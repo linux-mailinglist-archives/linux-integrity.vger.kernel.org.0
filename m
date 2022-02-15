@@ -2,181 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A154B5DAF
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Feb 2022 23:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D650D4B64C5
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Feb 2022 08:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbiBNWdt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Feb 2022 17:33:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43640 "EHLO
+        id S232445AbiBOHuN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Feb 2022 02:50:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiBNWdr (ORCPT
+        with ESMTP id S229485AbiBOHuN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Feb 2022 17:33:47 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F8813C27B;
-        Mon, 14 Feb 2022 14:33:38 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21ELrUnq012537;
-        Mon, 14 Feb 2022 22:32:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=KH7PhZv86pJmZAECyDrEHhT1RhG70HibOpQSq1zBsgg=;
- b=MXjoqzQWJtifsAJ1SkA2CuYAvDG303yilvF0I/x+AY8eH3TA/TjxhAR+lb9BTfKCXiOC
- dYJQDyrdlj/Qv2TKuC++Y0rUEWnRViW+Yvz91cIpBwMnSe93j7Vmm9pKgpoWMp6N2cA6
- DTXOHeUj9DKFqW4Waig4rL+Vd1UHTJGuUTgeY5W+f29ZVsIa/2wHy3mFypxga6jGGGES
- TNuOhDBpSx1uGdWGuo+94aur8LTwOLelkJ3ADryqPQeZWvb1NrIdOq8uKXY9LlHFNADJ
- tKEOcQaMBjVqRjoJZsP8lofKwkE1tWwlbKOD8s0Md8DuJIw7AsngsWg3xq6KELkfBx1f oA== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7c4eb3p4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 22:32:56 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EMHLa6021763;
-        Mon, 14 Feb 2022 22:32:54 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 3e64h9rhu1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 22:32:54 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EMWpgC48103780
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 22:32:51 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A61C611C054;
-        Mon, 14 Feb 2022 22:32:51 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 220F211C052;
-        Mon, 14 Feb 2022 22:32:50 +0000 (GMT)
-Received: from sig-9-65-70-53.ibm.com (unknown [9.65.70.53])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Feb 2022 22:32:50 +0000 (GMT)
-Message-ID: <36f85113f181f78eda3576823bd92be3f9cd1802.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Calculate digest in ima_inode_hash() if not
- available
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        Florent Revest <revest@chromium.org>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Mon, 14 Feb 2022 17:32:49 -0500
-In-Reply-To: <cc6bcb7742dc432ba990ee38b5909496@huawei.com>
-References: <20220211104828.4061334-1-roberto.sassu@huawei.com>
-         <537635732d9cbcc42bcf7be5ed932d284b03d39f.camel@linux.ibm.com>
-         <cc6bcb7742dc432ba990ee38b5909496@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GkRQ1rIxliyunm-29IisWEIsNOJXmUvf
-X-Proofpoint-ORIG-GUID: GkRQ1rIxliyunm-29IisWEIsNOJXmUvf
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 15 Feb 2022 02:50:13 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E098A303
+        for <linux-integrity@vger.kernel.org>; Mon, 14 Feb 2022 23:50:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 33DDA210ED;
+        Tue, 15 Feb 2022 07:50:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644911402; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ri+jy6g99BCa2fDBfgGL3cz0lHKNPGMprQO3MplVNPI=;
+        b=jyWeMgCA2RXidfcWKWoW+5pfZI+NeMl3j/DZuK+Iwdm6xSsmd8zW4Sup8ZX2WxWJxUXrIP
+        MTzaoAydBj2PncVMVjcCksCPF+TCgMx2lc6KdE4QkgBbK68LRlcU94Vl0PUh8yYbraBxpO
+        a2xE5CWlSJkZu2v0nsNNi2unfG3B/Tg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644911402;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ri+jy6g99BCa2fDBfgGL3cz0lHKNPGMprQO3MplVNPI=;
+        b=EaY83VPK0qOUyl06di0xyBVcFZYsV2PswO1TXFbgNSZouzpfjH/rJzWfkqKbCspk58kUCF
+        sQ0IwVEwi7P2PvCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E5B6A13BD2;
+        Tue, 15 Feb 2022 07:50:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id p9/GMylbC2IbTAAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Tue, 15 Feb 2022 07:50:01 +0000
+From:   Petr Vorel <pvorel@suse.cz>
+To:     linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 1/1] ci: Remove CentOS 8
+Date:   Tue, 15 Feb 2022 08:49:58 +0100
+Message-Id: <20220215074958.6942-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140128
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-02-14 at 17:05 +0000, Roberto Sassu wrote:
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Sunday, February 13, 2022 2:06 PM
-> > Hi Roberto,
-> > 
-> > On Fri, 2022-02-11 at 11:48 +0100, Roberto Sassu wrote:
-> > > __ima_inode_hash() checks if a digest has been already calculated by
-> > > looking for the integrity_iint_cache structure associated to the passed
-> > > inode.
-> > >
-> > > Users of ima_file_hash() and ima_inode_hash() (e.g. eBPF) might be
-> > > interested in obtaining the information without having to setup an IMA
-> > > policy so that the digest is always available at the time they call one of
-> > > those functions.
-> > >
-> > > Open a new file descriptor in __ima_inode_hash(), so that this function
-> > > could invoke ima_collect_measurement() to calculate the digest if it is not
-> > > available. Still return -EOPNOTSUPP if the calculation failed.
-> > >
-> > > Instead of opening a new file descriptor, the one from ima_file_hash()
-> > > could have been used. However, since ima_inode_hash() was created to
-> > obtain
-> > > the digest when the file descriptor is not available, it could benefit from
-> > > this change too. Also, the opened file descriptor might be not suitable for
-> > > use (file descriptor opened not for reading).
-> > >
-> > > This change does not cause memory usage increase, due to using a temporary
-> > > integrity_iint_cache structure for the digest calculation, and due to
-> > > freeing the ima_digest_data structure inside integrity_iint_cache before
-> > > exiting from __ima_inode_hash().
-> > >
-> > > Finally, update the test by removing ima_setup.sh (it is not necessary
-> > > anymore to set an IMA policy) and by directly executing /bin/true.
-> > >
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Although this patch doesn't directly modify either ima_file_hash() or
-> > ima_inode_hash(),  this change affects both functions.  ima_file_hash()
-> > was introduced to be used with eBPF.  Based on Florent's post, changing
-> > the ima_file_hash() behavor seems fine.  Since I have no idea whether
-> > anyone is still using ima_inode_hash(), perhaps it would be safer to
-> > limit this behavior change to just ima_file_hash().
-> 
-> Hi Mimi
-> 
-> ok.
-> 
-> I found that just checking that iint->ima_hash is not NULL is not enough
-> (ima_inode_hash() might still return the old digest after a file write).
-> Should I replace that check with !(iint->flags & IMA_COLLECTED)?
-> Or should I do only for ima_file_hash() and recalculate the digest
-> if necessary?
+It EOL in 12/2021 and CI is failing due removed repo:
 
-Updating the file hash after each write would really impact IMA
-performance.  If you really want to detect any file change, no matter
-how frequently it occurs, your best bet would be to track i_generation
-and i_version.  Stefan is already adding "i_generation" for IMA
-namespacing.
+CentOS Linux 8 - AppStream                      232  B/s |  38  B     00:00
+Error: Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: No URLs in mirrorlist
 
-> 
-> > Please update the ima_file_hash() doc.  While touching this area, I'd
-> > appreciate your fixing the first doc line in both ima_file_hash() and
-> > ima_inode_hash() cases, which wraps spanning two lines.
-> 
-> Did you mean to make the description shorter or to have everything
-> in one line? According to the kernel documentation (kernel-doc.rst),
-> having the brief description in multiple lines should be fine.
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+Hi,
 
-Thanks for checking kernel-doc.   The "brief description"  not wrapping
-across multiple lines did in fact change.
+the error:
+https://github.com/pevik/ima-evm-utils/runs/5196409185?check_suite_focus=true
 
-> > Please split the IMA from the eBPF changes.
-> 
-> Ok.
+Mimi, could you please test Travis CI?
+I tested only GitHub Actions:
+https://github.com/pevik/ima-evm-utils/actions/runs/1845623174
 
+Kind regards,
+Petr
+
+ .github/workflows/ci.yml | 5 -----
+ .travis.yml              | 4 ----
+ 2 files changed, 9 deletions(-)
+
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 4316ede..5e4498e 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -80,11 +80,6 @@ jobs:
+               CC: gcc
+               TSS: tpm2-tss
+ 
+-          - container: "centos:latest"
+-            env:
+-              CC: gcc
+-              TSS: tpm2-tss
+-
+           - container: "debian:testing"
+             env:
+               CC: clang
+diff --git a/.travis.yml b/.travis.yml
+index bdf78a1..1429e77 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -55,10 +55,6 @@ matrix:
+           env: DISTRO=centos:7 TSS=tpm2-tss
+           compiler: gcc
+ 
+-        - os: linux
+-          env: DISTRO=centos:latest TSS=tpm2-tss
+-          compiler: clang
+-
+         - os: linux
+           env: DISTRO=debian:testing TSS=tpm2-tss
+           compiler: clang
 -- 
-thanks,
-
-Mimi
+2.35.1
 
