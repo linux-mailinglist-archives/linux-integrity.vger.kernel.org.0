@@ -2,113 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1AE64B7640
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Feb 2022 21:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108394B7700
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Feb 2022 21:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238072AbiBORFM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 15 Feb 2022 12:05:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60500 "EHLO
+        id S241184AbiBOSJ6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Feb 2022 13:09:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234951AbiBORFM (ORCPT
+        with ESMTP id S234881AbiBOSJ6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 15 Feb 2022 12:05:12 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4382D11AA1F;
-        Tue, 15 Feb 2022 09:04:59 -0800 (PST)
-Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JynQl6ZBqz67KsG;
-        Wed, 16 Feb 2022 01:00:31 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Feb 2022 18:04:56 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Tue, 15 Feb 2022 18:04:56 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Yonghong Song <yhs@fb.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 3/6] bpf-lsm: Introduce new helper bpf_ima_file_hash()
-Thread-Topic: [PATCH v2 3/6] bpf-lsm: Introduce new helper bpf_ima_file_hash()
-Thread-Index: AQHYImlh7GCSPCaH8Uastxbf0OJz26yUxh4AgAARGHA=
-Date:   Tue, 15 Feb 2022 17:04:56 +0000
-Message-ID: <b896e06f871645a6a2fb9a6f6cf4a8ff@huawei.com>
-References: <20220215124042.186506-1-roberto.sassu@huawei.com>
- <20220215124042.186506-4-roberto.sassu@huawei.com>
- <f939bd53-96d0-d1dc-306f-6215ade6a7f1@fb.com>
-In-Reply-To: <f939bd53-96d0-d1dc-306f-6215ade6a7f1@fb.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Feb 2022 13:09:58 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C88119431;
+        Tue, 15 Feb 2022 10:09:47 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21FHB2pG016332;
+        Tue, 15 Feb 2022 18:09:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=9kxFY6QSfERb8ypvZ0/M23Sv+S4WIy8ZmOdiGOw/q4I=;
+ b=X4yaxXOc2a/6q/fjuObGtyNqKwxDYUzXn/K9HnUzHUz62EIENYgCz55If95TQfjnod70
+ LW8CSsvQcTKSolAKi7RlJPfj/y7H29w/Ot5JX7y9LtScIacl8aouZ5zg01dWXEG8G6tE
+ tN3j1hkvQubd9O0+zLnlPSI2C42V6OBvRK2kkjQb4LomKYRZXvl0eu5SEWFKYgC+6mmQ
+ bLpi809lXPQ/jhHSDkyr9TbQku9jTfjVx8qsCshOHNcOSRjX8NNJ8avVfxo3LUJiZQ27
+ Mv6LFhy7f4+kYFmr4/G95Qtt8PjqT9biwwwaih96KwgUZtETBY34XmVCulwgiiPWoToT Pw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8fe3tmfk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 18:09:12 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21FHDv5W026458;
+        Tue, 15 Feb 2022 18:09:12 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e8fe3tmer-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 18:09:12 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21FI8UFm001039;
+        Tue, 15 Feb 2022 18:09:10 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3e64ha1vkg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 18:09:10 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21FI95ce42205450
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 18:09:05 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 576C611C06C;
+        Tue, 15 Feb 2022 18:09:05 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34D4711C054;
+        Tue, 15 Feb 2022 18:09:03 +0000 (GMT)
+Received: from sig-9-65-88-149.ibm.com (unknown [9.65.88.149])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Feb 2022 18:09:03 +0000 (GMT)
+Message-ID: <8d72ee39ac5d98e0d293d46c8f73188281f270b7.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 03/27] ima: Return error code obtained from
+ securityfs functions
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Tue, 15 Feb 2022 13:09:02 -0500
+In-Reply-To: <1a4bc3cf915057bc5c5957c42c164bc2491a9da7.camel@linux.ibm.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+         <20220201203735.164593-4-stefanb@linux.ibm.com>
+         <1a4bc3cf915057bc5c5957c42c164bc2491a9da7.camel@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2vQN03Yr0BkbDFMnNTjyktEts2coJDFe
+X-Proofpoint-ORIG-GUID: CIupRnnEGM9sDcVqfp0CKLZMLJCOh7PS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-15_05,2022-02-14_04,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=953
+ impostorscore=0 suspectscore=0 bulkscore=0 mlxscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202150105
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBZb25naG9uZyBTb25nIFttYWlsdG86eWhzQGZiLmNvbV0NCj4gU2VudDogVHVlc2Rh
-eSwgRmVicnVhcnkgMTUsIDIwMjIgNjowMyBQTQ0KPiBPbiAyLzE1LzIyIDQ6NDAgQU0sIFJvYmVy
-dG8gU2Fzc3Ugd3JvdGU6DQo+ID4gaW1hX2ZpbGVfaGFzaCgpIGhhcyBiZWVuIG1vZGlmaWVkIHRv
-IGNhbGN1bGF0ZSB0aGUgbWVhc3VyZW1lbnQgb2YgYSBmaWxlIG9uDQo+ID4gZGVtYW5kLCBpZiBp
-dCBoYXMgbm90IGJlZW4gYWxyZWFkeSBwZXJmb3JtZWQgYnkgSU1BLiBGb3IgY29tcGF0aWJpbGl0
-eQ0KPiA+IHJlYXNvbnMsIGltYV9pbm9kZV9oYXNoKCkgcmVtYWlucyB1bmNoYW5nZWQuDQo+ID4N
-Cj4gPiBLZWVwIHRoZSBzYW1lIGFwcHJvYWNoIGluIGVCUEYgYW5kIGludHJvZHVjZSB0aGUgbmV3
-IGhlbHBlcg0KPiA+IGJwZl9pbWFfZmlsZV9oYXNoKCkgdG8gdGFrZSBhZHZhbnRhZ2Ugb2YgdGhl
-IG1vZGlmaWVkIGJlaGF2aW9yIG9mDQo+ID4gaW1hX2ZpbGVfaGFzaCgpLg0KPiA+DQo+ID4gU2ln
-bmVkLW9mZi1ieTogUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPg0KPiA+
-IC0tLQ0KPiA+ICAgaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oICAgICAgIHwgMTEgKysrKysrKysr
-KysNCj4gPiAgIGtlcm5lbC9icGYvYnBmX2xzbS5jICAgICAgICAgICB8IDIwICsrKysrKysrKysr
-KysrKysrKysrDQo+ID4gICB0b29scy9pbmNsdWRlL3VhcGkvbGludXgvYnBmLmggfCAxMSArKysr
-KysrKysrKw0KPiA+ICAgMyBmaWxlcyBjaGFuZ2VkLCA0MiBpbnNlcnRpb25zKCspDQo+ID4NCj4g
-PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIGIvaW5jbHVkZS91YXBpL2xp
-bnV4L2JwZi5oDQo+ID4gaW5kZXggYjAzODNkMzcxYjlhLi5iYTMzZDU3MThkNmIgMTAwNjQ0DQo+
-ID4gLS0tIGEvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gKysrIGIvaW5jbHVkZS91YXBp
-L2xpbnV4L2JwZi5oDQo+ID4gQEAgLTQ2NDgsNiArNDY0OCwxNiBAQCB1bmlvbiBicGZfYXR0ciB7
-DQo+ID4gICAgKgkJKiotRU9QTk9UU1VQKiogaWYgSU1BIGlzIGRpc2FibGVkIG9yICoqLUVJTlZB
-TCoqIGlmDQo+ID4gICAgKgkJaW52YWxpZCBhcmd1bWVudHMgYXJlIHBhc3NlZC4NCj4gPiAgICAq
-DQo+ID4gKyAqIGxvbmcgYnBmX2ltYV9maWxlX2hhc2goc3RydWN0IGZpbGUgKmZpbGUsIHZvaWQg
-KmRzdCwgdTMyIHNpemUpDQo+ID4gKyAqCURlc2NyaXB0aW9uDQo+ID4gKyAqCQlSZXR1cm5zIGEg
-Y2FsY3VsYXRlZCBJTUEgaGFzaCBvZiB0aGUgKmZpbGUqLg0KPiA+ICsgKgkJSWYgdGhlIGhhc2gg
-aXMgbGFyZ2VyIHRoYW4gKnNpemUqLCB0aGVuIG9ubHkgKnNpemUqDQo+ID4gKyAqCQlieXRlcyB3
-aWxsIGJlIGNvcGllZCB0byAqZHN0Kg0KPiA+ICsgKglSZXR1cm4NCj4gPiArICoJCVRoZSAqKmhh
-c2hfYWxnbyoqIGlzIHJldHVybmVkIG9uIHN1Y2Nlc3MsDQo+ID4gKyAqCQkqKi1FT1BOT1RTVVAq
-KiBpZiB0aGUgaGFzaCBjYWxjdWxhdGlvbiBmYWlsZWQgb3IgKiotRUlOVkFMKioNCj4gaWYNCj4g
-PiArICoJCWludmFsaWQgYXJndW1lbnRzIGFyZSBwYXNzZWQuDQo+ID4gKyAqDQo+ID4gICAgKiBz
-dHJ1Y3Qgc29ja2V0ICpicGZfc29ja19mcm9tX2ZpbGUoc3RydWN0IGZpbGUgKmZpbGUpDQo+ID4g
-ICAgKglEZXNjcmlwdGlvbg0KPiA+ICAgICoJCUlmIHRoZSBnaXZlbiBmaWxlIHJlcHJlc2VudHMg
-YSBzb2NrZXQsIHJldHVybnMgdGhlIGFzc29jaWF0ZWQNCj4gPiBAQCAtNTE4Miw2ICs1MTkyLDcg
-QEAgdW5pb24gYnBmX2F0dHIgew0KPiA+ICAgCUZOKGJwcm1fb3B0c19zZXQpLAkJXA0KPiA+ICAg
-CUZOKGt0aW1lX2dldF9jb2Fyc2VfbnMpLAlcDQo+ID4gICAJRk4oaW1hX2lub2RlX2hhc2gpLAkJ
-XA0KPiA+ICsJRk4oaW1hX2ZpbGVfaGFzaCksCQlcDQo+IA0KPiBQbGVhc2UgcHV0IHRoZSBhYm92
-ZSBGTihpbWFfZmlsZV9oYXNoKSB0byB0aGUgZW5kIG9mIHRoZSBsaXN0Lg0KPiBPdGhlcndpc2Us
-IHdlIGhhdmUgYSBiYWNrd2FyZCBjb21wYXRhYmlsaXR5IGlzc3VlLg0KDQpIaSBZb25naG9uZw0K
-DQpzdXJlLCB3aWxsIGRvLg0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9H
-SUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBl
-bmcsIFpob25nIFJvbmdodWENCg0KPiA+ICAgCUZOKHNvY2tfZnJvbV9maWxlKSwJCVwNCj4gPiAg
-IAlGTihjaGVja19tdHUpLAkJCVwNCj4gPiAgIAlGTihmb3JfZWFjaF9tYXBfZWxlbSksCQlcDQo+
-ID4gZGlmZiAtLWdpdCBhL2tlcm5lbC9icGYvYnBmX2xzbS5jIGIva2VybmVsL2JwZi9icGZfbHNt
-LmMNCj4gPiBpbmRleCA5ZTRlY2M5OTA2NDcuLmU4ZDI3YWY1YmJjYyAxMDA2NDQNCj4gPiAtLS0g
-YS9rZXJuZWwvYnBmL2JwZl9sc20uYw0KPiA+ICsrKyBiL2tlcm5lbC9icGYvYnBmX2xzbS5jDQo+
-IFsuLi5dDQo=
+On Thu, 2022-02-10 at 07:02 -0500, Mimi Zohar wrote:
+> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> > If an error occurs when creating a securityfs file, return the exact
+> > error code to the caller.
+> > 
+> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> Thanks, Stefan.  Nice cleanup.
+
+This is now queued in next-integrity.
+
+-- 
+Thanks,
+
+Mimi
+
