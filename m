@@ -2,97 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238CD4BA364
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Feb 2022 15:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A5B4BAA77
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Feb 2022 20:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233769AbiBQOqn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Feb 2022 09:46:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54400 "EHLO
+        id S242294AbiBQT6g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Feb 2022 14:58:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239810AbiBQOqm (ORCPT
+        with ESMTP id S229803AbiBQT6f (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:46:42 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4831EC55;
-        Thu, 17 Feb 2022 06:46:27 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HClcSB004685;
-        Thu, 17 Feb 2022 14:46:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=LfEq2DKVxw7frX4SdW5o6kqaOIfZLBqeo1TUgQHtdBs=;
- b=N9zQ/IQW1/ix6WfRSJIyxzrmESLzXmgTXUfB2p8gu1T+EInzOuVIRgZ2m+GqFziXTAcO
- Kgygewxxwh8SB4r1YoefhzgBm/I1RisvHM0OyhdySpOz5PCTYXd1WQYh4Xr6YtOJA7S7
- Go6slghGaT/e+A1x1sDlmK+jM08TI+gG3wXlkgyX//aocP6KKrhHFbbpdBgMzvj/dmbX
- 0vYsvUzXMycnPzVI1tCu5Rzr6wQuyTQP7O6sc+PcE6NdeJm+fzqVrJJf7BQ1tFmH7BoZ
- LgoOieTKjdu+pOXFwrJWWwXxvQ3c8762TYGsgcRgnI7oy6aq/NxC2wJ4/4/2KYiR8S1D aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9pp9jyub-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 14:46:16 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21HDLRhP005490;
-        Thu, 17 Feb 2022 14:46:16 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9pp9jytw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 14:46:15 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21HEjT7Y011454;
-        Thu, 17 Feb 2022 14:46:14 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3e645k97ss-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 14:46:14 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21HEk7A824314150
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Feb 2022 14:46:08 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C37714C05E;
-        Thu, 17 Feb 2022 14:46:07 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A7EA24C046;
-        Thu, 17 Feb 2022 14:46:05 +0000 (GMT)
-Received: from sig-9-65-66-221.ibm.com (unknown [9.65.66.221])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Feb 2022 14:46:05 +0000 (GMT)
-Message-ID: <38ac6915df39fb75fd7ae71c9daf488c772ae4b6.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 08/27] ima: Move measurement list related variables
- into ima_namespace
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Thu, 17 Feb 2022 09:46:05 -0500
-In-Reply-To: <20220201203735.164593-9-stefanb@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-9-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0wa5abw_26jBeXKF7y9-udVZwolj8Fb8
-X-Proofpoint-ORIG-GUID: de0yQ7rPNE-AU7GY4PaVYyypyiBErvJW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-17_05,2022-02-17_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- mlxlogscore=999 suspectscore=0 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 clxscore=1015 phishscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202170066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        Thu, 17 Feb 2022 14:58:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7086D289A4;
+        Thu, 17 Feb 2022 11:58:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C62CB821B4;
+        Thu, 17 Feb 2022 19:58:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA72C340E8;
+        Thu, 17 Feb 2022 19:58:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645127897;
+        bh=tIS1dG2zy1RRVA9bGHHwQ8vHAQt589WIAKZ0K8nnK9w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GQ2o3jDKhjfTmO1B8QNxXTbawirq/JvPaNVCKbG/1MmnLnvEBGkZjQtv5qcwXDefX
+         EDxAs9yAq3rt4vjzibnccRr1nTecBADIjqqzN2dx8XGeILA3w/ELpZ73JPWVjI9HOy
+         f3Y5Ia3wBxh1DZGlzT9SzGERZVvTb2m3nru6INvtl5lBO1lyT+fgI6yqr6edmpmYRE
+         Yjvj4SVfJKwTKt1WSjyuYSE8u+dq3+bGbwK8u0eMv+1bou9m4Z2g1oVNof6xiWHf9c
+         nxQGVullUol7/LIVSinq9JecwyEPmgZkJ7M2MkFCVTb54T/R8/cwopRLJOMNXn9uCU
+         u8OgfNrE8rzIA==
+Date:   Thu, 17 Feb 2022 20:58:52 +0100
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
+Message-ID: <Yg6o/ARtOIwuBFsW@iki.fi>
+References: <20210712170313.884724-1-mic@digikod.net>
+ <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net>
+ <YcGVZitNa23PCSFV@iki.fi>
+ <5030a9ff-a1d1-a9bd-902a-77c3d1d87446@digikod.net>
+ <Ydc/E3S2vmtDOnpw@iki.fi>
+ <YddADJJNLDlQAYRW@iki.fi>
+ <86c5010e-a926-023a-8915-d6605cfc4f0a@digikod.net>
+ <e4707df2-ecc2-0471-87fc-c54e774fe315@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e4707df2-ecc2-0471-87fc-c54e774fe315@digikod.net>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -101,18 +74,55 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> Move measurement list related variables into the ima_namespace. This way
-> a front-end like securityfs can show the measurement list inside an IMA
-> namespace.
-
-Also, in order for kexec to allocate memory for the existing
-measurement list, the measurement list memory size is stored in the
-binary_runtime_size variable.  To avoid special-casing init_ima_ns, as
-much as possible, move it into the ima_namespace.
-
+On Mon, Jan 31, 2022 at 12:33:51PM +0100, Mickaël Salaün wrote:
 > 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> On 07/01/2022 13:14, Mickaël Salaün wrote:
+> > 
+> > On 06/01/2022 20:16, Jarkko Sakkinen wrote:
+> > > On Thu, Jan 06, 2022 at 09:12:22PM +0200, Jarkko Sakkinen wrote:
+> > > > On Tue, Jan 04, 2022 at 04:56:36PM +0100, Mickaël Salaün wrote:
+> > > > > 
+> > > > > On 21/12/2021 09:50, Jarkko Sakkinen wrote:
+> > > > > > On Mon, Dec 13, 2021 at 04:30:29PM +0100, Mickaël Salaün wrote:
+> > > > > > > Hi Jarkko,
+> > > > > > > 
+> > > > > > > Since everyone seems OK with this and had plenty of
+> > > > > > > time to complain, could
+> > > > > > > you please take this patch series in your tree? It still applies on
+> > > > > > > v5.16-rc5 and it is really important to us. Please
+> > > > > > > let me know if you need
+> > > > > > > something more.
+> > > > > > > 
+> > > > > > > Regards,
+> > > > > > >    Mickaël
+> > > > > > 
+> > > > > > I'm off-work up until end of the year, i.e. I will
+> > > > > > address only important
+> > > > > > bug fixes and v5.16 up until that.
+> > > > > > 
+> > > > > > If any of the patches is yet missing my ack, feel free to
+> > > > > > 
+> > > > > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > > 
+> > > > > Thanks Jarkko. Can you please take it into your tree?
+> > > > 
+> > > > I can yes, as I need to anyway do a revised PR for v5.17, as one commit
+> > > > in my first trial had a truncated fixes tag.
+> > > 
+> > > Please check:
+> > > 
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> > > 
+> > > /Jarkko
+> > 
+> > Great, thanks!
+> 
+> Hi Jarkko,
+> 
+> I noticed your commits https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=3ec9c3a0531ac868422be3b12fc17310ed8c07dc
+> are no more referenced in your tree. Is there an issue?
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+This must be some sort of mistake I've made. I'll re-apply the patches.
+Sorry about this.
 
+BR, Jarkko
