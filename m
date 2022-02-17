@@ -2,70 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8194B9310
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Feb 2022 22:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E504BA362
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Feb 2022 15:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234096AbiBPVTx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Feb 2022 16:19:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45604 "EHLO
+        id S242018AbiBQOov (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Feb 2022 09:44:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiBPVTv (ORCPT
+        with ESMTP id S242017AbiBQOou (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Feb 2022 16:19:51 -0500
+        Thu, 17 Feb 2022 09:44:50 -0500
 Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B418622496F;
-        Wed, 16 Feb 2022 13:19:38 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GL8WJ2032687;
-        Wed, 16 Feb 2022 21:19:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=U8SNXnoO2x+3jqNdtP8FT7c218Mnv5NRJH1QCjrm+MM=;
- b=bg5Mqq1fDy3Xulmua3Am4/Hj10arF8Q5A+HuUzwou18kBw58FADxXHoqKgWOBn936i++
- sbkN/iW5EgVZCdpTAdR6+lCNWv59y/orhDIg6zpvuZta7nzCvLP5eAXEUUlnxun+mEbn
- ietG1goSA6hJK3i5G6m2zsDacozzyoD9frhttm+Vs8UEOdpC+yDyjFoNVspJJf8vxF0e
- m+9ydXfvjR8ZDsM30b4vWWq0KthlkxV8wPiTNrPe3V0olyHPROX9FhZaE25sol5hM143
- 7vCGVw4x1c6RxlXGlwm3YivlpLYDxltI/oMNizoq5nDoOrRXZ5pqPU1Vt5uDlknyNAMz ng== 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8A021D09A;
+        Thu, 17 Feb 2022 06:44:36 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HEdom6018081;
+        Thu, 17 Feb 2022 14:44:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=spMY1+f5fzaepG3IJUmW+zDHj/gJnfmPPnGFIgIiXsU=;
+ b=fi7jlNKXVPhmSjf6OqwffLzNHGvgqY7Hrx1kckDn2tONEp7A6FWR7I1SQU6sdtFwEmQU
+ NilIRGopIoR5X2zQb/5O/Hgr2Q5sd6K4RAiP3BEeZ7uzBTXYHqsImJRYw5TSc6vXxeDv
+ A9hkaQ069E5XjYjsw9M9n8I0p1mAn0yT5U+kaGSRzlbQZMB2asPt2SBMPx5POjDvqdEd
+ TIdzvip9RLLYOaAh4yrOjJuVv/3t3n2Mvup5THoXlEV2lLc08ooiWlmpDTn1082blwqV
+ 82xlpQsUtoeYiho80Z8aVygFwdnHCK8eITdikR8fceGftOGYxajznaHGCg6meUKbRVOW DA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e97qc1naj-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9q3ma170-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 21:19:24 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21GLHrk0006808;
-        Wed, 16 Feb 2022 21:19:23 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e97qc1na9-1
+        Thu, 17 Feb 2022 14:44:18 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21HEfKqe025294;
+        Thu, 17 Feb 2022 14:44:17 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9q3ma167-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 21:19:23 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GLHuoT024449;
-        Wed, 16 Feb 2022 21:19:22 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma04dal.us.ibm.com with ESMTP id 3e64hcxb57-1
+        Thu, 17 Feb 2022 14:44:17 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21HEXpFX028151;
+        Thu, 17 Feb 2022 14:44:15 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 3e64hah6hm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 21:19:22 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GLJLm035914166
+        Thu, 17 Feb 2022 14:44:15 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21HEXkR949807794
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Feb 2022 21:19:21 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3ECA2BE056;
-        Wed, 16 Feb 2022 21:19:21 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ABF57BE058;
-        Wed, 16 Feb 2022 21:19:19 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 16 Feb 2022 21:19:19 +0000 (GMT)
-Message-ID: <c1a32f5d-c15d-8127-6254-69946f751bdb@linux.ibm.com>
-Date:   Wed, 16 Feb 2022 16:19:19 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 06/27] ima: Move arch_policy_entry into ima_namespace
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+        Thu, 17 Feb 2022 14:33:46 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE5C6A4060;
+        Thu, 17 Feb 2022 14:44:11 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 64CFFA4054;
+        Thu, 17 Feb 2022 14:44:09 +0000 (GMT)
+Received: from sig-9-65-66-221.ibm.com (unknown [9.65.66.221])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Feb 2022 14:44:09 +0000 (GMT)
+Message-ID: <ee5b683e3d52b5aa9d5e7e0895d5d80c108c225c.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 09/27] ima: Move some IMA policy and filesystem
+ related variables into ima_namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
 Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
         containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
         ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
@@ -75,70 +73,45 @@ Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
         paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
         Christian Brauner <brauner@kernel.org>
+Date:   Thu, 17 Feb 2022 09:44:08 -0500
+In-Reply-To: <20220201203735.164593-10-stefanb@linux.ibm.com>
 References: <20220201203735.164593-1-stefanb@linux.ibm.com>
- <20220201203735.164593-7-stefanb@linux.ibm.com>
- <bf435ffa5d176213acabb8c576c159d2cbd4d395.camel@linux.ibm.com>
- <c350ccf1-f968-8b01-2f0d-015cabf39781@linux.ibm.com>
- <c4170de11d64d5927a8e2a2e0f7e8a6e69c6a558.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <c4170de11d64d5927a8e2a2e0f7e8a6e69c6a558.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+         <20220201203735.164593-10-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: a0JLbt8rZLx9dHrRWrfokUbIihXboZeN
-X-Proofpoint-GUID: ErNdkiqOb-tu9Gv7m0Ilrnm1jO72ttaU
+X-Proofpoint-GUID: 32RtK33s3oHJjgIoU6A-VViWq2h7QBOH
+X-Proofpoint-ORIG-GUID: PH3FBFc87FnJIVlNd-xDURjIEiw_IVVK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-16_10,2022-02-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015 phishscore=0
- mlxscore=0 impostorscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202160114
+ definitions=2022-02-17_05,2022-02-17_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 malwarescore=0
+ suspectscore=0 mlxscore=0 spamscore=0 adultscore=0 mlxlogscore=999
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202170066
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> Move the variables ima_write_mutex, ima_fs_flag, and valid_policy, which
+> are related to updating the IMA policy, into the ima_namespace. This way
+> each IMA namespace can set these variables independently in its instance
+> of securityfs.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
 
-On 2/16/22 15:56, Mimi Zohar wrote:
-> On Wed, 2022-02-16 at 15:48 -0500, Stefan Berger wrote:
->> On 2/16/22 11:39, Mimi Zohar wrote:
->>> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote
->>>
->>> Let's update the patch description providing a bit more background
->>> info:
->>>
->>> The archictecture specific policy rules, currently defined for EFI and
->>> powerpc, require the kexec kernel image and kernel modules to be
->>> validly signed and measured, based on the system's secure boot and/or
->>> trusted boot mode and the IMA_ARCH_POLICY Kconfig option being enabled.
->>>
->>>> Move the arch_policy_entry pointer into ima_namespace.
->>> Perhaps include something about namespaces being allowed or not allowed
->>> to kexec a new kernel or load kernel modules.
->> Namespaces are not allowed to kexec but special-casing the init_ima_ns
->> in the code to handle namespaces differently makes it much harder to
->> read the code. I would avoid special-casing init_ima_ns as much as
->> possible and therefore I have moved the arch_policy_entry into the
->> ima_namespace.
-> Please include this in the patch description, but re-write the last
-> line in the 3rd person, like:
->
-> To avoid special-casing init_ima_ns, as much as possible, move the
-> arch_policy_entry into the ima_namespace.
+Thanks,
 
-I took the paragraph on the background as well as this sentence.
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-
->
-> thanks,
->
-> Mimi
->
->
