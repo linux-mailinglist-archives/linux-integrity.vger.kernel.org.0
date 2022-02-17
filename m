@@ -2,316 +2,340 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DF44BB94A
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Feb 2022 13:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C3B4BBCCB
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Feb 2022 17:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbiBRMik (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 18 Feb 2022 07:38:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54596 "EHLO
+        id S237427AbiBRP7a (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 18 Feb 2022 10:59:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234830AbiBRMij (ORCPT
+        with ESMTP id S231565AbiBRP7J (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:38:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49441738F2;
-        Fri, 18 Feb 2022 04:38:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D27EB8261C;
-        Fri, 18 Feb 2022 12:38:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38114C340E9;
-        Fri, 18 Feb 2022 12:37:52 +0000 (UTC)
-Message-ID: <c70113dc-d017-b5bc-1466-02530f4707e2@xs4all.nl>
-Date:   Fri, 18 Feb 2022 13:37:50 +0100
+        Fri, 18 Feb 2022 10:59:09 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552785F8D6;
+        Fri, 18 Feb 2022 07:58:52 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21IFqqCf014970;
+        Fri, 18 Feb 2022 15:58:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=corp-2021-07-09; bh=NUJR5VgETGgo3lendu01lxVQtM0cAcyUJ0OEVrhh6oI=;
+ b=k3XjAwBFaa5sEeMqv0bXVtLiSY+73L1mrFCQ5N6mnbzENQVEdWXo+U7SqB8XrDcvvei7
+ s9izcIbiTlfrZax1nwwAV9/hOcP75epTH8VnTbj11CwYgK8tI8ziW4RpeqM8HrurwRpE
+ 9CNmroHzTMt9L+vOLJvJzU/3EVdnc0K1lbZIuxUX8VBKNZFd5gRb1pFvH2TxOalXrrDS
+ eC4w0Xj0MXAy9rx/+Vn0Oa4Vgkzu+aH/ZEt5vULoh4QrGKOEwCt86v7qF93/XAMQMq5D
+ LKxi8yhgtmXjE20GNmtvfpQg14Gp6pzZjhjr9Ld9QKgLbglOR08RNxyFUASwJeenJ1Vw 6A== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e8n3fh6wc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Feb 2022 15:58:08 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21IFuend062755;
+        Fri, 18 Feb 2022 15:58:06 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169])
+        by aserp3030.oracle.com with ESMTP id 3e9bre20v3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Feb 2022 15:58:06 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WrKA710zmncfXzANZq9668MvjrNOLhQ03asqoLVEQDAOMb0joYZNimWfPRLzHzfLePG8ro9AxChri/IL4BeHBsbMeKl052CM0kGkTYEC8ZzHAUjecknV8Ecjra553Y8vmo/Y5Sbxy6W3qxNdxx5BxwRv+pwLOPMro3hGqnTMT8I4QR6C22HGqoRk/lvLqAiVlClOnlxkw5gVVdquH6L9xljGV8Pz1jKVEi5KW53LzrPB+p6lSQMM6WpzcZZ9mjS4h1fXcmYKrRm1lb0WUG8oPvf0GPKV0dc5lSlEirjxAP9kE91p2cBHEhwj9XqFi6JUOMtVW14hk2v+Lb7rqN2kJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NUJR5VgETGgo3lendu01lxVQtM0cAcyUJ0OEVrhh6oI=;
+ b=oKFnBFE2J1chbHyfs38ytqaCzsouVx2W1CL477Xvu8f/6SHKLIRFnCq9fqsi7vJPivUDvVApRSCz6O8vUeaB4rIMODWs7D15AylOAQp/aB3yrA0BYHpaz/S1MIYf64QuuQUghJso4rZWGh6O0TYyVFwe/cYlavrH+tvpvnaCiqUknPi7oQa+7E3uo2/DM/lwZ0PdRGwmnRXcXmkp/3tcHssCE1xAJV/S+rPYvzNZeIzcLP+hZsVG7mLVQlUN/fobsC7RiftuTtRRdadAYOriUDOcej0pY4B8KyHEOP9tFCSfxFf8t5IyUJlPWcJWptJvAZyl7l1mbyQbMHO0ZHcQ9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NUJR5VgETGgo3lendu01lxVQtM0cAcyUJ0OEVrhh6oI=;
+ b=IfA9ivXvkryjSA3bioAlddGcsOGM8WAMfdca5DBUuowtwotg5TaXHgpT9Vcwfe34UgdfaHRCOB9dby4SZvyWqBfT/oPfwc2k5o1NY5rJ4sIIv2yuFTL1qp6toFQ3FnDGkOpLzgQlEOnHP4ZuhXH/odY72CR7dz0t3vsL7tKxtig=
+Received: from BY5PR10MB3793.namprd10.prod.outlook.com (2603:10b6:a03:1f6::14)
+ by DS7PR10MB5312.namprd10.prod.outlook.com (2603:10b6:5:3a9::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Fri, 18 Feb
+ 2022 15:58:04 +0000
+Received: from BY5PR10MB3793.namprd10.prod.outlook.com
+ ([fe80::398e:10a4:6887:4e18]) by BY5PR10MB3793.namprd10.prod.outlook.com
+ ([fe80::398e:10a4:6887:4e18%5]) with mapi id 15.20.4995.022; Fri, 18 Feb 2022
+ 15:58:04 +0000
+From:   Ross Philipson <ross.philipson@oracle.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, kexec@lists.infradead.org
+Cc:     iommu@lists.linux-foundation.org, ross.philipson@oracle.com,
+        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+Subject: [PATCH v5 00/12] x86: Trenchboot secure dynamic launch Linux kernel support
+Date:   Wed, 16 Feb 2022 22:54:33 -0500
+Message-Id: <1645070085-14255-1-git-send-email-ross.philipson@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0288.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::23) To BY5PR10MB3793.namprd10.prod.outlook.com
+ (2603:10b6:a03:1f6::14)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 5/5] spi: make remove callback a void function
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Emma Anholt <emma@anholt.net>,
-        David Lechner <david@lechnology.com>,
-        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
-        Antti Palosaari <crope@iki.fi>,
-        Lee Jones <lee.jones@linaro.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Piel <eric.piel@tremplin-utc.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Harry Morris <h.morris@cascoda.com>,
-        Varka Bhadram <varkabhadram@gmail.com>,
-        Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ajay Singh <ajay.kathat@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mark Greer <mgreer@animalcreek.com>,
-        Benson Leung <bleung@chromium.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?UTF-8?Q?Ronald_Tschal=c3=a4r?= <ronald@innovation.ch>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Heiko Schocher <hs@denx.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Matt Kline <matt@bitbashing.io>,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Yang Shen <shenyang39@huawei.com>,
-        dingsenjie <dingsenjie@yulong.com>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Walle <michael@walle.cc>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        wengjianfeng <wengjianfeng@yulong.com>,
-        Sidong Yang <realwakka@gmail.com>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Davidlohr Bueso <dbueso@suse.de>, Claudius Heine <ch@denx.de>,
-        Jiri Prchal <jiri.prchal@aksignal.cz>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        linux-wireless@vger.kernel.org, libertas-dev@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
- <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b3680a79-d269-4b5c-4ee2-08d9f2f77248
+X-MS-TrafficTypeDiagnostic: DS7PR10MB5312:EE_
+X-Microsoft-Antispam-PRVS: <DS7PR10MB5312BCF5F6DCAA88AB70E977E6379@DS7PR10MB5312.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3968;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jcs51eQUBCio4ZdGfCmzMbWTJiWdB6xl1TnuE3uHiNl6OldX3iMnX2w1sBXAqXY/swHAGFBtUAz7guNF122NPe5FVxQ6x6EAkjvxDkLuq7stGH6QCMMDVjFv5nqyKCCX1+FzPdQlPnZki07cfmcVfNVDC7kkoymQzmFPbhxreUf6uDXBf7P2qbzCaO6cJcjkHoF7rB+A3WcaXiBZSKG8xnB8iaT68TCtrSKdjiKbIj1hdda9uocNJFTEtxblTGvdnMOj1NqUfrgGHrPDDGhUiSaHe1jo1pKYHsUHMQ7qOde73I54PUKVF/J8u4kL7OhELgujYQ9831a9ksDW97ww1qb0sDM5A3nBNonoYAIAsWHEHwELEMOCvce1iSmbb66OJAqkYPWbrxIPHjZ+9wKQ5w/KPNuPQvO6C98ETXCZ3cpuOvaKF8TU58HFYl3GF+RrIOSk3E3CNCx0ANlMCPXvHzkem0MB0wkKOqEXrW/rSPiddExJQm9lOpNZ0bCqtB9f/0XxaBfEaOjAgHzCwGS5aG1lGcDv7zaRPJZWfavUZXP31t08NdRPve/AJ0M+9v9P3oVckewDR9NKs3b6pZItysxaduEIvjbSM25n5kb0yzCn2jOYwhzQQzi7aM6BjfNbgOl04dB837+eIkK0J5SXcuGaJGKsmGdpb/eaHXiLXo2Xho+GvMN65rLg4v51j+7yKhw9Mxt1mQkzhPnIgpiV6jK/pNuJz8cI4TQdhqP7Kg+5fTIKX5KD8B/krKJtWQzwMCZrnGMisgvnlkVCxfl/KG3wF94j/i0BXJ5KQc9g7gZutVx5lvJt9FXF4tnayaObt2iGpZBgD9Xu1AYOidaIyQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3793.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(44832011)(26005)(186003)(8676002)(4326008)(38350700002)(38100700002)(66476007)(66946007)(66556008)(508600001)(2616005)(6486002)(316002)(966005)(7416002)(36756003)(6666004)(5660300002)(8936002)(83380400001)(2906002)(6512007)(6506007)(52116002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sMz6XhWlZeGuZsAtAM0AXc0EoMAGiPt7CngasAcNAdlC5oGcmINdf096R3Xy?=
+ =?us-ascii?Q?HM+j0/UKsHCctlmvHd9cUXoLcqKvnI4LzIGu8g3ScS/A/yOpmPwBHixjYN5r?=
+ =?us-ascii?Q?t0lrsAXG7pJP8yebZy/nqv2UKtQ7eDdvcAyTCXaarWfAtdRrb/OcYYIzXJU5?=
+ =?us-ascii?Q?ulvvpGGyuqiM7BoBygvvxuS/4vNOL1JiOkJmk+KW1Pgxom3efI4Dg8Xp3/rK?=
+ =?us-ascii?Q?rtJeu26CddCVeM9Ybun4/7TaTaezrVxMTeaqh3hbw1JWzsj7Ju6qTVuLJHHI?=
+ =?us-ascii?Q?yCtppIqlk14q10FWHWt7oKJbfYP+dUdrmXceEZ51Dt/MLs895E3TeZxqWwtO?=
+ =?us-ascii?Q?uREeR5h2LF7WpX546qmYKXDszglyddm48dfXvyD78htS7I6wPpTJu+VAsvgh?=
+ =?us-ascii?Q?nAWlg4XPJozgyN3Inl7uUlpWH7wKZ/KAS0rJlDprQm1f42cNFV+9bDK7+iDZ?=
+ =?us-ascii?Q?vJpZx92YDxiCEnI8qehT57DChWnvzMIECPu76LuF0IA+rkV1xfmrHNGD7c/q?=
+ =?us-ascii?Q?DUiartmJ/jAeI0PdV/q6O9bra1maK+JEv1rCOyZvr/dFvCSP0qTZIPBGt2LS?=
+ =?us-ascii?Q?Jag70d1ax/rVomtupNCmMr2SUSNasWm3dMQ8QxUDoUDz01QY0CKNoth3Z9T3?=
+ =?us-ascii?Q?XnZApYrblZOg/0zLH+dSlfL+k8RoASomf3R34Hkb27GdIeekud1TFq1OZSdw?=
+ =?us-ascii?Q?+DMoSRPhBGn7J0OFp2n12iMWFO6EiGPLKYdtwxmFtZz/Xq7wan4RNJvRawMu?=
+ =?us-ascii?Q?6o+wmQux6oPNpcgxhsIL3oyvkkFqxf+7FIbWtYYwg3GK4RVRAAP7G+svk9E7?=
+ =?us-ascii?Q?WnrZJoP9ZNgbiQUeuzId3kUqIQ/m4WAttsBHsJn86FVHAGh/u4NUAJcUPpXI?=
+ =?us-ascii?Q?4jk8ElRurFgbDX2NkK3tThdhLkBa1KZBXyJ6r5oAlssGM6//ssdDS+8CvVUK?=
+ =?us-ascii?Q?F1Fo/hs8u1JKhHa/WDPLVXr6Wq9gKsthSrJGLUBxTezhFpmtx0M4xTE2jC3p?=
+ =?us-ascii?Q?rjRJQv5sdP1e2QSub2u2PndexAylMoP3hcJZiWCVnSPfm5ePJHKJOp4ep/+R?=
+ =?us-ascii?Q?SA5twDMum1MNg1rowQ/729udq4rlpMgk0iCIXLPQq5ZCaYhr8KaVZsbx0iym?=
+ =?us-ascii?Q?jDLtogE3PuOQezuGQEEEX6gdJ70GbByXIgrOoV9kO3CDS5riHspHJAnoO6X3?=
+ =?us-ascii?Q?GYtmw0SU1liUX5CshykoitGRkjTFOWJfrVMKN3J20DsVPFgLkwfhq7Zk2n5g?=
+ =?us-ascii?Q?kQ+dGxHdNP2JR4O2MKg8dx8v75/RhB75fFyAyqRXctHZSQ2Wr0qJlb2a4BKF?=
+ =?us-ascii?Q?nBkyGAIg50Fta8C/9eI+zUL+lTAJNR/QQOg98okApvC7dmS998e486gneh2z?=
+ =?us-ascii?Q?+Npnp23QikXoKXUgh7Klu/2zbAdofkU7rD6ihZUCFxxYzqok367Rcq5+4bcI?=
+ =?us-ascii?Q?zF2usOJCgKy/WPNE1tgXXq7AfFgW9UTWjrTNc5n9JlAmBZrNLaxiriH5KM6O?=
+ =?us-ascii?Q?bsX2yVcwKyREzbufRdDPAPqCgKlr1TjyVJn9sf6+8sEeC50+LDkPfh2UXMHa?=
+ =?us-ascii?Q?Ppk8jcqboFU1LcQO3/wduWTRUmxKtaYEYN3mOHAXTlsV16TzONkq/m05yb2v?=
+ =?us-ascii?Q?JKw2of4K4qdjXIU42ub+r9h6tUIiHQZYW+xBeBwCzGmbfvPNDmHf+HGVx13V?=
+ =?us-ascii?Q?6bWF0Q=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3680a79-d269-4b5c-4ee2-08d9f2f77248
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB3793.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 15:58:04.0477
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KdlnzKZsij4eM20JjQToY8fEuXUB4n0+EbKZWJ7nJt1h04BGioR/uVWXmUdQ8yWswKL+NIxyRN+bsETscZGU19gkPuVE3ANkdrmsoG7y9VE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5312
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10261 signatures=677564
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202180103
+X-Proofpoint-GUID: npSRhxYTHQSMcXSAPlanSYffmBtlmLOf
+X-Proofpoint-ORIG-GUID: npSRhxYTHQSMcXSAPlanSYffmBtlmLOf
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 23/01/2022 18:52, Uwe Kleine-König wrote:
-> The value returned by an spi driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
-> 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/bus/moxtet.c                                  |  4 +---
->  drivers/char/tpm/st33zp24/spi.c                       |  4 +---
->  drivers/char/tpm/tpm_tis_spi_main.c                   |  3 +--
->  drivers/clk/clk-lmk04832.c                            |  4 +---
->  drivers/gpio/gpio-74x164.c                            |  4 +---
->  drivers/gpio/gpio-max3191x.c                          |  4 +---
->  drivers/gpio/gpio-max7301.c                           |  4 +---
->  drivers/gpio/gpio-mc33880.c                           |  4 +---
->  drivers/gpio/gpio-pisosr.c                            |  4 +---
->  drivers/gpu/drm/panel/panel-abt-y030xx067a.c          |  4 +---
->  drivers/gpu/drm/panel/panel-ilitek-ili9322.c          |  4 +---
->  drivers/gpu/drm/panel/panel-ilitek-ili9341.c          |  3 +--
->  drivers/gpu/drm/panel/panel-innolux-ej030na.c         |  4 +---
->  drivers/gpu/drm/panel/panel-lg-lb035q02.c             |  4 +---
->  drivers/gpu/drm/panel/panel-lg-lg4573.c               |  4 +---
->  drivers/gpu/drm/panel/panel-nec-nl8048hl11.c          |  4 +---
->  drivers/gpu/drm/panel/panel-novatek-nt39016.c         |  4 +---
->  drivers/gpu/drm/panel/panel-samsung-db7430.c          |  3 +--
->  drivers/gpu/drm/panel/panel-samsung-ld9040.c          |  4 +---
->  drivers/gpu/drm/panel/panel-samsung-s6d27a1.c         |  3 +--
->  drivers/gpu/drm/panel/panel-samsung-s6e63m0-spi.c     |  3 +--
->  drivers/gpu/drm/panel/panel-sitronix-st7789v.c        |  4 +---
->  drivers/gpu/drm/panel/panel-sony-acx565akm.c          |  4 +---
->  drivers/gpu/drm/panel/panel-tpo-td028ttec1.c          |  4 +---
->  drivers/gpu/drm/panel/panel-tpo-td043mtea1.c          |  4 +---
->  drivers/gpu/drm/panel/panel-tpo-tpg110.c              |  3 +--
->  drivers/gpu/drm/panel/panel-widechips-ws2401.c        |  3 +--
->  drivers/gpu/drm/tiny/hx8357d.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9163.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9225.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9341.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9486.c                        |  4 +---
->  drivers/gpu/drm/tiny/mi0283qt.c                       |  4 +---
->  drivers/gpu/drm/tiny/repaper.c                        |  4 +---
->  drivers/gpu/drm/tiny/st7586.c                         |  4 +---
->  drivers/gpu/drm/tiny/st7735r.c                        |  4 +---
->  drivers/hwmon/adcxx.c                                 |  4 +---
->  drivers/hwmon/adt7310.c                               |  3 +--
->  drivers/hwmon/max1111.c                               |  3 +--
->  drivers/hwmon/max31722.c                              |  4 +---
->  drivers/iio/accel/bma400_spi.c                        |  4 +---
->  drivers/iio/accel/bmc150-accel-spi.c                  |  4 +---
->  drivers/iio/accel/bmi088-accel-spi.c                  |  4 +---
->  drivers/iio/accel/kxsd9-spi.c                         |  4 +---
->  drivers/iio/accel/mma7455_spi.c                       |  4 +---
->  drivers/iio/accel/sca3000.c                           |  4 +---
->  drivers/iio/adc/ad7266.c                              |  4 +---
->  drivers/iio/adc/ltc2496.c                             |  4 +---
->  drivers/iio/adc/mcp320x.c                             |  4 +---
->  drivers/iio/adc/mcp3911.c                             |  4 +---
->  drivers/iio/adc/ti-adc12138.c                         |  4 +---
->  drivers/iio/adc/ti-ads7950.c                          |  4 +---
->  drivers/iio/adc/ti-ads8688.c                          |  4 +---
->  drivers/iio/adc/ti-tlc4541.c                          |  4 +---
->  drivers/iio/amplifiers/ad8366.c                       |  4 +---
->  drivers/iio/common/ssp_sensors/ssp_dev.c              |  4 +---
->  drivers/iio/dac/ad5360.c                              |  4 +---
->  drivers/iio/dac/ad5380.c                              |  4 +---
->  drivers/iio/dac/ad5446.c                              |  4 +---
->  drivers/iio/dac/ad5449.c                              |  4 +---
->  drivers/iio/dac/ad5504.c                              |  4 +---
->  drivers/iio/dac/ad5592r.c                             |  4 +---
->  drivers/iio/dac/ad5624r_spi.c                         |  4 +---
->  drivers/iio/dac/ad5686-spi.c                          |  4 +---
->  drivers/iio/dac/ad5761.c                              |  4 +---
->  drivers/iio/dac/ad5764.c                              |  4 +---
->  drivers/iio/dac/ad5791.c                              |  4 +---
->  drivers/iio/dac/ad8801.c                              |  4 +---
->  drivers/iio/dac/ltc1660.c                             |  4 +---
->  drivers/iio/dac/ltc2632.c                             |  4 +---
->  drivers/iio/dac/mcp4922.c                             |  4 +---
->  drivers/iio/dac/ti-dac082s085.c                       |  4 +---
->  drivers/iio/dac/ti-dac7311.c                          |  3 +--
->  drivers/iio/frequency/adf4350.c                       |  4 +---
->  drivers/iio/gyro/bmg160_spi.c                         |  4 +---
->  drivers/iio/gyro/fxas21002c_spi.c                     |  4 +---
->  drivers/iio/health/afe4403.c                          |  4 +---
->  drivers/iio/magnetometer/bmc150_magn_spi.c            |  4 +---
->  drivers/iio/magnetometer/hmc5843_spi.c                |  4 +---
->  drivers/iio/potentiometer/max5487.c                   |  4 +---
->  drivers/iio/pressure/ms5611_spi.c                     |  4 +---
->  drivers/iio/pressure/zpa2326_spi.c                    |  4 +---
->  drivers/input/keyboard/applespi.c                     |  4 +---
->  drivers/input/misc/adxl34x-spi.c                      |  4 +---
->  drivers/input/touchscreen/ads7846.c                   |  4 +---
->  drivers/input/touchscreen/cyttsp4_spi.c               |  4 +---
->  drivers/input/touchscreen/tsc2005.c                   |  4 +---
->  drivers/leds/leds-cr0014114.c                         |  4 +---
->  drivers/leds/leds-dac124s085.c                        |  4 +---
->  drivers/leds/leds-el15203000.c                        |  4 +---
->  drivers/leds/leds-spi-byte.c                          |  4 +---
->  drivers/media/spi/cxd2880-spi.c                       |  4 +---
->  drivers/media/spi/gs1662.c                            |  4 +---
->  drivers/media/tuners/msi001.c                         |  3 +--
+The larger focus of the TrenchBoot project (https://github.com/TrenchBoot) is to
+enhance the boot security and integrity in a unified manner. The first area of
+focus has been on the Trusted Computing Group's Dynamic Launch for establishing
+a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
+Trust for Measurement). The project has been and continues to work on providing
+a unified means to Dynamic Launch that is a cross-platform (Intel and AMD) and
+cross-architecture (x86 and Arm), with our recent involvment in the upcoming
+Arm DRTM specification. The order of introducing DRTM to the Linux kernel
+follows the maturity of DRTM in the architectures. Intel's Trusted eXecution
+Technology (TXT) is present today and only requires a preamble loader, e.g. a
+boot loader, and an OS kernel that is TXT-aware. AMD DRTM implementation has
+been present since the introduction of AMD-V but requires an additional
+component that is AMD specific and referred to in the specification as the
+Secure Loader, which the TrenchBoot project has an active prototype in
+development. Finally Arm's implementation is in specification development stage
+and the project is looking to support it when it becomes available.
 
-A bit late, but for drivers/media:
+This patchset provides detailed documentation of DRTM, the approach used for
+adding the capbility, and relevant API/ABI documentation. In addition to the
+documentation the patch set introduces Intel TXT support as the first platform
+for Linux Secure Launch.
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+A quick note on terminology. The larger open source project itself is called
+TrenchBoot, which is hosted on Github (links below). The kernel feature enabling
+the use of Dynamic Launch technology is referred to as "Secure Launch" within
+the kernel code. As such the prefixes sl_/SL_ or slaunch/SLAUNCH will be seen
+in the code. The stub code discussed above is referred to as the SL stub.
 
-Thanks!
+The Secure Launch feature starts with patch #2. Patch #1 was authored by Arvind
+Sankar. There is no further status on this patch at this point but
+Secure Launch depends on it so it is included with the set.
 
-	Hans
+Links:
+
+The TrenchBoot project including documentation:
+
+https://github.com/trenchboot
+
+Intel TXT is documented in its own specification and in the SDM Instruction Set volume:
+
+https://www.intel.com/content/dam/www/public/us/en/documents/guides/intel-txt-software-development-guide.pdf
+https://software.intel.com/en-us/articles/intel-sdm
+
+AMD SKINIT is documented in the System Programming manual:
+
+https://www.amd.com/system/files/TechDocs/24593.pdf
+
+GRUB2 pre-launch support patchset (WIP):
+
+https://lists.gnu.org/archive/html/grub-devel/2020-05/msg00011.html
+
+Thanks
+Ross Philipson and Daniel P. Smith
+
+Changes in v2:
+
+ - Modified 32b entry code to prevent causing relocations in the compressed
+   kernel.
+ - Dropped patches for compressed kernel TPM PCR extender.
+ - Modified event log code to insert log delimiter events and not rely
+   on TPM access.
+ - Stop extending PCRs in the early Secure Launch stub code.
+ - Removed Kconfig options for hash algorithms and use the algorithms the
+   ACM used.
+ - Match Secure Launch measurement algorithm use to those reported in the
+   TPM 2.0 event log.
+ - Read the TPM events out of the TPM and extend them into the PCRs using
+   the mainline TPM driver. This is done in the late initcall module.
+ - Allow use of alternate PCR 19 and 20 for post ACM measurements.
+ - Add Kconfig constraints needed by Secure Launch (disable KASLR
+   and add x2apic dependency).
+ - Fix testing of SL_FLAGS when determining if Secure Launch is active
+   and the architecture is TXT.
+ - Use SYM_DATA_START_LOCAL macros in early entry point code.
+ - Security audit changes:
+   - Validate buffers passed to MLE do not overlap the MLE and are
+     properly laid out.
+   - Validate buffers and memory regions used by the MLE are
+     protected by IOMMU PMRs.
+ - Force IOMMU to not use passthrough mode during a Secure Launch.
+ - Prevent KASLR use during a Secure Launch.
+
+Changes in v3:
+
+ - Introduce x86 documentation patch to provide background, overview
+   and configuration/ABI information for the Secure Launch kernel
+   feature.
+ - Remove the IOMMU patch with special cases for disabling IOMMU
+   passthrough. Configuring the IOMMU is now a documentation matter
+   in the previously mentioned new patch.
+ - Remove special case KASLR disabling code. Configuring KASLR is now
+   a documentation matter in the previously mentioned new patch.
+ - Fix incorrect panic on TXT public register read.
+ - Properly handle and measure setup_indirect bootparams in the early
+   launch code.
+ - Use correct compressed kernel image base address when testing buffers
+   in the early launch stub code. This bug was introduced by the changes
+   to avoid relocation in the compressed kernel.
+ - Use CPUID feature bits instead of CPUID vendor strings to determine
+   if SMX mode is supported and the system is Intel.
+ - Remove early NMI re-enable on the BSP. This can be safely done later
+   on the BSP after an IDT is setup.
+
+Changes in v4:
+ - Expand the cover letter to provide more context to the order that DRTM
+   support will be added.
+ - Removed debug tracing in TPM request locality funciton and fixed
+   local variable declarations.
+ - Fixed missing break in default case in slmodule.c.
+ - Reworded commit messages in patches 1 and 2 per suggestions.
+
+Changes in v5:
+ - Comprehensive documentation rewrite.
+ - Use boot param loadflags to communicate Secure Launch status to
+   kernel proper.
+ - Fix incorrect check of X86_FEATURE_BIT_SMX bit.
+ - Rename the alternate details and authorities PCR support.
+ - Refactor the securityfs directory and file setup in slmodule.c.
+ - Misc. cleanup from internal code reviews.
+ - Use reverse fir tree format for variables.
+
+Arvind Sankar (1):
+  x86/boot: Place kernel_info at a fixed offset
+
+Daniel P. Smith (2):
+  x86: Add early SHA support for Secure Launch early measurements
+  x86: Secure Launch late initcall platform module
+
+Ross Philipson (9):
+  Documentation/x86: Secure Launch kernel documentation
+  x86: Secure Launch Kconfig
+  x86: Secure Launch main header file
+  x86: Secure Launch kernel early boot stub
+  x86: Secure Launch kernel late boot stub
+  x86: Secure Launch SMP bringup support
+  kexec: Secure Launch kexec SEXIT support
+  reboot: Secure Launch SEXIT support on reboot paths
+  tpm: Allow locality 2 to be set when initializing the TPM for Secure
+    Launch
+
+ Documentation/security/index.rst                   |   1 +
+ Documentation/security/launch-integrity/index.rst  |  10 +
+ .../security/launch-integrity/principles.rst       | 313 ++++++++++
+ .../launch-integrity/secure_launch_details.rst     | 552 +++++++++++++++++
+ .../launch-integrity/secure_launch_overview.rst    | 214 +++++++
+ Documentation/x86/boot.rst                         |  21 +
+ arch/x86/Kconfig                                   |  34 +
+ arch/x86/boot/compressed/Makefile                  |   3 +
+ arch/x86/boot/compressed/early_sha1.c              |  97 +++
+ arch/x86/boot/compressed/early_sha1.h              |  17 +
+ arch/x86/boot/compressed/early_sha256.c            |   7 +
+ arch/x86/boot/compressed/head_64.S                 |  37 ++
+ arch/x86/boot/compressed/kernel_info.S             |  53 +-
+ arch/x86/boot/compressed/kernel_info.h             |  12 +
+ arch/x86/boot/compressed/sl_main.c                 | 556 +++++++++++++++++
+ arch/x86/boot/compressed/sl_stub.S                 | 685 +++++++++++++++++++++
+ arch/x86/boot/compressed/vmlinux.lds.S             |   6 +
+ arch/x86/include/asm/realmode.h                    |   3 +
+ arch/x86/include/uapi/asm/bootparam.h              |   1 +
+ arch/x86/kernel/Makefile                           |   2 +
+ arch/x86/kernel/asm-offsets.c                      |  19 +
+ arch/x86/kernel/reboot.c                           |  10 +
+ arch/x86/kernel/setup.c                            |   3 +
+ arch/x86/kernel/slaunch.c                          | 536 ++++++++++++++++
+ arch/x86/kernel/slmodule.c                         | 493 +++++++++++++++
+ arch/x86/kernel/smpboot.c                          |  86 +++
+ arch/x86/realmode/rm/header.S                      |   3 +
+ arch/x86/realmode/rm/trampoline_64.S               |  37 ++
+ drivers/char/tpm/tpm-chip.c                        |   9 +-
+ drivers/iommu/intel/dmar.c                         |   4 +
+ include/linux/slaunch.h                            | 532 ++++++++++++++++
+ kernel/kexec_core.c                                |   4 +
+ lib/crypto/sha256.c                                |   8 +
+ lib/sha1.c                                         |   4 +
+ 34 files changed, 4367 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/security/launch-integrity/index.rst
+ create mode 100644 Documentation/security/launch-integrity/principles.rst
+ create mode 100644 Documentation/security/launch-integrity/secure_launch_details.rst
+ create mode 100644 Documentation/security/launch-integrity/secure_launch_overview.rst
+ create mode 100644 arch/x86/boot/compressed/early_sha1.c
+ create mode 100644 arch/x86/boot/compressed/early_sha1.h
+ create mode 100644 arch/x86/boot/compressed/early_sha256.c
+ create mode 100644 arch/x86/boot/compressed/kernel_info.h
+ create mode 100644 arch/x86/boot/compressed/sl_main.c
+ create mode 100644 arch/x86/boot/compressed/sl_stub.S
+ create mode 100644 arch/x86/kernel/slaunch.c
+ create mode 100644 arch/x86/kernel/slmodule.c
+ create mode 100644 include/linux/slaunch.h
+
+-- 
+1.8.3.1
+
