@@ -2,98 +2,196 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8884BABC1
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Feb 2022 22:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DF44BB94A
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Feb 2022 13:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiBQVem (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Feb 2022 16:34:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57978 "EHLO
+        id S235292AbiBRMik (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 18 Feb 2022 07:38:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiBQVem (ORCPT
+        with ESMTP id S234830AbiBRMij (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Feb 2022 16:34:42 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C872111109A;
-        Thu, 17 Feb 2022 13:34:26 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HLCpqB029719;
-        Thu, 17 Feb 2022 21:33:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=1IknNosHkgrIItd4+fz82yY/ZudLplMKSRIl8wwtLPw=;
- b=pQQCjtZw5ATEiWRyDBMN/rgTp0SQvwwErpt1jC31LpWcXQ5vCFmBf8A+DlTJDKd7UkDc
- OMivn8AKW2kHSegw09cJVZIqllQDHdiQksEcU3kbpn1lrFD+i0z9KMQ3B6woq+V70gyS
- gViVQhsUsRkNhxxdiUy/LuPmp3qm45NdH2bB+ARfzjQ0AEdwxNs93oHRFq2x9apzv+qf
- iFCiPsFaU83KqHQGAdCMc6G7NQne5cF5ro52vbCf3iDTlpLbU788WQyWX7V53kgVgyed
- TyTwRxyAiUZx3boiEU8L9rOkFFGWJ6P0KJwPTSEyCEguEmNGZhMAJkIZbxyMSCj4MsGR gA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9w6chfva-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 21:33:06 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21HLRFsa024521;
-        Thu, 17 Feb 2022 21:33:05 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9w6chfun-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 21:33:05 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21HLDgYZ010027;
-        Thu, 17 Feb 2022 21:33:03 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3e645kbguk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 21:33:03 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21HLX0cF37749028
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Feb 2022 21:33:00 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E83ADA405F;
-        Thu, 17 Feb 2022 21:32:59 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8213A4054;
-        Thu, 17 Feb 2022 21:32:57 +0000 (GMT)
-Received: from sig-9-65-72-122.ibm.com (unknown [9.65.72.122])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Feb 2022 21:32:57 +0000 (GMT)
-Message-ID: <d2528ee025956683574775ed9f1bb37665cdfb47.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 13/27] ima: Only accept AUDIT rules for
- non-init_ima_ns namespaces for now
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Christian Brauner <brauner@kernel.org>
-Date:   Thu, 17 Feb 2022 16:32:52 -0500
-In-Reply-To: <20220201203735.164593-14-stefanb@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-14-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zWXwygVsiLw7IdaxqGaPgAy1c5bNdkYl
-X-Proofpoint-ORIG-GUID: UGRkoEBLXim_aJhJGwR-23yVWmY0xS0B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-17_08,2022-02-17_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501 mlxscore=0
- adultscore=0 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202170102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        Fri, 18 Feb 2022 07:38:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49441738F2;
+        Fri, 18 Feb 2022 04:38:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D27EB8261C;
+        Fri, 18 Feb 2022 12:38:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38114C340E9;
+        Fri, 18 Feb 2022 12:37:52 +0000 (UTC)
+Message-ID: <c70113dc-d017-b5bc-1466-02530f4707e2@xs4all.nl>
+Date:   Fri, 18 Feb 2022 13:37:50 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 5/5] spi: make remove callback a void function
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Emma Anholt <emma@anholt.net>,
+        David Lechner <david@lechnology.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
+        Antti Palosaari <crope@iki.fi>,
+        Lee Jones <lee.jones@linaro.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eric Piel <eric.piel@tremplin-utc.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Harry Morris <h.morris@cascoda.com>,
+        Varka Bhadram <varkabhadram@gmail.com>,
+        Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mark Greer <mgreer@animalcreek.com>,
+        Benson Leung <bleung@chromium.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        =?UTF-8?Q?Ronald_Tschal=c3=a4r?= <ronald@innovation.ch>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Heiko Schocher <hs@denx.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Matt Kline <matt@bitbashing.io>,
+        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Yang Shen <shenyang39@huawei.com>,
+        dingsenjie <dingsenjie@yulong.com>,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michael Walle <michael@walle.cc>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        wengjianfeng <wengjianfeng@yulong.com>,
+        Sidong Yang <realwakka@gmail.com>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        Davidlohr Bueso <dbueso@suse.de>, Claudius Heine <ch@denx.de>,
+        Jiri Prchal <jiri.prchal@aksignal.cz>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        linux-wireless@vger.kernel.org, libertas-dev@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
+ <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -102,24 +200,118 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-
-> Only accept AUDIT rules for non-init_ima_ns namespaces rejecting all rules
-> that require support for measuring, appraisal, and hashing.
-
-It's probably obvious, but adding the words "for now" somewhere in the
-above line makes it clear this is temporary.
-
+On 23/01/2022 18:52, Uwe Kleine-König wrote:
+> The value returned by an spi driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
 > 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Acked-by: Christian Brauner <brauner@kernel.org>
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/bus/moxtet.c                                  |  4 +---
+>  drivers/char/tpm/st33zp24/spi.c                       |  4 +---
+>  drivers/char/tpm/tpm_tis_spi_main.c                   |  3 +--
+>  drivers/clk/clk-lmk04832.c                            |  4 +---
+>  drivers/gpio/gpio-74x164.c                            |  4 +---
+>  drivers/gpio/gpio-max3191x.c                          |  4 +---
+>  drivers/gpio/gpio-max7301.c                           |  4 +---
+>  drivers/gpio/gpio-mc33880.c                           |  4 +---
+>  drivers/gpio/gpio-pisosr.c                            |  4 +---
+>  drivers/gpu/drm/panel/panel-abt-y030xx067a.c          |  4 +---
+>  drivers/gpu/drm/panel/panel-ilitek-ili9322.c          |  4 +---
+>  drivers/gpu/drm/panel/panel-ilitek-ili9341.c          |  3 +--
+>  drivers/gpu/drm/panel/panel-innolux-ej030na.c         |  4 +---
+>  drivers/gpu/drm/panel/panel-lg-lb035q02.c             |  4 +---
+>  drivers/gpu/drm/panel/panel-lg-lg4573.c               |  4 +---
+>  drivers/gpu/drm/panel/panel-nec-nl8048hl11.c          |  4 +---
+>  drivers/gpu/drm/panel/panel-novatek-nt39016.c         |  4 +---
+>  drivers/gpu/drm/panel/panel-samsung-db7430.c          |  3 +--
+>  drivers/gpu/drm/panel/panel-samsung-ld9040.c          |  4 +---
+>  drivers/gpu/drm/panel/panel-samsung-s6d27a1.c         |  3 +--
+>  drivers/gpu/drm/panel/panel-samsung-s6e63m0-spi.c     |  3 +--
+>  drivers/gpu/drm/panel/panel-sitronix-st7789v.c        |  4 +---
+>  drivers/gpu/drm/panel/panel-sony-acx565akm.c          |  4 +---
+>  drivers/gpu/drm/panel/panel-tpo-td028ttec1.c          |  4 +---
+>  drivers/gpu/drm/panel/panel-tpo-td043mtea1.c          |  4 +---
+>  drivers/gpu/drm/panel/panel-tpo-tpg110.c              |  3 +--
+>  drivers/gpu/drm/panel/panel-widechips-ws2401.c        |  3 +--
+>  drivers/gpu/drm/tiny/hx8357d.c                        |  4 +---
+>  drivers/gpu/drm/tiny/ili9163.c                        |  4 +---
+>  drivers/gpu/drm/tiny/ili9225.c                        |  4 +---
+>  drivers/gpu/drm/tiny/ili9341.c                        |  4 +---
+>  drivers/gpu/drm/tiny/ili9486.c                        |  4 +---
+>  drivers/gpu/drm/tiny/mi0283qt.c                       |  4 +---
+>  drivers/gpu/drm/tiny/repaper.c                        |  4 +---
+>  drivers/gpu/drm/tiny/st7586.c                         |  4 +---
+>  drivers/gpu/drm/tiny/st7735r.c                        |  4 +---
+>  drivers/hwmon/adcxx.c                                 |  4 +---
+>  drivers/hwmon/adt7310.c                               |  3 +--
+>  drivers/hwmon/max1111.c                               |  3 +--
+>  drivers/hwmon/max31722.c                              |  4 +---
+>  drivers/iio/accel/bma400_spi.c                        |  4 +---
+>  drivers/iio/accel/bmc150-accel-spi.c                  |  4 +---
+>  drivers/iio/accel/bmi088-accel-spi.c                  |  4 +---
+>  drivers/iio/accel/kxsd9-spi.c                         |  4 +---
+>  drivers/iio/accel/mma7455_spi.c                       |  4 +---
+>  drivers/iio/accel/sca3000.c                           |  4 +---
+>  drivers/iio/adc/ad7266.c                              |  4 +---
+>  drivers/iio/adc/ltc2496.c                             |  4 +---
+>  drivers/iio/adc/mcp320x.c                             |  4 +---
+>  drivers/iio/adc/mcp3911.c                             |  4 +---
+>  drivers/iio/adc/ti-adc12138.c                         |  4 +---
+>  drivers/iio/adc/ti-ads7950.c                          |  4 +---
+>  drivers/iio/adc/ti-ads8688.c                          |  4 +---
+>  drivers/iio/adc/ti-tlc4541.c                          |  4 +---
+>  drivers/iio/amplifiers/ad8366.c                       |  4 +---
+>  drivers/iio/common/ssp_sensors/ssp_dev.c              |  4 +---
+>  drivers/iio/dac/ad5360.c                              |  4 +---
+>  drivers/iio/dac/ad5380.c                              |  4 +---
+>  drivers/iio/dac/ad5446.c                              |  4 +---
+>  drivers/iio/dac/ad5449.c                              |  4 +---
+>  drivers/iio/dac/ad5504.c                              |  4 +---
+>  drivers/iio/dac/ad5592r.c                             |  4 +---
+>  drivers/iio/dac/ad5624r_spi.c                         |  4 +---
+>  drivers/iio/dac/ad5686-spi.c                          |  4 +---
+>  drivers/iio/dac/ad5761.c                              |  4 +---
+>  drivers/iio/dac/ad5764.c                              |  4 +---
+>  drivers/iio/dac/ad5791.c                              |  4 +---
+>  drivers/iio/dac/ad8801.c                              |  4 +---
+>  drivers/iio/dac/ltc1660.c                             |  4 +---
+>  drivers/iio/dac/ltc2632.c                             |  4 +---
+>  drivers/iio/dac/mcp4922.c                             |  4 +---
+>  drivers/iio/dac/ti-dac082s085.c                       |  4 +---
+>  drivers/iio/dac/ti-dac7311.c                          |  3 +--
+>  drivers/iio/frequency/adf4350.c                       |  4 +---
+>  drivers/iio/gyro/bmg160_spi.c                         |  4 +---
+>  drivers/iio/gyro/fxas21002c_spi.c                     |  4 +---
+>  drivers/iio/health/afe4403.c                          |  4 +---
+>  drivers/iio/magnetometer/bmc150_magn_spi.c            |  4 +---
+>  drivers/iio/magnetometer/hmc5843_spi.c                |  4 +---
+>  drivers/iio/potentiometer/max5487.c                   |  4 +---
+>  drivers/iio/pressure/ms5611_spi.c                     |  4 +---
+>  drivers/iio/pressure/zpa2326_spi.c                    |  4 +---
+>  drivers/input/keyboard/applespi.c                     |  4 +---
+>  drivers/input/misc/adxl34x-spi.c                      |  4 +---
+>  drivers/input/touchscreen/ads7846.c                   |  4 +---
+>  drivers/input/touchscreen/cyttsp4_spi.c               |  4 +---
+>  drivers/input/touchscreen/tsc2005.c                   |  4 +---
+>  drivers/leds/leds-cr0014114.c                         |  4 +---
+>  drivers/leds/leds-dac124s085.c                        |  4 +---
+>  drivers/leds/leds-el15203000.c                        |  4 +---
+>  drivers/leds/leds-spi-byte.c                          |  4 +---
+>  drivers/media/spi/cxd2880-spi.c                       |  4 +---
+>  drivers/media/spi/gs1662.c                            |  4 +---
+>  drivers/media/tuners/msi001.c                         |  3 +--
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+A bit late, but for drivers/media:
 
--- 
-thanks,
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Mimi
+Thanks!
 
-
-
+	Hans
