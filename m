@@ -2,93 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F884BD29D
+	by mail.lfdr.de (Postfix) with ESMTP id 34FEA4BD29C
 	for <lists+linux-integrity@lfdr.de>; Mon, 21 Feb 2022 00:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245232AbiBTXUo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 20 Feb 2022 18:20:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45488 "EHLO
+        id S245256AbiBTXXA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 20 Feb 2022 18:23:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238913AbiBTXUn (ORCPT
+        with ESMTP id S236754AbiBTXXA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 20 Feb 2022 18:20:43 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691722C11A;
-        Sun, 20 Feb 2022 15:20:21 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21KGlOlN027877;
-        Sun, 20 Feb 2022 23:20:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=WalQmBmZDHc62f4OE0+VIiS7BEIhT60ZacvAOX9Q9ww=;
- b=WGhk4SmmRh/f1xiUBo0jKfBemQwWt+aQEiB+ThnsTmJJlrRdZ9MAIU9KNZtJNL5y5dQB
- jo1YALS8sRpUTY+FHCGJAkuz99+2CRnDiVlj5t/oiMsii5bJ8fqlLWcq7ZQv17f5sy0b
- GHdrOVE7xIDu6A/8pFUnApsiUhXuBQzIRifnhBt19prM/dSMAKtrk+FnNw/pKvBhLErj
- i2/jK7v0MLKvqfDmptQY1l1zvYEuxGBjjlHM5toK8jOIRj6IGNMwUCdSBUe7nLNrSx4G
- 7RYoyXpF9W1iorsMRWEodry+o8tVCgGf+6zwI0x6vrkM8ejVdT+Y7aHX8KokRIk+Sh/2 AQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ebsfk3unk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 20 Feb 2022 23:20:05 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21KNK5S0031649;
-        Sun, 20 Feb 2022 23:20:05 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ebsfk3un4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 20 Feb 2022 23:20:05 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21KNDkEL025911;
-        Sun, 20 Feb 2022 23:20:03 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3ear68wrch-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 20 Feb 2022 23:20:03 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21KNK0YU50266578
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 20 Feb 2022 23:20:00 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B3AA1AE04D;
-        Sun, 20 Feb 2022 23:20:00 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CAA57AE045;
-        Sun, 20 Feb 2022 23:19:59 +0000 (GMT)
-Received: from sig-9-65-90-122.ibm.com (unknown [9.65.90.122])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 20 Feb 2022 23:19:59 +0000 (GMT)
-Message-ID: <07a65960197c4b50f996abdf2b062e836ce1226d.camel@linux.ibm.com>
-Subject: Re: init_ima() adds 8 % to boot time
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, Petr Vorel <pvorel@suse.cz>
-Date:   Sun, 20 Feb 2022 18:19:59 -0500
-In-Reply-To: <YhLHZeQdaIKHexVd@iki.fi>
-References: <32f90c33-eeb9-64a0-b2e2-9258ba2e1820@molgen.mpg.de>
-         <7d84425f36e3b04ab1adabed23f98b478b53b770.camel@linux.ibm.com>
-         <YhLHZeQdaIKHexVd@iki.fi>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7AlreKb2QpztoMehMrNl39cWW8FRb7GN
-X-Proofpoint-GUID: vgL869rMjIqqMex1ZIANoHAigw1yvcgv
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 20 Feb 2022 18:23:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054D239A;
+        Sun, 20 Feb 2022 15:22:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86C8E60FA7;
+        Sun, 20 Feb 2022 23:22:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 186BFC340E8;
+        Sun, 20 Feb 2022 23:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645399357;
+        bh=3z3X8nPJCphhYNhLkKRt8j/6BnWu10ouKJ/lOj8V9dw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vzr4UtPq3g/zuq5Yx0UWTzFk5C47Z5UT1uYcxWnjNNIUKM4Rwaov+Doduz+HHTGg/
+         r48VnDUm6JeGrW+vYEOaG/DGYLEUxUJNqJ3NM8i1xeoxhiJIA3ISyzENb8ahvNT8p8
+         DFZPbBGibzvZtng+NnRASrEbwYxuUpmNL6UOO13vYzWA0QLQcFFyOfaNbfUWDqqu75
+         HvAcnLXtj7HYnWMBXi6uGLrR7KgeJ+UapgZaViXuKjbWXTQtuOcTFpIWx2dEHdB5kV
+         VZhEb5nlHneoOaJR2qerCZ6uQd/ArXmEp+dDX6xl2gFmSg6mwHEip8qPu04H+GxkoV
+         DOpvHDOM+qGxQ==
+Date:   Mon, 21 Feb 2022 00:23:15 +0100
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
+        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
+        nramas@linux.microsoft.com, lszubowi@redhat.com, jason@zx2c4.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Subject: Re: [PATCH v8 00/17] Enroll kernel keys thru MOK
+Message-ID: <YhLNYxBTbKW62vtC@iki.fi>
+References: <20211124044124.998170-1-eric.snowberg@oracle.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-20_10,2022-02-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 priorityscore=1501 spamscore=0 clxscore=1015
- mlxlogscore=999 impostorscore=0 phishscore=0 suspectscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202200151
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124044124.998170-1-eric.snowberg@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -97,123 +63,152 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, 2022-02-20 at 23:57 +0100, Jarkko Sakkinen wrote:
-> On Sun, Feb 20, 2022 at 10:19:37AM -0500, Mimi Zohar wrote:
-> > [Cc'ing Jarkko, Petr Vorel]
-> > 
-> > Hi Paul,
-> > 
-> > On Sat, 2022-02-19 at 10:44 +0100, Paul Menzel wrote:
-> > > Dear Linux folks,
-> > > 
-> > > 
-> > > Debian builds its Linux kernel image with `CONFIG_IMA=y` since version 
-> > > 5.13.9 [1]. Unfortunately, on the Dell Latitude E7250 `init_ima` takes 
-> > > around 33 ms, adding 8 % to the boot time up to loading the initrd.
-> > > 
-> > >      [    0.000000] Linux version 5.17.0-rc4-amd64 
-> > > (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-16) 11.2.0, GNU 
-> > > ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.17~rc4-1~exp1 
-> > > (2022-02-18)
-> > >      […]
-> > >      [    0.238520] calling  init_tis+0x0/0xde @ 1
-> > >      [    0.254749] tpm_tis 00:08: 1.2 TPM (device-id 0x3205, rev-id 80)
-> > >      [    0.285665] initcall init_tis+0x0/0xde returned 0 after 46038 usecs
-> > >      […]
-> > >      [    0.301327] calling  init_ima+0x0/0xb5 @ 1
-> > >      [    0.301332] ima: Allocated hash algorithm: sha256
-> > >      [    0.335502] ima: No architecture policies found
-> > >      [    0.335520] initcall init_ima+0x0/0xb5 returned 0 after 33389 usecs
-> > >      […]
-> > >      [    0.447312] Run /init as init process
-> > > 
-> > > Tracing `init_ima` with a depth of 5 shows 
-> > > `ima_calc_boot_aggregate_tfm()` takes 24 ms, and 
-> > > `ima_add_template_entry()` takes 10 ms.
-> > > 
-> > >          1.282630 |   1)   swapper-1    |               | 
-> > > ima_add_boot_aggregate() {
-> > >          1.282631 |   1)   swapper-1    |               | 
-> > > ima_calc_boot_agg:0regate() {
-> > >          1.282631 |   1)   swapper-1    |   0.153 us    | 
-> > > ima_alloc_tfm();
-> > >          1.282631 |   1)   swapper-1    | * 24404.59 us | 
-> > > ima_calc_boot_aggregate_tfm();
-> > >          1.307037 |   1)   swapper-1    |   0.482 us    | 
-> > > ima_free_tfm.part.0();
-> > >          1.307038 |   1)   swapper-1    | * 24407.06 us |        } /* 
-> > > ima_calc_boot_aggregate */
-> > >          1.307038 |   1)   swapper-1    |               | 
-> > > ima_alloc_init_template() {
-> > >          1.307038 |   1)   swapper-1    |   0.173 us    | 
-> > > ima_template_desc_current();
-> > >          1.307039 |   1)   swapper-1    |   0.836 us    | 
-> > > __kmalloc();
-> > >          1.307040 |   1)   swapper-1    |   0.580 us    | 
-> > > __kmalloc();
-> > >          1.307041 |   1)   swapper-1    |   1.555 us    | 
-> > > ima_eventdigest_ng_init();
-> > >          1.307043 |   1)   swapper-1    |   1.275 us    | 
-> > > ima_eventname_ng_init();
-> > >          1.307044 |   1)   swapper-1    |   0.256 us    | 
-> > > ima_eventsig_init();
-> > >          1.307045 |   1)   swapper-1    |   6.618 us    |        } /* 
-> > > ima_alloc_init_template */
-> > >          1.307045 |   1)   swapper-1    |               | 
-> > > ima_store_template() {
-> > >          1.307045 |   1)   swapper-1    |   5.049 us    | 
-> > > ima_calc_field_array_hash();
-> > >          1.307051 |   1)   swapper-1    | # 9316.953 us | 
-> > > ima_add_template_entry();
-> > >          1.316369 |   1)   swapper-1    | # 9323.728 us |        } /* 
-> > > ima_store_template */
-> > >          1.316369 |   1)   swapper-1    | * 33738.54 us |      } /* 
-> > > ima_add_boot_aggregate */
-> > > 
-> > > Tracing `ima_calc_boot_aggregate_tfm()` (attached) shows that the first 
-> > > `tpm1_pcr_read()` takes 16 ms in `tpm_transmit()`. Is communicating with 
-> > > the TPM supposed to be that slow?
-> > > 
-> > > In the last years, Linux decreased it’s boot time a lot, so do you see a 
-> > > way to move things out of the hot path and get `init_ima` well below 10 
-> > > ms? (As systems get faster and faster, having systems with standard 
-> > > distributions to be up below two seconds after pressing the power button 
-> > > should be a reasonable goal (500 ms firmware (like coreboot) + 500 ms 
-> > > Linux kernel + 1 s user space).
-> > > 
-> > > 
-> > > [1]: 
-> > > https://salsa.debian.org/kernel-team/linux/-/commit/6e679322d7d98d30b4a8a3d1b659c899a6e9d4df
-> > 
-> > Thank you including the initial and other TPM delays.  The main reason
-> > for the "boot_aggregate" is to tie the pre-OS measurements to the post
-> > OS measurement list.  Without the TPM based 'boot_aggregate', any IMA
-> > measurement list could be used to verify a TPM quote.  The
-> > 'boot_aggregate' is calculated, originally, based on PCRs 0 - 7 and
-> > more recently may include PCRs 8 & 9 as well.  The 'boot_aggregate' is
-> > the first record in the IMA measurement list and the first record after
-> > a soft reboot (kexec).  It is the one and only IMA measurement record
-> > not dependent on policy.
-> > 
-> > There are TPM 1.2 & 2.0 standards' requirements, but there are also
-> > buggy TPMs which don't adhere to them to such an extent that IMA goes
-> > into 'TPM-bypass' mode. Perhaps for those not interested in extending
-> > the concepts of trusted boot to the running OS, defining a new boot
-> > command line option to force IMA into this 'TPM-bypass' mode would be
-> > an acceptable alternative to the delay.  The IMA measurement list would
-> > still include a 'boot_aggregate' record, but one containing 0's.
+On Tue, Nov 23, 2021 at 11:41:07PM -0500, Eric Snowberg wrote:
+> Back in 2013 Linus requested a feature to allow end-users to have the 
+> ability "to add their own keys and sign modules they trust". This was
+> his *second* order outlined here [1]. There have been many attempts 
+> over the years to solve this problem, all have been rejected.  Many 
+> of the failed attempts loaded all preboot firmware keys into the kernel,
+> including the Secure Boot keys. Many distributions carry one of these 
+> rejected attempts [2], [3], [4]. This series tries to solve this problem 
+> with a solution that takes into account all the problems brought up in 
+> the previous attempts.
 > 
-> I support the opt-in boot option.
+> On UEFI based systems, this series introduces a new Linux kernel keyring 
+> containing the Machine Owner Keys (MOK) called machine. It also defines
+> a new MOK variable in shim. This variable allows the end-user to decide 
+> if they want to load MOK keys into the machine keyring. Mimi has suggested 
+> that only CA keys contained within the MOK be loaded into the machine 
+> keyring. All other certs will load into the platform keyring instead.
 > 
-> If the full hardware specifications are known for a device, you might want
-> to use this.
+> By default, nothing changes; MOK keys are not loaded into the machine
+> keyring.  They are only loaded after the end-user makes the decision 
+> themselves.  The end-user would set this through mokutil using a new 
+> --trust-mok option [5]. This would work similar to how the kernel uses 
+> MOK variables to enable/disable signature validation as well as use/ignore 
+> the db. Any kernel operation that uses either the builtin or secondary 
+> trusted keys as a trust source shall also reference the new machine 
+> keyring as a trust source.
+> 
+> Secure Boot keys will never be loaded into the machine keyring.  They
+> will always be loaded into the platform keyring.  If an end-user wanted 
+> to load one, they would need to enroll it into the MOK.
+> 
+> Steps required by the end user:
+> 
+> Sign kernel module with user created key:
+> $ /usr/src/kernels/$(uname -r)/scripts/sign-file sha512 \
+>    machine_signing_key.priv machine_signing_key.x509 my_module.ko
+> 
+> Import the key into the MOK
+> $ mokutil --import machine_signing_key.x509
+> 
+> Setup the kernel to load MOK keys into the .machine keyring
+> $ mokutil --trust-mok
+> 
+> Then reboot, the MokManager will load and ask if you want to trust the
+> MOK key and enroll the MOK into the MOKList.  Afterwards the signed kernel
+> module will load.
+> 
+> I have included  a link to the mokutil [5] changes I have made to support 
+> this new functionality.  The shim changes have now been accepted
+> upstream [6].
+> 
+> Upstream shim is located here [7], the build instructions are here [8].
+> TLDR:
+> 
+> $ git clone --recurse-submodules https://github.com/rhboot/shim
+> $ cd shim
+> $ make
+> 
+> After building shim, move shimx64.efi and mmx64.efi to the vendor or 
+> distribution specific directory on your EFI System Partition (assuming
+> you are building on x86). The instructions above are the minimal
+> steps needed to build shim to test this feature. It is assumed
+> Secure Boot shall not be enabled for this testing. To do testing
+> with Secure Boot enabled, all steps in the build instructions [8]
+> must be followed.
+> 
+> Instructions for building mokutil (including the new changes):
+> 
+> $ git clone -b mokvars-v3 https://github.com/esnowberg/mokutil.git
+> $ cd mokutil/
+> $ ./autogen.sh
+> $ make
+> 
+> [1] https://marc.info/?l=linux-kernel&m=136185386310140&w=2
+> [2] https://lore.kernel.org/lkml/1479737095.2487.34.camel@linux.vnet.ibm.com/
+> [3] https://lore.kernel.org/lkml/1556221605.24945.3.camel@HansenPartnership.com/
+> [4] https://lore.kernel.org/linux-integrity/1e41f22b1f11784f1e943f32bf62034d4e054cdb.camel@HansenPartnership.com/
+> [5] https://github.com/esnowberg/mokutil/tree/mokvars-v3
+> [6] https://github.com/rhboot/shim/commit/4e513405b4f1641710115780d19dcec130c5208f
+> [7] https://github.com/rhboot/shim
+> [8] https://github.com/rhboot/shim/blob/main/BUILDING
+> 
+> 
+> Eric Snowberg (17):
+>   KEYS: Create static version of public_key_verify_signature
+>   integrity: Fix warning about missing prototypes
+>   integrity: Introduce a Linux keyring called machine
+>   integrity: Do not allow machine keyring updates following init
+>   X.509: Parse Basic Constraints for CA
+>   KEYS: CA link restriction
+>   integrity: restrict INTEGRITY_KEYRING_MACHINE to restrict_link_by_ca
+>   integrity: add new keyring handler for mok keys
+>   KEYS: Rename get_builtin_and_secondary_restriction
+>   KEYS: add a reference to machine keyring
+>   KEYS: Introduce link restriction for machine keys
+>   KEYS: integrity: change link restriction to trust the machine keyring
+>   integrity: store reference to machine keyring
+>   KEYS: link machine trusted keys to secondary_trusted_keys
+>   efi/mokvar: move up init order
+>   integrity: Trust MOK keys if MokListTrustedRT found
+>   integrity: Only use machine keyring when uefi_check_trust_mok_keys is
+>     true
+> 
+>  certs/system_keyring.c                        | 48 +++++++++++-
+>  crypto/asymmetric_keys/restrict.c             | 43 +++++++++++
+>  crypto/asymmetric_keys/x509_cert_parser.c     |  9 +++
+>  drivers/firmware/efi/mokvar-table.c           |  2 +-
+>  include/crypto/public_key.h                   | 25 ++++++
+>  include/keys/system_keyring.h                 | 14 ++++
+>  security/integrity/Kconfig                    | 12 +++
+>  security/integrity/Makefile                   |  1 +
+>  security/integrity/digsig.c                   | 23 +++++-
+>  security/integrity/integrity.h                | 17 +++-
+>  .../platform_certs/keyring_handler.c          | 18 ++++-
+>  .../platform_certs/keyring_handler.h          |  5 ++
+>  security/integrity/platform_certs/load_uefi.c |  4 +-
+>  .../platform_certs/machine_keyring.c          | 77 +++++++++++++++++++
+>  14 files changed, 287 insertions(+), 11 deletions(-)
+>  create mode 100644 security/integrity/platform_certs/machine_keyring.c
+> 
+> 
+> base-commit: 136057256686de39cc3a07c2e39ef6bc43003ff6
+> -- 
+> 2.18.4
+> 
 
-The default would be to extend the TPM with the 'boot_aggregate', with
-an option to opt-out of extending the TPM.
+When I try to apply this:
 
--- 
-thanks,
+$ b4  am 20211124044124.998170-8-eric.snowberg@oracle.com
+Looking up https://lore.kernel.org/r/20211124044124.998170-8-eric.snowberg%40oracle.com
+Analyzing 40 messages in the thread
+Checking attestation on all messages, may take a moment...
+# ...
+$ git am -3 v8_20211123_eric_snowberg_enroll_kernel_keys_thru_mok.mbx
+Applying: KEYS: Create static version of public_key_verify_signature
+Applying: integrity: Fix warning about missing prototypes
+Applying: integrity: Introduce a Linux keyring called machine
+Applying: integrity: Do not allow machine keyring updates following init
+Applying: X.509: Parse Basic Constraints for CA
+Applying: KEYS: CA link restriction
+error: sha1 information is lacking or useless (include/crypto/public_key.h).
+error: could not build fake ancestor
+Patch failed at 0006 KEYS: CA link restriction
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
 
-Mimi
-
-
+BR, Jarkko
