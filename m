@@ -2,71 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE134BC83A
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Feb 2022 12:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDA64BCF62
+	for <lists+linux-integrity@lfdr.de>; Sun, 20 Feb 2022 16:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240541AbiBSLmV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 19 Feb 2022 06:42:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36624 "EHLO
+        id S244225AbiBTPUa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 20 Feb 2022 10:20:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbiBSLmV (ORCPT
+        with ESMTP id S244217AbiBTPUZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 19 Feb 2022 06:42:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AAB32078;
-        Sat, 19 Feb 2022 03:42:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4650CB8013C;
-        Sat, 19 Feb 2022 11:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D30C340EB;
-        Sat, 19 Feb 2022 11:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645270919;
-        bh=42N0kSNDN/I0l7uNeWq1bWt0szwT7gCbE5fdpr8yCWs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O3O2Mbkpy5TFqAygEu87Dvm9J87aB8FAFvYPSkE9DLHzRQlZXkAlWApSkQQZaFgEB
-         L7jszgblHHH1L7JJkforHcFZ1JF0KCGZZifWtslRWx0DiUcBvShfihcgZI4qViffbd
-         lFcKrpPkZ4X6Tv3yILibtkxjXDNyudmM44Q0NRt40XQFBugcE3Zk8Wx8flsPYcquN9
-         btlLaJmoCSDzGgbHEnOj4/SZJVMq5rGGoc7oKv2UtbLINzm3E2uYd0qHeD5NPhMdoL
-         n4gyWmC6Wk1UZMXw3VAsPWZ7eZIWvFMLnLllPTyk+FcpqyUZA8plxckNOLRlTnifdr
-         3XFtUZubEZoYg==
-Date:   Sat, 19 Feb 2022 12:42:30 +0100
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Andreas Rammhold <andreas@rammhold.de>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
-Message-ID: <YhDXpq8YDhxg0RLW@iki.fi>
-References: <20210712170313.884724-1-mic@digikod.net>
- <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net>
- <YcGVZitNa23PCSFV@iki.fi>
- <5030a9ff-a1d1-a9bd-902a-77c3d1d87446@digikod.net>
- <Ydc/E3S2vmtDOnpw@iki.fi>
- <YddADJJNLDlQAYRW@iki.fi>
- <86c5010e-a926-023a-8915-d6605cfc4f0a@digikod.net>
- <e4707df2-ecc2-0471-87fc-c54e774fe315@digikod.net>
- <Yg6o/ARtOIwuBFsW@iki.fi>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Sun, 20 Feb 2022 10:20:25 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DC449FB5;
+        Sun, 20 Feb 2022 07:20:04 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21KF7x2o007882;
+        Sun, 20 Feb 2022 15:19:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=xWeX0f27hFbj6hWO1Xf04esKZvilAf89jzBgjnNLI4k=;
+ b=sqL0BLRzSezQ0pdyfLeHV1nKVxQWdurEJY9W/c8Zbd86fUa+5z0S94X+Niq+syYVyzRs
+ rqVowd/kStPV73t7tcWyADKPJcgJ83d+i8zpyR69UYUcFLBrSJVkdu4gGzunET0uvxeG
+ fjfyfOR3UYfkrYpcVGkKwjOExWwP6K3KbDpPmqVZ3lioDXINz0vypcEqdwLG5nUiQybp
+ sHscwldTft+1skWjzLs8Bn5wrojPYFgAstzVhsptCEkUxmji5OVPOVqhZUK4ZpeoI9Jz
+ TsmED9HxKv1mpaGNLvUOvJiDfAWDShlwyyUFb/8Mgm2H+MXyOYpkuqmTGkt+TdGTkLzL 6A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ebpd2h9c0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Feb 2022 15:19:43 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21KFFL4G029654;
+        Sun, 20 Feb 2022 15:19:43 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ebpd2h9bp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Feb 2022 15:19:43 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21KFBeDl005876;
+        Sun, 20 Feb 2022 15:19:41 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ear68n94m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Feb 2022 15:19:41 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21KFJdKx31195540
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 20 Feb 2022 15:19:39 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2DA8352050;
+        Sun, 20 Feb 2022 15:19:39 +0000 (GMT)
+Received: from sig-9-65-76-76.ibm.com (unknown [9.65.76.76])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 14C7C5204F;
+        Sun, 20 Feb 2022 15:19:37 +0000 (GMT)
+Message-ID: <7d84425f36e3b04ab1adabed23f98b478b53b770.camel@linux.ibm.com>
+Subject: Re: init_ima() adds 8 % to boot time
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, Petr Vorel <pvorel@suse.cz>
+Date:   Sun, 20 Feb 2022 10:19:37 -0500
+In-Reply-To: <32f90c33-eeb9-64a0-b2e2-9258ba2e1820@molgen.mpg.de>
+References: <32f90c33-eeb9-64a0-b2e2-9258ba2e1820@molgen.mpg.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1dPQYEvnMYQZjOLePHPBzvz4-I6RQEZp
+X-Proofpoint-ORIG-GUID: g3EkaVL9_-6QUV02iYGLRJpgHDACVfCf
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yg6o/ARtOIwuBFsW@iki.fi>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-20_06,2022-02-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 clxscore=1015 lowpriorityscore=0 spamscore=0
+ malwarescore=0 priorityscore=1501 impostorscore=0 phishscore=0 mlxscore=0
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202200098
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,61 +92,111 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 08:58:57PM +0100, Jarkko Sakkinen wrote:
-> On Mon, Jan 31, 2022 at 12:33:51PM +0100, Mickaël Salaün wrote:
-> > 
-> > On 07/01/2022 13:14, Mickaël Salaün wrote:
-> > > 
-> > > On 06/01/2022 20:16, Jarkko Sakkinen wrote:
-> > > > On Thu, Jan 06, 2022 at 09:12:22PM +0200, Jarkko Sakkinen wrote:
-> > > > > On Tue, Jan 04, 2022 at 04:56:36PM +0100, Mickaël Salaün wrote:
-> > > > > > 
-> > > > > > On 21/12/2021 09:50, Jarkko Sakkinen wrote:
-> > > > > > > On Mon, Dec 13, 2021 at 04:30:29PM +0100, Mickaël Salaün wrote:
-> > > > > > > > Hi Jarkko,
-> > > > > > > > 
-> > > > > > > > Since everyone seems OK with this and had plenty of
-> > > > > > > > time to complain, could
-> > > > > > > > you please take this patch series in your tree? It still applies on
-> > > > > > > > v5.16-rc5 and it is really important to us. Please
-> > > > > > > > let me know if you need
-> > > > > > > > something more.
-> > > > > > > > 
-> > > > > > > > Regards,
-> > > > > > > >    Mickaël
-> > > > > > > 
-> > > > > > > I'm off-work up until end of the year, i.e. I will
-> > > > > > > address only important
-> > > > > > > bug fixes and v5.16 up until that.
-> > > > > > > 
-> > > > > > > If any of the patches is yet missing my ack, feel free to
-> > > > > > > 
-> > > > > > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > > > 
-> > > > > > Thanks Jarkko. Can you please take it into your tree?
-> > > > > 
-> > > > > I can yes, as I need to anyway do a revised PR for v5.17, as one commit
-> > > > > in my first trial had a truncated fixes tag.
-> > > > 
-> > > > Please check:
-> > > > 
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-> > > > 
-> > > > /Jarkko
-> > > 
-> > > Great, thanks!
-> > 
-> > Hi Jarkko,
-> > 
-> > I noticed your commits https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=3ec9c3a0531ac868422be3b12fc17310ed8c07dc
-> > are no more referenced in your tree. Is there an issue?
+[Cc'ing Jarkko, Petr Vorel]
+
+Hi Paul,
+
+On Sat, 2022-02-19 at 10:44 +0100, Paul Menzel wrote:
+> Dear Linux folks,
 > 
-> This must be some sort of mistake I've made. I'll re-apply the patches.
-> Sorry about this.
+> 
+> Debian builds its Linux kernel image with `CONFIG_IMA=y` since version 
+> 5.13.9 [1]. Unfortunately, on the Dell Latitude E7250 `init_ima` takes 
+> around 33 ms, adding 8 % to the boot time up to loading the initrd.
+> 
+>      [    0.000000] Linux version 5.17.0-rc4-amd64 
+> (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-16) 11.2.0, GNU 
+> ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.17~rc4-1~exp1 
+> (2022-02-18)
+>      [â€¦]
+>      [    0.238520] calling  init_tis+0x0/0xde @ 1
+>      [    0.254749] tpm_tis 00:08: 1.2 TPM (device-id 0x3205, rev-id 80)
+>      [    0.285665] initcall init_tis+0x0/0xde returned 0 after 46038 usecs
+>      [â€¦]
+>      [    0.301327] calling  init_ima+0x0/0xb5 @ 1
+>      [    0.301332] ima: Allocated hash algorithm: sha256
+>      [    0.335502] ima: No architecture policies found
+>      [    0.335520] initcall init_ima+0x0/0xb5 returned 0 after 33389 usecs
+>      [â€¦]
+>      [    0.447312] Run /init as init process
+> 
+> Tracing `init_ima` with a depth of 5 shows 
+> `ima_calc_boot_aggregate_tfm()` takes 24 ms, and 
+> `ima_add_template_entry()` takes 10 ms.
+> 
+>          1.282630 |   1)   swapper-1    |               | 
+> ima_add_boot_aggregate() {
+>          1.282631 |   1)   swapper-1    |               | 
+> ima_calc_boot_agg:0regate() {
+>          1.282631 |   1)   swapper-1    |   0.153 us    | 
+> ima_alloc_tfm();
+>          1.282631 |   1)   swapper-1    | * 24404.59 us | 
+> ima_calc_boot_aggregate_tfm();
+>          1.307037 |   1)   swapper-1    |   0.482 us    | 
+> ima_free_tfm.part.0();
+>          1.307038 |   1)   swapper-1    | * 24407.06 us |        } /* 
+> ima_calc_boot_aggregate */
+>          1.307038 |   1)   swapper-1    |               | 
+> ima_alloc_init_template() {
+>          1.307038 |   1)   swapper-1    |   0.173 us    | 
+> ima_template_desc_current();
+>          1.307039 |   1)   swapper-1    |   0.836 us    | 
+> __kmalloc();
+>          1.307040 |   1)   swapper-1    |   0.580 us    | 
+> __kmalloc();
+>          1.307041 |   1)   swapper-1    |   1.555 us    | 
+> ima_eventdigest_ng_init();
+>          1.307043 |   1)   swapper-1    |   1.275 us    | 
+> ima_eventname_ng_init();
+>          1.307044 |   1)   swapper-1    |   0.256 us    | 
+> ima_eventsig_init();
+>          1.307045 |   1)   swapper-1    |   6.618 us    |        } /* 
+> ima_alloc_init_template */
+>          1.307045 |   1)   swapper-1    |               | 
+> ima_store_template() {
+>          1.307045 |   1)   swapper-1    |   5.049 us    | 
+> ima_calc_field_array_hash();
+>          1.307051 |   1)   swapper-1    | # 9316.953 us | 
+> ima_add_template_entry();
+>          1.316369 |   1)   swapper-1    | # 9323.728 us |        } /* 
+> ima_store_template */
+>          1.316369 |   1)   swapper-1    | * 33738.54 us |      } /* 
+> ima_add_boot_aggregate */
+> 
+> Tracing `ima_calc_boot_aggregate_tfm()` (attached) shows that the first 
+> `tpm1_pcr_read()` takes 16 ms in `tpm_transmit()`. Is communicating with 
+> the TPM supposed to be that slow?
+> 
+> In the last years, Linux decreased itâ€™s boot time a lot, so do you see a 
+> way to move things out of the hot path and get `init_ima` well below 10 
+> ms? (As systems get faster and faster, having systems with standard 
+> distributions to be up below two seconds after pressing the power button 
+> should be a reasonable goal (500 ms firmware (like coreboot) + 500 ms 
+> Linux kernel + 1 s user space).
+> 
+> 
+> [1]: 
+> https://salsa.debian.org/kernel-team/linux/-/commit/6e679322d7d98d30b4a8a3d1b659c899a6e9d4df
 
-OK now the patches are in and will be included to the next PR. I fixed
-merge conflicts caused by 5cca36069d4c ("certs: refactor file cleaning")
-in "certs: Check that builtin blacklist hashes are valid" so please
-sanity check that it is good.
+Thank you including the initial and other TPM delays.  The main reason
+for the "boot_aggregate" is to tie the pre-OS measurements to the post
+OS measurement list.  Without the TPM based 'boot_aggregate', any IMA
+measurement list could be used to verify a TPM quote.  The
+'boot_aggregate' is calculated, originally, based on PCRs 0 - 7 and
+more recently may include PCRs 8 & 9 as well.  The 'boot_aggregate' is
+the first record in the IMA measurement list and the first record after
+a soft reboot (kexec).  It is the one and only IMA measurement record
+not dependent on policy.
 
-BR, Jarkko
+There are TPM 1.2 & 2.0 standards' requirements, but there are also
+buggy TPMs which don't adhere to them to such an extent that IMA goes
+into 'TPM-bypass' mode. Perhaps for those not interested in extending
+the concepts of trusted boot to the running OS, defining a new boot
+command line option to force IMA into this 'TPM-bypass' mode would be
+an acceptable alternative to the delay.  The IMA measurement list would
+still include a 'boot_aggregate' record, but one containing 0's.
+
+thanks,
+
+Mimi
+
