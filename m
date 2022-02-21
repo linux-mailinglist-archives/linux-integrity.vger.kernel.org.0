@@ -2,179 +2,179 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6774BE95B
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Feb 2022 19:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5794BEB8B
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Feb 2022 21:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbiBUNei (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Feb 2022 08:34:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49244 "EHLO
+        id S233398AbiBUUGQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Feb 2022 15:06:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359139AbiBUNea (ORCPT
+        with ESMTP id S232083AbiBUUGP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:34:30 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5E2220EE;
-        Mon, 21 Feb 2022 05:34:04 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21LD9Fck015805;
-        Mon, 21 Feb 2022 13:33:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=OBmPzCDj/H2f/L1YMi7Wukhw+jIUkf8pjUePNO4iA6k=;
- b=f33WKmOyvDuAAvRYbAD2+OiczjKSScTlMCbHi6mC3wq6ecRP3vXAHsh0GYjl8xjfQrhe
- O1tWAq5g4HLKaB8+lTrfccVKTgvYlQol/3+HzDmvM2pjHoULG3uLc+o2v1qaF5+fJ7iU
- +FM755oUmOk2TAJh3/hPwv9Y8vOYD615kYE/XWAU3PQrRMNTny/Yt+fswIU+HyH2tnjz
- MHp8eNXNrwVMUCo561vtNUc3CKh8WAXvieOXkTit/PhAP+TbGEpIUPAwfFI4xSKAoqen
- RwINGV8eYjStknAGI77SS18K3pWXb7lPSkmMv1j0QPprGj/VX0a2Vo1SjxxyUA6+fMew +w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ec5q0gb97-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Feb 2022 13:33:59 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21LCrBMi019070;
-        Mon, 21 Feb 2022 13:33:59 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ec5q0gb8w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Feb 2022 13:33:58 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21LDWtWq012841;
-        Mon, 21 Feb 2022 13:33:58 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma03dal.us.ibm.com with ESMTP id 3ear6aea0a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Feb 2022 13:33:57 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21LDXu3Q17891718
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Feb 2022 13:33:56 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A27B13605E;
-        Mon, 21 Feb 2022 13:33:56 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 65418136068;
-        Mon, 21 Feb 2022 13:33:55 +0000 (GMT)
-Received: from [9.211.59.13] (unknown [9.211.59.13])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Feb 2022 13:33:55 +0000 (GMT)
-Message-ID: <0a87bb3b-574c-6e8e-2f8f-49e42d71ab8c@linux.vnet.ibm.com>
-Date:   Mon, 21 Feb 2022 08:33:55 -0500
+        Mon, 21 Feb 2022 15:06:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D51237C6;
+        Mon, 21 Feb 2022 12:05:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78BC2B815A6;
+        Mon, 21 Feb 2022 20:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01A4C340E9;
+        Mon, 21 Feb 2022 20:05:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645473948;
+        bh=altu+U1/3ri4Dn3ihYdl52MdZAnh/l+MxbnJTLMjq1A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MFOSqqRk87MCF/kneZ21dXHmCOTaFwabWjhBn+xJ/sXhWcU5DuwP7kOh82YEG6EsE
+         /utrkYpdRlhnnNY0gSJ+3Vu5gzaWtvrVwMxvJNQJI166w7krK+mTmK+dgQRFZK9LD9
+         BT5SbxJXakiUDfHwSwijnj6dWeVUQa1QqYyJaIkt+2NXDi2YX+2/LixEbxO1lFG6M8
+         u0rquwvxcXwhSsiUEWUcIS/tWdge2LCYmSxxvLY94DNkhgojF56dHsoo13Zdej/tRp
+         j3UxZvb7x9SfybVQbQUNpApXi7yWcdU9kwlq8q/+YckkIaP2QCe4xZwS7TIxdUB/6O
+         PUmU5atskShfQ==
+Date:   Mon, 21 Feb 2022 21:06:23 +0100
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, Petr Vorel <pvorel@suse.cz>
+Subject: Re: init_ima() adds 8 % to boot time
+Message-ID: <YhPwvxBsuR/N7xoF@iki.fi>
+References: <32f90c33-eeb9-64a0-b2e2-9258ba2e1820@molgen.mpg.de>
+ <7d84425f36e3b04ab1adabed23f98b478b53b770.camel@linux.ibm.com>
+ <YhLHZeQdaIKHexVd@iki.fi>
+ <07a65960197c4b50f996abdf2b062e836ce1226d.camel@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v8 0/3] integrity: support including firmware ".platform"
- keys at build time
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        dhowells@redhat.com, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, Nayna Jain <nayna@linux.ibm.com>
-References: <20220111183647.977037-1-nayna@linux.ibm.com>
- <YhLIhJF0aWZt+8op@iki.fi>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <YhLIhJF0aWZt+8op@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: poqCIJwnj1fzXspijlfmjWakY7HPsrzX
-X-Proofpoint-GUID: dkbMQ8Nn6WyO0fh_-go_lbCTQ01aY0bX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-21_07,2022-02-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- malwarescore=0 adultscore=0 phishscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202210078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <07a65960197c4b50f996abdf2b062e836ce1226d.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Sun, Feb 20, 2022 at 06:19:59PM -0500, Mimi Zohar wrote:
+> On Sun, 2022-02-20 at 23:57 +0100, Jarkko Sakkinen wrote:
+> > On Sun, Feb 20, 2022 at 10:19:37AM -0500, Mimi Zohar wrote:
+> > > [Cc'ing Jarkko, Petr Vorel]
+> > > 
+> > > Hi Paul,
+> > > 
+> > > On Sat, 2022-02-19 at 10:44 +0100, Paul Menzel wrote:
+> > > > Dear Linux folks,
+> > > > 
+> > > > 
+> > > > Debian builds its Linux kernel image with `CONFIG_IMA=y` since version 
+> > > > 5.13.9 [1]. Unfortunately, on the Dell Latitude E7250 `init_ima` takes 
+> > > > around 33 ms, adding 8 % to the boot time up to loading the initrd.
+> > > > 
+> > > >      [    0.000000] Linux version 5.17.0-rc4-amd64 
+> > > > (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-16) 11.2.0, GNU 
+> > > > ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.17~rc4-1~exp1 
+> > > > (2022-02-18)
+> > > >      […]
+> > > >      [    0.238520] calling  init_tis+0x0/0xde @ 1
+> > > >      [    0.254749] tpm_tis 00:08: 1.2 TPM (device-id 0x3205, rev-id 80)
+> > > >      [    0.285665] initcall init_tis+0x0/0xde returned 0 after 46038 usecs
+> > > >      […]
+> > > >      [    0.301327] calling  init_ima+0x0/0xb5 @ 1
+> > > >      [    0.301332] ima: Allocated hash algorithm: sha256
+> > > >      [    0.335502] ima: No architecture policies found
+> > > >      [    0.335520] initcall init_ima+0x0/0xb5 returned 0 after 33389 usecs
+> > > >      […]
+> > > >      [    0.447312] Run /init as init process
+> > > > 
+> > > > Tracing `init_ima` with a depth of 5 shows 
+> > > > `ima_calc_boot_aggregate_tfm()` takes 24 ms, and 
+> > > > `ima_add_template_entry()` takes 10 ms.
+> > > > 
+> > > >          1.282630 |   1)   swapper-1    |               | 
+> > > > ima_add_boot_aggregate() {
+> > > >          1.282631 |   1)   swapper-1    |               | 
+> > > > ima_calc_boot_agg:0regate() {
+> > > >          1.282631 |   1)   swapper-1    |   0.153 us    | 
+> > > > ima_alloc_tfm();
+> > > >          1.282631 |   1)   swapper-1    | * 24404.59 us | 
+> > > > ima_calc_boot_aggregate_tfm();
+> > > >          1.307037 |   1)   swapper-1    |   0.482 us    | 
+> > > > ima_free_tfm.part.0();
+> > > >          1.307038 |   1)   swapper-1    | * 24407.06 us |        } /* 
+> > > > ima_calc_boot_aggregate */
+> > > >          1.307038 |   1)   swapper-1    |               | 
+> > > > ima_alloc_init_template() {
+> > > >          1.307038 |   1)   swapper-1    |   0.173 us    | 
+> > > > ima_template_desc_current();
+> > > >          1.307039 |   1)   swapper-1    |   0.836 us    | 
+> > > > __kmalloc();
+> > > >          1.307040 |   1)   swapper-1    |   0.580 us    | 
+> > > > __kmalloc();
+> > > >          1.307041 |   1)   swapper-1    |   1.555 us    | 
+> > > > ima_eventdigest_ng_init();
+> > > >          1.307043 |   1)   swapper-1    |   1.275 us    | 
+> > > > ima_eventname_ng_init();
+> > > >          1.307044 |   1)   swapper-1    |   0.256 us    | 
+> > > > ima_eventsig_init();
+> > > >          1.307045 |   1)   swapper-1    |   6.618 us    |        } /* 
+> > > > ima_alloc_init_template */
+> > > >          1.307045 |   1)   swapper-1    |               | 
+> > > > ima_store_template() {
+> > > >          1.307045 |   1)   swapper-1    |   5.049 us    | 
+> > > > ima_calc_field_array_hash();
+> > > >          1.307051 |   1)   swapper-1    | # 9316.953 us | 
+> > > > ima_add_template_entry();
+> > > >          1.316369 |   1)   swapper-1    | # 9323.728 us |        } /* 
+> > > > ima_store_template */
+> > > >          1.316369 |   1)   swapper-1    | * 33738.54 us |      } /* 
+> > > > ima_add_boot_aggregate */
+> > > > 
+> > > > Tracing `ima_calc_boot_aggregate_tfm()` (attached) shows that the first 
+> > > > `tpm1_pcr_read()` takes 16 ms in `tpm_transmit()`. Is communicating with 
+> > > > the TPM supposed to be that slow?
+> > > > 
+> > > > In the last years, Linux decreased it’s boot time a lot, so do you see a 
+> > > > way to move things out of the hot path and get `init_ima` well below 10 
+> > > > ms? (As systems get faster and faster, having systems with standard 
+> > > > distributions to be up below two seconds after pressing the power button 
+> > > > should be a reasonable goal (500 ms firmware (like coreboot) + 500 ms 
+> > > > Linux kernel + 1 s user space).
+> > > > 
+> > > > 
+> > > > [1]: 
+> > > > https://salsa.debian.org/kernel-team/linux/-/commit/6e679322d7d98d30b4a8a3d1b659c899a6e9d4df
+> > > 
+> > > Thank you including the initial and other TPM delays.  The main reason
+> > > for the "boot_aggregate" is to tie the pre-OS measurements to the post
+> > > OS measurement list.  Without the TPM based 'boot_aggregate', any IMA
+> > > measurement list could be used to verify a TPM quote.  The
+> > > 'boot_aggregate' is calculated, originally, based on PCRs 0 - 7 and
+> > > more recently may include PCRs 8 & 9 as well.  The 'boot_aggregate' is
+> > > the first record in the IMA measurement list and the first record after
+> > > a soft reboot (kexec).  It is the one and only IMA measurement record
+> > > not dependent on policy.
+> > > 
+> > > There are TPM 1.2 & 2.0 standards' requirements, but there are also
+> > > buggy TPMs which don't adhere to them to such an extent that IMA goes
+> > > into 'TPM-bypass' mode. Perhaps for those not interested in extending
+> > > the concepts of trusted boot to the running OS, defining a new boot
+> > > command line option to force IMA into this 'TPM-bypass' mode would be
+> > > an acceptable alternative to the delay.  The IMA measurement list would
+> > > still include a 'boot_aggregate' record, but one containing 0's.
+> > 
+> > I support the opt-in boot option.
+> > 
+> > If the full hardware specifications are known for a device, you might want
+> > to use this.
+> 
+> The default would be to extend the TPM with the 'boot_aggregate', with
+> an option to opt-out of extending the TPM.
 
-On 2/20/22 18:02, Jarkko Sakkinen wrote:
-> On Tue, Jan 11, 2022 at 01:36:44PM -0500, Nayna Jain wrote:
->> Some firmware support secure boot by embedding static keys to verify the
->> Linux kernel during boot. However, these firmware do not expose an
->> interface for the kernel to load firmware keys onto the ".platform"
->> keyring, preventing the kernel from verifying the kexec kernel image
->> signature.
->>
->> This patchset exports load_certificate_list() and defines a new function
->> load_builtin_platform_cert() to load compiled in certificates onto the
->> ".platform" keyring.
->>
->> Changelog:
->>
->> v8:
->> * Includes Jarkko's feedback on patch description and removed Reported-by
->> for Patch 1.
->>
->> v7:
->> * Incldues Jarkko's feedback on patch description for Patch 1 and 3.
->>
->> v6:
->> * Includes Jarkko's feedback:
->>   * Split Patch 2 into two.
->>   * Update Patch description.
->>
->> v5:
->> * Renamed load_builtin_platform_cert() to load_platform_certificate_list()
->> and config INTEGRITY_PLATFORM_BUILTIN_KEYS to INTEGRITY_PLATFORM_KEYS, as
->> suggested by Mimi Zohar.
->>
->> v4:
->> * Split into two patches as per Mimi Zohar and Dimitri John Ledkov
->> recommendation.
->>
->> v3:
->> * Included Jarkko's feedback
->>   ** updated patch description to include approach.
->>   ** removed extern for function declaration in the .h file.
->> * Included load_certificate_list() within #ifdef CONFIG_KEYS condition.
->>
->> v2:
->> * Fixed the error reported by kernel test robot
->> * Updated patch description based on Jarkko's feedback.
->>
->> Nayna Jain (3):
->>    certs: export load_certificate_list() to be used outside certs/
->>    integrity: make integrity_keyring_from_id() non-static
->>    integrity: support including firmware ".platform" keys at build time
->>
->>   certs/Makefile                                |  5 ++--
->>   certs/blacklist.c                             |  1 -
->>   certs/common.c                                |  2 +-
->>   certs/common.h                                |  9 -------
->>   certs/system_keyring.c                        |  1 -
->>   include/keys/system_keyring.h                 |  6 +++++
->>   security/integrity/Kconfig                    | 10 +++++++
->>   security/integrity/Makefile                   | 17 +++++++++++-
->>   security/integrity/digsig.c                   |  2 +-
->>   security/integrity/integrity.h                |  6 +++++
->>   .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
->>   .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
->>   12 files changed, 92 insertions(+), 16 deletions(-)
->>   delete mode 100644 certs/common.h
->>   create mode 100644 security/integrity/platform_certs/platform_cert.S
->>
->> -- 
->> 2.27.0
-> To sort out tree conflicts: what if I pick these patches? They look fine
-> to me now. I can try to fix the possible merge conflicts and you can check
-> them before I make a PR.
+Ah, right, thanks for correction. By "opt-in" I meant "opt-out" :-)
 
-Sounds good. Thanks !!
-
-Thanks & Regards,
-
-      - Nayna
-
+BR, Jarkko
