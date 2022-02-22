@@ -2,122 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B083F4BF73B
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Feb 2022 12:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0EE4C00FD
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Feb 2022 19:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbiBVLZv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Feb 2022 06:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
+        id S230084AbiBVSLW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Feb 2022 13:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiBVLZo (ORCPT
+        with ESMTP id S233620AbiBVSLV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Feb 2022 06:25:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8583D1323C1
-        for <linux-integrity@vger.kernel.org>; Tue, 22 Feb 2022 03:25:19 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nMTHb-0000ST-9t; Tue, 22 Feb 2022 12:24:39 +0100
-Message-ID: <db76da34-a40d-4746-5810-316b052acf16@pengutronix.de>
-Date:   Tue, 22 Feb 2022 12:24:33 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [EXT] Re: [PATCH v4 5/5] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     David Gstir <david@sigma-star.at>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Weinberger <richard@nod.at>,
-        James Morris <jmorris@namei.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        David Howells <dhowells@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-References: <cover.8f40b6d1b93adc80aed2cac29a134f7a7fb5ee98.1633946449.git-series.a.fatoum@pengutronix.de>
- <a0f1d14af8ac8bae16dd29ad1073f7143ba28f26.1633946449.git-series.a.fatoum@pengutronix.de>
- <b9283c8a4b3b04c7ee9f525208cbb32d798d4439.camel@ew.tq-group.com>
- <59f1f3e6-fcf1-794d-610c-674b826822bf@pengutronix.de>
- <4decdfb7d4395e967e1bf6c65212616400c8064a.camel@ew.tq-group.com>
- <DU2PR04MB8630EA7DB3AAD9F582EDB75C953B9@DU2PR04MB8630.eurprd04.prod.outlook.com>
-Content-Language: en-US
-In-Reply-To: <DU2PR04MB8630EA7DB3AAD9F582EDB75C953B9@DU2PR04MB8630.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 22 Feb 2022 13:11:21 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC81172E4F
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Feb 2022 10:10:56 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d11b6259adso149415067b3.19
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Feb 2022 10:10:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=I13G/NGnXK2R+yMCHPeUw1HIDrFT/dYlk/r65ZQP80k=;
+        b=AFW4G5Vozy99N1QGPrwAymuPpido6XEARzIXCKz2GBhuRaDW2bCkbmtAp5yP0HAsFL
+         ZQNt5WtaAEVGXac3sMhrHuksQDDS2tbW46vD8wygGUpwDMX6EBGio12uB4/5+SzW++V1
+         vPOMl0vCo+7vl5BiuZ5KCn07XN80pND6kNnnC1q+CDVwRszhN1Wt32w0u5EGKoCmRsa4
+         HGcGwRakPog2QwpHrfkL0H5jl+c/4+ydcURg/fz58lejnl+N7njwX3k0oY+jlGlT+IpI
+         NG3oWvd+tcYKxnsyH9hLyf0JFVG4WKyvwTPVnsXGtevb35lKA1hRftjp+QebLJtTSLk9
+         IYZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=I13G/NGnXK2R+yMCHPeUw1HIDrFT/dYlk/r65ZQP80k=;
+        b=D6UgrYkgrcmhCcZjXZqTi8E4aQeYlyvWWLQSqKgtu1KdEgEVicIojEVk4u2uS0n1xX
+         jW3C8No7UshmE9X2WpkwH6BaUyPfWLOenalsa4+5nq9bHvbaQt0ppEOcIRbq1DQLVpea
+         3OnGvB/3aP6Vu0l0VqFjTjQA8mLzsjRRnUIctUX/MoYLc0rP0X7fVgbF+Y/iqQ+ZIGUR
+         0jCD1e1cbh7LdU5gI8aBL5IJIk7EST9y5syrDIJH3Jwa8nDrOzeLlLqIP2TrWoQUYWYX
+         B/o+NS6ZrDdbBVT0h883riNx83Ci3o/gCw2/CzT80FtU6GhFYJqHF6AC3h0sYqOVT8IP
+         bAqw==
+X-Gm-Message-State: AOAM533TfBYYUJ/BlVLNF60e5vBEVOpwNZV+uVxkN7KYVUM42DvQ1FcZ
+        Ri4LZ5pQuguAdiD7CizUnnBV5fXCoA==
+X-Google-Smtp-Source: ABdhPJysP0JS7CSF/8hrjD15N4FHwwa7jB6FWJNu6UWctDUQyU201t8H935zFfUUhiRYi+IZNQdQqx7BEw==
+X-Received: from yaelt.nyc.corp.google.com ([2620:0:1003:415:7f1a:cf67:32ef:c972])
+ (user=yaelt job=sendgmr) by 2002:a5b:7c6:0:b0:60b:a0ce:19b with SMTP id
+ t6-20020a5b07c6000000b0060ba0ce019bmr23928108ybq.407.1645553455362; Tue, 22
+ Feb 2022 10:10:55 -0800 (PST)
+Date:   Tue, 22 Feb 2022 13:10:34 -0500
+Message-Id: <20220222181034.1005633-1-yaelt@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH v3] syscalls/keyctl09: test encrypted keys with provided
+ decrypted data.
+From:   Yael Tzur <yaelt@google.com>
+To:     ltp@lists.linux.it
+Cc:     zohar@linux.ibm.com, pvorel@suse.cz,
+        linux-integrity@vger.kernel.org, Yael Tzur <yaelt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Pankaj,
+Test that encrypted keys can be instantiated using hex-ascii
+encoded user-provided decrypted data.
+(https://lore.kernel.org/lkml/20220215141953.1557009-1-yaelt@google.com/).
 
-On 22.02.22 05:30, Pankaj Gupta wrote:
-> Hi Ahmad,
-> 
-> 
->> -----Original Message-----
->> From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
->> Sent: Monday, December 13, 2021 7:11 PM
->> To: Ahmad Fatoum <a.fatoum@pengutronix.de>
->>
->>> For now, this is pointed out in the documentation. If you have a
->>> suggestion on a specific condition we should check and issue a
->>> diagnostic on, I can incorporate it. An exhaustive if
->>> WARN_ON(!secure()) is impossible, but having some warning for
->>> unsuspecting users would indeed be nice.
->>
->> I don't know of any condition that doesn't involve looking at SoC- specific OTP
->> registers - that's what U-Boot does to determine whether HAB is enabled...
->>
-> 
-> Check the value fetched from the SEC Status Register (SSTA) (Offset 0xFD4h, bit 8,9 => 00b - Non-Secure, 01b - Secure, 10b - Trusted, 11b - Fail), for MOO (Mode of Operation).
-> And the warning can be issued accordingly.
-> 
-> It is to be noted that this register is part of CAAM page0, which might not be accessible to Linux, for all the iMX SoC(s).
-> 
-> For other SoC(s), this can be added.
+Signed-off-by: Yael Tzur <yaelt@google.com>
+---
 
-Thanks for the pointer. I am only testing this with i.MX, so I'd prefer this
-be left as a future exercise for a Layerscape user.
+Notes:
+    v -> v2: added key revocation and made styling changes.
+    
+    v2 -> v3: updated per latest kernel patch version.
 
-Thanks for your reviews. I collected them on Patches 2/5 and 4/5 for v5.
+ runtest/syscalls                            |  1 +
+ testcases/kernel/syscalls/keyctl/.gitignore |  1 +
+ testcases/kernel/syscalls/keyctl/keyctl09.c | 55 +++++++++++++++++++++
+ 3 files changed, 57 insertions(+)
+ create mode 100644 testcases/kernel/syscalls/keyctl/keyctl09.c
 
-Cheers,
-Ahmad
-
-
+diff --git a/runtest/syscalls b/runtest/syscalls
+index bcf3d56c9..ccea1ddbd 100644
+--- a/runtest/syscalls
++++ b/runtest/syscalls
+@@ -643,6 +643,7 @@ keyctl05 keyctl05
+ keyctl06 keyctl06
+ keyctl07 keyctl07
+ keyctl08 keyctl08
++keyctl09 keyctl09
+ 
+ kcmp01 kcmp01
+ kcmp02 kcmp02
+diff --git a/testcases/kernel/syscalls/keyctl/.gitignore b/testcases/kernel/syscalls/keyctl/.gitignore
+index 3544ac79c..f9948c176 100644
+--- a/testcases/kernel/syscalls/keyctl/.gitignore
++++ b/testcases/kernel/syscalls/keyctl/.gitignore
+@@ -6,3 +6,4 @@
+ /keyctl06
+ /keyctl07
+ /keyctl08
++/keyctl09
+diff --git a/testcases/kernel/syscalls/keyctl/keyctl09.c b/testcases/kernel/syscalls/keyctl/keyctl09.c
+new file mode 100644
+index 000000000..5d90a6a8d
+--- /dev/null
++++ b/testcases/kernel/syscalls/keyctl/keyctl09.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (c) 2022 Google, Inc.
++ */
++
++/*\
++ * [Description]
++ * Test that encrypted keys can be instantiated using user-provided decrypted
++ * data that is hex-ascii encoded.
++ */
++
++#include "tst_test.h"
++#include "lapi/keyctl.h"
++
++#define ENCRYPTED_KEY_1_PAYLOAD	"new enc32 user:masterkey 32 abcdefABCDEF1234567890aaaaaaaaaa"
++#define ENCRYPTED_KEY_2_PAYLOAD	"new enc32 user:masterkey 32 plaintext123@123!123@123!123@123"
++
++static void do_test(void)
++{
++	key_serial_t masterkey;
++	key_serial_t encryptedkey1;
++	key_serial_t encryptedkey2;
++	char buffer[128];
++
++	masterkey = add_key("user", "user:masterkey", "foo", 3,
++			    KEY_SPEC_PROCESS_KEYRING);
++	if (masterkey == -1)
++		tst_brk(TBROK | TERRNO, "Failed to add user key");
++
++	encryptedkey1 = add_key("encrypted", "ltptestkey1", ENCRYPTED_KEY_1_PAYLOAD,
++				60, KEY_SPEC_PROCESS_KEYRING);
++	if (encryptedkey1 == -1)
++		tst_brk(TFAIL, "Failed to instantiate encrypted key using payload decrypted data");
++
++	TEST(keyctl(KEYCTL_READ, encryptedkey1, buffer, sizeof(buffer)));
++	if (TST_RET < 0)
++		tst_brk(TFAIL, "KEYCTL_READ failed for encryptedkey1");
++
++	encryptedkey2 = add_key("encrypted", "ltptestkey2", ENCRYPTED_KEY_2_PAYLOAD,
++				60, KEY_SPEC_PROCESS_KEYRING);
++	if (encryptedkey2 != -1)
++		tst_brk(TFAIL, "Instantiation of encrypted key using non hex-encoded decrypted data unexpectedly succeeded");
++
++	tst_res(TPASS, "Encrypted keys were instantiated with decrypted data as expected");
++
++	keyctl(KEYCTL_CLEAR, KEY_SPEC_PROCESS_KEYRING);
++}
++
++static struct tst_test test = {
++	.test_all = do_test,
++	.needs_kconfigs = (const char *[]) {
++		"CONFIG_USER_DECRYPTED_DATA=y",
++		NULL
++	}
++};
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.35.1.473.g83b2b277ed-goog
+
