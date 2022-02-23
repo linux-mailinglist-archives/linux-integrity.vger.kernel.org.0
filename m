@@ -2,113 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB824C1C4D
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Feb 2022 20:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6FB4C1CD7
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Feb 2022 21:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiBWTdg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Feb 2022 14:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
+        id S240330AbiBWUIf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Feb 2022 15:08:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiBWTdf (ORCPT
+        with ESMTP id S239074AbiBWUI0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:33:35 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1737812AB1
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Feb 2022 11:33:08 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NGuaxn030975;
-        Wed, 23 Feb 2022 19:33:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=33qIe+cQCNvTdRtrGkOe54QUXUy1opbcp/Dvhsyk84I=;
- b=hK0ehblnhDxkmG5Ruiou+INuDU9O8fHnWm4E+NairuBV5dxVLzrG5bxGZ66Td2cwBQGO
- W4eqHPjfa7MFgFpALvimHSZoekMnYA+G2k+QzTaLrDUuckwS0Zxkx9ZGW+ETFrubW7s5
- x+DlHqLmjY86H7DJkmUGN9nYpBxP+88URFoae0rL6axhSq5xp78iDSegjvUThcNQMumZ
- 2elSrCz4BPnO//aaY9yoOFxPxr69nsOocjmsIu7fGxFbCTbclcF8yVc7yjOpRC3FJ8b4
- b22v4vHwLiLUdl7yA8fuzJasvC9PZey+fIRCof78QN81q6lirZj++wz+ompji9jrBChA Kw== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ede6t1xr1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 19:33:06 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NJWVfs028331;
-        Wed, 23 Feb 2022 19:33:03 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3eaqtjcd5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 19:33:03 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NJMK4037814692
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 19:22:20 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6231811C052;
-        Wed, 23 Feb 2022 19:33:00 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B3CF511C04C;
-        Wed, 23 Feb 2022 19:32:59 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.80.154])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 19:32:59 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH] MAINTAINERS: add missing security/integrity/platform_certs
-Date:   Wed, 23 Feb 2022 14:32:56 -0500
-Message-Id: <20220223193256.301493-1-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 33prq8YO4DGg0cGUfGRLsVeTbMtOiVn-
-X-Proofpoint-ORIG-GUID: 33prq8YO4DGg0cGUfGRLsVeTbMtOiVn-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_09,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=999
- clxscore=1015 mlxscore=0 malwarescore=0 adultscore=0 suspectscore=0
- spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202230110
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 15:08:26 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3694C7A7
+        for <linux-integrity@vger.kernel.org>; Wed, 23 Feb 2022 12:07:57 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d6994a6942so1041067b3.17
+        for <linux-integrity@vger.kernel.org>; Wed, 23 Feb 2022 12:07:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=AgH7G9qMhJjeNsK8pjjl8l2MFRb6uv/e5h3RVBpFjcM=;
+        b=lEvoTqPckwkesDmoXXT2GU4qtC9d2HvwvztmcK6sCsocVzbXr1YMGxD6/mvWS1AT8n
+         vrAj3qUZyCWQtRz+GH6DCGKDjzKqWWCr514C7f1glIUX1IMwosvkkc3zLLIhRNV6QBFP
+         bW5xTzchMMN272yNx+6+qqYkJZ1+9q2C9v9YZWE6dRmh0tHRUfq7Hjq0aFlS8eLOf/fG
+         FptCf0nuWlZdwAHvPaZdPXkvCHkhyYOT6pqwP+OXD02DS48QYGRJKUIiHaOIbT4Jo3j+
+         s8V8U6fykVUYTktsP6M9ZSPjodnr43ATUTNXP/97MHKdVcr0OsBIWtcfjT/aJt4yDVmU
+         SWFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=AgH7G9qMhJjeNsK8pjjl8l2MFRb6uv/e5h3RVBpFjcM=;
+        b=zgADJeimWC7wQ22wJ1VqrhGwQp8bKHtvX4FXjCX24DXrsmEd/0DeInsp53TIsSBJqM
+         WAAQKLTYPN6TqX4tbT1RZPKwzvjdlBufSIZYOwHy877gys5vUDTWS4g7WLU3E6IdDJTC
+         4AAr6LB9nO8fRoIfPoVYsl7zANfn8Y6de1DoGDlpEaKXBAl7+AlhaF7qafHvtRmv2kW3
+         6iBYnLG1cP2rKXnv1SQo6xX6bFy4gP0cpcPaHzagOkEnYjQYUKQeyQymJ5KA6KuFAiOF
+         Ai9cq1ZOQHL1GcFhRrz/awjWGatQpK2/HX4ifQ3CdAF59CVEVCw/RyRV2NxDRsVzV4Sh
+         yJLw==
+X-Gm-Message-State: AOAM532YLIor3gFn1ZWV95OqxRlG5COIh8wTOXoWIlbjFcUkIUuAqmHM
+        M7+QdojIuqJubnuloHXly34i6vauew==
+X-Google-Smtp-Source: ABdhPJzAzVL/jgyTyMBdgt10LBLSTNS2DA2lnFUL+O5dsWAxDcT8sK2SlRfFIRynAKemi0S1vNd4CagGZA==
+X-Received: from yaelt.nyc.corp.google.com ([2620:0:1003:415:fdfb:5043:291f:63ca])
+ (user=yaelt job=sendgmr) by 2002:a81:2450:0:b0:2d6:aee8:f0d5 with SMTP id
+ k77-20020a812450000000b002d6aee8f0d5mr1248279ywk.81.1645646877043; Wed, 23
+ Feb 2022 12:07:57 -0800 (PST)
+Date:   Wed, 23 Feb 2022 15:07:31 -0500
+Message-Id: <20220223200731.1859670-1-yaelt@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH v4] syscalls/keyctl09: test encrypted keys with provided
+ decrypted data.
+From:   Yael Tzur <yaelt@google.com>
+To:     ltp@lists.linux.it
+Cc:     zohar@linux.ibm.com, pvorel@suse.cz,
+        linux-integrity@vger.kernel.org, Yael Tzur <yaelt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Define a new KEYS/KEYRINGS_INTEGRITY record so that any changes
-to platform_certs/ are posted on the linux-integrity mailing list
-as well.
+Test that encrypted keys can be instantiated using hex-ascii
+encoded user-provided decrypted data.
+(https://lore.kernel.org/lkml/20220215141953.1557009-1-yaelt@google.com/).
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Yael Tzur <yaelt@google.com>
 ---
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fdf0420ba477..6328cd4535bc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10660,6 +10660,14 @@ F:	include/linux/keyctl.h
- F:	include/uapi/linux/keyctl.h
- F:	security/keys/
+Notes:
+    v -> v2: added key revocation and made styling changes.
+    
+    v2 -> v3: updated per latest kernel patch version.
+    
+    v3 -> v4: made styling changes.
+
+ runtest/syscalls                            |  1 +
+ testcases/kernel/syscalls/keyctl/.gitignore |  1 +
+ testcases/kernel/syscalls/keyctl/keyctl09.c | 53 +++++++++++++++++++++
+ 3 files changed, 55 insertions(+)
+ create mode 100644 testcases/kernel/syscalls/keyctl/keyctl09.c
+
+diff --git a/runtest/syscalls b/runtest/syscalls
+index bcf3d56c9..ccea1ddbd 100644
+--- a/runtest/syscalls
++++ b/runtest/syscalls
+@@ -643,6 +643,7 @@ keyctl05 keyctl05
+ keyctl06 keyctl06
+ keyctl07 keyctl07
+ keyctl08 keyctl08
++keyctl09 keyctl09
  
-+KEYS/KEYRINGS_INTEGRITY
-+M:	Jarkko Sakkinen <jarkko@kernel.org>
-+M:	Mimi Zohar <zohar@linux.ibm.com>
-+L:	linux-integrity@vger.kernel.org
-+L:	keyrings@vger.kernel.org
-+S:	Supported
-+F:	security/integrity/platform_certs
+ kcmp01 kcmp01
+ kcmp02 kcmp02
+diff --git a/testcases/kernel/syscalls/keyctl/.gitignore b/testcases/kernel/syscalls/keyctl/.gitignore
+index 3544ac79c..f9948c176 100644
+--- a/testcases/kernel/syscalls/keyctl/.gitignore
++++ b/testcases/kernel/syscalls/keyctl/.gitignore
+@@ -6,3 +6,4 @@
+ /keyctl06
+ /keyctl07
+ /keyctl08
++/keyctl09
+diff --git a/testcases/kernel/syscalls/keyctl/keyctl09.c b/testcases/kernel/syscalls/keyctl/keyctl09.c
+new file mode 100644
+index 000000000..71fc2f2a9
+--- /dev/null
++++ b/testcases/kernel/syscalls/keyctl/keyctl09.c
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (c) 2022 Google, Inc.
++ */
 +
- KFENCE
- M:	Alexander Potapenko <glider@google.com>
- M:	Marco Elver <elver@google.com>
++/*\
++ * [Description]
++ * Test that encrypted keys can be instantiated using user-provided decrypted
++ * data that is hex-ascii encoded.
++ */
++
++#include "tst_test.h"
++#include "lapi/keyctl.h"
++
++#define ENCRYPTED_KEY_VALID_PAYLOAD	"new enc32 user:masterkey 32 abcdefABCDEF1234567890aaaaaaaaaa"
++#define ENCRYPTED_KEY_INVALID_PAYLOAD	"new enc32 user:masterkey 32 plaintext123@123!123@123!123@123"
++
++static void do_test(void)
++{
++	char buffer[128];
++
++	TST_EXP_POSITIVE(add_key("user", "user:masterkey", "foo", 3,
++			    KEY_SPEC_PROCESS_KEYRING));
++
++	if (!TST_PASS)
++		return;
++
++	TST_EXP_POSITIVE(add_key("encrypted", "ltptestkey1",
++			    ENCRYPTED_KEY_VALID_PAYLOAD,
++			    60, KEY_SPEC_PROCESS_KEYRING));
++
++	if (!TST_PASS)
++		return;
++
++	TST_EXP_POSITIVE(keyctl(KEYCTL_READ, TST_RET, buffer, sizeof(buffer)));
++
++	if (!TST_PASS)
++		return;
++
++	TST_EXP_FAIL2(add_key("encrypted", "ltptestkey2",
++			    ENCRYPTED_KEY_INVALID_PAYLOAD, 60,
++			    KEY_SPEC_PROCESS_KEYRING), EINVAL);
++
++	keyctl(KEYCTL_CLEAR, KEY_SPEC_PROCESS_KEYRING);
++}
++
++static struct tst_test test = {
++	.test_all = do_test,
++	.needs_kconfigs = (const char *[]) {
++		"CONFIG_USER_DECRYPTED_DATA=y",
++		NULL
++	}
++};
 -- 
-2.27.0
+2.35.1.473.g83b2b277ed-goog
 
