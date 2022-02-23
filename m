@@ -2,136 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87B24C199D
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Feb 2022 18:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2D04C1A1F
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Feb 2022 18:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243208AbiBWRNI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Feb 2022 12:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
+        id S243486AbiBWRqI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Feb 2022 12:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243301AbiBWRM4 (ORCPT
+        with ESMTP id S243478AbiBWRqH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:12:56 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6954E216;
-        Wed, 23 Feb 2022 09:12:28 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NGNPZu008842;
-        Wed, 23 Feb 2022 17:12:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=i7a7ev+TSToZOoDITIyGq1Q0Jh67k8rK12gkyQZVitk=;
- b=qfiB00L18eYwIJ4dcgp+nVidsxXO/jALnC0A8yOv/5dyzQWPvIWjXpl8pmd9Eam0UkMZ
- 8uFyft8YsV/bliVgyhJmJ6CVIOAKzFNZK6Bhdd5lI1ND48/ceIDOzW62+TH9ARgv80f0
- dwY/Yq3YUfEm+9lY9kkPlISwJK+YSNd0tngx6uUqFMP1yjIsXqnWn0O4EKULIQ+IzNuG
- CbnRy5at002RxYp45gbf8eap5faqh29N8lKdkqfE9XyKPXCWbCDOgGeXNxBwppM/jk+i
- ocZjs7H6zGCehwXkXBFUBO5p2WtCzZMq58IbEbxGG7UVXzmHhrKIDZJo0aaB7y7oqX2T eA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edkxg092j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 17:12:14 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NGvX71002924;
-        Wed, 23 Feb 2022 17:12:14 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edkxg091f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 17:12:14 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NH6lnw028313;
-        Wed, 23 Feb 2022 17:12:11 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3ear69a3xy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 17:12:11 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NHC8QY29884898
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 17:12:08 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EBF2F11C050;
-        Wed, 23 Feb 2022 17:12:07 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 998A211C04A;
-        Wed, 23 Feb 2022 17:12:05 +0000 (GMT)
-Received: from sig-9-65-80-154.ibm.com (unknown [9.65.80.154])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 17:12:05 +0000 (GMT)
-Message-ID: <6e5d6ab590f18e6ee57c9e6e4bb805c8c223259a.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 24/27] ima: Introduce securityfs file to activate an
- IMA namespace
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Wed, 23 Feb 2022 12:12:05 -0500
-In-Reply-To: <9262a630-1f3e-0f58-110d-abfebe8274af@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-25-stefanb@linux.ibm.com>
-         <9a720bf5928151a0cbc7994ee498a1c3ca779c56.camel@linux.ibm.com>
-         <9262a630-1f3e-0f58-110d-abfebe8274af@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Wed, 23 Feb 2022 12:46:07 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFC241331;
+        Wed, 23 Feb 2022 09:45:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645638340; x=1677174340;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aeb0qt4wCCz7I/mFg9ArXVeLtAeRSHAS90P4rnXgYoM=;
+  b=IUOYbsZyWf1EQ8t/DZKZsUQGBm4pOgCkBYU7SWXnYKBXY0BBV4O1hbTf
+   E5+NufXT+Ohz7qsqAV0Y7Qn0oFvSNWmCVo4g6xRC3TOxWcnq5E/in6pQY
+   E+QK/VNbpiIUCUIiviEckaajJR4/YGD2NAYwHmXYmGHAm6e9WCQVBSVYX
+   LybPuRDAVjakFr+5EO3lYwtsZfO7apQGva61WPSKbFzUvZR/1Zhu3jfY2
+   gPtRC+ISd64H3uY1KtM+wdqkERoxHqqHkWhr79CFqiIpwr8jL1XMh1Xng
+   u4pScKU7A9LbhBdmqoStVM4b3NXhe+zfc6o0wRUL7yqHKAmysKdzs+zej
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="251774224"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="251774224"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 09:45:17 -0800
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="491292157"
+Received: from chakanog-mobl.amr.corp.intel.com (HELO [10.212.198.215]) ([10.212.198.215])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 09:45:17 -0800
+Message-ID: <04080c88-3e69-b4e6-0af2-0690accaa02f@intel.com>
+Date:   Wed, 23 Feb 2022 09:45:12 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 00/12] x86: Trenchboot secure dynamic launch Linux
+ kernel support
+Content-Language: en-US
+To:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, kexec@lists.infradead.org
+Cc:     iommu@lists.linux-foundation.org, dpsmith@apertussolutions.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+References: <1645070085-14255-1-git-send-email-ross.philipson@oracle.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <1645070085-14255-1-git-send-email-ross.philipson@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JJc5mqF_CaUs9S4-s0Iyrx8pandaGvzg
-X-Proofpoint-ORIG-GUID: wrjrOCkyqYYz1iMH06UsjUEM94jqL-on
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_08,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 phishscore=0 priorityscore=1501 mlxscore=0 clxscore=1015
- suspectscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202230097
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-02-23 at 12:08 -0500, Stefan Berger wrote:
-> On 2/23/22 08:54, Mimi Zohar wrote:
-> > On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> >
-> >>   int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
-> >>   {
-> >>   	struct ima_namespace *ns = ima_ns_from_user_ns(user_ns);
-> >> @@ -531,6 +596,12 @@ int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
-> >>   		}
-> >>   	}
-> >>   
-> >> +	if (ns != &init_ima_ns) {
-> >> +		ret = ima_fs_add_ns_files(ima_dir);
-> >> +		if (ret)
-> >> +			goto out;
-> >> +	}
-> >> +
-> > In all other cases, the securityfs files are directly created in
-> > ima_fs_ns_init().   What is different about "active" that a new
-> > function is defined?
-> 
-> 
-> It was meant as a function to create namespace-specific files, if more 
-> were to come along.  I can move the code from ima_fs_add_ns_files() into 
-> this function if you want.
+On 2/16/22 19:54, Ross Philipson wrote:
+> The larger focus of the TrenchBoot project (https://github.com/TrenchBoot) is to
+> enhance the boot security and integrity in a unified manner. The first area of
+> focus has been on the Trusted Computing Group's Dynamic Launch for establishing
+> a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
+> Trust for Measurement). The project has been and continues to work on providing
+> a unified means to Dynamic Launch that is a cross-platform (Intel and AMD) and
+> cross-architecture (x86 and Arm), with our recent involvment in the upcoming
+> Arm DRTM specification. The order of introducing DRTM to the Linux kernel
+> follows the maturity of DRTM in the architectures. Intel's Trusted eXecution
+> Technology (TXT) is present today and only requires a preamble loader, e.g. a
+> boot loader, and an OS kernel that is TXT-aware. AMD DRTM implementation has
+> been present since the introduction of AMD-V but requires an additional
+> component that is AMD specific and referred to in the specification as the
+> Secure Loader, which the TrenchBoot project has an active prototype in
+> development. Finally Arm's implementation is in specification development stage
+> and the project is looking to support it when it becomes available.
 
-Perhaps defer defining a new function until that happens.
-
-thanks,
-
-Mimi
-
+What problem is this patch series solving?  Is the same problem solved
+in a different way in the kernel today?  What is wrong with that
+solution?  What effects will end users see if they apply this series?
