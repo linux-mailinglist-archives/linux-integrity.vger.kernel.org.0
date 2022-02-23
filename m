@@ -2,97 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B959A4C16FC
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Feb 2022 16:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B9F4C172D
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Feb 2022 16:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242154AbiBWPjl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Feb 2022 10:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S242283AbiBWPlV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Feb 2022 10:41:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242157AbiBWPjj (ORCPT
+        with ESMTP id S242272AbiBWPlN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:39:39 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE932BD2C3;
-        Wed, 23 Feb 2022 07:39:11 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NERC6e017992;
-        Wed, 23 Feb 2022 15:38:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=7DQLKUgdnvflrrBNDkKPvx9BLtwQZE03ICcMhF/Lvdw=;
- b=satumKOykpaXCKFPWAWvXk3vllRUpB0jHgG6wBR2xOYJ1l/bfdatnkvbKj0J2vNw+Kx0
- ZWOEEek26ilUYYjPw3uP+bdWk8s0TwSIlzA2V8CR0VSo/axSLL2pGoG1XwGeJ9hWC+nP
- vjwNLYYQrVrDm/M03KZtUPyiTFG76AB8HwQHxGsBnlbJ3pFTgWHql3ZLSpSh+pd6DdbR
- uVSMIlQNFUolIgpRz9lLotFlBatJqxR9vFr+EpvIEdxc/KWqnqqh28Xkgqq5/Xi4fTLN
- PUn4B3LxoAB7dPSs8k/tbkzv9n1hVJAeRAjSXKz01XhSWHPJD+pm+bdTXrBaXsXSQ/lx 0A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edh6ws7ka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 15:38:49 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NEQv6T000576;
-        Wed, 23 Feb 2022 15:38:48 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edh6ws7jd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 15:38:48 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NFWYJ2010680;
-        Wed, 23 Feb 2022 15:38:45 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3ear699ku5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 15:38:45 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NFcg9i33816834
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 15:38:42 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74B66A4065;
-        Wed, 23 Feb 2022 15:38:42 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 44378A4062;
-        Wed, 23 Feb 2022 15:38:40 +0000 (GMT)
-Received: from sig-9-65-80-154.ibm.com (unknown [9.65.80.154])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 15:38:40 +0000 (GMT)
-Message-ID: <5e4a862917785972281bbcb483404da01b71e801.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 26/27] ima: Limit number of policy rules in
- non-init_ima_ns
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Wed, 23 Feb 2022 10:38:39 -0500
-In-Reply-To: <20220201203735.164593-27-stefanb@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-27-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -_N_LTBSyNxiP_N7uD9o1NSnm0GozV1V
-X-Proofpoint-ORIG-GUID: XQeRhpxmFWWbPSVucT5-uvdNPHlIsebt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_07,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 clxscore=1015 bulkscore=0 adultscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202230087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        Wed, 23 Feb 2022 10:41:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67651BECD3;
+        Wed, 23 Feb 2022 07:40:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0541061851;
+        Wed, 23 Feb 2022 15:40:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22D4C340E7;
+        Wed, 23 Feb 2022 15:40:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645630836;
+        bh=8IktSqdB85n+lg+7e0S9tm1HlnzAvjvyAcTHddVcl48=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YOWsE+Dwps7RGGwJq5CF82rcPW4Cajm7jGQms+3TSQz0peUcA8SY7gnOaGT0LF3L+
+         I+Z+qbcrjBT6dPz9IYTg44nXBRCmW6nDZ9eRozMKuuNDrNEaJk0UemHU10uqjPrd7b
+         pD2yqXPUyK6rjF+EqqxJtPQKjj1X799AXCdR2f1PjE4krNgtWxgF1jgP+MdM3ZWGNM
+         8i1uqlVFNEin9RkvzqBALtk1I7zP8slQR0JkQrw29mg4Y4BPXnp33SBBwfJlkOst2A
+         ITquYHoXPkvbOVC3BKPBVIAFmOTv6W90oAdG0Bkxflfi+8aYnDICz3tkeWrkANF4jm
+         K2wmGU/7ScniQ==
+Date:   Wed, 23 Feb 2022 16:41:12 +0100
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
+        David Gstir <david@sigma-star.at>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] crypto: caam - add in-kernel interface for blob
+ generator
+Message-ID: <YhZVmBy3/nWbqf+/@iki.fi>
+References: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
+ <20220222195819.2313913-5-a.fatoum@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222195819.2313913-5-a.fatoum@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -101,158 +76,153 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> Limit the number of policy rules one can set in non-init_ima_ns to a
-> hardcoded 1024 rules. If the user attempts to exceed this limit by
-> setting too many additional rules, emit an audit message with the cause
-> 'too-many-rules' and simply ignore the newly added rules.
-
-This paragraph describes 'what' you're doing, not 'why'.  Please prefix
-this paragraph with a short, probably one sentence, reason for the
-change.
+On Tue, Feb 22, 2022 at 08:58:18PM +0100, Ahmad Fatoum wrote:
+> The NXP Cryptographic Acceleration and Assurance Module (CAAM)
+> can be used to protect user-defined data across system reboot:
 > 
-> Switch the accounting for the memory allocated for IMA policy rules to
-> GFP_KERNEL_ACCOUNT so that cgroups kernel memory accounting takes effect.
-
-Does this change affect the existing IMA policy rules for init_ima_ns?
-
+>   - When the system is fused and boots into secure state, the master
+>     key is a unique never-disclosed device-specific key
+>   - random key is encrypted by key derived from master key
+>   - data is encrypted using the random key
+>   - encrypted data and its encrypted random key are stored alongside
+>   - This blob can now be safely stored in non-volatile memory
 > 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> On next power-on:
+>   - blob is loaded into CAAM
+>   - CAAM writes decrypted data either into memory or key register
+> 
+> Add functions to realize encrypting and decrypting into memory alongside
+> the CAAM driver.
+> 
+> They will be used in a later commit as a source for the trusted key
+> seal/unseal mechanism.
+> 
+> Reviewed-by: David Gstir <david@sigma-star.at>
+> Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Tested-By: Tim Harvey <tharvey@gateworks.com>
+> Tested-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 > ---
->  security/integrity/ima/ima_fs.c     | 20 ++++++++++++++------
->  security/integrity/ima/ima_policy.c | 23 ++++++++++++++++++-----
->  2 files changed, 32 insertions(+), 11 deletions(-)
+> To: "Horia Geantă" <horia.geanta@nxp.com>
+> To: Aymen Sghaier <aymen.sghaier@nxp.com>
+> To: Herbert Xu <herbert@gondor.apana.org.au>
+> To: "David S. Miller" <davem@davemloft.net>
+> Cc: James Bottomley <jejb@linux.ibm.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+> Cc: David Gstir <david@sigma-star.at>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+> Cc: Sumit Garg <sumit.garg@linaro.org>
+> Cc: Tim Harvey <tharvey@gateworks.com>
+> Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Cc: linux-integrity@vger.kernel.org
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> ---
+>  drivers/crypto/caam/Kconfig    |   3 +
+>  drivers/crypto/caam/Makefile   |   1 +
+>  drivers/crypto/caam/blob_gen.c | 230 +++++++++++++++++++++++++++++++++
+>  include/soc/fsl/caam-blob.h    |  56 ++++++++
+>  4 files changed, 290 insertions(+)
+>  create mode 100644 drivers/crypto/caam/blob_gen.c
+>  create mode 100644 include/soc/fsl/caam-blob.h
 > 
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 58d80884880f..cd102bbd4677 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -410,24 +410,32 @@ static int ima_release_policy(struct inode *inode, struct file *file)
->  {
->  	struct ima_namespace *ns = &init_ima_ns;
->  	const char *cause = ns->valid_policy ? "completed" : "failed";
-> +	int err = 0;
+> diff --git a/drivers/crypto/caam/Kconfig b/drivers/crypto/caam/Kconfig
+> index 84ea7cba5ee5..ea9f8b1ae981 100644
+> --- a/drivers/crypto/caam/Kconfig
+> +++ b/drivers/crypto/caam/Kconfig
+> @@ -151,6 +151,9 @@ config CRYPTO_DEV_FSL_CAAM_RNG_API
+>  	  Selecting this will register the SEC4 hardware rng to
+>  	  the hw_random API for supplying the kernel entropy pool.
 >  
->  	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
->  		return seq_release(inode, file);
->  
-> -	if (ns->valid_policy && ima_check_policy(ns) < 0) {
-> -		cause = "failed";
-> -		ns->valid_policy = 0;
-> +	if (ns->valid_policy) {
-> +		err = ima_check_policy(ns);
-> +		if (err < 0) {
-> +			if (err == -ENOSPC)
-
-Perhaps "EDQUOT" would be more appropriate.
-
-> +				cause = "too-many-rules";
-> +			else
-> +				cause = "failed";
-> +			ns->valid_policy = 0;
-> +		}
->  	}
->  
->  	pr_info("policy update %s\n", cause);
-> -	integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
-> -			    "policy_update", cause, !ns->valid_policy, 0);
-> +	integrity_audit_message(AUDIT_INTEGRITY_STATUS, NULL, NULL,
-> +				"policy_update", cause, !ns->valid_policy, 0,
-> +				-err);
-
-The 'err' value is already properly set.  No need for the minus sign.
-
->  
->  	if (!ns->valid_policy) {
->  		ima_delete_rules(ns);
->  		ns->valid_policy = 1;
->  		clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
-> -		return 0;
-> +		return err;
->  	}
->  
->  	ima_update_policy(ns);
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index acb4c36e539f..3f84d04f101d 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -305,7 +305,8 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
->  		return ERR_PTR(-EINVAL);
->  	}
->  
-> -	opt_list = kzalloc(struct_size(opt_list, items, count), GFP_KERNEL);
-> +	opt_list = kzalloc(struct_size(opt_list, items, count),
-> +			   GFP_KERNEL_ACCOUNT);
->  	if (!opt_list) {
->  		kfree(src_copy);
->  		return ERR_PTR(-ENOMEM);
-> @@ -379,7 +380,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_namespace *ns,
->  	 * Immutable elements are copied over as pointers and data; only
->  	 * lsm rules can change
->  	 */
-> -	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
-> +	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL_ACCOUNT);
->  	if (!nentry)
->  		return NULL;
->  
-> @@ -826,7 +827,7 @@ static void add_rules(struct ima_namespace *ns,
->  
->  		if (policy_rule & IMA_CUSTOM_POLICY) {
->  			entry = kmemdup(&entries[i], sizeof(*entry),
-> -					GFP_KERNEL);
-> +					GFP_KERNEL_ACCOUNT);
->  			if (!entry)
->  				continue;
->  
-> @@ -863,7 +864,7 @@ static int __init ima_init_arch_policy(struct ima_namespace *ns)
->  
->  	ns->arch_policy_entry = kcalloc(arch_entries + 1,
->  					sizeof(*ns->arch_policy_entry),
-> -					GFP_KERNEL);
-> +					GFP_KERNEL_ACCOUNT);
->  	if (!ns->arch_policy_entry)
->  		return 0;
->  
-> @@ -975,8 +976,20 @@ void __init ima_init_policy(struct ima_namespace *ns)
->  /* Make sure we have a valid policy, at least containing some rules. */
->  int ima_check_policy(struct ima_namespace *ns)
->  {
-> +	struct ima_rule_entry *entry;
-> +	size_t len1 = 0;
-> +	size_t len2 = 0;
+> +config CRYPTO_DEV_FSL_CAAM_BLOB_GEN
+> +	bool
 > +
->  	if (list_empty(&ns->ima_temp_rules))
->  		return -EINVAL;
-> +	if (ns != &init_ima_ns) {
-> +		list_for_each_entry(entry, &ns->ima_temp_rules, list)
-> +			len1++;
-> +		list_for_each_entry(entry, &ns->ima_policy_rules, list)
-
-Using list_for_each_entry() is fine here, because multiple policy
-updates at the same time are blocked.  Please add a comment.
-
-> +			len2++;
-> +		if (len1 + len2 > 1024)
-
-One variable should be enough.
-
-> +			return -ENOSPC;
-> +	}
->  	return 0;
->  }
+>  endif # CRYPTO_DEV_FSL_CAAM_JR
 >  
-> @@ -1848,7 +1861,7 @@ ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule)
->  	if (*p == '#' || *p == '\0')
->  		return len;
+>  endif # CRYPTO_DEV_FSL_CAAM
+> diff --git a/drivers/crypto/caam/Makefile b/drivers/crypto/caam/Makefile
+> index 3570286eb9ce..25f7ae5a4642 100644
+> --- a/drivers/crypto/caam/Makefile
+> +++ b/drivers/crypto/caam/Makefile
+> @@ -21,6 +21,7 @@ caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI) += caamalg_qi.o
+>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_AHASH_API) += caamhash.o
+>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_RNG_API) += caamrng.o
+>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_PKC_API) += caampkc.o pkc_desc.o
+> +caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_BLOB_GEN) += blob_gen.o
 >  
-> -	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
-> +	entry = kzalloc(sizeof(*entry), GFP_KERNEL_ACCOUNT);
->  	if (!entry) {
->  		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL,
->  				    NULL, op, "-ENOMEM", -ENOMEM, audit_info);
+>  caam-$(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI) += qi.o
+>  ifneq ($(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI),)
+> diff --git a/drivers/crypto/caam/blob_gen.c b/drivers/crypto/caam/blob_gen.c
+> new file mode 100644
+> index 000000000000..513d3f90e438
+> --- /dev/null
+> +++ b/drivers/crypto/caam/blob_gen.c
+> @@ -0,0 +1,230 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2015 Pengutronix, Steffen Trumtrar <kernel@pengutronix.de>
+> + * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <soc/fsl/caam-blob.h>
+> +
+> +#include "compat.h"
+> +#include "desc_constr.h"
+> +#include "desc.h"
+> +#include "error.h"
+> +#include "intern.h"
+> +#include "jr.h"
+> +#include "regs.h"
+> +
+> +struct caam_blob_priv {
+> +	struct device jrdev;
+> +};
+> +
+> +struct caam_blob_job_result {
+> +	int err;
+> +	struct completion completion;
+> +};
+> +
+> +static void caam_blob_job_done(struct device *dev, u32 *desc, u32 err, void *context)
+> +{
+> +	struct caam_blob_job_result *res = context;
+> +	int ecode = 0;
+> +
+> +	dev_dbg(dev, "%s %d: err 0x%x\n", __func__, __LINE__, err);
+> +
+> +	if (err)
+> +		ecode = caam_jr_strstatus(dev, err);
+> +
+> +	res->err = ecode;
+> +
+> +	/*
+> +	 * Upon completion, desc points to a buffer containing a CAAM job
+> +	 * descriptor which encapsulates data into an externally-storable
+> +	 * blob.
+> +	 */
+> +	complete(&res->completion);
+> +}
+> +
+> +static u32 *caam_blob_alloc_desc(size_t keymod_len)
+> +{
+> +	size_t len;
+> +
+> +	/* header + (key mod immediate) + 2x pointers + op */
+> +	len = 4 + (4 + ALIGN(keymod_len, 4)) + 2*(4 + 4 + CAAM_PTR_SZ_MAX) + 4;
 
--- 
-thanks,
+Nit: the amount of magic numbers is overwhelming here. I neither understand
+the statement nor how that comment should help me to understand it.
 
-Mimi
-
+BR, Jarkko
