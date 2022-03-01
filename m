@@ -2,69 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3730C4C8F62
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Mar 2022 16:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEB14C902A
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Mar 2022 17:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbiCAPrN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Mar 2022 10:47:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S235556AbiCAQTI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Mar 2022 11:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235713AbiCAPrN (ORCPT
+        with ESMTP id S231880AbiCAQTI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:47:13 -0500
+        Tue, 1 Mar 2022 11:19:08 -0500
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8609527E0;
-        Tue,  1 Mar 2022 07:46:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E4027FC1;
+        Tue,  1 Mar 2022 08:18:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1646149563;
-        bh=CNTbDLm/SXlfrI/Yw70t8qZjmfwCUbk5EeiLym2vS3o=;
+        s=badeba3b8450; t=1646151485;
+        bh=GE6GS19/67yYeeIDztfYNxsDMH/T0wk4DthhRy8ejPU=;
         h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=OqC9dpJ3yht3ymwKViwQ6Jqu/47pCQjQJCutG//Mw/O396ZZE5aD4yZuzZBir1EXy
-         g9A1/c1uZKi3x+R0OjNIgbce6t0mqQmK6iYwx1omHJQ4heVHbfnqt3WO6wNgCdcP0Q
-         4oWrygvTkjGUIQtB2qoX3uVWn2WK2bQNUcNa6+G8=
+        b=U7y+jA6LdTzJujUMK3dzljwv/P/RPSkc8GYdzn/zT29MiYk/TXclPyIt2WkLzo3Fz
+         QaaeABGOQNTaHqKx6l9jTgCBWGH8ff0yIVxJSqFHkiQh1IWmXHDKxrnKWZ7pbkGtab
+         msMU4JCkCx9xKfdLNzgbkjIVDlSvO1qeVpZuRwCk=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.74] ([149.172.237.68]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MMobU-1nfdeA3ROW-00ImCR; Tue, 01
- Mar 2022 16:46:02 +0100
-Subject: Re: [PATCH v8 0/1] tpm: fix reference counting for struct tpm_chip
-To:     Stefan Berger <stefanb@linux.ibm.com>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, James.Bottomley@hansenpartnership.com,
-        David.Laight@ACULAB.COM, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, p.rosenberger@kunbus.com
+Received: from [192.168.178.74] ([149.172.237.68]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mlf4c-1o6hTS2tr0-00ikHQ; Tue, 01
+ Mar 2022 17:18:04 +0100
+Subject: Re: [PATCH v8 1/1] tpm: fix reference counting for struct tpm_chip
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, David.Laight@ACULAB.COM,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org
 References: <20220301022108.30310-1-LinoSanfilippo@gmx.de>
- <a7a2c56c-a82b-40a9-68e5-7e6d92427c70@linux.ibm.com>
+ <20220301022108.30310-2-LinoSanfilippo@gmx.de>
+ <20220301140544.GF6468@ziepe.ca>
 From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <fbb0a768-dbef-bb6e-f77b-f40a4da7f8bb@gmx.de>
-Date:   Tue, 1 Mar 2022 16:45:59 +0100
+Message-ID: <65c85c5e-f1ec-c5fe-7477-e28ce2528fd4@gmx.de>
+Date:   Tue, 1 Mar 2022 17:18:03 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <a7a2c56c-a82b-40a9-68e5-7e6d92427c70@linux.ibm.com>
+In-Reply-To: <20220301140544.GF6468@ziepe.ca>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:l49twx3iq+56+pdB2eO5/63gkDHhNjH0/WXOoYU80/wUXFqDRxb
- 49CAPOfq/lQ0DHeC95gvHjTF5qGvfaoM8EEtNxqqKp2CblmJ6eEzOB8bhQS0tqyNKi5l+yY
- fdzkAgPCD6Q3AdzFj2exLDsQARTkXEZNx5wJ5HI7B0TnAeEKlsr3yf54jhJ65mWjITVDU3M
- ZHEqQKoj8XAjuX82js40w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bz4EH9nboAk=:kvWMoadFvgpJG2LMr8o9Cd
- RAQv7YWSUePsU0cPeMkx1LR2z7gMLBlReBsvqFaGADLOfaIujzBRkswF5uUm9119qSezUHekk
- ePHxBO/VwnPlagWznNtZf38thaDprEGZ85Ye2HVp+xjzbmyEpdugrUQjyQAwH3GCOPKXSXSNy
- qvP+nruQc5kMN+dWOtV7qYBwqPRA57pyYYNB20IzcR4vfBan8SI+imDm9lY+AzEuM1RGvowNT
- YleJ/EadRiSw9BxutDXHw1XoNtExwcmEuDmwLXxxbm86ILQazPoMuZu0xOE1XBczGGzJ+Z1LJ
- WxkJUCzOREvyTIzfZqoxwowsZFhYTI7NcdvQtMzJPLG00+Hbc33MGT54ofg0xFpIm7oI8TjwE
- 3be2pfdQND+X1tJZPhHirpwKj/zf2SzjMZzoiayXdAIrdEYr0iftsL5Hlo5gCu/gGsm7rh6hm
- qn9ETUNcc3pRhxXWRBFfY/WG5jx/mtJALk6yGKeZ4nzck15c0UqyYa+lm0WUC2NC7S/9Igv0E
- eDPJEyxoWoOP/mKEGiDfyGOp4FmPH3yZPZ1AsKNqtNduzr30u+NlRvWzP1asdAtHxFlhG9yDq
- DYWyGqUJI1FGhFWl6ePzdADzh6Ld3MjpJx8m+YjLaxMkcO+BgtEpC9+Ufyq4J8wnqPUzVvff6
- y8jdknYZjMjvgm3f31Tww+PFraVHYddnGVlA/+WYUeG8M1KC2Jc4sJ8QfMV0GyyItxMij9TQU
- IJWgwTG0jeRK8CjeSKNSbbGcEaQGP2copLqhd6ClLIZ8N0lsfHMkF3GBMPaozxOUHUcHSONKX
- iwI4mykkMLkSLTtjECWBTnPkRjnHeO3nnOD/QZGjsvbZOjPilpb2AGEq+oWlMC5UnLNNSYED9
- YLvXm9QA3/zeuMB7H1xKFSkpuMe3BfRQtDa7VRiHSyHHOHNfjOLsim/A35J4P7unsUEX8Go4t
- TgZf6psia4nkoLy6bU4RTMGhNKz7FCs1BHK6pRCkSS2rsd6/wl8GArhgB48lNdSuL1gPsNMDb
- 4lb7PRe1r7FhLbit/BxJhfvxXsCcC/j5BDmZyFlX5wazqvoCV/R95MOpuket1ASRqA/ZOe2eC
- KEs5Jp06NMyJ5E=
+X-Provags-ID: V03:K1:nwAQctVcgl9fE4nGE+wKXBDsYDQCaWgBIA8cXCrisbPkeQt47B2
+ nmPKtjZcElnwaihQ7+vMokf2+J5s3bYyh2knjZxeZD8myDRLZ5aGQKkmZ9djeHIKdwNJ1ly
+ ewLIUBNNNugJJ9oly2un4nZ/Sode0dlLkjf9Gm/Ntxy0gsPD0PqS+nXgOgJAQT4cc77nK4u
+ UpQ7vKSQXfYuh5CR/VpcA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/evx627867g=:h2bMDGki3tNTvJeSC47xjm
+ YT2jOIT5na0YxziUccoemGvk09q2jbizZgrpSevssuuc3pzXdAY2gE9GM0VOX3Wl7/H16zOsj
+ wSWlTROL5KwVZ4Zn5ERcNNBrWnXefWacIOxNj2reNOF/K8N/fsaga+QFvSOthrPxcXjIRVE70
+ 2JTv6pp5SwEW4Oi1nwjB6oDCaYHEaHfuFOdXZxq9A2W0UNyXQ9X0UP7AHL0HPF8W/3Te3fVe9
+ H022Jcq7e/+tW+N0k6zzAXvGQb+rdko11Piy/PeapcVuEylv0XpsWmYBylxeZ2Qjcsuu4N+ei
+ MCgi2to7EKo/qQxC++1w2pFRz5FZqb1tuen44DTPz4iMJUvD+LyoZT+aJ3R8/VYBBxl+JY1aC
+ nvKSZYunySJRrr7SR5P8JI+Zyq9k7KbDFTSB7YBluLcUPNJQLzHLvC+W9uo60ZYmpvJFsnNRk
+ cH1KhXetgI2MVrLCBVcS+JahGUbwuoNCaWXmcNQIW4xzbbcGEiov3dyQq3Q9q7ASbPJJRk/eq
+ hZsNlj3laHNx4b/CJh2eUsA0OYjO3dg6WHQ0aqO4WiLTivHhZME9v8T5ea3KaPKml89lRFsQj
+ OQfZI9LtPoXv2DkRrbdhP55D3J7LAI648gva/hKehd7BltHMQqBmyYYWMVR8zB8Z/r0EcsfYt
+ EKJme17Dzp7nz40pzVFKMLpzwax6WmZ0D0CJIXm8+ONy0XrVfIAk+HWfyQeKY/kc176ziYEk3
+ Uizrp4IOYu49zdb11a6cVdQ9zlR9onZ/7+L2aol5KD9KhIEG3GMPOzWYFRw+BDjbf5OY644Pc
+ xCPL7T+qM2irVLdZ0GL2lNyucsFzlske6bS4iLkLEAn+ovJZ3M/wzQyp77TMf3JYEOUPps07l
+ pTrN3H++8G6R1zqZejdQ2Vrlwq5wCEXAcIyT6MVIqHSYfs1RrTxMisdccjcFwBl1TFsc5i2as
+ SrkAJaiK4AJWlMTS1QrkTj7AziOKmYCGm7YQuOiSgmvpCq3rnhfQ6TiKDFvakk208/7b44ciI
+ pVNbXCXuKGhCxEJUudOQMh4hRTd/pU2NUdCxLPrU68IwDVcbT11LFYlQDeiBPwR/I/0mZrwXG
+ bmV2Pu4FFcnBFA=
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
@@ -75,26 +78,28 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 01.03.22 at 14:56, Stefan Berger wrote:
-
+On 01.03.22 at 15:05, Jason Gunthorpe wrote:
+> On Tue, Mar 01, 2022 at 03:21:08AM +0100, Lino Sanfilippo wrote:
+>> @@ -653,8 +623,10 @@ void tpm_chip_unregister(struct tpm_chip *chip)
+>>  	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chip=
+))
+>>  		hwrng_unregister(&chip->hwrng);
+>>  	tpm_bios_log_teardown(chip);
+>> -	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip=
+))
+>> +	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip=
+)) {
+>>  		cdev_device_del(&chip->cdevs, &chip->devs);
+>> +		put_device(&chip->devs);
+>> +	}
 >
-> We also need to apply this patch here to fix another crash:
->
-> https://lore.kernel.org/all/20210615091410.17007-2-vincent.whitchurch@ax=
-is.com/
+> I would put those two lines in a function bside tpm_devs_add() as
+> well, more modular.
 >
 
-Right, this is another issue that should be fixed. The bugfix you mention =
-is essentially the same
-as James proposed over two years ago:
-
-https://lore.kernel.org/linux-integrity/e7566e1e48f5be9dca034b4bfb67683b5d=
-3cb88f.camel@HansenPartnership.com/
+Agreed, I will put this in a tpm_devs_remove() function as counterpart to =
+tpm_devs_add().
 
 Regards,
 Lino
-
-
-
-
 
