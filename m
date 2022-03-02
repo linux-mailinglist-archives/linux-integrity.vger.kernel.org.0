@@ -2,72 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F114CB22E
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Mar 2022 23:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20324CB35B
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Mar 2022 01:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245460AbiCBWVv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Mar 2022 17:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        id S229841AbiCBX6x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Mar 2022 18:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245427AbiCBWVp (ORCPT
+        with ESMTP id S229819AbiCBX6w (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:21:45 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5A5D64C7;
-        Wed,  2 Mar 2022 14:21:00 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id p17so2801272plo.9;
-        Wed, 02 Mar 2022 14:21:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7nNxLa5fVLf7zBJyhXcOqLR/oQ9otRapOrLZOBmy+fs=;
-        b=Yx2Tu1pyRlHwyWfAJpaPEYBK7U9Xa99I7npuIMQDOm1nT+bKEWdz9xuk9vvQiYr6J8
-         m1U1geFt2wL4cHfRXI9KOdoZNY51YM8PgOUStDGYaT8EXuRMtYZw20kOBukG/tLik6lf
-         I0+G0WYqOLGTVWbD+OP460WGiCHhUe2jIN76eywXx51y/KwDNyJGRD4pp7pwjc/wJiaI
-         vVbW1C767aYo5MU1Swv6OSimECLQ2Z0f+iBvSA6zIGTnAxQxOcDShEQS1e4HdBUH4EDX
-         r9S5UNIPWTXY9ud/6RiFoDm39kjo7s8VJhjQxeP4QymVnd8IOBYOvCBQHc3pIKgFQZBN
-         uf8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7nNxLa5fVLf7zBJyhXcOqLR/oQ9otRapOrLZOBmy+fs=;
-        b=Iq2JiWqmC/iD+Xk6YKx9kpodTGpfEQTgSi4IhwVkW+R0jdM+nxS8GnLu6LUSZyCo7p
-         jQoJDwBLoLmpddyimWTJWveVVgQS/h6DG5QJPHpZNQsJpedW+Xol2g0NRFmX36My3tTy
-         rxBEb/BpWuBi+2GOlYwz5xCmBxPUdF41qWFES8y170ZQxQ6Ho0gXfYvPkNCcCU3A8mQB
-         jBMXTr3llKq5CZicr0upJhgbo7PCBNm9taa6JaVwLwwujVDgxzOouzSXCmh6pgTrMJNG
-         Hew3rzKRAamBfV4VZl2JPfsmwmuhZG7bIgotVXEr4c7OvXSgqPOpLF14xfiw9ESZ0qGA
-         K+Vw==
-X-Gm-Message-State: AOAM533av3EAY7GNKuCJEI/t5BXJWFGs+IQyQMRnXVkiAQYo2NEZhVCf
-        zdSyeNM3gwENdnLJeGYkjFk=
-X-Google-Smtp-Source: ABdhPJw3LwqNN9faD/CN8tV5gcaPOEskQM2Wni+pDcj4Vlrbq+CBge0QXPo1hghH4Dd+dIkl+666fQ==
-X-Received: by 2002:a17:902:7786:b0:14d:51c6:21a8 with SMTP id o6-20020a170902778600b0014d51c621a8mr33480455pll.75.1646259659674;
-        Wed, 02 Mar 2022 14:20:59 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::2:156b])
-        by smtp.gmail.com with ESMTPSA id h6-20020a636c06000000b00363a2533b17sm151118pgc.8.2022.03.02.14.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 14:20:59 -0800 (PST)
-Date:   Wed, 2 Mar 2022 14:20:56 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     zohar@linux.ibm.com, shuah@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, revest@chromium.org,
-        gregkh@linuxfoundation.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
-Message-ID: <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
-References: <20220302111404.193900-1-roberto.sassu@huawei.com>
+        Wed, 2 Mar 2022 18:58:52 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5828B22B1E;
+        Wed,  2 Mar 2022 15:58:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646265488; x=1677801488;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8rc56ekTbeKFOC2iDvS+DEuqovVns3lGZWNghGxdVAg=;
+  b=K58o9uRBYY7duBV0u+jYh31vDxU+I046W1LQUrR72tM9GTIg55EGKIRG
+   g9wQ2sLIJuqgOc81lnueCv9qK19KJc8sOFu9ghsR5Tp7du2meoSoMp1xG
+   GNMeddsVdCF4m6tadQwrK7PK2CwqLG8Q8ba8gFD50p0mT3OilmwXz5Pt9
+   yXdA43Y1HxmVSZjisWpOzaMNHfElUX97sysjhbL70AIboLqILB69W1zRK
+   vEpthpy0DDyD5pwGKVkHh4+fR9APIHQ3cpFSn80xMyRvWTgDmRVKGvzch
+   gLiOX0P8160SYjU3at5j/zDuPFMeCBIqvaAh7BuMhL+BZdk2YnT6oDpxI
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251101580"
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="251101580"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:12:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
+   d="scan'208";a="630572209"
+Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Mar 2022 15:11:59 -0800
+Received: from kbuild by e9605edfa585 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPY8U-00023G-Fz; Wed, 02 Mar 2022 23:11:58 +0000
+Date:   Thu, 3 Mar 2022 07:11:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v11 26/27] ima: Restrict informational audit messages to
+ init_ima_ns
+Message-ID: <202203030748.dQ8i3hT2-lkp@intel.com>
+References: <20220302134703.1273041-27-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220302111404.193900-1-roberto.sassu@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220302134703.1273041-27-stefanb@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,48 +74,81 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 12:13:55PM +0100, Roberto Sassu wrote:
-> Extend the interoperability with IMA, to give wider flexibility for the
-> implementation of integrity-focused LSMs based on eBPF.
-> 
-> Patch 1 fixes some style issues.
-> 
-> Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
-> measurement capability of IMA without needing to setup a policy in IMA
-> (those LSMs might implement the policy capability themselves).
-> 
-> Patches 7-9 allow eBPF-based LSMs to evaluate files read by the kernel.
-> 
-> Changelog
-> 
-> v2:
-> - Add better description to patch 1 (suggested by Shuah)
-> - Recalculate digest if it is not fresh (when IMA_COLLECTED flag not set)
-> - Move declaration of bpf_ima_file_hash() at the end (suggested by
->   Yonghong)
-> - Add tests to check if the digest has been recalculated
-> - Add deny test for bpf_kernel_read_file()
-> - Add description to tests
-> 
-> v1:
-> - Modify ima_file_hash() only and allow the usage of the function with the
->   modified behavior by eBPF-based LSMs through the new function
->   bpf_ima_file_hash() (suggested by Mimi)
-> - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
->   and bpf_ima_file_hash() can be called inside the implementation of
->   eBPF-based LSMs for this hook
-> 
-> Roberto Sassu (9):
->   ima: Fix documentation-related warnings in ima_main.c
->   ima: Always return a file measurement in ima_file_hash()
->   bpf-lsm: Introduce new helper bpf_ima_file_hash()
->   selftests/bpf: Move sample generation code to ima_test_common()
->   selftests/bpf: Add test for bpf_ima_file_hash()
->   selftests/bpf: Check if the digest is refreshed after a file write
->   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
->   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
->   selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA
->     policy
+Hi Stefan,
 
-We have to land this set through bpf-next.
-Please get the Acks for patches 1 and 2, so we can proceed.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.17-rc6]
+[cannot apply to zohar-integrity/next-integrity linux/master jmorris-security/next-testing next-20220302]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20220302-215707
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git fb184c4af9b9f4563e7a126219389986a71d5b5b
+config: arm64-randconfig-r006-20220302 (https://download.01.org/0day-ci/archive/20220303/202203030748.dQ8i3hT2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/781d4b92eee902d5ebcac657814703974f8e8b28
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20220302-215707
+        git checkout 781d4b92eee902d5ebcac657814703974f8e8b28
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> security/integrity/ima/ima_main.c:200:32: error: too many arguments to function call, expected 2, have 3
+                                   ima_update_xattr(ns, iint, file);
+                                   ~~~~~~~~~~~~~~~~           ^~~~
+   security/integrity/ima/ima.h:413:20: note: 'ima_update_xattr' declared here
+   static inline void ima_update_xattr(struct integrity_iint_cache *iint,
+                      ^
+   1 error generated.
+
+
+vim +200 security/integrity/ima/ima_main.c
+
+   176	
+   177	static void ima_check_last_writer(struct ima_namespace *ns,
+   178					  struct integrity_iint_cache *iint,
+   179					  struct inode *inode, struct file *file)
+   180	{
+   181		fmode_t mode = file->f_mode;
+   182		bool update;
+   183	
+   184		if (!(mode & FMODE_WRITE))
+   185			return;
+   186	
+   187		mutex_lock(&iint->mutex);
+   188		if (atomic_read(&inode->i_writecount) == 1) {
+   189			update = test_and_clear_bit(IMA_UPDATE_XATTR,
+   190						    &iint->atomic_flags);
+   191			if (!IS_I_VERSION(inode) ||
+   192			    !inode_eq_iversion(inode, iint->version) ||
+   193			    (iint->flags & IMA_NEW_FILE)) {
+   194				mask_iint_ns_status_flags
+   195						(iint,
+   196						 ~(IMA_DONE_MASK | IMA_NEW_FILE));
+   197				iint->measured_pcrs = 0;
+   198	
+   199				if (update)
+ > 200					ima_update_xattr(ns, iint, file);
+   201			}
+   202		}
+   203		mutex_unlock(&iint->mutex);
+   204	}
+   205	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
