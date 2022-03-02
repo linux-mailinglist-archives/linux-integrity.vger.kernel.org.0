@@ -2,64 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788B34CAF7F
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Mar 2022 21:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F114CB22E
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Mar 2022 23:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiCBURN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Mar 2022 15:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S245460AbiCBWVv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Mar 2022 17:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242976AbiCBURM (ORCPT
+        with ESMTP id S245427AbiCBWVp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Mar 2022 15:17:12 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E551CD5EA
-        for <linux-integrity@vger.kernel.org>; Wed,  2 Mar 2022 12:16:29 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2dc0364d2ceso31714037b3.7
-        for <linux-integrity@vger.kernel.org>; Wed, 02 Mar 2022 12:16:29 -0800 (PST)
+        Wed, 2 Mar 2022 17:21:45 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5A5D64C7;
+        Wed,  2 Mar 2022 14:21:00 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p17so2801272plo.9;
+        Wed, 02 Mar 2022 14:21:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s67k1EJaVHxhbvHcAvfuqUxfoKCbqS5gFyMqywS2VG8=;
-        b=XcytHnVbWT2BCtJIxUY3icFBZrzB/UM6egb4+8ldoQNwtxdhCmQtI0kuab6DQqU6qo
-         gREp7w5CH5ciETcu04uh43n3wOUL0XtK/NgBnH5tLLMjYEm+WiN46gn7Fl3yGjipLbuQ
-         PZ1W/MJEd/F0PAjXjZRmRjAMCrzJe+N+NRgaVUq/qG+zKn5R7aGFuTlKoebQrLjx/w9y
-         PsXY3fEydh4c+QBEe37955ZDdEnyAmoBtwiXUwAHkChgyAqFm/TDdhko67VIx/mABpHA
-         wqocT9Ek4mHW7K0k4CusZJO6d9qTP6cgnO878m0rfVkdc5gvMmkaFNTM4zQ2LQozzoVB
-         E4uQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7nNxLa5fVLf7zBJyhXcOqLR/oQ9otRapOrLZOBmy+fs=;
+        b=Yx2Tu1pyRlHwyWfAJpaPEYBK7U9Xa99I7npuIMQDOm1nT+bKEWdz9xuk9vvQiYr6J8
+         m1U1geFt2wL4cHfRXI9KOdoZNY51YM8PgOUStDGYaT8EXuRMtYZw20kOBukG/tLik6lf
+         I0+G0WYqOLGTVWbD+OP460WGiCHhUe2jIN76eywXx51y/KwDNyJGRD4pp7pwjc/wJiaI
+         vVbW1C767aYo5MU1Swv6OSimECLQ2Z0f+iBvSA6zIGTnAxQxOcDShEQS1e4HdBUH4EDX
+         r9S5UNIPWTXY9ud/6RiFoDm39kjo7s8VJhjQxeP4QymVnd8IOBYOvCBQHc3pIKgFQZBN
+         uf8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s67k1EJaVHxhbvHcAvfuqUxfoKCbqS5gFyMqywS2VG8=;
-        b=iJ3UE5noR/VxCWL4E1MY/Jw+x+4raqG2H0uOEvPQOh1t9yMUr0z3/G8kCqhylwkLcT
-         CEA0VPYR5tkkejC0yu2ACWYQlmxgnVJyxeEettuuFmvfqlEMQr6HRiuPSPB327q1D0BG
-         SB+mWBTx/40iw6rEnLO+5l+KKb+ADpDg4Wj43eGEMZvlPu2VVENZ3VM3aUynxnHR1rij
-         Hvnw6CzQk7nXmdbpoSO8a4EC4lRC/6yvi5fkpOZJXsd7fqXPZ9xNPxw52aw6AA0yTw+3
-         32NbtXEHoUjCwrOjA5TJ+riwjc5uyuzzOZla1CcfNnxk3mVq3ZoWbOPuq+KbNwZqn8WN
-         nBcg==
-X-Gm-Message-State: AOAM53119CiN/J2ldNuI8ngsKEgEGmczpqpjrnq6Lm2Jthie8nnzRr/t
-        g86WHmXxBEL0R0CSSprYVefkvpq8Fsn6cszzETJoSA==
-X-Google-Smtp-Source: ABdhPJzrH2if6CDf5wHK5EtuFMgfqu1uxju7OgWv0aks44zYH+1hcVNDxiRW4mKpFQe+z5VHbHFZvo9CV5G/1sjJr44=
-X-Received: by 2002:a81:a552:0:b0:2dc:15ce:21e with SMTP id
- v18-20020a81a552000000b002dc15ce021emr3588744ywg.250.1646252188339; Wed, 02
- Mar 2022 12:16:28 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7nNxLa5fVLf7zBJyhXcOqLR/oQ9otRapOrLZOBmy+fs=;
+        b=Iq2JiWqmC/iD+Xk6YKx9kpodTGpfEQTgSi4IhwVkW+R0jdM+nxS8GnLu6LUSZyCo7p
+         jQoJDwBLoLmpddyimWTJWveVVgQS/h6DG5QJPHpZNQsJpedW+Xol2g0NRFmX36My3tTy
+         rxBEb/BpWuBi+2GOlYwz5xCmBxPUdF41qWFES8y170ZQxQ6Ho0gXfYvPkNCcCU3A8mQB
+         jBMXTr3llKq5CZicr0upJhgbo7PCBNm9taa6JaVwLwwujVDgxzOouzSXCmh6pgTrMJNG
+         Hew3rzKRAamBfV4VZl2JPfsmwmuhZG7bIgotVXEr4c7OvXSgqPOpLF14xfiw9ESZ0qGA
+         K+Vw==
+X-Gm-Message-State: AOAM533av3EAY7GNKuCJEI/t5BXJWFGs+IQyQMRnXVkiAQYo2NEZhVCf
+        zdSyeNM3gwENdnLJeGYkjFk=
+X-Google-Smtp-Source: ABdhPJw3LwqNN9faD/CN8tV5gcaPOEskQM2Wni+pDcj4Vlrbq+CBge0QXPo1hghH4Dd+dIkl+666fQ==
+X-Received: by 2002:a17:902:7786:b0:14d:51c6:21a8 with SMTP id o6-20020a170902778600b0014d51c621a8mr33480455pll.75.1646259659674;
+        Wed, 02 Mar 2022 14:20:59 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::2:156b])
+        by smtp.gmail.com with ESMTPSA id h6-20020a636c06000000b00363a2533b17sm151118pgc.8.2022.03.02.14.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 14:20:59 -0800 (PST)
+Date:   Wed, 2 Mar 2022 14:20:56 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     zohar@linux.ibm.com, shuah@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, revest@chromium.org,
+        gregkh@linuxfoundation.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
+Message-ID: <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
+References: <20220302111404.193900-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-References: <20220223200731.1859670-1-yaelt@google.com> <Yh+S7JD2q8oalRoM@yuki>
-In-Reply-To: <Yh+S7JD2q8oalRoM@yuki>
-From:   Yael Tzur <yaelt@google.com>
-Date:   Wed, 2 Mar 2022 15:16:17 -0500
-Message-ID: <CAKoutNsWCE9wuXwBW544FFe5NDNdbRNOUyD335yEEaMQHbqqug@mail.gmail.com>
-Subject: Re: [LTP] [PATCH v4] syscalls/keyctl09: test encrypted keys with
- provided decrypted data.
-To:     Cyril Hrubis <chrubis@suse.cz>
-Cc:     ltp@lists.linux.it, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302111404.193900-1-roberto.sassu@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,23 +75,48 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 10:50 AM Cyril Hrubis <chrubis@suse.cz> wrote:
->
-> Hi!
-> The test looks good to me now.
->
-> Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
->
-> Looking at the kernel counterpart it is still in the next tree. We
-> usually wait until the kernel functionality is part of a kernel release
-> in order to make sure that there are no changes done to the
-> kernel-userspace API.
->
-> I this case I guess that in this case the change is so minimal that we
-> can add this test into LTP once it reaches Linus tree.
->
-> --
-> Cyril Hrubis
-> chrubis@suse.cz
+On Wed, Mar 02, 2022 at 12:13:55PM +0100, Roberto Sassu wrote:
+> Extend the interoperability with IMA, to give wider flexibility for the
+> implementation of integrity-focused LSMs based on eBPF.
+> 
+> Patch 1 fixes some style issues.
+> 
+> Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
+> measurement capability of IMA without needing to setup a policy in IMA
+> (those LSMs might implement the policy capability themselves).
+> 
+> Patches 7-9 allow eBPF-based LSMs to evaluate files read by the kernel.
+> 
+> Changelog
+> 
+> v2:
+> - Add better description to patch 1 (suggested by Shuah)
+> - Recalculate digest if it is not fresh (when IMA_COLLECTED flag not set)
+> - Move declaration of bpf_ima_file_hash() at the end (suggested by
+>   Yonghong)
+> - Add tests to check if the digest has been recalculated
+> - Add deny test for bpf_kernel_read_file()
+> - Add description to tests
+> 
+> v1:
+> - Modify ima_file_hash() only and allow the usage of the function with the
+>   modified behavior by eBPF-based LSMs through the new function
+>   bpf_ima_file_hash() (suggested by Mimi)
+> - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
+>   and bpf_ima_file_hash() can be called inside the implementation of
+>   eBPF-based LSMs for this hook
+> 
+> Roberto Sassu (9):
+>   ima: Fix documentation-related warnings in ima_main.c
+>   ima: Always return a file measurement in ima_file_hash()
+>   bpf-lsm: Introduce new helper bpf_ima_file_hash()
+>   selftests/bpf: Move sample generation code to ima_test_common()
+>   selftests/bpf: Add test for bpf_ima_file_hash()
+>   selftests/bpf: Check if the digest is refreshed after a file write
+>   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
+>   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
+>   selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA
+>     policy
 
-Sounds good. Thank you!
+We have to land this set through bpf-next.
+Please get the Acks for patches 1 and 2, so we can proceed.
