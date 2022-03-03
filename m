@@ -2,71 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20324CB35B
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Mar 2022 01:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813294CB4AA
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Mar 2022 03:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiCBX6x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Mar 2022 18:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S231589AbiCCCEL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Mar 2022 21:04:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiCBX6w (ORCPT
+        with ESMTP id S231580AbiCCCEK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Mar 2022 18:58:52 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5828B22B1E;
-        Wed,  2 Mar 2022 15:58:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646265488; x=1677801488;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8rc56ekTbeKFOC2iDvS+DEuqovVns3lGZWNghGxdVAg=;
-  b=K58o9uRBYY7duBV0u+jYh31vDxU+I046W1LQUrR72tM9GTIg55EGKIRG
-   g9wQ2sLIJuqgOc81lnueCv9qK19KJc8sOFu9ghsR5Tp7du2meoSoMp1xG
-   GNMeddsVdCF4m6tadQwrK7PK2CwqLG8Q8ba8gFD50p0mT3OilmwXz5Pt9
-   yXdA43Y1HxmVSZjisWpOzaMNHfElUX97sysjhbL70AIboLqILB69W1zRK
-   vEpthpy0DDyD5pwGKVkHh4+fR9APIHQ3cpFSn80xMyRvWTgDmRVKGvzch
-   gLiOX0P8160SYjU3at5j/zDuPFMeCBIqvaAh7BuMhL+BZdk2YnT6oDpxI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="251101580"
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="251101580"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 15:12:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,150,1643702400"; 
-   d="scan'208";a="630572209"
-Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Mar 2022 15:11:59 -0800
-Received: from kbuild by e9605edfa585 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPY8U-00023G-Fz; Wed, 02 Mar 2022 23:11:58 +0000
-Date:   Thu, 3 Mar 2022 07:11:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v11 26/27] ima: Restrict informational audit messages to
- init_ima_ns
-Message-ID: <202203030748.dQ8i3hT2-lkp@intel.com>
-References: <20220302134703.1273041-27-stefanb@linux.ibm.com>
+        Wed, 2 Mar 2022 21:04:10 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3375113F93;
+        Wed,  2 Mar 2022 18:03:25 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2230RrMT031932;
+        Thu, 3 Mar 2022 02:03:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=T9C3xmYlT8DnXDMis629GMjvTaHYpaVaSTrwiCNNBUI=;
+ b=MRrK+1g+2hWRsc4lFRz3D6cvJdYsMUVTT/zrPVqZUZZ0mwA/9NpFKygo8c9vxbxQaTqc
+ gN0AvK62btQ0Ey35M+dUxagHc3GuG7TznCo4hJrsVyWH2WKJZPhe2dmeAh7WfpSqUW6G
+ V7vbaXGVupNyB74WEFkwLWTLYZrZXTFJB+82ImgKpeXvxaijDeQnzeYdmOi0qMJDIqTN
+ 4EhvRvro/h7rs6r4dhF4vh1Uy+RhCikeFeOPRehWWauFVt+Ol+Jn0IfSiP34zQTkxYuw
+ t1RmhOpvljBoduZnPi4oP3TpzM437e7MMvWpS1ptiMH6Bqex9FdtN92Oi6YQNeImgRV/ VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ejd9wr61j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 02:03:20 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2231Zg3d017255;
+        Thu, 3 Mar 2022 02:03:19 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ejd9wr619-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 02:03:19 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2231lTJf014593;
+        Thu, 3 Mar 2022 02:03:18 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02dal.us.ibm.com with ESMTP id 3ejjuw8qh9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Mar 2022 02:03:18 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22323HSY18678100
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Mar 2022 02:03:17 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B955BE05B;
+        Thu,  3 Mar 2022 02:03:17 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B83DBE056;
+        Thu,  3 Mar 2022 02:03:16 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Mar 2022 02:03:16 +0000 (GMT)
+Message-ID: <45d5a510-eca8-f06f-8d6c-d8bbd41a4b23@linux.ibm.com>
+Date:   Wed, 2 Mar 2022 21:03:15 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] tpm: Fix crash on tmprm release
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     kernel@axis.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210615091410.17007-1-vincent.whitchurch@axis.com>
+ <20210615091410.17007-2-vincent.whitchurch@axis.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20210615091410.17007-2-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7jfS3NTJ8O0mqLwK46GFexoA3_U82CVy
+X-Proofpoint-GUID: WCP-pySGymS1pk_eDSaigx4BD1KLD6gC
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302134703.1273041-27-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 clxscore=1011
+ bulkscore=0 malwarescore=0 suspectscore=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2203030007
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,81 +99,65 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Stefan,
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc6]
-[cannot apply to zohar-integrity/next-integrity linux/master jmorris-security/next-testing next-20220302]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20220302-215707
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git fb184c4af9b9f4563e7a126219389986a71d5b5b
-config: arm64-randconfig-r006-20220302 (https://download.01.org/0day-ci/archive/20220303/202203030748.dQ8i3hT2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/781d4b92eee902d5ebcac657814703974f8e8b28
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20220302-215707
-        git checkout 781d4b92eee902d5ebcac657814703974f8e8b28
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> security/integrity/ima/ima_main.c:200:32: error: too many arguments to function call, expected 2, have 3
-                                   ima_update_xattr(ns, iint, file);
-                                   ~~~~~~~~~~~~~~~~           ^~~~
-   security/integrity/ima/ima.h:413:20: note: 'ima_update_xattr' declared here
-   static inline void ima_update_xattr(struct integrity_iint_cache *iint,
-                      ^
-   1 error generated.
+On 6/15/21 05:14, Vincent Whitchurch wrote:
+> If the tpm_tis module is removed (or a system shutdown is triggered)
+> while the tpmrm device is use, the kernel crashes due to chip->ops being
+> NULL:
+>
+>   # exec 3<>/dev/tpmrm0
+>   # rmmod tpm_tis
+>   # exit
+>   ==================================================================
+>   BUG: KASAN: null-ptr-deref in tpm_chip_start+0x2d/0x120 [tpm]
+>   Read of size 8 at addr 0000000000000060 by task sh/994
+>
+>   Call Trace:
+>    kasan_report.cold.13+0x10f/0x111
+>    tpm_chip_start+0x2d/0x120 [tpm]
+>    tpm2_del_space+0x2c/0xa0 [tpm]
+>    tpmrm_release+0x3f/0x50 [tpm]
+>    __fput+0x110/0x3c0
+>    task_work_run+0x94/0xd0
+>    do_exit+0x683/0x13e0
+>    do_group_exit+0x8b/0x140
+>    do_syscall_64+0x3c/0x80
+>   ==================================================================
+>
+> Fix this by making tpm2_del_space() use tpm_try_get_ops().  The latter
+> already includes the calls to tpm_chip_start() and tpm_chip_stop().
+>
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
 
-vim +200 security/integrity/ima/ima_main.c
+As a follow-up to this message here: https://lkml.org/lkml/2022/3/1/552
 
-   176	
-   177	static void ima_check_last_writer(struct ima_namespace *ns,
-   178					  struct integrity_iint_cache *iint,
-   179					  struct inode *inode, struct file *file)
-   180	{
-   181		fmode_t mode = file->f_mode;
-   182		bool update;
-   183	
-   184		if (!(mode & FMODE_WRITE))
-   185			return;
-   186	
-   187		mutex_lock(&iint->mutex);
-   188		if (atomic_read(&inode->i_writecount) == 1) {
-   189			update = test_and_clear_bit(IMA_UPDATE_XATTR,
-   190						    &iint->atomic_flags);
-   191			if (!IS_I_VERSION(inode) ||
-   192			    !inode_eq_iversion(inode, iint->version) ||
-   193			    (iint->flags & IMA_NEW_FILE)) {
-   194				mask_iint_ns_status_flags
-   195						(iint,
-   196						 ~(IMA_DONE_MASK | IMA_NEW_FILE));
-   197				iint->measured_pcrs = 0;
-   198	
-   199				if (update)
- > 200					ima_update_xattr(ns, iint, file);
-   201			}
-   202		}
-   203		mutex_unlock(&iint->mutex);
-   204	}
-   205	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+
+
+
+
+> ---
+>   drivers/char/tpm/tpm2-space.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> index 784b8b3cb903..e1111261021f 100644
+> --- a/drivers/char/tpm/tpm2-space.c
+> +++ b/drivers/char/tpm/tpm2-space.c
+> @@ -58,12 +58,10 @@ int tpm2_init_space(struct tpm_space *space, unsigned int buf_size)
+>   
+>   void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
+>   {
+> -	mutex_lock(&chip->tpm_mutex);
+> -	if (!tpm_chip_start(chip)) {
+> +	if (!tpm_try_get_ops(chip)) {
+>   		tpm2_flush_sessions(chip, space);
+> -		tpm_chip_stop(chip);
+> +		tpm_put_ops(chip);
+>   	}
+> -	mutex_unlock(&chip->tpm_mutex);
+>   	kfree(space->context_buf);
+>   	kfree(space->session_buf);
+>   }
