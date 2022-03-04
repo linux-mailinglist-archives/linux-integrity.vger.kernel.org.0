@@ -2,252 +2,393 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7888D4CDB69
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Mar 2022 18:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8663C4CDC9E
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Mar 2022 19:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241448AbiCDRzh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Mar 2022 12:55:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S241734AbiCDSfP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Mar 2022 13:35:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241386AbiCDRza (ORCPT
+        with ESMTP id S235729AbiCDSfM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:55:30 -0500
+        Fri, 4 Mar 2022 13:35:12 -0500
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D1B1C469B;
-        Fri,  4 Mar 2022 09:54:42 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 224FxggH026501;
-        Fri, 4 Mar 2022 17:54:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=V+3K2A9IaEm5glFYq8KGyB1PKWoveECOJp0uAT/fgzI=;
- b=f1hrng4sjgqgHu6/Y0Xcy/LAHcObEK/Gh4mns/jxrCNDuTsAissz2gG8R+saWs6Qcrma
- kGqIcmDhb3RKcwaD1gDAkJa7VhF6bem2GQXKhChcn0oHMrPw/44aThU3Y2/DErzGc8tv
- bLGAFkQK3xOJv7jvROf0Dg11jXcKUIwUxv5fQQEdVIb8QBjSVq7c4qIO6GIUvGmbiLc0
- np0L6em946ql04Oxq9M4PHeoLt/GoLCHMw1KjNUWfM7t47urJvEnBOIyZFaClRf4BRw4
- SVPjWhXHzw4dHv09jiKZqhPVBRQAwnW09f89BdQ2G5E6c/Dip80HWiz39Wd9BWHfQZsf Wg== 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97108159EAA;
+        Fri,  4 Mar 2022 10:34:22 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 224HoA2m010670;
+        Fri, 4 Mar 2022 18:34:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=YdxrP6ISC8fN7Erz3D5Qk28mXkYrjLG3b0dWOhyh47I=;
+ b=j3HWKOzMoAMyYUyCsdnMfmtCkQQ83OSSRgy54uxWiTQ9aFwLkxnkwjtE7eDm1Oh5VeE/
+ obG7JavQAHEcD5CZKUezTRj+lehN/VZlkBLmYkTlGE3cEs4qJU+0Pj3A/O2cZSU1+hBI
+ y5qFSfH9ufsOZF3+IH4B9EUwlL084gQRzMjUKrF5SCBN5JmTZtN4EAZsd9xfg5sS8JT9
+ 28xQRwcvIFygtmKjeytROQ/8c6UQSkjDa9W9mX4YkkliRJkqaGDSmGmnzOzzXHMiS9Y5
+ VnG95AZVmmkoidJhOrCY9uWtRCO2oewOI0G2oZoOmrfOf9ih/RFbBOolC3Mg8q5IMww+ nw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ekkmkncmc-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ekqgsgte0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 17:54:31 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 224HOAcC006563;
-        Fri, 4 Mar 2022 17:54:31 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ekkmknckm-1
+        Fri, 04 Mar 2022 18:34:13 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 224IPilb006351;
+        Fri, 4 Mar 2022 18:34:12 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ekqgsgtds-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 17:54:31 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 224HlnLp020587;
-        Fri, 4 Mar 2022 17:54:29 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ek4kbtbwe-1
+        Fri, 04 Mar 2022 18:34:12 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 224IHXxS006837;
+        Fri, 4 Mar 2022 18:34:11 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma04wdc.us.ibm.com with ESMTP id 3ek4kbemee-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 17:54:28 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 224HsPBu56099122
+        Fri, 04 Mar 2022 18:34:11 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 224IY9nj40632750
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Mar 2022 17:54:25 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AC609A405C;
-        Fri,  4 Mar 2022 17:54:25 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1F42FA405B;
-        Fri,  4 Mar 2022 17:54:23 +0000 (GMT)
-Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com.com (unknown [9.211.34.89])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  4 Mar 2022 17:54:22 +0000 (GMT)
-From:   Nayna Jain <nayna@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
-Cc:     dhowells@redhat.com, zohar@linux.ibm.com, jarkko@kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, rnsastry@linux.ibm.com,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: [PATCH v9 3/3] integrity: support including firmware ".platform" keys at build time
-Date:   Fri,  4 Mar 2022 12:54:03 -0500
-Message-Id: <20220304175403.20092-4-nayna@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220304175403.20092-1-nayna@linux.ibm.com>
-References: <20220304175403.20092-1-nayna@linux.ibm.com>
+        Fri, 4 Mar 2022 18:34:09 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8544811206D;
+        Fri,  4 Mar 2022 18:34:09 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5E23D112061;
+        Fri,  4 Mar 2022 18:34:06 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri,  4 Mar 2022 18:34:06 +0000 (GMT)
+Message-ID: <8b594101-f676-ca9d-ebe5-337470a3de80@linux.ibm.com>
+Date:   Fri, 4 Mar 2022 13:34:06 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v9 1/1] tpm: fix reference counting for struct tpm_chip
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org
+References: <20220302094353.3465-1-LinoSanfilippo@gmx.de>
+ <20220302094353.3465-2-LinoSanfilippo@gmx.de> <YiFFCP3/KVl6uo3e@iki.fi>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <YiFFCP3/KVl6uo3e@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uVgsGNZx49IhH-ha_stUEHVDzckFyfTc
-X-Proofpoint-ORIG-GUID: 4EUpBORzzrmW3XRNWOhasPQY7-iNoBO9
+X-Proofpoint-GUID: h9i3nsrFsvdPNGloOfsLgWKeC3o-gTFH
+X-Proofpoint-ORIG-GUID: zXGS_d4Df-eO0cVUWYOjwRqRTi2R26y6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-04_07,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 bulkscore=0 phishscore=0
- spamscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203040088
+ definitions=2022-03-04_08,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 clxscore=1015 suspectscore=0
+ lowpriorityscore=0 adultscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203040093
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Allow firmware keys to be embedded in the Linux kernel and loaded onto
-the ".platform" keyring on boot.
 
-The firmware keys can be specified in a file as a list of PEM encoded
-certificates using new config INTEGRITY_PLATFORM_KEYS. The certificates
-are embedded in the image by converting the PEM-formatted certificates
-into DER(binary) and generating
-security/integrity/platform_certs/platform_certificate_list file at
-build time. On boot, the embedded certs from the image are loaded onto
-the ".platform" keyring at late_initcall(), ensuring the platform keyring
-exists before loading the keys.
+On 3/3/22 17:45, Jarkko Sakkinen wrote:
+> On Wed, Mar 02, 2022 at 10:43:53AM +0100, Lino Sanfilippo wrote:
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> The following sequence of operations results in a refcount warning:
+>>
+>> 1. Open device /dev/tpmrm.
+>> 2. Remove module tpm_tis_spi.
+>> 3. Write a TPM command to the file descriptor opened at step 1.
+>>
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 3 PID: 1161 at lib/refcount.c:25 kobject_get+0xa0/0xa4
+>> refcount_t: addition on 0; use-after-free.
+>> Modules linked in: tpm_tis_spi tpm_tis_core tpm mdio_bcm_unimac brcmfmac
+>> sha256_generic libsha256 sha256_arm hci_uart btbcm bluetooth cfg80211 vc4
+>> brcmutil ecdh_generic ecc snd_soc_core crc32_arm_ce libaes
+>> raspberrypi_hwmon ac97_bus snd_pcm_dmaengine bcm2711_thermal snd_pcm
+>> snd_timer genet snd phy_generic soundcore [last unloaded: spi_bcm2835]
+>> CPU: 3 PID: 1161 Comm: hold_open Not tainted 5.10.0ls-main-dirty #2
+>> Hardware name: BCM2711
+>> [<c0410c3c>] (unwind_backtrace) from [<c040b580>] (show_stack+0x10/0x14)
+>> [<c040b580>] (show_stack) from [<c1092174>] (dump_stack+0xc4/0xd8)
+>> [<c1092174>] (dump_stack) from [<c0445a30>] (__warn+0x104/0x108)
+>> [<c0445a30>] (__warn) from [<c0445aa8>] (warn_slowpath_fmt+0x74/0xb8)
+>> [<c0445aa8>] (warn_slowpath_fmt) from [<c08435d0>] (kobject_get+0xa0/0xa4)
+>> [<c08435d0>] (kobject_get) from [<bf0a715c>] (tpm_try_get_ops+0x14/0x54 [tpm])
+>> [<bf0a715c>] (tpm_try_get_ops [tpm]) from [<bf0a7d6c>] (tpm_common_write+0x38/0x60 [tpm])
+>> [<bf0a7d6c>] (tpm_common_write [tpm]) from [<c05a7ac0>] (vfs_write+0xc4/0x3c0)
+>> [<c05a7ac0>] (vfs_write) from [<c05a7ee4>] (ksys_write+0x58/0xcc)
+>> [<c05a7ee4>] (ksys_write) from [<c04001a0>] (ret_fast_syscall+0x0/0x4c)
+>> Exception stack(0xc226bfa8 to 0xc226bff0)
+>> bfa0:                   00000000 000105b4 00000003 beafe664 00000014 00000000
+>> bfc0: 00000000 000105b4 000103f8 00000004 00000000 00000000 b6f9c000 beafe684
+>> bfe0: 0000006c beafe648 0001056c b6eb6944
+>> ---[ end trace d4b8409def9b8b1f ]---
+>>
+>> The reason for this warning is the attempt to get the chip->dev reference
+>> in tpm_common_write() although the reference counter is already zero.
+>>
+>> Since commit 8979b02aaf1d ("tpm: Fix reference count to main device") the
+>> extra reference used to prevent a premature zero counter is never taken,
+>> because the required TPM_CHIP_FLAG_TPM2 flag is never set.
+>>
+>> Fix this by moving the TPM 2 character device handling from
+>> tpm_chip_alloc() to tpm_add_char_device() which is called at a later point
+>> in time when the flag has been set in case of TPM2.
+>>
+>> Commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
+>> already introduced function tpm_devs_release() to release the extra
+>> reference but did not implement the required put on chip->devs that results
+>> in the call of this function.
+>>
+>> Fix this by putting chip->devs in tpm_chip_unregister().
+>>
+>> Finally move the new implementation for the TPM 2 handling into a new
+>> function to avoid multiple checks for the TPM_CHIP_FLAG_TPM2 flag in the
+>> good case and error cases.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
+>> Fixes: 8979b02aaf1d ("tpm: Fix reference count to main device")
+>> Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
+>> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Signed-off-by: Jason Gunthorpe <jgg@ziepe.ca>
+>> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+>> ---
+>>   drivers/char/tpm/tpm-chip.c   | 46 +++++--------------------
+>>   drivers/char/tpm/tpm.h        |  2 ++
+>>   drivers/char/tpm/tpm2-space.c | 65 +++++++++++++++++++++++++++++++++++
+>>   3 files changed, 75 insertions(+), 38 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+>> index b009e7479b70..783d65fc71f0 100644
+>> --- a/drivers/char/tpm/tpm-chip.c
+>> +++ b/drivers/char/tpm/tpm-chip.c
+>> @@ -274,14 +274,6 @@ static void tpm_dev_release(struct device *dev)
+>>   	kfree(chip);
+>>   }
+>>   
+>> -static void tpm_devs_release(struct device *dev)
+>> -{
+>> -	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
+>> -
+>> -	/* release the master device reference */
+>> -	put_device(&chip->dev);
+>> -}
+>> -
+>>   /**
+>>    * tpm_class_shutdown() - prepare the TPM device for loss of power.
+>>    * @dev: device to which the chip is associated.
+>> @@ -344,7 +336,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+>>   	chip->dev_num = rc;
+>>   
+>>   	device_initialize(&chip->dev);
+>> -	device_initialize(&chip->devs);
+>>   
+>>   	chip->dev.class = tpm_class;
+>>   	chip->dev.class->shutdown_pre = tpm_class_shutdown;
+>> @@ -352,29 +343,12 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+>>   	chip->dev.parent = pdev;
+>>   	chip->dev.groups = chip->groups;
+>>   
+>> -	chip->devs.parent = pdev;
+>> -	chip->devs.class = tpmrm_class;
+>> -	chip->devs.release = tpm_devs_release;
+>> -	/* get extra reference on main device to hold on
+>> -	 * behalf of devs.  This holds the chip structure
+>> -	 * while cdevs is in use.  The corresponding put
+>> -	 * is in the tpm_devs_release (TPM2 only)
+>> -	 */
+>> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+>> -		get_device(&chip->dev);
+>> -
+>>   	if (chip->dev_num == 0)
+>>   		chip->dev.devt = MKDEV(MISC_MAJOR, TPM_MINOR);
+>>   	else
+>>   		chip->dev.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num);
+>>   
+>> -	chip->devs.devt =
+>> -		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
+>> -
+>>   	rc = dev_set_name(&chip->dev, "tpm%d", chip->dev_num);
+>> -	if (rc)
+>> -		goto out;
+>> -	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
+>>   	if (rc)
+>>   		goto out;
+>>   
+>> @@ -382,9 +356,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+>>   		chip->flags |= TPM_CHIP_FLAG_VIRTUAL;
+>>   
+>>   	cdev_init(&chip->cdev, &tpm_fops);
+>> -	cdev_init(&chip->cdevs, &tpmrm_fops);
+>>   	chip->cdev.owner = THIS_MODULE;
+>> -	chip->cdevs.owner = THIS_MODULE;
+>>   
+>>   	rc = tpm2_init_space(&chip->work_space, TPM2_SPACE_BUFFER_SIZE);
+>>   	if (rc) {
+>> @@ -396,7 +368,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+>>   	return chip;
+>>   
+>>   out:
+>> -	put_device(&chip->devs);
+>>   	put_device(&chip->dev);
+>>   	return ERR_PTR(rc);
+>>   }
+>> @@ -445,14 +416,9 @@ static int tpm_add_char_device(struct tpm_chip *chip)
+>>   	}
+>>   
+>>   	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip)) {
+>> -		rc = cdev_device_add(&chip->cdevs, &chip->devs);
+>> -		if (rc) {
+>> -			dev_err(&chip->devs,
+>> -				"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
+>> -				dev_name(&chip->devs), MAJOR(chip->devs.devt),
+>> -				MINOR(chip->devs.devt), rc);
+>> -			return rc;
+>> -		}
+>> +		rc = tpm_devs_add(chip);
+>> +		if (rc)
+>> +			goto err_del_cdev;
+>>   	}
+>>   
+>>   	/* Make the chip available. */
+>> @@ -460,6 +426,10 @@ static int tpm_add_char_device(struct tpm_chip *chip)
+>>   	idr_replace(&dev_nums_idr, chip, chip->dev_num);
+>>   	mutex_unlock(&idr_lock);
+>>   
+>> +	return 0;
+>> +
+>> +err_del_cdev:
+>> +	cdev_device_del(&chip->cdev, &chip->dev);
+>>   	return rc;
+>>   }
+>>   
+>> @@ -654,7 +624,7 @@ void tpm_chip_unregister(struct tpm_chip *chip)
+>>   		hwrng_unregister(&chip->hwrng);
+>>   	tpm_bios_log_teardown(chip);
+>>   	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip))
+>> -		cdev_device_del(&chip->cdevs, &chip->devs);
+>> +		tpm_devs_remove(chip);
+>>   	tpm_del_char_device(chip);
+>>   }
+>>   EXPORT_SYMBOL_GPL(tpm_chip_unregister);
+>> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+>> index 283f78211c3a..2163c6ee0d36 100644
+>> --- a/drivers/char/tpm/tpm.h
+>> +++ b/drivers/char/tpm/tpm.h
+>> @@ -234,6 +234,8 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
+>>   		       size_t cmdsiz);
+>>   int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
+>>   		      size_t *bufsiz);
+>> +int tpm_devs_add(struct tpm_chip *chip);
+>> +void tpm_devs_remove(struct tpm_chip *chip);
+>>   
+>>   void tpm_bios_log_setup(struct tpm_chip *chip);
+>>   void tpm_bios_log_teardown(struct tpm_chip *chip);
+>> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+>> index 97e916856cf3..265ec72b1d81 100644
+>> --- a/drivers/char/tpm/tpm2-space.c
+>> +++ b/drivers/char/tpm/tpm2-space.c
+>> @@ -574,3 +574,68 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space,
+>>   	dev_err(&chip->dev, "%s: error %d\n", __func__, rc);
+>>   	return rc;
+>>   }
+>> +
+>> +/*
+>> + * Put the reference to the main device.
+>> + */
+>> +static void tpm_devs_release(struct device *dev)
+>> +{
+>> +	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
+>> +
+>> +	/* release the master device reference */
+>> +	put_device(&chip->dev);
+>> +}
+>> +
+>> +/*
+>> + * Remove the device file for exposed TPM spaces and release the device
+>> + * reference. This may also release the reference to the master device.
+>> + */
+>> +void tpm_devs_remove(struct tpm_chip *chip)
+>> +{
+>> +	cdev_device_del(&chip->cdevs, &chip->devs);
+>> +	put_device(&chip->devs);
+>> +}
+>> +
+>> +/*
+>> + * Add a device file to expose TPM spaces. Also take a reference to the
+>> + * main device.
+>> + */
+>> +int tpm_devs_add(struct tpm_chip *chip)
+>> +{
+>> +	int rc;
+>> +
+>> +	device_initialize(&chip->devs);
+>> +	chip->devs.parent = chip->dev.parent;
+>> +	chip->devs.class = tpmrm_class;
+>> +
+>> +	/*
+>> +	 * Get extra reference on main device to hold on behalf of devs.
+>> +	 * This holds the chip structure while cdevs is in use. The
+>> +	 * corresponding put is in the tpm_devs_release.
+>> +	 */
+>> +	get_device(&chip->dev);
+>> +	chip->devs.release = tpm_devs_release;
+>> +	chip->devs.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
+>> +	cdev_init(&chip->cdevs, &tpmrm_fops);
+>> +	chip->cdevs.owner = THIS_MODULE;
+>> +
+>> +	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
+>> +	if (rc)
+>> +		goto err_put_devs;
+>> +
+>> +	rc = cdev_device_add(&chip->cdevs, &chip->devs);
+>> +	if (rc) {
+>> +		dev_err(&chip->devs,
+>> +			"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
+>> +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
+>> +			MINOR(chip->devs.devt), rc);
+>> +		goto err_put_devs;
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +err_put_devs:
+>> +	put_device(&chip->devs);
+>> +
+>> +	return rc;
+>> +}
+>> -- 
+>> 2.35.1
+>>
+> LGTM, thank you.
+>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>
+> Stefan, if possible, for sanity check, redo test with v9.
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
----
- security/integrity/Kconfig                    | 10 +++++++
- security/integrity/Makefile                   | 15 ++++++++++-
- .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
- .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
- 4 files changed, 73 insertions(+), 1 deletion(-)
- create mode 100644 security/integrity/platform_certs/platform_cert.S
+We need that other patch as well!
 
-diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-index 599429f99f99..77b2c22c0e1b 100644
---- a/security/integrity/Kconfig
-+++ b/security/integrity/Kconfig
-@@ -62,6 +62,16 @@ config INTEGRITY_PLATFORM_KEYRING
-          provided by the platform for verifying the kexec'ed kerned image
-          and, possibly, the initramfs signature.
- 
-+config INTEGRITY_PLATFORM_KEYS
-+        string "Builtin X.509 keys for .platform keyring"
-+        depends on KEYS
-+        depends on ASYMMETRIC_KEY_TYPE
-+        depends on INTEGRITY_PLATFORM_KEYRING
-+        help
-+          If set, this option should be the filename of a PEM-formatted file
-+          containing X.509 certificates to be loaded onto the ".platform"
-+          keyring.
-+
- config INTEGRITY_MACHINE_KEYRING
- 	bool "Provide a keyring to which Machine Owner Keys may be added"
- 	depends on SECONDARY_TRUSTED_KEYRING
-diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-index d0ffe37dc1d6..65bd93301a3a 100644
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -3,13 +3,17 @@
- # Makefile for caching inode integrity data (iint)
- #
- 
-+quiet_cmd_extract_certs  = CERT  $@
-+      cmd_extract_certs  = certs/extract-cert $(2) $@
-+
- obj-$(CONFIG_INTEGRITY) += integrity.o
- 
- integrity-y := iint.o
- integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
- integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
- integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
--integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o
-+integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o \
-+						  platform_certs/platform_cert.o
- integrity-$(CONFIG_INTEGRITY_MACHINE_KEYRING) += platform_certs/machine_keyring.o
- integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
- 				      platform_certs/load_uefi.o \
-@@ -20,3 +24,12 @@ integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
-                                      platform_certs/keyring_handler.o
- obj-$(CONFIG_IMA)			+= ima/
- obj-$(CONFIG_EVM)			+= evm/
-+
-+$(obj)/platform_certs/platform_cert.o: $(obj)/platform_certs/platform_certificate_list
-+
-+targets += platform_certificate_list
-+
-+$(obj)/platform_certs/platform_certificate_list: $(CONFIG_INTEGRITY_PLATFORM_KEYS) certs/extract-cert FORCE
-+	$(call if_changed,extract_certs,$(if $(CONFIG_INTEGRITY_PLATFORM_KEYS),$<,""))
-+
-+clean-files := platform_certs/platform_certificate_list
-diff --git a/security/integrity/platform_certs/platform_cert.S b/security/integrity/platform_certs/platform_cert.S
-new file mode 100644
-index 000000000000..20bccce5dc5a
---- /dev/null
-+++ b/security/integrity/platform_certs/platform_cert.S
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/export.h>
-+#include <linux/init.h>
-+
-+	__INITRODATA
-+
-+	.align 8
-+#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
-+	.globl platform_certificate_list
-+platform_certificate_list:
-+__cert_list_start:
-+	.incbin "security/integrity/platform_certs/platform_certificate_list"
-+__cert_list_end:
-+#endif
-+
-+	.align 8
-+	.globl platform_certificate_list_size
-+platform_certificate_list_size:
-+#ifdef CONFIG_64BIT
-+	.quad __cert_list_end - __cert_list_start
-+#else
-+	.long __cert_list_end - __cert_list_start
-+#endif
-diff --git a/security/integrity/platform_certs/platform_keyring.c b/security/integrity/platform_certs/platform_keyring.c
-index bcafd7387729..b45de142c5f5 100644
---- a/security/integrity/platform_certs/platform_keyring.c
-+++ b/security/integrity/platform_certs/platform_keyring.c
-@@ -12,8 +12,12 @@
- #include <linux/cred.h>
- #include <linux/err.h>
- #include <linux/slab.h>
-+#include <keys/system_keyring.h>
- #include "../integrity.h"
- 
-+extern __initconst const u8 platform_certificate_list[];
-+extern __initconst const unsigned long platform_certificate_list_size;
-+
- /**
-  * add_to_platform_keyring - Add to platform keyring without validation.
-  * @source: Source of key
-@@ -37,6 +41,28 @@ void __init add_to_platform_keyring(const char *source, const void *data,
- 		pr_info("Error adding keys to platform keyring %s\n", source);
- }
- 
-+static __init int load_platform_certificate_list(void)
-+{
-+	const u8 *p;
-+	unsigned long size;
-+	int rc;
-+	struct key *keyring;
-+
-+	p = platform_certificate_list;
-+	size = platform_certificate_list_size;
-+
-+	keyring = integrity_keyring_from_id(INTEGRITY_KEYRING_PLATFORM);
-+	if (IS_ERR(keyring))
-+		return PTR_ERR(keyring);
-+
-+	rc = load_certificate_list(p, size, keyring);
-+	if (rc)
-+		pr_info("Error adding keys to platform keyring %d\n", rc);
-+
-+	return rc;
-+}
-+late_initcall(load_platform_certificate_list);
-+
- /*
-  * Create the trusted keyrings.
-  */
--- 
-2.27.0
 
+Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+
+
+
+
+    Stefan
+
+>
+> BR, Jarkko
