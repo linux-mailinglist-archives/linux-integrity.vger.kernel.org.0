@@ -2,56 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AE64CC960
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Mar 2022 23:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2EC4CDB59
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Mar 2022 18:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236970AbiCCWq6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Mar 2022 17:46:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S241353AbiCDRx2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Mar 2022 12:53:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbiCCWq6 (ORCPT
+        with ESMTP id S241394AbiCDRx0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:46:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEAF15C9E3;
-        Thu,  3 Mar 2022 14:46:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AD53B826EC;
-        Thu,  3 Mar 2022 22:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CEDDC340EC;
-        Thu,  3 Mar 2022 22:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646347569;
-        bh=0iM/LG+ZaoOQnUD8Y59axu+gsBRaEJqOMoi/DHqIZDI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QrFGl/wJAosMVeSyofyKI6MP10K7CveJ/WH2zfUZq9tAkZWukVToUCBed7VYLFxlM
-         2VfWy1zVbtEZotsmAvg0M2KA0dd/KnzI0hIRLtfjXd3nPiLDVNAdMy3WQfc18SI5Wp
-         7y8JojurhuQK/zC8oCbf0fA/gC9B47bF3piwzOTHNAHOzoNAiPio5VxLB7EYUA9Pmr
-         qM7yr57IQUlDJ/b5NAr8s0jEIc2qjx6cEpbbQntHaeK/XZAioURojndTNj1JUU5cDh
-         7P6UuPxWQyJm2MfGGy2f7kIAH7RTPNNvhtvNJfOM5bIs3Kpmh6gFB5v01jI0SCiLW4
-         wKsBOf9QKiq8A==
-Date:   Fri, 4 Mar 2022 00:45:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
+        Fri, 4 Mar 2022 12:53:26 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47B113E18
+        for <linux-integrity@vger.kernel.org>; Fri,  4 Mar 2022 09:52:32 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id p8so4190810qvg.12
+        for <linux-integrity@vger.kernel.org>; Fri, 04 Mar 2022 09:52:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=L/urtDFzZC4xatACRSLBQeFFMtch77UX/QBofNty68E=;
+        b=InAdpYtCcQYLQ6Xz6GPHsNtREqcY9Tn1Ag476bBrN++oGr6ViSK2JH+JQsv/K+tREN
+         P3kT8/KLmGgK0eH2tZ4FPhgz2ZQfKIH8w4r38vmdglzfOkZYuewcld2iD9ZnZD33N/JS
+         uSjJBYFylDv0+IH0FKfC+3bOBhX6rKzu0szN8ykGOjsBG+myY8AxCysLtCp79J1eFRbz
+         stmWD21I7Rf+VRzheF/OVPP337JHCorIxEyz1K4wOOUUPvSr/ZyzVsWDgyelrVMpkUA9
+         6XddGAHHYHHlFjBgz1yRHu9u6VagfIODGYVjcTABqH5XUNxsLOtISqmm1Ynm2UQ/iytI
+         Jzew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L/urtDFzZC4xatACRSLBQeFFMtch77UX/QBofNty68E=;
+        b=0zhVwXUMlFOjLf+TyswQlEelLHBsc9/lMpU0hjNb1DD39Cc9I8WBRh3Jh3+N3/M8my
+         SU3xvo7EueB86axoC+lIWJeR/3tdDSGDir/tgbrzPi0KmYxAkubqztfbLI1Y+w1qMDJk
+         87RWf3Di2iLpYsPmDuE25PoMCjg+BGGtdEoVmAOtV3TYqFzvP7YRp5me/jVmQ8ESnodN
+         o15y6Rf6TDA/4FSoX+93eainFlKckCM9OZIDdvp9E+1YxfWKehAotkjzvnp0SDCwgdTI
+         DDcTqp6DayUWahtOBfs6k7yHy4IR6keKE9q5Ia91Uex8TDyxgZ2TG6jW4LqjnNJM7UX7
+         uaiQ==
+X-Gm-Message-State: AOAM530fGsfdBwl4W+SmDf6Ws30TdKyK1uNBrlZj4xOYR72VzSgrT+Qf
+        TfvLcaCRw/i25hhzkrS3itmzmw==
+X-Google-Smtp-Source: ABdhPJwvgNhVty7iPiCbaA4nUhk47JCl9z+vlJ50QRjE2HTXfmmLaAxOv0FT2sYPaPUTGe0aE+AOBA==
+X-Received: by 2002:ad4:5222:0:b0:432:deec:7219 with SMTP id r2-20020ad45222000000b00432deec7219mr23257604qvq.2.1646416351633;
+        Fri, 04 Mar 2022 09:52:31 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id n1-20020a05622a11c100b002dff3364c6esm4018049qtk.19.2022.03.04.09.52.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 09:52:30 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nQC6P-004xNx-T2; Fri, 04 Mar 2022 13:52:29 -0400
+Date:   Fri, 4 Mar 2022 13:52:29 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
 To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, David.Laight@ACULAB.COM,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         p.rosenberger@kunbus.com,
         Lino Sanfilippo <l.sanfilippo@kunbus.com>,
         stable@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
 Subject: Re: [PATCH v9 1/1] tpm: fix reference counting for struct tpm_chip
-Message-ID: <YiFFCP3/KVl6uo3e@iki.fi>
+Message-ID: <20220304175229.GH6468@ziepe.ca>
 References: <20220302094353.3465-1-LinoSanfilippo@gmx.de>
  <20220302094353.3465-2-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220302094353.3465-2-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,214 +147,7 @@ On Wed, Mar 02, 2022 at 10:43:53AM +0100, Lino Sanfilippo wrote:
 >  drivers/char/tpm/tpm.h        |  2 ++
 >  drivers/char/tpm/tpm2-space.c | 65 +++++++++++++++++++++++++++++++++++
 >  3 files changed, 75 insertions(+), 38 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index b009e7479b70..783d65fc71f0 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -274,14 +274,6 @@ static void tpm_dev_release(struct device *dev)
->  	kfree(chip);
->  }
->  
-> -static void tpm_devs_release(struct device *dev)
-> -{
-> -	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
-> -
-> -	/* release the master device reference */
-> -	put_device(&chip->dev);
-> -}
-> -
->  /**
->   * tpm_class_shutdown() - prepare the TPM device for loss of power.
->   * @dev: device to which the chip is associated.
-> @@ -344,7 +336,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->  	chip->dev_num = rc;
->  
->  	device_initialize(&chip->dev);
-> -	device_initialize(&chip->devs);
->  
->  	chip->dev.class = tpm_class;
->  	chip->dev.class->shutdown_pre = tpm_class_shutdown;
-> @@ -352,29 +343,12 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->  	chip->dev.parent = pdev;
->  	chip->dev.groups = chip->groups;
->  
-> -	chip->devs.parent = pdev;
-> -	chip->devs.class = tpmrm_class;
-> -	chip->devs.release = tpm_devs_release;
-> -	/* get extra reference on main device to hold on
-> -	 * behalf of devs.  This holds the chip structure
-> -	 * while cdevs is in use.  The corresponding put
-> -	 * is in the tpm_devs_release (TPM2 only)
-> -	 */
-> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> -		get_device(&chip->dev);
-> -
->  	if (chip->dev_num == 0)
->  		chip->dev.devt = MKDEV(MISC_MAJOR, TPM_MINOR);
->  	else
->  		chip->dev.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num);
->  
-> -	chip->devs.devt =
-> -		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> -
->  	rc = dev_set_name(&chip->dev, "tpm%d", chip->dev_num);
-> -	if (rc)
-> -		goto out;
-> -	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
->  	if (rc)
->  		goto out;
->  
-> @@ -382,9 +356,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->  		chip->flags |= TPM_CHIP_FLAG_VIRTUAL;
->  
->  	cdev_init(&chip->cdev, &tpm_fops);
-> -	cdev_init(&chip->cdevs, &tpmrm_fops);
->  	chip->cdev.owner = THIS_MODULE;
-> -	chip->cdevs.owner = THIS_MODULE;
->  
->  	rc = tpm2_init_space(&chip->work_space, TPM2_SPACE_BUFFER_SIZE);
->  	if (rc) {
-> @@ -396,7 +368,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->  	return chip;
->  
->  out:
-> -	put_device(&chip->devs);
->  	put_device(&chip->dev);
->  	return ERR_PTR(rc);
->  }
-> @@ -445,14 +416,9 @@ static int tpm_add_char_device(struct tpm_chip *chip)
->  	}
->  
->  	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip)) {
-> -		rc = cdev_device_add(&chip->cdevs, &chip->devs);
-> -		if (rc) {
-> -			dev_err(&chip->devs,
-> -				"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
-> -				dev_name(&chip->devs), MAJOR(chip->devs.devt),
-> -				MINOR(chip->devs.devt), rc);
-> -			return rc;
-> -		}
-> +		rc = tpm_devs_add(chip);
-> +		if (rc)
-> +			goto err_del_cdev;
->  	}
->  
->  	/* Make the chip available. */
-> @@ -460,6 +426,10 @@ static int tpm_add_char_device(struct tpm_chip *chip)
->  	idr_replace(&dev_nums_idr, chip, chip->dev_num);
->  	mutex_unlock(&idr_lock);
->  
-> +	return 0;
-> +
-> +err_del_cdev:
-> +	cdev_device_del(&chip->cdev, &chip->dev);
->  	return rc;
->  }
->  
-> @@ -654,7 +624,7 @@ void tpm_chip_unregister(struct tpm_chip *chip)
->  		hwrng_unregister(&chip->hwrng);
->  	tpm_bios_log_teardown(chip);
->  	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip))
-> -		cdev_device_del(&chip->cdevs, &chip->devs);
-> +		tpm_devs_remove(chip);
->  	tpm_del_char_device(chip);
->  }
->  EXPORT_SYMBOL_GPL(tpm_chip_unregister);
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 283f78211c3a..2163c6ee0d36 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -234,6 +234,8 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
->  		       size_t cmdsiz);
->  int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
->  		      size_t *bufsiz);
-> +int tpm_devs_add(struct tpm_chip *chip);
-> +void tpm_devs_remove(struct tpm_chip *chip);
->  
->  void tpm_bios_log_setup(struct tpm_chip *chip);
->  void tpm_bios_log_teardown(struct tpm_chip *chip);
-> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-> index 97e916856cf3..265ec72b1d81 100644
-> --- a/drivers/char/tpm/tpm2-space.c
-> +++ b/drivers/char/tpm/tpm2-space.c
-> @@ -574,3 +574,68 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space,
->  	dev_err(&chip->dev, "%s: error %d\n", __func__, rc);
->  	return rc;
->  }
-> +
-> +/*
-> + * Put the reference to the main device.
-> + */
-> +static void tpm_devs_release(struct device *dev)
-> +{
-> +	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
-> +
-> +	/* release the master device reference */
-> +	put_device(&chip->dev);
-> +}
-> +
-> +/*
-> + * Remove the device file for exposed TPM spaces and release the device
-> + * reference. This may also release the reference to the master device.
-> + */
-> +void tpm_devs_remove(struct tpm_chip *chip)
-> +{
-> +	cdev_device_del(&chip->cdevs, &chip->devs);
-> +	put_device(&chip->devs);
-> +}
-> +
-> +/*
-> + * Add a device file to expose TPM spaces. Also take a reference to the
-> + * main device.
-> + */
-> +int tpm_devs_add(struct tpm_chip *chip)
-> +{
-> +	int rc;
-> +
-> +	device_initialize(&chip->devs);
-> +	chip->devs.parent = chip->dev.parent;
-> +	chip->devs.class = tpmrm_class;
-> +
-> +	/*
-> +	 * Get extra reference on main device to hold on behalf of devs.
-> +	 * This holds the chip structure while cdevs is in use. The
-> +	 * corresponding put is in the tpm_devs_release.
-> +	 */
-> +	get_device(&chip->dev);
-> +	chip->devs.release = tpm_devs_release;
-> +	chip->devs.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> +	cdev_init(&chip->cdevs, &tpmrm_fops);
-> +	chip->cdevs.owner = THIS_MODULE;
-> +
-> +	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
-> +	if (rc)
-> +		goto err_put_devs;
-> +
-> +	rc = cdev_device_add(&chip->cdevs, &chip->devs);
-> +	if (rc) {
-> +		dev_err(&chip->devs,
-> +			"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
-> +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
-> +			MINOR(chip->devs.devt), rc);
-> +		goto err_put_devs;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_put_devs:
-> +	put_device(&chip->devs);
-> +
-> +	return rc;
-> +}
-> -- 
-> 2.35.1
-> 
 
-LGTM, thank you.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-Stefan, if possible, for sanity check, redo test with v9.
-
-BR, Jarkko
+Jason
