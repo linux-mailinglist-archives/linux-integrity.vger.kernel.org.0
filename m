@@ -2,75 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2EC4CDB59
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Mar 2022 18:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6844CDB5E
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Mar 2022 18:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241353AbiCDRx2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Mar 2022 12:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S236174AbiCDRzQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Mar 2022 12:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241394AbiCDRx0 (ORCPT
+        with ESMTP id S229608AbiCDRzQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:53:26 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47B113E18
-        for <linux-integrity@vger.kernel.org>; Fri,  4 Mar 2022 09:52:32 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id p8so4190810qvg.12
-        for <linux-integrity@vger.kernel.org>; Fri, 04 Mar 2022 09:52:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L/urtDFzZC4xatACRSLBQeFFMtch77UX/QBofNty68E=;
-        b=InAdpYtCcQYLQ6Xz6GPHsNtREqcY9Tn1Ag476bBrN++oGr6ViSK2JH+JQsv/K+tREN
-         P3kT8/KLmGgK0eH2tZ4FPhgz2ZQfKIH8w4r38vmdglzfOkZYuewcld2iD9ZnZD33N/JS
-         uSjJBYFylDv0+IH0FKfC+3bOBhX6rKzu0szN8ykGOjsBG+myY8AxCysLtCp79J1eFRbz
-         stmWD21I7Rf+VRzheF/OVPP337JHCorIxEyz1K4wOOUUPvSr/ZyzVsWDgyelrVMpkUA9
-         6XddGAHHYHHlFjBgz1yRHu9u6VagfIODGYVjcTABqH5XUNxsLOtISqmm1Ynm2UQ/iytI
-         Jzew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L/urtDFzZC4xatACRSLBQeFFMtch77UX/QBofNty68E=;
-        b=0zhVwXUMlFOjLf+TyswQlEelLHBsc9/lMpU0hjNb1DD39Cc9I8WBRh3Jh3+N3/M8my
-         SU3xvo7EueB86axoC+lIWJeR/3tdDSGDir/tgbrzPi0KmYxAkubqztfbLI1Y+w1qMDJk
-         87RWf3Di2iLpYsPmDuE25PoMCjg+BGGtdEoVmAOtV3TYqFzvP7YRp5me/jVmQ8ESnodN
-         o15y6Rf6TDA/4FSoX+93eainFlKckCM9OZIDdvp9E+1YxfWKehAotkjzvnp0SDCwgdTI
-         DDcTqp6DayUWahtOBfs6k7yHy4IR6keKE9q5Ia91Uex8TDyxgZ2TG6jW4LqjnNJM7UX7
-         uaiQ==
-X-Gm-Message-State: AOAM530fGsfdBwl4W+SmDf6Ws30TdKyK1uNBrlZj4xOYR72VzSgrT+Qf
-        TfvLcaCRw/i25hhzkrS3itmzmw==
-X-Google-Smtp-Source: ABdhPJwvgNhVty7iPiCbaA4nUhk47JCl9z+vlJ50QRjE2HTXfmmLaAxOv0FT2sYPaPUTGe0aE+AOBA==
-X-Received: by 2002:ad4:5222:0:b0:432:deec:7219 with SMTP id r2-20020ad45222000000b00432deec7219mr23257604qvq.2.1646416351633;
-        Fri, 04 Mar 2022 09:52:31 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id n1-20020a05622a11c100b002dff3364c6esm4018049qtk.19.2022.03.04.09.52.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 09:52:30 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nQC6P-004xNx-T2; Fri, 04 Mar 2022 13:52:29 -0400
-Date:   Fri, 4 Mar 2022 13:52:29 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org, stefanb@linux.vnet.ibm.com,
-        James.Bottomley@hansenpartnership.com, David.Laight@ACULAB.COM,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        stable@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v9 1/1] tpm: fix reference counting for struct tpm_chip
-Message-ID: <20220304175229.GH6468@ziepe.ca>
-References: <20220302094353.3465-1-LinoSanfilippo@gmx.de>
- <20220302094353.3465-2-LinoSanfilippo@gmx.de>
+        Fri, 4 Mar 2022 12:55:16 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3701B8CAE;
+        Fri,  4 Mar 2022 09:54:27 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 224GnVEl014690;
+        Fri, 4 Mar 2022 17:54:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=ddnQcWmxR5yIRPFKEzafRdeHmN6llHVQgmZpng9Of8A=;
+ b=n/09CYqAm5Axx0r0yNVbqPm047UllmQhpOt1py/kpZ4s8/Dj8F/uaQqMUEAeyP3oU9QC
+ 9Q7lr4DYlsQwZxh04SWZPxAjuSnwJUGW0/tC8x+jdfENLlVkC/FI0fto4+rLVQ74Zn84
+ mcdegj8yWoz6qCkEd/07kUSaDrL3mWWjPpwDBuWIbrLcs+9K+ZtLsdj5jvNLpPd5+EJ6
+ PIRtRx6mGfNTJjSGIZqvQ0AZ9vzgFFzwUjQsylPn1+qRgdXD4TiticFDKd2JBxpujXxL
+ p1gQ/TMQuhv+DzGOIEtFD+OAKGTP/IyxITmvmNyVZPStOXySiq6KN+L1EE3DD80rLdh7 Hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ekpmph5cg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Mar 2022 17:54:23 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 224HoB8T006584;
+        Fri, 4 Mar 2022 17:54:22 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ekpmph5c0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Mar 2022 17:54:22 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 224HnJLs002169;
+        Fri, 4 Mar 2022 17:54:20 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3ek4k4j1tt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Mar 2022 17:54:20 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 224HsGLW58327396
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 4 Mar 2022 17:54:17 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD064A405F;
+        Fri,  4 Mar 2022 17:54:16 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CCDAA4054;
+        Fri,  4 Mar 2022 17:54:14 +0000 (GMT)
+Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com.com (unknown [9.211.34.89])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  4 Mar 2022 17:54:13 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
+Cc:     dhowells@redhat.com, zohar@linux.ibm.com, jarkko@kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
+        seth@forshee.me, rnsastry@linux.ibm.com,
+        Nayna Jain <nayna@linux.ibm.com>
+Subject: [PATCH v9 0/3] integrity: support including firmware ".platform" keys at build time 
+Date:   Fri,  4 Mar 2022 12:54:00 -0500
+Message-Id: <20220304175403.20092-1-nayna@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: P2-douyNUXyUCqEqacUZ6ZIPKLRi9Gib
+X-Proofpoint-ORIG-GUID: Y3HzdXXFTR7uK56j5kJ595at_wEoweIV
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302094353.3465-2-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-04_07,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ mlxlogscore=999 impostorscore=0 spamscore=0 phishscore=0 adultscore=0
+ suspectscore=0 priorityscore=1501 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203040088
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,76 +92,74 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 10:43:53AM +0100, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> 
-> The following sequence of operations results in a refcount warning:
-> 
-> 1. Open device /dev/tpmrm.
-> 2. Remove module tpm_tis_spi.
-> 3. Write a TPM command to the file descriptor opened at step 1.
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 3 PID: 1161 at lib/refcount.c:25 kobject_get+0xa0/0xa4
-> refcount_t: addition on 0; use-after-free.
-> Modules linked in: tpm_tis_spi tpm_tis_core tpm mdio_bcm_unimac brcmfmac
-> sha256_generic libsha256 sha256_arm hci_uart btbcm bluetooth cfg80211 vc4
-> brcmutil ecdh_generic ecc snd_soc_core crc32_arm_ce libaes
-> raspberrypi_hwmon ac97_bus snd_pcm_dmaengine bcm2711_thermal snd_pcm
-> snd_timer genet snd phy_generic soundcore [last unloaded: spi_bcm2835]
-> CPU: 3 PID: 1161 Comm: hold_open Not tainted 5.10.0ls-main-dirty #2
-> Hardware name: BCM2711
-> [<c0410c3c>] (unwind_backtrace) from [<c040b580>] (show_stack+0x10/0x14)
-> [<c040b580>] (show_stack) from [<c1092174>] (dump_stack+0xc4/0xd8)
-> [<c1092174>] (dump_stack) from [<c0445a30>] (__warn+0x104/0x108)
-> [<c0445a30>] (__warn) from [<c0445aa8>] (warn_slowpath_fmt+0x74/0xb8)
-> [<c0445aa8>] (warn_slowpath_fmt) from [<c08435d0>] (kobject_get+0xa0/0xa4)
-> [<c08435d0>] (kobject_get) from [<bf0a715c>] (tpm_try_get_ops+0x14/0x54 [tpm])
-> [<bf0a715c>] (tpm_try_get_ops [tpm]) from [<bf0a7d6c>] (tpm_common_write+0x38/0x60 [tpm])
-> [<bf0a7d6c>] (tpm_common_write [tpm]) from [<c05a7ac0>] (vfs_write+0xc4/0x3c0)
-> [<c05a7ac0>] (vfs_write) from [<c05a7ee4>] (ksys_write+0x58/0xcc)
-> [<c05a7ee4>] (ksys_write) from [<c04001a0>] (ret_fast_syscall+0x0/0x4c)
-> Exception stack(0xc226bfa8 to 0xc226bff0)
-> bfa0:                   00000000 000105b4 00000003 beafe664 00000014 00000000
-> bfc0: 00000000 000105b4 000103f8 00000004 00000000 00000000 b6f9c000 beafe684
-> bfe0: 0000006c beafe648 0001056c b6eb6944
-> ---[ end trace d4b8409def9b8b1f ]---
-> 
-> The reason for this warning is the attempt to get the chip->dev reference
-> in tpm_common_write() although the reference counter is already zero.
-> 
-> Since commit 8979b02aaf1d ("tpm: Fix reference count to main device") the
-> extra reference used to prevent a premature zero counter is never taken,
-> because the required TPM_CHIP_FLAG_TPM2 flag is never set.
-> 
-> Fix this by moving the TPM 2 character device handling from
-> tpm_chip_alloc() to tpm_add_char_device() which is called at a later point
-> in time when the flag has been set in case of TPM2.
-> 
-> Commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
-> already introduced function tpm_devs_release() to release the extra
-> reference but did not implement the required put on chip->devs that results
-> in the call of this function.
-> 
-> Fix this by putting chip->devs in tpm_chip_unregister().
-> 
-> Finally move the new implementation for the TPM 2 handling into a new
-> function to avoid multiple checks for the TPM_CHIP_FLAG_TPM2 flag in the
-> good case and error cases.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
-> Fixes: 8979b02aaf1d ("tpm: Fix reference count to main device")
-> Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
-> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
-> Signed-off-by: Jason Gunthorpe <jgg@ziepe.ca>
-> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-> ---
->  drivers/char/tpm/tpm-chip.c   | 46 +++++--------------------
->  drivers/char/tpm/tpm.h        |  2 ++
->  drivers/char/tpm/tpm2-space.c | 65 +++++++++++++++++++++++++++++++++++
->  3 files changed, 75 insertions(+), 38 deletions(-)
+Some firmware support secure boot by embedding static keys to verify the
+Linux kernel during boot. However, these firmware do not expose an
+interface for the kernel to load firmware keys onto the ".platform"
+keyring, preventing the kernel from verifying the kexec kernel image
+signature.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+This patchset exports load_certificate_list() and defines a new function
+load_builtin_platform_cert() to load compiled in certificates onto the
+".platform" keyring.
 
-Jason
+Changelog:
+v9:
+* Rebased on tpmdd master branch repo - 
+git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+
+v8:
+* Includes Jarkko's feedback on patch description and removed Reported-by
+for Patch 1.
+
+v7:
+* Incldues Jarkko's feedback on patch description for Patch 1 and 3.
+
+v6:
+* Includes Jarkko's feedback:
+ * Split Patch 2 into two.
+ * Update Patch description.
+
+v5:
+* Renamed load_builtin_platform_cert() to load_platform_certificate_list()
+and config INTEGRITY_PLATFORM_BUILTIN_KEYS to INTEGRITY_PLATFORM_KEYS, as
+suggested by Mimi Zohar.
+
+v4:
+* Split into two patches as per Mimi Zohar and Dimitri John Ledkov
+recommendation.
+
+v3:
+* Included Jarkko's feedback
+ ** updated patch description to include approach.
+ ** removed extern for function declaration in the .h file.
+* Included load_certificate_list() within #ifdef CONFIG_KEYS condition.
+
+v2:
+* Fixed the error reported by kernel test robot
+* Updated patch description based on Jarkko's feedback.
+
+Nayna Jain (3):
+  certs: export load_certificate_list() to be used outside certs/
+  integrity: make integrity_keyring_from_id() non-static
+  integrity: support including firmware ".platform" keys at build time
+
+ certs/Makefile                                |  5 ++--
+ certs/blacklist.c                             |  1 -
+ certs/common.c                                |  2 +-
+ certs/common.h                                |  9 -------
+ certs/system_keyring.c                        |  1 -
+ include/keys/system_keyring.h                 |  6 +++++
+ security/integrity/Kconfig                    | 10 +++++++
+ security/integrity/Makefile                   | 15 ++++++++++-
+ security/integrity/digsig.c                   |  2 +-
+ security/integrity/integrity.h                |  6 +++++
+ .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
+ .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
+ 12 files changed, 90 insertions(+), 16 deletions(-)
+ delete mode 100644 certs/common.h
+ create mode 100644 security/integrity/platform_certs/platform_cert.S
+
+
+base-commit: c9e54f38976a1c0ec69c0a6208b3fd55fceb01d1
+-- 
+2.27.0
