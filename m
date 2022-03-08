@@ -2,48 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142894D1889
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Mar 2022 13:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5ADB4D1907
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Mar 2022 14:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbiCHNAp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Mar 2022 08:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        id S242576AbiCHNVF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Mar 2022 08:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241948AbiCHNAn (ORCPT
+        with ESMTP id S233857AbiCHNVE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:00:43 -0500
+        Tue, 8 Mar 2022 08:21:04 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002DC48337;
-        Tue,  8 Mar 2022 04:59:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E113449687;
+        Tue,  8 Mar 2022 05:20:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8472B60B34;
-        Tue,  8 Mar 2022 12:59:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94115C340EB;
-        Tue,  8 Mar 2022 12:59:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 749F460F64;
+        Tue,  8 Mar 2022 13:20:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EACC340EB;
+        Tue,  8 Mar 2022 13:20:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646744369;
-        bh=8twpn2VXInIujbQlnoWElUcXznlL0Cva5mySXPEUnek=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n5ixWXCb/B2lIvUNSHVn6z4R3azJZMdUR/rV0MRUR4Dwrz0AEntP38eOa2LFjUZb3
-         +2/cVUvW+MOxRVxTIBbr6ZBepo11A+sC8UKpHXwi0V0Iqck9jPewHBcENEaKtAZ5El
-         lO28qP/FPvIzgwd6etZXCVHwviXHaC+Ja/gmiMmG9qdeuClg5CpYZFmsVGS+YPwomH
-         Sl8TFDSCrbPDdY+Q07V4/D4lJWZ+b/7EWUUl/y8aD795eox/7UMb81VDpYPpjxjEqn
-         yRtFhoDc8F36/iPqpzdOoywUKQePlA/744TsyLrIURohfK7dJLFQJaHmwooqMJieGr
-         3kou1ghiUjYZA==
-Date:   Tue, 8 Mar 2022 14:58:49 +0200
+        s=k20201202; t=1646745606;
+        bh=tGU5octn4cnB/mw4Ty6XIGrMXCKfoNOlJmYFqPsROs8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bmzxexaQQ0kY3kfIrJx+99W6CMIOM42SQZoQnI21ZzLUYMKc6TW/DrO7X5dfPb5z1
+         vbiqp2JEUnRhjWQhgBPLZKgFCmg5QMekJqLhLd/t8VmcfsDB8QfFwRBphkRZtYefZF
+         89+s3qT2JUKDpkK4RH0Cwu+H5h036F4+B19gsmynKNqcZx7xda74j1zRhkcEDAw8x4
+         eQ2jzy5w5ct6mKWrNBft8NuoF4ccAtFcrXJwr3uspBvv/SUupEmOQemDHN3LMmXO/6
+         ok0KPwq2qbYuY01h/JLYijter/+2oGAJ/e5AROgfYt5nkr+VDo3iz3OxdTZOGD211Y
+         LXeFmYG+G0eSg==
+Date:   Tue, 8 Mar 2022 15:19:26 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org, James Morris <jmorris@namei.org>,
-        David Howells <dhowells@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [GIT PULL] TPM DEVICE DRIVER updates for v5.18
-Message-ID: <YidTCX0NOgDfHCp9@kernel.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v8 5/5] certs: Allow root user to append signed hashes to
+ the blacklist keyring
+Message-ID: <YidX3jqNJeFfr1G1@iki.fi>
+References: <20210712170313.884724-1-mic@digikod.net>
+ <20210712170313.884724-6-mic@digikod.net>
+ <YidDznCPSmFmfNwE@iki.fi>
+ <995fc93b-531b-9840-1523-21ae2adbe4ba@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <995fc93b-531b-9840-1523-21ae2adbe4ba@digikod.net>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,126 +70,261 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+On Tue, Mar 08, 2022 at 01:18:28PM +0100, Mickaël Salaün wrote:
+> 
+> On 08/03/2022 12:53, Jarkko Sakkinen wrote:
+> > On Mon, Jul 12, 2021 at 07:03:13PM +0200, Mickaël Salaün wrote:
+> > > From: Mickaël Salaün <mic@linux.microsoft.com>
+> > > 
+> > > Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root user
+> > > to dynamically add new keys to the blacklist keyring.  This enables to
+> > > invalidate new certificates, either from being loaded in a keyring, or
+> > > from being trusted in a PKCS#7 certificate chain.  This also enables to
+> > > add new file hashes to be denied by the integrity infrastructure.
+> > > 
+> > > Being able to untrust a certificate which could have normaly been
+> > > trusted is a sensitive operation.  This is why adding new hashes to the
+> > > blacklist keyring is only allowed when these hashes are signed and
+> > > vouched by the builtin trusted keyring.  A blacklist hash is stored as a
+> > > key description.  The PKCS#7 signature of this description must be
+> > > provided as the key payload.
+> > > 
+> > > Marking a certificate as untrusted should be enforced while the system
+> > > is running.  It is then forbiden to remove such blacklist keys.
+> > > 
+> > > Update blacklist keyring, blacklist key and revoked certificate access rights:
+> > > * allows the root user to search for a specific blacklisted hash, which
+> > >    make sense because the descriptions are already viewable;
+> > > * forbids key update (blacklist and asymmetric ones);
+> > > * restricts kernel rights on the blacklist keyring to align with the
+> > >    root user rights.
+> > > 
+> > > See help in tools/certs/print-cert-tbs-hash.sh .
+> > > 
+> > > Cc: David Howells <dhowells@redhat.com>
+> > > Cc: David Woodhouse <dwmw2@infradead.org>
+> > > Cc: Eric Snowberg <eric.snowberg@oracle.com>
+> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> > > Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> > > Link: https://lore.kernel.org/r/20210712170313.884724-6-mic@digikod.net
+> > > ---
+> > > 
+> > > Changes since v6:
+> > > * Rebase on keys-cve-2020-26541-v3: commit ebd9c2ae369a ("integrity:
+> > >    Load mokx variables into the blacklist keyring").
+> > > 
+> > > Changes since v5:
+> > > * Rebase on keys-next, fix Kconfig conflict, and update the asymmetric
+> > >    key rights added to the blacklist keyring by the new
+> > >    add_key_to_revocation_list(): align with blacklist key rights by
+> > >    removing KEY_POS_WRITE as a safeguard, and add
+> > >    KEY_ALLOC_BYPASS_RESTRICTION to not be subject to
+> > >    restrict_link_for_blacklist() that only allows blacklist key types to
+> > >    be added to the keyring.
+> > > * Change the return code for restrict_link_for_blacklist() from -EPERM
+> > >    to -EOPNOTSUPP to align with asymmetric key keyrings.
+> > > 
+> > > Changes since v3:
+> > > * Update commit message for print-cert-tbs-hash.sh .
+> > > 
+> > > Changes since v2:
+> > > * Add comment for blacklist_key_instantiate().
+> > > ---
+> > >   certs/Kconfig     | 10 +++++
+> > >   certs/blacklist.c | 96 ++++++++++++++++++++++++++++++++++++-----------
+> > >   2 files changed, 85 insertions(+), 21 deletions(-)
+> > > 
+> > > diff --git a/certs/Kconfig b/certs/Kconfig
+> > > index 0fbe184ceca5..e0e524b7eff9 100644
+> > > --- a/certs/Kconfig
+> > > +++ b/certs/Kconfig
+> > > @@ -103,4 +103,14 @@ config SYSTEM_REVOCATION_KEYS
+> > >   	  containing X.509 certificates to be included in the default blacklist
+> > >   	  keyring.
+> > > +config SYSTEM_BLACKLIST_AUTH_UPDATE
+> > > +	bool "Allow root to add signed blacklist keys"
+> > > +	depends on SYSTEM_BLACKLIST_KEYRING
+> > > +	depends on SYSTEM_DATA_VERIFICATION
+> > > +	help
+> > > +	  If set, provide the ability to load new blacklist keys at run time if
+> > > +	  they are signed and vouched by a certificate from the builtin trusted
+> > > +	  keyring.  The PKCS#7 signature of the description is set in the key
+> > > +	  payload.  Blacklist keys cannot be removed.
+> > > +
+> > >   endmenu
+> > > diff --git a/certs/blacklist.c b/certs/blacklist.c
+> > > index b254c87ceb3a..486ce0dd8e9c 100644
+> > > --- a/certs/blacklist.c
+> > > +++ b/certs/blacklist.c
+> > > @@ -15,6 +15,7 @@
+> > >   #include <linux/err.h>
+> > >   #include <linux/seq_file.h>
+> > >   #include <linux/uidgid.h>
+> > > +#include <linux/verification.h>
+> > >   #include <keys/system_keyring.h>
+> > >   #include "blacklist.h"
+> > >   #include "common.h"
+> > > @@ -26,6 +27,9 @@
+> > >    */
+> > >   #define MAX_HASH_LEN	128
+> > > +#define BLACKLIST_KEY_PERM (KEY_POS_SEARCH | KEY_POS_VIEW | \
+> > > +			    KEY_USR_SEARCH | KEY_USR_VIEW)
+> > > +
+> > >   static const char tbs_prefix[] = "tbs";
+> > >   static const char bin_prefix[] = "bin";
+> > > @@ -80,19 +84,51 @@ static int blacklist_vet_description(const char *desc)
+> > >   	return 0;
+> > >   }
+> > > -/*
+> > > - * The hash to be blacklisted is expected to be in the description.  There will
+> > > - * be no payload.
+> > > - */
+> > > -static int blacklist_preparse(struct key_preparsed_payload *prep)
+> > > +static int blacklist_key_instantiate(struct key *key,
+> > > +		struct key_preparsed_payload *prep)
+> > >   {
+> > > -	if (prep->datalen > 0)
+> > > -		return -EINVAL;
+> > > -	return 0;
+> > > +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
+> > > +	int err;
+> > > +#endif
+> > > +
+> > > +	/* Sets safe default permissions for keys loaded by user space. */
+> > > +	key->perm = BLACKLIST_KEY_PERM;
+> > > +
+> > > +	/*
+> > > +	 * Skips the authentication step for builtin hashes, they are not
+> > > +	 * signed but still trusted.
+> > > +	 */
+> > > +	if (key->flags & (1 << KEY_FLAG_BUILTIN))
+> > > +		goto out;
+> > > +
+> > > +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
+> > > +	/*
+> > > +	 * Verifies the description's PKCS#7 signature against the builtin
+> > > +	 * trusted keyring.
+> > > +	 */
+> > > +	err = verify_pkcs7_signature(key->description,
+> > > +			strlen(key->description), prep->data, prep->datalen,
+> > > +			NULL, VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
+> > > +	if (err)
+> > > +		return err;
+> > > +#else
+> > > +	/*
+> > > +	 * It should not be possible to come here because the keyring doesn't
+> > > +	 * have KEY_USR_WRITE and the only other way to call this function is
+> > > +	 * for builtin hashes.
+> > > +	 */
+> > > +	WARN_ON_ONCE(1);
+> > > +	return -EPERM;
+> > > +#endif
+> > > +
+> > > +out:
+> > > +	return generic_key_instantiate(key, prep);
+> > >   }
+> > > -static void blacklist_free_preparse(struct key_preparsed_payload *prep)
+> > > +static int blacklist_key_update(struct key *key,
+> > > +		struct key_preparsed_payload *prep)
+> > >   {
+> > > +	return -EPERM;
+> > >   }
+> > >   static void blacklist_describe(const struct key *key, struct seq_file *m)
+> > > @@ -103,9 +139,8 @@ static void blacklist_describe(const struct key *key, struct seq_file *m)
+> > >   static struct key_type key_type_blacklist = {
+> > >   	.name			= "blacklist",
+> > >   	.vet_description	= blacklist_vet_description,
+> > > -	.preparse		= blacklist_preparse,
+> > > -	.free_preparse		= blacklist_free_preparse,
+> > > -	.instantiate		= generic_key_instantiate,
+> > > +	.instantiate		= blacklist_key_instantiate,
+> > > +	.update			= blacklist_key_update,
+> > >   	.describe		= blacklist_describe,
+> > >   };
+> > > @@ -154,8 +189,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
+> > >   				   hash,
+> > >   				   NULL,
+> > >   				   0,
+> > > -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
+> > > -				    KEY_USR_VIEW),
+> > > +				   BLACKLIST_KEY_PERM,
+> > >   				   KEY_ALLOC_NOT_IN_QUOTA |
+> > >   				   KEY_ALLOC_BUILT_IN);
+> > >   	if (IS_ERR(key)) {
+> > > @@ -232,8 +266,10 @@ int add_key_to_revocation_list(const char *data, size_t size)
+> > >   				   NULL,
+> > >   				   data,
+> > >   				   size,
+> > > -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW),
+> > > -				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN);
+> > > +				   KEY_POS_VIEW | KEY_POS_READ | KEY_POS_SEARCH
+> > > +				   | KEY_USR_VIEW,
+> > > +				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN
+> > > +				   | KEY_ALLOC_BYPASS_RESTRICTION);
+> > >   	if (IS_ERR(key)) {
+> > >   		pr_err("Problem with revocation key (%ld)\n", PTR_ERR(key));
+> > > @@ -260,25 +296,43 @@ int is_key_on_revocation_list(struct pkcs7_message *pkcs7)
+> > >   }
+> > >   #endif
+> > > +static int restrict_link_for_blacklist(struct key *dest_keyring,
+> > > +		const struct key_type *type, const union key_payload *payload,
+> > > +		struct key *restrict_key)
+> > > +{
+> > > +	if (type == &key_type_blacklist)
+> > > +		return 0;
+> > > +	return -EOPNOTSUPP;
+> > > +}
+> > > +
+> > >   /*
+> > >    * Initialise the blacklist
+> > >    */
+> > >   static int __init blacklist_init(void)
+> > >   {
+> > >   	const char *const *bl;
+> > > +	struct key_restriction *restriction;
+> > >   	if (register_key_type(&key_type_blacklist) < 0)
+> > >   		panic("Can't allocate system blacklist key type\n");
+> > > +	restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
+> > > +	if (!restriction)
+> > > +		panic("Can't allocate blacklist keyring restriction\n");
+> > 
+> > 
+> > This prevents me from taking this to my pull request. In moderns standards,
+> > no new BUG_ON(), panic() etc. should never added to the kernel.
+> > 
+> > I missed this in my review.
+> > 
+> > This should rather be e.g.
+> > 
+> >          restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
+> > 	if (!restriction) {
+> > 		pr_err("Can't allocate blacklist keyring restriction\n");
+> >                  return 0;
+> >          }
+> > 
+> > Unfortunately I need to drop this patch set, because adding new panic()
+> > is simply a no-go.
+> 
+> I agree that panic() is not great in general, but I followed the other part
+> of the code (just above) that do the same. This part of the kernel should
+> failed if critical memory allocation failed at boot time (only). It doesn't
+> impact the kernel once it is running. I don't think that just ignoring this
+> error with return 0 is fine, after all it's a critical error right?
 
-In order to split the work a bit we've aligned with David Howells more or
-less that I take more hardware/firmware aligned keyring patches, and he
-takes care more of the framework aligned patches.
+It's not good reason enough to crash the whole kernel, even if it is a
+critical error (e.g. run-time foresincs). Even WARN() is not recommended
+these days [*].
 
-For TPM the patches worth of highlighting are the fixes for refcounting
-provided by Lino Sanfilippo and James Bottomley.
+For the existing panic()-statements: I'm happy to review patches that
+render them out.
 
-Eric B. has done a bunch obvious (but important) fixes but there's one a
-bit controversial: removal of asym_tpm. It was added in 2018 when TPM1
-was already declared as insecure and world had moved on to TPM2. I don't
-know how this has passed all the filters but I did not have a chance to
-see the patches when they were out. I simply cannot commit on
-maintaining this because it was from all angles just wrong to take it in
-the first place to the mainline kernel. Nobody should use this module
-really for anything.
+Not sure tho, if this fails should it be then "everything blacklisted".
+Just one thing to consider.
 
-Finally, there is a new keyring ".machine" to hold MOK keys. In the mok
-side MokListTrustedRT UEFI variable can be set, from which kernel knows
-that MOK keys are kernel trusted keys and they are populated to the machine
-keyring. This keyring linked to the secondary trusted keyring, which means
-that can be used like any kernel trusted keys. This keyring of course can
-be used to hold other MOK'ish keys in other platforms in future.
+> Calling panic() seems OK here. Is there a better way to stop the kernel for
+> such critical error? If the kernel cannot allocate memory at this time, it
+> would be useless to try continuing booting.
+
+[*] https://lore.kernel.org/linux-sgx/YA0tvOGp%2FshchVhu@kroah.com/
 
 BR, Jarkko
-
-The following changes since commit ea4424be16887a37735d6550cfd0611528dbe5d9:
-
-  Merge tag 'mtd/fixes-for-5.17-rc8' of git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux (2022-03-07 11:43:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.18
-
-for you to fetch changes up to f4fe76112c8fbe0a2d2e3ebd94ff2cfe22977e39:
-
-  tpm: use try_get_ops() in tpm-space.c (2022-03-08 14:29:25 +0200)
-
-----------------------------------------------------------------
-tpmdd updates for Linux v5.18
-
-----------------------------------------------------------------
-Andreas Rammhold (1):
-      KEYS: trusted: Fix trusted key backends when building as module
-
-Dave Kleikamp (1):
-      KEYS: trusted: Avoid calling null function trusted_key_exit
-
-Eric Biggers (8):
-      KEYS: fix length validation in keyctl_pkey_params_get_2()
-      KEYS: x509: clearly distinguish between key and signature algorithms
-      KEYS: x509: remove unused fields
-      KEYS: x509: remove never-set ->unsupported_key flag
-      KEYS: x509: remove dead code that set ->unsupported_sig
-      KEYS: remove support for asym_tpm keys
-      KEYS: asymmetric: enforce that sig algo matches key algo
-      KEYS: asymmetric: properly validate hash_algo and encoding
-
-Eric Snowberg (8):
-      integrity: Fix warning about missing prototypes
-      integrity: Introduce a Linux keyring called machine
-      integrity: add new keyring handler for mok keys
-      KEYS: store reference to machine keyring
-      KEYS: Introduce link restriction for machine keys
-      efi/mokvar: move up init order
-      integrity: Trust MOK keys if MokListTrustedRT found
-      integrity: Only use machine keyring when uefi_check_trust_mok_keys is true
-
-Gustavo A. R. Silva (1):
-      tpm: xen-tpmfront: Use struct_size() helper
-
-James Bottomley (1):
-      tpm: use try_get_ops() in tpm-space.c
-
-Lino Sanfilippo (1):
-      tpm: fix reference counting for struct tpm_chip
-
-Stefan Berger (1):
-      selftests: tpm2: Determine available PCR bank
-
-Tadeusz Struk (2):
-      tpm: Fix error handling in async work
-      selftests: tpm: add async space test with noneexisting handle
-
- certs/system_keyring.c                             |  44 +-
- crypto/asymmetric_keys/Kconfig                     |  21 -
- crypto/asymmetric_keys/Makefile                    |  12 -
- crypto/asymmetric_keys/asym_tpm.c                  | 957 ---------------------
- crypto/asymmetric_keys/pkcs7_verify.c              |  13 +-
- crypto/asymmetric_keys/public_key.c                | 126 ++-
- crypto/asymmetric_keys/tpm.asn1                    |   5 -
- crypto/asymmetric_keys/tpm_parser.c                | 102 ---
- crypto/asymmetric_keys/x509.asn1                   |   2 +-
- crypto/asymmetric_keys/x509_cert_parser.c          |  34 +-
- crypto/asymmetric_keys/x509_parser.h               |   1 -
- crypto/asymmetric_keys/x509_public_key.c           |  24 -
- drivers/char/tpm/tpm-chip.c                        |  46 +-
- drivers/char/tpm/tpm-dev-common.c                  |   8 +-
- drivers/char/tpm/tpm.h                             |   2 +
- drivers/char/tpm/tpm2-space.c                      |  73 +-
- drivers/char/tpm/xen-tpmfront.c                    |   8 +-
- drivers/firmware/efi/mokvar-table.c                |   2 +-
- include/crypto/asym_tpm_subtype.h                  |  19 -
- include/keys/system_keyring.h                      |  14 +
- security/integrity/Kconfig                         |  13 +
- security/integrity/Makefile                        |   1 +
- security/integrity/digsig.c                        |  15 +-
- security/integrity/integrity.h                     |  17 +-
- .../integrity/platform_certs/keyring_handler.c     |  18 +-
- .../integrity/platform_certs/keyring_handler.h     |   5 +
- security/integrity/platform_certs/load_uefi.c      |   4 +-
- .../integrity/platform_certs/machine_keyring.c     |  77 ++
- security/keys/keyctl_pkey.c                        |  14 +-
- security/keys/trusted-keys/trusted_core.c          |   6 +-
- tools/testing/selftests/tpm2/tpm2.py               |  31 +
- tools/testing/selftests/tpm2/tpm2_tests.py         |  45 +-
- 32 files changed, 486 insertions(+), 1273 deletions(-)
- delete mode 100644 crypto/asymmetric_keys/asym_tpm.c
- delete mode 100644 crypto/asymmetric_keys/tpm.asn1
- delete mode 100644 crypto/asymmetric_keys/tpm_parser.c
- delete mode 100644 include/crypto/asym_tpm_subtype.h
- create mode 100644 security/integrity/platform_certs/machine_keyring.c
