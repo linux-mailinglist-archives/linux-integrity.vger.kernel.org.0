@@ -2,56 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B344D1377
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Mar 2022 10:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B857F4D16AF
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Mar 2022 12:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242751AbiCHJen (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Mar 2022 04:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
+        id S242254AbiCHLz3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Mar 2022 06:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbiCHJem (ORCPT
+        with ESMTP id S235676AbiCHLz3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:34:42 -0500
+        Tue, 8 Mar 2022 06:55:29 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3A84131D;
-        Tue,  8 Mar 2022 01:33:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB8F2DD5F;
+        Tue,  8 Mar 2022 03:54:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C98B3613EA;
-        Tue,  8 Mar 2022 09:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C68C340EC;
-        Tue,  8 Mar 2022 09:33:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02D12616B4;
+        Tue,  8 Mar 2022 11:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E320C340EE;
+        Tue,  8 Mar 2022 11:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646732022;
-        bh=KGNINKpwfme0ioYvCFXI97pXN8eXLL+5zUi6gZH62EU=;
+        s=k20201202; t=1646740471;
+        bh=mK13UO2icdJkbKzDbJRR7VE/cOk6rGlpu6tEY0bGCuI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iCKp5kebWxQkqmPGeS4Xfu/XlBlKW/CIp1uPmG5QEL5TsNgACHDzmthUMciPCwbih
-         HX6Vl7HF355FxbwuIS3Mg6qcgxpqgS0aMKravSk7Q2MQ8W+RcIyHUb1Y0aAZcH4S43
-         KvqTZWIJ7f3hJ1jJdxgL4OxDNvGj3D8tUqujbvG04NCY61s0D5IQ10GnL1CV2wy2JX
-         9c7zMiz3BXgw8Uw1zWvteze8kzKbGBC/Ndb654S2einb7Icuceehx3+gl0Qn6mwI50
-         V/2iqt/jdn4KSY4MotjWJ3S2awGrTLVHDfZfAmhWDRWrtAYSNwIBtwwmhTqDUEPZfN
-         xs8Krh4uJsg1A==
-Date:   Tue, 8 Mar 2022 11:33:01 +0200
+        b=Re5QDj7KRYzTymY4POCxVl1W2LAH0TjcmZxoB7Lcljws/4CY5LeietEgW+tc6LQ+S
+         iEDz677lvA1j7kmfIoqfKmPa6Hury9ctUNCbbdkWgNYiR8vMexjRRBCKxXMwAvIrMd
+         r4nrMUUZWzdOlzGP56ssPqA4ZqGCiEiOFibWz8STmwMRuF/FCDiFMaFnB6V2aZjFfY
+         vZHLYQJ7a2GAk2LM0Q8tGJ63WFN4b9hLuLGFe9aXqKjJcMtxNvFapkaomSWGx75JhS
+         hk2bDSCmqbjAsjtsygHOFwRdfHqTi8Kwoz6hQHGpEum45KLH7qoxv7a66TY5iCYe40
+         X7BOwDpy4dnNw==
+Date:   Tue, 8 Mar 2022 13:53:50 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org, dhowells@redhat.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, rnsastry@linux.ibm.com,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v10 3/3] integrity: support including firmware
- ".platform" keys at build time
-Message-ID: <Yiciza4e1hf4MPTd@iki.fi>
-References: <20220306205100.651878-1-nayna@linux.ibm.com>
- <20220306205100.651878-4-nayna@linux.ibm.com>
- <YiX/NHETfqLT8ZAz@iki.fi>
- <42243a19b5882ddff9d20b37d1566553b745a717.camel@linux.ibm.com>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v8 5/5] certs: Allow root user to append signed hashes to
+ the blacklist keyring
+Message-ID: <YidDznCPSmFmfNwE@iki.fi>
+References: <20210712170313.884724-1-mic@digikod.net>
+ <20210712170313.884724-6-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <42243a19b5882ddff9d20b37d1566553b745a717.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210712170313.884724-6-mic@digikod.net>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,217 +68,247 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 05:03:09PM -0500, Mimi Zohar wrote:
-> [Cc'ing  Masahiro Yamada]
+On Mon, Jul 12, 2021 at 07:03:13PM +0200, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
 > 
-> On Mon, 2022-03-07 at 14:48 +0200, Jarkko Sakkinen wrote:
-> > On Sun, Mar 06, 2022 at 03:51:00PM -0500, Nayna Jain wrote:
-> > > Allow firmware keys to be embedded in the Linux kernel and loaded onto
-> > > the ".platform" keyring on boot.
-> > > 
-> > > The firmware keys can be specified in a file as a list of PEM encoded
-> > > certificates using new config INTEGRITY_PLATFORM_KEYS. The certificates
-> > > are embedded in the image by converting the PEM-formatted certificates
-> > > into DER(binary) and generating
-> > > security/integrity/platform_certs/platform_certificate_list file at
-> > > build time. On boot, the embedded certs from the image are loaded onto
-> > > the ".platform" keyring at late_initcall(), ensuring the platform keyring
-> > > exists before loading the keys.
-> > > 
-> > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> > > ---
-> > >  security/integrity/Kconfig                    | 10 ++++++++
-> > >  security/integrity/Makefile                   | 15 +++++++++++-
-> > >  security/integrity/integrity.h                |  3 +++
-> > >  .../integrity/platform_certs/platform_cert.S  | 23 +++++++++++++++++++
-> > >  .../platform_certs/platform_keyring.c         | 23 +++++++++++++++++++
-> > >  5 files changed, 73 insertions(+), 1 deletion(-)
-> > >  create mode 100644 security/integrity/platform_certs/platform_cert.S
-> > > 
-> > > diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-> > > index 599429f99f99..77b2c22c0e1b 100644
-> > > --- a/security/integrity/Kconfig
-> > > +++ b/security/integrity/Kconfig
-> > > @@ -62,6 +62,16 @@ config INTEGRITY_PLATFORM_KEYRING
-> > >           provided by the platform for verifying the kexec'ed kerned image
-> > >           and, possibly, the initramfs signature.
-> > >  
-> > > +config INTEGRITY_PLATFORM_KEYS
-> > > +        string "Builtin X.509 keys for .platform keyring"
-> > > +        depends on KEYS
-> > > +        depends on ASYMMETRIC_KEY_TYPE
-> > > +        depends on INTEGRITY_PLATFORM_KEYRING
-> > > +        help
-> > > +          If set, this option should be the filename of a PEM-formatted file
-> > > +          containing X.509 certificates to be loaded onto the ".platform"
-> > > +          keyring.
-> > > +
-> > >  config INTEGRITY_MACHINE_KEYRING
-> > >  	bool "Provide a keyring to which Machine Owner Keys may be added"
-> > >  	depends on SECONDARY_TRUSTED_KEYRING
-> > > diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-> > > index d0ffe37dc1d6..65bd93301a3a 100644
-> > > --- a/security/integrity/Makefile
-> > > +++ b/security/integrity/Makefile
-> > > @@ -3,13 +3,17 @@
-> > >  # Makefile for caching inode integrity data (iint)
-> > >  #
-> > >  
-> > > +quiet_cmd_extract_certs  = CERT  $@
-> > > +      cmd_extract_certs  = certs/extract-cert $(2) $@
-> > > +
-> > >  obj-$(CONFIG_INTEGRITY) += integrity.o
-> > >  
-> > >  integrity-y := iint.o
-> > >  integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
-> > >  integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
-> > >  integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
-> > > -integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o
-> > > +integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o \
-> > > +						  platform_certs/platform_cert.o
-> > >  integrity-$(CONFIG_INTEGRITY_MACHINE_KEYRING) += platform_certs/machine_keyring.o
-> > >  integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
-> > >  				      platform_certs/load_uefi.o \
-> > > @@ -20,3 +24,12 @@ integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
-> > >                                       platform_certs/keyring_handler.o
-> > >  obj-$(CONFIG_IMA)			+= ima/
-> > >  obj-$(CONFIG_EVM)			+= evm/
-> > > +
-> > > +$(obj)/platform_certs/platform_cert.o: $(obj)/platform_certs/platform_certificate_list
-> > > +
-> > > +targets += platform_certificate_list
-> > > +
-> > > +$(obj)/platform_certs/platform_certificate_list: $(CONFIG_INTEGRITY_PLATFORM_KEYS) certs/extract-cert FORCE
-> > > +	$(call if_changed,extract_certs,$(if $(CONFIG_INTEGRITY_PLATFORM_KEYS),$<,""))
-> > > +
-> > > +clean-files := platform_certs/platform_certificate_list
-> > > diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-> > > index 76e9a9515f99..219da29fecf7 100644
-> > > --- a/security/integrity/integrity.h
-> > > +++ b/security/integrity/integrity.h
-> > > @@ -282,6 +282,9 @@ integrity_audit_log_start(struct audit_context *ctx, gfp_t gfp_mask, int type)
-> > >  #endif
-> > >  
-> > >  #ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
-> > > +extern __initconst const u8 platform_certificate_list[];
-> > > +extern __initconst const unsigned long platform_certificate_list_size;
-> > > +
-> > >  void __init add_to_platform_keyring(const char *source, const void *data,
-> > >  				    size_t len);
-> > >  #else
-> > > diff --git a/security/integrity/platform_certs/platform_cert.S b/security/integrity/platform_certs/platform_cert.S
-> > > new file mode 100644
-> > > index 000000000000..20bccce5dc5a
-> > > --- /dev/null
-> > > +++ b/security/integrity/platform_certs/platform_cert.S
-> > > @@ -0,0 +1,23 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +#include <linux/export.h>
-> > > +#include <linux/init.h>
-> > > +
-> > > +	__INITRODATA
-> > > +
-> > > +	.align 8
-> > > +#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
-> > > +	.globl platform_certificate_list
-> > > +platform_certificate_list:
-> > > +__cert_list_start:
-> > > +	.incbin "security/integrity/platform_certs/platform_certificate_list"
-> > > +__cert_list_end:
-> > > +#endif
-> > > +
-> > > +	.align 8
-> > > +	.globl platform_certificate_list_size
-> > > +platform_certificate_list_size:
-> > > +#ifdef CONFIG_64BIT
-> > > +	.quad __cert_list_end - __cert_list_start
-> > > +#else
-> > > +	.long __cert_list_end - __cert_list_start
-> > > +#endif
-> > > diff --git a/security/integrity/platform_certs/platform_keyring.c b/security/integrity/platform_certs/platform_keyring.c
-> > > index bcafd7387729..c2368912fd1b 100644
-> > > --- a/security/integrity/platform_certs/platform_keyring.c
-> > > +++ b/security/integrity/platform_certs/platform_keyring.c
-> > > @@ -12,6 +12,7 @@
-> > >  #include <linux/cred.h>
-> > >  #include <linux/err.h>
-> > >  #include <linux/slab.h>
-> > > +#include <keys/system_keyring.h>
-> > >  #include "../integrity.h"
-> > >  
-> > >  /**
-> > > @@ -37,6 +38,28 @@ void __init add_to_platform_keyring(const char *source, const void *data,
-> > >  		pr_info("Error adding keys to platform keyring %s\n", source);
-> > >  }
-> > >  
-> > > +static __init int load_platform_certificate_list(void)
-> > > +{
-> > > +	const u8 *p;
-> > > +	unsigned long size;
-> > > +	int rc;
-> > > +	struct key *keyring;
-> > > +
-> > > +	p = platform_certificate_list;
-> > > +	size = platform_certificate_list_size;
-> > > +
-> > > +	keyring = integrity_keyring_from_id(INTEGRITY_KEYRING_PLATFORM);
-> > > +	if (IS_ERR(keyring))
-> > > +		return PTR_ERR(keyring);
-> > > +
-> > > +	rc = load_certificate_list(p, size, keyring);
-> > > +	if (rc)
-> > > +		pr_info("Error adding keys to platform keyring %d\n", rc);
-> > > +
-> > > +	return rc;
-> > > +}
-> > > +late_initcall(load_platform_certificate_list);
-> > > +
-> > >  /*
-> > >   * Create the trusted keyrings.
-> > >   */
-> > > -- 
-> > > 2.27.0
-> > > 
-> > 
-> > There's zero tested-by's for this, i.e. cannot be applied before someone
-> > has tested this. Mimi, do not mean to be rude, but I don't frankly
-> > understand why you ask to pick a patch set that is *untested*.
-> > So I generated a self-signed certificate:
-> > 
-> > openssl req -x509 -out localhost.crt -keyout localhost.key \
-> >   -newkey rsa:2048 -nodes -sha256 \
-> >   -subj '/CN=localhost' -extensions EXT -config <( \
-> >    printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
-> > 
-> > (by courtesy of letsencrypt: https://letsencrypt.org/docs/certificates-for-localhost/)
-> > 
-> > openssl x509 -in localhost.crt -out localhost.pem -outform PEM
-> > 
-> > And starting with tinyconfig I added minimal options to enable this
-> > feature. The config is attached.
-> > 
-> > The end result is:
-> > 
-> > make[2]: *** No rule to make target 'certs/extract-cert', needed by 'security/integrity/platform_certs/platform_certificate_list'.  Stop.
-> > make[1]: *** [scripts/Makefile.build:550: security/integrity] Error 2
-> > make: *** [Makefile:1831: security] Error 2
+> Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root user
+> to dynamically add new keys to the blacklist keyring.  This enables to
+> invalidate new certificates, either from being loaded in a keyring, or
+> from being trusted in a PKCS#7 certificate chain.  This also enables to
+> add new file hashes to be denied by the integrity infrastructure.
 > 
-> I've reviewed and tested this patch set each time it was posted last
-> fall/winter.  Recent changes were limited to the cover letter and patch
-> description.  Only recently was "extract_cert" moved to the certs/
-> directory and not built automatically.  The commit message says the
-> move was because it wasn't being used outside the certs directory. 
-> Refer to commit 340a02535ee7 ("certs: move scripts/extract-cert to
-> certs/").
+> Being able to untrust a certificate which could have normaly been
+> trusted is a sensitive operation.  This is why adding new hashes to the
+> blacklist keyring is only allowed when these hashes are signed and
+> vouched by the builtin trusted keyring.  A blacklist hash is stored as a
+> key description.  The PKCS#7 signature of this description must be
+> provided as the key payload.
 > 
-> Masahiro Yamada would you be ok with reverting the move?
+> Marking a certificate as untrusted should be enforced while the system
+> is running.  It is then forbiden to remove such blacklist keys.
 > 
-> thanks,
+> Update blacklist keyring, blacklist key and revoked certificate access rights:
+> * allows the root user to search for a specific blacklisted hash, which
+>   make sense because the descriptions are already viewable;
+> * forbids key update (blacklist and asymmetric ones);
+> * restricts kernel rights on the blacklist keyring to align with the
+>   root user rights.
 > 
-> Mimi
+> See help in tools/certs/print-cert-tbs-hash.sh .
+> 
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: David Woodhouse <dwmw2@infradead.org>
+> Cc: Eric Snowberg <eric.snowberg@oracle.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20210712170313.884724-6-mic@digikod.net
+> ---
+> 
+> Changes since v6:
+> * Rebase on keys-cve-2020-26541-v3: commit ebd9c2ae369a ("integrity:
+>   Load mokx variables into the blacklist keyring").
+> 
+> Changes since v5:
+> * Rebase on keys-next, fix Kconfig conflict, and update the asymmetric
+>   key rights added to the blacklist keyring by the new
+>   add_key_to_revocation_list(): align with blacklist key rights by
+>   removing KEY_POS_WRITE as a safeguard, and add
+>   KEY_ALLOC_BYPASS_RESTRICTION to not be subject to
+>   restrict_link_for_blacklist() that only allows blacklist key types to
+>   be added to the keyring.
+> * Change the return code for restrict_link_for_blacklist() from -EPERM
+>   to -EOPNOTSUPP to align with asymmetric key keyrings.
+> 
+> Changes since v3:
+> * Update commit message for print-cert-tbs-hash.sh .
+> 
+> Changes since v2:
+> * Add comment for blacklist_key_instantiate().
+> ---
+>  certs/Kconfig     | 10 +++++
+>  certs/blacklist.c | 96 ++++++++++++++++++++++++++++++++++++-----------
+>  2 files changed, 85 insertions(+), 21 deletions(-)
+> 
+> diff --git a/certs/Kconfig b/certs/Kconfig
+> index 0fbe184ceca5..e0e524b7eff9 100644
+> --- a/certs/Kconfig
+> +++ b/certs/Kconfig
+> @@ -103,4 +103,14 @@ config SYSTEM_REVOCATION_KEYS
+>  	  containing X.509 certificates to be included in the default blacklist
+>  	  keyring.
+>  
+> +config SYSTEM_BLACKLIST_AUTH_UPDATE
+> +	bool "Allow root to add signed blacklist keys"
+> +	depends on SYSTEM_BLACKLIST_KEYRING
+> +	depends on SYSTEM_DATA_VERIFICATION
+> +	help
+> +	  If set, provide the ability to load new blacklist keys at run time if
+> +	  they are signed and vouched by a certificate from the builtin trusted
+> +	  keyring.  The PKCS#7 signature of the description is set in the key
+> +	  payload.  Blacklist keys cannot be removed.
+> +
+>  endmenu
+> diff --git a/certs/blacklist.c b/certs/blacklist.c
+> index b254c87ceb3a..486ce0dd8e9c 100644
+> --- a/certs/blacklist.c
+> +++ b/certs/blacklist.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/err.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/uidgid.h>
+> +#include <linux/verification.h>
+>  #include <keys/system_keyring.h>
+>  #include "blacklist.h"
+>  #include "common.h"
+> @@ -26,6 +27,9 @@
+>   */
+>  #define MAX_HASH_LEN	128
+>  
+> +#define BLACKLIST_KEY_PERM (KEY_POS_SEARCH | KEY_POS_VIEW | \
+> +			    KEY_USR_SEARCH | KEY_USR_VIEW)
+> +
+>  static const char tbs_prefix[] = "tbs";
+>  static const char bin_prefix[] = "bin";
+>  
+> @@ -80,19 +84,51 @@ static int blacklist_vet_description(const char *desc)
+>  	return 0;
+>  }
+>  
+> -/*
+> - * The hash to be blacklisted is expected to be in the description.  There will
+> - * be no payload.
+> - */
+> -static int blacklist_preparse(struct key_preparsed_payload *prep)
+> +static int blacklist_key_instantiate(struct key *key,
+> +		struct key_preparsed_payload *prep)
+>  {
+> -	if (prep->datalen > 0)
+> -		return -EINVAL;
+> -	return 0;
+> +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
+> +	int err;
+> +#endif
+> +
+> +	/* Sets safe default permissions for keys loaded by user space. */
+> +	key->perm = BLACKLIST_KEY_PERM;
+> +
+> +	/*
+> +	 * Skips the authentication step for builtin hashes, they are not
+> +	 * signed but still trusted.
+> +	 */
+> +	if (key->flags & (1 << KEY_FLAG_BUILTIN))
+> +		goto out;
+> +
+> +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
+> +	/*
+> +	 * Verifies the description's PKCS#7 signature against the builtin
+> +	 * trusted keyring.
+> +	 */
+> +	err = verify_pkcs7_signature(key->description,
+> +			strlen(key->description), prep->data, prep->datalen,
+> +			NULL, VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
+> +	if (err)
+> +		return err;
+> +#else
+> +	/*
+> +	 * It should not be possible to come here because the keyring doesn't
+> +	 * have KEY_USR_WRITE and the only other way to call this function is
+> +	 * for builtin hashes.
+> +	 */
+> +	WARN_ON_ONCE(1);
+> +	return -EPERM;
+> +#endif
+> +
+> +out:
+> +	return generic_key_instantiate(key, prep);
+>  }
+>  
+> -static void blacklist_free_preparse(struct key_preparsed_payload *prep)
+> +static int blacklist_key_update(struct key *key,
+> +		struct key_preparsed_payload *prep)
+>  {
+> +	return -EPERM;
+>  }
+>  
+>  static void blacklist_describe(const struct key *key, struct seq_file *m)
+> @@ -103,9 +139,8 @@ static void blacklist_describe(const struct key *key, struct seq_file *m)
+>  static struct key_type key_type_blacklist = {
+>  	.name			= "blacklist",
+>  	.vet_description	= blacklist_vet_description,
+> -	.preparse		= blacklist_preparse,
+> -	.free_preparse		= blacklist_free_preparse,
+> -	.instantiate		= generic_key_instantiate,
+> +	.instantiate		= blacklist_key_instantiate,
+> +	.update			= blacklist_key_update,
+>  	.describe		= blacklist_describe,
+>  };
+>  
+> @@ -154,8 +189,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
+>  				   hash,
+>  				   NULL,
+>  				   0,
+> -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
+> -				    KEY_USR_VIEW),
+> +				   BLACKLIST_KEY_PERM,
+>  				   KEY_ALLOC_NOT_IN_QUOTA |
+>  				   KEY_ALLOC_BUILT_IN);
+>  	if (IS_ERR(key)) {
+> @@ -232,8 +266,10 @@ int add_key_to_revocation_list(const char *data, size_t size)
+>  				   NULL,
+>  				   data,
+>  				   size,
+> -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW),
+> -				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN);
+> +				   KEY_POS_VIEW | KEY_POS_READ | KEY_POS_SEARCH
+> +				   | KEY_USR_VIEW,
+> +				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN
+> +				   | KEY_ALLOC_BYPASS_RESTRICTION);
+>  
+>  	if (IS_ERR(key)) {
+>  		pr_err("Problem with revocation key (%ld)\n", PTR_ERR(key));
+> @@ -260,25 +296,43 @@ int is_key_on_revocation_list(struct pkcs7_message *pkcs7)
+>  }
+>  #endif
+>  
+> +static int restrict_link_for_blacklist(struct key *dest_keyring,
+> +		const struct key_type *type, const union key_payload *payload,
+> +		struct key *restrict_key)
+> +{
+> +	if (type == &key_type_blacklist)
+> +		return 0;
+> +	return -EOPNOTSUPP;
+> +}
+> +
+>  /*
+>   * Initialise the blacklist
+>   */
+>  static int __init blacklist_init(void)
+>  {
+>  	const char *const *bl;
+> +	struct key_restriction *restriction;
+>  
+>  	if (register_key_type(&key_type_blacklist) < 0)
+>  		panic("Can't allocate system blacklist key type\n");
+>  
+> +	restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
+> +	if (!restriction)
+> +		panic("Can't allocate blacklist keyring restriction\n");
 
-OK, so I can add your tested-by? It was missing, that's where the
-concern came from.
+
+This prevents me from taking this to my pull request. In moderns standards,
+no new BUG_ON(), panic() etc. should never added to the kernel.
+
+I missed this in my review.
+
+This should rather be e.g.
+
+        restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
+	if (!restriction) {
+		pr_err("Can't allocate blacklist keyring restriction\n");
+                return 0;
+        }
+
+Unfortunately I need to drop this patch set, because adding new panic()
+is simply a no-go.
 
 BR, Jarkko
