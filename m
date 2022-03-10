@@ -2,130 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116354D3FBF
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Mar 2022 04:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6744D4040
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Mar 2022 05:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiCJDem (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 9 Mar 2022 22:34:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        id S238194AbiCJEWB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 9 Mar 2022 23:22:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239287AbiCJDem (ORCPT
+        with ESMTP id S235566AbiCJEWA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 9 Mar 2022 22:34:42 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BCA5EBD8;
-        Wed,  9 Mar 2022 19:33:42 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KDZLs5q0tz9sYG;
-        Thu, 10 Mar 2022 11:29:57 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Mar 2022 11:33:27 +0800
-Message-ID: <aa1b89b5-d13e-3dc8-ec2c-62823ea10021@huawei.com>
-Date:   Thu, 10 Mar 2022 11:33:27 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] tpm: Fix memory leak in tpmm_chip_alloc
-Content-Language: en-US
+        Wed, 9 Mar 2022 23:22:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2753312CC38;
+        Wed,  9 Mar 2022 20:21:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1B0EB824AB;
+        Thu, 10 Mar 2022 04:20:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFC0C340E8;
+        Thu, 10 Mar 2022 04:20:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646886057;
+        bh=C6YzQXJ4A8f7EpImKUHh1ypfIfiOwjesz0ZXkF9WljM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ctXacqoP2eLru8nzvqT1Glp5o155hlw5401WQ72RTYnPI0GNph0gSVhjBMBiiXuSY
+         EiV6HyAMhs52vewTGuy7PC9pBiU3VcC16119q2GPZu0/cxARiizQa9ghdNdtiZreKt
+         c/ZerLPYH3cSg8EPEE8yZFpuHw/usQrU0yW4WQGqEQy/TH0TlUaBLxLazpj+esxPSu
+         WBli+prOvmsKCzLImOpfeUX3QUbrfL8vQL85VliJBBF4qy/u++j2JUykI6oT8xxiIg
+         gO4G/86I0aLqs+Y6dSIdKKkUz4A7mYZPi+IMKNPbQdoXHt1t25RcwyqA5VroHAQQRp
+         6m8VVHniwwnKA==
+Date:   Wed, 9 Mar 2022 20:20:55 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
 To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     <linux-integrity@vger.kernel.org>, <wangweiyang2@huawei.com>,
-        <xiujianfeng@huawei.com>, <weiyongjun1@huawei.com>,
-        <peterhuewe@gmx.de>, <jgg@ziepe.ca>, <linux-kernel@vger.kernel.org>
-References: <20220307104827.40843-1-guozihua@huawei.com>
- <YiYMgnpnf3Y6l8IY@iki.fi>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <YiYMgnpnf3Y6l8IY@iki.fi>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, James Morris <jmorris@namei.org>,
+        David Howells <dhowells@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [GIT PULL] TPM DEVICE DRIVER updates for v5.18
+Message-ID: <Yil8p6OVFzXH1pzM@sol.localdomain>
+References: <YidTCX0NOgDfHCp9@kernel.org>
+ <YiecF6W2XAcpC7dF@sol.localdomain>
+ <YieldvygMyiqmZbT@iki.fi>
+ <Yik9VIcfuhW5Kd73@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yik9VIcfuhW5Kd73@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 2022/3/7 21:45, Jarkko Sakkinen wrote:
-> On Mon, Mar 07, 2022 at 06:48:27PM +0800, GUO Zihua wrote:
->> Fix a memory leak in tpmm_chip_alloc. devm_add_action_or_reset would
->> call put_device on error, while tpm->devs is left untouched. Call
->> put_device on tpm->devs as well if devm_add_action_or_reset returns an
->> error.
->>
->> Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm")
->> Signed-off-by: GUO Zihua <guozihua@huawei.com>
->> ---
->>   drivers/char/tpm/tpm-chip.c | 13 +++++++++----
->>   1 file changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
->> index b009e7479b70..0a92334e8c40 100644
->> --- a/drivers/char/tpm/tpm-chip.c
->> +++ b/drivers/char/tpm/tpm-chip.c
->> @@ -308,6 +308,12 @@ static int tpm_class_shutdown(struct device *dev)
->>   	return 0;
->>   }
->>   
->> +static void tpm_chip_free(struct tpm_chip *chip)
->> +{
->> +	put_device(&chip->devs);
->> +	put_device(&chip->dev);
->> +}
->> +
->>   /**
->>    * tpm_chip_alloc() - allocate a new struct tpm_chip instance
->>    * @pdev: device to which the chip is associated
->> @@ -396,8 +402,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->>   	return chip;
->>   
->>   out:
->> -	put_device(&chip->devs);
->> -	put_device(&chip->dev);
->> +	tpm_chip_free(chip);
->>   	return ERR_PTR(rc);
->>   }
->>   EXPORT_SYMBOL_GPL(tpm_chip_alloc);
->> @@ -420,8 +425,8 @@ struct tpm_chip *tpmm_chip_alloc(struct device *pdev,
->>   		return chip;
->>   
->>   	rc = devm_add_action_or_reset(pdev,
->> -				      (void (*)(void *)) put_device,
->> -				      &chip->dev);
->> +				      (void (*)(void *)) tpm_chip_free,
->> +				      chip);
->>   	if (rc)
->>   		return ERR_PTR(rc);
->>   
->> -- 
->> 2.17.1
->>
+On Thu, Mar 10, 2022 at 01:50:44AM +0200, Jarkko Sakkinen wrote:
+> On Tue, Mar 08, 2022 at 08:50:30PM +0200, Jarkko Sakkinen wrote:
+> > On Tue, Mar 08, 2022 at 10:10:31AM -0800, Eric Biggers wrote:
+> > > On Tue, Mar 08, 2022 at 02:58:49PM +0200, Jarkko Sakkinen wrote:
+> > > >       KEYS: asymmetric: enforce that sig algo matches key algo
+> > > 
+> > > It looks like you applied v1 of this patch
+> > > (https://lore.kernel.org/r/20220201003414.55380-2-ebiggers@kernel.org) rather
+> > > than v2 (https://lore.kernel.org/r/20220208052448.409152-2-ebiggers@kernel.org).
+> > > I think that v2 is necessary because some callers of
+> > > public_key_verify_signature() leave pkey_algo as NULL.
+> > > 
+> > > Sorry for not spotting that you applied v1 earlier.
+> > > 
+> > > - Eric
+> > 
+> > I can do another pull request.
 > 
-> Please test against the latest in
+> Eric, does 'next' branch in
 > 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+>   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git 
 > 
-> and share your results.
+> look good to you now?
 > 
-> BR, Jarkko
-> .
 
-Hi Jarkko,
+Yes, that looks good, thanks.
 
-I'll do that. Do we have a test set for TPM? Or do we just build and run 
-it and see if everything works as expected?
-
-This is an error handling optimization BTW.
-
--- 
-Best
-GUO Zihua
+- Eric
