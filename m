@@ -2,57 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF25C4D5CD1
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Mar 2022 08:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F254D5E32
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Mar 2022 10:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347172AbiCKHys (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Mar 2022 02:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
+        id S1347302AbiCKJRu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Mar 2022 04:17:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243573AbiCKHyr (ORCPT
+        with ESMTP id S1347326AbiCKJRt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Mar 2022 02:54:47 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9451567B0;
-        Thu, 10 Mar 2022 23:53:40 -0800 (PST)
+        Fri, 11 Mar 2022 04:17:49 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632FD1BBF54;
+        Fri, 11 Mar 2022 01:16:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646985220; x=1678521220;
+  t=1646990205; x=1678526205;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FLWbvY1n56XL8vkVa3MhNoPp/BpEfSLz4t4i6OZW2to=;
-  b=PonjFxNGVF0upny2pxQFgP+5BO/ipMWsJwEtR82WlWLxNER/YvzdyBd2
-   8BcNHVwmLqOfUcfLv/Xa0AIPlmv6+PLbyJSZPTYky+K4GS5PV6K+WfO8A
-   /BEIolhvzmQPJwdMc8aNKrqWrs1zLKx2fxR1wS1Zqw5+dsiKVnLFl013y
-   vPZvP9pbM8MVVwHYbqDo1ibpUHmt/IdnUWsnXbb/XoeehVU+SDP4y1Aq0
-   hiDEviJb3o4vTc4uKfsG6yWTk6tV9hzSZ7jxaCHFsU3+jwfxXggEgcBpC
-   JSsIruqL5Evm01GIOp1mJii/qslPOunecP83Nn4ZoxDUAJCsuGX2yYM5l
+  bh=7OLZJvYSGACnpTiII6Zea646Lqg4jF4JgH46Clx+CNo=;
+  b=bvHSDRJI35cdxERij+Gbay9/WysH2fs4esA1GRipT9aanHDvfrSRBmDr
+   T/JHue8XP+VXQ6kTMbZ9KwsQV8zo9bFlQxj+xdr0JWxx5do/gCKH0ddVl
+   ArOtqlE4l7/P4TakOm0MVSy7KSmDRVVSIMpa1gX2uPS9rfBf0K784Q0SC
+   s+a8tiPwFYnh58lc8HM6C//eKULF4vAtZlteUrFQZAPlRrg+tRpxEw7N6
+   01W79SzOwmYp8p7MrrUZ/Dyvym8tiaHJRk0WJG8q+zbI42oVRhwdsaIC0
+   5U/zHUGmqp86c/Is/M6ZScNE/xURGSN99TF17vX2hkHvQ6m/WVtBmJsLC
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="235473838"
+X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="318758895"
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="235473838"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 23:53:40 -0800
+   d="scan'208";a="318758895"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 01:16:44 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,173,1643702400"; 
-   d="scan'208";a="816515600"
+   d="scan'208";a="644875062"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Mar 2022 23:53:36 -0800
+  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2022 01:16:40 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nSa5g-00064M-24; Fri, 11 Mar 2022 07:53:36 +0000
-Date:   Fri, 11 Mar 2022 15:52:44 +0800
+        id 1nSbO4-00069l-2L; Fri, 11 Mar 2022 09:16:40 +0000
+Date:   Fri, 11 Mar 2022 17:16:35 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Casey Schaufler <casey@schaufler-ca.com>,
         casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
-        linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        casey@schaufler-ca.com, linux-audit@redhat.com,
+        keescook@chromium.org, john.johansen@canonical.com,
+        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org
 Subject: Re: [PATCH v33 13/29] LSM: Use lsmblob in security_cred_getsecid
-Message-ID: <202203111533.VLOzBETK-lkp@intel.com>
+Message-ID: <202203111731.kM4VVdt5-lkp@intel.com>
 References: <20220310234632.16194-14-casey@schaufler-ca.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -61,7 +62,7 @@ In-Reply-To: <20220310234632.16194-14-casey@schaufler-ca.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,8 +83,8 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-config: arc-randconfig-r043-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111533.VLOzBETK-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
+config: hexagon-randconfig-r041-20220310 (https://download.01.org/0day-ci/archive/20220311/202203111731.kM4VVdt5-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 276ca87382b8f16a65bddac700202924228982f6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -93,27 +94,23 @@ reproduce (this is a W=1 build):
         git checkout 77c3979bacdff1630a3c6211db065f2c79412621
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/android/binder.c: In function 'binder_transaction':
->> drivers/android/binder.c:2986:52: error: passing argument 2 of 'security_cred_getsecid' from incompatible pointer type [-Werror=incompatible-pointer-types]
-    2986 |                 security_cred_getsecid(proc->cred, &blob);
-         |                                                    ^~~~~
-         |                                                    |
-         |                                                    struct lsmblob *
-   In file included from drivers/android/binder.c:63:
-   include/linux/security.h:1126:70: note: expected 'u32 *' {aka 'unsigned int *'} but argument is of type 'struct lsmblob *'
-    1126 | static inline void security_cred_getsecid(const struct cred *c, u32 *secid)
-         |                                                                 ~~~~~^~~~~
-   cc1: some warnings being treated as errors
+>> drivers/android/binder.c:2986:38: error: incompatible pointer types passing 'struct lsmblob *' to parameter of type 'u32 *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
+                   security_cred_getsecid(proc->cred, &blob);
+                                                      ^~~~~
+   include/linux/security.h:1126:70: note: passing argument to parameter 'secid' here
+   static inline void security_cred_getsecid(const struct cred *c, u32 *secid)
+                                                                        ^
+   1 error generated.
 
 
-vim +/security_cred_getsecid +2986 drivers/android/binder.c
+vim +2986 drivers/android/binder.c
 
   2699	
   2700	static void binder_transaction(struct binder_proc *proc,
