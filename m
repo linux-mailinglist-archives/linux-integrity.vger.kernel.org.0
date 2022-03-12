@@ -2,176 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BD74D6C14
-	for <lists+linux-integrity@lfdr.de>; Sat, 12 Mar 2022 03:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D6B4D6C81
+	for <lists+linux-integrity@lfdr.de>; Sat, 12 Mar 2022 05:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiCLCoL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Mar 2022 21:44:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
+        id S230360AbiCLEwu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Mar 2022 23:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiCLCoK (ORCPT
+        with ESMTP id S230015AbiCLEwu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Mar 2022 21:44:10 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173B54990E;
-        Fri, 11 Mar 2022 18:43:06 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22C1RWuw020335;
-        Sat, 12 Mar 2022 02:43:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=1TZKdmVhIrLLgqUyFftdM7a+EouW7q6P7U9Yn32JeKQ=;
- b=EqYV7y8tOALck/9LmIsuEscvpBxe70uFXDFgTsnD8wp7yjYN8FbkxOsUfEnQ6d94pi51
- QoPi5IpnWjUVWhQ2Bt4OjBSYz4R81yWvQYfF3ttGGBLozJm/VaT36qyAAqDjQlp4TDvI
- TurcwqdFf+ZcJDiaVxWtOFod4T7uBvO0S3aMvb6eOryd8gYQUEdzD6yXiojsPQtfK3Xh
- irVQdzT6asfTLZ6KMzlKmPYRlZkEr/4twBwiq8IaEYBi8ocCsK6XD6iM1eMSp03yyHyK
- hwgFXef7osvsX296KDYJpQuIs3D6WLlqaLcE7t2n5lztdUteyic1dobvvtt6Reb19KnV CQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3eqm1bhtg9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 12 Mar 2022 02:43:00 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22C2Ztsr026366;
-        Sat, 12 Mar 2022 02:43:00 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3eqm1bhtfs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 12 Mar 2022 02:43:00 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22C2bsfU022802;
-        Sat, 12 Mar 2022 02:42:58 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3epyswcqjg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 12 Mar 2022 02:42:58 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22C2gs4e16318948
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 12 Mar 2022 02:42:55 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D4B2CA4054;
-        Sat, 12 Mar 2022 02:42:54 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C55DA4062;
-        Sat, 12 Mar 2022 02:42:52 +0000 (GMT)
-Received: from [9.43.110.208] (unknown [9.43.110.208])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sat, 12 Mar 2022 02:42:52 +0000 (GMT)
-Message-ID: <e59f2006-6af2-5f3a-eb34-cc8ccc99d75f@linux.ibm.com>
-Date:   Sat, 12 Mar 2022 08:12:50 +0530
+        Fri, 11 Mar 2022 23:52:50 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAA9E9D;
+        Fri, 11 Mar 2022 20:51:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647060703; x=1678596703;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZfF/lzNX9XMkZ21coHM0wPTpmygS6/b4qFfbU1ZtBVs=;
+  b=R3t0O7y8fpYnAMSvpPCrpn577lD9ibGrZWs0NJdSnvRqaihqDE5o0uO5
+   LXxC9TmVMUP/OhNgVWmkWRfLxi0EyONTlXnMtQ4LUTheNzRtRObIHfBcb
+   SiRId0t6qxovmxA8daTDHL/j9ZVcg24vG4RFDN6TEKWYah4MPKdbvyaqi
+   mLxgAR7DUQ4R7MBC/8vq+cD/XjRK5j1K46mn0K1NTt3U7ksGop4yRM73v
+   9EvJ2ZYsFJ/VX/lZoiUhndBRpQ88ztfufOgO2JutljVg81Mz9XEaUMSU2
+   gjuSeeTq+qM3Vt+j58ggOugioSKT2TJnOzUalqIIF1gGyVp0yHTHUXxxy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="280502984"
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="280502984"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 20:51:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="497025121"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2022 20:51:19 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nStio-0007WW-PR; Sat, 12 Mar 2022 04:51:18 +0000
+Date:   Sat, 12 Mar 2022 12:50:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v33 13/29] LSM: Use lsmblob in security_cred_getsecid
+Message-ID: <202203121225.Ab2lmSD3-lkp@intel.com>
+References: <20220310234632.16194-14-casey@schaufler-ca.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v12 0/4] integrity: support including firmware ".platform"
- keys at build time
-To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org
-Cc:     dhowells@redhat.com, zohar@linux.ibm.com, jarkko@kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, masahiroy@kernel.org
-References: <20220311210344.102396-1-nayna@linux.ibm.com>
-From:   Nageswara Sastry <rnsastry@linux.ibm.com>
-In-Reply-To: <20220311210344.102396-1-nayna@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: DASKLwDxXsXxtZB25zaNWsfr2jBMskun
-X-Proofpoint-GUID: oCrjtsqQ0jzmm6vb2fhrSdiBrM6JpE1q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-11_10,2022-03-11_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 suspectscore=0 impostorscore=0 priorityscore=1501
- adultscore=0 mlxscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2203120013
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310234632.16194-14-casey@schaufler-ca.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Casey,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on pcmoore-audit/next]
+[also build test WARNING on linus/master v5.17-rc7]
+[cannot apply to pcmoore-selinux/next jmorris-security/next-testing next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
+config: microblaze-randconfig-s031-20220310 (https://download.01.org/0day-ci/archive/20220312/202203121225.Ab2lmSD3-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/77c3979bacdff1630a3c6211db065f2c79412621
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
+        git checkout 77c3979bacdff1630a3c6211db065f2c79412621
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-On 12/03/22 2:33 am, Nayna Jain wrote:
-> Some firmware support secure boot by embedding static keys to verify the
-> Linux kernel during boot. However, these firmware do not expose an
-> interface for the kernel to load firmware keys onto the ".platform"
-> keyring, preventing the kernel from verifying the kexec kernel image
-> signature.
-> 
-> This patchset exports load_certificate_list() and defines a new function
-> load_builtin_platform_cert() to load compiled in certificates onto the
-> ".platform" keyring.
-> 
-> Changelog:
-> v12:
-> * Replace Patch 3/4 with reverting of the commit as suggested by
-> Masahiro Yamada.
-> 
+sparse warnings: (new ones prefixed by >>)
+>> kernel/audit.c:128:25: sparse: sparse: symbol 'audit_sig_lsm' was not declared. Should it be static?
+   kernel/audit.c:2197:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/audit.c:2197:9: sparse:     expected struct spinlock [usertype] *lock
+   kernel/audit.c:2197:9: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/audit.c:2200:40: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/audit.c:2200:40: sparse:     expected struct spinlock [usertype] *lock
+   kernel/audit.c:2200:40: sparse:     got struct spinlock [noderef] __rcu *
 
-Tested the following four patches ov v12 with and with out setting 
-CONFIG_INTEGRITY_PLATFORM_KEYS
+vim +/audit_sig_lsm +128 kernel/audit.c
 
-Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+   124	
+   125	/* The identity of the user shutting down the audit system. */
+   126	static kuid_t		audit_sig_uid = INVALID_UID;
+   127	static pid_t		audit_sig_pid = -1;
+ > 128	struct lsmblob		audit_sig_lsm;
+   129	
 
-
-1. With CONFIG_INTEGRITY_PLATFORM_KEYS set to a key
-
-# grep pem .config
-CONFIG_INTEGRITY_PLATFORM_KEYS="certs/kernel.pem"
-CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"
-CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem"
-
-# grep 
-"CONFIG_INTEGRITY_PLATFORM_KEYS\|INTEGRITY_PLATFORM_KEYRING\|SYSTEM_REVOCATION_LIST" 
-.config
-CONFIG_INTEGRITY_PLATFORM_KEYRING=y
-CONFIG_INTEGRITY_PLATFORM_KEYS="certs/kernel.pem"
-# CONFIG_SYSTEM_REVOCATION_LIST is not set
-
-# cat /proc/keys | grep platform
-0a7a11a9 I------     1 perm 1f0b0000     0     0 keyring   .platform: 1
-
-# keyctl show %keyring:.platform
-Keyring
-  175772073 ---lswrv      0     0  keyring: .platform
-  519271447 ---lswrv      0     0   \_ asymmetric: IBM Corporation: 
-Guest Secure Boot Imprint Kernel Signing Key: 
-a0cf9069c30875320cb10a77325d4fa7012f8d12
-
-
-2. With out CONFIG_INTEGRITY_PLATFORM_KEYS set, leaving empty
-
-# grep pem .config
-CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"
-CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem"
-
-# grep 
-"CONFIG_INTEGRITY_PLATFORM_KEYS\|INTEGRITY_PLATFORM_KEYRING\|SYSTEM_REVOCATION_LIST" 
-.config
-CONFIG_INTEGRITY_PLATFORM_KEYRING=y
-CONFIG_INTEGRITY_PLATFORM_KEYS=""
-# CONFIG_SYSTEM_REVOCATION_LIST is not set
-
-# cat /proc/keys | grep platform
-39c749b9 I------     1 perm 1f0b0000     0     0 keyring   .platform: empty
-
-# keyctl show %keyring:.platform
-Keyring
-  969361849 ---lswrv      0     0  keyring: .platform
-
-
-
-> 
-> base-commit: fb5abce6b2bb5cb3d628aaa63fa821da8c4600f9
-
--- 
-Thanks and Regards
-R.Nageswara Sastry
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
