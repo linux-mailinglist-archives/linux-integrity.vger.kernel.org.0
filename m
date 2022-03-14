@@ -2,71 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE544D79B7
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Mar 2022 04:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47714D79AC
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Mar 2022 04:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiCNDoQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 13 Mar 2022 23:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38948 "EHLO
+        id S231756AbiCNDip (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 13 Mar 2022 23:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbiCNDoP (ORCPT
+        with ESMTP id S231414AbiCNDin (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 13 Mar 2022 23:44:15 -0400
-X-Greylist: delayed 571 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Mar 2022 20:43:05 PDT
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633C8BC93
-        for <linux-integrity@vger.kernel.org>; Sun, 13 Mar 2022 20:43:02 -0700 (PDT)
-Received: from localhost (91-154-92-187.elisa-laajakaista.fi [91.154.92.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 13 Mar 2022 23:38:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0143DE013;
+        Sun, 13 Mar 2022 20:37:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sakkinen)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 9CDFE200B9;
-        Mon, 14 Mar 2022 05:33:23 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1647228803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=uQhyjB8j73qzl+ChbP8kn0vO6yWGcJ/9Sw43XmwkW0w=;
-        b=qtgMfRcX/anqtLCrek/LRwovjkV4rOYVySov8PlNI3nvO0kkuvNbvQb6lb+g3Yb2nlwZbu
-        3fsuK7vwA1IIptx4tGLclTjNt0rXnXLk/snLB4hEcEzENnMvdTT86hkH9XiU/uvv4O823Z
-        yf4zB5xs3eY7o6/sCtZ13w1xb/4tM4g=
-Date:   Mon, 14 Mar 2022 05:32:39 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 718D5B80CDD;
+        Mon, 14 Mar 2022 03:37:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D108CC340E9;
+        Mon, 14 Mar 2022 03:37:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647229051;
+        bh=K/Bb9AFQPgK9PzPqEzQS+im6UIEx//eVjDa74PHyN94=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JjZf1v4T5tFu/+MU4R/z/c4mBo1IerW9syUM4OK30NGy4NQUtv8ORL0vl0E2VwiJ6
+         iw32U8sCuNyEDKGo8gxzOU3LED9fojX4pT3xjeY+hpT9ccUNW2fvOsiQO975GUvRUm
+         tmy5nns+WhecldBxdwuKRYxqg7EmZwhQn67rkMG18R/q4Ws/6TNJmCFZDZBZrcA/MP
+         wa4jSJmyGGnfOe5SxLqTsVeilAznmy9GecnXSMjtLZESUJyhwceHmG3ZQ26vDTAey4
+         U/aSn3rQRqM975dBR4kD56JlnBT+zSS3eSs/kyPAHjonupcBgV6E0l3t+eNL461AdA
+         d9a9KHm9myrYA==
+Date:   Mon, 14 Mar 2022 05:36:44 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         keyrings@vger.kernel.org, James Morris <jmorris@namei.org>,
         David Howells <dhowells@redhat.com>,
         Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
 Subject: [GIT PULL] TPM DEVICE DRIVER updates for v5.18
-Message-ID: <Yi63V9wVfSJ3ioSm@iki.fi>
+Message-ID: <Yi64TJXqto+VdoOo@iki.fi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1647228803; a=rsa-sha256; cv=none;
-        b=VkNC55aZDMNRTZe+joMuK+lUobPyayMtVcgd8DvapbiJacXtQCdhCQULukkb4i1wt5u4XT
-        3K13qkpzNve6+K8FkgUP1XHqTch9oEsXZLiPhuHG6ErVrqKGxoX04tKMGZu5tN0kBr75nJ
-        b7JUUA8GNK3PIW0LqOMKQPws4jqbGhM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1647228803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=uQhyjB8j73qzl+ChbP8kn0vO6yWGcJ/9Sw43XmwkW0w=;
-        b=s0jz8gNi6Ri+XWWPt/Y18RxoBAOBZiKT6ExSRpRIHDhbUbfAdxDp0RfowlVOyj77wGmuGc
-        WuyB3y3KbO1jv7Ycd+duiT1WK909IzoXSnCYkf1u1tEwgsD76O1TG9zCEMAfdUkQsOnB/F
-        46PHXqTd1QYur8A9b89aozdtzYJac+Y=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
+
+Hi,
+
+In order to split the work a bit we've aligned with David Howells more or
+less that I take more hardware/firmware aligned keyring patches, and he
+takes care more of the framework aligned patches.
+
+For TPM the patches worth of highlighting are the fixes for refcounting
+provided by Lino Sanfilippo and James Bottomley.
+
+Eric B. has done a bunch obvious (but important) fixes but there's one a
+bit controversial: removal of asym_tpm. It was added in 2018 when TPM1
+was already declared as insecure and world had moved on to TPM2. I don't
+know how this has passed all the filters but I did not have a chance to
+see the patches when they were out. I simply cannot commit on
+maintaining this because it was from all angles just wrong to take it in
+the first place to the mainline kernel. Nobody should use this module
+really for anything.
+
+Finally, there is a new keyring ".machine" to hold MOK keys. In the mok
+side MokListTrustedRT UEFI variable can be set, from which kernel knows
+that MOK keys are kernel trusted keys and they are populated to the machine
+keyring. This keyring linked to the secondary trusted keyring, which means
+that can be used like any kernel trusted keys. This keyring of course can
+be used to hold other MOK'ish keys in other platforms in future.
+
+BR, Jarkko
+
+v2:
+* https://lore.kernel.org/all/20220201003414.55380-2-ebiggers@kernel.org/ =>
+  https://lore.kernel.org/all/20220208052448.409152-2-ebiggers@kernel.org/
 
 The following changes since commit ea4424be16887a37735d6550cfd0611528dbe5d9:
 
