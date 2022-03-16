@@ -2,238 +2,194 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487384D9FBE
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Mar 2022 17:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146FA4DB66E
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Mar 2022 17:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240278AbiCOQSe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 15 Mar 2022 12:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S1357520AbiCPQpY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 16 Mar 2022 12:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235918AbiCOQSd (ORCPT
+        with ESMTP id S1357491AbiCPQpX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:18:33 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Mar 2022 09:17:20 PDT
-Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB5C4BBAD
-        for <linux-integrity@vger.kernel.org>; Tue, 15 Mar 2022 09:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1647361040; x=1678897040;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=J8DWWprsVfaMQqD6t2Khk/j348EVT+8X44Wqzite2rw=;
-  b=jl3k9S4M/UkAxkQoBmXKQPS0P1p/0GXnTdyTRxXk1Wy3g7CaqDcEHxRo
-   5GXrdKYqzoMXwtuXIK26WPGFOMSO7rHfM37M5aU9aV5GRUSlf8Afz3DbT
-   rmT0KPOXnyvFMJjx//7tPyNTxrAA6nFgVv4TWi37Mbj2uIwIAtUtLnOt2
-   U=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="113042419"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643670000"; 
-   d="scan'208";a="113042419"
-Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
-  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 17:16:15 +0100
-Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
-        Tue, 15 Mar 2022 17:16:15 +0100 (CET)
-Received: from ISCN5CG1067W80.infineon.com (172.23.8.247) by
- MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Mar 2022 17:16:14 +0100
-From:   Johannes Holland <johannes.holland@infineon.com>
-To:     <peterhuewe@gmx.de>, <jarkko@kernel.org>,
-        <linux-integrity@vger.kernel.org>
-CC:     Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Johannes Holland <johannes.holland@infineon.com>
-Subject: [PATCH v2] tpm: Make implementation of read16/read32/write32 optional
-Date:   Tue, 15 Mar 2022 17:14:46 +0100
-Message-ID: <20220315161446.534-1-johannes.holland@infineon.com>
-X-Mailer: git-send-email 2.31.1.windows.1
-In-Reply-To: <20190718170355.6464-2-Alexander.Steffen@infineon.com>
-References: <20190718170355.6464-2-Alexander.Steffen@infineon.com>
+        Wed, 16 Mar 2022 12:45:23 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AB32B181
+        for <linux-integrity@vger.kernel.org>; Wed, 16 Mar 2022 09:44:06 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1nUWkM-0003gS-Jx; Wed, 16 Mar 2022 17:43:38 +0100
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1nUWkJ-007DX0-SN; Wed, 16 Mar 2022 17:43:35 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     kernel@pengutronix.de, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v6 0/4] KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+Date:   Wed, 16 Mar 2022 17:43:31 +0100
+Message-Id: <20220316164335.1720255-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE801.infineon.com (172.23.29.27) To
- MUCSE819.infineon.com (172.23.29.45)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Alexander Steffen <Alexander.Steffen@infineon.com>
+Series applies on top of current linux-tpmdd/master
 
-Only tpm_tis and tpm_tis_synquacer have a dedicated way to access
-multiple bytes at once, every other driver will just fall back to
-read_bytes/write_bytes. Therefore, move this common code out of
-tpm_tis_spi_main and tpm_tis_spi_cr50 into tpm_tis_core, so that it is
-automatically used when low-level drivers do not implement the
-specialized methods.
+v5 was here:
+https://lore.kernel.org/linux-integrity/20220222195819.2313913-1-a.fatoum@pengutronix.de/
 
-Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+Changelog was moved beneath each individual patch.
+
+
+The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+built into many newer i.MX and QorIQ SoCs by NXP.
+
+Its blob mechanism can AES encrypt/decrypt user data using a unique
+never-disclosed device-specific key.
+
+There has been multiple discussions on how to represent this within the kernel:
+
+The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+built into many newer i.MX and QorIQ SoCs by NXP.
+
+Its blob mechanism can AES encrypt/decrypt user data using a unique
+never-disclosed device-specific key. There has been multiple
+discussions on how to represent this within the kernel:
+
+ - [RFC] crypto: caam - add red blobifier
+   Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
+   best integrate the blob mechanism.
+   Mimi suggested that it could be used to implement trusted keys.
+   Trusted keys back then were a TPM-only feature.
+
+ - security/keys/secure_key: Adds the secure key support based on CAAM.
+   Udit Agarwal added[2] a new "secure" key type with the CAAM as backend.
+   The key material stays within the kernel only.
+   Mimi and James agreed that this needs a generic interface, not specific
+   to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
+   basis for TEE-backed keys.
+
+ - [RFC] drivers: crypto: caam: key: Add caam_tk key type
+   Franck added[3] a new "caam_tk" key type based on Udit's work. This time
+   it uses CAAM "black blobs" instead of "red blobs", so key material stays
+   within the CAAM and isn't exposed to kernel in plaintext.
+   James voiced the opinion that there should be just one user-facing generic
+   wrap/unwrap key type with multiple possible handlers.
+   David suggested trusted keys.
+
+ - Introduce TEE based Trusted Keys support
+   Sumit reworked[4] trusted keys to support multiple possible backends with
+   one chosen at boot time and added a new TEE backend along with TPM.
+   This now sits in Jarkko's master branch to be sent out for v5.13
+
+This patch series builds on top of Sumit's rework to have the CAAM as yet another
+trusted key backend.
+
+The CAAM bits are based on Steffen's initial patch from 2015. His work had been
+used in the field for some years now, so I preferred not to deviate too much from it.
+
+This series has been tested with dmcrypt[5] on an i.MX6Q/DL and an i.MX8M[6].
+
+Looking forward to your feedback.
+
+Cheers,
+Ahmad
+
+ [1]: https://lore.kernel.org/linux-crypto/1447082306-19946-2-git-send-email-s.trumtrar@pengutronix.de/
+ [2]: https://lore.kernel.org/linux-integrity/20180723111432.26830-1-udit.agarwal@nxp.com/
+ [3]: https://lore.kernel.org/lkml/1551456599-10603-2-git-send-email-franck.lenormand@nxp.com/
+ [4]: https://lore.kernel.org/lkml/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
+ [5]: https://lore.kernel.org/linux-integrity/20210122084321.24012-2-a.fatoum@pengutronix.de/
+ [6]: https://lore.kernel.org/linux-integrity/DU2PR04MB8630D83FE9BBC0D782C4FAF595089@DU2PR04MB8630.eurprd04.prod.outlook.com/
+
 ---
- drivers/char/tpm/tpm_tis_core.h     | 37 +++++++++++++++++++++++---
- drivers/char/tpm/tpm_tis_spi.h      |  4 ---
- drivers/char/tpm/tpm_tis_spi_cr50.c |  3 ---
- drivers/char/tpm/tpm_tis_spi_main.c | 41 -----------------------------
- 4 files changed, 34 insertions(+), 51 deletions(-)
+To: Jarkko Sakkinen <jarkko@kernel.org>
+To: "Horia Geantă" <horia.geanta@nxp.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+To: Pankaj Gupta <pankaj.gupta@nxp.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+To: "David S. Miller" <davem@davemloft.net>
+To: James Bottomley <jejb@linux.ibm.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+Cc: David Gstir <david@sigma-star.at>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+Cc: Sumit Garg <sumit.garg@linaro.org>
+Cc: Andreas Rammhold <andreas@rammhold.de>
+Cc: Tim Harvey <tharvey@gateworks.com>
+Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
 
-diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index 3be24f221e32..a1feff9d6c1f 100644
---- a/drivers/char/tpm/tpm_tis_core.h
-+++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -128,13 +128,35 @@ static inline int tpm_tis_read8(struct tpm_tis_data *data, u32 addr, u8 *result)
- static inline int tpm_tis_read16(struct tpm_tis_data *data, u32 addr,
- 				 u16 *result)
- {
--	return data->phy_ops->read16(data, addr, result);
-+	__le16 result_le;
-+	int rc;
-+
-+	if (data->phy_ops->read16)
-+		return data->phy_ops->read16(data, addr, result);
-+
-+	rc = data->phy_ops->read_bytes(data, addr, sizeof(u16),
-+				       (u8 *)&result_le);
-+	if (!rc)
-+		*result = le16_to_cpu(result_le);
-+
-+	return rc;
- }
- 
- static inline int tpm_tis_read32(struct tpm_tis_data *data, u32 addr,
- 				 u32 *result)
- {
--	return data->phy_ops->read32(data, addr, result);
-+	__le32 result_le;
-+	int rc;
-+
-+	if (data->phy_ops->read32)
-+		return data->phy_ops->read32(data, addr, result);
-+
-+	rc = data->phy_ops->read_bytes(data, addr, sizeof(u32),
-+				       (u8 *)&result_le);
-+	if (!rc)
-+		*result = le32_to_cpu(result_le);
-+
-+	return rc;
- }
- 
- static inline int tpm_tis_write_bytes(struct tpm_tis_data *data, u32 addr,
-@@ -151,7 +173,16 @@ static inline int tpm_tis_write8(struct tpm_tis_data *data, u32 addr, u8 value)
- static inline int tpm_tis_write32(struct tpm_tis_data *data, u32 addr,
- 				  u32 value)
- {
--	return data->phy_ops->write32(data, addr, value);
-+	__le32 value_le;
-+	int rc;
-+
-+	if (data->phy_ops->write32)
-+		return data->phy_ops->write32(data, addr, value);
-+
-+	value_le = cpu_to_le32(value);
-+	rc = data->phy_ops->write_bytes(data, addr, sizeof(u32),
-+					(u8 *)&value_le);
-+	return rc;
- }
- 
- static inline bool is_bsw(void)
-diff --git a/drivers/char/tpm/tpm_tis_spi.h b/drivers/char/tpm/tpm_tis_spi.h
-index bba73979c368..d0f66f6f1931 100644
---- a/drivers/char/tpm/tpm_tis_spi.h
-+++ b/drivers/char/tpm/tpm_tis_spi.h
-@@ -31,10 +31,6 @@ extern int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
- extern int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
- 				u8 *in, const u8 *out);
- 
--extern int tpm_tis_spi_read16(struct tpm_tis_data *data, u32 addr, u16 *result);
--extern int tpm_tis_spi_read32(struct tpm_tis_data *data, u32 addr, u32 *result);
--extern int tpm_tis_spi_write32(struct tpm_tis_data *data, u32 addr, u32 value);
--
- #ifdef CONFIG_TCG_TIS_SPI_CR50
- extern int cr50_spi_probe(struct spi_device *spi);
- #else
-diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_tis_spi_cr50.c
-index 7bf123d3c537..9584856d955d 100644
---- a/drivers/char/tpm/tpm_tis_spi_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
-@@ -236,9 +236,6 @@ static int tpm_tis_spi_cr50_write_bytes(struct tpm_tis_data *data, u32 addr,
- static const struct tpm_tis_phy_ops tpm_spi_cr50_phy_ops = {
- 	.read_bytes = tpm_tis_spi_cr50_read_bytes,
- 	.write_bytes = tpm_tis_spi_cr50_write_bytes,
--	.read16 = tpm_tis_spi_read16,
--	.read32 = tpm_tis_spi_read32,
--	.write32 = tpm_tis_spi_write32,
- };
- 
- static void cr50_print_fw_version(struct tpm_tis_data *data)
-diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-index aaa59a00eeae..f9e937c79c59 100644
---- a/drivers/char/tpm/tpm_tis_spi_main.c
-+++ b/drivers/char/tpm/tpm_tis_spi_main.c
-@@ -152,44 +152,6 @@ static int tpm_tis_spi_write_bytes(struct tpm_tis_data *data, u32 addr,
- 	return tpm_tis_spi_transfer(data, addr, len, NULL, value);
- }
- 
--int tpm_tis_spi_read16(struct tpm_tis_data *data, u32 addr, u16 *result)
--{
--	__le16 result_le;
--	int rc;
--
--	rc = data->phy_ops->read_bytes(data, addr, sizeof(u16),
--				       (u8 *)&result_le);
--	if (!rc)
--		*result = le16_to_cpu(result_le);
--
--	return rc;
--}
--
--int tpm_tis_spi_read32(struct tpm_tis_data *data, u32 addr, u32 *result)
--{
--	__le32 result_le;
--	int rc;
--
--	rc = data->phy_ops->read_bytes(data, addr, sizeof(u32),
--				       (u8 *)&result_le);
--	if (!rc)
--		*result = le32_to_cpu(result_le);
--
--	return rc;
--}
--
--int tpm_tis_spi_write32(struct tpm_tis_data *data, u32 addr, u32 value)
--{
--	__le32 value_le;
--	int rc;
--
--	value_le = cpu_to_le32(value);
--	rc = data->phy_ops->write_bytes(data, addr, sizeof(u32),
--					(u8 *)&value_le);
--
--	return rc;
--}
--
- int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
- 		     int irq, const struct tpm_tis_phy_ops *phy_ops)
- {
-@@ -205,9 +167,6 @@ int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
- static const struct tpm_tis_phy_ops tpm_spi_phy_ops = {
- 	.read_bytes = tpm_tis_spi_read_bytes,
- 	.write_bytes = tpm_tis_spi_write_bytes,
--	.read16 = tpm_tis_spi_read16,
--	.read32 = tpm_tis_spi_read32,
--	.write32 = tpm_tis_spi_write32,
- };
- 
- static int tpm_tis_spi_probe(struct spi_device *dev)
+Ahmad Fatoum (4):
+  KEYS: trusted: allow use of TEE as backend without TCG_TPM support
+  KEYS: trusted: allow use of kernel RNG for key material
+  crypto: caam - add in-kernel interface for blob generator
+  KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+
+ .../admin-guide/kernel-parameters.txt         |  11 ++
+ .../security/keys/trusted-encrypted.rst       |  60 ++++++-
+ MAINTAINERS                                   |   9 +
+ drivers/crypto/caam/Kconfig                   |   3 +
+ drivers/crypto/caam/Makefile                  |   1 +
+ drivers/crypto/caam/blob_gen.c                | 160 ++++++++++++++++++
+ include/keys/trusted-type.h                   |   2 +-
+ include/keys/trusted_caam.h                   |  11 ++
+ include/soc/fsl/caam-blob.h                   |  79 +++++++++
+ security/keys/Kconfig                         |  18 +-
+ security/keys/trusted-keys/Kconfig            |  38 +++++
+ security/keys/trusted-keys/Makefile           |  10 +-
+ security/keys/trusted-keys/trusted_caam.c     |  74 ++++++++
+ security/keys/trusted-keys/trusted_core.c     |  45 ++++-
+ 14 files changed, 492 insertions(+), 29 deletions(-)
+ create mode 100644 drivers/crypto/caam/blob_gen.c
+ create mode 100644 include/keys/trusted_caam.h
+ create mode 100644 include/soc/fsl/caam-blob.h
+ create mode 100644 security/keys/trusted-keys/Kconfig
+ create mode 100644 security/keys/trusted-keys/trusted_caam.c
+
 -- 
-2.31.1.windows.1
+2.30.2
 
