@@ -2,58 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1A74DC046
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Mar 2022 08:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 861DE4DC113
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Mar 2022 09:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiCQHkS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Mar 2022 03:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
+        id S229618AbiCQI3H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Mar 2022 04:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiCQHkR (ORCPT
+        with ESMTP id S229457AbiCQI3H (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Mar 2022 03:40:17 -0400
+        Thu, 17 Mar 2022 04:29:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8DDBD2FD;
-        Thu, 17 Mar 2022 00:39:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900DA17B0C0
+        for <linux-integrity@vger.kernel.org>; Thu, 17 Mar 2022 01:27:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70591B81DD2;
-        Thu, 17 Mar 2022 07:39:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCF3C340EE;
-        Thu, 17 Mar 2022 07:38:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49399B81DAB
+        for <linux-integrity@vger.kernel.org>; Thu, 17 Mar 2022 08:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B037FC340E9;
+        Thu, 17 Mar 2022 08:27:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647502739;
-        bh=O79CEsoyIM7lxDVdJAO6U5R65lNwXiJdQsB6hFftUwY=;
+        s=k20201202; t=1647505668;
+        bh=GlGuLfBCFkgxlBpkVP9Q9ZSr6CwIlHRIYhTr8Wf4Qh4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FFuNrIGNOAYmosTutCqrDM2kXVQiSItuO1IPhKEQHAgH4HwLiAVMVFOUjKN1DjwpD
-         4osvtn0lcnS5F3eaG/pVFKSfTBWqvFh4j3uOfHDvJqSb5w7sdTzuiMs7XGd8P6O7bi
-         nyTHoIxWh2wpLcbgW+auOg2nRYmMp/h2OS8E/tHxx/fqzhXDcGN2X8rrWFT4x9wjya
-         lXreP54kXkeKsCdeEub9CRYsu+1htrC11ZTTR8/u+1xq2QpR+q9qaW8/uKQxf7pfPg
-         dmmgPCqjUgq2TsKZ2sBgff7IHAw4/Z8RkkDwFr9sPZaIyYrVVFnyCuqLtZzBHIcGLz
-         nNz2EoXYfsZFw==
-Date:   Thu, 17 Mar 2022 09:38:09 +0200
+        b=cwavbUzFAYS5e7+JXyM99ZkyJ6FoVud0ZmnIB/Wkm+stml1IqYMMRRegqe+HtEhbh
+         6idr8+WS0ueGy5+Q1BEiMdxS0NzGWdBAygN9wonrM6qmteZfOm0fC54w/ZNZ3b5DPo
+         hS8Bt3Le5/c2WdfhuSmXQHQfsNgWmK/6/B19MkdLyc7hLVQpEvgZIywaPS1bLV8LeQ
+         QH3SEBEWJCZXOcrrmODqdf/Hi/hD8b0cx51TUPvR6xpX6w/B01H0DRjJETpEvUBQjz
+         FUu/AP1k6VL9AMFvWBeBFjL/52mD/Nv0ldyr9GNv1GawI8Dcigv//VTCtqkIfJBoZR
+         UymJlzLYVA6Pg==
+Date:   Thu, 17 Mar 2022 10:26:58 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Nayna <nayna@linux.vnet.ibm.com>
-Cc:     Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        dhowells@redhat.com, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v11 0/4] integrity: support including firmware
- ".platform" keys at build time
-Message-ID: <YjLlYTs+2ep80zoK@iki.fi>
-References: <20220310214450.676505-1-nayna@linux.ibm.com>
- <4afae87c-2986-6b0e-07be-954dd4937afd@linux.ibm.com>
- <f78d11fefd13bd17748e36621acee9c2f27a77f6.camel@kernel.org>
- <f92ec4d8-47c0-ece5-3c52-caeb8265881c@linux.vnet.ibm.com>
+To:     Johannes Holland <johannes.holland@infineon.com>
+Cc:     peterhuewe@gmx.de, linux-integrity@vger.kernel.org,
+        Alexander Steffen <Alexander.Steffen@infineon.com>
+Subject: Re: [PATCH v2] tpm: Make implementation of read16/read32/write32
+ optional
+Message-ID: <YjLw0sCDqHxy66jo@iki.fi>
+References: <20190718170355.6464-2-Alexander.Steffen@infineon.com>
+ <20220315161446.534-1-johannes.holland@infineon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f92ec4d8-47c0-ece5-3c52-caeb8265881c@linux.vnet.ibm.com>
+In-Reply-To: <20220315161446.534-1-johannes.holland@infineon.com>
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,53 +56,49 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 04:03:12PM -0500, Nayna wrote:
+On Tue, Mar 15, 2022 at 05:14:46PM +0100, Johannes Holland wrote:
+> From: Alexander Steffen <Alexander.Steffen@infineon.com>
 > 
-> On 3/11/22 11:42, Jarkko Sakkinen wrote:
-> > On Fri, 2022-03-11 at 10:11 +0530, Nageswara Sastry wrote:
-> > > 
-> > > On 11/03/22 3:14 am, Nayna Jain wrote:
-> > > > Some firmware support secure boot by embedding static keys to verify the
-> > > > Linux kernel during boot. However, these firmware do not expose an
-> > > > interface for the kernel to load firmware keys onto the ".platform"
-> > > > keyring, preventing the kernel from verifying the kexec kernel image
-> > > > signature.
-> > > > 
-> > > > This patchset exports load_certificate_list() and defines a new function
-> > > > load_builtin_platform_cert() to load compiled in certificates onto the
-> > > > ".platform" keyring.
-> > > > 
-> > > > Changelog:
-> > > > v11:
-> > > > * Added a new patch to conditionally build extract-cert if
-> > > > PLATFORM_KEYRING is enabled.
-> > > > 
-> > > Tested the following four patches with and with out setting
-> > > CONFIG_INTEGRITY_PLATFORM_KEYS
-> > > 
-> > > Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
-> > OK, I added it:
-> > 
-> > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> Only tpm_tis and tpm_tis_synquacer have a dedicated way to access
+> multiple bytes at once, every other driver will just fall back to
+> read_bytes/write_bytes. Therefore, move this common code out of
+> tpm_tis_spi_main and tpm_tis_spi_cr50 into tpm_tis_core, so that it is
+> automatically used when low-level drivers do not implement the
+> specialized methods.
 > 
-> Thanks Jarkko. Masahiro Yamada would prefer to revert the original commit
-> 340a02535ee785c64c62a9c45706597a0139e972 i.e. move extract-cert back to the
-> scripts/ directory.
-> 
-> I am just posting v12 which includes Masahiro feedback. Nageswara has
-> already tested v12 version as well.
-> 
-> I am fine either way 1.) Adding v11 and then separately handling of
-> reverting of the commit or 2.) Adding v12 version which includes the revert.
-> I leave the decision on you as to which one to upstream.
-> 
-> Thanks & Regards,
-> 
->     - Nayna
-> 
+> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> ---
 
-I already sent PR for v5.18. Too many late changes to include this, which
-means that v12 is the way to go.
+Please, add a change log to the next version, which also includes
+description of v2 changes.
+
+Redudancy is insignificant, and how things are now does not require
+special cases from the upper layer.
+
+Instead you should do this:
+
+enum tpm_tis_io_mode {
+        TPM_TIS_PHYS_8,
+        TPM_TIS_PHYS_16,
+        TPM_TIS_PHYS_32,
+};
+
+struct tpm_tis_phy_ops {
+	int (*read_bytes)(struct tpm_tis_data *data, u32 addr, u16 len, u8 *result,
+                          int mode);
+	int (*write_bytes)(struct tpm_tis_data *data, u32 addr, u16 len, const u8 *value,
+                           int mode);
+};
+
+And e.g.
+
+static inline int tpm_tis_read16(struct tpm_tis_data *data, u32 addr, u16 *result)
+{
+        rc = data->phy_ops->read_bytes(data, addr, sizeof(u16), &result_le, TPM_TIS_PHYS_16);
+}
+
+This takes away over half of the callback API, and does not require special
+cases on the top layer.
 
 BR, Jarkko
-
