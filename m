@@ -2,118 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFDB4DCA99
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Mar 2022 16:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D314DCF79
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Mar 2022 21:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235838AbiCQP7y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Mar 2022 11:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
+        id S229755AbiCQUju (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Mar 2022 16:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbiCQP7v (ORCPT
+        with ESMTP id S229778AbiCQUjs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:59:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF495BF03B;
-        Thu, 17 Mar 2022 08:58:34 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22HFsWPN027305;
-        Thu, 17 Mar 2022 15:58:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=3m4fCIq28ovG+snMQBx7uMwRJ3aY27nz3p2vh0x8Kzc=;
- b=SogeypK+ZDDWdv/8J1qiFhvoC1L0o5dwSA1XmgSbu/tH/zB0pwtu1xxrDj4+XYvuNyLx
- ofprfBAZWD3Pvb+XIBOPtRF+ZdU+Al89ls5llYT69yjG4+aJtNM06O/gRxhNM+jgDCB7
- 8tLlJ/oKJ3jGyc2Sh2UVdC7c3cyfeMxaNeku1ZHaS9K707fmFtEvUSOhKQ5jjFsjRJOB
- ky1UbVj8DMVq5Iuq33QcJAdjYoF2+zp9DOLk4hFxzUs5l9qXuUJiXWAFyvdFUH7yTXzu
- jea7VpmKCNaJV7qlNlRM4HfBtnZ7xEGc+L0AQwhT+JpZ3dC6XAyTUzFxld4mQNKY3ecG jA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev2sbq6a8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 15:58:30 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22HFZ27p003140;
-        Thu, 17 Mar 2022 15:58:28 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma02fra.de.ibm.com with ESMTP id 3erk58t000-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 15:58:28 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22HFwPO942336696
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Mar 2022 15:58:26 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D975F11C052;
-        Thu, 17 Mar 2022 15:58:25 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B2E811C04A;
-        Thu, 17 Mar 2022 15:58:25 +0000 (GMT)
-Received: from sig-9-65-73-185.ibm.com (unknown [9.65.73.185])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Mar 2022 15:58:24 +0000 (GMT)
-Message-ID: <692a64e10646154ee7310b62ffd74025f29cdccf.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 5/8] ima: permit fsverity's file digests in the IMA
- measurement list
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 17 Mar 2022 11:58:24 -0400
-In-Reply-To: <YhbUBJbQ+nCN515p@sol.localdomain>
-References: <20220211214310.119257-1-zohar@linux.ibm.com>
-         <20220211214310.119257-6-zohar@linux.ibm.com>
-         <YhbUBJbQ+nCN515p@sol.localdomain>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QGW2ZGs_To9y4LZRuo_-huVmNLOD99c6
-X-Proofpoint-GUID: QGW2ZGs_To9y4LZRuo_-huVmNLOD99c6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-17_06,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 mlxlogscore=816 lowpriorityscore=0
- suspectscore=0 bulkscore=0 phishscore=0 clxscore=1011 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203170091
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 16:39:48 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B52B4832D
+        for <linux-integrity@vger.kernel.org>; Thu, 17 Mar 2022 13:38:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A4AA01F37F;
+        Thu, 17 Mar 2022 20:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1647549509;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=74lwdKIvwqGlz3JKStuWrhCEtymdSwcboFZAop10ib4=;
+        b=xXCQiOttHz6ld0hVV4vg3HwLLG04+TWKfPwDO0t9rzplUTZ1PCD7eKhVSdiwTPAuprIeeJ
+        ttrGEGDWs92J9/8uQRkXS8w8VtfP8HKFSWZsDi8efgHvW5nL0XpFao69PPKQCZIhzJiDyg
+        qT21KZFd++GPXcJbFQP1LvzqR2+3cNU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1647549509;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=74lwdKIvwqGlz3JKStuWrhCEtymdSwcboFZAop10ib4=;
+        b=G/2ECm/o7nY9+tFj3b+PUTeq/MwVG5FP6hAJ+Dtrc10ZFjq5hsVsNgWQOZZ0kxMVJXY4bk
+        t9IbNRutxW+PbUAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6030C132BE;
+        Thu, 17 Mar 2022 20:38:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id W+O8FUWcM2K6TQAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Thu, 17 Mar 2022 20:38:29 +0000
+Date:   Thu, 17 Mar 2022 21:38:30 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Yael Tzur <yaelt@google.com>
+Cc:     Cyril Hrubis <chrubis@suse.cz>, linux-integrity@vger.kernel.org,
+        ltp@lists.linux.it
+Subject: Re: [LTP] [PATCH v4] syscalls/keyctl09: test encrypted keys with
+ provided decrypted data.
+Message-ID: <YjOcRn1qx0LHlO/j@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20220223200731.1859670-1-yaelt@google.com>
+ <Yh+S7JD2q8oalRoM@yuki>
+ <YiBcyvtqTX1CerM4@pevik>
+ <YiC4Pj1sH8UIHY7k@yuki>
+ <YiDB7wO3Se/vN15+@pevik>
+ <YiDGvzETiI/nxwW/@yuki>
+ <YiDLn3GMNFu482XG@pevik>
+ <CAKoutNsc-JWQd1MOTFk7Hd_MgsFKj=6qi=uusKez2HgatTNCdQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKoutNsc-JWQd1MOTFk7Hd_MgsFKj=6qi=uusKez2HgatTNCdQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> diff --git a/security/integrity/integrity.h
-b/security/integrity/integrity.h
-> > index daf49894fd7d..39a999877013 100644
-> > --- a/security/integrity/integrity.h
-> > +++ b/security/integrity/integrity.h
-> > @@ -32,7 +32,7 @@
-> >  #define IMA_HASHED		0x00000200
-> >  
-> >  /* iint policy rule cache flags */
-> > -#define IMA_NONACTION_FLAGS	0xff000000
-> > +#define IMA_NONACTION_FLAGS	0xff800000
-> >  #define IMA_DIGSIG_REQUIRED	0x01000000
-> >  #define IMA_PERMIT_DIRECTIO	0x02000000
-> >  #define IMA_NEW_FILE		0x04000000
-> > @@ -40,6 +40,8 @@
-> >  #define IMA_FAIL_UNVERIFIABLE_SIGS	0x10000000
-> >  #define IMA_MODSIG_ALLOWED	0x20000000
-> >  #define IMA_CHECK_BLACKLIST	0x40000000
-> > +#define IMA_VERITY_REQUIRED	0x80000000
-> > +#define IMA_VERITY_DIGEST	0x00800000
-> 
-> How about defining these flags in numerical order?
+> On Thu, Mar 3, 2022 at 9:07 AM Petr Vorel <pvorel@suse.cz> wrote:
 
-Originally I increased the flags size, but I'd like to avoid as much
-patch churn as possible for the namespacing patch set.
+> > Hi Cyril,
 
-Mimi
+> > [ Cc Richie, Li, Jan ]
 
+> > > Hi!
+> > > > > > > I this case I guess that in this case the change is so minimal that we
+> > > > > > > can add this test into LTP once it reaches Linus tree.
+> > > > > > Cyril, maybe we could finally merge our policy (waiting ack for you):
+> > > > > > https://patchwork.ozlabs.org/project/ltp/patch/20220203101803.10204-1-rpalethorpe@suse.com/
+> > > > > > and put keyctl09 into runtest/staging now.
+
+> > > > > I guess that we still did not agree on exactly how this should be
+> > > > > handled or did we?
+
+> > > > Isn't it enough "Once a feature is part of the stable kernel ABI the associated
+> > > > test must be moved out of staging." ?
+
+> > > The main problem is that someone has to make sure that it happens and
+> > > the process would be prone to errors. What I proposed instead was a flag
+> > > that would set a kernel version in which the ABI is going to be merged
+> > > and put the test right into the final runtest files. Then we can simply
+> > > skip the test on older kernels or do anything else we see as a
+> > > reasonable solution. At the same time we can easily add automatic
+> > > checker that would look for these flags in metadata into the CI which
+> > > would, for instance, send email to the ML once the flag is supposed to
+> > > be removed.
+> > OK, you're missing that kernel version. OTOH things get sometimes backported,
+> > thus it's not error prone (if we forget to leave that flag after kernel being
+> > released).
+
+> > Also version is hard to say if you use maintainer tree (which applies patches on
+> > previous rc1 than what is being in Linus tree). Thus maintainer's tree would be
+> > left, also IMHO next tree has no specific version in uname, thus we'd only
+> > support rc from Linus' tree.
+
+> > But anyway, if all agree that this is better than both solutions Richie
+> > implemented I'd try to find time to implement it so that we have finally a
+> > solution.
+
+> > > In this case it does not actually matter, since the test is guarded by a
+> > > kernel config option that is introduced by the patchset and the change
+> > > is fairly miniminal, so I do not think that there would be any changes
+> > > to the ABI anyways.
+> > Correct. At this stage IMHO we can dare to merge it.
+
+> > Kind regards,
+> > Petr
+
+> Hi Petr and Cyril,
+
+> I wanted to check whether there is pending action left on my end?
+@Yael nothing needed from you.
+
+@Cyril cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+decrypted data") is in Mimi Zohar's git tree and in next tree, going to be
+merged in next merge window. Can we merge it now as is?
+
+Kind regards,
+Petr
+
+
+> Thanks,
+> Yael
