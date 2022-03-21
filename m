@@ -2,113 +2,186 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AB74E2741
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Mar 2022 14:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049584E2DCE
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Mar 2022 17:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbiCUNLy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Mar 2022 09:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
+        id S1351061AbiCUQ0J (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Mar 2022 12:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbiCUNLy (ORCPT
+        with ESMTP id S1350273AbiCUQ0J (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:11:54 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8BC1D0EF;
-        Mon, 21 Mar 2022 06:10:29 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LAj81a024285;
-        Mon, 21 Mar 2022 13:10:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=dSRhfx3VoPovZmn5BHzSX5JfMdqftW5QA/0PFRNnjIU=;
- b=N4qjJhSIO1OgRK8iEblIGGnpKt31Mh9fCuLWWBphMuypKwzquZAaAjJMz/u1hntvOXi5
- kAQl/EmifPR5lmUXYT+edCKN6sFX2J1yqs3RyvO9b7RAeM5rlzG71E1N8jDWZOOTX2/M
- LQBQKmD+fbQbDcN7xqd8xKc+MNBIQ1xdAq3iwUS97mmXd/5YP/F8SS8dM3QrF5uuuju5
- rj0KgbDSftWHmCT4XORpXkwdk2i3g64l7m591Zdu87/5shmrWwzfvBfbFZe9zYaZ20eo
- mkbGHxvPCli03/SPyy92gOiTt1/ROLrqutlLcTCuUcNHZ8p4KC+M2fsoO2D7CyGT6bLf Rw== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3exmwkexqs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 13:10:26 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22LCvTUF020282;
-        Mon, 21 Mar 2022 13:10:25 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04wdc.us.ibm.com with ESMTP id 3exd3j3tsr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 13:10:25 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22LDAOAF29098254
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 13:10:24 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 173C46A04D;
-        Mon, 21 Mar 2022 13:10:24 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F2EA76A04F;
-        Mon, 21 Mar 2022 13:10:22 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Mar 2022 13:10:22 +0000 (GMT)
-Message-ID: <d79baf40-6bb7-d4f4-666d-91e1ad20be74@linux.ibm.com>
-Date:   Mon, 21 Mar 2022 09:10:22 -0400
+        Mon, 21 Mar 2022 12:26:09 -0400
+X-Greylist: delayed 578 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Mar 2022 09:24:43 PDT
+Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17CEECC72
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Mar 2022 09:24:43 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KMfpY1xlxzMptNy;
+        Mon, 21 Mar 2022 17:15:01 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KMfpV5pNCzlhRVJ;
+        Mon, 21 Mar 2022 17:14:58 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+Date:   Mon, 21 Mar 2022 17:15:57 +0100
+Message-Id: <20220321161557.495388-1-mic@digikod.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v6 4/5] ima: support fs-verity file digest based version 3
- signatures
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220318182151.100847-1-zohar@linux.ibm.com>
- <20220318182151.100847-5-zohar@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220318182151.100847-5-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hSEeA2y0OdL23AynEl1JBxWYH7heLFX8
-X-Proofpoint-GUID: hSEeA2y0OdL23AynEl1JBxWYH7heLFX8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-21_05,2022-03-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 adultscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
- mlxscore=0 clxscore=1015 bulkscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203210085
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Linus,
 
+This patch series adds a new syscall named trusted_for.  It enables user
+space to ask the kernel: is this file descriptor's content trusted to be
+used for this purpose?  The set of usage currently only contains
+execution, but other may follow (e.g. configuration, sensitive data).
+If the kernel identifies the file descriptor as trustworthy for this
+usage, user space should then take this information into account.  The
+"execution" usage means that the content of the file descriptor is
+trusted according to the system policy to be executed by user space,
+which means that it interprets the content or (try to) maps it as
+executable memory.
 
-On 3/18/22 14:21, Mimi Zohar wrote:
-> IMA may verify a file's integrity against a "good" value stored in the
-> 'security.ima' xattr or as an appended signature, based on policy.  When
-> the "good value" is stored in the xattr, the xattr may contain a file
-> hash or signature.  In either case, the "good" value is preceded by a
-> header.  The first byte of the xattr header indicates the type of data
-> - hash, signature - stored in the xattr.  To support storing fs-verity
-> signatures in the 'security.ima' xattr requires further differentiating
-> the fs-verity signature from the existing IMA signature.
-> 
-> In addition the signatures stored in 'security.ima' xattr, need to be
-> disambiguated.  Instead of directly signing the fs-verity digest, a new
-> signature version 3 is defined as the hash of the ima_file_id structure,
-> which identifies the type of signature and the digest.
+A simple system-wide security policy can be set by the system
+administrator through a sysctl configuration consistent with the mount
+points or the file access rights.  The documentation explains the
+prerequisites.
 
-Would it not be enough to just differentiat by the type of signature 
-rather than also bumping the version? It's still signature_v2_hdr but a 
-new type IMA_VERITY_DIGSIG is introduced there that shoud be sufficient 
-to indicate that a different method for calculating the hash is to be 
-used than for anything that existed before? sigv3 would then become the 
-more obvious veriftysig... ?
+It is important to note that this can only enable to extend access
+control managed by the kernel.  Hence it enables current access control
+mechanism to be extended and become a superset of what they can
+currently control.  Indeed, the security policy could also be delegated
+to an LSM, either a MAC system or an integrity system.  For instance,
+this is required to close a major IMA measurement/appraisal interpreter
+integrity gap by bringing the ability to check the use of scripts.
+Other uses are expected as well.
+
+For further details, please see the latest cover letter:
+https://lore.kernel.org/r/20220104155024.48023-1-mic@digikod.net
+
+Commit dae71698b6c5 ("printk: Move back proc_dointvec_minmax_sysadmin()
+to sysctl.c") was recently added due to the sysctl refactoring.
+
+Commit e674341a90b9 ("selftests/interpreter: fix separate directory
+build") will fix some test build cases as explained here:
+https://lore.kernel.org/r/20220119101531.2850400-1-usama.anjum@collabora.com
+Merging this commit without the new KHDR_INCLUDES is not an issue.
+The upcoming kselftest pull request is ready:
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next
+
+This patch series has been open for review for more than three years and
+got a lot of feedbacks (and bikeshedding) which were all considered.
+Since I heard no objection, please consider to pull this code for
+v5.18-rc1 .  These five patches have been successfully tested in the
+latest linux-next releases for several weeks.
+
+Regards,
+ Mickaël
+
+--
+The following changes since commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60:
+
+  gcc-plugins/stackleak: Use noinstr in favor of notrace (2022-02-03 17:02:21 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/trusted-for-v18
+
+for you to fetch changes up to e674341a90b95c3458d684ae25e6891afc3e03ad:
+
+  selftests/interpreter: fix separate directory build (2022-03-04 10:56:25 +0100)
+
+----------------------------------------------------------------
+Add the trusted_for system call (v18)
+
+The final goal of this patch series is to enable the kernel to be a
+global policy manager by entrusting processes with access control at
+their level.  To reach this goal, two complementary parts are required:
+* user space needs to be able to know if it can trust some file
+  descriptor content for a specific usage;
+* and the kernel needs to make available some part of the policy
+  configured by the system administrator.
+
+In a nutshell, this is a required building block to control script
+execution.
+
+For further details see the latest cover letter:
+https://lore.kernel.org/r/20220104155024.48023-1-mic@digikod.net
+
+----------------------------------------------------------------
+Mickaël Salaün (4):
+      printk: Move back proc_dointvec_minmax_sysadmin() to sysctl.c
+      fs: Add trusted_for(2) syscall implementation and related sysctl
+      arch: Wire up trusted_for(2)
+      selftest/interpreter: Add tests for trusted_for(2) policies
+
+Muhammad Usama Anjum (1):
+      selftests/interpreter: fix separate directory build
+
+ Documentation/admin-guide/sysctl/fs.rst            |  50 +++
+ arch/alpha/kernel/syscalls/syscall.tbl             |   1 +
+ arch/arm/tools/syscall.tbl                         |   1 +
+ arch/arm64/include/asm/unistd.h                    |   2 +-
+ arch/arm64/include/asm/unistd32.h                  |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl              |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl              |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl        |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl          |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl          |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl          |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl            |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl           |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl              |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl                |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl             |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl             |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl             |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl            |   1 +
+ fs/open.c                                          | 133 ++++++++
+ fs/proc/proc_sysctl.c                              |   2 +-
+ include/linux/syscalls.h                           |   1 +
+ include/linux/sysctl.h                             |   3 +
+ include/uapi/asm-generic/unistd.h                  |   5 +-
+ include/uapi/linux/trusted-for.h                   |  18 +
+ kernel/printk/sysctl.c                             |   9 -
+ kernel/sysctl.c                                    |   9 +
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/interpreter/.gitignore     |   2 +
+ tools/testing/selftests/interpreter/Makefile       |  21 ++
+ tools/testing/selftests/interpreter/config         |   1 +
+ .../selftests/interpreter/trust_policy_test.c      | 362 +++++++++++++++++++++
+ 32 files changed, 625 insertions(+), 12 deletions(-)
+ create mode 100644 include/uapi/linux/trusted-for.h
+ create mode 100644 tools/testing/selftests/interpreter/.gitignore
+ create mode 100644 tools/testing/selftests/interpreter/Makefile
+ create mode 100644 tools/testing/selftests/interpreter/config
+ create mode 100644 tools/testing/selftests/interpreter/trust_policy_test.c
