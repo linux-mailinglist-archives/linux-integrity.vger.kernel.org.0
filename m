@@ -2,115 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31FC4E1DFD
-	for <lists+linux-integrity@lfdr.de>; Sun, 20 Mar 2022 22:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1DA4E218E
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Mar 2022 08:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343740AbiCTVbp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 20 Mar 2022 17:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        id S1345024AbiCUHtq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Mar 2022 03:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236574AbiCTVbp (ORCPT
+        with ESMTP id S1344050AbiCUHtl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 20 Mar 2022 17:31:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B233819D;
-        Sun, 20 Mar 2022 14:30:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEF69B80EFA;
-        Sun, 20 Mar 2022 21:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996A3C340E9;
-        Sun, 20 Mar 2022 21:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647811818;
-        bh=tTXsRvXcOgBE9bkryBEz2qKjZqFOG8apagVn9U/uti0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p3XF6opLAITbuzC6qPWYfipEKm/uQr/7rBFwWLFBwnrqPVlc4t1suLbbQU3nDKoQz
-         Vt/UhFCvJs8KCgIq+j9X68rMLv48PO5LS8XUDHxEPCRFoK/q3pqFpKnCmRdzv1TwSY
-         rgFf3mCujGbriNThhNRY/4yE8Obdxg4MBzEEQHbzFJ366yxzohQnnQqbhFzxziYfFN
-         5jle4eIxmZtag+2HXRCLHQ7D/4b9u1p8Jck87YEYb+cunlYAn1R2HCKkCUN/ftVyLL
-         k/gAnAma91++7ccEszyF0PvfCuinT1joWPi7wpyoJf+7xQHOUWeBucleeQyAfhlW7F
-         W178jPJ4zAWRg==
-Date:   Sun, 20 Mar 2022 23:31:19 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Nayna <nayna@linux.vnet.ibm.com>
-Cc:     Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        dhowells@redhat.com, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v11 0/4] integrity: support including firmware
- ".platform" keys at build time
-Message-ID: <YjedJxNNv8KifAKd@kernel.org>
-References: <20220310214450.676505-1-nayna@linux.ibm.com>
- <4afae87c-2986-6b0e-07be-954dd4937afd@linux.ibm.com>
- <f78d11fefd13bd17748e36621acee9c2f27a77f6.camel@kernel.org>
- <f92ec4d8-47c0-ece5-3c52-caeb8265881c@linux.vnet.ibm.com>
- <YjLlYTs+2ep80zoK@iki.fi>
- <57d7034a-fb5c-444e-a709-4f993459688e@linux.vnet.ibm.com>
+        Mon, 21 Mar 2022 03:49:41 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE7DD7F;
+        Mon, 21 Mar 2022 00:48:15 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KMRYh3Djqz1GBxf;
+        Mon, 21 Mar 2022 15:48:08 +0800 (CST)
+Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
+ (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 21 Mar
+ 2022 15:48:13 +0800
+From:   GUO Zihua <guozihua@huawei.com>
+To:     <linux-integrity@vger.kernel.org>
+CC:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <roberto.sassu@huawei.com>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xiujianfeng@huawei.com>,
+        <wangweiyang2@huawei.com>
+Subject: [PATCH] ima: remove template "ima" as the compiled default
+Date:   Mon, 21 Mar 2022 15:47:37 +0800
+Message-ID: <20220321074737.138002-1-guozihua@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <57d7034a-fb5c-444e-a709-4f993459688e@linux.vnet.ibm.com>
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.31]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:25:07PM -0400, Nayna wrote:
-> 
-> On 3/17/22 03:38, Jarkko Sakkinen wrote:
-> > On Fri, Mar 11, 2022 at 04:03:12PM -0500, Nayna wrote:
-> > > On 3/11/22 11:42, Jarkko Sakkinen wrote:
-> > > > ".platform" keyring.
-> > > > > > Changelog:
-> > > > > > v11:
-> > > > > > * Added a new patch to conditionally build extract-cert if
-> > > > > > PLATFORM_KEYRING is enabled.
-> > > > > > 
-> > > > > Tested the following four patches with and with out setting
-> > > > > CONFIG_INTEGRITY_PLATFORM_KEYS
-> > > > > 
-> > > > > Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
-> > > > OK, I added it:
-> > > > 
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-> > > Thanks Jarkko. Masahiro Yamada would prefer to revert the original commit
-> > > 340a02535ee785c64c62a9c45706597a0139e972 i.e. move extract-cert back to the
-> > > scripts/ directory.
-> > > 
-> > > I am just posting v12 which includes Masahiro feedback. Nageswara has
-> > > already tested v12 version as well.
-> > > 
-> > > I am fine either way 1.) Adding v11 and then separately handling of
-> > > reverting of the commit or 2.) Adding v12 version which includes the revert.
-> > > I leave the decision on you as to which one to upstream.
-> > > 
-> > > Thanks & Regards,
-> > > 
-> > >      - Nayna
-> > > 
-> > I already sent PR for v5.18. Too many late changes to include this, which
-> > means that v12 is the way to go.
-> 
-> Assuming v12 looks good, could you please queue it now ?
-> 
-> Thanks & Regards,
-> 
->     - Nayna
-> 
+Template "ima" is a legacy template which limits the hash algorithm to
+either sha1 or md5. None of them should be considered "strong" these
+days. Besides, allowing template "ima" as the compiled default would
+also cause the following issue: the cmdline option "ima_hash=" must be
+behind "ima_template=", otherwise "ima_hash=" might be rejected.
 
-Unfortunately, I've already sent my v5.18 PR over a week ago. I can put it
-to my queue but I think it is lacking some of the tested by tags, doesn't
-it?
+The root cause of this issue is that during the processing of ima_hash,
+we would try to check whether the hash algorithm is compatible with the
+template. If the template is not set at the moment we do the check, we
+check the algorithm against the compiled default template. If the
+complied default template is "ima", then we reject any hash algorithm
+other than sha1 and md5.
 
-BR, Jarkko
+For example, if the compiled default template is "ima", and the default
+algorithm is sha1 (which is the current default). In the cmdline, we put
+in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
+that ima starts with ima-ng as the template and sha256 as the hash
+algorithm. However, during the processing of "ima_hash=",
+"ima_template=" has not been processed yet, and hash_setup would check
+the configured hash algorithm against the compiled default: ima, and
+reject sha256. So at the end, the hash algorithm that is actually used
+will be sha1.
+
+With template "ima" removed from the compiled default, we ensure that the
+default tempalte would at least be "ima-ng" which allows for basically
+any hash algorithm.
+
+This change would not break the algorithm compatibility checking for
+IMA.
+
+Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
+Signed-off-by: GUO Zihua <guozihua@huawei.com>
+---
+ security/integrity/ima/Kconfig | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index f3a9cc201c8c..9513df2ac19e 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -65,14 +65,11 @@ choice
+ 	help
+ 	  Select the default IMA measurement template.
+ 
+-	  The original 'ima' measurement list template contains a
+-	  hash, defined as 20 bytes, and a null terminated pathname,
+-	  limited to 255 characters.  The 'ima-ng' measurement list
+-	  template permits both larger hash digests and longer
+-	  pathnames.
+-
+-	config IMA_TEMPLATE
+-		bool "ima"
++	  The 'ima-ng' measurement list template permits various hash
++	  digests and long pathnames. The compiled default template
++	  can be overwritten using the kernel command line
++	  'ima_template=' option.
++
+ 	config IMA_NG_TEMPLATE
+ 		bool "ima-ng (default)"
+ 	config IMA_SIG_TEMPLATE
+@@ -82,7 +79,6 @@ endchoice
+ config IMA_DEFAULT_TEMPLATE
+ 	string
+ 	depends on IMA
+-	default "ima" if IMA_TEMPLATE
+ 	default "ima-ng" if IMA_NG_TEMPLATE
+ 	default "ima-sig" if IMA_SIG_TEMPLATE
+ 
+-- 
+2.17.1
+
