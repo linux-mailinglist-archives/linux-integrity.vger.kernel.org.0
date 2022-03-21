@@ -2,573 +2,325 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285544E22F9
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Mar 2022 10:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C94114E26F0
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Mar 2022 13:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236441AbiCUJLf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Mar 2022 05:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S1345487AbiCUMzM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Mar 2022 08:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244006AbiCUJLe (ORCPT
+        with ESMTP id S1343693AbiCUMzK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:11:34 -0400
-Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7515EDDA
-        for <linux-integrity@vger.kernel.org>; Mon, 21 Mar 2022 02:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1647853809; x=1679389809;
-  h=from:to:cc:subject:date:message-id:reply-to:mime-version:
-   content-transfer-encoding;
-  bh=TEJdzigz69+WJ/9ep5YOdUJgzgQmM6SegsJy1m7Y1JY=;
-  b=Vyrf+ZR5ij1A8NUrKWCKTcC+iK28oPSpYdIw8JZUt9SWHOw9Kh5hZQiP
-   aaHZOm5jjDYn8IexYRpHM9NgOhBtu3FlxgxGNhAaIXyd137W/oXkwzzvR
-   yIdkAhmZcazL71QeW4//O/OYGsezhRLLVkdsimFs3i5Nn8hKP5Za6rPhy
-   s=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="113686894"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643670000"; 
-   d="scan'208";a="113686894"
-Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
-  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 10:10:06 +0100
-Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
-        Mon, 21 Mar 2022 10:10:06 +0100 (CET)
-Received: from ISCN5CG1067W80.infineon.com (172.23.8.247) by
- MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 21 Mar 2022 10:10:05 +0100
-From:   Johannes Holland <johannes.holland@infineon.com>
-To:     <peterhuewe@gmx.de>, <jarkko@kernel.org>,
-        <linux-integrity@vger.kernel.org>
-CC:     <Alexander.Steffen@infineon.com>,
-        Johannes Holland <johannes.holland@infineon.com>
-Subject: [PATCH v4] tpm: Remove read16/read32/write32 calls from tpm_tis_phy_ops
-Date:   Mon, 21 Mar 2022 10:09:24 +0100
-Message-ID: <20220321090924.1951-1-johannes.holland@infineon.com>
-X-Mailer: git-send-email 2.31.1.windows.1
-Reply-To: <20220318151647.410-1-johannes.holland@infineon.com>
+        Mon, 21 Mar 2022 08:55:10 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0197349F0E;
+        Mon, 21 Mar 2022 05:53:44 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LCbtYV020632;
+        Mon, 21 Mar 2022 12:53:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=YdFgqeukeLoGFVaICxahPmVUOqgutiRUWpi8e1v11VA=;
+ b=LTs6csA0mg+QnOkRHqyrw/vozmfj5WnQb3Ume2Jamh/9C0SaGVX8XyGmG6aarrzkPEiD
+ ck1QO05SdpuCp2UPY0l0k0xrEf0CQa85HDT16HBaz7QI+YQ4UoPVNlGYgAro5nE4JrsI
+ aXvQd8hSUqf4eFLbCpGynLE4BDEGdNQ5u6Xveiku+YtAkyLH1lJTldPiduG/CsFqWguJ
+ e9Ma9Nieh8q7MQc4hI/jN7gPE8heAWCm0PQKCRe35BtCpLLH9VAe73VbgPtcjgjtfZWS
+ TdlG1p/nepN9J12N5GEiDAeHC9oDXjAFOU7PP/rj4yNh2WT7tIJrJ3M4dHHibD6Lyho+ ZA== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3exf1uuspn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Mar 2022 12:53:39 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22LCr7p9005803;
+        Mon, 21 Mar 2022 12:53:38 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma04dal.us.ibm.com with ESMTP id 3ew6t9gm9n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Mar 2022 12:53:38 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22LCrbTd32637328
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Mar 2022 12:53:37 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 323DD7805F;
+        Mon, 21 Mar 2022 12:53:37 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F301B78060;
+        Mon, 21 Mar 2022 12:53:35 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 21 Mar 2022 12:53:35 +0000 (GMT)
+Message-ID: <b19eca12-3ae1-a8a5-fcfd-a22b5ee9319c@linux.ibm.com>
+Date:   Mon, 21 Mar 2022 08:53:35 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE802.infineon.com (172.23.29.28) To
- MUCSE819.infineon.com (172.23.29.45)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v6 2/5] ima: define a new template field named 'd-ngv2'
+ and templates
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318182151.100847-1-zohar@linux.ibm.com>
+ <20220318182151.100847-3-zohar@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220318182151.100847-3-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: kTZHQ2FTVcLb4JqdPtlerAA2SRFtCU89
+X-Proofpoint-GUID: kTZHQ2FTVcLb4JqdPtlerAA2SRFtCU89
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-21_05,2022-03-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 suspectscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 spamscore=0 mlxscore=0 malwarescore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203210081
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Only tpm_tis and tpm_tis_synquacer have a dedicated way to access
-multiple bytes at once, every other driver will just fall back to
-read_bytes/write_bytes. Therefore, remove the read16/read32/write32
-calls and move their logic to read_bytes/write_bytes.
 
-Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
----=0D
-Changelog:=0D
- * v2:
-   * rebase and apply changes to tpm_tis_synquacer, as well
-   * move variable declarations to beginning of functions
- * v3:
-   * remove read16/read32/write32 api calls altogether and always call
-     read_bytes/write_bytes=0D
- * v4:=0D
-   * add Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>=0D
-   * move changelog out of commit message=0D
-   * add comment to enum tpm_tis_io_mode=0D
-=20
- drivers/char/tpm/tpm_tis.c           |  67 ++++++++---------
- drivers/char/tpm/tpm_tis_core.h      |  58 +++++++++++---
- drivers/char/tpm/tpm_tis_spi.h       |   4 -
- drivers/char/tpm/tpm_tis_spi_cr50.c  |   7 +-
- drivers/char/tpm/tpm_tis_spi_main.c  |  45 +----------
- drivers/char/tpm/tpm_tis_synquacer.c | 108 ++++++++++++---------------
- 6 files changed, 128 insertions(+), 161 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index d3f2e5364c27..bcff6429e0b4 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -153,50 +153,46 @@ static int check_acpi_tpm2(struct device *dev)
- #endif
-=20
- static int tpm_tcg_read_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
--			      u8 *result)
-+			      u8 *result, enum tpm_tis_io_mode io_mode)
- {
- 	struct tpm_tis_tcg_phy *phy =3D to_tpm_tis_tcg_phy(data);
--
--	while (len--)
--		*result++ =3D ioread8(phy->iobase + addr);
-+	__le16 result_le16;
-+	__le32 result_le32;
-+
-+	switch (io_mode) {
-+	case TPM_TIS_PHYS_8:
-+		while (len--)
-+			*result++ =3D ioread8(phy->iobase + addr);
-+		break;
-+	case TPM_TIS_PHYS_16:
-+		result_le16 =3D cpu_to_le16(ioread16(phy->iobase + addr));
-+		memcpy(result, &result_le16, sizeof(u16));
-+		break;
-+	case TPM_TIS_PHYS_32:
-+		result_le32 =3D cpu_to_le32(ioread32(phy->iobase + addr));
-+		memcpy(result, &result_le32, sizeof(u32));
-+		break;
-+	}
-=20
- 	return 0;
- }
-=20
- static int tpm_tcg_write_bytes(struct tpm_tis_data *data, u32 addr, u16 le=
-n,
--			       const u8 *value)
-+			       const u8 *value, enum tpm_tis_io_mode io_mode)
- {
- 	struct tpm_tis_tcg_phy *phy =3D to_tpm_tis_tcg_phy(data);
-=20
--	while (len--)
--		iowrite8(*value++, phy->iobase + addr);
--
--	return 0;
--}
--
--static int tpm_tcg_read16(struct tpm_tis_data *data, u32 addr, u16 *result)
--{
--	struct tpm_tis_tcg_phy *phy =3D to_tpm_tis_tcg_phy(data);
--
--	*result =3D ioread16(phy->iobase + addr);
--
--	return 0;
--}
--
--static int tpm_tcg_read32(struct tpm_tis_data *data, u32 addr, u32 *result)
--{
--	struct tpm_tis_tcg_phy *phy =3D to_tpm_tis_tcg_phy(data);
--
--	*result =3D ioread32(phy->iobase + addr);
--
--	return 0;
--}
--
--static int tpm_tcg_write32(struct tpm_tis_data *data, u32 addr, u32 value)
--{
--	struct tpm_tis_tcg_phy *phy =3D to_tpm_tis_tcg_phy(data);
--
--	iowrite32(value, phy->iobase + addr);
-+	switch (io_mode) {
-+	case TPM_TIS_PHYS_8:
-+		while (len--)
-+			iowrite8(*value++, phy->iobase + addr);
-+		break;
-+	case TPM_TIS_PHYS_16:
-+		return -EINVAL;
-+	case TPM_TIS_PHYS_32:
-+		iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase + addr);
-+		break;
-+	}
-=20
- 	return 0;
- }
-@@ -204,9 +200,6 @@ static int tpm_tcg_write32(struct tpm_tis_data *data, u=
-32 addr, u32 value)
- static const struct tpm_tis_phy_ops tpm_tcg =3D {
- 	.read_bytes =3D tpm_tcg_read_bytes,
- 	.write_bytes =3D tpm_tcg_write_bytes,
--	.read16 =3D tpm_tcg_read16,
--	.read32 =3D tpm_tcg_read32,
--	.write32 =3D tpm_tcg_write32,
- };
-=20
- static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
-diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_cor=
-e.h
-index 3be24f221e32..6c203f36b8a1 100644
---- a/drivers/char/tpm/tpm_tis_core.h
-+++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -104,54 +104,88 @@ struct tpm_tis_data {
- 	unsigned int timeout_max; /* usecs */
- };
-=20
-+/*
-+ * IO modes to indicate how many bytes should be read/written at once in t=
-he
-+ * tpm_tis_phy_ops read_bytes/write_bytes calls. Use TPM_TIS_PHYS_8 to
-+ * receive/transmit byte-wise, TPM_TIS_PHYS_16 for two bytes etc.
-+ */
-+enum tpm_tis_io_mode {
-+	TPM_TIS_PHYS_8,
-+	TPM_TIS_PHYS_16,
-+	TPM_TIS_PHYS_32,
-+};
-+
- struct tpm_tis_phy_ops {
-+	/* data is passed in little endian */
- 	int (*read_bytes)(struct tpm_tis_data *data, u32 addr, u16 len,
--			  u8 *result);
-+			  u8 *result, enum tpm_tis_io_mode mode);
- 	int (*write_bytes)(struct tpm_tis_data *data, u32 addr, u16 len,
--			   const u8 *value);
--	int (*read16)(struct tpm_tis_data *data, u32 addr, u16 *result);
--	int (*read32)(struct tpm_tis_data *data, u32 addr, u32 *result);
--	int (*write32)(struct tpm_tis_data *data, u32 addr, u32 src);
-+			   const u8 *value, enum tpm_tis_io_mode mode);
- };
-=20
- static inline int tpm_tis_read_bytes(struct tpm_tis_data *data, u32 addr,
- 				     u16 len, u8 *result)
- {
--	return data->phy_ops->read_bytes(data, addr, len, result);
-+	return data->phy_ops->read_bytes(data, addr, len, result,
-+					 TPM_TIS_PHYS_8);
- }
-=20
- static inline int tpm_tis_read8(struct tpm_tis_data *data, u32 addr, u8 *r=
-esult)
- {
--	return data->phy_ops->read_bytes(data, addr, 1, result);
-+	return data->phy_ops->read_bytes(data, addr, 1, result, TPM_TIS_PHYS_8);
- }
-=20
- static inline int tpm_tis_read16(struct tpm_tis_data *data, u32 addr,
- 				 u16 *result)
- {
--	return data->phy_ops->read16(data, addr, result);
-+	__le16 result_le;
-+	int rc;
-+
-+	rc =3D data->phy_ops->read_bytes(data, addr, sizeof(u16),
-+				       (u8 *)&result_le, TPM_TIS_PHYS_16);
-+	if (!rc)
-+		*result =3D le16_to_cpu(result_le);
-+
-+	return rc;
- }
-=20
- static inline int tpm_tis_read32(struct tpm_tis_data *data, u32 addr,
- 				 u32 *result)
- {
--	return data->phy_ops->read32(data, addr, result);
-+	__le32 result_le;
-+	int rc;
-+
-+	rc =3D data->phy_ops->read_bytes(data, addr, sizeof(u32),
-+				       (u8 *)&result_le, TPM_TIS_PHYS_32);
-+	if (!rc)
-+		*result =3D le32_to_cpu(result_le);
-+
-+	return rc;
- }
-=20
- static inline int tpm_tis_write_bytes(struct tpm_tis_data *data, u32 addr,
- 				      u16 len, const u8 *value)
- {
--	return data->phy_ops->write_bytes(data, addr, len, value);
-+	return data->phy_ops->write_bytes(data, addr, len, value,
-+					  TPM_TIS_PHYS_8);
- }
-=20
- static inline int tpm_tis_write8(struct tpm_tis_data *data, u32 addr, u8 v=
-alue)
- {
--	return data->phy_ops->write_bytes(data, addr, 1, &value);
-+	return data->phy_ops->write_bytes(data, addr, 1, &value,
-+					  TPM_TIS_PHYS_8);
- }
-=20
- static inline int tpm_tis_write32(struct tpm_tis_data *data, u32 addr,
- 				  u32 value)
- {
--	return data->phy_ops->write32(data, addr, value);
-+	__le32 value_le;
-+	int rc;
-+
-+	value_le =3D cpu_to_le32(value);
-+	rc =3D  data->phy_ops->write_bytes(data, addr, sizeof(u32),
-+					 (u8 *)&value_le, TPM_TIS_PHYS_32);
-+	return rc;
- }
-=20
- static inline bool is_bsw(void)
-diff --git a/drivers/char/tpm/tpm_tis_spi.h b/drivers/char/tpm/tpm_tis_spi.h
-index bba73979c368..d0f66f6f1931 100644
---- a/drivers/char/tpm/tpm_tis_spi.h
-+++ b/drivers/char/tpm/tpm_tis_spi.h
-@@ -31,10 +31,6 @@ extern int tpm_tis_spi_init(struct spi_device *spi, stru=
-ct tpm_tis_spi_phy *phy,
- extern int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 l=
-en,
- 				u8 *in, const u8 *out);
-=20
--extern int tpm_tis_spi_read16(struct tpm_tis_data *data, u32 addr, u16 *re=
-sult);
--extern int tpm_tis_spi_read32(struct tpm_tis_data *data, u32 addr, u32 *re=
-sult);
--extern int tpm_tis_spi_write32(struct tpm_tis_data *data, u32 addr, u32 va=
-lue);
--
- #ifdef CONFIG_TCG_TIS_SPI_CR50
- extern int cr50_spi_probe(struct spi_device *spi);
- #else
-diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_tis=
-_spi_cr50.c
-index 7bf123d3c537..f4937280e940 100644
---- a/drivers/char/tpm/tpm_tis_spi_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
-@@ -222,13 +222,13 @@ static int tpm_tis_spi_cr50_transfer(struct tpm_tis_d=
-ata *data, u32 addr, u16 le
- }
-=20
- static int tpm_tis_spi_cr50_read_bytes(struct tpm_tis_data *data, u32 addr,
--				       u16 len, u8 *result)
-+				       u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
- {
- 	return tpm_tis_spi_cr50_transfer(data, addr, len, result, NULL);
- }
-=20
- static int tpm_tis_spi_cr50_write_bytes(struct tpm_tis_data *data, u32 add=
-r,
--					u16 len, const u8 *value)
-+					u16 len, const u8 *value, enum tpm_tis_io_mode io_mode)
- {
- 	return tpm_tis_spi_cr50_transfer(data, addr, len, NULL, value);
- }
-@@ -236,9 +236,6 @@ static int tpm_tis_spi_cr50_write_bytes(struct tpm_tis_=
-data *data, u32 addr,
- static const struct tpm_tis_phy_ops tpm_spi_cr50_phy_ops =3D {
- 	.read_bytes =3D tpm_tis_spi_cr50_read_bytes,
- 	.write_bytes =3D tpm_tis_spi_cr50_write_bytes,
--	.read16 =3D tpm_tis_spi_read16,
--	.read32 =3D tpm_tis_spi_read32,
--	.write32 =3D tpm_tis_spi_write32,
- };
-=20
- static void cr50_print_fw_version(struct tpm_tis_data *data)
-diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis=
-_spi_main.c
-index aaa59a00eeae..d0920c3c400f 100644
---- a/drivers/char/tpm/tpm_tis_spi_main.c
-+++ b/drivers/char/tpm/tpm_tis_spi_main.c
-@@ -141,55 +141,17 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u=
-32 addr, u16 len,
- }
-=20
- static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
--				  u16 len, u8 *result)
-+				  u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
- {
- 	return tpm_tis_spi_transfer(data, addr, len, result, NULL);
- }
-=20
- static int tpm_tis_spi_write_bytes(struct tpm_tis_data *data, u32 addr,
--				   u16 len, const u8 *value)
-+				   u16 len, const u8 *value, enum tpm_tis_io_mode io_mode)
- {
- 	return tpm_tis_spi_transfer(data, addr, len, NULL, value);
- }
-=20
--int tpm_tis_spi_read16(struct tpm_tis_data *data, u32 addr, u16 *result)
--{
--	__le16 result_le;
--	int rc;
--
--	rc =3D data->phy_ops->read_bytes(data, addr, sizeof(u16),
--				       (u8 *)&result_le);
--	if (!rc)
--		*result =3D le16_to_cpu(result_le);
--
--	return rc;
--}
--
--int tpm_tis_spi_read32(struct tpm_tis_data *data, u32 addr, u32 *result)
--{
--	__le32 result_le;
--	int rc;
--
--	rc =3D data->phy_ops->read_bytes(data, addr, sizeof(u32),
--				       (u8 *)&result_le);
--	if (!rc)
--		*result =3D le32_to_cpu(result_le);
--
--	return rc;
--}
--
--int tpm_tis_spi_write32(struct tpm_tis_data *data, u32 addr, u32 value)
--{
--	__le32 value_le;
--	int rc;
--
--	value_le =3D cpu_to_le32(value);
--	rc =3D data->phy_ops->write_bytes(data, addr, sizeof(u32),
--					(u8 *)&value_le);
--
--	return rc;
--}
--
- int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
- 		     int irq, const struct tpm_tis_phy_ops *phy_ops)
- {
-@@ -205,9 +167,6 @@ int tpm_tis_spi_init(struct spi_device *spi, struct tpm=
-_tis_spi_phy *phy,
- static const struct tpm_tis_phy_ops tpm_spi_phy_ops =3D {
- 	.read_bytes =3D tpm_tis_spi_read_bytes,
- 	.write_bytes =3D tpm_tis_spi_write_bytes,
--	.read16 =3D tpm_tis_spi_read16,
--	.read32 =3D tpm_tis_spi_read32,
--	.write32 =3D tpm_tis_spi_write32,
- };
-=20
- static int tpm_tis_spi_probe(struct spi_device *dev)
-diff --git a/drivers/char/tpm/tpm_tis_synquacer.c b/drivers/char/tpm/tpm_ti=
-s_synquacer.c
-index e47bdd272704..2751be8e6065 100644
---- a/drivers/char/tpm/tpm_tis_synquacer.c
-+++ b/drivers/char/tpm/tpm_tis_synquacer.c
-@@ -35,72 +35,63 @@ static inline struct tpm_tis_synquacer_phy *to_tpm_tis_=
-tcg_phy(struct tpm_tis_da
- }
-=20
- static int tpm_tis_synquacer_read_bytes(struct tpm_tis_data *data, u32 add=
-r,
--					u16 len, u8 *result)
-+					u16 len, u8 *result,
-+					enum tpm_tis_io_mode io_mode)
- {
- 	struct tpm_tis_synquacer_phy *phy =3D to_tpm_tis_tcg_phy(data);
--
--	while (len--)
--		*result++ =3D ioread8(phy->iobase + addr);
-+	__le16 result_le16;
-+	__le32 result_le32;
-+	u16 result16;
-+	u32 result32;
-+
-+	switch (io_mode) {
-+	case TPM_TIS_PHYS_8:
-+		while (len--)
-+			*result++ =3D ioread8(phy->iobase + addr);
-+		break;
-+	case TPM_TIS_PHYS_16:
-+		result[1] =3D ioread8(phy->iobase + addr + 1);
-+		result[0] =3D ioread8(phy->iobase + addr);
-+		break;
-+	case TPM_TIS_PHYS_32:
-+		result[3] =3D ioread8(phy->iobase + addr + 3);
-+		result[2] =3D ioread8(phy->iobase + addr + 2);
-+		result[1] =3D ioread8(phy->iobase + addr + 1);
-+		result[0] =3D ioread8(phy->iobase + addr);
-+		break;
-+	}
-=20
- 	return 0;
- }
-=20
- static int tpm_tis_synquacer_write_bytes(struct tpm_tis_data *data, u32 ad=
-dr,
--					 u16 len, const u8 *value)
-+					 u16 len, const u8 *value,
-+					 enum tpm_tis_io_mode io_mode)
- {
- 	struct tpm_tis_synquacer_phy *phy =3D to_tpm_tis_tcg_phy(data);
--
--	while (len--)
--		iowrite8(*value++, phy->iobase + addr);
--
--	return 0;
--}
--
--static int tpm_tis_synquacer_read16_bw(struct tpm_tis_data *data,
--				       u32 addr, u16 *result)
--{
--	struct tpm_tis_synquacer_phy *phy =3D to_tpm_tis_tcg_phy(data);
--
--	/*
--	 * Due to the limitation of SPI controller on SynQuacer,
--	 * 16/32 bits access must be done in byte-wise and descending order.
--	 */
--	*result =3D (ioread8(phy->iobase + addr + 1) << 8) |
--		  (ioread8(phy->iobase + addr));
--
--	return 0;
--}
--
--static int tpm_tis_synquacer_read32_bw(struct tpm_tis_data *data,
--				       u32 addr, u32 *result)
--{
--	struct tpm_tis_synquacer_phy *phy =3D to_tpm_tis_tcg_phy(data);
--
--	/*
--	 * Due to the limitation of SPI controller on SynQuacer,
--	 * 16/32 bits access must be done in byte-wise and descending order.
--	 */
--	*result =3D (ioread8(phy->iobase + addr + 3) << 24) |
--		  (ioread8(phy->iobase + addr + 2) << 16) |
--		  (ioread8(phy->iobase + addr + 1) << 8) |
--		  (ioread8(phy->iobase + addr));
--
--	return 0;
--}
--
--static int tpm_tis_synquacer_write32_bw(struct tpm_tis_data *data,
--					u32 addr, u32 value)
--{
--	struct tpm_tis_synquacer_phy *phy =3D to_tpm_tis_tcg_phy(data);
--
--	/*
--	 * Due to the limitation of SPI controller on SynQuacer,
--	 * 16/32 bits access must be done in byte-wise and descending order.
--	 */
--	iowrite8(value >> 24, phy->iobase + addr + 3);
--	iowrite8(value >> 16, phy->iobase + addr + 2);
--	iowrite8(value >> 8, phy->iobase + addr + 1);
--	iowrite8(value, phy->iobase + addr);
-+	__le16 result_le16;
-+	__le32 result_le32;
-+	u16 result16;
-+	u32 result32;
-+
-+	switch (io_mode) {
-+	case TPM_TIS_PHYS_8:
-+		while (len--)
-+			iowrite8(*value++, phy->iobase + addr);
-+		break;
-+	case TPM_TIS_PHYS_16:
-+		return -EINVAL;
-+	case TPM_TIS_PHYS_32:
-+		/*
-+		 * Due to the limitation of SPI controller on SynQuacer,
-+		 * 16/32 bits access must be done in byte-wise and descending order.
-+		 */
-+		iowrite8(&value[3], phy->iobase + addr + 3);
-+		iowrite8(&value[2], phy->iobase + addr + 2);
-+		iowrite8(&value[1], phy->iobase + addr + 1);
-+		iowrite8(&value[0], phy->iobase + addr);
-+		break;
-+	}
-=20
- 	return 0;
- }
-@@ -108,9 +99,6 @@ static int tpm_tis_synquacer_write32_bw(struct tpm_tis_d=
-ata *data,
- static const struct tpm_tis_phy_ops tpm_tcg_bw =3D {
- 	.read_bytes	=3D tpm_tis_synquacer_read_bytes,
- 	.write_bytes	=3D tpm_tis_synquacer_write_bytes,
--	.read16		=3D tpm_tis_synquacer_read16_bw,
--	.read32		=3D tpm_tis_synquacer_read32_bw,
--	.write32	=3D tpm_tis_synquacer_write32_bw,
- };
-=20
- static int tpm_tis_synquacer_init(struct device *dev,
---=20
-2.31.1.windows.1
+On 3/18/22 14:21, Mimi Zohar wrote:
+> In preparation to differentiate between unsigned regular IMA file
+> hashes and fs-verity's file digests in the IMA measurement list,
+> define a new template field named 'd-ngv2'.
+> 
+> Also define two new templates named 'ima-ngv2' and 'ima-sigv2', which
+> include the new 'd-ngv2' field.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>   .../admin-guide/kernel-parameters.txt         |  3 +-
+>   security/integrity/ima/ima_template.c         |  4 ++
+>   security/integrity/ima/ima_template_lib.c     | 71 ++++++++++++++++---
+>   security/integrity/ima/ima_template_lib.h     |  4 ++
+>   4 files changed, 72 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index f5a27f067db9..47386ac10471 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1876,7 +1876,8 @@
+>   
+>   	ima_template=	[IMA]
+>   			Select one of defined IMA measurements template formats.
+> -			Formats: { "ima" | "ima-ng" | "ima-sig" }
+> +			Formats: { "ima" | "ima-ng" | "ima-ngv2" | "ima-sig" |
+> +				   "ima-sigv2" }
+>   			Default: "ima-ng"
+>   
+>   	ima_template_fmt=
+> diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+> index db1ad6d7a57f..c25079faa208 100644
+> --- a/security/integrity/ima/ima_template.c
+> +++ b/security/integrity/ima/ima_template.c
+> @@ -20,6 +20,8 @@ static struct ima_template_desc builtin_templates[] = {
+>   	{.name = IMA_TEMPLATE_IMA_NAME, .fmt = IMA_TEMPLATE_IMA_FMT},
+>   	{.name = "ima-ng", .fmt = "d-ng|n-ng"},
+>   	{.name = "ima-sig", .fmt = "d-ng|n-ng|sig"},
+> +	{.name = "ima-ngv2", .fmt = "d-ngv2|n-ng"},
+> +	{.name = "ima-sigv2", .fmt = "d-ngv2|n-ng|sig"},
+>   	{.name = "ima-buf", .fmt = "d-ng|n-ng|buf"},
+>   	{.name = "ima-modsig", .fmt = "d-ng|n-ng|sig|d-modsig|modsig"},
+>   	{.name = "evm-sig",
+> @@ -38,6 +40,8 @@ static const struct ima_template_field supported_fields[] = {
+>   	 .field_show = ima_show_template_string},
+>   	{.field_id = "d-ng", .field_init = ima_eventdigest_ng_init,
+>   	 .field_show = ima_show_template_digest_ng},
+> +	{.field_id = "d-ngv2", .field_init = ima_eventdigest_ngv2_init,
+> +	 .field_show = ima_show_template_digest_ngv2},
+>   	{.field_id = "n-ng", .field_init = ima_eventname_ng_init,
+>   	 .field_show = ima_show_template_string},
+>   	{.field_id = "sig", .field_init = ima_eventsig_init,
+> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+> index 7155d17a3b75..bd95864a5f6f 100644
+> --- a/security/integrity/ima/ima_template_lib.c
+> +++ b/security/integrity/ima/ima_template_lib.c
+> @@ -24,11 +24,16 @@ static bool ima_template_hash_algo_allowed(u8 algo)
+>   enum data_formats {
+>   	DATA_FMT_DIGEST = 0,
+>   	DATA_FMT_DIGEST_WITH_ALGO,
+> +	DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO,
+>   	DATA_FMT_STRING,
+>   	DATA_FMT_HEX,
+>   	DATA_FMT_UINT
+>   };
+>   
+> +#define DIGEST_TYPE_MAXLEN 16	/* including NULL */
+> +static const char * const digest_type_name[] = {"ima"};
+> +static int digest_type_size = ARRAY_SIZE(digest_type_name);
+> +
+>   static int ima_write_template_field_data(const void *data, const u32 datalen,
+>   					 enum data_formats datafmt,
+>   					 struct ima_field_data *field_data)
+> @@ -72,8 +77,9 @@ static void ima_show_template_data_ascii(struct seq_file *m,
+>   	u32 buflen = field_data->len;
+>   
+>   	switch (datafmt) {
+> +	case DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO:
+>   	case DATA_FMT_DIGEST_WITH_ALGO:
+> -		buf_ptr = strnchr(field_data->data, buflen, ':');
+> +		buf_ptr = strrchr(field_data->data, ':');
+>   		if (buf_ptr != field_data->data)
+>   			seq_printf(m, "%s", field_data->data);
+>   
+> @@ -178,6 +184,14 @@ void ima_show_template_digest_ng(struct seq_file *m, enum ima_show_type show,
+>   				     field_data);
+>   }
+>   
+> +void ima_show_template_digest_ngv2(struct seq_file *m, enum ima_show_type show,
+> +				   struct ima_field_data *field_data)
+> +{
+> +	ima_show_template_field_data(m, show,
+> +				     DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO,
+> +				     field_data);
+> +}
+> +
+>   void ima_show_template_string(struct seq_file *m, enum ima_show_type show,
+>   			      struct ima_field_data *field_data)
+>   {
+> @@ -265,26 +279,39 @@ int ima_parse_buf(void *bufstartp, void *bufendp, void **bufcurp,
+>   }
+>   
+>   static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
+> -				       u8 hash_algo,
+> +				       u8 digest_type, u8 hash_algo,
+>   				       struct ima_field_data *field_data)
+>   {
+>   	/*
+>   	 * digest formats:
+>   	 *  - DATA_FMT_DIGEST: digest
+>   	 *  - DATA_FMT_DIGEST_WITH_ALGO: [<hash algo>] + ':' + '\0' + digest,
+> +	 *  - DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO:
+> +	 *	[<digest type> + ':' + <hash algo>] + ':' + '\0' + digest,
+> +	 *    where <hash type> is either "ima" or "verity",
+>   	 *    where <hash algo> is provided if the hash algorithm is not
+>   	 *    SHA1 or MD5
+>   	 */
+> -	u8 buffer[CRYPTO_MAX_ALG_NAME + 2 + IMA_MAX_DIGEST_SIZE] = { 0 };
+> +	u8 buffer[DIGEST_TYPE_MAXLEN + CRYPTO_MAX_ALG_NAME + 2 +
+> +		IMA_MAX_DIGEST_SIZE] = { 0 };
 
+Should it not be DIGEST_TYPE_MAXLEN + 1 /* for ':' */ + 
+CRYPTO_MAX_ALG_NAME + ....
+
+>   	enum data_formats fmt = DATA_FMT_DIGEST;
+>   	u32 offset = 0;
+>   
+> -	if (hash_algo < HASH_ALGO__LAST) {
+> -		fmt = DATA_FMT_DIGEST_WITH_ALGO;
+> -		offset += snprintf(buffer, CRYPTO_MAX_ALG_NAME + 1, "%s",
+> +	if (digest_type < digest_type_size && hash_algo < HASH_ALGO__LAST) {
+
+It's a bit difficult to see what the digest_type has to do with size...
+Maybe digest_type should be a enum and the comparison here should be 
+digest_type != DIGEST_TYPE_NONE or something like it..
+
+
+> +		fmt = DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO;
+> +		offset += snprintf(buffer, DIGEST_TYPE_MAXLEN +
+> +				   CRYPTO_MAX_ALG_NAME + 1, "%*s:%s",
+> +				   (int)strlen(digest_type_name[digest_type]),
+> +				   digest_type_name[digest_type],
+>   				   hash_algo_name[hash_algo]);
+>   		buffer[offset] = ':';
+>   		offset += 2;
+> +	} else if (hash_algo < HASH_ALGO__LAST) {
+> +		fmt = DATA_FMT_DIGEST_WITH_ALGO;
+> +		offset += snprintf(buffer, CRYPTO_MAX_ALG_NAME + 1,
+> +				   "%s", hash_algo_name[hash_algo]);
+> +		buffer[offset] = ':';
+> +		offset += 2;
+>   	}
+>   
+>   	if (digest)
+> @@ -359,7 +386,8 @@ int ima_eventdigest_init(struct ima_event_data *event_data,
+>   	cur_digestsize = hash.hdr.length;
+>   out:
+>   	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
+> -					   HASH_ALGO__LAST, field_data);
+> +					   digest_type_size, HASH_ALGO__LAST,
+> +					   field_data);
+>   }
+>   
+>   /*
+> @@ -380,7 +408,31 @@ int ima_eventdigest_ng_init(struct ima_event_data *event_data,
+>   	hash_algo = event_data->iint->ima_hash->algo;
+>   out:
+>   	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
+> -					   hash_algo, field_data);
+> +					   digest_type_size, hash_algo,
+> +					   field_data);
+> +}
+> +
+> +/*
+> + * This function writes the digest of an event (without size limit),
+> + * prefixed with both the hash type and algorithm.
+> + */
+> +int ima_eventdigest_ngv2_init(struct ima_event_data *event_data,
+> +			      struct ima_field_data *field_data)
+> +{
+> +	u8 *cur_digest = NULL, hash_algo = HASH_ALGO_SHA1;
+> +	u32 cur_digestsize = 0;
+> +	u8 digest_type = 0;
+
+What does '0' mean? I think this should definitely be an enum or at 
+least #define.
+
+> +
+> +	if (event_data->violation)	/* recording a violation. */
+> +		goto out;
+> +
+> +	cur_digest = event_data->iint->ima_hash->digest;
+> +	cur_digestsize = event_data->iint->ima_hash->length;
+> +
+> +	hash_algo = event_data->iint->ima_hash->algo;
+> +out:
+> +	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
+> +					   digest_type, hash_algo, field_data);
+>   }
+>   
+>   /*
+> @@ -415,7 +467,8 @@ int ima_eventdigest_modsig_init(struct ima_event_data *event_data,
+>   	}
+>   
+>   	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
+> -					   hash_algo, field_data);
+> +					   digest_type_size, hash_algo,
+> +					   field_data);
+>   }
+>   
+>   static int ima_eventname_init_common(struct ima_event_data *event_data,
+> diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
+> index c71f1de95753..9f7c335f304f 100644
+> --- a/security/integrity/ima/ima_template_lib.h
+> +++ b/security/integrity/ima/ima_template_lib.h
+> @@ -21,6 +21,8 @@ void ima_show_template_digest(struct seq_file *m, enum ima_show_type show,
+>   			      struct ima_field_data *field_data);
+>   void ima_show_template_digest_ng(struct seq_file *m, enum ima_show_type show,
+>   				 struct ima_field_data *field_data);
+> +void ima_show_template_digest_ngv2(struct seq_file *m, enum ima_show_type show,
+> +				   struct ima_field_data *field_data);
+>   void ima_show_template_string(struct seq_file *m, enum ima_show_type show,
+>   			      struct ima_field_data *field_data);
+>   void ima_show_template_sig(struct seq_file *m, enum ima_show_type show,
+> @@ -38,6 +40,8 @@ int ima_eventname_init(struct ima_event_data *event_data,
+>   		       struct ima_field_data *field_data);
+>   int ima_eventdigest_ng_init(struct ima_event_data *event_data,
+>   			    struct ima_field_data *field_data);
+> +int ima_eventdigest_ngv2_init(struct ima_event_data *event_data,
+> +			      struct ima_field_data *field_data);
+>   int ima_eventdigest_modsig_init(struct ima_event_data *event_data,
+>   				struct ima_field_data *field_data);
+>   int ima_eventname_ng_init(struct ima_event_data *event_data,
