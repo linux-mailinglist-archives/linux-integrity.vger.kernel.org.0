@@ -2,89 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4744E3202
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Mar 2022 21:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0614E3469
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 00:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239397AbiCUUsb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Mar 2022 16:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S232725AbiCUXel (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Mar 2022 19:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbiCUUsa (ORCPT
+        with ESMTP id S232834AbiCUXeh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Mar 2022 16:48:30 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D381FA62;
-        Mon, 21 Mar 2022 13:47:03 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LKEF26021728;
-        Mon, 21 Mar 2022 20:47:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=bznLJJ5ayLawwKnAkuI141uK+6PE06H2Vvww5acbFf4=;
- b=sRArNvkvwHtXMG3RTPAjXpL/iNqmAMYaOGdF+FS0z4bMdvmzo/JkudWtdKRb10zQcdcx
- +M+bn7+wALuXS3kh2Caxkz8ZFSjBcwiPWFtDB2ksvEADy7uaw//vBaRXdr1uYAOjOoGH
- cRwbRCljyhPwX1lJRvCNkuOJ8sITACTzejH+x8RtDyFwEyfw5Oa381Gz0GmdCi20IBNH
- //85eOQCDnyhZaw3cezLc8FB1eoa90C7tBQK5V9Q0+XuQty0sIpEIgzo3O1o1w14pWCr
- WGbryzJmz032OdapEgm+MpPjjI2B4oLF2tn+1PszI5CW81kYHAMUYHYf6hnijgqUZUCT Rw== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3exreruk3w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 20:47:00 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22LKfEbe014430;
-        Mon, 21 Mar 2022 20:47:00 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma02dal.us.ibm.com with ESMTP id 3ew6t9un1f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 20:47:00 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22LKkw0V24772972
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 20:46:58 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EA637B2070;
-        Mon, 21 Mar 2022 20:46:57 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B31AFB2067;
-        Mon, 21 Mar 2022 20:46:57 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Mar 2022 20:46:57 +0000 (GMT)
-Message-ID: <ed3ea52c-a59f-358c-4753-125225bc39f2@linux.ibm.com>
-Date:   Mon, 21 Mar 2022 16:46:57 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v6 2/5] ima: define a new template field named 'd-ngv2'
- and templates
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220318182151.100847-1-zohar@linux.ibm.com>
- <20220318182151.100847-3-zohar@linux.ibm.com>
- <b19eca12-3ae1-a8a5-fcfd-a22b5ee9319c@linux.ibm.com>
- <31254e743b73a43f6f27679678318d0d8744a355.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <31254e743b73a43f6f27679678318d0d8744a355.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: XxZN493bfNzK4rMSDrtCexZHrsHNxzyb
-X-Proofpoint-GUID: XxZN493bfNzK4rMSDrtCexZHrsHNxzyb
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 21 Mar 2022 19:34:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EBD5577D;
+        Mon, 21 Mar 2022 16:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=8INTyMSFBrX1EJ+aoDBL+ySWd7+IvZDAvs379S+ikME=; b=aLSfJs7R8GRGCLwR+bJOKO7Nb6
+        F1TSYPL+zA2r9J2yLcffA10yBBQtSQ/upF+xpW42/Dj7ELLUpNckJZOD4TZWcRsKE7ArM0todtkWu
+        7GCW7VJkm2+VgQH5SZbXxNVxSGyOZd3dwOveQS8LL/a5lRRXqqrJEhemc7yua2+Ob3AgEu5U1kala
+        7QuJPq1NQSEj6dSqpnDmPU/KScnYham+fku06RDaxWBwE4Uvrzd0QDr7TC6VIkRj95pD6brp+J+EC
+        2wLcn5Z61YHDkP+7h+1FC+b2BpEQzKaZxZZvxTNF2OizXmjcw2UzGny/zBNsa81dIucRheCCYASEn
+        8j2FNP6Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWRW7-009QAL-Q6; Mon, 21 Mar 2022 23:32:51 +0000
+Date:   Mon, 21 Mar 2022 16:32:51 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+Message-ID: <YjkLI4D+ek9shkqL@bombadil.infradead.org>
+References: <20220321161557.495388-1-mic@digikod.net>
+ <Yji3/ejSErupJZtO@bombadil.infradead.org>
+ <cfa15768-ebf4-d198-fb1b-5a6ab47caedb@digikod.net>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-21_08,2022-03-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=892
- malwarescore=0 impostorscore=0 suspectscore=0 spamscore=0 mlxscore=0
- priorityscore=1501 phishscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203210130
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cfa15768-ebf4-d198-fb1b-5a6ab47caedb@digikod.net>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,39 +69,23 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 3/21/22 15:48, Mimi Zohar wrote:
-> On Mon, 2022-03-21 at 08:53 -0400, Stefan Berger wrote:
-
->>> +
->>> +/*
->>> + * This function writes the digest of an event (without size limit),
->>> + * prefixed with both the hash type and algorithm.
->>> + */
->>> +int ima_eventdigest_ngv2_init(struct ima_event_data *event_data,
->>> +			      struct ima_field_data *field_data)
->>> +{
->>> +	u8 *cur_digest = NULL, hash_algo = HASH_ALGO_SHA1;
->>> +	u32 cur_digestsize = 0;
->>> +	u8 digest_type = 0;
->>
->> What does '0' mean? I think this should definitely be an enum or at
->> least #define.
+On Mon, Mar 21, 2022 at 07:05:42PM +0100, Mickaël Salaün wrote:
 > 
-> The first element of the array is "ima".  Should I define two macros
-> similar to kernel_read_file_id and kernel_read_file_str for just two
-> strings?
-
-I would introduce an enum like enum hash_algo: 
-https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/hash_info.h#L38
-
-And an array like hash_algo_name: 
-https://elixir.bootlin.com/linux/latest/source/crypto/hash_info.c#L12
-
-
+> On 21/03/2022 18:38, Luis Chamberlain wrote:
+> > On Mon, Mar 21, 2022 at 05:15:57PM +0100, Mickaël Salaün wrote:
+> > > Since I heard no objection, please consider to pull this code for
+> > > v5.18-rc1 .  These five patches have been successfully tested in the
+> > > latest linux-next releases for several weeks.
+> > 
+> > >   kernel/sysctl.c                                    |   9 +
+> > 
+> > Please don't add more sysctls there. We're slowly trying to move
+> > all these to their respective places so this does not become a larger
+> > kitchen sink mess.
 > 
-> thanks,
-> 
-> Mimi
-> 
+> It is not a new sysctl but proc_dointvec_minmax_sysadmin(). This helper is
+> shared between printk and fs subsystems.
+
+That should be good then, thanks!
+
+  Luis
