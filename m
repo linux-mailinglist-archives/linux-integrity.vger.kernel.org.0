@@ -2,129 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0364E3EF3
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 13:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E383D4E4047
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 15:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbiCVNA1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Mar 2022 09:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S236376AbiCVOOU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Mar 2022 10:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbiCVNA0 (ORCPT
+        with ESMTP id S236338AbiCVOOT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Mar 2022 09:00:26 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C774C5DA49
-        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 05:58:57 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id yy13so36029140ejb.2
-        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 05:58:57 -0700 (PDT)
+        Tue, 22 Mar 2022 10:14:19 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFAF5EBD9
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 07:12:50 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id w25so21784437edi.11
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 07:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=fdnG00+FVnrNPc7pRJZUf6p0lTeWtkmJlgm0eIX6kX4=;
-        b=AjNPKZIAqwx1xa9dhSiLiycGummqAab3uazQK7DKrwe4jObs6/BzrY3gxWNhbARWYA
-         hVNgYlQWf0qCGbhYxIsv5oba6QFc4dqbH4rVwMM63GJC+ZYcFQu8a9yfPLTJFtebEnvq
-         sS7TBQzwsITHfW0WlkcFqkMk1QckKj0PPIq++Nyvh30ESPvmnbwBBUoOt7bFvweLvZdB
-         w/lllBznyKU8j0PhZDsnxxdukqmUvbUT+TXMDDH4nTzZQSODMf8zRUFxktw8DUru0TN2
-         5ePBJm2QDozZZ+PV1buKYCWqMUNMkO6ABcF5+0IpVF09tAgWda+ewU0kKFbTVxSEqsMo
-         lT+Q==
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=b/g6tTbOh1J+b6I0Bj7+4xBjDC+KuKXoWPrgs4jGFZY=;
+        b=ENIYC5DWMSnFJrGhldn/1hcXzlFWlZYd3l9SrKHw2ghi9QSR6YV852tu1MwT2lUAUx
+         agXIkF+1EluMwp05knqCwLCGmFWnjuAU+bl8CSpeia3D87G0OoY7wgYabz0csj/bhH2J
+         wyDVHvOdrml/C/K3mnCgn30lUQ0KkTycjOkkcmDpXsq00pf1lscFwl3xzntJlMFRE+WL
+         S6FjlrSpoAHUPcuGqM39U7qszKYODR0emH3nTnt6vxM2B+uOWu8ctOyjNDkDnGfG8FYZ
+         OBCw8VB2cCnK66cdIG1WP8nNR7K3wr+3JrZFV7KOeO71ID6VAeSzNX06jKzauQkxfWMz
+         SjTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=fdnG00+FVnrNPc7pRJZUf6p0lTeWtkmJlgm0eIX6kX4=;
-        b=oYcqKGcu4aW4Rh9xeEeMUBPXhpBY/76zSeEIHCunPZkmUV0dAT4vKzlPgC0hipbtLQ
-         pkcJrnOn2qjZ+NufDvlnxrLCepRSZ6UlG3mTGOb9LfXuRy4kkc40otf2vSQFCa29zvqM
-         sq772Vi5qAvsMOUlSA7IcE7COq6PTJRo4QfLvMR8I2CxU/WMCdJL2fpQDXcyLIU86XBU
-         oNbgK2uynt+FQ3mUyQuMTFWoH8Pjq6DHgfFcaY4zDGH28UMhFRxit1klQ3ZISxjkTjfy
-         50zMkYJmEyzVk6sG1vRHayNcYBmGgZnIG9p1YONydZ/mLdr/QDjjlsgpu3pyxqkdRCk3
-         zVRg==
-X-Gm-Message-State: AOAM530a/EzxiVmVJKZ3cbk11L4D98h+qyeBAYkKVOz/jDKGmeF4Wk2O
-        9sBg36wz9999w3Q9TVuE9EEYaElkOKtmsfxl4pA=
-X-Google-Smtp-Source: ABdhPJxJ5gfI3ASPs1ZQLPJ5mqeDxFjPhL/TbK+nPa5kjecR/ZD6LUe2SEjX0DqHf5k94THAgBevjCd50OdAmJ5sdEE=
-X-Received: by 2002:a17:907:d27:b0:6db:d928:a976 with SMTP id
- gn39-20020a1709070d2700b006dbd928a976mr25969197ejc.24.1647953935879; Tue, 22
- Mar 2022 05:58:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=b/g6tTbOh1J+b6I0Bj7+4xBjDC+KuKXoWPrgs4jGFZY=;
+        b=PXlboPke9WbsVEc2HckB/m/qPF4e0EoREAIHt6gbbAzKQF4xOWrfs88qvuo9nCp2Hz
+         WBJnBrtS8zxc6O9ru/9D8Rwm5yMtCgQL9VG6jSGcaQsXQ85mA7YYKYsnG5uodlm2yJsS
+         wSP4TXAFP6x1OYSIke9jkNpOofUApe3Zi0/T576mATNdKCdunf1sGsz3Kszm4KSFncAc
+         XARQubr66AAnLu+79sbCY+MDbya7i5hdppL4ahHerFhcDrIYfv/ULQGBK02y15CXToMS
+         JM8HJ3lRZsL6Ur2kWrswldmBQK61bB3+boK2ytTgFvk3Y2XE8BSeYNn4jyoJWfjpv5Lp
+         xWrQ==
+X-Gm-Message-State: AOAM531NOt+5fWqDTEsKeFD5TaGWpqKvqjTBURUUFAozUis2NKSS8GdD
+        e/z4BJ532PNJbV4ovbXtal+K9ULb3s1DoAk3CM8=
+X-Google-Smtp-Source: ABdhPJzvS7ml8Ex06Obh1flW08eSBskW1dEeogCf+eP3E1GYXvNih72DTt8s54sO7BBajvbGg3cGybqNaLxS6LCd0nU=
+X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
+ n13-20020a5099cd000000b00418d6c22405mr28398636edb.342.1647958365769; Tue, 22
+ Mar 2022 07:12:45 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 22 Mar 2022 12:58:46 +0000
-Message-ID: <CAHpNFcNnW_gYDy4m-cVqta_hux0cW5O7hhOP=fDEN5Tbuxk=NA@mail.gmail.com>
-Subject: Reference Kernel Security: https://science.n-helix.com/2019/06/kernel.html
-To:     bandwidthalliance@cloudflare.com
+Date:   Tue, 22 Mar 2022 14:12:36 +0000
+Message-ID: <CAHpNFcOb8vwZPySqV_htA7+mZCaNX3h=DQN_tu-MZbG-B38SxQ@mail.gmail.com>
+Subject: Kernel C/TRNG System TIMECrystal Quartz Variable T, Variable Fraction
+ & Security Leaf Systems :RS NT Interrupt counter Entropy : A counter theory : RS
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PDS_OTHER_BAD_TLD,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-  https://science.n-helix.com/2019/06/kernel.html
+Kernel C/TRNG System TIMECrystal Quartz Variable T, Variable Fraction
+& Security Leaf Systems :RS NT Interrupt counter Entropy : A counter
+theory : RS
 
-Trace ID : Kernel & Bios HASH Reference
-https://lkml.org/lkml/2022/3/22/446
+NT Interrupt counter Entropy : A counter theory : RS
 
-Jumpless Security HASH
-https://lkml.org/lkml/2022/3/22/440
+"more importantly, our
+distribution is not 2-monotone like NT's, because in addition to the
+cycle counter, we also include in those 4 words a register value, a
+return address, and an inverted jiffies. (Whether capturing anything
+beyond the cycle counter in the interrupt handler is even adding much of
+value is a question for a different time.)"
 
-SPE Decode & Encode
-https://lkml.org/lkml/2022/3/22/415
+NT Interrupt counter Entropy : A counter theory : RS
 
-*****
+To be clear interrupts are old fashioned (NT & Bios) : Points
 
-VM Virtual Call Frame : Security Aspect Leaf HASH Identifiers : Rupert S
+Network cards have offloading? Yes & why cannot we?
 
-Leaf HASH Identifiers in 16Bit/32Bit/64Bit : RS
+Offloaded does not mean that a time differential matrix HASH AES of 32Bit w=
+ords,
+Cross pollinated though MMX, AVX , SiMD is plausible!
 
-With this example in mind 16Bit HASH Values & identifiers make sense.
+Combined with even network latency timing & interrupt latency...
 
-16Bit HASH Reasoning Table: based upon Leaf HASH Identifiers in
-16Bit/32Bit/64Bit
+Various system differentials can alternate line in our table per clock sync=
+!
 
-16Bit Leaf HASH, Compatible max RAM) : 4GB Large Page
+In this reference Quartz clock instability is not only counter acted by NTP=
+...
+But also utilized as a variable co-modifier.
 
-16 Million HASH groups for identifiers with 128MB RAM per HASH Master group..
+So why not also advantage ourselves of the clock frequency scaling
+effect to confuse odds again for Entropy (Random, Not Entropy)
 
-256 HASH master Table
-256 HASH Per Group
+SSD does also have a write counter & a cleared state, not so boring as
+one thinks if per 32KB segment is hashed in 4Bit, 8,Bit 32Bit float!
+(remember we have DOT3 DOT 4 & INT8 in ML)
 
-16:32MB up to 4GB(16Bit Leaf HASH, Compatible max RAM) : RAM per group
+We can utilize write cycle statistics & all hardware; Interrupts by
+themselves are rather Boring!
 
-16Bit Hash identifier tables load into 16KB of processor cache
-Load, Save & Store can be done in a higher Bit depth; 32Bit for example
-SiMD can operate in Half, Single & Double Float capacity
+Computed timings on processes multiplexed over 3 Threads per group in
+competition is also a potential complexifier of Random
 
-Micro work loads such as motion & video & 3D Tessellation
-
-*
-
-VM Virtual Call Frame : Security Aspect Leaf HASH Identifiers in
-16Bit/32Bit/64Bit : RS
-
-If the CPU Manager can call Compression & Cypher independently on TASK Call,
-If the Processor Manager can call from Virtualisation functions for
-each secure task group.
-
-Security Aspect : With CPU Cache in the 8MB+ Region Leaf HASH
-Identifiers can be stored:
-
-Compressed if Processor has Compression such as BZip
-Encrypted Compressed if Processor has Compression such as AES
-
-In a Secure &+ Work Isolation Container : WIC or SWIC contained L2
-(Compress Store Small Identifier List)
-
-In a Secure &+ Work Isolation Container : WIC or SWIC contained L3
-(larger identifier lists),
-
-(c)Rupert S
-
-Reference Kernel Security:
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
+Rupert S
 
 https://science.n-helix.com/2018/12/rng.html
 
@@ -132,120 +117,266 @@ https://science.n-helix.com/2022/02/rdseed.html
 
 https://science.n-helix.com/2017/04/rng-and-random-web.html
 
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+https://science.n-helix.com/2022/02/interrupt-entropy.html
 
-Leaf HASH Identifier Paths to clear logic:
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
 
-Performance issues related to handheld would be solved with the use of:
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
+tml
 
-FP16 packed pixel
-FP16 background object maths
-FP/Int8/4 Machine learning adaptive code...
-Compute Shaders
-Compression > DOT Image format
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
 
-With these resources available, We can potentially do more!
+****
 
-https://science.n-helix.com/2019/06/vulkan-stack.html
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-https://science.n-helix.com/2021/09/temporal-aliasing-image-shaping-polygon.html
-https://science.n-helix.com/2022/03/simd-render.html
+PreSEED Poly Elliptic SiMD RAND : RS
 
-*
-https://science.n-helix.com/2019/06/kernel.html
+Preseed ; 3 Seeds with AES or Poly ChaCha or even 1 : 2 would be
+rather fast Init
 
-Trace ID : Kernel & Bios HASH Reference
-https://lkml.org/lkml/2022/3/22/446
+Blending them would make a rather paranoid Kernel developer feel safe! :D
 
-Jumpless Security HASH
-https://lkml.org/lkml/2022/3/22/440
+Like so List:
 
-SPE Decode & Encode
-https://lkml.org/lkml/2022/3/22/415
-*
+3 seeds 32Bit or 64Bit :
+Examples :
 
-As you know in my studies i found that 16x AA rarely has a performance
-hit on all verified hardware since RX200 3GB (and the RX560) & even
-the RX5770 1GB.The NVidia 1080 can manage most of this & i optimised
-Elite Dangerous for the 1080 & RX200 market.
+1 Seed : Pre seeded from CPU IRQ & Net 16Bit values each & merged
+2 & 3 from server https://pollinate.n-helix.com &or System TRNG
 
+4 Seed mix 128Bit Value
 
-A lot of the performance issues related to handheld would be solved
-with the use of:
+Advantages :
 
-FP16 packed pixel
-FP16 background object maths
-FP/Int8/4 Machine learning adaptive code...
-Compute Shaders
-Compression > DOT Image format
-
-With these resources available, We can potentially do more!
+AVX & SiMD Mixxer is fast 'Byte Swap & Maths etcetera" & MultiThreaded
+AES Support is common :
 
 *
+HASH : RSA Source Cert C/TRNG : (c)RS
 
-"Apex Legends : I get the feeling that the lower final precision on
-the screen output is the result of a 4x Anti Aliasing layer and lower
-Image compression settings,"
+Elliptic RSA : Cert Mixer : RSA 4096/2048/1024Temporal : 384/256/192
+ECC Temporal
+
+Centric Entropy HASH: Butterfly Effects
+
+ChaCha
+SM4
+SHA2
+SHA3
+
+Elliptic Encipher
+AES
+Poly ChaCha
+
+Elliptic : Time Variance : Tick Count Variance : On & Off Variance : IRQ
 
 *
+Time & Crystal : Quartz as a diffraction point fractal differentiator : RS
 
-Elite Dangerous Reference
-Videos:https://www.youtube.com/watch?v=JmMQPS_azJA&list=PL8DNvgnwiUU1cezx_Y9DraHjyqJxnrrN7
+RDTSC Variable bit differentiation & deviation of the quartz sub .0001
+Value combined with complexity of unique interplay with Alternative
+clocks such as Network cards, Audio cards & USB Sticks & Bluetooth
+radio clocks & Ultimately the NTP Pools themselves when required.
 
-ML & Game performance improvement
+(TIME Differential Float maths) TSC : RDTSC : RDTSCP : TCE supports
+single and half precision floating-point calculations
+
+Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
+pge mca cmov pat pse36 clflush mmx fxsr sse sse2 htt pni ssse3 fma
+cx16 sse4_1 sse4_2 popcnt aes f16c syscall nx lm avx svm sse4a osvw
+ibs xop skinit wdt lwp fma4 tce tbm topx page1gb rdtscp bmi1
+
+*
+For RDTSCP =3D TValue TV1=3D16.0685 TV2=3D16.1432 TV3=3D15.1871
+When Processor Mzh =3D PV1 PV2 PV3
+RAND Source =3D Es1 Es2 Es3
+
+If Xt =3D 1.9 < then roll right
+
+((TV1 - TV2) * (PV1 - PV2)) / ((TV1 - TV3) * (PV1 - PV3)) =3D FractorXt(Xt)
+
+Es1 * Xt =3D Differential
+
+Es2 Es3
+
+(c) Rupert S
+
+Quartz as a diffraction point fractal differentiator : RS
+
+https://tches.iacr.org/index.php/TCHES/article/download/7274/6452
+https://perso.univ-rennes1.fr/david.lubicz/articles/gda.pdf
+https://patents.google.com/patent/US9335971
+*
+
+"Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
+is, in part, why we take trylocks instead. But apparently this still
+trips up various lock dependency analysers. That seems like a bug in the
+analyser's that should be fixed, rather than having to change things
+here.
+
+But maybe there's another reason to change things up: by deferring the
+crng pre-init loading to the worker, we can use the cryptographic hash
+function rather than xor, which is perhaps a meaningful difference when
+considering this data has only been through the relatively weak
+fast_mix() function.
+
+The biggest downside of this approach is that the pre-init loading is
+now deferred until later, which means things that need random numbers
+after interrupts are enabled, but before work-queues are running -- or
+before this particular worker manages to run -- are going to get into
+trouble. Hopefully in the real world, this window is rather small,
+especially since this code won't run until 64 interrupts have occurred."
+
+https://lore.kernel.org/lkml/Yhc4LwK3biZFIqwQ@owl.dominikbrodowski.net/T/
 
 Rupert S
 
-The Handheld market performance ratings are :
+*****
+Serve C-TRNG QT Fractional Differentiator(c)RS
 
-Snapdragon (often used & is good)
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
 
-High quality option based upon Notebook expectations
+SipHash: a fast short-input PRF
 
-AMD Chipset
-NVidia
+Rotation Alignment : "The advantage of choosing such =E2=80=9Caligned=E2=80=
+=9D
+rotation counts is that aligned rotation counts are much faster than
+unaligned rotation counts on many non-64-bit architectures."
 
-My studies concluded that both NVidia and AMD have little to worry
-about AA performance upto 16x and it makes almost no performance
-advantage to use less in my performance tuning...
+http://cr.yp.to/siphash/siphash-20120918.pdf
 
-I am frequently in possession of older hardware; Like many users i
-cannot always afford all the best gear,
+https://www.aumasson.jp/siphash/siphash.pdf
 
-However there are examples of things that make a bigger hit:
+"Choice of rotation counts. Finding really bad rotation counts for ARX
+algorithms turns out to be difficult. For example, randomly setting
+all rotations in
+BLAKE-512 or Skein to a value in {8, 16, 24, . . . , 56} may allow known at=
+tacks
+to reach slightly more rounds, but no dramatic improvement is expected.
+The advantage of choosing such =E2=80=9Caligned=E2=80=9D rotation counts is=
+ that
+aligned rotation counts are much faster than unaligned rotation counts
+on many non-64-bit
+architectures. Many 8-bit microcontrollers have only 1-bit shifts of bytes,=
+ so
+rotation by (e.g.) 3 bits is particularly expensive; implementing a rotatio=
+n by
+a mere permutation of bytes greatly speeds up ARX algorithms. Even 64-bit
+systems can benefit from alignment, when a sequence of shift-shift-xor can =
+be
+replaced by SSSE3=E2=80=99s pshufb byte-shuffling instruction. For comparis=
+on,
+implementing BLAKE-256=E2=80=99s 16- and 8-bit rotations with pshufb led to=
+ a
+20% speedup
+on Intel=E2=80=99s Nehalem microarchitecture."
 
-16x tessellation rarely causes a problem (RX200 3GB+)24 & 32 both
-dynamically jiggle FPS around heavy asteroids & space stations in
-frontier elite..
+https://www.kernel.org/doc/html/latest/security/siphash.html
 
-but looks amazing!
+https://en.wikipedia.org/wiki/SipHash
 
-Multisampling is manageable at 2x on RX200 on elite dangerous
+Code SIP-HASH
+https://github.com/veorq/SipHash
 
-(a quite intense graphic space MMO)
-4x MultiSampling does involve a 20% frame rate drop, Quality is
-preferred but i went for 2x as it rarely causes issues.
+Serve C-TRNG QT Fractional Differentiator(c)RS
 
-Texture Image compression format optimisation is a priority NO.1 Priority..
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
 
-You save a lot of space & heavy usage of DOT 1 > 5 compression
-management is advised..
-10Bit sampling is perfectly logical.
+As we see rotation may benefit from the addition of Quartz crystal
+alignment sync data from 4 cycles & aligning data blocks,
 
-https://www.nintendolife.com/news/2021/03/video_check_out_this_side-by-side_comparison_of_apex_legends_running_on_switch_and_ps4_pro
+Obviously we can pre share 4 64Bit blocks use; use a pre seed AES/ChaCha Qu=
+ad!
+Indeed we can have 16 64Bit pre Seeds & chose them by time sync for kernel
 
-https://www.youtube.com/watch?v=uGrPwt_KHRE
+Security bug; Solutions & explanation's (contains additional RANDOM
+Security Methods) :RS
 
-Elite Dangerous 64Bit PvP Arena DeathMatch 4Q 2xMultiSampling.mp4
-(93.26 MB) https://mirrorace.org/m/6qr3y
+https://science.n-helix.com/2020/06/cryptoseed.html
+https://science.n-helix.com/2019/05/zombie-load.html
+https://science.n-helix.com/2018/01/microprocessor-bug-meltdown.html
 
-Elite Dangerous 64 Sub.FM Rastafari PvP 2016-04-23 19-27-22-552.mp4
-(89.27 MB) https://mirrorace.org/m/54waA
+Rupert S https://science.n-helix.com
 
-EliteDangerous - CQC PvP Arena - Bloody is the bath of kings -
-2016-05-05 14-30-27-909.mp4 (277.04 MB) https://mirrorace.org/m/3IO7p
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
 
-yes cloudflare apex_eoso.nx7v.icu apex_eu.nx7v.icu apex_wes.nx7v.icu
-apex_eas.nx7v.icu
+https://pollinate.n-helix.com
 
-USA: pop: apex_sv1.nx7v.icu apex_sv2.nx7v.icu apex_sv3.nx7v.icu
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://aka.ms/win10rng
+*
+
+Encryption Methods:
+https://tools.ietf.org/id/?doc=3Dhash
+
+https://tools.ietf.org/id/?doc=3Dencrypt
+
+HASH :
+
+https://datatracker.ietf.org/doc/html/draft-ietf-cose-hash-algs
+
+https://tools.ietf.org/id/draft-ribose-cfrg-sm4-10.html
+
+https://tools.ietf.org/id/?doc=3Dsha
+
+https://tools.ietf.org/id/?doc=3Drsa
+
+Encryption Common Support:
+
+https://tools.ietf.org/id/?doc=3Dchacha
+
+https://tools.ietf.org/id/?doc=3Daes
+
+SM4e does seem a good possibility for C/T/RNG CORE HASH Functions!
+
+ARM Crypto Extensions Code (Maybe AES Extensions would work here)
+https://lkml.org/lkml/2022/3/15/324
+
+ARM Neon / SiMD / AVX Compatible (GPU is possible)
+https://lkml.org/lkml/2022/3/15/323
+
+*
+
+197 FIPS NIST Standards Specification C/T/RNG
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+Only a Neanderthal would approve a non additive source combination
+that is injected into the HASH & Re-HASHED ,
+
+One does not Procreate inadequate RANDOM from a simple bias KERNEL,
+Hardware RNG's added together may add around 450% Complexity!
+
+Hardware RNG devices MUST be able to Re-HASH to their 197 NIST
+Standards Specification, That is FINAL 2022 DT
+
+KEYS: trusted: allow use of kernel RNG for key material
+
+https://lkml.org/lkml/2022/3/16/598
+
+CAAM PRNG Reference : https://lkml.org/lkml/2022/3/16/649
+
+TRNG Samples & Method
+
+https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=
+=3Ddrive_web
+https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=
+=3Ddrive_web
+https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=
+=3Ddrive_web
+https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=
+=3Ddrive_web
