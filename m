@@ -2,136 +2,163 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AA04E3A5B
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 09:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F99D4E3BCE
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 10:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiCVISG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Mar 2022 04:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
+        id S232622AbiCVJi6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Mar 2022 05:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiCVISC (ORCPT
+        with ESMTP id S232633AbiCVJi5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Mar 2022 04:18:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5620D517CA;
-        Tue, 22 Mar 2022 01:16:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4D719CE1D27;
-        Tue, 22 Mar 2022 08:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969DBC340EC;
-        Tue, 22 Mar 2022 08:16:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647936991;
-        bh=wViT03VO9WUj9KY0s8wKyKJNf+YcAvGEWXKoZ9AleN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W9Ue5cxIv8a2d8N6iYN533cFeIPEjXCJoeK1SMOj1yKL9jlMLWv2hpUePy4W2OOeI
-         2/GfhIzr7iKeyu13vGPOdlUE4Z88QOXfK1iofqjHcHKQUqJbLDOFDEoWrSR0Vccevd
-         E7UD3u4Bv81VODfXeTDk0Ds+1OhZhuStj8PSh5pKPwxW4FsS3KVOi587EFHNq0BCZl
-         B+9VLpFoX5r9+g54AGfK7b4fAKZWMTh61sVM1H9x+u2Q8NTHuf98ZioWtJZcyNudLN
-         qdYgiuy5fyanXQWqbfWw5tp05xwrO+/jqwNZ9dwMqIWlFOZo8oukfq1L3pqLSkNTdn
-         JSOt8GXcFgUzA==
-Date:   Tue, 22 Mar 2022 10:17:33 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, kernel@pengutronix.de,
-        David Gstir <david@sigma-star.at>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v6 4/4] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-Message-ID: <YjmGHRK5TzteGwNu@iki.fi>
-References: <20220316164335.1720255-1-a.fatoum@pengutronix.de>
- <20220316164335.1720255-5-a.fatoum@pengutronix.de>
- <YjeWSx84ev7u/YAi@iki.fi>
- <c946cce8-674a-43d2-1000-b57eba4bc45c@pengutronix.de>
+        Tue, 22 Mar 2022 05:38:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A777EA0B
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 02:37:29 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nWawt-0006Jj-Mp; Tue, 22 Mar 2022 10:37:07 +0100
+Message-ID: <828a8d00-ab9a-a7eb-4ad0-f95a63c7fb39@pengutronix.de>
+Date:   Tue, 22 Mar 2022 10:37:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c946cce8-674a-43d2-1000-b57eba4bc45c@pengutronix.de>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [EXT] [PATCH v6 3/4] crypto: caam - add in-kernel interface for
+ blob generator
+Content-Language: en-US
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        David Gstir <david@sigma-star.at>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Richard Weinberger <richard@nod.at>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+References: <20220316164335.1720255-1-a.fatoum@pengutronix.de>
+ <20220316164335.1720255-4-a.fatoum@pengutronix.de>
+ <DU2PR04MB86302DB35042F4DAE7C27FA695179@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <23cd140f-1046-7059-c9bd-ca4aac1d5183@pengutronix.de>
+In-Reply-To: <23cd140f-1046-7059-c9bd-ca4aac1d5183@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 08:33:34AM +0100, Ahmad Fatoum wrote:
-> Hello Jarkko,
+Hello Pankaj,
+
+On 22.03.22 08:32, Ahmad Fatoum wrote:
+> Hello Pankaj,
 > 
-> On 20.03.22 22:02, Jarkko Sakkinen wrote:
-> > On Wed, Mar 16, 2022 at 05:43:35PM +0100, Ahmad Fatoum wrote:
-> >> @@ -192,6 +217,19 @@ Usage::
-> >>  specific to TEE device implementation.  The key length for new keys is always
-> >>  in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-> >>  
-> >> +Trusted Keys usage: CAAM
-> >> +------------------------
-> >> +
-> >> +Usage::
-> >> +
-> >> +    keyctl add trusted name "new keylen" ring
-> >> +    keyctl add trusted name "load hex_blob" ring
-> >> +    keyctl print keyid
-> >> +
-> >> +"keyctl print" returns an ASCII hex copy of the sealed key, which is in format
-> >> +specific to CAAM device implementation.  The key length for new keys is always
-> >> +in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-> >> +
-> >>  Encrypted Keys usage
-> >>  --------------------
-> >>  
-> >> diff --git a/MAINTAINERS b/MAINTAINERS
-> >> index 05fd080b82f3..f13382a14967 100644
-> >> --- a/MAINTAINERS
-> >> +++ b/MAINTAINERS
-> >> @@ -10647,6 +10647,15 @@ S:	Supported
-> >>  F:	include/keys/trusted_tee.h
-> >>  F:	security/keys/trusted-keys/trusted_tee.c
-> >>  
-> >> +KEYS-TRUSTED-CAAM
-> >> +M:	Ahmad Fatoum <a.fatoum@pengutronix.de>
-> >> +R:	Pengutronix Kernel Team <kernel@pengutronix.de>
-> >> +L:	linux-integrity@vger.kernel.org
-> >> +L:	keyrings@vger.kernel.org
-> >> +S:	Maintained
-> >> +F:	include/keys/trusted_caam.h
-> >> +F:	security/keys/trusted-keys/trusted_caam.c
-> >> +
-> >>  KEYS/KEYRINGS
-> >>  M:	David Howells <dhowells@redhat.com>
-> >>  M:	Jarkko Sakkinen <jarkko@kernel.org>
-> > 
-> > Documentation and MAINTAINERS updates must be separate patches.
+> On 22.03.22 07:25, Pankaj Gupta wrote:
+>> Hi Ahmad,
+>>
+>> Suggested to define macro with more details.
+>> Please find comments in-line.
+>>
 > 
-> I will do so for v7. Does this patch look otherwise ok to you?
+>> len = 4 + (4 + ALIGN(keymod_len, 4)) + 2*(4 + 4 + 
+>>>>>> + CAAM_PTR_SZ_MAX) + 4;
+>>
+>>> +/* header + (key mod immediate) + 2x seq_intlen pointers + op */
+>>> +#define CAAM_BLOB_DESC_BYTES_MAX \
+>>> +       (CAAM_CMD_SZ + \
+>>> +        CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH + \
+>>> +        2 * (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \
+>>> +        CAAM_CMD_SZ)
+>>> +
+>>
+>> Suggested to replace the above macro like below:
+>>
+>> +#define CAAM_BLOB_DESC_BYTES_MAX \			
+>> +       (CAAM_CMD_SZ + \					/* Command to initialize & stating length of  descriptor */
+>> +        CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH + \	/* Command to append the key-modifier + followed by the key-modifier data */
+>> +        (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \		/* Command to include input plain key and pointer to the input key */
+>> +        (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \		/* Command to include output-key blob and pointer to the output-key blob */
+>> +        CAAM_CMD_SZ)						/* Command describing the Operation to perform */
+> 
+> 
+> Sure thing, will do for v7. Otherwise, if all looks good to you,
+> can I have your Reviewed-by?
+This doesn't compile as-is and it leads to quite long lines.
+The description isn't accurate also, because what's plain and what's blob
+changes depending on whether we encapsulate or decapsulate.
+
+Here's my revised macro version:
+
+#define CAAM_BLOB_DESC_BYTES_MAX                                        \
+        /* Command to initialize & stating length of descriptor */      \
+        (CAAM_CMD_SZ +                                                  \
+        /* Command to append the key-modifier + key-modifier data */    \
+         CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH +                        \
+        /* Command to include input key + pointer to the input key */   \
+         CAAM_CMD_SZ + CAAM_PTR_SZ_MAX +                                \
+        /* Command to include output key + pointer to the output key */ \
+         CAAM_CMD_SZ + CAAM_PTR_SZ_MAX +                                \
+        /* Command describing the Operation to perform */               \
+         CAAM_CMD_SZ)
+
+Alternatively, I can change it back into a function:
+
+static inline u32 *caam_blob_desc_alloc(void)
+{
+        size_t size = 0;
+
+        /* Command to initialize & stating length of descriptor */
+        size += CAAM_CMD_SZ;
+        /* Command to append the key-modifier + key-modifier data */
+        size += CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH;
+        /* Command to include input plain key + pointer to the input key */
+        size += CAAM_CMD_SZ + CAAM_PTR_SZ_MAX;
+        /* Command to include output-key blob + pointer to the output key */
+        size += CAAM_CMD_SZ + CAAM_PTR_SZ_MAX;
+        /* Command describing the Operation to perform */
+        size += CAAM_CMD_SZ;
+
+        return kzalloc(size, GFP_KERNEL | GFP_DMA);
+}
+
+Let me know what works better for you.
+
+Cheers,
+Ahmad
+
 > 
 > Thanks,
 > Ahmad
+> 
 
-I don't give heads ups. It's improperly constructed patch, i.e. I won't
-review it in this from.
 
-BR, Jarkko
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
