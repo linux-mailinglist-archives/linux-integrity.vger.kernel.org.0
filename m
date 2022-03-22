@@ -2,60 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E383D4E4047
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 15:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B75D24E4319
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 16:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbiCVOOU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Mar 2022 10:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
+        id S238579AbiCVPhG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Mar 2022 11:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236338AbiCVOOT (ORCPT
+        with ESMTP id S238618AbiCVPhF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:14:19 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFAF5EBD9
-        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 07:12:50 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id w25so21784437edi.11
-        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 07:12:50 -0700 (PDT)
+        Tue, 22 Mar 2022 11:37:05 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D02AE7C
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 08:35:32 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id k10so8392419edj.2
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 08:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=b/g6tTbOh1J+b6I0Bj7+4xBjDC+KuKXoWPrgs4jGFZY=;
-        b=ENIYC5DWMSnFJrGhldn/1hcXzlFWlZYd3l9SrKHw2ghi9QSR6YV852tu1MwT2lUAUx
-         agXIkF+1EluMwp05knqCwLCGmFWnjuAU+bl8CSpeia3D87G0OoY7wgYabz0csj/bhH2J
-         wyDVHvOdrml/C/K3mnCgn30lUQ0KkTycjOkkcmDpXsq00pf1lscFwl3xzntJlMFRE+WL
-         S6FjlrSpoAHUPcuGqM39U7qszKYODR0emH3nTnt6vxM2B+uOWu8ctOyjNDkDnGfG8FYZ
-         OBCw8VB2cCnK66cdIG1WP8nNR7K3wr+3JrZFV7KOeO71ID6VAeSzNX06jKzauQkxfWMz
-         SjTQ==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=1iSiwW/U+DweOlsvahyNIrQHjcrb1kkSroEQxDJW2/M=;
+        b=hQQEYfVUnY/Dpp6X5unwmO+zpJj06sYmQi0pQmGFsCuVX21DGipWNkP8hCku8xKK/J
+         0xAoN4O05/RDleqpXrshI617LYtJ1J++mHdYcoyPl1Wl10nz1H5ss67bty4LoYdymmId
+         tLKIXDa5ADTY7gCOKMAxTHw1KgQw3fnyQtr+AGHm57hKk/E1BMiIx+DjBMehuTYb46DP
+         UxfJhpHbBgopFq5DdRLtP44iFteI6hf9cffvzUe2Fwtk5xZzGakEK/gRZWocRxylDmOO
+         Nh1mZwcvxvobL9wjiMGUyZ/PS9h41Xg5HNcC0b+yaME/ACAV3P5kfITr3+u+/MUrz3Qa
+         w4Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=b/g6tTbOh1J+b6I0Bj7+4xBjDC+KuKXoWPrgs4jGFZY=;
-        b=PXlboPke9WbsVEc2HckB/m/qPF4e0EoREAIHt6gbbAzKQF4xOWrfs88qvuo9nCp2Hz
-         WBJnBrtS8zxc6O9ru/9D8Rwm5yMtCgQL9VG6jSGcaQsXQ85mA7YYKYsnG5uodlm2yJsS
-         wSP4TXAFP6x1OYSIke9jkNpOofUApe3Zi0/T576mATNdKCdunf1sGsz3Kszm4KSFncAc
-         XARQubr66AAnLu+79sbCY+MDbya7i5hdppL4ahHerFhcDrIYfv/ULQGBK02y15CXToMS
-         JM8HJ3lRZsL6Ur2kWrswldmBQK61bB3+boK2ytTgFvk3Y2XE8BSeYNn4jyoJWfjpv5Lp
-         xWrQ==
-X-Gm-Message-State: AOAM531NOt+5fWqDTEsKeFD5TaGWpqKvqjTBURUUFAozUis2NKSS8GdD
-        e/z4BJ532PNJbV4ovbXtal+K9ULb3s1DoAk3CM8=
-X-Google-Smtp-Source: ABdhPJzvS7ml8Ex06Obh1flW08eSBskW1dEeogCf+eP3E1GYXvNih72DTt8s54sO7BBajvbGg3cGybqNaLxS6LCd0nU=
-X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
- n13-20020a5099cd000000b00418d6c22405mr28398636edb.342.1647958365769; Tue, 22
- Mar 2022 07:12:45 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=1iSiwW/U+DweOlsvahyNIrQHjcrb1kkSroEQxDJW2/M=;
+        b=QqF96tztjuN8SPmeD+pIkDl0p7DFbix27bxdM/blG/8+YbwEROJQueBVyOLaSrGgMH
+         upMlRbRxh85RA9QPh26zoy6t7s+r4ynGPup7hNbVeLInY2ze7NJqmWuSSENTuIRH+xMD
+         hnKcR8q/v1IZY9b6kFGqyxTdhfZg1VfcTRHYmoghnWixza2fzHovpDumWypWEz4eFEXr
+         FdrdkQ5N28BtP4RNxS1ZfPOWSLRJ7J1LuQMU4Sp3Bm51etw4Ue6Z0/hXUw37S/8Bd6kN
+         cfTjGSL0vThO8BpxHzQVFrX8W8i7x09JhaTAToOEqR9XINuPOKYGy33LF/tJMzjmDQC5
+         2jLQ==
+X-Gm-Message-State: AOAM5309NNw0Em4XQ0JfQ8aSZeLI+r/2ks11czo29G5XUofAq6emiWsX
+        9WVfc9NhpoktBn81OA4yq1xQnYTMAs3EyuRQNmM=
+X-Google-Smtp-Source: ABdhPJzmpFGC4btTzix/OIqzZ+QN4+ZetwAddHho6/uOfHsss0zqotCIyMFiwxU7n+mRtKBrBqxPsxKWG0oq8gwG4II=
+X-Received: by 2002:a05:6402:8d7:b0:419:1162:a507 with SMTP id
+ d23-20020a05640208d700b004191162a507mr21614603edz.157.1647963330960; Tue, 22
+ Mar 2022 08:35:30 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 22 Mar 2022 14:12:36 +0000
-Message-ID: <CAHpNFcOb8vwZPySqV_htA7+mZCaNX3h=DQN_tu-MZbG-B38SxQ@mail.gmail.com>
-Subject: Kernel C/TRNG System TIMECrystal Quartz Variable T, Variable Fraction
- & Security Leaf Systems :RS NT Interrupt counter Entropy : A counter theory : RS
+Date:   Tue, 22 Mar 2022 15:35:21 +0000
+Message-ID: <CAHpNFcNdWdcrkHCWLAFRYbhr_g49msMaS5cChczOjjk2UFxdHQ@mail.gmail.com>
+Subject: Haptic & 3D Audio : Kernel Core Security & Privacy 'Cache Ripper
+ Memory Sniffers & Privacy Baiters ALL GONE' Cash_Bo_Montin Selector RS for
+ Cache & System Operations Optimisation & Compute CBoMontin Processor
+ Scheduler - Good for consoles & RT Kernels & Firmware (For HTTP+JS HyperThreading)
 To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,52 +63,180 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Kernel C/TRNG System TIMECrystal Quartz Variable T, Variable Fraction
-& Security Leaf Systems :RS NT Interrupt counter Entropy : A counter
-theory : RS
+Haptic & 3D Audio : Kernel Core Security & Privacy 'Cache Ripper
+Memory Sniffers & Privacy Baiters ALL GONE' Cash_Bo_Montin Selector RS
+for Cache & System Operations Optimisation & Compute CBoMontin
+Processor Scheduler - Good for consoles & RT Kernels & Firmware (For
+HTTP+JS HyperThreading)
 
-NT Interrupt counter Entropy : A counter theory : RS
+Primary Reference:
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
 
-"more importantly, our
-distribution is not 2-monotone like NT's, because in addition to the
-cycle counter, we also include in those 4 words a register value, a
-return address, and an inverted jiffies. (Whether capturing anything
-beyond the cycle counter in the interrupt handler is even adding much of
-value is a question for a different time.)"
+Cash_Bo_Montin Selector (c)Rupert S for Cache & System Operations
+Optimisation & Compute
+CBoMontin Processor Scheduler - Good for consoles & RT Kernels (For
+HTTP+JS HyperThreading)
 
-NT Interrupt counter Entropy : A counter theory : RS
+*
+Monticarlo Workload Selector
 
-To be clear interrupts are old fashioned (NT & Bios) : Points
+CPU, GPU, APU, SPU, ROM, Kernel & Operating system :
 
-Network cards have offloading? Yes & why cannot we?
+CPU/GPU/Chip/Kernel Cache & Thread Work Operations management
 
-Offloaded does not mean that a time differential matrix HASH AES of 32Bit w=
-ords,
-Cross pollinated though MMX, AVX , SiMD is plausible!
+In/out Memory operations & CU feature selection are ordered into
+groups based on:
 
-Combined with even network latency timing & interrupt latency...
+CU Selection is preferred by Chip features used by code & Cache
+in-lining in the same group.
 
-Various system differentials can alternate line in our table per clock sync=
-!
+Global Use (In application or common DLL) Group Core CU
+Localised Thread group, Sub prioritised to Sub CU in location of work use
+Prioritised to local CU with Chip feature available & with lower
+utilisation (lowers latency)
 
-In this reference Quartz clock instability is not only counter acted by NTP=
-...
-But also utilized as a variable co-modifier.
+{ Monticarlos In/Out }
+System input load Predictable Statistic analysis }
+Monticarlo Assumed averages per task }
+System: IO, IRQ, DMA, Data Motion }
 
-So why not also advantage ourselves of the clock frequency scaling
-effect to confuse odds again for Entropy (Random, Not Entropy)
+{ Process by Advantage }
+{ Process By Task FeatureSet }
+{ Process by time & Tick & Clock Cycle: Estimates }
+{ Monticarlos Out/In }
 
-SSD does also have a write counter & a cleared state, not so boring as
-one thinks if per 32KB segment is hashed in 4Bit, 8,Bit 32Bit float!
-(remember we have DOT3 DOT 4 & INT8 in ML)
+Random task & workload optimiser ,
+Task & Workload Assignment Requestor,
+Pointer Allocator,
+Cache RAM Allocation System.
 
-We can utilize write cycle statistics & all hardware; Interrupts by
-themselves are rather Boring!
+Multithreaded pointer Cache Object tasks & management.
 
-Computed timings on processes multiplexed over 3 Threads per group in
-competition is also a potential complexifier of Random
+{SEV_TDL_TDX Kernel Interaction mount point: Input & Output by SSL Code Class}:
+{Code Runtime Classification & Arch:Feature & Location Store: Kernel
+System Interaction Cache Flow Buffer}
+HT-ReadLinkAtTopForReference/SEV_SSLSecureCore
+HT-ReadLinkAtTopForReference/SSL_DRM_CleanKernel
+*
 
-Rupert S
+Based upon the fact that you can input Monti Carlos Semi Random
+Ordered work loads into the core process:
+
+*Core Process Instruction*
+
+CPU, Cache, Light memory load job selector
+Resident in Cache L3 for 256KB+- Cache list + Code 4Kb L2 with list access to L3
+
+L2:L3 <> L1 Data + Instruction
+
+*formula*
+
+(c)RS 12:00 to 14:00 Haptic & 3D Audio : Group Cluster Thread SPU:GPU CU
+
+Merge = "GPU+CPU SiMD" 3D Wave (Audio 93% * Haptic 7%)
+
+Grouping selector
+3D Wave selector
+
+Group Property value A = Audio S=Sound G=Geometry V=Video H=Haptic
+B=Both BH=BothHaptic
+
+CPU Int : ID+ (group of)"ASGVH"
+
+Float ops FPU Light localised positioning 8 thread
+
+Shader ID + Group 16 Blocks
+SiMD/AVX Big Group 2 Cycle
+GPU CU / Audio CU (Localised grouping MultiThreads)
+
+https://www.youtube.com/watch?v=cJkx-OLgLzo
+
+*
+
+Task & Workload Assignment Requestor : Memory & Power
+
+We have to bear in mind power requirements & task persistence in the
+:Task & Workload Assignment Requestor
+
+knowledge of the operating systems requirements:
+Latency list in groups { high processor load requirements > Low
+processor load requirements } : { latency Estimates }
+Ram load , Store & clear {high burst : 2ns < 15ns } GB/s Ordered
+Ram load , Store & clear {high burst : 5ns < 20ns } MB/s Disordered
+
+GPU Ram load , Store & clear {high burst : 2ns < 15ns } GB/s Ordered
+AUDIO Ram load , Store & clear {high burst : 1ns < 15ns } MB/s Disordered
+
+AUDIO Ram load , Store & clear {high burst : 1ns < 15ns } MB/s Ordered
+AUDIO Ram load , Store & clear {high burst : 1ns < 15ns } KB/s Disordered
+
+Network load , Send & Receive {Medium burst : 2ns < 15ns } GB/s Ordered
+Network load , Send & Receive {high burst : 1ns < 20ns } MB/s Disordered
+Hard drive management & storage {medium : 15ns SSD < 40ns HDD}
+
+*
+
+Also Good for disassociated Asymmetric cores; Since these pose a
+significant challenge to most software,
+However categorising by Processor function yields remarkable
+classification abilities:
+
+Processor Advanced Instruction set
+Core speed
+Importance
+
+Location in association with a group of baton passing & inter-thread
+messaging & cache,
+Symmetry classed processes & threads.
+
+*
+
+Bo-Montin Workload Compute :&: Hardware Accelerated Audio : 3D Audio
+Dolby NR & DTS
+
+Hardware Accelerated Audio : 3D Audio Dolby NR & DTS : Project
+Acoustics : Strangely enough ....
+Be more positive about Audio Block : Dolby & DTS will use it & thereby in games!
+
+Workload Compute : Where you optimise workload lists though SiMD Maths
+to HASH subtasks into new GPU workloads,
+
+Simply utilize Direct ML to anticipate future motion vectors (As with video)
+
+OpenCL & Direct Compute : Lists & Compute RAM Loads and Shaders to load...
+
+DMA & Reversed DMA (From GPU to & from RAM)
+ReBAR to vector compressed textures without intervention of one
+processor or another...
+
+Compression Block :
+KRAKEN & BC Compression & Decompression
+&
+SiMD Direct Compressed Load using the Cache Block per SiMD Work Group.
+
+Shaders Optimised & compiled in FPU & SiMD Code form for GPU: Compiling Methods:
+
+In advance load & compile : BRT : Before Runtime Time : task load
+optimised & ordered Task Executor : Bo-Montin Scheduler
+
+GPU SiMD & FPU (micro 128KB Block encoder : decoder : compiler)
+CPU SiMD & FPU (micro 128KB Block encoder : decoder : compiler)
+
+JIT : Just in Time task load optimised & ordered Task Executor :
+Bo-Montin Scheduler
+
+load & compile :
+
+GPU SiMD & FPU (micro 128KB Block encoder : decoder : compiler)
+CPU SiMD & FPU (micro 128KB Block encoder : decoder : compiler)
+
+(c)Rupert S https://science.n-helix.com
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
 
 https://science.n-helix.com/2018/12/rng.html
 
@@ -117,266 +244,299 @@ https://science.n-helix.com/2022/02/rdseed.html
 
 https://science.n-helix.com/2017/04/rng-and-random-web.html
 
-https://science.n-helix.com/2022/02/interrupt-entropy.html
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+*
+
+EMS Leaf Allocations & Why we find them useful:  (c)RS
+https://science.n-helix.com
+
+Memory clear though page Voltage removal..
+
+Systematic Cache randomisation flipping (On RAM Cache Directs
+syncobable (RAND Static, Lower quality RAND)(Why not DEV Write 8 x
+16KB (Aligned Streams (2x) L2 CACHE Reasons)
+
+Anyway in order to do this we Allocate Leaf Pages or Large Pages...
+De Allocation invokes scrubbing or VOID Call in the case of a VM.
+
+So in our case VT86 Instructions are quite useful in a Hypervisor;
+&So Hypervisor from kernel = WIN!
+
+(c)Rupert Summerskill
+
+Reference T Clear
+https://www.phoronix.com/scan.php?page=news_item&px=Linux-MGLRU-v9-Promising
+
+*
+
+If you could "Decode" Win DLL & particularly the Compiler code, plug
+in! you could use these on console :
+
+https://bit.ly/DJ_EQ
+https://bit.ly/VESA_BT
+
+https://www.youtube.com/watch?v=cJkx-OLgLzo
+
+High performance firmware:
 
 https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
 
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
-tml
+https://science.n-helix.com/2021/11/parallel-execution.html
 
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+https://science.n-helix.com/2019/06/kernel.html
 
-****
+HT-ReadLinkAtTopForReference/SEV_SSLSecureCore
+HT-ReadLinkAtTopForReference/SSL_DRM_CleanKernel
 
-PreSEED Poly Elliptic SiMD RAND : RS
+HT-ReadLinkAtTopForReference/workcacheserver
 
-Preseed ; 3 Seeds with AES or Poly ChaCha or even 1 : 2 would be
-rather fast Init
-
-Blending them would make a rather paranoid Kernel developer feel safe! :D
-
-Like so List:
-
-3 seeds 32Bit or 64Bit :
-Examples :
-
-1 Seed : Pre seeded from CPU IRQ & Net 16Bit values each & merged
-2 & 3 from server https://pollinate.n-helix.com &or System TRNG
-
-4 Seed mix 128Bit Value
-
-Advantages :
-
-AVX & SiMD Mixxer is fast 'Byte Swap & Maths etcetera" & MultiThreaded
-AES Support is common :
+HT-ReadLinkAtTopForReference/HPCLinux
 
 *
-HASH : RSA Source Cert C/TRNG : (c)RS
+More on HRTF 3D Audio
 
-Elliptic RSA : Cert Mixer : RSA 4096/2048/1024Temporal : 384/256/192
-ECC Temporal
+TERMINATOR Interview #Feeling
+https://www.youtube.com/watch?v=srksXVEkfAs & Yes you want that Conan
+to sound right in 3D HTRF
 
-Centric Entropy HASH: Butterfly Effects
+Cyberpunk 2077 HDR : THX, DTS, Dolby : Haptic response so clear you
+can feel the 3D SOUND
+https://www.youtube.com/watch?v=0t34NQ7Yrwo
 
-ChaCha
-SM4
-SHA2
-SHA3
+https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
 
-Elliptic Encipher
-AES
-Poly ChaCha
+https://science.n-helix.com/2021/12/3d-audio-plugin.html
 
-Elliptic : Time Variance : Tick Count Variance : On & Off Variance : IRQ
+HT-ReadLinkAtTopForReference/Quality3DAudioTest
 
+https://bit.ly/VESA_BT
 *
-Time & Crystal : Quartz as a diffraction point fractal differentiator : RS
-
-RDTSC Variable bit differentiation & deviation of the quartz sub .0001
-Value combined with complexity of unique interplay with Alternative
-clocks such as Network cards, Audio cards & USB Sticks & Bluetooth
-radio clocks & Ultimately the NTP Pools themselves when required.
-
-(TIME Differential Float maths) TSC : RDTSC : RDTSCP : TCE supports
-single and half precision floating-point calculations
-
-Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
-pge mca cmov pat pse36 clflush mmx fxsr sse sse2 htt pni ssse3 fma
-cx16 sse4_1 sse4_2 popcnt aes f16c syscall nx lm avx svm sse4a osvw
-ibs xop skinit wdt lwp fma4 tce tbm topx page1gb rdtscp bmi1
-
-*
-For RDTSCP =3D TValue TV1=3D16.0685 TV2=3D16.1432 TV3=3D15.1871
-When Processor Mzh =3D PV1 PV2 PV3
-RAND Source =3D Es1 Es2 Es3
-
-If Xt =3D 1.9 < then roll right
-
-((TV1 - TV2) * (PV1 - PV2)) / ((TV1 - TV3) * (PV1 - PV3)) =3D FractorXt(Xt)
-
-Es1 * Xt =3D Differential
-
-Es2 Es3
-
-(c) Rupert S
-
-Quartz as a diffraction point fractal differentiator : RS
-
-https://tches.iacr.org/index.php/TCHES/article/download/7274/6452
-https://perso.univ-rennes1.fr/david.lubicz/articles/gda.pdf
-https://patents.google.com/patent/US9335971
-*
-
-"Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
-is, in part, why we take trylocks instead. But apparently this still
-trips up various lock dependency analysers. That seems like a bug in the
-analyser's that should be fixed, rather than having to change things
-here.
-
-But maybe there's another reason to change things up: by deferring the
-crng pre-init loading to the worker, we can use the cryptographic hash
-function rather than xor, which is perhaps a meaningful difference when
-considering this data has only been through the relatively weak
-fast_mix() function.
-
-The biggest downside of this approach is that the pre-init loading is
-now deferred until later, which means things that need random numbers
-after interrupts are enabled, but before work-queues are running -- or
-before this particular worker manages to run -- are going to get into
-trouble. Hopefully in the real world, this window is rather small,
-especially since this code won't run until 64 interrupts have occurred."
-
-https://lore.kernel.org/lkml/Yhc4LwK3biZFIqwQ@owl.dominikbrodowski.net/T/
-
-Rupert S
-
-*****
-Serve C-TRNG QT Fractional Differentiator(c)RS
-
-Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
-32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
-differentiator.
-
-SipHash: a fast short-input PRF
-
-Rotation Alignment : "The advantage of choosing such =E2=80=9Caligned=E2=80=
-=9D
-rotation counts is that aligned rotation counts are much faster than
-unaligned rotation counts on many non-64-bit architectures."
-
-http://cr.yp.to/siphash/siphash-20120918.pdf
-
-https://www.aumasson.jp/siphash/siphash.pdf
-
-"Choice of rotation counts. Finding really bad rotation counts for ARX
-algorithms turns out to be difficult. For example, randomly setting
-all rotations in
-BLAKE-512 or Skein to a value in {8, 16, 24, . . . , 56} may allow known at=
-tacks
-to reach slightly more rounds, but no dramatic improvement is expected.
-The advantage of choosing such =E2=80=9Caligned=E2=80=9D rotation counts is=
- that
-aligned rotation counts are much faster than unaligned rotation counts
-on many non-64-bit
-architectures. Many 8-bit microcontrollers have only 1-bit shifts of bytes,=
- so
-rotation by (e.g.) 3 bits is particularly expensive; implementing a rotatio=
-n by
-a mere permutation of bytes greatly speeds up ARX algorithms. Even 64-bit
-systems can benefit from alignment, when a sequence of shift-shift-xor can =
-be
-replaced by SSSE3=E2=80=99s pshufb byte-shuffling instruction. For comparis=
-on,
-implementing BLAKE-256=E2=80=99s 16- and 8-bit rotations with pshufb led to=
- a
-20% speedup
-on Intel=E2=80=99s Nehalem microarchitecture."
-
-https://www.kernel.org/doc/html/latest/security/siphash.html
-
-https://en.wikipedia.org/wiki/SipHash
-
-Code SIP-HASH
-https://github.com/veorq/SipHash
-
-Serve C-TRNG QT Fractional Differentiator(c)RS
-
-Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
-32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
-differentiator.
-
-As we see rotation may benefit from the addition of Quartz crystal
-alignment sync data from 4 cycles & aligning data blocks,
-
-Obviously we can pre share 4 64Bit blocks use; use a pre seed AES/ChaCha Qu=
-ad!
-Indeed we can have 16 64Bit pre Seeds & chose them by time sync for kernel
-
-Security bug; Solutions & explanation's (contains additional RANDOM
-Security Methods) :RS
-
-https://science.n-helix.com/2020/06/cryptoseed.html
-https://science.n-helix.com/2019/05/zombie-load.html
-https://science.n-helix.com/2018/01/microprocessor-bug-meltdown.html
-
-Rupert S https://science.n-helix.com
 
 *RAND OP Ubuntu :
 https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
 
 https://pollinate.n-helix.com
 
-https://science.n-helix.com/2018/12/rng.html
+*
 
-https://science.n-helix.com/2022/02/rdseed.html
+(Spectra & Repoline Ablation) PreFETCH Statistical Load Adaptive CPU
+Optimising Task Manager ML(c)RS 2022
 
-https://science.n-helix.com/2017/04/rng-and-random-web.html
+Come to think of it, Light encryption 'In State' may be possible in
+the Cache L3 (the main problem with repoline) & L2 (secondary) : How?
 
+PFIO_Pol & GPIO Combined with PSLAC TaskManager (CBo_Montin)
+Processor, Kernel, UserSpace.
+
+Byte Swapping for example or 16b instruction, If a lightly used
+instruction is used
+(one that is under utilized)
+Other XOR SiMD instructions can potentially be used to pre load L2 &
+L1 Instruction & Data.
+
+Spectra & Repoline 1% CPU Hit : 75% improved Security : ALL CPU v& GPU
+Processor Type Compatible.
+
+In Terms of passwords & SSL Certificate loads only, The Coding would
+take 20Minutes & consume only 0.1% of total CPU Time.
+
+Also Good for disassociated Asymmetric cores; Since these pose a
+significant challenge to most software,
+However categorising by Processor function yields remarkable
+classification abilities:
+
+Processor Advanced Instruction set
+Core speed
+Importance
+
+Location in association with a group of baton passing & inter-thread
+messaging & cache,
+Symmetry classed processes & threads.
+
+HASH Example
+https://lkml.org/lkml/2022/3/17/120
+https://lkml.org/lkml/2022/3/17/119
+https://lkml.org/lkml/2022/3/17/116
+https://lkml.org/lkml/2022/3/17/115
+https://lkml.org/lkml/2022/3/17/118
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+In reference to :
 https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
 
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+CPU Statistical load debug 128 Thread :
+https://lkml.org/lkml/2022/3/17/243
 
+PFIO_Pol Generic Processor Function IO & Feature Statistics polling +
+CPUFunctionClass.h + VCache Memory Table Secure HASH
+
+GPIO: Simple logic analyzer using polling : Prefer = Precise Core
+VClock + GPIO + Processor Function IO & Feature Statistics polling
+
+https://lkml.org/lkml/2022/3/17/216
+https://lkml.org/lkml/2022/3/17/215
+*******
+
+Security bug; Solutions & explanation's :RS
+
+https://science.n-helix.com/2020/06/cryptoseed.html
+https://science.n-helix.com/2019/05/zombie-load.html
+https://science.n-helix.com/2018/01/microprocessor-bug-meltdown.html
+
+https://www.phoronix.com/scan.php?page=article&item=spectre-bhi-retpoline&num=1
+
+https://lore.kernel.org/lkml/?t=20211204091833
+
+The core scheduler is not the task prioritiser, This deals with Secure
+CPU & Processor Transactions.
+
+Good for consoles & RT Kernels (For HTTP+JS HyperThreading)
+
+Rupert S
+
+*Kernel Runtime Strict KeyLock Secure Chaos Scheduler: CTimeTree*
+
+[PATCH 0/5] Make Cluster Scheduling Configurable
+ 2021-12-04  9:14 UTC  (4+ messages)
+` [PATCH 4/5] scheduler: Add boot time enabling/disabling of cluster scheduling
+
+[mark:arm64/preempt-dynamic-static-key 6/6]
+kernel/locking/locktorture.c:122:3: error: implicit declaration of
+function 'preempt_schedule'
+ 2021-12-03 23:39 UTC
+
+[PATCH] preempt/dynamic: Fix setup_preempt_mode() return value
+ 2021-12-03 23:32 UTC
+
+[PATCH v11 0/4] Introduce Platform Firmware Runtime Update and Telemetry drivers
+ 2021-12-04  8:07 UTC  (4+ messages)
+` [PATCH v11 2/4] drivers/acpi: Introduce Platform Firmware Runtime
+Update device driver
+
+*CPU Core Logic*
+
+[RFC 0/6] Sparse HART id support
+ 2021-12-04  0:40 UTC  (7+ messages)
+` [RFC 1/6] RISC-V: Avoid using per cpu array for ordered booting
+` [RFC 2/6] RISC-V: Do not print the SBI version during HSM extension boot print
+` [RFC 3/6] RISC-V: Use __cpu_up_stack/task_pointer only for spinwait method
+` [RFC 5/6] RISC-V: Move spinwait booting method to its own config
+` [RFC 6/6] RISC-V: Do not use cpumask data structure for hartid bitmap
+
+AES RAND*****
+
+If we had a front door & a back door & we said that, "That door is
+only available exclusively to us "Someone would still want to use our
+code!
+AES is good for one thing! Stopping Cyber Crime!
+hod Save us from total anarchistic cynicism
+
+Rupert S
+
+/*
+  * This function will use the architecture-specific hardware random
+- * number generator if it is available.  The arch-specific hw RNG will
+- * almost certainly be faster than what we can do in software, but it
+- * is impossible to verify that it is implemented securely (as
+- * opposed, to, say, the AES encryption of a sequence number using a
+- * key known by the NSA).  So it's useful if we need the speed, but
+- * only if we're willing to trust the hardware manufacturer not to
+- * have put in a back door.
+- *
+- * Return number of bytes filled in.
++ * number generator if it is available. It is not recommended for
++ * use. Use get_random_bytes() instead. It returns the number of
++ * bytes filled in.
+  */
+
+https://lore.kernel.org/lkml/20220209135211.557032-1-Jason@zx2c4.com/t/
+
+RAND : Callback & spinlock
+
+Callback & spinlock are not just linux : Best we hash &or Encrypt
+several sources (if we have them)
+If we have a pure source of Random.. we like the purity! but 90% of
+the time we like to hash them all together & keep the quality & source
+integrally variable to improve complexity.
+Rupert S
+https://www.spinics.net/lists/linux-crypto/msg61312.html
+
+'function gets random data from the best available sourceThe current
+code has a sequence in several places that calls one or more of
+arch_get_random_long() or related functions, checks the return
+value(s) and on failure falls back to random_get_entropy().get_source
+long() is intended to replace all such sequences.This is better in
+several ways. In the fallback case it gives much more random output
+than random_get_entropy(). It never wasted effort by calling
+arch_get_random_long() et al. when the relevant config variables are
+not set. When it does usearch_get_random_long(), it does not deliver
+raw output from that function but masks it by mixing with stored
+random data.'
+
+https://science.n-helix.com/2022/02/rdseed.html
 https://science.n-helix.com/2022/02/interrupt-entropy.html
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
 
-https://aka.ms/win10rng
-*
+RAND : Callback & spinlock : Code Method
 
-Encryption Methods:
-https://tools.ietf.org/id/?doc=3Dhash
+Spinlock IRQ Interrupted upon RAND Pool Transfer > Why not Use DMA
+Transfer & Memory Buffer Merge with SiMD : AVX Byte Swapping & Merge
+into present RAM Buffer or Future location with Memory location Fast
+Table.
 
-https://tools.ietf.org/id/?doc=3Dencrypt
+Part of Bo-Montin Selector Code:
 
-HASH :
+(CPU & Thread Synced & on same CPU)
 
-https://datatracker.ietf.org/doc/html/draft-ietf-cose-hash-algs
+(Thread 1 : cpu:1:2:3:4)
+(RAND)
+(Buffer 1) > SiMD cache & Function :
 
-https://tools.ietf.org/id/draft-ribose-cfrg-sm4-10.html
+(Thread 2 : cpu:1:2:3:4)
+(Memory Location Table : EMS:XMS:32Bit:64Bit)
+(Selection Buffer & Transfer)
 
-https://tools.ietf.org/id/?doc=3Dsha
+(Buffer 1) (Buffer 2) (Buffer 3)
+(Entropy Sample : DieHARD : Small)
 
-https://tools.ietf.org/id/?doc=3Drsa
+Rupert S
 
-Encryption Common Support:
+https://lore.kernel.org/all/20220211011446.392673-1-Jason@zx2c4.com/
 
-https://tools.ietf.org/id/?doc=3Dchacha
+Random Initiator : Linus' 50ee7529ec45
 
-https://tools.ietf.org/id/?doc=3Daes
+Linus' 50ee7529ec45 ("random: try to actively add entropy
+rather than passively wait for it"), the RNG does a haveged-style jitter
+dance around the scheduler, in order to produce entropy
 
-SM4e does seem a good possibility for C/T/RNG CORE HASH Functions!
+The key is to initialize with a SEED key; To avoid the seed needing to
+be replaced too often we Encipher it in a set order with an additive
+key..
 
-ARM Crypto Extensions Code (Maybe AES Extensions would work here)
-https://lkml.org/lkml/2022/3/15/324
+to create the perfect circumstances we utilize 2 seeds:
+AES/SHA2/PolyCHA
 
-ARM Neon / SiMD / AVX Compatible (GPU is possible)
-https://lkml.org/lkml/2022/3/15/323
+Initiator math key CH1:8Bit to 32Bit High quality HASH Cryptic
+& Key 2 CrH
 
-*
+8Bit to 256Bit : Stored HASH Cryptic
 
-197 FIPS NIST Standards Specification C/T/RNG
-https://science.n-helix.com/2022/02/interrupt-entropy.html
+We operate maths on the differential and Crypro the HASH :
+AES/SHA2/PolyCHA
+CrH 'Math' CH1(1,2,3>)
 
-Only a Neanderthal would approve a non additive source combination
-that is injected into the HASH & Re-HASHED ,
+AES/SHA2/PolyCHA > Save to /dev/random & use
 
-One does not Procreate inadequate RANDOM from a simple bias KERNEL,
-Hardware RNG's added together may add around 450% Complexity!
+We may also use the code directly to do unique HASH RAND & therefore
+keep crucial details personal or per application & MultiThreads &or
+CPU & GPU & Task.
 
-Hardware RNG devices MUST be able to Re-HASH to their 197 NIST
-Standards Specification, That is FINAL 2022 DT
-
-KEYS: trusted: allow use of kernel RNG for key material
-
-https://lkml.org/lkml/2022/3/16/598
-
-CAAM PRNG Reference : https://lkml.org/lkml/2022/3/16/649
+Rupert S
 
 TRNG Samples & Method
 
-https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=
-=3Ddrive_web
+https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=drive_web
+https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=drive_web
+https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=drive_web
+https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=drive_web
