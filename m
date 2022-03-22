@@ -2,163 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F99D4E3BCE
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 10:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376114E3D12
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 12:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbiCVJi6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Mar 2022 05:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S232775AbiCVLBc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Mar 2022 07:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbiCVJi5 (ORCPT
+        with ESMTP id S232723AbiCVLBa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Mar 2022 05:38:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A777EA0B
-        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 02:37:29 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nWawt-0006Jj-Mp; Tue, 22 Mar 2022 10:37:07 +0100
-Message-ID: <828a8d00-ab9a-a7eb-4ad0-f95a63c7fb39@pengutronix.de>
-Date:   Tue, 22 Mar 2022 10:37:02 +0100
+        Tue, 22 Mar 2022 07:01:30 -0400
+Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4EE6A05C
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 04:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1647946803; x=1679482803;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5xxad+ygjE25DXIo2Jz/w96/MgYU6kftq9NOPg7qp8s=;
+  b=fY/lGj0A/PQX2iWfMQh5K2/gxixiZ8QppsJ1D/HQ4LRsR4494pKLC7Go
+   VbpyysBSR1vo79b1IN2HOXf5MFEoOFHIJXVDUJx6OGsCKhVkXsRW+vJxB
+   MOZ/9J94A57PA5SMz9MSQ4+NDA457+NoIoI4c5UJrJTecIXrJsQ31bjnV
+   M=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="286844934"
+X-IronPort-AV: E=Sophos;i="5.90,201,1643670000"; 
+   d="scan'208";a="286844934"
+Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
+  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2022 12:00:00 +0100
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
+        Tue, 22 Mar 2022 12:00:00 +0100 (CET)
+Received: from ISCN5CG1067W80.infineon.com (172.23.8.247) by
+ MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 22 Mar 2022 12:00:00 +0100
+From:   Johannes Holland <johannes.holland@infineon.com>
+To:     <peterhuewe@gmx.de>, <jarkko@kernel.org>,
+        <linux-integrity@vger.kernel.org>
+CC:     Johannes Holland <johannes.holland@infineon.com>
+Subject: [PATCH v1] tpm: Fix regression in tpm_tis_synquacer.c
+Date:   Tue, 22 Mar 2022 11:59:32 +0100
+Message-ID: <20220322105933.1242-1-johannes.holland@infineon.com>
+X-Mailer: git-send-email 2.31.1.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [EXT] [PATCH v6 3/4] crypto: caam - add in-kernel interface for
- blob generator
-Content-Language: en-US
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        David Gstir <david@sigma-star.at>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        Richard Weinberger <richard@nod.at>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-References: <20220316164335.1720255-1-a.fatoum@pengutronix.de>
- <20220316164335.1720255-4-a.fatoum@pengutronix.de>
- <DU2PR04MB86302DB35042F4DAE7C27FA695179@DU2PR04MB8630.eurprd04.prod.outlook.com>
- <23cd140f-1046-7059-c9bd-ca4aac1d5183@pengutronix.de>
-In-Reply-To: <23cd140f-1046-7059-c9bd-ca4aac1d5183@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE819.infineon.com (172.23.29.45) To
+ MUCSE819.infineon.com (172.23.29.45)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Pankaj,
+Remove unused variables and type mismatch (integer from pointer without
+a cast).
 
-On 22.03.22 08:32, Ahmad Fatoum wrote:
-> Hello Pankaj,
-> 
-> On 22.03.22 07:25, Pankaj Gupta wrote:
->> Hi Ahmad,
->>
->> Suggested to define macro with more details.
->> Please find comments in-line.
->>
-> 
->> len = 4 + (4 + ALIGN(keymod_len, 4)) + 2*(4 + 4 + 
->>>>>> + CAAM_PTR_SZ_MAX) + 4;
->>
->>> +/* header + (key mod immediate) + 2x seq_intlen pointers + op */
->>> +#define CAAM_BLOB_DESC_BYTES_MAX \
->>> +       (CAAM_CMD_SZ + \
->>> +        CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH + \
->>> +        2 * (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \
->>> +        CAAM_CMD_SZ)
->>> +
->>
->> Suggested to replace the above macro like below:
->>
->> +#define CAAM_BLOB_DESC_BYTES_MAX \			
->> +       (CAAM_CMD_SZ + \					/* Command to initialize & stating length of  descriptor */
->> +        CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH + \	/* Command to append the key-modifier + followed by the key-modifier data */
->> +        (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \		/* Command to include input plain key and pointer to the input key */
->> +        (CAAM_CMD_SZ + CAAM_PTR_SZ_MAX) + \		/* Command to include output-key blob and pointer to the output-key blob */
->> +        CAAM_CMD_SZ)						/* Command describing the Operation to perform */
-> 
-> 
-> Sure thing, will do for v7. Otherwise, if all looks good to you,
-> can I have your Reviewed-by?
-This doesn't compile as-is and it leads to quite long lines.
-The description isn't accurate also, because what's plain and what's blob
-changes depending on whether we encapsulate or decapsulate.
+Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+---
+ drivers/char/tpm/tpm_tis_synquacer.c | 18 ++++--------------
+ 1 file changed, 4 insertions(+), 14 deletions(-)
 
-Here's my revised macro version:
-
-#define CAAM_BLOB_DESC_BYTES_MAX                                        \
-        /* Command to initialize & stating length of descriptor */      \
-        (CAAM_CMD_SZ +                                                  \
-        /* Command to append the key-modifier + key-modifier data */    \
-         CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH +                        \
-        /* Command to include input key + pointer to the input key */   \
-         CAAM_CMD_SZ + CAAM_PTR_SZ_MAX +                                \
-        /* Command to include output key + pointer to the output key */ \
-         CAAM_CMD_SZ + CAAM_PTR_SZ_MAX +                                \
-        /* Command describing the Operation to perform */               \
-         CAAM_CMD_SZ)
-
-Alternatively, I can change it back into a function:
-
-static inline u32 *caam_blob_desc_alloc(void)
-{
-        size_t size = 0;
-
-        /* Command to initialize & stating length of descriptor */
-        size += CAAM_CMD_SZ;
-        /* Command to append the key-modifier + key-modifier data */
-        size += CAAM_CMD_SZ + CAAM_BLOB_KEYMOD_LENGTH;
-        /* Command to include input plain key + pointer to the input key */
-        size += CAAM_CMD_SZ + CAAM_PTR_SZ_MAX;
-        /* Command to include output-key blob + pointer to the output key */
-        size += CAAM_CMD_SZ + CAAM_PTR_SZ_MAX;
-        /* Command describing the Operation to perform */
-        size += CAAM_CMD_SZ;
-
-        return kzalloc(size, GFP_KERNEL | GFP_DMA);
-}
-
-Let me know what works better for you.
-
-Cheers,
-Ahmad
-
-> 
-> Thanks,
-> Ahmad
-> 
-
-
+diff --git a/drivers/char/tpm/tpm_tis_synquacer.c b/drivers/char/tpm/tpm_tis_synquacer.c
+index 2751be8e6065..679196c61401 100644
+--- a/drivers/char/tpm/tpm_tis_synquacer.c
++++ b/drivers/char/tpm/tpm_tis_synquacer.c
+@@ -39,11 +39,6 @@ static int tpm_tis_synquacer_read_bytes(struct tpm_tis_data *data, u32 addr,
+ 					enum tpm_tis_io_mode io_mode)
+ {
+ 	struct tpm_tis_synquacer_phy *phy = to_tpm_tis_tcg_phy(data);
+-	__le16 result_le16;
+-	__le32 result_le32;
+-	u16 result16;
+-	u32 result32;
+-
+ 	switch (io_mode) {
+ 	case TPM_TIS_PHYS_8:
+ 		while (len--)
+@@ -69,11 +64,6 @@ static int tpm_tis_synquacer_write_bytes(struct tpm_tis_data *data, u32 addr,
+ 					 enum tpm_tis_io_mode io_mode)
+ {
+ 	struct tpm_tis_synquacer_phy *phy = to_tpm_tis_tcg_phy(data);
+-	__le16 result_le16;
+-	__le32 result_le32;
+-	u16 result16;
+-	u32 result32;
+-
+ 	switch (io_mode) {
+ 	case TPM_TIS_PHYS_8:
+ 		while (len--)
+@@ -86,10 +76,10 @@ static int tpm_tis_synquacer_write_bytes(struct tpm_tis_data *data, u32 addr,
+ 		 * Due to the limitation of SPI controller on SynQuacer,
+ 		 * 16/32 bits access must be done in byte-wise and descending order.
+ 		 */
+-		iowrite8(&value[3], phy->iobase + addr + 3);
+-		iowrite8(&value[2], phy->iobase + addr + 2);
+-		iowrite8(&value[1], phy->iobase + addr + 1);
+-		iowrite8(&value[0], phy->iobase + addr);
++		iowrite8(value[3], phy->iobase + addr + 3);
++		iowrite8(value[2], phy->iobase + addr + 2);
++		iowrite8(value[1], phy->iobase + addr + 1);
++		iowrite8(value[0], phy->iobase + addr);
+ 		break;
+ 	}
+ 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.31.1.windows.1
+
