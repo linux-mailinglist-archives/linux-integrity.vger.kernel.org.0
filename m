@@ -2,90 +2,547 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0614E3469
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 00:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 563DE4E3593
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 01:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbiCUXel (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Mar 2022 19:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
+        id S234247AbiCVA3S (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Mar 2022 20:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbiCUXeh (ORCPT
+        with ESMTP id S234244AbiCVA3Q (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:34:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EBD5577D;
-        Mon, 21 Mar 2022 16:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=8INTyMSFBrX1EJ+aoDBL+ySWd7+IvZDAvs379S+ikME=; b=aLSfJs7R8GRGCLwR+bJOKO7Nb6
-        F1TSYPL+zA2r9J2yLcffA10yBBQtSQ/upF+xpW42/Dj7ELLUpNckJZOD4TZWcRsKE7ArM0todtkWu
-        7GCW7VJkm2+VgQH5SZbXxNVxSGyOZd3dwOveQS8LL/a5lRRXqqrJEhemc7yua2+Ob3AgEu5U1kala
-        7QuJPq1NQSEj6dSqpnDmPU/KScnYham+fku06RDaxWBwE4Uvrzd0QDr7TC6VIkRj95pD6brp+J+EC
-        2wLcn5Z61YHDkP+7h+1FC+b2BpEQzKaZxZZvxTNF2OizXmjcw2UzGny/zBNsa81dIucRheCCYASEn
-        8j2FNP6Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWRW7-009QAL-Q6; Mon, 21 Mar 2022 23:32:51 +0000
-Date:   Mon, 21 Mar 2022 16:32:51 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Heimes <christian@python.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steve Dower <steve.dower@python.org>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
-Message-ID: <YjkLI4D+ek9shkqL@bombadil.infradead.org>
-References: <20220321161557.495388-1-mic@digikod.net>
- <Yji3/ejSErupJZtO@bombadil.infradead.org>
- <cfa15768-ebf4-d198-fb1b-5a6ab47caedb@digikod.net>
+        Mon, 21 Mar 2022 20:29:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCECD35FF01
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Mar 2022 17:27:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EB506156B
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 00:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17EF4C340E8;
+        Tue, 22 Mar 2022 00:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647908868;
+        bh=hTmAWC1lvI1pXykPhPxMx0Ws/G8FP6kOwLGyDi22dlw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JWBDPeIp7tQi1zxoCPg+iCz7Hx9oMQhbWulsyfzH/hjsp8qRTboh1Bo0dnXWpeZf+
+         VZlvtRAlRGZOq2cDNyCJWdFTsbWAR4ErT2L6y7LeRKJ+QW6ElNLe2pVFAWDdNWEEhV
+         1xJwyCKq2sbgnENXiKJCnjhn/wZQInKO9Kux1Ae0ohSqIIaBa6z4b1OZBRAtViC2mf
+         TRP3tyZLcs5y9Mhm0IxzS8EhVAbG78wCDiHHTcWZ3rhCwWrlClrPrZYsTfVaj2ijtE
+         PRYl9dLvRNn71xfEprsPRfhma4+DqEHYvvGaQOrTai1hSXYuFyTOe4azi79WG0Hd0S
+         2N+9cqvPTellg==
+Date:   Tue, 22 Mar 2022 02:28:49 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     20220318151647.410-1-johannes.holland@infineon.com
+Cc:     peterhuewe@gmx.de, linux-integrity@vger.kernel.org,
+        Alexander.Steffen@infineon.com,
+        Johannes Holland <johannes.holland@infineon.com>
+Subject: Re: [PATCH v4] tpm: Remove read16/read32/write32 calls from
+ tpm_tis_phy_ops
+Message-ID: <YjkYQdf3GTAvwU1p@kernel.org>
+References: <20220321090924.1951-1-johannes.holland@infineon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cfa15768-ebf4-d198-fb1b-5a6ab47caedb@digikod.net>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220321090924.1951-1-johannes.holland@infineon.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 07:05:42PM +0100, Mickaël Salaün wrote:
+On Mon, Mar 21, 2022 at 10:09:24AM +0100, Johannes Holland wrote:
+> Only tpm_tis and tpm_tis_synquacer have a dedicated way to access
+> multiple bytes at once, every other driver will just fall back to
+> read_bytes/write_bytes. Therefore, remove the read16/read32/write32
+> calls and move their logic to read_bytes/write_bytes.
 > 
-> On 21/03/2022 18:38, Luis Chamberlain wrote:
-> > On Mon, Mar 21, 2022 at 05:15:57PM +0100, Mickaël Salaün wrote:
-> > > Since I heard no objection, please consider to pull this code for
-> > > v5.18-rc1 .  These five patches have been successfully tested in the
-> > > latest linux-next releases for several weeks.
-> > 
-> > >   kernel/sysctl.c                                    |   9 +
-> > 
-> > Please don't add more sysctls there. We're slowly trying to move
-> > all these to their respective places so this does not become a larger
-> > kitchen sink mess.
+> Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> ---
+> Changelog:
+>  * v2:
+>    * rebase and apply changes to tpm_tis_synquacer, as well
+>    * move variable declarations to beginning of functions
+>  * v3:
+>    * remove read16/read32/write32 api calls altogether and always call
+>      read_bytes/write_bytes
+>  * v4:
+>    * add Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+>    * move changelog out of commit message
+>    * add comment to enum tpm_tis_io_mode
+>  
+>  drivers/char/tpm/tpm_tis.c           |  67 ++++++++---------
+>  drivers/char/tpm/tpm_tis_core.h      |  58 +++++++++++---
+>  drivers/char/tpm/tpm_tis_spi.h       |   4 -
+>  drivers/char/tpm/tpm_tis_spi_cr50.c  |   7 +-
+>  drivers/char/tpm/tpm_tis_spi_main.c  |  45 +----------
+>  drivers/char/tpm/tpm_tis_synquacer.c | 108 ++++++++++++---------------
+>  6 files changed, 128 insertions(+), 161 deletions(-)
 > 
-> It is not a new sysctl but proc_dointvec_minmax_sysadmin(). This helper is
-> shared between printk and fs subsystems.
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index d3f2e5364c27..bcff6429e0b4 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -153,50 +153,46 @@ static int check_acpi_tpm2(struct device *dev)
+>  #endif
+>  
+>  static int tpm_tcg_read_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
+> -			      u8 *result)
+> +			      u8 *result, enum tpm_tis_io_mode io_mode)
+>  {
+>  	struct tpm_tis_tcg_phy *phy = to_tpm_tis_tcg_phy(data);
+> -
+> -	while (len--)
+> -		*result++ = ioread8(phy->iobase + addr);
+> +	__le16 result_le16;
+> +	__le32 result_le32;
+> +
+> +	switch (io_mode) {
+> +	case TPM_TIS_PHYS_8:
+> +		while (len--)
+> +			*result++ = ioread8(phy->iobase + addr);
+> +		break;
+> +	case TPM_TIS_PHYS_16:
+> +		result_le16 = cpu_to_le16(ioread16(phy->iobase + addr));
+> +		memcpy(result, &result_le16, sizeof(u16));
+> +		break;
+> +	case TPM_TIS_PHYS_32:
+> +		result_le32 = cpu_to_le32(ioread32(phy->iobase + addr));
+> +		memcpy(result, &result_le32, sizeof(u32));
+> +		break;
+> +	}
+>  
+>  	return 0;
+>  }
+>  
+>  static int tpm_tcg_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
+> -			       const u8 *value)
+> +			       const u8 *value, enum tpm_tis_io_mode io_mode)
+>  {
+>  	struct tpm_tis_tcg_phy *phy = to_tpm_tis_tcg_phy(data);
+>  
+> -	while (len--)
+> -		iowrite8(*value++, phy->iobase + addr);
+> -
+> -	return 0;
+> -}
+> -
+> -static int tpm_tcg_read16(struct tpm_tis_data *data, u32 addr, u16 *result)
+> -{
+> -	struct tpm_tis_tcg_phy *phy = to_tpm_tis_tcg_phy(data);
+> -
+> -	*result = ioread16(phy->iobase + addr);
+> -
+> -	return 0;
+> -}
+> -
+> -static int tpm_tcg_read32(struct tpm_tis_data *data, u32 addr, u32 *result)
+> -{
+> -	struct tpm_tis_tcg_phy *phy = to_tpm_tis_tcg_phy(data);
+> -
+> -	*result = ioread32(phy->iobase + addr);
+> -
+> -	return 0;
+> -}
+> -
+> -static int tpm_tcg_write32(struct tpm_tis_data *data, u32 addr, u32 value)
+> -{
+> -	struct tpm_tis_tcg_phy *phy = to_tpm_tis_tcg_phy(data);
+> -
+> -	iowrite32(value, phy->iobase + addr);
+> +	switch (io_mode) {
+> +	case TPM_TIS_PHYS_8:
+> +		while (len--)
+> +			iowrite8(*value++, phy->iobase + addr);
+> +		break;
+> +	case TPM_TIS_PHYS_16:
+> +		return -EINVAL;
+> +	case TPM_TIS_PHYS_32:
+> +		iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase + addr);
+> +		break;
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -204,9 +200,6 @@ static int tpm_tcg_write32(struct tpm_tis_data *data, u32 addr, u32 value)
+>  static const struct tpm_tis_phy_ops tpm_tcg = {
+>  	.read_bytes = tpm_tcg_read_bytes,
+>  	.write_bytes = tpm_tcg_write_bytes,
+> -	.read16 = tpm_tcg_read16,
+> -	.read32 = tpm_tcg_read32,
+> -	.write32 = tpm_tcg_write32,
+>  };
+>  
+>  static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index 3be24f221e32..6c203f36b8a1 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -104,54 +104,88 @@ struct tpm_tis_data {
+>  	unsigned int timeout_max; /* usecs */
+>  };
+>  
+> +/*
+> + * IO modes to indicate how many bytes should be read/written at once in the
+> + * tpm_tis_phy_ops read_bytes/write_bytes calls. Use TPM_TIS_PHYS_8 to
+> + * receive/transmit byte-wise, TPM_TIS_PHYS_16 for two bytes etc.
+> + */
+> +enum tpm_tis_io_mode {
+> +	TPM_TIS_PHYS_8,
+> +	TPM_TIS_PHYS_16,
+> +	TPM_TIS_PHYS_32,
+> +};
+> +
+>  struct tpm_tis_phy_ops {
+> +	/* data is passed in little endian */
+>  	int (*read_bytes)(struct tpm_tis_data *data, u32 addr, u16 len,
+> -			  u8 *result);
+> +			  u8 *result, enum tpm_tis_io_mode mode);
+>  	int (*write_bytes)(struct tpm_tis_data *data, u32 addr, u16 len,
+> -			   const u8 *value);
+> -	int (*read16)(struct tpm_tis_data *data, u32 addr, u16 *result);
+> -	int (*read32)(struct tpm_tis_data *data, u32 addr, u32 *result);
+> -	int (*write32)(struct tpm_tis_data *data, u32 addr, u32 src);
+> +			   const u8 *value, enum tpm_tis_io_mode mode);
+>  };
+>  
+>  static inline int tpm_tis_read_bytes(struct tpm_tis_data *data, u32 addr,
+>  				     u16 len, u8 *result)
+>  {
+> -	return data->phy_ops->read_bytes(data, addr, len, result);
+> +	return data->phy_ops->read_bytes(data, addr, len, result,
+> +					 TPM_TIS_PHYS_8);
+>  }
+>  
+>  static inline int tpm_tis_read8(struct tpm_tis_data *data, u32 addr, u8 *result)
+>  {
+> -	return data->phy_ops->read_bytes(data, addr, 1, result);
+> +	return data->phy_ops->read_bytes(data, addr, 1, result, TPM_TIS_PHYS_8);
+>  }
+>  
+>  static inline int tpm_tis_read16(struct tpm_tis_data *data, u32 addr,
+>  				 u16 *result)
+>  {
+> -	return data->phy_ops->read16(data, addr, result);
+> +	__le16 result_le;
+> +	int rc;
+> +
+> +	rc = data->phy_ops->read_bytes(data, addr, sizeof(u16),
+> +				       (u8 *)&result_le, TPM_TIS_PHYS_16);
+> +	if (!rc)
+> +		*result = le16_to_cpu(result_le);
+> +
+> +	return rc;
+>  }
+>  
+>  static inline int tpm_tis_read32(struct tpm_tis_data *data, u32 addr,
+>  				 u32 *result)
+>  {
+> -	return data->phy_ops->read32(data, addr, result);
+> +	__le32 result_le;
+> +	int rc;
+> +
+> +	rc = data->phy_ops->read_bytes(data, addr, sizeof(u32),
+> +				       (u8 *)&result_le, TPM_TIS_PHYS_32);
+> +	if (!rc)
+> +		*result = le32_to_cpu(result_le);
+> +
+> +	return rc;
+>  }
+>  
+>  static inline int tpm_tis_write_bytes(struct tpm_tis_data *data, u32 addr,
+>  				      u16 len, const u8 *value)
+>  {
+> -	return data->phy_ops->write_bytes(data, addr, len, value);
+> +	return data->phy_ops->write_bytes(data, addr, len, value,
+> +					  TPM_TIS_PHYS_8);
+>  }
+>  
+>  static inline int tpm_tis_write8(struct tpm_tis_data *data, u32 addr, u8 value)
+>  {
+> -	return data->phy_ops->write_bytes(data, addr, 1, &value);
+> +	return data->phy_ops->write_bytes(data, addr, 1, &value,
+> +					  TPM_TIS_PHYS_8);
+>  }
+>  
+>  static inline int tpm_tis_write32(struct tpm_tis_data *data, u32 addr,
+>  				  u32 value)
+>  {
+> -	return data->phy_ops->write32(data, addr, value);
+> +	__le32 value_le;
+> +	int rc;
+> +
+> +	value_le = cpu_to_le32(value);
+> +	rc =  data->phy_ops->write_bytes(data, addr, sizeof(u32),
+> +					 (u8 *)&value_le, TPM_TIS_PHYS_32);
+> +	return rc;
+>  }
+>  
+>  static inline bool is_bsw(void)
+> diff --git a/drivers/char/tpm/tpm_tis_spi.h b/drivers/char/tpm/tpm_tis_spi.h
+> index bba73979c368..d0f66f6f1931 100644
+> --- a/drivers/char/tpm/tpm_tis_spi.h
+> +++ b/drivers/char/tpm/tpm_tis_spi.h
+> @@ -31,10 +31,6 @@ extern int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
+>  extern int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+>  				u8 *in, const u8 *out);
+>  
+> -extern int tpm_tis_spi_read16(struct tpm_tis_data *data, u32 addr, u16 *result);
+> -extern int tpm_tis_spi_read32(struct tpm_tis_data *data, u32 addr, u32 *result);
+> -extern int tpm_tis_spi_write32(struct tpm_tis_data *data, u32 addr, u32 value);
+> -
+>  #ifdef CONFIG_TCG_TIS_SPI_CR50
+>  extern int cr50_spi_probe(struct spi_device *spi);
+>  #else
+> diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_tis_spi_cr50.c
+> index 7bf123d3c537..f4937280e940 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_cr50.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
+> @@ -222,13 +222,13 @@ static int tpm_tis_spi_cr50_transfer(struct tpm_tis_data *data, u32 addr, u16 le
+>  }
+>  
+>  static int tpm_tis_spi_cr50_read_bytes(struct tpm_tis_data *data, u32 addr,
+> -				       u16 len, u8 *result)
+> +				       u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
+>  {
+>  	return tpm_tis_spi_cr50_transfer(data, addr, len, result, NULL);
+>  }
+>  
+>  static int tpm_tis_spi_cr50_write_bytes(struct tpm_tis_data *data, u32 addr,
+> -					u16 len, const u8 *value)
+> +					u16 len, const u8 *value, enum tpm_tis_io_mode io_mode)
+>  {
+>  	return tpm_tis_spi_cr50_transfer(data, addr, len, NULL, value);
+>  }
+> @@ -236,9 +236,6 @@ static int tpm_tis_spi_cr50_write_bytes(struct tpm_tis_data *data, u32 addr,
+>  static const struct tpm_tis_phy_ops tpm_spi_cr50_phy_ops = {
+>  	.read_bytes = tpm_tis_spi_cr50_read_bytes,
+>  	.write_bytes = tpm_tis_spi_cr50_write_bytes,
+> -	.read16 = tpm_tis_spi_read16,
+> -	.read32 = tpm_tis_spi_read32,
+> -	.write32 = tpm_tis_spi_write32,
+>  };
+>  
+>  static void cr50_print_fw_version(struct tpm_tis_data *data)
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+> index aaa59a00eeae..d0920c3c400f 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -141,55 +141,17 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+>  }
+>  
+>  static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
+> -				  u16 len, u8 *result)
+> +				  u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
+>  {
+>  	return tpm_tis_spi_transfer(data, addr, len, result, NULL);
+>  }
+>  
+>  static int tpm_tis_spi_write_bytes(struct tpm_tis_data *data, u32 addr,
+> -				   u16 len, const u8 *value)
+> +				   u16 len, const u8 *value, enum tpm_tis_io_mode io_mode)
+>  {
+>  	return tpm_tis_spi_transfer(data, addr, len, NULL, value);
+>  }
+>  
+> -int tpm_tis_spi_read16(struct tpm_tis_data *data, u32 addr, u16 *result)
+> -{
+> -	__le16 result_le;
+> -	int rc;
+> -
+> -	rc = data->phy_ops->read_bytes(data, addr, sizeof(u16),
+> -				       (u8 *)&result_le);
+> -	if (!rc)
+> -		*result = le16_to_cpu(result_le);
+> -
+> -	return rc;
+> -}
+> -
+> -int tpm_tis_spi_read32(struct tpm_tis_data *data, u32 addr, u32 *result)
+> -{
+> -	__le32 result_le;
+> -	int rc;
+> -
+> -	rc = data->phy_ops->read_bytes(data, addr, sizeof(u32),
+> -				       (u8 *)&result_le);
+> -	if (!rc)
+> -		*result = le32_to_cpu(result_le);
+> -
+> -	return rc;
+> -}
+> -
+> -int tpm_tis_spi_write32(struct tpm_tis_data *data, u32 addr, u32 value)
+> -{
+> -	__le32 value_le;
+> -	int rc;
+> -
+> -	value_le = cpu_to_le32(value);
+> -	rc = data->phy_ops->write_bytes(data, addr, sizeof(u32),
+> -					(u8 *)&value_le);
+> -
+> -	return rc;
+> -}
+> -
+>  int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
+>  		     int irq, const struct tpm_tis_phy_ops *phy_ops)
+>  {
+> @@ -205,9 +167,6 @@ int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
+>  static const struct tpm_tis_phy_ops tpm_spi_phy_ops = {
+>  	.read_bytes = tpm_tis_spi_read_bytes,
+>  	.write_bytes = tpm_tis_spi_write_bytes,
+> -	.read16 = tpm_tis_spi_read16,
+> -	.read32 = tpm_tis_spi_read32,
+> -	.write32 = tpm_tis_spi_write32,
+>  };
+>  
+>  static int tpm_tis_spi_probe(struct spi_device *dev)
+> diff --git a/drivers/char/tpm/tpm_tis_synquacer.c b/drivers/char/tpm/tpm_tis_synquacer.c
+> index e47bdd272704..2751be8e6065 100644
+> --- a/drivers/char/tpm/tpm_tis_synquacer.c
+> +++ b/drivers/char/tpm/tpm_tis_synquacer.c
+> @@ -35,72 +35,63 @@ static inline struct tpm_tis_synquacer_phy *to_tpm_tis_tcg_phy(struct tpm_tis_da
+>  }
+>  
+>  static int tpm_tis_synquacer_read_bytes(struct tpm_tis_data *data, u32 addr,
+> -					u16 len, u8 *result)
+> +					u16 len, u8 *result,
+> +					enum tpm_tis_io_mode io_mode)
+>  {
+>  	struct tpm_tis_synquacer_phy *phy = to_tpm_tis_tcg_phy(data);
+> -
+> -	while (len--)
+> -		*result++ = ioread8(phy->iobase + addr);
+> +	__le16 result_le16;
+> +	__le32 result_le32;
+> +	u16 result16;
+> +	u32 result32;
+> +
+> +	switch (io_mode) {
+> +	case TPM_TIS_PHYS_8:
+> +		while (len--)
+> +			*result++ = ioread8(phy->iobase + addr);
+> +		break;
+> +	case TPM_TIS_PHYS_16:
+> +		result[1] = ioread8(phy->iobase + addr + 1);
+> +		result[0] = ioread8(phy->iobase + addr);
+> +		break;
+> +	case TPM_TIS_PHYS_32:
+> +		result[3] = ioread8(phy->iobase + addr + 3);
+> +		result[2] = ioread8(phy->iobase + addr + 2);
+> +		result[1] = ioread8(phy->iobase + addr + 1);
+> +		result[0] = ioread8(phy->iobase + addr);
+> +		break;
+> +	}
+>  
+>  	return 0;
+>  }
+>  
+>  static int tpm_tis_synquacer_write_bytes(struct tpm_tis_data *data, u32 addr,
+> -					 u16 len, const u8 *value)
+> +					 u16 len, const u8 *value,
+> +					 enum tpm_tis_io_mode io_mode)
+>  {
+>  	struct tpm_tis_synquacer_phy *phy = to_tpm_tis_tcg_phy(data);
+> -
+> -	while (len--)
+> -		iowrite8(*value++, phy->iobase + addr);
+> -
+> -	return 0;
+> -}
+> -
+> -static int tpm_tis_synquacer_read16_bw(struct tpm_tis_data *data,
+> -				       u32 addr, u16 *result)
+> -{
+> -	struct tpm_tis_synquacer_phy *phy = to_tpm_tis_tcg_phy(data);
+> -
+> -	/*
+> -	 * Due to the limitation of SPI controller on SynQuacer,
+> -	 * 16/32 bits access must be done in byte-wise and descending order.
+> -	 */
+> -	*result = (ioread8(phy->iobase + addr + 1) << 8) |
+> -		  (ioread8(phy->iobase + addr));
+> -
+> -	return 0;
+> -}
+> -
+> -static int tpm_tis_synquacer_read32_bw(struct tpm_tis_data *data,
+> -				       u32 addr, u32 *result)
+> -{
+> -	struct tpm_tis_synquacer_phy *phy = to_tpm_tis_tcg_phy(data);
+> -
+> -	/*
+> -	 * Due to the limitation of SPI controller on SynQuacer,
+> -	 * 16/32 bits access must be done in byte-wise and descending order.
+> -	 */
+> -	*result = (ioread8(phy->iobase + addr + 3) << 24) |
+> -		  (ioread8(phy->iobase + addr + 2) << 16) |
+> -		  (ioread8(phy->iobase + addr + 1) << 8) |
+> -		  (ioread8(phy->iobase + addr));
+> -
+> -	return 0;
+> -}
+> -
+> -static int tpm_tis_synquacer_write32_bw(struct tpm_tis_data *data,
+> -					u32 addr, u32 value)
+> -{
+> -	struct tpm_tis_synquacer_phy *phy = to_tpm_tis_tcg_phy(data);
+> -
+> -	/*
+> -	 * Due to the limitation of SPI controller on SynQuacer,
+> -	 * 16/32 bits access must be done in byte-wise and descending order.
+> -	 */
+> -	iowrite8(value >> 24, phy->iobase + addr + 3);
+> -	iowrite8(value >> 16, phy->iobase + addr + 2);
+> -	iowrite8(value >> 8, phy->iobase + addr + 1);
+> -	iowrite8(value, phy->iobase + addr);
+> +	__le16 result_le16;
+> +	__le32 result_le32;
+> +	u16 result16;
+> +	u32 result32;
+> +
+> +	switch (io_mode) {
+> +	case TPM_TIS_PHYS_8:
+> +		while (len--)
+> +			iowrite8(*value++, phy->iobase + addr);
+> +		break;
+> +	case TPM_TIS_PHYS_16:
+> +		return -EINVAL;
+> +	case TPM_TIS_PHYS_32:
+> +		/*
+> +		 * Due to the limitation of SPI controller on SynQuacer,
+> +		 * 16/32 bits access must be done in byte-wise and descending order.
+> +		 */
+> +		iowrite8(&value[3], phy->iobase + addr + 3);
+> +		iowrite8(&value[2], phy->iobase + addr + 2);
+> +		iowrite8(&value[1], phy->iobase + addr + 1);
+> +		iowrite8(&value[0], phy->iobase + addr);
+> +		break;
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -108,9 +99,6 @@ static int tpm_tis_synquacer_write32_bw(struct tpm_tis_data *data,
+>  static const struct tpm_tis_phy_ops tpm_tcg_bw = {
+>  	.read_bytes	= tpm_tis_synquacer_read_bytes,
+>  	.write_bytes	= tpm_tis_synquacer_write_bytes,
+> -	.read16		= tpm_tis_synquacer_read16_bw,
+> -	.read32		= tpm_tis_synquacer_read32_bw,
+> -	.write32	= tpm_tis_synquacer_write32_bw,
+>  };
+>  
+>  static int tpm_tis_synquacer_init(struct device *dev,
+> -- 
+> 2.31.1.windows.1
+> 
 
-That should be good then, thanks!
+Thank you.
 
-  Luis
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko
