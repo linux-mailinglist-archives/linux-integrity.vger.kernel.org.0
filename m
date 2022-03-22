@@ -2,53 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29104E3EE4
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 13:57:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0364E3EF3
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Mar 2022 13:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234117AbiCVM6g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Mar 2022 08:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S235074AbiCVNA1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Mar 2022 09:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiCVM6Q (ORCPT
+        with ESMTP id S234194AbiCVNA0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Mar 2022 08:58:16 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF776A409
-        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 05:56:46 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id h1so21539395edj.1
-        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 05:56:45 -0700 (PDT)
+        Tue, 22 Mar 2022 09:00:26 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C774C5DA49
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 05:58:57 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id yy13so36029140ejb.2
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Mar 2022 05:58:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=RpNDE+NQdE9P4TAEep76tk6uwbTamSrXJxQiX7LzDmA=;
-        b=lX+X9maIKUJOLri8mprQ4Qmj91/gjBbEx8RQ4xszeU7Yez8pDm/yEYLFPEhfR9hoSi
-         fCSX+1wfijU6ET5bZ2wFPrqEZYX/7GdNpJAEzHf5bhtj9cINsyg/J7eNRxeohHzzxN/O
-         f45QGU5PKEyqIUbPr0/7y4h4NEoWfkDt7UHIgLU07InyvbtJtEqhHV0vmYAW1ekycXbS
-         UM+2URli33c3DuLbfgmfp05bsNtFdgYiWevAMFdHyWF3EDY7uvP0Mxz11O5XtkCJGkqn
-         KB8XwGM8+GFAYWiAMc/tCJl/yJ/jJLW+6bTp8o7/aOWwtJ7f+9vcYLbIiNWvh7MM/JH/
-         l8RQ==
+        bh=fdnG00+FVnrNPc7pRJZUf6p0lTeWtkmJlgm0eIX6kX4=;
+        b=AjNPKZIAqwx1xa9dhSiLiycGummqAab3uazQK7DKrwe4jObs6/BzrY3gxWNhbARWYA
+         hVNgYlQWf0qCGbhYxIsv5oba6QFc4dqbH4rVwMM63GJC+ZYcFQu8a9yfPLTJFtebEnvq
+         sS7TBQzwsITHfW0WlkcFqkMk1QckKj0PPIq++Nyvh30ESPvmnbwBBUoOt7bFvweLvZdB
+         w/lllBznyKU8j0PhZDsnxxdukqmUvbUT+TXMDDH4nTzZQSODMf8zRUFxktw8DUru0TN2
+         5ePBJm2QDozZZ+PV1buKYCWqMUNMkO6ABcF5+0IpVF09tAgWda+ewU0kKFbTVxSEqsMo
+         lT+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=RpNDE+NQdE9P4TAEep76tk6uwbTamSrXJxQiX7LzDmA=;
-        b=7LlJN3ad/ys4n4zQB65/bdUhUjY1mcH6cGIQl45uauFnxaZm47W7S198x+UxJ0Ubyf
-         IkyDGqSA/FSaDtlxoXp8lFjOSTA89au2r6/sFd4LZWGaRHCz635LkKMG9rsEme0zl5xv
-         TZZdhyzzpnsO0eh8nbwCZD3Gkavydgj5q4u9owIeWxa2Hxj+dqfEXG6Ie8LiFgcs870H
-         YxnPLcuS+f34i6ymOG2GQ4JEBHIee+0FQrArvFvgsMgV+WhxMME1sRKxF/69CioSbkBH
-         gjrU9HHPiPl+bjuXzMwMq9C36uddD97+vUtGJhmmNi8W4+Pvr/SvpoF9Z4F41y7pi1/G
-         sNqA==
-X-Gm-Message-State: AOAM532OO/FcxBwRFHptwv4duRrmVdIBVGpeer0U58tqLCaZMMEeou90
-        FNa3xowoith1WTjKD6O+/BF38WM0ZekE3zWXiPE=
-X-Google-Smtp-Source: ABdhPJxDMYmxXWtAPybkm95NxHlSLzAZxS7jp7bunCMyQFGxcOzHKiNga7Yb5Kaxy+uJgi+Yz/DQ56qp4e+cW1CDQFY=
-X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
- n13-20020a5099cd000000b00418d6c22405mr28043520edb.342.1647953804463; Tue, 22
- Mar 2022 05:56:44 -0700 (PDT)
+        bh=fdnG00+FVnrNPc7pRJZUf6p0lTeWtkmJlgm0eIX6kX4=;
+        b=oYcqKGcu4aW4Rh9xeEeMUBPXhpBY/76zSeEIHCunPZkmUV0dAT4vKzlPgC0hipbtLQ
+         pkcJrnOn2qjZ+NufDvlnxrLCepRSZ6UlG3mTGOb9LfXuRy4kkc40otf2vSQFCa29zvqM
+         sq772Vi5qAvsMOUlSA7IcE7COq6PTJRo4QfLvMR8I2CxU/WMCdJL2fpQDXcyLIU86XBU
+         oNbgK2uynt+FQ3mUyQuMTFWoH8Pjq6DHgfFcaY4zDGH28UMhFRxit1klQ3ZISxjkTjfy
+         50zMkYJmEyzVk6sG1vRHayNcYBmGgZnIG9p1YONydZ/mLdr/QDjjlsgpu3pyxqkdRCk3
+         zVRg==
+X-Gm-Message-State: AOAM530a/EzxiVmVJKZ3cbk11L4D98h+qyeBAYkKVOz/jDKGmeF4Wk2O
+        9sBg36wz9999w3Q9TVuE9EEYaElkOKtmsfxl4pA=
+X-Google-Smtp-Source: ABdhPJxJ5gfI3ASPs1ZQLPJ5mqeDxFjPhL/TbK+nPa5kjecR/ZD6LUe2SEjX0DqHf5k94THAgBevjCd50OdAmJ5sdEE=
+X-Received: by 2002:a17:907:d27:b0:6db:d928:a976 with SMTP id
+ gn39-20020a1709070d2700b006dbd928a976mr25969197ejc.24.1647953935879; Tue, 22
+ Mar 2022 05:58:55 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 22 Mar 2022 12:56:34 +0000
-Message-ID: <CAHpNFcMJwu1JDMxuYygeMZbP3Y+L+Cv9=YRuBBVtj_Koe9169A@mail.gmail.com>
+Date:   Tue, 22 Mar 2022 12:58:46 +0000
+Message-ID: <CAHpNFcNnW_gYDy4m-cVqta_hux0cW5O7hhOP=fDEN5Tbuxk=NA@mail.gmail.com>
 Subject: Reference Kernel Security: https://science.n-helix.com/2019/06/kernel.html
-To:     torvalds@linux-foundation.org
+To:     bandwidthalliance@cloudflare.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PDS_OTHER_BAD_TLD,
@@ -60,7 +60,7 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-https://science.n-helix.com/2019/06/kernel.html
+  https://science.n-helix.com/2019/06/kernel.html
 
 Trace ID : Kernel & Bios HASH Reference
 https://lkml.org/lkml/2022/3/22/446
@@ -249,5 +249,3 @@ yes cloudflare apex_eoso.nx7v.icu apex_eu.nx7v.icu apex_wes.nx7v.icu
 apex_eas.nx7v.icu
 
 USA: pop: apex_sv1.nx7v.icu apex_sv2.nx7v.icu apex_sv3.nx7v.icu
-
-*
