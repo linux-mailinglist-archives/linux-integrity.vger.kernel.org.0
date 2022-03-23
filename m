@@ -2,155 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2BD4E5ABC
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Mar 2022 22:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 674A34E5BCD
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Mar 2022 00:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344961AbiCWVht (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Mar 2022 17:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S1344900AbiCWXcn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Mar 2022 19:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240867AbiCWVhs (ORCPT
+        with ESMTP id S241475AbiCWXcm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:37:48 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7887D00F
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Mar 2022 14:36:16 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id yy13so5499156ejb.2
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Mar 2022 14:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=2RHrOWoISIZGm/DvPY0LuaxD7QmbEyuYj5ghZWW+2nE=;
-        b=FDmYihKKzIc4yCb6yyRWzeIYyumvZwecwAAWPpH8gf+7y31BKaU6zi3RuFOXkagZRu
-         D3SE9gVMpCx+cvRSK4ySRgAhi655hjl/JMewgCdT8V5guWxa87/RvrjSVNcrQcF3aAe3
-         ZfxJi9DrcnAKWnHrYIaNU/qNPuOrtBcsgsvGZrdoGj+IiSX+68tGmwlV3zQ1YymCDT4y
-         S9TI4go0g+aq1TFkXcXxBGcvg1JTJDJuPSLS36OnGIEnhM/2uIFeTQ0AUpRVQEaHvL4s
-         XU4MD6uzD5Qi1vH6j7JUEIHFjU/7g8mIbHXq2Ze+smBrhZQrbaEDNeW5T6Q5nqNNYUfv
-         Gjsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=2RHrOWoISIZGm/DvPY0LuaxD7QmbEyuYj5ghZWW+2nE=;
-        b=RTJBHHQq4FzXWqwjGv56q6lPWyM50t6BjnZ0vVqmvKM/RJHXAzWT/WnQNWJgmS44Gf
-         nDMFVBYxTyWIQxEP3++kDV9QYrVfwn17pILR6NRLCJpnOFsn3eL/yxffDoC6qluVsNn+
-         fs0io+OQGPRY1KKIZIrJOOR3NNLUi/bXqima+dX+0/lZKNYiVMlnbnLisGHCNGpqvShm
-         jyVUEI8XyNksHf9lrMgrZ7DE9s5pea2+VU67c1PdZnHVy/vmG1pofe6Nxe9uEtitOwuI
-         WEYhT/nNqy2IGwJMhoEJFvYkF3e+MfYQcTxbA08VOG68rfjphbN8/O9t/UzX02wwowEO
-         Wteg==
-X-Gm-Message-State: AOAM5309s0qJDRd2Vs/36y/XNhxirFGvu+vX6MeIUZobD6DYv4FuEB+/
-        4gLw8gEd7brbIIBc6CF8ohD8o3X4KlFw+e35blI=
-X-Google-Smtp-Source: ABdhPJwwRgKueE5YMcjujXfBvSQ4CanyXkLJdj0YeSDjc8PVBYDzXkRdxqDc5TPQYNpYAExnuscG3Aot+Yj5Lyt5j70=
-X-Received: by 2002:a17:906:743:b0:6d0:7f19:d737 with SMTP id
- z3-20020a170906074300b006d07f19d737mr2328129ejb.11.1648071375043; Wed, 23 Mar
- 2022 14:36:15 -0700 (PDT)
+        Wed, 23 Mar 2022 19:32:42 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A9290CD8
+        for <linux-integrity@vger.kernel.org>; Wed, 23 Mar 2022 16:31:11 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22NK1Xpa001438;
+        Wed, 23 Mar 2022 23:31:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=6OWHzXsVz7AKaMufFCWuuHm6SPCb97H9O49yCLw5nCA=;
+ b=ObF267DGZxTfy+wdD/R9qprx2p2CyT8htV82eL+U8NaSiIAK4wcTjYGoRPcigyRtY+Km
+ +9RmnzgUt4bGuhghTQjjcVNQyV15DeBFY9aIG6pd7PnZtHkr52JaHydSWIMtnPX903yx
+ nKl3RXSsVIqSrtIGlNe5/8Ke2oaCi7peHHyrL2fz/2jCCwN9qEDJ4G32NVtizs9uXiz7
+ coCCizctXr3X5hSKc+69Qf7b1anGiNzu/ozd5b/Y57vlS2mXN0nhnvXrAU0bMnYfvZiw
+ 2sKRAVw+u5zdG1289cWVoTSpk8s+xebzuPLxXSF8xE4KNQfxvo5ismGP3jA0IAUe+ULt Fw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f053qb512-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Mar 2022 23:31:08 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22NNGvYW012903;
+        Wed, 23 Mar 2022 23:31:06 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ew6ej1jvb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Mar 2022 23:31:06 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22NNV3xd33685810
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Mar 2022 23:31:03 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 46B4CA4054;
+        Wed, 23 Mar 2022 23:31:03 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 90DCEA4060;
+        Wed, 23 Mar 2022 23:31:02 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.73.171])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 23 Mar 2022 23:31:02 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>
+Subject: [PATCH ima-evm-utils] travis: include CentOS stream 8
+Date:   Wed, 23 Mar 2022 19:30:57 -0400
+Message-Id: <20220323233057.42287-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 23 Mar 2022 21:36:08 +0000
-Message-ID: <CAHpNFcOi=PouCaLfpcLriTDwij+2KbzLA+MhjsdC9WnbPjpwoQ@mail.gmail.com>
-Subject: Presenting : IiCE-SSRTP for digital channel infrastructure & cables
- <Yes Even The Internet &+ Ethernet 5 Band> RS
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: atgcrl8Ecln4b_bXRBUuFlM1bhr8gB7L
+X-Proofpoint-GUID: atgcrl8Ecln4b_bXRBUuFlM1bhr8gB7L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-23_08,2022-03-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ bulkscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
+ malwarescore=0 mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203230120
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Presenting :  IiCE-SSR for digital channel infrastructure & cables
-<Yes Even The Internet &+ Ethernet 5 Band>
+Replace CentOS 8 with CentOS stream 8.
+Use podman for both CentOS 7 & 8.
 
-So the question of interleaved Bands & or signal inversion is a simple
-question but we have,
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ .travis.yml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
+diff --git a/.travis.yml b/.travis.yml
+index bdf78a1b12cd..0b70971a3c76 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -52,11 +52,11 @@ matrix:
+           compiler: clang
+ 
+         - os: linux
+-          env: DISTRO=centos:7 TSS=tpm2-tss
++          env: DISTRO=centos:7 TSS=tpm2-tss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/crun --network=host"
+           compiler: gcc
+ 
+         - os: linux
+-          env: DISTRO=centos:latest TSS=tpm2-tss
++          env: REPO="quay.io/centos/" DISTRO="${REPO}centos:stream8" TSS=tpm2-tss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/crun --network=host"
+           compiler: clang
+ 
+         - os: linux
+-- 
+2.27.0
 
-In Audio inversion would be a strange way to hear! but the inversion
-does help alleviate ...
-
-Transistor emission fatigue...
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting : IiCE for digital channel infrastructure & cables <Yes
-Even The Internet &+ Ethernet 5 Band>
-
-(c) Rupert S
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-*
-
-***** Dukes Of THRUST ******
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-***** Dukes Of THRUST ******
-
-Autism, Deafness & the hard of hearing : In need of ANC & Active audio
-clarification or correction 2022-01
-
-Sony & a few others make noise cancelling headphones that are suitable
-for people with Acute disfunction to brain function for ear drums ...
-Attention deficit or Autism,
-The newer Sony headsets are theoretically enablers of a clear
-confusion free world for Autistic people..
-Reaching out to a larger audience of people simply annoyed by a
-confusing world; While they listen to music..
-Can and does protect a small percentage of people who are confused &
-harassed by major discord located in all jurisdictions of life...
-
-Crazy noise levels, Or simply drowned in HISSING Static:
-
-Search for active voice enhanced noise cancellation today.
-
-Rupert S https://science.n-helix.com
-
-
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-
-https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
-
-
-https://www.orosound.com/
-
-https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/
