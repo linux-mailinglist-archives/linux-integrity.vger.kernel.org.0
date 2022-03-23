@@ -2,68 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15004E5374
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Mar 2022 14:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9688A4E537F
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Mar 2022 14:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236735AbiCWNqk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Mar 2022 09:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S240837AbiCWNs4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Mar 2022 09:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240686AbiCWNqj (ORCPT
+        with ESMTP id S234803AbiCWNsz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:46:39 -0400
+        Wed, 23 Mar 2022 09:48:55 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846AE17A92
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Mar 2022 06:45:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5407DA84
+        for <linux-integrity@vger.kernel.org>; Wed, 23 Mar 2022 06:47:26 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F3B611F387;
-        Wed, 23 Mar 2022 13:45:07 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C27A61F387;
+        Wed, 23 Mar 2022 13:47:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648043108;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rzhatBaQMU0UZa1rko9qn4hYZAzGqYcJxn2n1hc/45U=;
-        b=s7ibFI9Lq02VZ8HTF4fCzDwPLSXrdXRkbCpa1Yg4nRFR4m7EqJa1YV5L8oCdisNgRthknp
-        ijCsO14MUlXQrcQYMkqQozQVtGVs83Tcruoz2vK0wbrvW4p8XW/cA4JrNZ+d3mUbpFJMI5
-        sTjkR77f4/tg8nek2qgtDMKa9BWbIlc=
+        t=1648043244; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Yb8sVHPqcKJcrYK+l7id3C3vel4hY85C4TVlrztmXqs=;
+        b=KayDYj0X4HMj+FqjSwy62laBQ2N9NyRMuvXj1EKxrZq8/pb6tuNL8/rGJbOMJ0ylTMt0vI
+        PVzIAEc6c0pnpRzH5VOgyX07yusilPbob+o2eJ6ky8RHoCJG0gWl+chXRJ/0/8X9OIuj6q
+        RlLyS2QQTVfYxydCZiYdbmKtF+JdouQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648043108;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rzhatBaQMU0UZa1rko9qn4hYZAzGqYcJxn2n1hc/45U=;
-        b=sweaXjgTANesW+0fVbl7yityzJlhdDM383cSfjwBz0PwqlfsqwqVQccgaQxJ7iiNxFW+Rr
-        /mAzs2NoukZLaBCQ==
+        s=susede2_ed25519; t=1648043244;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Yb8sVHPqcKJcrYK+l7id3C3vel4hY85C4TVlrztmXqs=;
+        b=s7zFmBilYOExEORaSQrddop7CSYYZHln3KyvAR1OYS84oIyabovNYNRJ7lBdFkpeukG8iW
+        YXzvLsokRvMM3BBg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C924013302;
-        Wed, 23 Mar 2022 13:45:07 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B5B513302;
+        Wed, 23 Mar 2022 13:47:24 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id F1YCL2MkO2JGMwAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Wed, 23 Mar 2022 13:45:07 +0000
-Date:   Wed, 23 Mar 2022 14:45:06 +0100
+        id zSVQJOwkO2JwNAAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Wed, 23 Mar 2022 13:47:24 +0000
 From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        "Bruno E. O. Meneguele" <bmeneg@redhat.com>
-Subject: Re: [PATCH 1/1] ci: Remove CentOS 8
-Message-ID: <YjskYri179zwTJtp@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20220215074958.6942-1-pvorel@suse.cz>
- <401a1ee927a68a7c0811f21f4e75b6f01956e59c.camel@linux.ibm.com>
- <Yjoj6VZzLtOydw0f@pevik>
- <8c8dc78ab91d41c5755b5e1ae13a3054816d8072.camel@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH v2 1/1] ci/GitHub: Remove CentOS 8
+Date:   Wed, 23 Mar 2022 14:47:20 +0100
+Message-Id: <20220323134720.18556-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8c8dc78ab91d41c5755b5e1ae13a3054816d8072.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -74,44 +64,35 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+It EOL in 12/2021 and CI is failing due removed repo:
 
-> Hi Petr,
+CentOS Linux 8 - AppStream                      232  B/s |  38  B     00:00
+Error: Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: No URLs in mirrorlist
 
-> > > Removing "centos:latest" works, but is there another option?  Perhaps
-> > > defining a different repo - "REPO=quay.io/centos/"?
-> > This fix would be for Travis, which I'm not able to fix, but not for GitHub
-> > Actions :(. I'm not aware how to specify alternative repository for it.
+Removing only from GitHub Actions, because Mimi Zohar reported Travis
+can use centos:stream8.
 
-> FYI, "centos:stream9" results in crypto deprecated warnings and results
-> in /dev/null errors.  Instead of removing the "centos:latest" entry in
-> travis, I'll replace it with "centos:stream8" for now.
-centos:stream8 does not work on GitHub Actions:
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+ .github/workflows/ci.yml | 5 -----
+ 1 file changed, 5 deletions(-)
 
-/usr/bin/docker pull centos:stream8
-  Error response from daemon: manifest for centos:stream8 not found: manifest unknown: manifest unknown
-  Warning: Docker pull failed with exit code 1, back off 8.858 seconds before retry.
-  /usr/bin/docker pull centos:stream8
-  Error response from daemon: manifest for centos:stream8 not found: manifest unknown: manifest unknown
-  Warning: Docker pull failed with exit code 1, back off 8.279 seconds before retry.
-  /usr/bin/docker pull centos:stream8
-  Error response from daemon: manifest for centos:stream8 not found: manifest unknown: manifest unknown
-  Error: Docker pull failed with exit code 1
-
-> The "centos:stream9" -devel rpm packages are in the CRB repo.  I
-> manually set the CRB repo to enabled using sed.  Is there a better way
-> of enabling CRB?
-
-> Do you prefer to limit this patch to just removing the "centos:latest"
-> entry in ci.yml and reposting it, or should I trim it?
-In this case I'll send another version where I remove it just for GitHub
-Actions. It's just a bit unfortunate, that it will have different OS to test
-from Travis.
-
-Kind regards,
-Petr
-
-> thanks,
-
-> Mimi
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 4316ede..5e4498e 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -80,11 +80,6 @@ jobs:
+               CC: gcc
+               TSS: tpm2-tss
+ 
+-          - container: "centos:latest"
+-            env:
+-              CC: gcc
+-              TSS: tpm2-tss
+-
+           - container: "debian:testing"
+             env:
+               CC: clang
+-- 
+2.35.1
 
