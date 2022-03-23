@@ -2,101 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BC54E5293
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Mar 2022 13:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014424E5336
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Mar 2022 14:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239202AbiCWM5U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Mar 2022 08:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S244337AbiCWNiE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Mar 2022 09:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiCWM5U (ORCPT
+        with ESMTP id S244330AbiCWNiD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:57:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961627C795
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Mar 2022 05:55:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4290B1F37F;
-        Wed, 23 Mar 2022 12:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648040149;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Tey47sun5Fwc+RLPFpnZbktVRKnjI17SZzwyHGHCLI=;
-        b=YV2a3tmH1bs0nG9F86ILBdHlHAmBjn7oBbNGK4vZQHkx/29CYR5SPgr25fOk/Kjzcs6+hu
-        PqyctvenDd1Mzya0pcde6i1CqOzL9DDdeVDKH0jZMFhYhL1iXcXzbW2dUs27c2TMsKowb3
-        fCABZoCsZUnMxnZ486iBREZWkPUTkJY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648040149;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Tey47sun5Fwc+RLPFpnZbktVRKnjI17SZzwyHGHCLI=;
-        b=2jCrqTwKrJYU72OvwAvf2VKMbMizznJA+uQH2UeHBDaCZy+ugoonaccBfkQ68wjmxhhQrG
-        2OiKXqEy/UAN2dBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 17C8D12FC5;
-        Wed, 23 Mar 2022 12:55:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dNx6A9UYO2LAGQAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Wed, 23 Mar 2022 12:55:49 +0000
-Date:   Wed, 23 Mar 2022 13:55:47 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        "Bruno E. O. Meneguele" <bmeneg@redhat.com>
-Subject: Re: [PATCH 1/1] ci: Remove CentOS 8
-Message-ID: <YjsY01DZe0X67rUx@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20220215074958.6942-1-pvorel@suse.cz>
- <401a1ee927a68a7c0811f21f4e75b6f01956e59c.camel@linux.ibm.com>
- <Yjoj6VZzLtOydw0f@pevik>
- <8c8dc78ab91d41c5755b5e1ae13a3054816d8072.camel@linux.ibm.com>
+        Wed, 23 Mar 2022 09:38:03 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8234765B1
+        for <linux-integrity@vger.kernel.org>; Wed, 23 Mar 2022 06:36:31 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id h1so1882766edj.1
+        for <linux-integrity@vger.kernel.org>; Wed, 23 Mar 2022 06:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=eoJL8/ssTz//H6D1ky8wIdZCZtyYwQOapMLC4rpTJK4=;
+        b=bNAXkMThypJ8Fp6kfoI5Ak+DXC/qipME9qq62aGmE5rQINI4bXll1STdm+yJBTY1XJ
+         MAB6Colidi9wkqYkm7XWQwOKwYmnk4N/8QwaoLXdCBDgbO31bDjqhqNM7981z02PuoO3
+         M5L7fKggjZfAXBPxbyqoGJX8NduefdgX+vtezqdHOYoYD18Z5xNXH5mk1vIXUsDfCfO/
+         dURe8v8nEofP406hTLidblrYU8cfLUmEEdN7mt1/VBpZE2j2IUxhkmXtSwrxT0EowZJY
+         MteICWcMF6ES9/2/i6lSw8Gu7YZwdZjcjbUzz6HU0lS5Vrt7EMjMCphuPwK0KJ+6ciVZ
+         NmNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=eoJL8/ssTz//H6D1ky8wIdZCZtyYwQOapMLC4rpTJK4=;
+        b=ESdGo98MQhDn8XRGbAyrQSmbVo8o5AoAo36P1JMtDPxNLxdBC6LJWucH+SXepR7Lk2
+         0uBTZyN0bwWT75O+m6YK4WnRIfTG+fNefRCO51hQjt4/ytdScYj8oIKZNXHz9TLoY/1i
+         r4X+TAFwUxw4WqQSZuvJyQx8ui/sxR7ompcsu7Aqkb/tVLhebcq92sRyxWIqIdFLIlJS
+         urFbLiBy5UG/sq+iJMvW2elUMmjoLq3Y0eXR8GEaaUv1hEC4VQCF3hXWmDvkgPmY4w17
+         bPWlc67jAs21bRxjauaWINHUKBTZ+hUyXJGozU3L3C53Ggrwmto4uAcueHxaFK8AKS8l
+         /mTg==
+X-Gm-Message-State: AOAM5327ke2Cso72AmwDVOn2Trzbt0SjFHQHqdZ4PldHb4qqWKEFBgfI
+        ehfghOhEqtbRtbMn5kNZ3zL5r82kplpDHDdQYJ4=
+X-Google-Smtp-Source: ABdhPJwFcJm7rfKsAySs+0vGMiLsgkerhO1IJaAaoI5nIsMNewFDbxma8gXpcBnrN9wIhl6vxQwOyxG97McgmzXPrzY=
+X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
+ n13-20020a5099cd000000b00418d6c22405mr67804edb.342.1648042590389; Wed, 23 Mar
+ 2022 06:36:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8c8dc78ab91d41c5755b5e1ae13a3054816d8072.camel@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 23 Mar 2022 13:36:22 +0000
+Message-ID: <CAHpNFcM8p5hZ=wC5s+5JOw03yJbC-ZqApX0Cqpa48p=QdszTeg@mail.gmail.com>
+Subject: Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you
+ trade markerz ***** Dukes Of THRUST ******
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> Hi Petr,
+***** Dukes Of THRUST ******
 
-> > > Removing "centos:latest" works, but is there another option?  Perhaps
-> > > defining a different repo - "REPO=quay.io/centos/"?
-> > This fix would be for Travis, which I'm not able to fix, but not for GitHub
-> > Actions :(. I'm not aware how to specify alternative repository for it.
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
 
-> FYI, "centos:stream9" results in crypto deprecated warnings and results
-> in /dev/null errors.  Instead of removing the "centos:latest" entry in
-> travis, I'll replace it with "centos:stream8" for now.
+Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
+Interleaved channel BAND.
 
-> The "centos:stream9" -devel rpm packages are in the CRB repo.  I
-> manually set the CRB repo to enabled using sed.  Is there a better way
-> of enabling CRB?
+Microchip clock abd 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
+Coprocessor digital channel selector &
 
-> Do you prefer to limit this patch to just removing the "centos:latest"
-> entry in ci.yml and reposting it, or should I trim it?
-I'll check if centos:stream8 works on GitHub Actions.
+channel Key selection based on unique..
 
-Kind regards,
-Petr
+Crystal time Quartz with Synced Tick (Regulated & modular)
 
-> thanks,
+All digital interface and resistor ring channel & sync selector with
+micro band tuning firmware.
 
-> Mimi
+(c)Rupert S
 
+***** Dukes Of THRUST ******
+
+Autism, Deafness & the hard of hearing : In need of ANC & Active audio
+clarification or correction 2022-01
+
+Sony & a few others make noise cancelling headphones that are suitable
+for people with Acute disfunction to brain function for ear drums ...
+Attention deficit or Autism,
+The newer Sony headsets are theoretically enablers of a clear
+confusion free world for Autistic people..
+Reaching out to a larger audience of people simply annoyed by a
+confusing world; While they listen to music..
+Can and does protect a small percentage of people who are confused &
+harassed by major discord located in all jurisdictions of life...
+
+Crazy noise levels, Or simply drowned in HISSING Static:
+
+Search for active voice enhanced noise cancellation today.
+
+Rupert S https://science.n-helix.com
+
+
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+
+https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
+
+
+https://www.orosound.com/
+
+https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/
