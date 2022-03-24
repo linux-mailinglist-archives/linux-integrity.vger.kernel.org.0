@@ -2,161 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A0C4E65E1
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Mar 2022 16:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971734E67A6
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Mar 2022 18:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351282AbiCXPQe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Mar 2022 11:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S1352101AbiCXRVd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Mar 2022 13:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351312AbiCXPQ0 (ORCPT
+        with ESMTP id S1345269AbiCXRVc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Mar 2022 11:16:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C7A6CA63
-        for <linux-integrity@vger.kernel.org>; Thu, 24 Mar 2022 08:14:54 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22OFAXP5031754;
-        Thu, 24 Mar 2022 15:14:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=SDBb7pAgT8zDKSsHxMM983wxvqD/A2yBHic4brxt2Rw=;
- b=o2w/OFM25ELjcRPgo+k0lwklUTLtz6USsQpk5OnE+/TkMSIsZNixNeS/dl1PsB8wowck
- HTDSKnEM66MksizVen9DEpJTtcOmuo99M85/ziPt+ciuGsw9DZnU02T6wPMD+NB59j0u
- 5SNWCFiq+4bss/F7jNmGdgqpFgBbJNdeAJBERkSAE5KZqNsHHcZpfHDdb+JiaiYPEd+j
- /a0GnZKW54Hl5bjh6vhZgde7Vx1ITLFY1Cs7osWTmTYxTDoTG8noKVlifb9wcXuAhplJ
- eLzE1mMLCoeSr3mrTPMKgjiWjrpwucdmeMjICZf6CSBCcCox+HxJFl9O72l5uAFHeyse Mw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f0p8myggw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Mar 2022 15:14:50 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22OF7aa1030461;
-        Thu, 24 Mar 2022 15:14:48 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ew6t935px-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Mar 2022 15:14:47 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22OFEjUf40501648
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Mar 2022 15:14:45 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A32E84203F;
-        Thu, 24 Mar 2022 15:14:45 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34EF342042;
-        Thu, 24 Mar 2022 15:14:45 +0000 (GMT)
-Received: from sig-9-65-85-58.ibm.com (unknown [9.65.85.58])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 24 Mar 2022 15:14:45 +0000 (GMT)
-Message-ID: <b0187376bd137f7b6ffee141227b28a04ffc015a.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils] travis: include CentOS stream 8
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     linux-integrity@vger.kernel.org
-Date:   Thu, 24 Mar 2022 11:14:44 -0400
-In-Reply-To: <Yjx8RWbYwYV0ihKK@pevik>
-References: <20220323233057.42287-1-zohar@linux.ibm.com>
-         <Yjx8RWbYwYV0ihKK@pevik>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 24 Mar 2022 13:21:32 -0400
+X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 10:19:59 PDT
+Received: from sender4-of-o58.zoho.com (sender4-of-o58.zoho.com [136.143.188.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B371331535
+        for <linux-integrity@vger.kernel.org>; Thu, 24 Mar 2022 10:19:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1648141473; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=FW8MWCkOHrg9ThG91vgrGNzOB1erkBBBCrys60yv57C9YddH0CH8HvnFk9myGmnH3B5Nq+I13Q7IvozMXmQNalKVRJW30o6f0dFxA7nhXm74E6hxm/E3AhXG/g1S8sFhAcOiFYaTnkjH+BI8u0wjyfaYzaRJMkXZaKc9R8szTlc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1648141473; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=7HXVL4Pb13sd77J4IwrIZ4dtqYkJhhp1qvhSJ9pgPBw=; 
+        b=OOnHTegAEGLq8zBrfkpDbRPjBV4wYYeoE9UJON79fb2cAjRzzGBt4JkXexDlhfI4jptBOCiEiwby329qNbmXzVEHbw3sNlXhwnHVtEd907Pm5MsEICmfrgXXXZ4r4Qd4pj2VF2SLuuQnB5VxpiOub2SLm4yn9CWhat0+gFAlv6I=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (185.31.62.161 [185.31.62.161]) by mx.zohomail.com
+        with SMTPS id 1648141468242978.5467378280339; Thu, 24 Mar 2022 10:04:28 -0700 (PDT)
+Message-ID: <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
+Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
+        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        twawrzynczak@chromium.org
+In-Reply-To: <YJNKs8bUMGOzFre+@kernel.org>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+         <20210501135727.17747-3-LinoSanfilippo@gmx.de>
+         <YJAby8mmiJ74qWAh@kernel.org> <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
+         <YJNKs8bUMGOzFre+@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Thu, 24 Mar 2022 18:04:23 +0100
+MIME-Version: 1.0
+User-Agent: Evolution 3.42.2 
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mhMix2AdibS-wgv1lMMyIMuf_M0D76yV
-X-Proofpoint-GUID: mhMix2AdibS-wgv1lMMyIMuf_M0D76yV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-24_04,2022-03-24_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- impostorscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203240085
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2022-03-24 at 15:12 +0100, Petr Vorel wrote:
-> Hi Mimi,
+Hi guys,
+
+On Thu, 2021-05-06 at 04:47 +0300, Jarkko Sakkinen wrote:
+> On Wed, May 05, 2021 at 01:15:29AM +0200, Lino Sanfilippo wrote:
+> > Hi,
+> > 
+> > On 03.05.21 at 17:50, Jarkko Sakkinen wrote:
+> > > What the heck is "simplification" and what that has to do with fixing
+> > > anything? I don't understand your terminology.
+> > 
+> > 
+> > The intention for this patch is not to fix anything. Please read the cover
+> > letter and the commit message.
+> > This patch is about making the locality handling easier by not
+> > claiming/releasing
+> > it multiple times over the driver life time, but claiming it once at driver
+> > startup and only releasing it at driver shutdown.
+> > 
+> > Right now we have locality request/release combos in
+> > 
+> > - probe_itpm()
+> > - tpm_tis_gen_interrupt()
+> > - tpm_tis_core_init()
+> > - tpm_chip_start()
+> > 
+> > and there is still one combo missing for
+> > 
+> > - tpm2_get_timeouts()
+> > 
+> > which is the reason why we get the "TPM returned invalid status" bug in case
+> > of TPM2 (and this is the bug which is _incidentally_ fixed by this patch,
+> > see
+> > below).
+> > 
+> > And if we are going to enable interrupts, we have to introduce yet another
+> > combo,
+> > for accessing the status register in the interrupt handler, since TPM 2.0
+> > requires holding the locality for writing to the status register. That makes
+> > 6 different code places in which we take and release the locality.
+> > 
+> > With this patch applied we only take the locality at one place. Furthermore
+> > with interrupts enabled we dont have to claim the locality for each handler
+> > execution, saving us countless claim/release combinations at runtime.
+> > 
+> > Hence the term "simplification" which is perfectly justified IMO.
+> > 
+> > So again, this patch is "only" in preparation for the next patch when
+> > interrupts
+> > are actually enabled and we would have to take the locality in the interrupt
+> > handler without this patch.
 > 
-> > Replace CentOS 8 with CentOS stream 8.
-> > Use podman for both CentOS 7 & 8.
+> So: what problem this patch does solve?
 > 
-> Reviewed-by: Petr Vorel <pvorel@suse.cz>
-
-Thanks, Petr.  The three CI changes are now queued in next-testing.
+> /Jarkko
 > 
-> What a shame that GitHub Actions cannot specify container.
 
-Looking on the bright side, at least we didn't remove the travis
-support.   Below are a few of the "centos:stream9" compiler warnings
-and runtime errors.
+first, thank you very much, Lino, for working on this! I've been debugging
+issues with the tis driver in the last days and was about to start with the same
+approach as yours when I luckily discovered your patch!
 
-Build:
-evmctl.c:955:2: warning: 'RSA_free' is deprecated [-Wdeprecated-
-declarations]
-        RSA_free(key);
+Jarkko, while I agree, that the commit message is not optimal, Lino tried hard
+to explain what the problems with the current code are and how they are / can be
+fixed. Further, I too don't see why simplification / optimization is such a bad
+thing. This driver is actually a very good example. I had a hard time, too,
+figuring out what's going on there. A clean rewrite is a very valid approach
+here IMO. It's not "polishing for nothing", as you described it, but actually
+solving problems.
 
-evmctl.c:1096:9: warning: 'HMAC_CTX_new' is deprecated [-Wdeprecated-
-declarations]
-        pctx = HMAC_CTX_new();
-        ^
-evmctl.c:2249:3: warning: 'SHA1_Init' is deprecated [-Wdeprecated-
-declarations]
-                SHA1_Init(&c);
+Interrupt detection is broken for years now and finally a volunteer worked on a
+solution. Don't you think this should be valued? Let's get this problem sorted
+out :-)
 
-evmctl.c:2646:16: warning: 'ENGINE_by_id' is deprecated [-Wdeprecated-
-declarations]
-        ENGINE *eng = ENGINE_by_id(engine_id);
+Lino, I'd be happy to test the patches, when you have time and interest to work
+on this again!
 
+Thanks, Michael
 
-Rruntime:
-
-evmctl -v  ima_verify --key test-rsa1024.pub --xattr-user --sigfile
-sha256.txt
-  Failed to d2i_X509_fp key file: test-rsa1024.pub
-  openssl: error:068000A8:asn1 encoding routines::wrong tag
-  openssl: error:0688010A:asn1 encoding routines::nested asn1 error
-
-sha1 (test-rsa1024.key) test is skipped (openssl is unable to sign)
-
-evmctl -v  verify --key test-rsa1024.pub --xattr-user --rsa --uuid --
-generation 0 sha256.txt
-evmctl verify failed properly with (125) 
-
-sha1 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha1 sha1.txt
-sha1 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha224 sha224.txt
-sha224 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha224 sha224.txt
-sha224 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha256 sha256.txt
-sha256 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha256 sha256.txt
-sha256 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha384 sha384.txt
-sha384 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha384 sha384.txt
-sha384 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha512 sha512.txt
-sha512 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha512 sha512.txt
-sha512 (test-prime192v1.key) test is skipped (key file not found)
-- openssl dgst   -sha1 sha1.txt
-- openssl dgst   -sha1 -sign test-prime256v1.key -hex sha1.txt
-
--- 
-thanks,
-
-Mimi
 
