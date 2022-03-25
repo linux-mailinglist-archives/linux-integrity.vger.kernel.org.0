@@ -2,54 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0101E4E6F79
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 09:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A286C4E718B
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 11:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355113AbiCYIdw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Mar 2022 04:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S1348798AbiCYKvK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Mar 2022 06:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355005AbiCYIdq (ORCPT
+        with ESMTP id S1347300AbiCYKvJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Mar 2022 04:33:46 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBE3CC538
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Mar 2022 01:32:10 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id qx21so13837183ejb.13
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Mar 2022 01:32:10 -0700 (PDT)
+        Fri, 25 Mar 2022 06:51:09 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F35521E15
+        for <linux-integrity@vger.kernel.org>; Fri, 25 Mar 2022 03:49:34 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id c62so8756164edf.5
+        for <linux-integrity@vger.kernel.org>; Fri, 25 Mar 2022 03:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=SqHqQX9sgIhnYUekBYC5UZ5cF2gUbDG9nIqEMk7SQQM=;
-        b=NfLzMuNAJUBKIanhm6HrSnbo2k8udZZWptHOEK8iPUmraI21tcYMtDDUrhNx2T9TgN
-         Qyyw+q0pfN9jT9xIr4ojnyhD9KDGCivtkBiJdEOhsh1zh7cRUpsNIa33v4tWAU+F6XUA
-         Pqdwzbhdjffx94bwlCw8smwKi6pe7gPLLv4a4Fyv92pTxezTwOwj4HqNQkfIInV+Lbgt
-         CNPiRgLv6CuNIzeop4Nq6Wgp6U5hCQ6diXyz8PoCgYFFStSpNoSqcLsniHsQgyO2sKXZ
-         0CPhlt3mdvWJA1OxoWnIMBiroy2DtMw6haSLCRpkPAYunp6TxTAlxBZ3qxTbky4lfGcu
-         +7YQ==
+        bh=W1igGM1WsluVfytMkOoD9rahAF+bYDF3ee2Dn6NnyLs=;
+        b=kEU9oClKPA6napY8Am9GDPR2TG7lJoyYcAWInw0td78hQGhRnFdKEVefthiagcOkAc
+         1sFJWJBBn5iekSDtqQMnRQBFE9TwayysflOmGEOEc5fXLMTfYjszGZFQRV0nCWyaAQ2B
+         tsIbPDwJ4RNf/ETgzPSfFD/B4F9bnj9iBarDIgIslXWarG7bP8VybJAZKnsLOvAgbyp1
+         6d306tW/Tef6AfYYmJwX0F3BvrXEByOW9/R7+88DB2jbbyJMtu/aaS5+IW+L50zZcsL2
+         lPEUdolyuuviJvJ8taCqktGnqN/M+I0WYSO29tYdvLn5gSdvCwBz2zzjBsnYRA6DFhJH
+         iy9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=SqHqQX9sgIhnYUekBYC5UZ5cF2gUbDG9nIqEMk7SQQM=;
-        b=etrw0hF3Pz4UlrbGdTDzy4nuP6txtjfAwEzzjqiVOqtex2KgfV1eSUQ1AbHrtkOW/7
-         FxTvfhqyakMJF4UZXRtkISYdskO8xXpKIowaMYfiwrWvVnLRCXBuMo9mgmL0ziBSBHKx
-         WSVENXX6DdU5LmmtGNAEarrZ70oXxJGfqHBFiiWOPgo5vgspd8gkzSXDmIx4OW0+WB2Y
-         jtnCqNsJxSQK5Zc40i5gbswqoPM3jkJmjK5rFVHZhndClkLS97zgksdMKAI9ykR0qqrg
-         GrZiK1bvX8DppJUCQSlhtkZjHtuL/irqZAJ+2BK8xLAAF3vizpk46MlJwUleLr3eV0YF
-         fKlQ==
-X-Gm-Message-State: AOAM531gMK9SAXlGIbAbawt6aGg095KKjlWGUERoq/uhoQ/80JPYki6F
-        K/64OplnOaIWj/RSdV2NNnjaP4WwmEK37lJFQPk=
-X-Google-Smtp-Source: ABdhPJwP9DVVAFtlfPpT5O2PNwapt/1WW9DVPnWgjf91ZtmWF3B9oMLKj4RhYcEu2NRQGkmLdeueNMjvVROEBeYwLjY=
-X-Received: by 2002:a17:906:7d52:b0:6df:a6c7:2c5 with SMTP id
- l18-20020a1709067d5200b006dfa6c702c5mr10611625ejp.540.1648197128918; Fri, 25
- Mar 2022 01:32:08 -0700 (PDT)
+        bh=W1igGM1WsluVfytMkOoD9rahAF+bYDF3ee2Dn6NnyLs=;
+        b=SP7D+E7+RfVQLePczyFZN+MIudF9MpTCLvHHPTuTUhilByrF4JaDqdv1v1L9ivz6LH
+         m0JgIbQa88dvfi/KdKaM9cEnalMnHsyBxL+JNIdVbN4bwe6HgEBPg8NybYmNXYLOiyFP
+         UOHNGYgcgZll9KNSLGMeoDJot9+mGIJX+Csfud7nqsjy4VTpoPmRTnlDP7K2qkcKUo6g
+         ragAwLM+IbF6V3cBhwmkpKVI3ReBWlkde256poZ1sJFsF3fxFSoLjXEya1hwbNDJGZSV
+         tjjlnAKbzwSDznPXJ0PSdzO/qkKTUsPvXr/Sh6atnGJXSUOXxVJN1pPL+5RvrQixwOKc
+         D1vQ==
+X-Gm-Message-State: AOAM532wYYw5MOu1wuGUjEePSYbNVlDP1XJvSU531iDQ9dXXNs/Nv0kZ
+        s6p74cPIsBjENDNyTXWyyzlVxoDq5bdh7Rn1FA8=
+X-Google-Smtp-Source: ABdhPJwno2Me2em4RdspVO1v9jY+/EaZNxE42yqkoKVmbcDzvBXjTLLBEhPxitN/iAsM/Qu4ynVDhNoo5br7gbAnJR0=
+X-Received: by 2002:a05:6402:4414:b0:419:28bc:55dc with SMTP id
+ y20-20020a056402441400b0041928bc55dcmr12519198eda.130.1648205372155; Fri, 25
+ Mar 2022 03:49:32 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Fri, 25 Mar 2022 08:31:53 +0000
-Message-ID: <CAHpNFcNdiDL=ij7cJbGJDbQq0WOFvJFR5ka-CCwUmoxUQMHGNQ@mail.gmail.com>
-Subject: Audio, Visual & Bluetooth & Headset & mobile developments only go so
- far: https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-To:     torvalds@linux-foundation.org
+Date:   Fri, 25 Mar 2022 10:49:18 +0000
+Message-ID: <CAHpNFcNGnnGdxdxR3-0Occta0gn7LK1fdL_+uxK14v-kY1Yz1w@mail.gmail.com>
+Subject: GPRS Is Basically secure with TRNG from https://pollinate.n-helix.com/
+ & TPM/Jitter TimeCrystal, AS the report shows Origin /dev/random seed is a
+ most important matter : 1 of 13,291 Audio, Visual & Bluetooth & Headset &
+ mobile developments only go so far: https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+To:     service@2-sight.com, mobile@cloudflare.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -60,6 +62,19 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
+
+GPRS Is Basically secure with TRNG from https://pollinate.n-helix.com/
+& TPM/Jitter TimeCrystal, AS the report shows Origin /dev/random seed
+is a most important matter : 1 of 13,291 Audio, Visual & Bluetooth &
+Headset & mobile developments only go so far:
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+As https://github.com/P1sec/gea-implementation basically shows Crypto
+Random Seed is the most important thing...
+
+The code there SHALL Work.
+
+>> RS 2022
 
 ICE-SSRTP GEA Replacement 2022 + (c)RS
 
@@ -152,6 +167,8 @@ Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
 https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
 
 https://science.n-helix.com/2022/03/ice-ssrtp.html
+
+https://science.n-helix.com/2021/11/ihmtes.html
 
 https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
 https://science.n-helix.com/2021/11/wave-focus-anc.html
