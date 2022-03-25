@@ -2,33 +2,33 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCE24E7654
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 16:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072CA4E771A
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 16:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345910AbiCYPPQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Mar 2022 11:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
+        id S1376547AbiCYP1E (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Mar 2022 11:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376594AbiCYPNJ (ORCPT
+        with ESMTP id S1376481AbiCYPWH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:13:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11AA6C4B2;
-        Fri, 25 Mar 2022 08:10:05 -0700 (PDT)
+        Fri, 25 Mar 2022 11:22:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19576C93E;
+        Fri, 25 Mar 2022 08:16:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEDAF61C57;
-        Fri, 25 Mar 2022 15:10:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E32C340EE;
-        Fri, 25 Mar 2022 15:10:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E356660AC7;
+        Fri, 25 Mar 2022 15:15:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2196C340E9;
+        Fri, 25 Mar 2022 15:15:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221001;
-        bh=+MRoTFyqPRTcrtTBKEJBUVfJX9Jn2E243Gb2KCdfed4=;
+        s=korg; t=1648221351;
+        bh=8SAhyuG4jGlA+wi+EXKjrX7dlF5Y3pT/GEqS0lcPxAM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PWM8VJeoNdd1qmnLnJUpmFM4j7beiz3gToBAdG8L7SYQwR1QWNGpZhiXOtzb8N6oB
-         LdfDEEy4kqDwPacYepRg8rJVw9bCAqh7PMiR1gt4u27/6QsuYeqXJCpx96dxKBM2aB
-         h3voYNZZsBcUnJnM5y55HjwoSwoTtGUk2nd9z/dU=
+        b=iJUZy+2WU8dtSMP2C5xmLA0BGHxWfHz5XAPnpuWaChasnD2g1tnhutslxgNyMEdnj
+         y/P54SE6axNhwPGT67A7AWmbiTSAL2zmvRPyRXE3q0QDEfNPV9G01nyFUXTBFfO/WM
+         lEt/R8S2dRnz5fU/51Dlam46f69JhmPQ0C0lpotw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         linux-integrity@vger.kernel.org, Tadeusz Struk <tstruk@gmail.com>,
         Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: [PATCH 5.10 07/38] tpm: Fix error handling in async work
-Date:   Fri, 25 Mar 2022 16:04:51 +0100
-Message-Id: <20220325150419.972727322@linuxfoundation.org>
+Subject: [PATCH 5.15 03/37] tpm: Fix error handling in async work
+Date:   Fri, 25 Mar 2022 16:14:04 +0100
+Message-Id: <20220325150420.033358998@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
-References: <20220325150419.757836392@linuxfoundation.org>
+In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
+References: <20220325150419.931802116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -92,7 +92,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/char/tpm/tpm-dev-common.c
 +++ b/drivers/char/tpm/tpm-dev-common.c
-@@ -70,7 +70,13 @@ static void tpm_dev_async_work(struct wo
+@@ -69,7 +69,13 @@ static void tpm_dev_async_work(struct wo
  	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
  			       sizeof(priv->data_buffer));
  	tpm_put_ops(priv->chip);
