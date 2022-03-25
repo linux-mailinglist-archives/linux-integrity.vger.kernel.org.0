@@ -2,376 +2,196 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D434E77D3
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 16:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4444A4E7CD7
+	for <lists+linux-integrity@lfdr.de>; Sat, 26 Mar 2022 01:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376844AbiCYPgs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Mar 2022 11:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
+        id S233848AbiCYWk3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Mar 2022 18:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378631AbiCYPfQ (ORCPT
+        with ESMTP id S233827AbiCYWk2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:35:16 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0ECE27CFA
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Mar 2022 08:33:38 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bg10so16123850ejb.4
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Mar 2022 08:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=uXaRvLUj+1B5FMxtaQVDP6hPG33CuATLlxKJ63s1fLU=;
-        b=Sbh+T1BO8+3ApR6eVMpVAKbXp6SpXGcMBQtCiZlfz7NFEPoPimQzZt9BEE+5w6B8QD
-         F80MLlMNncTNvZ1tnh6MNHEHHD4jTPkzY8k83mLMg87ldf0igowUNCT6pyAC1rKxgaJV
-         hEjFj5N/YymVhkaCPSzx9kR1OJK9huGkFsVIvulUYTq75qflmdv9BTIegIWGd6nJ665x
-         5DflhY40NpU16yWA8tM1WLe1CSW743jeiMQR/RYc2JHmt+580uHk1VC76ZVQ01uwFNQQ
-         RsVcXwGkmYuQGexXGeBadvsMnPxo3pVoXwcf7/8JoUWh5OgTbBgKx7TYTsZEE77h6w5Y
-         A8uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=uXaRvLUj+1B5FMxtaQVDP6hPG33CuATLlxKJ63s1fLU=;
-        b=vlKIw/qz/PGzGqwymZMjRu4Ze5kDBeo74Eet4uJxrK6CYL2vSdLR6g1x7irspga145
-         oxPbtVNCWMggMemnT8fTpd9s8YsTn/9lU+ba1LcssXb7flvSgR4OtVIfvm5jZlFOhRBP
-         tIaQr2PdAKLbGrDdAUvdyNfFxCiC/BGShxxLX59abxZxe4hdjkcYkDOuYiKVUaNCR6Yf
-         Kt3swfeLcby9TRb+tHYeOyHr154iYfl3H/ulnIQjSY0jvbzuRTQSaXDwo+vMM9lyFD9J
-         U/OIZqPzXktvkswUoWCVJJsxyAWgL58kd38WVX5z3D2RoPjNS0bGyLaqECzi5D73KsgA
-         GeAQ==
-X-Gm-Message-State: AOAM533gsIa+KeW+VI9nsEfrWQIdhyF/MrCjHcfu7js1ePCwe+9jAEiQ
-        7YJWqNrTADAsuX5Mk4QzKJvDKxy4cbziNUgYOPE=
-X-Google-Smtp-Source: ABdhPJyenhDlHryyBuR+2Cpy7wmcGZOGhoCB1eEejw6e3Mv+Gf31XEBQK/ehNc4s5S/0ClUPGZTw0hRTYcixjDhFx4E=
-X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
- ji13-20020a170907980d00b006d6f910513amr11619163ejc.643.1648222416857; Fri, 25
- Mar 2022 08:33:36 -0700 (PDT)
+        Fri, 25 Mar 2022 18:40:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496C118CD3F;
+        Fri, 25 Mar 2022 15:38:53 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22PJqTkT023838;
+        Fri, 25 Mar 2022 22:38:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=9Vf2Np/u8aW3zAC23uIh4/co9Mu6SLc68vzzyshG+Qw=;
+ b=iLh4FLpUYmmB14aEgn0aa2GbC9FAezdlunTZSBAkcVkeMji2vAHO59Lwc+xM0TElnpGa
+ mLE7MBRjOAV/2kZ6bfiyy7xH436/zSjSF6J2jRl527zekEuOhuGpNHHImIP/jK6Ma4qm
+ umaJ7zUFP+3pXjyrue/aAmoZ9fFyv9AWjLnXI7x/tzx0j10XGWLzFbcwyuQ2fpfwsfPC
+ AQOfRFmSiz6YGsIrhb0JLCNLyRi4mL4pp2DV1AF6q+bT+ov5PDNtt7+4+5leVtQLRQa+
+ qPCrmLDASFygsMvVy4WTZSlWsq9RiGRh/u3PhlrQzPnVgBhZT/U5Sff6/ErfHJTfCzx5 3w== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f0q5p8ce8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Mar 2022 22:38:50 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22PMY3C5006528;
+        Fri, 25 Mar 2022 22:38:48 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ew6ej64cj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Mar 2022 22:38:48 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22PMQu7x46662134
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Mar 2022 22:26:56 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 197E8A405C;
+        Fri, 25 Mar 2022 22:38:45 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 132A5A4054;
+        Fri, 25 Mar 2022 22:38:44 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.72.52])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 25 Mar 2022 22:38:43 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/5] ima: support fs-verity digests and signatures
+Date:   Fri, 25 Mar 2022 18:38:19 -0400
+Message-Id: <20220325223824.310119-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: pGc8BDZFeGkgjhEFIQ3oRKjJ8zcyOrEl
+X-Proofpoint-GUID: pGc8BDZFeGkgjhEFIQ3oRKjJ8zcyOrEl
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Fri, 25 Mar 2022 15:33:26 +0000
-Message-ID: <CAHpNFcNnUSdaKnRS-QsCfXQ59YY58ZiZ5q+M=t0-zkd5uXgkVA@mail.gmail.com>
-Subject: Jitter RAND Support Data Set + GPRS Dongle usage Technology :
- Alarming as the GPRS 20% of key '20% of the key discovered Full Potential
- Hack' is With Real /Dev/random #NoHack
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-25_08,2022-03-24_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 bulkscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203250124
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Jitter RAND Support Data Set + GPRS Dongle usage Technology : Alarming
-as the GPRS 20% of key '20% of the key discovered Full Potential Hack'
-is With Real /Dev/random #NoHack
+Support for including fs-verity file digests and signatures in the IMA
+measurement list as well as verifying the fs-verity file digest based
+signatures was discussed prior to fs-verity being upstreamed[1,2].
+
+Including fs-verity file digests and signatures in the IMA measurement
+list need to be based on policy and be identifiable.  To address being
+based on policy, a new policy rule option "digest_type=verity", applicable
+to both "measure" and "appraise" policy rules, is defined.  To address
+being identifiable, a new template field 'd-ngv2' and two new template
+formats 'ima-ngv2' and 'ima-sigv2' are defined.
+
+d-ngv2:  prefixes the digest type ("ima", "verity") to the digest
+algorithm and digest.
+
+ima-ngv2', ima-sigv2: templates with the new d-ngv2 field defined.
+
+In addition the signatures stored in 'security.ima' xattr need to be
+disambiguated.  So instead of directly signing the fs-verity digest, the
+fs-verity digest is indirectly signed, by signing the hash of the new
+ima_file_id structure data (signature version 3) containing the fs-verity
+digest and other metadata.
+
+New policy rule option:
+appraise_type=sigv3: support for new IMA signature version 3
+
+
+[1] https://events19.linuxfoundation.org/wp-content/uploads/2017/11/fs-verify_Mike-Halcrow_Eric-Biggers.pdf
+[2] Documentation/filesystems/fsverity.rst
+
+Changelog v7:
+- Based on Stefan Berger's review, cleaned up code by defining an enum,
+  removed unnecessary memcpy, fs-verity documentation suggestions.
+- Add comment in ima_get_verify_digest() with explanation for always
+  returning the fs-verity digest.
+
+Changelog v6:
+- As suggested by Eric Bigger's, instead of defining a new field to
+  differentiate between IMA and fs-verity signatures, prepend the
+  digest type to the digest field.
+- Addressed Eric Bigger's comments: updated the patch description,
+  corrected comment, squashed patches, fixed enumeration usage,and
+  added assumption to fsverity_get_digest.
+- Removed the now unnecessary IMA_VERITY_DIGEST flag
+- Updated kernel-parameters.txt
+
+Changelog v5:
+- Define ima_max_digest_size struct, removing the locally defined versions.
+- Don't overload the 'digest_type=verity' to imply a verity signature,
+  but extend the 'appraise_type' policy rule option to define 'sigv3'.
+
+Changelog v4:
+- Based on Eric Bigger's signature verification concerns of replacing the
+  contents of a file with the ima_file_id struct hash, require per policy
+  rule signature versions.
+- Addressed Eric Bigger's other comments.
+- Added new audit messages "causes".
+- Updated patch descriptions.
+
+Changelog v3:
+- Addressed Eric Bigger's comments: included Ack, incremented the
+  signature format version, the crypto issues are generic and will be
+  addressed by him separately.
+- Addressed Vitaly Chikunov's comments: hard coded maximum digest size
+  rather than using a flexible array, removed unnecessary assignment, and
+  fixed comment to match variable name.
+- Defined new "ima_max_digest_size" struct to avoid wrapping the
+  "ima_digest_data" struct inside a function local structure or
+  having to dynamically allocate it with enough memory for the specific
+  hash algo size.
+
+Changelog v2:
+- Addressed Eric Bigger's comments: sign the hash of fsverity's digest
+  and the digest's metadata, use match_string, use preferred function
+  name fsverity_get_digest(), support including unsigned fs-verity's
+  digests in the IMA measurement list.
+- Remove signatures requirement for including fs-verity's file digests in
+  the 'd-ng' field of the measurement list.
+
+Changelog v1:
+- Updated both fsverity and IMA documentation.
+- Addressed both Eric Bigger's and Lakshmi's comments.
+
+Mimi Zohar (5):
+  fs-verity: define a function to return the integrity protected file
+    digest
+  ima: define a new template field named 'd-ngv2' and templates
+  ima: permit fsverity's file digests in the IMA measurement list
+  ima: support fs-verity file digest based version 3 signatures
+  fsverity: update the documentation
+
+ Documentation/ABI/testing/ima_policy          |  36 +++++-
+ .../admin-guide/kernel-parameters.txt         |   3 +-
+ Documentation/filesystems/fsverity.rst        |  20 +--
+ Documentation/security/IMA-templates.rst      |  12 +-
+ fs/verity/Kconfig                             |   1 +
+ fs/verity/fsverity_private.h                  |   7 --
+ fs/verity/measure.c                           |  43 +++++++
+ include/linux/fsverity.h                      |  18 +++
+ security/integrity/digsig.c                   |   3 +-
+ security/integrity/ima/ima_api.c              |  44 ++++++-
+ security/integrity/ima/ima_appraise.c         | 114 +++++++++++++++++-
+ security/integrity/ima/ima_policy.c           |  68 ++++++++++-
+ security/integrity/ima/ima_template.c         |   4 +
+ security/integrity/ima/ima_template_lib.c     |  86 +++++++++++--
+ security/integrity/ima/ima_template_lib.h     |   4 +
+ security/integrity/integrity.h                |  26 +++-
+ 16 files changed, 445 insertions(+), 44 deletions(-)
+
+-- 
+2.27.0
 
-Real hardened Rust Implementation & code for use:
-https://github.com/P1sec/gea-implementation
-
-Weekly Seed source : https://pollinate.n-helix.com/
-
-*****
-
-ICE-SSRTP GEA Replacement 2022 + (c)RS
-
-IiCE-SSR for digital channel infrastructure can help heal GPRS+ 3G+ 4G+ 5G+
-
-Time NTP Protocols : is usable in 2G+ <> 5G+LTE Network SIM
-
-ICE-SSRTP Encryption AES,Blake2, Poly ChaCha, SM4, SHA2, SHA3, GEA-1 and GEA-2
-'Ideal for USB Dongle & Radio' in Rust RS ' Ideal for Quality TPM
-Implementation'
-
-"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
-of GEA-1 with a higher amount of processing, and apparently not
-weakened) are bit-oriented stream ciphers."
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Example of use:
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade marker
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-*
-
-Good for cables ? and noise ?
-
-Presenting :  IiCE-SSR for digital channel infrastructure & cables
-<Yes Even The Internet &+ Ethernet 5 Band>
-
-So the question of interleaved Bands & or signal inversion is a simple
-question but we have,
-
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
-
-In Audio inversion would be a strange way to hear! but the inversion
-does help alleviate ...
-
-Transistor emission fatigue...
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting : IiCE for digital channel infrastructure & cables <Yes
-Even The Internet &+ Ethernet 5 Band>
-
-(c) Rupert S
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
-
-
-Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-https://science.n-helix.com/2022/03/ice-ssrtp.html
-
-https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-https://science.n-helix.com/2021/12/3d-audio-plugin.html
-
-Integral to Telecoms Security TRNG
-
-*RAND OP Ubuntu :
-https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
-
-https://pollinate.n-helix.com
-
-*
-
-***** Dukes Of THRUST ******
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-Dev/Random : Importance
-
-Dev/Random : Importance : Our C/T/RNG Can Help GEA-2 Open Software
-implementation of 3 Bits (T/RNG) Not 1 : We need Chaos : GEA-1 and
-GEA-2 Implementations we will improve with our /Dev/Random
-
-Our C/T/RNG Can Help GEA-2 Open Software implementation of 3 Bits
-(T/RNG) Not 1 : We need Chaos : GEA-1 and GEA-2 Implementations we
-will improve with our /Dev/Random
-
-We can improve GPRS 2G to 5G networks still need to save power, GPRS
-Doubles a phones capacity to run all day,
-
-Code can and will be improved, Proposals include:
-
-Blake2
-ChaCha
-SM4
-SHA2
-SHA3
-
-Elliptic Encipher
-AES
-Poly ChaCha
-
-Firstly we need a good solid & stable /dev/random
-
-So we can examine the issue with a true SEED!
-
-Rupert S https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-TRNG Samples & Method DRAND Proud!
-
-https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=drive_web
-https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=drive_web
-https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=drive_web
-https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=drive_web
-
-https://github.com/P1sec/gea-implementation
-
-"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
-of GEA-1 with a higher amount of processing, and apparently not
-weakened) are bit-oriented stream ciphers."
-
-"A stream cipher, such as the well-known RC4 or GEA-1, usually works
-through using the Xor operation against a plaintext. The Xor operation
-being symmetrical, this means that encrypting should be considered the
-same operation as decrypting: GEA-1 and GEA-2 are basically
-pseudo-random data generators, taking a seed (the key, IV and
-direction bit of the GPRS data, which are concatenated),
-
-The generated random data (the keystream) is xored with the clear-text
-data (the plaintext) for encrypting. Then, later, the keystream is
-xored with the encrypted data (the ciphertext) for decrypting. That is
-why the functions called in the target library for decrypting and
-encrypting are the same.
-
-GEA-1 and GEA-2 are bit-oriented, unlike RC4 which is byte-oriented,
-because their algorithms generate only one bit of pseudo-random data
-at once (derived from their internal state), while algorithms like RC4
-generate no less than one byte at once (in RC4's case, derived from
-
-permutation done in its internal state). Even though the keystream
-bits are put together by the current encryption / decryption C and
-Rust libraries into bytes in order to generate usable keystream,
-obviously.
-
-Based on this, you can understand that GEA-1 and GEA-2 are LFSR:
-Linear Feedback Shift Register-oriented ciphers, because their
-internal state is stored into fixed-size registers. This includes the
-S and W registers which serve for initialization / key scheduling
-purposes and are respectively 64 and 97-bit wide registers, and the A,
-B, C (and for GEA-2 only D) registers which serve for the purpose of
-keystream generation, which are respectively 31, 32, 33 and 29-bit
-wide registers.
-
-On each iteration of the keystream generation, each register is
-bit-wise rotated by one position, while the bit being rotated from the
-left towards the right side (or conversely depending on in which bit
-order you internally represent your registers) is fed back to the
-algorithm and mutated depending on given conditions. Hence, the
-
-shifted-out bit is derived from other processing, and reinserted,
-while being for this reason possibly flipped depending on conditions
-depending on bits present at the other side of the given register.
-
-This is the explanation for the name of linear feedback shift register
-(shift because of the shift operation required for the rotation, and
-linear feedback because of the constant-time transform operation
-involved).
-
-The rest of the register may also be mutated at each iteration steps,
-as in the case of the GEA-1 and 2, whole fixed Xor sequences (which
-differ for each register) may be applied depending on whether the
-rotated bit is a 0 or a 1.
-
-Note that a step where the register iterates is called clocking (the
-register is clocked), and that the fixed points where the register may
-be Xor'ed when the rotated bit becomes a 1 are called taps. The linear
-function which may transmute the rotated bit at the clocking step
-(taking several bits of the original register as an input) is called
-the F function.
-
-Those kind of bit-oriented LFSR algorithms, such as GEA-1 and 2 (for
-GPRS) and A5/1 and 2 (for GSM), were designed this way for optimal
-hardware implementations in the late 80's and early 90's."
-
-*****
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting :  IiCE-SSR for digital channel infrastructure & cables
-<Yes Even The Internet &+ Ethernet 5 Band>
-
-So the question of interleaved Bands & or signal inversion is a simple
-question but we have,
-
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
-
-In Audio inversion would be a strange way to hear! but the inversion
-does help alleviate ...
-
-Transistor emission fatigue...
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting : IiCE for digital channel infrastructure & cables <Yes
-Even The Internet &+ Ethernet 5 Band>
-
-(c) Rupert S
-
-
-***** Dukes Of THRUST ******
-
-Autism, Deafness & the hard of hearing : In need of ANC & Active audio
-clarification or correction 2022-01
-
-Sony & a few others make noise cancelling headphones that are suitable
-for people with Acute disfunction to brain function for ear drums ...
-Attention deficit or Autism,
-The newer Sony headsets are theoretically enablers of a clear
-confusion free world for Autistic people..
-Reaching out to a larger audience of people simply annoyed by a
-confusing world; While they listen to music..
-Can and does protect a small percentage of people who are confused &
-harassed by major discord located in all jurisdictions of life...
-
-Crazy noise levels, Or simply drowned in HISSING Static:
-
-Search for active voice enhanced noise cancellation today.
-
-Rupert S https://science.n-helix.com
-
-
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-
-https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
-
-
-https://www.orosound.com/
-
-https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/
