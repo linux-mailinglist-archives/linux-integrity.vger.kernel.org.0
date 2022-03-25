@@ -2,157 +2,251 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E214E747F
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 14:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEA64E74B2
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 15:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358548AbiCYNv2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Mar 2022 09:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S1348191AbiCYOE0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Mar 2022 10:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358499AbiCYNv1 (ORCPT
+        with ESMTP id S1359074AbiCYOEZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Mar 2022 09:51:27 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97F1D0824;
-        Fri, 25 Mar 2022 06:49:52 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22PCwOrf012056;
-        Fri, 25 Mar 2022 13:49:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=SWB1fRPssbUSIoi+2GNNbJc4k5vldoJwJL0bBzN0E6U=;
- b=oZT6+piEVH9PDdlam8zzBQ7B7z4YqQg/n4GjO+hHUKnEMADLi+F/OSA/sbrEOyK/IKLg
- w+u7nJN7Hgj4B8VTMvhEkHC1aYPlCumZ1VrbGG9sTyAvxXM3g3E5tXvnR7Kr2Jvl331S
- JtNYDrHHk1CRYM7KfjQBzRFUDBlAst8+43JILgpOFmEOIYRD86c/vTdR2wiHnJhxboFs
- R3iJAoCYPl7OIW5SBUYMW0veer4iJ7/BTG2khTq8CNco7BmGHwvhYdqDvS/VXcn5d/Zg
- 7V4cPpFe6NZYndUKC0nXXr0rtgIRMYSleki/EvSz3mD5LcDXyn0Lvrfc5B62r71s5UlX QA== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f0sd4jvsr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Mar 2022 13:49:49 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22PDmS7K010791;
-        Fri, 25 Mar 2022 13:49:48 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma04dal.us.ibm.com with ESMTP id 3ew6tapqg4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Mar 2022 13:49:48 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22PDnkS134603268
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Mar 2022 13:49:47 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D166BAE06D;
-        Fri, 25 Mar 2022 13:49:46 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A3EA7AE062;
-        Fri, 25 Mar 2022 13:49:46 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Mar 2022 13:49:46 +0000 (GMT)
-Message-ID: <dc791477-27cb-63c1-c9ee-11d7b1274c6c@linux.ibm.com>
-Date:   Fri, 25 Mar 2022 09:49:46 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v6 4/5] ima: support fs-verity file digest based version 3
- signatures
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220318182151.100847-1-zohar@linux.ibm.com>
- <20220318182151.100847-5-zohar@linux.ibm.com>
- <d79baf40-6bb7-d4f4-666d-91e1ad20be74@linux.ibm.com>
- <9bda9c8a9f161763f420bf8e7bd639fe0d7e1691.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <9bda9c8a9f161763f420bf8e7bd639fe0d7e1691.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oasaLqmPZ2GsW3SElYDM0F7BGaZe7-sS
-X-Proofpoint-ORIG-GUID: oasaLqmPZ2GsW3SElYDM0F7BGaZe7-sS
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 25 Mar 2022 10:04:25 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEE0D76FC
+        for <linux-integrity@vger.kernel.org>; Fri, 25 Mar 2022 07:02:49 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a8so15529865ejc.8
+        for <linux-integrity@vger.kernel.org>; Fri, 25 Mar 2022 07:02:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mTkB/8ok0Jsn34jiNB203Plx4NPfqmN3UIIy2Jyu7bo=;
+        b=In8qGeWW39amfdfMaC7ALJwwk2vGMRr7lk3s0LuuCmMDrxlYuKp3Rw/6rsW5fK8Glk
+         owwPL6TsetbV897lpSyliYR53rBbH8Du7kfmVB1i0Wx9yhTKjEZhQsfhRlWmVajNgvOM
+         nhs+APW1gXhEvsnz0sfKQ/EUrupA0vRe1xplRl8+TDIn9B7Zncg8D4QuK/DlQ4WuexHq
+         UWWHyB9h7j7K03KcGsElBWO8Kkm7WPVH4bc32h1GD8EeuI25OMggTeHvyLN/rqLMAY8N
+         JKCGBqpmnvRhobpxCr29K1Y3o9HVPXUz4M0crNYKx0m2G2e+u0xQ2+x4B7N6x2u/wK/X
+         LWxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mTkB/8ok0Jsn34jiNB203Plx4NPfqmN3UIIy2Jyu7bo=;
+        b=Ux7eZfYNWsoNqFPq6MNEZfxsisZxfbRmtMV5lk0VjMcX+JOtn8292QzKyngrp4yuRA
+         gk9OeY8CFJyEyRA0/5BSAEIy3P/MR0Iv4U5mbcQ5wwM0kWDnESvxZvL7aY+aHTsuUJfA
+         iysXj2O0yVtqBzWzy9XhQTpwDV43529TrkVzA57sxmsRKs5Zn9synAiZVsDgdF3TAjkt
+         NH/Wo6bAne+M5lhgvjcF/d0xj6Cafav5ABp9plyFeakoD60ssA7an+UtUbMNsN1ZV5n6
+         tX4HFJWWSvPTnnYXbh7kuqYBTk57Wfs5J1F9nllxTn85C97V8NUDBkPqqA5nZEyiEwuE
+         Ffqw==
+X-Gm-Message-State: AOAM531O/hV69/qhSPfvrCbp5nBspi8T04wGFogKCH4tFNUNjz2s4xow
+        BVg+mh127+wOINrbIQutCpkhxoIcl35Xw37+TVI=
+X-Google-Smtp-Source: ABdhPJwa+fESlJNgq3HJUEZBYThRPkGFuUFWog5FxbokThEcrv6N1wNu+ZKY4DjXlyBAga2mWsQ1PY/VlBrI93FD4kU=
+X-Received: by 2002:a17:906:d555:b0:6db:148e:5cc with SMTP id
+ cr21-20020a170906d55500b006db148e05ccmr11527925ejc.63.1648216967841; Fri, 25
+ Mar 2022 07:02:47 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-25_02,2022-03-24_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
- clxscore=1015 impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203250076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Fri, 25 Mar 2022 14:02:37 +0000
+Message-ID: <CAHpNFcMj2Pr5EyTEW2S_UDnLSpzacEznEb=aSOr-arV5F-i4oA@mail.gmail.com>
+Subject: New GPU/CPU & Motherboard Bios strategy for ASUS unique RX6700XTC-FlareEdition2021
+To:     mobile@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+https://www.phoronix.com/scan.php?page=3Dnews_item&px=3DLinux-5.18-x86-Plat=
+form-Drivers
+
+New GPU/CPU & Motherboard Bios strategy for ASUS unique
+RX6700XTC-FlareEdition2021
+
+Important Business : RS
+Date: Sun, Jan 3, 2021 at 11:12 AM
+To: Kr*****, L** <l**.kr****@amd.com>
+  To: <Med**@xilinx.com>
+
+FPGA BitFile & Code Opt (c)RS 2021-01
+
+Priority of Operating process for streamlining Dynamic FPGA units on
+CPU & GPU By Rupert S
+
+Factors common in FPGA are:100000 Gates to 750000 Gates (Ideal for
+complex tasks)
+
+Programmable Processor command implementation & reprogram  speed 3ns
+to 15 Seconds
+2 million gates
+Processor core usage to reprogram ?
+15% of a 200Mhz processor =3D 200ns programming time
+Processor core usage to reprogram ? 20% to 25% of a 200Mhz processor =3D
+30ns programming time
+
+250 to 2900 Gates 1uns to 2ns
+(ideal for small complex instructions)
+Processor usage (in programming) 2 to 5% CPU @200Mhz
+
+2000 to 12500 to 25000 Gates (ideal for very complex function)
+30uns to 8ns (ideal for small complex instructions & RISC)
+
+Processor usage (in programming) 2 to 9% CPU @200Mhz
+
+Plans to load a BitFile rely on constant use & not on the fly, However
+small gate arrays permit microsecond coding..
+
+However I do state that a parameter for operating order is specified &
+for most users Automatic.
+
+Operating system functions.. for example AUDIO are a priority & will
+stay consistent..
+
+So we will have specific common instructions that are specific to OS &
+BIOS Firmware..
+Commons will take 20% of a large FPGA (relative)
+
+With the aim of having at least 4 common & hard to match functions; As
+a core large ARRAY..The aim being not to reprogram every second,
+
+For example during boot process with: Bitfile preorder profile:
+1uns to 2ns (ideal for small complex instructions)
+
+During the operation of the Computer or array the FPGA may contain
+specific ANTIVirus & firewall functions, That we map to ML
+
+The small unit groups of fast reprogrammables will be ideal for
+application that we are using for more than 30 minutes.. & May be
+clustered.
+
+Optimus (Prime) bitfile : RS
+Obviously handheld devices require uniquely optimum feature set & tiny
+processor size..
+Create the boundry and push that limit.
+
+We will obviously prefer to enable Hardcode pre trained models such as :
+
+SiMD
+Tessellation & maths objective : for gaming & science
+Dynamic DMA Clusters (OS,Security,Root)
+Maths Unit
+HardDrive Accelerators
+Compressors
+Compiler optimisers CPU/GPU
+Core Prefetch/ML optimiser (on die)
+Combined Shader & function for both DirectX,Metal & Vulkan utility..
+GPU & CPU Synergy Network & Cache.
+Direct Audio & Video,Haptic processing dynamic; element 3D Extrapolation..
+Dynamic Meta Data processing & conversion ..
+(Very important because not all Meta data is understood directly in
+the used process.)
+
+Obviously handheld devices require uniquely optimum feature set & tiny
+processor size..
+Create the boundry and push that limit.
+
+(c)Rupert S https://science.n-helix.com
+
+"processor programs a reprogrammable execution unit with the bitfile
+so that the reprogrammable execution unit is capable of executing
+specialized instructions associated with the program."
+
+https://hothardware.com/news/amd-patent-hybrid-cpu-fpga-design-xilinx
+
+"AMD Patent Reveals Hybrid CPU-FPGA Design That Could Be Enabled By Xilinx =
+Tech
+xilinx office
+
+While they often aren=E2=80=99t as great as CPUs on their own, FPGAs can do=
+ a
+wonderful job accelerating specific tasks. Whether it's accelerating
+acting as a fabric for wide-scale datacenter services boosting AI
+performance, an FPGA in the hands of a capable engineer can offload a
+wide variety of tasks from a CPU and speed processes along. Intel has
+talked a big game about integrating Xeons with FPGAs over the last six
+years, but it hasn't resulted in a single product hitting its lineup.
+A new patent by AMD, though, could mean that the FPGA newcomer might
+be ready to make one of its own.
+
+In October, AMD announced plans to acquire Xilinx as part of a big
+push into the datacenter. On Thursday, the United States Patent and
+Trademark Office (USPTO) published an AMD patent for integrating
+programmable execution units with a CPU. AMD made 20 claims in its
+patent application, but the gist is that a processor can include one
+or more execution units that can be programmed to handle different
+types of custom instruction sets. That's exactly what an FPGA does. It
+might be a little bit until we see products based on this design, as
+it seems a little too soon to be part of CPUs included in recent EPYC
+leaks.
+
+While AMD has made waves with its chiplet designs for Zen 2 and Zen 3
+processors, that doesn't seem to be what's happening here. The
+programmable unit in AMD's FPGA patent actually shares registers with
+the processor's floating-point and integer execution units, which
+would be difficult, or at least very slow, if they're not on the same
+package. This kind of integration should make it easy for developers
+to weave these custom instructions into applications, and the CPU
+would just know to pass those onto the on-processor FPGA. Those
+programmable units can handle atypical data types, specifically FP16
+(or half-precision) values used to speed up AI training and inference.
+
+xilinx vu19p
+
+In the case of multiple programmable units, each unit could be
+programmed with a different set of specialized instructions, so the
+processor could accelerate multiple instruction sets, and these
+programmable EUs can be reprogrammed on the fly. The idea is that when
+a processor loads a program, it also loads a bitfile that configures
+the programmable execution unit to speed up certain tasks. The CPU's
+own decode and dispatch unit could address the programmable unit,
+passing those custom instructions to be processed.
+
+AMD has been working on different ways to speed up AI calculations for
+years. First the company announced and released the Radeon Impact
+series of AI accelerators, which were just big headless Radeon
+graphics processors with custom drivers. The company doubled down on
+that with the release of the MI60, its first 7-nm GPU ahead of the
+Radeon RX 5000 series launch, in 2018. A shift to focusing on AI via
+FPGAs after the Xilinx acquisition makes sense, and we're excited to
+see what the company comes up with."
+
+*****
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
+tml
 
 
-On 3/25/22 08:31, Mimi Zohar wrote:
-> On Mon, 2022-03-21 at 09:10 -0400, Stefan Berger wrote:
->>
->> On 3/18/22 14:21, Mimi Zohar wrote:
->>> IMA may verify a file's integrity against a "good" value stored in the
->>> 'security.ima' xattr or as an appended signature, based on policy.  When
->>> the "good value" is stored in the xattr, the xattr may contain a file
->>> hash or signature.  In either case, the "good" value is preceded by a
->>> header.  The first byte of the xattr header indicates the type of data
->>> - hash, signature - stored in the xattr.  To support storing fs-verity
->>> signatures in the 'security.ima' xattr requires further differentiating
->>> the fs-verity signature from the existing IMA signature.
->>>
->>> In addition the signatures stored in 'security.ima' xattr, need to be
->>> disambiguated.  Instead of directly signing the fs-verity digest, a new
->>> signature version 3 is defined as the hash of the ima_file_id structure,
->>> which identifies the type of signature and the digest.
->>
->> Would it not be enough to just differentiat by the type of signature
->> rather than also bumping the version? It's still signature_v2_hdr but a
->> new type IMA_VERITY_DIGSIG is introduced there that shoud be sufficient
->> to indicate that a different method for calculating the hash is to be
->> used than for anything that existed before? sigv3 would then become the
->> more obvious veriftysig... ?
-> 
-> One of Eric's concerns was that, "an attacker (who controls the file's
-> contents and IMA xattr) [could] replace the file with one with a
+Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
 
-Reference: 
-https://lore.kernel.org/linux-integrity/20220126000658.138345-1-zohar@linux.ibm.com/T/#m8929fa29fbdfc875dbf5f384a4c082d303d2040e
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
 
-This seem to describe the root user. A restrictions of root's power 
-maybe that root may not have access to the file signing key use on the 
-local system... ?
+https://science.n-helix.com/2022/03/ice-ssrtp.html
 
-> differrent content and still be able to pass the IMA check."  His
+https://science.n-helix.com/2021/11/ihmtes.html
 
-Is this a scenario of concern? : /usr/bin/foobar is signed by verity and 
-there's a rule in the IMA policy that would appraise this file. Can root 
-now remove /usr/bin/foobar and copy the regularly signed /usr/bin/bash 
-to /usr/bin/foobar along with bash's security.ima and have it execute 
-either since there's no appraise rule covering non-fsverity signatures 
-or due to a rule that covers non-fsverity signatures?
+https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+https://science.n-helix.com/2021/12/3d-audio-plugin.html
 
-Since the signature header of security.ima is not signed root could also 
-just rewrite the header and modify the signature type (and also version) 
-and circumvent appraisal rules specific to fsverity.
+Integral to Telecoms Security TRNG
 
-> solution was to only allow one signature version on a running system.
-> For the complete description of the attack, refer to Eric's comments on
-> v3.
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
 
-
-I am trying to figure out a concrete scenario that one has to defend 
-against what seems to be the power of the root user. A more concrete 
-example may be helpful.
-
-> 
-> Instead of only allowing one signature version on a running system,
-> subsequent versions of this patch set addressed his concern, by
-> limiting the signature version based on policy.
-> 
+https://pollinate.n-helix.com
