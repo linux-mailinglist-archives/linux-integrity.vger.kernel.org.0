@@ -2,170 +2,157 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4BF4E744E
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 14:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E214E747F
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 14:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352892AbiCYNis (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Mar 2022 09:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        id S1358548AbiCYNv2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Mar 2022 09:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356546AbiCYNis (ORCPT
+        with ESMTP id S1358499AbiCYNv1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Mar 2022 09:38:48 -0400
-Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED73D76C1
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Mar 2022 06:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1648215434; x=1679751434;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YW/zS5OL0dWRIXkCM3j1ryKtKS2Vy6gzAQrOEWA/A78=;
-  b=hRZhh+EHeRjbWnhl6h3ytbzSRzFP3EGdqsAjqdh583QmlmJ5Vk6T9lVA
-   fxyL45cHeiQxF5rKcxLCWc6j8exZQxd8ob8NunJHANzHaxogMasRwm2tE
-   7a2i4qB5nowj26PLpV9c3b5qCyFrxM4UmLILnxyRZc/JEyRmI+cte+HKG
-   A=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="114319714"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643670000"; 
-   d="scan'208";a="114319714"
-Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
-  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 14:37:12 +0100
-Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
-        Fri, 25 Mar 2022 14:37:11 +0100 (CET)
-Received: from ISCN5CG1067W80.infineon.com (172.23.8.247) by
- MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 25 Mar 2022 14:37:10 +0100
-From:   Johannes Holland <johannes.holland@infineon.com>
-To:     <peterhuewe@gmx.de>, <jarkko@kernel.org>, <jgg@ziepe.ca>,
-        <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>
-CC:     Johannes Holland <johannes.holland@infineon.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] tpm: Fix regression in tpm_tis_synquacer.c
-Date:   Fri, 25 Mar 2022 14:36:27 +0100
-Message-ID: <20220325133627.1619-1-johannes.holland@infineon.com>
-X-Mailer: git-send-email 2.31.1.windows.1
+        Fri, 25 Mar 2022 09:51:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97F1D0824;
+        Fri, 25 Mar 2022 06:49:52 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22PCwOrf012056;
+        Fri, 25 Mar 2022 13:49:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=SWB1fRPssbUSIoi+2GNNbJc4k5vldoJwJL0bBzN0E6U=;
+ b=oZT6+piEVH9PDdlam8zzBQ7B7z4YqQg/n4GjO+hHUKnEMADLi+F/OSA/sbrEOyK/IKLg
+ w+u7nJN7Hgj4B8VTMvhEkHC1aYPlCumZ1VrbGG9sTyAvxXM3g3E5tXvnR7Kr2Jvl331S
+ JtNYDrHHk1CRYM7KfjQBzRFUDBlAst8+43JILgpOFmEOIYRD86c/vTdR2wiHnJhxboFs
+ R3iJAoCYPl7OIW5SBUYMW0veer4iJ7/BTG2khTq8CNco7BmGHwvhYdqDvS/VXcn5d/Zg
+ 7V4cPpFe6NZYndUKC0nXXr0rtgIRMYSleki/EvSz3mD5LcDXyn0Lvrfc5B62r71s5UlX QA== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f0sd4jvsr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Mar 2022 13:49:49 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22PDmS7K010791;
+        Fri, 25 Mar 2022 13:49:48 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma04dal.us.ibm.com with ESMTP id 3ew6tapqg4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Mar 2022 13:49:48 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22PDnkS134603268
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Mar 2022 13:49:47 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D166BAE06D;
+        Fri, 25 Mar 2022 13:49:46 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A3EA7AE062;
+        Fri, 25 Mar 2022 13:49:46 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 25 Mar 2022 13:49:46 +0000 (GMT)
+Message-ID: <dc791477-27cb-63c1-c9ee-11d7b1274c6c@linux.ibm.com>
+Date:   Fri, 25 Mar 2022 09:49:46 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v6 4/5] ima: support fs-verity file digest based version 3
+ signatures
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318182151.100847-1-zohar@linux.ibm.com>
+ <20220318182151.100847-5-zohar@linux.ibm.com>
+ <d79baf40-6bb7-d4f4-666d-91e1ad20be74@linux.ibm.com>
+ <9bda9c8a9f161763f420bf8e7bd639fe0d7e1691.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <9bda9c8a9f161763f420bf8e7bd639fe0d7e1691.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oasaLqmPZ2GsW3SElYDM0F7BGaZe7-sS
+X-Proofpoint-ORIG-GUID: oasaLqmPZ2GsW3SElYDM0F7BGaZe7-sS
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE801.infineon.com (172.23.29.27) To
- MUCSE819.infineon.com (172.23.29.45)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-25_02,2022-03-24_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
+ clxscore=1015 impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203250076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Remove unused variables and type mismatch (integer from pointer without
-a cast).
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: a536629ef32d ("tpm: Remove read16/read32/write32 calls from tpm_tis_=
-phy_ops")
-Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
----=0D
-Like v1, this applies to Jarkko's master branch. If you need me to=0D
-rebase to another branch, please let me know.=0D
-=0D
-Sorry for the inconvenience!=0D
-=0D
-sparse warnings: (new ones prefixed by >>)=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:89:32: sparse: sparse: incorrect ty=
-pe in argument 1 (different base types) @@     expected unsigned char [user=
-type] value @@     got unsigned char const [usertype] * @@=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:89:32: sparse:     expected unsigne=
-d char [usertype] value=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:89:32: sparse:     got unsigned cha=
-r const [usertype] *=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:90:32: sparse: sparse: incorrect ty=
-pe in argument 1 (different base types) @@     expected unsigned char [user=
-type] value @@     got unsigned char const [usertype] * @@=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:90:32: sparse:     expected unsigne=
-d char [usertype] value=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:90:32: sparse:     got unsigned cha=
-r const [usertype] *=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:91:32: sparse: sparse: incorrect ty=
-pe in argument 1 (different base types) @@     expected unsigned char [user=
-type] value @@     got unsigned char const [usertype] * @@=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:91:32: sparse:     expected unsigne=
-d char [usertype] value=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:91:32: sparse:     got unsigned cha=
-r const [usertype] *=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:92:32: sparse: sparse: incorrect ty=
-pe in argument 1 (different base types) @@     expected unsigned char [user=
-type] value @@     got unsigned char const [usertype] * @@=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:92:32: sparse:     expected unsigne=
-d char [usertype] value=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:92:32: sparse:     got unsigned cha=
-r const [usertype] *=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:89:33: sparse: sparse: non size-pre=
-serving pointer to integer cast=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:90:33: sparse: sparse: non size-pre=
-serving pointer to integer cast=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:91:33: sparse: sparse: non size-pre=
-serving pointer to integer cast=0D
-   drivers/char/tpm/tpm_tis_synquacer.c:92:33: sparse: sparse: non size-pre=
-serving pointer to integer cast=0D
 
- drivers/char/tpm/tpm_tis_synquacer.c | 18 ++++--------------
- 1 file changed, 4 insertions(+), 14 deletions(-)
+On 3/25/22 08:31, Mimi Zohar wrote:
+> On Mon, 2022-03-21 at 09:10 -0400, Stefan Berger wrote:
+>>
+>> On 3/18/22 14:21, Mimi Zohar wrote:
+>>> IMA may verify a file's integrity against a "good" value stored in the
+>>> 'security.ima' xattr or as an appended signature, based on policy.  When
+>>> the "good value" is stored in the xattr, the xattr may contain a file
+>>> hash or signature.  In either case, the "good" value is preceded by a
+>>> header.  The first byte of the xattr header indicates the type of data
+>>> - hash, signature - stored in the xattr.  To support storing fs-verity
+>>> signatures in the 'security.ima' xattr requires further differentiating
+>>> the fs-verity signature from the existing IMA signature.
+>>>
+>>> In addition the signatures stored in 'security.ima' xattr, need to be
+>>> disambiguated.  Instead of directly signing the fs-verity digest, a new
+>>> signature version 3 is defined as the hash of the ima_file_id structure,
+>>> which identifies the type of signature and the digest.
+>>
+>> Would it not be enough to just differentiat by the type of signature
+>> rather than also bumping the version? It's still signature_v2_hdr but a
+>> new type IMA_VERITY_DIGSIG is introduced there that shoud be sufficient
+>> to indicate that a different method for calculating the hash is to be
+>> used than for anything that existed before? sigv3 would then become the
+>> more obvious veriftysig... ?
+> 
+> One of Eric's concerns was that, "an attacker (who controls the file's
+> contents and IMA xattr) [could] replace the file with one with a
 
-diff --git a/drivers/char/tpm/tpm_tis_synquacer.c b/drivers/char/tpm/tpm_ti=
-s_synquacer.c
-index 2751be8e6065..679196c61401 100644
---- a/drivers/char/tpm/tpm_tis_synquacer.c
-+++ b/drivers/char/tpm/tpm_tis_synquacer.c
-@@ -39,11 +39,6 @@ static int tpm_tis_synquacer_read_bytes(struct tpm_tis_d=
-ata *data, u32 addr,
- 					enum tpm_tis_io_mode io_mode)
- {
- 	struct tpm_tis_synquacer_phy *phy =3D to_tpm_tis_tcg_phy(data);
--	__le16 result_le16;
--	__le32 result_le32;
--	u16 result16;
--	u32 result32;
--
- 	switch (io_mode) {
- 	case TPM_TIS_PHYS_8:
- 		while (len--)
-@@ -69,11 +64,6 @@ static int tpm_tis_synquacer_write_bytes(struct tpm_tis_=
-data *data, u32 addr,
- 					 enum tpm_tis_io_mode io_mode)
- {
- 	struct tpm_tis_synquacer_phy *phy =3D to_tpm_tis_tcg_phy(data);
--	__le16 result_le16;
--	__le32 result_le32;
--	u16 result16;
--	u32 result32;
--
- 	switch (io_mode) {
- 	case TPM_TIS_PHYS_8:
- 		while (len--)
-@@ -86,10 +76,10 @@ static int tpm_tis_synquacer_write_bytes(struct tpm_tis=
-_data *data, u32 addr,
- 		 * Due to the limitation of SPI controller on SynQuacer,
- 		 * 16/32 bits access must be done in byte-wise and descending order.
- 		 */
--		iowrite8(&value[3], phy->iobase + addr + 3);
--		iowrite8(&value[2], phy->iobase + addr + 2);
--		iowrite8(&value[1], phy->iobase + addr + 1);
--		iowrite8(&value[0], phy->iobase + addr);
-+		iowrite8(value[3], phy->iobase + addr + 3);
-+		iowrite8(value[2], phy->iobase + addr + 2);
-+		iowrite8(value[1], phy->iobase + addr + 1);
-+		iowrite8(value[0], phy->iobase + addr);
- 		break;
- 	}
-=20
---=20
-2.31.1.windows.1
+Reference: 
+https://lore.kernel.org/linux-integrity/20220126000658.138345-1-zohar@linux.ibm.com/T/#m8929fa29fbdfc875dbf5f384a4c082d303d2040e
 
+This seem to describe the root user. A restrictions of root's power 
+maybe that root may not have access to the file signing key use on the 
+local system... ?
+
+> differrent content and still be able to pass the IMA check."  His
+
+Is this a scenario of concern? : /usr/bin/foobar is signed by verity and 
+there's a rule in the IMA policy that would appraise this file. Can root 
+now remove /usr/bin/foobar and copy the regularly signed /usr/bin/bash 
+to /usr/bin/foobar along with bash's security.ima and have it execute 
+either since there's no appraise rule covering non-fsverity signatures 
+or due to a rule that covers non-fsverity signatures?
+
+Since the signature header of security.ima is not signed root could also 
+just rewrite the header and modify the signature type (and also version) 
+and circumvent appraisal rules specific to fsverity.
+
+> solution was to only allow one signature version on a running system.
+> For the complete description of the attack, refer to Eric's comments on
+> v3.
+
+
+I am trying to figure out a concrete scenario that one has to defend 
+against what seems to be the power of the root user. A more concrete 
+example may be helpful.
+
+> 
+> Instead of only allowing one signature version on a running system,
+> subsequent versions of this patch set addressed his concern, by
+> limiting the signature version based on policy.
+> 
