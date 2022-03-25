@@ -2,130 +2,181 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5D94E737E
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 13:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3264E7393
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 13:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356414AbiCYMdT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Mar 2022 08:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S1359038AbiCYMe1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Mar 2022 08:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355069AbiCYMcv (ORCPT
+        with ESMTP id S1357546AbiCYMe1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:32:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0953CD080C;
-        Fri, 25 Mar 2022 05:31:17 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22PAS6J6013215;
-        Fri, 25 Mar 2022 12:31:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=goJB0SCqo5d39ZSNDAI7BU78CtP+9thRdvFF6R5J+wc=;
- b=A+wnsv4VInGsI6YKMTOyxSPCHej84JaylddJWXa6MNlPUx0Wutle5qE/uTtPREa9YZb9
- u/Os8thesgO5U5ciDqL1QqPsk/qbbGBXBPWfsIgC7puN8G/ICeJo1fCGPxZ3t4Gck6KM
- E3tzjsYeHV9uhBxcqJPmJeCtMCvBOKp7Z33Wv6eDrUfNN4Y4l/Vr3WasrdwaRhpr/Rgt
- Pcexh1lNbtQOdnVLOtayrI52YF5sVkF4uUTXKktRkYur9y4qX2RGBaFlPDPf1XMyxPHs
- XTXWGAhyC5y3Ca2WycRvnzusp3PHRnJ3eQoHHrzE+iSE2XY0kj3N71Q3U5AiojyGWeeY qA== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f0t26y2pj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Mar 2022 12:31:14 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22PCD6SS026663;
-        Fri, 25 Mar 2022 12:31:12 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3ew6ej3aqk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Mar 2022 12:31:12 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22PCVA9N54985002
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Mar 2022 12:31:10 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4583C11C04A;
-        Fri, 25 Mar 2022 12:31:10 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A8E011C04C;
-        Fri, 25 Mar 2022 12:31:09 +0000 (GMT)
-Received: from sig-9-65-72-52.ibm.com (unknown [9.65.72.52])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Mar 2022 12:31:09 +0000 (GMT)
-Message-ID: <9bda9c8a9f161763f420bf8e7bd639fe0d7e1691.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 4/5] ima: support fs-verity file digest based version
- 3 signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 25 Mar 2022 08:31:08 -0400
-In-Reply-To: <d79baf40-6bb7-d4f4-666d-91e1ad20be74@linux.ibm.com>
-References: <20220318182151.100847-1-zohar@linux.ibm.com>
-         <20220318182151.100847-5-zohar@linux.ibm.com>
-         <d79baf40-6bb7-d4f4-666d-91e1ad20be74@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6RIghj8AlccUgY2wbnH3it5WzrtsKJa8
-X-Proofpoint-GUID: 6RIghj8AlccUgY2wbnH3it5WzrtsKJa8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-25_02,2022-03-24_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- mlxlogscore=999 suspectscore=0 phishscore=0 clxscore=1015 impostorscore=0
- malwarescore=0 spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203250070
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 25 Mar 2022 08:34:27 -0400
+Received: from sender4-of-o58.zoho.com (sender4-of-o58.zoho.com [136.143.188.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAF4D0831;
+        Fri, 25 Mar 2022 05:32:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1648211551; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Pk5+Uvs8p6QVi5eNyjlSagCdWEnD9TwaeCCme6sUDPLnKJIa4ttLFieZ4as/aKg4Yx521qsXJkCPOTINvQBPQgIAF/j4sUH53Zaughu37/+A/ucZrkcrhk+N5jkV5PQD49tJ2oXohJOxesz0rMRAmGTNeRDY82fCX1Sm79a1kFw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1648211551; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Ho2LqfXp0ZlNliNHvgVFTeRFQ/nOhiEtZwLLG35jaUE=; 
+        b=YuZOjZc0XLB3tuROzkZHd6cTTeHj5JquhUiaA/JJoqGYOiOjf3lN/8n9smcuxPxUNVUEOZXhfhkjH6X0nq+mLpgrsKRx7B8GxbOv8BNf79LsXmXyj0NLY7Jp3F3WOKrtNOSp/Xgm9xgZIb4Np8A2ZpDlVft1OkrQts7CuQ4OHyo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (185.31.62.161 [185.31.62.161]) by mx.zohomail.com
+        with SMTPS id 1648211549353131.03759078535404; Fri, 25 Mar 2022 05:32:29 -0700 (PDT)
+Message-ID: <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
+Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com, stefanb@linux.ibm.com,
+        James.Bottomley@hansenpartnership.com, keescook@chromium.org,
+        jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        twawrzynczak@chromium.org
+In-Reply-To: <Yj0lhqTP1RoedxSc@iki.fi>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+         <20210501135727.17747-3-LinoSanfilippo@gmx.de>
+         <YJAby8mmiJ74qWAh@kernel.org> <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
+         <YJNKs8bUMGOzFre+@kernel.org>
+         <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
+         <Yj0lhqTP1RoedxSc@iki.fi>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Fri, 25 Mar 2022 13:32:25 +0100
+MIME-Version: 1.0
+User-Agent: Evolution 3.42.2 
+Content-Transfer-Encoding: 8BIT
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-03-21 at 09:10 -0400, Stefan Berger wrote:
-> 
-> On 3/18/22 14:21, Mimi Zohar wrote:
-> > IMA may verify a file's integrity against a "good" value stored in the
-> > 'security.ima' xattr or as an appended signature, based on policy.  When
-> > the "good value" is stored in the xattr, the xattr may contain a file
-> > hash or signature.  In either case, the "good" value is preceded by a
-> > header.  The first byte of the xattr header indicates the type of data
-> > - hash, signature - stored in the xattr.  To support storing fs-verity
-> > signatures in the 'security.ima' xattr requires further differentiating
-> > the fs-verity signature from the existing IMA signature.
+On Fri, 2022-03-25 at 04:14 +0200, Jarkko Sakkinen wrote:
+> On Thu, Mar 24, 2022 at 06:04:23PM +0100, Michael Niewöhner wrote:
+> > Hi guys,
 > > 
-> > In addition the signatures stored in 'security.ima' xattr, need to be
-> > disambiguated.  Instead of directly signing the fs-verity digest, a new
-> > signature version 3 is defined as the hash of the ima_file_id structure,
-> > which identifies the type of signature and the digest.
+> > On Thu, 2021-05-06 at 04:47 +0300, Jarkko Sakkinen wrote:
+> > > On Wed, May 05, 2021 at 01:15:29AM +0200, Lino Sanfilippo wrote:
+> > > > Hi,
+> > > > 
+> > > > On 03.05.21 at 17:50, Jarkko Sakkinen wrote:
+> > > > > What the heck is "simplification" and what that has to do with fixing
+> > > > > anything? I don't understand your terminology.
+> > > > 
+> > > > 
+> > > > The intention for this patch is not to fix anything. Please read the
+> > > > cover
+> > > > letter and the commit message.
+> > > > This patch is about making the locality handling easier by not
+> > > > claiming/releasing
+> > > > it multiple times over the driver life time, but claiming it once at
+> > > > driver
+> > > > startup and only releasing it at driver shutdown.
+> > > > 
+> > > > Right now we have locality request/release combos in
+> > > > 
+> > > > - probe_itpm()
+> > > > - tpm_tis_gen_interrupt()
+> > > > - tpm_tis_core_init()
+> > > > - tpm_chip_start()
+> > > > 
+> > > > and there is still one combo missing for
+> > > > 
+> > > > - tpm2_get_timeouts()
+> > > > 
+> > > > which is the reason why we get the "TPM returned invalid status" bug in
+> > > > case
+> > > > of TPM2 (and this is the bug which is _incidentally_ fixed by this
+> > > > patch,
+> > > > see
+> > > > below).
+> > > > 
+> > > > And if we are going to enable interrupts, we have to introduce yet
+> > > > another
+> > > > combo,
+> > > > for accessing the status register in the interrupt handler, since TPM
+> > > > 2.0
+> > > > requires holding the locality for writing to the status register. That
+> > > > makes
+> > > > 6 different code places in which we take and release the locality.
+> > > > 
+> > > > With this patch applied we only take the locality at one place.
+> > > > Furthermore
+> > > > with interrupts enabled we dont have to claim the locality for each
+> > > > handler
+> > > > execution, saving us countless claim/release combinations at runtime.
+> > > > 
+> > > > Hence the term "simplification" which is perfectly justified IMO.
+> > > > 
+> > > > So again, this patch is "only" in preparation for the next patch when
+> > > > interrupts
+> > > > are actually enabled and we would have to take the locality in the
+> > > > interrupt
+> > > > handler without this patch.
+> > > 
+> > > So: what problem this patch does solve?
+> > > 
+> > > /Jarkko
+> > > 
+> > 
+> > first, thank you very much, Lino, for working on this! I've been debugging
+> > issues with the tis driver in the last days and was about to start with the
+> > same
+> > approach as yours when I luckily discovered your patch!
+> > 
+> > Jarkko, while I agree, that the commit message is not optimal, Lino tried
+> > hard
+> > to explain what the problems with the current code are and how they are /
+> > can be
+> > fixed. Further, I too don't see why simplification / optimization is such a
+> > bad
+> > thing. This driver is actually a very good example. I had a hard time, too,
+> > figuring out what's going on there. A clean rewrite is a very valid approach
+> > here IMO. It's not "polishing for nothing", as you described it, but
+> > actually
+> > solving problems.
+> > 
+> > Interrupt detection is broken for years now and finally a volunteer worked
+> > on a
+> > solution. Don't you think this should be valued? Let's get this problem
+> > sorted
+> > out :-)
+> > 
+> > Lino, I'd be happy to test the patches, when you have time and interest to
+> > work
+> > on this again!
+> > 
+> > Thanks, Michael
 > 
-> Would it not be enough to just differentiat by the type of signature 
-> rather than also bumping the version? It's still signature_v2_hdr but a 
-> new type IMA_VERITY_DIGSIG is introduced there that shoud be sufficient 
-> to indicate that a different method for calculating the hash is to be 
-> used than for anything that existed before? sigv3 would then become the 
-> more obvious veriftysig... ?
+> It's quite easy to test them out. Both fixes are in the mainline GIT tree.
+> E.g. give a shot rc1, and please report if any issues persists to:
+> 
+>   linux-integrity@vger.kernel.org 
+> 
+> BR, Jarkko
 
-One of Eric's concerns was that, "an attacker (who controls the file's
-contents and IMA xattr) [could] replace the file with one with a
-differrent content and still be able to pass the IMA check."  His
-solution was to only allow one signature version on a running system.  
-For the complete description of the attack, refer to Eric's comments on
-v3.
+I don't see Linos patches on mainline. Also, the series included four patches:
+[PATCH v3 0/4] Fixes for TPM interrupt handling
+[PATCH v3 1/4] tpm: Use a threaded interrupt handler
+[PATCH v3 2/4] tpm: Simplify locality handling
+[PATCH v3 3/4] tpm: Fix test for interrupts
+[PATCH v3 4/4] tpm: Only enable supported irqs
 
-Instead of only allowing one signature version on a running system,
-subsequent versions of this patch set addressed his concern, by
-limiting the signature version based on policy.
+Three of them are relevant for the interrupt problem, which is still present in
+mainline, as these patches were refused:
+[PATCH v3 1/4] tpm: Use a threaded interrupt handler
+[PATCH v3 2/4] tpm: Simplify locality handling
+[PATCH v3 3/4] tpm: Fix test for interrupts
 
--- 
-thanks,
-
-Mimi
+Michael
 
