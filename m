@@ -2,33 +2,33 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072CA4E771A
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 16:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D65C44E7724
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Mar 2022 16:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376547AbiCYP1E (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Mar 2022 11:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
+        id S1376576AbiCYP1I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Mar 2022 11:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376481AbiCYPWH (ORCPT
+        with ESMTP id S1377610AbiCYPYW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:22:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19576C93E;
-        Fri, 25 Mar 2022 08:16:21 -0700 (PDT)
+        Fri, 25 Mar 2022 11:24:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CA1E7F6F;
+        Fri, 25 Mar 2022 08:18:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E356660AC7;
-        Fri, 25 Mar 2022 15:15:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2196C340E9;
-        Fri, 25 Mar 2022 15:15:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61F8AB827E0;
+        Fri, 25 Mar 2022 15:18:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1860C340E9;
+        Fri, 25 Mar 2022 15:18:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221351;
+        s=korg; t=1648221504;
         bh=8SAhyuG4jGlA+wi+EXKjrX7dlF5Y3pT/GEqS0lcPxAM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iJUZy+2WU8dtSMP2C5xmLA0BGHxWfHz5XAPnpuWaChasnD2g1tnhutslxgNyMEdnj
-         y/P54SE6axNhwPGT67A7AWmbiTSAL2zmvRPyRXE3q0QDEfNPV9G01nyFUXTBFfO/WM
-         lEt/R8S2dRnz5fU/51Dlam46f69JhmPQ0C0lpotw=
+        b=iWfEHWargdGxtuWArZzPjj4uX3/8mvcvcIpJ4hoZmd/6ze5pd0xu1UZvIS0M6/c6N
+         JnM9IkUOweNldmg08u6jAIXt5qv2jfxJpJl+W1FE01PVSEl++FBcZ/pdWApMXIbEMW
+         Z+7ssAn89Jfwd3JImPHTgHcCwl4ABzAqmH4Qs/gA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,13 +36,15 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         linux-integrity@vger.kernel.org, Tadeusz Struk <tstruk@gmail.com>,
         Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: [PATCH 5.15 03/37] tpm: Fix error handling in async work
-Date:   Fri, 25 Mar 2022 16:14:04 +0100
-Message-Id: <20220325150420.033358998@linuxfoundation.org>
+Subject: [PATCH 5.17 01/39] tpm: Fix error handling in async work
+Date:   Fri, 25 Mar 2022 16:14:16 +0100
+Message-Id: <20220325150420.289936517@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
-References: <20220325150419.931802116@linuxfoundation.org>
+In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
+References: <20220325150420.245733653@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
