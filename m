@@ -2,135 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF5B4E7D22
-	for <lists+linux-integrity@lfdr.de>; Sat, 26 Mar 2022 01:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3081A4E7EC4
+	for <lists+linux-integrity@lfdr.de>; Sat, 26 Mar 2022 04:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233887AbiCYWkg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Mar 2022 18:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S230498AbiCZD0z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Mar 2022 23:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233877AbiCYWke (ORCPT
+        with ESMTP id S229893AbiCZD0x (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Mar 2022 18:40:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EA7198EEE;
-        Fri, 25 Mar 2022 15:38:59 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22PLS5od024434;
-        Fri, 25 Mar 2022 22:38:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=6HSNayO2zoTea8iDOvU9XKWZ92yAaQB4lSX8FXdVqGU=;
- b=JH4vL8e37Pve+5DmHt9idRQZWDT5vgkK+wKYZJl/G4lHi1E2rG60Vh2t3QuOFWCPRTPr
- HHvABDBUMYUTwGlZBHjbiVNJOlPZMQxpztdEPSk4cO9UEfDvRBtzNO5aNEOjh97FYFUt
- OW5uoDHhn8WdKi+r1opi7zT3mRr2LLuOzpcVZRIGmN7Dke2cnPWbuobq2AOonO9wQvVZ
- G8R8M1UcUfPUvvZsg6j3uZXJdr+a464nYR7uOO+kUnRlND+JPbdIrb4UyQVmUlbJta0F
- GwpwDIoQD0PFCxCkAD0q4WkpU322sI9hhY19wRiIylyZRjyS7E/HHmhk7zdBPWjhgUqB LA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f0q5p8cft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Mar 2022 22:38:57 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22PMXLFK025406;
-        Fri, 25 Mar 2022 22:38:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ew6t962us-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Mar 2022 22:38:55 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22PMcuvB41288112
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Mar 2022 22:38:56 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4080A405C;
-        Fri, 25 Mar 2022 22:38:51 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3BB9A405B;
-        Fri, 25 Mar 2022 22:38:50 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.72.52])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Mar 2022 22:38:50 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 5/5] fsverity: update the documentation
-Date:   Fri, 25 Mar 2022 18:38:24 -0400
-Message-Id: <20220325223824.310119-6-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220325223824.310119-1-zohar@linux.ibm.com>
-References: <20220325223824.310119-1-zohar@linux.ibm.com>
+        Fri, 25 Mar 2022 23:26:53 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDA115E8AB;
+        Fri, 25 Mar 2022 20:25:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1648265098;
+        bh=7oP7pvkRPSKA/+PtnbLt5kAWR1EhLThMuSll1ajJ+24=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=h8XvCDAwPO3Fl2Gs9NNvI/BZhtXgXDvOKfPbLgU75xs+Int50yfQG2ue7lP4unS2x
+         uAS4k7y00W/bQ9L7LaZrlfDq8Fz3cogRpCYvZ9/miVKhwZYBcA76Nwxzb7e+V08fEG
+         VL0p+EAYOaRDRDCxu3FNjJaCPcdOnYKh5P6mx5/g=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.2.76]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmUHp-1nyWJ120qP-00iVEH; Sat, 26
+ Mar 2022 04:24:58 +0100
+Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
+To:     =?UTF-8?Q?Michael_Niew=c3=b6hner?= <linux@mniewoehner.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
+        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        twawrzynczak@chromium.org
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+ <20210501135727.17747-3-LinoSanfilippo@gmx.de> <YJAby8mmiJ74qWAh@kernel.org>
+ <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de> <YJNKs8bUMGOzFre+@kernel.org>
+ <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
+ <Yj0lhqTP1RoedxSc@iki.fi>
+ <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
+Date:   Sat, 26 Mar 2022 04:24:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MknxbNp5w9EfobQ0javNiFOp6lQtJ5Ln
-X-Proofpoint-GUID: MknxbNp5w9EfobQ0javNiFOp6lQtJ5Ln
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-25_08,2022-03-24_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 suspectscore=0 adultscore=0 mlxlogscore=913
- priorityscore=1501 lowpriorityscore=0 phishscore=0 bulkscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203250124
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:8qRPJcajsFdXGC6Xf69Y8Hu5wTpFxllwWC7zfLp9+wKNNVw8ZT6
+ w3SlF19EKsK3UmZTycjcavFLkiOF+y8i3X/XMWztVF3x/zaYS892KVIG7t3kUHa5kY/VbMB
+ 9k5gWJ7cyeAyOCN43NcpgSb4LWcu37ji6O/fpUy4pgV2o9scYgCNTETfR2BYOIZWqWmchiE
+ odlwM+QfX9t/8nRJJ2kow==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QZLz9T8rSsc=:J2R7AO4DyGQkmKrh6GnuuD
+ G0tWFI5Ki78XWdOEIUboVzlkQPYn4KoNiDUMZqxCrc7fZzHUAQslIICHewflOY0hk0WVcnO4R
+ XJSoqXmYnV4qSzI6W73NaKKgu4BNBzcuvCBlVzEdKnApgo8npXw6KVA4be1yffNwaMpvC+Pmh
+ TvPP8K4MrqDbUROypMmCWNBAVLm9f1shByJj2f5oz71itVxQx/RN4YOAe6l7+zdBtZlB+Rw0/
+ VV37qjjPX997X7PGmM/wVWp07RACm4R46Kk1MOnH3ARFxUaRfajPZVi+b+pTXxuAiaOSqBOoL
+ RuLjzN4+YYsrQW5mfaLzrQnaQgUfCknakSXuiRNsd2H2kBYpOaiYUK5dUTvvJhd7bL3FCy9oN
+ 1faJWEYT8hSFTvwndWsW4/6QwGW2vfwKa19mteIobKX89j6YFoSj9ScihT5iC/jlN1ZKCzfI7
+ t3j3dT5MsPnWB4o7OkfVdKzoGN3SFTr7RWYDirQNW5ghwBn4SnEJkPBeg7/QX9/i/hZ2q506w
+ Kf7oEmloXbEyjJ0ANlx7FZksaYNIi9BcxBKB5NEYsUzWciLjOo7+qKV3FvsjlUZtBErV8Wagp
+ 5fOJpi6rBWZ4pWUoTkPRae4zzGB1WEnCtYiEwAMPOgYpytEk/5ArqYtqeE9AKWzx2IeBdNJFJ
+ Pq5RxY6JIwxaZFlKLMiPuxNl/MauzXuRmCTXaoO6ITXmaYpSrQUOC2dQ9RV3jD5448yJlJa8o
+ tchErXzVJOudvnARMV6fSQnDzNiQ5+19s+qNfZHRzvDVNizB0OPiYrMnzNUz3YPhgb3N/0OWR
+ FUdIdaV5gH42afWI14o5uhE7kCKD6WDMzIUtqVZPWZF1aivjasFrhIRWqXZ/AXobI5wsHXR+/
+ QeB+7t0c4GbNhNX8DPbABGxYo2Zx69rAdKajRyrVNDNH35Cz2j9RRgR0lzCiDxQgztr5S+ZOs
+ IdMaiACyOkWm26iIDaCSYl1JgqyJZk7tmDQiArFIT2oymXlqnb+1ugMKzD8opMIOlYH/kDTpW
+ 3KTasl4EF78ZHEuRGzwRB4PMn98sF1NjO4Zho35r7dbqGPDdSQxMFCaIWiiFMJXTlxUZMywJS
+ Wq7kdBcrlAcwtQ=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Update the fsverity documentation related to IMA signature support.
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- Documentation/filesystems/fsverity.rst | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+Hi Michael,
 
-diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
-index 1d831e3cbcb3..c1d355f17a54 100644
---- a/Documentation/filesystems/fsverity.rst
-+++ b/Documentation/filesystems/fsverity.rst
-@@ -74,8 +74,12 @@ authenticating the files is up to userspace.  However, to meet some
- users' needs, fs-verity optionally supports a simple signature
- verification mechanism where users can configure the kernel to require
- that all fs-verity files be signed by a key loaded into a keyring; see
--`Built-in signature verification`_.  Support for fs-verity file hashes
--in IMA (Integrity Measurement Architecture) policies is also planned.
-+`Built-in signature verification`_.
-+
-+The Integrity Measurement Architecture (IMA) supports including
-+fs-verity file digests and signatures in the IMA measurement list
-+and verifying fs-verity based file signatures stored as security.ima
-+xattrs, based on policy.
- 
- User API
- ========
-@@ -653,12 +657,12 @@ weren't already directly answered in other parts of this document.
-     hashed and what to do with those hashes, such as log them,
-     authenticate them, or add them to a measurement list.
- 
--    IMA is planned to support the fs-verity hashing mechanism as an
--    alternative to doing full file hashes, for people who want the
--    performance and security benefits of the Merkle tree based hash.
--    But it doesn't make sense to force all uses of fs-verity to be
--    through IMA.  As a standalone filesystem feature, fs-verity
--    already meets many users' needs, and it's testable like other
-+    IMA supports the fs-verity hashing mechanism as an alternative
-+    to full file hashes, for those who want the performance and
-+    security benefits of the Merkle tree based hash.  However, it
-+    doesn't make sense to force all uses of fs-verity to be through
-+    IMA.  fs-verity already meets many users' needs even as a
-+    standalone filesystem feature, and it's testable like other
-     filesystem features e.g. with xfstests.
- 
- :Q: Isn't fs-verity useless because the attacker can just modify the
--- 
-2.27.0
+On 25.03.22 at 13:32, Michael Niew=C3=B6hner wrote:
+>>>
+>>> Lino, I'd be happy to test the patches, when you have time and interes=
+t to
+>>> work
+>>> on this again!
+>>>
+>>> Thanks, Michael
+>>
+>> It's quite easy to test them out. Both fixes are in the mainline GIT tr=
+ee.
+>> E.g. give a shot rc1, and please report if any issues persists to:
+>>
+>> =C2=A0 linux-integrity@vger.kernel.org=C2=A0
+>>
+>> BR, Jarkko
+>
+> I don't see Linos patches on mainline. Also, the series included four pa=
+tches:
+> [PATCH v3 0/4] Fixes for TPM interrupt handling
+> [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+> [PATCH v3 2/4] tpm: Simplify locality handling
+> [PATCH v3 3/4] tpm: Fix test for interrupts
+> [PATCH v3 4/4] tpm: Only enable supported irqs
+>
+> Three of them are relevant for the interrupt problem, which is still pre=
+sent in
+> mainline, as these patches were refused:
+> [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+> [PATCH v3 2/4] tpm: Simplify locality handling
+> [PATCH v3 3/4] tpm: Fix test for interrupts
+>
+> Michael
+>
+
+You are right, the interrupts are still not working in the mainline kernel=
+.
+I would gladly make another attempt to fix this but rather step by step
+than in a series that tries to fix (different) things at once.
+
+A first step could be to have a sleepable context for the interrupt handli=
+ng,
+since in case of SPI the accesses to the irq status register may sleep.
+
+I sent a patch for this purpose once, but it seems to have gone lost:
+
+https://lore.kernel.org/all/20210620023444.14684-1-LinoSanfilippo@gmx.de/
+
+
+Best regards,
+Lino
+
+
+
+
 
