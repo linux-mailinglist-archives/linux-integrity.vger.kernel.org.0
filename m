@@ -2,56 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627A14E8550
-	for <lists+linux-integrity@lfdr.de>; Sun, 27 Mar 2022 05:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5954E8609
+	for <lists+linux-integrity@lfdr.de>; Sun, 27 Mar 2022 07:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbiC0Dzm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 26 Mar 2022 23:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        id S235242AbiC0Flg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 27 Mar 2022 01:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233890AbiC0Dzj (ORCPT
+        with ESMTP id S235205AbiC0Flf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 26 Mar 2022 23:55:39 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DFE13DFF
-        for <linux-integrity@vger.kernel.org>; Sat, 26 Mar 2022 20:53:57 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id h4so5646868edr.3
-        for <linux-integrity@vger.kernel.org>; Sat, 26 Mar 2022 20:53:57 -0700 (PDT)
+        Sun, 27 Mar 2022 01:41:35 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAE94B1F6
+        for <linux-integrity@vger.kernel.org>; Sat, 26 Mar 2022 22:39:54 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id o10so22654647ejd.1
+        for <linux-integrity@vger.kernel.org>; Sat, 26 Mar 2022 22:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=uXaRvLUj+1B5FMxtaQVDP6hPG33CuATLlxKJ63s1fLU=;
-        b=WHbYB3D/saNPToEkj0WBAa6nXvL0HqfyU+Y5hpaCgsZHyQXCuaSeRuenQPGDxRBqMG
-         UyzlGbn3CCnOsy+T29J1n/Ld8koFyyfXtS+nBvXASsct4dvFn9CXwkNCJoWK3vzn4pI+
-         8aOjLzCUBC5MtfXmPdaXpVWaBCcNeELP+IpTc4EYHOCf9zYkZv/mX9DIeboIUOcBWdb2
-         1CXdUy3wyYocilgEY3l2a0JX2G0Awwjp6eqAFl5AonsT2Ntdll4p+K9ZMH6+tScCs29o
-         arF7GSfy4Hw1iTLsjoJf5JZsA/FlydB32Ii8bfHAo1IZJO6yfLV94YxeP1orA4QxKF7n
-         9DXg==
+        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
+        b=OtwB7mGJUasgZlH+7SPhyQ5Ks5i2bfDW4Wy+j/EQXTiLgTo6ZvS00DXj3DrO4Uj++u
+         ndRfnz9M/5Ir0tGI+IV5mU89XVRdVNRweQa6EDFqmh7iFBBywWrtn7vyUxBLSEEbsKNR
+         koPjg9XgUxk+h3h79ZYQsgGpVoc9HTjRdj/PES1SYh0GJ6QK8cAUluxB9guNUo71TBIo
+         38w2BsXHnYxyGIAfp1D7+xp3XZqLc4ghBd96Y69BwVLudiSgXNvcvbHnlH+dnfFprK0o
+         QUZ7+rXfTj/owDcBSFJwAVOLF8N5blI509CZ91FpWGS1fSgqyd1+/FJ7zwFrL5+6LHnc
+         PGsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=uXaRvLUj+1B5FMxtaQVDP6hPG33CuATLlxKJ63s1fLU=;
-        b=Nf59LyRqW43RBlR4mS/kxwuwf5i4bvuZn+wNP+LEdNOHDc25+7Ap68wdeW08gJliuN
-         GOGkm7Yph6bIH90VOdUM4gmIVdKF1Z1ArGQuYKZSr3hGuZrQKF5dYZhPk8DXFCaOfpKb
-         4xZX0D5J6vKMaYhog/SG5ZK0pFLSVyBWbjaf2mfnVRvumB9vLCwAjCpeIH96aGKVj8a0
-         CbUrEteggXiG+iy9oF/YrtSvHs5r1StjeHEmrSP28QuOyJ9QGfz/cQLgnRPkRBMz2zug
-         zFgGP0LHo8xdWDAVuFlSQ1ziWrrqlcM3pxmvEQPXXy41FO+T2MAIiJWtbA4T7Pf2GHjB
-         HYxw==
-X-Gm-Message-State: AOAM530LaIGtxEABC/sNw695NdbdWawpM/dgRuyZEeDnaW2ohy1Snz0+
-        S4o4Dkrlr2fZpqbbyt/OTFbcz2gMSZ9gFof8YF0=
-X-Google-Smtp-Source: ABdhPJzZD8Z2yWonCFr6uw6HTW3jwHIxz8mSt1fdP844JxY8by8YlapVE2a4JgJWnjZlUWC1MJLGeCDgSiCh9jr8jcY=
-X-Received: by 2002:a05:6402:8d7:b0:419:1162:a507 with SMTP id
- d23-20020a05640208d700b004191162a507mr8313467edz.157.1648353235326; Sat, 26
- Mar 2022 20:53:55 -0700 (PDT)
+        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
+        b=6GHFYy0nc0QwmWcmmzGYeRz/A3KnwqcIpN5PhTuCm0+HjORJfLX/Y+ne67tQImBxYR
+         M4lio8HNXEucS/XAf0MW+0EB/NjKLpC9Rodiw0JehqvxHlY7zq06cNZhiKyV+2A9u9jq
+         5JyDaY7is2LPq9vulxNPGHTABx1j5Fr9XpyaCTqah5+Gtwe2a/5p7MticikUFT1QR0qr
+         8vm+OWLzo2D4LRHUijq9hyBzmAkymBQ9J7Hybsw/asjPbbWb1UIIX1z7jv8e1o1jitF3
+         QblIIbGDM8SpEW+4SmMlVG1b5DdryG7R0pfAcUnAj4dJuan1Ps5gfoFbYvRMhsi30/iS
+         a1dw==
+X-Gm-Message-State: AOAM531Yc9j7hOOPCKN4+dXVq920mbnla0QC/17mIfNcmKo7x4naVooq
+        0ZutVfiO8oUe1x43raR5AlIMHYMmiZrKNVRBIFY=
+X-Google-Smtp-Source: ABdhPJzCOVofvmTh82oj+qn8IqGE+D0DGEF6nJd2ktr1OjSsm26Hcvu5URNaJZmBmpHfg3Zx1fC+xLROSUFsmCQt9Xo=
+X-Received: by 2002:a17:907:1c9c:b0:6e0:df50:d39d with SMTP id
+ nb28-20020a1709071c9c00b006e0df50d39dmr5194440ejc.24.1648359593062; Sat, 26
+ Mar 2022 22:39:53 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 27 Mar 2022 04:53:45 +0100
-Message-ID: <CAHpNFcNX7G+exq5KiyHS=EC5Ptuu8to+gn5v3tP4RCyX2cg+OA@mail.gmail.com>
-Subject: GPRS New Solutions ViaSystems 2022 : For VIA 2G> 5G Security IS THE
- LAW We Will Progress GPRS Will Survive as a manageable system in Africa &
- south america "We The People Are Hungry" Leaf Random & GPRS Security :
- Operating Systems will manage, But how long will we survive with No KLOGS :
- progress in linux ? https://lkml.org/lkml/2022/3/25/991
+Date:   Sun, 27 Mar 2022 06:39:43 +0100
+Message-ID: <CAHpNFcNcQ-hcDk8XpiUq2G3KzBx92tEAD7y8NM9QzNNhh3Y3eQ@mail.gmail.com>
+Subject: Presenting GPRS VT2 from ViaLicensing today world wide RS : for
+ ViaLicencing GPRS is quite a package, New from RS @ Via 2022
 To:     info@vialicensing.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -63,6 +60,13 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
+
+GPRS New Solutions ViaSystems 2022 : For VIA 2G> 5G Security IS THE
+LAW We Will Progress GPRS Will Survive as a manageable system in
+Africa & south america "We The People Are Hungry" Leaf Random & GPRS
+Security : Operating Systems will manage, But how long will we survive
+with No KLOGS : progress in linux ?
+https://lkml.org/lkml/2022/3/25/991
 
 Jitter RAND Support Data Set + GPRS Dongle usage Technology : Alarming
 as the GPRS 20% of key '20% of the key discovered Full Potential Hack'
