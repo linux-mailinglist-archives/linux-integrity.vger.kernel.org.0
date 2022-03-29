@@ -2,169 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C114EA508
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Mar 2022 04:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A150F4EA548
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Mar 2022 04:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiC2CSt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Mar 2022 22:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S230504AbiC2Cie (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Mar 2022 22:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiC2CSt (ORCPT
+        with ESMTP id S230478AbiC2Cib (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:18:49 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9C092D12
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Mar 2022 19:17:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id z92so19036704ede.13
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Mar 2022 19:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=OgOwwwPtBqtH2Nfvw1oTQa9WeHu8kROOmi+nT3PQOWs=;
-        b=V7+/CQTv/H4n6YyDO8BLudQHcJgZxpoNa9CD/3M3UIY/1jEZXiWxext68upgmuvFwF
-         BjngFaVv5dGVhg4VDJI5HYCL6/kzbJXP7GRK754XfWFlOyw4Z9ApV049UlrmyqTyM4Zv
-         kkfiZEncbpF3dD3yofGwLrJ9Y8U0zARijB2jtTZx9kBPdoVTNiJhCYOUp+gBvrwQ6lVC
-         w2+Dd7W5+5Z9DjOX89fTRhJlos0ncJXGJa1SgdOfIGQ0TgOgDBI0Xqnsy0z+7seCrSQ+
-         C8UWfBv35a+04581MsPqEEpXrGQpKxiKZu2MrOwsZUy+uI7Zz9nfoKYBt1qVIsrcp2ph
-         dS6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=OgOwwwPtBqtH2Nfvw1oTQa9WeHu8kROOmi+nT3PQOWs=;
-        b=Qo1KB63jF9ecdhtHeBNDd/O3h50vXZ8ck9aeAmDw3eUyuF0+vfuN0CQ0nZCOPSFjcw
-         1AGmoDGZ+CaemdgiTXSzIafM6xpDkdSEjsGge51ChkweJJrjBt/rnt5OhuEvEAVZYYx9
-         Rfa6Hi1o1um03tI1mS8h943lwlkd91CMtPIJZUOmwdUP8rnu8Q2JFwI4F/K2uKg321uP
-         oTk/QFUguvruUmyBvdIVkHny0GTAn4mtkVeu6WbfAKAUK5lQYCIBAHgdMVF0QOt46nq2
-         nUUgr2eobvuZUTDIO3fX1AMoKlZa6cvbNILAeFPUVRMkVUjaHsheXHDZdM1jDEY7frdS
-         zQ8g==
-X-Gm-Message-State: AOAM5316YZR88wA9OP2dFsg/fMsbpUosQcbDKPWvZ7bRrRZYJ3g4xgRW
-        spA/U35HVD0mEG9eIi20sHBlC1FbTAbo3WASEE1MIOZz2GdCCJWm
-X-Google-Smtp-Source: ABdhPJyuFLNxU6tDwxqf3G3+4NkWH0WP5fgIDlKCEEToOCDFNckn0o8usGU5L7W468nFbMiVibAYURDgefwZiDNvWq0=
-X-Received: by 2002:a50:d592:0:b0:415:e599:4166 with SMTP id
- v18-20020a50d592000000b00415e5994166mr1251977edi.195.1648520224123; Mon, 28
- Mar 2022 19:17:04 -0700 (PDT)
+        Mon, 28 Mar 2022 22:38:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F632467DD;
+        Mon, 28 Mar 2022 19:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648521409; x=1680057409;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LNHgqLDR8PycGfDeEiYuRN193gJyruOeIO57tRrWPxs=;
+  b=QtNizHn0ORe+GwXpIORa1Os+CFrzOaLghkdtU30LxgQ+ss28GI+Sm3hz
+   hVEkkyZWNh8BE/b72RuS8fvWh1NBtL2BfMAsykGLz2oWiXCLMxcE0Vwgi
+   Xbl+b3hkwJx+UCIRMHZig4FbAFcYUzYXDOdFZ2vcag0B5el/SN9ZsoWV3
+   TCTPTB+nYksrI5KfK67elg75DdrzS8jkL2EjhkW0Yn2TbydDuQTmAGCom
+   c+1E/rJpZwlpSPmXlNOT17dct0MhSKFJzfQtMYXEQNVXKNuNgX3DUcQq6
+   EqCmi/+CoixIxr14WtqiDfg2cNqhwJfu6ll8H2xt1prCWlrjXbmj4aJjA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="239077896"
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="239077896"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 19:36:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="518615068"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 28 Mar 2022 19:36:43 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZ1is-0002Xv-FZ; Tue, 29 Mar 2022 02:36:42 +0000
+Date:   Tue, 29 Mar 2022 10:35:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, corbet@lwn.net,
+        viro@zeniv.linux.org.uk, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, shuah@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        zohar@linux.ibm.com
+Cc:     kbuild-all@lists.01.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH 14/18] bpf-preload: Switch to new preload registration
+ method
+Message-ID: <202203291042.8dll5BFm-lkp@intel.com>
+References: <20220328175033.2437312-15-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 29 Mar 2022 03:16:55 +0100
-Message-ID: <CAHpNFcMxWJHfjAbAX+5uLsd7LaK1Kfo2DArFMOeSMt1pkeFh2w@mail.gmail.com>
-Subject: Dev/Random : 4096-bit LFSR used for entropy collection : Submission 118
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220328175033.2437312-15-roberto.sassu@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dev/Random : 4096-bit LFSR used for entropy collection
+Hi Roberto,
 
-Basically the HASH is what makes a difference, In respect to BLAKE2
-running out of entropy...
-An internal backup PKI AES/Blake2 Secondary HASH stored in Kernel...
+Thank you for the patch! Yet something to improve:
 
-Bear in mind that the backup seed is worked from quality Random & is
-99% unique : "We are The 99%"
+[auto build test ERROR on bpf-next/master]
+[also build test ERROR on linus/master next-20220328]
+[cannot apply to bpf/master v5.17]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This keeps simple Pseudo numbers from being the bearer of predictable
-kernel Security behavior,
-Nothing wrong with keeping more! & we can for system device pools for example!
+url:    https://github.com/intel-lab-lkp/linux/commits/Roberto-Sassu/bpf-Secure-and-authenticated-preloading-of-eBPF-programs/20220329-015829
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220329/202203291042.8dll5BFm-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/2e0e81b0296abc384efb2a73520ce03c2a5344ea
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Roberto-Sassu/bpf-Secure-and-authenticated-preloading-of-eBPF-programs/20220329-015829
+        git checkout 2e0e81b0296abc384efb2a73520ce03c2a5344ea
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-For reference core HASH reserve storage can be per type:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Main groups for Secondary hash main leaf HASH:
+All errors (new ones prefixed by >>):
 
-/Dev
-/Memory
-/Storage
-/Keys
-/Con
-
-Rupert S
-
-*RAND OP Ubuntu :
-https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
-
-https://pollinate.n-helix.com
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+>> kernel/bpf/inode.c:25:37: error: 'CONFIG_BPF_PRELOAD_LIST' undeclared here (not in a function)
+      25 | static char *bpf_preload_list_str = CONFIG_BPF_PRELOAD_LIST;
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~
 
 
-Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
+vim +/CONFIG_BPF_PRELOAD_LIST +25 kernel/bpf/inode.c
 
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+    24	
+  > 25	static char *bpf_preload_list_str = CONFIG_BPF_PRELOAD_LIST;
+    26	
 
-https://science.n-helix.com/2022/03/ice-ssrtp.html
-
-https://science.n-helix.com/2021/11/ihmtes.html
-
-https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-https://science.n-helix.com/2021/12/3d-audio-plugin.html
-
-https://aka.ms/win10rng
-
-"https://www.spinics.net/lists/stable/msg543787.html
-
-From: "Jason A. Donenfeld" <Jason@xxxxxxxxx>
-
-[ Upstream commit 6e8ec2552c7d13991148e551e3325a624d73fac6 ]
-
-The current 4096-bit LFSR used for entropy collection had a few
-desirable attributes for the context in which it was created. For
-example, the state was huge, which meant that /dev/random would be able
-to output quite a bit of accumulated entropy before blocking. It was
-also, in its time, quite fast at accumulating entropy byte-by-byte,
-which matters given the varying contexts in which mix_pool_bytes() is
-called. And its diffusion was relatively high, which meant that changes
-would ripple across several words of state rather quickly.
-
-However, it also suffers from a few security vulnerabilities. In
-particular, inputs learned by an attacker can be undone, but moreover,
-if the state of the pool leaks, its contents can be controlled and
-entirely zeroed out. I've demonstrated this attack with this SMT2
-script, <https://xn--4db.cc/5o9xO8pb>, which Boolector/CaDiCal solves in
-a matter of seconds on a single core of my laptop, resulting in little
-proof of concept C demonstrators such as <https://xn--4db.cc/jCkvvIaH/c>.
-
-For basically all recent formal models of RNGs, these attacks represent
-a significant cryptographic flaw. But how does this manifest
-practically? If an attacker has access to the system to such a degree
-that he can learn the internal state of the RNG, arguably there are
-other lower hanging vulnerabilities -- side-channel, infoleak, or
-otherwise -- that might have higher priority. On the other hand, seed
-files are frequently used on systems that have a hard time generating
-much entropy on their own, and these seed files, being files, often leak
-or are duplicated and distributed accidentally, or are even seeded over
-the Internet intentionally, where their contents might be recorded or
-tampered with. Seen this way, an otherwise quasi-implausible
-vulnerability is a bit more practical than initially thought.
-
-Another aspect of the current mix_pool_bytes() function is that, while
-its performance was arguably competitive for the time in which it was
-created, it's no longer considered so. This patch improves performance
-significantly: on a high-end CPU, an i7-11850H, it improves performance
-of mix_pool_bytes() by 225%, and on a low-end CPU, a Cortex-A7, it
-improves performance by 103%.
-
-This commit replaces the LFSR of mix_pool_bytes() with a straight-
-forward cryptographic hash function, BLAKE2s, which is already in use
-for pool extraction. Universal hashing with a secret seed was considered
-too, something along the lines of <https://eprint.iacr.org/2013/338>,
-but the requirement for a secret seed makes for a chicken & egg problem.
-Instead we go with a formally proven scheme using a computational hash
-function, described in sections 5.1, 6.4, and B.1.8 of
-<https://eprint.iacr.org/2019/198>."
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
