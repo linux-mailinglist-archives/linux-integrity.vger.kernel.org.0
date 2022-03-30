@@ -2,242 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE694ECA8B
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Mar 2022 19:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F124ECC37
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Mar 2022 20:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349282AbiC3R0h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Mar 2022 13:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
+        id S1349908AbiC3S07 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Mar 2022 14:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349261AbiC3R0a (ORCPT
+        with ESMTP id S1350511AbiC3S03 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:26:30 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8726662EE
-        for <linux-integrity@vger.kernel.org>; Wed, 30 Mar 2022 10:24:42 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id yy13so42940181ejb.2
-        for <linux-integrity@vger.kernel.org>; Wed, 30 Mar 2022 10:24:42 -0700 (PDT)
+        Wed, 30 Mar 2022 14:26:29 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90C749FAB
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-df22f50e0cso5636085fac.3
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=U2xWSUScXkI45pg1q8y4+hkage1RhlH6yEvmueXn3YA=;
-        b=U1+9v6UYmACR6tG0ba8bax6lpwCM+0gFM73DcjFnnBUKKZ6ecJn7HohHHzjH4gRGua
-         xtxoH4tbtAnpg8s5JSKuVLnOu3Y029LYQVs9mGMmHpaXlRtTim0MpIfTvdtoIHCQ6dhE
-         r1fnFct6dyh/RWm92vEWmdaVe8bCAAr/+X2Ge1OmXJb4PBgSRBHdKt+d7F58rWu8hNjq
-         208/X0VJHLhHfst3I/fyUWOPIKvkTyLKn9EiMedPcEn/Y+NX9R/NeLkK70eoG0bNsMlG
-         t/paI8k6ju/sw8L/aX6XfZbyoxJWmK+wNiXFRRRPxgptYqSEnApy26aApv0e3sAqXCSJ
-         5auQ==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
+         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
+         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
+         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
+         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
+         ou5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=U2xWSUScXkI45pg1q8y4+hkage1RhlH6yEvmueXn3YA=;
-        b=Zppp76BFG7cc0IyCMBUO28auFhDEArntQTcwMbaZb2YelPBEGiPzLGD9CKj+zhsA7t
-         QUGJvioeZSwk0Jyw/+m+EB4kZP9ed5E3YTZoN+yfd/l+/jyEuxQ2ZGuvgt963EXPcZvS
-         i82AR+cKIoic043QKhNETwmG0+ZtRv37dCpkTfIsunSXcJfptUg+6qtRebH3cAer98aN
-         GtEAKWi6L9My4CPxdPRKXMNMh2FWNcF+osXa6qWXYURYGc0ZLi2tyWUT7iL9YLpSJk8O
-         HfKBCa7DuZebwPWqXxEvDTP1/aiPQ3w3oOY5xG6qzfGOu00/5t8wEkSSHVQVg1qKdnZe
-         sOQg==
-X-Gm-Message-State: AOAM530pbmem9s59HeHu8qHm7Blv7AWUk9bgqK9MAu7bmKq6Im/Ph2Oz
-        B5Me3eCcZqFL90nZk5McaTe9L0nju93Km9OmBqo=
-X-Google-Smtp-Source: ABdhPJyzsFWhLPEX8HB6dHjAkg3i8edNoqOYrP11QZF1eMMeG53s1ocWdC5Hagxsn+744gQnKuXt8jzsbbxr7yCGDGc=
-X-Received: by 2002:a17:906:d555:b0:6db:148e:5cc with SMTP id
- cr21-20020a170906d55500b006db148e05ccmr614989ejc.63.1648661080924; Wed, 30
- Mar 2022 10:24:40 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=sNfWZ4B+LGhjGTp5ZCBkgBn/jC4Hlg4fa0qgylY1KsST6WjTCD97J0L5M3MOKX7YF8
+         P6x2VlADy9yQ6sNi0sklHVsvUTNY8YGMxxY6RdQMgiUjz8ldut1Y1CY8tVtr/91YWzlV
+         L33cNApxRLXsK7j0j80Gb5HL13drl2VXDSOMk98HNvXhrHnFEpArqZ8268LZEgwvNZcG
+         IiGVEfZS2jgGg6ZWjf3EfdCbfJkcxfSOlbAoPb6ky957FJlOCZ6z1rtIbSc0BuGqRbeG
+         upj/rwiZhbyObm1UJEUP10l7BOxiApsCmvftm7EcAchGSntkfd7WHJESKdQOb+AxWty4
+         d4og==
+X-Gm-Message-State: AOAM5314Yy3Gh4HiLYWIpVQtZZv4SPS8Bo12Lu1AB6NZhAxNxOqUhDCD
+        a3zS6Urcvs6CBaVWraTxd3FpUHrUG9vOFoejlNMYCWzE2MLB
+X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
+X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
+ ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
+ Mar 2022 11:23:38 -0700 (PDT)
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 30 Mar 2022 18:24:36 +0100
-Message-ID: <CAHpNFcNkhGE2yE9ttiPVd_8be3b_V2r2D==OJCS9Z=xYNy9hxA@mail.gmail.com>
-Subject: Matrix processors & how to use them, Both Mac, Intel, AMD & NV Want
- to make heavy use of , But how to utilize them : RS https://www.phoronix.com/vr.php?view=31014
-To:     submissions@vialicensing.com
+Reply-To: isabellasayouba0@gmail.com
+Sender: 040stherchurch@gmail.com
+Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
+ 11:23:37 -0700 (PDT)
+From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
+Date:   Wed, 30 Mar 2022 18:23:37 +0000
+X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
+Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
+Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Matrix processors & how to use them, Both Mac, Intel, AMD & NV Want to
-make heavy use of , But how to utilize them : RS
-https://www.phoronix.com/vr.php?view=31014
-
-Multi Operation Maths - CPU,GPU Computation (c)RS
-
-Kind of an F16 operation & Integer 16 or Int8 if you need it, With
-careful management and special libraries ..
-Capable of speeding up PC,Mac & Consoles :HPC:
-Requires specially compiled libraries so compiled codes can be managed
-& roll ops assessed.
-
-Performing multiple 4,8,16,32 operations on a 64Bit integer core (The example)
-
-
-Rules:
-
-All operations need to be by the same multiplication
-
-Rolls usable to convert value for example Mul & Division
-
-For example :
-
-451 722 551 834 x 6
-
-In the case of non base factor roll numbers
-
-We have to fraction the difference between the value and our base roll number,
-
-10 for example and 6, So the maths is convoluted & may not be worth it,
-
-Could do 6 + rolls & then -Rolls
-
-On a 10 processor the first factor would be 10x because we could
-compensate by placement
-
-But we still need space to expand the result to the right or left
-
-0451072205510834 x 10 =
-
-4510722055108340
-
-or 4510 roll -12
-7220 roll -8
-5510 roll -4
-8340 no roll
-
-Converting base 10 to & from hex may make sense
-
-Depending on the cost of roll; This operation may be worth it!
-
-This operation is in Base 10 & 8Bit makes more sense mostly for common
-operations in hex..
-
-But 8 is not a very big number for larger maths & 16Bit makes more
-sense; Because it has a larger number.
-
-Performing numeric expansion:
-consoles in particular and FPU where expansion is required for
-emergence mathematics
-
-Performing numeric expansion for circumstances where we require larger
-numbers for example:
-
-To fill the 187 FPU buffer..
-
-To do that we will roll to the left & expand the number, although we
-may need multiple operations..
-
-Like i say : Roll + or Roll -
-
-1447000
--Roll 3 = 1447
-or
-+Roll 3 = 1447000000
-
-That way we can potentially exceed the Bit Depth 32Bit for example.
-
-Rupert S https://science.n-helix.com
-
-https://science.n-helix.com/2021/02/multi-operation-maths.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
-
-*****
-
-Packed F16C & F16 Values in use on CPU & GPU - RS.txt
-
-F16C & F16 : lower precision values that are usable to optimise GPU &
-CPU operation that involve; Less Detailed values like Hashes or game
-data Metadata or Machine Learning : RS
-
-Firstly the F16C is the FX 8320E supported instruction so the CPU can
-potentially use packed F16 Float instructions directly from the CPU,
-As quoted F16 carefully managed produces a pipeline that is 100% F16..
-
-Packed F16 instructions use 2 data sets per 32Bit storage register...
-
-Data is converted if the array of instructions includes F32 & commonly
-all F16 should be present first; Before group conversion or
-alternatively...
-
-Allocating an additional 16Bits of data for example 0000x4 or subtle
-variance data that allows unique renders... Such as a chaos key or
-Entropy / RNG Random data...
-
-Potentially allocating a static key in the form of AES Output from
-base pair F16c Value...
-
-The additional data make potentially each game player render unique!
-
-Fast Conversion Proposals include:
-
-Unique per player additional data (AES Key conversion for example, Or
-DES; DES Produces smaller faster values)
-
-Static key, Sorted by data type (Base on player profile or Game map)
-
-Dynamic Key
-
-0000 or empty buffer hash
-
-Side by Side : Wide format texture = 2xF16 Value on same 32Bit Value
-Top & Bottom : F16 Double layered format texture = 2xF16 Value on same
-32Bit Value
-
-Yes transparency for alien skin can use : Top & Bottom F16 layered texture
-Machines also; Or even 4 layers for a truly special effect.
-
-Combine both methodology and crypto hash with one or more layer of
-BumpMap RayTracing SiMD
-
-SiMD is also 16Bit compatible so no conversion required.
-
-Weather & clouds are examples perfect for light fast loads over
-massive GPU Arrays.
-
-F16 are also theoretically ideal for 16Bit audio if using SiMD..
-
-In the case of AVX probably worth using dynamic key conversion..
-A Dynamic Remainder key that allows lower bits to interpolate Sound data.
-
-Other object sources such as render can potentially use the F16 system to..
-Interpolate or Tessellate bits on shift from F16 to F32 on final plane
-write to frame buffer..
-The memory required would be the buffer & not the source process..
-
-An example is to replace the bits missing from F16 in F32/F64 with
-tessellation shaping and sharpening code; Dynamically relative to
-performance of the GPU/CPU...
-F16 values obviously transfer from GPU to CPU fast & CPU to GPU..
-
-Image enhancement is also possible with a bitshift stack buffer that
-passes additional data to the missing bits..
-For example pre processed micro BumpMapping or Compute shading
-process; That will pull the bits in.. Under the F16 data
-453000.172000 > 453545.172711 bit swap.. could be complex!
-Done with a cache? Entirely possible with united cache L3
-
-DLSS & Dynamic sharpen & Smooth/Filter enhanced virtual resolution ..
-Can significantly enhance the process..
-Of dynamic buffer pipelining to render path. (on requirement benefit)
-
-(c)Rupert S https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://gpuopen.com/learn/first-steps-implementing-fp16/
-
-*****
-
-Submissions for review
-
-RS
-
-https://drive.google.com/drive/folders/1X5fUvsXkvBU6td78uq3EdEUJ_S6iUplA?usp=sharing
-
-https://lore.kernel.org/lkml/20220329164117.1449-1-mario.limonciello@amd.com/
-
-https://www.phoronix.com/scan.php?page=news_item&px=AMD-PSP-Sysfs-Expose
-
-https://lkml.org/lkml/2022/3/30/1005
+44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
+kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
+jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
+kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
+leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
+quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
+seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
+ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
+grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
+tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
+gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
+5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
+44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
+44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
+DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
+44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
+44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
+44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
+5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
+geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
+qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
+gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
+sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
+gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
+uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
+gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
+gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
+vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
+puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
+6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
+44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
+44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
+44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
+6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
+56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
+44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
+iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
+guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
+vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
+uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
+jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
+puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
+gonjgIINCg==
