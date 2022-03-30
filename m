@@ -2,121 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688834EC809
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Mar 2022 17:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A6D4EC851
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Mar 2022 17:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235559AbiC3PUS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Mar 2022 11:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
+        id S1348266AbiC3PfC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Mar 2022 11:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240658AbiC3PUS (ORCPT
+        with ESMTP id S1348250AbiC3PfB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:20:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE4515AAE2;
-        Wed, 30 Mar 2022 08:18:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CD9EB81B2F;
-        Wed, 30 Mar 2022 15:18:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6FAC340EE;
-        Wed, 30 Mar 2022 15:18:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648653510;
-        bh=NZtLh5n6uJudC6+M/fqWrHQmUDG8lg9LYqRK+f4nvX8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ruhvSz9i814m2acImZ8wezw8pt9oMQE/BYobaaOwb3vLi5z/HHeh0CSkeEWv6lyWd
-         UCQfXZqZPLYKcO7Eojt4wRAl95VVc6azBSSLCJR72NGHcX31LL1YjpnOPrn7VeQpoR
-         obdm0UJ7Er6CAc26SzKAWCb2K+FLNalfJPQkjU0JBC/whtTQa+pNzLfHHYc0IAHO3P
-         AQehrXVERFc+FBwjA92LGaZaZDU74jMpzsllrBOpZ8lCwTC8v1dj8rzQcyVr7XWS5T
-         MLvw3enPVAM94v0FcVgklslr83imDChpCVniRyWcEDl0/KvSPKeow6GaNicu86zm3X
-         BW3xZbivVEYfg==
-Date:   Wed, 30 Mar 2022 18:19:37 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     Michael =?iso-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>,
-        peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
-        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        twawrzynczak@chromium.org
-Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
-Message-ID: <YkR1Cf/5ZvHK2I2j@iki.fi>
-References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
- <20210501135727.17747-3-LinoSanfilippo@gmx.de>
- <YJAby8mmiJ74qWAh@kernel.org>
- <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
- <YJNKs8bUMGOzFre+@kernel.org>
- <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
- <Yj0lhqTP1RoedxSc@iki.fi>
- <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
- <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
+        Wed, 30 Mar 2022 11:35:01 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748A56581C
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Mar 2022 08:33:15 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id o10so42330482ejd.1
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Mar 2022 08:33:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=k4tOjXwVcjRbwIqO75tPZMywji6NA5bvyUrV2lo9zfU=;
+        b=ZvpGgO0rTRy4BxXcRwzsHHFuZRo4g3CARr5qe1cMD3fSVYBkhDQT6I2pcj7Wkus4vD
+         L/pV4kO5BVuN7x61TI7A+uMRtm6324yVDgXfaYOq8q+KMQ4/V+pPoRb3AiLc/FKSr3if
+         J+GN3sLdj4bXGUUPsxuj3SC4VikYaGpYroHXs5RMwPBZOrA1zUbc8rzoSnbIoyzl5VYP
+         89L+v9l7lH3QmK4n4TBz8AELmkTFCPVCwiqHn4OIwiNAuuOatlSMaRsSEJOknqnFEvhk
+         bDxbb6BqZPGpGeIOCUn9EPudkbn9Vuherq8IXnE6nukxV9ijFCla9WR35o8ITBwkLi59
+         jHgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=k4tOjXwVcjRbwIqO75tPZMywji6NA5bvyUrV2lo9zfU=;
+        b=jjzQj8ro6EJUK8DltJ4tklxp66eNtYHVUHpPv7RFUar/FniJVSZjpnBnjZz6tU4v/i
+         /YlCMRC7YwFkouo4cOYKvmppiNOlWL8nYpo/z1SjuAn7gRG78hG6CNoe7qH9WwpzxPrr
+         UBkR/Qo35gap6pzuPxEyDbSsjnLyf5mrpE7XlrHmQzv0kZ/zf2OtfP97i3BalPfxyzyl
+         Vhv5xatdNqBdpff+D2tMShDp0g6EZXadX2r9xlaRn66YG/pJMkq9C0sJRPiH+qKC2PX9
+         sRc0J8Y8sXhVAQuWMgO5JWSjDx4tte2zzLRpvIE2s0g8kHT0DI12eVNgnAq60Sf+MmwG
+         PVjw==
+X-Gm-Message-State: AOAM5317M8wBo3uxAkTX1vK+gxU/1NvsgwCmSdAn5U2sOUbmO2G8pCQQ
+        YfHL1C8rudE24oQokxvJxUQBQ+8pj/Mucz78ZSQ=
+X-Google-Smtp-Source: ABdhPJwqVo/RXrPoFsKPyisy5cThCgK4HiCNge6BTqyGlCrCBOuLxp78snnPGrCVRBmrldImsNzhfzIlFfVZyJBHyi0=
+X-Received: by 2002:a17:907:a42a:b0:6e4:973b:9d34 with SMTP id
+ sg42-20020a170907a42a00b006e4973b9d34mr102917ejc.24.1648654393947; Wed, 30
+ Mar 2022 08:33:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 30 Mar 2022 16:33:09 +0100
+Message-ID: <CAHpNFcPYBVg53gm_P7yh29n6ZyT=C=MsLXB5p9KyNMfZMjjMKQ@mail.gmail.com>
+Subject: On the subject of PSP processors : Arm features include NEON2! Why
+ not use this to our advantage? if safely potentiated! Every SiMD matters
+ after all! RS
+To:     submissions@vialicensing.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PLING_QUERY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 04:24:55AM +0100, Lino Sanfilippo wrote:
-> 
-> Hi Michael,
-> 
-> On 25.03.22 at 13:32, Michael Niewöhner wrote:
-> >>>
-> >>> Lino, I'd be happy to test the patches, when you have time and interest to
-> >>> work
-> >>> on this again!
-> >>>
-> >>> Thanks, Michael
-> >>
-> >> It's quite easy to test them out. Both fixes are in the mainline GIT tree.
-> >> E.g. give a shot rc1, and please report if any issues persists to:
-> >>
-> >>   linux-integrity@vger.kernel.org 
-> >>
-> >> BR, Jarkko
-> >
-> > I don't see Linos patches on mainline. Also, the series included four patches:
-> > [PATCH v3 0/4] Fixes for TPM interrupt handling
-> > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
-> > [PATCH v3 2/4] tpm: Simplify locality handling
-> > [PATCH v3 3/4] tpm: Fix test for interrupts
-> > [PATCH v3 4/4] tpm: Only enable supported irqs
-> >
-> > Three of them are relevant for the interrupt problem, which is still present in
-> > mainline, as these patches were refused:
-> > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
-> > [PATCH v3 2/4] tpm: Simplify locality handling
-> > [PATCH v3 3/4] tpm: Fix test for interrupts
-> >
-> > Michael
-> >
-> 
-> You are right, the interrupts are still not working in the mainline kernel.
-> I would gladly make another attempt to fix this but rather step by step
-> than in a series that tries to fix (different) things at once.
-> 
-> A first step could be to have a sleepable context for the interrupt handling,
-> since in case of SPI the accesses to the irq status register may sleep.
-> 
-> I sent a patch for this purpose once, but it seems to have gone lost:
-> 
-> https://lore.kernel.org/all/20210620023444.14684-1-LinoSanfilippo@gmx.de/
-> 
-> 
-> Best regards,
-> Lino
+On the subject of PSP processors : Arm features include NEON2!
+Why not use this to our advantage? if safely potentiated! Every SiMD
+matters after all,
 
-This is clearly my bad I'll test this ASAP.
+Particularly preparing for the GPU & Audio output!
+As a driver specific the advantages are around 13% improved
+performance & 20% improved code flexibility on SiMD compatibility.
 
-BR, Jarkko
+We can also directly utilize for Automated Direct Reactive Secure DMA or ADRSDMA
+
+(signed RS)
+
+ARM Patches 3 arte enabled! https://lkml.org/lkml/2022/3/30/977
+
+*
+
+GPRS for immediate use in all SFR SIM's & SFR Firmware & routers &
+boxes including ADSL & Fibre
+
+Cloudflare Kernels & VM linux, I pretty obviously would like to be
+able to utilise cloudflare Kernel & Linux & cloudflare is very special
+to me
+
+Submissions for review
+
+RS
+
+https://drive.google.com/drive/folders/1X5fUvsXkvBU6td78uq3EdEUJ_S6iUplA?usp=sharing
+
+https://lore.kernel.org/lkml/20220329164117.1449-1-mario.limonciello@amd.com/
