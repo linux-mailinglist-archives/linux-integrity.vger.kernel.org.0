@@ -2,167 +2,228 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530C14ED26C
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Mar 2022 06:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5104ED587
+	for <lists+linux-integrity@lfdr.de>; Thu, 31 Mar 2022 10:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiCaEIa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 31 Mar 2022 00:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
+        id S232791AbiCaI1c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 31 Mar 2022 04:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiCaEIU (ORCPT
+        with ESMTP id S232819AbiCaI1V (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:08:20 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8BE2414F1
-        for <linux-integrity@vger.kernel.org>; Wed, 30 Mar 2022 20:57:11 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bi12so45498511ejb.3
-        for <linux-integrity@vger.kernel.org>; Wed, 30 Mar 2022 20:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DQEdIqJQMT2DTXxNnryD3JrAvawMTCRUVp7h3+Y4I58=;
-        b=cc2rALVw1jxOK2Gb8L0J6Mph69Y5VA57JZQiuXcdW5z3m5d/DZa8hjTvhe9AMJD+oR
-         sZWBxGtudQhCDz36qcCCNXc3ZsuQhTI5QG975d+QEmIL1cXJrOcVg13mjtJE8BHQS/S4
-         iIpcrSGJc0jxFV9wD+VDOhUyo6n2rNmRzTngyO4v1oH9t0lTZGBvhB7L8IY+4CzZD6+5
-         M4FqiJvek0gzYy5Td1KrRIVZHZrS0to+wXWFHnEmd210xrZ0KyIsMVxwUnRTdhYssOXv
-         tEb6TOB/UOHofzCf3ePHP/RV74cESHbxnUZZk4LeNqIi36k63llzvcvq1RWBRsRe+fH3
-         8SsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DQEdIqJQMT2DTXxNnryD3JrAvawMTCRUVp7h3+Y4I58=;
-        b=llJRBuCWD1PFTCNWmV84Ce4s7VNs1Dvpq4eQPCM9rZ3BNXR2zWo4GnC0b39kreWRhn
-         zgnMyZ3qa4cxJ/kJHNor5yOBj6TEDUbhhulkIqmNqw9XXHXag0c1hpzh2yLLBapeHOat
-         +/0LzXthvoVDsvmYbaToJT5YKq6X5zLHmAOGOOdU9sG93cvwoPvoGdxJ8ivCAp8ftP2O
-         bcSKphSfC+tjatq/6k6qtu+RFoyrwrgw+Ky3VQIfuWf4YBNP1ZFgH+01C6qbUBCVrXIf
-         A1bXan3LvMuLIORooreCBncc+8KnsQ95RZ7ePJDxW+hwYvHLBKdN9Q2mr5Ea8Q3RreYa
-         tNzw==
-X-Gm-Message-State: AOAM532KIqCZsBIEBBwoP4kotw6NILPg910yhASeIs8kVT0pBMCo2mAz
-        qjpTWWw9yEsNrmJymLNTOnsd/njYYfIDAyiKJko=
-X-Google-Smtp-Source: ABdhPJy14q49ndRpft22Zxx3hmPk1d7rlxFG+MTHM3G13eqOKVC53V7KmYGrVmRIuAapJFVzhRur/hctam12CatbZ+4=
-X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
- ji13-20020a170907980d00b006d6f910513amr2951893ejc.643.1648699030251; Wed, 30
- Mar 2022 20:57:10 -0700 (PDT)
+        Thu, 31 Mar 2022 04:27:21 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9C41C391A;
+        Thu, 31 Mar 2022 01:25:25 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KTbtK51ctz67KsG;
+        Thu, 31 Mar 2022 16:23:53 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 31 Mar 2022 10:25:23 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Thu, 31 Mar 2022 10:25:23 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Thread-Topic: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Thread-Index: AQHYQsxoL5kXhl8+JE6PJPNWV+NOTqzYppqAgABrSsA=
+Date:   Thu, 31 Mar 2022 08:25:22 +0000
+Message-ID: <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+In-Reply-To: <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.81.200.158]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Thu, 31 Mar 2022 04:57:06 +0100
-Message-ID: <CAHpNFcPLqwMyzHt9F5WTGSHr8goaFcczEHS5YL7uajnhe3EwZw@mail.gmail.com>
-Subject: Fast AMD, MIPS & RISC Instruction guidance in reference to https://lkml.org/lkml/2022/3/30/1565
-To:     support.android@sfr.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-RISC Instructions : What do they all mean ? Todays manuel BLTU
+> From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
+> Sent: Thursday, March 31, 2022 4:27 AM
+> On Mon, Mar 28, 2022 at 07:50:15PM +0200, Roberto Sassu wrote:
+> > eBPF already allows programs to be preloaded and kept running without
+> > intervention from user space. There is a dedicated kernel module called
+> > bpf_preload, which contains the light skeleton of the iterators_bpf eBPF
+> > program. If this module is enabled in the kernel configuration, its loading
+> > will be triggered when the bpf filesystem is mounted (unless the module is
+> > built-in), and the links of iterators_bpf are pinned in that filesystem
+> > (they will appear as the progs.debug and maps.debug files).
+> >
+> > However, the current mechanism, if used to preload an LSM, would not
+> offer
+> > the same security guarantees of LSMs integrated in the security
+> subsystem.
+> > Also, it is not generic enough to be used for preloading arbitrary eBPF
+> > programs, unless the bpf_preload code is heavily modified.
+> >
+> > More specifically, the security problems are:
+> > - any program can be pinned to the bpf filesystem without limitations
+> >   (unless a MAC mechanism enforces some restrictions);
+> > - programs being executed can be terminated at any time by deleting the
+> >   pinned objects or unmounting the bpf filesystem.
+> 
+> So many things to untangle here.
 
-signed magnitude (BLT/BGE) or unsigned magnitude (BLTU/ BGEU) =E2=80=A2 12-=
-bit
-immediate encodes branch target address as a signed o=EF=AC=80set from PC, =
-in
-units of 16-bits (i.e., shiR leR by 1 then add to
+Hi Alexei
 
-https://passlab.github.io/CSE564/notes/lecture08_RISCV_Impl.pdf
+thanks for taking the time to provide such detailed
+explanation.
 
-#CryptoFASTintFL Polynomial ROOFLINING : In terms of Entropy pool Int
-& Timer collections Polynomial is a Cryptologic_Functiontion & should
-be A : Rooflined B : Streamlined & C : In Crypto_hash_function.h
-https://lkml.org/lkml/2022/3/30/1313
+> The above paragraphs are misleading and incorrect.
+> The commit log sounds like there are security issues that this
+> patch set is fixing.
+> This is not true.
 
-https://lkml.org/lkml/2022/3/30/1565
+I reiterate the goal: enforce a mandatory policy with
+an out-of-tree LSM (a kernel module is fine), with the
+same guarantees of LSMs integrated in the security
+subsystem.
 
-Coding folder:
-https://bit.ly/VESA_BT
+The root user is not part of the TCB (i.e. is untrusted),
+all the changes that user wants to make must be subject
+of decision by the LSM enforcing the mandatory policy.
 
-Rupert S
-*****
+I thought about adding support for LSMs from kernel
+modules via a new built-in LSM (called LoadLSM), but
+to me it looks that the bpf LSM is closer to achieve the
+same goal. And in addition, eBPF significantly simplifies
+with its helpers writing an LSM.
 
-Polynomial ROOFLINING : #CryptoFASTintFL
+> Looks like there is a massive misunderstanding on what bpffs is.
+> It's a file system to pin and get bpf objects with normal
+> file access permissions. Nothing else.
+> Do NOT use it to pin LSM or any other security sensitive bpf programs
+> and then complain that root can unpin them.
+> Yes. Root can and should be able to 'rm -rf' anything in bpffs instance.
+> 
+> > The usability problems are:
+> > - only a fixed amount of links can be pinned;
+> 
+> where do you see this limit?
 
-In terms of Entropy pool Int & Timer collections Polynomial is a
-Cryptologic_Functiontion & should be A : Rooflined B : Streamlined & C
-: In Crypto_hash_function.h
+static int populate_bpffs(struct dentry *parent)
+{
+        struct bpf_preload_info objs[BPF_PRELOAD_LINKS] = {};
 
-https://lkml.org/lkml/2022/3/30/1313
+#define BPF_PRELOAD_LINKS 2
 
-**Reference**
+> > - only links can be pinned, other object types are not supported;
+> 
+> really? progs, maps can be pinned as well.
 
-Multi Bit load operations for bitmap,Texture & Other tasks +ON+HighLowOP (c=
-)RS
-May take higher or lower bit depth & precisions: Rupert S 2021
+struct bpf_preload_info {
+        char link_name[16];
+        struct bpf_link *link;
+};
 
-MultiBit Serial & Parallel execution conversion inline of N*Bit -+
+> > - code to pin objects has to be written manually;
+> 
+> huh?
 
-2 16 Bit loads is 32Bit but takes 2 cycles...
+I meant if you want to extend the bpf_preload kernel
+module.
 
-16 Bit loads with 32 Bit Stores & Math unit:
+> > Solve the security problems by mounting the bpf filesystem from the
+> kernel,
+> > by preloading authenticated kernel modules (e.g. with
+> module.sig_enforce)
+> > and by pinning objects to that filesystem. This particular filesystem
+> > instance guarantees that desired eBPF programs run until the very end of
+> > the kernel lifecycle, since even root cannot interfere with it.
+> 
+> No.
 
-Operation 1
+Ok. How can the goal I stated above be achieved properly?
 
-16Bit , 16Bit , 16Bit , 16Bit Operation
-    \         /    \         /
-           Inline Store
-     32Bit Store 32Bit Store
-           64Bit Store
-       \     /
-32Bit ADD/DIV x 2 or 64Bit ADD/DIV x1
+> I suspect there is huge confusion on what these two "progs.debug"
+> and "maps.debug" files are in a bpffs instance.
+> They are debug files to pretty pring loaded maps and progs for folks who
+> like to use 'cat' to examine the state of the system instead of 'bpftool'.
+> The root can remove these files from bpffs.
+> 
+> There is no reason for kernel module to pin its bpf progs.
+> If you want to develop DIGLIM as a kernel module that uses light skeleton
+> just do:
+> #include <linux/init.h>
+> #include <linux/module.h>
+> #include "diglim.lskel.h"
+> 
+> static struct diglim_bpf *skel;
+> 
+> static int __init load(void)
+> {
+>         skel = diglim_bpf__open_and_load();
+>         err = diglim_bpf__attach(skel);
+> }
+> /* detach skel in __fini */
+> 
+> It's really that short.
+> 
+> Then you will be able to
+> - insmod diglim.ko -> will load and attach bpf progs.
+> - rmmod diglim -> will detach them.
 
-Operation 2
+root can stop the LSM without consulting the security
+policy. The goal of having root untrusted is not achieved.
 
-32Bit ADD/DIV x 2 or 64Bit ADD/DIV x1
-          \            /
-          4x 16Bit Store
+Maybe there is another way to prevent unloading
+the kernel module. I didn't find it yet. If there was an
+LSM hook called when kernel modules are unloaded,
+that would be sufficient, I guess.
 
-4 x 16Bit Operation
+My point was that pinning progs seems to be the
+recommended way of keeping them running. Pinning
+them to unreachable inodes intuitively looked the
+way to go for achieving the stated goal. Or maybe I
+should just increment the reference count of links
+and don't decrement during an rmmod?
 
-MultiBit Serial & Parallel execution conversion inline of N*Bit -+
+If there is something I'm missing, please let me know.
 
-In the case of ADD -+ Signed for example:(c)RS
-Plus & - Lines ADD or Subtract (Signed, Bit Depth Irrelevant)
+Thanks
 
-Multiples of 16Bit works in place of 32Bit or 64Bit
+Roberto
 
-V1: 16Bit Values composing a total 128Bit number
-V2: 16Bit Values composing a total 128Bit number - (Value less than V1)
-V3: Result
-NBit: Bit Depth
-
-4x16Bit operations in the same cycle >
-If Value =3D 16Bit =3D Store
-If Value =3D V3=3DBit =3D Store * NBit
-
-Stored 128Bit RAM or if remainder =3D less > 4x16Bit -1-1-1 ; 16Bit Value S=
-tore
-
-*
-
-*RAND OP Ubuntu
-
-https://pollinate.n-helix.com/
-
-(Rn1 *<>/ Rn2 *<>/ Rn3)
-
--+
-VAR(+-) Var =3D Rn1 +- Rn8
-
-(Rn5 *<>/ Rn6 *<>/ Rn7)
-
-4 Samples over N * Sample 1 to 4
-
-Input into pool 1 Low half -+
-Input into pool 1 High half -+
-
-*RAND OP Recycle It
-
-*
-
-(c)RS https://bit.ly/DJ_EQ
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua
