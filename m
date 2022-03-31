@@ -2,228 +2,174 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5104ED587
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Mar 2022 10:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C47E4EDA6A
+	for <lists+linux-integrity@lfdr.de>; Thu, 31 Mar 2022 15:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232791AbiCaI1c convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 31 Mar 2022 04:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
+        id S236769AbiCaNYX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 31 Mar 2022 09:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232819AbiCaI1V (ORCPT
+        with ESMTP id S235041AbiCaNYX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 31 Mar 2022 04:27:21 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9C41C391A;
-        Thu, 31 Mar 2022 01:25:25 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KTbtK51ctz67KsG;
-        Thu, 31 Mar 2022 16:23:53 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 31 Mar 2022 10:25:23 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 31 Mar 2022 10:25:23 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
- programs
-Thread-Topic: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
- programs
-Thread-Index: AQHYQsxoL5kXhl8+JE6PJPNWV+NOTqzYppqAgABrSsA=
-Date:   Thu, 31 Mar 2022 08:25:22 +0000
-Message-ID: <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
-References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
- <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
-In-Reply-To: <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.81.200.158]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 31 Mar 2022 09:24:23 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076AF1EA2AB
+        for <linux-integrity@vger.kernel.org>; Thu, 31 Mar 2022 06:22:36 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nZukz-0000QD-7y; Thu, 31 Mar 2022 15:22:33 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nZukz-0007dr-Hc; Thu, 31 Mar 2022 15:22:32 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nZukx-000FOr-8T; Thu, 31 Mar 2022 15:22:31 +0200
+Date:   Thu, 31 Mar 2022 15:22:31 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] char: tpm: cr50_i2c: Drop if with an always false
+ condition
+Message-ID: <20220331132231.h2hbtxthcqsdxmil@pengutronix.de>
+References: <20211112225308.1149304-1-u.kleine-koenig@pengutronix.de>
+ <0c7eb1e97e73e2cd3182a98d8cf76c6a2e2e6578.camel@kernel.org>
+ <20211113215340.cn5kyia7g6fcquh2@pengutronix.de>
+ <671cac28ac30a1135030261948487922cfcd4d89.camel@kernel.org>
+ <20211116173039.ilnj7pag7solqprd@pengutronix.de>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jwuucdekxnfeozc3"
+Content-Disposition: inline
+In-Reply-To: <20211116173039.ilnj7pag7solqprd@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
-> Sent: Thursday, March 31, 2022 4:27 AM
-> On Mon, Mar 28, 2022 at 07:50:15PM +0200, Roberto Sassu wrote:
-> > eBPF already allows programs to be preloaded and kept running without
-> > intervention from user space. There is a dedicated kernel module called
-> > bpf_preload, which contains the light skeleton of the iterators_bpf eBPF
-> > program. If this module is enabled in the kernel configuration, its loading
-> > will be triggered when the bpf filesystem is mounted (unless the module is
-> > built-in), and the links of iterators_bpf are pinned in that filesystem
-> > (they will appear as the progs.debug and maps.debug files).
-> >
-> > However, the current mechanism, if used to preload an LSM, would not
-> offer
-> > the same security guarantees of LSMs integrated in the security
-> subsystem.
-> > Also, it is not generic enough to be used for preloading arbitrary eBPF
-> > programs, unless the bpf_preload code is heavily modified.
-> >
-> > More specifically, the security problems are:
-> > - any program can be pinned to the bpf filesystem without limitations
-> >   (unless a MAC mechanism enforces some restrictions);
-> > - programs being executed can be terminated at any time by deleting the
-> >   pinned objects or unmounting the bpf filesystem.
-> 
-> So many things to untangle here.
 
-Hi Alexei
+--jwuucdekxnfeozc3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks for taking the time to provide such detailed
-explanation.
+On Tue, Nov 16, 2021 at 06:30:39PM +0100, Uwe Kleine-K=F6nig wrote:
+> On Tue, Nov 16, 2021 at 05:55:35PM +0200, Jarkko Sakkinen wrote:
+> > On Sat, 2021-11-13 at 22:53 +0100, Uwe Kleine-K=F6nig wrote:
+> > > Hello,
+> > >=20
+> > > On Sat, Nov 13, 2021 at 12:53:32PM +0200, Jarkko Sakkinen wrote:
+> > > > On Fri, 2021-11-12 at 23:53 +0100, Uwe Kleine-K=F6nig wrote:
+> > > > > tpm_cr50_i2c_remove() is only called after tpm_cr50_i2c_probe() r=
+eturned
+> > > > > successfully. As i2c_get_clientdata() returns driver data for the
+> > > > > client's device and this was set in tpmm_chip_alloc() it won't re=
+turn
+> > > > > NULL.
+> > > >=20
+> > > > This does not make the check obsolete, e.g. it would catch a progra=
+mming
+> > > > error elsewhere.
+> > > >=20
+> > > > > Simplify accordingly to prepare changing the prototype of the i2c=
+ remove
+> > > > > callback to return void. Notice that already today returning an e=
+rror
+> > > > > code from the remove callback doesn't prevent removal.
+> > > >=20
+> > > > I don't understand what you are trying to say.
+> > >=20
+> > > The eventual goal is the following change:
+> > >=20
+> > > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> > > index 16119ac1aa97..c7069ebf5a66 100644
+> > > --- a/include/linux/i2c.h
+> > > +++ b/include/linux/i2c.h
+> > > @@ -273,7 +273,7 @@ struct i2c_driver {
+> > > =A0
+> > > =A0=A0=A0=A0=A0=A0=A0=A0/* Standard driver model interfaces */
+> > > =A0=A0=A0=A0=A0=A0=A0=A0int (*probe)(struct i2c_client *client, const=
+ struct i2c_device_id *id);
+> > > -=A0=A0=A0=A0=A0=A0=A0int (*remove)(struct i2c_client *client);
+> > > +=A0=A0=A0=A0=A0=A0=A0void (*remove)(struct i2c_client *client);
+> > > =A0
+> > > =A0=A0=A0=A0=A0=A0=A0=A0/* New driver model interface to aid the seam=
+less removal of the
+> > > =A0=A0=A0=A0=A0=A0=A0=A0 * current probe()'s, more commonly unused th=
+an used second parameter.
+> > >=20
+> > > To prepare that I want to change all remove callbacks to unconditiona=
+lly
+> > > return 0.
+> > >=20
+> > > The motivation for the above change is that returning an error from an
+> > > i2c (or spi or platform) remove callback doesn't prevent the device f=
+rom
+> > > being removed. So the ability to return an int leads to wrong
+> > > expectations by driver authors.
+> > >=20
+> > > The only effect a non-zero return code has, is an error message from =
+the
+> > > i2c core. So if you object to my suggested change, the minimal change=
+ I
+> > > want to convince you of is to replace
+> > >=20
+> > > =A0=A0=A0=A0=A0=A0=A0=A0return -ENODEV;
+> > >=20
+> > > by
+> > >=20
+> > > =A0=A0=A0=A0=A0=A0=A0=A0return 0;
+> > >=20
+> > > .
+> >=20
+> > Please then include it to a patch set, where this happens.
+>=20
+> My plan is to do all the preparation before submitting the change to
+> struct i2c_driver such that in the end coordination is only needed for a
+> single patch. (As this patch should be easy to review and without side
+> effects it should only drop "return 0;" (or replace them by "return;",
+> depending on context) to make this easy to review/verify.
+>=20
+> Note that the suggested change has already a benefit today because in
+> the error case (and without the change) you get two error messages.
+> Returning 0 suppresses the generic (and so less useful) one.
 
-> The above paragraphs are misleading and incorrect.
-> The commit log sounds like there are security issues that this
-> patch set is fixing.
-> This is not true.
+Either this was not convincing or this patch fell through the cracks.
+Whatever it was, nobody replied and the patch isn't applied either.
 
-I reiterate the goal: enforce a mandatory policy with
-an out-of-tree LSM (a kernel module is fine), with the
-same guarantees of LSMs integrated in the security
-subsystem.
+Would you please (re)consider this patch?
 
-The root user is not part of the TCB (i.e. is untrusted),
-all the changes that user wants to make must be subject
-of decision by the LSM enforcing the mandatory policy.
+Best regards
+Uwe
 
-I thought about adding support for LSMs from kernel
-modules via a new built-in LSM (called LoadLSM), but
-to me it looks that the bpf LSM is closer to achieve the
-same goal. And in addition, eBPF significantly simplifies
-with its helpers writing an LSM.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-> Looks like there is a massive misunderstanding on what bpffs is.
-> It's a file system to pin and get bpf objects with normal
-> file access permissions. Nothing else.
-> Do NOT use it to pin LSM or any other security sensitive bpf programs
-> and then complain that root can unpin them.
-> Yes. Root can and should be able to 'rm -rf' anything in bpffs instance.
-> 
-> > The usability problems are:
-> > - only a fixed amount of links can be pinned;
-> 
-> where do you see this limit?
+--jwuucdekxnfeozc3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-static int populate_bpffs(struct dentry *parent)
-{
-        struct bpf_preload_info objs[BPF_PRELOAD_LINKS] = {};
+-----BEGIN PGP SIGNATURE-----
 
-#define BPF_PRELOAD_LINKS 2
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJFqxQACgkQwfwUeK3K
+7Amw2Qf+MPpBDwgzYIGVnb8kISAYjeaaykl+xvhFq45DqaCsCOAJK2jD7h7ATNVn
+96anWdkCFTtTuClbb4XYqGx9eHon26FNeeqFRQLhxmWGGi8gaOMQDtibwnqb+Xgk
+CbY8d39dPKRdShP56eC+9ObBgQo9NQX/w/RRMJLxtLQQcK8Y2IF8uoaVNShVovrn
+Rqce7sdASu9m8HuDyOJDNf/TW+k4Pe3Y4mxsmozw5al3mboh3FKP0INicqMIH0yc
+h6sXnaOxQ/q6iAsoYROmsSPxUavNhlaAPgYdc8NC757RHq7OCRYpYOCbEkecv+UX
+GFhLMA5KMg7BOPh6QxaVtJinRE/iTQ==
+=hTJq
+-----END PGP SIGNATURE-----
 
-> > - only links can be pinned, other object types are not supported;
-> 
-> really? progs, maps can be pinned as well.
-
-struct bpf_preload_info {
-        char link_name[16];
-        struct bpf_link *link;
-};
-
-> > - code to pin objects has to be written manually;
-> 
-> huh?
-
-I meant if you want to extend the bpf_preload kernel
-module.
-
-> > Solve the security problems by mounting the bpf filesystem from the
-> kernel,
-> > by preloading authenticated kernel modules (e.g. with
-> module.sig_enforce)
-> > and by pinning objects to that filesystem. This particular filesystem
-> > instance guarantees that desired eBPF programs run until the very end of
-> > the kernel lifecycle, since even root cannot interfere with it.
-> 
-> No.
-
-Ok. How can the goal I stated above be achieved properly?
-
-> I suspect there is huge confusion on what these two "progs.debug"
-> and "maps.debug" files are in a bpffs instance.
-> They are debug files to pretty pring loaded maps and progs for folks who
-> like to use 'cat' to examine the state of the system instead of 'bpftool'.
-> The root can remove these files from bpffs.
-> 
-> There is no reason for kernel module to pin its bpf progs.
-> If you want to develop DIGLIM as a kernel module that uses light skeleton
-> just do:
-> #include <linux/init.h>
-> #include <linux/module.h>
-> #include "diglim.lskel.h"
-> 
-> static struct diglim_bpf *skel;
-> 
-> static int __init load(void)
-> {
->         skel = diglim_bpf__open_and_load();
->         err = diglim_bpf__attach(skel);
-> }
-> /* detach skel in __fini */
-> 
-> It's really that short.
-> 
-> Then you will be able to
-> - insmod diglim.ko -> will load and attach bpf progs.
-> - rmmod diglim -> will detach them.
-
-root can stop the LSM without consulting the security
-policy. The goal of having root untrusted is not achieved.
-
-Maybe there is another way to prevent unloading
-the kernel module. I didn't find it yet. If there was an
-LSM hook called when kernel modules are unloaded,
-that would be sufficient, I guess.
-
-My point was that pinning progs seems to be the
-recommended way of keeping them running. Pinning
-them to unreachable inodes intuitively looked the
-way to go for achieving the stated goal. Or maybe I
-should just increment the reference count of links
-and don't decrement during an rmmod?
-
-If there is something I'm missing, please let me know.
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
+--jwuucdekxnfeozc3--
