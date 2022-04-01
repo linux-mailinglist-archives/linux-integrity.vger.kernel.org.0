@@ -2,159 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD7C4EE94A
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Apr 2022 09:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4254EEA6D
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Apr 2022 11:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344005AbiDAHxY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 1 Apr 2022 03:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
+        id S1344582AbiDAJbO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 1 Apr 2022 05:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343999AbiDAHxY (ORCPT
+        with ESMTP id S1344578AbiDAJbN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:53:24 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB1026240E
-        for <linux-integrity@vger.kernel.org>; Fri,  1 Apr 2022 00:51:33 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bh17so4082660ejb.8
-        for <linux-integrity@vger.kernel.org>; Fri, 01 Apr 2022 00:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=nXjAzXLpXSZdHQ34t/UZmSG0B+pcFpFO0TzLkKO37nA=;
-        b=R5qxyMq0KSgMLORzVFr6f8JZchVpBqg3vw6QZkgQMBmMpmrWvKJXEkPbDrZs+NDRNX
-         Q03+2GBXLOuu+WGHr2ImgjCSP8i5ANZM6zdGZHPChpz6m1xhNKPBNPmzSPCmhFczeIiG
-         zBBE5QrYUxqLcx7KAqLrrRxVbscoBuS+Nz0+d/T4WtF+Fz7Cyc0JvzCcF5/+dviBqJWY
-         GhXtl/dXbzv1w9GW18RawAEXaU70jdKR1CPuevT7lUMwFRzc8G1G+ukqTCVltycG1Dwb
-         4kf+VTT2GgdcwdOYxr1ksgSfhfhDaqD3WpPlg0ZS9r0RijRNPPQu60iG14SENDohcZyP
-         MHIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=nXjAzXLpXSZdHQ34t/UZmSG0B+pcFpFO0TzLkKO37nA=;
-        b=Y9S9/HLhsK+HRzKK7owFRHNHCDWdHYWbxa9luFTjCalnWLcBOfBqECxhSnJ2EmfR2P
-         jr249gE1pd7vH1BgHjhdE3KIrqPF+oiKi5WgRuxGlGXUqzWhabDEVfoFC4LbfEEtYr1E
-         x/3T/XfT8ahCjBahcXcdTWkX8dgY4DhTWAnlQGYUxw3Z1V+stCLqhjHHSUDACKMaQy0v
-         dJCt4Sj6FFgp1k47kYYMyNFI++UDvylHn9PUo9Ew+Ujp6+xTMzBz20MJh2UV+S4qUFeo
-         1skNf110oQgH0FY44Rz+LahDIPiL8NDHpqlLQ3aQfvQnOW5qS3KVWFFoJ4ksEnl9bnJ1
-         ntJw==
-X-Gm-Message-State: AOAM5331Rwym1gfer1kMab0hvc0y5TAdiTb06CtX/joGFxuo5qaGgBHo
-        oF07Cl60f4yn5po6vKwGEI0w6Wlxhzq+U5rnEJc=
-X-Google-Smtp-Source: ABdhPJy15tXaBUCoFtBaiXbg+DtyxG4m2FK0tsoBWDirs3TPeDTGqKEPNXZ3qdpz2WbQOSw71PF4td1cPe7M8XL04po=
-X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
- ji13-20020a170907980d00b006d6f910513amr7769180ejc.643.1648799491620; Fri, 01
- Apr 2022 00:51:31 -0700 (PDT)
+        Fri, 1 Apr 2022 05:31:13 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684321D41B9
+        for <linux-integrity@vger.kernel.org>; Fri,  1 Apr 2022 02:29:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=2;SR=0;TI=SMTPD_---0V8spY2g_1648805361;
+Received: from 30.240.100.21(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V8spY2g_1648805361)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 01 Apr 2022 17:29:21 +0800
+Message-ID: <18217eda-f28c-508d-412b-6c10f7d2b94f@linux.alibaba.com>
+Date:   Fri, 1 Apr 2022 17:29:20 +0800
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Fri, 1 Apr 2022 08:51:30 +0100
-Message-ID: <CAHpNFcPUVeOhEnL_10u9Omb+LDpYXjTPkYzteduPYWFiLe90bw@mail.gmail.com>
-Subject: Though the VESA & HDMI & DisplayPort standards Facilitates direct low
- bandwidth transport of and transformation of 3D & 2D graphics & fonts into
- directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-To:     moderator@vesa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: Progress about SM2-with-SM3 signature support for PKCS #7.
+Content-Language: en-US
+To:     "Guozihua (Scott)" <guozihua@huawei.com>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+References: <8609c0dc-1180-f410-e9cf-8f3ceee4c4cc@huawei.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <8609c0dc-1180-f410-e9cf-8f3ceee4c4cc@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-VecSR - Vector Standard Render
+Hi Guozihua,
 
-VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
-Consolas & other brilliant fonts : (c)RS
+On 4/1/22 3:04 PM, Guozihua (Scott) wrote:
+> Hi Tianjia,
+> 
+> Thank you for the all the work surrounding SM crypto algorithm and 
+> certificates.
+> 
+> I noticed that the patch implementing the support for SM2-with-SM3 
+> signature parsing in PKCS #7 has not been merged yet. Would you mind me 
+> asking about the progress of that patch?
+> 
 
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+Thanks, I'd love you to do so, the latest series patch is v4 version,
+this series also supports EC-RDSA algorithm.
 
-OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
-Mode & Desktop Rendering modes
-
-Improve Console & TV & BIOS & General Animated Render
-
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
-
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
-
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
-
-High precision for AVX 32Bit to 256Bit width precision.
-
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
-
-Though the VESA & HDMI & DisplayPort standards Facilitates direct low
-bandwidth transport of and transformation of 3D & 2D graphics & fonts
-into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-
-Display Standards Vector Render : DSVR-SiMD Can and will be directly
-rendered to a Surface for visual element : SfVE-Vec
-
-As such transport of Vectors & transformation onto display (Monitor,
-3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
-
-Directly resolve The total graphics pipeline into high quality output
-or input & allow communication of almost infinite Floating point
-values for all rendered 3D & 2D Elements on a given surface (RAM
-Render Page or Surface)
-
-In high precision that is almost unbeatable & yet consumes many levels
-less RAM & Transport Protocol bandwidth,
-
-Further more can also render Vector 3D & 2D Audio & other elements
-though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
-Harmonic reproduction units for example Yamaha and Casio keyboards.
-
-(c)Rupert S
-
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
-
-https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://science.n-helix.com/2019/06/kernel.html
-
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.html
-
-https://bit.ly/VESA_BT
-
-*
-
-*Application of SiMD Polygon Font Method Render
-*3D Render method with Console input DEMO : RS
-
-3D Display access to correct display of fonts at angles in games &
-apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
-font or shape. (c)Rupert S
-
-3rd dimensional access with vector fonts by a simple method:
-
-Render text to virtual screen layer AKA a fully rendered monochrome, 2
-colour or multi colour..
-
-Bitmap/Texture,
-
-Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
-
-Can be higher resolution & we can sub sample with closer view priority...
-
-We then rotate the texture on our output polygon & factor size differential.
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize
-
-Why ? Because rotating a polygon is harder than subtracting or adding
-width, Hight & direction to fully complex polygon Fonts & Polygon
-lines or curves...
-
-The maths is simple enough to implement in games on an SSE configured
-Celeron D (depending on resolution and Bilinear filter & resize.
-
-https://science.n-helix.com/2022/04/vecsr.html
+Best regards,
+Tianjia
