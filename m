@@ -2,55 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242D74F0462
-	for <lists+linux-integrity@lfdr.de>; Sat,  2 Apr 2022 17:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5E34F081D
+	for <lists+linux-integrity@lfdr.de>; Sun,  3 Apr 2022 08:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357292AbiDBPZ4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 2 Apr 2022 11:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S240600AbiDCGpe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 3 Apr 2022 02:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349411AbiDBPZz (ORCPT
+        with ESMTP id S1348286AbiDCGpc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 2 Apr 2022 11:25:55 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0F733A36
-        for <linux-integrity@vger.kernel.org>; Sat,  2 Apr 2022 08:24:02 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id g20so6172435edw.6
-        for <linux-integrity@vger.kernel.org>; Sat, 02 Apr 2022 08:24:02 -0700 (PDT)
+        Sun, 3 Apr 2022 02:45:32 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDE011158
+        for <linux-integrity@vger.kernel.org>; Sat,  2 Apr 2022 23:43:35 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id p15so13855936ejc.7
+        for <linux-integrity@vger.kernel.org>; Sat, 02 Apr 2022 23:43:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=pR6BQtJb61in8LI2RFfYMWRuA6qssaKJHiA8Szyk98E=;
-        b=dZ6B0rmBbn6QRB2CGYnKiqt+A9OfjP0b9Jb+mdx5Mab9Pr83Xz22KmJlJg5iGhjeSJ
-         FPAmXXt7CqZ7Em9Azz3XvAHCuLPogY98MjzgGQosw8tedERX4o2r/q86H0MpYGCu2LTz
-         dBAKpzc404DUv66B57/Gj7sL8T25YCTSr6+aTvfytSgvSXYAlJticmMXCmICrWQE2W5q
-         YvdZiQfvaqPre0TPUbZXMgxcXrJyEt6blc35OU1IH4k0ymKi2BmzECb9sTYnbeAxPuTG
-         9wnLW+SYrRDLcqdP+oxwcFHqOKSQV1LWVLU55Z67H5kf1Cve/6zCw+c4A52w80Dmn0LH
-         ussA==
+        bh=3Xx2ErVMBxvM/FsKeVuUk3St6Mlwp0omh3F7AKnqaSI=;
+        b=i9rDzybQOX37P+qV8TaQQg/OWkO8nhv8kgK42pzWL139Z8Xu9iSCKQwDblvXomhQdz
+         erv8P/h9REJoC4eMGW651lYjvDDBy3NA7QOPQL8DfMmtPpvkbCZ6n7//UrRniEAi29yw
+         4tSlQ1bvLmKZJeBSJwKQV45geF/xfvB/Lm3lHTu/WbIlhhLZQ8DqrR+FpcUJpM2zaJZm
+         LRVQ0cFP1rJPYw3si2S3se7+ZTQmjcFLpmEc4dDx+6seXPz/iiZziII8dEb84JGicwcN
+         IuS8ILoduby5VIzBgGJF+E7viQ/8AwAUImqesCBKIfbnxqlXVNc4drxfJZAMlQi7wTS2
+         SACQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=pR6BQtJb61in8LI2RFfYMWRuA6qssaKJHiA8Szyk98E=;
-        b=k+oKhGuVQmjTdEY2iiQHSRnLZEnjsGJZW2I9781BS/EZsACURX049/+g4+fthDm5bi
-         R3sCB7bEyv4kxgxbN7r00nu60pttZhe8jZYfZtY5oTyiekW/t2s/ped505HjAYJfo5bX
-         pqK8uyl0C4plSlxxBw3lzizceePGkLYBjNDGv1PrH//Walmxw68qfX4q0cnG0xsqk7o7
-         LUgqMms9h3SmfL/RB/Q1MUNyp2DdMECu8QPp4Ed6aDuPc6pws/toDykayMdpGHNDRGWY
-         nMuiUP8MtJTYSmeHw2e6lwlpZJTbqLsBSG/EfYPPRDjzKPbgVlIwBmzxC2JiAr7kLTwC
-         Pngg==
-X-Gm-Message-State: AOAM532FX9Y74tqos5bJcSi9p8zAK9NTgomEDGVRs1ShwQmvh8xQ7wA5
-        1wT9qA/c5pVkXYK6XA+6o9VLrM4uuC8oGFq3tPs=
-X-Google-Smtp-Source: ABdhPJzfpO9x/irXYPkJ+ByoIvEYWhB4lC8ADz0LH3KvLOarjg5u+B3PSgy9KA+2ojraLBe96jZg8Byr6KLOqqlpQQU=
-X-Received: by 2002:a05:6402:1e8b:b0:41c:59f6:2c26 with SMTP id
- f11-20020a0564021e8b00b0041c59f62c26mr8136977edf.156.1648913040944; Sat, 02
- Apr 2022 08:24:00 -0700 (PDT)
+        bh=3Xx2ErVMBxvM/FsKeVuUk3St6Mlwp0omh3F7AKnqaSI=;
+        b=GBuO/8uVkTYglRgYiDFE5VX8GpUmeeBI+Umxhz8v1SjynyklNhPJjGyWw0d7FbDbaj
+         oZhuvUHLvmY44eoHdjSuXVQFdMP5ymjprk8M8wb1iXjxvyi4yJQ9H+mnNpVateu9ulPY
+         xWjEC+8xgYc6ooE0CbOlvFHL33Gw5JsrhGF0zZFJ3R6+7jauUJaH/CmEc1Z7EAk8kIcl
+         FvGHD58jNxmGdbiEBReOpcOZof3OznVHvapzPmXYW6VZaX12HHE0US4NmGpkWicijFnF
+         Odt6uaMQCbC5tZA0nFtN1EOFFbW7DwTYs8LZFv9gNlfQxl89FT8YZ6R2YoX+ncDinG6h
+         d8kQ==
+X-Gm-Message-State: AOAM530ortuSvFncF/2Zxtz+J4+QeB8rmuGeiMuN4794gBs6I1KC9Z/n
+        3+nhPVFT8fP9WHD2WF3n4p5+Ovzxk+X1EGZ8YL8=
+X-Google-Smtp-Source: ABdhPJx/3YPNiIHFwcdTaaNlKfTfaMhjgdlgvxJs/3tX27AB4qh3X5TrQZv3Z73xqSyo00fOZ3JUVsT4gKwvPn2U1js=
+X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
+ sd6-20020a1709076e0600b006e4dae79574mr6451508ejc.540.1648968213486; Sat, 02
+ Apr 2022 23:43:33 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sat, 2 Apr 2022 16:24:03 +0100
-Message-ID: <CAHpNFcM_1BnAzzSYbpQ1gX8H3u+FY_nLag3OY8+3CJ44N7tU8Q@mail.gmail.com>
-Subject: submit it for inclusion in the standard along with Vector Compression
- VESA Standard Display protocol 3
+Date:   Sun, 3 Apr 2022 07:43:37 +0100
+Message-ID: <CAHpNFcNqkhWQ3xpSw1+MowYrVWii8FMjVOzv_DViCPSBMAHz0g@mail.gmail.com>
+Subject: VecSR Compression (HDMI & DP) & X-OR DSC1.2C & Along with our
+ brilliant security features in NTP Folder (Security bat & WebHSM) & Default
+ JS VESA_BT sure to please all on their servers
 To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -64,13 +65,21 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+VecSR Compression (HDMI  & DP) & X-OR DSC1.2C & Along with our
+brilliant security features in NTP Folder (Security bat & WebHSM) &
+Default JS https://bit.ly/VESA_BT sure to please all on their servers
+
 is QFT a Zero compression or low level compression version of DSC
 1.2b? Maybe X-OR X=3D1 New Data & X=3D0 being not sent ? Therefore Masking
 The Frame Buffer!
 
 If not i dually submit it for inclusion in the standard along with
 Vector Compression VESA Standard Display protocol 3
+https://lkml.org/lkml/2022/4/2/328
 https://lkml.org/lkml/2022/4/2/295
+
+Include vector today *important* RS
+https://vesa.org/vesa-display-compression-codecs/
 
 "QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
 latency=E2=80=9D, which is the amount of time between a frame being ready f=
