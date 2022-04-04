@@ -2,187 +2,153 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DB34F1ABE
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Apr 2022 23:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93A44F1AB2
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Apr 2022 23:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379172AbiDDVS4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S1379154AbiDDVSu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380531AbiDDUYh (ORCPT
+        with ESMTP id S1380577AbiDDUbw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:24:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B4C36B60;
-        Mon,  4 Apr 2022 13:22:39 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 234JAKmi006195;
-        Mon, 4 Apr 2022 20:22:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=sfw2RrUtmje6BGoULsQ9WojX8/18w10SSX3CBcUtUug=;
- b=FHk85IwWXeICJJHsltU4Mnj2ucXrR/O+B4aqoKOECxHXgFB4U9JMQ4dpGh7SJdGcf3ac
- xqTbwyiZvq+XKo+rDkje/qDdisV8/v1eMyn+/R/VVi1EXdsvrI8Ou25CaYsnygbitBV7
- oPrbIXdJ1IOqN8d08u95JL1VbLKlrwnWfDw0D6toATNVjbgOQlJADJaxunRcrzcI34m9
- J315msLcf+TGth0oLwvQI2Rpd/OHoZjppqWJ22b1G30xERvGVnewT27IM10YUTKBqI1T
- 1730DRjfPxpIkSo38bFmP2cwOR3u4xqJKJMK+jLyJz4FlFWrsOuq1+QAtcpBzfCatZLY uw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f6yupg9e1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 20:22:26 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 234KMQXf027173;
-        Mon, 4 Apr 2022 20:22:26 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f6yupg9dj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 20:22:25 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 234KJ58o029900;
-        Mon, 4 Apr 2022 20:22:24 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3f6drhm91e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 20:22:23 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 234KMLIh50266436
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 4 Apr 2022 20:22:21 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8E7E7A4053;
-        Mon,  4 Apr 2022 20:22:21 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D2F2A4040;
-        Mon,  4 Apr 2022 20:22:20 +0000 (GMT)
-Received: from sig-9-65-92-200.ibm.com (unknown [9.65.92.200])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  4 Apr 2022 20:22:20 +0000 (GMT)
-Message-ID: <5c3565f5a46f5728873c9aedd634699ba171fe98.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: remove template "ima" as the compiled default
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     GUO Zihua <guozihua@huawei.com>, linux-integrity@vger.kernel.org
-Cc:     dmitry.kasatkin@gmail.com, roberto.sassu@huawei.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiujianfeng@huawei.com,
-        wangweiyang2@huawei.com
-Date:   Mon, 04 Apr 2022 16:22:19 -0400
-In-Reply-To: <20220321074737.138002-1-guozihua@huawei.com>
-References: <20220321074737.138002-1-guozihua@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: pl8UE3lgklOhzRkfLPc-oB8xj5cwxfhv
-X-Proofpoint-ORIG-GUID: JwuNMqeC0dx2dXPMiAMUKqbUJwEakXWi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-04_09,2022-03-31_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- phishscore=0 adultscore=0 clxscore=1011 mlxlogscore=999 lowpriorityscore=0
- impostorscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204040111
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 4 Apr 2022 16:31:52 -0400
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA51377FD;
+        Mon,  4 Apr 2022 13:29:55 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KXMp90prXzMptVt;
+        Mon,  4 Apr 2022 22:29:53 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KXMp602llzlhRVP;
+        Mon,  4 Apr 2022 22:29:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1649104193;
+        bh=0mFVDtUYoFc9pSC5qUi5cW5G1Ntu51smq5L10oK+2/A=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=TaTRgRi8PJBAchvq1Ix+2vhlaVk/a4nJDrvNu0UPE+g7kY8z4w69RVDtrYUQI4sW7
+         NyeXa0fQWVDYnVQ3YGjrnXS4Dxsj1EG0+q4+bKAuR0xQzy0D8Rj6shj3puUOuxqZU6
+         n9x7Sib0gN6Nsv1/R7bd7gTDuaRn/pnmNcgBseS8=
+Message-ID: <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
+Date:   Mon, 4 Apr 2022 22:30:13 +0200
+MIME-Version: 1.0
+User-Agent: 
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+References: <20220321161557.495388-1-mic@digikod.net>
+ <202204041130.F649632@keescook>
+ <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+In-Reply-To: <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Guo,
 
-The Subject line above sounds like the default template is currently
-"ima", which it isn't.   Perhaps "ima: remove the IMA_TEMPLATE Kconfig
-option" is more accurate.
-
-On Mon, 2022-03-21 at 15:47 +0800, GUO Zihua wrote:
-> Template "ima" is a legacy template which limits the hash algorithm to
-> either sha1 or md5. None of them should be considered "strong" these
-> days. Besides, allowing template "ima" as the compiled default would
-> also cause the following issue: the cmdline option "ima_hash=" must be
-> behind "ima_template=", otherwise "ima_hash=" might be rejected.
+On 04/04/2022 20:47, Linus Torvalds wrote:
+> On Mon, Apr 4, 2022 at 11:40 AM Kees Cook <keescook@chromium.org> wrote:
+>>
+>> It looks like this didn't get pulled for -rc1 even though it was sent
+>> during the merge window and has been in -next for a while. It would be
+>> really nice to get this landed since userspace can't make any forward
+>> progress without the kernel support.
 > 
-
-True "ima" is a legacy template, but the purpose of removing the
-IMA_TEMPLATE from the Kconfig is to address the remaining boot command
-line ordering issue not previously addressed.  This is reasonable
-because the "ima" template is limited to SHA1 and MD5.  If someone
-still needs to use the "ima" template, "ima_template=ima" could still
-be specified on the boot command line.
-
-> The root cause of this issue is that during the processing of ima_hash,
-> we would try to check whether the hash algorithm is compatible with the
-> template. If the template is not set at the moment we do the check, we
-> check the algorithm against the compiled default template. If the
-> complied default template is "ima", then we reject any hash algorithm
-> other than sha1 and md5.
+> Honestly, I need a *lot* better reasoning for random new non-standard
+> system calls than this had.
 > 
-> For example, if the compiled default template is "ima", and the default
-> algorithm is sha1 (which is the current default). In the cmdline, we put
-> in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
-> that ima starts with ima-ng as the template and sha256 as the hash
-> algorithm. However, during the processing of "ima_hash=",
-> "ima_template=" has not been processed yet, and hash_setup would check
-> the configured hash algorithm against the compiled default: ima, and
-> reject sha256. So at the end, the hash algorithm that is actually used
-> will be sha1.
-> 
-> With template "ima" removed from the compiled default, we ensure that the
-> default tempalte would at least be "ima-ng" which allows for basically
-> any hash algorithm.
-> 
-> This change would not break the algorithm compatibility checking for
-> IMA.
-> 
-> Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
-> Signed-off-by: GUO Zihua <guozihua@huawei.com>
-> ---
->  security/integrity/ima/Kconfig | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index f3a9cc201c8c..9513df2ac19e 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -65,14 +65,11 @@ choice
->  	help
->  	  Select the default IMA measurement template.
->  
-> -	  The original 'ima' measurement list template contains a
-> -	  hash, defined as 20 bytes, and a null terminated pathname,
-> -	  limited to 255 characters.  The 'ima-ng' measurement list
-> -	  template permits both larger hash digests and longer
-> -	  pathnames.
-> -
-> -	config IMA_TEMPLATE
-> -		bool "ima"
-> +	  The 'ima-ng' measurement list template permits various hash
-> +	  digests and long pathnames. The compiled default template
-> +	  can be overwritten using the kernel command line
-> +	  'ima_template=' option.
-> +
->  	config IMA_NG_TEMPLATE
->  		bool "ima-ng (default)"
->  	config IMA_SIG_TEMPLATE
-> @@ -82,7 +79,6 @@ endchoice
->  config IMA_DEFAULT_TEMPLATE
->  	string
->  	depends on IMA
-> -	default "ima" if IMA_TEMPLATE
->  	default "ima-ng" if IMA_NG_TEMPLATE
->  	default "ima-sig" if IMA_SIG_TEMPLATE
->  
+> And this kind of "completely random interface with no semantics except
+> for random 'future flags'" I will not pull even *with* good reasoning.
 
-The IMA_TEMPLATE definition is removed, but leaves a few references to
-it.
--- 
-thanks,
+I think the semantic is well defined:
+"This new syscall enables user space to ask the kernel: is this file
+descriptor's content trusted to be used for this purpose?"
+See the trusted_for_policy sysctl documentation: 
+https://lore.kernel.org/all/20220104155024.48023-3-mic@digikod.net/
 
-Mimi
+There is currently only one defined and implemented purpose: execution 
+(or script interpretation). There is room for other flags because it is 
+a good practice to do so, and other purposes were proposed.
 
 
+> 
+> I already told Mickaël in private that I wouldn't pull this.
+> 
+> Honestly, we have a *horrible* history with non-standard system calls,
+> and that's been true even for well-designed stuff that actually
+> matters, that people asked for.
+> 
+> Something  like this, which adds one very special system call and
+> where the whole thing is designed for "let's add something random
+> later because we don't even know what we want" is right out.
+> 
+> What the system call seems to actually *want* is basically a new flag
+> to access() (and faccessat()). One that is very close to what X_OK
+> already is.
+
+I agree.
+
+
+> 
+> But that wasn't how it was sold.
+> 
+> So no. No way will this ever get merged, and whoever came up with that
+> disgusting "trusted_for()" (for WHAT? WHO TRUSTS? WHY?) should look
+> themselves in the mirror.
+
+Well, naming is difficult, but I'm open to suggestion. :)
+
+As explained in the description, the WHAT is the file descriptor 
+content, the WHO TRUSTS is the system security policy (e.g. the mount 
+point options) and the WHY is defined by the usage flag 
+(TRUSTED_FOR_EXECUTION).
+This translates to: is this file descriptor's content trusted to be used 
+for this specified purpose/usage?
+
+
+> 
+> If you add a new X_OK variant to access(), maybe that could fly.
+
+As answered in private, that was the approach I took for one of the 
+early versions but a dedicated syscall was requested by Al Viro: 
+https://lore.kernel.org/r/2ed377c4-3500-3ddc-7181-a5bc114ddf94@digikod.net
+The main reason behind this request was that it doesn't have the exact 
+same semantic as faccessat(2). The changes for this syscall are 
+documented here: 
+https://lore.kernel.org/all/20220104155024.48023-3-mic@digikod.net/
+The whole history is linked in the cover letter: 
+https://lore.kernel.org/all/2ed377c4-3500-3ddc-7181-a5bc114ddf94@digikod.net/
+
+This initial proposal was using a new faccessat2(2) flag: 
+AT_INTERPRETED, see 
+https://lore.kernel.org/all/20200908075956.1069018-2-mic@digikod.net/
+What do you think about that? I'm happy to get back to this version if 
+everyone is OK with it.
