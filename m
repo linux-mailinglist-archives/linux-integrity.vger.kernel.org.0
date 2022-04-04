@@ -2,67 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD394F1ECA
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Apr 2022 00:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464324F1FBA
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Apr 2022 01:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240243AbiDDWEf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Apr 2022 18:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S232630AbiDDXEa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Apr 2022 19:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379693AbiDDV6k (ORCPT
+        with ESMTP id S233001AbiDDXEP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Apr 2022 17:58:40 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE99B41635
-        for <linux-integrity@vger.kernel.org>; Mon,  4 Apr 2022 14:40:43 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id q14so14632093ljc.12
-        for <linux-integrity@vger.kernel.org>; Mon, 04 Apr 2022 14:40:43 -0700 (PDT)
+        Mon, 4 Apr 2022 19:04:15 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D72549F8E
+        for <linux-integrity@vger.kernel.org>; Mon,  4 Apr 2022 15:25:22 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id s8so10275761pfk.12
+        for <linux-integrity@vger.kernel.org>; Mon, 04 Apr 2022 15:25:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dvKxsafXL2Gat8gnxoPlSsJysAlo5fGZyeeEP4baNY8=;
-        b=A9tjEjTQxL5uzMyZiDMZsByK+whBGLSB6qHE+uZRK7pVJilQTKdEsI9cEjxGRejl5b
-         J71jC7xcvbNYqvYxcPtUkqcG/jeaBVt1hzrA68i4S37/iSwMfqtVSRk8JDPuGGLw6XZI
-         nrysu96epRGW5riZujfcbHCnjDbtfn5ZsZrfE=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=gk7YExpjD17yvmNb1YnkwGsNAfvivwtdanWcpr+eU8Y=;
+        b=b4kGzhYdOOBuJA+ydGgqp1rlD/EHbApMFe6NjPa2BcD1b0AjYblro2TW6cHiJwXv1j
+         cIHnWLN+29p+1lVvytOTxUDuVRYGoz8mHzrqWSCMqfa4dNIB3FqIE70xRvHTuuJ9+Prg
+         IMeR3KfPWdMGhvmBnaqnoUY8yhUtgAAzPiOJQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dvKxsafXL2Gat8gnxoPlSsJysAlo5fGZyeeEP4baNY8=;
-        b=jutuaa3NjWmIqyIYieJhXGQs/XrWOme1j205saqvjwh214kkhRzdvWueOAZtz+Yl46
-         FEjDxKTH/mm+ripCTStO77W7C/nJos/qgpqKl0waVA6+E7eyG9bHDZLdzHz5A+cK2v/d
-         ctx2zhl0AzI5nktWCdgEB9ZzVD0w/8eKl9fTgCxiI4iVX7NWP6IKRurgZRXxN7XlEYLC
-         zOjOe8ZI7axvZR7sozWw25Bqy92TP3yxxnepvrDwmtnT9XcyoAbvuFU5YRBIzNsQehIz
-         a94RGRi2D7PUZJcz1j54F4M91At4f2noEGV0yg+KZvbZe410EiCeFqg7yN+hghlKM9a4
-         gbew==
-X-Gm-Message-State: AOAM533QVYeiNZAIVfW+qi0d82tcBip3erfD1fwWkgvOpBwxGcZJnVVg
-        8ZnFxq7VELDChkoMAUJesU89s6i7jITPpv8DOR4=
-X-Google-Smtp-Source: ABdhPJxvPJaGke3BcxWtO+BKRmjXqcBtW4C1v3N2NkPiU6LriZQGTbfAb3RQj5Mhur5vEEYVPaPuYg==
-X-Received: by 2002:a2e:994a:0:b0:249:7be6:9e62 with SMTP id r10-20020a2e994a000000b002497be69e62mr65590ljj.215.1649108441943;
-        Mon, 04 Apr 2022 14:40:41 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id z11-20020a0565120c0b00b0044a378908d5sm1270346lfu.179.2022.04.04.14.40.38
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 14:40:39 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id b17so12117464lfv.3
-        for <linux-integrity@vger.kernel.org>; Mon, 04 Apr 2022 14:40:38 -0700 (PDT)
-X-Received: by 2002:a05:6512:3055:b0:44a:3914:6603 with SMTP id
- b21-20020a056512305500b0044a39146603mr239017lfb.435.1649108438583; Mon, 04
- Apr 2022 14:40:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220321161557.495388-1-mic@digikod.net> <202204041130.F649632@keescook>
- <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
- <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net> <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
-In-Reply-To: <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 4 Apr 2022 14:40:22 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjFQCUto1LGo8Cozhe1n9KjoU_99v94ubU_QWSQob7ntw@mail.gmail.com>
-Message-ID: <CAHk-=wjFQCUto1LGo8Cozhe1n9KjoU_99v94ubU_QWSQob7ntw@mail.gmail.com>
-Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     Kees Cook <keescook@chromium.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=gk7YExpjD17yvmNb1YnkwGsNAfvivwtdanWcpr+eU8Y=;
+        b=IQYnhNM0GfzetYjd7veloQb0F8LCSTNu4smBsVAoEmKznCw2hsCx/2OCecpiCcPYez
+         DUOehDk+9et/5Enqn2t+jBSaYDBks4G6VYv05xE8lN8Y6OQEiicQhjN8YIavUYUpgYZj
+         TFbkUo+4IPu2oAJEpYgl2W8u6IfcftnLeSj9JO0sJ1IEVy3Gs7XAh5+zodFGQ1UK5YPP
+         ONk6c9/N6YnINL9rEBjBFXhTnUm5UjPUZmV+QxxWGfDEM4C7MMI/6LeTldyT7Y9WOVhb
+         /9Q4NVhh3rkPtZPIkhYLoEuNKq/odpbjC/p6IUFoSMAxlmBRh+DDso9gKvri1uqYU6l/
+         EGQA==
+X-Gm-Message-State: AOAM532iKWF5E+dH1j8W6W6WlyOFUzrUkTxtwe/ygxsKrzAoOJYCQla0
+        HFySQ6YYZA0HpDdUDbZcSvUrGg==
+X-Google-Smtp-Source: ABdhPJxRptxXnfZI/YYw0ccjtfFSL+7+tWY8HL5HqZoAtkFBK4XdlYUkLt5bpzJtf2Kd+v7xUr+vhw==
+X-Received: by 2002:a62:7b43:0:b0:4fa:6936:6986 with SMTP id w64-20020a627b43000000b004fa69366986mr318150pfc.13.1649111121830;
+        Mon, 04 Apr 2022 15:25:21 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q9-20020a056a0002a900b004fde4893cf8sm8710271pfs.200.2022.04.04.15.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 15:25:21 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 15:25:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Christian Heimes <christian@python.org>,
@@ -72,7 +59,7 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?Q?Philippe_Tr=C3=A9buchet?= 
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
         <philippe.trebuchet@ssi.gouv.fr>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Steve Dower <steve.dower@python.org>,
@@ -83,31 +70,76 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         LSM List <linux-security-module@vger.kernel.org>,
         Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+Message-ID: <202204041451.CC4F6BF@keescook>
+References: <20220321161557.495388-1-mic@digikod.net>
+ <202204041130.F649632@keescook>
+ <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+ <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
+ <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 2:28 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
+On Mon, Apr 04, 2022 at 02:28:19PM -0700, Linus Torvalds wrote:
+> Now, what I *think* you mean is
+> 
+>  (1) user-space executable loaders want to be able to test the *same*
+> policy as the kernel does for execve()
+
+Right. The script interpreter wants to ask "if this file were actually
+an ELF going through execve(), would the kernel allow it?"
+
+>  (2) access(path, EXECVE_OK) will do the same permission checks as
+> "execve()" would do for that path
+
+Maybe. I defer to Mickaël here, but my instinct is to avoid creating an
+API that can be accidentally misused. I'd like this to be fd-only based,
+since that removes path name races. (e.g. trusted_for() required an fd.)
+
+>  (3) if you already have the fd open, use "faccess(fd, NULL,
+> F_OK_TO_EXECUTE, AT_EMPTY_PATH)"
+
+Yes, specifically faccessat2(). (And continuing the race thought above,
+yes, there could still be races if the content of the file could be
+changed, but that case is less problematic under real-world conditions.)
+
 >  (4) maybe we want to add a flag for the "euid vs real uid", and that
 > would be in the "flags" field, since that changes the actual *lookup*
 > semantics
+> 
+> Note that that (4) is something that some normal user space has wanted
+> in the past too (GNU libcs has a "eaccess()" thing for "effective uid
+> access").
 
-Duh. We already did that long ago, and it's there as AT_EACCESS.
+I think this already exists as AT_EACCESS? It was added with
+faccessat2() itself, if I'm reading the history correctly.
 
-I should have just looked at the code more closely.
+And I just need to say that the thought of setuid script interpreters
+still makes me sad. :)
 
-But that "you didn't even check what we already do, Linus" thing just
-makes it even more obvious that all of this makes perfect sense in the
-confines of access() already, and a new "check _these_ protections"
-should just be a new mode bit.
+>  - I really want the exact semantics very clearly defined. I think
+> it's ok to say "exact same security check as for 'execve()'", but even
+> then we need to have that discussion about
+> 
+>     (a) "what about suid bits that user space cannot react to"
 
-                 Linus
+What do you mean here? Do you mean setid bits on the file itself?
+
+>     (b) that whole "effective vs real" discussion
+
+I think this is handled with AT_EACCESS?
+
+-- 
+Kees Cook
