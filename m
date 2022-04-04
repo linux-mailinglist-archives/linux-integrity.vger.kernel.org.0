@@ -2,53 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118064F2067
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Apr 2022 01:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7D64F206A
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Apr 2022 01:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiDDXqO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Apr 2022 19:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S229470AbiDDXvy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Apr 2022 19:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiDDXqN (ORCPT
+        with ESMTP id S229461AbiDDXvx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:46:13 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011F15B3E8
-        for <linux-integrity@vger.kernel.org>; Mon,  4 Apr 2022 16:44:08 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id d3so6019744wrb.7
-        for <linux-integrity@vger.kernel.org>; Mon, 04 Apr 2022 16:44:08 -0700 (PDT)
+        Mon, 4 Apr 2022 19:51:53 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA70B67
+        for <linux-integrity@vger.kernel.org>; Mon,  4 Apr 2022 16:49:51 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id i6-20020a1c3b06000000b0038e710da2dcso535906wma.1
+        for <linux-integrity@vger.kernel.org>; Mon, 04 Apr 2022 16:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=ztaQ1ESX3eg+grHUE/lLkWKyWNOSEHPxB2f7GUJ16bI=;
-        b=Ix9sjBTdT+WbHjR0xleKYd65EDk/2s3vdBElZuwy/fNM1BRHLcuPyBNHzoeAQ3/hCM
-         ZaOoY8+bXR70Tg0nPIcI53d6rBmWt2O08FY9E3B+sMepZY1/ucJaYzdxr6MI9MI4fGF4
-         KcT6Lmw6L5RY5WerN/vKajLsWh7l0LHmZX0hZGSgFkIYqkxiKikLuBpoHenU6PllvMOF
-         wjgagidMxrA1jVgNqV8xcvAmejP7F4nuPeY+kmAYcEmzH+8oIWJQ+BnQY6KgwzX29Dm5
-         C6ru1HmG/r1iSBvW87/cN6oERf/ceqTdizk/FvUjTfrDlGC4hMcFd1BY+TRiooC5M0ZT
-         VPQg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l9xW3HAcFSKuV+/FcSEP9k1d5+BZ/v4v+0buVAagfng=;
+        b=Rtdpm9/eExIrkWu7lqvtkp2SFUdc1voWm++CoidXs0vCCl0DY2whSZxPuRt8j+gotn
+         +MrPOkFIqus6rHCei1KQMzI1v3glGY2IrhLl4sZuHtCXfTqNTYi1CmXVfLs14gYU7Dtv
+         XJJWs78w5wb0t8EsE89dxxUJNOF5TMhq0guchBQ1GMv5FMZRNfVzhUMPlK6qRz9QjRbU
+         z7Mmj1n/Vk4XgkeoTJUtjGrzX+Dof23gOL+XiaQSv/asA4zYRHUX6XqkqKxXOGDM4HI1
+         2p43PYHU8zuby29ZXuOjKABaRi1tTnGXw3urM1d/B8NwhpVSxEYBjUEyQsfbmNfwhjcD
+         5DeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=ztaQ1ESX3eg+grHUE/lLkWKyWNOSEHPxB2f7GUJ16bI=;
-        b=rRLI86X/QWOsYVLRGYWV2/QmWSamzZd5MUjXhEWArHThCnAAjzOAofviiWWD0YcUtY
-         embarFlR4i1nAeiyzcCR0Xcjg1SY3gZkeEkJOcOv1AX8CeC6pvs+3WY/k64EkIGLMgvC
-         EhQHpR95SxXNP6/bUWycU4evl+mGa3QGVBExHlQD8K4DSKkE8qWIHcHwaCgPKqVZVRlO
-         LGxJHQowpCYE9jwL2pOCSzM0NZFjdsbD7ZOflTpLxuUjTXxtu8B1CXdBRS/ZAukD6EgO
-         iWkEwqMZZBUj4zVRPhxO2Hpl5gFlVkz8/ixU6eg9eDBTBMgUQt/Ry/rj8E9OynrszrmZ
-         HwIw==
-X-Gm-Message-State: AOAM5317Ugu/5M1L/sFsgUFICw2uehZi/1oSZndZUlNN0m4+6TJAZuVC
-        8cPetoShu+ry3U83133ysOUAl1A61gl92KVKqQjOVNS8VBldAg==
-X-Google-Smtp-Source: ABdhPJzAvFzJ5KTWCvdRRB3Q0H07W6wPWHUSx4SjeyXDjL9MKOf22e3aoKXfxHZ0wHYzm6UfhMooUq98tBVFE6Ae0gw=
-X-Received: by 2002:a5d:410c:0:b0:206:b5c:65c7 with SMTP id
- l12-20020a5d410c000000b002060b5c65c7mr450774wrp.94.1649115765815; Mon, 04 Apr
- 2022 16:42:45 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l9xW3HAcFSKuV+/FcSEP9k1d5+BZ/v4v+0buVAagfng=;
+        b=gStN7rjEXt5MVNwrPGAi/QBcuOuL8p0iwLDauE5ilU2BX9Z/P8DB9pSHJEmfiu2mxO
+         bW2D3IqVXO5FkL2nFmaEoLeFadye3J8Ivqi9ZOI40YVJwTMQCbkn6Fo/RRzlVbdgxsFy
+         P/YtcEG0BIV5QkBMXQFq4LuHYzgXHP530T0wnmW91wiN3DdqtAHFTql6dSbryRJowuIh
+         6NkDq7HZ8HNcbkV9CRft/Oxsr5ZXwubwj9FT0Rjzho7ur797DJGlsYZTEH9OkCtRq58M
+         cUO7kKk9ELwzVOlXOO6Tzua+Uu/LKdd2nAE9mVhQfMDycbLPqvbliWtHn/NEFhwWVM71
+         9ixA==
+X-Gm-Message-State: AOAM531UO+CBVDtX2QrOjImL3xNV3eKkf0yC3Qm6AfKo7K68rhBtA+/B
+        K0hEYibTdV1p2vnd7ZAppc2rUOggDKixel/uFPU2DA==
+X-Google-Smtp-Source: ABdhPJyg+abWix7Ts4qCEO7RXp6fKaPsVgBsnBTOQy+NgVb44hvZvX8QAtOVUrILV/l+lMXh8eMMBCOoDOqNay9FyAk=
+X-Received: by 2002:a05:600c:1797:b0:38e:70fa:4e4f with SMTP id
+ x23-20020a05600c179700b0038e70fa4e4fmr479543wmo.30.1649115908962; Mon, 04 Apr
+ 2022 16:45:08 -0700 (PDT)
 MIME-Version: 1.0
+References: <CANMTAZSQgokaG7ZaqipcR56yzOK7iDq50P0_GKd-H7nxUX3TzQ@mail.gmail.com>
+ <Ykt9hoX+mPG1oirv@sol.localdomain>
+In-Reply-To: <Ykt9hoX+mPG1oirv@sol.localdomain>
 From:   Jes Klinke <jbk@google.com>
-Date:   Mon, 4 Apr 2022 16:42:34 -0700
-Message-ID: <CANMTAZTAnGDxJri4_rogsW2Ev9tpFTSTBZaEvSNpgmjEUAgwBA@mail.gmail.com>
-Subject: [PATCH] drivers/char/tpm: Google TPM, additional DID:VID
-To:     linux-integrity@vger.kernel.org
+Date:   Mon, 4 Apr 2022 16:44:57 -0700
+Message-ID: <CANMTAZR-7UEeNXx0Syd+eS7L1K9xc6X9L01UoT50xpDPu4+xVQ@mail.gmail.com>
+Subject: Re: PATCH: Google security chip, additional DID:VID
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -61,50 +67,33 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Accept one additional numerical value of DID:VID for Google TPM.
+I have sent a separate email to the list with the patch, in which I
+have cut out the long explanation, added Signed-off-by, and added the
+delimiter for the diff.  Let me know if there are anything else I have
+overlooked.
 
-Signed-off-by: Jes B. Klinke <jbk@google.com>
+Regards
+Jes
 
----
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index f6c0affbb4567..e5fb1ecc8fa2e 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -31,6 +31,7 @@
- #define TPM_CR50_TIMEOUT_SHORT_MS 2 /* Short timeout during transactions */
- #define TPM_CR50_TIMEOUT_NOIRQ_MS 20 /* Timeout for TPM ready without IRQ */
- #define TPM_CR50_I2C_DID_VID 0x00281ae0L /* Device and vendor ID reg value */
-+#define TPM_TI50_I2C_DID_VID 0x504a6666L
- #define TPM_CR50_I2C_MAX_RETRIES 3 /* Max retries due to I2C errors */
- #define TPM_CR50_I2C_RETRY_DELAY_LO 55 /* Min usecs between retries on I2C */
- #define TPM_CR50_I2C_RETRY_DELAY_HI 65 /* Max usecs between retries on I2C */
-@@ -742,16 +743,20 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
-  }
-
-  vendor = le32_to_cpup((__le32 *)buf);
-- if (vendor != TPM_CR50_I2C_DID_VID) {
-- dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
-- tpm_cr50_release_locality(chip, true);
-- return -ENODEV;
-+ if (vendor == TPM_CR50_I2C_DID_VID) {
-+ dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-+ client->addr, client->irq, vendor >> 16);
-+ return tpm_chip_register(chip);
-+ }
-+ if (vendor == TPM_TI50_I2C_DID_VID) {
-+ dev_info(dev, "ti50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-+ client->addr, client->irq, vendor >> 16);
-+ return tpm_chip_register(chip);
-  }
-
-- dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-- client->addr, client->irq, vendor >> 16);
--
-- return tpm_chip_register(chip);
-+ dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
-+ tpm_cr50_release_locality(chip, true);
-+ return -ENODEV;
- }
-
- /**
+On Mon, Apr 4, 2022 at 4:21 PM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Mon, Apr 04, 2022 at 04:00:31PM -0700, Jes Klinke wrote:
+> > Hello Peter,
+> >
+> > I am a firmware engineer working on the TPM chip in Chromebooks (known
+> > as cr50).  As we plan to deploy a new codebase on our TPM chips, we
+> > will have them present a new DID:VID value, but otherwise follow the
+> > same protocol as the existing implementations.
+> >
+> > The below patch has the effect of accepting one additional numerical
+> > value, and logging one of two messages, depending on the value.
+> > Unfortunately, I had to reverse the indentation, so the diff appears
+> > to touch more lines than it needed to do.
+> >
+> > I am unsure which procedure to follow, as this is my first kernel
+> > patch.  Let me know if posting the patch inline like this is not the
+> > way to go.
+>
+> Can you take a look at Documentation/process/submitting-patches.rst?
+>
+> - Eric
