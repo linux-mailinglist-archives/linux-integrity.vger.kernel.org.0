@@ -2,136 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28D54F10BE
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Apr 2022 10:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500CB4F1AC3
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Apr 2022 23:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243344AbiDDIVP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Apr 2022 04:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S1379213AbiDDVS6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243316AbiDDIVO (ORCPT
+        with ESMTP id S1378962AbiDDQK4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:21:14 -0400
-Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA653B543;
-        Mon,  4 Apr 2022 01:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1649060357; x=1680596357;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6g5F7vqMqbm8qvjj6KZ0nEFUne1Z/PQPj4eHWzChsVw=;
-  b=HsBE7eIAm2v0Elk237xPOOX55zJOmSeLJZMRwNj76ueMthVKXwPndRlT
-   5VeA34OUR28xWwqK+aBedY4G22beOxIV5k93heyEQ6cOSg5Ou0Z/+hjQP
-   bGg0YW7TR4oLflV9Yj9SHnOkq1x6Hz/WHty4I8BywmyFps2hJBrsVcbPw
-   A=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="172160987"
-X-IronPort-AV: E=Sophos;i="5.90,233,1643670000"; 
-   d="scan'208";a="172160987"
-Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 10:19:15 +0200
-Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
-        Mon,  4 Apr 2022 10:19:15 +0200 (CEST)
-Received: from ISCN5CG1067W80.infineon.com (172.23.8.247) by
- MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 4 Apr 2022 10:19:15 +0200
-From:   Johannes Holland <johannes.holland@infineon.com>
-To:     <peterhuewe@gmx.de>, <jarkko@kernel.org>, <jgg@ziepe.ca>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <amirmizi6@gmail.com>, <robh@kernel.org>,
-        Johannes Holland <johannes.holland@infineon.com>
-Subject: [PATCH 4/4] tpm: Add YAML schema for the TPM TIS I2C options
-Date:   Mon, 4 Apr 2022 10:18:35 +0200
-Message-ID: <20220404081835.495-4-johannes.holland@infineon.com>
-X-Mailer: git-send-email 2.31.1.windows.1
-In-Reply-To: <20220404081835.495-1-johannes.holland@infineon.com>
-References: <20220404081835.495-1-johannes.holland@infineon.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE812.infineon.com (172.23.29.38) To
- MUCSE819.infineon.com (172.23.29.45)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 4 Apr 2022 12:10:56 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC01DF47;
+        Mon,  4 Apr 2022 09:08:59 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so11187055fac.11;
+        Mon, 04 Apr 2022 09:08:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Kx6ERCrj+RAX4ftx3ARMDh8uvUSQAfGf8UrRWwljjyQ=;
+        b=VKbUPMt4ypzLMRW0Bj4M5MoMtZ0AQA2Ni4ImfNxVgsZrIvC8jpZWcifgPW2Umg32dN
+         VDx+crCsfJLjI+8d40MN8odTLjtpDN99wQtqLhXKeWVB759RVtwaQBbsE6MaOKLT2q9I
+         WKrOlTQJJo9X9mLQwVH99nGEls+bELTFKTfZIijh2E24WZXKObK3+wp57tPJfiHJOmv8
+         OFAmCH8mtzs44TGsLF4saC6GAHVqQwHfRTiqtldxkGAX+Yc26hiPvpAKlGe0LfrkPmaB
+         uIb+FVsM8Xrhs6/0EwQCG/Y3sWgmr+LG99fhLAWEYCSw7FSre6T16oIi67QuNzjJ3yTx
+         NeCw==
+X-Gm-Message-State: AOAM531jA6ChDqp887vLEjwlr0OuT7x1EPKu4sPy7ZvvTkBlsAp+rzFp
+        y/1/AaN8W6sYi0odLIEk0g==
+X-Google-Smtp-Source: ABdhPJwjEFDANYI87q+T1m/cxlD9OPVLWfDti/NALdasQ/YIMK9xAtUQhLRRf8DokcYSDllKErUj0Q==
+X-Received: by 2002:a05:6870:6188:b0:e1:e3ed:b39a with SMTP id a8-20020a056870618800b000e1e3edb39amr324317oah.271.1649088539072;
+        Mon, 04 Apr 2022 09:08:59 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i21-20020a056830011500b005cdc3cdacb5sm4730227otp.57.2022.04.04.09.08.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 09:08:58 -0700 (PDT)
+Received: (nullmailer pid 1436945 invoked by uid 1000);
+        Mon, 04 Apr 2022 16:08:58 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Johannes Holland <johannes.holland@infineon.com>
+Cc:     devicetree@vger.kernel.org, peterhuewe@gmx.de, jarkko@kernel.org,
+        jgg@ziepe.ca, amirmizi6@gmail.com, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+In-Reply-To: <20220404081835.495-4-johannes.holland@infineon.com>
+References: <20220404081835.495-1-johannes.holland@infineon.com> <20220404081835.495-4-johannes.holland@infineon.com>
+Subject: Re: [PATCH 4/4] tpm: Add YAML schema for the TPM TIS I2C options
+Date:   Mon, 04 Apr 2022 11:08:58 -0500
+Message-Id: <1649088538.021063.1436944.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add a YAML schema to support device tree bindings for the generic I2C
-physical layer. Refer to the TCG PC Client Platform TPM Profile (PTP)
-Specification for TPM 2.0 v1.04 Revision 14.
+On Mon, 04 Apr 2022 10:18:35 +0200, Johannes Holland wrote:
+> Add a YAML schema to support device tree bindings for the generic I2C
+> physical layer. Refer to the TCG PC Client Platform TPM Profile (PTP)
+> Specification for TPM 2.0 v1.04 Revision 14.
+> 
+> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> ---
+>  .../bindings/security/tpm/tpm-tis-i2c.yaml    | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+> 
 
-Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
----
- .../bindings/security/tpm/tpm-tis-i2c.yaml    | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
-new file mode 100644
-index 000000000000..7948867ff3f7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/security/tpm/tpm-tis-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: I2C PTP based TPM Device Tree Bindings
-+
-+maintainers:
-+  - Johannes Holland <johannes.holland@infineon.com>
-+
-+description:
-+  Device Tree Bindings for I2C based Trusted Platform Module (TPM).
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          # Infineon's Trusted Platform Module (TPM) (SLB9673)
-+          - infineon,slb9673
-+          # Nuvoton's Trusted Platform Module (TPM) (NPCT75x)
-+          - nuvoton,npct75x
-+      - const: tcg,tpm-tis-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupt:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      tpm@2e {
-+        compatible = "infineon,slb9673", "nuvoton,npct75x", "tcg,tpm-tis-i2c";
-+        reg = <0x2e>;
-+      };
-+    };
-+...
--- 
-2.31.1.windows.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.example.dt.yaml: tpm@2e: compatible:1: 'tcg,tpm-tis-i2c' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.example.dt.yaml: tpm@2e: compatible: ['infineon,slb9673', 'nuvoton,npct75x', 'tcg,tpm-tis-i2c'] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
