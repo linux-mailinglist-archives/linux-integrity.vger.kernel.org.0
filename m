@@ -2,260 +2,175 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F9A4F433D
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Apr 2022 23:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98894F5226
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Apr 2022 04:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238816AbiDEPDS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 5 Apr 2022 11:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S1449381AbiDFCgK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 5 Apr 2022 22:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387056AbiDEO33 (ORCPT
+        with ESMTP id S1452052AbiDEPyV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:29:29 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599521207D8;
-        Tue,  5 Apr 2022 06:11:32 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXnyW2G6Cz685VR;
-        Tue,  5 Apr 2022 21:08:35 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Apr 2022 15:11:28 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <corbet@lwn.net>, <viro@zeniv.linux.org.uk>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andrii@kernel.org>, <kpsingh@kernel.org>,
-        <tixxdz@gmail.com>, <shuah@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <zohar@linux.ibm.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [POC][USER SPACE][PATCH] Introduce LSM to protect pinned objects
-Date:   Tue, 5 Apr 2022 15:11:16 +0200
-Message-ID: <20220405131116.3810418-1-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
-References: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
+        Tue, 5 Apr 2022 11:54:21 -0400
+Received: from sonic314-26.consmr.mail.ne1.yahoo.com (sonic314-26.consmr.mail.ne1.yahoo.com [66.163.189.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8AF1D192B
+        for <linux-integrity@vger.kernel.org>; Tue,  5 Apr 2022 07:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649170201; bh=wj9b4EM96Nw9uy/BlR8A+kRsw+NxU/IGvlc7WNtaG6Y=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=szLTqN29hH0Fplkr6uAe+MXF5PEA5fsJqTjRbZbWpnvC0Al5xHpu2TN4ooBY38wWJ8uiTpimodlROdpLS5wh+w/cRUkreeUOk4IRrNYkk0oRW0v4kPNiuhgPw1X5zsHOt/MDQkQXGnSVaNgfhv762MM6O896isbhEQuhBvsq1ESOUk/TvdnN2GUdrLh5aQ5PKEy7nh36gPUebwxqWz//ak3Yuw61QLtypYZo2v+UhhO4ojX1rvbwuZSNQau/+CPl1qE7BLh8g5V3Oflo+FP9jLuvjXqyU3z15HyXJgvy6iIksyrZovyQwmLa6sOUWH8w5VOCGholry/lqUHaRfRKYQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649170201; bh=3ZN3cB5DrA9X/nY5OB/U+58iiXHAjbJw4aWJEs1+cuQ=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=DR1WkSMA58A7/84XbZe7tMPfrRoaKZfEofoTrXU55nzLbY4vyUCbCqDRR9vTC/Uadze+3Ih+fk9/OmEKXlLppRWnckXs7yEoDdbb1WxeA2BD+pBqa9ECHGxmWnpbUTNDe1t0cqQNPdRzvApbSFo59cOpx7FQiPfJ45QLXI6P3V1tLvseXsla3JhAphQvqPfea+KVBdU4EfvwaWyXsIKvq9+Q1xBRonm8LG2UkuJEo/kC6kyrnbt/cBHxXPlbLCTtK/dxx9qrMMl1Wm4gBUD0Zkw7Xm6NU1wxUyPD3d1PcroVIC0uhVcDjmLLYKx7g8iQESNTKTMCxrHzntqKfbbmRQ==
+X-YMail-OSG: CFOYxhkVM1m8ajYW0_qAcFcSymFYK7L2a6qwzT9OQ2UUlnv.BUpaBF0wlxuQwal
+ Id7mxXvbyHI3SKjYGp5dT0n84hYQnlM1pHkE4PFSYGPgBksboFZsw7oyD2lk5ECMCbr9SWtAVmH0
+ .d_7i9b6VeRrpvgGKNa1LydWgjhZ1aF1j0WCXmVAvxhuASrx4AcSwEbxIrf02ZzIpdkF0tRIDiGA
+ fIiLtCbvL7HMF.6JTu0hqKSkEm800._UKU74Zj1c8CSy3J6teokbUoLkU9l7KOyyfqPed71COGc.
+ Uk6.j4EupI6yx7AEAnyNrmRVsu.lfDRd0uLTdnaAKNWCzNHP0Rk81z_8._7QaZOYHEjwEpEZXCpK
+ zI2AD45g77679.Ja5Ys2GLvFXjX3.xp7aclyNNvofR7Jh067Y2gXqzIBDSu87zaEdP2MK837M.xB
+ 1OfFnJdnAvbWt_H_q3.Q1tMwL3Kixm_AgnvjlHbLwHBbqA5JOFNcArx5haZqok5xRTl2mf0F1D6l
+ .FzSfaWxY3OLo.mtM7g8kOFRLw0CvXlG4TIfXPLXErAlD6mRLM2xXPDwG1nR1vqd_xRYbS9xlKjK
+ TuOonIiTKMvOhrUQC02h69nK_tpOB8yYlI4k7YiEMslyPBbGWOFMwySUOrpRH.vBxhe.l6oheiYx
+ o5NBcl7BgAa1X3ivsn5SA.3767Hce6hgpq.yEFeQs06Ap8HcIVM14Y7deXwZmV1GWFltSdN_pJF2
+ UG58DzAejc8YGRZBu6lz5tuJrea9nd0slrvU3mECSMxrEbsyUTmunNoMIk0rA.aRSWtwaxhHGzuE
+ 5DgTgrWYaNzOwZ4VJJOYi.I9idvbKTmuLsXnnv.GOl.FDes9fM1fDSPMyMqXOnQWmSt2QuGgkxiX
+ O3J3CdGHIe2rsXRPr.0Wfe80l9txzoYyLA8ixpWlcmwY4mQ_Vp1oIgPvoKW8xWZfwbNjYoK.tVc9
+ DtYt_F4pHOqWb50NMKpHgAoi71Doo1u06ukfMzUSZyXaMjeTVIRzpEPEWCbLExiAl0aFBdB5KRBJ
+ te6O8QwP6VrOI6itfgkCtp3fEiaVJVMr47S.xuFOxzyKMGKcbgS.ruL8Rhe5lC5utwjw3f0BH0Nx
+ buLatAE2DDGm7V3HuuKQpFk1bD_ji9UZYRpnYQzSa7D71taZFqyWUmJWrX7vmBcQv_VN7PkLsFN7
+ 5sAQHk0sECA0_fB_g.iQ9WymiEErRe0kN7smNXq4tH.aejcBKLjJ24APkm4dTV1YtYomr_bMNfIv
+ nCFfXnwwZJlekUqNVA2hf35UraNh2atZDH4TiV59UQA.MCuGRsJYJqKAN_.CsrXt4u.vY4xBMxSR
+ 0u8G8TDu93_d3KzrzuvQ8XAvJl5mGkARGoICNoUrt_93L0kweQfUu97iBOpE7GlVkQXISdhck.eb
+ uG3dpWlu2E.v.iFKX4QlMWTlQoWgIfInZY4EB5qlB42SWHhNnJVPQOjEVWIP8ifbVbsZe1l5D04S
+ zkOUkmqknYyJhcamDu4OZHYL2IEPc5uiCroAgyfnYpJyyIeebSuq34rjsMoyh7tRQJpuWzizAbyu
+ bzNKtWQSCidx6SSyCGFQOCkA_8jUU04P_Xc0CmQk2ex_ev.N6JN3Y.4DoJD1jrqVUt5aphZ6taBL
+ hzeQ_wzrLft1yBBY0l2yuxwtSmxLiWmggDDoJA0Ii4HDpiqvKaRUenUxclO3D08BliBCrSyjvWbQ
+ sI.Mt6vM9CMIzGrRat4F_GcnzV65o3Y6a4UQ0BR49h2i8dZ9ibBUDd4ZOnCKmgu5ihRalDhHq.Lh
+ rDkyZs1_j2MiXKArIEu9GpzofL3tW2XdoYrwJ26iDh.EzUD03dUjgh4I0p0qEw4T4ahxw5BqeoOw
+ 4FHGancMHvTfphor.ZGF1SlwVQsXdsYbNebOirRY98B8SaXUn8n0EVeBYFTbp9WnTV_er1Z_HOo6
+ e4OSDMPR5Je3vjvIkLFrvbJzkAY5i2ZgAqaqyTn3Qx3ps2lX.ezpy64VwRHmfHzpt_jI2wElf24c
+ g4qW1E2DfMNs_nVIhc9rNzqBLSBtdAvROBR18UrN.ss97iy5jq0l.tL1OlKryQTzuvn9Z5oeeg6d
+ 5taNSsD3C8P83uZ5Nmlr4jusTx_GmTYgQrZVwfwIPG4piGX3vXgcpSuDdUSLCJqMSr2vUtELUu0N
+ iaXJ.aM7Zy3DgaMbDGql5Lp4CxMtioPoU.ZHG.XyM4z5fpCXl_pwMrMic2cooJQ_ylp09Z6_MEB9
+ j1_dDjzqt2Yo.6W58FqK16PgxUbxQG6_rkZpUVbZBZ0pvRlI58g--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Tue, 5 Apr 2022 14:50:01 +0000
+Received: by hermes--canary-production-bf1-665cdb9985-zm65g (VZM Hermes SMTP Server) with ESMTPA ID 7d2721fd225af1eb62abd539103a7a7f;
+          Tue, 05 Apr 2022 14:49:54 +0000 (UTC)
+Message-ID: <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
+Date:   Tue, 5 Apr 2022 07:49:49 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Djalal Harouni <tixxdz@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
+ <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
+ <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
+ <c2e57f10b62940eba3cfcae996e20e3c@huawei.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <c2e57f10b62940eba3cfcae996e20e3c@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Introduce a new LSM to protect pinned objects in a bpf filesystem
-instance. This is useful for example to ensure that an LSM will always
-enforce its policy, even despite root tries to unload the corresponding
-eBPF program.
+On 4/4/2022 10:20 AM, Roberto Sassu wrote:
+>> From: Djalal Harouni [mailto:tixxdz@gmail.com]
+>> Sent: Monday, April 4, 2022 9:45 AM
+>> On Sun, Apr 3, 2022 at 5:42 PM KP Singh <kpsingh@kernel.org> wrote:
+>>> On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
+>>> <alexei.starovoitov@gmail.com> wrote:
+>> ...
+>>>>> Pinning
+>>>>> them to unreachable inodes intuitively looked the
+>>>>> way to go for achieving the stated goal.
+>>>> We can consider inodes in bpffs that are not unlinkable by root
+>>>> in the future, but certainly not for this use case.
+>>> Can this not be already done by adding a BPF_LSM program to the
+>>> inode_unlink LSM hook?
+>>>
+>> Also, beside of the inode_unlink... and out of curiosity: making sysfs/bpffs/
+>> readonly after pinning, then using bpf LSM hooks
+>> sb_mount|remount|unmount...
+>> family combining bpf() LSM hook... isn't this enough to:
+>> 1. Restrict who can pin to bpffs without using a full MAC
+>> 2. Restrict who can delete or unmount bpf filesystem
+>>
+>> ?
+> I'm thinking to implement something like this.
+>
+> First, I add a new program flag called
+> BPF_F_STOP_ONCONFIRM, which causes the ref count
+> of the link to increase twice at creation time. In this way,
+> user space cannot make the link disappear, unless a
+> confirmation is explicitly sent via the bpf() system call.
+>
+> Another advantage is that other LSMs can decide
+> whether or not they allow a program with this flag
+> (in the bpf security hook).
+>
+> This would work regardless of the method used to
+> load the eBPF program (user space or kernel space).
+>
+> Second, I extend the bpf() system call with a new
+> subcommand, BPF_LINK_CONFIRM_STOP, which
+> decreasres the ref count for the link of the programs
+> with the BPF_F_STOP_ONCONFIRM flag. I will also
+> introduce a new security hook (something like
+> security_link_confirm_stop), so that an LSM has the
+> opportunity to deny the stop (the bpf security hook
+> would not be sufficient to determine exactly for
+> which link the confirmation is given, an LSM should
+> be able to deny the stop for its own programs).
 
-Achieve the protection by denying inode unlink and unmount of the
-protected bpf filesystem instance. Since protected inodes hold a
-reference of the link of loaded programs (e.g. LSM hooks), denying
-operations on them will prevent the ref count of the links from reaching
-zero, ensuring that the programs remain always active.
+Would you please stop referring to a set of eBPF programs
+loaded into the BPF LSM as an LSM? Call it a BPF security
+module (BSM) if you must use an abbreviation. An LSM is a
+provider of security_ hooks. In your case that is BPF. When
+you call the set of eBPF programs an LSM it is like calling
+an SELinux policy an LSM.
 
-Enable the protection only for the instance created by the user space
-counterpart of the LSM, and don't interfere with other instances, so
-that their behavior remains unchanged.
-
-Suggested-by: Djalal Harouni <tixxdz@gmail.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- .gitignore       |  4 +++
- Makefile         | 18 ++++++++++++++
- bpffs_lsm_kern.c | 63 ++++++++++++++++++++++++++++++++++++++++++++++++
- bpffs_lsm_user.c | 60 +++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 145 insertions(+)
- create mode 100644 .gitignore
- create mode 100644 Makefile
- create mode 100644 bpffs_lsm_kern.c
- create mode 100644 bpffs_lsm_user.c
-
-diff --git a/.gitignore b/.gitignore
-new file mode 100644
-index 000000000000..7fa02964f1dc
---- /dev/null
-+++ b/.gitignore
-@@ -0,0 +1,4 @@
-+*.o
-+vmlinux.h
-+bpffs_lsm_kern.skel.h
-+bpffs_lsm_user
-diff --git a/Makefile b/Makefile
-new file mode 100644
-index 000000000000..c3d805759db3
---- /dev/null
-+++ b/Makefile
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0
-+all: bpffs_lsm_user
-+
-+clean:
-+	rm -rf bpffs_lsm.skel.h vmlinux.h bpffs_lsm_kern.o bpffs_lsm_user
-+
-+vmlinux.h:
-+	/usr/sbin/bpftool btf dump file /sys/kernel/btf/vmlinux format c > \
-+			  vmlinux.h
-+
-+bpffs_lsm_kern.skel.h: bpffs_lsm_kern.o
-+	bpftool gen skeleton $< > $@
-+
-+bpffs_lsm_kern.o: bpffs_lsm_kern.c vmlinux.h
-+	clang -Wall -Werror -g -O2 -target bpf -c $< -o $@
-+
-+bpffs_lsm_user: bpffs_lsm_user.c bpffs_lsm_kern.skel.h bpffs_lsm_kern.o
-+	cc -Wall -Werror -g -o $@ $< -lbpf
-diff --git a/bpffs_lsm_kern.c b/bpffs_lsm_kern.c
-new file mode 100644
-index 000000000000..b3ccb2a75c95
---- /dev/null
-+++ b/bpffs_lsm_kern.c
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Authors:
-+ * Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement an LSM to protect a bpf filesystem instance.
-+ */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+uint32_t monitored_pid = 0;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_INODE_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, sizeof(uint8_t));
-+} inode_storage_map SEC(".maps");
-+
-+SEC("lsm/sb_set_mnt_opts")
-+int BPF_PROG(sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
-+	     unsigned long kern_flags, unsigned long *set_kern_flags)
-+{
-+	u32 pid;
-+
-+	pid = bpf_get_current_pid_tgid() >> 32;
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	if (!bpf_inode_storage_get(&inode_storage_map, sb->s_root->d_inode, 0,
-+				   BPF_LOCAL_STORAGE_GET_F_CREATE))
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+SEC("lsm/inode_unlink")
-+int BPF_PROG(inode_unlink, struct inode *dir, struct dentry *dentry)
-+{
-+	if (bpf_inode_storage_get(&inode_storage_map,
-+				  dir->i_sb->s_root->d_inode, 0, 0))
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+SEC("lsm/sb_umount")
-+int BPF_PROG(sb_umount, struct vfsmount *mnt, int flags)
-+{
-+	if (bpf_inode_storage_get(&inode_storage_map,
-+				  mnt->mnt_sb->s_root->d_inode, 0, 0))
-+		return -EPERM;
-+
-+	return 0;
-+}
-diff --git a/bpffs_lsm_user.c b/bpffs_lsm_user.c
-new file mode 100644
-index 000000000000..e20180cc5db9
---- /dev/null
-+++ b/bpffs_lsm_user.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the user space side of the LSM for bpffs.
-+ */
-+
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <limits.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+
-+#include "bpffs_lsm_kern.skel.h"
-+
-+#define MOUNT_FLAGS (MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME)
-+
-+int main(int argc, char *argv[])
-+{
-+	char mntpoint[] = "/tmp/bpf_private_mountXXXXXX";
-+	char path[PATH_MAX];
-+	struct bpffs_lsm_kern *skel;
-+	int ret, i;
-+
-+	skel = bpffs_lsm_kern__open_and_load();
-+	if (!skel)
-+		return -EINVAL;
-+
-+	ret = bpffs_lsm_kern__attach(skel);
-+	if (ret < 0)
-+		goto out_destroy;
-+
-+	mkdtemp(mntpoint);
-+
-+	skel->bss->monitored_pid = getpid();
-+	ret = mount(mntpoint, mntpoint, "bpf", MOUNT_FLAGS, NULL);
-+	skel->bss->monitored_pid = 0;
-+
-+	if (ret < 0)
-+		goto out_destroy;
-+
-+	for (i = 0; i < skel->skeleton->prog_cnt; i++) {
-+		snprintf(path, sizeof(path), "%s/%s", mntpoint,
-+			 skel->skeleton->progs[i].name);
-+		ret = bpf_link__pin(*skel->skeleton->progs[i].link, path);
-+		if (ret < 0)
-+			goto out_destroy;
-+	}
-+
-+	ret = 0;
-+out_destroy:
-+	bpffs_lsm_kern__destroy(skel);
-+	return ret;
-+}
--- 
-2.32.0
-
+>
+> What do you think?
+>
+> Thanks
+>
+> Roberto
+>
+> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> Managing Director: Li Peng, Zhong Ronghua
