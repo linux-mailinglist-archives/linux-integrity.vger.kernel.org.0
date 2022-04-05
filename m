@@ -2,33 +2,33 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE174F2B4C
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Apr 2022 13:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646774F35D2
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Apr 2022 15:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343932AbiDEJPt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 5 Apr 2022 05:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
+        id S240472AbiDEKzR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 5 Apr 2022 06:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244704AbiDEIwe (ORCPT
+        with ESMTP id S1345619AbiDEJnk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E7D18E24;
-        Tue,  5 Apr 2022 01:42:22 -0700 (PDT)
+        Tue, 5 Apr 2022 05:43:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD555C3365;
+        Tue,  5 Apr 2022 02:28:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B174B609D0;
-        Tue,  5 Apr 2022 08:42:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B576C385A1;
-        Tue,  5 Apr 2022 08:42:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF140616B9;
+        Tue,  5 Apr 2022 09:28:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D660FC385A0;
+        Tue,  5 Apr 2022 09:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148141;
+        s=korg; t=1649150938;
         bh=YQar6ezHZkPY8X6SYpKiX/qtDQj2Nb/lf+/JJVypKo8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ruQKorjoV32pU39DqmwNgMmTSWyTIew6GNyb5YXkNdhOMPzG+HkcfhR7LfiWR9dZE
-         iF34rM5Egm5c+mApDleQUXP7EM6wjRzcWuiMFZqyO+E7xJVMM5GGGsQtKNesRitkJV
-         4W0FnMbcA9b3jT+mOMhZk8D8D/YVtKQqXHeMSP6s=
+        b=Obr6utQNimflQ/xQmTIfihHkZ9GODdaxQzh1JbGeawFs+dXftLVfNtsUoeCcwmEsw
+         PyPhbU5V2x/0dRubiUIqNVE+Np8kQZOLyEbFTpnlmu0/p0iNbbxD0aUuXEA+mnYmaa
+         Aol4qf+/0Znqxi2Qc5D1rHjmpCneluIBAsDLWokM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -43,12 +43,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0248/1017] KEYS: trusted: Avoid calling null function trusted_key_exit
-Date:   Tue,  5 Apr 2022 09:19:21 +0200
-Message-Id: <20220405070401.621647117@linuxfoundation.org>
+Subject: [PATCH 5.15 235/913] KEYS: trusted: Avoid calling null function trusted_key_exit
+Date:   Tue,  5 Apr 2022 09:21:37 +0200
+Message-Id: <20220405070346.899679243@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
