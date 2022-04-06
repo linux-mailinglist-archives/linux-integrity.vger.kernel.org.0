@@ -2,69 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FA94F65DB
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Apr 2022 18:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C132A4F6648
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Apr 2022 19:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237859AbiDFQil (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 6 Apr 2022 12:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        id S238602AbiDFRAJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 6 Apr 2022 13:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238749AbiDFQiU (ORCPT
+        with ESMTP id S238251AbiDFRAC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:38:20 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14012F8FCD
-        for <linux-integrity@vger.kernel.org>; Wed,  6 Apr 2022 06:57:27 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id l26so4498859ejx.1
-        for <linux-integrity@vger.kernel.org>; Wed, 06 Apr 2022 06:57:27 -0700 (PDT)
+        Wed, 6 Apr 2022 13:00:02 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35093CDB66
+        for <linux-integrity@vger.kernel.org>; Wed,  6 Apr 2022 07:23:58 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id bq8so4587237ejb.10
+        for <linux-integrity@vger.kernel.org>; Wed, 06 Apr 2022 07:23:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=12C6tMvUOqmE7iPeN67Buox9hidIxbeU6o+nTMIlrmg=;
-        b=TIHndFfPo+aaXhrleHu1XKHsvk8SmC+eKthCJ1x8k1jOU+FlmZp1HraGZe+KRNSejw
-         lAdLIaFuzOEvGXFyAJm6TYPZxSDLp8r3tTzTA7hH4bWGi5bmSlmjb/JhO4m81EX/23zo
-         JMC37cyMVhkPc2YolTh/ZQH4C8yQX30KAKqpvHjDMS121yd+bZ+kGjC4fw/VSDTd/Bel
-         r++sz3h90Y1q3YMtz3u9vkqTtI9AnQYD9Dxw44zbHFq/3sIfbG/fosSlnR1j3w9I45Hd
-         c20ZFtPU/2IMcvlxH0WaArlfD88e06eBvHl6UAsbzD3EpoCHHQmgMnUL6JnMa80b+0IK
-         VdEw==
+        bh=MSq8BRFJdjzhbIUWwVzTf9cp5VRLdJQGSKxEJP82+cg=;
+        b=atkG5VJ/exTpitx1mzJ00ZRzmnHLJ8AtSgRAinAP7WoM2RJ4a7dV78PtHqsvAqrLYt
+         u8GD6GJ9eLq1x1wRuQRD25EEVjjnu7tFFzN6OXVdLIj5oIQINUaES72cNs5vnRFr+PCv
+         ILzQzmRB1EkTyAU2Q9XUX/p8sOaRwdrdoNaR5OVO/lJQjBBiyvF0dfxwD7MjvTnqM3ck
+         DQiYe2cFkfnctie+sXqKIzPxNMSOPbU6Fy8XFcif3DUc8N8WXse9pPvPgehmsTxyRL4B
+         IYpZ7PmsbPHPohuVwPDCZ77hFWel4clOJNQJrXtIlI+MNX6oZCqDazB2BXuaOgkRbGyp
+         xRuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=12C6tMvUOqmE7iPeN67Buox9hidIxbeU6o+nTMIlrmg=;
-        b=shyzrp/k3KjAoyxl4TFWaRdFw4nyjUUb1+7BhloQ7ZmbEYBTzrxPJyZmr6Qph1ShT7
-         3AfXABb4PCTOpKC3o37RH/Tjd1Ll2k/YN5vGt3E47etGQmVBPU0/uGGBcci0FSt7tzlW
-         odxk7hhn3tE0llj0YQ2GA8282tpPVpfv/y/G2mG5G7u0A7jpGiwiCJmuyrnNFYT7vu49
-         lGZZQIN99c/mitiV9wwllmj2KqQcn6+4CUPmmF1RLjqOP5ODtVMhaIzw9+hvLK0wa7ud
-         083WyabMTNGKxZKNBy8NwXO+Z8G0lbpMOlSienv1F3biBb0O5hFs2qABxv93D6aSuNHw
-         qZyg==
-X-Gm-Message-State: AOAM532MYe1hd7ZyVJZVVebEcMSotNgifdWZrq+hdgqcDi/LNMac61sL
-        DTJiWeo01I4t3kzvL/2KBsDOImgLmCXA2MpWBlA=
-X-Google-Smtp-Source: ABdhPJzFnHz+H9bUAOi37zIlujICLHHCorayrVW8scWF90/ZOC3VDJeoKK7oBD1gDjScx2MY4DTEtjSy2PyuLZI+P4Y=
-X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
- sd6-20020a1709076e0600b006e4dae79574mr8718896ejc.540.1649253445762; Wed, 06
- Apr 2022 06:57:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=MSq8BRFJdjzhbIUWwVzTf9cp5VRLdJQGSKxEJP82+cg=;
+        b=kMXlp4GALp4TjSwnzHFGUNblKEqFQPlryuECVpvLBJncj66s0nDv7qcaCmVYjtBZUE
+         XqdimiyKW6tjR0PGgJzxnj4pcDTYKcP37b096iakMo3xtCRHNusIXUH9b4EuQbgJuQug
+         aF9QV1PKKFAuYaOsWGzs9QzuBtuVaAuLgdCROwtSjRIF68oOadHPRTT2uDhqUMb4cjDv
+         UWqC0UGle5RmMuIdsJ3r6KgLH0leSjRMjzkOC8Fa3Q73znvKbFuHGB0Sq9S8TG+AbTrq
+         0op8XEhhLxtvP66PSVQuX5HgvnWVBJUH3E23yCtSBphf/7zWvctA1T6STt1L7yJ5xAPN
+         q8og==
+X-Gm-Message-State: AOAM532VMIIZve5gq5G5NWa3gupUcok6WPbv1puc7R995jwemkOe1tm0
+        VY4ro6eFq9/Q9KsDAvU6PYAELbW4EaHEnenBan4=
+X-Google-Smtp-Source: ABdhPJxz18ixmDxSg+vjvmFrVVPSV5gayAFd1jUkWiLqfXb+dXqTHTmfZ2wlvyC3myZfR93k1E4l0iUcOHEZF9aHn84=
+X-Received: by 2002:a17:906:d555:b0:6db:148e:5cc with SMTP id
+ cr21-20020a170906d55500b006db148e05ccmr8314937ejc.63.1649255037129; Wed, 06
+ Apr 2022 07:23:57 -0700 (PDT)
 MIME-Version: 1.0
+References: <CAHpNFcP+bNHrrEPD=2bD25GGFu3BQmTi+Oen6_josJauA8wbyA@mail.gmail.com>
+ <CAHpNFcNtokSx2sxA4bQBe_i8VKd=HXnUMrj8hDQwr9CwsJfGCg@mail.gmail.com>
+ <CAHpNFcPmWHzDBtiwLD3tUi6eH35NsYfmR=sDUAP1QQs4AguPjA@mail.gmail.com>
+ <CAHpNFcPPKLwgVuJe137S-Vt78Zkn617VZduJ-q6BtJwvFgLRng@mail.gmail.com> <CAHpNFcNM15KHnh_kusJ0Qzoqnb2KGOvrUe3Z9_gvknv1p2=L6Q@mail.gmail.com>
+In-Reply-To: <CAHpNFcNM15KHnh_kusJ0Qzoqnb2KGOvrUe3Z9_gvknv1p2=L6Q@mail.gmail.com>
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 6 Apr 2022 14:57:14 +0100
-Message-ID: <CAHpNFcObr9v28HTpqKS=eAKC5wV2z7k0NaVXz94ga6JN1kJ_vA@mail.gmail.com>
-Subject: Display Stream Compression Support - 3D Mux , 3D Mu-X by GPU & CPU
- though SiMD & AVX 32Bit IfNotOR to a Singular planar Frame Buffer
-To:     torvalds@linux-foundation.org
+Date:   Wed, 6 Apr 2022 15:23:45 +0100
+Message-ID: <CAHpNFcPW_q2xrb1RGbWtZ_5LxVSKyW3PDYo0u8uCUYrr-UTBbA@mail.gmail.com>
+Subject: Fwd: Display Stream Compression Support - 3D Mux , 3D Mu-X by GPU &
+ CPU though SiMD & AVX 32Bit IfNotOR to a Singular planar Frame Buffer
+To:     "ebiggers@kernel.org" <ebiggers@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Subject: Display Stream Compression Support - 3D Mux , 3D Mu-X by GPU
+& CPU though SiMD & AVX 32Bit IfNotOR to a Singular planar Frame
+Buffer
+Date: Wed, Apr 6, 2022 at 3:13 PM
+
+Display Stream Compression Support - 3D Mux , 3D Mu-X by GPU & CPU
+though SiMD & AVX 32Bit IfNotOR to a Singular planar Frame Buffer
+
 https://lkml.org/lkml/2022/4/6/401
+https://lkml.org/lkml/2022/4/6/541
 
 *
 [PATCH v7 13/14] drm/msm: Update generated headers Vinod Koul
