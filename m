@@ -2,301 +2,201 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50334F5219
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Apr 2022 04:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91ADE4F57F2
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Apr 2022 10:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444214AbiDFCf1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 5 Apr 2022 22:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S1344320AbiDFI14 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 6 Apr 2022 04:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1835879AbiDFAdx (ORCPT
+        with ESMTP id S232439AbiDFIZx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 5 Apr 2022 20:33:53 -0400
-Received: from sonic312-30.consmr.mail.ne1.yahoo.com (sonic312-30.consmr.mail.ne1.yahoo.com [66.163.191.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53847103DBF
-        for <linux-integrity@vger.kernel.org>; Tue,  5 Apr 2022 15:47:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649198856; bh=kuHtMKHl/c2qIGNhAGVZoANBI56QWLO5me7QncFB0/4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=lw/b5SvbMVXuoNhOkN60MTNvRK0sDPou7k8Sm8/fDot5jNIhKwRd3eHlRDH4X++09rQEJw1wr+aKES2kF0F5dOMKeDQUZQ6F4HZOWGED0RDC4zr9xcZY9Qk6H8JLGIQho7PvJeTl8oKy7KnIOIiPnQQ7B7oSZHdV7nV34QwwpPvCV1hoQGTxbT/4rS1hlwLxnfvKtak1zmDmffa+AUzFsTThb4ap/GSRNi9jovUUtR5yK7ddvNvJrvphSyDebb/pwGdWdzuXAqm2VSIbgKe10iBQx3wYqNt0U7V+Z2fvGSGZwR7tJu3GBEoFohyivhXzK9FuIP48+lJCqFVNv9I8hQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649198856; bh=VbxZHvRlQ3ApM+hvxQitthNUVXoy1RKh/KVchJBGZGS=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=oGp9qOO4oZpK+WQMwTyI6AQctVQpLckSVRDCMM9EY4+URlBQmX+gpK78IfGzEbJ1WQOoAgSAqaV7gbPSvkBrQmDEU+odSwN0Z7UaU315n38j5LFqVI6pfJGjwXZEkE0sJ20imT5mnbnidmwOGI5FZKeajBcL6gMT9w9tZ6VAPJSnOE5tnZANcnkdMh7dqLfFizhLODK+mnLGixLVyp1AgVBsFojT0K3uAfCKlTIeoM31WO7VJJKdaVbU1W5+cjem8eiUyG/ev9ipDWUvQK/goHUd0yZOMuHWRMtTMakOWirSW07wdwQdxNy89lTohXsPGu8sAAXcWlEgAmiEApvXZw==
-X-YMail-OSG: KM__rusVM1mvT51zYphGFvuxV3vMoEUz.64XbPOnJeUfM3Q02p8tjzbCHPbxK90
- xEbDliiZmXka7VwlPeFd9D1DD5e1OCiK71seGddNJdacxGYZBFqNL38S22jUAAh2NKwCZgZ3a1qm
- b68mSbOJTcl892WIwb.mTv9vYc9nK6H9jOBvffECkgbEOIuJ2OTT0OCGlYe38K9gXdoiudYOOpHl
- 2fh_s6WdkypLC5Nfeyk4z1adY.Se94Xlv.8WW64_g.Q6gsD7htFWlmyKKuIjT7IOL6GjWm9Szqd1
- R3UV59okWBjij2lkAmEvm1OGVvxhNPUS.liSAj2FU0qfbfjIyuTRodjmQ44ijXaF_l.ncSA6E7D2
- 52uqJTjoWIGYu33gu7Y9smglgLO03sxROpSKDJjLYSmqq5TZV191mqxNk6qpvwyo1.It_zg1CqAM
- _I4TYKmrHvNzptK8N1w3ksNztLX_e0N5gHbhAJlQPW5Bw6ykmInAWc_WUaCDq_nMTrMNQ0.BQLAW
- WCRbo_nap91myK7S6jaZMMJbCJQlKQ0d19nAP0GXwM.U0k4qdC3wPw9KG8_ejbIeSpZDDcf8IzrJ
- 4bQvcIjmYkKtr30WANdICKGFIG6qoNp9Fg95.2kjpGHvmwHPuO6qR9YqjocDnUP97EQvkTGUoZTC
- fmWLce.3nw8OaynFbR2KRNYiUriJl8uXIATVYpJyjRTwAIa8rjrwbAhxUP5NVN_nxvbt9B0qD1vL
- iF5dcCV7zA.vqsgkTlPIKvL7geTOs3C_5Q.EkNfAn5PlCJi3y1zODah_iTZ4ecECSgQVOQRR_lvQ
- 5sUCI4wSaPH5EOmTNV6q7bTyu3MxHVIaMUAIVoLi_8k4EtldfkqaEeKispwKxjk.YDkONtPJE0Cc
- pE8iFJVkuJaeEnENzECZy3vMXBzWkyWrlOzxhd.x5VcN.LvY_kezvJ9przKkPd24eoo3B9kOZUKP
- NS_jcRoQPrm.gnozfYxNufkt9qbgJaWqXnPjXRpcK_nHwdGqJ9SrZII7p1ZaQmL_NGh5eShl5Ak0
- oCDgnLQHlke0.mPoBs.DXXK7r8bayP2uWHxez.cMKyi2mCozH06SzzozGsmV2DV4wRVeNnQ5NnD7
- duFgvP9y0siotq8UHHEY2GCd5kkjmdaAUd1iyLgVlxPeMAd89ho9zCouqCHg9YuIHw3L_NEVlpyt
- 6bEP0KxoUYtsVKOeWmn1lqMZxOkdMux8JF.jzEan8uwwC2iFVX62Zh.3mtBLMy4wCtI2ydJ7NwVg
- kIvCoToLc5RDNWmOhaNfzcZ9SpG03jdgluv5cLh1oyTvjJti37BVGbQVSuFKambK6zz6fPT3JpqQ
- Td7uMTzGQLDd3aM3r4lpQwkkq6ZgvfZuI74TGG1Qz72OiRGT6ElyxmqgTz9DPI0QPCS8zFtBd5wN
- g7GXxswBII_DtM6v2a2SqBZlQJnDZCEbYwvF6Rsb7KLhj9nTdtNLv40B05j5uX6eOcjh6.gjicjh
- 4n2hzMomOHjxFoL26zmw2HZQXDRB9WrXRegbN6o9ZS7S56GISCNn0e.GVx1_ANGl1Y9ITLgc3mkj
- aeGxLxguvgu5LBpKKyxuQl92.GCrYlYGg9HBZk_gNpX.esY3Yg6VvCP7BctyRlX5CWY0a9REhZJK
- YiZHe20QUET91dvI8o.O7mlwNgp2u8k7LNi3gGdWWoDQLdXbXVKDqqN8p.OkQ_PT6MQFWhvWD6Hq
- lQi_UcfdeW3nTE0YTi7wBXLRaPZq2rA6YO6mbYysziXrkHmx9aCMWS1.7xLOO2J43QzBZ7VjWuOp
- mr2bspwwUWdOji.Vpcv8AgMMWnL2l9RHnGmuIXsm.HAAsC.rmVV9vmPHZtotu0A2DOfy6b8a.kDo
- 88dY442gAarDTf8zkzmeXacI80hqCh0bPv.qB_AqAuDz8UFgHzXk6kRu6lMfytQN56jEeBNu5Xav
- WAcMHhj._SoyiuB1CBQ_SLZ1CY5EpL3Iyd3J9TY3sxDmLjffnDicxHqypaiKCVj_kLP6XvZDVPDC
- iyDxzHS.Msc7c3OGGTk6..15qsMeGybeAzJrJPCL1fE309eHGaV_S4Jk04LwlcKG_q0pxqPS7NCO
- lvKrLp6NdUSkWJWPqisJBlzCNx0nElmqBXE2hAc2_hYCT_zwuwkjKJLWpKiy5Q8p8ZXptLMQaK_n
- h7bPvT_uLr4.6T.jmGFpAcr.PEWhdDEqORzK1ytMR5S1ocjyiSITC5gOz0z6sv3U1VufvspTMC_V
- OyGNoO0g8_WnT_BFdlHO7W5vCSMmUK1kEBFdnH8P0oNSTwlTNikou0acFupkLZ0z2
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ne1.yahoo.com with HTTP; Tue, 5 Apr 2022 22:47:36 +0000
-Received: by hermes--canary-production-bf1-665cdb9985-4zttc (VZM Hermes SMTP Server) with ESMTPA ID eaa50fa1da4b68d1bc9a73fb183248ea;
-          Tue, 05 Apr 2022 22:47:33 +0000 (UTC)
-Message-ID: <5ce85845-824c-32fb-3807-6f9ab95ad6fe@schaufler-ca.com>
-Date:   Tue, 5 Apr 2022 15:47:30 -0700
+        Wed, 6 Apr 2022 04:25:53 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E8843A67C;
+        Tue,  5 Apr 2022 18:54:55 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 235NhHn4006418;
+        Wed, 6 Apr 2022 01:54:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version;
+ s=corp-2021-07-09; bh=K5BUsp2UTk6loh0sMFaW0AUvuaEJlajn4DrSvHCIW1c=;
+ b=D5Duthtyg52v19DwGKb8qfrcoWJA1YripZLS9Yyc8VFjzCr+A1qswDqHjQtKqOshQDdZ
+ iRq8c6CO51obyLC3SvJ0sZ9N+l8nwYa/UQX7jzN5AB0s2NCtkpHH3yB/hkiWtnAfpROJ
+ UW2LdxRghoKE6hYfkClm5N36kWGMSFuJqfO+EuDzgI2zznEC2H7kHfWahiuKWtJZh4OG
+ wwjzKzmmMHtPSmmGvTQ0acK2jBDn7ERzrwJjZVhrGteoJpTinRN2NhVZYrzGCg6uF9Sr
+ E7qQy/z7Q7D4fBbzjWdIto/d+Zv/esPh1CLqsmAhOIbmz/05laHiNa50szsGBNx24IgB DA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6d31fmd1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Apr 2022 01:54:09 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2361orv1036988;
+        Wed, 6 Apr 2022 01:54:08 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3f6cx43f0t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Apr 2022 01:54:08 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nPNlUhOj1QY3PXbA2ProDCiyenoewFYbOTK3iPjPoBNFQjfD0NjUKrAT70pQkPhgzBgwIrUtM673q9r+VjdNcD0+6y49UKZ6zOeCL8nJ7Ukn9ztW11Y0WrBkY69MYOoEaDkwQMeXWYFeSJWf0b6/lAZVj8miY4vTnBV0M/ZAmM55aJFaqnZho5KUoh2ifFNtxYRbdS55WKbTGKcS/KSNWDmUobsTJgypytjQG0fqg2BjykvS86TM9fHH+IePxzug/r25v9POGXFoQICo4vB5kt4QgYdentJ1tv6ATWhKyhKgrtRXXpp3nw+i12cT2/52qDMm+m4nxUdQy6x3Nbn+Pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K5BUsp2UTk6loh0sMFaW0AUvuaEJlajn4DrSvHCIW1c=;
+ b=fqZKhSQnFTNJI4FVxj0L2qSLTHbKge+EoT/1TKxnLWbUAIlS/JFOgnBN8e9fJ98g2iXRg/RGo8Hf6TPl665REEFKPTYXW3XvmbcIRNQPXdEdk+aUqARB6qcgcEejzPSKQvENuIjMuQoUeZ0vCmwoSfFK12bubGdB4ouyUg2YWY85HAL66ps+HoSsFhHpZ9wmF5xmewU68CgKTNfb+aXTZ5f+MxM3CaMg1u8tTV3IqHg4WkPvDouGT3ozKzemQEp+FeCBWhUne9+yW83/WbyOW9wd1O5Hq+AQqzQA8tk3cmC+Hfzxi7WUTlndK4dOdTJ/g9lHFyVcsRaz4bg3EgN6EQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K5BUsp2UTk6loh0sMFaW0AUvuaEJlajn4DrSvHCIW1c=;
+ b=XQKvuvu68i5yFjBDeG17hPW+qDhwvZ5wlfQDOiXWlvdGel/XGefSPvL4QeDGFqD8bs8/8wz8tNMV+fiOd/cS+974fAWYUFh2P2JKla+oZ5FRVuKgrLud9OWeL0gfJi85c2Do//19rDKb2YYio3fyULq1NsH92tMuFzVDmbOWsKo=
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
+ by MN2PR10MB4349.namprd10.prod.outlook.com (2603:10b6:208:1d4::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
+ 2022 01:54:06 +0000
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::7ded:5b3:a28f:2e55]) by CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::7ded:5b3:a28f:2e55%5]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
+ 01:54:06 +0000
+From:   Eric Snowberg <eric.snowberg@oracle.com>
+To:     dhowells@redhat.com, dwmw2@infradead.org, jarkko@kernel.org,
+        zohar@linux.ibm.com, linux-integrity@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        roberto.sassu@huawei.com, nramas@linux.microsoft.com,
+        eric.snowberg@oracle.com, pvorel@suse.cz, tiwai@suse.de,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH 7/7] integrity: Use root of trust signature restriction
+Date:   Tue,  5 Apr 2022 21:53:37 -0400
+Message-Id: <20220406015337.4000739-8-eric.snowberg@oracle.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220406015337.4000739-1-eric.snowberg@oracle.com>
+References: <20220406015337.4000739-1-eric.snowberg@oracle.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SA0PR11CA0091.namprd11.prod.outlook.com
+ (2603:10b6:806:d1::6) To CH2PR10MB4150.namprd10.prod.outlook.com
+ (2603:10b6:610:ac::13)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [POC][USER SPACE][PATCH] Introduce LSM to protect pinned objects
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huawei.com>, corbet@lwn.net,
-        viro@zeniv.linux.org.uk, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, tixxdz@gmail.com,
-        shuah@kernel.org, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, zohar@linux.ibm.com
-Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
- <20220405131116.3810418-1-roberto.sassu@huawei.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220405131116.3810418-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c81338bb-f92d-4eff-20ec-08da17705525
+X-MS-TrafficTypeDiagnostic: MN2PR10MB4349:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR10MB4349AD7303AEC953B398177987E79@MN2PR10MB4349.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SulmLpo+6kGF13hoyedHvv451TMmnduH7JrAklDtImf/MeruejcdW+xp45ljMNVLVkY1Qu9h5IpurSReJZ6U28WXohEtDzG6G5HubvXOwV8MKqxG3FiBwKF5Y9nV3EOyoVIfJ16MjRrcfZn0o8VWxYFFW+gX0IfcHVPMYESbnNucEV1rJduGqxOqp9rV9f2Qkm+rL9CFJMwyoP4RPhjL/GAcjXpFPCUVwE5snL9d+988spuAqLFSVYJHJsnqjOVcnPLgusYMIhMzM20Yp75pJCSODx7h1MElRKwCeoO21F94+pnB/afHVWubTbhh5vgtweQgmN5sIovSmyTkcneuWPQOSOhDoeW6KAoS5I0pwECP9qplIZiPnnk7HtdZ3sYwBtluqbESXojUXZfB0Ul0Tj7HoniOBPG8fnFswdwgiDFxgt9Jwlnrsh54c9nHBSzTa08RpTkuOpnWRoZ5A9xrFCJWPYbqVHzolCH0Nrw3ALZjVVX3WlgX9sj8V5s6E7dtl0NytgVjMnGWzADYrS/u6vkQUqqw/qyoQhbC8dl2iipLeDJhN7mjMXzAtCXXJVSsMaWLd5xHXMLjw+QZr5BLTfIUvnIcndRdyZJOvbP2jhifxhmsvWHgqVNPUXFfz8dxsChIR9M9kvRf4CPxmPpW085btqh/3hasQhHC8lK2Wz/2IgdmMJj7q/1xBuLram7zdou2PBrbhNzVDbSo/PDqlg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(8676002)(6486002)(6506007)(6512007)(6666004)(5660300002)(508600001)(316002)(4326008)(66556008)(1076003)(83380400001)(36756003)(186003)(26005)(44832011)(38350700002)(38100700002)(66946007)(2616005)(86362001)(8936002)(2906002)(7416002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bxpDFUz0wTLFQdN55G6vRlCAVnLXBmuDMRL8vW2Tv33kJmpBPyObhXW3Cd26?=
+ =?us-ascii?Q?bGgf1GPUnaQeaQK5Z1G8lQlqW53zIwMQBy2qIryavXkl9q33jLgLbnhnvHSm?=
+ =?us-ascii?Q?w/xE1+EXybLBLoQLvK+ZzyXgI4cimS/ylWJbRsZ5d7rFCPdO0I3hRFaoxVC4?=
+ =?us-ascii?Q?yatBCNSofY83ZU9Erx5/zHj8R5jz9limklIEefqHWDhCbAnTc439iZWBEGMm?=
+ =?us-ascii?Q?BGELDEBmuzVc1ClHPmpM4MCiPBy94STne7M6LUWPuR5OR8OfytVrCaGm18/f?=
+ =?us-ascii?Q?ZXjqb2Eam/gFYKR1rLUSZifBpdRln/fDbhwLRsJLryeAWzvi/iZfHqoK+wZ4?=
+ =?us-ascii?Q?M07R+xkN6i/bkyuGybztBCIZlaJgPW/ALSsnGpdtB3qFlE5bd5k9f58g4sok?=
+ =?us-ascii?Q?xebrXVW6uPVI01FPkcdjuyT7ELi7O8jd7rDKqH/N4W+ABUOt/SuCApAhThZN?=
+ =?us-ascii?Q?76UPeHOT6VgutAW9Yh6a3UxbW+zUZoEwIS1Qq3Ps+9s/Eb2rGXe8KIr9zMXc?=
+ =?us-ascii?Q?tJsc9YZr6Igj4SQDBM8YzDOGr3k5luN7O5lUmoQO7EaX4yToRF86iERicluC?=
+ =?us-ascii?Q?yqwCzOmONOJsWTuSBV8DYrVCh+qu+cmW5OlubksOA8x7fFt5QZAf6621Oa5u?=
+ =?us-ascii?Q?q1iO5V7ypOWDnfkdz2NFf7fkoAdq+slS7xE0wRpMEteHtpjcCVcMPq+GWIgN?=
+ =?us-ascii?Q?t5iZS7yK8VppLxZj/0WTo0Kct994SCxmiTnCfSE3+BiN0fi5B47TwBKKf1oq?=
+ =?us-ascii?Q?pzJZ4c0cxqk6eUmI3OU/6TkPVepTVvZbKSi3nXsdaoQf9S70o2oCibnSX99S?=
+ =?us-ascii?Q?ETc7/+7tqXiWr4g8e97GBemc/BKjSF53f4tHf7NlRud1AmcqzEEfn8Bbu/eS?=
+ =?us-ascii?Q?3xTdNkZ7D92bYPZ3GOJbrwibwx8Bnm3NI5Jc4lZsf9Ezgt5ZC4tvE17FgNHm?=
+ =?us-ascii?Q?Di/zJESxkApyFOGIbbidb36RWVDB5UuM8nE6YgNE3EEO9rsvLTbVjFSvo9lk?=
+ =?us-ascii?Q?XxU7nKj2fT8MdHSByrgZg/AWLzvH83OoQ2vRZn7KmMMYhLFkp6wBCQflI94Q?=
+ =?us-ascii?Q?cZ9sedWcWe18Xr9xJjotYW0ThXhR3ASTSTjgU3AUVtEMcOmKFY1Zbq4jyPZv?=
+ =?us-ascii?Q?unvnAif9O75cvPbs8usVPatqJNsFlU9aeHonQqeSivgFMGZKo6Frg19T16RB?=
+ =?us-ascii?Q?+yoLvnA09MuHRGQUufSOKhesCmRMNgnBib4PjXlWQyAGHvRkcUWsQ3OBzbla?=
+ =?us-ascii?Q?S8poDI9yUlPC1XbVT3qxGHgTIqQ0Y+2WVp3g7KzFyM0hzCo5pc6jWFo444YV?=
+ =?us-ascii?Q?7i157y0pWVXF3QRbAtYiusVNpAZRr3ZmT+Vazzlxr6WKzH7RMCtWcgU9lEMP?=
+ =?us-ascii?Q?iwN5SShbqa6pyHtpK2w7lP6BdnXybhK4PCnfa7V3JnlHQ2FlooBi9YLT8lwf?=
+ =?us-ascii?Q?PzsjcoUlyqV4jA0XHH7ij5CtzWe92j6FMM6gb7m1dosd/Rd3zZwMZrXeA+T1?=
+ =?us-ascii?Q?3XZhNiO1gK/0FyuCmJ8m0SLHo+UpbIPbZg4RNKKb3lomdYy5R4Qe42rkirU2?=
+ =?us-ascii?Q?ObLiXpWDjiadglyOaWok/L6eYUi1QinZl4eksrmnMrvKf+7T/IW1RmqxYLJX?=
+ =?us-ascii?Q?egE2bZuBrO6dprkYqWFgcx/AZWhCxIl3/2vTB4FTB+vdZI9dzytCaMDX14zp?=
+ =?us-ascii?Q?+q1npckO14xGXjcHD/T5bfSpEOKlaNXVOnQkNLM5py9BTKIhRpWLAhz1RHeV?=
+ =?us-ascii?Q?mYvMbWmwP/R308F9ewWrNPYu6qRUVZ4=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c81338bb-f92d-4eff-20ec-08da17705525
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 01:54:06.1743
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ulyK8rGWqtDSZR3JgBvf4AHVhvcQnOBLdMofMHYyy85RwL5evBvTzB7hJBVq6vdmnElsgdf1W/NQlSjF+A+x3Lq/QyNoao1KEJ0ncPxv1hw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4349
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
+ definitions=2022-04-05_08:2022-04-04,2022-04-05 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 spamscore=0
+ phishscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204060004
+X-Proofpoint-GUID: jPDfwZ2a9lKHnFk0tyWrYYmYw8AqKcNL
+X-Proofpoint-ORIG-GUID: jPDfwZ2a9lKHnFk0tyWrYYmYw8AqKcNL
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 4/5/2022 6:11 AM, Roberto Sassu wrote:
-> Introduce a new LSM to protect pinned objects in a bpf filesystem
+Keys added to the IMA keyring must be vouched for by keys contained
+within the builtin or secondary keyrings.  These keys must also be self
+signed, have the CA bit set and have the kernCertSign KeyUsage bit set.
+Or they could be validated by a properly formed intermediate CA.
+Currently these restrictions are not enforced. Use the new
+restrict_link_by_rot_builtin_and_secondary_trusted and
+restrict_link_by_rot_builtin_trusted to enforce the missing
+CA restrictions when adding keys to the IMA keyring. With the
+CA restrictions enforced, allow the machine keyring to be
+enabled with IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY.
 
-This is *not an LSM*. Do not call it an LSM. It is a set of
-eBPF programs. We have all the opportunities for confusion
-that we need. I suggested that you call this a BPF security
-module (BSM) earlier today. You have any number of things
-you can call this that won't be objectionable.
+Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+---
+ security/integrity/Kconfig  | 1 -
+ security/integrity/digsig.c | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-> instance. This is useful for example to ensure that an LSM will always
-> enforce its policy, even despite root tries to unload the corresponding
-> eBPF program.
+diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+index 599429f99f99..14cc3c767270 100644
+--- a/security/integrity/Kconfig
++++ b/security/integrity/Kconfig
+@@ -68,7 +68,6 @@ config INTEGRITY_MACHINE_KEYRING
+ 	depends on INTEGRITY_ASYMMETRIC_KEYS
+ 	depends on SYSTEM_BLACKLIST_KEYRING
+ 	depends on LOAD_UEFI_KEYS
+-	depends on !IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+ 	help
+ 	 If set, provide a keyring to which Machine Owner Keys (MOK) may
+ 	 be added. This keyring shall contain just MOK keys.  Unlike keys
+diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+index c8c8a4a4e7a0..cfde2ea9c55b 100644
+--- a/security/integrity/digsig.c
++++ b/security/integrity/digsig.c
+@@ -34,9 +34,9 @@ static const char * const keyring_name[INTEGRITY_KEYRING_MAX] = {
+ };
+ 
+ #ifdef CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+-#define restrict_link_to_ima restrict_link_by_builtin_and_secondary_trusted
++#define restrict_link_to_ima restrict_link_by_rot_builtin_and_secondary_trusted
+ #else
+-#define restrict_link_to_ima restrict_link_by_builtin_trusted
++#define restrict_link_to_ima restrict_link_by_rot_builtin_trusted
+ #endif
+ 
+ static struct key *integrity_keyring_from_id(const unsigned int id)
+-- 
+2.27.0
 
-How is this going to ensure that SELinux enforces its policy?
-AppArmor has no eBPF program that corresponds to its policy,
-neither does any other existing LSM, save BPF. Your claim is
-nonsensical in the face of LSM behavior.
-
-> Achieve the protection by denying inode unlink and unmount of the
-> protected bpf filesystem instance. Since protected inodes hold a
-> reference of the link of loaded programs (e.g. LSM hooks), denying
-> operations on them will prevent the ref count of the links from reaching
-> zero, ensuring that the programs remain always active.
->
-> Enable the protection only for the instance created by the user space
-> counterpart of the LSM, and don't interfere with other instances, so
-> that their behavior remains unchanged.
->
-> Suggested-by: Djalal Harouni <tixxdz@gmail.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->   .gitignore       |  4 +++
->   Makefile         | 18 ++++++++++++++
->   bpffs_lsm_kern.c | 63 ++++++++++++++++++++++++++++++++++++++++++++++++
->   bpffs_lsm_user.c | 60 +++++++++++++++++++++++++++++++++++++++++++++
->   4 files changed, 145 insertions(+)
->   create mode 100644 .gitignore
->   create mode 100644 Makefile
->   create mode 100644 bpffs_lsm_kern.c
->   create mode 100644 bpffs_lsm_user.c
->
-> diff --git a/.gitignore b/.gitignore
-> new file mode 100644
-> index 000000000000..7fa02964f1dc
-> --- /dev/null
-> +++ b/.gitignore
-> @@ -0,0 +1,4 @@
-> +*.o
-> +vmlinux.h
-> +bpffs_lsm_kern.skel.h
-> +bpffs_lsm_user
-> diff --git a/Makefile b/Makefile
-> new file mode 100644
-> index 000000000000..c3d805759db3
-> --- /dev/null
-> +++ b/Makefile
-> @@ -0,0 +1,18 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +all: bpffs_lsm_user
-> +
-> +clean:
-> +	rm -rf bpffs_lsm.skel.h vmlinux.h bpffs_lsm_kern.o bpffs_lsm_user
-> +
-> +vmlinux.h:
-> +	/usr/sbin/bpftool btf dump file /sys/kernel/btf/vmlinux format c > \
-> +			  vmlinux.h
-> +
-> +bpffs_lsm_kern.skel.h: bpffs_lsm_kern.o
-> +	bpftool gen skeleton $< > $@
-> +
-> +bpffs_lsm_kern.o: bpffs_lsm_kern.c vmlinux.h
-> +	clang -Wall -Werror -g -O2 -target bpf -c $< -o $@
-> +
-> +bpffs_lsm_user: bpffs_lsm_user.c bpffs_lsm_kern.skel.h bpffs_lsm_kern.o
-> +	cc -Wall -Werror -g -o $@ $< -lbpf
-> diff --git a/bpffs_lsm_kern.c b/bpffs_lsm_kern.c
-> new file mode 100644
-> index 000000000000..b3ccb2a75c95
-> --- /dev/null
-> +++ b/bpffs_lsm_kern.c
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Authors:
-> + * Roberto Sassu <roberto.sassu@huawei.com>
-> + *
-> + * Implement an LSM to protect a bpf filesystem instance.
-> + */
-> +
-> +#include "vmlinux.h"
-> +#include <errno.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_core_read.h>
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +uint32_t monitored_pid = 0;
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_INODE_STORAGE);
-> +	__uint(map_flags, BPF_F_NO_PREALLOC);
-> +	__type(key, int);
-> +	__type(value, sizeof(uint8_t));
-> +} inode_storage_map SEC(".maps");
-> +
-> +SEC("lsm/sb_set_mnt_opts")
-> +int BPF_PROG(sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
-> +	     unsigned long kern_flags, unsigned long *set_kern_flags)
-> +{
-> +	u32 pid;
-> +
-> +	pid = bpf_get_current_pid_tgid() >> 32;
-> +	if (pid != monitored_pid)
-> +		return 0;
-> +
-> +	if (!bpf_inode_storage_get(&inode_storage_map, sb->s_root->d_inode, 0,
-> +				   BPF_LOCAL_STORAGE_GET_F_CREATE))
-> +		return -EPERM;
-> +
-> +	return 0;
-> +}
-> +
-> +SEC("lsm/inode_unlink")
-> +int BPF_PROG(inode_unlink, struct inode *dir, struct dentry *dentry)
-> +{
-> +	if (bpf_inode_storage_get(&inode_storage_map,
-> +				  dir->i_sb->s_root->d_inode, 0, 0))
-> +		return -EPERM;
-> +
-> +	return 0;
-> +}
-> +
-> +SEC("lsm/sb_umount")
-> +int BPF_PROG(sb_umount, struct vfsmount *mnt, int flags)
-> +{
-> +	if (bpf_inode_storage_get(&inode_storage_map,
-> +				  mnt->mnt_sb->s_root->d_inode, 0, 0))
-> +		return -EPERM;
-> +
-> +	return 0;
-> +}
-> diff --git a/bpffs_lsm_user.c b/bpffs_lsm_user.c
-> new file mode 100644
-> index 000000000000..e20180cc5db9
-> --- /dev/null
-> +++ b/bpffs_lsm_user.c
-> @@ -0,0 +1,60 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> + *
-> + * Implement the user space side of the LSM for bpffs.
-> + */
-> +
-> +#include <fcntl.h>
-> +#include <unistd.h>
-> +#include <stdio.h>
-> +#include <errno.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <limits.h>
-> +#include <sys/mount.h>
-> +#include <sys/stat.h>
-> +
-> +#include "bpffs_lsm_kern.skel.h"
-> +
-> +#define MOUNT_FLAGS (MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME)
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	char mntpoint[] = "/tmp/bpf_private_mountXXXXXX";
-> +	char path[PATH_MAX];
-> +	struct bpffs_lsm_kern *skel;
-> +	int ret, i;
-> +
-> +	skel = bpffs_lsm_kern__open_and_load();
-> +	if (!skel)
-> +		return -EINVAL;
-> +
-> +	ret = bpffs_lsm_kern__attach(skel);
-> +	if (ret < 0)
-> +		goto out_destroy;
-> +
-> +	mkdtemp(mntpoint);
-> +
-> +	skel->bss->monitored_pid = getpid();
-> +	ret = mount(mntpoint, mntpoint, "bpf", MOUNT_FLAGS, NULL);
-> +	skel->bss->monitored_pid = 0;
-> +
-> +	if (ret < 0)
-> +		goto out_destroy;
-> +
-> +	for (i = 0; i < skel->skeleton->prog_cnt; i++) {
-> +		snprintf(path, sizeof(path), "%s/%s", mntpoint,
-> +			 skel->skeleton->progs[i].name);
-> +		ret = bpf_link__pin(*skel->skeleton->progs[i].link, path);
-> +		if (ret < 0)
-> +			goto out_destroy;
-> +	}
-> +
-> +	ret = 0;
-> +out_destroy:
-> +	bpffs_lsm_kern__destroy(skel);
-> +	return ret;
-> +}
