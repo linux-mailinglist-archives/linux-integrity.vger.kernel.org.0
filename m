@@ -2,90 +2,135 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA564F8192
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Apr 2022 16:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6F74F8205
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Apr 2022 16:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245260AbiDGO2H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Apr 2022 10:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
+        id S1344205AbiDGOqK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Apr 2022 10:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238286AbiDGO2E (ORCPT
+        with ESMTP id S229759AbiDGOqJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:28:04 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4DD18D295
-        for <linux-integrity@vger.kernel.org>; Thu,  7 Apr 2022 07:25:32 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id e10so655521qka.6
-        for <linux-integrity@vger.kernel.org>; Thu, 07 Apr 2022 07:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SFCu5OPfr2u719QHLQmAFOOnrZqifL8kEuqIFWPJZfw=;
-        b=nkVklxuWxxl1JFd86S9ghjBHOJvTmapWl7hhrYXdo946L+xXZ59GFWXfXDC6rxS/95
-         8G3WeOIB/AdwIz+EAAdHoo33AbOz6KiqL+WKZMCXBMWeyQ2KAq0MdYMB8BjH3lSuCvjR
-         f79Aap2K+dCWRekmqt0Evl5jKtmk4UvK07fbaICwfSjmBXGuSfnbQ1ihrGNejys6XF5F
-         9vPwbPXIIQu1CMnjzyu0XENj6rQUAZy7uHtFwuMIPZrQ2U7qLj1tjq8uGYsd1mLXjlXv
-         sY96j02kjbUOqVrgs2TukSHSytmAchK8qTurOx7GHHe6ehdRj7x8/TIKFn4c+7iNpc8J
-         +iAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SFCu5OPfr2u719QHLQmAFOOnrZqifL8kEuqIFWPJZfw=;
-        b=r8frzOrA+8C/eJlB1eN/j7TcvmVitQ9Onc9x2/ybBhfboS1PjWa27oVBSDNCK3yQpO
-         mqLWxV2hI+VOX8VTpZ3ItPtSd/yT5g1wqqrpXfZf/zisNi2dfCbppT/jAwXLmy8xhrce
-         TavtsrbJdb8gPvT0lNs5037lALbNi/8ApgwQEf4kBBxUZsIvVyun/YaUFnokeWs0uUK0
-         B3S+rAlvBxZaq6Mz0WqvZGPdbPWmReWWszckQRVIeWt8Lm0Tidzx7GJpoBPNslK3GF7C
-         hd0lX04JWYqPIci1VTUG78SNpSFXMAVZd4cGfilpL/m/046BCJHnj8v1lFysj2Gmbakt
-         1IWw==
-X-Gm-Message-State: AOAM5303qtEsRemmmGRcMzy87iDpZVZmVfx5iyo2Xu32X3CPXXeRv7Hf
-        NmLg6ZVLEj5j6E0dqxufrRzxXg==
-X-Google-Smtp-Source: ABdhPJyoDvpsbtXc4mfn920OWQuGw8iLgBJ+mS0m+1UtIn9V7+msI3aLvZeekwcERfCqF6qVgniHBg==
-X-Received: by 2002:a05:620a:178f:b0:699:90a7:ffdf with SMTP id ay15-20020a05620a178f00b0069990a7ffdfmr8978417qkb.523.1649341528353;
-        Thu, 07 Apr 2022 07:25:28 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id s13-20020a05620a0bcd00b0067afe7dd3ffsm13059428qki.49.2022.04.07.07.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 07:25:27 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ncT4g-00EF4I-LL; Thu, 07 Apr 2022 11:25:26 -0300
-Date:   Thu, 7 Apr 2022 11:25:26 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org, =robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
-        p.rosenberger@kunbus.com, lukas@wunner.de
-Subject: Re: [PATCH 1/5] tpm: add functions to set and unset the tpm chips
- reset state
-Message-ID: <20220407142526.GW64706@ziepe.ca>
-References: <20220407111849.5676-1-LinoSanfilippo@gmx.de>
- <20220407111849.5676-2-LinoSanfilippo@gmx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407111849.5676-2-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 10:46:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A995BE08;
+        Thu,  7 Apr 2022 07:43:50 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237ELGAi028430;
+        Thu, 7 Apr 2022 14:43:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=+62jLIl9fAULYighSKmPmMh9FSeRATooKrDWGxOoe3A=;
+ b=ijbmwRaE+AW7S7DEDWrl3oGUVm0B3i35Eq/WBgKiw1i6IdTlNOvYbfpptAhOnylrr5m4
+ X7Urvql7wWPqevaewj+WMysozPR6WG+xZ/ZdDonN+CJ69eQFIODEsilVj/mYK2pbm64p
+ QOWf4Ek1CkHvyMyXoQs2W7jVrqkcsQ/Rj3rBcSdlq/GXopF8kSNyTqxO1MSe+J5w8YLY
+ LqUAIHBV6Dh98N5i/QLL/BfaOGjCfdSjpYAIFCxu85lVqhlHjlirHWk2GeRK9vunmyZo
+ S6D6y7IpKXX2iEs6lo+svsuUut1t9SEypywYH6ugb5a0hrfPIb3FYsGySIdwdpEVniKu 4w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fa0by2qsj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Apr 2022 14:43:41 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 237ELnr3029884;
+        Thu, 7 Apr 2022 14:43:41 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fa0by2qrp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Apr 2022 14:43:41 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 237EdPAo022948;
+        Thu, 7 Apr 2022 14:43:38 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3f6e4923bp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Apr 2022 14:43:38 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 237Ehah254264072
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Apr 2022 14:43:36 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6CB315204F;
+        Thu,  7 Apr 2022 14:43:36 +0000 (GMT)
+Received: from sig-9-65-64-98.ibm.com (unknown [9.65.64.98])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9AB4F5204E;
+        Thu,  7 Apr 2022 14:43:35 +0000 (GMT)
+Message-ID: <fbc9cda8eacc0a701d7b336bf45ecb6dfd450be9.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 1/1] ima: remove the IMA_TEMPLATE Kconfig option
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     GUO Zihua <guozihua@huawei.com>, linux-integrity@vger.kernel.org
+Cc:     dmitry.kasatkin@gmail.com, roberto.sassu@huawei.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 07 Apr 2022 10:43:35 -0400
+In-Reply-To: <20220407021619.146410-2-guozihua@huawei.com>
+References: <20220407021619.146410-1-guozihua@huawei.com>
+         <20220407021619.146410-2-guozihua@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vSgQl5agzBeyef9h5Pk1NZZtDf03cPFH
+X-Proofpoint-ORIG-GUID: s197i5WVDd1hX7pStpEn5i2CJP-Htyju
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-07_03,2022-04-07_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 adultscore=0 phishscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015
+ mlxlogscore=881 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204070071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 01:18:45PM +0200, Lino Sanfilippo wrote:
-> Currently it is not possible to set the tpm chips reset state from within
-> the driver. This is problematic if the chip is still in reset after the
-> system comes up. This may e.g. happen if the reset line is pulled into
-> reset state by a pin configuration in the device tree.
+On Thu, 2022-04-07 at 10:16 +0800, GUO Zihua wrote:
+> The original 'ima' measurement list template contains a hash, defined
+> as 20 bytes, and a null terminated pathname, limited to 255
+> characters.  Other measurement list templates permit both larger hashes
+> and longer pathnames.  When the "ima" template is configured as the
+> default, a new measurement list template (ima_template=) must be
+> specified before specifying a larger hash algorithm (ima_hash=) on the
+> boot command line.
+> 
+> To avoid this boot command line ordering issue, remove the legacy "ima"
+> template configuration option, allowing it to still be specified on the
+> boot command line.
+> 
+> The root cause of this issue is that during the processing of ima_hash,
+> we would try to check whether the hash algorithm is compatible with the
+> template. If the template is not set at the moment we do the check, we
+> check the algorithm against the configured default template. If the
+> default template is "ima", then we reject any hash algorithm other than
+> sha1 and md5.
+> 
+> For example, if the compiled default template is "ima", and the default
+> algorithm is sha1 (which is the current default). In the cmdline, we put
+> in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
+> that ima starts with ima-ng as the template and sha256 as the hash
+> algorithm. However, during the processing of "ima_hash=",
+> "ima_template=" has not been processed yet, and hash_setup would check
+> the configured hash algorithm against the compiled default: ima, and
+> reject sha256. So at the end, the hash algorithm that is actually used
+> will be sha1.
+> 
+> With template "ima" removed from the configured default, we ensure that
+> the default tempalte would at least be "ima-ng" which allows for
+> basically any hash algorithm.
+> 
+> This change would not break the algorithm compatibility checks for IMA.
+> 
+> Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
+> Signed-off-by: GUO Zihua <guozihua@huawei.com>
 
-This kind of system is badly misdesigned.
+thanks,
 
-TPM PCRs fundementally cannot work if the TPM reset line is under
-software control.
+Mimi
 
-Jason
+
