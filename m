@@ -2,113 +2,177 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63BC4FAFDA
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 Apr 2022 21:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00F24FBAF1
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Apr 2022 13:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238569AbiDJTrN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 10 Apr 2022 15:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
+        id S245270AbiDKLdU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 11 Apr 2022 07:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiDJTrM (ORCPT
+        with ESMTP id S1345736AbiDKLdS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 10 Apr 2022 15:47:12 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E44D5D5F2;
-        Sun, 10 Apr 2022 12:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649619888;
-        bh=0b150G6BrvAci/6qIgV9dOcDSR6KYc3RHxHU8xPDus0=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Ul8XQ3zhOwkrGvPbXl6Qh1pCcpgTgQ0urdJ//KTpUQxLlPkTei9THqUxK1Llt2qbM
-         IGaD4+ECMNxsy+lINyxo6QJSWVRF4oBwSpXCKjzmKVNizOgm83eBy2GuckgF0wHyM5
-         TwMX5WNcR86XK5x2LA6W/lY3gUi/fPne0t5MpDNM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.3.230]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mt79P-1nxNCT0dwX-00tPw9; Sun, 10
- Apr 2022 21:44:48 +0200
-Subject: Re: [PATCH 5/5] tpm: tpm_tis_spi_slb_9670: implement set_reset and
- unset_reset functions
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        =robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanb@linux.ibm.com, p.rosenberger@kunbus.com
-References: <20220407111849.5676-1-LinoSanfilippo@gmx.de>
- <20220407111849.5676-6-LinoSanfilippo@gmx.de>
- <20220410171826.GB24453@wunner.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <1229fbc4-0abd-376e-a9d7-ccdd6d56c2ae@gmx.de>
-Date:   Sun, 10 Apr 2022 21:44:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 11 Apr 2022 07:33:18 -0400
+Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0CC4578F;
+        Mon, 11 Apr 2022 04:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1649676665; x=1681212665;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gugPxkZRoxMXAphUXKAPVO6SK72+rb+7kZN6teQ7Gwk=;
+  b=Zkyhyzv4p1U84NEwsOQa5GX3OVm2asMwuLEcjLxx5ii2FYAoIXFNqC5i
+   O5mZ88DoNUO8+EZu87C8Bb9CtFnKgUOlPDEJhziNfONk7JCJ0KCgjaKfA
+   i9cWHEjyA7oA4qngy3lPxzghCpc3WCLJthXqPLV25MvVlhlQxoR/GcJiL
+   U=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="289851380"
+X-IronPort-AV: E=Sophos;i="5.90,251,1643670000"; 
+   d="scan'208";a="289851380"
+Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
+  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 13:30:55 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
+        Mon, 11 Apr 2022 13:30:54 +0200 (CEST)
+Received: from [10.160.241.183] (172.23.8.247) by MUCSE819.infineon.com
+ (172.23.29.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 11 Apr
+ 2022 13:30:54 +0200
+Message-ID: <52cfa5fc-9fc5-dee4-6d53-70d241510269@infineon.com>
+Date:   Mon, 11 Apr 2022 13:30:53 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220410171826.GB24453@wunner.de>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 4/4] tpm: Add YAML schema for the TPM TIS I2C options
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:mSm71vcc1o0VqmXNuuRUwbw/0qJB1BZH90rQsG55VU+wQkrfCzm
- 6pMOb4LSwaOycSFvCkcGxMT2vtoKI8dHgBX8DafWOZuTCdbeMImfFlhS787f40Nsbnmq7K9
- rtZ6wNQdXdrOXMxelkvqU9lQV6dnS1PxlitRFnZhR52IFntqBH6DqucbrETE36Ibh1fJ4Ka
- dvZIAuXaMCWYzm8Juzj1Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LfGMUcy+Qhw=:8gNvMHcSLwyqzQTM/qdGPb
- kBSyA2A5Cx6VsCLx+8vIAGBPGC4m4S0qQNtwRKSzicgmdHOq40GKo2QB8Gpteca2dNtjzYPfM
- +92jHFlvLP7DGYuKM607uevtj4wMjnAUQJSHzugRwLpkFzyGQV3VB+GtfGn0htN3xu4oUhZGp
- 3D4uniB+JZDOtqCGQhzKnTLz9D8AkNGMPguIGeY95bjMerBQZ7nm+mp9Yc+PLmOdf8zSYlQby
- AxkQWRjAmJsqOOcK0JElMrHgw0/2k6NQZf+3LcvshTgzfbFOfhoWvaNCyEo/43QQbOaDPKeSu
- P9wqUR1GZKjuaJ86aNYpN0T6xpGkB/YZvK2IgbfBlgLHS1cURmCznaI2C0sE0sIkPcAKj4kuK
- 0FlUCglZI8Y7Puwf0hTQ2qLds3ouFr6QNT4GYvNWQylNw4q2OI2m2ehm4c9CPS5aRi7ZlpQ3x
- 6x9edZ9Q1o/xyaWTLV019zX5t35h5CeM1qlKIc5BTn8zHIcR2lWcI1wqZW3zevXzKGao+/0hx
- DRWE7L66MwkOigV2HmQXgkJpgD0iSlGEI8lgL4rt8jx8rWLavsauxiu+A7QCSJagf0YuJngrJ
- fEsV1OR6HP71bWUyf4d+JGKB/RjzOzjgdlh/oaNM5NTtncTZHShbCFTNzECoWcPqBfFFE+kW0
- skY6zK2DRnMqJ8QxiMmSM0EsDMihe7a63uo1JWHYUEUNrb7eHGlwf9+2BJFflc8j18LUPUXPu
- wm6Ku0KD37UjMkOgQjvJEqG45YjBT0XQxExfGAoKfHxqpnozhzIAUEUufgTj7guzkKYYo8a6Q
- Lc71jkSZSxzsk43xffTn7qOhusa2XY+UoQYlLFO/92rC/SDjD/DhjGnSTqN8cYKAvStk/bwGy
- 0QejNLQsrqEw4RLX8hGAgjXD3jtYQa3DMGpOX5wt7mhylF6FAFaoGTwqwW6hFMn3Y0LgzaNp/
- gIltBiVlDXVFyHdEZlH9KDHPT+lupXTV2QZ+5MPT22pG85Uso40b+y268pziBtCGARaOkQ529
- ez3e5EiKKaoVhJjXDVkGs43FcVFfhF+G16wqiJwE77W22B7G+AhFRcUpG97SsZx1C/0un5te0
- PBbzspKhssoLAM=
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Rob Herring <robh@kernel.org>
+CC:     <peterhuewe@gmx.de>, <jarkko@kernel.org>, <jgg@ziepe.ca>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <amirmizi6@gmail.com>
+References: <20220404081835.495-1-johannes.holland@infineon.com>
+ <20220404081835.495-4-johannes.holland@infineon.com>
+ <YksaVw74Eotowyse@robh.at.kernel.org>
+From:   Johannes Holland <johannes.holland@infineon.com>
+In-Reply-To: <YksaVw74Eotowyse@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE816.infineon.com (172.23.29.42) To
+ MUCSE819.infineon.com (172.23.29.45)
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 10.04.22 at 19:18, Lukas Wunner wrote:
-> On Thu, Apr 07, 2022 at 01:18:49PM +0200, Lino Sanfilippo wrote:
+On 04.04.2022 18:18, Rob Herring wrote:
+> On Mon, Apr 04, 2022 at 10:18:35AM +0200, Johannes Holland wrote:
+>> Add a YAML schema to support device tree bindings for the generic I2C
+>> physical layer. Refer to the TCG PC Client Platform TPM Profile (PTP)
+>> Specification for TPM 2.0 v1.04 Revision 14.
+>
+> Bindings are for devices. A protocol layer does not make a device.
+
+Agreed. I will change this in my next patch.
+
+>
+>>
+>> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+>> ---
+>>  .../bindings/security/tpm/tpm-tis-i2c.yaml    | 48 +++++++++++++++++++
+>>  1 file changed, 48 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+>
+> We already have a binding for I2C TPM. That one should be converted.
+
+Will do. There are two required properties which are in fact not needed
+by any I2C driver. If that is ok with you, I would like to turn them
+optional.
+
+- linux,sml-base
+- linux,sml-size
+
+>>>
+>> diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+>> new file mode 100644
+>> index 000000000000..7948867ff3f7
 >> --- /dev/null
->> +++ b/drivers/char/tpm/tpm_tis_spi_slb9670.c
-> [...]
->> +int slb9670_spi_unset_reset(struct tpm_tis_data *data)
-> [...]
->> +int slb9670_spi_set_reset(struct tpm_tis_data *data)
-> [...]
->> +static const struct tpm_tis_phy_ops slb9670_spi_phy_ops =3D {
->> +	.read_bytes =3D tpm_tis_spi_read_bytes,
->> +	.write_bytes =3D tpm_tis_spi_write_bytes,
->> +	.read16 =3D tpm_tis_spi_read16,
->> +	.read32 =3D tpm_tis_spi_read32,
->> +	.write32 =3D tpm_tis_spi_write32,
->> +	.set_reset =3D slb9670_spi_set_reset,
->> +	.unset_reset =3D slb9670_spi_unset_reset,
->> +};
+>> +++ b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+>> @@ -0,0 +1,48 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/security/tpm/tpm-tis-i2c.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: I2C PTP based TPM Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Johannes Holland <johannes.holland@infineon.com>
+>> +
+>> +description:
+>> +  Device Tree Bindings for I2C based Trusted Platform Module (TPM).
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          # Infineon's Trusted Platform Module (TPM) (SLB9673)
+>> +          - infineon,slb9673
+>> +          # Nuvoton's Trusted Platform Module (TPM) (NPCT75x)
+>> +          - nuvoton,npct75x
 >
-> 0-day is complaining that slb9670_spi_set_reset() / slb9670_spi_unset_re=
-set()
-> are not declared static:
+> I see this is already used, but in general wildcards should not be used
+> in device compatibles.
+
+Ok, I took this over from a previous patch. Since I am not familiar with
+Nuvoton products, so I am going to remove this for now.
+
 >
-> https://lore.kernel.org/all/202204081357.8SfjQosI-lkp@intel.com/
+>> +      - const: tcg,tpm-tis-i2c
 >
-> Thanks,
->
-> Lukas
+> Pretty sure I killed this off when originally reviewing the TPM I2C
+> binding.
 >
 
-Right, I will fix this in the next version, thanks!
+Sorry, I did not see any discussion related to this.
 
-Regards,
-Lino
+IMHO, the TPM is a open standard device. That should allow for plug
+and play, regardless of the manufacturer. For SPI, we also have
+tcg,tpm_tis-spi. However, if you want it removed, I can do that.
 
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupt:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    i2c {
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      tpm@2e {
+>> +        compatible = "infineon,slb9673", "nuvoton,npct75x", "tcg,tpm-tis-i2c";
+>> +        reg = <0x2e>;
+>> +      };
+>> +    };
+>> +...
+>> --
+>> 2.31.1.windows.1
+>>
+>>
