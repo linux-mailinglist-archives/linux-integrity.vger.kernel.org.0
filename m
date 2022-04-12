@@ -2,41 +2,41 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BD34FE604
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Apr 2022 18:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E584FE631
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Apr 2022 18:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354238AbiDLQmx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Apr 2022 12:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S1357911AbiDLQrz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Apr 2022 12:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357805AbiDLQmt (ORCPT
+        with ESMTP id S1345055AbiDLQrY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:42:49 -0400
-Received: from IND01-MA1-obe.outbound.protection.outlook.com (mail-ma1ind01olkn0188.outbound.protection.outlook.com [104.47.100.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FF44831E;
-        Tue, 12 Apr 2022 09:40:31 -0700 (PDT)
+        Tue, 12 Apr 2022 12:47:24 -0400
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2043.outbound.protection.outlook.com [40.92.103.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D121CFC2;
+        Tue, 12 Apr 2022 09:45:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=irljsPvjLirGU2jOVdvAw70N93AhBkmPilbI80Dpis2hesA6oPweA6AiS4rSdCE3pxgRiUIwGt/NSe0bFC44bhaxK6qF/qqtoI/eODlXCKrxjTeYf5LAxCo9/to6Pmywzsfn/AhGgaStz7w320XGLN3FQZRx2QEASYnY3tg4BjMmigiFSGSgjgXPuPt8MHXICMVubg+BpIbn8jOjtjtr8a8LA857qdojiUDbN74IKElpncqa9uDqJuPL69/BTYrjRF5KKAssiD7PcibO9Sw01wpF29e/OK+ai8bMbJKL5MsRYTQeFvSCzBFe3rEtJbnWLI6cUFEvhGQ1vFYtCmtTuQ==
+ b=UlWpgsUR0Hadn1B92OqBGguHRdaUhzRzWcV527eMetDnIivvLQVilnkjD9R3aN2qoXzmNUJsptCIHvlFZZ+h87WcmwQa/TQsmWWansIlAXWo/ucHZA2IgOjxkMykpc8EmqdN/gPlthGJN4j5WfETrIBmDDVNwA/C3pg7NlfPkHu3HP5HVgfY7/LXfqW+pPaiLTVhraN77RdViTplIbNusln3zyP5c8lFNYrnX2pTVQny2zkoufhFZNpBYBEaUx2uRAbYDYu+6Yq04ZaRoDlco8nW/zal2uVVJfrd/51mtCbAmOZXWvkPlVBqpFh8Q5/uB2xr+83SHfmscIhUr9mM8A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ivt0xzWCSWl/gHe44gE7S5SWRiEkySjdMJncPuEtWSI=;
- b=msuU0Fw+PMw0sfOvy+RwjSG1Ezh/EGZ1lHiAGinpt0cA5CHqsmIcCuNd8yYrk6be5LbyJ7hH9eFqXGmkYjDksN7JiJ4TVp0hst5f9o7w10VZYHJANSedMqK5GCBEuQ3FFHg2S78EZTd2tRMZ9c5JWSY2j8qhexfmVKr7jOB0kwbIoicTPK0RSQDt5aN0D0cn8xnhjMcc9H+nAhe3QzUFx+B+UZJC4doKnWHXp14qqCYoUa6rvq4Z0PX/PB47FZ2eJkVdvz/CvmapeOV4xb2u6xc/+qxXUMTXmRgaANxjSFRTRXbA5nEEfn8WEaS0ycU2LvHqEZmuRYGv8GFnYZa2vg==
+ bh=J5HAJsIymNmVdpWcGHWznw8P+jbjXeVNXCN325s7DF4=;
+ b=fMYqy9m4dc8eDGWYcT30fVzVoYcNviMZ2ktJbl89g4PGuWMZk59JE6u16HhrBIfXX2k9SqMK4PrLLaVh56psvb8Ik+UVtR1R8dkMPvzfsMXHTDNaPpaVU7Xj7/f/xh/J2G1jjN5r6xjBGafm9itLJgJb5iurvpF5o4O4yFREiqkpwhVdx9Bri/+3/TtI2gSD+ujVBz5fRPBqqzqaQBPZCfENyrCR1WS4Q+7RrDVYfm8ZFer0P87FXI2+Ubzo9MMHzabhQ2Xnt0vYZdmCWkFd04FcvJStW1k/mtaE805+q90pazop1+O7bIsNoaB7BohMkZeSn/M/fbNHoL8mYrWJlw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ivt0xzWCSWl/gHe44gE7S5SWRiEkySjdMJncPuEtWSI=;
- b=j7Tc9W+W7cx6reNdnU/Ejx2/nFldA9ucZe4P7aAzleFGtOHkdMa7iK/AWy/2Fqqb83EQhj/RKnAuvc3hD2xUFmuA7J4dO6xb/EoZExDgqhW1Vop0fRbtcbkV5Goz1m566LIQwWOyWyC8cT/PKd5OGKjj23n1uDXTCzJn6AebY39rusk17y9DGOlpa3mwY5EltfnhkASs90Nd6xKplqaKT6pk/AVzxb+QmFMq0yjHX8Q7+MrRyZKfIvgcovpw76BcNRc3kHXNEJAXuvgqfjwvItdhNzJlOUBF40T5oT2XJ8AxJKgqR7/nwfMPmU/Ub/4hDiFiBLLaVgldbiS76Xgezw==
+ bh=J5HAJsIymNmVdpWcGHWznw8P+jbjXeVNXCN325s7DF4=;
+ b=oVw5OKFo+iVyaSJG5HecjCHRa/HdgwYxF+dfSAGxGnO0Jv9JyKx0fbJ8+vCyafQcz48XnisSJjzqwDPzWWwJfCKmA4cIB9ymzwbByVYyRfiVhwpkIoS12sScRX4wTZmmRY0NREzBzKi5twfE+QIO0yYqM6G5lm1DOQrNnZW49WbYH7VtezkScc3kmi5HJVG75mZ7TzXwn5/U3n5gN9d1N8wExxjcV4EVt8oiwuEFiQBG18zekywNfmrjt5UcgJ/NQo+RbPTQkBX2OBru9MUK+C/4Qz/RaIxg1Q1in0rRt/hpKY8LLZNZNewH5PeGGnDtdwKW0bNPkMC5TYALhhP7aw==
 Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
  by MA0PR01MB6906.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:37::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Tue, 12 Apr
- 2022 16:40:23 +0000
+ 2022 16:44:57 +0000
 Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
  ([fe80::dc4b:b757:214c:22cd]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
  ([fe80::dc4b:b757:214c:22cd%7]) with mapi id 15.20.5144.030; Tue, 12 Apr 2022
- 16:40:23 +0000
+ 16:44:57 +0000
 From:   Aditya Garg <gargaditya08@live.com>
 To:     "jarkko@kernel.org" <jarkko@kernel.org>,
         "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
@@ -59,63 +59,65 @@ CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         Orlando Chamberlain <redecorating@protonmail.com>,
-        "admin@kodeit.net" <admin@kodeit.net>
-Subject: [PATCH v4] efi: Do not import certificates from UEFI Secure Boot for
- T2 Macs
-Thread-Topic: [PATCH v4] efi: Do not import certificates from UEFI Secure Boot
- for T2 Macs
-Thread-Index: AQHYTowBbcLMYGtuzEagN7LaBXEsyA==
-Date:   Tue, 12 Apr 2022 16:40:23 +0000
-Message-ID: <94DD0D83-8FDE-4A61-AAF0-09A0175A0D0D@live.com>
+        "admin@kodeit.net" <admin@kodeit.net>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH v4 RESEND] efi: Do not import certificates from UEFI Secure
+ Boot for T2 Macs
+Thread-Topic: [PATCH v4 RESEND] efi: Do not import certificates from UEFI
+ Secure Boot for T2 Macs
+Thread-Index: AQHYToykrBFj4SbxpkSfp7eRtc7lVg==
+Date:   Tue, 12 Apr 2022 16:44:56 +0000
+Message-ID: <590ED76A-EE91-4ED1-B524-BC23419C051E@live.com>
 References: <652C3E9E-CB97-4C70-A961-74AF8AEF9E39@live.com>
-In-Reply-To: <652C3E9E-CB97-4C70-A961-74AF8AEF9E39@live.com>
+ <94DD0D83-8FDE-4A61-AAF0-09A0175A0D0D@live.com>
+In-Reply-To: <94DD0D83-8FDE-4A61-AAF0-09A0175A0D0D@live.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [y7gezmueV4Vvd9exRqlovZ158nhkjbr/]
+x-tmn:  [BSvz8NT8+F0ZyBjpzVSsHIz/tJb4ne4S]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 00bf62b4-7121-4590-ccba-08da1ca323ec
+x-ms-office365-filtering-correlation-id: 9633903e-b6f0-415b-a95d-08da1ca3c6fe
 x-ms-traffictypediagnostic: MA0PR01MB6906:EE_
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NTwStIfWdYsH0On3Ayh1XLjMNnYkti0g5lSE4oYTaaK+UZFsyNvxQHNK0h0755/pVHorvPmTMJj6pjiiTmZnFokZCaY6CgbcgE0eBeGcq70OZQ75v26EDS8TVPn1VPvB2OCHu2lu+Dtf23qJT6mquGgBfQjg0ZH09l96S5ELuVBBNStfu9GElI5nVd38CvbWX3EpuTH79SK3J8GhRFugZlECeQsmjesWyMtngv9WrM+EWR6ywNT5RX9cIhxbXHZHFCSGUQ5rv7yON7Dw44iXvphLbTToVAxFMj08vz6m5eRjHdqy5Dgd6n8CQ7dOvE2tZe5W7xjVQlry0r2d1PBiG3Ap8eY4Dlb8CB7iMtE5ZswjS5I7x++SQ3DOMVnbClntUKnc+/E66a1gDsxzZeSmdl5vBoZ73yr6V9xLdRJkdvJBTEzSTv4yaEWE2CynmQkCn+z0mmLtsEL7DB7gaPj6JfrVIym0OUu+WzG05Kf6Xxzmn2PVDB7QKUGpgTci50LRrYNGvQmm0EOi67UCwBrDniiQFT+f8Zp4S2IkvK8qrFO9wByCulyCbzcvunCPKkydAJPfTOuJ6lpVOix1yt7K+Q==
+x-microsoft-antispam-message-info: IP2K/Xf+HGGCy2CDeLeJvFRB0eN2P2hN0hwYQJtpK8MbE6tyGthNNu3ARtesBrvzqd38FFW9tvpqVN07Srd+jmRux7PN5zdyYE5kaElOm4oxP9olyBEvCbxVF4PlspMSksHfa5xNHua5AJLrd0lWZXq6NvsFtThNFlI1XTGvln0X7fS/p1/WKN/rvYMppkrEwCKvOJdooXNWtldE083FtVpEIIgPSJNXSIuqZ+yR64x3xwDHxgBlsFr1qoDMLdCqY/4AtHMWDTkvfhfqkAVrYcSDgGTr6LtoFLvjQPZMxKpYOJX2+NXqO2ONf+7buvsINvQ8YC034RXq2mbwNSL5a+39LyDhEiImBE+ejNfDe2jyuBuOyBYTfH1A8HFNEi3V+ps0oRvhwROsCRP5Huv1yabMDZlNmFTpmD78vHcFCFAs4oAE4LAjIRsGbm75sBM2LeFdWHJBOr971pAXMoJOQVi0UZegnUWi9yRR5bvXmPhZtjEYZ7ZTu1B15Ve7bP4bxpaeKsJrUb8r2TltRwmQ2LK97ckvHIcaP0QaHLUm9ynkmHFYLTxptpjZ9o3XMfynpvNH1EwTSSwQx0vLqC6Aqg==
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TSpUZr+6qtJAiweMGJqMDwVWQyAwH32CgMARQsr4I5eU/43JgSrCAQD+iRcJ?=
- =?us-ascii?Q?xWSAthz9BR/O3irmk9VCmyQFYxBl7B8FPRtmgBBUk4rIX0/zUjmNtuuSy/aG?=
- =?us-ascii?Q?Ji22R/GP7URXo3AhU+mzDEsTMVDHhaCdcZC7ldNj3/F/78crgdjrI1MyNsKV?=
- =?us-ascii?Q?/cHci87COyTV38bSpmxm443V7qK8qQ8xIgM+ja2b3z34twhXWq50Ac0ADT67?=
- =?us-ascii?Q?ify2xHEicoksn4J9y2Haz+eJQcyKZC+bTw9bfOEvW6B4ZnVcLokzm9yNnhLQ?=
- =?us-ascii?Q?aemy8hNojOIyXBi1rn0V0IxNgOmCUHntkV4cM9BC4hfeZp4RJLhfWbMjLpTK?=
- =?us-ascii?Q?oH415Vth3mdZ0zMOmVuQchVs9CnttwXXD9ITs5CqnQKo9Vv2mFXfFtaXsNF6?=
- =?us-ascii?Q?fE+lOoIspguylEV3fQWkX0LZqiHF+3DMb//F04EXDudhVEQE5eyJOWpsZFvh?=
- =?us-ascii?Q?76d2uWVYjMieY1zMmYsNZUXbpKFWSlqzlKWMVnVXyWSHhfgzOKLOlGTuwwni?=
- =?us-ascii?Q?IME/LFRxAILEF1sQNd9AqrQNvLNi+E2j2cxGPpIq12jyaHgl1TcLEnz3HiUi?=
- =?us-ascii?Q?bFbVYdgP1sW1hwKnOpCVlplw+gRDaTEHkxHl/5eKcKJEOG8gxtaFNSQXDj/R?=
- =?us-ascii?Q?Bo27YUlL2PXGQ1oi6RfFeGf6f8bCaYEEBb5uOjEkZQXtD7c4wtdPAHDfHAo6?=
- =?us-ascii?Q?IuUi0nPBXTSvqMl1/qzDcxxYjSrhwV2ZZXFtId1dgjoulWwhF/Lj2uLNmh2U?=
- =?us-ascii?Q?morxT5K+yyr9AV3+Xsc3G+M4yOkmiceL46a9S30tFj8DLS5QsZxGgyyhiIZ/?=
- =?us-ascii?Q?p44Wv3paExxm++W64LDnOfYJJ8PyzCmetTiQ9QuI2MUf/lDxAlcsT80LYUM3?=
- =?us-ascii?Q?jbzD9G9RUAiDZd1b9oF27ZAL7Sk4cX6dwCl/m11WE+5wm7flLlhOBJs0zLM0?=
- =?us-ascii?Q?GHNpXOMWzYCTwKR9AaEX6nT+4racqrUqImQYAo+gnB/hlD6dnDz1tMq/JBKA?=
- =?us-ascii?Q?8GA8p50s6IlZ6MxR8pjVnz25nEInQk8TAgPeGw8FWJ+jNKm6MelUgUS/7cOZ?=
- =?us-ascii?Q?//U/TfdzGKsjSbj0cBybjWDI3f/ODIcHp+ewl5BIFdRlIPCb7s9WipQatnzt?=
- =?us-ascii?Q?jZ9gIr8A5KSPl0NL6MZJruAPufxZLSwvPIwNH34RqJi41Ewk1qcU9ufIrpEa?=
- =?us-ascii?Q?SGSa9YkNhGArr2eOAsLcOupEdPQ7kNyGuyVOZgsPuGiDgE+7H+zl4rc65moT?=
- =?us-ascii?Q?8Kz37T85ZT3E97KZ8ddkQjarAPQa33cFyiAUYHBDS2Gqx4UBRcurlR9xEg2y?=
- =?us-ascii?Q?5Ec/2JomubJs4uQzIdigKnR9Yizf+uYJ2Q6H3nO5qogllKp9aE09K51ALB63?=
- =?us-ascii?Q?vR6Vv6d/JesGHRaW3uL+h8GOP7IH0HrLV2RGF9WpnzzFReoe4YV/+M/ggUqt?=
- =?us-ascii?Q?ndnguznvKaU=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nZZ1R1XuDYhvbBICzU+jzMsuZxT+/8aNhd4HOzcLEnigssGy26HkmZAj44gV?=
+ =?us-ascii?Q?auYBqiuJgG9A2PS7UTm4Qlq+eY6C7/yM50ZrgPmUsG2z5uiVcUpmsfqkIivE?=
+ =?us-ascii?Q?bi8yo6QSYvsIpntJkVplFhTdK8exeVlfDxmPoZYli5iW2gLt/ctzNcWugqKI?=
+ =?us-ascii?Q?73B6ACRbi5xnmNqdaGfET2hyvqXVqH2f18fV6liBmm7RWKP0bmJVLf4w0gqt?=
+ =?us-ascii?Q?TJQmzIKERJB3vwFzIj906g2Ftn8zJuKuUQ4dfS82d7sO4BBOjaj0QB+lWpLc?=
+ =?us-ascii?Q?Q8COIPZDlKTyALftgJME0/Tpn81YdMikZusANdN9XFGWkd8xKAnQJUmUGA5V?=
+ =?us-ascii?Q?st5ILNeBdflkTMH5eX0z6qHt7OMvKAECGyWv6Ayo2c7S/bCCsyNXxy4fQHP+?=
+ =?us-ascii?Q?LZgUV0xFd+A0FmE1GxBSlLdSED6wfAmdCk928a9TWuousGy8qab7d3DD/qMB?=
+ =?us-ascii?Q?fOtKOvGnqAIJi8nGoLEW/mRpx0jn0fdsVIKoZna5MbEJ8uoV6Xyfih51l87v?=
+ =?us-ascii?Q?mqjIMBZczmSpWXaXhS8tY20bSQse0yCQWLrsnnOKAlXULufwIgEBU8gpfWMm?=
+ =?us-ascii?Q?elK/ZzNeM8T7EdVGbL2aM901uFNVZJbIJdQqLoa6iVcApMy1bSqNO5lPkvBx?=
+ =?us-ascii?Q?9CQ2zvCRfrSCRZklHeckJLVcTRTt0AfTPLzgMv9hsJHZVPUHP5plquk/xYbC?=
+ =?us-ascii?Q?X1d0UhRj1bErsDwJBrl2JF0Aj66altyKSBoa68D1Qwj32skUaxXKftCpz/58?=
+ =?us-ascii?Q?5cJ2Xaw4k7MtbHucZBhYny6FVDrxrJHkuItb0XpryEgi0hGOcGBCpUWKAGbu?=
+ =?us-ascii?Q?lKljSv+zeNGMsRjDRtGor0tbTHmDnTqdvf3856N8q4tFUxhWLpNgTbOwuJEM?=
+ =?us-ascii?Q?7ZlnHRSaxv7O6WxFGyZXP9a3ahZDREp6goYeSQqhZ2QCFpXT/Cg0FJceJmjl?=
+ =?us-ascii?Q?IIj6hq1ksWg8TxpBN1EVz+DPfz5QuJ1Bc1zkg7nc0EGhPy/Dvd2E6cW8nx12?=
+ =?us-ascii?Q?ZnHK3+XFa+ru8Fcup/VWIvLBnfhnlwHbTDeQAwB7JLcxmclJxy0GT8bTM0U5?=
+ =?us-ascii?Q?UmugoGkSpkLw5JOgbUiQJltinNYC70wKGvedSXMomTGh2oVh6OGgWzbQLG6O?=
+ =?us-ascii?Q?0TvEzLAPqAFciLtNnLIiAQQQ+23wr9ZHHXIfJN4TAFk6UuCa7bNEyLrlPJGk?=
+ =?us-ascii?Q?uZ4Ogt8PI9cH1zi4E9VEF7gshFXW6Hd97GSOjXP4eDvEIHvzfMUtKnOauqtU?=
+ =?us-ascii?Q?gKgV6bd+ZktNoQSjCEwrrl+0NN83N13eEz1MgzvJ9wmGSrc+WOBv7wy2usfi?=
+ =?us-ascii?Q?l0jsjnPKQphFTrpi3F0t01Wf/ohSIqYqY0jdTl7qe6zWKQjESg9wQ1o+ZUae?=
+ =?us-ascii?Q?6nPyAWWc2vgznm6g7oa0vzBjOsfJK5u3FrqTNOyBd9x++WMK267cWijijLdU?=
+ =?us-ascii?Q?1PuQAV/DM2U=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <77D4DE5FC36F0C4EA59FF6E08DE91AFB@INDPRD01.PROD.OUTLOOK.COM>
+Content-ID: <2DCE488ADB19C843A73733946B7EB064@INDPRD01.PROD.OUTLOOK.COM>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00bf62b4-7121-4590-ccba-08da1ca323ec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2022 16:40:23.3690
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9633903e-b6f0-415b-a95d-08da1ca3c6fe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2022 16:44:56.9547
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -123,8 +125,8 @@ X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-0000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB6906
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -183,6 +185,7 @@ v2 :- Reduce code size of the table.
 v3 :- Close the brackets which were left open by mistake.
 v4 :- Fix comment style issues, remove blank spaces and limit use of dmi_fi=
 rst_match()
+v4 RESEND :- Add stable to cc
  .../platform_certs/keyring_handler.h          |  8 +++++
  security/integrity/platform_certs/load_uefi.c | 35 +++++++++++++++++++
  2 files changed, 43 insertions(+)
