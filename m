@@ -2,68 +2,44 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A1A502DB6
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Apr 2022 18:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028EC502E22
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Apr 2022 19:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345936AbiDOQ3e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Apr 2022 12:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S1356048AbiDOREq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Apr 2022 13:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238942AbiDOQ3d (ORCPT
+        with ESMTP id S234657AbiDOREp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:29:33 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F13B7C7A0;
-        Fri, 15 Apr 2022 09:27:04 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23FFOHaJ020889;
-        Fri, 15 Apr 2022 16:26:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=HeJ2w+n1oEAcUUXnghppzmXxVQYyq3hGhL8kqyl4vbU=;
- b=dR++cuynruEufF0J6OXdSEErjMVQrEFIMH6FwfGvLHzzg7crX2Uc2UUPnfpVbVcgyK9W
- FXWGy8cUXSPJFxe+LDPBgBNk+1aUwwJR8b3YRiu3KTjMwi6HLz35itGyMJGtxosl7nVB
- 3Sve+jYV4AgYZLpYmC4dNEI6bjhsJxlXyOgxZJC43rpZfzoGnjALHIC70/J5F3o50ZJi
- 1joxmpUwp7e4FZMrmR5h/6O/BJ2oKvJecQxK0P1nTmLXRBYXs4WVc87mAV2qOFyKhehK
- TOezYvqIVL+Qeg8EGOT9J5TsPrtC+QMs3/3DTBeFooDUyQLZU8WACrU7tujwchaflRQU nQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fefh5y2nw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Apr 2022 16:26:38 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23FGFGNN012502;
-        Fri, 15 Apr 2022 16:26:37 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fefh5y2na-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Apr 2022 16:26:37 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23FGI8Fg017541;
-        Fri, 15 Apr 2022 16:26:35 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3fb1s90nvf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Apr 2022 16:26:34 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23FGQg2m33358180
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 Apr 2022 16:26:42 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9FE9311C04A;
-        Fri, 15 Apr 2022 16:26:32 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B424311C058;
-        Fri, 15 Apr 2022 16:26:29 +0000 (GMT)
-Received: from sig-9-65-86-1.ibm.com (unknown [9.65.86.1])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 15 Apr 2022 16:26:29 +0000 (GMT)
-Message-ID: <faa20ad9a934269e6292ffdb385ebec2a2475454.camel@linux.ibm.com>
-Subject: Re: [PATCH v6] efi: Do not import certificates from UEFI Secure
- Boot for T2 Macs
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Aditya Garg <gargaditya08@live.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
+        Fri, 15 Apr 2022 13:04:45 -0400
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2057.outbound.protection.outlook.com [40.92.103.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA2A55BD7;
+        Fri, 15 Apr 2022 10:02:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QJ+EOdVBenrVtavvemtbvu7g4LnvyMbpf4Fwg+bxgT/nnSmCoE4iZrMnKWrFZILFmzT/iHL1F763RJSkUkIfzR1MiAkJh4FzDcCLEEAVZh5mgkh6+x2F+uzInJ6uTAWw+13g+tiE5CrSSJDsz5ZEWluVILcYmPJPqb+R498vO85+y+OayOGpRjZtvrrbk0/UpKJgtF4gKI8/oS+Y2PyhJFf7g7up2JLJzR0xT1Cla38RLAqhf3zO1Xwe+OJbmxMjX9SjkrhWQNpwZriUHOADqEspOehjILUosF1/ShaAJY2S0KK0EAyZbJr6Fw+9kKnziy6zM+ZUEnfPQKh1CCh1Xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ipZ05THe8gawDYwRcTsPWhEbAOurKQybfhkIrn2V0k0=;
+ b=gYwA5y/iG1bJpkOrS461S1C1ppAwBuq8vJiKJqjfB9QsIIg/5eY0uyjPdxBsqVsfK9Ybckg1AtQZ11Tufrlg8Lyn9F7FJ1se3FFwK2kcKYHAL0eSd51DpwpALAjSnHhe2mcJR8l/JRd9sdrPUMLYZLJtC7ubObnwe0Qi67ebBipQM5TJ6Jg3k3AcmyCvcGgu6dek4GwaGqGgNhalBQRZKajJ1RueTLIjjkJ1EYDKjBj30ZgVMlnn5iDFRR5KSp63QPioxOqJnnZGf7imqCiqApYDyfo8a+IHAApXAJoeDvlkQ2Tnzc8kocwsPmx84n1g9AyqGyiYBXg6N3YNtQABcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ipZ05THe8gawDYwRcTsPWhEbAOurKQybfhkIrn2V0k0=;
+ b=tFy/Jg0c6gDmuoO+Vx3PsX8uKT6sRWESzN3yI4cuosjkFJmig8juZA6cGhaj8iYSRc6PdRMAewrILZymKG8lOhGXGN1MymwkdFdzvjGbfeXVigEvCOm8ZR7RYubd0q/xgfKZuuKyvBoL2sjKxho0i7f753f70eKpJphS+7Tp4TAkAIrMgS3O4kiEwLlKzYSecydDO4uaGIT0tlnYPmPWLC8mtBKjgN7tBPBP8aD37Mcr3buarNl9n7Npg33DNS8ahfGjFNPaurBv4HvuodH/yHHUjwTK2yxiQ26d22bVvxehJzzgqdreZbGEOenGZTefEEWHDOSzrpfGGk3ROkuuWg==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by BM1PR01MB2881.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:52::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 15 Apr
+ 2022 17:02:07 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::dc4b:b757:214c:22cd]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::dc4b:b757:214c:22cd%7]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
+ 17:02:07 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+CC:     "jarkko@kernel.org" <jarkko@kernel.org>,
         "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
         "jmorris@namei.org" <jmorris@namei.org>,
         "serge@hallyn.com" <serge@hallyn.com>,
@@ -74,8 +50,8 @@ To:     Aditya Garg <gargaditya08@live.com>,
         "songliubraving@fb.com" <songliubraving@fb.com>,
         "yhs@fb.com" <yhs@fb.com>,
         "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
@@ -85,185 +61,88 @@ Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         Orlando Chamberlain <redecorating@protonmail.com>,
         "admin@kodeit.net" <admin@kodeit.net>,
         "stable@vger.kernel.org" <stable@vger.kernel.org>
-Date:   Fri, 15 Apr 2022 12:26:29 -0400
-In-Reply-To: <02125722-91FC-43D3-B63C-1B789C2DA8C3@live.com>
+Subject: Re: [PATCH v6] efi: Do not import certificates from UEFI Secure Boot
+ for T2 Macs
+Thread-Topic: [PATCH v6] efi: Do not import certificates from UEFI Secure Boot
+ for T2 Macs
+Thread-Index: AQHYUJC2bz3LzFcn3U+BP1sAv+GFWqzxKf2AgAAJ8oA=
+Date:   Fri, 15 Apr 2022 17:02:07 +0000
+Message-ID: <EBA0583E-3BAA-4916-93B9-3FFF67E637DC@live.com>
 References: <652C3E9E-CB97-4C70-A961-74AF8AEF9E39@live.com>
-         <94DD0D83-8FDE-4A61-AAF0-09A0175A0D0D@live.com>
-         <590ED76A-EE91-4ED1-B524-BC23419C051E@live.com>
-         <E9C28706-2546-40BF-B32C-66A047BE9EFB@live.com>
-         <02125722-91FC-43D3-B63C-1B789C2DA8C3@live.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nN3HLeHLlVR0Eb_A9acKJ5vhGvZhnFHj
-X-Proofpoint-ORIG-GUID: P_6vwYLd9u46h_C-sIf9g8RDJ6so5R3H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-15_06,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 impostorscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204150092
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <94DD0D83-8FDE-4A61-AAF0-09A0175A0D0D@live.com>
+ <590ED76A-EE91-4ED1-B524-BC23419C051E@live.com>
+ <E9C28706-2546-40BF-B32C-66A047BE9EFB@live.com>
+ <02125722-91FC-43D3-B63C-1B789C2DA8C3@live.com>
+ <faa20ad9a934269e6292ffdb385ebec2a2475454.camel@linux.ibm.com>
+In-Reply-To: <faa20ad9a934269e6292ffdb385ebec2a2475454.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [wTm9BNdXsB+X2jrLCBfDR/R5tW96thryPZPjP7lFlkIengUSy3VLFo4808ITJ3cuKpyHQ0KXSsg=]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 02133097-dc9b-4721-bf4d-08da1f01aca3
+x-ms-traffictypediagnostic: BM1PR01MB2881:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GAtsgk95y/SKS8PMtJWmdCnArahB8nDLBWcnwCgpnHsJLEgnYFmA/T/qzIY48iY+6Urnwfvj1bQgKL8BELz6KkCctvswE+j1lfVu0mOUoY5hdTZQfJsjO+RTOHfQ+dJKwehiMRONAbIcijOXtRJ3RQgkQjsYJBEwxv/Lkiq9DgThSzN9eNgtfm4lfi70Bhk0FwXIMLbCjgoXJ6pcl3pVf7FZFvsniopseqN+TIpGrvGzUQgYCBmS2bc4ow08BDE1gLFdju7hKTpnGgQ0urbiYvnRz/kGVZ3ZKkaxlssxw/cureCxNlx+dArM4j2kxqnaet4y4KTBzE1qPV9Y6RFsc+ugTTFe5QFcFOxd+ju09pg/mDZ16zsPJc0NU2+uih6VWzAdbDbnvewL2QoVY6A8pa1tatkVFkw07I8C8Ds0D6Lt27B6Qk+Ppzd1PFw40gIg20JL/g9RinkyJtAniNDkemxKGSIaO1kwHd2ulLqF71V350/s4dDnFrW+0fHPmjvq8aII46xBheN5s9nNuF2R0TOjazx+cstQFWQBGaiYlZY+PUQRpliyYFlzPeaRCiZEsOBzotmIAoHi161n9PYEMQ==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?i34670fzdRkGqhw3JqFMuRSW8F+8crPsPIAvy8xTcGFCVUv02Zkx7FEFs1BQ?=
+ =?us-ascii?Q?NGDo9hQ863ENpgaRM1HB/r+nfUX1C6g3VRLZ9+xfGrd3MesY3vimA5bP34Cm?=
+ =?us-ascii?Q?Eis1FRgjzUVGf1ok5HbSFnAIAOAb2wdHh3WWQgM1Tz605AaeB9O8qmIhjEmK?=
+ =?us-ascii?Q?6j+C6l+9Le7auGj5Rp5+BYW+c+olMP8EfxcaWZnoJv6sREJpnH2KaJieiOHW?=
+ =?us-ascii?Q?SfYWi4ZDcALBnPTYI0wyYnD0vbYDG856ZtCnOIyTleiwe6Sm0pwFR7riUnNb?=
+ =?us-ascii?Q?nP+9nKbV3QKJ+v/t0YcGIUKr3WXeCePtfn2Bv7R7RqgMho0t1sO37WWpWVGH?=
+ =?us-ascii?Q?U453eCa9QGYYNr1kgJNjMcS18L153PRmp+fghntG8sRvtnNCXjc+tqXjjkep?=
+ =?us-ascii?Q?BLD+0sTpgQMa0i3rOp93uMdf/iCt6Y8s1oNPIwJiCr4gp1RPHKQQEhnpfrdB?=
+ =?us-ascii?Q?QZ9xd5J2/V/YLn2hmel6RwXm6RMQpzlUxJD+JPP5s188bSgf3pDi6Po+2XN8?=
+ =?us-ascii?Q?ANdM/72kF25SUCBuANkvQAwbi5zCrTZyoPDJXp5//+DZ+xYYI4/Z4HclmuxC?=
+ =?us-ascii?Q?ThdIqbRp3TqCiYbslIt9qlPqJ5cTMBifTcUGGnzuqd3yu+tyz7/rmq+xvGjZ?=
+ =?us-ascii?Q?Djx140H7oWoRW87lndmgXP2JvYCmVJEfm9LX6aZ+UwATB/8weNdCkDvInIVP?=
+ =?us-ascii?Q?EoyNwzKeMVGyOCeYTcBskwtnUCR2TRoXW57uXaR/taSOp6K4MJxsLgPjdmRX?=
+ =?us-ascii?Q?o7IPCwX2aY71QTu6dwi4jL+LWnvGZCQMbfULenQ+p5ZgL3DsCn2NJ9jfRWTT?=
+ =?us-ascii?Q?h7D6vCjctDUuAW8130eBWDoisqV+HP/iepf4aP5cWdC1s60omPTONI7w4xKQ?=
+ =?us-ascii?Q?rZO4KOWfwFKEvSPcWgLl3t5+BMTxHWYD/O81lU0WAAkiscCYQOKL80FaDdtV?=
+ =?us-ascii?Q?f2veAKloNl2+WhA/VUhEylj9xdpytDYde+QH6lJL8QE6wj/WOIp8fKu6LDaw?=
+ =?us-ascii?Q?Sh8A1mbf8e/urGODX7IbzbtSNOtlcVggIVnGOvjfXQK+qbuv3mxKPptCeBU4?=
+ =?us-ascii?Q?RHNj3sLDKUQ3TT7Z1OoXwbA+u8y7ltH8/XhP5rIFW32RXWy6jQ6g4S6eHlTY?=
+ =?us-ascii?Q?kDM6ZIY4ptCxhTAVouyF/yqoBHolGlosxYLdnc+xLRLITxoGdf7tjxtst/LA?=
+ =?us-ascii?Q?U0ydRRktA/2I6mXFdlimRu/GSIfyEoEbzJCLNnMSENbJaIyJSdAi6ozkQ/A1?=
+ =?us-ascii?Q?dLyhCmCCvo4BiG1gabgQ0O2oKQDlBBCHsq1x/r8VJXq45cM+u598HLfghlQy?=
+ =?us-ascii?Q?goTgpV3icvyXtacVDiOutbToo6GI7fkm0U59oAPh+hXWGIwSfwSFxNpC6tcs?=
+ =?us-ascii?Q?sXVODKGz4ein8Go90qUz1AhG4be6yJ6VzNdAN/PSW5GrIXgxYvGnbyiJ+Lhc?=
+ =?us-ascii?Q?KkZtlXPIaZwRUyqr2f6UljPcq8zfq0R+xGFkM9ur9wSK1vbeBoKZK+S0pw0l?=
+ =?us-ascii?Q?eggWsFYj+UvTysggCH4N7Lxuo0tghcpde4lc?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7D6AE25695AD3446BF83071054A6B8B3@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02133097-dc9b-4721-bf4d-08da1f01aca3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2022 17:02:07.7563
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BM1PR01MB2881
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-04-15 at 06:19 +0000, Aditya Garg wrote:
-> From: Aditya Garg <gargaditya08@live.com>
-> 
-> On Apple T2 Macs, when Linux attempts to read the db and dbx efi variables
-> at early boot to load UEFI Secure Boot certificates, a page fault occurs
-> in Apple firmware code and EFI runtime services are disabled with the
-> following logs:
-> 
-> [Firmware Bug]: Page fault caused by firmware at PA: 0xffffb1edc0068000
-> WARNING: CPU: 3 PID: 104 at arch/x86/platform/efi/quirks.c:735 efi_crash_gracefully_on_page_fault+0x50/0xf0
-> (Removed some logs from here)
-> Call Trace:
->  <TASK>
->  page_fault_oops+0x4f/0x2c0
->  ? search_bpf_extables+0x6b/0x80
->  ? search_module_extables+0x50/0x80
->  ? search_exception_tables+0x5b/0x60
->  kernelmode_fixup_or_oops+0x9e/0x110
->  __bad_area_nosemaphore+0x155/0x190
->  bad_area_nosemaphore+0x16/0x20
->  do_kern_addr_fault+0x8c/0xa0
->  exc_page_fault+0xd8/0x180
->  asm_exc_page_fault+0x1e/0x30
-> (Removed some logs from here)
->  ? __efi_call+0x28/0x30
->  ? switch_mm+0x20/0x30
->  ? efi_call_rts+0x19a/0x8e0
->  ? process_one_work+0x222/0x3f0
->  ? worker_thread+0x4a/0x3d0
->  ? kthread+0x17a/0x1a0
->  ? process_one_work+0x3f0/0x3f0
->  ? set_kthread_struct+0x40/0x40
->  ? ret_from_fork+0x22/0x30
->  </TASK>
-> ---[ end trace 1f82023595a5927f ]---
-> efi: Froze efi_rts_wq and disabled EFI Runtime Services
-> integrity: Couldn't get size: 0x8000000000000015
-> integrity: MODSIGN: Couldn't get UEFI db list
-> efi: EFI Runtime Services are disabled!
-> integrity: Couldn't get size: 0x8000000000000015
-> integrity: Couldn't get UEFI dbx list
-> integrity: Couldn't get size: 0x8000000000000015
-> integrity: Couldn't get mokx list
-> integrity: Couldn't get size: 0x80000000
-> 
-> This patch skips reading these UEFI variables and thus prevents the crash.
 
-Instead of "This patch skips reading" say "Avoid reading".
+>=20
+> After making these minor changes, both above and below,=20
+> 	Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>=20
 
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
-
-After making these minor changes, both above and below, 
-	Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-
-> ---
-> v2 :- Reduce code size of the table.
-> v3 :- Close the brackets which were left open by mistake.
-> v4 :- Fix comment style issues, remove blank spaces and limit use of dmi_first_match()
-> v4 RESEND :- Add stable to cc
-> v5 :- Rewrite the description
-> v6 :- Make description more clear
->  .../platform_certs/keyring_handler.h          |  8 +++++
->  security/integrity/platform_certs/load_uefi.c | 33 +++++++++++++++++++
->  2 files changed, 41 insertions(+)
-> 
-> diff --git a/security/integrity/platform_certs/keyring_handler.h b/security/integrity/platform_certs/keyring_handler.h
-> index 284558f30..212d894a8 100644
-> --- a/security/integrity/platform_certs/keyring_handler.h
-> +++ b/security/integrity/platform_certs/keyring_handler.h
-> @@ -35,3 +35,11 @@ efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type);
->  efi_element_handler_t get_handler_for_dbx(const efi_guid_t *sig_type);
->  
->  #endif
-> +
-> +#ifndef UEFI_QUIRK_SKIP_CERT
-> +#define UEFI_QUIRK_SKIP_CERT(vendor, product) \
-> +		 .matches = { \
-> +			DMI_MATCH(DMI_BOARD_VENDOR, vendor), \
-> +			DMI_MATCH(DMI_PRODUCT_NAME, product), \
-> +		},
-> +#endif
-> diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integrity/platform_certs/load_uefi.c
-> index 5f45c3c07..1a7e7d597 100644
-> --- a/security/integrity/platform_certs/load_uefi.c
-> +++ b/security/integrity/platform_certs/load_uefi.c
-> @@ -3,6 +3,7 @@
->  #include <linux/kernel.h>
->  #include <linux/sched.h>
->  #include <linux/cred.h>
-> +#include <linux/dmi.h>
->  #include <linux/err.h>
->  #include <linux/efi.h>
->  #include <linux/slab.h>
-> @@ -12,6 +13,31 @@
->  #include "../integrity.h"
->  #include "keyring_handler.h"
->  
-> +/*
-> + * On T2 Macs reading the reading the db and dbx efi variables to load UEFI
-> + * Secure Boot certificates causes occurrence of a page fault in Apple's
-> + * firmware and a crash disabling EFI runtime services. The following quirk
-> + * skips reading these variables.
-> + */
-> +static const struct dmi_system_id uefi_skip_cert[] = {
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,1") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,2") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,3") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,4") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,1") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,2") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,3") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,4") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
-> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
-> +	{ }
-> +};
-> +
->  /*
->   * Look to see if a UEFI variable called MokIgnoreDB exists and return true if
->   * it does.
-> @@ -138,6 +164,13 @@ static int __init load_uefi_certs(void)
->  	unsigned long dbsize = 0, dbxsize = 0, mokxsize = 0;
->  	efi_status_t status;
->  	int rc = 0;
-> +	const struct dmi_system_id *dmi_id;
-> +
-> +	dmi_id = dmi_first_match(uefi_skip_cert);
-> +	if (dmi_id) {
-> +		pr_err("Getting UEFI Secure Boot Certs is not supported on T2 Macs.\n");
-
-Replace "Getting" with "Reading".
-
-thanks,
-
-Mimi
-
-> +		return false;
-> +	}
->  
->  	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE))
->  		return false;
-
+Sending a v7
 
