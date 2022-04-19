@@ -2,443 +2,368 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B174B50615B
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Apr 2022 03:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE175075B7
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Apr 2022 19:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243103AbiDSAyz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 18 Apr 2022 20:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
+        id S236908AbiDSRDv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 19 Apr 2022 13:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243401AbiDSAyy (ORCPT
+        with ESMTP id S1355673AbiDSRC3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:54:54 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F6113E33;
-        Mon, 18 Apr 2022 17:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650329532; x=1681865532;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1AgANzggJiFl4EBvW8198YXhTne+11IBxyoAEmpeCLM=;
-  b=codMTYZr0SC7pWDIkg7RG50MOaHgL+rkhcGdRtGSxYVI/NwSVQPgnbHF
-   ijqH0D1MYH46rddZLIBlVbsUB83cEnE/wYveW88N44Go44JVIwRQ9/6n7
-   8xbXhpSWuHpTp2mocCA9ZXeUP1LjXMyMTPYUo3nfx3GzJOY+dTGd3gVsL
-   HJTzu45G/pNhYqDlm+J2vE9bf/vMeHzawaOjxTdaykz7w4JE5UYhG4RQo
-   wD5/rT+jsiEubvVkCm53x3Ng1xG/KVPhb18kpiM5e6EwviOrBCsGrvvy8
-   CgaJFEM1w95LnFqqmWGkcGInLpRJ2M7q+bqyOPfhkZCUuhv/BCug2B8z2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="262503366"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="262503366"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:52:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="860389365"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Apr 2022 17:52:08 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngc6C-00058e-5r;
-        Tue, 19 Apr 2022 00:52:08 +0000
-Date:   Tue, 19 Apr 2022 08:51:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        casey@schaufler-ca.com, linux-audit@redhat.com,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v35 13/29] LSM: Use lsmblob in security_cred_getsecid
-Message-ID: <202204190819.XVXsdhdo-lkp@intel.com>
-References: <20220418145945.38797-14-casey@schaufler-ca.com>
+        Tue, 19 Apr 2022 13:02:29 -0400
+Received: from sonic305-27.consmr.mail.ne1.yahoo.com (sonic305-27.consmr.mail.ne1.yahoo.com [66.163.185.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A14640A14
+        for <linux-integrity@vger.kernel.org>; Tue, 19 Apr 2022 09:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1650387051; bh=omPjprIoX5yf5MPB02rCYjbp/no/6cyQKwgZQoCzu3g=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=b1T4YeYHJGCmkRwVsiXIzgwBcDdrTUqjrTJc+sxSQVeuuOfQmvb8YHi5M5bpYXW27C16KcCPRTXB+2Nr4QBDvA8yua9fNpWhKUJa4VOacJD3AJssb4ESsl5c30yTPeX6I60GQkJNq6HJwLIX+ZlbbJfaKIuBhp6NRKo16m4h+dtbbF0wkr+5QTOj4Br+AZvagG+RlVt1wmoo+FflzfNaA5VtqRA3RzO3glTDG/W/WHgxAXf4DaxmCUoNa1JROgyehdvdRJLBMAaa2qxVc1M8hvl7ZwThIFAoubtPgWefQBIz+AxbdYtMoZ/VunNkMIdAU/ymJKivBmyUoYmQLhPSXw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1650387051; bh=GOISVpJ/ysHWets9sbybVeizcf4zuMCK/6k7/GleTMq=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=BNh3xMygw865M44LA3swtCyhU/CC3fVzxfkymYxZpZnez+c5DULyzYXSq1AiYkjfzJOr72i1NY+PySC5nWZF0HQ+QM7mV5FbT79N30W0szmK03JI0oAbTK+Znh/46TCYIR8OaJzZqqiyNr41vEKs1uccyLKmM8n3qC8uDwPzNYL7ycsGgQeCG1dYPrv5VbsWrVXrpd4DlzjZZicdytyhKkRzhqHoDBBtzTNdrPw3KEz6Xx+z/kaWbKg4nrVCGYM71+FqOxVMt5O2t8hi7w/113ePNagiY6yMpPTHReQFYDiu1U7iIRdecoWCNnPlmKihFb3G9Sx1B+T2Gqy4zpkYkQ==
+X-YMail-OSG: AqXnYIQVM1lzmwxuLu1v.yoNNuf5FdbjIeO2yFpD_aTSLf4jcsJ4cK7uiKPodSs
+ kD6wXZCxZQtts8tGD2fTUIyJICPLXaOyauPILWA19DcTH6OYZrUoL4ff9hwQUkMCYY979j_zS91I
+ hh4orjzzR9hWCB72.SRD_Qvc1d1ygew6gtb2VPI6jkrSdHRMNgVOz4adZy4qK9nOeQR5mqWGaodR
+ X7h2RkLEvSrNq9dqiKAyDlCHA1I9LGl2ofFx2g9Rem6dni3PV3cIJ3UXPAKcSx.7rU20BbwOpSrC
+ Rg3OcrnrSyQUzkeA3GnulimKMf2Yg1ERQBeVigP9Jk1ObihckJ0iUzMoG..t28CEQsWqrtQNw_Dd
+ 9WjYw_ItK7tckUaZ2k2QzjFclADjpT11Nzl96pvxWSfUC99anrYFubslHARC0OjBbHOAXkLCOQ7o
+ 65UWlOAPqxQCqf.UflSU.jkHZtr4irOzFK0nkpogob8gN00SizGlbTVV.BEXlOuDupZHo8GPlpGo
+ ponFImP.FoyTJ_PPUXaBzY95bCfIhZlqsws2e.4sKWSPn20PPRsGorcuD609fI5Ip2PW0IZrVLHl
+ tApKFcuH7C7xM5NEBXZkxuX2eGIlfWe49aKBvJD_XVtjTSaa7HsA3E5tfNNL24eg_co3DPU7dbVl
+ rs9JqyoGON6JaQf468V9W6UlHwOgd6LQ2z0J8ItoJ265cWtM0Vwf6l_7To3KPGPclovCVLzGwscf
+ nMBT_RIugy1IEmAP41jC1bfzulh8COE7nQGC4yY1E5GaHBzc32JotcBzC_JjhHft3MFyRcniXL3I
+ r_1.xJoS41yDlMzY.J8ROeYqUWpy3h.C3n7D1tumDcHVma6WtxXkq4NDUVJ4PZc1MyoRj0h4IPCj
+ c.xFIlnA8ob0XXqteSIuJ0vwJaqxsraeM3dlaAFGC7jgTasK0ZfegLgqH2.jIHlh1p.ozN8CP945
+ t4K_7JJEkSomH9m6Qd3ruAvnPF7n8E0ZlhKSqir4un0ZQG5kzJWBZXrA6o.e3i9caUiHm7FjI4eA
+ i549zPsX1rMgRd_Rw6TohB59gen5IcG68yHN7ilezFr0dGcmvx82wGA9f7ejeS4yKmxTkWK8cRPg
+ 9tEgRKaBw9tlG2Kr9BrlsXgPUnDEM9QwJROM1coROe0SIOSY.GsTBmgCQlYTb_Z0Q4Ls1CAq_P9p
+ QO56UlVpkGnS4rco0jYgPnBpjkRGgbKuOWHrPwGZfEnLx6TGUzsyKIMrIpq60WTQGZkdBszdZ7Nd
+ .HSCYL5s69J5Nh5tk3crxYC0RfcMCiO9pJamc6KkMtPbmqC..xZ7fhMepUbCEX4KMmLmBaALPYAY
+ ZSOA4DPQ3Hkij1h7MxGftJGXlBwTv4ZF_hSUeMgx3BBOWVaavqdAOtWYvI5Wk.FiOnxEZvHjykWN
+ vtHABynI_ab235Sabj0GjHkIS_V0n_1DO3UV39hKnvCDvr0iLKL465DmUYdNm5XPlaDvu22zALlq
+ M6Pe5Ks4dKBHvHg2t2HqR.Tpsz25pfu1j.7yB6z5c4oNfF46DuO7.28ewY3FslyLFIKJHsAeFKMi
+ fnMiQhAiMJ6D5zCPnjZaR9lDDgjISpGfITzDtqnLErKY6SRtsaEIEFy_C112W8C7qbIDziunw.n4
+ WqPYXeWqS_C5_zJctaGUb9wPUlQXaCuVZMgqLirbPdgkU4Xvur5KWBW69Sq7I55tQGwNB6TPE6Iu
+ PozEZYpHPpzOeDgMvZIOZv4S3tXndMT7OQQhe.ExQ0lkpAsKdUxxQNvQXxEdIMIxqWTgY94aRDdN
+ 9z5mwxVrzfRdhp94udna_xmDUjTrWbh8njvWKGDWu1cAC1_Mir3G2bRaACeHFS.MSOTL534w_qql
+ T2x.jlbozCE4eifEdW1kAtpqO42FI36iux_p1Yp.yb60V_oMEfmeAHOpzUWOwVtcBxgVyLSd6pmg
+ ld3l4ovftpkXQ9cus..oli3BJGNj9YNPb5BxYCYz.4P3RIuGcFZEAkeN9f9mpCxCZAElQuQ_DyoS
+ _.u.gysno5YypewXdDiG4U80wMbZs2JCUvYv.5Xg27UYZA8.n3rgPaEihcOSgqP7UmDkkexFwIuB
+ IBAFPu5XYt75GoVuxQHgGhLYNWstjI1oVsMJO0m4qjTLwYOElkOjMt1tgF_FUSvgMFns_TJKRSA6
+ kTXkxCCOpclnOi0K0jwE4YNWoBU654Vkm888FTZDozZhnbks4pkBG006FbWQ6zELAueHXG_jdrxf
+ T8M8BSam4rePhKPtOaIVp2.EsG4mhTg.jsLBrEEXzhCE22WQGSY6VsIctjnd3qn.fcryA5Lb9
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.ne1.yahoo.com with HTTP; Tue, 19 Apr 2022 16:50:51 +0000
+Received: by hermes--canary-production-bf1-5f49dbcd6-xjccz (VZM Hermes SMTP Server) with ESMTPA ID ea3ba134e5f56be0aa4d06ea497fbf71;
+          Tue, 19 Apr 2022 16:50:46 +0000 (UTC)
+Message-ID: <286ba5a2-7399-b2b9-9846-e4235171db32@schaufler-ca.com>
+Date:   Tue, 19 Apr 2022 09:50:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418145945.38797-14-casey@schaufler-ca.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v35 05/29] IMA: avoid label collisions with stacked LSMs
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>
+References: <20220418145945.38797-1-casey@schaufler-ca.com>
+ <20220418145945.38797-6-casey@schaufler-ca.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220418145945.38797-6-casey@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20048 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Casey,
 
-I love your patch! Yet something to improve:
+On 4/18/2022 7:59 AM, Casey Schaufler wrote:
+> Integrity measurement may filter on security module information
+> and needs to be clear in the case of multiple active security
+> modules which applies. Provide a boot option ima_rules_lsm= to
+> allow the user to specify an active security module to apply
+> filters to. If not specified, use the first registered module
+> that supports the audit_rule_match() LSM hook. Allow the user
+> to specify in the IMA policy an lsm= option to specify the
+> security module to use for a particular rule.
+>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> To: Mimi Zohar <zohar@linux.ibm.com>
+> To: linux-integrity@vger.kernel.org
 
-[auto build test ERROR on pcmoore-selinux/next]
-[also build test ERROR on linus/master v5.18-rc3 next-20220414]
-[cannot apply to pcmoore-audit/next jmorris-security/next-testing]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Would it be possible to get feedback on the IMA portions
+of the stacking patch set? I believe that I have addressed
+previous issues. I need to wrap this up before too long.
+Thank you.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220419-000109
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
-config: s390-randconfig-r044-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190819.XVXsdhdo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/2fa01492487f9135e9ea9e59924289cc23a66576
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220419-000109
-        git checkout 2fa01492487f9135e9ea9e59924289cc23a66576
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/broadcom/bnx2x/ drivers/net/ethernet/hisilicon/hns/ drivers/net/ethernet/marvell/octeontx2/nic/ drivers/net/ethernet/netronome/nfp/ drivers/net/ethernet/pensando/ionic/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:31:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:31:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:31:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:34:
-   In file included from include/linux/netdevice.h:46:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:8:
->> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
-           *secid = 0;
-            ^
-   drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:13117:49: warning: shift count >= width of type [-Wshift-count-overflow]
-           rc = dma_set_mask_and_coherent(&bp->pdev->dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
->> drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:15204:26: warning: shift count >= width of type [-Wshift-count-overflow]
-           bp->cyclecounter.mask = CYCLECOUNTER_MASK(64);
-                                   ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/timecounter.h:14:59: note: expanded from macro 'CYCLECOUNTER_MASK'
-   #define CYCLECOUNTER_MASK(bits) (u64)((bits) < 64 ? ((1ULL<<(bits))-1) : -1)
-                                                             ^ ~~~~~~
-   14 warnings and 1 error generated.
---
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_link.c:23:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_link.c:23:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_link.c:23:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_link.c:24:
-   In file included from include/linux/netdevice.h:46:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:8:
->> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
-           *secid = 0;
-            ^
-   12 warnings and 1 error generated.
---
-   In file included from drivers/net/ethernet/hisilicon/hns/hns_dsaf_main.c:12:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:40:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/hisilicon/hns/hns_dsaf_main.c:12:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:40:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/hisilicon/hns/hns_dsaf_main.c:12:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:40:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from drivers/net/ethernet/hisilicon/hns/hns_dsaf_main.c:12:
-   In file included from include/linux/netdevice.h:46:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:8:
->> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
-           *secid = 0;
-            ^
->> drivers/net/ethernet/hisilicon/hns/hns_dsaf_main.c:200:48: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (!dma_set_mask_and_coherent(dsaf_dev->dev, DMA_BIT_MASK(64ULL)))
-                                                         ^~~~~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   13 warnings and 1 error generated.
---
-   In file included from drivers/net/ethernet/hisilicon/hns/hns_enet.c:8:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/hisilicon/hns/hns_enet.c:8:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/hisilicon/hns/hns_enet.c:8:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from drivers/net/ethernet/hisilicon/hns/hns_enet.c:8:
-   In file included from include/linux/etherdevice.h:21:
-   In file included from include/linux/netdevice.h:46:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:8:
->> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
-           *secid = 0;
-            ^
-   drivers/net/ethernet/hisilicon/hns/hns_enet.c:2355:38: warning: shift count >= width of type [-Wshift-count-overflow]
-           if (!dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
-                                               ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   13 warnings and 1 error generated.
-..
-
-
-vim +/secid +1147 include/linux/security.h
-
-ee18d64c1f6320 David Howells   2009-09-02  1143  
-2fa01492487f91 Casey Schaufler 2022-04-18  1144  static inline void security_cred_getsecid(const struct cred *c,
-2fa01492487f91 Casey Schaufler 2022-04-18  1145  					  struct lsmblob *blob)
-4d5b5539742d25 Todd Kjos       2021-10-12  1146  {
-4d5b5539742d25 Todd Kjos       2021-10-12 @1147  	*secid = 0;
-4d5b5539742d25 Todd Kjos       2021-10-12  1148  }
-4d5b5539742d25 Todd Kjos       2021-10-12  1149  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>   Documentation/ABI/testing/ima_policy |  8 ++++-
+>   include/linux/security.h             | 14 ++++----
+>   security/integrity/ima/ima_policy.c  | 51 ++++++++++++++++++++++++----
+>   security/security.c                  | 35 +++++++++++++++----
+>   4 files changed, 89 insertions(+), 19 deletions(-)
+>
+> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
+> index 839fab811b18..64863e9d87ea 100644
+> --- a/Documentation/ABI/testing/ima_policy
+> +++ b/Documentation/ABI/testing/ima_policy
+> @@ -26,7 +26,7 @@ Description:
+>   				[uid=] [euid=] [gid=] [egid=]
+>   				[fowner=] [fgroup=]]
+>   			lsm:	[[subj_user=] [subj_role=] [subj_type=]
+> -				 [obj_user=] [obj_role=] [obj_type=]]
+> +				 [obj_user=] [obj_role=] [obj_type=]] [lsm=]
+>   			option:	[[appraise_type=]] [template=] [permit_directio]
+>   				[appraise_flag=] [appraise_algos=] [keyrings=]
+>   		  base:
+> @@ -126,6 +126,12 @@ Description:
+>   
+>   			measure subj_user=_ func=FILE_CHECK mask=MAY_READ
+>   
+> +		It is possible to explicitly specify which security
+> +		module a rule applies to using lsm=.  If the security
+> +		module specified is not active on the system the rule
+> +		will be rejected.  If lsm= is not specified the first
+> +		security module registered on the system will be assumed.
+> +
+>   		Example of measure rules using alternate PCRs::
+>   
+>   			measure func=KEXEC_KERNEL_CHECK pcr=4
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index d00870d2b416..3666eddad59a 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -1985,25 +1985,27 @@ static inline void security_audit_rule_free(struct audit_lsm_rules *lsmrules)
+>   #endif /* CONFIG_AUDIT */
+>   
+>   #if defined(CONFIG_IMA_LSM_RULES) && defined(CONFIG_SECURITY)
+> -int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule);
+> -int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule);
+> -void ima_filter_rule_free(void *lsmrule);
+> +int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule,
+> +			 int lsmslot);
+> +int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule,
+> +			  int lsmslot);
+> +void ima_filter_rule_free(void *lsmrule, int lsmslot);
+>   
+>   #else
+>   
+>   static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
+> -					   void **lsmrule)
+> +				       void **lsmrule, int lsmslot)
+>   {
+>   	return 0;
+>   }
+>   
+>   static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
+> -					    void *lsmrule)
+> +					void *lsmrule, int lsmslot)
+>   {
+>   	return 0;
+>   }
+>   
+> -static inline void ima_filter_rule_free(void *lsmrule)
+> +static inline void ima_filter_rule_free(void *lsmrule, int lsmslot)
+>   { }
+>   
+>   #endif /* defined(CONFIG_IMA_LSM_RULES) && defined(CONFIG_SECURITY) */
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index eea6e92500b8..97470354c8ae 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -89,6 +89,7 @@ struct ima_rule_entry {
+>   	bool (*fgroup_op)(kgid_t cred_gid, kgid_t rule_gid); /* gid_eq(), gid_gt(), gid_lt() */
+>   	int pcr;
+>   	unsigned int allowed_algos; /* bitfield of allowed hash algorithms */
+> +	int which;		/* which LSM rule applies to */
+>   	struct {
+>   		void *rule;	/* LSM file metadata specific */
+>   		char *args_p;	/* audit value */
+> @@ -285,6 +286,20 @@ static int __init default_appraise_policy_setup(char *str)
+>   }
+>   __setup("ima_appraise_tcb", default_appraise_policy_setup);
+>   
+> +static int ima_rules_lsm __ro_after_init;
+> +
+> +static int __init ima_rules_lsm_init(char *str)
+> +{
+> +	ima_rules_lsm = lsm_name_to_slot(str);
+> +	if (ima_rules_lsm < 0) {
+> +		ima_rules_lsm = 0;
+> +		pr_err("rule lsm \"%s\" not registered", str);
+> +	}
+> +
+> +	return 1;
+> +}
+> +__setup("ima_rules_lsm=", ima_rules_lsm_init);
+> +
+>   static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
+>   {
+>   	struct ima_rule_opt_list *opt_list;
+> @@ -356,7 +371,7 @@ static void ima_lsm_free_rule(struct ima_rule_entry *entry)
+>   	int i;
+>   
+>   	for (i = 0; i < MAX_LSM_RULES; i++) {
+> -		ima_filter_rule_free(entry->lsm[i].rule);
+> +		ima_filter_rule_free(entry->lsm[i].rule, entry->which);
+>   		kfree(entry->lsm[i].args_p);
+>   	}
+>   }
+> @@ -407,7 +422,8 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+>   
+>   		ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
+>   				     nentry->lsm[i].args_p,
+> -				     &nentry->lsm[i].rule);
+> +				     &nentry->lsm[i].rule,
+> +				     entry->which);
+>   		if (!nentry->lsm[i].rule)
+>   			pr_warn("rule for LSM \'%s\' is undefined\n",
+>   				nentry->lsm[i].args_p);
+> @@ -623,14 +639,16 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
+>   			security_inode_getsecid(inode, &osid);
+>   			rc = ima_filter_rule_match(osid, rule->lsm[i].type,
+>   						   Audit_equal,
+> -						   rule->lsm[i].rule);
+> +						   rule->lsm[i].rule,
+> +						   rule->which);
+>   			break;
+>   		case LSM_SUBJ_USER:
+>   		case LSM_SUBJ_ROLE:
+>   		case LSM_SUBJ_TYPE:
+>   			rc = ima_filter_rule_match(secid, rule->lsm[i].type,
+>   						   Audit_equal,
+> -						   rule->lsm[i].rule);
+> +						   rule->lsm[i].rule,
+> +						   rule->which);
+>   			break;
+>   		default:
+>   			break;
+> @@ -1025,7 +1043,7 @@ enum policy_opt {
+>   	Opt_fowner_lt, Opt_fgroup_lt,
+>   	Opt_appraise_type, Opt_appraise_flag, Opt_appraise_algos,
+>   	Opt_permit_directio, Opt_pcr, Opt_template, Opt_keyrings,
+> -	Opt_label, Opt_err
+> +	Opt_lsm, Opt_label, Opt_err
+>   };
+>   
+>   static const match_table_t policy_tokens = {
+> @@ -1073,6 +1091,7 @@ static const match_table_t policy_tokens = {
+>   	{Opt_template, "template=%s"},
+>   	{Opt_keyrings, "keyrings=%s"},
+>   	{Opt_label, "label=%s"},
+> +	{Opt_lsm, "lsm=%s"},
+>   	{Opt_err, NULL}
+>   };
+>   
+> @@ -1091,7 +1110,8 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
+>   	entry->lsm[lsm_rule].type = audit_type;
+>   	result = ima_filter_rule_init(entry->lsm[lsm_rule].type, Audit_equal,
+>   				      entry->lsm[lsm_rule].args_p,
+> -				      &entry->lsm[lsm_rule].rule);
+> +				      &entry->lsm[lsm_rule].rule,
+> +				      entry->which);
+>   	if (!entry->lsm[lsm_rule].rule) {
+>   		pr_warn("rule for LSM \'%s\' is undefined\n",
+>   			entry->lsm[lsm_rule].args_p);
+> @@ -1780,6 +1800,19 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>   						 &(template_desc->num_fields));
+>   			entry->template = template_desc;
+>   			break;
+> +		case Opt_lsm:
+> +			result = lsm_name_to_slot(args[0].from);
+> +			if (result == LSMBLOB_INVALID) {
+> +				int i;
+> +
+> +				for (i = 0; i < MAX_LSM_RULES; i++)
+> +					entry->lsm[i].args_p = NULL;
+> +				result = -EINVAL;
+> +				break;
+> +			}
+> +			entry->which = result;
+> +			result = 0;
+> +			break;
+>   		case Opt_err:
+>   			ima_log_string(ab, "UNKNOWN", p);
+>   			result = -EINVAL;
+> @@ -1816,6 +1849,7 @@ ssize_t ima_parse_add_rule(char *rule)
+>   	struct ima_rule_entry *entry;
+>   	ssize_t result, len;
+>   	int audit_info = 0;
+> +	int i;
+>   
+>   	p = strsep(&rule, "\n");
+>   	len = strlen(p) + 1;
+> @@ -1833,6 +1867,9 @@ ssize_t ima_parse_add_rule(char *rule)
+>   
+>   	INIT_LIST_HEAD(&entry->list);
+>   
+> +	for (i = 0; i < MAX_LSM_RULES; i++)
+> +		entry->which = ima_rules_lsm;
+> +
+>   	result = ima_parse_rule(p, entry);
+>   	if (result) {
+>   		ima_free_rule(entry);
+> @@ -2158,6 +2195,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>   		seq_puts(m, "appraise_flag=check_blacklist ");
+>   	if (entry->flags & IMA_PERMIT_DIRECTIO)
+>   		seq_puts(m, "permit_directio ");
+> +	if (entry->which >= 0)
+> +		seq_printf(m, pt(Opt_lsm), lsm_slot_to_name(entry->which));
+>   	rcu_read_unlock();
+>   	seq_puts(m, "\n");
+>   	return 0;
+> diff --git a/security/security.c b/security/security.c
+> index d1ddbb857af1..9e0139b0d346 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -2728,19 +2728,42 @@ int security_audit_rule_match(u32 secid, u32 field, u32 op,
+>    * The integrity subsystem uses the same hooks as
+>    * the audit subsystem.
+>    */
+> -int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule)
+> +int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule,
+> +			 int lsmslot)
+>   {
+> -	return call_int_hook(audit_rule_init, 0, field, op, rulestr, lsmrule);
+> +	struct security_hook_list *hp;
+> +
+> +	hlist_for_each_entry(hp, &security_hook_heads.audit_rule_init, list)
+> +		if (hp->lsmid->slot == lsmslot)
+> +			return hp->hook.audit_rule_init(field, op, rulestr,
+> +							lsmrule);
+> +
+> +	return 0;
+>   }
+>   
+> -void ima_filter_rule_free(void *lsmrule)
+> +void ima_filter_rule_free(void *lsmrule, int lsmslot)
+>   {
+> -	call_void_hook(audit_rule_free, lsmrule);
+> +	struct security_hook_list *hp;
+> +
+> +	hlist_for_each_entry(hp, &security_hook_heads.audit_rule_free, list) {
+> +		if (hp->lsmid->slot == lsmslot) {
+> +			hp->hook.audit_rule_free(lsmrule);
+> +			return;
+> +		}
+> +	}
+>   }
+>   
+> -int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
+> +int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule,
+> +			  int lsmslot)
+>   {
+> -	return call_int_hook(audit_rule_match, 0, secid, field, op, lsmrule);
+> +	struct security_hook_list *hp;
+> +
+> +	hlist_for_each_entry(hp, &security_hook_heads.audit_rule_match, list)
+> +		if (hp->lsmid->slot == lsmslot)
+> +			return hp->hook.audit_rule_match(secid, field, op,
+> +							 lsmrule);
+> +
+> +	return 0;
+>   }
+>   #endif /* CONFIG_IMA_LSM_RULES */
+>   
