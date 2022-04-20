@@ -2,115 +2,162 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5E2508BB2
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Apr 2022 17:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21D850905F
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Apr 2022 21:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379928AbiDTPNQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 20 Apr 2022 11:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
+        id S1381783AbiDTT0s (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 20 Apr 2022 15:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380095AbiDTPMs (ORCPT
+        with ESMTP id S1381785AbiDTT0r (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 20 Apr 2022 11:12:48 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B7E1BEB8;
-        Wed, 20 Apr 2022 08:10:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 326F31F752;
-        Wed, 20 Apr 2022 15:10:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650467401; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CI5eCbbUh0HTvUxNvVm6rOMW68v7G6W10HjxAtg/ngA=;
-        b=gjZEMURyKhH+ffoe/cJZIs+1qR6NiuC5LbjUsc6HQbUiY2YzhMqa9gcWbW4J8W52XRcuUB
-        bxVKmzgppOt2rXgXD9zG+IZ7iT7xfDjw0J35R694tg4TxR9zrp0FyFGkwbXBgSna0vfc7P
-        /KVWK5ggl/fmh28DGQ7IZcMIgPfHAnU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0350D13AD5;
-        Wed, 20 Apr 2022 15:10:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wJc1O0giYGJILQAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 20 Apr 2022 15:10:00 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [PATCH 12/18] xen/tpmfront: use xenbus_setup_ring() and xenbus_teardown_ring()
-Date:   Wed, 20 Apr 2022 17:09:36 +0200
-Message-Id: <20220420150942.31235-13-jgross@suse.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220420150942.31235-1-jgross@suse.com>
-References: <20220420150942.31235-1-jgross@suse.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Apr 2022 15:26:47 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B40A3DA46
+        for <linux-integrity@vger.kernel.org>; Wed, 20 Apr 2022 12:23:52 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23KIVSNR008020;
+        Wed, 20 Apr 2022 19:23:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=eFfV/jSfUYDItgzBRrGUCCi9dTXpkblOrqrdOhSfRBs=;
+ b=OY14gGK+Ydc0FUo2xGQ+qOMxGhrXOCWBKRH6Y/+K0N5tAZWOoZdcs19bbzlc4FXENyJM
+ hTIWGZlw45o51zJkUe5jt0cFCpjuTvA3+fuaMXIHzh5oxH++Lv1ttQn703dKkHknR15x
+ RGSJfRRtFAvW4eHPXHrA3lvZ1xvpWVmAiF4uBm7rNYCnVJlSX/6iuNB7bUG/K+nmG9yW
+ jghPWU5lV7bAchvcAe+Tr1Pa+2oKa034xmFulx+mFZwe4MQRkMRLBffS9WDx3tQyCV5A
+ 0LA+9E7SNlweeUckwMQm/eYVV/0HO5gIsF+et+FmR0iP1MMEYKWcVk7doahAhV7h/yYU /g== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7kbheqx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 19:23:49 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23KJDLDf012437;
+        Wed, 20 Apr 2022 19:23:48 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ffne8prqg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 19:23:47 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23KJNjL642992030
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Apr 2022 19:23:45 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 71229A4040;
+        Wed, 20 Apr 2022 19:23:45 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D653DA4055;
+        Wed, 20 Apr 2022 19:23:44 +0000 (GMT)
+Received: from sig-9-65-70-186.ibm.com (unknown [9.65.70.186])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 20 Apr 2022 19:23:44 +0000 (GMT)
+Message-ID: <caac73351355243bb1a545fe46ecb88db2600030.camel@linux.ibm.com>
+Subject: Re: [PATCH v35 05/29] IMA: avoid label collisions with stacked LSMs
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Date:   Wed, 20 Apr 2022 15:23:44 -0400
+In-Reply-To: <286ba5a2-7399-b2b9-9846-e4235171db32@schaufler-ca.com>
+References: <20220418145945.38797-1-casey@schaufler-ca.com>
+         <20220418145945.38797-6-casey@schaufler-ca.com>
+         <286ba5a2-7399-b2b9-9846-e4235171db32@schaufler-ca.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8xmskws5Mv1ic-U4ONityPcbIRNPP2PW
+X-Proofpoint-GUID: 8xmskws5Mv1ic-U4ONityPcbIRNPP2PW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-20_05,2022-04-20_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 suspectscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204200113
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Simplify tpmfront's ring creation and removal via xenbus_setup_ring()
-and xenbus_teardown_ring().
+Hi Casey,
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- drivers/char/tpm/xen-tpmfront.c | 18 +++---------------
- 1 file changed, 3 insertions(+), 15 deletions(-)
+Below are a few initial comments/questions from a high level...
 
-diff --git a/drivers/char/tpm/xen-tpmfront.c b/drivers/char/tpm/xen-tpmfront.c
-index 69df04ae2401..379291826261 100644
---- a/drivers/char/tpm/xen-tpmfront.c
-+++ b/drivers/char/tpm/xen-tpmfront.c
-@@ -253,20 +253,12 @@ static int setup_ring(struct xenbus_device *dev, struct tpm_private *priv)
- 	struct xenbus_transaction xbt;
- 	const char *message = NULL;
- 	int rv;
--	grant_ref_t gref;
- 
--	priv->shr = (void *)__get_free_page(GFP_KERNEL|__GFP_ZERO);
--	if (!priv->shr) {
--		xenbus_dev_fatal(dev, -ENOMEM, "allocating shared ring");
--		return -ENOMEM;
--	}
--
--	rv = xenbus_grant_ring(dev, priv->shr, 1, &gref);
-+	rv = xenbus_setup_ring(dev, GFP_KERNEL, (void **)&priv->shr, 1,
-+			       &priv->ring_ref);
- 	if (rv < 0)
- 		return rv;
- 
--	priv->ring_ref = gref;
--
- 	rv = xenbus_alloc_evtchn(dev, &priv->evtchn);
- 	if (rv)
- 		return rv;
-@@ -331,11 +323,7 @@ static void ring_free(struct tpm_private *priv)
- 	if (!priv)
- 		return;
- 
--	if (priv->ring_ref)
--		gnttab_end_foreign_access(priv->ring_ref,
--				(unsigned long)priv->shr);
--	else
--		free_page((unsigned long)priv->shr);
-+	xenbus_teardown_ring((void **)&priv->shr, 1, &priv->ring_ref);
- 
- 	if (priv->irq)
- 		unbind_from_irqhandler(priv->irq, priv);
--- 
-2.34.1
+On Tue, 2022-04-19 at 09:50 -0700, Casey Schaufler wrote:
+> On 4/18/2022 7:59 AM, Casey Schaufler wrote:
+
+> > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> > index eea6e92500b8..97470354c8ae 100644
+> > --- a/security/integrity/ima/ima_policy.c
+> > +++ b/security/integrity/ima/ima_policy.c
+> > @@ -89,6 +89,7 @@ struct ima_rule_entry {
+> >   	bool (*fgroup_op)(kgid_t cred_gid, kgid_t rule_gid); /* gid_eq(), gid_gt(), gid_lt() */
+> >   	int pcr;
+> >   	unsigned int allowed_algos; /* bitfield of allowed hash algorithms */
+> > +	int which;		/* which LSM rule applies to */
+
+If "which" was defined in the lsm[] structure, it would be clear
+reading the code that "which" refers to an LSM (e.g. entry-
+>lsm[i].which).  Perhaps rename "which" to "which_lsm", "lsm_slot", or
+"rules_lsm".
+
+> >   	struct {
+> >   		void *rule;	/* LSM file metadata specific */
+> >   		char *args_p;	/* audit value */
+> > @@ -285,6 +286,20 @@ static int __init default_appraise_policy_setup(char *str)
+> >   }
+> >   __setup("ima_appraise_tcb", default_appraise_policy_setup);
+> >   
+> > +static int ima_rules_lsm __ro_after_init;
+> > +
+> > +static int __init ima_rules_lsm_init(char *str)
+> > +{
+> > +	ima_rules_lsm = lsm_name_to_slot(str);
+> > +	if (ima_rules_lsm < 0) {
+> > +		ima_rules_lsm = 0;
+> > +		pr_err("rule lsm \"%s\" not registered", str);
+> > +	}
+
+Specific IMA policy rules could be independent of the default one being
+initialized here.  Probably "ima_rules_lsm" should be renamed
+"default_rules_lsm" or "default_ima_rules_lsm".  The pr_err() message
+should indicate setting the default rule LSM failed with an indication
+of which LSM is set as the default.
+
+Assuming 0 is guaranteed to be a valid LSM, then something like: 
+ "default rule lsm \"%s\" not registered, using \"%s"\", str,
+lsm_slot_to_name(0));
+
+> > +
+> > +	return 1;
+> > +}
+> > +__setup("ima_rules_lsm=", ima_rules_lsm_init);
+> > +
+> >   static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
+> >   {
+> >   	struct ima_rule_opt_list *opt_list;
+> > @@ -356,7 +371,7 @@ static void ima_lsm_free_rule(struct ima_rule_entry *entry)
+> >   	int i;
+> >   
+> >   	for (i = 0; i < MAX_LSM_RULES; i++) {
+> > -		ima_filter_rule_free(entry->lsm[i].rule);
+> > +		ima_filter_rule_free(entry->lsm[i].rule, entry->which);
+> >   		kfree(entry->lsm[i].args_p);
+> >   	}
+> >   }
+
+ima_rules_lsm is initialized to 0,  If it isn't guranteed to be a valid
+LSM, then ima_rules_lsm_init() needs to be called from ima_init.c:
+ima_init(), so that it can be reset to an invalid value.  Then
+ima_filter_rule_init()/free() could check it.
+
+thanks,
+
+Mimi
 
