@@ -2,125 +2,201 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A040450E1D9
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Apr 2022 15:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C6250E27E
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Apr 2022 15:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240542AbiDYNeH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 25 Apr 2022 09:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S235448AbiDYN7t (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 25 Apr 2022 09:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242143AbiDYNeA (ORCPT
+        with ESMTP id S242306AbiDYN7c (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 25 Apr 2022 09:34:00 -0400
-X-Greylist: delayed 523 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 06:30:33 PDT
-Received: from ithil.bigon.be (ithil.bigon.be [IPv6:2001:bc8:25f1:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F504BE2F
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Apr 2022 06:30:25 -0700 (PDT)
-Received: from localhost (localhost [IPv6:::1])
-        by ithil.bigon.be (Postfix) with ESMTP id 08D971FCDF
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Apr 2022 15:21:45 +0200 (CEST)
-Received: from ithil.bigon.be ([IPv6:::1])
-        by localhost (ithil.bigon.be [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id V88AKyXsYCv3 for <linux-integrity@vger.kernel.org>;
-        Mon, 25 Apr 2022 15:21:44 +0200 (CEST)
-Received: from [IPV6:2a02:a03f:65c9:ec00:67d5:9dce:890f:485e] (unknown [IPv6:2a02:a03f:65c9:ec00:67d5:9dce:890f:485e])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 25 Apr 2022 09:59:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F43E2558D;
+        Mon, 25 Apr 2022 06:56:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: bigon@bigon.be)
-        by ithil.bigon.be (Postfix) with ESMTPSA
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Apr 2022 15:21:44 +0200 (CEST)
-Message-ID: <c3ad6b7c-7dc1-7308-dc47-bed5354bfce8@debian.org>
-Date:   Mon, 25 Apr 2022 15:21:42 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0B90B817FE;
+        Mon, 25 Apr 2022 13:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CB5C385A4;
+        Mon, 25 Apr 2022 13:56:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650894984;
+        bh=FcggaBLYFmXfUnvykIxa7coqHlNFLqYXIU23AZ10GS0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=i2urg+wuXKOIDbr6jA8I/Vc6yvbVb9q+0K7i2IxvGvotnr6GXDLM3KVy01DEja/M/
+         ht0o/qSQgGj9BnhIEL9CkJIsD1TKUV7x9PEjO+yof3utdL6HOTadKkVK01vK5mLPDg
+         F+sikVp5E7APi7P2LZu66ACq4Oz8+5ohHaRlfVmfEsr7vjbqy9ezxKS87lQbuXyUy8
+         r5IjxAoXNSAds7J4k6RBnDeKi96wvGNA8NQI4GA3aspp3bwas8UNGTWEME/TuyURZa
+         uN24tmOSiU1e3kxGw463gjrANev4rTI/AK0eWyTxHSl2iFVwlG+VHVWUdP1i9Okqo+
+         7CD+MwapbZkwA==
+Message-ID: <8ed6cf56ddd8e75a26cc8ea56be36dc54356f02d.camel@kernel.org>
+Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
+        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        twawrzynczak@chromium.org, Lukas Wunner <lukas@wunner.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>
+Date:   Mon, 25 Apr 2022 16:57:51 +0300
+In-Reply-To: <77374443-dc9b-5d1d-c652-0d093b6029f4@gmx.de>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+         <20210501135727.17747-3-LinoSanfilippo@gmx.de>
+         <YJAby8mmiJ74qWAh@kernel.org> <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
+         <YJNKs8bUMGOzFre+@kernel.org>
+         <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
+         <Yj0lhqTP1RoedxSc@iki.fi>
+         <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
+         <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
+         <c8c0c5fb614d8b2de2a5faee2ef5ff3214281064.camel@kernel.org>
+         <77374443-dc9b-5d1d-c652-0d093b6029f4@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Laurent Bigonville <bigon@debian.org>
-Subject: tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
-To:     linux-integrity@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello,
+On Sun, 2022-04-24 at 04:22 +0200, Lino Sanfilippo wrote:
+>=20
+> Hi,
+>=20
+> On 20.04.22 at 07:30, Jarkko Sakkinen wrote:
+> > n Sat, 2022-03-26 at 04:24 +0100, Lino Sanfilippo wrote:
+> > >=20
+> > > Hi Michael,
+> > >=20
+> > > On 25.03.22 at 13:32, Michael Niew=C3=B6hner wrote:
+> > > > > >=20
+> > > > > > Lino, I'd be happy to test the patches, when you have time and =
+interest to
+> > > > > > work
+> > > > > > on this again!
+> > > > > >=20
+> > > > > > Thanks, Michael
+> > > > >=20
+> > > > > It's quite easy to test them out. Both fixes are in the mainline =
+GIT tree.
+> > > > > E.g. give a shot rc1, and please report if any issues persists to=
+:
+> > > > >=20
+> > > > > =C2=A0 linux-integrity@vger.kernel.org=C2=A0
+> > > > >=20
+> > > > > BR, Jarkko
+> > > >=20
+> > > > I don't see Linos patches on mainline. Also, the series included fo=
+ur patches:
+> > > > [PATCH v3 0/4] Fixes for TPM interrupt handling
+> > > > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+> > > > [PATCH v3 2/4] tpm: Simplify locality handling
+> > > > [PATCH v3 3/4] tpm: Fix test for interrupts
+> > > > [PATCH v3 4/4] tpm: Only enable supported irqs
+> > > >=20
+> > > > Three of them are relevant for the interrupt problem, which is stil=
+l present in
+> > > > mainline, as these patches were refused:
+> > > > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+> > > > [PATCH v3 2/4] tpm: Simplify locality handling
+> > > > [PATCH v3 3/4] tpm: Fix test for interrupts
+> > > >=20
+> > > > Michael
+> > > >=20
+> > >=20
+> > > You are right, the interrupts are still not working in the mainline k=
+ernel.
+> > > I would gladly make another attempt to fix this but rather step by st=
+ep
+> > > than in a series that tries to fix (different) things at once.
+> > >=20
+> > > A first step could be to have a sleepable context for the interrupt h=
+andling,
+> > > since in case of SPI the accesses to the irq status register may slee=
+p.
+> > >=20
+> > > I sent a patch for this purpose once, but it seems to have gone lost:
+> > >=20
+> > > https://lore.kernel.org/all/20210620023444.14684-1-LinoSanfilippo@gmx=
+.de/
+> > >=20
+> > >=20
+> > > Best regards,
+> > > Lino
+> >=20
+> > I went these through one by one>
+> > # Above linked patch
+> >=20
+> > Boolean parameters are considered bad. I.e. use named flags
+> > instead. This is for above linked patch.
+>=20
+> Ok, we could extend tpm_tis_flags by a flag "TPM_TIS_USE_THREADED_IRQ"
+> for this.
+>=20
+> >=20
+> > # [PATCH v3 3/4] tpm: Fix test for interrupts
+> >=20
+> > 1. Please remove "unnecessarily complicated" sentence because
+> > =C2=A0=C2=A0 it cannot be evaluated. It's your opinion, which might per=
+haps
+> > =C2=A0=C2=A0 be correct, but it is irrelevant for any possible patch
+> > =C2=A0=C2=A0 description.
+> > 2. There's no such thing as "fix by re-implementation". Please
+> > =C2=A0=C2=A0 explain instead code change is relevant for the bug fix.
+> > 3. If set_bit() et al necessarily to fix a possible race condition
+> > =C2=A0=C2=A0 you need to have a separate patch for that.
+> >=20
+> > To move forward, start with a better summary such as
+> >=20
+> > "tpm: move interrupt test to tpm_tis_probe_irq_single()"
+> >=20
+> > I'd also either revert the change for flags, or alternatively
+> > move it to separate patch explaining race condition. Otherwise,
+> > there's no argument of saying that using set_bit() is more
+> > proper. This will make the change more localized.
+> >=20
+>=20
+> Ok, I will split the fix for the irq test into two patches then.
+>=20
+> >=20
+> > # [PATCH v3 2/4] tpm: Simplify locality handling
+> >=20
+> > "As a side-effect these modifications fix a bug which results in the
+> > following warning when using TPM 2:"
+> >=20
+> > Generally speaking, the simplifications should be done on top of code
+> > that does not have known bugs, even if the simplification renders out
+> > the bug. This is because then we have code that have potentially unknow=
+n
+> > unknown bugs.
+> >=20
+> > I hope you see my point. The problem with these patches were then
+> > and is still that they intermix bug fixes and other modifications and
+> > thus cannot be taken in.
+> >=20
+>=20
+> Yes, I can see that point.
+>=20
+> > BR, Jarkko
+> >=20
+>=20
+> Thanks a lot for the review. I will prepare new patches with the suggeste=
+d
+> changes.
 
-I'm coming back to a problem I've on an old machine that has a TPM 1.2 chip.
+Yeah, I mean the point being: it's OK to suggest clean ups but with bug fix=
+es
+you should aim for the lowest common denominator as far as you possibly can=
+.
 
-We already had an exchange of mail on this mailing list about a (few) 
-year(s) ago, but the problem still exist on 5.17 on debian unstable
-
-[    1.071637] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
-[    1.071694] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G I       
-5.17.0-1-amd64 #1  Debian 5.17.3-1
-[    1.071697] Hardware name: System manufacturer System Product 
-Name/P6T DELUXE V2, BIOS 0406    04/24/2009
-[    1.071699] Call Trace:
-[    1.071702]  <TASK>
-[    1.071705]  dump_stack_lvl+0x48/0x5e
-[    1.071711]  tpm_tis_status.cold+0x19/0x20
-[    1.071714]  wait_for_tpm_stat+0xf7/0x200
-[    1.071718]  ? get_page_from_freelist+0xc33/0xf10
-[    1.071722]  ? tpm_tcg_read_bytes+0x30/0x50
-[    1.071725]  tpm_tis_send_data+0x90/0x250
-[    1.071728]  tpm_tis_send_main+0x2e/0xf0
-[    1.071731]  ? __mod_node_page_state+0x7c/0xb0
-[    1.071733]  tpm_transmit+0xd6/0x3e0
-[    1.071737]  tpm_transmit_cmd+0x25/0x90
-[    1.071739]  tpm2_probe+0xe2/0x140
-[    1.071742]  tpm_tis_core_init+0x2d0/0x330
-[    1.071745]  ? tpm_tis_init.part.0+0x120/0x120
-[    1.071747]  tpm_tis_pnp_init+0xe2/0x110
-[    1.071750]  pnp_device_probe+0xb0/0x140
-[    1.071754]  really_probe+0x1f5/0x3d0
-[    1.071758]  __driver_probe_device+0xfe/0x180
-[    1.071761]  driver_probe_device+0x1e/0x90
-[    1.071763]  __driver_attach+0xc0/0x1c0
-[    1.071766]  ? __device_attach_driver+0xe0/0xe0
-[    1.071768]  ? __device_attach_driver+0xe0/0xe0
-[    1.071771]  bus_for_each_dev+0x78/0xc0
-[    1.071774]  bus_add_driver+0x149/0x1e0
-[    1.071777]  driver_register+0x8f/0xe0
-[    1.071780]  ? tpm_init+0xf1/0xf1
-[    1.071783]  init_tis+0x9b/0xde
-[    1.071786]  ? driver_register+0xc2/0xe0
-[    1.071789]  do_one_initcall+0x44/0x200
-[    1.071794]  kernel_init_freeable+0x21b/0x282
-[    1.071798]  ? rest_init+0xd0/0xd0
-[    1.071801]  kernel_init+0x16/0x120
-[    1.071803]  ret_from_fork+0x22/0x30
-[    1.071807]  </TASK>
-
-[...]
-
-[    1.800842] tpm tpm0: tpm_try_transmit: send(): error -62
-[    1.800894] tpm_tis 00:06: 1.2 TPM (device-id 0x6871, rev-id 1)
-
-[...]
-
-[    4.156840] tpm tpm0: tpm_try_transmit: send(): error -62
-[    4.156891] ima: Error Communicating to TPM chip
-
-And then the console is spammed with several more:
-
-[  149.636208] tpm tpm0: tpm_try_transmit: send(): error -62
-
-The /dev/tpm0 device error is present, but trousers/tcsd fails with:
-
-avr 25 15:12:06 fornost tcsd[4667]: TCSD TDDL[4667]: TrouSerS ERROR: 
-write to device /dev/tpm0 failed: Timer expired
-avr 25 15:12:06 fornost tcsd[4667]: TCSD TCS[4667]: TrouSerS ERROR: TCS 
-GetCapability failed with result = 0x1087
-
-An idea?
-
-Kind regards,
-
-Laurent Bigonville
+BR, Jarkko
 
