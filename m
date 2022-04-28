@@ -2,94 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B836D512474
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Apr 2022 23:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5770C51294C
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Apr 2022 04:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbiD0VYq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Apr 2022 17:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        id S234410AbiD1CHR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Apr 2022 22:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiD0VYg (ORCPT
+        with ESMTP id S229493AbiD1CHQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:24:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADDD6E8D0;
-        Wed, 27 Apr 2022 14:21:19 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23RLDsI8020643;
-        Wed, 27 Apr 2022 21:21:08 GMT
+        Wed, 27 Apr 2022 22:07:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCE15FF3D;
+        Wed, 27 Apr 2022 19:04:03 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S01jW6023389;
+        Thu, 28 Apr 2022 02:03:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=Kb8QQD4rsJqSzMlQCv657F8recoXzj3ZXDDxMpxp/YM=;
- b=Q+Sj4OEBwpXuMkY2uEpbT75VqT+DgdHbNRkv6aH9I2Juqri5itqYoRgz6TOWB7WhhPwy
- w6QZneXyMoODgc+eC9YJuGO+zhuFK2ozxZ52STmYfIUkOeAK1tt3GwnU1TODigEhmgOm
- Lqf94u9V4EKf2RSnA9qvEh6XQXPUg/0h2Gk9C8pG6ou6RgIWDO2oEfiGKNtEsl51NFkA
- k6jqDz9Z3xHBI02zSHyDXN7hotI0NoITZ5YdCwxcc20acKvuWPKcmkX6qW6xdwRbVTrk
- PsE2UoiuGoRMm8QuSzIyH9zHtQWrZFU4KeN/YcoeG2RHn/Q9KcGudhs1eLv+7YARhfZQ Jw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqdjf039j-1
+ bh=v4DC5jk5MW0kmAL8NfEopkxW5+LAGdSMqLeMRUpLlxI=;
+ b=RmyWBgSEjEROXKWcQlgvAZayB37v8sswxxdRHZUeBCIsHXJsktryRPjAqKvGmNI+06iE
+ /TwFj9Nwych3tagggYm8satgE1IOiNSXRkjt/1czRs0Ek4Tqr/nroofW9YH7CuVLoPuW
+ qQQAMEO4o5tVDFFY+Eo/7tKCewWE7vmODtTUeR9aFKwvWJjN/mfyGkfu2Rw7SVtwWAny
+ /qUUBQ8F6P4vLYERNwdp+1r4V1wlEC1sXHWvyfEUzxvtd3HItxakbP6FOSfWqzojq/KX
+ ReZPta5+wVIVmAjg+m6KFnHQv6psJGnjsUszqhnLk6zRg+679ufRu/AsZsfv62WoVvNI 5Q== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqg1a1qsc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 21:21:07 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23RLDsCI020638;
-        Wed, 27 Apr 2022 21:21:06 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqdjf0390-1
+        Thu, 28 Apr 2022 02:03:56 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23S22aK4022680;
+        Thu, 28 Apr 2022 02:03:55 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fm938xpx8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 21:21:06 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23RL3bCk017390;
-        Wed, 27 Apr 2022 21:21:04 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3fm8qhn56j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 21:21:04 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23RLL2cj49349036
+        Thu, 28 Apr 2022 02:03:54 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23S23qnU36045126
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 Apr 2022 21:21:02 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1011FA405B;
-        Wed, 27 Apr 2022 21:21:02 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 16A88A4054;
-        Wed, 27 Apr 2022 21:21:01 +0000 (GMT)
+        Thu, 28 Apr 2022 02:03:52 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97EEBAE04D;
+        Thu, 28 Apr 2022 02:03:52 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B4BC6AE053;
+        Thu, 28 Apr 2022 02:03:51 +0000 (GMT)
 Received: from sig-9-65-70-226.ibm.com (unknown [9.65.70.226])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 27 Apr 2022 21:21:00 +0000 (GMT)
-Message-ID: <9a9a6cb0b3f2e643a17743250f4a137baaea7a7e.camel@linux.ibm.com>
-Subject: Re: [PATCH] integrity: Allow ima_appraise bootparam to be set when
- SB is enabled
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Apr 2022 02:03:51 +0000 (GMT)
+Message-ID: <1f76429bfe89ee37a19f2d8ad0cf1a31ff9da798.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 2/5] ima: define a new template field named 'd-ngv2'
+ and templates
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Wed, 27 Apr 2022 17:21:00 -0400
-In-Reply-To: <48467663-5CD6-49C5-B43F-9FA0887D0575@oracle.com>
-References: <20220425222120.1998888-1-eric.snowberg@oracle.com>
-         <d7ba004bd2ce2a8ce2ff0601b4bca921a5301ece.camel@linux.ibm.com>
-         <48467663-5CD6-49C5-B43F-9FA0887D0575@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 27 Apr 2022 22:03:51 -0400
+In-Reply-To: <YkyUdM5hmKf4noS7@gmail.com>
+References: <20220325223824.310119-1-zohar@linux.ibm.com>
+         <20220325223824.310119-3-zohar@linux.ibm.com> <YkyUdM5hmKf4noS7@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wVpVvyL4cW6tz6CMaPfFc-lRyfkYKU_E
-X-Proofpoint-ORIG-GUID: N87tiXpPTrCWlLzWfsOUB04elZ7Ur81-
+X-Proofpoint-GUID: Jom3KH8WeVfajdKrCS7j0EwBuV8h46wP
+X-Proofpoint-ORIG-GUID: Jom3KH8WeVfajdKrCS7j0EwBuV8h46wP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- malwarescore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 spamscore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204270129
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ mlxlogscore=999 lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0
+ impostorscore=0 phishscore=0 bulkscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204280010
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -99,59 +87,76 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-04-27 at 16:12 +0000, Eric Snowberg wrote:
+On Tue, 2022-04-05 at 19:11 +0000, Eric Biggers wrote:
+> On Fri, Mar 25, 2022 at 06:38:21PM -0400, Mimi Zohar wrote:
+> >  static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
+> > -				       u8 hash_algo,
+> > +				       u8 digest_type, u8 hash_algo,
+> >  				       struct ima_field_data *field_data)
+> >  {
+> >  	/*
+> >  	 * digest formats:
+> >  	 *  - DATA_FMT_DIGEST: digest
+> >  	 *  - DATA_FMT_DIGEST_WITH_ALGO: [<hash algo>] + ':' + '\0' + digest,
+> > +	 *  - DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO:
+> > +	 *	[<digest type> + ':' + <hash algo>] + ':' + '\0' + digest,
+> > +	 *    where <hash type> is either "ima" or "verity",
+> >  	 *    where <hash algo> is provided if the hash algorithm is not
+> >  	 *    SHA1 or MD5
 > 
-> > On Apr 26, 2022, at 12:18 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > 
-> > On Mon, 2022-04-25 at 18:21 -0400, Eric Snowberg wrote:
-> >> The IMA_APPRAISE_BOOTPARM config allows enabling different "ima_appraise="
-> >> modes (log, fix, enforce) to be configured at boot time.  When booting
-> >> with Secure Boot enabled, all modes are ignored except enforce.  To use
-> >> log or fix, Secure Boot must be disabled.
-> >> 
-> >> With a policy such as:
-> >> 
-> >> appraise func=BPRM_CHECK appraise_type=imasig
-> >> 
-> >> A user may just want to audit signature validation. Not all users
-> >> are interested in full enforcement and find the audit log appropriate
-> >> for their use case.
-> >> 
-> >> Add a new IMA_APPRAISE_SB_BOOTPARAM config allowing "ima_appraise="
-> >> to work when Secure Boot is enabled.
-> >> 
-> >> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> > 
-> > Since the IMA architecture specific policy rules were first
-> > upstreamed, either enabling IMA_APPRAISE_BOOTPARAM or IMA_ARCH_POLICY
-> > was permitted, but not both.  
+> This says both "hash type" and "digest type".  It should be one or the other.
 > 
-> I don’t see code preventing this and just created a config with both of them
-> enabled.  Is this an assumption everyone is supposed to understand?
+> The square brackets are meant to indicate that the part within it is optional,
+> right?  Are they in the right place?  I don't see how this matches the code.
+> There is also no explanation for why or when <digest type> is optional with
+> DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO.
 
-This was very clear in the original patch upstreamed.  Refer to the
-IMA_APPRAISE_BOOTPRAM in commit d958083a8f64 ("x86/ima: define
-arch_get_ima_policy() for x86").  This subsequently changed to be based
-on  the secureboot runtime state.  Refer to commit 311aa6aafea4 ("ima:
-move APPRAISE_BOOTPARAM dependency on ARCH_POLICY to runtime").
+Agreed.
 
 > 
-> > This Kconfig negates the assumptions on
-> > which the CONFIG_IMA_ARCH_POLICY and the ima_appraise_signature() are
-> > based without any indication of the ramifications.   This impacts the
-> > kexec file syscall lockdown LSM assumptions as well.
+> > +	if (digest_type < DIGEST_TYPE__LAST && hash_algo < HASH_ALGO__LAST) {
+> > +		fmt = DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO;
+> > +		offset += snprintf(buffer, DIGEST_TYPE_NAME_LEN_MAX +
+> > +				   CRYPTO_MAX_ALG_NAME + 1, "%*s:%s",
+> > +				   (int)strlen(digest_type_name[digest_type]),
+> > +				   digest_type_name[digest_type],
+> >  				   hash_algo_name[hash_algo]);
+> >  		buffer[offset] = ':';
+> >  		offset += 2;
 > 
-> I will fix this in the next round.
+> There's no need to use %*s if the length argument is just going to be strlen().
+> It should just use %s.
 
-Either secureboot is or isn't enabled.  When it is enabled, then IMA
-must be in enforcing mode.
+Using "%*s" prevents having a trailing NULL.
 
-> > A fuller, more complete explanation for needing "log" mode when secure
-> > boot is enabled is required.
 > 
-> and add a more thorough explanation.  Thanks.
+> Also, this is not correct use of snprintf(), given that the string is
+> unconditionally appended to at the offset which snprintf() returns.  So it is
+> not providing buffer overflow protection.  It might as well just be:
+> 
+>                 offset += 1 + sprintf(buffer, "%s:%s:",
+>                                       digest_type_name[digest_type],
+>                                       hash_algo_name[hash_algo]);
+> 
+> and likewise for the other case:
+> 
+>                 offset += 1 + sprintf(buffer, "%s:", hash_algo_name[hash_algo]);
+> 
+> > +/*
+> > + * This function writes the digest of an event (without size limit),
+> > + * prefixed with both the hash type and algorithm.
+> > + */
+> > +int ima_eventdigest_ngv2_init(struct ima_event_data *event_data,
+> > +			      struct ima_field_data *field_data)
+> > +{
+> > +	u8 *cur_digest = NULL, hash_algo = HASH_ALGO_SHA1;
+> 
+> Why is this defaulting to SHA-1?
 
-Normally "log" mode is needed during development.
+Violation records contain 0's in the file hash and the template data
+hash fields. Changing the default hash algorithm would result in larger
+violation digests without any real benefit other than cosmetic.  Will
+make the change anyway in the next version.
 
 thanks,
 
