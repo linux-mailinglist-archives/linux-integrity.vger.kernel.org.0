@@ -2,127 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D38513E4C
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 Apr 2022 00:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1921514397
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Apr 2022 10:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347740AbiD1WL5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 28 Apr 2022 18:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S1355292AbiD2IIN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 29 Apr 2022 04:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347530AbiD1WL5 (ORCPT
+        with ESMTP id S1350225AbiD2IIM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:11:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D72ABCB5E;
-        Thu, 28 Apr 2022 15:08:39 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SKf2bt003777;
-        Thu, 28 Apr 2022 22:08:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=kCWBkV9EBURXMYT9kDz54RHvpVE/FsInuBtEK/b+Bg4=;
- b=CzK9bOB6HYT2CMnz65Rmgq5Ex9Ni07yj09ysM8kdMosoxiTsBYwyRjkPIgbGx0Jyv36I
- yeF5/Sv2YVbZBnc992PsKUkkMzAhbjES3qxr2DcsC38DtVZZ1HikWS1TLNhYvxG7QoBx
- ROb7kN04jkLsB/J81wiuFuJ6vJOea/SoR/koeZnu6GYLZE+CXaBfJ+8vFdnnBZWvyWOQ
- 00niJ4yiDXztcyNSfLiyemnaqHk+k4Z8f+BX9cIU50NiuLX7EO3LLaU6QzfazUQcYLwB
- NgcFOfeTWeTRLYrZ2jsGYVUc5vMoMYQFah/LvAolXSDtV1kQlIcGCGOaSV2JDCddiPrR 0Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9dwp3e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 22:08:22 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SLn3eF005352;
-        Thu, 28 Apr 2022 22:08:21 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9dwp3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 22:08:21 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SLgXlH032529;
-        Thu, 28 Apr 2022 22:08:20 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma04dal.us.ibm.com with ESMTP id 3fm93aq30c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 22:08:20 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SM8Jj436438418
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Apr 2022 22:08:19 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA3E26E054;
-        Thu, 28 Apr 2022 22:08:19 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A7106E04E;
-        Thu, 28 Apr 2022 22:08:19 +0000 (GMT)
-Received: from [9.211.77.121] (unknown [9.211.77.121])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 28 Apr 2022 22:08:19 +0000 (GMT)
-Message-ID: <0c6442db-7e97-58dd-f39c-b22a37398715@linux.vnet.ibm.com>
-Date:   Thu, 28 Apr 2022 18:08:18 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] integrity: Allow ima_appraise bootparam to be set when SB
- is enabled
-Content-Language: en-US
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com
-References: <20220425222120.1998888-1-eric.snowberg@oracle.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <20220425222120.1998888-1-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rimEikXrGxHYx5taUsRDOxhOxtqdH1iw
-X-Proofpoint-ORIG-GUID: mAlKens8YqIG3yS2DPKRj9XhK_OYTk1h
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 29 Apr 2022 04:08:12 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180EF6F481
+        for <linux-integrity@vger.kernel.org>; Fri, 29 Apr 2022 01:04:50 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aeb18.dynamic.kabel-deutschland.de [95.90.235.24])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D261261EA1923;
+        Fri, 29 Apr 2022 10:04:47 +0200 (CEST)
+Message-ID: <476db1ba-2e5f-ead2-72c8-e1c671e096f8@molgen.mpg.de>
+Date:   Fri, 29 Apr 2022 10:04:47 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-28_05,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
- adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1011 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204280129
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Dell XPS 13 9310 2-in-1: tpm tpm0: invalid TPM_STS.x 0xff,
+ dumping stack for forensics
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org
+References: <a1d39c04-d0a4-4b0b-5e39-5330e79d5fc0@molgen.mpg.de>
+In-Reply-To: <a1d39c04-d0a4-4b0b-5e39-5330e79d5fc0@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+[Resend as reply, as original message was blocked due to too big Linux 
+log attachment]
 
-On 4/25/22 18:21, Eric Snowberg wrote:
-> The IMA_APPRAISE_BOOTPARM config allows enabling different "ima_appraise="
-> modes (log, fix, enforce) to be configured at boot time.  When booting
-> with Secure Boot enabled, all modes are ignored except enforce.  To use
-> log or fix, Secure Boot must be disabled.
->
-> With a policy such as:
->
-> appraise func=BPRM_CHECK appraise_type=imasig
->
-> A user may just want to audit signature validation. Not all users
-> are interested in full enforcement and find the audit log appropriate
-> for their use case.
->
-> Add a new IMA_APPRAISE_SB_BOOTPARAM config allowing "ima_appraise="
-> to work when Secure Boot is enabled.
-
-Tianocore(UEFI Reference Implementation) defines four secure boot modes, 
-one of which is Audit Mode. Refer to last few lines of Feature Summary 
-section in Readme.MD 
-(https://github.com/tianocore/edk2-staging/blob/Customized-Secure-Boot/Readme.MD#3-feature-summary). 
-Based on the reference, IMA appraise_mode="log" should probably work in 
-coordination with AuditMode.
-
-Thanks & Regards,
-
-     - Nayna
-
+Am 28.04.22 um 17:35 schrieb Paul Menzel:
+> Dear Linux folks,
+> 
+> 
+> On a Dell XPS 13 9310 2-in-1, Linux 5.17.3 on Debian sid/unstable logs 
+> the trace below:
+> 
+> ```
+> [    0.000000] Linux version 5.17.0-1-amd64 
+> (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-20) 11.2.0, GNU ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.17.3-1 (2022-04-18)
+> […]
+> [    0.000000] DMI: Dell Inc. XPS 13 9310 2-in-1/02P55J, BIOS 2.7.0 12/11/2021
+> […]
+> [171059.677004] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
+> [171059.677012] CPU: 5 PID: 38885 Comm: kworker/5:0 Not tainted 5.17.0-1-amd64 #1  Debian 5.17.3-1
+> [171059.677014] Hardware name: Dell Inc. XPS 13 9310 2-in-1/02P55J, BIOS 2.7.0 12/11/2021
+> [171059.677016] Workqueue: tpm_dev_wq tpm_dev_async_work
+> [171059.677022] Call Trace:
+> [171059.677025]  <TASK>
+> [171059.677028]  dump_stack_lvl+0x48/0x5e
+> [171059.677032]  tpm_tis_status.cold+0x19/0x20
+> [171059.677035]  tpm_tis_send_data+0x3f/0x250
+> [171059.677037]  tpm_tis_send_main+0x2e/0xf0
+> [171059.677039]  tpm_transmit+0xd3/0x3e0
+> [171059.677041]  tpm_dev_transmit.constprop.0+0x67/0xc0
+> [171059.677043]  ? tpm_try_get_ops+0x44/0x90
+> [171059.677044]  tpm_dev_async_work+0x62/0x90
+> [171059.677046]  process_one_work+0x1e2/0x3b0
+> [171059.677049]  ? rescuer_thread+0x390/0x390
+> [171059.677050]  worker_thread+0x50/0x3a0
+> [171059.677051]  ? rescuer_thread+0x390/0x390
+> [171059.677051]  kthread+0xe5/0x110
+> [171059.677053]  ? kthread_complete_and_exit+0x20/0x20
+> [171059.677055]  ret_from_fork+0x1f/0x30
+> [171059.677059]  </TASK>
+> ```
+> 
+> Please find the output of `dmesg` attached.
+> 
+> 
+> Kind regards,
+> 
+> Paul
