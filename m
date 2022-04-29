@@ -2,82 +2,46 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B49D51480E
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 Apr 2022 13:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00284514926
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Apr 2022 14:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358312AbiD2L3y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 29 Apr 2022 07:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
+        id S1359042AbiD2MZo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 29 Apr 2022 08:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358313AbiD2L3w (ORCPT
+        with ESMTP id S1359035AbiD2MZn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:29:52 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCD649264;
-        Fri, 29 Apr 2022 04:26:33 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23T8HK4Q025933;
-        Fri, 29 Apr 2022 11:26:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=dhabbGXhdWEZKSomL5GlgkEUR4yGtHLfzEtnFb5cnto=;
- b=F8WSIGckqIpKWXuXajNlRkPHnuKuPZ1luIfIIvjle/sZn896LPRQOjv4A5Qpjj4Nubwg
- 42JdS9201qvxDMyAHHCszVkWm0oYiE8Ty8R2a+uIT6WfjVZa7I1L66i9Mfe0Bz2ZxyK0
- SGoyFF5L1fXMkO5YJoTnFcThfzPJ/ZcB9R+YoFftWDZR+Lmw8uc6uL/KIp3GOrD+eas+
- xh7otjOiB6Jq3hDCzmG2OLCdX9LeFQOU5+wr3pLbFmmDEClp2zOxgsnHeoR7Wl3omEI8
- mIgdT1WkizbREGdTgNgGsvQvd5+GnPJoqwHc0/KnAjGd1Hqt48xExobJNesdq74Oxwdz fQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtqvtn2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 11:26:31 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TBCmPA016335;
-        Fri, 29 Apr 2022 11:26:29 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fm9391055-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 11:26:29 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TBQQQZ42139918
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 11:26:26 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1452D11C050;
-        Fri, 29 Apr 2022 11:26:26 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3E5A511C04A;
-        Fri, 29 Apr 2022 11:26:25 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.70.88])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 11:26:25 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v8 7/7] fsverity: update the documentation
-Date:   Fri, 29 Apr 2022 07:26:01 -0400
-Message-Id: <20220429112601.1421947-8-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220429112601.1421947-1-zohar@linux.ibm.com>
-References: <20220429112601.1421947-1-zohar@linux.ibm.com>
+        Fri, 29 Apr 2022 08:25:43 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14ABB82D8
+        for <linux-integrity@vger.kernel.org>; Fri, 29 Apr 2022 05:22:19 -0700 (PDT)
+Received: from [141.14.12.206] (g206.RadioFreeInternet.molgen.mpg.de [141.14.12.206])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id EA80B61EA1923;
+        Fri, 29 Apr 2022 14:22:16 +0200 (CEST)
+Message-ID: <17a22b43-573b-3406-0f4c-f687bc266a5a@molgen.mpg.de>
+Date:   Fri, 29 Apr 2022 14:22:16 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Dell XPS 13 9310 2-in-1: tpm tpm0: invalid TPM_STS.x 0xff,
+ dumping stack for forensics
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Laurent Bigonville <bigon@debian.org>
+References: <a1d39c04-d0a4-4b0b-5e39-5330e79d5fc0@molgen.mpg.de>
+ <476db1ba-2e5f-ead2-72c8-e1c671e096f8@molgen.mpg.de>
+In-Reply-To: <476db1ba-2e5f-ead2-72c8-e1c671e096f8@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TIcGhbkW5n5o72ztsMLT7cyPTxVcp1fl
-X-Proofpoint-ORIG-GUID: TIcGhbkW5n5o72ztsMLT7cyPTxVcp1fl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0 suspectscore=0
- mlxlogscore=755 phishscore=0 malwarescore=0 adultscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290064
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,66 +49,135 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Update the fsverity documentation related to IMA signature support.
+Dear Linux folks,
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- Documentation/filesystems/fsverity.rst | 35 +++++++++++++++++---------
- 1 file changed, 23 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
-index 8cc536d08f51..b7d42fd65e9d 100644
---- a/Documentation/filesystems/fsverity.rst
-+++ b/Documentation/filesystems/fsverity.rst
-@@ -70,12 +70,23 @@ must live on a read-write filesystem because they are independently
- updated and potentially user-installed, so dm-verity cannot be used.
- 
- The base fs-verity feature is a hashing mechanism only; actually
--authenticating the files is up to userspace.  However, to meet some
--users' needs, fs-verity optionally supports a simple signature
--verification mechanism where users can configure the kernel to require
--that all fs-verity files be signed by a key loaded into a keyring; see
--`Built-in signature verification`_.  Support for fs-verity file hashes
--in IMA (Integrity Measurement Architecture) policies is also planned.
-+authenticating the files may be done by:
-+
-+* Userspace-only
-+
-+* Builtin signature verification + userspace policy
-+
-+  fs-verity optionally supports a simple signature verification
-+  mechanism where users can configure the kernel to require that
-+  all fs-verity files be signed by a key loaded into a keyring;
-+  see `Built-in signature verification`_.
-+
-+* Integrity Measurement Architecture (IMA)
-+
-+  IMA supports including fs-verity file digests and signatures in the
-+  IMA measurement list and verifying fs-verity based file signatures
-+  stored as security.ima xattrs, based on policy.
-+
- 
- User API
- ========
-@@ -653,12 +664,12 @@ weren't already directly answered in other parts of this document.
-     hashed and what to do with those hashes, such as log them,
-     authenticate them, or add them to a measurement list.
- 
--    IMA is planned to support the fs-verity hashing mechanism as an
--    alternative to doing full file hashes, for people who want the
--    performance and security benefits of the Merkle tree based hash.
--    But it doesn't make sense to force all uses of fs-verity to be
--    through IMA.  As a standalone filesystem feature, fs-verity
--    already meets many users' needs, and it's testable like other
-+    IMA supports the fs-verity hashing mechanism as an alternative
-+    to full file hashes, for those who want the performance and
-+    security benefits of the Merkle tree based hash.  However, it
-+    doesn't make sense to force all uses of fs-verity to be through
-+    IMA.  fs-verity already meets many users' needs even as a
-+    standalone filesystem feature, and it's testable like other
-     filesystem features e.g. with xfstests.
- 
- :Q: Isn't fs-verity useless because the attacker can just modify the
--- 
-2.27.0
+Am 29.04.22 um 10:04 schrieb Paul Menzel:
+> [Resend as reply, as original message was blocked due to too big Linux 
+> log attachment]
+> 
+> Am 28.04.22 um 17:35 schrieb Paul Menzel:
 
+>> On a Dell XPS 13 9310 2-in-1, Linux 5.17.3 on Debian sid/unstable logs 
+>> the trace below:
+>>
+>> ```
+>> [    0.000000] Linux version 5.17.0-1-amd64 
+>> (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-20) 11.2.0, GNU ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.17.3-1 (2022-04-18)
+>> […]
+>> [    0.000000] DMI: Dell Inc. XPS 13 9310 2-in-1/02P55J, BIOS 2.7.0 12/11/2021
+>> […]
+>> [171059.677004] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
+>> [171059.677012] CPU: 5 PID: 38885 Comm: kworker/5:0 Not tainted 5.17.0-1-amd64 #1  Debian 5.17.3-1
+>> [171059.677014] Hardware name: Dell Inc. XPS 13 9310 2-in-1/02P55J, BIOS 2.7.0 12/11/2021
+
+By the way, newer system firmware is available, but not over LVFS [1].
+
+>> [171059.677016] Workqueue: tpm_dev_wq tpm_dev_async_work
+>> [171059.677022] Call Trace:
+>> [171059.677025]  <TASK>
+>> [171059.677028]  dump_stack_lvl+0x48/0x5e
+>> [171059.677032]  tpm_tis_status.cold+0x19/0x20
+>> [171059.677035]  tpm_tis_send_data+0x3f/0x250
+>> [171059.677037]  tpm_tis_send_main+0x2e/0xf0
+>> [171059.677039]  tpm_transmit+0xd3/0x3e0
+>> [171059.677041]  tpm_dev_transmit.constprop.0+0x67/0xc0
+>> [171059.677043]  ? tpm_try_get_ops+0x44/0x90
+>> [171059.677044]  tpm_dev_async_work+0x62/0x90
+>> [171059.677046]  process_one_work+0x1e2/0x3b0
+>> [171059.677049]  ? rescuer_thread+0x390/0x390
+>> [171059.677050]  worker_thread+0x50/0x3a0
+>> [171059.677051]  ? rescuer_thread+0x390/0x390
+>> [171059.677051]  kthread+0xe5/0x110
+>> [171059.677053]  ? kthread_complete_and_exit+0x20/0x20
+>> [171059.677055]  ret_from_fork+0x1f/0x30
+>> [171059.677059]  </TASK>
+>> ```
+>>
+>> Please find the output of `dmesg` attached.
+
+According to the system firmware menu it’s a TPM 2.0 device, and Linux 
+confirms that:
+
+     $ sudo grep -R . /sys/module/tpm
+     grep: /sys/module/tpm/uevent: Permission denied
+     /sys/module/tpm/parameters/suspend_pcr:0
+     /sys/module/tpm/version:2.0
+     $ cat /sys/devices/platform/STM0125\:00/tpm/tpm0/tpm_version_major
+     2
+
+The message is *not* logged at every boot/run, and it’s present three 
+times in the log, already with Linux 5.16.7 from Debian sid/unstable 
+(but not always). The second one below is different though:
+
+```
+[…]
+tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
+CPU: 4 PID: 84 Comm: kworker/4:1 Not tainted 5.16.0-1-amd64 #1  Debian 
+5.16.7-1
+Hardware name: Dell Inc. XPS 13 9310 2-in-1/02P55J, BIOS 2.7.0 12/11/2021
+Workqueue: tpm_dev_wq tpm_dev_async_work
+Call Trace:
+  <TASK>
+  dump_stack_lvl+0x48/0x5e
+  tpm_tis_status.cold+0x19/0x20
+  tpm_tis_send_data+0x3f/0x250
+  tpm_tis_send_main+0x2e/0xf0
+  tpm_transmit+0xd3/0x3e0
+  tpm_dev_transmit.constprop.0+0x67/0xc0
+  ? tpm_try_get_ops+0x44/0x90
+  tpm_dev_async_work+0x62/0x90
+  process_one_work+0x1e5/0x3c0
+  worker_thread+0x50/0x3b0
+  ? rescuer_thread+0x370/0x370
+  kthread+0x169/0x190
+  ? set_kthread_struct+0x40/0x40
+  ret_from_fork+0x1f/0x30
+  </TASK>
+[…]
+```
+
+```
+[…]
+ima: Allocated hash algorithm: sha256
+tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
+CPU: 7 PID: 1 Comm: swapper/0 Not tainted 5.16.0-1-amd64 #1  Debian 5.16.7-2
+Hardware name: Dell Inc. XPS 13 9310 2-in-1/02P55J, BIOS 2.7.0 12/11/2021
+Call Trace:
+  <TASK>
+  dump_stack_lvl+0x48/0x5e
+  tpm_tis_status.cold+0x19/0x20
+  tpm_tis_send_data+0x3f/0x250
+  tpm_tis_send_main+0x2e/0xf0
+  tpm_transmit+0xd3/0x3e0
+  tpm_transmit_cmd+0x25/0x90
+  tpm2_pcr_read+0x177/0x300
+  tpm_pcr_read+0x5a/0x70
+  ima_calc_boot_aggregate_tfm+0xc3/0x190
+  ? desc_read_finalized_seq+0x2f/0x90
+  ? _prb_read_valid+0x235/0x2b0
+  ? prb_read_valid+0x17/0x20
+  ? console_unlock+0x2cc/0x4b0
+  ima_calc_boot_aggregate+0xc3/0xf0
+  ? hash_setup+0xc5/0xc5
+  ima_add_boot_aggregate+0xaa/0x13e
+  ima_init+0x5e/0xa9
+  init_ima+0x23/0xb5
+  ? hash_setup+0xc5/0xc5
+  do_one_initcall+0x41/0x200
+  kernel_init_freeable+0x21b/0x282
+  ? rest_init+0xd0/0xd0
+  kernel_init+0x16/0x120
+  ret_from_fork+0x1f/0x30
+  </TASK>
+ima: No architecture policies found
+[…]
+```
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://github.com/fwupd/firmware-dell/issues/124
