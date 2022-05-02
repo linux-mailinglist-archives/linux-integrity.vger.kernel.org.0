@@ -2,83 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87375516F6A
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 May 2022 14:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDAD45171A6
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 May 2022 16:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384965AbiEBMTq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 May 2022 08:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
+        id S1380038AbiEBOiI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 May 2022 10:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384989AbiEBMTm (ORCPT
+        with ESMTP id S1378194AbiEBOiH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 May 2022 08:19:42 -0400
+        Mon, 2 May 2022 10:38:07 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A0D15A19;
-        Mon,  2 May 2022 05:16:12 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242AmvWi021479;
-        Mon, 2 May 2022 12:16:09 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B3C5F81;
+        Mon,  2 May 2022 07:34:39 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242EVH50020019;
+        Mon, 2 May 2022 14:34:16 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=DGExP6oLSvLNaEuKQ24CJDRu/rp2Mv+OMa2OdAf8ywM=;
- b=J4O37aNkQX06kuW4bsa/zFP/FverwcmmLhAzFl6oaXs68K/HE65tUu+HcORsPCF9bGhX
- dtSgVUjXbZALmz2zwbsrdYBQjTzUBst5a3cwmOzHHluleez2SXv/LJdqkuUz3iZMHAE/
- AG2tYmnNShNVB5cXyl6nwwBES28zPIHhnA77fMaC1aM4eJPPrEKRgYBOes9Yae7+hS8f
- vuvSILZSY6+4S+xBJsRa7zLb7Lv1a7tR/gKR6bRXHJArWqLTo2F3pVhqnIwDWYzseTJG
- ZwjCtvxl5s9aBGrBy7fdD7YQNuzAwifvuzpDgVM67kPFgsZ/x8C5IlrjpcMB+hiEbSmC QA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ftdvjhpga-1
+ bh=WdExTye17olTIg6QT8mBBfdfn+P/Stz7q1ekNoAttpE=;
+ b=dxJ6fZaDeSA4ihga6rpilVdEGfjabtwwsf0ZJVuk3WBq2lc6XY5E8vJ90pFhHIwnS7ic
+ s9M+aPW0IRYqIe7FV1Bf/NuQ3Ixo9S85C9EqHjVF9GDZQHywaoMvjvp2K2uEOktqV7RW
+ n36HAaX1wbRZrSrd9ZPPFtVmk09yEOfP3RlqCuaqCzAPpXgnPkfjezg7XwWeU3Cif8dq
+ cLEfIwW6QLsy4sKI4+v0l+JMQgbi5oYpI/hr6OGAL7UVnFMg9MsftDd5bzXxC3eHu0fQ
+ xKPlBebfDEEmMesP30yAmbZz/kk5tQbbaJXiSdNN2mHxcpjpEhuDFb1CKrET1LGX8KFO 2g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fth4tg18m-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 12:16:09 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 242CCOqr005991;
-        Mon, 2 May 2022 12:16:07 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3frvcj2p7d-1
+        Mon, 02 May 2022 14:34:16 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 242EYG7c031072;
+        Mon, 2 May 2022 14:34:16 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fth4tg186-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 12:16:07 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 242CG5iX56295876
+        Mon, 02 May 2022 14:34:16 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 242EWbT2032085;
+        Mon, 2 May 2022 14:34:14 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03fra.de.ibm.com with ESMTP id 3fscdk1nuk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 14:34:13 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 242EKu3q23462322
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 May 2022 12:16:05 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C8FF42041;
-        Mon,  2 May 2022 12:16:05 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B0E694203F;
-        Mon,  2 May 2022 12:16:04 +0000 (GMT)
-Received: from sig-9-65-70-224.ibm.com (unknown [9.65.70.224])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  2 May 2022 12:16:04 +0000 (GMT)
-Message-ID: <18587675b3c6ebc74b81cabe53dc293099304861.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 6/7] ima: support fs-verity file digest based version
- 3 signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 02 May 2022 08:16:04 -0400
-In-Reply-To: <8a18eb04-4d07-7bad-e6f9-0015788e6a11@linux.ibm.com>
-References: <20220429112601.1421947-1-zohar@linux.ibm.com>
-         <20220429112601.1421947-7-zohar@linux.ibm.com>
-         <8a18eb04-4d07-7bad-e6f9-0015788e6a11@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
+        Mon, 2 May 2022 14:20:56 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 82282AE055;
+        Mon,  2 May 2022 14:34:11 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1A6E6AE045;
+        Mon,  2 May 2022 14:34:11 +0000 (GMT)
+Received: from sig-9-145-11-74.uk.ibm.com (unknown [9.145.11.74])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  2 May 2022 14:34:11 +0000 (GMT)
+Message-ID: <438c88e740f674ad334cdc88004fcec5b9ec57f4.camel@linux.ibm.com>
+Subject: Re: [RFC v2 04/39] char: impi, tpm: depend on HAS_IOPORT
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Corey Minyard <minyard@acm.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "moderated list:IPMI SUBSYSTEM" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Date:   Mon, 02 May 2022 16:34:10 +0200
+In-Reply-To: <ff7605de-fe12-3bbf-cce9-aec18be9d54e@pengutronix.de>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+         <20220429135108.2781579-7-schnelle@linux.ibm.com>
+         <07c39877d9e940a96be41e21e22fe45dbb73d949.camel@linux.ibm.com>
+         <ff7605de-fe12-3bbf-cce9-aec18be9d54e@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: N88oVwMXZoq6HL5Rw2n3PO8mIChkA1Rj
-X-Proofpoint-GUID: N88oVwMXZoq6HL5Rw2n3PO8mIChkA1Rj
+X-Proofpoint-GUID: Fm4gl_CCV9IRrCnZDVRyK0djotDq9YcN
+X-Proofpoint-ORIG-GUID: eIPjDVk3Gk_Wv_RNZGcDg89tcb5gRnjm
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-02_04,2022-05-02_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- bulkscore=0 priorityscore=1501 phishscore=0 spamscore=0 lowpriorityscore=0
- adultscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205020094
+ definitions=2022-05-02_04,2022-05-02_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 phishscore=0 mlxlogscore=920 spamscore=0 bulkscore=0
+ clxscore=1011 suspectscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205020114
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -88,105 +103,66 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> > @@ -225,6 +232,40 @@ int ima_read_xattr(struct dentry *dentry,
-> >   	return ret;
-> >   }
-> >   
-> > +/*
-> > + * calc_file_id_hash - calculate the hash of the ima_file_id struct data
-> > + * @type: xattr type [enum evm_ima_xattr_type]
-> > + * @algo: hash algorithm [enum hash_algo]
-> > + * @digest: pointer to the digest to be hashed
-> > + * @hash: (out) pointer to the hash
-> > + *
-> > + * IMA signature version 3 disambiguates the data that is signed by
-> > + * indirectly signing the hash of the ima_file_id structure data.
-> > + *
-> > + * Signing the ima_file_id struct is currently only supported for
-> > + * IMA_VERITY_DIGSIG type xattrs.
-> > + *
-> > + * Return 0 on success, error code otherwise.
-> > + */
-> > +static int calc_file_id_hash(enum evm_ima_xattr_type type,
-> > +			     enum hash_algo algo, const u8 *digest,
-> > +			     struct ima_digest_data *hash)
-> > +{
-> > +	struct ima_file_id file_id = {
-> > +		.hash_type = IMA_VERITY_DIGSIG, .hash_algorithm = algo};
-> > +	unsigned int unused = HASH_MAX_DIGESTSIZE - hash_digest_size[algo];
-> > +
-> > +	if (type != IMA_VERITY_DIGSIG)
-> > +		return -EINVAL;
-> > +
-> > +	memcpy(file_id.hash, digest, hash_digest_size[algo]);
-> > +
-> > +	hash->algo = algo;
-> > +	hash->length = hash_digest_size[algo];
-> > +
-> > +	return ima_calc_buffer_hash(&file_id, sizeof(file_id) - unused, hash);
+On Fri, 2022-04-29 at 16:33 +0200, Ahmad Fatoum wrote:
+> Hello Niklas,
 > 
-> +struct ima_file_id {
-> +	__u8 hash_type;		/* xattr type [enum evm_ima_xattr_type] */
-> +	__u8 hash_algorithm;	/* Digest algorithm [enum hash_algo] */
-> +	__u8 hash[HASH_MAX_DIGESTSIZE];
-> +} __packed;
+> On 29.04.22 16:23, Niklas Schnelle wrote:
+> > > Hello Niklas,
+> > > 
+> > > On 29.04.22 15:50, Niklas Schnelle wrote:
+> > > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > > > not being declared. We thus need to add this dependency and ifdef
+> > > > sections of code using inb()/outb() as alternative access methods.
+> > > > 
+> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > 
+> > > [snip]
+> > > 
+> > > > diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
+> > > > index 9c924a1440a9..2d2ae37153ba 100644
+> > > > --- a/drivers/char/tpm/tpm_infineon.c
+> > > > +++ b/drivers/char/tpm/tpm_infineon.c
+> > > > @@ -51,34 +51,40 @@ static struct tpm_inf_dev tpm_dev;
+> > > >  
+> > > >  static inline void tpm_data_out(unsigned char data, unsigned char offset)
+> > > >  {
+> > > > +#ifdef CONFIG_HAS_IOPORT
+> > > >       if (tpm_dev.iotype == TPM_INF_IO_PORT)
+> > > >               outb(data, tpm_dev.data_regs + offset);
+> > > >       else
+> > > > +#endif
+> > > 
+> > > This looks ugly. Can't you declare inb/outb anyway and skip the definition,
+> > > so you can use IS_ENABLED() here instead?
+> > > 
+> > > You can mark the declarations with __compiletime_error("some message"), so
+> > > if an IS_ENABLED() reference is not removed at compile time, you get some
+> > > readable error message instead of a link error.
+> > > 
+> > > Cheers,
+> > > Ahmad
+> > 
+> > I didn't know about __compiletime_error() that certainly sounds
+> > interesting even when using a normal #ifdef.
+> > 
+> > That said either with the function not being declared or this
+> > __compiletime_error() mechanism I would think that using IS_ENABLED()
+> > relies on compiler optimizations not to compile in the missing/error
+> > function call, right? I'm not sure if that is something we should do.
 > 
-> did you maybe mean 'sizeof(file_id.hash) - unused' ?
-
-No, the hash includes the other fields as well.  Instead of including a
-flexible array in struct ima_file_id and dynamically allocating the
-memory for the struct with the specific hash size, the maximum sized
-hash is included in the struct.
+> Yes, it assumes your compiler is able to discard the body of an if (0),
+> which we already assume, otherwise it wouldn't make sense for any existing
+> code to use __compiletime_error().
 > 
+> To me this sounds much cleaner than #ifdefs in the midst of functions,
+> which are a detriment to maintainability.
 > 
-> > +}
-> > +
-
-
-> > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> > index 390a8faa77f9..e24531db95cd 100644
-> > --- a/security/integrity/ima/ima_policy.c
-> > +++ b/security/integrity/ima/ima_policy.c
-> > @@ -1310,6 +1310,15 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
-> >   	    !(entry->flags & IMA_MODSIG_ALLOWED))
-> >   		return false;
-> >   
-> > +	/*
-> > +	 * Ensure verity appraise rules require signature format v3 signatures
-> > +	 * ('appraise_type=sigv3').
+> Cheers,
+> Ahmad
 > 
-> This comment doesn't seem to reflect what is actually checked below ... 
-> at least for me it's difficult to see that.
-> 
-> It's more like 'ensure that appraise rules for verity signature type 
-> also have the IMA_DIGSIG_REQUIRED flag set.'
 
-Generally code should be understandable without requiring a comment.  
-In this case, the purpose of the comment is to require a file
-signature.  Here's the updated comment:
+Ok, makes sense. I'll look into using __compiletime_error() and
+IS_ENABLED().
 
-+        * Unlike for regular IMA 'appraise' policy rules where
-security.ima
-+        * xattr may contain either a file hash or signature, the
-security.ima
-+        * xattr for fsverity must contain a file signature
-(sigv3).  Ensure
-+        * that 'appraise' rules for fsverity require file signatures
-by
-+        * checking the IMA_DIGSIG_REQUIRED flag is set.
-
-
-> > +	 */
-> > +	if (entry->action == APPRAISE &&
-> > +	    (entry->flags & IMA_VERITY_REQUIRED) &&
-> > +	    !(entry->flags & IMA_DIGSIG_REQUIRED))
-> > +		return false;
-> > +
-> >   	return true;
-> >   }
-> >   
-
-thanks,
-
-Mimi
 
