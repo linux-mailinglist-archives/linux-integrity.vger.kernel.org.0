@@ -2,111 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5CB518C4C
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 May 2022 20:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC83518D1D
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 May 2022 21:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241255AbiECS2m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 May 2022 14:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S230079AbiECT0x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 May 2022 15:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235501AbiECS2l (ORCPT
+        with ESMTP id S241859AbiECT0v (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 May 2022 14:28:41 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEC13F309;
-        Tue,  3 May 2022 11:25:08 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 5287822248;
-        Tue,  3 May 2022 20:25:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1651602306;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9iC4cXPg9k+4gpVj29AuB8WPa1LP5MNPiMZNf/cbI60=;
-        b=RkDedRUtGXV+rYDTtGD6Re5PzUJOBv4t7jgDYB3cDSNZ0v6oz4lwCp7IpoCeuwt+18s9MY
-        PbLjrkr/lyl3evJtuCAESVCKxhGl+o8DYxappQloW/rX9+eHSPUo4f4RxMt8f654gPLeY4
-        cWqIHbGZ4YO/qwb3alIBVDznZsUDoxo=
-From:   Michael Walle <michael@walle.cc>
-To:     a.fatoum@pengutronix.de
-Cc:     davem@davemloft.net, david@sigma-star.at, dhowells@redhat.com,
-        ebiggers@kernel.org, franck.lenormand@nxp.com,
-        herbert@gondor.apana.org.au, horia.geanta@nxp.com,
-        j.luebbe@pengutronix.de, jarkko@kernel.org, jejb@linux.ibm.com,
-        jmorris@namei.org, kernel@pengutronix.de, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        matthias.schiffer@ew.tq-group.com, pankaj.gupta@nxp.com,
-        richard@nod.at, serge@hallyn.com, sumit.garg@linaro.org,
-        tharvey@gateworks.com, zohar@linux.ibm.com,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v8 3/6] crypto: caam - add in-kernel interface for blob generator
-Date:   Tue,  3 May 2022 20:24:54 +0200
-Message-Id: <20220503182454.2749454-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220428140145.870527-4-a.fatoum@pengutronix.de>
-References: <20220428140145.870527-4-a.fatoum@pengutronix.de>
+        Tue, 3 May 2022 15:26:51 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E29B2AE37
+        for <linux-integrity@vger.kernel.org>; Tue,  3 May 2022 12:23:18 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id b18so13041075lfv.9
+        for <linux-integrity@vger.kernel.org>; Tue, 03 May 2022 12:23:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=oDPDRTaJ/Y9FxcEb/X2khYoMXOgW7bHgyQsV8PtMr7Y=;
+        b=UrLmD6tCqKeG6+qUvD3hHxC/7foZmjkC2BmjZf25xGF648iF4IDJqjbzyfeYzl/xjA
+         WMGDsHeQrmpyATwD6MWLsZ6vZOEMAyoWPiI1q1iWaqh6tRbP1gIwTSilFXtvHB/oXf9e
+         isJVuZxZDeGoSTBLW/Gx+UOrV351WD/G8XvsZXqw0ZKLGSaJ4mVrK17lKparMyguqwff
+         I4w3UZBLIN3tGRKQ0ffeP3XA1CCK0P3q+jYbfV3B3HHB9FRic9NdgQgk3NDo+4aGgmOb
+         fIQYi1ip2njr6wNSeDgaSlFjNkABFBs88JslD3/uEjR0n8GzefAFPnPqJ3ZWiwBo+Sx5
+         Khjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=oDPDRTaJ/Y9FxcEb/X2khYoMXOgW7bHgyQsV8PtMr7Y=;
+        b=asynRccN4GlVj/WwEdC1YOjHU6NS4IfVS3cKbahL8i9MSDotOG92JndPO4MPmva3eL
+         vLkL3sOPhwbJvnEg3tYdwobNamsOGQQoovk62A68d1fhcKNmPR37QocWmlB207pto/qF
+         /RraP8K0uHEyWck3q4BryMDbxzlCr+xD2+W58UD2LoK8W3tMP5feXGHu/qTrIGZCZnW3
+         OqGn6W1a9W8ZVLeyDk4RP/s6oOZWvIA+Dr9BpkW4eYmqboC388DBo7UqRqvOuv/jkRsp
+         hi/jYwEj+2aQq0uf07ddjOZpDmuGAyRwOY8Q6cgAKX9rfseI5ovumJLXSX/F8Ia9c2tH
+         sJcg==
+X-Gm-Message-State: AOAM530eTvA3orp6huFNQZtAxzIGUNSxx1umEW+lLr/y1k+hTopBz/32
+        DUKE7G2d+fLmmMZR0I+NZeocccN64nKMS+BpujnVbLFDvOk=
+X-Google-Smtp-Source: ABdhPJwe0OKZU6xokfVUK0JvKXXGwI8b8dPqA1aRxNlk7ZYn8zNJJPxwvacC/lN9OC2zyQ7DIAxIrfvPsbJjRwkFkvE=
+X-Received: by 2002:a19:f706:0:b0:473:9e36:79de with SMTP id
+ z6-20020a19f706000000b004739e3679demr6476812lfe.35.1651605795823; Tue, 03 May
+ 2022 12:23:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   William Roberts <bill.c.roberts@gmail.com>
+Date:   Tue, 3 May 2022 14:23:02 -0500
+Message-ID: <CAFftDdqL5OB+1X=W4C5KjkJgArAaUM-EJPorOXOWKsfOP6jBLA@mail.gmail.com>
+Subject: Permissions on binary_runtime_measurements and tpm0/binary_bios_measurements
+To:     linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+Currently the tpm2-tools and other userspace processes cannot access
+the system measurement logs for users even if they are in the group
+tss:
 
-> The NXP Cryptographic Acceleration and Assurance Module (CAAM)
-> can be used to protect user-defined data across system reboot:
-> 
->   - When the system is fused and boots into secure state, the master
->     key is a unique never-disclosed device-specific key
->   - random key is encrypted by key derived from master key
->   - data is encrypted using the random key
->   - encrypted data and its encrypted random key are stored alongside
->   - This blob can now be safely stored in non-volatile memory
-> 
-> On next power-on:
->   - blob is loaded into CAAM
->   - CAAM writes decrypted data either into memory or key register
-> 
-> Add functions to realize encrypting and decrypting into memory alongside
-> the CAAM driver.
-> 
-> They will be used in a later commit as a source for the trusted key
-> seal/unseal mechanism.
+crw-rw---- 1 tss root 10, 224 Mai  3 17:22 /dev/tpm0
+-r--r----- 1 root root 0 Mai  3 17:22
+/sys/kernel/security/ima/binary_runtime_measurements
+-r--r----- 1 root root 0 Mai  3 17:22
+/sys/kernel/security/tpm0/binary_bios_measurements
 
-Thanks for the work on this and I'm excited to try this. I'm currently
-playing with this and one thing I've noticed is that an export restricted
-CAAM isn't handled properly.
+So with tss2_quote a quote can be computed but not the pcrLog for the
+sytem PCRs.
 
-That is, there are CAAM's which aren't fully featured. Normally, the
-caam driver will take care of it. For example, see commit f20311cc9c58
-("crypto: caam - disable pkc for non-E SoCs"). For the trusted keys case,
-it would be nice if the kernel will not even probe (or similar).
-
-Right now, everything seems to work fine, but once I try to add a new key,
-I'll get the following errros:
-
-# keyctl add trusted mykey "new 32" @u
-add_key: Invalid argument
-[   23.138714] caam_jr 8020000.jr: 20000b0f: CCB: desc idx 11: : Invalid CHA selected.
-[   23.138740] trusted_key: key_seal failed (-22)
-
-Again this is expected, because I run it on a non-E version. IMHO, it
-should be that the trusted keys shouldn't be enabled at all. Like it is
-for example if an unknown rng is given:
-
-  trusted_key: Unsupported RNG. Supported: kernel, default
+The problem could be solved if the log files would be owned by tss.
+But that could create privacy issues because the pcrLog would e.g.
+contain executables in user home directories.
+Do you have any suggestions how the problem could be addressed or is
+there a privacy concern here?
 
 Thanks,
--michael
+Bill
