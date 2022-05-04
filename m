@@ -2,160 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC7951ACCE
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 May 2022 20:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7716B51AE1B
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 May 2022 21:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377066AbiEDSc6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 May 2022 14:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S1355901AbiEDTpn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 May 2022 15:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376932AbiEDScm (ORCPT
+        with ESMTP id S1344026AbiEDTpl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 May 2022 14:32:42 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C50E5AA43;
-        Wed,  4 May 2022 11:09:11 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id m6-20020a05683023a600b0060612720715so1395504ots.10;
-        Wed, 04 May 2022 11:09:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D+E9lNuRbHFdd170vr+MtjOcic+cq6LuKuOZKRSFmmQ=;
-        b=hqu6R1IRae0VoX6RVScHw+Zzo1GjIz7JEVjL/qj/M5RsjpSzZPnxbWaJ2QRNj9pG/V
-         GzcagHr+46Vvmokee05IR5m2irmd6EgL7Zj5NeOxB9mO4H+0VWs7t+QY6SdSEHLAFOQX
-         7nlxFOlTSSaPyJczzOi0IByyUPBRQBxkBJureHxsnNNwZLVdOxVmsPv3XR9dms/Hhmdq
-         Dpei6T4pf7hR9BSOp3RbmeuXVXYkTBZhjTdTpNg8Sjcc5Id2RNDvW92doze4AoQiouKc
-         /p5ZsjI6uJj0BqaJNqAfTwSy3ZnrnJ6J4Wl3iDw286tyYbPdWZk0VQKlkpwQfXgmyYMV
-         dCDg==
-X-Gm-Message-State: AOAM531GBGiEJMipM7x6IPEegxYs2k8skR7Jmuzu2kokd0nLw2UfSWFh
-        7VEkFE2UyuEFyw5s9SPLig==
-X-Google-Smtp-Source: ABdhPJz7UxGCoN/1mtQLUptxPhW193aedSmrIFdTLYGH8vHQEwAOv7HLwELKhlP+txzkjgVxGZbMKA==
-X-Received: by 2002:a05:6830:116:b0:606:3fb1:e89e with SMTP id i22-20020a056830011600b006063fb1e89emr2227922otp.310.1651687750783;
-        Wed, 04 May 2022 11:09:10 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d19-20020a4ad353000000b0035eb4e5a6bfsm6240803oos.21.2022.05.04.11.09.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 11:09:10 -0700 (PDT)
-Received: (nullmailer pid 1975953 invoked by uid 1000);
-        Wed, 04 May 2022 18:09:09 -0000
-Date:   Wed, 4 May 2022 13:09:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-xtensa@linux-xtensa.org, devicetree@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-bluetooth@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, llvm@lists.linux.dev,
-        netdev@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH 29/32] xtensa: Use mem_to_flex_dup() with struct property
-Message-ID: <YnKbaXEUHyu+btOD@robh.at.kernel.org>
-References: <20220504014440.3697851-1-keescook@chromium.org>
- <20220504014440.3697851-30-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504014440.3697851-30-keescook@chromium.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 4 May 2022 15:45:41 -0400
+Received: from wrqvnntq.outbound-mail.sendgrid.net (wrqvnntq.outbound-mail.sendgrid.net [149.72.34.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC3619C10
+        for <linux-integrity@vger.kernel.org>; Wed,  4 May 2022 12:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliance87.org;
+        h=content-transfer-encoding:content-type:from:mime-version:subject:
+        reply-to:to;
+        s=m1; bh=MIFtYr6Nwim5ZPAUByRkeB6hjmbHaDaCtdrOfFmofIc=;
+        b=E6yumyaF32NRiHVcPM8QECcKQVzOMy+Qccgf0yc2YHCC/ZULcI8IKRst0siWeRGCbfeP
+        awe+cVC/AmFq/ealToM1Nw6QtcyipOFvd/A4dkJYE/EpSFzbZ8ceSSTM5eKe8WM43XnwMt
+        QRAsayHWlcK7UdBGqUkpzOfieQmrc/Ne0=
+Received: by filterdrecv-74cbf9986b-8pfkp with SMTP id filterdrecv-74cbf9986b-8pfkp-1-6272D70A-74
+        2022-05-04 19:42:02.649817706 +0000 UTC m=+2411844.915024122
+Received: from MTAzNzgwMjI (unknown)
+        by geopod-ismtpd-1-4 (SG) with HTTP
+        id _weoMYo8Q9WWA30nUH0zPA
+        Wed, 04 May 2022 19:42:02.646 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Date:   Wed, 04 May 2022 19:42:02 +0000 (UTC)
+From:   "info@alliance87.org" <info@alliance87.org>
+Mime-Version: 1.0
+Message-ID: <_weoMYo8Q9WWA30nUH0zPA@geopod-ismtpd-1-4>
+Subject: Alliance 8.7: Join Alliance Submission by =?UTF-8?B?8J+Snw==?= Fiona
+ is interested in your profile! Click here: http://inx.lv/GHWi?a5s
+ =?UTF-8?B?8J+Snw==?=
+Reply-To: info@alliance87.org
+X-SG-EID: =?us-ascii?Q?jYBDhdreLqvKT3GqLoxUNIPZCCVL89ve9s4KHCXAHIURuqUhYEEfdGBUGI6U93?=
+ =?us-ascii?Q?1X1+unGS2QHPg=2Fz0OaDNuMOLbtHpwvQrfnu7t49?=
+ =?us-ascii?Q?Z1qy8PTwLryfVBnGnPh4FpIKSZ2qeXXXAxpmMLH?=
+ =?us-ascii?Q?npdV0gD3whLg058Fbwtc2ElQl84veREtr6GTnjC?=
+ =?us-ascii?Q?jhYLxU1=2FNFq8kq7cVRoVt1V58CiU9WqawGI=2FMXL?=
+ =?us-ascii?Q?zZGcTfB1X54pQ3w7O4EkKHk6MEcblv+t6C2tNCA?=
+ =?us-ascii?Q?5vXJWdh4x4aLErxDrrY4g=3D=3D?=
+X-SG-ID: =?us-ascii?Q?N2C25iY2uzGMFz6rgvQsb0AnyvHldiapXNREf=2F5j=2FfvE3jpDB5=2Fq+sQVp1MEDv?=
+ =?us-ascii?Q?dTaFoBcWWPcMqDJWr7iuV2Yw=3D=3D?=
+To:     info@alliance87.org, linux-integrity@vger.kernel.org
+X-Entity-ID: NvF+fSYImsOHM7a9UrAwOw==
+X-Spam-Status: No, score=3.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GB_FAKE_RF_SHORT,PLING_QUERY,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,SCC_BODY_URI_ONLY,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Gmail won't send this, so I've trimmed the recipients...
-
-On Tue, May 03, 2022 at 06:44:38PM -0700, Kees Cook wrote:
-> As part of the work to perform bounds checking on all memcpy() uses,
-> replace the open-coded a deserialization of bytes out of memory into a
-> trailing flexible array by using a flex_array.h helper to perform the
-> allocation, bounds checking, and copying.
-> 
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-xtensa@linux-xtensa.org
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/xtensa/platforms/xtfpga/setup.c | 9 +++------
->  include/linux/of.h                   | 3 ++-
->  2 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/xtensa/platforms/xtfpga/setup.c b/arch/xtensa/platforms/xtfpga/setup.c
-> index 538e6748e85a..31c1fa4ba4ec 100644
-> --- a/arch/xtensa/platforms/xtfpga/setup.c
-> +++ b/arch/xtensa/platforms/xtfpga/setup.c
-> @@ -102,7 +102,7 @@ CLK_OF_DECLARE(xtfpga_clk, "cdns,xtfpga-clock", xtfpga_clk_setup);
->  #define MAC_LEN 6
->  static void __init update_local_mac(struct device_node *node)
->  {
-> -	struct property *newmac;
-> +	struct property *newmac = NULL;
->  	const u8* macaddr;
->  	int prop_len;
->  
-> @@ -110,19 +110,16 @@ static void __init update_local_mac(struct device_node *node)
->  	if (macaddr == NULL || prop_len != MAC_LEN)
->  		return;
->  
-> -	newmac = kzalloc(sizeof(*newmac) + MAC_LEN, GFP_KERNEL);
-> -	if (newmac == NULL)
-> +	if (mem_to_flex_dup(&newmac, macaddr, MAC_LEN, GFP_KERNEL))
->  		return;
->  
-> -	newmac->value = newmac + 1;
-> -	newmac->length = MAC_LEN;
-> +	newmac->value = newmac->contents;
->  	newmac->name = kstrdup("local-mac-address", GFP_KERNEL);
->  	if (newmac->name == NULL) {
->  		kfree(newmac);
->  		return;
->  	}
->  
-> -	memcpy(newmac->value, macaddr, MAC_LEN);
->  	((u8*)newmac->value)[5] = (*(u32*)DIP_SWITCHES_VADDR) & 0x3f;
->  	of_update_property(node, newmac);
->  }
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index 17741eee0ca4..efb0f419fd1f 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -30,7 +30,7 @@ typedef u32 ihandle;
->  
->  struct property {
->  	char	*name;
-> -	int	length;
-> +	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(int, length);
->  	void	*value;
->  	struct property *next;
->  #if defined(CONFIG_OF_DYNAMIC) || defined(CONFIG_SPARC)
-> @@ -42,6 +42,7 @@ struct property {
->  #if defined(CONFIG_OF_KOBJ)
->  	struct bin_attribute attr;
->  #endif
-> +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, contents);
-
-99.9% of the time, this is not where the property value is stored as it 
-points into an FDT blob. I suppose that is okay, but just want to make 
-sure.
-
-The DT API for creating new nodes and properties is horrible as it is 
-multiple allocs and strdups which makes for tricky error paths. A better 
-API to centralize it would be welcome, but if this is the only case you 
-came across it's certainly not a requirement.
-
-Rob
+<p>Hello Administrator,</p><p>Join the alliance request has been submitted =
+from Alliance 8.7 website.</p><p>Please find the below details:</p><table>
+                <tr><td>Organization Name: </td><td>=F0=9F=92=9F Fiona is i=
+nterested in your profile! Click here: http://inx.lv/GHWi?a5s =F0=9F=92=9F<=
+/td></tr>
+                <tr><td>Organization Type: </td><td>Survivor Networks</td><=
+/tr>
+                <tr><td>Organization Website URL: </td><td>=F0=9F=92=9F Fio=
+na is interested in your profile! Click here: http://inx.lv/GHWi?a5s =F0=9F=
+=92=9F</td></tr>
+                <tr><td>Action Groups Requested: </td><td>Supply  chains</t=
+d></tr>
+                <tr><td>Contact First Name: </td><td>=F0=9F=92=9F Fiona is =
+interested in your profile! Click here: http://inx.lv/GHWi?a5s =F0=9F=92=9F=
+</td></tr>
+                <tr><td>Contact Last Name: </td><td>=F0=9F=92=9F Fiona is i=
+nterested in your profile! Click here: http://inx.lv/GHWi?a5s =F0=9F=92=9F<=
+/td></tr>
+                <tr><td>Contact Job Title: </td><td>=F0=9F=92=9F Fiona is i=
+nterested in your profile! Click here: http://inx.lv/GHWi?a5s =F0=9F=92=9F<=
+/td></tr>
+                <tr><td>Contact Department: </td><td>=F0=9F=92=9F Fiona is =
+interested in your profile! Click here: http://inx.lv/GHWi?a5s =F0=9F=92=9F=
+</td></tr>
+                <tr><td>Country: </td><td></td></tr>
+                <tr><td>Email: </td><td>linux-integrity@vger.kernel.org</td=
+></tr>
+                <tr><td>Phone: </td><td>=F0=9F=92=9F Fiona is interested in=
+ your profile! Click here: http://inx.lv/GHWi?a5s =F0=9F=92=9F</td></tr>
+                </table><p><small>This is an automated email notification</=
+small></p><p>Alliance 8.7</p>
