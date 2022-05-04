@@ -2,60 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A3451963A
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 May 2022 06:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB6851963D
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 May 2022 06:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236619AbiEDELn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 May 2022 00:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S1344475AbiEDENK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 May 2022 00:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235940AbiEDELm (ORCPT
+        with ESMTP id S235940AbiEDENJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 May 2022 00:11:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981392180E
-        for <linux-integrity@vger.kernel.org>; Tue,  3 May 2022 21:08:07 -0700 (PDT)
+        Wed, 4 May 2022 00:13:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A2F2180E;
+        Tue,  3 May 2022 21:09:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6C2861A6A
-        for <linux-integrity@vger.kernel.org>; Wed,  4 May 2022 04:08:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA415C385AA;
-        Wed,  4 May 2022 04:08:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77DA461994;
+        Wed,  4 May 2022 04:09:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD95C385A4;
+        Wed,  4 May 2022 04:09:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651637286;
-        bh=axJMczegSwMWKaMQABy2dlymfTdZEK2k7ibXP3gNfD0=;
+        s=k20201202; t=1651637373;
+        bh=MRs4nB2lV3N57W1w2TRtVbdRp6xHsxyYRmRSSLkKL2o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uqoNqBZtcMW7zTp9i8N0ycgIkTfzPCI8CLVhl9d8RSn+nkJNdWDrc8KrzI/ZoQhaA
-         q/az3Qzf0ME8lR743PKj0VzItecSGna6ed06DJedtI04gbBr2in63rIpqBbiLwaEqp
-         pUd1ryjc+m4ZwTmmJIFXQYNdUJn09QC+buOl5lp35E9tcW2eaprf+DoRmrvGXuBqPp
-         u76uVLQGzE7Jb5MCMiNd6E8ypfoiMNM29BSFXuqJfp59ig2ZY0JV999CwdLWT5RDzN
-         YqQzmr88tVYKQ3d3gXmUGWXc75DMh2Z5BP0tN4wNsJlCvOf+bBHy26lHqO5f/sYP24
-         /XrT536bQ9NZQ==
-Date:   Wed, 4 May 2022 07:06:40 +0300
+        b=lLoLN7zvcgI3p2rlMEzh94MwRo/MGTXspasaHzXxS+BKIine0R1Tkxqo4EgUB3HF1
+         WtoOUg3KyEDnqMYjn0sV5sX9M35eVG3FOwsXse5PDa2bHemurz3+YREgfijN3c+6Yh
+         6652LILOHFoSJAbXfU0/258qoVj1uoIupKHEEOl2n6kIQxGf3KVq/1id8kO91zVunU
+         +C+UGmBoXbxY+ObC2OAT/lg7ea8E86lJ3OYBvHDXqNjsad/NG6g5B2Ffe2ul3KVl06
+         S4bOEqs16yD2FyBDDFNwzX8M3mWlTZmUWhxdNXPA5BcXLjcKKtIywdEZsTQWRB6tMp
+         LdU3t7OEmnOPw==
+Date:   Wed, 4 May 2022 07:08:08 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>,
-        linux-integrity@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] char: tpm: cr50_i2c: Suppress duplicated error message
- in .remove()
-Message-ID: <YnH70MJdQGqFBMKh@kernel.org>
-References: <20211112225308.1149304-1-u.kleine-koenig@pengutronix.de>
- <0c7eb1e97e73e2cd3182a98d8cf76c6a2e2e6578.camel@kernel.org>
- <20211113215340.cn5kyia7g6fcquh2@pengutronix.de>
- <671cac28ac30a1135030261948487922cfcd4d89.camel@kernel.org>
- <20211116173039.ilnj7pag7solqprd@pengutronix.de>
- <20220331132231.h2hbtxthcqsdxmil@pengutronix.de>
- <20220425191132.nm66acqichx4fmel@pengutronix.de>
- <cf3df097d436c9b54c710401783667b56931b9b8.camel@kernel.org>
- <20220426080602.wdquj6ra3vhufur4@pengutronix.de>
- <YnH4qge2KmmM27sC@kernel.org>
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>
+Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [EXT] [PATCH v7 0/6] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+Message-ID: <YnH8KGGubFFMcRRU@kernel.org>
+References: <20220415205647.46056-1-a.fatoum@pengutronix.de>
+ <DU2PR04MB86306B75C018C7CAB9FFA57195FD9@DU2PR04MB8630.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YnH4qge2KmmM27sC@kernel.org>
+In-Reply-To: <DU2PR04MB86306B75C018C7CAB9FFA57195FD9@DU2PR04MB8630.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,15 +80,16 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 04, 2022 at 06:53:17AM +0300, Jarkko Sakkinen wrote:
-> On Tue, Apr 26, 2022 at 10:06:02AM +0200, Uwe Kleine-König wrote:
-> > -		dev_err(dev, "Could not get client data at remove\n");
-> > -		return -ENODEV;
-> > +		dev_crit(dev, "Could not get client data at remove, memory corruption ahead\n");
-> > +		return 0;
+On Thu, Apr 28, 2022 at 12:50:50PM +0000, Pankaj Gupta wrote:
+> Hi Ahmad,
 > 
-> Just change the return value 0 and log-level, message can be as it is.
+> I have tested the patch-set.
+> It is working as expected even when CAAM is compiled as kernel module.
+> 
+> Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Tested-by: Pankaj Gupta <pankaj.gupta@nxp.com>
 
-Ignore, I applied the patch.
+1. Please do not top-post.
+2. Tag the exact patches you tested.
 
 BR, Jarkko
