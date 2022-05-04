@@ -2,93 +2,228 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73346519767
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 May 2022 08:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CBF519778
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 May 2022 08:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344964AbiEDGgk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 May 2022 02:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
+        id S1344998AbiEDGnV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 May 2022 02:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238996AbiEDGge (ORCPT
+        with ESMTP id S239078AbiEDGnV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 May 2022 02:36:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8FA101CB
-        for <linux-integrity@vger.kernel.org>; Tue,  3 May 2022 23:32:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A1E6110F
-        for <linux-integrity@vger.kernel.org>; Wed,  4 May 2022 06:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39888C385A4;
-        Wed,  4 May 2022 06:32:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651645975;
-        bh=Id7/5kGXadjcY2sbsRNoi1JRh8XPAUHQC5NwktD4BEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PEhOLh6+VYoMSbDei2kcqzhgSql8UuCz59Bw75JwlzgaVTudamzuejh6bH+idAZ5j
-         dBT+tRgYYMeyxDZ0pvqaSuYUEPU1xyKsD8h5RwFHIwzeAAUaabjA/sHQlQ7WUinSjw
-         e+VV4tddl8XQmTwqqRpQ2AL20GTDmQA782wtKjzsKYJRcKsZm7yAYm1l7JTP/U62Z4
-         7ta7KelQwgYfvnvFoYbxtA/EMTkc7olwlsEIGL0caBigi8CRgVL+fjn5rncPrWw7T+
-         a6c2lKcVsh+NcRhWY4EdqA81Q7dXnTfXAHfxHUGNYpl9YDBGbHj4Zrha0PSYWgS8Y1
-         3S1BOPxdK0mMg==
-Date:   Wed, 4 May 2022 09:31:30 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
-        jgg@ziepe.ca, James.Bottomley@hansenpartnership.com
-Subject: Re: Dell XPS 13 9310 2-in-1: tpm tpm0: invalid TPM_STS.x 0xff,
- dumping stack for forensics
-Message-ID: <YnIdwmLR4qtJUbS3@kernel.org>
-References: <a1d39c04-d0a4-4b0b-5e39-5330e79d5fc0@molgen.mpg.de>
+        Wed, 4 May 2022 02:43:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372E613FBD
+        for <linux-integrity@vger.kernel.org>; Tue,  3 May 2022 23:39:46 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nm8fZ-0007wQ-Ke; Wed, 04 May 2022 08:39:29 +0200
+Message-ID: <ac014f19-0c08-c6cf-d639-f55268ba11c2@pengutronix.de>
+Date:   Wed, 4 May 2022 08:39:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a1d39c04-d0a4-4b0b-5e39-5330e79d5fc0@molgen.mpg.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v8 3/6] crypto: caam - add in-kernel interface for blob
+ generator
+To:     Michael Walle <michael@walle.cc>
+Cc:     davem@davemloft.net, david@sigma-star.at, dhowells@redhat.com,
+        ebiggers@kernel.org, franck.lenormand@nxp.com,
+        herbert@gondor.apana.org.au, horia.geanta@nxp.com,
+        j.luebbe@pengutronix.de, jarkko@kernel.org, jejb@linux.ibm.com,
+        jmorris@namei.org, kernel@pengutronix.de, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        matthias.schiffer@ew.tq-group.com, pankaj.gupta@nxp.com,
+        richard@nod.at, serge@hallyn.com, sumit.garg@linaro.org,
+        tharvey@gateworks.com, zohar@linux.ibm.com
+References: <20220428140145.870527-4-a.fatoum@pengutronix.de>
+ <20220503182454.2749454-1-michael@walle.cc>
+Content-Language: en-US
+In-Reply-To: <20220503182454.2749454-1-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 05:35:37PM +0200, Paul Menzel wrote:
-> Dear Linux folks,
-> 
-> 
-> On a Dell XPS 13 9310 2-in-1, Linux 5.17.3 on Debian sid/unstable logs the
-> trace below:
-> 
-> ```
-> [    0.000000] Linux version 5.17.0-1-amd64 (debian-kernel@lists.debian.org)
-> (gcc-11 (Debian 11.2.0-20) 11.2.0, GNU ld (GNU Binutils for Debian) 2.38) #1
-> SMP PREEMPT Debian 5.17.3-1 (2022-04-18)
-> […]
-> [    0.000000] DMI: Dell Inc. XPS 13 9310 2-in-1/02P55J, BIOS 2.7.0
-> 12/11/2021
-> […]
-> [171059.677004] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for
-> forensics
-> [171059.677012] CPU: 5 PID: 38885 Comm: kworker/5:0 Not tainted
-> 5.17.0-1-amd64 #1  Debian 5.17.3-1
-> [171059.677014] Hardware name: Dell Inc. XPS 13 9310 2-in-1/02P55J, BIOS
-> 2.7.0 12/11/2021
-> [171059.677016] Workqueue: tpm_dev_wq tpm_dev_async_work
-> [171059.677022] Call Trace:
-> [171059.677025]  <TASK>
-> [171059.677028]  dump_stack_lvl+0x48/0x5e
-> [171059.677032]  tpm_tis_status.cold+0x19/0x20
-> [171059.677035]  tpm_tis_send_data+0x3f/0x250
-> [171059.677037]  tpm_tis_send_main+0x2e/0xf0
-> [171059.677039]  tpm_transmit+0xd3/0x3e0
-> [171059.677041]  tpm_dev_transmit.constprop.0+0x67/0xc0
-> [171059.677043]  ? tpm_try_get_ops+0x44/0x90
+Hello Michael,
 
-Weird, TPM gives 0xFF when locality is not set, and it is set according
-to the log. Initially looks like faulty behaving TPM.
+On 03.05.22 20:24, Michael Walle wrote:
+>> Add functions to realize encrypting and decrypting into memory alongside
+>> the CAAM driver.
+>>
+>> They will be used in a later commit as a source for the trusted key
+>> seal/unseal mechanism.
+> 
+> Thanks for the work on this and I'm excited to try this. I'm currently
+> playing with this and one thing I've noticed is that an export restricted
+> CAAM isn't handled properly.
 
-BR, Jarkko
+I didn't know there are still crypto export restrictions in place ;o
+
+> That is, there are CAAM's which aren't fully featured. Normally, the
+> caam driver will take care of it. For example, see commit f20311cc9c58
+> ("crypto: caam - disable pkc for non-E SoCs"). For the trusted keys case,
+> it would be nice if the kernel will not even probe (or similar).
+>
+> Right now, everything seems to work fine, but once I try to add a new key,
+> I'll get the following errros:
+> 
+> # keyctl add trusted mykey "new 32" @u
+> add_key: Invalid argument
+> [   23.138714] caam_jr 8020000.jr: 20000b0f: CCB: desc idx 11: : Invalid CHA selected.
+> [   23.138740] trusted_key: key_seal failed (-22)
+
+Trusted key core will attempt TPM and TEE if enabled before trying CAAM unless
+CAAM was explicitly requested. Silently failing in this case would not be
+helpful to users. I think an info message (not error, as it'd be annoying to
+see it every time booting a restricted SoC) is a good idea.
+Thanks for the feedback.
+
+> Again this is expected, because I run it on a non-E version. IMHO, it
+> should be that the trusted keys shouldn't be enabled at all. Like it is
+> for example if an unknown rng is given:
+> 
+>   trusted_key: Unsupported RNG. Supported: kernel, default
+
+Other backends return -ENODEV and Trusted key core will ignore and try next
+in list. Please give below patch a try. I tested it on normal unrestricted
+i.MX6. If that's what you had in mind, I can incorporate it into v9.
+If you have any Tested-by's or the like you want me to add, please tell. :)
+
+Cheers,
+Ahmad
+
+------------------------------ 8< ------------------------------
+
+diff --git a/drivers/crypto/caam/blob_gen.c b/drivers/crypto/caam/blob_gen.c
+index d0b1a0015308..1d07e056a5dd 100644
+--- a/drivers/crypto/caam/blob_gen.c
++++ b/drivers/crypto/caam/blob_gen.c
+@@ -4,6 +4,8 @@
+  * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
+  */
+ 
++#define pr_fmt(fmt) "caam blob_gen: " fmt
++
+ #include <linux/device.h>
+ #include <soc/fsl/caam-blob.h>
+ 
+@@ -147,11 +149,27 @@ EXPORT_SYMBOL(caam_process_blob);
+ 
+ struct caam_blob_priv *caam_blob_gen_init(void)
+ {
++	struct caam_drv_private *ctrlpriv;
+ 	struct device *jrdev;
+ 
++	/*
++	 * caam_blob_gen_init() may expectedly fail with -ENODEV, e.g. when
++	 * CAAM driver didn't probe or when SoC lacks BLOB support. An
++	 * error would be harsh in this case, so we stick to info level.
++	 */
++
+ 	jrdev = caam_jr_alloc();
+-	if (IS_ERR(jrdev))
+-		return ERR_CAST(jrdev);
++	if (IS_ERR(jrdev)) {
++		pr_info("no job ring available\n");
++		return ERR_PTR(-ENODEV);
++	}
++
++	ctrlpriv = dev_get_drvdata(jrdev->parent);
++	if (!ctrlpriv->blob_present) {
++		dev_info(jrdev, "no hardware blob generation support\n");
++		caam_jr_free(jrdev);
++		return ERR_PTR(-ENODEV);
++	}
+ 
+ 	return container_of(jrdev, struct caam_blob_priv, jrdev);
+ }
+diff --git a/drivers/crypto/caam/ctrl.c b/drivers/crypto/caam/ctrl.c
+index ca0361b2dbb0..a0a622ca5dd4 100644
+--- a/drivers/crypto/caam/ctrl.c
++++ b/drivers/crypto/caam/ctrl.c
+@@ -660,6 +660,10 @@ static int caam_probe(struct platform_device *pdev)
+ 
+ 	caam_little_end = !(bool)(rd_reg32(&ctrl->perfmon.status) &
+ 				  (CSTA_PLEND | CSTA_ALT_PLEND));
++
++	comp_params = rd_reg32(&ctrl->perfmon.comp_parms_ls);
++	ctrlpriv->blob_present = !!(comp_params & CTPR_LS_BLOB);
++
+ 	comp_params = rd_reg32(&ctrl->perfmon.comp_parms_ms);
+ 	if (comp_params & CTPR_MS_PS && rd_reg32(&ctrl->mcr) & MCFGR_LONG_PTR)
+ 		caam_ptr_sz = sizeof(u64);
+diff --git a/drivers/crypto/caam/intern.h b/drivers/crypto/caam/intern.h
+index 7d45b21bd55a..e92210e2ab76 100644
+--- a/drivers/crypto/caam/intern.h
++++ b/drivers/crypto/caam/intern.h
+@@ -92,6 +92,7 @@ struct caam_drv_private {
+ 	 */
+ 	u8 total_jobrs;		/* Total Job Rings in device */
+ 	u8 qi_present;		/* Nonzero if QI present in device */
++	u8 blob_present;	/* Nonzero if BLOB support present in device */
+ 	u8 mc_en;		/* Nonzero if MC f/w is active */
+ 	int secvio_irq;		/* Security violation interrupt number */
+ 	int virt_en;		/* Virtualization enabled in CAAM */
+diff --git a/drivers/crypto/caam/regs.h b/drivers/crypto/caam/regs.h
+index 3738625c0250..b829066f5063 100644
+--- a/drivers/crypto/caam/regs.h
++++ b/drivers/crypto/caam/regs.h
+@@ -414,6 +414,7 @@ struct caam_perfmon {
+ #define CTPR_MS_PG_SZ_MASK	0x10
+ #define CTPR_MS_PG_SZ_SHIFT	4
+ 	u32 comp_parms_ms;	/* CTPR - Compile Parameters Register	*/
++#define CTPR_LS_BLOB           BIT(1)
+ 	u32 comp_parms_ls;	/* CTPR - Compile Parameters Register	*/
+ 	u64 rsvd1[2];
+ 
+diff --git a/include/soc/fsl/caam-blob.h b/include/soc/fsl/caam-blob.h
+index ec57eec4f2d2..8e821bd56e54 100644
+--- a/include/soc/fsl/caam-blob.h
++++ b/include/soc/fsl/caam-blob.h
+@@ -38,8 +38,9 @@ struct caam_blob_info {
+ 
+ /**
+  * caam_blob_gen_init - initialize blob generation
+- * Return: pointer to new caam_blob_priv instance on success
+- * and error pointer otherwise
++ * Return: pointer to new &struct caam_blob_priv instance on success
++ * and ``ERR_PTR(-ENODEV)`` if CAAM has no hardware blobbing support
++ * or no job ring could be allocated.
+  */
+ struct caam_blob_priv *caam_blob_gen_init(void);
+ 
+diff --git a/security/keys/trusted-keys/trusted_caam.c b/security/keys/trusted-keys/trusted_caam.c
+index 46cb2484ec36..e3415c520c0a 100644
+--- a/security/keys/trusted-keys/trusted_caam.c
++++ b/security/keys/trusted-keys/trusted_caam.c
+@@ -55,10 +55,8 @@ static int trusted_caam_init(void)
+ 	int ret;
+ 
+ 	blobifier = caam_blob_gen_init();
+-	if (IS_ERR(blobifier)) {
+-		pr_err("Job Ring Device allocation for transform failed\n");
++	if (IS_ERR(blobifier))
+ 		return PTR_ERR(blobifier);
+-	}
+ 
+ 	ret = register_key_type(&key_type_trusted);
+ 	if (ret)
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
