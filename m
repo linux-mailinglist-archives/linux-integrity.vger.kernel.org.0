@@ -2,242 +2,276 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E0E51A158
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 May 2022 15:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3190951A33B
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 May 2022 17:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350844AbiEDNyO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 May 2022 09:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S1351907AbiEDPMJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 May 2022 11:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350730AbiEDNyN (ORCPT
+        with ESMTP id S1351909AbiEDPMF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 May 2022 09:54:13 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8E53614F;
-        Wed,  4 May 2022 06:50:36 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244D89Ej032359;
-        Wed, 4 May 2022 13:49:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=WafK932ObesQwXzcMhdlCMkFPACyb1XIUSZ459VPeVM=;
- b=GfNGckMlqMq+2bwhPleFOSC33RhhJ4vd/ZnUwSi1ry8ZxLv9Yo+pDia/vvw1tHK/DaxP
- Fsn6sVF3RuRsKPBKZqkXjJJcUWUhDepRETNGVGGdk5k809wM9QCCUUyFZBdxEFYqrXic
- HIafOhw9ohW58LZ/tmo+XT9XMWPIVw0XnFoO1TPkuU22oLtiPCnQ9BSxS4e6LimOYvEe
- 9Onef2st/5I3f3Y8skTfSEVheahP2ryE4xDJWzuQ2ZJDPv2fQvKsAGP8yzUn5rZNeisX
- UEV0wobi3Y8gi966n79xFGkpFkmTGatgFNcCFOaTxj5QMHTOlhS250/UlfMJV1Wpodbb Gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fusjwhps8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 13:49:58 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 244DAc7l005951;
-        Wed, 4 May 2022 13:49:58 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fusjwhpra-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 13:49:58 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 244DmGHn003903;
-        Wed, 4 May 2022 13:49:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3frvr8vm3t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 13:49:55 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 244DnoXO26018096
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 May 2022 13:49:50 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14F0F42041;
-        Wed,  4 May 2022 13:49:53 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 833B442045;
-        Wed,  4 May 2022 13:49:51 +0000 (GMT)
-Received: from sig-9-65-73-150.ibm.com (unknown [9.65.73.150])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  4 May 2022 13:49:51 +0000 (GMT)
-Message-ID: <bbd6886aa5575765b5c223e1b4f5aab336fe4350.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jonathan McDowell <noodles@fb.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        Wed, 4 May 2022 11:12:05 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE0737A82
+        for <linux-integrity@vger.kernel.org>; Wed,  4 May 2022 08:08:28 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so1340127pji.3
+        for <linux-integrity@vger.kernel.org>; Wed, 04 May 2022 08:08:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Qb+1GrJs8SRgE6Wq+GlmzxuejfTqdKZ3b89DzJavSQw=;
+        b=QW7CQXai9IiD71Wvf+o2VYxsrI+DMXmN1vsS0b5DV0rtrX+G8r3eGzQnrLgcSNLS6o
+         18VjexLmt9t17aqS0qc4jCF5CPslGIy/SB1vEauI+iOiw3aemKigwzjm7wU//Osg3Pbt
+         9wMF/4HUhAaX0invtmDD41DdrKFbACP1VK8u0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qb+1GrJs8SRgE6Wq+GlmzxuejfTqdKZ3b89DzJavSQw=;
+        b=nL5BnR2I2PQy7fCiujz5wnPF2uTrkBWwek4EXS16bGDvw++sUKEZtKsKpVXWCzZE0K
+         O5N0PIGxqYwdBxWm7tH2128GEJWziiPXWZ87ekM1pZ4q81j0zh8DO85sVHiHNuhj0biy
+         L2g6EKuu2tjdzDMuiE3I18mp3C9ohQfW149CkBAulM1BzeUoEnlB+S9KFkjxwRj+OqTy
+         YozdgHkfy/VMZxPPnXyN5SbgnXke3XUiMGIogv1i7QpjcWks7/naeQd5GPsFZbh4HDB4
+         4hXfMzef8fBZhk2dfbNrfGjRuRGPjqcyxsul6Y0sM57rW6p1g0OvpZbCS82Hmvsf8vWT
+         3xAg==
+X-Gm-Message-State: AOAM5324vODZ9YCwhH9epNuF7OIuyamKJqXr97bJZtt0MCIES+Q5APoj
+        31h/KyqZabWC035ClVqifB4sVg==
+X-Google-Smtp-Source: ABdhPJxppSZTl5CKjnq8a5hBmltXmdlckYUA+zJjxmwbiUJP9s+fG0NYe/ezZfchAEYBzvKm6cdN0g==
+X-Received: by 2002:a17:90a:e7d2:b0:1dc:3762:c72d with SMTP id kb18-20020a17090ae7d200b001dc3762c72dmr10809021pjb.243.1651676908004;
+        Wed, 04 May 2022 08:08:28 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q10-20020a170902bd8a00b0015e8d4eb2c8sm8430976pls.274.2022.05.04.08.08.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 08:08:27 -0700 (PDT)
+Date:   Wed, 4 May 2022 08:08:26 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, wcn36xx@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Christian Brauner <brauner@kernel.org>,
+        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Gow <davidgow@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hulk Robot <hulkci@huawei.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        John Keeping <john@metanate.com>,
+        Juergen Gross <jgross@suse.com>,
+        Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        llvm@lists.linux.dev, Louis Peens <louis.peens@corigine.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Rich Felker <dalias@aerifal.cx>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Wed, 04 May 2022 09:49:51 -0400
-In-Reply-To: <YnEZtisrvO0AhrAz@noodles-fedora.dhcp.thefacebook.com>
-References: <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
-         <7d7fa18d396439d98e26890f647fffdc9e7d8b20.camel@linux.ibm.com>
-         <YnEZtisrvO0AhrAz@noodles-fedora.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qoBAfW7MCTZ_vV3jXf2EyNBLgbNTv_mQ
-X-Proofpoint-ORIG-GUID: zljCZxrC8b6iSRP8V_WObcC03bkZCfeI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-04_04,2022-05-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- suspectscore=0 priorityscore=1501 spamscore=0 mlxscore=0
- lowpriorityscore=0 mlxlogscore=999 impostorscore=0 clxscore=1015
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205040086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SHA-cyfmac-dev-list@infineon.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Wei Liu <wei.liu@kernel.org>, xen-devel@lists.xenproject.org,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 10/32] wcn36xx: Use mem_to_flex_dup() with struct
+ wcn36xx_hal_ind_msg
+Message-ID: <202205040730.161645EC@keescook>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-11-keescook@chromium.org>
+ <8735hpc0q1.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735hpc0q1.fsf@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-05-03 at 12:02 +0000, Jonathan McDowell wrote:
-> On Fri, Apr 29, 2022 at 05:30:10PM -0400, Mimi Zohar wrote:
-> > > diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> > > index 13753136f03f..419c50cfe6b9 100644
-> > > --- a/security/integrity/ima/ima_kexec.c
-> > > +++ b/security/integrity/ima/ima_kexec.c
-> > > @@ -10,6 +10,7 @@
-> > >  #include <linux/seq_file.h>
-> > >  #include <linux/vmalloc.h>
-> > >  #include <linux/kexec.h>
-> > > +#include <linux/memblock.h>
-> > >  #include <linux/of.h>
-> > >  #include <linux/ima.h>
-> > >  #include "ima.h"
-> > > @@ -134,10 +135,66 @@ void ima_add_kexec_buffer(struct kimage *image)
-> > >  }
-> > >  #endif /* IMA_KEXEC */
-> > >  
-> > > +#ifndef CONFIG_OF
-> > > +static phys_addr_t ima_early_kexec_buffer_phys;
-> > > +static size_t ima_early_kexec_buffer_size;
-> > > +
-> > > +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
-> > > +{
-> > > +	if (size == 0)
-> > > +		return;
-> > > +
-> > > +	ima_early_kexec_buffer_phys = phys_addr;
-> > > +	ima_early_kexec_buffer_size = size;
-> > > +}
-> > > +
-> > > +int __init ima_free_kexec_buffer(void)
-> > > +{
-> > > +	int rc;
-> > > +
-> > > +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> > > +		return -ENOTSUPP;
-> > > +
-> > > +	if (ima_early_kexec_buffer_size == 0)
-> > > +		return -ENOENT;
-> > > +
-> > > +	rc = memblock_phys_free(ima_early_kexec_buffer_phys,
-> > > +				ima_early_kexec_buffer_size);
-> > > +	if (rc)
-> > > +		return rc;
-> > > +
-> > > +	ima_early_kexec_buffer_phys = 0;
-> > > +	ima_early_kexec_buffer_size = 0;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +int __init ima_get_kexec_buffer(void **addr, size_t *size)
-> > > +{
-> > > +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> > > +		return -ENOTSUPP;
-
-The Kconfig conditionally compiles ima_kexec.c based on
-CONFIG_HAVE_IMA_KEXEC.  This test should be removed from here and from
-ima_get_kexec_buffer().
-
-CONFIG_IMA_KEXEC controls whether or not to carry the measurement list
-to the next kernel, not whether the measurement list should be
-restored.  Notice that ima_load_kexec_buffer() is not within the ifdef
-CONFIG_IMA_KEXEC.
-
-> > > +
-> > > +	if (ima_early_kexec_buffer_size == 0)
-> > > +		return -ENOENT;
-
-There should always be at least one measurement - the boot_aggregate.
-
-> > > +
-> > > +	*addr = __va(ima_early_kexec_buffer_phys);
-> > > +	*size = ima_early_kexec_buffer_size;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > 
-> > Originally both ima_get_kexec_buffer() and ima_free_kexec_buffer() were
-> > architecture specific.  Refer to commit 467d27824920 ("powerpc: ima:
-> > get the kexec buffer passed by the previous kernel").  Is there any
-> > need for defining them here behind an "#ifndef CONFIG_OF"?
+On Wed, May 04, 2022 at 08:42:46AM +0300, Kalle Valo wrote:
+> Kees Cook <keescook@chromium.org> writes:
 > 
-> Commit fee3ff99bc67 (powerpc: Move arch independent ima kexec functions
-> to drivers/of/kexec.c) moved those functions to drivers/of/kexec.c as a
-> more generic implementation so that ARM64 could use them too.
+> > As part of the work to perform bounds checking on all memcpy() uses,
+> > replace the open-coded a deserialization of bytes out of memory into a
+> > trailing flexible array by using a flex_array.h helper to perform the
+> > allocation, bounds checking, and copying.
+> >
+> > Cc: Loic Poulain <loic.poulain@linaro.org>
+> > Cc: Kalle Valo <kvalo@kernel.org>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: wcn36xx@lists.infradead.org
+> > Cc: linux-wireless@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > 
-> I think for platforms that use device tree that's the way to go, but the
-> functions to generically set + get the IMA buffer for non device tree
-> systems were useful enough to put in the IMA code rather than being x86
-> specific. If you disagree I can move them under arch/x86/ (assuming the
-> x86 folk agree using setup_data is the right way to go, I haven't seen
-> any of them comment on this approach yet).
-
-So other architectures will need to define CONFIG_HAVE_IMA_KEXEC, a
-function to call ima_set_kexec_buffer() to restore the measurement
-list, and a function equivalent to ima_setup_state().
-
-After removing the unnecessary tests mentioned above, consider whether
-there is still any benefit to defining these functions.
-
-> > > +#else
-> > > +
-> > > +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
-> > > +{
-> > > +	pr_warn("CONFIG_OF enabled, ignoring call to set buffer details.\n");
-> > > +}
-> > > +#endif /* CONFIG_OF */
-> > > +
-> > 
-> > Only when "HAVE_IMA_KEXEC" is defined is this file included.  Why is
-> > this warning needed?
+> [...]
 > 
-> x86 *can* have device tree enabled, but the only platform I'm aware that
-> did it was OLPC and I haven't seen any of the distros enable it. I put
-> this in so there's a warning if we have CONFIG_OF enabled on x86 and
-> tried to pass the IMA log via setup_data. Can remove (or fold into the
-> x86 code if we go that way).
-
-Thanks for the explanation.
-
-> > >  /*
-> > >   * Restore the measurement list from the previous kernel.
-> > >   */
-> > > -void ima_load_kexec_buffer(void)
-> > > +void __init ima_load_kexec_buffer(void)
-> > >  {
-> > >  	void *kexec_buffer = NULL;
-> > >  	size_t kexec_buffer_size = 0;
+> > --- a/drivers/net/wireless/ath/wcn36xx/smd.h
+> > +++ b/drivers/net/wireless/ath/wcn36xx/smd.h
+> > @@ -46,8 +46,8 @@ struct wcn36xx_fw_msg_status_rsp {
+> >  
+> >  struct wcn36xx_hal_ind_msg {
+> >  	struct list_head list;
+> > -	size_t msg_len;
+> > -	u8 msg[];
+> > +	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(size_t, msg_len);
+> > +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, msg);
 > 
-> J.
+> This affects readability quite a lot and tbh I don't like it. Isn't
+> there any simpler way to solve this?
 
-thanks,
+Similar to how I plumbed member names into __mem_to_flex(), I could do
+the same for __mem_to_flex_dup(). That way if the struct member aliases
+(DECLARE_FLEX...)  aren't added, the longer form of the helper could
+be used. Instead of:
 
-Mimi
+	if (mem_to_flex_dup(&msg_ind, buf, len, GFP_ATOMIC)) {
 
+it would be:
+
+	if (__mem_to_flex_dup(&msg_ind, /* self */, msg,
+			      msg_len, buf, len, GFP_ATOMIC)) {
+
+This was how I'd written the helpers in an earlier version, but it
+seemed much cleaner to avoid repeating structure layout details at each
+call site.
+
+I couldn't find any other way to encode the needed information. It'd be
+wonderful if C would let us do:
+
+	struct wcn36xx_hal_ind_msg {
+		struct list_head list;
+		size_t msg_len;
+		u8 msg[msg_len];
+	}
+
+And provide some kind of interrogation:
+
+	__builtin_flex_array_member(msg_ind) -> msg_ind->msg
+	__builtin_flex_array_count(msg_ind)  -> msg_ind->msg_len
+
+My hope would be to actually use the member aliases to teach things like
+-fsanitize=array-bounds about flexible arrays. If it encounters a
+structure with the aliases, it could add the instrumentation to do the
+bounds checking of things like:
+
+	msg_ind->msg[42]; /* check that 42 is < msg_ind->msg_len */
+
+I also wish I could find a way to make the proposed macros "forward
+portable" into proposed C syntax above, but this eluded me as well.
+For example:
+
+	struct wcn36xx_hal_ind_msg {
+		size_t msg_len;
+		struct list_head list;
+		BOUNDED_FLEX_ARRAY(u8, msg, msg_len);
+	}
+
+	#ifdef CC_HAS_DYNAMIC_ARRAY_LEN
+	# define BOUNDED_FLEX_ARRAY(type, name, bounds)	type name[bounds]
+	#else
+	# define BOUNDED_FLEX_ARRAY(type, name, bounds)			\
+		magic_alias_of msg_len __flex_array_elements_count;	\
+		union {							\
+			type name[];					\
+			type __flex_array_elements[];			\
+		}
+	#endif
+
+But I couldn't sort out the "magic_alias_of" syntax that wouldn't force
+structures into having the count member immediately before the flex
+array, which would impose more limitations on where this could be
+used...
+
+Anyway, I'm open to ideas on how to improve this!
+
+-Kees
+
+-- 
+Kees Cook
