@@ -2,82 +2,79 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D35051C093
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 May 2022 15:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415E751C1C5
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 May 2022 15:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379312AbiEEN2n (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 May 2022 09:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S1379283AbiEEOD0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 May 2022 10:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377265AbiEEN2i (ORCPT
+        with ESMTP id S233206AbiEEOD0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 May 2022 09:28:38 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCE95677D;
-        Thu,  5 May 2022 06:24:56 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvDtw5FdMzhYv6;
-        Thu,  5 May 2022 21:24:24 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 21:24:55 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.152) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 21:24:54 +0800
-From:   Wang Weiyang <wangweiyang2@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <jmorris@namei.org>, <serge@hallyn.com>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <wangweiyang2@huawei.com>
-Subject: [PATCH 3/3] ima: Append line feed to ima/binary_runtime_measurements
-Date:   Thu, 5 May 2022 21:23:01 +0800
-Message-ID: <20220505132301.124832-4-wangweiyang2@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220505132301.124832-1-wangweiyang2@huawei.com>
-References: <20220505132301.124832-1-wangweiyang2@huawei.com>
+        Thu, 5 May 2022 10:03:26 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136D83617E
+        for <linux-integrity@vger.kernel.org>; Thu,  5 May 2022 06:59:47 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id u205so4263340vsu.6
+        for <linux-integrity@vger.kernel.org>; Thu, 05 May 2022 06:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=ikvLHKPwXc8SwXWbFJlAucH7yXhIQw1zrapwwT0e9zA=;
+        b=LuT3usaImWLUBwWvQaa1Kjppb7vUfaUJU7ecYRxqS4QPx25M1BLeZISMSd4ZqSqhVc
+         Rl8spSncilw7HnreJCa214uuptjCi+H6qJd3mqH5z5qQfYucOdayGFm1YYUp3IKB4rd+
+         +BjxtONoe+cu7fhIoeytGi3BP6LNUuZuocfRn0N1nEB7JMnO7Cjk0tWB280uOFVjY82h
+         1ZDaGezYKWWpBB/t7D7qpaNPgmdJIZVdKp1nZkKW0mfPi7UB693aOjqmwidFBLDqsoZp
+         y3mwHeUN97QC38iD/6KOlFKWXy3pSS4IgaVh+pN33ZcdlWyce88PmAca5oC1jD6wOKym
+         HznQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=ikvLHKPwXc8SwXWbFJlAucH7yXhIQw1zrapwwT0e9zA=;
+        b=k4Xpt39uBALKpw3jR2siiR8TozsQo4xKGH3cqPZkoPV7oxnFuMhcBwwe350412obJa
+         5Q2QANSiice5jGdQ4rVcIEMPGsyVHYHFNHgwsbEaOBCLt4HiqR890d/IpmQQvo7FsFsd
+         AGkztNMkYMI7lM6EtElx3Ft552KvlDbfXoDXN1amn4RiUr8KNKW4nLmXIBB6bKu5Z0tI
+         tmd5i4mNPABUmkhihUupd4mw/6KBWaESFtjVE/pq4Hhl0VEI6c5d3fAYGgE8hoFm5VFo
+         GxN+3y7OsVRIKsCsTigrAYWVue1IQZnZ2cV4Bb7qa5/SIM+W7vXEkYrsjex7lxwzR+0C
+         K0OA==
+X-Gm-Message-State: AOAM531B1ES8zmjWtAuvea1CaN0mpTRnylpi6iSyZGxgfd0ezULhog0L
+        JJwZxp380O+HvkweoL2Wp6dOaEXuBoecJNaRUqZSPTU+wV8=
+X-Google-Smtp-Source: ABdhPJxSkbV0e4ZjKySraY3GvdbcX91c4lx6RcvRku5kuaBjbUZMhYLKtqWFcXV0U9jMW2hKCv367l+LEI4QeWqrsd8=
+X-Received: by 2002:a67:ea90:0:b0:32c:d17d:7c25 with SMTP id
+ f16-20020a67ea90000000b0032cd17d7c25mr7669480vso.54.1651759186008; Thu, 05
+ May 2022 06:59:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.152]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   William Roberts <bill.c.roberts@gmail.com>
+Date:   Thu, 5 May 2022 08:59:35 -0500
+Message-ID: <CAFftDdrGYV=VwNPjypoOs1SmpNeZMTfrAFhht=zVOgC0hDrHSA@mail.gmail.com>
+Subject: Question on permissions of runtime and bios measurements files
+To:     linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-There is no LF in binary_runtime_measurements output. It is little weird,
-so append LF to it.
+Currently the tss command line tools can't access the system
+measurement logs for users even if they are in the group tss:
 
-Example:
+crw-rw---- 1 tss root 10, 224 Mai  3 17:22 /dev/tpm0
+-r--r----- 1 root root 0 Mai  3 17:22
+/sys/kernel/security/ima/binary_runtime_measurements
+-r--r----- 1 root root 0 Mai  3 17:22
+/sys/kernel/security/tpm0/binary_bios_measurements
 
-/ # cat /sys/kernel/security/ima/binary_runtime_measurements
-...imaboot_aggregate/ #
+So with tss2_quote, a quote can be computed but not the pcrLog for the
+system PCRs.
+The problem could be solved if the log files would be owned by tss.
+But that could create privacy issues because the pcrLog would e.g.
+contain executables in user home directories.
+Do you have any suggestions how the problem could be addressed?
 
-Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
----
- security/integrity/ima/ima_fs.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index cd1683dad3bf..0a2f9cb25b20 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -183,6 +183,7 @@ int ima_measurements_show(struct seq_file *m, void *v)
- 			show = IMA_SHOW_BINARY_OLD_STRING_FMT;
- 		field->field_show(m, show, &e->template_data[i]);
- 	}
-+	seq_puts(m, "\n");
- 	return 0;
- }
- 
--- 
-2.17.1
-
+Thanks,
+Bill
