@@ -2,126 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802FB51C520
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 May 2022 18:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A71A51C5DB
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 May 2022 19:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381975AbiEEQdV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 May 2022 12:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S1382532AbiEERQe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 May 2022 13:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233421AbiEEQdU (ORCPT
+        with ESMTP id S1382531AbiEERQb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 May 2022 12:33:20 -0400
-Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18F128E08
-        for <linux-integrity@vger.kernel.org>; Thu,  5 May 2022 09:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1651768180; bh=BBoA8CuRgkbA7cmy3x62CIFOIJuQmkI5nM2k21Q2MQY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ihQBmtSn1+pdUrTUfmnYARsRzjV0rUvXD0EZsMkevLZ3gEW2Jgo3bOEZd/y9sYAZDg+vmESB0306l8qb8NRtWyZfK7fSl2HmoGCNmT2sUrTYlPdAwTGZ42UKfX7yzffTk/BKL3ipILCCotqvcpYwk7uKYjikebSnDR+H3Na+0ByXYN44GJDTiIYIp28wrZTLyF2n6fFa/ZvCPN4XmS6V0Abw63qn/VnKuf0icRYzxQ1js7uI7NBU5ZbXqlgPohRyjAZGwIZgMj/ryFqvH2ej3qZHnPKW3A1F37sZ+RxOH1gXslJZ8uvnRpQKEAfTVbILvvUNLp2z1DGY0qTDmLb//w==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1651768180; bh=XYk6WA+A2wypDxVG9uSPSh0LN+IeUqUwAyUGgpOqZZp=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=sjxwt7vCpDl64g3JGMGRGCLxdemZ8vGptaT+tB7osT+gkNm4roeys86KKBs9fcIC57Owh9EUystpoCGhrSlKnIkW0Fc3DU+JqQS8Pf79BFZLsMT1eUOAdw7oxSE0ezGQRDVEUkkFYRLocjqXYWoXSaE6h4AGkRAAwtfGZyrpMPBS7VTwYA6xG76jxlwKZI5B9NOTBbJHiBJDaE0hLNDJNNojxBovHrbwhNRONBa80Nfcp224lIBQow0voxF5/A7+SWo93w5343bWjEJOUGRUwBsATsF1qRsuLcXTP8kDFN6oVk1PDkD6sXxnAbkYy4woxPZhQRv00RCdAXoxsxumSw==
-X-YMail-OSG: pJt4TT8VM1nGmnl9kZnN1WCGvMTcLo0RjHLt2muSJ11KFhlldg4TIbu9dAl43b9
- rDjeAqil6mAQpXiq8b.0kWbiLBhxu471LUsdDD63XZa9ADnJQN089vUZFaSc6Vh3iejysuiaW7FU
- 7uhHN1yULCxfJsZH9U2AkSprCAMXgJ65nFuoRuAVex7GpNevd1AyP2NOM.ihhrkl3AsgdCyadbt0
- W02nXqztvEvrMjsrFwibJQBrAJ4nGWr5h0akSmX34dDOlxEkyPc1mcWNHrJE.0s9h9n1sRu9hmTL
- VRBiWprF0PzsIK8Mmo.08NSg_Et4OCk52kidbZia3GJcznVz0VjerLAI0RkmqOFo2WRk.xIdzAoi
- efdX2n3zRSJyiJTQ48oJixUrj7FxoS9wplaR7t4ctnXdr5vNjHPZeSLqgZzDmOLX4trTEwWOFE1Q
- thZ.x61Ivivmeo9Sik0hqY.VsCHHmrhMm_PMGG1VwTPwWhn59Tl6fO_j_zEhymHPtMSXZLJDc0Ph
- jUsoDayuFJYddGOelUFGSMPbrYT9P_T9MRf8Iyqbx7oN4n0DC8GWDMAfb6gcFlBd_sCvf3IzTvRt
- 2BVRoPBq7I1zggrgNjxuW_y2F5HouUPV69dEOF061YUoaW0fmGnu2iEcrpNIe7.Cl473JJcPIvVL
- TOCngx4SsgUGL8qYQHKhSJNw0j5BAlIDp5d.uVmteeFnHmYdPHov9x2b0HZCtrq9p2UwaHbVaSrU
- FsRL0RQluHxp0f2UhXYjqrUJV7Fkk3gAtaV0RjVRr_9BeR0l1LyV.Fp4VKCgj_rTSCa3enkJrRja
- Cf0WFKanBTdnC7xUmdElyKT2JT2ksYL3pg3thBGCDEfnrFK.VWn7ZVLWzIyKALg2fhKREnLYywIa
- yqt9SmirZfZQHuh9XkW.7sTuVR4lea8IKPuQGk7DTsCCYsPMhJbTNd4II8Mlxvd1Xrltq0D3l_G0
- Lwd7gr5vywClwAIUUJEY7mbxmi_PHQTdnJfpSlhE8i_4FYnkDgt5YOK0GmI8ki7uYyvEXXNez.Vw
- ktVwYc.qW9F6MiU8DbYxQkcHEtusrjEwxLlzHdvGamphIyT7jzJgej42M9m9IfK9a5FrjCeRNE2t
- m8_ODJgfyxMJqm4cbLHx7Zbd.wU1oBS9ZF7zT7QhWlAhcY7S5o1QkwOhDn3U0zt0d3Y.s.ilePul
- r1ZfjD70oJpjKBDTAmIBrl7XquFT5PpPWHSrI6DU_tWrbfRtQWLbGq9zKkMp26QOYOuJVS5QjVV5
- .Kz8mJAlw_4gvgmbPF2k16UdGUJmD0XtD1pyE8vNyXt4sLF3h3UxrNeN0BV7CdsWe3gbQ8HVJKKr
- kJW2r5DaT36p4n0ON5i.KEO1LHLmUuoB3RzkqvFMb0.Bb4i8m6.93.TmUfd_Im7wVwuZ8_uGJaLf
- _r3Q.wcanNgli35LRmg2S8wMpR1plfoqo6Q6_AfYV2pyxXH6mPaS1aYcKS5P.ZLE844gBuDflbCr
- ZGAj4h2ekwwTRDBJweLcZ8In4VOMH6GZz6n3_pLwipQTp5e3dSKPts53DZYMw1XcTHP9NaIotwU_
- f_xKwzHrSa3qCnVNUKgCuTiu6oFAEwepXgivRG80xuQz_HyjvEA5XkffnaRzj0Cvq1yrQIuKMMib
- HSIo1wL1anQNanUi8vImo0oanIM1iEXSXtrPy6V8a5CWYLLC4dqlkHxi71kpuxs9rKtvsqKW7qhD
- Wxy1UrcuKgFWgA3B8TLtUJKQuszSu8kI.qjQ0La7msYnHfHLFFofnsxoAnRuUUICzSMZT_v1vrVk
- 4rb2joAcOGhUL0acXXAt2S6hg0khHcYk8IbyUQcQNnU.cuSHBvHNCSSnGOU3tBi7XFVCfzw2NGKS
- NecHIcgH17QABwSyyS53VJjzhHsRuDxaR4MGuOV8ovyAhEJ1vnCkT0fi9qIU_XQwuOjBhcp.pzBh
- kr5Xkjqr6CZbQJvhxTS8r3IQNqLLd9uc_Q3aynbYr5eHXiutnX7CIPd89o4olNZVkitlrE6RUGtB
- I7z659rXcNAGUPnNVGqe.c02IeI3MzzfIGzViNlCcx1euff1ki7qjCCvBjtKM.ql4_Q3WJU.52bk
- 5D8F4y0okxgqgvNg6j3zhz6KkHyBchtOAxYd6fLgCbScXT4eig.zasRdC0lql.BeKO435hNYq0kd
- LjRyeVEW3fp6_O9nQVNqVh6DS6WOA68xrva6_Y11_X.J8.99_iwynRPnkaFL3siQVRwcRUv_7l6z
- ISA831TM_R0p6mWudN4NJn6xS5EMwMzTHSoWCm5I-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Thu, 5 May 2022 16:29:39 +0000
-Received: by hermes--canary-production-gq1-647b99747d-ndj76 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 89f08076760c31b5e11091f02eb35912;
-          Thu, 05 May 2022 16:29:36 +0000 (UTC)
-Message-ID: <84b848b6-770a-7d2a-4978-5e758383f994@schaufler-ca.com>
-Date:   Thu, 5 May 2022 09:29:34 -0700
+        Thu, 5 May 2022 13:16:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890585C877;
+        Thu,  5 May 2022 10:12:51 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 245GVK9C030921;
+        Thu, 5 May 2022 17:12:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Oy7utAOsTBky6zMG1vAj2bVPZkz4VO9zEgBvUU2VdDQ=;
+ b=lAy9ZJqOldS9XMxA/dIyKG0AyKKhtj5XKYe0LxkMUbKH5MMEJwUFijo8mSfAQNXlfMYN
+ TCXwkpgffEN6GWEQB8+eFcOvE68cdhTwE69cR6JPqNCgQUMV5Cmxd2/3HbJ0XbfotXWg
+ X/xnh5QpQxA47lZpqcGhHXgNGUZQUFCcA/iD0F4RQR6NkBg9vnhxBaJz/vc58dh3Mh4Y
+ Uin1Q68W4IglqcoGI5Z8d2itlKv8BYHf63IVYph5VpzOBcLYevWjI8sYtD3AHO4Cdcqi
+ 3q6TtXksGqTh4NL0TobxcH37Rn80PYHgJtaeih4sz2TQikdi393FBnDeplku/4TjHtJL 1w== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvj630u09-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 17:12:43 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 245H2Pb6017022;
+        Thu, 5 May 2022 17:12:42 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma01wdc.us.ibm.com with ESMTP id 3frvr9u0as-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 17:12:41 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 245HCfOp29163976
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 May 2022 17:12:41 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2574EBE058;
+        Thu,  5 May 2022 17:12:41 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C5010BE051;
+        Thu,  5 May 2022 17:12:40 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  5 May 2022 17:12:40 +0000 (GMT)
+Message-ID: <ae5889bc-f5aa-6d0a-fdce-81819a15d22c@linux.ibm.com>
+Date:   Thu, 5 May 2022 13:12:40 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/3] securityfs: Append line feed to
- /sys/kernel/security/lsm
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v9 6/7] ima: support fs-verity file digest based version 3
+ signatures
 Content-Language: en-US
-To:     Wang Weiyang <wangweiyang2@huawei.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20220505132301.124832-1-wangweiyang2@huawei.com>
- <20220505132301.124832-2-wangweiyang2@huawei.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220505132301.124832-2-wangweiyang2@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220505123141.1599622-1-zohar@linux.ibm.com>
+ <20220505123141.1599622-7-zohar@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220505123141.1599622-7-zohar@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20118 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: coOlU9zrGOKZpJOhXPb5K8YTp8hsJ5pa
+X-Proofpoint-GUID: coOlU9zrGOKZpJOhXPb5K8YTp8hsJ5pa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-05_06,2022-05-05_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0
+ mlxlogscore=905 priorityscore=1501 mlxscore=0 spamscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205050118
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/5/2022 6:22 AM, Wang Weiyang wrote:
-> There is no LF in /sys/kerne/security/lsm output. It is a little weird,
-> so append LF to it.
 
-NAK: The existing behavior is consistent with long standing LSM convention.
 
->
-> Example:
->
-> / # cat /sys/kernel/security/lsm
-> capability,selinux/ #
->
-> Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
-> ---
->   security/inode.c | 16 ++++++++++++++--
->   1 file changed, 14 insertions(+), 2 deletions(-)
->
-> diff --git a/security/inode.c b/security/inode.c
-> index 6c326939750d..bfd5550fa129 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -318,8 +318,20 @@ static struct dentry *lsm_dentry;
->   static ssize_t lsm_read(struct file *filp, char __user *buf, size_t count,
->   			loff_t *ppos)
->   {
-> -	return simple_read_from_buffer(buf, count, ppos, lsm_names,
-> -		strlen(lsm_names));
-> +	char *tmp;
-> +	ssize_t len = strlen(lsm_names);
-> +	ssize_t rc;
-> +
-> +	tmp = kmalloc(len + 2, GFP_KERNEL);
-> +	if (!tmp)
-> +		return -ENOMEM;
-> +
-> +	scnprintf(tmp, len + 2, "%s\n", lsm_names);
-> +	rc = simple_read_from_buffer(buf, count, ppos, tmp, strlen(tmp));
-> +
-> +	kfree(tmp);
-> +
-> +	return rc;
->   }
->   
->   static const struct file_operations lsm_ops = {
+On 5/5/22 08:31, Mimi Zohar wrote:
+> IMA may verify a file's integrity against a "good" value stored in the
+> 'security.ima' xattr or as an appended signature, based on policy.  When
+> the "good value" is stored in the xattr, the xattr may contain a file
+> hash or signature.  In either case, the "good" value is preceded by a
+> header.  The first byte of the xattr header indicates the type of data
+> - hash, signature - stored in the xattr.  To support storing fs-verity
+> signatures in the 'security.ima' xattr requires further differentiating
+> the fs-verity signature from the existing IMA signature.
+> 
+> In addition the signatures stored in 'security.ima' xattr, need to be
+> disambiguated.  Instead of directly signing the fs-verity digest, a new
+> signature format version 3 is defined as the hash of the ima_file_id
+> structure, which identifies the type of signature and the digest.
+> 
+> The IMA policy defines "which" files are to be measured, verified, and/or
+> audited.  For those files being verified, the policy rules indicate "how"
+> the file should be verified.  For example to require a file be signed,
+> the appraise policy rule must include the 'appraise_type' option.
+> 
+> 	appraise_type:= [imasig] | [imasig|modsig] | [sigv3]
+>             where 'imasig' is the original or signature format v2 (default),
+>             where 'modsig' is an appended signature,
+>             where 'sigv3' is the signature format v3.
+> 
+> The policy rule must also indicate the type of digest, if not the IMA
+> default, by first specifying the digest type:
+> 
+> 	digest_type:= [verity]
+> 
+> The following policy rule requires fsverity signatures.  The rule may be
+> constrained, for example based on a fsuuid or LSM label.
+> 
+>        appraise func=BPRM_CHECK digest_type=verity appraise_type=sigv3
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+
+Acked-by: Stefan Berger <stefanb@linux.ibm.com>
