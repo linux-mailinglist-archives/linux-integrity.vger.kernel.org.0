@@ -2,136 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7B751D6C3
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 May 2022 13:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E161C51D725
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 May 2022 13:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345979AbiEFLjm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 May 2022 07:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
+        id S1391569AbiEFMC3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 May 2022 08:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391400AbiEFLip (ORCPT
+        with ESMTP id S1385170AbiEFMC3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 May 2022 07:38:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F5C60C9;
-        Fri,  6 May 2022 04:35:00 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246B75QC019894;
-        Fri, 6 May 2022 11:34:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=8RspyK0PRVi0UwT8ZnmwyEdIxA4z/RirluGKXyNrCTA=;
- b=pLybBU5TqODQcC568tj3fPG9m/p81DE+btfiHLCN7MVEElM8PTwhyZQvEH24NloC6iA3
- Q9PoYWEKMp7a5cvHxNOhkR3oroXaGBVe0hToM7vq8M86Ye6W65tdEoUA8+cYCq2/3vT6
- lc46T/6dY38fzASUhWbGiadTbFnXsdXcRSdwpbyFMS0zVWMQ1Do1p2S6Pic9RsRPuaBs
- MHf/aAKPYK7LHb56EPjPvVfwlXMokTGb4lh5hKYPixOcFns5LhL9HcBCFW6+FR1C7ymR
- VzX/dDXARzU1y6Vu6nZp0WrkabKBnA9De+VsnWP7SPTfV8g0B4UlBkqzWXapfU+IA4kG bw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw2av8pf6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 11:34:58 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246BRfrU012987;
-        Fri, 6 May 2022 11:34:56 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ftp7fwdd9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 11:34:56 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246BYsfb10223956
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 May 2022 11:34:54 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2DEDC52050;
-        Fri,  6 May 2022 11:34:54 +0000 (GMT)
-Received: from sig-9-65-81-120.ibm.com (unknown [9.65.81.120])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7979F5204F;
-        Fri,  6 May 2022 11:34:53 +0000 (GMT)
-Message-ID: <e223929f4fbbfcba51b8cc9dda6a07ace12f5dd8.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 6/7] ima: support fs-verity file digest based version
- 3 signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 06 May 2022 07:34:52 -0400
-In-Reply-To: <ae5889bc-f5aa-6d0a-fdce-81819a15d22c@linux.ibm.com>
-References: <20220505123141.1599622-1-zohar@linux.ibm.com>
-         <20220505123141.1599622-7-zohar@linux.ibm.com>
-         <ae5889bc-f5aa-6d0a-fdce-81819a15d22c@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wZzEGnpUmiC3DEU-_QzHN1fbud1kxZT-
-X-Proofpoint-ORIG-GUID: wZzEGnpUmiC3DEU-_QzHN1fbud1kxZT-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_04,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 phishscore=0 suspectscore=0 mlxlogscore=758 adultscore=0
- mlxscore=0 clxscore=1015 spamscore=0 malwarescore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060064
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 May 2022 08:02:29 -0400
+Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6C1583BB
+        for <linux-integrity@vger.kernel.org>; Fri,  6 May 2022 04:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1651838326; x=1683374326;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hqaoikTYY0XSPOLEqFdOhBQ/y9tGSU0OMLPapWEpPjE=;
+  b=OnLNosTArupzATNwYL+i/ZBjgsJW5MJ27aXWDZczxrcayRA5bK28EC6T
+   FqIf5k8CFuN/9ko+dn6jGdmqXito6CtND3upXYXHokNoKoA5i8H3WMOzH
+   aANJaMXcizKpPxwrXmqvXofY6DOMMnq9rllzclKeCovnY5+8h8TVOWjXh
+   k=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="119484655"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647298800"; 
+   d="scan'208";a="119484655"
+Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 13:58:44 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
+        Fri,  6 May 2022 13:58:44 +0200 (CEST)
+Received: from MUCSE818.infineon.com (172.23.29.44) by MUCSE819.infineon.com
+ (172.23.29.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 6 May 2022
+ 13:58:44 +0200
+Received: from smaha-lin-dev01.agb.infineon.com (172.23.8.247) by
+ MUCSE818.infineon.com (172.23.29.44) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 6 May 2022 13:58:44 +0200
+From:   Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+To:     <martenli@axis.com>
+CC:     <Marten.Lindahl@axis.com>, <jarkko@kernel.org>, <jgg@ziepe.ca>,
+        <kernel@axis.com>, <linux-integrity@vger.kernel.org>,
+        <peterhuewe@gmx.de>
+Subject: Re: [PATCH] tpm: Add check for Failure mode for TPM2 modules
+Date:   Fri, 6 May 2022 14:00:41 +0200
+Message-ID: <20220506120041.228769-1-stefan.mahnke-hartmann@infineon.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YmbDpMUtUK/NrXIY@axis.com>
+References: <YmbDpMUtUK/NrXIY@axis.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE816.infineon.com (172.23.29.42) To
+ MUCSE818.infineon.com (172.23.29.44)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2022-05-05 at 13:12 -0400, Stefan Berger wrote:
-> 
-> On 5/5/22 08:31, Mimi Zohar wrote:
-> > IMA may verify a file's integrity against a "good" value stored in the
-> > 'security.ima' xattr or as an appended signature, based on policy.  When
-> > the "good value" is stored in the xattr, the xattr may contain a file
-> > hash or signature.  In either case, the "good" value is preceded by a
-> > header.  The first byte of the xattr header indicates the type of data
-> > - hash, signature - stored in the xattr.  To support storing fs-verity
-> > signatures in the 'security.ima' xattr requires further differentiating
-> > the fs-verity signature from the existing IMA signature.
+> On Mon, Apr 25, 2022 at 04:03:33PM +0200, Jarkko Sakkinen wrote:
+> > On Mon, 2022-04-25 at 12:25 +0200, Mårten Lindahl wrote:
+> > > In commit 0aa698787aa2 ("tpm: Add Upgrade/Reduced mode support for
+> > > TPM2 modules") it was said that:
+> > > 
+> > > "If the TPM is in Failure mode, it will successfully respond to both
+> > > tpm2_do_selftest() and tpm2_startup() calls. Although, will fail to
+> > > answer to tpm2_get_cc_attrs_tbl(). Use this fact to conclude that TPM
+> > > is in Failure mode."
+> > > 
+> > > But a check was never added in the commit when calling
+> > > tpm2_get_cc_attrs_tbl() to conclude that the TPM is in Failure mode.
+> > > This commit corrects this by adding a check.
+> > > 
+> > > Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
 > > 
-> > In addition the signatures stored in 'security.ima' xattr, need to be
-> > disambiguated.  Instead of directly signing the fs-verity digest, a new
-> > signature format version 3 is defined as the hash of the ima_file_id
-> > structure, which identifies the type of signature and the digest.
+> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 > > 
-> > The IMA policy defines "which" files are to be measured, verified, and/or
-> > audited.  For those files being verified, the policy rules indicate "how"
-> > the file should be verified.  For example to require a file be signed,
-> > the appraise policy rule must include the 'appraise_type' option.
+> > I think this should actually have the fixes tag. It's a regression,
+> > right? I can add it.
+>
+> Hi Jarkko!
+>
+> Thank you. Yes it should have a fixes tag for the mentioned commit.
+>
+> Kind regards
+> Mårten
+>
 > > 
-> > 	appraise_type:= [imasig] | [imasig|modsig] | [sigv3]
-> >             where 'imasig' is the original or signature format v2 (default),
-> >             where 'modsig' is an appended signature,
-> >             where 'sigv3' is the signature format v3.
-> > 
-> > The policy rule must also indicate the type of digest, if not the IMA
-> > default, by first specifying the digest type:
-> > 
-> > 	digest_type:= [verity]
-> > 
-> > The following policy rule requires fsverity signatures.  The rule may be
-> > constrained, for example based on a fsuuid or LSM label.
-> > 
-> >        appraise func=BPRM_CHECK digest_type=verity appraise_type=sigv3
-> > 
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> Acked-by: Stefan Berger <stefanb@linux.ibm.com>
+> > BR, Jarkko
 
-Thanks, Stefan!
+Hi Mårten,
 
-This patch set is now queued in the next-integrity-testing branch,
-waiting additional review/tags. 
+your patch introduces redundant code. The code block of the if below
+contains exactly the same code.
 
-thanks,
+Additionally, your patch masks a bug (derefencing uninitialized
+memory). I will send a patch set shortly.
 
-Mimi
-
+Regards
+Stefan
