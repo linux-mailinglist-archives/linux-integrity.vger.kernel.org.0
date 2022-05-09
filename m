@@ -2,270 +2,164 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCF952033A
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 May 2022 19:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AF55203C2
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 May 2022 19:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239503AbiEIRLL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 May 2022 13:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S239791AbiEIRuW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 May 2022 13:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239560AbiEIRLK (ORCPT
+        with ESMTP id S239768AbiEIRuV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 May 2022 13:11:10 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70B1613C366
-        for <linux-integrity@vger.kernel.org>; Mon,  9 May 2022 10:07:15 -0700 (PDT)
-Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7402420EC5B6;
-        Mon,  9 May 2022 10:07:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7402420EC5B6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1652116034;
-        bh=KE6IG536wFkahQuq34fEmd4fC2uLbcfNjVDvNxNvdkY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Hj27LDC9LIONKk0UzSFVobAjlq8htEmTUcL9M3N3qY8pof0eKozS1mxVZg1n0hzwA
-         6qh7Kr7nOdxarQOnjKF7lkJgV5PXCzq/CGStZaXNBRS/WThkHqhDIO9eaSoEutifFJ
-         cgt7v/8U6fJ+0AUoy8ikqFncxiv+eyxfhkYhMSn4=
-Message-ID: <3090f056-8f06-fcb5-6ab8-501d8438bc0b@linux.microsoft.com>
-Date:   Mon, 9 May 2022 10:07:14 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RFC PATCH 1/3] dm ima: allow targets to remeasure their table
- entry
+        Mon, 9 May 2022 13:50:21 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E856C483B7;
+        Mon,  9 May 2022 10:46:26 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 249Ek1FO002591;
+        Mon, 9 May 2022 10:46:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=i/lCVF6fcoFe5hDGMdQQKhRagdIpjJCUYM7rUySDq78=;
+ b=VPezwVtGuNZk6/3fPgotNsSAXRPYZ952WjxG8a21aFMBBgvX2Z+ODIR1ggcQDqkk6Hke
+ 6sl2LOPPLk44A4q+X5oYr91yGHsYB8ubO7FQSyMxz3X0NMkIUNwsnH3qO+IWJekRpH4s
+ TQjX7KngXGVizDdFIJTMIkeSuT9VL0befxo= 
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2045.outbound.protection.outlook.com [104.47.73.45])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fwpfmtc14-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 May 2022 10:46:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EWEf9bTFehomkEdIThyVuNMPxRxqFzHQF8/s5WnHz4iJdQ/wfFb5FguOVIjl5TPA95pyP7BYeAJnvlRz7WMXIErk94wLpXCcqvq/BH+BHBUErmdcsw1RprRbD+YMUeNFAGZMrvLEhQPXx9voBENg7N44s1k6oo+e1G/ExcCQGLFyNSML1eDDtpkNMOOp3rkFxHD0R8Jb8tYJDKjrO9KT58wBJFd+QxBFvfyOE/3ePPmu4Mpk9vzcEXkkQHI4LVo1Q5dDn6KkJubaLtAdT/xt8Wv5k9LRKUuvgW04oxAi4hZlIvK+e3TWJ3tVxdj2y1yns4z3aFpEaeAn7eYincCNjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i/lCVF6fcoFe5hDGMdQQKhRagdIpjJCUYM7rUySDq78=;
+ b=YEgjdwKz4Y0w0dN6h5d8YrSoN4xg7717KMnv+wCO9wHxr4nKmPbHrkFIkfPSIhuRyFakJxDkKkx4v57ybReUvfl9y7xq9WObh6aYMzF1zffvbuSYkSBq+2rmwLOczpFLNYmDSe3meHPjbTicTJGJD65jazFkLN2/UX4ye6uCy8/d3j8EDCrt1VfyNpUZmmD2AgGusr2eyY80C8t6rQ2mWDzeul5DyfR5zupnqcSvxRZHK6pQXoHCRCmT4mT2SQDvfEqMPHOiw9oYat7V3YAVufryFdV6xxFhoF0voHAiI+2g6473CmvYivZlZlVG99il8WYkLoCjb798sCX/A+RsGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com (2603:10b6:a03:379::12)
+ by DM6PR15MB2825.namprd15.prod.outlook.com (2603:10b6:5:1a6::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Mon, 9 May
+ 2022 17:46:22 +0000
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::af:a5d5:458b:4f4e]) by SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::af:a5d5:458b:4f4e%9]) with mapi id 15.20.5227.023; Mon, 9 May 2022
+ 17:46:22 +0000
+From:   Jonathan McDowell <noodles@fb.com>
+To:     Boris Petkov <bp@alien8.de>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        James Morris <jmorris@namei.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
+Thread-Topic: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
+Thread-Index: AQHYWY4yqojcPM99qUKBDg6v3vLzMa0WbyIAgAAMsgCAAGptgA==
+Date:   Mon, 9 May 2022 17:46:22 +0000
+Message-ID: <YnlTaawPH6T7LOUs@noodles-fedora.dhcp.thefacebook.com>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+ <YnjvfNs5pgWiomWx@noodles-fedora.dhcp.thefacebook.com>
+ <0960C132-581C-4881-8948-C566657C3998@alien8.de>
+In-Reply-To: <0960C132-581C-4881-8948-C566657C3998@alien8.de>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Thore Sommer <public@thson.de>, dm-devel@redhat.com,
-        agk@redhat.com, snitzer@redhat.com
-Cc:     tusharsu@linux.microsoft.com, linux-integrity@vger.kernel.org
-References: <20220106203436.281629-1-public@thson.de>
- <20220106203436.281629-2-public@thson.de>
- <796b7d69-6000-d4bf-d29b-f1fdfec6e332@linux.microsoft.com>
- <00030b50-d888-1562-e33c-24f7ee38cd99@thson.de>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-In-Reply-To: <00030b50-d888-1562-e33c-24f7ee38cd99@thson.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-20.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e5d5634f-c3bd-4656-2c6a-08da31e3d4ba
+x-ms-traffictypediagnostic: DM6PR15MB2825:EE_
+x-microsoft-antispam-prvs: <DM6PR15MB28252481AA920A9C02E41E8DC1C69@DM6PR15MB2825.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Xz9BDLsoLtE9YtldtY1e3+m5J1qJy/TPFS6a7gPWnX3sgHloToeKOJfA1tChndi/DEKHYF2GmKteMAgApnz9t4lMmIPlH6yyma2i481SmDGmvTr+p2Qm6XeIlY+zlTlgb25MirKC9eX3W0N4tx611fnkkDhKjdg0kBGG5YzMUo4Po0QDfE+ng5cUTUaRNrDwm2cSih6i+oTQ4P9XDaygOpsVtA+80owvCGNxH4DY0pDOae2v31q+uqeZKlkl3CpZxuEbiXLpmN+7Md1MuEiJvZl69Cz4CzjK1KtAq1T6L7z5/sTrUcpJGsAs1r6ZFVJGUT5neWH8o0oX9mf/8rr94bArRmh5nFWhQtdTPbgnk0qp/29tLxPZy5j0+a9m9zzgsXxmiAZxlPPtRbcQQGGgB0qJsRjPObvykz7iY/hgvf6z07c6MnlC7liX3q0euFz8AOXdDbj3TxvI4GDoy5cqNbjaCtifpv1QtNv0dOL8TX9058xpWaIorFvkx2LTCGfgNxtMDhMoVORZCooNO7jAVs0CBvXTw8VJPC5jkgm3AHBMHPv+m0PGcCMgxdaqbNAPE05v5Gd+Biz59JqwiX3p6NZRCYUxQoks2UNaEZVVef6fY9K0FehuLuK19b4+slARSR94gu1FKCK440Y+WQoSfBIZu5TVC6CajGvIouktJd+o2/Dh229SydhwUgqT2V9aGe5f2YZFCX1F+QvQgvMezA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB4552.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(9686003)(71200400001)(508600001)(6486002)(6512007)(316002)(6506007)(53546011)(86362001)(186003)(2906002)(5660300002)(7416002)(122000001)(4744005)(91956017)(54906003)(66446008)(76116006)(66946007)(4326008)(66556008)(66476007)(8676002)(64756008)(6916009)(38100700002)(38070700005)(8936002)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5NB+xx4eBJGiNEakf6ed5AvfAeP22SWCzpYLur8vMso/iajdEU8k3SNV+LXZ?=
+ =?us-ascii?Q?6PpJidb357jNniwQcv7t6bUCsg9m9C7DOS0MpryIBMxxInMwQw1DgzFBMFa8?=
+ =?us-ascii?Q?6K1xheHTHn9BpRXt20GLrSFkwbM7rUNvBlWqbiyw0IJKWGIx0N37gNwFA9Mo?=
+ =?us-ascii?Q?PdKxsxuwKINVssBwLPirLAW8TOT0nYZ/DbcjJ97+MKHbTzWju7rGYRdGjV2M?=
+ =?us-ascii?Q?ZO62edlkaqCu4IIvDpprMJCv4fmIDGQ48YHWbthSD3TW0FQYC7cfPyWeyEg3?=
+ =?us-ascii?Q?i3KJJa17RDRYiPJxFXoiimZOU1BOf+mXPVduTFXqdUVBPttvb8SZ0xp2hf8M?=
+ =?us-ascii?Q?iR2Cluspw/YpXVpQlPvfv9QdHopIQBZpGhthp7+dbBMjeqJO6L3aFB6FZZNt?=
+ =?us-ascii?Q?sd1kpGyp9CmFX4Yf4v3BNXwPMHNjjB54Z5JG7baY8+dfAikQF4X4ge60pKRw?=
+ =?us-ascii?Q?JRxkCTxaggQLp6IH9Uex4UtgOC7vt8QtJMNw1jVChp8+amx2TITAWI+sVWXf?=
+ =?us-ascii?Q?KE7gfSBhCuvJQR6sjJWvAAZC1nB4/KHVrkKPblx4DaTHPc6BSFj5n9E5rgvO?=
+ =?us-ascii?Q?HTY0YcLCWMOxGXIYjcQXu05vmDrHS85kdkb/yuOyQ0waACvWtgXzhzJXXLJd?=
+ =?us-ascii?Q?WTNdwVI+oPYu2giM8mPtJgQ/3C7yopp8ETTUBJLFcq7GCXSBEix5PXUEK5c8?=
+ =?us-ascii?Q?ez+kKZAXTxoXfEAp/XOoDkvRT+RY0PgnDLz1W88UeOFKjUPFRLg9xQr6IrBz?=
+ =?us-ascii?Q?cQLoxt91NDWL0bA9oSElFwv0aLeTGNSuzelOx5OnT5AJqrf4eDpvZNzdyhnr?=
+ =?us-ascii?Q?ffYqWbxG3M6rRCuoc0O07+L2qukFtlsLWNRLjo4BAWgp99E9zIH0zHBtvkrw?=
+ =?us-ascii?Q?KMfNID4c1CTAV2SuaJfgIgyd4dH/0YB9EItJbO9N1ow/HPTTbSNYXGDKkV46?=
+ =?us-ascii?Q?jbU6MhKj91kRboG3t4BgidC3iVBsdyejuH6UqKPMpM4wfZQXpSNQhQ7d+BTR?=
+ =?us-ascii?Q?/G+fC8iWLAan2EfNLWxRgC/fLVCQwkYyUQkddyImNuiKIweFDQjw6CeGsaid?=
+ =?us-ascii?Q?KRNTSWIZa5epyh2d3ADYljAGkjTdzKVz23+U72/dfqIc8+DBAqasA2BUr5Ru?=
+ =?us-ascii?Q?Vi8tv1Y4rwBpZ5eKo4+fhKK3aewCMoVJaBaQJBzuUpNAZ1321pMtyaolCnEs?=
+ =?us-ascii?Q?GaaP9ZR2Oal2Ib22PaSan+fenjzO9hQgLPpOzLXGaUSeZuOIXjrDBBIjssJK?=
+ =?us-ascii?Q?7N5zesr689KdUNIgdUGr8JkA7BpH4Mu7UV2uAldehAsWlr8AGIWT/qm8O4V1?=
+ =?us-ascii?Q?FMWQh84F/zvvMjbKjz17/Br4sg4oOWYnc2m7nS2v0L4itRc11eBuvyOxsilL?=
+ =?us-ascii?Q?tzXxFGIld8gydvbwLJ62PMsTlAz1RfsDhONq3lDYlFDDmp7Us/z1mXGo2DWz?=
+ =?us-ascii?Q?FJM0X65O8qRkUy9wP0TAzwL83DFmRs24YXyT7Ro2yJKAURe8xN846PT6ij5/?=
+ =?us-ascii?Q?abu4lXBOTXZPuUt5ylNJVk0R+HMQDZui0UlZEYJD6ve7NpYry510WvbMwmpp?=
+ =?us-ascii?Q?zCnQFbL/5/AyMYhMnDSIU2jsbmaQUgn5YuFpF/xkyVx8SrjDiKy4t8R7tU92?=
+ =?us-ascii?Q?M3BuQznVagrkWul960a4DmDDF5ra2H65nUKxFU9zzqPCYWiRTMNdsz+efW6o?=
+ =?us-ascii?Q?l4w0SDowxS3dHituRPCUzrAIVPtF0bHlv40MpLwPfzQ3IBMSPNqPhMRBqA2S?=
+ =?us-ascii?Q?mJyfujtItg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <EE715D2563BAEB49999DCDE446E626D5@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB4552.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5d5634f-c3bd-4656-2c6a-08da31e3d4ba
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2022 17:46:22.2342
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7gnkZt1k0uU9UAhxKZyi5k2qj93JYNcA0ebB4tQRHbCSumDoATxG2EgpTcruSoEp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB2825
+X-Proofpoint-ORIG-GUID: CYxnl5smo-JDtgAx8CbfK2oYgVoLZTYO
+X-Proofpoint-GUID: CYxnl5smo-JDtgAx8CbfK2oYgVoLZTYO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-09_05,2022-05-09_02,2022-02-23_01
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Mon, May 09, 2022 at 11:25:22AM +0000, Boris Petkov wrote:
+> On May 9, 2022 10:40:01 AM UTC, Jonathan McDowell <noodles@fb.com> wrote:
+> >> powerpc and ARM64 both achieve this using device tree with a
+> >> "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
+> >> device tree
+> 
+> What's wrong with making x86 use the same devicetree node(s)?
 
+Device tree on x86 doesn't seem to be a thing; none of the distros I
+regularly use enable CONFIG_OF for x86, I can only find 2 32-bit x86
+platforms that actually select it and none of the plumbing for kexec on
+x86 ties in device tree. I agree for platforms that make active use of
+device tree that's the appropriate path, but it doesn't seem to be the
+case for x86.
 
-On 5/9/2022 2:55 AM, Thore Sommer wrote:
-> Hi Lakshmi,
-> 
-> On 06.05.22 22:25, Lakshmi Ramasubramanian wrote:
->> Hi Thore,
->>
->> On 1/6/2022 12:34 PM, Thore Sommer wrote:
->>> A new DM event dm_target_update is introduced for targets to remeasure
->>> their table entry. This is intended for targets that indicate security
->>> relevant events by updating one of their table entries (e.g. verity for
->>> corruption).
->> In the patch description please state the existing problem (or, 
->> limitation in the existing implementation) and then describe how the 
->> proposed change addresses the issue.
-> 
-> For v2 I will add the problem description from the cover letter also to 
-> this patch description.
-Sounds good Thore.
-
-You may know this already - when the patch is merged, description in the 
-cover letter is not included. Only the information in the patch 
-description is included in the git history. So please describe the 
-problem and how it is addressed in the patch description for each patch.
-
-> 
->>
->>>
->>> In the event the dm version, device metadata and target data gets
->>> measured.
->>>
->>> This does not update the hash of the active table because it would 
->>> require
->>> to rehash the whole table with all the other targets entries.
->>>
->>> Signed-off-by: Thore Sommer <public@thson.de>
->>> ---
->>>   drivers/md/dm-ima.c | 76 +++++++++++++++++++++++++++++++++++++++++++++
->>>   drivers/md/dm-ima.h |  2 ++
->>>   2 files changed, 78 insertions(+)
->>>
->>> diff --git a/drivers/md/dm-ima.c b/drivers/md/dm-ima.c
->>> index 957999998d70..3b1bb97263d9 100644
->>> --- a/drivers/md/dm-ima.c
->>> +++ b/drivers/md/dm-ima.c
->>> @@ -750,3 +750,79 @@ void dm_ima_measure_on_device_rename(struct 
->>> mapped_device *md)
->>>       kfree(new_dev_name);
->>>       kfree(new_dev_uuid);
->>>   }
->>> +
->>> +/*
->>> + * Give the option for targets to remeasure on state change.
->>> + */
->>> +void dm_ima_measure_on_target_update(struct dm_target *ti)
->>> +{
->>> +    char *ima_buf = NULL, *target_metadata_buf = NULL, 
->>> *target_data_buf = NULL;
->>> +    struct dm_target *ti2;
->>> +    size_t target_metadata_buf_len, target_data_buf_len;
->>> +    unsigned int num_targets, target_index;
->>> +    struct dm_table *table = ti->table;
->>> +    struct mapped_device *md = table->md;
->>> +    bool found = false;
->>> +    bool noio = true;
->>> +    int l = 0;
->>> +
->> Initializing "ima_buf" to NULL is not necessary since the statement 
->> below initializes it.
-> Yes, I will remove that.
-> 
->>
->>> +    ima_buf = dm_ima_alloc(DM_IMA_MEASUREMENT_BUF_LEN, GFP_KERNEL, 
->>> noio);
->>> +    if (!ima_buf)
->>> +        return;
->>> +
->>> +    target_metadata_buf = 
->>> dm_ima_alloc(DM_IMA_TARGET_METADATA_BUF_LEN, GFP_KERNEL, noio);
->>> +    if (!target_metadata_buf)
->>> +        goto exit;
->>> +
->>> +    target_data_buf = dm_ima_alloc(DM_IMA_TARGET_DATA_BUF_LEN, 
->>> GFP_KERNEL, noio);
->>> +    if (!target_data_buf)
->>> +        goto exit;
->>> +
->>> +    /*
->>> +     * Get the index of the target in the table.
->>> +     */
->>> +    num_targets = dm_table_get_num_targets(table);
->>> +    for (target_index = 0; target_index < num_targets; 
->>> target_index++) {
->>> +        ti2 = dm_table_get_target(table, target_index);
->>> +        if (!ti)
->>> +            goto exit;
->> This check for "ti" can be done on function entry to avoid memory 
->> allocations and calls to dm_table_get_num_targets(), 
->> dm_table_get_target() when "ti" is NULL.
-> 
-> I actually wanted to check for ti2, but I think this entire loop can be 
-> simplified to:
-> 
->      num_targets = dm_table_get_num_targets(table);
->      for (target_index = 0; target_index < num_targets; target_index++) {
->          ti2 = dm_table_get_target(table, target_index);
->          if (ti == ti2)
->              break;
->      }
->      if (target_index == num_targets)
->          goto exit;
-> 
-> This should work and because we iterate over all targets and if we 
-> iterated over all and did not find a match then we skip the measuring.
-> I do not know if checking if "ti" is NULL is required because it should 
-> never be NULL in my understanding.
-Sounds good.
-
-> 
->>
->>> +        if (ti == ti2) {
->>> +            found = true;
->>> +            break;
->>> +        }
->>> +    }
->>> +    if (!found)
->>> +        goto exit;
->>> +
->>> +    scnprintf(target_metadata_buf, DM_IMA_TARGET_METADATA_BUF_LEN,
->>> +              "target_index=%d,target_begin=%llu,target_len=%llu,",
->>> +              target_index, ti->begin, ti->len);
->> Check return status of "scnprintf()" and handle any error.
-> 
-> The other code in dm-ima.c also does not check for errors "scnprintf()".
-> Do you have an example on how to handle "scnprintf()" errors?
-scnprintf returns the number of characters written into the buffer not 
-including the trailing '\0'. Instead of calling strlen on 
-target_metadata_buf, the return value of scnprintf can be used.
-
-scnprintf(target_metadata_buf, DM_IMA_TARGET_METADATA_BUF_LEN,			 
-"target_index=%d,target_begin=%llu,target_len=%llu,",
-		  target_index, ti->begin, ti->len);
-
-target_metadata_buf_len = strlen(target_metadata_buf);
-
-  -lakshmi
-
-> 
-> Regards,
-> Thore
-> 
-> 
->>
->> thanks,
->>   -lakshmi
->>
->>> +    target_metadata_buf_len = strlen(target_metadata_buf);
->>> +
->>> +    if (ti->type->status)
->>> +        ti->type->status(ti, STATUSTYPE_IMA, STATUSTYPE_IMA, 
->>> target_data_buf,
->>> +                    DM_IMA_TARGET_DATA_BUF_LEN);
->>> +    else
->>> +        target_data_buf[0] = '\0';
->>> +    target_data_buf_len = strlen(target_data_buf);
->>> +
->>> +    memcpy(ima_buf + l, DM_IMA_VERSION_STR, 
->>> md->ima.dm_version_str_len);
->>> +    l += md->ima.dm_version_str_len;
->>> +
->>> +    memcpy(ima_buf + l, md->ima.active_table.device_metadata,
->>> +           md->ima.active_table.device_metadata_len);
->>> +    l += md->ima.active_table.device_metadata_len;
->>> +
->>> +    memcpy(ima_buf + l, target_metadata_buf, target_metadata_buf_len);
->>> +    l += target_metadata_buf_len;
->>> +
->>> +    memcpy(ima_buf + l, target_data_buf, target_data_buf_len);
->>> +
->>> +    dm_ima_measure_data("dm_target_update", ima_buf, 
->>> strlen(ima_buf), noio);
->>> +
->>> +exit:
->>> +    kfree(ima_buf);
->>> +    kfree(target_data_buf);
->>> +    kfree(target_metadata_buf);
->>> +}
->>> +EXPORT_SYMBOL_GPL(dm_ima_measure_on_target_update);
->>> diff --git a/drivers/md/dm-ima.h b/drivers/md/dm-ima.h
->>> index b8c3b614670b..281a8b65f8a9 100644
->>> --- a/drivers/md/dm-ima.h
->>> +++ b/drivers/md/dm-ima.h
->>> @@ -63,6 +63,7 @@ void dm_ima_measure_on_device_resume(struct 
->>> mapped_device *md, bool swap);
->>>   void dm_ima_measure_on_device_remove(struct mapped_device *md, bool 
->>> remove_all);
->>>   void dm_ima_measure_on_table_clear(struct mapped_device *md, bool 
->>> new_map);
->>>   void dm_ima_measure_on_device_rename(struct mapped_device *md);
->>> +void dm_ima_measure_on_target_update(struct dm_target *ti);
->>>   #else
->>> @@ -72,6 +73,7 @@ static inline void 
->>> dm_ima_measure_on_device_resume(struct mapped_device *md, boo
->>>   static inline void dm_ima_measure_on_device_remove(struct 
->>> mapped_device *md, bool remove_all) {}
->>>   static inline void dm_ima_measure_on_table_clear(struct 
->>> mapped_device *md, bool new_map) {}
->>>   static inline void dm_ima_measure_on_device_rename(struct 
->>> mapped_device *md) {}
->>> +static inline void dm_ima_measure_on_target_update(struct dm_target 
->>> *ti) {}
->>>   #endif /* CONFIG_IMA */
+J.
