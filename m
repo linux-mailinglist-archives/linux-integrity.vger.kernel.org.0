@@ -2,94 +2,95 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F7E5213C8
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 May 2022 13:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C097B521467
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 May 2022 13:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233056AbiEJLfH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 May 2022 07:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
+        id S241336AbiEJMBN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 May 2022 08:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238147AbiEJLfE (ORCPT
+        with ESMTP id S241378AbiEJMBG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 May 2022 07:35:04 -0400
-Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4762FFEC;
-        Tue, 10 May 2022 04:31:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1652182267; x=1683718267;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=2SNelXJdTh3xGopHG8ofy7R9HS6iWQB+gEljljkwN88=;
-  b=lgkF0Z5EDZK523ENyRA0OfwRx2/qnh8j6PSVHrrkT60uWZEKM5KhnOyt
-   jkgxxZ5+3DW5t7CWDztkDfNp2ZG9HRd1D0wHRkC82A1A0E2UO/hbTIipb
-   MNCXu1vERuhCwzhCfec09VxaLE1lJyBA8u3Fy4zsl+uBg7gP44FoKYLsD
-   Y=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="119943251"
-X-IronPort-AV: E=Sophos;i="5.91,214,1647298800"; 
-   d="scan'208";a="119943251"
-Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
-  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 13:31:04 +0200
-Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 10 May 2022 08:01:06 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAD016689A;
+        Tue, 10 May 2022 04:56:58 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aeae3.dynamic.kabel-deutschland.de [95.90.234.227])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
-        Tue, 10 May 2022 13:31:03 +0200 (CEST)
-Received: from ISCN5CG1067W80.muc.infineon.com (172.23.8.247) by
- MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 13:30:59 +0200
-From:   Johannes Holland <johannes.holland@infineon.com>
-To:     <jarkko@kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        Johannes Holland <johannes.holland@infineon.com>
-Subject: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
-Date:   Tue, 10 May 2022 13:29:03 +0200
-Message-ID: <20220510112902.23213-1-johannes.holland@infineon.com>
-X-Mailer: git-send-email 2.34.1
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2911861E6478B;
+        Tue, 10 May 2022 13:56:55 +0200 (CEST)
+Message-ID: <c0daa593-5494-6d40-969b-f7ed09e87d99@molgen.mpg.de>
+Date:   Tue, 10 May 2022 13:56:54 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] tpm: increase timeout for kselftests
+Content-Language: en-US
+To:     Johannes Holland <johannes.holland@infineon.com>
+Cc:     jarkko@kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca
+References: <20220510111607.22984-1-johannes.holland@infineon.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220510111607.22984-1-johannes.holland@infineon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE801.infineon.com (172.23.29.27) To
- MUCSE819.infineon.com (172.23.29.45)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-To comply with protocol requirements, minimum polling times must often
-be adhered to. Therefore, a macro like tpm_msleep() should sleep at
-least the given amount of time (not up to the given period). Have
-tpm_msleep() sleep at least the given number of milliseconds.
+Dear Johannes,
 
-Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
----
- drivers/char/tpm/tpm.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index 2163c6ee0d36..0971b55fffe3 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
- 
- static inline void tpm_msleep(unsigned int delay_msec)
- {
--	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
--		     delay_msec * 1000);
-+	usleep_range(delay_msec * 1000, (delay_msec * 1000)
-+		     + TPM_TIMEOUT_RANGE_US);
- };
- 
- int tpm_chip_start(struct tpm_chip *chip);
--- 
-2.34.1
+Thank you for your patch.
 
+Am 10.05.22 um 13:16 schrieb Johannes Holland:
+
+
+Should you resend, maybe be more specific in the commit message summary. 
+Maybe:
+
+Double timeout for kselftests to 10 min
+
+> Due to CreatePrimary commands which need to create RSA keys of
+> increasing size, the timeout value need to be raised, as well.
+
+need*s*?
+
+> Default is 300s.
+
+Mention 600 ms somewhere?
+
+> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> ---
+> A timeout of anything below 600s still lead to occasional timeouts for
+> me. Therefore, I propose 600s as a new value.
+
+I’d say, this should go into the commit message. Maybe even say, what 
+devices you are testing with.
+
+
+Kind regards,
+
+Paul
+
+
+>   tools/testing/selftests/tpm2/settings | 2 ++
+>   1 file changed, 2 insertions(+)
+>   create mode 100644 tools/testing/selftests/tpm2/settings
+> 
+> diff --git a/tools/testing/selftests/tpm2/settings b/tools/testing/selftests/tpm2/settings
+> new file mode 100644
+> index 000000000000..919bc3803f03
+> --- /dev/null
+> +++ b/tools/testing/selftests/tpm2/settings
+> @@ -0,0 +1,2 @@
+> +timeout=600
+> +
