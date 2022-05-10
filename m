@@ -2,74 +2,80 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C9D521DD5
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 May 2022 17:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05BF522034
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 May 2022 17:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345287AbiEJPRN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 May 2022 11:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S1346547AbiEJP6k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 May 2022 11:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345982AbiEJPQf (ORCPT
+        with ESMTP id S1347876AbiEJP6K (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 May 2022 11:16:35 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E70021AA9D;
-        Tue, 10 May 2022 07:53:56 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id DD06C755; Tue, 10 May 2022 09:53:54 -0500 (CDT)
-Date:   Tue, 10 May 2022 09:53:54 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        containers@lists.linux.dev,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Tue, 10 May 2022 11:58:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BC462CF2;
+        Tue, 10 May 2022 08:51:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EA0161373;
+        Tue, 10 May 2022 15:51:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88345C385A6;
+        Tue, 10 May 2022 15:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652197876;
+        bh=6JxcE5t9KXVE8fMNIQQ+vlROON2kYoaeG2ur0y4wic8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=akwaLFkg0R/3GizbON24I88jiLQHcxNG8NGP6pKgKS5C20Khy1Y7xZNOmJ1vAelWH
+         rklD2/xr0jvYdgTPQ+bgI54Yis5lQ6qpm8zKgAAGNREmUk4dP47T37AtmFAVt+9ZLn
+         7ybau9gnxTutbjks0xu5bdYaLWBF0fhuuYhnHQ/NGnWoLHD6xpBik/lQlltS3OxC8m
+         5DPiB0+mHyrLbixkwNyrsKK7V/DIGaYhx8ekCyDDC39Oq0NGXSFIMw4oGVoLfqe1Ad
+         SQJXjYjCBSBCP0Tfxpj4Wnb/XvmucYWbOg/cO1t+HaI8YoTDuVXsRzdCbUGDmZqWDy
+         MHmI9I4lAIjAA==
+Date:   Tue, 10 May 2022 17:51:07 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
         krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
         mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
         puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        James Morris <jmorris@namei.org>, jpenumak@redhat.com,
-        Christian Brauner <brauner@kernel.org>,
-        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com, John Johansen <john.johansen@canonical.com>,
         Matthew Garrett <mjg59@srcf.ucam.org>,
         Micah Morton <mortonm@chromium.org>,
         Kentaro Takeda <takedakn@nttdata.co.jp>,
         Jarkko Sakkinen <jarkko@kernel.org>
 Subject: Re: [PATCH v12 01/26] securityfs: rework dentry creation
-Message-ID: <20220510145354.GB7974@mail.hallyn.com>
+Message-ID: <20220510155107.srxifzuqfstvet2f@wittgenstein>
 References: <20220420140633.753772-1-stefanb@linux.ibm.com>
  <20220420140633.753772-2-stefanb@linux.ibm.com>
  <20220509195414.GA30894@mail.hallyn.com>
- <20220509203618.GA31408@mail.hallyn.com>
- <CAOQ4uxjJJVRHrsiOqFokR=zFCV46U+tZJJ74cn9vriucbCHRkA@mail.gmail.com>
+ <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
+ <20220510141025.GA7290@mail.hallyn.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAOQ4uxjJJVRHrsiOqFokR=zFCV46U+tZJJ74cn9vriucbCHRkA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220510141025.GA7290@mail.hallyn.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:43:13AM +0300, Amir Goldstein wrote:
-> On Mon, May 9, 2022 at 11:36 PM Serge E. Hallyn <serge@hallyn.com> wrote:
-> >
-> > On Mon, May 09, 2022 at 02:54:14PM -0500, Serge E. Hallyn wrote:
+On Tue, May 10, 2022 at 09:10:25AM -0500, Serge Hallyn wrote:
+> On Tue, May 10, 2022 at 12:25:25PM +0200, Christian Brauner wrote:
+> > On Mon, May 09, 2022 at 02:54:14PM -0500, Serge Hallyn wrote:
 > > > On Wed, Apr 20, 2022 at 10:06:08AM -0400, Stefan Berger wrote:
 > > > > From: Christian Brauner <brauner@kernel.org>
-> > > >
+> > > > 
 > > > > When securityfs creates a new file or directory via
 > > > > securityfs_create_dentry() it will take an additional reference on the
 > > > > newly created dentry after it has attached the new inode to the new
@@ -78,139 +84,70 @@ On Tue, May 10, 2022 at 11:43:13AM +0300, Amir Goldstein wrote:
 > > > > securityfs. It uses a similar pairing as securityfs. Where securityfs
 > > > > has the securityfs_create_dentry() and securityfs_remove() pairing,
 > > > > debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
-> > > >
+> > > > 
 > > > > In contrast to securityfs, debugfs doesn't take an additional reference
 > > > > on the newly created dentry in __debugfs_create_file() which would need
 > > > > to be put in debugfs_remove().
-> > > >
+> > > > 
 > > > > The additional dget() isn't a problem per se. In the current
 > > > > implementation of securityfs each created dentry pins the filesystem via
-> > >
+> > > 
 > > > Is 'via' an extra word here or is there a missing word?
-> > >
+> > > 
 > > > I'll delay the rest of my response as the missing word may answer my
 > > > remaining question :)
-> > >
-> > > > until it is removed. Since it is virtually guaranteed that there is at
-> > > > least one user of securityfs that has created dentries the initial
-> > > > securityfs mount cannot go away until all dentries have been removed.
-> > > >
-> > > > Since most of the users of the initial securityfs mount don't go away
-> > > > until the system is shutdown the initial securityfs won't go away when
-> > > > unmounted. Instead a mount will usually surface the same superblock as
-> > > > before. The additional dget() doesn't matter in this scenario since it
-> > > > is required that all dentries have been cleaned up by the respective
-> > > > users before the superblock can be destroyed, i.e. superblock shutdown
-> > > > is tied to the lifetime of the associated dentries.
-> > > >
-> > > > However, in order to support ima namespaces we need to extend securityfs
-> > > > to support being mounted outside of the initial user namespace. For
-> > > > namespaced users the pinning logic doesn't make sense. Whereas in the
-> > > > initial namespace the securityfs instance and the associated data
-> > > > structures of its users can't go away for reason explained earlier users
-> > > > of non-initial securityfs instances do go away when the last users of
-> > > > the namespace are gone.
-> > > >
-> > > > So for those users we neither want to duplicate the pinning logic nor
-> > > > make the global securityfs instance display different information based
-> > > > on the namespace. Both options would be really messy and hacky.
-> > > >
-> > > > Instead we will simply give each namespace its own securityfs instance
-> > > > similar to how each ipc namespace has its own mqueue instance and all
-> > > > entries in there are cleaned up on umount or when the last user of the
-> > > > associated namespace is gone.
-> > > >
-> > > > This means that the superblock's lifetime isn't tied to the dentries.
-> > > > Instead the last umount, without any fds kept open, will trigger a clean
-> > > > shutdown. But now the additional dget() gets in the way. Instead of
-> > > > being able to rely on the generic superblock shutdown logic we would
-> > > > need to drop the additional dentry reference during superblock shutdown
-> > > > for all associated users. That would force the use of a generic
-> > > > coordination mechanism for current and future users of securityfs which
-> > > > is unnecessary. Simply remove the additional dget() in
-> > > > securityfs_dentry_create().
-> > > >
-> > > > In securityfs_remove() we will call dget() to take an additional
-> > > > reference on the dentry about to be removed. After simple_unlink() or
-> > > > simple_rmdir() have dropped the dentry refcount we can call d_delete()
-> > > > which will either turn the dentry into negative dentry if our earlier
-> > > > dget() is the only reference to the dentry, i.e. it has no other users,
-> > > > or remove it from the hashqueues in case there are additional users.
-> > > >
+> > 
+> > It can be both. It should either be removed or it should be followed by
+> > "securityfs_create_dentry()". securityfs_create_dentry() takes two
+> > references one in lookup_one_len() and another one explicitly via
+> > dget(). The latter one isn't needed. Some of that has been covered in an
+> > earlier thread:
+> > https://lore.kernel.org/lkml/20220105101815.ldsm4s5yx7pmuiil@wittgenstein
 > 
-> The first case (turn negative) cannot happen because the function is
-> entered with at least 1 refcount and increments it by 1.
-> So you can follow commit 46c46f8df9aa ("devpts_pty_kill(): don't bother
-> with d_delete()") and use d_drop() instead.
-> 
-> > > > All of these changes should not have any effect on the userspace
-> > > > semantics of the initial securityfs mount.
-> > > >
-> > > > Signed-off-by: Christian Brauner <brauner@kernel.org>
-> > > > Cc: John Johansen <john.johansen@canonical.com>
-> > > > Cc: Matthew Garrett <mjg59@srcf.ucam.org>
-> > > > Cc: Micah Morton <mortonm@chromium.org>
-> > > > Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
-> > > > Cc: James Morris <jmorris@namei.org>
-> > > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > > ---
-> > > >  security/inode.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/security/inode.c b/security/inode.c
-> > > > index 6c326939750d..13e6780c4444 100644
-> > > > --- a/security/inode.c
-> > > > +++ b/security/inode.c
-> > > > @@ -159,7 +159,6 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
-> > > >             inode->i_fop = fops;
-> > > >     }
-> > > >     d_instantiate(dentry, inode);
-> > > > -   dget(dentry);
-> > > >     inode_unlock(dir);
-> > > >     return dentry;
-> > > >
-> > > > @@ -302,10 +301,12 @@ void securityfs_remove(struct dentry *dentry)
-> > > >     dir = d_inode(dentry->d_parent);
-> > > >     inode_lock(dir);
-> > > >     if (simple_positive(dentry)) {
-> > > > +           dget(dentry);
-> > > >             if (d_is_dir(dentry))
-> > > >                     simple_rmdir(dir, dentry);
-> >
-> > Hm, so I realize your patch isn't introducing this, but is the
-> > fact that we ignore the possible -ENOTEMPTY return value of
-> > simple_rmdir() not a problem?
-> 
-> As long as we are using debugfs as a reference code, wouldn't
-> securityfs need to use simple_recursive_removal()?
-> Can we guaranty that modules always cleanup all entries in
-> correct order?
-> 
-> >
-> > > >             else
-> > > >                     simple_unlink(dir, dentry);
-> > > > +           d_delete(dentry);
-> >
-> 
-> d_drop() (see comment above)
-> 
-> > I'm mostly trying to convince myself that the fact that there is not
-> > a matching dput being removed (to match the dget being removed above)
-> > is ok.  I do think it is, but that belief seems to dictate that right
-> > now dentries must never be being released.
-> >
-> > Otherwise, it seems like there must be cases where the next dput could
-> > be called on a dentry that has been freed.
-> >
-> > > >             dput(dentry);
-> 
-> Huh? There must be a ref to dentry when entering this function
-> and there is dget() added above so balance is not lost.
+> Yes, I saw that two references were being taken.  And near as I can tell,
+> the second one was never being dropped.  So if you tell me that before this
+> patch the dentries are never freed, then I'm happy.  Otherwise, I'm
+> bothered the fact that no matching dput is being deleted in the code (to
+> match the extra dget being removed).  So where is the code where the final
+> dput was happening, and is it the d_delete() you're adding which is making
+> it so that that dput won't be called now?
 
-Like, I said, i think the answer is that before this patch there the
-dentry counts never reach 0.  But we are removing a dget and not
-removing any matching dput, so if they reached 0 before, then my
-question is where was that happening and is that code still safe after
-this patch.
+* So consider mounting securityfs _without this patch applied_:
+
+  mount -t securityfs /sfs
+  
+  and assume we only have a single user that creates a file "foo" via
+  
+  securityfs_create_file()
+  {
+  	lookup_one_len();	// first dget()
+  	dget();			// second dget()
+  }
+  
+  now assume that user at some point calls
+  
+  void securityfs_remove()
+  {
+  	if (d_is_dir(dentry))
+  		simple_rmdir(dir, dentry);	// first dput()
+  	else
+  		simple_unlink(dir, dentry);	// first dput()
+  	dput(dentry);				// second dput()
+  }
+
+* Now consider mounting securityfs _with this patch applied_:
+
+  securityfs_create_file()
+  {
+  	lookup_one_len();	// first dget()
+  }
+  
+  void securityfs_remove()
+  {
+  	dget();					// second dget() 
+  	if (d_is_dir(dentry))
+  		simple_rmdir(dir, dentry);	// first dput()
+  	else
+  		simple_unlink(dir, dentry);	// first dput()
+  	dput(dentry);				// second dput()
+  }
