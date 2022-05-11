@@ -2,131 +2,186 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E66523D37
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 May 2022 21:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69977523D48
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 May 2022 21:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346683AbiEKTNT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 May 2022 15:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S243698AbiEKTTJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 May 2022 15:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345686AbiEKTNR (ORCPT
+        with ESMTP id S242629AbiEKTTI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 May 2022 15:13:17 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC2E7357F;
-        Wed, 11 May 2022 12:13:16 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BH1qih030573;
-        Wed, 11 May 2022 19:12:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=7GCQv78viqKU8RwDGBuW3z+HlE0qjI3m9seEq8djQSw=;
- b=JKeXOfhJY31bnB3N8mlZWyQTtVg/2iabjwzDPbV6QJbzNL04pzYx/3Bdlo9B2w97XxXp
- g3cQjjs/DRt0/Cs9VOueuz5z4aJM9qVL82NBVZ+PCjKBv5ER32zRJPBwRvtu+7iJWGNZ
- l2jvlWTZPKISTV8g3kg0xWPCbyO3jJc0q68I4go6DETklymLviOQSJDS2D2F5lHRBvnP
- 7ZR5eJAgnTxrBz+RJyBxyzCrOYF9srf2HtXUrV+klNJNJxb3J/PVsYQd/pkPlBcbim5c
- ars20e+3CnQQRSJjZZdrXYNUurz84m546xXo/WTs4PMzB+eFgqyIx9AZGkFHVXQSFrdK ew== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0cme100e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 19:12:46 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24BIvBrm014399;
-        Wed, 11 May 2022 19:12:45 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0cme0yyw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 19:12:45 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24BJ7hX2005482;
-        Wed, 11 May 2022 19:12:43 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06fra.de.ibm.com with ESMTP id 3fwg1hvk4d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 May 2022 19:12:43 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24BJCeuR50790726
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 May 2022 19:12:40 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A346EA405C;
-        Wed, 11 May 2022 19:12:40 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF350A4054;
-        Wed, 11 May 2022 19:12:38 +0000 (GMT)
-Received: from sig-9-65-89-202.ibm.com (unknown [9.65.89.202])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 11 May 2022 19:12:38 +0000 (GMT)
-Message-ID: <997ea6e0a1f2c40f429ad1f457566cdd80458c78.camel@linux.ibm.com>
-Subject: Re: [PATCH v3] x86/kexec: Carry forward IMA measurement log on kexec
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jonathan McDowell <noodles@fb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Wed, 11 May 2022 15:12:38 -0400
-In-Reply-To: <Ynv4zBnLvbMKrwrq@zn.tnic>
-References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
-         <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
-         <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
-         <67f0fe5874638241bc2f2401dc2bc12c51becc0b.camel@linux.ibm.com>
-         <Ynv4zBnLvbMKrwrq@zn.tnic>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FMIVkOK8bETfNCXJnG5WCBfstjQsssso
-X-Proofpoint-GUID: qv3eKpt49e3w7Y1UmtFq3Qv1l1cZgdY6
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 11 May 2022 15:19:08 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF50541A4;
+        Wed, 11 May 2022 12:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1652296720;
+        bh=K6++BUf6/YdegjM4BnlUkF76z9/6nIa57i654gYKFwg=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=T/woSgcwitQUDyi8m4Ah7EDL3k3Q+Da+10SEgWnWKh0sUA4JgpT1SklBMUrgS/7Px
+         D8gxGmYgirxBrzSJ8pBPm9iU0UrHIJnVkzAtZMabpyF+jK4TiGtpvbM8seF6PSrBPZ
+         UBe83135XoH85ioxAGAsWB3ytCNWp6ovdMl8AmYI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.3.12]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MDhhX-1nfpJf2fN1-00AoPq; Wed, 11
+ May 2022 21:18:40 +0200
+Subject: Re: [PATCH v4 1/6] tpm, tpm_tis_spi: Request threaded irq
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukas@wunner.de,
+        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
+ <20220509080559.4381-2-LinoSanfilippo@gmx.de> <YnucgDH3I87RI8PN@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <486cec01-ec02-3f11-0b81-037e0700c503@gmx.de>
+Date:   Wed, 11 May 2022 21:18:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-11_07,2022-05-11_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxlogscore=851 adultscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0
- phishscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205110083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YnucgDH3I87RI8PN@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:isOjDfYGs9rj3rFvgoSSlcdFwtYl/xB/3PYo10NFQYguhcBoORe
+ rkmEuS2ylsl5mRo+Vp03AnDvbURnm3Q7SO2594DDENp1KR1+oTibJb0s3puEH2UKmWNUu1J
+ Lirp/k8iiPUnCf7X9f5QUROUHVOza7iI5YODuONcBJFxSdQHZukvOlah+wDnrA3z7Mq0SAa
+ od/sdOY1JmIRocXlY2jzA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eXJ1qHVv3nk=:5OO9LtosDPQb1K80uv70Ef
+ YEsYh9g6UjN+uADMLSvoDT+VwB16Z+EwFH/UahyHi/ChD78thsWhK59tuOWTYkenmHFveeRAf
+ 1vGERV/WrqM+P9aC1fjiMK2/kDFsJJd1hyOixMCeJM6dGG9yP9jixTtPJICROX5SP6E9g6HcC
+ J06v1jO2PlbE6k3/14sXptP1cxOKZ2CyaeeTBXNEmhwiu1bPsFN3gIGjwk8385vgGsQxVLeKr
+ OJ6RWqyWhXcEYizXaS1sDSoy3Vex4OTLST+sRBATXh0gdPB4IiXrljDPRWKz5C/t4ZCZ7/WV8
+ xnFNssFzfY0nYBiw7kZEr0mAc309gP5cInbE2hMAc2rPUIyJSlkXNf1SOxUA1im7PQSRJANNn
+ kRLF0f8UYnOdsFxFXrQgRua46SCg/dusqokrDFUjRxjkCEmckrr0VshRgyeflKqXSG5HsTE9W
+ 0+0LDDXxS1vFkMCAfdbfdXCJrzd/ZfZEI4jjn2d2zYA/Vti3ez+umr36d2914eU5P++Cwh9S8
+ /G6Xff5LJOPXbFIQPIxOOSXAeWr1uTkuFWVHFcOLLlBQh0uIjldidSpgC3l6sZW8xBomy9Qoe
+ lAvU1S4IxYtlobUG1ka8TLQxoNHCkoSQNrCDjif2sNLeGif/HgY4lFoR4QTx1KfLvDURn3mY/
+ BwUKjcSRsLD6c3zFYeUE9LX7XXeb7jRansOl6fJWrmB1YAGker961WpgRlfc1tTMuA9JoKg3z
+ 0QRr9ZU8ktCs4ivu2dl/67RN/qctcqZlnErhBNJgfmIXM6fqMWeDfe/PwsSdflXBYfOv4iJp5
+ syNNomr7GnHJnedANJCij6gSDE/qTLcCLssB4raNH/MJArQ8tAebQ6zZriBepfeDZ6zAqBck6
+ RU9UxA44U8SMJ+McQE0pG+pmZwIrOEIGwlcz/kociGfCQJx/AkZGjWMtjevE83LEZFgsHAI3c
+ 7gscEcuHW1p7JqwqK8n9Szqf2IZxcHFb9CbfEw0lNyw4tsUVwbXFZafYlssQlbhGDFgrJEHbn
+ gS9EwEtQayq0Ro00BW/IzyRPAMftWZpcL0/qxjRLDeHnHPT9TEfmayvSWYlVVMKQgvC2200UX
+ 1+DYY8txEaT5Ag=
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-05-11 at 19:56 +0200, Borislav Petkov wrote:
-> On Wed, May 11, 2022 at 01:53:23PM -0400, Mimi Zohar wrote:
-> > This patch doesn't apply to Linus' master branch.  Which tip/master
-> > branch?
-> 
-> This one:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/
+Hi,
 
-thanks!
+On 11.05.22 at 13:22, Jarkko Sakkinen wrote:
+> On Mon, May 09, 2022 at 10:05:54AM +0200, Lino Sanfilippo wrote:
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> Interrupt handling at least includes reading and writing the interrupt
+>> status register within the interrupt routine. Since accesses over the S=
+PI
+>> bus are synchronized by a mutex, request a threaded interrupt handler t=
+o
+>> ensure a sleepable context during interrupt processing.
+>>
+>> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver"=
+)
+>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>
+> When you state that it needs a sleepable context, you should bring a
+> context why it needs it. This not to disregard the code change overally =
+but
+> you cannot make even the most obvious claim without backing data.
+>
 
-> 
-> Considering how the majority of the changes are x86-specific, I was
-> thinking I'd carry it through the tip tree after getting your ACK for
-> the IMA side of things?
+so what kind of backing data do you have in mind? Would it help to emphasi=
+ze more
+that the irq handler is running in hard irq context in the current code an=
+d thus
+must not access registers over SPI since SPI uses a mutex (I consider it a=
+s basic
+knowledge that a mutex must not be taken in hard irq context)?
 
-Agreed, all of the changes should be architecture specific.  It should
-definitely be upstreamed via x86.
 
-thanks,
+Regards,
+Lino
 
-Mimi
+
+>> ---
+>>  drivers/char/tpm/tpm_tis_core.c     | 15 +++++++++++++--
+>>  drivers/char/tpm/tpm_tis_core.h     |  1 +
+>>  drivers/char/tpm/tpm_tis_spi_main.c |  5 +++--
+>>  3 files changed, 17 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
+_core.c
+>> index dc56b976d816..52369ef39b03 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.c
+>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>> @@ -747,8 +747,19 @@ static int tpm_tis_probe_irq_single(struct tpm_chi=
+p *chip, u32 intmask,
+>>  	int rc;
+>>  	u32 int_status;
+>>
+>> -	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
+>> -			     dev_name(&chip->dev), chip) !=3D 0) {
+>> +
+>> +	if (priv->flags & TPM_TIS_USE_THREADED_IRQ) {
+>> +		rc =3D devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+>> +					       tis_int_handler,
+>> +					       IRQF_ONESHOT | flags,
+>> +					       dev_name(&chip->dev),
+>> +					       chip);
+>> +	} else {
+>> +		rc =3D devm_request_irq(chip->dev.parent, irq, tis_int_handler,
+>> +				      flags, dev_name(&chip->dev), chip);
+>> +	}
+>> +
+>> +	if (rc) {
+>>  		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
+>>  			 irq);
+>>  		return -1;
+>> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis=
+_core.h
+>> index 3be24f221e32..43b724e55192 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.h
+>> +++ b/drivers/char/tpm/tpm_tis_core.h
+>> @@ -86,6 +86,7 @@ enum tis_defaults {
+>>  enum tpm_tis_flags {
+>>  	TPM_TIS_ITPM_WORKAROUND		=3D BIT(0),
+>>  	TPM_TIS_INVALID_STATUS		=3D BIT(1),
+>> +	TPM_TIS_USE_THREADED_IRQ	=3D BIT(2),
+>>  };
+>>
+>>  struct tpm_tis_data {
+>> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm=
+_tis_spi_main.c
+>> index 184396b3af50..f56613f2946f 100644
+>> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+>> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+>> @@ -223,9 +223,10 @@ static int tpm_tis_spi_probe(struct spi_device *de=
+v)
+>>  	phy->flow_control =3D tpm_tis_spi_flow_control;
+>>
+>>  	/* If the SPI device has an IRQ then use that */
+>> -	if (dev->irq > 0)
+>> +	if (dev->irq > 0) {
+>>  		irq =3D dev->irq;
+>> -	else
+>> +		phy->priv.flags |=3D TPM_TIS_USE_THREADED_IRQ;
+>> +	} else
+>>  		irq =3D -1;
+>>
+>>  	init_completion(&phy->ready);
+>> --
+>> 2.36.0
+>>
+>
+>
+> BR, Jarkko
+>
 
