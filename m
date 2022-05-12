@@ -2,54 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8868552572B
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 May 2022 23:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1723B52574A
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 May 2022 23:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358800AbiELVle (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 May 2022 17:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        id S1358899AbiELVsK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 May 2022 17:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358790AbiELVlb (ORCPT
+        with ESMTP id S1358885AbiELVr6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 May 2022 17:41:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 212217092C
-        for <linux-integrity@vger.kernel.org>; Thu, 12 May 2022 14:41:30 -0700 (PDT)
+        Thu, 12 May 2022 17:47:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 064E327E6A6
+        for <linux-integrity@vger.kernel.org>; Thu, 12 May 2022 14:47:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652391689;
+        s=mimecast20190719; t=1652392069;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YX4qZOz+9WbIDFanSGeueshT1smpwyQHiwCB0mvZIgg=;
-        b=Be7drBzatnRNs6Q7hzMakRp+pOglm55sLPvM7j6Epmbn70zwsBoDatjN6MTWnUKw7PQgWZ
-        HLBrbSRV7M+aPXmQd5y3JkaEZ7k+NT8xzLzlkORPaCdpQ6cq8eK5xq4dF/xFnSSbqMb5kQ
-        aD4FLOLh1HVJnXU3qkN+u6EJ7adq9t0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=YWzVrdFw3n8EH2Ce8k4daz33bBf83epcMdzHAJNT8tE=;
+        b=W7fM6+FP2nVc7JqRXicqDnuFbWP7P4eyJiwsZ9YlNakyg97P2QjfN7ffSYjyyBXEiyp1OR
+        lsy8k4LA+7V6KeD/7ZmY6IG3SBOdSwEgfwYbYhk1RRxEMWRaz43Sux5NiiUPm+J7/gM2sP
+        Vlm8DTivFbjlNgY0SJ7DU6wuT+toqS8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-316--9sq3rMhP6iZqr34jl7IjA-1; Thu, 12 May 2022 17:41:24 -0400
-X-MC-Unique: -9sq3rMhP6iZqr34jl7IjA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+ us-mta-617-E2haYQIaNmW7kVC3uepXEg-1; Thu, 12 May 2022 17:47:46 -0400
+X-MC-Unique: E2haYQIaNmW7kVC3uepXEg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E950F8038E3;
-        Thu, 12 May 2022 21:41:22 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD7EB383328C;
+        Thu, 12 May 2022 21:47:45 +0000 (UTC)
 Received: from warthog.procyon.org.uk (unknown [10.33.37.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E2C7416156;
-        Thu, 12 May 2022 21:41:05 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A13B84010E23;
+        Thu, 12 May 2022 21:47:31 +0000 (UTC)
 Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
         Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
         Kingdom.
         Registered in England and Wales under Company Registration No. 3798903
 From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220504014440.3697851-20-keescook@chromium.org>
-References: <20220504014440.3697851-20-keescook@chromium.org> <20220504014440.3697851-1-keescook@chromium.org>
+In-Reply-To: <20220504014440.3697851-1-keescook@chromium.org>
+References: <20220504014440.3697851-1-keescook@chromium.org>
 To:     Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, Alexei Starovoitov <ast@kernel.org>,
-        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
+Cc:     Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Gabbasov <andrew_gabbasov@mentor.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andy Gross <agross@kernel.org>,
@@ -69,6 +66,7 @@ Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Dan Williams <dan.j.williams@intel.com>,
         David Gow <davidgow@google.com>,
+        David Howells <dhowells@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
         Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
         devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
@@ -108,6 +106,7 @@ Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
         Leon Romanovsky <leon@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
         linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
@@ -119,6 +118,7 @@ Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
         Louis Peens <louis.peens@corigine.com>,
         Luca Coelho <luciano.coelho@intel.com>,
         Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
         Marcel Holtmann <marcel@holtmann.org>,
         Mark Brown <broonie@kernel.org>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
@@ -149,12 +149,12 @@ Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
         xen-devel@lists.xenproject.org,
         Xiu Jianfeng <xiujianfeng@huawei.com>,
         Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 19/32] afs: Use mem_to_flex_dup() with struct afs_acl
+Subject: Re: [PATCH 00/32] Introduce flexible array struct memcpy() helpers
 MIME-Version: 1.0
 Content-Type: text/plain
-Date:   Thu, 12 May 2022 22:41:05 +0100
-Message-ID: <898803.1652391665@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Date:   Thu, 12 May 2022 22:47:31 +0100
+Message-ID: <899235.1652392051@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -168,50 +168,23 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Kees Cook <keescook@chromium.org> wrote:
 
->  struct afs_acl {
-> -	u32	size;
-> -	u8	data[];
-> +	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(u32, size);
-> +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, data);
->  };
+> I'm happy to also point out that the conversions (patches 5+) are actually
+> a net reduction in lines of code:
+>  49 files changed, 154 insertions(+), 244 deletions(-)
 
-Oof...  That's really quite unpleasant syntax.  Is it not possible to have
-mem_to_flex_dup() and friends work without that?  You are telling them the
-fields they have to fill in.
+That doesn't mean that it's actually code that's clearer to read.  I would say
+that it's actually less clear.  In a bunch of places, you've done something
+like:
 
-> +	struct afs_acl *acl = NULL;
->  
-> -	acl = kmalloc(sizeof(*acl) + size, GFP_KERNEL);
-> -	if (!acl) {
-> +	if (mem_to_flex_dup(&acl, buffer, size, GFP_KERNEL)) {
+-	e = kmalloc(...);
+-	if (!e)
++	if (__mem_to_flex_dup(&e, ...))
 
-Please don't do that.  Either do:
+The problem is that, to me at least, it looks like:
 
-	acl = mem_to_flex_dup(buffer, size, GFP_KERNEL);
-	if (!acl)
-
-or:
-
-	acl = mem_to_flex_dup(buffer, size, GFP_KERNEL);
-	if (IS_ERR(acl))
-
-Please especially don't make it that an apparent 'true' return indicates an
-error.  If you absolutely must return the acl pointer through the argument
-list (presumably because it's actually a macro), make it return false on
-failure:
-
-	if (!mem_to_flex_dup(&acl, buffer, size, GFP_KERNEL))
-
-or return and explicitly check for an error code:
-
-	if (mem_to_flex_dup(&acl, buffer, size, GFP_KERNEL) < 0)
-
-or:
-
-	ret = mem_to_flex_dup(&acl, buffer, size, GFP_KERNEL);
-	if (ret < 0)
-
-(or use != 0 rather than < 0)
+-	e = kmalloc(...);
+-	if (kmalloc failed)
++	if (__mem_to_flex_dup(&e, ...) succeeded)
 
 David
 
