@@ -2,74 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B47B524BE7
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 May 2022 13:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BBE524C99
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 May 2022 14:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353094AbiELLnO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 May 2022 07:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S1353630AbiELMVc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 May 2022 08:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351802AbiELLnN (ORCPT
+        with ESMTP id S1353632AbiELMVb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 May 2022 07:43:13 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCD65BD24;
-        Thu, 12 May 2022 04:43:12 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CBPdXq011183;
-        Thu, 12 May 2022 11:43:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=VZbIDCul7T2Ww8sJEjj+xsE0H5qsntMAXBtOrgZzbxc=;
- b=S/CuAKWCxf4DvZrmjW8ErAmyX+2RgVqP653ujCC+/oz9Yea6zi3WgMM/D78DgB516PPB
- hSnt3c4PHd9wsojQpPjjI5sEb9dW7JMSnd1gWwcqsLD+yIt5LdLJ8C/klDiU5ma6mBSG
- d9tgWeCj5pkGCwHRyX3eZarpLl+Jluj0AspN4ERGneGQE046di/R1mzKLeVz194qYGpR
- IHSUNyuUO3xM9cZRWMQJqYS43Xr+GfjNLxHhMe6Dq/E1+u6XXP199JDN1u5LsrL6xMDN
- tlocHV5Y7TKZ+N1TX9daCOXiAyHzjVVM2eAl86hq3tCkvPXYpBr6CkQJM8/BlAJidUqm Lw== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g11bug8tc-1
+        Thu, 12 May 2022 08:21:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D8D62235;
+        Thu, 12 May 2022 05:21:29 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CCJDnq014644;
+        Thu, 12 May 2022 12:21:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=bCU0bOeBXG5Y6DNauHOVFi5fNBXbyQkfeBK2dG8rdvw=;
+ b=ZjvQU0ZHGwtBdLWlUg+S2cVl1S5V40JJA0RHaSjyZrAXWD5cDXPJTl2d5Qr51ZUKK3j3
+ 8aNKwMtM0XLmdU10c8ANHjdStcRmShtDxnJanaiJQVZlv7W6n2TtbZadg5MVTVyl7w2W
+ 0pB2Sg/EOxoPLKFR6QfQgMTBKzL3IOsbIsEKVLy7I2uPrfwHX2p/oqzlCyiMWNJPS+rK
+ AaGjIy38aH6mHN+DWVpwohkxa89DYJX7EFcLefhyvw32iSz/gHkSON6heSI4J2GNu8VA
+ T+wlisDnvWy8IzpyQ8ujNtKQQvZ7LnAOolXpoE+JYP1sLv9WaHI7jOWDdAJ3oyBlU3Ct PQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g124rg1u1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 11:43:12 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CBbIb7031987;
-        Thu, 12 May 2022 11:43:11 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 3fwgda2wna-1
+        Thu, 12 May 2022 12:21:24 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CCKCMV019771;
+        Thu, 12 May 2022 12:21:24 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g124rg1sr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 11:43:11 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CBhARV43516172
+        Thu, 12 May 2022 12:21:23 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CCJdYr001036;
+        Thu, 12 May 2022 12:21:22 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma05fra.de.ibm.com with ESMTP id 3fwgd8wg5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 May 2022 12:21:21 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CCLJTo52560360
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 11:43:10 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CC496A05D;
-        Thu, 12 May 2022 11:43:10 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A9D776A054;
-        Thu, 12 May 2022 11:43:09 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 12 May 2022 11:43:09 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH] evm: Return INTEGRITY_PASS for enum integrity_status value '0'
-Date:   Thu, 12 May 2022 07:43:07 -0400
-Message-Id: <20220512114307.3669972-1-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 12 May 2022 12:21:19 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9B378A4054;
+        Thu, 12 May 2022 12:21:19 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5ACD7A405B;
+        Thu, 12 May 2022 12:21:18 +0000 (GMT)
+Received: from sig-9-65-70-87.ibm.com (unknown [9.65.70.87])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 12 May 2022 12:21:18 +0000 (GMT)
+Message-ID: <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
+Subject: Re: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Nayna <nayna@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca
+Date:   Thu, 12 May 2022 08:21:17 -0400
+In-Reply-To: <YnvTSqRgYkWu0qgp@kernel.org>
+References: <20220510112902.23213-1-johannes.holland@infineon.com>
+         <YnvTSqRgYkWu0qgp@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FVgjLTIpGbMgE3v2a1Jhhqrluafzcg5W
-X-Proofpoint-ORIG-GUID: FVgjLTIpGbMgE3v2a1Jhhqrluafzcg5W
+X-Proofpoint-GUID: zx-3t_x1YUzXSSJZt9EnPRcjXHiHQJ8i
+X-Proofpoint-ORIG-GUID: INxetDhYIMU4i4YGIGUtGGi-9gmPTIp5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_02,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=787 phishscore=0
- adultscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205120052
+ definitions=2022-05-12_10,2022-05-12_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ lowpriorityscore=0 priorityscore=1501 adultscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 suspectscore=0 clxscore=1011
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205120056
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -79,26 +94,44 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Return INTEGRITY_PASS for the enum integrity_status rather than 0.
+On Wed, 2022-05-11 at 18:16 +0300, Jarkko Sakkinen wrote:
+> On Tue, May 10, 2022 at 01:29:03PM +0200, Johannes Holland wrote:
+> > To comply with protocol requirements, minimum polling times must often
+> > be adhered to. Therefore, a macro like tpm_msleep() should sleep at
+> > least the given amount of time (not up to the given period). Have
+> > tpm_msleep() sleep at least the given number of milliseconds.
+> > 
+> > Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> > ---
+> >  drivers/char/tpm/tpm.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > index 2163c6ee0d36..0971b55fffe3 100644
+> > --- a/drivers/char/tpm/tpm.h
+> > +++ b/drivers/char/tpm/tpm.h
+> > @@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
+> >  
+> >  static inline void tpm_msleep(unsigned int delay_msec)
+> >  {
+> > -	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
+> > -		     delay_msec * 1000);
+> > +	usleep_range(delay_msec * 1000, (delay_msec * 1000)
+> > +		     + TPM_TIMEOUT_RANGE_US);
+> >  };
+> >  
+> >  int tpm_chip_start(struct tpm_chip *chip);
+> > -- 
+> > 2.34.1
+> > 
+> 
+> For this I would really like to hear a 2nd opinion from Nayna and Mimi.
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- security/integrity/evm/evm_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch reverts commit 5ef924d9e2e8 ("tpm: use tpm_msleep() value as
+max delay").    Are you experiencing TPM issues that require it?
 
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 7d87772f0ce6..cc88f02c7562 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -436,7 +436,7 @@ static enum integrity_status evm_verify_current_integrity(struct dentry *dentry)
- 	struct inode *inode = d_backing_inode(dentry);
- 
- 	if (!evm_key_loaded() || !S_ISREG(inode->i_mode) || evm_fixmode)
--		return 0;
-+		return INTEGRITY_PASS;
- 	return evm_verify_hmac(dentry, NULL, NULL, 0, NULL);
- }
- 
--- 
-2.35.1
+thanks,
+
+Mimi
+
 
