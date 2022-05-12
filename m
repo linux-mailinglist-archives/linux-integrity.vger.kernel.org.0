@@ -2,91 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BBE524C99
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 May 2022 14:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40FF2524CE7
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 May 2022 14:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353630AbiELMVc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 May 2022 08:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S1353780AbiELMdC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 May 2022 08:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353632AbiELMVb (ORCPT
+        with ESMTP id S1353778AbiELMdB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 May 2022 08:21:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D8D62235;
-        Thu, 12 May 2022 05:21:29 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24CCJDnq014644;
-        Thu, 12 May 2022 12:21:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=bCU0bOeBXG5Y6DNauHOVFi5fNBXbyQkfeBK2dG8rdvw=;
- b=ZjvQU0ZHGwtBdLWlUg+S2cVl1S5V40JJA0RHaSjyZrAXWD5cDXPJTl2d5Qr51ZUKK3j3
- 8aNKwMtM0XLmdU10c8ANHjdStcRmShtDxnJanaiJQVZlv7W6n2TtbZadg5MVTVyl7w2W
- 0pB2Sg/EOxoPLKFR6QfQgMTBKzL3IOsbIsEKVLy7I2uPrfwHX2p/oqzlCyiMWNJPS+rK
- AaGjIy38aH6mHN+DWVpwohkxa89DYJX7EFcLefhyvw32iSz/gHkSON6heSI4J2GNu8VA
- T+wlisDnvWy8IzpyQ8ujNtKQQvZ7LnAOolXpoE+JYP1sLv9WaHI7jOWDdAJ3oyBlU3Ct PQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g124rg1u1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 12:21:24 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24CCKCMV019771;
-        Thu, 12 May 2022 12:21:24 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g124rg1sr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 12:21:23 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24CCJdYr001036;
-        Thu, 12 May 2022 12:21:22 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 3fwgd8wg5j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 12:21:21 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24CCLJTo52560360
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 12:21:19 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9B378A4054;
-        Thu, 12 May 2022 12:21:19 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5ACD7A405B;
-        Thu, 12 May 2022 12:21:18 +0000 (GMT)
-Received: from sig-9-65-70-87.ibm.com (unknown [9.65.70.87])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 12 May 2022 12:21:18 +0000 (GMT)
-Message-ID: <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
+        Thu, 12 May 2022 08:33:01 -0400
+X-Greylist: delayed 58837 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 05:32:59 PDT
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4365BD16;
+        Thu, 12 May 2022 05:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1652358778;
+        bh=IySozlMZXy/1QNYSgDSx5HLq+jIRHXYcbbpihCThx6s=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=rKE+Lp6Uxyi3yJmORKUqLDYGEKVYhKiNso8at95lUIeg8azuxByuZWwz/T6Wg5Kuy
+         ulXO3j5EkYgL3XYf8vg6jNAMGdjOguNYLK4dQq22V+vqixY3K9QDdLkxsY+mXDMvyX
+         orkDtOPb1bKA0hUB68gyjIfcxoQHQ/HYaQElawao=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7646A12869F3;
+        Thu, 12 May 2022 08:32:58 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3XK07T6rk3Bg; Thu, 12 May 2022 08:32:58 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1652358777;
+        bh=IySozlMZXy/1QNYSgDSx5HLq+jIRHXYcbbpihCThx6s=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=sfLrRlb76wM8CIFj4r6KmR/cimvHsb3Tz6HoqnEPAmMyABOODn6xzBX9Atdm256jX
+         MHx9wT4qBaNvyW6YeLu8vjarX5+rp107Vpcu61EQhJPxnGMzm+dKypq0VcP2XA3q/S
+         QJ+ayWjJzwcf5XKtGZUVJlQV2GP11l3VAJ8k2v4E=
+Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1DED3128195F;
+        Thu, 12 May 2022 08:32:57 -0400 (EDT)
+Message-ID: <eb9ef8aeab4c0284028c013a2c86b248719a46ae.camel@HansenPartnership.com>
 Subject: Re: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Johannes Holland <johannes.holland@infineon.com>,
         Nayna <nayna@linux.vnet.ibm.com>
 Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         peterhuewe@gmx.de, jgg@ziepe.ca
-Date:   Thu, 12 May 2022 08:21:17 -0400
-In-Reply-To: <YnvTSqRgYkWu0qgp@kernel.org>
+Date:   Thu, 12 May 2022 08:32:55 -0400
+In-Reply-To: <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
 References: <20220510112902.23213-1-johannes.holland@infineon.com>
          <YnvTSqRgYkWu0qgp@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+         <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zx-3t_x1YUzXSSJZt9EnPRcjXHiHQJ8i
-X-Proofpoint-ORIG-GUID: INxetDhYIMU4i4YGIGUtGGi-9gmPTIp5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_10,2022-05-12_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 adultscore=0 spamscore=0
- impostorscore=0 malwarescore=0 bulkscore=0 suspectscore=0 clxscore=1011
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205120056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,44 +69,66 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-05-11 at 18:16 +0300, Jarkko Sakkinen wrote:
-> On Tue, May 10, 2022 at 01:29:03PM +0200, Johannes Holland wrote:
-> > To comply with protocol requirements, minimum polling times must often
-> > be adhered to. Therefore, a macro like tpm_msleep() should sleep at
-> > least the given amount of time (not up to the given period). Have
-> > tpm_msleep() sleep at least the given number of milliseconds.
+On Thu, 2022-05-12 at 08:21 -0400, Mimi Zohar wrote:
+> On Wed, 2022-05-11 at 18:16 +0300, Jarkko Sakkinen wrote:
+> > On Tue, May 10, 2022 at 01:29:03PM +0200, Johannes Holland wrote:
+> > > To comply with protocol requirements, minimum polling times must
+> > > often
+> > > be adhered to. Therefore, a macro like tpm_msleep() should sleep
+> > > at
+> > > least the given amount of time (not up to the given period). Have
+> > > tpm_msleep() sleep at least the given number of milliseconds.
+> > > 
+> > > Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> > > ---
+> > >  drivers/char/tpm/tpm.h | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > > index 2163c6ee0d36..0971b55fffe3 100644
+> > > --- a/drivers/char/tpm/tpm.h
+> > > +++ b/drivers/char/tpm/tpm.h
+> > > @@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
+> > >  
+> > >  static inline void tpm_msleep(unsigned int delay_msec)
+> > >  {
+> > > -	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
+> > > -		     delay_msec * 1000);
+> > > +	usleep_range(delay_msec * 1000, (delay_msec * 1000)
+> > > +		     + TPM_TIMEOUT_RANGE_US);
+> > >  };
+> > >  
+> > >  int tpm_chip_start(struct tpm_chip *chip);
+> > > -- 
+> > > 2.34.1
+> > > 
 > > 
-> > Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
-> > ---
-> >  drivers/char/tpm/tpm.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > index 2163c6ee0d36..0971b55fffe3 100644
-> > --- a/drivers/char/tpm/tpm.h
-> > +++ b/drivers/char/tpm/tpm.h
-> > @@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
-> >  
-> >  static inline void tpm_msleep(unsigned int delay_msec)
-> >  {
-> > -	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
-> > -		     delay_msec * 1000);
-> > +	usleep_range(delay_msec * 1000, (delay_msec * 1000)
-> > +		     + TPM_TIMEOUT_RANGE_US);
-> >  };
-> >  
-> >  int tpm_chip_start(struct tpm_chip *chip);
-> > -- 
-> > 2.34.1
-> > 
+> > For this I would really like to hear a 2nd opinion from Nayna and
+> > Mimi.
 > 
-> For this I would really like to hear a 2nd opinion from Nayna and Mimi.
+> This patch reverts commit 5ef924d9e2e8 ("tpm: use tpm_msleep() value
+> as max delay").    Are you experiencing TPM issues that require it?
 
-This patch reverts commit 5ef924d9e2e8 ("tpm: use tpm_msleep() value as
-max delay").    Are you experiencing TPM issues that require it?
+I am:
 
-thanks,
+https://lore.kernel.org/linux-integrity/1531328689.3260.8.camel@HansenPartnership.com/
 
-Mimi
+I'm about 24h into a soak test of the patch with no TPM failure so far.
+I think it probably needs to run another 24h just to be sure, but it
+does seem the theory is sound (my TPM gets annoyed by being poked too
+soon) so reverting 5ef924d9e2e8 looks to be the correct action.  The
+only other ways I've found to fix this are either revert the
+usleep_range patch altogether or increase the timings:
+
+https://lore.kernel.org/linux-integrity/1531329074.3260.9.camel@HansenPartnership.com/
+
+Which obviously pushes the min past whatever issue my TPM is having
+even with 5ef924d9e2e8 applied.
+
+Given that even the commit message for 5ef924d9e2e8 admits it only
+shaves about 12% off the TPM response time, that would appear to be an
+optimization too far if it's going to cause some TPMs to fail.
+
+James
 
 
