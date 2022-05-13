@@ -2,70 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF582526551
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 May 2022 16:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616AC52656D
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 May 2022 16:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381575AbiEMO6E (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 May 2022 10:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
+        id S1343493AbiEMO6u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 May 2022 10:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381381AbiEMO6B (ORCPT
+        with ESMTP id S1381648AbiEMO6q (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 May 2022 10:58:01 -0400
+        Fri, 13 May 2022 10:58:46 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0942527B25
-        for <linux-integrity@vger.kernel.org>; Fri, 13 May 2022 07:57:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB483054F
+        for <linux-integrity@vger.kernel.org>; Fri, 13 May 2022 07:58:12 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <afa@pengutronix.de>)
-        id 1npWjS-0002Mt-CF; Fri, 13 May 2022 16:57:30 +0200
+        id 1npWjS-0002Mj-CO; Fri, 13 May 2022 16:57:30 +0200
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <afa@pengutronix.de>)
-        id 1npWjR-0026HH-Ss; Fri, 13 May 2022 16:57:28 +0200
+        id 1npWjQ-0026H0-V3; Fri, 13 May 2022 16:57:27 +0200
 Received: from afa by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <afa@pengutronix.de>)
-        id 1npWjO-008jCf-VH; Fri, 13 May 2022 16:57:26 +0200
+        id 1npWjP-008jCk-0b; Fri, 13 May 2022 16:57:27 +0200
 From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
 To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        James Bottomley <jejb@linux.ibm.com>
-Cc:     kernel@pengutronix.de, David Howells <dhowells@redhat.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         Sumit Garg <sumit.garg@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     kernel@pengutronix.de, Pankaj Gupta <pankaj.gupta@nxp.com>,
         Andreas Rammhold <andreas@rammhold.de>,
         Tim Harvey <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
         Michael Walle <michael@walle.cc>,
         John Ernberg <john.ernberg@actia.se>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v10 0/7] KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
-Date:   Fri, 13 May 2022 16:56:58 +0200
-Message-Id: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Richard Weinberger <richard@nod.at>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH v10 1/7] KEYS: trusted: allow use of TEE as backend without TCG_TPM support
+Date:   Fri, 13 May 2022 16:56:59 +0200
+Message-Id: <20220513145705.2080323-2-a.fatoum@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
+References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: afa@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,145 +71,202 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Series applies on top of v5.18-rc6. Would be great if this could make it
-into v5.19.
+With recent rework, trusted keys are no longer limited to TPM as trust
+source. The Kconfig symbol is unchanged however leading to a few issues:
 
-v9 was here:
-https://lore.kernel.org/linux-integrity/20220506062553.1068296-1-a.fatoum@pengutronix.de
+  - TCG_TPM is required, even if only TEE is to be used
+  - Enabling TCG_TPM, but excluding it from available trusted sources
+    is not possible
+  - TEE=m && TRUSTED_KEYS=y will lead to TEE support being silently
+    dropped, which is not the best user experience
 
-Changelog is beneath each individual patch. Compared to v9, only code
-change is checking whether CAAM can support blobbing at init-time for
-CAAM revisions < 10 (such as LS1046A) to avoid a cryptic error message
-at first use.
+Remedy these issues by introducing two new boolean Kconfig symbols:
+TRUSTED_KEYS_TPM and TRUSTED_KEYS_TEE with the appropriate
+dependencies.
 
+Any new code depending on the TPM trusted key backend in particular
+or symbols exported by it will now need to explicitly state that it
 
-The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
-built into many newer i.MX and QorIQ SoCs by NXP.
+  depends on TRUSTED_KEYS && TRUSTED_KEYS_TPM
 
-Its blob mechanism can AES encrypt/decrypt user data using a unique
-never-disclosed device-specific key.
+The latter to ensure the dependency is built and the former to ensure
+it's reachable for module builds. There are no such users yet.
 
-There has been multiple discussions on how to represent this within the kernel:
-
-The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
-built into many newer i.MX and QorIQ SoCs by NXP.
-
-Its blob mechanism can AES encrypt/decrypt user data using a unique
-never-disclosed device-specific key. There has been multiple
-discussions on how to represent this within the kernel:
-
- - [RFC] crypto: caam - add red blobifier
-   Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
-   best integrate the blob mechanism.
-   Mimi suggested that it could be used to implement trusted keys.
-   Trusted keys back then were a TPM-only feature.
-
- - security/keys/secure_key: Adds the secure key support based on CAAM.
-   Udit Agarwal added[2] a new "secure" key type with the CAAM as backend.
-   The key material stays within the kernel only.
-   Mimi and James agreed that this needs a generic interface, not specific
-   to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
-   basis for TEE-backed keys.
-
- - [RFC] drivers: crypto: caam: key: Add caam_tk key type
-   Franck added[3] a new "caam_tk" key type based on Udit's work. This time
-   it uses CAAM "black blobs" instead of "red blobs", so key material stays
-   within the CAAM and isn't exposed to kernel in plaintext.
-   James voiced the opinion that there should be just one user-facing generic
-   wrap/unwrap key type with multiple possible handlers.
-   David suggested trusted keys.
-
- - Introduce TEE based Trusted Keys support
-   Sumit reworked[4] trusted keys to support multiple possible backends with
-   one chosen at boot time and added a new TEE backend along with TPM.
-   This now sits in Jarkko's master branch to be sent out for v5.13
-
-This patch series builds on top of Sumit's rework to have the CAAM as yet another
-trusted key backend.
-
-The CAAM bits are based on Steffen's initial patch from 2015. His work had been
-used in the field for some years now, so I preferred not to deviate too much from it.
-
-This series has been tested with dmcrypt[5] on an i.MX6Q/DL, i.MX8M[6]
-and LS1028[7].
-
-Looking forward to your feedback.
-
-Cheers,
-Ahmad
-
- [1]: https://lore.kernel.org/linux-crypto/1447082306-19946-2-git-send-email-s.trumtrar@pengutronix.de/
- [2]: https://lore.kernel.org/linux-integrity/20180723111432.26830-1-udit.agarwal@nxp.com/
- [3]: https://lore.kernel.org/lkml/1551456599-10603-2-git-send-email-franck.lenormand@nxp.com/
- [4]: https://lore.kernel.org/lkml/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
- [5]: https://lore.kernel.org/linux-integrity/20210122084321.24012-2-a.fatoum@pengutronix.de/
- [6]: https://lore.kernel.org/linux-integrity/DU2PR04MB8630D83FE9BBC0D782C4FAF595089@DU2PR04MB8630.eurprd04.prod.outlook.com/
- [7]: https://lore.kernel.org/linux-integrity/49e1738c55c73819ee0e2cac0be74d81@walle.cc/
-
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+Tested-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+Tested-by: Andreas Rammhold <andreas@rammhold.de>
+Tested-by: Tim Harvey <tharvey@gateworks.com>
+Tested-by: Michael Walle <michael@walle.cc> # on ls1028a (non-E and E)
+Tested-by: John Ernberg <john.ernberg@actia.se> # iMX8QXP
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 ---
+v9 -> v10:
+  - added Michael's and John's Tested-by
+v8 -> v9:
+  - no changes
+v7 -> v8:
+  - add Pankaj's Reviewed-by and Tested-by
+v6 -> v7:
+  - s/Tested-By/Tested-by/
+v5 -> v6:
+  - Rebased on asym_tpm removal
+v4 -> v5:
+  - collected Jarkko's Reviewed-by
+v3 -> v4:
+  - rebased on top of Andreas' regression fix and pulled it back
+    into series
+v2 -> v3:
+  - factored this patch out as a fix for backporting
+v1 -> v2:
+  - Move rest of TPM-related selects from TRUSTED_KEYS to
+    TRUSTED_KEYS_TPM (Sumit)
+  - Remove left-over line in Makefile (Sumit)
+  - added Fixes: tag
+  - adjust commit message to reference the regression reported
+    by Andreas
+  - have ASYMMETRIC_TPM_KEY_SUBTYPE depend on TRUSTED_KEYS_TPM,
+    because it references global symbols that are exported
+    by the trusted key TPM backend.
+
+[1]: https://lore.kernel.org/linux-integrity/f8285eb0135ba30c9d846cf9dd395d1f5f8b1efc.1624364386.git-series.a.fatoum@pengutronix.de/
+[2]: https://lore.kernel.org/linux-integrity/20210719091335.vwfebcpkf4pag3wm@wrt/T/#t
+
 To: Jarkko Sakkinen <jarkko@kernel.org>
-To: "Horia Geantă" <horia.geanta@nxp.com>
+To: James Morris <jmorris@namei.org>
+To: "Serge E. Hallyn" <serge@hallyn.com>
+To: James Bottomley <jejb@linux.ibm.com>
 To: Mimi Zohar <zohar@linux.ibm.com>
-To: Pankaj Gupta <pankaj.gupta@nxp.com>
+To: Sumit Garg <sumit.garg@linaro.org>
+To: David Howells <dhowells@redhat.com>
 To: Herbert Xu <herbert@gondor.apana.org.au>
 To: "David S. Miller" <davem@davemloft.net>
-To: James Bottomley <jejb@linux.ibm.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Cc: Jan Luebbe <j.luebbe@pengutronix.de>
 Cc: David Gstir <david@sigma-star.at>
-Cc: Eric Biggers <ebiggers@kernel.org>
 Cc: Richard Weinberger <richard@nod.at>
-Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-Cc: Sumit Garg <sumit.garg@linaro.org>
-Cc: Andreas Rammhold <andreas@rammhold.de>
-Cc: Tim Harvey <tharvey@gateworks.com>
 Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
 Cc: Michael Walle <michael@walle.cc>
 Cc: John Ernberg <john.ernberg@actia.se>
-Cc: linux-integrity@vger.kernel.org
 Cc: keyrings@vger.kernel.org
 Cc: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Cc: linux-security-module@vger.kernel.org
-
-
-
-Ahmad Fatoum (7):
-  KEYS: trusted: allow use of TEE as backend without TCG_TPM support
-  KEYS: trusted: allow use of kernel RNG for key material
-  crypto: caam - determine whether CAAM supports blob encap/decap
-  crypto: caam - add in-kernel interface for blob generator
-  KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
-  doc: trusted-encrypted: describe new CAAM trust source
-  MAINTAINERS: add KEYS-TRUSTED-CAAM
-
- .../admin-guide/kernel-parameters.txt         |  11 ++
- .../security/keys/trusted-encrypted.rst       |  60 +++++-
- MAINTAINERS                                   |   9 +
- drivers/crypto/caam/Kconfig                   |   3 +
- drivers/crypto/caam/Makefile                  |   1 +
- drivers/crypto/caam/blob_gen.c                | 182 ++++++++++++++++++
- drivers/crypto/caam/ctrl.c                    |  17 +-
- drivers/crypto/caam/intern.h                  |   1 +
- drivers/crypto/caam/regs.h                    |   4 +-
- include/keys/trusted-type.h                   |   2 +-
- include/keys/trusted_caam.h                   |  11 ++
- include/soc/fsl/caam-blob.h                   | 103 ++++++++++
- security/keys/Kconfig                         |  18 +-
- security/keys/trusted-keys/Kconfig            |  38 ++++
- security/keys/trusted-keys/Makefile           |  10 +-
- security/keys/trusted-keys/trusted_caam.c     |  80 ++++++++
- security/keys/trusted-keys/trusted_core.c     |  45 ++++-
- 17 files changed, 563 insertions(+), 32 deletions(-)
- create mode 100644 drivers/crypto/caam/blob_gen.c
- create mode 100644 include/keys/trusted_caam.h
- create mode 100644 include/soc/fsl/caam-blob.h
+Cc: linux-integrity@vger.kernel.org
+---
+ security/keys/Kconfig                     | 18 ++++++--------
+ security/keys/trusted-keys/Kconfig        | 29 +++++++++++++++++++++++
+ security/keys/trusted-keys/Makefile       |  8 +++----
+ security/keys/trusted-keys/trusted_core.c |  4 ++--
+ 4 files changed, 42 insertions(+), 17 deletions(-)
  create mode 100644 security/keys/trusted-keys/Kconfig
- create mode 100644 security/keys/trusted-keys/trusted_caam.c
 
+diff --git a/security/keys/Kconfig b/security/keys/Kconfig
+index 0e30b361e1c1..abb03a1b2a5c 100644
+--- a/security/keys/Kconfig
++++ b/security/keys/Kconfig
+@@ -70,23 +70,19 @@ config BIG_KEYS
+ 
+ config TRUSTED_KEYS
+ 	tristate "TRUSTED KEYS"
+-	depends on KEYS && TCG_TPM
+-	select CRYPTO
+-	select CRYPTO_HMAC
+-	select CRYPTO_SHA1
+-	select CRYPTO_HASH_INFO
+-	select ASN1_ENCODER
+-	select OID_REGISTRY
+-	select ASN1
++	depends on KEYS
+ 	help
+ 	  This option provides support for creating, sealing, and unsealing
+ 	  keys in the kernel. Trusted keys are random number symmetric keys,
+-	  generated and RSA-sealed by the TPM. The TPM only unseals the keys,
+-	  if the boot PCRs and other criteria match.  Userspace will only ever
+-	  see encrypted blobs.
++	  generated and sealed by a trust source selected at kernel boot-time.
++	  Userspace will only ever see encrypted blobs.
+ 
+ 	  If you are unsure as to whether this is required, answer N.
+ 
++if TRUSTED_KEYS
++source "security/keys/trusted-keys/Kconfig"
++endif
++
+ config ENCRYPTED_KEYS
+ 	tristate "ENCRYPTED KEYS"
+ 	depends on KEYS
+diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
+new file mode 100644
+index 000000000000..fc4abd581abb
+--- /dev/null
++++ b/security/keys/trusted-keys/Kconfig
+@@ -0,0 +1,29 @@
++config TRUSTED_KEYS_TPM
++	bool "TPM-based trusted keys"
++	depends on TCG_TPM >= TRUSTED_KEYS
++	default y
++	select CRYPTO
++	select CRYPTO_HMAC
++	select CRYPTO_SHA1
++	select CRYPTO_HASH_INFO
++	select ASN1_ENCODER
++	select OID_REGISTRY
++	select ASN1
++	help
++	  Enable use of the Trusted Platform Module (TPM) as trusted key
++	  backend. Trusted keys are random number symmetric keys,
++	  which will be generated and RSA-sealed by the TPM.
++	  The TPM only unseals the keys, if the boot PCRs and other
++	  criteria match.
++
++config TRUSTED_KEYS_TEE
++	bool "TEE-based trusted keys"
++	depends on TEE >= TRUSTED_KEYS
++	default y
++	help
++	  Enable use of the Trusted Execution Environment (TEE) as trusted
++	  key backend.
++
++if !TRUSTED_KEYS_TPM && !TRUSTED_KEYS_TEE
++comment "No trust source selected!"
++endif
+diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
+index feb8b6c3cc79..2e2371eae4d5 100644
+--- a/security/keys/trusted-keys/Makefile
++++ b/security/keys/trusted-keys/Makefile
+@@ -5,10 +5,10 @@
+ 
+ obj-$(CONFIG_TRUSTED_KEYS) += trusted.o
+ trusted-y += trusted_core.o
+-trusted-y += trusted_tpm1.o
++trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm1.o
+ 
+ $(obj)/trusted_tpm2.o: $(obj)/tpm2key.asn1.h
+-trusted-y += trusted_tpm2.o
+-trusted-y += tpm2key.asn1.o
++trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm2.o
++trusted-$(CONFIG_TRUSTED_KEYS_TPM) += tpm2key.asn1.o
+ 
+-trusted-$(CONFIG_TEE) += trusted_tee.o
++trusted-$(CONFIG_TRUSTED_KEYS_TEE) += trusted_tee.o
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index 9b9d3ef79cbe..7cdbd16aed30 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+ MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+ 
+ static const struct trusted_key_source trusted_key_sources[] = {
+-#if IS_REACHABLE(CONFIG_TCG_TPM)
++#if defined(CONFIG_TRUSTED_KEYS_TPM)
+ 	{ "tpm", &trusted_key_tpm_ops },
+ #endif
+-#if IS_REACHABLE(CONFIG_TEE)
++#if defined(CONFIG_TRUSTED_KEYS_TEE)
+ 	{ "tee", &trusted_key_tee_ops },
+ #endif
+ };
 -- 
 2.30.2
 
