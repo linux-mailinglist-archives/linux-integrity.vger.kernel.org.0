@@ -2,43 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F514526573
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 May 2022 16:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C32B526565
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 May 2022 16:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350465AbiEMO7A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 May 2022 10:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
+        id S1381604AbiEMO6Q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 May 2022 10:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234215AbiEMO6P (ORCPT
+        with ESMTP id S1381541AbiEMO6D (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 May 2022 10:58:15 -0400
+        Fri, 13 May 2022 10:58:03 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB86C17054
-        for <linux-integrity@vger.kernel.org>; Fri, 13 May 2022 07:58:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF5C3D481
+        for <linux-integrity@vger.kernel.org>; Fri, 13 May 2022 07:57:59 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <afa@pengutronix.de>)
-        id 1npWjS-0002Mu-Bo; Fri, 13 May 2022 16:57:30 +0200
+        id 1npWjS-0002Mk-Bv; Fri, 13 May 2022 16:57:30 +0200
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <afa@pengutronix.de>)
-        id 1npWjS-0026HL-0D; Fri, 13 May 2022 16:57:28 +0200
+        id 1npWjR-0026H3-I4; Fri, 13 May 2022 16:57:28 +0200
 Received: from afa by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <afa@pengutronix.de>)
-        id 1npWjP-008jD4-6q; Fri, 13 May 2022 16:57:27 +0200
+        id 1npWjP-008jD9-7s; Fri, 13 May 2022 16:57:27 +0200
 From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
 To:     Jonathan Corbet <corbet@lwn.net>,
         David Howells <dhowells@redhat.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         James Bottomley <jejb@linux.ibm.com>,
         Mimi Zohar <zohar@linux.ibm.com>
-Cc:     kernel@pengutronix.de, David Gstir <david@sigma-star.at>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Michael Walle <michael@walle.cc>,
-        John Ernberg <john.ernberg@actia.se>,
+Cc:     kernel@pengutronix.de, Pankaj Gupta <pankaj.gupta@nxp.com>,
         Ahmad Fatoum <a.fatoum@pengutronix.de>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
@@ -47,15 +42,19 @@ Cc:     kernel@pengutronix.de, David Gstir <david@sigma-star.at>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Biggers <ebiggers@kernel.org>,
         Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
         Richard Weinberger <richard@nod.at>,
         Franck LENORMAND <franck.lenormand@nxp.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Michael Walle <michael@walle.cc>,
+        John Ernberg <john.ernberg@actia.se>,
         Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v10 5/7] KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
-Date:   Fri, 13 May 2022 16:57:03 +0200
-Message-Id: <20220513145705.2080323-6-a.fatoum@pengutronix.de>
+Subject: [PATCH v10 6/7] doc: trusted-encrypted: describe new CAAM trust source
+Date:   Fri, 13 May 2022 16:57:04 +0200
+Message-Id: <20220513145705.2080323-7-a.fatoum@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
 References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
@@ -75,58 +74,22 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
-built into many newer i.MX and QorIQ SoCs by NXP.
+Update documentation for trusted key use with the Cryptographic
+Acceleration and Assurance Module (CAAM), an IP on NXP SoCs.
 
-The CAAM does crypto acceleration, hardware number generation and
-has a blob mechanism for encapsulation/decapsulation of sensitive material.
-
-This blob mechanism depends on a device specific random 256-bit One Time
-Programmable Master Key that is fused in each SoC at manufacturing
-time. This key is unreadable and can only be used by the CAAM for AES
-encryption/decryption of user data.
-
-This makes it a suitable backend (source) for kernel trusted keys.
-
-Previous commits generalized trusted keys to support multiple backends
-and added an API to access the CAAM blob mechanism. Based on these,
-provide the necessary glue to use the CAAM for trusted keys.
-
-Reviewed-by: David Gstir <david@sigma-star.at>
 Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Tested-by: Tim Harvey <tharvey@gateworks.com>
-Tested-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Tested-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-Tested-by: Michael Walle <michael@walle.cc> # on ls1028a (non-E and E)
-Tested-by: John Ernberg <john.ernberg@actia.se> # iMX8QXP
 Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 ---
 v9 -> v10:
-  - added Michael's and John's Tested-by
+  - no change
 v8 -> v9:
-  - remove diagnostic on caam_blob_gen_init() failure as more relevant
-    messages are now printed by caam_blob_gen_init() itself
-v7 -> v8:
   - add Jarkko's Reviewed-by
+v7 -> v8:
+  - add Pankaj's Reviewed-by
 v6 -> v7:
-  - Split off MAINTAINERS and documentation chanes into separate patches
-    (Jarkko)
-  - Use new struct caam_blob_info API (Pankaj)
-v5 -> v6:
-  - Rename caam_trusted_key_ops to trusted_key_caam_ops for symmetry
-    with other trust sources (Pankaj)
-  - Collected Pankaj's Reviewed-by
-v4 -> v5:
-  - Collected Reviewed-by's and Tested-by's
-  - Changed modifier to SECURE_KEY for compatibility with linux-imx
-    (Matthias)
-v3 -> v4:
-  - Collected Acked-by's, Reviewed-by's and Tested-by
-v2 -> v3:
- - add MAINTAINERS entry
-v1 -> v2:
- - Extend trusted keys documentation for CAAM
+  - docs update split off as new Patch (Jarkko)
+  - fixed typo in "Trusted Keys usage: CAAM" section
 
 To: Jonathan Corbet <corbet@lwn.net>
 To: David Howells <dhowells@redhat.com>
@@ -145,9 +108,9 @@ Cc: David Gstir <david@sigma-star.at>
 Cc: Richard Weinberger <richard@nod.at>
 Cc: Franck LENORMAND <franck.lenormand@nxp.com>
 Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Sumit Garg <sumit.garg@linaro.org>
 Cc: Michael Walle <michael@walle.cc>
 Cc: John Ernberg <john.ernberg@actia.se>
+Cc: Sumit Garg <sumit.garg@linaro.org>
 Cc: keyrings@vger.kernel.org
 Cc: linux-crypto@vger.kernel.org
 Cc: linux-doc@vger.kernel.org
@@ -155,193 +118,98 @@ Cc: linux-integrity@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Cc: linux-security-module@vger.kernel.org
 ---
- .../admin-guide/kernel-parameters.txt         |  1 +
- include/keys/trusted_caam.h                   | 11 +++
- security/keys/trusted-keys/Kconfig            | 11 ++-
- security/keys/trusted-keys/Makefile           |  2 +
- security/keys/trusted-keys/trusted_caam.c     | 80 +++++++++++++++++++
- security/keys/trusted-keys/trusted_core.c     |  6 +-
- 6 files changed, 109 insertions(+), 2 deletions(-)
- create mode 100644 include/keys/trusted_caam.h
- create mode 100644 security/keys/trusted-keys/trusted_caam.c
+ .../security/keys/trusted-encrypted.rst       | 40 ++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 4deed1908a75..9afb7046ce97 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5958,6 +5958,7 @@
- 			sources:
- 			- "tpm"
- 			- "tee"
-+			- "caam"
- 			If not specified then it defaults to iterating through
- 			the trust source list starting with TPM and assigns the
- 			first trust source as a backend which is initialized
-diff --git a/include/keys/trusted_caam.h b/include/keys/trusted_caam.h
-new file mode 100644
-index 000000000000..73fe2f32f65e
---- /dev/null
-+++ b/include/keys/trusted_caam.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
-+ */
-+
-+#ifndef __CAAM_TRUSTED_KEY_H
-+#define __CAAM_TRUSTED_KEY_H
-+
-+extern struct trusted_key_ops trusted_key_caam_ops;
-+
-+#endif
-diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
-index fc4abd581abb..dbfdd8536468 100644
---- a/security/keys/trusted-keys/Kconfig
-+++ b/security/keys/trusted-keys/Kconfig
-@@ -24,6 +24,15 @@ config TRUSTED_KEYS_TEE
- 	  Enable use of the Trusted Execution Environment (TEE) as trusted
- 	  key backend.
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index 2fe6fd1a2bbd..0bfb4c339748 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -35,6 +35,13 @@ safe.
+          Rooted to Hardware Unique Key (HUK) which is generally burnt in on-chip
+          fuses and is accessible to TEE only.
  
--if !TRUSTED_KEYS_TPM && !TRUSTED_KEYS_TEE
-+config TRUSTED_KEYS_CAAM
-+	bool "CAAM-based trusted keys"
-+	depends on CRYPTO_DEV_FSL_CAAM_JR >= TRUSTED_KEYS
-+	select CRYPTO_DEV_FSL_CAAM_BLOB_GEN
-+	default y
-+	help
-+	  Enable use of NXP's Cryptographic Accelerator and Assurance Module
-+	  (CAAM) as trusted key backend.
++     (3) CAAM (Cryptographic Acceleration and Assurance Module: IP on NXP SoCs)
 +
-+if !TRUSTED_KEYS_TPM && !TRUSTED_KEYS_TEE && !TRUSTED_KEYS_CAAM
- comment "No trust source selected!"
- endif
-diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
-index 2e2371eae4d5..735aa0bc08ef 100644
---- a/security/keys/trusted-keys/Makefile
-+++ b/security/keys/trusted-keys/Makefile
-@@ -12,3 +12,5 @@ trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm2.o
- trusted-$(CONFIG_TRUSTED_KEYS_TPM) += tpm2key.asn1.o
++         When High Assurance Boot (HAB) is enabled and the CAAM is in secure
++         mode, trust is rooted to the OTPMK, a never-disclosed 256-bit key
++         randomly generated and fused into each SoC at manufacturing time.
++         Otherwise, a common fixed test key is used instead.
++
+   *  Execution isolation
  
- trusted-$(CONFIG_TRUSTED_KEYS_TEE) += trusted_tee.o
-+
-+trusted-$(CONFIG_TRUSTED_KEYS_CAAM) += trusted_caam.o
-diff --git a/security/keys/trusted-keys/trusted_caam.c b/security/keys/trusted-keys/trusted_caam.c
-new file mode 100644
-index 000000000000..e3415c520c0a
---- /dev/null
-+++ b/security/keys/trusted-keys/trusted_caam.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
-+ */
-+
-+#include <keys/trusted_caam.h>
-+#include <keys/trusted-type.h>
-+#include <linux/build_bug.h>
-+#include <linux/key-type.h>
-+#include <soc/fsl/caam-blob.h>
-+
-+static struct caam_blob_priv *blobifier;
-+
-+#define KEYMOD "SECURE_KEY"
-+
-+static_assert(MAX_KEY_SIZE + CAAM_BLOB_OVERHEAD <= CAAM_BLOB_MAX_LEN);
-+static_assert(MAX_BLOB_SIZE <= CAAM_BLOB_MAX_LEN);
-+
-+static int trusted_caam_seal(struct trusted_key_payload *p, char *datablob)
-+{
-+	int ret;
-+	struct caam_blob_info info = {
-+		.input  = p->key,  .input_len   = p->key_len,
-+		.output = p->blob, .output_len  = MAX_BLOB_SIZE,
-+		.key_mod = KEYMOD, .key_mod_len = sizeof(KEYMOD) - 1,
-+	};
-+
-+	ret = caam_encap_blob(blobifier, &info);
-+	if (ret)
-+		return ret;
-+
-+	p->blob_len = info.output_len;
-+	return 0;
-+}
-+
-+static int trusted_caam_unseal(struct trusted_key_payload *p, char *datablob)
-+{
-+	int ret;
-+	struct caam_blob_info info = {
-+		.input   = p->blob,  .input_len  = p->blob_len,
-+		.output  = p->key,   .output_len = MAX_KEY_SIZE,
-+		.key_mod = KEYMOD,  .key_mod_len = sizeof(KEYMOD) - 1,
-+	};
-+
-+	ret = caam_decap_blob(blobifier, &info);
-+	if (ret)
-+		return ret;
-+
-+	p->key_len = info.output_len;
-+	return 0;
-+}
-+
-+static int trusted_caam_init(void)
-+{
-+	int ret;
-+
-+	blobifier = caam_blob_gen_init();
-+	if (IS_ERR(blobifier))
-+		return PTR_ERR(blobifier);
-+
-+	ret = register_key_type(&key_type_trusted);
-+	if (ret)
-+		caam_blob_gen_exit(blobifier);
-+
-+	return ret;
-+}
-+
-+static void trusted_caam_exit(void)
-+{
-+	unregister_key_type(&key_type_trusted);
-+	caam_blob_gen_exit(blobifier);
-+}
-+
-+struct trusted_key_ops trusted_key_caam_ops = {
-+	.migratable = 0, /* non-migratable */
-+	.init = trusted_caam_init,
-+	.seal = trusted_caam_seal,
-+	.unseal = trusted_caam_unseal,
-+	.exit = trusted_caam_exit,
-+};
-diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-index 9235fb7d0ec9..c6fc50d67214 100644
---- a/security/keys/trusted-keys/trusted_core.c
-+++ b/security/keys/trusted-keys/trusted_core.c
-@@ -9,6 +9,7 @@
- #include <keys/user-type.h>
- #include <keys/trusted-type.h>
- #include <keys/trusted_tee.h>
-+#include <keys/trusted_caam.h>
- #include <keys/trusted_tpm.h>
- #include <linux/capability.h>
- #include <linux/err.h>
-@@ -29,7 +30,7 @@ MODULE_PARM_DESC(rng, "Select trusted key RNG");
+      (1) TPM
+@@ -46,6 +53,10 @@ safe.
+          Customizable set of operations running in isolated execution
+          environment verified via Secure/Trusted boot process.
  
- static char *trusted_key_source;
- module_param_named(source, trusted_key_source, charp, 0);
--MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
-+MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee or caam)");
++     (3) CAAM
++
++         Fixed set of operations running in isolated execution environment.
++
+   * Optional binding to platform integrity state
  
- static const struct trusted_key_source trusted_key_sources[] = {
- #if defined(CONFIG_TRUSTED_KEYS_TPM)
-@@ -38,6 +39,9 @@ static const struct trusted_key_source trusted_key_sources[] = {
- #if defined(CONFIG_TRUSTED_KEYS_TEE)
- 	{ "tee", &trusted_key_tee_ops },
- #endif
-+#if defined(CONFIG_TRUSTED_KEYS_CAAM)
-+	{ "caam", &trusted_key_caam_ops },
-+#endif
- };
+      (1) TPM
+@@ -63,6 +74,11 @@ safe.
+          Relies on Secure/Trusted boot process for platform integrity. It can
+          be extended with TEE based measured boot process.
  
- DEFINE_STATIC_CALL_NULL(trusted_key_init, *trusted_key_sources[0].ops->init);
++     (3) CAAM
++
++         Relies on the High Assurance Boot (HAB) mechanism of NXP SoCs
++         for platform integrity.
++
+   *  Interfaces and APIs
+ 
+      (1) TPM
+@@ -74,10 +90,13 @@ safe.
+          TEEs have well-documented, standardized client interface and APIs. For
+          more details refer to ``Documentation/staging/tee.rst``.
+ 
++     (3) CAAM
++
++         Interface is specific to silicon vendor.
+ 
+   *  Threat model
+ 
+-     The strength and appropriateness of a particular TPM or TEE for a given
++     The strength and appropriateness of a particular trust source for a given
+      purpose must be assessed when using them to protect security-relevant data.
+ 
+ 
+@@ -104,6 +123,12 @@ selected trust source:
+      from platform specific hardware RNG or a software based Fortuna CSPRNG
+      which can be seeded via multiple entropy sources.
+ 
++  *  CAAM: Kernel RNG
++
++     The normal kernel random number generator is used. To seed it from the
++     CAAM HWRNG, enable CRYPTO_DEV_FSL_CAAM_RNG_API and ensure the device
++     is probed.
++
+ Users may override this by specifying ``trusted.rng=kernel`` on the kernel
+ command-line to override the used RNG with the kernel's random number pool.
+ 
+@@ -193,6 +218,19 @@ Usage::
+ specific to TEE device implementation.  The key length for new keys is always
+ in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
+ 
++Trusted Keys usage: CAAM
++------------------------
++
++Usage::
++
++    keyctl add trusted name "new keylen" ring
++    keyctl add trusted name "load hex_blob" ring
++    keyctl print keyid
++
++"keyctl print" returns an ASCII hex copy of the sealed key, which is in a
++CAAM-specific format.  The key length for new keys is always in bytes.
++Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
++
+ Encrypted Keys usage
+ --------------------
+ 
 -- 
 2.30.2
 
