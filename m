@@ -2,73 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0976F525D07
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 May 2022 10:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA6B526195
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 May 2022 14:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351091AbiEMIKt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 May 2022 04:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S232473AbiEMMMl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 May 2022 08:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378105AbiEMIKr (ORCPT
+        with ESMTP id S232458AbiEMMMk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 May 2022 04:10:47 -0400
-Received: from mail.coredeal.pl (mail.coredeal.pl [51.75.73.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6DADF9A
-        for <linux-integrity@vger.kernel.org>; Fri, 13 May 2022 01:10:41 -0700 (PDT)
-Received: by mail.coredeal.pl (Postfix, from userid 1002)
-        id 3AC58A531F; Fri, 13 May 2022 08:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=coredeal.pl; s=mail;
-        t=1652429260; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
-        h=Date:From:To:Subject:From;
-        b=EYyYCsp+J/uwQrdYkFGu+89u40tQwXspE5baX83RiiXr9qlJJuagUB5T1ruAvmJPI
-         SH0kZf1WLWPcSxtT2R4V3XUPjuNq4UM1cPkmIBJYVapYGKrZ3Aj1Fpd1ZXpfQBQ1dt
-         OeVHQcECD+HMkYMEr1CcIxu7ozrAXdclCiEK3jZxdMT9nsZKrCs2Rydiz1VyB5XKMY
-         27OMwU8CSY1J/YWB0vrjb3L4F9MGh+sr7pw3XfRypzRQmVAeIEH4q5Vi0dGmvV3KLY
-         ow5JklSIKqy+lj2oQTg43LLtd5/JL/soRmwyUDCAv4ily9d3IJ9PZJPcXGhSfs8J5K
-         XgBgrsvcvrfTQ==
-Received: by mail.coredeal.pl for <linux-integrity@vger.kernel.org>; Fri, 13 May 2022 08:05:55 GMT
-Message-ID: <20220513064500-0.1.33.o0uz.0.o9h9ddr6in@coredeal.pl>
-Date:   Fri, 13 May 2022 08:05:55 GMT
-From:   "Krzysztof Maj" <krzysztof.maj@coredeal.pl>
-To:     <linux-integrity@vger.kernel.org>
-Subject: Biznesowy angielski
-X-Mailer: mail.coredeal.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 13 May 2022 08:12:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A66263394
+        for <linux-integrity@vger.kernel.org>; Fri, 13 May 2022 05:12:39 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24DC0XJ5015924;
+        Fri, 13 May 2022 12:12:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=IXAlnsjagdkanynEy5KbfcBbS0A9QsV8TZKTQX72su8=;
+ b=AR9M8QyI0RFl9YlnnIOnKAyIXTZFxSxsQkVczdy3qTqOfryJ1bar2E/NF1HXgN2djFN1
+ MkI4EJC0YMsjkW6wFDqi9i23b3LriP50u9SZOmlhbFzUZOLS14L9VBvP7SC8vRyGDrGi
+ LjW/9y4+63/HhaGuq6A39FU57C0jQzN5W3/Dg2r/XJKM2CZXuz8d1aKqDDz19uz+EAp0
+ mSpTcGns/Q7/tXVcVvjZ807qwIwQMHziIBUb9rFEaZ6ovgIpbyYmJGx9wDrltRvDLB1S
+ d/oo6euvEAcqCefVO/r2kLCBPxvvdZQ4b2iHB7VMrIv4SfN+5aaGvaczj2oJWrZrLNvT 4w== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g1py7g88w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 12:12:31 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24DC1VAK026065;
+        Fri, 13 May 2022 12:12:28 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3g0kn7a487-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 May 2022 12:12:28 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24DCCP1l50332136
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 May 2022 12:12:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34CFAAE04D;
+        Fri, 13 May 2022 12:12:25 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB415AE045;
+        Fri, 13 May 2022 12:12:24 +0000 (GMT)
+Received: from sig-9-65-91-25.ibm.com (unknown [9.65.91.25])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 13 May 2022 12:12:24 +0000 (GMT)
+Message-ID: <17a2963c7f4151de9360912da494c924fbf2709d.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 ima-evm-utils 2/3] Sign an fs-verity file digest
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>
+Date:   Fri, 13 May 2022 08:12:24 -0400
+In-Reply-To: <b4ed4a2c-2da2-b9f0-cb1c-50ee7ec43eba@linux.ibm.com>
+References: <20220512183056.307597-1-zohar@linux.ibm.com>
+         <20220512183056.307597-2-zohar@linux.ibm.com>
+         <b4ed4a2c-2da2-b9f0-cb1c-50ee7ec43eba@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: OP-K93XL2zPBB-cSM3B9Ox--xQtDq3Rd
+X-Proofpoint-GUID: OP-K93XL2zPBB-cSM3B9Ox--xQtDq3Rd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-13_04,2022-05-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ phishscore=0 suspectscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205130054
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
+On Thu, 2022-05-12 at 17:48 -0400, Stefan Berger wrote:
+> > -             /* find the end of the hash */
+> > -             token = strpbrk(line, ", \t");
+> > -             hashlen = token ? token - line : strlen(line);
+> > +             /*
+> > +              * Before either directly or indirectly signing the hash,
+> > +              * convert the hex-ascii hash representation to binary.
+> > +              */
+> > +             if (veritysig) {
+> > +
+> > +                     /* split the algorithm from the hash */
+> > +                     hashp = strpbrk(line, ":");
+> > +                     if (!hashp) {   /* pointer to the delimiter */
+> > +                             log_err("Missing fsverity hash algorithm\n");
+> > +                             continue;
+> > +                     }
+> > +
+> > +                     algolen = hashp - line;
+> > +                     if (algolen > sizeof(algo))
+> > +                             algolen = sizeof(algo);
+> 
+> I think a hash name exceeding the max buffer size and needing to be 
+> truncating it should be an error since the name to index conversion will 
+> fail  later on.
 
-czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
-swoich pracownik=C3=B3w?
+Sure.  In fact, the hash algorithm name size should be limited to the
+maximum size of those algorithms that fs-verity actually supports.
 
-Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
-w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
-ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
-=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
+thanks,
 
-Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
-=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
-re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
-o=C5=BCliwo=C5=9Bci biznesowe.=20
+Mimi
 
-Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
- kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
-za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
-=2E
-
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
-w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
-
-
-Pozdrawiam
-Krzysztof Maj
