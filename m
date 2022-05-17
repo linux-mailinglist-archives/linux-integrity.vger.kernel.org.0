@@ -2,113 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7530B5293D4
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 May 2022 00:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31BC529AB4
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 May 2022 09:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349794AbiEPWuP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 May 2022 18:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
+        id S240490AbiEQHZS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 May 2022 03:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349772AbiEPWuM (ORCPT
+        with ESMTP id S235896AbiEQHZR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 May 2022 18:50:12 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CE443EFE;
-        Mon, 16 May 2022 15:50:11 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GKixHF017960;
-        Mon, 16 May 2022 22:50:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=gfTmdZg2R6iesNFeLO9g31D6moYj/CqEIy7Ppd+BVBs=;
- b=b09tpDpGg1nroHs7o348ROGPDg2pu1bxRaf4yMIsNnMOTdNBAGVo/X9A2KrhQTcSI7I+
- XFQSrtWsDLvwxjP6eHQ400dNEPVo0P7km9d9iGY4fjWiARSHvBCfap5nCRkibaetw29a
- 0kppDrhvKL6FFEEhXCht8nESBJbIa/85aR30kj8D1yZFlDld0ep6H+WEgFhgczz4sEXM
- RoKA7HviOC5zytvBU6Lw0AtMJQDw5akCZSvULY2QBbSgDTztXPOmBmaC0e6JqI3POvfk
- xszZ8/4ACFC/jEraFXXDa+xwrH1jAu5duimRHuNvEDCTlVts9CODD7TMd+uPgsnJyXvT Iw== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g3wx21v4e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 22:50:10 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24GMmChS019199;
-        Mon, 16 May 2022 22:50:08 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 3g2428tm5v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 22:50:08 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24GMo4DK47382838
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 May 2022 22:50:04 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DB4B7AE04D;
-        Mon, 16 May 2022 22:50:04 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A9E9AE045;
-        Mon, 16 May 2022 22:50:04 +0000 (GMT)
-Received: from sig-9-65-83-206.ibm.com (unknown [9.65.83.206])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 16 May 2022 22:50:03 +0000 (GMT)
-Message-ID: <883edebc6d2260dc0c7480cac11805a30bf11931.camel@linux.ibm.com>
-Subject: Re: [PATCH] evm: Clean up some variables
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Date:   Mon, 16 May 2022 18:50:03 -0400
-In-Reply-To: <b01b3269-626f-5918-41c0-08c05518525a@linux.ibm.com>
-References: <20220513174105.3684229-1-stefanb@linux.ibm.com>
-         <6d91e146702bcaf361cb193eaca35c57e38482df.camel@linux.ibm.com>
-         <b01b3269-626f-5918-41c0-08c05518525a@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3QTm2SA0L4JKEQ_QERyNvzb7OhyYbN_6
-X-Proofpoint-ORIG-GUID: 3QTm2SA0L4JKEQ_QERyNvzb7OhyYbN_6
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 17 May 2022 03:25:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B6443EDC;
+        Tue, 17 May 2022 00:25:16 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2SL26jKtzhZLQ;
+        Tue, 17 May 2022 15:24:26 +0800 (CST)
+Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
+ (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
+ 2022 15:25:14 +0800
+From:   GUO Zihua <guozihua@huawei.com>
+To:     <linux-integrity@vger.kernel.org>
+CC:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <gustavoars@kernel.org>, <linux-hardening@vger.kernel.org>
+Subject: [PATCH -next] evm: Refector struct evm_xattr
+Date:   Tue, 17 May 2022 15:23:44 +0800
+Message-ID: <20220517072344.23576-1-guozihua@huawei.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_16,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=695 spamscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 malwarescore=0 clxscore=1015
- suspectscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205160124
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.31]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-05-16 at 11:27 -0400, Stefan Berger wrote:
-> 
-> On 5/16/22 10:50, Mimi Zohar wrote:
-> > On Fri, 2022-05-13 at 13:41 -0400, Stefan Berger wrote:
-> >> Make hmac_tfm static since it's not used anywhere else besides the file
-> >> it is in.
-> >>
-> >> Remove declaration of hash_tfm since it doesn't exist.
-> >>
-> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > 
-> > Thanks, Stefan.   Both this patch and "evm: Return INTEGRITY_PASS for
-> > enum integrity_status value '0'"  are now queued in next-integrity.
-> > 
-> > Mimi
-> > 
-> 
-> There's also this one here:
-> 
-> https://lore.kernel.org/all/20220421175205.798974-1-stefanb@linux.ibm.com/
+struct evm_xattr is only used for EVM_XATTR_HMAC type evm digest and is
+glued together one flexible array and one fixed length array. The
+original intention seems to be shortening the code as the "data" field
+would always be a SHA1 digest.
 
-Thanks for the reminder.  It's now queued in next-integrity.
+This implementation is not complying with GCC's specification about
+flexible array and spars yield the following warning:
 
-Mimi
+security/integrity/evm/evm_main.c:852:30: warning: using sizeof on a flexible
+structure
+security/integrity/evm/evm_main.c:862:32: warning: using sizeof on a flexible
+structure
+
+Fix it by:
+1. Remove struct evm_xattr and use struct evm_ima_xattr_data directly.
+2. Get array size with struct_size instead of sizeof.
+
+Reference: https://github.com/KSPP/linux/issues/174
+
+Fixes: 6be5cc5246f80 ("evm: add support for different security.evm data types")
+Signed-off-by: GUO Zihua <guozihua@huawei.com>
+---
+ security/integrity/evm/evm_main.c | 14 ++++++++------
+ security/integrity/integrity.h    |  6 ------
+ 2 files changed, 8 insertions(+), 12 deletions(-)
+
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 7d87772f0ce6..f2c4501a287a 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -211,7 +211,8 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+ 	/* check value type */
+ 	switch (xattr_data->type) {
+ 	case EVM_XATTR_HMAC:
+-		if (xattr_len != sizeof(struct evm_xattr)) {
++		if (xattr_len != struct_size(*xattr_data, data,
++					     SHA1_DIGEST_SIZE)) {
+ 			evm_status = INTEGRITY_FAIL;
+ 			goto out;
+ 		}
+@@ -842,24 +843,25 @@ int evm_inode_init_security(struct inode *inode,
+ 				 const struct xattr *lsm_xattr,
+ 				 struct xattr *evm_xattr)
+ {
+-	struct evm_xattr *xattr_data;
++	struct evm_ima_xattr_data *xattr_data;
+ 	int rc;
+ 
+ 	if (!(evm_initialized & EVM_INIT_HMAC) ||
+ 	    !evm_protected_xattr(lsm_xattr->name))
+ 		return 0;
+ 
+-	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
++	xattr_data = kzalloc(struct_size(*xattr_data, data,
++			     SHA1_DIGEST_SIZE), GFP_NOFS);
+ 	if (!xattr_data)
+ 		return -ENOMEM;
+ 
+-	xattr_data->data.type = EVM_XATTR_HMAC;
+-	rc = evm_init_hmac(inode, lsm_xattr, xattr_data->digest);
++	xattr_data->type = EVM_XATTR_HMAC;
++	rc = evm_init_hmac(inode, lsm_xattr, xattr_data->data);
+ 	if (rc < 0)
+ 		goto out;
+ 
+ 	evm_xattr->value = xattr_data;
+-	evm_xattr->value_len = sizeof(*xattr_data);
++	evm_xattr->value_len = struct_size(*xattr_data, data, SHA1_DIGEST_SIZE);
+ 	evm_xattr->name = XATTR_EVM_SUFFIX;
+ 	return 0;
+ out:
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 3510e413ea17..91b16d620dd9 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -86,12 +86,6 @@ struct evm_ima_xattr_data {
+ 	u8 data[];
+ } __packed;
+ 
+-/* Only used in the EVM HMAC code. */
+-struct evm_xattr {
+-	struct evm_ima_xattr_data data;
+-	u8 digest[SHA1_DIGEST_SIZE];
+-} __packed;
+-
+ #define IMA_MAX_DIGEST_SIZE	64
+ 
+ struct ima_digest_data {
+-- 
+2.36.0
 
