@@ -2,154 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CB052AA8F
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 May 2022 20:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4BE52AAA9
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 May 2022 20:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352045AbiEQSWM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 May 2022 14:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S231624AbiEQSYz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 May 2022 14:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233638AbiEQSWJ (ORCPT
+        with ESMTP id S231573AbiEQSYz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 May 2022 14:22:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772BD1D336;
-        Tue, 17 May 2022 11:22:08 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HICMSK013805;
-        Tue, 17 May 2022 18:21:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=yV5FjTW6aOdLLJ5GfzekGQ47jfBqvFOoSil7rFJpN1k=;
- b=SOwhDpLuF1BISd+/zK9p7zWBqsOwgKdz5TX/sa7P5C6Pe+XSOpOdzkykE2znVlGb4ZgP
- PIAHkjTz1RJB/zaAflVOtJrG9cREgwVgQfOgeRgG5IexoIIXdiKAZRTAx5SLsPKfVZH4
- 47zq/I5OMXDuBuNeJ/BrkgZKjEBgetwyHTgcUSCvmgXmHyzJodG6NYQ5/fK3nlDusn3U
- 1GpE8/xe4fFbS8nXFDh5MQ4wz0jKgyB75B5dzBhFgjl6JsfjT2U/XrMyDyAxlbiw7Qim
- sw1h+z3aRvhwpepr1DZKKrCVOmp7FDPrqm/k0denfvKaAy8w5zhx50xjSrM25fyjV+nl Eg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4gs7r65e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 18:21:18 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24HIF3Z2023921;
-        Tue, 17 May 2022 18:21:17 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4gs7r64n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 18:21:17 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HI8hRo028569;
-        Tue, 17 May 2022 18:21:14 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3g2428kqc4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 18:21:14 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HIKdlw33292696
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 18:20:39 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 760B74C04A;
-        Tue, 17 May 2022 18:21:12 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 650FB4C046;
-        Tue, 17 May 2022 18:21:09 +0000 (GMT)
-Received: from sig-9-65-95-105.ibm.com (unknown [9.65.95.105])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 17 May 2022 18:21:09 +0000 (GMT)
-Message-ID: <4fe5564e860eb3093a88528ba1d30364d57723e0.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 2/7] KEYS: trusted: allow use of kernel RNG for key
- material
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        David Gstir <david@sigma-star.at>,
-        Michael Walle <michael@walle.cc>,
-        John Ernberg <john.ernberg@actia.se>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Horia =?UTF-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Pascal Van Leeuwen <pvanleeuwen@verimatrix.com>
-Date:   Tue, 17 May 2022 14:21:08 -0400
-In-Reply-To: <YoPdfjswwA2wKinr@zx2c4.com>
-References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
-         <20220513145705.2080323-3-a.fatoum@pengutronix.de>
-         <1c6a5ce2564c29a06eca255072a379351a5fc026.camel@linux.ibm.com>
-         <YoPdfjswwA2wKinr@zx2c4.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: snNeX5_3_uw2TD-aDKNeaE6XMCoy0svW
-X-Proofpoint-GUID: msDQgd47JUtzKxF1GBXOPQcnot1uj5Xy
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 17 May 2022 14:24:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B82496BB;
+        Tue, 17 May 2022 11:24:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C7866153B;
+        Tue, 17 May 2022 18:24:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60B5AC34117;
+        Tue, 17 May 2022 18:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652811893;
+        bh=5s7DT1idOs5YfZG4Es2EkVEczNIwYfYftJleVW6Ca24=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Xz9rbHYUNn/Y1NPprhcdNc8fApOvghVXTjGOTYQIhrtyY5slzvzdIM+XkFKLhHFmk
+         gbsksDQqMehKHTzifihHnwInOy7/E/C3JwFYAxf2EIz3QGMaFFLBdRoeo3iN3Vj74c
+         3WgYBJy+g8ZCPQnAtoJ3dDfKU2xHlvRrli8Qb2McwRo5WHaNM7kB4ADZ3+ScZ35oua
+         FdktsMiV9LMxDoHQDeeWQxZYbsto+V6/m/DlgEQ0akRbHwjmNBj5FIy/qsGuRlyQbe
+         D4V98E0oDS3+xhKjAKTqka1he/xS5jP8Yia3SKlaNOuhPE5NteehW6+Bx8Ek4rowSq
+         0jJSD0W3fNMgg==
+Message-ID: <2d7e011ae604b3d6d952bed5f7ba08a090930fbe.camel@kernel.org>
+Subject: Re: [PATCH v4 1/6] tpm, tpm_tis_spi: Request threaded irq
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukas@wunner.de,
+        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Date:   Tue, 17 May 2022 21:23:18 +0300
+In-Reply-To: <1b306d56-c6b3-e51f-1d63-2f6725fa7557@gmx.de>
+References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
+         <20220509080559.4381-2-LinoSanfilippo@gmx.de> <YnucgDH3I87RI8PN@kernel.org>
+         <486cec01-ec02-3f11-0b81-037e0700c503@gmx.de> <Yn6esMyUl+QhECq+@kernel.org>
+         <1b306d56-c6b3-e51f-1d63-2f6725fa7557@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_03,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- priorityscore=1501 clxscore=1011 phishscore=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 suspectscore=0 bulkscore=0
- mlxlogscore=877 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205170107
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-05-17 at 19:38 +0200, Jason A. Donenfeld wrote:
-> On Tue, May 17, 2022 at 11:52:55AM -0400, Mimi Zohar wrote:
-> > On Fri, 2022-05-13 at 16:57 +0200, Ahmad Fatoum wrote:
-> > >  static int __init init_trusted(void)
-> > >  {
-> > > +       int (*get_random)(unsigned char *key, size_t key_len);
-> > >         int i, ret = 0;
-> > >  
-> > >         for (i = 0; i < ARRAY_SIZE(trusted_key_sources); i++) {
-> > > @@ -322,6 +333,28 @@ static int __init init_trusted(void)
-> > >                             strlen(trusted_key_sources[i].name)))
-> > >                         continue;
-> > >  
-> > > +               /*
-> > > +                * We always support trusted.rng="kernel" and "default" as
-> > > +                * well as trusted.rng=$trusted.source if the trust source
-> > > +                * defines its own get_random callback.
-> > > +                */
-> >  
-> > While TEE trusted keys support was upstreamed, there was a lot of
-> > discussion about using kernel RNG.  One of the concerns was lack of or
-> > insuffiencent entropy during early boot on embedded devices.  This
-> > concern needs to be clearly documented in both Documentation/admin-
-> > guide/kernel-parameters.txt and Documentation/security/keys/trusted-
-> > encrypted.rst.
-> 
-> Sounds like FUD. Use `get_random_bytes_wait()`, and you'll be fine.
+On Mon, 2022-05-16 at 21:52 +0200, Lino Sanfilippo wrote:
+> Hi,
+>=20
+> On 13.05.22 at 20:08, Jarkko Sakkinen wrote:
+> > On Wed, May 11, 2022 at 09:18:39PM +0200, Lino Sanfilippo wrote:
+> > > Hi,
+> > >=20
+> > > On 11.05.22 at 13:22, Jarkko Sakkinen wrote:
+> > > > On Mon, May 09, 2022 at 10:05:54AM +0200, Lino Sanfilippo wrote:
+> > > > > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> > > > >=20
+> > > > > Interrupt handling at least includes reading and writing the inte=
+rrupt
+> > > > > status register within the interrupt routine. Since accesses over=
+ the SPI
+> > > > > bus are synchronized by a mutex, request a threaded interrupt han=
+dler to
+> > > > > ensure a sleepable context during interrupt processing.
+> > > > >=20
+> > > > > Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the d=
+river")
+> > > > > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> > > >=20
+> > > > When you state that it needs a sleepable context, you should bring =
+a
+> > > > context why it needs it. This not to disregard the code change over=
+ally but
+> > > > you cannot make even the most obvious claim without backing data.
+> > > >=20
+> > >=20
+> > > so what kind of backing data do you have in mind? Would it help to em=
+phasize more
+> > > that the irq handler is running in hard irq context in the current co=
+de and thus
+> > > must not access registers over SPI since SPI uses a mutex (I consider=
+ it as basic
+> > > knowledge that a mutex must not be taken in hard irq context)?
+> >=20
+> > There's zero mention about specific lock you are talking about. Providi=
+ng
+> > the basic knowledge what you are trying to do is the whole point of the
+> > commit message in the first place. I'd presume this patch is related to=
+ the
+> > use bus_lock_mutex but it is fully ingored here.
+> >=20
+>=20
+> Ok, understood. I will amend the commit message to make more clear that
+> reading and writing registers from the interrupt handler results in
+> a call to tpm_tis_spi_transfer() which uses the bus_lock_mutex of the
+> spi device and thus requires a sleepable context.
 
-As per the original discussion, there's also certification requirements
-[1].
+Yeah, please be always as explicit as possible, so that it is impossible
+to get it wrong. Then a reader of your patch saves time from seeking e.g.
+the current name of the data structure. Just dumb things down as far as
+you can.
 
-Mimi
+Commit messages have a dual function:
 
-[1] https://lkml.org/lkml/2019/10/9/53
+1. They *lower* the barrier to look into a code change, which helps
+the patches get any attention.
+2. Proper commit messages save tons of time from the maintainer, when
+you have revisit years old commits, e.g. when bisecting a bug.
 
+Comparing to e.g. Github the key difference is this: in Github you have
+commits and issues. In kernel commit is both issue and the commit bundled
+together. Therefore, every commit also needs to have a "bug report"
+included.
 
+BR, Jarkko
