@@ -2,161 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7B552A767
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 May 2022 17:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BE552A79E
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 May 2022 18:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350656AbiEQPxm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 May 2022 11:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
+        id S1350672AbiEQQG6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 May 2022 12:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350650AbiEQPxl (ORCPT
+        with ESMTP id S1350676AbiEQQG5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 May 2022 11:53:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60BA227;
-        Tue, 17 May 2022 08:53:40 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HFmXiL021978;
-        Tue, 17 May 2022 15:53:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=sJA5HNvoKyXLH7X+0lH0WPS92sWNHhiOLepPwbTZTr0=;
- b=Rw71t49D8PqBOCh7jHat+NZ4UIMN23nIXWrZ/4ykLbBObKnoTIMa4lXUd+vsir1tKhIi
- LgqwcTHVhmnnfcFEHe23JeV8J6XhiSjUMkg73QXzGXcR/5Tf2r6VI825ACmk/ouqoomW
- mD0Eucns4l4qWvWKrLCtUhlDS5ALhoNWaJZq4XeYGhdVjaPlSxKd/tk1+dMcqndtRCjd
- fVcn1N+N4OcxMNUf08F+23mfeKBaasC98wLbDDuOD4t7DQEo246tl+GWcnYhEO/SOD9v
- 6CMGvcfn4Tdhp+MkeYyM/DuBeL8jJgzXEAHKfDy55Y6V4WoLuXrTl2NGlV047tfamqR5 eQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4ebt8nyn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 15:53:04 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24HFn7gO025135;
-        Tue, 17 May 2022 15:53:03 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4ebt8nxq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 15:53:03 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HFqWIp032749;
-        Tue, 17 May 2022 15:53:01 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 3g2428kk1y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 15:53:01 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HFqwcd43254228
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 15:52:58 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AEC6BA404D;
-        Tue, 17 May 2022 15:52:58 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ABE4AA4040;
-        Tue, 17 May 2022 15:52:55 +0000 (GMT)
-Received: from sig-9-65-95-105.ibm.com (unknown [9.65.95.105])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 17 May 2022 15:52:55 +0000 (GMT)
-Message-ID: <1c6a5ce2564c29a06eca255072a379351a5fc026.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 2/7] KEYS: trusted: allow use of kernel RNG for key
- material
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        James Bottomley <jejb@linux.ibm.com>,
+        Tue, 17 May 2022 12:06:57 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A63369E5;
+        Tue, 17 May 2022 09:06:56 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id i11so33157487ybq.9;
+        Tue, 17 May 2022 09:06:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T+Y0T0by6V75JyhkkKhy6aaHysUDsmwlgU76NEv5hWY=;
+        b=JTxWjsc1g9aYb/foqfiAq6EqRuWOzjuVWT97j4hei0KotI2fGZLoyk5H9k2vpFVABK
+         2gMsAP0otZsp+mk4lMAGh5XYJwdaXjJoz80VaExDriCUo+A3xY8XODKIDdwx5p18pPUQ
+         a79VdvzuaLIqj7ePYQqWL3ltFlobmmcsUXkTK16aBZNP/jNyitdFGU1TkiZDemdu5EsA
+         8Fi83f/O6anK8/sqbNSQwnkPiUtuJCD7cQPLa7QkjqinCLfNzWPo9z3j5A7g3ADyELE4
+         9S2kwN74Xkh074fXE7Mzs60WyKzUKTnfuGprrBd12erZl9WIBPz4akLvqw3XGoYMz2LX
+         5cXA==
+X-Gm-Message-State: AOAM5304AGrVtug+HToZCE+wR33fjbyUtDZYx3YvC6ghQNl6CkbNe1AC
+        KpDRUclLkwOy0fMtVPDqu2oZVjTI/cKT/WlHqws/ufhe
+X-Google-Smtp-Source: ABdhPJy1LGg4mJVH0m9Pwfdn7gwx0zv22rx74oJyN/QFQI66KeJQrMvIuDw13YQMm1Z5ZZyzAnUAXdJqmdCaaW/IMyc=
+X-Received: by 2002:a25:1145:0:b0:64d:d6be:c741 with SMTP id
+ 66-20020a251145000000b0064dd6bec741mr8135761ybr.137.1652803615502; Tue, 17
+ May 2022 09:06:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
+ <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
+In-Reply-To: <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 May 2022 18:06:44 +0200
+Message-ID: <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Encrypted Hibernation
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, LKML <linux-kernel@vger.kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
         Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     kernel@pengutronix.de, Sumit Garg <sumit.garg@linaro.org>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        David Gstir <david@sigma-star.at>,
-        Michael Walle <michael@walle.cc>,
-        John Ernberg <john.ernberg@actia.se>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Horia =?UTF-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux PM <linux-pm@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         linux-security-module@vger.kernel.org
-Date:   Tue, 17 May 2022 11:52:55 -0400
-In-Reply-To: <20220513145705.2080323-3-a.fatoum@pengutronix.de>
-References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
-         <20220513145705.2080323-3-a.fatoum@pengutronix.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SE_jucLUMk1vHaVn0CtxN-mL7pixtwk2
-X-Proofpoint-GUID: WeggiYsQgcZKsHI4Vh9DhvROgGdOew6I
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_03,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- suspectscore=0 phishscore=0 lowpriorityscore=0 clxscore=1011 spamscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 mlxlogscore=848 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205170095
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-05-13 at 16:57 +0200, Ahmad Fatoum wrote:
->  static int __init init_trusted(void)
->  {
-> +       int (*get_random)(unsigned char *key, size_t key_len);
->         int i, ret = 0;
->  
->         for (i = 0; i < ARRAY_SIZE(trusted_key_sources); i++) {
-> @@ -322,6 +333,28 @@ static int __init init_trusted(void)
->                             strlen(trusted_key_sources[i].name)))
->                         continue;
->  
-> +               /*
-> +                * We always support trusted.rng="kernel" and "default" as
-> +                * well as trusted.rng=$trusted.source if the trust source
-> +                * defines its own get_random callback.
-> +                */
- 
-While TEE trusted keys support was upstreamed, there was a lot of
-discussion about using kernel RNG.  One of the concerns was lack of or
-insuffiencent entropy during early boot on embedded devices.  This
-concern needs to be clearly documented in both Documentation/admin-
-guide/kernel-parameters.txt and Documentation/security/keys/trusted-
-encrypted.rst.
+On Mon, May 9, 2022 at 6:44 PM Evan Green <evgreen@chromium.org> wrote:
+>
+> On Fri, May 6, 2022 at 9:08 AM Pavel Machek <pavel@ucw.cz> wrote:
+> >
+> > Hi!
+> >
+> > > We are exploring enabling hibernation in some new scenarios. However,
+> > > our security team has a few requirements, listed below:
+> > > 1. The hibernate image must be encrypted with protection derived from
+> > >    both the platform (eg TPM) and user authentication data (eg
+> > >    password).
+> > > 2. Hibernation must not be a vector by which a malicious userspace can
+> > >    escalate to the kernel.
+> >
+> > Can you (or your security team) explain why requirement 2. is needed?
+> >
+> > On normal systems, trusted userspace handles kernel upgrades (for example),
+> > so it can escalate to kernel priviledges.
+> >
+>
+> Our systems are a little more sealed up than a normal distro, we use
+> Verified Boot [1]. To summarize, RO firmware with an embedded public
+> key verifies that the kernel+commandline was signed by Google. The
+> commandline includes the root hash of the rootfs as well (where the
+> modules live). So when an update is applied (A/B style, including the
+> whole rootfs), assuming the RO firmware stayed RO (which requires
+> physical measures to defeat), we can guarantee that the kernel,
+> commandline, and rootfs have not been tampered with.
+>
+> Verified boot gives us confidence that on each boot, we're at least
+> starting from known code. This makes it more challenging for an
+> attacker to persist an exploit across reboot. With the kernel and
+> modules verified, we try to make it non-trivial for someone who does
+> manage to gain root execution once from escalating to kernel
+> execution. Hibernation would be one obvious escalation route, so we're
+> hoping to find a way to enable it without handing out that easy
+> primitive.
+>
+> [1] https://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot/
 
-thanks,
+So I guess this really is an RFC.
 
-Mimi
+Honestly, I need more time to go through this and there are pieces of
+it that need to be looked at other people (like the TPM-related
+changes).
 
-> +               get_random = trusted_key_sources[i].ops->get_random;
-> +               if (trusted_rng && strcmp(trusted_rng, "default")) {
-> +                       if (!strcmp(trusted_rng, "kernel")) {
-> +                               get_random = kernel_get_random;
-> +                       } else if (strcmp(trusted_rng, trusted_key_sources[i].name) ||
-> +                                  !get_random) {
-> +                               pr_warn("Unsupported RNG. Supported: kernel");
-> +                               if (get_random)
-> +                                       pr_cont(", %s", trusted_key_sources[i].name);
-> +                               pr_cont(", default\n");
-> +                               return -EINVAL;
-> +                       }
-> +               }
-> +
-> +               if (!get_random)
-> +                       get_random = kernel_get_random;
-> +
->                 static_call_update(trusted_key_init,
->                                    trusted_key_sources[i].ops->init);
-
+Thanks!
