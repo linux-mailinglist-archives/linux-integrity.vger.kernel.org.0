@@ -2,76 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A3452AFA1
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 May 2022 03:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C255952AFC0
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 May 2022 03:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233192AbiERBJ5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 May 2022 21:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        id S233316AbiERBQQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 May 2022 21:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiERBJ4 (ORCPT
+        with ESMTP id S229943AbiERBQP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 May 2022 21:09:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACA736E16;
-        Tue, 17 May 2022 18:09:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7751AB81BEA;
-        Wed, 18 May 2022 01:09:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC81AC385B8;
-        Wed, 18 May 2022 01:09:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652836191;
-        bh=fXm/jNWiR+uB6y2skR3sOXI5YjTEgz3MjlGfetpWRgc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=SyUEAn+gBKLP4/y7Dp2x8gWSW1lqeyqAXiL2vBFEZeB2RkB5kpLoHp6ZrlZ8QfQ+v
-         CJiDHmKolgvDy3q0WmtL/Fr4i/y1mA+txWjVxbXEPA2LASDGCfeihKmNBcJIKZlODp
-         yctJBSwOgWdGhXJS4xHrCWRbCe6soNnAOJjOEe1KGpFwQatT201u0KiW6A8msecgLb
-         UP3yu7Hl05XwGV7BFMKjs1U0Dr8VO2eIf5Y1I2quQOw/uJNgGivzuP+cknMFzbkQVn
-         WaswSxl512pCH+OJw40YH93JG3CE5Zvt6DbCKBydO1c9zaoLwCzSeoxMZaOeISSshJ
-         qIh02HXYMpZgQ==
-Message-ID: <c511995075cafb35bfefcbfe6fa6e84aa31c536f.camel@kernel.org>
-Subject: Re: [PATCH v10 0/7] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Horia =?UTF-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        James Bottomley <jejb@linux.ibm.com>, kernel@pengutronix.de,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Andreas Rammhold <andreas@rammhold.de>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Michael Walle <michael@walle.cc>,
-        John Ernberg <john.ernberg@actia.se>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Wed, 18 May 2022 04:08:15 +0300
-In-Reply-To: <4d4ecd4b-9683-08a0-7a5f-11a7ff86ea6d@pengutronix.de>
-References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
-         <YoKZwFkfcl7ixTF4@kernel.org>
-         <4d4ecd4b-9683-08a0-7a5f-11a7ff86ea6d@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 
+        Tue, 17 May 2022 21:16:15 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DDEBCA5;
+        Tue, 17 May 2022 18:16:14 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L2w576wKrz1JCGK;
+        Wed, 18 May 2022 09:14:51 +0800 (CST)
+Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
+ (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
+ 2022 09:16:12 +0800
+From:   GUO Zihua <guozihua@huawei.com>
+To:     <linux-integrity@vger.kernel.org>
+CC:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <gustavoars@kernel.org>, <linux-hardening@vger.kernel.org>
+Subject: [RESEND] evm: Refector struct evm_xattr
+Date:   Wed, 18 May 2022 09:14:39 +0800
+Message-ID: <20220518011439.184809-1-guozihua@huawei.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.31]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,35 +46,94 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-05-17 at 14:44 +0200, Ahmad Fatoum wrote:
-> Hello Herbert,
->=20
-> On 16.05.22 20:36, Jarkko Sakkinen wrote:
-> > On Fri, May 13, 2022 at 04:56:58PM +0200, Ahmad Fatoum wrote:
-> > I can probably pick these unless objections?
->=20
-> Pankaj has given his Reviewed-by for the CAAM parts he co-maintains,
-> is it ok for this to go in via Jarkko's tree?
->=20
-> Note that applying this series on top of jarkko/linux-tpmdd.git has a
-> trivial conflict when merged with herbert/cryptodev-2.6.git:
-> Two independently added Kconfig options need to coexist in
-> drivers/crypto/caam/Kconfig.
->=20
-> I can resend my series rebased if needed.
->=20
-> Cheers,
-> Ahmad
->=20
-> >=20
-> > BR, Jarkko
-> >=20
->=20
->=20
+struct evm_xattr is only used for EVM_XATTR_HMAC type evm digest and is
+glued together one flexible array and one fixed length array. The
+original intention seems to be shortening the code as the "data" field
+would always be a SHA1 digest.
 
-This came up:
+This implementation is not complying with GCC's specification about
+flexible array and spars yield the following warning:
 
-https://lore.kernel.org/keyrings/0e8da958a222e5c1dccaaf1600b08bdb8705b48e.c=
-amel@kernel.org/
+security/integrity/evm/evm_main.c:852:30: warning: using sizeof on a flexible
+structure
+security/integrity/evm/evm_main.c:862:32: warning: using sizeof on a flexible
+structure
 
-BR, Jarkko
+Fix it by:
+1. Remove struct evm_xattr and use struct evm_ima_xattr_data directly.
+2. Get array size with struct_size instead of sizeof.
+
+Reference: https://github.com/KSPP/linux/issues/174
+
+Fixes: 6be5cc5246f80 ("evm: add support for different security.evm data types")
+Signed-off-by: GUO Zihua <guozihua@huawei.com>
+---
+ security/integrity/evm/evm_main.c | 14 ++++++++------
+ security/integrity/integrity.h    |  6 ------
+ 2 files changed, 8 insertions(+), 12 deletions(-)
+
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 7d87772f0ce6..f2c4501a287a 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -211,7 +211,8 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+ 	/* check value type */
+ 	switch (xattr_data->type) {
+ 	case EVM_XATTR_HMAC:
+-		if (xattr_len != sizeof(struct evm_xattr)) {
++		if (xattr_len != struct_size(*xattr_data, data,
++					     SHA1_DIGEST_SIZE)) {
+ 			evm_status = INTEGRITY_FAIL;
+ 			goto out;
+ 		}
+@@ -842,24 +843,25 @@ int evm_inode_init_security(struct inode *inode,
+ 				 const struct xattr *lsm_xattr,
+ 				 struct xattr *evm_xattr)
+ {
+-	struct evm_xattr *xattr_data;
++	struct evm_ima_xattr_data *xattr_data;
+ 	int rc;
+ 
+ 	if (!(evm_initialized & EVM_INIT_HMAC) ||
+ 	    !evm_protected_xattr(lsm_xattr->name))
+ 		return 0;
+ 
+-	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
++	xattr_data = kzalloc(struct_size(*xattr_data, data,
++			     SHA1_DIGEST_SIZE), GFP_NOFS);
+ 	if (!xattr_data)
+ 		return -ENOMEM;
+ 
+-	xattr_data->data.type = EVM_XATTR_HMAC;
+-	rc = evm_init_hmac(inode, lsm_xattr, xattr_data->digest);
++	xattr_data->type = EVM_XATTR_HMAC;
++	rc = evm_init_hmac(inode, lsm_xattr, xattr_data->data);
+ 	if (rc < 0)
+ 		goto out;
+ 
+ 	evm_xattr->value = xattr_data;
+-	evm_xattr->value_len = sizeof(*xattr_data);
++	evm_xattr->value_len = struct_size(*xattr_data, data, SHA1_DIGEST_SIZE);
+ 	evm_xattr->name = XATTR_EVM_SUFFIX;
+ 	return 0;
+ out:
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 3510e413ea17..91b16d620dd9 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -86,12 +86,6 @@ struct evm_ima_xattr_data {
+ 	u8 data[];
+ } __packed;
+ 
+-/* Only used in the EVM HMAC code. */
+-struct evm_xattr {
+-	struct evm_ima_xattr_data data;
+-	u8 digest[SHA1_DIGEST_SIZE];
+-} __packed;
+-
+ #define IMA_MAX_DIGEST_SIZE	64
+ 
+ struct ima_digest_data {
+-- 
+2.36.0
+
