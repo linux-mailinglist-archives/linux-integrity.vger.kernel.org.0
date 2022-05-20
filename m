@@ -2,103 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3FD52EF93
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 May 2022 17:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC95E52F039
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 May 2022 18:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351060AbiETPpo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 May 2022 11:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
+        id S1351018AbiETQLd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 May 2022 12:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351072AbiETPpl (ORCPT
+        with ESMTP id S1351544AbiETQLR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 May 2022 11:45:41 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE3F179961
-        for <linux-integrity@vger.kernel.org>; Fri, 20 May 2022 08:45:29 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so6649750pjb.0
-        for <linux-integrity@vger.kernel.org>; Fri, 20 May 2022 08:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=vc6UzMZJ99rPT/oGbTC9rWGA9q53ZOjUpC79nvKqcAU=;
-        b=xn7tGQsd1Ammyb30tKhGhYaTasZDR6D+KopoaEElpoNqc6cGf0hpG8c/xcaW+oBpAb
-         NQDMz08xYT3+AcMmulQAk6hqyDWTp+nOeQiNtJHz9aUl3GAakkxCzJCkqmNuICNj6ku9
-         Vl5uzJywr8dENe3WususOJPHvvwQ2N9Zb7UXl2j98MpGfkZKlVUup3aNUYpiWXSSsMnF
-         HepGggexSW9DzDTaB5r53P4KdrOWLX4hD7rWWZIHZzryaJzlILIHBDAqaXM69uvA+q0+
-         HTb8rFfgcXIiymlN8fTxxIcV4a/06ryRKb3FCuQF+PfCqhJ1VLcOJ4sJZ6Wafv1dnUgs
-         vWtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding:cc:from:to;
-        bh=vc6UzMZJ99rPT/oGbTC9rWGA9q53ZOjUpC79nvKqcAU=;
-        b=jPBeVfFFFPN7juWmndS/l0i35XJzyxCfuYYtJLbSnO2URTVff4wor7dWSqluM3sSC5
-         6gwvpKTbYOxex6lTfPODMj8RYKv6PSQU+x3gBLWwD9h4GJfrSo8HpXcTQ1HvIEpCCIez
-         hrJ55pq5ks+ZBJIev9UwuWKkNzA+LDrdWWCIiHql/9sJ0n3NpHZtoxKpeVGHB5MzIA03
-         IH3b3BVUEIeJu5v+TSy5lNJbhom7UU2wRUkYderUwrvJ87WNnweWxnsPfO3HLTw4BTt4
-         QLEzhrYOwy5wOCto96EaU49m/STVh2/enMUvOINzQBUQE05zPyDHip+csNEDVM2CshvW
-         tFOg==
-X-Gm-Message-State: AOAM530uePhJzXIsvABKUJ6fD6pWW+27k8v4mDYFljvlQlBVJkyhxFHr
-        UtnfCFYp8Us46tHmv8+ZIl5TsA==
-X-Google-Smtp-Source: ABdhPJztQKNxzDANcIjGDZLNAGCofYLcLEa+w82rs1Ze6iiV8t755M1LTaCfj73BRJaCli8PyHWtOQ==
-X-Received: by 2002:a17:902:8c98:b0:15f:3e78:dc43 with SMTP id t24-20020a1709028c9800b0015f3e78dc43mr10194800plo.120.1653061528884;
-        Fri, 20 May 2022 08:45:28 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id hi4-20020a17090b30c400b001cda0b69a30sm1987977pjb.52.2022.05.20.08.45.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 08:45:28 -0700 (PDT)
-Subject: [PATCH v1 5/5] RISC-V: Allow kexec_file() on 32-bit platforms
-Date:   Fri, 20 May 2022 08:44:31 -0700
-Message-Id: <20220520154430.18593-6-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220520154430.18593-1-palmer@rivosinc.com>
-References: <20220520154430.18593-1-palmer@rivosinc.com>
+        Fri, 20 May 2022 12:11:17 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B250E165B0
+        for <linux-integrity@vger.kernel.org>; Fri, 20 May 2022 09:11:16 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KFp76o017305;
+        Fri, 20 May 2022 16:11:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=rOO5rDkIAbnD9sFxvCAVF2Ffv2a/9exQolkAa7q6psQ=;
+ b=BhS5lxNPCIGWcdKKI2/4v/Jeb2FcOx4B/POfD91KczhGSY8pmor2KPS0yWRFe06ShAsH
+ QWBhkZtXF5n4H7HJpI0g5zokynaAMA3kGWWK6WGW4am83ceH1bJDcUb5CcydqkMuvZxc
+ Qpmptw1XOGUSnsYJq3zp2PT/0ZhAS6DA5khTEghl2vYfraqLl1l2PoJ2+qgNAlKuWrFL
+ jaGdX4817HASDEyUBJE1Ox664hL+/cuon7hZrWXzeahttqrcp0iBh0yRaffss4R4OBP3
+ C0DCd7vZ7afS60H6R+Exjcgknte0fJ0pi4D64HJO91T5m8HdHBc63n+RRd7/dWpAggE3 Sw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g6dyygcm4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 16:11:14 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KFqxxd016003;
+        Fri, 20 May 2022 16:11:12 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjh3pk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 16:11:12 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KGB9wt51380568
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 16:11:09 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E63152052;
+        Fri, 20 May 2022 16:11:09 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.82.251])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 094985204E;
+        Fri, 20 May 2022 16:11:08 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v3 ima-evm-utils 0/3] fs-verity file signature support
+Date:   Fri, 20 May 2022 12:11:00 -0400
+Message-Id: <20220520161103.373554-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        robh+dt@kernel.org, frowand.list@gmail.com, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        liaochang1@huawei.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux@rivosinc.com,
-        Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     lizhengyu3@huawei.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: PW-jG5ongDqdAHCYfBaz-ALe1FoXBUAI
+X-Proofpoint-ORIG-GUID: PW-jG5ongDqdAHCYfBaz-ALe1FoXBUAI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_04,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 malwarescore=0 clxscore=1015 phishscore=0 mlxlogscore=999
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205200106
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+Extend the existing file list digest signing and the IMA measurement
+list file signature verification to support the new sigv3 format
+version.  Neither file digest signing nor signature verification
+require calculating the fs-verity file digest.
 
-With the build issues now sorted out we can enable kexec_file() on
-32-bit platforms as well.
+evmctl examples of signing fs-verity file hashes and verifying the
+fs-verity file signatures are included the respective patch
+description.
 
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- arch/riscv/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+Changelog v3:
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 898052ff743e..a246f2fe60c2 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -388,7 +388,6 @@ config KEXEC_FILE
- 	select KEXEC_CORE
- 	select KEXEC_ELF
- 	select HAVE_IMA_KEXEC if IMA
--	depends on 64BIT
- 	help
- 	  This is new version of kexec system call. This system call is
- 	  file based and takes file descriptors as system call argument
+- Refactor the existing file hash signing function so that both
+signature format version 2 and 3 may use it.  Signature v2 directly
+signs the file hash, while signature v3 indirectly signs the file hash.
+
+- Addressed Stefan Berger's comments: properly clear errno, properly
+limit the hash algorithm name size to address an out of bounds error.
+Instead of allowing the maximum hash algorithm name size, use the
+current fs-verity supported maximum hash algorithm size.
+
+- Based on Eric Bigger's recommendation of using "fsverity digest"
+instead of "fsverity measure", replaced all references.
+
+
+Mimi Zohar (3):
+  Reset 'errno' after failure to open or access a file
+  Sign an fs-verity file digest
+  Verify an fs-verity file digest based signature
+
+ README          |   3 +-
+ src/evmctl.c    | 126 ++++++++++++++++++++++++++++++------
+ src/imaevm.h    |   5 +-
+ src/libimaevm.c | 166 ++++++++++++++++++++++++++++++++++++++++++++----
+ src/utils.c     |   5 +-
+ 5 files changed, 272 insertions(+), 33 deletions(-)
+
 -- 
-2.34.1
+2.27.0
 
