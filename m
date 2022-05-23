@@ -2,78 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4C55312C0
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 May 2022 18:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A448531C9E
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 May 2022 22:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238686AbiEWQSc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 May 2022 12:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S232691AbiEWQ7j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 May 2022 12:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238721AbiEWQSV (ORCPT
+        with ESMTP id S238994AbiEWQ7h (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 May 2022 12:18:21 -0400
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32CC674F5;
-        Mon, 23 May 2022 09:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1653322697; x=1684858697;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=z8t769RTJ1v6wThwJD40WUm25oo8h2mVf0BG5uNRaCc=;
-  b=QsUaaVCYZ67dYpIAxoxr1Erzw784RBvGVRLnW0moaMNe/aWmzlgL7v1c
-   4nincVzD0wFO/OK6k4/Bh9KpDOmScsyNdHTQSK5flPgVFbYeDSQcQuP+Q
-   LGrx4/ZUiPPbdZ6duVIec/tFPtPLXEy+1tphYY4CYTG2xz/yLD51n+iJc
-   Q=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="297362362"
-X-IronPort-AV: E=Sophos;i="5.91,246,1647298800"; 
-   d="scan'208";a="297362362"
-Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 18:18:15 +0200
-Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        Mon, 23 May 2022 12:59:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C5C340D5;
+        Mon, 23 May 2022 09:59:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
-        Mon, 23 May 2022 18:18:14 +0200 (CEST)
-Received: from MUCSE817.infineon.com (172.23.29.43) by MUCSE819.infineon.com
- (172.23.29.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 23 May
- 2022 18:18:14 +0200
-Received: from [10.165.68.85] (10.165.68.85) by MUCSE817.infineon.com
- (172.23.29.43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 23 May
- 2022 18:18:14 +0200
-Message-ID: <cbebf61b-71ab-b37d-c516-57a9155e1a94@infineon.com>
-Date:   Mon, 23 May 2022 18:18:02 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 135E2614AB;
+        Mon, 23 May 2022 16:59:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF590C385AA;
+        Mon, 23 May 2022 16:59:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653325175;
+        bh=JD4vUg5P0ha+qnAxEQ/1K+c2zyCjSh6N/g9oM1/e13s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hHEVLd+W+IKAK7huRJaRTprXZYDkmj/tkJXO5eY1IwPr4caapKhNueUPpQzFc57za
+         NgyyRmm8MvuMsbpiiVWbf+k2cKQfe1y7iGbodIelhjKJ1Q+shafuEydxAm1REbARIa
+         8Q5JKYumb4AFVVttum0/cu83SRg3uZHMiUN6yBfEbJc/Djhy660C1xqPD6p4nVI+fe
+         lOFFezmlIAT5HhlHTvcaEiZFTTdGTKjW3G2wtTgtERDwuHZf+Hgm80pJFHK2rUY560
+         /nELiROQKN6SCm3DSswNB+qkN9fnl9ldPDRo++t46tIQdWf4ma4DD4ERlPrBCA0OJc
+         7Aw1nDWeYNjgg==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] TPM DEVICE DRIVER updates for v5.19-rc1
+Date:   Mon, 23 May 2022 19:57:44 +0300
+Message-Id: <20220523165744.48234-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 1/2] tpm: Add tpm_tis_i2c backend for tpm_tis_core
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <jarkko@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>
-CC:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Johannes Holland <johannes.holland@infineon.com>,
-        Amir Mizinski <amirmizi6@gmail.com>
-References: <20220520172422.4309-1-Alexander.Steffen@infineon.com>
- <20220520172422.4309-2-Alexander.Steffen@infineon.com>
- <02596f22-3d19-8872-75fd-2a8f563c8270@linaro.org>
- <8f0d2098-8c7f-2347-3004-bf3e422de3a3@infineon.com>
- <d4ab965c-d193-3b4b-9b88-95b8b2b40f80@linaro.org>
- <9d9e04e9-463a-bd43-b116-a9488f6e154e@linaro.org>
-From:   Alexander Steffen <Alexander.Steffen@infineon.com>
-In-Reply-To: <9d9e04e9-463a-bd43-b116-a9488f6e154e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.165.68.85]
-X-ClientProxiedBy: MUCSE807.infineon.com (172.23.29.33) To
- MUCSE817.infineon.com (172.23.29.43)
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,129 +59,110 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 23.05.22 11:44, Krzysztof Kozlowski wrote:
-> On 23/05/2022 11:32, Krzysztof Kozlowski wrote:
->> On 23/05/2022 10:55, Alexander Steffen wrote:
->>> On 22.05.22 10:30, Krzysztof Kozlowski wrote:
->>>> Without bindings, new compatibles and properties cannot be accepted, so NAK.
->>>
->>> Could you be more specific as to what the correct solution is here?
->>> Usually, I'd just look at what the existing code does, but that is a
->>> little messy:
->>>
->>>
->>>
->>> * socionext,synquacer-tpm-mmio is documented only in
->>> Documentation/devicetree/bindings/trivial-devices.yaml
->>>
->>> * nuvoton,npct601 is documented in trivial-devices.yaml and is also
->>> mentioned in Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
->>>
->>> * nuvoton,npct650 is only mentioned in tpm-i2c.txt, but appears nowhere
->>> in the code
->>>
->>> * infineon,tpm_i2c_infineon appears only in tpm_i2c_infineon.c, but is
->>> documented nowhere
->>>
->>> * tpm_tis_spi_main.c has all its compatibles documented in
->>> tpm_tis_spi.txt, except google,cr50, which is documented in
->>> google,cr50.txt, even though it has the same properties
->>>
->>> * tpm_tis_i2c_cr50.c uses the exact same google,cr50, even though that
->>> is explicitly documented as a device "on SPI Bus" and lists
->>> spi-max-frequency as one of its required properties, which does not make
->>> any sense for an I2C device
->>>
->>> * According to the feedback in
->>> https://patchwork.kernel.org/project/linux-integrity/patch/20220404081835.495-4-johannes.holland@infineon.com/#24801807,
->>> the text format, that is currently used everywhere in
->>> Documentation/devicetree/bindings/security/tpm/, is deprecated anyway
->>> and should be replaced by YAML
->>>
->>>
->>>
->>> So would you be okay with just adding the compatibles from tpm_tis_i2c.c
->>> to trivial-devices.yaml, so that checkpatch does not complain anymore,
->>> and leave the cleanup of the mess above for later?
->>
-> To trivial-devices you should add only bindings of really trivial
-> devices, which do not have any other properties, even when the bindings
-> are finished. This means you describe fully the hardware and still have
-> only reg+compatible.
-> 
-> If this device fits such case - no other hardware properties than reg -
-> then, feel free to document it in trivial-devices. However I am not sure
-> that TPM devices are that trivial... For example tpm-i2c.txt defines
-> also interrupts and label.
-> 
-> If the device is not trivial, it should be documented in bindings,
-> either dedicated or some existing ones.
+The following changes since commit 4b0986a3613c92f4ec1bdc7f60ec66fea135991f:
 
-Ok, let's see whether I understood that correctly:
+  Linux 5.18 (2022-05-22 09:52:31 -1000)
 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.19-rc1
 
-I think, in general, TPMs are trivial devices: They sit on the I2C or 
-SPI bus waiting for commands, but don't do much else. They might have 
-TPM-specific properties, like whether they implement the 1.2 or 2.0 
-command set, but we don't encode those in the device tree, since the 
-driver tries to detect the available functionality dynamically (which 
-makes sense, since some TPMs can be upgraded from 1.2 to 2.0, so that is 
-not a static property of the device). Other properties, such as the 
-maximum SPI frequency, are not TPM-specific, but apply to every SPI 
-device and might be limited by either the SPI device itself or the SPI 
-controller (or the user, wishing to run at lower frequencies, for 
-whatever reason).
+for you to fetch changes up to 7f3113e3b9f7207f0bd57b5fdae1a1b9c8215e08:
 
+  MAINTAINERS: add KEYS-TRUSTED-CAAM (2022-05-23 18:47:50 +0300)
 
+----------------------------------------------------------------
+tpmdd updates for v5.19-rc1
 
-Looking at the code, there are some TPM-specific properties in use 
-though: There is the powered-while-suspended flag, which only the TPM 
-driver looks at (in drivers/char/tpm/eventlog/of.c). It is not specific 
-to a single TPM (a single compatible string), but can be set for all the 
-TPMs. Also, the linux,sml-* properties might be TPM-specific, though 
-they get set in arch/powerpc/kernel/prom_init.c to communicate some 
-information to the TPM driver. And there is lpcpd-gpios, which is only 
-used by st33zp24.
+- Strictened validation of key hashes for SYSTEM_BLACKLIST_HASH_LIST.  An
+  invalid hash format causes a compilation error.  Previously, they got
+  included to the kernel binary but were silently ignored at run-time.
+- Allow root user to append new hashes to the blacklist keyring.
+- Trusted keys backed with Cryptographic Acceleration and Assurance Module
+  (CAAM), which part of some of the new NXP's SoC's.  Now there is total
+  three hardware backends for trusted keys: TPM, ARM TEE and CAAM.
+- A scattered set of fixes and small improvements for the TPM driver.
 
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
+----------------------------------------------------------------
+Ahmad Fatoum (7):
+      KEYS: trusted: allow use of TEE as backend without TCG_TPM support
+      KEYS: trusted: allow use of kernel RNG for key material
+      crypto: caam - determine whether CAAM supports blob encap/decap
+      crypto: caam - add in-kernel interface for blob generator
+      KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+      doc: trusted-encrypted: describe new CAAM trust source
+      MAINTAINERS: add KEYS-TRUSTED-CAAM
 
-Now the purpose of trivial-devices.yaml is to specify a schema of valid 
-device definitions. It only allows the properties reg, interrupts and 
-spi-max-frequency in addition to the compatible strings. So, strictly 
-speaking, none of the TPMs should be listed there, since all the TPMs 
-can, in theory, use the powered-while-suspended flag, which is not 
-allowed by the schema. With other properties the schema does not seem to 
-be too strict, since it applies to both I2C and SPI devices, but allows 
-the spi-max-frequency property, even though that does not make sense for 
-I2C devices.
+Haowen Bai (1):
+      tpm/tpm_ftpm_tee: Return true/false (not 1/0) from bool functions
 
+Jes B. Klinke (1):
+      tpm: cr50: Add new device/vendor ID 0x504a6666
 
+Johannes Holland (1):
+      tpm: Remove read16/read32/write32 calls from tpm_tis_phy_ops
 
-So the correct solution could be this: Replace all the text files in 
-Documentation/devicetree/bindings/security/tpm/ with a single 
-trivial-tpms.yaml (similar to trivial-devices.yaml) and also move all 
-the TPMs from trivial-devices.yaml there. This allows to properly 
-document the powered-while-suspended flag and other generic TPM 
-properties. st33zp24 should get its own YAML, to document lpcpd-gpios, 
-that is only used by this driver. I'm not quite sure what to do with 
-ibmvtpm.txt, since that seems to document several properties, that are 
-not referenced in the TPM driver at all but instead get used by some 
-scsi driver (e.g. ibm,loc-code), so I'd probably ignore it for now. What 
-do you think?
+Mickaël Salaün (6):
+      tools/certs: Add print-cert-tbs-hash.sh
+      certs: Factor out the blacklist hash creation
+      certs: Make blacklist_vet_description() more strict
+      certs: Check that builtin blacklist hashes are valid
+      certs: Allow root user to append signed hashes to the blacklist keyring
+      certs: Explain the rationale to call panic()
 
+Stefan Mahnke-Hartmann (2):
+      tpm: Fix buffer access in tpm2_get_tpm_pt()
+      tpm: Add field upgrade mode support for Infineon TPM2 modules
 
+Uwe Kleine-König (1):
+      char: tpm: cr50_i2c: Suppress duplicated error message in .remove()
 
-As for tpm_tis_i2c, if there are no other objections to its current 
-state, I'd add its compatible strings to trivial-devices.yaml for now, 
-then do the cleanup as described above later. It does not make the code 
-more wrong, since trivial-devices.yaml already contains some TPM 
-devices, that are very similar to what tpm_tis_i2c now supports (i.e. 
-that also don't have special properties), but allows for more time to do 
-the cleanup properly, without holding up tpm_tis_i2c.
+Xiu Jianfeng (1):
+      tpm: ibmvtpm: Correct the return value in tpm_ibmvtpm_probe()
 
-
-
-Kind regards
-
-Alexander
+ Documentation/admin-guide/kernel-parameters.txt    |  11 +
+ Documentation/security/keys/trusted-encrypted.rst  |  60 +++++-
+ MAINTAINERS                                        |  11 +
+ certs/.gitignore                                   |   1 +
+ certs/Kconfig                                      |  17 +-
+ certs/Makefile                                     |  14 +-
+ certs/blacklist.c                                  | 227 ++++++++++++++++-----
+ crypto/asymmetric_keys/x509_public_key.c           |   3 +-
+ drivers/char/tpm/tpm2-cmd.c                        |  17 +-
+ drivers/char/tpm/tpm_ftpm_tee.c                    |   2 +-
+ drivers/char/tpm/tpm_ibmvtpm.c                     |   1 +
+ drivers/char/tpm/tpm_tis.c                         |  67 +++---
+ drivers/char/tpm/tpm_tis_core.h                    |  58 ++++--
+ drivers/char/tpm/tpm_tis_i2c_cr50.c                |  11 +-
+ drivers/char/tpm/tpm_tis_spi.h                     |   4 -
+ drivers/char/tpm/tpm_tis_spi_cr50.c                |   7 +-
+ drivers/char/tpm/tpm_tis_spi_main.c                |  45 +---
+ drivers/char/tpm/tpm_tis_synquacer.c               |  98 ++++-----
+ drivers/crypto/caam/Kconfig                        |   3 +
+ drivers/crypto/caam/Makefile                       |   1 +
+ drivers/crypto/caam/blob_gen.c                     | 182 +++++++++++++++++
+ drivers/crypto/caam/ctrl.c                         |  17 +-
+ drivers/crypto/caam/intern.h                       |   1 +
+ drivers/crypto/caam/regs.h                         |   4 +-
+ include/keys/system_keyring.h                      |  14 +-
+ include/keys/trusted-type.h                        |   2 +-
+ include/keys/trusted_caam.h                        |  11 +
+ include/soc/fsl/caam-blob.h                        | 103 ++++++++++
+ scripts/check-blacklist-hashes.awk                 |  37 ++++
+ .../integrity/platform_certs/keyring_handler.c     |  26 +--
+ security/keys/Kconfig                              |  18 +-
+ security/keys/trusted-keys/Kconfig                 |  38 ++++
+ security/keys/trusted-keys/Makefile                |  10 +-
+ security/keys/trusted-keys/trusted_caam.c          |  80 ++++++++
+ security/keys/trusted-keys/trusted_core.c          |  45 +++-
+ tools/certs/print-cert-tbs-hash.sh                 |  91 +++++++++
+ 36 files changed, 1056 insertions(+), 281 deletions(-)
+ create mode 100644 drivers/crypto/caam/blob_gen.c
+ create mode 100644 include/keys/trusted_caam.h
+ create mode 100644 include/soc/fsl/caam-blob.h
+ create mode 100755 scripts/check-blacklist-hashes.awk
+ create mode 100644 security/keys/trusted-keys/Kconfig
+ create mode 100644 security/keys/trusted-keys/trusted_caam.c
+ create mode 100755 tools/certs/print-cert-tbs-hash.sh
