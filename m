@@ -2,111 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6495306E6
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 May 2022 02:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3864D53073C
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 May 2022 03:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbiEWAnY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 22 May 2022 20:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S233693AbiEWBnr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 22 May 2022 21:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiEWAnY (ORCPT
+        with ESMTP id S232626AbiEWBnq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 22 May 2022 20:43:24 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3BF30569;
-        Sun, 22 May 2022 17:43:23 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 1BF61EB5; Sun, 22 May 2022 19:43:22 -0500 (CDT)
-Date:   Sun, 22 May 2022 19:43:22 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com
-Subject: Re: [PATCH v12 15/26] ima: Implement ima_free_policy_rules() for
- freeing of an ima_namespace
-Message-ID: <20220523004322.GB28089@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-16-stefanb@linux.ibm.com>
+        Sun, 22 May 2022 21:43:46 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBC2201AC;
+        Sun, 22 May 2022 18:43:44 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L60NL22GYzDqLY;
+        Mon, 23 May 2022 09:38:42 +0800 (CST)
+Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
+ (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 23 May
+ 2022 09:43:31 +0800
+From:   GUO Zihua <guozihua@huawei.com>
+To:     <linux-integrity@vger.kernel.org>
+CC:     <zohar@linux.ibm.com>, <dhowells@redhat.com>, <jarkko@kernel.org>,
+        <keyrings@vger.kernel.org>
+Subject: [PATCH v2] keys: Use struct_size and size_add helper with alloc
+Date:   Mon, 23 May 2022 09:41:55 +0800
+Message-ID: <20220523014155.27840-1-guozihua@huawei.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420140633.753772-16-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.31]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:06:22AM -0400, Stefan Berger wrote:
-> Implement ima_free_policy_rules() to free the current custom IMA policy's
-> rules. This function will be called when an ima_namespace is freed.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Use struct_size helper for calculating size of flexible struct, following
+the best practice.
 
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
+Reference: https://lore.kernel.org/all/CAHk-=wiGWjxs7EVUpccZEi6esvjpHJdgHQ=vtUeJ5crL62hx9A@mail.gmail.com/
 
-> 
-> ---
-> v10:
->   - Not calling ima_delete_rules() anymore
->   - Move access check from ima_delete_rules into very last patch
-> 
->  v9:
->   - Only reset temp_ima_appraise when using init_ima_ns.
-> ---
->  security/integrity/ima/ima.h        |  1 +
->  security/integrity/ima/ima_policy.c | 14 ++++++++++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 2775a6d89e6d..054b8f67be04 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -333,6 +333,7 @@ void ima_update_policy_flags(struct ima_namespace *ns);
->  ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule);
->  void ima_delete_rules(struct ima_namespace *ns);
->  int ima_check_policy(struct ima_namespace *ns);
-> +void ima_free_policy_rules(struct ima_namespace *ns);
->  void *ima_policy_start(struct seq_file *m, loff_t *pos);
->  void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos);
->  void ima_policy_stop(struct seq_file *m, void *v);
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 45a997709200..eb10d895923d 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -1905,6 +1905,20 @@ void ima_delete_rules(struct ima_namespace *ns)
->  	}
->  }
->  
-> +/**
-> + * ima_free_policy_rules - free all policy rules
-> + * @ns: IMA namespace that has the policy
-> + */
-> +void ima_free_policy_rules(struct ima_namespace *ns)
-> +{
-> +	struct ima_rule_entry *entry, *tmp;
-> +
-> +	list_for_each_entry_safe(entry, tmp, &ns->ima_policy_rules, list) {
-> +		list_del(&entry->list);
-> +		ima_free_rule(entry);
-> +	}
-> +}
-> +
->  #define __ima_hook_stringify(func, str)	(#func),
->  
->  const char *const func_tokens[] = {
-> -- 
-> 2.34.1
+Note: HASH_SIZE here is a SHA256_DIGEST_SIZE whoes value is 32, so
+adding 1 should be fine here.
+
+Signed-off-by: GUO Zihua <guozihua@huawei.com>
+
+---
+
+v2:
+    Update the commit message, removing the part about "potential issue"
+    following Jarkko's suggestion.
+
+---
+ security/keys/encrypted-keys/encrypted.c | 7 +++++--
+ security/keys/user_defined.c             | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
+index e05cfc2e49ae..37349580e855 100644
+--- a/security/keys/encrypted-keys/encrypted.c
++++ b/security/keys/encrypted-keys/encrypted.c
+@@ -613,6 +613,7 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
+ 	long dlen;
+ 	int i;
+ 	int ret;
++	size_t epayload_datalen = 0;
+ 
+ 	ret = kstrtol(datalen, 10, &dlen);
+ 	if (ret < 0 || dlen < MIN_DATA_SIZE || dlen > MAX_DATA_SIZE)
+@@ -667,8 +668,10 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
+ 	if (ret < 0)
+ 		return ERR_PTR(ret);
+ 
+-	epayload = kzalloc(sizeof(*epayload) + payload_datalen +
+-			   datablob_len + HASH_SIZE + 1, GFP_KERNEL);
++	epayload_datalen = size_add(payload_datalen, datablob_len);
++	epayload_datalen = size_add(epayload_datalen, HASH_SIZE + 1);
++	epayload = kzalloc(struct_size(epayload, payload_data,
++				epayload_datalen), GFP_KERNEL);
+ 	if (!epayload)
+ 		return ERR_PTR(-ENOMEM);
+ 
+diff --git a/security/keys/user_defined.c b/security/keys/user_defined.c
+index 749e2a4dcb13..334fed36e9f3 100644
+--- a/security/keys/user_defined.c
++++ b/security/keys/user_defined.c
+@@ -64,7 +64,7 @@ int user_preparse(struct key_preparsed_payload *prep)
+ 	if (datalen <= 0 || datalen > 32767 || !prep->data)
+ 		return -EINVAL;
+ 
+-	upayload = kmalloc(sizeof(*upayload) + datalen, GFP_KERNEL);
++	upayload = kmalloc(struct_size(upayload, data, datalen), GFP_KERNEL);
+ 	if (!upayload)
+ 		return -ENOMEM;
+ 
+-- 
+2.36.0
+
