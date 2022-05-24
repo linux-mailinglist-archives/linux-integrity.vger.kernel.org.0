@@ -2,69 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316B9532B42
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 May 2022 15:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1CD532C12
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 May 2022 16:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237793AbiEXN0V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 May 2022 09:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S230475AbiEXORx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 May 2022 10:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237804AbiEXN0M (ORCPT
+        with ESMTP id S237718AbiEXORx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 May 2022 09:26:12 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EFC34B9C;
-        Tue, 24 May 2022 06:26:11 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24ODBdAm029873;
-        Tue, 24 May 2022 13:25:35 GMT
+        Tue, 24 May 2022 10:17:53 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4235DA70;
+        Tue, 24 May 2022 07:17:50 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24ODoL5A019788;
+        Tue, 24 May 2022 14:17:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hBbcMrX9s6JSpr08mbOB4SZ6XiS2E7eqbNX1M5D5MBY=;
- b=AAAByyi91dHEoGm6NYlZn+wRXYe74rFA7dWvXySO+ATU2V3bumZAlWRKf1gQzvp/8/jf
- hcpaxosyWSDnSokBRoM4uPK7lVeLDGhUUH9/RpySgvv5XLBP7We/g9IYkTsU4sIFOnK3
- f4bi/fvwXZpucg8S9TL43/a1aib1N0iYBTDWGFjO3yW74mIW0I2ASroV65+NkVvNZOvk
- P72SGcnLaQsHzdSxMldx+7Vb/1briIWwYJtJPwqX27MkfbxbPqJiS99MpqLVmDdHSCpA
- +X2/S8NZ2lQqhFzb9e60Vz4JLlntJdYOzngVACRgg680c7lV4j+WqgGKQEDB94frkeQR lA== 
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=48zm3WbH9RuCz4QK6/PJjpinT6WsMc8nOREZWmXsybk=;
+ b=HC4Uyua1G8+aT6s9w2LBLhSqE85ObLgZGenTbqMPoMoCX5wSmHrpxZDDzQxkAeVsNTq4
+ iwCbnfVGnm5inEDbwtuxTL2tVubbKHp3igib1zu9CSvnWY4KoeMn92V7/2ZqElHK4o8J
+ fUfANlrc1jT0ivLeFYlhHA8AA8JpUUAdhlQ+bVHuSKObz/nNKZn7yG7jeEnM74jFxPWm
+ YENipcgc7SPX4FNf8B8mUujB0vNh5JnmGVQAKBroMY4qKo167NfyqZlmjxmZpGkHifWm
+ Ees1YEvF0rxE0nfmp3uOi7Ud12SqrpgbFN7c2v9OmXMebOZy1Li7dBUkkLWgB9BqGLg8 ZA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g901ggasw-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g903bsn9q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 13:25:35 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24ODCcnT032838;
-        Tue, 24 May 2022 13:25:34 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g901ggasm-1
+        Tue, 24 May 2022 14:17:31 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24ODprTs028893;
+        Tue, 24 May 2022 14:17:31 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g903bsn95-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 13:25:34 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24ODK0DZ013006;
-        Tue, 24 May 2022 13:25:33 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma03dal.us.ibm.com with ESMTP id 3g6qqa66wf-1
+        Tue, 24 May 2022 14:17:31 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OEE7xX030227;
+        Tue, 24 May 2022 14:17:30 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01wdc.us.ibm.com with ESMTP id 3g6qq9ggf8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 13:25:33 +0000
+        Tue, 24 May 2022 14:17:30 +0000
 Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24ODPWEL30277940
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OEHTIf34734364
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 13:25:32 GMT
+        Tue, 24 May 2022 14:17:29 GMT
 Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C65E6A054;
-        Tue, 24 May 2022 13:25:32 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 4D5D26A051;
+        Tue, 24 May 2022 14:17:29 +0000 (GMT)
 Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B8466A04F;
-        Tue, 24 May 2022 13:25:30 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 1BE596A057;
+        Tue, 24 May 2022 14:17:28 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
         by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 24 May 2022 13:25:30 +0000 (GMT)
-Message-ID: <6c16b3b8-cd3f-4175-9269-2c542f7d4188@linux.ibm.com>
-Date:   Tue, 24 May 2022 09:25:30 -0400
-MIME-Version: 1.0
+        Tue, 24 May 2022 14:17:28 +0000 (GMT)
+Message-ID: <ba9027b7-40dc-c958-e140-2eaa102e2c30@linux.ibm.com>
+Date:   Tue, 24 May 2022 10:17:27 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH v12 12/26] ima: Only accept AUDIT rules for
- non-init_ima_ns namespaces for now
+Subject: Re: [PATCH v12 11/26] ima: Define mac_admin_ns_capable() as a wrapper
+ for ns_capable()
 Content-Language: en-US
 To:     "Serge E. Hallyn" <serge@hallyn.com>
 Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
@@ -75,25 +74,27 @@ Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
         puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, Christian Brauner <brauner@kernel.org>
+        jpenumak@redhat.com, Denis Semakin <denis.semakin@huawei.com>
 References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-13-stefanb@linux.ibm.com>
- <20220522173844.GA24519@mail.hallyn.com>
+ <20220420140633.753772-12-stefanb@linux.ibm.com>
+ <20220522173100.GB24041@mail.hallyn.com>
 From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220522173844.GA24519@mail.hallyn.com>
+In-Reply-To: <20220522173100.GB24041@mail.hallyn.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6NFAnCdZijNoZg9U7nT1qmCrXylN8GWD
-X-Proofpoint-GUID: D-cNVwma8oNMshAs7sKX_m1vlca8muQM
+X-Proofpoint-ORIG-GUID: esteqUPeWMnvSxMLspjEYyYUNNRU3vHR
+X-Proofpoint-GUID: G4XWVbpVinR-Lha1H_-xsFupBL_sVYzW
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_06,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxscore=0 spamscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 suspectscore=0 phishscore=0 clxscore=1015
- mlxlogscore=999 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205240066
+ definitions=2022-05-24_07,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ bulkscore=0 clxscore=1011 mlxscore=0 impostorscore=0 priorityscore=1501
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205240072
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -106,77 +107,119 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 
-On 5/22/22 13:38, Serge E. Hallyn wrote:
-> On Wed, Apr 20, 2022 at 10:06:19AM -0400, Stefan Berger wrote:
->> Only accept AUDIT rules for non-init_ima_ns namespaces for now. Reject
+On 5/22/22 13:31, Serge E. Hallyn wrote:
+> On Wed, Apr 20, 2022 at 10:06:18AM -0400, Stefan Berger wrote:
+>> Define mac_admin_ns_capable() as a wrapper for the combined ns_capable()
+>> checks on CAP_MAC_ADMIN and CAP_SYS_ADMIN in a user namespace. Return
+>> true on the check if either capability or both are available.
+>>
+>> Use mac_admin_ns_capable() in place of capable(SYS_ADMIN). This will allow
+>> an IMA namespace to read the policy with only CAP_MAC_ADMIN, which has
+>> less privileges than CAP_SYS_ADMIN.
+>>
+>> Since CAP_MAC_ADMIN is an additional capability added to an existing gate
+>> avoid auditing in case it is not set.
 > 
-> This sentence gives me trouble - i keep thinking you mean that you'll
-> reject AUDIT rules for init_ima_ns :)  Can you rephrase it as something
-> like
+> It would probably be best to become a user of
+> https://lore.kernel.org/all/20220217145003.78982-2-cgzones@googlemail.com/
 > 
-> For non-init_ima_ns namespaces, only accept AUDIT rules for now.
+> when that lands.
+
+Hm,I'll try to monitor to see when this gets merged. Though the function 
+proposed there uses a hard-coded init_user_ns, which may not work for 
+everyone.
+
 > 
-> :)
-> 
->> all rules that require support for measuring, appraisal, and hashing.
->
-
-I kept the title of the patch but the text now states:
-
-For non-init_ima_ns namespaces, only accept AUDIT rules for now. Reject
-all rules that require support for measuring, appraisal, and hashing.
-
-
-
->
+>> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
 >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Acked-by: Christian Brauner <brauner@kernel.org>
->> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 >>
 >> ---
->> v9:
->>    - Jump to err_audit when unsupported rules are detected
+>> v11:
+>>    - use ns_capable_noaudit for CAP_MAC_ADMIN to avoid auditing in this case
 >> ---
->>   security/integrity/ima/ima_policy.c | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
+>>   include/linux/capability.h      | 6 ++++++
+>>   security/integrity/ima/ima.h    | 6 ++++++
+>>   security/integrity/ima/ima_fs.c | 5 ++++-
+>>   3 files changed, 16 insertions(+), 1 deletion(-)
 >>
->> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->> index 59e4ae5a6361..45a997709200 100644
->> --- a/security/integrity/ima/ima_policy.c
->> +++ b/security/integrity/ima/ima_policy.c
->> @@ -1812,6 +1812,17 @@ static int ima_parse_rule(struct ima_namespace *ns,
->>   			result = -EINVAL;
->>   			break;
->>   		}
->> +
->> +		/* IMA namespace only accepts AUDIT rules */
->> +		if (ns != &init_ima_ns && result == 0) {
->> +			switch (entry->action) {
->> +			case MEASURE:
->> +			case APPRAISE:
->> +			case HASH:
-> 
-> So... what about DONT_MEASURE and DONT_APPRAISE?
-
-They don't cause IMA to do anything that is not supported at this point 
-so I let them pass. If you set these you still don't get a measurements 
-or appraisal and that's good at this point..
-
-> 
->> +				result = -EINVAL;
->> +				goto err_audit;
->> +			}
->> +		}
->>   	}
->>   	if (!result && !ima_validate_rule(entry))
->>   		result = -EINVAL;
->> @@ -1824,6 +1835,7 @@ static int ima_parse_rule(struct ima_namespace *ns,
->>   		check_template_modsig(template_desc);
->>   	}
+>> diff --git a/include/linux/capability.h b/include/linux/capability.h
+>> index 65efb74c3585..dc3e1230b365 100644
+>> --- a/include/linux/capability.h
+>> +++ b/include/linux/capability.h
+>> @@ -270,6 +270,12 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+>>   		ns_capable(ns, CAP_SYS_ADMIN);
+>>   }
 >>   
->> +err_audit:
->>   	audit_log_format(ab, "res=%d", !result);
->>   	audit_log_end(ab);
->>   	return result;
+>> +static inline bool mac_admin_ns_capable(struct user_namespace *ns)
+>> +{
+>> +	return ns_capable_noaudit(ns, CAP_MAC_ADMIN) ||
+>> +		ns_capable(ns, CAP_SYS_ADMIN);
+>> +}
+>> +
+>>   /* audit system wants to get cap info from files as well */
+>>   int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
+>>   			   const struct dentry *dentry,
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index 5bf7f080c2be..626a6ce2453c 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -491,4 +491,10 @@ static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
+>>   #define	POLICY_FILE_FLAGS	S_IWUSR
+>>   #endif /* CONFIG_IMA_READ_POLICY */
+>>   
+>> +static inline
+>> +struct user_namespace *ima_user_ns_from_file(const struct file *filp)
+>> +{
+>> +	return file_inode(filp)->i_sb->s_user_ns;
+>> +}
+> 
+> include/linux/fs.h has file_mnt_user_ns().  Maybe you should add a
+> file_sb_user_ns() next to that?
+
+I did that now:
+
+
++static inline
++struct user_namespace *ima_user_ns_from_file(struct file *filp)
++{
++       return file_sb_user_ns(filp);
++}
++
+
+
++static inline struct user_namespace *file_sb_user_ns(struct file *file)
++{
++       return i_user_ns(file_inode(file));
++}
++
+
+
+
+> 
+>> +
+>>   #endif /* __LINUX_IMA_H */
+>> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+>> index 89d3113ceda1..c41aa61b7393 100644
+>> --- a/security/integrity/ima/ima_fs.c
+>> +++ b/security/integrity/ima/ima_fs.c
+>> @@ -377,6 +377,9 @@ static const struct seq_operations ima_policy_seqops = {
+>>    */
+>>   static int ima_open_policy(struct inode *inode, struct file *filp)
+>>   {
+>> +#ifdef CONFIG_IMA_READ_POLICY
+>> +	struct user_namespace *user_ns = ima_user_ns_from_file(filp);
+>> +#endif
+>>   	struct ima_namespace *ns = &init_ima_ns;
+>>   
+>>   	if (!(filp->f_flags & O_WRONLY)) {
+>> @@ -385,7 +388,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
+>>   #else
+>>   		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
+>>   			return -EACCES;
+>> -		if (!capable(CAP_SYS_ADMIN))
+>> +		if (!mac_admin_ns_capable(user_ns))
+>>   			return -EPERM;
+>>   		return seq_open(filp, &ima_policy_seqops);
+>>   #endif
 >> -- 
 >> 2.34.1
