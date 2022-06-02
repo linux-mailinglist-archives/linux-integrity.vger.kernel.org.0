@@ -2,107 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C6D53B7CB
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Jun 2022 13:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E558D53BA15
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Jun 2022 15:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234200AbiFBL1Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Jun 2022 07:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S235135AbiFBNsz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Jun 2022 09:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234186AbiFBL1X (ORCPT
+        with ESMTP id S234021AbiFBNsx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:27:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509102ACB46;
-        Thu,  2 Jun 2022 04:27:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 395F8B81EFC;
-        Thu,  2 Jun 2022 11:27:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 999A9C385A5;
-        Thu,  2 Jun 2022 11:27:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654169238;
-        bh=bkkX8lyw+LlhjrWMM9UPH00U1eomprbT2CFStMN6JTw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fec5AsNMHf1/CMW5blwRUqYNKLZZuq8z35ueIPBTc335mfgxSp/pO/sq8yCVBIl+x
-         KRrwEzAO/oqKQJzJSceuE7U0nXAZTa6XhRR74WQkJFt5TQJ1NzA3uFStQ7zFY+L1VE
-         DvjOUTVC1OoKmh8g7OJMhz4fTRiihbaI3QqEpoTkX/z7Khsq673LGR8LUvQ6T+NaS6
-         c9ZT7h0QliTPw7/PoMB2qvrrJ7KWsSk7ZqSxpslIry3PbAyZn/uzMjHxPJvmCmyaYc
-         z4WmbM15tFbfKT6P8Wl7n4PchUaqTgJ0poc9Ho1Rc7t0EBlq7N9klGdYDboBpEmbyW
-         SOsQmx1Gf9/7g==
-Date:   Thu, 2 Jun 2022 14:25:26 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca
-Subject: Re: [PATCH] tpm: Add upgrade/reduced mode support for TPM1.2 modules
-Message-ID: <YpieJlx511jZUDmn@iki.fi>
-References: <20220601083810.330809-1-stefan.mahnke-hartmann@infineon.com>
+        Thu, 2 Jun 2022 09:48:53 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B05F59E;
+        Thu,  2 Jun 2022 06:48:50 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-f2cbceefb8so6761831fac.11;
+        Thu, 02 Jun 2022 06:48:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZLsZQGwsALXGpwwgGurYj2bunkoe3IvjuaCpAsGQqs4=;
+        b=HTe3YuHHkCtxWIakuZcKtzI+RhTjyni3GnKA3R7AyvjdbxFhYq14eVdAiGO957JvfU
+         X5Rd/esaw91RhYCZsMsCj0ChnppAIumO+aEg8xWMF5ItG+X0+9KDSxutA2uvW0JPKcA5
+         X0tT+fuMaCQU9B+Tj+zkC75eD0HhKz1CM35ON/WJYMYRck1TQwnBJsU64zyd2nKY/o3y
+         eUcIDEJqtHoIlj4HnQP3TqNAaR8v3nBPlWKSjuCzuGO2F7S1EVWS01ZiOyNPLvWW0D4h
+         tAyRb67hKOfxYRNd8FFhXMlquA5qAdZka+PiY7UjxQFcZW+778VDf9KOLBL5hhFaZAV4
+         5cnw==
+X-Gm-Message-State: AOAM533sUOfNwtU3cp/EP5WZC3EDfv1qnnYI9PffEmiRGZPiMH2ItKA9
+        4KQ2DUBEo1HgG/A6H7nQ4g==
+X-Google-Smtp-Source: ABdhPJzhAExoUF+3ohnZR4GGm+CAP7YlqdUPcNsT0zhxsWf8ebeYkbeyF4YzJF+4BWW7gB+1NtJAfA==
+X-Received: by 2002:a05:6870:61cd:b0:e9:8de7:9c51 with SMTP id b13-20020a05687061cd00b000e98de79c51mr2791058oah.50.1654177729893;
+        Thu, 02 Jun 2022 06:48:49 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bh35-20020a056808182300b00325cda1ff95sm2566851oib.20.2022.06.02.06.48.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 06:48:49 -0700 (PDT)
+Received: (nullmailer pid 2184180 invoked by uid 1000);
+        Thu, 02 Jun 2022 13:48:48 -0000
+Date:   Thu, 2 Jun 2022 08:48:48 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc:     jarkko@kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, devicetree@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: trivial-devices: Add two I2C TPM
+ devices
+Message-ID: <20220602134848.GA2178372-robh@kernel.org>
+References: <20220525165849.7789-1-Alexander.Steffen@infineon.com>
+ <20220525165849.7789-2-Alexander.Steffen@infineon.com>
+ <8c4941a1-e047-1352-32ba-8595cd0143f0@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601083810.330809-1-stefan.mahnke-hartmann@infineon.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8c4941a1-e047-1352-32ba-8595cd0143f0@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 10:38:11AM +0200, Stefan Mahnke-Hartmann wrote:
-> In case a TPM in failure mode is detected, the TPM should be accessible
-> through a transparent communication channel for analysing purposes (e.g.
-> TPM_GetTestResult) or a field upgrade. Since a TPM in failure mode has
-> similar reduced functionality as in field upgrade mode, the flag
-> TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE is also valid.
+On Thu, May 26, 2022 at 02:29:56PM +0200, Krzysztof Kozlowski wrote:
+> On 25/05/2022 18:58, Alexander Steffen wrote:
+> > Both are supported by the upcoming tpm_tis_i2c driver.
+> > 
+> > Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> > ---
+> >  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> > index 550a2e5c9e05..dc52822331dd 100644
+> > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> > @@ -135,6 +135,8 @@ properties:
+> >            - infineon,slb9635tt
+> >              # Infineon SLB9645 I2C TPM (new protocol, max 400khz)
+> >            - infineon,slb9645tt
+> > +            # Infineon SLB9673 I2C TPM 2.0
+> > +          - infineon,slb9673
+> >              # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+> >            - infineon,tlv493d-a1b6
+> >              # Infineon Multi-phase Digital VR Controller xdpe11280
+> > @@ -323,6 +325,8 @@ properties:
+> >            - st,24c256
+> >              # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
+> >            - taos,tsl2550
+> > +            # TCG TIS-compliant TPM with I2C interface
+> > +          - tcg,tpm_tis-i2c
 > 
-> As described in TCG TPM Main Part1 Design Principles, Revision 116,
-> chapter 9.2.1. the TPM also allows an update function in case a TPM is
-> in failure mode.
-> 
-> If the TPM in failure mode is detected, the function tpm1_auto_startup()
-> sets TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE flag. This patch simply follows
-> the same rationale as TPM2 in field upgrade mode.
+> One flavor uses tpm-tis, another tpm_tis... I guess it is too late to
+> make it consistent, but let's stick to the one more reasonable, so:
+> "tpm-tis-i2c".
 
-"following the rationale" does not give a clue what it does.
+Neither should be used except perhaps as a fallback. Does 'TCG 
+TIS-compliant TPM' encompass every property of a device? Power supplies, 
+resets, interrupts, quirks, etc.?
 
-Also minor nit: write in imperative from, and please do not say "this
-patch". It won't be a patch, once it is in git.
-
-> Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-> ---
-> If you have any better suggestions, please let me know.
-> 
->  drivers/char/tpm/tpm1-cmd.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> index f7dc986fa4a0..7a42d74c450c 100644
-> --- a/drivers/char/tpm/tpm1-cmd.c
-> +++ b/drivers/char/tpm/tpm1-cmd.c
-> @@ -710,8 +710,10 @@ int tpm1_auto_startup(struct tpm_chip *chip)
->  		goto out;
->  	rc = tpm1_do_selftest(chip);
->  	if (rc) {
-> -		dev_err(&chip->dev, "TPM self test failed\n");
-> -		goto out;
-> +		dev_err(&chip->dev, "TPM self test failed, so the TPM has limited functionality\n");
-> +		/* A TPM in this state possibly allows or needs a firmware upgrade */
-> +		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE;
-> +		rc = 0;
->  	}
->  
->  	return rc;
-> -- 
-> 2.25.1
-> 
-
-Why all error codes trigger this action, e.g. all possible TPM2
-errors and -ETIME?
-
-BR, Jarkko
+Rob
