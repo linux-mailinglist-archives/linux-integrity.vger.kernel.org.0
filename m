@@ -2,133 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322C953C70B
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jun 2022 10:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1709553CAAD
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jun 2022 15:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242290AbiFCInJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 Jun 2022 04:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
+        id S244631AbiFCN3A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 Jun 2022 09:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241085AbiFCInI (ORCPT
+        with ESMTP id S238620AbiFCN27 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:43:08 -0400
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7471AF08;
-        Fri,  3 Jun 2022 01:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1654245788; x=1685781788;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yxeS19Ie7EpNl/oaJ6C+O+T88X917wAoRTSCg0t/yDo=;
-  b=hDWnUUpfuVuWUfF7fKyWaxGowEWUyR5tAhWeZaMHcjmgBJ38F24M0a4A
-   0o+29KO1WXtZvFxwI6WGDmBu/SU/X3Kgg99Z3hd1rq3m3Aokt8r42LH+E
-   snjuP+mYj39QOumeoSrtHiCRGZv/bgegv0L4gF9H1BusHFSjXYzQtHmzT
-   A=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="299504368"
-X-IronPort-AV: E=Sophos;i="5.91,274,1647298800"; 
-   d="scan'208";a="299504368"
-Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 10:43:05 +0200
-Received: from MUCSE814.infineon.com (MUCSE814.infineon.com [172.23.29.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
-        Fri,  3 Jun 2022 10:43:04 +0200 (CEST)
-Received: from MUCSE818.infineon.com (172.23.29.44) by MUCSE814.infineon.com
- (172.23.29.40) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 3 Jun 2022
- 10:43:04 +0200
-Received: from smaha-lin-dev01.agb.infineon.com (172.23.8.247) by
- MUCSE818.infineon.com (172.23.29.44) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.26; Fri, 3 Jun 2022 10:43:04 +0200
-From:   Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-To:     <jarkko@kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-Subject: [PATCH v3] tpm: Add upgrade/reduced mode support for TPM1.2 modules
-Date:   Fri, 3 Jun 2022 10:41:58 +0200
-Message-ID: <20220603084156.7090-1-stefan.mahnke-hartmann@infineon.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Jun 2022 09:28:59 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB9A25EB2
+        for <linux-integrity@vger.kernel.org>; Fri,  3 Jun 2022 06:28:59 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id x7so5499309qta.6
+        for <linux-integrity@vger.kernel.org>; Fri, 03 Jun 2022 06:28:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:content-transfer-encoding
+         :user-agent:mime-version;
+        bh=gioCFJFyfX3Y+KuZpA0N/9893mHiQmos9qji8S38pcw=;
+        b=CzSmJL7F1oGlPk2HNEDOpIUDJx5aU1NUwI7mDymrwcXeh/ArS38FL6a+C+vSZsJn9c
+         Qq5k71uzFIaEZJwJulriNpmAObRQkJSK3Z/SNBc8RFl89Pr2M9Vv++VZ4RLIXjRiz3aY
+         iKZkWOkbfKia0fwIRyEhEBY6j9TNvvUiPRy8Yohiao2ETTM2IEcPjq1pephijT36Wdsz
+         VSUIFkpd39NU3Vb6L7/9bHqzhxfXo5nXnbZKWCzvpt/9ro4akbZoogpnVSzS17LID6R0
+         nf/EZzB75K07d/6iyRw5EXLUNvPxp0Mu8SVswiPCEa/3chf+bmfY/HihEyG5OCnMfiMY
+         eIbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=gioCFJFyfX3Y+KuZpA0N/9893mHiQmos9qji8S38pcw=;
+        b=BiSVflQQ39OQcIIY4vr0B29jsC+4k2IOn54QJvrc8Uc6YzR5RaHVRgd07BqdL2I3GM
+         g+7ePmEOFDhsX50B53jhdy8ET8lADvG7tyutLZZv5RLopCCmyEBLVLWTr70hZDi9KCKV
+         fGL7v8/5ZUvFAzTfbXtkIMf6eU6raW7QRwRrWteqiptCdntR8SNkeWLaGpJKygI6ErLA
+         4lLMmmg4jmAlJOFvUR61IqhjpUs3hRPQwGFu14O4lcc6t3xUdRvrJZiXWcrkFVl6L+R1
+         cuWd2S+jD4hjA0w4yk9/ffEmcRpnKQxUsvllE3qbllue+keXcv/OZkOvDTyIjWcSyBCt
+         o5DQ==
+X-Gm-Message-State: AOAM5314qbbqAHJnzkFvhTcvEj60u72WRKB1OegBZ1GUF3z+GcboMKLU
+        UvDj9t9/i5KovMvDaImvKoPawASA7KI5NGTz
+X-Google-Smtp-Source: ABdhPJxz7xvkrDFOTZyrwuTNtnmYjTfB5XZbSjpZiQ09wmq57er8drs6kuH3WpfDb1iUF625wxWOMA==
+X-Received: by 2002:a05:622a:246:b0:2f3:d514:7ac with SMTP id c6-20020a05622a024600b002f3d51407acmr7354692qtx.688.1654262937883;
+        Fri, 03 Jun 2022 06:28:57 -0700 (PDT)
+Received: from localhost.localdomain (pool-96-250-49-75.nycmny.fios.verizon.net. [96.250.49.75])
+        by smtp.gmail.com with ESMTPSA id az35-20020a05620a172300b006a68867a243sm2526718qkb.90.2022.06.03.06.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 06:28:57 -0700 (PDT)
+Message-ID: <874177b3b34b10679829dbf011e5bde7f37a4c9c.camel@gmail.com>
+Subject: [PATCH] trusted-keys-fix-migratable-logic
+From:   david.safford@gmail.com
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>
+Date:   Fri, 03 Jun 2022 09:28:56 -0400
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE805.infineon.com (172.23.29.31) To
- MUCSE818.infineon.com (172.23.29.44)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-In case a TPM in failure mode is detected, the TPM should be accessible
-through a transparent communication channel for analysing purposes (e.g.
-TPM_GetTestResult) or a field upgrade. Since a TPM in failure mode has
-similar reduced functionality as in field upgrade mode, the flag
-TPM_CHIP_FLAG_FIRMWARE_UPGRADE is also valid.
+When creating (sealing) a new trusted key, migratable
+trusted keys have the FIXED_TPM and FIXED_PERM attributes
+set, and non-migratable keys don't. This is backwards, and
+also causes creation to fail when creating a migratable key
+under a migratable parent. (The TPM thinks you are trying to
+seal a non-migratable blob under a migratable parent.)
 
-As described in TCG TPM Main Part1 Design Principles, Revision 116,
-chapter 9.2.1. the TPM also allows an update function in case a TPM is
-in failure mode.
+The following simple patch fixes the logic, and has been
+tested for all four combinations of migratable and non-migratable
+trusted keys and parent storage keys. With this logic, you will
+get a proper failure if you try to create a non-migratable=20
+trusted key under a migratable parent storage key, and all other
+combinations work correctly.
 
-If the TPM in failure mode is detected, the function tpm1_auto_startup()
-sets TPM_CHIP_FLAG_FIRMWARE_UPGRADE flag, which is used later during
-driver initialization/deinitialization to disable functionality which
-makes no sense or will fail in the current TPM state. The following
-functionality is affected:
- * Do not register TPM as a hwrng
- * Do not get pcr allocation
- * Do not register sysfs entries which provide information impossible to
-   obtain in limited mode
-
-Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+david safford
 ---
-Changelog:
- * v3:
-   * Change kernel messages
+ security/keys/trusted-keys/trusted_tpm2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/char/tpm/tpm.h      | 1 +
- drivers/char/tpm/tpm1-cmd.c | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index 2163c6ee0d36..24ee4e1cc452 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -55,6 +55,7 @@ enum tpm_addr {
- #define TPM_WARN_DOING_SELFTEST 0x802
- #define TPM_ERR_DEACTIVATED     0x6
- #define TPM_ERR_DISABLED        0x7
-+#define TPM_ERR_FAILEDSELFTEST  0x1C
- #define TPM_ERR_INVALID_POSTINIT 38
- 
- #define TPM_TAG_RQU_COMMAND 193
-diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-index f7dc986fa4a0..cf64c7385105 100644
---- a/drivers/char/tpm/tpm1-cmd.c
-+++ b/drivers/char/tpm/tpm1-cmd.c
-@@ -709,7 +709,12 @@ int tpm1_auto_startup(struct tpm_chip *chip)
- 	if (rc)
- 		goto out;
- 	rc = tpm1_do_selftest(chip);
--	if (rc) {
-+	if (rc == TPM_ERR_FAILEDSELFTEST) {
-+		dev_warn(&chip->dev, "TPM self test failed, switching to the firmware upgrade mode\n");
-+		/* A TPM in this state possibly allows or needs a firmware upgrade */
-+		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE;
-+		return 0;
-+	} else if (rc) {
- 		dev_err(&chip->dev, "TPM self test failed\n");
- 		goto out;
- 	}
--- 
-2.25.1
-
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trus=
+ted-keys/trusted_tpm2.c
+index 0165da386289..2b2c8eb258d5 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -283,8 +283,8 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 	/* key properties */
+ 	flags =3D 0;
+ 	flags |=3D options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
+-	flags |=3D payload->migratable ? (TPM2_OA_FIXED_TPM |
+-					TPM2_OA_FIXED_PARENT) : 0;
++	flags |=3D payload->migratable ? 0 : (TPM2_OA_FIXED_TPM |
++					    TPM2_OA_FIXED_PARENT);
+ 	tpm_buf_append_u32(&buf, flags);
+=20
+ 	/* policy */
+--=20
+2.36.1
