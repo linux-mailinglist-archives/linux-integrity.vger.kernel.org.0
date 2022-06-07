@@ -2,50 +2,49 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E118653FA58
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jun 2022 11:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C05053FA5F
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jun 2022 11:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240163AbiFGJwB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Jun 2022 05:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38948 "EHLO
+        id S238971AbiFGJwj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Jun 2022 05:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240205AbiFGJvy (ORCPT
+        with ESMTP id S240415AbiFGJwa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:51:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664BCE8B98
-        for <linux-integrity@vger.kernel.org>; Tue,  7 Jun 2022 02:49:58 -0700 (PDT)
+        Tue, 7 Jun 2022 05:52:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC33FEBE8F;
+        Tue,  7 Jun 2022 02:51:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74FBA611DE
-        for <linux-integrity@vger.kernel.org>; Tue,  7 Jun 2022 09:49:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D7EC385A5;
-        Tue,  7 Jun 2022 09:49:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F22EB81E79;
+        Tue,  7 Jun 2022 09:51:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8173C385A5;
+        Tue,  7 Jun 2022 09:51:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654595396;
-        bh=oNic5a98tpP9ffjsjNPqtEoYrMrm04L1CCrj0GC9M3s=;
+        s=k20201202; t=1654595464;
+        bh=c53iMFsek4aDHjn5Gc9SrQFad4s69M1znk7Uy+IQOB0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qrdtkhej+RknW/GIQaDfHaWGD+SMNtxQ3P0ZqT8PNAIbobLwXz9lld0aYjTwMfknP
-         zWvrNqdeq8U70m4LtvuCN2CzUMUe0pvZCCvrecp2WKbRZB67GNm799Dm8MPxBBTWJV
-         4u621YkVSOCMbB3JGnpQhxV8Ot4jGMCQ2ttqmRSqzeDAfBoZ+uuqcRJ7XPF8czqmMq
-         b8AhCL76thJTZ0wiI3URutdkhrdDNuHKT9OTw3HS4OcpzXnMql5ggCP7505CLGUx5q
-         bKSIqxQ9evsuCAOCI0wVooc3aICg/319BbklrUxJ7nzbkzAtQXYqmICWK4f12/J9VC
-         d7Fh1vjzUkhzg==
-Date:   Tue, 7 Jun 2022 12:48:01 +0300
+        b=ZCvag8OmWSoqImIrmPSTjMWq+V0WxOa1CPAvgU2Kq2JoBWDybCuMKFF6bumzBIRN5
+         /8lTjcg0S74NlBy3wG8PTufV/iapGlVGt5UFC5BMBMqUsSEen9C6THagPJ470qJa9H
+         yW3kh32Yn7myW5v5OUaFgFs0ef/peNQw6WifQLItq7od6+NnCFgaM0bDLQ6xl/jg9c
+         bVc0XlyJ3LWYPnWzPcXjTCqCfVtSHcrwoTpfpUnzVm1A3oaqCt2FSqN78DadsjuQfE
+         EkWwXWDwo9gcPmiygBiD7ZQ94oGwUmepxFGSsMRu6MxjBmRCFPCHaJQ8pgvrwYwlpG
+         97dFZVGfWwJ8Q==
+Date:   Tue, 7 Jun 2022 12:49:08 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     david.safford@gmail.com, linux-integrity@vger.kernel.org,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>
-Subject: Re: [PATCH] trusted-keys-fix-migratable-logic
-Message-ID: <Yp8e0X+jkg3HWSA0@iki.fi>
-References: <874177b3b34b10679829dbf011e5bde7f37a4c9c.camel@gmail.com>
- <1eda7b47-1f9f-9188-efbe-e135326d7585@pengutronix.de>
+To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca
+Subject: Re: [PATCH v3] tpm: Add upgrade/reduced mode support for TPM1.2
+ modules
+Message-ID: <Yp8fFNMzBLAXdNig@iki.fi>
+References: <20220603084156.7090-1-stefan.mahnke-hartmann@infineon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1eda7b47-1f9f-9188-efbe-e135326d7585@pengutronix.de>
+In-Reply-To: <20220603084156.7090-1-stefan.mahnke-hartmann@infineon.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,47 +55,73 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 08:15:49AM +0200, Ahmad Fatoum wrote:
-> Hello David,
+On Fri, Jun 03, 2022 at 10:41:58AM +0200, Stefan Mahnke-Hartmann wrote:
+> In case a TPM in failure mode is detected, the TPM should be accessible
+> through a transparent communication channel for analysing purposes (e.g.
+> TPM_GetTestResult) or a field upgrade. Since a TPM in failure mode has
+> similar reduced functionality as in field upgrade mode, the flag
+> TPM_CHIP_FLAG_FIRMWARE_UPGRADE is also valid.
 > 
-> On 03.06.22 15:28, david.safford@gmail.com wrote:
-> > When creating (sealing) a new trusted key, migratable
-> > trusted keys have the FIXED_TPM and FIXED_PERM attributes
-> > set, and non-migratable keys don't. This is backwards, and
-> > also causes creation to fail when creating a migratable key
-> > under a migratable parent. (The TPM thinks you are trying to
-> > seal a non-migratable blob under a migratable parent.)
-> > 
-> > The following simple patch fixes the logic, and has been
-> > tested for all four combinations of migratable and non-migratable
-> > trusted keys and parent storage keys. With this logic, you will
-> > get a proper failure if you try to create a non-migratable 
-> > trusted key under a migratable parent storage key, and all other
-> > combinations work correctly.
-> > 
-> > david safford
+> As described in TCG TPM Main Part1 Design Principles, Revision 116,
+> chapter 9.2.1. the TPM also allows an update function in case a TPM is
+> in failure mode.
 > 
-> Thanks for your patch. It looks sensible, but needs some work to
-> be aligned to the kernel patch guidelines, documented here:
-> Documentation/process/submitting-patches.rst
+> If the TPM in failure mode is detected, the function tpm1_auto_startup()
+> sets TPM_CHIP_FLAG_FIRMWARE_UPGRADE flag, which is used later during
+> driver initialization/deinitialization to disable functionality which
+> makes no sense or will fail in the current TPM state. The following
+> functionality is affected:
+>  * Do not register TPM as a hwrng
+>  * Do not get pcr allocation
+>  * Do not register sysfs entries which provide information impossible to
+>    obtain in limited mode
 > 
-> What I noticed in particular:
+> Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+> ---
+> Changelog:
+>  * v3:
+>    * Change kernel messages
 > 
->   - Your Signed-off-by is missing
->   - Your patch title needs alignment to others in the revision history,
->     you could change it e.g. "KEYS: trusted: tpm2: Fix migratable logic"
->   - The To:/Cc: list is incomplete. Patches to this file are normally
->     merged via Jarkko's tree. get_maintainers.pl will produce a full list
->     of people and mailing lists to copy.
+>  drivers/char/tpm/tpm.h      | 1 +
+>  drivers/char/tpm/tpm1-cmd.c | 7 ++++++-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 > 
-> Looking forward to your v2.
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 2163c6ee0d36..24ee4e1cc452 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -55,6 +55,7 @@ enum tpm_addr {
+>  #define TPM_WARN_DOING_SELFTEST 0x802
+>  #define TPM_ERR_DEACTIVATED     0x6
+>  #define TPM_ERR_DISABLED        0x7
+> +#define TPM_ERR_FAILEDSELFTEST  0x1C
+>  #define TPM_ERR_INVALID_POSTINIT 38
+>  
+>  #define TPM_TAG_RQU_COMMAND 193
+> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> index f7dc986fa4a0..cf64c7385105 100644
+> --- a/drivers/char/tpm/tpm1-cmd.c
+> +++ b/drivers/char/tpm/tpm1-cmd.c
+> @@ -709,7 +709,12 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+>  	if (rc)
+>  		goto out;
+>  	rc = tpm1_do_selftest(chip);
+> -	if (rc) {
+> +	if (rc == TPM_ERR_FAILEDSELFTEST) {
+> +		dev_warn(&chip->dev, "TPM self test failed, switching to the firmware upgrade mode\n");
+> +		/* A TPM in this state possibly allows or needs a firmware upgrade */
+> +		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE;
+> +		return 0;
+> +	} else if (rc) {
+>  		dev_err(&chip->dev, "TPM self test failed\n");
+>  		goto out;
+>  	}
+> -- 
+> 2.25.1
+> 
 
-The code change looks legit but it also needs to have this:
+I think this looks good now, thanks for patience:
 
-Fixes: e5fb5d2c5a03 ("security: keys: trusted: Make sealed key properly interoperable")
-
-
-> Cheers,
-> Ahmad
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
