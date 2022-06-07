@@ -2,112 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488FA53F5F7
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jun 2022 08:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BE453F7CC
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jun 2022 10:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236951AbiFGGPy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Jun 2022 02:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S237984AbiFGIC6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Jun 2022 04:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiFGGPx (ORCPT
+        with ESMTP id S231132AbiFGIC5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:15:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E71D771A
-        for <linux-integrity@vger.kernel.org>; Mon,  6 Jun 2022 23:15:52 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nySVL-0002dw-5c; Tue, 07 Jun 2022 08:15:51 +0200
-Message-ID: <1eda7b47-1f9f-9188-efbe-e135326d7585@pengutronix.de>
-Date:   Tue, 7 Jun 2022 08:15:49 +0200
+        Tue, 7 Jun 2022 04:02:57 -0400
+X-Greylist: delayed 915 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 01:02:54 PDT
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8029F35878;
+        Tue,  7 Jun 2022 01:02:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=FzsQe
+        Klfx+PTNhydCXy5arK4m63g42oEcDpVKHz+ar0=; b=Eqd5XGCE4BV50FAUN/N4t
+        q7z/nZMZr7sIwloIGMSpLbKhTA7sDPho1a0gsRfPPiIdh3JUiz1ZfbYx06iFRxKT
+        kr/NKH0YuNIgP0XSHvW99p93YbU/3sNYKGZJw0MJjc+NpPfDPuHx/yVEY2okMPPv
+        G2irPV95sR/DiAtmPSgcxU=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp2 (Coremail) with SMTP id GtxpCgB3PCJrAp9iIndHHQ--.24586S4;
+        Tue, 07 Jun 2022 15:47:06 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] security:trusted_tpm2: Fix memory leak in tpm2_key_encode()
+Date:   Tue,  7 Jun 2022 15:46:50 +0800
+Message-Id: <20220607074650.432834-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH] trusted-keys-fix-migratable-logic
-To:     david.safford@gmail.com, linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-References: <874177b3b34b10679829dbf011e5bde7f37a4c9c.camel@gmail.com>
-Content-Language: en-US
-In-Reply-To: <874177b3b34b10679829dbf011e5bde7f37a4c9c.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GtxpCgB3PCJrAp9iIndHHQ--.24586S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar4xKFyxXF18uFykuFyDKFg_yoW8Zr1kpF
+        ZxKF4aqrZF9F9rAry7JF4fZF13C395Gr47Gwsru39rGasxJFsxtFy7AF4Ygr17CFWftw15
+        AFWDZFWUWrWqvr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRIPfLUUUUU=
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiWxoZjGI0U5oI1wAAsU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello David,
+The function allocates a memory chunk for scratch by kmalloc(), but
+it is never freed through the function, which leads to a memory leak.
+Handle those cases with kfree().
 
-On 03.06.22 15:28, david.safford@gmail.com wrote:
-> When creating (sealing) a new trusted key, migratable
-> trusted keys have the FIXED_TPM and FIXED_PERM attributes
-> set, and non-migratable keys don't. This is backwards, and
-> also causes creation to fail when creating a migratable key
-> under a migratable parent. (The TPM thinks you are trying to
-> seal a non-migratable blob under a migratable parent.)
-> 
-> The following simple patch fixes the logic, and has been
-> tested for all four combinations of migratable and non-migratable
-> trusted keys and parent storage keys. With this logic, you will
-> get a proper failure if you try to create a non-migratable 
-> trusted key under a migratable parent storage key, and all other
-> combinations work correctly.
-> 
-> david safford
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ security/keys/trusted-keys/trusted_tpm2.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Thanks for your patch. It looks sensible, but needs some work to
-be aligned to the kernel patch guidelines, documented here:
-Documentation/process/submitting-patches.rst
-
-What I noticed in particular:
-
-  - Your Signed-off-by is missing
-  - Your patch title needs alignment to others in the revision history,
-    you could change it e.g. "KEYS: trusted: tpm2: Fix migratable logic"
-  - The To:/Cc: list is incomplete. Patches to this file are normally
-    merged via Jarkko's tree. get_maintainers.pl will produce a full list
-    of people and mailing lists to copy.
-
-Looking forward to your v2.
-
-Cheers,
-Ahmad
-
-> ---
->  security/keys/trusted-keys/trusted_tpm2.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-> index 0165da386289..2b2c8eb258d5 100644
-> --- a/security/keys/trusted-keys/trusted_tpm2.c
-> +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> @@ -283,8 +283,8 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->  	/* key properties */
->  	flags = 0;
->  	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
-> -	flags |= payload->migratable ? (TPM2_OA_FIXED_TPM |
-> -					TPM2_OA_FIXED_PARENT) : 0;
-> +	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM |
-> +					    TPM2_OA_FIXED_PARENT);
->  	tpm_buf_append_u32(&buf, flags);
->  
->  	/* policy */
-
-
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 0165da386289..dc9efd6c8b14 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 		unsigned char bool[3], *w = bool;
+ 		/* tag 0 is emptyAuth */
+ 		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+-		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
++		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
++			kfree(scratch);
+ 			return PTR_ERR(w);
++		}
+ 		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+ 	}
+ 
+@@ -69,8 +71,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 	 * trigger, so if it does there's something nefarious going on
+ 	 */
+ 	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+-		 "BUG: scratch buffer is too small"))
++		 "BUG: scratch buffer is too small")) {
++		kfree(scratch);
+ 		return -EINVAL;
++	}
+ 
+ 	work = asn1_encode_integer(work, end_work, options->keyhandle);
+ 	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+@@ -79,8 +83,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 	work1 = payload->blob;
+ 	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
+ 				     scratch, work - scratch);
+-	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
++	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
++		kfree(scratch);
+ 		return PTR_ERR(work1);
++	}
+ 
+ 	return work1 - payload->blob;
+ }
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
+
