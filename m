@@ -2,87 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6428C5429FD
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jun 2022 10:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B36F542ADC
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jun 2022 11:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbiFHIyD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Jun 2022 04:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
+        id S234181AbiFHJKz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Jun 2022 05:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbiFHIxj (ORCPT
+        with ESMTP id S234262AbiFHJJm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:53:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872B337E8B1;
-        Wed,  8 Jun 2022 01:12:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9BF0ECE2535;
-        Wed,  8 Jun 2022 08:02:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99192C3411D;
-        Wed,  8 Jun 2022 08:02:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654675336;
-        bh=09GflePoermPFREk/n9az26hTfpo0H7Xj5McEsLlFJQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZCDxQYVmYqZidM5WW39gUjkgm4WMrJxNpUzfJj4EhOFOWPvu4V6xp81uL1rsn0o+o
-         QfQLpX+VGhCgIeYK3mtLHVuI8dSweZq8nflfguxlEXwyeOYwDjG7enN91wpByGeRRr
-         dFYK7sIqQQQTMkqrcDMK/aZF7epgSy243V6VEgaasLwJGBF1MgoMG05c8rzdkGeFKS
-         wx+0tVXAfb9C7a6q8HlfqwmkkBgDg8bDaMZIhnkie0eomYRUFvzv/dtsCX4jl4b2GW
-         MNJVIAOcln1Nv2khtLWUW3ofqY348n/xXnIr6/R4mlvggciQt+UjFANuWbgcZBzVq4
-         xdEPxs0uQM+Jg==
-Date:   Wed, 8 Jun 2022 11:00:19 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
-        jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+        Wed, 8 Jun 2022 05:09:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3B61E049E
+        for <linux-integrity@vger.kernel.org>; Wed,  8 Jun 2022 01:30:07 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nyr4d-0002wQ-2V; Wed, 08 Jun 2022 10:29:55 +0200
+Message-ID: <c9fdf487-c523-de3d-425c-e11d8f2f44bc@pengutronix.de>
+Date:   Wed, 8 Jun 2022 10:29:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
 Subject: Re: [PATCH] security:trusted_tpm2: Fix memory leak in
  tpm2_key_encode()
-Message-ID: <YqBXExY7M012ENt7@iki.fi>
+Content-Language: en-US
+To:     Jianglei Nie <niejianglei2021@163.com>, jejb@linux.ibm.com,
+        jarkko@kernel.org, zohar@linux.ibm.com, dhowells@redhat.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220608025938.447908-1-niejianglei2021@163.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
 In-Reply-To: <20220608025938.447908-1-niejianglei2021@163.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The short summary (as mentioned in review):
+Hello Jianglei,
 
-"KEYS: trusted: Fix memory leak in tpm2_key_encode()"
-
-Also, you should version your patches, and provide a change log.
-
-See: https://www.kernel.org/doc/html/v5.18/process/submitting-patches.html#the-canonical-patch-format
-
-For git format-patch  you can simply supply "-vX" to get
-the-canonical-patch-format version included.
-
-On Wed, Jun 08, 2022 at 10:59:38AM +0800, Jianglei Nie wrote:
+On 08.06.22 04:59, Jianglei Nie wrote:
 > tpm2_key_encode() allocates a memory chunk from scratch with kmalloc(),
 > but it is never freed, which leads to a memory leak. Free the memory
 > chunk with kfree() in the return path.
+
+Repeating my question in your implicit v1:
+Are you sure, scratch need not be freed in the successful return case?
+asn1_encode_sequence() copies bytes out of scratch into payload->blob,
+so it looks like the buffer is unused after function return.
+
+Cheers,
+Ahmad
+
 > 
 > Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 > ---
-
-Here you can write:
-
-v3:
-...
-v2:
-...
-
 >  security/keys/trusted-keys/trusted_tpm2.c | 12 +++++++++---
 >  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
@@ -126,8 +111,10 @@ v2:
 >  
 >  	return work1 - payload->blob;
 >  }
-> -- 
-> 2.25.1
-> 
 
-BR, Jarkko
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
