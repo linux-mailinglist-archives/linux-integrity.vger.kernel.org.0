@@ -2,81 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D12543902
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jun 2022 18:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D55543A77
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jun 2022 19:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245480AbiFHQ12 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Jun 2022 12:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S231705AbiFHRcE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Jun 2022 13:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245461AbiFHQ11 (ORCPT
+        with ESMTP id S229684AbiFHRb4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Jun 2022 12:27:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6104F4C7BE;
-        Wed,  8 Jun 2022 09:27:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 8 Jun 2022 13:31:56 -0400
+Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A126F1CF;
+        Wed,  8 Jun 2022 10:31:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1654709514; x=1686245514;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JU9DjpCG30LpZ+9PeqI7jIXrafkc1BEYv9uUrbRLnzI=;
+  b=Rr4765dbHuudrLsHFeL3xKHCYIiZ0G4fjw9jdR+QJVins5UcE0evosO7
+   IbjNty+88E/YWOw5L2ifu+gJ7IzsUiDbVFPYYTB9gPPcBvhECYuhFGZml
+   RXOkL0jDEOM7RLQ9qqtXFUWF7lSqheC0kFmY/a1SsjdWULhwtTfFfKG84
+   M=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="300189234"
+X-IronPort-AV: E=Sophos;i="5.91,286,1647298800"; 
+   d="scan'208";a="300189234"
+Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
+  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 19:31:48 +0200
+Received: from MUCSE814.infineon.com (MUCSE814.infineon.com [172.23.29.40])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E1A3B828A4;
-        Wed,  8 Jun 2022 16:27:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BB8FEC34116;
-        Wed,  8 Jun 2022 16:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654705643;
-        bh=jnV8D6F6t5LRcnIMrtuP3YnUfQqo0fSVsHE2ZEkxPAo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Z6Wz0kLZI2+ET5dq0GNVXDxpQsRPz6p41+Iywc9q5zUVHCKT7FiMbtSV5q8TgW2l+
-         chvgIMvFA8jeSzrEsytrJPJPFkeRFuwDqoaf+Cp/3UVqmdpxYCnwJ0kez9BuG9kNOX
-         /EyXi63ANSFkCBVXp18+qh4tXjcWoPZ/pi740I+9i8G/hdSVW+VoPC8+RDQFGM93Sf
-         7vpmPCyttwlGmSIUKJUC9o0gRLKeAfX4CRXtTmdffy0QvDvIYUxwsgjbirsloe0KSR
-         IhrA19qO4yl2WK/ZeZrIC6XTxREX6TMCGh9Fssqc1qZfktsQkEucsoh7rXdUJv2Up6
-         6/1ltHhnV+BDw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A3AECE737EF;
-        Wed,  8 Jun 2022 16:27:23 +0000 (UTC)
-Subject: Re: [GIT PULL] tpmdd updates for v5.19-rc2-v2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220608111418.3081578-1-jarkko@kernel.org>
-References: <20220608111418.3081578-1-jarkko@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220608111418.3081578-1-jarkko@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.19-rc2-v2
-X-PR-Tracked-Commit-Id: dda5384313a40ecbaafd8a9a80f47483255e4c4d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 32d380a7ef0254d65763408b955a5aa6848ea49c
-Message-Id: <165470564365.4500.8712069598214562693.pr-tracker-bot@kernel.org>
-Date:   Wed, 08 Jun 2022 16:27:23 +0000
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
+        Wed,  8 Jun 2022 19:31:47 +0200 (CEST)
+Received: from MUCSE817.infineon.com (172.23.29.43) by MUCSE814.infineon.com
+ (172.23.29.40) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 8 Jun 2022
+ 19:31:47 +0200
+Received: from ISCNPC0VBFBX.infineon.com (172.23.8.247) by
+ MUCSE817.infineon.com (172.23.29.43) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.26; Wed, 8 Jun 2022 19:31:47 +0200
+From:   Alexander Steffen <Alexander.Steffen@infineon.com>
+To:     <jarkko@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>
+CC:     Alexander Steffen <Alexander.Steffen@infineon.com>,
+        <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: [PATCH v6 0/3] tpm_tis_i2c
+Date:   Wed, 8 Jun 2022 19:31:10 +0200
+Message-ID: <20220608173113.9232-1-Alexander.Steffen@infineon.com>
+X-Mailer: git-send-email 2.28.0.windows.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE804.infineon.com (172.23.29.30) To
+ MUCSE817.infineon.com (172.23.29.43)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Wed,  8 Jun 2022 14:14:17 +0300:
+Changelog:
+ * v6:
+   * Remove tpm-tis-i2c compatible for now
+ * v5:
+   * Rename tpm_tis-i2c to tpm-tis-i2c
+   * Remove unused includes
+ * v4:
+   * Move changelog to cover letter
+   * Add compatibles to trivial-devices.yaml
+   * Split patch for CRC interface and implementation
+   * Add tpm_tis_i2c prefix to all functions
+   * Improve documentation for guard time and sanity check
+   * Use for loop instead of while for retries
+ * v3:
+   * Document address_to_register function
+   * Add tpm_tis_i2c prefix to address_to_register
+   * Add #ifdef CONFIG_OF to of_tis_i2c_match
+   * Fix typos
+ * v2:
+   * move CCs from copyright comment to commit message
+   * fix an unchecked return code
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.19-rc2-v2
+Alexander Steffen (3):
+  dt-bindings: trivial-devices: Add Infineon SLB9673 TPM
+  tpm: Add tpm_tis_verify_crc to the tpm_tis_phy_ops protocol layer
+  tpm: Add tpm_tis_i2c backend for tpm_tis_core
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/32d380a7ef0254d65763408b955a5aa6848ea49c
-
-Thank you!
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ drivers/char/tpm/Kconfig                      |  12 +
+ drivers/char/tpm/Makefile                     |   1 +
+ drivers/char/tpm/tpm_tis_core.c               |  14 +
+ drivers/char/tpm/tpm_tis_core.h               |  10 +
+ drivers/char/tpm/tpm_tis_i2c.c                | 391 ++++++++++++++++++
+ 6 files changed, 430 insertions(+)
+ create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+
