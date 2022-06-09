@@ -2,51 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75244544320
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jun 2022 07:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6950544328
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jun 2022 07:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238367AbiFIFYi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Jun 2022 01:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
+        id S238376AbiFIFad (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Jun 2022 01:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238450AbiFIFYa (ORCPT
+        with ESMTP id S236993AbiFIFac (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:24:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F06CB854;
-        Wed,  8 Jun 2022 22:24:27 -0700 (PDT)
+        Thu, 9 Jun 2022 01:30:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B131228714;
+        Wed,  8 Jun 2022 22:30:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B6E861D07;
-        Thu,  9 Jun 2022 05:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C954C34114;
-        Thu,  9 Jun 2022 05:24:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DC1FB82C1F;
+        Thu,  9 Jun 2022 05:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B63C34114;
+        Thu,  9 Jun 2022 05:30:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654752266;
-        bh=gR7Tftbpm2rm+WC0YD9ESf+wexNbl5yDTu6oejUROKo=;
+        s=k20201202; t=1654752629;
+        bh=UPd29q5HWT+IXQLp3cxU4COiMwXAghPMXBh9HBWf3Ek=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p9xN8uACyHgE4TBurpqUMrazZhTOO7WCxnzZBwK6zSNWSO1JoWukpOw47b8aNjrSX
-         TS/Qns8mKxpVAEKe18gWhZaUGbW1nS+tsLj2OVqdoky/35nf5wGa1aJPXpEz56mS2Q
-         Hnbsx7MQua2CwtHMrlZ4LzJmq3GHsE6iNVz0LiyPEY/siNq/RpfQS6oBjGOiK60Cvk
-         Y332UIEw9MxqvqxVG+7087cxgE75a926Q49m/ORQoMvunjWw1YbNKWKwQdnttYHZaq
-         bh5/GQXo0UE8cNuWKSJCU5zA7kirNBzKLHHb0DbPSfRP3ZTw4HHM8tUiUWoWyRUgBP
-         beWN8V2YZopfA==
-Date:   Thu, 9 Jun 2022 08:22:29 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
-        jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+        b=c1awn6iWRpQKh7vS9DefuUSRw8Hococ8EHfx7JDebWZcKYzojQBUE6mc3bb13agbk
+         uaDYxUvF/6zNY2BjrdZwUHXcWkDiUR1Rt/C9sFrPJX3PM8/ASKqvjrdwi64LrAoqTd
+         UrhDAMQhI5dyazxl99NvitNVc5J/+CyePuqorcVfcToD7ATYQITE0zSab2ds5i9u0U
+         wUw0C7niX9O4/CJuTRxPvk/Uzq14kgW5U/1+eoeO51iiyRIa5XLFosXpQJwHpKDH11
+         18BCPxXDIypiEv3xKYEsbriPhGt6IjGbTB5GQZ4k8NI53/hrltoPBq2gLVeibQTBAF
+         p3InvYON5AYtw==
+Date:   Thu, 9 Jun 2022 08:28:30 +0300
+From:   "jarkko@kernel.org" <jarkko@kernel.org>
+To:     Jonathan McDowell <noodles@fb.com>
+Cc:     Jianglei Nie <niejianglei2021@163.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v2] KEYS: trusted: Fix memory leak in tpm2_key_encode()
-Message-ID: <YqGDlYGGOvC8rkf6@iki.fi>
+Message-ID: <YqGE/v0Zgi+g4gY6@iki.fi>
 References: <20220608131732.550234-1-niejianglei2021@163.com>
- <YqGDTVa64aknbldb@iki.fi>
+ <YqCmVi3J10Tcx0Wk@noodles-fedora.dhcp.thefacebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqGDTVa64aknbldb@iki.fi>
+In-Reply-To: <YqCmVi3J10Tcx0Wk@noodles-fedora.dhcp.thefacebook.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,18 +64,19 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 08:21:20AM +0300, Jarkko Sakkinen wrote:
+On Wed, Jun 08, 2022 at 01:38:35PM +0000, Jonathan McDowell wrote:
 > On Wed, Jun 08, 2022 at 09:17:32PM +0800, Jianglei Nie wrote:
 > > tpm2_key_encode() allocates a memory chunk from scratch with kmalloc(),
 > > but it is never freed, which leads to a memory leak. Free the memory
 > > chunk with kfree() in the return path.
-> > 
+> 
+> This change only does the kfree in the success path; "out" just returns
+> the error without freeing the memory.
+
+A valid point.
+
 > > Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 > > ---
-> 
-> You should write down the changelog ere. No idea what changed
-> from the previous version.
-> 
 > >  security/keys/trusted-keys/trusted_tpm2.c | 23 +++++++++++++++++------
 > >  1 file changed, 17 insertions(+), 6 deletions(-)
 > > 
@@ -81,13 +89,22 @@ On Thu, Jun 09, 2022 at 08:21:20AM +0300, Jarkko Sakkinen wrote:
 > >  			   u8 *src, u32 len)
 > >  {
 > > +	int err;
-> 
-> Declare as the last local variable (reverse christmas tree order).
-> 
-> Also, I'd use "int ret" since in other functions that is used.
-> 
 > >  	const int SCRATCH_SIZE = PAGE_SIZE;
 > >  	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+
+Also, the fix is half-way there, it does not have OOM
+check for scratch.
+
+I.e. I'd change the declaration as:
+
+        u8 *scratch;
+
+And later on after declarations:
+
+        scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+        if (!scratch)
+                return -ENOMEM; 
+
 > >  	u8 *work = scratch, *work1;
 > > @@ -57,8 +58,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
 > >  		unsigned char bool[3], *w = bool;
@@ -124,35 +141,28 @@ On Thu, Jun 09, 2022 at 08:21:20AM +0300, Jarkko Sakkinen wrote:
 > > +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
 > > +		err = -EINVAL;
 > > +		goto out;
-> 
-> Why you are changing the return value from PTR_ERR(work1
-> to -EINVAL?
-> 
 > > +	}
 > > +	kfree(scratch);
 > >  
 > >  	return work1 - payload->blob;
 > > +
 > > +out:
-> 
-> Nit:
-> 
-> err:
-> 
-> It's only used for the error path.
-> 
 > > +	return err;
+
+I.e.
+
+        kfree(scratch);
+        return work1 - payload->blob;
+
+err:
+        kfree(scratch);
+        return ret;
+
+
 > >  }
 > >  
 > >  struct tpm2_key_context {
 > > -- 
 > > 2.25.1
-> > 
-> 
-> BR, Jarkko
-
-And the patch is also missing fixes tag:
-
-Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key format for the blobs")
 
 BR, Jarkko
