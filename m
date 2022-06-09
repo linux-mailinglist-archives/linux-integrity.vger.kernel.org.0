@@ -2,127 +2,159 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02DE5449B4
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jun 2022 13:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A93B544AF4
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jun 2022 13:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240663AbiFILFw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Jun 2022 07:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S244568AbiFILtP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Jun 2022 07:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiFILFt (ORCPT
+        with ESMTP id S244534AbiFILtN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Jun 2022 07:05:49 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5172F21A540;
-        Thu,  9 Jun 2022 04:05:48 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJh3F5cDyz689QR;
-        Thu,  9 Jun 2022 19:00:57 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Thu, 9 Jun 2022 13:05:45 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 9 Jun 2022 13:05:45 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Index: AQHYe+tsPH1HC/8x8Uq7oovD5MPpKK1G5r2Q
-Date:   Thu, 9 Jun 2022 11:05:45 +0000
-Message-ID: <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
-References: <20190523121803.21638-1-roberto.sassu@huawei.com>
- <cf9d08ca-74c7-c945-5bf9-7c3495907d1e@huawei.com>
- <541e9ea1-024f-5c22-0b58-f8692e6c1eb1@landley.net>
- <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
- <1561909199.3985.33.camel@linux.ibm.com>
- <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
- <1561991485.4067.14.camel@linux.ibm.com>
- <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
- <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
- <20220609102627.GA3922@lxhi-065>
-In-Reply-To: <20220609102627.GA3922@lxhi-065>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.21]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 9 Jun 2022 07:49:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF0B1E0C38;
+        Thu,  9 Jun 2022 04:49:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0B8E609FA;
+        Thu,  9 Jun 2022 11:49:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6C87C3411D;
+        Thu,  9 Jun 2022 11:49:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654775351;
+        bh=sOpooX/7k/7fNvf2bUnObw15K+692V0mXLBRO5tSgpE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mW6SOy0zqzt3ynnO2xz65j6KaXG3/u2vqoKNaZsKC6R1r79iZaSo5F5L+g+fNlojm
+         dbbCpl1Tbg84CoyTkBVZcN09gYSDtX6pqnzKSX9t/mMsD/EzR2MWXkh2rExJZG3dtb
+         efLyI3ujmnrClDrykkaJlMf+k6Qt4UL9XmDZsDKFnPOiFCCODQFDwtJPuR7FP+5rHT
+         XkKv1QRhuBgkyGQwYTkAdlBrbnBQpiuoctYSmTsQ9/8k9+LHv549iXSXAh1s+apW2o
+         lyEfcXrUVWCAitT459WIJdD6xC+ejXV0Si+TmD8wORLtiey9HaVcJ27s2jlMhQnlX9
+         2jvT1GhvxYg4g==
+Date:   Thu, 9 Jun 2022 14:47:12 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Morten Linderud <morten@linderud.pw>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI
+ address
+Message-ID: <YqHdwD/hJfVdSE94@iki.fi>
+References: <20220608123109.678343-1-morten@linderud.pw>
+ <YqF7NktlAJg26Bvd@iki.fi>
+ <20220609081159.rjj7a3x63y7ag4ty@terminus>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609081159.rjj7a3x63y7ag4ty@terminus>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Eugeniu Rosca [mailto:erosca@de.adit-jv.com]
-> Sent: Thursday, June 9, 2022 12:26 PM
-> Dear Roberto,
-> Cc: Yamada-san, linux-kbuild
+On Thu, Jun 09, 2022 at 10:11:59AM +0200, Morten Linderud wrote:
+> On Thu, Jun 09, 2022 at 07:46:46AM +0300, Jarkko Sakkinen wrote:
+> > On Wed, Jun 08, 2022 at 02:31:08PM +0200, Morten Linderud wrote:
+> > > tpm_read_log_acpi() should return -ENODEV when no eventlog from the ACPI
+> > > table is found. If the firmware vendor includes an invalid log address
+> > > we are unable to map from the ACPI memory and the function returns -EIO
+> > > which would abort discovery of the eventlog.
+> > > 
+> > > This change ensure we always return -ENODEV in tpm_read_log_acpi() and
+> > > fallback to the EFI configuration table.
+> > 
+> > Please do not use "we" in commit messages. Or start a sentence
+> > with "this patch", "this commit" or "this change". It is always
+> > best just to go down to the roots and use imperative form.
+> > 
+> > E.g. you could rephrase the last paragraph as
+> > 
+> > "Change the return value from -EIO to -ENODEV when acpi_os_map_iomem()
+> > fails to map the event log."
 > 
-> On Mi, Jul 24, 2019 at 05:34:53 +0200, Roberto Sassu wrote:
-> > Is there anything I didn't address in this patch set, that is delaying
-> > the review? I would appreciate if you can give me a feedback, positive
-> > or negative.
-> >
-> > Thanks a lot!
-> >
-> > Roberto
+> ack
 > 
-> Some of our users have recently asked for this patch series.
+> > > The following hardware was used to test this issue:
+> > >     Framework Laptop (Pre-production)
+> > >     BIOS: INSYDE Corp, Revision: 3.2
+> > >     TPM Device: NTC, Firmware Revision: 7.2
+> > > 
+> > > Dump of the faulty ACPI TPM2 table:
+> > >     [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface Table]
+> > >     [004h 0004   4]                 Table Length : 0000004C
+> > >     [008h 0008   1]                     Revision : 04
+> > >     [009h 0009   1]                     Checksum : 2B
+> > >     [00Ah 0010   6]                       Oem ID : "INSYDE"
+> > >     [010h 0016   8]                 Oem Table ID : "TGL-ULT"
+> > >     [018h 0024   4]                 Oem Revision : 00000002
+> > >     [01Ch 0028   4]              Asl Compiler ID : "ACPI"
+> > >     [020h 0032   4]        Asl Compiler Revision : 00040000
+> > > 
+> > >     [024h 0036   2]               Platform Class : 0000
+> > >     [026h 0038   2]                     Reserved : 0000
+> > >     [028h 0040   8]              Control Address : 0000000000000000
+> > >     [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
+> > > 
+> > >     [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
+> > >     [040h 0064   4]           Minimum Log Length : 00010000
+> > >     [044h 0068   8]                  Log Address : 000000004053D000
+> > > 
+> > > Signed-off-by: Morten Linderud <morten@linderud.pw>
+> > > 
+> > > ---
+> > > 
+> > > v2: Tweak commit message and opt to return -ENODEV instead of loosening up the
+> > >     if condition in tpm_read_log()
+> > > 
+> > > ---
+> > >  drivers/char/tpm/eventlog/acpi.c | 6 +++++-
+> > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+> > > index 1b18ce5ebab1..2b15d6eebd69 100644
+> > > --- a/drivers/char/tpm/eventlog/acpi.c
+> > > +++ b/drivers/char/tpm/eventlog/acpi.c
+> > > @@ -136,8 +136,12 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+> > >  
+> > >  	ret = -EIO;
+> > >  	virt = acpi_os_map_iomem(start, len);
+> > > -	if (!virt)
+> > > +	if (!virt) {
+> > > +		dev_warn(&chip->dev, "%s: Failed to map ACPI memory\n", __func__);
+> > > +		/* try EFI log next */
+> > > +		ret = -ENODEV;
+> > >  		goto err;
+> > > +	}
+> > 
+> > It is wrong to try out EFI, if this fails. TPM2 ACPI table was already
+> > detected.
+> 
+> The next branch tries out EFI if the eventlog it found is empty, as it created
+> an empty file. This branch would produce no eventlog if we fail to map the
+> memory. I don't understand why there would be a difference between these two
+> branches?
+> 
+> This seems like an oversight after 3dcd15665aca80197333500a4be3900948afccc1
+> 
+> > >  
+> > >  	memcpy_fromio(log->bios_event_log, virt, len);
+> > >  
+> > > -- 
+> > > 2.36.1
+> > 
+> > What you are using this for? Without any actual bug report, this 
+> > is an obvious NAK.
+> 
+> I have hardware with faulty ACPI values which prevents me from getting a
+> eventlog. I can surely make a bugreport if it helps the case, but that seems
+> like an arbiterary hurdle when I have already spent the time tracking down the
+> issue and proposed a fix.
 
-Hello
+What is the hardware?
 
-thanks for your interest in this patch set.
-
-> Could you please feedback if this is the latest revision available or
-> maybe there is a newer one developed and potentially not shared on LKML?
-
-Yes, it is the latest revision available. There might have been few
-fixes in the final code. You may want to have a look at:
-
-https://github.com/openeuler-mirror/kernel/commit/888460f17775b62f77e33e774e6673587c61cabd
-https://github.com/openeuler-mirror/kernel/commit/4adaeecd5d23cc75ffd1883d9b677bbd67c535d1
-https://github.com/openeuler-mirror/kernel/commit/59db8952e91c2ac443bccdcacfd37ae94c49a259
-
-and:
-
-https://gitee.com/src-openeuler/cpio/blob/master/add-option-to-add-metadata-in-copy-out-mode.patch
-https://gitee.com/src-openeuler/cpio/blob/master/Fix-use-after-free-and-return-appropriate-error.patch
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Yang Xi, Li He
+BR, Jarkko
