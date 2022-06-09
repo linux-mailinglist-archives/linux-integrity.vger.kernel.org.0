@@ -2,49 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30F15442C2
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jun 2022 06:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0960544310
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Jun 2022 07:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbiFIEsu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Jun 2022 00:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S238182AbiFIFXS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Jun 2022 01:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiFIEss (ORCPT
+        with ESMTP id S235383AbiFIFXR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Jun 2022 00:48:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6900A6424;
-        Wed,  8 Jun 2022 21:48:47 -0700 (PDT)
+        Thu, 9 Jun 2022 01:23:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507C3E0BF;
+        Wed,  8 Jun 2022 22:23:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 136B3B81DBA;
-        Thu,  9 Jun 2022 04:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6301AC34114;
-        Thu,  9 Jun 2022 04:48:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7A7961D1F;
+        Thu,  9 Jun 2022 05:23:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8052C34114;
+        Thu,  9 Jun 2022 05:23:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654750124;
-        bh=pc9Sx5FD1mon9/oL66m0qEe+QZMPjUEMwctwj/Wa2iA=;
+        s=k20201202; t=1654752195;
+        bh=XHZdFhnq6qjYdg5fXbtYu1DYUiXJ7YdR40VwYr8Qwhs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HKlCDrS9O4/4OXh5vJ7KFIcVdn1e/EcaQTVVH5DhcBruNKKLJFkFqS6XWjrzhgbOY
-         LuhAKe4UZdjd+B0EPWuqAd+jVJrWHJwxnzvoJX0Pt5/iagf5a/OKhxtD+qdCPRIIBr
-         gkBRaVIpFcDYt/X+getsVw7dANejFpOVz191w3KHodJgJBH0/TEU4pXIF7jG2rkQ55
-         oqf2qfdvV6cRPh28uVOeTpRyCmCurkQs6O/WGKx8h2ed35kLqkiXo+PkSWZenn15Vw
-         6CSee0tt4W6FSadFh8Sf7BvHtFLBQt1JjgcvhXd8+xamBYxiuXlpSFTt/e1U4alEw6
-         2hstkkz3HrT2g==
-Date:   Thu, 9 Jun 2022 07:46:46 +0300
+        b=S4jNXjOa+bXfsBQgDssKkfORXh7KV4Fv2Qbc1fIUpHJ9pwlQ6mdX+H2LjTz2f+uIU
+         l2a5Dvp03xSxHTGoi0XvVX3+rpg+JNkhEWbTM3hsK8tahLym+j1QiV/FxQZoRJ/luc
+         CCaMTsS/9Guys5kITQ7QS7h1kmAXR6bJcTJn9LHJIhYMyL7fc+AmbrxNqItuGDSPsA
+         m4lf6G+itblmu7MwvAWKxZzOF7YF8Em86E2V6X/X5HpAAhRK1XEbwgDGIza7r7DDsv
+         fzEpaigSTtdKaowngUCwPEirA8QeCLXzXVb3MrzNYaN6BykbvjdEU4iP4JL6kT6h4c
+         LoMbeCq+Sl+kQ==
+Date:   Thu, 9 Jun 2022 08:21:17 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Morten Linderud <morten@linderud.pw>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI
- address
-Message-ID: <YqF7NktlAJg26Bvd@iki.fi>
-References: <20220608123109.678343-1-morten@linderud.pw>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
+        jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KEYS: trusted: Fix memory leak in tpm2_key_encode()
+Message-ID: <YqGDTVa64aknbldb@iki.fi>
+References: <20220608131732.550234-1-niejianglei2021@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220608123109.678343-1-morten@linderud.pw>
+In-Reply-To: <20220608131732.550234-1-niejianglei2021@163.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,86 +56,95 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 02:31:08PM +0200, Morten Linderud wrote:
-> tpm_read_log_acpi() should return -ENODEV when no eventlog from the ACPI
-> table is found. If the firmware vendor includes an invalid log address
-> we are unable to map from the ACPI memory and the function returns -EIO
-> which would abort discovery of the eventlog.
+On Wed, Jun 08, 2022 at 09:17:32PM +0800, Jianglei Nie wrote:
+> tpm2_key_encode() allocates a memory chunk from scratch with kmalloc(),
+> but it is never freed, which leads to a memory leak. Free the memory
+> chunk with kfree() in the return path.
 > 
-> This change ensure we always return -ENODEV in tpm_read_log_acpi() and
-> fallback to the EFI configuration table.
-
-Please do not use "we" in commit messages. Or start a sentence
-with "this patch", "this commit" or "this change". It is always
-best just to go down to the roots and use imperative form.
-
-E.g. you could rephrase the last paragraph as
-
-"Change the return value from -EIO to -ENODEV when acpi_os_map_iomem()
-fails to map the event log."
-
-> The following hardware was used to test this issue:
->     Framework Laptop (Pre-production)
->     BIOS: INSYDE Corp, Revision: 3.2
->     TPM Device: NTC, Firmware Revision: 7.2
-> 
-> Dump of the faulty ACPI TPM2 table:
->     [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface Table]
->     [004h 0004   4]                 Table Length : 0000004C
->     [008h 0008   1]                     Revision : 04
->     [009h 0009   1]                     Checksum : 2B
->     [00Ah 0010   6]                       Oem ID : "INSYDE"
->     [010h 0016   8]                 Oem Table ID : "TGL-ULT"
->     [018h 0024   4]                 Oem Revision : 00000002
->     [01Ch 0028   4]              Asl Compiler ID : "ACPI"
->     [020h 0032   4]        Asl Compiler Revision : 00040000
-> 
->     [024h 0036   2]               Platform Class : 0000
->     [026h 0038   2]                     Reserved : 0000
->     [028h 0040   8]              Control Address : 0000000000000000
->     [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
-> 
->     [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
->     [040h 0064   4]           Minimum Log Length : 00010000
->     [044h 0068   8]                  Log Address : 000000004053D000
-> 
-> Signed-off-by: Morten Linderud <morten@linderud.pw>
-> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 > ---
+
+You should write down the changelog ere. No idea what changed
+from the previous version.
+
+>  security/keys/trusted-keys/trusted_tpm2.c | 23 +++++++++++++++++------
+>  1 file changed, 17 insertions(+), 6 deletions(-)
 > 
-> v2: Tweak commit message and opt to return -ENODEV instead of loosening up the
->     if condition in tpm_read_log()
-> 
-> ---
->  drivers/char/tpm/eventlog/acpi.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-> index 1b18ce5ebab1..2b15d6eebd69 100644
-> --- a/drivers/char/tpm/eventlog/acpi.c
-> +++ b/drivers/char/tpm/eventlog/acpi.c
-> @@ -136,8 +136,12 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 0165da386289..8b7ab22950d1 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -32,6 +32,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  			   struct trusted_key_options *options,
+>  			   u8 *src, u32 len)
+>  {
+> +	int err;
+
+Declare as the last local variable (reverse christmas tree order).
+
+Also, I'd use "int ret" since in other functions that is used.
+
+>  	const int SCRATCH_SIZE = PAGE_SIZE;
+>  	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+>  	u8 *work = scratch, *work1;
+> @@ -57,8 +58,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  		unsigned char bool[3], *w = bool;
+>  		/* tag 0 is emptyAuth */
+>  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+> -		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+> -			return PTR_ERR(w);
+> +		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
+> +			err = PTR_ERR(w);
+> +			goto out;
+> +		}
+>  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+>  	}
 >  
->  	ret = -EIO;
->  	virt = acpi_os_map_iomem(start, len);
-> -	if (!virt)
-> +	if (!virt) {
-> +		dev_warn(&chip->dev, "%s: Failed to map ACPI memory\n", __func__);
-> +		/* try EFI log next */
-> +		ret = -ENODEV;
->  		goto err;
+> @@ -69,8 +72,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	 * trigger, so if it does there's something nefarious going on
+>  	 */
+>  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+> -		 "BUG: scratch buffer is too small"))
+> -		return -EINVAL;
+> +		 "BUG: scratch buffer is too small")) {
+> +		err = -EINVAL;
+> +		goto out;
 > +	}
-
-It is wrong to try out EFI, if this fails. TPM2 ACPI table was already
-detected.
-
 >  
->  	memcpy_fromio(log->bios_event_log, virt, len);
+>  	work = asn1_encode_integer(work, end_work, options->keyhandle);
+>  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+> @@ -79,10 +84,16 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	work1 = payload->blob;
+>  	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
+>  				     scratch, work - scratch);
+> -	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+> -		return PTR_ERR(work1);
+> +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
+> +		err = -EINVAL;
+> +		goto out;
+
+Why you are changing the return value from PTR_ERR(work1
+to -EINVAL?
+
+> +	}
+> +	kfree(scratch);
 >  
+>  	return work1 - payload->blob;
+> +
+> +out:
+
+Nit:
+
+err:
+
+It's only used for the error path.
+
+> +	return err;
+>  }
+>  
+>  struct tpm2_key_context {
 > -- 
-> 2.36.1
-
-What you are using this for? Without any actual bug report, this 
-is an obvious NAK.
+> 2.25.1
+> 
 
 BR, Jarkko
