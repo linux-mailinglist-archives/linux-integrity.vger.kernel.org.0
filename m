@@ -2,122 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7063E54682E
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jun 2022 16:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367FA54696C
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jun 2022 17:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243193AbiFJOUi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Jun 2022 10:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
+        id S1343946AbiFJPdq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Jun 2022 11:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234402AbiFJOUh (ORCPT
+        with ESMTP id S233020AbiFJPdp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Jun 2022 10:20:37 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA86AF33A4;
-        Fri, 10 Jun 2022 07:20:36 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ADXxin023507;
-        Fri, 10 Jun 2022 14:20:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=y7F6aAGJJqS6pYIxeYiMNfj4D9EhTZlB+uVA973QynI=;
- b=Y1aMqn3W81UHqjWP1aVUhXZS2Hzo8br4vj+eaASDmiKvWg6sEpqWuICN/l9bjAoADjEu
- qS/S1V9GPniezkaXj3WJa0Y06yyr8dBzS/EQ5da0Av8A9uLkzrirRS5Yucl2NsqI4XhU
- zrBajj/lb6IVANMwgXUdww8gWiwjz+5vQu7Hsl5OrfHJfu0XbCH2s0Ej+G6BnPxOLtk0
- cOrFgCCN61vzECiFV1dnht370hN/F8IWSwHhM1vadkQNZbTTpDkcz75lFsh2tHGr63PW
- CeBHhZjJytOpR4eX9hsV8o81jxlhVf2o5YnOUcjUqsUdFYs9G04/mN3PXKz0X8PMPo2g 4A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm6y190pg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 14:20:23 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25ADYL8W024660;
-        Fri, 10 Jun 2022 14:20:22 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm6y190nr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 14:20:22 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25AE68dA011547;
-        Fri, 10 Jun 2022 14:20:20 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gfxnj0cw7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 14:20:20 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25AEJvoX23724504
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jun 2022 14:19:57 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6EA5411C052;
-        Fri, 10 Jun 2022 14:20:18 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A15511C054;
-        Fri, 10 Jun 2022 14:20:17 +0000 (GMT)
-Received: from sig-9-65-64-7.ibm.com (unknown [9.65.64.7])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Jun 2022 14:20:17 +0000 (GMT)
-Message-ID: <5842536c5c2bde1e3c2840f7e877becc3282b47c.camel@linux.ibm.com>
-Subject: Re: [PATCH -next] Revert "evm: Fix memleak in init_desc"
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, dmitry.kasatkin@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        "Guozihua (Scott)" <guozihua@huawei.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 10 Jun 2022 10:20:15 -0400
-In-Reply-To: <20220527111726.195825-1-xiujianfeng@huawei.com>
-References: <20220527111726.195825-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: KKuVtIHQmFAYn_bXOFDlvDZXJJMnYNXf
-X-Proofpoint-GUID: XU765cbsgikOgMxSClaCs7FRkX3ig9KC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-10_06,2022-06-09_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- bulkscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 priorityscore=1501 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206100057
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Jun 2022 11:33:45 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7BE17ED36;
+        Fri, 10 Jun 2022 08:33:43 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id BB6A5520171;
+        Fri, 10 Jun 2022 17:33:41 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.27) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Fri, 10 Jun
+ 2022 17:33:40 +0200
+Date:   Fri, 10 Jun 2022 17:33:36 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+        "takondra@cisco.com" <takondra@cisco.com>,
+        "kamensky@cisco.com" <kamensky@cisco.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Message-ID: <20220610153336.GA8881@lxhi-065>
+References: <cf9d08ca-74c7-c945-5bf9-7c3495907d1e@huawei.com>
+ <541e9ea1-024f-5c22-0b58-f8692e6c1eb1@landley.net>
+ <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
+ <1561909199.3985.33.camel@linux.ibm.com>
+ <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
+ <1561991485.4067.14.camel@linux.ibm.com>
+ <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
+ <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
+ <20220609102627.GA3922@lxhi-065>
+ <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.27]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-05-27 at 19:17 +0800, Xiu Jianfeng wrote:
-> This reverts commit ccf11dbaa07b328fa469415c362d33459c140a37.
+Hello Roberto,
+
+On Do, Jun 09, 2022 at 11:05:45 +0000, Roberto Sassu wrote:
+> > From: Eugeniu Rosca [mailto:erosca@de.adit-jv.com]
+> > Sent: Thursday, June 9, 2022 12:26 PM
+> > Dear Roberto,
+> > Cc: Yamada-san, linux-kbuild
+> > 
+> > On Mi, Jul 24, 2019 at 05:34:53 +0200, Roberto Sassu wrote:
+> > > Is there anything I didn't address in this patch set, that is delaying
+> > > the review? I would appreciate if you can give me a feedback, positive
+> > > or negative.
+> > >
+> > > Thanks a lot!
+> > >
+> > > Roberto
+> > 
+> > Some of our users have recently asked for this patch series.
 > 
-> Commit ccf11dbaa07b ("evm: Fix memleak in init_desc") said there is
-> memleak in init_desc. That may be incorrect, as we can see, tmp_tfm is
-> saved in one of the two global variables hmac_tfm ohr evm_tfm[hash_algo],
-> then if init_desc is called next time, there is no need to alloc tfm
-> again, so in the error path of kmalloc desc or crypto_shash_init(desc),
-> It is not a problem without freeing tmp_tfm.
+> Hello
 > 
-> And also that commit did not reset the global variable to NULL after
-> freeing tmp_tfm and this makes *tfm a dangling pointer which may cause a
-> UAF issue.
+> thanks for your interest in this patch set.
 > 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> > Could you please feedback if this is the latest revision available or
+> > maybe there is a newer one developed and potentially not shared on LKML?
+> 
+> Yes, it is the latest revision available. There might have been few
+> fixes in the final code. You may want to have a look at:
 
-Agreed, thanks.  This was first reported by Guozihua (Scott) <
-guozihua@huawei.com>.  If neither you nor Scott object, I'll add his
-Reported-by tag.
+Many thanks for the links to the updated patch revisions. It looks
+like the new versions added a couple of bugfixes and refinements.
 
-thanks,
+With more users now using this feature, do you think there is a higher
+chance for upstreaming, compared to 2019 (original submission date)?
 
-Mimi
-
-
-
-
-
+Best Regards,
+Eugeniu
