@@ -2,95 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFA05458D7
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jun 2022 01:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F259545A57
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jun 2022 05:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345637AbiFIXrD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Jun 2022 19:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S232772AbiFJDNo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Jun 2022 23:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbiFIXrC (ORCPT
+        with ESMTP id S229833AbiFJDNo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Jun 2022 19:47:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BBFC965D;
-        Thu,  9 Jun 2022 16:47:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E1616201E;
-        Thu,  9 Jun 2022 23:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43018C34114;
-        Thu,  9 Jun 2022 23:46:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654818419;
-        bh=75ma3gShevB/s+RL0PO7tBwv+TZNSdvzkkGB14y8o+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kcX+PwMw5mFGo3Hvd5s+OCw0NUn7tGUaFLmRiU7V0WspqeDtxnP4hKHuGR04d0Zh/
-         CmqrhaiNPpoiltOTf+gpcxwOtF2MvuPkzFtYsPvf0fFIr2JbSi7wNC+Csv9+lRUjWi
-         opbqKAFrkAoeuRc7dMMJbhCkSkK4kowoEKuE5crEYe4xnUSu/eOOgwMqFaDAPU8na3
-         fphsoQ/VKiMJbP/Epu6c/rwA+3yiRDVQI2cSRN8LsM296JFCP0HRNxCApnQHSLL/bN
-         I3irVFNVvS/5ZSLwPzuIsM3L6DDs8FHN/TmjloO4XV1i006u9oLMGJ4ej4H8MhUo/V
-         11soWc+hYdL8Q==
-Date:   Thu, 9 Jun 2022 16:46:57 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Deven Bowers <deven.desai@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
-        snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v8 13/17] fsverity: consume builtin signature via LSM
- hook
-Message-ID: <YqKGcdM3t5gjqBpq@sol.localdomain>
-References: <1654714889-26728-1-git-send-email-deven.desai@linux.microsoft.com>
- <1654714889-26728-14-git-send-email-deven.desai@linux.microsoft.com>
+        Thu, 9 Jun 2022 23:13:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7385930AB5B;
+        Thu,  9 Jun 2022 20:13:41 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LK5dC0qjDzDqjc;
+        Fri, 10 Jun 2022 11:13:19 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 10 Jun 2022 11:13:39 +0800
+Subject: Re: [PATCH -next] Revert "evm: Fix memleak in init_desc"
+From:   xiujianfeng <xiujianfeng@huawei.com>
+To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220527111726.195825-1-xiujianfeng@huawei.com>
+Message-ID: <c34789ad-0a3e-c534-8a74-28c3068602a1@huawei.com>
+Date:   Fri, 10 Jun 2022 11:13:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1654714889-26728-14-git-send-email-deven.desai@linux.microsoft.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220527111726.195825-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 12:01:25PM -0700, Deven Bowers wrote:
-> From: Fan Wu <wufan@linux.microsoft.com>
-> 
-> fsverity represents a mechanism to support both integrity and
-> authenticity protection of a file, supporting both signed and unsigned
-> digests.
-> 
-> An LSM which controls access to a resource based on authenticity and
-> integrity of said resource, can then use this data to make an informed
-> decision on the authorization (provided by the LSM's policy) of said
-> claim.
-> 
-> This effectively allows the extension of a policy enforcement layer in
-> LSM for fsverity, allowing for more granular control of how a
-> particular authenticity claim can be used. For example, "all (built-in)
-> signed fsverity files should be allowed to execute, but only these
-> hashes are allowed to be loaded as kernel modules".
-> 
-> This enforcement must be done in kernel space, as a userspace only
-> solution would fail a simple litmus test: Download a self-contained
-> malicious binary that never touches the userspace stack. This
-> binary would still be able to execute.
-> 
-> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+Hi, ping....
 
-The IMA support for fs-verity, which is now upstream, already does this (except
-that IMA isn't an LSM).  It also doesn't rely on the fs-verity builtin
-signatures, which shouldn't really be used.  Can you elaborate on how what
-you're doing is better?
-
-- Eric
+ÔÚ 2022/5/27 19:17, Xiu Jianfeng Ð´µÀ:
+> This reverts commit ccf11dbaa07b328fa469415c362d33459c140a37.
+>
+> Commit ccf11dbaa07b ("evm: Fix memleak in init_desc") said there is
+> memleak in init_desc. That may be incorrect, as we can see, tmp_tfm is
+> saved in one of the two global variables hmac_tfm or evm_tfm[hash_algo],
+> then if init_desc is called next time, there is no need to alloc tfm
+> again, so in the error path of kmalloc desc or crypto_shash_init(desc),
+> It is not a problem without freeing tmp_tfm.
+>
+> And also that commit did not reset the global variable to NULL after
+> freeing tmp_tfm and this makes *tfm a dangling pointer which may cause a
+> UAF issue.
+>
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>   security/integrity/evm/evm_crypto.c | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+> index a733aff02006..708de9656bbd 100644
+> --- a/security/integrity/evm/evm_crypto.c
+> +++ b/security/integrity/evm/evm_crypto.c
+> @@ -75,7 +75,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+>   {
+>   	long rc;
+>   	const char *algo;
+> -	struct crypto_shash **tfm, *tmp_tfm = NULL;
+> +	struct crypto_shash **tfm, *tmp_tfm;
+>   	struct shash_desc *desc;
+>   
+>   	if (type == EVM_XATTR_HMAC) {
+> @@ -120,16 +120,13 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+>   alloc:
+>   	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
+>   			GFP_KERNEL);
+> -	if (!desc) {
+> -		crypto_free_shash(tmp_tfm);
+> +	if (!desc)
+>   		return ERR_PTR(-ENOMEM);
+> -	}
+>   
+>   	desc->tfm = *tfm;
+>   
+>   	rc = crypto_shash_init(desc);
+>   	if (rc) {
+> -		crypto_free_shash(tmp_tfm);
+>   		kfree(desc);
+>   		return ERR_PTR(rc);
+>   	}
