@@ -2,66 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B154F546999
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jun 2022 17:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B3454716F
+	for <lists+linux-integrity@lfdr.de>; Sat, 11 Jun 2022 04:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348083AbiFJPlZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Jun 2022 11:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S1349068AbiFKCiN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Jun 2022 22:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiFJPk0 (ORCPT
+        with ESMTP id S1346449AbiFKCiL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Jun 2022 11:40:26 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A804A2A7A99;
-        Fri, 10 Jun 2022 08:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654875588; x=1686411588;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y/xmB8i0JAfRDDmS2bDtJaItU5JaDKmsDXCMEkxCBqs=;
-  b=ZJJFghvQmEJ6Rny04u6SgV/9WTHBagJy5KS+a0ZP0in+7dhj/wWn9dK4
-   kk/U1wK6uQHo7geaBEQuAZx6VRb9FCK87KdjY599rePxpT0ApRngXhBHA
-   i3VUE7xRnZ/JjN63YTROOLL/ct44e/qZzlp64DX1N2n1mkbEletxEThz1
-   5nFde6ykvP6eIdeLFqZnLswXLRvDugAx7/QxwTZc+w1eiSGpaI4+BFKNN
-   Rva/Y1nOh8XMmEpykY/Rfe5loeo0ihSd9yi6t+4BQKw0bA/jZ1G3DLLGt
-   e7D9GCQzcy6XR683Gtk1etSMJy7A8eU0crEYQziDLfj7ZQF46KucEKsRF
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="339414288"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="339414288"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 08:39:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="616522242"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 10 Jun 2022 08:39:44 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nzgjf-000I45-Fe;
-        Fri, 10 Jun 2022 15:39:43 +0000
-Date:   Fri, 10 Jun 2022 23:38:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
-        jarkko@kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        peterhuewe@gmx.de, jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
-        Johannes Holland <johannes.holland@infineon.com>,
-        Amir Mizinski <amirmizi6@gmail.com>
-Subject: Re: [PATCH v6 3/3] tpm: Add tpm_tis_i2c backend for tpm_tis_core
-Message-ID: <202206102314.V0zCPT2v-lkp@intel.com>
-References: <20220608173113.9232-4-Alexander.Steffen@infineon.com>
+        Fri, 10 Jun 2022 22:38:11 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5445326065D;
+        Fri, 10 Jun 2022 19:38:10 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LKhmX1MWxzjXNV;
+        Sat, 11 Jun 2022 10:36:44 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 11 Jun 2022 10:38:08 +0800
+Message-ID: <2df1631b-3c3c-be97-0e93-a1ade05828c2@huawei.com>
+Date:   Sat, 11 Jun 2022 10:38:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608173113.9232-4-Alexander.Steffen@infineon.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next] Revert "evm: Fix memleak in init_desc"
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        <dmitry.kasatkin@gmail.com>, <jmorris@namei.org>,
+        <serge@hallyn.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220527111726.195825-1-xiujianfeng@huawei.com>
+ <5842536c5c2bde1e3c2840f7e877becc3282b47c.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <5842536c5c2bde1e3c2840f7e877becc3282b47c.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,28 +55,35 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Alexander,
+On 2022/6/10 22:20, Mimi Zohar wrote:
+> On Fri, 2022-05-27 at 19:17 +0800, Xiu Jianfeng wrote:
+>> This reverts commit ccf11dbaa07b328fa469415c362d33459c140a37.
+>>
+>> Commit ccf11dbaa07b ("evm: Fix memleak in init_desc") said there is
+>> memleak in init_desc. That may be incorrect, as we can see, tmp_tfm is
+>> saved in one of the two global variables hmac_tfm ohr evm_tfm[hash_algo],
+>> then if init_desc is called next time, there is no need to alloc tfm
+>> again, so in the error path of kmalloc desc or crypto_shash_init(desc),
+>> It is not a problem without freeing tmp_tfm.
+>>
+>> And also that commit did not reset the global variable to NULL after
+>> freeing tmp_tfm and this makes *tfm a dangling pointer which may cause a
+>> UAF issue.
+>>
+>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> 
+> Agreed, thanks.  This was first reported by Guozihua (Scott) <
+> guozihua@huawei.com>.  If neither you nor Scott object, I'll add his
+> Reported-by tag.
+> 
+> thanks,
+> 
+> Mimi
+> 
+> .
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on robh/for-next v5.19-rc1 next-20220610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Steffen/tpm_tis_i2c/20220609-013636
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git f2906aa863381afb0015a9eb7fefad885d4e5a56
-config: riscv-randconfig-c004-20220609 (https://download.01.org/0day-ci/archive/20220610/202206102314.V0zCPT2v-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.3.0
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-cocci warnings: (new ones prefixed by >>)
->> drivers/char/tpm/tpm_tis_i2c.c:379:3-8: No need to set .owner here. The core will do it.
+Good for me.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best
+GUO Zihua
