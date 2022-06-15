@@ -2,52 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E140054D0D5
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 20:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5658854D0DF
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 20:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349054AbiFOSXw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jun 2022 14:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S1356130AbiFOSZb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jun 2022 14:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346397AbiFOSXs (ORCPT
+        with ESMTP id S245336AbiFOSZ3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:23:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E425294;
-        Wed, 15 Jun 2022 11:23:46 -0700 (PDT)
+        Wed, 15 Jun 2022 14:25:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0748936694;
+        Wed, 15 Jun 2022 11:25:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2D41B82130;
-        Wed, 15 Jun 2022 18:23:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E5D4C36AF2;
-        Wed, 15 Jun 2022 18:23:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4BB61C36;
+        Wed, 15 Jun 2022 18:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DD5C3411C;
+        Wed, 15 Jun 2022 18:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655317424;
-        bh=zObHqLUh2Rncs2EFcgmp5EbS5j6sE7FLEKEpqYw7Hfc=;
+        s=k20201202; t=1655317527;
+        bh=TKz+MoBx361FqhpuLU25ZFeB5xn7vox/KsAYOW8gYoM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QsaiN+I9lB+w/4rklbNVmHf5zAK8JOiTSNF8/RnIJtGn9TQ1HS1k56Yx/XpAbHiKN
-         tFf2HYsMP4lTjsDkZhVhPD2p04kEo7swymPhPnHMgLX6kDSR7GzIo2xdEM/DKN/vAP
-         0Q4Z1dogGiwlnM1I2d9S+9wHhVAnDiIBdAehKM+YN6kM+8BAM24aIVoUk9zg3E9Tei
-         MvYyNiymrmLpmZkg6pRA3ooUK1OJ7EoACOvc6lC+Ov0XefhLdXhzI/MJsVrddfjv5G
-         4Ke6J1h6uUNEDirIwdpuIGCed7W7+uLWDnr2RUlj8rWDjP42AdJcFc+N4jjrYT6xen
-         /1gJfXcEWV5Uw==
-Date:   Wed, 15 Jun 2022 21:21:34 +0300
+        b=RuS+3FA3y9QBVx67brxIF+rQqLzjj5xYhKIcjRZbyeLJIP8d2GU3goxuaJSPtV4RN
+         I1Z2hekRseMXkqOSGpCG4PXfmS3LnEGmK8RLyGDJto+TtU0i2m3uzYqYSuqcmIgPiC
+         toZopFtQ/LYS50vjwzFDrGv4gI+QgvwrpApDwMSlBpDe3KH2fouUWi6notXtZXqYne
+         Wn5RbsX28aM5t4vmuq8U0tRr12mJg4kA0SECJ3iB+fd9lVjlG0xgE5rqp3o+sQfeO7
+         Mbj/9j8Vxasuuu7uojzDfcBakdbNbqInV+i6dS3Rl7KyBuXZu+4yYtdRM8/H0wY680
+         wN8am1Z2u0NbQ==
+Date:   Wed, 15 Jun 2022 21:23:18 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     LinoSanfilippo@gmx.de
 Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
         linux@mniewoehner.de, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
         lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v5 06/10] tpm, tpm_tis: Only handle supported interrupts
- in wait_for_tpm_stat()
-Message-ID: <YqojLqfoy2NXTTGV@iki.fi>
+Subject: Re: [PATCH v5 07/10] tmp, tmp_tis: Implement usage counter for
+ locality
+Message-ID: <Yqojlh5J0660gfaT@iki.fi>
 References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
- <20220610110846.8307-7-LinoSanfilippo@gmx.de>
+ <20220610110846.8307-8-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610110846.8307-7-LinoSanfilippo@gmx.de>
+In-Reply-To: <20220610110846.8307-8-LinoSanfilippo@gmx.de>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,105 +58,110 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:08:42PM +0200, LinoSanfilippo@gmx.de wrote:
+On Fri, Jun 10, 2022 at 01:08:43PM +0200, LinoSanfilippo@gmx.de wrote:
 > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > 
-> According to the TPM Interface Specification (TIS) interrupts for
-> "stsValid" and "commandReady" might not be supported.
+> Implement a usage counter for the (default) locality used by the TPM TIS
+> driver:
+> Request the locality from the TPM if it has not been claimed yet, otherwise
+> only increment the counter. Also release the locality if the counter is 0
+> otherwise only decrement the counter. Ensure thread-safety by protecting
+> the counter with a mutex.
 > 
-> Take this into account and only wait for interrupts which are actually in
-> use in wait_for_tpm_stat(). After that process all the remaining status
-> changes by polling the status register.
+> This allows to request and release the locality from a thread and the
+> interrupt handler at the same time without the danger to interfere with
+> each other.
 > 
 > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > ---
->  drivers/char/tpm/tpm_tis_core.c | 46 ++++++++++++++++++++++++---------
->  1 file changed, 34 insertions(+), 12 deletions(-)
+>  drivers/char/tpm/tpm_tis_core.c | 30 ++++++++++++++++++++++++++++--
+>  drivers/char/tpm/tpm_tis_core.h |  2 ++
+>  2 files changed, 30 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 2f03fefa1706..028bec44362d 100644
+> index 028bec44362d..0ef74979bc2c 100644
 > --- a/drivers/char/tpm/tpm_tis_core.c
 > +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -53,41 +53,63 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
->  	long rc;
->  	u8 status;
->  	bool canceled = false;
-> +	u8 active_irqs = 0;
-
-Something like sts_mask would be a better name. Calling it
-'active_irqs' is a bit confusing.
-
-> +	int ret = 0;
->  
->  	/* check current status */
->  	status = chip->ops->status(chip);
->  	if ((status & mask) == mask)
->  		return 0;
->  
-> -	stop = jiffies + timeout;
-> +	/* check what status changes can be handled by irqs */
-> +	if (priv->irqs_in_use & TPM_INTF_STS_VALID_INT)
-> +		active_irqs |= TPM_STS_VALID;
->  
-> -	if (chip->flags & TPM_CHIP_FLAG_IRQ) {
-> +	if (priv->irqs_in_use & TPM_INTF_DATA_AVAIL_INT)
-> +		active_irqs |= TPM_STS_DATA_AVAIL;
-> +
-> +	if (priv->irqs_in_use & TPM_INTF_CMD_READY_INT)
-> +		active_irqs |= TPM_STS_COMMAND_READY;
-> +
-> +	active_irqs &= mask;
-> +
-> +	stop = jiffies + timeout;
-> +	/* process status changes with irq support */
-> +	if (active_irqs) {
-> +		ret = -ETIME;
->  again:
->  		timeout = stop - jiffies;
->  		if ((long)timeout <= 0)
->  			return -ETIME;
->  		rc = wait_event_interruptible_timeout(*queue,
-> -			wait_for_tpm_stat_cond(chip, mask, check_cancel,
-> +			wait_for_tpm_stat_cond(chip, active_irqs, check_cancel,
->  					       &canceled),
->  			timeout);
->  		if (rc > 0) {
->  			if (canceled)
->  				return -ECANCELED;
-> -			return 0;
-> +			ret = 0;
->  		}
->  		if (rc == -ERESTARTSYS && freezing(current)) {
->  			clear_thread_flag(TIF_SIGPENDING);
->  			goto again;
->  		}
-> -	} else {
-> -		do {
-> -			usleep_range(priv->timeout_min,
-> -				     priv->timeout_max);
-> -			status = chip->ops->status(chip);
-> -			if ((status & mask) == mask)
-> -				return 0;
-> -		} while (time_before(jiffies, stop));
->  	}
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	mask &= ~active_irqs;
-> +	if (!mask) /* all done */
-> +		return 0;
-> +	/* process status changes without irq support */
-> +	do {
-> +		status = chip->ops->status(chip);
-> +		if ((status & mask) == mask)
-> +			return 0;
-> +		usleep_range(priv->timeout_min,
-> +			     priv->timeout_max);
-> +	} while (time_before(jiffies, stop));
->  	return -ETIME;
+> @@ -158,16 +158,26 @@ static bool check_locality(struct tpm_chip *chip, int l)
+>  	return false;
 >  }
 >  
+> +static int release_locality_locked(struct tpm_tis_data *priv, int l)
+> +{
+> +	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
+
+nit: empty line here
+
+Also it would not hurt to prefix it with tpm_tis.
+
+This is for simple and practical reasons, like grepping. I don't
+mind if you do that also for other functions (if you want to).
+
+> +	return 0;
+> +}
+> +
+>  static int release_locality(struct tpm_chip *chip, int l)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  
+> -	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
+> +	mutex_lock(&priv->locality_count_mutex);
+> +	priv->locality_count--;
+> +	if (priv->locality_count == 0)
+> +		release_locality_locked(priv, l);
+> +	mutex_unlock(&priv->locality_count_mutex);
+>  
+>  	return 0;
+>  }
+>  
+> -static int request_locality(struct tpm_chip *chip, int l)
+> +static int request_locality_locked(struct tpm_chip *chip, int l)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  	unsigned long stop, timeout;
+> @@ -208,6 +218,20 @@ static int request_locality(struct tpm_chip *chip, int l)
+>  	return -1;
+>  }
+>  
+> +static int request_locality(struct tpm_chip *chip, int l)
+> +{
+> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&priv->locality_count_mutex);
+> +	if (priv->locality_count == 0)
+> +		ret = request_locality_locked(chip, l);
+> +	if (!ret)
+> +		priv->locality_count++;
+> +	mutex_unlock(&priv->locality_count_mutex);
+> +	return ret;
+> +}
+> +
+>  static u8 tpm_tis_status(struct tpm_chip *chip)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> @@ -987,6 +1011,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
+>  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
+>  	priv->phy_ops = phy_ops;
+> +	priv->locality_count = 0;
+> +	mutex_init(&priv->locality_count_mutex);
+>  
+>  	dev_set_drvdata(&chip->dev, priv);
+>  
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index 8e02faa4079d..e1871c482da2 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -94,6 +94,8 @@ enum tpm_tis_irqtest_flags {
+>  
+>  struct tpm_tis_data {
+>  	u16 manufacturer_id;
+> +	struct mutex locality_count_mutex;
+> +	unsigned int locality_count;
+>  	int locality;
+>  	int irq;
+>  	unsigned int irqs_in_use;
 > -- 
 > 2.36.1
 > 
