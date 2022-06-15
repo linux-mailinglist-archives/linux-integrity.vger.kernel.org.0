@@ -2,56 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B63254D06C
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 19:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7874E54D0BD
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 20:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236365AbiFORyW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jun 2022 13:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S1348755AbiFOSON (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jun 2022 14:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235028AbiFORyV (ORCPT
+        with ESMTP id S1358326AbiFOSOE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:54:21 -0400
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6634E26117;
-        Wed, 15 Jun 2022 10:54:20 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        Wed, 15 Jun 2022 14:14:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FC33DDC9;
+        Wed, 15 Jun 2022 11:14:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 33E96520291;
-        Wed, 15 Jun 2022 19:54:18 +0200 (CEST)
-Received: from lxhi-065 (10.72.94.5) by hi2exch02.adit-jv.com (10.72.92.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Wed, 15 Jun
- 2022 19:54:17 +0200
-Date:   Wed, 15 Jun 2022 19:54:12 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>
-CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
-        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bug-cpio@gnu.org>,
-        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
-        <takondra@cisco.com>, <kamensky@cisco.com>, <hpa@zytor.com>,
-        <arnd@arndb.de>, <rob@landley.net>, <james.w.mcmechan@gmail.com>,
-        <niveditas98@gmail.com>, Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v4 1/3] initramfs: add file metadata
-Message-ID: <20220615175412.GA7029@lxhi-065>
-References: <20190523121803.21638-1-roberto.sassu@huawei.com>
- <20190523121803.21638-2-roberto.sassu@huawei.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44601B820FE;
+        Wed, 15 Jun 2022 18:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED90C3411C;
+        Wed, 15 Jun 2022 18:14:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655316840;
+        bh=6lDvbFvHvn80IflfO9FEcBhFgYYpeJ+mAlZpmlJeM6U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PgbSXRLixAXKtsy7Wc1OmaIsx6ykSuSqlJ35go/AzyCXkORxm0PwFmCM+ylvtzYW0
+         nn918/T3Olnc4k/uV6M26in01V/ii4OK4DFXm6ECuz0dO5Xdiz+d6lSEMgT4k6vWFI
+         DRzaxxsuOh7K7xEo/mAMEYmPLA2R+L0ubIGaQ15N0HM4oZTI65H2P4c59ulsBI2CgD
+         j3dOqGDUJ/3n3nYARaXI2q2oqggFZmpMMm+bAuaYTDLB2+9Ergn8FcvuhvCS/ckzXO
+         4shdYloJzqO/zxe/YaIParIhWWGZ+qjAyA/rSz/qOClfdQmUiFX3juP0z/oUVzdovY
+         nepeSY01f8pwA==
+Date:   Wed, 15 Jun 2022 21:11:52 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     LinoSanfilippo@gmx.de
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH v5 03/10] tpm, tpm_tis: Disable interrupts if
+ tpm_tis_probe_irq() failed
+Message-ID: <Yqog6Jp/544X0cbD@iki.fi>
+References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
+ <20220610110846.8307-4-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190523121803.21638-2-roberto.sassu@huawei.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.94.5]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220610110846.8307-4-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,70 +58,61 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Roberto,
-Hello Mimi,
-
-On Thu, May 23, 2019 at 02:18:01PM +0200, Roberto Sassu wrote:
-> From: Mimi Zohar <zohar@linux.vnet.ibm.com>
+On Fri, Jun 10, 2022 at 01:08:39PM +0200, LinoSanfilippo@gmx.de wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > 
-> This patch adds metadata to a file from a supplied buffer. The buffer might
-> contains multiple metadata records. The format of each record is:
+> Both functions tpm_tis_probe_irq_single() and tpm_tis_probe_irq() may setup
+> the interrupts and then return with an error. This case is indicated by a
+> missing TPM_CHIP_FLAG_IRQ flag in chips->flags.
+> Currently the interrupt setup is only undone if tpm_tis_probe_irq_single()
+> fails. Undo the setup also if tpm_tis_probe_irq() fails.
 > 
-> <metadata len (ASCII, 8 chars)><version><type><metadata>
-> 
-> For now, only the TYPE_XATTR metadata type is supported. The specific
-> format of this metadata type is:
-> 
-> <xattr #N name>\0<xattr #N value>
-> 
-> [kamensky: fixed restoring of xattrs for symbolic links by using
->            sys_lsetxattr() instead of sys_setxattr()]
-> 
-> [sassu: removed state management, kept only do_setxattrs(), added support
->         for generic file metadata, replaced sys_lsetxattr() with
->         vfs_setxattr(), added check for entry_size, added check for
->         hdr->c_size, replaced strlen() with strnlen(); moved do_setxattrs()
->         before do_name()]
-> 
-> Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
-> Signed-off-by: Victor Kamensky <kamensky@cisco.com>
-> Signed-off-by: Taras Kondratiuk <takondra@cisco.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > ---
->  include/linux/initramfs.h | 21 ++++++++++
->  init/initramfs.c          | 88 ++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 107 insertions(+), 2 deletions(-)
->  create mode 100644 include/linux/initramfs.h
-
-[..]
-
-> +static int __init do_setxattrs(char *pathname, char *buf, size_t size)
-> +{
-> +	struct path path;
-> +	char *xattr_name, *xattr_value;
-> +	size_t xattr_name_size, xattr_value_size;
-> +	int ret;
+>  drivers/char/tpm/tpm_tis_core.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index ee6b48c55ac9..dee701609b80 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -1077,21 +1077,21 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  			goto out_err;
+>  		}
+>  
+> -		if (irq) {
+> +		if (irq)
+>  			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
+>  						 irq);
+> -			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+> -				dev_err(&chip->dev, FW_BUG
+> +		else
+> +			tpm_tis_probe_irq(chip, intmask);
 > +
-> +	xattr_name = buf;
-> +	xattr_name_size = strnlen(xattr_name, size);
-> +	if (xattr_name_size == size) {
-> +		error("malformed xattrs");
-> +		return -EINVAL;
-> +	}
-> +
+> +		if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+> +			dev_err(&chip->dev, FW_BUG
+>  					"TPM interrupt not working, polling instead\n");
+>  
+> -				rc = request_locality(chip, 0);
+> -				if (rc < 0)
+> -					goto out_err;
+> -				disable_interrupts(chip);
+> -				release_locality(chip, 0);
+> -			}
+> -		} else {
+> -			tpm_tis_probe_irq(chip, intmask);
+> +			rc = request_locality(chip, 0);
+> +			if (rc < 0)
+> +				goto out_err;
+> +			disable_interrupts(chip);
+> +			release_locality(chip, 0);
+>  		}
+>  	}
+>  
+> -- 
+> 2.36.1
+> 
 
-[..]
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-> +
-> +		switch (hdr->c_type) {
-> +		case TYPE_XATTR:
-> +			do_setxattrs(pathname, buf + sizeof(*hdr),
-> +				     entry_size - sizeof(*hdr));
-
-Is it on purpose not to check the return value of do_setxattrs?
-
-I think I would have more comfort and piece of mind if I knew
-the return value is properly checked and acted upon. Otherwise,
-why returning an int from within do_setxattrs() at all?
-
-BR, Eugeniu
+BR, Jarkko
