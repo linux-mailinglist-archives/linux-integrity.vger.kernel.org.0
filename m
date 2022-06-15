@@ -2,62 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D8054D1C4
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 21:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE3154D20D
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 21:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344980AbiFOTlJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jun 2022 15:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        id S242953AbiFOTzU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jun 2022 15:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiFOTlI (ORCPT
+        with ESMTP id S242506AbiFOTzT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:41:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BE22E0B5;
-        Wed, 15 Jun 2022 12:41:04 -0700 (PDT)
+        Wed, 15 Jun 2022 15:55:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5EE29372
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jun 2022 12:55:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D93E60EB1;
-        Wed, 15 Jun 2022 19:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 016E2C34115;
-        Wed, 15 Jun 2022 19:41:03 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6AB38CE229F
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jun 2022 19:55:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CC68C34115;
+        Wed, 15 Jun 2022 19:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655322063;
-        bh=RzP3qZTZJINHqTKFXOClmmCHrILPHRVdARLSckRDLu4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=sPr3tIrT00EMIjz/ONdLIRYJ+CB3UQOmsXySLdFOSmMVE2PIqmKgbXhYyH32JQZOj
-         f6o4nwcpo1SxAbGU4TcsxsaJ6rLXGSSmag8Q+kJlSv2x/nHwW+EXm33zaZiLMoVba/
-         XyUP4fWev//LsLGc6CqxUc/QPEU6VyFffwW010XBEEVSHnQG74LfDlu6/TyNaBRe/d
-         wL6xNNbxbp38Yf2kJrfPjTVJVyseia0LPYGREuqKzE/gtOt0X+Q0ErfsJ8F+n6qSfn
-         ZpyGr0xWlE/fK5Fwg/q4GZf76t52zYvIz156FNbzmt1ErWyOQlrDVbqYz25AxHW0Hq
-         Vzs4DM4Pq/Urg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0890E73856;
-        Wed, 15 Jun 2022 19:41:02 +0000 (UTC)
-Subject: Re: [GIT PULL] tpmdd updates for v5.19-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220615185912.40987-1-jarkko@kernel.org>
-References: <20220615185912.40987-1-jarkko@kernel.org>
-X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220615185912.40987-1-jarkko@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-v5.19-rc3
-X-PR-Tracked-Commit-Id: 27b5b22d252c6d71a2a37a4bdf18d0be6d25ee5a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: afe9eb14ea1cbac5d91ca04eb64810d2d9fa22b0
-Message-Id: <165532206290.28565.8327730742132157264.pr-tracker-bot@kernel.org>
-Date:   Wed, 15 Jun 2022 19:41:02 +0000
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+        s=k20201202; t=1655322915;
+        bh=/nz210YLLlvWhbqxTRUp474GtlI0pOFkn5HZB4Vgkuo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qPSseb+N/gtizAeFPGiQ+uyUP9Ne/TQRh/GolGc7id9TF1X7VQ6CmV+57GfLi32da
+         tQHKAOPC0qqi8VM/UEaQ3TbnuIvxCgPnOWIc+C340BabkItqV+LqVsxoDDHSCexKbE
+         u6oP/KaAf7C07Ot6riVXA3aPs0RZLqUC4kLTKWVspy7ANGRNT/p+KqRIw1xCjA4k7W
+         OksT1t4LkRKTokqYp9Nj7bLZCdCREZKI/nMrzPpW8D3bNzvDVw+cIeRyASfZn2JMpK
+         42HAjCmWyJtnLYTzluERfrtub+0rzZXkKBleJmi34KNM9AcQWxTwpkXHvHoNjRMWpH
+         AzfUZVUiQxhoA==
+Date:   Wed, 15 Jun 2022 22:53:06 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Subject: Re: CKI team seeing boot failures with 5.19 kernels on VMs with tpm
+ device
+Message-ID: <Yqo4ot+mIW+LsrxB@iki.fi>
+References: <CALzcddv+khkc4vy4n0m6EAn=d2+9M5RRc92_TbxdCPMViJUC3w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzcddv+khkc4vy4n0m6EAn=d2+9M5RRc92_TbxdCPMViJUC3w@mail.gmail.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,15 +56,26 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Wed, 15 Jun 2022 21:59:12 +0300:
+On Mon, Jun 13, 2022 at 07:47:40AM -0700, Jerry Snitselaar wrote:
+> This came to my attention this morning, and I was able to do a quick
+> test and reproduce in a vm locally, using both the crb and tis
+> emulation. 5.18 boots up fine.
+> 
+> The only thing I see that could impact both crb and tis in the tpm
+> changes would be:
+> 
+> af402ee3c045 tpm: Add field upgrade mode support for Infineon TPM2
+> modules | 2022-05-23 | (Stefan Mahnke-Hartmann)
+> e57b2523bd37 tpm: Fix buffer access in tpm2_get_tpm_pt() | 2022-05-23
+> | (Stefan Mahnke-Hartmann)
+> 
+> I'm going to poke around some more and see if I can figure out what is
+> going on, but wanted to give you a heads up.
+> 
+> Regards,
+> Jerry
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-v5.19-rc3
+OK, thanks for spotting this.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/afe9eb14ea1cbac5d91ca04eb64810d2d9fa22b0
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+BR, Jarkko
