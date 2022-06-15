@@ -2,52 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B42654CB65
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 16:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BA854CB68
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 16:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240054AbiFOOcQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jun 2022 10:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
+        id S242571AbiFOOdW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jun 2022 10:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiFOOcQ (ORCPT
+        with ESMTP id S230355AbiFOOdV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:32:16 -0400
+        Wed, 15 Jun 2022 10:33:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862DB49B64;
-        Wed, 15 Jun 2022 07:32:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A58D31DD3;
+        Wed, 15 Jun 2022 07:33:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D4E860AB0;
-        Wed, 15 Jun 2022 14:32:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25DB8C34115;
-        Wed, 15 Jun 2022 14:32:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB56660A72;
+        Wed, 15 Jun 2022 14:33:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C656FC34115;
+        Wed, 15 Jun 2022 14:33:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655303534;
-        bh=Oem7MqbkCZEaURs3v3eZLONkUT4Nvbai0WIqLG04674=;
+        s=k20201202; t=1655303600;
+        bh=7vMefsxEfPqWjUU6iDGb+XPXaNa4+dE4KbbW3gPldDs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LwE/9tXxtaVSqbBvHvB07lcYyhfyTSpy3aRU5szzydOvIKnJnv0TATOjokDDQGwkA
-         otm2Mcl6k8YRclyIZZHukhttKBvw2i5+6dP+eV1xL7CIVXG0ZMeiYyjRnu/eli5aLC
-         5Dcs+diGXrvl3NciVq7NfpcmWXnmCWEpvfCrXLziYE5+cL9Jtyf4VOl9ZMt791uUre
-         H8ZnTyEElAAbkcv4sW/h26otQoSD7sIPAM+e80XTyDq/mCc7YsvCdE4tsc3TZhPhPH
-         CITGuL8HVoReifMJ4XBBF/BJEyeuwp7AA+6M4iM0DQpnV6VTQ5LovNsNnaF0JotdVX
-         JOo/K0d32cbEQ==
-Date:   Wed, 15 Jun 2022 17:32:10 +0300
+        b=jDYlw+oUBUELWeRUl5LKiGAfM7msnH+3xwmVB4M4ptH8YhnZcen1FYcwe+XHTeKf9
+         n6GRa/hbttlVV7CmT7r4xiOn1gMoS1afp9T/LvXK/9KnDo7fu50wpvZdYE06kYHrpd
+         vXQ5g1Hc9zGyJ/98wQU7SEvYtvR15vk4UvUY3KMI0clwWrA9yoDijvs+IvqDTjzl2d
+         dQfIQHhlQRqg6xOSToCP9HaZTWiJ0llRZf+ekMIXHsy2UZZVhAxHDdU1ubxnaNeyK2
+         ibzv3ShQYpj/sAgnvnO32KfSYC+AL2tfQckNNQvhBxtLi6U/DAsMsYlUxA+7Dv2Ztc
+         Tk5H2aN/co8ZQ==
+Date:   Wed, 15 Jun 2022 17:33:16 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     LinoSanfilippo@gmx.de
 Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
         linux@mniewoehner.de, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
         lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v5 01/10] tpm, tpm_tis: Avoid cache incoherency in test
- for interrupts
-Message-ID: <YqntNDU5tcwgDdvG@kernel.org>
+Subject: Re: [PATCH v5 02/10] tpm, tpm_tis: Claim locality before writing
+ TPM_INT_ENABLE register
+Message-ID: <YqntrKqWD9mfqJlh@kernel.org>
 References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
- <20220610110846.8307-2-LinoSanfilippo@gmx.de>
+ <20220610110846.8307-3-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610110846.8307-2-LinoSanfilippo@gmx.de>
+In-Reply-To: <20220610110846.8307-3-LinoSanfilippo@gmx.de>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,100 +58,39 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:08:37PM +0200, LinoSanfilippo@gmx.de wrote:
+On Fri, Jun 10, 2022 at 01:08:38PM +0200, LinoSanfilippo@gmx.de wrote:
 > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > 
-> The interrupt handler that sets the boolean variable irq_tested may run on
-> another CPU as the thread that checks irq_tested as part of the irq test in
-> tmp_tis_send().
-> 
-> Since nothing guarantees cache coherency between CPUs for unsynchronized
-> accesses to boolean variables the testing thread might not perceive the
-> value change done in the interrupt handler.
-> 
-> Avoid this issue by using a bitfield instead of a boolean variable and by
-> accessing this field with the bit manipulating functions that provide cache
-> coherency.
+> In disable_interrupts() the TPM_GLOBAL_INT_ENABLE bit is unset in the
+> TPM_INT_ENABLE register to shut the interrupts off. However modifying the
+> register is only possible with a held locality. So claim the locality
+> before disable_interrupts() is called.
 > 
 > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > ---
->  drivers/char/tpm/tpm_tis_core.c | 13 +++++++------
->  drivers/char/tpm/tpm_tis_core.h |  6 +++++-
->  2 files changed, 12 insertions(+), 7 deletions(-)
+>  drivers/char/tpm/tpm_tis_core.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
 > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index dc56b976d816..6f2cf75add8b 100644
+> index 6f2cf75add8b..ee6b48c55ac9 100644
 > --- a/drivers/char/tpm/tpm_tis_core.c
 > +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -470,7 +470,8 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
->  	int rc, irq;
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> @@ -1084,7 +1084,11 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  				dev_err(&chip->dev, FW_BUG
+>  					"TPM interrupt not working, polling instead\n");
 >  
-> -	if (!(chip->flags & TPM_CHIP_FLAG_IRQ) || priv->irq_tested)
-> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ) ||
-> +	     test_bit(TPM_TIS_IRQ_TESTED, &priv->irqtest_flags))
->  		return tpm_tis_send_main(chip, buf, len);
->  
->  	/* Verify receipt of the expected IRQ */
-> @@ -480,11 +481,11 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
->  	rc = tpm_tis_send_main(chip, buf, len);
->  	priv->irq = irq;
->  	chip->flags |= TPM_CHIP_FLAG_IRQ;
-> -	if (!priv->irq_tested)
-> +	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->irqtest_flags))
->  		tpm_msleep(1);
-> -	if (!priv->irq_tested)
-> +	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->irqtest_flags))
->  		disable_interrupts(chip);
-> -	priv->irq_tested = true;
-> +	set_bit(TPM_TIS_IRQ_TESTED, &priv->irqtest_flags);
->  	return rc;
->  }
->  
-> @@ -693,7 +694,7 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
->  	if (interrupt == 0)
->  		return IRQ_NONE;
->  
-> -	priv->irq_tested = true;
-> +	set_bit(TPM_TIS_IRQ_TESTED, &priv->irqtest_flags);
->  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
->  		wake_up_interruptible(&priv->read_queue);
->  	if (interrupt & TPM_INTF_LOCALITY_CHANGE_INT)
-> @@ -779,7 +780,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  	if (rc < 0)
->  		return rc;
->  
-> -	priv->irq_tested = false;
-> +	clear_bit(TPM_TIS_IRQ_TESTED, &priv->irqtest_flags);
->  
->  	/* Generate an interrupt by having the core call through to
->  	 * tpm_tis_send
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> index 3be24f221e32..0f29d0b68c3e 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -88,11 +88,15 @@ enum tpm_tis_flags {
->  	TPM_TIS_INVALID_STATUS		= BIT(1),
->  };
->  
-> +enum tpm_tis_irqtest_flags {
-> +	TPM_TIS_IRQ_TESTED		= BIT(0),
-> +};
-> +
->  struct tpm_tis_data {
->  	u16 manufacturer_id;
->  	int locality;
->  	int irq;
-> -	bool irq_tested;
-> +	unsigned long irqtest_flags;
->  	unsigned long flags;
->  	void __iomem *ilb_base_addr;
->  	u16 clkrun_enabled;
+> +				rc = request_locality(chip, 0);
+> +				if (rc < 0)
+> +					goto out_err;
+>  				disable_interrupts(chip);
+> +				release_locality(chip, 0);
+>  			}
+>  		} else {
+>  			tpm_tis_probe_irq(chip, intmask);
 > -- 
 > 2.36.1
 > 
 
-Otherwise looks fine, but please add TPM_TIS_IRQ_TESTED to 'flags', and
-convert existing sites to use set_bit() and and test_bit().
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
