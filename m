@@ -2,189 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49CE54CDB3
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 18:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B63254D06C
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jun 2022 19:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237134AbiFOQDm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jun 2022 12:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S236365AbiFORyW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jun 2022 13:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbiFOQDk (ORCPT
+        with ESMTP id S235028AbiFORyV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:03:40 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16F9237EF;
-        Wed, 15 Jun 2022 09:03:37 -0700 (PDT)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LNVRp2wCgz683yD;
-        Thu, 16 Jun 2022 00:01:58 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 15 Jun 2022 18:03:35 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Wed, 15 Jun 2022 18:03:35 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-CC:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>,
-        "rob@landley.net" <rob@landley.net>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "niveditas98@gmail.com" <niveditas98@gmail.com>
-Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Index: AQHYgM+mPH1HC/8x8Uq7oovD5MPpKK1QoLWg
-Date:   Wed, 15 Jun 2022 16:03:35 +0000
-Message-ID: <d6479ebe656d4a75909b556d4cbcee22@huawei.com>
+        Wed, 15 Jun 2022 13:54:21 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6634E26117;
+        Wed, 15 Jun 2022 10:54:20 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 33E96520291;
+        Wed, 15 Jun 2022 19:54:18 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.5) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Wed, 15 Jun
+ 2022 19:54:17 +0200
+Date:   Wed, 15 Jun 2022 19:54:12 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>
+CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bug-cpio@gnu.org>,
+        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
+        <takondra@cisco.com>, <kamensky@cisco.com>, <hpa@zytor.com>,
+        <arnd@arndb.de>, <rob@landley.net>, <james.w.mcmechan@gmail.com>,
+        <niveditas98@gmail.com>, Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v4 1/3] initramfs: add file metadata
+Message-ID: <20220615175412.GA7029@lxhi-065>
 References: <20190523121803.21638-1-roberto.sassu@huawei.com>
- <20220615155034.1271240-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220615155034.1271240-1-alexandr.lobakin@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.21]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+ <20190523121803.21638-2-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190523121803.21638-2-roberto.sassu@huawei.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.5]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Alexander Lobakin [mailto:alexandr.lobakin@intel.com]
-> Sent: Wednesday, June 15, 2022 5:51 PM
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> Date: Thu, 23 May 2019 14:18:00 +0200
+Hello Roberto,
+Hello Mimi,
+
+On Thu, May 23, 2019 at 02:18:01PM +0200, Roberto Sassu wrote:
+> From: Mimi Zohar <zohar@linux.vnet.ibm.com>
 > 
-> > This patch set aims at solving the following use case: appraise files from
-> > the initial ram disk. To do that, IMA checks the signature/hash from the
+> This patch adds metadata to a file from a supplied buffer. The buffer might
+> contains multiple metadata records. The format of each record is:
 > 
-> Hi,
-> is this[0] relatable somehow?
-
-Hi Alexander
-
-seems a separate problem. For that, we opted for having a dedicated
-kernel option:
-
-https://github.com/openeuler-mirror/kernel/commit/18a502f7e3b1de7b9ba0c70896ce08ee13d052da
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Yang Xi, Li He
-
-> > security.ima xattr. Unfortunately, this use case cannot be implemented
-> > currently, as the CPIO format does not support xattrs.
-> >
-> > This proposal consists in including file metadata as additional files named
-> > METADATA!!!, for each file added to the ram disk. The CPIO parser in the
-> > kernel recognizes these special files from the file name, and calls the
-> > appropriate parser to add metadata to the previously extracted file. It has
-> > been proposed to use bit 17:16 of the file mode as a way to recognize files
-> > with metadata, but both the kernel and the cpio tool declare the file mode
-> > as unsigned short.
-> >
-> > The difference from v2, v3 (https://lkml.org/lkml/2019/5/9/230,
-> > https://lkml.org/lkml/2019/5/17/466) is that file metadata are stored in
-> > separate files instead of a single file. Given that files with metadata
-> > must immediately follow the files metadata will be added to, image
-> > generators have to be modified in this version.
-> >
-> > The difference from v1 (https://lkml.org/lkml/2018/11/22/1182) is that
-> > all files have the same name. The file metadata are added to is always the
-> > previous one, and the image generator in user space will make sure that
-> > files are in the correct sequence.
-> >
-> > The difference with another proposal
-> > (https://lore.kernel.org/patchwork/cover/888071/) is that xattrs can be
-> > included in an image without changing the image format. Files with metadata
-> > will appear as regular files. It will be task of the parser in the kernel
-> > to process them.
-> >
-> > This patch set extends the format of data defined in patch 9/15 of the last
-> > proposal. It adds header version and type, so that new formats can be
-> > defined and arbitrary metadata types can be processed.
-> >
-> > The changes introduced by this patch set don't cause any compatibility
-> > issue: kernels without the metadata parser simply extract the special files
-> > and don't process metadata; kernels with the metadata parser don't process
-> > metadata if the special files are not included in the image.
-> >
-> > >>From the kernel space perspective, backporting this functionality to older
-> > kernels should be very easy. It is sufficient to add two calls to the new
-> > function do_process_metadata() in do_copy(), and to check the file name in
-> > do_name(). From the user space perspective, unlike the previous version of
-> > the patch set, it is required to modify the image generators in order to
-> > include metadata as separate files.
-> >
-> > Changelog
-> >
-> > v3:
-> > - include file metadata as separate files named METADATA!!!
-> > - add the possibility to include in the ram disk arbitrary metadata types
-> >
-> > v2:
-> > - replace ksys_lsetxattr() with kern_path() and vfs_setxattr()
-> >   (suggested by Jann Horn)
-> > - replace ksys_open()/ksys_read()/ksys_close() with
-> >   filp_open()/kernel_read()/fput()
-> >   (suggested by Jann Horn)
-> > - use path variable instead of name_buf in do_readxattrs()
-> > - set last byte of str to 0 in do_readxattrs()
-> > - call do_readxattrs() in do_name() before replacing an existing
-> >   .xattr-list
-> > - pass pathname to do_setxattrs()
-> >
-> > v1:
-> > - move xattr unmarshaling to CPIO parser
-> >
-> >
-> > Mimi Zohar (1):
-> >   initramfs: add file metadata
-> >
-> > Roberto Sassu (2):
-> >   initramfs: read metadata from special file METADATA!!!
-> >   gen_init_cpio: add support for file metadata
-> >
-> >  include/linux/initramfs.h |  21 ++++++
-> >  init/initramfs.c          | 137 +++++++++++++++++++++++++++++++++++++-
-> >  usr/Kconfig               |   8 +++
-> >  usr/Makefile              |   4 +-
-> >  usr/gen_init_cpio.c       | 137 ++++++++++++++++++++++++++++++++++++--
-> >  usr/gen_initramfs_list.sh |  10 ++-
-> >  6 files changed, 305 insertions(+), 12 deletions(-)
-> >  create mode 100644 include/linux/initramfs.h
-> >
-> > --
-> > 2.17.1
+> <metadata len (ASCII, 8 chars)><version><type><metadata>
 > 
-> [0] https://lore.kernel.org/all/20210702233727.21301-1-alobakin@pm.me
+> For now, only the TYPE_XATTR metadata type is supported. The specific
+> format of this metadata type is:
 > 
-> Thanks,
-> Olek
+> <xattr #N name>\0<xattr #N value>
+> 
+> [kamensky: fixed restoring of xattrs for symbolic links by using
+>            sys_lsetxattr() instead of sys_setxattr()]
+> 
+> [sassu: removed state management, kept only do_setxattrs(), added support
+>         for generic file metadata, replaced sys_lsetxattr() with
+>         vfs_setxattr(), added check for entry_size, added check for
+>         hdr->c_size, replaced strlen() with strnlen(); moved do_setxattrs()
+>         before do_name()]
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
+> Signed-off-by: Victor Kamensky <kamensky@cisco.com>
+> Signed-off-by: Taras Kondratiuk <takondra@cisco.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  include/linux/initramfs.h | 21 ++++++++++
+>  init/initramfs.c          | 88 ++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 107 insertions(+), 2 deletions(-)
+>  create mode 100644 include/linux/initramfs.h
+
+[..]
+
+> +static int __init do_setxattrs(char *pathname, char *buf, size_t size)
+> +{
+> +	struct path path;
+> +	char *xattr_name, *xattr_value;
+> +	size_t xattr_name_size, xattr_value_size;
+> +	int ret;
+> +
+> +	xattr_name = buf;
+> +	xattr_name_size = strnlen(xattr_name, size);
+> +	if (xattr_name_size == size) {
+> +		error("malformed xattrs");
+> +		return -EINVAL;
+> +	}
+> +
+
+[..]
+
+> +
+> +		switch (hdr->c_type) {
+> +		case TYPE_XATTR:
+> +			do_setxattrs(pathname, buf + sizeof(*hdr),
+> +				     entry_size - sizeof(*hdr));
+
+Is it on purpose not to check the return value of do_setxattrs?
+
+I think I would have more comfort and piece of mind if I knew
+the return value is properly checked and acted upon. Otherwise,
+why returning an int from within do_setxattrs() at all?
+
+BR, Eugeniu
