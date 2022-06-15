@@ -2,113 +2,194 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53D354D440
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 00:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3AE54D44B
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 00:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347891AbiFOWIv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jun 2022 18:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S1349927AbiFOWMm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jun 2022 18:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350414AbiFOWIe (ORCPT
+        with ESMTP id S1349884AbiFOWMl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:08:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD24A42A05;
-        Wed, 15 Jun 2022 15:08:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655330901;
-        bh=YTzmET/tH2HD8vOlvz/aarT5wNU4Ip1N3B72KZ7IcGk=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=M+R8dVlcrWrxDoEJaFd+2B2arPG4kRQ5o/Pl5ml8s6+JVeg0LtR8tLsWo1NiERQf+
-         c9vEbJBQOooek12I1zWL5F6etOx15X4sC1vWWPDHqj9VEINmLPIPm2sG3slvmxn3i4
-         Wk+Y6oaySoEqHaYUcLXD53PjocQW5gW2giI2ytKQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.17]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N3siG-1nbIuL2VpQ-00zoYT; Thu, 16
- Jun 2022 00:08:21 +0200
-Subject: Re: [PATCH v5 06/10] tpm, tpm_tis: Only handle supported interrupts
- in wait_for_tpm_stat()
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
- <20220610110846.8307-7-LinoSanfilippo@gmx.de> <YqojLqfoy2NXTTGV@iki.fi>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <a4a88b28-0ea0-b285-fe5c-d42944032db2@gmx.de>
-Date:   Thu, 16 Jun 2022 00:08:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 15 Jun 2022 18:12:41 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F59E10B3
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jun 2022 15:12:33 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id c21so17121708wrb.1
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jun 2022 15:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0nYF2+L0+nfm2ZZrGFnn5kpR2H6SVKM0WrlyyHrypck=;
+        b=IfERn+03UqWtxXLyO34clbji2GIEw/NmkaNlK0oeunYY/1Hsy4RFRtzmZRukgQ38zS
+         BZJDIKoEyYef2iPVHLWo2zeziufyg23fZvcvQwstDSlaP3Co8MYRvbvCA8cN7dzV+i86
+         M9xQetZI485xvvbOtVjDy+1wJG/y2zrDyysgM0Elv9145+H/1cUqnn220imqz118qZVu
+         +GGQzJ2Ak9lVih6J0scW99b1gdgm0STHKRJXpOwAXryBgGma7c/m+VuTprCV/CjwXA/q
+         qDPvEDudDimD3QikadNk3tJv8DuFl1zzvXPFPycPuDupe0Ih4S7u7yEFoOf/tZzq7MK0
+         J8zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0nYF2+L0+nfm2ZZrGFnn5kpR2H6SVKM0WrlyyHrypck=;
+        b=1lvF3rtyHjqpB/hv0go1V7atlREgyx7JLddEFpttRBuOAsobpwKEcgr4oNPBjr1zV3
+         YaYeooZec4C/hSqt5KXVGrobE/cJGdvmOb3QwgJHuxNvBRH/xVkkggk9zBd2nC27mvDS
+         8+ppLtwrbRsWvCHGVAk1BD63QYIqpWJamRIhOz7vVJabbqy8M9G1gQK+sUICC2UVW/qm
+         K0G+dRFbH797dUSiTZ5S08WD/pDGNPz56n0qiQf6+zEl7LThxEOpu5K12wD3f3JCiDYJ
+         DHa0ZgpD6YfxbXiEJ/CuDv6ebFjedJQWjIXQ2gs2GeHAbrJ6f0DBc/iMT71lUNO5u5H6
+         sQ5g==
+X-Gm-Message-State: AJIora9vA7B07g+CqMfdpDgsxtkJWsV0nyf75OZ4pDA9mgXlOTsvw4J2
+        iBmM5iwPZBa9csWzHjDeHUwIYb9WKv1nRADMA8UR
+X-Google-Smtp-Source: AGRyM1u/WGHw/3tv1rjJVxbCcTw2Va1S87bCBsDXwO9w9w+rsBwJm64Rn4aYl5YK1dRF5MTqCXjGUMyJeamkdiB6/+E=
+X-Received: by 2002:a05:6000:230:b0:210:31ca:28b8 with SMTP id
+ l16-20020a056000023000b0021031ca28b8mr1794755wrz.538.1655331152126; Wed, 15
+ Jun 2022 15:12:32 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YqojLqfoy2NXTTGV@iki.fi>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ar6jD7PFDwwoQrLs5YTXC8YDLE4YHM7JD6SlZk+JA+1urt37hif
- xYp1fE1XpWkUVCjwSg9Q9jpYtPvHLJRFfunu33pmok024ISn4M2fUw64JE4TEVVIOg6ZfDz
- GWDlw3yynrw42c7PcdLgPUinItNCEMGMIq/ZdBsxtgogj5eyaDnXWLxOWSWl+txwFa6emZ5
- CwtA3y8oXhGGHfI+EQ0Og==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YHYBtC2OOZ8=:gwZGfpcLCOoQ6RZA9zz8ZG
- 3Se0kGCFHbwQtdW8bkpkC4kUYErd2gKFdUzPXWj65dxKYtp3bpECHcPfM5PsUsErg6ZJ/QLMk
- SpiGxrFvZTie0gCdZlHEqiKuu3shQ21AU9i9DHMgknQgy+cOZZR4+Vk1RiWEf+Uyxhr+R5Qr8
- 9BEgtexupotZ7jOoEIvO/E9KISlKdE1lXnXBTy9dUkay3o16PYYaoL73XPRTZwd+hFb4WVeAn
- WUkXzzZVHgnlLNPz2u57CJ5KOUPBeCqc9V6LTeTGPxUGVTgfWM+4VyrmdWkLQsUvPAQcYSXEj
- ICqVxw+6FUHUZuF/cq5GV+PgBN3b6/HKI7Np48/dN+CIcDXjhanuHeGBZxEdmNx5gRKdpp3B8
- e00xTszh+SGw4ePXqsKDlesWbGQP7d48cYe7CbXhCH93iw1gE/IDZPaZXBY21tJyEPLgafqvn
- leMloaYjUkya21uV2nFi+0D/Eiwp2NeRVoBl1SuxdSdlimjNEIpxZKOcER6tgFk4p38S2Und0
- UylynBR+8sq4IYhKVKMt39mH2fGv8LzTk18wBbs424Ndu8bLdpEjkA+00/IQKIQJQfvEfjWSP
- NbmmSuWoIDxJ2lY1ewJ//FKpWTr6EzbhvtchHgW7PydqNuXPH53wgmXSTTslyWkSdNFjmCM9R
- I6fUYmx02kc/L0zkpDjrnPu416CkjPOGKepkpUKWbx08vrAdMpid/7gRUboyPkJEjJKldmuXC
- aNVPdx5qxN2qacWM/txsAFlmhOKS0aTP4OOQX60w4k6xRppLJWtthZyS+ciYajNFCzLQBoOy/
- QAgOxcfLsRQsOSlIe2dPMjA/pNqrfT3dyrQn7N+uvc69D7klM21nHms5zhSOwDF0K8/tJpyGm
- ZeFkSeoJs2dq/+1ENWB2cPBMw18COFnpyAjrvrcPX2lMNEX5HZSQtzny/+7Vftk3ngn8GY/l5
- vQF05Eb9LOtOMg9WZ6TFBnvvNMGLmerFNKjUgqjOvelGqkINT98zHJd8YMBD/ApGzcyFt5OMB
- bZgvJqIx8j+CWqcZx4tM5bp1Uphbny6WWNlB/qsUmH3bX95v1/FZ/2eS23ESNdK4rR/TMccnu
- VwMN/Z6E53ObIVaBFTTgtteXhXza0tAg4GQwlBKCowMCPEBWSxEDkFDYg==
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1654714889-26728-1-git-send-email-deven.desai@linux.microsoft.com>
+ <1654714889-26728-3-git-send-email-deven.desai@linux.microsoft.com>
+In-Reply-To: <1654714889-26728-3-git-send-email-deven.desai@linux.microsoft.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 15 Jun 2022 18:12:21 -0400
+Message-ID: <CAHC9VhQum+az8SLd64rPfi_fyHGE2nePodF_pTzUtk-8y6wpSg@mail.gmail.com>
+Subject: Re: [RFC PATCH v8 02/17] ipe: add policy parser
+To:     Deven Bowers <deven.desai@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 15.06.22 at 20:21, Jarkko Sakkinen wrote:
-> On Fri, Jun 10, 2022 at 01:08:42PM +0200, LinoSanfilippo@gmx.de wrote:
->> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>
->> According to the TPM Interface Specification (TIS) interrupts for
->> "stsValid" and "commandReady" might not be supported.
->>
->> Take this into account and only wait for interrupts which are actually =
-in
->> use in wait_for_tpm_stat(). After that process all the remaining status
->> changes by polling the status register.
->>
->> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->> ---
->>  drivers/char/tpm/tpm_tis_core.c | 46 ++++++++++++++++++++++++---------
->>  1 file changed, 34 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
-_core.c
->> index 2f03fefa1706..028bec44362d 100644
->> --- a/drivers/char/tpm/tpm_tis_core.c
->> +++ b/drivers/char/tpm/tpm_tis_core.c
->> @@ -53,41 +53,63 @@ static int wait_for_tpm_stat(struct tpm_chip *chip,=
- u8 mask,
->>  	long rc;
->>  	u8 status;
->>  	bool canceled =3D false;
->> +	u8 active_irqs =3D 0;
+On Wed, Jun 8, 2022 at 3:03 PM Deven Bowers
+<deven.desai@linux.microsoft.com> wrote:
 >
-> Something like sts_mask would be a better name. Calling it
-> 'active_irqs' is a bit confusing.
+> IPE's interpretation of the what the user trusts is accomplished through
+> its policy. IPE's design is to not provide support for a single trust
+> provider, but to support multiple providers to enable the end-user to
+> choose the best one to seek their needs.
+>
+> This requires the policy to be rather flexible and modular so that
+> integrity providers, like fs-verity, dm-verity, dm-integrity, or
+> some other system, can plug into the policy with minimal code changes,
+> and IPE can
+>
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+>
+> ---
+> v2:
+>   + Split evaluation loop, access control hooks,
+>     and evaluation loop from policy parser and userspace
+>     interface to pass mailing list character limit
+>
+> v3:
+>   + Move policy load and activation audit event to 03/12
+>   + Fix a potential panic when a policy failed to load.
+>   + use pr_warn for a failure to parse instead of an
+>     audit record
+>   + Remove comments from headers
+>   + Add lockdep assertions to ipe_update_active_policy and
+>     ipe_activate_policy
+>   + Fix up warnings with checkpatch --strict
+>   + Use file_ns_capable for CAP_MAC_ADMIN for securityfs
+>     nodes.
+>   + Use memdup_user instead of kzalloc+simple_write_to_buffer.
+>   + Remove strict_parse command line parameter, as it is added
+>     by the sysctl command line.
+>   + Prefix extern variables with ipe_
+>
+> v4:
+>   + Remove securityfs to reverse-dependency
+>   + Add SHA1 reverse dependency.
+>   + Add versioning scheme for IPE properties, and associated
+>     interface to query the versioning scheme.
+>   + Cause a parser to always return an error on unknown syntax.
+>   + Remove strict_parse option
+>   + Change active_policy interface from sysctl, to securityfs,
+>     and change scheme.
+>
+> v5:
+>   + Cause an error if a default action is not defined for each
+>     operaiton.
+>   + Minor function renames
+>
+> v6:
+>   + No changes
+>
+> v7:
+>   + Further split parser and userspace interface into two
+>     separate commits, for easier review.
+>
+>   + Refactor policy parser to make code cleaner via introducing a
+>     more modular design, for easier extension of policy, and
+>     easier review.
+>
+> v8:
+>   + remove unnecessary pr_info emission on parser loading
+>
+>   + add explicit newline to the pr_err emitted when a parser
+>     fails to load.
+> ---
+>  include/asm-generic/vmlinux.lds.h    |  16 +
+>  security/ipe/Makefile                |   6 +
+>  security/ipe/ipe.c                   |  61 ++
+>  security/ipe/ipe.h                   |   5 +
+>  security/ipe/ipe_parser.h            |  59 ++
+>  security/ipe/modules.c               | 109 +++
+>  security/ipe/modules.h               |  17 +
+>  security/ipe/modules/ipe_module.h    |  33 +
+>  security/ipe/parsers.c               | 143 ++++
+>  security/ipe/parsers/Makefile        |  12 +
+>  security/ipe/parsers/default.c       | 106 +++
+>  security/ipe/parsers/policy_header.c | 126 ++++
+>  security/ipe/policy.c                | 946 +++++++++++++++++++++++++++
+>  security/ipe/policy.h                |  97 +++
+>  14 files changed, 1736 insertions(+)
+>  create mode 100644 security/ipe/ipe_parser.h
+>  create mode 100644 security/ipe/modules.c
+>  create mode 100644 security/ipe/modules.h
+>  create mode 100644 security/ipe/modules/ipe_module.h
+>  create mode 100644 security/ipe/parsers.c
+>  create mode 100644 security/ipe/parsers/Makefile
+>  create mode 100644 security/ipe/parsers/default.c
+>  create mode 100644 security/ipe/parsers/policy_header.c
+>  create mode 100644 security/ipe/policy.c
+>  create mode 100644 security/ipe/policy.h
 
-Ok.
+I had a few small comments while reading through this code, e.g. try
+to drop the support for quoted values, but I think my big issue here
+is that non-trivial string parsers in the kernel make me nervous and
+with +1700 lines spread across 14 files this is definitely a
+non-trivial parser.
 
-Regards,
-Lino
+I understand the basic 'key=value' pair format, and I think that's
+okay, but I worry about the added complexity in the parser brought
+about by the need to introduce an abstraction layer between the core
+parser(s) and modules.  I realize flexibility is an important part of
+IPE, and this relies on the ability to add support for new language
+keys/modules, but I don't believe that requires the level of
+indirection seen here.
+
+I'm not asking you to make radical changes to the IPE policy language,
+but I do believe spending some time to rethink how you parse the
+language would be a good idea.  When in doubt keep the parser as
+simple as possible, you can always add complexity and more nuance in
+the future when the language requires it.  The IPE policy language
+grammar is the immutable kernel/userspace API promise, not the parser
+implementation.
+
+--
+paul-moore.com
