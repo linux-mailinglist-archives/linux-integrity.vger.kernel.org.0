@@ -2,97 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFAC54D758
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 03:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F3D54D8B3
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 04:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350509AbiFPBu0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jun 2022 21:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
+        id S1354878AbiFPC7i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jun 2022 22:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350182AbiFPBuS (ORCPT
+        with ESMTP id S1350287AbiFPC7i (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jun 2022 21:50:18 -0400
+        Wed, 15 Jun 2022 22:59:38 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28CB6580FB
-        for <linux-integrity@vger.kernel.org>; Wed, 15 Jun 2022 18:50:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 725B55A151
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jun 2022 19:59:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655344217;
+        s=mimecast20190719; t=1655348376;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Mfnj3kbt/mcFDC8cZyL7mlTMEbSGwlIrcY0mmV2SXko=;
-        b=jMvgI0vwYwJZqmZk5ChEEZ6iHe7CEXkLNaxZXBNZrPMnZ5zr4QU7NEC6uC6b/ppIyCkd7X
-        vcyPYEwEGVsig9Y9eXKDBK+WLYIjjg2dBOtq2zE+smQFqSy8E49VFOU8pZrSz1SqLuBBaN
-        1FtndXpAN+civPuSV/GCnaABgwRNLto=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=SyBYL1pY81YOYBd6hVWvRLbn1C7svVUvtneGDVFIWeM=;
+        b=N1ekUpYOkbZnpHthobxo7TijCae/IuzIpd6MBeryTaYhQR498q14nBSVKWyKcZ2VieRC3p
+        NJaTJz8KkGHMSn7iGPzkMHQr8JawB5h1gafkgaE+xA4B4DeIAuG8HKB8U5l8nVBw1804F1
+        CCgPVNI0878kLnqCAUGhWzG44qcWr/8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-572-H4CJQzB4N-6uxp2JwBYUBQ-1; Wed, 15 Jun 2022 21:50:15 -0400
-X-MC-Unique: H4CJQzB4N-6uxp2JwBYUBQ-1
-Received: by mail-pg1-f197.google.com with SMTP id u71-20020a63854a000000b004019c5cac3aso7327513pgd.19
-        for <linux-integrity@vger.kernel.org>; Wed, 15 Jun 2022 18:50:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Mfnj3kbt/mcFDC8cZyL7mlTMEbSGwlIrcY0mmV2SXko=;
-        b=PmO7PevUoBYOFLAxH1ArdT/s7av2OyW+Ef3iUsTY2j/UPQ2psHLXnHgEadheoitcbT
-         Y9MIM9M5uY9RNpmJCkQxKxMCWHkokn7JnOPLXx/ygQXoDQ9DRMDY0tN80NXsts/ypc8A
-         qMo2bTNVO1ADRaAiVfeZilb3bnQqFcuyRWpXPjbm7nSOvhSlchTUWL2S+Z9mWCOV6o6b
-         /6+etYeMgjxd3RsTMp04NHzYq1hdktD8COmW6q2bVnb+O7zHjK69SnmkbZL412S0zUsY
-         EnNbDX6n0Pg4Ghu/FDrza10TmM9548BHzvq32IumGfLk9Muewo7fB69ptZCvItrtTYpX
-         727w==
-X-Gm-Message-State: AJIora9Yd2PZX2bFzhR4xWe86dgHTOobZaAykIeESNrruI3nd9/fei20
-        sQTYOf/BUaJfAo7HBi4Qa8yoODUpenx4DTUoJg6Ukdlb0EMjJnsis8ohRSEWQoB/5D9sv279ceM
-        eD5LTK5U40fqUrSL0gAZT7DoHWNa1
-X-Received: by 2002:a63:1e1d:0:b0:401:a251:767e with SMTP id e29-20020a631e1d000000b00401a251767emr2357338pge.26.1655344214526;
-        Wed, 15 Jun 2022 18:50:14 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sEarbrrVxjiXB2Z4yglIOjHVgXmEDqqN6H9xo+0t/vhcHtsIxwYcmDDYcM0diomczP0LPViQ==
-X-Received: by 2002:a63:1e1d:0:b0:401:a251:767e with SMTP id e29-20020a631e1d000000b00401a251767emr2357317pge.26.1655344214223;
-        Wed, 15 Jun 2022 18:50:14 -0700 (PDT)
-Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id k16-20020a17090aaa1000b001e3351cb7fbsm2464671pjq.28.2022.06.15.18.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 18:50:13 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 09:46:50 +0800
-From:   Coiby Xu <coxu@redhat.com>
+ us-mta-528-e7JYHVoOPaK7Uddguyd0jw-1; Wed, 15 Jun 2022 22:59:33 -0400
+X-MC-Unique: e7JYHVoOPaK7Uddguyd0jw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C5FE9802C17;
+        Thu, 16 Jun 2022 02:59:32 +0000 (UTC)
+Received: from localhost (ovpn-12-237.pek2.redhat.com [10.72.12.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B4881410DD8;
+        Thu, 16 Jun 2022 02:59:31 +0000 (UTC)
+Date:   Thu, 16 Jun 2022 10:59:27 +0800
+From:   Baoquan He <bhe@redhat.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Baoquan He <bhe@redhat.com>,
-        Michal =?utf-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>,
-        Heiko Carstens <hca@linux.ibm.com>, akpm@linux-foundation.org,
-        kexec@lists.infradead.org, keyrings@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Chun-Yi Lee <jlee@suse.com>, stable@vger.kernel.org,
-        Philipp Rudo <prudo@linux.ibm.com>,
-        linux-security-module@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: Re: [PATCH v8 4/4] kexec, KEYS, s390: Make use of built-in and
- secondary keyring for signature verification
-Message-ID: <20220616014650.wd6saed72breqeyb@Rk>
-References: <20220512070123.29486-1-coxu@redhat.com>
- <20220512070123.29486-5-coxu@redhat.com>
- <YoTYm6Fo1vBUuJGu@osiris>
- <20220519003902.GE156677@MiWiFi-R3L-srv>
- <c47299b899da4ad4b6d3ad637022ad82c8ed6ed2.camel@linux.ibm.com>
- <YoZSl84aJYTscgfO@MiWiFi-R3L-srv>
- <20220519171134.GN163591@kunlun.suse.cz>
+Cc:     Jonathan McDowell <noodles@fb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Subject: Re: [PATCH v5] x86/kexec: Carry forward IMA measurement log on kexec
+Message-ID: <Yqqcj0/j+fC6/K5v@MiWiFi-R3L-srv>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+ <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
+ <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
+ <YqcRuQFq5fg1XhB/@noodles-fedora.dhcp.thefacebook.com>
+ <60813f86e960d12ed3738531a14382769a061a02.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519171134.GN163591@kunlun.suse.cz>
+In-Reply-To: <60813f86e960d12ed3738531a14382769a061a02.camel@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,54 +77,100 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+On 06/13/22 at 05:01pm, Mimi Zohar wrote:
+> On Mon, 2022-06-13 at 10:30 +0000, Jonathan McDowell wrote:
+> > On kexec file load Integrity Measurement Architecture (IMA) subsystem
+> > may verify the IMA signature of the kernel and initramfs, and measure
+> > it. The command line parameters passed to the kernel in the kexec call
+> > may also be measured by IMA. A remote attestation service can verify
+> > a TPM quote based on the TPM event log, the IMA measurement list, and
+> > the TPM PCR data. This can be achieved only if the IMA measurement log
+> > is carried over from the current kernel to the next kernel across
+> > the kexec call.
+> > 
+> > powerpc and ARM64 both achieve this using device tree with a
+> > "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
+> > device tree, so use the setup_data mechanism to pass the IMA buffer to
+> > the new kernel.
+> > 
+> > (Mimi, Baoquan, I haven't included your reviewed-bys because this has
+> >  changed the compile guards around the ima_(free|get)_kexec_buffer
+> >  functions in order to fix the warning the kernel test robot found. I
+> >  think this is the right thing to do and avoids us compiling them on
+> >  platforms where they won't be used. The alternative would be to drop
+> >  the guards in ima.h that Mimi requested for v4.)hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+> > 
+> > Signed-off-by: Jonathan McDowell <noodles@fb.com>
+> > ---
+> > v5:
+> >  - Guard ima_(free|get)_kexec_buffer functions with
+> >    CONFIG_HAVE_IMA_KEXEC (kernel test robot)
+> >  - Use setup_data_offset in setup_boot_parameters and update rather than
+> >    calculating in call to setup_ima_state.
+> > v4:
+> >  - Guard ima.h function prototypes with CONFIG_HAVE_IMA_KEXEC
+> 
+> > diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+> > index 8d374cc552be..42a6c5721a43 100644
+> > --- a/drivers/of/kexec.c
+> > +++ b/drivers/of/kexec.c
+> > @@ -9,6 +9,7 @@
+> >   *  Copyright (C) 2016  IBM Corporation
+> >   */
+> >  
+> > +#include <linux/ima.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/kexec.h>
+> >  #include <linux/memblock.h>
+> > @@ -115,6 +116,7 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
+> >  	return 0;
+> >  }
+> >  
+> > +#ifdef CONFIG_HAVE_IMA_KEXEC
+> >  /**
+> >   * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+> >   * @addr:	On successful return, set to point to the buffer contents.
+> > @@ -173,6 +175,7 @@ int ima_free_kexec_buffer(void)
+> >  
+> >  	return memblock_phys_free(addr, size);
+> >  }
+> > +#endif
+> 
+> Inside ima_{get,free}_kexec_buffer(), there's no need now to test
+> whether CONFIG_HAVE_IMA_KEXEC is enabled.
+> 
+>         if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+>                 return -ENOTSUPP;
 
->> >
->> > This patch set could probably go through KEYS/KEYRINGS_INTEGRITY, but
->> > it's kind of late to be asking.  Has it been in linux-next?  Should I
->> > assume this patch set has been fully tested or can we get some "tags"?
->>
-[...]
->>
->> IIRC, Coiby has tested it on x86_64/arm64, not sure if he took test on
->> s390. No, this hasn't been in linux-next.
+Indeed. The #ifdef added by Jonathan is redundant. Not sure if the
+original IS_ENABLED(CONFIG_HAVE_IMA_KEXEC) checking inside
+ima_{get,free}_kexec_buffer() is intended. I ever reviewed below patch,
+the IS_ENABLED(CONFIG_XX) inside static function will make the function
+compiled, and will be optimized out if the CONFIG_XX is not enabled.
+However, it only has effect on static function. Here,
+ima_{get,free}_kexec_buffer() is not static, likely we should remove the
+inside IS_ENABLED() checking.
 
-For arm64, recently I did a new round of test and the patches works as
-expected,
-   1. Build 5.19.0-rc2
-   2. generate keys and add them to .secondary_trusted_keys, MOK, UEFI
-      db; 
-   3. sign different kernel images with different keys including keys
-      from .builtin_trusted_key, .secondary_trusted_keys keyring, UEFI db
-      key and MOK key 
-   4. Without lockdown, all kernel images can be kexec'ed; with lockdown
-      enabled, only the kernel image signed by the key from
-      .builtin_trusted_key can be kexec'ed
+commit 4ece09be9913a87ff99ea347fd7e7adad5bdbc8f
+Author: Jisheng Zhang <jszhang@kernel.org>
+Date:   Wed Mar 23 16:06:39 2022 -0700
 
-Then I build a new kernel with the patches applied and confirm all
-kernel images can be kexec'ed.
+    x86/setup: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
+    
+    Replace the conditional compilation using "#ifdef CONFIG_KEXEC_CORE" by a
+    check for "IS_ENABLED(CONFIG_KEXEC_CORE)", to simplify the code and
+    increase compile coverage.
 
->
->I used the s390 code on powerpc and there it did not work because the
->built-in key was needed to verify the kernel.
->
->I did not really run this on s390, only ported the fix I needed on
->powerpc back to s390.
+Other than this one Mimi pointed out, this patch looks good to me, thx.
 
-For 390, I commented out the code that skips signature verification
-when secure boot is not enabled since I couldn't find a machine that
-supports secure boot and confirm before applying the patch, kernel
-images signed by keys from .builtin_trusted_key, .secondary_trusted_keys
-couldn't be kexec'ed when lockdown is enabled; after applying the
-patch, those kernel images could be kexec'ed. 
+Reviewed-by: Baoquan He <bhe@redhat.com>
 
->
->Thanks
->
->Michal
->
-
--- 
-Best regards,
-Coiby
+> 
+> 
+> >  
+> >  /**
+> >   * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
+> > diff --git a/include/linux/ima.h b/include/linux/ima.h
+> 
+> 
 
