@@ -2,103 +2,152 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E3254D54B
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 01:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFAC54D758
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 03:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350227AbiFOXbB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Jun 2022 19:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S1350509AbiFPBu0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Jun 2022 21:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350313AbiFOXaz (ORCPT
+        with ESMTP id S1350182AbiFPBuS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Jun 2022 19:30:55 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AAD192B5;
-        Wed, 15 Jun 2022 16:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655335828;
-        bh=fJpKWfjPw4yXjZfJL9Hj+n1PhzBhGLJ/rI0WGDhjV10=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=fPleUF/dvG/B264MG/yMH+rR5Jmzxn8IjIDQG/Cknbe++ffCrZ73KrBavOstOipYN
-         Ez9LN4pkzwge+tZhFF/9Jp/rPnxySAT1BY+VuPfLf9nkG9cTiaHdSM8ZhA78RTWJdQ
-         92JySZ85qrcP1UtiJSnz0z9cEMRb7WGkcZIq48Fs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.17]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MgNh1-1nVapf18Ih-00hs0W; Thu, 16
- Jun 2022 01:30:28 +0200
-Subject: Re: [PATCH v5 10/10] tpm, tpm_tis: Enable interrupt test
-To:     =?UTF-8?Q?Michael_Niew=c3=b6hner?= <linux@mniewoehner.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James.Bottomley@hansenpartnership.com,
-        twawrzynczak <twawrzynczak@chromium.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
- <20220610110846.8307-11-LinoSanfilippo@gmx.de> <YqokW/cNLrrsZ2ib@iki.fi>
- <c610a318258198f72a53541c551c0c595a205329.camel@mniewoehner.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <1c90aba2-5874-7251-ff19-4b6c5bc19962@gmx.de>
-Date:   Thu, 16 Jun 2022 01:30:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 15 Jun 2022 21:50:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28CB6580FB
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jun 2022 18:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655344217;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mfnj3kbt/mcFDC8cZyL7mlTMEbSGwlIrcY0mmV2SXko=;
+        b=jMvgI0vwYwJZqmZk5ChEEZ6iHe7CEXkLNaxZXBNZrPMnZ5zr4QU7NEC6uC6b/ppIyCkd7X
+        vcyPYEwEGVsig9Y9eXKDBK+WLYIjjg2dBOtq2zE+smQFqSy8E49VFOU8pZrSz1SqLuBBaN
+        1FtndXpAN+civPuSV/GCnaABgwRNLto=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-572-H4CJQzB4N-6uxp2JwBYUBQ-1; Wed, 15 Jun 2022 21:50:15 -0400
+X-MC-Unique: H4CJQzB4N-6uxp2JwBYUBQ-1
+Received: by mail-pg1-f197.google.com with SMTP id u71-20020a63854a000000b004019c5cac3aso7327513pgd.19
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Jun 2022 18:50:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Mfnj3kbt/mcFDC8cZyL7mlTMEbSGwlIrcY0mmV2SXko=;
+        b=PmO7PevUoBYOFLAxH1ArdT/s7av2OyW+Ef3iUsTY2j/UPQ2psHLXnHgEadheoitcbT
+         Y9MIM9M5uY9RNpmJCkQxKxMCWHkokn7JnOPLXx/ygQXoDQ9DRMDY0tN80NXsts/ypc8A
+         qMo2bTNVO1ADRaAiVfeZilb3bnQqFcuyRWpXPjbm7nSOvhSlchTUWL2S+Z9mWCOV6o6b
+         /6+etYeMgjxd3RsTMp04NHzYq1hdktD8COmW6q2bVnb+O7zHjK69SnmkbZL412S0zUsY
+         EnNbDX6n0Pg4Ghu/FDrza10TmM9548BHzvq32IumGfLk9Muewo7fB69ptZCvItrtTYpX
+         727w==
+X-Gm-Message-State: AJIora9Yd2PZX2bFzhR4xWe86dgHTOobZaAykIeESNrruI3nd9/fei20
+        sQTYOf/BUaJfAo7HBi4Qa8yoODUpenx4DTUoJg6Ukdlb0EMjJnsis8ohRSEWQoB/5D9sv279ceM
+        eD5LTK5U40fqUrSL0gAZT7DoHWNa1
+X-Received: by 2002:a63:1e1d:0:b0:401:a251:767e with SMTP id e29-20020a631e1d000000b00401a251767emr2357338pge.26.1655344214526;
+        Wed, 15 Jun 2022 18:50:14 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sEarbrrVxjiXB2Z4yglIOjHVgXmEDqqN6H9xo+0t/vhcHtsIxwYcmDDYcM0diomczP0LPViQ==
+X-Received: by 2002:a63:1e1d:0:b0:401:a251:767e with SMTP id e29-20020a631e1d000000b00401a251767emr2357317pge.26.1655344214223;
+        Wed, 15 Jun 2022 18:50:14 -0700 (PDT)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id k16-20020a17090aaa1000b001e3351cb7fbsm2464671pjq.28.2022.06.15.18.50.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 18:50:13 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 09:46:50 +0800
+From:   Coiby Xu <coxu@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Baoquan He <bhe@redhat.com>,
+        Michal =?utf-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>,
+        Heiko Carstens <hca@linux.ibm.com>, akpm@linux-foundation.org,
+        kexec@lists.infradead.org, keyrings@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Chun-Yi Lee <jlee@suse.com>, stable@vger.kernel.org,
+        Philipp Rudo <prudo@linux.ibm.com>,
+        linux-security-module@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        "open list:S390" <linux-s390@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: Re: [PATCH v8 4/4] kexec, KEYS, s390: Make use of built-in and
+ secondary keyring for signature verification
+Message-ID: <20220616014650.wd6saed72breqeyb@Rk>
+References: <20220512070123.29486-1-coxu@redhat.com>
+ <20220512070123.29486-5-coxu@redhat.com>
+ <YoTYm6Fo1vBUuJGu@osiris>
+ <20220519003902.GE156677@MiWiFi-R3L-srv>
+ <c47299b899da4ad4b6d3ad637022ad82c8ed6ed2.camel@linux.ibm.com>
+ <YoZSl84aJYTscgfO@MiWiFi-R3L-srv>
+ <20220519171134.GN163591@kunlun.suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <c610a318258198f72a53541c551c0c595a205329.camel@mniewoehner.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:5bqKLG2yEju7Htztep1S9suzxDRr+iP1xCUz8I/lQbOfh2BQlrH
- 00Jp6iWqNJ2qivU2uQarqDTD5yYoQxbITOAGj+dGND2s0IbGhU8EXtoJQVjvTXXnDci9iEV
- uSxXT8/Trp2ErIHmNmYXgoVq9geoqQrKHGuDLAb/EVDA+EnIUh0rnhQUUFf5/cBGYmfeAhK
- V/C+Opa1KXzSA8mNNAX1w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3QSQ0IEDTlQ=:lPhR7H2yO8iwLtr++qAWBt
- BBg4aYW02FEwlc7lLcbtfRWoj4peT1VBoigPX4Ueqek7pNWi4Mfvf0f0F2TXAlkwpOaQnCOF0
- +ReANXjQLyT6gp4vbUsi5YzJctQi9abzG0dy8pntdOkfP/vJu+kH8/266UkQeMh+xzShpnKY1
- XkFKMHbP6phqL4Dm0mr+qYsDQY9xh+tsMdwiExjFPyj62A28uYff+bTnqJLJEioYUwVt6tuzU
- NXNqcp/Yx+k6KXXCFLZSy47MKs3QsKHqVGZYYfgP4s2trEJb6RRiGkAcf/Mzcvw6wpADQIBUU
- Aro/tp5BR6RAuSzazgTCppKce5U9t680ygtnuwigFHT832ETshOlbUWfD8bgzmxOvK4gfFsmo
- LMBAcd8NzV5tTthm80P2iV6xIhnjpn4xK1/i7P/x+XHguT/9JU1hXXYx7t0qtTK1zgFQS1GlM
- FZFMh+foi+IQFqeB5C+DR6go2Lf+VU729eXITkPlYFM5Sw8uuJW9XFXMAtSmvrpvWOuBLHLkA
- er3TwH4XJeKAYSRSDjrcTgzmMoB9AgXGYcDy/Q99OFwDJYrW+mKcU/giv7oVcoKnysfPWfvY0
- IsN2xzVTojRbYHDm7Wg3tImDoYkkpv1F608Fl5p+rtSQb68L2JDbQYvQ/lGMP0GuRj5shkYJO
- 7RmwnxZnAl+6TYgAcX8DH4rYAN+p5YgNR6ZkzcOVyRyJ7X7BReAWFOWvEA1edkpM3+RNrPIEz
- 38NG1PJGJZUX6Chu2Kdpn3eYuoRWo83+vTBf7fufQo9TfQFMcReRu6jkFzCobQ80j4XLcSFbl
- Vo96yWQpyca0xAVIeSyXzUg9c4SXXa7ZUUF74hcKsjFYzmLc1HrSqml9dKrtS7TOjDYy+WcyV
- FEf14Q+83W4XkW6COzCLoC25kfKyoJhzuvLfPr4uD+W3bTiSvY0LMYYPh++G0HYS5iSP3Pems
- i9wKfV2RS/9zowi5hcmREA/taE5j+lnE3m7odh7YR/sMynxkVm+rja1HqFImi7viuduL6QYC5
- b72k5lEwyvjpBYPXxribSMPNC3YZbwQdU9z9rmtlSp0m0j6woc9hTKHEH+0YaqMimiizmUsKM
- 9vxB3kWLIR2Ak5n9i+kG+2R35jAL0Mz/HL4y9VnqF0guImj6bTFFr7Y1w==
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220519171134.GN163591@kunlun.suse.cz>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Mimi,
 
-Hi Michael,
+>> >
+>> > This patch set could probably go through KEYS/KEYRINGS_INTEGRITY, but
+>> > it's kind of late to be asking.  Has it been in linux-next?  Should I
+>> > assume this patch set has been fully tested or can we get some "tags"?
+>>
+[...]
+>>
+>> IIRC, Coiby has tested it on x86_64/arm64, not sure if he took test on
+>> s390. No, this hasn't been in linux-next.
 
-On 15.06.22 at 23:54, Michael Niew=C3=B6hner wrote:
+For arm64, recently I did a new round of test and the patches works as
+expected,
+   1. Build 5.19.0-rc2
+   2. generate keys and add them to .secondary_trusted_keys, MOK, UEFI
+      db; 
+   3. sign different kernel images with different keys including keys
+      from .builtin_trusted_key, .secondary_trusted_keys keyring, UEFI db
+      key and MOK key 
+   4. Without lockdown, all kernel images can be kexec'ed; with lockdown
+      enabled, only the kernel image signed by the key from
+      .builtin_trusted_key can be kexec'ed
+
+Then I build a new kernel with the patches applied and confirm all
+kernel images can be kexec'ed.
 
 >
-> Hi guys,
+>I used the s390 code on powerpc and there it did not work because the
+>built-in key was needed to verify the kernel.
 >
-> for me this series causes boot problems - somehow feels like an interrup=
-t
-> storm...
+>I did not really run this on s390, only ported the fix I needed on
+>powerpc back to s390.
 
+For 390, I commented out the code that skips signature verification
+when secure boot is not enabled since I couldn't find a machine that
+supports secure boot and confirm before applying the patch, kernel
+images signed by keys from .builtin_trusted_key, .secondary_trusted_keys
+couldn't be kexec'ed when lockdown is enabled; after applying the
+patch, those kernel images could be kexec'ed. 
 
-Thanks for this info. Which hardware do you use?
-
-> Not sure yet, which commit is causing that
-> @Tim could you test on any of your devices, please?
 >
-> BR
-> Michael
+>Thanks
+>
+>Michal
 >
 
-Regards,
-Lino
+-- 
+Best regards,
+Coiby
+
