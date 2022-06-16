@@ -2,88 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B377754E643
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 17:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD3A54EB1E
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 22:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233364AbiFPPnZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Jun 2022 11:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S1378444AbiFPU1B (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Jun 2022 16:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbiFPPnY (ORCPT
+        with ESMTP id S1378727AbiFPU0u (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Jun 2022 11:43:24 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D395B15FE5
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Jun 2022 08:43:22 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso2351902fac.4
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Jun 2022 08:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/gQbIaU17eRw5sO/hecNb5FpluiGnQGygV2egDmXIIk=;
-        b=ehE/gd4tah9jS/e8Ze0l+xwI3htCbpaNOqoUJX7AbepMSAJB7sjMCvDJmqYls5FM/e
-         F+y7gfLeUntwqRbT824JObmT4UsnMPnZepY+gdttD59wtsyHuqRPnFlASHQpgPMKidRb
-         BCO5iBlThav5VCTLbd9PY0Av71Kt15RjOCU8k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/gQbIaU17eRw5sO/hecNb5FpluiGnQGygV2egDmXIIk=;
-        b=wK/kOG9sU2d5CnCeW96C/RZD5NBDjZK5BVzovLt3Lj2B0bOMcntdIVbqYd9J3ifU42
-         jUdKQhBDAGnunfLyPfXkweZC4BWkUPwO8k4lFaQMhbYPW4YOwze3HdF/HqgkZR1ahb+t
-         dtR0rlLTckSbZsbVXJeMXvpv8rrlHBIuWHVpEzWyVZAHTsOIhww6crg+Fr0+lVddwYeD
-         QDx/h8M0QJvS9KQSq4E+CzfAEfEcCzHgPlBjWf1DECVXVTtwq79aIWwwthT1l3t1s+16
-         XLn/C6jWBEoJRvXQz0PYPcUzikHvgw8FwT/XZBSkn9nzaFojBah2TLkxF5osQr0El5/o
-         c3mA==
-X-Gm-Message-State: AJIora+Oqb5V2ZiRrKe4jenGEdsYc2pjB3CZh0dUWFeei4Q1RQaV+nV7
-        oFeDELmGfUrc/DFAXGfpIfYDq414N5Fp+A==
-X-Google-Smtp-Source: AGRyM1uUhnL2zVtv2/XWR45qOttajs2w0BMQiW6sbErXPhEUo7mjt9UqAbuX+q/ZD6VrZWRy5/KHAw==
-X-Received: by 2002:a05:6870:8925:b0:fe:4638:dc01 with SMTP id i37-20020a056870892500b000fe4638dc01mr8420602oao.209.1655394201744;
-        Thu, 16 Jun 2022 08:43:21 -0700 (PDT)
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com. [209.85.160.47])
-        by smtp.gmail.com with ESMTPSA id p3-20020a4a8143000000b0035eb4e5a6cbsm1183633oog.33.2022.06.16.08.43.20
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 08:43:21 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1014b2752c1so2325222fac.11
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Jun 2022 08:43:20 -0700 (PDT)
-X-Received: by 2002:a05:6870:5247:b0:fb:2e60:26c6 with SMTP id
- o7-20020a056870524700b000fb2e6026c6mr3012759oai.241.1655394200150; Thu, 16
- Jun 2022 08:43:20 -0700 (PDT)
+        Thu, 16 Jun 2022 16:26:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E145BD3B;
+        Thu, 16 Jun 2022 13:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655411186; x=1686947186;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mCBE9b7OKZue36WoDEtNzIp8Vup2V1mQ1A14xh+mBlQ=;
+  b=Yktye0dFIXhhtPHAYp5nhSF/OPFOy5B9DzuhIBYYoR/g6s4kfC0tHfdw
+   h5IazAboXuHyk57tsrdynRe40+Rq9XYrLBwKB4lAh8qK3DJoTlTTIvim/
+   jdjVWgVMws4/cCiHLKhEzGiv8cnFtwf4mc7WQMi7jZwMEMNX95RjxxPE3
+   fR3URkbHhL1O0N2ttUO7MoEocgM74btCCAWj363fMeWEBnMVRq7vTX51s
+   J3pYaGHoMX6Y6KHBJbGfOi+LFZl6ZRzABfgVqryNT0FqxYzV6khF6QNUa
+   7xngfAelM25a6SfJ/OhCN8VBGoyvSA5/KciM5f1jL5C9IESCtqMXRnrbG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="340999636"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="340999636"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 13:26:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="536584728"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 16 Jun 2022 13:26:14 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1w4D-000OkH-IZ;
+        Thu, 16 Jun 2022 20:26:13 +0000
+Date:   Fri, 17 Jun 2022 04:25:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>, kexec@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, nayna@linux.ibm.com,
+        nasastry@in.ibm.com, Stefan Berger <stefanb@linux.ibm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>
+Subject: Re: [PATCH v2 3/3] tpm/kexec: Duplicate TPM measurement log in
+ of-tree for kexec
+Message-ID: <202206170406.VbxuBICz-lkp@intel.com>
+References: <20220616154130.2052541-4-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
- <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
- <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com> <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
-In-Reply-To: <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Thu, 16 Jun 2022 08:42:43 -0700
-X-Gmail-Original-Message-ID: <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
-Message-ID: <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, LKML <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616154130.2052541-4-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,75 +69,58 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, May 17, 2022 at 10:34 AM Evan Green <evgreen@chromium.org> wrote:
->
-> Hi Rafael,
->
-> On Tue, May 17, 2022 at 9:06 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Mon, May 9, 2022 at 6:44 PM Evan Green <evgreen@chromium.org> wrote:
-> > >
-> > > On Fri, May 6, 2022 at 9:08 AM Pavel Machek <pavel@ucw.cz> wrote:
-> > > >
-> > > > Hi!
-> > > >
-> > > > > We are exploring enabling hibernation in some new scenarios. However,
-> > > > > our security team has a few requirements, listed below:
-> > > > > 1. The hibernate image must be encrypted with protection derived from
-> > > > >    both the platform (eg TPM) and user authentication data (eg
-> > > > >    password).
-> > > > > 2. Hibernation must not be a vector by which a malicious userspace can
-> > > > >    escalate to the kernel.
-> > > >
-> > > > Can you (or your security team) explain why requirement 2. is needed?
-> > > >
-> > > > On normal systems, trusted userspace handles kernel upgrades (for example),
-> > > > so it can escalate to kernel priviledges.
-> > > >
-> > >
-> > > Our systems are a little more sealed up than a normal distro, we use
-> > > Verified Boot [1]. To summarize, RO firmware with an embedded public
-> > > key verifies that the kernel+commandline was signed by Google. The
-> > > commandline includes the root hash of the rootfs as well (where the
-> > > modules live). So when an update is applied (A/B style, including the
-> > > whole rootfs), assuming the RO firmware stayed RO (which requires
-> > > physical measures to defeat), we can guarantee that the kernel,
-> > > commandline, and rootfs have not been tampered with.
-> > >
-> > > Verified boot gives us confidence that on each boot, we're at least
-> > > starting from known code. This makes it more challenging for an
-> > > attacker to persist an exploit across reboot. With the kernel and
-> > > modules verified, we try to make it non-trivial for someone who does
-> > > manage to gain root execution once from escalating to kernel
-> > > execution. Hibernation would be one obvious escalation route, so we're
-> > > hoping to find a way to enable it without handing out that easy
-> > > primitive.
-> > >
-> > > [1] https://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot/
-> >
-> > So I guess this really is an RFC.
->
-> Yes, I suppose it is.
->
-> >
-> > Honestly, I need more time to go through this and there are pieces of
-> > it that need to be looked at other people (like the TPM-related
-> > changes).
->
-> No problem, thanks for the reply to let me know. I expect some back
-> and forth in terms of what should be hidden behind abstractions and
-> where exactly things should live. But I wanted to get this out to
-> upstream as early as I could, just to get initial reactions on the
-> overall concept and design. Looking forward to hearing your thoughts
-> when you get a chance, and let me know if there are others I should be
-> adding that I've missed.
+Hi Stefan,
 
-Gentle bump in case this dropped off of radars, I'd still appreciate
-any feedback folks had on this series.
--Evan
+Thank you for the patch! Perhaps something to improve:
 
->
-> -Evan
->
-> >
-> > Thanks!
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on linus/master v5.19-rc2 next-20220616]
+[cannot apply to robh/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Berger/tpm-Preserve-TPM-measurement-log-across-kexec/20220616-234240
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 0a35780c755ccec097d15c6b4ff8b246a89f1689
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220617/202206170406.VbxuBICz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c28e0f7321d0b7245454e811a3dd0f2134d9dd74
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stefan-Berger/tpm-Preserve-TPM-measurement-log-across-kexec/20220616-234240
+        git checkout c28e0f7321d0b7245454e811a3dd0f2134d9dd74
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/of/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/of/kexec.c:305: warning: expecting prototype for tpm_free_kexec_buffer(). Prototype was for tpm_of_remove_kexec_buffer() instead
+
+
+vim +305 drivers/of/kexec.c
+
+   300	
+   301	/**
+   302	 * tpm_free_kexec_buffer - free memory used by the IMA buffer
+   303	 */
+   304	static int tpm_of_remove_kexec_buffer(void)
+ > 305	{
+   306		struct property *prop;
+   307	
+   308		prop = of_find_property(of_chosen, "linux,tpm-kexec-buffer", NULL);
+   309		if (!prop)
+   310			return -ENOENT;
+   311	
+   312		return of_remove_property(of_chosen, prop);
+   313	}
+   314	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
