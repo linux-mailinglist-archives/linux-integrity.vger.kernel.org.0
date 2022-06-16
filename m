@@ -2,126 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A204654E19E
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 15:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B6A54E1D5
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jun 2022 15:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376329AbiFPNOR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Jun 2022 09:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S231734AbiFPNYR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Jun 2022 09:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbiFPNOL (ORCPT
+        with ESMTP id S229740AbiFPNYR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:14:11 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C7132069;
-        Thu, 16 Jun 2022 06:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655385230;
-        bh=9JzekwRcTTH87yPrLP08+Xsxgb/jf6L+u5cxUoWlAO8=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=gRpToD2tXV6pmlHyDurQ5A8QN3he/k9KP64IhB/96PWLH1z99CuMDgn9VoBMCYviR
-         nalHoejsKRZlREJp4aw6gNbkobZnP7ShCgJfqDTvyzHGfF2FPr4tMoyF02GlqvLf6+
-         pgLwAwEhtzdsLVpaHwWIeUPiyi+8wGSHzvFb69Cc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.17]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvsEn-1nkhwH1xKB-00stVu; Thu, 16
- Jun 2022 15:13:50 +0200
-Subject: Re: [PATCH v5 10/10] tpm, tpm_tis: Enable interrupt test
-To:     =?UTF-8?Q?Michael_Niew=c3=b6hner?= <linux@mniewoehner.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James.Bottomley@hansenpartnership.com,
-        twawrzynczak <twawrzynczak@chromium.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
- <20220610110846.8307-11-LinoSanfilippo@gmx.de> <YqokW/cNLrrsZ2ib@iki.fi>
- <c610a318258198f72a53541c551c0c595a205329.camel@mniewoehner.de>
- <1c90aba2-5874-7251-ff19-4b6c5bc19962@gmx.de>
- <8ed1c322b6f3dc36427c6a5704df0caab2dcec11.camel@mniewoehner.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <14583fe9-a374-1022-3aac-1f05fa8f6e94@gmx.de>
-Date:   Thu, 16 Jun 2022 15:13:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 16 Jun 2022 09:24:17 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F8033EB6;
+        Thu, 16 Jun 2022 06:24:15 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 56957520290;
+        Thu, 16 Jun 2022 15:24:13 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.14) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Thu, 16 Jun
+ 2022 15:24:12 +0200
+Date:   Thu, 16 Jun 2022 15:24:08 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bug-cpio@gnu.org>,
+        <zohar@linux.vnet.ibm.com>, <silviu.vlasceanu@huawei.com>,
+        <dmitry.kasatkin@huawei.com>, <takondra@cisco.com>,
+        <kamensky@cisco.com>, <hpa@zytor.com>, <arnd@arndb.de>,
+        <rob@landley.net>, <james.w.mcmechan@gmail.com>,
+        <niveditas98@gmail.com>, Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Message-ID: <20220616132408.GA4018@lxhi-065>
+References: <20190523121803.21638-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <8ed1c322b6f3dc36427c6a5704df0caab2dcec11.camel@mniewoehner.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:V6aNRS4pfcmJAUy62E3547AvrfhU/+gvMRP+QY/0PxiJ1yHRKEc
- GGdhxJmFJ1fyMPMEmxiDHEKg9nTE/epumuQNnE+Mdo4jmeHn7Jc3nWzawlhpk0AvvItfk5J
- DJXj/Sf5mDgtCzFxXvT9ZryaK05u/lEngncSQKfsIboK/qqOMeLl20HGtuOnqj3zni0sa+t
- PT3RImWXsTPc/d7xj1Djg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4C7SLbBP5eQ=:fbuonv0A4Gu1Y6rT0+NZqP
- g8v+6GPip3G9NCCPUinlr7npqmG4smMninR1+ZQ16lk7qcpZX6qjsJfEfnPkIx9ZXWZ9kwaeK
- ezKJc1mBmEvkmN1mA6hEb89tZvyT7OYGS4agdhUgJrXMzXur4xOAef9FMj5bo0YX1RBz5fmXC
- SliYysMpRCO9/la3ez55BHvIvETwdaBWWusTtFex+kgJ/Azc+R0hgbZR9+0YzMQ6mQJ7ylesI
- zJcHHErz/73EewrQFEJ6h+EG2Kb58rHt7790Gbeasw8WzNwoFi709EOz/9TmNqTR3bpwLjogA
- 6gZNk0jUQckb7faQSdpuqLs8TvfdL/XzCqQSozj7BypSn3tAgnlJDwtyCLGbrDPZ+4bs6IJ9n
- f7lDk4J8Ep/ypSY7/RXGGaB79ps+tFRqupY2VGDqhrwiwhh5BAiDPuLhUQayQ5nqoMNrWmway
- 0JcN99rs8PAlXdjvM7oM7BdXv7QpIOlj0RVYi6rGOpk4PMsGhZrACmiSzdd0qyaeUd9Fcw0XF
- +65gyz8tB+8loiH7VlfWmEgHeX2FQYFeOwVlF+UDSQ6fYpDJVqu5nnD6X2tWTChbWCdi98BpX
- 4mkxw0ogwdHmBPvh/jl8z5XCHaa2LarawDOxfJkq3Uqlku4WBiDYa4tcHw2htUxkn3LJyiKDj
- Ddu+DRj4/vpnC1uc6ayzXkFMVdmqXyDRd7Ape7iQ19AjdD75zns8z1HziyEw19CM4N2S4IdpH
- Lg/VtP45kNuz3hqmZpS6fdcr+2352MSqWfoq2W0kRy3kLCEsGJAViQ6DZkkP7zsq/M/NSu03i
- c+j2e5X3upH6R9J7PbgChs8EgzPKWH7p+em7lROZZKYowFu8iq37OSjQ2LF5M/TTGps1+CD0r
- gDlgEm7yvY+zWAmmllmIdxzN76P/N9eD1HbrGzObVZ+AlrRKWjz+cZWkW1bgvk/jLUT9GwjpA
- xdJ6pU8mYI4wvbqgo/uQot2QqWGbtI1f9MNfk4oCG8n9fOYxlNRProBZa/jrfs0xSVCmM4Qsm
- 279/+0DR3s4ONzkwbLB238Naf/UDJr/9HgyaG4vE1cJWo1Mg7olb/bdFST+3EoZZVIguhnUnH
- CvzyjkFZU7/o9Of6w/s/lwcPLRxkP2SYaAQ3Mp/RtSbO14Zjimx03PQkA==
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190523121803.21638-1-roberto.sassu@huawei.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.14]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Michael,
+Dear Yamada-san,
 
-On 16.06.22 at 15:03, Michael Niew=C3=B6hner wrote:
-> Hi Lino,
->
-> On Thu, 2022-06-16 at 01:30 +0200, Lino Sanfilippo wrote:
->>
->> Hi Michael,
->>
->> On 15.06.22 at 23:54, Michael Niew=C3=B6hner wrote:
->>
->>>
->>> Hi guys,
->>>
->>> for me this series causes boot problems - somehow feels like an interr=
-upt
->>> storm...
->>
->>
->> Thanks for this info. Which hardware do you use?
->>
->>> Not sure yet, which commit is causing that
->>> @Tim could you test on any of your devices, please?
->>>
->>> BR
->>> Michael
->>>
->>
->> Regards,
->> Lino
->
-> looks like something was wrong with the devices firmware... I flashed a =
-fresh
-> image and everything is totally fine now - TPM gets detected without the
-> "interrupts not working" error! :-)
->
-> Test device: Clevo L140MU, FW v1.07.12, TPM 2.0 Infineon SLB9670 (SPI)
->
+On Do, Mai 23, 2019 at 02:18:00 +0200, Roberto Sassu wrote:
+> This patch set aims at solving the following use case: appraise files from
+> the initial ram disk. To do that, IMA checks the signature/hash from the
+> security.ima xattr. Unfortunately, this use case cannot be implemented
+> currently, as the CPIO format does not support xattrs.
+> 
+> This proposal consists in including file metadata as additional files named
+> METADATA!!!, for each file added to the ram disk. The CPIO parser in the
+> kernel recognizes these special files from the file name, and calls the
+> appropriate parser to add metadata to the previously extracted file. It has
+> been proposed to use bit 17:16 of the file mode as a way to recognize files
+> with metadata, but both the kernel and the cpio tool declare the file mode
+> as unsigned short.
+> 
+> The difference from v2, v3 (https://lkml.org/lkml/2019/5/9/230,
+> https://lkml.org/lkml/2019/5/17/466) is that file metadata are stored in
+> separate files instead of a single file. Given that files with metadata
+> must immediately follow the files metadata will be added to, image
+> generators have to be modified in this version.
+> 
+> The difference from v1 (https://lkml.org/lkml/2018/11/22/1182) is that
+> all files have the same name. The file metadata are added to is always the
+> previous one, and the image generator in user space will make sure that
+> files are in the correct sequence.
+> 
+> The difference with another proposal
+> (https://lore.kernel.org/patchwork/cover/888071/) is that xattrs can be
+> included in an image without changing the image format. Files with metadata
+> will appear as regular files. It will be task of the parser in the kernel
+> to process them.
+> 
+> This patch set extends the format of data defined in patch 9/15 of the last
+> proposal. It adds header version and type, so that new formats can be
+> defined and arbitrary metadata types can be processed.
+> 
+> The changes introduced by this patch set don't cause any compatibility
+> issue: kernels without the metadata parser simply extract the special files
+> and don't process metadata; kernels with the metadata parser don't process
+> metadata if the special files are not included in the image.
+> 
+> >From the kernel space perspective, backporting this functionality to older
+> kernels should be very easy. It is sufficient to add two calls to the new
+> function do_process_metadata() in do_copy(), and to check the file name in
+> do_name(). From the user space perspective, unlike the previous version of
+> the patch set, it is required to modify the image generators in order to
+> include metadata as separate files.
 
+Since this patch series most likely falls under your jurisdiction and
+also given your recent commits [*] in the same area, I am curious if
+there are any early signs which would prevent your final acceptance
+and would potentially result in a no-Go?
 
-Good to hear that everything is fine now, thanks a lot for testing!
+Can we have an early confirmation that, upon rebasing and handling of
+all the review comments, you would be willing to accept the patches?
 
-Best regards,
-Lino
+[*] Most recent commits touching usr/gen_initramfs.sh
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7168965ec7b10b8a2c7dea1f82f1ebadf44d64ba
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=65e00e04e5aea34b256814cfa21b32e3b94a2402
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=469e87e89fd61de804bd29f6dd0380a399b567a7
 
+Thanks,
+Eugeniu.
