@@ -2,38 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1280754F238
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jun 2022 09:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C51654F283
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jun 2022 10:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380138AbiFQHwG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 Jun 2022 03:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
+        id S1380757AbiFQIIs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Jun 2022 04:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234463AbiFQHwG (ORCPT
+        with ESMTP id S1380252AbiFQIIs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 Jun 2022 03:52:06 -0400
+        Fri, 17 Jun 2022 04:08:48 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9671C674FE
-        for <linux-integrity@vger.kernel.org>; Fri, 17 Jun 2022 00:52:04 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LPWRG0GL9zhXZT;
-        Fri, 17 Jun 2022 15:50:02 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF4A67D3C
+        for <linux-integrity@vger.kernel.org>; Fri, 17 Jun 2022 01:08:46 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LPWqY4tmQzjXcX;
+        Fri, 17 Jun 2022 16:07:37 +0800 (CST)
 Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
  (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 17 Jun
- 2022 15:51:56 +0800
+ 2022 16:08:44 +0800
 From:   GUO Zihua <guozihua@huawei.com>
 To:     <linux-integrity@vger.kernel.org>
 CC:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>
-Subject: [PATCH -next] ima: Refactor hash algo compatibility check
-Date:   Fri, 17 Jun 2022 15:49:47 +0800
-Message-ID: <20220617074947.56054-1-guozihua@huawei.com>
+Subject: [PATCH -next v2] ima: Refactor hash algo compatibility check
+Date:   Fri, 17 Jun 2022 16:06:11 +0800
+Message-ID: <20220617080611.60133-1-guozihua@huawei.com>
 X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
  dggpemm500024.china.huawei.com (7.185.36.203)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -55,6 +55,10 @@ No functional change in this patch.
 
 Signed-off-by: GUO Zihua <guozihua@huawei.com>
 ---
+
+v2: fix the check in hash_setup which is wrong
+
+---
  security/integrity/ima/ima_main.c         | 23 ++++++++++-------------
  security/integrity/ima/ima_template.c     |  2 +-
  security/integrity/ima/ima_template_lib.c |  8 --------
@@ -62,7 +66,7 @@ Signed-off-by: GUO Zihua <guozihua@huawei.com>
  4 files changed, 19 insertions(+), 22 deletions(-)
 
 diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 040b03ddc1c7..a2c532f82717 100644
+index 040b03ddc1c7..e7e1c5480ca7 100644
 --- a/security/integrity/ima/ima_main.c
 +++ b/security/integrity/ima/ima_main.c
 @@ -28,6 +28,7 @@
@@ -95,7 +99,7 @@ index 040b03ddc1c7..a2c532f82717 100644
 -		} else if (strncmp(str, "md5", 3) == 0) {
 -			ima_hash_algo = HASH_ALGO_MD5;
 -		} else {
-+		if (ima_template_hash_algo_allowed(algo)) {
++		if (!ima_template_hash_algo_allowed(algo)) {
  			pr_err("invalid hash algorithm \"%s\" for template \"%s\"",
  				str, IMA_TEMPLATE_IMA_NAME);
  			return 1;
