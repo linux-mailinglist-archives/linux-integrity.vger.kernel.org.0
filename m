@@ -2,171 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C51654F283
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jun 2022 10:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82D854F8B0
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jun 2022 15:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380757AbiFQIIs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 Jun 2022 04:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S1381052AbiFQN4e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Jun 2022 09:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380252AbiFQIIs (ORCPT
+        with ESMTP id S1382523AbiFQN4d (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 Jun 2022 04:08:48 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF4A67D3C
-        for <linux-integrity@vger.kernel.org>; Fri, 17 Jun 2022 01:08:46 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LPWqY4tmQzjXcX;
-        Fri, 17 Jun 2022 16:07:37 +0800 (CST)
-Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 17 Jun
- 2022 16:08:44 +0800
-From:   GUO Zihua <guozihua@huawei.com>
-To:     <linux-integrity@vger.kernel.org>
-CC:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>
-Subject: [PATCH -next v2] ima: Refactor hash algo compatibility check
-Date:   Fri, 17 Jun 2022 16:06:11 +0800
-Message-ID: <20220617080611.60133-1-guozihua@huawei.com>
-X-Mailer: git-send-email 2.36.0
+        Fri, 17 Jun 2022 09:56:33 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4693C4B8
+        for <linux-integrity@vger.kernel.org>; Fri, 17 Jun 2022 06:56:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 199F7218B1;
+        Fri, 17 Jun 2022 13:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655474191; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Wx9PR0zxToLAnkqcqQWh0unZcw78nGJEcwqaAdch5E8=;
+        b=qcVAUjFrsOkRCo8RtMbYYzqtlEI6XbGPkdvYCbifJbWV+3cOOG8avBj1NCI2EuLAHjPVAL
+        L4v6LrXpUKHxQSlKipQ8U0U+6sL8vOjPkHFneCPMUM1K1VeJv4hW+oOt1ngTeuqyqEtceV
+        B7qjH2m+BNnOVtT1tJb7wxYDegqMD0I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655474191;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Wx9PR0zxToLAnkqcqQWh0unZcw78nGJEcwqaAdch5E8=;
+        b=4pp8iSHNAopoJ6LyY0DSUlWdlTg9GmVpLK/zs/PDmLlIdm2mRxmLvalec9i7UX859nFgIn
+        CTIP2rzs9CyGPtCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D956813458;
+        Fri, 17 Jun 2022 13:56:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id h9uvMg6IrGKfIAAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Fri, 17 Jun 2022 13:56:30 +0000
+From:   Petr Vorel <pvorel@suse.cz>
+To:     linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 1/1] ci/ubuntu: impish -> jammy
+Date:   Fri, 17 Jun 2022 15:56:25 +0200
+Message-Id: <20220617135625.2370-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Make ima_template_hash_algo_allowed a utility function and refector the
-compatibility checks in a couple places. This should unify the
-compatibility check and make the code more streamlined.
+Ubuntu 21.10 impish EOL in 2027-04 (next month).
+Replace it with the latest stable release (EOL 2027-04).
 
-Also, rename the i in hash_setup to algo.
-
-No functional change in this patch.
-
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
 ---
+Hi Mimi,
 
-v2: fix the check in hash_setup which is wrong
+Tested: https://github.com/pevik/ima-evm-utils/actions/runs/2515784254
 
----
- security/integrity/ima/ima_main.c         | 23 ++++++++++-------------
- security/integrity/ima/ima_template.c     |  2 +-
- security/integrity/ima/ima_template_lib.c |  8 --------
- security/integrity/ima/ima_template_lib.h |  8 ++++++++
- 4 files changed, 19 insertions(+), 22 deletions(-)
+It's also a question whether use 20.04 LTS focal instead of 18.04 LTS
+bionic. I guess we'd like to cover everything: bleeding edge, used
+distros and very old and still used distros. bionic EOL next year
+(2023-04).
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 040b03ddc1c7..e7e1c5480ca7 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -28,6 +28,7 @@
- #include <linux/fs.h>
+I'll try to have look on Alpine failure sometimes on July.
+
+Kind regards,
+Petr
+
+ .github/workflows/ci.yml | 2 +-
+ .travis.yml              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 5e4498e..dc06fce 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -59,7 +59,7 @@ jobs:
+               CC: gcc
+               TSS: tpm2-tss
  
- #include "ima.h"
-+#include "ima_template_lib.h"
+-          - container: "ubuntu:impish"
++          - container: "ubuntu:jammy"
+             env:
+               CC: gcc
+               TSS: ibmtss
+diff --git a/.travis.yml b/.travis.yml
+index d6b3c5e..5741116 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -40,7 +40,7 @@ matrix:
+           compiler: gcc
  
- #ifdef CONFIG_IMA_APPRAISE
- int ima_appraise = IMA_APPRAISE_ENFORCE;
-@@ -45,17 +46,19 @@ static struct notifier_block ima_lsm_policy_notifier = {
- static int __init hash_setup(char *str)
- {
- 	struct ima_template_desc *template_desc = ima_template_desc_current();
--	int i;
-+	int algo;
+         - os: linux
+-          env: DISTRO=ubuntu:impish TSS=ibmtss COMPILE_SSL=openssl-3.0.0-beta1
++          env: DISTRO=ubuntu:jammy TSS=ibmtss COMPILE_SSL=openssl-3.0.0-beta1
+           compiler: gcc
  
- 	if (hash_setup_done)
- 		return 1;
- 
-+	algo = match_string(hash_algo_name, HASH_ALGO__LAST, str);
-+	if (algo < 0) {
-+		pr_err("invalid hash algorithm \"%s\"", str);
-+		return 1;
-+	}
-+
- 	if (strcmp(template_desc->name, IMA_TEMPLATE_IMA_NAME) == 0) {
--		if (strncmp(str, "sha1", 4) == 0) {
--			ima_hash_algo = HASH_ALGO_SHA1;
--		} else if (strncmp(str, "md5", 3) == 0) {
--			ima_hash_algo = HASH_ALGO_MD5;
--		} else {
-+		if (!ima_template_hash_algo_allowed(algo)) {
- 			pr_err("invalid hash algorithm \"%s\" for template \"%s\"",
- 				str, IMA_TEMPLATE_IMA_NAME);
- 			return 1;
-@@ -63,13 +66,7 @@ static int __init hash_setup(char *str)
- 		goto out;
- 	}
- 
--	i = match_string(hash_algo_name, HASH_ALGO__LAST, str);
--	if (i < 0) {
--		pr_err("invalid hash algorithm \"%s\"", str);
--		return 1;
--	}
--
--	ima_hash_algo = i;
-+	ima_hash_algo = algo;
- out:
- 	hash_setup_done = 1;
- 	return 1;
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index c25079faa208..b030edb33fa6 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -128,7 +128,7 @@ static int __init ima_template_setup(char *str)
- 	 * by the 'ima' template.
- 	 */
- 	if (template_len == 3 && strcmp(str, IMA_TEMPLATE_IMA_NAME) == 0 &&
--	    ima_hash_algo != HASH_ALGO_SHA1 && ima_hash_algo != HASH_ALGO_MD5) {
-+	    !ima_template_hash_algo_allowed(ima_hash_algo)) {
- 		pr_err("template does not support hash alg\n");
- 		return 1;
- 	}
-diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-index c877f01a5471..7efae3041a40 100644
---- a/security/integrity/ima/ima_template_lib.c
-+++ b/security/integrity/ima/ima_template_lib.c
-@@ -13,14 +13,6 @@
- #include <linux/xattr.h>
- #include <linux/evm.h>
- 
--static bool ima_template_hash_algo_allowed(u8 algo)
--{
--	if (algo == HASH_ALGO_SHA1 || algo == HASH_ALGO_MD5)
--		return true;
--
--	return false;
--}
--
- enum data_formats {
- 	DATA_FMT_DIGEST = 0,
- 	DATA_FMT_DIGEST_WITH_ALGO,
-diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
-index 9f7c335f304f..c4663595f1c8 100644
---- a/security/integrity/ima/ima_template_lib.h
-+++ b/security/integrity/ima/ima_template_lib.h
-@@ -66,4 +66,12 @@ int ima_eventinodexattrlengths_init(struct ima_event_data *event_data,
- 				    struct ima_field_data *field_data);
- int ima_eventinodexattrvalues_init(struct ima_event_data *event_data,
- 				   struct ima_field_data *field_data);
-+
-+static inline bool ima_template_hash_algo_allowed(int algo)
-+{
-+	if (algo == HASH_ALGO_SHA1 || algo == HASH_ALGO_MD5)
-+		return true;
-+
-+	return false;
-+}
- #endif /* __LINUX_IMA_TEMPLATE_LIB_H */
+         - os: linux
 -- 
-2.36.0
+2.36.1
 
