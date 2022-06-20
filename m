@@ -2,429 +2,490 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219C8550DEE
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jun 2022 02:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849525513C6
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Jun 2022 11:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236756AbiFTAet (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 19 Jun 2022 20:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
+        id S240228AbiFTJMd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Jun 2022 05:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236397AbiFTAes (ORCPT
+        with ESMTP id S239136AbiFTJMc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 19 Jun 2022 20:34:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFFC64D8
-        for <linux-integrity@vger.kernel.org>; Sun, 19 Jun 2022 17:34:46 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25JN2xRF032089;
-        Mon, 20 Jun 2022 00:34:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yHPAdrhx2HH8FvtqExQgqNJ4P4HhtjdbW8ogay5n/9k=;
- b=BA4ak2AfFXpXYfTe2TR0k29BBBmBlF16W0V9zsECh1452MUR4AP+6c0VU54Xpl2DJ4LZ
- 9B79UUiPCxeDMTlVZnnOeo/d6saotBjO5yajYP/bejlLQoH2cslYiGaV4KEBkOm1TcDU
- MhuupEwBM89meDmdad40AVcWGWOviGaRxGxTXQYfElkQzQnfAp1mmWxHXUrOToS4hb6R
- BbqwLOPbHiRSGQFaQWhbk6km31paVmnYAKWLcnxqOTicJ0iiSaGErlO1EHIy5Rq1e7+T
- Bso9cP4N6Tn1Iw6i7xx6VCo+Cw47hbUsb0Yjx9Z4aX8Sl229UswW65Ya3nMZa1rQP10B kg== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gsr4k26j2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jun 2022 00:34:37 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25K0L4W3010416;
-        Mon, 20 Jun 2022 00:34:37 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma05wdc.us.ibm.com with ESMTP id 3gs6b92165-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jun 2022 00:34:37 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25K0Ya5V66453834
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jun 2022 00:34:36 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 502D7AE05F;
-        Mon, 20 Jun 2022 00:34:36 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 17F99AE060;
-        Mon, 20 Jun 2022 00:34:36 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Jun 2022 00:34:36 +0000 (GMT)
-Message-ID: <3ba337f8-8c1c-025e-a510-2fd1616f51d0@linux.ibm.com>
-Date:   Sun, 19 Jun 2022 20:34:35 -0400
+        Mon, 20 Jun 2022 05:12:32 -0400
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2122.outbound.protection.outlook.com [40.107.11.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF802A184;
+        Mon, 20 Jun 2022 02:12:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TTHUJsRNyfcxjgIunPmZ8TctdpD4LLwUK293fxSgYXygrLT0S8SO2GpzFxfM3QTuHltFCmqwDVwBuNHDK757asribgx8m5ncmP5s3Y4BKQqwG3RQ0qWo8ifoAcFirActoINJElUYnngaCurFQuGHyiHJrF7qwHlIuF2RzFRNTyPk3DvCOz7V8PVJwliMKiD9B8SWKnrc34XWvRBP5N3PY7HNZugpRGbDNdbv9ZODFHV9522OGWtgyl/HXt2hH7qQTE8MTPGngKrbSdidBkviL1o64//hW3XLV24Z7ylp0gTWCJ6Yjii0phqejzRQaLEF7lIPvNjchKcwLBqjjrK8XA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Fo7a2nASPPT+u3SlIrJtHtTV6M2IB+yOMIi3WQIOqKA=;
+ b=bHYkRwsRei7w0HL8W1nXB24zJ/vdc+HID3MlBC6fs50jx8XpnSQ5E0Z7eSF+Ahho0u1HFHcJpN4Rtwu5jAqSlaLEpD1J/dQWYDkkZIOyD/Shdi9g9a2vYQlKz1L/oLQK/d/MHfpKAvorZkchS53We01goTZl8baO/shilG0JzEQpfMxwE0GRGiyQU74mW3pBTn4Pf/0E4a3ARzNtDqxww1WTIGefx4Cu/wUfgtUZy0rnTpltSirhJr+uMFsS9fZ8zGSANYOlhst04qZPYmQMwv83mpChgn9miqIv/+asDxThnPWW3EIy+kYFdzIAV/FpGSR0gaxvCwAsbf7uHvWC3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sancloud.com; dmarc=pass action=none header.from=sancloud.com;
+ dkim=pass header.d=sancloud.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sancloud.onmicrosoft.com; s=selector2-sancloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Fo7a2nASPPT+u3SlIrJtHtTV6M2IB+yOMIi3WQIOqKA=;
+ b=eUjPtrmtD21rSEafIMiTGXfh9O103JH3VwOusTxzNlR2gauD9O9C7O+wp2eLLtbi/osohElcP5eJXqnD/y10G25xLDAFPjMG0TQXun9ur3a3+U0tH/Lx3KbC65YSiZRe8ti0WBp1BbD97O/BEaSYzadcF8GAnbcZbxmLNmNRhHM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=sancloud.com;
+Received: from CWLP123MB2241.GBRP123.PROD.OUTLOOK.COM (2603:10a6:401:61::19)
+ by LO0P123MB5551.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:215::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Mon, 20 Jun
+ 2022 09:12:26 +0000
+Received: from CWLP123MB2241.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::20d9:bdfe:da66:6c1a]) by CWLP123MB2241.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::20d9:bdfe:da66:6c1a%7]) with mapi id 15.20.5353.022; Mon, 20 Jun 2022
+ 09:12:26 +0000
+Message-ID: <bea8f798-0fff-435c-1e21-e9915ba44d5c@sancloud.com>
+Date:   Mon, 20 Jun 2022 10:12:24 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+From:   Paul Barker <paul.barker@sancloud.com>
+To:     Michael Walle <michael@walle.cc>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Cc:     Stuart Rubin <stuart.rubin@trustiphi.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <416958ee-c2df-0981-8c77-298561d09381@sancloud.com>
+ <418e465f5156adb340976bac209539f8@walle.cc>
+ <821b7140-abb0-17d2-4aab-07247a250e9c@sancloud.com>
+ <9b85e0336f11fc6d4aa66f991ce9b9a9@walle.cc>
+ <0fc9040b-4e4a-e907-8940-d9470aec92a8@sancloud.com>
+Subject: Re: Sending vendor specific commands to spi-nor flash
+In-Reply-To: <0fc9040b-4e4a-e907-8940-d9470aec92a8@sancloud.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------pP3EEa97i6gP6RciwsEmFPJi"
+X-ClientProxiedBy: LO2P265CA0499.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:13b::6) To CWLP123MB2241.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:401:61::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v4 ima-evm-utils 2/3] Sign an fs-verity file digest
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>
-References: <20220617192107.270865-1-zohar@linux.ibm.com>
- <20220617192107.270865-3-zohar@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220617192107.270865-3-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: CJb0hZ2350z0jzFnrGyTaTtj7WTvx1MD
-X-Proofpoint-GUID: CJb0hZ2350z0jzFnrGyTaTtj7WTvx1MD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-19_17,2022-06-17_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 priorityscore=1501 impostorscore=0 spamscore=0 mlxscore=0
- phishscore=0 clxscore=1015 malwarescore=0 mlxlogscore=999 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206200000
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9139b278-c832-4f17-1c2d-08da529cfdc1
+X-MS-TrafficTypeDiagnostic: LO0P123MB5551:EE_
+X-Microsoft-Antispam-PRVS: <LO0P123MB555163650ED0B0F7E1832A3693B09@LO0P123MB5551.GBRP123.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K5lA7ltNpDtyaOkim/0bVfgMWX24fkrhyyHHv4EsSN9Sn0p1Re0ZxYl12nn1B/CKaGK+ULuyagLOG2Egu4wEQBh9pKvNmdkN8Qfvbd6ZKI+yw3FHwSXtQpgqr4ys2/e0f/Q5im0D+se4pREbtyg2ru1DYbly/ksItLIigt8/GI7fD9rNSO8janHjSYq12l8TGHb66OTAJ5aBMp+mzPp/lQIwloc1BcxZWi2KjBp/1zVTmUjfiuCZ9rr6IIMovSDKRO426KxHXBQx1L1u+3nuPFn92d7XoEMhk6f7YT/tM8XncVp+kLtnEJScmYOqyHStcCyF3CUstapssSmPecNWpzqEtMxQz3tEQXojJ8L8g4mwnM0/1y1WCILUI2KI9l75fP9RFPzPZ24UkG7a9DSsjt/Ffa/tSAnATVQBOoFBsnUH57G7l+UMfyobp61LOcaxJp1qQIj/2m+YZANDtjMEC8kz3Uo+qczsonptC/JBnIjBSp0GVqA3LA0vShsfGJuonkGAfagxjDByiwfrPRWmKELmBmmbGP5lllXAj2NtYArtzxsr+zX2l+uazSIovmzTpVIE7OOz8CPYS2adY1CpP4f4ngi53q5ul1up1uaF9khc9f5hkpdIcsh62Cmxa1YJWJ6DBVz7dblnsbaqj87ml8hf+jvG9/DljsnDF+2FT8EecQ/W959iR2UEhQol3MXyc1RPDDtCRZMAIC7LNqyPIMBYiG8Z3O+k6LEbT5sino6hR1WwZg8PKVBlgjzoI4dS9Ka021/P9xkCeRXVQOd55IRM5iBNK+DFbAaSakmhjjPvDp5mIpi2xYu5VSzRfAurMm6B6iAnSIb39IKCGIDfl+nHix2aUNTRoQzov7oq7d0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB2241.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(366004)(346002)(136003)(376002)(396003)(39830400003)(2616005)(478600001)(86362001)(8936002)(4326008)(186003)(6486002)(31686004)(966005)(110136005)(66556008)(53546011)(8676002)(52116002)(316002)(6506007)(41300700001)(31696002)(26005)(66946007)(66476007)(38100700002)(21480400003)(36756003)(6512007)(33964004)(83380400001)(44832011)(5660300002)(7416002)(235185007)(38350700002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkZTVWNpR3FqTmxMQ0FTU0piOUFFMXNFR2dQbnhodkpkREpCdzRWSnFHY1Q1?=
+ =?utf-8?B?TnpHV1Y4VUJnVUJkWG9SbkdybDhxWnBjUnB2dFNBdm5qeElsZThoVXJrNjRH?=
+ =?utf-8?B?M3NjcWdRUU5waXJ1RzVneFUvdmNxZUtoSWkwYkE5SFpEQ1EvWHdGRFZrWmF2?=
+ =?utf-8?B?TDJhSkRTQkNvRS9wT1Vob0lCN2VkaXZSRWhIMXFjMCtMUW5pc01seXFpVzE0?=
+ =?utf-8?B?ajVWeWFPSXp6L1N4UG50dEJCNUtleitVdDdaRXZ0dTdQM1ZNUEdBdC9mbktV?=
+ =?utf-8?B?L25nUzVoRWlvQkIySzlJTWxiNFNTSzlySlZTTXcxT0Fkd3djWDkxR2dSUEtS?=
+ =?utf-8?B?WWdEeGhXZGdtRllUZ3hZWEFYR1NuTXBIZTcyVDV0ZjhDbC82S3dZSE5UMGRW?=
+ =?utf-8?B?UnQrRjRyZzZycGJHK0M4M3F0RzBSTkZZdjVEeC84azM4SjZWSE80TVlUQ0Zv?=
+ =?utf-8?B?T3pNVnI1L0ZWYUFpVnhqeXhZMnJuL0VHZmllZGVkdzU0QkJuUDdNdk52RXU0?=
+ =?utf-8?B?bURKSXovaGtkM2JldG5oT3JNeUY1bHZHc2NJbnd1MHdBYWROMWI5VHRqMkRO?=
+ =?utf-8?B?NXRBSk9MblN0UUZjZWp5dFdEUWtEWmVSUVlMWDJzMWxsOHpBRFZqcjJyVVVC?=
+ =?utf-8?B?Zko2RG4rUzh5K0dSZ0dQVUhmdHNRZnVteEk0SWJtbElaY0FvUDcrdGcxQW5h?=
+ =?utf-8?B?SmlLdmcrV3JTelFoYnlpRFlNTU5ZdUlmR3RkSzVyUktGYms5U3YvWjBsVVh6?=
+ =?utf-8?B?dEt3WDdZTVJ6TGk2SWdPOHhkNC8yeDRMRUVMQWZBdzJUMTZ1MkQwYi9tSWls?=
+ =?utf-8?B?aFBzKzlXQndMU2tKRkI2RUUvWDlQWGI3NHAvS3pPOXBET0lzREhOT05NN0Q0?=
+ =?utf-8?B?V3Nrc3p2R0gwbWVsY3lOeVBYTnplZzg1R1JzNmwvcWNObWpxVWxLMDBYZXE1?=
+ =?utf-8?B?L041OVFJME1aTzZHRVp0T3FmYldGc3VaNEFxaXl3RU8yRHVUUDd4TlBLMlBR?=
+ =?utf-8?B?Z3l5MXVyaXdJeEZUWEJKSEJSVTU2R0Q2ZC9Idk5hb0JzNm9OMi9Scis1cHR0?=
+ =?utf-8?B?emtqY2o1WmlUM0ZOaHpWVVRpbVFNNHl3NVlmcFpudWhmUGpCVGY4VXlmc1Vi?=
+ =?utf-8?B?bVh2QlltM0ZONnpmTnpJbU1RWEw1RFM2enluV2k5S3ZlTUYzaHFXUklWSTUr?=
+ =?utf-8?B?RGlSUGgyKzNjb2JKSzBKaitXMC9Uak5rQmRtK0FIa0xPS1lwMXlpbWVWdDM3?=
+ =?utf-8?B?ejZDZThyUUQydHl4TG5rWmFEUUUzTC9EbDkzSGJ1WG5ZSzNEV2ZUakJBZGhw?=
+ =?utf-8?B?OW14NlN4Qkt4RTZYY1ZXcElKMXU4QjZmWjd4V3pqY28zS09Uc1VKb1BzU0ps?=
+ =?utf-8?B?U3NPZzRoS0lqenpSZXZlc0hnM0Z2cEdXcGxHeThKZmhGQ1JtbjBjTTF3bFRp?=
+ =?utf-8?B?N212QlNzdi9GTVBIMW5OR0JvTDFwVEsxZkpIQU8zcHJNYWdCcUZhSVhUNTJ4?=
+ =?utf-8?B?MnA5RkdwNmptdXNCKzlnd294cStCTHNGdUNocmxXVmxlNkhTUmgvd2FGVXRi?=
+ =?utf-8?B?dGpIb20rUUMwVVBZUzh6OURrQ0RjWGhZTUJraVFTa0Z0SmVWaUxqcnlxMGo5?=
+ =?utf-8?B?RWZhM3dEUnN3bTVubVMwV09tcnhjT2cvQ1kyT2FUTnpUQ2VKRHZ3WjlrK0Zl?=
+ =?utf-8?B?UmJjbzVmYkxtbU9tODVVMVFQK0plK0hrZ045OVJqQkYwU08zdVF5b2hOajVR?=
+ =?utf-8?B?eWxuVVZ4R3ZLMS9GNzBBMjVkUTJYcTlDMllTQURVUTBOVnQwOFlNaFNEcnN4?=
+ =?utf-8?B?ZjFGQlNhTWJ4b2NCcGx2RE5EeUxSMmNLSVJJTFRkVGJNaS95eTQxSXlieWZ1?=
+ =?utf-8?B?bEFnczVmbjVhNGRuK3ZmMytNSVVPQUhlL2taZFIzYVRyaXEwdlIzUlNxWW51?=
+ =?utf-8?B?NHNlOHhJWkV1WUE0aHBBNURDdHNFa2tMdWU5ZDFPV3RTVGlrK0JYUG9nMXZW?=
+ =?utf-8?B?WVRTR1liSDl1TGUzV2crbWpNSkVpbEhFa1lkTks0ZDhrT3RPdWtGQmk3VWph?=
+ =?utf-8?B?aUgzZ05ibk16QmM2YlI4V3BXdGlPdkR3YWN0U3REajZtRlh4NmhuckkzZ1dM?=
+ =?utf-8?B?STVCUFRmYXBLUytIS3ZmN3hUVm5sSUxBbS9lVWI1WFdobkFQd0dCWEg3dlYy?=
+ =?utf-8?B?RG9UUkdFTGR4Yzh5SkU2WXpjMEQ2UUg5bDRhQUU1Ni9nckI2czFvaWtMU3lU?=
+ =?utf-8?B?L3h2Z2hzRGhzM0w1QWtRNGNMT0hnS01ibFUzTHNYZURkZ2lib3VpQW9qeXM0?=
+ =?utf-8?B?WEJwd2ZyYmJTdGxybGxPUjZsVWVlN3Jka0dZY2M2NHI0V0NHdFJxeE9sc3NI?=
+ =?utf-8?Q?VBlK+0SO81HlGxRg=3D?=
+X-OriginatorOrg: sancloud.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9139b278-c832-4f17-1c2d-08da529cfdc1
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB2241.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2022 09:12:25.3576
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 840be37c-244a-450e-9bcc-2064862de1f4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: exOVT07M2/ReY3zQTjGly8pc3KlblyJ9IRm9P496QYq9B20dTzV2v4TjGoFwI5AynJCv1pay9vUjk01vJ02dwNbqmcjDcSZLv4pheWj8jb4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB5551
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+--------------pP3EEa97i6gP6RciwsEmFPJi
+Content-Type: multipart/mixed; boundary="------------OpYLBAdI7D68I9UnBO0rgtUy";
+ protected-headers="v1"
+From: Paul Barker <paul.barker@sancloud.com>
+To: Michael Walle <michael@walle.cc>,
+ Tudor Ambarus <tudor.ambarus@microchip.com>, Pratyush Yadav
+ <p.yadav@ti.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ linux-mtd@lists.infradead.org
+Cc: Stuart Rubin <stuart.rubin@trustiphi.com>,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org
+Message-ID: <bea8f798-0fff-435c-1e21-e9915ba44d5c@sancloud.com>
+Subject: Re: Sending vendor specific commands to spi-nor flash
+References: <416958ee-c2df-0981-8c77-298561d09381@sancloud.com>
+ <418e465f5156adb340976bac209539f8@walle.cc>
+ <821b7140-abb0-17d2-4aab-07247a250e9c@sancloud.com>
+ <9b85e0336f11fc6d4aa66f991ce9b9a9@walle.cc>
+ <0fc9040b-4e4a-e907-8940-d9470aec92a8@sancloud.com>
+In-Reply-To: <0fc9040b-4e4a-e907-8940-d9470aec92a8@sancloud.com>
 
+--------------OpYLBAdI7D68I9UnBO0rgtUy
+Content-Type: multipart/mixed; boundary="------------oJ1kg2NeCKB7Ynnftbu06a32"
 
-On 6/17/22 15:21, Mimi Zohar wrote:
-> Sign fs-verity file digests provided in the format as produced by
-> "fsverity digest".  The output is of the same format as the input,
-> but with the file signature appended.  Use setfattr to write the
-> signature as security.ima xattr.
-> 
-> fsverity digest format: <algo>:<hash> <pathname>
-> output format: <algo>:<hash> <pathname> <signature>
-> 
-> Instead of directly signing the fsverity hash, to disambiguate the
-> original IMA signatures from the fs-verity signatures stored in the
-> security.ima xattr a new signature format version 3 (sigv3) was
-> defined as the hash of the xattr type (enum evm_ima_xattr_type),
-> the hash algorithm (enum hash_algo), and the hash.
-> 
-> Example:
-> fsverity digest <pathname> | evmctl sign_hash --veritysig \
->   --key <pem encoded private key>
-> 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->   README          |  3 +-
->   src/evmctl.c    | 99 +++++++++++++++++++++++++++++++++++++++++--------
->   src/imaevm.h    |  5 ++-
->   src/libimaevm.c | 85 ++++++++++++++++++++++++++++++++++++++++++
->   4 files changed, 175 insertions(+), 17 deletions(-)
-> 
-> diff --git a/README b/README
-> index 5b5ecb52a74b..ffe46ad75728 100644
-> --- a/README
-> +++ b/README
-> @@ -34,7 +34,7 @@ COMMANDS
->    ima_hash file
->    ima_measurement [--ignore-violations] [--verify-sig [--key "key1, key2, ..."]]  [--pcrs [hash-algorithm,]file [--pcrs hash-algorithm,file] ...] file
->    ima_fix [-t fdsxm] path
-> - sign_hash [--key key] [--pass password]
-> + sign_hash [--veritysig] [--key key] [--pass password]
->    hmac [--imahash | --imasig ] file
->   
->   
-> @@ -43,6 +43,7 @@ OPTIONS
->   
->     -a, --hashalgo     sha1, sha224, sha256, sha384, sha512
->     -s, --imasig       make IMA signature
-> +      --veritysig    sign an fs-verity file digest hash
->     -d, --imahash      make IMA hash
->     -f, --sigfile      store IMA signature in .sig file instead of xattr
->         --xattr-user   store xattrs in user namespace (for testing purposes)
-> diff --git a/src/evmctl.c b/src/evmctl.c
-> index 101cd407e05d..a8aba65fec4d 100644
-> --- a/src/evmctl.c
-> +++ b/src/evmctl.c
-> @@ -135,6 +135,7 @@ static int msize;
->   static dev_t fs_dev;
->   static bool evm_immutable;
->   static bool evm_portable;
-> +static bool veritysig;
->   
->   #define HMAC_FLAG_NO_UUID	0x0001
->   #define HMAC_FLAG_CAPS_SET	0x0002
-> @@ -731,33 +732,97 @@ static int cmd_sign_ima(struct command *cmd)
->   	return do_cmd(cmd, sign_ima_file);
->   }
->   
-> +/*
-> + * Sign file hash(es) provided in the format as produced by either
-> + * sha*sum or "fsverity digest".
-> + *
-> + * sha*sum format: <hash> <pathname>
-> + * fsverity digest format: <algo>:<hash> <pathname>
-> + *
-> + * To disambiguate the resulting file signatures, a new signature format
-> + * version 3 (sigv3) was defined as the hash of the xattr type (enum
-> + * evm_ima_xattr_type), the hash algorithm (enum hash_algo), and the hash.
-> + *
-> + * Either directly sign the sha*sum hash or indirectly sign the fsverity
-> + * hash (sigv3).
-> + *
-> + * The output is the same format as the input with the resulting file
-> + * signature appended.
-> + */
->   static int cmd_sign_hash(struct command *cmd)
->   {
-> +	unsigned char sigv3_hash[MAX_DIGEST_SIZE];
-> +	unsigned char sig[MAX_SIGNATURE_SIZE];
-> +	unsigned char hash[MAX_DIGEST_SIZE];
-> +	int siglen, algolen = 0, hashlen = 0;
-> +	char *line = NULL, *token, *hashp;
-> +	size_t line_len = 0;
->   	const char *key;
-> -	char *token, *line = NULL;
-> -	int hashlen = 0;
-> -	size_t line_len;
-> +	char algo[7];	/* Current maximum fsverity hash algo name length */
->   	ssize_t len;
-> -	unsigned char hash[MAX_DIGEST_SIZE];
-> -	unsigned char sig[MAX_SIGNATURE_SIZE] = "\x03";
-> -	int siglen;
-> +	int ret;
->   
->   	key = imaevm_params.keyfile ? : "/etc/keys/privkey_evm.pem";
->   
-> -	/* support reading hash (eg. output of shasum) */
->   	while ((len = getline(&line, &line_len, stdin)) > 0) {
->   		/* remove end of line */
->   		if (line[len - 1] == '\n')
->   			line[--len] = '\0';
->   
-> -		/* find the end of the hash */
-> -		token = strpbrk(line, ", \t");
-> -		hashlen = token ? token - line : strlen(line);
-> +		/*
-> +		 * Before either directly or indirectly signing the hash,
-> +		 * convert the hex-ascii hash representation to binary.
-> +		 */
-> +		if (veritysig) {
-> +
-> +			/* split the algorithm from the hash */
-> +			hashp = strpbrk(line, ":");
-> +			if (hashp)	/* pointer to the delimiter */
-> +				algolen = hashp - line;
-> +
-> +			if (!hashp || algolen <= 0 ||
-> +			    algolen >= sizeof(algo)) {
-> +				log_err("Missing/invalid fsverity hash algorithm\n");
-> +				continue;
-> +			}
-> +
-> +			strncpy(algo, line, algolen);
-> +			algo[algolen] = '\0';	/* Nul terminate algorithm */
-> +
-> +			hashp++;
-> +			token = strpbrk(line, ", \t");
+--------------oJ1kg2NeCKB7Ynnftbu06a32
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I haven't run this so I don't know the output but maybe the code should 
-show what the expected line looks like. That strpbrk is looking for any 
-one  of ',', ' ', and '\t' is ok? And the start of the search should be 
-line and cannot be hashp ?
-token == NULL check?
+T24gMDcvMDYvMjAyMiAxNDo1MCwgUGF1bCBCYXJrZXIgd3JvdGU6DQo+IEhpIE1pY2hhZWws
+IGZvbGtzLA0KPiANCj4gQXBvbG9naWVzIGZvciB0aGUgc2xvdyBmb2xsb3ctdXAsIEkgd2Fz
+IGlsbCBvdmVyIHRoZSBsYXN0IHdlZWsgb2YgTWF5ICYgDQo+IHN0YXJ0IG9mIEp1bmUuDQo+
+IA0KPiBPbiAyMy8wNS8yMDIyIDEyOjI1LCBNaWNoYWVsIFdhbGxlIHdyb3RlOg0KPj4gWysg
+bGludXgtc2VjdXJpdHktbW9kdWxlLCBsaW51eC1pbnRlZ3JpdHksIHNvcnJ5IGlmIHRoZXNl
+IGFyZSB0aGUNCj4+IHdyb25nIE1McywgYnV0IEkgZG9uJ3QgaGF2ZSBhbnkgZXhwZXJpZW5j
+ZXMgd2l0aCBjcnlwdG9dDQo+Pg0KPj4gQW0gMjAyMi0wNS0yMyAxMjowMiwgc2NocmllYiBQ
+YXVsIEJhcmtlcjoNCj4+PiBPbiAyMy8wNS8yMDIyIDA5OjMxLCBNaWNoYWVsIFdhbGxlIHdy
+b3RlOg0KPj4+PiBBbSAyMDIyLTA1LTE4IDE0OjMyLCBzY2hyaWViIFBhdWwgQmFya2VyOg0K
+Pj4+Pj4gV2UncmUgbG9va2luZyB0byBhZGQgc3VwcG9ydCBmb3Igc2VuZGluZyB2ZW5kb3Ig
+c3BlY2lmaWMgY29tbWFuZHMgdG8NCj4+Pj4+IE1pY3JvbiBBdXRoZW50YSBmbGFzaCBkZXZp
+Y2VzIG92ZXIgdGhlIFNQSSBidXMuDQo+Pj4+DQo+Pj4+IFBsZWFzZSBlbGFib3JhdGUgYSBi
+aXQgbW9yZSBvbiB0aGUgdXNlIGNhc2UuIElzIHRoaXMgc29tZXRoaW5nIHNwZWNpZmljDQo+
+Pj4+IHRvIHRoZSBmbGFzaCBvciBpcyBpdCBtb3JlIG9mIGEgZ2VuZXJhbCBmZWF0dXJlPw0K
+Pj4+DQo+Pj4gVGhlIEF1dGhlbnRhIGZsYXNoIGRldmljZXMgc3VwcG9ydCB0d28gZ3JvdXBz
+IG9mIHZlbmRvci1zcGVjaWZpYyANCj4+PiBjb21tYW5kczoNCj4+Pg0KPj4+IDEpICJBZHZh
+bmNlZCBTZWN0b3IgUHJvdGVjdGlvbiIgY29tbWFuZHMsIGNvbW1vbiB0byBzZXZlcmFsIE1p
+Y3Jvbg0KPj4+IHBhcnRzLiBUaGVzZSBpbmNsdWRlIHZvbGF0aWxlICYgbm9uLXZvbGF0aWxl
+IGxvY2sgYml0cywgcGFzc3dvcmQNCj4+PiBwcm90ZWN0aW9uIGFuZCBhIGdsb2JhbCBmcmVl
+emUgYml0Lg0KPj4NCj4+IFBhcnRzIG9mIHRoYXQgaXNuJ3QgcmVhbGx5IHNwZWNpZmljIHRv
+IE1pY3JvbiwgaXMgaXQ/IFNvdW5kcyBsaWtlDQo+PiBhIHBlciBzZWN0b3IgbG9ja2luZy4g
+QUZBSVIgVHVkb3Igd2FzIHdvcmtpbmcgb24gYWR2YW5jZWQgc2VjdG9yDQo+PiBwcm90ZWN0
+aW9uLg0KPiANCj4gSSBzZWUgeW91ciBwb2ludCBoZXJlLiBUaGUgaW1wbGVtZW50YXRpb24g
+bWF5IGJlIE1pY3JvbiBzcGVjaWZpYyBidXQgDQo+IHRoZXJlIGFyZSBwcm9iYWJseSB3YXlz
+IHRvIGltcHJvdmUgdGhlIGdlbmVyaWMgbG9ja2luZyBBUElzIHRvIGNvdmVyIA0KPiB0aGVz
+ZSBmZWF0dXJlcy4NCj4gDQo+IEknbSBoYXBweSB0byBsb29rIGF0IHdoYXQgVHVkb3Igd2Fz
+IHdvcmtpbmcgb24sIGhhdmUgYW55IHBhdGNoZXMgYmVlbiANCj4gcG9zdGVkIGZvciB0aGlz
+PyBJJ3ZlIHNlYXJjaGVkIHRoZSBtYWlsaW5nIGxpc3QgaGlzdG9yeSBmb3IgdGhlIHBhc3Qg
+ZmV3IA0KPiBtb250aHMgYnV0IGNhbid0IGZpbmQgYW55Lg0KPiANCj4+DQo+Pj4gMikgIkF1
+dGhlbnRpY2F0ZWQgQ29yZSBSb290IG9mIFRydXN0IGZvciBNZWFzdXJlbWVudCAoQS1DUlRN
+KSINCj4+PiBjb21tYW5kcywgc3BlY2lmaWMgdG8gQXV0aGVudGEgZmxhc2ggZGV2aWNlcy4g
+VGhlc2UgaW5jbHVkZQ0KPj4+IGF1dGhlbnRpY2F0ZWQgd3JpdGUgb3BlcmF0aW9ucyB3aGVy
+ZSB0aGUgZGF0YSB0byBiZSB3cml0dGVuIG11c3QgYmUNCj4+PiBzaWduZWQgd2l0aCBhIGNy
+eXB0b2dyYXBoaWMga2V5IGFuZCBtZWFzdXJlbWVudCBvcGVyYXRpb25zIHdoaWNoIGFsbG93
+DQo+Pj4gcmVtb3RlIGF0dGVzdGF0aW9uIG9mIHRoZSBjb250ZW50cyBvZiB0aGUgZmxhc2gu
+IFRoZXNlIGZlYXR1cmVzDQo+Pj4gaW50ZXJhY3Qgd2l0aCB0aGUgY2xvdWQtYmFzZWQgQXV0
+aGVudGEgS2V5IE1hbmFnZW1lbnQgU2VydmljZSAoS01TKQ0KPj4+IHByb3ZpZGVkIGJ5IE1p
+Y3JvbiBhbmQgdXNlci1jb250cm9sbGVkIGNyeXB0b2dyYXBoaWMga2V5cyBjYW4gYWxzbyBi
+ZQ0KPj4+IHN1cHBvcnRlZCBmb3IgdGhlc2UgZGV2aWNlcy4NCj4+Pg0KPj4+IFRvIG1ha2Ug
+dXNlIG9mIHRoZXNlIGZlYXR1cmVzIHZlbmRvci1zcGVjaWZpYyBjb21tYW5kcyBhcmUgc2Vu
+dCB0byB0aGUNCj4+PiBmbGFzaCBkZXZpY2UuIFdlIGV4cGVjdCB0byBzZW5kIHRoZXNlIGNv
+bW1hbmRzIGR1cmluZyB0aGUgYm9vdCBwcm9jZXNzDQo+Pj4gYW5kIGR1cmluZyB0aGUgcHJv
+Y2VzcyBvZiBzZWN1cmVseSBkZXBsb3lpbmcgYSBuZXcgc29mdHdhcmUgaW1hZ2UgdG8NCj4+
+PiB0aGUgZmxhc2ggZGV2aWNlLg0KPj4+DQo+Pj4gQnJpZWYgaW5mb3JtYXRpb24gb24gdGhl
+IEF1dGhlbnRhIGZlYXR1cmVzIGlzIGF2YWlsYWJsZSBhcyBhIFBERiBbMV0uDQo+Pj4NCj4+
+PiBbMV06DQo+Pj4gaHR0cHM6Ly9tZWRpYS13d3cubWljcm9uLmNvbS8tL21lZGlhL2NsaWVu
+dC9nbG9iYWwvZG9jdW1lbnRzL3Byb2R1Y3RzL2RhdGEtc2hlZXQvbm9yLWZsYXNoL3Nlcmlh
+bC1ub3IvbXQyNXEvbXQyNXFfYV9jcnRtX3JwbWNfYWRkZW5kdW1fcmV2XzFfNl9icmllZi5w
+ZGYgDQo+Pj4NCj4+Pg0KPj4+DQo+Pj4+DQo+Pj4+PiBTaW5jZSB3ZSdyZSB1c2luZyB0aGUN
+Cj4+Pj4+IE1URCBibG9jayBpbnRlcmZhY2UgdG8gc3VwcG9ydCBhIGZpbGVzeXN0ZW0gb24g
+dGhlIFNQSSBmbGFzaCB3ZSBuZWVkDQo+Pj4+PiB0byBzZW5kIHRoZXNlIHZlbmRvciBzcGVj
+aWZpYyBjb21tYW5kcyB2aWEgc29tZSBzb3J0IG9mIElPQ1RMLg0KPj4+Pj4NCj4+Pj4+IEkg
+Y2FuIHNlZSBhIGNvdXBsZSBvZiB3YXlzIHRvIGFjaGlldmUgdGhpcyAoYXMgZm9sbG93cykg
+YW5kIHdvdWxkIGxpa2UNCj4+Pj4+IHRvIGdldCBzb21lIGZlZWRiYWNrIGZyb20gdGhlIE1U
+RCAmIHNwaS1ub3IgbWFpbnRhaW5lcnMgb24gd2hpY2gNCj4+Pj4+IGFwcHJvYWNoIGlzIHBy
+ZWZlcnJlZDoNCj4+Pj4+DQo+Pj4+PiAxKSBBZGQgbmV3IElPQ1RMcyB0byB0aGUgbXRkY2hh
+ciBkZXZpY2UgdG8gc3VwcG9ydCB0aGVzZSB2ZW5kb3INCj4+Pj4+IHNwZWNpZmljIG9wZXJh
+dGlvbnMuIEFuIGluaXRpYWwgc2V0IG9mIHBhdGNoZXMgd2FzIHNlbnQgYmFjayBpbg0KPj4+
+Pj4gT2N0b2JlciAyMDIxIHdoaWNoIHRvb2sgdGhpcyByb3V0ZSBbMV0sIGJ1dCBubyBmdXJ0
+aGVyIHByb2dyZXNzIHdhcw0KPj4+Pj4gbWFkZS4gVGhlIG5ldyBJT0NUTHMgd291bGQgZXhp
+c3QgZm9yIGFsbCBtdGRjaGFyIGRldmljZXMgKHJlZ2FyZGxlc3MNCj4+Pj4+IG9mIHZlbmRv
+cikgaWYgd2UgZ28gdGhpcyByb3V0ZSBhbmQgd2UnZCBuZWVkIHRvIGVuc3VyZSAtRUlOVkFM
+IG9yDQo+Pj4+PiAtRU5PVFNVUFAgaXMgcmV0dXJuZWQgYXMgYXBwcm9wcmlhdGUgaWYgdGhl
+c2UgSU9DVExzIGFyZSBjYWxsZWQgb24gYQ0KPj4+Pj4gZGV2aWNlIHdoaWNoIGRvZXMgbm90
+IGltcGxlbWVudCB0aGVtLg0KPj4+Pj4NCj4+Pj4+IDIpIEFkZCBhIHZlbmRvci1zcGVjaWZp
+YyBJT0NUTCBsYXllciB0byB0aGUgbXRkY2hhciBkZXZpY2UgaW50ZXJmYWNlLg0KPj4+Pj4g
+V2hlbiB0aGUgbXRkY2hhciBJT0NUTCBoYW5kbGVyIGlzIGNhbGxlZCB3aXRoIGEgY29tbWFu
+ZCBub3QgZGVmaW5lZCBpbg0KPj4+Pj4gbXRkY2hhci5jLCBwYXNzIHRoZSBjYWxsIG9uIHRv
+IGEgZGV2aWNlLXNwZWNpZmljIElPQ1RMIGhhbmRsZXIgd2hpY2gNCj4+Pj4+IGNhbiBwb3Rl
+bnRpYWxseSBoYW5kbGUgdmVuZG9yIHNwZWNpZmljIGNvbW1hbmRzLg0KPj4+Pj4NCj4+Pj4+
+IDMpIEFkZCBhIGdlbmVyaWMgU1BJIHRyYW5zZmVyIElPQ1RMIGZvciBzcGktbm9yIE1URCBk
+ZXZpY2VzLiBUaGlzDQo+Pj4+PiB3b3VsZCBhdm9pZCB0aGUgbmVlZCB0byBkZWZpbmUgSU9D
+VExzIGZvciBldmVyeSB2ZW5kb3Igc3BlY2lmaWMNCj4+Pj4+IGNvbW1hbmQgc3VwcG9ydGVk
+IGJ5IFNQSSBmbGFzaCBkZXZpY2VzLiBJbnN0ZWFkLCBrbm93bGVkZ2Ugb2YgdGhlDQo+Pj4+
+PiB2ZW5kb3Igc3BlY2lmaWMgY29tbWFuZHMgd291bGQgYmUga2VwdCBpbiB1c2Vyc3BhY2Ug
+YW5kIHRoZSBrZXJuZWwNCj4+Pj4+IHdvdWxkIHNpbXBseSBwcm92aWRlIGFuIEFQSSBmb3Ig
+c2VuZGluZyAmIHJlY2VpdmluZyBhcmJpdHJhcnkgYnl0ZXMNCj4+Pj4+IG92ZXIgdGhlIFNQ
+SSBidXMuIFRoaXMgaXMgc2ltaWxhciB0byB0aGUgTU1DX0lPQ19DTUQgSU9DVEwgc3VwcG9y
+dGVkDQo+Pj4+PiBieSB0aGUgTU1DIGRyaXZlci4NCj4+Pj4+DQo+Pj4+PiBNeSBwcmVmZXJl
+bmNlIHdvdWxkIGJlIGZvciBvcHRpb24gKDMpIHNpbmNlIGl0IG1pbmltaXplcyB0aGUgc2Nv
+cGUgb2YNCj4+Pj4+IHRoZSBjaGFuZ2VzIHdlIG5lZWQgdG8gbWFrZSBpbiB0aGUga2VybmVs
+LiBXZSdyZSBub3QgdGllZCB0byB0aGlzDQo+Pj4+PiB0aG91Z2gsIHNvIGxldCB1cyBrbm93
+IGlmIGEgZGlmZmVyZW50IG9wdGlvbiBpcyBwcmVmZXJyZWQuDQo+Pj4+DQo+Pj4+IEknbSBu
+b3Qgc3VyZSB3ZSBzaG91bGQgYWxsb3cgYSBnZW5lcmljICJpc3N1ZSBhbnl0aGluZyB0byB0
+aGUgc3BpDQo+Pj4+IGZsYXNoIi4gSXQgaXQgaXMganVzdCBhIG9uZSB0aW1lIHRoaW5nLCBs
+aWtlIGZvciBleGFtcGxlLCBwcm9ncmFtDQo+Pj4+IGEgcGFzc3dvcmQgZHVyaW5nIHByb2R1
+Y3Rpb24sIG9yIHByb2dyYW0gbm9uLXZvbGF0aWxlIG1lbW9yeSBkdXJpbmcNCj4+Pj4gcHJv
+ZHVjdGlvbiBvZiB0aGUgYm9hcmQsIEknbSBmaW5lIHdpdGggaXQuIE1vc3QgcHJvYmFibHks
+IGNhbGxpbmcNCj4+Pj4gdGhhdCBpb2N0bCB3aWxsIGFsc28gY2FsbCBhZGRfdGFpbnQoKS4g
+VGhpcyB3aWxsIGFsc28gbmVlZCB0byBnbw0KPj4+PiB3aXRoIHByb3BlciB1c2Vyc3BhY2Ug
+dXRpbCBzdXBwb3J0Lg0KPj4+Pg0KPj4+PiBCdXQgaWYgaXQgaXMgc29tZXRoaW5nIGZvciBn
+ZW5lcmFsIHVzZSwgcGxlYXNlIHByb3ZpZGUgYSBwcm9wZXIgQVBJDQo+Pj4+IGFuZCBkb24n
+dCB3cml0ZSB1c2Vyc3BhY2UgZHJpdmVycy4NCj4+Pg0KPj4+IEkndmUgYmVlbiBsb29raW5n
+IGF0IGhvdyB0aGUgZU1NQy9TRCBhbmQgTlZNZSBkcml2ZXJzIHN1cHBvcnQgcGFzc2luZw0K
+Pj4+IHRocm91Z2ggdmVuZG9yIHNwZWNpZmljIGNvbW1hbmRzIHVzaW5nIE1NQ19JT0NfQ01E
+IGZvciBlTU1DL1NEIGFuZA0KPj4+IE5WTUVfSU9DVExfQURNSU5fQ01EL05WTUVfSU9DVExf
+SU9fQ01EIGZvciBOVk1lLiBOZWl0aGVyIG9mIHRoZXNlDQo+Pj4gaW9jdGwgaGFuZGxlcnMg
+YXBwZWFyIHRvIGNhbGwgYWRkX3RhaW50KCkuDQo+Pg0KPj4gSSBkb24ndCBrbm93IHRoZSB1
+c2UgY2FzZSBmb3IgTU1DL05WTWUsIGJ1dCB1bnRpbCB5b3UgY29udmluY2UgbWUNCj4+IG90
+aGVyd2lzZSwgSSBzZWUgInNlbmRpbmcgcmF3IGNvbW1hbmRzIHRvIHRoZSBTUEkgZmxhc2gi
+IGFzIHNvbWV0aGluZw0KPj4gZXhjZXB0aW9uYWwsIGFuZCB0aHVzIHlvdSdkIHRhaW50IHRo
+ZSBrZXJuZWwuDQo+IA0KPiBMb29raW5nIGF0IGh0dHBzOi8vZG9jcy5rZXJuZWwub3JnL2Fk
+bWluLWd1aWRlL3RhaW50ZWQta2VybmVscy5odG1sLCBJIA0KPiBjYW4ndCBzZWUgYW55IHRh
+aW50IGZsYWcgKHRhaW50ZWQgc3RhdGUgYml0KSB0aGF0IHdvdWxkIGFwcGx5IGZvciB0aGUg
+DQo+IGNhc2Ugd2hlbiByYXcgY29tbWFuZHMgYXJlIHNlbnQgdG8gYSBoYXJkd2FyZSBkZXZp
+Y2UuIEkgbWF5IGJlIA0KPiBtaXN1bmRlcnN0YW5kaW5nIHNvbWV0aGluZyB0aG91Z2ggLSB3
+aGljaCB0YWludGVkIHN0YXRlIGJpdCB3b3VsZCBiZSBzZXQgDQo+IGJ5IHRoaXMgb3BlcmF0
+aW9uPw0KPiANCj4+DQo+Pj4gRm9yIEEtQ1JUTSBvcGVyYXRpb25zLCBpbiBvdXIgY3VycmVu
+dCB1c2UgY2FzZSB0aGUgY29tbWFuZCBieXRlcyB0byBiZQ0KPj4+IHNlbnQgb3ZlciB0aGUg
+U1BJIGJ1cyB0byB0aGUgZmxhc2ggZGV2aWNlIGFyZSBzZW50IGZyb20gYSBjbG91ZC1iYXNl
+ZA0KPj4+IHNlcnZpY2UgdG8gYSB1c2Vyc3BhY2UgYWdlbnQgb24gdGhlIGRldmljZS4gVGhl
+IGFnZW50IHNpbXBseSBuZWVkcyBhDQo+Pj4gd2F5IHRvIHBhc3MgdGhlc2UgY29tbWFuZCBi
+eXRlcyBvdmVyIHRoZSBTUEkgYnVzIHRvIHRoZSBkZXZpY2UgYW5kDQo+Pj4gcmV0cmlldmUg
+dGhlIHNlcXVlbmNlIG9mIHJlc3BvbnNlIGJ5dGVzIHRvIHNlbmQgYmFjayB0byB0aGUNCj4+
+PiBjbG91ZC1iYXNlZCBzZXJ2aWNlLiBGb3IgdGhpcyB3ZSBjb3VsZCB1c2UgZWl0aGVyIGEg
+Z2VuZXJpYyBTUEkNCj4+PiB0cmFuc2ZlciBJT0NUTCBvciBhIE1pY3JvbiBzcGVjaWZpYyBB
+LUNSVE0gY29tbWFuZCBJT0NUTC4NCj4+Pg0KPj4+IEZvciB0aGUgQWR2YW5jZWQgU2VjdG9y
+IFByb3RlY3Rpb24gY29tbWFuZHMgd2UgY2FuIGFkZCBJT0NUTHMgZm9yIGVhY2gNCj4+PiBj
+b21tYW5kIGlmIHRoYXQncyB0aGUgcHJlZmVycmVkIGFwcHJvYWNoLiBUaGUgY29tbWFuZCBs
+aXN0IGNhbiBiZSBzZWVuDQo+Pj4gb24gcGFnZSAzNSBvZiB0aGUgZGF0YXNoZWV0IGZvciB0
+aGUgTVQyNVFMMDJHQ0JCIHNwaS1ub3IgZmxhc2ggZGV2aWNlDQo+Pj4gWzJdIGFuZCBvbiBv
+dGhlciBNaWNyb24gZmxhc2ggZGV2aWNlIGRhdGFzaGVldHMuDQo+Pg0KPj4gVGhpcyBkb2Vz
+bid0IHNvdW5kIGxpa2UgYSBwcm9wZXIgYWJzdHJhY3Rpb24gdG8gbWUuIEFnYWluLCB0aGUg
+cGVyDQo+PiBzZWN0b3IgbG9jayBwcm90ZWN0aW9uIHNob3VsZCBiZSBpbnRlZ3JhdGVkIGlu
+dG8gdGhlIGN1cnJlbnQgbG9ja2luZw0KPj4gaW9jdGxzLiBSZWdhcmRpbmcgdGhlIHNlY3Vy
+aXR5IGNvbW1hbmRzLCBJJ20gYWZyYWlkIEkgY2FuJ3QgaGVscA0KPj4geW91IG9uIHRoYXQg
+cG9pbnQsIGJ1dCBpdCBzb3VuZHMgbGlrZSBieXBhc3NpbmcgdGhlIGtlcm5lbCBpcyB0aGUN
+Cj4+IHdyb25nIHRoaW5nIHRvIGRvLg0KPiANCj4gRm9yIHRoZSBBZHZhbmNlZCBTZWN0b3Ig
+UHJvdGVjdGlvbiBjb21tYW5kcyBJIGNhbiBsb29rIGludG8gZXh0ZW5kaW5nIA0KPiB0aGUg
+ZXhpc3RpbmcgSU9DVExzIGlmIHRoYXQncyB0aGUgcHJlZmVycmVkIGFwcHJvYWNoLg0KPiAN
+Cj4gRm9yIHRoZSBBLUNSVE0gb3BlcmF0aW9ucywgdGhlc2UgZG9uJ3QgZml0IHdlbGwgaW50
+byB0aGUgZXhpc3RpbmcgQVBJcy4gDQo+IEZ1cnRoZXJtb3JlLCBmb3Igc2V2ZXJhbCBvZiB0
+aGVzZSBvcGVyYXRpb25zIHRoZSBieXRlcyBzZW50IG92ZXIgdGhlIFNQSSANCj4gYnVzIGNv
+bnNpc3Qgb2YgYSBtZXNzYWdlIGJsb2NrIChpbmNsdWRpbmcgYW4gb3Bjb2RlL3N1Yi1vcGNv
+ZGUgYW5kIGFueSANCj4gYXJndW1lbnRzKSBmb2xsb3dlZCBieSBhIEhNQUMgc2lnbmF0dXJl
+IG9mIHRoZSBtZXNzYWdlIGJsb2NrLiBUaGUgDQo+IHNpZ25pbmcga2V5IGZvciB0aGlzIEhN
+QUMgaXMgdHlwaWNhbGx5IGtlcHQgb2ZmIHRoZSBkZXZpY2UgaXRzZWxmIChlLmcuIA0KPiBp
+biBhbiBvbi1zaXRlIHNlcnZlciBvciBhIGNsb3VkLWJhc2VkIEtleSBNYW5hZ2VtZW50IFN5
+c3RlbSkuIFRoaXMgbWVhbnMgDQo+IHRoYXQgdGhlIHNlcXVlbmNlIG9mIGJ5dGVzIHRvIGJl
+IHNlbnQgb3ZlciB0aGUgU1BJIGJ1cyBpcyB0eXBpY2FsbHkgDQo+IHByb2R1Y2VkIGJ5IGEg
+c3lzdGVtIHdoaWNoIGhhcyBhY2Nlc3MgdG8gdGhlIHNpZ25pbmcga2V5IGFuZCBpcyB0aGVu
+IA0KPiBzZW50IHRvIHRoZSB0YXJnZXQgZGV2aWNlIHRvIGJlIHJlbGF5ZWQgb3ZlciB0aGUg
+U1BJIGJ1cyB0byB0aGUgQXV0aGVudGEgDQo+IGZsYXNoIGRldmljZS4gVGhlIGtlcm5lbCBy
+dW5uaW5nIG9uIGEgc3lzdGVtIHdpdGggYW4gQXV0aGVudGEgZmxhc2ggDQo+IGRldmljZSBp
+cyB0eXBpY2FsbHkgbm90IGluIGEgcG9zaXRpb24gdG8gY29uc3RydWN0IGFuZCBzaWduIHRo
+ZSBzZXF1ZW5jZSANCj4gb2YgYnl0ZXMgdG8gYmUgc2VudCBvdmVyIHRoZSBTUEkgYnVzIGZv
+ciBBLUNSVE0gY29tbWFuZHMuDQo+IA0KPiBTbywgSSB0aGluayB0aGUgYmVzdCBBUEkgZm9y
+IEEtQ1JUTSBvcGVyYXRpb25zIHdvdWxkIGJlIGEgcGFpciBvZiANCj4gdmVuZG9yLXNwZWNp
+ZmljIElPQ1RMcywgV1JfQ1JUTV9DTUQgYW5kIFJEX0NSVE1fQ01ELCB3aGljaCBlYWNoIHRh
+a2UgYW4gDQo+IGFycmF5IG9mIGJ5dGVzLCBpbmNsdWRpbmcgYW55IEhNQUMgc2lnbmF0dXJl
+LCB0byBiZSBzZW50IG92ZXIgdGhlIFNQSSANCj4gYnVzIHRvIHRoZSBBdXRoZW50YSBmbGFz
+aCBkZXZpY2UuIFRoZXNlIHdvdWxkIGNoZWNrIHRoZSANCj4gb3Bjb2RlL3N1Yi1vcGNvZGUg
+dG8gZW5zdXJlIHRoYXQgdGhleSByZXByZXNlbnQgYSB2YWxpZCBBLUNSVE0gY29tbWFuZCAN
+Cj4gYW5kIGZvciBSRF9DUlRNX0NNRCB0byBhbHNvIGNoZWNrIHRoYXQgdGhpcyBpcyBhbiBB
+LUNSVE0gY29tbWFuZCB0aGF0IA0KPiBkb2VzIG5vdCBtb2RpZnkgdGhlIGRldmljZSBzdGF0
+ZSBvciBmbGFzaCBjb250ZW50cy4gVGh1cyBXUl9DUlRNX0NNRCANCj4gcmVxdWlyZXMgdGhl
+IGRldmljZSB0byBiZSBvcGVuZWQgZm9yIHdyaXRpbmcsIFJEX0NSVE1fQ01EIG9ubHkgcmVx
+dWlyZXMgDQo+IHRoZSBkZXZpY2UgdG8gYmUgb3BlbmVkIGZvciByZWFkaW5nLiBPbmNlIHRo
+ZSBvcGNvZGUvc3ViLW9wY29kZSBoYXMgYmVlbiANCj4gY2hlY2tlZCB0aGUgY29tbWFuZCB3
+b3VsZCBiZSBzZW50IHRvIHRoZSBBdXRoZW50YSBmbGFzaCBkZXZpY2UgYW5kIHRoZSANCj4g
+cmVzcG9uc2Ugc2VudCBiYWNrIHRvIHVzZXJzcGFjZS4NCg0KSSdkIGxpa2UgdG8gc3RhcnQg
+bW92aW5nIHRoaW5ncyBmb3J3YXJkIGhlcmUuIEkgdGhpbmsgdGhlIGJlc3QgcGxhY2UgdG8g
+DQpzdGFydCBpcyBnb2luZyB0byBiZSB0byBzZW5kIGFuIGluaXRpYWwgUkZDIHBhdGNoIHNl
+cmllcyBmb3IgdGhlIGNoYW5nZXMgDQp0byBkcml2ZXJzL210ZC9zcGktbm9yL21pY3Jvbi1z
+dC5jIHRvIGFkZCB3cmFwcGVyIGZ1bmN0aW9ucyBmb3IgdGhlIA0KQWR2YW5jZWQgU2VjdG9y
+IFByb3RlY3Rpb24gJiBBLUNSVE0gY29tbWFuZHMsIGFuZCBhZGQgYXBwcm9wcmlhdGUgDQpl
+bnRyaWVzIHRvIG1pY3Jvbl9ub3JfcGFydHMuIFRoYXQgd2lsbCBob3BlZnVsbHkgaW1wcm92
+ZSB0aGUgY29udGV4dCBhbmQgDQp3ZSBjYW4gY29udGludWUgdG8gZGlzY3VzcyB3aGF0IGlz
+IGFuIGFwcHJvcHJpYXRlIEFQSSBmb3IgZXhwb3NpbmcgdGhlc2UgDQpjb21tYW5kcyB0byB0
+aGUgdXNlciBzcGFjZSBzZXJ2aWNlIHdoaWNoIG5lZWRzIHRvIGludm9rZSB0aGVtICh0byAN
+CnBlcmZvcm0gYWN0aW9ucyBzdWNoIGFzIGluaXRpYXRpbmcgYSBjcnlwdG9ncmFwaGljIG1l
+YXN1cmVtZW50LCBkZXJpdmluZyANCmEgc2VjcmV0IGtleSBiYXNlZCBvbiBhIG1lYXN1cmVt
+ZW50IG9yIHNlY3VyZWx5IHVwZGF0aW5nIGEgYm9vdGxvYWRlciANCmltYWdlIGluIHRoZSBm
+bGFzaCkuDQoNCklmIGFueW9uZSBoYXMgYW55IGZ1cnRoZXIgdGhvdWdodHMgYXQgdGhpcyBz
+dGFnZSBwbGVhc2UgbGV0IHVzIGtub3cuDQoNClJlZ2FyZHMsDQoNCi0tIA0KUGF1bCBCYXJr
+ZXINClByaW5jaXBhbCBTb2Z0d2FyZSBFbmdpbmVlcg0KU2FuQ2xvdWQgTHRkDQoNCmU6IHBh
+dWwuYmFya2VyQHNhbmNsb3VkLmNvbQ0KdzogaHR0cHM6Ly9zYW5jbG91ZC5jb20vDQo=
+--------------oJ1kg2NeCKB7Ynnftbu06a32
+Content-Type: application/pgp-keys; name="OpenPGP_0xA67255DFCCE62ECD.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xA67255DFCCE62ECD.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> +			hashlen = token - hashp;
-> +			if (hashlen <= 0) {
-> +				log_err("Missing fsverity hash\n");
-> +				continue;
-> +			}
-> +
-> +			assert(hashlen / 2 <= sizeof(hash));
-> +			hex2bin(hash, hashp, hashlen / 2);
-> +
-> +			ret = calc_hash_sigv3(IMA_VERITY_DIGSIG, algo, hash,
-> +					      sigv3_hash);
-> +			if (ret < 0 || ret == 1) {
-> +				log_info("Failure to calculate fs-verity hash\n");
-> +				continue;
-> +			}
-> +
-> +			siglen = sign_hash(algo, sigv3_hash, hashlen / 2,
-> +					   key, NULL, sig + 1);
-> +
-> +			sig[0] = IMA_VERITY_DIGSIG;
-> +			sig[1] = DIGSIG_VERSION_3;	/* sigv3 */
-> +		} else {
-> +			token = strpbrk(line, ", \t");
-> +			hashlen = token ? token - line : strlen(line);
-> +			assert(hashlen / 2 <= sizeof(hash));
-> +			hex2bin(hash, line, hashlen / 2);
-> +
-> +			siglen = sign_hash(imaevm_params.hash_algo, hash,
-> +					   hashlen / 2, key, NULL, sig + 1);
-> +			sig[0] = EVM_IMA_XATTR_DIGSIG;
-> +		}
->   
-> -		assert(hashlen / 2 <= sizeof(hash));
-> -		hex2bin(hash, line, hashlen / 2);
-> -		siglen = sign_hash(imaevm_params.hash_algo, hash, hashlen / 2,
-> -				 key, NULL, sig + 1);
->   		if (siglen <= 1)
->   			return siglen;
->   		assert(siglen < sizeof(sig));
-> @@ -2568,7 +2633,7 @@ struct command cmds[] = {
->   	{"ima_boot_aggregate", cmd_ima_bootaggr, 0, "[--pcrs hash-algorithm,file] [TPM 1.2 BIOS event log]", "Calculate per TPM bank boot_aggregate digests\n"},
->   	{"ima_fix", cmd_ima_fix, 0, "[-t fdsxm] path", "Recursively fix IMA/EVM xattrs in fix mode.\n"},
->   	{"ima_clear", cmd_ima_clear, 0, "[-t fdsxm] path", "Recursively remove IMA/EVM xattrs.\n"},
-> -	{"sign_hash", cmd_sign_hash, 0, "[--key key] [--pass [password]", "Sign hashes from shaXsum output.\n"},
-> +	{"sign_hash", cmd_sign_hash, 0, "[--veritysig] [--key key] [--pass password]", "Sign hashes from either shaXsum or \"fsverity digest\" output.\n"},
->   #ifdef DEBUG
->   	{"hmac", cmd_hmac_evm, 0, "[--imahash | --imasig ] file", "Sign file metadata with HMAC using symmetric key (for testing purpose).\n"},
->   #endif
-> @@ -2608,6 +2673,7 @@ static struct option opts[] = {
->   	{"verify-bank", 2, 0, 143},
->   	{"keyid", 1, 0, 144},
->   	{"keyid-from-cert", 1, 0, 145},
-> +	{"veritysig", 0, 0, 146},
->   	{}
->   
->   };
-> @@ -2838,6 +2904,9 @@ int main(int argc, char *argv[])
->   			}
->   			imaevm_params.keyid = keyid;
->   			break;
-> +		case 146:
-> +			veritysig = 1;
-> +			break;
->   		case '?':
->   			exit(1);
->   			break;
-> diff --git a/src/imaevm.h b/src/imaevm.h
-> index 0d53a0232ae4..afcf1e042014 100644
-> --- a/src/imaevm.h
-> +++ b/src/imaevm.h
-> @@ -93,6 +93,7 @@ enum evm_ima_xattr_type {
->   	EVM_IMA_XATTR_DIGSIG,
->   	IMA_XATTR_DIGEST_NG,
->   	EVM_XATTR_PORTABLE_DIGSIG,
-> +	IMA_VERITY_DIGSIG,
->   };
->   
->   struct h_misc {
-> @@ -138,7 +139,8 @@ enum digest_algo {
->   
->   enum digsig_version {
->   	DIGSIG_VERSION_1 = 1,
-> -	DIGSIG_VERSION_2
-> +	DIGSIG_VERSION_2,
-> +	DIGSIG_VERSION_3	/* hash of ima_file_id struct (portion used) */
->   };
->   
->   struct pubkey_hdr {
-> @@ -233,5 +235,6 @@ int ima_verify_signature(const char *file, unsigned char *sig, int siglen, unsig
->   void init_public_keys(const char *keyfiles);
->   int imaevm_hash_algo_from_sig(unsigned char *sig);
->   const char *imaevm_hash_algo_by_id(int algo);
-> +int calc_hash_sigv3(enum evm_ima_xattr_type type, const char *algo, const unsigned char *in_hash, unsigned char *out_hash);
->   
->   #endif
-> diff --git a/src/libimaevm.c b/src/libimaevm.c
-> index a4f2ec40684d..52663a464cd7 100644
-> --- a/src/libimaevm.c
-> +++ b/src/libimaevm.c
-> @@ -497,6 +497,91 @@ err:
->   	return ret;
->   }
->   
-> +#define HASH_MAX_DIGESTSIZE 64	/* kernel HASH_MAX_DIGESTSIZE is 64 bytes */
-> +
-> +struct ima_file_id {
-> +	__u8 hash_type;		/* xattr type [enum evm_ima_xattr_type] */
-> +	__u8 hash_algorithm;	/* Digest algorithm [enum hash_algo] */
-> +	__u8 hash[HASH_MAX_DIGESTSIZE];
-> +} __packed;
-> +
-> +/*
-> + * Calculate the signature format version 3 hash based on the portion
-> + * of the ima_file_id structure used, not the entire structure.
-> + *
-> + * For openssl errors return 1, other errors return -EINVAL.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-Returns the legth of the hash otherwise.
+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
+4yvD5AdHy8s8HYtBP5oowjSllz6aOtP0BiQ=3D
+=3Duult
+-----END PGP PUBLIC KEY BLOCK-----
 
+--------------oJ1kg2NeCKB7Ynnftbu06a32--
 
-   With the two nits fixed:
+--------------OpYLBAdI7D68I9UnBO0rgtUy--
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+--------------pP3EEa97i6gP6RciwsEmFPJi
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> + */
-> +int calc_hash_sigv3(enum evm_ima_xattr_type type, const char *algo,
-> +		    const unsigned char *in_hash, unsigned char *out_hash)
-> +{
-> +	struct ima_file_id file_id = { .hash_type = IMA_VERITY_DIGSIG };
-> +	uint8_t *data = (uint8_t *) &file_id;
-> +
-> +	const EVP_MD *md;
-> +	EVP_MD_CTX *pctx;
-> +	unsigned int mdlen;
-> +	int err;
-> +#if OPENSSL_VERSION_NUMBER < 0x10100000
-> +	EVP_MD_CTX ctx;
-> +	pctx = &ctx;
-> +#else
-> +	pctx = EVP_MD_CTX_new();
-> +#endif
-> +	int hash_algo;
-> +	int hash_size;
-> +	unsigned int unused;
-> +
-> +	if (type != IMA_VERITY_DIGSIG) {
-> +		log_err("Only fsverity supports signature format v3 (sigv3)\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if ((hash_algo = imaevm_get_hash_algo(algo)) < 0) {
-> +		log_err("Hash algorithm %s not supported\n", algo);
-> +		return -EINVAL;
-> +	}
-> +	file_id.hash_algorithm = hash_algo;
-> +
-> +	md = EVP_get_digestbyname(algo);
-> +	if (!md) {
-> +		log_err("EVP_get_digestbyname(%s) failed\n", algo);
-> +		err = 1;
-> +		goto err;
-> +	}
-> +
-> +	hash_size = EVP_MD_size(md);
-> +	memcpy(file_id.hash, in_hash, hash_size);
-> +
-> +	err = EVP_DigestInit(pctx, md);
-> +	if (!err) {
-> +		log_err("EVP_DigestInit() failed\n");
-> +		err = 1;
-> +		goto err;
-> +	}
-> +
-> +	unused = HASH_MAX_DIGESTSIZE - hash_size;
-> +	if (!EVP_DigestUpdate(pctx, data, sizeof(file_id) - unused)) {
-> +		log_err("EVP_DigestUpdate() failed\n");
-> +		err = 1;
-> +		goto err;
-> +	}
-> +
-> +	err = EVP_DigestFinal(pctx, out_hash, &mdlen);
-> +	if (!err) {
-> +		log_err("EVP_DigestFinal() failed\n");
-> +		err = 1;
-> +		goto err;
-> +	}
-> +	err = mdlen;
-> +err:
-> +	if (err == 1)
-> +		output_openssl_errors();
-> +#if OPENSSL_VERSION_NUMBER >= 0x10100000
-> +	EVP_MD_CTX_free(pctx);
-> +#endif
-> +	return err;
-> +}
-> +
->   int imaevm_get_hash_algo(const char *algo)
->   {
->   	int i;
+-----BEGIN PGP SIGNATURE-----
+
+wnsEABYIACMWIQS7m7rT1+CktY3YG1PYN3IfEvob6gUCYrA5+AUDAAAAAAAKCRDYN3IfEvob6vuF
+AP98XDUlOg3RB8FGm5+egscE5feXtJdy6+79ATXf7+1YZQD/VgDMkJ1EdAwjhrMXAwJm5JROqPDG
+MrTBPwYoV2quMgs=
+=XQ9e
+-----END PGP SIGNATURE-----
+
+--------------pP3EEa97i6gP6RciwsEmFPJi--
