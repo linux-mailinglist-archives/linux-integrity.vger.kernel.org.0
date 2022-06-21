@@ -2,92 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0388D553394
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jun 2022 15:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81940553421
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jun 2022 16:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351445AbiFUNeW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Jun 2022 09:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        id S233485AbiFUOEJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Jun 2022 10:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351573AbiFUNbC (ORCPT
+        with ESMTP id S229626AbiFUOEJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Jun 2022 09:31:02 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70A72AE1E;
-        Tue, 21 Jun 2022 06:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655817939;
-        bh=6NOAMXdCUByyszfLupmrTS363FnVyz0cu7VA/+0ZRpg=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=We4utsoGckPb7P63tspOFDUOD+/zLTgLvZg9QhtYw8+7TshQCwQZo2L6w+91ky5eV
-         daVcP4lSCdWcRjfOvC98uMchCvp76tnTwziO81Jy3ll5jp7HCWwQyRtXijWvIWB965
-         d1PuJBwxEIt5633EvI1kAa4wJHR9EHSrFMZGKIAM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([46.223.2.162]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mof5H-1nJ5re2E2L-00p6Z3; Tue, 21
- Jun 2022 15:25:39 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, LinoSanfilippo@gmx.de, lukas@wunner.de,
-        p.rosenberger@kunbus.com
-Subject: [PATCH v6 9/9] tpm, tpm_tis: Enable interrupt test
-Date:   Tue, 21 Jun 2022 15:24:47 +0200
-Message-Id: <20220621132447.16281-10-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220621132447.16281-1-LinoSanfilippo@gmx.de>
-References: <20220621132447.16281-1-LinoSanfilippo@gmx.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:xSB16AR/mNo0Fvb7nCgg54P4T5PTXXJ6u1/cxTo833nbHj1CGwF
- 85DnFGzQJq2atuTTl2iqce6c8e1HOqzMIO+EymhOc6g/r0MKH7EArUfMfOmJfM8o1mFCEMr
- VqNOdl9gVUQienIscPHd1P3lYV3ePa/vcMNOROFa5cSEy4WzXYNfYounXqhnixli/nTi9W+
- ohvFU5CmjZNRWRQ19eI1g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:OkfFheutD+Q=:vbgJUfdRzcOzV95IvgvhwB
- CF4BNMQGYWVsXIVn55d38NNBBB0qUsZyHgcwI0xX3rWg2miFY85FLWyASWx3oCJpRt6eHQQNS
- 7FGs+iNFn3/E71ES5tG5PZJU/VglbLq2edlmrpJrCU8mK3Hf4PIx+JwVnnT9eP62OxM99Kvw1
- RbasWoVbSUlJMzUqqaC5Hnitm3WUSj0dyAgqQGQCO9NtdsGv1loHJrKDOf3UN8ZqxQwtCEXZ6
- O48lBFi9ZtmTzGKG7sy4ozLC88y1YuVcIV3FfrkmQFYuzaTSgTYb6+jrei7vzef73h7sVJF/E
- UBavHCh01ORKG4CBreAhvvtGktQPo1Iy67F1ov2ckJAG21RX5EMrZshM8rEwLF9If4+p5VMZA
- TULeP2oXiuo168M3adh1wpcsUf/zrQZqCYFM38/W18Ey9wRTwJYvCgYvz3ZY/nRZhCua6XnGL
- RpgDVZQr4eh1b++OZAKR3DNnx5EjiOXZ0345rUC15V4kvddpnDPMELp110714ZAUAZAhJKOk3
- mOLCugXLGiFpAP4mJv4dNFPhMABxdEgqmemS6XVM6Lw/b+b0L4bEYuVFUd7QDDHTZwMSp1+QJ
- /TNpy06CpQC+syTZCQebOlDiwqQ8jnGiCWXGkCDuoU1T/PnsyqUTPd0EXgSk92D5pID2dNnw5
- 4jVceD2HNX5xvPr8fWL4zIs+3w7+Ra5PAwNtW4pKz+AAca9B3z/64T0I9nLvBJn+CyNiPHHK0
- XVMa9TurgYuWMbhjuqq42lRdjS7ObkOQmhT/0uig+i1dRWc+EvBAD8F6f4zA9YDrf/WQBaWlC
- NdkW7FApsx0WJr6t5HJ6KBKGQsJBSB8kqIsvAfH8kYkCIOFoQ5YVwHOoMViuaIaNmTgK3xr1X
- SowelutJkRpKenaNvA83bmwGy5V7cdmvQV2dtturNeEo+nhDPlhieEVEne/fVPtXsp1Pa7cY+
- JFKwA73133eJzO640cTlKiazx76MX5ZmSt3j0YA5aBCVua1pWntnfjkcAUSDUmWPN8EL1aeyH
- tiMAthMwfRHSxJsANB/xPaAJk8GY50/9lciqCWpwFo1slLTmUsR+92y+6D0ByClXRb1gzR2hS
- Khe0Lqg5apwUdTw3tAkoid/zZwVHqkz+0wUgOR3tNuVs2eU391nqQm3pQ==
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Jun 2022 10:04:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B53B12AAF;
+        Tue, 21 Jun 2022 07:04:07 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25LDtq0C030901;
+        Tue, 21 Jun 2022 14:03:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=95EPxFwW62db/02iZB6Sc7wbkfLf24RnMNVN5Y5ove8=;
+ b=LswtMCsjE0V2p9/crZEJNTLYWvydoNQ88oZK+erOwphDi3GD/JiaNnr6wvU7pK3S2FkT
+ /cI9E8kvADQCCS0t+po+gjrq6QFNRa4SWrQjeu4lhfiu8tkcRr3UavZTJXnrc3lWWL/d
+ FLF0Ka5tIpjyCtd+mLGRvwDqQDXC7dw3cdR8pyJ9hOray7UlSnXfBMzw2vV3Xw0Vgcu0
+ C53geWVoI2hOVyRgiAmix8APzRn94bVNWXjtll6t4iQCTVJf5TrJRrQKH3Dg52qmxzzv
+ JPjOzcrk+xB/q2uTT3DZmk7XrpQF7+bIl1W7gJEHVJCY1BKp0FTcAZYqcYJZBp+wQM+U YA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gufa0g8gj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jun 2022 14:03:46 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25LE1hc0029144;
+        Tue, 21 Jun 2022 14:03:45 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gufa0g8fq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jun 2022 14:03:45 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25LDosP4008344;
+        Tue, 21 Jun 2022 14:03:44 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gs5yhm53t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jun 2022 14:03:43 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25LE3fTM19792142
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Jun 2022 14:03:41 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 95A49A4060;
+        Tue, 21 Jun 2022 14:03:41 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A5FEA405C;
+        Tue, 21 Jun 2022 14:03:40 +0000 (GMT)
+Received: from sig-9-65-64-13.ibm.com (unknown [9.65.64.13])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Jun 2022 14:03:40 +0000 (GMT)
+Message-ID: <5d0c291bb4a674a6733a18f9eb67cf40193732f4.camel@linux.ibm.com>
+Subject: Re: [PATCH -next] evm: Use IS_ENABLED to initialize .enabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     xiujianfeng <xiujianfeng@huawei.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 21 Jun 2022 10:03:39 -0400
+In-Reply-To: <812c4ee9-56f7-900a-df48-f3ca3e15542f@huawei.com>
+References: <20220606101042.89638-1-xiujianfeng@huawei.com>
+         <64511312-df94-c40b-689c-5fc3823e91f5@pengutronix.de>
+         <812c4ee9-56f7-900a-df48-f3ca3e15542f@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: sc-cLhOOXlux62wlkyoXKORyFgam6zbC
+X-Proofpoint-ORIG-GUID: Yf3cyXtm2a6RXtX5F4LrU-CGLPLqhedo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-21_06,2022-06-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ suspectscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
+ mlxlogscore=999 priorityscore=1501 impostorscore=0 clxscore=1011
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206210062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoZSB0ZXN0
-IGZvciBpbnRlcnJ1cHRzIGluIHRwbV90aXNfc2VuZCgpIGlzIHNraXBwZWQgaWYgdGhlIGZsYWcK
-VFBNX0NISVBfRkxBR19JUlEgaXMgbm90IHNldC4gU2luY2UgdGhlIGN1cnJlbnQgY29kZSBuZXZl
-ciBzZXRzIHRoZSBmbGFnCmluaXRpYWxseSB0aGUgdGVzdCBpcyBuZXZlciBleGVjdXRlZC4KCkZp
-eCB0aGlzIGJ5IHNldHRpbmcgdGhlIGZsYWcgaW4gdHBtX3Rpc19nZW5faW50ZXJydXB0KCkgcmln
-aHQgYWZ0ZXIKaW50ZXJydXB0cyBoYXZlIGJlZW4gZW5hYmxlZCBhbmQgYmVmb3JlIHRoZSB0ZXN0
-IGlzIGV4ZWN1dGVkLgoKU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlw
-cG9Aa3VuYnVzLmNvbT4KLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jIHwgNSAr
-KysrKwogMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29y
-ZS5jCmluZGV4IDFmNzY2M2FjMWZjNC4uNjUwYzIwMmQyZjUwIDEwMDY0NAotLS0gYS9kcml2ZXJz
-L2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCisrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19j
-b3JlLmMKQEAgLTc3NSwxMSArNzc1LDE2IEBAIHN0YXRpYyBpbnQgdHBtX3Rpc19nZW5faW50ZXJy
-dXB0KHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAlpZiAocmV0IDwgMCkKIAkJcmV0dXJuIHJldDsK
-IAorCWNoaXAtPmZsYWdzIHw9IFRQTV9DSElQX0ZMQUdfSVJROworCiAJaWYgKGNoaXAtPmZsYWdz
-ICYgVFBNX0NISVBfRkxBR19UUE0yKQogCQlyZXQgPSB0cG0yX2dldF90cG1fcHQoY2hpcCwgMHgx
-MDAsICZjYXAyLCBkZXNjKTsKIAllbHNlCiAJCXJldCA9IHRwbTFfZ2V0Y2FwKGNoaXAsIFRQTV9D
-QVBfUFJPUF9USVNfVElNRU9VVCwgJmNhcCwgZGVzYywgMCk7CiAKKwlpZiAocmV0KQorCQljaGlw
-LT5mbGFncyAmPSB+VFBNX0NISVBfRkxBR19JUlE7CisKIAl0cG1fdGlzX3JlbGVhc2VfbG9jYWxp
-dHkoY2hpcCwgMCk7CiAKIAlyZXR1cm4gcmV0OwotLSAKMi4zNi4xCgo=
+On Tue, 2022-06-21 at 18:58 +0800, xiujianfeng wrote:
+> Hi, Ahmad
+> 
+> 在 2022/6/7 14:06, Ahmad Fatoum 写道:
+> > On 06.06.22 12:10, Xiu Jianfeng wrote:
+> >> Use IS_ENABLED(CONFIG_XXX) instead of #ifdef/#endif statements to
+> >> initialize .enabled, minor simplicity improvement.
+
+The difference between using ifdef's and IS_ENABLED is when the
+decision is made - build time, run time.   Please update the patch
+description providing an explanation for needing to make the decision
+at run time.
+
+thanks,
+
+Mimi
+
