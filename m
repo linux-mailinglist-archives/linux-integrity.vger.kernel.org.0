@@ -2,62 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AC75543C5
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jun 2022 10:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7723A554942
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jun 2022 14:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353349AbiFVH4Q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Jun 2022 03:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S233391AbiFVJxR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Jun 2022 05:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353710AbiFVH4O (ORCPT
+        with ESMTP id S232568AbiFVJxR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Jun 2022 03:56:14 -0400
-Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BC937A2E
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Jun 2022 00:56:13 -0700 (PDT)
-Received: by mail.olerise.pl (Postfix, from userid 1001)
-        id 35CA3268C3; Wed, 22 Jun 2022 09:51:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
-        t=1655884412; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
-        h=Date:From:To:Subject:From;
-        b=q9faAMGed8AVsgXLY4aD2xVj9a6CLxbWPbt3G78vJsjO6tL2SRj8XVvRqlS7uIHDA
-         iICueRTA24PqnKsL3lP1hUNLyNbnjEvBNw0eu7ED6OyqTDG5SLodNoNl9LZsv/ACRJ
-         +42Y265TXIsBH2k+lYoNf4B18blknAqHVnJ0XhTltqvLLMdariFBYxNy9t2yKaDEiw
-         iK78sjuYk9K8ZRnZWVnZz6mCd+CpQWLKTdq+BRNqSgUrNJylna7z9RlsEBGTR0Gi2m
-         R2xLnO+uAf6D4r2yE4HrUA7OyGUZh91L3yKHvoy8+SReo8di4MmxGiKOEVXadPAu/N
-         PQo/Gnp4zwmHg==
-Received: by mail.olerise.pl for <linux-integrity@vger.kernel.org>; Wed, 22 Jun 2022 07:50:21 GMT
-Message-ID: <20220622084500-0.1.j.bbex.0.r2snwbpd53@olerise.pl>
-Date:   Wed, 22 Jun 2022 07:50:21 GMT
-From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
-        <przemyslaw.wroblewski@olerise.pl>
-To:     <linux-integrity@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.olerise.pl
+        Wed, 22 Jun 2022 05:53:17 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82691BF76;
+        Wed, 22 Jun 2022 02:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1655891583;
+        bh=9cEw9FMLBn4W5pgHYOQdSlww+YpqE/CuIHU5Q+i/17A=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=HQRd0reRnmkalF5Nlv1fL+D9ySw6cRDCl67K5L2ZnfaVAAYB6M5E+TSpiLZDr3ubN
+         6AkOhh40U+uSUTWihMGup+g8tazDQ4VD30PxnbFegPm951KiUVq3ep5FX7zjGIcbeF
+         LVT3nhapmClj0fugm2jSMSq/2nCQylaY2EO1ZwYE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.2.22]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MF3DW-1nswXX0cq8-00FQVG; Wed, 22
+ Jun 2022 11:53:03 +0200
+Subject: Re: [PATCH v6 9/9] tpm, tpm_tis: Enable interrupt test
+To:     =?UTF-8?Q?Michael_Niew=c3=b6hner?= <linux@mniewoehner.de>,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+References: <20220621132447.16281-1-LinoSanfilippo@gmx.de>
+ <20220621132447.16281-10-LinoSanfilippo@gmx.de>
+ <822cad1aa73867ea36c5428cb929a00aa0e82bc9.camel@mniewoehner.de>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <573d1c1a-cff2-4b45-6ec0-bd32f5312a16@gmx.de>
+Date:   Wed, 22 Jun 2022 11:53:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <822cad1aa73867ea36c5428cb929a00aa0e82bc9.camel@mniewoehner.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Provags-ID: V03:K1:Ppv3eukWPslFcTbhTkTqi3dgA/tijvgsEE14CGSoqVrtwKkYmZp
+ Mxa1uUjWTytXRXGHd0n0yRRpf3MhXbH60V5Hz3dtq0FXoDW1d/YIZnHl15TXdsvTkm+5KQc
+ ewiw7CbQ/I2QrQL3psU2KdMtwAVgZ0pwskvArXUm2F4s7wxwKE9/Dv/cPI7zoI/oUvmilPf
+ N6ezkVp+PCjHO1s1748qA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sPL2QIr2apI=:Oh4KaDzPLhM5B6nwdxLbmT
+ ln+qQYbCqkC2Rr1o2aghdvV8VDO+4m+Xtk0lCfXj41tagDI8Hhn/bzlf2Z3JzmNpmIwrbyiz8
+ m6RF5UaqrPNo4AYKMq/stxpYAjNONhIfbZcjAeUeLe29wat2H7geJrawZU+CgncNuQhF79PPW
+ 6ocNvjYjnKUz24cVUd99YCMLlaLU9f/iyhjBrb7jUfX/oXUJP2H23wNKf53QQYrP6jS5bvyJR
+ M+g+K8MEDWBo/DY/bSpjftmnCKDR9obTPKFblGg0gpv37lGNrGZbFcFJyD4Pcc/Vry5VB6twL
+ Wufu0KnggGgGaXpX1E8dGsnd9O/vjbkBlAYYiBcEmbmWtl7J3+g/sPjYUUsvCMfY5rlgVFo2q
+ KXH6g2lMkSqTEtPTANY/lymoz/akoNE/kEiDjvRpZ5J319ZbieBRA4P9eV/EQ3kHhW+kAjysS
+ vGrLAQOU8IdzLUTV2KpEeg9B/hzAxEPWOIYVmhCFX4yW8uqfJpTJTSzDlt7U051MGKblgNsKM
+ FTJzuGD07GaSrevsGIUSDsxZq32iMD4ZzvqgyUo4ZjSWD/9Kf/1kZ1/THPUTFavsII0tRBU+V
+ reO/dVppBmgP+xuoeAcsAMC1LH3rEAQRUMQZl1osrvhFs6YvH9BKPx2giFGAFHhklRQ0jljH2
+ W6ZnFxjXOaUiXYE8beG8zWrycvG3+n9MThwArWB/5Me1zjeG+rF70klaSHp1LCYGhSsGT0/9Q
+ KJhKeMgEvIO1O53kORoi+qgF0R0vkZduGo3I5kTSL5tkSLefqDdvwwVq++8od0v64Dni8adWO
+ KkzNfZT4V/SR/tz9Lmjgaxz63yHqQ8XzosqpmuZsEJ4wFbiA5sT9BCKPQHMtkdOOKe8LVKHsp
+ V74sZdGLD8rq4gecebhzOiRnzOrZaH2/Nj6Kn6ISJN/aXc5OoqcmTZ92tvbn2j+eC21d7/KGQ
+ FuYlR6yYZG49XRl1UZ9bYRFWMzufx0ffLbPbjlZMaHZzjhbhI54eUvDkJpvPP0BX8d8qbMBn/
+ esH4X+K9ytLmB3OUtyVGdJhoEnOWbV3qDL8gARzghuRPcztm+GG+80PgrZfoefzFzQNbbeTGG
+ XTQTZJ4+03+QCQdxmVRGq+J7UNS8PSkOiwmoENmwZdgG34PdwofEWjMXw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 22.06.22 at 00:39, Michael Niew=C3=B6hner wrote:
+> On Tue, 2022-06-21 at 15:24 +0200, Lino Sanfilippo wrote:
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+>
+> Tested-by: Michael Niew=C3=B6hner <linux@mniewoehner.de>
+>
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+Thanks Michael!
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+Regards,
+Lino
 
-
-Pozdrawiam,
-Przemys=C5=82aw Wr=C3=B3blewski
