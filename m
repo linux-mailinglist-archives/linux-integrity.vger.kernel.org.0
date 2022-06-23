@@ -2,74 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF05B554E58
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jun 2022 17:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB0355725E
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 Jun 2022 06:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359008AbiFVPED (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Jun 2022 11:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S233039AbiFWErl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 23 Jun 2022 00:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358974AbiFVPD4 (ORCPT
+        with ESMTP id S1346553AbiFWE1O (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:03:56 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D50F3E5C4
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Jun 2022 08:03:51 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso22793774fac.4
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Jun 2022 08:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=lmXhPRDXrnlbYClAFJkfHZYdowqXsf1nTuDLZnU/Y1W/T6TJ8ApbIv950i47frAtN/
-         OtndHJQoWJG+weygm2GuosJduERMEzUHLtTF4oGKopzqXa+c5O1ob2p5JuwuGNaCZz0D
-         0k2iO6ZG6gpeVsjTt5A+NLMvCH8qDkpG8Ex3xIMBpunG6BNJWrlCGLJYo7boJK6pvBIx
-         W4x550ST0gVpK9sdxwL58OfMVVl7H7xG/39bSvJCxipLUGbdwSBY6WRzvY6hd28wfB/N
-         vDKUfqITg8PxsgA4g6gEDGmS0K0dBg3KSntFmGDvcmLKkvSy/F4e+TYysqkO/txSQBCJ
-         afFQ==
+        Thu, 23 Jun 2022 00:27:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FE6A2DAB6
+        for <linux-integrity@vger.kernel.org>; Wed, 22 Jun 2022 21:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655958431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=IBxvMB+Edf2kNT2Bpm+WLvfut0GM6YsurjzoxFCucJo=;
+        b=UQqko6fpr0DmJsKYE/STSJVGDV7GOCXK+q2vqnWsqS+L7AQ/7fokJKgWQDqK8S3sj9MpbG
+        6ROJolwP83WkS0w7is9M2xakqh2L5Y1m8thflhX8R9yUya+buKTzBOi0l0t5Ge4c9gH+Vq
+        0v7FHMwT3x/Wa/qEjfk3UlNQItRuF5Y=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-ri7QvMfUMXSL4xTivwpcuw-1; Thu, 23 Jun 2022 00:27:08 -0400
+X-MC-Unique: ri7QvMfUMXSL4xTivwpcuw-1
+Received: by mail-vk1-f197.google.com with SMTP id m63-20020a1fee42000000b0036c8981d9bdso979535vkh.16
+        for <linux-integrity@vger.kernel.org>; Wed, 22 Jun 2022 21:27:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=xca7utFwdIANn0+dtwAG7L6QAAlek2qJXZH8HeYDIetnG5h+89EOJvRH+Z9LEvR2Ll
-         yIP5r49ZxYhhpyTpRYcM9JT3D0S6AXy29jIWaj18S1uIeJLuDcAhOR0wPILGlYwV6zGN
-         E23sBHdx0MkZBdma8GAKxu2DfQ+LWSQ10A4JWOHZ50jyhbAt7BvTBXuy4FzSQ/xPr2rF
-         irTo+E1JFRMKrjTJKLSYpencvNbmoCVXf9UMM1lXsZa4wARiahIPRktiXTJiUqV2bDb+
-         PmcLh0FAVEkzwGXZGsroHsX6h5xUuMcmuNcm00gc+Hd+o1PfxLTB2PwD4EMg45ERTVB5
-         JPCQ==
-X-Gm-Message-State: AJIora+nkJYSeK7ROYWfH9Jbk0P9Q+u2ob/PyPysjRsA+JN57IS5rZhH
-        Bss7A+yo3QfN3o85Pvu1xu6a+IuIJhQDIoMIKvZzdP1o1R3NeNtU
-X-Google-Smtp-Source: AGRyM1ulxotWsDV/SS5wzW6q4zt5LXu3F658bS4StYWI/FgPuIBqBz38zqk7aydOTm9FXxU+wDfnf428k+eRTEG/aD8=
-X-Received: by 2002:a17:90b:1988:b0:1ec:f52d:90d4 with SMTP id
- mv8-20020a17090b198800b001ecf52d90d4mr1796737pjb.70.1655910220864; Wed, 22
- Jun 2022 08:03:40 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=IBxvMB+Edf2kNT2Bpm+WLvfut0GM6YsurjzoxFCucJo=;
+        b=gLGCUw4RdSomVkWZ5TGpDEum0gq0cj5R1xi8UZz7Z9O/+k9S3uNWS2v2ZQkqgwhJyN
+         WjT34p97QflOo/zpd3qkplLbPIH+ahS8agH+tOKVnEC/ABhekSHplSRX6X+lTIfI3JEX
+         ZSBRvYvAX92UVWpM+Be6fmm30Du6fN3XoZ/MkZ3WfhiV+9yis/tX0gpSJsfGarIh829z
+         a37RQBCm3S/u/FQnYufbiqEBWoqowHKoCKMvpiq1Xa3QAC3q53fnWTdttIhmUuWXJ+DK
+         QCqthLASsYvUyXf5FOHzWEuIKmus+M9tGgQGpzTflij3HQG2GcGc7wnXRqFPnWZq2/Lt
+         6ylg==
+X-Gm-Message-State: AJIora+jfoFa9vpxhWqBevkYdfq4ruO3fjM2VbH9W6BTg8p2kxmXVcwz
+        kxUH8sYnxNnorHMfNoVrnWYFMswybuGK7P663dz4Lp2ECM25VmbUg0Tfhg/BF4jgBMRKaE1rZtB
+        om8Gu7zSyjqs0z+8SdZhiEeeVzLzih8ER573dw/Va+kvQ
+X-Received: by 2002:a05:6102:390f:b0:34b:fd08:765b with SMTP id e15-20020a056102390f00b0034bfd08765bmr16297305vsu.20.1655958428191;
+        Wed, 22 Jun 2022 21:27:08 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sqAVgj7S1VnchuTdBup1a9JK6o0vYCVoY8GvaUXQmHuO1iT+OVscT0bHinyPB4lh4Jp/HzGkdPzdUSBdvBLl0=
+X-Received: by 2002:a05:6102:390f:b0:34b:fd08:765b with SMTP id
+ e15-20020a056102390f00b0034bfd08765bmr16297299vsu.20.1655958427918; Wed, 22
+ Jun 2022 21:27:07 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:903:2308:b0:16a:1b3f:f74b with HTTP; Wed, 22 Jun 2022
- 08:03:40 -0700 (PDT)
-Reply-To: sales0212@asonmedsystemsinc.com
-From:   Prasad Ronni <lerwickfinance7@gmail.com>
-Date:   Wed, 22 Jun 2022 16:03:40 +0100
-Message-ID: <CAFkto5vTxj70kORZJZdwOGowXjsZ399eo6DJj=8T==7paSuHTw@mail.gmail.com>
-Subject: Service Needed.
-To:     undisclosed-recipients:;
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+Date:   Wed, 22 Jun 2022 21:26:42 -0700
+Message-ID: <CALzcddsfNchgJhKdxbUDDb3zBhbHZfYLCtRt9o6o=pv-zk_w_g@mail.gmail.com>
+Subject: efi_tpm_eventlog_init question
+To:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
--- 
-Hi,
+Is this calling memblock_reserve() correctly for the final events log?
 
-Are you currently open to work as our executive company representative
-on contractual basis working remotely? If yes, we will be happy to
-share more details. Looking forward to your response.
+For the tpm events log it does:
+
+memblock_reserve(efi.tpm_log, tbl_size);
+
+For the final events log it does:
+
+          memblock_reserve((unsigned long)final_tbl,
+                           tbl_size + sizeof(*final_tbl));
+
+
+which ends up with something like:
+
+[    0.000000] memblock_reserve:
+[0x000000005d7b5018-0x000000005d7b958a]
+efi_tpm_eventlog_init+0x82/0x370
+[    0.000000] memblock_reserve:
+[0xffffffffff2c0000-0xffffffffff2c00e4]
+efi_tpm_eventlog_init+0x324/0x370
+
 
 Regards,
+Jerry
+
