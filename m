@@ -2,85 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E66A55916C
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jun 2022 07:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C974555909D
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jun 2022 07:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbiFXEty (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 24 Jun 2022 00:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
+        id S231774AbiFXEtz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 24 Jun 2022 00:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiFXEs2 (ORCPT
+        with ESMTP id S231861AbiFXEs2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 24 Jun 2022 00:48:28 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC2E6924D
-        for <linux-integrity@vger.kernel.org>; Thu, 23 Jun 2022 21:48:24 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id n10so1151516plp.0
-        for <linux-integrity@vger.kernel.org>; Thu, 23 Jun 2022 21:48:24 -0700 (PDT)
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFDB68096
+        for <linux-integrity@vger.kernel.org>; Thu, 23 Jun 2022 21:48:26 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so1685951pjj.5
+        for <linux-integrity@vger.kernel.org>; Thu, 23 Jun 2022 21:48:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
-         :from:to;
-        bh=VOrN2Skldd6ynBdimZLEfOLlQdQeXbU4ZvduMfJHL6c=;
-        b=XgTwJU2SJn7OgRjOacDrBq8AbIvZy9A81IA50d1kPRNcGZ35nasRgjV4RLK/GhrSHQ
-         liBXBNjEUUlPp7BL7s5TqwGWSyxagHvQ+xTyaGyQcCkEpt11davqrfMjfjAoapuf6WZn
-         v6n8vJYQWsu4abQaVlYDcuSEV6Jot7TID2g+Pt0cEwyChpdWBH/41ODLnB/El/jl5Xlc
-         WGrSAghyUAohMDgNK8/g16MxKloX+ZO5e5BTBzscGGT9lseU/cNO1WuZfmcRl5onAV85
-         +S2Z1J0jMLcEbiefwlIIQiebdEEaaQDPxk7iERWdaKfVeUWSz1gTQ1mXF06EWgq4DNX0
-         fgPA==
+        h=subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=vBU/QhGWkV1K4rpRU6iuVI+/0UvyZtTiMv0XrxYPMnY=;
+        b=KBTXLVQ9Myy+5fRcw18yS0lVJWlJWOdd7MztywK2mmLs41m1QyL9u71UUmRkZsVufO
+         WBGDCzLQmzxvYVvsyvL43mR/VUG7XnIdk39+oF8XwhmacjrZkaSZcXbdPN9I5HafTNer
+         xr82vLEO3N2V2NbYCHw86NmaenfnQTgypXQywZ3rOFxQ8Ry2BA3Q6/1czAnoeM+amgXI
+         PXNiI40EmhGP/RqKwo10U5bHYT3e2eMwbnXUA42H/MeYjCJBsRUSv0ePUpNifVLgVv1h
+         EOnTPql0DKaJ4Wn1LDQyp0D911OQtivur+xe4+XmZBEwj8WkviY0CU/CFaC8mcdEguoD
+         tZuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=VOrN2Skldd6ynBdimZLEfOLlQdQeXbU4ZvduMfJHL6c=;
-        b=xsqGu46JHr3IIUIoxZsp5whSkps97FFQL/F+3wf5xgKDNJiRO+mO39/0fpLC1oGXVA
-         IsNjD+xfiw497nf8gwjD7VIia2DiWnTo5irCB4//bxvoi3FhtKEi7eG9EOnW1PBabQRH
-         B59HKBwmwJPAd0qcUHo6OjJAUOAPProOXWsqF7wN/r/WTNsR1NtiQx1/vs5cTuQ0dGIt
-         KmBDvaKpjqmwT4zsAX+BkgheAVMcY0KPZg21CdblDZwU9sFmlVhxEDAf3pOzUMM8QXsU
-         63kFpVCFpmDl5C3eblBzUJ27QApI2cUMcmclWXc+pEx6KXtv5OG30cVSOUbvB9AMxCLQ
-         Bjsg==
-X-Gm-Message-State: AJIora+CpeqPMHC2u7UogIWbWUdjjB0kFpCutxBk47jLrwm7bq/YPcK+
-        w7D5MGtrZbzY53mE8er1mgXXjQ==
-X-Google-Smtp-Source: AGRyM1twjNfvXdC15oBPlo3E7P9L0CcbGOzh0tICPbKtW3VyqvOblbLp0OUdm7yJez7FETjSBlaYbg==
-X-Received: by 2002:a17:902:d48e:b0:16a:67e7:d979 with SMTP id c14-20020a170902d48e00b0016a67e7d979mr1887249plg.29.1656046104242;
-        Thu, 23 Jun 2022 21:48:24 -0700 (PDT)
+        h=x-gm-message-state:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding:cc:from:to;
+        bh=vBU/QhGWkV1K4rpRU6iuVI+/0UvyZtTiMv0XrxYPMnY=;
+        b=kTEHpW4vLegNd0S8rYvv8GemGIuU5QJdEE3uZqavaNMhtXBs5fRt69UxUmtrtrRvo/
+         jImushUb9GcG2yavHT/b3lFE3sTRLCVqrNaEcCT+v5ypBkFxIP4tLHeXuLMUD3s2+Fpi
+         F3V6jzfFxuIaopqmTIU8MqJ7tmvPOC0Ilqsyg42H69fJqxdzQkrXkO3vCdnomZRan/Ba
+         WvIFSZemreHfhaorEgNXlrGBkCKmA9OxW2HaJcb5v7YbYUrRijNcsiBDWPCT681krUFT
+         UV9NbmRmAvQlCguUAxUzWYopvnr1NldxBIHMDAglXTvvRRxWrUlLnD+D1tZFpuMN96n4
+         go/w==
+X-Gm-Message-State: AJIora92unKEsWTUkKjFc+6eQ2bAkkL89lAe/bd53iraQjQWiGA4vynl
+        e1uxMbT0g4Ca/Eq7+EJ7nbuIAKuyD5nzrA==
+X-Google-Smtp-Source: AGRyM1voXMrdQb1DI39mijMlt8wYaDCo2EZoNrpq8QsrSaFoZs/0+hNfar1BHQvqZ1cGC/I8u7r8Ug==
+X-Received: by 2002:a17:902:7202:b0:167:6548:3f3e with SMTP id ba2-20020a170902720200b0016765483f3emr41641064plb.98.1656046105816;
+        Thu, 23 Jun 2022 21:48:25 -0700 (PDT)
 Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id x20-20020a056a00189400b005251b9102dbsm557073pfh.144.2022.06.23.21.48.23
+        by smtp.gmail.com with ESMTPSA id x13-20020a056a000bcd00b005206d4fd636sm559062pfu.2.2022.06.23.21.48.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 21:48:23 -0700 (PDT)
-Subject: [PATCH v2 0/5] Support kexec_file on 32-bit RISC-V
-Date:   Thu, 23 Jun 2022 21:48:06 -0700
-Message-Id: <20220624044811.9682-1-palmer@rivosinc.com>
+        Thu, 23 Jun 2022 21:48:24 -0700 (PDT)
+Subject: [PATCH v2 1/5] drivers: of: kexec ima: Support 32-bit platforms
+Date:   Thu, 23 Jun 2022 21:48:07 -0700
+Message-Id: <20220624044811.9682-2-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220624044811.9682-1-palmer@rivosinc.com>
+References: <20220624044811.9682-1-palmer@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Cc:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-            linux-security-module@vger.kernel.org
+            linux-security-module@vger.kernel.org,
+            Palmer Dabbelt <palmer@rivosinc.com>,
+            Rob Herring <robh@kernel.org>
 From:   Palmer Dabbelt <palmer@rivosinc.com>
 To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
         linux-integrity@vger.kernel.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This rolled itself back to the top of my inbox, so I figured I'd send it
-again as Rob's review landed.  IMO the security/integrity/ima/ change is
-sufficiently trivial that it's fine to take it through the RISC-V tree
-but I don't have an Review/Ack so I'll wait until this loops back again
-to give the security/integrity/ folks a chance to chime in.
+RISC-V recently added kexec_file() support, which uses enables kexec
+IMA.  We're the first 32-bit platform to support this, so we found a
+build bug.
 
-If this loops back to the top of my queue (which looks about a month
-deep right now) without any comments then I'll put it in riscv/for-next.
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ drivers/of/kexec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Changes since v1
-<https://lore.kernel.org/all/20220520154430.18593-1-palmer@rivosinc.com/>
-* Collected reviews for drivers/of/kexec.c.
-
+diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+index b9bd1cff1793..ed3451ec2b24 100644
+--- a/drivers/of/kexec.c
++++ b/drivers/of/kexec.c
+@@ -236,8 +236,8 @@ static int setup_ima_buffer(const struct kimage *image, void *fdt,
+ 	if (ret)
+ 		return -EINVAL;
+ 
+-	pr_debug("IMA buffer at 0x%llx, size = 0x%zx\n",
+-		 image->ima_buffer_addr, image->ima_buffer_size);
++	pr_debug("IMA buffer at 0x%pa, size = 0x%zx\n",
++		 &image->ima_buffer_addr, image->ima_buffer_size);
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
 
