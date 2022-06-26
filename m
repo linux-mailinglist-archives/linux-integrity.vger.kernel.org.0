@@ -2,95 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405F8559186
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jun 2022 07:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990DE55AF47
+	for <lists+linux-integrity@lfdr.de>; Sun, 26 Jun 2022 07:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbiFXEuf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 24 Jun 2022 00:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
+        id S229986AbiFZFTp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 26 Jun 2022 01:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiFXEsc (ORCPT
+        with ESMTP id S229957AbiFZFTo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 24 Jun 2022 00:48:32 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE14469985
-        for <linux-integrity@vger.kernel.org>; Thu, 23 Jun 2022 21:48:30 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 23so1348000pgc.8
-        for <linux-integrity@vger.kernel.org>; Thu, 23 Jun 2022 21:48:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=4THMhvS8M5ZnFTHvTFejhkWhYsuAvg/ZgzsYmQOutl8=;
-        b=jZ+UoLM3M7Aw8FzFUs4vfV0xGVF+Z1rgG06Q0g6ddvpteFSUct4m0aAnWG/UHlIHcy
-         xDIWATlB0GGjs/hfRkxe6UQ1V4kDs2Fm3V/6fxpXi023MU/ojZBBXm7JW8wCFWafwRbY
-         ZPHpdFFCz4HQaws9xVkBWt/pnD6GgEBKfUCt/XZPKwwH8Eji0UWJl8bjjLOYO2Km/VcU
-         riLaGCyFAc2cIrl3N/VncOYPKf8urgmhHUYRlJWR81bCqV+fn5a5+P3hY9dVVfzj35qZ
-         3V3zmkqcGPJtvORY1fF7FSMecx1wrSvXDD/7UYn08WWFqdnoryi8KMch/00RWyQK0gLR
-         DpLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding:cc:from:to;
-        bh=4THMhvS8M5ZnFTHvTFejhkWhYsuAvg/ZgzsYmQOutl8=;
-        b=i4ultIkyqY6hknvl9Pxw3IUr5MmCRRFf9aTGP9DGz1xNFgGrlYReeU4e/TJaEOXLbO
-         M4XlY469Lj626vLz0MT53LbEtbgbV0/CItElqVTdqB5epvXykoX5aAXWN/OsJDR/3mMD
-         ShTrLskLAW+m6fi0SXdD1f72n/hvLoDN0qwLdwdH87jdZeS6xdyvuvFoWX6v5OxzfY0h
-         Q02DYr3N/u8U947Tsk8p3Qod2FqBl+F6WYBI6tU32IgqKntlSgDYTSTA8PVD8OuRnXQX
-         WdGne7VDdMnU5hO3ZFCpjGGREjhiYBMHRuMCRUztn71ZwSbh/aRBj+EUMfxd4xbINlP5
-         JWQQ==
-X-Gm-Message-State: AJIora+VRLLC0CGMhjQ+dgvMo4AkMN4hmhnVHIuVJZI2SShHH1O8Nt3n
-        8ZBNmfj3ycjiVlFpRKQpsEm9/g==
-X-Google-Smtp-Source: AGRyM1tjG9XTGQzrvxKP1b0oJm9GIdXwYRdfAbtw1YGd6ry6SLMEHPonI2hZnL7q9k/q2Z13VDkRjA==
-X-Received: by 2002:aa7:9206:0:b0:525:1068:c026 with SMTP id 6-20020aa79206000000b005251068c026mr31366064pfo.52.1656046110313;
-        Thu, 23 Jun 2022 21:48:30 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id k26-20020aa7821a000000b0052517150777sm555865pfi.41.2022.06.23.21.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 21:48:29 -0700 (PDT)
-Subject: [PATCH v2 5/5] RISC-V: Allow kexec_file() on 32-bit platforms
-Date:   Thu, 23 Jun 2022 21:48:11 -0700
-Message-Id: <20220624044811.9682-6-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220624044811.9682-1-palmer@rivosinc.com>
-References: <20220624044811.9682-1-palmer@rivosinc.com>
+        Sun, 26 Jun 2022 01:19:44 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58C8120A2;
+        Sat, 25 Jun 2022 22:19:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 27B4FCE0B69;
+        Sun, 26 Jun 2022 05:19:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D268EC3411D;
+        Sun, 26 Jun 2022 05:19:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656220780;
+        bh=yr0i4ViqFKUS+bKRECGetMKIohDWSv3X9Hrw1N7C1Po=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kukJwx/UfRW8RTBuOQQhcBV5GyXa0omMB5JlV2PYoSg+dVyRz3Mw08HTL2Skb61SH
+         rROLX6cVDIWlZrVNt2wr/FTCiWL7hwt0wYvam5ikUmi0Ex3q10IUpbVmchiOZYlW1j
+         kGj9mirjRIl2FwxPJANHUNckvwk9I0Icj1E77Ow+pybRnANVIlHAFFPGKgX/MZioua
+         aHEg5yZtNFVzbiZoBcA+I4c45iOx5VV/LEjGBxjaV+SV2/uF5YxzgNKhkc/ykGliwi
+         eiswUQ+Q6yYLdMkqBeIDCbtovACjaTEZO0ZRQL/qRkJKZjDoXQ+omZqljaEY2t93Tn
+         W/FIVnDsLYD3A==
+Date:   Sun, 26 Jun 2022 08:19:36 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Michael =?iso-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+Cc:     LinoSanfilippo@gmx.de, James.Bottomley@hansenpartnership.com,
+        peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH v5 10/10] tpm, tpm_tis: Enable interrupt test
+Message-ID: <YrfsP3/Da6+3dpbg@kernel.org>
+References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
+ <20220610110846.8307-11-LinoSanfilippo@gmx.de>
+ <YqokW/cNLrrsZ2ib@iki.fi>
+ <75124ab23f2c845d8f683d7e3123de3ccdb07ad0.camel@mniewoehner.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Cc:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-            linux-security-module@vger.kernel.org,
-            Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        linux-integrity@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <75124ab23f2c845d8f683d7e3123de3ccdb07ad0.camel@mniewoehner.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-With the build issues now sorted out we can enable kexec_file() on
-32-bit platforms as well.
+On Thu, Jun 16, 2022 at 03:04:30PM +0200, Michael Niewöhner wrote:
+> On Wed, 2022-06-15 at 21:26 +0300, Jarkko Sakkinen wrote:
+> > On Fri, Jun 10, 2022 at 01:08:46PM +0200, LinoSanfilippo@gmx.de wrote:
+> > > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> > > 
+> > > The test for interrupts in tpm_tis_send() is skipped if the flag
+> > > TPM_CHIP_FLAG_IRQ is not set. Since the current code never sets the flag
+> > > initially the test is never executed.
+> > > 
+> > > Fix this by setting the flag in tpm_tis_gen_interrupt() right after
+> > > interrupts have been enabled.
+> > > 
+> > > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> > > ---
+> > >  drivers/char/tpm/tpm_tis_core.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm_tis_core.c
+> > > b/drivers/char/tpm/tpm_tis_core.c
+> > > index e5edf745fb23..be229c173f10 100644
+> > > --- a/drivers/char/tpm/tpm_tis_core.c
+> > > +++ b/drivers/char/tpm/tpm_tis_core.c
+> > > @@ -774,11 +774,16 @@ static int tpm_tis_gen_interrupt(struct tpm_chip
+> > > *chip)
+> > >         if (ret < 0)
+> > >                 return ret;
+> > >  
+> > > +       chip->flags |= TPM_CHIP_FLAG_IRQ;
+> > > +
+> > >         if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> > >                 ret = tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+> > >         else
+> > >                 ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap,
+> > > desc, 0);
+> > >  
+> > > +       if (ret)
+> > > +               chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+> > > +
+> > >         release_locality(chip, 0);
+> > >  
+> > >         return ret;
+> > > -- 
+> > > 2.36.1
+> > > 
+> > 
+> > James, do you have a chance to test this on your side? Thanks.
+> > 
+> > BR, Jarkko
+> 
+> Tested-by: Michael Niewöhner <linux@mniewoehner.de>
 
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- arch/riscv/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+Thank you.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 898052ff743e..a246f2fe60c2 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -388,7 +388,6 @@ config KEXEC_FILE
- 	select KEXEC_CORE
- 	select KEXEC_ELF
- 	select HAVE_IMA_KEXEC if IMA
--	depends on 64BIT
- 	help
- 	  This is new version of kexec system call. This system call is
- 	  file based and takes file descriptors as system call argument
--- 
-2.34.1
-
+BR, Jarkko
