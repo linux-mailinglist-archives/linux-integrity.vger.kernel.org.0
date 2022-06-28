@@ -2,285 +2,164 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E78F55E49F
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jun 2022 15:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D3055EA5D
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Jun 2022 18:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345760AbiF1Nbg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Jun 2022 09:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S232587AbiF1Qze (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 Jun 2022 12:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345833AbiF1Nai (ORCPT
+        with ESMTP id S232782AbiF1Qys (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:30:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4474264C1;
-        Tue, 28 Jun 2022 06:30:02 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SD1ZL3011915;
-        Tue, 28 Jun 2022 13:29:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=FNQemyB/OW0nWHwzGNJkEHsB83P2tTckEJpnuaiqO7U=;
- b=EpWM1uaQ/DOrfOsliXHvUCm9G32BotfF9QYQO3ixauF8Cpxr9HIM67f5HIkYoN6kO7ws
- B50BED37E/khCBktxNYgc1qokcK/9/BpJNCksEDNG3fjbpKL2pL+1t/MTZtPrtFavTJj
- XqhHklSuN4x8UEQLVgbhwAUay0Ntu43kLYp3pQv61mVSseCo+TnsNDgIRhFPaxhiPziR
- OYaccrNOgUkxZ3COcLQ5zEqKrSth6wIew3BfsSucDPzKZDFqj78qNNNmeOwQh7VkvdqJ
- qGMHSQX8AZTN+O+OB2df2SQJlqeKHWIZ2rZH8xFzQn/bzPVLURjwZHXzsz5DNKMmpucM Xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h025sh8na-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 13:29:52 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25SD1wPx015765;
-        Tue, 28 Jun 2022 13:29:51 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h025sh8ms-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 13:29:51 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25SDJtvh013165;
-        Tue, 28 Jun 2022 13:29:50 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma03dal.us.ibm.com with ESMTP id 3gwt0a13jp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 13:29:50 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25SDTnI214025152
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 13:29:49 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B19DBE053;
-        Tue, 28 Jun 2022 13:29:49 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A5602BE04F;
-        Tue, 28 Jun 2022 13:29:48 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Jun 2022 13:29:48 +0000 (GMT)
-Message-ID: <170c78f7-f0ba-c186-dacf-55759dae9b83@linux.ibm.com>
-Date:   Tue, 28 Jun 2022 09:29:48 -0400
+        Tue, 28 Jun 2022 12:54:48 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146E623164;
+        Tue, 28 Jun 2022 09:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656435208; x=1687971208;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lk9i+UFDFPdV2X5SBVGrwZ4ywWGVr3wZW7Ti7xnz5Js=;
+  b=LBnYK7pIdoOPEQsjFbnRHlbrJSuU2zdtucqQ8Ri4f724EuJ49Mb7iBvF
+   Ck7lMab4V0bq9/04SCIIbekqAAHU9qvF81g2wGRNE5SkU2lLk7rGZP04h
+   /cRrn2MWL84oKyQAjczLGpFMVK2jGXIxQeEriCCpyTV7wpc2ZNm/UMDkG
+   lH7+YV6YnMR+MttmRRWcKb41kne999ETvP6F5pI3qHZo6UL2ogn8zmkKd
+   rbg3htcwrsg7eQYj40gtuz8O84HpXSVEr5OLzLXs9bDdiTuIX4NC75kCN
+   mD2m9zsfSbkr+qIfMsKUYkxJbC/rWc2L+liyIgyPHwpgOpVmQLItQy30W
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="279338975"
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="279338975"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 09:53:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="646993101"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2022 09:53:25 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o6ESq-000ARG-UR;
+        Tue, 28 Jun 2022 16:53:24 +0000
+Date:   Wed, 29 Jun 2022 00:53:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>, kexec@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, nayna@linux.ibm.com, nasastry@in.ibm.com,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>
+Subject: Re: [PATCH v2 3/3] tpm/kexec: Duplicate TPM measurement log in
+ of-tree for kexec
+Message-ID: <202206290021.AodC96Vc-lkp@intel.com>
+References: <20220616154130.2052541-4-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 1/3] tpm: of: Move of-tree specific code from tpm
- driver into of driver
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Frank Rowand <frowand.list@gmail.com>
-References: <20220616154130.2052541-1-stefanb@linux.ibm.com>
- <20220616154130.2052541-2-stefanb@linux.ibm.com>
- <20220627224325.GB3082294-robh@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220627224325.GB3082294-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ejAW8MjeayEDOFS4zHLIlz_R7LRBy4JK
-X-Proofpoint-ORIG-GUID: MGZzN5PnmhnegDiOa0wS5Ex5fN_GJmaN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-28_07,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- adultscore=0 spamscore=0 phishscore=0 malwarescore=0 mlxlogscore=999
- bulkscore=0 suspectscore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616154130.2052541-4-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Stefan,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on linus/master v5.19-rc4 next-20220628]
+[cannot apply to robh/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Berger/tpm-Preserve-TPM-measurement-log-across-kexec/20220616-234240
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 0a35780c755ccec097d15c6b4ff8b246a89f1689
+config: parisc-randconfig-r012-20220627 (https://download.01.org/0day-ci/archive/20220629/202206290021.AodC96Vc-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c28e0f7321d0b7245454e811a3dd0f2134d9dd74
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stefan-Berger/tpm-Preserve-TPM-measurement-log-across-kexec/20220616-234240
+        git checkout c28e0f7321d0b7245454e811a3dd0f2134d9dd74
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/of/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/of/kexec.c: In function 'tpm_add_kexec_buffer':
+>> drivers/of/kexec.c:371:18: error: implicit declaration of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=implicit-function-declaration]
+     371 |         buffer = vmalloc(size);
+         |                  ^~~~~~~
+         |                  kvmalloc
+   drivers/of/kexec.c:371:16: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     371 |         buffer = vmalloc(size);
+         |                ^
+   drivers/of/kexec.c: In function 'tpm_post_kexec':
+   drivers/of/kexec.c:446:42: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     446 |                 *(u64 *)newprop->value = (u64)phyaddr;
+         |                                          ^
+   cc1: some warnings being treated as errors
 
 
-On 6/27/22 18:43, Rob Herring wrote:
-> On Thu, Jun 16, 2022 at 11:41:28AM -0400, Stefan Berger wrote:
->> Simplify tpm_read_log_of() by moving Openfirmware-specific code into
->> the Openfirmware driver to make the code reusable. Call the new
-> 
-> There is no such 'Openfirmware driver'.
-> 
->> of_tpm_get_sml_parameters() function from the TPM Openfirmware driver.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->> Cc: Jason Gunthorpe <jgg@ziepe.ca>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Frank Rowand <frowand.list@gmail.com>
->> ---
->>   drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
->>   drivers/of/Makefile            |  2 +-
->>   drivers/of/device_node.c       | 27 +++++++++++++++++++++++++++
-> 
-> Humm, definitely the wrong direction. Generally, code for specific
-> bindings does not go in drivers/of/. There used to be some, but we've
-> moved it to the appropriate subsystems. kexec was an exception to not
-> have 2 copies of the same code in arch/.
+vim +371 drivers/of/kexec.c
 
-The function I am moving here is called by the TPM subsystem and also 
-now by of/kexec.c. The latter is compiled under the following conditions:
+   349	
+   350	void tpm_add_kexec_buffer(struct kimage *image)
+   351	{
+   352		struct kexec_buf kbuf = { .image = image, .buf_align = 1,
+   353					  .buf_min = 0, .buf_max = ULONG_MAX,
+   354					  .top_down = true };
+   355		struct device_node *np;
+   356		void *buffer;
+   357		u32 size;
+   358		u64 base;
+   359		int ret;
+   360	
+   361		if (!IS_ENABLED(CONFIG_PPC64))
+   362			return;
+   363	
+   364		np = of_find_node_by_name(NULL, "vtpm");
+   365		if (!np)
+   366			return;
+   367	
+   368		if (of_tpm_get_sml_parameters(np, &base, &size) < 0)
+   369			return;
+   370	
+ > 371		buffer = vmalloc(size);
+   372		if (!buffer)
+   373			return;
+   374		memcpy(buffer, __va(base), size);
+   375	
+   376		kbuf.buffer = buffer;
+   377		kbuf.bufsz = size;
+   378		kbuf.memsz = size;
+   379		ret = kexec_add_buffer(&kbuf);
+   380		if (ret) {
+   381			pr_err("Error passing over kexec TPM measurement log buffer: %d\n",
+   382			       ret);
+   383			return;
+   384		}
+   385	
+   386		image->tpm_buffer = buffer;
+   387		image->tpm_buffer_addr = kbuf.mem;
+   388		image->tpm_buffer_size = size;
+   389	}
+   390	
 
-ifdef CONFIG_KEXEC_FILE
-ifdef CONFIG_OF_FLATTREE
-obj-y	+= kexec.o
-endif
-endif
-
-The code that current calls it is compiled under the following conditions:
-
-tpm-$(CONFIG_OF) += eventlog/of.o
-
-To make it available to both I could keep it in the TPM subsystem like this:
-
-obj-$(CONFIG_OF) = tpm_of.o
-
-
-Jarrko, if you read this, any comment?
-
-
-    Stefan
-
-
-> 
->>   include/linux/of_device_node.h |  9 +++++++++
-> 
-> of_tpm.h would be the right name assuming we kept this structure which
-> we shouldn't. Probably linux/tpm.h? Just a guess, I'm not familar with
-> the TPM code really.
-> 
-> 
->>   4 files changed, 42 insertions(+), 27 deletions(-)
->>   create mode 100644 drivers/of/device_node.c
->>   create mode 100644 include/linux/of_device_node.h
->>
->> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
->> index a9ce66d09a75..5b18f4333ad1 100644
->> --- a/drivers/char/tpm/eventlog/of.c
->> +++ b/drivers/char/tpm/eventlog/of.c
->> @@ -12,6 +12,7 @@
->>   
->>   #include <linux/slab.h>
->>   #include <linux/of.h>
->> +#include <linux/of_device_node.h>
->>   #include <linux/tpm_eventlog.h>
->>   
->>   #include "../tpm.h"
->> @@ -20,11 +21,10 @@
->>   int tpm_read_log_of(struct tpm_chip *chip)
->>   {
->>   	struct device_node *np;
->> -	const u32 *sizep;
->> -	const u64 *basep;
->>   	struct tpm_bios_log *log;
->>   	u32 size;
->>   	u64 base;
->> +	int ret;
->>   
->>   	log = &chip->log;
->>   	if (chip->dev.parent && chip->dev.parent->of_node)
->> @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
->>   	if (of_property_read_bool(np, "powered-while-suspended"))
->>   		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
->>   
->> -	sizep = of_get_property(np, "linux,sml-size", NULL);
->> -	basep = of_get_property(np, "linux,sml-base", NULL);
->> -	if (sizep == NULL && basep == NULL)
->> -		return -ENODEV;
->> -	if (sizep == NULL || basep == NULL)
->> -		return -EIO;
->> -
->> -	/*
->> -	 * For both vtpm/tpm, firmware has log addr and log size in big
->> -	 * endian format. But in case of vtpm, there is a method called
->> -	 * sml-handover which is run during kernel init even before
->> -	 * device tree is setup. This sml-handover function takes care
->> -	 * of endianness and writes to sml-base and sml-size in little
->> -	 * endian format. For this reason, vtpm doesn't need conversion
->> -	 * but physical tpm needs the conversion.
->> -	 */
->> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
->> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
->> -		size = be32_to_cpup((__force __be32 *)sizep);
->> -		base = be64_to_cpup((__force __be64 *)basep);
->> -	} else {
->> -		size = *sizep;
->> -		base = *basep;
->> -	}
->> +	ret = of_tpm_get_sml_parameters(np, &base, &size);
->> +	if (ret < 0)
->> +		return ret;
->>   
->>   	if (size == 0) {
->>   		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
->> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
->> index e0360a44306e..1c9feac450ad 100644
->> --- a/drivers/of/Makefile
->> +++ b/drivers/of/Makefile
->> @@ -1,5 +1,5 @@
->>   # SPDX-License-Identifier: GPL-2.0
->> -obj-y = base.o device.o platform.o property.o
->> +obj-y = base.o device.o platform.o property.o device_node.o
->>   obj-$(CONFIG_OF_KOBJ) += kobj.o
->>   obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
->>   obj-$(CONFIG_OF_FLATTREE) += fdt.o
->> diff --git a/drivers/of/device_node.c b/drivers/of/device_node.c
->> new file mode 100644
->> index 000000000000..71a19bc1bac2
->> --- /dev/null
->> +++ b/drivers/of/device_node.c
->> @@ -0,0 +1,27 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <linux/export.h>
->> +#include <linux/of_device_node.h>
->> +
->> +int of_tpm_get_sml_parameters(struct device_node *np, u64 *base, u32 *size)
->> +{
->> +	const u32 *sizep;
->> +	const u64 *basep;
->> +
->> +	sizep = of_get_property(np, "linux,sml-size", NULL);
->> +	basep = of_get_property(np, "linux,sml-base", NULL);
->> +	if (sizep == NULL && basep == NULL)
->> +		return -ENODEV;
->> +	if (sizep == NULL || basep == NULL)
->> +		return -EIO;
->> +
->> +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
->> +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
->> +		*size = be32_to_cpup((__force __be32 *)sizep);
->> +		*base = be64_to_cpup((__force __be64 *)basep);
->> +	} else {
->> +		*size = *sizep;
->> +		*base = *basep;
->> +	}
->> +	return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(of_tpm_get_sml_parameters);
->> diff --git a/include/linux/of_device_node.h b/include/linux/of_device_node.h
->> new file mode 100644
->> index 000000000000..ae3faf023aab
->> --- /dev/null
->> +++ b/include/linux/of_device_node.h
->> @@ -0,0 +1,9 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef _LINUX_OF_DEVICE_NODE_H
->> +#define _LINUX_OF_DEVICE_NODE_H
->> +
->> +#include <linux/of.h>
->> +
->> +int of_tpm_get_sml_parameters(struct device_node *np, u64 *base, u32 *size);
->> +
->> +#endif /* _LINUX_OF_DEVICE_NODE_H */
->> -- 
->> 2.35.1
->>
->>
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
