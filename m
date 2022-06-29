@@ -2,145 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB3F55F8D5
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jun 2022 09:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7067455F92F
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jun 2022 09:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbiF2HYK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Jun 2022 03:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
+        id S232129AbiF2HhT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jun 2022 03:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbiF2HYI (ORCPT
+        with ESMTP id S232158AbiF2HhQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Jun 2022 03:24:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2D934B82
-        for <linux-integrity@vger.kernel.org>; Wed, 29 Jun 2022 00:24:06 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o6S2d-0005UO-4V; Wed, 29 Jun 2022 09:23:15 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o6S2S-003M3c-Vk; Wed, 29 Jun 2022 09:23:08 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o6S2V-001qeU-Nu; Wed, 29 Jun 2022 09:23:07 +0200
-Date:   Wed, 29 Jun 2022 09:23:04 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jeremy Kerr <jk@codeconstruct.com.au>
-Cc:     Wolfram Sang <wsa@kernel.org>, dri-devel@lists.freedesktop.org,
-        linux-serial@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-mtd@lists.infradead.org,
+        Wed, 29 Jun 2022 03:37:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE5EE3614A
+        for <linux-integrity@vger.kernel.org>; Wed, 29 Jun 2022 00:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656488234;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1h0smKgkaQYyMckjg1gEO+92UXCJgyf7f6YfzsCAFg4=;
+        b=LqaQQ4rMNNaHAgwNqe1aoCTG75kn7/oNsqAIKCxO5hJyIk+F/Yw45XvOyYaLbryYdHBzdJ
+        7bhG0i7WnNZRvAnFxgrRWBJIR3H02XwQGwDE9mvpMwd1ztR1wRLQMBek1iG7s251Msv7kc
+        IxwAvqSKWZ18XPybTGnZsn34pvCYHnQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-326-zQ430oOHPcK-0_9LLg0FRQ-1; Wed, 29 Jun 2022 03:37:12 -0400
+X-MC-Unique: zQ430oOHPcK-0_9LLg0FRQ-1
+Received: by mail-wm1-f71.google.com with SMTP id az40-20020a05600c602800b003a048edf007so3859909wmb.5
+        for <linux-integrity@vger.kernel.org>; Wed, 29 Jun 2022 00:37:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1h0smKgkaQYyMckjg1gEO+92UXCJgyf7f6YfzsCAFg4=;
+        b=7cJYfbAWxM3AKNI5ZW1VkuuwnD3rCW9+XQZhIIRVMDE8zHXfXjy6FP/cLK+FbeN9AN
+         YQP3OBWVKMIcNZynl1lYwnwXkxNIqxspHpQ4e8gtPkcGjb33kOuksI4n88BdeO8ew1/c
+         L4XmgfuCcDYC+8QRD4f0JqC4u/mmJei/Ih3XHjEsu+SMTzorD64Di2+jPtdWZtY4ziEz
+         34zW2E5cKeDFDlQsTo8iIzpRStFKglSiktfeBgZfjMtq2NQtuW43zcNN/pSYl9PIg25h
+         ifi06sCqFU1xXa+rQkIM0ee6uAwqEDmBOvNdfa8N/vjkMRRR/dU+z6WyBEm/qhYlbrz8
+         hajA==
+X-Gm-Message-State: AJIora+ZjwacwBKV9G5puXx2P9CZipqyt3ixp8Pb2D22hbG8919scXxR
+        AKfQikLH4PEP548obPijM9usAgOYbiJoKmZtxmNVCnS6zBaF6xe02rWx22wASLnHVTDQdwJRyNL
+        yPkX4ZDltV75iasBl2brGg/3xXygw
+X-Received: by 2002:a05:6000:1448:b0:21b:b7db:c40b with SMTP id v8-20020a056000144800b0021bb7dbc40bmr1650298wrx.279.1656488231089;
+        Wed, 29 Jun 2022 00:37:11 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vfq7mqFRSJqFJPQOP6rs25Ch1nA7fBeueZwuaRaLaWENw0ay54yTOP4QHXmGLo1NEA4L9c5g==
+X-Received: by 2002:a05:6000:1448:b0:21b:b7db:c40b with SMTP id v8-20020a056000144800b0021bb7dbc40bmr1650238wrx.279.1656488230741;
+        Wed, 29 Jun 2022 00:37:10 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id j10-20020a5d448a000000b0021b8c99860asm15832366wrq.115.2022.06.29.00.37.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 00:37:10 -0700 (PDT)
+Message-ID: <7654a74e-a410-a8a5-c228-d006dbbc200f@redhat.com>
+Date:   Wed, 29 Jun 2022 09:37:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     linux-fbdev@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-iio@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-i2c@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
-        linux-crypto@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-staging@lists.linux.dev, kasan-dev@googlegroups.com,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
-        chrome-platform@lists.linux.dev, linux-input@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, linux-gpio@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
         openipmi-developer@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
         Support Opensource <support.opensource@diasemi.com>,
-        linux-fbdev@vger.kernel.org, patches@opensource.cirrus.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pwm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-staging@lists.linux.dev
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-Message-ID: <20220629072304.qazmloqdi5h5kdre@pengutronix.de>
+        netdev@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        linux-crypto@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        patches@opensource.cirrus.com, linux-integrity@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
 References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
  <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
  <60cc6796236f23c028a9ae76dbe00d1917df82a5.camel@codeconstruct.com.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3yzpq2rgg2xm7tqn"
-Content-Disposition: inline
-In-Reply-To: <60cc6796236f23c028a9ae76dbe00d1917df82a5.camel@codeconstruct.com.au>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+ <20220629072304.qazmloqdi5h5kdre@pengutronix.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220629072304.qazmloqdi5h5kdre@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 6/29/22 09:23, Uwe Kleine-König wrote:
+> Hello,
+> 
+> [I dropped nearly all individuals from the Cc: list because various
+> bounces reported to be unhappy about the long (logical) line.]
+>
 
---3yzpq2rgg2xm7tqn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, it also bounced for me when I tried to reply earlier today.
 
-Hello,
+> diff --git a/drivers/gpu/drm/solomon/ssd130x-i2c.c b/drivers/gpu/drm/solomon/ssd130x-i2c.c
+> index 1e0fcec7be47..ddfa0bb5d9c9 100644
+> --- a/drivers/gpu/drm/solomon/ssd130x-i2c.c
+> +++ b/drivers/gpu/drm/solomon/ssd130x-i2c.c
+> @@ -39,13 +39,11 @@ static int ssd130x_i2c_probe(struct i2c_client *client)
+>  	return 0;
+>  }
+>  
+> -static int ssd130x_i2c_remove(struct i2c_client *client)
+> +static void ssd130x_i2c_remove(struct i2c_client *client)
+>  {
+>  	struct ssd130x_device *ssd130x = i2c_get_clientdata(client);
+>  
+>  	ssd130x_remove(ssd130x);
+> -
+> -	return 0;
+>  }
+>  
+>  static void ssd130x_i2c_shutdown(struct i2c_client *client)
 
-[I dropped nearly all individuals from the Cc: list because various
-bounces reported to be unhappy about the long (logical) line.]
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com> 
+-- 
+Best regards,
 
-On Wed, Jun 29, 2022 at 03:03:54PM +0800, Jeremy Kerr wrote:
-> Looks good - just one minor change for the mctp-i2c driver, but only
-> worthwhile if you end up re-rolling this series for other reasons:
->=20
-> > -static int mctp_i2c_remove(struct i2c_client *client)
-> > +static void mctp_i2c_remove(struct i2c_client *client)
-> > =A0{
-> > =A0=A0=A0=A0=A0=A0=A0=A0struct mctp_i2c_client *mcli =3D i2c_get_client=
-data(client);
-> > =A0=A0=A0=A0=A0=A0=A0=A0struct mctp_i2c_dev *midev =3D NULL, *tmp =3D N=
-ULL;
-> > @@ -1000,7 +1000,6 @@ static int mctp_i2c_remove(struct i2c_client *cli=
-ent)
-> > =A0=A0=A0=A0=A0=A0=A0=A0mctp_i2c_free_client(mcli);
-> > =A0=A0=A0=A0=A0=A0=A0=A0mutex_unlock(&driver_clients_lock);
-> > =A0=A0=A0=A0=A0=A0=A0=A0/* Callers ignore return code */
-> > -=A0=A0=A0=A0=A0=A0=A0return 0;
-> > =A0}
->=20
-> The comment there no longer makes much sense, I'd suggest removing that
-> too.
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-Yeah, that was already pointed out to me in a private reply. It's
-already fixed in
-
-	https://git.pengutronix.de/cgit/ukl/linux/log/?h=3Di2c-remove-void
-
-> Either way:
->=20
-> Reviewed-by: Jeremy Kerr <jk@codeconstruct.com.au>
-
-Added to my tree, too.
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---3yzpq2rgg2xm7tqn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmK7/dUACgkQwfwUeK3K
-7AnTJgf9GW2H7fk9/Je11PRlCnUOSZ1sz/49RHAm4xj66pI/hdRP++D8L5o7ntEU
-Hl5hKosR36cUyX12ie+YQtiCRkjhLqUoJnPzJOtcXQNV7mlMt6ds2INSO4iHYtMa
-b2UH+lLQ6K/DO0+1KquElKJhfBOKucYY1WQAVK4cfasBKMR4MtukcHAgcYClRYdj
-Nvvy6bCjqr8M1+uqDTJUUR/d0rWYHxFKygYRUfK7YPpz57gaVgaR9Js9GDGkVFB4
-qVL5x23NzgB/Djr1Ls1F6Z5eFMjbtVb+S1HDRsU+HJOYD6v1LkT2OFx9iFpme+8m
-+4HHNR5pxKogz59u4YpP1pIb0MejhA==
-=ibah
------END PGP SIGNATURE-----
-
---3yzpq2rgg2xm7tqn--
