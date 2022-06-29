@@ -2,126 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761F6560BA2
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jun 2022 23:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18472560D24
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jun 2022 01:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiF2VUb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Jun 2022 17:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S231252AbiF2X1j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jun 2022 19:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiF2VU3 (ORCPT
+        with ESMTP id S230504AbiF2X1i (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:20:29 -0400
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99113F79;
-        Wed, 29 Jun 2022 14:20:28 -0700 (PDT)
-Received: from [37.161.29.0] (port=43545 helo=[192.168.131.30])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1o6f6m-000BzC-Qd;
-        Wed, 29 Jun 2022 23:20:25 +0200
-Message-ID: <d682fb60-c254-f89e-5d6d-cdf7aa752939@lucaceresoli.net>
-Date:   Wed, 29 Jun 2022 23:20:04 +0200
+        Wed, 29 Jun 2022 19:27:38 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC1924F38;
+        Wed, 29 Jun 2022 16:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656545243;
+        bh=2zc8/rUJ7dNQmSr6g++hY3lXlmXibvM/3VMSy/TocvQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=JN7b4c7FGfAomklAyvkuVVEC62SLU3Vb0Sjbia7KFOeItS5GBUYfFyR4Pfw5a9LWW
+         2vNKOBs1KElR1s9ox9FFAzHXinfQmJ62E6d8/igkjuKrTUAyZHTsYwqQS+K0+cApoE
+         kBZaKgbSJaHx4qxghX6zKjRnCiht/+graQdo1mX8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([46.223.3.23]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MF3DW-1nrIt110si-00FR3n; Thu, 30
+ Jun 2022 01:27:23 +0200
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com, LinoSanfilippo@gmx.de, lukas@wunner.de,
+        p.rosenberger@kunbus.com
+Subject: [PATCH v7 00/10] TPM IRQ fixes
+Date:   Thu, 30 Jun 2022 01:26:43 +0200
+Message-Id: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mediatek@lists.infradead.org
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-Content-Language: en-US
-In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:kn2TwQigqLq1k9hVEgWts/dcEKo9y9gt4xkBibqKIoTt0xZUwh0
+ HzeqcXpSyl2lI4CJfxAOw6jCOYvmNzWpSm/hQR7ALzK/fHo54YO4GoMsb26VWhEtledr3UI
+ bigdIOZ4N1D0DKkkSvRhicVsxJvuPiAe/mqOLyb6LUSvdYI3QHxXmsa6u9RaySVwLZYuzm0
+ 8Cps7SqkjCEN/9XAvz3ig==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:huhEXYWJax0=:rl5vuwr9ZGUL4YaeFE0abD
+ Ksq7dmDPt86ZwXikCm98wEdBC2l8GI8XtAM+EovErI58kBamQEpgMcGef7GbtCtXHsu2gK1pN
+ zR5jkLdufrfjWFzQC/m6qJBqqjFL/31f1HZdEDBLp1DzvJz0GJ3fho/jyInEas2B5Ekxdh/as
+ paQy5vnYsjJ63w+8TVK5FAb4hZNog7k4T7NNrMmu/amAiqhlijL1v1Er2+am8VtYw2qr7vdX1
+ W2sOenREMFSnouNOml8Yzx7MafHIYE9WHH4OGhCXMoQEHWEgHbMxibpGynkAQzPlrseWCLils
+ FhMi6ZHZBu/bDfOeIftC90W/OkQyosRfY1cp1lHRMW6YQ/cgb7WguOud0e7NGcO1LgbGsWapU
+ wXVcHd2Ly/tcotQV0FGH1FUhAmlCcqr6qKER1M0xfgfzgtVG1uz+lCDJR7GjlEoKXo39Nu2ZY
+ /VU76yO+FYyyNcudUW+q7p6buTj3ON0QHt3C8f+YXwV/W4AVkZGwOCNmbMFHyJNWz+XSzaaIP
+ hWdAGlZ1Tw7fcpVVRHDqLBkx0ntMka2TYBX/uoWF7gDPGyvD9BnThGvXi3tPm/wPIHbpEQ2c+
+ Q6LgHcXXT91ZPz0auERlD1aJSVcKQVzgvCWFdI5K4tBeDDLGrpl7ITkp6DcHaat2f5bF19tak
+ EbjL43/ovpdaHxe91XnAalh7ELgseteXYHNkypGA8DptdJBIkBKfLWl3IJ8JrmYt7F9dTpeTt
+ 2Ag72lDj6JtqNED6mk0Jz64oGNy5jBCJn7KNDyfLsmhHx4YAPyikGVKkK6cKNuBJRi/rjrosE
+ 5xIFqjLRsSuGLAc9NjN3UgiFXZDuOkiQ6TU2+3kqiav6CvslqX4SuijdtIRW0pKLFO/LdZaNE
+ F+jno/0r7MINmjTCS6p3oEghc1peiYTDQgEocNAGaKfZ6KPfj0o5W0fVAPwGGHYrHIXA4y+5V
+ PopYKo6vKRKLeKMEuUv8eQGLhGBr6f4HBwHEGAwnBq6IX2uyEQUsiCILHkjQcgHwH3DTMrgnd
+ HPewEwTPVDdnwZQQWiMYeSm2oS6ErbZgSCp8GQJBVYCjz9aXP01J0UETKozInG6/3a0AxNZRL
+ BplQufNPSe7qXpzMFeh+s8IPOyqag5X3XuzJzEfH8ttwahQJT+U/Vspjg==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
-
-[keeping only individuals and lists in Cc to avoid bounces]
-
-On 28/06/22 16:03, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <uwe@kleine-koenig.org>
-> 
-> The value returned by an i2c driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
-> 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-
-For versaclock:
-
-> diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
-> index e7be3e54b9be..657493ecce4c 100644
-> --- a/drivers/clk/clk-versaclock5.c
-> +++ b/drivers/clk/clk-versaclock5.c
-> @@ -1138,7 +1138,7 @@ static int vc5_probe(struct i2c_client *client)
->  	return ret;
->  }
->  
-> -static int vc5_remove(struct i2c_client *client)
-> +static void vc5_remove(struct i2c_client *client)
->  {
->  	struct vc5_driver_data *vc5 = i2c_get_clientdata(client);
->  
-> @@ -1146,8 +1146,6 @@ static int vc5_remove(struct i2c_client *client)
->  
->  	if (vc5->chip_info->flags & VC5_HAS_INTERNAL_XTAL)
->  		clk_unregister_fixed_rate(vc5->pin_xin);
-> -
-> -	return 0;
->  }
->  
->  static int __maybe_unused vc5_suspend(struct device *dev)
-
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
--- 
-Luca
+RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoaXMgc2Vy
+aWVzIGVuYWJsZXMgSVJRIHN1cHBvcnQgZm9yIHRoZSBUUE0gVElTIGNvcmUuIEZvciB0aGlzIHJl
+YXNvbiBhCm51bWJlciBvZiBidWdmaXhlcyBhcm91bmQgdGhlIGludGVycnVwdCBoYW5kbGluZyBh
+cmUgcmVxdWlyZWQgKHBhdGNoZXMgMSB0bwo0KS4KClBhdGNoIDUgdGFrZXMgaW50byBhY2NvdW50
+IHRoYXQgYWNjb3JkaW5nIHRvIHRoZSBUUE0gSW50ZXJmYWNlClNwZWNpZmljYXRpb24gc3RzVmFs
+aWQgYW5kIGNvbW1hbmRSZWFkIGludGVycnVwdHMgbWlnaHQgbm90IGJlIHN1cHBvcnRlZApieSB0
+aGUgaGFyZHdhcmUuIEZvciB0aGlzIHJlYXNvbiB0aGUgc3VwcG9ydGVkIGludGVycnVwdHMgYXJl
+IGZpcnN0IHF1ZXJpZWQKYW5kIHN0b3JlZC4gVGhlbiB3YWl0X2Zvcl90cG1fc3RhdCgpIGlzIGFk
+anVzdGVkIHRvIG5vdCB3YWl0IGZvciBzdGF0dXMKY2hhbmdlcyB0aGF0IGFyZSBub3QgcmVwb3J0
+ZWQgYnkgaW50ZXJydXB0cy4KClBhdGNoIDYgbW92ZXMgdGhlIGludGVycnVwdCBmbGFnIGNoZWNr
+cyBpbnRvIGFuIG93biBmdW5jdGlvbi4KClBhdGNoIDcgYWRkcmVzc2VzIHRoZSBpc3N1ZSB3aXRo
+IGNvbmN1cnJlbnQgbG9jYWxpdHkgaGFuZGxpbmc6ClNpbmNlIHRoZSBpbnRlcnJ1cHQgaGFuZGxl
+ciB3cml0ZXMgdGhlIGludGVycnVwdCBzdGF0dXMgcmVnaXN0ZXJzIGl0IG5lZWRzCnRvIGhvbGQg
+dGhlIGxvY2FsaXR5LiBIb3dldmVyIGl0IHJ1bnMgY29uY3VycmVudGx5IHRvIHRoZSB0aHJlYWQg
+d2hpY2gKdHJpZ2dlcmVkIHRoZSBpbnRlcnJ1cHQgKGUuZy4gYnkgcmVhZGluZyBvciB3cml0aW5n
+IGRhdGEgdG8gdGhlIFRQTSkuIFNvCml0IG11c3QgdGFrZSBjYXJlIHdoZW4gY2xhaW1pbmcgYW5k
+IHJlbGVhc2luZyB0aGUgbG9jYWxpdHkgaXRzZWxmLApiZWNhdXNlIGl0IG1heSByYWNlIHdpdGgg
+dGhlIGNvbmN1cnJlbnQgcnVubmluZyB0aHJlYWQgd2hpY2ggYWxzbyBjbGFpbXMKYW5kIHJlbGVh
+c2VzIHRoZSBsb2NhbGl0eS4KVG8gYXZvaWQgdGhhdCBib3RoIGludGVycnVwdCBhbmQgY29uY3Vy
+cmVudCBydW5uaW5nIHRocmVhZCBpbnRlcmZlcmUgd2l0aAplYWNoIG90aGVyIGEgbG9jYWxpdHkg
+Y291bnRlciBpcyB1c2VkIHdoaWNoIGd1YXJhbnRlZXMgdGhhdCBhdCBhbnkgdGltZQp0aGUgbG9j
+YWxpdHkgaXMgaGVsZCBhcyBsb25nIGFzIGl0IGlzIHJlcXVpcmVkIGJ5IG9uZSBvZiBib3RoIGV4
+ZWN1dGlvbgpwYXRocy4KClBhdGNoIDggaW1wbGVtZW50cyB0aGUgcmVxdWVzdCBvZiBhIHRocmVh
+ZGVkIGludGVycnVwdCBoYW5kbGVyLiBUaGlzIGlzCm5lZWRlZCBzaW5jZSBTUEkgdXNlcyBhIG11
+dGV4IGZvciBkYXRhIHRyYW5zbWlzc2lvbiBhbmQgc2luY2Ugd2UgYWNjZXNzIHRoZQppbnRlcnJ1
+cHQgc3RhdHVzIHJlZ2lzdGVyIHZpYSBTUEkgaW4gdGhlIGlycSBoYW5kbGVyIHdlIG5lZWQgYSBz
+bGVlcGFibGUKY29udGV4dC4KClBhdGNoIDkgbWFrZXMgc3VyZSB0aGF0IHdyaXRlcyB0byB0aGUg
+aW50ZXJydXB0IHJlZ2lzdGVyIGFyZSBlZmZlY3RpdmUgaWYKZG9uZSBpbiB0aGUgaW50ZXJydXB0
+IGhhbmRsZXIuCgpQYXRjaCAxMCBlbmFibGVzIHRoZSB0ZXN0IGZvciBpbnRlcnJ1cHRzIGJ5IHNl
+dHRpbmcgdGhlIHJlcXVpcmVkIGZsYWcKYmVmb3JlIHRoZSB0ZXN0IGlzIGV4ZWN1dGVkLgoKCkNo
+YW5nZXMgaW4gdjc6Ci0gbW92ZWQgaW50ZXJydXB0IGZsYWcgY2hlY2tzIGludG8gYW4gb3duIGZ1
+bmN0aW9uIGFzIHN1Z2dlc3RlZCBieSBKYXJra28KLSBhZGRlZCAiVGVzdGVkLWJ5IiB0YWdzIGZv
+ciBUZXN0cyBmcm9tIE1pY2hhZWwgTmlld8O2aG5lcgotIGZpeGVkIG9uZSBjb21tZW50CgpDaGFu
+Z2VzIGluIHY2OgotIHNldCBUUE1fVElTX0lSUV9URVNURUQgaW4gZmxhZyBtZW1iZXIgb2YgdGhl
+IHRwbV90aXNfZGF0YSBzdHJ1Y3QgaW5zdGVhZAppbiBhbiBvd24gYml0ZmllbGQgCi0gaW1wcm92
+ZSBjb21taXQgbWVzc2FnZXMKLSB1c2UgaW50X21hc2sgaW5zdGVhZCBvZiBpcnFzX2luX3VzZSBh
+cyB2YXJpYWJsZSBuYW1lCi0gdXNlIHN0c19tYXNrIGluc3RlYWQgb2YgYWN0aXZlX2lycXMgYXMg
+dmFyaWFibGUgbmFtZQotIHNxdWFzaCBwYXRjaCA1IGFuZCA2Ci0gcHJlZml4IGZ1bmN0aW9ucyB3
+aXRoIHRwbV90aXNfCi0gcmVtb3ZlICJmaXhlcyIgdGFnCgpDaGFuZ2VzIGluIHY1OgotIGltcHJv
+dmUgY29tbWl0IG1lc3NhZ2Ugb2YgcGF0Y2ggMSBhcyByZXF1ZXN0ZWQgYnkgSmFya28KLSBkcm9w
+IHBhdGNoIHRoYXQgbWFrZXMgbG9jYWxpdHkgaGFuZGxpbmcgc2ltcGxlciBieSBvbmx5IGNsYWlt
+aW5nIGl0IGF0CiAgZHJpdmVyIHN0YXJ0dXAgYW5kIHJlbGVhc2luZyBpdCBhdCBkcml2ZXIgc2h1
+dGRvd24gKHJlcXVlc3RlZCBieSBKYXJrbykKLSBkcm9wIHBhdGNoIHRoYXQgbW92ZXMgdGhlIGlu
+dGVycnVwdCB0ZXN0IGZyb20gdHBtX3Rpc19zZW5kKCkKICB0byB0bXBfdGlzX3Byb2JlX2lycV9z
+aW5nbGUoKSBhcyByZXF1ZXN0ZWQgYnkgSmFya28KLSBhZGQgcGF0Y2ggdG8gbWFrZSBsb2NhbGl0
+eSBoYW5kbGluZyB0aHJlYWRzYWZlIHNvIHRoYXQgaXQgY2FuIGFsc28gYmUKICBkb25lIGJ5IHRo
+ZSBpcnEgaGFuZGxlcgotIHNlcGFyYXRlIGxvZ2ljYWwgY2hhbmdlcyBpbnRvIG93biBwYXRjaGVz
+Ci0gYWx3YXlzIHJlcXVlc3QgdGhyZWFkZWQgaW50ZXJydXB0IGhhbmRsZXIKCkNoYW5nZXMgaW4g
+djQ6Ci0gb25seSByZXF1ZXN0IHRocmVhZGVkIGlycSBpbiBjYXNlIG9mIFNQSSBhcyByZXF1ZXN0
+ZWQgYnkgSmFya28uCi0gcmVpbXBsZW1lbnQgcGF0Y2ggMiB0byBsaW1pdCBsb2NhbGl0eSBoYW5k
+bGluZyBjaGFuZ2VzIHRvIHRoZSBUSVMgY29yZS4KLSBzZXBhcmF0ZSBmaXhlcyBmcm9tIGNsZWFu
+dXBzIGFzIHJlcXVlc3RlZCBieSBKYXJrby4KLSByZXBocmFzZSBjb21taXQgbWVzc2FnZXMgCgpD
+aGFuZ2VzIGluIHYzOgotIGZpeGVkIGNvbXBpbGVyIGVycm9yIHJlcG9ydGVkIGJ5IGtlcm5lbCB0
+ZXN0IHJvYm90Ci0gcmVwaHJhc2VkIGNvbW1pdCBtZXNzYWdlIGFzIHN1Z2dlc3RlZCBieSBKYXJr
+byBTYWtraW5lbgotIGFkZGVkIFJldmlld2VkLWJ5IHRhZwoKQ2hhbmdlcyBpbiB2MjoKLSByZWJh
+c2UgYWdhaW5zdCA1LjEyCi0gZnJlZSBpcnEgb24gZXJyb3IgcGF0aAoKCkxpbm8gU2FuZmlsaXBw
+byAoMTApOgogIHRwbSwgdHBtX3RpczogQXZvaWQgY2FjaGUgaW5jb2hlcmVuY3kgaW4gdGVzdCBm
+b3IgaW50ZXJydXB0cwogIHRwbSwgdHBtX3RpczogQ2xhaW0gbG9jYWxpdHkgYmVmb3JlIHdyaXRp
+bmcgVFBNX0lOVF9FTkFCTEUgcmVnaXN0ZXIKICB0cG0sIHRwbV90aXM6IERpc2FibGUgaW50ZXJy
+dXB0cyBpZiB0cG1fdGlzX3Byb2JlX2lycSgpIGZhaWxlZAogIHRwbSwgdG1wX3RpczogQ2xhaW0g
+bG9jYWxpdHkgYmVmb3JlIHdyaXRpbmcgaW50ZXJydXB0IHJlZ2lzdGVycwogIHRwbSwgdHBtX3Rp
+czogT25seSBoYW5kbGUgc3VwcG9ydGVkIGludGVycnVwdHMKICB0cG0sIHRwbV90aXM6IE1vdmUg
+aW50ZXJydXB0IG1hc2sgY2hlY2tzIGludG8gb3duIGZ1bmN0aW9uCiAgdG1wLCB0bXBfdGlzOiBJ
+bXBsZW1lbnQgdXNhZ2UgY291bnRlciBmb3IgbG9jYWxpdHkKICB0cG0sIHRwbV90aXM6IFJlcXVl
+c3QgdGhyZWFkZWQgaW50ZXJydXB0IGhhbmRsZXIKICB0cG0sIHRwbV90aXM6IENsYWltIGxvY2Fs
+aXR5IGluIGludGVycnVwdCBoYW5kbGVyCiAgdHBtLCB0cG1fdGlzOiBFbmFibGUgaW50ZXJydXB0
+IHRlc3QKCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXMuYyAgICAgIHwgICAyICstCiBkcml2ZXJz
+L2NoYXIvdHBtL3RwbV90aXNfY29yZS5jIHwgMjU5ICsrKysrKysrKysrKysrKysrKysrKy0tLS0t
+LS0tLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5oIHwgICA1ICstCiAzIGZpbGVz
+IGNoYW5nZWQsIDE3OCBpbnNlcnRpb25zKCspLCA4OCBkZWxldGlvbnMoLSkKCgpiYXNlLWNvbW1p
+dDogOTQxZTNlNzkxMjY5NmI5ZmJlMzU4NjA4M2E3YzJlMTAyY2VlN2E4NwotLSAKMi4yNS4xCgo=
