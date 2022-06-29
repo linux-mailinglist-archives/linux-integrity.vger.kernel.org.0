@@ -2,166 +2,167 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EBE560264
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jun 2022 16:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A30256029A
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jun 2022 16:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiF2ORA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Jun 2022 10:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47374 "EHLO
+        id S232050AbiF2O0C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jun 2022 10:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiF2OQ7 (ORCPT
+        with ESMTP id S230240AbiF2O0A (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Jun 2022 10:16:59 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623842ED5B;
-        Wed, 29 Jun 2022 07:16:58 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25TEElIS003730;
-        Wed, 29 Jun 2022 14:16:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=cHy38VAaYfwUL1rpWnFpkNYgiHgrJYl/KVo8ZW+UcrM=;
- b=eU8PvES2MDv1rWgeOGt4waBT2BpeTvMJzfYXZeu0jOhn7/f4QaXZIU2oCXg9Xh8yhMGd
- xFcCftfvts7SjW2abIhfNCae8fMezIYeEFpdxGR1Seqq38pNZprkr8WYcsC5lU1gmRyz
- B3pa63LIb0ErZv2drcuvX5QWWduVcSTM7j9qeU79TWgah5icw46NSrW6bPRhxE4Mipcz
- TWWgfaEGXt4pchopFzm5JBCH4T3rtGiXDKworScHTCsxUAtuSrwjpjdxJkcO4erLs6AG
- KwaIHbgOBMJBUCUwkSDtYbf3fvTb6eCyXyO3JbvmJZebCTv4uS2QGPezgMrrQDv2xo8O TQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h0rb580v1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jun 2022 14:16:41 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25TEGfHl008991;
-        Wed, 29 Jun 2022 14:16:41 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h0rb580ut-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jun 2022 14:16:41 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25TE5xGh004496;
-        Wed, 29 Jun 2022 14:16:40 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma03dal.us.ibm.com with ESMTP id 3gwt0aggdq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jun 2022 14:16:40 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25TEGcsd25821584
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 Jun 2022 14:16:38 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 982C1BE051;
-        Wed, 29 Jun 2022 14:16:38 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 16305BE054;
-        Wed, 29 Jun 2022 14:16:38 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 29 Jun 2022 14:16:38 +0000 (GMT)
-Message-ID: <6e097ec9-0657-b920-89c5-cef3e95bd7ea@linux.ibm.com>
-Date:   Wed, 29 Jun 2022 10:16:37 -0400
+        Wed, 29 Jun 2022 10:26:00 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A93190A;
+        Wed, 29 Jun 2022 07:25:59 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id mf9so33053848ejb.0;
+        Wed, 29 Jun 2022 07:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nzVAkjUIXnSmifmZO/KNuTW33GCGTCzsi9aX026XXeg=;
+        b=S2dVib/eYmAFl827WdIoCLllzfbxALRjIjzfRRwuBWpdbVEMsjXdf1fQZ0QK1n2n0J
+         7Rc0uKmDUlj06sv7gme85B+3fLmze+mOouy0tIsuBDVpy1nD4eEh9k2i1LyAyfo/z7Zj
+         KDlk5RBwfb1T/0o1rVzuZORFiKZsCvSsNfve9fNt60vuT8XdzQWLTwkS/9FAhK69nmEs
+         mEzSIHBFyIvznhb3ZYEmWznM5HxrpFTwi8PXn2kSF7LDJWEQQU2316sTZ03OvudAaN+G
+         thYeRK11RnXT7zItby/QP43/O2E1Z4EfVZv3Nyn7dRrR7zoEuvKZKKrx+f9P5pfvx3Rg
+         uLHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nzVAkjUIXnSmifmZO/KNuTW33GCGTCzsi9aX026XXeg=;
+        b=K+/sP/hRrNW2dKVpBtInRhRcLgevV8ty+8mr5yrNwVTd2440sDwaFo+X70nnHqBZAM
+         O1e8Mt2RDyCnrbwIY3Vfho714AOnWqqXNMH6wDFomSZQxVP/5hLg590W2SFDcCNq7n0j
+         dUBbh1mohPAsDDqfwTtDNwtKCgpxtJ7iwkDUt4rOj9rlVZxBDAQBZ70wGo35FmuOBC3u
+         xejORvqK4II7TIRohQmMq2TK+l0mlnshiOzW+PTHdSVBC+QokePfjOGSPUlKUtHUWTqi
+         1dbdYVekSRxf7honXKELQjw3s2sJFpAo6ohp0sneZck+CTstgY3IOQrAz3PYuH8xBCno
+         LsNA==
+X-Gm-Message-State: AJIora9fPn0c14bXzp6tnc7I4qM66JCoAiTwWqMctW6cwVtnVYc7d4n8
+        MWmqpEuyoC12RWdG8cu+TcE=
+X-Google-Smtp-Source: AGRyM1vLxTFMIxeh0MQDJmw094z51hmalDIKhKM+71jelG0gY6NpuuzQXDALY4ZT1iSuYjMs9++euw==
+X-Received: by 2002:a17:906:58cf:b0:722:e4e1:c174 with SMTP id e15-20020a17090658cf00b00722e4e1c174mr3593366ejs.85.1656512758310;
+        Wed, 29 Jun 2022 07:25:58 -0700 (PDT)
+Received: from [10.29.0.16] ([37.120.217.82])
+        by smtp.gmail.com with ESMTPSA id jy19-20020a170907763300b007263713cfe9sm7220580ejc.169.2022.06.29.07.25.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 07:25:57 -0700 (PDT)
+Message-ID: <80117936-6869-19b2-45a6-96a4562c6cd2@gmail.com>
+Date:   Wed, 29 Jun 2022 16:25:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 1/3] tpm: of: Move of-tree specific code from tpm
- driver into of driver
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
 Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, kexec@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-        nayna@linux.ibm.com, nasastry@in.ibm.com,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Frank Rowand <frowand.list@gmail.com>
-References: <20220616154130.2052541-1-stefanb@linux.ibm.com>
- <20220616154130.2052541-2-stefanb@linux.ibm.com>
- <20220627224325.GB3082294-robh@kernel.org>
- <170c78f7-f0ba-c186-dacf-55759dae9b83@linux.ibm.com>
- <Yru83e4OLW7vH5/o@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <Yru83e4OLW7vH5/o@kernel.org>
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mediatek@lists.infradead.org
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+ <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tIUxx4YKQ9ejkBKzzE9b6Rri7pkvOR0z
-X-Proofpoint-GUID: _H4DtsbsPJ0mRAmXjonrw9KfRF1GT3s2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-29_17,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- mlxscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- suspectscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 impostorscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206290052
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 6/28/22 22:45, Jarkko Sakkinen wrote:
-> On Tue, Jun 28, 2022 at 09:29:48AM -0400, Stefan Berger wrote:
->>
->>
->> On 6/27/22 18:43, Rob Herring wrote:
->>> On Thu, Jun 16, 2022 at 11:41:28AM -0400, Stefan Berger wrote:
->>>> Simplify tpm_read_log_of() by moving Openfirmware-specific code into
->>>> the Openfirmware driver to make the code reusable. Call the new
->>>
->>> There is no such 'Openfirmware driver'.
->>>
->>>> of_tpm_get_sml_parameters() function from the TPM Openfirmware driver.
->>>>
->>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->>>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->>>> Cc: Jason Gunthorpe <jgg@ziepe.ca>
->>>> Cc: Rob Herring <robh+dt@kernel.org>
->>>> Cc: Frank Rowand <frowand.list@gmail.com>
->>>> ---
->>>>    drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
->>>>    drivers/of/Makefile            |  2 +-
->>>>    drivers/of/device_node.c       | 27 +++++++++++++++++++++++++++
->>>
->>> Humm, definitely the wrong direction. Generally, code for specific
->>> bindings does not go in drivers/of/. There used to be some, but we've
->>> moved it to the appropriate subsystems. kexec was an exception to not
->>> have 2 copies of the same code in arch/.
->>
->> The function I am moving here is called by the TPM subsystem and also now by
->> of/kexec.c. The latter is compiled under the following conditions:
->>
->> ifdef CONFIG_KEXEC_FILE
->> ifdef CONFIG_OF_FLATTREE
->> obj-y	+= kexec.o
->> endif
->> endif
->>
->> The code that current calls it is compiled under the following conditions:
->>
->> tpm-$(CONFIG_OF) += eventlog/of.o
->>
->> To make it available to both I could keep it in the TPM subsystem like this:
->>
->> obj-$(CONFIG_OF) = tpm_of.o
->>
->>
->> Jarrko, if you read this, any comment?
->>
->>
->>     Stefan
+On 6/28/22 16:03, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <uwe@kleine-koenig.org>
 > 
-> Why can't you convert of_tpm_get_sml_parameters() to inline function?
-
-I can do that and put it into include/linux/tpm.h. The only concern 
-would have been the size of the function.
-
-Thanks,
-    Stefan
-
+> The value returned by an i2c driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
 > 
-> BR, Jarkko
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+
+[...]
+>   drivers/platform/surface/surface3_power.c                 | 4 +---
+
+[...]
+
+> diff --git a/drivers/platform/surface/surface3_power.c b/drivers/platform/surface/surface3_power.c
+> index 444ec81ba02d..3b20dddeb815 100644
+> --- a/drivers/platform/surface/surface3_power.c
+> +++ b/drivers/platform/surface/surface3_power.c
+> @@ -554,7 +554,7 @@ static int mshw0011_probe(struct i2c_client *client)
+>   	return error;
+>   }
+>   
+> -static int mshw0011_remove(struct i2c_client *client)
+> +static void mshw0011_remove(struct i2c_client *client)
+>   {
+>   	struct mshw0011_data *cdata = i2c_get_clientdata(client);
+>   
+> @@ -564,8 +564,6 @@ static int mshw0011_remove(struct i2c_client *client)
+>   		kthread_stop(cdata->poll_task);
+>   
+>   	i2c_unregister_device(cdata->bat0);
+> -
+> -	return 0;
+>   }
+>   
+>   static const struct acpi_device_id mshw0011_acpi_match[] = {
+
+For the quoted above:
+
+Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
