@@ -2,136 +2,207 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692B955FBC1
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jun 2022 11:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9074A55FC8B
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Jun 2022 11:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbiF2JVL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Jun 2022 05:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S233197AbiF2JxC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Jun 2022 05:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiF2JVK (ORCPT
+        with ESMTP id S233235AbiF2Jw4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Jun 2022 05:21:10 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3341C369C0;
-        Wed, 29 Jun 2022 02:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656494449;
-        bh=EkAeX5N6w3YtqO8hOxSosvDf28tnCpFaYhH61mIA+xM=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Z3XzPsNPYg2ClCI0TYTMVAZ3j9MQbwEiFofNt6OMebPo4MwuqH2ZElQFB/nSPB0JM
-         xpYJ9b59N3B9Thw95ysi/UQIE49tQaLoCywMKDZv7+7rdqd6isTA2JtzVaugF2po8Z
-         Tg8NkHQMF/uMnV+mBNGiz8DrjQOvhXRos0Jp5838=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.69] ([46.223.3.23]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MY68d-1o7w5c2P8v-00YOJ2; Wed, 29
- Jun 2022 11:20:49 +0200
-Message-ID: <4b2b3a2b-fdc0-a684-d4b1-9725e5b87ccb@gmx.de>
-Date:   Wed, 29 Jun 2022 11:20:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 5/9] tpm, tpm_tis: Only handle supported interrupts
+        Wed, 29 Jun 2022 05:52:56 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F386C3D4B9;
+        Wed, 29 Jun 2022 02:52:54 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25T4I1QC020672;
+        Wed, 29 Jun 2022 02:52:53 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=7Lef431669HQ8GUAygdqrZ30Z09bzM02ar1bF9uNg14=;
+ b=IgzHWiM/HDDp92TtlGKM6VSsL+/iCm+MflYGBNUJqRSjjPTzlOtCmlX2xvwLd477Hpwg
+ yctmPGOFvrnY7gq4esAr5BcIZSmosxAE+RpRUu5bVM+aKMko0V4EbmUt7UxEitBeTXao
+ cL/Gpdj+IAfgubdxeszfQL/kfUXSFUubaKU= 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h0dgqhuk8-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jun 2022 02:52:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OKp/m0IihZ4IjfzqUJVZCG5cbENLI52137BC95v7WM4/gjV+pEP+0mn5uYkkIbFGO/3me2ILBH6YFSaYsti3Etrdp1KQENYKMb/EjxmrBYNS/gllkXn5qMvNklkSbtN84mlL1aqUAC2TCF1a98SRKpM0bkW6uxUNhszQEu2hAWQA/aXHPOYf0eArR68rA9O53Nv3LKVVOV9QjbbgzE8fB8P78JQ0kMib5Rvw7kJQUap+VZpq1k7z9k5kD6LN21uubVFS5+3qL+5tUAoAwwfcXm4ZDSFe+EaCSeyedYA0ve50qQHCW7kSn6Thc0R9X8DLJMowsD+N+aWv5e9UnREHwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7Lef431669HQ8GUAygdqrZ30Z09bzM02ar1bF9uNg14=;
+ b=FWU2HzGarPOkSdcw2ovmFphg9hWhSdzTy9ljSpqVGFtrHdywXAHZWs7F8GTX36Dru3bUzUlt4ghC7TRkWN1ni716mo9W2+YG3caBjjROKwpNfQ4ZOS447d7nP44z3tepert8pHxDGi8I6tqre38ymI9pqtdOmFXMWPBTmHTfmZHLQuyQ3wLjQmFpax9jhHck/8UAV16NhmF8FrzNy2N3P4KIiV8FVFGd/mlk0oNZ1/jhxHt49vWBeHcGhTdZuRiu3qlC9sbKtZyENtXwsyzvZboJw0pHbZdd7WllZpnQkiqYPrdlCIBsPp+ePHKCJqhnGOuLGN9tReGJsuwWu5IN1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com (2603:10b6:a03:379::12)
+ by BN6PR15MB1427.namprd15.prod.outlook.com (2603:10b6:404:c6::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 29 Jun
+ 2022 09:52:50 +0000
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::81f9:c21c:c5bf:e174]) by SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::81f9:c21c:c5bf:e174%8]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
+ 09:52:50 +0000
+From:   Jonathan McDowell <noodles@fb.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     kernel test robot <lkp@intel.com>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>, Baoquan He <bhe@redhat.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Subject: [PATCH] of: Correctly annotate IMA kexec buffer functions
+Thread-Topic: [PATCH] of: Correctly annotate IMA kexec buffer functions
+Thread-Index: AQHYi53+57Uf9qOfm0WoCzCAOs74RA==
+Date:   Wed, 29 Jun 2022 09:52:50 +0000
+Message-ID: <Yrwg1aYEnFz38V6+@noodles-fedora.dhcp.thefacebook.com>
+References: <202206291039.yGgljGbx-lkp@intel.com> <YrwPjnxBk3Xyuakg@zn.tnic>
+In-Reply-To: <YrwPjnxBk3Xyuakg@zn.tnic>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20220621132447.16281-1-LinoSanfilippo@gmx.de>
- <20220621132447.16281-6-LinoSanfilippo@gmx.de> <Yrf/azvJlzWfOE9y@kernel.org>
- <6b950660-6a78-f329-39b4-11d585e4959c@gmx.de> <Yro4tl7g1IqkEszT@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-In-Reply-To: <Yro4tl7g1IqkEszT@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ejJxBMc0f49kRY5+GOJpGpT422gdXQehGqrdv/3iJwEgq3wWlyZ
- qYetttZl/KJHTWMkWUuVufuUrsRIYQ1PisgVo8zEg2rNHSIOKFHicjDOzEqPyGQXuf6Gwk0
- 3vhEwzXQO+5lyauP/40WgovM/N/QJrdkyWofMYdScQf2qt8Rm/2m6RrAwFkkbm75N98zqjl
- 4QPV5fw30D2v8A84asZIA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:p6CUeDtQxa4=:G3gxnADgZrEBnAOsQCCzbP
- uzEdPo2bpnPcUmlPVk57Xfu8LFAWi2rSGYH24mXPOQKRHIRjdMm8hhEn6KO+SOil1LsRup306
- koQplAiC5E6OVMd4eSA8wKojdE7X27+oNqfGfwKNcx6ydY7XqW9Uq+2sARWD20WxtvWC/oZOm
- FpNkDXwimmtjI4vk/Mze9qagNQsene0rdIUmrQSEeos+K+/uYPZceByABXwQCujhaVvk2GoEa
- KUduV5cpJsM2zo1zgD26wNZjxUbGdXPIJkK5+pmQemZXjAk3FOVdASi+apsJ23GzVKQY9ZrFh
- L/nOKKqLIEi44kAUoOXwsSE7jqKIZuQ8UUC+GiRz84qVj1fjZ8KdHGk6WWgxf7399ApQVgpfC
- 2IB1I6so77thfOtZ8uHmhE1DtVtepGZsU53NLLNnP5K8jfcaurZmr41fV1uQSwzQi1xZ8d1g/
- s+yqAJjOBIZvQa142Wnc+BDyVuh6dSX4NiQx5t2vaM3z0MuGW0pTIyVaeOV2GSIG3DT2CtuSi
- xc/HbAtFd+sGpvm/2s79NxBRsEGadmAWpt8TzTGrGCS/d7OjcRmJtxUY4O1xpOMTKWlMZ8LCP
- re4R0JQlHN0zsVUpyo7ujAVcwqPG9JOOSNoG0jKx9PNC/IvnbpmE/1aQ7aVFk4kY/1i3e7UVy
- tKaI/mW/Y74T+xvM8rqprlg4F+42Ramyu5ggX2CKjDqQEfVMIOr3u+VIzA/uMNmDrMLpJ6WWy
- dIqsPB5oZbCPDfJf9UeYSZUXb0eevvoN5Y6Nbo3Q9mSlzfdOsavlAl0M2+1KGDL2W1ftfy8Ju
- vzkGO0SVptfwc+5UNeiZwIajx9Apm6XSqVo0wADILQShKdnpQBfO3sqaru+40g8SrEMvu+SCz
- LyqbCOhzKRXKY44QlYVq+d9Ec0o9hP+TLoGlosOev/Dh8mNR2C83YsghizFsj1fYgNqMLueyc
- zG0TFOcAxIX8knJW8S0BRd/UfeYw/vmjZ3YUPTgrFEHQ/YKPijIcnYMYMScHHUJ/HRDFOGvuV
- GzhBKHcs0Im4yzPZrpLM821wQP0kIC9mqLxDu0uqLaomQhkM2CT9OfQI0TXVtbXBJvzR5jqES
- 92ms0ar/dOL7PZ0lAHsBny+fe9WLH5ACdxktQ8yg3ztT71dEZMApWyKhA==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7c5815ee-44d6-44e8-7847-08da59b52121
+x-ms-traffictypediagnostic: BN6PR15MB1427:EE_
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ql29pDw9WoyUR4EJaM+/Xn8uNBw26PQ8zouXAJDuKwhh6TAyWXW/hfm8eDfclmNGNfbWBGbDAv7gE3bxt48D7kMwgmFN/3fCOdRw2q3SJdJ7hFnZUEeOcuqERnpYfaEe9KuU5l1CPzc/7L5TAQ2bYycmpv5x1InXawckS9gmvP6Gw7mFGbLvG5ezBJ0zlxWmR5Bf+yZ6rLh3o1sTf07GoCh7xPyVVBr72BItO2IcjfTIvSNximZnjoUF+4yfF5FznGcy2xlMKvXplAbcm4r2t5pqNh9INZEP2Hq+BXQian4C4kJ65debJkeE++OuY5eETiALC/OKYzdKQLiJSBh5gZ1Ymp994VF94Yy9VSdleV3adBPfVWnmrmZ7ZdhDg6GV2vjBSOUB9hKKkEx39ze0zv0RsBGukpEfchU20rByDRGMwhs+y/m3Q/pABviEEYWWXQUH4hfYT9UunWNkshMKx9Yy9CjpRw7IP/eSNR6AE76nAlhUYb2fJVrPcnnU43RCUiuDA7wROz8+NMZ+N7MuhHjEejCcaaeEDsNPJlBn2LbHaR7gnz9HzPwBK+Ftz2Dkm+dxvwtUOFd0zp3hN/eU6fgfDI5H8TQ8NGBUqTlZJw0m03S1XRBHfxXtHsKl8WgEffqoGEVF4Oj7T+bU21r09TKF2rK4yJJoDqQPFd5GxlzX94mRbitJnQGfh7L9YL2v5iN/GlXLNl1KIRFcml3SiuspfvyxCs4P0teLjAaruUPqWDPqKyxcPFCgNhg4zdRIA+Ut9oP1zZ2rgNxYEpKg53Kwww4ULEgVXCLQtqFdP81LllbiFSWX4egT3KQZpmjZD6a0YTJVOnSw+tnEgeOIgw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB4552.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(66946007)(4326008)(66476007)(66556008)(8676002)(64756008)(66446008)(8936002)(5660300002)(2906002)(7416002)(83380400001)(86362001)(38070700005)(38100700002)(122000001)(71200400001)(966005)(6486002)(478600001)(91956017)(316002)(41300700001)(6916009)(54906003)(186003)(6506007)(76116006)(26005)(6512007)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?t8BUHcgXdaVItTADSYbP5Ia9pA4QwhzvGoAqGlbL8BZMTtoyooy/LWjNosAK?=
+ =?us-ascii?Q?AghaIBEVvJGKzVopVitAAQJqbe4jBIalRreAkuaZWuzxxGTsq4t4IK+l8lxH?=
+ =?us-ascii?Q?n+V40YlcAe/j0N7dnKGrniPaDZEviSKzecZLSTL2gWcz+p1TB8RkETJgx9a+?=
+ =?us-ascii?Q?0dljzjCf96WxZNPXJOXg/Yp8arnvTEdkV+F6MslTXQJh6YdkLEf3YeReh2VB?=
+ =?us-ascii?Q?5zKCfFhkdlDQdVPhX53KfNFisjorf23s+4f1pn8e92wGsLG/6LQfWmN0JGWq?=
+ =?us-ascii?Q?mHq6pthHUThzhLdl5Ic35+ruhJU+E6jxV9NsrpUmNZydRK6XyNV33iCZD9qJ?=
+ =?us-ascii?Q?96XdOpO731rmu92RBlppnw+gNWhnij9iomefnfbo8M8IqcemAWQ+56gZdIHn?=
+ =?us-ascii?Q?QyOEtzIO4GPbZWWhD4cxVyu2r+Td00rE0o7gjl8sSmmENybBb9O78zRl07DF?=
+ =?us-ascii?Q?0Z85duRVihX2nYrNDF0jGqyyyP/m4ufv+WSmyw+tYWRdj06ogIu/2vNuLEak?=
+ =?us-ascii?Q?vqbnKGGkisnv1Rlbo46qrp86bu82XaY/TnYXQ6+GtdlJDASM5nBAk/JHMVle?=
+ =?us-ascii?Q?VFsc2cUqbeZY8retGJRID4xGWPBVo5xrPgzX7chLEo6B3duqsx4fB86Ci0n6?=
+ =?us-ascii?Q?5DK78jCa6H0YIKzE45t68ZGu6Oro1p7DmtbG5hy2NOQ1z9ouVq70yPJdW7ch?=
+ =?us-ascii?Q?OT2c6eW6Xw1Qyv0zYsGjGOB8XlvWVNyIPHULYj/zO51hV0dmafkobWSDLRnn?=
+ =?us-ascii?Q?qySHeu3a1+cB2RROStfMfXI/Io8XcOkLiMHJJvnklIGwF8fFb/5Wb/2TO70h?=
+ =?us-ascii?Q?EvL1x+pRp9BSuYNAw8fte/c18JgqYe9i7ciVikgxBSMHzIX+W3TcFUvzpUVF?=
+ =?us-ascii?Q?CEAua2/QKrTdJwzTj3/S8Wy+fTJcV887MRFXjNuZsEfBSY7Y3zkxrNTldmjW?=
+ =?us-ascii?Q?8sXTj63HU3VaYT+SfkFYIp1oxv1CiCL3WB/ujQo5FyI4z5tLuIiBq7QA1UEV?=
+ =?us-ascii?Q?PvycTVZinZLNAEuoNwBSPf76eZaHHP3J5oppl8zVxZSTDxSxzTG8TB2z7Y17?=
+ =?us-ascii?Q?fPOGixJn21cojAwZTpNLvwdlrluZzFCfLdHmObX2IAm3eRb1PZ7Lh3LbF1rf?=
+ =?us-ascii?Q?/M/kiowPr/3lSFYud0xW+opVeLE2tx9EQxOL7TsosZCS5zv2FaLAJ2Ac3dhK?=
+ =?us-ascii?Q?uJBOzgyYLT728BRTRjJeZaVzAUXcsL6obEOcrpqP7PDF3srBP67eHk6us2HW?=
+ =?us-ascii?Q?kp7EymdT/L9JGj8uibfYUw3erOfcA86bU3XvV5cIWi53jLLvOp1EqXKgGr36?=
+ =?us-ascii?Q?RsOb6GAt6Zbs41RMynfcoD139PVVUDn2Et1cCdcMckcgzxJrZ6i6nHS8fh2s?=
+ =?us-ascii?Q?wXcyNfHdyIm3ACLuiDBWwb16XE6w7IOPnZgfFMCJrIukzENDUwfFPyWXeliE?=
+ =?us-ascii?Q?cQxypoVJwitzPTxrdy8NshUMVwUxd6aDxKGwemxwxkAw0U3AZzdQFhy9x4uD?=
+ =?us-ascii?Q?XNAL/6LkPWMs8Y7z4qYwzpnm528q1D71rLCOqDfE2c6D3Fg81kWxQ2TCe17+?=
+ =?us-ascii?Q?ajosjQP0FHWhZZP5z0Uv6EAJM8uhn7o3tdmiRrqn?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <13F63E006EFD0D4591762FB53D852F8A@namprd15.prod.outlook.com>
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB4552.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c5815ee-44d6-44e8-7847-08da59b52121
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2022 09:52:50.5828
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z/gsaMmgM7t2dk0ZEEg5c2xaA1G/u0494LPSAuudJJESv+6+kL/WEyD8XMgqgyYm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR15MB1427
+X-Proofpoint-ORIG-GUID: V-DtDs5NvFPnigEoQDiS_JYwgRLF21_J
+X-Proofpoint-GUID: V-DtDs5NvFPnigEoQDiS_JYwgRLF21_J
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-28_11,2022-06-28_01,2022-06-22_01
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Wed, Jun 29, 2022 at 10:38:46AM +0200, Borislav Petkov wrote:
+> On Wed, Jun 29, 2022 at 10:52:13AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/kdump
+> > head:   69243968bd526641e549ed231c750ce92e3eeb35
+> > commit: 69243968bd526641e549ed231c750ce92e3eeb35 [1/1] x86/kexec: Carry forward IMA measurement log on kexec
+> 
+> I've zapped it from tip for the time being.
 
+This turns out to be the old OF code that can now be hit on x86 when
+CONFIG_OF=y because it defines HAVE_IMA_KEXEC. I suspect the warning
+already exists on ARM64/PowerPC. Fix is to mark those functions up in
+the same manner as the new x86 variants.
 
-On 28.06.22 01:09, Jarkko Sakkinen wrote:
-> On Sun, Jun 26, 2022 at 02:18:17PM +0200, Lino Sanfilippo wrote:
->> On 26.06.22 at 08:40, Jarkko Sakkinen wrote:
->>>
->>> I would instead mask out bits and write a helper function
->>> taking care of this:
->>>
->>> static u8 tpm_tis_filter_sts_mask(u8 int_mask, u8 sts_mask)
->>> {
->>>         struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->>>
->>>         if (!(int_mask & TPM_INTF_STS_VALID_INT))
->>>                 sts_mask &=3D ~TPM_STS_VALID;
->>>
->>>         if (!(int_mask & TPM_INTF_DATA_AVAIL_INT))
->>>                 sts_mask &=3D ~TPM_STS_DATA_AVAIL;
->>>
->>>         if (!(int_mask & TPM_INTF_CMD_READY_INT))
->>> 		sts_mask &=3D ~TPM_STS_COMMAND_READY;
->>>
->>>         return sts_mask;
->>> }
->>>
->>> Less operations and imho somewhat cleaner structure.
->>>
->>> Add suggested-by if you want.
->>
->> I thought of a helper like this before but then decided to
->> not introduce another function to keep the code changes minimal. But ye=
-s,
->> it is indeed cleaner. I will do the change and resubmit the series.
->>
->> Thanks for the review!
->>
->> Regards,
->> Lino
->
-> Yeah, please don't add suggested-by, it's such a minor detail
-> in the overall patch :-)
+Below is on top of what was in tip; I can roll a v7 if preferred but
+I think seeing the fix on its own is clearer.
+---
 
-I already created a separate patch which only contains moving the bit chec=
-ks into the
-helper function. For that patch the Suggested-by is fully justified IMHO.
+ima_free_kexec_buffer() calls into memblock_phys_free() so must be
+annotated __meminit. Equally ima_kexec_get_buffer() is executed during
+__init so can be marked as such. This was already done in the new x86
+IMA kexec passing functions but not for the pre-existing OF based
+functions.
 
+Signed-off-by: Jonathan McDowell <noodles@fb.com>
+Reported-by: kernel test robot <lkp@intel.com>
+---
+ drivers/of/kexec.c  | 4 ++--
+ include/linux/ima.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks for taking time to fix these
-> glitches and also taking all the feedback into account (and
-> also being patient).
->
-
-No problem. Its always good to have some feedback from people that have a =
-deeper insight
-into the code. Especially when it is as complex as the TPM subsystem and d=
-rivers.
-
-Best regards,
-Lino
+diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+index d3ec430fa403..95cd5532b503 100644
+--- a/drivers/of/kexec.c
++++ b/drivers/of/kexec.c
+@@ -124,7 +124,7 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
+  *
+  * Return: 0 on success, negative errno on error.
+  */
+-int ima_get_kexec_buffer(void **addr, size_t *size)
++int __init ima_get_kexec_buffer(void **addr, size_t *size)
+ {
+ 	int ret, len;
+ 	unsigned long tmp_addr;
+@@ -148,7 +148,7 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
+ /**
+  * ima_free_kexec_buffer - free memory used by the IMA buffer
+  */
+-int ima_free_kexec_buffer(void)
++int __meminit ima_free_kexec_buffer(void)
+ {
+ 	int ret;
+ 	unsigned long addr;
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index ff4bd993e432..8d4698e63190 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -141,8 +141,8 @@ static inline int ima_measure_critical_data(const char *event_label,
+ #endif /* CONFIG_IMA */
+ 
+ #ifdef CONFIG_HAVE_IMA_KEXEC
+-int ima_free_kexec_buffer(void);
+-int ima_get_kexec_buffer(void **addr, size_t *size);
++int __meminit ima_free_kexec_buffer(void);
++int __init ima_get_kexec_buffer(void **addr, size_t *size);
+ #endif
+ 
+ #ifdef CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
+-- 
+2.36.1
