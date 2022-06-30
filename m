@@ -2,33 +2,33 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C4F561EBE
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jun 2022 17:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6C3562469
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jun 2022 22:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235412AbiF3PGe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Jun 2022 11:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
+        id S237291AbiF3UjB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Jun 2022 16:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235352AbiF3PGe (ORCPT
+        with ESMTP id S237264AbiF3Uiz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Jun 2022 11:06:34 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98C327CD2;
-        Thu, 30 Jun 2022 08:06:32 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LYhTx4mTcz67bMc;
-        Thu, 30 Jun 2022 23:05:41 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Thu, 30 Jun 2022 17:06:30 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 30 Jun 2022 17:06:30 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-CC:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        Thu, 30 Jun 2022 16:38:55 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B12D2710;
+        Thu, 30 Jun 2022 13:38:42 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 8E59152055C;
+        Thu, 30 Jun 2022 22:38:40 +0200 (CEST)
+Received: from lxhi-065 (10.72.94.33) by hi2exch02.adit-jv.com (10.72.92.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Thu, 30 Jun
+ 2022 22:38:39 +0200
+Date:   Thu, 30 Jun 2022 22:38:34 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
@@ -47,42 +47,36 @@ CC:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
         "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
         "niveditas98@gmail.com" <niveditas98@gmail.com>,
         Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: RE: [PATCH v4 3/3] gen_init_cpio: add support for file metadata
-Thread-Topic: [PATCH v4 3/3] gen_init_cpio: add support for file metadata
-Thread-Index: AQHYgZP+NG1dyMlW0kaLKmzbu04HPq1oIlgQ
-Date:   Thu, 30 Jun 2022 15:06:30 +0000
-Message-ID: <fca71da4092a45689d34ce6eeffd1893@huawei.com>
+Subject: Re: [PATCH v4 3/3] gen_init_cpio: add support for file metadata
+Message-ID: <20220630203834.GA5234@lxhi-065>
 References: <20190523121803.21638-1-roberto.sassu@huawei.com>
-        <20190523121803.21638-4-roberto.sassu@huawei.com>
+ <20190523121803.21638-4-roberto.sassu@huawei.com>
  <20220616151603.GA4400@lxhi-065>
-In-Reply-To: <20220616151603.GA4400@lxhi-065>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+ <fca71da4092a45689d34ce6eeffd1893@huawei.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <fca71da4092a45689d34ce6eeffd1893@huawei.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.94.33]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Eugeniu Rosca [mailto:erosca@de.adit-jv.com]
-> Sent: Thursday, June 16, 2022 5:16 PM
-> Hello Roberto,
+Hello Roberto,
 
-Hello Eugeniu
+On Do, Jun 30, 2022 at 03:06:30 +0000, Roberto Sassu wrote:
+> sorry, I'm a bit busy. Will have a look at your comments
+> as soon as possible, and maybe I rebase the patches.
 
-sorry, I'm a bit busy. Will have a look at your comments
-as soon as possible, and maybe I rebase the patches.
+No rush. Thanks for keeping in touch.
 
-Thanks
-
-Roberto
+Best regards,
+Eugeniu.
