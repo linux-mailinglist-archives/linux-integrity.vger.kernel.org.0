@@ -2,67 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6C3562469
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Jun 2022 22:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A662D5626E2
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Jul 2022 01:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237291AbiF3UjB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Jun 2022 16:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S232558AbiF3XRR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Jun 2022 19:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237264AbiF3Uiz (ORCPT
+        with ESMTP id S232597AbiF3XRQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Jun 2022 16:38:55 -0400
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B12D2710;
-        Thu, 30 Jun 2022 13:38:42 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        Thu, 30 Jun 2022 19:17:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2151599F4;
+        Thu, 30 Jun 2022 16:17:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 8E59152055C;
-        Thu, 30 Jun 2022 22:38:40 +0200 (CEST)
-Received: from lxhi-065 (10.72.94.33) by hi2exch02.adit-jv.com (10.72.92.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Thu, 30 Jun
- 2022 22:38:39 +0200
-Date:   Thu, 30 Jun 2022 22:38:34 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>,
-        "rob@landley.net" <rob@landley.net>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "niveditas98@gmail.com" <niveditas98@gmail.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v4 3/3] gen_init_cpio: add support for file metadata
-Message-ID: <20220630203834.GA5234@lxhi-065>
-References: <20190523121803.21638-1-roberto.sassu@huawei.com>
- <20190523121803.21638-4-roberto.sassu@huawei.com>
- <20220616151603.GA4400@lxhi-065>
- <fca71da4092a45689d34ce6eeffd1893@huawei.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AB5AB82BEA;
+        Thu, 30 Jun 2022 23:17:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC06DC341C7;
+        Thu, 30 Jun 2022 23:17:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656631021;
+        bh=n6mhqJyBBGDTk5KWSPiBhw/VEJ5HKNOC9gzwL4tu7Gw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g0ywGvs4T3+HsnunBmZj5bd7HklMf7tvLU+rEjx98mg6OGxaro3YPTcFdcD58IgSG
+         0l0JbSVNpFigNfJDb3Bx+riZKhV2t4f5hgA6WoR1lvoBDUukGSviBFimnodSrq0O2p
+         i7I9C6deqLQyZIL400b0aXqkGXUUUi3LaNkyW5oDxb0G1xnNB99O03Drf55Mz6X8OD
+         FwZSVgGNyRTZSxlPZ0/3Qg0b2nf5okvpYNPwkN2wY2RyUh+dhs3wL7Stlg7QVPKmIZ
+         yDFmRvDHntMaWyJU5syRkzEb+QujjFTHD27tU/I59FBkztFdSsrs4QrMmw3RezIczO
+         TymCZLkFmprCQ==
+Date:   Fri, 1 Jul 2022 02:16:57 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Rob Herring <robh@kernel.org>, kexec@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
+        nayna@linux.ibm.com, nasastry@in.ibm.com,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH v2 1/3] tpm: of: Move of-tree specific code from tpm
+ driver into of driver
+Message-ID: <Yr4u6eADhCEc6rSM@kernel.org>
+References: <20220616154130.2052541-1-stefanb@linux.ibm.com>
+ <20220616154130.2052541-2-stefanb@linux.ibm.com>
+ <20220627224325.GB3082294-robh@kernel.org>
+ <170c78f7-f0ba-c186-dacf-55759dae9b83@linux.ibm.com>
+ <Yru83e4OLW7vH5/o@kernel.org>
+ <6e097ec9-0657-b920-89c5-cef3e95bd7ea@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fca71da4092a45689d34ce6eeffd1893@huawei.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.94.33]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <6e097ec9-0657-b920-89c5-cef3e95bd7ea@linux.ibm.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,13 +63,65 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Roberto,
+On Wed, Jun 29, 2022 at 10:16:37AM -0400, Stefan Berger wrote:
+> 
+> 
+> On 6/28/22 22:45, Jarkko Sakkinen wrote:
+> > On Tue, Jun 28, 2022 at 09:29:48AM -0400, Stefan Berger wrote:
+> > > 
+> > > 
+> > > On 6/27/22 18:43, Rob Herring wrote:
+> > > > On Thu, Jun 16, 2022 at 11:41:28AM -0400, Stefan Berger wrote:
+> > > > > Simplify tpm_read_log_of() by moving Openfirmware-specific code into
+> > > > > the Openfirmware driver to make the code reusable. Call the new
+> > > > 
+> > > > There is no such 'Openfirmware driver'.
+> > > > 
+> > > > > of_tpm_get_sml_parameters() function from the TPM Openfirmware driver.
+> > > > > 
+> > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > > > Cc: Frank Rowand <frowand.list@gmail.com>
+> > > > > ---
+> > > > >    drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
+> > > > >    drivers/of/Makefile            |  2 +-
+> > > > >    drivers/of/device_node.c       | 27 +++++++++++++++++++++++++++
+> > > > 
+> > > > Humm, definitely the wrong direction. Generally, code for specific
+> > > > bindings does not go in drivers/of/. There used to be some, but we've
+> > > > moved it to the appropriate subsystems. kexec was an exception to not
+> > > > have 2 copies of the same code in arch/.
+> > > 
+> > > The function I am moving here is called by the TPM subsystem and also now by
+> > > of/kexec.c. The latter is compiled under the following conditions:
+> > > 
+> > > ifdef CONFIG_KEXEC_FILE
+> > > ifdef CONFIG_OF_FLATTREE
+> > > obj-y	+= kexec.o
+> > > endif
+> > > endif
+> > > 
+> > > The code that current calls it is compiled under the following conditions:
+> > > 
+> > > tpm-$(CONFIG_OF) += eventlog/of.o
+> > > 
+> > > To make it available to both I could keep it in the TPM subsystem like this:
+> > > 
+> > > obj-$(CONFIG_OF) = tpm_of.o
+> > > 
+> > > 
+> > > Jarrko, if you read this, any comment?
+> > > 
+> > > 
+> > >     Stefan
+> > 
+> > Why can't you convert of_tpm_get_sml_parameters() to inline function?
+> 
+> I can do that and put it into include/linux/tpm.h. The only concern would
+> have been the size of the function.
 
-On Do, Jun 30, 2022 at 03:06:30 +0000, Roberto Sassu wrote:
-> sorry, I'm a bit busy. Will have a look at your comments
-> as soon as possible, and maybe I rebase the patches.
+It is somewhat insignificant amount (dozens of bytes at most).
 
-No rush. Thanks for keeping in touch.
-
-Best regards,
-Eugeniu.
+BR, Jarkko
