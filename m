@@ -2,131 +2,194 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1124C563C73
-	for <lists+linux-integrity@lfdr.de>; Sat,  2 Jul 2022 00:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF5D563D80
+	for <lists+linux-integrity@lfdr.de>; Sat,  2 Jul 2022 03:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiGAWni (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 1 Jul 2022 18:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
+        id S231794AbiGBBDn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 1 Jul 2022 21:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiGAWng (ORCPT
+        with ESMTP id S231173AbiGBBDi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 1 Jul 2022 18:43:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA072980F
-        for <linux-integrity@vger.kernel.org>; Fri,  1 Jul 2022 15:43:36 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 261MSmxV026178;
-        Fri, 1 Jul 2022 22:43:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Bey6zCQiCL/DGMTl7Gf++tLWWDv4koCBCwWXduf+5pc=;
- b=mLaWYjhQZyqAp639QvlryvIYEjjYEdzL9+apZS+fVaMs2typA/iy4k3iudjeILozbDO+
- AZssKJTqBEz8F0ijXOZAwuBvW9aeu3sPaNefU3MkCI9KpNEskg2DEl/MSKoNo0Li+pLm
- nuRdIxi+OlnhtGBHaHX6GeTpYz+TTEVGLWQ0Y1uewFubK2yOkMHTzI8k4mAqN+7FWSfn
- OMlpi7UIiAaf3GPcmgodcp5m7vQtDBcFx48W48cT6kv6nsa30kaymsxNN8Iq+5Wv/x59
- iLDKiwTxcIRg6P+mc+QHbPwGzgv3m9tg63c0UXYRizmd8sOellgwN9kCjJcCllGp+B/4 eQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h29rnr8kq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Jul 2022 22:43:33 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 261MbZGt008375;
-        Fri, 1 Jul 2022 22:43:31 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gwt092766-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Jul 2022 22:43:31 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 261MhSsN18284900
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 1 Jul 2022 22:43:28 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E0CE4C046;
-        Fri,  1 Jul 2022 22:43:28 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 71A3E4C040;
-        Fri,  1 Jul 2022 22:43:27 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.154.188])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  1 Jul 2022 22:43:27 +0000 (GMT)
-Message-ID: <3077f189ad6e50e7c223199c36e6f635623fdf8b.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: fix violation measurement list record
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date:   Fri, 01 Jul 2022 18:43:26 -0400
-In-Reply-To: <Yr94LQGboFv4f1xG@earth.li>
-References: <20220701201325.396766-1-zohar@linux.ibm.com>
-         <Yr94LQGboFv4f1xG@earth.li>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9Ig5ZL0aEVgHmAfXt-Gb981J5eKA0Svi
-X-Proofpoint-ORIG-GUID: 9Ig5ZL0aEVgHmAfXt-Gb981J5eKA0Svi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-01_15,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- clxscore=1011 malwarescore=0 adultscore=0 suspectscore=0 spamscore=0
- bulkscore=0 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2207010090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 1 Jul 2022 21:03:38 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4682409E;
+        Fri,  1 Jul 2022 18:03:35 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 18:03:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1656723813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UefsvJWBOCsJEHG/jcpgIGR+KBtUCRUqjXcROu7qjh4=;
+        b=oGHlDm4tgr6UzDbC5z/sb7q2WEts5mi8mJ8aiIMXBOzW75BRr4BaIuszRL9hOCzoFfVxku
+        tmO6BM7R9GzDDzZbe/MQeyeOEOAx+3VHqH/w/8ecEZ7fImffcNYGlal4Cw/gQ26E9Sym1J
+        usYWeNXz8OdB9Vt23HLuxwKOwXbZ7ng=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        kernel test robot <lkp@intel.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        usbb2k-api-dev@nongnu.org, tipc-discussion@lists.sourceforge.net,
+        target-devel@vger.kernel.org, sound-open-firmware@alsa-project.org,
+        samba-technical@lists.samba.org, rds-devel@oss.oracle.com,
+        patches@opensource.cirrus.com, osmocom-net-gprs@lists.osmocom.org,
+        openipmi-developer@lists.sourceforge.net, nvdimm@lists.linux.dev,
+        ntb@lists.linux.dev, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
+        megaraidlinux.pdl@broadcom.com, linuxppc-dev@lists.ozlabs.org,
+        linux1394-devel@lists.sourceforge.net, linux-x25@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-sctp@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-parport@lists.infradead.org,
+        linux-parisc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-nfc@lists.01.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-bcache@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linaro-mm-sig@lists.linaro.org,
+        legousb-devel@lists.sourceforge.net, kvm@vger.kernel.org,
+        keyrings@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
+        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
+        intel-wired-lan@lists.osuosl.org, dri-devel@lists.freedesktop.org,
+        dm-devel@redhat.com, devicetree@vger.kernel.org,
+        dev@openvswitch.org, dccp@vger.kernel.org, damon@lists.linux.dev,
+        coreteam@netfilter.org, cgroups@vger.kernel.org,
+        ceph-devel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        amd-gfx@lists.freedesktop.org, alsa-devel@alsa-project.org,
+        accessrunner-general@lists.sourceforge.net
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ 6cc11d2a1759275b856e464265823d94aabd5eaf
+Message-ID: <Yr+ZTnLb9lJk6fJO@castle>
+References: <62be3696.+PAAAVlbtWK6G2hk%lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62be3696.+PAAAVlbtWK6G2hk%lkp@intel.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-07-01 at 23:41 +0100, Jonathan McDowell wrote:
-> On Fri, Jul 01, 2022 at 04:13:25PM -0400, Mimi Zohar wrote:
-> > Although the violation digest in the IMA measurement list is always
-> > zeroes, the size of the digest should be based on the hash algorithm.
-> > Until recently the hash algorithm was hard coded to sha1.  Fix the
-> > violation digest size included in the IMA measurement list.
-> > 
-> > This is just a cosmetic which should not affect attestation.
-> > 
-> > Reported-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Fixes: 09091c44cb73 ("ima: use IMA default hash algorithm for integrity violations")
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >  security/integrity/ima/ima_template_lib.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-> > index c877f01a5471..67359845c975 100644
-> > --- a/security/integrity/ima/ima_template_lib.c
-> > +++ b/security/integrity/ima/ima_template_lib.c
-> > @@ -326,7 +326,7 @@ static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
-> >  		 * Make room for the digest by increasing the offset of
-> >  		 * IMA_DIGEST_SIZE.
-> >  		 */
-> > -		offset += IMA_DIGEST_SIZE;
-> > +		offset += hash_digest_size[hash_algo];
+esOn Fri, Jul 01, 2022 at 07:49:42AM +0800, kbuild test robot wrote:
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> branch HEAD: 6cc11d2a1759275b856e464265823d94aabd5eaf  Add linux-next specific files for 20220630
 > 
-> Update the comment as well?
-
-Yes, of course.  Thank you for catching it!
-
-Mimi
-
-
+> Error/Warning reports:
 > 
-> >  	return ima_write_template_field_data(buffer, offset + digestsize,
-> >  					     fmt, field_data);
-> > -- 
-> > 2.27.0
-> > 
+> https://lore.kernel.org/linux-mm/202206301859.UodBCrva-lkp@intel.com
 > 
-> J.
+> Error/Warning: (recently discovered and may have been fixed)
 > 
+> arch/powerpc/kernel/interrupt.c:542:55: error: suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+> arch/powerpc/kernel/interrupt.c:542:55: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+> drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous prototype for 'pci_read' [-Wmissing-prototypes]
+> drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: no previous prototype for 'pci_write' [-Wmissing-prototypes]
+> mm/shrinker_debug.c:143:9: warning: function 'shrinker_debugfs_rename' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/shrinker_debug.c:217:9: warning: function 'shrinker_debugfs_rename' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/vmscan.c:637:9: warning: function 'prealloc_shrinker' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/vmscan.c:642:9: warning: function 'prealloc_shrinker' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/vmscan.c:697:9: warning: function 'register_shrinker' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+> mm/vmscan.c:702:9: warning: function 'register_shrinker' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
 
+Shrinker-related warnings should be fixed by the following patch.
+
+Thanks!
+
+--
+
+From c399aff65c7745a209397a531c5b28fd404d83c2 Mon Sep 17 00:00:00 2001
+From: Roman Gushchin <roman.gushchin@linux.dev>
+Date: Fri, 1 Jul 2022 17:38:31 -0700
+Subject: [PATCH] mm:shrinkers: fix build warnings
+
+Add __printf(a, b) attributes to shrinker functions taking shrinker
+name as an argument to avoid compiler warnings like:
+
+mm/shrinker_debug.c:143:9: warning: function 'shrinker_debugfs_rename'
+  might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/shrinker_debug.c:217:9: warning: function 'shrinker_debugfs_rename'
+  might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/vmscan.c:637:9: warning: function 'prealloc_shrinker' might be a
+  candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/vmscan.c:642:9: warning: function 'prealloc_shrinker' might be a
+  candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/vmscan.c:697:9: warning: function 'register_shrinker' might be a
+  candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+mm/vmscan.c:702:9: warning: function 'register_shrinker' might be a
+  candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+
+Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+---
+ include/linux/shrinker.h | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
+index 64416f3e0a1f..08e6054e061f 100644
+--- a/include/linux/shrinker.h
++++ b/include/linux/shrinker.h
+@@ -93,9 +93,11 @@ struct shrinker {
+  */
+ #define SHRINKER_NONSLAB	(1 << 3)
+ 
+-extern int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...);
++extern int __printf(2, 3) prealloc_shrinker(struct shrinker *shrinker,
++					    const char *fmt, ...);
+ extern void register_shrinker_prepared(struct shrinker *shrinker);
+-extern int register_shrinker(struct shrinker *shrinker, const char *fmt, ...);
++extern int __printf(2, 3) register_shrinker(struct shrinker *shrinker,
++					    const char *fmt, ...);
+ extern void unregister_shrinker(struct shrinker *shrinker);
+ extern void free_prealloced_shrinker(struct shrinker *shrinker);
+ extern void synchronize_shrinkers(void);
+@@ -103,8 +105,8 @@ extern void synchronize_shrinkers(void);
+ #ifdef CONFIG_SHRINKER_DEBUG
+ extern int shrinker_debugfs_add(struct shrinker *shrinker);
+ extern void shrinker_debugfs_remove(struct shrinker *shrinker);
+-extern int shrinker_debugfs_rename(struct shrinker *shrinker,
+-				   const char *fmt, ...);
++extern int __printf(2, 3) shrinker_debugfs_rename(struct shrinker *shrinker,
++						  const char *fmt, ...);
+ #else /* CONFIG_SHRINKER_DEBUG */
+ static inline int shrinker_debugfs_add(struct shrinker *shrinker)
+ {
+@@ -113,8 +115,8 @@ static inline int shrinker_debugfs_add(struct shrinker *shrinker)
+ static inline void shrinker_debugfs_remove(struct shrinker *shrinker)
+ {
+ }
+-static inline int shrinker_debugfs_rename(struct shrinker *shrinker,
+-					  const char *fmt, ...)
++static inline __printf(2, 3)
++int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
+ {
+ 	return 0;
+ }
+-- 
+2.36.1
 
