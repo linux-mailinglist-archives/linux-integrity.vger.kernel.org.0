@@ -2,81 +2,200 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB5A563F0F
-	for <lists+linux-integrity@lfdr.de>; Sat,  2 Jul 2022 10:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA4B5641D9
+	for <lists+linux-integrity@lfdr.de>; Sat,  2 Jul 2022 19:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbiGBIIb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 2 Jul 2022 04:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
+        id S232437AbiGBR1e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 2 Jul 2022 13:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiGBIIa (ORCPT
+        with ESMTP id S231520AbiGBR1c (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 2 Jul 2022 04:08:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940B6D137
-        for <linux-integrity@vger.kernel.org>; Sat,  2 Jul 2022 01:08:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FCB7B818AA
-        for <linux-integrity@vger.kernel.org>; Sat,  2 Jul 2022 08:08:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D11CAC341C8;
-        Sat,  2 Jul 2022 08:08:23 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-integrity@vger.kernel.org,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <git@xen0n.name>
-Subject: [PATCH] tpm: eventlog: Fix section mismatch for DEBUG_SECTION_MISMATCH
-Date:   Sat,  2 Jul 2022 16:09:34 +0800
-Message-Id: <20220702080934.1168975-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Sat, 2 Jul 2022 13:27:32 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C073E00C
+        for <linux-integrity@vger.kernel.org>; Sat,  2 Jul 2022 10:27:31 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id l2-20020a056e0212e200b002d9258029c4so2626850iln.22
+        for <linux-integrity@vger.kernel.org>; Sat, 02 Jul 2022 10:27:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=dTAC6yIXCZBxw+p2OErqKUaqKTzBG5E7gPda2WRrS70=;
+        b=A95lJzMT6OcLefKZZB2xudDQ48dmh0Evygikq7EofdKcxibqoPd6QwOXMz/2V+mzB3
+         QlNwKXm4xhDQ2TMTkBQDBY9VBRqnhAKYxk8qH2D0hL7bMXNAn6TGFPwnjkluy0lJV5zl
+         lhB0BbAzhMurlJW/YtEULoubIuM4BqfNvIXMLvwMaUChk/VWYiVvhBx783XoOCE2PbNy
+         EB2hWVMiANI2ABW7BG8spJDwFh523BUyr2TspUxgqJ58KhL28XPQWR0F5ylf6y+FCesq
+         n/njFC8iKPvAtgo63Rwuf8uMdy0L7rfn7WHPLBR9v4FO6ivbhuH1p3bSnyxp8LE/ERDM
+         ITYg==
+X-Gm-Message-State: AJIora/hUVLZSNZmNt5bGmF4YhVKnD2tCM06q0tNsxYxK2wgTHcOGVP7
+        rdaNnMLNzcSI4LTnMh7J9uV94nBzT5/urT995Ncy35GvvJrj
+X-Google-Smtp-Source: AGRyM1upGQbN8M2U3E6dSGQcI8Sf0xsGM0IyEwcytHdaebO/6yBNpoAlUFJ8z0B8bOXAtCESh6FexaFKMm1MdyphULXdYZGq0uld
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1562:b0:2d9:434d:25b4 with SMTP id
+ k2-20020a056e02156200b002d9434d25b4mr12384635ilu.59.1656782850516; Sat, 02
+ Jul 2022 10:27:30 -0700 (PDT)
+Date:   Sat, 02 Jul 2022 10:27:30 -0700
+In-Reply-To: <00000000000067d24205c4d0e599@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000466f0d05e2d5d1d1@google.com>
+Subject: Re: [syzbot] possible deadlock in mnt_want_write (2)
+From:   syzbot <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, zohar@us.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-If DEBUG_SECTION_MISMATCH enabled, __calc_tpm2_event_size() will not be
-inlined, this cause section mismatch like this:
+syzbot has found a reproducer for the following issue on:
 
-WARNING: modpost: vmlinux.o(.text.unlikely+0xe30c): Section mismatch in reference from the variable L0 to the function .init.text:early_ioremap()
-The function L0() references
-the function __init early_memremap().
-This is often because L0 lacks a __init 
-annotation or the annotation of early_ioremap is wrong.
+HEAD commit:    089866061428 Merge tag 'libnvdimm-fixes-5.19-rc5' of git:/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11dd91f0080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=75c9ff14e1db87c0
+dashboard link: https://syzkaller.appspot.com/bug?extid=b42fe626038981fb7bfa
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=167bafc0080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11aad3e0080000
 
-Fix it by using __always_inline instead of inline for the called-once
-function __calc_tpm2_event_size().
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com
 
-Reported-by: WANG Xuerui <git@xen0n.name>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- include/linux/tpm_eventlog.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+======================================================
+WARNING: possible circular locking dependency detected
+5.19.0-rc4-syzkaller-00187-g089866061428 #0 Not tainted
+------------------------------------------------------
+syz-executor450/3829 is trying to acquire lock:
+ffff88807e574460 (sb_writers#4){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
 
-diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
-index 739ba9a03ec1..20c0ff54b7a0 100644
---- a/include/linux/tpm_eventlog.h
-+++ b/include/linux/tpm_eventlog.h
-@@ -157,7 +157,7 @@ struct tcg_algorithm_info {
-  * Return: size of the event on success, 0 on failure
-  */
- 
--static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
-+static __always_inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
- 					 struct tcg_pcr_event *event_header,
- 					 bool do_mapping)
- {
--- 
-2.27.0
+but task is already holding lock:
+ffff888074de91a0 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x7d2/0x1c10 security/integrity/ima/ima_main.c:260
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&iint->mutex){+.+.}-{3:3}:
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5665
+       __mutex_lock_common+0x1de/0x26c0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       process_measurement+0x7d2/0x1c10 security/integrity/ima/ima_main.c:260
+       ima_file_check+0xe7/0x160 security/integrity/ima/ima_main.c:517
+       do_open fs/namei.c:3522 [inline]
+       path_openat+0x2705/0x2ec0 fs/namei.c:3653
+       do_filp_open+0x277/0x4f0 fs/namei.c:3680
+       do_sys_openat2+0x13b/0x500 fs/open.c:1278
+       do_sys_open fs/open.c:1294 [inline]
+       __do_sys_open fs/open.c:1302 [inline]
+       __se_sys_open fs/open.c:1298 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1298
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+-> #0 (sb_writers#4){.+.+}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain+0x185c/0x65c0 kernel/locking/lockdep.c:3829
+       __lock_acquire+0x129a/0x1f80 kernel/locking/lockdep.c:5053
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5665
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1699 [inline]
+       sb_start_write+0x4d/0x1a0 include/linux/fs.h:1774
+       mnt_want_write+0x3b/0x80 fs/namespace.c:393
+       ovl_maybe_copy_up+0x124/0x190 fs/overlayfs/copy_up.c:1078
+       ovl_open+0x106/0x2a0 fs/overlayfs/file.c:152
+       do_dentry_open+0x789/0x1040 fs/open.c:848
+       vfs_open fs/open.c:981 [inline]
+       dentry_open+0xc1/0x120 fs/open.c:997
+       ima_calc_file_hash+0x157/0x1cb0 security/integrity/ima/ima_crypto.c:557
+       ima_collect_measurement+0x3de/0x850 security/integrity/ima/ima_api.c:292
+       process_measurement+0xf87/0x1c10 security/integrity/ima/ima_main.c:337
+       ima_file_check+0xe7/0x160 security/integrity/ima/ima_main.c:517
+       do_open fs/namei.c:3522 [inline]
+       path_openat+0x2705/0x2ec0 fs/namei.c:3653
+       do_filp_open+0x277/0x4f0 fs/namei.c:3680
+       do_sys_openat2+0x13b/0x500 fs/open.c:1278
+       do_sys_open fs/open.c:1294 [inline]
+       __do_sys_open fs/open.c:1302 [inline]
+       __se_sys_open fs/open.c:1298 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1298
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&iint->mutex);
+                               lock(sb_writers#4);
+                               lock(&iint->mutex);
+  lock(sb_writers#4);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor450/3829:
+ #0: ffff888074de91a0 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x7d2/0x1c10 security/integrity/ima/ima_main.c:260
+
+stack backtrace:
+CPU: 1 PID: 3829 Comm: syz-executor450 Not tainted 5.19.0-rc4-syzkaller-00187-g089866061428 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ check_noncircular+0x2f7/0x3b0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain+0x185c/0x65c0 kernel/locking/lockdep.c:3829
+ __lock_acquire+0x129a/0x1f80 kernel/locking/lockdep.c:5053
+ lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5665
+ percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+ __sb_start_write include/linux/fs.h:1699 [inline]
+ sb_start_write+0x4d/0x1a0 include/linux/fs.h:1774
+ mnt_want_write+0x3b/0x80 fs/namespace.c:393
+ ovl_maybe_copy_up+0x124/0x190 fs/overlayfs/copy_up.c:1078
+ ovl_open+0x106/0x2a0 fs/overlayfs/file.c:152
+ do_dentry_open+0x789/0x1040 fs/open.c:848
+ vfs_open fs/open.c:981 [inline]
+ dentry_open+0xc1/0x120 fs/open.c:997
+ ima_calc_file_hash+0x157/0x1cb0 security/integrity/ima/ima_crypto.c:557
+ ima_collect_measurement+0x3de/0x850 security/integrity/ima/ima_api.c:292
+ process_measurement+0xf87/0x1c10 security/integrity/ima/ima_main.c:337
+ ima_file_check+0xe7/0x160 security/integrity/ima/ima_main.c:517
+ do_open fs/namei.c:3522 [inline]
+ path_openat+0x2705/0x2ec0 fs/namei.c:3653
+ do_filp_open+0x277/0x4f0 fs/namei.c:3680
+ do_sys_openat2+0x13b/0x500 fs/open.c:1278
+ do_sys_open fs/open.c:1294 [inline]
+ __do_sys_open fs/open.c:1302 [inline]
+ __se_sys_open fs/open.c:1298 [inline]
+ __x64_sys_open+0x221/0x270 fs/open.c:1298
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7faf98402749
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 16 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007faf9838e2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007faf98491270 RCX: 00007faf98402749
+RDX: 0000000000000000 RSI: 000000000000000b RDI: 00000000200000c0
+RBP: 00007faf98458504 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 3d7269647265776f R14: 0079616c7265766f R15: 00007faf98491278
+ </TASK>
 
