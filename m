@@ -2,59 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC707564B52
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Jul 2022 03:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C846B564B55
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Jul 2022 03:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233032AbiGDBwj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 3 Jul 2022 21:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S233036AbiGDBwo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 3 Jul 2022 21:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiGDBwi (ORCPT
+        with ESMTP id S233037AbiGDBwl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 3 Jul 2022 21:52:38 -0400
+        Sun, 3 Jul 2022 21:52:41 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B1582630
-        for <linux-integrity@vger.kernel.org>; Sun,  3 Jul 2022 18:52:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F0A3273D
+        for <linux-integrity@vger.kernel.org>; Sun,  3 Jul 2022 18:52:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656899557;
+        s=mimecast20190719; t=1656899559;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MT59o1vyNl28UvpV0L18f4IgJU3gRlDgKTViOwYZmyQ=;
-        b=fzHjmVSFSjMaYZjxHKjdl6ckw+dXnzD8IvQmtuoJx/Tb1XnXEwiemhBW00uU50pGbyozc+
-        e3S1rOQE/W9/y3u6eW5d/UT9vIlJq4sLfJfdb1+hJRS/V57wSFDrjJInz4nZiujrR+cLZq
-        qllx1xcTcZusLQKhZNwQwsdAvGQH7RA=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=nTUj8DskjrdqH+782mh4voi0bsQ4nV3nMCPn/39C26o=;
+        b=SYFFNlMJ+4FVnIf6CHit9KPxA9Nh8YOfGTaR61/CivRuanH0pMosWU/Bme0cuqGFVHHHnw
+        zEJaUrkVrmiGcSsd72qMJ0XfoYCJmhLMuO4qgYEGyZPbsJxXOCmO+S43VyxhkZbwz4r6y7
+        DGAFwD31XXuzz79O8lw5TTbw6hRM5dI=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-390-vNIeu2AxNxGEPL55_4Jgpg-1; Sun, 03 Jul 2022 21:52:33 -0400
-X-MC-Unique: vNIeu2AxNxGEPL55_4Jgpg-1
-Received: by mail-pj1-f72.google.com with SMTP id mh7-20020a17090b4ac700b001ef88609386so729018pjb.9
-        for <linux-integrity@vger.kernel.org>; Sun, 03 Jul 2022 18:52:33 -0700 (PDT)
+ us-mta-554-r-BTin6YPB-5q39KCzeueA-1; Sun, 03 Jul 2022 21:52:38 -0400
+X-MC-Unique: r-BTin6YPB-5q39KCzeueA-1
+Received: by mail-pg1-f200.google.com with SMTP id h13-20020a63e14d000000b0040df75eaa2eso3360909pgk.21
+        for <linux-integrity@vger.kernel.org>; Sun, 03 Jul 2022 18:52:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MT59o1vyNl28UvpV0L18f4IgJU3gRlDgKTViOwYZmyQ=;
-        b=j6ZvMlrxlv4+O2NI8s6/DSDx+2weXR8+2Zrvprp1nALOcZmjewuFNKoX8rN/NphSou
-         4fIsBMMGMWnM3t4IVDN0PAdsL2YrRggIiBKmHScHjmagDiqqj8WLlha4u8XHr0SnNGXV
-         NyuhiB9JVD7l96v0lL/yA1ud9nw4oZKP20yw6zaHSPmaokD5l26AxvU+XRhVPYeW0xxG
-         93NYuVMgOpYBetMJI2gDTftdokz2AjDDDbmAOfNSKVaNQccKru+L01Wz5MraJfAAFvy9
-         MfEYjxaiYm6cbS1HKou1ATgvqL3TLsm89JLHquuxfag2Ggh7z+dc9MnrktzY9WLp11mv
-         P6tw==
-X-Gm-Message-State: AJIora8c0UHLiq9ayb4adS0/pVoBzjSDo3KgWm05sEdJLmCSd2eR3P5I
-        uHLrZf7TSf7mqsN9WVvOlhV8NIB+A4LpSjiL2bT4yL5oHEhs9ATpX/JE5QquwmD194QCPhaK2RZ
-        dzRpcjtME/1EuuW9vh6IhLu4D+c9o
-X-Received: by 2002:a05:6a00:134b:b0:525:b7cc:30b5 with SMTP id k11-20020a056a00134b00b00525b7cc30b5mr34248660pfu.32.1656899551988;
-        Sun, 03 Jul 2022 18:52:31 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1swtT1/ZGRM402/NNr6/11axGlFQ3W8t6/TrZaLKS4HwWEg/bXgrfKUGlU7DvgjIxWMijELOQ==
-X-Received: by 2002:a05:6a00:134b:b0:525:b7cc:30b5 with SMTP id k11-20020a056a00134b00b00525b7cc30b5mr34248637pfu.32.1656899551714;
-        Sun, 03 Jul 2022 18:52:31 -0700 (PDT)
+        bh=nTUj8DskjrdqH+782mh4voi0bsQ4nV3nMCPn/39C26o=;
+        b=ePaGCdBYO2pkYe7MfU+cXXs67kd3uvdXA8exPDCMLCMKQVU2dGcG841n2P0D4bAglO
+         Bo4QNmO4b1HDXKEaPOK5rSNED2M/IJgsSGXeGe2HWX10JdLZZptL937HpDTkJwOhfLmm
+         UBx20i/sQNdqL9N1ki5pg19z9HZqJ+YiCa3abYTd77x80L1phLwU2U9/E3n+frkVU/nw
+         nBCslYr2zpxaqctoN17/Zcu33nPYQLm4FzwAipLPZYxRQwko6rjMt6H6EnARi+YXHjNB
+         R/n+7XvnASz3TR5ePqrg8WF5R2uD6bshzlSIliORrIocUl3NP0Tzu0I5ESb0Vdylhlz9
+         CCvw==
+X-Gm-Message-State: AJIora9a+Ad2R1Zrza2Ij/jfbTCbDUBeCuouxyyHLL0CwzFSxq0ra4bX
+        34boMGuWhgkfgx0nteSj192rdTL4xTJPx+NFULeCCXm8dkhKmjLXQ2uKNSZaeOgAqEOPZKB6k9P
+        DZ1KHZ6HTt7Vu+9OxtVBNxMs6qdPX
+X-Received: by 2002:a05:6a00:14d3:b0:528:486d:d576 with SMTP id w19-20020a056a0014d300b00528486dd576mr10568898pfu.24.1656899556867;
+        Sun, 03 Jul 2022 18:52:36 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sPC0DInjaucHaeeAE1l8WghG5rlTMFBew3zvn/xHz/06n1jLEOyrEMAmRej9+XCnhiWSv1dg==
+X-Received: by 2002:a05:6a00:14d3:b0:528:486d:d576 with SMTP id w19-20020a056a0014d300b00528486dd576mr10568874pfu.24.1656899556610;
+        Sun, 03 Jul 2022 18:52:36 -0700 (PDT)
 Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id v6-20020a1709029a0600b0015edc07dcf3sm19697225plp.21.2022.07.03.18.52.30
+        by smtp.gmail.com with ESMTPSA id i13-20020a17090332cd00b0016b7c557e08sm11927704plr.56.2022.07.03.18.52.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 18:52:31 -0700 (PDT)
+        Sun, 03 Jul 2022 18:52:36 -0700 (PDT)
 From:   Coiby Xu <coxu@redhat.com>
 To:     kexec@lists.infradead.org, linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
@@ -63,11 +63,18 @@ Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
         Will Deacon <will@kernel.org>,
         "Eric W . Biederman" <ebiederm@xmission.com>,
-        Chun-Yi Lee <jlee@suse.com>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v9 1/4] kexec: clean up arch_kexec_kernel_verify_sig
-Date:   Mon,  4 Jul 2022 09:51:58 +0800
-Message-Id: <20220704015201.59744-2-coxu@redhat.com>
+        Chun-Yi Lee <jlee@suse.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH v9 2/4] kexec, KEYS: make the code in bzImage64_verify_sig generic
+Date:   Mon,  4 Jul 2022 09:51:59 +0800
+Message-Id: <20220704015201.59744-3-coxu@redhat.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220704015201.59744-1-coxu@redhat.com>
 References: <20220704015201.59744-1-coxu@redhat.com>
@@ -75,7 +82,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,96 +90,120 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Currently there is no arch-specific implementation of
-arch_kexec_kernel_verify_sig. Even if we want to add an implementation
-for an architecture in the future, we can simply use "(struct
-kexec_file_ops*)->verify_sig". So clean it up.
+commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
+signature verify") adds platform keyring support on x86 kexec but not
+arm64.
 
-Note this patch is dependent by later patches so it should backported to
-the stable tree as well.
+The code in bzImage64_verify_sig uses the keys on the
+.builtin_trusted_keys, .machine, if configured and enabled,
+.secondary_trusted_keys, also if configured, and .platform keyrings
+to verify the signed kernel image as PE file.
 
-Cc: stable@vger.kernel.org
-Suggested-by: Eric W. Biederman <ebiederm@xmission.com>
+Cc: kexec@lists.infradead.org
+Cc: keyrings@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
 Reviewed-by: Michal Suchanek <msuchanek@suse.de>
-Acked-by: Baoquan He <bhe@redhat.com>
 Signed-off-by: Coiby Xu <coxu@redhat.com>
 ---
- include/linux/kexec.h |  4 ----
- kernel/kexec_file.c   | 34 +++++++++++++---------------------
- 2 files changed, 13 insertions(+), 25 deletions(-)
+ arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
+ include/linux/kexec.h             |  6 ++++++
+ kernel/kexec_file.c               | 17 +++++++++++++++++
+ 3 files changed, 24 insertions(+), 19 deletions(-)
 
+diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+index 170d0fd68b1f..f299b48f9c9f 100644
+--- a/arch/x86/kernel/kexec-bzimage64.c
++++ b/arch/x86/kernel/kexec-bzimage64.c
+@@ -17,7 +17,6 @@
+ #include <linux/kernel.h>
+ #include <linux/mm.h>
+ #include <linux/efi.h>
+-#include <linux/verification.h>
+ 
+ #include <asm/bootparam.h>
+ #include <asm/setup.h>
+@@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+-static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
+-{
+-	int ret;
+-
+-	ret = verify_pefile_signature(kernel, kernel_len,
+-				      VERIFY_USE_SECONDARY_KEYRING,
+-				      VERIFYING_KEXEC_PE_SIGNATURE);
+-	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+-		ret = verify_pefile_signature(kernel, kernel_len,
+-					      VERIFY_USE_PLATFORM_KEYRING,
+-					      VERIFYING_KEXEC_PE_SIGNATURE);
+-	}
+-	return ret;
+-}
+-#endif
+-
+ const struct kexec_file_ops kexec_bzImage64_ops = {
+ 	.probe = bzImage64_probe,
+ 	.load = bzImage64_load,
+ 	.cleanup = bzImage64_cleanup,
+ #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+-	.verify_sig = bzImage64_verify_sig,
++	.verify_sig = kexec_kernel_verify_pe_sig,
+ #endif
+ };
 diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-index ce6536f1d269..e3125fae1599 100644
+index e3125fae1599..620018bbc419 100644
 --- a/include/linux/kexec.h
 +++ b/include/linux/kexec.h
-@@ -194,10 +194,6 @@ int arch_kexec_kernel_image_probe(struct kimage *image, void *buf,
+@@ -19,6 +19,7 @@
+ #include <asm/io.h>
+ 
+ #include <uapi/linux/kexec.h>
++#include <linux/verification.h>
+ 
+ /* Location of a reserved region to hold the crash kernel.
+  */
+@@ -194,6 +195,11 @@ int arch_kexec_kernel_image_probe(struct kimage *image, void *buf,
  				  unsigned long buf_len);
  void *arch_kexec_kernel_image_load(struct kimage *image);
  int arch_kimage_file_post_load_cleanup(struct kimage *image);
--#ifdef CONFIG_KEXEC_SIG
--int arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
--				 unsigned long buf_len);
--#endif
++#ifdef CONFIG_KEXEC_SIG
++#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
++int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len);
++#endif
++#endif
  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
  
  extern int kexec_add_buffer(struct kexec_buf *kbuf);
 diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 145321a5e798..c7cbadc754a1 100644
+index c7cbadc754a1..db6e89128b98 100644
 --- a/kernel/kexec_file.c
 +++ b/kernel/kexec_file.c
-@@ -89,25 +89,6 @@ int __weak arch_kimage_file_post_load_cleanup(struct kimage *image)
- 	return kexec_image_post_load_cleanup_default(image);
- }
- 
--#ifdef CONFIG_KEXEC_SIG
--static int kexec_image_verify_sig_default(struct kimage *image, void *buf,
--					  unsigned long buf_len)
--{
--	if (!image->fops || !image->fops->verify_sig) {
--		pr_debug("kernel loader does not support signature verification.\n");
--		return -EKEYREJECTED;
--	}
--
--	return image->fops->verify_sig(buf, buf_len);
--}
--
--int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
--					unsigned long buf_len)
--{
--	return kexec_image_verify_sig_default(image, buf, buf_len);
--}
--#endif
--
- /*
-  * Free up memory used by kernel, initrd, and command line. This is temporary
-  * memory allocation which is not needed any more after these buffers have
-@@ -150,13 +131,24 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+@@ -131,6 +131,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
  }
  
  #ifdef CONFIG_KEXEC_SIG
-+static int kexec_image_verify_sig(struct kimage *image, void *buf,
-+		unsigned long buf_len)
++#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
++int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
 +{
-+	if (!image->fops || !image->fops->verify_sig) {
-+		pr_debug("kernel loader does not support signature verification.\n");
-+		return -EKEYREJECTED;
++	int ret;
++
++	ret = verify_pefile_signature(kernel, kernel_len,
++				      VERIFY_USE_SECONDARY_KEYRING,
++				      VERIFYING_KEXEC_PE_SIGNATURE);
++	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
++		ret = verify_pefile_signature(kernel, kernel_len,
++					      VERIFY_USE_PLATFORM_KEYRING,
++					      VERIFYING_KEXEC_PE_SIGNATURE);
 +	}
-+
-+	return image->fops->verify_sig(buf, buf_len);
++	return ret;
 +}
++#endif
 +
- static int
- kimage_validate_signature(struct kimage *image)
+ static int kexec_image_verify_sig(struct kimage *image, void *buf,
+ 		unsigned long buf_len)
  {
- 	int ret;
- 
--	ret = arch_kexec_kernel_verify_sig(image, image->kernel_buf,
--					   image->kernel_buf_len);
-+	ret = kexec_image_verify_sig(image, image->kernel_buf,
-+				     image->kernel_buf_len);
- 	if (ret) {
- 
- 		if (IS_ENABLED(CONFIG_KEXEC_SIG_FORCE)) {
 -- 
 2.35.3
 
