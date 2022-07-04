@@ -2,74 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F07564BC9
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Jul 2022 04:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995CE564FDF
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Jul 2022 10:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiGDCg2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 3 Jul 2022 22:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
+        id S231171AbiGDIkA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Jul 2022 04:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGDCg1 (ORCPT
+        with ESMTP id S229762AbiGDIj7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 3 Jul 2022 22:36:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E4546560
-        for <linux-integrity@vger.kernel.org>; Sun,  3 Jul 2022 19:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656902186;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f1FJ6cqRuF8dBXv9KcZczCA6imIHUu41nOlrwT+WJ0s=;
-        b=DumGiiXWuHxiJcxBICHtVo03K4sSvRrpuyOriDgaCVT32x/EMopRbGwa0tfEG0l2CbVzoY
-        ktOCNzIXFoHstInzQcCKde8RORhTuzuLahbl2BuTdMJfariG1Afe58zvMfdzCUhx2m+/ZS
-        SAVvv0j4U1XJNvR3uQ1DMfYpL9+LrCg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-513-FYcXjujqMAeLRZl34AbSJQ-1; Sun, 03 Jul 2022 22:36:22 -0400
-X-MC-Unique: FYcXjujqMAeLRZl34AbSJQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A3B485A581;
-        Mon,  4 Jul 2022 02:36:22 +0000 (UTC)
-Received: from localhost (ovpn-13-121.pek2.redhat.com [10.72.13.121])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5646C1415308;
-        Mon,  4 Jul 2022 02:36:19 +0000 (UTC)
-Date:   Mon, 4 Jul 2022 10:36:16 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Jonathan McDowell <noodles@fb.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Subject: Re: [PATCH v7] x86/kexec: Carry forward IMA measurement log on kexec
-Message-ID: <YsJSIIsCnjoL+ObY@MiWiFi-R3L-srv>
-References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
- <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
- <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
- <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
- <YqcRuQFq5fg1XhB/@noodles-fedora.dhcp.thefacebook.com>
- <YqtMf9ivGR8Rkl8u@noodles-fedora.dhcp.thefacebook.com>
- <Yr1geLyslnjKck86@noodles-fedora.dhcp.thefacebook.com>
+        Mon, 4 Jul 2022 04:39:59 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0F7B7C0
+        for <linux-integrity@vger.kernel.org>; Mon,  4 Jul 2022 01:39:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o8HcT-000163-Ia; Mon, 04 Jul 2022 10:39:49 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o8HcO-004Kpb-OZ; Mon, 04 Jul 2022 10:39:48 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o8HcR-002u9x-L3; Mon, 04 Jul 2022 10:39:47 +0200
+Date:   Mon, 4 Jul 2022 10:39:47 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     kernel@pengutronix.de, linux-i2c@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 0/6] i2c: Make remove callback return void
+Message-ID: <20220704083947.55ioswcze7r36g44@pengutronix.de>
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y5aw2syq7mhf2y53"
 Content-Disposition: inline
-In-Reply-To: <Yr1geLyslnjKck86@noodles-fedora.dhcp.thefacebook.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,30 +57,243 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 06/30/22 at 08:36am, Jonathan McDowell wrote:
-> On kexec file load, the Integrity Measurement Architecture (IMA)
-> subsystem may verify the IMA signature of the kernel and initramfs, and
-> measure it. The command line parameters passed to the kernel in the
-> kexec call may also be measured by IMA.
-> 
-> A remote attestation service can verify a TPM quote based on the TPM
-> event log, the IMA measurement list and the TPM PCR data. This can
-> be achieved only if the IMA measurement log is carried over from the
-> current kernel to the next kernel across the kexec call.
-> 
-> PowerPC and ARM64 both achieve this using device tree with a
-> "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
-> device tree, so use the setup_data mechanism to pass the IMA buffer to
-> the new kernel.
-> 
-> (Mimi, Baoquan, I haven't included your reviewed-bys because this has
->  changed the section annotations to __init and Boris reasonably enough
->  wants to make sure IMA folk are happy before taking this update.)
-> 
-> Signed-off-by: Jonathan McDowell <noodles@fb.com>
-> Link: https://lore.kernel.org/r/YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG
 
-LGTM,
+--y5aw2syq7mhf2y53
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Baoquan He <bhe@redhat.com>
+On Tue, Jun 28, 2022 at 04:03:06PM +0200, Uwe Kleine-K=F6nig wrote:
+> as announced in
+> https://lore.kernel.org/linux-i2c/20220609091018.q52fhowlsdbdkct5@pengutr=
+onix.de
+> I intend to change the remove prototype for i2c drivers to remove void.
+>=20
+> As this touches quite some drivers, the plan is to submit this change
+> for inclusion after the next merge window and get it quickly into next
+> that other subsystems have enough time to adapt.
+>=20
+> Still to give the opportunity to comment I send the patch set out based
+> on v5.19-rc4. There are still a few patches in next that are required,
+> namely:
+>=20
+> 	d04d46dd82ad iio:magnetometer:mbc150: Make bmc150_magn_remove() return v=
+oid
+> 	7576bc05b360 iio:light:vcnl4035: Improve error reporting for problems du=
+ring .remove()
+> 	ab91da2f2574 iio:light:vcnl4000: Improve error reporting for problems du=
+ring .remove()
+> 	5049646718d7 iio:light:us5182d: Improve error reporting for problems dur=
+ing .remove()
+> 	be9f6004be88 iio:light:pa12203001: Improve error reporting for problems =
+during .remove()
+> 	730cd2f54eba iio:chemical:ccs811: Improve error reporting for problems d=
+uring .remove()
+> 	a76209246d9f iio:chemical:atlas: Improve error reporting for problems du=
+ring .remove()
+> 	8f760ce7affd iio:adc:ti-ads1015: Improve error reporting for problems du=
+ring .remove()
+> 	ffa952e95d8c iio:adc:ina2xx: Improve error reporting for problems during=
+ .remove()
+> 	48d1ae774099 iio: health: afe4404: Remove duplicated error reporting in =
+=2Eremove()
+> 	8dc0a72795e4 iio:light:tsl2583: Remove duplicated error reporting in .re=
+move()
+> 	58a6df5580bb iio:light:stk3310: Remove duplicated error reporting in .re=
+move()
+> 	44ceb791182a iio:light:opt3001: Remove duplicated error reporting in .re=
+move()
+> 	f0e34d262567 iio:light:jsa1212: Remove duplicated error reporting in .re=
+move()
+> 	8d3d6baa4990 iio:light:isl29028: Remove duplicated error reporting in .r=
+emove()
+> 	5004e24a466c iio:light:bh1780: Remove duplicated error reporting in .rem=
+ove()
+> 	1db6926d611d iio:accel:stk8ba50: Remove duplicated error reporting in .r=
+emove()
+> 	1aec857d50ce iio:accel:stk8312: Remove duplicated error reporting in .re=
+move()
+> 	aae59bdf2585 iio:accel:mc3230: Remove duplicated error reporting in .rem=
+ove()
+> 	7df7563b16aa crypto: atmel-ecc - Remove duplicated error reporting in .r=
+emove()
+> 	99ad11e06be8 i2c: dummy: Drop no-op remove function
+> 	84965cc60e64 ASoC: cs35l45: Make cs35l45_remove() return void
+> 	fb68cb963bb7 ASoC: da732x: Drop no-op remove function
+> 	3cce931a5e44 ASoC: lm49453: Drop no-op remove function
+> 	8a291eebeb63 ASoC: da7219: Drop no-op remove function
+> 	60391d788a22 ASoC: ak4642: Drop no-op remove function
+> 	51bd0abd873d extcon: fsa9480: Drop no-op remove function
+>=20
+> I hope and assume they will all be included in v5.20-rc1. There are 5
+> more patches required that didn't made it into next yet (i.e. patches #1
+> - #5 of this series).
+>=20
+> There are also two drivers in next that need adaption:
+>=20
+> 	drivers/gpu/drm/bridge/ti-dlpc3433.c
+> 	drivers/tty/serial/max310x.c
 
+There is now a third driver in next that is affected:
+drivers/char/tpm/tpm_tis_i2c.c that was added with commit
+88f3b0f519c068ad29c92e965239a7900a2deea3 to next.
+
+A tree containing patched #1 to #5 merges just fine with next/master.
+When merging patch 6 into the result the merge resolution looks as
+follows:
+
+diff --cc drivers/gpu/drm/bridge/parade-ps8640.c
+index 31e88cb39f8a,a09d1828d8e1..000000000000
+--- a/drivers/gpu/drm/bridge/parade-ps8640.c
++++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+diff --cc drivers/gpu/drm/bridge/ti-sn65dsi83.c
+index dc26640e7d9b,8f93e374848c..000000000000
+--- a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
++++ b/drivers/gpu/drm/bridge/ti-sn65dsi83.c
+@@@ -712,8 -731,7 +712,6 @@@ static void sn65dsi83_remove(struct i2c
+  	struct sn65dsi83 *ctx =3D i2c_get_clientdata(client);
+ =20
+  	drm_bridge_remove(&ctx->bridge);
+-=20
+- 	return 0;
+ -	of_node_put(ctx->host_node);
+  }
+ =20
+  static struct i2c_device_id sn65dsi83_id[] =3D {
+diff --cc drivers/iio/accel/bma400_i2c.c
+index 1ba2a982ea73,90c99ab8c8f2..000000000000
+--- a/drivers/iio/accel/bma400_i2c.c
++++ b/drivers/iio/accel/bma400_i2c.c
+diff --cc drivers/input/keyboard/adp5588-keys.c
+index 1a1a05d7cd42,b5666d650994..000000000000
+--- a/drivers/input/keyboard/adp5588-keys.c
++++ b/drivers/input/keyboard/adp5588-keys.c
+@@@ -590,21 -584,43 +590,20 @@@ static int adp5588_probe(struct i2c_cli
+ =20
+  	dev_info(&client->dev, "Rev.%d keypad, irq %d\n", revid, client->irq);
+  	return 0;
+ -
+ - err_free_irq:
+ -	free_irq(client->irq, kpad);
+ -	cancel_delayed_work_sync(&kpad->work);
+ - err_unreg_dev:
+ -	input_unregister_device(input);
+ -	input =3D NULL;
+ - err_free_mem:
+ -	input_free_device(input);
+ -	kfree(kpad);
+ -
+ -	return error;
+  }
+ =20
+- static int adp5588_remove(struct i2c_client *client)
++ static void adp5588_remove(struct i2c_client *client)
+  {
+ -	struct adp5588_kpad *kpad =3D i2c_get_clientdata(client);
+ -
+  	adp5588_write(client, CFG, 0);
+ -	free_irq(client->irq, kpad);
+ -	cancel_delayed_work_sync(&kpad->work);
+ -	input_unregister_device(kpad->input);
+ -	adp5588_gpio_remove(kpad);
+ -	kfree(kpad);
+ +
+ +	/* all resources will be freed by devm */
+- 	return 0;
+  }
+ =20
+ -#ifdef CONFIG_PM
+ -static int adp5588_suspend(struct device *dev)
+ +static int __maybe_unused adp5588_suspend(struct device *dev)
+  {
+ -	struct adp5588_kpad *kpad =3D dev_get_drvdata(dev);
+ -	struct i2c_client *client =3D kpad->client;
+ +	struct i2c_client *client =3D to_i2c_client(dev);
+ =20
+  	disable_irq(client->irq);
+ -	cancel_delayed_work_sync(&kpad->work);
+ -
+ -	if (device_may_wakeup(&client->dev))
+ -		enable_irq_wake(client->irq);
+ =20
+  	return 0;
+  }
+diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+index 8e0686fe4eb1..5299e30657b8 100644
+--- a/drivers/char/tpm/tpm_tis_i2c.c
++++ b/drivers/char/tpm/tpm_tis_i2c.c
+@@ -351,13 +351,12 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev,
+ 				 NULL);
+ }
+=20
+-static int tpm_tis_i2c_remove(struct i2c_client *client)
++static void tpm_tis_i2c_remove(struct i2c_client *client)
+ {
+ 	struct tpm_chip *chip =3D i2c_get_clientdata(client);
+=20
+ 	tpm_chip_unregister(chip);
+ 	tpm_tis_remove(chip);
+-	return 0;
+ }
+=20
+ static const struct i2c_device_id tpm_tis_i2c_id[] =3D {
+diff --git a/drivers/gpu/drm/bridge/ti-dlpc3433.c b/drivers/gpu/drm/bridge/=
+ti-dlpc3433.c
+index 06e519798ac5..c1b94bc183e6 100644
+--- a/drivers/gpu/drm/bridge/ti-dlpc3433.c
++++ b/drivers/gpu/drm/bridge/ti-dlpc3433.c
+@@ -378,14 +378,12 @@ static int dlpc3433_probe(struct i2c_client *client)
+ 	return ret;
+ }
+=20
+-static int dlpc3433_remove(struct i2c_client *client)
++static void dlpc3433_remove(struct i2c_client *client)
+ {
+ 	struct dlpc *dlpc =3D i2c_get_clientdata(client);
+=20
+ 	drm_bridge_remove(&dlpc->bridge);
+ 	of_node_put(dlpc->host_node);
+-
+-	return 0;
+ }
+=20
+ static const struct i2c_device_id dlpc3433_id[] =3D {
+diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+index e162bfb44080..8a4d0defa0cb 100644
+--- a/drivers/tty/serial/max310x.c
++++ b/drivers/tty/serial/max310x.c
+@@ -1616,11 +1616,9 @@ static int max310x_i2c_probe(struct i2c_client *clie=
+nt)
+ 			     regmaps, client->irq);
+ }
+=20
+-static int max310x_i2c_remove(struct i2c_client *client)
++static void max310x_i2c_remove(struct i2c_client *client)
+ {
+ 	max310x_remove(&client->dev);
+-
+-	return 0;
+ }
+=20
+ static struct i2c_driver max310x_i2c_driver =3D {
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--y5aw2syq7mhf2y53
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLCp1AACgkQwfwUeK3K
+7AmRiwf7B7O29fr8DKJCvZjXFEoU2tVCodsP0mcqFRYgTyI6KPOHcX7hAXc9rllJ
+rL+Z1fAHAnZJEcVGwaUtgoAzNuN2zP3t0l23Nf+g2rQkeROulFZyjTCeqWEhiaFB
+kdp0ZkJywd3lYzPEZPcRL0RCAGGzx7wdDsCunip+MGfDK9dUQ9oEFTqv/mDSlcbQ
++P0twM0lKTQYzshZ7Y+t7pilTa3VawWzjfI+dg1MypcKWN9K2a/XbDQ4bEiriMk6
+ZI0DccfbmfhYIKDf4MsgFV9EmkRVwQbA1NzHxkhuSoWfAtuBMc6MtasoD71IGQ/G
+Oc44rn9JQzTvl/RNv2e++dwSdsx2Ng==
+=Drmq
+-----END PGP SIGNATURE-----
+
+--y5aw2syq7mhf2y53--
