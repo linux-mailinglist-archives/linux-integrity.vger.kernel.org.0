@@ -2,55 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995CE564FDF
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Jul 2022 10:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18F8565D2B
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Jul 2022 19:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbiGDIkA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Jul 2022 04:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S230034AbiGDRpb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Jul 2022 13:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiGDIj7 (ORCPT
+        with ESMTP id S229894AbiGDRpa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:39:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0F7B7C0
-        for <linux-integrity@vger.kernel.org>; Mon,  4 Jul 2022 01:39:57 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o8HcT-000163-Ia; Mon, 04 Jul 2022 10:39:49 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o8HcO-004Kpb-OZ; Mon, 04 Jul 2022 10:39:48 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o8HcR-002u9x-L3; Mon, 04 Jul 2022 10:39:47 +0200
-Date:   Mon, 4 Jul 2022 10:39:47 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Johannes Holland <johannes.holland@infineon.com>,
-        Amir Mizinski <amirmizi6@gmail.com>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     kernel@pengutronix.de, linux-i2c@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 0/6] i2c: Make remove callback return void
-Message-ID: <20220704083947.55ioswcze7r36g44@pengutronix.de>
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+        Mon, 4 Jul 2022 13:45:30 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E446FD5;
+        Mon,  4 Jul 2022 10:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656956716;
+        bh=TQ4lBTrLpuo+eOz6EySprVM5Znbg7fuRxnxioDxOg14=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=KdSpeikfbSf3EQvihQEIF7SS8Ku4HT8j4pwvPpvzdscJiSTAGpcBNw7Keo9Mzuthe
+         6rGLo1KQU+SeKl4fjXkZ7r0Pjb89kEesrFMcRj3K4woHDhKoR78JojJmsU0y697my/
+         UYr0I3hN7/fqKcmPWje1pgA6VUU5pO72cHt46wIM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.69] ([46.223.3.210]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1McpNy-1nYoCU1GHi-00Zuiw; Mon, 04
+ Jul 2022 19:45:16 +0200
+Message-ID: <f0e33bc4-335c-322a-9295-18d6bc0b8286@gmx.de>
+Date:   Mon, 4 Jul 2022 19:45:12 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y5aw2syq7mhf2y53"
-Content-Disposition: inline
-In-Reply-To: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 07/10] tmp, tmp_tis: Implement usage counter for
+ locality
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
+ <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
+ <Yr4x6KRSvzlXNdH2@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+In-Reply-To: <Yr4x6KRSvzlXNdH2@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7NEXJUNaT6KySY/atP+dQn+HYXS4nNzYgcoi8I8faZCB2VCxL+n
+ yJulzOSntGDyPF4x/sqJy1J/rMK6r8TXz2h9Sge/BlwpsIPea8Vv1tvANcQA0MZTOjKR7I4
+ QqP4x4B191n3TVgy3bBeG+m5PAOWg6e+ZRS5l8f40DXk6WxOuVGO5Toszy3emCPnoSLaADa
+ fGLWpUlMq1Vn70JOOej7w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zQEcDyYnCbo=:CohU44Go8P38dFklNt1xAx
+ i2sEaBRJ+kMTHJl0QXkQIMBsp2JqsM8O4ow9cVJ8iMxy3al9JX7AwlOa1SQtTLoQfgAr2Om8I
+ hes53IsJXO8BpiZXBQaynG0OVCyUaD83Uk8dyQiePxgV9j55qvruUKGjMZN7rA6LsmgDduer+
+ 0J3ZzZIIbbNGKL8wBy/To+N5RJ5EuFYsNH0sQwudOoSX1/LuTaX9ZrSD40ZSN9LVo/0TRiqzD
+ lwzdBA+BlWOXtiwyN6kYT7h/N5uGkbwjFquPfTEyMjN04koittlS/M5jlIN4rMoT14EzjAGCj
+ FsQgNhrvK5DS7FEyXGK+q1AboHt8suvK07fFi1bwtA8h0lqTUBri+VdqCwnkAT03Rzb6z6F0n
+ VGh+hKz0gSjFH6jmbg3xFiqNf/5+87N8grbInyE8cdnpvsHYwx8NAJ8VncaQPIR+UdaHSSVSA
+ r/7Djlyd7OuuXlLx7ArLYG5+S0/z1glrMygUkJO3tG/WSdc1faX8pgXaMXaXW82JTRPMlOVv4
+ 3Hrjte4f4xCShJCzhBaTsufFx5EaiiSeMl11vOVZFzzjSUVWpycG1BCAAWLW2XzmvHz70E9sx
+ /oR6Nbj6ZD9m3CaeZj91c/PerBSpiR6ixw5BKfzFet4xoJPknajniKMKh6DxkexdW851Bp38E
+ UnYBQTHk1grHLS+/zSt5kicdYuE8yRj335enTcOIGxW8GR0Ck2oRAIW6l8HY0aTYIVgVvtYOc
+ bxR9ABt0kbxr7F/+dD5FxHhhF4ry4hVNDKcGZbW8fK2rrgBpe4igMdHyp9yypZDpWBdlsceE5
+ 8T5CQPDJH44mjIh25KtHH33vKt2ST+Mc5XmK9RfX7b8+Sh0iF/zeNBVuspTAPqMygs9nmxPxM
+ FUEly1NjnLfDt8D/B0WfoFCCoJrOqd2MWuriarjwCezfqs/+62lmBeXtMKJ1j8hvfOSiQ4YD1
+ iFKo0dIG+rPFfHi3hVPBS6EFgz8ZgVa0EC9CczEl+WdWF/2Ku54U3qMT+C2dM+QmeE0wwktpN
+ KsH9FDR24qO+rRzPL+vANigeZRgJTgImA1HMoFUlhKAAeK7xIAznKJhjED5XKjywLfVpkOEWt
+ 4c/vswxXu20Hgyx1Epi6bqBJom+Kx0IZtMfpF3BO9M8/4o89lsYDkDTYQ==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,242 +78,121 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---y5aw2syq7mhf2y53
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 28, 2022 at 04:03:06PM +0200, Uwe Kleine-K=F6nig wrote:
-> as announced in
-> https://lore.kernel.org/linux-i2c/20220609091018.q52fhowlsdbdkct5@pengutr=
-onix.de
-> I intend to change the remove prototype for i2c drivers to remove void.
->=20
-> As this touches quite some drivers, the plan is to submit this change
-> for inclusion after the next merge window and get it quickly into next
-> that other subsystems have enough time to adapt.
->=20
-> Still to give the opportunity to comment I send the patch set out based
-> on v5.19-rc4. There are still a few patches in next that are required,
-> namely:
->=20
-> 	d04d46dd82ad iio:magnetometer:mbc150: Make bmc150_magn_remove() return v=
-oid
-> 	7576bc05b360 iio:light:vcnl4035: Improve error reporting for problems du=
-ring .remove()
-> 	ab91da2f2574 iio:light:vcnl4000: Improve error reporting for problems du=
-ring .remove()
-> 	5049646718d7 iio:light:us5182d: Improve error reporting for problems dur=
-ing .remove()
-> 	be9f6004be88 iio:light:pa12203001: Improve error reporting for problems =
-during .remove()
-> 	730cd2f54eba iio:chemical:ccs811: Improve error reporting for problems d=
-uring .remove()
-> 	a76209246d9f iio:chemical:atlas: Improve error reporting for problems du=
-ring .remove()
-> 	8f760ce7affd iio:adc:ti-ads1015: Improve error reporting for problems du=
-ring .remove()
-> 	ffa952e95d8c iio:adc:ina2xx: Improve error reporting for problems during=
- .remove()
-> 	48d1ae774099 iio: health: afe4404: Remove duplicated error reporting in =
-=2Eremove()
-> 	8dc0a72795e4 iio:light:tsl2583: Remove duplicated error reporting in .re=
-move()
-> 	58a6df5580bb iio:light:stk3310: Remove duplicated error reporting in .re=
-move()
-> 	44ceb791182a iio:light:opt3001: Remove duplicated error reporting in .re=
-move()
-> 	f0e34d262567 iio:light:jsa1212: Remove duplicated error reporting in .re=
-move()
-> 	8d3d6baa4990 iio:light:isl29028: Remove duplicated error reporting in .r=
-emove()
-> 	5004e24a466c iio:light:bh1780: Remove duplicated error reporting in .rem=
-ove()
-> 	1db6926d611d iio:accel:stk8ba50: Remove duplicated error reporting in .r=
-emove()
-> 	1aec857d50ce iio:accel:stk8312: Remove duplicated error reporting in .re=
-move()
-> 	aae59bdf2585 iio:accel:mc3230: Remove duplicated error reporting in .rem=
-ove()
-> 	7df7563b16aa crypto: atmel-ecc - Remove duplicated error reporting in .r=
-emove()
-> 	99ad11e06be8 i2c: dummy: Drop no-op remove function
-> 	84965cc60e64 ASoC: cs35l45: Make cs35l45_remove() return void
-> 	fb68cb963bb7 ASoC: da732x: Drop no-op remove function
-> 	3cce931a5e44 ASoC: lm49453: Drop no-op remove function
-> 	8a291eebeb63 ASoC: da7219: Drop no-op remove function
-> 	60391d788a22 ASoC: ak4642: Drop no-op remove function
-> 	51bd0abd873d extcon: fsa9480: Drop no-op remove function
->=20
-> I hope and assume they will all be included in v5.20-rc1. There are 5
-> more patches required that didn't made it into next yet (i.e. patches #1
-> - #5 of this series).
->=20
-> There are also two drivers in next that need adaption:
->=20
-> 	drivers/gpu/drm/bridge/ti-dlpc3433.c
-> 	drivers/tty/serial/max310x.c
+On 01.07.22 01:29, Jarkko Sakkinen wrote:
 
-There is now a third driver in next that is affected:
-drivers/char/tpm/tpm_tis_i2c.c that was added with commit
-88f3b0f519c068ad29c92e965239a7900a2deea3 to next.
+>
+> I'm kind of thinking that should tpm_tis_data have a lock for its
+> contents?
 
-A tree containing patched #1 to #5 merges just fine with next/master.
-When merging patch 6 into the result the merge resolution looks as
-follows:
+Most of the tpm_tis_data structure elements are set once during init and
+then never changed but only read. So no need for locking for these. The
+exceptions I see are
 
-diff --cc drivers/gpu/drm/bridge/parade-ps8640.c
-index 31e88cb39f8a,a09d1828d8e1..000000000000
---- a/drivers/gpu/drm/bridge/parade-ps8640.c
-+++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-diff --cc drivers/gpu/drm/bridge/ti-sn65dsi83.c
-index dc26640e7d9b,8f93e374848c..000000000000
---- a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-+++ b/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-@@@ -712,8 -731,7 +712,6 @@@ static void sn65dsi83_remove(struct i2c
-  	struct sn65dsi83 *ctx =3D i2c_get_clientdata(client);
- =20
-  	drm_bridge_remove(&ctx->bridge);
--=20
-- 	return 0;
- -	of_node_put(ctx->host_node);
-  }
- =20
-  static struct i2c_device_id sn65dsi83_id[] =3D {
-diff --cc drivers/iio/accel/bma400_i2c.c
-index 1ba2a982ea73,90c99ab8c8f2..000000000000
---- a/drivers/iio/accel/bma400_i2c.c
-+++ b/drivers/iio/accel/bma400_i2c.c
-diff --cc drivers/input/keyboard/adp5588-keys.c
-index 1a1a05d7cd42,b5666d650994..000000000000
---- a/drivers/input/keyboard/adp5588-keys.c
-+++ b/drivers/input/keyboard/adp5588-keys.c
-@@@ -590,21 -584,43 +590,20 @@@ static int adp5588_probe(struct i2c_cli
- =20
-  	dev_info(&client->dev, "Rev.%d keypad, irq %d\n", revid, client->irq);
-  	return 0;
- -
- - err_free_irq:
- -	free_irq(client->irq, kpad);
- -	cancel_delayed_work_sync(&kpad->work);
- - err_unreg_dev:
- -	input_unregister_device(input);
- -	input =3D NULL;
- - err_free_mem:
- -	input_free_device(input);
- -	kfree(kpad);
- -
- -	return error;
-  }
- =20
-- static int adp5588_remove(struct i2c_client *client)
-+ static void adp5588_remove(struct i2c_client *client)
-  {
- -	struct adp5588_kpad *kpad =3D i2c_get_clientdata(client);
- -
-  	adp5588_write(client, CFG, 0);
- -	free_irq(client->irq, kpad);
- -	cancel_delayed_work_sync(&kpad->work);
- -	input_unregister_device(kpad->input);
- -	adp5588_gpio_remove(kpad);
- -	kfree(kpad);
- +
- +	/* all resources will be freed by devm */
-- 	return 0;
-  }
- =20
- -#ifdef CONFIG_PM
- -static int adp5588_suspend(struct device *dev)
- +static int __maybe_unused adp5588_suspend(struct device *dev)
-  {
- -	struct adp5588_kpad *kpad =3D dev_get_drvdata(dev);
- -	struct i2c_client *client =3D kpad->client;
- +	struct i2c_client *client =3D to_i2c_client(dev);
- =20
-  	disable_irq(client->irq);
- -	cancel_delayed_work_sync(&kpad->work);
- -
- -	if (device_may_wakeup(&client->dev))
- -		enable_irq_wake(client->irq);
- =20
-  	return 0;
-  }
-diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-index 8e0686fe4eb1..5299e30657b8 100644
---- a/drivers/char/tpm/tpm_tis_i2c.c
-+++ b/drivers/char/tpm/tpm_tis_i2c.c
-@@ -351,13 +351,12 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev,
- 				 NULL);
- }
-=20
--static int tpm_tis_i2c_remove(struct i2c_client *client)
-+static void tpm_tis_i2c_remove(struct i2c_client *client)
- {
- 	struct tpm_chip *chip =3D i2c_get_clientdata(client);
-=20
- 	tpm_chip_unregister(chip);
- 	tpm_tis_remove(chip);
--	return 0;
- }
-=20
- static const struct i2c_device_id tpm_tis_i2c_id[] =3D {
-diff --git a/drivers/gpu/drm/bridge/ti-dlpc3433.c b/drivers/gpu/drm/bridge/=
-ti-dlpc3433.c
-index 06e519798ac5..c1b94bc183e6 100644
---- a/drivers/gpu/drm/bridge/ti-dlpc3433.c
-+++ b/drivers/gpu/drm/bridge/ti-dlpc3433.c
-@@ -378,14 +378,12 @@ static int dlpc3433_probe(struct i2c_client *client)
- 	return ret;
- }
-=20
--static int dlpc3433_remove(struct i2c_client *client)
-+static void dlpc3433_remove(struct i2c_client *client)
- {
- 	struct dlpc *dlpc =3D i2c_get_clientdata(client);
-=20
- 	drm_bridge_remove(&dlpc->bridge);
- 	of_node_put(dlpc->host_node);
--
--	return 0;
- }
-=20
- static const struct i2c_device_id dlpc3433_id[] =3D {
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index e162bfb44080..8a4d0defa0cb 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -1616,11 +1616,9 @@ static int max310x_i2c_probe(struct i2c_client *clie=
-nt)
- 			     regmaps, client->irq);
- }
-=20
--static int max310x_i2c_remove(struct i2c_client *client)
-+static void max310x_i2c_remove(struct i2c_client *client)
- {
- 	max310x_remove(&client->dev);
--
--	return 0;
- }
-=20
- static struct i2c_driver max310x_i2c_driver =3D {
+- flags
+- locality_count
+- locality
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---y5aw2syq7mhf2y53
-Content-Type: application/pgp-signature; name="signature.asc"
+whereby "flags" is accessed by atomic bit manipulating functions and thus
+does not need extra locking. "locality_count" is protected by the locality=
+_count_mutex.
+"locality" is only set in check_locality() which is called from tpm_tis_re=
+quest_locality_locked()
+which holds the locality_count_mutex. So check_locality() is also protecte=
+d by the locality_count_mutex
+(which for this reason should probably rather be called locality_mutex sin=
+ce it protects both the "locality_count"
+and the "locality" variable).
 
------BEGIN PGP SIGNATURE-----
+There is one other place check_locality() is called from, namely the inter=
+rupt handler. This is also the only
+place in which "locality" could be assigned another value than 0 (aka the =
+default). In this case there
+is no lock, so this could indeed by racy.
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLCp1AACgkQwfwUeK3K
-7AmRiwf7B7O29fr8DKJCvZjXFEoU2tVCodsP0mcqFRYgTyI6KPOHcX7hAXc9rllJ
-rL+Z1fAHAnZJEcVGwaUtgoAzNuN2zP3t0l23Nf+g2rQkeROulFZyjTCeqWEhiaFB
-kdp0ZkJywd3lYzPEZPcRL0RCAGGzx7wdDsCunip+MGfDK9dUQ9oEFTqv/mDSlcbQ
-+P0twM0lKTQYzshZ7Y+t7pilTa3VawWzjfI+dg1MypcKWN9K2a/XbDQ4bEiriMk6
-ZI0DccfbmfhYIKDf4MsgFV9EmkRVwQbA1NzHxkhuSoWfAtuBMc6MtasoD71IGQ/G
-Oc44rn9JQzTvl/RNv2e++dwSdsx2Ng==
-=Drmq
------END PGP SIGNATURE-----
+The solution I see for this is:
+1. remove the entire loop that checks for the current locality, i.e. this =
+code:
 
---y5aw2syq7mhf2y53--
+	if (interrupt & TPM_INTF_LOCALITY_CHANGE_INT)
+		for (i =3D 0; i < 5; i++)
+			if (check_locality(chip, i))
+				break;
+
+So we avoid "locality" from being changed to something that is not the def=
+ault.
+
+
+2. grab the locality_count_mutex and protect "locality":
+
+if (interrupt & TPM_INTF_LOCALITY_CHANGE_INT)
+	mutex_lock(&priv->locality_count_mutex);
+		for (i =3D 0; i < 5; i++)
+			if (check_locality(chip, i))
+				break;
+	mutex_unlock(&priv->locality_count_mutex);
+
+
+I dont see the reason why we should store which locality is the active one=
+, since the only thing
+that ever would change it from 0 (i.e. the default which we use) to someth=
+ing else is some external instance.
+
+So I would vote for option 1.
+
+
+
+>
+> I kind of doubt that we would ever need more than one lock for it,
+> and it would give some more ensurance to not be race, especially
+> when re-enabling interrupts this feels important to be "extra safe".
+>
+> I looked at this commit, and did not see anything that would prevent
+> using a spin lock instead of mutex. With a spin lock priv can be
+> accessed also in the interrupt context.
+>
+> So instead prepend this patch with a patch that adds:
+>
+>         struct spin_lock lock;
+>
+> And something like:
+>
+>         static inline struct tpm_tis_data *tpm_tis_priv_get(struct tpm_c=
+hip *chip)
+>         {
+>                 struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev=
+);
+>
+>                 spin_lock(&priv->lock);
+>                 return priv;
+>         }
+>
+>         static inline void tpm_tis_priv_put(struct tpm_tis_data *priv)
+>         {
+>                 spin_unlock(&priv->lock);
+>         }
+>
+> And change the sites where priv is used to acquire the instance with thi=
+s.
+>
+
+In this patch we need the mutex to protect the locality counter. We have t=
+o hold the mutex
+while we do a register access that requires a locality (to make sure that =
+the locality is not
+released by another thread shortly before we do the access).
+
+We cannot do the register access while holding a spinlock, since for SPI t=
+he (SPI) bus
+lock mutex is used which needs a sleepable context. That is not given whil=
+e holding a spinlock,
+so I think we have no choice here unfortunately.
+
+Regards,
+Lino
+
+
+
+
+
