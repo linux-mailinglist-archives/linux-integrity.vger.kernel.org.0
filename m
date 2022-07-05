@@ -2,101 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6BD566FE1
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Jul 2022 15:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F2E5670C1
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Jul 2022 16:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbiGENva (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 5 Jul 2022 09:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
+        id S233335AbiGEOQs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 5 Jul 2022 10:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbiGENvO (ORCPT
+        with ESMTP id S233281AbiGEOQY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 5 Jul 2022 09:51:14 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C1F237D0;
-        Tue,  5 Jul 2022 06:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1657027484;
-  x=1688563484;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=keBvT11AkM8MQQ8xbVHjfoxCbaKO5OZ97FSscysqk+U=;
-  b=FztiFUgZorB99QtAgjs1xMiIyiUgbG9iN5HlrIx2suNb7C2xm0fshSVT
-   P/OtsCHEPJgBGR49kVr36hmBH9iwFVrys623ynfypC8YH7waThBdng7wj
-   GWmawjnBLI5AoGHd8h2E00DeQituMKuhyWWLyB9flK44SOqUzPnArdUcr
-   9RINt0BboYoH7OCjdRNrgk7p7p4my6mDUHdScC6s8cdNFLVJKt63Pj1+/
-   xkbGcGOadcb+MSIn4s2ALvIYVhK1ciY2xOI4MPRVE0LzLFvT8VtuvSAzP
-   trYo1jKq6qpq3fii3ZagqOBQQXeMUtnVBogIjsdMEAlKYjUuf8A247YC4
-   A==;
-From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-CC:     Jason Gunthorpe <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>,
-        <kernel@axis.com>,
-        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v3] tpm: Add check for Failure mode for TPM2 modules
-Date:   Tue, 5 Jul 2022 15:24:23 +0200
-Message-ID: <20220705132423.232603-1-marten.lindahl@axis.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 5 Jul 2022 10:16:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543791DA64
+        for <linux-integrity@vger.kernel.org>; Tue,  5 Jul 2022 07:10:48 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 265E7bcm018003
+        for <linux-integrity@vger.kernel.org>; Tue, 5 Jul 2022 14:10:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=+bk0mNqvWAcKa+UBNMYuRj7aNZGXCgwufPgyzYxmplA=;
+ b=EaSd7XoeqRdPkoCOCCfJIJH5VmZRWRw1U86Kl19EA5M3834iTQoIXpfxDc1N8znHVn2h
+ eSgSHIkBSr2ltxYXsxFuWgM6XEv25aazASzsQiQR3bnllGZQwO7O3XTPEnGM+UQim7OS
+ 8pXPNjPL2LFoFdDcRloHr95MSgy19Au6guUemSZ0TAmO4uydjc2m+EWmbT6jlrM2m4mR
+ aL+MoiigGP32+PD5Uk0ZGHI0HG2bsXMJveOYRArH3h23tNHWiSEZJHP67O3L/YRi6lTG
+ NzQZL9Xhpt0QIak7/ASj9fEd7ILG9EVlHTZFuKME32BMHSFF5uOZ7/fZjn1ymN7WR4t5 Ww== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h4nkeagb3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 05 Jul 2022 14:10:47 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 265E5W5s030733
+        for <linux-integrity@vger.kernel.org>; Tue, 5 Jul 2022 14:10:45 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3h2dn944rt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 05 Jul 2022 14:10:45 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 265EAgXj9765262
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 5 Jul 2022 14:10:42 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 50B394203F;
+        Tue,  5 Jul 2022 14:10:42 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 31C9B42041;
+        Tue,  5 Jul 2022 14:10:41 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.211.104.119])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  5 Jul 2022 14:10:40 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH v2] ima: fix violation measurement list record
+Date:   Tue,  5 Jul 2022 10:10:35 -0400
+Message-Id: <20220705141035.1101598-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Fw5hnPGrBfq46-9rIG45RebuUPOO-OLO
+X-Proofpoint-GUID: Fw5hnPGrBfq46-9rIG45RebuUPOO-OLO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-05_10,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=999 adultscore=0 suspectscore=0 impostorscore=0
+ clxscore=1015 malwarescore=0 spamscore=0 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2207050061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-In commit 0aa698787aa2 ("tpm: Add Upgrade/Reduced mode support for
-TPM2 modules") it was said that:
+Although the violation digest in the IMA measurement list is always
+zeroes, the size of the digest should be based on the hash algorithm.
+Until recently the hash algorithm was hard coded to sha1.  Fix the
+violation digest size included in the IMA measurement list.
 
-"If the TPM is in Failure mode, it will successfully respond to both
-tpm2_do_selftest() and tpm2_startup() calls. Although, will fail to
-answer to tpm2_get_cc_attrs_tbl(). Use this fact to conclude that TPM
-is in Failure mode."
+This is just a cosmetic change which should not affect attestation.
 
-But a check was never added in the commit when calling
-tpm2_get_cc_attrs_tbl() to conclude that the TPM is in Failure mode.
-This commit corrects this by adding a check.
-
-Fixes: 0aa698787aa2 ("tpm: Add Upgrade/Reduced mode support for TPM2 modules")
-Cc: stable@vger.kernel.org # v5.17+
-Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+Fixes: 09091c44cb73 ("ima: use IMA default hash algorithm for integrity violations")
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
+ security/integrity/ima/ima_template_lib.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v3:
- - Add Jarkkos Reviewed-by tag.
- - Add Fixes tag and Cc.
-
-v2:
- - Add missed check for TPM error code.
-
- drivers/char/tpm/tpm2-cmd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index c1eb5d223839..65d03867e114 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -752,6 +752,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
- 	}
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index c877f01a5471..34a8cabe09b1 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -324,9 +324,9 @@ static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
+ 		/*
+ 		 * If digest is NULL, the event being recorded is a violation.
+ 		 * Make room for the digest by increasing the offset of
+-		 * IMA_DIGEST_SIZE.
++		 * hash algorithm digest size.
+ 		 */
+-		offset += IMA_DIGEST_SIZE;
++		offset += hash_digest_size[hash_algo];
  
- 	rc = tpm2_get_cc_attrs_tbl(chip);
-+	if (rc == TPM2_RC_FAILURE || (rc < 0 && rc != -ENOMEM)) {
-+		dev_info(&chip->dev,
-+			 "TPM in field failure mode, requires firmware upgrade\n");
-+		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE;
-+		rc = 0;
-+	}
- 
- out:
- 	/*
+ 	return ima_write_template_field_data(buffer, offset + digestsize,
+ 					     fmt, field_data);
 -- 
-2.30.2
+2.27.0
 
