@@ -2,58 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D6556A5E2
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 16:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE66256A609
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 16:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236032AbiGGOsi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Jul 2022 10:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        id S236185AbiGGOtq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Jul 2022 10:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235990AbiGGOsb (ORCPT
+        with ESMTP id S236042AbiGGOso (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:48:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EB55581;
-        Thu,  7 Jul 2022 07:48:26 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267EMpDU024927;
-        Thu, 7 Jul 2022 14:48:08 GMT
+        Thu, 7 Jul 2022 10:48:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59272F395;
+        Thu,  7 Jul 2022 07:48:38 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267EgLew008771;
+        Thu, 7 Jul 2022 14:48:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=O//a5zlLvQZ6XagKc13b+xL++Fbux04O3vgdHrK3Hdk=;
- b=gM05ZhVmEzsFS6IEmTZ1WDee4cdd86+vyIc7kA7yX1pz88VKSyzsU6933/JzFl7fqesU
- lzalWallr1a4tN6oZaMVXEdjRi6Uu0Y1ncx5zXZDQFj/w+XC9VFQx+bXvwquE+CoSl5t
- wATtC4hMsWSYM9AEA0YuQRp6iccQEmwmHfqBO56JRV/qRhElvHZlGa3Utklzjkrh7EgP
- DxoW84hhHGcKmvphTVKwg56WLbKLdqLCRkS6oF3N6ndvfkg2HEFjWvRjD3DPBS5Z0g/8
- VS9xR3DhT703gobBcIaw9p3r6gMj5BQyXtHoHhQGqytfuqmMxt4zy60JMU4UBF4Ccu83 tA== 
+ bh=xNp40MLEwTi2D7tP/OBIgg+PEOgp1oD8CsXmiRu6ELo=;
+ b=ZF+A2o7nJvfSUTrux2nH7U9BXFCknFpj2pyIWEMxT+KR8zqIyWrWkVNUgwNEPB+8zXpq
+ +ET8BCfFzKj7gKb3ix92uRYkj6uvNljyEM+g0ZbNxPLkLI4i09c7nBixrq05vkWPhrWb
+ amSKiFmyADSFoT3WiPOynUxPZ9z4l7Blupv2AOMU/CAJWDJBF1hJuDoM825ndaxr6NBi
+ nrsqg8XZSn7ORtdFPXcVQ0iSLKO9/zN4IHejhA2aRdDuHwW1cH+33vXkBpbHEdPY+4LM
+ CP1JwH4ZXNOqdsMBrdRCYS7s12upo7fJbUF3uCec4a3rtQtsPMGuVtl0N0Snm+/88BcL GA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp2540-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h61fy86y4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 14:48:09 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 267EhPk3015487;
+        Thu, 7 Jul 2022 14:48:08 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h61fy86x5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 07 Jul 2022 14:48:08 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 267EN1Ex026267;
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267EaPqs018489;
         Thu, 7 Jul 2022 14:48:07 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp253j-1
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma03dal.us.ibm.com with ESMTP id 3h4v5vemdq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 07 Jul 2022 14:48:07 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267EacLO006769;
-        Thu, 7 Jul 2022 14:48:06 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma03wdc.us.ibm.com with ESMTP id 3h4ucnuyca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 14:48:06 +0000
 Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267Em5w533489304
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267Em60Q5833540
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 7 Jul 2022 14:48:05 GMT
+        Thu, 7 Jul 2022 14:48:06 GMT
 Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CC0AB112062;
+        by IMSVA (Postfix) with ESMTP id E4A58112063;
         Thu,  7 Jul 2022 14:48:05 +0000 (GMT)
 Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AEC3A112061;
+        by IMSVA (Postfix) with ESMTP id D127C112065;
         Thu,  7 Jul 2022 14:48:05 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
@@ -70,25 +70,25 @@ Cc:     zohar@linux.ibm.com, serge@hallyn.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
         jpenumak@redhat.com, Stefan Berger <stefanb@linux.ibm.com>,
         Christian Brauner <brauner@kernel.org>
-Subject: [PATCH v13 12/26] ima: Only accept AUDIT rules for non-init_ima_ns namespaces for now
-Date:   Thu,  7 Jul 2022 10:47:46 -0400
-Message-Id: <20220707144800.828288-13-stefanb@linux.ibm.com>
+Subject: [PATCH v13 13/26] userns: Add pointer to ima_namespace to user_namespace
+Date:   Thu,  7 Jul 2022 10:47:47 -0400
+Message-Id: <20220707144800.828288-14-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220707144800.828288-1-stefanb@linux.ibm.com>
 References: <20220707144800.828288-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: VuwqG02sLf5rHJV8jeZml0OLWT2VqrnE
-X-Proofpoint-GUID: klyM1Frv1fDm3BTkgEfdqh9kBddn81rw
+X-Proofpoint-ORIG-GUID: SI-Rj2-s8MAVpm-IMILkFsDtrigt8B_Y
+X-Proofpoint-GUID: LaANTCA9tRL-VGsx6VbW05hmte0Iqpcs
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-07_12,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- mlxlogscore=999 clxscore=1015 lowpriorityscore=0 suspectscore=0 mlxscore=0
- impostorscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207070057
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207070057
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -98,50 +98,94 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-For non-init_ima_ns namespaces, only accept AUDIT rules for now. Reject
-all rules that require support for measuring, appraisal, and hashing.
+Add a pointer to ima_namespace to the user_namespace and initialize
+the init_user_ns with a pointer to init_ima_ns. We need a pointer from
+the user namespace to its associated IMA namespace since IMA namespaces
+are piggybacking on user namespaces.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 Acked-by: Christian Brauner <brauner@kernel.org>
 Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
 ---
-v9:
-  - Jump to err_audit when unsupported rules are detected
----
- security/integrity/ima/ima_policy.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+v13:
+ - Added comment to ima_namespace pointer in user_namespace structure
+   following Serge's suggestion
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index de335dd97309..4a7e1e57655d 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1865,6 +1865,17 @@ static int ima_parse_rule(struct ima_namespace *ns,
- 			result = -EINVAL;
- 			break;
- 		}
-+
-+		/* IMA namespace only accepts AUDIT rules */
-+		if (ns != &init_ima_ns && result == 0) {
-+			switch (entry->action) {
-+			case MEASURE:
-+			case APPRAISE:
-+			case HASH:
-+				result = -EINVAL;
-+				goto err_audit;
-+			}
-+		}
- 	}
- 	if (!result && !ima_validate_rule(entry))
- 		result = -EINVAL;
-@@ -1886,6 +1897,7 @@ static int ima_parse_rule(struct ima_namespace *ns,
- 				     "verity rules should include d-ngv2");
- 	}
+v11:
+ - Added lost A-b from Christian back
+ - Added sentence to patch description explaining why we need the pointer
+
+v9:
+ - Deferred implementation of ima_ns_from_user_ns() to later patch
+---
+ include/linux/ima.h            | 2 ++
+ include/linux/user_namespace.h | 9 +++++++++
+ kernel/user.c                  | 4 ++++
+ 3 files changed, 15 insertions(+)
+
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 426b1744215e..fcb60a44e05f 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -14,6 +14,8 @@
+ #include <crypto/hash_info.h>
+ struct linux_binprm;
  
-+err_audit:
- 	audit_log_format(ab, "res=%d", !result);
- 	audit_log_end(ab);
- 	return result;
++extern struct ima_namespace init_ima_ns;
++
+ #ifdef CONFIG_IMA
+ extern enum hash_algo ima_get_current_hash_algo(void);
+ extern int ima_bprm_check(struct linux_binprm *bprm);
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index 33a4240e6a6f..8cb3489c988d 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -36,6 +36,7 @@ struct uid_gid_map { /* 64 bytes -- 1 cache line */
+ #define USERNS_INIT_FLAGS USERNS_SETGROUPS_ALLOWED
+ 
+ struct ucounts;
++struct ima_namespace;
+ 
+ enum ucount_type {
+ 	UCOUNT_USER_NAMESPACES,
+@@ -99,6 +100,14 @@ struct user_namespace {
+ #endif
+ 	struct ucounts		*ucounts;
+ 	long ucount_max[UCOUNT_COUNTS];
++#ifdef CONFIG_IMA_NS
++	/* Pointer to ima_ns which this user_ns created.  Can be null. IMA's
++	 * file access checks will walk the userns->parent chain and check
++	 * against all active ima_ns's. Note that when the user_ns is
++	 * freed, the ima_ns is guaranteed to be free-able.
++	 */
++	struct ima_namespace	*ima_ns;
++#endif
+ } __randomize_layout;
+ 
+ struct ucounts {
+diff --git a/kernel/user.c b/kernel/user.c
+index e2cf8c22b539..e5d1f4b9b8ba 100644
+--- a/kernel/user.c
++++ b/kernel/user.c
+@@ -19,6 +19,7 @@
+ #include <linux/export.h>
+ #include <linux/user_namespace.h>
+ #include <linux/proc_ns.h>
++#include <linux/ima.h>
+ 
+ /*
+  * userns count is 1 for root user, 1 for init_uts_ns,
+@@ -67,6 +68,9 @@ struct user_namespace init_user_ns = {
+ 	.keyring_name_list = LIST_HEAD_INIT(init_user_ns.keyring_name_list),
+ 	.keyring_sem = __RWSEM_INITIALIZER(init_user_ns.keyring_sem),
+ #endif
++#ifdef CONFIG_IMA_NS
++	.ima_ns = &init_ima_ns,
++#endif
+ };
+ EXPORT_SYMBOL_GPL(init_user_ns);
+ 
 -- 
 2.36.1
 
