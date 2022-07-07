@@ -2,116 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DDD56A537
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 16:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E466056A521
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 16:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbiGGOPo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Jul 2022 10:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S235553AbiGGOMk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Jul 2022 10:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbiGGOPn (ORCPT
+        with ESMTP id S235264AbiGGOMk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:15:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D08C2F38E
-        for <linux-integrity@vger.kernel.org>; Thu,  7 Jul 2022 07:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657203342;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Snse6WNAbXQDgwuAFPKIs/eg6AGY2otiMBS6p+tZq8Q=;
-        b=AI4GdB253ugo4pYDVhIzZOK6gHWsxVNxinesDRl6y+cDtf12fw597Hf4ANg2Uftdp3Jl/r
-        D45Gdgeq8VltK1r6SLtax1OGHqyksOufUULsvn4a7iA4DnNiPIEIY2vGaAHTc5+2lWwx24
-        eLnfynmZHQat3qldFEHqLriAZrPMWhg=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-22-IJEMS1NLNMmuJUyLELifhA-1; Thu, 07 Jul 2022 10:15:41 -0400
-X-MC-Unique: IJEMS1NLNMmuJUyLELifhA-1
-Received: by mail-pf1-f200.google.com with SMTP id ay16-20020a056a00301000b00528c0c726f8so2958472pfb.16
-        for <linux-integrity@vger.kernel.org>; Thu, 07 Jul 2022 07:15:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Snse6WNAbXQDgwuAFPKIs/eg6AGY2otiMBS6p+tZq8Q=;
-        b=TAqOerw39G5m40tmvKPJ1n9A7YvqCcBO3jqCa9AimvJqdE9In5ZzL7LvZxrDlS9r45
-         BqUrpyHwr5DMIUoqm/DfMEqsH4r45THJTAqIlSrgzOEKKnj/GYMorfjL6wVerJ/440v+
-         v7q/sGJcOzEdxP1WTWxfJFvfOImzqMQVyD/E+KBV7JyO7m6PC3EKMP5dkolKhjj5ktIu
-         g7RiodyLd3E18j6yzyw0C+fwnyQ9wmryKLE+v7XoQpI5QI8bzu2fbrNqoYBzoTsdDbND
-         5RCT/QcEE/vl6G0o8nID7ovSIIFG+bDVv8F06Lf1g6qxEWISO0fXHqqSg4cvvRjl3GLg
-         ghBw==
-X-Gm-Message-State: AJIora+x29aPKr6Hno8Jfe1LWrznhI3dQeMwNpBuidHi/R9jZyImXhM2
-        FanBCLh4On5T/zfLlvOayZvHZVIOMqyMPoMGmxV1WMoCrs0LzOPDYJZFAZ2mWf2vPJJ0umLSr1Y
-        Q2DUZOXQNnWecwWpZMOE8tO/ttn+p
-X-Received: by 2002:a05:6a00:1d9e:b0:528:a33a:22b9 with SMTP id z30-20020a056a001d9e00b00528a33a22b9mr10537534pfw.7.1657203339902;
-        Thu, 07 Jul 2022 07:15:39 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tuWzdyOy7C3Ub7vTA/s057bMHl2QvOk3c7J797qqSRQnzwd0elRhBJpWmYXea++UlYeQjR1w==
-X-Received: by 2002:a05:6a00:1d9e:b0:528:a33a:22b9 with SMTP id z30-20020a056a001d9e00b00528a33a22b9mr10537501pfw.7.1657203339558;
-        Thu, 07 Jul 2022 07:15:39 -0700 (PDT)
-Received: from localhost ([240e:3a1:31b:3d30:c711:d753:abde:647d])
-        by smtp.gmail.com with ESMTPSA id o197-20020a62cdce000000b005292729cc5csm203757pfg.160.2022.07.07.07.15.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 07:15:38 -0700 (PDT)
-Date:   Thu, 7 Jul 2022 22:10:29 +0800
-From:   Coiby Xu <coxu@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        kexec@lists.infradead.org, linux-integrity@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Chun-Yi Lee <jlee@suse.com>
-Subject: Re: [PATCH v9 0/4] unify the keyrings of arm64 and s390 with x86 to
- verify kexec'ed kernel signature
-Message-ID: <20220707141029.tj6zerqd6dcu2wrr@Rk>
-References: <20220704015201.59744-1-coxu@redhat.com>
- <711440de6340ef6ad73e4db5edd36fc391b8a11d.camel@linux.ibm.com>
- <20220706114806.GB2403@willie-the-truck>
- <45013a3990af13449c2d0deadab419e5d437eae7.camel@linux.ibm.com>
+        Thu, 7 Jul 2022 10:12:40 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D2E2CC9E;
+        Thu,  7 Jul 2022 07:12:36 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267DoK4o033255;
+        Thu, 7 Jul 2022 14:12:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=fcx2vaYpLimBdEBYsnGNhtx56Y7bddCHHHVLh18fXpU=;
+ b=UU7lc1KFOycR//lVyNmVObRB2eMZj9Wp3Mh/yc3HG7HtdcY7IOekOtT5MKh0JxCwejvv
+ M+Iul70whE8rwXIQ6mRnpUUZgvOntIEsJqt9bxnLXx4U4ZAsCHNFNkrB4k6Pp656vfOY
+ rYPR3OnQJY08Hc8ACbGfQh+ox/hzhfcqYLM4vHJ5qEAziDMMa7OQzrrX+2t1Cg4GeG30
+ XiJ3Kq+L6R8NMseAiCA4cg51X4jepXz5cU1WycX+mdHfxGV0cF9Qsj7gUg81h5UftlOD
+ vAiFDPzx8fhJtB0DrsoBMelJGH3qceh8EbjlmmPwZ2FtKF86IrAaUdBh3FWXpMPp7aD6 QA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp0s3a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 14:12:14 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 267Ds61f004934;
+        Thu, 7 Jul 2022 14:12:14 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp0s2m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 14:12:14 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267E5lEU016355;
+        Thu, 7 Jul 2022 14:12:13 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma01dal.us.ibm.com with ESMTP id 3h4ud7pn9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 14:12:12 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267ECBNQ37093642
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 7 Jul 2022 14:12:11 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 73C4EBE05A;
+        Thu,  7 Jul 2022 14:12:11 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C8CFBE058;
+        Thu,  7 Jul 2022 14:12:10 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  7 Jul 2022 14:12:10 +0000 (GMT)
+Message-ID: <ba9a7f72-3a68-d3fe-a55d-ff1e4ac41e6e@linux.ibm.com>
+Date:   Thu, 7 Jul 2022 10:12:09 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <45013a3990af13449c2d0deadab419e5d437eae7.camel@linux.ibm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v12 04/26] ima: Move arch_policy_entry into ima_namespace
+Content-Language: en-US
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com, Christian Brauner <brauner@kernel.org>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-5-stefanb@linux.ibm.com>
+ <20220521024633.GB9107@mail.hallyn.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220521024633.GB9107@mail.hallyn.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vKogRgOJWS65HCVdqDHhSNdTehHRaXjo
+X-Proofpoint-GUID: XTndIoLAhmDMjP4LgIeE0qvSnmrbQMM-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-07_09,2022-06-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ mlxlogscore=999 clxscore=1011 lowpriorityscore=0 suspectscore=0 mlxscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207070055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
 
-On Wed, Jul 06, 2022 at 10:33:50AM -0400, Mimi Zohar wrote:
->On Wed, 2022-07-06 at 12:48 +0100, Will Deacon wrote:
-[..]
->> It looks like this series is ready to go, but it's not clear who should
->> pick it up. Eric -- would you be the best person? Otherwise, I'm happy to
->> take it via the arm64 tree (on its own branch) if that would be helpful.
->
->Unless Eric is interested, I was asked to pick this patch set up.
 
-Thanks! FYI, Andrew has queued up Naveen's patch set "[PATCH 0/2] kexec:
-Drop __weak attributes from functions" though:
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/log/?h=mm-nonmm-unstable
+On 5/20/22 22:46, Serge E. Hallyn wrote:
+> On Wed, Apr 20, 2022 at 10:06:11AM -0400, Stefan Berger wrote:
 
-With Naveen's patch set, "[PATCH v9 1/4] kexec: clean up
-arch_kexec_kernel_verify_sig"" can be dropped. If you need me to send a
-new version, please let me know.
+>> @@ -1005,7 +1003,8 @@ void ima_update_policy(struct ima_namespace *ns)
+>>   		 * on boot.  After loading a custom policy, free the
+>>   		 * architecture specific rules stored as an array.
+>>   		 */
+>> -		kfree(arch_policy_entry);
+>> +		kfree(ns->arch_policy_entry);
+>> +		ns->arch_policy_entry = NULL;
+> 
+> So the thing that prevents multiple racing occurances of the above two lines is
+> that ima_open_policy() sets IMA_FS_BUSY (or returns EBUSY) and then removes
+> this file before clearing the flag, right?
 
->
->thanks,
->
->Mimi
->
+Correct.
 
--- 
-Best regards,
-Coiby
-
+> 
+> Seems good.
+> 
+> Reviewed-by: Serge Hallyn <serge@hallyn.com>
+> 
+> 
+>>   	}
+>>   	ima_update_policy_flags(ns);
+>>   
+>> -- 
+>> 2.34.1
