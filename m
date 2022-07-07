@@ -2,112 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C61569DC3
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 10:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503FC56A1CE
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 14:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbiGGIpP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Jul 2022 04:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S235302AbiGGMRH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Jul 2022 08:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbiGGIpJ (ORCPT
+        with ESMTP id S235374AbiGGMRE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:45:09 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563D813F9F;
-        Thu,  7 Jul 2022 01:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657183508; x=1688719508;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=edbKoKalbvq90CBmxogPesuIiDjl8rwJ49B+zZvetjQ=;
-  b=BfVKisWKCdx8CvBHxqsYg7j9cXv26yoQXE72HrhvrsHZACMcDf+Q4QeE
-   iezKOt76usGXV+kbwaKO7ucB7IaYA4gBUybR0oLB4xyC1Vm4hlMy3Mfqh
-   9orF/TMUfYsnaA4siDN3OfNN2ZHi8li2Tg62mdzzqPrFaDG0JJbV+DRPP
-   iwpbPp2cvvpvUZ62IKMOCHbcsc96XaEccZnOxR3WRawWvB7mbC3jKctJN
-   8CAuCUDBdHrDFmaFdIMnnGGbzhA6JCPGgQiHYVbqMyi9DeZgOTiWpgxom
-   oJhCT3UL+2okh6qNBEUcmQZZmIof0uguLdB3ImckLr4T46d5mInnCBOBg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="345659129"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="345659129"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 01:45:06 -0700
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="651047273"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.6]) ([10.255.31.6])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 01:44:45 -0700
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 088b9c375534d905a4d337c78db3b3bfbb52c4a0
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        virtualization@lists.linux-foundation.org,
-        usbb2k-api-dev@nongnu.org, tipc-discussion@lists.sourceforge.net,
-        target-devel@vger.kernel.org, sound-open-firmware@alsa-project.org,
-        samba-technical@lists.samba.org, rds-devel@oss.oracle.com,
-        patches@opensource.cirrus.com, osmocom-net-gprs@lists.osmocom.org,
-        openipmi-developer@lists.sourceforge.net, nvdimm@lists.linux.dev,
-        ntb@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
-        megaraidlinux.pdl@broadcom.com, linuxppc-dev@lists.ozlabs.org,
-        linux1394-devel@lists.sourceforge.net, linux-x25@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-sctp@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-parport@lists.infradead.org,
-        linux-parisc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-nfc@lists.01.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linaro-mm-sig@lists.linaro.org,
-        legousb-devel@lists.sourceforge.net, kvm@vger.kernel.org,
-        keyrings@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
-        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
-        intel-wired-lan@lists.osuosl.org, greybus-dev@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, dm-devel@redhat.com,
-        devicetree@vger.kernel.org, dev@openvswitch.org,
-        dccp@vger.kernel.org, damon@lists.linux.dev,
-        coreteam@netfilter.org, cgroups@vger.kernel.org,
-        ceph-devel@vger.kernel.org, ath11k@lists.infradead.org,
-        apparmor@lists.ubuntu.com, amd-gfx@lists.freedesktop.org,
-        alsa-devel@alsa-project.org,
-        accessrunner-general@lists.sourceforge.net
-References: <62c683a2.g1VSVt6BrQC6ZzOz%lkp@intel.com>
- <YsaUgfPbOg7WuBuB@kroah.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <c86816fd-aaba-01a9-5def-44868f0a46c9@intel.com>
-Date:   Thu, 7 Jul 2022 16:44:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Thu, 7 Jul 2022 08:17:04 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7D8237CF;
+        Thu,  7 Jul 2022 05:17:03 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id bn33so603636ljb.13;
+        Thu, 07 Jul 2022 05:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qfuJzO7Or1hWutQ+055wT2mkGtRVlLJZKOvJBQUacs4=;
+        b=nhjLdyUgzSBGyn9ZAj9Ub70NCHUDRm68Jc3D8pHg16pEAyy4eIBz8CFJ92r42zwS5U
+         QJ52CTfsvnFoJha09WyzpHei+Ry/IBYgzRaPd8LKbawqC9/7HNj6RlwhJTX/4hXNuxrU
+         rfd4g0b7g5vksVaBDympNxGUSHaHqAOOe9CAogCovSJUVS3shKhWOH5XgnasXrza/ABq
+         rbG8LTAKWsNs07O/K6K9Ly4yZVcMM1ntnpR71nN0rKxtS6qYTfJxak3yo8/oa3C5+vgA
+         8YA9yU4OQHAVr7iSC5uNFke6y12oFkObkS/KpknxC+of6uHN4U5pgUuZwQAd8bYOo5vL
+         VOlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qfuJzO7Or1hWutQ+055wT2mkGtRVlLJZKOvJBQUacs4=;
+        b=k/LYaWKFOrCcInpi+XbpkND47J0vykzuniQJ0xEaxg1/oC/Ba9otzOdAwF+VaEWW6y
+         iutk1q3Nwa8yxebg9j0cOr7PArab13Pn2521thaw9CPgbj7f+8wro3K+pQqZL/Vyk5Pr
+         N6hlvHzPR1GV1h8XpVWHb8Nmaq10xlxwXMVxqh78Qr1XiRu7LIDKAbub1q7i2zYZseVL
+         fvpTo/eLtcKaR4q2NXoCeQWdvnJZSiY8bchdj3P++qiO2VWtFadSEFg8eFB7FznPGQ4j
+         pikXqDhZuxPFiyP68GnBYtkCn2UY8hfqsBJP1+8w0ldo9UtlxqOfz3qH92yKev5R86Fc
+         Arog==
+X-Gm-Message-State: AJIora91DAwIXo02dbrMpgNBdTheDve+ZVsS9QNXKWlbEWoijrKJ7+Hn
+        mZvcWKt4BzPx6M3pXs+vSEJbBzqeaRvuOLoHQctOU45UUKA=
+X-Google-Smtp-Source: AGRyM1s+RbuwD2N4/3CLcjeaFbbM5o6RlMijDKSoUc4v3+elnXOrfUTLZJKzeYT7+jrC2vqoDXH+dHqmr0CFLZgOaNE=
+X-Received: by 2002:a2e:8608:0:b0:25d:3cb6:c306 with SMTP id
+ a8-20020a2e8608000000b0025d3cb6c306mr6265880lji.389.1657196221230; Thu, 07
+ Jul 2022 05:17:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YsaUgfPbOg7WuBuB@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220706164043.417780-1-jandryuk@gmail.com> <5687473ad4da4c26a85b6d230cfc011a@huawei.com>
+In-Reply-To: <5687473ad4da4c26a85b6d230cfc011a@huawei.com>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Thu, 7 Jul 2022 08:16:49 -0400
+Message-ID: <CAKf6xpu6Pg7fdg4F5Qk4twinCjaOxYQpwq+N=1+WX19nT=xmOg@mail.gmail.com>
+Subject: Re: [PATCH] tpm_tis: Hold locality open during probe
+To:     "chenjun (AM)" <chenjun102@huawei.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,81 +72,66 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, Jul 7, 2022 at 3:48 AM chenjun (AM) <chenjun102@huawei.com> wrote:
+>
+> =E5=9C=A8 2022/7/7 0:41, Jason Andryuk =E5=86=99=E9=81=93:
+> > WEC TPMs (in 1.2 mode) and NTC (in 2.0 mode) have been observer to
+> > frequently, but intermittently, fail probe with:
+> > tpm_tis: probe of 00:09 failed with error -1
+> >
+> > Added debugging output showed that the request_locality in
+> > tpm_tis_core_init succeeds, but then the tpm_chip_start fails when its
+> > call to tpm_request_locality -> request_locality fails.
+> >
+> > The access register in check_locality would show:
+> > 0x80 TPM_ACCESS_VALID
+> > 0x82 TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_USE
+> > 0x80 TPM_ACCESS_VALID
+> > continuing until it times out. TPM_ACCESS_ACTIVE_LOCALITY (0x20) doesn'=
+t
+> > get set which would end the wait.
+> >
+> > My best guess is something racy was going on between release_locality's
+> > write and request_locality's write.  There is no wait in
+> > release_locality to ensure that the locality is released, so the
+> > subsequent request_locality could confuse the TPM?
+> >
+> > tpm_chip_start grabs locality 0, and updates chip->locality.  Call that
+> > before the TPM_INT_ENABLE write, and drop the explicit request/release
+> > calls.  tpm_chip_stop performs the release.  With this, we switch to
+> > using chip->locality instead of priv->locality.  The probe failure is
+> > not seen after this.
+> >
+> > commit 0ef333f5ba7f ("tpm: add request_locality before write
+> > TPM_INT_ENABLE") added a request_locality/release_locality pair around
+> > tpm_tis_write32 TPM_INT_ENABLE, but there is a read of
+> > TPM_INT_ENABLE for the intmask which should also have the locality
+> > grabbed.  tpm_chip_start is moved before that to have the locality open
+> > during the read.
+> >
+> > Fixes: 0ef333f5ba7f ("tpm: add request_locality before write TPM_INT_EN=
+ABLE")
+>
+> 0ef333f5ba7f is probably not the commit that introduced the problem? As
+> you said the problem was in 5.4 and the commit was merged in 5.16.
 
+I was imprecise with my versions.  0ef333f5ba7f was backported to
+stable-5.4.y as 13af3a9b1ba6 in 5.4.174.  I was running 5.4.163 on
+some systems without problem, but the probe failures started after
+jumping to 5.4.200.
 
-On 7/7/2022 4:08 PM, Greg KH wrote:
-> On Thu, Jul 07, 2022 at 02:56:34PM +0800, kernel test robot wrote:
->> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->> branch HEAD: 088b9c375534d905a4d337c78db3b3bfbb52c4a0  Add linux-next specific files for 20220706
->>
->> Error/Warning reports:
->>
->> https://lore.kernel.org/linux-doc/202207070644.x48XOOvs-lkp@intel.com
->>
->> Error/Warning: (recently discovered and may have been fixed)
->>
->> Documentation/arm/google/chromebook-boot-flow.rst: WARNING: document isn't included in any toctree
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1108): undefined reference to `__aeabi_ddiv'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1124): undefined reference to `__aeabi_ui2d'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1164): undefined reference to `__aeabi_dmul'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1170): undefined reference to `__aeabi_dadd'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1180): undefined reference to `__aeabi_dsub'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1190): undefined reference to `__aeabi_d2uiz'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x162c): undefined reference to `__aeabi_d2iz'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x16b0): undefined reference to `__aeabi_i2d'
->> dc_dmub_srv.c:(.text+0x10f8): undefined reference to `__aeabi_ui2d'
->> dc_dmub_srv.c:(.text+0x464): undefined reference to `__floatunsidf'
->> dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x33c): undefined reference to `__floatunsidf'
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous prototype for 'pci_read' [-Wmissing-prototypes]
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: no previous prototype for 'pci_write' [-Wmissing-prototypes]
->> drivers/vfio/vfio_iommu_type1.c:2141:35: warning: cast to smaller integer type 'enum iommu_cap' from 'void *' [-Wvoid-pointer-to-enum-cast]
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x34c): undefined reference to `__floatunsidf'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x378): undefined reference to `__divdf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x38c): undefined reference to `__muldf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x3a0): undefined reference to `__adddf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x3b4): undefined reference to `__subdf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x3d4): undefined reference to `__fixunsdfsi'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x750): undefined reference to `__fixdfsi'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x7c0): undefined reference to `__floatsidf'
->> powerpc-linux-ld: drivers/pci/endpoint/functions/pci-epf-vntb.c:174: undefined reference to `ntb_link_event'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x468): undefined reference to `__divdf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x46c): undefined reference to `__muldf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x470): undefined reference to `__adddf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x474): undefined reference to `__subdf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x478): undefined reference to `__fixunsdfsi'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x47c): undefined reference to `__fixdfsi'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x480): undefined reference to `__floatsidf'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x60c): undefined reference to `__floatunsidf'
->>
->> Unverified Error/Warning (likely false positive, please contact us if interested):
->>
->> arch/x86/events/core.c:2114 init_hw_perf_events() warn: missing error code 'err'
->> drivers/android/binder.c:1481:19-23: ERROR: from is NULL but dereferenced.
->> drivers/android/binder.c:2920:29-33: ERROR: target_thread is NULL but dereferenced.
->> drivers/android/binder.c:353:25-35: ERROR: node -> proc is NULL but dereferenced.
->> drivers/android/binder.c:4888:16-20: ERROR: t is NULL but dereferenced.
->> drivers/base/regmap/regmap.c:1996:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/char/random.c:869:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/firmware/arm_scmi/clock.c:394:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/firmware/arm_scmi/powercap.c:376:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/vega10_powertune.c:1214:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/gpu/drm/amd/display/dc/os_types.h: drm/drm_print.h is included more than once.
->> drivers/gpu/drm/bridge/ite-it66121.c:1398:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/greybus/operation.c:617:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
-> 
-> <snip>
-> 
-> When the compiler crashes, why are you blaming all of these different
-> mailing lists?  Perhaps you need to fix your compiler :)
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Other systems showing the probe failures were 5.15.29 (which has
+0ef333f5ba7f backported as ea1fd8364c9f 5.15.17) and 5.17.y (5.17.5 I
+think) from a Fedora 36 USB drive.
 
-Hi Greg,
+Other machines run fine with 0ef333f5ba7f which is part of why I
+didn't notice it earlier between 5.4.613 and 5.4.200.
 
-Sorry for the inconvience, we'll fix it ASAP.
+At the top I wrote: "frequently, but intermittently, fail probe".  To
+expand on that: Basically on the affected machines, the probe during
+boot fails.  In one instance, I repeatedly ran `echo 00:05 >
+/sys/bus/pnp/drivers/tpm_tis/bind`, and it successfully probed on the
+7th try.  So something racy seems to be going on.
 
-Best Regards,
-Rong Chen
+Regards,
+Jason
