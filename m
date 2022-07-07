@@ -2,58 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3A956A614
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 16:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D6556A5E2
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 16:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236055AbiGGOsq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Jul 2022 10:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S236032AbiGGOsi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Jul 2022 10:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236005AbiGGOsd (ORCPT
+        with ESMTP id S235990AbiGGOsb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:48:33 -0400
+        Thu, 7 Jul 2022 10:48:31 -0400
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A5C13F70;
-        Thu,  7 Jul 2022 07:48:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EB55581;
+        Thu,  7 Jul 2022 07:48:26 -0700 (PDT)
 Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267EMqcY024978;
-        Thu, 7 Jul 2022 14:48:09 GMT
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267EMpDU024927;
+        Thu, 7 Jul 2022 14:48:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=crSOawII6J69kifzQsqZzjDMxGyunMsU+c1elFFCzAA=;
- b=DIuUGy24OPEjDdRs05sQxpoO8aBRP6YKy7ruU1ffFZwffVQGyxRpf649v+SRJSJRGbPO
- 0IbxMmv0Wc2fppettdu3D+kbG09nKPUtGW746PKnpoUxPLxP6C2Cq5OZPL65lDEnsGlN
- D6mdXmirCuHDzorZrP6qzG39nAiZEhXwQGTq6mtk9QWtktp5qsUq9k5uCG1V1fl+af+P
- OLjH5uhGfo02SXgQDtQZIp7JTIah0DKXSremN8L+0r96val7tefGjk1oqkmeH/TIJt5u
- XwP1njev/XCYz7BvLhlAePVg94z+GQ3Yo9mpxAbc8IZn6w6+wP0tlvq86/ukPLMvQ6km MA== 
+ bh=O//a5zlLvQZ6XagKc13b+xL++Fbux04O3vgdHrK3Hdk=;
+ b=gM05ZhVmEzsFS6IEmTZ1WDee4cdd86+vyIc7kA7yX1pz88VKSyzsU6933/JzFl7fqesU
+ lzalWallr1a4tN6oZaMVXEdjRi6Uu0Y1ncx5zXZDQFj/w+XC9VFQx+bXvwquE+CoSl5t
+ wATtC4hMsWSYM9AEA0YuQRp6iccQEmwmHfqBO56JRV/qRhElvHZlGa3Utklzjkrh7EgP
+ DxoW84hhHGcKmvphTVKwg56WLbKLdqLCRkS6oF3N6ndvfkg2HEFjWvRjD3DPBS5Z0g/8
+ VS9xR3DhT703gobBcIaw9p3r6gMj5BQyXtHoHhQGqytfuqmMxt4zy60JMU4UBF4Ccu83 tA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp254x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 14:48:09 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 267EZaV0016383;
-        Thu, 7 Jul 2022 14:48:08 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp253r-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp2540-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 07 Jul 2022 14:48:08 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267EafoZ006992;
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 267EN1Ex026267;
+        Thu, 7 Jul 2022 14:48:07 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h60qp253j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 07 Jul 2022 14:48:07 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267EacLO006769;
         Thu, 7 Jul 2022 14:48:06 GMT
 Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma02dal.us.ibm.com with ESMTP id 3h4ugfevqg-1
+        by ppma03wdc.us.ibm.com with ESMTP id 3h4ucnuyca-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 07 Jul 2022 14:48:06 +0000
 Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267Em5IX33489302
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267Em5w533489304
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 7 Jul 2022 14:48:05 GMT
 Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F6C5112069;
+        by IMSVA (Postfix) with ESMTP id CC0AB112062;
         Thu,  7 Jul 2022 14:48:05 +0000 (GMT)
 Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A5BA112062;
+        by IMSVA (Postfix) with ESMTP id AEC3A112061;
         Thu,  7 Jul 2022 14:48:05 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
@@ -69,25 +69,23 @@ Cc:     zohar@linux.ibm.com, serge@hallyn.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
         jpenumak@redhat.com, Stefan Berger <stefanb@linux.ibm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        Denis Semakin <denis.semakin@huawei.com>
-Subject: [PATCH v13 11/26] ima: Define mac_admin_ns_capable() as a wrapper for ns_capable()
-Date:   Thu,  7 Jul 2022 10:47:45 -0400
-Message-Id: <20220707144800.828288-12-stefanb@linux.ibm.com>
+        Christian Brauner <brauner@kernel.org>
+Subject: [PATCH v13 12/26] ima: Only accept AUDIT rules for non-init_ima_ns namespaces for now
+Date:   Thu,  7 Jul 2022 10:47:46 -0400
+Message-Id: <20220707144800.828288-13-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220707144800.828288-1-stefanb@linux.ibm.com>
 References: <20220707144800.828288-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6VjL1PHiKr3PqOpjzHyYM5jOrD6G0Vz5
-X-Proofpoint-GUID: sMAEKegzmdUp3lD1TLtOP075DbBjsFKs
+X-Proofpoint-ORIG-GUID: VuwqG02sLf5rHJV8jeZml0OLWT2VqrnE
+X-Proofpoint-GUID: klyM1Frv1fDm3BTkgEfdqh9kBddn81rw
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-07_12,2022-06-28_01,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- mlxlogscore=999 clxscore=1011 lowpriorityscore=0 suspectscore=0 mlxscore=0
+ mlxlogscore=999 clxscore=1015 lowpriorityscore=0 suspectscore=0 mlxscore=0
  impostorscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
  definitions=main-2207070057
@@ -100,107 +98,50 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Define mac_admin_ns_capable() as a wrapper for the combined ns_capable()
-checks on CAP_MAC_ADMIN and CAP_SYS_ADMIN in a user namespace. Return
-true on the check if either capability or both are available.
+For non-init_ima_ns namespaces, only accept AUDIT rules for now. Reject
+all rules that require support for measuring, appraisal, and hashing.
 
-Use mac_admin_ns_capable() in place of capable(SYS_ADMIN). This will allow
-an IMA namespace to read the policy with only CAP_MAC_ADMIN, which has
-less privileges than CAP_SYS_ADMIN.
-
-Since CAP_MAC_ADMIN is an additional capability added to an existing gate
-avoid auditing in case it is not set.
-
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Acked-by: Christian Brauner <brauner@kernel.org>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
 ---
-v13:
-  - implemented file_sb_user_ns(const struct file *); const is needed so it
-    can be called with seq_file's 'const struct file *file'
-
-v11:
-  - use ns_capable_noaudit for CAP_MAC_ADMIN to avoid auditing in this case
+v9:
+  - Jump to err_audit when unsupported rules are detected
 ---
- include/linux/capability.h      | 6 ++++++
- include/linux/fs.h              | 5 +++++
- security/integrity/ima/ima.h    | 6 ++++++
- security/integrity/ima/ima_fs.c | 5 ++++-
- 4 files changed, 21 insertions(+), 1 deletion(-)
+ security/integrity/ima/ima_policy.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/include/linux/capability.h b/include/linux/capability.h
-index 65efb74c3585..dc3e1230b365 100644
---- a/include/linux/capability.h
-+++ b/include/linux/capability.h
-@@ -270,6 +270,12 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
- 		ns_capable(ns, CAP_SYS_ADMIN);
- }
- 
-+static inline bool mac_admin_ns_capable(struct user_namespace *ns)
-+{
-+	return ns_capable_noaudit(ns, CAP_MAC_ADMIN) ||
-+		ns_capable(ns, CAP_SYS_ADMIN);
-+}
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index de335dd97309..4a7e1e57655d 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1865,6 +1865,17 @@ static int ima_parse_rule(struct ima_namespace *ns,
+ 			result = -EINVAL;
+ 			break;
+ 		}
 +
- /* audit system wants to get cap info from files as well */
- int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
- 			   const struct dentry *dentry,
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 9ad5e3520fae..a34b664ed3f1 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2595,6 +2595,11 @@ static inline struct user_namespace *file_mnt_user_ns(struct file *file)
- 	return mnt_user_ns(file->f_path.mnt);
- }
++		/* IMA namespace only accepts AUDIT rules */
++		if (ns != &init_ima_ns && result == 0) {
++			switch (entry->action) {
++			case MEASURE:
++			case APPRAISE:
++			case HASH:
++				result = -EINVAL;
++				goto err_audit;
++			}
++		}
+ 	}
+ 	if (!result && !ima_validate_rule(entry))
+ 		result = -EINVAL;
+@@ -1886,6 +1897,7 @@ static int ima_parse_rule(struct ima_namespace *ns,
+ 				     "verity rules should include d-ngv2");
+ 	}
  
-+static inline struct user_namespace *file_sb_user_ns(const struct file *file)
-+{
-+	return i_user_ns(file_inode(file));
-+}
-+
- /**
-  * is_idmapped_mnt - check whether a mount is mapped
-  * @mnt: the mount to check
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 5bf7f080c2be..28a9842c566f 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -491,4 +491,10 @@ static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
- #define	POLICY_FILE_FLAGS	S_IWUSR
- #endif /* CONFIG_IMA_READ_POLICY */
- 
-+static inline
-+struct user_namespace *ima_user_ns_from_file(const struct file *filp)
-+{
-+	return file_sb_user_ns(filp);
-+}
-+
- #endif /* __LINUX_IMA_H */
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 89d3113ceda1..c41aa61b7393 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -377,6 +377,9 @@ static const struct seq_operations ima_policy_seqops = {
-  */
- static int ima_open_policy(struct inode *inode, struct file *filp)
- {
-+#ifdef CONFIG_IMA_READ_POLICY
-+	struct user_namespace *user_ns = ima_user_ns_from_file(filp);
-+#endif
- 	struct ima_namespace *ns = &init_ima_ns;
- 
- 	if (!(filp->f_flags & O_WRONLY)) {
-@@ -385,7 +388,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
- #else
- 		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
- 			return -EACCES;
--		if (!capable(CAP_SYS_ADMIN))
-+		if (!mac_admin_ns_capable(user_ns))
- 			return -EPERM;
- 		return seq_open(filp, &ima_policy_seqops);
- #endif
++err_audit:
+ 	audit_log_format(ab, "res=%d", !result);
+ 	audit_log_end(ab);
+ 	return result;
 -- 
 2.36.1
 
