@@ -2,58 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3070456A625
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 16:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7749456A5DE
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Jul 2022 16:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236162AbiGGOtn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Jul 2022 10:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S235959AbiGGOsd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Jul 2022 10:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236025AbiGGOsi (ORCPT
+        with ESMTP id S235983AbiGGOs0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:48:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6505C32042;
-        Thu,  7 Jul 2022 07:48:37 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267EMiNQ025948;
-        Thu, 7 Jul 2022 14:48:11 GMT
+        Thu, 7 Jul 2022 10:48:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEABA10CC;
+        Thu,  7 Jul 2022 07:48:25 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267EkpZV007596;
+        Thu, 7 Jul 2022 14:48:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=rnaBHwWsozhrkNPR/NBB2RlHrgwsEHZubX6huSo6mJM=;
- b=hETmk7vDSUYu5w+Bz2a8UTfZL64zFX721TNLo+EWtayrHGBV8vYxvD4GFXmaQRiBaJEB
- Jd0vZwrFl9NqIEVdPS+Rx0vbrUpbLqO5k66yqlSMthGPc9dj1mPdbnI/9NKe/NP76LQC
- 8xemF7oip5XHQ9mImlph4l33iPtaR+c444zTYmrvMiJBc/+3SkIPYbdHikR7PQ+FrRYk
- AbKPZNV53b2577/qNOQT1lsC6UnjkDUQCXklzNGGzZoBV8G2tjXEeZQkKqhkOb3sCxPg
- N2RXCs1Wj7z7hoy1wVU5jVtYPEkbLfUez02mB+Omxy6cyl49+gGeDVwXoPnCMK7NAqSX dw== 
+ bh=6MkXC7AxIl6dyiN1hKRN001xHZoWoEfAYX9KK4yLB6Q=;
+ b=Ve/zzeziUwxKhjazoJ7sDsQNvW2rDD3FFhkgRGeqUnJ6Gz0TSr0mRZs5gcuKSVHR6alH
+ N8DzghZpsgYOMNNFMfR3EtF8DmGKyYDo+gwnk6J1S8UqATF8badE+E1oI4+m8sg+jDib
+ NzR+Vjhf1AQuUY7PP7QXjBJ5GHX5m2lz9NB7+VnGVyGPhP4Up5jDKyXlA0PB8gcIHBsy
+ O+JC0H7p6N/2SJfxEeORsgufIwn/H9Bh/QIETA+LaXm/9ymmotLr/2JgIoqr7phnpOlw
+ KItIqXWdnIuAv+/S47XKPOntp1DMHoRbU6sJEwWXnQWL8RvUA6XydCTtdA4pAvYSthq3 qw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h612ps928-1
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h61j5r1se-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 07 Jul 2022 14:48:10 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 267EOFmJ000708;
-        Thu, 7 Jul 2022 14:48:10 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h612ps91b-1
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 267El0vY008044;
+        Thu, 7 Jul 2022 14:48:09 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h61j5r1rj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jul 2022 14:48:10 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267EaI0c018418;
+        Thu, 07 Jul 2022 14:48:09 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 267EZmCL021786;
         Thu, 7 Jul 2022 14:48:08 GMT
 Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma03dal.us.ibm.com with ESMTP id 3h4v5vemdx-1
+        by ppma01dal.us.ibm.com with ESMTP id 3h4ud7pvtj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 07 Jul 2022 14:48:08 +0000
 Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267Em7gg24445304
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 267Em7D624903964
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 7 Jul 2022 14:48:07 GMT
 Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E3B8112069;
+        by IMSVA (Postfix) with ESMTP id 93599112061;
         Thu,  7 Jul 2022 14:48:07 +0000 (GMT)
 Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5C67E112061;
+        by IMSVA (Postfix) with ESMTP id 77F5411206D;
         Thu,  7 Jul 2022 14:48:07 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
@@ -69,25 +69,25 @@ Cc:     zohar@linux.ibm.com, serge@hallyn.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
         jpenumak@redhat.com, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v13 23/26] ima: Show owning user namespace's uid and gid when displaying policy
-Date:   Thu,  7 Jul 2022 10:47:57 -0400
-Message-Id: <20220707144800.828288-24-stefanb@linux.ibm.com>
+Subject: [PATCH v13 24/26] ima: Limit number of policy rules in non-init_ima_ns
+Date:   Thu,  7 Jul 2022 10:47:58 -0400
+Message-Id: <20220707144800.828288-25-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220707144800.828288-1-stefanb@linux.ibm.com>
 References: <20220707144800.828288-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: JFKqdsizujM9z7caJj2O6PdTdXOiszWF
-X-Proofpoint-GUID: g_E1pPN5VsVRjD1FjpcLf7WXxv_U0iVi
+X-Proofpoint-GUID: 0KdKAxTr75UZM5DSYeFKhc8n125Lgtjj
+X-Proofpoint-ORIG-GUID: mpxIn8yl1EEqoIq3ecQ4KLPh522MtPtU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-07_12,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- adultscore=0 impostorscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
- mlxscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207070057
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 clxscore=1015 phishscore=0 mlxlogscore=999
+ impostorscore=0 suspectscore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2206140000 definitions=main-2207070055
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -97,98 +97,100 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Show the uid and gid values relative to the user namespace that opened
-the IMA policy file. The effect of this change is that when one displays
-the policy from the user namespace that originally set the policy,
-the same uid and gid values are shown in the policy as those that were
-used when the policy was set.
+Limit the number of policy rules a user can set in non-init_ima_ns to a
+hardcoded 1024 rules. This allows to restrict the amount of kernel memory
+used for IMA's policy since now any user can create an IMA namespace and
+could try to waste kernel memory.
+
+Ignore added rules if the user attempts to exceed this limit by setting
+too many additional rules.
+
+Switch the accounting for the memory allocated for IMA policy rules to
+GFP_KERNEL_ACCOUNT so that cgroups kernel memory accounting can take
+effect. This switch has no effect on the init_ima_ns.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
 
 ---
-v13:
-  - Rephrased commit message following Serge's suggestion
 
-v9:
-  - use seq_user_ns and from_k{g,u}id_munged()
+v11:
+  - roll back changes to auditing too-many-rules since not auditing from
+    IMA namespaces
 ---
- security/integrity/ima/ima_policy.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ security/integrity/ima/ima_policy.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
 diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index f5997f5a8f5b..181340678844 100644
+index 181340678844..d26765df0dba 100644
 --- a/security/integrity/ima/ima_policy.c
 +++ b/security/integrity/ima/ima_policy.c
-@@ -2080,6 +2080,7 @@ static void ima_policy_show_appraise_algos(struct seq_file *m,
+@@ -312,7 +312,8 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
+ 		return ERR_PTR(-EINVAL);
+ 	}
  
- int ima_policy_show(struct seq_file *m, void *v)
+-	opt_list = kzalloc(struct_size(opt_list, items, count), GFP_KERNEL);
++	opt_list = kzalloc(struct_size(opt_list, items, count),
++			   GFP_KERNEL_ACCOUNT);
+ 	if (!opt_list) {
+ 		kfree(src_copy);
+ 		return ERR_PTR(-ENOMEM);
+@@ -386,7 +387,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_namespace *ns,
+ 	 * Immutable elements are copied over as pointers and data; only
+ 	 * lsm rules can change
+ 	 */
+-	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
++	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL_ACCOUNT);
+ 	if (!nentry)
+ 		return NULL;
+ 
+@@ -842,7 +843,7 @@ static void add_rules(struct ima_namespace *ns,
+ 
+ 		if (policy_rule & IMA_CUSTOM_POLICY) {
+ 			entry = kmemdup(&entries[i], sizeof(*entry),
+-					GFP_KERNEL);
++					GFP_KERNEL_ACCOUNT);
+ 			if (!entry)
+ 				continue;
+ 
+@@ -879,7 +880,7 @@ static int __init ima_init_arch_policy(struct ima_namespace *ns)
+ 
+ 	ns->arch_policy_entry = kcalloc(arch_entries + 1,
+ 					sizeof(*ns->arch_policy_entry),
+-					GFP_KERNEL);
++					GFP_KERNEL_ACCOUNT);
+ 	if (!ns->arch_policy_entry)
+ 		return 0;
+ 
+@@ -991,8 +992,20 @@ void __init ima_init_policy(struct ima_namespace *ns)
+ /* Make sure we have a valid policy, at least containing some rules. */
+ int ima_check_policy(struct ima_namespace *ns)
  {
-+	struct user_namespace *user_ns = seq_user_ns(m);
- 	struct ima_rule_entry *entry = v;
- 	int i;
- 	char tbuf[64] = {0,};
-@@ -2165,7 +2166,8 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	}
++	struct ima_rule_entry *entry;
++	size_t len1 = 0;
++	size_t len2 = 0;
++
+ 	if (list_empty(&ns->ima_temp_rules))
+ 		return -EINVAL;
++	if (ns != &init_ima_ns) {
++		list_for_each_entry(entry, &ns->ima_temp_rules, list)
++			len1++;
++		list_for_each_entry(entry, &ns->ima_policy_rules, list)
++			len2++;
++		if (len1 + len2 > 1024)
++			return -ENOSPC;
++	}
+ 	return 0;
+ }
  
- 	if (entry->flags & IMA_UID) {
--		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->uid));
-+		snprintf(tbuf, sizeof(tbuf),
-+			 "%d", from_kuid_munged(user_ns, entry->uid));
- 		if (entry->uid_op == &uid_gt)
- 			seq_printf(m, pt(Opt_uid_gt), tbuf);
- 		else if (entry->uid_op == &uid_lt)
-@@ -2176,7 +2178,8 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	}
+@@ -1926,7 +1939,7 @@ ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule)
+ 	if (*p == '#' || *p == '\0')
+ 		return len;
  
- 	if (entry->flags & IMA_EUID) {
--		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->uid));
-+		snprintf(tbuf, sizeof(tbuf),
-+			 "%d", from_kuid_munged(user_ns, entry->uid));
- 		if (entry->uid_op == &uid_gt)
- 			seq_printf(m, pt(Opt_euid_gt), tbuf);
- 		else if (entry->uid_op == &uid_lt)
-@@ -2187,7 +2190,8 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	}
- 
- 	if (entry->flags & IMA_GID) {
--		snprintf(tbuf, sizeof(tbuf), "%d", __kgid_val(entry->gid));
-+		snprintf(tbuf, sizeof(tbuf),
-+			 "%d", from_kgid_munged(user_ns, entry->gid));
- 		if (entry->gid_op == &gid_gt)
- 			seq_printf(m, pt(Opt_gid_gt), tbuf);
- 		else if (entry->gid_op == &gid_lt)
-@@ -2198,7 +2202,8 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	}
- 
- 	if (entry->flags & IMA_EGID) {
--		snprintf(tbuf, sizeof(tbuf), "%d", __kgid_val(entry->gid));
-+		snprintf(tbuf, sizeof(tbuf),
-+			 "%d", from_kgid_munged(user_ns, entry->gid));
- 		if (entry->gid_op == &gid_gt)
- 			seq_printf(m, pt(Opt_egid_gt), tbuf);
- 		else if (entry->gid_op == &gid_lt)
-@@ -2209,7 +2214,8 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	}
- 
- 	if (entry->flags & IMA_FOWNER) {
--		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->fowner));
-+		snprintf(tbuf, sizeof(tbuf),
-+			 "%d", from_kuid_munged(user_ns, entry->fowner));
- 		if (entry->fowner_op == &uid_gt)
- 			seq_printf(m, pt(Opt_fowner_gt), tbuf);
- 		else if (entry->fowner_op == &uid_lt)
-@@ -2220,7 +2226,8 @@ int ima_policy_show(struct seq_file *m, void *v)
- 	}
- 
- 	if (entry->flags & IMA_FGROUP) {
--		snprintf(tbuf, sizeof(tbuf), "%d", __kgid_val(entry->fgroup));
-+		snprintf(tbuf, sizeof(tbuf),
-+			 "%d", from_kgid_munged(user_ns, entry->fgroup));
- 		if (entry->fgroup_op == &gid_gt)
- 			seq_printf(m, pt(Opt_fgroup_gt), tbuf);
- 		else if (entry->fgroup_op == &gid_lt)
+-	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
++	entry = kzalloc(sizeof(*entry), GFP_KERNEL_ACCOUNT);
+ 	if (!entry) {
+ 		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL,
+ 				    NULL, op, "-ENOMEM", -ENOMEM, audit_info);
 -- 
 2.36.1
 
