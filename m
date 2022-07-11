@@ -2,108 +2,182 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBB257019F
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Jul 2022 14:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF4C570AD4
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Jul 2022 21:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbiGKMEX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 11 Jul 2022 08:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
+        id S229940AbiGKThu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 11 Jul 2022 15:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbiGKMEV (ORCPT
+        with ESMTP id S229685AbiGKTht (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:04:21 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF66741D33;
-        Mon, 11 Jul 2022 05:04:20 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26BBJPKt014047;
-        Mon, 11 Jul 2022 12:04:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=dy5qnrY8PKyQYQC1yezcdT8KNhS4VxqtVLh8J5ex2n0=;
- b=kldtlybrL5SobUYT5Gx/8XXk5K2c3LFBfbnr25NJqOxoa2Ve+4PeBkpMFOGvYfaifTwR
- xdfVysUDoMrcEasglFMFDRXwyLEHnJuzLJBf388+HcEsUoDCek+GX2Qm2GEXtdqFq/e9
- iE1VOH0aXbuxFl1Vj+xHxHIyblZ0GEkj6Ej3XBgOwuFdLXwC4Xz7XDracfuHZC8zDNCz
- l1T4Ac+pc45iuUmsqZLfCtKFvKMxhlnY/fw4VVcN4rR8nGYHvxmCnhgoqi7fxnre+CKi
- 5vglCmgwIFBoxXTcq89TUDgVJgP62QFUw6s6CQSxSef9RBJciPDhDsWf1EuL6zQ1fNJv mA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h84sagfn4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 12:04:10 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26BAXTw3026877;
-        Mon, 11 Jul 2022 12:04:10 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h84sagfkj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 12:04:09 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26BBq16i027196;
-        Mon, 11 Jul 2022 12:04:07 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3h71a8tpgr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 12:04:07 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26BC45nA17629598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Jul 2022 12:04:05 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 113D9A4060;
-        Mon, 11 Jul 2022 12:04:05 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04CFBA405F;
-        Mon, 11 Jul 2022 12:04:03 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.107.19])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 11 Jul 2022 12:04:02 +0000 (GMT)
-Message-ID: <81ea189fd671947efc61000a745599a4b0573370.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima/evm: Fix potential memory leak in ima_init_crypto()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jianglei Nie <niejianglei2021@163.com>, dmitry.kasatkin@gmail.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 11 Jul 2022 08:04:01 -0400
-In-Reply-To: <20220711072202.2319030-1-niejianglei2021@163.com>
-References: <20220711072202.2319030-1-niejianglei2021@163.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: kM73rs2Rr-dLTyIY3ri_t9sjkc7zXq29
-X-Proofpoint-ORIG-GUID: ESBp5WcxjtrgDeLcV_KlZiXzMkb1K52C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-11_17,2022-07-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- priorityscore=1501 impostorscore=0 spamscore=0 clxscore=1015
- malwarescore=0 suspectscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
- mlxlogscore=797 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207110052
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 11 Jul 2022 15:37:49 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EC04D4E8;
+        Mon, 11 Jul 2022 12:37:48 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id o7so10367205lfq.9;
+        Mon, 11 Jul 2022 12:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A4JHArgc2s+5GOoOO0PJp9b8nXcn+f7ATVJu+wNYsfs=;
+        b=NfanDx12r4uhByK5iiL46uu291qZuQ5alGkeu5IpNfs8e/gi4JYrK8qwf1dRqZsLke
+         YSyess7cxeV4ScILCMLP3WlCOa2HEmGoKfAecI8q0qfEKnG63/KWd8dfcNxltD6DuOwW
+         spFsYDxap2S4f59Kn+3+mBctYh9oG+lqgm6NVzCu5jZ2eEX6kvOPDiAQQMqDKjGZqlrs
+         A9xZV18QAQvF4dqUzoLg4K5GYyi9lJSiHFAULvUfRQeFt0l/93jBvO85N5pNH6wEKh2H
+         ktL40jfzeZjLQANyTChfh6W87/WoFnWvvKtq9m4N+kCUQGsuZrx2cxdj7tGFQZQNijx9
+         dU+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A4JHArgc2s+5GOoOO0PJp9b8nXcn+f7ATVJu+wNYsfs=;
+        b=oEeWcxaF3YxqfQ61F6vD6o+mnlR0zCa/nRlSTtwM2Ib89amyoPhoDNk73S3KP76l52
+         g/LUy8DM6J+EDyQtgH/BzGil+0JNtokq00Mt3ofpe+1NU1o5hBSOCHJNakMyCRK7zqLV
+         /+p02NhQvf7z+xnYwzlQe5RHl7K475O8RoXeGtnC29O1RCrKxTODAm4zm40CYzTXBz9u
+         dRF6ImnJHR89MLjR8D4JQIl8fc0vkvS+QLoUScsJLrQhzuHe39/OtSBCzRRlRasM6af3
+         s0Jj9To+eUD/mMBgRaNIvcUdSCt3s/2kJv69+QXSv+CDgmaKN7JPKf1PW4iG3mnr09Q3
+         EoGg==
+X-Gm-Message-State: AJIora8CpicU5B1lr6AXV9eFQCXnhLDXvQVP2cKy3EyLwaYHlfg9BXhU
+        XmzbRvRPaQ5nb5B4Vwn1IAYJBnlffhE8qNHo3rY+/SIW
+X-Google-Smtp-Source: AGRyM1sMwO67XvFDpUPQu55Ww7kgydNlRu3c4ksRjw2L2Rwm5rYXBIR26iJ5nby2ARhw7odTnRvHGp114MVUeMBQRFw=
+X-Received: by 2002:a05:6512:1312:b0:47f:7bd3:1427 with SMTP id
+ x18-20020a056512131200b0047f7bd31427mr11963717lfu.128.1657568266717; Mon, 11
+ Jul 2022 12:37:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220706164043.417780-1-jandryuk@gmail.com> <YsuRzGBss/lMG2+W@kernel.org>
+In-Reply-To: <YsuRzGBss/lMG2+W@kernel.org>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Mon, 11 Jul 2022 15:37:34 -0400
+Message-ID: <CAKf6xpvY0Tj4HGpbshWonnpJLf_08+9pARONt2uHi-m92aqJmQ@mail.gmail.com>
+Subject: Re: [PATCH] tpm_tis: Hold locality open during probe
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Chen Jun <chenjun102@huawei.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-07-11 at 15:22 +0800, Jianglei Nie wrote:
-> This patch adds the missing kfree() for ima_algo_array allocated by
-> kcalloc() to avoid potential memory leak.
+On Sun, Jul 10, 2022 at 10:58 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, Jul 06, 2022 at 12:40:43PM -0400, Jason Andryuk wrote:
+> > WEC TPMs (in 1.2 mode) and NTC (in 2.0 mode) have been observer to
+> > frequently, but intermittently, fail probe with:
+> > tpm_tis: probe of 00:09 failed with error -1
+> >
+> > Added debugging output showed that the request_locality in
+> > tpm_tis_core_init succeeds, but then the tpm_chip_start fails when its
+> > call to tpm_request_locality -> request_locality fails.
+> >
+> > The access register in check_locality would show:
+> > 0x80 TPM_ACCESS_VALID
+> > 0x82 TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_USE
+> > 0x80 TPM_ACCESS_VALID
+> > continuing until it times out. TPM_ACCESS_ACTIVE_LOCALITY (0x20) doesn't
+> > get set which would end the wait.
+> >
+> > My best guess is something racy was going on between release_locality's
+> > write and request_locality's write.  There is no wait in
+> > release_locality to ensure that the locality is released, so the
+> > subsequent request_locality could confuse the TPM?
+> >
+> > tpm_chip_start grabs locality 0, and updates chip->locality.  Call that
+> > before the TPM_INT_ENABLE write, and drop the explicit request/release
+> > calls.  tpm_chip_stop performs the release.  With this, we switch to
+> > using chip->locality instead of priv->locality.  The probe failure is
+> > not seen after this.
+> >
+> > commit 0ef333f5ba7f ("tpm: add request_locality before write
+> > TPM_INT_ENABLE") added a request_locality/release_locality pair around
+> > tpm_tis_write32 TPM_INT_ENABLE, but there is a read of
+> > TPM_INT_ENABLE for the intmask which should also have the locality
+> > grabbed.  tpm_chip_start is moved before that to have the locality open
+> > during the read.
+> >
+> > Fixes: 0ef333f5ba7f ("tpm: add request_locality before write TPM_INT_ENABLE")
+> > CC: stable@vger.kernel.org
+> > Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+> > ---
+> > The probe failure was seen on 5.4, 5.15 and 5.17.
+> >
+> > commit e42acf104d6e ("tpm_tis: Clean up locality release") removed the
+> > release wait.  I haven't tried, but re-introducing that would probably
+> > fix this issue.  It's hard to know apriori when a synchronous wait is
+> > needed, and they don't seem to be needed typically.  Re-introducing the
+> > wait would re-introduce a wait in all cases.
+> >
+> > Surrounding the read of TPM_INT_ENABLE with grabbing the locality may
+> > not be necessary?  It looks like the code only grabs a locality for
+> > writing, but that asymmetry is surprising to me.
+> >
+> > tpm_chip and tpm_tis_data track the locality separately.  Should the
+> > tpm_tis_data one be removed so they don't get out of sync?
+> > ---
+> >  drivers/char/tpm/tpm_tis_core.c | 20 ++++++++------------
+> >  1 file changed, 8 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> > index dc56b976d816..529c241800c0 100644
+> > --- a/drivers/char/tpm/tpm_tis_core.c
+> > +++ b/drivers/char/tpm/tpm_tis_core.c
+> > @@ -986,8 +986,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+> >               goto out_err;
+> >       }
+> >
+> > +     /* Grabs locality 0. */
+> > +     rc = tpm_chip_start(chip);
+> > +     if (rc)
+> > +             goto out_err;
+> > +
+> >       /* Take control of the TPM's interrupt hardware and shut it off */
+> > -     rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> > +     rc = tpm_tis_read32(priv, TPM_INT_ENABLE(chip->locality), &intmask);
+> >       if (rc < 0)
+> >               goto out_err;
+> >
+> > @@ -995,19 +1000,10 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+> >                  TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+> >       intmask &= ~TPM_GLOBAL_INT_ENABLE;
+> >
+> > -     rc = request_locality(chip, 0);
+> > -     if (rc < 0) {
+> > -             rc = -ENODEV;
+> > -             goto out_err;
+> > -     }
+> > -
+> > -     tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> > -     release_locality(chip, 0);
+> > +     tpm_tis_write32(priv, TPM_INT_ENABLE(chip->locality), intmask);
+> >
+> > -     rc = tpm_chip_start(chip);
+> > -     if (rc)
+> > -             goto out_err;
+> >       rc = tpm2_probe(chip);
+> > +     /* Releases locality 0. */
+> >       tpm_chip_stop(chip);
+> >       if (rc)
+> >               goto out_err;
+> > --
+> > 2.36.1
+> >
+>
+> Can you test against
+>
+> https://lore.kernel.org/linux-integrity/20220629232653.1306735-1-LinoSanfilippo@gmx.de/T/#t
 
-Missing is the reason that ima_algo_array is being freed.
+I applied on top of 5.15.53, and the probe on boot still fails.
+Manually probing works intermittently.
 
-Perhaps something like, 
-"On failure to allocate the SHA1 tfm, IMA fails to initialize and exits
-without freeing the ima_algo_array.   Add the missing kfree() for
-ima_algo_array to avoid the potential memory leak."
-
-thanks,
-
-Mimi
-
+Regards,
+Jason
