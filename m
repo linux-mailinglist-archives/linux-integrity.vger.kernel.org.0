@@ -2,77 +2,185 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFFB56C84B
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Jul 2022 11:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC2656D20F
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Jul 2022 02:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbiGIJUa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 9 Jul 2022 05:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
+        id S229540AbiGKABg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 10 Jul 2022 20:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiGIJU2 (ORCPT
+        with ESMTP id S229502AbiGKABf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 9 Jul 2022 05:20:28 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F95655B4
-        for <linux-integrity@vger.kernel.org>; Sat,  9 Jul 2022 02:20:23 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id va17so1394051ejb.0
-        for <linux-integrity@vger.kernel.org>; Sat, 09 Jul 2022 02:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=TKvyPiNZ+anjmYa10tWJwFVa+LgbgMa6tcU0LfkkBNI=;
-        b=Rw4EfubfZ/faCl4SO4kGUHTsF29gYmjUZN5r9EX2QvJZu1MCNedG9zlXeV2AhFrD+e
-         SXaisYWxi2fUxcpk19A/i7AtZbMpv3lr7KUgXbxpkLIIUEJyCshVIYNhva/EaDsmb0pp
-         34YplPkczi2T6yFHhiVl87ULuueLNlq21qgKhbgzefk/zgF3MSAJ/EB94FuyhPSFpwaS
-         LQjwd8/JA89CMxd1TzBKztR50rgjHQG/1pn1q4sYpKoJjmXYoL3DuCwTrbCj9+TXy7u2
-         AhJgLh9STUmqhDuCm1GQgtrOxx/JMJRJrDLbc1QMj3bXzNJMrA0fbQKeShJ/tnNmoYAB
-         5OTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=TKvyPiNZ+anjmYa10tWJwFVa+LgbgMa6tcU0LfkkBNI=;
-        b=VlC8GeA+AnM8aGLFKIhfjWEeF+hLip+jQPlDV595ADZ3A3RpbMAMrAZgET8qMyN/Y3
-         P1Ui+4fkrTodwa8gA5hI4bB1k5CC2GXR+GB3B0ijk4mn1kS58wwcmwBF3wFTnsoDc7Ot
-         xyixi5ULdz80VkA6p/n/Ksm2kApUO5kSl8Mh7hMV1c4zh6D4Hu01ollj8LNl+bCyYO/2
-         tHtaryr3+mOrnrrlF16TsAX57bLdhxDyxAx29YE16Whlvvx8O9XA/e1nwUQ4gr9Q/KfQ
-         kwZ20+8AxXpqm1vcqDbttm+X3cnbCLzJnFp/sSD/aTarHe3HlL6cZ4/sXVIEvOmc/nc8
-         R5tQ==
-X-Gm-Message-State: AJIora8UHE+uFkihA3BgZ2O1hS1gXxnGc9SKaN2Yb7eqFiQBWgadylPz
-        RLHBMPdMJcpf8ZT/xd4p+bKLvNb/r8FmepsdIak=
-X-Google-Smtp-Source: AGRyM1u+lkUomLC9sj7m2S98v3aFMbUcPQRo+XYLcmPa7mGw7szcEoVya6ud7PjqcZccMjpswFD4wRZfo1uSn8ZwKfk=
-X-Received: by 2002:a17:907:1c8f:b0:6e8:f898:63bb with SMTP id
- nb15-20020a1709071c8f00b006e8f89863bbmr8101819ejc.721.1657358421741; Sat, 09
- Jul 2022 02:20:21 -0700 (PDT)
+        Sun, 10 Jul 2022 20:01:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8376CE07;
+        Sun, 10 Jul 2022 17:01:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA33F60FE6;
+        Mon, 11 Jul 2022 00:01:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C12FC3411E;
+        Mon, 11 Jul 2022 00:01:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657497691;
+        bh=TlKLPcBbz3RbDuAHDfDGZpSXrFAFDL26YjdPaucaCzw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TM0tqX+WVO1YhtmTQj6f3/iwtJ9vXQmF/+f23nkkdRjQm/qtjCTQE5K0/ykfIyDWz
+         m462R4ubh/OY87QYnG0uWBV/1gTLLlqsQtRg2gd+80nU5nyvYYGMc1dFoahy1XtsDv
+         GomSv43YdZTK/luiQlUzKeAYIC14VaQGNT14BMhNDwDSM6dVEIFBxbXhqsZhcDFXJW
+         d+LWMuuPK7ZvTaUwyYREKLvPsN93GRqjaLwJ0q622KKFzCMTVJNHyBLc2ZpH2Sns0J
+         QGe4GQeA3z6pVIBMoavuGt9IG2lvU9YKLXCYa82ESk3AsXkbPyH87XFvs6wYXWU5yK
+         VEw30aJNXttSQ==
+Date:   Mon, 11 Jul 2022 03:01:25 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
+        nasastry@in.ibm.com, mpe@ellerman.id.au,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH v4 3/5] tpm: of: Make of-tree specific function commonly
+ available
+Message-ID: <YstoVXqxE8IguTpT@kernel.org>
+References: <20220701022603.31076-1-stefanb@linux.ibm.com>
+ <20220701022603.31076-4-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-Received: by 2002:a17:907:a40c:0:0:0:0 with HTTP; Sat, 9 Jul 2022 02:20:21
- -0700 (PDT)
-From:   John Jacob <jjacobvsusa@gmail.com>
-Date:   Sat, 9 Jul 2022 12:20:21 +0300
-Message-ID: <CAKZDKkCKN5p+6LNhGP=88n5ZYzzERAMdH-XX-DunqQw+dsw0iQ@mail.gmail.com>
-Subject: Confirm Receipt
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701022603.31076-4-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Dear,
+On Thu, Jun 30, 2022 at 10:26:01PM -0400, Stefan Berger wrote:
+> Simplify tpm_read_log_of() by moving reusable parts of the code into
+> an inline function that makes it commonly available so it can be
+> used also for kexec support. Call the new of_tpm_get_sml_parameters()
+> function from the TPM Open Firmware driver.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> 
+> ---
+> v4:
+>  - converted to inline function
+> ---
+>  drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
+>  include/linux/tpm.h            | 27 +++++++++++++++++++++++++++
+>  2 files changed, 32 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> index a9ce66d09a75..f9462d19632e 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -12,6 +12,7 @@
+>  
+>  #include <linux/slab.h>
+>  #include <linux/of.h>
+> +#include <linux/tpm.h>
+>  #include <linux/tpm_eventlog.h>
+>  
+>  #include "../tpm.h"
+> @@ -20,11 +21,10 @@
+>  int tpm_read_log_of(struct tpm_chip *chip)
+>  {
+>  	struct device_node *np;
+> -	const u32 *sizep;
+> -	const u64 *basep;
+>  	struct tpm_bios_log *log;
+>  	u32 size;
+>  	u64 base;
+> +	int ret;
+>  
+>  	log = &chip->log;
+>  	if (chip->dev.parent && chip->dev.parent->of_node)
+> @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>  	if (of_property_read_bool(np, "powered-while-suspended"))
+>  		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
+>  
+> -	sizep = of_get_property(np, "linux,sml-size", NULL);
+> -	basep = of_get_property(np, "linux,sml-base", NULL);
+> -	if (sizep == NULL && basep == NULL)
+> -		return -ENODEV;
+> -	if (sizep == NULL || basep == NULL)
+> -		return -EIO;
+> -
+> -	/*
+> -	 * For both vtpm/tpm, firmware has log addr and log size in big
+> -	 * endian format. But in case of vtpm, there is a method called
+> -	 * sml-handover which is run during kernel init even before
+> -	 * device tree is setup. This sml-handover function takes care
+> -	 * of endianness and writes to sml-base and sml-size in little
+> -	 * endian format. For this reason, vtpm doesn't need conversion
+> -	 * but physical tpm needs the conversion.
+> -	 */
+> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
+> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+> -		size = be32_to_cpup((__force __be32 *)sizep);
+> -		base = be64_to_cpup((__force __be64 *)basep);
+> -	} else {
+> -		size = *sizep;
+> -		base = *basep;
+> -	}
+> +	ret = of_tpm_get_sml_parameters(np, &base, &size);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	if (size == 0) {
+>  		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index dfeb25a0362d..b3dff255bc58 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -460,4 +460,31 @@ static inline struct tpm_chip *tpm_default_chip(void)
+>  	return NULL;
+>  }
+>  #endif
+> +
+> +#ifdef CONFIG_OF
+> +static inline int of_tpm_get_sml_parameters(struct device_node *np,
+> +					    u64 *base, u32 *size)
+> +{
+> +	const u32 *sizep;
+> +	const u64 *basep;
+> +
+> +	sizep = of_get_property(np, "linux,sml-size", NULL);
+> +	basep = of_get_property(np, "linux,sml-base", NULL);
+> +	if (sizep == NULL && basep == NULL)
+> +		return -ENODEV;
+> +	if (sizep == NULL || basep == NULL)
+> +		return -EIO;
+> +
+> +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
+> +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+> +		*size = be32_to_cpup((__force __be32 *)sizep);
+> +		*base = be64_to_cpup((__force __be64 *)basep);
+> +	} else {
+> +		*size = *sizep;
+> +		*base = *basep;
+> +	}
+> +	return 0;
+> +}
+> +#endif
+> +
+>  #endif
+> -- 
+> 2.35.1
+> 
 
-I am Daniel Affum a retired civil servant i have a  business to
-discuss with you from the Eastern part of Africa aimed at agreed
-percentage upon your acceptance of my hand in business and friendship.
-Kindly respond to me if you are interested to partner with me for an
-update.Very important.
 
-Yours Sincerely,
-Jacob John.
-For,
-Daniel Affum.
-Reply to: danielaffum005@yahoo.com
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko
