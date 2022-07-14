@@ -2,133 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C10657524F
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jul 2022 17:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05625753F0
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jul 2022 19:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239542AbiGNP6d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Jul 2022 11:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S231649AbiGNRVk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 Jul 2022 13:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239685AbiGNP6b (ORCPT
+        with ESMTP id S231651AbiGNRVj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:58:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EBA47B89;
-        Thu, 14 Jul 2022 08:58:30 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26EFlm7k028943;
-        Thu, 14 Jul 2022 15:58:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=kXmdXReKKdFW2AYraqhD9Yzbo4c8roWakTadJ/BDm6E=;
- b=lCvUHziePSEmCW595qAtJHRxBSL8RXXYnQ43T5il0j2qB9WKCQg3QuJLtu4Xw8wHS0ZH
- QEQvbaLNMafreUnc56056nQoAajQ8VsoG7FvJoLWpxni0k903dpspwOoJ7E1XAo0aruH
- 2Yu7FpM1Nkvq7c2C19e8y8SEZu/H48FvOlenSB+e5FaDPUYdxzVL0OifquiZi+iyxl66
- 7xrgYxOi7Nyh4DUvR8MVAWAR12Q77DOntHtve0Fe3FkDK4E6scpvgeTAJ7zENWdHJ1CR
- YhRBhquwFfRzYH3UxWP927Azm9Z7jjpGWVZVAk5ahtNJDY657lHZlk2OHck8Is4xaRPV sQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hanyegbaf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 15:58:29 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26EFpP9e016203;
-        Thu, 14 Jul 2022 15:58:27 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3h71a8xnn3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jul 2022 15:58:27 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26EFwOps23003606
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 15:58:24 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1CDE42041;
-        Thu, 14 Jul 2022 15:58:24 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BAC3B4203F;
-        Thu, 14 Jul 2022 15:58:23 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.122.174])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 14 Jul 2022 15:58:23 +0000 (GMT)
-Message-ID: <32baeee1b12e620693c10d89dac5a8c1de6d61a2.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: subsystem fixes for v5.19
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Thu, 14 Jul 2022 11:58:22 -0400
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CCHDKBfU3wm6pauBu8fIPHjR2HPp9sYb
-X-Proofpoint-ORIG-GUID: CCHDKBfU3wm6pauBu8fIPHjR2HPp9sYb
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 14 Jul 2022 13:21:39 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED3552457;
+        Thu, 14 Jul 2022 10:21:38 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id n7so1953431ioo.7;
+        Thu, 14 Jul 2022 10:21:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TwlP1i3DseYJRbHuqOfV0GFqZdryH2G33X6Mm9Jm2CM=;
+        b=YpzSu3HTJc2LdbWx25T3piHljMqbRRYDIIpn4+UR5HEJaVeadGUn1t0wheKcm4tNG0
+         yYVf9Y9NjCPNPNuRE2FVlzwy/1E+0bJVI7pKQZh/b2oa8YfFa5hde/DFoS5Gygwq4CzT
+         NSgsmbQO6CJFfCYN+L9vMXNxPEKxN4lMUOEsD0eDBfQ+ZK1E+oF32Ong7QFmrsuLOhPR
+         yqQ7LJUCjPcvO4TmYCUl5/MfYhS5E+tEY4MKqnkMDzxMfFk3kqf+TZP/DBOvrb16bZ37
+         pfjAPe81b3GsBthfKg0eZXgx5v23FXyqVj5yLTWflHRRnCBoOOhuj+/jC3JhVy5ADOuv
+         ZT2Q==
+X-Gm-Message-State: AJIora9yVOusF35tIHCRiU7J0Yaj/rww11arxt9Xmv/ZYOE8S8ihwyKb
+        Pm+xOUz4FIIcgH5Uvmyurw==
+X-Google-Smtp-Source: AGRyM1vO9dGrA7Y7SKsg+5554fBaotiNHywW1yLUMUZ53GyvbeVEnUtAvGac2Q1pjgYrrT0HbEWTiw==
+X-Received: by 2002:a05:6602:1682:b0:65d:f539:e30 with SMTP id s2-20020a056602168200b0065df5390e30mr4768576iow.81.1657819297971;
+        Thu, 14 Jul 2022 10:21:37 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id p32-20020a056638192000b00339da678a7csm970726jal.78.2022.07.14.10.21.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 10:21:37 -0700 (PDT)
+Received: (nullmailer pid 2584872 invoked by uid 1000);
+        Thu, 14 Jul 2022 17:21:36 -0000
+Date:   Thu, 14 Jul 2022 11:21:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
+        nasastry@in.ibm.com, mpe@ellerman.id.au,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [PATCH v6 5/6] of: kexec: Refactor IMA buffer related functions
+ to make them reusable
+Message-ID: <20220714172136.GA2575969-robh@kernel.org>
+References: <20220707172026.831614-1-stefanb@linux.ibm.com>
+ <20220707172026.831614-6-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-14_12,2022-07-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- impostorscore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
- mlxlogscore=999 clxscore=1011 phishscore=0 mlxscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207140067
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707172026.831614-6-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
+On Thu, Jul 07, 2022 at 01:20:25PM -0400, Stefan Berger wrote:
+> Refactor IMA buffer related functions to make them reusable for carrying
+> TPM logs across kexec.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> 
+> ---
+> v6:
+>  - Add __init to get_kexec_buffer as suggested by Jonathan
+> 
+> v5:
+>  - Rebased on Jonathan McDowell's commit "b69a2afd5afc x86/kexec: Carry
+>    forward IMA measurement log on kexec"
+> v4:
+>  - Move debug output into setup_buffer()
+> ---
+>  drivers/of/kexec.c | 126 ++++++++++++++++++++++++++-------------------
+>  1 file changed, 74 insertions(+), 52 deletions(-)
 
-Here are a number of fixes for recently found bugs.  Only "ima: fix
-violation measurement list record" was introduced in the current
-release.  The rest address existing bugs.
-
-thanks,
-
-Mimi
-
-The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
-
-  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.19-fix
-
-for you to fetch changes up to 067d2521874135267e681c19d42761c601d503d6:
-
-  ima: Fix potential memory leak in ima_init_crypto() (2022-07-13 10:13:58 -0400)
-
-----------------------------------------------------------------
-integrity-v5.19-fix
-
-----------------------------------------------------------------
-Coiby Xu (1):
-      ima: force signature verification when CONFIG_KEXEC_SIG is configured
-
-Huaxin Lu (1):
-      ima: Fix a potential integer overflow in ima_appraise_measurement
-
-Jianglei Nie (1):
-      ima: Fix potential memory leak in ima_init_crypto()
-
-Mimi Zohar (1):
-      ima: fix violation measurement list record
-
-Xiu Jianfeng (1):
-      Revert "evm: Fix memleak in init_desc"
-
- include/linux/kexec.h                     |  6 ++++++
- kernel/kexec_file.c                       | 11 ++++++++++-
- security/integrity/evm/evm_crypto.c       |  7 ++-----
- security/integrity/ima/ima_appraise.c     |  3 ++-
- security/integrity/ima/ima_crypto.c       |  1 +
- security/integrity/ima/ima_efi.c          |  2 ++
- security/integrity/ima/ima_template_lib.c |  6 +++---
- 7 files changed, 26 insertions(+), 10 deletions(-)
-
+Reviewed-by: Rob Herring <robh@kernel.org>
