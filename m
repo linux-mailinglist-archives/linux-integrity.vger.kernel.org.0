@@ -2,75 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4368A575678
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jul 2022 22:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57A6575C61
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jul 2022 09:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240881AbiGNUmi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Jul 2022 16:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S229456AbiGOHbh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Jul 2022 03:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiGNUmh (ORCPT
+        with ESMTP id S231878AbiGOHbd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Jul 2022 16:42:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3CF4B0E1;
-        Thu, 14 Jul 2022 13:42:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 15 Jul 2022 03:31:33 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFAC7B379
+        for <linux-integrity@vger.kernel.org>; Fri, 15 Jul 2022 00:31:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80C26B8258C;
-        Thu, 14 Jul 2022 20:42:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 17276C341C6;
-        Thu, 14 Jul 2022 20:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657831354;
-        bh=l1FoGDoakqveIxnnDB6yJP8BYI677lqpBbxBVYBa+zY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=MzeezQq3Rs+VZhlG7tEZM9xPmEfTSpUjdJxPnDrHHkRyj/oOFwuE6Widg6J3TsvDM
-         0U/CIRrsOE8md3VM1/augurL8ykEAs+88Gggkm26TJe3MCoJfKFkavlaBspk8hFDWo
-         BlEaxO/DrGtQk6p4EJOtqdt2n/n7PmJe+n8TPIGbLOjrF9CMQCEE51E/tJajx3zfZC
-         UEflcS6nP7U+0dv+Bap1SzH14XjybJZr1gEleMPbXcT6VC+unYOlR6jduCqCQQc+5n
-         EnYGCNwBZuZ4PEOw7cFnwkDGI73YPmC54btI6P8ihupWGvz1bxgUmxCxw03Py+Kq2I
-         avJE+l3esqV8Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0225DE45224;
-        Thu, 14 Jul 2022 20:42:34 +0000 (UTC)
-Subject: Re: [GIT PULL] integrity: subsystem fixes for v5.19
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <32baeee1b12e620693c10d89dac5a8c1de6d61a2.camel@linux.ibm.com>
-References: <32baeee1b12e620693c10d89dac5a8c1de6d61a2.camel@linux.ibm.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <32baeee1b12e620693c10d89dac5a8c1de6d61a2.camel@linux.ibm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.19-fix
-X-PR-Tracked-Commit-Id: 067d2521874135267e681c19d42761c601d503d6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4adfa865bb972d38d35a6fb19e59a86074d25a75
-Message-Id: <165783135400.13350.16981956716917437886.pr-tracker-bot@kernel.org>
-Date:   Thu, 14 Jul 2022 20:42:34 +0000
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 51D0133FBC;
+        Fri, 15 Jul 2022 07:31:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1657870289; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=0Dwd4U5tz5PKLz0GsQkLydyf9BBZ02EbITM2RDzdWQU=;
+        b=STmtz1biK7fW6DD3q2/tJvOPgGaio/Fc+MrPOX09tsHPRFIOp9I1g+l9rb3wMfamaX2IqY
+        mkuu93TABqKzW9XFPXFWbJnJcFtsM+3hGMqE3pKKAj7l4NlBChp6eWIkRrBf4V8UkvR18R
+        r8pSasN8GLGkHdaUFCnOLOpWZRKMGt4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1657870289;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=0Dwd4U5tz5PKLz0GsQkLydyf9BBZ02EbITM2RDzdWQU=;
+        b=Z16N/Oe1tkXiSy2LOOVZr8LkxU43/d7GdCphCyXruIAjS6dOlHSUqbOtB4Ir53pI+3fry5
+        dUY2dwo59JERtbDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 10F6113754;
+        Fri, 15 Jul 2022 07:31:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DCmaAtEX0WLUDAAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Fri, 15 Jul 2022 07:31:29 +0000
+From:   Petr Vorel <pvorel@suse.cz>
+To:     linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 1/1] ci/alpine.sh: Install bash
+Date:   Fri, 15 Jul 2022 09:31:21 +0200
+Message-Id: <20220715073121.8979-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.37.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Thu, 14 Jul 2022 11:58:22 -0400:
+bash is a dependency for tests, not being installed by default on
+containers.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.19-fix
+This fixes:
+../test-driver: line 112: ./ima_hash.test: not found
+../test-driver: line 112: ./sign_verify.test: not found
+../test-driver: line 112: ./boot_aggregate.test: not found
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4adfa865bb972d38d35a6fb19e59a86074d25a75
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+ ci/alpine.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thank you!
-
+diff --git a/ci/alpine.sh b/ci/alpine.sh
+index 63d7954..0e4ba0d 100755
+--- a/ci/alpine.sh
++++ b/ci/alpine.sh
+@@ -26,6 +26,7 @@ apk add \
+ 	attr-dev \
+ 	autoconf \
+ 	automake \
++	bash \
+ 	diffutils \
+ 	docbook-xml \
+ 	docbook-xsl \
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.37.0
+
