@@ -2,99 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014E8576504
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jul 2022 18:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4287B576FA6
+	for <lists+linux-integrity@lfdr.de>; Sat, 16 Jul 2022 17:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbiGOQCq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Jul 2022 12:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
+        id S229589AbiGPPPu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 16 Jul 2022 11:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233382AbiGOQCG (ORCPT
+        with ESMTP id S229499AbiGPPPu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Jul 2022 12:02:06 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2526747BE;
-        Fri, 15 Jul 2022 09:02:03 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FFL0YF010551;
-        Fri, 15 Jul 2022 16:01:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Nc7U3jMNz3s5relVkPSuzWGxkTEQWd++fvh2MPtZbDU=;
- b=KQoMl8eYhN6d6yRs668JUFyi3p0AiiMq0OLhbenyevAzQ1dRl1Pn2sUWq1EOyxg3GTY+
- 4vkUAPlwg9vHxfY+YnChBcVItus4fUCjgMg4LnFV7wjc1f6WCKJZnOvT7XdhNwWo0624
- h6gPlUfhBhSdNzhOf3cIr4OIZHp8q4FBKMmtXQw9Oo9z0reD03HKMe1ex9mItzEqRWFR
- OfSSo5lIsKPVhkBXSvBHTfOGeG22u/a4lYMx+dzNPeSDwouOzNjbO2kWZg7icVWTTiAy
- J7rS8n3jKT6NmPVv1HrTgiEyN6SFl2XJI8igH1EN+G25O6BdpC5xtFRm9n0OR19rcZKO 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hbat68vfn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 16:01:40 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26FFkLSm026424;
-        Fri, 15 Jul 2022 16:01:40 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hbat68vf5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 16:01:39 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26FFp5vB021358;
-        Fri, 15 Jul 2022 16:01:39 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02dal.us.ibm.com with ESMTP id 3h9am58svk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 16:01:39 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26FG1bhc35914158
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 Jul 2022 16:01:37 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B64D1136053;
-        Fri, 15 Jul 2022 16:01:37 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0F72413604F;
-        Fri, 15 Jul 2022 16:01:36 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 15 Jul 2022 16:01:36 +0000 (GMT)
-Message-ID: <3a9196b3-c510-0c32-8b70-572d9c4fe69d@linux.ibm.com>
-Date:   Fri, 15 Jul 2022 12:01:36 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v5 4/6] tpm: of: Make of-tree specific function commonly
- available
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-References: <20220706152329.665636-1-stefanb@linux.ibm.com>
- <20220706152329.665636-5-stefanb@linux.ibm.com> <YsuTRny45aBxGjm5@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <YsuTRny45aBxGjm5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Ad0o9E6xukVBHUz222-CjzD2D4HlvqOu
-X-Proofpoint-ORIG-GUID: ZqRm3DHERDE5hNRQwUZcbTuvmXWwlZGl
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sat, 16 Jul 2022 11:15:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6A319C2D
+        for <linux-integrity@vger.kernel.org>; Sat, 16 Jul 2022 08:15:49 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oCjW0-0005St-Rz; Sat, 16 Jul 2022 17:15:32 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oCjVy-001L7h-KS; Sat, 16 Jul 2022 17:15:30 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oCjVy-005ZdW-1F; Sat, 16 Jul 2022 17:15:30 +0200
+Date:   Sat, 16 Jul 2022 17:15:27 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>,
+        Alexander Steffen <Alexander.Steffen@infineon.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 0/6] i2c: Make remove callback return void
+Message-ID: <20220716151527.u5vh4lz6ubpqq2tv@pengutronix.de>
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+ <20220704083947.55ioswcze7r36g44@pengutronix.de>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-15_08,2022-07-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- lowpriorityscore=0 mlxscore=0 phishscore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0 spamscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207150068
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tp4j3fkdykbndk3l"
+Content-Disposition: inline
+In-Reply-To: <20220704083947.55ioswcze7r36g44@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -102,141 +61,140 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
+--tp4j3fkdykbndk3l
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 7/10/22 23:04, Jarkko Sakkinen wrote:
-> On Wed, Jul 06, 2022 at 11:23:27AM -0400, Stefan Berger wrote:
->> Simplify tpm_read_log_of() by moving reusable parts of the code into
->> an inline function that makes it commonly available so it can be
->> used also for kexec support. Call the new of_tpm_get_sml_parameters()
->> function from the TPM Open Firmware driver.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->> Cc: Jason Gunthorpe <jgg@ziepe.ca>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Frank Rowand <frowand.list@gmail.com>
->>
->> ---
->> v4:
->>   - converted to inline function
->> ---
->>   drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
->>   include/linux/tpm.h            | 27 +++++++++++++++++++++++++++
->>   2 files changed, 32 insertions(+), 26 deletions(-)
->>
->> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
->> index a9ce66d09a75..f9462d19632e 100644
->> --- a/drivers/char/tpm/eventlog/of.c
->> +++ b/drivers/char/tpm/eventlog/of.c
->> @@ -12,6 +12,7 @@
->>   
->>   #include <linux/slab.h>
->>   #include <linux/of.h>
->> +#include <linux/tpm.h>
->>   #include <linux/tpm_eventlog.h>
->>   
->>   #include "../tpm.h"
->> @@ -20,11 +21,10 @@
->>   int tpm_read_log_of(struct tpm_chip *chip)
->>   {
->>   	struct device_node *np;
->> -	const u32 *sizep;
->> -	const u64 *basep;
->>   	struct tpm_bios_log *log;
->>   	u32 size;
->>   	u64 base;
->> +	int ret;
->>   
->>   	log = &chip->log;
->>   	if (chip->dev.parent && chip->dev.parent->of_node)
->> @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
->>   	if (of_property_read_bool(np, "powered-while-suspended"))
->>   		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
->>   
->> -	sizep = of_get_property(np, "linux,sml-size", NULL);
->> -	basep = of_get_property(np, "linux,sml-base", NULL);
->> -	if (sizep == NULL && basep == NULL)
->> -		return -ENODEV;
->> -	if (sizep == NULL || basep == NULL)
->> -		return -EIO;
->> -
->> -	/*
->> -	 * For both vtpm/tpm, firmware has log addr and log size in big
->> -	 * endian format. But in case of vtpm, there is a method called
->> -	 * sml-handover which is run during kernel init even before
->> -	 * device tree is setup. This sml-handover function takes care
->> -	 * of endianness and writes to sml-base and sml-size in little
->> -	 * endian format. For this reason, vtpm doesn't need conversion
->> -	 * but physical tpm needs the conversion.
->> -	 */
+Hello,
 
+On Mon, Jul 04, 2022 at 10:39:47AM +0200, Uwe Kleine-K=F6nig wrote:
+> On Tue, Jun 28, 2022 at 04:03:06PM +0200, Uwe Kleine-K=F6nig wrote:
+> > as announced in
+> > https://lore.kernel.org/linux-i2c/20220609091018.q52fhowlsdbdkct5@pengu=
+tronix.de
+> > I intend to change the remove prototype for i2c drivers to remove void.
+> >=20
+> > As this touches quite some drivers, the plan is to submit this change
+> > for inclusion after the next merge window and get it quickly into next
+> > that other subsystems have enough time to adapt.
+> >=20
+> > Still to give the opportunity to comment I send the patch set out based
+> > on v5.19-rc4. There are still a few patches in next that are required,
+> > namely:
+> >=20
+> > 	d04d46dd82ad iio:magnetometer:mbc150: Make bmc150_magn_remove() return=
+ void
+> > 	7576bc05b360 iio:light:vcnl4035: Improve error reporting for problems =
+during .remove()
+> > 	ab91da2f2574 iio:light:vcnl4000: Improve error reporting for problems =
+during .remove()
+> > 	5049646718d7 iio:light:us5182d: Improve error reporting for problems d=
+uring .remove()
+> > 	be9f6004be88 iio:light:pa12203001: Improve error reporting for problem=
+s during .remove()
+> > 	730cd2f54eba iio:chemical:ccs811: Improve error reporting for problems=
+ during .remove()
+> > 	a76209246d9f iio:chemical:atlas: Improve error reporting for problems =
+during .remove()
+> > 	8f760ce7affd iio:adc:ti-ads1015: Improve error reporting for problems =
+during .remove()
+> > 	ffa952e95d8c iio:adc:ina2xx: Improve error reporting for problems duri=
+ng .remove()
+> > 	48d1ae774099 iio: health: afe4404: Remove duplicated error reporting i=
+n .remove()
+> > 	8dc0a72795e4 iio:light:tsl2583: Remove duplicated error reporting in .=
+remove()
+> > 	58a6df5580bb iio:light:stk3310: Remove duplicated error reporting in .=
+remove()
+> > 	44ceb791182a iio:light:opt3001: Remove duplicated error reporting in .=
+remove()
+> > 	f0e34d262567 iio:light:jsa1212: Remove duplicated error reporting in .=
+remove()
+> > 	8d3d6baa4990 iio:light:isl29028: Remove duplicated error reporting in =
+=2Eremove()
+> > 	5004e24a466c iio:light:bh1780: Remove duplicated error reporting in .r=
+emove()
+> > 	1db6926d611d iio:accel:stk8ba50: Remove duplicated error reporting in =
+=2Eremove()
+> > 	1aec857d50ce iio:accel:stk8312: Remove duplicated error reporting in .=
+remove()
+> > 	aae59bdf2585 iio:accel:mc3230: Remove duplicated error reporting in .r=
+emove()
+> > 	7df7563b16aa crypto: atmel-ecc - Remove duplicated error reporting in =
+=2Eremove()
+> > 	99ad11e06be8 i2c: dummy: Drop no-op remove function
+> > 	84965cc60e64 ASoC: cs35l45: Make cs35l45_remove() return void
+> > 	fb68cb963bb7 ASoC: da732x: Drop no-op remove function
+> > 	3cce931a5e44 ASoC: lm49453: Drop no-op remove function
+> > 	8a291eebeb63 ASoC: da7219: Drop no-op remove function
+> > 	60391d788a22 ASoC: ak4642: Drop no-op remove function
+> > 	51bd0abd873d extcon: fsa9480: Drop no-op remove function
+> >=20
+> > I hope and assume they will all be included in v5.20-rc1. There are 5
+> > more patches required that didn't made it into next yet (i.e. patches #1
+> > - #5 of this series).
+> >=20
+> > There are also two drivers in next that need adaption:
+> >=20
+> > 	drivers/gpu/drm/bridge/ti-dlpc3433.c
+> > 	drivers/tty/serial/max310x.c
+>=20
+> There is now a third driver in next that is affected:
+> drivers/char/tpm/tpm_tis_i2c.c that was added with commit
+> 88f3b0f519c068ad29c92e965239a7900a2deea3 to next.
+>=20
+> A tree containing patched #1 to #5 merges just fine with next/master.
+> When merging patch 6 into the result the merge resolution looks as
+> follows:
 
-Jarkko,
+Now there is a forth driver in next that needs adaption:
+drivers/media/i2c/ar0521.c adding=20
 
-  can I apply your R-b tag after putting this lost comment back into the 
-inline function?
-    Stefan
+diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
+index c7bdfc69b9be..c6ab531532be 100644
+--- a/drivers/media/i2c/ar0521.c
++++ b/drivers/media/i2c/ar0521.c
+@@ -1018,7 +1018,7 @@ static int ar0521_probe(struct i2c_client *client)
+ 	return ret;
+ }
+=20
+-static int ar0521_remove(struct i2c_client *client)
++static void ar0521_remove(struct i2c_client *client)
+ {
+ 	struct v4l2_subdev *sd =3D i2c_get_clientdata(client);
+ 	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
+@@ -1031,7 +1031,6 @@ static int ar0521_remove(struct i2c_client *client)
+ 		ar0521_power_off(&client->dev);
+ 	pm_runtime_set_suspended(&client->dev);
+ 	mutex_destroy(&sensor->lock);
+-	return 0;
+ }
+=20
+ static const struct dev_pm_ops ar0521_pm_ops =3D {
 
->> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
->> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
->> -		size = be32_to_cpup((__force __be32 *)sizep);
->> -		base = be64_to_cpup((__force __be64 *)basep);
->> -	} else {
->> -		size = *sizep;
->> -		base = *basep;
->> -	}
->> +	ret = of_tpm_get_sml_parameters(np, &base, &size);
->> +	if (ret < 0)
->> +		return ret;
->>   
->>   	if (size == 0) {
->>   		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
->> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
->> index dfeb25a0362d..b3dff255bc58 100644
->> --- a/include/linux/tpm.h
->> +++ b/include/linux/tpm.h
->> @@ -460,4 +460,31 @@ static inline struct tpm_chip *tpm_default_chip(void)
->>   	return NULL;
->>   }
->>   #endif
->> +
->> +#ifdef CONFIG_OF
->> +static inline int of_tpm_get_sml_parameters(struct device_node *np,
->> +					    u64 *base, u32 *size)
->> +{
->> +	const u32 *sizep;
->> +	const u64 *basep;
->> +
->> +	sizep = of_get_property(np, "linux,sml-size", NULL);
->> +	basep = of_get_property(np, "linux,sml-base", NULL);
->> +	if (sizep == NULL && basep == NULL)
->> +		return -ENODEV;
->> +	if (sizep == NULL || basep == NULL)
->> +		return -EIO;
->> +
->> +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
->> +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
->> +		*size = be32_to_cpup((__force __be32 *)sizep);
->> +		*base = be64_to_cpup((__force __be64 *)basep);
->> +	} else {
->> +		*size = *sizep;
->> +		*base = *basep;
->> +	}
->> +	return 0;
->> +}
->> +#endif
->> +
->>   #endif
->> -- 
->> 2.35.1
->>
-> 
-> 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> BR, Jarkko
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
+to the patch needed on top of v5.20-rc1.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--tp4j3fkdykbndk3l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLS1gwACgkQwfwUeK3K
+7Alqwwf6A3SFKx5mK9sV+UR870u7oDNMqMIMLaS2XMjhIA6ck1Ml6B4kKV+C25xg
+nigQn2p0d1ZymPushddxbzuQPaWWrcnxPWlyH4Yu7NKTlqXcoQIMB05NG/sz5+zA
+sdV/C+q/333KnzkgvATvRv0Itq+YKJXxw8ezPameUz5LusPZ7QQbEUeeuelTJKJM
+3AJKi0NeVIQJqkUfI4qkdFKa1T3g1tw2Mt5ZEmmbqVBNHy0pAA9qBcYtsyhpRZQV
+CtQFJ/56/jtreNB4CFqI86lOrzNv7lTB9QFO917Xwm4ad+PlTtmiX7L8HVFwl3sC
+jOj3oJzSRs8ApwYCAGAGcJ6lZE/j6w==
+=04Fi
+-----END PGP SIGNATURE-----
+
+--tp4j3fkdykbndk3l--
