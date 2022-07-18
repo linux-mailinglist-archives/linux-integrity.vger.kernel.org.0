@@ -2,36 +2,42 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF17C5787BF
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 Jul 2022 18:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC41B57893A
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Jul 2022 20:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233519AbiGRQte (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 18 Jul 2022 12:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
+        id S235701AbiGRSIQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 18 Jul 2022 14:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiGRQtd (ORCPT
+        with ESMTP id S235694AbiGRSIQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:49:33 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B8C336;
-        Mon, 18 Jul 2022 09:49:31 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LmnvT21FCz6HJbV;
-        Tue, 19 Jul 2022 00:47:49 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Mon, 18 Jul 2022 18:49:29 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Mon, 18 Jul 2022 18:49:29 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Jim Baxter <jim_baxter@mentor.com>,
+        Mon, 18 Jul 2022 14:08:16 -0400
+Received: from esa2.mentor.iphmx.com (esa2.mentor.iphmx.com [68.232.141.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FB22F004;
+        Mon, 18 Jul 2022 11:08:15 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.92,281,1650960000"; 
+   d="scan'208";a="79917465"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa2.mentor.iphmx.com with ESMTP; 18 Jul 2022 10:08:14 -0800
+IronPort-SDR: zDH7NpIdnCMcwT/D3prrqMMhlGnooyg0d/vhKwsQ0lbC8PuU04Gv9ZCy4BNlxdbHMTipPu7yzI
+ dRMIu+m44ScLzHSFuk1bs8Ke08oCUF1fdtWSLySCjNnRNbNbRqvzPvN10aGLaiF4xz+hncd+0H
+ w6grKi3yhHgBbe41Ac8tf1gLu427xsb4JbCK67KTEudG/ltVQCQNF9/N9qfGccyar1t//X34gq
+ HsStVJsdYbWaWOsQLdbtbvtx5Nc4d6iFxX75zmgTGALxm3lBG+OSR+9nWMcypiPEFqSevnUg3O
+ bnk=
+Message-ID: <737ddf72-05f4-a47e-c901-fec5b1dfa7a6@mentor.com>
+Date:   Mon, 18 Jul 2022 19:08:04 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Content-Language: en-GB
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
         Eugeniu Rosca <erosca@de.adit-jv.com>
 CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Arvind Sankar <nivedita@alum.mit.edu>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
@@ -51,13 +57,6 @@ CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
         "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
         Dirk Behme <dirk.behme@de.bosch.com>,
         Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Index: AQHYe+tsPH1HC/8x8Uq7oovD5MPpKK1G5r2QgAG+ywCAACILEIAHUz4AgDRUxQCAACKFgA==
-Date:   Mon, 18 Jul 2022 16:49:28 +0000
-Message-ID: <f82d4961986547b28b6de066219ad08b@huawei.com>
 References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
  <1561909199.3985.33.camel@linux.ibm.com>
  <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
@@ -70,74 +69,128 @@ References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
  <4bc349a59e4042f7831b1190914851fe@huawei.com>
  <20220615092712.GA4068@lxhi-065>
  <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
-In-Reply-To: <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <f82d4961986547b28b6de066219ad08b@huawei.com>
+From:   Jim Baxter <jim_baxter@mentor.com>
+Organization: Siemens Digital Industries Software
+In-Reply-To: <f82d4961986547b28b6de066219ad08b@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: svr-ies-mbx-12.mgc.mentorg.com (139.181.222.12) To
+ svr-ies-mbx-12.mgc.mentorg.com (139.181.222.12)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBKaW0gQmF4dGVyIFttYWlsdG86amltX2JheHRlckBtZW50b3IuY29tXQ0KPiBTZW50
-OiBNb25kYXksIEp1bHkgMTgsIDIwMjIgNjozNiBQTQ0KPiBPbiAxNS8wNi8yMDIyIDEwOjI3LCBF
-dWdlbml1IFJvc2NhIHdyb3RlOg0KPiA+IEhlbGxvIFJvYmVydG8sDQo+ID4NCj4gPiBPbiBGciwg
-SnVuIDEwLCAyMDIyIGF0IDAzOjM4OjI0ICswMDAwLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+
-PiBJIHdvdWxkIGJlIGhhcHB5IHRvIGFkZHJlc3MgdGhlIHJlbWFpbmluZyBjb25jZXJucywgb3Ig
-dGFrZSBtb3JlDQo+ID4+IHN1Z2dlc3Rpb25zLCBhbmQgdGhlbiBkZXZlbG9wIGEgbmV3IHZlcnNp
-b24gb2YgdGhlIHBhdGNoIHNldC4NCj4gPiBJIGZhY2UgYSBudW1iZXIgb2YgY29uZmxpY3RzIHdo
-ZW4gSSB0cnkgdG8gcmViYXNlIHRoZSBsYXRlc3Qgb3BlbkV1bGVyDQo+ID4gY29tbWl0cyBhZ2Fp
-bnN0IHZhbmlsbGEgbWFzdGVyICh2NS4xOS1yYzIpLiBEbyB5b3UgdGhpbmsgaXQgaXMgcG9zc2li
-bGUNCj4gPiB0byBzdWJtaXQgdGhlIHJlYmFzZWQgdmVyc2lvbiB0byBNTD8NCj4gPg0KPiA+IElu
-IGFkZGl0aW9uLCBJIGNhbiBhbHNvIHNlZSBzb21lIG9wZW4vdW5yZXNvbHZlZCBwb2ludHMgZnJv
-bSBNaW1pIFsqXS4NCj4gPiBEaWQgeW91IGJ5IGNoYW5jZSBmaW5kIHNvbWUgbXV0dWFsIGFncmVl
-bWVudCBvZmZsaW5lIG9yIGRvIHlvdSB0aGluaw0KPiA+IHRoZXkgd291bGQgc3RpbGwgcG90ZW50
-aWFsbHkgbmVlZCBzb21lIGF0dGVudGlvbj8NCj4gPg0KPiA+IE1heWJlIHdlIGNhbiByZXN1bWUg
-dGhlIGRpc2N1c3Npb24gb25jZSB5b3Ugc3VibWl0IHRoZSByZWJhc2VkIHNlcmllcz8NCj4gPg0K
-PiA+IE1hbnkgdGhhbmtzIGFuZCBsb29raW5nIGZvcndhcmQgdG8gaXQuDQo+ID4NCj4gPiBbKl0g
-UG90ZW50aWFsbHkgY29tbWVudHMgd2hpY2ggZGVzZXJ2ZSBhIHJlcGx5L2NsYXJpZmljYXRpb24v
-cmVzb2x1dGlvbg0KPiA+DQo+ID4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8xNTYxOTg1
-NjUyLjQwNDkuMjQuY2FtZWxAbGludXguaWJtLmNvbS8jdA0KPiA+IGh0dHBzOi8vbG9yZS5rZXJu
-ZWwub3JnL2xrbWwvMTU2MTkwODQ1Ni4zOTg1LjIzLmNhbWVsQGxpbnV4LmlibS5jb20vDQo+ID4N
-Cj4gPiBCUiwgRXVnZW5pdS4NCj4gPg0KPiANCj4gDQo+IEhlbGxvLA0KPiANCj4gSSBoYXZlIGJl
-ZW4gdGVzdGluZyB0aGVzZSBwYXRjaGVzIGFuZCBkbyBub3Qgc2VlIHRoZSB4YXR0ciBpbmZvcm1h
-dGlvbiB3aGVuDQo+IHRyeWluZyB0byByZXRyaWV2ZSBpdCB3aXRoaW4gdGhlIGluaXRyYW1mcywg
-ZG8geW91IGhhdmUgYW4gZXhhbXBsZSBvZiBob3cNCj4geW91IHRlc3RlZCB0aGlzIG9yaWdpbmFs
-bHk/DQoNCkhpIEppbSwgYWxsDQoNCmFwb2xvZ2llcywgSSBkaWRuJ3QgZmluZCB5ZXQgdGhlIHRp
-bWUgdG8gbG9vayBhdCB0aGlzLg0KDQpVaG0sIEkgZ3Vlc3MgdGhpcyBjb3VsZCBiZSBzb2x2ZWQg
-d2l0aDoNCg0KaHR0cHM6Ly9naXRodWIuY29tL29wZW5ldWxlci1taXJyb3Iva2VybmVsL2NvbW1p
-dC8xOGE1MDJmN2UzYjFkZTdiOWJhMGM3MDg5NmNlMDhlZTEzZDA1MmRhDQoNCmFuZCBhZGRpbmcg
-aW5pdHJhbXRtcGZzIHRvIHRoZSBrZXJuZWwgY29tbWFuZCBsaW5lLiBZb3UgYXJlDQpwcm9iYWJs
-eSB1c2luZyByYW1mcywgd2hpY2ggZG9lcyBub3QgaGF2ZSB4YXR0ciBzdXBwb3J0Lg0KDQo+IFNv
-IGZhciBJIGhhdmUgc2V0IHRoZSB4YXR0ciBpbiB0aGUgcm9vdGZzIGJlZm9yZSBjcmVhdGluZyB0
-aGUgY3BpbyBmaWxlIGxpa2UgdGhpczoNCj4gJCBzZXRmYXR0ciAtbiB1c2VyLmNvbW1lbnQgLXYg
-InRoaXMgaXMgYSBjb21tZW50IiB0ZXN0LnR4dA0KPiBJZiBJIGFjY2VzcyB0aGUgZGF0YSBoZXJl
-IGl0IHdvcmtzOg0KPiAkIGdldGZhdHRyIHRlc3QudHh0DQo+ICMgZmlsZTogdGVzdC50eHQNCj4g
-dXNlci5jb21tZW50DQo+IA0KPiANCj4gVGhlbiBJIHBhY2thZ2UgaXQgYW5kIHRyeSB0byB2ZXJp
-ZnkgaXQgd2l0aCB0aGlzIGNvbW1hbmQ6DQo+ICRnZXRmYXR0ciAvdGVzdC50eHQNCg0KSSBhc3N1
-bWUgeW91IHRyeSB0byBwYWNrL3VucGFjaywgcmlnaHQ/IElmIEkgcmVtZW1iZXIgY29ycmVjdGx5
-DQpJIG9ubHkgaW1wbGVtZW50ZWQgdGhlIHBhY2sgcGFydC4gVW5wYWNraW5nIGlzIGRvbmUgYnkg
-dGhlIGtlcm5lbA0KKGJ1dCB5b3UgYXJlIHJpZ2h0LCBpdCBzaG91bGQgYmUgZG9uZSBieSB1c2Vy
-IHNwYWNlIHRvbykuDQoNCj4gV2hpY2ggcmV0dXJucyB0byB0aGUgY29tbWFuZCBsaW5lIHdpdGhv
-dXQgdGhlIGRhdGEuDQo+IA0KPiANCj4gDQo+IEkgYmVsaWV2ZSB0aGUgY3BpbyBpcyB3b3JraW5n
-IGJlY2F1c2UgSSBzZWUgdGhlIGZpbGUgL01FVEFEQVRBXCFcIVwhIGluDQo+IHRoZSB0YXJnZXQg
-cm9vdCBmaWxlc3lzdGVtLCB3aGljaCBzaG93cyB0aGUgZm9sbG93aW5nIHdoZW4gdmlld2VkIHdp
-dGggY2F0IC1lOg0KPiAwMDAwMDAyOF5BXkF1c2VyLmNvbW1lbnReQHRoaXMgaXMgYSBjb21tZW50
-DQo+IA0KPiBUaGlzIG1hdGNoZXMgdGhlIGRhdGEgSSBmZWQgaW4gYXQgdGhlIHN0YXJ0LCBzbyBJ
-IGJlbGlldmUgdGhlIGRhdGEgaXMgYmVpbmcNCj4gdHJhbnNmZXJyZWQgY29ycmVjdGx5IGJ1dCBJ
-IGFtIGFjY2Vzc2lvbmluZyBpdCB3aXRoIHRoZSB3cm9uZyB0b29scy4NCg0KWWVzLCB4YXR0cnMg
-YXJlIG1hcnNoYWxsZWQgaW4gdGhlIE1FVEFEQVRBISEhIGZpbGUsIG9uZSBwZXIgcmVndWxhciBm
-aWxlDQp4YXR0cnMgYXJlIGFwcGxpZWQgdG8uIFhhdHRycyBhcmUgYXBwbGllZCB0byB0aGUgcHJl
-dmlvdXMgcmVndWxhciBmaWxlLg0KVGhhdCBmaWxlIG5hbWUgd2FzIHByZWZlcnJlZCB0byBhZGRp
-bmcgYSBzdWZmaXggdG8gdGhlIGZpbGUsIHRvIGF2b2lkDQpyZWFjaGluZyB0aGUgZmlsZW5hbWUg
-c2l6ZSBsaW1pdC4NCg0KUm9iZXJ0bw0K
+
+
+Best regards,
+
+*Jim Baxter*
+
+Siemens Digital Industries Software
+Automotive Business Unit
+DI SW STS ABU
+UK
+Tel.: +44 (161) 926-1656
+mailto:jim.baxter@siemens.com <mailto:jim.baxter@siemens.com>
+sw.siemens.com <https://sw.siemens.com/>
+
+On 18/07/2022 17:49, Roberto Sassu wrote:
+>> From: Jim Baxter [mailto:jim_baxter@mentor.com]
+>> Sent: Monday, July 18, 2022 6:36 PM
+>>
+>>
+>> Hello,
+>>
+>> I have been testing these patches and do not see the xattr information when
+>> trying to retrieve it within the initramfs, do you have an example of how
+>> you tested this originally?
+> 
+> Hi Jim, all
+> 
+> apologies, I didn't find yet the time to look at this.
+
+Hello Roberto,
+
+Thank you for your response, I can wait until you have looked at the patches,
+I asked the question to make sure it was not something wrong in my
+configuration.
+
+> 
+> Uhm, I guess this could be solved with:
+> 
+> https://github.com/openeuler-mirror/kernel/commit/18a502f7e3b1de7b9ba0c70896ce08ee13d052da
+> 
+> and adding initramtmpfs to the kernel command line. You are
+> probably using ramfs, which does not have xattr support.
+> 
+
+
+Thank you, I have tested that patch but the problem remained. Here is my
+command line, I wonder if there is something wrong.
+
+Kernel command line: rw rootfstype=initramtmpfs root=/dev/ram0 initrd=0x500000000 rootwait 
+
+
+I also found that root is always mounted as rootfs in my initramfs system
+which I understood to be tmpfs, is that incorrect?
+
+sh-3.2# mount
+none on / type rootfs (rw)
+
+
+>> So far I have set the xattr in the rootfs before creating the cpio file like this:
+>> $ setfattr -n user.comment -v "this is a comment" test.txt
+>> If I access the data here it works:
+>> $ getfattr test.txt
+>> # file: test.txt
+>> user.comment
+>>
+>>
+>> Then I package it and try to verify it with this command:
+>> $getfattr /test.txt
+> 
+> I assume you try to pack/unpack, right? If I remember correctly
+> I only implemented the pack part. Unpacking is done by the kernel
+> (but you are right, it should be done by user space too).
+> 
+
+
+I modified the file before packing. To pack I use the following commands:
+
+$ ./usr/gen_initramfs.sh -l initramfs.list -e xattr ../rootfs > initramfs.cpio
+$ gzip initramfs.cpio
+$ mkimage -A arm64 -O linux -T ramdisk -d initramfs.cpio.gz uRamdisk
+
+The kernel is loaded using:
+booti ${kernaddr} ${initramaddr} ${dtbaddr}
+
+
+
+
+>> Which returns to the command line without the data.
+>>
+>>
+>>
+>> I believe the cpio is working because I see the file /METADATA\!\!\! in
+>> the target root filesystem, which shows the following when viewed with cat -e:
+>> 00000028^A^Auser.comment^@this is a comment
+>>
+>> This matches the data I fed in at the start, so I believe the data is being
+>> transferred correctly but I am accessioning it with the wrong tools.
+> 
+> Yes, xattrs are marshalled in the METADATA!!! file, one per regular file
+> xattrs are applied to. Xattrs are applied to the previous regular file.
+> That file name was preferred to adding a suffix to the file, to avoid
+> reaching the filename size limit.
+> 
+> Roberto
+
+Best regards,
+Jim
