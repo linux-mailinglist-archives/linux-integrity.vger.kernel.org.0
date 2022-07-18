@@ -2,98 +2,147 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15E35779E2
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 Jul 2022 06:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285A957881E
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Jul 2022 19:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbiGRESv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 18 Jul 2022 00:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S233739AbiGRRHy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 18 Jul 2022 13:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGRESu (ORCPT
+        with ESMTP id S235862AbiGRRHm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 18 Jul 2022 00:18:50 -0400
-Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3ABD12741;
-        Sun, 17 Jul 2022 21:18:45 -0700 (PDT)
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-        by ni.piap.pl (Postfix) with ESMTPSA id 10587C3F2A70;
-        Mon, 18 Jul 2022 06:18:40 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 10587C3F2A70
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
-        t=1658117921; bh=41KGE0z3Ej55Cxp2F/mwCt22CFNs3EZaA+H4OPsmPec=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=PIwkagZwqWvI11IGk5uqr762WglmqntgH+0ewUk77c5XC/KyRhpIsKQ3QujWgr3Vz
-         mC/SXuX6OgjfVbeTgPOR9feQjFa5dBCbEBtGYmCw0bF6+wvVtPHp01VWMFzNwUA0sB
-         s4y6apa4cZ5sxi5EYV6V55UbCJ6NmzOCOLpHG0O4=
-From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Johannes Holland <johannes.holland@infineon.com>,
-        Amir Mizinski <amirmizi6@gmail.com>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-integrity@vger.kernel.org, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 0/6] i2c: Make remove callback return void
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
-        <20220704083947.55ioswcze7r36g44@pengutronix.de>
-        <20220716151527.u5vh4lz6ubpqq2tv@pengutronix.de>
-Sender: khalasa@piap.pl
-Date:   Mon, 18 Jul 2022 06:18:40 +0200
-In-Reply-To: <20220716151527.u5vh4lz6ubpqq2tv@pengutronix.de> ("Uwe
-        =?utf-8?Q?Kleine-K=C3=B6nig=22's?= message of "Sat, 16 Jul 2022 17:15:27
- +0200")
-Message-ID: <m3v8rvdpen.fsf@t19.piap.pl>
+        Mon, 18 Jul 2022 13:07:42 -0400
+X-Greylist: delayed 962 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Jul 2022 10:07:36 PDT
+Received: from esa3.mentor.iphmx.com (esa3.mentor.iphmx.com [68.232.137.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9B12BB1A
+        for <linux-integrity@vger.kernel.org>; Mon, 18 Jul 2022 10:07:36 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.92,281,1650960000"; 
+   d="scan'208";a="79810792"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa3.mentor.iphmx.com with ESMTP; 18 Jul 2022 08:36:16 -0800
+IronPort-SDR: RTjfIgzc+dEN6kC/wiahZ34aDq4N/lz4wt2gOaf3gyvKgbBgy7GQpdrAGz0TSAiEUWi+ya5Unr
+ gmkYsvQK+ohtMCEWFgUOpyY66f9X39W1vVK02qBI1H5onSYK75Pc/1vMoVCUJxGv33IMPq9bQ2
+ oVXSpXODQ6Og1foDv+s8GFj50phjddzVPBJt2HR23rxJmXRZiaFdLlzC1jNdr2lwwmR5DNHLGX
+ AK5/7yyQ++vhwU/PHSyXdo4u6nIwJuPb8F93oY3w+emM9L4h04z8oSkrSns1WQE8vNYUpZYkVK
+ UJM=
+Message-ID: <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
+Date:   Mon, 18 Jul 2022 17:36:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-KLMS-Message-Action: skipped
-X-KLMS-AntiSpam-Status: not scanned, license restriction
-X-KLMS-AntiPhishing: not scanned, license restriction
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, license restriction
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Content-Language: en-GB
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+        "takondra@cisco.com" <takondra@cisco.com>,
+        "kamensky@cisco.com" <kamensky@cisco.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
+ <1561909199.3985.33.camel@linux.ibm.com>
+ <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
+ <1561991485.4067.14.camel@linux.ibm.com>
+ <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
+ <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
+ <20220609102627.GA3922@lxhi-065>
+ <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+ <20220610153336.GA8881@lxhi-065>
+ <4bc349a59e4042f7831b1190914851fe@huawei.com>
+ <20220615092712.GA4068@lxhi-065>
+From:   Jim Baxter <jim_baxter@mentor.com>
+Organization: Siemens Digital Industries Software
+In-Reply-To: <20220615092712.GA4068@lxhi-065>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: svr-ies-mbx-13.mgc.mentorg.com (139.181.222.13) To
+ svr-ies-mbx-12.mgc.mentorg.com (139.181.222.12)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 15/06/2022 10:27, Eugeniu Rosca wrote:
+> Hello Roberto,
+> 
+> On Fr, Jun 10, 2022 at 03:38:24 +0000, Roberto Sassu wrote:
+>> I would be happy to address the remaining concerns, or take more
+>> suggestions, and then develop a new version of the patch set.
+> I face a number of conflicts when I try to rebase the latest openEuler
+> commits against vanilla master (v5.19-rc2). Do you think it is possible
+> to submit the rebased version to ML?
+> 
+> In addition, I can also see some open/unresolved points from Mimi [*].
+> Did you by chance find some mutual agreement offline or do you think
+> they would still potentially need some attention?
+> 
+> Maybe we can resume the discussion once you submit the rebased series?
+> 
+> Many thanks and looking forward to it.
+> 
+> [*] Potentially comments which deserve a reply/clarification/resolution
+> 
+> https://lore.kernel.org/lkml/1561985652.4049.24.camel@linux.ibm.com/#t
+> https://lore.kernel.org/lkml/1561908456.3985.23.camel@linux.ibm.com/
+> 
+> BR, Eugeniu.
+> 
+
+
 Hello,
 
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> writes:
+I have been testing these patches and do not see the xattr information when
+trying to retrieve it within the initramfs, do you have an example of how
+you tested this originally?
 
-> Now there is a forth driver in next that needs adaption:
-> drivers/media/i2c/ar0521.c adding=20
 
-Very well. It's even already
-Acked-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
+So far I have set the xattr in the rootfs before creating the cpio file like this:
+$ setfattr -n user.comment -v "this is a comment" test.txt
+If I access the data here it works:
+$ getfattr test.txt 
+# file: test.txt
+user.comment
 
-> --- a/drivers/media/i2c/ar0521.c
-> +++ b/drivers/media/i2c/ar0521.c
-> @@ -1018,7 +1018,7 @@ static int ar0521_probe(struct i2c_client *client)
->  	return ret;
->  }
->=20=20
-> -static int ar0521_remove(struct i2c_client *client)
-> +static void ar0521_remove(struct i2c_client *client)
->  {
->  	struct v4l2_subdev *sd =3D i2c_get_clientdata(client);
->  	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
-> @@ -1031,7 +1031,6 @@ static int ar0521_remove(struct i2c_client *client)
->  		ar0521_power_off(&client->dev);
->  	pm_runtime_set_suspended(&client->dev);
->  	mutex_destroy(&sensor->lock);
-> -	return 0;
->  }
->=20=20
 
---=20
-Krzysztof "Chris" Ha=C5=82asa
+Then I package it and try to verify it with this command:
+$getfattr /test.txt
 
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa
+Which returns to the command line without the data.
+
+
+
+I believe the cpio is working because I see the file /METADATA\!\!\! in
+the target root filesystem, which shows the following when viewed with cat -e:
+00000028^A^Auser.comment^@this is a comment
+
+This matches the data I fed in at the start, so I believe the data is being
+transferred correctly but I am accessioning it with the wrong tools.
+
+Thank you for any help.
+
+Best regards,
+Jim
