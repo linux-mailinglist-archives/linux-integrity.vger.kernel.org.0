@@ -2,120 +2,195 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067F057B5E8
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Jul 2022 13:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F206157B7A3
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Jul 2022 15:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbiGTLwF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 20 Jul 2022 07:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S231733AbiGTNmN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 20 Jul 2022 09:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGTLwE (ORCPT
+        with ESMTP id S231668AbiGTNmM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:52:04 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B227157268;
-        Wed, 20 Jul 2022 04:52:03 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lnv9H1bNxz6J6Mk;
-        Wed, 20 Jul 2022 19:48:35 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 20 Jul 2022 13:52:01 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Wed, 20 Jul 2022 13:52:01 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Rob Landley <rob@landley.net>, Jim Baxter <jim_baxter@mentor.com>,
-        "Eugeniu Rosca" <erosca@de.adit-jv.com>
-CC:     "hpa@zytor.com" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
+        Wed, 20 Jul 2022 09:42:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AF250044;
+        Wed, 20 Jul 2022 06:42:11 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KDTooT003951;
+        Wed, 20 Jul 2022 13:41:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=ceae2RFmF5KznbMBiZv8OUYGP49kcO0YzT3TQXSYO+w=;
+ b=SXAOlAbJKmWdKEYRPLAuQfFyVkUMdm3VBIO4vNEHzzZjCfTCgNHYpR4EsvCSnhDL4xAT
+ G8mMqkYJEsShTTSDJJMo+gOuYyXJ6vpFSBAiSv3WPw0WXARpbGSMoXDl14iedNxEMP3L
+ 1+Cgp+Ne6bbYbgXPDSU6d3+mEozlt6hdwLj6yhB6UzlGMfQMjNsqLVZCXSaYaBIBFdGK
+ GsMPlwUISnaTRXiO9BVJeBNNpT7AMq0LqZuRdl38nLeDsUHqzgTAuh0nFs/wI4QZOCQI
+ GQbYHJ1VgMs+b+N7g0l+unYTaazv8C3QPFFZidfZ3LreRIQt8kygJigbL97lBl6F8qsj 2Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hejn2ghc3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 13:41:50 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26KDTq7d004207;
+        Wed, 20 Jul 2022 13:41:49 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2104.outbound.protection.outlook.com [104.47.55.104])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hejn2ghbd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 13:41:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bngAT2SIJIaUowCLsXtOzjvU00nsYHtYnzJfNIEkI7mDfoi2pYDIAeNlTPOw1YQpi6CSxUJfOzg7TGZudF/zGt0wD6Enb7ZAfNMu0WhGXD+RyyYdP1L5SVrqlclxHCK3fjmyxh/UNPA4jCuWCiQnKouPK7LXgxSGfpx9H1MBVQNk456MVpfLlD7iQo3JFV98tOI6Nru6TVOiiLZ9H85qaLxwprLcaYADnRFW1bsbNsd41tD1vVEUwuO6y8+td/xAaoNF6DJEz2o/R+Y9DJ0LcoT25UbINld0sqoFpHSxIxT+jAGeifYsTwJx2bbdCn9KM4mE2fyvmna+iieNF3bTgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t6IIZehMPnx+JOAb1VuZZg7T4R2iW1WxUrEYhTFuTjI=;
+ b=hWEn5ZFkKFjcAXIyNTff9ZcRVT6OAY6gVJwBYbAPRMicM/AFbbEKxby6H0UG4Q2Fu2o70IljKWjTxvn5VtUsYapESEjzzHkNqWn9Drq/Tx+TUQqmHbiEeWS5vkp79AA1D7gtCPXmpUCNZqN7lZXmDShhCA0QK3dUHBRLUDy/TtIPjtunx2EDEjHOSY1T0wY2CRRiWIe5g9NhydMgOWT5ssG8r58+hsp1vld/zv8IY6evhFsDH66LoZ2VT6DNInh60CI2yVgpCnqSaHCrhLpUHxQWw3ykLrCN1RLKt9sClirtslcSgsCXXnZQ+5OnR7T8gf3KSbekyB8oo0znM5iuGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in.ibm.com; dmarc=pass action=none header.from=in.ibm.com;
+ dkim=pass header.d=in.ibm.com; arc=none
+Received: from MWHPR15MB1150.namprd15.prod.outlook.com (2603:10b6:320:2f::8)
+ by BYAPR15MB3175.namprd15.prod.outlook.com (2603:10b6:a03:105::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Wed, 20 Jul
+ 2022 13:41:47 +0000
+Received: from MWHPR15MB1150.namprd15.prod.outlook.com
+ ([fe80::1024:8a31:a334:d02f]) by MWHPR15MB1150.namprd15.prod.outlook.com
+ ([fe80::1024:8a31:a334:d02f%5]) with mapi id 15.20.5458.018; Wed, 20 Jul 2022
+ 13:41:47 +0000
+From:   Nageswara R Sastry <nasastry@in.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Index: AQHYe+tsPH1HC/8x8Uq7oovD5MPpKK1G5r2QgAG+ywCAACILEIAHUz4AgDRUxQCAACKFgP//9y0AgAD3swCAADE5AIAAIobAgAAFq4CAAYjhkA==
-Date:   Wed, 20 Jul 2022 11:52:00 +0000
-Message-ID: <0b9971555f6b4a319614570aae8bcdf3@huawei.com>
-References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
-        <1561909199.3985.33.camel@linux.ibm.com>
-        <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
-        <1561991485.4067.14.camel@linux.ibm.com>
-        <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
-        <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
-        <20220609102627.GA3922@lxhi-065>
-        <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
-        <20220610153336.GA8881@lxhi-065>
-        <4bc349a59e4042f7831b1190914851fe@huawei.com>
-        <20220615092712.GA4068@lxhi-065>
-        <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
-        <f82d4961986547b28b6de066219ad08b@huawei.com>
-        <737ddf72-05f4-a47e-c901-fec5b1dfa7a6@mentor.com>
-        <8e6a723874644449be99fcebb0905058@huawei.com>
-        <dc86769f-0ac6-d9f3-c003-54d3793ccfec@landley.net>
-        <5b8b0bcac01b477eaa777ceb8c109f58@huawei.com>
- <3d77db23-51da-be5e-b40d-a92aeb568833@landley.net>
-In-Reply-To: <3d77db23-51da-be5e-b40d-a92aeb568833@landley.net>
-Accept-Language: en-US
-Content-Language: en-US
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+CC:     "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Rob Herring <robh@kernel.org>,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v6 1/6] of: check previous kernel's ima-kexec-buffer
+ against memory bounds
+Thread-Topic: [PATCH v6 1/6] of: check previous kernel's ima-kexec-buffer
+ against memory bounds
+Thread-Index: AQHYkiXjWJEZuDUJsU+IRCFzgEiaGq2HWCz2
+Date:   Wed, 20 Jul 2022 13:41:47 +0000
+Message-ID: <MWHPR15MB11506BA4D2AE5E3F5B4D608CEB8E9@MWHPR15MB1150.namprd15.prod.outlook.com>
+References: <20220707172026.831614-1-stefanb@linux.ibm.com>
+ <20220707172026.831614-2-stefanb@linux.ibm.com>
+In-Reply-To: <20220707172026.831614-2-stefanb@linux.ibm.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 577a60fb-84ae-4274-1e13-08da6a5597a8
+x-ms-traffictypediagnostic: BYAPR15MB3175:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Bg6nhpXXB+W1CU8fTiMG+M8wwwCjxmmeuKMNy1dKO4WV4hCoa+jMK6V+vay7A6BfbHvrK0QWG8MiNcIjaCBTgEuD0RAfs1UjiXkEAVW4+BKpE7ng3nb6OHhFOD4UeR7GVJqVcewPdAhZdT4Mb5ivVJgQ2kmVRSugYbQzwxPFy4AjkyZb6r3yAabQO7pOcITCBLc5a+3araIaHFzpU8+sxDSL2PLF2n1JqV7Vm91kCEbrpd6pyHVonCzMwly0zoD4mFy6Lcb8cHZmPtjN5xkSaAUKGkfpCvqOaVlcgBPme4c3vQggvTZmv/OaScFST+3g4MIn5/FuDnWv8jXoheLNbaqw+58cw35MmumB4boSXuwX2TI9QkBPM0ryAk/r0/CAOblgSEZu2c1c5q0msO1mzSamB6TgBWeV/YIojC1kIq5ddvznJjKzkOTE80VxL3ClaOOvrIAHxn+izAkZq9eehIXWL5CpGURXc0VnW58VvYN1ApqdCgQ+BtKNjh2LWQWpv10kN39h6+DoNpc3kPJp0vCLKe0YJ086vo4eR+Nbjw4CBfEUEPIjcLTrH0rbTxN6exQ5zyCIWgzOVMhjyFBjqebEHMXTVs1shEExOdylA9sJNFVx6AD82A7dFo2gEqw8Je/Z5yYA2pb14a0QDzaRYn4I6zgbBH2jkYsNJYwbq9MNJjdp9Oj1vfDvUZddwUu3TzXKEeutCaEwN5CVwf/7a+grBMVZKRRAsjFAUb0jXwRyOLXYqIjlzaztQIG38GE1UEQwO6QiKDPlEmx9yvC3DryINh15FUo+kFQV/cb406IqObCyo0XKVDqi8Kkx6sq3MU7N1oSfPSp3aJ/j9uSKXg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR15MB1150.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(346002)(376002)(136003)(39860400002)(41300700001)(71200400001)(2906002)(4744005)(86362001)(52536014)(38070700005)(478600001)(7416002)(8936002)(5660300002)(122000001)(38100700002)(966005)(186003)(33656002)(110136005)(91956017)(316002)(54906003)(26005)(53546011)(55236004)(66946007)(6506007)(8676002)(66446008)(64756008)(4326008)(66556008)(66476007)(76116006)(83380400001)(9686003)(55016003)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?BKBfC6HDGP6mstRdWJVNA0Bvz6ml2WIY/craY4Od6k2x1dPg4cyTLi+uXT?=
+ =?iso-8859-1?Q?iK/F7e6t8GsA3chyOP6CRjWuIv5gBkP8moSrby82ODa4bjL5hhAWX39Mv4?=
+ =?iso-8859-1?Q?UBqGltrohR9hwqkWCtU8V7rnWhhR0yFrwkJUVC2jhYIWmNDATea+Q9DcYK?=
+ =?iso-8859-1?Q?jL8PNL1fwWS0T+udfwyxXl2PC1kc/VT32HG3LN1IHFE91S4CN+e6tec954?=
+ =?iso-8859-1?Q?SbF5MawSA65417wPvjYpMiZZyWHATHAR/bsdGkMApowZ3fZWhg8Eg5aKiV?=
+ =?iso-8859-1?Q?Pu2zRi5mwfBwq2cJa0wiSy1iFOeTO8O+HJbcCSnf9F/09vPWuecHpddpZO?=
+ =?iso-8859-1?Q?KUayiOZPqWDvW7jg8HfxRllGIGbQuN8Z0XQ2YQksYJCNNhsQ1iXOhspVYs?=
+ =?iso-8859-1?Q?qtOozvdoqxyPdIe9/Lq7hwmlDu0sb00j4HSGlKv+UAWObcF1CziEvfoZ65?=
+ =?iso-8859-1?Q?QqAhR1gv2G2v4lvT3RHIUyLIEaoBJHnYEN4EddttYoXBrl3vBvzzmHIVsU?=
+ =?iso-8859-1?Q?CefETNnN+NHGFBOp1KCnXnWIn+WlcU+qgQrplKfzx8+7oFy7E0eqoB9lzv?=
+ =?iso-8859-1?Q?C6iK/QZjTbeUfO1UkrctYCU+tQzohpWBerq1N2o7UlOyMipcIiMXGhDqG0?=
+ =?iso-8859-1?Q?FtVbsk1km6wDZooFqTCETSgLfudHYCOH4mvuq67+oEuOz7luJ337y28OBZ?=
+ =?iso-8859-1?Q?PRdxsQS49JeR2D4QTULxiwmB/2cyk2dadc578+GxPK+O/v6fWd2K0bdhmS?=
+ =?iso-8859-1?Q?cWg4GjMwl7gAb5v/OEc6QtDriscenCkvgGf3WYUP+o8F6RwTnSEAFwNG1H?=
+ =?iso-8859-1?Q?/+Cw/v2bQScvdvEsF7gdiEJt56fss14ZhayQnk2GHG6b+a2q89aoPqkvdy?=
+ =?iso-8859-1?Q?J4kVONkwYzzvkDuwEbidjcIFK501PxpEJcw1/gSBlybkz1rtc7Dn8OIB4x?=
+ =?iso-8859-1?Q?O3QUb3rwqt1wMoB8gcQOfPROGNtJzdkGxUTyXDNLPcKCNlwOwnydMCEb++?=
+ =?iso-8859-1?Q?AbKUkB8KtJe//PhiOZGmYGe/+ehYm2o3tx4nxILG8iGuIRFloocEYYUlDW?=
+ =?iso-8859-1?Q?GktcISjizdKoS5kpqP+MpftIBSowqQxfPsUOaH1ZAk8XdC7fS5w7JRbmpH?=
+ =?iso-8859-1?Q?so8q2v+uI1a6covtMptujki9hRZlLQJraLYLQ4zRV1xN7lUEcB/letUuHz?=
+ =?iso-8859-1?Q?iHCI/SE8NvruMTvJ6VxehTatDAuYDU5Q3lQRK0VA6HD30HsyDpZKFukBJg?=
+ =?iso-8859-1?Q?YL0FnLBAIH3imB1ZyW6Omi9xkKUCxbJ4lUSjTwghjuAjGiGmkxyfH/30cv?=
+ =?iso-8859-1?Q?N5Ka7tKD1pCKgwqcx3pCHz1Zaoue1LnpKgAfdeLD1QOHZfn3AsJNhL+gjB?=
+ =?iso-8859-1?Q?f0LoMesFV2NED2w+6Ukh8l4bweIscjD+I8IPdhH1Ze6YAm3ehCCIo6iUNu?=
+ =?iso-8859-1?Q?SNmDg+2AAXv3Wurm9qs3yH/EF932EXVkKUUA1VD5pDDu8fzFDmcoLJaWuP?=
+ =?iso-8859-1?Q?lgcjCkjLoB7PQK4ezNTRUicG7QG6xoGa3R3pJftJZI536FV1LLuJwTRXTy?=
+ =?iso-8859-1?Q?BxnQfWlJpNMTEodGxS0/A7IhXWbHDvkL8sfyZlBdmS5c4e2OKzcZmIIyI2?=
+ =?iso-8859-1?Q?JcPaOJy2AHLNTMTJOXnS3ELGDdBQPxXSlr?=
+Content-Type: text/plain; charset="iso-8859-1"
+X-OriginatorOrg: in.ibm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR15MB1150.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 577a60fb-84ae-4274-1e13-08da6a5597a8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 13:41:47.5332
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: fcf67057-50c9-4ad4-98f3-ffca64add9e9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dUf+FJ0km9khTXK6BmuVe1GijAC1ACQjQw6bZxIjaAp+UFb2PQ5S3QFsEJyty0Qk8M+PqC+UzgGst2niAKzo6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3175
+X-Proofpoint-GUID: H5xuyK7f5NT5RTWAoT7E-BZUMi5-Nt44
+X-Proofpoint-ORIG-GUID: xkkELs9ZHme4F-PHSqiZfyZJboTOXc7B
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_07,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=932 spamscore=0
+ malwarescore=0 priorityscore=1501 impostorscore=0 suspectscore=0
+ adultscore=0 clxscore=1011 phishscore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207200056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBSb2IgTGFuZGxleSBbbWFpbHRvOnJvYkBsYW5kbGV5Lm5ldF0NCj4gU2VudDogVHVl
-c2RheSwgSnVseSAxOSwgMjAyMiA0OjE1IFBNDQo+IE9uIDcvMTkvMjIgMDc6MjYsIFJvYmVydG8g
-U2Fzc3Ugd3JvdGU6DQo+ID4+IFAuUC5TLiBJZiB5b3Ugd2FudCB0byBydW4gYSBjb21tYW5kIG90
-aGVyIHRoYW4gL2luaXQgb3V0IG9mIGluaXRyYW1mcyBvciBpbml0cmQsDQo+ID4+IHVzZSB0aGUg
-cmRpbml0PS9ydW4vdGhpcyBvcHRpb24uIE5vdGUgdGhlIHJvb3Q9IG92ZXJtb3VudCBtZWNoYW5p
-c20gaXMNCj4gPj4gY29tcGxldGVseSBkaWZmZXJlbnQgY29kZSBhbmQgdXNlcyB0aGUgaW5pdD0v
-cnVuL3RoaXMgYXJndW1lbnQgaW5zdGVhZCwNCj4gd2hpY2gNCj4gPj4gbWVhbnMgbm90aGluZyB0
-byBpbml0cmFtZnMuIEFnYWluLCBzcGVjaWZ5aW5nIHJvb3Q9IHNheXMgd2UgYXJlIE5PVCBzdGF5
-aW5nDQo+IGluDQo+ID4+IGluaXRyYW1mcy4NCj4gPg0KPiA+IFNvcnJ5LCBpdCB3YXMgc29tZSB0
-aW1lIGFnby4gSSBoYXZlIHRvIGdvIGJhY2sgYW5kIHNlZSB3aHkgd2UgbmVlZGVkDQo+ID4gYSBz
-ZXBhcmF0ZSBvcHRpb24uDQo+IA0KPiBEaWQgSSBtZW50aW9uIHRoYXQgaW5pdC9kb19tb3VudHMu
-YyBhbHJlYWR5IGhhczoNCj4gDQo+IF9fc2V0dXAoInJvb3Rmc3R5cGU9IiwgZnNfbmFtZXNfc2V0
-dXApOw0KDQpJdCBpcyBjb25zdW1lZCBieSBkcmFjdXQgdG9vLCBmb3IgdGhlIHJlYWwgcm9vdCBm
-aWxlc3lzdGVtLg0KDQpbLi4uXQ0KDQo+IExvdHMgb2Ygc3lzdGVtcyBydW5uaW5nIGZyb20gaW5p
-dHJhbWZzIGFscmVhZHkgRE9OJ1QgaGF2ZSBhIHJvb3Q9LCBzbyB5b3UncmUNCj4gc2F5aW5nIGRy
-YWN1dCBiZWluZyBicm9rZW4gd2hlbiB0aGVyZSBpcyBubyByb290PSBpcyBzb21ldGhpbmcgdG8g
-d29yayBhcm91bmQNCj4gcmF0aGVyIHRoYW4gZml4IGluIGRyYWN1dCwgZXZlbiB0aG91Z2ggaXQn
-cyBiZWVuIGVhc3kgdG8gY3JlYXRlIGEgc3lzdGVtIHdpdGhvdXQNCj4gYSByb290PSBmb3IgYSBk
-ZWNhZGUgYW5kIGEgaGFsZiBhbHJlYWR5Li4uDQoNCklmIHRoZXJlIGlzIGEgcG9zc2liaWxpdHkg
-dGhhdCByb290PSBvciByb290ZnN0eXBlPSBhcmUgdXNlZCBieQ0Kc29tZW9uZSBlbHNlLCBJIHdv
-dWxkIG5vdCBjb3VudCBvbiB0aG9zZSB0byBtYWtlIGEgc2VsZWN0aW9uDQpvZiB0aGUgZmlsZXN5
-c3RlbSBmb3Igcm9vdGZzLg0KDQpPbiB0aGUgb3RoZXIgaGFuZCwgd2hhdCBjYW4gZ28gd3Jvbmcg
-aW4gaGF2aW5nIGEgZGVkaWNhdGVkLA0Kbm90IHVzZWQgYnkgYW55b25lIG9wdGlvbiB0byBkbyB0
-aGlzIGpvYj8NCg0KVGhhbmtzDQoNClJvYmVydG8NCg==
+
+
+________________________________________
+> From: Stefan Berger <stefanb@linux.ibm.com>
+> Sent: 07 July 2022 10:50 PM
+> To: kexec@lists.infradead.org; devicetree@vger.kernel.org; linux-integrit=
+y@vger.kernel.org; linux-kernel@vger.kernel.org; linuxppc-dev@lists.ozlabs.=
+org
+> Cc: nayna@linux.ibm.com; Nageswara R Sastry; mpe@ellerman.id.au; Vaibhav =
+Jain; Frank Rowand; Prakhar Srivastava; Lakshmi Ramasubramanian; Thiago Jun=
+g Bauermann; Rob Herring; Ritesh Harjani; Robin Murphy
+> Subject: [PATCH v6 1/6] of: check previous kernel's ima-kexec-buffer agai=
+nst memory bounds
+
+> From: Vaibhav Jain <vaibhav@linux.ibm.com>
+
+...
+
+> Fixes: 467d27824920 ("powerpc: ima: get the kexec buffer passed by the pr=
+evious kernel")
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Cc: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Ritesh Harjani <ritesh.list@gmail.com>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> Link: https://lore.kernel.org/r/20220531041446.3334259-1-vaibhav@linux.ib=
+m.com
+> ---
+
+Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>=
