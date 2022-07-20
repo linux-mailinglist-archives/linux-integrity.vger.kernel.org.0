@@ -2,36 +2,36 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7F057AC52
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Jul 2022 03:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5837C57ACC5
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Jul 2022 03:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241773AbiGTBWK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 19 Jul 2022 21:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
+        id S240747AbiGTBZQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 19 Jul 2022 21:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241703AbiGTBVn (ORCPT
+        with ESMTP id S242149AbiGTBYn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 19 Jul 2022 21:21:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91206FA0E;
-        Tue, 19 Jul 2022 18:16:22 -0700 (PDT)
+        Tue, 19 Jul 2022 21:24:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A15D6B273;
+        Tue, 19 Jul 2022 18:17:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5BCFB81DE8;
-        Wed, 20 Jul 2022 01:16:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EF22C341CA;
-        Wed, 20 Jul 2022 01:16:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7FA2B81DF5;
+        Wed, 20 Jul 2022 01:17:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5C0C341CE;
+        Wed, 20 Jul 2022 01:17:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658279779;
-        bh=WP6r6LQNJO2+9pHuPQRmTbKrAoo3ff+tZkivkVuHCjY=;
+        s=k20201202; t=1658279853;
+        bh=Q7ZhkRrWHkA3lvxxygS+CDAZo/0pv3aD77ykno15VZg=;
         h=From:To:Cc:Subject:Date:From;
-        b=it6b/flguRzXz16kLQg48EuKJ2BcbkcuUTNIWhFwdiufquknzBc2m1ZngWl17/GlS
-         64jPOlTyWTvKi+C4eXcBJ76mkc7nOT7HUlhityh7Tm0WZG1Gz0aJ4W1bdxfOiGMQsx
-         YW9YyIRYJUoPx3gPsvyGRm8dLJLBHcx/kfbhUvpMxVtCz6iupYF3GPtvyJHl7DyR3e
-         euvEFtRrAg7kUwzANAeC//mVmNiDZtcSctBotLa2EeB+QLy1hfH1jCUrzqwLCrnX+s
-         mQgirpccFhesxJiLGQ1IO7FYFJRE+dqQQrd+8D4O8d9DRiVM0y0NDM5KO8q7brOPtV
-         ZKUKh8OWqnlCg==
+        b=cf9vtwS4l4VPHNyVAP/2p4TZ+/OAm8RhnwTFeU+AKCIKSg8dLM0+priIwSUE4z6Hw
+         +JVTutP3Vz2YJ+O0w0hc+73c+6rqBQgAwnUxf17tSas5Vt6eAQSq1u4wOOsfjN1GOA
+         0Z+HcjJep9679wlzt/aLpzeFsOhfeQQUwZMHwHGTdUKbxEva8rmWtkscLtWET1VRV0
+         yddIjnLJY9AuyvTW5Nkwox/o8eSRYbC+2OZBS0tJ3tRh9aHfSERkgGHKlgn/axGozf
+         m9mDZhORNytQTv7ypatgzX2ALtM+4Q3icCz8Ufog439Bn+egkcmkGlWaAX0lUoa3HB
+         3P7JWmqmuWUGA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>,
@@ -40,9 +40,9 @@ Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>,
         jmorris@namei.org, serge@hallyn.com,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 01/25] Revert "evm: Fix memleak in init_desc"
-Date:   Tue, 19 Jul 2022 21:15:52 -0400
-Message-Id: <20220720011616.1024753-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 01/16] Revert "evm: Fix memleak in init_desc"
+Date:   Tue, 19 Jul 2022 21:17:15 -0400
+Message-Id: <20220720011730.1025099-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-stable: review
@@ -83,10 +83,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index a6dd47eb086d..168c3b78ac47 100644
+index 25dac691491b..ee6bd945f3d6 100644
 --- a/security/integrity/evm/evm_crypto.c
 +++ b/security/integrity/evm/evm_crypto.c
-@@ -73,7 +73,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+@@ -75,7 +75,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
  {
  	long rc;
  	const char *algo;
@@ -95,7 +95,7 @@ index a6dd47eb086d..168c3b78ac47 100644
  	struct shash_desc *desc;
  
  	if (type == EVM_XATTR_HMAC) {
-@@ -118,16 +118,13 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+@@ -120,16 +120,13 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
  alloc:
  	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
  			GFP_KERNEL);
