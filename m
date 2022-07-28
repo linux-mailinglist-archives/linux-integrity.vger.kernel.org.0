@@ -2,58 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452D05839A2
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jul 2022 09:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395B1583A07
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jul 2022 10:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbiG1Hkg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 28 Jul 2022 03:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S234990AbiG1IHZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 28 Jul 2022 04:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234230AbiG1Hkf (ORCPT
+        with ESMTP id S234838AbiG1IHY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:40:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5753D4D83D;
-        Thu, 28 Jul 2022 00:40:34 -0700 (PDT)
+        Thu, 28 Jul 2022 04:07:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3184BD07;
+        Thu, 28 Jul 2022 01:07:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D264AB82284;
-        Thu, 28 Jul 2022 07:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B61C43470;
-        Thu, 28 Jul 2022 07:40:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C13761B89;
+        Thu, 28 Jul 2022 08:07:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A82AC433C1;
+        Thu, 28 Jul 2022 08:07:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658994031;
-        bh=p81wbSl4jQvNdxEQIWuCLFSph+3DQKM11CCOw6EGVc4=;
+        s=k20201202; t=1658995642;
+        bh=+HJ6jlAD0ouWT2q+KDfgQAcYPW1ZDvP8eATEJFjyLNQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cv5PwUYCCTni2XA0aQzBYgUcsAonaMU5j+FBsyqzk1VBGaUBwrzetTytavedUvCdv
-         oSg/NaVW1sccm2S21QeVGOyR1WM91YMv4P9yxSS7MSeF543QvBSwiKkuZ6QY8IzHze
-         IXXPphSIebXXWzKADTcb8tz4gH5C6DlKkfx8oIXcYjaqkXOXSKrD9X7bvIgAbeyAEH
-         hLFbMjVVFD7ONHyHCMfWpdGYm0ln5egrWHzeuKff2JN3TpGNhKoI//vy5s3bHUeRcY
-         cWWmFbwBBKWhGj2msQyHoMmDM4sJ7bKKc9vKPtOCRSCrdeyUhH+5/lKCptXnTGYayu
-         ftYnFgLCqFFbg==
-Date:   Thu, 28 Jul 2022 10:40:28 +0300
+        b=EORXPtO2GMMtPF95tHjY1C1ceuBdtFgTuIPtUvaOWzpXvtlMFJ8iZyndsUvS1/tvO
+         rFi4/wltv4mJyt52zll5VvTVNLeNaiJdqMqNR/HLzPIxyu2vkOjRa/hIJU6AgYtxMw
+         884HHcxbC81jJiv/+JHVNR/esc/6ABm2JN53uxxhQzZNnU/kLPtJik+I+nQvX/Navj
+         GOXFZeUqYFjLvSBs4w/uZ8cW3nVGI2Hi0Nn+eC29FTWXMbCJf3i0/ns+oUbrThhtGA
+         nVVDwWQVLemryqS+lf+pkB/ocYg2h1g0yTMw8zV0E2+W30UY9maC35xirn0IWoNoIB
+         FJVq5w5pWGHig==
+Date:   Thu, 28 Jul 2022 11:07:19 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v5 4/6] tpm: of: Make of-tree specific function commonly
- available
-Message-ID: <YuI9bLmqGsZwn4n6@kernel.org>
-References: <20220706152329.665636-1-stefanb@linux.ibm.com>
- <20220706152329.665636-5-stefanb@linux.ibm.com>
- <YsuTRny45aBxGjm5@kernel.org>
- <3a9196b3-c510-0c32-8b70-572d9c4fe69d@linux.ibm.com>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
+        jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] KEYS: trusted: Fix memory leak in tpm2_key_encode()
+Message-ID: <YuJDt6T6tUv76bIT@kernel.org>
+References: <YqGE/v0Zgi+g4gY6@iki.fi>
+ <20220722082125.2526529-1-niejianglei2021@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3a9196b3-c510-0c32-8b70-572d9c4fe69d@linux.ibm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <20220722082125.2526529-1-niejianglei2021@163.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,79 +56,97 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 12:01:36PM -0400, Stefan Berger wrote:
+On Fri, Jul 22, 2022 at 04:21:25PM +0800, Jianglei Nie wrote:
+> tpm2_key_encode() allocates a memory chunk from scratch with kmalloc(),
+> but it is never freed, which leads to a memory leak. Free the memory
+> chunk with kfree() in the return path.
 > 
-> 
-> On 7/10/22 23:04, Jarkko Sakkinen wrote:
-> > On Wed, Jul 06, 2022 at 11:23:27AM -0400, Stefan Berger wrote:
-> > > Simplify tpm_read_log_of() by moving reusable parts of the code into
-> > > an inline function that makes it commonly available so it can be
-> > > used also for kexec support. Call the new of_tpm_get_sml_parameters()
-> > > function from the TPM Open Firmware driver.
-> > > 
-> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > Cc: Frank Rowand <frowand.list@gmail.com>
-> > > 
-> > > ---
-> > > v4:
-> > >   - converted to inline function
-> > > ---
-> > >   drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
-> > >   include/linux/tpm.h            | 27 +++++++++++++++++++++++++++
-> > >   2 files changed, 32 insertions(+), 26 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-> > > index a9ce66d09a75..f9462d19632e 100644
-> > > --- a/drivers/char/tpm/eventlog/of.c
-> > > +++ b/drivers/char/tpm/eventlog/of.c
-> > > @@ -12,6 +12,7 @@
-> > >   #include <linux/slab.h>
-> > >   #include <linux/of.h>
-> > > +#include <linux/tpm.h>
-> > >   #include <linux/tpm_eventlog.h>
-> > >   #include "../tpm.h"
-> > > @@ -20,11 +21,10 @@
-> > >   int tpm_read_log_of(struct tpm_chip *chip)
-> > >   {
-> > >   	struct device_node *np;
-> > > -	const u32 *sizep;
-> > > -	const u64 *basep;
-> > >   	struct tpm_bios_log *log;
-> > >   	u32 size;
-> > >   	u64 base;
-> > > +	int ret;
-> > >   	log = &chip->log;
-> > >   	if (chip->dev.parent && chip->dev.parent->of_node)
-> > > @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
-> > >   	if (of_property_read_bool(np, "powered-while-suspended"))
-> > >   		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
-> > > -	sizep = of_get_property(np, "linux,sml-size", NULL);
-> > > -	basep = of_get_property(np, "linux,sml-base", NULL);
-> > > -	if (sizep == NULL && basep == NULL)
-> > > -		return -ENODEV;
-> > > -	if (sizep == NULL || basep == NULL)
-> > > -		return -EIO;
-> > > -
-> > > -	/*
-> > > -	 * For both vtpm/tpm, firmware has log addr and log size in big
-> > > -	 * endian format. But in case of vtpm, there is a method called
-> > > -	 * sml-handover which is run during kernel init even before
-> > > -	 * device tree is setup. This sml-handover function takes care
-> > > -	 * of endianness and writes to sml-base and sml-size in little
-> > > -	 * endian format. For this reason, vtpm doesn't need conversion
-> > > -	 * but physical tpm needs the conversion.
-> > > -	 */
-> 
-> 
-> Jarkko,
-> 
->  can I apply your R-b tag after putting this lost comment back into the
-> inline function?
->    Stefan
+> Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key format for the blobs")
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
 
-If there's a change I want to see the updated patch first.
+The change log is missing. I have no idea what happened in v2 and v3.
+
+>  security/keys/trusted-keys/trusted_tpm2.c | 33 ++++++++++++++++-------
+>  1 file changed, 23 insertions(+), 10 deletions(-)
+> 
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 2b2c8eb258d5..eb25c784b5c3 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -32,8 +32,13 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  			   struct trusted_key_options *options,
+>  			   u8 *src, u32 len)
+>  {
+> +	int ret;
+>  	const int SCRATCH_SIZE = PAGE_SIZE;
+> -	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+> +	u8 *scratch;
+> +
+> +	scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+> +	if (!scratch)
+> +		return -ENOMEM;
+>  	u8 *work = scratch, *work1;
+>  	u8 *end_work = scratch + SCRATCH_SIZE;
+>  	u8 *priv, *pub;
+> @@ -47,9 +52,6 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	pub_len = get_unaligned_be16(src) + 2;
+>  	pub = src;
+>  
+> -	if (!scratch)
+> -		return -ENOMEM;
+> -
+>  	work = asn1_encode_oid(work, end_work, tpm2key_oid,
+>  			       asn1_oid_len(tpm2key_oid));
+>  
+> @@ -57,8 +59,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  		unsigned char bool[3], *w = bool;
+>  		/* tag 0 is emptyAuth */
+>  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+> -		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+> -			return PTR_ERR(w);
+> +		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
+> +			ret = PTR_ERR(w);
+> +			goto err;
+> +		}
+>  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+>  	}
+>  
+> @@ -69,8 +73,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	 * trigger, so if it does there's something nefarious going on
+>  	 */
+>  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+> -		 "BUG: scratch buffer is too small"))
+> -		return -EINVAL;
+> +		 "BUG: scratch buffer is too small")) {
+> +		ret = -EINVAL;
+> +		goto err;
+> +	}
+>  
+>  	work = asn1_encode_integer(work, end_work, options->keyhandle);
+>  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+> @@ -79,10 +85,17 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	work1 = payload->blob;
+>  	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
+>  				     scratch, work - scratch);
+> -	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+> -		return PTR_ERR(work1);
+> +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
+> +		ret = PTR_ERR(work1);
+> +		goto err;
+> +	}
+>  
+> +	kfree(scratch);
+>  	return work1 - payload->blob;
+> +
+> +err:
+> +	kfree(scratch);
+> +	return ret;
+>  }
+>  
+>  struct tpm2_key_context {
+> -- 
+> 2.25.1
+> 
 
 BR, Jarkko
