@@ -2,107 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9E8586EDA
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Aug 2022 18:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70667586F02
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Aug 2022 18:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234013AbiHAQna (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Aug 2022 12:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S233939AbiHAQu5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Aug 2022 12:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbiHAQn2 (ORCPT
+        with ESMTP id S234327AbiHAQuv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:43:28 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3821A3A9
-        for <linux-integrity@vger.kernel.org>; Mon,  1 Aug 2022 09:43:26 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id q7so12907412ljp.13
-        for <linux-integrity@vger.kernel.org>; Mon, 01 Aug 2022 09:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
-        b=bf7kmBr/SgfZ1wV4nI5vTAndNdYUbiAGmhGqIym6rX1OX0IxSa121QCCLjtfPTtP/q
-         Ji+y0OXbVSONjuLK/7HvTPJ0m6T7C2i8zva8hRhi9PAc4NLMf2QcGCMsVKAR/4SoxG8P
-         QCVBFNb+TBSE6hOTyUwwlUWtblNmcAsvavL/vwkHJhwxC5HKcnSuNdd2JaoddtOnq0f2
-         l8L1cTnZHt01Ad2nR5db4ZRgjujP4vZ5Nbd+R/n0bCKSy+6DchnTG1m2WXhoILL//vjC
-         4hQ2rR4QddBHqcFb8uNfmIzBTiaeke8T1siffGxdfn9eTO7JBIN070YbQDUKkrumHKo5
-         1fZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
-        b=duHBTt98f6IFIW96Ux7bsMgxX8xfCno+41SOqogbp7I9MVfmvrN3L/Uv4ZBO7YaUYf
-         HKlHZHDxfwtFYSjksgoy4Dhd6KpjaDgPbc24jFe6+4QvF1GDGLt1/q9//PVc4IvU1cus
-         Tt6EB0CZfdGrzjpGfZarnVp3uAmI9J7wreH8CwbMRv8C7TVkVfVtMnit5JMEhDdUGz4g
-         QLsDvP3p+k71Ur2gqdPiqN2CRN90lJRLPiUAldt0xP7RxXbDw6iqInQm8wrb5U2GdZXO
-         NlvG61zugNc45M/urE4C6Xe943RHobq7Nos3xM1jW7hiE1WnVI0UXSH0/Q9QvRWG40GR
-         OeWQ==
-X-Gm-Message-State: ACgBeo1LaflIo7eVwOgi9NkWjheHz2U9D4qNwRjA38iG5kEV9R3JmhxU
-        F9kTjfmlWso43YuByQZnxDJjFrfQsMFSwMnqozU=
-X-Google-Smtp-Source: AA6agR515/n1OMi0vRWF0LCNYzDsADnnMxK25Yt6CRjhyA+ZrhMbjmB0DBADjlTnR+ktgvNpDDCS04nHCVe1WUuUnWY=
-X-Received: by 2002:a2e:3806:0:b0:25e:48ff:a218 with SMTP id
- f6-20020a2e3806000000b0025e48ffa218mr3294471lja.292.1659372205210; Mon, 01
- Aug 2022 09:43:25 -0700 (PDT)
+        Mon, 1 Aug 2022 12:50:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3268611809;
+        Mon,  1 Aug 2022 09:50:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D87B7B815AB;
+        Mon,  1 Aug 2022 16:50:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C446C433D7;
+        Mon,  1 Aug 2022 16:50:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659372648;
+        bh=JfFD7gSZ+NQJfP6dqs4qpKB1DvnASqty13HHPdaYeOs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B+b8UjKYX+T4BG5oHMytKVkdvT2C+FNtmgoTx/MloDWyxXs35mS2B+Uqg59x0MwEt
+         D8xQKOC20iE92uRYMrInkx6pTy9big5IGZ+LerGkVALQz6wfPxjKual6v4AiZcuJL1
+         E+hw9IIuHeNbZNypeaAG9PGImmqir1kmprcQV9GCb4uwj1E2OistxXN77tFO6xXvRv
+         EWYI4QwoSpqrT3iddxsjNlHyd6NrYstymVNpszG0KrY1P/2yxF66ranJ5w3aJ1RvqK
+         bD/QRNCi7zQvBmQdWGra5GpepRBMm5K8JCxy4pAXtKYc9a5cJVLTKWJWtlLU5WeCu7
+         VUMR1l00UjfJw==
+Date:   Mon, 1 Aug 2022 19:50:43 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     =?iso-8859-1?Q?M=E5rten?= Lindahl <marten.lindahl@axis.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, kernel@axis.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v4] tpm: Add check for Failure mode for TPM2 modules
+Message-ID: <YugEY6Wec3DpW9o2@kernel.org>
+References: <20220801135703.26754-1-marten.lindahl@axis.com>
 MIME-Version: 1.0
-Received: by 2002:aa6:cb52:0:b0:1fa:aaed:e6d9 with HTTP; Mon, 1 Aug 2022
- 09:43:24 -0700 (PDT)
-From:   Bright Gawayn <gben68387@gmail.com>
-Date:   Mon, 1 Aug 2022 22:13:24 +0530
-Message-ID: <CAG1+V0xy74Pa_JLx+ze1qhQfmiuJXdNJ4_AvNnskoiwRCHFd=g@mail.gmail.com>
-Subject: Lucrative business proposal very urgent!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:242 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5113]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [gben68387[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [gben68387[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.5 ADVANCE_FEE_3_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220801135703.26754-1-marten.lindahl@axis.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello dear My name is Mr Bright Gawayn,  It's my pleasure to contact you today.
+On Mon, Aug 01, 2022 at 03:57:03PM +0200, Mårten Lindahl wrote:
+> In commit 0aa698787aa2 ("tpm: Add Upgrade/Reduced mode support for
+> TPM2 modules") it was said that:
+> 
+> "If the TPM is in Failure mode, it will successfully respond to both
+> tpm2_do_selftest() and tpm2_startup() calls. Although, will fail to
+> answer to tpm2_get_cc_attrs_tbl(). Use this fact to conclude that TPM
+> is in Failure mode."
+> 
+> But a check was never added in the commit when calling
+> tpm2_get_cc_attrs_tbl() to conclude that the TPM is in Failure mode.
+> This commit corrects this by adding a check.
+> 
+> Fixes: 0aa698787aa2 ("tpm: Add Upgrade/Reduced mode support for TPM2 modules")
+> Cc: stable@vger.kernel.org # v5.17+
+> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> 
+> v4:
+>  - Resend of patch because of invalid characters in Signed-off-by tag.
+> 
+> v3:
+>  - Add Jarkkos Reviewed-by tag.
+>  - Add Fixes tag and Cc.
+> 
+> v2:
+>  - Add missed check for TPM error code.
+> 
+>  drivers/char/tpm/tpm2-cmd.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index c1eb5d223839..65d03867e114 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -752,6 +752,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+>  	}
+>  
+>  	rc = tpm2_get_cc_attrs_tbl(chip);
+> +	if (rc == TPM2_RC_FAILURE || (rc < 0 && rc != -ENOMEM)) {
+> +		dev_info(&chip->dev,
+> +			 "TPM in field failure mode, requires firmware upgrade\n");
+> +		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE;
+> +		rc = 0;
+> +	}
+>  
+>  out:
+>  	/*
+> -- 
+> 2.30.2
+> 
 
-We use a certain raw material in our pharmaceutical firm for the
-manufacture of animal vaccines and many more.
+Thank you, applied.
 
-My intention is to give you the new contact information of the local
-manufacturer of this raw material in India and every details regarding
-how to supply the material to my company if you're interested, my
-company pays in advance for this material.
-
-Due to some reasons, which I will explain in my next email, I cannot
-procure this material and supply it to my company myself due to the
-fact that I am a staff in the company.
-
-Please get back to me as soon as possible for full detail if you are interested.
-
-Thanks and regards
-Bright.
+BR, Jarkko
