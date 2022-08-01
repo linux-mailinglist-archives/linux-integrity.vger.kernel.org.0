@@ -2,53 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573CF586DDB
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Aug 2022 17:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFB2586EAE
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Aug 2022 18:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbiHAPhE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Aug 2022 11:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S233106AbiHAQia (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Aug 2022 12:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbiHAPhA (ORCPT
+        with ESMTP id S232136AbiHAQi3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:37:00 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6462E2A425
-        for <linux-integrity@vger.kernel.org>; Mon,  1 Aug 2022 08:36:57 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id q7so12696751ljp.13
-        for <linux-integrity@vger.kernel.org>; Mon, 01 Aug 2022 08:36:57 -0700 (PDT)
+        Mon, 1 Aug 2022 12:38:29 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9971C7
+        for <linux-integrity@vger.kernel.org>; Mon,  1 Aug 2022 09:38:25 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id r14so12952840ljp.2
+        for <linux-integrity@vger.kernel.org>; Mon, 01 Aug 2022 09:38:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
         bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
-        b=UKcP1FDF09nj1k3uYCs67Q7ZyiUIjGtO/8/Bj2O390UgRgAJaQbdj4bNFv73NHa6D2
-         iYDxlXmYJBF3bZ+BbTGm686z3m5B8jXpwu0YmqjPCoKHCXX42ltrt2aAmH4sQv+ccJN+
-         OHyZ31OJTJwijh8OV8oO5eWh1/bM4pqSqK2uyo052aPr6eVSdk1CVQkx424vXYMEZQTj
-         HsS77Ky28UOjl0KpgsmMPfvxGbLfejaevmoaRlv0kRAHXIpr67GF1/t31ULjMlw9VGDc
-         NI+pGTJBLZwknk3P787XURm2/kBy3STaEpJiGhVmWsgdrf7IgJXaPWV7ssfsuJ7alB0a
-         /1Uw==
+        b=UpgXbpfO0w/dJq4k0vuSl6sUdwOXFPzo72SUDWGRn4yCt6QTXqfTKNyPrrLSbJ8yzY
+         7SvNYiuTJto9ZKlzvm5aoeOkIg+OLPLmA7JtBAqJNAo3ZwaSjplZ/wAzKUOl+dDU/dDK
+         hYOtZRuneAEXUY6rJcSHGhuzX712qrYQrFpKbC7RuKjQlSCmwGRK5sGDya2wx4XaUf+k
+         IlVzDxfqSKvxeU6NrU/S6TRC1i25W9OIICD2HGjN/h5O8s28u9oHxFPUHjB6EjmlL3W1
+         LOFyxwAfOSDkgEr1jZ/ZsXk1P0uSiTY0XrYgKEkG3SBkCMdWMSlGcFhfScKKMVApzTc3
+         wpBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
         bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
-        b=bdCaO05S1PioD/+cBsV8pSEUcGkh+w+QUSgIEJPfyi8C7XVGGS5rbCLXVa9XxO7vLv
-         hvhhuqsxMbsOmgRFDAbaMS2Wm18dqLOTMjyNr/HRI6VmWvBQZgd3H5QVGsud+YrHf0hm
-         zAXxer7dY/UpagSD2xjXrVjy/5TQC1vmI6kvNaZfBWMDMV3Ckzw2CAxmDH5t+Xhy9Zq1
-         vRcq8ggHvzL9vQowc2RFmn/p5tP3AL2xQL+RZ081J3dLvUmJM+n/qRNyyk+P5B4j6voF
-         ZHA7sSTRO6CqkZq8AcKQsfwcQd2++lS5yOFDqd0PYq0PLFUQ5e/O//eqFWKL3u4hJldC
-         LXlQ==
-X-Gm-Message-State: AJIora8Zs4PF12mAQnIuL+619zrNc9i9SDMaCj5C44jw6rROgxo8KVAa
-        +yLouVupcCMw0T6SxgmV3Bg3uuhJt/RpnAe1Nhw=
-X-Google-Smtp-Source: AGRyM1vmE9FJ4oaYsT2Hr55xmADsiyPljwE7zY7KjJ0BGtCDobMH8efpf5FFXcSqHPDNiB3EqFhLCRIlfACfnG64NOA=
+        b=QyrmDVaY22rUmbFBr3X+T3gjj5SmOKF0wqAV3SF/umytJY0XFXyV6Mz7elZ84SaxFX
+         LCWEFSRcNrt43UbslHL+j8Pn/Scbo2JE6eyljHN+6zxZWEz5ozPQ4el5N2jGGLcD7n3e
+         +3JHwfkl1zFSpjyqgHnnaLalTCw83Ko9N2q5j7t6cel7irEviLHzkgDTECbaL/rTkB9A
+         g+N1sP5Lf3KMxLXxNBTmhlysPTPLFsmA9lpxSX0Mr0kLEMshE9sSkf6tUbI7LRKjEwNx
+         Uxol2dFDNoLnYtNjeJh7WmT6PuvSrb7SMwE9jNaKUr5QC2uo4/PXtBo7hzY1DU8AWvHM
+         RvNg==
+X-Gm-Message-State: AJIora9TaxWL7PIz4WHQZETy3Z8OVOb4yT8gh7e1ab5Oc3ZQ8uLErAxT
+        beRbn8U06nauCNGBkg0rr5eFCtwCDzlT6+1d7LMwlV7OXjGIDg==
+X-Google-Smtp-Source: AGRyM1uhfxKvD7WlSvnzrbGlwEuRLAbxrb3yEpNH1m/q+RCiRS7C4p1DxknGjCMobov/SaZ/nFOLCAAIjg3qtSJ3b84=
 X-Received: by 2002:a2e:be90:0:b0:25e:1496:a0b8 with SMTP id
- a16-20020a2ebe90000000b0025e1496a0b8mr5475533ljr.194.1659368215756; Mon, 01
- Aug 2022 08:36:55 -0700 (PDT)
+ a16-20020a2ebe90000000b0025e1496a0b8mr5567966ljr.194.1659371903861; Mon, 01
+ Aug 2022 09:38:23 -0700 (PDT)
 MIME-Version: 1.0
 Received: by 2002:aa6:cb52:0:b0:1fa:aaed:e6d9 with HTTP; Mon, 1 Aug 2022
- 08:36:55 -0700 (PDT)
+ 09:38:23 -0700 (PDT)
 From:   Bright Gawayn <gben68387@gmail.com>
-Date:   Mon, 1 Aug 2022 21:06:55 +0530
-Message-ID: <CAG1+V0zQ=FhBLNLT__co7DHJWC=eYBw480NBDxjx-Za_ZVMuzw@mail.gmail.com>
+Date:   Mon, 1 Aug 2022 22:08:23 +0530
+Message-ID: <CAG1+V0w-Pt5No3wNn5Sm7K_0Y_mZnH5=drEjS3cseB6w-yBsLg@mail.gmail.com>
 Subject: Lucrative business proposal very urgent!
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
@@ -59,10 +59,10 @@ X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
         version=3.4.6
 X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
         *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:242 listed in]
+        *      [2a00:1450:4864:20:0:0:0:241 listed in]
         [list.dnswl.org]
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5003]
+        *      [score: 0.5002]
         *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
         *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
         *      provider
