@@ -2,107 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37986586ECA
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Aug 2022 18:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A27D586ED8
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Aug 2022 18:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233650AbiHAQl0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Aug 2022 12:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
+        id S233346AbiHAQmv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Aug 2022 12:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233760AbiHAQlW (ORCPT
+        with ESMTP id S233005AbiHAQmu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:41:22 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DACBC23
-        for <linux-integrity@vger.kernel.org>; Mon,  1 Aug 2022 09:41:18 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id e15so8160518lfs.0
-        for <linux-integrity@vger.kernel.org>; Mon, 01 Aug 2022 09:41:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
-        b=Bxl5axUsg9q1jblhPn/sD0+XJcBD3bAcmC9Aes5ip1ahcImMEHBlh+Er+rhf8FIO5i
-         +XJNmIRVpjVrbiySb5O5JjfIYrlkw/mOOo1qLRe9SX6sdqO1Rz2KXY4WbugpN4fJWRij
-         CC78UfV1dMZkmuojiTGc3RQBuAg37lvfWIZxpBN7oIZ+TFFhJCkZYKmkXCGO1XSk++os
-         BEc9uqs1UR2e1JE6FJCIOTKylSGKLi8i6iImu/1NRs2zwpfONk1G3Sx/5wm/96rkxk/n
-         idBjkyW5OxynxwIdfLGjdySuoKDi/2Cx+yQ5t/sygpVds2zaObagHbRvikV7OatiZuWO
-         7vpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
-        b=kNleVvuD3IGEf8OvknSSJUsJh3rFyCV8gHKzjHp9eEWuhcoTPnq81h2bffSB+NNQJ8
-         9PXR7XWOBiBaxFSHF9S+hO9Syx+UsTjYquBnUCkE9tBVaZVhe2yuyd7k/YsC6vAUl6Kt
-         MHGilxYx3v/F4w7ifQ6UDtI17SqXGjdHzmd+exhQB/2N9L3JNYzyeoJyGRgKAHi4pxJp
-         QvotLpiBHQ8Fk5NOIbSS+v84oOMYKkNK3uKnp/07XJo1NLVR95B/Yl9BkZML1ZnKf0Pf
-         /xmQTJ0xBoj602kTWI4CkrFPVND1eSNMmaGbTmWsN8kYTqiO7U8M1313I88tCSH6PBKZ
-         s49g==
-X-Gm-Message-State: ACgBeo0a3gA9zYNXEKF4hHLvoAfdr17E+cW9GcAj0Kqz8A96G6gBChy6
-        J9/QKZBSmZLxj3tvUk2GQw58r85hVupBmm31bQE=
-X-Google-Smtp-Source: AA6agR7hKhHIm3F/ejmSJp6d9SbrPg4lDvobGmT+31j9yOEF5/lXFTH1cRKmZ7l8KWQdcnShwsngG5SjR8Fu/Me3Bwc=
-X-Received: by 2002:a05:6512:2c8a:b0:48a:f7e9:973f with SMTP id
- dw10-20020a0565122c8a00b0048af7e9973fmr2082578lfb.5.1659372076778; Mon, 01
- Aug 2022 09:41:16 -0700 (PDT)
+        Mon, 1 Aug 2022 12:42:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D985B90;
+        Mon,  1 Aug 2022 09:42:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C02660F6E;
+        Mon,  1 Aug 2022 16:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988D3C433D6;
+        Mon,  1 Aug 2022 16:42:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659372169;
+        bh=DQ4noSUQRPScorU8fDb3IKwYMG7ZdcugAbAWD3extDo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ic5eUIVwgaLfNSKjaUBrgSbP0o312UCTFo6eVANI5XwPJJMXOUNSLsBczeuVR/JJo
+         16VDwx5WiBl4Akcn//oRARv6kF7dpZBgQpnhjn+6uogmg7h6YtV4B9bFVsqB4XMYc3
+         we+mT0s7PPnvjhAUljRlA09F/S9cz1qMRcL4rtP4cyYIRsoyb4zBGoHvfP1ncAOnU3
+         hUcFMJveamEKiGbfoRIA64HlFKlQTjEBiSS+sWisvPALVq2NdvRbxqI4GrcxYyvUg5
+         YYAvsOZBccHe0imctXLxY8FuktcEbq0mlvqvQnX30F6BJYHSqA6DAuUGenmR5mFGeG
+         UiwgfE40BdUnA==
+Date:   Mon, 1 Aug 2022 19:42:43 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH v7 07/10] tmp, tmp_tis: Implement usage counter for
+ locality
+Message-ID: <YugCg5s8I5GIRWls@kernel.org>
+References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
+ <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
+ <Yr4x6KRSvzlXNdH2@kernel.org>
+ <f0e33bc4-335c-322a-9295-18d6bc0b8286@gmx.de>
+ <570976c3-8292-092d-5e0c-25eef63f7f3c@kunbus.com>
 MIME-Version: 1.0
-Received: by 2002:aa6:cb52:0:b0:1fa:aaed:e6d9 with HTTP; Mon, 1 Aug 2022
- 09:41:16 -0700 (PDT)
-From:   Bright Gawayn <gben68387@gmail.com>
-Date:   Mon, 1 Aug 2022 22:11:16 +0530
-Message-ID: <CAG1+V0wE_akdUeEq+pYde2NDn1FBw6gG03M1=wDyPkOui2q5Hw@mail.gmail.com>
-Subject: Lucrative business proposal very urgent!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:141 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5011]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [gben68387[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [gben68387[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.5 ADVANCE_FEE_3_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <570976c3-8292-092d-5e0c-25eef63f7f3c@kunbus.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello dear My name is Mr Bright Gawayn,  It's my pleasure to contact you today.
+On Thu, Jul 28, 2022 at 07:36:19PM +0200, Lino Sanfilippo wrote:
+> 
+> 
+> On 04.07.22 19:45, Lino Sanfilippo wrote:
+> > 
+> > 
+> > On 01.07.22 01:29, Jarkko Sakkinen wrote:
+> > 
+> >>
+> >> I'm kind of thinking that should tpm_tis_data have a lock for its
+> >> contents?
+> > 
+> > Most of the tpm_tis_data structure elements are set once during init and
+> > then never changed but only read. So no need for locking for these. The
+> > exceptions I see are
+> > 
+> > - flags
+> > - locality_count
+> > - locality
+> > 
+> > 
+> > whereby "flags" is accessed by atomic bit manipulating functions and thus
+> > does not need extra locking. "locality_count" is protected by the locality_count_mutex.
+> > "locality" is only set in check_locality() which is called from tpm_tis_request_locality_locked()
+> > which holds the locality_count_mutex. So check_locality() is also protected by the locality_count_mutex
+> > (which for this reason should probably rather be called locality_mutex since it protects both the "locality_count"
+> > and the "locality" variable).
+> > 
+> > There is one other place check_locality() is called from, namely the interrupt handler. This is also the only
+> > place in which "locality" could be assigned another value than 0 (aka the default). In this case there
+> > is no lock, so this could indeed by racy.
+> > 
+> > The solution I see for this is:
+> > 1. remove the entire loop that checks for the current locality, i.e. this code:
+> > 
+> > 	if (interrupt & TPM_INTF_LOCALITY_CHANGE_INT)
+> > 		for (i = 0; i < 5; i++)
+> > 			if (check_locality(chip, i))
+> > 				break;
+> > 
+> > So we avoid "locality" from being changed to something that is not the default.
+> > 
+> > 
+> 
+> I wonder if we need tpm_tis_data->locality at all: the claimed locality is already tracked in
+> chip->locality and in TPM TIS we never use anything else than locality 0 so it never changes.
+> 
+> Is there any good reason not to remove it?
 
-We use a certain raw material in our pharmaceutical firm for the
-manufacture of animal vaccines and many more.
+I think it would be a great idea to unify them.
 
-My intention is to give you the new contact information of the local
-manufacturer of this raw material in India and every details regarding
-how to supply the material to my company if you're interested, my
-company pays in advance for this material.
-
-Due to some reasons, which I will explain in my next email, I cannot
-procure this material and supply it to my company myself due to the
-fact that I am a staff in the company.
-
-Please get back to me as soon as possible for full detail if you are interested.
-
-Thanks and regards
-Bright.
+BR, Jarkko
