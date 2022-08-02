@@ -2,108 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6187F5881F1
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Aug 2022 20:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5108F5883D0
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Aug 2022 23:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237867AbiHBShF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Aug 2022 14:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S230512AbiHBVz1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Aug 2022 17:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237851AbiHBShD (ORCPT
+        with ESMTP id S229751AbiHBVzY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:37:03 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0558B205C0
-        for <linux-integrity@vger.kernel.org>; Tue,  2 Aug 2022 11:36:55 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bq11so18086616lfb.5
-        for <linux-integrity@vger.kernel.org>; Tue, 02 Aug 2022 11:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=aurora.tech; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=0V0vFut6oA8ltHdEyyj9G6rE8xemZdZlYLyGMvFW5i4=;
-        b=JbMbzCWRmy2/Iq8VzGanXbbRzWl9cc1EE2JwK+mM841qApg8exzR+ojIFePkA7dQsb
-         gRvYUobGX7Snt7L3xK5hiI7zmrzrfLFRObO9mFClHnUkwfU6RNbXI69ns2zApTAL5gwY
-         kR7qULTZV5hfS9jHk1j94fGdCQkp4OBZzlsDCSvL9fb11iscSOr5AmCiXIvg1FPe5NWO
-         koW2x7Wj40zQPUC0l7K2Xgx4uTqPUvDr2YMa8LZhVKI2B+MeIHFWqwE8TEimAQrNInYn
-         is/ADBfYIy6DYJUaZIuUiI0ETOFvlzjoNx0rvql7JSvU6PkaoZznCv80G6c9ccum3uVl
-         vtog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0V0vFut6oA8ltHdEyyj9G6rE8xemZdZlYLyGMvFW5i4=;
-        b=7WJR0D8ptssyLZRTyl0+JCMo74BgpADY9r2X57cINalGuItzk5S78TR5UCHlosMJ3k
-         DSXcip6tLxsRriPUwIb1tjsW+XPfdXW2R0n0zCYMD113CT4XiMDGw5L4W7K1hHMdbb8V
-         498KrVkz9P264tf5hsMwV1ZkqYcqQtdKuK5mhA5/YF5PBqgg6pB5mMg/9vJEW8BCfvaU
-         q0S+7Z6hgyxdr/C7/f86ZehrsehTJxCZezSZ4RwU3IFetApTlKpG+KP76LfAhLIdqVTX
-         F6lxd3jTprkpk59wvvKRMnOiLxA7ez7USWqTwX56rwvZXNdgTuKU/vKgfxcyrIk8N6Sy
-         cPMw==
-X-Gm-Message-State: ACgBeo1mRMrRtLMrbCzxXCoqTxmO+8eNkzbC/mZjO3SkRI7xM47Rvfe3
-        Eau2gN8tqOQIjOY0H00yHMk/B+5EpJyxDczCo7Kdmw==
-X-Google-Smtp-Source: AA6agR70SjsuYYJddFRJXTUrFz/CWwlMCj2fILiDwxN6veWaZoGRKD8kCvsT07vO/4pAW16kbrglao8qW/EMdbXFqzc=
-X-Received: by 2002:a05:6512:210a:b0:48a:eaaf:b889 with SMTP id
- q10-20020a056512210a00b0048aeaafb889mr6144760lfr.89.1659465413351; Tue, 02
- Aug 2022 11:36:53 -0700 (PDT)
+        Tue, 2 Aug 2022 17:55:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AE0B860;
+        Tue,  2 Aug 2022 14:55:22 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272LgH9P039301;
+        Tue, 2 Aug 2022 21:55:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=ZUClRZRQuq6EHCQYU3U7eESI9G+COXc+kz0j9F8+w1g=;
+ b=NYX16b5v/Ik53UW5vVD1mBaAwu2L9PYG79Su+y18Q32HUeUbrF9DnsQbB5dcur0LaRB/
+ fdmNXstdkYjpBaryOHFVq4AR99MsI9llSKtjKwdxP/unqjXOhCTPqrSoInyFUIvc/y1R
+ 8wi0fb9IarzbvnjIc2drzp4Ee/Z7ytpNz2nLTGhWmYvJG/z0jgEX8nC8MmZDsVoEm3OK
+ bxytzrQ6tBQ0gMkwKTSIFpn4ODt72aDMfZacg+idgqzr9iTjfrxIF53NMCMVcXuxXhXc
+ 89aV2ukb+G5BIZj6CaWNbRsuOEFYwmt/fvM9WmjynStw0ihCkE6ZzFo/83wnxRlFJHmp WA== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqc2kra3a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Aug 2022 21:55:21 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 272Lq03L010575;
+        Tue, 2 Aug 2022 21:55:19 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3hmv98k2ak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Aug 2022 21:55:19 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 272LtGB427459938
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 Aug 2022 21:55:16 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D78EAE045;
+        Tue,  2 Aug 2022 21:55:16 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 54324AE055;
+        Tue,  2 Aug 2022 21:55:15 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.57.126])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  2 Aug 2022 21:55:15 +0000 (GMT)
+Message-ID: <04e413ed5db93479848f1127a1a664a03df3bd2b.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity subsystem updates for v6.0
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 02 Aug 2022 17:55:14 -0400
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gLgRNN1iMUuPKo54JaUixhbD-BzHAcuN
+X-Proofpoint-ORIG-GUID: gLgRNN1iMUuPKo54JaUixhbD-BzHAcuN
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
- <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
- <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
- <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
- <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com> <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
-In-Reply-To: <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
-From:   Matthew Garrett <mgarrett@aurora.tech>
-Date:   Tue, 2 Aug 2022 11:36:43 -0700
-Message-ID: <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
-To:     Evan Green <evgreen@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-02_14,2022-08-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=768 spamscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2206140000 definitions=main-2208020100
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 3:33 PM Evan Green <evgreen@chromium.org> wrote:
+Hi Linus,
 
-> One more bump here, as we'd really love to get encrypted hibernation
-> to a form upstream would accept if at all possible. We were
-> considering landing this in our Chrome OS tree for now, then coming
-> back in a couple months with a "we've been baking this ourselves and
-> it's going so great, oooh yeah". I'm not sure if upstream would find
-> that compelling or not. But in any case, some guidance towards making
-> this more upstream friendly would be well appreciated.
->
-> One thing I realized in attempting to pick this myself is that the
-> trusted key blob format has moved to ASN.1. So I should really move
-> the creation ticket to the new ASN.1 format (if I can figure out the
-> right OID for that piece), which would allow me to drop a lot of the
-> ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
-> I'll work on that and resend.
+Aside from the one EVM cleanup patch, all the other changes are kexec
+related.
 
-I've been revamping my TPM-backed verified hibernation implementation
-based on this work, so I'd definitely be enthusiastic about it being
-mergeable.
+On different architectures different keyrings are used to verify the
+kexec'ed kernel image signature.  Here are a number of preparatory
+cleanup patches and the patches themselves for making the keyrings -
+builtin_trusted_keyring, .machine, .secondary_trusted_keyring, and
+.platform - consistent across the different architectures.
+
+The root of trust for the different keyrings was described in the cover
+letter and is retained in the merge message.
+
+Note: Stephen is carrying a merge conflict patch with
+commit 68b8e9713c8e ("x86/setup: Use rng seeds from setup_data").
+
+thanks,
+
+Mimi
+
+The following changes since commit 067d2521874135267e681c19d42761c601d503d6:
+
+  ima: Fix potential memory leak in ima_init_crypto() (2022-07-13 10:13:58 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.0
+
+for you to fetch changes up to 88b61b130334212f8f05175e291c04adeb2bf30b:
+
+  Merge remote-tracking branch 'linux-integrity/kexec-keyrings' into next-integrity (2022-07-26 15:58:49 -0400)
+
+----------------------------------------------------------------
+integrity-v6.0
+
+----------------------------------------------------------------
+Coiby Xu (3):
+      kexec: clean up arch_kexec_kernel_verify_sig
+      kexec, KEYS: make the code in bzImage64_verify_sig generic
+      arm64: kexec_file: use more system keyrings to verify kernel image signature
+
+Michal Suchanek (1):
+      kexec, KEYS, s390: Make use of built-in and secondary keyring for signature verification
+
+Mimi Zohar (1):
+      Merge remote-tracking branch 'linux-integrity/kexec-keyrings' into next-integrity
+
+Naveen N. Rao (2):
+      kexec_file: drop weak attribute from functions
+      kexec: drop weak attribute from functions
+
+Xiu Jianfeng (1):
+      evm: Use IS_ENABLED to initialize .enabled
+
+ arch/arm64/include/asm/kexec.h        | 18 +++++++-
+ arch/arm64/kernel/kexec_image.c       | 11 +----
+ arch/powerpc/include/asm/kexec.h      | 14 ++++++
+ arch/s390/include/asm/kexec.h         | 14 ++++++
+ arch/s390/kernel/machine_kexec_file.c | 18 +++++---
+ arch/x86/include/asm/kexec.h          | 12 +++++
+ arch/x86/kernel/kexec-bzimage64.c     | 20 +--------
+ include/linux/kexec.h                 | 82 +++++++++++++++++++++++++++++-----
+ kernel/kexec_core.c                   | 27 ------------
+ kernel/kexec_file.c                   | 83 +++++++++++++----------------------
+ security/integrity/evm/evm_main.c     | 52 ++++++++++------------
+ 11 files changed, 195 insertions(+), 156 deletions(-)
+
