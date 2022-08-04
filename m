@@ -2,72 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206BD58958C
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Aug 2022 02:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3FD5897CD
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Aug 2022 08:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238885AbiHDA7h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 3 Aug 2022 20:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
+        id S232333AbiHDGgF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Aug 2022 02:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238861AbiHDA7g (ORCPT
+        with ESMTP id S229534AbiHDGgE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 3 Aug 2022 20:59:36 -0400
+        Thu, 4 Aug 2022 02:36:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440655F9AF;
-        Wed,  3 Aug 2022 17:59:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9E33AB31;
+        Wed,  3 Aug 2022 23:36:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B839861751;
-        Thu,  4 Aug 2022 00:59:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98755C433C1;
-        Thu,  4 Aug 2022 00:59:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B26B460EF5;
+        Thu,  4 Aug 2022 06:36:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8464C433C1;
+        Thu,  4 Aug 2022 06:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659574773;
-        bh=c0/kYEt5J2FdFJ1FwCq/4THeVhzcRRwZ4/5qZhcI7OE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F4wcugpqGGlPXXs70am0ZjVTUrZiqaKLeXs3OasZWwFdN1LltdJ4eybaDZ6H0ns5y
-         v6uB4vaqKembrVC3p0SxJHJlHmqCBe/dU50f7AyBp/tWsTyk1HD4O6CQFuOE86dcid
-         G0Nh7kIvy/CPexZ3/IOJF+CQE9+d5L7VFpu9zaqeuuLR8Y/8SKN7+3Fo9SVGrqnfgC
-         tWWzGeEToXMW6Vex1z+NbfJubFno50C/TkJscFAhkDFvjh9xBPcOm8a1TjtrsB3vxT
-         czEg5uT1k7lwXWapU3btmj1gxrU2X4GutaCBtKlp3z9oqXiIdMQfSijMSZ/jNcKmNg
-         yzkbTbJIgOcIA==
-Date:   Thu, 4 Aug 2022 03:59:30 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Matthew Garrett <mgarrett@aurora.tech>
-Cc:     Evan Green <evgreen@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
+        s=k20201202; t=1659594960;
+        bh=XWdk58I8HuYnLJ5GXb3J4tqaVKN0JX8nir8rtpOl2Fo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=CEhJyC6z6ebWqBBC413s3sNPrZsBsb37Oys6ZXEAHfJd9TB2CiwSGDuxGEvUzTIV3
+         AfvDu6tNH/+f5qoikGDlpGkzuyJdz06dkd/ewDvVZ0hDf4xmXhhQ67qjJa2b+PUo9n
+         rlXch47Y9YndESG7X6Y0/NexXldDq0rltxhHQTr/puO9Iewf5GhEUvh/Fgcp4OUT2S
+         /sn/xzKJ67oyI8KMEm6p5rA3O6/op3KsxByUSI8aUqZar318uSpZvfRqmRSsmXCZ/d
+         HgG6+H/RBtqRZpPveTlf12AZVEZQ+R8GRBWx62FtolwovDmVUaK5NcHM77NNspqKHG
+         9pKZP1OIcxqxQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Peter Huewe <peterhuewe@gmx.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
-Message-ID: <YusZ8gD/LjiAXadR@kernel.org>
-References: <20220504232102.469959-1-evgreen@chromium.org>
- <20220506160807.GA1060@bug>
- <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
- <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
- <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
- <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
- <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
- <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com>
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [GIT PULL] tpmdd updates for v5.20
+In-Reply-To: <20220803210228.158993-1-jarkko@kernel.org> (Jarkko Sakkinen's
+        message of "Thu, 4 Aug 2022 00:02:28 +0300")
+References: <20220803210228.158993-1-jarkko@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Thu, 04 Aug 2022 09:35:51 +0300
+Message-ID: <87pmhgikhk.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -77,28 +61,45 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 11:36:43AM -0700, Matthew Garrett wrote:
-> On Mon, Aug 1, 2022 at 3:33 PM Evan Green <evgreen@chromium.org> wrote:
-> 
-> > One more bump here, as we'd really love to get encrypted hibernation
-> > to a form upstream would accept if at all possible. We were
-> > considering landing this in our Chrome OS tree for now, then coming
-> > back in a couple months with a "we've been baking this ourselves and
-> > it's going so great, oooh yeah". I'm not sure if upstream would find
-> > that compelling or not. But in any case, some guidance towards making
-> > this more upstream friendly would be well appreciated.
-> >
-> > One thing I realized in attempting to pick this myself is that the
-> > trusted key blob format has moved to ASN.1. So I should really move
-> > the creation ticket to the new ASN.1 format (if I can figure out the
-> > right OID for that piece), which would allow me to drop a lot of the
-> > ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
-> > I'll work on that and resend.
-> 
-> I've been revamping my TPM-backed verified hibernation implementation
-> based on this work, so I'd definitely be enthusiastic about it being
-> mergeable.
+Jarkko Sakkinen <jarkko@kernel.org> writes:
 
-BTW, is it tested with QEMU + swtpm?
+> Contains mostly TPM and also few keyring fixes.
+>
+> BR, Jarkko
+>
+> The following changes since commit 200e340f2196d7fd427a5810d06e893b932f145a:
+>
+>   Merge tag 'pull-work.dcache' of git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs (2022-08-03 11:43:12 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.20
+>
+> for you to fetch changes up to 863ed94c589fcd1984f4e3080f069d30508044bb:
+>
+>   tpm: Add check for Failure mode for TPM2 modules (2022-08-03 23:56:20 +0300)
+>
+> ----------------------------------------------------------------
+> tpmdd updates for Linux v5.20
+>
+> ----------------------------------------------------------------
+> Alexander Steffen (3):
+>       dt-bindings: trivial-devices: Add Infineon SLB9673 TPM
+>       tpm: Add tpm_tis_verify_crc to the tpm_tis_phy_ops protocol layer
+>       tpm: Add tpm_tis_i2c backend for tpm_tis_core
+>
+> Elvira Khabirova (1):
+>       pkcs7: support EC-RDSA/streebog in SignerInfo
+>
+> Huacai Chen (1):
+>       tpm: eventlog: Fix section mismatch for DEBUG_SECTION_MISMATCH
+>
+> M...rten Lindahl (1):
+>       tpm: Add check for Failure mode for TPM2 modules
 
-BR, Jarkko
+Some encoding problems in the name? At least my Gnus didn't show them correctly.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
