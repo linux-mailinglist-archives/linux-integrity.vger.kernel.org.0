@@ -2,51 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D09758B784
-	for <lists+linux-integrity@lfdr.de>; Sat,  6 Aug 2022 20:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7468158B793
+	for <lists+linux-integrity@lfdr.de>; Sat,  6 Aug 2022 20:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiHFSLj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 6 Aug 2022 14:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
+        id S241913AbiHFSTq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 6 Aug 2022 14:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiHFSLi (ORCPT
+        with ESMTP id S233260AbiHFSTl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 6 Aug 2022 14:11:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DEADFB5;
-        Sat,  6 Aug 2022 11:11:37 -0700 (PDT)
+        Sat, 6 Aug 2022 14:19:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5EAE0C7;
+        Sat,  6 Aug 2022 11:19:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 409AB611CD;
-        Sat,  6 Aug 2022 18:11:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 437F0C433D6;
-        Sat,  6 Aug 2022 18:11:36 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 391D0CE090A;
+        Sat,  6 Aug 2022 18:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 75E7EC433C1;
+        Sat,  6 Aug 2022 18:19:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659809496;
-        bh=QVM9KSZRLYkqpS1ouT+Ij9B/WbZhpHmHOeFMoBrXB7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n4CbZDbLAvW0jaxY5dIiN3gUprCx0x/Y0b16YE55fmM+RMwVMDRhVqtQo/Hluv68y
-         9D/xWTv+sbFZA6pX/6B3rUW501Eg3eHRMAq9x3dur2nCiSW251rq+LzAU5bfnvcNl0
-         21VkLH51jhe7WuNClzrbQ7Trq61Ljs9bfp+ldR/0Q7j8I/nFfpcVGFg/JZ3URBssdM
-         FKk2ZWZTu8N0EqHv444pobIbwv0OMhKyzIEgtmPpYk1AjCeeHoi3mTHRLcdhJkYfs6
-         8or+KfFwiu0kXrFmERXXMZQlYiv6XrM4DPZu6KkdtHwWLvD0mQGZzyyHofodTUUxrQ
-         gHJt4GzLdN7Sg==
-Date:   Sat, 6 Aug 2022 21:11:33 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jiang Liu <jiang.liu@linux.intel.com>,
+        s=k20201202; t=1659809977;
+        bh=23hV1FvTFoQPJG82yincXoFnJtqM68n3qlr/PH7oADY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ILANQsuLLMucXnRB/iHWGiNaBVoLWXbAkknVcD2cGJLIYlriMmpWFtqhay/j6XAwm
+         755/K0yQhh1B34uySCHuMiVnDXP+AOhAe+TrGSj+e1pnkdsajuKBsbe35fg9Kp6xv4
+         wwLuXNE/7SlgerUnXenEDiJDFvPDKXBfjOvrf5lG6BHHL4xZrpricm9hDGh49UhYWG
+         oqxY8UiocFUG1LZi0Zxvv2oQ/qetgEsGg9rPAet7tbrODXGb2r3+BwKBvuts4mqA+h
+         pXmFjny/BwAkUvNVC48xE9yUNNEHzCv4YcyCPMdOyLwsOPG9BWfgDa44Agaztw4Zcl
+         3peTp+KosojjA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 630E3C43140;
+        Sat,  6 Aug 2022 18:19:37 +0000 (UTC)
+Subject: Re: [GIT PULL] tpmdd updates for v5.20
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220803210228.158993-1-jarkko@kernel.org>
+References: <20220803210228.158993-1-jarkko@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220803210228.158993-1-jarkko@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.20
+X-PR-Tracked-Commit-Id: 863ed94c589fcd1984f4e3080f069d30508044bb
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f20c95b46b8fa3ad34b3ea2e134337f88591468b
+Message-Id: <165980997740.27284.17376485647055486721.pr-tracker-bot@kernel.org>
+Date:   Sat, 06 Aug 2022 18:19:37 +0000
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-integrity@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] tpm/ppi: fix return type in tpm_show_ppi_response()
-Message-ID: <Yu6u1RZb7uZ6rMA6@kernel.org>
-References: <YutwPjef/hseEE31@kili>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YutwPjef/hseEE31@kili>
+        David Howells <dhowells@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,38 +69,15 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 10:07:42AM +0300, Dan Carpenter wrote:
-> This "status" is declared as type acpi_status but it is never used to
-> store any acpi_statuses, only int.
-> 
-> The tpm_show_ppi_response() function returns ssize_t (signed long) and
-> acpi_status is unsigned int.  That means that negative error codes will
-> be type promoted to large positive values.
-> 
-> Fixes: 84b1667dea23 ("ACPI / TPM: replace open-coded _DSM code with helper functions")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/char/tpm/tpm_ppi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-> index 40018a73b3cb..240df925c38c 100644
-> --- a/drivers/char/tpm/tpm_ppi.c
-> +++ b/drivers/char/tpm/tpm_ppi.c
-> @@ -222,7 +222,7 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
->  				     struct device_attribute *attr,
->  				     char *buf)
->  {
-> -	acpi_status status = -EINVAL;
-> +	int status = -EINVAL;
->  	union acpi_object *obj, *ret_obj;
->  	u64 req, res;
->  	struct tpm_chip *chip = to_tpm_chip(dev);
-> -- 
-> 2.35.1
-> 
+The pull request you sent on Thu,  4 Aug 2022 00:02:28 +0300:
 
+> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.20
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f20c95b46b8fa3ad34b3ea2e134337f88591468b
 
-BR, Jarkko
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
