@@ -2,107 +2,160 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4FA58E310
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Aug 2022 00:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CF858F727
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Aug 2022 07:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiHIWQs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 9 Aug 2022 18:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S233711AbiHKFCN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 Aug 2022 01:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiHIWPW (ORCPT
+        with ESMTP id S233459AbiHKFCM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 9 Aug 2022 18:15:22 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596C624974
-        for <linux-integrity@vger.kernel.org>; Tue,  9 Aug 2022 15:15:15 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id h132so12617556pgc.10
-        for <linux-integrity@vger.kernel.org>; Tue, 09 Aug 2022 15:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=GI1h58u9NHz7rI/vIwOU5DkUcoHPmL+b4tk5i/xxv5Y=;
-        b=QTP95oQi+RYhXbI8sz4RyTZp0RSE4jP48cyyUmWbTiK1ItvOHbADVtjkGHK/8zFbqv
-         EIzUG3d4HgG5eAQxnVHuBpH33ycuIiNpMEXk8S0LHARhhQGb6AufQVVn/40aQfLvP77W
-         778oK7qnpGZXO0Q2aGCYT4Mad4FGDHlh1br3s7D4D+9Vr7gPQrhXDR8bwR1fyz6kQ1n2
-         /mI7/+oIm6xqfpBjeRephfywWnzvzUcqvvdKwYuFsxmTm/GRVEQb9jKfBsLPvHEPeyBR
-         SLk52BQ10Zm7GZ4Mv5gugSKJZhGFXVOipaGDVsAOq6ABLyMrmGMv+5RYTjL3cqduwO+M
-         O1Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=GI1h58u9NHz7rI/vIwOU5DkUcoHPmL+b4tk5i/xxv5Y=;
-        b=WeB+4JP/qwGPlBAgh6255j+MR0kpZtv9gAq0AFCGaF0Y3nEm/aV+4SRj5UWJG9iXMo
-         eohvxWVAbNZWj20PEQ44IK9gH97kebmAhOElHv3+g5psvDgItym5YbloyXW3VELxPqbA
-         qMp0BGwgLmHd0+gIdklm+ekWv/a73wyfggC00Kw1qeoRL22pfYXBYdV2Zn4OLJyODBDO
-         rKPeu2xryd8g5ISAT3R1im1Niqhtdciix1DMeXCPNgzBcF481HSqaO1vY58EDg1xVDQ8
-         quGX8Ca/TWaGuiIIDTy2/J8K0wv+2yV1pnQspAB4FIf8dWG5SFsbiAM1TvU2B8HUsqeW
-         ZoZw==
-X-Gm-Message-State: ACgBeo33E7svM5IBcQYGNfsSbXy6sqBtvEaSXaDQXh18UOdkxXzhWU/y
-        J361I1DreyT2SkVEjRf3kDX8BWV3+Kzi6WmXQfEWWDGvapOaPw==
-X-Google-Smtp-Source: AA6agR7pJ6r7fhR2kV9XLe+oV3h+/ej1weqLnpTQS1YP5ule1vsDwGSNCnOW6LlEIY2xTapZFY+hu5KXPqSjTYpoaJM=
-X-Received: by 2002:a63:4642:0:b0:41b:d353:c5c7 with SMTP id
- v2-20020a634642000000b0041bd353c5c7mr20359415pgk.568.1660083303718; Tue, 09
- Aug 2022 15:15:03 -0700 (PDT)
+        Thu, 11 Aug 2022 01:02:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65E67CB58;
+        Wed, 10 Aug 2022 22:02:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9950DB81EF2;
+        Thu, 11 Aug 2022 05:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0779AC433D6;
+        Thu, 11 Aug 2022 05:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660194128;
+        bh=sbr+S4YokhI1iJOsvmS4oDGxcnii+dV1h5gl6Iw/AfM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NIeyuwHhlTo61IVf8eg9iytmLr2lKh3mKMzrSG5fMwp+fI9MZKC76CbHxxDyKzlYB
+         BTsI72wfs9ugBB1cJ1phGLPFLsUSwAIpGcBk/k60FFZxJ8jzBgxvWAToQV5C6R45m1
+         GC3lqoIg3kQmaxa+ghwiQ+DKLaAdYkpmIkvGcHLMBBeIyTbS12vgiCcejm0Uh/u/lG
+         Ay7ZROaP8ZQHpc9108+U2VArdjDpLFEAdqs1jB59+FpWGGbCmgJvlkJtRa+Yk189c9
+         5GqKRKo608Y4i4W1qDAtcGI4dMA1oCJ/K3p0i4spuzbtFtWlQ0AC3ERJtb7nz7EacH
+         J7njQnuooYIPg==
+Date:   Thu, 11 Aug 2022 08:02:02 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sven van Ashbrook <svenva@chromium.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Hao Wu <hao.wu@rubrik.com>, Yi Chou <yich@google.com>,
+        Andrey Pronin <apronin@chromium.org>,
+        James Morris <james.morris@microsoft.com>,
+        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: fix potential race condition in suspend/resume
+Message-ID: <YvSNSs84wMRZ8Fa9@kernel.org>
+References: <20220809193921.544546-1-svenva@chromium.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:e8a6:b0:2d4:fb1c:cc5e with HTTP; Tue, 9 Aug 2022
- 15:15:03 -0700 (PDT)
-Reply-To: wijh555@gmail.com
-From:   "Dr. Ali Moses" <alimoses07@gmail.com>
-Date:   Tue, 9 Aug 2022 15:15:03 -0700
-Message-ID: <CADWzZe65tcOX2+bMZfMLLauGpHEQ9Cdv814nLU=uQvKzDFrEVg@mail.gmail.com>
-Subject: Good Day,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:536 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [alimoses07[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [wijh555[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [alimoses07[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220809193921.544546-1-svenva@chromium.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
--- 
-Hello,
-We the Board Directors believe you are in good health, doing great and
-with the hope that this mail will meet you in good condition, We are
-privileged and delighted to reach you via email" And we are urgently
-waiting to hear from you. and again your number is not connecting.
+On Tue, Aug 09, 2022 at 07:39:18PM +0000, Sven van Ashbrook wrote:
+> Concurrent accesses to the tpm chip are prevented by allowing only a
+> single thread at a time to obtain a tpm chip reference through
+> tpm_try_get_ops(). However, the tpm's suspend function does not use
+> this mechanism, so when the tpm api is called by a kthread which
+> does not get frozen on suspend (such as the hw_random kthread)
+> it's possible that the tpm is used when already in suspend, or
+> in use while in the process of suspending.
+> 
+> This is seen on certain ChromeOS platforms - low-probability warnings
+> are generated during suspend. In this case, the tpm attempted to read data
+> from a tpm chip on an already-suspended bus.
+> 
+>   i2c_designware i2c_designware.1: Transfer while suspended
+> 
+> Fix:
+> 1. prevent concurrent execution of tpm accesses and suspend/
+>    resume, by letting suspend/resume grab the tpm_mutex.
+> 2. before commencing a tpm access, check if the tpm chip is already
+>    suspended. Fail with -EAGAIN if so.
+> 
+> Tested by running 6000 suspend/resume cycles back-to-back on a
+> ChromeOS "brya" device. The intermittent warnings reliably
+> disappear after applying this patch. No system issues were observed.
+> 
+> Cc: <stable@vger.kernel.org>
+> Fixes: e891db1a18bf ("tpm: turn on TPM on suspend for TPM 1.x")
+> Signed-off-by: Sven van Ashbrook <svenva@chromium.org>
+> ---
+>  drivers/char/tpm/tpm-interface.c | 16 ++++++++++++++++
+>  include/linux/tpm.h              |  2 ++
+>  2 files changed, 18 insertions(+)
+> 
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 1621ce818705..16ca490fd483 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -82,6 +82,11 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+>  		return -E2BIG;
+>  	}
+>  
+> +	if (chip->is_suspended) {
+> +		dev_info(&chip->dev, "blocking transmit while suspended\n");
+> +		return -EAGAIN;
+> +	}
+> +
+>  	rc = chip->ops->send(chip, buf, count);
+>  	if (rc < 0) {
+>  		if (rc != -EPIPE)
+> @@ -394,6 +399,8 @@ int tpm_pm_suspend(struct device *dev)
+>  	if (!chip)
+>  		return -ENODEV;
+>  
+> +	mutex_lock(&chip->tpm_mutex);
+> +
+>  	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+>  		goto suspended;
+>  
+> @@ -411,6 +418,11 @@ int tpm_pm_suspend(struct device *dev)
+>  	}
+>  
+>  suspended:
+> +	if (!rc)
+> +		chip->is_suspended = true;
+> +
+> +	mutex_unlock(&chip->tpm_mutex);
+> +
+>  	return rc;
+>  }
+>  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+> @@ -426,6 +438,10 @@ int tpm_pm_resume(struct device *dev)
+>  	if (chip == NULL)
+>  		return -ENODEV;
+>  
+> +	mutex_lock(&chip->tpm_mutex);
+> +	chip->is_suspended = false;
+> +	mutex_unlock(&chip->tpm_mutex);
+> +
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(tpm_pm_resume);
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index d7c67581929f..0fbc1a43ae80 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -131,6 +131,8 @@ struct tpm_chip {
+>  	int dev_num;		/* /dev/tpm# */
+>  	unsigned long is_open;	/* only one allowed */
+>  
+> +	bool is_suspended;
+> +
+>  	char hwrng_name[64];
+>  	struct hwrng hwrng;
+>  
+> -- 
+> 2.37.1.559.g78731f0fdb-goog
+> 
 
-My regards,
-Dr. Ali Moses..
+What about adding TPM_CHIP_FLAG_SUSPENDED instead?
 
-Sincerely,
-Prof. Chin Guang
+BR, Jarkko
