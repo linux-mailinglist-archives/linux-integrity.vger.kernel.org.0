@@ -2,76 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCC85925E1
-	for <lists+linux-integrity@lfdr.de>; Sun, 14 Aug 2022 19:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD325925FB
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Aug 2022 20:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiHNR7S (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 14 Aug 2022 13:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S229555AbiHNSac (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 14 Aug 2022 14:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiHNR7S (ORCPT
+        with ESMTP id S229379AbiHNSab (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 14 Aug 2022 13:59:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4AA23BE7;
-        Sun, 14 Aug 2022 10:59:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C3253CE0B6B;
-        Sun, 14 Aug 2022 17:59:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD92AC433C1;
-        Sun, 14 Aug 2022 17:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660499954;
-        bh=WUnkyF/jNFURTckY2gWMqvZYLn4P0jY1yB4UNrr5PG8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U0G/IUM2CzBKuMP32GF2DT+SpuIncGNSM+suuHYblDIDY2fPihRaurMmpVkUZvngp
-         S74HNwTNETAdQS9b3P++XwJUBRZ8ROSQURUoXwhKxW3TSAxkhRPkiQbxydz5nlYg8a
-         BBtUqhH1dWa6TdIWyk6qRcxsvr3Snx+xh6fEaubt8oYZx8/evaW/vV7Mv9r2u9bagU
-         blTyOdDObZPQaZck18EqfU5hR+q0b5O1dXaCCvmfMAfDP5eXhpp5rH3cHwFtzjeuZC
-         VY7I+VPpMfR1KywGhWKk+WPzWRO4ug8kTVen4NcY3dYETebpxiyKypFE8TPkxvEuoD
-         vSF6PvlXaKYow==
-Date:   Sun, 14 Aug 2022 20:59:10 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sven van Ashbrook <svenva@chromium.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Hao Wu <hao.wu@rubrik.com>, Yi Chou <yich@google.com>,
-        Andrey Pronin <apronin@chromium.org>,
-        James Morris <james.morris@microsoft.com>,
-        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tpm: fix potential race condition in suspend/resume
-Message-ID: <Yvk37kLvftaNbB91@kernel.org>
-References: <20220809193921.544546-1-svenva@chromium.org>
- <YvSNSs84wMRZ8Fa9@kernel.org>
- <CAM7w-FX4NfeQy9chKgzjAj6gvvoK3OxCK0VYq9DT5qrdB=_tDA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM7w-FX4NfeQy9chKgzjAj6gvvoK3OxCK0VYq9DT5qrdB=_tDA@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 14 Aug 2022 14:30:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29245E0EB;
+        Sun, 14 Aug 2022 11:30:30 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27EHbiAC009940;
+        Sun, 14 Aug 2022 18:30:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=KxBUd7pa2nUZRRhQOewbZm2CwhO+HiORytJTT6QWhVA=;
+ b=E7KwKf9K6Lghzex7ZtLlxNWBkkNssziLcu0Cf9zz77q1TTvIQ/GpNpuV1Zeo+dobPUUM
+ 6rW8OIqLBAfGi/+hD5demaiL0AK5sGUQGSxvfFLmxWUFLa0nEak2UI6bOcDqpujQo4Mr
+ xJdY6QSWers6UGzj8TO/RflvGtshi38Zt+QNptFYI+hmJQ5sbUdXcy9ECmddweepZEYX
+ Dqj0wo7SKscGLNMzILW1ZJu1jAMmju52+lVjDeiA4OzBS5VBt1QTjK0yIJ6r5bbiFhk5
+ 01/Qtl8Km7SDvYO0HisLCfho7Hf/c8eTX9GCuuUNqFYbwFOuos/Kuz1/xi2hyItvAKkE aQ== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hy3jv2yac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 Aug 2022 18:30:17 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27EIMvMP030904;
+        Sun, 14 Aug 2022 18:30:15 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 3hx3k8rxu9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 Aug 2022 18:30:15 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27EIUCIm34210238
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 14 Aug 2022 18:30:13 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD7A7A4053;
+        Sun, 14 Aug 2022 18:30:12 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2898AA4040;
+        Sun, 14 Aug 2022 18:30:11 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.84.29])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 14 Aug 2022 18:30:10 +0000 (GMT)
+Message-ID: <649f9797ae80907aa72a8c0418a71df9eacdd1f5.camel@linux.ibm.com>
+Subject: Re: Race conditioned discovered between ima_match_rules and
+ ima_update_lsm_update_rules
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Paul Moore <paul@paul-moore.com>,
+        "Guozihua (Scott)" <guozihua@huawei.com>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        selinux@vger.kernel.org,
+        "xiujianfeng@huawei.com" <xiujianfeng@huawei.com>,
+        luhuaxin <luhuaxin1@huawei.com>
+Date:   Sun, 14 Aug 2022 14:30:10 -0400
+In-Reply-To: <CAHC9VhRCt9UKih_VzawKr9dL5oZ7fgOoiU5edLp3hGZ2LkhAYw@mail.gmail.com>
+References: <ffbb5ff1-cec7-3dad-7330-31fdfb67fecc@huawei.com>
+         <cc760579-36f4-fe32-3526-bb647efd438c@huawei.com>
+         <CAHC9VhRCt9UKih_VzawKr9dL5oZ7fgOoiU5edLp3hGZ2LkhAYw@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: lRwG9hK_VCa5WNUTO6Rd0y1HRCB3u4_a
+X-Proofpoint-GUID: lRwG9hK_VCa5WNUTO6Rd0y1HRCB3u4_a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-14_11,2022-08-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ impostorscore=0 spamscore=0 clxscore=1011 bulkscore=0 priorityscore=1501
+ mlxlogscore=999 adultscore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208140079
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 09:09:38AM -0400, Sven van Ashbrook wrote:
-> On Thu, Aug 11, 2022 at 1:02 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+Hi Scott, Paul,
+
+On Tue, 2022-08-09 at 12:24 -0400, Paul Moore wrote:
+> On Sun, Aug 7, 2022 at 11:19 PM Guozihua (Scott) <guozihua@huawei.com> wrote:
 > >
-> > What about adding TPM_CHIP_FLAG_SUSPENDED instead?
+> > On 2022/8/8 11:02, Guozihua (Scott) wrote:
+> > > Hi Community,
+> > >
+> > > Recently we discovered a race condition while updating SELinux policy
+> > > with IMA lsm rule enabled. Which would lead to extra files being measured.
+> > >
+> > > While SELinux policy is updated, the IDs for object types and such would
+> > > be changed, and ima_lsm_update_rules would be called.
+> > >
+> > > There are no lock applied in ima_lsm_update_rules. If user accesses a
+> > > file during this time, ima_match_rules will be matching rules based on
+> > > old SELinux au_seqno resulting in selinux_audit_rule_match returning
+> > > -ESTALE.
+> > >
+> > > However, in ima_match_rules, this error number is not handled, causing
+> > > IMA to think the LSM rule is also a match, leading to measuring extra
+> > > files.
 > 
-> Thank you for the feedback, Jarkko. After thinking this over, I
-> believe this patch only moves kernel warnings around. Will re-post
-> soon with a fresh approach, intended to fix the underlying issue
-> rather than the symptom.
+> ...
 > 
-> So please disregard this patch.
+> > > Is this the intended behavior? Or is it a good idea to add a lock for
+> > > LSM rules during update?
+> 
+> I'm not the IMA expert here, but a lot of effort has been into the
+> SELinux code to enable lockless/RCU SELinux policy access and I
+> *really* don't want to have to backtrack on that.
 
-np 
+IMA initially updated it's reference to the SELinux label ids lazily. 
+More recently IMA refreshes the LSM label ids based on
+register_blocking_lsm_notifier().  As a result of commit 9ad6e9cb39c6
+("selinux: fix race between old and new sidtab"), -ESTALE is now being
+returned.
 
-BR, Jarkko
+- How likely is it if one SELinux label is stale that other labels are
+stale as well? 
+- Perhaps SELinux is calling the call_blocking_lsm_notifier() too
+early.  Or does SELinux need to call the notifier again after
+addressing the ESTALE ids?
+
+thanks,
+
+Mimib
+
