@@ -2,100 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18EB591579
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Aug 2022 20:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCC85925E1
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Aug 2022 19:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbiHLS3F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Aug 2022 14:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S231976AbiHNR7S (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 14 Aug 2022 13:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiHLS3F (ORCPT
+        with ESMTP id S229520AbiHNR7S (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Aug 2022 14:29:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E726B2DBC;
-        Fri, 12 Aug 2022 11:29:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Sun, 14 Aug 2022 13:59:18 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4AA23BE7;
+        Sun, 14 Aug 2022 10:59:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 25B892076B;
-        Fri, 12 Aug 2022 18:29:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1660328943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tPX04jbC0BQlROGb55mEQeAkYdO/pUMQJcyP6P8yDMg=;
-        b=Dnk3QtxahbVc8N9Wb+mg3LWpIqkL3j324Xp+zLN1b3scdy/6qC3SQRFK8mueXE9dOR3bzD
-        kJVAa0mCRV10Ey1xRS0KdJiaA9Wz8rqTWrRnCe1cOw0qo+FQTx1rfRhSaWUJljn9CEbQwD
-        xzFf5Tca5Jc7aJLzQhyTBqFAUhyiUPw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1660328943;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tPX04jbC0BQlROGb55mEQeAkYdO/pUMQJcyP6P8yDMg=;
-        b=RKeJHxsr+7BAG6RlGp765vCQzZKzbcl/KDPcaPksygxZXVLn3ATBYyju64TDEMjTHB+oX2
-        LKozQGXN/hssDQAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14F5C13AAE;
-        Fri, 12 Aug 2022 18:29:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Is0VBe+b9mLdIgAAMHmgww
-        (envelope-from <bp@suse.de>); Fri, 12 Aug 2022 18:29:03 +0000
-Date:   Fri, 12 Aug 2022 20:28:58 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jonathan McDowell <noodles@fb.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v7 3/6] x86/kexec: Carry forward IMA measurement log on
- kexec
-Message-ID: <Yvab6lC9BUbmp4a8@zn.tnic>
-References: <20220812164305.2056641-1-stefanb@linux.ibm.com>
- <20220812164305.2056641-4-stefanb@linux.ibm.com>
- <YvaJc7bQjz61Y1jj@zn.tnic>
- <935988a4-c245-7cb1-4e14-bc99d39220a1@linux.ibm.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id C3253CE0B6B;
+        Sun, 14 Aug 2022 17:59:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD92AC433C1;
+        Sun, 14 Aug 2022 17:59:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660499954;
+        bh=WUnkyF/jNFURTckY2gWMqvZYLn4P0jY1yB4UNrr5PG8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U0G/IUM2CzBKuMP32GF2DT+SpuIncGNSM+suuHYblDIDY2fPihRaurMmpVkUZvngp
+         S74HNwTNETAdQS9b3P++XwJUBRZ8ROSQURUoXwhKxW3TSAxkhRPkiQbxydz5nlYg8a
+         BBtUqhH1dWa6TdIWyk6qRcxsvr3Snx+xh6fEaubt8oYZx8/evaW/vV7Mv9r2u9bagU
+         blTyOdDObZPQaZck18EqfU5hR+q0b5O1dXaCCvmfMAfDP5eXhpp5rH3cHwFtzjeuZC
+         VY7I+VPpMfR1KywGhWKk+WPzWRO4ug8kTVen4NcY3dYETebpxiyKypFE8TPkxvEuoD
+         vSF6PvlXaKYow==
+Date:   Sun, 14 Aug 2022 20:59:10 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sven van Ashbrook <svenva@chromium.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Hao Wu <hao.wu@rubrik.com>, Yi Chou <yich@google.com>,
+        Andrey Pronin <apronin@chromium.org>,
+        James Morris <james.morris@microsoft.com>,
+        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: fix potential race condition in suspend/resume
+Message-ID: <Yvk37kLvftaNbB91@kernel.org>
+References: <20220809193921.544546-1-svenva@chromium.org>
+ <YvSNSs84wMRZ8Fa9@kernel.org>
+ <CAM7w-FX4NfeQy9chKgzjAj6gvvoK3OxCK0VYq9DT5qrdB=_tDA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <935988a4-c245-7cb1-4e14-bc99d39220a1@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAM7w-FX4NfeQy9chKgzjAj6gvvoK3OxCK0VYq9DT5qrdB=_tDA@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 01:14:38PM -0400, Stefan Berger wrote:
-> Yes, so this series can be tested by krobot.
+On Thu, Aug 11, 2022 at 09:09:38AM -0400, Sven van Ashbrook wrote:
+> On Thu, Aug 11, 2022 at 1:02 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > What about adding TPM_CHIP_FLAG_SUSPENDED instead?
+> 
+> Thank you for the feedback, Jarkko. After thinking this over, I
+> believe this patch only moves kernel warnings around. Will re-post
+> soon with a fresh approach, intended to fix the underlying issue
+> rather than the symptom.
+> 
+> So please disregard this patch.
 
-You mean Intel's 0day robot?
+np 
 
-I believe that thing has by now enough logic to figure out which branch
-to base patches ontop. Or maybe there's some magic incantation to tell
-it which base commit to use so that you can simply do your patches ontop
-of latest linux-next instead of having to carry upstreamed patches.
-
-Also, there's a little point in testing against 5.19 when you wanna test
-it against v6.0-rc1...
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+BR, Jarkko
