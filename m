@@ -2,132 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFC8596A4C
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Aug 2022 09:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872C0596B13
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Aug 2022 10:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbiHQHUg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Aug 2022 03:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S233960AbiHQIJC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Aug 2022 04:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiHQHUg (ORCPT
+        with ESMTP id S230201AbiHQII7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Aug 2022 03:20:36 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCCE6E2E1;
-        Wed, 17 Aug 2022 00:20:34 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M6zqY1RbMzcg0W;
-        Wed, 17 Aug 2022 15:17:29 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 15:20:32 +0800
-Message-ID: <283a9142-f9e5-24b9-808c-f980343acaa7@huawei.com>
-Date:   Wed, 17 Aug 2022 15:20:32 +0800
+        Wed, 17 Aug 2022 04:08:59 -0400
+X-Greylist: delayed 454 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 Aug 2022 01:08:57 PDT
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E651F4D4FF
+        for <linux-integrity@vger.kernel.org>; Wed, 17 Aug 2022 01:08:57 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id 2182D22F3A; Wed, 17 Aug 2022 08:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1660723282; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=ELplTtgGrsLmmiQFk8fpncXRuTnWhGwVBK0rMZjQ4wNEMU7BUPupZpUUARN1oiSey
+         XR6IpQMcBlRXXzlP10bbNtih7cS8ksw5EBU3jsqbGYoJNLM4cfv3hKB0sv6tGPFlE3
+         7sexiLmTx2KshcvdJK7a/I6HxWAkUbYTGAFgVW4UXISZyEY6p54NRq5S7+ThM1EqEs
+         I2k3/XNJdNRNdEHJ72ggEHr1dSJStluCfyd0+ydM9kXyws65bOLKg5FTR1SGWdby5Q
+         qN1EDOHyF4/te4l3VLXjPOpPIILgedaM62fK2SodHNUhE7LeKCKRQrHcNQTaIoJsDN
+         5l949FifWkspw==
+Received: by mail.fadrush.pl for <linux-integrity@vger.kernel.org>; Wed, 17 Aug 2022 08:00:09 GMT
+Message-ID: <20220817064500-0.1.12.8bg4.0.fs8g0ibcf5@fadrush.pl>
+Date:   Wed, 17 Aug 2022 08:00:09 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-integrity@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: Race conditioned discovered between ima_match_rules and
- ima_update_lsm_update_rules
-Content-Language: en-US
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-To:     Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        <selinux@vger.kernel.org>,
-        "xiujianfeng@huawei.com" <xiujianfeng@huawei.com>,
-        luhuaxin <luhuaxin1@huawei.com>
-References: <ffbb5ff1-cec7-3dad-7330-31fdfb67fecc@huawei.com>
- <cc760579-36f4-fe32-3526-bb647efd438c@huawei.com>
- <CAHC9VhRCt9UKih_VzawKr9dL5oZ7fgOoiU5edLp3hGZ2LkhAYw@mail.gmail.com>
- <649f9797ae80907aa72a8c0418a71df9eacdd1f5.camel@linux.ibm.com>
- <CAHC9VhTO2YDF8paeYfPDj2aAdiNGCDxziHTY2Sa_5C=yup+P_w@mail.gmail.com>
- <c9e269ce-74aa-f2f0-f21d-0d023db23739@huawei.com>
-In-Reply-To: <c9e269ce-74aa-f2f0-f21d-0d023db23739@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2022/8/17 15:17, Guozihua (Scott) wrote:
-> On 2022/8/16 6:23, Paul Moore wrote:
->> On Sun, Aug 14, 2022 at 2:30 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
->>>
->>> Hi Scott, Paul,
->>>
->>> On Tue, 2022-08-09 at 12:24 -0400, Paul Moore wrote:
->>>> On Sun, Aug 7, 2022 at 11:19 PM Guozihua (Scott) 
->>>> <guozihua@huawei.com> wrote:
->>>>>
->>>>> On 2022/8/8 11:02, Guozihua (Scott) wrote:
->>>>>> Hi Community,
->>>>>>
->>>>>> Recently we discovered a race condition while updating SELinux policy
->>>>>> with IMA lsm rule enabled. Which would lead to extra files being 
->>>>>> measured.
->>>>>>
->>>>>> While SELinux policy is updated, the IDs for object types and such 
->>>>>> would
->>>>>> be changed, and ima_lsm_update_rules would be called.
->>>>>>
->>>>>> There are no lock applied in ima_lsm_update_rules. If user accesses a
->>>>>> file during this time, ima_match_rules will be matching rules 
->>>>>> based on
->>>>>> old SELinux au_seqno resulting in selinux_audit_rule_match returning
->>>>>> -ESTALE.
->>>>>>
->>>>>> However, in ima_match_rules, this error number is not handled, 
->>>>>> causing
->>>>>> IMA to think the LSM rule is also a match, leading to measuring extra
->>>>>> files.
->>>>
->>>> ...
->>>>
->>>>>> Is this the intended behavior? Or is it a good idea to add a lock for
->>>>>> LSM rules during update?
->>>>
->>>> I'm not the IMA expert here, but a lot of effort has been into the
->>>> SELinux code to enable lockless/RCU SELinux policy access and I
->>>> *really* don't want to have to backtrack on that.
->>>
->>> IMA initially updated it's reference to the SELinux label ids lazily.
->>> More recently IMA refreshes the LSM label ids based on
->>> register_blocking_lsm_notifier().  As a result of commit 9ad6e9cb39c6
->>> ("selinux: fix race between old and new sidtab"), -ESTALE is now being
->>> returned.
->>
->> To be clear, are you seeing this only started happening after commit
->> 9ad6e9cb39c6?  If that is the case, I would suggest a retry loop
->> around ima_filter_rule_match() when -ESTALE is returned.  I believe
->> that should resolve the problem, if not please let us know.
->>
-> 
-> Hi Mimi and Paul
-> 
-> It seems that selinux_audit_rule_match has been returning -ESTALE for a 
-> very long time. It dates back to 376bd9cb357ec.
-> 
-> IMA used to have a retry mechanism, but it was removed by b16942455193 
-> ("ima: use the lsm policy update notifier"). Maybe we should consider 
-> bring it back or just add a lock in ima_lsm_update_rules().
-> 
-> FYI, once ima received the notification, it starts updating all it's lsm 
-> rules one-by-one. During this time, calling ima_match_rules on any rule 
-> that is not yet updated would return -ESTALE.
-> 
+Dzie=C5=84 dobry,
 
-I mean a retry might still be needed in ima_match_rules(), but not the 
-ima_lsm_update_rules().
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
--- 
-Best
-GUO Zihua
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
+
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
+
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
+
+
+Pozdrawiam
+Jakub Olejniczak
