@@ -2,102 +2,135 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535DC5992CB
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Aug 2022 03:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B593599B37
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Aug 2022 13:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245318AbiHSBuY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 Aug 2022 21:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
+        id S1348309AbiHSLez (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Aug 2022 07:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244505AbiHSBuV (ORCPT
+        with ESMTP id S1347966AbiHSLey (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 Aug 2022 21:50:21 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A260D7D04
-        for <linux-integrity@vger.kernel.org>; Thu, 18 Aug 2022 18:50:20 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M84PC2RhRz1N7LL;
-        Fri, 19 Aug 2022 09:46:55 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 09:50:18 +0800
-Message-ID: <998ca87c-8eef-8d50-e1ee-da53ef8f0046@huawei.com>
-Date:   Fri, 19 Aug 2022 09:50:18 +0800
+        Fri, 19 Aug 2022 07:34:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE905DB047;
+        Fri, 19 Aug 2022 04:34:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D243617AB;
+        Fri, 19 Aug 2022 11:34:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1015C433C1;
+        Fri, 19 Aug 2022 11:34:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660908892;
+        bh=V2k0NMVIrgt8WLIyR18szSE2DGtSyfglRqVICktd4EQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gXb2Fj7z4gZg7GmGCleAWuzTrZ6C8k87aaw6G0WZCwj8Gab6EEcHiNcw3h+nJ7BB1
+         rTRJavVtvl8jZ+XNdZTgFN7RvF5kXTo3+rGAm+YeYUckRwV1flm16m27K1QiG8oFeR
+         Zhkj0cu3D4dRiYhTsl9gz2TazexVVRRALu+Jodzr5Xl+snfLn+FUhH23U11rdd7XtZ
+         C7N7ss4rQ/9kxv3yTAWFThMijQWOKHu7PMpVEIg3KO0KMWAdGhTThsC06HTjuUkzJc
+         HqBGKttMVlsD+zMCR6hMQTNMV5AzqA315Zyn4jS3qnFCCDJSn8uqYe6KpC/Acmair5
+         OnBXSlvHs376A==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     "Darrick J . Wong" <djwong@kernel.org>
+Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Dave Chinner <david@fromorbit.com>, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        David Wysochanski <dwysocha@redhat.com>
+Subject: [PATCH] xfs: don't bump the i_version on an atime update in xfs_vn_update_time
+Date:   Fri, 19 Aug 2022 07:34:50 -0400
+Message-Id: <20220819113450.11885-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] ima: Handle -ESTALE returned by ima_filter_rule_match()
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        <linux-integrity@vger.kernel.org>, <dmitry.kasatkin@gmail.com>,
-        <paul@paul-moore.com>
-References: <20220818020551.18922-1-guozihua@huawei.com>
- <b383f302284dfa31408e2796a9cae60eefd45004.camel@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <b383f302284dfa31408e2796a9cae60eefd45004.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2022/8/18 21:43, Mimi Zohar wrote:
-> Hi Scott,
-> 
-> On Thu, 2022-08-18 at 10:05 +0800, GUO Zihua wrote:
->> IMA relies on lsm policy update notifier to be notified when it should
->> update it's lsm rules.
-> 
-> ^IMA relies on the blocking LSM policy notifier callback to update the
-> LSM based IMA policy rules.
+xfs will update the i_version when updating only the atime value, which
+is not desirable for any of the current consumers of i_version. Doing so
+leads to unnecessary cache invalidations on NFS and extra measurement
+activity in IMA.
 
-I'll fix this in the next version.
-> 
->> When SELinux update it's policies, ima would be notified and starts
->> updating all its lsm rules one-by-one. During this time, -ESTALE would
->> be returned by ima_filter_rule_match() if it is called with a lsm rule
->> that has not yet been updated. In ima_match_rules(), -ESTALE is not
->> handled, and the lsm rule is considered a match, causing extra files
->> be measured by IMA.
->>
->> Fix it by retrying for at most three times if -ESTALE is returned by
->> ima_filter_rule_match().
-> 
-> With the lazy LSM policy update, retrying only once was needed.  With
-> the blocking LSM notifier callback, why is three times needed?  Is this
-> really a function of how long it takes IMA to walk and update ALL the
-> LSM based IMA policy rules?  Would having SELinux wait for the -ESTALE
-> to change do anything?
+Add a new XFS_ILOG_NOIVER flag, and use that to indicate that the
+transaction should not update the i_version. Set that value in
+xfs_vn_update_time if we're only updating the atime.
 
-With lazy policy update, policy update is triggered and would be 
-finished before retrying. However, with a notifier callback, the update 
-runs in a different process which might introduce extra latency. 
-Technically if one rule has been updated, any following rules would have 
-been updated at the time they are read as well, thus the retry should 
-happen on the first rule affected by SELinux policy update only. 
-Retrying for three times here would leave some time for the notifier to 
-finish it's job on updating the rules.
->>
->> Fixes: b16942455193 ("ima: use the lsm policy update notifier")
->> Signed-off-by: GUO Zihua <guozihua@huawei.com>
-> 
-> thanks,
-> 
-> Mimi
-> 
-> .
+Cc: Dave Chinner <david@fromorbit.com>
+Cc: NeilBrown <neilb@suse.de>
+Cc: Trond Myklebust <trondmy@hammerspace.com>
+Cc: David Wysochanski <dwysocha@redhat.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ fs/xfs/libxfs/xfs_log_format.h  |  2 +-
+ fs/xfs/libxfs/xfs_trans_inode.c |  2 +-
+ fs/xfs/xfs_iops.c               | 10 +++++++---
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-
+diff --git a/fs/xfs/libxfs/xfs_log_format.h b/fs/xfs/libxfs/xfs_log_format.h
+index b351b9dc6561..866a4c5cf70c 100644
+--- a/fs/xfs/libxfs/xfs_log_format.h
++++ b/fs/xfs/libxfs/xfs_log_format.h
+@@ -323,7 +323,7 @@ struct xfs_inode_log_format_32 {
+ #define	XFS_ILOG_ABROOT	0x100	/* log i_af.i_broot */
+ #define XFS_ILOG_DOWNER	0x200	/* change the data fork owner on replay */
+ #define XFS_ILOG_AOWNER	0x400	/* change the attr fork owner on replay */
+-
++#define XFS_ILOG_NOIVER	0x800	/* don't bump i_version */
+ 
+ /*
+  * The timestamps are dirty, but not necessarily anything else in the inode
+diff --git a/fs/xfs/libxfs/xfs_trans_inode.c b/fs/xfs/libxfs/xfs_trans_inode.c
+index 8b5547073379..ffe6d296e7f9 100644
+--- a/fs/xfs/libxfs/xfs_trans_inode.c
++++ b/fs/xfs/libxfs/xfs_trans_inode.c
+@@ -126,7 +126,7 @@ xfs_trans_log_inode(
+ 	 * unconditionally.
+ 	 */
+ 	if (!test_and_set_bit(XFS_LI_DIRTY, &iip->ili_item.li_flags)) {
+-		if (IS_I_VERSION(inode) &&
++		if (!(flags & XFS_ILOG_NOIVER) && IS_I_VERSION(inode) &&
+ 		    inode_maybe_inc_iversion(inode, flags & XFS_ILOG_CORE))
+ 			iversion_flags = XFS_ILOG_CORE;
+ 	}
+diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
+index 45518b8c613c..54db85a43dfb 100644
+--- a/fs/xfs/xfs_iops.c
++++ b/fs/xfs/xfs_iops.c
+@@ -1021,7 +1021,7 @@ xfs_vn_update_time(
+ {
+ 	struct xfs_inode	*ip = XFS_I(inode);
+ 	struct xfs_mount	*mp = ip->i_mount;
+-	int			log_flags = XFS_ILOG_TIMESTAMP;
++	int			log_flags = XFS_ILOG_TIMESTAMP|XFS_ILOG_NOIVER;
+ 	struct xfs_trans	*tp;
+ 	int			error;
+ 
+@@ -1041,10 +1041,14 @@ xfs_vn_update_time(
+ 		return error;
+ 
+ 	xfs_ilock(ip, XFS_ILOCK_EXCL);
+-	if (flags & S_CTIME)
++	if (flags & S_CTIME) {
+ 		inode->i_ctime = *now;
+-	if (flags & S_MTIME)
++		log_flags &= ~XFS_ILOG_NOIVER;
++	}
++	if (flags & S_MTIME) {
+ 		inode->i_mtime = *now;
++		log_flags &= ~XFS_ILOG_NOIVER;
++	}
+ 	if (flags & S_ATIME)
+ 		inode->i_atime = *now;
+ 
 -- 
-Best
-GUO Zihua
+2.37.2
+
