@@ -2,75 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38716598E7E
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Aug 2022 23:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535DC5992CB
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Aug 2022 03:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346195AbiHRVAy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 Aug 2022 17:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S245318AbiHSBuY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 Aug 2022 21:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346061AbiHRVAK (ORCPT
+        with ESMTP id S244505AbiHSBuV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 Aug 2022 17:00:10 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E76D34DD
-        for <linux-integrity@vger.kernel.org>; Thu, 18 Aug 2022 14:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=QYUdtLyaTXLKVZL9d+gxvko1AR0
-        KMsbRRhFR8pH/3qU=; b=G4YtVzLcyCkV7wmGpxn4ginxmZGNQ7uy7oUAh0DIYoh
-        XhMqUKOILtaKsRtYESh/qxG0twzbs1UTPxjjJYnsB0YPKnVQ5Pb+qO5sidk4jNp3
-        djZECp+CzKzj4xqefisy2cssy2f3Vc9ZBKIHDa39ICHLSrq/92FcggDVK6/Erids
-        =
-Received: (qmail 3959533 invoked from network); 18 Aug 2022 23:00:00 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Aug 2022 23:00:00 +0200
-X-UD-Smtp-Session: l3s3148p1@3rW4Q4rmUZ8ucref
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Subject: [PATCH] char: move from strlcpy with unused retval to strscpy
-Date:   Thu, 18 Aug 2022 22:59:59 +0200
-Message-Id: <20220818205959.6576-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 18 Aug 2022 21:50:21 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A260D7D04
+        for <linux-integrity@vger.kernel.org>; Thu, 18 Aug 2022 18:50:20 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M84PC2RhRz1N7LL;
+        Fri, 19 Aug 2022 09:46:55 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 19 Aug 2022 09:50:18 +0800
+Message-ID: <998ca87c-8eef-8d50-e1ee-da53ef8f0046@huawei.com>
+Date:   Fri, 19 Aug 2022 09:50:18 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] ima: Handle -ESTALE returned by ima_filter_rule_match()
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        <linux-integrity@vger.kernel.org>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>
+References: <20220818020551.18922-1-guozihua@huawei.com>
+ <b383f302284dfa31408e2796a9cae60eefd45004.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <b383f302284dfa31408e2796a9cae60eefd45004.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Follow the advice of the below link and prefer 'strscpy' in this
-subsystem. Conversion is 1:1 because the return value is not used.
-Generated by a coccinelle script.
+On 2022/8/18 21:43, Mimi Zohar wrote:
+> Hi Scott,
+> 
+> On Thu, 2022-08-18 at 10:05 +0800, GUO Zihua wrote:
+>> IMA relies on lsm policy update notifier to be notified when it should
+>> update it's lsm rules.
+> 
+> ^IMA relies on the blocking LSM policy notifier callback to update the
+> LSM based IMA policy rules.
 
-Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/char/tpm/tpm_ppi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'll fix this in the next version.
+> 
+>> When SELinux update it's policies, ima would be notified and starts
+>> updating all its lsm rules one-by-one. During this time, -ESTALE would
+>> be returned by ima_filter_rule_match() if it is called with a lsm rule
+>> that has not yet been updated. In ima_match_rules(), -ESTALE is not
+>> handled, and the lsm rule is considered a match, causing extra files
+>> be measured by IMA.
+>>
+>> Fix it by retrying for at most three times if -ESTALE is returned by
+>> ima_filter_rule_match().
+> 
+> With the lazy LSM policy update, retrying only once was needed.  With
+> the blocking LSM notifier callback, why is three times needed?  Is this
+> really a function of how long it takes IMA to walk and update ALL the
+> LSM based IMA policy rules?  Would having SELinux wait for the -ESTALE
+> to change do anything?
 
-diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-index 40018a73b3cb..bc7b1b4501b3 100644
---- a/drivers/char/tpm/tpm_ppi.c
-+++ b/drivers/char/tpm/tpm_ppi.c
-@@ -380,7 +380,7 @@ void tpm_add_ppi(struct tpm_chip *chip)
- 				      TPM_PPI_FN_VERSION,
- 				      NULL, ACPI_TYPE_STRING);
- 	if (obj) {
--		strlcpy(chip->ppi_version, obj->string.pointer,
-+		strscpy(chip->ppi_version, obj->string.pointer,
- 			sizeof(chip->ppi_version));
- 		ACPI_FREE(obj);
- 	}
+With lazy policy update, policy update is triggered and would be 
+finished before retrying. However, with a notifier callback, the update 
+runs in a different process which might introduce extra latency. 
+Technically if one rule has been updated, any following rules would have 
+been updated at the time they are read as well, thus the retry should 
+happen on the first rule affected by SELinux policy update only. 
+Retrying for three times here would leave some time for the notifier to 
+finish it's job on updating the rules.
+>>
+>> Fixes: b16942455193 ("ima: use the lsm policy update notifier")
+>> Signed-off-by: GUO Zihua <guozihua@huawei.com>
+> 
+> thanks,
+> 
+> Mimi
+> 
+> .
+
+
 -- 
-2.35.1
-
+Best
+GUO Zihua
