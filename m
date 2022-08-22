@@ -2,170 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E65359C52E
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Aug 2022 19:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD34059C596
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Aug 2022 19:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236456AbiHVRkB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Aug 2022 13:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
+        id S237366AbiHVR7b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Aug 2022 13:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235360AbiHVRkA (ORCPT
+        with ESMTP id S237357AbiHVR73 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:40:00 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815B73F332;
-        Mon, 22 Aug 2022 10:39:59 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MGBj1W017156;
-        Mon, 22 Aug 2022 17:39:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=LLQbnt0q20UFDDZ3yGUxRCh9F6rYZEakZkSemAYNDz0=;
- b=l4O2LQ4b+48Y2b5DbW1GS09Ly8JzaBLZaS0gBXC3VkjUvj/hldFY/Qgn/oEPAkVT931f
- 0FtS6g4/KYfkctQgTvxXRaWg2HEovJYovqd2qKF0VsL+H/7qHI2yyqi1ba3gQD1KOpFe
- IOrL04i+ZG/G6CAwfz/CXa1uqK5mZ1sBUmzXSb8oxyLdL1M+T9heR6Z1QjnvQj/lr1+u
- EdD7vu8CTN/RxHtMHgQB/P8OwRhpQlKZ6dNxJHoxvvvgtDXA7mYNruOMLf9cgJAa/ICs
- N4gM94Kcgpb7wf4gtC65YOsHEdOwp3DT4z1GVvjDSgqOp+iuGVNfB8znjSezdAu5USsO tg== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j4d3w2gax-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Aug 2022 17:39:51 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27MHLM14021957;
-        Mon, 22 Aug 2022 17:39:48 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3j2q88tqnt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Aug 2022 17:39:48 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27MHe62F33751454
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 17:40:06 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 78A05A404D;
-        Mon, 22 Aug 2022 17:39:46 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CADB0A4040;
-        Mon, 22 Aug 2022 17:39:43 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.20.129])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 22 Aug 2022 17:39:43 +0000 (GMT)
-Message-ID: <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jeff Layton <jlayton@kernel.org>, linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Dave Chinner <david@fromorbit.com>
-Date:   Mon, 22 Aug 2022 13:39:42 -0400
-In-Reply-To: <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
-References: <20220822133309.86005-1-jlayton@kernel.org>
-         <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
-         <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: DPsvjf5TeA-4Aml2sZxqU_iiU1YlCmIP
-X-Proofpoint-ORIG-GUID: DPsvjf5TeA-4Aml2sZxqU_iiU1YlCmIP
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 22 Aug 2022 13:59:29 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7720013EA4;
+        Mon, 22 Aug 2022 10:59:27 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id a133so5306035oif.4;
+        Mon, 22 Aug 2022 10:59:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=3TuVf54GgPydYoGd51XaXL3tfz0KadvwC9z8/Fy+sls=;
+        b=3v9yCy+M1HSa7s5GrzJ8Yeolm2QsufS72EDOEKwiM/5m+3T58koxFY1E6VlV66oupy
+         /wJVN9Kv6YUrdWzRFcVvrX60wtHr7WVMStkJ8cPH0zH5ipvzsqTDQbbq/DNxWu7gTFOG
+         ui1OX96Jk2Bu6xlhyLdOovvGTzZa/U47Yt1Be5FEcHwPztKoVLZYyEC5r5FRg23xg0nO
+         nO/ovHR8zw6yDKqyWoIBFgIpClc1t/W2EO5IVM7ecb847quRMtIf6TRF1q3YTLqfpqzE
+         upuYQsk5SVxbMV95hLaP0RH/bojUOXBGUrYZqaIXgnCHNzU53pkDJKaRW+a8Hh43l6Le
+         E/vg==
+X-Gm-Message-State: ACgBeo2d+yV8qAE+6WGSdvVeOPi2HP1kOuFO+XZZHYBupT/GInO2Z9/m
+        yBm/z6nM4CMc7e5tMeMLXA==
+X-Google-Smtp-Source: AA6agR602WMERbYZ3uSCPQSQ/AhC9EWTsVLdvnnS5HXY696Jr8IN6ZBdolcGmNue7hlW5WqBeaMdnQ==
+X-Received: by 2002:a05:6808:302b:b0:2f9:eeef:f03 with SMTP id ay43-20020a056808302b00b002f9eeef0f03mr11736503oib.128.1661191166666;
+        Mon, 22 Aug 2022 10:59:26 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r11-20020a4a964b000000b0041b49c19a00sm2478019ooi.18.2022.08.22.10.59.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 10:59:26 -0700 (PDT)
+Received: (nullmailer pid 62586 invoked by uid 1000);
+        Mon, 22 Aug 2022 17:59:24 -0000
+Date:   Mon, 22 Aug 2022 12:59:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     kexec@lists.infradead.org, mpe@ellerman.id.au,
+        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        nayna@linux.ibm.com, nasastry@in.ibm.com,
+        Frank Rowand <frowand.list@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v7 6/6] tpm/kexec: Duplicate TPM measurement log in
+ of-tree for kexec
+Message-ID: <20220822175924.GA62553-robh@kernel.org>
+References: <20220812164305.2056641-1-stefanb@linux.ibm.com>
+ <20220812164305.2056641-7-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_10,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 impostorscore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 spamscore=0 clxscore=1015
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2208220073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220812164305.2056641-7-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-08-22 at 12:22 -0400, Jeff Layton wrote:
-> On Mon, 2022-08-22 at 11:40 -0400, Mimi Zohar wrote:
-> > On Mon, 2022-08-22 at 09:33 -0400, Jeff Layton wrote:
-> > > Add an explicit paragraph codifying that atime updates due to reads
-> > > should not be counted against the i_version counter. None of the
-> > > existing subsystems that use the i_version want those counted, and
-> > > there is an easy workaround for those that do.
-> > > 
-> > > Cc: NeilBrown <neilb@suse.de>
-> > > Cc: Trond Myklebust <trondmy@hammerspace.com>
-> > > Cc: Dave Chinner <david@fromorbit.com>
-> > > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.17134712694961326033@noble.neil.brown.name/#t
-> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > ---
-> > >  include/linux/iversion.h | 10 ++++++++--
-> > >  1 file changed, 8 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-> > > index 3bfebde5a1a6..da6cc1cc520a 100644
-> > > --- a/include/linux/iversion.h
-> > > +++ b/include/linux/iversion.h
-> > > @@ -9,8 +9,8 @@
-> > >   * ---------------------------
-> > >   * The change attribute (i_version) is mandated by NFSv4 and is mostly for
-> > >   * knfsd, but is also used for other purposes (e.g. IMA). The i_version must
-> > > - * appear different to observers if there was a change to the inode's data or
-> > > - * metadata since it was last queried.
-> > > + * appear different to observers if there was an explicit change to the inode's
-> > > + * data or metadata since it was last queried.
-> > >   *
-> > >   * Observers see the i_version as a 64-bit number that never decreases. If it
-> > >   * remains the same since it was last checked, then nothing has changed in the
-> > > @@ -18,6 +18,12 @@
-> > >   * anything about the nature or magnitude of the changes from the value, only
-> > >   * that the inode has changed in some fashion.
-> > >   *
-> > > + * Note that atime updates due to reads or similar activity do _not_ represent
-> > > + * an explicit change to the inode. If the only change is to the atime and it
-> > 
-> > Thanks, Jeff.  The ext4 patch increments i_version on file metadata
-> > changes.  Could the wording here be more explicit to reflect changes
-> > based on either inode data or metadata changes?b
-> > 
-> > 
+On Fri, 12 Aug 2022 12:43:05 -0400, Stefan Berger wrote:
+> The memory area of the TPM measurement log is currently not properly
+> duplicated for carrying it across kexec when an Open Firmware
+> Devicetree is used. Therefore, the contents of the log get corrupted.
+> Fix this for the kexec_file_load() syscall by allocating a buffer and
+> copying the contents of the existing log into it. The new buffer is
+> preserved across the kexec and a pointer to it is available when the new
+> kernel is started. To achieve this, store the allocated buffer's address
+> in the flattened device tree (fdt) under the name linux,tpm-kexec-buffer
+> and search for this entry early in the kernel startup before the TPM
+> subsystem starts up. Adjust the pointer in the of-tree stored under
+> linux,sml-base to point to this buffer holding the preserved log. The TPM
+> driver can then read the base address from this entry when making the log
+> available. Invalidate the log by removing 'linux,sml-base' from the
+> devicetree if anything goes wrong with updating the buffer.
 > 
-> Thanks Mimi,
+> Use subsys_initcall() to call the function to restore the buffer even if
+> the TPM subsystem or driver are not used. This allows the buffer to be
+> carried across the next kexec without involvement of the TPM subsystem
+> and ensures a valid buffer pointed to by the of-tree.
 > 
-> Care to suggest some wording?
+> Use the subsys_initcall(), rather than an ealier initcall, since
+> page_is_ram() in get_kexec_buffer() only starts working at this stage.
 > 
-> The main issue we have is that ext4 and xfs both increment i_version on
-> atime updates due to reads. I have patches in flight to fix those, but
-> going forward, we want to ensure that i_version gets incremented on all
-> changes _except_ for atime updates.
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
 > 
-> The best wording we have at the moment is what Trond suggested, which is
-> to classify the changes to the inode as "explicit" (someone or something
-> made a deliberate change to the inode) and "implicit" (the change to the
-> inode was due to activity such as reads that don't actually change
-> anything).
+> ---
+> v6:
+>  - Define prototype for tpm_add_kexec_buffer under same config options
+>    as drivers/of/kexec.c is compiled, provide inline function otherwise.
+>    (kernel test robot)
 > 
-> Is there a better way to describe this?
-
-"explicit change to the inode" probably implies both the inode file
-data and metadata, but let's call it out by saying "an explicit change
-to either the inode data or metadata".
-
-> 
-> > > + * wasn't set via utimes() or a similar mechanism, then i_version should not be
-> > > + * incremented. If an observer cares about atime updates, it should plan to
-> > > + * fetch and store them in conjunction with the i_version.
-> > > + *
-> > >   * Not all filesystems properly implement the i_version counter. Subsystems that
-> > >   * want to use i_version field on an inode should first check whether the
-> > >   * filesystem sets the SB_I_VERSION flag (usually via the IS_I_VERSION macro).
-> > 
-> > 
+> v4:
+>  - Added #include <linux/vmalloc.h> due to parisc
+>  - Use phys_addr_t for physical address rather than void *
+>  - Remove linux,sml-base if the buffer cannot be updated after a kexec
+>  - Added __init to functions where possible
+> ---
+>  drivers/of/kexec.c    | 216 +++++++++++++++++++++++++++++++++++++++++-
+>  include/linux/kexec.h |   6 ++
+>  include/linux/of.h    |   9 +-
+>  kernel/kexec_file.c   |   6 ++
+>  4 files changed, 234 insertions(+), 3 deletions(-)
 > 
 
-
+Reviewed-by: Rob Herring <robh@kernel.org>
