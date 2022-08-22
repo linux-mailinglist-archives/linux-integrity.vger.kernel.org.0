@@ -2,131 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADF959C0BA
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Aug 2022 15:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1E459C0C7
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Aug 2022 15:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbiHVNkR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Aug 2022 09:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        id S235257AbiHVNmG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Aug 2022 09:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbiHVNkR (ORCPT
+        with ESMTP id S235265AbiHVNmF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:40:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4674213F8E;
-        Mon, 22 Aug 2022 06:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08024B81215;
-        Mon, 22 Aug 2022 13:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0989C433D6;
-        Mon, 22 Aug 2022 13:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661175613;
-        bh=8Qc9eRpmV/qtcPvoaYrP/gNt01F55WiPH7SQ9+4cdl8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MUKVa86fDGQ8tghg6Dgm8Rhh2JnuGDeA053lp9t5u4KhQyArZBKJ5HBKk3kOBYEMN
-         nARKvqE6/y2Q5c6ytOfNa84CsKCIc5bOcFmNQD+kawrr7yDkImQoQv85sft0U6iQAL
-         zZcdsRutSf5MQTIgVpw+bMIPwaqNpADfth0CLAx7ME0GMoYBn8pbrxkYA8pXAz0CJz
-         azRHV43dgsCJ93Ku+k2s6XYLGvP8lKpvpzo7hq3SmSMZdKTK0KLOgc+iMbde/4TRha
-         jVbpPmyKbs7oZjLmnIoTU0F2/wqD2IjAbnKLeuALyOvVw9ZYR0swgLUdwXeHTybYob
-         86bd1WBvENDiA==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     "Darrick J . Wong" <djwong@kernel.org>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Dave Chinner <david@fromorbit.com>, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        David Wysochanski <dwysocha@redhat.com>
-Subject: [PATCH v2] xfs: don't bump the i_version on an atime update in xfs_vn_update_time
-Date:   Mon, 22 Aug 2022 09:40:11 -0400
-Message-Id: <20220822134011.86558-1-jlayton@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Mon, 22 Aug 2022 09:42:05 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACA118E1B
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Aug 2022 06:42:01 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MDSTXd021880;
+        Mon, 22 Aug 2022 13:41:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=R8ZarQPB03+5CbP0CXy5SM3pkcBx2L71OrTt452Cx5Q=;
+ b=LNzb+SN6CazGbKwqNV7H4J3ncdQcLD4eRX+COuVjHWf5O23spTpXw2l+h4wCfGyKH/zS
+ RUf8OvAzDzTNU9aDHCYcHKGVL6uOwcI2RZzke7JFVkutw4+vnd6M/I5wuWGGYefGRfMl
+ ctvlF6Bb+OaXN9/ZeC4EbwxqrRWyvEB3LN/hoRcRXmGB0DxpGkmTfnG347IK/vvLRDpv
+ KNpQckdvUAntn/ura2l2obnsu7QHIiJr5s+lT6JQ46Lb06gUMokm4THTqqQSCfPBoEw4
+ OFIYKIe7KSUIFn/AiF1IKpcZCW/TkdaloCJiu50SEp9FPHmR0HKzsUM/Ds6oWrXyLt9t UA== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j4aqe8e8g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Aug 2022 13:41:42 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27MDehet030657;
+        Mon, 22 Aug 2022 13:41:40 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3j2q891tkq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Aug 2022 13:41:39 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27MDfbS328574010
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Aug 2022 13:41:37 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0C97A404D;
+        Mon, 22 Aug 2022 13:41:37 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4E4EBA4040;
+        Mon, 22 Aug 2022 13:41:36 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.163.20.129])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 22 Aug 2022 13:41:36 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Simon Thoby <simon.thoby@viveris.fr>,
+        Seth Forshee <sforshee@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Christian Brauner <brauner@kernel.org>
+Subject: [PATCH] ima: fix blocking of security.ima xattrs of unsupported algorithms
+Date:   Mon, 22 Aug 2022 09:41:24 -0400
+Message-Id: <20220822134124.1090472-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5I_CdPrebQdMCJCqnTRFO4OHGC54dxda
+X-Proofpoint-ORIG-GUID: 5I_CdPrebQdMCJCqnTRFO4OHGC54dxda
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-22_08,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ malwarescore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ spamscore=0 phishscore=0 impostorscore=0 mlxscore=0 mlxlogscore=906
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208220056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-xfs will update the i_version when updating only the atime value, which
-is not desirable for any of the current consumers of i_version. Doing so
-leads to unnecessary cache invalidations on NFS and extra measurement
-activity in IMA.
+Limit validating the hash algorithm to just security.ima xattr, not
+the security.evm xattr or any of the protected EVM security xattrs,
+nor posix acls.
 
-Add a new XFS_ILOG_NOIVER flag, and use that to indicate that the
-transaction should not update the i_version. Set that value in
-xfs_vn_update_time if we're only updating the atime.
-
-Cc: Dave Chinner <david@fromorbit.com>
-Cc: NeilBrown <neilb@suse.de>
-Cc: Trond Myklebust <trondmy@hammerspace.com>
-Cc: David Wysochanski <dwysocha@redhat.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Fixes: 50f742dd9147 ("IMA: block writes of the security.ima xattr with unsupported algorithms")
+Reported-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- fs/xfs/libxfs/xfs_log_format.h  |  2 +-
- fs/xfs/libxfs/xfs_trans_inode.c |  2 +-
- fs/xfs/xfs_iops.c               | 11 +++++++++--
- 3 files changed, 11 insertions(+), 4 deletions(-)
+ security/integrity/ima/ima_appraise.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-v2: don't set the NOIVERS flag if S_VERSION is set
-
-diff --git a/fs/xfs/libxfs/xfs_log_format.h b/fs/xfs/libxfs/xfs_log_format.h
-index b351b9dc6561..866a4c5cf70c 100644
---- a/fs/xfs/libxfs/xfs_log_format.h
-+++ b/fs/xfs/libxfs/xfs_log_format.h
-@@ -323,7 +323,7 @@ struct xfs_inode_log_format_32 {
- #define	XFS_ILOG_ABROOT	0x100	/* log i_af.i_broot */
- #define XFS_ILOG_DOWNER	0x200	/* change the data fork owner on replay */
- #define XFS_ILOG_AOWNER	0x400	/* change the attr fork owner on replay */
--
-+#define XFS_ILOG_NOIVER	0x800	/* don't bump i_version */
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index bde74fcecee3..3e0fbbd99534 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -750,22 +750,26 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
+ 	const struct evm_ima_xattr_data *xvalue = xattr_value;
+ 	int digsig = 0;
+ 	int result;
++	int err;
  
- /*
-  * The timestamps are dirty, but not necessarily anything else in the inode
-diff --git a/fs/xfs/libxfs/xfs_trans_inode.c b/fs/xfs/libxfs/xfs_trans_inode.c
-index 8b5547073379..ffe6d296e7f9 100644
---- a/fs/xfs/libxfs/xfs_trans_inode.c
-+++ b/fs/xfs/libxfs/xfs_trans_inode.c
-@@ -126,7 +126,7 @@ xfs_trans_log_inode(
- 	 * unconditionally.
- 	 */
- 	if (!test_and_set_bit(XFS_LI_DIRTY, &iip->ili_item.li_flags)) {
--		if (IS_I_VERSION(inode) &&
-+		if (!(flags & XFS_ILOG_NOIVER) && IS_I_VERSION(inode) &&
- 		    inode_maybe_inc_iversion(inode, flags & XFS_ILOG_CORE))
- 			iversion_flags = XFS_ILOG_CORE;
- 	}
-diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
-index 45518b8c613c..94f14d96641b 100644
---- a/fs/xfs/xfs_iops.c
-+++ b/fs/xfs/xfs_iops.c
-@@ -1041,10 +1041,17 @@ xfs_vn_update_time(
- 		return error;
- 
- 	xfs_ilock(ip, XFS_ILOCK_EXCL);
--	if (flags & S_CTIME)
+ 	result = ima_protect_xattr(dentry, xattr_name, xattr_value,
+ 				   xattr_value_len);
+ 	if (result == 1) {
+ 		if (!xattr_value_len || (xvalue->type >= IMA_XATTR_LAST))
+ 			return -EINVAL;
 +
-+	if (!(flags & S_VERSION))
-+		log_flags |= XFS_ILOG_NOIVER;
-+	if (flags & S_CTIME) {
- 		inode->i_ctime = *now;
--	if (flags & S_MTIME)
-+		log_flags &= ~XFS_ILOG_NOIVER;
-+	}
-+	if (flags & S_MTIME) {
- 		inode->i_mtime = *now;
-+		log_flags &= ~XFS_ILOG_NOIVER;
-+	}
- 	if (flags & S_ATIME)
- 		inode->i_atime = *now;
- 
++		err = validate_hash_algo(dentry, xvalue, xattr_value_len);
++		if (err)
++			return err;
++
+ 		digsig = (xvalue->type == EVM_IMA_XATTR_DIGSIG);
+ 	} else if (!strcmp(xattr_name, XATTR_NAME_EVM) && xattr_value_len > 0) {
+ 		digsig = (xvalue->type == EVM_XATTR_PORTABLE_DIGSIG);
+ 	}
+ 	if (result == 1 || evm_revalidate_status(xattr_name)) {
+-		result = validate_hash_algo(dentry, xvalue, xattr_value_len);
+-		if (result)
+-			return result;
+-
+ 		ima_reset_appraise_flags(d_backing_inode(dentry), digsig);
++		if (result == 1)
++			result = 0;
+ 	}
+ 	return result;
+ }
 -- 
-2.37.2
+2.31.1
 
