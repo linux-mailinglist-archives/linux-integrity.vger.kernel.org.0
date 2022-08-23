@@ -2,80 +2,126 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EF759CC41
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Aug 2022 01:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEE059D63E
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Aug 2022 11:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbiHVXep (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Aug 2022 19:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
+        id S233735AbiHWI1L (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 23 Aug 2022 04:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233004AbiHVXeo (ORCPT
+        with ESMTP id S243410AbiHWIY6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Aug 2022 19:34:44 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91E68564E0;
-        Mon, 22 Aug 2022 16:34:43 -0700 (PDT)
-Received: from dread.disaster.area (pa49-195-4-169.pa.nsw.optusnet.com.au [49.195.4.169])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id DFAB310E8EE0;
-        Tue, 23 Aug 2022 09:34:41 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oQGwK-00GLjR-2u; Tue, 23 Aug 2022 09:34:40 +1000
-Date:   Tue, 23 Aug 2022 09:34:40 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     "Darrick J . Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        David Wysochanski <dwysocha@redhat.com>
-Subject: Re: [PATCH v2] xfs: don't bump the i_version on an atime update in
- xfs_vn_update_time
-Message-ID: <20220822233440.GK3600936@dread.disaster.area>
-References: <20220822134011.86558-1-jlayton@kernel.org>
+        Tue, 23 Aug 2022 04:24:58 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5D126DC
+        for <linux-integrity@vger.kernel.org>; Tue, 23 Aug 2022 01:13:30 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MBhhv1Rdsz1N7Vd;
+        Tue, 23 Aug 2022 16:09:35 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 23 Aug 2022 16:12:29 +0800
+Message-ID: <d5861fbc-1079-a47f-e746-1072dd1d37d7@huawei.com>
+Date:   Tue, 23 Aug 2022 16:12:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822134011.86558-1-jlayton@kernel.org>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=OJNEYQWB c=1 sm=1 tr=0 ts=63041292
-        a=FOdsZBbW/tHyAhIVFJ0pRA==:117 a=FOdsZBbW/tHyAhIVFJ0pRA==:17
-        a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=7-415B0cAAAA:8 a=SEtKQCMJAAAA:8
-        a=20KFwNOVAAAA:8 a=VwQbUJbxAAAA:8 a=QkFuO-hpO70cwR4qdtIA:9
-        a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22 a=kyTSok1ft720jgMXX5-3:22
-        a=AjGcO6oz07-iQ99wixmX:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] ima: Handle -ESTALE returned by ima_filter_rule_match()
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        <linux-integrity@vger.kernel.org>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>
+References: <20220818020551.18922-1-guozihua@huawei.com>
+ <b383f302284dfa31408e2796a9cae60eefd45004.camel@linux.ibm.com>
+ <998ca87c-8eef-8d50-e1ee-da53ef8f0046@huawei.com>
+ <c61de998f8ed1e1192297f9a2ce568a86cee3296.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <c61de998f8ed1e1192297f9a2ce568a86cee3296.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 09:40:11AM -0400, Jeff Layton wrote:
-> xfs will update the i_version when updating only the atime value, which
-> is not desirable for any of the current consumers of i_version. Doing so
-> leads to unnecessary cache invalidations on NFS and extra measurement
-> activity in IMA.
+On 2022/8/22 22:41, Mimi Zohar wrote:
+> On Fri, 2022-08-19 at 09:50 +0800, Guozihua (Scott) wrote:
+>> On 2022/8/18 21:43, Mimi Zohar wrote:
+>>> Hi Scott,
+>>>
+>>> On Thu, 2022-08-18 at 10:05 +0800, GUO Zihua wrote:
+>>>> IMA relies on lsm policy update notifier to be notified when it should
+>>>> update it's lsm rules.
+>>>
+>>> ^IMA relies on the blocking LSM policy notifier callback to update the
+>>> LSM based IMA policy rules.
+>>
+>> I'll fix this in the next version.
 > 
-> Add a new XFS_ILOG_NOIVER flag, and use that to indicate that the
-> transaction should not update the i_version. Set that value in
-> xfs_vn_update_time if we're only updating the atime.
+> Thanks.
 > 
-> Cc: Dave Chinner <david@fromorbit.com>
-> Cc: NeilBrown <neilb@suse.de>
-> Cc: Trond Myklebust <trondmy@hammerspace.com>
-> Cc: David Wysochanski <dwysocha@redhat.com>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+>>>
+>>>> When SELinux update it's policies, ima would be notified and starts
+>>>> updating all its lsm rules one-by-one. During this time, -ESTALE would
+>>>> be returned by ima_filter_rule_match() if it is called with a lsm rule
+>>>> that has not yet been updated. In ima_match_rules(), -ESTALE is not
+>>>> handled, and the lsm rule is considered a match, causing extra files
+>>>> be measured by IMA.
+>>>>
+>>>> Fix it by retrying for at most three times if -ESTALE is returned by
+>>>> ima_filter_rule_match().
+>>>
+>>> With the lazy LSM policy update, retrying only once was needed.  With
+>>> the blocking LSM notifier callback, why is three times needed?  Is this
+>>> really a function of how long it takes IMA to walk and update ALL the
+>>> LSM based IMA policy rules?  Would having SELinux wait for the -ESTALE
+>>> to change do anything?
+>>
+>> With lazy policy update, policy update is triggered and would be
+>> finished before retrying. However, with a notifier callback, the update
+>> runs in a different process which might introduce extra latency.
+>> Technically if one rule has been updated, any following rules would have
+>> been updated at the time they are read as well, thus the retry should
+>> happen on the first rule affected by SELinux policy update only.
+>> Retrying for three times here would leave some time for the notifier to
+>> finish it's job on updating the rules.
+> 
+> The question is whether we're waiting for the SELinux policy to change
+> from ESTALE or whether it is the number of SELinux based IMA policy
+> rules or some combination of the two.  Retrying three times seems to be
+> random.  If SELinux waited for ESTALE to change, then it would only be
+> dependent on the time it took to update the SELinux based IMA policy
+> rules.
 
-NACK.
+We are waiting for ima_lsm_update_rules() to finish re-initializing all 
+the LSM based rules.
 
-We need to define exactly what iversion covers first before we go
-changing how filesystems update it. We only want to change iversion
-behaviour once, and we want it done right the first time.
+Once new policy takes effect in SELinux, the policy sequence number 
+would be incremented. During rule match, this sequence number is checked 
+and if mismatched, -ESTALE is returned and the rules should be 
+re-initialized. Normally during this time, ima_lsm_update_rules should 
+be running already, so we are going to wait for it to finish.
+> 
+> thanks,
+> 
+> Mimi
+> 
+>>>>
+>>>> Fixes: b16942455193 ("ima: use the lsm policy update notifier")
+>>>> Signed-off-by: GUO Zihua <guozihua@huawei.com>
+> 
+> .
 
--Dave.
+
 -- 
-Dave Chinner
-david@fromorbit.com
+Best
+GUO Zihua
