@@ -2,184 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F63259FDF1
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Aug 2022 17:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C355A008B
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Aug 2022 19:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238723AbiHXPLw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Aug 2022 11:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
+        id S240238AbiHXRkH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Aug 2022 13:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238039AbiHXPLv (ORCPT
+        with ESMTP id S240251AbiHXRkF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:11:51 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8A390809
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Aug 2022 08:11:50 -0700 (PDT)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MCTxg6MBrz682wj;
-        Wed, 24 Aug 2022 23:08:23 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 24 Aug 2022 17:11:48 +0200
-Received: from mscphispre00062.huawei.com (10.123.70.102) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 16:11:47 +0100
-From:   Denis Semakin <denis.semakin@huawei.com>
-To:     <linux-integrity@vger.kernel.org>
-CC:     <anton.sirazetdinov@huawei.com>, <artem.kuzin@huawei.com>,
-        <konstantin.meskhidze@huawei.com>, <yusongping@huawei.com>,
-        <hukeping@huawei.com>, <roberto.sassu@huawei.com>,
-        <krzysztof.struczynski@huawei.com>, <stefanb@linux.ibm.com>,
-        <denis.semakin@huawei-partners.com>
-Subject: [RFC PATCH v1 4/4] ima: Extend the real PCR12 with tempPCR value.
-Date:   Wed, 24 Aug 2022 23:11:40 +0800
-Message-ID: <20220824151140.234654-1-denis.semakin@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 24 Aug 2022 13:40:05 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68F661D65
+        for <linux-integrity@vger.kernel.org>; Wed, 24 Aug 2022 10:40:03 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-11c5ee9bf43so21729123fac.5
+        for <linux-integrity@vger.kernel.org>; Wed, 24 Aug 2022 10:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=iUc7iTn6xTAH7nh/o6yxXHdfKGNX4Z/5Jv6PbbsrmvE=;
+        b=RlaeiBa5eL8zu0NgF7ARiV93OK31F7GkkyowxpdoTtVaIt6Yd6AwdmZeT4UhqxTOir
+         TaQbTq0RY8Y6y+tGLDAhuRgnPvpdkEIOG/XPkwF4v5NCae8dReQI9E0ZTHaROIT2w45q
+         f9sqGu0D99xgh/NvOUXrlPA/eOIMcCfk0srM0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=iUc7iTn6xTAH7nh/o6yxXHdfKGNX4Z/5Jv6PbbsrmvE=;
+        b=DMaTShNVGr/WE/Am56rv1ju0D6MMKLarORzmGLVjsu6a0tMqsCNHKmavRN5dAw4sjR
+         ybBEHtPcbbvQrgxHz0cEkXfNULHMev50guTq+6JAqfcD9r8BrulwKPzU3d5dDU5qCRsr
+         354XDCW8QXAMVv8o4byX2VJ5SGsJz5Ir5l0/uKzloQKsWKfDAo8LtJT0D9HilcjHKL0K
+         HkzW9NzpWGHLGFJoirQUGDnrCjzOoIFHWAj4fJ6fSyP4/UdG+62GTXFvjQkQ/f3FQjn8
+         MmyPvHeoD0mK1A3cKGT5lSWT3VtPcL0cNc9iUV2zZGHuyMgyAJ6FKkmVedprKQyvbG6k
+         AKUg==
+X-Gm-Message-State: ACgBeo3RGFgItmG3llHsejIWnUR8uX+EoHAr8Jb8+Yj+jXc+2o3pnJLR
+        Phdczsc/iGgYMF7PGBeZNPhFCOpPrWsOMQ==
+X-Google-Smtp-Source: AA6agR4eUW1C2fcZEiD3L90RL4XIYJ0dgfSuzuhlPXmUOiV8n5tg90rmr5IjskLT36RGAdVuZxJehQ==
+X-Received: by 2002:a05:6870:8202:b0:11d:2ab8:15ba with SMTP id n2-20020a056870820200b0011d2ab815bamr3952355oae.66.1661362802714;
+        Wed, 24 Aug 2022 10:40:02 -0700 (PDT)
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com. [209.85.160.54])
+        by smtp.gmail.com with ESMTPSA id p10-20020acabf0a000000b00344afa2b08bsm4180658oif.26.2022.08.24.10.40.02
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 10:40:02 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-11c59785966so21723702fac.11
+        for <linux-integrity@vger.kernel.org>; Wed, 24 Aug 2022 10:40:02 -0700 (PDT)
+X-Received: by 2002:a05:6808:3096:b0:342:ff93:4672 with SMTP id
+ bl22-20020a056808309600b00342ff934672mr120785oib.174.1661362486729; Wed, 24
+ Aug 2022 10:34:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.123.70.102]
-X-ClientProxiedBy: mscpeml100001.china.huawei.com (7.188.26.227) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.4.I32591db064b6cdc91850d777f363c9d05c985b39@changeid> <YwYR/rzvrkvgZzBm@farprobe>
+In-Reply-To: <YwYR/rzvrkvgZzBm@farprobe>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Wed, 24 Aug 2022 10:34:10 -0700
+X-Gmail-Original-Message-ID: <CAE=gft48Tg6NnEUqfM-n1eOT3qa35dtowQGYCL3sbYBmr_Wm_w@mail.gmail.com>
+Message-ID: <CAE=gft48Tg6NnEUqfM-n1eOT3qa35dtowQGYCL3sbYBmr_Wm_w@mail.gmail.com>
+Subject: Re: [PATCH v2 04/10] security: keys: trusted: Allow storage of PCR
+ values in creation data
+To:     list.lkml.keyrings@me.benboeckel.net
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Jarkko Sakkinen <jarkko@kernel.org>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-For each namespace do this calculation:
-	tempPCR := HASH(tempPCR || tempValue);
+On Wed, Aug 24, 2022 at 4:56 AM Ben Boeckel <me@benboeckel.net> wrote:
+>
+> On Tue, Aug 23, 2022 at 15:25:20 -0700, Evan Green wrote:
+> > diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+> > index 0bfb4c33974890..dc9e11bb4824da 100644
+> > --- a/Documentation/security/keys/trusted-encrypted.rst
+> > +++ b/Documentation/security/keys/trusted-encrypted.rst
+> > @@ -199,6 +199,10 @@ Usage::
+> >         policyhandle= handle to an authorization policy session that defines the
+> >                       same policy and with the same hash algorithm as was used to
+> >                       seal the key.
+> > +       creationpcrs= hex integer representing the set of PCR values to be
+> > +                     included in the PCR creation data. The bit corresponding
+> > +                  to each PCR should be 1 to be included, 0 to be ignored.
+> > +                  TPM2 only.
+>
+> There's inconsistent whitespace here. Given the context, I suspect the
+> tabs should be expanded to spaces.
+>
+> As for the docs themselves, this might preferrably mention how large
+> this is supposed to be. It seems to be limited to 32bits by the code.
+> What happens if fewer are provided? More? Will there always be at most
+> 32 PCR values? Also, how are the bits interpreted? I presume bit 0 is
+> for PCR value 0?
 
-And finally extend the real PCR12P:
-	PCR12 := PCR_Extend(PCR12,tempPCR);
+Makes sense, I'll pin down the specification a bit better here and fix
+up the spacing.
 
-Then read the PCR12 and return its value to user-space.
+>
+> Thanks for including docs.
 
-Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
----
- security/integrity/ima/ima.h    |  2 +-
- security/integrity/ima/ima_fs.c | 46 ++++++++++++++++++++++++++++++++-
- 2 files changed, 46 insertions(+), 2 deletions(-)
+Thanks for looking at them!
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 81385aee04f1..257c60ffed23 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -27,7 +27,7 @@
- 
- enum ima_show_type { IMA_SHOW_BINARY, IMA_SHOW_BINARY_NO_FIELD_LEN,
- 		     IMA_SHOW_BINARY_OLD_STRING_FMT, IMA_SHOW_ASCII };
--enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
-+enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10, TPM_PCR12 = 12 };
- 
- /* digest size for IMA, fits SHA1 or MD5 */
- #define IMA_DIGEST_SIZE		SHA1_DIGEST_SIZE
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index aaa65ee0d9d5..1fab4eed3692 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -559,6 +559,9 @@ static ssize_t ima_vpcr_read(struct file *filp, char __user *buf, size_t count,
- 			     loff_t *ppos)
- {
- 	struct vpcr_entry *vpcr;
-+	struct tpm_digest *temp_tpm;
-+	struct tpm_digest pcr12_digest;
-+	struct tpm_chip *ns_tpm_chip;
- 	struct {
- 		struct ima_digest_data hdr;
- 		char digest[SHA256_DIGEST_SIZE];
-@@ -568,17 +571,20 @@ static ssize_t ima_vpcr_read(struct file *filp, char __user *buf, size_t count,
- 		u8 dig[CPCR_PFX_LEN + SHA256_DIGEST_SIZE + 1];
- 	} *vpcr_buff = NULL;
- 
--	int ret, i = 0;
-+	int ret, j, i = 0;
- 	size_t vpcr_buff_size = 0;
- 	loff_t size = SHA256_DIGEST_SIZE * 2;
- 	struct ima_namespace *init_ns = &init_ima_ns;
- 	struct ima_namespace *curr_ns = ima_ns_from_file(filp);
- 
-+	ns_tpm_chip = curr_ns->ima_tpm_chip;
-+
- 	if (*ppos != 0)
- 		return 0;
- 
- 	temp_vpcr_hash.hdr.algo = HASH_ALGO_SHA256;
- 	temp_vpcr_hash.hdr.length = SHA256_DIGEST_SIZE;
-+	pcr12_digest.alg_id = TPM_ALG_SHA256;
- 
- 	if (mutex_lock_interruptible(&vpcr_list_mutex))
- 		return -EINTR;
-@@ -616,6 +622,38 @@ static ssize_t ima_vpcr_read(struct file *filp, char __user *buf, size_t count,
- 		i++;
- 	}
- 
-+	/**
-+	 * TPM banks for extend
-+	 */
-+	temp_tpm = kcalloc(ns_tpm_chip->nr_allocated_banks,
-+			   sizeof(*curr_ns->digests), GFP_NOFS);
-+	if (!temp_tpm) {
-+		ret = -ENOMEM;
-+		goto free_mem;
-+	}
-+
-+	for (j = 0; j < ns_tpm_chip->nr_allocated_banks; j++) {
-+		temp_tpm[j].alg_id = ns_tpm_chip->allocated_banks[j].alg_id;
-+		if (temp_tpm[j].alg_id == TPM_ALG_SHA256)
-+			memcpy(&temp_tpm[j].digest, &temp_vpcr_hash.digest,
-+			       SHA256_DIGEST_SIZE);
-+		else
-+			memset(&temp_tpm[j].digest, 0,
-+			       hash_digest_size[ns_tpm_chip->allocated_banks[j].crypto_id]);
-+	}
-+
-+	ret = tpm_pcr_extend(ns_tpm_chip, TPM_PCR12, temp_tpm);
-+	if (ret != 0) {
-+		ret = -EINTR;
-+		goto free_mem;
-+	}
-+
-+	ret = tpm_pcr_read(ns_tpm_chip, TPM_PCR12, &pcr12_digest);
-+	if (ret != 0) {
-+		ret = -EINTR;
-+		goto free_mem;
-+	}
-+
- 	vpcr_buff_size += PCR12_PFX_LEN + SHA256_DIGEST_SIZE + 1;
- 	vpcr_buff = krealloc(vpcr_buff, vpcr_buff_size, GFP_NOFS);
- 	if (!vpcr_buff) {
-@@ -624,10 +662,14 @@ static ssize_t ima_vpcr_read(struct file *filp, char __user *buf, size_t count,
- 	}
- 
- 	memcpy(&vpcr_buff[i].dig, PCR12_PFX, PCR12_PFX_LEN);
-+	memcpy(&vpcr_buff[i].dig[PCR12_PFX_LEN], &pcr12_digest.digest,
-+	       SHA256_DIGEST_SIZE);
-+
- 	mutex_unlock(&vpcr_list_mutex);
- 	ret = simple_read_from_buffer(buf, count, ppos, vpcr_buff,
- 				      vpcr_buff_size);
- 	kfree(vpcr_buff);
-+	kfree(temp_tpm);
- 
- 	return ret;
- 
-@@ -636,6 +678,8 @@ static ssize_t ima_vpcr_read(struct file *filp, char __user *buf, size_t count,
- 	if (vpcr_buff)
- 		kfree(vpcr_buff);
- 
-+	kfree(temp_tpm);
-+
- 	return ret;
- }
- 
--- 
-2.25.1
-
+-Evan
