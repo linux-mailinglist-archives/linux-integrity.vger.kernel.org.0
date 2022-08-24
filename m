@@ -2,94 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF7659F127
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Aug 2022 03:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7C359F8E1
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Aug 2022 13:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiHXB4H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 23 Aug 2022 21:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S236495AbiHXL4y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Aug 2022 07:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiHXB4G (ORCPT
+        with ESMTP id S234085AbiHXL4x (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:56:06 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AEF6566C
-        for <linux-integrity@vger.kernel.org>; Tue, 23 Aug 2022 18:56:04 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MC8Hj3h0jzlWJd;
-        Wed, 24 Aug 2022 09:52:49 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 09:56:03 +0800
-Message-ID: <61bc81bc-1b4a-3c08-6232-afc0d04decee@huawei.com>
-Date:   Wed, 24 Aug 2022 09:56:03 +0800
+        Wed, 24 Aug 2022 07:56:53 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9102889906;
+        Wed, 24 Aug 2022 04:56:49 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id EE9B2580E11;
+        Wed, 24 Aug 2022 07:56:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 24 Aug 2022 07:56:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1661342208; x=
+        1661349408; bh=kuW/qG4JUmJmu4VzPx61uemjjFalqwyag3kx6XOqPOE=; b=o
+        pzymONiwjq65ETafTTr380XapsmSk8TEgFCze/PUAxebjOab59cPNdRbW5I2P5Gc
+        nPQKG4YPRvE++LJQ7/t27UluedPOuvs7txqtYryRE+szjSSAdEz19GlMLM1fa1p6
+        Lg/mfnoslm76AnTcRYz7PmDQ5au0tb4YrubBbqIOCcVqACJIEF1WwW2wzdBGfYTH
+        BXkh+6ZCAdLIsKeQVByEzhFgw3NWWTIOIlCMIEHIQH1MV5kOQRubdSY99Qj/x+wX
+        a6Z931m4w51+xL+9hCbzbx9OFA/lOBTWB6kJ5BgCfd1Y/F2Y8xHr7Dw72Drfi2s2
+        wPa7i8fGjQDU2jFbAkIUA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1661342208; x=1661349408; bh=kuW/qG4JUmJmu
+        4VzPx61uemjjFalqwyag3kx6XOqPOE=; b=BKd1EmuvOpNnAIpXPJJFjSIkFigeG
+        5WPP3Ibfqgn6f+nabolef24CZ62iA40nUXTpU69mHIajgRUJeaPdZKqeeRby1+7R
+        OImR1Cgp49wc6MKbmxueF2Z4rhcVmtBgvDlP/buckg88nSZoV8AGAqyo74MWqQWf
+        cL1vExQMPfwMqwL+3Wstn11DI/v16iRCvmxGkFPGKdv8aY0nVGLRVfm80jl6tV9K
+        qPyRmPnvGD414awHxysN3ma/36/3b0er2sKgT8h0nmLSufblmsK3v4OnfSTC95+6
+        BcUAijw6ggfn3y6AtnoNC1NJ9cKi4J9GoNmGp1ALRk7N50KuUdDpNfyuA==
+X-ME-Sender: <xms:_xEGY0_3uaGI0slJdDTlozWfU31KwX4m5ySru_WAamPhEnUYzqSV-A>
+    <xme:_xEGY8tiKbf9JBRjzog0znkRGzDefHS3WnHdFVEBCMKmsLdH9SQJ6b2uc62_Qe1xZ
+    cV2XmWuz87kQXoF2PE>
+X-ME-Received: <xmr:_xEGY6DK5T_2PH1z13eyzdjJ9YNA8GuZGlXSmB5eqnWH6GQ4xp9GjLffVaerb7T17LbiNi7_s13F35Zf7pRmNE5f4cKJTeCsrgM7>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddggeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkrhhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegv
+    nhcuuehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrg
+    htthgvrhhnpeduteehgfefudfffeelfffhheejgfdvfffhledvueekudeuieegueejieff
+    vdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmvgessggvnhgsohgvtghkvghlrdhnvght
+X-ME-Proxy: <xmx:_xEGY0dyRnm6I5p5ONdvswQuoH911Qcv4k4ImGelq3Uch2wdQt5f_w>
+    <xmx:_xEGY5M2YhW9IUMVZJ6XQ-y_7KCZgHrFbMNy0dM51kOr9oKnXhoY0w>
+    <xmx:_xEGY-nqQ6Kt_ul1NcmJNFISyhWSNz1xNbbNexnw5rJRg1E6x27NzA>
+    <xmx:ABIGYw_lH9x1hUhEBWjBASxkZJlyL74M8KEWiyffntejBaufUpUfTA>
+Feedback-ID: iffc1478b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 24 Aug 2022 07:56:47 -0400 (EDT)
+Date:   Wed, 24 Aug 2022 07:56:46 -0400
+From:   Ben Boeckel <me@benboeckel.net>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
+        Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, apronin@chromium.org,
+        dlunev@google.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        corbet@lwn.net, jejb@linux.ibm.com,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 04/10] security: keys: trusted: Allow storage of PCR
+ values in creation data
+Message-ID: <YwYR/rzvrkvgZzBm@farprobe>
+Reply-To: list.lkml.keyrings@me.benboeckel.net
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.4.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] ima: Handle -ESTALE returned by ima_filter_rule_match()
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        <linux-integrity@vger.kernel.org>, <dmitry.kasatkin@gmail.com>,
-        <paul@paul-moore.com>
-References: <20220818020551.18922-1-guozihua@huawei.com>
- <b383f302284dfa31408e2796a9cae60eefd45004.camel@linux.ibm.com>
- <998ca87c-8eef-8d50-e1ee-da53ef8f0046@huawei.com>
- <c61de998f8ed1e1192297f9a2ce568a86cee3296.camel@linux.ibm.com>
- <d5861fbc-1079-a47f-e746-1072dd1d37d7@huawei.com>
- <dc34912b2bad1c46f249fb6e2aa2c79e26890699.camel@linux.ibm.com>
- <6cd55a0f-366f-45b7-d0e5-4116de454c10@huawei.com>
- <117476d4f35be96ddba26675b849af44a5dbd6d1.camel@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <117476d4f35be96ddba26675b849af44a5dbd6d1.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220823152108.v2.4.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2022/8/24 9:26, Mimi Zohar wrote:
-> On Tue, 2022-08-23 at 21:28 +0800, Guozihua (Scott) wrote:
->> On 2022/8/23 21:21, Mimi Zohar wrote:
->>> On Tue, 2022-08-23 at 16:12 +0800, Guozihua (Scott) wrote:
->>>>> The question is whether we're waiting for the SELinux policy to change
->>>>> from ESTALE or whether it is the number of SELinux based IMA policy
->>>>> rules or some combination of the two.  Retrying three times seems to be
->>>>> random.  If SELinux waited for ESTALE to change, then it would only be
->>>>> dependent on the time it took to update the SELinux based IMA policy
->>>>> rules.
->>>>
->>>> We are waiting for ima_lsm_update_rules() to finish re-initializing all
->>>> the LSM based rules.
->>>
->>> Fine.  Hopefully retrying a maximum of 3 times is sufficient.
->>>
->> Well, at least this should greatly reduce the chance of this issue from
->> happening.
-> 
-> Agreed
-> 
->> This would be the best we I can think of without locking and
->> busy waiting. Maybe we can also add delays before we retry. Maybe you
->> got any other thought in mind?
-> 
-> Another option would be to re-introduce the equivalent of the "lazy"
-> LSM update on -ESTALE, but without updating the policy rule, as the
-> notifier callback will eventually get to it.
-> 
+On Tue, Aug 23, 2022 at 15:25:20 -0700, Evan Green wrote:
+> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+> index 0bfb4c33974890..dc9e11bb4824da 100644
+> --- a/Documentation/security/keys/trusted-encrypted.rst
+> +++ b/Documentation/security/keys/trusted-encrypted.rst
+> @@ -199,6 +199,10 @@ Usage::
+>         policyhandle= handle to an authorization policy session that defines the
+>                       same policy and with the same hash algorithm as was used to
+>                       seal the key.
+> +       creationpcrs= hex integer representing the set of PCR values to be
+> +                     included in the PCR creation data. The bit corresponding
+> +		     to each PCR should be 1 to be included, 0 to be ignored.
+> +		     TPM2 only.
 
-For this to happen we would need a way to tell when we are able to 
-continue with the retry though.
+There's inconsistent whitespace here. Given the context, I suspect the
+tabs should be expanded to spaces.
 
--- 
-Best
-GUO Zihua
+As for the docs themselves, this might preferrably mention how large
+this is supposed to be. It seems to be limited to 32bits by the code.
+What happens if fewer are provided? More? Will there always be at most
+32 PCR values? Also, how are the bits interpreted? I presume bit 0 is
+for PCR value 0?
+
+Thanks for including docs.
+
+Thanks,
+
+--Ben
