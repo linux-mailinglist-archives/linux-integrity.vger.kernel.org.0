@@ -2,64 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D69D59FA8A
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Aug 2022 14:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B910759FDEC
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Aug 2022 17:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237576AbiHXMyA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Aug 2022 08:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
+        id S235726AbiHXPKl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Aug 2022 11:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237558AbiHXMx6 (ORCPT
+        with ESMTP id S231451AbiHXPKk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:53:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B7995E4F;
-        Wed, 24 Aug 2022 05:53:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 828B16138B;
-        Wed, 24 Aug 2022 12:53:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF8C2C433D6;
-        Wed, 24 Aug 2022 12:53:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661345635;
-        bh=9qKTFfSvvv3odyymWozZ3aH/e3Es4L33cC41zZfYrDE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Hk1K3btiYElGBvohLpvnxQA2OisfrjMc8S/kg7OoZJF85mm9jLVcvTTAZ2Lw3evSf
-         +sk8cPvrEnDfRUlkNaDMbeNAim0UmwOmrY2pIWcRft2vYW4uPpmhpNvFOWSEFl9mf3
-         QLay6v3wIZsAU5jfFCs7L1BJGnXS/W03OFJ0YDMp4gY37+neRradBW1qYmAIK/3vXZ
-         rH0cBEQjhvbko4l7YDHO4ZvHkKsW6ii/iQNe7zRcOO0XiedDIeQ1GB55rvhtyCgtDT
-         MTwkOUMyoB8htAc5+QUeCwDFg2s1hrRx+bU8zr99viJWCFLcJrbgo2GNfUpBcdOvDe
-         UEdrfsdXKJDGw==
-Message-ID: <5f248d934ec5d2345986fd75d7d12bcd9e2f32b9.camel@kernel.org>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-From:   Jeff Layton <jlayton@kernel.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Trond Myklebust <trondmy@hammerspace.com>
-Date:   Wed, 24 Aug 2022 08:53:53 -0400
-In-Reply-To: <166129348704.23264.10381335282721356873@noble.neil.brown.name>
-References: <20220822133309.86005-1-jlayton@kernel.org>
-        , <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
-        , <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
-        , <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>
-        , <4cc84440d954c022d0235bf407a60da66a6ccc39.camel@kernel.org>
-        , <20220822233231.GJ3600936@dread.disaster.area>
-        , <6cbcb33d33613f50dd5e485ecbf6ce7e305f3d6f.camel@kernel.org>
-        , <166125468756.23264.2859374883806269821@noble.neil.brown.name>
-        , <df469d936b2e1c1a8c9c947896fa8a160f33b0e8.camel@kernel.org>
-         <166129348704.23264.10381335282721356873@noble.neil.brown.name>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 24 Aug 2022 11:10:40 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB33564F6
+        for <linux-integrity@vger.kernel.org>; Wed, 24 Aug 2022 08:10:37 -0700 (PDT)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MCTzl5PZ1z67Ntg;
+        Wed, 24 Aug 2022 23:10:11 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 24 Aug 2022 17:10:35 +0200
+Received: from mscphispre00062.huawei.com (10.123.70.102) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 24 Aug 2022 16:10:34 +0100
+From:   Denis Semakin <denis.semakin@huawei.com>
+To:     <linux-integrity@vger.kernel.org>
+CC:     <anton.sirazetdinov@huawei.com>, <artem.kuzin@huawei.com>,
+        <konstantin.meskhidze@huawei.com>, <yusongping@huawei.com>,
+        <hukeping@huawei.com>, <roberto.sassu@huawei.com>,
+        <krzysztof.struczynski@huawei.com>, <stefanb@linux.ibm.com>,
+        <denis.semakin@huawei-partners.com>
+Subject: [RFC PATCH v1 0/4] Virtualize PCR for Container-IMA
+Date:   Wed, 24 Aug 2022 23:10:05 +0800
+Message-ID: <20220824151005.234388-1-denis.semakin@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.123.70.102]
+X-ClientProxiedBy: mscpeml100001.china.huawei.com (7.188.26.227) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,81 +54,95 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-08-24 at 08:24 +1000, NeilBrown wrote:
-> On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > On Tue, 2022-08-23 at 21:38 +1000, NeilBrown wrote:
-> > > On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > > > So, we can refer to that and simply say:
-> > > >=20
-> > > > "If the function updates the mtime or ctime on the inode, then the
-> > > > i_version should be incremented. If only the atime is being updated=
-,
-> > > > then the i_version should not be incremented. The exception to this=
- rule
-> > > > is explicit atime updates via utimes() or similar mechanism, which
-> > > > should result in the i_version being incremented."
-> > >=20
-> > > Is that exception needed? utimes() updates ctime.
-> > >=20
-> > > https://man7.org/linux/man-pages/man2/utimes.2.html
-> > >=20
-> > > doesn't say that, but
-> > >=20
-> > > https://pubs.opengroup.org/onlinepubs/007904875/functions/utimes.html
-> > >=20
-> > > does, as does the code.
-> > >=20
-> >=20
-> > Oh, good point! I think we can leave that out. Even better!
->=20
-> Further, implicit mtime updates (file_update_time()) also update ctime.
-> So all you need is
->  If the function updates the ctime, then i_version should be
->  incremented.
->=20
-> and I have to ask - why not just use the ctime? Why have another number
-> that is parallel?
->=20
-> Timestamps are updated at HZ (ktime_get_course) which is at most every
-> millisecond.
-> xfs stores nanosecond resolution, so about 20 bits are currently wasted.
-> We could put a counter like i_version in there that only increments
-> after it is viewed, then we can get all the precision we need but with
-> exactly ctime semantics.
->=20
-> The 64 change-id could comprise
->  35 bits of seconds (nearly a millenium)
->  16 bits of sub-seconds (just in case a higher precision time was wanted
->  one day)
->  13 bits of counter. - 8192 changes per tick
+The main goal of this series is to provide the opportunity
+for retrieving integrity information from containters (namespaces)
+in case of remote attestation requests and requests from another servers
+querying the state of integrity for any given container.
 
-We'd need a "seen" flag too, so maybe only 4096 changes per tick...
+The detailed description and architecture can be found here:
+https://www.usenix.org/system/files/raid2019-luo.pdf,
+this paper shows the basics for how it works in general
+but did not solve the some practical issues related to memoy allocation,
+TPM interaction etc.
 
->=20
-> The value exposed in i_ctime would hide the counter and just show the
-> timestamp portion of what the filesystem stores. This would ensure we
-> never get changes on different files that happen in one order leaving
-> timestamps with the reversed order (the timestamps could be the same,
-> but that is expected).
->=20
-> This scheme could be made to handle a sustained update rate of 1
-> increment every 8 nanoseconds (if the counter were allowed to overflow
-> into unused bits of the sub-second field). This is one ever 24 CPU
-> cycles. Incrementing a counter and making it visible to all CPUs can
-> probably be done in 24 cycles. Accessing it and setting the "seen" flag
-> as well might just fit with faster memory. Getting any other useful
-> work done while maintaining that rate on a single file seems unlikely.
+Summary:
 
-This is an interesting idea.
+Let Ih is host integrity, and Ic1, Ic2, Icn the integrity
+of the first, second and etc container.
+Then the whole integrity of system would be:
 
-So, for NFSv4 you'd just mask off the counter bits (and "seen" flag) to
-get the ctime, and for the change attribute we'd just mask off the
-"seen" flag and put it all in there.
+	Ih = Ic1 + Ic2 + ... + Icn;
 
- * Implementing that for all filesystems would be a huge project though.
-   If we were implementing the i_version counter from scratch, I'd
-   probably do something along these lines. Given that we already have
-   an existing i_version counter, would there be any real benefit to
-   pursuing this avenue instead?
---=20
-Jeff Layton <jlayton@kernel.org>
+	where Ic1, Ic2 ... are integrity of corresponding
+	containers (namespaces)
+
+Each container integrity consists of measurement lists
+and the value of virtual PCR (container PCR). vPCR = cPCR.
+
+	Architecture scheme
+
+	.---------.     .---------.          .---------.
+	| C1 with |     | C2 with |          | Cn with |
+	| IMA-ns  |     | IMA-ns  |          | IMA-ns  |
+	|---------|     |---------|          |---------|
+	|  vPCR1  |<--->|  vPCR2  |... <---> |  vPCRn  |
+	|---------|     |---------|          |---------|
+	|         |     |         |          |         |
+	'---------'     '---------'          '---------'
+
+	C1, C2, Cn - containers (with IMA namespaces)
+	vPCRi - virtual PCR (in other words cPCR - container PCRs)
+
+Each IMA namespace which belongs to container should
+store its own PCR value (virtual vPCR or in other words
+container PCR = cPCR = vPCR, virtual PCR)
+and should perform a number of operation.
+
+Measurement:
+1. records the history value of a specific PCR (historyPCR)
+   which is not used in the current system. In our prototype
+   based on TPM 2.0, we choose PCR12.
+
+2. records the digest of all cPCRs
+   (cPCR - container PCR or virtual PCR that is stored for namespace).
+   During measurement perform:
+
+   tempValue := cPCRi.value xor cPCRi.secret;
+   tempPCR := HASH(tempPCR || tempValue);
+
+   Where cPCRi.value - is a value of a given namespaces, cPCRi.secret -
+   random generated sequence of bytes for namespace,
+   || - concatenation.
+
+3. extends the physical PCR12 with the final tempPCR.
+   PCR12 := PCR_Extend(PCR12,tempPCR)
+
+Attestation:
+When receiving this request, the IMA (and TPM) should provide
+the following data:
+1. the related PCR values, in our case this is PCR12
+
+2. sendcPCRs list where sendcPCR for each namespace is calculated as:
+   sendcPCRs = cPCRi.value xor cPCRi.secret
+3. Measurement lists for namespace.
+
+This work is also based on Stefan Berger's patches from:
+https://github.com/stefanberger/linux-ima-namespaces
+
+
+Denis Semakin (4):
+  ima: Introduce PCR virtualization for IMA namespace.
+  ima: Use tpm_chip from init IMA namespace.
+  ima: Create vpcr file on securityfs.
+  ima: Extend the real PCR12 with tempPCR value.
+
+ security/integrity/ima/ima.h             |  12 +-
+ security/integrity/ima/ima_fs.c          | 166 +++++++++++++++++++++++
+ security/integrity/ima/ima_init_ima_ns.c |  22 +++
+ security/integrity/ima/ima_ns.c          |   3 +
+ security/integrity/ima/ima_queue.c       |  55 ++++++++
+ 5 files changed, 257 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
+
