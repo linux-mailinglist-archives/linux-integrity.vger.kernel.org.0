@@ -2,30 +2,30 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B910759FDEC
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Aug 2022 17:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7E159FDED
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Aug 2022 17:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235726AbiHXPKl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Aug 2022 11:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S237858AbiHXPLA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Aug 2022 11:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiHXPKk (ORCPT
+        with ESMTP id S231451AbiHXPLA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:10:40 -0400
+        Wed, 24 Aug 2022 11:11:00 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB33564F6
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Aug 2022 08:10:37 -0700 (PDT)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MCTzl5PZ1z67Ntg;
-        Wed, 24 Aug 2022 23:10:11 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA7B80501
+        for <linux-integrity@vger.kernel.org>; Wed, 24 Aug 2022 08:10:58 -0700 (PDT)
+Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MCV086b2tz67x9g;
+        Wed, 24 Aug 2022 23:10:32 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 17:10:35 +0200
+ 15.1.2375.24; Wed, 24 Aug 2022 17:10:56 +0200
 Received: from mscphispre00062.huawei.com (10.123.70.102) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 16:10:34 +0100
+ 15.1.2375.24; Wed, 24 Aug 2022 16:10:51 +0100
 From:   Denis Semakin <denis.semakin@huawei.com>
 To:     <linux-integrity@vger.kernel.org>
 CC:     <anton.sirazetdinov@huawei.com>, <artem.kuzin@huawei.com>,
@@ -33,9 +33,9 @@ CC:     <anton.sirazetdinov@huawei.com>, <artem.kuzin@huawei.com>,
         <hukeping@huawei.com>, <roberto.sassu@huawei.com>,
         <krzysztof.struczynski@huawei.com>, <stefanb@linux.ibm.com>,
         <denis.semakin@huawei-partners.com>
-Subject: [RFC PATCH v1 0/4] Virtualize PCR for Container-IMA
-Date:   Wed, 24 Aug 2022 23:10:05 +0800
-Message-ID: <20220824151005.234388-1-denis.semakin@huawei.com>
+Subject: [RFC PATCH v1 1/4] ima: Introduce PCR virtualization for IMA namespace.
+Date:   Wed, 24 Aug 2022 23:10:40 +0800
+Message-ID: <20220824151040.234462-1-denis.semakin@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -46,103 +46,195 @@ X-ClientProxiedBy: mscpeml100001.china.huawei.com (7.188.26.227) To
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The main goal of this series is to provide the opportunity
-for retrieving integrity information from containters (namespaces)
-in case of remote attestation requests and requests from another servers
-querying the state of integrity for any given container.
+Define a structure for virtual PCR and corresponding
+function.
+This function is called when IMA extends the real PCR register
+and perform following operations:
 
-The detailed description and architecture can be found here:
-https://www.usenix.org/system/files/raid2019-luo.pdf,
-this paper shows the basics for how it works in general
-but did not solve the some practical issues related to memoy allocation,
-TPM interaction etc.
+1) Extends virtual PCR value in structure vpcr_entry;
+2) XOR this vPCR with random secret;
+3) Store xored value in specific field.
 
-Summary:
+vpcr_digest :=  HASH256(vpcr_digest || new_digest);
+vpcr_temp := vpcr_digest XOR vpcr_secret;
 
-Let Ih is host integrity, and Ic1, Ic2, Icn the integrity
-of the first, second and etc container.
-Then the whole integrity of system would be:
+Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+---
+ security/integrity/ima/ima.h             | 10 +++++
+ security/integrity/ima/ima_init_ima_ns.c | 14 ++++++
+ security/integrity/ima/ima_ns.c          |  3 ++
+ security/integrity/ima/ima_queue.c       | 55 ++++++++++++++++++++++++
+ 4 files changed, 82 insertions(+)
 
-	Ih = Ic1 + Ic2 + ... + Icn;
-
-	where Ic1, Ic2 ... are integrity of corresponding
-	containers (namespaces)
-
-Each container integrity consists of measurement lists
-and the value of virtual PCR (container PCR). vPCR = cPCR.
-
-	Architecture scheme
-
-	.---------.     .---------.          .---------.
-	| C1 with |     | C2 with |          | Cn with |
-	| IMA-ns  |     | IMA-ns  |          | IMA-ns  |
-	|---------|     |---------|          |---------|
-	|  vPCR1  |<--->|  vPCR2  |... <---> |  vPCRn  |
-	|---------|     |---------|          |---------|
-	|         |     |         |          |         |
-	'---------'     '---------'          '---------'
-
-	C1, C2, Cn - containers (with IMA namespaces)
-	vPCRi - virtual PCR (in other words cPCR - container PCRs)
-
-Each IMA namespace which belongs to container should
-store its own PCR value (virtual vPCR or in other words
-container PCR = cPCR = vPCR, virtual PCR)
-and should perform a number of operation.
-
-Measurement:
-1. records the history value of a specific PCR (historyPCR)
-   which is not used in the current system. In our prototype
-   based on TPM 2.0, we choose PCR12.
-
-2. records the digest of all cPCRs
-   (cPCR - container PCR or virtual PCR that is stored for namespace).
-   During measurement perform:
-
-   tempValue := cPCRi.value xor cPCRi.secret;
-   tempPCR := HASH(tempPCR || tempValue);
-
-   Where cPCRi.value - is a value of a given namespaces, cPCRi.secret -
-   random generated sequence of bytes for namespace,
-   || - concatenation.
-
-3. extends the physical PCR12 with the final tempPCR.
-   PCR12 := PCR_Extend(PCR12,tempPCR)
-
-Attestation:
-When receiving this request, the IMA (and TPM) should provide
-the following data:
-1. the related PCR values, in our case this is PCR12
-
-2. sendcPCRs list where sendcPCR for each namespace is calculated as:
-   sendcPCRs = cPCRi.value xor cPCRi.secret
-3. Measurement lists for namespace.
-
-This work is also based on Stefan Berger's patches from:
-https://github.com/stefanberger/linux-ima-namespaces
-
-
-Denis Semakin (4):
-  ima: Introduce PCR virtualization for IMA namespace.
-  ima: Use tpm_chip from init IMA namespace.
-  ima: Create vpcr file on securityfs.
-  ima: Extend the real PCR12 with tempPCR value.
-
- security/integrity/ima/ima.h             |  12 +-
- security/integrity/ima/ima_fs.c          | 166 +++++++++++++++++++++++
- security/integrity/ima/ima_init_ima_ns.c |  22 +++
- security/integrity/ima/ima_ns.c          |   3 +
- security/integrity/ima/ima_queue.c       |  55 ++++++++
- 5 files changed, 257 insertions(+), 1 deletion(-)
-
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index b740699ba060..81385aee04f1 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -119,6 +119,15 @@ struct ima_h_table {
+ 	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
+ };
+ 
++struct vpcr_entry {
++	u8 vpcr_tmp[SHA256_DIGEST_SIZE];
++	u8 vpcr_digest[SHA256_DIGEST_SIZE];
++	u8 secret[SHA256_DIGEST_SIZE];
++	struct list_head list;
++};
++
++extern struct mutex vpcr_list_mutex;
++
+ struct ima_namespace {
+ 	unsigned long ima_ns_flags;
+ /* Bit numbers for above flags; use BIT() to get flag */
+@@ -165,6 +174,7 @@ struct ima_namespace {
+ 	 * and IMA default algo.
+ 	 */
+ 	int ima_extra_slots;
++	struct vpcr_entry vpcr;
+ } __randomize_layout;
+ extern struct ima_namespace init_ima_ns;
+ 
+diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
+index 00eabdb55e91..1b20e07556e6 100644
+--- a/security/integrity/ima/ima_init_ima_ns.c
++++ b/security/integrity/ima/ima_init_ima_ns.c
+@@ -6,8 +6,12 @@
+  *   Stefan Berger <stefanb@linux.vnet.ibm.com>
+  */
+ 
++#include <linux/random.h>
+ #include "ima.h"
+ 
++struct mutex vpcr_list_mutex;
++struct list_head vpcr_list;
++
+ int ima_init_namespace(struct ima_namespace *ns)
+ {
+ 	int ret;
+@@ -50,8 +54,18 @@ int ima_init_namespace(struct ima_namespace *ns)
+ 		ns->ima_tpm_chip = tpm_default_chip();
+ 		if (!ns->ima_tpm_chip)
+ 			pr_info("No TPM chip found, activating TPM-bypass!\n");
++
++		INIT_LIST_HEAD(&vpcr_list);
++		mutex_init(&vpcr_list_mutex);
++		list_add(&ns->vpcr.list, &vpcr_list);
++	} else {
++		mutex_lock(&vpcr_list_mutex);
++		list_add_tail(&ns->vpcr.list, &vpcr_list);
++		mutex_unlock(&vpcr_list_mutex);
+ 	}
+ 
++	get_random_bytes(&ns->vpcr.secret, sizeof(ns->vpcr.secret));
++
+ 	set_bit(IMA_NS_ACTIVE, &ns->ima_ns_flags);
+ 
+ 	return 0;
+diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
+index be7f50b1def8..278a1e355c6e 100644
+--- a/security/integrity/ima/ima_ns.c
++++ b/security/integrity/ima/ima_ns.c
+@@ -31,6 +31,9 @@ static void destroy_ima_ns(struct ima_namespace *ns)
+ 	kfree(ns->arch_policy_entry);
+ 	ima_free_policy_rules(ns);
+ 	ima_free_ns_status_tree(ns);
++	mutex_lock(&vpcr_list_mutex);
++	list_del(&ns->vpcr.list);
++	mutex_unlock(&vpcr_list_mutex);
+ }
+ 
+ void ima_free_ima_ns(struct ima_namespace *ns)
+diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
+index ad59df193b29..b0057996b775 100644
+--- a/security/integrity/ima/ima_queue.c
++++ b/security/integrity/ima/ima_queue.c
+@@ -17,6 +17,7 @@
+ 
+ #include <linux/rculist.h>
+ #include <linux/slab.h>
++#include <crypto/algapi.h>
+ #include "ima.h"
+ 
+ #define AUDIT_CAUSE_LEN_MAX 32
+@@ -127,6 +128,55 @@ unsigned long ima_get_binary_runtime_size(struct ima_namespace *ns)
+ 		return ns->binary_runtime_size + sizeof(struct ima_kexec_hdr);
+ }
+ 
++/**
++ * This function extends the virtual PCR for namespace.
++ * It calculates the HASH for given digest, store it in structure
++ * and XOR it with random secret.
++ * vpcr_digest := HASH(vpcr_digest || new_digest);
++ * vpcr_temp := vpcr_digest XOR vpcr_secret;
++ */
++
++static int ima_vpcr_extend(struct ima_namespace *ns,
++			   struct tpm_digest *digests_arg, int pcr)
++{
++	int ret = 0;
++	u8 buf[IMA_MAX_DIGEST_SIZE * 2];
++	struct {
++		struct ima_digest_data hdr;
++		char digest[IMA_MAX_DIGEST_SIZE];
++	} hash = {};
++
++	size_t dig_len = hash_digest_size[ima_hash_algo];
++	loff_t size = SHA256_DIGEST_SIZE + dig_len;
++
++	/* paranoic zeroing */
++	memset(buf, 0, sizeof(buf));
++	memset(&hash.digest, 0, sizeof(hash.digest));
++
++	/* Use SHA256 hash for vPCR */
++	hash.hdr.algo = HASH_ALGO_SHA256;
++	hash.hdr.length = SHA256_DIGEST_SIZE;
++
++	memcpy(buf, ns->vpcr.vpcr_digest, SHA256_DIGEST_SIZE);
++	memcpy(buf + SHA256_DIGEST_SIZE, &digests_arg->digest[ns->ima_hash_algo_idx],
++	       dig_len);
++
++	ret = ima_calc_buffer_hash(ns, buf, size, &hash.hdr);
++	if (ret < 0)
++		goto out;
++
++	if (mutex_lock_interruptible(&vpcr_list_mutex))
++		return -EINTR;
++
++	memcpy(ns->vpcr.vpcr_digest, &hash.digest, SHA256_DIGEST_SIZE);
++	crypto_xor_cpy(ns->vpcr.vpcr_tmp, ns->vpcr.vpcr_digest,
++		       ns->vpcr.secret, SHA256_DIGEST_SIZE);
++	mutex_unlock(&vpcr_list_mutex);
++out:
++
++	return ret;
++}
++
+ static int ima_pcr_extend(struct ima_namespace *ns,
+ 			  struct tpm_digest *digests_arg, int pcr)
+ {
+@@ -135,9 +185,14 @@ static int ima_pcr_extend(struct ima_namespace *ns,
+ 	if (!ns->ima_tpm_chip)
+ 		return result;
+ 
++	result = ima_vpcr_extend(ns, digests_arg, pcr);
++	if (result != 0)
++		pr_err("Error extending vPCR, result: %d\n", result);
++
+ 	result = tpm_pcr_extend(ns->ima_tpm_chip, pcr, digests_arg);
+ 	if (result != 0)
+ 		pr_err("Error Communicating to TPM chip, result: %d\n", result);
++
+ 	return result;
+ }
+ 
 -- 
 2.25.1
 
