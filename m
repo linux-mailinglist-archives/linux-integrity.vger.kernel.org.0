@@ -2,50 +2,48 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5185A1FA7
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Aug 2022 06:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B745A2082
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Aug 2022 07:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbiHZELE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Aug 2022 00:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S231315AbiHZFxi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Aug 2022 01:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiHZELE (ORCPT
+        with ESMTP id S244943AbiHZFxi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Aug 2022 00:11:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9E77C1E2;
-        Thu, 25 Aug 2022 21:11:02 -0700 (PDT)
+        Fri, 26 Aug 2022 01:53:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690B6D0752;
+        Thu, 25 Aug 2022 22:53:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63FC1B80ABF;
-        Fri, 26 Aug 2022 04:11:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C571EC433D6;
-        Fri, 26 Aug 2022 04:10:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8A2361A18;
+        Fri, 26 Aug 2022 05:53:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3912C433D6;
+        Fri, 26 Aug 2022 05:53:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661487060;
-        bh=9FtfZRg8d5/PrQ/D6oaioOqEEZ7sw5lB8CDSQZYEtRY=;
+        s=k20201202; t=1661493216;
+        bh=VHnSXpnorzXm9YRmeeQW4ruB4c62oX2QKjpA2ehtdKk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lmtvuIAgTtWn8izH0XCMTykm91F7YBO6bLH7g2KaPvo4IE6IFomOX3gtkG9L1clNZ
-         /KZn6fo+DSJV+1/jLmD4OSFLtVuudCx0jMq6mTNIv8is/XTUwrcn/VcGG6TsU6Wbkh
-         +MCsrNFXAozRxZxfHHzF1+/aTxSsdQVCI6rhvlMRyPmW12lVVg02KaS9VTAUEGPkpe
-         ODf+xLEy/myfrNYXbbfR+irKgRN3dQNgUsPBPp/uFDV/FrqvMLMBKskdDcLwjUzPj4
-         k/CyawtXbzRNEH/VOW0Hr0M8zA4XuQQe73Pq59u+32FCCElwhSEUCTrbsD9yPZfnFF
-         c8bRBqpP/c/sQ==
-Date:   Fri, 26 Aug 2022 07:10:52 +0300
+        b=Ov1Wc9rvWCHtSNO93LEyy9gkVGQ3MyEmzHEZyVdiJHjZ6DKF3p7iwEA5YLJSE+MfQ
+         Zf5NlLiknoJP1Upac/SZ/vJ+IYl2asaQyUfzrBHZazSG/V8Qw7vrVPKQzQ5vjsOhwR
+         lPu9lrp/0SWC3ieRi4mjUHWTagWNUQV8FKitK4SM0cnfHtVVrx4nBM7466EzLW5ysZ
+         mZdtWKphjiGTMLoHIv26wdsI6b1ckjKdXWoigC1UU0LsChTGrBCOp7DS5+WQpgdGBb
+         uBfde8YWmtHIeNA/A2ocHWq5rAuwuR/swltNkv3fwk0kzYcYoZEqrPvubnshal1PhP
+         W0Gbzo23OGbhQ==
+Date:   Fri, 26 Aug 2022 08:53:29 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander.Steffen@infineon.com, jgg@ziepe.ca, peterhuewe@gmx.de,
-        joel@jms.id.au
-Subject: Re: [PATCH] tpm: tis_i2c: Fix sanity check interrupt enable mask
-Message-ID: <YwhHzDL5agT3enUn@kernel.org>
-References: <20220817200333.305264-1-eajames@linux.ibm.com>
- <YwhGLZX2+dggWHcI@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] char: move from strlcpy with unused retval to strscpy
+Message-ID: <Ywhf2XNKJN0ec+I5@kernel.org>
+References: <20220818205959.6576-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwhGLZX2+dggWHcI@kernel.org>
+In-Reply-To: <20220818205959.6576-1-wsa+renesas@sang-engineering.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,42 +54,36 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 07:04:00AM +0300, Jarkko Sakkinen wrote:
-> On Wed, Aug 17, 2022 at 03:03:33PM -0500, Eddie James wrote:
-> > The sanity check mask for TPM_INT_ENABLE register was off by 8 bits,
-> > resulting in failure to probe if the TPM_INT_ENABLE register was a
-> > valid value.
-> > 
-> > Fixes: bbc23a07b072 ("tpm: Add tpm_tis_i2c backend for tpm_tis_core")
-> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> > ---
-> >  drivers/char/tpm/tpm_tis_i2c.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-> > index 0692510dfcab..635a69dfcbbd 100644
-> > --- a/drivers/char/tpm/tpm_tis_i2c.c
-> > +++ b/drivers/char/tpm/tpm_tis_i2c.c
-> > @@ -49,7 +49,7 @@
-> >  
-> >  /* Masks with bits that must be read zero */
-> >  #define TPM_ACCESS_READ_ZERO 0x48
-> > -#define TPM_INT_ENABLE_ZERO 0x7FFFFF6
-> > +#define TPM_INT_ENABLE_ZERO 0x7FFFFF60
-> >  #define TPM_STS_READ_ZERO 0x23
-> >  #define TPM_INTF_CAPABILITY_ZERO 0x0FFFF000
-> >  #define TPM_I2C_INTERFACE_CAPABILITY_ZERO 0x80000000
-> > -- 
-> > 2.31.1
-> > 
+On Thu, Aug 18, 2022 at 10:59:59PM +0200, Wolfram Sang wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
 > 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/char/tpm/tpm_ppi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Thank you.
+> diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+> index 40018a73b3cb..bc7b1b4501b3 100644
+> --- a/drivers/char/tpm/tpm_ppi.c
+> +++ b/drivers/char/tpm/tpm_ppi.c
+> @@ -380,7 +380,7 @@ void tpm_add_ppi(struct tpm_chip *chip)
+>  				      TPM_PPI_FN_VERSION,
+>  				      NULL, ACPI_TYPE_STRING);
+>  	if (obj) {
+> -		strlcpy(chip->ppi_version, obj->string.pointer,
+> +		strscpy(chip->ppi_version, obj->string.pointer,
+>  			sizeof(chip->ppi_version));
+>  		ACPI_FREE(obj);
+>  	}
+> -- 
+> 2.35.1
+> 
 
-I used "6.3 Handling of Multi-Byte Registers" I2C specification
-to check this. I do not posses I2C chip.
+I can cope with this.
 
-https://trustedcomputinggroup.org/wp-content/uploads/TCG-TPM-I2C-Interface-Specification-v1.00.pdf
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
