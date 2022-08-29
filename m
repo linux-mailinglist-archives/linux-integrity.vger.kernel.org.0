@@ -2,55 +2,201 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EB25A5632
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Aug 2022 23:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58F65A560C
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Aug 2022 23:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiH2V2h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 Aug 2022 17:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        id S229449AbiH2VXa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 Aug 2022 17:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiH2V1r (ORCPT
+        with ESMTP id S229446AbiH2VX3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 Aug 2022 17:27:47 -0400
-X-Greylist: delayed 3124 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 Aug 2022 14:26:46 PDT
-Received: from mail.seambee.monster (svmt.bestweekendideas.co [80.85.152.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2E0A0617
-        for <linux-integrity@vger.kernel.org>; Mon, 29 Aug 2022 14:26:46 -0700 (PDT)
-Received: by mail.seambee.monster (Postfix, from userid 48)
-        id F30722281074; Mon, 29 Aug 2022 20:15:55 +0000 (UTC)
-To:     linux-integrity@vger.kernel.org
-Subject: Request for catalog and price list
-X-PHP-Originating-Script: 0:hawmnawmn.php
-From:   Richard Martins <sales56901@outlook.com>
-Reply-To: martins12290@hotmail.com
+        Mon, 29 Aug 2022 17:23:29 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B5386B7A
+        for <linux-integrity@vger.kernel.org>; Mon, 29 Aug 2022 14:23:28 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TLEGZ9030932;
+        Mon, 29 Aug 2022 21:22:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type; s=pp1; bh=aNIhqvbCwVKh7Nq8W5hNmuMe2LXcmlTUOeMTmLOrGJQ=;
+ b=oB2qof6bmjbYYvVNTMOCvW3wfeXMVLAnJU3jHWrOH+2JcU+xPnQMH5iIix5b0JIl20ZN
+ K7wn5TkIxfZIHs/gBZ3blCkju+4hCkClNd9pgHUN3RdSyohQqYtMb6r4UNFBNCeCiduu
+ 5stP2P8b8d+BqVGb5oBMdDepkCF49UwB7jFj2dKjUpRQ6MKEM/nKdtx85mfaOZu3WnXm
+ fKWgqVE2fXEnuRsAtX+3Kt7BCNyXwULI2XuXIaD/8O0hKorRrvum8oxfMr0DtWkMIsaU
+ XT+JY/KBLcjX/p40QGJg1Cv7NoBFGBGO9lbxM5GU+nN7TMSZXeVCCWKB+zMHUXcNHGiO 1g== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j956er8n9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 21:22:58 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27TLLT26007476;
+        Mon, 29 Aug 2022 21:22:58 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04wdc.us.ibm.com with ESMTP id 3j7aw9fmge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 21:22:58 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27TLMvOA13107944
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Aug 2022 21:22:57 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E392C6057;
+        Mon, 29 Aug 2022 21:22:57 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 33485C6055;
+        Mon, 29 Aug 2022 21:22:56 +0000 (GMT)
+Received: from [9.211.157.141] (unknown [9.211.157.141])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 29 Aug 2022 21:22:55 +0000 (GMT)
+Message-ID: <4c40d3f7-470c-efc2-ccfc-5a40b0ec486e@linux.ibm.com>
+Date:   Mon, 29 Aug 2022 17:22:55 -0400
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-Message-Id: <20220829201555.F30722281074@mail.seambee.monster>
-Date:   Mon, 29 Aug 2022 20:15:55 +0000 (UTC)
-X-Spam-Status: No, score=3.7 required=5.0 tests=BAYES_80,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [RFC PATCH v1 4/4] ima: Extend the real PCR12 with tempPCR value.
+Content-Language: en-US
+To:     Denis Semakin <denis.semakin@huawei.com>,
+        linux-integrity@vger.kernel.org
+Cc:     anton.sirazetdinov@huawei.com, artem.kuzin@huawei.com,
+        konstantin.meskhidze@huawei.com, yusongping@huawei.com,
+        hukeping@huawei.com, roberto.sassu@huawei.com,
+        krzysztof.struczynski@huawei.com, stefanb@linux.ibm.com,
+        denis.semakin@huawei-partners.com
+References: <20220824151140.234654-1-denis.semakin@huawei.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+In-Reply-To: <20220824151140.234654-1-denis.semakin@huawei.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms030901020309040909000907"
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: KtZM1VrSMX4RZjzZc2zDOOYEE5Ho-pS2
+X-Proofpoint-GUID: KtZM1VrSMX4RZjzZc2zDOOYEE5Ho-pS2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-29_10,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 clxscore=1011 phishscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208290094
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi, Friend,
+This is a cryptographically signed message in MIME format.
 
-This is Richard Martins and I'm the purchasing manager from K&B Trading(SANTIAGO) in Chile.
-We are glad to know about your company from the web and we are interested in your products.
-Kindly send us your Latest catalog and price list for our trial order, Thanks.
+--------------ms030901020309040909000907
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Best Regards,
-Mr. Richard Martins
-Purchasing Manager
-K&B Trading (SANTIAGO) Chile
-Add: Marchant Pereira 190,Providencia,Santiago
-Tel.:  56 2 2204 5852
+On 8/24/2022 11:11 AM, Denis Semakin wrote:
+> For each namespace do this calculation:
+> 	tempPCR := HASH(tempPCR || tempValue);
+> 
+> And finally extend the real PCR12P:
+> 	PCR12 := PCR_Extend(PCR12,tempPCR);
+> 
+> Then read the PCR12 and return its value to user-space.
+> 
 
+Sorry I missed the original context.  Is this namespacing for containers?  Is PCR 12 becoming the 'standard' PCR for this?
+
+
+--------------ms030901020309040909000907
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+JTNkQWN0YWxpcyUyMFMucC5BLiUyZjAzMzU4NTIwOTY3LGMlM2RJVD9jZXJ0aWZpY2F0ZVJl
+dm9jYXRpb25MaXN0O2JpbmFyeTA9oDugOYY3aHR0cDovL2NybDA1LmFjdGFsaXMuaXQvUmVw
+b3NpdG9yeS9BVVRILVJPT1QvZ2V0TGFzdENSTDAdBgNVHQ4EFgQUvpepqoS/gL8QU30JMvnh
+LjIbz3cwDgYDVR0PAQH/BAQDAgEGMA0GCSqGSIb3DQEBCwUAA4ICAQAmm+cbWQ10sxID6edV
+94SAhc1CwzthHFfHpuYS30gisWUfWpgp43Dg1XzG2in3VGV7XrzCCGZh4JM/XQWp+4oxmyV4
+2Qjz9vc8GRksgo6X2nYObPYZzQjda9wxsCB38i4G3H33w8lf9sFvl0xm4ZXZ2s2bF/PdqvrK
+0ZgvF51+MoIPnli/wJBw3p72xbk5Sb1MneSO3tZ293WFzDmz7tuGU0PfytYUkG7O6annGqbU
+1I6CA6QVKUqeFLPodSODAFqJ3pimKD0vX9MuuSa0QinH7CkiPtZMD0mpwwzIsnSs3qOOl60t
+IZQOTc0I6lCe1LLhrz7Q75J6nNL9N5zVwZ1I3o2Lb8Dt7BA13VFuZvZIzapUGV83R7pmSVaj
+1Bik1nJ/R393e6mwppsT140KDVLh4Oenywmp2VpBDuEj9RgICAO0sibv8n379LbO7ARa0kw9
+y9pggFzN2PAX25b7w0n9m78kpv3z3vW65rs6wl7E8VEHNfv8+cnb81dxN3C51KElz+l31zch
+FTurD5HFEpyEhzO/fMS5AkweRJIzwozxNs7OL/S/SVTpJLJL1ukZ1lnHHX0d3xCzRy/5HqfK
+3uiG22LPB5+RjNDobPAjAz2BKMfkF/+v0pzn8mqqkopQaJzEAbLbMpgQYHRCjvrUxxwjJyUF
+b2Z+40UNtMF4MTK7zTGCA/MwggPvAgEBMIGWMIGBMQswCQYDVQQGEwJJVDEQMA4GA1UECAwH
+QmVyZ2FtbzEZMBcGA1UEBwwQUG9udGUgU2FuIFBpZXRybzEXMBUGA1UECgwOQWN0YWxpcyBT
+LnAuQS4xLDAqBgNVBAMMI0FjdGFsaXMgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIENBIEczAhBe
+LLAGq3EDXaRbRjTikYn/MA0GCWCGSAFlAwQCAQUAoIICLTAYBgkqhkiG9w0BCQMxCwYJKoZI
+hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA4MjkyMTIyNTVaMC8GCSqGSIb3DQEJBDEiBCAa
+n6U9N6nhk6rGF1NOBbQDHfM9F+etiPzYzIlqY87OJzBsBgkqhkiG9w0BCQ8xXzBdMAsGCWCG
+SAFlAwQBKjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwDgYIKoZIhvcNAwICAgCAMA0GCCqG
+SIb3DQMCAgFAMAcGBSsOAwIHMA0GCCqGSIb3DQMCAgEoMIGnBgkrBgEEAYI3EAQxgZkwgZYw
+gYExCzAJBgNVBAYTAklUMRAwDgYDVQQIDAdCZXJnYW1vMRkwFwYDVQQHDBBQb250ZSBTYW4g
+UGlldHJvMRcwFQYDVQQKDA5BY3RhbGlzIFMucC5BLjEsMCoGA1UEAwwjQWN0YWxpcyBDbGll
+bnQgQXV0aGVudGljYXRpb24gQ0EgRzMCEF4ssAarcQNdpFtGNOKRif8wgakGCyqGSIb3DQEJ
+EAILMYGZoIGWMIGBMQswCQYDVQQGEwJJVDEQMA4GA1UECAwHQmVyZ2FtbzEZMBcGA1UEBwwQ
+UG9udGUgU2FuIFBpZXRybzEXMBUGA1UECgwOQWN0YWxpcyBTLnAuQS4xLDAqBgNVBAMMI0Fj
+dGFsaXMgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIENBIEczAhBeLLAGq3EDXaRbRjTikYn/MA0G
+CSqGSIb3DQEBAQUABIIBAIDpSde0JN0JUFcLARslE0RVXPi7nrJ1esMimrq89gtsjmm6PaIc
+dkSgRgC0a8Bc/DFZR/TN0RJb+mGTlUyEyswYQc54kWAP9As8ERftFF0dGXIeiHe/cYn77hZD
+x/vUgeh2bh5V3LppIglKIf95v/W/StyoEtfmSqsHQ/CIVpSQ/LLaJ6SrrelZE8PWaf68s+J/
+KSFwbxcPzTcXtWoobWnLgSJhtgTs5gvyhXmdoUzEjvz13nyvAjITC3lEoI75m01QBJiYvKGE
+NrpEt5vGoRWII7TioMv7dPkFEfBhs5Yhac82tkXOnYJ1UzdokYyW2Wjn2wfbtLitMAmjqfUI
+ioQAAAAAAAA=
+--------------ms030901020309040909000907--
 
