@@ -2,100 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B735A6368
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Aug 2022 14:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1CB5A642E
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Aug 2022 14:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiH3Mc3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Aug 2022 08:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
+        id S229766AbiH3M5N (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Aug 2022 08:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiH3Mc2 (ORCPT
+        with ESMTP id S230179AbiH3M4p (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:32:28 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74925AE22C
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Aug 2022 05:32:25 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MH68r5pXqzHnVZ;
-        Tue, 30 Aug 2022 20:30:36 +0800 (CST)
-Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 30 Aug
- 2022 20:32:23 +0800
-From:   GUO Zihua <guozihua@huawei.com>
-To:     <linux-integrity@vger.kernel.org>, <zohar@linux.ibm.com>,
-        <dmitry.kasatkin@gmail.com>, <paul@paul-moore.com>
-Subject: [PATCH v3] ima: Handle -ESTALE returned by ima_filter_rule_match()
-Date:   Tue, 30 Aug 2022 20:29:06 +0800
-Message-ID: <20220830122906.44496-1-guozihua@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 30 Aug 2022 08:56:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827F3153D3F
+        for <linux-integrity@vger.kernel.org>; Tue, 30 Aug 2022 05:56:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0B81B1FA7C;
+        Tue, 30 Aug 2022 12:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661864126;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JF4B393OiwtOXn9Tf5y0chw81uWmzJktgfqH3NXg3hY=;
+        b=BWX0kzrJJSbamBZxh/mOhFGqpS+uSSIw97XX0lM3tPcN0BetG9gdU/WDkyTRH9SQCMmsNX
+        psTFE2fS0Kyt3joyV8LYUtLeoNBMsFU51wmLbf25jVc81UufHTgWTTiSuX8S+ZEiFlZ3To
+        IDIE4gfjI2afVQAgbYdTy3V9OWQ3RHI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661864126;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JF4B393OiwtOXn9Tf5y0chw81uWmzJktgfqH3NXg3hY=;
+        b=w5/itynbo1WyHXWlqnYtGY3VQtjOwWX7zD7Ci9uXgjWLmleBMcnOYvmoAUzxORE67GJWIs
+        SreJNqBAgBtLAxAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CE0A813B0C;
+        Tue, 30 Aug 2022 12:55:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id J4qzML0IDmPocgAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Tue, 30 Aug 2022 12:55:25 +0000
+Date:   Tue, 30 Aug 2022 14:55:24 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [RFC PATCH ima-evm-utils 05/11] Replace the low level SHA1 calls
+ when calculating the TPM 1.2 PCRs
+Message-ID: <Yw4IvIgYZt5JMBYn@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20220830005936.189922-1-zohar@linux.ibm.com>
+ <20220830005936.189922-6-zohar@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830005936.189922-6-zohar@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA relies on the blocking LSM policy notifier callback to update the
-LSM based IMA policy rules.
+Hi Mimi,
 
-When SELinux update its policies, IMA would be notified and starts
-updating all its lsm rules one-by-one. During this time, -ESTALE would
-be returned by ima_filter_rule_match() if it is called with a LSM rule
-that has not yet been updated. In ima_match_rules(), -ESTALE is not
-handled, and the LSM rule is considered a match, causing extra files
-to be measured by IMA.
+> OpenSSL v3 emits deprecated warnings for SHA1 functions.  Use the
+> EVP_ functions when walking the TPM 1.2 binary bios measurements
+> to calculate the TPM 1.2 PCRs.
 
-Fix it by actively updating current rule if -ESTALE is returned by
-ima_filter_rule_match().
+LGTM.
 
-Fixes: b16942455193 ("ima: use the lsm policy update notifier")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
 
-v3:
-  Update current rule instead of just retrying, as suggested by Mimi
-v2:
-  Fixes message errors pointed out by Mimi
-
----
- security/integrity/ima/ima_policy.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index a8802b8da946..62a5b6164923 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -616,6 +616,8 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 			else
- 				return false;
- 		}
-+
-+retry:
- 		switch (i) {
- 		case LSM_OBJ_USER:
- 		case LSM_OBJ_ROLE:
-@@ -635,6 +637,12 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 		default:
- 			break;
- 		}
-+
-+		if (rc == -ESTALE) {
-+			rc = ima_lsm_update_rule(rule);
-+			if (!rc)
-+				goto retry;
-+		}
- 		if (!rc)
- 			return false;
- 	}
--- 
-2.17.1
-
+Kind regards,
+Petr
