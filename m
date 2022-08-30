@@ -2,76 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361975A5BD5
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Aug 2022 08:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A4F5A5E5D
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Aug 2022 10:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiH3G3q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Aug 2022 02:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
+        id S231341AbiH3ImC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Aug 2022 04:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiH3G3p (ORCPT
+        with ESMTP id S231645AbiH3ImA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:29:45 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44D497B1D;
-        Mon, 29 Aug 2022 23:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661840969;
-        bh=WpgEEn6MUf6DJ1NYH18nt11KqeVSMW+6kQbhTyNwqxE=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=jTa+kSoa/nBwKZr5abAdmSmRy5QhQHoGrB55f6/XmRdDyNu4NDSUcaTI8jupEoBr7
-         8Z3iwRnZI0B4DltrEem0qEwutFF0GIRBCMsG4OkdMjx585KJwu4xAxFxDEG5LqDAS8
-         oby8eJ88KN8KsGSqVDg+Cml9QeACM1h7+1LXI/Es=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.2.37] ([84.162.5.241]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MdefJ-1p1hXM0STB-00ZiJH; Tue, 30
- Aug 2022 08:29:29 +0200
-Subject: Re: [PATCH v7 05/10] tpm, tpm_tis: Only handle supported interrupts
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
- <20220629232653.1306735-6-LinoSanfilippo@gmx.de>
- <CAKf6xpsc9KRUKo5Z-kPqDcSCdpf9-tjf+ZdREnEiJUdHwyDQcA@mail.gmail.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <bf42f6cc-dcc6-ba01-7208-de5df43f3919@gmx.de>
-Date:   Tue, 30 Aug 2022 08:29:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 30 Aug 2022 04:42:00 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5BAB72AB
+        for <linux-integrity@vger.kernel.org>; Tue, 30 Aug 2022 01:41:58 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MH1155xw3zlWXV;
+        Tue, 30 Aug 2022 16:38:33 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 30 Aug 2022 16:41:56 +0800
+Message-ID: <2ad8179d-9ed6-b0f4-7b8d-e47b3de70b26@huawei.com>
+Date:   Tue, 30 Aug 2022 16:41:56 +0800
 MIME-Version: 1.0
-In-Reply-To: <CAKf6xpsc9KRUKo5Z-kPqDcSCdpf9-tjf+ZdREnEiJUdHwyDQcA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] ima: Handle -ESTALE returned by ima_filter_rule_match()
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:WXoZzcBcfVA6OV5rwwR9Fg6hPWzh6LcZOmaAItebSDmrsGPW59w
- Uye+16N9OGrYcuGRYUpVkAPTXUdM5ViCOzShiAgw2CuxTpIhMRd4xVupZP/EzJg5TWh3tSG
- +EhQR+z7u/T+NoVF1M/+kE+4WPwzPckhqWlZQXLVrDaHu/Wtnt71FgaMaDRiYWCKXxjMIaa
- EA/OMb212wfYk9X0ox+mA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:B41wivnqFQI=:RrFk3NWRcC8gi3Oi3eq2h2
- 8f9+X/ilt1MmuBOM6QMjY4UBXo1+gdr+agjW/ZqBDWtcZ+KAd+UyAZXmC7sfk5ez8FhvovVqf
- /egGQDbCos9EXdRhPPyAd/Mt856hip+owgeAGsXNbQjMC+HtCuqRfnJcyZ6pyaOjQJYPj9VRz
- KUZbgwzhyNEffCGdfv5zq7fLhLdZ88QY49FG8ChmMH2txfGNAoHpWTexHKmCBysKQiCWs+0JQ
- 7D62PEvuNfLeAu8VLdoTga3SROklxvPyP2Dg3WrHLCx4t65rgcgyi1ytlIimAZX0CzikPNkOQ
- MbEgafT6V6Ebe2P4pTCaghRcbkQqv1tOWbWbSW7dZJYFls93Ac8OLLWpLjnXAPEQggxUo03qY
- /qM8jBYqgPdUedvLPM8AFtvdVdenYheOQhlou7UGBatWXFfpD/jLyrC3+1oE/oXbpYUKKlJmc
- Elhp6pB/rAs3kXFIZEcRqMMm/LfjKYaooCGV6jkOa6yXJQ3QShf5wWAkDgcuq3UtZkqS+q5GS
- BaOhvwFhId8i3KVu//7My64ADnAABWsa5zKauGRPxcbBv8XfVOU9P7fQ60K5t8Q2TBHiwGb8a
- 2cKsp0kDP49YWGR80jA95MSJqymrtf1RP0AhodYf9X77vKqxSCd0nfO2+oIiMbnb2OoAdrIiH
- o62TXNQ711DtLflU7/oJFUAhhr/3IH4yMewI+W+jyBPv7B8OG3+DKEIvvk+DVnR44kLt2Rpq1
- qKyp/G5y3cEao2CNlds5L3luWv9zPMrKxNEJDX8qN/JImUvCxZt2xU/45YZQVFnXah2ggqR7X
- m22+VKD3VTce9q7Wx9ogrCi0PRPKpevF6q2NAm5+RgFpk9gg9fMgCw0VqTG6xVHxvBx1aV7vI
- eyGLt1IOb4J4ysJqfSQl/dhy9E585aKicoPT5FeunzckGt8RTNA8kY9jCYWlxhxMf9Sj0+ANu
- nvVhNncEHfhj8Oe3hrCn19o+y5ldKtoXHwOxhJf/kavBmcq1XP+OG+lrVFSuSmBfNr7E3OEVD
- 9EMlMpPFbtLG08jfVzwaSjAilEiU4AG/DaaVJ175lzxJoENk+1P43WaG/fqT+KbmXPJjEBOCT
- ACI1NbW3uzNh92cvJOZak/MyvCEAGmrD8PVL5kK5mJtFuCYhM1IshBzUw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        <linux-integrity@vger.kernel.org>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>
+References: <20220818020551.18922-1-guozihua@huawei.com>
+ <b383f302284dfa31408e2796a9cae60eefd45004.camel@linux.ibm.com>
+ <998ca87c-8eef-8d50-e1ee-da53ef8f0046@huawei.com>
+ <c61de998f8ed1e1192297f9a2ce568a86cee3296.camel@linux.ibm.com>
+ <d5861fbc-1079-a47f-e746-1072dd1d37d7@huawei.com>
+ <dc34912b2bad1c46f249fb6e2aa2c79e26890699.camel@linux.ibm.com>
+ <6cd55a0f-366f-45b7-d0e5-4116de454c10@huawei.com>
+ <117476d4f35be96ddba26675b849af44a5dbd6d1.camel@linux.ibm.com>
+ <61bc81bc-1b4a-3c08-6232-afc0d04decee@huawei.com>
+ <886d4588b9b6ab4e7dd903addf9809898defd6d9.camel@linux.ibm.com>
+ <d967a934-ba41-1a6d-4dcb-26d715b941b2@huawei.com>
+ <9da1b1ab4a0e75f717c78ff44d985318a955ccd7.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <9da1b1ab4a0e75f717c78ff44d985318a955ccd7.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,66 +61,62 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-Hi Jason,
-
-On 26.08.22 at 19:43, Jason Andryuk wrote:
-> On Wed, Jun 29, 2022 at 7:28 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> =
-wrote:
->
->> @@ -1007,8 +1029,39 @@ int tpm_tis_core_init(struct device *dev, struct=
- tpm_tis_data *priv, int irq,
->>         if (rc < 0)
->>                 goto out_err;
+On 2022/8/30 9:20, Mimi Zohar wrote:
+> On Sat, 2022-08-27 at 17:57 +0800, Guozihua (Scott) wrote:
+>> On 2022/8/25 21:02, Mimi Zohar wrote:
+>>> On Wed, 2022-08-24 at 09:56 +0800, Guozihua (Scott) wrote:
+>>>> On 2022/8/24 9:26, Mimi Zohar wrote:
+>>>>> On Tue, 2022-08-23 at 21:28 +0800, Guozihua (Scott) wrote:
+>>>>>> On 2022/8/23 21:21, Mimi Zohar wrote:
+>>>>>>> On Tue, 2022-08-23 at 16:12 +0800, Guozihua (Scott) wrote:
+>>>>>>>>> The question is whether we're waiting for the SELinux policy to change
+>>>>>>>>> from ESTALE or whether it is the number of SELinux based IMA policy
+>>>>>>>>> rules or some combination of the two.  Retrying three times seems to be
+>>>>>>>>> random.  If SELinux waited for ESTALE to change, then it would only be
+>>>>>>>>> dependent on the time it took to update the SELinux based IMA policy
+>>>>>>>>> rules.
+>>>>>>>>
+>>>>>>>> We are waiting for ima_lsm_update_rules() to finish re-initializing all
+>>>>>>>> the LSM based rules.
+>>>>>>>
+>>>>>>> Fine.  Hopefully retrying a maximum of 3 times is sufficient.
+>>>>>>>
+>>>>>> Well, at least this should greatly reduce the chance of this issue from
+>>>>>> happening.
+>>>>>
+>>>>> Agreed
+>>>>>
+>>>>>> This would be the best we I can think of without locking and
+>>>>>> busy waiting. Maybe we can also add delays before we retry. Maybe you
+>>>>>> got any other thought in mind?
+>>>>>
+>>>>> Another option would be to re-introduce the equivalent of the "lazy"
+>>>>> LSM update on -ESTALE, but without updating the policy rule, as the
+>>>>> notifier callback will eventually get to it.
+>>>>>
+>>>>
+>>>> For this to happen we would need a way to tell when we are able to
+>>>> continue with the retry though.
+>>>
+>>> Previously with the lazy update, on failure security_filter_rule_init()
+>>> was called before the retry.  To avoid locking or detecting when to
+>>> continue, another option would be to call to
+>>> security_filter_rule_init() with a local copy of the rule.  The retry
+>>> would be based on a local copy of the rule.
+>>>
+>>> Eventually the registered callback will complete, so we don't need to
+>>> be concerned about updating the actual rules.
 >>
->> -       intmask |=3D TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_=
-INT |
->> -                  TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
->> +       /* Figure out the capabilities */
->> +       rc =3D tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &int=
-fcaps);
->> +       if (rc < 0)
->> +               goto out_err;
->> +
->> +       dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
->> +               intfcaps);
->> +       if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
->> +               dev_dbg(dev, "\tBurst Count Static\n");
->> +       if (intfcaps & TPM_INTF_CMD_READY_INT) {
->> +               intmask |=3D TPM_INTF_CMD_READY_INT;
->> +               dev_dbg(dev, "\tCommand Ready Int Support\n");
->> +       }
->> +       if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
->> +               dev_dbg(dev, "\tInterrupt Edge Falling\n");
->> +       if (intfcaps & TPM_INTF_INT_EDGE_RISING)
->> +               dev_dbg(dev, "\tInterrupt Edge Rising\n");
->> +       if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
->> +               dev_dbg(dev, "\tInterrupt Level Low\n");
->> +       if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
->> +               dev_dbg(dev, "\tInterrupt Level High\n");
->> +       if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
->
-> Hi, you may already have fixed this, but I just saw:
->
-> error: this =E2=80=98if=E2=80=99 clause does not guard... [-Werror=3Dmis=
-leading-indentation]
->  1144 |         if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
->       |         ^~
->
->> +               intmask |=3D TPM_INTF_LOCALITY_CHANGE_INT;
->> +               dev_dbg(dev, "\tLocality Change Int Support\n");
->
-> You need { } for the block.
->
+>> Is it possible to cause race condition though? With this, the notifier
+>> path seems to be unnecessary.
+> 
+> I don't see how there would be a race condition.  The notifier callback
+> is the normal method of updating the policy rules.  Hopefully -ESTALE
+> isn't something that happens frequently.
 
-Thanks for pointing at this. I will fix it in the next version of the seri=
-es.
+The notifier callback uses RCU to update rules, I think we should mimic 
+that behavior if we are to update individual rules in the matching logic.
 
-Best Regards,
-Lino
-
-
-> Regards,
-> Jason
->
-
+-- 
+Best
+GUO Zihua
