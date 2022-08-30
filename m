@@ -2,170 +2,396 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535725A6367
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Aug 2022 14:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B298A5A62F1
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Aug 2022 14:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiH3MbK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Aug 2022 08:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
+        id S229830AbiH3MMW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Aug 2022 08:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiH3Maz (ORCPT
+        with ESMTP id S229683AbiH3MMV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:30:55 -0400
+        Tue, 30 Aug 2022 08:12:21 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7140C55AA
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Aug 2022 05:30:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30454FBA72
+        for <linux-integrity@vger.kernel.org>; Tue, 30 Aug 2022 05:12:20 -0700 (PDT)
 Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UC304V026913;
-        Tue, 30 Aug 2022 12:03:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=cW1mtGGt8nXt/KeclFXydw1Y+B71jVhE9C3MeLWhs4A=;
- b=TCcmzVs9opm6k2cJCFWpxq0/xWeKbt3KEvlWuopuczKaDxujSOVd0G2Igbi2G/HzBb7W
- zrrCzYZPQOBk9Q8wD5odIjfLIvPoGaKFAgV/YtZHzRAizc0UZ0nqHlscOB7MbTDiySA2
- uVjcz3hjbRXRmlQkyewpz4iLW+Dz5FWAyI3jAmaZYgNbhTtUf0HcrMfYRkb6bgvAtO1Y
- xH9O2JJ0TnA6+44MYLVr5ih9FKee/wZIIAesDvHVdljsBKbuDMI5KUYBmPxcMeNGYdAv
- YOTZB95hbUQalcB1RMx7EyXQYTwmL3Q7fh0glc09Bk8ZQLaXRzK9VWZhRKikAn6TfCqz cg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j9j7b015t-1
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UC2sYY026228;
+        Tue, 30 Aug 2022 12:12:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=TZdMmcrkLOvjEXYhiVcDFKHnC3pHaZU+KLQ80HiXaIU=;
+ b=GZBWDg2YXprth3MZ1KfRk0RWtHvWwOtvW2ySx2sL+FCiJ/EEbeMtLHf4LLgCGmOZWgQH
+ F+NVgz6qGyZ3MmYgrZHwV9PyHH6Um6RI1Z46mMc0aRSWeAqS3R5N4cpLSReeDcitkcvv
+ FtmhAGKGCJNfPHYKoKQgTiovm0cxnrBf0AEf4F3EXK/xNW0eOsXzGyM+VAMcEUrQF3AR
+ ZqN/GueZXKXLA20G4KspgGWXWfVoEpjCvkYs5G6HbBHAwwPMl+/ob0Log6SnTmitL/7l
+ lCmegOXnIOUYfZd3GDBPfzCKA956ri/w0VUY0pVDsL8B75xEyrLQlv/xh+D7kPRKN5PF jA== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j9j7b0e21-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 12:03:54 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27UC3ZS6030111;
-        Tue, 30 Aug 2022 12:03:53 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j9j7b015d-1
+        Tue, 30 Aug 2022 12:12:12 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27UC76KX005925;
+        Tue, 30 Aug 2022 12:12:11 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma01wdc.us.ibm.com with ESMTP id 3j7aw9bhef-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 12:03:53 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27UBp0cB009429;
-        Tue, 30 Aug 2022 12:03:53 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma01dal.us.ibm.com with ESMTP id 3j7aw9ra7r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 12:03:53 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27UC3qKc63897996
+        Tue, 30 Aug 2022 12:12:11 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27UCCBAD47317502
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Aug 2022 12:03:52 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 13C15124053;
-        Tue, 30 Aug 2022 12:03:52 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 738AB124052;
-        Tue, 30 Aug 2022 12:03:51 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.148.246])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 30 Aug 2022 12:03:51 +0000 (GMT)
-Message-ID: <6e6fe95710fe50312633852dd96914141f8a7466.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Handle -ESTALE returned by ima_filter_rule_match()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>,
-        linux-integrity@vger.kernel.org, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com
-Date:   Tue, 30 Aug 2022 08:03:50 -0400
-In-Reply-To: <2ad8179d-9ed6-b0f4-7b8d-e47b3de70b26@huawei.com>
-References: <20220818020551.18922-1-guozihua@huawei.com>
-         <b383f302284dfa31408e2796a9cae60eefd45004.camel@linux.ibm.com>
-         <998ca87c-8eef-8d50-e1ee-da53ef8f0046@huawei.com>
-         <c61de998f8ed1e1192297f9a2ce568a86cee3296.camel@linux.ibm.com>
-         <d5861fbc-1079-a47f-e746-1072dd1d37d7@huawei.com>
-         <dc34912b2bad1c46f249fb6e2aa2c79e26890699.camel@linux.ibm.com>
-         <6cd55a0f-366f-45b7-d0e5-4116de454c10@huawei.com>
-         <117476d4f35be96ddba26675b849af44a5dbd6d1.camel@linux.ibm.com>
-         <61bc81bc-1b4a-3c08-6232-afc0d04decee@huawei.com>
-         <886d4588b9b6ab4e7dd903addf9809898defd6d9.camel@linux.ibm.com>
-         <d967a934-ba41-1a6d-4dcb-26d715b941b2@huawei.com>
-         <9da1b1ab4a0e75f717c78ff44d985318a955ccd7.camel@linux.ibm.com>
-         <2ad8179d-9ed6-b0f4-7b8d-e47b3de70b26@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Tue, 30 Aug 2022 12:12:11 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6143D112061;
+        Tue, 30 Aug 2022 12:12:11 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 447AC112063;
+        Tue, 30 Aug 2022 12:12:11 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 30 Aug 2022 12:12:11 +0000 (GMT)
+Message-ID: <6958893d-d370-6906-0862-6c52b9ce701f@linux.ibm.com>
+Date:   Tue, 30 Aug 2022 08:12:10 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH ima-evm-utils 04/11] Deprecate IMA signature version 1
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
+References: <20220830005936.189922-1-zohar@linux.ibm.com>
+ <20220830005936.189922-5-zohar@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220830005936.189922-5-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: nxr7aO8KV8V3zs1xnYxwprhhSXyCjrtC
-X-Proofpoint-GUID: WtqHg1BRWANk7fO8KFVglZ0_l17zos90
+X-Proofpoint-ORIG-GUID: MmYtKH6UZa_23KJHjnnD8Wzq9LTprpUU
+X-Proofpoint-GUID: MmYtKH6UZa_23KJHjnnD8Wzq9LTprpUU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-30_05,2022-08-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
  priorityscore=1501 mlxscore=0 suspectscore=0 bulkscore=0 malwarescore=0
  impostorscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
  mlxlogscore=999 spamscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2207270000 definitions=main-2208300059
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-08-30 at 16:41 +0800, Guozihua (Scott) wrote:
-> On 2022/8/30 9:20, Mimi Zohar wrote:
-> > On Sat, 2022-08-27 at 17:57 +0800, Guozihua (Scott) wrote:
-> >> On 2022/8/25 21:02, Mimi Zohar wrote:
-> >>> On Wed, 2022-08-24 at 09:56 +0800, Guozihua (Scott) wrote:
-> >>>> On 2022/8/24 9:26, Mimi Zohar wrote:
-> >>>>> On Tue, 2022-08-23 at 21:28 +0800, Guozihua (Scott) wrote:
-> >>>>>> On 2022/8/23 21:21, Mimi Zohar wrote:
-> >>>>>>> On Tue, 2022-08-23 at 16:12 +0800, Guozihua (Scott) wrote:
-> >>>>>>>>> The question is whether we're waiting for the SELinux policy to change
-> >>>>>>>>> from ESTALE or whether it is the number of SELinux based IMA policy
-> >>>>>>>>> rules or some combination of the two.  Retrying three times seems to be
-> >>>>>>>>> random.  If SELinux waited for ESTALE to change, then it would only be
-> >>>>>>>>> dependent on the time it took to update the SELinux based IMA policy
-> >>>>>>>>> rules.
-> >>>>>>>>
-> >>>>>>>> We are waiting for ima_lsm_update_rules() to finish re-initializing all
-> >>>>>>>> the LSM based rules.
-> >>>>>>>
-> >>>>>>> Fine.  Hopefully retrying a maximum of 3 times is sufficient.
-> >>>>>>>
-> >>>>>> Well, at least this should greatly reduce the chance of this issue from
-> >>>>>> happening.
-> >>>>>
-> >>>>> Agreed
-> >>>>>
-> >>>>>> This would be the best we I can think of without locking and
-> >>>>>> busy waiting. Maybe we can also add delays before we retry. Maybe you
-> >>>>>> got any other thought in mind?
-> >>>>>
-> >>>>> Another option would be to re-introduce the equivalent of the "lazy"
-> >>>>> LSM update on -ESTALE, but without updating the policy rule, as the
-> >>>>> notifier callback will eventually get to it.
-> >>>>>
-> >>>>
-> >>>> For this to happen we would need a way to tell when we are able to
-> >>>> continue with the retry though.
-> >>>
-> >>> Previously with the lazy update, on failure security_filter_rule_init()
-> >>> was called before the retry.  To avoid locking or detecting when to
-> >>> continue, another option would be to call to
-> >>> security_filter_rule_init() with a local copy of the rule.  The retry
-> >>> would be based on a local copy of the rule.
-> >>>
-> >>> Eventually the registered callback will complete, so we don't need to
-> >>> be concerned about updating the actual rules.
-> >>
-> >> Is it possible to cause race condition though? With this, the notifier
-> >> path seems to be unnecessary.
-> > 
-> > I don't see how there would be a race condition.  The notifier callback
-> > is the normal method of updating the policy rules.  Hopefully -ESTALE
-> > isn't something that happens frequently.
+
+
+On 8/29/22 20:59, Mimi Zohar wrote:
+> The original IMA file signatures were based on a SHA1 hash.  Kernel
+> support for other hash algorithms was subsequently upstreamed.  Deprecate
+> "--rsa" support.
 > 
-> The notifier callback uses RCU to update rules, I think we should mimic 
-> that behavior if we are to update individual rules in the matching logic.
+> Define "--enable-sigv1" option to configure signature v1 support.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>   configure.ac           |  6 ++++++
+>   src/Makefile.am        | 10 ++++++++++
+>   src/evmctl.c           | 16 ++++++++++++----
+>   src/libimaevm.c        | 24 ++++++++++++++++++++++--
+>   tests/sign_verify.test | 18 ++++++++++++------
+>   5 files changed, 62 insertions(+), 12 deletions(-)
+> 
+> diff --git a/configure.ac b/configure.ac
+> index 9d3b23ff8def..dc666f2bb1fa 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -49,6 +49,11 @@ AC_ARG_ENABLE([openssl_conf],
+>   		AC_DEFINE(DISABLE_OPENSSL_CONF, 1, [Define to disable loading of openssl config by evmctl.])
+>   	      fi], [enable_openssl_conf=yes])
+>   
+> +AC_ARG_ENABLE(sigv1,
+> +	      AS_HELP_STRING([--enable-sigv1], [Build ima-evm-utils with signature v1 support]))
+> +	AM_CONDITIONAL([CONFIG_SIGV1], [test "x$enable_sigv1" = "xyes"])
+> +	AS_IF([test "$enable_sigv1"  != "yes"], [enable_sigv1="no"])
+> +
+>   #debug support - yes for a while
+>   PKG_ARG_ENABLE(debug, "yes", DEBUG, [Enable Debug support])
+>   if test $pkg_cv_enable_debug = yes; then
+> @@ -83,5 +88,6 @@ echo	"   openssl-conf: $enable_openssl_conf"
+>   echo	"      tss2-esys: $ac_cv_lib_tss2_esys_Esys_Free"
+>   echo	" tss2-rc-decode: $ac_cv_lib_tss2_rc_Tss2_RC_Decode"
+>   echo    "         ibmtss: $ac_cv_header_ibmtss_tss_h"
+> +echo    "         sigv1:  $enable_sigv1"
+>   echo	"            doc: $have_doc"
+>   echo
+> diff --git a/src/Makefile.am b/src/Makefile.am
+> index 396496bb439d..90c7249020cf 100644
+> --- a/src/Makefile.am
+> +++ b/src/Makefile.am
+> @@ -7,6 +7,10 @@ libimaevm_la_CPPFLAGS = $(AM_CPPFLAGS) $(LIBCRYPTO_CFLAGS)
+>   libimaevm_la_LDFLAGS = -version-info 3:0:0
+>   libimaevm_la_LIBADD =  $(LIBCRYPTO_LIBS)
+>   
+> +if CONFIG_SIGV1
+> +libimaevm_la_CFLAGS = -DCONFIG_SIGV1
+> +endif
+> +
+>   include_HEADERS = imaevm.h
+>   
+>   nodist_libimaevm_la_SOURCES = hash_info.h
+> @@ -22,6 +26,12 @@ evmctl_CPPFLAGS = $(AM_CPPFLAGS) $(LIBCRYPTO_CFLAGS)
+>   evmctl_LDFLAGS = $(LDFLAGS_READLINE)
+>   evmctl_LDADD =  $(LIBCRYPTO_LIBS) -lkeyutils libimaevm.la
+>   
+> +# Enable IMA signature version 1
+> +if CONFIG_SIGV1
+> +evmctl_CFLAGS = -DCONFIG_SIGV1
+> +endif
+> +
+> +
+>   # USE_PCRTSS uses the Intel TSS
+>   if USE_PCRTSS
+>    evmctl_SOURCES += pcr_tss.c
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index 76e2561798fa..621136b5b85f 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -987,7 +987,6 @@ static int cmd_verify_ima(struct command *cmd)
+>   			init_public_keys("/etc/keys/x509_evm.der");
+>   	}
+>   
+> -	errno = 0;
+>   	if (!file) {
+>   		log_err("Parameters missing\n");
+>   		print_usage(cmd);
+> @@ -1006,6 +1005,7 @@ static int cmd_verify_ima(struct command *cmd)
+>   
+>   static int cmd_convert(struct command *cmd)
+>   {
+> +#if CONFIG_SIGV1
+>   	char *inkey;
+>   	unsigned char _pub[1024], *pub = _pub;
+>   	int len, err = 0;
+> @@ -1033,6 +1033,8 @@ static int cmd_convert(struct command *cmd)
+>   
+>   	RSA_free(key);
+>   	return err;
+> +#endif
+> +	return 77;
+>   }
+>   
+>   static int cmd_import(struct command *cmd)
+> @@ -1088,6 +1090,7 @@ static int cmd_import(struct command *cmd)
+>   		calc_keyid_v2((uint32_t *)keyid, name, pkey);
+>   		EVP_PKEY_free(pkey);
+>   	} else {
+> +#if CONFIG_SIGV1
+>   		RSA *key = read_pub_key(inkey, imaevm_params.x509);
+>   
+>   		if (!key)
+> @@ -1095,6 +1098,10 @@ static int cmd_import(struct command *cmd)
+>   		len = key2bin(key, pub);
+>   		calc_keyid_v1(keyid, name, pub, len);
+>   		RSA_free(key);
+> +#else
+> +		log_info("Importing public RSA key not supported\n");
 
-If the callback update hasn't completed causing an -ESTALE, the
-fallback is to directly query the LSM for a single IMA policy rule. 
-Please keep it simple.
+.. key *is* not supported
 
--- 
-thanks,
+> +		return 1;
+> +#endif
+>   	}
+>   
+>   	log_info("Importing public key %s from file %s into keyring %d\n", name, inkey, id);
+> @@ -2598,7 +2605,8 @@ static void usage(void)
+>   		"  -d, --imahash      make IMA hash\n"
+>   		"  -f, --sigfile      store IMA signature in .sig file instead of xattr\n"
+>   		"      --xattr-user   store xattrs in user namespace (for testing purposes)\n"
+> -		"      --rsa          use RSA key type and signing scheme v1\n"
+> +
+> +		"      --rsa          use RSA key type and signing scheme v1 (deprecated)\n"
+>   		"  -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)\n"
+>   		"                     or a pkcs11 URI\n"
+>   		"      --keyid n      overwrite signature keyid with a 32-bit value in hex (for signing)\n"
+> @@ -2637,8 +2645,8 @@ static void usage(void)
+>   struct command cmds[] = {
+>   	{"--version", NULL, 0, ""},
+>   	{"help", cmd_help, 0, "<command>"},
+> -	{"import", cmd_import, 0, "[--rsa] pubkey keyring", "Import public key into the keyring.\n"},
+> -	{"convert", cmd_convert, 0, "key", "convert public key into the keyring.\n"},
+> +	{"import", cmd_import, 0, "[--rsa] pubkey keyring", "Import public key into the keyring. (deprecated)\n"},
+> +	{"convert", cmd_convert, 0, "key", "convert public key into the keyring. (deprecated)\n"},
 
-Mimi
+Unless CONFIG_SIGV1 is defined it looks like cmd_convert doesn't do 
+anything anymore except return 77? In this case you could just ifdef 
+this command out.
 
+>   	{"sign", cmd_sign_evm, 0, "[-r] [--imahash | --imasig ] [--key key] [--pass [password] file", "Sign file metadata.\n"},
+>   	{"verify", cmd_verify_evm, 0, "file", "Verify EVM signature (for debugging).\n"},
+>   	{"ima_sign", cmd_sign_ima, 0, "[--sigfile] [--key key] [--pass [password] file", "Make file content signature.\n"},
+> diff --git a/src/libimaevm.c b/src/libimaevm.c
+> index e4b62b4989b2..cb815f953a80 100644
+> --- a/src/libimaevm.c
+> +++ b/src/libimaevm.c
+> @@ -294,8 +294,9 @@ out:
+>   
+>   RSA *read_pub_key(const char *keyfile, int x509)
+>   {
+> +	RSA *key = NULL;
+> +#if CONFIG_SIGV1
+>   	EVP_PKEY *pkey;
+> -	RSA *key;
+>   
+>   	pkey = read_pub_pkey(keyfile, x509);
+>   	if (!pkey)
+> @@ -307,9 +308,11 @@ RSA *read_pub_key(const char *keyfile, int x509)
+>   		output_openssl_errors();
+>   		return NULL;
+>   	}
+> +#endif
+>   	return key;
+>   }
+>   
+> +#if CONFIG_SIGV1
+>   static int verify_hash_v1(const char *file, const unsigned char *hash, int size,
+>   			  unsigned char *sig, int siglen, const char *keyfile)
+>   {
+> @@ -351,6 +354,7 @@ static int verify_hash_v1(const char *file, const unsigned char *hash, int size,
+>   
+>   	return 0;
+>   }
+> +#endif
+>   
+>   struct public_key_entry {
+>   	struct public_key_entry *next;
+> @@ -686,6 +690,7 @@ int verify_hash(const char *file, const unsigned char *hash, int size,
+>   {
+>   	/* Get signature type from sig header */
+>   	if (sig[1] == DIGSIG_VERSION_1) {
+> +#if CONFIG_SIGV1
+>   		const char *key = NULL;
+>   
+>   		/* Read pubkey from RSA key */
+> @@ -695,6 +700,10 @@ int verify_hash(const char *file, const unsigned char *hash, int size,
+>   			key = imaevm_params.keyfile;
+>   		return verify_hash_v1(file, hash, size, sig + 1, siglen - 1,
+>   					 key);
+> +#else
+> +		log_info("Signature version 1 deprecated.");
+> +		return -1;
+> +#endif
+>   	} else if (sig[1] == DIGSIG_VERSION_2) {
+>   		return verify_hash_v2(file, hash, size, sig, siglen);
+>   	} else if (sig[1] == DIGSIG_VERSION_3) {
+> @@ -747,6 +756,7 @@ int ima_verify_signature(const char *file, unsigned char *sig, int siglen,
+>    */
+>   int key2bin(RSA *key, unsigned char *pub)
+>   {
+> +#if CONFIG_SIGV1
+>   	int len, b, offset = 0;
+>   	struct pubkey_hdr *pkh = (struct pubkey_hdr *)pub;
+>   	const BIGNUM *n, *e;
+> @@ -781,10 +791,14 @@ int key2bin(RSA *key, unsigned char *pub)
+>   	offset += len;
+>   
+>   	return offset;
+> +#else
+> +	return 77; /* SKIP */
+> +#endif
+>   }
+
+This function has no callers if CONFIG_SIGV1 is not set and otherwise 
+it's useless also if someone was a user of the library only. I would 
+consider ifdef'ing the whole function...
+
+>   
+>   void calc_keyid_v1(uint8_t *keyid, char *str, const unsigned char *pkey, int len)
+>   {
+> +#if CONFIG_SIGV1
+>   	uint8_t sha1[SHA_DIGEST_LENGTH];
+>   	uint64_t id;
+>   
+> @@ -799,6 +813,7 @@ void calc_keyid_v1(uint8_t *keyid, char *str, const unsigned char *pkey, int len
+>   
+>   	if (imaevm_params.verbose > LOG_INFO)
+>   		log_info("keyid-v1: %s\n", str);
+> +#endif
+>   }
+>   
+>   /*
+> @@ -990,10 +1005,11 @@ err_engine:
+>   	return NULL;
+>   }
+>   
+> +#if CONFIG_SIGV1
+>   static RSA *read_priv_key(const char *keyfile, const char *keypass)
+>   {
+> +	RSA *key = NULL;
+>   	EVP_PKEY *pkey;
+> -	RSA *key;
+>   
+>   	pkey = read_priv_pkey(keyfile, keypass);
+>   	if (!pkey)
+> @@ -1018,10 +1034,12 @@ static int get_hash_algo_v1(const char *algo)
+>   
+>   	return -1;
+>   }
+> +#endif
+>   
+>   static int sign_hash_v1(const char *hashalgo, const unsigned char *hash,
+>   			int size, const char *keyfile, unsigned char *sig)
+>   {
+> +#if CONFIG_SIGV1
+>   	int len = -1, hashalgo_idx;
+>   	SHA_CTX ctx;
+>   	unsigned char pub[1024];
+> @@ -1099,6 +1117,8 @@ static int sign_hash_v1(const char *hashalgo, const unsigned char *hash,
+>   out:
+>   	RSA_free(key);
+>   	return len;
+> +#endif
+> +	return 77;  /* SKIP */
+>   }
+>   
+>   /*
+> diff --git a/tests/sign_verify.test b/tests/sign_verify.test
+> index c56290aa4932..948892759424 100755
+> --- a/tests/sign_verify.test
+> +++ b/tests/sign_verify.test
+> @@ -17,6 +17,7 @@
+>   
+>   cd "$(dirname "$0")" || exit 1
+>   PATH=../src:$PATH
+> +SIGV1=0
+>   source ./functions.sh
+>   
+>   _require cmp evmctl getfattr openssl xxd
+> @@ -368,13 +369,18 @@ try_different_sigs() {
+>   
+>   ## Test v1 signatures
+>   # Signature v1 only supports sha1 and sha256 so any other should fail
+> -expect_fail \
+> -  check_sign TYPE=ima KEY=rsa1024 ALG=md5 PREFIX=0x0301 OPTS=--rsa
+> +if [ $SIGV1 -eq 0 ]; then
+> +  __skip() { echo "IMA signature v1 tests are skipped: not supported"; return $SKIP; }
+> +  expect_pass __skip
+> +else
+> +   expect_fail \
+> +      check_sign TYPE=ima KEY=rsa1024 ALG=md5 PREFIX=0x0301 OPTS=--rsa
+>   
+> -sign_verify  rsa1024  sha1    0x0301 --rsa
+> -sign_verify  rsa1024  sha256  0x0301 --rsa
+> -  try_different_keys
+> -  try_different_sigs
+> +   sign_verify  rsa1024  sha1    0x0301 --rsa
+> +   sign_verify  rsa1024  sha256  0x0301 --rsa
+> +      try_different_keys
+> +      try_different_sigs
+> +fi
+>   
+>   ## Test v2 signatures with RSA PKCS#1
+>   # List of allowed hashes much greater but not all are supported.
