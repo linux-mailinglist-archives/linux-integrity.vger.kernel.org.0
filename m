@@ -2,158 +2,340 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71DCB5A58DE
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Aug 2022 03:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733C85A59CA
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Aug 2022 05:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiH3BUl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 Aug 2022 21:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
+        id S230121AbiH3DOS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 Aug 2022 23:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiH3BUk (ORCPT
+        with ESMTP id S230175AbiH3DNw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:20:40 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9905E317
-        for <linux-integrity@vger.kernel.org>; Mon, 29 Aug 2022 18:20:39 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U1I0PQ005681;
-        Tue, 30 Aug 2022 01:20:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=gUzxpSxuMNKWcMgs76XXpDO+KCUwY0J8ozbxwf30rJ8=;
- b=igZcbwsEIXYzZVpR0EkJl8nVxkeK3EYkvYcyd/Ue2gQjckH6nDzdl/gdq49VbS0Oh3G7
- yNhRet/DmBs7Gt5viqu6UbcTDoGNUFdlnMkpZ9NmXEvr48isSed3s8KCJcqNhkw50+wO
- ncH9KVnC8cGFXsRViUUy7pnk/VYnBuSumYGOXnewvqyNVYRL8wS5Us2+Tnnss36kTt3s
- N2E3TkythYmKQXVOKe7hWQyTid3+Fafb90bE4QUY31A9g7Xl/+zjU1VM6cLYOrZZ4MLb
- DMAVy20rYyS6NPmVfsIxZLLCyIMaXZm0cZBhsosIIPHRbTzNy/DnqWCqIIC8OwQYdYBz ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j98s1034n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 01:20:31 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27U1IQMJ006453;
-        Tue, 30 Aug 2022 01:20:31 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j98s10345-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 01:20:31 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27U15F8r008433;
-        Tue, 30 Aug 2022 01:20:31 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma04wdc.us.ibm.com with ESMTP id 3j7aw9gn8p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 01:20:30 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27U1KUNQ10158784
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Aug 2022 01:20:30 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45EB5BE053;
-        Tue, 30 Aug 2022 01:24:52 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F1464BE051;
-        Tue, 30 Aug 2022 01:24:51 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.117.120])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 30 Aug 2022 01:24:51 +0000 (GMT)
-Message-ID: <9da1b1ab4a0e75f717c78ff44d985318a955ccd7.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Handle -ESTALE returned by ima_filter_rule_match()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>,
-        linux-integrity@vger.kernel.org, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com
-Date:   Mon, 29 Aug 2022 21:20:29 -0400
-In-Reply-To: <d967a934-ba41-1a6d-4dcb-26d715b941b2@huawei.com>
-References: <20220818020551.18922-1-guozihua@huawei.com>
-         <b383f302284dfa31408e2796a9cae60eefd45004.camel@linux.ibm.com>
-         <998ca87c-8eef-8d50-e1ee-da53ef8f0046@huawei.com>
-         <c61de998f8ed1e1192297f9a2ce568a86cee3296.camel@linux.ibm.com>
-         <d5861fbc-1079-a47f-e746-1072dd1d37d7@huawei.com>
-         <dc34912b2bad1c46f249fb6e2aa2c79e26890699.camel@linux.ibm.com>
-         <6cd55a0f-366f-45b7-d0e5-4116de454c10@huawei.com>
-         <117476d4f35be96ddba26675b849af44a5dbd6d1.camel@linux.ibm.com>
-         <61bc81bc-1b4a-3c08-6232-afc0d04decee@huawei.com>
-         <886d4588b9b6ab4e7dd903addf9809898defd6d9.camel@linux.ibm.com>
-         <d967a934-ba41-1a6d-4dcb-26d715b941b2@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ShGL4LYZNDD-Z0ngIo5Y3oMx5xi22NiN
-X-Proofpoint-ORIG-GUID: 1VSKuS-DhlL4i2OzZxQsmhtYaHldgNvd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-29_13,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 bulkscore=0 suspectscore=0 phishscore=0 impostorscore=0
- mlxlogscore=999 malwarescore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208300002
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 29 Aug 2022 23:13:52 -0400
+X-Greylist: delayed 563 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 Aug 2022 20:13:18 PDT
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38A93A926D
+        for <linux-integrity@vger.kernel.org>; Mon, 29 Aug 2022 20:13:17 -0700 (PDT)
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id D3C3472C97D;
+        Tue, 30 Aug 2022 06:03:53 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id BA32D4A470D;
+        Tue, 30 Aug 2022 06:03:53 +0300 (MSK)
+Date:   Tue, 30 Aug 2022 06:03:53 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [RFC PATCH ima-evm-utils 08/11] Deprecate use of OpenSSL 3
+ "engine" support
+Message-ID: <20220830030353.lwggzfsqmalpznoy@altlinux.org>
+References: <20220830005936.189922-1-zohar@linux.ibm.com>
+ <20220830005936.189922-9-zohar@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20220830005936.189922-9-zohar@linux.ibm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, 2022-08-27 at 17:57 +0800, Guozihua (Scott) wrote:
-> On 2022/8/25 21:02, Mimi Zohar wrote:
-> > On Wed, 2022-08-24 at 09:56 +0800, Guozihua (Scott) wrote:
-> >> On 2022/8/24 9:26, Mimi Zohar wrote:
-> >>> On Tue, 2022-08-23 at 21:28 +0800, Guozihua (Scott) wrote:
-> >>>> On 2022/8/23 21:21, Mimi Zohar wrote:
-> >>>>> On Tue, 2022-08-23 at 16:12 +0800, Guozihua (Scott) wrote:
-> >>>>>>> The question is whether we're waiting for the SELinux policy to change
-> >>>>>>> from ESTALE or whether it is the number of SELinux based IMA policy
-> >>>>>>> rules or some combination of the two.  Retrying three times seems to be
-> >>>>>>> random.  If SELinux waited for ESTALE to change, then it would only be
-> >>>>>>> dependent on the time it took to update the SELinux based IMA policy
-> >>>>>>> rules.
-> >>>>>>
-> >>>>>> We are waiting for ima_lsm_update_rules() to finish re-initializing all
-> >>>>>> the LSM based rules.
-> >>>>>
-> >>>>> Fine.  Hopefully retrying a maximum of 3 times is sufficient.
-> >>>>>
-> >>>> Well, at least this should greatly reduce the chance of this issue from
-> >>>> happening.
-> >>>
-> >>> Agreed
-> >>>
-> >>>> This would be the best we I can think of without locking and
-> >>>> busy waiting. Maybe we can also add delays before we retry. Maybe you
-> >>>> got any other thought in mind?
-> >>>
-> >>> Another option would be to re-introduce the equivalent of the "lazy"
-> >>> LSM update on -ESTALE, but without updating the policy rule, as the
-> >>> notifier callback will eventually get to it.
-> >>>
-> >>
-> >> For this to happen we would need a way to tell when we are able to
-> >> continue with the retry though.
-> > 
-> > Previously with the lazy update, on failure security_filter_rule_init()
-> > was called before the retry.  To avoid locking or detecting when to
-> > continue, another option would be to call to
-> > security_filter_rule_init() with a local copy of the rule.  The retry
-> > would be based on a local copy of the rule.
-> > 
-> > Eventually the registered callback will complete, so we don't need to
-> > be concerned about updating the actual rules.
+Mimi,
+
+On Mon, Aug 29, 2022 at 08:59:33PM -0400, Mimi Zohar wrote:
+> OpenSSL 3 "engine" support is deprecated, which results in deprecated
+> build warning messages.  In preparation for OpenSSL "engine" support
+> to be removed, define a "--enable-engine" configuration option. If not
+> specified, disable engine support on systems with OpenSSL v3.
+
+This seems to change default behavior.
+
+Many distributions (AFAIK) still contain openssl1, and some contain both
+openssl1 and openssl3, including devel packages. So they will suddenly
+drop --engine support on ima-evm-utils update, even though their OpenSSL
+supports it.
+
+Maybe --disable-engine should be added instead if user wants to avoid
+compile time deprecation warnings?
+
+(Also, engines aren't just deprecated, they are deprecated in favor of
+providers.)
+
 > 
-> Is it possible to cause race condition though? With this, the notifier 
-> path seems to be unnecessary.
+> When ima-evm-utils engine support is disabled, don't execute the tests
+> requiring it.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  configure.ac           | 15 +++++++++++++++
+>  src/Makefile.am        |  8 ++++++++
+>  src/evmctl.c           | 17 +++++++++++++++--
+>  src/imaevm.h           |  2 ++
+>  src/libimaevm.c        |  5 +++++
+>  tests/functions.sh     | 11 ++++++++++-
+>  tests/ima_hash.test    |  9 +++++++++
+>  tests/sign_verify.test | 10 ++++++++++
+>  8 files changed, 74 insertions(+), 3 deletions(-)
+> 
+> diff --git a/configure.ac b/configure.ac
+> index dc666f2bb1fa..5e0b78eb651b 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -54,6 +54,19 @@ AC_ARG_ENABLE(sigv1,
+>  	AM_CONDITIONAL([CONFIG_SIGV1], [test "x$enable_sigv1" = "xyes"])
+>  	AS_IF([test "$enable_sigv1"  != "yes"], [enable_sigv1="no"])
+>  
+> +AC_ARG_ENABLE(engine,
+> +	      [AS_HELP_STRING([--enable-engine], [build ima-evm-utils with OpenSSL engine support])])
+> +
+> +ssl_version=$(openssl version | sed -e 's/^OpenSSL //' | sed -e 's/ .*//')
+> +if test -z "$enable_engine"; then
+> +	if test "${ssl_version::1}" = "3"; then
+> +		enable_engine="no"
+> +	else
+> +		enable_engine="yes"
+> +	fi
+> +fi
+> +AM_CONDITIONAL([CONFIG_ENGINE], [test "x$enable_engine" = "xyes"])
+> +
+>  #debug support - yes for a while
+>  PKG_ARG_ENABLE(debug, "yes", DEBUG, [Enable Debug support])
+>  if test $pkg_cv_enable_debug = yes; then
+> @@ -89,5 +102,7 @@ echo	"      tss2-esys: $ac_cv_lib_tss2_esys_Esys_Free"
+>  echo	" tss2-rc-decode: $ac_cv_lib_tss2_rc_Tss2_RC_Decode"
+>  echo    "         ibmtss: $ac_cv_header_ibmtss_tss_h"
+>  echo    "         sigv1:  $enable_sigv1"
+> +echo    "         engine: $enable_engine"
+> +echo    "            ssl: $ssl_version"
+>  echo	"            doc: $have_doc"
+>  echo
+> diff --git a/src/Makefile.am b/src/Makefile.am
+> index 90c7249020cf..a810d6e0acff 100644
+> --- a/src/Makefile.am
+> +++ b/src/Makefile.am
+> @@ -11,6 +11,10 @@ if CONFIG_SIGV1
+>  libimaevm_la_CFLAGS = -DCONFIG_SIGV1
+>  endif
+>  
+> +if CONFIG_ENGINE
+> +libimaevm_la_CFLAGS = -DCONFIG_ENGINE
+> +endif
+> +
+>  include_HEADERS = imaevm.h
+>  
+>  nodist_libimaevm_la_SOURCES = hash_info.h
+> @@ -31,6 +35,10 @@ if CONFIG_SIGV1
+>  evmctl_CFLAGS = -DCONFIG_SIGV1
+>  endif
+>  
+> +# Enable "--engine" support
+> +if CONFIG_ENGINE
+> +evmctl_CFLAGS = -DCONFIG_ENGINE
+> +endif
+>  
+>  # USE_PCRTSS uses the Intel TSS
+>  if USE_PCRTSS
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index 490d355188d0..ad96789f1984 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -64,7 +64,9 @@
+>  #include <openssl/hmac.h>
+>  #include <openssl/err.h>
+>  #include <openssl/rsa.h>
+> +#if CONFIG_ENGINE
+>  #include <openssl/engine.h>
+> +#endif
+>  #include <openssl/x509v3.h>
+>  #include "hash_info.h"
+>  #include "pcr.h"
+> @@ -2715,7 +2717,7 @@ static void usage(void)
+>  		"      --selinux      use custom Selinux label for EVM\n"
+>  		"      --caps         use custom Capabilities for EVM(unspecified: from FS, empty: do not use)\n"
+>  		"      --verify-sig   verify measurement list signatures\n"
+> -		"      --engine e     preload OpenSSL engine e (such as: gost)\n"
+> +		"      --engine e     preload OpenSSL engine e (such as: gost) id deprecated\n"
 
-I don't see how there would be a race condition.  The notifier callback
-is the normal method of updating the policy rules.  Hopefully -ESTALE
-isn't something that happens frequently.
--- 
-thanks,
+Typo.
 
-Mimi
+>  		"      --ignore-violations ignore ToMToU measurement violations\n"
+>  		"  -v                 increase verbosity level\n"
+>  		"  -h, --help         display this help and exit\n"
+> @@ -2828,7 +2830,9 @@ static char *get_password(void)
+>  
+>  static ENGINE *setup_engine(const char *engine_id)
+>  {
+> +#if CONFIG_ENGINE
+>  	ENGINE *eng = ENGINE_by_id(engine_id);
+> +
+>  	if (!eng) {
+>  		log_err("engine %s isn't available\n", optarg);
+>  		ERR_print_errors_fp(stderr);
+> @@ -2841,6 +2845,9 @@ static ENGINE *setup_engine(const char *engine_id)
+>  	if (eng)
+>  		ENGINE_set_default(eng, ENGINE_METHOD_ALL);
+>  	return eng;
+> +#endif
+> +	log_err("OpenSSL 3 \"engine\" support is deprecated\n");
+> +	return NULL;
+>  }
+>  
+>  int main(int argc, char *argv[])
+> @@ -2969,8 +2976,12 @@ int main(int argc, char *argv[])
+>  			break;
+>  		case 139: /* --engine e */
+>  			imaevm_params.eng = setup_engine(optarg);
+> -			if (!imaevm_params.eng)
+> +			if (!imaevm_params.eng) {
+> +#ifndef CONFIG_ENGINE
+> +				err = 77; /* SKIP */
+> +#endif
+>  				goto error;
+> +			}
+>  			break;
+>  		case 140: /* --xattr-user */
+>  			xattr_ima = "user.ima";
+> @@ -3056,6 +3067,7 @@ int main(int argc, char *argv[])
+>  	}
+>  
+>  error:
+> +#if CONFIG_ENGINE
+>  	if (imaevm_params.eng) {
+>  		ENGINE_finish(imaevm_params.eng);
+>  		ENGINE_free(imaevm_params.eng);
+> @@ -3063,6 +3075,7 @@ error:
+>  		ENGINE_cleanup();
+>  #endif
+>  	}
+> +#endif
+>  	ERR_free_strings();
+>  	EVP_cleanup();
+>  	BIO_free(NULL);
+> diff --git a/src/imaevm.h b/src/imaevm.h
+> index afcf1e042014..ebe8c20d566a 100644
+> --- a/src/imaevm.h
+> +++ b/src/imaevm.h
+> @@ -48,7 +48,9 @@
+>  #include <errno.h>
+>  #include <sys/types.h>
+>  #include <openssl/rsa.h>
+> +#ifdef CONFIG_ENGINE
+>  #include <openssl/engine.h>
+> +#endif
+>  
+>  #ifdef USE_FPRINTF
+>  #define do_log(level, fmt, args...)	\
+> diff --git a/src/libimaevm.c b/src/libimaevm.c
+> index cb815f953a80..d81bdbb85250 100644
+> --- a/src/libimaevm.c
+> +++ b/src/libimaevm.c
+> @@ -965,6 +965,7 @@ static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
+>  	EVP_PKEY *pkey;
+>  
+>  	if (!strncmp(keyfile, "pkcs11:", 7)) {
+> +#ifdef CONFIG_ENGINE
+>  		if (!imaevm_params.keyid) {
+>  			log_err("When using a pkcs11 URI you must provide the keyid with an option\n");
+>  			return NULL;
+> @@ -981,6 +982,10 @@ static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
+>  			log_err("Failed to load private key %s\n", keyfile);
+>  			goto err_engine;
+>  		}
+> +#else
+> +		log_err("OpenSSL 3 \"engine\" support is deprecated\n");
+> +		goto err_engine;
+> +#endif
+>  	} else {
+>  		fp = fopen(keyfile, "r");
+>  		if (!fp) {
+> diff --git a/tests/functions.sh b/tests/functions.sh
+> index 8f6f02dfcd95..ddc8fe9e5ea6 100755
+> --- a/tests/functions.sh
+> +++ b/tests/functions.sh
+> @@ -312,4 +312,13 @@ _softhsm_teardown() {
+>    rm -rf "${SOFTHSM_SETUP_CONFIGDIR}"
+>    unset SOFTHSM_SETUP_CONFIGDIR SOFTHSM2_CONF PKCS11_KEYURI \
+>      EVMCTL_ENGINE OPENSSL_ENGINE OPENSSL_KEYFORM
+> -}
+> \ No newline at end of file
+> +}
+> +
+> +# OpenSSL 3 engine support still works, but is deprecated. In preparation
+> +# for it being removed, a new ima-evm-utils configuration option
+> +# "--enable-engine" is defined.`
+> +_is_engine_supported() {
+> +  cmd="evmctl --engine pkcs11"
 
+I think pkcs11 engine is optional (and could be in additional package)
+even if other engines are present.
+
+Also engine could be loaded via openssl.cnf/OPENSSL_CONF, in that case
+--engine option is not needed but engine is still there to use/test.
+
+
+> +  $cmd &>/dev/null
+> +  ENGINE_SUPPORTED=$?
+> +}
+> diff --git a/tests/ima_hash.test b/tests/ima_hash.test
+> index e88fd59cc359..0de9e6808af9 100755
+> --- a/tests/ima_hash.test
+> +++ b/tests/ima_hash.test
+> @@ -71,6 +71,15 @@ expect_pass check  sha384     0x0405 38b060a751ac96384cd9327eb1b1e36a21fdb71114b
+>  expect_pass check  sha512     0x0406 cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e
+>  expect_pass check  rmd160     0x0403 9c1185a5c5e9fc54612808977ee8f548b2258d31
+>  expect_pass check  sm3        0x0411 1ab21d8355cfa17f8e61194831e81a8f22bec8c728fefb747ed035eb5082aa2b
+> +
+> +# Remaining tests require engine support
+> +_is_engine_supported
+> +if [ $ENGINE_SUPPORTED -eq 77 ]; then
+> +  __skip() { echo "Tests requiring engine support are skipped (not supported)"; return $SKIP; }
+> +  expect_pass __skip
+> +  exit 0
+> +fi
+
+GOST tests try to handle absence of algorithms (can work w/o --engine
+option if configured via openssl config) and skip gracefully.
+Perhaps this check should be moved below them just for pkcs11 tests
+if they are so sensitive.
+
+Thanks,
+
+> +
+>  _enable_gost_engine
+>  expect_pass check  md_gost12_256 0x0412 3f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
+>  expect_pass check  streebog256   0x0412 3f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
+> diff --git a/tests/sign_verify.test b/tests/sign_verify.test
+> index 948892759424..8c005b741916 100755
+> --- a/tests/sign_verify.test
+> +++ b/tests/sign_verify.test
+> @@ -18,6 +18,8 @@
+>  cd "$(dirname "$0")" || exit 1
+>  PATH=../src:$PATH
+>  SIGV1=0
+> +ENGINE_SUPPORTED=0
+> +
+>  source ./functions.sh
+>  
+>  _require cmp evmctl getfattr openssl xxd
+> @@ -418,6 +420,14 @@ if [ -x /opt/openssl3/bin/openssl ]; then
+>      sign_verify  sm2    sm3    0x030211:K:004[345678]
+>  fi
+>  
+> +# Remaining tests require engine support
+> +_is_engine_supported
+> +if [ $ENGINE_SUPPORTED -eq 77 ]; then
+> +  __skip() { echo "Tests requiring engine support are skipped (not supported)"; return $SKIP; }
+> +  expect_pass __skip
+> +  exit 0
+> +fi
+> +
+>  # Test v2 signatures with EC-RDSA
+>  _enable_gost_engine
+>  sign_verify  gost2012_256-A md_gost12_256 0x030212:K:0040
+> -- 
+> 2.31.1
