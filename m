@@ -2,81 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04345A8639
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Aug 2022 20:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA8C5AA1A0
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Sep 2022 23:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232944AbiHaS7q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 31 Aug 2022 14:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
+        id S233136AbiIAVqj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Sep 2022 17:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbiHaS7i (ORCPT
+        with ESMTP id S233250AbiIAVqi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:59:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06086C276F
-        for <linux-integrity@vger.kernel.org>; Wed, 31 Aug 2022 11:58:45 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VIUiOO028017;
-        Wed, 31 Aug 2022 18:58:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=HO5SQSaaprbBsBPHvQa4nWukrHHV/YnGvLNBehvIIXw=;
- b=oNILkY+H1YBgfV3ESWFNFK8PfXTtDnnRvTJ8LfxbHw5JaNo3XEnnQzG1nFTu4w4E4869
- qRWw4Z1ZL1rpGA0akdjt2ew5kLST6o6Vfq0ujBG2U7pnUQrrYlF5C51Ndsr21Ck4dwYd
- m9RH+kr16eNy+UaNqcLEf07J0kPvsEN11W0TRjOV3GuR5HVMyJqArHLAI5ldc624Qg+o
- KbBC1eU81vF9fuQPPl6hnFatyRNHw44DQCqkpRxvzz+IN4RxjHw0P/sphyrIx7zPlrNz
- 72yK9gePZZw2FUeo795Sl2XJwBEExrCTBNxrC8+NqCF3BpRgBbve7UQ927ccysGm3PEO DQ== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jad049ume-1
+        Thu, 1 Sep 2022 17:46:38 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EE379A45;
+        Thu,  1 Sep 2022 14:46:37 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281LUgSW031933;
+        Thu, 1 Sep 2022 21:46:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=r2ZqQzsxMzMBvy51gRpn7fAMC1irQrpsOuT7QpcOflw=;
+ b=Ket3w1/Aq7qOEsc1YWBmSvfDetKV0jycPNgjtk3WQz4+UqU9QmMUv2aY7WA9w2pHCekL
+ wO0oTAuRi0TJNALLyyK9+8vfuOAWj20F2UsS+5D7XPsKaWI3WG/SEbT5aygf8que9ukB
+ 5GUp+vkg8ka3NP9Hl4yvISnny3swTxU1LyF+rF07evkOPGS2C+MCbwHtU0/6eulxYlNp
+ Pk00G4vRokI7ualg5vnFn418SdkAS1PmPLqVM59mqzSF7M96TtdAXVOPw4lh73yocgeQ
+ HMTtznSqxXpH4uxnh/hpcr+7btmzBHJiXYsOiYiQCuGxkmV3qnzA9z5JPYnHJ2qrUH9E 8A== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jb4qg0h3e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Aug 2022 18:58:39 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27VIqJVI017101;
-        Wed, 31 Aug 2022 18:58:37 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma05wdc.us.ibm.com with ESMTP id 3j7aw9v7bq-1
+        Thu, 01 Sep 2022 21:46:23 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 281LaGBO019083;
+        Thu, 1 Sep 2022 21:46:22 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02dal.us.ibm.com with ESMTP id 3j7awa4v52-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Aug 2022 18:58:37 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27VIwajS59441442
+        Thu, 01 Sep 2022 21:46:22 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 281LkL3S15860208
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Aug 2022 18:58:36 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 344CCBE051;
-        Wed, 31 Aug 2022 19:04:11 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C46E9BE04F;
-        Wed, 31 Aug 2022 19:04:10 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.watson.ibm.com (unknown [9.31.98.41])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 31 Aug 2022 19:04:10 +0000 (GMT)
-Message-ID: <5f1a5458f8f4d283ca61ccfcc02f9301e5b8c27d.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH ima-evm-utils 04/11] Deprecate IMA signature version
- 1
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     linux-integrity@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
+        Thu, 1 Sep 2022 21:46:21 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E35A5C6057;
+        Thu,  1 Sep 2022 21:46:20 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5DE01C6055;
+        Thu,  1 Sep 2022 21:46:20 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Sep 2022 21:46:20 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     nayna@linux.ibm.com, nasastry@in.ibm.com, mpe@ellerman.id.au,
         Stefan Berger <stefanb@linux.ibm.com>
-Date:   Wed, 31 Aug 2022 14:58:35 -0400
-In-Reply-To: <Yw36rCs7MhTAWFEr@pevik>
-References: <20220830005936.189922-1-zohar@linux.ibm.com>
-         <20220830005936.189922-5-zohar@linux.ibm.com> <Yw36rCs7MhTAWFEr@pevik>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v8 0/4] tpm: Preserve TPM measurement log across kexec (ppc64)
+Date:   Thu,  1 Sep 2022 17:46:06 -0400
+Message-Id: <20220901214610.768645-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: M_dliCiGr_pGUfU5mredSIFGCrkQrnZN
-X-Proofpoint-ORIG-GUID: M_dliCiGr_pGUfU5mredSIFGCrkQrnZN
+X-Proofpoint-ORIG-GUID: GsA1unPRsVQRw4jZ6R8Ro8Eu6KpIZ5_9
+X-Proofpoint-GUID: GsA1unPRsVQRw4jZ6R8Ro8Eu6KpIZ5_9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-31_11,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
- lowpriorityscore=0 adultscore=0 spamscore=0 priorityscore=1501
- phishscore=0 bulkscore=0 malwarescore=0 impostorscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208310089
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ bulkscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 clxscore=1011
+ priorityscore=1501 spamscore=0 suspectscore=0 malwarescore=0
+ mlxlogscore=757 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209010094
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -86,95 +82,59 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Petr,
+The of-tree subsystem does not currently preserve the IBM vTPM 1.2 and
+vTPM 2.0 measurement logs across a kexec on PowerVM and PowerKVM. This
+series fixes this for the kexec_file_load() syscall using the flattened
+device tree (fdt) to carry the TPM measurement log's buffer across kexec.
 
-On Tue, 2022-08-30 at 13:55 +0200, Petr Vorel wrote:
-> > The original IMA file signatures were based on a SHA1 hash.  Kernel
-> > support for other hash algorithms was subsequently upstreamed.  Deprecate
-> > "--rsa" support.
-> 
-> > Define "--enable-sigv1" option to configure signature v1 support.
-> 
-> LGTM, few minor comments below.
-> 
-> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+   Stefan
 
-Thank you for all the reviews!
+v8:
+ - Added Jarkko's, Coiby's, and Rob's tags
+ - Rebase on v6.0-rc3 that absorbed 2 already upstreamed patches
 
-> 
-> ...
-> > +++ b/configure.ac
-> ...
-> 
-> >  static int cmd_convert(struct command *cmd)
-> >  {
-> > +#if CONFIG_SIGV1
-> >  	char *inkey;
-> >  	unsigned char _pub[1024], *pub = _pub;
-> >  	int len, err = 0;
-> > @@ -1033,6 +1033,8 @@ static int cmd_convert(struct command *cmd)
-> 
-> >  	RSA_free(key);
-> >  	return err;
-> > +#endif
-> > +	return 77;
-> What is this this magic number? EBADFD?
-> Well, git grep shows many places with 77, so it's just a tip for next cleanup :).
+v7:
+ - Added Nageswara's Tested-by tags
+ - Added back original comment to inline function and removed Jarkko's R-b tag
 
-SKIP is defined as 77 in the tests/ directory.  Using 77 in src/*.c is
-incorrect.  v2 ifdefs all of cmd_convert(), so this is going away. 
-I'll remove the other occurance of 77 in the src/ directory.
+v6:
+ - Add __init to get_kexec_buffer as suggested by Jonathan
+ - Fixed issue detected by kernel test robot
 
-> 
-> ...
-> >  	log_info("Importing public key %s from file %s into keyring %d\n", name, inkey, id);
-> > @@ -2598,7 +2605,8 @@ static void usage(void)
-> >  		"  -d, --imahash      make IMA hash\n"
-> >  		"  -f, --sigfile      store IMA signature in .sig file instead of xattr\n"
-> >  		"      --xattr-user   store xattrs in user namespace (for testing purposes)\n"
-> > -		"      --rsa          use RSA key type and signing scheme v1\n"
-> > +
-> nit: was this blank line intentional?
-> > +		"      --rsa          use RSA key type and signing scheme v1 (deprecated)\n"
-> >  		"  -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)\n"
-> >  		"                     or a pkcs11 URI\n"
-> >  		"      --keyid n      overwrite signature keyid with a 32-bit value in hex (for signing)\n"
-> > @@ -2637,8 +2645,8 @@ static void usage(void)
-> >  struct command cmds[] = {
-> >  	{"--version", NULL, 0, ""},
-> >  	{"help", cmd_help, 0, "<command>"},
-> > -	{"import", cmd_import, 0, "[--rsa] pubkey keyring", "Import public key into the keyring.\n"},
-> > -	{"convert", cmd_convert, 0, "key", "convert public key into the keyring.\n"},
-> > +	{"import", cmd_import, 0, "[--rsa] pubkey keyring", "Import public key into the keyring. (deprecated)\n"},
-> > +	{"convert", cmd_convert, 0, "key", "convert public key into the keyring. (deprecated)\n"},
-> >  	{"sign", cmd_sign_evm, 0, "[-r] [--imahash | --imasig ] [--key key] [--pass [password] file", "Sign file metadata.\n"},
-> >  	{"verify", cmd_verify_evm, 0, "file", "Verify EVM signature (for debugging).\n"},
-> >  	{"ima_sign", cmd_sign_ima, 0, "[--sigfile] [--key key] [--pass [password] file", "Make file content signature.\n"},
-> ...
-> > +++ b/src/libimaevm.c
-> ...
-> 
-> > +#if CONFIG_SIGV1
-> >  static RSA *read_priv_key(const char *keyfile, const char *keypass)
-> >  {
-> > +	RSA *key = NULL;
-> nit: NULL is safe, I wonder if it is necessary (was needed before).
+v5:
+ - Rebased on 1 more patch that would otherwise create merge conflicts
 
-Looking at this again, it isn't needed.  On failure to set either pkey
-or key, NULL is returned.
+v4:
+ - Rebased on 2 patches that would otherwise create merge conflicts;
+   posting these patches in this series with several tags removed so
+   krobot can test the series already
+ - Changes to individual patches documented in patch descripitons
 
-> >  	EVP_PKEY *pkey;
-> > -	RSA *key;
-> 
-> >  	pkey = read_priv_pkey(keyfile, keypass);
-> >  	if (!pkey)
-> > @@ -1018,10 +1034,12 @@ static int get_hash_algo_v1(const char *algo)
-> 
-> >  	return -1;
-> >  }
-> > +#endif
+v3:
+ - Moved TPM Open Firmware related function to drivers/char/tpm/eventlog/tpm_of.c
+
+v2:
+ - rearranged patches
+ - fixed compilation issues for x86
+
+Palmer Dabbelt (1):
+  drivers: of: kexec ima: Support 32-bit platforms
+
+Stefan Berger (3):
+  tpm: of: Make of-tree specific function commonly available
+  of: kexec: Refactor IMA buffer related functions to make them reusable
+  tpm/kexec: Duplicate TPM measurement log in of-tree for kexec
+
+ drivers/char/tpm/eventlog/of.c |  31 +--
+ drivers/of/kexec.c             | 336 ++++++++++++++++++++++++++++-----
+ include/linux/kexec.h          |   6 +
+ include/linux/of.h             |   9 +-
+ include/linux/tpm.h            |  36 ++++
+ kernel/kexec_file.c            |   6 +
+ 6 files changed, 346 insertions(+), 78 deletions(-)
+
+
+base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
 -- 
-thanks,
-
-Mimi
+2.35.1
 
