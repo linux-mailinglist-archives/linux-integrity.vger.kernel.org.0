@@ -2,74 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDA35AB960
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Sep 2022 22:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81F05AB972
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Sep 2022 22:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiIBUTM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 2 Sep 2022 16:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S230063AbiIBUYr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Sep 2022 16:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbiIBUTL (ORCPT
+        with ESMTP id S229932AbiIBUYc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 2 Sep 2022 16:19:11 -0400
+        Fri, 2 Sep 2022 16:24:32 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7369EFE83D
-        for <linux-integrity@vger.kernel.org>; Fri,  2 Sep 2022 13:19:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177966561
+        for <linux-integrity@vger.kernel.org>; Fri,  2 Sep 2022 13:24:28 -0700 (PDT)
 Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 282IKuku029992;
-        Fri, 2 Sep 2022 20:18:58 GMT
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 282IKuEO029984;
+        Fri, 2 Sep 2022 20:24:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ozvGtP6Qm3ZEbF8x5OSsWVJZCSjOpYgX9K/UOgLdGP4=;
- b=PXVWMInZsPzgcPdq+SWdcvvBHeg4ES0COv+2J8tUfti1xigr5fouybehLlLPvC85csst
- EyR0Gh5NWRsInt1nllaG//h8KDr2tUTuxXgEIz6JXSyhCd9kKb3F2DmGSIM4V57PEvsY
- 8g9qDvbIzlShaUZ9z/sF0N04psOypgcUO/lXoaLVQ231uZFAIl/JYUJAKqX3Bq+zw1gy
- IYcVwa6YCR56MkLz8ULnklyOd8tfgxLGmzeqsjf+FPkWl3yNaCrMy9y39iQjgnaECqjt
- HTRStx6XD4bHGh6YZJJQnOPnjXpVydM13k3zFvevK+08pyw04PtV8v2h223VMQ14SRiZ sw== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jbq1hjmjt-1
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=2mwhaQBCYlKoJgdSLJOv8dPK5ZYIpGNZnjKoE7HuI18=;
+ b=l7rGbsy6t+9mhYfzcaYtnrPuD/EGvFTsK/V50eab36GrmpfBJfXNsh8V9hLeArZ3EqQq
+ JwI2jKz8KUS3bjHPWFe7r2cWGVY2IZ+17/ks1RaVwHtwaySuB0JxXqrAlR1joZWM+xKO
+ gKk8pS+tGK1T2c1D0eCYr9IRUOGWBy4zKTtx/0loTReot6f89h3VNAunEM9gVbZ1wbDR
+ U0hPRLO6hVp2jNKSqHZC2TK8HTo9Yc8gSQWzIhmDBbC2HPgEeiPVKfopBkL05cHwqGRr
+ mdsn3RQ6h5BV/ZuYLY/NTy6xIxhLr9Ow8/3c0jqYMLEgssrFRyYn2CR/MfeyykSbM6eH cA== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jbq1hjr8b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Sep 2022 20:18:57 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 282K66Fb004815;
-        Fri, 2 Sep 2022 20:18:56 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma05wdc.us.ibm.com with ESMTP id 3j7awaa3q1-1
+        Fri, 02 Sep 2022 20:24:23 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 282KL89I021685;
+        Fri, 2 Sep 2022 20:24:22 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma01dal.us.ibm.com with ESMTP id 3j7awamjxk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Sep 2022 20:18:56 +0000
+        Fri, 02 Sep 2022 20:24:22 +0000
 Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 282KIuhd45547864
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 282KOL0S4588104
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 2 Sep 2022 20:18:56 GMT
+        Fri, 2 Sep 2022 20:24:21 GMT
 Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F2C1FB2065;
-        Fri,  2 Sep 2022 20:18:55 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 36884B2064;
+        Fri,  2 Sep 2022 20:24:21 +0000 (GMT)
 Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB914B2064;
-        Fri,  2 Sep 2022 20:18:55 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 170ADB205F;
+        Fri,  2 Sep 2022 20:24:21 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
         by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  2 Sep 2022 20:18:55 +0000 (GMT)
-Message-ID: <0779a0e1-367e-b98f-467a-883c72ccdbfa@linux.ibm.com>
-Date:   Fri, 2 Sep 2022 16:18:55 -0400
-MIME-Version: 1.0
+        Fri,  2 Sep 2022 20:24:21 +0000 (GMT)
+Message-ID: <4e531d80-0df0-8f1a-6897-7e82a899ad9f@linux.ibm.com>
+Date:   Fri, 2 Sep 2022 16:24:20 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH ima-evm-utils 05/11] Replace the low level SHA1 calls when
- calculating the TPM 1.2 PCRs
+Subject: Re: [PATCH ima-evm-utils 02/11] travis: update dist=focal
 Content-Language: en-US
 To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
 Cc:     Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
 References: <20220902162836.554839-1-zohar@linux.ibm.com>
- <20220902162836.554839-6-zohar@linux.ibm.com>
+ <20220902162836.554839-3-zohar@linux.ibm.com>
 From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220902162836.554839-6-zohar@linux.ibm.com>
+In-Reply-To: <20220902162836.554839-3-zohar@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _Q-CL66KNmQu36lOiSV-AQ1R3kbBEW9R
-X-Proofpoint-GUID: _Q-CL66KNmQu36lOiSV-AQ1R3kbBEW9R
+X-Proofpoint-ORIG-GUID: 3-RW06dW9RP4H3VUQedxzhFn1Pzy7fB2
+X-Proofpoint-GUID: 3-RW06dW9RP4H3VUQedxzhFn1Pzy7fB2
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-09-02_04,2022-08-31_03,2022-06-22_01
@@ -91,130 +91,31 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 On 9/2/22 12:28, Mimi Zohar wrote:
-> OpenSSL v3 emits deprecated warnings for SHA1 functions.  Use the
-> EVP_ functions when walking the TPM 1.2 binary bios measurements
-> to calculate the TPM 1.2 PCRs.
+> Although Github Actions is available on Github Enterprise Server 3.x
+> single server edition, as well as the unpaid version, it is not
+> available in Github Enterprise Server 3.x cluster edition[1].  Continue
+> to support travis.
+
+This text really has nothing obvious to do with the upgrade to focal...
+
+> 
+> [1] https://docs.github.com/en/enterprise-server@3.0/admin/release-notes#github-packages
 > 
 > Reviewed-by: Petr Vorel <pvorel@suse.cz>
 > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 > ---
->   src/evmctl.c | 65 +++++++++++++++++++++++++++++++++++++++++++++++-----
->   1 file changed, 59 insertions(+), 6 deletions(-)
+>   .travis.yml | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/src/evmctl.c b/src/evmctl.c
-> index 13b0105af8c4..641504047a36 100644
-> --- a/src/evmctl.c
-> +++ b/src/evmctl.c
-> @@ -2295,6 +2295,11 @@ static int cmd_ima_measurement(struct command *cmd)
->   	return ima_measurement(file);
->   }
+> diff --git a/.travis.yml b/.travis.yml
+> index b18c871be200..cc76c0adb312 100644
+> --- a/.travis.yml
+> +++ b/.travis.yml
+> @@ -1,6 +1,6 @@
+>   # Copyright (c) 2017-2021 Petr Vorel <pvorel@suse.cz>
 >   
-> +/*
-> + * read_binary_bios_measurements - read the TPM 1.2 event log
-> + *
-> + * Returns 0 on success, 1 on failure.
-> + */
->   #define MAX_EVENT_DATA_SIZE 200000
->   static int read_binary_bios_measurements(char *file, struct tpm_bank_info *bank)
->   {
-> @@ -2307,12 +2312,19 @@ static int read_binary_bios_measurements(char *file, struct tpm_bank_info *bank)
->   		} header;
->   		unsigned char data[MAX_EVENT_DATA_SIZE];
->   	} event;
-> +	EVP_MD_CTX *mdctx;
-> +	const EVP_MD *md;
-> +	unsigned int mdlen;
-> +	int evp_err = 1;	/* success */
->   	struct stat s;
->   	FILE *fp;
-> -	SHA_CTX c;
->   	int err = 0;
->   	int len;
->   	int i;
-> +#if OPENSSL_VERSION_NUMBER < 0x10100000
-> +	EVP_MD_CTX ctx;
-> +	mdctx = &ctx;
-> +#endif
->   
->   	if (stat(file, &s) == -1) {
->   		errno = 0;
-> @@ -2334,6 +2346,23 @@ static int read_binary_bios_measurements(char *file, struct tpm_bank_info *bank)
->   	if (imaevm_params.verbose > LOG_INFO)
->   		log_info("Reading the TPM 1.2 event log %s.\n", file);
->   
-> +	md = EVP_get_digestbyname(bank->algo_name);
-> +	if (!md) {
-> +		log_errno("Unknown message digest %s\n", bank->algo_name);
-> +		errno = 0;
-> +		fclose(fp);
-> +		return 1;
-> +	}
-> +
-> +#if OPENSSL_VERSION_NUMBER >= 0x10100000
-> +	mdctx = EVP_MD_CTX_new();
-> +	if (!mdctx) {
-> +		log_err("EVP_MD_CTX_new failed\n");
-> +		fclose(fp);
-> +		return 1;
-> +	}
-> +#endif
-> +
->   	/* Extend the pseudo TPM PCRs with the event digest */
->   	while (fread(&event, sizeof(event.header), 1, fp) == 1) {
->   		if (imaevm_params.verbose > LOG_INFO) {
-> @@ -2342,13 +2371,30 @@ static int read_binary_bios_measurements(char *file, struct tpm_bank_info *bank)
->   		}
->   		if (event.header.pcr >= NUM_PCRS) {
->   			log_err("Invalid PCR %d.\n", event.header.pcr);
-> -			err = 1;
->   			break;
->   		}
-> -		SHA1_Init(&c);
-> -		SHA1_Update(&c, bank->pcr[event.header.pcr], 20);
-> -		SHA1_Update(&c, event.header.digest, 20);
-> -		SHA1_Final(bank->pcr[event.header.pcr], &c);
-> +
-> +		evp_err = EVP_DigestInit(mdctx, md);
-> +		if (evp_err == 0) {
-> +			log_err("EVP_DigestInit() failed\n");
-> +			break;
-> +		}
-> +
-> +		evp_err = EVP_DigestUpdate(mdctx, bank->pcr[event.header.pcr], 20);
-> +		if (evp_err == 0) {
-> +			log_err("EVP_DigestUpdate() failed\n");
-> +			break;
-> +		}
-> +		evp_err = EVP_DigestUpdate(mdctx, event.header.digest, 20);
-> +		if (evp_err == 0) {
-> +			log_err("EVP_DigestUpdate() failed\n");
-> +			break;
-> +		}
-> +		evp_err = EVP_DigestFinal(mdctx, bank->pcr[event.header.pcr], &mdlen);
-> +		if (evp_err == 0) {
-> +			log_err("EVP_DigestFinal() failed\n");
-> +			break;
-> +		}
->   		if (event.header.len > MAX_EVENT_DATA_SIZE) {
->   			log_err("Event data event too long.\n");
->   			err = 1;
-> @@ -2357,10 +2403,17 @@ static int read_binary_bios_measurements(char *file, struct tpm_bank_info *bank)
->   		len = fread(event.data, event.header.len, 1, fp);
->   		if (len != 1) {
->   			log_errno("Failed reading event data (short read)\n");
-> +			err = 1;
->   			break;
->   		}
->   	}
-> +
-> +	if (evp_err == 0) /* EVP_ functions return 1 on success, 0 on failure */
-> +		err = 1;
->   	fclose(fp);
-> +#if OPENSSL_VERSION_NUMBER >= 0x10100000
-> +	EVP_MD_CTX_free(mdctx);
-> +#endif
->   
->   	if (imaevm_params.verbose <= LOG_INFO)
->   		return err;
-
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> -dist: bionic
+> +dist: focal
+>   language: C
+>   services:
+>       - docker
