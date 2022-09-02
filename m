@@ -2,203 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF415AA63D
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Sep 2022 05:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2715AB689
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Sep 2022 18:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234886AbiIBDUu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Sep 2022 23:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S236393AbiIBQ3K (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Sep 2022 12:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIBDUl (ORCPT
+        with ESMTP id S236111AbiIBQ3I (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:20:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD2429A;
-        Thu,  1 Sep 2022 20:20:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DBE61EA7;
-        Fri,  2 Sep 2022 03:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6FEC433D7;
-        Fri,  2 Sep 2022 03:20:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662088838;
-        bh=BsOHRM4pj/Cx8jQlerkEmWkvN1ZmISnL0o3Je+RC3rw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GKaUWEyjbUEJRtygq8yOuDVsk1O04YnbRJGoh7VvhNd2P1rxWx4bnXqflp21EoP8j
-         buEgk7J+cWUd5w63K33u1gmvuBgvleQoLczdUYEHhIe4b/bHpJk3wpa9oun5xIUUQn
-         EeCzn7anOLNmtAKSVDDC6xGqxiaJwsAWqKnd8bg0koKtrvKoo5/BUx2g8iCvQd2l9R
-         OsHcjQ2UoQlUNW460HYHQRSfenZNJxl2XpHCWCIjP/2mlhVWuKAcwFPKzQsBlnCJ5J
-         Tku/VFuscSdEsr3TD912gdlFXx+DBeNh233eWt1mF7hudLkeKk1xz5AJ5hwz4dfmNU
-         RjmGqaz32M8jg==
-Date:   Fri, 2 Sep 2022 06:20:33 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nageswara R Sastry <rnsastry@linux.ibm.com>,
-        Coiby Xu <coxu@redhat.com>
-Subject: Re: [PATCH v8 2/4] tpm: of: Make of-tree specific function commonly
- available
-Message-ID: <YxF2gTw4vlfwxhpl@kernel.org>
-References: <20220901214610.768645-1-stefanb@linux.ibm.com>
- <20220901214610.768645-3-stefanb@linux.ibm.com>
+        Fri, 2 Sep 2022 12:29:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB69CD9E8B
+        for <linux-integrity@vger.kernel.org>; Fri,  2 Sep 2022 09:28:57 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 282GGDl9005308;
+        Fri, 2 Sep 2022 16:28:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Zt3sWI0QpSHd2a3AJyT/LrG2hO4XVV2uqw30w0Hd1K8=;
+ b=GoFhisUlyRsjMqt1ik0+eBIjkuPrut/Bt9zExUlx4R67y+qHTsyghjNTFaACLSiHsip8
+ cShQP/GOUHwPPWRrv8HXWHNd4HzneueT9RR9ZHKsPnteZ0CGq8VX78aXUTBNFbjgQJV4
+ IQEJIFLgibk576HuwbxLTlO02RyNmqddP++ioeAyFmc65OjpnY3gy7PfpjHJh6LzK/lm
+ bjBgLAZkyp0lCXpb3mSDvPF1cA0ENFekcAK1GizanGW6MbZ29ftw8x1M8/K63PjK3sNr
+ WZNRSKLX1UyU05Q2XyTCjKz4yyA+oHqrJ3goiZNe6eWEizebhKte9btz89KmpEv+o3YH nA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jbn730ak4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Sep 2022 16:28:51 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 282G7vEW022477;
+        Fri, 2 Sep 2022 16:28:49 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3j7aw90d74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Sep 2022 16:28:49 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 282GSkwR39321954
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 2 Sep 2022 16:28:46 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2707652050;
+        Fri,  2 Sep 2022 16:28:46 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.211.132.193])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9D3645204F;
+        Fri,  2 Sep 2022 16:28:44 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH ima-evm-utils 00/11] address deprecated warnings
+Date:   Fri,  2 Sep 2022 12:28:25 -0400
+Message-Id: <20220902162836.554839-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901214610.768645-3-stefanb@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qTIfOV11YGhNKLYTQbinrK45A_ZeKima
+X-Proofpoint-ORIG-GUID: qTIfOV11YGhNKLYTQbinrK45A_ZeKima
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-02_04,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ mlxscore=0 suspectscore=0 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2209020078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 05:46:08PM -0400, Stefan Berger wrote:
-> Simplify tpm_read_log_of() by moving reusable parts of the code into
-> an inline function that makes it commonly available so it can be
-> used also for kexec support. Call the new of_tpm_get_sml_parameters()
-> function from the TPM Open Firmware driver.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Tested-by: Coiby Xu <coxu@redhat.com>
-> 
-> ---
-> v7:
->  - Added original comment back into inlined function
-> 
-> v4:
->  - converted to inline function
-> ---
->  drivers/char/tpm/eventlog/of.c | 31 +++++------------------------
->  include/linux/tpm.h            | 36 ++++++++++++++++++++++++++++++++++
->  2 files changed, 41 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-> index a9ce66d09a75..f9462d19632e 100644
-> --- a/drivers/char/tpm/eventlog/of.c
-> +++ b/drivers/char/tpm/eventlog/of.c
-> @@ -12,6 +12,7 @@
->  
->  #include <linux/slab.h>
->  #include <linux/of.h>
-> +#include <linux/tpm.h>
->  #include <linux/tpm_eventlog.h>
->  
->  #include "../tpm.h"
-> @@ -20,11 +21,10 @@
->  int tpm_read_log_of(struct tpm_chip *chip)
->  {
->  	struct device_node *np;
-> -	const u32 *sizep;
-> -	const u64 *basep;
->  	struct tpm_bios_log *log;
->  	u32 size;
->  	u64 base;
-> +	int ret;
->  
->  	log = &chip->log;
->  	if (chip->dev.parent && chip->dev.parent->of_node)
-> @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
->  	if (of_property_read_bool(np, "powered-while-suspended"))
->  		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
->  
-> -	sizep = of_get_property(np, "linux,sml-size", NULL);
-> -	basep = of_get_property(np, "linux,sml-base", NULL);
-> -	if (sizep == NULL && basep == NULL)
-> -		return -ENODEV;
-> -	if (sizep == NULL || basep == NULL)
-> -		return -EIO;
-> -
-> -	/*
-> -	 * For both vtpm/tpm, firmware has log addr and log size in big
-> -	 * endian format. But in case of vtpm, there is a method called
-> -	 * sml-handover which is run during kernel init even before
-> -	 * device tree is setup. This sml-handover function takes care
-> -	 * of endianness and writes to sml-base and sml-size in little
-> -	 * endian format. For this reason, vtpm doesn't need conversion
-> -	 * but physical tpm needs the conversion.
-> -	 */
-> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
-> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
-> -		size = be32_to_cpup((__force __be32 *)sizep);
-> -		base = be64_to_cpup((__force __be64 *)basep);
-> -	} else {
-> -		size = *sizep;
-> -		base = *basep;
-> -	}
-> +	ret = of_tpm_get_sml_parameters(np, &base, &size);
-> +	if (ret < 0)
-> +		return ret;
->  
->  	if (size == 0) {
->  		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index dfeb25a0362d..6356baaa1393 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -460,4 +460,40 @@ static inline struct tpm_chip *tpm_default_chip(void)
->  	return NULL;
->  }
->  #endif
-> +
-> +#ifdef CONFIG_OF
-> +static inline int of_tpm_get_sml_parameters(struct device_node *np,
-> +					    u64 *base, u32 *size)
-> +{
-> +	const u32 *sizep;
-> +	const u64 *basep;
-> +
-> +	sizep = of_get_property(np, "linux,sml-size", NULL);
-> +	basep = of_get_property(np, "linux,sml-base", NULL);
-> +	if (sizep == NULL && basep == NULL)
-> +		return -ENODEV;
-> +	if (sizep == NULL || basep == NULL)
-> +		return -EIO;
-> +
-> +	/*
-> +	 * For both vtpm/tpm, firmware has log addr and log size in big
-> +	 * endian format. But in case of vtpm, there is a method called
-> +	 * sml-handover which is run during kernel init even before
-> +	 * device tree is setup. This sml-handover function takes care
-> +	 * of endianness and writes to sml-base and sml-size in little
-> +	 * endian format. For this reason, vtpm doesn't need conversion
-> +	 * but physical tpm needs the conversion.
-> +	 */
-> +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
-> +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
-> +		*size = be32_to_cpup((__force __be32 *)sizep);
-> +		*base = be64_to_cpup((__force __be64 *)basep);
-> +	} else {
-> +		*size = *sizep;
-> +		*base = *basep;
-> +	}
-> +	return 0;
-> +}
-> +#endif
-> +
->  #endif
-> -- 
-> 2.35.1
-> 
+Between travis/ci and OpenSSL v3 a large number of deprecated warnings
+are being emitted when compiling ima-evm-utils.  Start addressing these
+deprecated warnings by replacing the low level SHA1 and HMAC calls with
+the EVP_ functions.  IMA signature version 1 also uses low level calls,
+but instead of fixing it, deprecate it as nobody should be using it
+anyway.
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+OpenSSL v3 "engine" support is deprecated and replaced with "providers".
+Engine support will continue to work for a while, but results in
+deprecated declaration and other messages.  Define a "--disable-engine"
+and the equivalent "--enable-engine=no" configuration option.
 
-BR, Jarkko
+Changelog:
+- Based on Stefan's comments, removed deprecated functions when not
+used and added missing word. Updated the usage and options accordingly.
+- Based on Vitaly's comments, explicitly require "--disable-engine"
+configuration to compile ima-evm-utils without OpenSSL v3 engine support
+and typo.
+- Based on Petr's comments, addressed the "return 77" by removing it,
+  updated the travis patch description, and added his Reviewed-by tags.
+
+Mimi Zohar (11):
+  travis: use the distro OpenSSL version on jammy
+  travis: update dist=focal
+  Update configure.ac to address a couple of obsolete warnings
+  Deprecate IMA signature version 1
+  Replace the low level SHA1 calls when calculating the TPM 1.2 PCRs
+  Replace the low level HMAC calls when calculating the EVM HMAC
+  Add missing EVP_MD_CTX_free() call in calc_evm_hash()
+  Deprecate use of OpenSSL v3 "engine" support
+  Fix potential use after free in read_tpm_banks()
+  Limit the file hash algorithm name length
+  Missing template data size lower bounds checking
+
+ .travis.yml               |   4 +-
+ acinclude.m4              |   2 +-
+ configure.ac              |  23 +++-
+ m4/manpage-docbook-xsl.m4 |   2 +-
+ src/Makefile.am           |  18 +++
+ src/evmctl.c              | 223 +++++++++++++++++++++++++++++---------
+ src/imaevm.h              |   2 +
+ src/libimaevm.c           |  27 ++++-
+ tests/functions.sh        |  14 ++-
+ tests/ima_hash.test       |   9 ++
+ tests/sign_verify.test    |  28 ++++-
+ 11 files changed, 280 insertions(+), 72 deletions(-)
+
+-- 
+2.31.1
+
