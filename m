@@ -2,22 +2,22 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF1C5ACD45
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Sep 2022 10:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6854D5ACD50
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Sep 2022 10:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237234AbiIEH6u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Sep 2022 03:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        id S237229AbiIEH6t (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Sep 2022 03:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237186AbiIEH6n (ORCPT
+        with ESMTP id S237188AbiIEH6o (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:58:43 -0400
+        Mon, 5 Sep 2022 03:58:44 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22038474E1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229F2474E9;
         Mon,  5 Sep 2022 00:58:41 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MLgmC547JzmV5d;
-        Mon,  5 Sep 2022 15:55:07 +0800 (CST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MLgmD0wjmzmV7N;
+        Mon,  5 Sep 2022 15:55:08 +0800 (CST)
 Received: from cgs.huawei.com (10.244.148.83) by
  kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -29,9 +29,9 @@ To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
 CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next 3/4] ima: Use DECLARE_FLEX_ARRAY() helper in ima_policy
-Date:   Mon, 5 Sep 2022 15:58:36 +0800
-Message-ID: <20220905075837.1083216-4-cuigaosheng1@huawei.com>
+Subject: [PATCH -next 4/4] integrity: Use DECLARE_FLEX_ARRAY() helper in integrity.h
+Date:   Mon, 5 Sep 2022 15:58:37 +0800
+Message-ID: <20220905075837.1083216-5-cuigaosheng1@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220905075837.1083216-1-cuigaosheng1@huawei.com>
 References: <20220905075837.1083216-1-cuigaosheng1@huawei.com>
@@ -53,8 +53,13 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Zero-length arrays are deprecated and we are moving towards adopting
 C99 flexible-array members instead. So, replace zero-length array
-declaration with the new DECLARE_FLEX_ARRAY() helper macro in struct
-ima_rule_opt_list.
+declarations with the new DECLARE_FLEX_ARRAY() helper macro in
+integrity.h.
+
+As follows:
+	struct evm_ima_xattr_data,
+	struct ima_digest_data,
+	struct signature_v2_hdr,
 
 This helper allows for a flexible-array member in a union.
 
@@ -64,22 +69,40 @@ Link: KSPP#197
 Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
 Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- security/integrity/ima/ima_policy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ security/integrity/integrity.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index a8802b8da946..a93e8d0fd90f 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -68,7 +68,7 @@ enum policy_rule_list { IMA_DEFAULT_POLICY = 1, IMA_CUSTOM_POLICY };
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 7167a6e99bdc..3eeea8d630e0 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -85,7 +85,7 @@ enum evm_ima_xattr_type {
  
- struct ima_rule_opt_list {
- 	size_t count;
--	char *items[];
-+	DECLARE_FLEX_ARRAY(char *, items);
- };
+ struct evm_ima_xattr_data {
+ 	u8 type;
+-	u8 data[];
++	DECLARE_FLEX_ARRAY(u8, data);
+ } __packed;
  
- struct ima_rule_entry {
+ /* Only used in the EVM HMAC code. */
+@@ -110,7 +110,7 @@ struct ima_digest_data {
+ 		} ng;
+ 		u8 data[2];
+ 	} xattr;
+-	u8 digest[];
++	DECLARE_FLEX_ARRAY(u8, digest);
+ } __packed;
+ 
+ /*
+@@ -138,7 +138,7 @@ struct signature_v2_hdr {
+ 	uint8_t	hash_algo;	/* Digest algorithm [enum hash_algo] */
+ 	__be32 keyid;		/* IMA key identifier - not X509/PGP specific */
+ 	__be16 sig_size;	/* signature size */
+-	uint8_t sig[];		/* signature payload */
++	DECLARE_FLEX_ARRAY(uint8_t, sig); /* signature payload */
+ } __packed;
+ 
+ /*
 -- 
 2.25.1
 
