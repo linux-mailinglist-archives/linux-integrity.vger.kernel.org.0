@@ -2,91 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B505AE900
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Sep 2022 15:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CA25AF391
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Sep 2022 20:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233559AbiIFNDy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Sep 2022 09:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S229806AbiIFS1p (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Sep 2022 14:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbiIFNDx (ORCPT
+        with ESMTP id S229786AbiIFS1o (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:03:53 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EC8402F9;
-        Tue,  6 Sep 2022 06:03:53 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 66B4E5C015C;
-        Tue,  6 Sep 2022 09:03:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 06 Sep 2022 09:03:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1662469432; x=1662555832; bh=Lz
-        rKfTcjNa2gAYtG7mObzCcMkmt+e+ZeVr16IOXkI9Q=; b=FB8R49WvUzxUAY/QLO
-        0B9zWhxqPOcOOARwGkDoP+AV2rxDIvbksXX2HQ1MxlhDGOhAux7gNLeO3trSzct9
-        5eKepMsdR9areu1huPQnDzP+NlU3kSYTffVIjle2HNL7UFe3KGxtCwcwDGYWYpKu
-        UA7DHyfluQWS0ZWm7oyFKt3Em9cOegvepxi5D5Omw9qxMHKQPcGeRxe/Cs5KMnXp
-        xmA3xAz3SgmA9hlfxp5ALpUFmqkTYkyarKaJREMxAaJjEBvL1QSbRBdDVOguRwiI
-        FwF8Gu0uK5BfwHx0M+01quZZV2IHxNO/m3jh7BUqbounFvtRvlZNg/dqm4E0zRuW
-        alnQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662469432; x=1662555832; bh=LzrKfTcjNa2gAYtG7mObzCcMkmt+
-        e+ZeVr16IOXkI9Q=; b=DkC18CJJBQMHbol50NFvQme1LFVGP4hVY/zkbPRqkZBs
-        vDfLjOs/da6LoN/vFc0ZIxSjLidBprjIRhy9u//YxpAMAg2asob+CfpnPLeF+72f
-        5cRguktNnuRsDKqlBA8EL4UVofEboXA8Ekbnen02OEUsJI4r7mDgOXPaVpnk30lg
-        HyCxNJBxwTKmYvwjVHkHzJmhSinzLF+XJrDIaeuz4m3VIeYsZbUU/sI56ckoyNJZ
-        TsROQy5GU/41Jh4q8p4tOcI35jHWq12giheZa+V+zK85pxCEXDGTIhXNyv5TZsBL
-        TGqJelhOm9207irqMoyJxKrBJ5JRMCOvNS0mj95euQ==
-X-ME-Sender: <xms:NkUXYyAp1P7aigflXTgkJmCI6fhYOtu_uK8ueNr9a0GmtdLn1kLZjA>
-    <xme:NkUXY8hevg6TLba2niZSV4APsBU0KlcVK3lRsUh505kEjtiHE98kK4joVgmeJ3FOi
-    NKqOIMwKTN1cHuyyGI>
-X-ME-Received: <xmr:NkUXY1lj9heGLCHl3_QB1xuVBmqB2tEYLORXu-XJkzrv45_ebAotMoBAnt2etD8uRQdXCxBgAKfmJlwZwlZr4Oy2tET8l5GHMq5H>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelkedgieduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujggfsehttdertddtreejnecuhfhrohhmpeeuvghn
-    uceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlhdrnhgvtheqnecuggftrfgrth
-    htvghrnhepffelgeffveelkeffkeehiefgtdeluedvtdfghfdtvdefgfejheffudeuveek
-    vddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    gvsegsvghnsghovggtkhgvlhdrnhgvth
-X-ME-Proxy: <xmx:NkUXYwyvGZrad7T064RRoQ1OLHM5awoNeUvRS4HgNBUPN68MoT5RFQ>
-    <xmx:NkUXY3QUiLPv4Y0m-uWgx8S_KBnq6chwfoU_TmTU5NjEls7o6JXxyA>
-    <xmx:NkUXY7aJJ6e1n25wwg3yB9KwZKABSwsKKBcz63Pz-c9kK55rRKGzxw>
-    <xmx:OEUXY_qqGV1JoBS2ZntZv3x-SeYrR6BEioLbT5zviEaPBp9kjzWf1Q>
-Feedback-ID: iffc1478b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Sep 2022 09:03:50 -0400 (EDT)
-Date:   Tue, 6 Sep 2022 09:03:48 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc:     jarkko@kernel.org, a.fatoum@pengutronix.de, Jason@zx2c4.com,
-        jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
-        sumit.garg@linaro.org, david@sigma-star.at, michael@walle.cc,
-        john.ernberg@actia.se, jmorris@namei.org, serge@hallyn.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        j.luebbe@pengutronix.de, ebiggers@kernel.org, richard@nod.at,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
-        kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
-Subject: Re: [RFC PATCH HBK: 6/8] KEYS: trusted: caam based black key
-Message-ID: <YxdFNIYcD1QO7mtC@farprobe>
-References: <20220906065157.10662-1-pankaj.gupta@nxp.com>
- <20220906065157.10662-7-pankaj.gupta@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220906065157.10662-7-pankaj.gupta@nxp.com>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        Tue, 6 Sep 2022 14:27:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42ABA2235
+        for <linux-integrity@vger.kernel.org>; Tue,  6 Sep 2022 11:27:43 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286HTgWS019909;
+        Tue, 6 Sep 2022 18:27:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=XQdraFDiZE2Ips9SH+G0AXlwbh9I/9Ta4IlsQiVuMiQ=;
+ b=XGE8C1KeSqHa9YEEKsePwpygBCGoGzitL5fa8KKpLmQCOaasoOwcY8YXgv1FoNxgTOM8
+ O+WAMWdpolMVm2XsNA4IoFnXRafSbS2WBORW7FueOEgwTA0BGtYFOUO1aqvG+ostIRj2
+ LOgS64ezRg+/UjrtWjRTs3vuwwcU9x5zXi0XuaW3W28Wnv4fuyCWF+y1AcI1EJed0NcM
+ 6OODCUk+p9QnQTL06kZfYkaf8nkdBsev8PuEtjgiZz43YVjsZBmgihPoP3Vm8On8jOPa
+ DBZojNU8YD/xSQ6f5Zl2E4CLQo/nZBx5Mc1yAj6cImH59VhYENAcc9TWlJrdovEnoZka 6w== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jeaf0j0b7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 18:27:39 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 286IKPOR025080;
+        Tue, 6 Sep 2022 18:27:38 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02dal.us.ibm.com with ESMTP id 3jbxjaade8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 18:27:38 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 286IRbjv63242578
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Sep 2022 18:27:38 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BB8DC136053;
+        Tue,  6 Sep 2022 18:27:36 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A24A13604F;
+        Tue,  6 Sep 2022 18:27:36 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.107.58])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Sep 2022 18:27:36 +0000 (GMT)
+Message-ID: <cbd5ec45625bd111e5be066d54ffb641f417552b.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils 02/11] travis: update dist=focal
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
+Date:   Tue, 06 Sep 2022 14:27:36 -0400
+In-Reply-To: <4e531d80-0df0-8f1a-6897-7e82a899ad9f@linux.ibm.com>
+References: <20220902162836.554839-1-zohar@linux.ibm.com>
+         <20220902162836.554839-3-zohar@linux.ibm.com>
+         <4e531d80-0df0-8f1a-6897-7e82a899ad9f@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: EjBfh5kuoK_ZmPT41bdxID7L-VQWFt3Z
+X-Proofpoint-GUID: EjBfh5kuoK_ZmPT41bdxID7L-VQWFt3Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ spamscore=0 mlxlogscore=945 bulkscore=0 priorityscore=1501 suspectscore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209060084
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,20 +86,18 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 12:21:55 +0530, Pankaj Gupta wrote:
-> - CAAM supports two types of black keys:
+On Fri, 2022-09-02 at 16:24 -0400, Stefan Berger wrote:
+> 
+> On 9/2/22 12:28, Mimi Zohar wrote:
+> > Although Github Actions is available on Github Enterprise Server 3.x
+> > single server edition, as well as the unpaid version, it is not
+> > available in Github Enterprise Server 3.x cluster edition[1].  Continue
+> > to support travis.
+> 
+> This text really has nothing obvious to do with the upgrade to focal...
 
-What is a "black key"?
+True, but I've been asked why we have both github actions and travis.  
+This was a convienent place for providing that explanation.
 
->   -- Plain key encrypted with ECB
->   -- Plain key encrypted with CCM
->   Note: Due to robustness, default encytption used for black key is CCM.
-                                     ^^^^^^^^^^
+Mimi
 
-"encryption"
-
-> - A black key blob is generated, and added to trusted key payload.
-
-Missing "the" before "trusted".
-
---Ben
