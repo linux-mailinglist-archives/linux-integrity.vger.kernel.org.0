@@ -2,207 +2,161 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EED5B08DF
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 Sep 2022 17:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734C85B0A70
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Sep 2022 18:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiIGPnW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 7 Sep 2022 11:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
+        id S229718AbiIGQoU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 7 Sep 2022 12:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIGPnV (ORCPT
+        with ESMTP id S229707AbiIGQoO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:43:21 -0400
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BF339E2D5
-        for <linux-integrity@vger.kernel.org>; Wed,  7 Sep 2022 08:43:20 -0700 (PDT)
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id A077772C90B;
-        Wed,  7 Sep 2022 18:43:19 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 5B64E4A4800;
-        Wed,  7 Sep 2022 18:43:19 +0300 (MSK)
-Date:   Wed, 7 Sep 2022 18:43:19 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [RFC PATCH ima-evm-utils v2 12/12] Limit configuring OpenSSL
- engine support
-Message-ID: <20220907154319.f2gewj42yhqi5wsv@altlinux.org>
-References: <20220906195021.854090-1-zohar@linux.ibm.com>
- <20220906195021.854090-13-zohar@linux.ibm.com>
+        Wed, 7 Sep 2022 12:44:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1455874CDC;
+        Wed,  7 Sep 2022 09:43:57 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287FQok3027611;
+        Wed, 7 Sep 2022 16:43:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=XKzpQ3NKsCgBVgEiqJa1ooTwl86JBBLgdI0DdILcKrM=;
+ b=o3RkMLcKXjb4Z+YWIxUmBm2/zCkMkTvYb1rT5wL+e63WzmUwK4TdPQtSs2WrG/8jslvl
+ QJxTX0KRiX8T14UzjMw/+Q1HIiQOT4MkQQ5YVLwbLJeK4L/igmg5VjdJB9BEpyf/pHXI
+ LutUqCHg2kAMljlg/1kozurdRrRJ7ioJvHiXMzEX5uYO2iD9/r6LMX6zg+tEFf/Fz5xE
+ UrlBBorN0Fq5NeQZ3PIykik0RmoNObz/CH73O2NmFibISBvfj6c+Qfpc4KtGPXizWwsW
+ 0JaLBFbMO+lIIJl8sVvHMTJi3vzVeAovblyWR+JY1tDktlrnNL9UKYgZgvi8Il7tntj5 TQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jewxnjfnb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 16:43:22 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 287FSkCR032420;
+        Wed, 7 Sep 2022 16:43:22 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jewxnjfn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 16:43:22 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 287GKWlL006145;
+        Wed, 7 Sep 2022 16:43:21 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma03dal.us.ibm.com with ESMTP id 3jbxja9pje-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 16:43:21 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 287GhKdL2884252
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Sep 2022 16:43:20 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C236E124054;
+        Wed,  7 Sep 2022 16:43:20 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29603124053;
+        Wed,  7 Sep 2022 16:43:20 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.65.226.72])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  7 Sep 2022 16:43:20 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, peterhuewe@gmx.de, jarkko@kernel.or,
+        jgg@ziepe.ca, joel@jms.id.au, Alexander.Steffen@infineon.com,
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] tpm: Add flag to use default cancellation policy
+Date:   Wed,  7 Sep 2022 11:43:17 -0500
+Message-Id: <20220907164317.80617-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <20220906195021.854090-13-zohar@linux.ibm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HU3f8M9Mz5uMtN5kL1buHpIC64LP2Rwn
+X-Proofpoint-ORIG-GUID: 04oVuitsB1EDcgZu-hL2iO7n6Sg7qlLb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_08,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1011 phishscore=0 spamscore=0
+ suspectscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi,
+The check for cancelled request depends on the VID of the chip, but
+some chips share VID which shouldn't share their cancellation
+behavior. This is the case for the Nuvoton NPCT75X, which should use
+the default cancellation check, not the Winbond one.
+To avoid changing the existing behavior, add a new flag to indicate
+that the chip should use the default cancellation check and set it
+for the I2C TPM2 TIS driver.
 
-On Tue, Sep 06, 2022 at 03:50:21PM -0400, Mimi Zohar wrote:
-> If either OPENSSL_NO_DYNAMIC_ENGINE or OPENSSL_NO_ENGINE is defined
-> do not build ima-evm-utils with OpenSSL engine support.
-> 
-> Suggested-by: Vitaly Chikunov <vt@altlinux.org>
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
-> Vitaly, unlike with "--disable-engine" the "Tests requiring engine support
-> are skipped (not supported)" message is not being displayed after building
-> OpenSSL v3 with "no-engine" support.
-> 
->  src/evmctl.c              | 14 ++++++++++++++
->  src/libimaevm.c           |  4 +++-
->  tests/install-openssl3.sh |  2 +-
->  3 files changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/src/evmctl.c b/src/evmctl.c
-> index e603449b7d9e..399a0d078a52 100644
-> --- a/src/evmctl.c
-> +++ b/src/evmctl.c
-> @@ -64,9 +64,11 @@
->  #include <openssl/hmac.h>
->  #include <openssl/err.h>
->  #include <openssl/rsa.h>
-> +#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
->  #if CONFIG_ENGINE
->  #include <openssl/engine.h>
->  #endif
-> +#endif
->  #include <openssl/x509v3.h>
->  #include "hash_info.h"
->  #include "pcr.h"
-> @@ -2722,8 +2724,10 @@ static void usage(void)
->  		"      --selinux      use custom Selinux label for EVM\n"
->  		"      --caps         use custom Capabilities for EVM(unspecified: from FS, empty: do not use)\n"
->  		"      --verify-sig   verify measurement list signatures\n"
-> +#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
->  #if CONFIG_ENGINE
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/char/tpm/tpm_tis_core.c | 18 ++++++++++--------
+ drivers/char/tpm/tpm_tis_core.h |  1 +
+ drivers/char/tpm/tpm_tis_i2c.c  |  1 +
+ 3 files changed, 12 insertions(+), 8 deletions(-)
 
-BTW, I would still undefine CONFIG_ENGINE (once, somewhere) if
-OPENSSL_NO_ENGINE or OPENSSL_NO_DYNAMIC_ENGINE is defined by openssl,
-instead of having two such #if-s each time we want to have engine
-dependent code.
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 757623bacfd5..175e75337395 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -682,15 +682,17 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 
+-	switch (priv->manufacturer_id) {
+-	case TPM_VID_WINBOND:
+-		return ((status == TPM_STS_VALID) ||
+-			(status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
+-	case TPM_VID_STM:
+-		return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
+-	default:
+-		return (status == TPM_STS_COMMAND_READY);
++	if (!test_bit(TPM_TIS_DEFAULT_CANCELLATION, &priv->flags)) {
++		switch (priv->manufacturer_id) {
++		case TPM_VID_WINBOND:
++			return ((status == TPM_STS_VALID) ||
++				(status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
++		case TPM_VID_STM:
++			return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
++		}
+ 	}
++
++	return status == TPM_STS_COMMAND_READY;
+ }
+ 
+ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+index 66a5a13cd1df..b68479e0de10 100644
+--- a/drivers/char/tpm/tpm_tis_core.h
++++ b/drivers/char/tpm/tpm_tis_core.h
+@@ -86,6 +86,7 @@ enum tis_defaults {
+ enum tpm_tis_flags {
+ 	TPM_TIS_ITPM_WORKAROUND		= BIT(0),
+ 	TPM_TIS_INVALID_STATUS		= BIT(1),
++	TPM_TIS_DEFAULT_CANCELLATION	= BIT(2),
+ };
+ 
+ struct tpm_tis_data {
+diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+index 0692510dfcab..6722588e0217 100644
+--- a/drivers/char/tpm/tpm_tis_i2c.c
++++ b/drivers/char/tpm/tpm_tis_i2c.c
+@@ -329,6 +329,7 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev,
+ 	if (!phy->io_buf)
+ 		return -ENOMEM;
+ 
++	set_bit(TPM_TIS_DEFAULT_CANCELLATION, &phy->priv.flags);
+ 	phy->i2c_client = dev;
+ 
+ 	/* must precede all communication with the tpm */
+-- 
+2.31.1
 
->  		"      --engine e     preload OpenSSL engine e (such as: gost) is deprecated\n"
-> +#endif
->  #endif
->  		"      --ignore-violations ignore ToMToU measurement violations\n"
->  		"  -v                 increase verbosity level\n"
-> @@ -2786,8 +2790,10 @@ static struct option opts[] = {
->  	{"selinux", 1, 0, 136},
->  	{"caps", 2, 0, 137},
->  	{"verify-sig", 0, 0, 138},
-> +#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
->  #if CONFIG_ENGINE
->  	{"engine", 1, 0, 139},
-> +#endif
->  #endif
->  	{"xattr-user", 0, 0, 140},
->  	{"ignore-violations", 0, 0, 141},
-> @@ -2841,6 +2847,7 @@ static char *get_password(void)
->  	return password;
->  }
->  
-> +#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
->  #if CONFIG_ENGINE
->  static ENGINE *setup_engine(const char *engine_id)
->  {
-> @@ -2860,6 +2867,7 @@ static ENGINE *setup_engine(const char *engine_id)
->  	return eng;
->  }
->  #endif
-> +#endif
->  
->  int main(int argc, char *argv[])
->  {
-> @@ -2985,12 +2993,14 @@ int main(int argc, char *argv[])
->  		case 138:
->  			verify_list_sig = 1;
->  			break;
-> +#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
->  #if CONFIG_ENGINE
-
-A lot of times.
-
-Thanks,
-
->  		case 139: /* --engine e */
->  			imaevm_params.eng = setup_engine(optarg);
->  			if (!imaevm_params.eng)
->  				goto error;
->  			break;
-> +#endif
->  #endif
->  		case 140: /* --xattr-user */
->  			xattr_ima = "user.ima";
-> @@ -3050,8 +3060,10 @@ int main(int argc, char *argv[])
->  	if (imaevm_params.keyfile != NULL &&
->  	    imaevm_params.eng == NULL &&
->  	    !strncmp(imaevm_params.keyfile, "pkcs11:", 7)) {
-> +#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
->  #if CONFIG_ENGINE
->  		imaevm_params.eng = setup_engine("pkcs11");
-> +#endif
->  #endif
->  		if (!imaevm_params.eng)
->  			goto error;
-> @@ -3078,6 +3090,7 @@ int main(int argc, char *argv[])
->  	}
->  
->  error:
-> +#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
->  #if CONFIG_ENGINE
->  	if (imaevm_params.eng) {
->  		ENGINE_finish(imaevm_params.eng);
-> @@ -3086,6 +3099,7 @@ error:
->  		ENGINE_cleanup();
->  #endif
->  	}
-> +#endif
->  #endif
->  	ERR_free_strings();
->  	EVP_cleanup();
-> diff --git a/src/libimaevm.c b/src/libimaevm.c
-> index 037027c1d951..c41b63fb97b9 100644
-> --- a/src/libimaevm.c
-> +++ b/src/libimaevm.c
-> @@ -959,7 +959,8 @@ static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
->  	EVP_PKEY *pkey;
->  
->  	if (!strncmp(keyfile, "pkcs11:", 7)) {
-> -#ifdef CONFIG_ENGINE
-> +#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
-> +#if CONFIG_ENGINE
->  		if (!imaevm_params.keyid) {
->  			log_err("When using a pkcs11 URI you must provide the keyid with an option\n");
->  			return NULL;
-> @@ -979,6 +980,7 @@ static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
->  #else
->  		log_err("OpenSSL \"engine\" support is disabled\n");
->  		goto err_engine;
-> +#endif
->  #endif
->  	} else {
->  		fp = fopen(keyfile, "r");
-> diff --git a/tests/install-openssl3.sh b/tests/install-openssl3.sh
-> index 1b634681a760..cdda77980fea 100755
-> --- a/tests/install-openssl3.sh
-> +++ b/tests/install-openssl3.sh
-> @@ -13,7 +13,7 @@ wget --no-check-certificate https://github.com/openssl/openssl/archive/refs/tags
->  tar --no-same-owner -xzf ${version}.tar.gz
->  cd openssl-${version}
->  
-> -./Configure --prefix=/opt/openssl3 --openssldir=/opt/openssl3/ssl
-> +./Configure no-engine no-dynamic-engine --prefix=/opt/openssl3 --openssldir=/opt/openssl3/ssl
->  make -j$(nproc)
->  # only install apps and library
->  sudo make install_sw
-> -- 
-> 2.31.1
