@@ -2,73 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953695B3190
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Sep 2022 10:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18A15B3BB9
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Sep 2022 17:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbiIIIXC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Sep 2022 04:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S232114AbiIIPVW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Sep 2022 11:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiIIIXB (ORCPT
+        with ESMTP id S229892AbiIIPVU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Sep 2022 04:23:01 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480C51251B8
-        for <linux-integrity@vger.kernel.org>; Fri,  9 Sep 2022 01:23:00 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id b136so1615882yba.2
-        for <linux-integrity@vger.kernel.org>; Fri, 09 Sep 2022 01:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=MxU4fJ4El5xIikQ69s5+V+M7YC/oCSbBwTvPMsApxc8=;
-        b=UrVbo/N4wIWe1TMaGA2dLF7a5UA2Hj+X8NS3IMgXnSHDAoM1Jm7IJ3uuSeB++5zfeY
-         yowU3ZHiauBHiCw2NOylFMZOROnxx3e84KJ8tBx9Kr9eSeEn5VLKMk3/T1nKth6Er7eG
-         Du02mdzU1DARPaPvjeGQKUq2G2d4rAoNkZNmCJtj7X7kUYsf8O8lAdSJnMHZDHgteQF5
-         HedbCkuMx8HNYAe3nIefj1PV3NxGMXgE56hjxPK86wOuUL7j+kB4qPCPmP0wtzpp2fC+
-         cL3P0i5dCPscuBDmIcLkX8cyHyZrQSiLWpktOAg+/4KxrOy5iZHqnbu0cN4yRbmjfYp6
-         hpkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=MxU4fJ4El5xIikQ69s5+V+M7YC/oCSbBwTvPMsApxc8=;
-        b=0cgSJAvGQ8QwxCiFzCauKiHiqzOiAYYdm7mzEuT0M5OfguodLZyNC2NtwWYMpIsMn8
-         3mOhI0W6b5asdcMOoScfT4bTzjMaB8I2zQ462HS6tHRfayXE17YOc6kIkCeIZvSvJepu
-         4Ipvxx8FzBB7qP2YBWVe3jyvVGZfOvm8warcQc041QNxJnrvkiuj83B4OFZkQcmuSmIp
-         71uLrRqc6fDCbjXVsuvXOVF3eSCy/Su0w/iIHIVIMMiNOVyx9HflBL7sE78Jga8PoyOU
-         bPXlDXfbvXjy7jrYuMgqdfp+5bhcMdiVgnQ+8FtMf/oZqCz7LXCubk/NTaFPHI25MKXe
-         3FBw==
-X-Gm-Message-State: ACgBeo37iqSVaZ4kobIahKlJ7H+Wy/kdTRlE7AXmJ75wij4JnnPJGX8Q
-        ga3VPVgtX8ftoj/9ILujpZKNRvyfIyBZpRUlKi8=
-X-Google-Smtp-Source: AA6agR7NOQSoL9pfavKCjtqBhMjbmgReo+NR/c6+NL7hpvo+IDtzqoZJwwo95jXidWR5q32BcqRWIg5OwHeBdC6fRoc=
-X-Received: by 2002:a25:f85:0:b0:696:144b:ebd8 with SMTP id
- 127-20020a250f85000000b00696144bebd8mr10809716ybp.123.1662711779425; Fri, 09
- Sep 2022 01:22:59 -0700 (PDT)
+        Fri, 9 Sep 2022 11:21:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF77A00EF;
+        Fri,  9 Sep 2022 08:21:16 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 289El24C003935;
+        Fri, 9 Sep 2022 15:21:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=ETxy00/oSLMaFwhEgTi64CSAohYWFjoKt+q44NRh+5E=;
+ b=e2lK6FKnRBGUqzGIpdMTD3kgoJF94JDX7W3gB05VUy88pA9GOKEXGyy9CozkcTC+6NcT
+ kqpvFq/c/UYv5n7/NenDrFRo1AwyJz5/mGp4J8oxL4mzIU6VfzlGyL79O6p6FFMdMsR0
+ kxgmLNY+6pLYnQ8EXpibpE1eFCc8WDX5Qvd5psVHw+kP6lMlsxIyIKJABFOuS6LyxxK7
+ uDVv4dpF51rI3dtZE9u9qBLU+Wg0B7aJtss7WQNKm0btkojHcdEGhpWJPZaZbDsAUZGU
+ VH9VO+jfiE3C0yqlwwdmc1B0EmWjKiSJuZKDXCzG8ASCTaSlr5NRIUThJoYNIK2HWhGJ 4A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jg7j6s3nj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 15:21:12 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 289ElHbX005279;
+        Fri, 9 Sep 2022 15:21:11 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jg7j6s3n7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 15:21:11 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 289FKfiU030354;
+        Fri, 9 Sep 2022 15:21:10 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03dal.us.ibm.com with ESMTP id 3jbxjash13-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Sep 2022 15:21:10 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 289FL9Tb35521022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Sep 2022 15:21:09 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41FFB7805F;
+        Fri,  9 Sep 2022 15:32:50 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AFD5E78064;
+        Fri,  9 Sep 2022 15:32:49 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  9 Sep 2022 15:32:49 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     jarkko@kernel.org, linux-integrity@vger.kernel.org
+Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH] selftests: tpm2: Implement class desstructor to close file descriptor
+Date:   Fri,  9 Sep 2022 11:20:56 -0400
+Message-Id: <20220909152056.1335261-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Received: by 2002:a05:7110:4148:b0:193:65bb:df75 with HTTP; Fri, 9 Sep 2022
- 01:22:58 -0700 (PDT)
-Reply-To: mr.ahodolevi@gmail.com
-From:   George Levi <mr.koffiwillames@gmail.com>
-Date:   Fri, 9 Sep 2022 08:22:58 +0000
-Message-ID: <CAMgiTmbWu1MGutA2KRTyBx5SvZyWNCLxtH_Zdqfxz1Tg3kocnw@mail.gmail.com>
-Subject: Deposit
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: uBgP43LIeEsIw0QlRJAR-jQOm899RkpN
+X-Proofpoint-ORIG-GUID: K_4MA1wVvviQMNkflsxsgCsUvZOJ5Saa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-09_08,2022-09-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
+ clxscore=1011 adultscore=0 suspectscore=0 priorityscore=1501
+ mlxlogscore=483 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2209090053
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+From: Stefan Berger <stefanb@linux.ibm.com>
+
+Implement a class destructor to close the open TPM file descriptor
+and avoid the following error message:
+
+ test_flush_context (tpm2_tests.SpaceTest) ... \
+   /usr/lib64/python3.6/unittest/case.py:605: ResourceWarning: \
+   unclosed file <_io.FileIO name='/dev/tpmrm0' mode='rb+' closefd=True>
+
+Fixes: 6ea3dfe1e0732 ("selftests: add TPM 2.0 tests")
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+
+---
+ tools/testing/selftests/tpm2/tpm2.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+index 057a4f49c79d..c7363c6764fc 100644
+--- a/tools/testing/selftests/tpm2/tpm2.py
++++ b/tools/testing/selftests/tpm2/tpm2.py
+@@ -371,6 +371,10 @@ class Client:
+             fcntl.fcntl(self.tpm, fcntl.F_SETFL, flags)
+             self.tpm_poll = select.poll()
+ 
++    def __del__(self):
++        if self.tpm:
++            self.tpm.close()
++
+     def close(self):
+         self.tpm.close()
+ 
 -- 
-Dear
-I am contacting you to assist retrieve his huge deposit Mr. Alexander
-left in the bank before its get confiscated by the bank. Get back to
-me for more detail's
-Barr. George Levi
+2.35.1
+
