@@ -2,96 +2,148 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDE15B8F9C
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Sep 2022 22:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA71F5B900A
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Sep 2022 23:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbiINUS7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 14 Sep 2022 16:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
+        id S229744AbiINVVQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 14 Sep 2022 17:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiINUS6 (ORCPT
+        with ESMTP id S229634AbiINVVP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 14 Sep 2022 16:18:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC6B80F5B;
-        Wed, 14 Sep 2022 13:18:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 234AFB81CB4;
-        Wed, 14 Sep 2022 20:18:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC215C4347C;
-        Wed, 14 Sep 2022 20:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663186734;
-        bh=Lru7PFikr9gooa+rcfmfjS8+VVhSRnx69Y2dyir0dfs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BMstrKotZRuU/6fpqWWtHEls40R0T74xGpA39Hx1Q96QHV0sIzhrkwNF7GMwR3KQX
-         Cem6orYPoPcYV6nRPCt7264M+ztbTxaXFucJvvLaGdHu+QlxkrD3nI/k4OA/uP1vLK
-         QTssqx3lIM9bk7d+cf3eyUmQDKsiMCMjwqhs6TSeqk61spt5bWd1sqVJ2TD+/8GuxF
-         rKXQFdD196CdEdl3h/U2ti1vsDN4pXP18iAsNgwUKDSWl+DTSbLBXTIIDs7xpgO7VY
-         9v+uMQxPFBrXq9h8K5qLLoyAes+2K1dPtDLtRgQ+/oPxQ5YU07ULAiEqFh05X0j4G3
-         1I51Hz+xU9aLw==
-Received: by mail-vk1-f169.google.com with SMTP id g185so8027659vkb.13;
-        Wed, 14 Sep 2022 13:18:54 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0cWgzks2r6wkavJZLl23zWaCQ6mmEiUgMPOyxIoEh0tKn4i3Ns
-        mxO3tTxqLr2HsPDvx1pPoXdVUzIK0l1j4YZ+Gw==
-X-Google-Smtp-Source: AA6agR5iKd4zqjkDmalrBk7jisYALPKK0lS1iB8OaES1QH5gwnk2lDL6XD8fe2N0XD9jtwdNmPTFk5W9R/MFUIkxt4A=
-X-Received: by 2002:a1f:9e44:0:b0:39e:e4ff:1622 with SMTP id
- h65-20020a1f9e44000000b0039ee4ff1622mr11608618vke.15.1663186733579; Wed, 14
- Sep 2022 13:18:53 -0700 (PDT)
+        Wed, 14 Sep 2022 17:21:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337511FCE1
+        for <linux-integrity@vger.kernel.org>; Wed, 14 Sep 2022 14:21:14 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28EKVOMJ020197;
+        Wed, 14 Sep 2022 21:21:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=e2fAz9PHrcB8ZfX2pFm5xu583h6h5hhWUAhHLnMXlKg=;
+ b=pFomN9z675GAoOWGD6q8F8Dlz0KHjoaHejXcU5bDJ9+kc1DSQLCFoim+3sC5VxUDu0RV
+ oMJ91C5WE9KBlwedgfq26FNdbSFeg5T0/EEt9oiuhz3loGMuBPWTC0VSmkSoRDyXt0XN
+ IMf9Hceeg5qeT+DW3A+/I9LcLrf35Dp+5slt1igvigJEStuvr+yZIbOGQ6rKRL9o5uv8
+ Sp9YSZ9hV4DSKg+qROF6orTjj2dyZow7IMxsmHmVRBMoZbqhk4CQYntAKCCqBq34M3vP
+ FG3EmQR10HJgTfPY8CJquB+SojJrVFE5zznk1JxaJvQyfvQrLZ7KdiRjgiqv4pbPzXjO Fw== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jkm0950wh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 21:21:10 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28EL5h7A030643;
+        Wed, 14 Sep 2022 21:21:09 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma01wdc.us.ibm.com with ESMTP id 3jjypu70fv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Sep 2022 21:21:09 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28ELL8w315139446
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Sep 2022 21:21:08 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 361B3C6057;
+        Wed, 14 Sep 2022 21:21:07 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F01F0C605A;
+        Wed, 14 Sep 2022 21:21:06 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 14 Sep 2022 21:21:06 +0000 (GMT)
+Message-ID: <4354a45a-406c-fd33-fd4c-be5769652537@linux.ibm.com>
+Date:   Wed, 14 Sep 2022 17:21:07 -0400
 MIME-Version: 1.0
-References: <20220901214610.768645-1-stefanb@linux.ibm.com>
- <ce08b0af-fb1b-0ade-61ac-f66e95d6eb6a@linux.ibm.com> <CAL_JsqJ+M6TP9kWXDAUqqh7wfPHkE8YfEU7j5HWqeGMhL=c6bg@mail.gmail.com>
- <f8c8b3dd-f77b-7917-6029-a288255fee8a@linux.ibm.com>
-In-Reply-To: <f8c8b3dd-f77b-7917-6029-a288255fee8a@linux.ibm.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 14 Sep 2022 15:18:42 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLN-7LHJuMhR+kbGb_n09K8usmcfKVzA_fV40FHmqaaDw@mail.gmail.com>
-Message-ID: <CAL_JsqLN-7LHJuMhR+kbGb_n09K8usmcfKVzA_fV40FHmqaaDw@mail.gmail.com>
-Subject: Re: [PATCH v8 0/4] tpm: Preserve TPM measurement log across kexec (ppc64)
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, nasastry@in.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH ima-evm-utils 4/4] Fix tpm2_pcr_supported() output
+ messages
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>
+References: <20220914142225.1381077-1-zohar@linux.ibm.com>
+ <20220914142225.1381077-5-zohar@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220914142225.1381077-5-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pInl3HOccnTYnln69VFYfhNhzHbphdnp
+X-Proofpoint-ORIG-GUID: pInl3HOccnTYnln69VFYfhNhzHbphdnp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-14_09,2022-09-14_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ bulkscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2208220000
+ definitions=main-2209140101
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 2:46 PM Stefan Berger <stefanb@linux.ibm.com> wrote:
->
->
->
-> On 9/14/22 14:01, Rob Herring wrote:
-> > On Mon, Sep 12, 2022 at 8:01 AM Stefan Berger <stefanb@linux.ibm.com> wrote:
-> >>
-> >>
-> >> Hi Rob,
-> >>
-> >>     can you take this series in your tree?
-> >
-> > IMO, it should be someone that cares about TPM, kexec, or powerpc.
-> > Yes, there's code in drivers/of/, but that is purely to avoid
-> > duplication of code across powerpc and arm64.
->
-> What about 1/4? Can someone else take it into their tree?
 
-I thought that was taken long ago now by Palmer in the riscv tree, but
-it seems not.
 
-In any case, it has my Ack, so yes, someone else can take it. It *can*
-go in via 2 different trees (as git won't care), but we generally try
-to avoid that.
+On 9/14/22 10:22, Mimi Zohar wrote:
+> Remove unnecessary path check in pcr_ibmtss.c and update the syntax
+> in the other.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>   src/pcr_ibmtss.c     | 12 +-----------
+>   src/pcr_tsspcrread.c |  4 ++--
+>   2 files changed, 3 insertions(+), 13 deletions(-)
+> 
+> diff --git a/src/pcr_ibmtss.c b/src/pcr_ibmtss.c
+> index b8700ddd5da8..6b38d280e80c 100644
+> --- a/src/pcr_ibmtss.c
+> +++ b/src/pcr_ibmtss.c
+> @@ -20,21 +20,11 @@
+>   #undef MAX_DIGEST_SIZE	/* imaevm uses a different value than the TSS */
+>   #include <ibmtss/tss.h>
+>   
+> -#define CMD "tsspcrread"
+> -
+> -static char path[PATH_MAX];
+> -
+>   int tpm2_pcr_supported(void)
+>   {
+>   	if (imaevm_params.verbose > LOG_INFO)
+> -		log_info("Using %s to read PCRs.\n", CMD);
+> -
+> -	if (get_cmd_path(CMD, path, sizeof(path))) {
+> -		log_debug("Couldn't find '%s' in $PATH\n", CMD);
+> -		return 0;
+> -	}
+> +		log_info("Using ibmtss to read PCRs.\n");
+>   
+> -	log_debug("Found '%s' in $PATH\n", CMD);
+>   	return 1;
+>   }
+>   
+> diff --git a/src/pcr_tsspcrread.c b/src/pcr_tsspcrread.c
+> index 95048f8a5469..39ff8f7fc14d 100644
+> --- a/src/pcr_tsspcrread.c
+> +++ b/src/pcr_tsspcrread.c
+> @@ -60,11 +60,11 @@ int tpm2_pcr_supported(void)
+>   		log_info("Using %s to read PCRs.\n", CMD);
+>   
+>   	if (get_cmd_path(CMD, path, sizeof(path))) {
+> -		log_debug("Couldn't find '%s' in $PATH\n", CMD);
+> +		log_info("Couldn't find '%s' in %s\n", CMD, path);
+>   		return 0;
+>   	}
+>   
+> -	log_debug("Found '%s' in $PATH\n", CMD);
+> +	log_debug("Found '%s' in %s\n", CMD, path);
+>   	return 1;
+>   }
+>   
 
-Rob
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
