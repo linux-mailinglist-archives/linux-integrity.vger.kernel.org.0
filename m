@@ -2,112 +2,148 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3A55BA3A0
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Sep 2022 02:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784A35BA3E9
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Sep 2022 03:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiIPA4l (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Sep 2022 20:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S229853AbiIPBRq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Sep 2022 21:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiIPA4k (ORCPT
+        with ESMTP id S229544AbiIPBRh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Sep 2022 20:56:40 -0400
-Received: from sonic306-28.consmr.mail.ne1.yahoo.com (sonic306-28.consmr.mail.ne1.yahoo.com [66.163.189.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F57399F4
-        for <linux-integrity@vger.kernel.org>; Thu, 15 Sep 2022 17:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663289798; bh=xKRiN+tRII6o9SvC/3zJQA9qwLpa7PTjKW/Ff3H5skQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=NFozRvUvVllyDxNm8mGpQuWHNfVe+0Vmd/ZxLGtyvDHNAFhVPihyJf93g1EQQONlgqSEraxWM2sTEVOfKS7eq+cOV7dMKI7WTJSC//J0RUU+HvsQYI02jErc/+PBQ4CbbQgo046/+oqjqlD03pCNJPxB1RUW8A7roxsDiv2FMG+gtYLlrRJnVn3Jcb7waBr5tfKfwMZqdLg5DHAM9bHfYZWCwZHHxk9n+OLchbJdzhMlQ0G3/B5paKde1VaWcMGmJZ8GiSGUgYdwMmTqZtMCyv2vjweL4O9vH1YHIvjH+9D2TY4O9KTX4ETM/qlRVt6EOMAW+lsCocOESbJO/psVDg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663289798; bh=WmbW9yzUc/no9nIGRczo+NjTt/C2LrnnvT/LDS/tlmf=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=jubetYHTnYnbe+plg91aXvQq7Gzu4RAHvHoK+1Yxi3sLZ60qd+fW5ZbR6y4+nbM2qJD/CQMebGxYdJs7eyhti4ADt8aAu+f0z7sG4UH0dXiOp2dsI1Jpvr3ht7XfCB1900W/2b+0LwBAmcl2MhjueK10ywLOtTVMh2KoA+f5ztjFgp5VCnYh0FXYERL93xszZJsBNwoJpYMsc/emFZhyFcA6uFNgO5yULhLVprj64RAGWfgRaEpmIxGyDFwsocqeM1dv+nWHr7RfXcxQCZQaB6P2pwqBXiGIJJZMilKNapACLr0bX/vSF2xicHHVOJqng8H0w930Ct2yw6T8xwvF4w==
-X-YMail-OSG: fcI8zmcVM1nySX6lXTbLEFjZgYiOVpZpFxRJjJrjqht1j8DWMgd8dKkoU7fLH95
- BNDqUW3VENgZamOE4TKh4Ve0neoNuxMGhdJYJ26xm71ueJ5yztC9YAf_KmVk.P.WYHL.OnSmz6VV
- F8RpEnJu8NvZ_cXXNA4HBl8.sHuYEfUHq81bVBqYlH23Nk9.lU6IbFBT0EFfAjwEhbq_yKG1GEX2
- HsIFcDolc0njG9Yscj5Q6LBnOwJyjAIdpHM2.fJfq_PFNy5MfvAIDG36gDDLy_XJUjprczwHa6Kh
- gGVOHWTVMjW9HVVOhbJ3jOnXd7x0eDYTRPulHswYIDvWzurhhZBvpoO49E4aDPYSh3oPHrx1qSC_
- ISkkYvz37HTdskMw8BBMBQfYKEt8myY8yP1u3gnl_52ot42IgXh6hRSucG7QGTD1_B5YmwxfXEss
- VJyYnkGwtVdBlfXCKzuMUCn57TLd59BPhCh2TB3FroMYu70GaoyCjOV1MIMtxCwq1UoHawe7Ejm4
- lpPyhmJ.1YlSGZ5PKsP51MtnxeL1A1sjnIgSJlIEvIdHN27gNVhXbiLoPNQxYWlGXO8iObAhnPSD
- QN2N_KnNNDOM6Pgk1vQiqKStegE2eisFkirZXywn.mc56hAk7wjX.6n.mebAXieUtDjmlpS.ZdYH
- uPIa5z2CCVrzhh.7tHvt5ox7M2qxZg8onOsnPe8exln4yPv5NTVe.lYav592bq5To2BUQxmy8XMU
- ZCKsECZzzn47dMi4Wl.Nq2gFofhmBjWzFsklHgBN5pgpOevVMy23aUUYX9Ilb9StI4dDRJI2jfXD
- PE5XQCGkRaywik686Fj72._YPsOTQtOsv8l2arh1X5jOWPYRuH99VwPdtXodQMq_kk80fHn1i8.Z
- fcF.eXuoOdeD49wNT.OhI5i6wZ52q9DaoAtaK2qgluleNBcHsz.BPTnPhZjuHXtyWrU7YoOS2kK7
- 1ClQ4iQNNP2gEOdovsOym4vH96aLsXXHfpWfgZWSc.KjMb00vT.xvnDCeB6ncaQbk2eJHgQwJqVY
- lDjiVHgd_iA1B4OhOTJu8YZFAkkicMKSkLvJUfSPCj.KFjsS4YIs2gODpXSMJrxduqnek86nnw3h
- v0WKcWPl5dGHeazK6NofxQkjMSu9gXpWiY8FRt7bmoTlqY6zHCSyGGzs7cdR2GRvkqMQggGiBwcG
- rEhUpAzbDo287MXBwG9vVLfFeVRAM6XKjkwDUbL0f9NLyks8B71BiF366OKyhguhVfeWFzPCfV1D
- 1I6ISkDtf7tSc4IpRVQHC1pmQNuS9dFJMk9v0moddp35AecVKgcjHiT6rCrUGw8NqBv55SYsXhOR
- vs_4xxIQNCN9vmR_w9Hgkhq6yDlpV9O_6rFmZg7GBQ0jTrPKFCI2HyA5yJeaaleuAkAJec4_XPTu
- fBu1D.rMNewQQ8kn7CBZyc.wnaCNBjE7OjbY2u255uqsJqwg0u.vOVxWWfjO0UH6yM6r4PKjDAA7
- AfNTR8ZeBofsYuoY5nf8aS3YkbEKRT52I08adwzYNvgYnwqBUvfvzsUaEyL9WeCgD9EJgWSCAuCc
- g5vGgkePv3yCCAAV0bUuEyG4Ec6zH5sV9f_TY9hJoJlNH0OdZ5C9Trvvkf4RFM9EknJtr_ZhuGww
- lm2clJFDMioDM8CIWbfv.EFoZs5C3tIKhvB749LWIWqCl1r3IGZqAbMAL1QXyRHPou8iRT2bJIUn
- 17EqDQJHEAaKFXmeGO5vRUjvprLREavnzfw8VET0Nxqc6U_TDgaZ_5ZrVUxTk4_k7eu1ALh7UwSH
- P47WTLn6dSqaT8mJv67xewLMkstsvD1tLfTSaKKuJJG7veeXgpVwFIgfK_DX.o_eYA5jtU35OdR6
- qMpXGVEL.dHlmb5pCidBuL2yAtA2dpZl1Z27TmUfPbqeSkaJoYghyLrhPY8lmlkJOI3WxjKTQJZL
- PTr4Kpkb22gI3ZMG5kDIylbrjkcsXmgSrBPiDiRhzjEbMeeUPjAna.mLReO9GUTvo.NJbxh5rMMD
- 8wGT9wXdJRxKKGy5o89LqHttmDnPNk0M_4zHzmSbYRxKRGxVNlDjjFceSm8TtqOoKzRxieVKW8X7
- jHvmU3CbXO0CR5uQ9tuPqJNLIoNJQLkyYa8COe7EPK79jxcOScsEoaVYhgGv1cio1HN8RBOGp2aY
- 6AuZrT3Jc8piHv1UhMokg8ly8MdzVeOuOSKwG2SfhtK.6.4GoxFwoVyrBwl_dxup2XzW4mh6VejP
- ZI8ndST0gVUDtRrXIOSdl4XaE4_KLz6dhFRyHBw8bKnJ3TrBk_68kE0dD82jZ9SBA7F1kJPyACpU
- -
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Fri, 16 Sep 2022 00:56:38 +0000
-Received: by hermes--production-ne1-544744cc75-mbjj6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 906197aefc0e524116a4d5e4b45ad582;
-          Fri, 16 Sep 2022 00:56:33 +0000 (UTC)
-Message-ID: <7234a3e5-8b3c-3ac4-2e06-c6cffa46c10e@schaufler-ca.com>
-Date:   Thu, 15 Sep 2022 17:56:32 -0700
+        Thu, 15 Sep 2022 21:17:37 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01hn2205.outbound.protection.outlook.com [52.100.0.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C90A7757A;
+        Thu, 15 Sep 2022 18:17:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S4zNsTA1GtSbc/0kAsfDc0D42MqMUxzKoKQxE+jbb4HFKt0l1Xa6OySfaHegb1mGJyat185df5zerzg05KYlbuS2xLe6QJgBNvAwOYT/6SHtRQFFfT1zPeQXkZneWVhz4QNh2WbINDhHSPVdJgvK2ds3KTAFlXPI7klef5eDdM6z/mOEA1nafD8f/uC1JJJ/v5BUiQooqnBHPszEPRvMSAip1wDuVdIttjpHdbKFE6oPl+c6nrOogdqTNY0VCsFAEOOI4Bbv9ygbY49M8QHFT8LjAhQ+UuAwgyv4BbRtH/RBqVjdPyPoTEry00wHj+00dgoJ52sn9V6btFE6mlebYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Bs10Md+15nMnyayKLyd22Uv+/ZH79IcFcpzuzGLq1Fg=;
+ b=ABF4zgQLqPSYDA3/AOmTmGs5pbxsOCLrHKldFkHAyKG7Eb9cDwIhH6cPVvalVW27VQ/GOR0WWe75cAGbXNNME98XP8O1A5Y/2r7W9M5AmB0RgHQ1ggFSuMtcY34fo/iwYY+WMWaEqd3mdi7tgLGpqQh8JIlWBPodeEUHR7PEWk9paY1QEKp+A44rnl+beLFnRAgLbbLrnMmJQpwjd3EjMynNffn9W0DEfSQMjtHyqTiKwm/qg8hSF8FW+RVQY+vfGA/YRFiPyNddJmy/v4iYAbcqYEXC0ex5AXseQpzknyjuRygZR/bXjPdhoGBKwf/ihIA2b1PAeTshDafVBOyXZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 45.14.71.5) smtp.rcpttodomain=mail.uni-mainz.de smtp.mailfrom=t4.cims.jp;
+ dmarc=bestguesspass action=none header.from=t4.cims.jp; dkim=none (message
+ not signed); arc=none (0)
+Received: from SG2PR02CA0089.apcprd02.prod.outlook.com (2603:1096:4:90::29) by
+ KL1PR0401MB4130.apcprd04.prod.outlook.com (2603:1096:820:21::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.14; Fri, 16 Sep
+ 2022 01:17:34 +0000
+Received: from SG2APC01FT0020.eop-APC01.prod.protection.outlook.com
+ (2603:1096:4:90:cafe::13) by SG2PR02CA0089.outlook.office365.com
+ (2603:1096:4:90::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.16 via Frontend
+ Transport; Fri, 16 Sep 2022 01:17:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 45.14.71.5)
+ smtp.mailfrom=t4.cims.jp; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=t4.cims.jp;
+Received-SPF: Pass (protection.outlook.com: domain of t4.cims.jp designates
+ 45.14.71.5 as permitted sender) receiver=protection.outlook.com;
+ client-ip=45.14.71.5; helo=User; pr=M
+Received: from mail.prasarana.com.my (58.26.8.159) by
+ SG2APC01FT0020.mail.protection.outlook.com (10.13.36.117) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5632.12 via Frontend Transport; Fri, 16 Sep 2022 01:17:32 +0000
+Received: from MRL-EXH-02.prasarana.com.my (10.128.66.101) by
+ MRL-EXH-02.prasarana.com.my (10.128.66.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 16 Sep 2022 09:17:02 +0800
+Received: from User (45.14.71.5) by MRL-EXH-02.prasarana.com.my
+ (10.128.66.101) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Fri, 16 Sep 2022 09:16:27 +0800
+Reply-To: <rhashimi202222@kakao.com>
+From:   Consultant Swift Capital Loans Ltd <info@t4.cims.jp>
+Subject: I hope you are doing well, and business is great!
+Date:   Fri, 16 Sep 2022 09:17:13 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v14 00/26] ima: Namespace IMA with audit support in IMA-ns
-Content-Language: en-US
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com, brauner@kernel.org,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, casey@schaufler-ca.com
-References: <20220915193221.1728029-1-stefanb@linux.ibm.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220915193221.1728029-1-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20612 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <b6ddaece-1ca6-43f5-8952-0fc7d50aeeb1@MRL-EXH-02.prasarana.com.my>
+To:     Undisclosed recipients:;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-SkipListedInternetSender: ip=[45.14.71.5];domain=User
+X-MS-Exchange-ExternalOriginalInternetSender: ip=[45.14.71.5];domain=User
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2APC01FT0020:EE_|KL1PR0401MB4130:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5ad405e9-5ae2-43d1-aa10-08da97813b2d
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-MS-Exchange-SenderADCheck: 0
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?windows-1251?Q?FHqI8+s7pKKRlS69NfkDlp1BxodDyoLQZMN7ITGboB71dh486cANKC47?=
+ =?windows-1251?Q?1kYhoZSVY9O6IgjlubSS0jLTtf3V9SK6sqkanngfUQ/Zz4DSZY1HOClW?=
+ =?windows-1251?Q?ntReVrwe8DBG1jzuoM8kimh9zadoh5ZbTRkPc46r11pB8NN8DEaDbZyq?=
+ =?windows-1251?Q?c94xsQGITRm4Ub4NhZQzwlUCZwbw0Z5cgoLuKXoSIS+bY6LQNTlzuTv8?=
+ =?windows-1251?Q?Zilwj1VupMrGVJ5MHKDIGpmA+f2jUvCZlGzLDwVJKbsJtTukkRAgan5P?=
+ =?windows-1251?Q?qtsh+tRTtnJJg5mkNhv1sZO2IOt3Sn2mEXLvcC8r+qFhF0sHnbntOP0m?=
+ =?windows-1251?Q?Pqy9sPZ5M1ukYPP3QkDAbYa40wB+prhusbZE0aiToCrXJPQ4B90OUmU1?=
+ =?windows-1251?Q?Z+yrIMtvD38sw5oUqYfTdhttdrhmTLKC7ENigvomCFB6l6gUX9LTdQs4?=
+ =?windows-1251?Q?HmzwAPWCQEMxBqpQDXE1ZzAyESwCn12NftDmcco8RmV1YblR22RF7yym?=
+ =?windows-1251?Q?5NuKJa/PUPUuaOx4nAQNHHgwiC1SqG2fAecociulPUJ9Z58Q4xa8R6D5?=
+ =?windows-1251?Q?3AnB1YHozvT9pD4bprgQzMRh0cyDU+DJPonD1vXYk/GAa51nysO4ODKE?=
+ =?windows-1251?Q?qcjq9iUTE8DmC4nhN5ok6tYVgiqDEU885P9bnGV+/yDRwZiWfyZYyI96?=
+ =?windows-1251?Q?a3k/I0RBGpA2s7FvvjakB5qS4KymcmE6uKjWnnCSDoca9G9debA/Z2Qu?=
+ =?windows-1251?Q?di8gzhRgRIzN0pWeN8c/rAjH6xaeu3mj0cd11lskX/qBwf7JOrGiZ331?=
+ =?windows-1251?Q?99utJAGwP6vqDh141fsr2q+c7JYDudamBAi0WjqHSjSg81AOP0LFM/TY?=
+ =?windows-1251?Q?zGaQhSDiTQWT9bwFAQxGY7E5ZKgrzl8+Pp9gPbbt/Mkkq8vSTvbPAv8S?=
+ =?windows-1251?Q?p6QF0P+L+MQE9YgqjIm/DdHCmbN9J/RFxnZZPU1cJV6LoWi2Aa5aR6yV?=
+ =?windows-1251?Q?gnqsrOACuT2B5QHPGCvYyIJQYcYDZbvJRXYBgNwNPiIWVi48nU2GWvP+?=
+ =?windows-1251?Q?A8Fk/0LV6OtLSLNmSpnazPhzco9KgJCSxOI/XiJDNWM1WJ7U+G4cWoju?=
+ =?windows-1251?Q?UFmjSzd/XaXEoVZLK79nlBXMYOWxAAFQ3ZpS2F1ahwcOJQE09xZh1Jv3?=
+ =?windows-1251?Q?PTF+b5aMPsmmgmmbpucQMey3UR+15oFAUI7bEgbEj7D6iqk55VP48EAs?=
+ =?windows-1251?Q?PfC3X2qOo4OIy7J7wsqwrHVXVpuLlsDuD10exlN5lcteVtv8sgGKLbpX?=
+ =?windows-1251?Q?qZP8PZXW+QlbgjYwDt1b76z8HM8PJ8ficinjDlGO/NRizKRX?=
+X-Forefront-Antispam-Report: CIP:58.26.8.159;CTRY:JP;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:User;PTR:45.14.71.5.static.xtom.com;CAT:OSPM;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199015)(46966006)(40470700004)(66899012)(81166007)(31686004)(4744005)(2906002)(5660300002)(40460700003)(82740400003)(7406005)(7416002)(956004)(31696002)(26005)(9686003)(40480700001)(6666004)(41300700001)(498600001)(86362001)(8936002)(32850700003)(156005)(36906005)(316002)(336012)(35950700001)(82310400005)(109986005)(8676002)(70206006)(70586007)(47076005)(2700400008);DIR:OUT;SFP:1501;
+X-OriginatorOrg: myprasarana.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 01:17:32.5145
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ad405e9-5ae2-43d1-aa10-08da97813b2d
+X-MS-Exchange-CrossTenant-Id: 3cbb2ff2-27fb-4993-aecf-bf16995e64c0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3cbb2ff2-27fb-4993-aecf-bf16995e64c0;Ip=[58.26.8.159];Helo=[mail.prasarana.com.my]
+X-MS-Exchange-CrossTenant-AuthSource: SG2APC01FT0020.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0401MB4130
+X-Spam-Status: Yes, score=6.2 required=5.0 tests=AXB_XMAILER_MIMEOLE_OL_024C2,
+        AXB_X_FF_SEZ_S,BAYES_50,FORGED_MUA_OUTLOOK,FSL_CTYPE_WIN1251,
+        FSL_NEW_HELO_USER,HEADER_FROM_DIFFERENT_DOMAINS,NSL_RCVD_FROM_USER,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5049]
+        *  0.0 NSL_RCVD_FROM_USER Received from User
+        *  0.0 FSL_CTYPE_WIN1251 Content-Type only seen in 419 spam
+        *  3.2 AXB_X_FF_SEZ_S Forefront sez this is spam
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
+        *      mail domains are different
+        *  0.0 AXB_XMAILER_MIMEOLE_OL_024C2 Yet another X header trait
+        *  0.0 FSL_NEW_HELO_USER Spam's using Helo and User
+        *  1.9 FORGED_MUA_OUTLOOK Forged mail pretending to be from MS Outlook
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 9/15/2022 12:31 PM, Stefan Berger wrote:
-> The goal of this series of patches is to start with the namespacing of
-> IMA and support auditing within an IMA namespace (IMA-ns) as the first
-> step.
->
-> In this series the IMA namespace is piggybacking on the user namespace
-> and therefore an IMA namespace is created when a user namespace is
-> created, although this is done late when SecurityFS is mounted inside
-> a user namespace. The advantage of piggybacking on the user namespace
-> is that the user namespace can provide the keys infrastructure that IMA
-> appraisal support will need later on.
->
-> We chose the goal of supporting auditing within an IMA namespace since it
-> requires the least changes to IMA. Following this series, auditing within
-> an IMA namespace can be activated by a root running the following lines
-> that rely on a statically linked busybox to be installed on the host for
-> execution within the minimal container environment:
->
-> As root (since audit rules may now only be set by root):
+Hello,
 
-How about calling out the required capabilities? You don't need
-to be root, you need a specific set of capabilities. It would be
-very useful for the purposes of understanding the security value
-of the patch set to know this.
+I hope you are doing well, and business is great!
+However, if you need working capital to further grow and expand your business, we may be a perfect fit for you. I am Ms. Kaori Ichikawa Swift Capital Loans Ltd Consultant, Our loans are NOT based on your personal credit, and NO collateral is required.
 
+We are a Direct Lender who can approve your loan today, and fund as Early as Tomorrow.
+
+Once your reply I will send you the official website to complete your application
+
+Waiting for your reply.
+
+Regards
+Ms. Kaori Ichikawa
+Consultant Swift Capital Loans Ltd
