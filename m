@@ -2,107 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648545BB77A
-	for <lists+linux-integrity@lfdr.de>; Sat, 17 Sep 2022 11:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8815BBD7F
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Sep 2022 12:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiIQJQk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 17 Sep 2022 05:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S229602AbiIRK6V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 18 Sep 2022 06:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIQJQj (ORCPT
+        with ESMTP id S229596AbiIRK6U (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 17 Sep 2022 05:16:39 -0400
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3740645F64;
-        Sat, 17 Sep 2022 02:16:37 -0700 (PDT)
-Date:   Sat, 17 Sep 2022 09:16:20 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1663406192; x=1663665392;
-        bh=WtH1XiJMuAo2t7Ag08kalVAzbnlWzm46SLxhU7NTyU4=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=wrMZSanWm0KJNnm3ykOCdOL3myVpKchYhLarOh+NsiXJB3cNn0XiZL2PXDM6LtgBL
-         3apqAbQLnHqEh+eoVn63MLzOc906v+d+cUbfJ7xjwtZPIpLDp0VA5MAShrxzjReeR5
-         M7EvduAsjV/qy4vIacG6Y4U/isHOKKOzBg/bah+2GmOqPNKtrznVv1st9g2xOZEqkV
-         XUeyh6D0dktGbx7x+5AFx72NVxUZP4NlfAo2XDtrCaycemsJPpqV6rVhIEdjUd7wzp
-         0MAp+ypX4PO1Rlcbi6BYF02vair4YktlZi5QGPL6Pye/WVA25lTRB3xEw+Nwd0/b0a
-         sZMpKhkpZNHrw==
-To:     linux-kernel@vger.kernel.org
-From:   Orlando Chamberlain <redecorating@protonmail.com>
-Cc:     jarkko@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        gargaditya08@live.com, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        stable@vger.kernel.org, Samuel Jiang <chyishian.jiang@gmail.com>
-Subject: [PATCHv2 1/1] efi: Correct Macmini DMI match in uefi cert quirk
-Message-ID: <20220917091532.3607-1-redecorating@protonmail.com>
-Feedback-ID: 28131841:user:proton
+        Sun, 18 Sep 2022 06:58:20 -0400
+X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 18 Sep 2022 03:58:18 PDT
+Received: from smtp.sws.net.au (smtp.sws.net.au [IPv6:2a01:4f8:201:1e6::dada:cafe])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3721FCC3
+        for <linux-integrity@vger.kernel.org>; Sun, 18 Sep 2022 03:58:18 -0700 (PDT)
+Received: from xev.coker.com.au (localhost [127.0.0.1])
+        by smtp.sws.net.au (Postfix) with ESMTP id 91B45FF9F;
+        Sun, 18 Sep 2022 20:48:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=coker.com.au;
+        s=2008; t=1663498091;
+        bh=GLx1fexzUulcYPs/0+79P0rAlxlaevhRnP5bupunXOs=; l=1795;
+        h=From:To:Reply-To:Subject:Date:In-Reply-To:References:From;
+        b=QO1DCwmyNDyCSDwPN1i6Rd4zH64yFPfyPeQaR8dvSjH0Ia5IpZ+UyEJYyWsnHZkD5
+         FYi9/9+jeCDnNx6ATvWZnNgqbiMi0JQgoK4WAl5ChB78XVBf4ZiKCEIAtiuH5nmdr1
+         0mChqB8EeuHm+8UuVRlup4Ww0nHu5d+NBt83pEEw=
+Received: by xev.coker.com.au (Postfix, from userid 1001)
+        id BD4D81A85311; Sun, 18 Sep 2022 20:48:06 +1000 (AEST)
+From:   Russell Coker <russell@coker.com.au>
+To:     linux-integrity@vger.kernel.org, Ken Williams <ken@williamsclan.us>
+Reply-To: russell@coker.com.au
+Subject: Re: User questions
+Date:   Sun, 18 Sep 2022 20:48:06 +1000
+Message-ID: <4153672.NgBsaNRSFp@xev>
+In-Reply-To: <CADrftwOUDT5CuwHsrgEM1GTu_N3TAhZTpxFBERKa7zwUHkQscw@mail.gmail.com>
+References: <CADrftwOUDT5CuwHsrgEM1GTu_N3TAhZTpxFBERKa7zwUHkQscw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-It turns out Apple doesn't capitalise the "mini" in "Macmini" in DMI, which
-is inconsistent with other model line names.
+On Friday, 16 September 2022 15:36:52 AEST Ken Williams wrote:
+> If yes, then let me describe my environment;
+> I am running an older kernel, 4.14.238,
 
-Correct the capitalisation of Macmini in the quirk for skipping loading
-platform certs on T2 Macs.
+Things are changing all the time in IMA, getting an older kernel to work might 
+be a problem.  However I have seen some documentation about using it in 
+embedded systems in vehicles which is a use that tends to have long support 
+times, so some old versions will be supported.
 
-Currently users get:
+> learning curve in this area may not be out of line.  My plan is to
+> pre-sign the files prior to installation and I see that effort as
+> being outside of the scope of my inquiries here.  So now, does it look
+> like I am starting in the right direction?
 
-------------[ cut here ]------------
-[Firmware Bug]: Page fault caused by firmware at PA: 0xffffa30640054000
-WARNING: CPU: 1 PID: 8 at arch/x86/platform/efi/quirks.c:735 efi_crash_grac=
-efully_on_page_fault+0x55/0xe0
-Modules linked in:
-CPU: 1 PID: 8 Comm: kworker/u12:0 Not tainted 5.18.14-arch1-2-t2 #1 4535eb3=
-fc40fd08edab32a509fbf4c9bc52d111e
-Hardware name: Apple Inc. Macmini8,1/Mac-7BA5B2DFE22DDD8C, BIOS 1731.120.10=
-.0.0 (iBridge: 19.16.15071.0.0,0) 04/24/2022
-Workqueue: efi_rts_wq efi_call_rts
-...
----[ end trace 0000000000000000 ]---
-efi: Froze efi_rts_wq and disabled EFI Runtime Services
-integrity: Couldn't get size: 0x8000000000000015
-integrity: MODSIGN: Couldn't get UEFI db list
-efi: EFI Runtime Services are disabled!
-integrity: Couldn't get size: 0x8000000000000015
-integrity: Couldn't get UEFI dbx list
+For typical uses of Linux you would want pre-signed executables.  You want to 
+have the system running the programs to not have the signing key and provide 
+the signatures from a trusted system.
 
-Fixes: 155ca952c7ca ("efi: Do not import certificates from UEFI Secure Boot=
- for T2 Macs")
-Cc: stable@vger.kernel.org
-Cc: Aditya Garg <gargaditya08@live.com>
-Tested-by: Samuel Jiang <chyishian.jiang@gmail.com>
-Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
----
-v1->v2: Clarified in commit message that this is for a dmi match string
- security/integrity/platform_certs/load_uefi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've been thinking of having some sort of system that proxies the packages of 
+software and creates signatures for them.  The default signing includes the 
+Inode number of the file, that can be disabled or the system installing could 
+say "give me a signature for /bin/bash from package bash version 5.2~rc2-2 
+with Inode 27597791".
 
-diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integ=
-rity/platform_certs/load_uefi.c
-index 093894a640dc..b78753d27d8e 100644
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -31,7 +31,7 @@ static const struct dmi_system_id uefi_skip_cert[] =3D {
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
--=09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
-+=09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "Macmini8,1") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
- =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
---=20
-2.37.1
+The next issue is that the current kernel code doesn't allow signing unsigned 
+files unless you boot with "ima_appraise=fix evm=fix" on the kernel command-
+line.  I've been thinking of writing a kernel patch to give a compile time 
+option to remove that requirement.
 
+As for reasons to use IMA without TPM, one example is virtual machines.  The 
+host OS provides a known good kernel and initramfs and we want that kernel to 
+ensure that it's not running a corrupt user-space.
+
+-- 
+My Main Blog         http://etbe.coker.com.au/
+My Documents Blog    http://doc.coker.com.au/
 
