@@ -2,140 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B1C5BC0A9
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Sep 2022 01:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7815BC1A2
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Sep 2022 05:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiIRXrh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 18 Sep 2022 19:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S229568AbiISDHv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 18 Sep 2022 23:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiIRXrh (ORCPT
+        with ESMTP id S229566AbiISDHu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 18 Sep 2022 19:47:37 -0400
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A08413D25
-        for <linux-integrity@vger.kernel.org>; Sun, 18 Sep 2022 16:47:36 -0700 (PDT)
-Received: by mail-pg1-f172.google.com with SMTP id t65so25303241pgt.2
-        for <linux-integrity@vger.kernel.org>; Sun, 18 Sep 2022 16:47:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TFPwQDGpKxGHCU3i/WHsbI+n7I3u5oaPEEJ6wGMtfx4=;
-        b=bx04SoJzLrsqLJK6v2CuTfWWHi1YjurW14PV2PudY+8QF5/SSK0kEbRA/RFNnacDqW
-         Mx2iIljYXdmvdQwV/bMhyB9ukIcZnTiOFJl1fcUCvqYu66S3T1b5Ey0dJyg7h9fbW7dV
-         kOOQCRo7hre4mMpsCov4bVf0VuQbnO6cfJUgI8UsCnAB+gAdtcR6qz5VUO8wq85pwRAK
-         meEV46JmKIT0A/YkVea2F9RvzVUDbkFrrrs/Eixg01vqOq+igHMYLgVfwlTyIOpkZu8b
-         kKbmlDS1lqsgagFjJjvwGMfQLXgOtwszPgs60n7efv389ESe/w3SzAesuEovj2oIZh7x
-         BIIg==
-X-Gm-Message-State: ACrzQf09+8sNakUpBwLJoSzubFxYtn0X37Vdyvx6hv1x/fKnhpuNamSL
-        HDxUEXMuLtAe5HhAyLUiNNJAjcYadGc=
-X-Google-Smtp-Source: AMsMyM6oJs6cSs6FiWuGqXj7giPa90lI/656I/7X6k+IiX5L2c1z8Ys39nIYjlLve2FRCrJ6CeiqCA==
-X-Received: by 2002:a63:da03:0:b0:439:dcdd:67f4 with SMTP id c3-20020a63da03000000b00439dcdd67f4mr6662088pgh.27.1663544855093;
-        Sun, 18 Sep 2022 16:47:35 -0700 (PDT)
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com. [209.85.215.177])
-        by smtp.gmail.com with ESMTPSA id y20-20020a170902ed5400b00174f7d107c8sm18964152plb.293.2022.09.18.16.47.34
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 16:47:34 -0700 (PDT)
-Received: by mail-pg1-f177.google.com with SMTP id c24so25270980pgg.11
-        for <linux-integrity@vger.kernel.org>; Sun, 18 Sep 2022 16:47:34 -0700 (PDT)
-X-Received: by 2002:a63:5b4f:0:b0:426:9c52:a1f with SMTP id
- l15-20020a635b4f000000b004269c520a1fmr13527863pgm.511.1663544854286; Sun, 18
- Sep 2022 16:47:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <CADrftwOUDT5CuwHsrgEM1GTu_N3TAhZTpxFBERKa7zwUHkQscw@mail.gmail.com>
- <d70a3bf1bf8245ed54bd55eafd4fbb98fd08e316.camel@linux.ibm.com>
-In-Reply-To: <d70a3bf1bf8245ed54bd55eafd4fbb98fd08e316.camel@linux.ibm.com>
-From:   Ken Williams <ken@williamsclan.us>
-Date:   Sun, 18 Sep 2022 16:47:20 -0700
-X-Gmail-Original-Message-ID: <CADrftwOM6mWaQ+xNbExbgcHisAirBe1vQSRdCEtET7xqQ=_bjg@mail.gmail.com>
-Message-ID: <CADrftwOM6mWaQ+xNbExbgcHisAirBe1vQSRdCEtET7xqQ=_bjg@mail.gmail.com>
+        Sun, 18 Sep 2022 23:07:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFE51A80A
+        for <linux-integrity@vger.kernel.org>; Sun, 18 Sep 2022 20:07:49 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28J0m7lw015016;
+        Mon, 19 Sep 2022 03:07:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=8rITW6cHv2UshN9DFodVsyN7L9fKVFO47m9244sr3dM=;
+ b=k07lOZazYoZTUbfJ9nzHRDhAw9dgbTPS+aqbnYstnrj8zX4WN9gjpE1pFwvsehmYPoxl
+ BlmFKBjOSZZCKrq1t3mYNq9qWrX+ghSRLO16qBpz1nO6gAa0ziVplwsVUgjyDSC1nm+F
+ QnoCbmGpB5FL9oxA6ZJJ1J/mnwE0Twgxab9Ru60xip5IHBaSYYBPVx/cqT88nYue8l1U
+ NIwa89WtU3GY0m2DTnq3mnuNoCXm1VwUdf3iRefqRAUxJBc3Wbm/DeKVIm0HnchxlZ/8
+ 3npzF28dJ04/EbnKBwjOUqcWCNQrZcm4pf/POlDbazcITcBYlanFsgUzN/sLsbm9r5X3 UQ== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jpe6xt4xn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 03:07:45 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28J35KPw013667;
+        Mon, 19 Sep 2022 03:07:45 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02wdc.us.ibm.com with ESMTP id 3jn5v932jk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 03:07:44 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28J37hdY39387742
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Sep 2022 03:07:43 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 37B60BE05B;
+        Mon, 19 Sep 2022 03:26:05 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D76B6BE059;
+        Mon, 19 Sep 2022 03:26:04 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.183.187])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 19 Sep 2022 03:26:04 +0000 (GMT)
+Message-ID: <2320e083af2bbbc012551c80ed56652bfdbec0f5.camel@linux.ibm.com>
 Subject: Re: User questions
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     russell@coker.com.au, linux-integrity@vger.kernel.org,
+        Ken Williams <ken@williamsclan.us>
+Date:   Sun, 18 Sep 2022 23:07:43 -0400
+In-Reply-To: <4153672.NgBsaNRSFp@xev>
+References: <CADrftwOUDT5CuwHsrgEM1GTu_N3TAhZTpxFBERKa7zwUHkQscw@mail.gmail.com>
+         <4153672.NgBsaNRSFp@xev>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: _B97rawxEzdF_2EvyDN-DN1yAuPhlO9t
+X-Proofpoint-ORIG-GUID: _B97rawxEzdF_2EvyDN-DN1yAuPhlO9t
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_01,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 spamscore=0
+ malwarescore=0 clxscore=1011 mlxscore=0 phishscore=0 suspectscore=0
+ mlxlogscore=833 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2209190020
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi and others and thanks for responding.
+Hi Russell,
 
-My primary goal right now is to develop an understanding of IMA for
-the purpose of determining if and how it can be useful for my application.
-For that, I have outlined below a few implementation scenarios.
+> For typical uses of Linux you would want pre-signed executables.  You want to 
+> have the system running the programs to not have the signing key and provide 
+> the signatures from a trusted system.
+> 
+> I've been thinking of having some sort of system that proxies the packages of 
+> software and creates signatures for them.  The default signing includes the 
+> Inode number of the file, that can be disabled or the system installing could 
+> say "give me a signature for /bin/bash from package bash version 5.2~rc2-2 
+> with Inode 27597791".
 
-I have played around with IMA a bit so as to get some understanding of
-the process, configuration and capabilities.  This included creating a
-policy file
-for measurements as well as signing files and enabling appraisal.
-All of this was done on-target and obviously putting a private key on the target
-is not right but this was a familiarization exercise.  In any case, my current
-understanding is that options available to me, without a TPM device, are:
+EVM portable & immutable signatures do not include the inode.
 
-- Measure files which have no security.ima=<HASH> xattr
-  In this case I can detect if a previously measured file has changed.
-  This is a nice exercise for getting my feet wet but without a TPM,
-  it is hard to embrace this alone as being a security tool that can
-  work for me.
+> 
+> The next issue is that the current kernel code doesn't allow signing unsigned 
+> files unless you boot with "ima_appraise=fix evm=fix" on the kernel command-
+> line.  I've been thinking of writing a kernel patch to give a compile time 
+> option to remove that requirement.
 
-- Measure files which do have a security.ima=<HASH> xattr
-  This is a good step up but I cannot see how this enables the
-  detection of a 'bad' but properly labeled file without a link to
-  some kind of file validation server.  Again, I have no TPM.
+When EVM is initialized to only support portable & immutable signatures
+(no HMAC key), then the file metadata may be updated.  Refer to the
+last paragraph of the cover letter: 
+https://lore.kernel.org/linux-integrity/20210514152753.982958-1-roberto.sassu@huawei.com/
 
-- Attest to files which have been signed with a private key prior to
-installation
- With this, I understand that as long as I have control over the file
-installation
-  process, I have a level of protection equal to that of the signing algorithm.
-  If I am correct, I also understand that this applies only to immutable files,
-  typically executable binaries.  The process of signing the files would be
-  off-target and outside the scope of my questions and comments here.
+--  
+thanks,
 
-  Again, I do not have a TPM so I understand that an off-line attack
-is still possible
-  but it looks like this might be the best I can get out of IMA for
-the environment
-  I have.
+Mimi
 
-Russell, regarding your comment regarding inclusion of the i-node in
-the signing,
-I understood that to be included in signing for EVM, not for the
-attestation part of IMA.
-
-Thanks for any comments.
-
-Ken
-
-
-> Let's add some context to the above quote.  One of the differences
-> between IMA-appraisal and IMA-measurement is that IMA-appraisal
-> requires quite a bit of configuration (e.g. keys, signing files, and
-> policy).  This is in comparison to IMA-measurement, which requires just
-> a policy.
->
-> As long as the IMA-appraisal policy encompasses just those things that
-> can and should be signed, enforcing the IMA-appraisal policy is
-> straight forward:
-> - Create a local CA key and build it into the kernel.
-> - Create a public/private key pair signed by the local CA key
-> - Sign files.
-> - Load the public key on the IMA keyring.
-> - Load the IMA appraise policy.
->
-> Examples of the first 2 steps can be seen in the ima-evm-utils README.
-> Examples of the last two steps can be seen in dracut 98integrity
-> modules.  systemd can be configured to load an IMA custom policy.
->
-> --
-> thanks,
->
-> Mimi
->
