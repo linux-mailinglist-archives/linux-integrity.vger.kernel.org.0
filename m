@@ -2,66 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4366E5BDBB8
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Sep 2022 06:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8820D5BDBCE
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Sep 2022 06:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiITEhB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Sep 2022 00:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
+        id S229768AbiITEvC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Sep 2022 00:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiITEhB (ORCPT
+        with ESMTP id S229832AbiITEvA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Sep 2022 00:37:01 -0400
+        Tue, 20 Sep 2022 00:51:00 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A7A4B0DB;
-        Mon, 19 Sep 2022 21:37:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A15852DC7;
+        Mon, 19 Sep 2022 21:50:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E757DB82460;
-        Tue, 20 Sep 2022 04:36:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B77C433D7;
-        Tue, 20 Sep 2022 04:36:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 001E5B818B6;
+        Tue, 20 Sep 2022 04:50:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7E9FC433D6;
+        Tue, 20 Sep 2022 04:50:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663648617;
-        bh=SprS5l+6cj+tby4G6xsjKmuaVZo5eaK1B+EgbbCG/Q8=;
+        s=k20201202; t=1663649456;
+        bh=fzjnfFvXaoLalr68n3B2MZyIURza6L8/C5Yc3Wy/osI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HufNmGLXLG5l4zZgX54JuT3OO5DVsUmGo0twf1HUi8dKTqmO3nTNwxOTdIhF/n8zP
-         NbhxnQR+Scdt6Qmi5J8rzy4kjDuMca1GtkefC86o8Na+wZ46rDRt5el+TjZmgjxsiW
-         6qI69y/7ywzI4+Evqfou50T/Pg/FtjdleMYeREcN7eFZI4/juLBghUFeysr7ocqQwf
-         S+28eLhPWfduK7iWYmThn7MeIFdEjcHmvOu8MQ0MDvIjSefcqxrl80tUQtMthcxmHR
-         +080LONoXmj9maxTXK1PU28/JxHgKgStdfX/arH9rdgOIGHQdum3G2VTvhXvv908HR
-         Zl96BrELNiMlg==
-Date:   Tue, 20 Sep 2022 07:36:49 +0300
+        b=oX7GvtQRx5hPjag0bbNf26qO81fekuU0755+qCCtZxI00VfTgFLg/j7/suGU+f0dL
+         BhH2cIEwfRo3I2lA2GS//8IkXQXMo1LQ7xSBsmPoKDZXPbXJSIYOuYWbTQzpQsG7l8
+         RE4lRC9d3vNLddHPdFIOMPRKIskmZtsbkbihaSp6qwrY3EyZE9iuKOhesLAhM3IBUr
+         mxRe01nWD/AjhC83Jd1VrnevgW/wW1qnBy5WDp+FHTths2Y2OnwTfI6QHNrQaCpW09
+         SdJYvV3SGeS2odprJfSpI8qFRmXVVezO+mnShkDhE9k4X0zpnnZbEiKY/4asR0F4gN
+         z5CEoJGxa7p8g==
+Date:   Tue, 20 Sep 2022 07:50:51 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: TPM: hibernate with IMA PCR 10
-Message-ID: <YylDYU+KTX/KJpqU@kernel.org>
-References: <20220504232102.469959-1-evgreen@chromium.org>
- <20220504161439.6.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
- <deafaf6f-8e79-b193-68bf-3ab01bddd5c2@linux.ibm.com>
- <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
- <Yw7L+X2cHf9qprxl@kernel.org>
- <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
- <96360ec16b21d8b37461a5de083ff794f3604300.camel@linux.ibm.com>
- <Yxl8tbJERqrmsgpU@kernel.org>
- <96cfd1f3f084f6d145bd22e0989dc046fe15b66a.camel@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org,
+        gwendal@chromium.org, Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        apronin@chromium.org, dlunev@google.com, rjw@rjwysocki.net,
+        linux-pm@vger.kernel.org, corbet@lwn.net, jejb@linux.ibm.com,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v2 02/10] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+Message-ID: <YylGq7eUvaoSyA1u@kernel.org>
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <4308c2d0-94ae-8a65-e0c7-69270e31d447@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <96cfd1f3f084f6d145bd22e0989dc046fe15b66a.camel@linux.ibm.com>
+In-Reply-To: <4308c2d0-94ae-8a65-e0c7-69270e31d447@linux.ibm.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,71 +63,146 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Sep 10, 2022 at 10:40:05PM -0400, Mimi Zohar wrote:
-> On Thu, 2022-09-08 at 08:25 +0300, Jarkko Sakkinen wrote:
-> > On Wed, Sep 07, 2022 at 07:57:27PM -0400, Mimi Zohar wrote:
-> > > On Wed, 2022-09-07 at 13:47 -0700, Evan Green wrote:
-> > > > On Tue, Aug 30, 2022 at 7:48 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > >
-> > > > > On Mon, Aug 29, 2022 at 02:51:50PM -0700, Matthew Garrett wrote:
-> > > > > > On Mon, Aug 29, 2022 at 2:45 PM Ken Goldman <kgold@linux.ibm.com> wrote:
-> > > > > > >
-> > > > > > > On 5/4/2022 7:20 PM, Evan Green wrote:
-> > > > > > > > Enabling the kernel to be able to do encryption and integrity checks on
-> > > > > > > > the hibernate image prevents a malicious userspace from escalating to
-> > > > > > > > kernel execution via hibernation resume.  [snip]
-> > > > > > >
-> > > > > > > I have a related question.
-> > > > > > >
-> > > > > > > When a TPM powers up from hibernation, PCR 10 is reset.  When a
-> > > > > > > hibernate image is restored:
-> > > > > > >
-> > > > > > > 1. Is there a design for how PCR 10 is restored?
-> > > > > >
-> > > > > > I don't see anything that does that at present.
-> > > > > >
-> > > > > > > 2. How are /sys/kernel/security/ima/[pseudofiles] saved and
-> > > > > > > restored?
-> > > > > >
-> > > > > > They're part of the running kernel state, so should re-appear without
-> > > > > > any special casing. However, in the absence of anything repopulating
-> > > > > > PCR 10, they'll no longer match the in-TPM value.
-> > > > >
-> > > > > This feature could still be supported, if IMA is disabled
-> > > > > in the kernel configuration, which I see a non-issue as
-> > > > > long as config flag checks are there.
-> > > > 
-> > > > Right, from what I understand about IMA, the TPM's PCR getting out of
-> > > > sync with the in-kernel measurement list across a hibernate (because
-> > > > TPM is reset) or kexec() (because in-memory list gets reset) is
-> > > > already a problem. This series doesn't really address that, in that it
-> > > > doesn't really make that situation better or worse.
-> > > 
-> > > For kexec, the PCRs are not reset, so the IMA measurment list needs to
-> > > be carried across kexec and restored.  This is now being done on most
-> > > architectures.  Afterwards, the IMA measurement list does match the
-> > > PCRs.
-> > > 
-> > > Hibernation introduces a different situation, where the the PCRs are
-> > > reset, but the measurement list is restored, resulting in their not
-> > > matching.
-> > 
-> > As I said earlier the feature still can be supported if
-> > kernel does not use IMA but obviously needs to be flagged.
+On Tue, Sep 13, 2022 at 08:26:09AM -0400, Stefan Berger wrote:
 > 
-> Jumping to the conclusion that "hibernate" is acceptable for non-IMA
-> enabled kernels misses the security implications of mixing (kexec) non-
-> IMA and IMA enabled kernels. 
-> I would prefer some sort of hibernate marker, the equivalent of a
-> "boot_aggregate" record.
+> 
+> On 8/23/22 18:25, Evan Green wrote:
+> > From: Matthew Garrett <matthewgarrett@google.com>
+> > 
+> > Under certain circumstances it might be desirable to enable the creation
+> > of TPM-backed secrets that are only accessible to the kernel. In an
+> > ideal world this could be achieved by using TPM localities, but these
+> > don't appear to be available on consumer systems. An alternative is to
+> > simply block userland from modifying one of the resettable PCRs, leaving
+> > it available to the kernel. If the kernel ensures that no userland can
+> > access the TPM while it is carrying out work, it can reset PCR 23,
+> > extend it to an arbitrary value, create or load a secret, and then reset
+> > the PCR again. Even if userland somehow obtains the sealed material, it
+> > will be unable to unseal it since PCR 23 will never be in the
+> > appropriate state.
+> > 
+> > From: Matthew Garrett <mjg59@google.com>
+> > Signed-off-by: Matthew Garrett <mjg59@google.com>
+> > 
+> > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > ---
+> > Matthew's original version of this patch is at:
+> > https://patchwork.kernel.org/patch/12096491/
+> > 
+> > Changes in v2:
+> >   - Fixed sparse warnings
+> > 
+> >   drivers/char/tpm/Kconfig          | 10 +++++++++
+> >   drivers/char/tpm/tpm-dev-common.c |  8 +++++++
+> >   drivers/char/tpm/tpm.h            | 21 +++++++++++++++++++
+> >   drivers/char/tpm/tpm1-cmd.c       | 35 +++++++++++++++++++++++++++++++
+> >   drivers/char/tpm/tpm2-cmd.c       | 22 +++++++++++++++++++
+> >   drivers/char/tpm/tpm2-space.c     |  2 +-
+> >   6 files changed, 97 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> > index 927088b2c3d3f2..4483b61a428b11 100644
+> > --- a/drivers/char/tpm/Kconfig
+> > +++ b/drivers/char/tpm/Kconfig
+> > @@ -211,4 +211,14 @@ config TCG_FTPM_TEE
+> >   	  This driver proxies for firmware TPM running in TEE.
+> >   source "drivers/char/tpm/st33zp24/Kconfig"
+> > +
+> > +config TCG_TPM_RESTRICT_PCR
+> > +	bool "Restrict userland access to PCR 23"
+> > +	depends on TCG_TPM
+> > +	help
+> > +	  If set, block userland from extending or resetting PCR 23. This
+> > +	  allows it to be restricted to in-kernel use, preventing userland
+> > +	  from being able to make use of data sealed to the TPM by the kernel.
+> > +	  This is required for secure hibernation support, but should be left
+> > +	  disabled if any userland may require access to PCR23.
+> >   endif # TCG_TPM
+> > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+> > index dc4c0a0a512903..7a4e618c7d1942 100644
+> > --- a/drivers/char/tpm/tpm-dev-common.c
+> > +++ b/drivers/char/tpm/tpm-dev-common.c
+> > @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+> >   	priv->response_read = false;
+> >   	*off = 0;
+> > +	if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
+> > +		ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > +	else
+> > +		ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > +
+> > +	if (ret)
+> > +		goto out;
+> > +
+> >   	/*
+> >   	 * If in nonblocking mode schedule an async job to send
+> >   	 * the command return the size.
+> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > index a80b341d38eb8c..077c3ca0a127ba 100644
+> > --- a/drivers/char/tpm/tpm.h
+> > +++ b/drivers/char/tpm/tpm.h
+> > @@ -229,6 +229,8 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
+> >   unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+> >   int tpm2_probe(struct tpm_chip *chip);
+> >   int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
+> > +int tpm_find_and_validate_cc(struct tpm_chip *chip, struct tpm_space *space,
+> > +			     const void *buf, size_t bufsiz);
+> >   int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
+> >   int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
+> >   void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
+> > @@ -244,4 +246,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
+> >   void tpm_bios_log_teardown(struct tpm_chip *chip);
+> >   int tpm_dev_common_init(void);
+> >   void tpm_dev_common_exit(void);
+> > +
+> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > +#define TPM_RESTRICTED_PCR 23
+> > +
+> > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > +#else
+> > +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > +				      size_t size)
+> > +{
+> > +	return 0;
+> > +}
+> > +
+> > +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > +				      size_t size)
+> > +{
+> > +	return 0;
+> > +}
+> > +#endif
+> >   #endif
+> > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> > index 8ec743dec26544..318e75ae42fb85 100644
+> > --- a/drivers/char/tpm/tpm1-cmd.c
+> > +++ b/drivers/char/tpm/tpm1-cmd.c
+> > @@ -845,3 +845,38 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
+> >   	return 0;
+> >   }
+> > +
+> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
+> > +{
+> > +	struct tpm_header *header = (struct tpm_header *)buffer;
+> > +	char len, offset;
+> > +	__be32 *pcr;
+> > +	int pos;
+> > +
+> > +	switch (be32_to_cpu(header->ordinal)) {
+> > +	case TPM_ORD_PCR_EXTEND:
+> > +		if (size < (TPM_HEADER_SIZE + sizeof(u32)))
+> > +			return -EINVAL;
+> > +		pcr = (__be32 *)&buffer[TPM_HEADER_SIZE];
+> > +		if (be32_to_cpu(*pcr) == TPM_RESTRICTED_PCR)
+> > +			return -EPERM;
+> 
+> FYI: TPM 1.2 has transport sessions where the command is tunneled in an
+> encrypted channel and this check could be circumvented...
 
-Not sure if this matters. If you run a kernel, which is not aware
-of IMA, it's your choice. I don't undestand why here is so important
-to protect user from doing illogical decisions.
+BTW, Why do we want to support TPM 1.2 at all.
 
-If you want non-IMA kernels to support IMA, CONFIG_IMA should not
-probably even exist because you are essentially saying that any
-kernel play well with IMA.
+I would not support it for new features. This could be just TPM2 only
+feeature.
 
 BR, Jarkko
-
