@@ -2,22 +2,22 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343DB5BFE8F
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Sep 2022 15:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4273F5BFE94
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Sep 2022 15:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiIUNBy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 21 Sep 2022 09:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
+        id S229929AbiIUNB5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 21 Sep 2022 09:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiIUNBw (ORCPT
+        with ESMTP id S229908AbiIUNBx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:01:52 -0400
+        Wed, 21 Sep 2022 09:01:53 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26368E446;
-        Wed, 21 Sep 2022 06:01:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0655E8E98A;
+        Wed, 21 Sep 2022 06:01:51 -0700 (PDT)
 Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXdjx6CZhzlW43;
-        Wed, 21 Sep 2022 20:57:41 +0800 (CST)
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXdlS37TqzpV2q;
+        Wed, 21 Sep 2022 20:59:00 +0800 (CST)
 Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
  (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
@@ -27,9 +27,9 @@ To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
         <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
 CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>
-Subject: [PATCH v5 1/2] ima: Simplify ima_lsm_copy_rule
-Date:   Wed, 21 Sep 2022 20:58:03 +0800
-Message-ID: <20220921125804.59490-2-guozihua@huawei.com>
+Subject: [PATCH v5 2/2] ima: Handle -ESTALE returned by ima_filter_rule_match()
+Date:   Wed, 21 Sep 2022 20:58:04 +0800
+Message-ID: <20220921125804.59490-3-guozihua@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220921125804.59490-1-guozihua@huawei.com>
 References: <20220921125804.59490-1-guozihua@huawei.com>
@@ -47,57 +47,105 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Currently ima_lsm_copy_rule() set the arg_p field of the source rule to
-NULL, so that the source rule could be freed afterward. It does not make
-sense for this behavior to be inside a "copy" function. So move it
-outside and let the caller handle this field.
+IMA relies on the blocking LSM policy notifier callback to update the
+LSM based IMA policy rules.
 
-ima_lsm_copy_rule() now produce a shallow copy of the original entry
-including args_p field. Meaning only the lsm.rule and the rule itself
-should be freed for the original rule. Thus, instead of calling
-ima_lsm_free_rule() which frees lsm.rule as well as args_p field, free
-the lsm.rule directly.
+When SELinux update its policies, IMA would be notified and starts
+updating all its lsm rules one-by-one. During this time, -ESTALE would
+be returned by ima_filter_rule_match() if it is called with a LSM rule
+that has not yet been updated. In ima_match_rules(), -ESTALE is not
+handled, and the LSM rule is considered a match, causing extra files
+to be measured by IMA.
 
+Fix it by re-initializing a temporary rule if -ESTALE is returned by
+ima_filter_rule_match(). The origin rule in the rule list would be
+updated by the LSM policy notifier callback.
+
+Fixes: b16942455193 ("ima: use the lsm policy update notifier")
 Signed-off-by: GUO Zihua <guozihua@huawei.com>
 ---
- security/integrity/ima/ima_policy.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ security/integrity/ima/ima_policy.c | 41 ++++++++++++++++++++++-------
+ 1 file changed, 32 insertions(+), 9 deletions(-)
 
 diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index a8802b8da946..8040215c0252 100644
+index 8040215c0252..2edff7f58c25 100644
 --- a/security/integrity/ima/ima_policy.c
 +++ b/security/integrity/ima/ima_policy.c
-@@ -398,12 +398,6 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 
- 		nentry->lsm[i].type = entry->lsm[i].type;
- 		nentry->lsm[i].args_p = entry->lsm[i].args_p;
--		/*
--		 * Remove the reference from entry so that the associated
--		 * memory will not be freed during a later call to
--		 * ima_lsm_free_rule(entry).
--		 */
--		entry->lsm[i].args_p = NULL;
- 
- 		ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
- 				     nentry->lsm[i].args_p,
-@@ -417,6 +411,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 
- static int ima_lsm_update_rule(struct ima_rule_entry *entry)
+@@ -545,6 +545,9 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
+ 			    const char *func_data)
  {
-+	int i;
- 	struct ima_rule_entry *nentry;
+ 	int i;
++	bool result = false;
++	struct ima_rule_entry *lsm_rule = rule;
++	bool rule_reinitialized = false;
  
- 	nentry = ima_lsm_copy_rule(entry);
-@@ -431,7 +426,8 @@ static int ima_lsm_update_rule(struct ima_rule_entry *entry)
- 	 * references and the entry itself. All other memory references will now
- 	 * be owned by nentry.
- 	 */
--	ima_lsm_free_rule(entry);
-+	for (i = 0; i < MAX_LSM_RULES; i++)
-+		ima_filter_rule_free(entry->lsm[i].rule);
- 	kfree(entry);
+ 	if ((rule->flags & IMA_FUNC) &&
+ 	    (rule->func != func && func != POST_SETATTR))
+@@ -606,35 +609,55 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
+ 		int rc = 0;
+ 		u32 osid;
  
- 	return 0;
+-		if (!rule->lsm[i].rule) {
+-			if (!rule->lsm[i].args_p)
++		if (!lsm_rule->lsm[i].rule) {
++			if (!lsm_rule->lsm[i].args_p)
+ 				continue;
+ 			else
+ 				return false;
+ 		}
++
++retry:
+ 		switch (i) {
+ 		case LSM_OBJ_USER:
+ 		case LSM_OBJ_ROLE:
+ 		case LSM_OBJ_TYPE:
+ 			security_inode_getsecid(inode, &osid);
+-			rc = ima_filter_rule_match(osid, rule->lsm[i].type,
++			rc = ima_filter_rule_match(osid, lsm_rule->lsm[i].type,
+ 						   Audit_equal,
+-						   rule->lsm[i].rule);
++						   lsm_rule->lsm[i].rule);
+ 			break;
+ 		case LSM_SUBJ_USER:
+ 		case LSM_SUBJ_ROLE:
+ 		case LSM_SUBJ_TYPE:
+-			rc = ima_filter_rule_match(secid, rule->lsm[i].type,
++			rc = ima_filter_rule_match(secid, lsm_rule->lsm[i].type,
+ 						   Audit_equal,
+-						   rule->lsm[i].rule);
++						   lsm_rule->lsm[i].rule);
+ 			break;
+ 		default:
+ 			break;
+ 		}
+-		if (!rc)
+-			return false;
++
++		if (rc == -ESTALE && !rule_reinitialized) {
++			lsm_rule = ima_lsm_copy_rule(rule);
++			if (lsm_rule) {
++				rule_reinitialized = true;
++				goto retry;
++			}
++		}
++		if (!rc) {
++			result = false;
++			goto out;
++		}
+ 	}
+-	return true;
++	result = true;
++
++out:
++	if (rule_reinitialized) {
++		for (i = 0; i < MAX_LSM_RULES; i++)
++			ima_filter_rule_free(lsm_rule->lsm[i].rule);
++		kfree(lsm_rule);
++	}
++	return result;
+ }
+ 
+ /*
 -- 
 2.17.1
 
