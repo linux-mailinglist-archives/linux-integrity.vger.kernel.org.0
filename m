@@ -2,106 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F365BF107
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Sep 2022 01:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7415BF791
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Sep 2022 09:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbiITXY1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Sep 2022 19:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S229437AbiIUHY0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 21 Sep 2022 03:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbiITXY0 (ORCPT
+        with ESMTP id S229804AbiIUHY0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Sep 2022 19:24:26 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B35753B6
-        for <linux-integrity@vger.kernel.org>; Tue, 20 Sep 2022 16:24:24 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id bh13so4232750pgb.4
-        for <linux-integrity@vger.kernel.org>; Tue, 20 Sep 2022 16:24:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=YBxKYtku/8oBqXa6wknfhjy5g8vzVr4YX5LTwcm1bbI=;
-        b=gD+f9UOZYo3ekJbZUpFYgJ/HfGJ3fd5gvcLeDrzeVaBYB8VWTCKUuiMS0S396sBJ6X
-         KpDzMKtkwKRdJNS6Fbjyx6EOV6BmQStq678NppE46oVHcCnQ2pGndSnsbyZDK+Ejy+Qj
-         EtfxzfsAymKrFf4r4Wv/XpQ48uxJNUbG/MkkM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=YBxKYtku/8oBqXa6wknfhjy5g8vzVr4YX5LTwcm1bbI=;
-        b=jbKMwuLYPcfpL+8VEBA/qF6tRt/XwEqYJzzgM8Ao+PYlO/QVG7V4BYjIlcpLJi20Hs
-         aSHh8ZR5500G47WhSXYUUAJx0XiMsuEYIBdrRKR1iSa3vhxEu4rZ5eC7GbHq0R2J/iPx
-         UniWtV4mGHW9pmmmimlacPFCpwxGO1bJJHrIHE59tfHVMmufWYGlQPRRhB/CWQqQmtF8
-         3kBU+vAq4BvYVYg4PwdzTjaLpGVWpwcjfp91Sse5fh0Ozk+U0YRyTzsyedrBaspZ2J0m
-         rwr1KTSWmZvVLWW/nL4D/C6m12mLDXiQ4p2ZUeOhYWtjYvze5FRr17Yodo6QRqEgOZVe
-         jqcw==
-X-Gm-Message-State: ACrzQf3GeRERiYifVyHuMoh/ISERHWr3FtjcieDgro6tHvhiCp9pkhDb
-        Rm2pyXXl5pUqOfkcwZoJa0DH+g==
-X-Google-Smtp-Source: AMsMyM5uBrWLdMDVSDXHfRBiUgynAOmM97uKnPLCvt5fOVHCz/I7t0Kb31PyQDclJDkq7Bc00gKLmw==
-X-Received: by 2002:a65:6742:0:b0:43a:827d:c0 with SMTP id c2-20020a656742000000b0043a827d00c0mr7944368pgu.537.1663716264218;
-        Tue, 20 Sep 2022 16:24:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b20-20020a6567d4000000b0042b291a89bfsm536149pgs.11.2022.09.20.16.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 16:24:23 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 16:24:22 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
-        Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, apronin@chromium.org,
-        dlunev@google.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        corbet@lwn.net, jejb@linux.ibm.com, Hao Wu <hao.wu@rubrik.com>,
-        Len Brown <len.brown@intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, axelj <axelj@axis.com>
-Subject: Re: [PATCH v2 10/10] PM: hibernate: seal the encryption key with a
- PCR policy
-Message-ID: <202209201620.A886373@keescook>
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220823152108.v2.10.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
+        Wed, 21 Sep 2022 03:24:26 -0400
+Received: from mail.steuer-voss.de (mail.steuer-voss.de [85.183.69.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA5B7CB48;
+        Wed, 21 Sep 2022 00:24:22 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
+Received: by mail.steuer-voss.de (Postfix, from userid 1000)
+        id 92390E74F; Wed, 21 Sep 2022 09:24:18 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.steuer-voss.de (Postfix) with ESMTP id 8F854E737;
+        Wed, 21 Sep 2022 09:24:18 +0200 (CEST)
+Date:   Wed, 21 Sep 2022 09:24:18 +0200 (CEST)
+From:   Nikolaus Voss <nv@vosn.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+cc:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yael Tzur <yaelt@google.com>
+Subject: Re: [PATCH] KEYS: encrypted: fix key instantiation with user-provided
+ data
+In-Reply-To: <2ee1e3e68d847001c4bf856d980a553e52de5023.camel@linux.ibm.com>
+Message-ID: <439012d8-dd4-7fd2-3788-49cf72faa99@vosn.de>
+References: <20220919072317.E41421357@mail.steuer-voss.de>  <53730789a41358673b1715dd650706e9ffcb1199.camel@linux.ibm.com>  <35fd816-d755-967-5712-b5496875ac7a@vosn.de> <2ee1e3e68d847001c4bf856d980a553e52de5023.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823152108.v2.10.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 03:25:26PM -0700, Evan Green wrote:
-> The key blob is not secret, and by default the TPM will happily unseal
-> it regardless of system state. We can protect against that by sealing
-> the secret with a PCR policy - if the current PCR state doesn't match,
-> the TPM will refuse to release the secret. For now let's just seal it to
-> PCR 23. In the long term we may want a more flexible policy around this,
-> such as including PCR 7 for PCs or 0 for Chrome OS.
-> 
-> Sourced-from: Matthew Garrett <mjg59@google.com>
+On Tue, 20 Sep 2022, Mimi Zohar wrote:
+> On Tue, 2022-09-20 at 18:23 +0200, Nikolaus Voss wrote:
+>> On Tue, 20 Sep 2022, Mimi Zohar wrote:
+>>> On Fri, 2022-09-16 at 07:45 +0200, Nikolaus Voss wrote:
+>>>> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+>>>> decrypted data") added key instantiation with user provided decrypted data.
+>>>> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+>>>> Fix this to use hex2bin instead.
+>>>
+>>> Thanks, Nikolaus.  We iterated a number of times over what would be the
+>>> safest userspace input.  One of the last changes was that the key data
+>>> should be hex-ascii-encoded.  Unfortunately, the LTP
+>>> testcases/kernel/syscalls/keyctl09.c example isn't hex-ascii-encoded
+>>> and the example in Documentation/security/keys/trusted-encrypted.rst
+>>> just cat's a file.  Both expect the length to be the length of the
+>>> userspace provided data.   With this patch, when hex2bin() fails, there
+>>> is no explanation.
+>>
+>> That's true. But it's true for all occurrences of hex2bin() in this file.
+>> I could pr_err() an explanation, improve the trusted-encrypted.rst example
+>> and respin the patch. Should I, or do you have another suggestion?
+>
+>> I wasn't aware of keyctl09.c, but quickly looking into it, the user data
+>> _is_ hex-ascii-encoded, only the length is "wrong": Imho, the specified
+>> length should be the binary length as this is consistent with key-length
+>> specs in other cases (e.g. when loading the key from a blob).
+>> keyctl09.c could be easy to fix, if only the length is modified. Should
+>> I propose a patch? What is the correct/appropriate workflow there?
+>
+> I'm concerned that this change breaks existing encrypted keys created
+> with user-provided data.  Otherwise I'm fine with your suggestion.
 
-If it's a total rewrite, I'd say use:
+Ok, but this change does not touch the hex-ascii format of encrypted key 
+blobs?
 
-Suggested-by: Matthew Garrett <...>
-Link: https://lore.kernel.org/of/what/it/was/based/on
+>
+> The LTP example decrypted data length is 32, but the minimum decrypted
+> data size is  20.  So it's a bit more than just changing the LTP
+> decrypted data size.   The modified LTP test should work on kernels
+> with and without this patch.
 
-If it's built on an existing patch, I'd say use:
+So this would mean OR-ing old and new variant for the test?
 
-Co-developed-by: Matthew Garrett <...>
-Signed-off-by: Matthew Garrett <...>
+The current implementation of the test will fail anyway as the key size is 
+below the minimum of 20 and thus should have failed before.
 
-But I defer to what Matthew thinks. :)
-
-Also, if you don't hear from Matthew, maybe ping his mjg59@srcf.ucam.org
-address.
-
--Kees
-
--- 
-Kees Cook
+Niko
