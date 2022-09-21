@@ -2,150 +2,246 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4273F5BFE94
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Sep 2022 15:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725715C01CB
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Sep 2022 17:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiIUNB5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 21 Sep 2022 09:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
+        id S231420AbiIUPjs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 21 Sep 2022 11:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiIUNBx (ORCPT
+        with ESMTP id S231469AbiIUPjR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:01:53 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0655E8E98A;
-        Wed, 21 Sep 2022 06:01:51 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXdlS37TqzpV2q;
-        Wed, 21 Sep 2022 20:59:00 +0800 (CST)
-Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 21:01:49 +0800
-From:   GUO Zihua <guozihua@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>
-Subject: [PATCH v5 2/2] ima: Handle -ESTALE returned by ima_filter_rule_match()
-Date:   Wed, 21 Sep 2022 20:58:04 +0800
-Message-ID: <20220921125804.59490-3-guozihua@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220921125804.59490-1-guozihua@huawei.com>
-References: <20220921125804.59490-1-guozihua@huawei.com>
+        Wed, 21 Sep 2022 11:39:17 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A029083F
+        for <linux-integrity@vger.kernel.org>; Wed, 21 Sep 2022 08:36:14 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id w28so9294605edi.7
+        for <linux-integrity@vger.kernel.org>; Wed, 21 Sep 2022 08:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=DowNtUvg1wqk2HPh1JIjNM1OJ6s6RaSVIqBEJJMRcKE=;
+        b=TDrR3lEu3iWZsasjtoWxLdg9e72yWkm95E80MesLNGGMtozYlxxjj3prNUgquumxwW
+         m8k1rDaYYNAyrAL78WSQiT22EAJYiyAFmRCFZ5jvpQeSL9H8M6Hx/AqfKYWvlovH8oBC
+         sfONAjK+nE5IsM29iNve5oCQv3aD4NAUQ/oIw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=DowNtUvg1wqk2HPh1JIjNM1OJ6s6RaSVIqBEJJMRcKE=;
+        b=u7j5cMI4sMdE8zDGnMI7XFEkcIW8rjZ1vvzSuiF2HNPWNqhdAPgQz7uKRS5qazDyeb
+         9LJf9w1yc9y+7ky6gjspi3dZwt3E5yJVG+//R4mJFHx5b44qfVVQy/t2vPogdCnEjEsX
+         mcpbILs9bng8Fit/HrqHNiedgNG8vR/Yo3TSfF9tQe78Da7/LtHg8/ooIQ4G7sUUK4OZ
+         QuH/vG6aqjNtAKxG23++NrrMObE9hn+uI1l4pNntNVp1bXyQj9+Zehsz+iAW5UUFmJhG
+         puLmwyj4DoxBAlxWa+Uf/ncUI55Q8pXAtMjRacSwoS8qVgnzv8/NEizDlO74MKR32217
+         4g/w==
+X-Gm-Message-State: ACrzQf0EAOPBoJAxOZshzliTonReNn0kwFD5poBa2Axbqdfxq4ta2aPY
+        sArDOR2qNHrYuGSoGDI0xM+dd40toAZtzTLeDG8=
+X-Google-Smtp-Source: AMsMyM6NmJXfzcVjtHqbGRoMVT3HEzuiF8rorsi6RPIf4PEWVQ7OL3ECjnsXq/yJL4y0WsO6AGiW7Q==
+X-Received: by 2002:aa7:cb18:0:b0:452:9071:aff with SMTP id s24-20020aa7cb18000000b0045290710affmr25090495edt.194.1663774572936;
+        Wed, 21 Sep 2022 08:36:12 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id q27-20020a056402249b00b004542e65337asm2018722eda.51.2022.09.21.08.36.12
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 08:36:12 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id t4so796942wmj.5
+        for <linux-integrity@vger.kernel.org>; Wed, 21 Sep 2022 08:36:12 -0700 (PDT)
+X-Received: by 2002:a1c:e90b:0:b0:3b4:fb6c:7654 with SMTP id
+ q11-20020a1ce90b000000b003b4fb6c7654mr2036395wmc.98.1663774571822; Wed, 21
+ Sep 2022 08:36:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <4308c2d0-94ae-8a65-e0c7-69270e31d447@linux.ibm.com> <YylGq7eUvaoSyA1u@kernel.org>
+In-Reply-To: <YylGq7eUvaoSyA1u@kernel.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Wed, 21 Sep 2022 08:35:35 -0700
+X-Gmail-Original-Message-ID: <CAE=gft4-TLDvjtMH+qRJNppkJb798jpKXKXF8nytW7v9d2euRg@mail.gmail.com>
+Message-ID: <CAE=gft4-TLDvjtMH+qRJNppkJb798jpKXKXF8nytW7v9d2euRg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA relies on the blocking LSM policy notifier callback to update the
-LSM based IMA policy rules.
+On Mon, Sep 19, 2022 at 9:51 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Tue, Sep 13, 2022 at 08:26:09AM -0400, Stefan Berger wrote:
+> >
+> >
+> > On 8/23/22 18:25, Evan Green wrote:
+> > > From: Matthew Garrett <matthewgarrett@google.com>
+> > >
+> > > Under certain circumstances it might be desirable to enable the creation
+> > > of TPM-backed secrets that are only accessible to the kernel. In an
+> > > ideal world this could be achieved by using TPM localities, but these
+> > > don't appear to be available on consumer systems. An alternative is to
+> > > simply block userland from modifying one of the resettable PCRs, leaving
+> > > it available to the kernel. If the kernel ensures that no userland can
+> > > access the TPM while it is carrying out work, it can reset PCR 23,
+> > > extend it to an arbitrary value, create or load a secret, and then reset
+> > > the PCR again. Even if userland somehow obtains the sealed material, it
+> > > will be unable to unseal it since PCR 23 will never be in the
+> > > appropriate state.
+> > >
+> > > From: Matthew Garrett <mjg59@google.com>
+> > > Signed-off-by: Matthew Garrett <mjg59@google.com>
+> > >
+> > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > > ---
+> > > Matthew's original version of this patch is at:
+> > > https://patchwork.kernel.org/patch/12096491/
+> > >
+> > > Changes in v2:
+> > >   - Fixed sparse warnings
+> > >
+> > >   drivers/char/tpm/Kconfig          | 10 +++++++++
+> > >   drivers/char/tpm/tpm-dev-common.c |  8 +++++++
+> > >   drivers/char/tpm/tpm.h            | 21 +++++++++++++++++++
+> > >   drivers/char/tpm/tpm1-cmd.c       | 35 +++++++++++++++++++++++++++++++
+> > >   drivers/char/tpm/tpm2-cmd.c       | 22 +++++++++++++++++++
+> > >   drivers/char/tpm/tpm2-space.c     |  2 +-
+> > >   6 files changed, 97 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> > > index 927088b2c3d3f2..4483b61a428b11 100644
+> > > --- a/drivers/char/tpm/Kconfig
+> > > +++ b/drivers/char/tpm/Kconfig
+> > > @@ -211,4 +211,14 @@ config TCG_FTPM_TEE
+> > >       This driver proxies for firmware TPM running in TEE.
+> > >   source "drivers/char/tpm/st33zp24/Kconfig"
+> > > +
+> > > +config TCG_TPM_RESTRICT_PCR
+> > > +   bool "Restrict userland access to PCR 23"
+> > > +   depends on TCG_TPM
+> > > +   help
+> > > +     If set, block userland from extending or resetting PCR 23. This
+> > > +     allows it to be restricted to in-kernel use, preventing userland
+> > > +     from being able to make use of data sealed to the TPM by the kernel.
+> > > +     This is required for secure hibernation support, but should be left
+> > > +     disabled if any userland may require access to PCR23.
+> > >   endif # TCG_TPM
+> > > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+> > > index dc4c0a0a512903..7a4e618c7d1942 100644
+> > > --- a/drivers/char/tpm/tpm-dev-common.c
+> > > +++ b/drivers/char/tpm/tpm-dev-common.c
+> > > @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+> > >     priv->response_read = false;
+> > >     *off = 0;
+> > > +   if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
+> > > +           ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > > +   else
+> > > +           ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > > +
+> > > +   if (ret)
+> > > +           goto out;
+> > > +
+> > >     /*
+> > >      * If in nonblocking mode schedule an async job to send
+> > >      * the command return the size.
+> > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > > index a80b341d38eb8c..077c3ca0a127ba 100644
+> > > --- a/drivers/char/tpm/tpm.h
+> > > +++ b/drivers/char/tpm/tpm.h
+> > > @@ -229,6 +229,8 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
+> > >   unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+> > >   int tpm2_probe(struct tpm_chip *chip);
+> > >   int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
+> > > +int tpm_find_and_validate_cc(struct tpm_chip *chip, struct tpm_space *space,
+> > > +                        const void *buf, size_t bufsiz);
+> > >   int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
+> > >   int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
+> > >   void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
+> > > @@ -244,4 +246,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
+> > >   void tpm_bios_log_teardown(struct tpm_chip *chip);
+> > >   int tpm_dev_common_init(void);
+> > >   void tpm_dev_common_exit(void);
+> > > +
+> > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > > +#define TPM_RESTRICTED_PCR 23
+> > > +
+> > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > > +#else
+> > > +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > > +                                 size_t size)
+> > > +{
+> > > +   return 0;
+> > > +}
+> > > +
+> > > +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > > +                                 size_t size)
+> > > +{
+> > > +   return 0;
+> > > +}
+> > > +#endif
+> > >   #endif
+> > > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> > > index 8ec743dec26544..318e75ae42fb85 100644
+> > > --- a/drivers/char/tpm/tpm1-cmd.c
+> > > +++ b/drivers/char/tpm/tpm1-cmd.c
+> > > @@ -845,3 +845,38 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
+> > >     return 0;
+> > >   }
+> > > +
+> > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
+> > > +{
+> > > +   struct tpm_header *header = (struct tpm_header *)buffer;
+> > > +   char len, offset;
+> > > +   __be32 *pcr;
+> > > +   int pos;
+> > > +
+> > > +   switch (be32_to_cpu(header->ordinal)) {
+> > > +   case TPM_ORD_PCR_EXTEND:
+> > > +           if (size < (TPM_HEADER_SIZE + sizeof(u32)))
+> > > +                   return -EINVAL;
+> > > +           pcr = (__be32 *)&buffer[TPM_HEADER_SIZE];
+> > > +           if (be32_to_cpu(*pcr) == TPM_RESTRICTED_PCR)
+> > > +                   return -EPERM;
+> >
+> > FYI: TPM 1.2 has transport sessions where the command is tunneled in an
+> > encrypted channel and this check could be circumvented...
+>
+> BTW, Why do we want to support TPM 1.2 at all.
+>
+> I would not support it for new features. This could be just TPM2 only
+> feeature.
 
-When SELinux update its policies, IMA would be notified and starts
-updating all its lsm rules one-by-one. During this time, -ESTALE would
-be returned by ima_filter_rule_match() if it is called with a LSM rule
-that has not yet been updated. In ima_match_rules(), -ESTALE is not
-handled, and the LSM rule is considered a match, causing extra files
-to be measured by IMA.
+I didn't know about the TPM1.2 tunnelling thing, thanks Stefan. Yes,
+maybe in light of that and Jarkko's comment we shouldn't bend over
+backwards to make this work on TPM1 and just make it a TPM2-only
+feature.
 
-Fix it by re-initializing a temporary rule if -ESTALE is returned by
-ima_filter_rule_match(). The origin rule in the rule list would be
-updated by the LSM policy notifier callback.
-
-Fixes: b16942455193 ("ima: use the lsm policy update notifier")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
- security/integrity/ima/ima_policy.c | 41 ++++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 9 deletions(-)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 8040215c0252..2edff7f58c25 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -545,6 +545,9 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 			    const char *func_data)
- {
- 	int i;
-+	bool result = false;
-+	struct ima_rule_entry *lsm_rule = rule;
-+	bool rule_reinitialized = false;
- 
- 	if ((rule->flags & IMA_FUNC) &&
- 	    (rule->func != func && func != POST_SETATTR))
-@@ -606,35 +609,55 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 		int rc = 0;
- 		u32 osid;
- 
--		if (!rule->lsm[i].rule) {
--			if (!rule->lsm[i].args_p)
-+		if (!lsm_rule->lsm[i].rule) {
-+			if (!lsm_rule->lsm[i].args_p)
- 				continue;
- 			else
- 				return false;
- 		}
-+
-+retry:
- 		switch (i) {
- 		case LSM_OBJ_USER:
- 		case LSM_OBJ_ROLE:
- 		case LSM_OBJ_TYPE:
- 			security_inode_getsecid(inode, &osid);
--			rc = ima_filter_rule_match(osid, rule->lsm[i].type,
-+			rc = ima_filter_rule_match(osid, lsm_rule->lsm[i].type,
- 						   Audit_equal,
--						   rule->lsm[i].rule);
-+						   lsm_rule->lsm[i].rule);
- 			break;
- 		case LSM_SUBJ_USER:
- 		case LSM_SUBJ_ROLE:
- 		case LSM_SUBJ_TYPE:
--			rc = ima_filter_rule_match(secid, rule->lsm[i].type,
-+			rc = ima_filter_rule_match(secid, lsm_rule->lsm[i].type,
- 						   Audit_equal,
--						   rule->lsm[i].rule);
-+						   lsm_rule->lsm[i].rule);
- 			break;
- 		default:
- 			break;
- 		}
--		if (!rc)
--			return false;
-+
-+		if (rc == -ESTALE && !rule_reinitialized) {
-+			lsm_rule = ima_lsm_copy_rule(rule);
-+			if (lsm_rule) {
-+				rule_reinitialized = true;
-+				goto retry;
-+			}
-+		}
-+		if (!rc) {
-+			result = false;
-+			goto out;
-+		}
- 	}
--	return true;
-+	result = true;
-+
-+out:
-+	if (rule_reinitialized) {
-+		for (i = 0; i < MAX_LSM_RULES; i++)
-+			ima_filter_rule_free(lsm_rule->lsm[i].rule);
-+		kfree(lsm_rule);
-+	}
-+	return result;
- }
- 
- /*
--- 
-2.17.1
-
+Downstream of this decision, in the other patch, "Add support for
+in-kernel resetting of PCRs", my instinct is to keep the addition of
+tpm1_pcr_reset() just so the newly introduced generic tpm_pcr_reset()
+is fully implemented. Let me know if instead I should also drop the
+tpm1 side of that as well, in the name of "don't add stuff you're not
+using".
+-Evan
