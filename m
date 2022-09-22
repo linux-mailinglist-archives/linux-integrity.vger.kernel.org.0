@@ -2,169 +2,95 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8A95E66B9
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Sep 2022 17:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5FB5E6857
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Sep 2022 18:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbiIVPSv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Sep 2022 11:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
+        id S231788AbiIVQ1W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Sep 2022 12:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbiIVPSl (ORCPT
+        with ESMTP id S230415AbiIVQ1V (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:18:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B76F0889;
-        Thu, 22 Sep 2022 08:18:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C43BB83838;
-        Thu, 22 Sep 2022 15:18:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CD5CC433C1;
-        Thu, 22 Sep 2022 15:18:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663859904;
-        bh=0BWKBpw8rzbdfa52pJIJ4GOXKyBmJzOIQdYF0qpOldc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gkbvGVb8nkeRJ973jMjzWtgCqRpBk3J+KPlebV44Tk2Jo1e4Vdydxs64U5UOz03Hu
-         PPGzzP1IxiHzfgh2Uj3BIUkh7pB/oNPMki00SGbmMmxhZu83gCuWvJAcQ3pifoZxFZ
-         W5AF+RrvRGELwkZheVK0XdxbOHl0ofQBtVE40aizBkszBgbiaZQtg4TPSM6G1KMfqi
-         10sUqVk6uZzPfBLA6+km9P3QXe1HGso4Od+rs9nHIBYAHiUJLhaADFwusL1wx6rxFt
-         AH0mwWrf2DSL5DoF9WoombFLmYQ1nl4AL5B2ep4Gcb34p0R6OXHNvvI6utSxebGj+R
-         AFUAbSPrivkkQ==
-From:   Christian Brauner <brauner@kernel.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH 17/29] evm: simplify evm_xattr_acl_change()
-Date:   Thu, 22 Sep 2022 17:17:15 +0200
-Message-Id: <20220922151728.1557914-18-brauner@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220922151728.1557914-1-brauner@kernel.org>
-References: <20220922151728.1557914-1-brauner@kernel.org>
+        Thu, 22 Sep 2022 12:27:21 -0400
+Received: from sonic306-27.consmr.mail.ne1.yahoo.com (sonic306-27.consmr.mail.ne1.yahoo.com [66.163.189.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E294E11DA
+        for <linux-integrity@vger.kernel.org>; Thu, 22 Sep 2022 09:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663864039; bh=HLuQousOxe85ItzKBGOzCJooyd+X6tRLuu1h8Oz3VYg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Zqz1L2qMONfJcSjF+NbdkK0DCKmzBNKVSX+1s14XCgM+lLq5QKG3f2FGrR9YU0YaUIWePnfxDpm8ceiS6XJPJXWTBcmvK8NtWZ1w1SM7v4HwQHvpLa09AXeKv401EOZpUmgzTUdJr4mgNgU+SVATVDVDrhiJBPhE/Re/9J4hSiUdH0Q4Z/oJwPUfvguLWE5hNBJU6GwPtTIzrJW765m/iK2gXgLhxf1pFljRe1Ina+RSTK1UJxolsAtBb0RHZ5xwal5XUxs1ZJQ9M6sLx12pDouNaTlJSyDjLUaGixxF0SQ4u1DRSSSvvzQdj4V1aOCTf5st59ehBO6+LE7dVwZwBg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1663864039; bh=Mlvi4DG+D4A+V6g6owYVyZXrfPAkdABSrMXJAPp2biz=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=t//XGhUd91Hs6DOar9xOjvR1nZVph9eTWdIfX1b9vnEJTPTFgVhze2Tscdk4mhHq3xaXYvhe1g+NUL6xqDeeFitVuqk6oQc8t8l7GJu46ngcD42mpOFtjb0jLH0FdRSOqALDDC/usS3/FwywzPUwurWWfbT2+LcmlbWLWEc5AJPIE1LR442ahRI6fZQFs8dePurk2ZvSEXvKufk2II/3U2E4PUWShEONJMKtLLjPIsa3/jG2LQVDBBkI+noU5/1RQD0nXxg45zrg899+WU/f+ypkUfsPI+veGid4yE+1qsEHlsFbXb5zjdb0ABs+Ab5GkwM6Tgn48QIKSKxgrt/Gmw==
+X-YMail-OSG: f5ydc9QVM1k7l1ohbr0jcrv8Un_EBpkKiqfkcN1GW_4p2A5EoNiwnZqiq2Gahix
+ tIfkYa2DOehcBuyYAwgsjrioDTGPCpagtmSQ2HNOqqq5vH3jGzjKkjW3XyXuz07fdGxRLVKh3bLg
+ aQhdHshX.G4R3h3Zh1HTcjs.B4BMb8U9WSFf5_SU0aAPQtC1tSwhqNyE5c3O3UwfhoAirGEG.7cC
+ pkJqhHWJf.s1J09eC3XNLeg18kn3yXN3ZBTF3JNwr4dtgJak9l9f0LGKYtN1uiLj8hjKt13t9vCZ
+ jSSyh0ry_pI9tYXN5.nJlIXjAAKn01Ma7idTpgKRSN5OReHlkoKh6CxcPoptMFDWUYMzcsN7O1Ql
+ IhLkVvl_WnFVpx7awaPtO_ILCl9EYxCwMiiZIrBDKstze9kuEujQq3U8t3JwirU5N47kusx70O6C
+ N6VH5rc6S8eWusPTqN1Dj_sH9XsxvtYWV3gxR7yTL4rZH.grFVvqrt0iEe.TlLypS_x1e_k0vYok
+ op4blUDGKCPwbXsE6hlClgDy28AYa42poGZoHHsmZSTKopAg7QPqSw5gwnDP7ZFFZO8IijbOWKJh
+ 3daYLhnHp.aTT190DGZq81OggjA7aWJSO1ArH5xMZcKFHFr7FTq39_SL2YftUDNBFoshl9xZsN1p
+ 7jpa0RRtkL99457X97Y35Co.12Ca394JZLTfCOO93qzWJjRa150NmzXKU7oAgKTIgkSpYdfZ7tJI
+ TBR4AyYqDx7CPvknwaED5fpSyX8CqzDknnSwAPMgbm3mWEprjz5yAo_f.m2IVUeDFnPxnjbnA_YV
+ 1KiSm3qxb0WRwfkqTpenCHG.5qpLK8nYa4jgLf.o.maFjWqx0TDSM_nLnPb_2gHKE3zpAP4ffS3y
+ 57G7D5sEnKmeUQr6Tt1.yozx_.kJCKB_H70ObOyNQ0E4xOwdZyiRsjevl3t_f4CYfwnXcnyieuDd
+ rydogEf6aRLtATGNqp2iziCIY.Jug0I9Gaa0dK_.SE5cYzUgqHIDWjvO4rZdrq2.KU5yNANYgsG2
+ d4POCv5x9TGi_toDam3vlfqgljywx0gmJiCcGKEDp.M0iyToPySKn7RObpAse2t5cc8NJDYaaO2P
+ pWi7j5N_mZwwWYnBVpcyJWpCr4J5DLjRhPsjEJkPJ1smYdKq7ZDfZ0E1ZOKRwOnE3BfFf_pfFZ7O
+ jOwvXiwLQK4ihhu4669.NifzP2vLzfrvN0eSfMU2b5GjMbsOuu7gd8iLfoieNgCnvIcWIECGb29T
+ BUCosGkL_NeIw_ahIgMNwVXUTaOBPtZtZJsXCjfywgj4Q25BaS1qahrlGkVgGfnMGDlr5WAGuRW0
+ N8IhuuCuSxY.SdjMdVlhlHO9ADB1TR6RVpoyCqCW2Qb4j3_amERC6Pfq0YGGpwJm_IcKejb67QHV
+ fF3L5LAxR8yQ.vs1ewfoMJ_vQN3rY0.ffCNwk9KdmmtY5fBF1jpECEeWYgnhSu4XGcSt0BEuFqPj
+ ZBImzjTWj5x.kkDMBaa4s3hTYXplWLiR5hfH8VCUBGWShxNfd1LZ.nJA9L6QJm_6WFbKEc88qNoV
+ JBioltqYz_U5ut92wwGvmu7AI6RFYB89Pg7saJm.h9Sye88F_NtM38mN3Kaa5LBnOZyBCrsax5L1
+ ANY.df7R61EdyKopPbuBdvvNQzd_hh41NhjED01_IOzbK978uK9x9aDG2RHbTFxBJ4F_EGPUBFL8
+ BnCWLZyo8XMtTeToI8E36mNSBMj_xU.ICEaoKv.u3f2SJMh_7hMHc1BxpMEb5gNCe4Z9sbiMe6.x
+ kfqa.Pn2kzrP4gjQ1UGpWNBTTUqn180V7dKMrC7T2.tLI0Gd3c1I0tUhPx7JulMrCKhXzzH_0_wq
+ 2CPUripjjJSX_e2ojdt3baExHLhw7QmFjcrFU71tHkjne1m8gcH494dewy0tPxoIZyKaYYbkShH6
+ SKIJ9TNPuloXeFvQpSPlpvcYudPKbZLP8l3CvxuAs7ZJ9nom.m_BWr_1WqCTeWDDmvGlh9X6.g6W
+ M6BQOZo1uJXAEAHA7Nc6riHhUXup_yjSPDI26AISc4TwmfABtlFcFJndJxO7aRJQRcnsf5K0W8ei
+ ELJti6viwuAdDtJ7gULm1Mmrg6QFjHvkHzQoC2Eh3a8b0gZXPzijVe3Rfp1sQI0hE20X6RxmLJzs
+ uetAlHe_kGU7Jb97icngcoJH4.A1UbSdw7UML2gaQ9.dt8zNBA4Qy19EPRW2k6Ww59S8wIw0I5ox
+ ahmLcH580L4vuppt2g9tBxo78_IZkPAb89JvbE8U6rGFEcGhkcZ1Pf9o5fzM5lt8GQkXDAcRGy0N
+ RIOtdITdM73m0aeRTJ15YgDopgQ--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Thu, 22 Sep 2022 16:27:19 +0000
+Received: by hermes--production-bf1-64b498bbdd-ds6cg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 803b97668af2e2870df2ffe80b36b598;
+          Thu, 22 Sep 2022 16:27:13 +0000 (UTC)
+Message-ID: <d74030ae-4b9a-5b39-c203-4b813decd9eb@schaufler-ca.com>
+Date:   Thu, 22 Sep 2022 09:27:10 -0700
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3965; i=brauner@kernel.org; h=from:subject; bh=0BWKBpw8rzbdfa52pJIJ4GOXKyBmJzOIQdYF0qpOldc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSTr1FRd8Ms/emVZEdNu/iX3hXYovs287BhadXvp5ltzM5T3 78v521HKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRMhmG//kvVzwOe+Fp8CR2mtb5nR /nsd6IZvnyaFb2v382Pw60V+cyMjzdvdnpucwc271hM6pEjTnU/DdHFJ2YFPd3x76354+Uu7MCAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [RFC PATCH 00/29] acl: add vfs posix acl api
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     Seth Forshee <sforshee@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        v9fs-developer@lists.sourceforge.net, linux-cifs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, casey@schaufler-ca.com
+References: <20220922151728.1557914-1-brauner@kernel.org>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220922151728.1557914-1-brauner@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20663 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The posix acl api provides a dedicated security and integrity hook for
-setting posix acls. This means that
+On 9/22/2022 8:16 AM, Christian Brauner wrote:
+> From: "Christian Brauner (Microsoft)" <brauner@kernel.org>
 
-evm_protect_xattr()
--> evm_xattr_change()
-   -> evm_xattr_acl_change()
-
-is now only hit during vfs_remove_acl() at which point we are guaranteed
-that xattr_value and xattr_value_len are NULL and 0. In this case evm
-always used to return 1. Simplify this function to do just that.
-
-Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
----
- security/integrity/evm/evm_main.c | 62 +++++++------------------------
- 1 file changed, 14 insertions(+), 48 deletions(-)
-
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 15aa5995fff4..1fbe1b8d0364 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -436,62 +436,29 @@ static enum integrity_status evm_verify_current_integrity(struct dentry *dentry)
- 
- /*
-  * evm_xattr_acl_change - check if passed ACL changes the inode mode
-- * @mnt_userns: user namespace of the idmapped mount
-- * @dentry: pointer to the affected dentry
-  * @xattr_name: requested xattr
-  * @xattr_value: requested xattr value
-  * @xattr_value_len: requested xattr value length
-  *
-- * Check if passed ACL changes the inode mode, which is protected by EVM.
-+ * This is only hit during xattr removal at which point we always return 1.
-+ * Splat a warning in case someone managed to pass data to this function. That
-+ * should never happen.
-  *
-  * Returns 1 if passed ACL causes inode mode change, 0 otherwise.
-  */
--static int evm_xattr_acl_change(struct user_namespace *mnt_userns,
--				struct dentry *dentry, const char *xattr_name,
--				const void *xattr_value, size_t xattr_value_len)
-+static int evm_xattr_acl_change(const void *xattr_value, size_t xattr_value_len)
- {
--#ifdef CONFIG_FS_POSIX_ACL
--	umode_t mode;
--	struct posix_acl *acl = NULL, *acl_res;
--	struct inode *inode = d_backing_inode(dentry);
--	int rc;
--
--	/*
--	 * An earlier comment here mentioned that the idmappings for
--	 * ACL_{GROUP,USER} don't matter since EVM is only interested in the
--	 * mode stored as part of POSIX ACLs. Nonetheless, if it must translate
--	 * from the uapi POSIX ACL representation to the VFS internal POSIX ACL
--	 * representation it should do so correctly. There's no guarantee that
--	 * we won't change POSIX ACLs in a way that ACL_{GROUP,USER} matters
--	 * for the mode at some point and it's difficult to keep track of all
--	 * the LSM and integrity modules and what they do to POSIX ACLs.
--	 *
--	 * Frankly, EVM shouldn't try to interpret the uapi struct for POSIX
--	 * ACLs it received. It requires knowledge that only the VFS is
--	 * guaranteed to have.
--	 */
--	acl = vfs_set_acl_prepare(mnt_userns, i_user_ns(inode),
--				  xattr_value, xattr_value_len);
--	if (IS_ERR_OR_NULL(acl))
--		return 1;
--
--	acl_res = acl;
--	/*
--	 * Passing mnt_userns is necessary to correctly determine the GID in
--	 * an idmapped mount, as the GID is used to clear the setgid bit in
--	 * the inode mode.
--	 */
--	rc = posix_acl_update_mode(mnt_userns, inode, &mode, &acl_res);
--
--	posix_acl_release(acl);
--
--	if (rc)
--		return 1;
-+	int rc = 0;
- 
--	if (inode->i_mode != mode)
--		return 1;
-+#ifdef CONFIG_FS_POSIX_ACL
-+	WARN_ONCE(xattr_value != NULL,
-+		  "Passing xattr value for POSIX ACLs not supported\n");
-+	WARN_ONCE(xattr_value_len != 0,
-+		  "Passing non-zero length for POSIX ACLs not supported\n");
-+	rc = 1;
- #endif
--	return 0;
-+
-+	return rc;
- }
- 
- /*
-@@ -514,8 +481,7 @@ static int evm_xattr_change(struct user_namespace *mnt_userns,
- 	int rc = 0;
- 
- 	if (posix_xattr_acl(xattr_name))
--		return evm_xattr_acl_change(mnt_userns, dentry, xattr_name,
--					    xattr_value, xattr_value_len);
-+		return evm_xattr_acl_change(xattr_value, xattr_value_len);
- 
- 	rc = vfs_getxattr_alloc(&init_user_ns, dentry, xattr_name, &xattr_data,
- 				0, GFP_NOFS);
--- 
-2.34.1
+Could we please see the entire patch set on the LSM list?
+( linux-security-module@vger.kernel.org )
+It's really tough to judge the importance of adding a new
+LSM hook without seeing both how it is called and how the
+security modules are expected to fulfill it. In particular,
+it is important to see how a posix acl is different from
+any other xattr. 
 
