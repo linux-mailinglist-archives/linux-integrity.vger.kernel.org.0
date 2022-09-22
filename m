@@ -2,52 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FEA5E66A7
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Sep 2022 17:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A19A5E66BC
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Sep 2022 17:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbiIVPRz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Sep 2022 11:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
+        id S232035AbiIVPSw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Sep 2022 11:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiIVPRw (ORCPT
+        with ESMTP id S231879AbiIVPSj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Sep 2022 11:17:52 -0400
+        Thu, 22 Sep 2022 11:18:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2580BEF08F;
-        Thu, 22 Sep 2022 08:17:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6416CF0887;
+        Thu, 22 Sep 2022 08:18:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A26E1B8383D;
-        Thu, 22 Sep 2022 15:17:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E6BC433C1;
-        Thu, 22 Sep 2022 15:17:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16F8CB8383E;
+        Thu, 22 Sep 2022 15:18:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B562FC43141;
+        Thu, 22 Sep 2022 15:18:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663859868;
-        bh=OjsopGJbEh30ykDOPAJ1LockAmQsii3SfjPv0VMH5wQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iO71NyZnoI/Sz3I0BFsFGYXPpYlcoksZhi6Pz+1Nryy3Z7l1S/IvD5skDUBFeZa9G
-         61aXiv2eel7nAgApQPh8ktV1wYCNjXoL9YICZM3VMf9lD6uc0XC+e10VStXU5mZUZS
-         BzxTEIMjj5akCdiVdvaSC13+qQ7MHVeiQlBNO4zfViVDjiWRLF5Hp0RgoswF0dscE+
-         D2LjvT1VsS23Q6v6Mudv8rgDzhvVHLp6my1rHgi2KGl9dHaGkNmWkNcV90+YVV8AaP
-         Qgt70Cjtzl8wzGnxDyF3YYFEz5aSOaoBaFevYrkXIl9GHE+g7+LNwPrnlcOGy/QMFR
-         z3h4nXibOuEbQ==
+        s=k20201202; t=1663859890;
+        bh=khd9yJ9DVSHAbKI1RnSSMhQz9ZvYIsRT5tFSI3pyVgQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=t4WiSmLJs8jmGiRs/bzrpEmaKuMczu/hGlxaNzlppiuT/Qlflz6IVfC0npDC8AlH8
+         jz/nvGSPjveqXPbT2sGtUgvaCCt7epcXVn295MpTmRpnjkgnvLMJgU34T6vXHDfXBg
+         99e6ccOh0vJliCLrdyxJaIs5eu66RYJA9m49otxuJW67Hp8ErEZFoVO84Bp95lZSWA
+         ebpXrtQR9/oXn68czRGi52aLHtywcOPXU4uhIK8jJyCXMF1bZq7kSl2ueAbiK26RuX
+         UN+gtuAAQffRkTj47G9ZwC4Uu+QPJB0ZYHoFNM3BL6RVqfG5HebeGmNj77VPpllOdC
+         qHSpI0DFaggAA==
 From:   Christian Brauner <brauner@kernel.org>
 To:     linux-fsdevel@vger.kernel.org
-Cc:     "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+Cc:     Christian Brauner <brauner@kernel.org>,
         Seth Forshee <sforshee@kernel.org>,
         Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        v9fs-developer@lists.sourceforge.net, linux-cifs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [RFC PATCH 00/29] acl: add vfs posix acl api
-Date:   Thu, 22 Sep 2022 17:16:58 +0200
-Message-Id: <20220922151728.1557914-1-brauner@kernel.org>
+        linux-integrity@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org
+Subject: [PATCH 10/29] selinux: implement set acl hook
+Date:   Thu, 22 Sep 2022 17:17:08 +0200
+Message-Id: <20220922151728.1557914-11-brauner@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220922151728.1557914-1-brauner@kernel.org>
+References: <20220922151728.1557914-1-brauner@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13995; i=brauner@kernel.org; h=from:subject; bh=oi16MCRs2mCm5xmIs7w3qonFGeCQcJqxkrnagMXcCd4=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSTr1JR6zdzyYar1xydBDdHyb5yecZqEPJJ+udI9a9uDKS2z 5/M+6ShlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZjI9g5GhnNrcj58djzpohshYByQ+r HMc0exVcX3fEHR7CJPVSPeSkaGKcydReZ/33LnHsx73/XOfbvD+S1+OXs07O/93lMmwmnCBQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2967; i=brauner@kernel.org; h=from:subject; bh=khd9yJ9DVSHAbKI1RnSSMhQz9ZvYIsRT5tFSI3pyVgQ=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSTr1FT4Lfn0pZZ14x+uVeaP61mkfb9+YU9b+e/oL97yOxMs bLz2dJSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEyEbQkjwxSlrph/n/+8+fVpbkfG9K pQzd57XHuknp5T3FMwbZO2UCkjwxP5ueKTubYt11xenZv4XMdy+cJjbpdfS4XoOIQHeGcL8AEA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,317 +60,64 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: "Christian Brauner (Microsoft)" <brauner@kernel.org>
+The current way of setting and getting posix acls through the generic
+xattr interface is error prone and type unsafe. The vfs needs to
+interpret and fixup posix acls before storing or reporting it to
+userspace. Various hacks exist to make this work. The code is hard to
+understand and difficult to maintain in it's current form. Instead of
+making this work by hacking posix acls through xattr handlers we are
+building a dedicated posix acl api around the get and set inode
+operations. This removes a lot of hackiness and makes the codepaths
+easier to maintain. A lot of background can be found in [1].
 
-Hey everyone,
+So far posix acls were passed as a void blob to the security and
+integrity modules. Some of them like evm then proceed to interpret the
+void pointer and convert it into the kernel internal struct posix acl
+representation to perform their integrity checking magic. This is
+obviously pretty problematic as that requires knowledge that only the
+vfs is guaranteed to have and has lead to various bugs. Add a proper
+security hook for setting posix acls and pass down the posix acls in
+their appropriate vfs format instead of hacking it through a void
+pointer stored in the uapi format.
 
-As we discussed and seen multiple times the current state of how posix
-acls are handled isn't nice and comes with a lot of problems. For a long
-and detailed explanation for just some of the issues [1] provides a good
-summary.
+I spent considerate time in the security module infrastructure and
+audited all codepaths. SELinux has no restrictions based on the posix
+acl values passed through it. The capability hook doesn't need to be
+called either because it only has restrictions on security.* xattrs. So
+this all becomes a very simple hook for SELinux.
 
-The current way of handling posix acls via the generic xattr api is
-error prone, hard to maintain, and type unsafe for the vfs until we call
-into the filesystem's dedicated get and set inode operations.
+Link: https://lore.kernel.org/all/20220801145520.1532837-1-brauner@kernel.org [1]
+Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+---
+ security/selinux/hooks.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-It is already the case that posix acls are special-cased to death all
-the way through the vfs. There are an uncounted number of hacks that
-operate on the uapi posix acl struct instead of the dedicated vfs struct
-posix_acl. And the vfs must be involved in order to interpret and fixup
-posix acls before storing them to the backing store, caching them,
-reporting them to userspace, or for permission checking.
-
-Currently a range of hacks and duct tape exist to make this work. As
-with most things this is really no ones fault it's just something that
-happened over time. But the code is hard to understand and difficult
-to maintain and one is constantly at risk of introducing bugs and
-regressions when having to touch it.
-
-Instead of continuing to hack posix acls through the xattr handlers this
-series builds a dedicated posix acl api solely around the get and set
-inode operations. Going forward, the vfs_get_acl(), vfs_remove_acl(),
-and vfs_set_acl() helpers must be used in order to interact with posix
-acls. They operate directly on the vfs internal struct posix_acl instead
-of abusing the uapi posix acl struct as we currently do. In the end this
-removes all of the hackiness, makes the codepaths easier to maintain,
-and gets us type safety.
-
-This series passes the LTP and xfstests suites without any regressions.
-For xfstests the following combinations were tested:
-
-* xfs
-* ext4
-* btrfs
-* overlayfs
-* overlayfs on top of idmapped mounts
-
-For people wanting to run their own xfstests I'd recommend to shorten
-their test runs via:
-
-./check -g acl,attr,cap,idmapped,io_uring,perms,subvol,unlink
-
-I would appreciate if the 9p and cifs folks could run any posix acl
-related tests as I have no setup to really do this without causing me a
-lot of pain.
-
-Very likely there's a lot more simplifications for posix acls that we
-can make in the future if the basic api has made it.
-
-A few implementation details:
-
-* The series makes sure to retain exactly the same security and
-  integrity module permission checks. See [2] for annotated callchains.
-  Especially for the integrity modules this api is a win because right
-  now they convert the uapi posix acl struct passed to them via a void
-  pointer into the vfs struct posix_acl format to perform permission
-  checking on the mode.
-
-  There's a new dedicated security hook for setting posix acls which
-  passes the vfs struct posix_acl not a void pointer. Basing checking on
-  the posix acl stored in the uapi format is really unreliable. The vfs
-  currently hacks around directly in the uapi struct storing values that
-  frankly the security and integrity modules can't correctly interpret
-  as evidenced by bugs we reported and fixed in this area. It's not
-  necessarily even their fault it's just that the format we provide to
-  them is sub optimal.
-
-* Some filesystems like 9p and cifs need access to the dentry in order
-  to get and set posix acls which is why they either only partially or
-  not even at all implement get and set inode operations. For example,
-  cifs allows setxattr() and getxattr() operations but doesn't allow
-  permission checking based on posix acls because it can't implement a
-  get acl inode operation.
-
-  Thus, this patch series updates the set acl inode operation to take a
-  dentry instead of an inode argument. However, for the get acl inode
-  operation we can't do this as the old get acl method is called in
-  e.g., generic_permission() and inode_permission(). These helpers in
-  turn are called in various filesystem's permission inode operation. So
-  passing a dentry argument to the old get acl inode operation would
-  amount to passing a dentry to the permission inode operation which we
-  shouldn't and probably can't do.
-
-  So instead of extending the existing inode operation Christoph
-  suggested to add a new one. He also requested to ensure that the get
-  and set acl inode operation taking a dentry are consistently named. So
-  for this version the old get acl operation is renamed to
-  ->get_inode_acl() and a new ->get_acl() inode operation taking a
-  dentry is added. With this we can give both 9p and cifs get and set
-  acl inode operations and in turn remove their complex custom posix
-  xattr handlers.
-
-* I've done a full audit of every codepaths using variant of the
-  current generic xattr api to get and set posix acls and surprisingly
-  it isn't that many places. There's of course always a chance that I
-  might have missed some and I'm sure we'll find them soon enough.
-
-  The crucial codepaths to be converted are obviously stacking
-  filesystems such as ecryptfs and overlayfs.
-
-  For a list of all callers currently using generic xattr api helpers
-  see [2] including comments whether they support posix acls or not.
-
-* The old vfs generic posix acl infrastructure doesn't obey
-  the create and replace semantics promised on the setxattr(2) manpage.
-  This patch series doesn't address this. It really is something we
-  should revisit later though.
-
-The patch series is roughly organized as follows:
-
-// intended to be a non-functional change
-1. Change existing set acl inode operation to take a dentry argument.
-
-// intended to be a non-functional change
-2. Rename existing get acl method.
-
-// intended to be a non-functional change
-3. Implement get and set acl inode operations for filesystems that
-   couldn't implement one before because of the missing dentry. That's
-   mostly 9p and cifs.
-
-// intended to be a non-functional change
-4. Build posix acl api, i.e., add vfs_get_acl(), vfs_remove_acl(), and
-   vfs_set_acl() including security and integrity hooks.
-
-// intended to be a non-functional change
-5. Implement get and set acl inode operations for stacking filesystems.
-
-// semantical change
-6. Switch posix acl handling in stacking filesystems to new posix acl
-   api now that all filesystems it can stack upon support it.
-
-// semantical change
-7. Switch vfs to new posix acl api
-
-8. Remove all now unused helpers
-
-The series can be pulled from:
-
-https://gitlab.com/brauner/linux/-/commits/fs.acl.rework
-https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/log/?h=fs.acl.rework
-
-The series contains a few preliminary patches which are scheduled for
-the next merge window. It was just easier to base the series on top of
-them. But if you pull this branch you'll get them included.
-
-I've been working on this for a while and before going any further it'd
-be nice to get some reviews. I think that it should be fine to have get
-and set acl inode operations that operate on the dentry at least nothing
-stuck out immediately that would prevent this. But obviously having
-other people point out issues with that would be helpful.
-
-Thanks to Seth for a lot of good discussion around this and
-encouragement and input from Christoph.
-
-[1]: https://lore.kernel.org/all/20220801145520.1532837-1-brauner@kernel.org
-[2]: https://gist.github.com/brauner/12c795b93a05dc3b3056b1982549a633
-
-Thanks!
-Christian
-
-Christian Brauner (29):
-  fs: pass dentry to set acl method
-  fs: rename current get acl method
-  fs: add new get acl method
-  cifs: implement get acl method
-  cifs: implement set acl method
-  9p: implement get acl method
-  9p: implement set acl method
-  acl: add vfs_set_acl()
-  security: add set acl hook
-  selinux: implement set acl hook
-  smack: implement set acl hook
-  evm: implement set acl hook
-  acl: use set acl hook
-  evm: add post set acl hook
-  acl: add vfs_get_acl()
-  acl: add vfs_remove_acl()
-  evm: simplify evm_xattr_acl_change()
-  ksmbd: use vfs_remove_acl()
-  ecryptfs: implement get acl method
-  ecryptfs: implement set acl method
-  ovl: implement get acl method
-  ovl: implement set acl method
-  ovl: use posix acl api
-  xattr: use posix acl api
-  ecryptfs: use stub posix acl handlers
-  ovl: use stub posix acl handlers
-  cifs: use stub posix acl handlers
-  9p: use stub posix acl handlers
-  acl: remove a slew of now unused helpers
-
- Documentation/filesystems/locking.rst |   4 +-
- Documentation/filesystems/porting.rst |   4 +-
- Documentation/filesystems/vfs.rst     |   3 +-
- fs/9p/acl.c                           | 307 ++++++------
- fs/9p/acl.h                           |  19 +-
- fs/9p/vfs_inode_dotl.c                |   4 +
- fs/9p/xattr.c                         |   7 +-
- fs/9p/xattr.h                         |   2 -
- fs/bad_inode.c                        |   4 +-
- fs/btrfs/acl.c                        |   3 +-
- fs/btrfs/ctree.h                      |   2 +-
- fs/btrfs/inode.c                      |   8 +-
- fs/ceph/acl.c                         |   3 +-
- fs/ceph/dir.c                         |   2 +-
- fs/ceph/inode.c                       |   4 +-
- fs/ceph/super.h                       |   2 +-
- fs/cifs/cifsacl.c                     | 137 +++++
- fs/cifs/cifsfs.c                      |   4 +
- fs/cifs/cifsproto.h                   |  20 +-
- fs/cifs/cifssmb.c                     | 236 +++++----
- fs/cifs/xattr.c                       |  68 +--
- fs/ecryptfs/inode.c                   |  32 ++
- fs/erofs/inode.c                      |   6 +-
- fs/erofs/namei.c                      |   2 +-
- fs/ext2/acl.c                         |   3 +-
- fs/ext2/acl.h                         |   2 +-
- fs/ext2/file.c                        |   2 +-
- fs/ext2/inode.c                       |   2 +-
- fs/ext2/namei.c                       |   4 +-
- fs/ext4/acl.c                         |   3 +-
- fs/ext4/acl.h                         |   2 +-
- fs/ext4/file.c                        |   2 +-
- fs/ext4/inode.c                       |   2 +-
- fs/ext4/namei.c                       |   4 +-
- fs/f2fs/acl.c                         |   4 +-
- fs/f2fs/acl.h                         |   2 +-
- fs/f2fs/file.c                        |   4 +-
- fs/f2fs/namei.c                       |   4 +-
- fs/fuse/acl.c                         |   3 +-
- fs/fuse/dir.c                         |   4 +-
- fs/fuse/fuse_i.h                      |   2 +-
- fs/gfs2/acl.c                         |   3 +-
- fs/gfs2/acl.h                         |   2 +-
- fs/gfs2/inode.c                       |   6 +-
- fs/internal.h                         |   1 +
- fs/jffs2/acl.c                        |   3 +-
- fs/jffs2/acl.h                        |   2 +-
- fs/jffs2/dir.c                        |   2 +-
- fs/jffs2/file.c                       |   2 +-
- fs/jffs2/fs.c                         |   2 +-
- fs/jfs/acl.c                          |   3 +-
- fs/jfs/file.c                         |   4 +-
- fs/jfs/jfs_acl.h                      |   2 +-
- fs/jfs/namei.c                        |   2 +-
- fs/ksmbd/smb2pdu.c                    |   4 +-
- fs/ksmbd/smbacl.c                     |   4 +-
- fs/ksmbd/vfs.c                        |  17 +-
- fs/ksmbd/vfs.h                        |   4 +-
- fs/namei.c                            |   2 +-
- fs/nfs/nfs3_fs.h                      |   2 +-
- fs/nfs/nfs3acl.c                      |   3 +-
- fs/nfs/nfs3proc.c                     |   4 +-
- fs/nfsd/nfs2acl.c                     |   4 +-
- fs/nfsd/nfs3acl.c                     |   4 +-
- fs/nfsd/vfs.c                         |   4 +-
- fs/ntfs3/file.c                       |   4 +-
- fs/ntfs3/namei.c                      |   4 +-
- fs/ntfs3/ntfs_fs.h                    |   4 +-
- fs/ntfs3/xattr.c                      |   9 +-
- fs/ocfs2/acl.c                        |   3 +-
- fs/ocfs2/acl.h                        |   2 +-
- fs/ocfs2/file.c                       |   4 +-
- fs/ocfs2/namei.c                      |   2 +-
- fs/orangefs/acl.c                     |  47 +-
- fs/orangefs/inode.c                   |  47 +-
- fs/orangefs/namei.c                   |   2 +-
- fs/orangefs/orangefs-kernel.h         |   9 +-
- fs/orangefs/orangefs-utils.c          |  12 +-
- fs/overlayfs/copy_up.c                |   9 +
- fs/overlayfs/dir.c                    |  22 +-
- fs/overlayfs/inode.c                  | 140 +++++-
- fs/overlayfs/overlayfs.h              |  36 +-
- fs/overlayfs/super.c                  | 107 +---
- fs/overlayfs/util.c                   |  42 ++
- fs/posix_acl.c                        | 688 +++++++++++++-------------
- fs/reiserfs/acl.h                     |   6 +-
- fs/reiserfs/file.c                    |   2 +-
- fs/reiserfs/inode.c                   |   2 +-
- fs/reiserfs/namei.c                   |   4 +-
- fs/reiserfs/xattr_acl.c               |   9 +-
- fs/xattr.c                            |  78 ++-
- fs/xfs/xfs_acl.c                      |   3 +-
- fs/xfs/xfs_acl.h                      |   2 +-
- fs/xfs/xfs_iops.c                     |  16 +-
- include/linux/evm.h                   |  22 +
- include/linux/fs.h                    |  10 +-
- include/linux/lsm_hook_defs.h         |   2 +
- include/linux/lsm_hooks.h             |   4 +
- include/linux/posix_acl.h             |  35 +-
- include/linux/posix_acl_xattr.h       |  43 +-
- include/linux/security.h              |  11 +
- include/linux/xattr.h                 |   8 +
- io_uring/xattr.c                      |   2 +
- mm/shmem.c                            |   2 +-
- security/integrity/evm/evm_main.c     | 128 +++--
- security/security.c                   |  16 +
- security/selinux/hooks.c              |   8 +
- security/smack/smack_lsm.c            |  24 +
- 108 files changed, 1586 insertions(+), 1062 deletions(-)
-
-
-base-commit: 38e316398e4e6338b80223fb5f74415c0513718f
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 79573504783b..bbc0ce3bde35 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -3239,6 +3239,13 @@ static int selinux_inode_setxattr(struct user_namespace *mnt_userns,
+ 			    &ad);
+ }
+ 
++static int selinux_inode_set_acl(struct user_namespace *mnt_userns,
++				 struct dentry *dentry, const char *acl_name,
++				 struct posix_acl *kacl)
++{
++	return dentry_has_perm(current_cred(), dentry, FILE__SETATTR);
++}
++
+ static void selinux_inode_post_setxattr(struct dentry *dentry, const char *name,
+ 					const void *value, size_t size,
+ 					int flags)
+@@ -7063,6 +7070,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(inode_getxattr, selinux_inode_getxattr),
+ 	LSM_HOOK_INIT(inode_listxattr, selinux_inode_listxattr),
+ 	LSM_HOOK_INIT(inode_removexattr, selinux_inode_removexattr),
++	LSM_HOOK_INIT(inode_set_acl, selinux_inode_set_acl),
+ 	LSM_HOOK_INIT(inode_getsecurity, selinux_inode_getsecurity),
+ 	LSM_HOOK_INIT(inode_setsecurity, selinux_inode_setsecurity),
+ 	LSM_HOOK_INIT(inode_listsecurity, selinux_inode_listsecurity),
 -- 
 2.34.1
 
