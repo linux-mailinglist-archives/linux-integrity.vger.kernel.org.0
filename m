@@ -2,72 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8591A5E6F78
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Sep 2022 00:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584355E729E
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Sep 2022 06:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbiIVWN7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Sep 2022 18:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        id S229774AbiIWECA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Sep 2022 00:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiIVWN5 (ORCPT
+        with ESMTP id S229687AbiIWEB7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Sep 2022 18:13:57 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD901129CF
-        for <linux-integrity@vger.kernel.org>; Thu, 22 Sep 2022 15:13:56 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id m130so14191418oif.6
-        for <linux-integrity@vger.kernel.org>; Thu, 22 Sep 2022 15:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=lVxzQXoJt8yJlDUfwhT+9PZwkUKntLnGspL2HrKQRnw=;
-        b=2rNsM24o5o8hp8REt3SbWPwTx8H5Ez3ZVvyMWYf5FOdHA8xvcb/s6T3cf9ZhMiy3OP
-         MDdYwXnChE4uteJTJDHMEi8RLXFZGzmOTkgTSBHYlLbQL2LOCNWn0DqhjSlw8EX/xU5S
-         SCZiL+x23crfmJ/eL3IASKIFIVOL3SKGMReJgMvJTl9GR/r6TUXJq04VuznLBC8FZlK5
-         gwnkH0J8ZvFAX8tkJnFHz+4rwP5HuXjWm16MDs1da8iT1dmxlTlJuv45gp2mH/hITSlE
-         doBl/3YfKxuORFXqyNLacs3tmmDXNmz4gUtP8RWBRXj3USNFf82tUbXoz6a1mNVkhty+
-         GxRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lVxzQXoJt8yJlDUfwhT+9PZwkUKntLnGspL2HrKQRnw=;
-        b=il4KRJ8F58inL9FlE80CxEP0MAKxPE6fHQvrxNEkLZ3GN3b8oFrCOzf7iu9BZV0xIQ
-         F3XdKsoK2bH0Afq4gcar848X/Hi7uVlexU61OAL8UPEDEKQhzPFtogTGRWf5aNkodkf+
-         nBvjmtrjrmBtDfAmXQyEJ4GkaCbFznRNg5qDcQco0CvObmBZmzLaeoFTftWW/Ucz/mqD
-         r11p+jYCT+ETU4cLqRyK0ZPjU/jD/zCMDJqqW/jd7vt4+ijkcI8MOlDaKJyxIOYsw2qA
-         mXnOoCztxiCLXqppxr8aIlDccOYhIm6rrYaL3NoPEJomKt1b3y7qI9/yg2KFxpL+WSX3
-         I9fg==
-X-Gm-Message-State: ACrzQf1nICTDv/5JOCuslvH6Wpul/dcuy9TqTN0cYqWkxFegmJ560/zE
-        bt+dEdHv+vqhGeyiGoV2JfO6ySY/n2mKOrhL7q77
-X-Google-Smtp-Source: AMsMyM5Onvxiq8nCOD2wBV8RegfymgeU0WI0iCMUw//aI9XM1Wpuhd5pGa5VlijH5GzJXc0eysR5lfHbW/Qiu2J+BYc=
-X-Received: by 2002:a05:6808:144b:b0:350:a06a:f8cb with SMTP id
- x11-20020a056808144b00b00350a06af8cbmr7536588oiv.51.1663884834071; Thu, 22
- Sep 2022 15:13:54 -0700 (PDT)
+        Fri, 23 Sep 2022 00:01:59 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366E3ADCDD;
+        Thu, 22 Sep 2022 21:01:56 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYdgX3Sp1zpVFS;
+        Fri, 23 Sep 2022 11:59:04 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 23 Sep 2022 12:01:55 +0800
+Message-ID: <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
+Date:   Fri, 23 Sep 2022 12:01:54 +0800
 MIME-Version: 1.0
-References: <20220922151728.1557914-1-brauner@kernel.org> <d74030ae-4b9a-5b39-c203-4b813decd9eb@schaufler-ca.com>
- <CAHk-=whLbq9oX5HDaMpC59qurmwj6geteNcNOtQtb5JN9J0qFw@mail.gmail.com>
- <16ca7e4c-01df-3585-4334-6be533193ba6@schaufler-ca.com> <CAHC9VhQRST66pVuNM0WGJsh-W01mDD-bX=GpFxCceUJ1FMWrmg@mail.gmail.com>
- <20220922215731.GA28876@mail.hallyn.com>
-In-Reply-To: <20220922215731.GA28876@mail.hallyn.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 22 Sep 2022 18:13:44 -0400
-Message-ID: <CAHC9VhSBwavTLcgkgJ-AYwH9wzECi3B7BtwdKOx5FJ3n7M+WYg@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/29] acl: add vfs posix acl api
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        v9fs-developer@lists.sourceforge.net, linux-cifs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
+ ima_filter_rule_match()
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>
+References: <20220921125804.59490-1-guozihua@huawei.com>
+ <20220921125804.59490-3-guozihua@huawei.com>
+ <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,63 +54,55 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 5:57 PM Serge E. Hallyn <serge@hallyn.com> wrote:
-> On Thu, Sep 22, 2022 at 03:07:44PM -0400, Paul Moore wrote:
-> > On Thu, Sep 22, 2022 at 2:54 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> > > On 9/22/2022 10:57 AM, Linus Torvalds wrote:
-> > > > On Thu, Sep 22, 2022 at 9:27 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> > > >> Could we please see the entire patch set on the LSM list?
-> > > > While I don't think that's necessarily wrong, I would like to point
-> > > > out that the gitweb interface actually does make it fairly easy to
-> > > > just see the whole patch-set.
-> > > >
-> > > > IOW, that
-> > > >
-> > > >   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/log/?h=fs.acl.rework
-> > > >
-> > > > that Christian pointed to is not a horrible way to see it all. Go to
-> > > > the top-most commit, and it's easy to follow the parent links.
-> > >
-> > > I understand that the web interface is fine for browsing the changes.
-> > > It isn't helpful for making comments on the changes. The discussion
-> > > on specific patches (e.g. selinux) may have impact on other parts of
-> > > the system (e.g. integrity) or be relevant elsewhere (e.g. smack). It
-> > > can be a real problem if the higher level mailing list (the LSM list
-> > > in this case) isn't included.
-> >
-> > This is probably one of those few cases where Casey and I are in
-> > perfect agreement.  I'd much rather see the patches hit my inbox than
-> > have to go hunting for them and then awkwardly replying to them (and
-> > yes, I know there are ways to do that, I just personally find it
-> > annoying).  I figure we are all deluged with email on a daily basis
-> > and have developed mechanisms to deal with that in a sane way, what is
-> > 29 more patches on the pile?
->
-> Even better than the web interface, is find the message-id in any of the
-> emails you did get, and run
->
-> b4 mbox 20220922151728.1557914-1-brauner@kernel.org
->
-> In general I'd agree with sending the whole set to the lsm list, but
-> then one needs to start knowing which lists do and don't want the whole
-> set...  b4 mbox and lei are now how I read all kernel related lists.
+On 2022/9/22 19:09, Mimi Zohar wrote:
+> Hi Scott,
+> 
+> On Wed, 2022-09-21 at 20:58 +0800, GUO Zihua wrote:
+>>                  }
+>> -               if (!rc)
+>> -                       return false;
+>> +
+>> +               if (rc == -ESTALE && !rule_reinitialized) {
+> 
+> Ok, this limits allocating ima_lsm_copy_rule() to the first -ESTALE,
+> 
+>> +                       lsm_rule = ima_lsm_copy_rule(rule);
+>> +                       if (lsm_rule) {
+>> +                               rule_reinitialized = true;
+>> +                               goto retry;
+> 
+> but "retry" is also limited to the first -ESTALE.
 
-In my opinion, sending the entire patchset to the relevant lists
-should be the default for all the reasons mentioned above.  All the
-other methods are fine, and I don't want to stop anyone from using
-their favorite tool, but *requiring* the use of a separate tool to
-properly review and comment on patches gets us away from the
-email-is-universal argument.  Yes, all the other tools mentioned are
-still based in a world of email, but if you are not emailing the
-relevant stakeholders directly (or indirectly via a list), you are
-placing another hurdle in front of the reviewers by requiring them to
-leave their email client based workflow and jump over to lore, b4,
-etc. to review the patchset.
+Technically we would only need one retry. This loop is looping on all 
+the lsm members of one rule, and ima_lsm_copy_rule would update all the 
+lsm members of this rule. The "lsm member" here refers to LSM defined 
+properties like obj_user, obj_role etc. These members are of AND 
+relation, meaning all lsm members together would form one LSM rule.
 
-The lore.kernel.org instance is wonderful, full stop, and the b4 tool
-is equally wonderful, full stop, but they are tools intended to assist
-and optimize; they should not replace the practice of sending patches,
-with the full context, to the relevant parties.
+As of the scenario you mentioned, I think it should be really rare. 
+Spending to much time and code on this might not worth it.
+> 
+>> +                       }
+>> +               }
+>> +               if (!rc) {
+>> +                       result = false;
+>> +                       goto out;
+>> +               }
+>>          }
+>> -       return true;
+>> +       result = true;
+>> +
+>> +out:
+>> +       if (rule_reinitialized) {
+>> +               for (i = 0; i < MAX_LSM_RULES; i++)
+>> +                       ima_filter_rule_free(lsm_rule->lsm[i].rule);
+>> +               kfree(lsm_rule);
+>> +       }
+>> +       return result;
+>>   }
+> 
+
 
 -- 
-paul-moore.com
+Best
+GUO Zihua
