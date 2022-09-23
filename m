@@ -2,107 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584355E729E
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Sep 2022 06:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF53D5E738D
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Sep 2022 07:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiIWECA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Sep 2022 00:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S229797AbiIWF6g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Sep 2022 01:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiIWEB7 (ORCPT
+        with ESMTP id S229624AbiIWF6c (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Sep 2022 00:01:59 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366E3ADCDD;
-        Thu, 22 Sep 2022 21:01:56 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYdgX3Sp1zpVFS;
-        Fri, 23 Sep 2022 11:59:04 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 12:01:55 +0800
-Message-ID: <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
-Date:   Fri, 23 Sep 2022 12:01:54 +0800
+        Fri, 23 Sep 2022 01:58:32 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1809912207B;
+        Thu, 22 Sep 2022 22:58:31 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 2241368AFE; Fri, 23 Sep 2022 07:58:27 +0200 (CEST)
+Date:   Fri, 23 Sep 2022 07:58:26 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        v9fs-developer@lists.sourceforge.net, linux-cifs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH 00/29] acl: add vfs posix acl api
+Message-ID: <20220923055826.GA15662@lst.de>
+References: <20220922151728.1557914-1-brauner@kernel.org> <d74030ae-4b9a-5b39-c203-4b813decd9eb@schaufler-ca.com> <CAHk-=whLbq9oX5HDaMpC59qurmwj6geteNcNOtQtb5JN9J0qFw@mail.gmail.com> <16ca7e4c-01df-3585-4334-6be533193ba6@schaufler-ca.com> <CAHC9VhQRST66pVuNM0WGJsh-W01mDD-bX=GpFxCceUJ1FMWrmg@mail.gmail.com> <20220922215731.GA28876@mail.hallyn.com> <CAHC9VhSBwavTLcgkgJ-AYwH9wzECi3B7BtwdKOx5FJ3n7M+WYg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
- ima_filter_rule_match()
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>
-References: <20220921125804.59490-1-guozihua@huawei.com>
- <20220921125804.59490-3-guozihua@huawei.com>
- <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhSBwavTLcgkgJ-AYwH9wzECi3B7BtwdKOx5FJ3n7M+WYg@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2022/9/22 19:09, Mimi Zohar wrote:
-> Hi Scott,
-> 
-> On Wed, 2022-09-21 at 20:58 +0800, GUO Zihua wrote:
->>                  }
->> -               if (!rc)
->> -                       return false;
->> +
->> +               if (rc == -ESTALE && !rule_reinitialized) {
-> 
-> Ok, this limits allocating ima_lsm_copy_rule() to the first -ESTALE,
-> 
->> +                       lsm_rule = ima_lsm_copy_rule(rule);
->> +                       if (lsm_rule) {
->> +                               rule_reinitialized = true;
->> +                               goto retry;
-> 
-> but "retry" is also limited to the first -ESTALE.
+On Thu, Sep 22, 2022 at 06:13:44PM -0400, Paul Moore wrote:
+> In my opinion, sending the entire patchset to the relevant lists
+> should be the default for all the reasons mentioned above.
 
-Technically we would only need one retry. This loop is looping on all 
-the lsm members of one rule, and ima_lsm_copy_rule would update all the 
-lsm members of this rule. The "lsm member" here refers to LSM defined 
-properties like obj_user, obj_role etc. These members are of AND 
-relation, meaning all lsm members together would form one LSM rule.
+Agreed.  I'm perfectly fine when people minimize the CCs to actual
+people (but then for the entire patch set), but having only the
+partial series in an mbox just makes it useful.  Either the list
+or person on everything or nothing.  I can't actually do anything
+with a partial CC except for either ignoring it or shoting at
+you that I need the entire series to do something useful with it.
 
-As of the scenario you mentioned, I think it should be really rare. 
-Spending to much time and code on this might not worth it.
-> 
->> +                       }
->> +               }
->> +               if (!rc) {
->> +                       result = false;
->> +                       goto out;
->> +               }
->>          }
->> -       return true;
->> +       result = true;
->> +
->> +out:
->> +       if (rule_reinitialized) {
->> +               for (i = 0; i < MAX_LSM_RULES; i++)
->> +                       ima_filter_rule_free(lsm_rule->lsm[i].rule);
->> +               kfree(lsm_rule);
->> +       }
->> +       return result;
->>   }
-> 
-
-
--- 
-Best
-GUO Zihua
+(although in this case I did get all of it anyway).
