@@ -2,156 +2,155 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F275E7945
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Sep 2022 13:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8190E5E7BE2
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Sep 2022 15:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiIWLTv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Sep 2022 07:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        id S229784AbiIWNbC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Sep 2022 09:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiIWLTt (ORCPT
+        with ESMTP id S230076AbiIWNay (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:19:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32AB23BF5;
-        Fri, 23 Sep 2022 04:19:47 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NA0lIN008001;
-        Fri, 23 Sep 2022 11:19:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=eVLNts8du4/dAkRp2IkzA6R7Xd1NbFI7u6ng0l298JY=;
- b=XrgMgVsB2oFn2cwjXlvJc/Wq3twkcyVqTN+CL9h8eAhPo9WyQuvQlaIxTrFLGqBs1JHh
- dzmQT6e2Qj4nb0YGXv6Dh+RVyTrKDMtqdq4aoJE4aEhtcy9kQlNpG/ZSNQXQ6Wh1/lae
- caxsWBY5HjesbVfeXDvQh9E8E49cgKoxQxEpjceeKoUcC5L3y0/dcWCWzy/G1qymptPy
- 63OJv4gBSKko1ONhcLVTF9USTD8TtRCl7Qy+h53mYkYX1/x9PQhrjlpIjB7DmeBdIAhO
- 4IT5IIciuOqYPEl2S/9bXTMC0Lzoh0AzyGOUwE9bSbqVPM3gx/VipMeDsXIQqB4IbvRn 6A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3js7bdqqkt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 11:19:30 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28NAZpKK025246;
-        Fri, 23 Sep 2022 11:19:29 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3js7bdqqkh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 11:19:29 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28NB7vW7008033;
-        Fri, 23 Sep 2022 11:19:28 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma02wdc.us.ibm.com with ESMTP id 3jn5v9y764-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Sep 2022 11:19:28 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28NBJR2o61407676
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 23 Sep 2022 11:19:28 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B463058055;
-        Fri, 23 Sep 2022 11:19:27 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BEC675804E;
-        Fri, 23 Sep 2022 11:19:26 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.5.8])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 23 Sep 2022 11:19:26 +0000 (GMT)
-Message-ID: <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
- ima_filter_rule_match()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Fri, 23 Sep 2022 07:19:26 -0400
-In-Reply-To: <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
-References: <20220921125804.59490-1-guozihua@huawei.com>
-         <20220921125804.59490-3-guozihua@huawei.com>
-         <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
-         <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: kp1VsAdDHC_zCWXYY3Gg28rQXQq5hYnz
-X-Proofpoint-ORIG-GUID: IM5NrmwD8jcVmKOq1Gj04LtNdKIDMcdq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-23_03,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 spamscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209230072
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 09:30:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E22E6DE9;
+        Fri, 23 Sep 2022 06:30:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F4FD62510;
+        Fri, 23 Sep 2022 13:30:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6481AC433D6;
+        Fri, 23 Sep 2022 13:30:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663939851;
+        bh=l1JlluurWiwvkKH7l5/tNNLVpHEQly8opDz1dsRJSOo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TB2uLYC0uWJqGmCUafRtEj3CAiR5CnJiMB8w1NeQkeoHgEHqP4OJSUMGbgzYSqwO5
+         8TNpqzkzimHavz8/puunVuqIGDKx5UmmX6UCMlpDOO2wAJMKp0+eKgdlaAdAxHpeFp
+         foSM3FT9zvDgoCxL4DTMddeQ+W1J2Ncya5pastOM+lGnRQl84Xfrl9VNCFemqaP5bm
+         RRrhmGijiYJ3/Z1Yc8Rh+2UtbgP+IGSbESZVkhwOuT3fOWN0zLNLx1zs/msuBmMbVq
+         Ra0s/Jg/4XvF+oSrV9qxB3UrlTpuQ0mBAg1cGbEn7rOSCLyi2WSZAlPZhgfsxbc1Jx
+         ytbGFRjQTJjeA==
+Date:   Fri, 23 Sep 2022 16:30:47 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Evan Green <evgreen@chromium.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniil Lunev <dlunev@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: TPM: hibernate with IMA PCR 10
+Message-ID: <Yy21B4EGumiI9XsU@kernel.org>
+References: <20220504161439.6.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+ <deafaf6f-8e79-b193-68bf-3ab01bddd5c2@linux.ibm.com>
+ <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
+ <Yw7L+X2cHf9qprxl@kernel.org>
+ <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
+ <96360ec16b21d8b37461a5de083ff794f3604300.camel@linux.ibm.com>
+ <Yxl8tbJERqrmsgpU@kernel.org>
+ <96cfd1f3f084f6d145bd22e0989dc046fe15b66a.camel@linux.ibm.com>
+ <YylDYU+KTX/KJpqU@kernel.org>
+ <2bc656bf67af52e0b9a68e91c5b574e0ab4ffa8e.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2bc656bf67af52e0b9a68e91c5b574e0ab4ffa8e.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-09-23 at 12:01 +0800, Guozihua (Scott) wrote:
-> On 2022/9/22 19:09, Mimi Zohar wrote:
-> > Hi Scott,
+On Wed, Sep 21, 2022 at 04:15:20PM -0400, Mimi Zohar wrote:
+> On Tue, 2022-09-20 at 07:36 +0300, Jarkko Sakkinen wrote:
+> > On Sat, Sep 10, 2022 at 10:40:05PM -0400, Mimi Zohar wrote:
+> > > On Thu, 2022-09-08 at 08:25 +0300, Jarkko Sakkinen wrote:
+> > > > On Wed, Sep 07, 2022 at 07:57:27PM -0400, Mimi Zohar wrote:
+> > > > > On Wed, 2022-09-07 at 13:47 -0700, Evan Green wrote:
+> > > > > > On Tue, Aug 30, 2022 at 7:48 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > > > > >
+> > > > > > > On Mon, Aug 29, 2022 at 02:51:50PM -0700, Matthew Garrett wrote:
+> > > > > > > > On Mon, Aug 29, 2022 at 2:45 PM Ken Goldman <kgold@linux.ibm.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On 5/4/2022 7:20 PM, Evan Green wrote:
+> > > > > > > > > > Enabling the kernel to be able to do encryption and integrity checks on
+> > > > > > > > > > the hibernate image prevents a malicious userspace from escalating to
+> > > > > > > > > > kernel execution via hibernation resume.  [snip]
+> > > > > > > > >
+> > > > > > > > > I have a related question.
+> > > > > > > > >
+> > > > > > > > > When a TPM powers up from hibernation, PCR 10 is reset.  When a
+> > > > > > > > > hibernate image is restored:
+> > > > > > > > >
+> > > > > > > > > 1. Is there a design for how PCR 10 is restored?
+> > > > > > > >
+> > > > > > > > I don't see anything that does that at present.
+> > > > > > > >
+> > > > > > > > > 2. How are /sys/kernel/security/ima/[pseudofiles] saved and
+> > > > > > > > > restored?
+> > > > > > > >
+> > > > > > > > They're part of the running kernel state, so should re-appear without
+> > > > > > > > any special casing. However, in the absence of anything repopulating
+> > > > > > > > PCR 10, they'll no longer match the in-TPM value.
+> > > > > > >
+> > > > > > > This feature could still be supported, if IMA is disabled
+> > > > > > > in the kernel configuration, which I see a non-issue as
+> > > > > > > long as config flag checks are there.
+> > > > > > 
+> > > > > > Right, from what I understand about IMA, the TPM's PCR getting out of
+> > > > > > sync with the in-kernel measurement list across a hibernate (because
+> > > > > > TPM is reset) or kexec() (because in-memory list gets reset) is
+> > > > > > already a problem. This series doesn't really address that, in that it
+> > > > > > doesn't really make that situation better or worse.
+> > > > > 
+> > > > > For kexec, the PCRs are not reset, so the IMA measurment list needs to
+> > > > > be carried across kexec and restored.  This is now being done on most
+> > > > > architectures.  Afterwards, the IMA measurement list does match the
+> > > > > PCRs.
+> > > > > 
+> > > > > Hibernation introduces a different situation, where the the PCRs are
+> > > > > reset, but the measurement list is restored, resulting in their not
+> > > > > matching.
+> > > > 
+> > > > As I said earlier the feature still can be supported if
+> > > > kernel does not use IMA but obviously needs to be flagged.
+> > > 
+> > > Jumping to the conclusion that "hibernate" is acceptable for non-IMA
+> > > enabled kernels misses the security implications of mixing (kexec) non-
+> > > IMA and IMA enabled kernels. 
+> > > I would prefer some sort of hibernate marker, the equivalent of a
+> > > "boot_aggregate" record.
 > > 
-> > On Wed, 2022-09-21 at 20:58 +0800, GUO Zihua wrote:
-> >>                  }
-> >> -               if (!rc)
-> >> -                       return false;
-> >> +
-> >> +               if (rc == -ESTALE && !rule_reinitialized) {
+> > Not sure if this matters. If you run a kernel, which is not aware
+> > of IMA, it's your choice. I don't undestand why here is so important
+> > to protect user from doing illogical decisions.
 > > 
-> > Ok, this limits allocating ima_lsm_copy_rule() to the first -ESTALE,
-> > 
-> >> +                       lsm_rule = ima_lsm_copy_rule(rule);
-> >> +                       if (lsm_rule) {
-> >> +                               rule_reinitialized = true;
-> >> +                               goto retry;
-> > 
-> > but "retry" is also limited to the first -ESTALE.
+> > If you want non-IMA kernels to support IMA, CONFIG_IMA should not
+> > probably even exist because you are essentially saying that any
+> > kernel play well with IMA.
 > 
-> Technically we would only need one retry. This loop is looping on all 
-> the lsm members of one rule, and ima_lsm_copy_rule would update all the 
-> lsm members of this rule. The "lsm member" here refers to LSM defined 
-> properties like obj_user, obj_role etc. These members are of AND 
-> relation, meaning all lsm members together would form one LSM rule.
+> That will never happen, nor am I suggesting it should.
 > 
-> As of the scenario you mentioned, I think it should be really rare. 
-> Spending to much time and code on this might not worth it.
-> > 
-> >> +                       }
-> >> +               }
+> Enabling hibernate or IMA shouldn't be an either-or decision, if at all
+> possible.  The main concern is that attestation servers be able to
+> detect hibernation and possibly the loss of measurement
+> history.  Luckily, although the PCRs are reset, the TPM
+> pcrUpdateCounter is not.
+> 
+> I would appreciate including a "hibernate" marker, similar to the
+> "boot_aggregate".
 
-Either there can be multiple LSM fields and the memory is allocated
-once and freed once at the end, as you suggested, or the memory should
-be freed here and rule_reinitialized reset, minimizing the code change.
+Yeah, I guess that would not do harm.
 
-> >> +               if (!rc) {
-> >> +                       result = false;
-> >> +                       goto out;
-> >> +               }
-> >>          }
-> >> -       return true;
-> >> +       result = true;
-> >> +
-> >> +out:
-> >> +       if (rule_reinitialized) {
-> >> +               for (i = 0; i < MAX_LSM_RULES; i++)
-> >> +                       ima_filter_rule_free(lsm_rule->lsm[i].rule);
-> >> +               kfree(lsm_rule);
-> >> +       }
-> >> +       return result;
-> >>   }
-
--- 
-thanks,
-
-Mimi
-
+BR, Jarkko
