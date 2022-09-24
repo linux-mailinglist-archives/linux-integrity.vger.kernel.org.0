@@ -2,107 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF555E8859
-	for <lists+linux-integrity@lfdr.de>; Sat, 24 Sep 2022 06:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840515E88AC
+	for <lists+linux-integrity@lfdr.de>; Sat, 24 Sep 2022 08:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbiIXEcA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 24 Sep 2022 00:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
+        id S233207AbiIXGFd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 24 Sep 2022 02:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233053AbiIXEb7 (ORCPT
+        with ESMTP id S233312AbiIXGFc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 24 Sep 2022 00:31:59 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5AD120BC2
-        for <linux-integrity@vger.kernel.org>; Fri, 23 Sep 2022 21:31:58 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id q9so1939250pgq.8
-        for <linux-integrity@vger.kernel.org>; Fri, 23 Sep 2022 21:31:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=GnuhqFcO+fe0wjKJOsEuT4koguWc3h3nlcYn9yXR1Zw=;
-        b=ilf0THC+aUYPZwJdPDqccBQqqkMoBov963Qzs4Dr2+tuAPSs/AcMmzfsh15hy6+fH7
-         YTnwBOSMof5NP3YfRHg6bn185tlwhU0tn7acrCMKbYVD+djexbMzul59+Q5oft9TjqHj
-         mg9uLJXPb8EqhgT1u1YSKzol9b6AhlL1VCSIg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=GnuhqFcO+fe0wjKJOsEuT4koguWc3h3nlcYn9yXR1Zw=;
-        b=NrVwhT4GMZSsk2dNQZwj3QBJXoVHftiRkYvbN/6r1yViJ8X52zpnO1nb2y6gJaaV3G
-         85mYCR1CFjm666XXAa6n+M5Td1Hsdc31fc4wY8stY2uHCD2oIJqvP2azyvqYLUC1C06Q
-         bzRvxHSS9HhxKvAo12NFEDT+9SN53DWaidPi3G9l2YH+LMD2ZJ1yPkSKYzuLmHm1fd+v
-         5sECy56uIAQEFO58xtUnBqok3oZELuBrx2FcVDr37p5y1BVVAeVDdFlvztZJupfQQQor
-         0/HSS1FsQI9n0zx6rAcCAYDW13oL/vPaUVl4aYIy8+T+nms6tSUr0g5TKKzAIARWa07W
-         8btA==
-X-Gm-Message-State: ACrzQf2513OkLD6zBDNprgYkITVyH2l7wWo2xQFOb6ZLxLnvrQGlV1eo
-        1w7a/a6ceav93wUHGg6S8DM/Rw==
-X-Google-Smtp-Source: AMsMyM5aWgHQQgsKm67s9bNvFG2Josu1kMqGEZ4X0ajZCrpuwU5ilSO8WEOZTkJiSG0xeUURu/VHNQ==
-X-Received: by 2002:a63:91c7:0:b0:438:36c9:9022 with SMTP id l190-20020a6391c7000000b0043836c99022mr10756123pge.573.1663993917905;
-        Fri, 23 Sep 2022 21:31:57 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m2-20020a170902d18200b001728ac8af94sm6677144plb.248.2022.09.23.21.31.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 21:31:56 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 21:31:56 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 07/10] PM: hibernate: Use TPM-backed keys to encrypt
- image
-Message-ID: <202209232130.ED110D8F7D@keescook>
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220823152108.v2.7.Ibd067e73916b9fae268a5824c2dd037416426af8@changeid>
- <202209201610.C06F8CA@keescook>
- <CAE=gft4twDMw8zpp1o0hv+SFFQtGNxkAivBg0VC2Pax1ez7qzg@mail.gmail.com>
+        Sat, 24 Sep 2022 02:05:32 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD9421242;
+        Fri, 23 Sep 2022 23:05:27 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZJL05Tz2zWh0d;
+        Sat, 24 Sep 2022 14:01:12 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 14:05:12 +0800
+Message-ID: <7ac3e330-e77c-95d8-7d3b-29e243b57251@huawei.com>
+Date:   Sat, 24 Sep 2022 14:05:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE=gft4twDMw8zpp1o0hv+SFFQtGNxkAivBg0VC2Pax1ez7qzg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
+ ima_filter_rule_match()
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>
+References: <20220921125804.59490-1-guozihua@huawei.com>
+ <20220921125804.59490-3-guozihua@huawei.com>
+ <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
+ <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
+ <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 03:23:43PM -0700, Evan Green wrote:
-> On Tue, Sep 20, 2022 at 4:16 PM Kees Cook <keescook@chromium.org> wrote:
-> > On Tue, Aug 23, 2022 at 03:25:23PM -0700, Evan Green wrote:
-> > > [...]
-> > > +     ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
-> > > +                                    NULL);
-> >
-> > You want to keep the trailing NUL byte here so it's easier to read back
-> > later? Reading it back will need to verify the trailing NUL regardless.
-> > (Does this get read back?)
+On 2022/9/23 19:19, Mimi Zohar wrote:
+> On Fri, 2022-09-23 at 12:01 +0800, Guozihua (Scott) wrote:
+>> On 2022/9/22 19:09, Mimi Zohar wrote:
+>>> Hi Scott,
+>>>
+>>> On Wed, 2022-09-21 at 20:58 +0800, GUO Zihua wrote:
+>>>>                   }
+>>>> -               if (!rc)
+>>>> -                       return false;
+>>>> +
+>>>> +               if (rc == -ESTALE && !rule_reinitialized) {
+>>>
+>>> Ok, this limits allocating ima_lsm_copy_rule() to the first -ESTALE,
+>>>
+>>>> +                       lsm_rule = ima_lsm_copy_rule(rule);
+>>>> +                       if (lsm_rule) {
+>>>> +                               rule_reinitialized = true;
+>>>> +                               goto retry;
+>>>
+>>> but "retry" is also limited to the first -ESTALE.
+>>
+>> Technically we would only need one retry. This loop is looping on all
+>> the lsm members of one rule, and ima_lsm_copy_rule would update all the
+>> lsm members of this rule. The "lsm member" here refers to LSM defined
+>> properties like obj_user, obj_role etc. These members are of AND
+>> relation, meaning all lsm members together would form one LSM rule.
+>>
+>> As of the scenario you mentioned, I think it should be really rare.
+>> Spending to much time and code on this might not worth it.
+>>>
+>>>> +                       }
+>>>> +               }
 > 
-> Are you referring to the trailing nul on keyinfo? The keyinfo string
-> is only used within this function, as key_instantiate_and_link()
-> receives it as a parameter string. I can see that
-> trusted_instantiate() also null-terminates the buffer defensively for
-> itself, but it still seemed prudent to hand in a terminated string. I
-> can remove the + 1 if you think it's better.
+> Either there can be multiple LSM fields and the memory is allocated
+> once and freed once at the end, as you suggested, or the memory should
+> be freed here and rule_reinitialized reset, minimizing the code change.
 
-No, I like having the trailing NUL byte -- it seems more robust that
-way. I just wanted to understand who the consumer was going to be. I'm
-clear now; thank you! :)
+I might have overlooked something, but if I understands the code 
+correctly, we would be copying the same rule over and over again till 
+the loop ends in that case. ima_lsm_update_rule() would replace the rule 
+node on the rule list without updating the rule in place. Although 
+synchronize_rcu() should prevent a UAF, the rule in ima_match_rules() 
+would not be updated. Meaning SELinux would always return -ESTALE before 
+we copy and retry as we keep passing in the outdated rule entry.
+> 
+>>>> +               if (!rc) {
+>>>> +                       result = false;
+>>>> +                       goto out;
+>>>> +               }
+>>>>           }
+>>>> -       return true;
+>>>> +       result = true;
+>>>> +
+>>>> +out:
+>>>> +       if (rule_reinitialized) {
+>>>> +               for (i = 0; i < MAX_LSM_RULES; i++)
+>>>> +                       ima_filter_rule_free(lsm_rule->lsm[i].rule);
+>>>> +               kfree(lsm_rule);
+>>>> +       }
+>>>> +       return result;
+>>>>    }
+> 
+
 
 -- 
-Kees Cook
+Best
+GUO Zihua
