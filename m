@@ -2,120 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128065E98D9
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Sep 2022 07:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0F25E9B6E
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Sep 2022 10:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiIZFkL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Sep 2022 01:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S234400AbiIZIAv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Sep 2022 04:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbiIZFkK (ORCPT
+        with ESMTP id S234311AbiIZH7s (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Sep 2022 01:40:10 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9727D183BA;
-        Sun, 25 Sep 2022 22:40:04 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id u69so5618518pgd.2;
-        Sun, 25 Sep 2022 22:40:04 -0700 (PDT)
+        Mon, 26 Sep 2022 03:59:48 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3DC1E3DB
+        for <linux-integrity@vger.kernel.org>; Mon, 26 Sep 2022 00:57:36 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id v4so5829492pgi.10
+        for <linux-integrity@vger.kernel.org>; Mon, 26 Sep 2022 00:57:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=zbMWBpJAr3OkSRe66ITLMsu2IwUoetprW3YnPTViuio=;
-        b=dOx4PbxAEA45IugHMxj+VOgf0c4AcoOEBjy447rlNd/9AfP2QjGYXtea3yg9skyxIK
-         fFjDAPYOleyizDiY0xCUpedgRZgYP2f5Tmssaj+rZXY07EEj5I4eh8pMWmFdBeGSJkBe
-         LfilB76y6vrdRBTtBlKgGq2SidQxImUas7yA7A+sm2rjUPR1iXgLfPCMf7LMK8FMTBu2
-         1tkfrFu9+yCBHKMIhrf1oD9eazvBMpGmvcJE2lK3itp6b9mdCzfAuxQTSOjul6uEwRIE
-         EGw9WgP3rLgHkTsD2nPR6S5+XmuRTF/Xq6J7NtSwuc1Qsc/UXedMAkm9yV8HiwZEBj+N
-         q0ag==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=p4tQ0Veg2aAipvjxXfd/dOpQbJgpeWN6SuNpOla53Hk=;
+        b=WiwqDYN3Ur2fO943ookpYkguhas9KY4wHopBmxa3ytfFMqfU7WjIRhDldMRfc9V4ZM
+         X8RNw5Nw3+30DEGNtv2uDZU05lJH/OghhZPQ5f3JbXR2OgbhG7oAyck9Fpu6s/DEm3fd
+         nS2WZ9WXk/lDEa6OaYXhhvnlxo/px7+z5jbwJoO416YLzkUicesp30SbWQxR/pE7dDHM
+         CO+DdHg3kgCcNvdi/KQd17Gj2BCSTexq86p3Qe5BPaTdKqeOKG4VFrtm4Aq+dFenBfQX
+         U5z95aRnkyUslN/brR/HUh6UMEOROlZOa+J9yVbD2r5c2X9fj/2wTayIO/UfxKyG/N71
+         bHPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=zbMWBpJAr3OkSRe66ITLMsu2IwUoetprW3YnPTViuio=;
-        b=JHFm0Xlw7vIt/GxMxas/dYAWHUrjSLeQPvd6RNlbAeUBjCrh3GCgldcRrROwZJkchB
-         /QWKnYEK9a73jzIsu0LXEd85qyO1QU9vcjRdXOP39io3OQoIePgmYrRhvkug0EjwLq8a
-         WL3Nk1bvOG2bDTHV6NABQVw1GqL3pUUUCBBCv2FbKq6huYbSAiRuuy5JxuFkBf3kdc9J
-         xkc7Z6Ns+kae0WfasW4pwy4SYLR8ghMQpmr1acYS/UYST4WLprc6YQrf/lk8ePzpRyLu
-         YWmkFrK3nSHX+QFGNRxNjHExg/dTypGDhtTzZChI2s7XgeM/KPvUFmzt4NtrqSmora71
-         WXOg==
-X-Gm-Message-State: ACrzQf08vXBd6yNXqe1L7en3p5cd+cgBMQ3rHINsULKLoG2YZjnZVUA6
-        6flO4ZCPncO3SudAvHh37lI=
-X-Google-Smtp-Source: AMsMyM78y3GHje17aC0crHddY/JbQqOBEWo9hveb8SUBzolzOMysUeG0fZK7vLtmf1eNsVtTJuA1iw==
-X-Received: by 2002:a63:90c9:0:b0:434:b578:3bb4 with SMTP id a192-20020a6390c9000000b00434b5783bb4mr17686371pge.389.1664170803940;
-        Sun, 25 Sep 2022 22:40:03 -0700 (PDT)
-Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:7e1b:858c:19dc:934])
-        by smtp.gmail.com with ESMTPSA id h18-20020a170902f71200b00176b0dec886sm10120350plo.58.2022.09.25.22.40.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 22:40:03 -0700 (PDT)
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] tpm: st33zp24: remove pointless checks on probe
-Date:   Sun, 25 Sep 2022 22:39:58 -0700
-Message-Id: <20220926053958.1541912-3-dmitry.torokhov@gmail.com>
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-In-Reply-To: <20220926053958.1541912-1-dmitry.torokhov@gmail.com>
-References: <20220926053958.1541912-1-dmitry.torokhov@gmail.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=p4tQ0Veg2aAipvjxXfd/dOpQbJgpeWN6SuNpOla53Hk=;
+        b=FuLKH1nPvGNwCtou4VJBSs4xTNY5QJac0udkm0PFhyBnsYZKLxdu6tKwjgvrcx+sY5
+         AYeXCojWfdjb4SmPPb1ddkMOM1zB9RkYuuxX1BF8XYpRh4k96YVJ68573eJH6Yo/3nPp
+         9kzSvHBi7kHprkVS4Mx6E+60eo/4hw6kHqOO/geGfYd/RJPNM6pNaoVLI++9rNSj/Jvu
+         jcuTfKv+AWZoYigyjuwka49PCEaYS2sxPpOnVGlPHM3xGJ0KIWLVbO/9hiiXhqUsW4zR
+         3rir7+ehCT4ydVlSYIXHLxCoqWbuGPi2MzLEjk3dHbbO8uiYyI8n/VVPukt6QfKNpn/g
+         ASKg==
+X-Gm-Message-State: ACrzQf18NhnpNx1dgyPhqDHKNAkzMFUX5RgDF2Qt0QpxyurZvQr2w/r/
+        NyAXZbzAN+O24wrRWDjLPQ+ZpKOLvIqjayOcsnM=
+X-Google-Smtp-Source: AMsMyM6jxUyPK1BxNKQi/p/f9XWjIweva48ugzk3U5kBuC/CVoGqbMi7XVfIZGVZb9/NV7Fd6mcC9XBhib7IPr0mOKM=
+X-Received: by 2002:a62:8345:0:b0:53e:a1bf:8df9 with SMTP id
+ h66-20020a628345000000b0053ea1bf8df9mr22414961pfe.68.1664179055692; Mon, 26
+ Sep 2022 00:57:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ac4:9ba2:0:b0:578:474:608e with HTTP; Mon, 26 Sep 2022
+ 00:57:35 -0700 (PDT)
+Reply-To: izzatibrahim724@gmail.com
+From:   "Ibrahim I . Hassan" <doungotraore1234@gmail.com>
+Date:   Mon, 26 Sep 2022 07:57:35 +0000
+Message-ID: <CAJFraYwCRR8omz_C3k6hA9V8=YiNDJ6AayC165Y19Y4rRY8U5A@mail.gmail.com>
+Subject: Thanks
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:535 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5202]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [izzatibrahim724[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [doungotraore1234[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [doungotraore1234[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Driver core will never call driver's probe method without appropriate
-device structure, so testing them for NULL is pointless.
+ATTENTION:
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- drivers/char/tpm/st33zp24/i2c.c | 6 ------
- drivers/char/tpm/st33zp24/spi.c | 7 -------
- 2 files changed, 13 deletions(-)
+Have you any viable business plan that needs funding? I am acting on
+behalf of a family who are cautious due to political and personal
+reasons. Be assured that more details will be revealed on showing
+interest.
 
-diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-index 614c7d8ed84f..8156bb2af78c 100644
---- a/drivers/char/tpm/st33zp24/i2c.c
-+++ b/drivers/char/tpm/st33zp24/i2c.c
-@@ -106,12 +106,6 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
- {
- 	struct st33zp24_i2c_phy *phy;
- 
--	if (!client) {
--		pr_info("%s: i2c client is NULL. Device not accessible.\n",
--			__func__);
--		return -ENODEV;
--	}
--
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
- 		dev_info(&client->dev, "client not i2c capable\n");
- 		return -ENODEV;
-diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-index ff4adbe104cf..2154059f0235 100644
---- a/drivers/char/tpm/st33zp24/spi.c
-+++ b/drivers/char/tpm/st33zp24/spi.c
-@@ -223,13 +223,6 @@ static int st33zp24_spi_probe(struct spi_device *dev)
- {
- 	struct st33zp24_spi_phy *phy;
- 
--	/* Check SPI platform functionnalities */
--	if (!dev) {
--		pr_info("%s: dev is NULL. Device is not accessible.\n",
--			__func__);
--		return -ENODEV;
--	}
--
- 	phy = devm_kzalloc(&dev->dev, sizeof(struct st33zp24_spi_phy),
- 			   GFP_KERNEL);
- 	if (!phy)
--- 
-2.37.3.998.g577e59143f-goog
+For the safety of their funds the family will be willing to invest or
+fund in both short and long term projects. Should you be interested to
+engage us for a more detailed discussion on the aforementioned
+proposal, we would be glad to do so in whatever medium appropriate for
+this engagement.
 
+The funds will be released through bank to bank transfer upon proof of
+feasibility study conformable to be viable and demonstration of
+managerial skill to prove that the principal amount being invested
+will be secured,
+
+Due to the above mentioned reasons (political and personal) we implore
+for confidentiality as we look forward to your response. Please
+contact me with the below alternative email Address (
+izzatibrahim724@gmail.com )
+We look forward towards receiving your proposal/feasibility study.
+
+Regards :
+Ibrahim I . Hassan
