@@ -2,122 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0F25E9B6E
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Sep 2022 10:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4675E9CEC
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Sep 2022 11:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbiIZIAv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Sep 2022 04:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S234751AbiIZJGl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Sep 2022 05:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234311AbiIZH7s (ORCPT
+        with ESMTP id S234744AbiIZJGN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Sep 2022 03:59:48 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3DC1E3DB
-        for <linux-integrity@vger.kernel.org>; Mon, 26 Sep 2022 00:57:36 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id v4so5829492pgi.10
-        for <linux-integrity@vger.kernel.org>; Mon, 26 Sep 2022 00:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=p4tQ0Veg2aAipvjxXfd/dOpQbJgpeWN6SuNpOla53Hk=;
-        b=WiwqDYN3Ur2fO943ookpYkguhas9KY4wHopBmxa3ytfFMqfU7WjIRhDldMRfc9V4ZM
-         X8RNw5Nw3+30DEGNtv2uDZU05lJH/OghhZPQ5f3JbXR2OgbhG7oAyck9Fpu6s/DEm3fd
-         nS2WZ9WXk/lDEa6OaYXhhvnlxo/px7+z5jbwJoO416YLzkUicesp30SbWQxR/pE7dDHM
-         CO+DdHg3kgCcNvdi/KQd17Gj2BCSTexq86p3Qe5BPaTdKqeOKG4VFrtm4Aq+dFenBfQX
-         U5z95aRnkyUslN/brR/HUh6UMEOROlZOa+J9yVbD2r5c2X9fj/2wTayIO/UfxKyG/N71
-         bHPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=p4tQ0Veg2aAipvjxXfd/dOpQbJgpeWN6SuNpOla53Hk=;
-        b=FuLKH1nPvGNwCtou4VJBSs4xTNY5QJac0udkm0PFhyBnsYZKLxdu6tKwjgvrcx+sY5
-         AYeXCojWfdjb4SmPPb1ddkMOM1zB9RkYuuxX1BF8XYpRh4k96YVJ68573eJH6Yo/3nPp
-         9kzSvHBi7kHprkVS4Mx6E+60eo/4hw6kHqOO/geGfYd/RJPNM6pNaoVLI++9rNSj/Jvu
-         jcuTfKv+AWZoYigyjuwka49PCEaYS2sxPpOnVGlPHM3xGJ0KIWLVbO/9hiiXhqUsW4zR
-         3rir7+ehCT4ydVlSYIXHLxCoqWbuGPi2MzLEjk3dHbbO8uiYyI8n/VVPukt6QfKNpn/g
-         ASKg==
-X-Gm-Message-State: ACrzQf18NhnpNx1dgyPhqDHKNAkzMFUX5RgDF2Qt0QpxyurZvQr2w/r/
-        NyAXZbzAN+O24wrRWDjLPQ+ZpKOLvIqjayOcsnM=
-X-Google-Smtp-Source: AMsMyM6jxUyPK1BxNKQi/p/f9XWjIweva48ugzk3U5kBuC/CVoGqbMi7XVfIZGVZb9/NV7Fd6mcC9XBhib7IPr0mOKM=
-X-Received: by 2002:a62:8345:0:b0:53e:a1bf:8df9 with SMTP id
- h66-20020a628345000000b0053ea1bf8df9mr22414961pfe.68.1664179055692; Mon, 26
- Sep 2022 00:57:35 -0700 (PDT)
+        Mon, 26 Sep 2022 05:06:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3458839B9F;
+        Mon, 26 Sep 2022 02:05:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 286BDB8076E;
+        Mon, 26 Sep 2022 09:05:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A980C433D7;
+        Mon, 26 Sep 2022 09:05:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664183118;
+        bh=0g86jOVv3VeJ8lk0JCkQymoiaTts5ZO0mxnD94+cDig=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iNwm0JGLH6PEK2b/4/REbfim6kqxRnjv5mLiSrtb19n54sh6VVtQtx9vNJYH1kaNL
+         a7H5kPypEC4KnbzDPkWGWvqsdYxdlweAHF/nmNZZa40nA2EPtdpUawy/4mkLpJwiij
+         3AFkAwbWOOQvABeJMtAvbww4B/Y/UM8xbxUnpcKyKb94p/A4Ic9FRs28nWQrxtLNeJ
+         qi1SaHlXgMTmCIK6b1ElKx9InThJLjT8bCRA4dAsnoFAVXQA/GMcthIVSQ0vw2Z8Mn
+         VXK6e7sxxaFSEYEqmvtWp6Q2q70YbpGu8VOQE+sgCNiVxjlxw50vWvm3ZtfN+QiXrl
+         oJmCu6jFzczlQ==
+Date:   Mon, 26 Sep 2022 11:05:13 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org,
+        Seth Forshee <sforshee@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-integrity@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org
+Subject: Re: [PATCH 10/29] selinux: implement set acl hook
+Message-ID: <20220926090513.hn3ylkakb5wf2rrx@wittgenstein>
+References: <20220922151728.1557914-1-brauner@kernel.org>
+ <20220922151728.1557914-11-brauner@kernel.org>
+ <CAHC9VhS7gEbngqYPMya52EMS5iZYQ_7pPgQiEfRqwPCgzhDbwA@mail.gmail.com>
+ <20220923064707.GD16489@lst.de>
+ <20220923075752.nmloqf2aj5yhoe34@wittgenstein>
+ <CAHC9VhS3NWfMk3uHxZSZMtDay4FqOYzTf9mKCy1=Rb22r-2P4A@mail.gmail.com>
+ <20220923143540.howryhuygxi2hsj3@wittgenstein>
+ <CAHC9VhRZf+OAzc96=c2s3NqkizNh2tZbLF8OFPHbFFuFXEZ8sA@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ac4:9ba2:0:b0:578:474:608e with HTTP; Mon, 26 Sep 2022
- 00:57:35 -0700 (PDT)
-Reply-To: izzatibrahim724@gmail.com
-From:   "Ibrahim I . Hassan" <doungotraore1234@gmail.com>
-Date:   Mon, 26 Sep 2022 07:57:35 +0000
-Message-ID: <CAJFraYwCRR8omz_C3k6hA9V8=YiNDJ6AayC165Y19Y4rRY8U5A@mail.gmail.com>
-Subject: Thanks
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:535 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5202]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [izzatibrahim724[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [doungotraore1234[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [doungotraore1234[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhRZf+OAzc96=c2s3NqkizNh2tZbLF8OFPHbFFuFXEZ8sA@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-ATTENTION:
+On Fri, Sep 23, 2022 at 01:35:08PM -0400, Paul Moore wrote:
+> On Fri, Sep 23, 2022 at 10:35 AM Christian Brauner <brauner@kernel.org> wrote:
+> > On Fri, Sep 23, 2022 at 10:26:35AM -0400, Paul Moore wrote:
+> > > On Fri, Sep 23, 2022 at 3:57 AM Christian Brauner <brauner@kernel.org> wrote:
+> > > > On Fri, Sep 23, 2022 at 08:47:07AM +0200, Christoph Hellwig wrote:
+> > > > > On Thu, Sep 22, 2022 at 01:16:57PM -0400, Paul Moore wrote:
+> > > > > > properly review the changes, but one thing immediately jumped out at
+> > > > > > me when looking at this: why is the LSM hook
+> > > > > > "security_inode_set_acl()" when we are passing a dentry instead of an
+> > > > > > inode?  We don't have a lot of them, but there are
+> > > > > > `security_dentry_*()` LSM hooks in the existing kernel code.
+> > > > >
+> > > > > I'm no LSM expert, but isn't the inode vs dentry for if it is
+> > > > > related to an inode operation or dentry operation, not about that
+> > > > > the first argument is?
+> > > >
+> > > > Indeed. For example ...
+> > >
+> > > If the goal is for this LSM hook to operate on an inode and not a
+> > > dentry, let's pass it an inode instead.  This should help prevent
+> >
+> > I would be ok with that but EVM requires a dentry being passed and as
+> > evm is called from security_inode_set_acl() exactly like it is from
+> > security_inode_setxattr() and similar the hook has to take a dentry.
+> 
+> If a dentry is truly needed by EVM (a quick look indicates that it may
+> just be for the VFS getxattr API, but I haven't traced the full code
+> path), then I'm having a hard time reconciling that this isn't a
+> dentry operation.  Yes, I get that the ACLs belong to the inode and
+> not the dentry, but then why do we need the dentry?  It seems like the
+> interfaces are broken slightly, or at least a little odd ... <shrug>
 
-Have you any viable business plan that needs funding? I am acting on
-behalf of a family who are cautious due to political and personal
-reasons. Be assured that more details will be revealed on showing
-interest.
+There's multiple reasons for the generic xattr api to take a dentry. For
+example, there are quite a few filesystems that require dentry access
+during (specific or all) xattr operations. So ideally, we'd just want to
+pass the dentry I'd say. But we can't do that because of security
+modules. 
 
-For the safety of their funds the family will be willing to invest or
-fund in both short and long term projects. Should you be interested to
-engage us for a more detailed discussion on the aforementioned
-proposal, we would be glad to do so in whatever medium appropriate for
-this engagement.
+Some security modules call security_d_instantiate() which in turn calls
+__vfs_{g,s}et_xattr() in the hook implementation. That's at least true
+of SELinux and Smack iirc. They want dentry and inode but
+security_d_instantiate() is called in e.g., d_instantiate and d_add()
+before the inode is attached to the dentry:
 
-The funds will be released through bank to bank transfer upon proof of
-feasibility study conformable to be viable and demonstration of
-managerial skill to prove that the principal amount being invested
-will be secured,
+selinux_d_instantiate()
+-> inode_doinit_with_dentry()
+   -> inode_doinit_use_xattr()
+      -> __vfs_getxattr()
 
-Due to the above mentioned reasons (political and personal) we implore
-for confidentiality as we look forward to your response. Please
-contact me with the below alternative email Address (
-izzatibrahim724@gmail.com )
-We look forward towards receiving your proposal/feasibility study.
+smack_d_instantiate()
+-> __vfs_getxattr()
+-> __vfs_setxattr()
 
-Regards :
-Ibrahim I . Hassan
+So that mandates both dentry and inode in vfs xattr helpers.
+
+I don't think we can and want to solve this in this patchset. For now we
+can stick with the naming as set by precedent and then in the future the
+security modules can decide whether they want to do a rename patchset
+for most of the xattr hooks at some point.
+
+> 
+> > And I want to minimize - ideally get rid of at some point - separate
+> > calls to security_*() and evm_*() or ima_() in the vfs. So the evm hook
+> > should please stay in there.
+> 
+> For the record, I want to get rid of the IMA and EVM specific hooks in
+> the kernel.  They were a necessity back when there could only be one
+> LSM active at a given time, but with that no longer the case I see
+> little reason why IMA/EVM/etc. remain separate; it makes the code
+> worse and complicates a lot of things both at the LSM layer as well as
+> the rest of the kernel.  I've mentioned this to a few people,
+> including Mimi, and it came up during at talk at LPC this year.
+
+Sounds good.
