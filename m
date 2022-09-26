@@ -2,175 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FDC5EAAA7
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Sep 2022 17:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1FF5EB076
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Sep 2022 20:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbiIZPYX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Sep 2022 11:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
+        id S230195AbiIZSs4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Sep 2022 14:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236642AbiIZPX4 (ORCPT
+        with ESMTP id S230120AbiIZSsy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Sep 2022 11:23:56 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6977324B;
-        Mon, 26 Sep 2022 07:09:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8117DCE114D;
-        Mon, 26 Sep 2022 14:09:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742AAC433D7;
-        Mon, 26 Sep 2022 14:09:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664201368;
-        bh=mZiUJrvg8yaqgBdnDKc8+Ezywv02rJLKTDGCaJnn3OU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IqZtyn/JKkfubM8GJuzxSffRB5aOiFKohVcQSGC2SR8LnaGO6xIxS/fKGvWgrzNW0
-         zuANfLYr0H8e3MwqJumW8OQRasTFzPt15cBkMda73e1S3rxByLNV55HcO6VordKJPB
-         NBhFwDWdca1yfGK8SdEAzBLvOOXNMzNChOWexBWWel4aqZyPwY13NMzrh3MG6UbHBp
-         Q3ii02eu3eayEqZpqoBGWVXGn68ZzKOabEPLBfTn0dYMXOjUpBFiYnRJnh0Cbo719m
-         SQF8QHholkqKtn+60zFLWcqbOh3DdI0sPT9nq03ii7dXDB7w3PkbgBf8r82TvhsM0r
-         Xh/oEQkkUxDLg==
-From:   Christian Brauner <brauner@kernel.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v2 18/30] evm: simplify evm_xattr_acl_change()
-Date:   Mon, 26 Sep 2022 16:08:15 +0200
-Message-Id: <20220926140827.142806-19-brauner@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220926140827.142806-1-brauner@kernel.org>
-References: <20220926140827.142806-1-brauner@kernel.org>
+        Mon, 26 Sep 2022 14:48:54 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB2888A0E
+        for <linux-integrity@vger.kernel.org>; Mon, 26 Sep 2022 11:48:52 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id r125so9354442oia.8
+        for <linux-integrity@vger.kernel.org>; Mon, 26 Sep 2022 11:48:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=diSLexVku7NIpkpDyMmHjZ9yydShayfTBoCbTnyuXUM=;
+        b=k6Sr4B2HRalEteZEFi0pNViRzzYpDHksAyega8gizfu12lYPvE2WDzYixar2fNZyvh
+         EeUqs8FLdXVGyR/YKvK8WwU9lYR0aN+voejsgDOH3EWXyLDZ/+ewTa/nnHpzb7wx4jfI
+         a/SmEiOzCV3J27C8T+ShSXDCBUx8UJs143paDyfk1zCaqeRdzWLbRrl7uNm053LyW8I7
+         0zWwwBbBpVd24cfruBNMMifrbkM/wKcUNfV0oqswrNZwF5kLjgTU5FO1qcoVtGdfwkmc
+         5AIKajukRV3ln20EG7VZySV7bvFkipmuE4gBG7/vbMJwialras2jakPQgohHxDScfQdx
+         +xhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=diSLexVku7NIpkpDyMmHjZ9yydShayfTBoCbTnyuXUM=;
+        b=6whTwtOGVLcjqYllkJKX4sFwtxwDwOs3L/kRLa7ahbozCKDxl3v8thby/SYTHvdHUK
+         3hHcn7ULLFozAFkCM9FdCQRQ4O16+jU/lm7t10dXbtBDUB57gd25YuOdCWxngQCt771q
+         Q1x6/FGLpjSKqq0PcgcgI1XmuDg/agJeyiuektxvNE4ZEH/2nW5JNVvXyddKHXfeboo7
+         DMrhL2hLUD4Izs9YFVUn9A33x8jRHV8V0B2ChSHJxNRmlb3ap3H96qCSCyX5epWmqVYW
+         zX6Cp6qly+H3jvdjwN5uRcMibs/Eye0atjrUMP2whTYGl+0FGbbBXzP2TKgE42Il17hi
+         0CFg==
+X-Gm-Message-State: ACrzQf3VadlfD8+LA1cBj8De2E3v36YT2mDbeX4cQeIbl3StnoTo3Hxl
+        f0S2l2g5Sv8hd0WhpU1AD7FncmWifSKu5ys+00kv
+X-Google-Smtp-Source: AMsMyM6M5GJLyJ/NXWh7Ux5KhWW46gpUyre3gGEHrNjBBbLSSQJZzpm8KL8Dmt84aK0Zal5N6S2alsyCY0taWfyvlvg=
+X-Received: by 2002:aca:1c13:0:b0:350:ce21:a022 with SMTP id
+ c19-20020aca1c13000000b00350ce21a022mr76641oic.172.1664218131786; Mon, 26 Sep
+ 2022 11:48:51 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4006; i=brauner@kernel.org; h=from:subject; bh=mZiUJrvg8yaqgBdnDKc8+Ezywv02rJLKTDGCaJnn3OU=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSQbbnI8nD+vU2XRUo206wdMFs3I1JiSnf/iscfV4J7aGWWB 2/x3dJSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEzkyEyGfzobjYXyCi9vYWG6+6OB/d WfyYf7LtydL75v3vTlrP2JnnMY/ofcW66kysX8nenC9vUsthMi0tvOiBc8KfE4s3/rOxWLs9wA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220922151728.1557914-1-brauner@kernel.org> <20220922151728.1557914-11-brauner@kernel.org>
+ <CAHC9VhS7gEbngqYPMya52EMS5iZYQ_7pPgQiEfRqwPCgzhDbwA@mail.gmail.com>
+ <20220923064707.GD16489@lst.de> <20220923075752.nmloqf2aj5yhoe34@wittgenstein>
+ <CAHC9VhS3NWfMk3uHxZSZMtDay4FqOYzTf9mKCy1=Rb22r-2P4A@mail.gmail.com>
+ <20220923143540.howryhuygxi2hsj3@wittgenstein> <CAHC9VhRZf+OAzc96=c2s3NqkizNh2tZbLF8OFPHbFFuFXEZ8sA@mail.gmail.com>
+ <20220926090513.hn3ylkakb5wf2rrx@wittgenstein>
+In-Reply-To: <20220926090513.hn3ylkakb5wf2rrx@wittgenstein>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 26 Sep 2022 14:48:40 -0400
+Message-ID: <CAHC9VhR6+aDG3j-xepxaK5RqphnisVGxUndcKUMuMLgbtoPW2Q@mail.gmail.com>
+Subject: Re: [PATCH 10/29] selinux: implement set acl hook
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org,
+        Seth Forshee <sforshee@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-integrity@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The posix acl api provides a dedicated security and integrity hook for
-setting posix acls. This means that
+On Mon, Sep 26, 2022 at 5:05 AM Christian Brauner <brauner@kernel.org> wrote:
+> On Fri, Sep 23, 2022 at 01:35:08PM -0400, Paul Moore wrote:
+> > On Fri, Sep 23, 2022 at 10:35 AM Christian Brauner <brauner@kernel.org> wrote:
+> > > On Fri, Sep 23, 2022 at 10:26:35AM -0400, Paul Moore wrote:
+> > > > On Fri, Sep 23, 2022 at 3:57 AM Christian Brauner <brauner@kernel.org> wrote:
+> > > > > On Fri, Sep 23, 2022 at 08:47:07AM +0200, Christoph Hellwig wrote:
+> > > > > > On Thu, Sep 22, 2022 at 01:16:57PM -0400, Paul Moore wrote:
+> > > > > > > properly review the changes, but one thing immediately jumped out at
+> > > > > > > me when looking at this: why is the LSM hook
+> > > > > > > "security_inode_set_acl()" when we are passing a dentry instead of an
+> > > > > > > inode?  We don't have a lot of them, but there are
+> > > > > > > `security_dentry_*()` LSM hooks in the existing kernel code.
+> > > > > >
+> > > > > > I'm no LSM expert, but isn't the inode vs dentry for if it is
+> > > > > > related to an inode operation or dentry operation, not about that
+> > > > > > the first argument is?
+> > > > >
+> > > > > Indeed. For example ...
+> > > >
+> > > > If the goal is for this LSM hook to operate on an inode and not a
+> > > > dentry, let's pass it an inode instead.  This should help prevent
+> > >
+> > > I would be ok with that but EVM requires a dentry being passed and as
+> > > evm is called from security_inode_set_acl() exactly like it is from
+> > > security_inode_setxattr() and similar the hook has to take a dentry.
+> >
+> > If a dentry is truly needed by EVM (a quick look indicates that it may
+> > just be for the VFS getxattr API, but I haven't traced the full code
+> > path), then I'm having a hard time reconciling that this isn't a
+> > dentry operation.  Yes, I get that the ACLs belong to the inode and
+> > not the dentry, but then why do we need the dentry?  It seems like the
+> > interfaces are broken slightly, or at least a little odd ... <shrug>
+>
+> There's multiple reasons for the generic xattr api to take a dentry. For
+> example, there are quite a few filesystems that require dentry access
+> during (specific or all) xattr operations. So ideally, we'd just want to
+> pass the dentry I'd say ...
 
-evm_protect_xattr()
--> evm_xattr_change()
-   -> evm_xattr_acl_change()
+Independent of the naming issue discussed above, I want to make it
+clear that in general I believe that the dentry is more useful to the
+LSMs if for no other reason that it is pretty trivial to go from a
+dentry to an inode, whereas the opposite is not true.  Of course there
+are cases where the dentry is not always available, or the
+connectivity between the dentry and the inode is not yet present.  In
+those cases we would obviously need to pass the inode, or both the
+inode and the dentry, which gets me to my next point and my motivation
+behind bringing all this up once we started down the rathole ...
 
-is now only hit during vfs_remove_acl() at which point we are guaranteed
-that xattr_value and xattr_value_len are NULL and 0. In this case evm
-always used to return 1. Simplify this function to do just that.
+My main concern is making sure that the LSM hooks are declared in such
+a way that they are fairly resistant to misuse; not that I expect any
+malice, but I do believe accidental misuse of the hooks is legitimate
+concern.  With respect to the various VFS related hooks, one of the
+things that has always caught my attention in this respect has been
+hooks which pass both a dentry and a inode for the same file.  Of
+course there are cases where this will always be necessary, but I hate
+to see bad interfaces continued forward simply because "that's the way
+we've always done it".
 
-Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
----
+In this particular patch the hook prototype is reasonably well defined
+as far as I'm concerned, with no worries of both a dentry and an
+inode, so that's good.  I still don't really like the name disconnect
+between the function name and the parameter list (inode vs dentry),
+but que sera sera; my appetite for argument here is rapidly waning.
 
-Notes:
-    /* v2 */
-    unchanged
-
- security/integrity/evm/evm_main.c | 62 +++++++------------------------
- 1 file changed, 14 insertions(+), 48 deletions(-)
-
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 15aa5995fff4..1fbe1b8d0364 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -436,62 +436,29 @@ static enum integrity_status evm_verify_current_integrity(struct dentry *dentry)
- 
- /*
-  * evm_xattr_acl_change - check if passed ACL changes the inode mode
-- * @mnt_userns: user namespace of the idmapped mount
-- * @dentry: pointer to the affected dentry
-  * @xattr_name: requested xattr
-  * @xattr_value: requested xattr value
-  * @xattr_value_len: requested xattr value length
-  *
-- * Check if passed ACL changes the inode mode, which is protected by EVM.
-+ * This is only hit during xattr removal at which point we always return 1.
-+ * Splat a warning in case someone managed to pass data to this function. That
-+ * should never happen.
-  *
-  * Returns 1 if passed ACL causes inode mode change, 0 otherwise.
-  */
--static int evm_xattr_acl_change(struct user_namespace *mnt_userns,
--				struct dentry *dentry, const char *xattr_name,
--				const void *xattr_value, size_t xattr_value_len)
-+static int evm_xattr_acl_change(const void *xattr_value, size_t xattr_value_len)
- {
--#ifdef CONFIG_FS_POSIX_ACL
--	umode_t mode;
--	struct posix_acl *acl = NULL, *acl_res;
--	struct inode *inode = d_backing_inode(dentry);
--	int rc;
--
--	/*
--	 * An earlier comment here mentioned that the idmappings for
--	 * ACL_{GROUP,USER} don't matter since EVM is only interested in the
--	 * mode stored as part of POSIX ACLs. Nonetheless, if it must translate
--	 * from the uapi POSIX ACL representation to the VFS internal POSIX ACL
--	 * representation it should do so correctly. There's no guarantee that
--	 * we won't change POSIX ACLs in a way that ACL_{GROUP,USER} matters
--	 * for the mode at some point and it's difficult to keep track of all
--	 * the LSM and integrity modules and what they do to POSIX ACLs.
--	 *
--	 * Frankly, EVM shouldn't try to interpret the uapi struct for POSIX
--	 * ACLs it received. It requires knowledge that only the VFS is
--	 * guaranteed to have.
--	 */
--	acl = vfs_set_acl_prepare(mnt_userns, i_user_ns(inode),
--				  xattr_value, xattr_value_len);
--	if (IS_ERR_OR_NULL(acl))
--		return 1;
--
--	acl_res = acl;
--	/*
--	 * Passing mnt_userns is necessary to correctly determine the GID in
--	 * an idmapped mount, as the GID is used to clear the setgid bit in
--	 * the inode mode.
--	 */
--	rc = posix_acl_update_mode(mnt_userns, inode, &mode, &acl_res);
--
--	posix_acl_release(acl);
--
--	if (rc)
--		return 1;
-+	int rc = 0;
- 
--	if (inode->i_mode != mode)
--		return 1;
-+#ifdef CONFIG_FS_POSIX_ACL
-+	WARN_ONCE(xattr_value != NULL,
-+		  "Passing xattr value for POSIX ACLs not supported\n");
-+	WARN_ONCE(xattr_value_len != 0,
-+		  "Passing non-zero length for POSIX ACLs not supported\n");
-+	rc = 1;
- #endif
--	return 0;
-+
-+	return rc;
- }
- 
- /*
-@@ -514,8 +481,7 @@ static int evm_xattr_change(struct user_namespace *mnt_userns,
- 	int rc = 0;
- 
- 	if (posix_xattr_acl(xattr_name))
--		return evm_xattr_acl_change(mnt_userns, dentry, xattr_name,
--					    xattr_value, xattr_value_len);
-+		return evm_xattr_acl_change(xattr_value, xattr_value_len);
- 
- 	rc = vfs_getxattr_alloc(&init_user_ns, dentry, xattr_name, &xattr_data,
- 				0, GFP_NOFS);
 -- 
-2.34.1
-
+paul-moore.com
