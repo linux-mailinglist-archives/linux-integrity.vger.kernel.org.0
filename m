@@ -2,56 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8211B5ED092
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Sep 2022 00:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 323375ED096
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Sep 2022 00:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbiI0W4t (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Sep 2022 18:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
+        id S232020AbiI0W5O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Sep 2022 18:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiI0W4p (ORCPT
+        with ESMTP id S232033AbiI0W5M (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Sep 2022 18:56:45 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D351A80F50
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 15:56:41 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id z18-20020a9d65d2000000b0065c3705f7beso2991245oth.9
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 15:56:41 -0700 (PDT)
+        Tue, 27 Sep 2022 18:57:12 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704F583BC8
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 15:56:56 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1319cf91d8aso1249208fac.5
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 15:56:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=VhU2M30mPXzl6yzEPDfyAe1FzeUf2j8Qu8orpZvxf7A=;
-        b=fOZRgCa5NAKFIm/qIhOsmvEx3hdUlYJ7QZdvw01xCZKXyQFW1BYUicDLbrK8cIkEDY
-         XImOI7doLlIt7dB3Bbi8O9/PN60SZoPBz/O38SONrMuvM0Cm3ZoGMbm/dRQsrBf1DLPN
-         uPZFkde3M15D2n/qmhhPpyqjmWXF7yPKOIKGAcqC/74NVsMgsElGP6VzMRbhBxVuu5Dl
-         M58wzHYYr4lREBqubmNWeTKG0ii2LClTupTYDiP921Cwt46QYO2CB8vCkd6qVqU82ZNW
-         isLCY+4K+gatgVuIlretOJMBd7ZeMgXCCawBZCiUD4CeTWBuazFG1Wfnwbj9MRZATWG2
-         ZfVw==
+        bh=N9qEMgiqxUd/9otLFy+P0/SRM49MpnfliPH1FnPcVI4=;
+        b=JqBPKEaOR6vRaTr0jLpD0Eu1x+ED2CsYrCHCZY6bKzXmldyg2wKH8UVl0f8DiyHnXv
+         F44XzVGcIrdZai4tA00RwixKiCWVjANypsw7ynKOFdoQ0tBh0KWAvD9OtYLEMd59ZjVa
+         nHskPDfIAmRkVzUpsVm5cg14LjUpPAG7JrCoScjlNAds5SlAst78+iS1wEVWH0zWW6ZY
+         hBvMqYvY//3NKjEx/JT0Xh1WVSYPKy0eTE+nYhYkvu0Cufp11jgTfY+diFwTV4SsJLlF
+         iotaq3a5flI9o5BAenKAw3YVu0THhopPModbejb3F0AukykB9pQknCsetJPTNERdv23D
+         EIWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=VhU2M30mPXzl6yzEPDfyAe1FzeUf2j8Qu8orpZvxf7A=;
-        b=rhYnGQhxhhIAH1LzCYEQjnMHHlMXb1WPro3nmPiP9EkKkseIKZHlok8aXcZTJkb9y3
-         tmY9OjhdJzFeOpQ6b16cb10ECOmKzZ1j6pVntKyCtoN1eWER/u/T3p32vJVXB+6PDfbq
-         voA2t2XESs2qSulT0gmBQvW5lka/y9kuE+xRCVG8vMKbngEMEm6DVtKWBuUfHcbqNs47
-         I7qNZpR8Oalspn38oeyIOjtDDvJrpGaPdlBLTb2Bk0xvJBo3ZMoa0vQ6joMpBjwQwD/m
-         PcTeeB9dfHy6chsMLL0S/kpjk/6g7+hnFDT6ahZu80rd4xeSTlKTtNZFHXeIlQ90CkZ5
-         dGow==
-X-Gm-Message-State: ACrzQf1qrt9Ka6KdbF9iepagZAOY+/d+Av7DVJAsiK6QV6thQqVd/j32
-        sWzts6yxF2T121KkHUE3FI11kt7UN2jUdD3YkE4z
-X-Google-Smtp-Source: AMsMyM4ON3IQFaMBaXAGTJIu4Z8RHjcuiG/+2xhk0+VmPQisVNn0kC8pJZB5fYaPLtNHrkLfrm/iVa6V3204XbJgmZI=
-X-Received: by 2002:a05:6830:114f:b0:655:bd97:7a9b with SMTP id
- x15-20020a056830114f00b00655bd977a9bmr13279196otq.287.1664319401122; Tue, 27
- Sep 2022 15:56:41 -0700 (PDT)
+        bh=N9qEMgiqxUd/9otLFy+P0/SRM49MpnfliPH1FnPcVI4=;
+        b=aay2zYBu7hP7PchWXXzF8TGN/C4WTgjD1sUXyw74mD+CYAHEMCRYUKG11/lm1fvR7P
+         TX16sAGaEJZfa9+j/WKi6eeo+rR4ussJf1qWxyZUJIKmo08XzZALHZxcr0wP9dSWvwht
+         EiwQUZm8CiGeHwbKEs51OS3QVPrfwm3LTUei8JJLBzsL4h9Zs2uweosD8xqaK2lVOcnF
+         NtUlrEaoT0bqJNs8/5owZI5F0/UMpOAiFCPuxREI4qyKu0im6xIHFD++AfW+en6zClbs
+         35JUAYpgdgUeA1GUNYt1dsxD59+HtB9g9sAph7o5Vm4mcOhzpbZszyduF3V0spleZT58
+         M+PQ==
+X-Gm-Message-State: ACrzQf2SQq7EzmUKijeu9FKDNdqQU/1OEE0O33A5QtELnJp6YcVCOjMq
+        nZlYe53iH76lIMlAXMWZ9ugZD3HSII7yfcoltay1
+X-Google-Smtp-Source: AMsMyM6trTC+Bs2z8YL2MfKl+TsUO4g0UHYlBQ1lp05aHfXLcc9CUJG+zgpYTbdnGbSgtXAfNLsLXvW24lQK9LA/3bI=
+X-Received: by 2002:a05:6870:a916:b0:131:9361:116a with SMTP id
+ eq22-20020a056870a91600b001319361116amr1944037oab.172.1664319415761; Tue, 27
+ Sep 2022 15:56:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220926140827.142806-1-brauner@kernel.org> <20220926140827.142806-16-brauner@kernel.org>
-In-Reply-To: <20220926140827.142806-16-brauner@kernel.org>
+References: <20220926140827.142806-1-brauner@kernel.org> <20220926140827.142806-19-brauner@kernel.org>
+In-Reply-To: <20220926140827.142806-19-brauner@kernel.org>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 27 Sep 2022 18:56:30 -0400
-Message-ID: <CAHC9VhS_8OeVNiXbcf9q1BX00pQQW2meC2eh9iV3WwgJ0iNxJg@mail.gmail.com>
-Subject: Re: [PATCH v2 15/30] evm: add post set acl hook
+Date:   Tue, 27 Sep 2022 18:56:44 -0400
+Message-ID: <CAHC9VhTx-Pkh0E3Awr=BR-Zh31gmoP3d1MKHf-UPVibfV3VxKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 18/30] evm: simplify evm_xattr_acl_change()
 To:     Christian Brauner <brauner@kernel.org>
 Cc:     linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
         Christoph Hellwig <hch@lst.de>,
@@ -61,8 +61,8 @@ Cc:     linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
         linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,37 +71,16 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 On Mon, Sep 26, 2022 at 11:24 AM Christian Brauner <brauner@kernel.org> wrote:
 >
-> The security_inode_post_setxattr() hook is used by security modules to
-> update their own security.* xattrs. Consequently none of the security
-> modules operate on posix acls. So we don't need an additional security
-> hook when post setting posix acls.
+> The posix acl api provides a dedicated security and integrity hook for
+> setting posix acls. This means that
 >
-> However, the integrity subsystem wants to be informed about posix acl
-> changes and specifically evm to update their hashes when the xattrs
-> change. The callchain for evm_inode_post_setxattr() is:
+> evm_protect_xattr()
+> -> evm_xattr_change()
+>    -> evm_xattr_acl_change()
 >
-> -> evm_inode_post_setxattr()
->    -> evm_update_evmxattr()
->       -> evm_calc_hmac()
->          -> evm_calc_hmac_or_hash()
->
-> and evm_cacl_hmac_or_hash() walks the global list of protected xattr
-> names evm_config_xattrnames. This global list can be modified via
-> /sys/security/integrity/evm/evm_xattrs. The write to "evm_xattrs" is
-> restricted to security.* xattrs and the default xattrs in
-> evm_config_xattrnames only contains security.* xattrs as well.
->
-> So the actual value for posix acls is currently completely irrelevant
-> for evm during evm_inode_post_setxattr() and frankly it should stay that
-> way in the future to not cause the vfs any more headaches. But if the
-> actual posix acl values matter then evm shouldn't operate on the binary
-> void blob and try to hack around in the uapi struct anyway. Instead it
-> should then in the future add a dedicated hook which takes a struct
-> posix_acl argument passing the posix acls in the proper vfs format.
->
-> For now it is sufficient to make evm_inode_post_set_acl() a wrapper
-> around evm_inode_post_setxattr() not passing any actual values down.
-> This will still cause the hashes to be updated as before.
+> is now only hit during vfs_remove_acl() at which point we are guaranteed
+> that xattr_value and xattr_value_len are NULL and 0. In this case evm
+> always used to return 1. Simplify this function to do just that.
 >
 > Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 > ---
@@ -110,11 +89,93 @@ On Mon, Sep 26, 2022 at 11:24 AM Christian Brauner <brauner@kernel.org> wrote:
 >     /* v2 */
 >     unchanged
 >
->  fs/posix_acl.c      |  5 ++++-
->  include/linux/evm.h | 13 +++++++++++++
->  2 files changed, 17 insertions(+), 1 deletion(-)
+>  security/integrity/evm/evm_main.c | 62 +++++++------------------------
+>  1 file changed, 14 insertions(+), 48 deletions(-)
+>
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> index 15aa5995fff4..1fbe1b8d0364 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -436,62 +436,29 @@ static enum integrity_status evm_verify_current_integrity(struct dentry *dentry)
+>
+>  /*
+>   * evm_xattr_acl_change - check if passed ACL changes the inode mode
+> - * @mnt_userns: user namespace of the idmapped mount
+> - * @dentry: pointer to the affected dentry
+>   * @xattr_name: requested xattr
+>   * @xattr_value: requested xattr value
+>   * @xattr_value_len: requested xattr value length
+>   *
+> - * Check if passed ACL changes the inode mode, which is protected by EVM.
+> + * This is only hit during xattr removal at which point we always return 1.
+> + * Splat a warning in case someone managed to pass data to this function. That
+> + * should never happen.
+>   *
+>   * Returns 1 if passed ACL causes inode mode change, 0 otherwise.
+>   */
+> -static int evm_xattr_acl_change(struct user_namespace *mnt_userns,
+> -                               struct dentry *dentry, const char *xattr_name,
+> -                               const void *xattr_value, size_t xattr_value_len)
+> +static int evm_xattr_acl_change(const void *xattr_value, size_t xattr_value_len)
+>  {
+> -#ifdef CONFIG_FS_POSIX_ACL
+> -       umode_t mode;
+> -       struct posix_acl *acl = NULL, *acl_res;
+> -       struct inode *inode = d_backing_inode(dentry);
+> -       int rc;
+> -
+> -       /*
+> -        * An earlier comment here mentioned that the idmappings for
+> -        * ACL_{GROUP,USER} don't matter since EVM is only interested in the
+> -        * mode stored as part of POSIX ACLs. Nonetheless, if it must translate
+> -        * from the uapi POSIX ACL representation to the VFS internal POSIX ACL
+> -        * representation it should do so correctly. There's no guarantee that
+> -        * we won't change POSIX ACLs in a way that ACL_{GROUP,USER} matters
+> -        * for the mode at some point and it's difficult to keep track of all
+> -        * the LSM and integrity modules and what they do to POSIX ACLs.
+> -        *
+> -        * Frankly, EVM shouldn't try to interpret the uapi struct for POSIX
+> -        * ACLs it received. It requires knowledge that only the VFS is
+> -        * guaranteed to have.
+> -        */
+> -       acl = vfs_set_acl_prepare(mnt_userns, i_user_ns(inode),
+> -                                 xattr_value, xattr_value_len);
+> -       if (IS_ERR_OR_NULL(acl))
+> -               return 1;
+> -
+> -       acl_res = acl;
+> -       /*
+> -        * Passing mnt_userns is necessary to correctly determine the GID in
+> -        * an idmapped mount, as the GID is used to clear the setgid bit in
+> -        * the inode mode.
+> -        */
+> -       rc = posix_acl_update_mode(mnt_userns, inode, &mode, &acl_res);
+> -
+> -       posix_acl_release(acl);
+> -
+> -       if (rc)
+> -               return 1;
+> +       int rc = 0;
+>
+> -       if (inode->i_mode != mode)
+> -               return 1;
+> +#ifdef CONFIG_FS_POSIX_ACL
+> +       WARN_ONCE(xattr_value != NULL,
+> +                 "Passing xattr value for POSIX ACLs not supported\n");
+> +       WARN_ONCE(xattr_value_len != 0,
+> +                 "Passing non-zero length for POSIX ACLs not supported\n");
+> +       rc = 1;
+>  #endif
+> -       return 0;
+> +
+> +       return rc;
+>  }
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
+This is another case where I'll leave the final say up to Mimi, but
+why not just get rid of evm_xattr_acl_change() entirely?  Unless I'm
+missing something, it's only reason for existing now is to check that
+it is passed the proper (empty) parameters which seems pointless ...
+no?
 
 --
 paul-moore.com
