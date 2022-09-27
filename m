@@ -2,151 +2,187 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90D15EC8BA
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Sep 2022 17:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD575EC8FE
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Sep 2022 18:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbiI0Pzs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Sep 2022 11:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
+        id S232901AbiI0QGc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Sep 2022 12:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbiI0PzS (ORCPT
+        with ESMTP id S232903AbiI0QGD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:55:18 -0400
-Received: from sonic309-26.consmr.mail.ne1.yahoo.com (sonic309-26.consmr.mail.ne1.yahoo.com [66.163.184.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619835280B
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 08:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1664294113; bh=coTCryraE6//vMjy1fLNSb3iLSlfq45ZwjApzHKRKSA=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ifJFkPZAiDgxg3b8dewqsWRLosTfAlHt1Wu/BKCyk0fZPEF1qEAuuJTf65QofysxHB4+WLyPgnyWlK6tTggYZHpe7aXO3SADJ/RnHkCnFOIKdN+NoDUBPgOAyAsExr2Muv88YdQixLCUcua5yE6avlEYATf+tpmOmPxYGBWhPLO+8TCYw92r+ECgXrKNxiDWtJGv3JqqlFnLjAJJ9j1SvnBKXT1fZil3BUPymTld5vw1DtXewplD2kXhEspFTOEFZWFEbcT2m+OjshXd/lculqu0vjuTMxayPQ/GGFP0bnvxJtYa3kJd4fR9cMcVolLQkFrLq5G6j5T09DR0MvK8CA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1664294113; bh=GeOY8SOWF1/gY0IM3llxq40hYNxBSa97GwVoZBxMvZN=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=hXZ9usewk0J1q9NmC4PXA8au8hnUinCRw7uX5xjFGBf8WmxIdxj4tEWcFj5wxsw9SbAk2izJ6yK2dgH3WfdnPGihat+WxtuOke6riQ+SAY/BVnhMo/Dv5ryDFCNlJzC7LLNi65fY0XwCLjhXGvvf6oHRT7NBUQb1cXuZTXIbxRzB6pYeBdJzUSKOlOlfOoOf/2tUICGldsOPj0Uvp3nFzKQF8CIIpQUSwMZKRV5jhSpAPCCbEsNMsNDDdbTwVZh+utcwxaIt1msBX0N33dEmLY8aWciKoZ9iC+33CaltOq+GkSSW2+2XOsmBmvJFI1oO5h50jvUIAXw9KIP4XCyuCQ==
-X-YMail-OSG: SpRhvFYVM1kIRV.2K3KkpFBeNZffM9hZxbo.yTLr9Ne9BGVlUiFIXL3PYbmz2TR
- 2n6iqN3v95yDHSfpui4yrl7CNCRwyy3IqoXONw0UJ9Pv.CRTOIGSBbzT8_wtj2V7YYn.cRw6m4Rq
- 19q2D0tfH94UxLRUT6ZYn8s_UA5PISHZRkv._s4TDcHadFKnvLUHWOuRTCE9BHKJXIXqCD9tgO81
- 3VfR4hKP.UbllvcyikfSXzF4vPSP7Tv0K_XGzZkjqmf4kjS.I6sMI.FMFeFV8GlHmhhJKJjBtVEr
- O8fSnUVe7vg1Ci0GR3KI7ooTAVCzOTyGR9hWq5mMJDf1tRXiV_pQ8d4pf4utTgvHxSWSc5LYjrj8
- eFgjaQ.njps3itc5mD8UfwZVsNo_tLwSku3z4xf.k5JMJsLPUynx7AKDFqKDyrq1sehUVUjxBe2U
- RSoSsLyrwylRpf4jJAJb6fSLK_Z1n41mqaF_N2lepfN.f2ZcCcaLda1VN3MmD1huRH92n4kNgaCo
- hR5h.9syLz_mh.3p548UrLJnd_wHUREz5pOhH2TaI3rrDAZoAysVpN9m7Fn3lrJfJx3TuZlUfV5m
- _0i5WgLRwjpAeGkt2gjgCcCY.kAxsi8GgSoQSLS63RC50BQOy6wFnP6con58vXswIf.9MT1TaG2d
- Zx_W1iz.c7.6UCm4t2M2Sil0.dVCKsmW0tpTmDv_XUFEYPiUhz0KIHdOYQ8Ns4Ru.vJ4Wkqw223P
- ptUsPpTtOHUFjAjzlKAN6N0hcJA6txTBvr3pO7T18Fp.fa6rJoIw.MydHYxKa.DG6SrrkuCGCG8p
- UrSNkrov8LU.mHurWm5_ziZiTs6107zD68vrKWnRUgpRBNK_VXMi4UDGkx8RjKWCS1EKkHXynZQC
- 85gl86R_D6Ulr2m1I2vUu7CYuULUXDJVvbGNWglMRtri_vtR1Cy4ecNzzRkLomz72tSQQBezXi47
- lZXT3LJ.OGz8QbWVsqHSjfuMRewhr7VGkPew9bDeaDzRsn1QyeEVY3aXefhbio7kpw74TrTgvO5D
- hTOPhGNkZBKIV_L09wnNEQXdsUINbPUAvJdydFAP0RE_qx0azTuAj5H2PR7ybhwtkfEQtEnqaP6.
- 7IizKxswAirWdcZkJzPoAFqz43RfNaURE1bUv7Z3APxQVp1MPZoOyJNG0ADKjpf7blwg0NRopKgG
- ErqLDGNDLCPl2drQTZuO8_PyZ6TUK3NXQ8BH.eDCnlWCsl_MvEUxMfrdTonS0HGx5_n6v8La3VTX
- sl2OKfFtTDaQAM2Rm72XUqPnlXflgjC4yafpZlvtaxpI2rMTlRPthsTCIZkXNYUTfcDKLs7uzhJt
- ojzBa7s6Tv8SoYWhJsDG.Th6PqC95zq0d8if8Lgwwyr3g6sB7USS32URPoWc4KxPrZnH09KSu.U7
- 2B2_OTkEUb_bOB086X2v6KRHODBm8lPFhXXHxyNLQ0alb9bVLTqsbEPQbPnv6JHCMsst9hSg2FyC
- Z_wdW0KPFC.Zo5dVAh2nPNWHPH0sCzFxVq_6fnjtW51hKdTUBC7Myxog8qp1Qwc4gTvbVngLnfPU
- 8JwQ_DeYnEz0zCvEM2LzkgoC901PSK2qlu0.axAkO0w9._Mv_51eo5LnhS3EKzQtu497fuC6DxqN
- F6akW6kTZ3WVKsF1dOavduJNki_t7tr.euOx5pIH4LbjRFNVUyPKM6wVkPScB9RZ5gmYG226a9M.
- oB1XNdwSkEaoD.89nfEjDB_cWztVwf49Gk2wga6Asi.7dLVUIbAEo8Op6Zla8_.q6.YV00WMszX5
- afQDoHdssgkTxCmNM5Sjh62E4ruj7nQ.GQr.fHR4Uu6VvZhwyt_gMRs.LkQ.5vBiUJNvm6U08GQp
- epXPpuTb27baD.CCuhe6GpXHPWH7PZoVnkpvVSITsTKyAYob.jK7Qj.qHSdRAVxNmZ8BWpUkQ2jY
- 5_Gbb8lSQ1vvMhnCnVw2mvaPnlN8dxGhQqi_ocGSdFxAX8iiNxDeTrj7CRHjUjshkhSN1g4upgjY
- t6ja9dW4wWnDuuXvCJRyP.pEc_MtB6C1CXYf5ETi5AC5u_5cWNHbvVJAhiHoEqKsQhs62R5iKPl7
- nwh6X477gsX5m6ve678zbmP5gI7dg8BUk7KtXi8yk511ud49WZKfnOZIUSFW1kgWB37yJvgq9WdD
- rCwGRTnVOrkvVOgwEDWdQKqF1f4px9bWsVIpv3SSwTjfcv4E6PyQ1su73klbDi8GDTjkGg3d63ew
- MnV9J5kDidBvMmi2lldxhccixlTkon1Mr8R4gZJb38lQG0Est8nvt6hjKV7pgSNh2i2OjEM8ApTH
- vaIZeBl0RJXZgJjYFRoYX7GEHPM0PXIA-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Tue, 27 Sep 2022 15:55:13 +0000
-Received: by hermes--production-bf1-759bcdd488-6vlh5 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 257e07de7080f81fa365df07b75f3a66;
-          Tue, 27 Sep 2022 15:55:10 +0000 (UTC)
-Message-ID: <4954ef66-52ff-52de-9d7d-41da1b070b13@schaufler-ca.com>
-Date:   Tue, 27 Sep 2022 08:55:07 -0700
+        Tue, 27 Sep 2022 12:06:03 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027DE1D6275
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 09:04:06 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id bj12so21641460ejb.13
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 09:04:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=liXObbgP3O1j9wnHRMWomBTfFdrqTMOSRmMpI7BXVVY=;
+        b=n2Lk2q1OenQsBHB6/6w7EytQnVWgaCyzH63n8WLXHc9dTCHJyXCOhhf2LGOQ4BGMrC
+         Fh8x4BoeM8b2tTPzogSAqD5NNiWEWowB8EInMzJnxyyfQVOFNsLTDc2Ov2/aNGCamFFP
+         p5QciKn4hMoDlwkMbNEsmkIo4GYpzZn3Tz34o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=liXObbgP3O1j9wnHRMWomBTfFdrqTMOSRmMpI7BXVVY=;
+        b=2J8EwoCMEQoPNGTifBNxwDaY8iH9jtqsAl6DQYC6W574ainhucL0MbGnc+JtzmN3+9
+         gafapn9mOqzjI15pO5mvjSWW+zX89MWF0XudSA3e/Oo00aApJwgUr+S23OhT3ExRRD1z
+         SdkkjN4HQu4MUC9oxKKxVZtNeJ37iQ9T7/Itf5O3oqbTFHLrajcpQfJYH0J26GGwLNmc
+         G4bFwBIj4MzaPuiDn9Adf1ewTsowEjQ/9yjlKC+gGSe8uNJGwItKEZLszApxh5gChTrB
+         KbMCd3s0F9UTjev4jcULokX3EQSwxKtiSTDyeUOxsWXSYpHAWL7Z/u1XGaWpd/wo4iz/
+         1BPQ==
+X-Gm-Message-State: ACrzQf13bAeTN0ekfPgGpS0DQMRfDRiAVDVlphd1PfL0mycvyyM2RAM2
+        nUx7CW4hNtoL60aKpGAjgx76sdQwabYvSQ==
+X-Google-Smtp-Source: AMsMyM4AGZFbW1M7I7l1dyHY8Npbf8EdR0SGYlSGsP8gu2N+TFWqcCYouJ56Ras0wJbFnrvodvm8TQ==
+X-Received: by 2002:a17:907:1c91:b0:782:496f:271f with SMTP id nb17-20020a1709071c9100b00782496f271fmr24310666ejc.718.1664294644452;
+        Tue, 27 Sep 2022 09:04:04 -0700 (PDT)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id p22-20020aa7cc96000000b00457b5ba968csm1362022edt.27.2022.09.27.09.03.58
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 09:04:01 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id l18so3716488wrw.9
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 09:03:58 -0700 (PDT)
+X-Received: by 2002:a5d:69ce:0:b0:22b:19d:2856 with SMTP id
+ s14-20020a5d69ce000000b0022b019d2856mr18516147wrw.591.1664294638093; Tue, 27
+ Sep 2022 09:03:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 00/30] acl: add vfs posix acl api
-Content-Language: en-US
-To:     Seth Forshee <sforshee@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        v9fs-developer@lists.sourceforge.net, linux-cifs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, casey@schaufler-ca.com
-References: <20220926140827.142806-1-brauner@kernel.org>
- <99173046-ab2e-14de-7252-50cac1f05d27@schaufler-ca.com>
- <20220927074101.GA17464@lst.de>
- <a0cf3efb-dea1-9cb0-2365-2bcc2ca1fdba@schaufler-ca.com>
- <YzMT2axDeni7L1O8@do-x1extreme>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <YzMT2axDeni7L1O8@do-x1extreme>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20702 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220504161439.6.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+ <deafaf6f-8e79-b193-68bf-3ab01bddd5c2@linux.ibm.com> <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
+ <Yw7L+X2cHf9qprxl@kernel.org> <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
+ <96360ec16b21d8b37461a5de083ff794f3604300.camel@linux.ibm.com>
+ <Yxl8tbJERqrmsgpU@kernel.org> <96cfd1f3f084f6d145bd22e0989dc046fe15b66a.camel@linux.ibm.com>
+ <YylDYU+KTX/KJpqU@kernel.org> <2bc656bf67af52e0b9a68e91c5b574e0ab4ffa8e.camel@linux.ibm.com>
+ <Yy21B4EGumiI9XsU@kernel.org>
+In-Reply-To: <Yy21B4EGumiI9XsU@kernel.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 27 Sep 2022 09:03:21 -0700
+X-Gmail-Original-Message-ID: <CAE=gft7CnUVPqKpCHKPSpa3z-NR9pimhUJbz+qTkVV0E6WeoPw@mail.gmail.com>
+Message-ID: <CAE=gft7CnUVPqKpCHKPSpa3z-NR9pimhUJbz+qTkVV0E6WeoPw@mail.gmail.com>
+Subject: Re: TPM: hibernate with IMA PCR 10
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniil Lunev <dlunev@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 9/27/2022 8:16 AM, Seth Forshee wrote:
-> On Tue, Sep 27, 2022 at 07:11:17AM -0700, Casey Schaufler wrote:
->> On 9/27/2022 12:41 AM, Christoph Hellwig wrote:
->>> On Mon, Sep 26, 2022 at 05:22:45PM -0700, Casey Schaufler wrote:
->>>> I suggest that you might focus on the acl/evm interface rather than the entire
->>>> LSM interface. Unless there's a serious plan to make ima/evm into a proper LSM
->>>> I don't see how the breadth of this patch set is appropriate.
->>> Umm. The problem is the historically the Linux xattr interface was
->>> intended for unstructured data, while some of it is very much structured
->>> and requires interpretation by the VFS and associated entities.  So
->>> splitting these out and add proper interface is absolutely the right
->>> thing to do and long overdue (also for other thing like capabilities).
->>> It might make things a little more verbose for LSM, but it fixes a very
->>> real problem.
->> Here's the problem I see. All of the LSMs see xattrs, except for their own,
->> as opaque objects. Introducing LSM hooks to address the data interpretation
->> issues between VFS and EVM, which is not an LSM, adds to an already overlarge
->> and interface. And the "real" users of the interface don't need the new hook.
->> I'm not saying that the ACL doesn't have problems. I'm not saying that the
->> solution you've proposed isn't better than what's there now. I am saying that
->> using LSM as a conduit between VFS and EVM at the expense of the rest of the
->> modules is dubious. A lot of change to LSM for no value to LSM.
->>
->> I am not adamant about this. A whole lot worse has been done for worse reasons.
->> But as Paul says, we're overdue to make an effort to keep the LSM interface sane.
-> So I assume the alternative you have in mind would be to use the
-> existing setxattr hook?
+On Fri, Sep 23, 2022 at 6:30 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, Sep 21, 2022 at 04:15:20PM -0400, Mimi Zohar wrote:
+> > On Tue, 2022-09-20 at 07:36 +0300, Jarkko Sakkinen wrote:
+> > > On Sat, Sep 10, 2022 at 10:40:05PM -0400, Mimi Zohar wrote:
+> > > > On Thu, 2022-09-08 at 08:25 +0300, Jarkko Sakkinen wrote:
+> > > > > On Wed, Sep 07, 2022 at 07:57:27PM -0400, Mimi Zohar wrote:
+> > > > > > On Wed, 2022-09-07 at 13:47 -0700, Evan Green wrote:
+> > > > > > > On Tue, Aug 30, 2022 at 7:48 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Aug 29, 2022 at 02:51:50PM -0700, Matthew Garrett wrote:
+> > > > > > > > > On Mon, Aug 29, 2022 at 2:45 PM Ken Goldman <kgold@linux.ibm.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On 5/4/2022 7:20 PM, Evan Green wrote:
+> > > > > > > > > > > Enabling the kernel to be able to do encryption and integrity checks on
+> > > > > > > > > > > the hibernate image prevents a malicious userspace from escalating to
+> > > > > > > > > > > kernel execution via hibernation resume.  [snip]
+> > > > > > > > > >
+> > > > > > > > > > I have a related question.
+> > > > > > > > > >
+> > > > > > > > > > When a TPM powers up from hibernation, PCR 10 is reset.  When a
+> > > > > > > > > > hibernate image is restored:
+> > > > > > > > > >
+> > > > > > > > > > 1. Is there a design for how PCR 10 is restored?
+> > > > > > > > >
+> > > > > > > > > I don't see anything that does that at present.
+> > > > > > > > >
+> > > > > > > > > > 2. How are /sys/kernel/security/ima/[pseudofiles] saved and
+> > > > > > > > > > restored?
+> > > > > > > > >
+> > > > > > > > > They're part of the running kernel state, so should re-appear without
+> > > > > > > > > any special casing. However, in the absence of anything repopulating
+> > > > > > > > > PCR 10, they'll no longer match the in-TPM value.
+> > > > > > > >
+> > > > > > > > This feature could still be supported, if IMA is disabled
+> > > > > > > > in the kernel configuration, which I see a non-issue as
+> > > > > > > > long as config flag checks are there.
+> > > > > > >
+> > > > > > > Right, from what I understand about IMA, the TPM's PCR getting out of
+> > > > > > > sync with the in-kernel measurement list across a hibernate (because
+> > > > > > > TPM is reset) or kexec() (because in-memory list gets reset) is
+> > > > > > > already a problem. This series doesn't really address that, in that it
+> > > > > > > doesn't really make that situation better or worse.
+> > > > > >
+> > > > > > For kexec, the PCRs are not reset, so the IMA measurment list needs to
+> > > > > > be carried across kexec and restored.  This is now being done on most
+> > > > > > architectures.  Afterwards, the IMA measurement list does match the
+> > > > > > PCRs.
+> > > > > >
+> > > > > > Hibernation introduces a different situation, where the the PCRs are
+> > > > > > reset, but the measurement list is restored, resulting in their not
+> > > > > > matching.
+> > > > >
+> > > > > As I said earlier the feature still can be supported if
+> > > > > kernel does not use IMA but obviously needs to be flagged.
+> > > >
+> > > > Jumping to the conclusion that "hibernate" is acceptable for non-IMA
+> > > > enabled kernels misses the security implications of mixing (kexec) non-
+> > > > IMA and IMA enabled kernels.
+> > > > I would prefer some sort of hibernate marker, the equivalent of a
+> > > > "boot_aggregate" record.
+> > >
+> > > Not sure if this matters. If you run a kernel, which is not aware
+> > > of IMA, it's your choice. I don't undestand why here is so important
+> > > to protect user from doing illogical decisions.
+> > >
+> > > If you want non-IMA kernels to support IMA, CONFIG_IMA should not
+> > > probably even exist because you are essentially saying that any
+> > > kernel play well with IMA.
+> >
+> > That will never happen, nor am I suggesting it should.
+> >
+> > Enabling hibernate or IMA shouldn't be an either-or decision, if at all
+> > possible.  The main concern is that attestation servers be able to
+> > detect hibernation and possibly the loss of measurement
+> > history.  Luckily, although the PCRs are reset, the TPM
+> > pcrUpdateCounter is not.
+> >
+> > I would appreciate including a "hibernate" marker, similar to the
+> > "boot_aggregate".
+>
+> Yeah, I guess that would not do harm.
 
-That is how it works today.
+I think I understand it. It's pretty much exactly a boot_aggregate
+marker that we want, correct?
 
->  I worry about type confusion if an LSM does
-> someday want to look inside the ACL data.
+Should it have its own name, or is it sufficient to simply infer that
+a boot_aggregate marker that isn't the first item in the list must
+come from hibernate resume?
 
-I suggest that changes to system behavior based on the content of
-an ACL really belongs in the ACL code, not in an LSM. Can I imagine
-someone wanting to add SELinux policy that controls what entries
-are allowed to be set by a particular domain? Sure, but I can't see
-how that would be popular with existing ACL fans.
-
->  Unless LSMs aren't supposed to
-> look inside of xattr data, but in that case why pass the data pointer on
-> to the LSMs?
-
-So that the LSM can look at it's own xattr data.
-
-> Note that the caller of this new hook does not have access to the uapi
-> xattr data, and I think this is the right place for the new hook to be
-> called as it's the interface that stacked filesystems like overlayfs
-> will use to write ACLs to the lower filesystems.
-
-I'm not saying anything about the organization of the calling code.
-Why is it calling
-
-	security_acl_hooha(...)
-
-instead of
-
-	evm_acl_hooha(...)
-
+Should it include PCR10, to essentially say "the resuming system may
+have extended this, but we can't reason about it and simply treat it
+as a starting value"?
+-Evan
 
 >
-> Seth
+> BR, Jarkko
