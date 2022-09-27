@@ -2,49 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419235EC9F2
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Sep 2022 18:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7475A5EC9F9
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Sep 2022 18:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbiI0Qtv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Sep 2022 12:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
+        id S229951AbiI0QuP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Sep 2022 12:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbiI0Qtk (ORCPT
+        with ESMTP id S232770AbiI0Qty (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:49:40 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4454DE90
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 09:49:33 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so10659063pjl.0
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 09:49:33 -0700 (PDT)
+        Tue, 27 Sep 2022 12:49:54 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4C6E0C3
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 09:49:52 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id e129so3844664pgc.9
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Sep 2022 09:49:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=CshlNIOejbfiYc9tiWv058BC6HJpHyki8VAbybm61uA=;
-        b=MucmUzS2nCcF+AhT93QZQrmD3Psbz+Enr8Z1TI7Cl88vuGDyx6aGFblYhF7ZvzNJ9P
-         oHqeDAjNu2VqHESkGQZT9EmNsJXCAY9WpWP5mBw31Vo3QbUQMzyXGuWxp9cHqOk5VguX
-         gOhSrowuXG+DHdSY0V2Tnnmr+AGJ8P6bdZRLc=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=JqdilZ5JCg39u52hx5ok1CZxfYUZFtYxLXmj/CVzrSU=;
+        b=eDGNIqCgnrhWjr+PAUC1lfpa1BhvlK7XAuMKA5dwNGoo7dhHVfE+pUcDy85KVIt/EF
+         +oUYvGjEXoTVD/bBSQWk/JlMVOJRaY/xA6v0edGx2yYYiNKwMsckkGIxMfzEqjYEOunS
+         ltInPjFobhSAKdqwXylUVTd2bWljzdj4GmRaw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=CshlNIOejbfiYc9tiWv058BC6HJpHyki8VAbybm61uA=;
-        b=SIN8MZY9GyYxsklyaQzrHAdpuyWUtJVvFpPkZxizA14P97FQbZbsMmhozgIZtgPkTb
-         Ny6ZzrINRNxgKlSKhBpctYfWWoN+D2sCjvVP0CC5oPqEpONeELX/bhVzBFnAgCBPdGeM
-         bejp4QFCeGv8tI2DZOBTRDppTieEKoP89IjOtBBtAyegkTw4feAH9SRm1yp1GXU21a6L
-         xu2oZn5UZKL/tlhonaZdzkain28Gw2pzlhG6CRI91AFxX5GwOToegNSz+ZMkP7DMYyRn
-         mEU7XMaT/rpvuVrNftA1io7E+2XZi1weAPA4L+4OODG87IYgC0G0v/rnJcoAKvJ6Y33y
-         vZ4Q==
-X-Gm-Message-State: ACrzQf1ef7h/AAcj7NkoVYA2BP3059AQJqfXlsIITHxVtnr7WllN2oqY
-        P7VL7m4l/s+ga685ECZYvJM8Ng==
-X-Google-Smtp-Source: AMsMyM5nHrnaxrzhddnmL2v6Bi3s6QZogqG6G/cZkv7Zy3cQbem1uUeyfaGRak4dMeabdo6+o2ZdLQ==
-X-Received: by 2002:a17:90b:3ec1:b0:203:5eef:fe1e with SMTP id rm1-20020a17090b3ec100b002035eeffe1emr5441458pjb.143.1664297373237;
-        Tue, 27 Sep 2022 09:49:33 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=JqdilZ5JCg39u52hx5ok1CZxfYUZFtYxLXmj/CVzrSU=;
+        b=RNaogdwXwgU7D/y2ZsN1oE+o9TX2y32ipreQjSFppYoolQ5RaKD+XxKnpI1sENpMtl
+         boUyl4sVdJDx+bCDDu5/mhxVE5K2Y2pJV011dvDRFtfDoPxRk/JjUwyAewQMr1KEFCyL
+         lhUwT6nKUnnDxHfEcBjULqFQhfj5ReULNGoiPWjCW+JlSgVKrXF8fPNn0ct4TOLlDDFd
+         0jN6PfukOSV7w8/JEKGPGqLclSXvO6UY/r9rQJp9C98ztSWn4O4TRiaj544GX4P4kOTM
+         Yjv+WA2NFQuGPsTEXj26S0nKpB6ToCLHEKbgoh6OQ1tfFIL9ys16joiM+ynT4JVNIVBW
+         C+cw==
+X-Gm-Message-State: ACrzQf1KYN2PQj0sg3+jWiL/GPsIgSvNebsL9yzLN7hjpbDdHRFyjniK
+        CLhRe5nxA9tUA951MNmSRAHH+0rJD9Fk6dQkXF8=
+X-Google-Smtp-Source: AMsMyM71fGUlBMqx2GLQPnBNrz+ePFDFh9J5j7g6Joy43RZ06O19ji4s2CXjvZPdFSNaXFzKbj60gQ==
+X-Received: by 2002:a63:1954:0:b0:438:79da:7849 with SMTP id 20-20020a631954000000b0043879da7849mr24709298pgz.527.1664297380346;
+        Tue, 27 Sep 2022 09:49:40 -0700 (PDT)
 Received: from evgreen-glaptop.lan ([73.231.74.141])
-        by smtp.gmail.com with ESMTPSA id p13-20020a63950d000000b00434272fe870sm1753509pgd.88.2022.09.27.09.49.30
+        by smtp.gmail.com with ESMTPSA id p13-20020a63950d000000b00434272fe870sm1753509pgd.88.2022.09.27.09.49.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 09:49:32 -0700 (PDT)
+        Tue, 27 Sep 2022 09:49:39 -0700 (PDT)
 From:   Evan Green <evgreen@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-integrity@vger.kernel.org, apronin@chromium.org,
@@ -54,22 +55,17 @@ Cc:     linux-integrity@vger.kernel.org, apronin@chromium.org,
         Kees Cook <keescook@chromium.org>,
         Eric Biggers <ebiggers@kernel.org>, jejb@linux.ibm.com,
         gwendal@chromium.org, Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
         Matthew Garrett <matthewgarrett@google.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v3 00/11] Encrypted Hibernation
-Date:   Tue, 27 Sep 2022 09:49:11 -0700
-Message-Id: <20220927164922.3383711-1-evgreen@chromium.org>
+        Matthew Garrett <mjg59@google.com>,
+        Evan Green <evgreen@chromium.org>, Hao Wu <hao.wu@rubrik.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, axelj <axelj@axis.com>
+Subject: [PATCH v3 01/11] tpm: Add support for in-kernel resetting of PCRs
+Date:   Tue, 27 Sep 2022 09:49:12 -0700
+Message-Id: <20220927094559.v3.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
 X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20220927164922.3383711-1-evgreen@chromium.org>
+References: <20220927164922.3383711-1-evgreen@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -81,164 +77,158 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-We are exploring enabling hibernation in some new scenarios. However,
-our security team has a few requirements, listed below:
-1. The hibernate image must be encrypted with protection derived from
-   both the platform (eg TPM) and user authentication data (eg
-   password).
-2. Hibernation must not be a vector by which a malicious userspace can
-   escalate to the kernel.
+From: Matthew Garrett <matthewgarrett@google.com>
 
-Requirement #1 can be achieved solely with uswsusp, however requirement
-2 necessitates mechanisms in the kernel to guarantee integrity of the
-hibernate image. The kernel needs a way to authenticate that it generated
-the hibernate image being loaded, and that the image has not been tampered
-with. Adding support for in-kernel AEAD encryption with a TPM-sealed key
-allows us to achieve both requirements with a single computation pass.
+Add an internal command for resetting a PCR. This will be used by the
+encrypted hibernation code to set PCR23 to a known value. The
+hibernation code will seal the hibernation key with a policy specifying
+PCR23 be set to this known value as a mechanism to ensure that the
+hibernation key is genuine. But to do this repeatedly, resetting the PCR
+is necessary as well.
 
-Matthew Garrett published a series [1] that aligns closely with this
-goal. His series utilized the fact that PCR23 is a resettable PCR that
-can be blocked from access by usermode. The TPM can create a sealed key
-tied to PCR23 in two ways. First, the TPM can attest to the value of
-PCR23 when the key was created, which the kernel can use on resume to
-verify that the kernel must have created the key (since it is the only
-one capable of modifying PCR23). It can also create a policy that enforces
-PCR23 be set to a specific value as a condition of unsealing the key,
-preventing usermode from unsealing the key by talking directly to the
-TPM.
-
-This series adopts that primitive as a foundation, tweaking and building
-on it a bit. Where Matthew's series used the TPM-backed key to encrypt a
-hash of the image, this series uses the key directly as a gcm(aes)
-encryption key, which the kernel uses to encrypt and decrypt the
-hibernate image in chunks of 16 pages. This provides both encryption and
-integrity, which turns out to be a noticeable performance improvement over
-separate passes for encryption and hashing.
-
-The series also introduces the concept of mixing user key material into
-the encryption key. This allows usermode to introduce key material
-based on unspecified external authentication data (in our case derived
-from something like the user password or PIN), without requiring
-usermode to do a separate encryption pass.
-
-Matthew also documented issues his series had [2] related to generating
-fake images by booting alternate kernels without the PCR23 limiting.
-With access to PCR23 on the same machine, usermode can create fake
-hibernate images that are indistinguishable to the new kernel from
-genuine ones. His post outlines a solution that involves adding more
-PCRs into the creation data and policy, with some gyrations to make this
-work well on a standard PC.
-
-Our approach would be similar: on our machines PCR 0 indicates whether
-the system is booted in secure/verified mode or developer mode. By
-adding PCR0 to the policy, we can reject hibernate images made in
-developer mode while in verified mode (or vice versa).
-
-Additionally, mixing in the user authentication data limits both
-data exfiltration attacks (eg a stolen laptop) and forged hibernation
-image attacks to attackers that already know the authentication data (eg
-user's password). This, combined with our relatively sealed userspace
-(dm-verity on the rootfs), and some judicious clearing of the hibernate
-image (such as across an OS update) further reduce the risk of an online
-attack. The remaining attack space of a forgery from someone with
-physical access to the device and knowledge of the authentication data
-is out of scope for us, given that flipping to developer mode or
-reflashing RO firmware trivially achieves the same thing.
-
-A couple of patches still need to be written on top of this series. The
-generalized functionality to OR in additional PCRs via Kconfig (like PCR
-0 or 5) still needs to be added. We'll also need a patch that disallows
-unencrypted forms of resume from hibernation, to fully close the door
-to malicious userspace. However, I wanted to get this series out first
-and get reactions from upstream before continuing to add to it.
-
-[1] https://patchwork.kernel.org/project/linux-pm/cover/20210220013255.1083202-1-matthewgarrett@google.com/
-[2] https://mjg59.dreamwidth.org/58077.html
+Link: https://lore.kernel.org/lkml/20210220013255.1083202-2-matthewgarrett@google.com/
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Signed-off-by: Evan Green <evgreen@chromium.org>
+---
 
 Changes in v3:
  - Unify tpm1/2_pcr_reset prototypes (Jarkko)
  - Wait no, remove the TPM1 stuff altogether (Jarkko)
  - Remove extra From tag and blank in commit msg (Jarkko).
- - Split find_and_validate_cc() export to its own patch (Jarkko)
- - Rename tpm_find_and_validate_cc() to tpm2_find_and_validate_cc().
- - Fix up commit message (Jarkko)
- - tpm2_find_and_validate_cc() was split (Jarkko)
- - Simply fully restrict TPM1 since v2 failed to account for tunnelled
-   transport sessions (Stefan and Jarkko).
- - Fix SoB and -- note ordering (Kees)
- - Add comments describing the TPM2 spec type names for the new fields
-   in tpm2key.asn1 (Kees)
- - Add len buffer checks in tpm2_key_encode() (Kees)
- - Clarified creationpcrs documentation (Ben)
- - Changed funky tag to suggested-by (Kees). Matthew, holler if you want
-   something different.
- - ENCRYPTED_HIBERNATION needs TRUSTED_KEYS builtin for
-   key_type_trusted.
- - Remove KEYS dependency since it's covered by TRUSTED_KEYS (Kees)
- - Changed funky tag to Co-developed-by (Kees). Matthew, holler if you
-   want something different.
- - Changed funky tag to Co-developed-by (Kees)
 
-Changes in v2:
- - Fixed sparse warnings
- - Adjust hash len by 2 due to new ASN.1 storage, and add underflow
-   check.
- - Rework load/create_kernel_key() to eliminate a label (Andrey)
- - Call put_device() needed from calling tpm_default_chip().
- - Add missing static on snapshot_encrypted_byte_count()
- - Fold in only the used kernel key bytes to the user key.
- - Make the user key length 32 (Eric)
- - Use CRYPTO_LIB_SHA256 for less boilerplate (Eric)
- - Fixed some sparse warnings
- - Use CRYPTO_LIB_SHA256 to get rid of sha256_data() (Eric)
- - Adjusted offsets due to new ASN.1 format, and added a creation data
-   length check.
- - Fix sparse warnings
- - Fix session type comment (Andrey)
- - Eliminate extra label in get/create_kernel_key() (Andrey)
- - Call tpm_try_get_ops() before calling tpm2_flush_context().
+ drivers/char/tpm/tpm-interface.c | 25 ++++++++++++++++++++++
+ drivers/char/tpm/tpm.h           |  1 +
+ drivers/char/tpm/tpm2-cmd.c      | 36 ++++++++++++++++++++++++++++++++
+ include/linux/tpm.h              |  7 +++++++
+ 4 files changed, 69 insertions(+)
 
-Evan Green (8):
-  tpm: Export and rename tpm2_find_and_validate_cc()
-  security: keys: trusted: Include TPM2 creation data
-  security: keys: trusted: Verify creation data
-  PM: hibernate: Add kernel-based encryption
-  PM: hibernate: Use TPM-backed keys to encrypt image
-  PM: hibernate: Mix user key in encrypted hibernate
-  PM: hibernate: Verify the digest encryption key
-  PM: hibernate: seal the encryption key with a PCR policy
-
-Matthew Garrett (3):
-  tpm: Add support for in-kernel resetting of PCRs
-  tpm: Allow PCR 23 to be restricted to kernel-only use
-  security: keys: trusted: Allow storage of PCR values in creation data
-
- Documentation/power/userland-swsusp.rst       |    8 +
- .../security/keys/trusted-encrypted.rst       |    6 +
- drivers/char/tpm/Kconfig                      |   12 +
- drivers/char/tpm/tpm-dev-common.c             |    8 +
- drivers/char/tpm/tpm-interface.c              |   25 +
- drivers/char/tpm/tpm.h                        |   23 +
- drivers/char/tpm/tpm1-cmd.c                   |   13 +
- drivers/char/tpm/tpm2-cmd.c                   |   58 +
- drivers/char/tpm/tpm2-space.c                 |    8 +-
- include/keys/trusted-type.h                   |    9 +
- include/linux/tpm.h                           |   12 +
- include/uapi/linux/suspend_ioctls.h           |   28 +-
- kernel/power/Kconfig                          |   15 +
- kernel/power/Makefile                         |    1 +
- kernel/power/power.h                          |    1 +
- kernel/power/snapenc.c                        | 1037 +++++++++++++++++
- kernel/power/snapshot.c                       |    5 +
- kernel/power/user.c                           |   44 +-
- kernel/power/user.h                           |  114 ++
- security/keys/trusted-keys/tpm2key.asn1       |   15 +-
- security/keys/trusted-keys/trusted_tpm1.c     |    9 +
- security/keys/trusted-keys/trusted_tpm2.c     |  318 ++++-
- 22 files changed, 1724 insertions(+), 45 deletions(-)
- create mode 100644 kernel/power/snapenc.c
- create mode 100644 kernel/power/user.h
-
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 1621ce8187052c..2ac9079860b1e0 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -342,6 +342,31 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ }
+ EXPORT_SYMBOL_GPL(tpm_pcr_extend);
+ 
++/**
++ * tpm_pcr_reset - reset the specified PCR
++ * @chip:	a &struct tpm_chip instance, %NULL for the default chip
++ * @pcr_idx:	the PCR to be reset
++ *
++ * Return: same as with tpm_transmit_cmd(), or ENOTTY for TPM1 devices.
++ */
++int tpm_pcr_reset(struct tpm_chip *chip, u32 pcr_idx)
++{
++	int rc;
++
++	chip = tpm_find_get_ops(chip);
++	if (!chip)
++		return -ENODEV;
++
++	if (chip->flags & TPM_CHIP_FLAG_TPM2)
++		rc = tpm2_pcr_reset(chip, pcr_idx);
++	else
++		rc = -ENOTTY;
++
++	tpm_put_ops(chip);
++	return rc;
++}
++EXPORT_SYMBOL_GPL(tpm_pcr_reset);
++
+ /**
+  * tpm_send - send a TPM command
+  * @chip:	a &struct tpm_chip instance, %NULL for the default chip
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 24ee4e1cc452a0..34e20b3192f833 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -217,6 +217,7 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+ 		  struct tpm_digest *digest, u16 *digest_size_ptr);
+ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 		    struct tpm_digest *digests);
++int tpm2_pcr_reset(struct tpm_chip *chip, u32 pcr_idx);
+ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max);
+ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
+ 			u32 *value, const char *desc);
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index 65d03867e114c5..69126a6770386e 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -269,6 +269,42 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 	return rc;
+ }
+ 
++/**
++ * tpm2_pcr_reset() - reset a PCR
++ *
++ * @chip:	TPM chip to use.
++ * @pcr_idx:	index of the PCR.
++ *
++ * Return: Same as with tpm_transmit_cmd.
++ */
++int tpm2_pcr_reset(struct tpm_chip *chip, u32 pcr_idx)
++{
++	struct tpm_buf buf;
++	struct tpm2_null_auth_area auth_area;
++	int rc;
++
++	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_RESET);
++	if (rc)
++		return rc;
++
++	tpm_buf_append_u32(&buf, pcr_idx);
++
++	auth_area.handle = cpu_to_be32(TPM2_RS_PW);
++	auth_area.nonce_size = 0;
++	auth_area.attributes = 0;
++	auth_area.auth_size = 0;
++
++	tpm_buf_append_u32(&buf, sizeof(struct tpm2_null_auth_area));
++	tpm_buf_append(&buf, (const unsigned char *)&auth_area,
++		       sizeof(auth_area));
++
++	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to reset a PCR");
++
++	tpm_buf_destroy(&buf);
++
++	return rc;
++}
++
+ struct tpm2_get_random_out {
+ 	__be16 size;
+ 	u8 buffer[TPM_MAX_RNG_DATA];
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index dfeb25a0362dee..8320cbac6f4009 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -219,6 +219,7 @@ enum tpm2_command_codes {
+ 	TPM2_CC_HIERARCHY_CONTROL       = 0x0121,
+ 	TPM2_CC_HIERARCHY_CHANGE_AUTH   = 0x0129,
+ 	TPM2_CC_CREATE_PRIMARY          = 0x0131,
++	TPM2_CC_PCR_RESET		= 0x013D,
+ 	TPM2_CC_SEQUENCE_COMPLETE       = 0x013E,
+ 	TPM2_CC_SELF_TEST	        = 0x0143,
+ 	TPM2_CC_STARTUP		        = 0x0144,
+@@ -423,6 +424,7 @@ extern ssize_t tpm_transmit_cmd(struct tpm_chip *chip, struct tpm_buf *buf,
+ 				size_t min_rsp_body_length, const char *desc);
+ extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+ 			struct tpm_digest *digest);
++extern int tpm_pcr_reset(struct tpm_chip *chip, u32 pcr_idx);
+ extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 			  struct tpm_digest *digests);
+ extern int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen);
+@@ -440,6 +442,11 @@ static inline int tpm_pcr_read(struct tpm_chip *chip, int pcr_idx,
+ 	return -ENODEV;
+ }
+ 
++static inline int tpm_pcr_reset(struct tpm_chip *chip, int pcr_idx)
++{
++	return -ENODEV;
++}
++
+ static inline int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 				 struct tpm_digest *digests)
+ {
 -- 
 2.31.0
 
