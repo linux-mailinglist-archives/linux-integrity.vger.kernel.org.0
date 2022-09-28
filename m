@@ -2,71 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E975ED3FA
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Sep 2022 06:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A5F5ED421
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Sep 2022 07:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiI1ElV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Sep 2022 00:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S230057AbiI1FKl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Sep 2022 01:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232343AbiI1ElT (ORCPT
+        with ESMTP id S229594AbiI1FKk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Sep 2022 00:41:19 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CC19B879;
-        Tue, 27 Sep 2022 21:41:15 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id w2so11543919pfb.0;
-        Tue, 27 Sep 2022 21:41:15 -0700 (PDT)
+        Wed, 28 Sep 2022 01:10:40 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DC911D0EE;
+        Tue, 27 Sep 2022 22:10:38 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id r6so643574wru.8;
+        Tue, 27 Sep 2022 22:10:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
-        bh=fmTTNMO6nsNe3wwRALCsW2vgWT26jAViSTGEkQkN2xQ=;
-        b=jxBQhnmvzqGCDopGTTWap7p3CfH89/qdhBvA2jCdFcstc30gbSfpozgkE6NAT1Gj+H
-         5BSTzGE4t/RVKqSbRykONVgD7iltxOf3qRrk3riU+UA9DIhHHbNmOCyZ8gMUajW+HZVI
-         NLP2WTJUS9/Ub71qoV7HKTiD4InpViwiixbdUHymIVZFo07b7pNhSs6ruIc+oSTJ5zZo
-         ndGfqN+oVLod8oJMo9TIKFG3HIgXZOunjqLB1lcc6lvhrfZxn8jUPT71+VxHuSR8Mtsm
-         VIE4HuJIp517+WIPEO1xSSvHX5Gn9wt+PfKDH8FI3Trhl4DyUf0VwnBNNRPAIgfoIMUi
-         iZZg==
+        d=jms.id.au; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=fAgZ5tRHZZRRHERZLI7/VYVjT/NV9E6VbCAjwipHzgk=;
+        b=jyzgohuSp/UPukht3ZdHLxEs4mLcJJivttqHddKq7VS3qE9LduWwlHFnlJVuX5lufJ
+         WLn7sTXhzluTmtBmNGesJ8VAKiyovpjLRvKzxTkAIQ3s+QyuMA8ARdySwdkxocH2Y6Aw
+         md5IfY9BXKDv0eBdIByrW54+0idk67nSFYS6Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date;
-        bh=fmTTNMO6nsNe3wwRALCsW2vgWT26jAViSTGEkQkN2xQ=;
-        b=e7bY1Cq407ODp3bjbEIXfGoupXMizWX8vqksvnDKZ6SbS1scJb8q3Gs1/idBrvWKW6
-         mPyuZwPJHiNXs5+kJT6Kpa8jFTXkwCBmsyJbA4eUzTGjbEjT+AoCT85nggje4wWQ0b0Q
-         dsS1ai/ZEt7eqR1F38+958dToFLotnDClUPp4puOik+MZg1KSlQOkeLkwW7aDAePesqZ
-         KP5/d3Y2ceJUjI1uXtGpkLjQcuVahf866PZd6dfSLwC02uB/VJIGuitMe32xf7MFUQ3y
-         7FqqpzwohZvM/ENg00g4rIhQsy27J2smBZvrnle28yhrsmStoMCKaxmaoggFvXTViwr1
-         5waQ==
-X-Gm-Message-State: ACrzQf2uf2J9Gf9MemB7bppizOKrDtyg/zRmHpRwCI9Bwo+XVAv5w2JI
-        1TsQ3hm8y3SXunrxf6/YKzkwu5jklLrbkQ==
-X-Google-Smtp-Source: AMsMyM6OjeMBDncKovrfBrauwsMbC7jPBrOrDGMVCCdiVbGsbmIIYeu+lFoSHceRGW54M4IlSuUhew==
-X-Received: by 2002:a63:d118:0:b0:43c:1440:6486 with SMTP id k24-20020a63d118000000b0043c14406486mr27160681pgg.92.1664340074533;
-        Tue, 27 Sep 2022 21:41:14 -0700 (PDT)
-Received: from localhost.localdomain ([45.124.203.18])
-        by smtp.gmail.com with ESMTPSA id u8-20020a170902e80800b00178ac4e70dcsm2504439plg.185.2022.09.27.21.41.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 21:41:13 -0700 (PDT)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-To:     Rob Herring <robh+dt@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Johannes Holland <johannes.holland@infineon.com>,
-        eajames@linux.ibm.com
-Subject: [PATCH v2 3/3] tpm: tis-i2c: Add more compatible strings
-Date:   Wed, 28 Sep 2022 14:09:57 +0930
-Message-Id: <20220928043957.2636877-4-joel@jms.id.au>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220928043957.2636877-1-joel@jms.id.au>
-References: <20220928043957.2636877-1-joel@jms.id.au>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=fAgZ5tRHZZRRHERZLI7/VYVjT/NV9E6VbCAjwipHzgk=;
+        b=GdevUA2J9t9uuB+/ZqRXtabYaAp6Q6yR1p8RMh+Xsgo9nMHS8nwMcQvd74mPI9AwPb
+         GoDD3Xb0GuLzox4wM2NUjthti0WmLOhlcCcupjlOIYQA8BDLC2ZAXcrcALQo/LqyVGOh
+         dOAPvrcrWeaA0i8MLRI9EMYBDvVq5FQ17PeDCiPc/WUdboSLZJoiU90MiLM/FC7Kmk/U
+         yvlgXHn19lC9HksDqHlnIDX9aw7VQza7DLgPj8RKPLEA9o0w1EXBRURqg6Qcwq9cj7eN
+         2gpQsOupnUHzC0+wUc52PPqJcFmrpFdcg4fG8aTbHFe6t1+k0Y/TILCtvAMpdOHohmH1
+         2bDg==
+X-Gm-Message-State: ACrzQf0CzA3dlZQgEA81Em6ZqWlVYzE+D3iAggZhii2DAokHILGCv2YS
+        z9OaL22JZQN3YgCyY2p1sUXIgTvdS9vxILjUOYnzd7DfGJWOpg==
+X-Google-Smtp-Source: AMsMyM4ZY/+ny8VzMnpfRJPd15YWX9Knuyrf35sLqo8Xz/xOY8VYV36VWkMmcx5pKaj3akTM4QjhjvI7WlwaQ6mul/U=
+X-Received: by 2002:a5d:52c9:0:b0:22c:c9e0:8547 with SMTP id
+ r9-20020a5d52c9000000b0022cc9e08547mr165724wrv.3.1664341837285; Tue, 27 Sep
+ 2022 22:10:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220907164317.80617-1-eajames@linux.ibm.com> <Yxl8CJBZiROgqhd6@kernel.org>
+ <1a20cd56-cc6f-d1c3-2e9d-c6b1fe278959@linux.ibm.com>
+In-Reply-To: <1a20cd56-cc6f-d1c3-2e9d-c6b1fe278959@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 28 Sep 2022 05:10:25 +0000
+Message-ID: <CACPK8XfRC==6CmFV3LoTW9oF_KLxMXH2KZQD0WFfnYpgnBERXQ@mail.gmail.com>
+Subject: Re: [PATCH] tpm: Add flag to use default cancellation policy
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jarkko@kernel.or, jgg@ziepe.ca,
+        Alexander.Steffen@infineon.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
         SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,30 +66,111 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
+On Thu, 8 Sept 2022 at 13:53, Eddie James <eajames@linux.ibm.com> wrote:
+>
+>
+> On 9/8/22 00:22, Jarkko Sakkinen wrote:
+> > On Wed, Sep 07, 2022 at 11:43:17AM -0500, Eddie James wrote:
+> >> The check for cancelled request depends on the VID of the chip, but
+> >> some chips share VID which shouldn't share their cancellation
+> >> behavior. This is the case for the Nuvoton NPCT75X, which should use
+> >> the default cancellation check, not the Winbond one.
+> >> To avoid changing the existing behavior, add a new flag to indicate
+> >> that the chip should use the default cancellation check and set it
+> >> for the I2C TPM2 TIS driver.
+> >>
+> >> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> >> ---
+> >>   drivers/char/tpm/tpm_tis_core.c | 18 ++++++++++--------
+> >>   drivers/char/tpm/tpm_tis_core.h |  1 +
+> >>   drivers/char/tpm/tpm_tis_i2c.c  |  1 +
+> >>   3 files changed, 12 insertions(+), 8 deletions(-)
+> >>
+> >> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> >> index 757623bacfd5..175e75337395 100644
+> >> --- a/drivers/char/tpm/tpm_tis_core.c
+> >> +++ b/drivers/char/tpm/tpm_tis_core.c
+> >> @@ -682,15 +682,17 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+> >>   {
+> >>      struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> >>
+> >> -    switch (priv->manufacturer_id) {
+> >> -    case TPM_VID_WINBOND:
+> >> -            return ((status == TPM_STS_VALID) ||
+> >> -                    (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
+> >> -    case TPM_VID_STM:
+> >> -            return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
+> >> -    default:
+> >> -            return (status == TPM_STS_COMMAND_READY);
+> >> +    if (!test_bit(TPM_TIS_DEFAULT_CANCELLATION, &priv->flags)) {
+> >> +            switch (priv->manufacturer_id) {
+> >> +            case TPM_VID_WINBOND:
+> >> +                    return ((status == TPM_STS_VALID) ||
+> >> +                            (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
+> >> +            case TPM_VID_STM:
+> >> +                    return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
+> >> +            }
+> > Why there is no default: ?
+>
+>
+> Well I didn't want to duplicate the line "status ==
+> TPM_STS_COMMAND_READY" in the default case and for the flagged case. So
+> now the switch just falls through for default. I can add default: break
+> instead
 
-https://www.nuvoton.com/products/cloud-computing/security/trusted-platform-module-tpm/
+This code was in the original patch series submitted by Nuvoton:
 
-Add a compatible string for it, and the generic compatible.
+https://lore.kernel.org/r/20211104140211.6258-3-amirmizi6@gmail.com
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- drivers/char/tpm/tpm_tis_i2c.c | 2 ++
- 1 file changed, 2 insertions(+)
+Perhaps something like that would be better?
 
-diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-index 0692510dfcab..4af27b7ec5b1 100644
---- a/drivers/char/tpm/tpm_tis_i2c.c
-+++ b/drivers/char/tpm/tpm_tis_i2c.c
-@@ -368,6 +368,8 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
- #ifdef CONFIG_OF
- static const struct of_device_id of_tis_i2c_match[] = {
- 	{ .compatible = "infineon,slb9673", },
-+	{ .compatible = "nuvoton,npct75x", },
-+	{ .compatible = "tcg,tpm-tis-i2c", },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
--- 
-2.35.1
-
+>
+>
+> >
+> >>      }
+> >> +
+> >> +    return status == TPM_STS_COMMAND_READY;
+> >>   }
+> >>
+> >>   static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+> >> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> >> index 66a5a13cd1df..b68479e0de10 100644
+> >> --- a/drivers/char/tpm/tpm_tis_core.h
+> >> +++ b/drivers/char/tpm/tpm_tis_core.h
+> >> @@ -86,6 +86,7 @@ enum tis_defaults {
+> >>   enum tpm_tis_flags {
+> >>      TPM_TIS_ITPM_WORKAROUND         = BIT(0),
+> >>      TPM_TIS_INVALID_STATUS          = BIT(1),
+> >> +    TPM_TIS_DEFAULT_CANCELLATION    = BIT(2),
+> >>   };
+> >>
+> >>   struct tpm_tis_data {
+> >> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> >> index 0692510dfcab..6722588e0217 100644
+> >> --- a/drivers/char/tpm/tpm_tis_i2c.c
+> >> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> >> @@ -329,6 +329,7 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev,
+> >>      if (!phy->io_buf)
+> >>              return -ENOMEM;
+> >>
+> >> +    set_bit(TPM_TIS_DEFAULT_CANCELLATION, &phy->priv.flags);
+> > What if you just zeroed manufacturer ID?
+>
+>
+> It's already zero there, and gets set to the VID as part of the core
+> init function.
+>
+>
+> Thanks,
+>
+> Eddie
+>
+>
+> >
+> >>      phy->i2c_client = dev;
+> >>
+> >>      /* must precede all communication with the tpm */
+> >> --
+> >> 2.31.1
+> >>
+> > BR, Jarkko
