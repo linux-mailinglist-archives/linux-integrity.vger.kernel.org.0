@@ -2,174 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1FE5EDDAF
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Sep 2022 15:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3145EDE7E
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Sep 2022 16:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbiI1Nbs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Sep 2022 09:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S233653AbiI1OMH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Sep 2022 10:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbiI1Nbr (ORCPT
+        with ESMTP id S231703AbiI1OMG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Sep 2022 09:31:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B2CA2233;
-        Wed, 28 Sep 2022 06:31:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 869E761EAB;
-        Wed, 28 Sep 2022 13:31:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA1CC433D6;
-        Wed, 28 Sep 2022 13:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664371903;
-        bh=fv8K7xC6bKS8EccwTZv0pR5iY+09mG3RZycCPUFUFGc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OekWThH4kvbq6ymsyKm2fXQ5hFgBLaGRER/NTKeUNH/5h2nIhKwRs5NpETvolN5DX
-         BZcM1Wk/9uN5n0Jv5JPB95cKxV+0ePMCFQBJXXzn17zoBVToyt+KdBxO8tX2cR75aH
-         8j4ctmn6lN3RSEWbEmK/ykQyTy+3eSE7doYFs7to+sDFjc1fUSsOcEiKGOBPhPQyq4
-         cfGr1LPtu4gYhFMn3XAVcYpDPE5Tyc80fLMQl1u57KcNz2LsazOXy6IvRGtuMMBl/H
-         cL1SfnkkAJIE0YAA7LuJplQ9d5mCirSS9XF9BXVkGCznN7zPo30ZPeGw29aPHoVQiH
-         Y8XNM4vv+Ou3g==
-Date:   Wed, 28 Sep 2022 15:31:39 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 18/30] evm: simplify evm_xattr_acl_change()
-Message-ID: <20220928133139.ectxtqgitfjmioef@wittgenstein>
-References: <20220926140827.142806-1-brauner@kernel.org>
- <20220926140827.142806-19-brauner@kernel.org>
- <CAHC9VhTx-Pkh0E3Awr=BR-Zh31gmoP3d1MKHf-UPVibfV3VxKQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhTx-Pkh0E3Awr=BR-Zh31gmoP3d1MKHf-UPVibfV3VxKQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 10:12:06 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9499E2C8;
+        Wed, 28 Sep 2022 07:12:05 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SCYGnl006798;
+        Wed, 28 Sep 2022 14:11:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=2qfwID3iDQdHFwDSNCdNKGmKTyUW+HPVTmc7dFG8/NU=;
+ b=KwLgNRfNok8OahPwxgAxiGNaoHtT0b0XBE+3pGKmo/KWHs0ez+/LPD+iLiu5GkJpHwk8
+ 7NVjlw0OXx9Gg2yxjythgtXjyr2WbMqmubJsR7HlHiNnpfNfeW+DQImFB0vhusXwHtLp
+ lAI6NDUMpDpYfYgvrOZ8CxzPzTntwWEcJlgof29gtCTyweii2DyxQCUjLkmQ0hM2jN5F
+ jelt4aYRASuGw0x40OiG1AFLgH4MY+JDD2yMmk72fumeFC6Q0HsgJWv1pMHntCsNfnVy
+ 5cJ981R2k1NwWJhnELS1TiYK2d/wcq7kqHTO6NJxGC09hu0hUPYKoxfDgnBQOCegQYyO mQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvpcwb5pt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 14:11:48 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28SDbN2q018490;
+        Wed, 28 Sep 2022 14:11:48 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvpcwb5pa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 14:11:48 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28SE6oVc019244;
+        Wed, 28 Sep 2022 14:11:47 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01dal.us.ibm.com with ESMTP id 3jsshajae5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 14:11:47 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com ([9.208.128.114])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28SEBjwd10748614
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Sep 2022 14:11:46 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C176058070;
+        Wed, 28 Sep 2022 14:11:45 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6AF4358058;
+        Wed, 28 Sep 2022 14:11:44 +0000 (GMT)
+Received: from sig-9-65-238-59.ibm.com (unknown [9.65.238.59])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Sep 2022 14:11:44 +0000 (GMT)
+Message-ID: <5e304b17fe709d2b2f30b991d5ffc4711d27a075.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
+ ima_filter_rule_match()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     "Guozihua (Scott)" <guozihua@huawei.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Janne Karhunen <janne.karhunen@gmail.com>
+Date:   Wed, 28 Sep 2022 10:11:43 -0400
+In-Reply-To: <7ac3e330-e77c-95d8-7d3b-29e243b57251@huawei.com>
+References: <20220921125804.59490-1-guozihua@huawei.com>
+         <20220921125804.59490-3-guozihua@huawei.com>
+         <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
+         <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
+         <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
+         <7ac3e330-e77c-95d8-7d3b-29e243b57251@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 23Dq_TGVV4wtaHlEprzBXYS1W1BgN42o
+X-Proofpoint-ORIG-GUID: -l7MlE2jINQHwGnb_yNeA2OjCOWhSqR2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_06,2022-09-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ phishscore=0 mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209280085
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 06:56:44PM -0400, Paul Moore wrote:
-> On Mon, Sep 26, 2022 at 11:24 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > The posix acl api provides a dedicated security and integrity hook for
-> > setting posix acls. This means that
-> >
-> > evm_protect_xattr()
-> > -> evm_xattr_change()
-> >    -> evm_xattr_acl_change()
-> >
-> > is now only hit during vfs_remove_acl() at which point we are guaranteed
-> > that xattr_value and xattr_value_len are NULL and 0. In this case evm
-> > always used to return 1. Simplify this function to do just that.
-> >
-> > Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> > ---
-> >
-> > Notes:
-> >     /* v2 */
-> >     unchanged
-> >
-> >  security/integrity/evm/evm_main.c | 62 +++++++------------------------
-> >  1 file changed, 14 insertions(+), 48 deletions(-)
-> >
-> > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> > index 15aa5995fff4..1fbe1b8d0364 100644
-> > --- a/security/integrity/evm/evm_main.c
-> > +++ b/security/integrity/evm/evm_main.c
-> > @@ -436,62 +436,29 @@ static enum integrity_status evm_verify_current_integrity(struct dentry *dentry)
-> >
-> >  /*
-> >   * evm_xattr_acl_change - check if passed ACL changes the inode mode
-> > - * @mnt_userns: user namespace of the idmapped mount
-> > - * @dentry: pointer to the affected dentry
-> >   * @xattr_name: requested xattr
-> >   * @xattr_value: requested xattr value
-> >   * @xattr_value_len: requested xattr value length
-> >   *
-> > - * Check if passed ACL changes the inode mode, which is protected by EVM.
-> > + * This is only hit during xattr removal at which point we always return 1.
-> > + * Splat a warning in case someone managed to pass data to this function. That
-> > + * should never happen.
-> >   *
-> >   * Returns 1 if passed ACL causes inode mode change, 0 otherwise.
-> >   */
-> > -static int evm_xattr_acl_change(struct user_namespace *mnt_userns,
-> > -                               struct dentry *dentry, const char *xattr_name,
-> > -                               const void *xattr_value, size_t xattr_value_len)
-> > +static int evm_xattr_acl_change(const void *xattr_value, size_t xattr_value_len)
-> >  {
-> > -#ifdef CONFIG_FS_POSIX_ACL
-> > -       umode_t mode;
-> > -       struct posix_acl *acl = NULL, *acl_res;
-> > -       struct inode *inode = d_backing_inode(dentry);
-> > -       int rc;
-> > -
-> > -       /*
-> > -        * An earlier comment here mentioned that the idmappings for
-> > -        * ACL_{GROUP,USER} don't matter since EVM is only interested in the
-> > -        * mode stored as part of POSIX ACLs. Nonetheless, if it must translate
-> > -        * from the uapi POSIX ACL representation to the VFS internal POSIX ACL
-> > -        * representation it should do so correctly. There's no guarantee that
-> > -        * we won't change POSIX ACLs in a way that ACL_{GROUP,USER} matters
-> > -        * for the mode at some point and it's difficult to keep track of all
-> > -        * the LSM and integrity modules and what they do to POSIX ACLs.
-> > -        *
-> > -        * Frankly, EVM shouldn't try to interpret the uapi struct for POSIX
-> > -        * ACLs it received. It requires knowledge that only the VFS is
-> > -        * guaranteed to have.
-> > -        */
-> > -       acl = vfs_set_acl_prepare(mnt_userns, i_user_ns(inode),
-> > -                                 xattr_value, xattr_value_len);
-> > -       if (IS_ERR_OR_NULL(acl))
-> > -               return 1;
-> > -
-> > -       acl_res = acl;
-> > -       /*
-> > -        * Passing mnt_userns is necessary to correctly determine the GID in
-> > -        * an idmapped mount, as the GID is used to clear the setgid bit in
-> > -        * the inode mode.
-> > -        */
-> > -       rc = posix_acl_update_mode(mnt_userns, inode, &mode, &acl_res);
-> > -
-> > -       posix_acl_release(acl);
-> > -
-> > -       if (rc)
-> > -               return 1;
-> > +       int rc = 0;
-> >
-> > -       if (inode->i_mode != mode)
-> > -               return 1;
-> > +#ifdef CONFIG_FS_POSIX_ACL
-> > +       WARN_ONCE(xattr_value != NULL,
-> > +                 "Passing xattr value for POSIX ACLs not supported\n");
-> > +       WARN_ONCE(xattr_value_len != 0,
-> > +                 "Passing non-zero length for POSIX ACLs not supported\n");
-> > +       rc = 1;
-> >  #endif
-> > -       return 0;
-> > +
-> > +       return rc;
-> >  }
-> 
-> This is another case where I'll leave the final say up to Mimi, but
-> why not just get rid of evm_xattr_acl_change() entirely?  Unless I'm
-> missing something, it's only reason for existing now is to check that
-> it is passed the proper (empty) parameters which seems pointless ...
-> no?
+On Sat, 2022-09-24 at 14:05 +0800, Guozihua (Scott) wrote:
 
-Yeah, I think we can remove it. evm_inode_remove_acl() is just
-evm_inode_set_acl(NULL, 0) so if we add evm_inode_remove_acl() as a
-wrapper around it instead of simply abusing the existing
-evm_inode_removexattr() we can delete all that code indeed as it won't
-be reachable from generic xattr code anymore.
+> I might have overlooked something, but if I understands the code 
+> correctly, we would be copying the same rule over and over again till 
+> the loop ends in that case. ima_lsm_update_rule() would replace the rule 
+> node on the rule list without updating the rule in place. Although 
+> synchronize_rcu() should prevent a UAF, the rule in ima_match_rules() 
+> would not be updated. Meaning SELinux would always return -ESTALE before 
+> we copy and retry as we keep passing in the outdated rule entry.
+
+After reviewing this patch set again, the code looks fine.  The commit
+message is still a bit off, but I've pushed the patch set out to next-
+integrity-testing, waiting for some Reviewed-by/Tested-by tags.
+
+-- 
+thanks,
+
+Mimi
+
