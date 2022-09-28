@@ -2,174 +2,163 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B3C5EE188
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Sep 2022 18:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9D15EE1F0
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Sep 2022 18:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbiI1QQA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Sep 2022 12:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S234028AbiI1Qdv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Sep 2022 12:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234161AbiI1QOg (ORCPT
+        with ESMTP id S231919AbiI1Qdu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:14:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27B1DF393;
-        Wed, 28 Sep 2022 09:13:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D264561ED7;
-        Wed, 28 Sep 2022 16:13:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352BCC433D7;
-        Wed, 28 Sep 2022 16:13:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664381631;
-        bh=tSWSc0RzHXYJdQPae3JpE6xvY1f+QZmrBPNCIoz96UI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tbf98rHwWzLZgiVzkAExTN+sch+GFxxoomo1Z7WSTfWt5Q6leEpWQvei1Msl2H4Cz
-         jsWAiM47OJTVMAp6/UTSlElDbvlB6NSFGihtbFOEZw9eBm2P9wa5u80hDPTZfeWp70
-         2KNP/A7g194DiJ25PiNCtm7nh9rXVglImNBoSRiBx4MzeSJnIDnsd5qWx0p0C/ZnI1
-         VRekXv20WfqNKxDGAzcqsOU8n8fDqbsJg5Ln+Gf7cTEOIgAjeg0W2N9aeN0NgETb+D
-         MV06/OYHNLKj78Wz0kBn5xczCDwXoE+H/XVpKdlzXJH2+kMyqa7woeA+X8X9iuf1PY
-         018SWZ6BN3/dg==
-From:   Christian Brauner <brauner@kernel.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
+        Wed, 28 Sep 2022 12:33:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7ABE24F0E;
+        Wed, 28 Sep 2022 09:33:48 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SGWftt001897;
+        Wed, 28 Sep 2022 16:33:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=YxGK65bERyHGDZ0NikSMS6Pq247mdVcfcfK5VTcrENA=;
+ b=lVYXE/nwpL2wNycJGv6Vp4n8wouzb9Gmx9x2Uuau434NIVBpYcCZFTfdZZnf1818nlPO
+ HBgd2VlI8VKdj8CNiEsQRhO3aPZm1UF0bB3RkHF5FlGIPG//UHGy9nxzzQGgo1PBmbp7
+ YKjsMSDi0NGc/3O4wvGml0qvM3z7TRpXjN7Feoz+WVQ050EV3FJN7aTti45tY+3DoIuS
+ OTR3eH+UzZuDStT7R5AtZmC8ZtrcSPg69giyoMG6/RTkoMCQyHmLbqfNtJtRlptnshmq
+ ukX+Nmst6qo/Z2UWAysgUPGiBNfB9AR3CQkCbKQstygzKYhxHentaQshn3hfvHjoBRV5 gw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvqxp4ggu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 16:33:43 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28SEuxhE004743;
+        Wed, 28 Sep 2022 16:33:42 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvqxp4ggc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 16:33:42 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28SGLFMt013293;
+        Wed, 28 Sep 2022 16:33:42 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma05wdc.us.ibm.com with ESMTP id 3jssh9v936-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 16:33:42 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com ([9.208.128.114])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28SGXfjb3474034
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Sep 2022 16:33:41 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E0D1D5805C;
+        Wed, 28 Sep 2022 16:33:40 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B136D58059;
+        Wed, 28 Sep 2022 16:33:39 +0000 (GMT)
+Received: from sig-9-65-238-59.ibm.com (unknown [9.65.238.59])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Sep 2022 16:33:39 +0000 (GMT)
+Message-ID: <42dbb8f6bc0a3e8339a5283bf26a50bd7bec3767.camel@linux.ibm.com>
+Subject: Re: [PATCH] KEYS: encrypted: fix key instantiation with
+ user-provided data
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Nikolaus Voss <nv@vosn.de>
+Cc:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>
-Subject: [PATCH v3 24/29] evm: remove evm_xattr_acl_change()
-Date:   Wed, 28 Sep 2022 18:08:38 +0200
-Message-Id: <20220928160843.382601-25-brauner@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220928160843.382601-1-brauner@kernel.org>
-References: <20220928160843.382601-1-brauner@kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3856; i=brauner@kernel.org; h=from:subject; bh=tSWSc0RzHXYJdQPae3JpE6xvY1f+QZmrBPNCIoz96UI=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSSbFNat4Gm6wWOsoKh6oo5rh5vDh2leS72PR7o1h2t+OZtQ mvemo5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCJnLjEynFm92G1qN6fo0gxbhsNxmR 1s339N5HpdfLUnc3XrZq0KDUaG+bzvlxz54DR31SHvdS+U+SdP2mFgzZbQ/CjvaOLF0jv/mAA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, Yael Tzur <yaelt@google.com>
+Date:   Wed, 28 Sep 2022 12:33:39 -0400
+In-Reply-To: <2fe0144d-ee19-ec17-9566-16bce6386925@vosn.de>
+References: <20220919072317.E41421357@mail.steuer-voss.de>
+           <53730789a41358673b1715dd650706e9ffcb1199.camel@linux.ibm.com>
+           <35fd816-d755-967-5712-b5496875ac7a@vosn.de>
+          <2ee1e3e68d847001c4bf856d980a553e52de5023.camel@linux.ibm.com>
+          <439012d8-dd4-7fd2-3788-49cf72faa99@vosn.de>
+         <6b4229386dced275f745619f190f64a71b7c0aec.camel@linux.ibm.com>
+         <2fe0144d-ee19-ec17-9566-16bce6386925@vosn.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hIywS9S9ebs2kWr8-Xst2qFiBsJQ_hsC
+X-Proofpoint-GUID: sh6o-FOlLD1aPHMsdoQc-1wtAeHSbW90
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_07,2022-09-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ mlxlogscore=999 impostorscore=0 mlxscore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 phishscore=0 bulkscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209280099
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The security and integrity infrastructure has dedicated hooks now so
-evm_xattr_acl_change() is dead code. Before this commit the callchain was:
+On Wed, 2022-09-28 at 14:08 +0200, Nikolaus Voss wrote:
+> On Wed, 21 Sep 2022, Mimi Zohar wrote:
+> > On Wed, 2022-09-21 at 09:24 +0200, Nikolaus Voss wrote:
+> >> On Tue, 20 Sep 2022, Mimi Zohar wrote:
+> >>> On Tue, 2022-09-20 at 18:23 +0200, Nikolaus Voss wrote:
+> >>>> On Tue, 20 Sep 2022, Mimi Zohar wrote:
+> >>>>> On Fri, 2022-09-16 at 07:45 +0200, Nikolaus Voss wrote:
+> >>>>>> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+> >>>>>> decrypted data") added key instantiation with user provided decrypted data.
+> >>>>>> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+> >>>>>> Fix this to use hex2bin instead.
+> >>>>>
+> >>>>> Thanks, Nikolaus.  We iterated a number of times over what would be the
+> >>>>> safest userspace input.  One of the last changes was that the key data
+> >>>>> should be hex-ascii-encoded.  Unfortunately, the LTP
+> >>>>> testcases/kernel/syscalls/keyctl09.c example isn't hex-ascii-encoded
+> >>>>> and the example in Documentation/security/keys/trusted-encrypted.rst
+> >>>>> just cat's a file.  Both expect the length to be the length of the
+> >>>>> userspace provided data.   With this patch, when hex2bin() fails, there
+> >>>>> is no explanation.
+> >>>>
+> >>>> That's true. But it's true for all occurrences of hex2bin() in this file.
+> >>>> I could pr_err() an explanation, improve the trusted-encrypted.rst example
+> >>>> and respin the patch. Should I, or do you have another suggestion?
+> >>>
+> >>>> I wasn't aware of keyctl09.c, but quickly looking into it, the user data
+> >>>> _is_ hex-ascii-encoded, only the length is "wrong": Imho, the specified
+> >>>> length should be the binary length as this is consistent with key-length
+> >>>> specs in other cases (e.g. when loading the key from a blob).
+> >>>> keyctl09.c could be easy to fix, if only the length is modified. Should
+> >>>> I propose a patch? What is the correct/appropriate workflow there?
+> >>>
+> >>> I'm concerned that this change breaks existing encrypted keys created
+> >>> with user-provided data.  Otherwise I'm fine with your suggestion.
+> >>
+> >> Ok, but this change does not touch the hex-ascii format of encrypted key
+> >> blobs?
+> >
+> > True, but any persistent data based on this key would be affected.
+> 
+> Persistent data is stored encypted with e.g. the master key in hex-ascii 
+> already and should not be affected. Only persistent data stored 
+> unencrypted is affected, but the encrypted-keys stuff is just about 
+> avoiding that. Or do I still misunderstand something?
 
-evm_protect_xattr()
--> evm_xattr_change()
-   -> evm_xattr_acl_change()
+Perhaps an existing encrypted key usage example would help clarify what
+is meant by persistent data.  The two original encrypted key usages are
+the EVM HMAC key and ecryptfs.  The EVM key is an encrypted key used to
+calculate the EVM HMAC, which is stored in security.evm.  In that
+scenario, the persistent data would be the data stored in security.evm.
 
-where evm_protect_xattr() was hit from evm_inode_setxattr() and
-evm_inode_removexattr(). But now we have evm_inode_set_acl() and
-evm_inode_remove_acl() and have switched over the vfs to rely on the posix
-acl api so the code isn't hit anymore.
+Would this patch break existing kernel/application persistent data
+based on encrypted keys created with user-provided data?
 
-Suggested-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
----
-
-Notes:
-    /* v2 */
-    unchanged
-    
-    /* v3 */
-    Paul Moore <paul@paul-moore.com>:
-    - Remove evm_xattr_acl_change() completely.
-
- security/integrity/evm/evm_main.c | 64 -------------------------------
- 1 file changed, 64 deletions(-)
-
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 7904786b610f..e0d120383870 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -434,66 +434,6 @@ static enum integrity_status evm_verify_current_integrity(struct dentry *dentry)
- 	return evm_verify_hmac(dentry, NULL, NULL, 0, NULL);
- }
- 
--/*
-- * evm_xattr_acl_change - check if passed ACL changes the inode mode
-- * @mnt_userns: user namespace of the idmapped mount
-- * @dentry: pointer to the affected dentry
-- * @xattr_name: requested xattr
-- * @xattr_value: requested xattr value
-- * @xattr_value_len: requested xattr value length
-- *
-- * Check if passed ACL changes the inode mode, which is protected by EVM.
-- *
-- * Returns 1 if passed ACL causes inode mode change, 0 otherwise.
-- */
--static int evm_xattr_acl_change(struct user_namespace *mnt_userns,
--				struct dentry *dentry, const char *xattr_name,
--				const void *xattr_value, size_t xattr_value_len)
--{
--#ifdef CONFIG_FS_POSIX_ACL
--	umode_t mode;
--	struct posix_acl *acl = NULL, *acl_res;
--	struct inode *inode = d_backing_inode(dentry);
--	int rc;
--
--	/*
--	 * An earlier comment here mentioned that the idmappings for
--	 * ACL_{GROUP,USER} don't matter since EVM is only interested in the
--	 * mode stored as part of POSIX ACLs. Nonetheless, if it must translate
--	 * from the uapi POSIX ACL representation to the VFS internal POSIX ACL
--	 * representation it should do so correctly. There's no guarantee that
--	 * we won't change POSIX ACLs in a way that ACL_{GROUP,USER} matters
--	 * for the mode at some point and it's difficult to keep track of all
--	 * the LSM and integrity modules and what they do to POSIX ACLs.
--	 *
--	 * Frankly, EVM shouldn't try to interpret the uapi struct for POSIX
--	 * ACLs it received. It requires knowledge that only the VFS is
--	 * guaranteed to have.
--	 */
--	acl = vfs_set_acl_prepare(mnt_userns, i_user_ns(inode),
--				  xattr_value, xattr_value_len);
--	if (IS_ERR_OR_NULL(acl))
--		return 1;
--
--	acl_res = acl;
--	/*
--	 * Passing mnt_userns is necessary to correctly determine the GID in
--	 * an idmapped mount, as the GID is used to clear the setgid bit in
--	 * the inode mode.
--	 */
--	rc = posix_acl_update_mode(mnt_userns, inode, &mode, &acl_res);
--
--	posix_acl_release(acl);
--
--	if (rc)
--		return 1;
--
--	if (inode->i_mode != mode)
--		return 1;
--#endif
--	return 0;
--}
--
- /*
-  * evm_xattr_change - check if passed xattr value differs from current value
-  * @mnt_userns: user namespace of the idmapped mount
-@@ -513,10 +453,6 @@ static int evm_xattr_change(struct user_namespace *mnt_userns,
- 	char *xattr_data = NULL;
- 	int rc = 0;
- 
--	if (posix_xattr_acl(xattr_name))
--		return evm_xattr_acl_change(mnt_userns, dentry, xattr_name,
--					    xattr_value, xattr_value_len);
--
- 	rc = vfs_getxattr_alloc(&init_user_ns, dentry, xattr_name, &xattr_data,
- 				0, GFP_NOFS);
- 	if (rc < 0)
 -- 
-2.34.1
+thanks,
+
+Mimi
 
