@@ -2,74 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5F45EFDB4
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Sep 2022 21:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA0D5EFDB9
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Sep 2022 21:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiI2TPA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Sep 2022 15:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
+        id S229716AbiI2TPg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Sep 2022 15:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiI2TO6 (ORCPT
+        with ESMTP id S229689AbiI2TPc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:14:58 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD68EE3D
-        for <linux-integrity@vger.kernel.org>; Thu, 29 Sep 2022 12:14:53 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1280590722dso2974700fac.1
-        for <linux-integrity@vger.kernel.org>; Thu, 29 Sep 2022 12:14:53 -0700 (PDT)
+        Thu, 29 Sep 2022 15:15:32 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352C51572A
+        for <linux-integrity@vger.kernel.org>; Thu, 29 Sep 2022 12:15:29 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id q10so2599403oib.5
+        for <linux-integrity@vger.kernel.org>; Thu, 29 Sep 2022 12:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=so8f7/FpW15uqm64n1pk5SbXYMzGIpKd49c5eY6WZhI=;
-        b=DuO4Ghap+57aG2+4EBfVbGqGkqFbZ8mMkc4f/baBKELkqqTkWW4Mmx5l5DS9hE2W+b
-         4N6qDuPVJN9A/JvN8SmObmxYfyfrCkWhXpC7ARxFQRs+3OFKx3dPoAuhyNbDN496C0Ma
-         kB1Ik5Pd2KjblhkMTRlplrd/sBVd39orC+pVfXBfKcs9zJBEZ4HHCaIxRRdbmromVsGT
-         TqlciHhiCI9TDmtbUlNVdLJbIzSwYpFsIBtbiKR/KjA9/qE51YqGpqA6p7gXRUfxnVQw
-         rTELVRH2b/5hSQk064L6hOiNT5Rc2UvZmte19QJxCbecySUF75yBfAakdzJGIuSDZmiH
-         lyrQ==
+        bh=yf/8WC/DYqH8NUie8myJNN0/4LtlMUik3EmVrOxaY9Q=;
+        b=DaHz7jnx/r9+gh+UrBzNiGWymlwe5U/4UlM8FpQWxFdji10rY+2a8DbU/jkLnLwiVH
+         RTuePNf+PbsmWPq1e5Rw0tC4Na1cua6pKbvpn1NIMZmRwmQD1NWGwrDerOR19RJo0k7/
+         tqhLQXYMDUidhpJbOzAErvZqiQAVSspPsOndRBxLFMx9Qk/56e+UpyWgfBeFWWA6fqjv
+         416v2KBqpZRq2n1FMacI1FwvPncTtIZCpeMXagDueiQzlu6F9TBy9m9Gy8Yw/fKU4gG8
+         vNpg/RRGUwBRqv/ZZROiQs+Qnfo4f7ujLgFbMiiRLjdZDKM5BsGysh5V/VLn4Th/vBRe
+         CxqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=so8f7/FpW15uqm64n1pk5SbXYMzGIpKd49c5eY6WZhI=;
-        b=se1XUO9huwATBLCvSYd2iFHl7prg9K3xlXPuVQXMepMTuY8Mfjs79S5+kKInXd9PpD
-         Mnt1dzf9ZKWCNdtXB4aASfWiSVUXHTMZWUoqvYup6QMeBQBEgu0djoIt6GSG7kUW6Xl4
-         1KYtkqvmT2UsJFYjongCw9jD3QY5Dztmxp7B/W1kif9KEghkcd8gjCVmGp++rGQRuiNA
-         dnFZ+qxecl+JE8ZWtooyrMPr2NgyeR6LhJg4PPnkd2xGMpZUL/2Ej+mx60m1St8dkFjY
-         cxKaYVQSRUsoGt5HnEFL0yZC0gxBGghTdBW3rH67eVzMWajHWZ9cymWRh//h6886FNkx
-         MTEA==
-X-Gm-Message-State: ACrzQf2CARGaAE7+1RE2DfTWm7cgQqUS0I1j56GzsimlHxD9iO/SPxaa
-        ZZywBwYzZQRWrQUJRayTPwnB2Io+mIX6dPq/Krj9MmaHVicH
-X-Google-Smtp-Source: AMsMyM45cOexR0D+Wh6iAT/29fWCulWmYamGRCQWxac1spbOjzNUMh22cQMNGqRgnmLZJxrvU6hN17CJ8Jt5qfHl89c=
-X-Received: by 2002:a05:6870:41cb:b0:131:9656:cc30 with SMTP id
- z11-20020a05687041cb00b001319656cc30mr7564530oac.51.1664478892860; Thu, 29
- Sep 2022 12:14:52 -0700 (PDT)
+        bh=yf/8WC/DYqH8NUie8myJNN0/4LtlMUik3EmVrOxaY9Q=;
+        b=6z5B/545u1dkNM2J/ux9lIA7UXb3CV8Wa4GBbdOXNrPDcRuQneVwu2i48pCOtkI0Zi
+         2gmNZVBDCcXuOzObgirqFYFLJYN9YYsvyv8WZo15ZkybupOGozGo7/VlJ2UCjhiYNQzX
+         VWTT9d05WUCzfkiXnXE6y+b/oQo+bILIuZJLLThFHKmlYeTUExAO0olWxLgNVX/bd8bS
+         aE5Gfj9+LASDGjJiwZiSeP0SMh5t71xDQGqb7dYdrruPZUZsaOc3TYf3cyPl+9OFzQzG
+         Un9LmZB3SOsE4TtU9ADXcQ2VuiGveZsAngjfPPw8tAn8OD9f5AyRCAUBouBfVB3VjRhE
+         wW2Q==
+X-Gm-Message-State: ACrzQf3VfYjxymlXO31lVgKKZjDgk344QfNlc60yk5TtgYdB47DUEaV/
+        okHozJU11Ob6Ta0/mxev83NHjSdnvrVwKRrSznfc
+X-Google-Smtp-Source: AMsMyM5buXcZU2WWeRA4j7WNkmGG+LD9rY61v8RROQHTg9bc9ki1ysYnnlYoXu7fuXJ4Xn1BHFZJbZTffKIvQ/FuiB4=
+X-Received: by 2002:aca:1c13:0:b0:350:ce21:a022 with SMTP id
+ c19-20020aca1c13000000b00350ce21a022mr2346251oic.172.1664478928551; Thu, 29
+ Sep 2022 12:15:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220929153041.500115-1-brauner@kernel.org> <20220929153041.500115-13-brauner@kernel.org>
-In-Reply-To: <20220929153041.500115-13-brauner@kernel.org>
+References: <20220929153041.500115-1-brauner@kernel.org> <20220929153041.500115-11-brauner@kernel.org>
+In-Reply-To: <20220929153041.500115-11-brauner@kernel.org>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 29 Sep 2022 15:14:42 -0400
-Message-ID: <CAHC9VhSxr-aUj7mqKo05B5Oj=5FWeajx_mNjR_EszzpYR1YozA@mail.gmail.com>
-Subject: Re: [PATCH v4 12/30] integrity: implement get and set acl hook
+Date:   Thu, 29 Sep 2022 15:15:17 -0400
+Message-ID: <CAHC9VhSHSk9MNK+FmydGTZDzDOuwF0b1A3SqYhG+X0NSCwoUEg@mail.gmail.com>
+Subject: Re: [PATCH v4 10/30] selinux: implement get, set and remove acl hook
 To:     Christian Brauner <brauner@kernel.org>
 Cc:     linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
         Christoph Hellwig <hch@lst.de>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        Mimi Zohar <zohar@linux.ibm.com>,
         linux-integrity@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
         linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 11:33 AM Christian Brauner <brauner@kernel.org> wrote:
+On Thu, Sep 29, 2022 at 11:31 AM Christian Brauner <brauner@kernel.org> wrote:
 >
 > The current way of setting and getting posix acls through the generic
 > xattr interface is error prone and type unsafe. The vfs needs to
@@ -91,21 +92,11 @@ On Thu, Sep 29, 2022 at 11:33 AM Christian Brauner <brauner@kernel.org> wrote:
 > their appropriate vfs format instead of hacking it through a void
 > pointer stored in the uapi format.
 >
-> I spent considerate time in the security module and integrity
-> infrastructure and audited all codepaths. EVM is the only part that
-> really has restrictions based on the actual posix acl values passed
-> through it. Before this dedicated hook EVM used to translate from the
-> uapi posix acl format sent to it in the form of a void pointer into the
-> vfs format. This is not a good thing. Instead of hacking around in the
-> uapi struct give EVM the posix acls in the appropriate vfs format and
-> perform sane permissions checks that mirror what it used to to in the
-> generic xattr hook.
->
-> IMA doesn't have any restrictions on posix acls. When posix acls are
-> changed it just wants to update its appraisal status.
->
-> The removal of posix acls is equivalent to passing NULL to the posix set
-> acl hooks. This is the same as before through the generic xattr api.
+> I spent considerate time in the security module infrastructure and
+> audited all codepaths. SELinux has no restrictions based on the posix
+> acl values passed through it. The capability hook doesn't need to be
+> called either because it only has restrictions on security.* xattrs. So
+> these are all fairly simply hooks for SELinux.
 >
 > Link: https://lore.kernel.org/all/20220801145520.1532837-1-brauner@kernel.org [1]
 > Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
@@ -122,89 +113,45 @@ On Thu, Sep 29, 2022 at 11:33 AM Christian Brauner <brauner@kernel.org> wrote:
 >     /* v4 */
 >     unchanged
 >
->  include/linux/evm.h                   | 23 +++++++++
->  include/linux/ima.h                   | 21 ++++++++
->  security/integrity/evm/evm_main.c     | 70 ++++++++++++++++++++++++++-
->  security/integrity/ima/ima_appraise.c |  9 ++++
->  security/security.c                   | 21 +++++++-
->  5 files changed, 141 insertions(+), 3 deletions(-)
+>  security/selinux/hooks.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 
-...
+One small nitpick below, but looks good regardless.
 
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> index 23d484e05e6f..7904786b610f 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -8,7 +8,7 @@
->   *
->   * File: evm_main.c
->   *     implements evm_inode_setxattr, evm_inode_post_setxattr,
-> - *     evm_inode_removexattr, and evm_verifyxattr
-> + *     evm_inode_removexattr, evm_verifyxattr, and evm_inode_set_acl.
->   */
->
->  #define pr_fmt(fmt) "EVM: "fmt
-> @@ -670,6 +670,74 @@ int evm_inode_removexattr(struct user_namespace *mnt_userns,
->         return evm_protect_xattr(mnt_userns, dentry, xattr_name, NULL, 0);
+Acked-by: Paul Moore <paul@paul-moore.com>
+
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 79573504783b..0e3cd67e5e92 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -3239,6 +3239,27 @@ static int selinux_inode_setxattr(struct user_namespace *mnt_userns,
+>                             &ad);
 >  }
 >
-> +static int evm_inode_set_acl_change(struct user_namespace *mnt_userns,
-> +                                   struct dentry *dentry, const char *name,
-> +                                   struct posix_acl *kacl)
+> +static int selinux_inode_set_acl(struct user_namespace *mnt_userns,
+> +                                struct dentry *dentry, const char *acl_name,
+> +                                struct posix_acl *kacl)
 > +{
-> +#ifdef CONFIG_FS_POSIX_ACL
-> +       int rc;
+> +       return dentry_has_perm(current_cred(), dentry, FILE__SETATTR);
+> +}
 > +
-> +       umode_t mode;
-> +       struct inode *inode = d_backing_inode(dentry);
+> +static int selinux_inode_get_acl(struct user_namespace *mnt_userns,
+> +                                struct dentry *dentry, const char *acl_name)
+> +{
+> +       const struct cred *cred = current_cred();
 > +
-> +       if (!kacl)
-> +               return 1;
-> +
-> +       rc = posix_acl_update_mode(mnt_userns, inode, &mode, &kacl);
-> +       if (rc || (inode->i_mode != mode))
-> +               return 1;
-> +#endif
-> +       return 0;
+> +       return dentry_has_perm(cred, dentry, FILE__GETATTR);
 > +}
 
-I'm not too bothered by it either way, but one might consider pulling
-the #ifdef outside the function definition, for example:
+Both the set and remove hooks use current_cred() directly in the call
+to dentry_has_perm(), you might as well do the same in the get hook.
 
-#ifdef CONFIG_FS_POSIX_ACL
-static int evm_inode_foo(...)
-{
-  /* ... stuff ... */
-}
-#else
-static int evm_inode_foo(...)
-{
-  return 0;
-}
-#endif /* CONFIG_FS_POSIX_ACL */
 
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index bde74fcecee3..698a8ae2fe3e 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -770,6 +770,15 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
->         return result;
->  }
->
-> +int ima_inode_set_acl(struct user_namespace *mnt_userns, struct dentry *dentry,
-> +                     const char *acl_name, struct posix_acl *kacl)
+> +static int selinux_inode_remove_acl(struct user_namespace *mnt_userns,
+> +                                   struct dentry *dentry, const char *acl_name)
 > +{
-> +       if (evm_revalidate_status(acl_name))
-> +               ima_reset_appraise_flags(d_backing_inode(dentry), 0);
-> +
-> +       return 0;
+> +       return dentry_has_perm(current_cred(), dentry, FILE__SETATTR);
 > +}
 
-While the ima_inode_set_acl() implementation above looks okay for the
-remove case, I do see that the ima_inode_setxattr() function has a
-call to validate_hash_algo() before calling
-ima_reset_appraise_flags().  IANAIE (I Am Not An Ima Expert), but it
-seems like we would still want that check in the ACL case.
-
--- 
+--
 paul-moore.com
