@@ -2,67 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6185F0D26
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Sep 2022 16:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADD85F0DD2
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Sep 2022 16:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbiI3OMF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Sep 2022 10:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
+        id S230255AbiI3Oos (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Sep 2022 10:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbiI3OLh (ORCPT
+        with ESMTP id S229869AbiI3Oor (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:11:37 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F21A0D15
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Sep 2022 07:11:23 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id r136-20020a4a378e000000b004755953bc6cso2294581oor.13
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Sep 2022 07:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=+02lWUnQnVpnIW75GUY8RdFtLVPFU6flJQgBwpnhGBU=;
-        b=rt5DQ1gpYyGWOabp0rvarti0MXhPdro0zgBzGjdJTaVn4/FqeqPqFXgSFzQsik2ABd
-         9gsm3BPQAiQpVGKpvObwIPzi9rg//WYfatrw+sxudu9uNLCFZHSsH038qSLByxlif17I
-         BwL+l7VEMY5C5gkCZxAU6RyD+YxD+bW/RNMAxit/EbqYk+ZMjyaNb74drfob5aOGywia
-         xR3NyIekUQE6WaeyzlsKxuulWSZW76djBTE+3habFDW2TsMc1jnMluI+MSpnlIVE5Fsb
-         uYEpJQJkg1pO0wSBzS01JkOGnsjjM4FORQilbPczPZC8TRFrh2om7f4JPILCTsaDuNXm
-         dxXQ==
+        Fri, 30 Sep 2022 10:44:47 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AFD1037;
+        Fri, 30 Sep 2022 07:44:40 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-131dda37dddso4708386fac.0;
+        Fri, 30 Sep 2022 07:44:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+02lWUnQnVpnIW75GUY8RdFtLVPFU6flJQgBwpnhGBU=;
-        b=8KW8fC2DIedCxSioakb/hUiGkqcSII8QNN4xx/8ayRQbipIYFY75AsfBoyHWHJtcWf
-         DTtTUPigbvuUk5gj8j6nZJ2qP1RSnp/HRZGlB/lMxtCzYana6Y7w+PM/D9xdKZI3xBMx
-         Cg1nvp3OIe0jD/vZnm6/BbkG/gbvLTqKZW/8FY9dtKlxQADInORb8P6JY91aH4tYPWGe
-         +2jJDQYwEJZIzMWlmPcoHO1AzIYP8WRBaS8KwRjZHTv8/UAEIvzw1bR8TPZtHWewODEi
-         P+H/l2pLnt7czPQqFqgmh5S9vWl5bE6N3DVfHAAPtfLuDcWayCL7gUP5ZrtvZkA74jrW
-         B1UA==
-X-Gm-Message-State: ACrzQf0Fsl9L3GvuGFleBTJNvD1bwEJxU6IdZifpSiQxQmx1EeZe21nw
-        qJNiNN650u5mF7pU5DyoutW7RfeKqQlZE+EZMhpD
-X-Google-Smtp-Source: AMsMyM6IyQ5sGNm/pGDeJJQ5vn5WZ1By4iKoxvFogUYrIwPYfUksEqpPNIf9trER/6ncZB31spquEFt73Tpwxy4slys=
-X-Received: by 2002:a4a:c10a:0:b0:476:4a59:4e4b with SMTP id
- s10-20020a4ac10a000000b004764a594e4bmr3452742oop.24.1664547082349; Fri, 30
- Sep 2022 07:11:22 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=cvFArS6MbZlp0VEs9+nbM3Zi/QLj8a6RzAmXxUMKqqY=;
+        b=zhvj62T0FppdrxfXVw5Hj8PVm/e1fkfTGgkS6KeJMwdGO2/0XC4se2mOTvtHlMLDLP
+         gm3ZqnsJ17ZmL7abpKnWU+fzWy/dXpfp4uTfjTuqyze4/2T8TSto1v9W/kH+1PMuRRiD
+         /3uA5zMLrez45BdDgf4giuNjc1++0H8GcSnkmqYmR+RZkTSF/A2Fndx9083SmKgYxRCL
+         vpH6lGySsGPRf9VG6+Mk54JapIKnH0YHMFwS2hjlk3GROtNZFCaGyhQJQRXYzUVq4PnY
+         PwHflYYnuLrnWPRjnYy3bBB4R21nxTNc2jb/lYwVpu9ae0uXo+UqxZETMKXoFSMifQKS
+         Y9Mg==
+X-Gm-Message-State: ACrzQf0DBg/5Mj6IDELcoKY/nZ9vKlDJ1KdDH0Qo7Sg3env5ZqvD0p5j
+        cGT5GVhiCUoSbofTVVw3cA==
+X-Google-Smtp-Source: AMsMyM4y7nt+4cE/cnupvOpbwnXeIop/R3L2Xtd4hhCnD0Tm/E/fmzbPA2hVxn+FMX+L9nLirejFdQ==
+X-Received: by 2002:a05:6870:e886:b0:131:c8fe:1b60 with SMTP id q6-20020a056870e88600b00131c8fe1b60mr4867995oan.248.1664549079541;
+        Fri, 30 Sep 2022 07:44:39 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bx14-20020a0568081b0e00b00342fedaf7d9sm545439oib.43.2022.09.30.07.44.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 07:44:39 -0700 (PDT)
+Received: (nullmailer pid 289557 invoked by uid 1000);
+        Fri, 30 Sep 2022 14:44:38 -0000
+Date:   Fri, 30 Sep 2022 09:44:38 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        eajames@linux.ibm.com
+Subject: Re: [PATCH v2 3/3] tpm: tis-i2c: Add more compatible strings
+Message-ID: <20220930144438.GA287295-robh@kernel.org>
+References: <20220928043957.2636877-1-joel@jms.id.au>
+ <20220928043957.2636877-4-joel@jms.id.au>
 MIME-Version: 1.0
-References: <20220929153041.500115-1-brauner@kernel.org> <20220929153041.500115-13-brauner@kernel.org>
- <CAHC9VhSxr-aUj7mqKo05B5Oj=5FWeajx_mNjR_EszzpYR1YozA@mail.gmail.com> <53f18ae71d0b8811fbd23c87a80447bc159832e0.camel@linux.ibm.com>
-In-Reply-To: <53f18ae71d0b8811fbd23c87a80447bc159832e0.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 30 Sep 2022 10:11:11 -0400
-Message-ID: <CAHC9VhRn6Lojr-ct0YJb6R6oO66-p+6Pa9YBY=bxu_wsKs9bYQ@mail.gmail.com>
-Subject: Re: [PATCH v4 12/30] integrity: implement get and set acl hook
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928043957.2636877-4-joel@jms.id.au>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,41 +67,36 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 11:19 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> Hi Paul,
->
-> On Thu, 2022-09-29 at 15:14 -0400, Paul Moore wrote:
-> > > diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> > > index bde74fcecee3..698a8ae2fe3e 100644
-> > > --- a/security/integrity/ima/ima_appraise.c
-> > > +++ b/security/integrity/ima/ima_appraise.c
-> > > @@ -770,6 +770,15 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
-> > >         return result;
-> > >  }
-> > >
-> > > +int ima_inode_set_acl(struct user_namespace *mnt_userns, struct dentry *dentry,
-> > > +                     const char *acl_name, struct posix_acl *kacl)
-> > > +{
-> > > +       if (evm_revalidate_status(acl_name))
-> > > +               ima_reset_appraise_flags(d_backing_inode(dentry), 0);
-> > > +
-> > > +       return 0;
-> > > +}
-> >
-> > While the ima_inode_set_acl() implementation above looks okay for the
-> > remove case, I do see that the ima_inode_setxattr() function has a
-> > call to validate_hash_algo() before calling
-> > ima_reset_appraise_flags().  IANAIE (I Am Not An Ima Expert), but it
-> > seems like we would still want that check in the ACL case.
->
-> Thanks, Paul.  The "ima: fix blocking of security.ima xattrs of
-> unsupported algorithms" patch in next-integrity branch, moves the hash
-> algorithm checking earlier.
+On Wed, Sep 28, 2022 at 02:09:57PM +0930, Joel Stanley wrote:
+> The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
+> 
+> https://www.nuvoton.com/products/cloud-computing/security/trusted-platform-module-tpm/
+> 
+> Add a compatible string for it, and the generic compatible.
+> 
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> ---
+>  drivers/char/tpm/tpm_tis_i2c.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> index 0692510dfcab..4af27b7ec5b1 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> @@ -368,6 +368,8 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+>  #ifdef CONFIG_OF
+>  static const struct of_device_id of_tis_i2c_match[] = {
+>  	{ .compatible = "infineon,slb9673", },
+> +	{ .compatible = "nuvoton,npct75x", },
+> +	{ .compatible = "tcg,tpm-tis-i2c", },
 
-Okay, thanks.  When comparing against the status quo I usually just
-stick with what is in Linus' tree, but I'm happy to hear this patch is
-correct.
+If there is not currently any distinction that the kernel makes, you 
+only need to add "tcg,tpm-tis-i2c".
 
--- 
-paul-moore.com
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
+> -- 
+> 2.35.1
+> 
+> 
