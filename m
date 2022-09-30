@@ -2,125 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507155F1533
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Sep 2022 23:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A2B5F15B8
+	for <lists+linux-integrity@lfdr.de>; Sat,  1 Oct 2022 00:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbiI3Vtt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Sep 2022 17:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S232461AbiI3WGC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Sep 2022 18:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiI3Vts (ORCPT
+        with ESMTP id S232446AbiI3WFx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:49:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA06FF5A4;
-        Fri, 30 Sep 2022 14:49:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86EF162523;
-        Fri, 30 Sep 2022 21:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 905E5C433D6;
-        Fri, 30 Sep 2022 21:49:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664574584;
-        bh=B7rHmkcOb/r7UGom5v9umZRm+YQRsqQ8eeuZLeWJQUA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HTlpmjYmcVJ8TjvV/2JE4xS7G3BH4q14VoRQ+nbV3kSvwXu4uTVGlEyyi3JvATiJE
-         RbL+X2ysoekpw3Az/3JwMkNM+6fYOVa3oy0nQIjjUpEg3bTpL/UMAYLocLoUN5OWIf
-         ft79pHy8vvCqz/XAHaUFZ+o9XNHowUNnQYO5bWgMvKnomVUNSMU6KxeLDkA1qc50AK
-         UkVMljuv5CqJ4pAjK01FkQIh5dmWjNQ8s7Qd+4tMNaTy/ofB260QNxtDQCRyy6nvfo
-         Ui41X8vSlBrm5ct2/ahFqfqRERNzIk9t389hwbsnoeaCxGdnt4JnQw3gXYujRENnR/
-         F9h/I4pC00nfQ==
-Date:   Sat, 1 Oct 2022 00:49:42 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Eddie James <eajames@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterhuewe@gmx.de, jarkko@kernel.or, jgg@ziepe.ca,
-        Alexander.Steffen@infineon.com
-Subject: Re: [PATCH] tpm: Add flag to use default cancellation policy
-Message-ID: <Yzdkdj7Ma3/RnCCs@kernel.org>
-References: <20220907164317.80617-1-eajames@linux.ibm.com>
- <Yxl8CJBZiROgqhd6@kernel.org>
- <1a20cd56-cc6f-d1c3-2e9d-c6b1fe278959@linux.ibm.com>
- <CACPK8XfRC==6CmFV3LoTW9oF_KLxMXH2KZQD0WFfnYpgnBERXQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACPK8XfRC==6CmFV3LoTW9oF_KLxMXH2KZQD0WFfnYpgnBERXQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 18:05:53 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07BE303D3;
+        Fri, 30 Sep 2022 15:05:51 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id w13so6079237oiw.8;
+        Fri, 30 Sep 2022 15:05:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=e95cVkU1YVsZYYYeZhd6YkazhTnGPp2+jcn6yw8+tqE=;
+        b=G3tdnHbU5slcsOZMAJQkgf2HXwg+RcDvoFOz+hQLNnhEoXmLt64f0QcGxUvZta05zu
+         h9l+fYzHsQEludlG79Ot4Cn4a8Hr4xj9e/KU470ksiz7DV7k0EP7zN79JQG5b21ugblJ
+         dYSbsuMZ2kI/h8A18EdovLT8qAPkhDGREEQV+TOP8q0QyJy2l/J7ZIitO7a7stT7yZq3
+         HaNLyOG5ZMiDlm100ST6n5uRr5uQu5sRXfjhkQEiKpMfqDcniaTup8S5MM9/9q0RIN4N
+         kS7UY9MII1upTHUpk6TwUI5pKdw5fMpq158ibEbeAWkHuVPLbXfvRmCyfz1KaoCKisFW
+         mc2A==
+X-Gm-Message-State: ACrzQf0STKfmLQ0sQC0SS/q33+2cxLE1yKnd4Q5NX3AT4h+cAODnkYfM
+        50jaeGM7O+kEOK6vCK9GhQ==
+X-Google-Smtp-Source: AMsMyM6jvPDYKOu5nnoVUGS5dquPmDjpVw7IBrmQTDGkgGN1eHdIAaU6rv2qekAa2Gs9JeQBCN1aOQ==
+X-Received: by 2002:a05:6808:308f:b0:350:55d6:ebbb with SMTP id bl15-20020a056808308f00b0035055d6ebbbmr128224oib.168.1664575550484;
+        Fri, 30 Sep 2022 15:05:50 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 9-20020a9d0f09000000b006594674d4ddsm834733ott.44.2022.09.30.15.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 15:05:49 -0700 (PDT)
+Received: (nullmailer pid 1129754 invoked by uid 1000);
+        Fri, 30 Sep 2022 22:05:43 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc:     benoit.houyere@st.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, amirmizi6@gmail.com, jarkko@kernel.org,
+        peter@pjd.dev, Johannes.Holland@infineon.com,
+        linux-integrity@vger.kernel.org
+In-Reply-To: <20220930165116.13329-3-Alexander.Steffen@infineon.com>
+References: <20220930165116.13329-1-Alexander.Steffen@infineon.com> <20220930165116.13329-3-Alexander.Steffen@infineon.com>
+Message-Id: <166457528569.1113018.4558441482039920312.robh@kernel.org>
+Subject: Re: [PATCH 2/7] dt-bindings: tpm: Improve documentation of compatibles
+Date:   Fri, 30 Sep 2022 17:05:43 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 05:10:25AM +0000, Joel Stanley wrote:
-> On Thu, 8 Sept 2022 at 13:53, Eddie James <eajames@linux.ibm.com> wrote:
-> >
-> >
-> > On 9/8/22 00:22, Jarkko Sakkinen wrote:
-> > > On Wed, Sep 07, 2022 at 11:43:17AM -0500, Eddie James wrote:
-> > >> The check for cancelled request depends on the VID of the chip, but
-> > >> some chips share VID which shouldn't share their cancellation
-> > >> behavior. This is the case for the Nuvoton NPCT75X, which should use
-> > >> the default cancellation check, not the Winbond one.
-> > >> To avoid changing the existing behavior, add a new flag to indicate
-> > >> that the chip should use the default cancellation check and set it
-> > >> for the I2C TPM2 TIS driver.
-> > >>
-> > >> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> > >> ---
-> > >>   drivers/char/tpm/tpm_tis_core.c | 18 ++++++++++--------
-> > >>   drivers/char/tpm/tpm_tis_core.h |  1 +
-> > >>   drivers/char/tpm/tpm_tis_i2c.c  |  1 +
-> > >>   3 files changed, 12 insertions(+), 8 deletions(-)
-> > >>
-> > >> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> > >> index 757623bacfd5..175e75337395 100644
-> > >> --- a/drivers/char/tpm/tpm_tis_core.c
-> > >> +++ b/drivers/char/tpm/tpm_tis_core.c
-> > >> @@ -682,15 +682,17 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
-> > >>   {
-> > >>      struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> > >>
-> > >> -    switch (priv->manufacturer_id) {
-> > >> -    case TPM_VID_WINBOND:
-> > >> -            return ((status == TPM_STS_VALID) ||
-> > >> -                    (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
-> > >> -    case TPM_VID_STM:
-> > >> -            return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
-> > >> -    default:
-> > >> -            return (status == TPM_STS_COMMAND_READY);
-> > >> +    if (!test_bit(TPM_TIS_DEFAULT_CANCELLATION, &priv->flags)) {
-> > >> +            switch (priv->manufacturer_id) {
-> > >> +            case TPM_VID_WINBOND:
-> > >> +                    return ((status == TPM_STS_VALID) ||
-> > >> +                            (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
-> > >> +            case TPM_VID_STM:
-> > >> +                    return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
-> > >> +            }
-> > > Why there is no default: ?
-> >
-> >
-> > Well I didn't want to duplicate the line "status ==
-> > TPM_STS_COMMAND_READY" in the default case and for the flagged case. So
-> > now the switch just falls through for default. I can add default: break
-> > instead
+On Fri, 30 Sep 2022 18:51:11 +0200, Alexander Steffen wrote:
+> Add missing information:
+> * Device name, for discoverability
+> * Interface, to distinguish otherwise similar devices
+> * TPM version, so that outdated devices can be deprecated in the future
 > 
-> This code was in the original patch series submitted by Nuvoton:
+> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> ---
+>  .../bindings/security/tpm/trivial-tpms.yaml        | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 > 
-> https://lore.kernel.org/r/20211104140211.6258-3-amirmizi6@gmail.com
-> 
-> Perhaps something like that would be better?
 
-The current patch could have 
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-        default:
-                /* fall-through */
-                break;
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-BR, Jarkko
+Full log is available here: https://patchwork.ozlabs.org/patch/
+
+
+tpm@20: 'powered-while-suspended' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rk3288-veyron-brain.dtb
+	arch/arm/boot/dts/rk3288-veyron-fievel.dtb
+	arch/arm/boot/dts/rk3288-veyron-jaq.dtb
+	arch/arm/boot/dts/rk3288-veyron-jerry.dtb
+	arch/arm/boot/dts/rk3288-veyron-mickey.dtb
+	arch/arm/boot/dts/rk3288-veyron-mighty.dtb
+	arch/arm/boot/dts/rk3288-veyron-minnie.dtb
+	arch/arm/boot/dts/rk3288-veyron-pinky.dtb
+	arch/arm/boot/dts/rk3288-veyron-speedy.dtb
+	arch/arm/boot/dts/rk3288-veyron-tiger.dtb
+	arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dtb
+	arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtb
+	arch/arm64/boot/dts/mediatek/mt8173-elm.dtb
+	arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dtb
+
