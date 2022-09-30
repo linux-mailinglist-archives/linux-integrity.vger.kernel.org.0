@@ -2,89 +2,212 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6845F0597
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Sep 2022 09:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479155F0640
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Sep 2022 10:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiI3HRx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Sep 2022 03:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
+        id S230225AbiI3ILg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Sep 2022 04:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiI3HRw (ORCPT
+        with ESMTP id S229981AbiI3ILd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Sep 2022 03:17:52 -0400
-X-Greylist: delayed 714 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 00:17:51 PDT
-Received: from mail.pgn.gob.gt (mail.pgn.gob.gt [216.230.140.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD45518480B
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Sep 2022 00:17:51 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.pgn.gob.gt (Postfix) with ESMTP id 272E3D66F9DB3;
-        Fri, 30 Sep 2022 01:05:54 -0600 (CST)
-Received: from mail.pgn.gob.gt ([127.0.0.1])
-        by localhost (mail.pgn.gob.gt [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 3m2neqEIPfQ2; Fri, 30 Sep 2022 01:05:53 -0600 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.pgn.gob.gt (Postfix) with ESMTP id 9E7AFD66F9DB8;
-        Fri, 30 Sep 2022 01:05:53 -0600 (CST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.pgn.gob.gt 9E7AFD66F9DB8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pgn.gob.gt;
-        s=E0581F14-500F-11EC-8EFF-93589398BF5E; t=1664521553;
-        bh=p6uDRsmMjXS9HGPzoMms1Q7ir8ScWDe+tE5fjoTUKeo=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=q3pgmqQC3GSromcM2/7iAUUmdp6uWRUvdVAvlyLnod3+yt7fM6Bi3UFCbMYghUxxB
-         Z6XDFBMbvyO4c5TI3b3LRRiyFWJVEi2drQuHuaq7C7oiHbrjcsPk8Gjb4PayOli7S1
-         4fMsQNliO2NPXXpUl3JX4lnUD2lkq833uCuq9JqAQrz3PQ3gNLQazeEwO1R0siFKKz
-         HbI7S/FlrBwBCY3qpReUncFIQInSOIiYQH8SHJLzoTM0LCBR/B1wx/2BodtKeZ7c8H
-         8S/3VdMbJjp1DDWQQLIhvYF3fQTBPUQpo3XdRGTGEEwSorjbDeDUw2PALilrK6fhiP
-         q3/oZw+OMZEhw==
-X-Virus-Scanned: amavisd-new at pgn.gob.gt
-Received: from mail.pgn.gob.gt ([127.0.0.1])
-        by localhost (mail.pgn.gob.gt [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id cMAb-E2EVMwK; Fri, 30 Sep 2022 01:05:53 -0600 (CST)
-Received: from mail.pgn.gob.gt (mail.pgn.gob.gt [192.168.0.80])
-        by mail.pgn.gob.gt (Postfix) with ESMTP id A816DD5909954;
-        Fri, 30 Sep 2022 01:05:51 -0600 (CST)
-Date:   Fri, 30 Sep 2022 01:05:51 -0600 (CST)
-From:   =?utf-8?Q?darcovsk=C3=BD?= dobrodinec 
-        <marvin.aquino.jalapa@pgn.gob.gt>
-Reply-To: "pinvest68@gmail.com" <pinvest68@gmail.com>
-Message-ID: <621430137.11859986.1664521551675.JavaMail.zimbra@pgn.gob.gt>
-Subject: =?utf-8?Q?d=C3=B4vern=C3=A9_ozn=C3=A1menie?=
+        Fri, 30 Sep 2022 04:11:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2CC1BB6C8;
+        Fri, 30 Sep 2022 01:11:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19253B8275F;
+        Fri, 30 Sep 2022 08:11:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CC2C433D6;
+        Fri, 30 Sep 2022 08:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664525488;
+        bh=RnAuN7ArCjMiR+Ns0K2qV+ZE4a1puMppCM/ESDvAdqY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XNS9QTOb+k/X3bfWTicAbw6Yglb4mTvfnHuAnDCvTHwYGar6LmarlYTAgmUTtx3ai
+         +UxmG66pUrQv6oWe2xhu7QgL9L7Y1t8fhjNCtXgYkXNeisJIRWGdDbhr8m4dcFaSfl
+         TDQBM2qXIPM51TNWzLt/dEeaMTMKiVU7OutjZSWLWvDkkrLC8rOqbj3J82iDUW20mp
+         KpwSVZ+QrpHIJURH8E7EXJiay59fKvxdPzaBRCvwjeIUm/tVb4dPRzi9YqvMZWH6oy
+         X5AhQ0gBMMToDavvAPM6+FEIj8wIC/OUhntY8ovmnvZal604gmd9+loNXYWHcYf6G2
+         7UHjO/qrVUo2g==
+Date:   Fri, 30 Sep 2022 10:11:23 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 12/30] integrity: implement get and set acl hook
+Message-ID: <20220930081123.dwoijem2fpy6ubpp@wittgenstein>
+References: <20220929153041.500115-1-brauner@kernel.org>
+ <20220929153041.500115-13-brauner@kernel.org>
+ <CAHC9VhSxr-aUj7mqKo05B5Oj=5FWeajx_mNjR_EszzpYR1YozA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.168.0.80]
-X-Mailer: Zimbra 8.8.15_GA_4173 (zclient/8.8.15_GA_4173)
-Thread-Index: yAjZ1UKoN1yRAjSYzXAjPh2rJFnj0w==
-Thread-Topic: =?utf-8?Q?d=C3=B4vern=C3=A9_ozn=C3=A1menie?=
-X-Spam-Status: No, score=2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhSxr-aUj7mqKo05B5Oj=5FWeajx_mNjR_EszzpYR1YozA@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, Sep 29, 2022 at 03:14:42PM -0400, Paul Moore wrote:
+> On Thu, Sep 29, 2022 at 11:33 AM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > The current way of setting and getting posix acls through the generic
+> > xattr interface is error prone and type unsafe. The vfs needs to
+> > interpret and fixup posix acls before storing or reporting it to
+> > userspace. Various hacks exist to make this work. The code is hard to
+> > understand and difficult to maintain in it's current form. Instead of
+> > making this work by hacking posix acls through xattr handlers we are
+> > building a dedicated posix acl api around the get and set inode
+> > operations. This removes a lot of hackiness and makes the codepaths
+> > easier to maintain. A lot of background can be found in [1].
+> >
+> > So far posix acls were passed as a void blob to the security and
+> > integrity modules. Some of them like evm then proceed to interpret the
+> > void pointer and convert it into the kernel internal struct posix acl
+> > representation to perform their integrity checking magic. This is
+> > obviously pretty problematic as that requires knowledge that only the
+> > vfs is guaranteed to have and has lead to various bugs. Add a proper
+> > security hook for setting posix acls and pass down the posix acls in
+> > their appropriate vfs format instead of hacking it through a void
+> > pointer stored in the uapi format.
+> >
+> > I spent considerate time in the security module and integrity
+> > infrastructure and audited all codepaths. EVM is the only part that
+> > really has restrictions based on the actual posix acl values passed
+> > through it. Before this dedicated hook EVM used to translate from the
+> > uapi posix acl format sent to it in the form of a void pointer into the
+> > vfs format. This is not a good thing. Instead of hacking around in the
+> > uapi struct give EVM the posix acls in the appropriate vfs format and
+> > perform sane permissions checks that mirror what it used to to in the
+> > generic xattr hook.
+> >
+> > IMA doesn't have any restrictions on posix acls. When posix acls are
+> > changed it just wants to update its appraisal status.
+> >
+> > The removal of posix acls is equivalent to passing NULL to the posix set
+> > acl hooks. This is the same as before through the generic xattr api.
+> >
+> > Link: https://lore.kernel.org/all/20220801145520.1532837-1-brauner@kernel.org [1]
+> > Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> > ---
+> >
+> > Notes:
+> >     /* v2 */
+> >     unchanged
+> >
+> >     /* v3 */
+> >     Paul Moore <paul@paul-moore.com>:
+> >     - Add get, and remove acl hook
+> >
+> >     /* v4 */
+> >     unchanged
+> >
+> >  include/linux/evm.h                   | 23 +++++++++
+> >  include/linux/ima.h                   | 21 ++++++++
+> >  security/integrity/evm/evm_main.c     | 70 ++++++++++++++++++++++++++-
+> >  security/integrity/ima/ima_appraise.c |  9 ++++
+> >  security/security.c                   | 21 +++++++-
+> >  5 files changed, 141 insertions(+), 3 deletions(-)
+> 
+> ...
+> 
+> > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> > index 23d484e05e6f..7904786b610f 100644
+> > --- a/security/integrity/evm/evm_main.c
+> > +++ b/security/integrity/evm/evm_main.c
+> > @@ -8,7 +8,7 @@
+> >   *
+> >   * File: evm_main.c
+> >   *     implements evm_inode_setxattr, evm_inode_post_setxattr,
+> > - *     evm_inode_removexattr, and evm_verifyxattr
+> > + *     evm_inode_removexattr, evm_verifyxattr, and evm_inode_set_acl.
+> >   */
+> >
+> >  #define pr_fmt(fmt) "EVM: "fmt
+> > @@ -670,6 +670,74 @@ int evm_inode_removexattr(struct user_namespace *mnt_userns,
+> >         return evm_protect_xattr(mnt_userns, dentry, xattr_name, NULL, 0);
+> >  }
+> >
+> > +static int evm_inode_set_acl_change(struct user_namespace *mnt_userns,
+> > +                                   struct dentry *dentry, const char *name,
+> > +                                   struct posix_acl *kacl)
+> > +{
+> > +#ifdef CONFIG_FS_POSIX_ACL
+> > +       int rc;
+> > +
+> > +       umode_t mode;
+> > +       struct inode *inode = d_backing_inode(dentry);
+> > +
+> > +       if (!kacl)
+> > +               return 1;
+> > +
+> > +       rc = posix_acl_update_mode(mnt_userns, inode, &mode, &kacl);
+> > +       if (rc || (inode->i_mode != mode))
+> > +               return 1;
+> > +#endif
+> > +       return 0;
+> > +}
+> 
+> I'm not too bothered by it either way, but one might consider pulling
+> the #ifdef outside the function definition, for example:
+> 
+> #ifdef CONFIG_FS_POSIX_ACL
+> static int evm_inode_foo(...)
+> {
+>   /* ... stuff ... */
+> }
+> #else
+> static int evm_inode_foo(...)
+> {
+>   return 0;
+> }
+> #endif /* CONFIG_FS_POSIX_ACL */
+> 
+> > diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> > index bde74fcecee3..698a8ae2fe3e 100644
+> > --- a/security/integrity/ima/ima_appraise.c
+> > +++ b/security/integrity/ima/ima_appraise.c
+> > @@ -770,6 +770,15 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
+> >         return result;
+> >  }
+> >
+> > +int ima_inode_set_acl(struct user_namespace *mnt_userns, struct dentry *dentry,
+> > +                     const char *acl_name, struct posix_acl *kacl)
+> > +{
+> > +       if (evm_revalidate_status(acl_name))
+> > +               ima_reset_appraise_flags(d_backing_inode(dentry), 0);
+> > +
+> > +       return 0;
+> > +}
+> 
+> While the ima_inode_set_acl() implementation above looks okay for the
+> remove case, I do see that the ima_inode_setxattr() function has a
+> call to validate_hash_algo() before calling
+> ima_reset_appraise_flags().  IANAIE (I Am Not An Ima Expert), but it
+> seems like we would still want that check in the ACL case.
 
+Ah, you might've missed this bug...
+The fact that they call validate_hash_algo() on posix acls is a bug in
+ima. It's a type safety bug. IMA uses posix acls passed through the void
+pointer as struct evm_ima_xattr:
 
-Ahoj,Som Jonathan Sherman. Som syn kanadsk=C3=A9ho stavite=C4=BEa. H=C4=BEa=
-d=C3=A1m k=C3=BApu domu vo va=C5=A1ej krajine, kde by som sa mohol pres=C5=
-=A5ahova=C5=A5 so svojou rodinou. Ak by ste boli tak=C3=BD l=C3=A1skav=C3=
-=BD a pomohli mi n=C3=A1js=C5=A5 niekoho bl=C3=ADzkeho, som ochotn=C3=BD sa=
- s vami podeli=C5=A5 o 40 % svojho dedi=C4=8Dstva. Vlo=C5=BEte zlat=C3=A9 p=
-eniaze do banky a ove=C4=BEa viac. Toto je len =C3=BAvod k tomu, o =C4=8Dom=
- by som sa s vami r=C3=A1d porozpr=C3=A1val. Boli by ste tak=C3=BD l=C3=A1s=
-kav=C3=BD a kontaktoval ma pre viac podrobnost=C3=AD? Toto je d=C3=B4vern=
-=C3=A9, nikdy som to nechcel zverejni=C5=A5. Z tohto d=C3=B4vodu sa mus=C3=
-=ADm osobne obr=C3=A1ti=C5=A5 na v=C3=A1=C5=A1 e-mail. Pre bli=C5=BE=C5=A1i=
-e inform=C3=A1cie ma pros=C3=ADm kontaktujte. S=C4=BEubujem, =C5=BEe ti nez=
-aberiem ve=C4=BEa =C4=8Dasu. Len som potreboval niekoho, komu by som sa zve=
-ril so svoj=C3=ADm tajn=C3=BDm pl=C3=A1nom s=C5=A5ahovania. ak by ste boli =
-tak l=C3=A1skav=C3=AD a kontaktovali moju s=C3=BAkromn=C3=BA e-mailov=C3=BA=
- adresu: poskytnem v=C3=A1m v=C5=A1etky podrobnosti o d=C3=B4vode m=C3=B4jh=
-o pres=C5=A5ahovania. s=C3=BAkromn=C3=BD e-mail: JonathonSherman&#64;outloo=
-k.comS=C3=BAkromn=C3=A9 WhatsApp: &#43;1(289)6459842S Pozdravom,Jonathan Sh=
-erman.
+ 	const struct evm_ima_xattr_data *xvalue = xattr_value;
+
+	result = validate_hash_algo(dentry, xvalue, xattr_value_len);
+
+I reported this to them a little while ago and Mimi sent a fix for it
+that's in -next:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=5926586f291b53cb8a0c9631fc19489be1186e2d
+
+IOW, what I have here seems correct.
