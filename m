@@ -2,124 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92B85F1A0E
-	for <lists+linux-integrity@lfdr.de>; Sat,  1 Oct 2022 07:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617995F1FE3
+	for <lists+linux-integrity@lfdr.de>; Sat,  1 Oct 2022 23:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiJAFvv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 1 Oct 2022 01:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
+        id S229529AbiJAVxO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 1 Oct 2022 17:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiJAFvu (ORCPT
+        with ESMTP id S229453AbiJAVxN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 1 Oct 2022 01:51:50 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405AE2559B;
-        Fri, 30 Sep 2022 22:51:49 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id 10so2002517pli.0;
-        Fri, 30 Sep 2022 22:51:49 -0700 (PDT)
+        Sat, 1 Oct 2022 17:53:13 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6171D4F680
+        for <linux-integrity@vger.kernel.org>; Sat,  1 Oct 2022 14:53:10 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id u26so3106013lfk.8
+        for <linux-integrity@vger.kernel.org>; Sat, 01 Oct 2022 14:53:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bearmetal.eu; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=a3vzhRK1Q2NWu6tijC9jAXxq+6f9f5sg6oBazUuCYOU=;
-        b=PD1K/zGUmG6P/1xnC/2RTxP7tR7oiTbozxGB8cpd1o6GWEcK/8mhK2PIIblUKrgLn6
-         L6R9OjQYF+mrJuEfhK6myMaAvs2/ZaMN/pkmRb3r9GpATNhlY1jxvzPJxvCeX1cb7gGd
-         1spYZ4BC4Esg60o2VD2WAizBBH+9Jdf82iHMfa36IKElBRdmxSyUNxrC2c7kDRX1FeXx
-         TZkJPasuOmcFagtoEKnJq7lQ4TuJZDL/VClFBgNkTF2rVycSUfTlaUWOK8x2kRXXYXrp
-         ZpchDEsunVWNIsuWVgfRnyHRdtvqonN/xVTQRKuMU06pHhL7hzcQziVs/Cnzsd2KrcEv
-         EjPQ==
+        bh=ABtpF7FpkfscTeG2ufv9Or4kQC9LnXNTy/2SsoC+Eas=;
+        b=HevJvU8hspeLmS9MrlOWp8KZGUAhe2ngK8LrGg4cMI9Ux5yoH+miFKJTeY9Y1Bi3s8
+         /p7kt8KZiBWquzSUdAm8MpsZ1RI5yIoYCOg147BgCVO3Q7aFH9wTVe4+H/+OcTAI1966
+         ntNzHfy7Dz2w0HGE+fKIa7I6BLuw0No8KvFNp/V2zy3/yT03PyJg15YpQpje59mETt2q
+         AaAZCWaTRTlnEEiVl73NAn4zm+a/Xnbsjqilxlf5Se1eqYYcKm6fDPm01qq0oFSFpjny
+         iQKF8SgnEZmrmdl241J6+KtiRJPETT4JlnHIXUgweLsNw+awH1PacMyVAsTDr92hKfFI
+         JrmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=a3vzhRK1Q2NWu6tijC9jAXxq+6f9f5sg6oBazUuCYOU=;
-        b=PnpuXg4I4msP32jwnfVQm6+2RBW8bdebK3oLl8XtLRpnK6uAUrbh00iUns/1jXU+9F
-         INqEy/6FkCoVgLFAXvTdKdwqSypHitBpdo3F2fofKqbzM5gD8ffIt7TBZ1AYJGYZ6mgV
-         Ui344WOpwhx7P6uxl9Tk9AGriA7KNzVPPimvaGpOneqmRjJPpxx6aY1/nXll30w/qzGs
-         TH4jEpKp5W7bYtFkZpiVEI1V8KmOGBj1Ag0E532dMYLO5XOJDOyU6lvDhcSTSy9TrUUB
-         ZDrz/J6WAVGdY+Jikco02cmoJBQAHGDotKsEBGpPBxyJQe+wbTxWLWC049lNO8ZeGQk1
-         MgKQ==
-X-Gm-Message-State: ACrzQf2MB/Y0ecDz9UjYsqwtu3lWzHtBKy5WF0pPQlk9RY3CAc5vSMqi
-        7b4QPC/PPJj5dIn05l30u+M=
-X-Google-Smtp-Source: AMsMyM5Rx4JhhOVKpnSlRjoaLR/ogpuq66B6ItcEv+rYHlyDSHu+xr8FXa1UQrRNuj5q1lecA3Wb0Q==
-X-Received: by 2002:a17:902:8347:b0:178:6e81:35ce with SMTP id z7-20020a170902834700b001786e8135cemr11976582pln.23.1664603508614;
-        Fri, 30 Sep 2022 22:51:48 -0700 (PDT)
-Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:63e7:415:943b:4707])
-        by smtp.gmail.com with ESMTPSA id z25-20020aa79599000000b0055f6a0d82e0sm613268pfj.51.2022.09.30.22.51.47
+        bh=ABtpF7FpkfscTeG2ufv9Or4kQC9LnXNTy/2SsoC+Eas=;
+        b=oaZIfe6fSkPlLnND5og70iODOTYxec+WhX+rLCU0bGtdSAV7TjiuaHCdy5mm+UBbo4
+         LObzzR2+RN454e4THuX3BVtmIj70aA4JGk54APGWU3MtZimTSKFmaPNma9sGcUgpMbRD
+         7Al61cmo35CVOqyoH7nc1qR/3MKh3609G1j6LKTf4TANgWF+jycI+mixwrdQOZOnrBcP
+         qHgWSuj/rC7jw8b+RgXxyI5qAZQqv27ufqbn+S20tGjfeYwwxanYc/P1cm6K9lReLaAf
+         3QNRXAoKBw1Kb/k7P11HYkgyJuy0/hMWjl/nP3ynunZ/QL8CVNzBROuyNhm4Hkgw2PFR
+         KUjw==
+X-Gm-Message-State: ACrzQf2MiZPYI4SIk4MzNeODkBFJm3KYL7u79/wk0WTAeO77CSDIOQPc
+        OnL0Dh9/V7gGoYRulFB5tCzeOA==
+X-Google-Smtp-Source: AMsMyM53AovU0IuW6qHAXDZOCB0H9RLslxXWp+EFYe4dSwZrqWB6ghDV2ik9rEFJezod/YDrivgfmA==
+X-Received: by 2002:a05:6512:1087:b0:49e:5f7b:ffad with SMTP id j7-20020a056512108700b0049e5f7bffadmr5835239lfg.471.1664661188580;
+        Sat, 01 Oct 2022 14:53:08 -0700 (PDT)
+Received: from erkki-carbon-x1.bearden.eu (75-161-250-195.sta.estpak.ee. [195.250.161.75])
+        by smtp.gmail.com with ESMTPSA id f5-20020a056512228500b0049c86ca95bfsm870920lfu.52.2022.10.01.14.53.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 22:51:48 -0700 (PDT)
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] tpm: st33zp24: remove pointless checks on probe
-Date:   Fri, 30 Sep 2022 22:51:42 -0700
-Message-Id: <20221001055142.3196483-3-dmitry.torokhov@gmail.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-In-Reply-To: <20221001055142.3196483-1-dmitry.torokhov@gmail.com>
-References: <20221001055142.3196483-1-dmitry.torokhov@gmail.com>
+        Sat, 01 Oct 2022 14:53:08 -0700 (PDT)
+From:   Erkki Eilonen <erkki@bearmetal.eu>
+To:     jarkko@kernel.org
+Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, morten@linderud.pw, peterhuewe@gmx.de
+Subject: Re: [PATCH v2] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI address
+Date:   Sun,  2 Oct 2022 00:52:24 +0300
+Message-Id: <20221001215223.783896-1-erkki@bearmetal.eu>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <Yqooof3If/y9lBPC@iki.fi>
+References: <Yqooof3If/y9lBPC@iki.fi>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Remove tests for SPI device or I2C client to be non-NULL because
-driver core will never call driver's probe method without having
-a valid device structure.
+> If this is not something you can buy off-the-shelf, it
+> unfortunately does not cut.
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
+For a N=2, we're having the same issue with a set of OTC machines.
 
-v2: reworked commit message
+Device: QuantaGrid D53X-1U
+BIOS:
+  Vendor: INSYDE Corp.
+  Version: 3A16.Q402
+  Release_Date: 11/10/2021
 
- drivers/char/tpm/st33zp24/i2c.c | 6 ------
- drivers/char/tpm/st33zp24/spi.c | 7 -------
- 2 files changed, 13 deletions(-)
+ACPI TPM2 table:
+  [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface table]
+  [004h 0004   4]                 Table Length : 0000004C
+  [008h 0008   1]                     Revision : 04
+  [009h 0009   1]                     Checksum : 8C
+  [00Ah 0010   6]                       Oem ID : "INSYDE"
+  [010h 0016   8]                 Oem Table ID : "WHITLEY "
+  [018h 0024   4]                 Oem Revision : 00000002
+  [01Ch 0028   4]              Asl Compiler ID : "INTL"
+  [020h 0032   4]        Asl Compiler Revision : 00040000
+  
+  [024h 0036   2]               Platform Class : 0001
+  [026h 0038   2]                     Reserved : 0000
+  [028h 0040   8]              Control Address : 0000000000000000
+  [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
+  
+  [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
+  [040h 0064   4]           Minimum Log Length : 00010000
+  [044h 0068   8]                  Log Address : 0000000043274000
 
-diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-index 614c7d8ed84f..8156bb2af78c 100644
---- a/drivers/char/tpm/st33zp24/i2c.c
-+++ b/drivers/char/tpm/st33zp24/i2c.c
-@@ -106,12 +106,6 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
- {
- 	struct st33zp24_i2c_phy *phy;
- 
--	if (!client) {
--		pr_info("%s: i2c client is NULL. Device not accessible.\n",
--			__func__);
--		return -ENODEV;
--	}
--
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
- 		dev_info(&client->dev, "client not i2c capable\n");
- 		return -ENODEV;
-diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-index ff4adbe104cf..2154059f0235 100644
---- a/drivers/char/tpm/st33zp24/spi.c
-+++ b/drivers/char/tpm/st33zp24/spi.c
-@@ -223,13 +223,6 @@ static int st33zp24_spi_probe(struct spi_device *dev)
- {
- 	struct st33zp24_spi_phy *phy;
- 
--	/* Check SPI platform functionnalities */
--	if (!dev) {
--		pr_info("%s: dev is NULL. Device is not accessible.\n",
--			__func__);
--		return -ENODEV;
--	}
--
- 	phy = devm_kzalloc(&dev->dev, sizeof(struct st33zp24_spi_phy),
- 			   GFP_KERNEL);
- 	if (!phy)
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+Fallback to the UEFI eventlog is what we did for a short term fix too. Will try to contact the vendor for a fixed ACPI table long term.
 
+Morten: Did you get in contact with the vendor about this? Looks like a class error across different devices.
+
+Cheers,
+Erkki
