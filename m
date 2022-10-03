@@ -2,119 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C33E5F22E8
-	for <lists+linux-integrity@lfdr.de>; Sun,  2 Oct 2022 13:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFA05F359B
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Oct 2022 20:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiJBL2T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 2 Oct 2022 07:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S229819AbiJCS1X (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Oct 2022 14:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJBL2S (ORCPT
+        with ESMTP id S229922AbiJCS1W (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 2 Oct 2022 07:28:18 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Oct 2022 04:28:15 PDT
-Received: from linderud.pw (linderud.dev [163.172.10.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E919C2A731;
-        Sun,  2 Oct 2022 04:28:15 -0700 (PDT)
-Received: from linderud.pw (localhost [127.0.0.1])
-        by linderud.pw (Postfix) with ESMTP id C9EF1C02A0;
-        Sun,  2 Oct 2022 13:10:29 +0200 (CEST)
+        Mon, 3 Oct 2022 14:27:22 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222812E6A9;
+        Mon,  3 Oct 2022 11:27:19 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 293HM78G030805;
+        Mon, 3 Oct 2022 18:27:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=ZCu/P1XmHl6fcKfQ+R4WbT1BU0+smgIEhLwbpCZSzrw=;
+ b=riy1VPC39gJQtML+/ForMivMBt8C2HVAw2qhtgpnV9gM4SNN2gen7FyxMqSPFXn7gjJk
+ aKYchrH++qbmq2cOJ92ejCiZDIZzAeRUdam4h+wtY6RHzWw7H6wDuJWnvrO7DGHWIbFl
+ fWIT2PaqpnoJ61ADB/wTi/QOHUfr+pE54t4Xqgx507lHHo0FhEo86IXeE7gTPiSmBXnP
+ 3JBLxxDTAbsXCvBDGJRf3HX1MYwobbdUOfwDJT76qe9nFPLV3yee13RXrtesTtaW+ziJ
+ 50tRViJFWm3w68FUhOTLSwlovLyAnr/+9f+qoix/BryGgPNSTQs0I0LrdW+NsUhvPbCf aQ== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k02u04b52-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Oct 2022 18:27:18 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 293IKxps018310;
+        Mon, 3 Oct 2022 18:27:18 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma02wdc.us.ibm.com with ESMTP id 3jxd69evqj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Oct 2022 18:27:18 +0000
+Received: from smtpav03.dal12v.mail.ibm.com ([9.208.128.129])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 293IRG4C16122374
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 3 Oct 2022 18:27:16 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F0E195803F;
+        Mon,  3 Oct 2022 18:27:16 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0C8058061;
+        Mon,  3 Oct 2022 18:27:16 +0000 (GMT)
+Received: from sig-9-65-200-240.ibm.com (unknown [9.65.200.240])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Oct 2022 18:27:16 +0000 (GMT)
+Message-ID: <fc8f279ee3ac05e8adbaf10974bf8eda57824f57.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity: susbsytem updates for v6.1
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Mon, 03 Oct 2022 14:27:16 -0400
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: JccGLjbXGvTQOZUhSPMWg_BuCWVL0fG6
+X-Proofpoint-GUID: JccGLjbXGvTQOZUhSPMWg_BuCWVL0fG6
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 mlxscore=0 impostorscore=0 clxscore=1011
+ phishscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210030109
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no version=3.4.6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
-        s=linderud; t=1664709029;
-        bh=UhWwiZWSA+9PF4RhFQp6epUywS14Bc/N/EjEyRvAKsc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=WBxr9c3D0MlO7zTT+oxFUghLPHRJRJ8oc0U/GE5Jwb0C2Mz/+FTFJNld5Ucq67FQ+
-         TodwBx3hYciOr0Sx1H6IPUmaPh/EV9v5XxDcI4g8rVrXNDg5/xFuN1NLhHw6Cpic6E
-         PT389neq6GP5LlxWIr+pfiakE8sRbofIYc3L6ezOoWl1EryMK/rizcimwfaLiLUSq/
-         pg9BHSmf+dxnP7JaU0cyyt/3WgSo5bo7bJrA+JFU6rQvQ1p8QVv3cJxZF++uiE1yH9
-         aZ+CLIerpng3N8SCfqZDpdakm+M0cq6KtnuDMQoyt9EPCEn7rBUD8H35Xj6p4YrRVe
-         trkUJw9Cx4pst2zc8Ski8Qqfp3VmanWFNKzyVv1Iv7hOLqAZby1WwFpWthy/NNd9Ox
-         KznyRL7RldZJu7aO36bbuCqGc0+hkyvH4mjocwrxYussMBT2s5ql6ovSdQFkrixIaI
-         HXpJNhNaisYu8i4NM0turgWzQPvF1k/TMaXvOzLtWsWIZ35dLGbXoXp0LoNOGZtVCW
-         iHf82rguNFvWddr6zWzixsvA4adrnZQEeTljJYaOfA3+My378GAo7vpkI/xNiNh0/3
-         BlRxvJtHY6hWrPDZjz4PbIDfvfi0sdtc3fGdYJVFJjb1HgCzvckG6qm9KjbcYvZbkX
-         m/fJD8UHcEQMIKkxY2Qg8J+0=
-Received: from localhost (host-37-191-241-102.lynet.no [37.191.241.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: morten)
-        by linderud.pw (Postfix) with ESMTPSA id 7FE09C0272;
-        Sun,  2 Oct 2022 13:10:29 +0200 (CEST)
-Date:   Sun, 2 Oct 2022 13:10:14 +0200
-From:   Morten Linderud <morten@linderud.pw>
-To:     Erkki Eilonen <erkki@bearmetal.eu>
-Cc:     jarkko@kernel.org, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peterhuewe@gmx.de
-Subject: Re: [PATCH v2] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI
- address
-Message-ID: <20221002111014.za35mf67yn53riji@framework>
-References: <Yqooof3If/y9lBPC@iki.fi>
- <20221001215223.783896-1-erkki@bearmetal.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221001215223.783896-1-erkki@bearmetal.eu>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 12:52:24AM +0300, Erkki Eilonen wrote:
-> > If this is not something you can buy off-the-shelf, it
-> > unfortunately does not cut.
-> 
-> For a N=2, we're having the same issue with a set of OTC machines.
-> 
-> Device: QuantaGrid D53X-1U
-> BIOS:
->   Vendor: INSYDE Corp.
->   Version: 3A16.Q402
->   Release_Date: 11/10/2021
-> 
-> ACPI TPM2 table:
->   [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface table]
->   [004h 0004   4]                 Table Length : 0000004C
->   [008h 0008   1]                     Revision : 04
->   [009h 0009   1]                     Checksum : 8C
->   [00Ah 0010   6]                       Oem ID : "INSYDE"
->   [010h 0016   8]                 Oem Table ID : "WHITLEY "
->   [018h 0024   4]                 Oem Revision : 00000002
->   [01Ch 0028   4]              Asl Compiler ID : "INTL"
->   [020h 0032   4]        Asl Compiler Revision : 00040000
->   
->   [024h 0036   2]               Platform Class : 0001
->   [026h 0038   2]                     Reserved : 0000
->   [028h 0040   8]              Control Address : 0000000000000000
->   [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
->   
->   [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
->   [040h 0064   4]           Minimum Log Length : 00010000
->   [044h 0068   8]                  Log Address : 0000000043274000
-> 
-> Fallback to the UEFI eventlog is what we did for a short term fix too. Will try to contact the vendor for a fixed ACPI table long term.
-> 
-> Morten: Did you get in contact with the vendor about this? Looks like a class error across different devices.
+Hi Linus,
 
+Just two bug fixes.
 
-It was part of the Framework 3.06 BIOS firmware update which was released a year ago.
+Thanks,
 
-> Fix TPM Event log table resource pointer.
+Mimi
 
-https://knowledgebase.frame.work/en_us/framework-laptop-bios-releases-S1dMQt6F
+The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
 
-https://community.frame.work/t/known-issues-on-early-framework-laptops/4551/55
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
 
-I have also seen evidence of this on Lenovo laptops from time to time, but they
-seem to be fixed with firmware updates fairly quickly.
+are available in the Git repository at:
 
-I'd still like this to see this fixed in the kernel.
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.1
 
--- 
-Morten Linderud
-PGP: 9C02FF419FECBE16
+for you to fetch changes up to bab715bdaa9ebf28d99a6d1efb2704a30125e96d:
+
+  efi: Correct Macmini DMI match in uefi cert quirk (2022-09-30 13:47:27 -0400)
+
+----------------------------------------------------------------
+integrity-v6.1
+
+----------------------------------------------------------------
+Mimi Zohar (1):
+      ima: fix blocking of security.ima xattrs of unsupported algorithms
+
+Orlando Chamberlain (1):
+      efi: Correct Macmini DMI match in uefi cert quirk
+
+ security/integrity/ima/ima_appraise.c         | 12 ++++++++----
+ security/integrity/platform_certs/load_uefi.c |  2 +-
+ 2 files changed, 9 insertions(+), 5 deletions(-)
+
