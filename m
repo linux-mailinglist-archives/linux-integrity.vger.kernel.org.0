@@ -2,100 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397B95F45BD
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Oct 2022 16:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840F55F48AB
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Oct 2022 19:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiJDOj4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Oct 2022 10:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S229482AbiJDRix (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Oct 2022 13:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiJDOjw (ORCPT
+        with ESMTP id S229563AbiJDRiP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:39:52 -0400
-X-Greylist: delayed 1177 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Oct 2022 07:39:47 PDT
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7E2DF35
-        for <linux-integrity@vger.kernel.org>; Tue,  4 Oct 2022 07:39:45 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mhfp3314rz9v7Vl;
-        Tue,  4 Oct 2022 22:14:03 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwA3L5MDQTxj4XuZAA--.43765S2;
-        Tue, 04 Oct 2022 15:19:53 +0100 (CET)
-Message-ID: <f3ec924e5617b78488c51402fe6fdae66d4a41f6.camel@huaweicloud.com>
-Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
- ima_filter_rule_match()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Guozihua (Scott)" <guozihua@huawei.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Tue, 04 Oct 2022 16:19:44 +0200
-In-Reply-To: <5e304b17fe709d2b2f30b991d5ffc4711d27a075.camel@linux.ibm.com>
-References: <20220921125804.59490-1-guozihua@huawei.com>
-         <20220921125804.59490-3-guozihua@huawei.com>
-         <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
-         <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
-         <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
-         <7ac3e330-e77c-95d8-7d3b-29e243b57251@huawei.com>
-         <5e304b17fe709d2b2f30b991d5ffc4711d27a075.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 4 Oct 2022 13:38:15 -0400
+Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D689E1A390;
+        Tue,  4 Oct 2022 10:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1664905041; x=1696441041;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=bXEBroaWZPTfxlT+pHcVM2wJfQxT4dO2wrZZGruUUeU=;
+  b=benAiZO2s/e1AEdlZIe5E8nJ8RJhhRhxrooi29efttFLxS7+U6it+a+e
+   GbD8aNVwjOQgKEEG0J0doQJUogU2yyBpmlEo/bnQLFfBjhjQ3abgN+7A+
+   YPStb4UDxhxubsdqHsirpr5JRYQ9vYpQqstjcabmBhp7dTCxjh8JPjhNC
+   A=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="3046270"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661810400"; 
+   d="scan'208";a="3046270"
+Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
+  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 19:37:17 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
+        Tue,  4 Oct 2022 19:37:16 +0200 (CEST)
+Received: from MUCSE817.infineon.com (172.23.29.43) by MUCSE819.infineon.com
+ (172.23.29.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
+ 19:37:16 +0200
+Received: from [10.165.68.85] (10.165.68.85) by MUCSE817.infineon.com
+ (172.23.29.43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
+ 19:37:16 +0200
+Message-ID: <afc6b006-63b8-344d-ba2d-1070ddb464cd@infineon.com>
+Date:   Tue, 4 Oct 2022 19:37:09 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Alexander Steffen <Alexander.Steffen@infineon.com>
+Subject: Re: [PATCH 2/7] dt-bindings: tpm: Improve documentation of
+ compatibles
+To:     Rob Herring <robh@kernel.org>
+CC:     <benoit.houyere@st.com>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <amirmizi6@gmail.com>,
+        <jarkko@kernel.org>, <peter@pjd.dev>,
+        <Johannes.Holland@infineon.com>, <linux-integrity@vger.kernel.org>
+References: <20220930165116.13329-1-Alexander.Steffen@infineon.com>
+ <20220930165116.13329-3-Alexander.Steffen@infineon.com>
+ <166457528569.1113018.4558441482039920312.robh@kernel.org>
+Content-Language: en-US
+In-Reply-To: <166457528569.1113018.4558441482039920312.robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwA3L5MDQTxj4XuZAA--.43765S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrur1xAFykXF18uw4kur4xtFb_yoWftFg_ur
-        ZayFykAw4UJFZ7Ja9xKrWYqrWfKFyj9rn8AryrKwnxJrn5ZF4xWrs5urnFyr4kGa4vq3sx
-        Grs7Aa43Awsa9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUboxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-        IF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnI
-        WIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj3-SdAABsg
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.165.68.85]
+X-ClientProxiedBy: MUCSE820.infineon.com (172.23.29.46) To
+ MUCSE817.infineon.com (172.23.29.43)
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-09-28 at 10:11 -0400, Mimi Zohar wrote:
-> On Sat, 2022-09-24 at 14:05 +0800, Guozihua (Scott) wrote:
+On 01.10.22 00:05, Rob Herring wrote:
+> On Fri, 30 Sep 2022 18:51:11 +0200, Alexander Steffen wrote:
+>> Add missing information:
+>> * Device name, for discoverability
+>> * Interface, to distinguish otherwise similar devices
+>> * TPM version, so that outdated devices can be deprecated in the future
+>>
+>> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+>> ---
+>>   .../bindings/security/tpm/trivial-tpms.yaml        | 14 +++++++-------
+>>   1 file changed, 7 insertions(+), 7 deletions(-)
+>>
 > 
-> > I might have overlooked something, but if I understands the code 
-> > correctly, we would be copying the same rule over and over again
-> > till 
-> > the loop ends in that case. ima_lsm_update_rule() would replace the
-> > rule 
-> > node on the rule list without updating the rule in place. Although 
-> > synchronize_rcu() should prevent a UAF, the rule in
-> > ima_match_rules() 
-> > would not be updated. Meaning SELinux would always return -ESTALE
-> > before 
-> > we copy and retry as we keep passing in the outdated rule entry.
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
 > 
-> After reviewing this patch set again, the code looks fine.  The
-> commit
-> message is still a bit off, but I've pushed the patch set out to
-> next-
-> integrity-testing, waiting for some Reviewed-by/Tested-by tags.
+> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> This will change in the future.
+> 
+> Full log is available here: https://patchwork.ozlabs.org/patch/
+> 
+> 
+> tpm@20: 'powered-while-suspended' does not match any of the regexes: 'pinctrl-[0-9]+'
+>          arch/arm/boot/dts/rk3288-veyron-brain.dtb
+>          arch/arm/boot/dts/rk3288-veyron-fievel.dtb
+>          arch/arm/boot/dts/rk3288-veyron-jaq.dtb
+>          arch/arm/boot/dts/rk3288-veyron-jerry.dtb
+>          arch/arm/boot/dts/rk3288-veyron-mickey.dtb
+>          arch/arm/boot/dts/rk3288-veyron-mighty.dtb
+>          arch/arm/boot/dts/rk3288-veyron-minnie.dtb
+>          arch/arm/boot/dts/rk3288-veyron-pinky.dtb
+>          arch/arm/boot/dts/rk3288-veyron-speedy.dtb
+>          arch/arm/boot/dts/rk3288-veyron-tiger.dtb
+>          arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dtb
+>          arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtb
+>          arch/arm64/boot/dts/mediatek/mt8173-elm.dtb
+>          arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dtb
 
-The patches look ok for me. For both:
-
-Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Roberto
-
+This is fixed by PATCH 3/7. Not sure it is worth changing the order, 
+since the intention of the first two patches was just to convert the 
+existing data, without making any functional changes.
