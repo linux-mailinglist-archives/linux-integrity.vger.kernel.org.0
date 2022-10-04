@@ -1,140 +1,101 @@
 Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6F05F3D02
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Oct 2022 09:05:20 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 397B95F45BD
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Oct 2022 16:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJDHFI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Oct 2022 03:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
+        id S229877AbiJDOj4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Oct 2022 10:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiJDHFH (ORCPT
+        with ESMTP id S229717AbiJDOjw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:05:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CDEE02E;
-        Tue,  4 Oct 2022 00:05:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4359B8160C;
-        Tue,  4 Oct 2022 07:05:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 599AEC433C1;
-        Tue,  4 Oct 2022 07:05:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664867103;
-        bh=AUPUQA+Gqkffiz159XDkGeRx4va6HgRuw8sStcNwhEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GlojbK6B3227XIgjAD7w0qAWB6BIhJlNKW50LY9NosQDlJ7pRFqvuumHmFbSunLuL
-         0WX9pzzmyZ8Rs75OMZ2a9/qM4tLcAivN7kCSYTwnLzXS1wdxVH9c0lZ81ec8iW0iED
-         fQqUehuJJCCVkHLxaXwNZroySFCWZyzG1nY1XJOGLGQbsUhZDaMA2WYoEXRAsoFg0D
-         WTbSzcrg7QqPfi849ca0BshyYUIRzPV29sDAHD0HFHQH5cUA/8/mlNwejDwKiYLO52
-         hs5v+F6ZLKcir6514oUH8SoD7kh2mtnqbNVQtB/4V0LnyJ4UZzKjoexgvEttAk2wpJ
-         Cf54DSXXNCFvg==
-Date:   Tue, 4 Oct 2022 09:04:53 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-integrity@vger.kernel.org,
+        Tue, 4 Oct 2022 10:39:52 -0400
+X-Greylist: delayed 1177 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Oct 2022 07:39:47 PDT
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7E2DF35
+        for <linux-integrity@vger.kernel.org>; Tue,  4 Oct 2022 07:39:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mhfp3314rz9v7Vl;
+        Tue,  4 Oct 2022 22:14:03 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwA3L5MDQTxj4XuZAA--.43765S2;
+        Tue, 04 Oct 2022 15:19:53 +0100 (CET)
+Message-ID: <f3ec924e5617b78488c51402fe6fdae66d4a41f6.camel@huaweicloud.com>
+Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
+ ima_filter_rule_match()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "Guozihua (Scott)" <guozihua@huawei.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>
-Subject: Re: [PATCH v4 13/30] evm: add post set acl hook
-Message-ID: <20221004070453.vb34nsenxf2ocwff@wittgenstein>
-References: <20220929153041.500115-1-brauner@kernel.org>
- <20220929153041.500115-14-brauner@kernel.org>
- <9b71392a68d9441697fcca12b30e26578ed7423f.camel@linux.ibm.com>
- <20220930084438.4wuyeyogdthiwmmn@wittgenstein>
- <e55cf916e5d5a50e293c7dc5b4f00802578eb6d6.camel@linux.ibm.com>
+        Janne Karhunen <janne.karhunen@gmail.com>
+Date:   Tue, 04 Oct 2022 16:19:44 +0200
+In-Reply-To: <5e304b17fe709d2b2f30b991d5ffc4711d27a075.camel@linux.ibm.com>
+References: <20220921125804.59490-1-guozihua@huawei.com>
+         <20220921125804.59490-3-guozihua@huawei.com>
+         <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
+         <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
+         <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
+         <7ac3e330-e77c-95d8-7d3b-29e243b57251@huawei.com>
+         <5e304b17fe709d2b2f30b991d5ffc4711d27a075.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e55cf916e5d5a50e293c7dc5b4f00802578eb6d6.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwA3L5MDQTxj4XuZAA--.43765S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrur1xAFykXF18uw4kur4xtFb_yoWftFg_ur
+        ZayFykAw4UJFZ7Ja9xKrWYqrWfKFyj9rn8AryrKwnxJrn5ZF4xWrs5urnFyr4kGa4vq3sx
+        Grs7Aa43Awsa9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUboxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+        IF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnI
+        WIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj3-SdAABsg
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 07:48:31AM -0400, Mimi Zohar wrote:
-> Hi Christian,
+On Wed, 2022-09-28 at 10:11 -0400, Mimi Zohar wrote:
+> On Sat, 2022-09-24 at 14:05 +0800, Guozihua (Scott) wrote:
 > 
-> On Fri, 2022-09-30 at 10:44 +0200, Christian Brauner wrote:
-> > On Thu, Sep 29, 2022 at 09:44:45PM -0400, Mimi Zohar wrote: 
-> > > On Thu, 2022-09-29 at 17:30 +0200, Christian Brauner wrote:
-> > > > The security_inode_post_setxattr() hook is used by security modules to
-> > > > update their own security.* xattrs. Consequently none of the security
-> > > > modules operate on posix acls. So we don't need an additional security
-> > > > hook when post setting posix acls.
-> > > > 
-> > > > However, the integrity subsystem wants to be informed about posix acl
-> > > > changes and specifically evm to update their hashes when the xattrs
-> > > > change. 
-> > > 
-> > > ^... to be informed about posix acl changes in order to reset the EVM
-> > > status flag.
-> > 
-> > Substituted.
-> >  
-> > 
-> > > 
-> > > > The callchain for evm_inode_post_setxattr() is:
-> > > > 
-> > > > -> evm_inode_post_setxattr()
-> > > 
-> > > Resets the EVM status flag for both EVM signatures and HMAC.
-> > > 
-> > > >    -> evm_update_evmxattr()
-> > > 
-> > > evm_update_evmxattr() is only called for "security.evm", not acls.
+> > I might have overlooked something, but if I understands the code 
+> > correctly, we would be copying the same rule over and over again
+> > till 
+> > the loop ends in that case. ima_lsm_update_rule() would replace the
+> > rule 
+> > node on the rule list without updating the rule in place. Although 
+> > synchronize_rcu() should prevent a UAF, the rule in
+> > ima_match_rules() 
+> > would not be updated. Meaning SELinux would always return -ESTALE
+> > before 
+> > we copy and retry as we keep passing in the outdated rule entry.
 > 
-> After re-reading the code with fresh eyes, I made a mistake here. 
-> Please revert these suggestions.
+> After reviewing this patch set again, the code looks fine.  The
+> commit
+> message is still a bit off, but I've pushed the patch set out to
+> next-
+> integrity-testing, waiting for some Reviewed-by/Tested-by tags.
 
-Ok.
+The patches look ok for me. For both:
 
-> 
-> > 
-> > I've added both comments but note that I'm explaining this in the
-> > paragraph below as well.
-> 
-> Agreed.
-> 
-> > 
-> > > 
-> > > >       -> evm_calc_hmac()
-> > > >          -> evm_calc_hmac_or_hash()
-> > > > 
-> > > > and evm_cacl_hmac_or_hash() walks the global list of protected xattr
-> > > > names evm_config_xattrnames. This global list can be modified via
-> > > > /sys/security/integrity/evm/evm_xattrs. The write to "evm_xattrs" is
-> > > > restricted to security.* xattrs and the default xattrs in
-> > > > evm_config_xattrnames only contains security.* xattrs as well.
-> > > > 
-> > > > So the actual value for posix acls is currently completely irrelevant
-> > > > for evm during evm_inode_post_setxattr() and frankly it should stay that
-> > > > way in the future to not cause the vfs any more headaches. But if the
-> > > > actual posix acl values matter then evm shouldn't operate on the binary
-> > > > void blob and try to hack around in the uapi struct anyway. Instead it
-> > > > should then in the future add a dedicated hook which takes a struct
-> > > > posix_acl argument passing the posix acls in the proper vfs format.
-> > > > 
-> > > > For now it is sufficient to make evm_inode_post_set_acl() a wrapper
-> > > > around evm_inode_post_setxattr() not passing any actual values down.
-> > > > This will still cause the hashes to be updated as before.
-> > > 
-> > > ^This will cause the EVM status flag to be reset.
-> > 
-> > Substituted.
-> 
-> My mistake.  Can you replace it with:
-> 
-> This will still cause the EVM status flag to be reset and EVM HMAC's to
-> be updated as before.
+Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Sure.
+Roberto
+
