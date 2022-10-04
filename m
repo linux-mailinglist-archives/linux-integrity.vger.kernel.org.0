@@ -2,53 +2,48 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B283D5F4AEF
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Oct 2022 23:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E2A5F4B95
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Oct 2022 00:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiJDVaL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Oct 2022 17:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S230071AbiJDWE1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Oct 2022 18:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiJDVaJ (ORCPT
+        with ESMTP id S230037AbiJDWE0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:30:09 -0400
+        Tue, 4 Oct 2022 18:04:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E60EEE13;
-        Tue,  4 Oct 2022 14:30:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C19558EB;
+        Tue,  4 Oct 2022 15:04:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39ED06152F;
-        Tue,  4 Oct 2022 21:30:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 386ACC433C1;
-        Tue,  4 Oct 2022 21:30:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DB3F614A7;
+        Tue,  4 Oct 2022 22:04:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DCF5C433C1;
+        Tue,  4 Oct 2022 22:04:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664919007;
-        bh=u/tqsKkNVQghdOr3hJaurm14WPQ10nJ++8FrC5pLGgU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DnYXd6PHmTXWt4gTqLSXBgpCCNzk0I2HGmN5NCCkooQ4EMAAF7ro2WKBarSUPba0e
-         4UJjPB0uvoSO9HYlIjs1i5W43qa4QvUOZa5MYXkoETnKp1JadG9XMlnJvEoN7TMUcn
-         ZaYqVZEfZrAscRmhehWKsBq29lMCGYZ7IjB+weqAdl8ht/f6vSlk309iyGEnhmb+Wb
-         xSnZngETukTw9c2BxGIM05lu8sp9Ht9FZjjHxwJj3Ix8SxvpTvGd6QBkpRavGJha4x
-         oV5ChtnVntbgmIpc8f4CchTCb61RIbHNOApu7lh2yPnbe3Bu1AsjZGU5pfCiJkQOQ+
-         cSslYRJkKfllQ==
+        s=k20201202; t=1664921064;
+        bh=K6MSXesUBRkQT1JBME2CxSTln3XxX+D3uM4eCblrckM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eytRLa+gwVd863I0cWHTRxgulo8xfq5pq9xEqFxGYL8ulTkoiECivILY9z3Mj9Hz8
+         aa7W+cJLxJPVW2Zxce9FSQc0/I8rgZoyFbYxu3yeJnNNTRag1l73Z9cRHFiFwjiBzL
+         DkyERQ04BBpy7oLtZKZ4rRz+5OxSFROqbfJW12NunQWf3bA4V8fmxQCPCcz62moKqA
+         AnYYuxmjv6D5DxdaqB2oxJnQOY0fnhg1FPXimyMeYbon/adGoppoBnbD89kb6WGZr9
+         TZfuo/SH00MmfY4IFOt9AXN050AUJ2cB8Y/03Vgk4cQUmxs1R9Dwm6BBb0QKuIZrfQ
+         PughiWLine1ug==
+Date:   Wed, 5 Oct 2022 01:04:20 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [GIT PULL] tpmdd updates for Linux v6.1-rc1
-Date:   Wed,  5 Oct 2022 00:30:02 +0300
-Message-Id: <20221004213003.57166-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.37.3
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] tpm: st33zp24: drop support for platform data
+Message-ID: <Yzyt5O4p5J/Y6vWZ@kernel.org>
+References: <20221001055142.3196483-1-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221001055142.3196483-1-dmitry.torokhov@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,38 +53,12 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+On Fri, Sep 30, 2022 at 10:51:40PM -0700, Dmitry Torokhov wrote:
+> Drop support for platform data from the driver because there are no
+> users of st33zp24_platform_data structure in the mainline kernel.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Just a few bug fixes this time.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
-
-The following changes since commit 4fe89d07dcc2804c8b562f6c7896a45643d34b2f:
-
-  Linux 6.0 (2022-10-02 14:09:07 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v6.1-rc1
-
-for you to fetch changes up to 2d869f0b458547386fbcd8cf3004b271b7347b7f:
-
-  selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle (2022-10-05 00:25:56 +0300)
-
-----------------------------------------------------------------
-tpmdd updates for Linux v6.1-rc1
-
-----------------------------------------------------------------
-Stefan Berger (1):
-      selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle
-
-Vincenzo Frascino (1):
-      security/keys: Remove inconsistent __user annotation
-
-Wolfram Sang (1):
-      char: move from strlcpy with unused retval to strscpy
-
- drivers/char/tpm/tpm_ppi.c           | 2 +-
- security/keys/keyring.c              | 2 +-
- tools/testing/selftests/tpm2/tpm2.py | 4 ++++
- 3 files changed, 6 insertions(+), 2 deletions(-)
