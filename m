@@ -2,44 +2,44 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47D15F6585
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Oct 2022 14:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBBD5F658A
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Oct 2022 14:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiJFMCx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Oct 2022 08:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
+        id S230337AbiJFMDH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Oct 2022 08:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiJFMCw (ORCPT
+        with ESMTP id S230294AbiJFMDC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:02:52 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130054.outbound.protection.outlook.com [40.107.13.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4AE9DFAB;
-        Thu,  6 Oct 2022 05:02:48 -0700 (PDT)
+        Thu, 6 Oct 2022 08:03:02 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80049.outbound.protection.outlook.com [40.107.8.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845809DF97;
+        Thu,  6 Oct 2022 05:02:55 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pe1IFClc0y8G8EVioRm7V5+Kn+EILUxYKx1LZRef6F9DCOGTJ/f8YV38eCPqX2yksv9ML2dC9JJ8QMTGJrWhQa5dCJvjdov8tjSl3ifwZEysUx9Hw1Ai1mGzgT9+l4K7SVzpz6nVXUic7ZeBOlHEpFLp4BvghohC5ZJTMJhAahvCi8CUkgX+c4v1jrWSo+3WFRZUVtdItPUVrRR7HycirsVCsFzgKBbm7Yl7SMPuJoc5o8luD65KVoosT9rR8xknVa+1N/LOFf1Eu5H9NqQBBXfcNgm+REJJ/OgPpbBnxhMSYRnLnba2QDyKIhcso7N79FkRUc9OxGohXieF8eZKpg==
+ b=ORWMUU1LIKiwz1S1CVF9IIRa+cP/blr4ZsiVYfgGU7ERXOMWmU4d4GHzFvm8n3Hu+gMhb5A5XkpQMHXf/XMR6GzWHSgqkeauHAPJSSNK96jO99pi8+hxFCnOTWDWaouKI7jS4N4y8kRikahgvDax/gaVthqTuTVlzojwlYDbQIZzGOOY2veb0Q7gCAHdvYlN6h6pnl0gS8IlQxyF4hwDyeJOVyt+c9JUed+SSegybaD7/f9i6eLCikP2GZh6JnTfEMDZfXNrd4KgpYQYDoQDHk6UoEVaV9/SIL606M2ZiAyc8jM9QtdhZ3q6MPgPZqO0awaiHHeYhxtAPOwYrYH33Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0mkMP5F83kXf4WhXlGerUWx7J3LD5XE2oRNb/0WC+yc=;
- b=IEF5Sdy1SGt1uFvce/NRjM0st4gCP4Z/gCzsNgDnubmlTLqwhQCV4GJyHp1bLWgVVHDaCfZmbkR3IrFN/X4F5BI4fsyoaPcMzAiswtTME8EvwAPueGQtA9KrbYCbQBdCRiznDg3u7DRhUdA4n9zpECMPfVGEIzGLyGVXPcSRFQf9ul2MNq82nvVnVI1//lD0Gq7n3T1EY5qk23KidoP607sGGt+eHtcALEbR6qiwp2SyGxRBng5VXnCoup7PmEqWeNH78nUUpmCb2u2mTvHcLolUBOZdtSs2oG6LmTfB044DIzHVj5CBxprH59C4S3QPriW1W891st8Z2iIeCqfCSA==
+ bh=Ut6SQk9xGws8OY0mrSJBJ4KVW4Sj21Bmvp4J0BHJjxw=;
+ b=IOzHhnK1dBuLTjb2XJylICn3kNYbbwxiKdCumoZR0Mx6Q2H/DTXzzuuXCMjlK7otVj1IMbkqH5TMDbmXSCtSvrsdfuWVvKy2CJLHhSl7PWJQrCdEMvYtBw3MMA5i1p0sAJmBuPXGLOLv2JLTRMfDB/k9NR5uNtxrfmYurIUvc5MflUgPE8CUY/267jl/J12ImS6OiaoakytPYEKNRJMQTooMhTbWQmqgMLX96sS+42kotjmDu2qY/8aix/99fL+HGagGLoEgRwpGu1y7JMvOwjarn4g0dJF+iC3Tqx9ideLuOUdd/6BCfu1NfWOMsOpYCoxUv2LIyN/m89mDdGhKVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0mkMP5F83kXf4WhXlGerUWx7J3LD5XE2oRNb/0WC+yc=;
- b=VbNK5xwpf4I1+iRFIUzR2u8kKoPc2UZTZw0cEXhkxJBcRB+3+ThxOR3xdzDbo80azT01DMRbz6Hcq5d6fCKx6rkJDu+/5WWPEM7o5e+FkvcTFi1xJkiKgMSeIkhZcgxJnYJPl1Ehkcrq2zEDX17RWtOapEwgns+lvE1Mvq4l+zI=
+ bh=Ut6SQk9xGws8OY0mrSJBJ4KVW4Sj21Bmvp4J0BHJjxw=;
+ b=DBW7lCW/FpX5LAwAdKNsqDx5f63fLV9MPJQVBwRoeF5Oh02Kq2gp4E1aKhpWL3bge7JRXHj20KbqXGarUL6Fg7mrpCwEya5gDBb9vugqPVbOw/x270jBz72mn8qcTgH6dWFF4tunPwG4vZu8NdjpsrqeOawPkzrla4/6tEoRv8Y=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
- by VI1PR04MB7008.eurprd04.prod.outlook.com (2603:10a6:803:13b::20) with
+ by AM9PR04MB8523.eurprd04.prod.outlook.com (2603:10a6:20b:432::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34; Thu, 6 Oct
- 2022 12:02:45 +0000
+ 2022 12:02:53 +0000
 Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
  ([fe80::d551:6af4:bca4:88ea]) by DU2PR04MB8630.eurprd04.prod.outlook.com
  ([fe80::d551:6af4:bca4:88ea%7]) with mapi id 15.20.5676.032; Thu, 6 Oct 2022
- 12:02:45 +0000
+ 12:02:53 +0000
 From:   Pankaj Gupta <pankaj.gupta@nxp.com>
 To:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
         Jason@zx2c4.com, jejb@linux.ibm.com, zohar@linux.ibm.com,
@@ -52,62 +52,64 @@ To:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
         linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
         kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
 Cc:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Subject: [PATCH v0 0/8] Hardware Bound key added to Trusted Key-Ring
-Date:   Thu,  6 Oct 2022 18:38:29 +0530
-Message-Id: <20221006130837.17587-1-pankaj.gupta@nxp.com>
+Subject: [PATCH v0 1/8] hw-bound-key: introducing the generic structure
+Date:   Thu,  6 Oct 2022 18:38:30 +0530
+Message-Id: <20221006130837.17587-2-pankaj.gupta@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221006130837.17587-1-pankaj.gupta@nxp.com>
+References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
 Content-Type: text/plain
 X-ClientProxiedBy: SI1PR02CA0011.apcprd02.prod.outlook.com
  (2603:1096:4:1f7::19) To DU2PR04MB8630.eurprd04.prod.outlook.com
  (2603:10a6:10:2dd::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8630:EE_|VI1PR04MB7008:EE_
-X-MS-Office365-Filtering-Correlation-Id: fda89363-1bf2-4e84-02c8-08daa792adc2
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8630:EE_|AM9PR04MB8523:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c565679-3cfb-435b-b069-08daa792b29a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wmqhgyUAmJZyKpkJ5xRYEXXi7WMX1LMuA5FCKgi/YgeSgHtluqmo2cfV/k3KLQ/f8RdE6kzIBZiwL7y0/E2CxQAGVyqgkbH1bVh/Z78/ut2dTNWEhbpTvyNm2l4AKGv7Gg2ohz7EHlQAdMIgpWt/75pMoLaQh52ZHAMNsFebdd9Fx2AnXRAEsbXNBWl7RGEE5mVPreoPHHsmYhLvdHYht2bXqw5mOaQQ2V35dq4ZIINZTn28fYXr+8qr/TK+WH07ygVwNqGq1YWENz8CHpxpGrNFI5Bw2F5SbezmvORDMslNGn4JQdb1OrcZ9oQA2jnKTqB5MJSxccXwNWZ+TtBET5Wee4OD2CcqNFkif2ULdnIwIsgZEd6n/XRRWo8wC8440g0lKrugmTH4vcMpD4CotjifCkLUq7kg+JAg5FMtqylUXH8nXEIRc48y37rzCag3udpTmSIvSZGW9NJAEK+Skj9OWf1knO2FfiksTw41NNh2jgyuLAltRlP/o03yieeErLvE0G7eE8xIaJFmj2arTwbba+dkA5W2w+qiS9ab/jRgwFTg0xpLWA9CO5Nuf/A3sVlFumer8fKjnawiUc/NsHMEu84vAt8Z1LyQ9ExTyKc38dCCNd2t9fMycCQJmrzWNOC8LKnqr4BfZ2hYTdcEK7sO4p5ffhaid6arqncx8W5vwab2jdJAyEEHNRUWOHSPV0JL3okDpIly071DGaiDzUPq4TGGz74+oQG1t7oJwOOxyn3aAVOYd6RDpljMkEUIXBtnKgX6M9EPgdeIkw4WVdPTiKuTRVPx7X1mnAFtaiU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(39860400002)(136003)(396003)(451199015)(2906002)(52116002)(26005)(6512007)(6666004)(7416002)(41300700001)(36756003)(478600001)(38350700002)(6486002)(38100700002)(86362001)(8936002)(5660300002)(921005)(2616005)(186003)(44832011)(1076003)(83380400001)(6506007)(316002)(66556008)(66946007)(66476007)(6636002)(4326008)(8676002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: mNv9UzIo114sYH77KTJWvFAuYM32i8LYQbWbINOHqPRbkPBqpxaEje0ojYhjx3k75yM4ejj0ot+TjhYKD9XO7OBXPAhz7Xzdj1kbRJjMFnS6enVeCr28PIh71/mujaZmFCnQ691getwCegEKvsXIknjK2L0JZ1g5te7VUhciIS/UEq6z1W921jOO7P63xRt7rjgXY42S3P+wH3WCKoxjTekp1aytSG7MAwBcxVcZurxXPtobdzHKQpR0HZrqdWzbMAEyvAXcDB18LhBHRRDE4cxwuiuWMO2XFK05ux3wguUmw/TpnQN5ftWakKCcoFXaY5ni68WaDDxOjmuoo118aUftAtqlZXICXnJZzVVzl740FSyjvLOcXuREs7eQka4Vj1mm7xLmcZ+a3/iyKERQWwTs/JENZlFcGrBgkkvm6FroRFN1qO0RVQyaRZjH1qACCzYS1NSGI8Tx3NpewE4/IQlLubchi/fB+hrt0NCVVV2OH8ry2S3taPOTqAHNm6O2yKv+kMuhaPhDjeXlb+v4q5IRMvfjVFT7wBFK+Z8XWg0+3GdrV/E9vLatA4al3FnijbOic0iNsWXyeP81Ck5FfCVbBNIYgBKITX9S/cakQGOQpzkXOG9g/1SsgiYz7AzlLXEh3QroZNRYd+jBu0scarEvSu8qtGKAEJg7aFwbQVaqKJtrwhrElozWDiFvO5bjt0zAsxhPKw5sn9mAww1cBq95V8svSlVKS84+6hk/F+ztWDcbNeeGvFx6lcKPg1b8HWtXCJAhqsN+q9IxO4Flp7m5TekbPgUs5Znmyq8Hx0639Hp4uOzjgcTOAGuaScOu
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(366004)(396003)(39860400002)(136003)(451199015)(66946007)(66556008)(4326008)(66476007)(8676002)(38350700002)(38100700002)(478600001)(83380400001)(1076003)(36756003)(41300700001)(2616005)(186003)(6486002)(316002)(6636002)(52116002)(6506007)(6512007)(86362001)(921005)(6666004)(26005)(2906002)(44832011)(5660300002)(7416002)(8936002)(41533002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?F/LKeZZdP6VmW+zpFYz9aGjoohBnk751z+cfO7V0RYe9dhAxvVp90jWsXgGT?=
- =?us-ascii?Q?ikf/A60OF/C/CR3Dz73+Bt/CqlPa4wqUscjM/NtQGas/q6m/AIg5D2JTafZ/?=
- =?us-ascii?Q?HG3N6a6tksE25/V8KzcWSsbyf/Dz9uRieVAG1FtQcg4L1gy8YwdaIx216sRH?=
- =?us-ascii?Q?OrvtD22NGF9SNnHdGYQWALhHWrhAHp8u4DLSNdk5P50aYJSDADkaORUN1kYh?=
- =?us-ascii?Q?7xKJb702Vwpvvvp4jGay9OLiESi487rznijyR2SWamSViviBHY60bXE55Ir6?=
- =?us-ascii?Q?B6/pbFWdRSzUUuEanOZOkBM1mQU3mDYiv9ODxvJu3who6+eV5FiRDXDlgz05?=
- =?us-ascii?Q?EQ3Qtoh4QzCoT+AewjeUEOjhGk6oLM8ODB+iorIZ0hevpozbU5lmVHKHXm8Z?=
- =?us-ascii?Q?n9f8qzwKrRkijIIreKXVfBwNxqgYRBfXA5AAzES36cEhcRmgfcFYjzZYhqeo?=
- =?us-ascii?Q?WBEuFkO8GFAzv6XOORTYUV/0DpveCy6dvp796lj2Emro0H/rPJ9dIuU6zaTn?=
- =?us-ascii?Q?ih8TlmGajDZZjX7uJu4Og4h3Ich5FP62eRZ8dH6E8iDBTyOSxSYA0Sn0MeyL?=
- =?us-ascii?Q?0u41N+FZYS1REnnzol8Jglx3yK3Dx3fYW0h3GVxRjlIpEj/OQOEKPlBOjW9q?=
- =?us-ascii?Q?aKkj1zAvHKwK4TQiOXRK3D0UJOkOdNKRkH5zdVDwcfEystRFCcFbmhM8kwzd?=
- =?us-ascii?Q?U1JvYwJl5G7EwDRuf5QUZdm2CXkxAbWoyVi22ufUb5FRSHDBsy+8WDJZG441?=
- =?us-ascii?Q?vZvkbM1JkrJ5Yk6cIrdDFzSrAJjLPOdcWm/KCDJbpfZuAcU2sgqdv448L7zp?=
- =?us-ascii?Q?iu4dHwE9PQO1Gcx3XTVuTxtG0KJVMyuUvjE7ylgJ1tqV/sX0L/6PgWqqMYpw?=
- =?us-ascii?Q?i9MY1sh4YDcTiWGxwbhPaIJ08WMqGPync0kID3jqSDq5EWE5EI/ut9mkjdNH?=
- =?us-ascii?Q?p5JJeLIg2xuHuvjhCI8OyRZvXZI8VaUb9IDYZfxpJMekU3wLpBi/ZMZJUK1h?=
- =?us-ascii?Q?a2nB7KUOUoywIBe5Ei3uwwxLfYOzz6LgUHY9C4SLsqCFmsBDQhRwsA39vzGS?=
- =?us-ascii?Q?xv3av9gjychR+84nfkHB0komvD8w0X/0NmgFRibW3Wto30Tc8VSDzVV/Zx7y?=
- =?us-ascii?Q?d87VIi6tbKVFsEmnP66qDvWvgrfTgggaaHM12s5QWULlgXrDRV4ktq+Hp6mn?=
- =?us-ascii?Q?Ou8VxjyIaoCI6MVjb65LvUJ/XMgSXZpsMVVDulBmxpVrAQoHp8zEV+f9N7MS?=
- =?us-ascii?Q?G0Oj5LtCen6F1u+O6kkuuRqlhlbRQxUOMvqMiP8dBCZtBubJ1EtVpHYSLvIl?=
- =?us-ascii?Q?QL2+18Gbci6QB60A0bZSJU6myb71cb6z4S6jh2a41D5N2y3Y2iyC/RXAYk2D?=
- =?us-ascii?Q?g7GZWbS8J+Jk54QxO9At94NY8K3sT+27QOkflMWBsMEq5zMbJba9KcaNuI94?=
- =?us-ascii?Q?x9oYuAH4FUSv+bxyDmpEFCN2NT73dfKYX0i4iDPLg/rn53EAMROu8wiYSUsA?=
- =?us-ascii?Q?PEZauBZ/wZ96/P+i8emToZYREvTyhPS1uJV/y3GTh38bpG1AcHFyZ1Kj5zKz?=
- =?us-ascii?Q?pzV/EvNX5N6D+nOqC8VjBFVIUHwkabv4xbsyYtHo?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SHPknXPj6uzVPoUCnipRx5wXuFWNjABISF61Htf4uJunLoC/eK86Ygq4Xw86?=
+ =?us-ascii?Q?dzeK+7ye8MJGaayKG6GCNxYaUiJsoMPAIvFV/LLbuUCWu9i5ru6sdLK9FyQE?=
+ =?us-ascii?Q?93MPX18XJULSvqD6IJAaguQ2oFpq7bD/ex08UliUP+DfL0WGGPC3hMbwmmTB?=
+ =?us-ascii?Q?RK6fVwXxbk/+o2ju7sHydTQyEUsDyOp2OZLdXsVO4NcSfex7N2YHzGZ4Xjp0?=
+ =?us-ascii?Q?BrcRUuuQ3RTYXhsDdZYkEqci6j8RcZLN6g85FnFTweA6cn0mVxGiI0MppdjV?=
+ =?us-ascii?Q?6axgnrqnggPpDETi7kxf9iNAphppMHUAEf8d9qWG/glI52mewJQQNGLVoRr2?=
+ =?us-ascii?Q?dOToYt1Uqk0Si9nJFnboRZJZT0UtQQWWdYm62BtMuJQhck9bUBPlaLgwP/bQ?=
+ =?us-ascii?Q?Jkl8U6q+2iiocWCm2fjNW1fzyDgkecAFR6rVv3QvBTdgDPoxcYpPcDP3Mf5/?=
+ =?us-ascii?Q?D6o+S6GzDxmMwxGu9l32b49sbSPsBkldPpZg5hfprW1jgZgUCumndlzveDZV?=
+ =?us-ascii?Q?2zy9NcRq93VJGy+LN5iqkoNEcBih55sAj15Mpy286GFtZdfVQdenEgWi64oj?=
+ =?us-ascii?Q?sOk4FWVsgx9EcpexQe+ZjwewX6jsy2WSKfkXkCpq1HgOtkvs6F4tc9HHT1+E?=
+ =?us-ascii?Q?m+sxAB1d/vuQz5ejMVnNoTp+i1zClYqD43Q7j0bxZeimfGabdeoagEF6GDQC?=
+ =?us-ascii?Q?v1vLgBKh8o5rHZLfGyibkxOJqk6vZHGI3NwVhX+6vvpNhfPK3LWzxZvWVgBh?=
+ =?us-ascii?Q?FIve6EpmOav0uL+gJNzVT2NTRaPyNJqdr+dHBTxx1QwzB1u/AmRAgMc3a/E0?=
+ =?us-ascii?Q?HZggnBvlm2UHgyWtvmJ07KVWBzJY7ZPYHaITcUmteBgEAYt0x/esUHGQ0stw?=
+ =?us-ascii?Q?y2QaCKeGx7uvjGTC9Az83uB4LoaiHEeMVUtbSrTbDL+S2HUPftVbVMZO1VXO?=
+ =?us-ascii?Q?WusTuuAapedoYqV7ARPO90HcSjR9C9Pj4zAKDul0BVydzN/J2qDT6x4+bqhD?=
+ =?us-ascii?Q?28jtV4K/SXy4BUYtRMoCBmgclU7Hc7AFp+tVkv2Jfo+D1sf/PG6jpE2EbctR?=
+ =?us-ascii?Q?wpc5Si7wuJRDbBhH016o2UB68kCmkdoMt9XGM0eBnrkubE8vdA71Agos8Onh?=
+ =?us-ascii?Q?oUal9JI9wtQEdPfjzwM5ejAaeUegmwLjVEaMzXBVyQ/hooO1Z+KHAkN7ebTH?=
+ =?us-ascii?Q?/Vx7CL2xfxjGjdzchXfLVlIE5UYiNmN8rLcBFicWq/sIjFOQAuvhIQd19Nxa?=
+ =?us-ascii?Q?ohKSwNNVYhqBmhsauMPTsBj1rV9/CCotFQaWjiunLuCkOp8QopiojpuHgzIi?=
+ =?us-ascii?Q?3Gh7oubVcehIy3TL2Uk5rLxBpdniQqjjEbk1yCgYJVOzp6rrEWoywIxjt8wb?=
+ =?us-ascii?Q?Lg6vwG/twZe39oIuqnY/DIQnLbBim7aoVxGl5Qg1VAOtG2UC0ILotnrFNHuM?=
+ =?us-ascii?Q?W+KwUeDvgjZCVoAt/xbPornV1L+JEhR5JZoSA51dLyX/91jsHOGU54QlzcL7?=
+ =?us-ascii?Q?rQqW2iE9TxEPJv1vmfIqWrcQTM30JTN6rbevCOViRy3L9meZfZitWG+HPTzy?=
+ =?us-ascii?Q?gqEPwLb4C30LwrKBbfiamOsYtHKJw9vuIf7bOwag?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fda89363-1bf2-4e84-02c8-08daa792adc2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c565679-3cfb-435b-b069-08daa792b29a
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8630.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 12:02:45.1252
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 12:02:53.3810
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VTB4D7N13tcjDVQz0Y9aWCZwmfSS4H3B711RJ1cYtNBgavLkcYYKq7WPV2WrotDP4NeiBaH0EdTuprLyWsymgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7008
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2MCT56vIO50H/bjB+2j01nh49xrmRFovzdOUEmL9a6aLbcLC5pZl8Uc/CtRXUizEwEumrdi1Ce2qAHB2WvojKg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8523
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -118,121 +120,52 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hardware Bound key(HBK), is never available as a plain key buffer outside of the hardware boundary.
-Thus, it is un-usable, even if somehow fetched from kernel memory.
-It ensures run-time security.
+Hardware bound keys buffer has additional information,
+that will be accessed using this new structure.
 
-This patchset establishes a generic bridge between HBK & the kernel's trusted-keyring.
-This patchset adds generic support for identifying if the key is HBK.
+structure members are:
+- flags, flags for hardware specific information.
+- key_sz, size of the plain key.
 
-Note: Copy-paste this text-based block diagram to notepad, for better
-clarity.
-                      +---------------+
-                      |               |
-                      |    keyctl     |
-                      |               |
-                      +-------+-------+
-                              |
-                              |
-      +-----------------------+-------------------------+
-      |                trusted keyring                  |
-      |                               +---------------+ |
-      |   +-----------------+         |trusted-key    | |
-      |   |                 |-------->|payload (plain)| |
-      |   |                 |         +---------------+ |
-      |-->| trusted key     |         +---------------+ |
-      |   | source as CAAM  |-------->|  trusted-key  | |
-      |   +-----------------+         |  payload (HBK)| |
-      |                               +-------^-------+ |
-      +---------------------------------------|---------+
-                                              |
-                                              |
-                                              |
- +----------------+  crypt_alloc_tfms +-------|------------------+
- | Kernel         |<------------------|        DM-Crypt          |
- | Crypto-API     |                   | +---------------------+  |
- |                |------------------>| |struct crypto_tfm:   |  |
- +----------------+  crypto_tfm(HBK)  | |- flag-is_hbk        |  |
-                                      | |- struct-hbk_info,   |  |
-                                      | |is copied from the   |  |
-                                      | |tkp structure        |  |
-                                      | +---------------------+  |
-                                      +------------|-------------+
-                                                   |
-                                                   |
-                                                   |crypto_tfm(HBK)
-                                                   |
-                                   +---------------|--------------+
-                                   | Hardware crypto driver       |
-                                   |                              |
-                                   | Processing the incoming      |
-                                   | key based on the flag        |
-                                   | - as plain key, if is_hbk = 0|
-                                   | - as HBK, if is_hbk = 1      |
-                                   +------------------------------+
-
-Major additions done: (in brief)
-
-- Newly added:
-  -- flag-'is_hbk', and
-  -- struct hw_bound_key_info hbk_info,
-  added to the structures - tfm & trusted key payload.
-
-- Enhanced the 'keyctl' command to generate the hardware bound key
-  as trusted key.
-  -- at the time of generating the HBK, the values: 'flag - is_hbk'
-     & structure 'hbk_info', in the trusted key payload, is set by
-     the hw driver, generating or loading the key in the trusted
-     key-ring.
-
-- Applications like dm-crypt,
-  -- first fetch the key from trusted key-ring. As part of doing this,
-     application retains the values of: 'flag - is_hbk' & structure 'hbk_info'.
-
-  -- to use kernel crypto api, after allocating the transformation,
-     application sets the 'flag - is_hbk' & structure 'hbk_info', 
-     to the tfm allocated from crypto_alloc_tfm().
-
-- Newly added information to tfm, helps to influence the core processing logic
-  for the encapsulated algorithm.
-
-First implementation is based on CAAM.
-
-NXP built CAAM IP is the Cryptographic Acceleration and Assurance Module.
-This is contain by the i.MX and QorIQ SoCs by NXP.
-
-CAAM is a suitable backend (source) for kernel trusted keys.
-This backend source can be used for run-time security as well by generating the hardware bound key.
-
-Along with plain key, the CAAM generates black key. A black key is an encrypted key, which can only be decrypted inside CAAM.
-Hence, CAAM's black key can only be used by CAAM. Thus it is declared as a hardware bound key.
-
-Pankaj Gupta (8):
-  hw-bound-key: introducing the generic structure
-  keys-trusted: new cmd line option added
-  crypto: hbk flags & info added to the tfm
-  sk_cipher: checking for hw bound operation
-  keys-trusted: re-factored caam based trusted key
-  KEYS: trusted: caam based black key
-  caam alg: symmetric key ciphers are updated
-  dm-crypt: consumer-app setting the flag-is_hbk
-
- crypto/skcipher.c                         |   3 +-
- drivers/crypto/caam/blob_gen.c            | 221 ++++++++++++++++++++--
- drivers/crypto/caam/caamalg.c             |  43 ++++-
- drivers/crypto/caam/caamalg_desc.c        |   8 +-
- drivers/crypto/caam/desc.h                |   8 +-
- drivers/crypto/caam/desc_constr.h         |   6 +-
- drivers/md/dm-crypt.c                     |  12 +-
- include/keys/trusted-type.h               |   4 +
- include/linux/crypto.h                    |   5 +
- include/linux/hw_bound_key.h              |  27 +++
- include/soc/fsl/caam-blob.h               |  38 ++--
- security/keys/trusted-keys/trusted_caam.c |   8 +
- security/keys/trusted-keys/trusted_core.c |  16 ++
- 13 files changed, 356 insertions(+), 43 deletions(-)
+Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+---
+ include/linux/hw_bound_key.h | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
  create mode 100644 include/linux/hw_bound_key.h
 
+diff --git a/include/linux/hw_bound_key.h b/include/linux/hw_bound_key.h
+new file mode 100644
+index 000000000000..e7f152410438
+--- /dev/null
++++ b/include/linux/hw_bound_key.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0-only
++ *
++ * Copyright 2022 NXP
++ * Author: Pankaj Gupta <pankaj.gupta@nxp.com>
++ */
++
++#ifndef _HW_BOUND_KEY_H
++#define _HW_BOUND_KEY_H
++
++#include "types.h"
++
++struct hw_bound_key_info {
++	/* Key types specific to the hw. [Implementation Defined]
++	 */
++	uint8_t flags;
++	uint8_t reserved;
++	/* Plain key size.
++	 */
++	uint16_t key_sz;
++};
++
++#define set_hbk_info(hbk_info, hw_flags, key_len) do {\
++	hbk_info->flags = hw_flags;\
++	hbk_info->key_sz = key_len;\
++} while (0)
++
++#endif /* _HW_BOUND_KEY_H */
 -- 
 2.17.1
 
