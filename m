@@ -2,113 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472B45F5B69
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Oct 2022 23:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8EE5F6629
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Oct 2022 14:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbiJEVHo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 5 Oct 2022 17:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
+        id S230376AbiJFMgW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Oct 2022 08:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiJEVHn (ORCPT
+        with ESMTP id S229796AbiJFMgU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 5 Oct 2022 17:07:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1613696FD;
-        Wed,  5 Oct 2022 14:07:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3B6A61755;
-        Wed,  5 Oct 2022 21:07:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B97FC433D6;
-        Wed,  5 Oct 2022 21:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665004060;
-        bh=o+JFjGfmGHxvtniPCHVArgFUusf7mfq6V3+g8hM52Bg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TzkDU6Gz53krWick2tUSigiRx+pTsOKCEIa2kG1t874l4+wFrV9VKtb+G2L7A+84T
-         ziFgKkYLCDQMWDvlamT+bvgvoCkJymZG/DXXZPfQyVXB/S4mI+QZYma4/d0sodx9rn
-         +jdG9svsP07uSuLLNwLYuQJ/o8vzsG/pTlJgUYPw47BmHzE9lrUwBgH+SFdUflvRzu
-         P+wkThklRSRX4LrZNFS/Sc1emv4s+xPNF7nxYwPj9TJLySj96rBULCOGUrSIME30Uz
-         ZhrcjL914QqyWccBWbls+94h6h2jUE5HLxe3zgdhSlLvaZGrw5vTDNadoE0euj2MRb
-         IfAVgTs35C6Mw==
-Date:   Thu, 6 Oct 2022 00:07:35 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Morten Linderud <morten@linderud.pw>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.ibm.com>,
+        Thu, 6 Oct 2022 08:36:20 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4CF85A8E;
+        Thu,  6 Oct 2022 05:36:18 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id A3BA73200805;
+        Thu,  6 Oct 2022 08:36:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 06 Oct 2022 08:36:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1665059773; x=
+        1665146173; bh=x/5eQeyF8wgxc3lBlMlLCE+D3SClhrVS+22aVr9TqjU=; b=q
+        +sgP3Tc/y297yW5XXTzhrO4+Qo6cxIjnmKI3zcvscNQwafBSie53iKn3KCSwJfSu
+        LC0WbgPyKW5Xc1UsQeJw3PwnECIjH8emzV0abYkXYxgCyh4Gif+antZgx7LNbqW/
+        9ddmEF/4b1GoW4FR/glvrutlElogDrL8gehTfKvuFoMmfdaH8IUKwgLo3V5fqDhp
+        32qlfia1GOqZZHrvoJbZln9rdSqlXgXoBI6QVb49px5nZOCs9Qkgp6CQQr3eLstx
+        5n9t028e3VkD6mHwgaCLAwsPE3fQyy2exQFRWiILShrXZJPMQ54fDVu5LnvuXa1o
+        tdXfQNwPw4cYE1X5fJARw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1665059773; x=1665146173; bh=x/5eQeyF8wgxc
+        3lBlMlLCE+D3SClhrVS+22aVr9TqjU=; b=raTmo2i386qfqhru2VjLPvoZMtJmv
+        nQQUiMPj6BWtWemO+UGjVXK8d9R+RQmHOFFWPV+rNcHEJY9k3pi2O7t4j3FPMCbE
+        +KOHy9DafDsRDnMY62SGvTRuRIi+orJuaksZxtHJfDQfx91niWX1tZ/Ol1RqVVB7
+        E9v9n7DveTFJTfHzGasj+FOQcQXoP+VhYB8lL95tZ1/DU3PWNghTYIxCUQSQYlAL
+        FUrSyHDLa+0TIMVMpvWm9DTnTn887/j+xiXEBrCRIeY3IX6vcD39kiT/i2bkYFdO
+        8SJYRtMINHRPKkewjt6UTPVgbti/V1PGgKReavF0D4ZQhQVulCmPhei3w==
+X-ME-Sender: <xms:uss-Y1vYy2Vqs8hF-ULSkI7VRJTg5ui-mHr7WbUC_8PfV6Q0F4lqlw>
+    <xme:uss-Y-f8BiJcJaRYQThmkup6rV_TuuP7O6V5dMhJpqiHDTSybh6J3nXc3I-bN9mPM
+    4OA5ryUbinLOfVRNws>
+X-ME-Received: <xmr:uss-Y4yQhTLgH2hwlyfhykGdjoe0LOt5x-YQ0KRx0v1n-odCTikP1z3yc3cK7_hZ1zRHEQXD_XIHNgX9J_GLvQeFXiSRLd3o903R>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkrhhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegv
+    nhcuuehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrg
+    htthgvrhhnpeduteehgfefudfffeelfffhheejgfdvfffhledvueekudeuieegueejieff
+    vdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmvgessggvnhgsohgvtghkvghlrdhnvght
+X-ME-Proxy: <xmx:uss-Y8O_r3BBxeFMpfHX33weeXb5KKr6skLM9dBoKh0TLy3GXSsvRQ>
+    <xmx:uss-Y1-cJf9I8_HXk2-JQg_xeoQ4dFfS7l1r1V-Dl8O4Merzz4bJmA>
+    <xmx:uss-Y8WK-3erQvyA7yRtCKK6hrIVzT3Fo7WJjEmsrGHY3cMikx92rw>
+    <xmx:vcs-Y5Sbjc3jYNXO0uaAfqH0Nh35mLLSQDxdAnpMI3L5oTp3d7IyrQ>
+Feedback-ID: iffc1478b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Oct 2022 08:36:10 -0400 (EDT)
+Date:   Thu, 6 Oct 2022 08:37:00 -0400
+From:   Ben Boeckel <me@benboeckel.net>
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>
+Cc:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
+        Jason@zx2c4.com, jejb@linux.ibm.com, zohar@linux.ibm.com,
+        dhowells@redhat.com, sumit.garg@linaro.org, david@sigma-star.at,
+        michael@walle.cc, john.ernberg@actia.se, jmorris@namei.org,
+        serge@hallyn.com, herbert@gondor.apana.org.au, davem@davemloft.net,
+        j.luebbe@pengutronix.de, ebiggers@kernel.org, richard@nod.at,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: Re: [PATCH] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI
- config
-Message-ID: <Yz3yFxZ+qj2Qz4az@kernel.org>
-References: <20210920203447.4124005-1-morten@linderud.pw>
- <Yzy2STXGSBmSLhmA@kernel.org>
- <20221005093128.nsudft5yl32xj2gg@framework>
+        linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
+        kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
+Subject: Re: [PATCH v0 2/8] keys-trusted: new cmd line option added
+Message-ID: <Yz7L7KZ4WVW6XBmx@megas.dev.benboeckel.internal>
+Reply-To: list.lkml.keyrings@me.benboeckel.net
+References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
+ <20221006130837.17587-3-pankaj.gupta@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221005093128.nsudft5yl32xj2gg@framework>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221006130837.17587-3-pankaj.gupta@nxp.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 11:31:28AM +0200, Morten Linderud wrote:
-> On Wed, Oct 05, 2022 at 01:40:09AM +0300, Jarkko Sakkinen wrote:
-> > On Mon, Sep 20, 2021 at 10:34:47PM +0200, Morten Linderud wrote:
-> > > Some vendors report faulty values in the acpi TPM2 table. This causes
-> > 
-> > s/acpi/ACPI/
-> > 
-> > > the function to abort with EIO and essentially short circuits the
-> > 
-> > s/the function/tpm_read_log()/
-> > 
-> > > tpm_read_log function as we never even attempt to read the EFI
-> > > configuration table for a log.
-> > 
-> > > 
-> > > This changes the condition to only look for a positive return value,
-> > > else hands over the eventlog discovery to the EFI configuration table
-> > > which should hopefully work better.
-> > 
-> > Please, write in imperative ("Change...").
-> > 
-> > Also exlicitly state how are you changing the check for
-> > tpm_read_log_acpi() in tpm_read_log().
-> > 
-> > You could *even* have a snippet how the checks change
-> > here for clarity.
-> > 
-> > > It's unclear to me if there is a better solution to this then just
-> > > failing. However, I do not see any clear reason why we can't properly
-> > > fallback to the EFI configuration table.
-> > 
-> > This paragraph should not be part of the commit message.
-> > 
-> > Rest of the commit message made sense can you add also fixes tag
-> > as this is clearly a bug fix?
-> > 
-> > Also, please remove the two spurious diff's from the commit that
-> > are not relevant for a stable bug fix (pr_warn() and comment
-> > removal).
-> 
-> Yo,
-> 
-> This is the v1 of the patch which you reviewed a year ago.
-> https://marc.info/?l=linux-integrity&m=163225066613340&w=2
-> 
-> V2 mostly fixed the commit message, but there where some more pointers. I'm
-> happy to submit a V3 if we can agree on all the details.
-> 
-> V2 review is here:
-> https://marc.info/?l=linux-integrity&m=165475008823837&w=2
+On Thu, Oct 06, 2022 at 18:38:31 +0530, Pankaj Gupta wrote:
+> Changes done:
+> - new cmd line option "hw" needs to be suffix, to generate the
+>   hw bound key.
 
-Send v3 with fixes tag and it is fine.
+`Documentation/` is silent on this. Can you please add this there?
 
-BR, Jarkko
+Other than that, is `hw` really a good name for this? Are there virtual
+devices for these things that can make them not hardware in some way?
+Is there a better name in such a case? Maybe something "device"
+oriented?
+
+--Ben
