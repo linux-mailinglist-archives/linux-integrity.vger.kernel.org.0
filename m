@@ -2,52 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8EE5F6629
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Oct 2022 14:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171FF5F6645
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Oct 2022 14:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiJFMgW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Oct 2022 08:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S231265AbiJFMlu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Oct 2022 08:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiJFMgU (ORCPT
+        with ESMTP id S230371AbiJFMls (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:36:20 -0400
+        Thu, 6 Oct 2022 08:41:48 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4CF85A8E;
-        Thu,  6 Oct 2022 05:36:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2879B8F950;
+        Thu,  6 Oct 2022 05:41:48 -0700 (PDT)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id A3BA73200805;
-        Thu,  6 Oct 2022 08:36:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 06 Oct 2022 08:36:15 -0400
+        by mailout.west.internal (Postfix) with ESMTP id 99075320090D;
+        Thu,  6 Oct 2022 08:41:45 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 06 Oct 2022 08:41:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
          h=cc:cc:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1665059773; x=
-        1665146173; bh=x/5eQeyF8wgxc3lBlMlLCE+D3SClhrVS+22aVr9TqjU=; b=q
-        +sgP3Tc/y297yW5XXTzhrO4+Qo6cxIjnmKI3zcvscNQwafBSie53iKn3KCSwJfSu
-        LC0WbgPyKW5Xc1UsQeJw3PwnECIjH8emzV0abYkXYxgCyh4Gif+antZgx7LNbqW/
-        9ddmEF/4b1GoW4FR/glvrutlElogDrL8gehTfKvuFoMmfdaH8IUKwgLo3V5fqDhp
-        32qlfia1GOqZZHrvoJbZln9rdSqlXgXoBI6QVb49px5nZOCs9Qkgp6CQQr3eLstx
-        5n9t028e3VkD6mHwgaCLAwsPE3fQyy2exQFRWiILShrXZJPMQ54fDVu5LnvuXa1o
-        tdXfQNwPw4cYE1X5fJARw==
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1665060105; x=
+        1665146505; bh=WjfN3TnG3qyIp+b77nmfwa/0mGwvYTAgTe3PiH8ciEE=; b=W
+        cl/t60RHccMRbIHxNtZppCSGv+KOGIG8iyciTRiIkmxlKm/MZBBKvbwiAnpxaD8T
+        BwL//MpPzgRNUqF6OJY2t+baiVRpJtI+o/bSz+Il9b+RjJ1CZxQFZ8vSjg+YxUG+
+        MqJ+2PeL8zO4ukHP/NwRBww7XIypeJ5yh4anM0wCFdI/0SyYfUPlzkDqVBLtHk9p
+        iVGmZLsULN7JTDF4EAdRzprGOm6nInRsIhN18gVLnm668myEORgmwkbzqOloHy9m
+        xUHvVSnXxPAK5hdPgAYmzw4pZ8Jn4lIg0WVEAQplL9Ot5a3B1QmGs53uSP9ga7ZL
+        6q6kvnoKOek0NAw1EiyJQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1665059773; x=1665146173; bh=x/5eQeyF8wgxc
-        3lBlMlLCE+D3SClhrVS+22aVr9TqjU=; b=raTmo2i386qfqhru2VjLPvoZMtJmv
-        nQQUiMPj6BWtWemO+UGjVXK8d9R+RQmHOFFWPV+rNcHEJY9k3pi2O7t4j3FPMCbE
-        +KOHy9DafDsRDnMY62SGvTRuRIi+orJuaksZxtHJfDQfx91niWX1tZ/Ol1RqVVB7
-        E9v9n7DveTFJTfHzGasj+FOQcQXoP+VhYB8lL95tZ1/DU3PWNghTYIxCUQSQYlAL
-        FUrSyHDLa+0TIMVMpvWm9DTnTn887/j+xiXEBrCRIeY3IX6vcD39kiT/i2bkYFdO
-        8SJYRtMINHRPKkewjt6UTPVgbti/V1PGgKReavF0D4ZQhQVulCmPhei3w==
-X-ME-Sender: <xms:uss-Y1vYy2Vqs8hF-ULSkI7VRJTg5ui-mHr7WbUC_8PfV6Q0F4lqlw>
-    <xme:uss-Y-f8BiJcJaRYQThmkup6rV_TuuP7O6V5dMhJpqiHDTSybh6J3nXc3I-bN9mPM
-    4OA5ryUbinLOfVRNws>
-X-ME-Received: <xmr:uss-Y4yQhTLgH2hwlyfhykGdjoe0LOt5x-YQ0KRx0v1n-odCTikP1z3yc3cK7_hZ1zRHEQXD_XIHNgX9J_GLvQeFXiSRLd3o903R>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgheegucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm2; t=1665060105; x=1665146505; bh=WjfN3TnG3qyIp
+        +b77nmfwa/0mGwvYTAgTe3PiH8ciEE=; b=BFZYF9gXLkSbDZHyxHzhBjPsY0R0t
+        WHiUm2vlPDiOXSkd8tuR/ov0+L3wREOdmJSgXTwxBBYeBlQfeQM70z46pfJvP1+A
+        sYnhMWMG4lgmrCevaW5n/7Q3v/2MSDPOSZ44tMC5eymjFPcdFNLdYFe/oKq89Ie3
+        Ir7tqxFfCIR8jLPin5rvtpjtOTOIGqB1A51DacMV+pWzE08SzeRp36z/REhWf1PN
+        2Op5dYFPm+Xc3wv6eamrpVSZMv0rEIDI6wUtWib1F9BLjcq9oogZuD6wuaiMZrfb
+        WULL9CLod1fyHtnG/vIsKnLAyQtAcbCb2rfLsAIKMrbFSVGWpEdSCrdDw==
+X-ME-Sender: <xms:B80-Yz230Gol5ZsN305g5vda9sgmTF2Jj7QFTSDK65QixInnufiJFQ>
+    <xme:B80-YyHvsBkXgIGh7cDi_pts6YaarCeEcRITfE__hFxGDVpjliOko0Xl770y6g7pd
+    M1HgUqV-GTlNU2HAws>
+X-ME-Received: <xmr:B80-Yz7P-e51cRaEyPWZrILIqpQo037ZLsvj-xuik-3lM82VUaif0EhceVt2QXBozevoKvw6IXi6-0OfWascDEdeqlndwLLCRCAW>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgheehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvfevuffkrhhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegv
@@ -55,14 +55,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgheegucetufdoteggod
     htthgvrhhnpeduteehgfefudfffeelfffhheejgfdvfffhledvueekudeuieegueejieff
     vdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hmvgessggvnhgsohgvtghkvghlrdhnvght
-X-ME-Proxy: <xmx:uss-Y8O_r3BBxeFMpfHX33weeXb5KKr6skLM9dBoKh0TLy3GXSsvRQ>
-    <xmx:uss-Y1-cJf9I8_HXk2-JQg_xeoQ4dFfS7l1r1V-Dl8O4Merzz4bJmA>
-    <xmx:uss-Y8WK-3erQvyA7yRtCKK6hrIVzT3Fo7WJjEmsrGHY3cMikx92rw>
-    <xmx:vcs-Y5Sbjc3jYNXO0uaAfqH0Nh35mLLSQDxdAnpMI3L5oTp3d7IyrQ>
+X-ME-Proxy: <xmx:B80-Y41dmkadIYs_oMXZBoivvasthp8GFDy7FLiyBnqh6UwRVwQHkw>
+    <xmx:B80-Y2FHBoC3JsDIF1p0ZZDqV6GUEHo8pEzpaskN82DrQU3lx7BebA>
+    <xmx:B80-Y58mIJNlaASd6QTkImhS3Am2DRugin2253QiW4ajPqDMvKSaIw>
+    <xmx:Cc0-Y5bv-TC9YXZspjWrC4mBc0i-uNmb0ESAeNCEF9nXSdj7Hbv4tg>
 Feedback-ID: iffc1478b:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Oct 2022 08:36:10 -0400 (EDT)
-Date:   Thu, 6 Oct 2022 08:37:00 -0400
+ 6 Oct 2022 08:41:43 -0400 (EDT)
+Date:   Thu, 6 Oct 2022 08:42:32 -0400
 From:   Ben Boeckel <me@benboeckel.net>
 To:     Pankaj Gupta <pankaj.gupta@nxp.com>
 Cc:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
@@ -75,15 +75,15 @@ Cc:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
         kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
-Subject: Re: [PATCH v0 2/8] keys-trusted: new cmd line option added
-Message-ID: <Yz7L7KZ4WVW6XBmx@megas.dev.benboeckel.internal>
+Subject: Re: [PATCH v0 6/8] KEYS: trusted: caam based black key
+Message-ID: <Yz7NOB1vePLE4yoB@megas.dev.benboeckel.internal>
 Reply-To: list.lkml.keyrings@me.benboeckel.net
 References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
- <20221006130837.17587-3-pankaj.gupta@nxp.com>
+ <20221006130837.17587-7-pankaj.gupta@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221006130837.17587-3-pankaj.gupta@nxp.com>
+In-Reply-To: <20221006130837.17587-7-pankaj.gupta@nxp.com>
 User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
@@ -94,16 +94,32 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 18:38:31 +0530, Pankaj Gupta wrote:
-> Changes done:
-> - new cmd line option "hw" needs to be suffix, to generate the
->   hw bound key.
+On Thu, Oct 06, 2022 at 18:38:35 +0530, Pankaj Gupta wrote:
+> - CAAM supports two types of black keys:
+>   -- Plain key encrypted with ECB
+>   -- Plain key encrypted with CCM
 
-`Documentation/` is silent on this. Can you please add this there?
+What is a "black key"? Is this described in the documentation or local
+comments at all? (I know I'm unfamiliar with CAAM, but maybe this should
+be mentioned somewhere?).
 
-Other than that, is `hw` really a good name for this? Are there virtual
-devices for these things that can make them not hardware in some way?
-Is there a better name in such a case? Maybe something "device"
-oriented?
+>   Note: Due to robustness, default encytption used for black key is CCM.
+                                     ^^^^^^^^^^ encryption
+
+What "robustness"? Surely there's some more technical details involved
+here?
+
+> - A black key blob is generated, and added to trusted key payload.
+>   This is done as part of sealing operation, that was triggered as a result of:
+>   -- new key generation
+>   -- load key,
+
+It seems that "black keys" are what the uapi calls "hw". I think this
+should be mentioned in the commit message (and CAAM docs).
+
+What do other keytypes do if `hw` is requested and it's not possible
+(say, `big_key`)?
+
+Thanks,
 
 --Ben
