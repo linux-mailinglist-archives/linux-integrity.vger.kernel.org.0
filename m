@@ -2,114 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CD15FC2A8
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Oct 2022 11:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031435FC807
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Oct 2022 17:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiJLJHe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Oct 2022 05:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
+        id S229586AbiJLPOp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Oct 2022 11:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLJHd (ORCPT
+        with ESMTP id S229496AbiJLPOo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:07:33 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911884599A;
-        Wed, 12 Oct 2022 02:07:28 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oiXgv-00DsnR-3W; Wed, 12 Oct 2022 20:06:18 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 12 Oct 2022 17:06:17 +0800
-Date:   Wed, 12 Oct 2022 17:06:16 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Pankaj Gupta <pankaj.gupta@nxp.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "gilad@benyossef.com" <gilad@benyossef.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "john.ernberg@actia.se" <john.ernberg@actia.se>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "richard@nod.at" <richard@nod.at>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Sahil Malhotra <sahil.malhotra@nxp.com>,
-        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>
-Subject: Re: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
- tfm
-Message-ID: <Y0aDiLp7BztzwNez@gondor.apana.org.au>
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
- <20221006130837.17587-4-pankaj.gupta@nxp.com>
- <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
- <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
- <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
- <Y0UxY51KQoKCq59o@gondor.apana.org.au>
- <Y0XLqd/+C1sxq2G0@zx2c4.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0XLqd/+C1sxq2G0@zx2c4.com>
+        Wed, 12 Oct 2022 11:14:44 -0400
+Received: from mail.steuer-voss.de (mail.steuer-voss.de [85.183.69.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1E510B;
+        Wed, 12 Oct 2022 08:14:34 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
+Received: by mail.steuer-voss.de (Postfix, from userid 1000)
+        id 391EE9BB; Wed, 12 Oct 2022 17:14:29 +0200 (CEST)
+From:   Nikolaus Voss <nv@vosn.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
+        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 12 Oct 2022 17:09:27 +0200
+Subject: [PATCH v2] KEYS: encrypted: fix key instantiation with user-provided
+ data
+Message-Id: <20221012151429.391EE9BB@mail.steuer-voss.de>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 02:01:45PM -0600, Jason A. Donenfeld wrote:
->
-> I've got no stake in this, but isn't the whole idea that if you specify
-> "aes" you get AES, and if you specify "cbc(aes)" you get AES-CBC, and so
-> forth? And so leaking implementation details into the algorithm name
-> feels like it breaks the abstraction a bit.
+Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+decrypted data") added key instantiation with user provided decrypted data.
+The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+Fix this to use hex2bin instead.
 
-Well, keys stored in hardware are fundamentally incompatible with
-the algorithm/implementation model.  The whole point of having
-algorithms with multiple implementations (e.g., drivers) is that
-they all provide exactly the same functionality and could be
-substituted at will.
+Keys created from user provided decrypted data saved with "keyctl pipe"
+are still valid, however if the key is recreated from decrypted data the
+old key must be converted to the correct format. This can be done with a
+small shell script, e.g.:
 
-This completely breaks down with hardware keys because by definition
-the key is stored in a specific piece of hardware so it will only
-work with a particular driver.  IOW it almost never makes sense
-to allocate "aes" if you have a hardware key, you almost always
-want to allocate "aes-mydriver" instead.
+BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
+NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c64)
+keyctl add user masterkey "$(cat masterkey.bin)" @u
+keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
 
-> Rather, drivers that do AES should be called "aes". For this hardware
-> key situation, I guess that means keys have a type (in-memory vs
-> hardware-resident). Then, a crypto operation takes an "algorithm" and a
-> "key", and the abstraction then picks the best implementation that's
-> compatible with both the "algorithm" and the "key".
+It is encouraged to switch to a new key because the effective key size
+of the old keys is only half of the specified size.
 
-No the key is already in a specific hardware bound to some driver.
-The user already knows where the key is and therefore they know
-which driver it is.
+The corresponding test for the Linux Test Project ltp has been fixed
+with this patch:
+https://lists.linux.it/pipermail/ltp/2022-October/031060.html
 
-> If you don't want a proliferation of different ways of doing the same
-> thing, maybe the requirement should be that the author of this series
-> also converts the existing "paes" kludge to use the new thing he's
-> proposing?
+Changes
+=======
+v2: - clarify commit message, add example to recover old/broken keys
+    - improve example in Documentation/security/keys/trusted-encrypted.rst
+    - add link to ltp patch
 
-Yes that would definitely be a good idea.  We should also talk to the
-people who added paes in the first place, i.e., s390.
+Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
+Cc: stable <stable@kernel.org>
+Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
+---
+ Documentation/security/keys/trusted-encrypted.rst | 3 ++-
+ security/keys/encrypted-keys/encrypted.c          | 6 +++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Cheers,
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index 0bfb4c339748..e81e47db0b4c 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -350,7 +350,8 @@ Load an encrypted key "evm" from saved blob::
+ 
+ Instantiate an encrypted key "evm" using user-provided decrypted data::
+ 
+-    $ keyctl add encrypted evm "new default user:kmk 32 `cat evm_decrypted_data.blob`" @u
++    $ evmkey=abcdefABCDEF1234567890aaaaaaaaaaabcdefABCDEF1234567890aaaaaaaaaa
++    $ keyctl add encrypted evm "new default user:kmk 32 $evmkey" @u
+     794890253
+ 
+     $ keyctl print 794890253
+diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
+index e05cfc2e49ae..1e313982af02 100644
+--- a/security/keys/encrypted-keys/encrypted.c
++++ b/security/keys/encrypted-keys/encrypted.c
+@@ -627,7 +627,7 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
+ 			pr_err("encrypted key: instantiation of keys using provided decrypted data is disabled since CONFIG_USER_DECRYPTED_DATA is set to false\n");
+ 			return ERR_PTR(-EINVAL);
+ 		}
+-		if (strlen(decrypted_data) != decrypted_datalen) {
++		if (strlen(decrypted_data) != decrypted_datalen * 2) {
+ 			pr_err("encrypted key: decrypted data provided does not match decrypted data length provided\n");
+ 			return ERR_PTR(-EINVAL);
+ 		}
+@@ -791,8 +791,8 @@ static int encrypted_init(struct encrypted_key_payload *epayload,
+ 		ret = encrypted_key_decrypt(epayload, format, hex_encoded_iv);
+ 	} else if (decrypted_data) {
+ 		get_random_bytes(epayload->iv, ivsize);
+-		memcpy(epayload->decrypted_data, decrypted_data,
+-				   epayload->decrypted_datalen);
++		ret = hex2bin(epayload->decrypted_data, decrypted_data,
++			      epayload->decrypted_datalen);
+ 	} else {
+ 		get_random_bytes(epayload->iv, ivsize);
+ 		get_random_bytes(epayload->decrypted_data, epayload->decrypted_datalen);
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.34.1
+
