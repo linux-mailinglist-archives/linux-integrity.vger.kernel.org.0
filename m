@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BED05FC270
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Oct 2022 10:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1A75FC278
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Oct 2022 10:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJLIyX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Oct 2022 04:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S229916AbiJLIzh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Oct 2022 04:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiJLIyB (ORCPT
+        with ESMTP id S229943AbiJLIzO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Oct 2022 04:54:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B730B97B4;
-        Wed, 12 Oct 2022 01:53:19 -0700 (PDT)
+        Wed, 12 Oct 2022 04:55:14 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E78BDFA;
+        Wed, 12 Oct 2022 01:54:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E793B819D0;
-        Wed, 12 Oct 2022 08:52:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72CCDC433D6;
-        Wed, 12 Oct 2022 08:52:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BF611CE1B48;
+        Wed, 12 Oct 2022 08:53:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8148FC433C1;
+        Wed, 12 Oct 2022 08:53:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665564739;
-        bh=jlyAJtmCR8ZWkVcxBk7C7KpvDq/ZundskWWe+5hPx2M=;
+        s=k20201202; t=1665564821;
+        bh=gtoItcPGfyZKLxXvw4iJ2D84Gny/uKXcQVuRYmSNaLA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K8lXhZfRVcF2qxnlvxyWO+zxwhfmjU/pQncOgsTi5A1I+TIRYhdy4akxBXJEUU1/r
-         IAYRYhZwaqMZBg1aB1xgyuiOHK4/x3i03PqsDDWRuAHTjB8sI56bWKhMUdP260NQse
-         BuwF5BdNuMpOL++ePlqTfnVOsarxs0KesGqkJ1XFZS56yLlzCH3p0kKNuvPq4wb6w6
-         zkFkgALlemphkOzByRYpQufQGJ5/UsP6xIQBcNCxYce6HFKfpMrvk1g5Xzd8gaHWN6
-         0W/vknHyWKPoyT5Bp69M0HtRf945En1K9xEUYumDmIQu3Ml7R9Eb15ZhoVbnrdXRbH
-         R61NmqugEO+DA==
-Date:   Wed, 12 Oct 2022 11:52:15 +0300
+        b=DRENFGiB3gIe8FqXclcfZTAv/VwA/B8keHOqetejQn/fyfec9G9BeyI0m8MC3eBif
+         TySjyg36JIJafWuDv6KXmb3JiEu4rMZXES0lg2/i2UzEWsTsQB2fTz+Oc6n8iSzlQw
+         QX9zCkTTXSpRz1Cp07L3A5/W2XZxdAod7IrFOWQYD67ucnRNkrhe8ljPVDFn0y737M
+         e584mW+W1sLqdPQYhzkTzUvxlkeA5ZVSHgh02tPMFFmEUDdH/erQMhlGZzS7N4DkQL
+         V7dR712auLBtfIP2MGQ3dG8V4wTJG1Pbfc6t0wYRQeFfB1ZTvTHep/dkM/JlAtnMdB
+         vENl3t8GwcYSg==
+Date:   Wed, 12 Oct 2022 11:53:37 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Pankaj Gupta <pankaj.gupta@nxp.com>
 Cc:     a.fatoum@pengutronix.de, gilad@benyossef.com, Jason@zx2c4.com,
@@ -46,7 +46,7 @@ Cc:     a.fatoum@pengutronix.de, gilad@benyossef.com, Jason@zx2c4.com,
         linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
         kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
 Subject: Re: [PATCH v0 1/8] hw-bound-key: introducing the generic structure
-Message-ID: <Y0aAP/NvH9mgAi8n@kernel.org>
+Message-ID: <Y0aAkQBDN0Pn0sKX@kernel.org>
 References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
  <20221006130837.17587-2-pankaj.gupta@nxp.com>
 MIME-Version: 1.0
@@ -63,85 +63,14 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 On Thu, Oct 06, 2022 at 06:38:30PM +0530, Pankaj Gupta wrote:
-> Hardware bound keys buffer has additional information,
-> that will be accessed using this new structure.
-
-I don't really understand what I should get from this.
-
-It lacks motivation and function of this structure, even
-the name of the structure.
-
-Hardware bound key does not mean anything at all without
-a context. I don't know what it is.
-
-> 
-> structure members are:
-> - flags, flags for hardware specific information.
-> - key_sz, size of the plain key.
-
-Who cares listing member names?
-
-> 
-> Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-> ---
->  include/linux/hw_bound_key.h | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 include/linux/hw_bound_key.h
-> 
-> diff --git a/include/linux/hw_bound_key.h b/include/linux/hw_bound_key.h
-> new file mode 100644
-> index 000000000000..e7f152410438
-> --- /dev/null
-> +++ b/include/linux/hw_bound_key.h
-> @@ -0,0 +1,27 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only
-> + *
-> + * Copyright 2022 NXP
-> + * Author: Pankaj Gupta <pankaj.gupta@nxp.com>
-
-Formatting here is incorrect and there is no such license in
-existence as "GPL-2.0-only".
-
-Should probably be:
-
-/* SPDX-License-Identifier: GPL-2.0+ */
-/*
- * Copyright (C) 2022 NXP Semiconductors N.V.
- */
-
-Author-field is redundant as it is part of the git metadata.
-Also it is inaccurate description of authorship, as a file
-can have multiple contributors over time.
-
-This all is documented in 
-
-https://www.kernel.org/doc/html/latest/process/license-rules.html
-
-> + */
-> +
-> +#ifndef _HW_BOUND_KEY_H
-> +#define _HW_BOUND_KEY_H
-> +
-> +#include "types.h"
-> +
-> +struct hw_bound_key_info {
-> +	/* Key types specific to the hw. [Implementation Defined]
-> +	 */
-> +	uint8_t flags;
-> +	uint8_t reserved;
-> +	/* Plain key size.
-> +	 */
-> +	uint16_t key_sz;
-> +};
-> +
 > +#define set_hbk_info(hbk_info, hw_flags, key_len) do {\
 > +	hbk_info->flags = hw_flags;\
 > +	hbk_info->key_sz = key_len;\
 > +} while (0)
-> +
-> +#endif /* _HW_BOUND_KEY_H */
-> -- 
-> 2.17.1
-> 
+
+Also this:
+
+1. Undocumented.
+2. No idea why you want to use a macro instead of inline function.
 
 BR, Jarkko
