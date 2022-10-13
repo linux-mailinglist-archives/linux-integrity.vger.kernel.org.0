@@ -2,68 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929BF5FE564
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Oct 2022 00:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC6B5FE559
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Oct 2022 00:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiJMWhJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Oct 2022 18:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S229696AbiJMWhA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Oct 2022 18:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiJMWhF (ORCPT
+        with ESMTP id S229526AbiJMWg7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Oct 2022 18:37:05 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA9E112A91
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Oct 2022 15:36:59 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id pq16so3285158pjb.2
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Oct 2022 15:36:59 -0700 (PDT)
+        Thu, 13 Oct 2022 18:36:59 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808A4BA938
+        for <linux-integrity@vger.kernel.org>; Thu, 13 Oct 2022 15:36:57 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c24so3121871plo.3
+        for <linux-integrity@vger.kernel.org>; Thu, 13 Oct 2022 15:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jQAeNxeJTyn1Cn+RS6Vx/H+Tf8STo7ROWsmXYvM9Qw8=;
-        b=SNm7kh5cQEfxOs/f0jz3d4Jijz9U3R0dSyHk83VFHEj3lKztL9+ZZBtOQsrmRusMAP
-         vQ7Wb/df4yYUiVKsIpuC2RxcKVugp3kjAvaZcAGdJAQZrPkLvpMiLHd6/6kmsuEVI6mh
-         gqPlQNFg+XW8QwdJ3y2wI4e5o3b5PHnLwp3jo=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eKnBh/rdccA0d/5kVDkVm6ZffK/rrsQm1/mENkeAGwY=;
+        b=MRwg26DsZVrrk+VGAgo/rSdkC/qC7KiEipRVjOFTuBqV9YnpOxXq7E9su5tYXVzB5g
+         nYaDzinYZhQP2TEUi4jYSOCbNfOziDti66Jt/gbuqcSNDZW1aI5wNfEX4pS1AlWJoAkB
+         n3TZsGwPtpDgaZdB04jwByap6i2mjq1+rmKSE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jQAeNxeJTyn1Cn+RS6Vx/H+Tf8STo7ROWsmXYvM9Qw8=;
-        b=HbcvfYq73CRK9SpM+zCv4loOPklxqaKVLr94Ndefh6VFHMwaMZOkwDSQ//3ZPRBssO
-         03fPSV9iLkC/I414GzBjS1TgTBi7wuG9XOMUMH5IFVGAfP38TTsAdrHFyE2Tk9lQ05rC
-         1vsQFrCA1FztWuW5T1JJqc7NZ7xbmEU611zbIXcUWsYk4g0soEatx1p9s/af/ZMOdSzQ
-         swCQ8EJJoVDuUHWwGqw2o0k3zlwxPRmtJFGh8fSafDb5VMgsUEbK64eDqDZqBeJBee+p
-         1+p+xhhpK4IXTA0LTCmyrXYDDxn9rbG5IncljYcfvTHNKTZ4FCsYj8yPuDTfs82lIZMY
-         GRMw==
-X-Gm-Message-State: ACrzQf0JEVerctsxYWTZKMNWhqhUPP+JRiJEvBAGSqYoOB5fJUmC4VZ9
-        NSBwa0Db7zdsoMreNRZwtOX3OA==
-X-Google-Smtp-Source: AMsMyM6ZfdnI5oenHINzBXChWvwpmJmEPvdgA40CGNTh/nLOZcER/YWKfQ+8lQNZCJAQUX9kvQrv5A==
-X-Received: by 2002:a17:902:bd98:b0:182:631b:7dd5 with SMTP id q24-20020a170902bd9800b00182631b7dd5mr1848776pls.165.1665700618483;
-        Thu, 13 Oct 2022 15:36:58 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eKnBh/rdccA0d/5kVDkVm6ZffK/rrsQm1/mENkeAGwY=;
+        b=ChxFvCPnMC4sNwY8vSezWb60ALxvWGpd9PxjQho+e2wYcrwV5KILOiGcVauVHaOFhO
+         +f6ZHTymmrxvR634r+wRYrCcpzInXDZKklCk7DASnskQrRBImK7sBXgc0c3SCaHEnO9Q
+         xa5Cr3kgKRd5Dt8t9NNqAAOa/8GXy0AWo8v0rgVsvzlywwIpGfKaGKCu3efs8zQf9Zsa
+         om3WNVtCmzjnBV1QPWcFucrlfv9dVslqN0pFT7UIsxIcyW1i/t3YD3YSbHIv79KfcuCu
+         yIHbeE5EKBydHAkHkFxlO6MG68u8HQb/D/82n5GjYz5/eXM9IYkk0Sv0Jmkug8UlATgj
+         1RUw==
+X-Gm-Message-State: ACrzQf04T8tYEAPUf40cYc07wK/YvmxldxSHX2QfB4BIvxaXGI3rGmG7
+        xlxBvmEi4joQKzJaX7Q31Mncjw==
+X-Google-Smtp-Source: AMsMyM6AR8Y27aSqTIfnLE/BszoK27vRlaEd7LbSvPopybAXc6YTPDuZpOauIOTSzwLP5wpPYw1+Fw==
+X-Received: by 2002:a17:90b:4b47:b0:20a:cfcb:8561 with SMTP id mi7-20020a17090b4b4700b0020acfcb8561mr2139159pjb.55.1665700616917;
+        Thu, 13 Oct 2022 15:36:56 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i3-20020a17090a2a0300b0020a1f091a0asm3685673pjd.55.2022.10.13.15.36.55
+        by smtp.gmail.com with ESMTPSA id q13-20020a170902dacd00b00176a715653dsm336002plx.145.2022.10.13.15.36.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 13 Oct 2022 15:36:56 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Mimi Zohar <zohar@linux.ibm.com>
 Cc:     Kees Cook <keescook@chromium.org>,
         Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        KP Singh <kpsingh@kernel.org>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
         Casey Schaufler <casey@schaufler-ca.com>,
         John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH 0/9] integrity: Move hooks into LSM
-Date:   Thu, 13 Oct 2022 15:36:45 -0700
-Message-Id: <20221013222702.never.990-kees@kernel.org>
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH 1/9] integrity: Prepare for having "ima" and "evm" available in "integrity" LSM
+Date:   Thu, 13 Oct 2022 15:36:46 -0700
+Message-Id: <20221013223654.659758-1-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221013222702.never.990-kees@kernel.org>
+References: <20221013222702.never.990-kees@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2329; h=from:subject:message-id; bh=Rqb1/7Rmsyt9YO6WJZlgGJd4M6/XeTOUzpcOQEF2HJw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjSJMDeaBP2XLSDLNB3r+80mq1j5GFVEDof8xNcCU3 kutSPj6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0iTAwAKCRCJcvTf3G3AJjtxEA CX4on0FfpHi6vw4tRbZo7sYkWND2hfsGJx0dve8cpcdOLP00fga+uc+6ELIMcpIV4W76BKZp8WLZgA 8iz2mvEp+kAtKrO+MymemcX2gWvBNFQ6oqKDJTafK3LuQtVhl6KoYMuTyOYB0ZYFfLU2LZZ0zCABw+ 9xSIjtSrKzKbBLeFvOC66vyTTmwoKUrw+NYgFu+vE2qVK2OOyhy88qAL8YiGt7WRfbUbUKCPkzWSSe Z8zOzGTm8tsJEJUdgV1GBi6YeluCVM1YLQGc8ZDsQJwYsFcDfTxI1MftUBU1O1/4iqcSXVVhJLvcuj iyANrNCCyUlc5suVeGWwJjwBpK2J68zlCkWpMPkcqpvvca8FW2jRJGK9KLgBv4F5yKEvZvVHhkSKSy PrbaBmIqxwaF+N8TI3/d/EO2DOds1yN7OL32SkX8EdV3oLZQJ4hVvhlr4kFZHmUd7pgVwn8Vqv+uK0 UFan4RQ1+I3qkErQAANveVvY5pXtci9ipFe4FGoWoSUTDG1UgUSINTEVskfUOFyB9qoHI36yRNUl2F jqQrqP9+un1/0GisyWHFVg/4yk1APsDuL/bcZfD8mXL28M2fC8F7ih+gObJ65mNiTSlnS/noOYmMur gzjHkQGd9Iy9zVdgXvpuTvJYV/by/kknnK2M4nUw6VwG1HmoDpR9ErQG8zxw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4972; h=from:subject; bh=X25ar5cnDAOImSwIPi4dRS33/W6S8V04RVdvF3svy1g=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjSJMEI4he7aV1fUMbAUP8+xOlSU/Mc/mejIzZVgwZ MgicjxaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0iTBAAKCRCJcvTf3G3AJi2ID/ 9IBaUFqXWRxmua4MK2h4HUvB+6dgAfWu8nN+BNz69h5r6S4m+jTtsTJ4xDfUgtPrnzzm8Z6rL/5UzJ R1QclfS45ROQRyvcqlyzKJqsxMZIRjzbWLmW0wnmOktcinGIbcvzYoVNZHTvmD+ALd2KNfkHIrXX6J 97OKhNAwRpbcLcitq566kjcbJvGDwYdRwlUa5Ft5l3a6cGqES+sm3RSc95zLLf5UBLgFq/sVPDacYt RdKywXjefO9oqFW54hg2ehfZEHkRENdcZvfIeIrNiJibJ9KYGamJ9xAY4HEFfcCns8CVpiRjdl9dhq zmgmyFKvwDFcZWE1qwxgsuVRQDVxqKEhozcV26CoiS5SzYhZqiTEoOzNv/ZyNjVGLVIiGI3dQpggTA bckOlVsVLymnQw1ab3sddZ4I9MCjbCYTwIQBw76dqO4MfgaHbejC6naXOaI5SDxxIeH9a58xHLsnV5 OeSpsGDa4xAWuQejlQMVcJA5/CodmZiWoScJ7ALKEuLwHahBlNzxsPL48hu3zYfimHTArbc34fvgyr 5R8O7Sfp1ApmjbKchmAIfdZoK6AqzMECbgiBAAAVfIcRms6TP4OJF9O6jSPHHBzfmnk9vSJ2rMVDML y/8VotNFwVeFAazDw8bmqdealoYdhDXNGpWOoxUOSg7LufhqzZlv4hZymShA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -76,61 +81,141 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+Move "integrity" LSM to the end of the Kconfig list and prepare for
+having ima and evm LSM initialization called from the top-level
+"integrity" LSM.
 
-It's been over 4 years since LSM stack was introduced. The integrity
-subsystem is long overdue for moving to this infrastructure. Here's my
-first pass at converting integrity and ima (and some of evm) into LSM
-hooks. This should be enough of an example to finish evm, and introduce
-the missing hooks for both. For example, after this, it looks like ima
-only has a couple places it's still doing things outside of the LSM. At
-least these stood out:
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: "Mickaël Salaün" <mic@digikod.net>
+Cc: linux-security-module@vger.kernel.org
+Cc: linux-integrity@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ security/Kconfig                  | 10 +++++-----
+ security/integrity/evm/evm_main.c |  4 ++++
+ security/integrity/iint.c         | 17 +++++++++++++----
+ security/integrity/ima/ima_main.c |  4 ++++
+ security/integrity/integrity.h    |  6 ++++++
+ 5 files changed, 32 insertions(+), 9 deletions(-)
 
-fs/namei.c:     ima_post_create_tmpfile(mnt_userns, inode);
-fs/namei.c:                             ima_post_path_mknod(mnt_userns, dentry);
-
-Mimi, can you please take this series and finish the conversion for
-what's missing in ima and evm?
-
-I would also call attention to "175 insertions(+), 240 deletions(-)" --
-as expected, this is a net reduction in code.
-
-Thanks!
-
--Kees
-
-Kees Cook (9):
-  integrity: Prepare for having "ima" and "evm" available in "integrity"
-    LSM
-  security: Move trivial IMA hooks into LSM
-  ima: Move xattr hooks into LSM
-  ima: Move ima_file_free() into LSM
-  LSM: Introduce inode_post_setattr hook
-  fs: Introduce file_to_perms() helper
-  ima: Move ima_file_check() into LSM
-  integrity: Move trivial hooks into LSM
-  integrity: Move integrity_inode_get() out of global header
-
- fs/attr.c                             |  3 +-
- fs/file_table.c                       |  1 -
- fs/namei.c                            |  2 -
- fs/nfsd/vfs.c                         |  6 --
- include/linux/evm.h                   |  6 --
- include/linux/fs.h                    | 22 +++++++
- include/linux/ima.h                   | 87 ---------------------------
- include/linux/integrity.h             | 30 +--------
- include/linux/lsm_hook_defs.h         |  3 +
- security/Kconfig                      | 10 +--
- security/apparmor/include/file.h      | 18 ++----
- security/integrity/evm/evm_main.c     | 14 ++++-
- security/integrity/iint.c             | 28 +++++++--
- security/integrity/ima/ima.h          | 12 ++++
- security/integrity/ima/ima_appraise.c | 21 +++++--
- security/integrity/ima/ima_main.c     | 66 ++++++++++++++------
- security/integrity/integrity.h        |  8 +++
- security/security.c                   | 78 ++++++------------------
- 18 files changed, 175 insertions(+), 240 deletions(-)
-
+diff --git a/security/Kconfig b/security/Kconfig
+index e6db09a779b7..d472e87a2fc4 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -246,11 +246,11 @@ endchoice
+ 
+ config LSM
+ 	string "Ordered list of enabled LSMs"
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
+-	default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
++	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf,integrity" if DEFAULT_SECURITY_SMACK
++	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf,integrity" if DEFAULT_SECURITY_APPARMOR
++	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf,integrity" if DEFAULT_SECURITY_TOMOYO
++	default "landlock,lockdown,yama,loadpin,safesetid,bpf,integrity" if DEFAULT_SECURITY_DAC
++	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf,integrity"
+ 	help
+ 	  A comma-separated list of LSMs, in initialization order.
+ 	  Any LSMs left off this list will be ignored. This can be
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 2e6fb6e2ffd2..1ef965089417 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -904,3 +904,7 @@ static int __init init_evm(void)
+ }
+ 
+ late_initcall(init_evm);
++
++void __init integrity_lsm_evm_init(void)
++{
++}
+diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+index 8638976f7990..4f322324449d 100644
+--- a/security/integrity/iint.c
++++ b/security/integrity/iint.c
+@@ -18,7 +18,6 @@
+ #include <linux/file.h>
+ #include <linux/uaccess.h>
+ #include <linux/security.h>
+-#include <linux/lsm_hooks.h>
+ #include "integrity.h"
+ 
+ static struct rb_root integrity_iint_tree = RB_ROOT;
+@@ -172,19 +171,29 @@ static void init_once(void *foo)
+ 	mutex_init(&iint->mutex);
+ }
+ 
+-static int __init integrity_iintcache_init(void)
++void __init integrity_add_lsm_hooks(struct security_hook_list *hooks,
++				    int count)
++{
++	security_add_hooks(hooks, count, "integrity");
++}
++
++static int __init integrity_lsm_init(void)
+ {
+ 	iint_cache =
+ 	    kmem_cache_create("iint_cache", sizeof(struct integrity_iint_cache),
+ 			      0, SLAB_PANIC, init_once);
++
++	integrity_lsm_ima_init();
++	integrity_lsm_evm_init();
++
+ 	return 0;
+ }
++
+ DEFINE_LSM(integrity) = {
+ 	.name = "integrity",
+-	.init = integrity_iintcache_init,
++	.init = integrity_lsm_init,
+ };
+ 
+-
+ /*
+  * integrity_kernel_read - read data from the file
+  *
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 040b03ddc1c7..e617863af5ff 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -1076,3 +1076,7 @@ static int __init init_ima(void)
+ }
+ 
+ late_initcall(init_ima);	/* Start IMA after the TPM is available */
++
++void __init integrity_lsm_ima_init(void)
++{
++}
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 7167a6e99bdc..3707349271c9 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -18,6 +18,7 @@
+ #include <crypto/hash.h>
+ #include <linux/key.h>
+ #include <linux/audit.h>
++#include <linux/lsm_hooks.h>
+ 
+ /* iint action cache flags */
+ #define IMA_MEASURE		0x00000001
+@@ -191,6 +192,11 @@ extern struct dentry *integrity_dir;
+ 
+ struct modsig;
+ 
++void __init integrity_lsm_ima_init(void);
++void __init integrity_lsm_evm_init(void);
++void __init integrity_add_lsm_hooks(struct security_hook_list *hooks,
++				    int count);
++
+ #ifdef CONFIG_INTEGRITY_SIGNATURE
+ 
+ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
 -- 
 2.34.1
 
