@@ -2,150 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5839C602FE1
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Oct 2022 17:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754D260325E
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Oct 2022 20:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiJRPjK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Oct 2022 11:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S229751AbiJRSZf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Oct 2022 14:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiJRPi6 (ORCPT
+        with ESMTP id S230184AbiJRSZV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:38:58 -0400
-X-Greylist: delayed 333 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 08:38:56 PDT
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840B2BE51E;
-        Tue, 18 Oct 2022 08:38:56 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MsHvN4lzDz9xFn1;
-        Tue, 18 Oct 2022 23:33:36 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwC3PQRuyE5jwJgGAA--.16309S2;
-        Tue, 18 Oct 2022 16:38:31 +0100 (CET)
-Message-ID: <3935350428bf290e873d93d8a1f9c26b0e65979e.camel@huaweicloud.com>
-Subject: Re: [PATCH 0/9] integrity: Move hooks into LSM
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Paul Moore <paul@paul-moore.com>, KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
+        Tue, 18 Oct 2022 14:25:21 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7112F659D6
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Oct 2022 11:25:06 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id n7so14657843plp.1
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Oct 2022 11:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XnD0cUVp+TOTlgr52vU4IJ+UQNYJwnMUoL+t7q45VyE=;
+        b=knjecM+JwXsRjmXTN38QTXdo60yLmZbtz3TiWB6dKs1qQ30ZMLuU5uJKsLks+W19SL
+         MhCYYnb+l60NN2dFy1uHPJPAONKJjdBvZIKuQ839w8pnHn6FV3rCq6AXDJoeopNRIXa7
+         NAdJf2F6f8oMnGxEvBxeISjz0+pS8DGQ57Cvc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XnD0cUVp+TOTlgr52vU4IJ+UQNYJwnMUoL+t7q45VyE=;
+        b=K2kmuqp81jN6v7v7MZjHFvGGAEpaiIeqAm5+dnXmfeGPfiLbJpolxByKQd/Fn3jtKV
+         0cLcI24xRW9R4W+g8zeoP7X1fB8NJ+E8osrGTz47lNz27tbkDkfZ/BubtyZK6M2pv0ib
+         edaw4uR+WzeEz4o8XK+kKJvpDJ58uMQ2Wj6oXbtuD4I7b/zR1pEVUWl06Iyz6FqpGStF
+         B97OibxRsrz8RzjQxNp9wiaSlE9HsT+u624ib2R71c04zYBILpzTdGcRoq7fQcXWQqZ3
+         FlTIoz6IMkYzOm2X68ejK4DqAOhB6Uy6WB/xREILIQdiVmK9N5UL3n15OVcKSFFDT5el
+         NRVQ==
+X-Gm-Message-State: ACrzQf3CpBH2NMPbiJyhsAkBxtN1Lbg1rUGaE7NInPY22uZ3L5i8m6jt
+        mv9Bsbdcyh9NaGrgj9og4xvRiw==
+X-Google-Smtp-Source: AMsMyM56wYSQF4d6PdxkC9KXMD1lXxNzi/2pnc/ihUXr+HLyRnxmdbs1/lcrj69ovUsn97pESxrYwQ==
+X-Received: by 2002:a17:902:ea85:b0:17f:88c1:7015 with SMTP id x5-20020a170902ea8500b0017f88c17015mr4189852plb.49.1666117504543;
+        Tue, 18 Oct 2022 11:25:04 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m4-20020a170902f64400b00176b84eb29asm8884968plg.301.2022.10.18.11.25.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 11:25:03 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 11:25:02 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 18 Oct 2022 17:38:19 +0200
-In-Reply-To: <0a8f21a6-02de-36f0-7613-06ed3daf934b@digikod.net>
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 6/9] fs: Introduce file_to_perms() helper
+Message-ID: <202210181124.73B5B7ECCE@keescook>
 References: <20221013222702.never.990-kees@kernel.org>
-         <0a8f21a6-02de-36f0-7613-06ed3daf934b@digikod.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+ <20221013223654.659758-6-keescook@chromium.org>
+ <20221018141037.zzpfjzutqbutbpiy@wittgenstein>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwC3PQRuyE5jwJgGAA--.16309S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZry7Wr4DuFyrKF4kXr1rtFb_yoW5Gw18pF
-        s3Ka43ur18JFya9F92v3W3u3W5K3yrWr1UWr13Ar10y3sIvF18Xr4UAry09Fy3WrWrAr12
-        grsFgrn8Cr1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
-        0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42
-        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2
-        z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UGYL9UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4BjQgAAsf
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018141037.zzpfjzutqbutbpiy@wittgenstein>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-10-18 at 17:31 +0200, Mickaël Salaün wrote:
-> There is a complementary patch series that didn't received review: 
-> https://lore.kernel.org/all/20210427113732.471066-1-roberto.sassu@huawei.com/
+On Tue, Oct 18, 2022 at 04:10:37PM +0200, Christian Brauner wrote:
+> On Thu, Oct 13, 2022 at 03:36:51PM -0700, Kees Cook wrote:
+> > Extract the logic used by LSM file hooks to be able to reconstruct the
+> > access mode permissions from an open.
+> > 
+> > Cc: John Johansen <john.johansen@canonical.com>
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: James Morris <jmorris@namei.org>
+> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > Cc: linux-security-module@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  include/linux/fs.h               | 22 ++++++++++++++++++++++
+> >  security/apparmor/include/file.h | 18 ++++--------------
+> >  2 files changed, 26 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/include/linux/fs.h b/include/linux/fs.h
+> > index 9eced4cc286e..814f10d4132e 100644
+> > --- a/include/linux/fs.h
+> > +++ b/include/linux/fs.h
+> > @@ -993,6 +993,28 @@ static inline struct file *get_file(struct file *f)
+> >  #define get_file_rcu(x) atomic_long_inc_not_zero(&(x)->f_count)
+> >  #define file_count(x)	atomic_long_read(&(x)->f_count)
+> >  
+> > +/* Calculate the basic MAY_* flags needed for a given file. */
+> > +static inline u8 file_to_perms(struct file *file)
+> 
+> As long as there aren't multiple users of this and especially none in
+> the vfs proper please don't move this into fs.h. It's overloaded enough
+> as it is and we have vague plans on splitting it further in the future.
 
-Thanks Mickael, just pushed to Github the patch set you mentioned + IMA
-on LSM infrastructure.
+Sure -- this can live in a security .h file somewhere.
 
-That patch set was a prerequisite: allowing multiple stacked LSMs to
-provide an xattr at inode creation time.
-
-Roberto
-
-> On 14/10/2022 00:36, Kees Cook wrote:
-> > Hi,
-> > 
-> > It's been over 4 years since LSM stack was introduced. The
-> > integrity
-> > subsystem is long overdue for moving to this infrastructure. Here's
-> > my
-> > first pass at converting integrity and ima (and some of evm) into
-> > LSM
-> > hooks. This should be enough of an example to finish evm, and
-> > introduce
-> > the missing hooks for both. For example, after this, it looks like
-> > ima
-> > only has a couple places it's still doing things outside of the
-> > LSM. At
-> > least these stood out:
-> > 
-> > fs/namei.c:     ima_post_create_tmpfile(mnt_userns, inode);
-> > fs/namei.c:                             ima_post_path_mknod(mnt_use
-> > rns, dentry);
-> > 
-> > Mimi, can you please take this series and finish the conversion for
-> > what's missing in ima and evm?
-> > 
-> > I would also call attention to "175 insertions(+), 240 deletions(-
-> > )" --
-> > as expected, this is a net reduction in code.
-> > 
-> > Thanks!
-> > 
-> > -Kees
-> > 
-> > Kees Cook (9):
-> >    integrity: Prepare for having "ima" and "evm" available in
-> > "integrity"
-> >      LSM
-> >    security: Move trivial IMA hooks into LSM
-> >    ima: Move xattr hooks into LSM
-> >    ima: Move ima_file_free() into LSM
-> >    LSM: Introduce inode_post_setattr hook
-> >    fs: Introduce file_to_perms() helper
-> >    ima: Move ima_file_check() into LSM
-> >    integrity: Move trivial hooks into LSM
-> >    integrity: Move integrity_inode_get() out of global header
-> > 
-> >   fs/attr.c                             |  3 +-
-> >   fs/file_table.c                       |  1 -
-> >   fs/namei.c                            |  2 -
-> >   fs/nfsd/vfs.c                         |  6 --
-> >   include/linux/evm.h                   |  6 --
-> >   include/linux/fs.h                    | 22 +++++++
-> >   include/linux/ima.h                   | 87 ----------------------
-> > -----
-> >   include/linux/integrity.h             | 30 +--------
-> >   include/linux/lsm_hook_defs.h         |  3 +
-> >   security/Kconfig                      | 10 +--
-> >   security/apparmor/include/file.h      | 18 ++----
-> >   security/integrity/evm/evm_main.c     | 14 ++++-
-> >   security/integrity/iint.c             | 28 +++++++--
-> >   security/integrity/ima/ima.h          | 12 ++++
-> >   security/integrity/ima/ima_appraise.c | 21 +++++--
-> >   security/integrity/ima/ima_main.c     | 66 ++++++++++++++------
-> >   security/integrity/integrity.h        |  8 +++
-> >   security/security.c                   | 78 ++++++--------------
-> > ----
-> >   18 files changed, 175 insertions(+), 240 deletions(-)
-> > 
-
+-- 
+Kees Cook
