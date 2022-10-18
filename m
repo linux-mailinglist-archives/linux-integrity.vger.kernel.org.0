@@ -2,87 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9505602F28
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Oct 2022 17:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A97602FDE
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Oct 2022 17:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJRPIF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Oct 2022 11:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
+        id S229848AbiJRPiv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Oct 2022 11:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiJRPIF (ORCPT
+        with ESMTP id S229807AbiJRPiu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:08:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF02C3574;
-        Tue, 18 Oct 2022 08:08:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCB9F615AB;
-        Tue, 18 Oct 2022 15:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47443C433D7;
-        Tue, 18 Oct 2022 15:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666105683;
-        bh=slRde/SJHhsCQe4oq+YTcbRGFc/BuD3pTR0zuPQ4uBQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=In5dBJJEPh+dGa4roXNDd6Xks03NLhpX0J98eVIiyFeZFE6pz6Py0np2joZPVSifI
-         ilJvwF7SthyHl3TWhG5QcaqiPe1KK2b8OAeOGvZ9ayA7JevXZYNBtAeOddCv2UmGrY
-         cYUvtNVZQNq7sYBBvjTj0I4t/jmsf6gCr6Fh+6o0r9bWEv3QMs9RBAF6DDXUDCFd48
-         lRkmi/0tJiV8BUAzu5MpG5GJj2tJILfU9VYievKFzDPoiwEs2k4+vGsmULRpCDWy50
-         rU6FOiyggYnTdx6G5BQrNxcRCSOvUEnnV3jkn0cl4WzlIxYSctkt6JSgCGR4e7WhrG
-         A7kfJpXKqgzFA==
-Date:   Tue, 18 Oct 2022 17:07:51 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Borislav Petkov <bp@suse.de>,
-        Jonathan McDowell <noodles@fb.com>,
-        Takashi Iwai <tiwai@suse.de>, Petr Vorel <pvorel@suse.cz>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        KP Singh <kpsingh@kernel.org>,
+        Tue, 18 Oct 2022 11:38:50 -0400
+X-Greylist: delayed 108362 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 08:38:49 PDT
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A8ABCB93
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Oct 2022 08:38:48 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MsHsZ163mzMqN0w;
+        Tue, 18 Oct 2022 17:32:02 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MsHsX4RHJzMppDd;
+        Tue, 18 Oct 2022 17:32:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1666107122;
+        bh=nHmKfmaafXkFdZ1cKaSMwMPaalSNB93vBG08IP5ymEI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d//1P7UDlfmXbLfumG+7GpwG1gBkOSiMcd7vK+r3gwZgQAcSVhG6f6IwKYD1ZZ14d
+         jqolszIvuEQVXfMRDyH0EwIRyfEYgrtiqXAxlJDrhSuFRhyTkFDamwfwwcejzkTA09
+         0osNI20uMpVmFVF26H9VTbG+/aGTP8ScmL90w/3A=
+Message-ID: <0a8f21a6-02de-36f0-7613-06ed3daf934b@digikod.net>
+Date:   Tue, 18 Oct 2022 17:31:59 +0200
+MIME-Version: 1.0
+User-Agent: 
+Subject: Re: [PATCH 0/9] integrity: Move hooks into LSM
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Paul Moore <paul@paul-moore.com>, KP Singh <kpsingh@kernel.org>,
         Casey Schaufler <casey@schaufler-ca.com>,
         John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 3/9] ima: Move xattr hooks into LSM
-Message-ID: <20221018150751.3qsbehcnli4c4g4o@wittgenstein>
+        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
 References: <20221013222702.never.990-kees@kernel.org>
- <20221013223654.659758-3-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221013223654.659758-3-keescook@chromium.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20221013222702.never.990-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 03:36:48PM -0700, Kees Cook wrote:
-> Move the xattr IMA hooks into normal LSM layer. As with SELinux and
-> Smack, handle calling cap_inode_setxattr() internally.
-> 
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: Jonathan McDowell <noodles@fb.com>
-> Cc: Takashi Iwai <tiwai@suse.de>
-> Cc: Petr Vorel <pvorel@suse.cz>
-> Cc: linux-integrity@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+There is a complementary patch series that didn't received review: 
+https://lore.kernel.org/all/20210427113732.471066-1-roberto.sassu@huawei.com/
 
-I like that changes obviously but in general, does IMA depend on being
-called _after_ all other LSMs or is this just a historical artifact?
+On 14/10/2022 00:36, Kees Cook wrote:
+> Hi,
+> 
+> It's been over 4 years since LSM stack was introduced. The integrity
+> subsystem is long overdue for moving to this infrastructure. Here's my
+> first pass at converting integrity and ima (and some of evm) into LSM
+> hooks. This should be enough of an example to finish evm, and introduce
+> the missing hooks for both. For example, after this, it looks like ima
+> only has a couple places it's still doing things outside of the LSM. At
+> least these stood out:
+> 
+> fs/namei.c:     ima_post_create_tmpfile(mnt_userns, inode);
+> fs/namei.c:                             ima_post_path_mknod(mnt_userns, dentry);
+> 
+> Mimi, can you please take this series and finish the conversion for
+> what's missing in ima and evm?
+> 
+> I would also call attention to "175 insertions(+), 240 deletions(-)" --
+> as expected, this is a net reduction in code.
+> 
+> Thanks!
+> 
+> -Kees
+> 
+> Kees Cook (9):
+>    integrity: Prepare for having "ima" and "evm" available in "integrity"
+>      LSM
+>    security: Move trivial IMA hooks into LSM
+>    ima: Move xattr hooks into LSM
+>    ima: Move ima_file_free() into LSM
+>    LSM: Introduce inode_post_setattr hook
+>    fs: Introduce file_to_perms() helper
+>    ima: Move ima_file_check() into LSM
+>    integrity: Move trivial hooks into LSM
+>    integrity: Move integrity_inode_get() out of global header
+> 
+>   fs/attr.c                             |  3 +-
+>   fs/file_table.c                       |  1 -
+>   fs/namei.c                            |  2 -
+>   fs/nfsd/vfs.c                         |  6 --
+>   include/linux/evm.h                   |  6 --
+>   include/linux/fs.h                    | 22 +++++++
+>   include/linux/ima.h                   | 87 ---------------------------
+>   include/linux/integrity.h             | 30 +--------
+>   include/linux/lsm_hook_defs.h         |  3 +
+>   security/Kconfig                      | 10 +--
+>   security/apparmor/include/file.h      | 18 ++----
+>   security/integrity/evm/evm_main.c     | 14 ++++-
+>   security/integrity/iint.c             | 28 +++++++--
+>   security/integrity/ima/ima.h          | 12 ++++
+>   security/integrity/ima/ima_appraise.c | 21 +++++--
+>   security/integrity/ima/ima_main.c     | 66 ++++++++++++++------
+>   security/integrity/integrity.h        |  8 +++
+>   security/security.c                   | 78 ++++++------------------
+>   18 files changed, 175 insertions(+), 240 deletions(-)
+> 
