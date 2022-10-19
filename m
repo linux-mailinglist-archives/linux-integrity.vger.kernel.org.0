@@ -2,102 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF572603A33
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Oct 2022 08:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE99603A7C
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Oct 2022 09:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiJSG4i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Oct 2022 02:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S229552AbiJSHSf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Oct 2022 03:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiJSG4h (ORCPT
+        with ESMTP id S229963AbiJSHSb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Oct 2022 02:56:37 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACBB74E00;
-        Tue, 18 Oct 2022 23:56:36 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MshF607dCz9xrq3;
-        Wed, 19 Oct 2022 14:50:18 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAnrgR5n09jwF4JAA--.26227S2;
-        Wed, 19 Oct 2022 07:56:04 +0100 (CET)
-Message-ID: <00bf4f189e4ec3b98130451f40e77ead8f28179e.camel@huaweicloud.com>
-Subject: Re: [PATCH 4/9] ima: Move ima_file_free() into LSM
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Petr Vorel <pvorel@suse.cz>,
-        Jonathan McDowell <noodles@fb.com>,
-        Borislav Petkov <bp@suse.de>, Takashi Iwai <tiwai@suse.de>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Date:   Wed, 19 Oct 2022 08:55:49 +0200
-In-Reply-To: <202210181126.E58AB4A0F@keescook>
-References: <20221013222702.never.990-kees@kernel.org>
-         <20221013223654.659758-4-keescook@chromium.org>
-         <20221018150213.7n4sv7rtsh6lshd5@wittgenstein>
-         <1b41c633bbd31b82b02fdbae718f2f11ac862181.camel@huaweicloud.com>
-         <202210181126.E58AB4A0F@keescook>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 19 Oct 2022 03:18:31 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A956C7696D;
+        Wed, 19 Oct 2022 00:18:30 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mshm92Zd0z1P71B;
+        Wed, 19 Oct 2022 15:13:45 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 19 Oct 2022 15:17:58 +0800
+Message-ID: <38d5fd39-ead2-e954-5901-b35ef6ec96b6@huawei.com>
+Date:   Wed, 19 Oct 2022 15:17:58 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
+ ima_filter_rule_match()
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20220921125804.59490-1-guozihua@huawei.com>
+ <20220921125804.59490-3-guozihua@huawei.com>
+ <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
+ <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
+ <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
+ <7ac3e330-e77c-95d8-7d3b-29e243b57251@huawei.com>
+ <5e304b17fe709d2b2f30b991d5ffc4711d27a075.camel@linux.ibm.com>
+ <2f032b6c-ecf2-5a41-dc38-e6ab0a2d7885@huawei.com>
+ <90f8940cff5eeef7917e2b11a07e41b32b207ffa.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <90f8940cff5eeef7917e2b11a07e41b32b207ffa.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAnrgR5n09jwF4JAA--.26227S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr4ktw48CFyDGr13Aw1DWrg_yoWfXFb_GF
-        WjyrZ2yFn8JF1kKanavFW3Gr4DWrWUXr4Yvw4fJrnxZw4Svw47XFs7CF93C3WrJw4av3Zx
-        Ja4avayxta17tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4RlmgAAsF
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-10-18 at 11:29 -0700, Kees Cook wrote:
-> On Tue, Oct 18, 2022 at 05:32:40PM +0200, Roberto Sassu wrote:
-> > I also did this work before. In my implementation, I created a new
-> > security hook called security_file_pre_free().
-> > 
-> > https://github.com/robertosassu/linux/commit/692c9d36fff865435b23b3cb765d31f3584f6263
-> > 
-> > If useful, the whole patch set is available at:
-> > 
-> > https://github.com/robertosassu/linux/commits/ima-evm-lsm-v1-devel-v3
+On 2022/10/19 9:07, Mimi Zohar wrote:
+> On Tue, 2022-10-18 at 16:43 +0800, Guozihua (Scott) wrote:
+>> On 2022/9/28 22:11, Mimi Zohar wrote:
+>>>
+>>> After reviewing this patch set again, the code looks fine.  The commit
+>>> message is still a bit off, but I've pushed the patch set out to next-
+>>> integrity-testing, waiting for some Reviewed-by/Tested-by tags.
+>>>
+>>
+>> Hi Mimi,
+>>
+>> How's this patch going? I see Roberto is replying with a Reviewed-by.
 > 
-> Ah, lovely! Can you pick this back up and run with it? I mainly did
-> these a proof-of-concept, but it looks like you got further.
+> I'd really like to see a "Tested-by" tag as well.
+> 
+> Are you able to force the scenario?
+> 
 
-It was some time ago. If I remember correctly, I got to the point of
-running IMA/EVM and passing basic tests.
-
-Will take a look at your patches and comments, and integrate in mines
-if something is missing.
-
-Will also send again the prerequisite patch set.
-
-Roberto
+It's a race condition which could be hard to reproduce easily and in a 
+stable manner. I'll give it a try.
+-- 
+Best
+GUO Zihua
 
