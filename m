@@ -2,142 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32BA604D77
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Oct 2022 18:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E11D604DB1
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Oct 2022 18:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiJSQcJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Oct 2022 12:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
+        id S229622AbiJSQph (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Oct 2022 12:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiJSQcH (ORCPT
+        with ESMTP id S229497AbiJSQpg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:32:07 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877D91AD82;
-        Wed, 19 Oct 2022 09:32:03 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JGLrXP001457;
-        Wed, 19 Oct 2022 16:31:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=0FemrlkL2zjvgkEKYy/s8nxfAGJ9llFtOVrJjesBs4c=;
- b=FI+kgbyjJfybtZOpTF5kniMetTPjZBM/CB7at9lRxhHB4Nd6CL0L4+rkHRmeNgZ811OB
- 7ug6rtecywvfnfmvxvGjpwto7ZFWC8e7/2bl+wmmSNs1HLwO4IQAm2HqmUiUzmgRm9m3
- tUQtCqLlClkl6bK2lrdnc57P2ZwG5THImsF1ldqDN4R2zNMIYqehS0XamDVEM9HnP3Cw
- 5GWAUxdpjpZi7NkAvCrqR9tfYEAe2HvsJ3/oCeylsuQZEihu8KlzuNhkYyZmMjw9yDv7
- /9RRT1PJSII+3JKV7Xa3Nlt5QrxW+UHA+Ib6gMctHEMuNoTC6kQatPAdpswfK5c0/gKo Aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kampqraq3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 16:31:54 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JGM6kd002140;
-        Wed, 19 Oct 2022 16:31:53 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kampqrapt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 16:31:53 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JGKpse028105;
-        Wed, 19 Oct 2022 16:31:52 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma01dal.us.ibm.com with ESMTP id 3k7mg9bjrh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 16:31:52 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JGVpWr43254254
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Oct 2022 16:31:51 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 698FB58055;
-        Wed, 19 Oct 2022 16:31:50 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47C0258056;
-        Wed, 19 Oct 2022 16:31:49 +0000 (GMT)
-Received: from sig-9-65-252-68.ibm.com (unknown [9.65.252.68])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Oct 2022 16:31:49 +0000 (GMT)
-Message-ID: <230c9c42995e52174b8503b05f0c51225ad0aeca.camel@linux.ibm.com>
-Subject: Re: [PATCH v5] KEYS: encrypted: fix key instantiation with
- user-provided data
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nikolaus Voss <nv@vosn.de>, David Howells <dhowells@redhat.com>,
+        Wed, 19 Oct 2022 12:45:36 -0400
+Received: from mail.steuer-voss.de (mail.steuer-voss.de [85.183.69.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF9DB6D;
+        Wed, 19 Oct 2022 09:45:31 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
+Received: by mail.steuer-voss.de (Postfix, from userid 1000)
+        id B70DF1C59; Wed, 19 Oct 2022 18:45:26 +0200 (CEST)
+From:   Nikolaus Voss <nikolaus.voss@haag-streit.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
         Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>
 Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 19 Oct 2022 12:31:47 -0400
-In-Reply-To: <20221019141031.E605D1B3B@mail.steuer-voss.de>
-References: <20221019141031.E605D1B3B@mail.steuer-voss.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7UGECKheJno6Xp8SpPP1z9gKWj1k9Ng6
-X-Proofpoint-ORIG-GUID: ao8WAIor37KsT8KpDy2Wbdnn4z8tH1EV
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-19_09,2022-10-19_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 adultscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 phishscore=0
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210190091
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 19 Oct 2022 18:38:20 +0200
+Subject: [PATCH v6] KEYS: encrypted: fix key instantiation with user-provided
+ data
+Message-Id: <20221019164526.B70DF1C59@mail.steuer-voss.de>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Nikolaus,
+Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with
+user-provided decrypted data") added key instantiation with user
+provided decrypted data.  The user data is hex-ascii-encoded but was
+just memcpy'ed to the binary buffer. Fix this to use hex2bin instead.
 
-On Wed, 2022-10-19 at 16:07 +0200, Nikolaus Voss wrote:
-> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
-> decrypted data") added key instantiation with user provided decrypted data.
-> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
-> Fix this to use hex2bin instead.
-> 
-> Old keys created from user provided decrypted data saved with "keyctl pipe"
-> are still valid, however if the key is recreated from decrypted data the
-> old key must be converted to the correct format. This can be done with a
-> small shell script, e.g.:
-> 
-> BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
-> NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
-> keyctl add user masterkey "$(cat masterkey.bin)" @u
-> keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
-> 
-> However, NEWKEY is still broken: If for BROKENKEY 32 bytes were specified, a
-> brute force attacker knowing the key properties would only need to try at most
-> 2^(16*8) keys, as if the key was only 16 bytes long.
-> 
-> The security issue is a result of the combination of limiting the input range
-> to hex-ascii and using memcpy() instead of hex2bin(). It could have been fixed
-> either by allowing binary input or using hex2bin() (and doubling the ascii
-> input key length). This patch implements the latter.
-> 
-> The corresponding test for the Linux Test Project ltp has also been
-> fixed (see link below).
-> 
-> Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
-> Cc: stable <stable@kernel.org>
-> Link: https://lore.kernel.org/ltp/20221006081709.92303897@mail.steuer-voss.de/
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
+Old keys created from user provided decrypted data saved with "keyctl
+pipe" are still valid, however if the key is recreated from decrypted
+data the old key must be converted to the correct format. This can be
+done with a small shell script, e.g.:
 
-While preparing to queue this patch, I noticed scripts/checkpatch.pl
-returns a couple of warnings, including that the sender email address
-and your tag here don't match.  Wish I had caught them earlier.
+BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
+NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
+keyctl add user masterkey "$(cat masterkey.bin)" @u
+keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
+
+However, NEWKEY is still broken: If for BROKENKEY 32 bytes were
+specified, a brute force attacker knowing the key properties would only
+need to try at most 2^(16*8) keys, as if the key was only 16 bytes long.
+
+The security issue is a result of the combination of limiting the input
+range to hex-ascii and using memcpy() instead of hex2bin(). It could
+have been fixed either by allowing binary input or using hex2bin() (and
+doubling the ascii input key length). This patch implements the latter.
+
+The corresponding test for the Linux Test Project ltp has also been
+fixed (see link below).
+
+Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/ltp/20221006081709.92303897@mail.steuer-voss.de/
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
+---
+Changes
+=======
+v6: - fix checkpatch warnings
+v5: - explain security issue in commit message, add Reviewd-by
+v4: - change "Link:" address
+v3: - use generated random key in example, reformat commit message
+v2: - clarify commit message, add example to recover old/broken keys
+    - improve example in Documentation/security/keys/trusted-encrypted.rst
+    - add link to ltp patch
+
+ Documentation/security/keys/trusted-encrypted.rst | 3 ++-
+ security/keys/encrypted-keys/encrypted.c          | 6 +++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index 0bfb4c339748..9bc9db8ec651 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -350,7 +350,8 @@ Load an encrypted key "evm" from saved blob::
+ 
+ Instantiate an encrypted key "evm" using user-provided decrypted data::
+ 
+-    $ keyctl add encrypted evm "new default user:kmk 32 `cat evm_decrypted_data.blob`" @u
++    $ evmkey=$(dd if=/dev/urandom bs=1 count=32 | xxd -c32 -p)
++    $ keyctl add encrypted evm "new default user:kmk 32 $evmkey" @u
+     794890253
+ 
+     $ keyctl print 794890253
+diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
+index e05cfc2e49ae..1e313982af02 100644
+--- a/security/keys/encrypted-keys/encrypted.c
++++ b/security/keys/encrypted-keys/encrypted.c
+@@ -627,7 +627,7 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
+ 			pr_err("encrypted key: instantiation of keys using provided decrypted data is disabled since CONFIG_USER_DECRYPTED_DATA is set to false\n");
+ 			return ERR_PTR(-EINVAL);
+ 		}
+-		if (strlen(decrypted_data) != decrypted_datalen) {
++		if (strlen(decrypted_data) != decrypted_datalen * 2) {
+ 			pr_err("encrypted key: decrypted data provided does not match decrypted data length provided\n");
+ 			return ERR_PTR(-EINVAL);
+ 		}
+@@ -791,8 +791,8 @@ static int encrypted_init(struct encrypted_key_payload *epayload,
+ 		ret = encrypted_key_decrypt(epayload, format, hex_encoded_iv);
+ 	} else if (decrypted_data) {
+ 		get_random_bytes(epayload->iv, ivsize);
+-		memcpy(epayload->decrypted_data, decrypted_data,
+-				   epayload->decrypted_datalen);
++		ret = hex2bin(epayload->decrypted_data, decrypted_data,
++			      epayload->decrypted_datalen);
+ 	} else {
+ 		get_random_bytes(epayload->iv, ivsize);
+ 		get_random_bytes(epayload->decrypted_data, epayload->decrypted_datalen);
 -- 
-thanks,
-
-Mimi
+2.34.1
 
