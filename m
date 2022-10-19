@@ -2,125 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0524603766
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Oct 2022 03:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF572603A33
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Oct 2022 08:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiJSBIz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Oct 2022 21:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S229645AbiJSG4i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Oct 2022 02:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiJSBIj (ORCPT
+        with ESMTP id S229554AbiJSG4h (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Oct 2022 21:08:39 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D23BDFC08;
-        Tue, 18 Oct 2022 18:08:36 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29J0ud4n015004;
-        Wed, 19 Oct 2022 01:08:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=PTXFKiaqw8WDi1XGVH0av05QNVaP7YEtjK+e1UbuFx4=;
- b=UGYlspng/kc9By85lcBcW+vfvU4Iu2DJdZOce4gMsel9NVX97wQSQrJk0EA3Q6GokX4/
- G7dku1aUznvJ5+8f8TeMcIZvSbgjKWtPO+nP3f2X2d39piPXH5EFsnlDOYldoqr1x5CV
- 9Njauod594rriORvUSf5GE93d9pz5cd2WR7QRK8eiks9IU2chjhim7qAo/VxXUMnHnIF
- ZG9lbunPOavISxxp+VQE1sqBDyOM7sECsSejStuBIssSSgM4y420Xfk9v8pv19sriXMR
- d5+Pi6kXUg4nBt+VJgXOLqNNDFMQ7idlzhU21rOFk0061ER4PawgBi/Ky4TGVc/Y0+Hm qw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ka7510dc1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 01:08:13 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29J10BU1029534;
-        Wed, 19 Oct 2022 01:07:57 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ka7510cdc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 01:07:57 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29J17AkV008974;
-        Wed, 19 Oct 2022 01:07:46 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma01wdc.us.ibm.com with ESMTP id 3k9be2axsw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 01:07:46 +0000
-Received: from smtpav03.dal12v.mail.ibm.com ([9.208.128.129])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29J17igc24380140
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Oct 2022 01:07:44 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 221D458060;
-        Wed, 19 Oct 2022 01:07:45 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 79D745803F;
-        Wed, 19 Oct 2022 01:07:44 +0000 (GMT)
-Received: from sig-9-65-232-148.ibm.com (unknown [9.65.232.148])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Oct 2022 01:07:44 +0000 (GMT)
-Message-ID: <90f8940cff5eeef7917e2b11a07e41b32b207ffa.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
- ima_filter_rule_match()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
+        Wed, 19 Oct 2022 02:56:37 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACBB74E00;
+        Tue, 18 Oct 2022 23:56:36 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MshF607dCz9xrq3;
+        Wed, 19 Oct 2022 14:50:18 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAnrgR5n09jwF4JAA--.26227S2;
+        Wed, 19 Oct 2022 07:56:04 +0100 (CET)
+Message-ID: <00bf4f189e4ec3b98130451f40e77ead8f28179e.camel@huaweicloud.com>
+Subject: Re: [PATCH 4/9] ima: Move ima_file_free() into LSM
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Petr Vorel <pvorel@suse.cz>,
+        Jonathan McDowell <noodles@fb.com>,
+        Borislav Petkov <bp@suse.de>, Takashi Iwai <tiwai@suse.de>,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 18 Oct 2022 21:07:44 -0400
-In-Reply-To: <2f032b6c-ecf2-5a41-dc38-e6ab0a2d7885@huawei.com>
-References: <20220921125804.59490-1-guozihua@huawei.com>
-         <20220921125804.59490-3-guozihua@huawei.com>
-         <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
-         <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
-         <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
-         <7ac3e330-e77c-95d8-7d3b-29e243b57251@huawei.com>
-         <5e304b17fe709d2b2f30b991d5ffc4711d27a075.camel@linux.ibm.com>
-         <2f032b6c-ecf2-5a41-dc38-e6ab0a2d7885@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Wed, 19 Oct 2022 08:55:49 +0200
+In-Reply-To: <202210181126.E58AB4A0F@keescook>
+References: <20221013222702.never.990-kees@kernel.org>
+         <20221013223654.659758-4-keescook@chromium.org>
+         <20221018150213.7n4sv7rtsh6lshd5@wittgenstein>
+         <1b41c633bbd31b82b02fdbae718f2f11ac862181.camel@huaweicloud.com>
+         <202210181126.E58AB4A0F@keescook>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: y8BArRBy6mkseiO0clCZ7DUsoiSTqqnj
-X-Proofpoint-ORIG-GUID: lwyednaTJSdh7rQf1GNl4DHVbsSvMc_Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-18_10,2022-10-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 clxscore=1011
- phishscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210190004
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwAnrgR5n09jwF4JAA--.26227S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr4ktw48CFyDGr13Aw1DWrg_yoWfXFb_GF
+        WjyrZ2yFn8JF1kKanavFW3Gr4DWrWUXr4Yvw4fJrnxZw4Svw47XFs7CF93C3WrJw4av3Zx
+        Ja4avayxta17tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4RlmgAAsF
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-10-18 at 16:43 +0800, Guozihua (Scott) wrote:
-> On 2022/9/28 22:11, Mimi Zohar wrote:
+On Tue, 2022-10-18 at 11:29 -0700, Kees Cook wrote:
+> On Tue, Oct 18, 2022 at 05:32:40PM +0200, Roberto Sassu wrote:
+> > I also did this work before. In my implementation, I created a new
+> > security hook called security_file_pre_free().
 > > 
-> > After reviewing this patch set again, the code looks fine.  The commit
-> > message is still a bit off, but I've pushed the patch set out to next-
-> > integrity-testing, waiting for some Reviewed-by/Tested-by tags.
+> > https://github.com/robertosassu/linux/commit/692c9d36fff865435b23b3cb765d31f3584f6263
 > > 
+> > If useful, the whole patch set is available at:
+> > 
+> > https://github.com/robertosassu/linux/commits/ima-evm-lsm-v1-devel-v3
 > 
-> Hi Mimi,
-> 
-> How's this patch going? I see Roberto is replying with a Reviewed-by.
+> Ah, lovely! Can you pick this back up and run with it? I mainly did
+> these a proof-of-concept, but it looks like you got further.
 
-I'd really like to see a "Tested-by" tag as well.
+It was some time ago. If I remember correctly, I got to the point of
+running IMA/EVM and passing basic tests.
 
-Are you able to force the scenario?
+Will take a look at your patches and comments, and integrate in mines
+if something is missing.
 
--- 
-thanks,
+Will also send again the prerequisite patch set.
 
-Mimi
+Roberto
 
