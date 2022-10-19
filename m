@@ -2,97 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BD36049AD
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Oct 2022 16:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32BA604D77
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Oct 2022 18:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiJSOtj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Oct 2022 10:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
+        id S229794AbiJSQcJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Oct 2022 12:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiJSOtX (ORCPT
+        with ESMTP id S230187AbiJSQcH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:49:23 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A68FF88D9;
-        Wed, 19 Oct 2022 07:37:00 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JEWCub008964;
-        Wed, 19 Oct 2022 14:36:40 GMT
+        Wed, 19 Oct 2022 12:32:07 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877D91AD82;
+        Wed, 19 Oct 2022 09:32:03 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JGLrXP001457;
+        Wed, 19 Oct 2022 16:31:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=gQ0LrSPPMFn2K044cE0uzaLohVsC19QuIJLiPg813JU=;
- b=ndV8MqyCeIU1XL0FTgxXLnIvLXFxWbHVYZfPDYVVwdUVkMbBXrq7wRw9yQGzvkirsIaf
- 2gyNf++2jz3JLIUzatlz/h3YFrESBDEM3dxBewDCjt7o5iVZoxMbR3M/VGpccmqXluR+
- RYBjUKdz0J0ZZ0CYrO+GXQlTxCk609ZwoV9AZ+UTlnTMVKaxRPpqtZf2H5VUjV0dNUge
- iAfs/GX/8Yw0S5ZccC+MSc5ZdbGinZXQI+QJpesI9hSViw2ZRIDxt6N5R+VntCO9yy/Z
- 03gJWHUsYg4I4rz3QeaYTg3xZLn4BvxBTxdVw6VFUzQ940/fXIKdZ859vnxZxtXpg/5A Cg== 
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=0FemrlkL2zjvgkEKYy/s8nxfAGJ9llFtOVrJjesBs4c=;
+ b=FI+kgbyjJfybtZOpTF5kniMetTPjZBM/CB7at9lRxhHB4Nd6CL0L4+rkHRmeNgZ811OB
+ 7ug6rtecywvfnfmvxvGjpwto7ZFWC8e7/2bl+wmmSNs1HLwO4IQAm2HqmUiUzmgRm9m3
+ tUQtCqLlClkl6bK2lrdnc57P2ZwG5THImsF1ldqDN4R2zNMIYqehS0XamDVEM9HnP3Cw
+ 5GWAUxdpjpZi7NkAvCrqR9tfYEAe2HvsJ3/oCeylsuQZEihu8KlzuNhkYyZmMjw9yDv7
+ /9RRT1PJSII+3JKV7Xa3Nlt5QrxW+UHA+Ib6gMctHEMuNoTC6kQatPAdpswfK5c0/gKo Aw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kak330d0n-1
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kampqraq3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 14:36:39 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JEX7Ig013830;
-        Wed, 19 Oct 2022 14:35:40 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kak3309md-1
+        Wed, 19 Oct 2022 16:31:54 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JGM6kd002140;
+        Wed, 19 Oct 2022 16:31:53 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kampqrapt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 14:35:40 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JEKIfR011292;
-        Wed, 19 Oct 2022 14:34:52 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma02dal.us.ibm.com with ESMTP id 3k7mgabb0p-1
+        Wed, 19 Oct 2022 16:31:53 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JGKpse028105;
+        Wed, 19 Oct 2022 16:31:52 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma01dal.us.ibm.com with ESMTP id 3k7mg9bjrh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 14:34:52 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JEYpcx983658
+        Wed, 19 Oct 2022 16:31:52 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JGVpWr43254254
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Oct 2022 14:34:51 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CC9F05805E;
-        Wed, 19 Oct 2022 14:34:50 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3382D58056;
-        Wed, 19 Oct 2022 14:34:49 +0000 (GMT)
+        Wed, 19 Oct 2022 16:31:51 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 698FB58055;
+        Wed, 19 Oct 2022 16:31:50 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47C0258056;
+        Wed, 19 Oct 2022 16:31:49 +0000 (GMT)
 Received: from sig-9-65-252-68.ibm.com (unknown [9.65.252.68])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Oct 2022 14:34:49 +0000 (GMT)
-Message-ID: <16e008b3709f3c85dbad1accb9fce8ddad552205.camel@linux.ibm.com>
-Subject: Re: [PATCH 2/9] security: Move trivial IMA hooks into LSM
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Oct 2022 16:31:49 +0000 (GMT)
+Message-ID: <230c9c42995e52174b8503b05f0c51225ad0aeca.camel@linux.ibm.com>
+Subject: Re: [PATCH v5] KEYS: encrypted: fix key instantiation with
+ user-provided data
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Petr Vorel <pvorel@suse.cz>, Borislav Petkov <bp@suse.de>,
-        Takashi Iwai <tiwai@suse.de>,
-        Jonathan McDowell <noodles@fb.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Date:   Wed, 19 Oct 2022 10:34:48 -0400
-In-Reply-To: <20221013223654.659758-2-keescook@chromium.org>
-References: <20221013222702.never.990-kees@kernel.org>
-         <20221013223654.659758-2-keescook@chromium.org>
+To:     Nikolaus Voss <nv@vosn.de>, David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
+        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 19 Oct 2022 12:31:47 -0400
+In-Reply-To: <20221019141031.E605D1B3B@mail.steuer-voss.de>
+References: <20221019141031.E605D1B3B@mail.steuer-voss.de>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: yCJxJtC0CR0Mftu0gWwsAb5HlVqwg9E1
-X-Proofpoint-ORIG-GUID: LqgPk_vOKUjAebx2xuWDzUINYmLiEH59
+X-Proofpoint-GUID: 7UGECKheJno6Xp8SpPP1z9gKWj1k9Ng6
+X-Proofpoint-ORIG-GUID: ao8WAIor37KsT8KpDy2Wbdnn4z8tH1EV
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-19_08,2022-10-19_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
- malwarescore=0 suspectscore=0 spamscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210190081
+ definitions=2022-10-19_09,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190091
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -102,19 +97,45 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2022-10-13 at 15:36 -0700, Kees Cook wrote:
-> This moves the trivial hard-coded stacking of IMA LSM hooks into the
-> existing LSM infrastructure.
+Hi Nikolaus,
 
-The only thing trivial about making IMA and EVM LSMs is moving them to
-LSM hooks.  Although static files may be signed and the signatures
-distributed with the file data through the normal distribution
-mechanisms (e.g. RPM), other files cannot be signed remotely (e.g.
-configuration files).  For these files, both IMA and EVM may be
-configured to maintain persistent file state stored as security xattrs
-in the form of security.ima file hashes or security.evm HMACs.  The LSM
-flexibility of enabling/disabling IMA or EVM on a per boot basis breaks
-this usage, potentially preventing subsequent boots.
+On Wed, 2022-10-19 at 16:07 +0200, Nikolaus Voss wrote:
+> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+> decrypted data") added key instantiation with user provided decrypted data.
+> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+> Fix this to use hex2bin instead.
+> 
+> Old keys created from user provided decrypted data saved with "keyctl pipe"
+> are still valid, however if the key is recreated from decrypted data the
+> old key must be converted to the correct format. This can be done with a
+> small shell script, e.g.:
+> 
+> BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
+> NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
+> keyctl add user masterkey "$(cat masterkey.bin)" @u
+> keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
+> 
+> However, NEWKEY is still broken: If for BROKENKEY 32 bytes were specified, a
+> brute force attacker knowing the key properties would only need to try at most
+> 2^(16*8) keys, as if the key was only 16 bytes long.
+> 
+> The security issue is a result of the combination of limiting the input range
+> to hex-ascii and using memcpy() instead of hex2bin(). It could have been fixed
+> either by allowing binary input or using hex2bin() (and doubling the ascii
+> input key length). This patch implements the latter.
+> 
+> The corresponding test for the Linux Test Project ltp has also been
+> fixed (see link below).
+> 
+> Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
+> Cc: stable <stable@kernel.org>
+> Link: https://lore.kernel.org/ltp/20221006081709.92303897@mail.steuer-voss.de/
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
+
+While preparing to queue this patch, I noticed scripts/checkpatch.pl
+returns a couple of warnings, including that the sender email address
+and your tag here don't match.  Wish I had caught them earlier.
 -- 
 thanks,
 
