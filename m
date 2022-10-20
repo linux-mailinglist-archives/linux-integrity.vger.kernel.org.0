@@ -2,138 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0C96068CF
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Oct 2022 21:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C75606921
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Oct 2022 21:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJTTYB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 Oct 2022 15:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        id S229489AbiJTTwC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 Oct 2022 15:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiJTTX7 (ORCPT
+        with ESMTP id S229610AbiJTTwB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 Oct 2022 15:23:59 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D926E20FB09
-        for <linux-integrity@vger.kernel.org>; Thu, 20 Oct 2022 12:23:56 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id t25so628682qkm.2
-        for <linux-integrity@vger.kernel.org>; Thu, 20 Oct 2022 12:23:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UXYBorl1dI3AKqx3xQmawJPVUjsdLNNAJw91kOBPSIk=;
-        b=SQ8OK63PFQry61FWFejRq6pCAtpPieg4TVk5hrGs9yrj+h+2wqx1laUos+OOt2inze
-         DxH8KYz/cFMdCorv+jYplUO9OBUoad0QYHCrDukFBDYQPBbyRbh85/wjBDyceg5Qn/Mw
-         AY6c47hC4FlDCeYqXpsjlx5xcFXM2e8jCwRYjVjGrgARsDTjAxsyuPtQr8llfQEKnJg1
-         X17NSzzxO60lqAYhBWrsrzqfsyp3nIWpLFhXkfq1bXrVeNlc6rHwsCfM0+veR6Lf7Tii
-         ahBQKsXfUlV5kuc64s1qLlK24/w3Yz0Hj9ecP3Ukekz9WUV+Sr3+7HWIPNNvVSg5WPWS
-         H9ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UXYBorl1dI3AKqx3xQmawJPVUjsdLNNAJw91kOBPSIk=;
-        b=ldobWuwqBxfeGyKDKsoDt7g1tNsJbvqBSUJDx1TMD9byeaCBeQmCfyOvuAC9zgVXHS
-         7bazMuL0f+UMJ14e/B9Twi2xIkwfK/INf6+N11Vyx78Zo4EMOk3nXIenWijRqv+h/nN0
-         ZXCF/x1F18rjv5YzuhW2eNWHIqMEbtn+qm/7NmgL+Nk/Ka/6SSZaS4CC/f8T/eDQWYI8
-         GlEB4gB1DtzRebZgohw1CVLinDrQ+zWkRzSy6YWscdAPuyK560OmvDs0owSVXI6QTjz8
-         lc0+8I7cF/q0Gta/OfsQ7iMx9FvL1QFnSqrYnXYVfAS424BWOn3nVN8MRAVT0dREvOPz
-         QPsA==
-X-Gm-Message-State: ACrzQf0e2S2SFnZWLlhnY0Z9XzoftJHl89804jU6P5R0Oj1JnX1rBQLH
-        ECvkeUaXsz1KwXLzkGIKBNgb8w==
-X-Google-Smtp-Source: AMsMyM6/PxGqTil/yztlMG8oGxbBRTidnNsSg45nwoJJ8KtNHLjmGAlx/eEJkbzdVhzCbBBaGVTwmg==
-X-Received: by 2002:a05:620a:1512:b0:6ee:b258:51f1 with SMTP id i18-20020a05620a151200b006eeb25851f1mr10701716qkk.716.1666293835335;
-        Thu, 20 Oct 2022 12:23:55 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id ew5-20020a05622a514500b0039cc9d24843sm6594369qtb.66.2022.10.20.12.23.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 12:23:54 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1olb8z-00Ay3E-DR;
-        Thu, 20 Oct 2022 16:23:53 -0300
-Date:   Thu, 20 Oct 2022 16:23:53 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "gilad@benyossef.com" <gilad@benyossef.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "john.ernberg@actia.se" <john.ernberg@actia.se>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "richard@nod.at" <richard@nod.at>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Sahil Malhotra <sahil.malhotra@nxp.com>,
-        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>
-Subject: Re: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
- tfm
-Message-ID: <Y1GgSX+ZmOsxhB2N@ziepe.ca>
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
- <20221006130837.17587-4-pankaj.gupta@nxp.com>
- <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
- <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
- <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
- <Y0UxY51KQoKCq59o@gondor.apana.org.au>
- <Y0XLqd/+C1sxq2G0@zx2c4.com>
- <Y0aDiLp7BztzwNez@gondor.apana.org.au>
- <Y0m2TU5k78I1AR+p@ziepe.ca>
- <Y1DN3SqEyFZd9i37@sol.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1DN3SqEyFZd9i37@sol.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 20 Oct 2022 15:52:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE6C1FAE6D;
+        Thu, 20 Oct 2022 12:52:00 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29KJlcts007371;
+        Thu, 20 Oct 2022 19:51:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=OLIu2NSMK/vk5UMVeqN8Ey0SJMx222pTWlN8hTualag=;
+ b=HcNDZjr9cy2+fh6wbdLzarWrshIWexK6Fdg0vP2jrZk1SEjm7rppVIHwMHPE7hKEwBSB
+ AL/L4HmjXed6mj97I8pb2/+7NQuOsdL9oSvsuX5s6RHJnlWqlQZPsGlcyjUaKpCUVTCi
+ FM/ikYhLe3WyvAxyeL3dYFMh93jFdlOyge9kyQN4sAZxJZzLjb3xS2PfiPhMizySBb2V
+ nYcOkMZ0Itj3zq3c2xCSmiBBHkvq9HFcc2qbe8jtKVbdNzJhsKNqRVt+SQW09CBJl5SG
+ M+hg9nzD9ic0/TORnzcHCwzWJTJLMZkSz+YHcsaiyQOVfCvsfN4XmRqSo8yNg6mB9ZiJ rA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kbct4g3qc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 19:51:43 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29KJpggv029619;
+        Thu, 20 Oct 2022 19:51:42 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kbct4g3pr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 19:51:42 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29KJcCF9021442;
+        Thu, 20 Oct 2022 19:51:41 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma05wdc.us.ibm.com with ESMTP id 3k7mgaa750-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 19:51:41 +0000
+Received: from smtpav05.dal12v.mail.ibm.com ([9.208.128.132])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29KJphek49349056
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Oct 2022 19:51:43 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D21D358052;
+        Thu, 20 Oct 2022 19:51:39 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 72BB65804C;
+        Thu, 20 Oct 2022 19:51:38 +0000 (GMT)
+Received: from sig-9-65-203-47.ibm.com (unknown [9.65.203.47])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Oct 2022 19:51:38 +0000 (GMT)
+Message-ID: <5edef60c775117758ecc146f1e8b96ef1c48e3da.camel@linux.ibm.com>
+Subject: Re: [PATCH] evm: Correct inode_init_security hooks behaviors
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>,
+        linux-integrity@vger.kernel.org
+Cc:     philippe.trebuchet@ssi.gouv.fr, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        casey@schaufler-ca.com, davem@davemloft.net, lucien.xin@gmail.com,
+        vgoyal@redhat.com, omosnace@redhat.com, mortonm@chromium.org,
+        nicolas.bouchinet@ssi.gouv.fr, mic@digikod.net,
+        cgzones@googlemail.com, linux-security-module@vger.kernel.org,
+        brauner@kernel.org, keescook@chromium.org
+Date:   Thu, 20 Oct 2022 15:51:38 -0400
+In-Reply-To: <Y1FTSIo+1x+4X0LS@archlinux>
+References: <Y1FTSIo+1x+4X0LS@archlinux>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XvsbPHNgzMzsIzyolVM1K1ZtCs_sY_Mc
+X-Proofpoint-ORIG-GUID: BtqlKIjye2StOvuwh5MNOmNqYlqehmSo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-20_10,2022-10-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
+ mlxlogscore=999 spamscore=0 malwarescore=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210200118
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 09:26:05PM -0700, Eric Biggers wrote:
-
-> Are you referring to the support for hardware-wrapped inline crypto keys?  It
-> isn't upstream yet, but my latest patchset is at
-> https://lore.kernel.org/linux-fscrypt/20220927014718.125308-2-ebiggers@kernel.org/T/#u.
-> There's also a version of it used by some Android devices already.  Out of
-> curiosity, are you using it in an Android device, or have you adopted it in some
-> other downstream?
-
-Unrelated to Android, similar functionality, but slightly different
-ultimate purpose. We are going to be sending a fscrypt patch series
-for mlx5 and nvme soonish.
-
-> > Yes, it would be nice to see a comprehensive understand on how HW
-> > resident keys can be modeled in the keyring.
+On Thu, 2022-10-20 at 15:55 +0200, Nicolas Bouchinet wrote:
+> From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
 > 
-> Note that the keyrings subsystem is not as useful as it might seem.  It sounds
-> like something you want (you have keys, and there is a subsystem called
-> "keyrings", so it should be used, right?), but often it isn't.  fscrypt has
-> mostly moved away from using it, as it caused lots of problems.  I would caution
-> against assuming that it needs to be part of any solution.
+> Fixes a NULL pointer dereference occuring in the
+> `evm_protected_xattr_common` function of the EVM LSM. The bug is
+> triggered if a `inode_init_security` hook returns 0 without initializing
+> the given `struct xattr` fields (which is the case of BPF) and if no
+> other LSM overrides thoses fields after. This also leads to memory
+> leaks.
+> 
+> Adds a `call_int_hook_xattr` macro that fetches and feed the
+> `new_xattrs` array with every called hook xattr values.
+> 
+> Adds a `evm_init_hmacs` function which init the EVM hmac using every
+> entry of the array contrary to `evm_init_hmac`.
+  
+Only EVM portable digital signatures include all of the protected
+xattrs.   Refer to commit 8c7a703ec978 ("evm: Verify portable
+signatures against all protected xattrs").
 
-That sounds disappointing that we are now having parallel ways for the
-admin to manipulate kernel owned keys.
+> 
+> Fixes the `evm_inode_init_security` function to use `evm_init_hmacs`.
 
-Jason
+Won't this break existing EVM hmac usage?
+
+-- 
+thanks,
+
+Mimi
+
