@@ -2,131 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B271860798C
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Oct 2022 16:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF65607A1C
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Oct 2022 17:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJUO0k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 21 Oct 2022 10:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
+        id S230070AbiJUPJQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 21 Oct 2022 11:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiJUO0j (ORCPT
+        with ESMTP id S229785AbiJUPJP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 21 Oct 2022 10:26:39 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C24E27020B
-        for <linux-integrity@vger.kernel.org>; Fri, 21 Oct 2022 07:26:31 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id c23so1704776qtw.8
-        for <linux-integrity@vger.kernel.org>; Fri, 21 Oct 2022 07:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WkpZpN+5guunfMfs9Ho23gqkDVOq+GpOA2uDceX8XJM=;
-        b=kdIMtnd2zjOJAGzob9/rapKewAxnVg8iSmmrt+qn/Np9Wf/YKILlv1t2EtfAKxmzhE
-         azrR6pvDwyaZzqbp1njtDGjltCxWo7hCUS/Glb19MRwg/+QUbriLb5/ZglZfojD5TfZK
-         YRWqp9oHTT+fTa6NV0IYIJ23X5zDqcmh+1TPVLcwLC+GEodNoyunratirlrmjmF/r4ep
-         lys13Hrf5y9+zcMFI7KWvkwsThNynErtlGbRKm2z4gDKgiCMrkehbHIDKbxDayEyepEp
-         6BMxC4GHjQvPZfaJFt4E8EXTVtrlHe24UQDmEtW8S/Bt92SBUEu/2RyyaO0T1eJGhRBa
-         O03w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WkpZpN+5guunfMfs9Ho23gqkDVOq+GpOA2uDceX8XJM=;
-        b=QcX9sahlbS3N+cedbwSQ6xzwEVEFfH6Iz+IBtvMvaslbOh3kkEOp5TXPHgmDnUiA64
-         GlEGbiC7PdjF+Ao4Y2LeXKAaqYLr1vD/9KB8/l8gVbXkergHUMYMe8IWTI+D4jxsWdDB
-         rNHx9adt2YvFeT7hQTezSvuHrEb0+DWuMtjiv4+IwdUnxIAC8od3yk5XNg+Tcwe8LSXj
-         o+3OMTVX/hSY7HnTQ1j8jXWjZ4L9fUhivpixe6nkcq64COpo7CmD0oSevanDfX+tHJjN
-         7QF2i1RqjB4xZlDu+jkOdD885rBo+p7lO3L1iCNxybwqqpsmEKXmgFspYK0WEWWrU0en
-         HVJQ==
-X-Gm-Message-State: ACrzQf3r7ohTa8DIgBUFefwFN8m2nUHO0srnckk6Ozr96yJxrJVP2TS1
-        LUav7XGqnHe59g6J4+GEHmoegQ==
-X-Google-Smtp-Source: AMsMyM4GLlwzSgiDn6oSWU0avcVSlT+5sn8qfe0sZ7q5b9zsxdTcwacLLDAbhOJTFyY0gNuOgzY3wA==
-X-Received: by 2002:a05:622a:1389:b0:39c:c847:f384 with SMTP id o9-20020a05622a138900b0039cc847f384mr17105694qtk.301.1666362390416;
-        Fri, 21 Oct 2022 07:26:30 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id bn4-20020a05622a1dc400b0039ccbf75f92sm7994103qtb.11.2022.10.21.07.26.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 07:26:29 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1olsyi-00BKqE-N8;
-        Fri, 21 Oct 2022 11:26:28 -0300
-Date:   Fri, 21 Oct 2022 11:26:28 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org,
-        linux-integrity@vger.kernel.org, keescook@chromium.org,
-        samitolvanen@google.com
-Subject: Re: [PATCH] tpm: Avoid function type cast of put_device()
-Message-ID: <Y1KsFLr/8zjjT0DW@ziepe.ca>
-References: <20221021123309.2770740-1-ardb@kernel.org>
+        Fri, 21 Oct 2022 11:09:15 -0400
+Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C330526103
+        for <linux-integrity@vger.kernel.org>; Fri, 21 Oct 2022 08:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666364952; bh=5nPK+V+RCvjFoZEW5zbjeDnfOYHm+iEgYVpG3f56v4k=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=SMbHPnFflf4+sPhHobkWfp1M/Erd5ttFva+1DKZpSb+MyVOHQvpXA1gX7wVpK398jcOpCJG3F3/qQit8yTMlGGEV2PcK1iWrqwt5U3Q9n5sRJoUWm7QSUt6l2o1jszRLyEB3iUIJJvrC3uMOuNl/3dZi5RfuVCVUpyKcGr+d+R8/BZedqMdeIE9MUoExNIEOwpaiavXDAzE5eKdR2hYRWw6fXdVHYMu1RCIwOBtyCbgQNH++NMlz2S9UUoXq5dqzbPbGnvuRe0gZIrD9AYjEfrtnD8KWX+MnwftJGkO5KGdAuXxg0n2MdhQMCbg7/aAAbwyxMZfS9s5mNT7qRSanaw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666364953; bh=/uK1CRViwXvgmXLllzd4T/LIsx1kcEn2CHHOFM/TEQt=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Gy33Y65mHtxokFOrpKsiqgTnkd3A4KjliyCg/+TaBmjv09eiPKieWCRPOES7a+sMXOXRNSxdnoP3fi3RTBGq7vvyW+gyvkqk0WRIUkSW0/OnbitgMu2bBUINo4Kl1EnVtXV3qcYJ+8GShsJNMLlffLZ3RYFJHD3kZPksT0+aVm4ADQ3vwqWqa5k/GCZ58cxm6TtfWMpjCMQjyfDon+FOTS7wCV7V7ZE5OJWM+5PQmN0ks8GNBGrwIdq4KScvieWVPu6wcK+BMZUSRHT7proohMl9pKy2qsxojxG4DD2ESpl2mkjtQ0Gl5P7iKH2H/9pXkoHy8VchSHxvvjV9O6oa2Q==
+X-YMail-OSG: eP2yAv4VM1n5IRgcq.gtnmxNtyia9zays1l_qNuu5M72xhg2a6NG4nvrFkEvK7Q
+ zfFvoJlA34u5r.jFWPK4jvEYw3DMLUzC3VyFi2375QYKS1nizfDxr2Qvxu1whqb_OCH2uXGSWOke
+ 0TwwQRAx18ZTyHYCAFLYksVsByjrTKqH0of9qYhtpxrrVvVqhvtVr7wub_EngSuWK9zdhi9pBdHx
+ rhnRfuMr8oXW5xMHysF3CGmqQoD0YJrhW_.uqN2C.h44rVzRypnwvVfc9VecAM32gV5eg_hfqKb1
+ mzraOSh3_sKysHIEiL2_yQG90Bm4CEcJaqcKus4NvuU4Rs2SjvHp3o61DaVIqIjFSqNDgF54c5rU
+ RhSngecyh6tXKynVV3iC5CD2Gg3Qsbkej9ef3AW14uH2v_92rxJ2iM1GZIHJvI9bOsGrO6SzTTsI
+ kK4kYp0kpdOPLA4MsM0rIz.ZF3kl7PvWofny3eEeRB8aC2shH_kTQRLZVwGxE6e_.o8RDVy8fVH6
+ vpi7Df.L7vabX3c_uIeJf3FyYtLw_ztnRw71s2kXwS0V8_SLRxkQCanaKvSATwqRiSZAnlHpSyLo
+ WpGOaHSS4BV7e12YnFAXybejZzrlXxnDC.QYzaPe7F2oIvAq1NqABHrcaT8_UugQXXK54dZn7atN
+ 9ynUq9UvjcYLufvhVPPN5UYGKy7UqwrFJ_c4N7QPB9ZmDWUd8oPqDypFMy3qG2f57q3JdU2GtGOk
+ gYtM1G8vjZP7bWrUOb2a2XAHs..g2YYuXrLA1IPPd5gJ6RCwsD.HxEhU7l3m9QYfPvYockdeTMAu
+ ZR9Q0DevBmrKMlPuv1.LwnYfVUQUrgJwPKmltGGOlkYnM5LmVyuzbbzC3N74gojKT2RcDxsF4q7Z
+ N878anZNwV893mBJQhs2rkUQXg14pnX_bCvNVH5K8Ykd4ep.bkmU9sa6HU3NVsItJNakC3DbLSjt
+ fVwdK1bP1YkhmB8vCt6EvN8hACU9IGEtRsO51FW6FxN9Tm..rKxsMFUP1KcZuvZPj0dEXuOrkvug
+ Gpfe6lIeJYQBY5.z4C7oMk2LP5YSr72YwT2MoRglqWYlVx0PiOrpyVUTDz1rDKbOZkhtjikMN31e
+ tHda9ddIZf9BzQM7WKxfR2JVYZMwxhHVNVhRcsr3QhbXFdT0O0ruc2HT3mygIqjoH_fo2efUMo5C
+ vlO_6qG_HfpLaU4Bt6CSWXlb6yBJghsvyPlSt9kSzOdtIW8.yREmg69CX9BSWF_EZGST5DanJ_tv
+ hdSq0WNDQvY9.WuE96IuVmNMprXBTw6rkfZ3Xobf0BSEmYGB47RPvanYvhjhwvSCKfV55LxzhIA8
+ EHKbWPXlsaOIjit5Kct9vpHlSk8Ux4BocsZV9PJRkFTXqgRqstHXIVDZM6tPLy4s9vPnazKlavz1
+ Emd9XUirlMzKNSGhipgnhaqO9uNa2Ltuwz.ee4zExp_iPj6auaM7lrKmcJheXnGr2hzG8OGyOrd0
+ IPIv0pArK0MwV154wvdEIjYup3.Nh7xV6.CS7bwC8WHo7eK3ow1XhcG7bx.oLNTcuLqs7W8zMGW7
+ E1CWuwLOcZX_8ypQEHqYcb3tvrfv_WTQEqSNl2EFOf1A6sRFN7i7svekCgDzmVor7Whn4PoLRsJv
+ TqiVBqE701n9AZ1uO8m5vg_HoF6L8Nc7kBhUZB3GY58Ao8p824YZtw_QZdDAS5cu5FDsDePJZeWd
+ T4i_4ixXzbYrEAaZEBpBvn7wKLthqS7TbpjMOus62ygLLYE2DjQ8mZ3RMnduTND4.YmA5RfrxQyG
+ Bj3MNwU7wWUxb8iMqvBhEHy_QryvnuBZz4GpFn1niYzW.voTQ8qZ.trvE6gMPmsfvsEHhmFgz353
+ U7eqUHBET9cjfc3YzcJBgSrOuMHVu0h5yaNRA6A3WcToykmmt9EaZ8PLoyOIq.XiUqrYsPHktnlg
+ cStTltoKM7ghkvrm_OOjVSJB7HOsbhokBL9gZCDERStTDsWdbS7XdMBZX6EZrFGVhbXoxWtizIBJ
+ eyGwiODk.2SVLLNzMiQlOY17vbs5XARtgO.OTjRiwIMPS6knenCGMvWqVGWT9MNX11Dw6HFakXN0
+ nGbTDkNCZbn0N5cryGtogSr6PWUtaLAUIXlgmsOJGcm5rzz73_AEl2UahYlqEk8J_MIc97L9axsE
+ 7AhavvfwLHQwgAyHLZ3CjfEXg7UTGY5Y_V7RbXJ4AUNGpWplCUsuAfhE4RBkEpzJ7Xiaq.pbqtbJ
+ V6IG8s2XK82cyh_soGsltabI1tpENg77fdxs8FteOg3V1CkJ4bnFuFTeEfwpRxHr3bB02THmtI.h
+ OihNrVId24Z9X7g--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Fri, 21 Oct 2022 15:09:12 +0000
+Received: by hermes--production-gq1-754cb59848-jk2dx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 7839a2d21e18f0740fb3ec907ad162ce;
+          Fri, 21 Oct 2022 15:09:08 +0000 (UTC)
+Message-ID: <643437be-761b-a281-293b-6844a6d6196c@schaufler-ca.com>
+Date:   Fri, 21 Oct 2022 08:09:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021123309.2770740-1-ardb@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 2/9] security: Move trivial IMA hooks into LSM
+Content-Language: en-US
+To:     "Dr. Greg" <greg@enjellic.com>, Kees Cook <keescook@chromium.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Micka?l Sala?n <mic@digikod.net>, Petr Vorel <pvorel@suse.cz>,
+        Borislav Petkov <bp@suse.de>, Takashi Iwai <tiwai@suse.de>,
+        Jonathan McDowell <noodles@fb.com>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        casey@schaufler-ca.com
+References: <20221013222702.never.990-kees@kernel.org>
+ <20221013223654.659758-2-keescook@chromium.org>
+ <16e008b3709f3c85dbad1accb9fce8ddad552205.camel@linux.ibm.com>
+ <202210191134.FC646AFC71@keescook> <20221021145348.GA15390@wind.enjellic.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20221021145348.GA15390@wind.enjellic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20754 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 02:33:09PM +0200, Ard Biesheuvel wrote:
-> The TPM code registers put_device() as a devm cleanup handler, and casts
-> the reference to the right function pointer type for this to be
-> permitted by the compiler.
-> 
-> However, under kCFI, this is rejected at runtime, resulting in a splat
-> like
-> 
->    CFI failure at devm_action_release+0x24/0x3c (target: put_device+0x0/0x24; expected type: 0xa488ebfc)
->    Internal error: Oops - CFI: 0000000000000000 [#1] PREEMPT SMP
->    Modules linked in:  ...
->    CPU: 20 PID: 454 Comm: systemd-udevd Not tainted 6.1.0-rc1+ #51
->    Hardware name: Socionext SynQuacer E-series DeveloperBox, BIOS build #1 Oct  3 2022
->    pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->    pc : devm_action_release+0x24/0x3c
->    lr : devres_release_all+0xb4/0x114
->    sp : ffff800009bb3630
->    x29: ffff800009bb3630 x28: 0000000000000000 x27: 0000000000000011
->    x26: ffffaa6f9922c0c8 x25: 0000000000000002 x24: 000000000000000f
->    x23: ffff800009bb3648 x22: ffff7aefc3be2100 x21: ffff7aefc3be2e00
->    x20: 0000000000000005 x19: ffff7aefc1e1ec10 x18: ffff800009af70a8
->    x17: 00000000a488ebfc x16: 0000000094ee7df3 x15: 0000000000000000
->    x14: 4075c5c2ef7affff x13: e46a91c5c5e2ef42 x12: ffff7aefc2c57540
->    x11: 0000000000000001 x10: 0000000000000001 x9 : 0000000100000000
->    x8 : ffffaa6fa09b39b4 x7 : 7f7f7f7f7f7f7f7f x6 : 8000000000000000
->    x5 : 000000008020000e x4 : ffff7aefc2c57500 x3 : ffff800009bb3648
->    x2 : ffff800009bb3648 x1 : ffff7aefc3be2e80 x0 : ffff7aefc3bb7000
->    Call trace:
->     devm_action_release+0x24/0x3c
->     devres_release_all+0xb4/0x114
->     really_probe+0xb0/0x49c
->     __driver_probe_device+0x114/0x180
->     driver_probe_device+0x48/0x1ec
->     __driver_attach+0x118/0x284
->     bus_for_each_dev+0x94/0xe4
->     driver_attach+0x24/0x34
->     bus_add_driver+0x10c/0x220
->     driver_register+0x78/0x118
->     __platform_driver_register+0x24/0x34
->     init_module+0x20/0xfe4 [tpm_tis_synquacer]
->     do_one_initcall+0xd4/0x248
->     do_init_module+0x44/0x28c
->     load_module+0x16b4/0x1920
-> 
-> Fix this by going through a helper function of the correct type.
-> 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  drivers/char/tpm/tpm-chip.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+On 10/21/2022 7:53 AM, Dr. Greg wrote:
+> On Wed, Oct 19, 2022 at 11:59:40AM -0700, Kees Cook wrote:
+>
+> Good morning, I hope the week is ending well for everyone.
+>
+>> On Wed, Oct 19, 2022 at 10:34:48AM -0400, Mimi Zohar wrote:
+>>> The only thing trivial about making IMA and EVM LSMs is moving
+>>> them to LSM hooks.  Although static files may be signed and the
+>>> signatures distributed with the file data through the normal
+>>> distribution mechanisms (e.g. RPM), other files cannot be signed
+>>> remotely (e.g.  configuration files).  For these files, both IMA
+>>> and EVM may be configured to maintain persistent file state stored
+>>> as security xattrs in the form of security.ima file hashes or
+>>> security.evm HMACs.  The LSM flexibility of enabling/disabling IMA
+>>> or EVM on a per boot basis breaks this usage, potentially
+>>> preventing subsequent boots.
+>> I'm not suggesting IMA and EVM don't have specific behaviors that
+>> need to be correctly integrated into the LSM infrastructure. In
+>> fact, I spent a lot of time designing that infrastructure to be
+>> flexible enough to deal with these kinds of things. (e.g. plumbing
+>> "enablement", etc.) As I mentioned, this was more of trying to
+>> provide a head-start on the conversion. I don't intend to drive this
+>> -- please take whatever is useful from this example and use it. :)
+>> I'm happy to help construct any missing infrastructure needed
+>> (e.g. LSM_ORDER_LAST, etc).
+> We are 2-3 weeks out from submitting for review and inclusion in the
+> kernel, a new LSM, and an associated userspace stack, that will have a
+> high degree of significance with respect to these conversations.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Oh, come on, No one likes a teaser trailer. ;)
 
-Jason
+>
+>> Kees Cook
+> Best wishes for a pleasant fall weekend.
+>
+> As always,
+>
+> Dr. Greg
+> The Quixote Project - Flailing at the Travails of Cybersecurity
