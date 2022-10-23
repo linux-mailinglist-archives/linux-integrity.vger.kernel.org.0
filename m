@@ -2,53 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A1D609130
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Oct 2022 06:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D41B460913E
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Oct 2022 07:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiJWEk7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Oct 2022 00:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
+        id S229756AbiJWFTE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Oct 2022 01:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJWEk6 (ORCPT
+        with ESMTP id S229535AbiJWFTD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Oct 2022 00:40:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB70C6B145;
-        Sat, 22 Oct 2022 21:40:54 -0700 (PDT)
+        Sun, 23 Oct 2022 01:19:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBE333851;
+        Sat, 22 Oct 2022 22:19:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1976BB80CD9;
-        Sun, 23 Oct 2022 04:40:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65EF8C433C1;
-        Sun, 23 Oct 2022 04:40:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62E0660B7B;
+        Sun, 23 Oct 2022 05:19:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66952C433D6;
+        Sun, 23 Oct 2022 05:19:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666500051;
-        bh=gPyxyOwPQPkB61qgMrc1kRWRUwmWalIc2y4yWNTdtZ4=;
+        s=k20201202; t=1666502341;
+        bh=4WumegjNIu97dfMp5g8k+iRKHn+y1Xn5e4PPczh9HE0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EU6FehWu7G04TYAKUpYalYneBKLVsDDS/UaEBvYVQziQGZcyyVb4sYdJ+i5GwvOrg
-         b+XeO6+OjrW7vogJuaLrVEXyWcY+U1NKC+qaFEF6bU4mMvw78RcHNA6TzVOjjiX+N2
-         oSjZGebk8e4s5/w7oNeOUuujkZXwsJ8YcpXpG27eeAnpiUE6zbyVGes8ZXsYyOPYRe
-         pDPdGi8W1+/WPrD+FATOn1k22VtWiiK0+CfhCARqk9L6kB1rL6a6kN/FhDhnuEDppy
-         5puCbTTyNLnmFGVPMExoRCawZfINh83REcfVB1I1ncWFwJVgbeX1W3hY8sU7XKaf4T
-         /dsBD48uemmsA==
-Date:   Sun, 23 Oct 2022 07:40:44 +0300
+        b=tWXK2iRxvpgAi6UVSLc87zvEUnVwaPHauGol1AOnBlhpUaQnC6OLep9AoGHceFDDQ
+         2JzPaawQOaz8jhsPAMG3Sxo8CD0RqUjfhDlanrgxiBcE5bNnsXjJu0uMR9CRzBiJs9
+         RU399WSIFR7ubZyzF/9tThjfCRJrKwHdEjUNo+oktH93stqYHHIc40H3NF0Ll31gn9
+         YKyCzFT8xROJkH6ViIlHapOE9YKB7E0H1yyPGSqqPNFVKVaa4xo6UvbBDD0/Klja/y
+         RfXmn3ivFqYt3Cf4KkpOoVYVh+m/lshcoQMZ4ZRaLb/UAPHUMy4fN63G4+KXAS6bHs
+         V1MsOAAPll9qw==
+Date:   Sun, 23 Oct 2022 08:18:55 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jandryuk@gmail.com,
-        pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com, lukas@wunner.de,
-        p.rosenberger@kunbus.com
-Subject: Re: [PATCH v8 08/11] tpm, tpm: Implement usage counter for locality
-Message-ID: <Y1TFzO1CBY8d4rfa@kernel.org>
-References: <20221017235732.10145-1-LinoSanfilippo@gmx.de>
- <20221017235732.10145-9-LinoSanfilippo@gmx.de>
+To:     Nikolaus Voss <nv@vosn.de>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
+        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] KEYS: encrypted: fix key instantiation with
+ user-provided data
+Message-ID: <Y1TOv6F8KNXvNx9l@kernel.org>
+References: <20221013064308.857011E25@mail.steuer-voss.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221017235732.10145-9-LinoSanfilippo@gmx.de>
+In-Reply-To: <20221013064308.857011E25@mail.steuer-voss.de>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,292 +59,90 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 01:57:29AM +0200, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+On Thu, Oct 13, 2022 at 08:39:58AM +0200, Nikolaus Voss wrote:
+> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+> decrypted data") added key instantiation with user provided decrypted data.
+> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+> Fix this to use hex2bin instead.
 > 
-> Implement a usage counter for the (default) locality used by the TPM TIS
-> driver:
-> Request the locality from the TPM if it has not been claimed yet, otherwise
-> only increment the counter. Also release the locality if the counter is 0
-> otherwise only decrement the counter. Ensure thread-safety by protecting
-> the counter with a mutex.
+> Old keys created from user provided decrypted data saved with "keyctl pipe"
+> are still valid, however if the key is recreated from decrypted data the
+> old key must be converted to the correct format. This can be done with a
+> small shell script, e.g.:
 > 
-> This allows to request and release the locality from a thread and the
-> interrupt handler at the same time without the danger to interfere with
-> each other.
+> BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
+> NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
+> keyctl add user masterkey "$(cat masterkey.bin)" @u
+> keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
 > 
-> By doing this refactor the names of the amended functions to use the proper
-> prefix.
+> It is encouraged to switch to a new key because the effective key size
+> of the old keys is only half of the specified size.
 > 
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> Tested-by: Michael Niewöhner <linux@mniewoehner.de>
+> The corresponding test for the Linux Test Project ltp has also been
+> fixed (see link below).
+> 
+> Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
+> Cc: stable <stable@kernel.org>
+> Link: https://lore.kernel.org/ltp/20221006081709.92303897@mail.steuer-voss.de/
+> Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
 > ---
->  drivers/char/tpm/tpm_tis_core.c | 75 ++++++++++++++++++++++-----------
->  drivers/char/tpm/tpm_tis_core.h |  2 +
->  2 files changed, 53 insertions(+), 24 deletions(-)
+> Changes
+> =======
+> v4: - fixed link
+> v3: - use generated random key in example, reformat commit message
+> v2: - clarify commit message, add example to recover old/broken keys
+>     - improve example in Documentation/security/keys/trusted-encrypted.rst
+>     - add link to ltp patch
 > 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 4336f7ea8c2b..79dfab65976f 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -165,16 +165,27 @@ static bool check_locality(struct tpm_chip *chip, int l)
->  	return false;
->  }
+>  Documentation/security/keys/trusted-encrypted.rst | 3 ++-
+>  security/keys/encrypted-keys/encrypted.c          | 6 +++---
+>  2 files changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+> index 0bfb4c339748..9bc9db8ec651 100644
+> --- a/Documentation/security/keys/trusted-encrypted.rst
+> +++ b/Documentation/security/keys/trusted-encrypted.rst
+> @@ -350,7 +350,8 @@ Load an encrypted key "evm" from saved blob::
 >  
-> -static int release_locality(struct tpm_chip *chip, int l)
-> +static int tpm_tis_release_locality_locked(struct tpm_tis_data *priv, int l)
-
-Nit: usually you would actually use "unlocked" here, not locked.
-
-Probably best name would be __tpm_tis_release_locality().
-
-> +{
-> +	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tpm_tis_release_locality(struct tpm_chip *chip, int l)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  Instantiate an encrypted key "evm" using user-provided decrypted data::
 >  
-> -	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
-> +	mutex_lock(&priv->locality_count_mutex);
-> +	priv->locality_count--;
-> +	if (priv->locality_count == 0)
-> +		tpm_tis_release_locality_locked(priv, l);
-> +	mutex_unlock(&priv->locality_count_mutex);
+> -    $ keyctl add encrypted evm "new default user:kmk 32 `cat evm_decrypted_data.blob`" @u
+> +    $ evmkey=$(dd if=/dev/urandom bs=1 count=32 | xxd -c32 -p)
+> +    $ keyctl add encrypted evm "new default user:kmk 32 $evmkey" @u
+>      794890253
 >  
->  	return 0;
->  }
-
-Since the function pointer has the word "relinquish" and not "release",
-perhaps these should also use that word for consistency.
-
->  
-> -static int request_locality(struct tpm_chip *chip, int l)
-> +static int tpm_tis_request_locality_locked(struct tpm_chip *chip, int l)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  	unsigned long stop, timeout;
-> @@ -215,6 +226,20 @@ static int request_locality(struct tpm_chip *chip, int l)
->  	return -1;
->  }
->  
-> +static int tpm_tis_request_locality(struct tpm_chip *chip, int l)
-> +{
-> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> +	int ret = 0;
-> +
-> +	mutex_lock(&priv->locality_count_mutex);
-> +	if (priv->locality_count == 0)
-> +		ret = tpm_tis_request_locality_locked(chip, l);
-> +	if (!ret)
-> +		priv->locality_count++;
-> +	mutex_unlock(&priv->locality_count_mutex);
-> +	return ret;
-> +}
-> +
->  static u8 tpm_tis_status(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> @@ -682,7 +707,7 @@ static int probe_itpm(struct tpm_chip *chip)
->  	if (vendor != TPM_VID_INTEL)
->  		return 0;
->  
-> -	if (request_locality(chip, 0) != 0)
-> +	if (tpm_tis_request_locality(chip, 0) != 0)
->  		return -EBUSY;
->  
->  	rc = tpm_tis_send_data(chip, cmd_getticks, len);
-> @@ -703,7 +728,7 @@ static int probe_itpm(struct tpm_chip *chip)
->  
->  out:
->  	tpm_tis_ready(chip);
-> -	release_locality(chip, priv->locality);
-> +	tpm_tis_release_locality(chip, priv->locality);
->  
->  	return rc;
->  }
-> @@ -762,7 +787,7 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
->  	cap_t cap;
->  	int ret;
->  
-> -	ret = request_locality(chip, 0);
-> +	ret = tpm_tis_request_locality(chip, 0);
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -771,7 +796,7 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
->  	else
->  		ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc, 0);
->  
-> -	release_locality(chip, 0);
-> +	tpm_tis_release_locality(chip, 0);
->  
->  	return ret;
->  }
-> @@ -796,33 +821,33 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  	}
->  	priv->irq = irq;
->  
-> -	rc = request_locality(chip, 0);
-> +	rc = tpm_tis_request_locality(chip, 0);
->  	if (rc < 0)
->  		return rc;
->  
->  	rc = tpm_tis_read8(priv, TPM_INT_VECTOR(priv->locality),
->  			   &original_int_vec);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
->  	rc = tpm_tis_write8(priv, TPM_INT_VECTOR(priv->locality), irq);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
->  	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &int_status);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
->  	/* Clear all existing */
->  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), int_status);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
-> @@ -830,11 +855,11 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  	rc = tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality),
->  			     intmask | TPM_GLOBAL_INT_ENABLE);
->  	if (rc < 0) {
-> -		release_locality(chip, priv->locality);
-> +		tpm_tis_release_locality(chip, priv->locality);
->  		return rc;
->  	}
->  
-> -	release_locality(chip, priv->locality);
-> +	tpm_tis_release_locality(chip, priv->locality);
->  	clear_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->  
->  	/* Generate an interrupt by having the core call through to
-> @@ -970,8 +995,8 @@ static const struct tpm_class_ops tpm_tis = {
->  	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
->  	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
->  	.req_canceled = tpm_tis_req_canceled,
-> -	.request_locality = request_locality,
-> -	.relinquish_locality = release_locality,
-> +	.request_locality = tpm_tis_request_locality,
-> +	.relinquish_locality = tpm_tis_release_locality,
->  	.clk_enable = tpm_tis_clkrun_enable,
->  };
->  
-> @@ -1005,6 +1030,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
->  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
->  	priv->phy_ops = phy_ops;
-> +	priv->locality_count = 0;
-> +	mutex_init(&priv->locality_count_mutex);
->  
->  	dev_set_drvdata(&chip->dev, priv);
->  
-> @@ -1083,14 +1110,14 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  
->  	intmask &= ~TPM_GLOBAL_INT_ENABLE;
->  
-> -	rc = request_locality(chip, 0);
-> +	rc = tpm_tis_request_locality(chip, 0);
->  	if (rc < 0) {
->  		rc = -ENODEV;
->  		goto out_err;
->  	}
->  
->  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> -	release_locality(chip, 0);
-> +	tpm_tis_release_locality(chip, 0);
->  
->  	rc = tpm_chip_start(chip);
->  	if (rc)
-> @@ -1124,13 +1151,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  		 * proper timeouts for the driver.
->  		 */
->  
-> -		rc = request_locality(chip, 0);
-> +		rc = tpm_tis_request_locality(chip, 0);
->  		if (rc < 0)
->  			goto out_err;
->  
->  		rc = tpm_get_timeouts(chip);
->  
-> -		release_locality(chip, 0);
-> +		tpm_tis_release_locality(chip, 0);
->  
->  		if (rc) {
->  			dev_err(dev, "Could not get TPM timeouts and durations\n");
-> @@ -1150,11 +1177,11 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  			dev_err(&chip->dev, FW_BUG
->  					"TPM interrupt not working, polling instead\n");
->  
-> -			rc = request_locality(chip, 0);
-> +			rc = tpm_tis_request_locality(chip, 0);
->  			if (rc < 0)
->  				goto out_err;
->  			disable_interrupts(chip);
-> -			release_locality(chip, 0);
-> +			tpm_tis_release_locality(chip, 0);
+>      $ keyctl print 794890253
+> diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
+> index e05cfc2e49ae..1e313982af02 100644
+> --- a/security/keys/encrypted-keys/encrypted.c
+> +++ b/security/keys/encrypted-keys/encrypted.c
+> @@ -627,7 +627,7 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
+>  			pr_err("encrypted key: instantiation of keys using provided decrypted data is disabled since CONFIG_USER_DECRYPTED_DATA is set to false\n");
+>  			return ERR_PTR(-EINVAL);
 >  		}
->  	}
->  
-> @@ -1221,13 +1248,13 @@ int tpm_tis_resume(struct device *dev)
->  	 * an error code but for unknown reason it isn't handled.
->  	 */
->  	if (!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
-> -		ret = request_locality(chip, 0);
-> +		ret = tpm_tis_request_locality(chip, 0);
->  		if (ret < 0)
->  			return ret;
->  
->  		tpm1_do_selftest(chip);
->  
-> -		release_locality(chip, 0);
-> +		tpm_tis_release_locality(chip, 0);
->  	}
->  
->  	return 0;
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> index 2deef11c88db..13bdcf38e56f 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -91,6 +91,8 @@ enum tpm_tis_flags {
->  
->  struct tpm_tis_data {
->  	u16 manufacturer_id;
-> +	struct mutex locality_count_mutex;
-
-BTW, why mutex and not spinlock?
-
-Hmm.. also I think you might have given feedback already on this
-but could the lock cover the whole struct instead of a counter?
-I tried to dig lore for earlier response but could not find. I'm
-sorry if I'm asking the same question again.
-
-You could probably use rcu for that.
-
-> +	unsigned int locality_count;
->  	int locality;
->  	int irq;
->  	unsigned int int_mask;
+> -		if (strlen(decrypted_data) != decrypted_datalen) {
+> +		if (strlen(decrypted_data) != decrypted_datalen * 2) {
+>  			pr_err("encrypted key: decrypted data provided does not match decrypted data length provided\n");
+>  			return ERR_PTR(-EINVAL);
+>  		}
+> @@ -791,8 +791,8 @@ static int encrypted_init(struct encrypted_key_payload *epayload,
+>  		ret = encrypted_key_decrypt(epayload, format, hex_encoded_iv);
+>  	} else if (decrypted_data) {
+>  		get_random_bytes(epayload->iv, ivsize);
+> -		memcpy(epayload->decrypted_data, decrypted_data,
+> -				   epayload->decrypted_datalen);
+> +		ret = hex2bin(epayload->decrypted_data, decrypted_data,
+> +			      epayload->decrypted_datalen);
+>  	} else {
+>  		get_random_bytes(epayload->iv, ivsize);
+>  		get_random_bytes(epayload->decrypted_data, epayload->decrypted_datalen);
 > -- 
-> 2.36.1
->
+> 2.34.1
+> 
+
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+Unless there is opposing views, I can pick this.
 
 BR, Jarkko
