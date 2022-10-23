@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9230660912B
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Oct 2022 06:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC18760912D
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Oct 2022 06:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJWEdq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Oct 2022 00:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
+        id S229935AbiJWEeP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Oct 2022 00:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiJWEdp (ORCPT
+        with ESMTP id S229588AbiJWEeO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Oct 2022 00:33:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1893D785A9;
-        Sat, 22 Oct 2022 21:33:42 -0700 (PDT)
+        Sun, 23 Oct 2022 00:34:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C6C785AF;
+        Sat, 22 Oct 2022 21:34:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B38B60023;
-        Sun, 23 Oct 2022 04:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86281C433C1;
-        Sun, 23 Oct 2022 04:33:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1471860B7C;
+        Sun, 23 Oct 2022 04:34:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F137C433D6;
+        Sun, 23 Oct 2022 04:34:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666499621;
-        bh=yVmCehrys/VM8FyWaDMdaRcKpIpUE20oqYBea8J+z/E=;
+        s=k20201202; t=1666499652;
+        bh=Q3s1OLxzArfWy9GccENd4cbB843/Dd9hjqQDGmE9cK4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d0Tt76XCalm79uabTsTv4PwMli3Mwt2SZVrRiPJcNw1qFE23D9b1JeysMhXFOAUQP
-         duem4KAClU6sPc18It4SDJNCmgPdALVtg/dbmZ7u/0RH/HBcMF5oQlxqKELAOfgkN4
-         RXGN2z6kyGrMO81I9UesLh2it4SiTuRKY2okX7KWYPhma6y5Jq51hld24hx+sy6l2W
-         yxOs8cssxb9o/TsiIfoQ5cCbwLt6Gb6olFRppW+tI6zxdLtsDHy+QJ0mH7hJ4d+6Ss
-         iuCZG6oRp7xynMFvLLX9TBO8tdvn5lnNE3/UpDxgzUgsxV3dCDjw6IoHYbKYnJcwpn
-         rhdcPvte55ULA==
-Date:   Sun, 23 Oct 2022 07:33:35 +0300
+        b=LFNlvXHVcv/Y9xiXrSffphyuPHkvt/EnAGRiP+tpr/S3X06jdOoEM3LOdPPyF4qHO
+         3K78/r1FThzCAreKEn9w22rV3C6Bvsx6Cq9AYWrN95xjbtxPQB3amuCVI+evj7zhCZ
+         s7OcVcQnyHSq5TBS48QEI9KAgGlxunIdw9e5CW69gi8KU/RkSJ2ongX6PM+TeaOU8w
+         +Um7RaJr9eNa3HQZN8Cf+SYH8mMNmkSBWyQufSavX9S+8hIDARytxbtF1Tm8iZUCzq
+         Mt2DCBJtOwOJEMBzSOyRxJGBKnMJDlJGOgbSO0MqP8HLaw0FBna/7Wuuy3jzDjrn0L
+         xlNPTAOVFBEkg==
+Date:   Sun, 23 Oct 2022 07:34:05 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
 Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
@@ -41,7 +41,7 @@ Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
         pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com, lukas@wunner.de,
         p.rosenberger@kunbus.com
 Subject: Re: [PATCH v8 11/11] tpm, tpm_tis: Enable interrupt test
-Message-ID: <Y1TEHy74MN4a+VfO@kernel.org>
+Message-ID: <Y1TEPW02O7AyX8ty@kernel.org>
 References: <20221017235732.10145-1-LinoSanfilippo@gmx.de>
  <20221017235732.10145-12-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
@@ -98,6 +98,7 @@ On Tue, Oct 18, 2022 at 01:57:32AM +0200, Lino Sanfilippo wrote:
 > -- 
 > 2.36.1
 > 
+
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
