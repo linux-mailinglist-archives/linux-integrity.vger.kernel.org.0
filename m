@@ -2,55 +2,48 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4188B60967B
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Oct 2022 23:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B69609683
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Oct 2022 23:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiJWVYd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Oct 2022 17:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
+        id S229816AbiJWV1c (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Oct 2022 17:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiJWVYb (ORCPT
+        with ESMTP id S229596AbiJWV11 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Oct 2022 17:24:31 -0400
+        Sun, 23 Oct 2022 17:27:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035CBBC86;
-        Sun, 23 Oct 2022 14:24:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6008266F2D
+        for <linux-integrity@vger.kernel.org>; Sun, 23 Oct 2022 14:27:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E66E9B80D5F;
-        Sun, 23 Oct 2022 21:24:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C1FC433D6;
-        Sun, 23 Oct 2022 21:24:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13FF1B80DCE
+        for <linux-integrity@vger.kernel.org>; Sun, 23 Oct 2022 21:27:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D2FC433B5;
+        Sun, 23 Oct 2022 21:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666560267;
-        bh=+Xtjv/IQXjonunfO3JI+ovsB9FIdpoITMCdSerdKZ1s=;
+        s=k20201202; t=1666560443;
+        bh=4V0hOIBLog/JEv5WsOgqIaQjdSUS3u1YzkMdoP0dYS8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TBBXPTY9EtN+feVt2EiR2ce1LQONd3cdEs9WWnrtIJVO9y+GeQHFJiMG3bc2CwJfq
-         39QysLuPybbfTITCBdC+ErS7AwJBHBZCBCS4F2vMfufIRa7Bpgu/lk9Cu8UR0ChVd3
-         GLBvnJtIUamNuKRcHPAcDHseezVYWei16RLS/OV/+ptL9vvCBFJbjowKugaUxL5z03
-         RraQlRkcKSdkhLgpqeNss6Uk0DEWk4EPYopTafS9+dn2zpk6Fy/OIfmmTwyVEG1IUz
-         DA1AtToBb4KoLjUqvmcXXpFdqnddexc49h/o3TNdDdfzSIGGNA/AmK7KiOQMFYinbV
-         zVmWgttIGiCKg==
-Date:   Mon, 24 Oct 2022 00:24:20 +0300
+        b=WEe04/adwm2P1EZ+/q0QFRxkGgGek+GaHHIANvqK4TzTQp+tE5BK0RDYHN0daWeDC
+         Ecx2IRNbkXtYbGHBZSeAhu9AWQGwTOkUoK0W4JER03tJRI6VbsN1mHbhcHbVcSmONn
+         aXLhr9unEskSQ2OY6LihOnEHMoP3Smzaj0+idphRp1GRVbksUZb+cfB3itpy4nzQyl
+         pPhilyWSrHBG9TO0v2v410zRsZ+gCvupnpCXzqTt88yITOpjzBTlxAtL07FciLPZTC
+         0oyGFvy1kx3RrUEoFO12/V+aeJWO+/bOw7T/RitqOfLaHw7Y2R+JXJ9oVRpiSBeMe9
+         di4DYsAic5B7g==
+Date:   Mon, 24 Oct 2022 00:27:16 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Nikolaus Voss <nikolaus.voss@haag-streit.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
-        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] KEYS: encrypted: fix key instantiation with
- user-provided data
-Message-ID: <Y1WxBBnaiIP3fnHB@kernel.org>
-References: <20221019164526.B70DF1C59@mail.steuer-voss.de>
- <075b53e67638b4da85da9299b59fe2662a765c92.camel@linux.ibm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     peterhuewe@gmx.de, linux-integrity@vger.kernel.org, jgg@ziepe.ca,
+        keescook@chromium.org, samitolvanen@google.com
+Subject: Re: [PATCH] tpm: Avoid function type cast of put_device()
+Message-ID: <Y1WxtIjnJvX0jAk1@kernel.org>
+References: <20221021123309.2770740-1-ardb@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <075b53e67638b4da85da9299b59fe2662a765c92.camel@linux.ibm.com>
+In-Reply-To: <20221021123309.2770740-1-ardb@kernel.org>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,44 +53,86 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 05:28:23PM -0400, Mimi Zohar wrote:
-> On Wed, 2022-10-19 at 18:38 +0200, Nikolaus Voss wrote:
-> > Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with
-> > user-provided decrypted data") added key instantiation with user
-> > provided decrypted data.  The user data is hex-ascii-encoded but was
-> > just memcpy'ed to the binary buffer. Fix this to use hex2bin instead.
-> > 
-> > Old keys created from user provided decrypted data saved with "keyctl
-> > pipe" are still valid, however if the key is recreated from decrypted
-> > data the old key must be converted to the correct format. This can be
-> > done with a small shell script, e.g.:
-> > 
-> > BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
-> > NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
-> > keyctl add user masterkey "$(cat masterkey.bin)" @u
-> > keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
-> > 
-> > However, NEWKEY is still broken: If for BROKENKEY 32 bytes were
-> > specified, a brute force attacker knowing the key properties would only
-> > need to try at most 2^(16*8) keys, as if the key was only 16 bytes long.
-> > 
-> > The security issue is a result of the combination of limiting the input
-> > range to hex-ascii and using memcpy() instead of hex2bin(). It could
-> > have been fixed either by allowing binary input or using hex2bin() (and
-> > doubling the ascii input key length). This patch implements the latter.
-> > 
-> > The corresponding test for the Linux Test Project ltp has also been
-> > fixed (see link below).
-> > 
-> > Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
-> > Cc: stable@kernel.org
-> > Link: https://lore.kernel.org/ltp/20221006081709.92303897@mail.steuer-voss.de/
-> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
+On Fri, Oct 21, 2022 at 02:33:09PM +0200, Ard Biesheuvel wrote:
+> The TPM code registers put_device() as a devm cleanup handler, and casts
+> the reference to the right function pointer type for this to be
+> permitted by the compiler.
 > 
-> Thanks!  This patch is now queued in next-integrity/next-integrity-
-> testing.
+> However, under kCFI, this is rejected at runtime, resulting in a splat
+> like
+> 
+>    CFI failure at devm_action_release+0x24/0x3c (target: put_device+0x0/0x24; expected type: 0xa488ebfc)
+>    Internal error: Oops - CFI: 0000000000000000 [#1] PREEMPT SMP
+>    Modules linked in:  ...
+>    CPU: 20 PID: 454 Comm: systemd-udevd Not tainted 6.1.0-rc1+ #51
+>    Hardware name: Socionext SynQuacer E-series DeveloperBox, BIOS build #1 Oct  3 2022
+>    pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>    pc : devm_action_release+0x24/0x3c
+>    lr : devres_release_all+0xb4/0x114
+>    sp : ffff800009bb3630
+>    x29: ffff800009bb3630 x28: 0000000000000000 x27: 0000000000000011
+>    x26: ffffaa6f9922c0c8 x25: 0000000000000002 x24: 000000000000000f
+>    x23: ffff800009bb3648 x22: ffff7aefc3be2100 x21: ffff7aefc3be2e00
+>    x20: 0000000000000005 x19: ffff7aefc1e1ec10 x18: ffff800009af70a8
+>    x17: 00000000a488ebfc x16: 0000000094ee7df3 x15: 0000000000000000
+>    x14: 4075c5c2ef7affff x13: e46a91c5c5e2ef42 x12: ffff7aefc2c57540
+>    x11: 0000000000000001 x10: 0000000000000001 x9 : 0000000100000000
+>    x8 : ffffaa6fa09b39b4 x7 : 7f7f7f7f7f7f7f7f x6 : 8000000000000000
+>    x5 : 000000008020000e x4 : ffff7aefc2c57500 x3 : ffff800009bb3648
+>    x2 : ffff800009bb3648 x1 : ffff7aefc3be2e80 x0 : ffff7aefc3bb7000
+>    Call trace:
+>     devm_action_release+0x24/0x3c
+>     devres_release_all+0xb4/0x114
+>     really_probe+0xb0/0x49c
+>     __driver_probe_device+0x114/0x180
+>     driver_probe_device+0x48/0x1ec
+>     __driver_attach+0x118/0x284
+>     bus_for_each_dev+0x94/0xe4
+>     driver_attach+0x24/0x34
+>     bus_add_driver+0x10c/0x220
+>     driver_register+0x78/0x118
+>     __platform_driver_register+0x24/0x34
+>     init_module+0x20/0xfe4 [tpm_tis_synquacer]
+>     do_one_initcall+0xd4/0x248
+>     do_init_module+0x44/0x28c
+>     load_module+0x16b4/0x1920
+> 
+> Fix this by going through a helper function of the correct type.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 783d65fc71f0..741d8f3e8fb3 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -373,6 +373,11 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+>  }
+>  EXPORT_SYMBOL_GPL(tpm_chip_alloc);
+>  
+> +static void tpm_put_device(void *dev)
+> +{
+> +	put_device(dev);
+> +}
+> +
+>  /**
+>   * tpmm_chip_alloc() - allocate a new struct tpm_chip instance
+>   * @pdev: parent device to which the chip is associated
+> @@ -391,7 +396,7 @@ struct tpm_chip *tpmm_chip_alloc(struct device *pdev,
+>  		return chip;
+>  
+>  	rc = devm_add_action_or_reset(pdev,
+> -				      (void (*)(void *)) put_device,
+> +				      tpm_put_device,
+>  				      &chip->dev);
+>  	if (rc)
+>  		return ERR_PTR(rc);
+> -- 
+> 2.35.1
+> 
 
-Did you check the checkpatch.pl because earlier versions did not pass.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
