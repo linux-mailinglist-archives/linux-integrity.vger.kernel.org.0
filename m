@@ -2,90 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279C360BEAC
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Oct 2022 01:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE7B60BFF5
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Oct 2022 02:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJXXdw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Oct 2022 19:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
+        id S230179AbiJYAoi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Oct 2022 20:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiJXXdW (ORCPT
+        with ESMTP id S231307AbiJYAoM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:33:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04EE2E25FF
-        for <linux-integrity@vger.kernel.org>; Mon, 24 Oct 2022 14:54:10 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OLBPXa032401;
-        Mon, 24 Oct 2022 21:54:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=+1AZn5rL2gnxunXpJxbaqs+ALF861H8JT2o7OB5DhgY=;
- b=iKXWBB8plNwjZIoreuFVrUxCmg4Od3vs2WYEl2CUStmZodw1qBWWQf2Quj5eAVIOrepJ
- WkEbgHn2T8wyEyiClwfSqxsa0U2Ez9V2R9IdyBK8sobUjuwqgzTU4crP0OIlDYqDHa9S
- jwTTAYIIa4oouSlxrfvZ2k9XgF2XQ7fSbcpUcmvM5kId0TVGYKzdb/U8XB4CAMUfY7Qo
- vOxhDFj4tYy7LI4QRvTTY4A7V+hxQXPLMA1Mi6EKJyUux+T3Ssv7ND96G1gdEnMuWCWt
- MwpN/ePZK9J5ZvNP5mRr06rdVNBXAATII29OOZ0n/dP/oWuF0Dd2L98APpzMItoH7odw pQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ke1w9tbs2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 21:54:00 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29OLox2A022006;
-        Mon, 24 Oct 2022 21:53:59 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ke1w9tbrn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 21:53:59 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29OLpCUx027710;
-        Mon, 24 Oct 2022 21:53:58 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma01dal.us.ibm.com with ESMTP id 3kc85a66gr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 21:53:58 +0000
-Received: from smtpav06.dal12v.mail.ibm.com ([9.208.128.130])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29OLrwXl38928878
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Oct 2022 21:53:59 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B95458043;
-        Mon, 24 Oct 2022 21:53:57 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 055FB58059;
-        Mon, 24 Oct 2022 21:53:57 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Oct 2022 21:53:56 +0000 (GMT)
-Message-ID: <8e44d9d8-fcb6-c6a5-6ee6-068ebc5a72a8@linux.ibm.com>
-Date:   Mon, 24 Oct 2022 17:53:56 -0400
+        Mon, 24 Oct 2022 20:44:12 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D7C3A490;
+        Mon, 24 Oct 2022 16:17:26 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MwzNV031yz9v7bx;
+        Mon, 24 Oct 2022 23:23:06 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAH9HAIr1ZjeA0LAA--.2997S2;
+        Mon, 24 Oct 2022 16:28:16 +0100 (CET)
+Message-ID: <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from
+ bpf_lsm_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     KP Singh <kpsingh@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Date:   Mon, 24 Oct 2022 17:28:04 +0200
+In-Reply-To: <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
+         <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
+         <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] ima: Fix a potential null pointer access problem in
- ima_restore_measurement_list
-Content-Language: en-US
-To:     luhuaxin1@huawei.com, linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
-References: <20221016122047.16788-1-luhuaxin1@huawei.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20221016122047.16788-1-luhuaxin1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: u6jkstf1HshA4jsBfFvaY-Q4gPMNyCkK
-X-Proofpoint-GUID: Z1I9PwOuEaUAZ0idpCnaubwpKHrstZE3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_07,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 clxscore=1011 spamscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210240129
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+X-CM-TRANSID: LxC2BwAH9HAIr1ZjeA0LAA--.2997S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw4xury8tFWrXFW3ZF1DKFg_yoWrZw45pF
+        WUGF1jkr4ktFn5Jr12v3WUuw1IywsxCF4UXr1kJr1UA3Z0vr15Ar10y3W7uFyDGrs8X3ZF
+        qw1Yva1rKw1UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAPBF1jj4SZSwAAst
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,37 +71,109 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 10/16/22 08:20, luhuaxin1@huawei.com wrote:
-> From: Huaxin Lu <luhuaxin1@huawei.com>
+On Mon, 2022-10-24 at 11:25 +0200, Roberto Sassu wrote:
+> On Sun, 2022-10-23 at 16:36 -0700, Alexei Starovoitov wrote:
 > 
-> In restore_template_fmt, when kstrdup fails, a non-NULL value will still
-> be returned, which causes a NULL pointer access in template_desc_init_fields.
+> Sorry, forgot to CC Mimi and linux-integrity.
 > 
-> Co-authored-by: Jiaming Li <lijiaming30@huawei.com>
-> Signed-off-by: Huaxin Lu <luhuaxin1@huawei.com>
-> ---
->   security/integrity/ima/ima_template.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
+> > On Fri, Oct 21, 2022 at 9:57 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > BPF LSM allows security modules to directly attach to the security
+> > > hooks,
+> > > with the potential of not meeting the kernel expectation.
+> > > 
+> > > This is the case for the inode_init_security hook, for which the
+> > > kernel
+> > > expects that name and value are set if the hook implementation
+> > > returns
+> > > zero.
+> > > 
+> > > Consequently, not meeting the kernel expectation can cause the
+> > > kernel to
+> > > crash. One example is evm_protected_xattr_common() which expects
+> > > the
+> > > req_xattr_name parameter to be always not NULL.
+> > 
+> > Sounds like a bug in evm_protected_xattr_common.
 > 
-> diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-> index 07398f5..f81d4b2 100644
-> --- a/security/integrity/ima/ima_template.c
-> +++ b/security/integrity/ima/ima_template.c
-> @@ -295,8 +295,11 @@ static struct ima_template_desc *restore_template_fmt(char *template_name)
->   
->   	template_desc->name = "";
->   	template_desc->fmt = kstrdup(template_name, GFP_KERNEL);
-> -	if (!template_desc->fmt)
-> +	if (!template_desc->fmt) {
-> +		kfree(template_desc);
-> +		template_desc = NULL;
->   		goto out;
-> +	}
->   
->   	spin_lock(&template_list);
->   	list_add_tail_rcu(&template_desc->list, &defined_templates);
+> If an LSM implementing the inode_init_security hook returns -EOPNOTSUPP
+> or -ENOMEM, evm_protected_xattr_common() is not going to be executed.
+> 
+> This is documented in include/linux/lsm_hooks.h
+> 
+> Why it would be a bug in evm_protected_xattr_common()?
+> 
+> > > Introduce a level of indirection in BPF LSM, for the
+> > > inode_init_security
+> > > hook, to check the validity of the name and value set by security
+> > > modules.
+> > 
+> > Doesn't make sense.
+> 
+> Look at this example. The LSM infrastructure has a convention on return
+> values for the hooks (maybe there is something similar for other
+> hooks). The code calling the hooks relies on such conventions. If
+> conventions are not followed a panic occurs.
+> 
+> If LSMs go to the kernel, their code is checked for compliance with the
+> conventions. However, this does not happen for security modules
+> attached to the BPF LSM, because BPF LSM directly executes the eBPF
+> programs without further checks.
+> 
+> I was able to trigger the panic with this simple eBPF program:
+> 
+> SEC("lsm/inode_init_security")
+> int BPF_PROG(test_int_hook, struct inode *inode,
+> 	 struct inode *dir, const struct qstr *qstr, const char **name,
+> 	 void **value, size_t *len)
+> {
+> 	return 0;
+> }
+> 
+> In my opinion, the level of indirection is necessary to ensure that
+> kernel expectations are met.
 
+I investigated further. Instead of returning zero, I return one. This
+causes a crash even with the most recent kernel (lsm=bpf):
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+[   27.685704] BUG: kernel NULL pointer dereference, address: 00000000000000e1
+[   27.686445] #PF: supervisor read access in kernel mode
+[   27.686964] #PF: error_code(0x0000) - not-present page
+[   27.687465] PGD 0 P4D 0 
+[   27.687724] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[   27.688155] CPU: 9 PID: 897 Comm: in:imjournal Not tainted 6.1.0-rc2 #255
+[   27.688807] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+[   27.689652] RIP: 0010:fsnotify+0x71a/0x780
+[   27.690056] Code: ff 48 85 db 74 54 48 83 bb 68 04 00 00 00 74 4a 41 8b 92 98 06 00 00 4d 85 ed
+0f 85 a6 f9 ff ff e9 ad f9 ff ff 48 8b 44 24 08 <4c> 8b 90 e0 00 00 00 e9 00 fa ff ff 48 c7 c2 b8 12
+78 82 be 81 01
+[   27.691809] RSP: 0018:ffffc90001307ca0 EFLAGS: 00010246
+[   27.692313] RAX: 0000000000000001 RBX: 0000000000000000 RCX: ffff88811d73b4a8
+[   27.692998] RDX: 0000000000000003 RSI: 0000000000000001 RDI: 0000000000000100
+[   27.693682] RBP: ffff888100441c08 R08: 0000000000000059 R09: 0000000000000000
+[   27.694371] R10: 0000000000000000 R11: ffff88846fc72d30 R12: 0000000000000100
+[   27.695073] R13: ffff88811a2a5200 R14: ffffc90001307dc0 R15: 0000000000000001
+[   27.695738] FS:  00007ff791000640(0000) GS:ffff88846fc40000(0000) knlGS:0000000000000000
+[   27.696137] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   27.696430] CR2: 00000000000000e1 CR3: 0000000112aa6000 CR4: 0000000000350ee0
+[   27.696782] Call Trace:
+[   27.696909]  <TASK>
+[   27.697026]  path_openat+0x484/0xa00
+[   27.697218]  ? rcu_read_lock_held_common+0xe/0x50
+[   27.697461]  do_filp_open+0x9f/0xf0
+[   27.697643]  ? rcu_read_lock_sched_held+0x13/0x70
+[   27.697888]  ? lock_release+0x1e1/0x2a0
+[   27.698085]  ? _raw_spin_unlock+0x29/0x50
+[   27.698291]  do_sys_openat2+0x226/0x300
+[   27.698491]  do_sys_open+0x34/0x60
+[   27.698667]  do_syscall_64+0x3b/0x90
+[   27.698861]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Beeing positive, instead of negative, the return code is converted
+to a legitimate pointer instead of an error pointer, causing a crash
+in fsnotify().
+
+Roberto
+
