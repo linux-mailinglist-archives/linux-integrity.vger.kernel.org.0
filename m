@@ -2,114 +2,277 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A212609874
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Oct 2022 05:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5410D609DF1
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Oct 2022 11:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJXDHk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Oct 2022 23:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
+        id S230070AbiJXJZm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Oct 2022 05:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiJXDHh (ORCPT
+        with ESMTP id S230096AbiJXJZj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Oct 2022 23:07:37 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94D774BBB
-        for <linux-integrity@vger.kernel.org>; Sun, 23 Oct 2022 20:07:36 -0700 (PDT)
-Received: by mail-pj1-f46.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so2429833pji.0
-        for <linux-integrity@vger.kernel.org>; Sun, 23 Oct 2022 20:07:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BBS6W4GcIdd3PGdlMqMgZMuvtU7nNy5MNdHU8dmE4nA=;
-        b=dJrpgMoTfiGKnmCNizXqtx2Kpp4hwhfuzt8Ln3w78NTjpYiMl10POzrD7uTafA3b73
-         l6FdBlPS1PEmahwLYQe+LA2RdD5TRr+FqtZ6q3YZAMvH22athUMzbmMebfs4y6VgjQQn
-         YjwnYrxr5FCauHtb6HQ7Dsvzt2AetsRxTP6Natejz+WE8laMQwSzO/hLqqnXRpucLwxq
-         aO9zmlM9mfD2Wu1nYnqOSDptDskaRXSY+oI6tPNygFoorplbTGZROuFahNnKRVDPZl1e
-         5pYLVytvFXTyghkgWWi+vvCIH58PQFDzD6XLJfswIv23mBzO3UBDrJZEBpbJiwjSKkQO
-         4oiQ==
-X-Gm-Message-State: ACrzQf0sNQnqp5N33/N7J0d66yXFPxn8EB2HyMB5LObQF5QYUrAv9uAB
-        TsZaE4OrOCfZzH1iS+IneG+L2/wrvcE=
-X-Google-Smtp-Source: AMsMyM6oONIDj2IyLVrSaqpzKj/GS90eKkrTqO6JDTuCtr5GGb5M3TQzDBfL5F61bHQV8truCya2uA==
-X-Received: by 2002:a17:902:9b82:b0:183:fffb:1bfe with SMTP id y2-20020a1709029b8200b00183fffb1bfemr31717730plp.173.1666580856061;
-        Sun, 23 Oct 2022 20:07:36 -0700 (PDT)
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com. [209.85.216.50])
-        by smtp.gmail.com with ESMTPSA id q3-20020a170902a3c300b001784a45511asm18571317plb.79.2022.10.23.20.07.35
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 20:07:35 -0700 (PDT)
-Received: by mail-pj1-f50.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso7853441pjc.5
-        for <linux-integrity@vger.kernel.org>; Sun, 23 Oct 2022 20:07:35 -0700 (PDT)
-X-Received: by 2002:a17:90b:4c92:b0:213:13d2:381f with SMTP id
- my18-20020a17090b4c9200b0021313d2381fmr2777694pjb.219.1666580855434; Sun, 23
- Oct 2022 20:07:35 -0700 (PDT)
-MIME-Version: 1.0
-From:   Ken Williams <ken@williamsclan.us>
-Date:   Sun, 23 Oct 2022 20:07:24 -0700
-X-Gmail-Original-Message-ID: <CADrftwNYya==hLiZ+c=ZCJOt++JCVbCivjaeMWv8vKnF+pgOBw@mail.gmail.com>
-Message-ID: <CADrftwNYya==hLiZ+c=ZCJOt++JCVbCivjaeMWv8vKnF+pgOBw@mail.gmail.com>
-Subject: Expected appraisal behavior after script modification
-To:     linux-integrity@vger.kernel.org
+        Mon, 24 Oct 2022 05:25:39 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E4C645C;
+        Mon, 24 Oct 2022 02:25:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MwqJY3nz0z9y0Bb;
+        Mon, 24 Oct 2022 17:19:09 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwC3o3DzWVZjleQJAA--.1629S2;
+        Mon, 24 Oct 2022 10:25:15 +0100 (CET)
+Message-ID: <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from
+ bpf_lsm_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     KP Singh <kpsingh@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Date:   Mon, 24 Oct 2022 11:25:01 +0200
+In-Reply-To: <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
+References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
+         <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwC3o3DzWVZjleQJAA--.1629S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3AryrXFWfWw17uFW8AFW8WFg_yoWxAF17pF
+        WDK3Wakrs8AFW7WryIqa17u3WSg3yrGr4UGrnxJr17Z3ZIvrn7tr40yr1a9Fn5JrWkK3WF
+        vw4avr15Ww1DAa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj4CT3AACs1
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-I am interested in knowing the expected appraisal behavior after a
-signed script has been modified.  I am asking because I observe that a
-modified signed script can be executed.  In my effort, I did the
-following:
+On Sun, 2022-10-23 at 16:36 -0700, Alexei Starovoitov wrote:
 
-0) Configure IMA with the only positive appraisal being:
-appraise func=BPRM_CHECK appraise_type=imasig
+Sorry, forgot to CC Mimi and linux-integrity.
 
-1) Create s simple script, as shown here:
-#!/bin/bash
+> On Fri, Oct 21, 2022 at 9:57 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > BPF LSM allows security modules to directly attach to the security
+> > hooks,
+> > with the potential of not meeting the kernel expectation.
+> > 
+> > This is the case for the inode_init_security hook, for which the
+> > kernel
+> > expects that name and value are set if the hook implementation
+> > returns
+> > zero.
+> > 
+> > Consequently, not meeting the kernel expectation can cause the
+> > kernel to
+> > crash. One example is evm_protected_xattr_common() which expects
+> > the
+> > req_xattr_name parameter to be always not NULL.
+> 
+> Sounds like a bug in evm_protected_xattr_common.
 
-echo "Hello World"
+If an LSM implementing the inode_init_security hook returns -EOPNOTSUPP
+or -ENOMEM, evm_protected_xattr_common() is not going to be executed.
 
-2) Try to execute the script and see a failure as expected:
-# ./hello.sh
-bash: ./hello.sh: /bin/bash: bad interpreter: Permission denied
+This is documented in include/linux/lsm_hooks.h
 
-and see:
-journalctl | grep INTEG
-Oct 24 02:26:32 ctx0700 audit[7135]: INTEGRITY_DATA pid=7135 uid=0
-auid=0 ses=4 subj=root:staff_r:staff_t:s0-s0:c0.c1023
-op="appraise_data" cause="IMA-signature-required" comm="bash"
-name="/sysroot/home/root/hello.sh" dev="mmcblk0p6" ino=23072 res=0
+Why it would be a bug in evm_protected_xattr_common()?
 
-3) Sign the script:
-evmctl ima_sign -k /etc/keys/privkey_ima.pem ./hello.sh
+> > Introduce a level of indirection in BPF LSM, for the
+> > inode_init_security
+> > hook, to check the validity of the name and value set by security
+> > modules.
+> 
+> Doesn't make sense.
 
-4) Execute
-# ./hello.sh
-Hello World
+Look at this example. The LSM infrastructure has a convention on return
+values for the hooks (maybe there is something similar for other
+hooks). The code calling the hooks relies on such conventions. If
+conventions are not followed a panic occurs.
 
-5) Modify the script to read:
-#!/bin/bash
+If LSMs go to the kernel, their code is checked for compliance with the
+conventions. However, this does not happen for security modules
+attached to the BPF LSM, because BPF LSM directly executes the eBPF
+programs without further checks.
 
-echo "Hello World"
-echo "Hello Again"
+I was able to trigger the panic with this simple eBPF program:
 
->>>>>>>>>  ****************** <<<<<<<<<<
-6) Execute the script and observe that the modified script executes successfully
- This was unexpected.
-# ./hello.sh
-Hello World
-Hello Again
+SEC("lsm/inode_init_security")
+int BPF_PROG(test_int_hook, struct inode *inode,
+	 struct inode *dir, const struct qstr *qstr, const char **name,
+	 void **value, size_t *len)
+{
+	return 0;
+}
 
-The signature was unchanged.
+In my opinion, the level of indirection is necessary to ensure that
+kernel expectations are met.
 
-In order to avoid crowding this email with too much info, I have
-omitted some details such as the actual signature and the full policy
-(with dont_appraise fs=xxxx) and kernel config, but will be glad to
-augment this as requested.  But first, I want to start by
-understanding if this behavior is expected.
-I am running a 4.14.238 kernel.
+> You probably meant security_old_inode_init_security,
+> because the hook without _old_ doesn't have such args:
+> int security_inode_init_security(struct inode *inode, struct inode
+> *dir,
+>                                  const struct qstr *qstr,
+>                                  initxattrs initxattrs, void
+> *fs_data);
+
+I meant inode_init_security. The signature of the hook is different
+from that of security_inode_init_security():
+
+LSM_HOOK(int, 0, inode_init_security, struct inode *inode,
+	 struct inode *dir, const struct qstr *qstr, const char **name,
+	 void **value, size_t *len)
+
+BPF LSM programs attach to the attachment points defined with:
+
+#define LSM_HOOK(RET, DEFAULT, NAME, ...)	\
+noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
+{						\
+	return DEFAULT;				\
+}
+
+#include <linux/lsm_hook_defs.h>
+#undef LSM_HOOK
+
+> Encapsulate bpf_lsm_inode_init_security(), the existing attachment
+> > point,
+> > with bpf_inode_init_security(), the new function. After the
+> > attachment
+> > point is called, return -EOPNOTSUPP if the xattr name is not set,
+> > -ENOMEM
+> > if the xattr value is not set.
+> > 
+> > As the name still cannot be set, rely on future patches to the eBPF
+> > verifier or introducing new kfuncs/helpers to ensure its
+> > correctness.
+> > 
+> > Finally, as proposed by Nicolas, update the LSM hook documentation
+> > for the
+> > inode_init_security hook, to reflect the current behavior (only the
+> > xattr
+> > value is allocated).
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 520b7aa00d8cd ("bpf: lsm: Initialize the BPF LSM hooks")
+> > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  include/linux/lsm_hooks.h |  4 ++--
+> >  security/bpf/hooks.c      | 25 +++++++++++++++++++++++++
+> >  2 files changed, 27 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > index 4ec80b96c22e..f44d45f4737f 100644
+> > --- a/include/linux/lsm_hooks.h
+> > +++ b/include/linux/lsm_hooks.h
+> > @@ -229,8 +229,8 @@
+> >   *     This hook is called by the fs code as part of the inode
+> > creation
+> >   *     transaction and provides for atomic labeling of the inode,
+> > unlike
+> >   *     the post_create/mkdir/... hooks called by the VFS.  The
+> > hook function
+> > - *     is expected to allocate the name and value via kmalloc,
+> > with the caller
+> > - *     being responsible for calling kfree after using them.
+> > + *     is expected to allocate the value via kmalloc, with the
+> > caller
+> > + *     being responsible for calling kfree after using it.
+> 
+> must be an obsolete comment.
+> 
+> >   *     If the security module does not use security attributes or
+> > does
+> >   *     not wish to put a security attribute on this particular
+> > inode,
+> >   *     then it should return -EOPNOTSUPP to skip this processing.
+> > diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+> > index e5971fa74fd7..492c07ba6722 100644
+> > --- a/security/bpf/hooks.c
+> > +++ b/security/bpf/hooks.c
+> > @@ -6,11 +6,36 @@
+> >  #include <linux/lsm_hooks.h>
+> >  #include <linux/bpf_lsm.h>
+> > 
+> > +static int bpf_inode_init_security(struct inode *inode, struct
+> > inode *dir,
+> > +                                  const struct qstr *qstr, const
+> > char **name,
+> > +                                  void **value, size_t *len)
+> > +{
+> > +       int ret;
+> > +
+> > +       ret = bpf_lsm_inode_init_security(inode, dir, qstr, name,
+> > value, len);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       /*
+> > +        * As the name cannot be set by the eBPF programs directly,
+> > eBPF will
+> > +        * be responsible for its correctness through the verifier
+> > or
+> > +        * appropriate kfuncs/helpers.
+> > +        */
+> > +       if (name && !*name)
+> > +               return -EOPNOTSUPP;
+> 
+> bpf cannot write into such pointers.
+> It won't be able to use kfuncs to kmalloc and write into them either.
+> None of it makes sense to me.
+
+Ok, so it is a technical limitation not being able to implement the
+inode_init_security hook in eBPF. Should we always return -EOPNOTSUPP
+even if eBPF programs are successully attached to inode_init_security?
+
+Thanks
+
+Roberto
+
+> > +
+> > +       if (value && !*value)
+> > +               return -ENOMEM;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  static struct security_hook_list bpf_lsm_hooks[]
+> > __lsm_ro_after_init = {
+> >         #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
+> >         LSM_HOOK_INIT(NAME, bpf_lsm_##NAME),
+> >         #include <linux/lsm_hook_defs.h>
+> >         #undef LSM_HOOK
+> > +       LSM_HOOK_INIT(inode_init_security,
+> > bpf_inode_init_security),
+> >         LSM_HOOK_INIT(inode_free_security, bpf_inode_storage_free),
+> >         LSM_HOOK_INIT(task_free, bpf_task_storage_free),
+> >  };
+> > --
+> > 2.25.1
+> > 
+
