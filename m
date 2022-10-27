@@ -2,112 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA5560F463
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Oct 2022 12:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405C460F574
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Oct 2022 12:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbiJ0KEQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 Oct 2022 06:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S234898AbiJ0Kjo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 Oct 2022 06:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235150AbiJ0KEH (ORCPT
+        with ESMTP id S235205AbiJ0Kjl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:04:07 -0400
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2016.outbound.protection.outlook.com [40.92.103.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047DCBC34;
-        Thu, 27 Oct 2022 03:04:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E+shBmqzFD4ayPbdP4wJY8sIEr5kntGKhOUflNUtrtgVECBYNoWakP56s4RUZrkStPc9zsOLlC0+YXJgkgI8nWwJ3p4zrOartMzqKIA5Qahs56BPQ7EfeOiv7eaVNdIBuC+8Gxz+pF51t6bN6t3++CUhlT1y4AK2JuyDahc4OV8qxzcCUivhw8mMGmtx9DmFrOCBo3a4rn192SBasbITfU3qNfKA42FaijGemvMzDPMpw7fsPGik+mwjHE2W1+LsV2jeq9OR2FePhf0aI9jVrJFDHJlPHr9xW/PD6aNc5JxI6CsBWNo7DWLlS/z/DkfUK7jKTpYd+6tEcwrX3X99sA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0J/K0jHKE+VWvSv2kPNuWSM721hfnQcQ6L5uCrWFK2c=;
- b=LvMMOgS1ONxhiy9JhlYp12OBPvIYxbIgtS12nr7wlU06CcOgp9jvywM0t+3XzYWL3Gj+xb+mjtfz7jBm8HFzWeBBD+AWKp8xBz6YubRTAZ9EOx2ANcW/0Blzhl/gZ/0xSx2bHerz8lONKXOuUW4XBdXphWVXiuxeTsM52ivvDbBW6U1MdCUbz7ykjePozL+RifjJnySF5wcKzTiCfw+FweMsyD2Qyf4CXqj5rZt/missO8/Be/sE9yqKjNW9MY/Bx/g6a5sgatM3ajo9vktb/YfPWGMZyXHK5SjedRWywP14NxEwzOzfc2Pu0ZuOMwq/oy5EzNEb375iPEBHj++iPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0J/K0jHKE+VWvSv2kPNuWSM721hfnQcQ6L5uCrWFK2c=;
- b=mu6XZHW0hMIEr69E+/TLBjqZEOgIWrdNxcBbepRu8NTI3byxAuSXqrPNLPf/likfhRv1h4Mf0ZN3JX9jK1rSMuOX28/ZrZ41XJZhhrb24UX/EaxugQrxTVXsagVSxT8Z8a0nAyqvSpg9SnZyrRhoDlvHg+BBMnNJTBCuj2kKWG+FompBclM/U6xr4cfhENRiQzwK9aUSoo96kRHe1Umtffx0jWb4u8tyvcFoxsGaYOLfe25o0QRjc1UhHQV5zX5YUHwPYNJ84t6PbdzPGfk7SDE6lnjFOo9SYj+2cuzpC3nJGsqFBPWJ2m9vvYLQTfT18KfhUUgouQELUdVlifHPww==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- MAZPR01MB7794.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:22::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.28; Thu, 27 Oct 2022 10:01:43 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::3dc1:f6bc:49e4:b294]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::3dc1:f6bc:49e4:b294%9]) with mapi id 15.20.5746.029; Thu, 27 Oct 2022
- 10:01:43 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "chyishian.jiang@gmail.com" <chyishian.jiang@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>
-Subject: [PATCH] efi: Add iMac Pro 2017 to uefi skip cert quirk
-Thread-Topic: [PATCH] efi: Add iMac Pro 2017 to uefi skip cert quirk
-Thread-Index: AQHY6esdtcYgI4FYkkmedEvra7eSTA==
-Date:   Thu, 27 Oct 2022 10:01:43 +0000
-Message-ID: <8CB9E43B-AB65-4735-BB8D-A8A7A10F9E30@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [dDbCyKXgOYUmPwvmRCV6wwTMpaoeSwdA]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MAZPR01MB7794:EE_
-x-ms-office365-filtering-correlation-id: 82a215f4-4939-4da4-505d-08dab802405f
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JiNC2Ko5c9NwSt5IQ+Nwz0KbEoO9pbEl0K/cb3ZPUrBeAcXj4eOULGoZCQoGLslw64Dx9TRckSUA9LlsvsNaED8Bc+TzeBHZSJgoH2dWhz2jPe8tqB9qerdY+Qr8oBmTN1j8PEIU0vTyxKaJbCNZeVv8s64bv9A77wzChF+Qs9vm6EO/y3vcV455tRFJt68nTNkCyilJKx3Z2Skk78DI18SUlq4QPCIaoM14LCXfoYEVVRCUZTZxSymPgihXrqfK96l+mixpCLlt4iBkBUmfiFUZt4i2xmxUktP3Y3Qzc6zj5jato620hDQeBXujpnj7RwyoRBxgoGhCpzdXyVNxCM7OUD1n7Io4eGBkSBWz1+GVmUIUCc0hGiNLWUENx5zY/kji+CxrdH4+HovrhySVyVAScgBC/7CnaNAXEp6wmjBR3Xo9uWtRUJohP+wUKq6oIj8Cl3C5u/ao+oFRXWuSfwOuO69HYt+hTaF0FWiMQDf64B7VqHlPUVTrQUdMGh7dIhxpa++969PJVUBYYEUgWEmog2tSWbXcSpQXc1ShwtPRH1rmrwVVJILM+GgNsm6/ukE36/FT4NTkbyJuRmhOTyh7/0xsHc7IZZyHlW3vA+wqrM+fTipGKERC0Zg3qoAAwqh8pE+ONBXmvw4Fma+bfw==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oDuTxBmGS2JwxhsKiIshO+Q2UdXYSfFeWebfh4xL0743pOMxXBRJg7UImMsf?=
- =?us-ascii?Q?Il7P9UkfEOud8G7Xi4zaqkjJoI0pePji+QCk7/WtQ7TPD+w7ms1lBcnxMFrO?=
- =?us-ascii?Q?NvsTxmsDu7GzjzvPfZcxLa0NOmpJma7XMp9SkEEDpPjz58yoOHgkKHhWtHyL?=
- =?us-ascii?Q?Vl5YCOEorVD0IdcYDmqUdaFqNmvUP1Ys0T65vPuGlgTAUudPDvVHCGPbhZ6C?=
- =?us-ascii?Q?wGLEhZcVQStANopcwQuqeYiHKPvjCTEns7Emerz3GWEc/F/28mcrnVPPahct?=
- =?us-ascii?Q?kgxlP/joQjXOrh5zsZavsGd+dOjvVXMwJTLo/qFYrXx1DMGJlbuY+UuUCwic?=
- =?us-ascii?Q?BciMEAzrIQ0QSePdJOn9erDn03vY7cr5i0GZgTUxvMHnYEg9C+zpgsNZorqv?=
- =?us-ascii?Q?LZe9tP1tSDHOCV51ckOZRL1NiSXc8+p0w+q3R4PACtHgf/jq8aC7R55CrtH1?=
- =?us-ascii?Q?gYxVDdMvbnpVpRShDFhtpL3Szb37gpVRSxGcpVidgSN8mfWwC8nXQXrfCfC6?=
- =?us-ascii?Q?a9YSMHzENZHLvE2TUuFCk84KoJoUpvWcuFJdZ3wEOQx93TXetWhEX66D/cyx?=
- =?us-ascii?Q?fFvE7bWc5UR9Cl9CkRJSYFQkW+jIQ1lvybt9OtlD3i9KD0X5CrnSs+F8OGOL?=
- =?us-ascii?Q?2nTH+QbHHYQQgAN759Haq80/FNGADoimmeahFOdJsZkJ9Z68ADY/acvEmR1R?=
- =?us-ascii?Q?JhCoU0orAh8wg0Hu4UxjX6mP3SWVO9PEmxNJSCZbCKh1eIAh+R7VvhKg5AWM?=
- =?us-ascii?Q?fG6JVFVb63GkRgW+25tbaiqqhBvBAHtekNI0/KxaqOSZTdIfKtmgdrjygRPj?=
- =?us-ascii?Q?yeh/4I8uXozXhKDQCAqzDIdpG2PJ+G5ceLwKlBgD0VZtRtuoeKtWEj2SJrLl?=
- =?us-ascii?Q?P3MMzUk89ULNp+c0hhkdWSCI8LywRb30Kwn46DZJuQczAnOm0T1kheL9bxXK?=
- =?us-ascii?Q?X6byaMda2pPwmOrL3rlbiPkal+6gqqqeuDuhdnWh5r5+K9fxlj0/CNDSBdrS?=
- =?us-ascii?Q?kwew+5iHsNVehfY81dlqQf1+FC7iqYuCS4jzUuLqYSUzs7AccIkSrJDO0Abk?=
- =?us-ascii?Q?PChnK0oSuJf9HD0kSzSMXASOHtSJcdHPVjzQ6Tcx5K0Ay5w7cXNZI06/6ZVJ?=
- =?us-ascii?Q?OsSoIMOme1G6mvkkC2Y7yG4AlhMbxr/yu0S+xBWSUzKaP+rxbtKw/s0UZ3S/?=
- =?us-ascii?Q?NClHFwn7BpXY6wdpfUA8DyNyKfI2DGNYwJojbmiEkN4AViLK7b8t6TnLK4ta?=
- =?us-ascii?Q?rlTTCn7/W5BSQPW77kKcQ/rBmO+nmwMN9Lhd0y4LXg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <EF434E29E7CDBB49B2738354A64078F6@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 27 Oct 2022 06:39:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BB464F8
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Oct 2022 03:39:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53657B82570
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Oct 2022 10:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F071DC43143
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Oct 2022 10:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666867172;
+        bh=Wfmr4jp4HWW9KkLYlH5RdoT/CI548D6X9rUf/WCpVQg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oKsgT1PjuIzr/x0ppB0HfU/AtoiNBThShImmM38C5H93pDCWBAbimk9ZdSxe+v1Ao
+         c5Za/d03Pe04V0A6ttVg3AQbrDvVHq2DI9aiKLGCYlJ0rbaI3UKLsI604/AuM29vns
+         a53S8WjbgDiSJrVGMjyloI8yttBzQoIz1HZKwgjiaEtIFb6o/gtOhaxIMkisAaIH44
+         HUxrJfxrb4+O/jCIpxIC+sKyKsIjvcTuuwNMRFtxsCDUQfbysPRgeVMGgjLEiEHcGl
+         MW+51kq5URuTrJaRT6sMR7hIqE2JTcPSI4C7ryCUplTQ/3d+cqpMh1s8Yly1cxHHiG
+         +HjbAmS8YvrRw==
+Received: by mail-lj1-f169.google.com with SMTP id o4so1736193ljp.8
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Oct 2022 03:39:31 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0Co48qDA2mYotmefuJDMcHnV5IEbV1y3moJA6PE4efr0B5PUtB
+        V7k85bZdaF8ovHWYWGYHo/fESqNMJUIMPwBZuaSljg==
+X-Google-Smtp-Source: AMsMyM5lSj/2LnLqo7T20znVrmI7UobT8m/3WPr8d4g5QIvgeQkhIyhha+FrrV0RKJldTOKLM0u9mHBI8oYzZVC6HQ8=
+X-Received: by 2002:a2e:9107:0:b0:277:2e85:79d4 with SMTP id
+ m7-20020a2e9107000000b002772e8579d4mr455368ljg.425.1666867169899; Thu, 27 Oct
+ 2022 03:39:29 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82a215f4-4939-4da4-505d-08dab802405f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2022 10:01:43.5311
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAZPR01MB7794
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
+ <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
+ <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+ <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
+ <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
+ <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com>
+ <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com> <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
+ <34357c96-fe58-ffe5-e464-4bded8f119d5@huaweicloud.com> <CAADnVQKD5e9vKsSo1TPeBm5hr6j4GzQeHqRURoBJyB++VOwHCw@mail.gmail.com>
+In-Reply-To: <CAADnVQKD5e9vKsSo1TPeBm5hr6j4GzQeHqRURoBJyB++VOwHCw@mail.gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 27 Oct 2022 12:39:19 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
+Message-ID: <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
+Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from bpf_lsm_inode_init_security()
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,27 +78,109 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+On Wed, Oct 26, 2022 at 7:14 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Oct 26, 2022 at 1:42 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> >
+> > On 10/26/2022 8:37 AM, Alexei Starovoitov wrote:
+> > > On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > >>
+> > >> On 10/25/2022 12:43 AM, Roberto Sassu wrote:
+> > >>> On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov wrote:
+> > >>>> I'm looking at security_inode_init_security() and it is indeed messy.
+> > >>>> Per file system initxattrs callback that processes kmalloc-ed
+> > >>>> strings.
+> > >>>> Yikes.
+> > >>>>
+> > >>>> In the short term we should denylist inode_init_security hook to
+> > >>>> disallow attaching bpf-lsm there. set/getxattr should be done
+> > >>>> through kfuncs instead of such kmalloc-a-string hack.
+> > >>> Inode_init_security is an example. It could be that the other hooks are
+> > >>> affected too. What happens if they get arbitrary positive values too?
+> > >>
+> > >> TL;DR - Things will go cattywampus.
+> > >>
+> > >> The LSM infrastructure is an interface that has "grown organically",
+> > >> and isn't necessarily consistent in what it requires of the security
+> > >> module implementations. There are cases where it assumes that the
+> > >> security module hooks are well behaved, as you've discovered. I have
+> > >> no small amount of fear that someone is going to provide an eBPF
+> > >> program for security_secid_to_secctx(). There has been an assumption,
+> > >> oft stated, that all security modules are going to be reviewed as
+> > >> part of the upstream process. The review process ought to catch hooks
+> > >> that return unacceptable values. Alas, we've lost that with BPF.
+> > >>
+> > >> It would take a(nother) major overhaul of the LSM infrastructure to
+> > >> make it safe against hooks that are not well behaved. From what I have
+> > >> seen so far it wouldn't be easy/convenient/performant to do it in the
+> > >> BPF security module either. I personally think that BPF needs to
+> > >> ensure that the eBPF implementations don't return inappropriate values,
+> > >> but I understand why that is problematic.
+> > >
+> > > That's an accurate statement. Thank you.
+> > >
+> > > Going back to the original question...
+> > > We fix bugs when we discover them.
+> > > Regardless of the subsystem they belong to.
+> > > No finger pointing.
+> >
+> > I'm concerned about the following situation:
+> >
+> > struct <something> *function()
+> > {
+> >
+> >         ret = security_*();
+> >         if (ret)
+> >                 return ERR_PTR(ret);
+> >
+> > }
+> >
+> > int caller()
+> > {
+> >         ptr = function()
+> >         if (IS_ERR(ptr)
+> >                 goto out;
+> >
+> >         <use of invalid pointer>
+> > }
+> >
+> > I quickly found an occurrence of this:
+> >
+> > static int lookup_one_common()
+> > {
+> >
+> > [...]
+> >
+> >         return inode_permission();
+> > }
+> >
+> > struct dentry *try_lookup_one_len()
+> > {
+> >
+> > [...]
+> >
+> >          err = lookup_one_common(&init_user_ns, name, base, len, &this);
+> >          if (err)
+> >                  return ERR_PTR(err);
+> >
+> >
+> > Unfortunately, attaching to inode_permission causes the kernel
+> > to crash immediately (it does not happen with negative return
+> > values).
+> >
+> > So, I think the fix should be broader, and not limited to the
+> > inode_init_security hook. Will try to see how it can be fixed.
+>
+> I see. Let's restrict bpf-lsm return values to IS_ERR_VALUE.
+> Trivial verifier change.
 
-The iMac Pro 2017 is also a T2 Mac. Thus add it to the list of uefi skip ce=
-rt.
+Thanks, yes this indeed is an issue. We need to do a few things:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
----
- security/integrity/platform_certs/load_uefi.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integ=
-rity/platform_certs/load_uefi.c
-index b78753d27d8ea6..d1fdd113450a63 100644
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -35,6 +35,7 @@ static const struct dmi_system_id uefi_skip_cert[] =3D {
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMacPro1,1") },
- 	{ }
- };
- =
+1. Restrict some hooks that we know the BPF LSM will never need.
+2. A verifier function that checks return values of LSM
+hooks.
+For most LSK hooks IS_ERR_VALUE is fine, however, there are some hooks
+like *xattr hooks that use a return value of 1 to indicate a
+capability check is required which might need special handling.
