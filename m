@@ -2,136 +2,222 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A7A610C53
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Oct 2022 10:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68691610C7B
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Oct 2022 10:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiJ1IhO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Oct 2022 04:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S230093AbiJ1IuC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Oct 2022 04:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiJ1IhN (ORCPT
+        with ESMTP id S230055AbiJ1Itx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Oct 2022 04:37:13 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114721C4ED5;
-        Fri, 28 Oct 2022 01:37:11 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MzG4Y6DyGz15MGy;
-        Fri, 28 Oct 2022 16:32:13 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 28 Oct 2022 16:36:56 +0800
-Message-ID: <11716411-e143-ab1f-3b1e-d5d35f2a590a@huawei.com>
-Date:   Fri, 28 Oct 2022 16:36:55 +0800
+        Fri, 28 Oct 2022 04:49:53 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26514102F;
+        Fri, 28 Oct 2022 01:49:28 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MzGK11SwTz9xFfs;
+        Fri, 28 Oct 2022 16:43:01 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwC3o3B8l1tjSAUbAA--.18857S2;
+        Fri, 28 Oct 2022 09:49:08 +0100 (CET)
+Message-ID: <edf0ec89c61fbee68fd537981982e14b1674393d.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from
+ bpf_lsm_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     KP Singh <kpsingh@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Date:   Fri, 28 Oct 2022 10:48:56 +0200
+In-Reply-To: <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
+References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
+         <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
+         <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+         <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
+         <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
+         <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com>
+         <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com>
+         <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
+         <34357c96-fe58-ffe5-e464-4bded8f119d5@huaweicloud.com>
+         <CAADnVQKD5e9vKsSo1TPeBm5hr6j4GzQeHqRURoBJyB++VOwHCw@mail.gmail.com>
+         <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
- ima_filter_rule_match()
-Content-Language: en-US
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20220921125804.59490-1-guozihua@huawei.com>
- <20220921125804.59490-3-guozihua@huawei.com>
- <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
- <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
- <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
- <7ac3e330-e77c-95d8-7d3b-29e243b57251@huawei.com>
- <5e304b17fe709d2b2f30b991d5ffc4711d27a075.camel@linux.ibm.com>
- <2f032b6c-ecf2-5a41-dc38-e6ab0a2d7885@huawei.com>
- <90f8940cff5eeef7917e2b11a07e41b32b207ffa.camel@linux.ibm.com>
- <38d5fd39-ead2-e954-5901-b35ef6ec96b6@huawei.com>
-In-Reply-To: <38d5fd39-ead2-e954-5901-b35ef6ec96b6@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500024.china.huawei.com (7.185.36.203)
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwC3o3B8l1tjSAUbAA--.18857S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF1kXFWkuF4ruw4rZw45GFg_yoWrCrWDpF
+        W5tF1jkr4DJFy7Cr1Iqa15XrWIyryfKrsrXwn8Jr1UZFyqvr1ayr17Jr4Y9FWUur4UGw1F
+        vr4jvrW3Zw1DA3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4TG5gAAsD
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2022/10/19 15:17, Guozihua (Scott) wrote:
-> On 2022/10/19 9:07, Mimi Zohar wrote:
->> On Tue, 2022-10-18 at 16:43 +0800, Guozihua (Scott) wrote:
->>> On 2022/9/28 22:11, Mimi Zohar wrote:
->>>>
->>>> After reviewing this patch set again, the code looks fine.  The commit
->>>> message is still a bit off, but I've pushed the patch set out to next-
->>>> integrity-testing, waiting for some Reviewed-by/Tested-by tags.
->>>>
->>>
->>> Hi Mimi,
->>>
->>> How's this patch going? I see Roberto is replying with a Reviewed-by.
->>
->> I'd really like to see a "Tested-by" tag as well.
->>
->> Are you able to force the scenario?
->>
+On Thu, 2022-10-27 at 12:39 +0200, KP Singh wrote:
+> On Wed, Oct 26, 2022 at 7:14 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > On Wed, Oct 26, 2022 at 1:42 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On 10/26/2022 8:37 AM, Alexei Starovoitov wrote:
+> > > > On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <
+> > > > casey@schaufler-ca.com> wrote:
+> > > > > On 10/25/2022 12:43 AM, Roberto Sassu wrote:
+> > > > > > On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov
+> > > > > > wrote:
+> > > > > > > I'm looking at security_inode_init_security() and it is
+> > > > > > > indeed messy.
+> > > > > > > Per file system initxattrs callback that processes
+> > > > > > > kmalloc-ed
+> > > > > > > strings.
+> > > > > > > Yikes.
+> > > > > > > 
+> > > > > > > In the short term we should denylist inode_init_security
+> > > > > > > hook to
+> > > > > > > disallow attaching bpf-lsm there. set/getxattr should be
+> > > > > > > done
+> > > > > > > through kfuncs instead of such kmalloc-a-string hack.
+> > > > > > Inode_init_security is an example. It could be that the
+> > > > > > other hooks are
+> > > > > > affected too. What happens if they get arbitrary positive
+> > > > > > values too?
+> > > > > 
+> > > > > TL;DR - Things will go cattywampus.
+> > > > > 
+> > > > > The LSM infrastructure is an interface that has "grown
+> > > > > organically",
+> > > > > and isn't necessarily consistent in what it requires of the
+> > > > > security
+> > > > > module implementations. There are cases where it assumes that
+> > > > > the
+> > > > > security module hooks are well behaved, as you've discovered.
+> > > > > I have
+> > > > > no small amount of fear that someone is going to provide an
+> > > > > eBPF
+> > > > > program for security_secid_to_secctx(). There has been an
+> > > > > assumption,
+> > > > > oft stated, that all security modules are going to be
+> > > > > reviewed as
+> > > > > part of the upstream process. The review process ought to
+> > > > > catch hooks
+> > > > > that return unacceptable values. Alas, we've lost that with
+> > > > > BPF.
+> > > > > 
+> > > > > It would take a(nother) major overhaul of the LSM
+> > > > > infrastructure to
+> > > > > make it safe against hooks that are not well behaved. From
+> > > > > what I have
+> > > > > seen so far it wouldn't be easy/convenient/performant to do
+> > > > > it in the
+> > > > > BPF security module either. I personally think that BPF needs
+> > > > > to
+> > > > > ensure that the eBPF implementations don't return
+> > > > > inappropriate values,
+> > > > > but I understand why that is problematic.
+> > > > 
+> > > > That's an accurate statement. Thank you.
+> > > > 
+> > > > Going back to the original question...
+> > > > We fix bugs when we discover them.
+> > > > Regardless of the subsystem they belong to.
+> > > > No finger pointing.
+> > > 
+> > > I'm concerned about the following situation:
+> > > 
+> > > struct <something> *function()
+> > > {
+> > > 
+> > >         ret = security_*();
+> > >         if (ret)
+> > >                 return ERR_PTR(ret);
+> > > 
+> > > }
+> > > 
+> > > int caller()
+> > > {
+> > >         ptr = function()
+> > >         if (IS_ERR(ptr)
+> > >                 goto out;
+> > > 
+> > >         <use of invalid pointer>
+> > > }
+> > > 
+> > > I quickly found an occurrence of this:
+> > > 
+> > > static int lookup_one_common()
+> > > {
+> > > 
+> > > [...]
+> > > 
+> > >         return inode_permission();
+> > > }
+> > > 
+> > > struct dentry *try_lookup_one_len()
+> > > {
+> > > 
+> > > [...]
+> > > 
+> > >          err = lookup_one_common(&init_user_ns, name, base, len,
+> > > &this);
+> > >          if (err)
+> > >                  return ERR_PTR(err);
+> > > 
+> > > 
+> > > Unfortunately, attaching to inode_permission causes the kernel
+> > > to crash immediately (it does not happen with negative return
+> > > values).
+> > > 
+> > > So, I think the fix should be broader, and not limited to the
+> > > inode_init_security hook. Will try to see how it can be fixed.
+> > 
+> > I see. Let's restrict bpf-lsm return values to IS_ERR_VALUE.
+> > Trivial verifier change.
 > 
-> It's a race condition which could be hard to reproduce easily and in a 
-> stable manner. I'll give it a try.
+> Thanks, yes this indeed is an issue. We need to do a few things:
+> 
+> 1. Restrict some hooks that we know the BPF LSM will never need.
+> 2. A verifier function that checks return values of LSM
+> hooks.
+> For most LSK hooks IS_ERR_VALUE is fine, however, there are some
+> hooks
+> like *xattr hooks that use a return value of 1 to indicate a
+> capability check is required which might need special handling.
 
-Hi Mimi,
+I looked at security.c:
 
-I managed to re-produce this issue with the help of the following two 
-scripts:
+/*
+ * SELinux and Smack integrate the cap call,
+ * so assume that all LSMs supplying this call do so.
+ */
 
-read_tmp_measurement.sh:
-> #!/bin/bash
-> 
-> while true
-> do
->         cat /root/tmp.txt > /dev/null
->         measurement=`cat /sys/kernel/security/ima/ascii_runtime_measurements | grep "tmp\.txt" | wc -l`
->         if [ "${measurement}" == "1" ]; then
->                 echo "measurement found"
->                 exit 1
->         fi
-> done
+Other than checking the return value, probably we should also wrap
+bpf_lsm_inode_{set,remove}xattr() to do the capability check, right?
 
-test.sh:
-> #!/bin/bash
-> 
-> echo "measure obj_user=system_u obj_role=object_r obj_type=unlabeled_t" > /sys/kernel/security/ima/policy
-> 
-> cat /root/tmp2.txt
-> measurement=`cat /sys/kernel/security/ima/ascii_runtime_measurements | grep "tmp2\.txt" | wc -l`
-> [ "$measurement" == "1" ] && echo "measurement for tmp2 found"
-> 
-> cat /root/tmp.txt
-> measurement=`cat /sys/kernel/security/ima/ascii_runtime_measurements | grep "tmp\.txt" | wc -l`
-> [ "$measurement" == "1" ] && echo "measurement for tmp found, preparation failed!" && exit 1
-> 
-> ./read_tmp_measurement.sh &
-> pid=$!
-> 
-> cd /usr/share/selinux/default
-> semodule -i clock.pp.bz2
-> semodule -r clock
-> 
-> kill ${pid}
-
-I created two files tmp.txt and tmp2.txt, assign them with type 
-user_home_t and unlabeled_t respectively and then run test.sh.
-On a multi-core environment, I managed to reproduce this issue pretty 
-easily and tested that once the solution is merged, the issue stops 
-happening.
-
--- 
-Best
-GUO Zihua
+Roberto
 
