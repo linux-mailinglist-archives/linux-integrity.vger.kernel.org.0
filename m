@@ -2,236 +2,78 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E35611860
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Oct 2022 18:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72889611C2F
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Oct 2022 23:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiJ1Q4g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Oct 2022 12:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S229615AbiJ1VIj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Oct 2022 17:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiJ1Qzq (ORCPT
+        with ESMTP id S230046AbiJ1VIc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:55:46 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEB01CCCD1;
-        Fri, 28 Oct 2022 09:55:37 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MzT5x3dj4z9xFQb;
-        Sat, 29 Oct 2022 00:49:09 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBX9XFOCVxj63ccAA--.45991S4;
-        Fri, 28 Oct 2022 17:55:14 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        revest@chromium.org, jackmanb@chromium.org, shuah@kernel.org,
-        paul@paul-moore.com, casey@schaufler-ca.com, zohar@linux.ibm.com
-Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nicolas.bouchinet@clip-os.org
-Subject: [RESEND][RFC][PATCH 3/3] selftests/bpf: Check if return values of LSM programs are allowed
-Date:   Fri, 28 Oct 2022 18:54:23 +0200
-Message-Id: <20221028165423.386151-3-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
-References: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
+        Fri, 28 Oct 2022 17:08:32 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E956724AAEC
+        for <linux-integrity@vger.kernel.org>; Fri, 28 Oct 2022 14:08:26 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id 17so1535361pfv.4
+        for <linux-integrity@vger.kernel.org>; Fri, 28 Oct 2022 14:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4DpCDCfgix6fhBcWBNBseudtoBNtCW3+LdSSUlRuRRE=;
+        b=fmOAu0FnuQec1OaBOKSLImzDv6UdMN/T5vknhvPk+r5OhWxejfFyt1cmbSqFLwMbhf
+         eBz36iQ5T6qLODbZX/9dGAcD58xA+Z2yZU8aZNsKPgFv9Lkws7fsvc78HtgEYDn7spLY
+         MPXB6dvc9pcR5Dcz9wS3HD073TSOD1PHbTf+0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4DpCDCfgix6fhBcWBNBseudtoBNtCW3+LdSSUlRuRRE=;
+        b=oPHPwCCg59gLTGbeVdTPfG5yIxF4OkTBDL1v4wojZ9DSgzK2k4yb9L11T09wJQbz9A
+         0hYL7q/iMpAs/p0mK7SY8kdRwdtxUY8zYCzizRb4ECCMNo5ZNA6TZlOqHQ6IBF4MRSXV
+         DwwBWEkQCgqiiSmZmTm758eGA384+/RDTLQJ1Sa7hdr1Cdw8+8tGQGGVYurS5ByroMGO
+         MHs+oaPoB7wYOEWE8kVCKg/xK0y7dHIWVImjCNBc02nqfJOVFQNfV/q0GttdUGNwPRZ4
+         MAGXmAc6oBehlod4uhEcRPK0FBBfAd3izTp0ys8DzxJ1GcAVOB7ZMUV46GwjUhDF2b2Q
+         xSMQ==
+X-Gm-Message-State: ACrzQf0Ylb5xcdPUxsUSgRZGnABNRkdytH2l39VozoSIWGiqKJKEhR+7
+        tujPNsek26Khp0byLTQjMOQi+Q==
+X-Google-Smtp-Source: AMsMyM58AFzdnBpI+k19m++SDxgNek0dlsX3H4HcMS4Yghg2VZxjANmtnyYSexE9cimQ5Cvbfz+zYg==
+X-Received: by 2002:a63:e218:0:b0:448:5163:478f with SMTP id q24-20020a63e218000000b004485163478fmr1248136pgh.415.1666991306407;
+        Fri, 28 Oct 2022 14:08:26 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n1-20020a170902e54100b00174c1855cd9sm3509621plf.267.2022.10.28.14.08.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 14:08:25 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 14:08:24 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, peterhuewe@gmx.de,
+        linux-integrity@vger.kernel.org, jgg@ziepe.ca,
+        samitolvanen@google.com
+Subject: Re: [PATCH] tpm: Avoid function type cast of put_device()
+Message-ID: <202210281407.29FF39D8@keescook>
+References: <20221021123309.2770740-1-ardb@kernel.org>
+ <Y1WxtIjnJvX0jAk1@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBX9XFOCVxj63ccAA--.45991S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF1kAr4UAFyxAr48Cr17ZFb_yoWrZw1Dp3
-        WrZw1jkF40vF4avFWrK397uayS9FW7CrW5KwnxZwnrZa97JF4xW3W5tFy5Zr13Gr15Gr9Y
-        qr17Can5u3WUZa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-        AKxVWrXVW3AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-        07jTbyZUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4DNkwAAs6
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1WxtIjnJvX0jAk1@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Mon, Oct 24, 2022 at 12:27:16AM +0300, Jarkko Sakkinen wrote:
+> [...]
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Ensure that the eBPF verifier allows to load only LSM programs that return
-an allowed value depending on the LSM hook they attach to.
+Who's tree can this land in?
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- .../testing/selftests/bpf/verifier/lsm_ret.c  | 148 ++++++++++++++++++
- 1 file changed, 148 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/verifier/lsm_ret.c
-
-diff --git a/tools/testing/selftests/bpf/verifier/lsm_ret.c b/tools/testing/selftests/bpf/verifier/lsm_ret.c
-new file mode 100644
-index 000000000000..1a11f47fb24a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/lsm_ret.c
-@@ -0,0 +1,148 @@
-+{
-+	"lsm return value: positive not allowed, return -EPERM",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_permission",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: positive not allowed, return zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_permission",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: positive not allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_permission",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return positive value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: zero/positive not allowed, return -EPERM",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_init_security",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: zero/positive not allowed, return zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_init_security",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return zero value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: zero/positive not allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_init_security",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return positive value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: positive allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "getprocattr",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: positive allowed, return two",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "getprocattr",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: only one allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "audit_rule_match",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: only one allowed, return two",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "audit_rule_match",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, can return only one as positive value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: negative not allowed, return -EPERM",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "vm_enough_memory",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return negative value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: negative not allowed, return zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "vm_enough_memory",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: negative not allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "vm_enough_memory",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
 -- 
-2.25.1
-
+Kees Cook
