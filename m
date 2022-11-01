@@ -2,49 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344676142B2
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Nov 2022 02:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D4B6142C1
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Nov 2022 02:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiKABLA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 31 Oct 2022 21:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S229853AbiKABX0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 31 Oct 2022 21:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiKABK7 (ORCPT
+        with ESMTP id S229781AbiKABXZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 31 Oct 2022 21:10:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2450DEE0C;
-        Mon, 31 Oct 2022 18:10:58 -0700 (PDT)
+        Mon, 31 Oct 2022 21:23:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9295210B5C
+        for <linux-integrity@vger.kernel.org>; Mon, 31 Oct 2022 18:23:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE5C161519;
-        Tue,  1 Nov 2022 01:10:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85917C433D6;
-        Tue,  1 Nov 2022 01:10:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14B526151B
+        for <linux-integrity@vger.kernel.org>; Tue,  1 Nov 2022 01:23:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89EEEC433C1;
+        Tue,  1 Nov 2022 01:23:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667265057;
-        bh=E9tDPlGMSYHBswA14cGsgL7Le44ZO8NaHmzcY0vJyLg=;
+        s=k20201202; t=1667265803;
+        bh=kCTvckIAww+vWve8vjMTgkQ9dxqkTiuNq3jJ2ugyKjQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iNFHHJxv33E3jdaoc4X76QzbquSIC4hiENGXQ/LA/Xas6x7QSi6RfRgDYtwpwG262
-         56EXGdrlEdQBtmvaufWlcyIs03CnlLhuzj1l/GcMFaOPqqWAazBbYSbJPNH+xYN/+/
-         jynB3NxQ8E5ekYtTpdo6QtRKwaOZvI8WbENoT9ip486qVVcwG70W/lEQy/jSJy05An
-         rcVQIXGIjqQbwPo0mQwYgkMghIuDHdx6rX27WVjbNTUZbxKfeEMuY4V+tbdTM4A9mD
-         RFbZrb3fRF7EpdkF/ge4b/tvDfS7ubAllThpSJ9BgpgQwhg4/nbRXfE/gX8pWM6av1
-         VapLKCB5BnAFg==
-Date:   Tue, 1 Nov 2022 03:10:52 +0200
+        b=l4U8SGXrSzsWDq/HXj+p6M9GwhPk6m/Fun/T6MNxKB+8y6GObwfh7TDDF9rVmN5kt
+         G3KLoDY7b4ZhHPC6g6fJIvSnJkHYZgdnb1QkzTyprqoSAOLuqjmkszbGlgwHQa2IR6
+         HbEw8jZ/m81va18P3wXKnmwe97BEBoYCK5kNj5JmfbjjqGUjmQq1wj+tyL0RSYK4fc
+         qNFrdkmM8gej5BD2gfvedugSQKkZYnCJ5wTybsCUSRyiMIVeRiDm/dy9ojNANOi/kx
+         FMgHH6o1Q02gaqA9qpmi31/FcoVUvqDjYqMAfjU9/xKNvIaUb43P9tn6uzKQp9kQ+o
+         SBeFxGnvRO0rw==
+Date:   Tue, 1 Nov 2022 03:23:18 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] tpm: st33zp24: remove pointless checks on probe
-Message-ID: <Y2ByHKkX8mHJK7EL@kernel.org>
-References: <20221027071349.991730-1-dmitry.torokhov@gmail.com>
- <20221027071349.991730-3-dmitry.torokhov@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, peterhuewe@gmx.de,
+        linux-integrity@vger.kernel.org, jgg@ziepe.ca,
+        samitolvanen@google.com
+Subject: Re: [PATCH] tpm: Avoid function type cast of put_device()
+Message-ID: <Y2B1Bla/uSXow/5c@kernel.org>
+References: <20221021123309.2770740-1-ardb@kernel.org>
+ <Y1WxtIjnJvX0jAk1@kernel.org>
+ <202210281407.29FF39D8@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027071349.991730-3-dmitry.torokhov@gmail.com>
+In-Reply-To: <202210281407.29FF39D8@keescook>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,61 +56,17 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 12:13:49AM -0700, Dmitry Torokhov wrote:
-> Remove tests for SPI device or I2C client to be non-NULL because
-> driver core will never call driver's probe method without having
-> a valid device structure.
+On Fri, Oct 28, 2022 at 02:08:24PM -0700, Kees Cook wrote:
+> On Mon, Oct 24, 2022 at 12:27:16AM +0300, Jarkko Sakkinen wrote:
+> > [...]
+> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
+> Who's tree can this land in?
+
+Sorry, I forgot to pick this, it's now applied to my tree.
+
 > 
-> v3: no changes
-> v2: reworked commit message
-> 
->  drivers/char/tpm/st33zp24/i2c.c | 6 ------
->  drivers/char/tpm/st33zp24/spi.c | 7 -------
->  2 files changed, 13 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-> index 614c7d8ed84f..8156bb2af78c 100644
-> --- a/drivers/char/tpm/st33zp24/i2c.c
-> +++ b/drivers/char/tpm/st33zp24/i2c.c
-> @@ -106,12 +106,6 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
->  {
->  	struct st33zp24_i2c_phy *phy;
->  
-> -	if (!client) {
-> -		pr_info("%s: i2c client is NULL. Device not accessible.\n",
-> -			__func__);
-> -		return -ENODEV;
-> -	}
-> -
->  	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
->  		dev_info(&client->dev, "client not i2c capable\n");
->  		return -ENODEV;
-> diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-> index 25b0e7994d27..c249d3f964fd 100644
-> --- a/drivers/char/tpm/st33zp24/spi.c
-> +++ b/drivers/char/tpm/st33zp24/spi.c
-> @@ -223,13 +223,6 @@ static int st33zp24_spi_probe(struct spi_device *dev)
->  {
->  	struct st33zp24_spi_phy *phy;
->  
-> -	/* Check SPI platform functionnalities */
-> -	if (!dev) {
-> -		pr_info("%s: dev is NULL. Device is not accessible.\n",
-> -			__func__);
-> -		return -ENODEV;
-> -	}
-> -
->  	phy = devm_kzalloc(&dev->dev, sizeof(struct st33zp24_spi_phy),
->  			   GFP_KERNEL);
->  	if (!phy)
 > -- 
-> 2.38.0.135.g90850a2211-goog
-> 
-
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Kees Cook
 
 BR, Jarkko
