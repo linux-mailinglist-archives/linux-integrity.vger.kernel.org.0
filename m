@@ -2,187 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B350D614305
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Nov 2022 03:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE828614A14
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Nov 2022 12:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiKACEd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 31 Oct 2022 22:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
+        id S230239AbiKAL5t (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Nov 2022 07:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiKACEc (ORCPT
+        with ESMTP id S230173AbiKAL5m (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 31 Oct 2022 22:04:32 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D8C5FAC
-        for <linux-integrity@vger.kernel.org>; Mon, 31 Oct 2022 19:04:31 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id j14so18977332ljh.12
-        for <linux-integrity@vger.kernel.org>; Mon, 31 Oct 2022 19:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oPl1SOnxyAnQu6lEK1ziCKE74cXYRenL9yBkUnWkw14=;
-        b=F1igKS61rW0KJ3aOyU2c0g4z4smdRxqTgtzdhbdpFum/1avRujwvQFbx8TaILeqrWu
-         wBk7C25kWgmeIdowA1zWM9/c4zi8pQw3XqOY6ookBu/TQqWePz5jbMqj+rsIBNw7FuyH
-         m5ql7j5vMnLSttGBPzmZWQBN4AEaGfS5B2bFI1uD7aXHrwEFcuT3seyjv4BpplGrtTkQ
-         hT9zDgAkX7FKMR8tW3qmv3aER2pgH6a15pCRe9cBDDkSAvFv5NaSL7hhzMnutJtpqBtQ
-         tThH9kbnnGg27MV2dxw03u8vqATADURZ/InhJel1UKreFmj8WlsrsbAAhEkRBEpiZYgd
-         QgEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oPl1SOnxyAnQu6lEK1ziCKE74cXYRenL9yBkUnWkw14=;
-        b=UvXXD94UIqydwLpopZDLKcFL773WjThhOW8mqpkH8XbB2AAcKGXqb1O8d4xnvzv4J+
-         0DDLJONcgq2R3YU+2G9Nr/id+87AQcXl2gjESM2HFg96TNKNzgmcI+T30VGLspUcJC/P
-         7UXoKM+coYxbNsJrGQVwtWd98zlw1Pd2U5RDfScShwFoB8Lqk4lI3A8N01nA+crR0mk2
-         G8p21XI+UL+2cPRqdS931DRpN6bY2DPxFNN5rVKWlVXNri0PHPKdwBpFfQhHvgqDq7Fy
-         O7cQgOKXCdLJM6+lDb8LqnbppIyyGs8Iw623p0XqE3RTEtf6j2pg0FNOn1rLnVj2fGxc
-         BMmA==
-X-Gm-Message-State: ACrzQf02rPt7TfcA4RRpuwLQos4fUtvBXUaR8vhXX1G0D1cA8R3qrvBl
-        eBFIKDRy0N45D7Y0tk9FjhDt0H5KnXNRvOR8+xs=
-X-Google-Smtp-Source: AMsMyM4gh7IwkqsCFTFXzDOx8pgg2BLRHFpsXXl6fVoGy8CA3oRpPQ837gfTfHUkglTlTt5Snl1ieg==
-X-Received: by 2002:a2e:a37a:0:b0:277:2e8a:bc82 with SMTP id i26-20020a2ea37a000000b002772e8abc82mr6881736ljn.391.1667268269375;
-        Mon, 31 Oct 2022 19:04:29 -0700 (PDT)
-Received: from dabros-l.roam.corp.google.com ([185.157.14.92])
-        by smtp.gmail.com with ESMTPSA id k11-20020ac257cb000000b00494942bec60sm1508799lfo.17.2022.10.31.19.04.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 19:04:29 -0700 (PDT)
-From:   Jan Dabros <jsd@semihalf.com>
-To:     linux-integrity@vger.kernel.org, jarkko@kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
-        arnd@arndb.de
-Cc:     rrangel@chromium.org, timvp@google.com, apronin@google.com,
-        mw@semihalf.com, upstream@semihalf.com, jsd@semihalf.com
-Subject: [PATCH 3/3] char: tpm: cr50: Move i2c locking to request/relinquish locality ops
-Date:   Tue,  1 Nov 2022 03:03:52 +0100
-Message-Id: <20221101020352.939691-4-jsd@semihalf.com>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-In-Reply-To: <20221101020352.939691-1-jsd@semihalf.com>
-References: <20221101020352.939691-1-jsd@semihalf.com>
+        Tue, 1 Nov 2022 07:57:42 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C7B632D;
+        Tue,  1 Nov 2022 04:57:40 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1BsVKN034449;
+        Tue, 1 Nov 2022 11:57:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=UU2OVLyRFQWblX6Bgns3JmLCMcn+pjyZngTrFCH7Oq4=;
+ b=PCobK7eqqySZBQm7BlisnYLug4EBnNcXM7oazZRKoQpFvk0dKjmPbT/5OH3q+NdB6gsZ
+ 6iTH6sstU4FdYD1iqyrxdzHFXFfNpiiF1Bkvfq6Ypbvc55VPMeK+44MaPFvZaI2NJ74F
+ hHvR2mWBNfa+UErxNmedwD3VyzMf8/y77rhmFJhZDIui2g4v6tdf1WDsmxquc5npfNnS
+ KKIxhwvzmE02fcPEwJzGNsFgBLr0XKv94I5kp2KJtLJLN1SZkz8e8YoWtkToMH0v4ee4
+ BKsNK1+rzRZPDjm/P1+QS1i7yYez4GGZWeglYfN9XRwTuI7aQYpr23sFJGLbl/lvV9+R kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjw7tt8yq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Nov 2022 11:57:21 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A1BpZK7035036;
+        Tue, 1 Nov 2022 11:57:21 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjw7tt8yc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Nov 2022 11:57:21 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A1BokD0010795;
+        Tue, 1 Nov 2022 11:57:20 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma04dal.us.ibm.com with ESMTP id 3kguta0re6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Nov 2022 11:57:20 +0000
+Received: from smtpav03.dal12v.mail.ibm.com ([9.208.128.129])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A1BvKRn10224376
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Nov 2022 11:57:20 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DB4E15803F;
+        Tue,  1 Nov 2022 11:57:18 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1680858061;
+        Tue,  1 Nov 2022 11:57:18 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.189.66])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Nov 2022 11:57:17 +0000 (GMT)
+Message-ID: <cee0b0176edc942ecc0ce6f4d585c239f9b7c425.camel@linux.ibm.com>
+Subject: Re: [PATCH] efi: Add iMac Pro 2017 to uefi skip cert quirk
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Aditya Garg <gargaditya08@live.com>,
+        "chyishian.jiang@gmail.com" <chyishian.jiang@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>
+Date:   Tue, 01 Nov 2022 07:57:17 -0400
+In-Reply-To: <8CB9E43B-AB65-4735-BB8D-A8A7A10F9E30@live.com>
+References: <8CB9E43B-AB65-4735-BB8D-A8A7A10F9E30@live.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Zge99lZrCYUCxOnvM_rD_JuFr53dJRrL
+X-Proofpoint-GUID: 8SUFS2ZDxrTrw_6zpKDYdKfWqqPFy30H
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-01_06,2022-11-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ mlxlogscore=999 mlxscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
+ bulkscore=0 adultscore=0 priorityscore=1501 suspectscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211010088
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Move i2c locking primitives to request_locality and relinquish_locality
-callbacks, what effectively blocks TPM bus for the whole duration of
-logical TPM operation.
+Hi Aditya,
 
-With this in place, cr50-equipped TPM may be shared with external CPUs -
-assuming that underneath i2c controller driver is aware of this setup
-(see i2c-designware-amdpsp as an example).
+On Thu, 2022-10-27 at 10:01 +0000, Aditya Garg wrote:
+> From: Aditya Garg <gargaditya08@live.com>
+> 
+> The iMac Pro 2017 is also a T2 Mac. Thus add it to the list of uefi skip cert.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
 
-Signed-off-by: Jan Dabros <jsd@semihalf.com>
----
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+I found this list of computers with the Apple T2 Security Chip - 
+https://support.apple.com/en-us/HT208862, but not a list that
+correlates them to the system ID.  With this update, is this the entire
+list?
 
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index d3438a4ed1ef8..c6628351ec383 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -202,8 +202,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t
- 	};
- 	int rc;
- 
--	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
--
- 	/* Prepare for completion interrupt */
- 	tpm_cr50_i2c_enable_tpm_irq(chip);
- 
-@@ -222,7 +220,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t
- 
- out:
- 	tpm_cr50_i2c_disable_tpm_irq(chip);
--	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
- 
- 	if (rc < 0)
- 		return rc;
-@@ -264,8 +261,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
- 	priv->buf[0] = addr;
- 	memcpy(priv->buf + 1, buffer, len);
- 
--	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
--
- 	/* Prepare for completion interrupt */
- 	tpm_cr50_i2c_enable_tpm_irq(chip);
- 
-@@ -279,7 +274,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
- 
- out:
- 	tpm_cr50_i2c_disable_tpm_irq(chip);
--	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
- 
- 	if (rc < 0)
- 		return rc;
-@@ -323,6 +317,7 @@ static int tpm_cr50_check_locality(struct tpm_chip *chip, int loc)
-  */
- static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
- {
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
- 	u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_PENDING;
- 	u8 addr = TPM_I2C_ACCESS(loc);
- 	u8 buf;
-@@ -330,13 +325,15 @@ static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
- 
- 	rc = tpm_cr50_i2c_read(chip, addr, &buf, sizeof(buf));
- 	if (rc < 0)
--		return rc;
-+		goto unlock_out;
- 
- 	if ((buf & mask) == mask) {
- 		buf = TPM_ACCESS_ACTIVE_LOCALITY;
- 		rc = tpm_cr50_i2c_write(chip, addr, &buf, sizeof(buf));
- 	}
- 
-+unlock_out:
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
- 	return rc;
- }
- 
-@@ -351,16 +348,19 @@ static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
-  */
- static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
- {
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
- 	u8 buf = TPM_ACCESS_REQUEST_USE;
- 	unsigned long stop;
- 	int rc;
- 
-+	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
- 	if (tpm_cr50_check_locality(chip, loc) == loc)
- 		return loc;
- 
- 	rc = tpm_cr50_i2c_write(chip, TPM_I2C_ACCESS(loc), &buf, sizeof(buf));
- 	if (rc < 0)
--		return rc;
-+		goto unlock_out;
- 
- 	stop = jiffies + chip->timeout_a;
- 	do {
-@@ -370,7 +370,11 @@ static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
- 		msleep(TPM_CR50_TIMEOUT_SHORT_MS);
- 	} while (time_before(jiffies, stop));
- 
--	return -ETIMEDOUT;
-+	rc = -ETIMEDOUT;
-+
-+unlock_out:
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+	return rc;
- }
- 
- /**
--- 
-2.38.1.273.g43a17bfeac-goog
+thanks,
+
+Mimi
+
+> ---
+>  security/integrity/platform_certs/load_uefi.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integrity/platform_certs/load_uefi.c
+> index b78753d27d8ea6..d1fdd113450a63 100644
+> --- a/security/integrity/platform_certs/load_uefi.c
+> +++ b/security/integrity/platform_certs/load_uefi.c
+> @@ -35,6 +35,7 @@ static const struct dmi_system_id uefi_skip_cert[] = {
+>  	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
+>  	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
+>  	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
+> +	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMacPro1,1") },
+>  	{ }
+>  };
+>  
+
 
