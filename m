@@ -2,157 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F338B614C3D
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Nov 2022 15:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A264614EA0
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Nov 2022 16:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiKAOGi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Nov 2022 10:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S229763AbiKAPxU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Nov 2022 11:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiKAOGg (ORCPT
+        with ESMTP id S229533AbiKAPxU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:06:36 -0400
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2084.outbound.protection.outlook.com [40.92.103.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FE91A803;
-        Tue,  1 Nov 2022 07:06:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IwxNx/lxzjThiV9cr1IhWvdsFpNf6yT0aGbp6rukTAsF4ZqMLveWxRxsL71KtjU3WpPBxek7GYnzHPG/3Aq0G9xHvvYsZx79fg2pkhRMaMFb6OSCWJVJsZupkgQA+9buHPRVh3jTy2in35dBSnFcM12WjzYIFT+RXNVlaVuE5F2eqlhQb3L7SfDgcKqnmnKbGXhejhBKYPoGZOW1bv7CT6sLlz7YVjuBux2rKYq1agfIx4n2J7H+wv535xseNms5dzY8bYDkpFQThxt3JRKBGdB1WZLJ4yaz6YrCU9WUO+DhjFB80iZCdwPwzXXMos3W8+f70q+9fBDlPwRcfhx0RA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qQ9L+LtixxFQtsHQB6Vn9SqXNr15ekUJtkOSvHOdKRw=;
- b=RJSbTc1dKShU4ukhCDLSqe6PqWwEg9IYIpIzkwPZYUfpFG2kJDzFciacKwxDTAvctX9NK3og4XrDz2uGek5wGpjY3ewNWTCYmDnfBOtrJkq0w0bX7KX2sWE4XGkF/Z88t6Wi1OpgNRA3VnmHknP4DKmncI/l4xNCc36D4esirzKZWE9mhew3bTSFG+JTMV5Y/39kRQBKVOAvonH0tw5+9BQsKWlMsm46kFzu42az9ghDBd4nnn6z/8CT8URw+NRAqZO1ig5VBfbJ7W7O1xCgYH/I0QdmVdA9qbya31Q0dBuXqbKO3XiEaHtsmD3c0W3wYvBX4dCbEub2yzWg8RZ6pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qQ9L+LtixxFQtsHQB6Vn9SqXNr15ekUJtkOSvHOdKRw=;
- b=PUD+CYdYAasTlvE2HwiZYsqiNHLOaBEeXz1AJhOrpZ0WOtQMdTEw5pyVpSHbeOLCUKV7SQkC9C0fMDbnv0nIdgMuDEp1uhnk/giZOnkPemhzaQ303eqZiFMiMSEiVeR1udjDfc4Eq8x1/6xOikw1Jn8eU/RYDnogiJBZdIopzJaS5EhqEB52TplSvzPYlffKvDS+EoxmlsytrL/Tng4u1Sqn/R7gvLUtC9IqXJ6Nc/iCz1WGWbK5X/d0h/stxeu8MJSwCRE+0qHw+paFeChYiTiDjpCzdpSytx6bouYiC/Vy25uCvuzpKcEWxRkFqZSxURhhbrqV1Lps6YEXZ+LusA==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- PN0PR01MB6352.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:72::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.19; Tue, 1 Nov 2022 14:06:30 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::3dc1:f6bc:49e4:b294]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::3dc1:f6bc:49e4:b294%9]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
- 14:06:29 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-CC:     "chyishian.jiang@gmail.com" <chyishian.jiang@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>
-Subject: Re: [PATCH] efi: Add iMac Pro 2017 to uefi skip cert quirk
-Thread-Topic: [PATCH] efi: Add iMac Pro 2017 to uefi skip cert quirk
-Thread-Index: AQHY6esdl6KnIgWJpkiPJy9/QYH1qa4p/leAgAAkCoA=
-Date:   Tue, 1 Nov 2022 14:06:29 +0000
-Message-ID: <9D46D92F-1381-4F10-989C-1A12CD2FFDD8@live.com>
-References: <8CB9E43B-AB65-4735-BB8D-A8A7A10F9E30@live.com>
- <cee0b0176edc942ecc0ce6f4d585c239f9b7c425.camel@linux.ibm.com>
-In-Reply-To: <cee0b0176edc942ecc0ce6f4d585c239f9b7c425.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [RF7TXoAYhMByxGM2eb2puNimRey2Lu+h]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN0PR01MB6352:EE_
-x-ms-office365-filtering-correlation-id: 091f3098-2859-408c-0dcf-08dabc12462f
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: G4Aao7jpe1hyExV4KcHIj29veQ/4R0zZFSZrRWIoImkXUHtDSGxZZ5ky4Bss1fP6Ohp8D7ZUQsBF+ykR6NSg/8J4rh5DAiBvQwgKEtg4JDzwDGcV481SSTPe4DCdgNKTcGbYXYixcBXjE8QjbKUgnyVF8+Vt4cvrDrqP1I1ulx/IJhnS8/+sqEQ01VoDyhCozVNPKhjQtNoKd5T3polynUFFXOJdL9E5RWd0XEiOzAar+Dn940ty5s48fj2luF06USdv7Dx1I3HC1OqYDsiH9t0r6gdYHr5PGeck+kQhSvGvSYfXTMx/2RbmJ9VSEjonHV/S6CCSMFQY3JWAau8XyLXe6Pphj4+a80qtnVhd2RL41Sv7bhcQHzGJj1Ry70yifMb4VhBWwvMgZQNJbnHtOBjffeIX3OS7v8h7KEBf/mVtWMiPcxG+YEUjUSLltiosW5rF6paSt2E5OGiV0ZJEt8sp7NQZqoLPrRxS4bQh5KT3ZQzLDjExv47sDS6gfxgNyleyrPjo/ymAne5FIFwsQqlVNeEIdkbwX51ke7FCIHRleJHcoqE/HjqiooRrAeAeI/hdQXuxzAHQwH0X5c5Eyuuy9oIPvS+qgFe3FYaU6bbV5X3sVD+SZ2hVXD0n89hoGAIqdz5EJ8fZy3EVTvACYgnoHyOAst0JCnEQQubw+AcSHoSxeCPOVwqlbLppGquuY9YvvGgmnzmDPMQaDYf9QQ==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WkpqVVFubEtVejhpcDBRSjFOTTljSEJqZFN5dFYxVFM0aVVuem9DcklWWm9P?=
- =?utf-8?B?MzdMODJ6VUcxeEJIam5ZRXdpcjZtQXZKT0FTcTFVc0VFdUZXTDlNem1oSlhO?=
- =?utf-8?B?Wm9FbExGNVNkNmZnUVRhNFRLanFuWlRtdnV4b1JFdk1yc2tqUzFtT1pmM2Rz?=
- =?utf-8?B?Y2gvSkJmWm90aXhFK0VyaGFvSENzQ1h6MmVHSzEzVFVsM05ZbXlzbWVseGpr?=
- =?utf-8?B?LzBoQTM1ckxaN1pTNDRsT0tzaU5vZlpvNGM5dE0zOUtxZzNFYnFQZ0V5elVN?=
- =?utf-8?B?VU5MQXdtUmF2bCtBYkF3OFE3YWtDVzJDTHJhbGhlclhlcmpDMHF0TzJhRHB0?=
- =?utf-8?B?aGZDQ2FFTnVMbk5SalhOVXBveFZZcHo3TEg0OU5sZW5lUFZLSmVUN3dJRDN6?=
- =?utf-8?B?OUVwcXArU0pMUVNraXR6Y1IyTWFaVmx3SjgrZWVZV2xXS2UxQ0Q0ZXlxRkNM?=
- =?utf-8?B?TFdFQmd3MDlBVWlMc2VGcVZkZEJ5MjkzdjBROXhWL2N5NWNVdEhqWHQ1UTQ0?=
- =?utf-8?B?WklKV0VXNXpzR1lWUWFUYnFSY2Jxd00yb1NsMTR4OUxmZWcybGNFaWFlVnBG?=
- =?utf-8?B?aXpLdm5aOG5nR0lNYW1ZV3djdVdmdzBLTDdTODQyUnlZYnYzVzVmdllDaXlE?=
- =?utf-8?B?YnNFRmhadE13WitUN0MvNXFSc3UzUmQwVUlvMzF4UzVkRjdMV29nTzZ0cXRS?=
- =?utf-8?B?cVlTSXI1ZHF4MkRUaFJ5Mmp4ZUxyQXdOcytVMWVFL25ETHR4cHR2OTdYYXpK?=
- =?utf-8?B?MDBtcjBLdVRmcmM0bUR3RC9iaWZWSzVCR0VSQWVadUZ3blNHd0JVdUpibHJI?=
- =?utf-8?B?bkIwcXoyUnVGSjJZb3BvSmVkSVdaT3RxM1Y4NTY0RnhLL3JvaWkvN3VDK2Y0?=
- =?utf-8?B?TWFrYytXL1NYMStHVkMvL05SWEQ2QjB0L1MxZXp4c0piUXoyWGowSHFYYkVQ?=
- =?utf-8?B?M3dPZ3NENkpmN1JTT3k2K29vMDRiZmhML2d3elg3TGg2VkU0OUw2L1oyekI4?=
- =?utf-8?B?MUJIUnBnT3h0Z1JEbzExUGZxemk2clJJaENIR3hnTkp6M05ZME5EOVRaTzc2?=
- =?utf-8?B?S25ZRXFhRUNKMHl0ZXV6SWN0N3R0SG12dkJyWmU5VUtNc2RzMXpjQVgzYmpk?=
- =?utf-8?B?d2lxdFJwUTZHOXJRdmdBeGErYzVEbTZnaGFzQ0F5NUM4cERyckh4a2NQT1gr?=
- =?utf-8?B?QkVreU5UV1lnRzlaemNqUGlYUHNUVEJpV1A0M0tJYUlybWhTb2pRUk9YdEpJ?=
- =?utf-8?B?Qjlob28xSFFWdWt4WUpwZzRqRGFpektLLzdnRnk2T1ZVbjFXOHFVTkxDV1R4?=
- =?utf-8?B?bmxTRndxSzFzeE5YK0F0dmFpTENWMnpxdG9CYTh1NlNDSm1GQ1lXbHQwdHhZ?=
- =?utf-8?B?M2Rtd04rckNWWVd2L2tlOEJCNDFpMk1SVE5sQWNpQzBOQTh3M2FsOThNU1pz?=
- =?utf-8?B?emp0K2ZnZmgzME9YM0t6VHZkbnplb28vYkFwaTlIN3I5RkYzNVlHczBLVFM0?=
- =?utf-8?B?amlKUVlWK2NvWjRQbnVJVEIyN3EvbitENDBjWFhrZW9Lc2VVQzdWT1dGNTcz?=
- =?utf-8?B?amFYVkF6TTRveit5UVp5YkE2dmplSmZsQjRTQzdicDI4SmhYSDBVc2h1eFc5?=
- =?utf-8?B?dWRZL1JoWEpTMTUxamtVOEJNYWlEUVkwNTNYdklRUjE2UEpFdFhvT29Jbmc3?=
- =?utf-8?B?Y0hnYXdjNHNxVHREaUxZNFFFSWliTDdSdjFsVVJYcFplRTNycUo1anJ3PT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EAEAB7C18C8DFC4AAADC2D4B8C245436@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Tue, 1 Nov 2022 11:53:20 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ED7167E8
+        for <linux-integrity@vger.kernel.org>; Tue,  1 Nov 2022 08:53:16 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id t25so38125796ejb.8
+        for <linux-integrity@vger.kernel.org>; Tue, 01 Nov 2022 08:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=krVzZq9tImSVKhNSwmyx5FUkEl3EHfvETEVJbBZ50GQ=;
+        b=PIVfLw+rTgZpkZ2RaTHQi9BNWp1og3LoYr7+FOXdy39xK1Za5l/3ctot3PaRfWh+aU
+         wCaaRSIG/x0Jgsj8LcpnpZmHJgw/HIuQ6s+BCJ4MgTWLuTL2lo3P2NOgOTJCf/H/yVuU
+         9OpfaVv8XuFZekOa5DEdigNEepUR08zz6u1MQ2g2vmzOtZH/UWJv4hJNh4rtvRiW7/nX
+         v/FiOpk53/Ff5y1gk0qJKI2Rc3Hgn64oGUkAqDgZ6a72WpIpNL5DFhnYk9b+qG13u+43
+         EQ6RcLfC0GG/5FVPuinlzmekI0VCoidzARXR1oTfgGpmqZfM7hzWjQn3uLyXwUjLbeM/
+         hvkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=krVzZq9tImSVKhNSwmyx5FUkEl3EHfvETEVJbBZ50GQ=;
+        b=c0B1/po8IJ5x4hWMCxdwJbqzSVpgtDIuKZSIfQzg1UALRe74IHRDEuknz5pCHlAJBu
+         u/dVxuy0LyG9N1uXHxYZVvZFna/jMwsiwhhIZpeni4+Po4Yc1sYudyUrKuilQEK8yK4m
+         ib4pHheiAkH8kCLy1q8X9YwjngJ6O+6fu1Gu/XOw/+8yec+sl4ALPsx96RkC4ZwSZ4NJ
+         OKwFMofqs+ikCpNIvSxF1g3o0YNg1P7hEuTQxy3qFmr8KVX5cMWgurvh9J9FrbFK/qvM
+         OPanvqOx8K/qTU+vfa8M1Kj3CoDvWYZR2BOKsBdYMgczuDwRkApocuVUip5FYUfJVo32
+         k1zg==
+X-Gm-Message-State: ACrzQf3E0gWiPMy0nGft9ZPjono2ch7zsQyQ29JnZnS0I4VB0P+6otA8
+        CuKBHtDlUtYv3DubenBy7VeW14Zz/ATW8fn7XHD/qA==
+X-Google-Smtp-Source: AMsMyM7Eh5+RyNKsX42Iw3wNFJiYktvAWtkOMWKiWKS4BXls2fUYdIk2wnotYEv7K3vhBi2ymX2vGJsUljsDeHR0S9E=
+X-Received: by 2002:a17:907:969e:b0:7a6:fe3:6f11 with SMTP id
+ hd30-20020a170907969e00b007a60fe36f11mr19217443ejc.501.1667317994392; Tue, 01
+ Nov 2022 08:53:14 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 091f3098-2859-408c-0dcf-08dabc12462f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2022 14:06:29.8799
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0PR01MB6352
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221101020352.939691-1-jsd@semihalf.com> <20221101020352.939691-2-jsd@semihalf.com>
+In-Reply-To: <20221101020352.939691-2-jsd@semihalf.com>
+From:   Tim Van Patten <timvp@google.com>
+Date:   Tue, 1 Nov 2022 09:53:03 -0600
+Message-ID: <CANkg5eyWqhReHJd7Bj5EEG5chz89M-PKCnak91qPRWZEzm3NRw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] char: tpm: Protect tpm_pm_suspend with locks
+To:     Jan Dabros <jsd@semihalf.com>
+Cc:     linux-integrity@vger.kernel.org, jarkko@kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
+        arnd@arndb.de, rrangel@chromium.org, apronin@google.com,
+        mw@semihalf.com, upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SGkgTWltaQ0KDQo+IEkgZm91bmQgdGhpcyBsaXN0IG9mIGNvbXB1dGVycyB3aXRoIHRoZSBBcHBs
-ZSBUMiBTZWN1cml0eSBDaGlwIC0gDQo+IGh0dHBzOi8vc3VwcG9ydC5hcHBsZS5jb20vZW4tdXMv
-SFQyMDg4NjIsIGJ1dCBub3QgYSBsaXN0IHRoYXQNCj4gY29ycmVsYXRlcyB0aGVtIHRvIHRoZSBz
-eXN0ZW0gSUQuICBXaXRoIHRoaXMgdXBkYXRlLCBpcyB0aGlzIHRoZSBlbnRpcmUNCj4gbGlzdD8N
-Cg0KQXMgcGVyIHRoZSBsaW5rIHlvdSBzZW50IG1lLCB0aGUgZm9sbG93aW5nIGFyZSB0aGUgc3lz
-dGVtIElEcyBvZiB0aGUgVDIgTWFjcyBtZW50aW9uZWQgaW4gdGhlIGxpc3QNCg0KMS4gaU1hYyAo
-UmV0aW5hIDVLLCAyNy1pbmNoLCAyMDIwKSAtIGlNYWMyMCwxLCBpTWFjMjAsMg0KMi4gaU1hYyBQ
-cm8gLSBpTWFjUHJvMSwxDQozLiBNYWMgUHJvICgyMDE5KSAtIE1hY1BybzcsMQ0KNC4gTWFjIFBy
-byAoUmFjaywgMjAxOSkgLSBNYWNQcm83LDENCjUuIE1hYyBtaW5pICgyMDE4KSAtIE1hY21pbmk4
-LDENCjYuIE1hY0Jvb2sgQWlyIChSZXRpbmEsIDEzLWluY2gsIDIwMjApIC0gTWFjQm9va0Fpcjks
-MQ0KNy4gTWFjQm9vayBBaXIgKFJldGluYSwgMTMtaW5jaCwgMjAxOSkgLSBNYWNCb29rQWlyOCwy
-DQo4LiBNYWNCb29rIEFpciAoUmV0aW5hLCAxMy1pbmNoLCAyMDE4KSAtIE1hY0Jvb2tBaXI4LDEN
-CjkuIE1hY0Jvb2sgUHJvICgxMy1pbmNoLCAyMDIwLCBUd28gVGh1bmRlcmJvbHQgMyBwb3J0cykg
-LSBNYWNCb29rUHJvMTYsMw0KMTAuIE1hY0Jvb2sgUHJvICgxMy1pbmNoLCAyMDIwLCBGb3VyIFRo
-dW5kZXJib2x0IDMgcG9ydHMpIC0gTWFjQm9va1BybzE2LDINCjExLiBNYWNCb29rIFBybyAoMTYt
-aW5jaCwgMjAxOSkgLSBNYWNCb29rUHJvMTYsMSwgTWFjQm9va1BybzE2LDQNCjEyLiBNYWNCb29r
-IFBybyAoMTMtaW5jaCwgMjAxOSwgVHdvIFRodW5kZXJib2x0IDMgcG9ydHMpIC0gTWFjQm9va1By
-bzE1LDQNCjEzLiBNYWNCb29rIFBybyAoMTUtaW5jaCwgMjAxOSkgLSBNYWNCb29rUHJvMTUsMSwg
-TWFjQm9va1BybzE1LDMNCjE0LiBNYWNCb29rIFBybyAoMTMtaW5jaCwgMjAxOSwgRm91ciBUaHVu
-ZGVyYm9sdCAzIHBvcnRzKSAtIE1hY0Jvb2tQcm8xNSwyDQoxNS4gTWFjQm9vayBQcm8gKDE1LWlu
-Y2gsIDIwMTgpIC0gTWFjQm9va1BybzE1LDENCjE2LiBNYWNCb29rIFBybyAoMTMtaW5jaCwgMjAx
-OCwgRm91ciBUaHVuZGVyYm9sdCAzIHBvcnRzKSAtIE1hY0Jvb2tQcm8xNSwyDQoNClRoZSBzeXN0
-ZW0gSURzIG9mIHRoZSBNYWNzIGNhbiBiZSBzZWVuIGZyb20gb2ZmaWNpYWwgQXBwbGXigJlzIGRv
-Y3VtZW50YXRpb24gZm9ybSB0aGUgbGlua3MgYmVsb3cgOi0NCg0KaHR0cHM6Ly9zdXBwb3J0LmFw
-cGxlLmNvbS9lbi1pbi9IVDIwMTYzNCAtIEZvciBpTWFjDQpodHRwczovL3N1cHBvcnQuYXBwbGUu
-Y29tL2VuLWluL0hUMjAyODg4IC0gRm9yIE1hYyBQcm8NCmh0dHBzOi8vc3VwcG9ydC5hcHBsZS5j
-b20vZW4taW4vSFQyMDE4OTQgLSBGb3IgTWFjIG1pbmkNCmh0dHBzOi8vc3VwcG9ydC5hcHBsZS5j
-b20vZW4taW4vSFQyMDE4NjIgLSBGb3IgTWFjQm9vayBBaXINCmh0dHBzOi8vc3VwcG9ydC5hcHBs
-ZS5jb20vZW4taW4vSFQyMDEzMDAgLSBGb3IgTWFjQm9vayBQcm8NCg0KQWZ0ZXIgY3Jvc3MtY2hl
-Y2tpbmcgb25seSBpTWFjUHJvMSwxIHNlZW1zIHRvIGJlIG1pc3NpbmcuDQoNClRoYW5rcw0KQWRp
-dHlh
+On Mon, Oct 31, 2022 at 8:04 PM Jan Dabros <jsd@semihalf.com> wrote:
+>
+> -       if (!tpm_chip_start(chip)) {
+> +       rc = tpm_try_get_ops(chip);
+> +       if (!rc) {
+>                 if (chip->flags & TPM_CHIP_FLAG_TPM2)
+>                         tpm2_shutdown(chip, TPM2_SU_STATE);
+>                 else
+>                         rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+
+This if-else block is still interacting with the TPM even though
+you're not guaranteed to have the lock, which could lead to
+racy/inchorent results. Would it be better to just bail out entirely
+since we can't safely attempt any recovery at this point. If it's
+still worth attempting the shutdown command, it would at least be good
+to add a comment admitting that we have no choice but to communicate
+with the TPM without a lock.
+
+-- 
+
+Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997
