@@ -2,71 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C65615303
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Nov 2022 21:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9307615308
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Nov 2022 21:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiKAUS3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Nov 2022 16:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S230193AbiKAUSc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Nov 2022 16:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiKAUS0 (ORCPT
+        with ESMTP id S230190AbiKAUS3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Nov 2022 16:18:26 -0400
+        Tue, 1 Nov 2022 16:18:29 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8DF644A
-        for <linux-integrity@vger.kernel.org>; Tue,  1 Nov 2022 13:18:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB276DF2F
+        for <linux-integrity@vger.kernel.org>; Tue,  1 Nov 2022 13:18:26 -0700 (PDT)
 Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1IaH3c032273;
-        Tue, 1 Nov 2022 20:18:22 GMT
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1Ishux027865;
+        Tue, 1 Nov 2022 20:18:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=VYYMkhwQG+wfyk3wxq1h6bcWHrs7e2US+4y/UJWmv9o=;
- b=MxVwRVXFALbNVQ3vRNQVSGthq5/fdvBXwbWQgnx9a8ytu+t6ycfP+7j4N5mNB5crXqF7
- 4rgYWaeIaknaznJTomHX45NloKZN/QdWhv97Ml6PopuJudma5eqXZj5/RhTj9nb5zJod
- DDxLfYIVK71uHVyL8GfAr2ethdtnnEryCnkfaZGHvoNCbvq//yPOTYFV0DDuTbMisa/B
- c8XyKskoyVmwLaSvbTVlFcgZUFcBKe3qGToLLN2XbZ4lRS4A5kKWgrftn4ywOGbx0zuO
- smpE6hChlFJ03WSnOQwqEFuapBdgMMf7iDoFKBKRbnq6wi/9LdPQP+GdyO7C1xCaSRKH Hw== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjtw3g4fw-1
+ bh=uvfh6MTyWjh11ox160+OBJ2eKLAYVZcg93CZSE8+2jg=;
+ b=G53cgFiWQ1yqXBzVisV4Lo3mPz2VbV52y4c57xCOPy7eeLipgUOR25B8ZMh1wzlWU5as
+ XG6AAGj8DZLGFeTCI8Vm9mIGvgnhZXR79gZVJAF3B0cC5pqS3jHbDk8ei55kx9QJbDal
+ AtEi+6UsmYBvqPT24c0FtPrZiKtmk8AwJRw0/xjfLpOdDVzFEgnmlNAG6UhVnz4cA8xg
+ RGRbhdd2SXZgSz5SCz9ZoS3j96gv0vfnNQwuKr22s8MAGdtmlhW/Hka1wgk2Ft3XWWqv
+ Lo78CjvKjowHMij5fcsjQeYCAQsjXcJ+AXPAytEDfX9uenaqEYvWonZkYinlQij50KPn LA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjtw3g4gc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 20:18:21 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A1K5JlK025198;
-        Tue, 1 Nov 2022 20:18:19 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3kgut9bwbm-1
+        Tue, 01 Nov 2022 20:18:22 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A1K5Z42004779;
+        Tue, 1 Nov 2022 20:18:20 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3kgut8w8bv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 20:18:19 +0000
+        Tue, 01 Nov 2022 20:18:20 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A1KIq0X39125474
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A1KCntL47841552
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Nov 2022 20:18:52 GMT
+        Tue, 1 Nov 2022 20:12:49 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 88571A4060;
+        by IMSVA (Postfix) with ESMTP id 6DF9EA405F;
+        Tue,  1 Nov 2022 20:18:17 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6521A405C;
         Tue,  1 Nov 2022 20:18:16 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CC476A4054;
-        Tue,  1 Nov 2022 20:18:15 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.160.14.52])
         by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Nov 2022 20:18:15 +0000 (GMT)
+        Tue,  1 Nov 2022 20:18:16 +0000 (GMT)
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
         Vitaly Chikunov <vt@altlinux.org>,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH ima-evm-utils v4 09/17] Add missing EVP_MD_CTX_free() call in calc_evm_hash()
-Date:   Tue,  1 Nov 2022 16:17:55 -0400
-Message-Id: <20221101201803.372652-10-zohar@linux.ibm.com>
+Subject: [PATCH ima-evm-utils v4 10/17] Disable use of OpenSSL "engine" support
+Date:   Tue,  1 Nov 2022 16:17:56 -0400
+Message-Id: <20221101201803.372652-11-zohar@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221101201803.372652-1-zohar@linux.ibm.com>
 References: <20221101201803.372652-1-zohar@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: opd1Wh6UV8VT7lFRJY7A4FELlvlXKPAM
-X-Proofpoint-GUID: opd1Wh6UV8VT7lFRJY7A4FELlvlXKPAM
+X-Proofpoint-ORIG-GUID: uXgRQns-tC8ikSosZ9dLFeS97wMkSN2C
+X-Proofpoint-GUID: uXgRQns-tC8ikSosZ9dLFeS97wMkSN2C
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-01_10,2022-11-01_02,2022-06-22_01
@@ -84,177 +84,219 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When EVP_MD_CTX_new() call was added, the corresponding EVP_MD_CTX_free()
-was never called.  Properly free it.
+OpenSSL v3 "engine" support is deprecated and replaced with "providers".
+Engine support will continue to work for a while, but results in
+deprecated declaration and other messages.  One option is simply to hide
+them ("-Wno-deprecated-declarations").  The other alternative is to
+conditionally build ima-evm-utils without OpenSSL engine support and
+without disabling deprecated declarations.
 
-Fixes: 81010f0d87ef ("ima-evm-utils: Add backward compatible support for openssl 1.1")
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Based on "--disable-engine" or "--enable-engine=no" configuration
+option, disable OpenSSL "engine" support.
+
+As suggested by Vitaly,
+- verify ENGINE_init symbol is defined in libcrypto
+- disable engine support if either OPENSSL_NO_DYNAMIC_ENGINE or
+OPENSSL_NO_ENGINE variables are defined
+
 Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- src/evmctl.c | 58 +++++++++++++++++++++++++++++++++++-----------------
- 1 file changed, 39 insertions(+), 19 deletions(-)
+ configure.ac    |  6 ++++++
+ src/Makefile.am |  8 ++++++++
+ src/evmctl.c    | 17 ++++++++++++++++-
+ src/imaevm.h    |  6 ++++++
+ src/libimaevm.c |  7 ++++++-
+ 5 files changed, 42 insertions(+), 2 deletions(-)
 
+diff --git a/configure.ac b/configure.ac
+index dc666f2bb1fa..90646da22061 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -54,6 +54,11 @@ AC_ARG_ENABLE(sigv1,
+ 	AM_CONDITIONAL([CONFIG_SIGV1], [test "x$enable_sigv1" = "xyes"])
+ 	AS_IF([test "$enable_sigv1"  != "yes"], [enable_sigv1="no"])
+ 
++AC_ARG_ENABLE(engine,
++	      [AS_HELP_STRING([--disable-engine], [build ima-evm-utils without OpenSSL engine support])],,[enable_engine=yes])
++	AC_CHECK_LIB([crypto], [ENGINE_init],, [enable_engine=no])
++	AM_CONDITIONAL([CONFIG_IMA_EVM_ENGINE], [test "x$enable_engine" = "xyes"])
++
+ #debug support - yes for a while
+ PKG_ARG_ENABLE(debug, "yes", DEBUG, [Enable Debug support])
+ if test $pkg_cv_enable_debug = yes; then
+@@ -89,5 +94,6 @@ echo	"      tss2-esys: $ac_cv_lib_tss2_esys_Esys_Free"
+ echo	" tss2-rc-decode: $ac_cv_lib_tss2_rc_Tss2_RC_Decode"
+ echo    "         ibmtss: $ac_cv_header_ibmtss_tss_h"
+ echo    "         sigv1:  $enable_sigv1"
++echo    "         engine: $enable_engine"
+ echo	"            doc: $have_doc"
+ echo
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 90c7249020cf..0527a7b9df5c 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -11,6 +11,10 @@ if CONFIG_SIGV1
+ libimaevm_la_CFLAGS = -DCONFIG_SIGV1
+ endif
+ 
++if CONFIG_IMA_EVM_ENGINE
++libimaevm_la_CFLAGS = -DCONFIG_IMA_EVM_ENGINE
++endif
++
+ include_HEADERS = imaevm.h
+ 
+ nodist_libimaevm_la_SOURCES = hash_info.h
+@@ -31,6 +35,10 @@ if CONFIG_SIGV1
+ evmctl_CFLAGS = -DCONFIG_SIGV1
+ endif
+ 
++# Enable "--engine" support
++if CONFIG_IMA_EVM_ENGINE
++evmctl_CFLAGS = -DCONFIG_IMA_EVM_ENGINE
++endif
+ 
+ # USE_PCRTSS uses the Intel TSS
+ if USE_PCRTSS
 diff --git a/src/evmctl.c b/src/evmctl.c
-index 5306d3b6356d..039571577448 100644
+index 039571577448..4817eeba01c0 100644
 --- a/src/evmctl.c
 +++ b/src/evmctl.c
-@@ -331,11 +331,17 @@ err:
- 	return -1;
+@@ -65,7 +65,9 @@
+ #include <openssl/hmac.h>
+ #include <openssl/err.h>
+ #include <openssl/rsa.h>
++#if CONFIG_IMA_EVM_ENGINE
+ #include <openssl/engine.h>
++#endif
+ #include <openssl/x509v3.h>
+ #include "hash_info.h"
+ #include "pcr.h"
+@@ -2704,7 +2706,9 @@ static void usage(void)
+ 		"      --selinux      use custom Selinux label for EVM\n"
+ 		"      --caps         use custom Capabilities for EVM(unspecified: from FS, empty: do not use)\n"
+ 		"      --verify-sig   verify measurement list signatures\n"
+-		"      --engine e     preload OpenSSL engine e (such as: gost)\n"
++#if CONFIG_IMA_EVM_ENGINE
++		"      --engine e     preload OpenSSL engine e (such as: gost) is deprecated\n"
++#endif
+ 		"      --ignore-violations ignore ToMToU measurement violations\n"
+ 		"  -v                 increase verbosity level\n"
+ 		"  -h, --help         display this help and exit\n"
+@@ -2766,7 +2770,9 @@ static struct option opts[] = {
+ 	{"selinux", 1, 0, 136},
+ 	{"caps", 2, 0, 137},
+ 	{"verify-sig", 0, 0, 138},
++#if CONFIG_IMA_EVM_ENGINE
+ 	{"engine", 1, 0, 139},
++#endif
+ 	{"xattr-user", 0, 0, 140},
+ 	{"ignore-violations", 0, 0, 141},
+ 	{"pcrs", 1, 0, 142},
+@@ -2819,9 +2825,11 @@ static char *get_password(void)
+ 	return password;
  }
  
-+/*
-+ * calc_evm_hash - calculate the file metadata hash
-+ *
-+ * Returns 0 for EVP_ function failures. Return -1 for other failures.
-+ * Return hash algorithm size on success.
-+ */
- static int calc_evm_hash(const char *file, unsigned char *hash)
++#if CONFIG_IMA_EVM_ENGINE
+ static ENGINE *setup_engine(const char *engine_id)
  {
-         const EVP_MD *md;
- 	struct stat st;
--	int err;
-+	int err = -1;
- 	uint32_t generation = 0;
- 	EVP_MD_CTX *pctx;
- 	unsigned int mdlen;
-@@ -349,12 +355,10 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- #if OPENSSL_VERSION_NUMBER < 0x10100000
- 	EVP_MD_CTX ctx;
- 	pctx = &ctx;
--#else
--	pctx = EVP_MD_CTX_new();
+ 	ENGINE *eng = ENGINE_by_id(engine_id);
++
+ 	if (!eng) {
+ 		log_err("engine %s isn't available\n", optarg);
+ 		ERR_print_errors_fp(stderr);
+@@ -2835,6 +2843,7 @@ static ENGINE *setup_engine(const char *engine_id)
+ 		ENGINE_set_default(eng, ENGINE_METHOD_ALL);
+ 	return eng;
+ }
++#endif
+ 
+ int main(int argc, char *argv[])
+ {
+@@ -2960,11 +2969,13 @@ int main(int argc, char *argv[])
+ 		case 138:
+ 			verify_list_sig = 1;
+ 			break;
++#if CONFIG_IMA_EVM_ENGINE
+ 		case 139: /* --engine e */
+ 			imaevm_params.eng = setup_engine(optarg);
+ 			if (!imaevm_params.eng)
+ 				goto error;
+ 			break;
++#endif
+ 		case 140: /* --xattr-user */
+ 			xattr_ima = "user.ima";
+ 			xattr_evm = "user.evm";
+@@ -3023,7 +3034,9 @@ int main(int argc, char *argv[])
+ 	if (imaevm_params.keyfile != NULL &&
+ 	    imaevm_params.eng == NULL &&
+ 	    !strncmp(imaevm_params.keyfile, "pkcs11:", 7)) {
++#if CONFIG_IMA_EVM_ENGINE
+ 		imaevm_params.eng = setup_engine("pkcs11");
++#endif
+ 		if (!imaevm_params.eng)
+ 			goto error;
+ 	}
+@@ -3049,6 +3062,7 @@ int main(int argc, char *argv[])
+ 	}
+ 
+ error:
++#if CONFIG_IMA_EVM_ENGINE
+ 	if (imaevm_params.eng) {
+ 		ENGINE_finish(imaevm_params.eng);
+ 		ENGINE_free(imaevm_params.eng);
+@@ -3056,6 +3070,7 @@ error:
+ 		ENGINE_cleanup();
  #endif
- 
- 	if (lstat(file, &st)) {
--		log_err("Failed to stat: %s\n", file);
-+		log_errno_reset(LOG_ERR, "Failed to stat: %s", file);
- 		return -1;
  	}
- 
-@@ -389,21 +393,30 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 
- 	list_size = llistxattr(file, list, sizeof(list));
- 	if (list_size < 0) {
--		log_err("llistxattr() failed\n");
-+		log_errno_reset(LOG_ERR, "llistxattr() failed");
- 		return -1;
- 	}
- 
-+#if OPENSSL_VERSION_NUMBER >= 0x10100000
-+	pctx = EVP_MD_CTX_new();
-+	if (!pctx) {
-+		log_err("EVP_MD_CTX_new() failed\n");
-+		return 0;
-+	}
++#endif
+ 	ERR_free_strings();
+ 	EVP_cleanup();
+ 	BIO_free(NULL);
+diff --git a/src/imaevm.h b/src/imaevm.h
+index afcf1e042014..884321670fa7 100644
+--- a/src/imaevm.h
++++ b/src/imaevm.h
+@@ -48,7 +48,13 @@
+ #include <errno.h>
+ #include <sys/types.h>
+ #include <openssl/rsa.h>
++#ifdef CONFIG_IMA_EVM_ENGINE
+ #include <openssl/engine.h>
 +#endif
 +
- 	md = EVP_get_digestbyname(imaevm_params.hash_algo);
- 	if (!md) {
- 		log_err("EVP_get_digestbyname(%s) failed\n",
- 			imaevm_params.hash_algo);
--		return 1;
-+		err = 0;
-+		goto out;
- 	}
- 
- 	err = EVP_DigestInit(pctx, md);
- 	if (!err) {
- 		log_err("EVP_DigestInit() failed\n");
--		return 1;
-+		goto out;
- 	}
- 
- 	for (xattrname = evm_config_xattrnames; *xattrname != NULL; xattrname++) {
-@@ -414,7 +427,8 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 			if (err > sizeof(xattr_value)) {
- 				log_err("selinux[%u] value is too long to fit into xattr[%zu]\n",
- 					err, sizeof(xattr_value));
--				return -1;
-+				err = -1;
-+				goto out;
- 			}
- 			strcpy(xattr_value, selinux_str);
- 		} else if (!strcmp(*xattrname, XATTR_NAME_IMA) && ima_str) {
-@@ -422,7 +436,8 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 			if (err > sizeof(xattr_value)) {
- 				log_err("ima[%u] value is too long to fit into xattr[%zu]\n",
- 					err, sizeof(xattr_value));
--				return -1;
-+				err = -1;
-+				goto out;
- 			}
- 			hex2bin(xattr_value, ima_str, err);
- 		} else if (!strcmp(*xattrname, XATTR_NAME_IMA) && evm_portable){
-@@ -431,7 +446,7 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 			if (err < 0) {
- 				log_err("EVM portable sig: %s required\n",
- 					xattr_ima);
--				return -1;
-+				goto out;
- 			}
- 			use_xattr_ima = 1;
- 		} else if (!strcmp(*xattrname, XATTR_NAME_CAPS) && (hmac_flags & HMAC_FLAG_CAPS_SET)) {
-@@ -441,7 +456,8 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 			if (err >= sizeof(xattr_value)) {
- 				log_err("caps[%u] value is too long to fit into xattr[%zu]\n",
- 					err + 1, sizeof(xattr_value));
--				return -1;
-+				err = -1;
-+				goto out;
- 			}
- 			strcpy(xattr_value, caps_str);
- 		} else {
-@@ -462,7 +478,7 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 		err = EVP_DigestUpdate(pctx, xattr_value, err);
- 		if (!err) {
- 			log_err("EVP_DigestUpdate() failed\n");
--			return 1;
-+			goto out;
- 		}
- 	}
- 
-@@ -516,29 +532,33 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 	err = EVP_DigestUpdate(pctx, &hmac_misc, hmac_size);
- 	if (!err) {
- 		log_err("EVP_DigestUpdate() failed\n");
--		return 1;
-+		goto out;
- 	}
- 
- 	if (!evm_immutable && !evm_portable &&
- 	    !(hmac_flags & HMAC_FLAG_NO_UUID)) {
- 		err = get_uuid(&st, uuid);
- 		if (err)
--			return -1;
-+			goto out;
- 
- 		err = EVP_DigestUpdate(pctx, (const unsigned char *)uuid, sizeof(uuid));
- 		if (!err) {
- 			log_err("EVP_DigestUpdate() failed\n");
--			return 1;
-+			goto out;
- 		}
- 	}
- 
- 	err = EVP_DigestFinal(pctx, hash, &mdlen);
--	if (!err) {
-+	if (!err)
- 		log_err("EVP_DigestFinal() failed\n");
--		return 1;
--	}
- 
--	return mdlen;
-+out:
-+#if OPENSSL_VERSION_NUMBER >= 0x10100000
-+	EVP_MD_CTX_free(pctx);
++#if defined(OPENSSL_NO_ENGINE) || defined(OPENSSL_NO_DYNAMIC_ENGINE)
++#undef CONFIG_IMA_EVM_ENGINE
 +#endif
-+	if (err == 1)
-+		return mdlen;
-+	return err;
- }
  
- static int sign_evm(const char *file, const char *key)
+ #ifdef USE_FPRINTF
+ #define do_log(level, fmt, args...)	\
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index b12b7ff14d95..8070ffd61a2c 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -953,9 +953,10 @@ uint32_t imaevm_read_keyid(const char *certfile)
+ static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
+ {
+ 	FILE *fp;
+-	EVP_PKEY *pkey;
++	EVP_PKEY *pkey = NULL;
+ 
+ 	if (!strncmp(keyfile, "pkcs11:", 7)) {
++#ifdef CONFIG_IMA_EVM_ENGINE
+ 		if (!imaevm_params.keyid) {
+ 			log_err("When using a pkcs11 URI you must provide the keyid with an option\n");
+ 			return NULL;
+@@ -972,6 +973,10 @@ static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
+ 			log_err("Failed to load private key %s\n", keyfile);
+ 			goto err_engine;
+ 		}
++#else
++		log_err("OpenSSL \"engine\" support is disabled\n");
++		goto err_engine;
++#endif
+ 	} else {
+ 		fp = fopen(keyfile, "r");
+ 		if (!fp) {
 -- 
 2.31.1
 
