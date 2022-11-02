@@ -2,144 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FF6616FFF
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 22:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92076617033
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 23:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiKBVmy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Nov 2022 17:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
+        id S230132AbiKBWFZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Nov 2022 18:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBVmw (ORCPT
+        with ESMTP id S229681AbiKBWFZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:42:52 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0041563D0
-        for <linux-integrity@vger.kernel.org>; Wed,  2 Nov 2022 14:42:51 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id h206so12700782iof.10
-        for <linux-integrity@vger.kernel.org>; Wed, 02 Nov 2022 14:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LIdmaqZeSNizmt6MMmspW44PQIHeaw+eQdTEyj8Is6o=;
-        b=P9OBe1fpxXys3NgQvnjGd7oHgAEpNg32ivS5qFyIcKLfQml5BX0bCqWEGeOPNg4m/7
-         AAmIM8iL1BXzL8WI6aY1JXpuRb33Nn06Lix+86LD08wQef1oEf0x+dgDFh2k6l2SgMKU
-         UhClCHFo/bxgapDFaf9TW/vMI32RclXCuQsIirfBUp//rYdiTAp7iuN1cCbP1obai4n1
-         TSx/In6U10ARA4uf/s+D9UfZymwMRNAMXW8uTpVRcokGixUWKJtLzyh8SXFUB+vTQe4e
-         8A2PK0lwEpJ0FNjLbXF8xSZK26YcUs00yXfULI7jhzPI9T+gZ6l8T4gg1iwHJ5hg+Vhv
-         IWWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LIdmaqZeSNizmt6MMmspW44PQIHeaw+eQdTEyj8Is6o=;
-        b=mvBOZZcCZ4pd1cdlo7AIiZMspHkocdJ1QqH70AIa+O2txMuos1vNJy6Pe/bUn8mfcW
-         97bBUPNcNwoqQ0idDPWl+Cac/T2RFme+3oXi9Gb+z3QZQ0lOS+3m41g7QAjNRW1AhzSn
-         oj/vo1Wblt/nGQhOurL18BL3fZyWex+AA59QtoMgHJ2sSz2iF5smBVzsYgIgYcu1FZPv
-         EmTgQBOyo8h/vrb4kjOOaxhADM74GTO0L7Jf0wlhrW8qh+ouHhGI853ZQXbcWWdCYJBf
-         oF4SmQ45qK7pJAX3hCA6Wt2aHcH0i81ZvREpp2olQh9Booa9AFYYsZbifIl92BpBFsa/
-         6iQg==
-X-Gm-Message-State: ACrzQf2noHuqXOmbQlJBbtr/Z4/3ToK7npUvkBBtMMBwLKi/nXPlAZbb
-        HSHw1d68vdR/FUHHbdtH+4IrZ3BBpeaK6EpcZH5fTA==
-X-Google-Smtp-Source: AMsMyM772PXzRJ8S3Qzs5krirV4cUiywhBmYYiA8M2i7QN5tgG0CdB9/Xhijb+4KGBXw8O7PMGyfgsabZcYpoCLrUvs=
-X-Received: by 2002:a02:7b10:0:b0:375:4b12:56c with SMTP id
- q16-20020a027b10000000b003754b12056cmr15012214jac.51.1667425371370; Wed, 02
- Nov 2022 14:42:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221101020352.939691-1-jsd@semihalf.com> <20221101020352.939691-3-jsd@semihalf.com>
- <CANkg5ezwYT+ZsiRDW9fe1m4vyncOEDFamq0jXTxmWO37d4i3Nw@mail.gmail.com>
-In-Reply-To: <CANkg5ezwYT+ZsiRDW9fe1m4vyncOEDFamq0jXTxmWO37d4i3Nw@mail.gmail.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Wed, 2 Nov 2022 22:42:40 +0100
-Message-ID: <CAOtMz3P0aToZN8+VwQ2GjWQbn_=DOAZteyw0NxFgO4YAOPXxXQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] char: tpm: cr50: Use generic request/relinquish
- locality ops
-To:     Tim Van Patten <timvp@google.com>
-Cc:     linux-integrity@vger.kernel.org, jarkko@kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
-        arnd@arndb.de, rrangel@chromium.org, apronin@google.com,
-        mw@semihalf.com, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Nov 2022 18:05:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB94617B;
+        Wed,  2 Nov 2022 15:05:24 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2Lcs8L030144;
+        Wed, 2 Nov 2022 22:05:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=7dbezdsWrjkeeMK5twTGOFsoXL1sQg9vzSRIDM1zxyY=;
+ b=Bqf5ObwD15lBCgLE6ZdCXPnYGEKFxHtfFJ6e0kWJi0hulVwLosbCrj7lk+AwWDraU/Aq
+ QhNsCWo1EYpwJ36tm8delRQdJze8CkC6rUy5tgjMEAMYSOETdKgqPrxk5OPgRGUX6vr7
+ Dq7JVP4CfE3f/JQ+D/XMrZ7+jboUH1XkYs5Th55w0MAOvKvKRQSsrApUrU2yneXxGweP
+ l2Pe2Fs1TYI5eujOfO2bcxu6eFPF45OvDnpOkEiQB0TJE3ytINRf501MubMAONAJV6u+
+ Bbr9xwjpOAbcdm3pOgNm5TNze7Zn5qqkHIy4658wMkzvAWWYFWHRDtkGxP6WsMT4mzHC Xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3km0dk8s58-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:04:59 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2M4mJY032545;
+        Wed, 2 Nov 2022 22:04:59 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3km0dk8s4k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:04:59 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2Los9W018270;
+        Wed, 2 Nov 2022 22:04:58 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma02dal.us.ibm.com with ESMTP id 3kgutampy0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:04:58 +0000
+Received: from smtpav04.dal12v.mail.ibm.com ([9.208.128.131])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2M4wnv524918
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 22:04:59 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F6E25806D;
+        Wed,  2 Nov 2022 22:04:57 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 49CAD58056;
+        Wed,  2 Nov 2022 22:04:56 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.53.174])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Nov 2022 22:04:56 +0000 (GMT)
+Message-ID: <ef7375db277ac6a9398ee31a27e95eed717c4832.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fix memory leak in __ima_inode_hash()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaac.jmatt@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Wed, 02 Nov 2022 18:04:55 -0400
+In-Reply-To: <20221102163006.1039343-1-roberto.sassu@huaweicloud.com>
+References: <20221102163006.1039343-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: GNyIH1ZTOMz_JqqTwmGGKkMDxZn7WlVK
+X-Proofpoint-GUID: FKRu6htgPJkjapMQl1NhLG56MGNwlI9N
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=867 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020146
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> >  /**
-> > - * tpm_cr50_check_locality() - Verify TPM locality 0 is active.
-> > + * tpm_cr50_check_locality() - Verify if required TPM locality is active.
-> >   * @chip: A TPM chip.
-> > + * @loc: Locality to be verified
-> >   *
-> >   * Return:
-> > - * - 0:                Success.
-> > + * - loc:      Success.
-> >   * - -errno:   A POSIX error code.
-> >   */
-> > -static int tpm_cr50_check_locality(struct tpm_chip *chip)
-> > +static int tpm_cr50_check_locality(struct tpm_chip *chip, int loc)
-> >  {
-> >         u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_ACTIVE_LOCALITY;
-> >         u8 buf;
-> >         int rc;
-> >
-> > -       rc = tpm_cr50_i2c_read(chip, TPM_I2C_ACCESS(0), &buf, sizeof(buf));
-> > +       rc = tpm_cr50_i2c_read(chip, TPM_I2C_ACCESS(loc), &buf, sizeof(buf));
-> >         if (rc < 0)
-> >                 return rc;
-> >
-> >         if ((buf & mask) == mask)
-> > -               return 0;
-> > +               return loc;
-> >
-> >         return -EIO;
-> >  }
->
-> Why is it useful to return the same `loc` value that was passed in,
-> rather than just returning `0`? The caller already knows the value of
-> `loc`, so they aren't being told anything new.
->
-> I think this should continue to return `0` for success.
+Hi Roberto,
 
-I agree, I should keep this as it was.
+On Wed, 2022-11-02 at 17:30 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 
->
->
-> > - * tpm_cr50_request_locality() - Request TPM locality 0.
-> > + * tpm_cr50_request_locality() - Request TPM locality.
-> >   * @chip: A TPM chip.
-> > + * @loc: Locality to be requested.
-> >   *
-> >   * Return:
-> > - * - 0:                Success.
-> > + * - loc:      Success.
->
-> Same as above. Return `0`.
+Any chance you could fix your mailer?
 
-The case here is that .request_locality callback should return active
-locality. This value is assigned to chip->locality inside
-tpm_request_locality() [drivers/char/tpm/tpm-chip.c].
+> 
+> Commit f3cc6b25dcc5 ("ima: always measure and audit files in policy") lets
+> measurement or audit happen even if the file digest cannot be calculated.
+> 
+> As a result, iint->ima_hash could have been allocated despite
+> ima_collect_measurement() returning an error.
+> 
+> Since ima_hash belongs to a temporary inode metadata structure, declared
+> at the beginning of __ima_inode_hash(), just add a kfree() call if
+> ima_collect_measurement() returns an error different from -ENOMEM (in that
+> case, ima_hash should not have been allocated).
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 280fe8367b0d ("ima: Always return a file measurement in ima_file_hash()")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
->
-> > @@ -374,7 +386,9 @@ static u8 tpm_cr50_i2c_tis_status(struct tpm_chip *chip)
-> >  {
-> >         u8 buf[4];
-> >
-> > -       if (tpm_cr50_i2c_read(chip, TPM_I2C_STS(0), buf, sizeof(buf)) < 0)
-> > +       WARN_ONCE((chip->locality < 0), "Incorrect tpm locality value\n");
->
-> For each of these ` WARN_ONCE((chip->locality < 0), ...).`, can it
-> return immediately rather than attempting to continue using an invalid
-> locality value? Do the following commands have a chance of succeeding
-> with the invalid value?
+Thanks,
 
-I agree - it makes more sense to return immediately instead of trying
-to send invalid configuration over i2c.
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Best Regards,
-Jan
