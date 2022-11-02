@@ -2,160 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC67C616F4F
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 22:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59CAB616FC1
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 22:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiKBVCT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Nov 2022 17:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S230348AbiKBV31 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Nov 2022 17:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiKBVCS (ORCPT
+        with ESMTP id S230165AbiKBV24 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:02:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB40DDF29
-        for <linux-integrity@vger.kernel.org>; Wed,  2 Nov 2022 14:02:17 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2KqTj8002202;
-        Wed, 2 Nov 2022 21:02:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ozBkaOasXK4kHkldivIL/iCn9O7lKRvQq/0wuIScR/o=;
- b=G7H2wC1VlzEuaPCO1/wuLMeZ9oBdTiwmB90ZnBroZWffaNtQZZvLaAZ2jme/KGL3n0Pk
- FslM1Y6SCbGkm+ln2o4XHdAOCEryizbBJMg6+kz9IwDbrfIx6zRfR5lu7AjHOgmPBt1r
- 7IMMttlNXIcr4J/Wyh8rjREQvhWw2ilF1OD2n40Fv0NJnYv1tgkhYCnUS+OOUBzeFm+m
- 11RYgqQle48R7/3UY/CD2cZsI6u44GEeCoMP+oHBVC7eXzdc70vCY2eRyItZsadjqUDb
- 7kZU9ePkMBLZNTQCdWfHQJsQNKIq9iHjD8Ku21o6Y8yxWqsGsQ8Tcj0KMya9dQtowrXP rg== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkyyjg7tg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 21:02:11 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2KoJ3v013693;
-        Wed, 2 Nov 2022 21:02:10 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01wdc.us.ibm.com with ESMTP id 3kgut9w42g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 21:02:10 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2L293r19530136
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Nov 2022 21:02:09 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8A015803F;
-        Wed,  2 Nov 2022 21:02:08 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4978E58066;
-        Wed,  2 Nov 2022 21:02:08 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Nov 2022 21:02:08 +0000 (GMT)
-Message-ID: <acaaf8eb-431e-fc73-78da-40507d56e6d8@linux.ibm.com>
-Date:   Wed, 2 Nov 2022 17:02:07 -0400
+        Wed, 2 Nov 2022 17:28:56 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210C3FAC8
+        for <linux-integrity@vger.kernel.org>; Wed,  2 Nov 2022 14:28:48 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id q142so10087082iod.5
+        for <linux-integrity@vger.kernel.org>; Wed, 02 Nov 2022 14:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kk3ON7oKr0DXltTERjD9VAgx2qz3ErmvVhiYuoaolyQ=;
+        b=PhgjGvYqiwBfLKR8oPqOmlg6HR8v2LlpUNDzQAGWms9ldh4YERTv6qxczRJHANaRFz
+         xMcyjVVybEqGWzyKVmsjX3mkcNqjhDUDm4AEg1wgKUQ020FZkXxlCF2JiYs+heJYQhoO
+         vdOy11oE0hlFsVZzgWsHTAAmRO3Q0hQlHi2gRNFuSo2ia6wQ9aDMtuW4FdCsNO6xTpN6
+         nyIjOrpkeCWZzYVJXVU1tSUksGodJSjn1Y/eM/1iAw8F1YXjipJVGHXUrPSU8558wgyD
+         xZwFBrmzZC6vQc9kXTytB1BAK5ZBNsTURYkx49BymV4cXM8mSN47eEPHRcmf/PU6t5J6
+         T2SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kk3ON7oKr0DXltTERjD9VAgx2qz3ErmvVhiYuoaolyQ=;
+        b=2PzFuareWfikrG/nAW8UakJ7qLRoUeqql2ptcyqERyR8sGi9kDquAb4xF6yQtb50+c
+         sysZeCbqscjA9K5wKARXQf/GOX5scuTcOxH0DEluXe38XmokSK64/zaq8jUQKGUWF4Pk
+         QJot+hGhKBlb8w+b4OMmx1RbmeJVpQJfDCBTWPSIUjIWQkaW/Wx7rIqk8oAytxyZCf+w
+         L2gdWx0Z7tbj1fn7abZvBTe67r+5QoE4Oh53+cPp3akJoquxsC+iKGzSH4+uuJbEpxpD
+         iDq/T4L15eDtI2gB3e5a8o0/qHVnpbFwClvY+dHLaouN2H4CJCwMt/2rL8rEtg/sTEOk
+         EOTg==
+X-Gm-Message-State: ACrzQf3YWHwDYBX1inYm0jtqEUNx0MrETD9zUYqPHAPhLXZifpQuZsp6
+        Utgmb2BhePrPT2dVZdZKpfgS9SCZJlDHAvt7DuJ4lQ==
+X-Google-Smtp-Source: AMsMyM4jo/DAl57yWFnALlR5PuSXqUFwc8/8gpmgyvIc9QAxViA2Zertx2CdnMGDbzAt1oOyhg/l+YnEMY1bM+DpuN4=
+X-Received: by 2002:a05:6638:1187:b0:375:2e5a:71ef with SMTP id
+ f7-20020a056638118700b003752e5a71efmr17128628jas.121.1667424527533; Wed, 02
+ Nov 2022 14:28:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH ima-evm-utils v4 02/17] log and reset 'errno' after
- failure to open non-critical files
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
-References: <20221101201803.372652-1-zohar@linux.ibm.com>
- <20221101201803.372652-3-zohar@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20221101201803.372652-3-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RpcXUmt-s27JPotZZUkeJvs53jztBIjX
-X-Proofpoint-GUID: RpcXUmt-s27JPotZZUkeJvs53jztBIjX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
- phishscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211020139
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221101020352.939691-1-jsd@semihalf.com> <20221101020352.939691-2-jsd@semihalf.com>
+ <CANkg5eyWqhReHJd7Bj5EEG5chz89M-PKCnak91qPRWZEzm3NRw@mail.gmail.com>
+In-Reply-To: <CANkg5eyWqhReHJd7Bj5EEG5chz89M-PKCnak91qPRWZEzm3NRw@mail.gmail.com>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Wed, 2 Nov 2022 22:28:36 +0100
+Message-ID: <CAOtMz3Od-r03EigmuEAG_q27bvifRS8ZV8YPOUHrayEW6YXO-Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] char: tpm: Protect tpm_pm_suspend with locks
+To:     Tim Van Patten <timvp@google.com>
+Cc:     linux-integrity@vger.kernel.org, jarkko@kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
+        arnd@arndb.de, rrangel@chromium.org, apronin@google.com,
+        mw@semihalf.com, upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+> > -       if (!tpm_chip_start(chip)) {
+> > +       rc = tpm_try_get_ops(chip);
+> > +       if (!rc) {
+> >                 if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> >                         tpm2_shutdown(chip, TPM2_SU_STATE);
+> >                 else
+> >                         rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+>
+> This if-else block is still interacting with the TPM even though
+> you're not guaranteed to have the lock, which could lead to
+> racy/inchorent results. Would it be better to just bail out entirely
+> since we can't safely attempt any recovery at this point. If it's
+> still worth attempting the shutdown command, it would at least be good
+> to add a comment admitting that we have no choice but to communicate
+> with the TPM without a lock.
 
+If tpm_try_get_ops() returns 0 it means that we have a lock. And if we
+don't have a lock, then we are not executing any TPM commands. Are you
+referring to tpm_mutex or something different?
 
-On 11/1/22 16:17, Mimi Zohar wrote:
-> Define a log_errno_reset macro to emit the errno string at or near the
-> time of error, similar to the existing log_errno macro, but also reset
-> errno to avoid dangling or duplicate errno messages on exit.
-> 
-> The initial usage is for non-critical file open failures.
-
-After looking just at the fopen() in evmctl.c at the end of this series there are some that are left over that show no error message (read_binary_bios_measurements) others that still use log_err() then. Should they not all be converted/extended and use log_errno_reset()?
-
-
-> 
-> Suggested-by: Vitaly Chikunov <vt@altlinux.org>
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->   src/evmctl.c | 12 ++++++++++--
->   1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/src/evmctl.c b/src/evmctl.c
-> index 0412bc0ac2b0..54123bf20f03 100644
-> --- a/src/evmctl.c
-> +++ b/src/evmctl.c
-> @@ -166,6 +166,9 @@ struct tpm_bank_info {
->   static char *pcrfile[MAX_PCRFILE];
->   static unsigned npcrfile;
->   
-> +#define log_errno_reset(level, fmt, args...) \
-> +	{do_log(level, fmt " (errno: %s)\n", ##args, strerror(errno)); errno = 0; }
-> +
->   static int bin2file(const char *file, const char *ext, const unsigned char *data, int len)
->   {
->   	FILE *fp;
-> @@ -1911,8 +1914,10 @@ static int read_sysfs_pcrs(int num_banks, struct tpm_bank_info *tpm_banks)
->   	fp = fopen(pcrs, "r");
->   	if (!fp)
->   		fp = fopen(misc_pcrs, "r");
-> -	if (!fp)
-> +	if (!fp) {
-> +		log_errno_reset(LOG_DEBUG, "Failed to read TPM 1.2 PCRs");
->   		return -1;
-> +	}
->   
->   	result = read_one_bank(&tpm_banks[0], fp);
->   	fclose(fp);
-> @@ -2055,7 +2060,6 @@ static int ima_measurement(const char *file)
->   	int err_padded = -1;
->   	int err = -1;
->   
-> -	errno = 0;
->   	memset(zero, 0, MAX_DIGEST_SIZE);
->   
->   	pseudo_padded_banks = init_tpm_banks(&num_banks);
-> @@ -2072,6 +2076,8 @@ static int ima_measurement(const char *file)
->   		init_public_keys(imaevm_params.keyfile);
->   	else				/* assume read pubkey from x509 cert */
->   		init_public_keys("/etc/keys/x509_evm.der");
-> +	if (errno)
-> +		log_errno_reset(LOG_DEBUG, "Failed to initialize public keys");
->   
->   	/*
->   	 * Reading the PCRs before walking the IMA measurement list
-> @@ -2746,6 +2752,8 @@ int main(int argc, char *argv[])
->   	unsigned long keyid;
->   	char *eptr;
->   
-> +	errno = 0;	/* initialize global errno */
-> +
->   #if !(OPENSSL_VERSION_NUMBER < 0x10100000)
->   	OPENSSL_init_crypto(
->   #ifndef DISABLE_OPENSSL_CONF
-
+Best Regards,
+Jan
