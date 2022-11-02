@@ -2,117 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B0E615D5C
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 09:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F02A615F9E
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 10:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiKBII7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Nov 2022 04:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
+        id S230475AbiKBJYp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Nov 2022 05:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKBII6 (ORCPT
+        with ESMTP id S231336AbiKBJY3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:08:58 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753F3DA6;
-        Wed,  2 Nov 2022 01:08:54 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4N2KBh70whz9xGY8;
-        Wed,  2 Nov 2022 16:03:08 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAHpXGIJWJjLiQwAA--.64703S2;
-        Wed, 02 Nov 2022 09:08:44 +0100 (CET)
-Message-ID: <e45a4736e9fa77acbe48e947f40c023d3cd71922.camel@huaweicloud.com>
-Subject: Re: Possible bug or unintended behaviour using bpf_ima_file_hash
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Isaac Matthews <isaac.jmatt@gmail.com>,
-        linux-integrity@vger.kernel.org, bpf@vger.kernel.org
-Cc:     isaac.matthews@hpe.com
-Date:   Wed, 02 Nov 2022 09:08:30 +0100
-In-Reply-To: <CAFrssUQKyfZXXXQQA2vPMLR957RZtt7MN9rEG_VbLW_D0wBZ0w@mail.gmail.com>
-References: <CAFrssUQKyfZXXXQQA2vPMLR957RZtt7MN9rEG_VbLW_D0wBZ0w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 2 Nov 2022 05:24:29 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF2D28E08
+        for <linux-integrity@vger.kernel.org>; Wed,  2 Nov 2022 02:22:51 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N2LyZ1hbpz15MJG;
+        Wed,  2 Nov 2022 17:22:46 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 2 Nov 2022 17:22:49 +0800
+Received: from huawei.com (10.175.104.170) by kwepemm600010.china.huawei.com
+ (7.193.23.86) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 2 Nov
+ 2022 17:22:48 +0800
+From:   Huaxin Lu <luhuaxin1@huawei.com>
+To:     <linux-integrity@vger.kernel.org>
+CC:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>
+Subject: [PATCH v2] ima: Fix a potential null pointer access problem in ima_restore_measurement_list
+Date:   Wed, 2 Nov 2022 17:20:30 +0800
+Message-ID: <20221102092030.27051-1-luhuaxin1@huawei.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwAHpXGIJWJjLiQwAA--.64703S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFy5tFW8uFyfGFW7tF1UWrg_yoW8ur4Dpr
-        W3GF10kFs0kr10kF9F9a1UWFWFk393ZFy5XFWv9ryrAr4DXrWvqrWYga45WrW8KrykKF18
-        XF4fW347JF1kKa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-        KfnxnUUI43ZEXa7IU1CPfJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4DweAABs6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-10-31 at 16:25 +0000, Isaac Matthews wrote:
-> Using bpf_ima_file_hash() from kernel 6.0.
-> 
-> When using bpf_ima_file_hash() with the lsm.s/file_open hook, a hash
-> of the file is only sometimes returned.  This is because the
-> FMODE_CAN_READ flag is set after security_file_open() is already
-> called, and ima_calc_file_hash() only checks for FMODE_READ not
-> FMODE_CAN_READ in order to decide if a new instance needs to be
-> opened. Because of this, if a file passes the FMODE_READ check  it
-> will fail to be hashed as FMODE_CAN_READ has not yet been set.
-> 
-> To demonstrate: if the file is opened for write for example, when
-> ima_calc_file_hash() is called and the file->f_mode is checked
-> against
-> FMODE_READ, a new file instance is opened with the correct flags and
-> a
-> hash is returned. If the file is opened for read, a new file instance
-> is not returned in ima_calc_file_hash() as (!(file->f_mode &
-> FMODE_READ)) is now false. When __kernel_read() is called as part of
-> ima_calc_file_hash_tfm() it will fail on if (!(file->f_mode &
-> FMODE_CAN_READ)) and so no hash will be returned by
-> bpf_ima_file_hash().
-> 
-> If possible could someone please advise me as to whether this is
-> intended behaviour, and is it possible to either modify the flags
-> with
-> eBPF or to open a new instance with the correct flags set as IMA does
-> currently?
+In restore_template_fmt, when kstrdup fails, a non-NULL value will still be
+returned, which causes a NULL pointer access in template_desc_init_fields.
 
-Hi Isaac
+Signed-off-by: Huaxin Lu <luhuaxin1@huawei.com>
+Co-developed-by: Jiaming Li <lijiaming30@huawei.com>
+Signed-off-by: Jiaming Li <lijiaming30@huawei.com>
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/ima/ima_template.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-I think this is the intended behavior, as IMA is supposed to be called
-when the file descriptor is ready to use.
-
-If we need to call ima_file_hash() from lsm.s/file_open, I think it
-should not be a problem to create a new fd just for eBPF, in
-__ima_inode_hash().
-
-Mimi, what do you think?
-
-Thanks
-
-Roberto
-
-> Alternatively, would a better solution be adding a check for
-> FMODE_CAN_READ to ima_calc_file_hash()? I noticed in the comment
-> above
-> the conditional in ima_calc_file_hash() that the conditional should
-> be
-> checking whether the file can be read, but only checks the FMODE_READ
-> flag which is not the only requirement for __kernel_read() to be able
-> to read a file.
-> 
-> Thanks for your help.
-> Isaac
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index c25079faa..49f062692 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -340,8 +340,11 @@ static struct ima_template_desc *restore_template_fmt(char *template_name)
+ 
+ 	template_desc->name = "";
+ 	template_desc->fmt = kstrdup(template_name, GFP_KERNEL);
+-	if (!template_desc->fmt)
++	if (!template_desc->fmt) {
++		kfree(template_desc);
++		template_desc = NULL;
+ 		goto out;
++	}
+ 
+ 	spin_lock(&template_list);
+ 	list_add_tail_rcu(&template_desc->list, &defined_templates);
+-- 
+2.36.1
 
