@@ -2,60 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E801616325
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 13:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0A3616699
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 16:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiKBMzW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Nov 2022 08:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S230078AbiKBPzv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Nov 2022 11:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiKBMzU (ORCPT
+        with ESMTP id S230258AbiKBPzu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:55:20 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974F9286C2;
-        Wed,  2 Nov 2022 05:55:19 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4N2RXF2Rx5z9v7gQ;
-        Wed,  2 Nov 2022 20:48:45 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDXC_ipaGJjheAwAA--.42563S2;
-        Wed, 02 Nov 2022 13:55:10 +0100 (CET)
-Message-ID: <72e37c82754171c47415a4849ea7a1188eb718ee.camel@huaweicloud.com>
-Subject: Re: Possible bug or unintended behaviour using bpf_ima_file_hash
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Isaac Matthews <isaac.jmatt@gmail.com>,
-        linux-integrity@vger.kernel.org, bpf@vger.kernel.org
-Cc:     isaac.matthews@hpe.com
-Date:   Wed, 02 Nov 2022 13:55:02 +0100
-In-Reply-To: <135f442b44af0ac2bcd239c1f11c18c740f6e641.camel@linux.ibm.com>
-References: <CAFrssUQKyfZXXXQQA2vPMLR957RZtt7MN9rEG_VbLW_D0wBZ0w@mail.gmail.com>
-         <e45a4736e9fa77acbe48e947f40c023d3cd71922.camel@huaweicloud.com>
-         <135f442b44af0ac2bcd239c1f11c18c740f6e641.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 2 Nov 2022 11:55:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DE32B184
+        for <linux-integrity@vger.kernel.org>; Wed,  2 Nov 2022 08:55:49 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2Fo8YC016800;
+        Wed, 2 Nov 2022 15:55:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=kSJAemRJ/anp8qTcFMGAiYfXiQLfLDL8GP0vCVI6COE=;
+ b=aSww5CO9n/xC+7RFlCs9vcWhg+MSGlJAr8aYDRLwLIxuaTAHFuwBWfsvHGlpjwXelWEr
+ tfAruR59F9bi+D/2TbyTVaR41z0AkRkbrYZcJzHPope9yqt5pZboBKEU8un3BuOMdqq8
+ uglY4oKgx6YsMO/Q3lW0rQDe41M0TeRQhcbi9ASbQThdHwu3zm1tjPpdHJio3dN1F+Bz
+ GSYs0EaC6R1JL53a7JsJtJY1TNHO0rMDaiT89rL7/XFabJJhV/XxMrrTMoUuI27lleMF
+ S7HUhfEhn2bNDRtwB+T80DecZva0PmZVJWwNvfJsoF3h0XZnWE6Rm38WH+fiXdEMxSwR YA== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkqqn1swy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 15:55:42 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2FoQ9W007822;
+        Wed, 2 Nov 2022 15:55:41 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03wdc.us.ibm.com with ESMTP id 3kgut9uptm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 15:55:41 +0000
+Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2FtgmI49217978
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 15:55:42 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C202358058;
+        Wed,  2 Nov 2022 15:55:40 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5709458059;
+        Wed,  2 Nov 2022 15:55:40 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Nov 2022 15:55:40 +0000 (GMT)
+Message-ID: <4811654a-8b58-5998-24c3-38d1a1eba0d9@linux.ibm.com>
+Date:   Wed, 2 Nov 2022 11:55:39 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH ima-evm-utils v4 03/17] Log and reset 'errno' on lsetxattr
+ failure
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>
+References: <20221101201803.372652-1-zohar@linux.ibm.com>
+ <20221101201803.372652-4-zohar@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20221101201803.372652-4-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDXC_ipaGJjheAwAA--.42563S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr43tF15AFW8try7KF4fAFb_yoW5WFWrpr
-        WfG3WUKF4DGr10krnFv3WDXFWrK393WFy7XFyvgryrAr1qqryvqrW2gayY9FWkKrykK3WI
-        qF4xG347Zryvya7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-        KfnxnUUI43ZEXa7IU1CPfJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4D2QQAAsE
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: N4g_2H7pE2JXIp1-BvEBHvX9iy-GG3Qp
+X-Proofpoint-ORIG-GUID: N4g_2H7pE2JXIp1-BvEBHvX9iy-GG3Qp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_13,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ spamscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020093
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,82 +87,75 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-11-02 at 07:55 -0400, Mimi Zohar wrote:
-> On Wed, 2022-11-02 at 09:08 +0100, Roberto Sassu wrote:
-> > On Mon, 2022-10-31 at 16:25 +0000, Isaac Matthews wrote:
-> > > Using bpf_ima_file_hash() from kernel 6.0.
-> > > 
-> > > When using bpf_ima_file_hash() with the lsm.s/file_open hook, a
-> > > hash
-> > > of the file is only sometimes returned.  This is because the
-> > > FMODE_CAN_READ flag is set after security_file_open() is already
-> > > called, and ima_calc_file_hash() only checks for FMODE_READ not
-> > > FMODE_CAN_READ in order to decide if a new instance needs to be
-> > > opened. Because of this, if a file passes the FMODE_READ
-> > > check  it
-> > > will fail to be hashed as FMODE_CAN_READ has not yet been set.
-> > > 
-> > > To demonstrate: if the file is opened for write for example, when
-> > > ima_calc_file_hash() is called and the file->f_mode is checked
-> > > against
-> > > FMODE_READ, a new file instance is opened with the correct flags
-> > > and
-> > > a
-> > > hash is returned. If the file is opened for read, a new file
-> > > instance
-> > > is not returned in ima_calc_file_hash() as (!(file->f_mode &
-> > > FMODE_READ)) is now false. When __kernel_read() is called as part
-> > > of
-> > > ima_calc_file_hash_tfm() it will fail on if (!(file->f_mode &
-> > > FMODE_CAN_READ)) and so no hash will be returned by
-> > > bpf_ima_file_hash().
-> > > 
-> > > If possible could someone please advise me as to whether this is
-> > > intended behaviour, and is it possible to either modify the flags
-> > > with
-> > > eBPF or to open a new instance with the correct flags set as IMA
-> > > does
-> > > currently?
-> > 
-> > Hi Isaac
-> > 
-> > I think this is the intended behavior, as IMA is supposed to be
-> > called
-> > when the file descriptor is ready to use.
-> > 
-> > If we need to call ima_file_hash() from lsm.s/file_open, I think it
-> > should not be a problem to create a new fd just for eBPF, in
-> > __ima_inode_hash().
-> > 
-> > Mimi, what do you think?
+
+
+On 11/1/22 16:17, Mimi Zohar wrote:
+> Writing either security.ima hashes or security.evm hmacs from userspace
+> will fail regardless of the IMA or EVM fix mode.  In fix mode, 'touch'
+> will force security.ima and security.evm to be updated.
 > 
-> Who/what is checking that this is a regular file and we have
-> permission
-> to open the file?  Are we relying on eBPF to do this?  Will opening a
-> file circumvent all of the LSM checks?
+> Make the setxattr error messages more explicit and clear errno.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>   src/evmctl.c | 13 ++++++++-----
+>   1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index 54123bf20f03..b1dcd9b1c1ef 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -572,7 +572,7 @@ static int sign_evm(const char *file, const char *key)
+>   	if (xattr) {
+>   		err = lsetxattr(file, xattr_evm, sig, len, 0);
+>   		if (err < 0) {
+> -			log_err("setxattr failed: %s\n", file);
+> +			log_errno_reset(LOG_ERR, "Set EVM xattr failed: %s", file);
 
-Opening the file again will cause another permission request to be sent
-to LSMs, and thus to the eBPF program implementing lsm.s/file_open.
-Maybe it is not a good idea to use this hook.
+Change 'Set' to 'Setting' (in other cases as well)?
 
-In the future, if IMA/EVM stacking is successful, we might introduce
-the file_post_open hook, which I believe could be suitable for calling 
-bpf_ima_file_hash().
+>   			return err;
+>   		}
+>   	}
+> @@ -615,7 +615,8 @@ static int hash_ima(const char *file)
+>   	if (xattr) {
+>   		err = lsetxattr(file, xattr_ima, hash, len, 0);
+>   		if (err < 0) {
+> -			log_err("setxattr failed: %s\n", file);
+> +			log_errno_reset(LOG_ERR, "Set IMA hash xattr failed: %s",
+> +					file);
+>   			return err;
+>   		}
+>   	}
+> @@ -652,7 +653,8 @@ static int sign_ima(const char *file, const char *key)
+>   	if (xattr) {
+>   		err = lsetxattr(file, xattr_ima, sig, len, 0);
+>   		if (err < 0) {
+> -			log_err("setxattr failed: %s\n", file);
+> +			log_errno_reset(LOG_ERR, "Set IMA sig xattr failed: %s",
+> +					file);
+>   			return err;
+>   		}
+>   	}
+> @@ -1125,7 +1127,7 @@ static int setxattr_ima(const char *file, char *sig_file)
+>   
+>   	err = lsetxattr(file, xattr_ima, sig, len, 0);
+>   	if (err < 0)
+> -		log_err("setxattr failed: %s\n", file);
+> +		log_errno_reset(LOG_ERR, "Set IMA sig xattr failed: %s", file);
+>   	free(sig);
+>   	return err;
+>   }
+> @@ -1323,7 +1325,8 @@ static int hmac_evm(const char *file, const char *key)
+>   		sig[0] = EVM_XATTR_HMAC;
+>   		err = lsetxattr(file, xattr_evm, sig, len + 1, 0);
+>   		if (err < 0) {
+> -			log_err("setxattr failed: %s\n", file);
+> +			log_errno_reset(LOG_ERR, "Set EVM hmac xattr failed: %s",
+> +					file);
+>   			return err;
+>   		}
+>   	}
 
-Roberto
 
-> > > Alternatively, would a better solution be adding a check for
-> > > FMODE_CAN_READ to ima_calc_file_hash()? I noticed in the comment
-> > > above
-> > > the conditional in ima_calc_file_hash() that the conditional
-> > > should
-> > > be
-> > > checking whether the file can be read, but only checks the
-> > > FMODE_READ
-> > > flag which is not the only requirement for __kernel_read() to be
-> > > able
-> > > to read a file.
-> > > 
-> > > Thanks for your help.
-> > > Isaac
-
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
