@@ -2,143 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060A8615714
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 02:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B0E615D5C
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Nov 2022 09:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiKBBmP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Nov 2022 21:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
+        id S229866AbiKBII7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Nov 2022 04:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKBBmO (ORCPT
+        with ESMTP id S229457AbiKBII6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Nov 2022 21:42:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B672B1C3;
-        Tue,  1 Nov 2022 18:42:12 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N28g16J2pzpW5t;
-        Wed,  2 Nov 2022 09:38:37 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 09:42:10 +0800
-Message-ID: <b2949b3d-c370-8a41-fe7c-9f175abd4f71@huawei.com>
-Date:   Wed, 2 Nov 2022 09:42:10 +0800
+        Wed, 2 Nov 2022 04:08:58 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753F3DA6;
+        Wed,  2 Nov 2022 01:08:54 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4N2KBh70whz9xGY8;
+        Wed,  2 Nov 2022 16:03:08 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAHpXGIJWJjLiQwAA--.64703S2;
+        Wed, 02 Nov 2022 09:08:44 +0100 (CET)
+Message-ID: <e45a4736e9fa77acbe48e947f40c023d3cd71922.camel@huaweicloud.com>
+Subject: Re: Possible bug or unintended behaviour using bpf_ima_file_hash
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Isaac Matthews <isaac.jmatt@gmail.com>,
+        linux-integrity@vger.kernel.org, bpf@vger.kernel.org
+Cc:     isaac.matthews@hpe.com
+Date:   Wed, 02 Nov 2022 09:08:30 +0100
+In-Reply-To: <CAFrssUQKyfZXXXQQA2vPMLR957RZtt7MN9rEG_VbLW_D0wBZ0w@mail.gmail.com>
+References: <CAFrssUQKyfZXXXQQA2vPMLR957RZtt7MN9rEG_VbLW_D0wBZ0w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v5 2/2] ima: Handle -ESTALE returned by
- ima_filter_rule_match()
-To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20220921125804.59490-1-guozihua@huawei.com>
- <20220921125804.59490-3-guozihua@huawei.com>
- <ce948f9e5639345026679b31a818cc12a247ce60.camel@linux.ibm.com>
- <77c9c86b-85a6-aa87-e084-59a70bb47167@huawei.com>
- <f321c638bf5572088a8c5e4d7027c3a797bdd568.camel@linux.ibm.com>
- <7ac3e330-e77c-95d8-7d3b-29e243b57251@huawei.com>
- <5e304b17fe709d2b2f30b991d5ffc4711d27a075.camel@linux.ibm.com>
- <2f032b6c-ecf2-5a41-dc38-e6ab0a2d7885@huawei.com>
- <90f8940cff5eeef7917e2b11a07e41b32b207ffa.camel@linux.ibm.com>
- <38d5fd39-ead2-e954-5901-b35ef6ec96b6@huawei.com>
- <11716411-e143-ab1f-3b1e-d5d35f2a590a@huawei.com>
- <db821df65b7ff7319c657a1de65f5ba903599fc4.camel@linux.ibm.com>
-Content-Language: en-US
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <db821df65b7ff7319c657a1de65f5ba903599fc4.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500024.china.huawei.com (7.185.36.203)
+X-CM-TRANSID: LxC2BwAHpXGIJWJjLiQwAA--.64703S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFy5tFW8uFyfGFW7tF1UWrg_yoW8ur4Dpr
+        W3GF10kFs0kr10kF9F9a1UWFWFk393ZFy5XFWv9ryrAr4DXrWvqrWYga45WrW8KrykKF18
+        XF4fW347JF1kKa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4DweAABs6
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+On Mon, 2022-10-31 at 16:25 +0000, Isaac Matthews wrote:
+> Using bpf_ima_file_hash() from kernel 6.0.
+> 
+> When using bpf_ima_file_hash() with the lsm.s/file_open hook, a hash
+> of the file is only sometimes returned.  This is because the
+> FMODE_CAN_READ flag is set after security_file_open() is already
+> called, and ima_calc_file_hash() only checks for FMODE_READ not
+> FMODE_CAN_READ in order to decide if a new instance needs to be
+> opened. Because of this, if a file passes the FMODE_READ check  it
+> will fail to be hashed as FMODE_CAN_READ has not yet been set.
+> 
+> To demonstrate: if the file is opened for write for example, when
+> ima_calc_file_hash() is called and the file->f_mode is checked
+> against
+> FMODE_READ, a new file instance is opened with the correct flags and
+> a
+> hash is returned. If the file is opened for read, a new file instance
+> is not returned in ima_calc_file_hash() as (!(file->f_mode &
+> FMODE_READ)) is now false. When __kernel_read() is called as part of
+> ima_calc_file_hash_tfm() it will fail on if (!(file->f_mode &
+> FMODE_CAN_READ)) and so no hash will be returned by
+> bpf_ima_file_hash().
+> 
+> If possible could someone please advise me as to whether this is
+> intended behaviour, and is it possible to either modify the flags
+> with
+> eBPF or to open a new instance with the correct flags set as IMA does
+> currently?
 
-On 2022/11/2 6:15, Mimi Zohar wrote:
-> Hi Scott,
-> 
-> On Fri, 2022-10-28 at 16:36 +0800, Guozihua (Scott) wrote:
->>
->> I managed to re-produce this issue with the help of the following two
->> scripts:
->>
->> read_tmp_measurement.sh:
->>> #!/bin/bash
->>>
->>> while true
->>> do
->>>          cat /root/tmp.txt > /dev/null
->>>          measurement=`cat /sys/kernel/security/ima/ascii_runtime_measurements | grep "tmp\.txt" | wc -l`
->>>          if [ "${measurement}" == "1" ]; then
->>>                  echo "measurement found"
->>>                  exit 1
->>>          fi
->>> done
->>
->> test.sh:
->>> #!/bin/bash
->>>
->>> echo "measure obj_user=system_u obj_role=object_r obj_type=unlabeled_t" > /sys/kernel/security/ima/policy
->>>
->>> cat /root/tmp2.txt
->>> measurement=`cat /sys/kernel/security/ima/ascii_runtime_measurements | grep "tmp2\.txt" | wc -l`
->>> [ "$measurement" == "1" ] && echo "measurement for tmp2 found"
->>>
->>> cat /root/tmp.txt
->>> measurement=`cat /sys/kernel/security/ima/ascii_runtime_measurements | grep "tmp\.txt" | wc -l`
->>> [ "$measurement" == "1" ] && echo "measurement for tmp found, preparation failed!" && exit 1
->>>
->>> ./read_tmp_measurement.sh &
->>> pid=$!
->>>
->>> cd /usr/share/selinux/default
->>> semodule -i clock.pp.bz2
->>> semodule -r clock
->>>
->>> kill ${pid}
-> 
-> Are you loading/unloading any selinux policy or specifically clock? If
-> specifically clock, what is special about it?
+Hi Isaac
 
-No there are nothing special about clock. Any selinux policy should do,.
-> 
->> I created two files tmp.txt and tmp2.txt, assign them with type
->> user_home_t and unlabeled_t respectively and then run test.sh.
->> On a multi-core environment, I managed to reproduce this issue pretty
->> easily and tested that once the solution is merged, the issue stops
->> happening.
-> 
-> As I only see an IMA measurement policy rule being loaded for
-> "unlabeled_t" and not "user_home_t", should I assume that an IMA
-> measurement rule already exists for "user_home_t"?
+I think this is the intended behavior, as IMA is supposed to be called
+when the file descriptor is ready to use.
 
-There wasn't a rule for user_home_t. These scripts demonstrate that 
-during a selinux policy reload, IMA would measure files that is not in 
-the range of it's LSM based rules. Which is the issue I am trying to fix.
+If we need to call ima_file_hash() from lsm.s/file_open, I think it
+should not be a problem to create a new fd just for eBPF, in
+__ima_inode_hash().
 
-In this test, we only have one rule for measuring files of type 
-unlabeled_t. However, during selinux policy reload, file of user_home_t 
-is also measured.
-> 
-> thanks,
-> 
-> Mimi
-> 
+Mimi, what do you think?
 
--- 
-Best
-GUO Zihua
+Thanks
+
+Roberto
+
+> Alternatively, would a better solution be adding a check for
+> FMODE_CAN_READ to ima_calc_file_hash()? I noticed in the comment
+> above
+> the conditional in ima_calc_file_hash() that the conditional should
+> be
+> checking whether the file can be read, but only checks the FMODE_READ
+> flag which is not the only requirement for __kernel_read() to be able
+> to read a file.
+> 
+> Thanks for your help.
+> Isaac
 
