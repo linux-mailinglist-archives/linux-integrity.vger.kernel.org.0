@@ -2,152 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E6F618B9E
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 23:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD08618BA0
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 23:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiKCWfS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Nov 2022 18:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S230231AbiKCWg0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Nov 2022 18:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbiKCWfS (ORCPT
+        with ESMTP id S230075AbiKCWgZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:35:18 -0400
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CB3A20185
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 15:35:17 -0700 (PDT)
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 9EF6872C983;
-        Fri,  4 Nov 2022 01:35:16 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 893904A472A;
-        Fri,  4 Nov 2022 01:35:16 +0300 (MSK)
-Date:   Fri, 4 Nov 2022 01:35:16 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        "Dmitry V. Levin" <ldv@altlinux.org>
-Subject: Re: [PATCH ima-evm-utils v5 02/17] log and reset 'errno' after
- failure to open non-critical files
-Message-ID: <20221103223516.x5eyb65chj6th3e3@altlinux.org>
-References: <20221103183904.103562-1-zohar@linux.ibm.com>
- <20221103183904.103562-3-zohar@linux.ibm.com>
- <20221103220531.ok6bwddhxmq6oxky@altlinux.org>
- <20221103222421.fhtdymd2spiejvuh@altlinux.org>
+        Thu, 3 Nov 2022 18:36:25 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D06A1FCE7
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 15:36:24 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 21so5227492edv.3
+        for <linux-integrity@vger.kernel.org>; Thu, 03 Nov 2022 15:36:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=phnKeO1dMgzl7mkMf0YYrKl7ykqDKgipvnWqDP1fXiM=;
+        b=Zw5snCsIB19dCp6x644ge7l8Z2zGk39qvSf5/mFVSE7YXuhMIfqKkCDKBlO9bIdtMR
+         OyZOpreqF4uq5F9blNYVLcpU7aEpl6hHLBK64TCF1ndNy/39PwaKhDZWsBO+YBFECR5L
+         1QQtCKDM2FXEpHoFjUeHkFb67XBzTgvnGvLJxV2vUjxyqYwHheAJQGGODfKT6ruAg0Kk
+         EPlODLPZTBuODjdUNKiMrjOd1ErYj/HgM+Od6E/2eOM4/RLKDhAZnxuLUbI70EVe9ixR
+         ToNxj4C8Q8PauiU/vqm+TvQcdeTy4CQiMrXUxIMMZcHfdh3CGuwoVboe6HAJWOZ1c3P6
+         78dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=phnKeO1dMgzl7mkMf0YYrKl7ykqDKgipvnWqDP1fXiM=;
+        b=P85V+oSL1AQ3On3wxdpggKpxxC2+vM01XXAbHEqstBjE4mrW0gF7/m0z3jSBlK+BKF
+         d5qRiFhpw2ZPqpv3pS8yQQAlRfZeZ2gidKf8qpdMVMhc5eLaTSYfHnx4png3eHpk2g7k
+         pNr1BI3mHFD9DQCMPDZzHO7t52NKOZsR8hDl73BMMkf84ZwTKggoy4qlNUqY17X9FWJ3
+         d/rfKanHcY7jdu2o5EAoZkTgxppVvmiUNurqyYANIBWYwhP5Mar9O/ylN7BaGCEheGkK
+         KioudyQP+hzfStAJS/4j50ofh9XvHp4Wmotzm+U8/T7ePrGAvuA3dYmSdrdWxxe97vSh
+         gQ9g==
+X-Gm-Message-State: ACrzQf019OcUCdSkhUz9Fl9lG2M0BMwldxAcQ82hg5CR//+Yw+CVsPCq
+        3Y1GZn0ysLexxtJjdL0iHsoZe9Cz1d9ltsm72HeuLw==
+X-Google-Smtp-Source: AMsMyM6WFzo+OgehrLaJjm0nQW9+wXHYKuyO/jelSqVpQCDtV648WrecT+6LYon5WVlBVNrK5QMLRJaidQJgFvSexIc=
+X-Received: by 2002:a05:6402:d05:b0:462:9b84:3299 with SMTP id
+ eb5-20020a0564020d0500b004629b843299mr31565565edb.270.1667514982434; Thu, 03
+ Nov 2022 15:36:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <20221103222421.fhtdymd2spiejvuh@altlinux.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221101020352.939691-1-jsd@semihalf.com> <20221101020352.939691-2-jsd@semihalf.com>
+ <CANkg5eyWqhReHJd7Bj5EEG5chz89M-PKCnak91qPRWZEzm3NRw@mail.gmail.com> <CAOtMz3Od-r03EigmuEAG_q27bvifRS8ZV8YPOUHrayEW6YXO-Q@mail.gmail.com>
+In-Reply-To: <CAOtMz3Od-r03EigmuEAG_q27bvifRS8ZV8YPOUHrayEW6YXO-Q@mail.gmail.com>
+From:   Tim Van Patten <timvp@google.com>
+Date:   Thu, 3 Nov 2022 16:36:11 -0600
+Message-ID: <CANkg5exkR7rEK2k+3_aLUuGEaKp0Z4_jMULs_gjCCDt8fvWELw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] char: tpm: Protect tpm_pm_suspend with locks
+To:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Cc:     linux-integrity@vger.kernel.org, jarkko@kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
+        arnd@arndb.de, rrangel@chromium.org, apronin@google.com,
+        mw@semihalf.com, upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 01:24:21AM +0300, Vitaly Chikunov wrote:
-> On Fri, Nov 04, 2022 at 01:05:31AM +0300, Vitaly Chikunov wrote:
-> > Mimi,
-> > 
-> > On Thu, Nov 03, 2022 at 02:38:49PM -0400, Mimi Zohar wrote:
-> > > Define a log_errno_reset macro to emit the errno string at or near the
-> > > time of error, similar to the existing log_errno macro, but also reset
-> > > errno to avoid dangling or duplicate errno messages on exit.
-> > > 
-> > > The initial usage is for non-critical file open failures.
-> > > 
-> > > Suggested-by: Vitaly Chikunov <vt@altlinux.org>
-> > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > ---
-> > >  src/evmctl.c | 12 ++++++++++--
-> > >  1 file changed, 10 insertions(+), 2 deletions(-)
-> > 
-> > Reviewed-by: Vitaly Chikunov <vt@altlinux.org>
-> > 
-> > > 
-> > > diff --git a/src/evmctl.c b/src/evmctl.c
-> > > index 0412bc0ac2b0..54123bf20f03 100644
-> > > --- a/src/evmctl.c
-> > > +++ b/src/evmctl.c
-> > > @@ -2055,7 +2060,6 @@ static int ima_measurement(const char *file)
-> > >  	int err_padded = -1;
-> > >  	int err = -1;
-> > >  
-> > > -	errno = 0;
-> > >  	memset(zero, 0, MAX_DIGEST_SIZE);
-> > >  
-> > >  	pseudo_padded_banks = init_tpm_banks(&num_banks);
-> > > @@ -2072,6 +2076,8 @@ static int ima_measurement(const char *file)
-> > >  		init_public_keys(imaevm_params.keyfile);
-> > >  	else				/* assume read pubkey from x509 cert */
-> > >  		init_public_keys("/etc/keys/x509_evm.der");
-> > > +	if (errno)
-> > > +		log_errno_reset(LOG_DEBUG, "Failed to initialize public keys");
-> > 
-> > Library prints appropriate error messages, so this is perhaps just to
-> > clear errno. But it's not necessarily completely failed, but maybe
-> > failure in one key. So I would say "Failure in initializing public
-> > keys" to be precise.
-> > 
-> > ps.
-> > 
-> > BTW, init_public_keys API call cannot return error except by errno,
-> > but it does not set it consistently so some errors may be missed.
-> > 
-> > init_public_keys loops calling read_pub_pkey
-> > 
-> >                 entry->key = read_pub_pkey(keyfile, 1);
-> >                 if (!entry->key) {
-> >                         free(entry);
-> >                         continue;
-> >                 }
-> > 
-> > and read_pub_pkey have such code:
-> > 
-> >         if (!keyfile)
-> >                 return NULL;
-> > 
-> > In that case some key is not read but we don't get any error notification.
-> > 
-> > I think it's legal, by the right of being library, so set `errno =
-> > EINVAL` there somewhere. But, I'm not sure where - as we should not
-> > clobber existing errno values. Perhaps, errno setting should be added to
-> > libimaevm consistently to all functions, but this is huge task, so I
-> > would not suggest to do it now. Just suggestion for the future
-> > developments, maybe.
-> 
-> Just to compare with other library - libtracefs sets errno _sometimes_,
+On Wed, Nov 2, 2022 at 3:28 PM Jan D=C4=85bro=C5=9B <jsd@semihalf.com> wrot=
+e:
+>
+> > > -       if (!tpm_chip_start(chip)) {
+> > > +       rc =3D tpm_try_get_ops(chip);
+> > > +       if (!rc) {
+> > >                 if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> > >                         tpm2_shutdown(chip, TPM2_SU_STATE);
+> > >                 else
+> > >                         rc =3D tpm1_pm_suspend(chip, tpm_suspend_pcr)=
+;
+> >
+> > This if-else block is still interacting with the TPM even though
+> > you're not guaranteed to have the lock, which could lead to
+> > racy/inchorent results. Would it be better to just bail out entirely
+> > since we can't safely attempt any recovery at this point. If it's
+> > still worth attempting the shutdown command, it would at least be good
+> > to add a comment admitting that we have no choice but to communicate
+> > with the TPM without a lock.
+>
+> If tpm_try_get_ops() returns 0 it means that we have a lock. And if we
+> don't have a lock, then we are not executing any TPM commands. Are you
+> referring to tpm_mutex or something different?
 
-It "is not consistent" in the sense that error in the API call does not
-have always errno set. And this is unlike we have for common libc API
-calls where errno is defined. (As a consequence we cannot just add
-strerror() to the printing errors from these APIs).
+Ah, yup, I was reading this backwards, thinking that something had
+gone wrong when entering this block. Nevermind.
 
-But, it's not necessarily there is standard or common practice about
-this matter.
+--=20
 
-Thanks,
-
-
-> for example, their API call tracefs_dynevent_get have:
-> 
->   struct tracefs_dynevent *
->   tracefs_dynevent_get(enum tracefs_dynevent_type type, const char *system,
-> 		       const char *event)
->   {
->   ...
-> 	  if (!event) {
-> 		  errno = -EINVAL;
-> 		  return NULL;
-> 	  }
-> 
-> 	  count = get_all_dynevents(type, system, &events);
-> 	  if (count <= 0)
-> 		  return NULL;
->   ...
-> 
-> So it sets errno sometimes, but not always, which I am not sure is correct
-> approach. This needs to be discussed more with library experts.
-> 
-> Thanks,
+Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997
