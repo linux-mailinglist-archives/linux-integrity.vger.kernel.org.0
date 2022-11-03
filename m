@@ -2,108 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1BB6177F4
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 08:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E485617C1E
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 13:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiKCHt7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Nov 2022 03:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
+        id S229850AbiKCMFI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Nov 2022 08:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiKCHty (ORCPT
+        with ESMTP id S229809AbiKCMFH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:49:54 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2ED96153;
-        Thu,  3 Nov 2022 00:49:50 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4N2wjJ5N4sz9v7Yb;
-        Thu,  3 Nov 2022 15:43:16 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAnXPiHcmNjgWE0AA--.46417S2;
-        Thu, 03 Nov 2022 08:49:35 +0100 (CET)
-Message-ID: <de51358cb9019a1834cb6ad0f0b7785a8b21d72c.camel@huaweicloud.com>
-Subject: Re: [PATCH] ima: Fix memory leak in __ima_inode_hash()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaac.jmatt@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Thu, 03 Nov 2022 08:49:23 +0100
-In-Reply-To: <ef7375db277ac6a9398ee31a27e95eed717c4832.camel@linux.ibm.com>
-References: <20221102163006.1039343-1-roberto.sassu@huaweicloud.com>
-         <ef7375db277ac6a9398ee31a27e95eed717c4832.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
+        Thu, 3 Nov 2022 08:05:07 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4871261B
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 05:05:07 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3Bb4xd024067;
+        Thu, 3 Nov 2022 12:04:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=ce4camKnWEtEnhmJBheAPp6aI2Kc3dfsqhJM6hBPrjY=;
+ b=qRuzJN0+lz+BWm4H47uZ3O72AnSaOnsI5mSNk0nuAw3vrwb9mrPwoyCN09qSIsNUx/v3
+ SxUOPKVXly0qjWTb8ixuissix/qXju5xbv+7E3BBNjMbUz0xtk/w0RlAzctnjaOgmzGg
+ Vbay/JF8SDqM7zNxIKWubNZpIttmdIKY88FgyiZ+2U3k3L8Z3v3RNxs7+NYHRc63IshM
+ XDCitnEKiGIBt0IeVm7bq8AtvMF6Rarf8m9EZxnb4SuT+c4nLP5QJIPqklNzo7AXDKAq
+ RBDlVVHNWYDsBTehcwcWiVjQ4O78OzVhhUNX3bbaUZl5Q/sBkHR2BrEpOA9JR34hrIG4 8g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmbdbujp5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 12:04:55 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A3BbBPb025164;
+        Thu, 3 Nov 2022 12:04:55 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmbdbujn2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 12:04:55 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A3BoBtn019433;
+        Thu, 3 Nov 2022 12:04:53 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma04wdc.us.ibm.com with ESMTP id 3kguta940v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 12:04:53 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com ([9.208.128.114])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A3C4qu266257172
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Nov 2022 12:04:52 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1D9C158068;
+        Thu,  3 Nov 2022 12:04:52 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7F9A35805D;
+        Thu,  3 Nov 2022 12:04:51 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.20.100])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Nov 2022 12:04:51 +0000 (GMT)
+Message-ID: <7a151334df92108441d32da315022be068c2f89d.camel@linux.ibm.com>
+Subject: Re: [PATCH v3] ima: Fix a potential NULL pointer access in
+ ima_restore_measurement_list
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Huaxin Lu <luhuaxin1@huawei.com>, linux-integrity@vger.kernel.org
+Cc:     dmitry.kasatkin@gmail.com
+Date:   Thu, 03 Nov 2022 08:04:51 -0400
+In-Reply-To: <20221102160949.28779-1-luhuaxin1@huawei.com>
+References: <20221102160949.28779-1-luhuaxin1@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAnXPiHcmNjgWE0AA--.46417S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Gr13Cr1fKw4fZw4rtr43Wrg_yoW8JF17pa
-        yUG3WYkr4vqFyfCrZ2vFW7Z3yrZ3yxJ3W2qrZ8twn8Zr13Wr90kr1xXF4Fga1v9r18KFyf
-        t3W7Ka4rJa4jvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAFBF1jj4D+JAACsq
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NQAxWGhs9HdMFDTgIimERW_FjuCECjJR
+X-Proofpoint-GUID: qIbxldt5Apy1HvpQP2d7r20tNk5V0n5L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-03_02,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ mlxscore=0 mlxlogscore=999 clxscore=1015 spamscore=0 malwarescore=0
+ adultscore=0 priorityscore=1501 phishscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211030083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-11-02 at 18:04 -0400, Mimi Zohar wrote:
-> Hi Roberto,
+On Thu, 2022-11-03 at 00:09 +0800, Huaxin Lu wrote:
+> In restore_template_fmt, when kstrdup fails, a non-NULL value will still be
+> returned, which causes a NULL pointer access in template_desc_init_fields.
 > 
-> On Wed, 2022-11-02 at 17:30 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Any chance you could fix your mailer?
-
-Hi Mimi
-
-not sure how to fix this. I need to send from @huaweicloud.com because
-some people didn't receive the patches from @huawei.com. But I still
-prefer to have the original email in the patches.
-
-Thanks
-
-Roberto
-
-> > Commit f3cc6b25dcc5 ("ima: always measure and audit files in
-> > policy") lets
-> > measurement or audit happen even if the file digest cannot be
-> > calculated.
-> > 
-> > As a result, iint->ima_hash could have been allocated despite
-> > ima_collect_measurement() returning an error.
-> > 
-> > Since ima_hash belongs to a temporary inode metadata structure,
-> > declared
-> > at the beginning of __ima_inode_hash(), just add a kfree() call if
-> > ima_collect_measurement() returns an error different from -ENOMEM
-> > (in that
-> > case, ima_hash should not have been allocated).
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: 280fe8367b0d ("ima: Always return a file measurement in
-> > ima_file_hash()")
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Thanks,
-> 
+> Co-developed-by: Jiaming Li <lijiaming30@huawei.com>
+> Signed-off-by: Jiaming Li <lijiaming30@huawei.com>
+> Signed-off-by: Huaxin Lu <luhuaxin1@huawei.com>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
+Thank you.   This patch is now queued in next-integrity.
+
+-- 
+Mimi
 
