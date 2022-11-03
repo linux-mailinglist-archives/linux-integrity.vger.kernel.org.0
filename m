@@ -2,104 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD08618BA0
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 23:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21746618C0D
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 23:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiKCWg0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Nov 2022 18:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S230194AbiKCWvO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Nov 2022 18:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiKCWgZ (ORCPT
+        with ESMTP id S230165AbiKCWux (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:36:25 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D06A1FCE7
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 15:36:24 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 21so5227492edv.3
-        for <linux-integrity@vger.kernel.org>; Thu, 03 Nov 2022 15:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=phnKeO1dMgzl7mkMf0YYrKl7ykqDKgipvnWqDP1fXiM=;
-        b=Zw5snCsIB19dCp6x644ge7l8Z2zGk39qvSf5/mFVSE7YXuhMIfqKkCDKBlO9bIdtMR
-         OyZOpreqF4uq5F9blNYVLcpU7aEpl6hHLBK64TCF1ndNy/39PwaKhDZWsBO+YBFECR5L
-         1QQtCKDM2FXEpHoFjUeHkFb67XBzTgvnGvLJxV2vUjxyqYwHheAJQGGODfKT6ruAg0Kk
-         EPlODLPZTBuODjdUNKiMrjOd1ErYj/HgM+Od6E/2eOM4/RLKDhAZnxuLUbI70EVe9ixR
-         ToNxj4C8Q8PauiU/vqm+TvQcdeTy4CQiMrXUxIMMZcHfdh3CGuwoVboe6HAJWOZ1c3P6
-         78dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=phnKeO1dMgzl7mkMf0YYrKl7ykqDKgipvnWqDP1fXiM=;
-        b=P85V+oSL1AQ3On3wxdpggKpxxC2+vM01XXAbHEqstBjE4mrW0gF7/m0z3jSBlK+BKF
-         d5qRiFhpw2ZPqpv3pS8yQQAlRfZeZ2gidKf8qpdMVMhc5eLaTSYfHnx4png3eHpk2g7k
-         pNr1BI3mHFD9DQCMPDZzHO7t52NKOZsR8hDl73BMMkf84ZwTKggoy4qlNUqY17X9FWJ3
-         d/rfKanHcY7jdu2o5EAoZkTgxppVvmiUNurqyYANIBWYwhP5Mar9O/ylN7BaGCEheGkK
-         KioudyQP+hzfStAJS/4j50ofh9XvHp4Wmotzm+U8/T7ePrGAvuA3dYmSdrdWxxe97vSh
-         gQ9g==
-X-Gm-Message-State: ACrzQf019OcUCdSkhUz9Fl9lG2M0BMwldxAcQ82hg5CR//+Yw+CVsPCq
-        3Y1GZn0ysLexxtJjdL0iHsoZe9Cz1d9ltsm72HeuLw==
-X-Google-Smtp-Source: AMsMyM6WFzo+OgehrLaJjm0nQW9+wXHYKuyO/jelSqVpQCDtV648WrecT+6LYon5WVlBVNrK5QMLRJaidQJgFvSexIc=
-X-Received: by 2002:a05:6402:d05:b0:462:9b84:3299 with SMTP id
- eb5-20020a0564020d0500b004629b843299mr31565565edb.270.1667514982434; Thu, 03
- Nov 2022 15:36:22 -0700 (PDT)
+        Thu, 3 Nov 2022 18:50:53 -0400
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22F7F1AD
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 15:50:50 -0700 (PDT)
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 482A372C983;
+        Fri,  4 Nov 2022 01:50:49 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 27D044A472A;
+        Fri,  4 Nov 2022 01:50:49 +0300 (MSK)
+Date:   Fri, 4 Nov 2022 01:50:49 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Petr Vorel <pvorel@suse.cz>, Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH ima-evm-utils v4 01/17] Revert "Reset 'errno' after
+ failure to open or access a file"
+Message-ID: <20221103225049.6u7xxgn3tk66n3ez@altlinux.org>
+References: <20221101201803.372652-1-zohar@linux.ibm.com>
+ <20221101201803.372652-2-zohar@linux.ibm.com>
+ <0a70ffe5-a35a-f8fa-dfa8-be3bf2e5e29f@linux.ibm.com>
+ <145f4c70ec894c4980d9455485cdac4673e01d04.camel@linux.ibm.com>
+ <52e19952-a1c3-722e-2267-a625e16c37a2@linux.ibm.com>
+ <4db89eab7d21124aa7945ccf4fd150c3ee4d259c.camel@linux.ibm.com>
+ <Y2PREKTdNQhwhPEK@pevik>
+ <6641d0eec7dd91d0d8b2f5dbf1844173a79b13fe.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20221101020352.939691-1-jsd@semihalf.com> <20221101020352.939691-2-jsd@semihalf.com>
- <CANkg5eyWqhReHJd7Bj5EEG5chz89M-PKCnak91qPRWZEzm3NRw@mail.gmail.com> <CAOtMz3Od-r03EigmuEAG_q27bvifRS8ZV8YPOUHrayEW6YXO-Q@mail.gmail.com>
-In-Reply-To: <CAOtMz3Od-r03EigmuEAG_q27bvifRS8ZV8YPOUHrayEW6YXO-Q@mail.gmail.com>
-From:   Tim Van Patten <timvp@google.com>
-Date:   Thu, 3 Nov 2022 16:36:11 -0600
-Message-ID: <CANkg5exkR7rEK2k+3_aLUuGEaKp0Z4_jMULs_gjCCDt8fvWELw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] char: tpm: Protect tpm_pm_suspend with locks
-To:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Cc:     linux-integrity@vger.kernel.org, jarkko@kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
-        arnd@arndb.de, rrangel@chromium.org, apronin@google.com,
-        mw@semihalf.com, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <6641d0eec7dd91d0d8b2f5dbf1844173a79b13fe.camel@linux.ibm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 3:28 PM Jan D=C4=85bro=C5=9B <jsd@semihalf.com> wrot=
-e:
->
-> > > -       if (!tpm_chip_start(chip)) {
-> > > +       rc =3D tpm_try_get_ops(chip);
-> > > +       if (!rc) {
-> > >                 if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > >                         tpm2_shutdown(chip, TPM2_SU_STATE);
-> > >                 else
-> > >                         rc =3D tpm1_pm_suspend(chip, tpm_suspend_pcr)=
-;
-> >
-> > This if-else block is still interacting with the TPM even though
-> > you're not guaranteed to have the lock, which could lead to
-> > racy/inchorent results. Would it be better to just bail out entirely
-> > since we can't safely attempt any recovery at this point. If it's
-> > still worth attempting the shutdown command, it would at least be good
-> > to add a comment admitting that we have no choice but to communicate
-> > with the TPM without a lock.
->
-> If tpm_try_get_ops() returns 0 it means that we have a lock. And if we
-> don't have a lock, then we are not executing any TPM commands. Are you
-> referring to tpm_mutex or something different?
+On Thu, Nov 03, 2022 at 05:35:40PM -0400, Mimi Zohar wrote:
+> Hi Petr,
+> 
+> > > > Is the github repo now the main repo and sourceforge repo is dead?
+> > 
+> > > The "next" branch in both repo's are the same.  Before posting patches,
+> > > I verify that github Actions works.   As a result, the next-testing
+> > > branch on github is rebased frequently.  Once a patch set is ready, the
+> > > "next" branch in both repo's is updated.
+> > 
+> > > To answer your question the github repo is primary.
+> > Maybe deleting everything in sourceforge and ad put single file with link to
+> > github.com would save you work (having master, next and next-testing branches
+> > with this file).
+> 
+> Thanks, definitely appreciate time saving tips!  Vitaly suggested
+> saving the sourceforge wiki info in ima-evm-utils and updating the
+> file(s) like any other file.  Before removing "everything"h from
+> sourceforge, that still needs to be done.
 
-Ah, yup, I was reading this backwards, thinking that something had
-gone wrong when entering this block. Nevermind.
+I thought markdown should be downloaded from Edit interface, which is not
+available on SF for non-admins. But I found recently how to download it
+in Json format via Allura API:
 
---=20
+  curl -s https://sourceforge.net/rest/p/linux-ima/wiki/Home  | jq -r .text
 
-Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997
+Then only end-of-lines need to be fixed.
+
+Thanks,
+
+> 
+> -- 
+> thanks,
+> 
+> Mimi
