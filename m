@@ -2,187 +2,301 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5311618044
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 15:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807046180BB
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 16:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiKCO4D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Nov 2022 10:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
+        id S232110AbiKCPL2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Nov 2022 11:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiKCOzt (ORCPT
+        with ESMTP id S231993AbiKCPLI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:55:49 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CD019039
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 07:55:29 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bp15so3210051lfb.13
-        for <linux-integrity@vger.kernel.org>; Thu, 03 Nov 2022 07:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=797EtY+3agoh3EckHxqCO4GdYgV/ObcVxut9/TriEp4=;
-        b=oNfUg3hpxIZ7Yzl1SIL56j8kPoZmkn6N3H8r3ujzPVMPHxGX+8d6w7B1iegBtVAk6W
-         MKJz53gkJ1lJrBOAOtRRZuhncJcBDfcFgCsgz34QnS/Ae51jtz5BjU4t4RP7EJBznvNx
-         W52OWvsgKxRu9VokqbxrrrQkLalDvMbxcLXO0gou9ORsxyWtROHeAq1fj3uIGjktJ+Xo
-         nv6S2MeHmEXBaEvRAQ0b4F5h2qBo5gW1JXC3YdJ2Hs3SKOVt1fx91FEdXERccB2pZ/4e
-         l8RrMN6se105eXcfsHAN16rBhY9yyv/yAyABhNJ49CG2zV0oyeg52o9Kvx7PRGyoakvZ
-         ZfzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=797EtY+3agoh3EckHxqCO4GdYgV/ObcVxut9/TriEp4=;
-        b=OqGIHHWvPlx/NzctJO9H2MtWXc19uECCPk7tzjXw3ns4pfy4fwDce30NXBxw+cXJZS
-         R9YAaj+hjY92q3g6+wSNx9UObJ/8kf3RwER1Tt2RlUx/a0vzGFMvL42hhruyL10r4zKe
-         x47rsVMBTuwySPKVVHHSqHhqyRvSRFvYSz9Ejoao+NkgAbnnxWzn9ziYw/5sRSSa6e9P
-         pl4v2gbWIM8Nb0NYvnQsH5PlfbgzhbcazhYxeSx31BQo0sODTBcmQYiH+ejiBFXvxLuy
-         qbPnHBGIfz1xqDFLODwplbVtUtvxRccL4vKG3Sswk8HuyPvy9UyLokS5h+qXVjEJqsxr
-         886A==
-X-Gm-Message-State: ACrzQf2KH3Rl59BBRYGcIODH4j7dPDwuyBk0tQHx6Lx/0KrXq65Oisqg
-        c1euDDSW+Q1BGvRtKUmEB7ewXx4suq1GVSNW
-X-Google-Smtp-Source: AMsMyM7zD2LHnsvto2Wtv5t2RisYntHENi4UMi2MLiW9MqwoOuWbe1+cfYCTeOdRLMITJZkZ8RpIEQ==
-X-Received: by 2002:a05:6512:1281:b0:4a2:cbfc:d6a8 with SMTP id u1-20020a056512128100b004a2cbfcd6a8mr12270149lfs.514.1667487327503;
-        Thu, 03 Nov 2022 07:55:27 -0700 (PDT)
-Received: from dabros-l.wifi.semihalf.net ([83.142.187.86])
-        by smtp.gmail.com with ESMTPSA id x4-20020a056512078400b0049c29389b98sm154878lfr.151.2022.11.03.07.55.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:55:27 -0700 (PDT)
-From:   Jan Dabros <jsd@semihalf.com>
-To:     linux-integrity@vger.kernel.org, jarkko@kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
-        arnd@arndb.de
-Cc:     rrangel@chromium.org, timvp@google.com, apronin@google.com,
-        mw@semihalf.com, upstream@semihalf.com, jsd@semihalf.com
-Subject: [PATCH v2 3/3] char: tpm: cr50: Move i2c locking to request/relinquish locality ops
-Date:   Thu,  3 Nov 2022 15:54:50 +0100
-Message-Id: <20221103145450.1409273-4-jsd@semihalf.com>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-In-Reply-To: <20221103145450.1409273-1-jsd@semihalf.com>
-References: <20221103145450.1409273-1-jsd@semihalf.com>
+        Thu, 3 Nov 2022 11:11:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A383A1B1CE
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 08:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4116B61F14
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 15:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F103C433B5
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 15:10:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667488219;
+        bh=ewhJrs7iVBajHat39GJj2Bvn4oi2wS3pS9klk+VGHKE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sPIDKngJei93NhA+m5oQNtDyp33vm42H29FsmtdshFyZX1U4Nu67SjMGdZNu8xkFv
+         xri5Pvb6fhcZ0oStK6HSTosg5i+RADwob6KzWJ5JaJkQv7g37Dbn9mVnpO0vSgU6/Y
+         Tn0/uT8YMGBc1ZRvfyQKXZpfaZGtnl8zGSAXztTAbK9Xirrz8ynpEUQx568CXJ4FV3
+         12rAL/4beoR0iqvX0jcSrVrxnJAl1Kcsm8qbJEekuC47ZrDM6I0UcIQT8AXr68Fs7w
+         KxNkuP9dTk2N2CCHImdxBh/OPyE0XEn0jEc2kN5ZIWa7qClEsEE1o9V7JOWNisQP/a
+         FxvyixxcBmEaQ==
+Received: by mail-ej1-f49.google.com with SMTP id bj12so5996152ejb.13
+        for <linux-integrity@vger.kernel.org>; Thu, 03 Nov 2022 08:10:19 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3EoG67w1gr3WoUQSiYIzwUv1YhfXRolklvkl8qeqS79XeG2TxB
+        s4AexDKjJw3B5LxoaM6/VRuvo1llfaVWzZniHVTeHg==
+X-Google-Smtp-Source: AMsMyM4Cg6hX3EpnVpClZ01WmQnXuKDsfT4wK4DfY7RDGiifjvu9l3DsMTn43RgsCL9r9814r/hJWGZIoSbvDrkuMOc=
+X-Received: by 2002:a05:6512:10c2:b0:4a2:ed6:4f4e with SMTP id
+ k2-20020a05651210c200b004a20ed64f4emr12527874lfg.136.1667488207006; Thu, 03
+ Nov 2022 08:10:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221028165423.386151-1-roberto.sassu@huaweicloud.com> <20221028165423.386151-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221028165423.386151-2-roberto.sassu@huaweicloud.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 3 Nov 2022 16:09:56 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ5gFu5a-NoKFD6XFNYMDyP+iPon=kHMimJybmNexbhAPg@mail.gmail.com>
+Message-ID: <CACYkzJ5gFu5a-NoKFD6XFNYMDyP+iPon=kHMimJybmNexbhAPg@mail.gmail.com>
+Subject: Re: [RESEND][RFC][PATCH 2/3] bpf-lsm: Limit values that can be
+ returned by security modules
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, revest@chromium.org,
+        jackmanb@chromium.org, shuah@kernel.org, paul@paul-moore.com,
+        casey@schaufler-ca.com, zohar@linux.ibm.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nicolas.bouchinet@clip-os.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Move i2c locking primitives to request_locality and relinquish_locality
-callbacks, what effectively blocks TPM bus for the whole duration of
-logical TPM operation.
+On Fri, Oct 28, 2022 at 6:55 PM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> BPF LSM defines a bpf_lsm_*() function for each LSM hook, so that
+> security modules can define their own implementation for the desired hooks.
+>
+> Unfortunately, BPF LSM does not restrict which values security modules can
+> return (for non-void LSM hooks). Security modules might follow the
+> conventions stated in include/linux/lsm_hooks.h, or put arbitrary values.
+>
+> This could cause big troubles, as the kernel is not ready to handle
+> possibly malicious return values from LSMs. Until now, it was not the
 
-With this in place, cr50-equipped TPM may be shared with external CPUs -
-assuming that underneath i2c controller driver is aware of this setup
-(see i2c-designware-amdpsp as an example).
+I am not sure I would call this malicious. This would be incorrect, if
+someone is writing a BPF LSM program they already have the powers
+to willingly do a lot of malicious stuff.
 
-Signed-off-by: Jan Dabros <jsd@semihalf.com>
----
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+It's about unknowingly returning values that can break the system.
 
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index 517d8410d7da0..f8a67fc2382cc 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -202,8 +202,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t
- 	};
- 	int rc;
- 
--	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
--
- 	/* Prepare for completion interrupt */
- 	tpm_cr50_i2c_enable_tpm_irq(chip);
- 
-@@ -222,7 +220,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t
- 
- out:
- 	tpm_cr50_i2c_disable_tpm_irq(chip);
--	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
- 
- 	if (rc < 0)
- 		return rc;
-@@ -264,8 +261,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
- 	priv->buf[0] = addr;
- 	memcpy(priv->buf + 1, buffer, len);
- 
--	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
--
- 	/* Prepare for completion interrupt */
- 	tpm_cr50_i2c_enable_tpm_irq(chip);
- 
-@@ -279,7 +274,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
- 
- out:
- 	tpm_cr50_i2c_disable_tpm_irq(chip);
--	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
- 
- 	if (rc < 0)
- 		return rc;
-@@ -323,6 +317,7 @@ static int tpm_cr50_check_locality(struct tpm_chip *chip, int loc)
-  */
- static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
- {
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
- 	u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_PENDING;
- 	u8 addr = TPM_I2C_ACCESS(loc);
- 	u8 buf;
-@@ -330,13 +325,15 @@ static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
- 
- 	rc = tpm_cr50_i2c_read(chip, addr, &buf, sizeof(buf));
- 	if (rc < 0)
--		return rc;
-+		goto unlock_out;
- 
- 	if ((buf & mask) == mask) {
- 		buf = TPM_ACCESS_ACTIVE_LOCALITY;
- 		rc = tpm_cr50_i2c_write(chip, addr, &buf, sizeof(buf));
- 	}
- 
-+unlock_out:
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
- 	return rc;
- }
- 
-@@ -351,16 +348,19 @@ static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
-  */
- static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
- {
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
- 	u8 buf = TPM_ACCESS_REQUEST_USE;
- 	unsigned long stop;
- 	int rc;
- 
-+	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
- 	if (!tpm_cr50_check_locality(chip, loc))
- 		return loc;
- 
- 	rc = tpm_cr50_i2c_write(chip, TPM_I2C_ACCESS(loc), &buf, sizeof(buf));
- 	if (rc < 0)
--		return rc;
-+		goto unlock_out;
- 
- 	stop = jiffies + chip->timeout_a;
- 	do {
-@@ -370,7 +370,11 @@ static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
- 		msleep(TPM_CR50_TIMEOUT_SHORT_MS);
- 	} while (time_before(jiffies, stop));
- 
--	return -ETIMEDOUT;
-+	rc = -ETIMEDOUT;
-+
-+unlock_out:
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+	return rc;
- }
- 
- /**
--- 
-2.38.1.273.g43a17bfeac-goog
+> case, as each LSM is carefully reviewed and it won't be accepted if it
+> does not meet the return value conventions.
+>
+> The biggest problem is when an LSM returns a positive value, instead of a
+> negative value, as it could be converted to a pointer. Since such pointer
+> escapes the IS_ERR() check, its use later in the code can cause
+> unpredictable consequences (e.g. invalid memory access).
+>
+> Another problem is returning zero when an LSM is supposed to have done some
+> operations. For example, the inode_init_security hook expects that their
+> implementations return zero only if they set the name and value of the new
+> xattr to be added to the new inode. Otherwise, other kernel subsystems
+> might encounter unexpected conditions leading to a crash (e.g.
+> evm_protected_xattr_common() getting NULL as argument).
+>
+> Finally, there are LSM hooks which are supposed to return just one as
+> positive value, or non-negative values. Also in these cases, although it
+> seems less critical, it is safer to return to callers of the LSM
+> infrastructure more precisely what they expect.
+>
+> As eBPF allows code outside the kernel to run, it is its responsibility
+> to ensure that only expected values are returned to LSM infrastructure
+> callers.
+>
+> Create four new BTF ID sets, respectively for hooks that can return
+> positive values, only one as positive value, that cannot return zero, and
+> that cannot return negative values. Create also corresponding functions to
+> check if the hook a security module is attached to belongs to one of the
+> defined sets.
+>
+> Finally, check in the eBPF verifier the value returned by security modules
+> for each attached LSM hook, and return -EINVAL (the security module cannot
+> run) if the hook implementation does not satisfy the hook return value
+> policy.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  include/linux/bpf_lsm.h | 24 ++++++++++++++++++
+>  kernel/bpf/bpf_lsm.c    | 56 +++++++++++++++++++++++++++++++++++++++++
+>  kernel/bpf/verifier.c   | 35 +++++++++++++++++++++++---
+>  3 files changed, 112 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> index 4bcf76a9bb06..cd38aca4cfc0 100644
+> --- a/include/linux/bpf_lsm.h
+> +++ b/include/linux/bpf_lsm.h
+> @@ -28,6 +28,10 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+>                         const struct bpf_prog *prog);
+>
+>  bool bpf_lsm_is_sleepable_hook(u32 btf_id);
+> +bool bpf_lsm_can_ret_pos_value(u32 btf_id);
+> +bool bpf_lsm_can_ret_only_one_as_pos_value(u32 btf_id);
+> +bool bpf_lsm_cannot_ret_zero(u32 btf_id);
+> +bool bpf_lsm_cannot_ret_neg_value(u32 btf_id);
+>
 
+This does not need to be exported to the rest of the kernel. Please
+have this logic in bpf_lsm.c and export a single verify function.
+
+Also, these really don't need to be such scattered logic, Could we
+somehow encode this into the LSM_HOOK definition?
+
+>  static inline struct bpf_storage_blob *bpf_inode(
+>         const struct inode *inode)
+> @@ -51,6 +55,26 @@ static inline bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+>         return false;
+>  }
+>
+> +static inline bool bpf_lsm_can_ret_pos_value(u32 btf_id)
+> +{
+> +       return false;
+> +}
+> +
+> +static inline bool bpf_lsm_can_ret_only_one_as_pos_value(u32 btf_id)
+> +{
+> +       return false;
+> +}
+> +
+> +static inline bool bpf_lsm_cannot_ret_zero(u32 btf_id)
+> +{
+> +       return false;
+> +}
+> +
+> +static inline bool bpf_lsm_cannot_ret_neg_value(u32 btf_id)
+> +{
+> +       return false;
+> +}
+> +
+>  static inline int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+>                                       const struct bpf_prog *prog)
+>  {
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index d6c9b3705f24..3dcb70b2f978 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -348,6 +348,62 @@ bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+>         return btf_id_set_contains(&sleepable_lsm_hooks, btf_id);
+>  }
+>
+> +/* The set of hooks which are allowed to return a positive value. */
+> +BTF_SET_START(pos_ret_value_lsm_hooks)
+> +BTF_ID(func, bpf_lsm_vm_enough_memory)
+> +BTF_ID(func, bpf_lsm_inode_getsecurity)
+> +BTF_ID(func, bpf_lsm_inode_listsecurity)
+> +BTF_ID(func, bpf_lsm_inode_need_killpriv)
+> +BTF_ID(func, bpf_lsm_inode_copy_up_xattr)
+> +BTF_ID(func, bpf_lsm_getprocattr)
+> +BTF_ID(func, bpf_lsm_setprocattr)
+> +BTF_ID(func, bpf_lsm_xfrm_state_pol_flow_match)
+> +BTF_ID(func, bpf_lsm_key_getsecurity)
+> +BTF_ID(func, bpf_lsm_ismaclabel)
+> +BTF_ID(func, bpf_lsm_audit_rule_known)
+> +BTF_ID(func, bpf_lsm_audit_rule_match)
+> +BTF_SET_END(pos_ret_value_lsm_hooks)
+> +
+> +bool bpf_lsm_can_ret_pos_value(u32 btf_id)
+> +{
+> +       return btf_id_set_contains(&pos_ret_value_lsm_hooks, btf_id);
+> +}
+> +
+> +BTF_SET_START(one_ret_value_lsm_hooks)
+> +BTF_ID(func, bpf_lsm_vm_enough_memory)
+> +BTF_ID(func, bpf_lsm_inode_copy_up_xattr)
+> +BTF_ID(func, bpf_lsm_xfrm_state_pol_flow_match)
+> +BTF_ID(func, bpf_lsm_ismaclabel)
+> +BTF_ID(func, bpf_lsm_audit_rule_known)
+> +BTF_ID(func, bpf_lsm_audit_rule_match)
+> +BTF_SET_END(one_ret_value_lsm_hooks)
+> +
+> +bool bpf_lsm_can_ret_only_one_as_pos_value(u32 btf_id)
+> +{
+> +       return btf_id_set_contains(&one_ret_value_lsm_hooks, btf_id);
+> +}
+> +
+> +/* The set of hooks which are not allowed to return zero. */
+> +BTF_SET_START(not_zero_ret_value_lsm_hooks)
+> +BTF_ID(func, bpf_lsm_inode_init_security)
+> +BTF_SET_END(not_zero_ret_value_lsm_hooks)
+> +
+> +bool bpf_lsm_cannot_ret_zero(u32 btf_id)
+> +{
+> +       return btf_id_set_contains(&not_zero_ret_value_lsm_hooks, btf_id);
+> +}
+> +
+> +/* The set of hooks which are not allowed to return a negative value. */
+> +BTF_SET_START(not_neg_ret_value_lsm_hooks)
+> +BTF_ID(func, bpf_lsm_vm_enough_memory)
+> +BTF_ID(func, bpf_lsm_audit_rule_known)
+> +BTF_SET_END(not_neg_ret_value_lsm_hooks)
+> +
+> +bool bpf_lsm_cannot_ret_neg_value(u32 btf_id)
+> +{
+> +       return btf_id_set_contains(&not_neg_ret_value_lsm_hooks, btf_id);
+> +}
+> +
+>  const struct bpf_prog_ops lsm_prog_ops = {
+>  };
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7f0a9f6cb889..099c1bf88fed 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -10623,9 +10623,38 @@ static int check_return_code(struct bpf_verifier_env *env)
+>
+>         case BPF_PROG_TYPE_LSM:
+>                 if (env->prog->expected_attach_type != BPF_LSM_CGROUP) {
+> -                       /* Regular BPF_PROG_TYPE_LSM programs can return
+> -                        * any value.
+> -                        */
+> +                       /* < 0 */
+> +                       if (tnum_in(tnum_range((u64)(~0) << 31, (u64)(~0)), reg->var_off)) {
+> +                               if (bpf_lsm_cannot_ret_neg_value(env->prog->aux->attach_btf_id)) {
+> +                                       verbose(env, "Invalid R0, cannot return negative value\n");
+> +                                       return -EINVAL;
+> +                               }
+> +                       /* = 0 */
+> +                       } else if (tnum_equals_const(reg->var_off, 0)) {
+> +                               if (bpf_lsm_cannot_ret_zero(env->prog->aux->attach_btf_id)) {
+> +                                       verbose(env, "Invalid R0, cannot return zero value\n");
+> +                                       return -EINVAL;
+> +                               }
+> +                       /* = 1 */
+> +                       } else if (tnum_equals_const(reg->var_off, 1)) {
+> +                               if (!bpf_lsm_can_ret_pos_value(env->prog->aux->attach_btf_id)) {
+> +                                       verbose(env, "Invalid R0, cannot return positive value\n");
+> +                                       return -EINVAL;
+> +                               }
+> +                       /* > 1 */
+> +                       } else {
+> +                               if (!bpf_lsm_can_ret_pos_value(env->prog->aux->attach_btf_id)) {
+> +                                       verbose(env, "Invalid R0, cannot return positive value\n");
+> +                                       return -EINVAL;
+> +                               }
+> +
+> +                               if (bpf_lsm_can_ret_only_one_as_pos_value(env->prog->aux->attach_btf_id)) {
+> +                                       verbose(env,
+> +                                               "Invalid R0, can return only one as positive value\n");
+> +                                       return -EINVAL;
+> +                               }
+> +                       }
+> +
+>                         return 0;
+>                 }
+>                 if (!env->prog->aux->attach_func_proto->type) {
+> --
+> 2.25.1
+>
