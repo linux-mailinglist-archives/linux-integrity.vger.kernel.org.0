@@ -2,51 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355556186F8
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 19:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F112618701
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Nov 2022 19:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiKCSE5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Nov 2022 14:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S229551AbiKCSFG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Nov 2022 14:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiKCSEM (ORCPT
+        with ESMTP id S230383AbiKCSEO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:04:12 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBBF23BFA
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 11:01:53 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id io19so2654109plb.8
-        for <linux-integrity@vger.kernel.org>; Thu, 03 Nov 2022 11:01:53 -0700 (PDT)
+        Thu, 3 Nov 2022 14:04:14 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B121823BFD
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Nov 2022 11:01:55 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id 130so2328134pfu.8
+        for <linux-integrity@vger.kernel.org>; Thu, 03 Nov 2022 11:01:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gN9qKMAhYJlqKuIbqJEoz2jqEFif72BoLEhc9K1zc0g=;
-        b=Z/A7qsCsCNMQebxMQUC7jeFHDbsCaxq6l6xjtJLdKNsLMO2wJ1eVH+54fYkt67yJIZ
-         5EeKE7mZJBZeCt+yZ24MTMX5WMFvtd4imlOBNzHP4jhjjMA8t6qbm6NjK49G+9baNTYq
-         Hb/NFEIIMs+34NLi/jQmUCZzQIilo0WZ7iMvQ=
+        bh=zmWNArOWA63+Rp+4KSjfkZ/X8L7crokDBuY2zqY1JQ4=;
+        b=EaqDm7Xl0Ea2PZH6mPEVFdEcgktPCKge1E7xRIasguVtrYMF4tocv9gOBmyDp2zCAF
+         rgUUrNngU/x1jtj2CJVUNjmCABNZeGrrFEbALTQkWY331ugsSutrIVYltYE4QsoT1J8J
+         vbXDWRSUpz4nR+duOLw/S+jV7/iioZYSCQadQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gN9qKMAhYJlqKuIbqJEoz2jqEFif72BoLEhc9K1zc0g=;
-        b=QlTOpuHglUVcbKkpZHJPnjZbmdepq1UxvQvbPdeFR6+eTjBwmpIkZp1OpSEkRp1/cW
-         EWMqfHKBGEcndDui6j3rttbFNeS54sCMZOVoByIxz/k2766OL+9W25Rhmm+wCaV6L2SE
-         69NcT+TVBBiNmnK3WuvIzxL16uUeaiiUJ6y5kVYXdMxG0OA5R0wMQvZA3kh75Dpo8P6N
-         J8zE+r4Nmvg6KuKfVGr1s1okDgMk19XuG6hnjXQULPja0cwzNR0n2LVzC8hZvDWdEGyF
-         NOQ/Jo2mm4DbekrYCBrh7JDksczWlnMmU0bn/KmXqsNH70LbeiseaRuIgYPrWZU0CVu6
-         XxBQ==
-X-Gm-Message-State: ACrzQf3QEgaEAOT8wKsmytAkIZY+EOkkUgMqiP099tP+WRFW6jsMCz6S
-        YxVgORXlsa7piekUM48iEKeqvA==
-X-Google-Smtp-Source: AMsMyM5a8tzGl/cuGVJLwZgHv1F/Lsn8ZnybwoSrB6/BbEzupQ6p0duRG7+uxZmiFVkZrKcswz9S4Q==
-X-Received: by 2002:a17:90b:118a:b0:213:bbbc:8f09 with SMTP id gk10-20020a17090b118a00b00213bbbc8f09mr28269131pjb.64.1667498513109;
-        Thu, 03 Nov 2022 11:01:53 -0700 (PDT)
+        bh=zmWNArOWA63+Rp+4KSjfkZ/X8L7crokDBuY2zqY1JQ4=;
+        b=OEdl6KjZLOyIYwCONATM3Rfq2Pm+pjMFy0Hdz4Mu3sbH6o3QlEE0lQNjNRpmWPBs5z
+         86FQ+PPW2NlFm3yUQnCid93UyhnqA4FYkX7XoMersLva70vZC3Ur6JmRLTGmrkaNS+LS
+         IfZ6KceRe+JctsNlnll903JQb+69NFqXrh8sS+zUZ2z/K6SQvvLK/Ue/buVoA02apIoi
+         YZHx3BJsK4Sf7wAYwMZwxKzms6LvAJCaiy0mAu9nO3qFz2Z6F3zxrTqUwlmUQ3N8/ef2
+         VkaGCMkyoSYjRs+1nUBucqRtd3PZLi981I8yZxGZf1fdKI00BLAkhGwsE6UU8p4bg5qe
+         LMEg==
+X-Gm-Message-State: ACrzQf0Kpfq2lJ/9cXXbfjgPtbST58sEiwgxOGXSZLmGTyiP2zug/bMG
+        VwwaGV1Lj8a2WxUNzYtVX+GH/g==
+X-Google-Smtp-Source: AMsMyM5NCdtte+TiA5CkaGdf8YHCzOF2rZ2JUeWfMzQXd99PrtrTx1HE+dZnJMmlZ/F8gvdxjfHN8Q==
+X-Received: by 2002:a63:8bc3:0:b0:46f:fa99:7d76 with SMTP id j186-20020a638bc3000000b0046ffa997d76mr11438904pge.134.1667498514923;
+        Thu, 03 Nov 2022 11:01:54 -0700 (PDT)
 Received: from evgreen-glaptop.lan ([98.45.28.95])
-        by smtp.gmail.com with ESMTPSA id t12-20020a1709027fcc00b00177fb862a87sm1000277plb.20.2022.11.03.11.01.51
+        by smtp.gmail.com with ESMTPSA id t12-20020a1709027fcc00b00177fb862a87sm1000277plb.20.2022.11.03.11.01.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 11:01:52 -0700 (PDT)
+        Thu, 03 Nov 2022 11:01:54 -0700 (PDT)
 From:   Evan Green <evgreen@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     corbet@lwn.net, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
@@ -60,9 +60,9 @@ Cc:     corbet@lwn.net, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
         Evan Green <evgreen@chromium.org>,
         Len Brown <len.brown@intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v4 08/11] PM: hibernate: Use TPM-backed keys to encrypt image
-Date:   Thu,  3 Nov 2022 11:01:16 -0700
-Message-Id: <20221103105558.v4.8.Ibd067e73916b9fae268a5824c2dd037416426af8@changeid>
+Subject: [PATCH v4 09/11] PM: hibernate: Mix user key in encrypted hibernate
+Date:   Thu,  3 Nov 2022 11:01:17 -0700
+Message-Id: <20221103105558.v4.9.I87952411cf83f2199ff7a4cc8c828d357b8c8ce3@changeid>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221103180120.752659-1-evgreen@chromium.org>
 References: <20221103180120.752659-1-evgreen@chromium.org>
@@ -77,353 +77,437 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When using encrypted hibernate images, have the TPM create a key for us
-and seal it. By handing back a sealed blob instead of the raw key, we
-prevent usermode from being able to decrypt and tamper with the
-hibernate image on a different machine.
+Usermode may have their own data protection requirements when it comes
+to encrypting the hibernate image. For example, users may want a policy
+where the hibernate image is protected by a key derived both from
+platform-level security as well as authentication data (such as a
+password or PIN). This way, even if the platform is compromised (ie a
+stolen laptop), sensitive data cannot be exfiltrated via the hibernate
+image without additional data (like the user's password).
 
-We'll also go through the motions of having PCR23 set to a known value at
-the time of key creation and unsealing. Currently there's nothing that
-enforces the contents of PCR23 as a condition to unseal the key blob,
-that will come in a later change.
+The kernel is already doing the encryption, but will be protecting its
+key with the TPM alone. Allow usermode to mix in key content of their own
+for the data portion of the hibernate image, so that the image
+encryption key is determined both by a TPM-backed secret and
+user-defined data.
 
-Sourced-from: Matthew Garrett <mjg59@google.com>
+To mix the user key in, we hash the kernel key followed by the user key,
+and use the resulting hash as the new key. This allows usermode to mix
+in its key material without giving it too much control over what key is
+actually driving the encryption (which might be used to attack the
+secret kernel key).
+
+Limiting this to the data portion allows the kernel to receive the page
+map and prepare its giant allocation even if this user key is not yet
+available (ie the user has not yet finished typing in their password).
+Once the user key becomes available, the data portion can be pushed
+through to the kernel as well. This enables "preloading" scenarios,
+where the hibernate image is loaded off of disk while the additional
+key material (eg password) is being collected.
+
+One annoyance of the "preloading" scheme is that hibernate image memory
+is effectively double-allocated: first by the usermode process pulling
+encrypted contents off of disk and holding it, and second by the kernel
+in its giant allocation in prepare_image(). An interesting future
+optimization would be to allow the kernel to accept and store encrypted
+page data before the user key is available. This would remove the
+double allocation problem, as usermode could push the encrypted pages
+loaded from disk immediately without storing them. The kernel could defer
+decryption of the data until the user key is available, while still
+knowing the correct page locations to store the encrypted data in.
+
 Signed-off-by: Evan Green <evgreen@chromium.org>
-
 ---
-Matthew's incarnation of this patch is at:
-https://patchwork.kernel.org/project/linux-pm/patch/20210220013255.1083202-9-matthewgarrett@google.com/
 
-Changes in v4:
- - s/tpm_pcr_reset/tpm2_pcr_reset/ due to change in other patch
- - Variable ordering and whitespace fixes (Jarkko)
- - Add NULL check explanation in teardown (Jarkko)
- - Change strlen+1 to sizeof for static buffer (Jarkko)
- - Fix nr_allocated_banks loop overflow (found via KASAN)
-
-Changes in v3:
- - ENCRYPTED_HIBERNATION needs TRUSTED_KEYS builtin for
-   key_type_trusted.
- - Remove KEYS dependency since it's covered by TRUSTED_KEYS (Kees)
+(no changes since v2)
 
 Changes in v2:
- - Rework load/create_kernel_key() to eliminate a label (Andrey)
- - Call put_device() needed from calling tpm_default_chip().
+ - Add missing static on snapshot_encrypted_byte_count()
+ - Fold in only the used kernel key bytes to the user key.
+ - Make the user key length 32 (Eric)
+ - Use CRYPTO_LIB_SHA256 for less boilerplate (Eric)
 
- kernel/power/Kconfig   |   1 +
- kernel/power/snapenc.c | 211 +++++++++++++++++++++++++++++++++++++++--
- kernel/power/user.h    |   1 +
- 3 files changed, 204 insertions(+), 9 deletions(-)
+ include/uapi/linux/suspend_ioctls.h |  15 ++-
+ kernel/power/Kconfig                |   1 +
+ kernel/power/power.h                |   1 +
+ kernel/power/snapenc.c              | 158 ++++++++++++++++++++++++++--
+ kernel/power/snapshot.c             |   5 +
+ kernel/power/user.c                 |   4 +
+ kernel/power/user.h                 |  12 +++
+ 7 files changed, 185 insertions(+), 11 deletions(-)
 
+diff --git a/include/uapi/linux/suspend_ioctls.h b/include/uapi/linux/suspend_ioctls.h
+index b73026ef824bb9..f93a22eac52dc2 100644
+--- a/include/uapi/linux/suspend_ioctls.h
++++ b/include/uapi/linux/suspend_ioctls.h
+@@ -25,6 +25,18 @@ struct uswsusp_key_blob {
+ 	__u8 nonce[USWSUSP_KEY_NONCE_SIZE];
+ } __attribute__((packed));
+ 
++/*
++ * Allow user mode to fold in key material for the data portion of the hibernate
++ * image.
++ */
++struct uswsusp_user_key {
++	/* Kernel returns the metadata size. */
++	__kernel_loff_t meta_size;
++	__u32 key_len;
++	__u8 key[32];
++	__u32 pad;
++};
++
+ #define SNAPSHOT_IOC_MAGIC	'3'
+ #define SNAPSHOT_FREEZE			_IO(SNAPSHOT_IOC_MAGIC, 1)
+ #define SNAPSHOT_UNFREEZE		_IO(SNAPSHOT_IOC_MAGIC, 2)
+@@ -42,6 +54,7 @@ struct uswsusp_key_blob {
+ #define SNAPSHOT_AVAIL_SWAP_SIZE	_IOR(SNAPSHOT_IOC_MAGIC, 19, __kernel_loff_t)
+ #define SNAPSHOT_ALLOC_SWAP_PAGE	_IOR(SNAPSHOT_IOC_MAGIC, 20, __kernel_loff_t)
+ #define SNAPSHOT_ENABLE_ENCRYPTION	_IOWR(SNAPSHOT_IOC_MAGIC, 21, struct uswsusp_key_blob)
+-#define SNAPSHOT_IOC_MAXNR	21
++#define SNAPSHOT_SET_USER_KEY		_IOWR(SNAPSHOT_IOC_MAGIC, 22, struct uswsusp_user_key)
++#define SNAPSHOT_IOC_MAXNR	22
+ 
+ #endif /* _LINUX_SUSPEND_IOCTLS_H */
 diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-index cd574af0b43379..2f8acbd87b34dc 100644
+index 2f8acbd87b34dc..35bf48b925ebf6 100644
 --- a/kernel/power/Kconfig
 +++ b/kernel/power/Kconfig
-@@ -96,6 +96,7 @@ config ENCRYPTED_HIBERNATION
- 	bool "Encryption support for userspace snapshots"
+@@ -97,6 +97,7 @@ config ENCRYPTED_HIBERNATION
  	depends on HIBERNATION_SNAPSHOT_DEV
  	depends on CRYPTO_AEAD2=y
-+	depends on TRUSTED_KEYS=y
+ 	depends on TRUSTED_KEYS=y
++	select CRYPTO_LIB_SHA256
  	default n
  	help
  	  Enable support for kernel-based encryption of hibernation snapshots
+diff --git a/kernel/power/power.h b/kernel/power/power.h
+index b4f43394320961..5955e5cf692302 100644
+--- a/kernel/power/power.h
++++ b/kernel/power/power.h
+@@ -151,6 +151,7 @@ struct snapshot_handle {
+ 
+ extern unsigned int snapshot_additional_pages(struct zone *zone);
+ extern unsigned long snapshot_get_image_size(void);
++extern unsigned long snapshot_get_meta_page_count(void);
+ extern int snapshot_read_next(struct snapshot_handle *handle);
+ extern int snapshot_write_next(struct snapshot_handle *handle);
+ extern void snapshot_write_finalize(struct snapshot_handle *handle);
 diff --git a/kernel/power/snapenc.c b/kernel/power/snapenc.c
-index f215df16dad4d3..7ff4fc66f7500c 100644
+index 7ff4fc66f7500c..50167a37c5bf23 100644
 --- a/kernel/power/snapenc.c
 +++ b/kernel/power/snapenc.c
-@@ -4,13 +4,23 @@
- #include <linux/crypto.h>
- #include <crypto/aead.h>
+@@ -6,6 +6,7 @@
  #include <crypto/gcm.h>
-+#include <keys/trusted-type.h>
-+#include <linux/key-type.h>
+ #include <keys/trusted-type.h>
+ #include <linux/key-type.h>
++#include <crypto/sha.h>
  #include <linux/random.h>
  #include <linux/mm.h>
-+#include <linux/tpm.h>
- #include <linux/uaccess.h>
+ #include <linux/tpm.h>
+@@ -21,6 +22,38 @@ static struct tpm_digest known_digest = { .alg_id = TPM_ALG_SHA256,
+ 		   0xf1, 0x22, 0x38, 0x6c, 0x33, 0xb1, 0x14, 0xb7, 0xec, 0x05,
+ 		   0x5f, 0x49}};
  
- #include "power.h"
- #include "user.h"
- 
-+/* sha256("To sleep, perchance to dream") */
-+static struct tpm_digest known_digest = { .alg_id = TPM_ALG_SHA256,
-+	.digest = {0x92, 0x78, 0x3d, 0x79, 0x2d, 0x00, 0x31, 0xb0, 0x55, 0xf9,
-+		   0x1e, 0x0d, 0xce, 0x83, 0xde, 0x1d, 0xc4, 0xc5, 0x8e, 0x8c,
-+		   0xf1, 0x22, 0x38, 0x6c, 0x33, 0xb1, 0x14, 0xb7, 0xec, 0x05,
-+		   0x5f, 0x49}};
++/* Derive a key from the kernel and user keys for data encryption. */
++static int snapshot_use_user_key(struct snapshot_data *data)
++{
++	u8 digest[SHA256_DIGEST_SIZE];
++	struct trusted_key_payload *payload = data->key->payload.data[0];
++	struct sha256_state sha256_state;
++
++	/*
++	 * Hash the kernel key and the user key together. This folds in the user
++	 * key, but not in a way that gives the user mode predictable control
++	 * over the key bits.
++	 */
++	sha256_init(&sha256_state);
++	sha256_update(&sha256_state, payload->key, SNAPSHOT_ENCRYPTION_KEY_SIZE);
++	sha256_update(&sha256_state, data->user_key, sizeof(data->user_key));
++	sha256_final(&sha256_state, digest);
++	return crypto_aead_setkey(data->aead_tfm,
++				  digest,
++				  SNAPSHOT_ENCRYPTION_KEY_SIZE);
++}
++
++/* Check to see if it's time to switch to the user key, and do it if so. */
++static int snapshot_check_user_key_switch(struct snapshot_data *data)
++{
++	if (data->user_key_valid && data->meta_size &&
++	    data->crypt_total == data->meta_size) {
++		return snapshot_use_user_key(data);
++	}
++
++	return 0;
++}
 +
  /* Encrypt more data from the snapshot into the staging area. */
  static int snapshot_encrypt_refill(struct snapshot_data *data)
  {
-@@ -314,6 +324,16 @@ void snapshot_teardown_encryption(struct snapshot_data *data)
- {
- 	int i;
+@@ -32,6 +65,15 @@ static int snapshot_encrypt_refill(struct snapshot_data *data)
+ 	int pg_idx;
+ 	int res;
  
-+	/*
-+	 * Do NULL checks so this function can safely be called from error paths
-+	 * and other places where this context may not be fully set up.
-+	 */
-+	if (data->key) {
-+		key_revoke(data->key);
-+		key_put(data->key);
-+		data->key = NULL;
++	if (data->crypt_total == 0) {
++		data->meta_size = snapshot_get_meta_page_count() << PAGE_SHIFT;
++
++	} else {
++		res = snapshot_check_user_key_switch(data);
++		if (res)
++			return res;
 +	}
 +
- 	if (data->aead_req) {
- 		aead_request_free(data->aead_req);
- 		data->aead_req = NULL;
-@@ -382,10 +402,82 @@ static int snapshot_setup_encryption_common(struct snapshot_data *data)
- 	return rc;
- }
+ 	/*
+ 	 * The first buffer is the associated data, set to the offset to prevent
+ 	 * attacks that rearrange chunks.
+@@ -42,6 +84,11 @@ static int snapshot_encrypt_refill(struct snapshot_data *data)
+ 	for (pg_idx = 0; pg_idx < CHUNK_SIZE; pg_idx++) {
+ 		void *buf = data->crypt_pages[pg_idx];
  
-+static int snapshot_create_kernel_key(struct snapshot_data *data)
-+{
-+	/* Create a key sealed by the SRK. */
-+	char *keyinfo = "new\t32\tkeyhandle=0x81000000";
-+	const struct cred *cred = current_cred();
-+	struct tpm_digest *digests = NULL;
-+	struct key *key = NULL;
-+	struct tpm_chip *chip;
-+	int ret, i;
++		/* Stop at the meta page boundary to potentially switch keys. */
++		if (total &&
++		    ((data->crypt_total + total) == data->meta_size))
++			break;
 +
-+	chip = tpm_default_chip();
-+	if (!chip)
-+		return -ENODEV;
-+
-+	if (!(tpm_is_tpm2(chip))) {
-+		ret = -ENODEV;
-+		goto out_dev;
-+	}
-+
-+	ret = tpm2_pcr_reset(chip, 23);
-+	if (ret)
-+		goto out;
-+
-+	digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
-+			  GFP_KERNEL);
-+	if (!digests) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	for (i = 0; i < chip->nr_allocated_banks; i++) {
-+		digests[i].alg_id = chip->allocated_banks[i].alg_id;
-+		if (digests[i].alg_id == known_digest.alg_id)
-+			memcpy(&digests[i], &known_digest, sizeof(known_digest));
-+	}
-+
-+	ret = tpm_pcr_extend(chip, 23, digests);
-+	if (ret != 0)
-+		goto out;
-+
-+	key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
-+			GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
-+			NULL);
-+
-+	if (IS_ERR(key)) {
-+		ret = PTR_ERR(key);
-+		key = NULL;
-+		goto out;
-+	}
-+
-+	ret = key_instantiate_and_link(key, keyinfo, sizeof(keyinfo), NULL,
-+				       NULL);
-+	if (ret != 0)
-+		goto out;
-+
-+	data->key = key;
-+	key = NULL;
-+
-+out:
-+	if (key) {
-+		key_revoke(key);
-+		key_put(key);
-+	}
-+
-+	kfree(digests);
-+	tpm2_pcr_reset(chip, 23);
-+
-+out_dev:
-+	put_device(&chip->dev);
-+	return ret;
-+}
-+
- int snapshot_get_encryption_key(struct snapshot_data *data,
- 				struct uswsusp_key_blob __user *key)
- {
--	u8 aead_key[SNAPSHOT_ENCRYPTION_KEY_SIZE];
-+	struct trusted_key_payload *payload;
- 	u8 nonce[USWSUSP_KEY_NONCE_SIZE];
- 	int rc;
+ 		res = snapshot_read_next(&data->handle);
+ 		if (res < 0)
+ 			return res;
+@@ -114,10 +161,10 @@ static int snapshot_decrypt_drain(struct snapshot_data *data)
+ 		sg_set_buf(&data->sg[1 + pg_idx], data->crypt_pages[pg_idx], PAGE_SIZE);
  
-@@ -401,21 +493,28 @@ int snapshot_get_encryption_key(struct snapshot_data *data,
- 	get_random_bytes(nonce, sizeof(nonce));
- 	memcpy(&data->nonce_low, &nonce[0], sizeof(data->nonce_low));
- 	memcpy(&data->nonce_high, &nonce[8], sizeof(data->nonce_high));
--	/* Build a random key */
--	get_random_bytes(aead_key, sizeof(aead_key));
--	rc = crypto_aead_setkey(data->aead_tfm, aead_key, sizeof(aead_key));
-+
-+	/* Create a kernel key, and set it. */
-+	rc = snapshot_create_kernel_key(data);
-+	if (rc)
-+		goto fail;
-+
-+	payload = data->key->payload.data[0];
-+	/* Install the key */
-+	rc = crypto_aead_setkey(data->aead_tfm, payload->key, SNAPSHOT_ENCRYPTION_KEY_SIZE);
- 	if (rc)
- 		goto fail;
- 
--	/* Hand the key back to user mode (to be changed!) */
--	rc = put_user(sizeof(struct uswsusp_key_blob), &key->blob_len);
-+	/* Hand the key back to user mode in sealed form. */
-+	rc = put_user(payload->blob_len, &key->blob_len);
- 	if (rc)
- 		goto fail;
- 
--	rc = copy_to_user(&key->blob, &aead_key, sizeof(aead_key));
-+	rc = copy_to_user(&key->blob, &payload->blob, payload->blob_len);
- 	if (rc)
- 		goto fail;
- 
-+	/* The nonce just gets handed back in the clear. */
- 	rc = copy_to_user(&key->nonce, &nonce, sizeof(nonce));
- 	if (rc)
- 		goto fail;
-@@ -427,10 +526,99 @@ int snapshot_get_encryption_key(struct snapshot_data *data,
- 	return rc;
- }
- 
-+static int snapshot_load_kernel_key(struct snapshot_data *data,
-+				    struct uswsusp_key_blob *blob)
-+{
-+
-+	char *keytemplate = "load\t%s\tkeyhandle=0x81000000";
-+	const struct cred *cred = current_cred();
-+	struct tpm_digest *digests = NULL;
-+	char *blobstring = NULL;
-+	struct key *key = NULL;
-+	struct tpm_chip *chip;
-+	char *keyinfo = NULL;
-+	int i, ret;
-+
-+	chip = tpm_default_chip();
-+	if (!chip)
-+		return -ENODEV;
-+
-+	if (!(tpm_is_tpm2(chip))) {
-+		ret = -ENODEV;
-+		goto out_dev;
-+	}
-+
-+	ret = tpm2_pcr_reset(chip, 23);
-+	if (ret)
-+		goto out;
-+
-+	digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
-+			  GFP_KERNEL);
-+	if (!digests)
-+		goto out;
-+
-+	for (i = 0; i < chip->nr_allocated_banks; i++) {
-+		digests[i].alg_id = chip->allocated_banks[i].alg_id;
-+		if (digests[i].alg_id == known_digest.alg_id)
-+			memcpy(&digests[i], &known_digest, sizeof(known_digest));
-+	}
-+
-+	ret = tpm_pcr_extend(chip, 23, digests);
-+	if (ret != 0)
-+		goto out;
-+
-+	blobstring = kmalloc(blob->blob_len * 2, GFP_KERNEL);
-+	if (!blobstring) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	bin2hex(blobstring, blob->blob, blob->blob_len);
-+	keyinfo = kasprintf(GFP_KERNEL, keytemplate, blobstring);
-+	if (!keyinfo) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
-+			GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
-+			NULL);
-+
-+	if (IS_ERR(key)) {
-+		ret = PTR_ERR(key);
-+		key = NULL;
-+		goto out;
-+	}
-+
-+	ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
-+				       NULL);
-+	if (ret != 0)
-+		goto out;
-+
-+	data->key = key;
-+	key = NULL;
-+
-+out:
-+	if (key) {
-+		key_revoke(key);
-+		key_put(key);
-+	}
-+
-+	kfree(keyinfo);
-+	kfree(blobstring);
-+	kfree(digests);
-+	tpm2_pcr_reset(chip, 23);
-+
-+out_dev:
-+	put_device(&chip->dev);
-+	return ret;
-+}
-+
- int snapshot_set_encryption_key(struct snapshot_data *data,
- 				struct uswsusp_key_blob __user *key)
- {
- 	struct uswsusp_key_blob blob;
-+	struct trusted_key_payload *payload;
- 	int rc;
- 
- 	/* It's too late if data's been pushed in. */
-@@ -446,13 +634,18 @@ int snapshot_set_encryption_key(struct snapshot_data *data,
- 	if (rc)
- 		goto crypto_setup_fail;
- 
--	if (blob.blob_len != sizeof(struct uswsusp_key_blob)) {
-+	if (blob.blob_len > sizeof(key->blob)) {
- 		rc = -EINVAL;
- 		goto crypto_setup_fail;
+ 	/*
+-	 * It's possible this is the final decrypt, and there are fewer than
+-	 * CHUNK_SIZE pages. If this is the case we would have just written the
+-	 * auth tag into the first few bytes of a new page. Copy to the tag if
+-	 * so.
++	 * It's possible this is the final decrypt, or the final decrypt of the
++	 * meta region, and there are fewer than CHUNK_SIZE pages. If this is
++	 * the case we would have just written the auth tag into the first few
++	 * bytes of a new page. Copy to the tag if so.
+ 	 */
+ 	if ((page_count < CHUNK_SIZE) &&
+ 	    (data->crypt_offset - total) == sizeof(data->auth_tag)) {
+@@ -172,7 +219,14 @@ static int snapshot_decrypt_drain(struct snapshot_data *data)
+ 		total += PAGE_SIZE;
  	}
  
-+	rc = snapshot_load_kernel_key(data, &blob);
-+	if (rc)
-+		goto crypto_setup_fail;
++	if (data->crypt_total == 0)
++		data->meta_size = snapshot_get_meta_page_count() << PAGE_SHIFT;
 +
-+	payload = data->key->payload.data[0];
- 	rc = crypto_aead_setkey(data->aead_tfm,
--				blob.blob,
-+				payload->key,
- 				SNAPSHOT_ENCRYPTION_KEY_SIZE);
+ 	data->crypt_total += total;
++	res = snapshot_check_user_key_switch(data);
++	if (res)
++		return res;
++
+ 	return 0;
+ }
  
- 	if (rc)
+@@ -221,8 +275,26 @@ static ssize_t snapshot_write_next_encrypted(struct snapshot_data *data,
+ 	if (data->crypt_offset < (PAGE_SIZE * CHUNK_SIZE)) {
+ 		size_t pg_idx = data->crypt_offset >> PAGE_SHIFT;
+ 		size_t pg_off = data->crypt_offset & (PAGE_SIZE - 1);
++		size_t size_avail = PAGE_SIZE;
+ 		*buf = data->crypt_pages[pg_idx] + pg_off;
+-		return PAGE_SIZE - pg_off;
++
++		/*
++		 * If this is the boundary where the meta pages end, then just
++		 * return enough for the auth tag.
++		 */
++		if (data->meta_size && (data->crypt_total < data->meta_size)) {
++			uint64_t total_done =
++				data->crypt_total + data->crypt_offset;
++
++			if ((total_done >= data->meta_size) &&
++			    (total_done <
++			     (data->meta_size + SNAPSHOT_AUTH_TAG_SIZE))) {
++
++				size_avail = SNAPSHOT_AUTH_TAG_SIZE;
++			}
++		}
++
++		return size_avail - pg_off;
+ 	}
+ 
+ 	/* Use offsets just beyond the size to return the tag. */
+@@ -304,9 +376,15 @@ ssize_t snapshot_write_encrypted(struct snapshot_data *data,
+ 			break;
+ 		}
+ 
+-		/* Drain the encrypted buffer if it's full. */
++		/*
++		 * Drain the encrypted buffer if it's full, or if we hit the end
++		 * of the meta pages and need a key change.
++		 */
+ 		if ((data->crypt_offset >=
+-		    ((PAGE_SIZE * CHUNK_SIZE) + SNAPSHOT_AUTH_TAG_SIZE))) {
++		    ((PAGE_SIZE * CHUNK_SIZE) + SNAPSHOT_AUTH_TAG_SIZE)) ||
++		    (data->meta_size && (data->crypt_total < data->meta_size) &&
++		     ((data->crypt_total + data->crypt_offset) ==
++		      (data->meta_size + SNAPSHOT_AUTH_TAG_SIZE)))) {
+ 
+ 			int rc;
+ 
+@@ -350,6 +428,8 @@ void snapshot_teardown_encryption(struct snapshot_data *data)
+ 			data->crypt_pages[i] = NULL;
+ 		}
+ 	}
++
++	memset(data->user_key, 0, sizeof(data->user_key));
+ }
+ 
+ static int snapshot_setup_encryption_common(struct snapshot_data *data)
+@@ -359,6 +439,7 @@ static int snapshot_setup_encryption_common(struct snapshot_data *data)
+ 	data->crypt_total = 0;
+ 	data->crypt_offset = 0;
+ 	data->crypt_size = 0;
++	data->user_key_valid = false;
+ 	memset(data->crypt_pages, 0, sizeof(data->crypt_pages));
+ 	/* This only works once per hibernate. */
+ 	if (data->aead_tfm)
+@@ -661,15 +742,72 @@ int snapshot_set_encryption_key(struct snapshot_data *data,
+ 	return rc;
+ }
+ 
+-loff_t snapshot_get_encrypted_image_size(loff_t raw_size)
++static loff_t snapshot_encrypted_byte_count(loff_t plain_size)
+ {
+-	loff_t pages = raw_size >> PAGE_SHIFT;
++	loff_t pages = plain_size >> PAGE_SHIFT;
+ 	loff_t chunks = (pages + (CHUNK_SIZE - 1)) / CHUNK_SIZE;
+ 	/*
+ 	 * The encrypted size is the normal size, plus a stitched in
+ 	 * authentication tag for every chunk of pages.
+ 	 */
+-	return raw_size + (chunks * SNAPSHOT_AUTH_TAG_SIZE);
++	return plain_size + (chunks * SNAPSHOT_AUTH_TAG_SIZE);
++}
++
++static loff_t snapshot_get_meta_data_size(void)
++{
++	loff_t pages = snapshot_get_meta_page_count();
++
++	return snapshot_encrypted_byte_count(pages << PAGE_SHIFT);
++}
++
++int snapshot_set_user_key(struct snapshot_data *data,
++	struct uswsusp_user_key __user *key)
++{
++	struct uswsusp_user_key user_key;
++	unsigned int key_len;
++	int rc;
++	loff_t size;
++
++	/*
++	 * Return the metadata size, the number of bytes that can be fed in before
++	 * the user data key is needed at resume time.
++	 */
++	size = snapshot_get_meta_data_size();
++	rc = put_user(size, &key->meta_size);
++	if (rc)
++		return rc;
++
++	rc = copy_from_user(&user_key, key, sizeof(struct uswsusp_user_key));
++	if (rc)
++		return rc;
++
++	key_len = min_t(__u32, user_key.key_len, sizeof(data->user_key));
++	if (key_len < 8)
++		return -EINVAL;
++
++	/* Don't allow it if it's too late. */
++	if (data->crypt_total > data->meta_size)
++		return -EBUSY;
++
++	memset(data->user_key, 0, sizeof(data->user_key));
++	memcpy(data->user_key, user_key.key, key_len);
++	data->user_key_valid = true;
++	/* Install the key if the user is just under the wire. */
++	rc = snapshot_check_user_key_switch(data);
++	if (rc)
++		return rc;
++
++	return 0;
++}
++
++loff_t snapshot_get_encrypted_image_size(loff_t raw_size)
++{
++	loff_t pages = raw_size >> PAGE_SHIFT;
++	loff_t meta_size;
++
++	pages -= snapshot_get_meta_page_count();
++	meta_size = snapshot_get_meta_data_size();
++	return snapshot_encrypted_byte_count(pages << PAGE_SHIFT) + meta_size;
+ }
+ 
+ int snapshot_finalize_decrypted_image(struct snapshot_data *data)
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 2a406753af9049..026ee511633bc9 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -2083,6 +2083,11 @@ unsigned long snapshot_get_image_size(void)
+ 	return nr_copy_pages + nr_meta_pages + 1;
+ }
+ 
++unsigned long snapshot_get_meta_page_count(void)
++{
++	return nr_meta_pages + 1;
++}
++
+ static int init_header(struct swsusp_info *info)
+ {
+ 	memset(info, 0, sizeof(struct swsusp_info));
+diff --git a/kernel/power/user.c b/kernel/power/user.c
+index bba5cdbd2c0239..a66e32c9596da8 100644
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -427,6 +427,10 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+ 			error = snapshot_set_encryption_key(data, (void __user *)arg);
+ 		break;
+ 
++	case SNAPSHOT_SET_USER_KEY:
++		error = snapshot_set_user_key(data, (void __user *)arg);
++		break;
++
+ 	default:
+ 		error = -ENOTTY;
+ 
 diff --git a/kernel/power/user.h b/kernel/power/user.h
-index ac429782abff85..6c86fb64ebe13e 100644
+index 6c86fb64ebe13e..c1e80a835d0a38 100644
 --- a/kernel/power/user.h
 +++ b/kernel/power/user.h
-@@ -31,6 +31,7 @@ struct snapshot_data {
- 	uint64_t crypt_total;
+@@ -32,6 +32,9 @@ struct snapshot_data {
  	uint64_t nonce_low;
  	uint64_t nonce_high;
-+	struct key *key;
+ 	struct key *key;
++	u8 user_key[SNAPSHOT_ENCRYPTION_KEY_SIZE];
++	bool user_key_valid;
++	uint64_t meta_size;
  #endif
  
  };
+@@ -55,6 +58,9 @@ int snapshot_get_encryption_key(struct snapshot_data *data,
+ int snapshot_set_encryption_key(struct snapshot_data *data,
+ 				struct uswsusp_key_blob __user *key);
+ 
++int snapshot_set_user_key(struct snapshot_data *data,
++	struct uswsusp_user_key __user *key);
++
+ loff_t snapshot_get_encrypted_image_size(loff_t raw_size);
+ 
+ int snapshot_finalize_decrypted_image(struct snapshot_data *data);
+@@ -89,6 +95,12 @@ static int snapshot_set_encryption_key(struct snapshot_data *data,
+ 	return -ENOTTY;
+ }
+ 
++static int snapshot_set_user_key(struct snapshot_data *data,
++	struct uswsusp_user_key __user *key)
++{
++	return -ENOTTY;
++}
++
+ static loff_t snapshot_get_encrypted_image_size(loff_t raw_size)
+ {
+ 	return raw_size;
 -- 
 2.38.1.431.g37b22c650d-goog
 
