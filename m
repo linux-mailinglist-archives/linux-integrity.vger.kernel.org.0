@@ -2,50 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5F3619854
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Nov 2022 14:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B98619B9E
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Nov 2022 16:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiKDNoR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Nov 2022 09:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        id S232136AbiKDP3Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Nov 2022 11:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiKDNoR (ORCPT
+        with ESMTP id S231810AbiKDP3Y (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Nov 2022 09:44:17 -0400
+        Fri, 4 Nov 2022 11:29:24 -0400
 Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380B4E6B;
-        Fri,  4 Nov 2022 06:44:14 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4N3hWj2JxdzB099L;
-        Fri,  4 Nov 2022 21:37:37 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B6C5582;
+        Fri,  4 Nov 2022 08:29:21 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4N3krz4qShz9xqq7;
+        Fri,  4 Nov 2022 23:22:43 +0800 (CST)
 Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwB3FXIBF2VjHOY5AA--.9623S2;
-        Fri, 04 Nov 2022 14:43:42 +0100 (CET)
-Message-ID: <f292d4f68e540f394504cbc8a4b98132cca09209.camel@huaweicloud.com>
-Subject: Re: [PATCH v4] evm: Correct inode_init_security hooks behaviors
+        by APP2 (Coremail) with SMTP id GxC2BwB3rPirL2VjChk6AA--.52698S2;
+        Fri, 04 Nov 2022 16:28:56 +0100 (CET)
+Message-ID: <38c3ff70963de4a7a396c0fad84349c7c39c0f07.camel@huaweicloud.com>
+Subject: Re: [RESEND][RFC][PATCH 2/3] bpf-lsm: Limit values that can be
+ returned by security modules
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>,
-        linux-integrity@vger.kernel.org
-Cc:     philippe.trebuchet@ssi.gouv.fr, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, casey@schaufler-ca.com, davem@davemloft.net,
-        lucien.xin@gmail.com, vgoyal@redhat.com, omosnace@redhat.com,
-        mortonm@chromium.org, nicolas.bouchinet@ssi.gouv.fr,
-        mic@digikod.net, cgzones@googlemail.com,
-        linux-security-module@vger.kernel.org, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, bpf@vger.kernel.org
-Date:   Fri, 04 Nov 2022 14:43:25 +0100
-In-Reply-To: <2b10941d35ab833dbb0e5858489fefc33d11c010.camel@huaweicloud.com>
-References: <Y1lElHVQGT/1Pa6O@archlinux>
-         <2b10941d35ab833dbb0e5858489fefc33d11c010.camel@huaweicloud.com>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, revest@chromium.org,
+        jackmanb@chromium.org, shuah@kernel.org, paul@paul-moore.com,
+        casey@schaufler-ca.com, zohar@linux.ibm.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nicolas.bouchinet@clip-os.org
+Date:   Fri, 04 Nov 2022 16:28:40 +0100
+In-Reply-To: <CACYkzJ5gFu5a-NoKFD6XFNYMDyP+iPon=kHMimJybmNexbhAPg@mail.gmail.com>
+References: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
+         <20221028165423.386151-2-roberto.sassu@huaweicloud.com>
+         <CACYkzJ5gFu5a-NoKFD6XFNYMDyP+iPon=kHMimJybmNexbhAPg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwB3FXIBF2VjHOY5AA--.9623S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr1rtF47Kw1UZw4UuFykKrg_yoWrKr13pF
-        W5K3W3Kr4kAFyxCrZ2k3W7ua1Sg3yrCrWUGryfCw1Fv3Z0qFn2qr40kr15uF98CrW09Fy2
-        qF13ur43uw1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: GxC2BwB3rPirL2VjChk6AA--.52698S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WF17GFyDGw4DKw1rAr43Wrg_yoWfKw1rpr
+        4xJFyYkrWvvFWava43tan5Zws5Ar1Fga1qkr1DGr1Ik3sFvry8tw15Cr1YgFy3ur1UKr1I
+        9w4jvF4ag347Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
         vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
@@ -58,7 +60,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxCr1rtF47Kw1UZw4UuFykKrg_yoWrKr13pF
         2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
         xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
         c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAGBF1jj4UScwABsX
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAGBF1jj4UUPQACsc
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,108 +70,249 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2022-11-03 at 16:27 +0100, Roberto Sassu wrote:
-> On Wed, 2022-10-26 at 16:30 +0200, Nicolas Bouchinet wrote:
-> > From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+On Thu, 2022-11-03 at 16:09 +0100, KP Singh wrote:
+> On Fri, Oct 28, 2022 at 6:55 PM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
 > > 
-> > Fixes a NULL pointer dereference occurring in the
-> > `evm_protected_xattr_common` function of the EVM LSM. The bug is
-> > triggered if a `inode_init_security` hook returns 0 without initializing
-> > the given `struct xattr` fields (which is the case of BPF) and if no
-> > other LSM overrides thoses fields after. This also leads to memory
-> > leaks.
+> > BPF LSM defines a bpf_lsm_*() function for each LSM hook, so that
+> > security modules can define their own implementation for the desired hooks.
 > > 
-> > The `call_int_hook_xattr` macro has been inlined into the
-> > `security_inode_init_security` hook in order to check hooks return
-> > values and skip ones who doesn't init `xattrs`.
+> > Unfortunately, BPF LSM does not restrict which values security modules can
+> > return (for non-void LSM hooks). Security modules might follow the
+> > conventions stated in include/linux/lsm_hooks.h, or put arbitrary values.
 > > 
-> > Modify `evm_init_hmac` function to init the EVM hmac using every
-> > entry of the given xattr array.
-> > 
-> > The `MAX_LSM_EVM_XATTR` value is now based on the security modules
-> > compiled in, which gives room for SMACK, SELinux, Apparmor, BPF and
-> > IMA/EVM security attributes.
-> > 
-> > Changes the default return value of the `inode_init_security` hook
-> > definition to `-EOPNOTSUPP`.
-> > 
-> > Changes the hook documentation to match the behavior of the LSMs using
-> > it (only xattr->value is initialised with kmalloc and thus is the only
-> > one that should be kfreed by the caller).
-> > 
-> > Cc: roberto.sassu@huaweicloud.com
-> > Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
-> > ---
-> > Changes since v3:
-> > https://lore.kernel.org/linux-integrity/Y1fu4jofqLHVDprT@archlinux/
-> > 
-> > * Fixes compilation error reported by the kernel test robot.
-> > ---
-> >  include/linux/lsm_hook_defs.h       |  2 +-
-> >  include/linux/lsm_hooks.h           |  4 ++--
-> >  security/integrity/evm/evm.h        |  1 +
-> >  security/integrity/evm/evm_crypto.c |  9 +++++++--
-> >  security/integrity/evm/evm_main.c   |  7 ++++---
-> >  security/security.c                 | 31 ++++++++++++++++++++++-------
-> >  6 files changed, 39 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> > index 806448173033..e5dd0c0f6345 100644
-> > --- a/include/linux/lsm_hook_defs.h
-> > +++ b/include/linux/lsm_hook_defs.h
-> > @@ -111,7 +111,7 @@ LSM_HOOK(int, 0, path_notify, const struct path *path, u64 mask,
-> >  	 unsigned int obj_type)
-> >  LSM_HOOK(int, 0, inode_alloc_security, struct inode *inode)
-> >  LSM_HOOK(void, LSM_RET_VOID, inode_free_security, struct inode *inode)
-> > -LSM_HOOK(int, 0, inode_init_security, struct inode *inode,
-> > +LSM_HOOK(int, -EOPNOTSUPP, inode_init_security, struct inode *inode,
-> >  	 struct inode *dir, const struct qstr *qstr, const char **name,
-> >  	 void **value, size_t *len)
-> >  LSM_HOOK(int, 0, inode_init_security_anon, struct inode *inode,
-> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> > index 84a0d7e02176..95aff9383de1 100644
-> > --- a/include/linux/lsm_hooks.h
-> > +++ b/include/linux/lsm_hooks.h
-> > @@ -229,8 +229,8 @@
-> >   *	This hook is called by the fs code as part of the inode creation
-> >   *	transaction and provides for atomic labeling of the inode, unlike
-> >   *	the post_create/mkdir/... hooks called by the VFS.  The hook function
-> > - *	is expected to allocate the name and value via kmalloc, with the caller
-> > - *	being responsible for calling kfree after using them.
-> > + *	is expected to allocate the value via kmalloc, with the caller
-> > + *	being responsible for calling kfree after using it.
+> > This could cause big troubles, as the kernel is not ready to handle
+> > possibly malicious return values from LSMs. Until now, it was not the
 > 
-> Please also update the description of @name as well (remove allocated).
+> I am not sure I would call this malicious. This would be incorrect, if
+> someone is writing a BPF LSM program they already have the powers
+> to willingly do a lot of malicious stuff.
+> 
+> It's about unknowingly returning values that can break the system.
 
-While you update the patch, I worked on the other patches: reiserfs
-fixes, if we want still to apply them; expand the call_int_hook() loop
-also for security_old_inode_init_security() to have consistent behavior
-across all filesystems.
+Maybe it is possible to return specific values that lead to acquire
+more information/do actions that the eBPF program is not supposed to
+cause.
 
-The patches are available here:
+I don't have a concrete example, so I will use the word you suggested.
 
-https://github.com/robertosassu/linux/tree/evm-multiple-lsms-nicolas-v1-devel-v6
+> > case, as each LSM is carefully reviewed and it won't be accepted if it
+> > does not meet the return value conventions.
+> > 
+> > The biggest problem is when an LSM returns a positive value, instead of a
+> > negative value, as it could be converted to a pointer. Since such pointer
+> > escapes the IS_ERR() check, its use later in the code can cause
+> > unpredictable consequences (e.g. invalid memory access).
+> > 
+> > Another problem is returning zero when an LSM is supposed to have done some
+> > operations. For example, the inode_init_security hook expects that their
+> > implementations return zero only if they set the name and value of the new
+> > xattr to be added to the new inode. Otherwise, other kernel subsystems
+> > might encounter unexpected conditions leading to a crash (e.g.
+> > evm_protected_xattr_common() getting NULL as argument).
+> > 
+> > Finally, there are LSM hooks which are supposed to return just one as
+> > positive value, or non-negative values. Also in these cases, although it
+> > seems less critical, it is safer to return to callers of the LSM
+> > infrastructure more precisely what they expect.
+> > 
+> > As eBPF allows code outside the kernel to run, it is its responsibility
+> > to ensure that only expected values are returned to LSM infrastructure
+> > callers.
+> > 
+> > Create four new BTF ID sets, respectively for hooks that can return
+> > positive values, only one as positive value, that cannot return zero, and
+> > that cannot return negative values. Create also corresponding functions to
+> > check if the hook a security module is attached to belongs to one of the
+> > defined sets.
+> > 
+> > Finally, check in the eBPF verifier the value returned by security modules
+> > for each attached LSM hook, and return -EINVAL (the security module cannot
+> > run) if the hook implementation does not satisfy the hook return value
+> > policy.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  include/linux/bpf_lsm.h | 24 ++++++++++++++++++
+> >  kernel/bpf/bpf_lsm.c    | 56 +++++++++++++++++++++++++++++++++++++++++
+> >  kernel/bpf/verifier.c   | 35 +++++++++++++++++++++++---
+> >  3 files changed, 112 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> > index 4bcf76a9bb06..cd38aca4cfc0 100644
+> > --- a/include/linux/bpf_lsm.h
+> > +++ b/include/linux/bpf_lsm.h
+> > @@ -28,6 +28,10 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+> >                         const struct bpf_prog *prog);
+> > 
+> >  bool bpf_lsm_is_sleepable_hook(u32 btf_id);
+> > +bool bpf_lsm_can_ret_pos_value(u32 btf_id);
+> > +bool bpf_lsm_can_ret_only_one_as_pos_value(u32 btf_id);
+> > +bool bpf_lsm_cannot_ret_zero(u32 btf_id);
+> > +bool bpf_lsm_cannot_ret_neg_value(u32 btf_id);
+> > 
+> 
+> This does not need to be exported to the rest of the kernel. Please
+> have this logic in bpf_lsm.c and export a single verify function.
+> 
+> Also, these really don't need to be such scattered logic, Could we
+> somehow encode this into the LSM_HOOK definition?
 
-Other than Github Actions related patches, there is also TestLSM, which
-I developed to ensure that xattrs are correctly created.
+The problem is that a new LSM_HOOK definition would apply to every LSM
+hook, while we need the ability to select subsets.
 
-I also adapted the IMA/EVM tests, which are available here:
-
-https://github.com/robertosassu/ima-evm-utils/tree/evm-multiple-lsms-nicolas-v1-devel-v6
-
-Nicolas, if you want to test the new patch locally, build the UML
-kernel with:
-
-make ARCH=um -j$(nproc)
-
-Build ima-evm-utils, and copy linux and certs/signing_key.pem from the
-kernel source directory to the ima-evm-utils directory. Then, run:
-
-tests/evm_multiple_lsms.test
-
-It basically runs the UML kernel with different combinations of LSMs
-(some providing an xattr, some not) and compares the HMAC calculated by
-EVM in the kernel with the HMAC calculated by evmctl in user space.
+I was thinking, but I didn't check yet, what about using BTF_ID_FLAGS,
+introducing a flag for each interval (<0, 0, 1, >1) and setting the
+appropriate flags for each LSM hook?
 
 Roberto
+
+> >  static inline struct bpf_storage_blob *bpf_inode(
+> >         const struct inode *inode)
+> > @@ -51,6 +55,26 @@ static inline bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+> >         return false;
+> >  }
+> > 
+> > +static inline bool bpf_lsm_can_ret_pos_value(u32 btf_id)
+> > +{
+> > +       return false;
+> > +}
+> > +
+> > +static inline bool bpf_lsm_can_ret_only_one_as_pos_value(u32 btf_id)
+> > +{
+> > +       return false;
+> > +}
+> > +
+> > +static inline bool bpf_lsm_cannot_ret_zero(u32 btf_id)
+> > +{
+> > +       return false;
+> > +}
+> > +
+> > +static inline bool bpf_lsm_cannot_ret_neg_value(u32 btf_id)
+> > +{
+> > +       return false;
+> > +}
+> > +
+> >  static inline int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+> >                                       const struct bpf_prog *prog)
+> >  {
+> > diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> > index d6c9b3705f24..3dcb70b2f978 100644
+> > --- a/kernel/bpf/bpf_lsm.c
+> > +++ b/kernel/bpf/bpf_lsm.c
+> > @@ -348,6 +348,62 @@ bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+> >         return btf_id_set_contains(&sleepable_lsm_hooks, btf_id);
+> >  }
+> > 
+> > +/* The set of hooks which are allowed to return a positive value. */
+> > +BTF_SET_START(pos_ret_value_lsm_hooks)
+> > +BTF_ID(func, bpf_lsm_vm_enough_memory)
+> > +BTF_ID(func, bpf_lsm_inode_getsecurity)
+> > +BTF_ID(func, bpf_lsm_inode_listsecurity)
+> > +BTF_ID(func, bpf_lsm_inode_need_killpriv)
+> > +BTF_ID(func, bpf_lsm_inode_copy_up_xattr)
+> > +BTF_ID(func, bpf_lsm_getprocattr)
+> > +BTF_ID(func, bpf_lsm_setprocattr)
+> > +BTF_ID(func, bpf_lsm_xfrm_state_pol_flow_match)
+> > +BTF_ID(func, bpf_lsm_key_getsecurity)
+> > +BTF_ID(func, bpf_lsm_ismaclabel)
+> > +BTF_ID(func, bpf_lsm_audit_rule_known)
+> > +BTF_ID(func, bpf_lsm_audit_rule_match)
+> > +BTF_SET_END(pos_ret_value_lsm_hooks)
+> > +
+> > +bool bpf_lsm_can_ret_pos_value(u32 btf_id)
+> > +{
+> > +       return btf_id_set_contains(&pos_ret_value_lsm_hooks, btf_id);
+> > +}
+> > +
+> > +BTF_SET_START(one_ret_value_lsm_hooks)
+> > +BTF_ID(func, bpf_lsm_vm_enough_memory)
+> > +BTF_ID(func, bpf_lsm_inode_copy_up_xattr)
+> > +BTF_ID(func, bpf_lsm_xfrm_state_pol_flow_match)
+> > +BTF_ID(func, bpf_lsm_ismaclabel)
+> > +BTF_ID(func, bpf_lsm_audit_rule_known)
+> > +BTF_ID(func, bpf_lsm_audit_rule_match)
+> > +BTF_SET_END(one_ret_value_lsm_hooks)
+> > +
+> > +bool bpf_lsm_can_ret_only_one_as_pos_value(u32 btf_id)
+> > +{
+> > +       return btf_id_set_contains(&one_ret_value_lsm_hooks, btf_id);
+> > +}
+> > +
+> > +/* The set of hooks which are not allowed to return zero. */
+> > +BTF_SET_START(not_zero_ret_value_lsm_hooks)
+> > +BTF_ID(func, bpf_lsm_inode_init_security)
+> > +BTF_SET_END(not_zero_ret_value_lsm_hooks)
+> > +
+> > +bool bpf_lsm_cannot_ret_zero(u32 btf_id)
+> > +{
+> > +       return btf_id_set_contains(&not_zero_ret_value_lsm_hooks, btf_id);
+> > +}
+> > +
+> > +/* The set of hooks which are not allowed to return a negative value. */
+> > +BTF_SET_START(not_neg_ret_value_lsm_hooks)
+> > +BTF_ID(func, bpf_lsm_vm_enough_memory)
+> > +BTF_ID(func, bpf_lsm_audit_rule_known)
+> > +BTF_SET_END(not_neg_ret_value_lsm_hooks)
+> > +
+> > +bool bpf_lsm_cannot_ret_neg_value(u32 btf_id)
+> > +{
+> > +       return btf_id_set_contains(&not_neg_ret_value_lsm_hooks, btf_id);
+> > +}
+> > +
+> >  const struct bpf_prog_ops lsm_prog_ops = {
+> >  };
+> > 
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 7f0a9f6cb889..099c1bf88fed 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -10623,9 +10623,38 @@ static int check_return_code(struct bpf_verifier_env *env)
+> > 
+> >         case BPF_PROG_TYPE_LSM:
+> >                 if (env->prog->expected_attach_type != BPF_LSM_CGROUP) {
+> > -                       /* Regular BPF_PROG_TYPE_LSM programs can return
+> > -                        * any value.
+> > -                        */
+> > +                       /* < 0 */
+> > +                       if (tnum_in(tnum_range((u64)(~0) << 31, (u64)(~0)), reg->var_off)) {
+> > +                               if (bpf_lsm_cannot_ret_neg_value(env->prog->aux->attach_btf_id)) {
+> > +                                       verbose(env, "Invalid R0, cannot return negative value\n");
+> > +                                       return -EINVAL;
+> > +                               }
+> > +                       /* = 0 */
+> > +                       } else if (tnum_equals_const(reg->var_off, 0)) {
+> > +                               if (bpf_lsm_cannot_ret_zero(env->prog->aux->attach_btf_id)) {
+> > +                                       verbose(env, "Invalid R0, cannot return zero value\n");
+> > +                                       return -EINVAL;
+> > +                               }
+> > +                       /* = 1 */
+> > +                       } else if (tnum_equals_const(reg->var_off, 1)) {
+> > +                               if (!bpf_lsm_can_ret_pos_value(env->prog->aux->attach_btf_id)) {
+> > +                                       verbose(env, "Invalid R0, cannot return positive value\n");
+> > +                                       return -EINVAL;
+> > +                               }
+> > +                       /* > 1 */
+> > +                       } else {
+> > +                               if (!bpf_lsm_can_ret_pos_value(env->prog->aux->attach_btf_id)) {
+> > +                                       verbose(env, "Invalid R0, cannot return positive value\n");
+> > +                                       return -EINVAL;
+> > +                               }
+> > +
+> > +                               if (bpf_lsm_can_ret_only_one_as_pos_value(env->prog->aux->attach_btf_id)) {
+> > +                                       verbose(env,
+> > +                                               "Invalid R0, can return only one as positive value\n");
+> > +                                       return -EINVAL;
+> > +                               }
+> > +                       }
+> > +
+> >                         return 0;
+> >                 }
+> >                 if (!env->prog->aux->attach_func_proto->type) {
+> > --
+> > 2.25.1
+> > 
 
