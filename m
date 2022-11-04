@@ -2,93 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D4D619E08
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Nov 2022 18:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D8A619FCB
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Nov 2022 19:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiKDREA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Nov 2022 13:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S231868AbiKDSZb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Nov 2022 14:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiKDREA (ORCPT
+        with ESMTP id S230333AbiKDSZ2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Nov 2022 13:04:00 -0400
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [IPv6:2001:1600:4:17::42aa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1732C64C
-        for <linux-integrity@vger.kernel.org>; Fri,  4 Nov 2022 10:03:58 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4N3n5l3xVSzMqP72;
-        Fri,  4 Nov 2022 18:03:55 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4N3n5k5nYNzMpprG;
-        Fri,  4 Nov 2022 18:03:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1667581435;
-        bh=rDKlvs8YU46CKqX82hlxiACZy1AJYlqE6JjX6FipWvY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=C4wdECx7thGygxi5nrmA3/kCeEewHDEX338TkrABm3eCBt+52aGJsEpDx39JZs54+
-         SbOE59h+HHFRl4V1yri2Lnl/43ykDhCcxJjBoQQNwn+1EulC3fTuJkL8lyJON/Xjlm
-         PGn8iDj4oEvB8LSEmCrtuBIobYASOQyNZNfqvoCA=
-Message-ID: <af0d6881-76c0-f570-0c5b-f664e261c4cf@digikod.net>
-Date:   Fri, 4 Nov 2022 18:03:53 +0100
+        Fri, 4 Nov 2022 14:25:28 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A328E57
+        for <linux-integrity@vger.kernel.org>; Fri,  4 Nov 2022 11:25:27 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id i3so5192991pfc.11
+        for <linux-integrity@vger.kernel.org>; Fri, 04 Nov 2022 11:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=N+zCgb1/SzDeDjC+vBm0YAYeuRy8cLDQigNzNk9ARjk=;
+        b=XybAPYJttcijaPr/nAJsmDLP3UTm9pg2RY/hUVR216pKXnvZsPs8UblVlXw6iv++Wt
+         twSGPXjkJAmuQtRG59/Rb3MQdTXwOdvfJFdXWoWSPRUhJ0dUkHTYuSKXHAztXcVNyoPY
+         RLrhYvQGFb6M3h29pihNmOQha+MZz9F7UBL2c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N+zCgb1/SzDeDjC+vBm0YAYeuRy8cLDQigNzNk9ARjk=;
+        b=AcXhYvgsW9qkhF/OqSd8if4HYD9nrQAbYUtXZ2v2Ipi56EngnFAoYspIJ00VN1SCCL
+         we4YHRkX1RAVGrtek+/p/1ucn3neD74DngrSrJ7R1JH/v41GJh9iwm+kYvKcOCbrpTXq
+         w1uor8mhHzDjplU0EjQvcXoMQKe7kVRRwA7/AGwPOY/8/rAsi7Kz0ajf0vJmHuSfmES0
+         TuOlj9qYoPefX7AIhwLbPyBJ8jMnnJUhzirDVvRGIViM3cqIiQszqz3PPSnL6zoC1Fmu
+         tXBZS8s6UR4Bz1xcjIq/WWp/fAADV0CUvWE+PQNLC74I0QqgzmydQkyExtl9s8V9tnJ+
+         KZwg==
+X-Gm-Message-State: ACrzQf30ybec/5jX8GEjjOkeRCl+m+64dxiTfSG1iTFUNT0e1mT7789+
+        LKVUCzSnFAoK3L8uPL6O+Q+scw==
+X-Google-Smtp-Source: AMsMyM5X/Shx4cgtu5hc6fwml5LMImDqhjEcMMKKGnvGAIdHWWZYV748v+nJVyT5k+iiPjXS5Y64nQ==
+X-Received: by 2002:a63:211d:0:b0:44e:f294:8440 with SMTP id h29-20020a63211d000000b0044ef2948440mr31050826pgh.103.1667586326820;
+        Fri, 04 Nov 2022 11:25:26 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090a784b00b00217090ece49sm49088pjl.31.2022.11.04.11.25.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 11:25:26 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 11:25:25 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
+        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, dlunev@google.com,
+        Eric Biggers <ebiggers@kernel.org>,
+        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v4 02/11] tpm: Export and rename
+ tpm2_find_and_validate_cc()
+Message-ID: <202211041125.6DA20EB25@keescook>
+References: <20221103180120.752659-1-evgreen@chromium.org>
+ <20221103105558.v4.2.I7bbedcf5efd3f1c72c32d6002faed086c5ed31c7@changeid>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [BUG] blacklist: Problem blacklisting hash (-13) during boot
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        keyrings@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-References: <c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103105558.v4.2.I7bbedcf5efd3f1c72c32d6002faed086c5ed31c7@changeid>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
-
-Thanks for this report. These error messages seem correct but I don't 
-see any legitimate reason for the firmware to store duplicate 
-blacklisted hashes.
-
-According to the blacklist_init() function, the "blacklisting failed" 
-message could be improved to explain that only a set of hashes failed, 
-and why they failed. However, despite this message, this should work as 
-expected and should not generate any issue.
-
-Did you contact Lenovo to report this issue (i.e. duplicate hashes in 
-their firmware)?
-
-Could you please provide the list of duplicate hashes?
-
-Regards,
-  Mickaël
-
-
-On 15/10/2022 05:16, Thomas Weißschuh wrote:
-> Hi,
+On Thu, Nov 03, 2022 at 11:01:10AM -0700, Evan Green wrote:
+> Export tpm_find_and_validate_cc() since it will be needed by an upcoming
+> change allowing access to certain PCRs to be restricted to the kernel.
+> In order to export it consistently, and because it's a tpm2-only
+> function, rename it to tpm2_find_and_validate_cc().
 > 
-> Since 5.19 during boot I see lots of the following entries in dmesg:
-> 
-> blacklist: Problem blacklisting hash (-13)
-> 
-> This happens because the firmware contains duplicate blacklist entries.
-> As commit 6364d106e041 [0] modified the "blacklist" keyring to reject updates
-> this now leads to the spurious error messages.
-> 
-> The machine is a Thinkpad X1 Cargon Gen9 with BIOS revision 1.56 and firmware
-> revision 1.33.
-> 
-> [0] 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
+> Signed-off-by: Evan Green <evgreen@chromium.org>
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
