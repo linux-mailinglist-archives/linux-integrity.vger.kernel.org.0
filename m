@@ -2,249 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5400B61A070
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Nov 2022 20:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7273A61A097
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Nov 2022 20:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiKDTA7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Nov 2022 15:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S229754AbiKDTLp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Nov 2022 15:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKDTA5 (ORCPT
+        with ESMTP id S229748AbiKDTLo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Nov 2022 15:00:57 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814E95986F
-        for <linux-integrity@vger.kernel.org>; Fri,  4 Nov 2022 12:00:54 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id k22so5289963pfd.3
-        for <linux-integrity@vger.kernel.org>; Fri, 04 Nov 2022 12:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3jhteGoCfhnRu6lO56jCIvAOnYVZ3wVFwNqjWZiWhdE=;
-        b=L2WinIR13ZQtNbMb0Qv5sE/qDaoCOqJ2+uqCKDxqXG7TTCGXBj9xQF94e8Gle8k5SY
-         g1qAEqMRKv15fHhSCbxOiblgAjdwH4fVPbfsT5Qvuv/OrN7lpdF6q6swf4xHkyFNStjX
-         19dGIVUo9ohirNQvWYmFxlFDgUAh3FOie2iWE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3jhteGoCfhnRu6lO56jCIvAOnYVZ3wVFwNqjWZiWhdE=;
-        b=z45pUsfpux1ctFPIYcn3QG3cI38ulRl6z2NzErhFGdVP1JUAaGs/kyVkH13Zuk7qr5
-         1e+BWgbFcFamxQOYOCjWB/A0J/WuWgC/mkXEezpAlmT+AvDC2JIhfoPzf7EmJClTVzAP
-         qFcwh8mU6cH9KXnyOxFp67d5cNdgMWAN2lZd3eKT5nyJougDy5ujCtaWFA0SqE+Vmtv3
-         n7vpdDTRfQ4P590l0925R0PG0TqMJg+yrG0mNc/jqFihVvignDp0zrJs2+jYTbsK/w83
-         N9VTX1svINJ6ANrKvSeWOhYkgVMUxny/EQTG8fKtMOJQbiESyQarPUCX1qdntKH9HTpQ
-         C+zQ==
-X-Gm-Message-State: ACrzQf0X139mJbVlHvPTdy+Ueeb6P0qHiQppOjzYbntnCmU7EOnxL/U1
-        YPo9szJtZuyF5Cb3E/zELm4rrA==
-X-Google-Smtp-Source: AMsMyM7LJpMMZ+JYQKPCMmo7xp54Qu0quGeHYZP5TMa7jKCXeIDtus2F8YhNZQ2OsbyceaOK6er8sQ==
-X-Received: by 2002:a65:56c4:0:b0:458:85e:9e65 with SMTP id w4-20020a6556c4000000b00458085e9e65mr32502538pgs.358.1667588453958;
-        Fri, 04 Nov 2022 12:00:53 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f20-20020a623814000000b0056232682a7esm3108223pfa.2.2022.11.04.12.00.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 12:00:53 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 12:00:52 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
-        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, dlunev@google.com,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v4 10/11] PM: hibernate: Verify the digest encryption key
-Message-ID: <202211041156.3D184961EE@keescook>
-References: <20221103180120.752659-1-evgreen@chromium.org>
- <20221103105558.v4.10.I504d456c7a94ef1aaa7a2c63775ce9690c3ad7ab@changeid>
+        Fri, 4 Nov 2022 15:11:44 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BB569DC8;
+        Fri,  4 Nov 2022 12:11:41 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 20:11:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1667589096; bh=mmhBi7QB7LltXTiDiPTvIZiQKPGsrakjKVHkFQwHxR8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RliUcthLTL78oYdnbv6cGpfbEI9Ctu78m6xqETt0VvL6oyYBSajt/HJ8Mt88J5BDf
+         sq1o5hYgXh9ek5gwC9YSiqasvHu/2LUT4bfmFtSsARlNC4yB0QyCProJbtQ4X+Q2V8
+         tFMBlND0nUzObQbJFrcuFH3v3XA4L8y7IXH1kr8I=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Subject: Re: [BUG] blacklist: Problem blacklisting hash (-13) during boot
+Message-ID: <632d2180-02f8-4a5f-803a-57a6443a60f4@t-8ch.de>
+References: <c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de>
+ <af0d6881-76c0-f570-0c5b-f664e261c4cf@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221103105558.v4.10.I504d456c7a94ef1aaa7a2c63775ce9690c3ad7ab@changeid>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <af0d6881-76c0-f570-0c5b-f664e261c4cf@digikod.net>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:01:18AM -0700, Evan Green wrote:
-> We want to ensure that the key used to encrypt the digest was created by
-> the kernel during hibernation. To do this we request that the TPM
-> include information about the value of PCR 23 at the time of key
-> creation in the sealed blob. On resume, we can make sure that the PCR
-> information in the creation data blob (already certified by the TPM to
-> be accurate) corresponds to the expected value. Since only
-> the kernel can touch PCR 23, if an attacker generates a key themselves
-> the value of PCR 23 will have been different, allowing us to reject the
-> key and boot normally instead of resuming.
+Hi Mickaël,
+
+On 2022-11-04 18:03+0100, Mickaël Salaün wrote:
+> Thanks for this report. These error messages seem correct but I don't see
+> any legitimate reason for the firmware to store duplicate blacklisted
+> hashes.
 > 
-> Co-developed-by: Matthew Garrett <mjg59@google.com>
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> Signed-off-by: Evan Green <evgreen@chromium.org>
+> According to the blacklist_init() function, the "blacklisting failed"
+> message could be improved to explain that only a set of hashes failed, and
+> why they failed. However, despite this message, this should work as expected
+> and should not generate any issue.
 > 
-> ---
-> Matthew's original version of this patch is here:
-> https://patchwork.kernel.org/project/linux-pm/patch/20210220013255.1083202-9-matthewgarrett@google.com/
-> 
-> I moved the TPM2_CC_CERTIFYCREATION code into a separate change in the
-> trusted key code because the blob_handle was being flushed and was no
-> longer valid for use in CC_CERTIFYCREATION after the key was loaded. As
-> an added benefit of moving the certification into the trusted keys code,
-> we can drop the other patch from the original series that squirrelled
-> the blob_handle away.
-> 
-> Changes in v4:
->  - Local variable reordering (Jarkko)
-> 
-> Changes in v3:
->  - Changed funky tag to Co-developed-by (Kees). Matthew, holler if you
->    want something different.
-> 
-> Changes in v2:
->  - Fixed some sparse warnings
->  - Use CRYPTO_LIB_SHA256 to get rid of sha256_data() (Eric)
->  - Adjusted offsets due to new ASN.1 format, and added a creation data
->    length check.
-> 
->  kernel/power/snapenc.c | 67 ++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 65 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/power/snapenc.c b/kernel/power/snapenc.c
-> index 50167a37c5bf23..2f421061498246 100644
-> --- a/kernel/power/snapenc.c
-> +++ b/kernel/power/snapenc.c
-> @@ -22,6 +22,12 @@ static struct tpm_digest known_digest = { .alg_id = TPM_ALG_SHA256,
->  		   0xf1, 0x22, 0x38, 0x6c, 0x33, 0xb1, 0x14, 0xb7, 0xec, 0x05,
->  		   0x5f, 0x49}};
->  
-> +/* sha256(sha256(empty_pcr | known_digest)) */
-> +static const char expected_digest[] = {0x2f, 0x96, 0xf2, 0x1b, 0x70, 0xa9, 0xe8,
-> +	0x42, 0x25, 0x8e, 0x66, 0x07, 0xbe, 0xbc, 0xe3, 0x1f, 0x2c, 0x84, 0x4a,
-> +	0x3f, 0x85, 0x17, 0x31, 0x47, 0x9a, 0xa5, 0x53, 0xbb, 0x23, 0x0c, 0x32,
-> +	0xf3};
-> +
->  /* Derive a key from the kernel and user keys for data encryption. */
->  static int snapshot_use_user_key(struct snapshot_data *data)
->  {
-> @@ -486,7 +492,7 @@ static int snapshot_setup_encryption_common(struct snapshot_data *data)
->  static int snapshot_create_kernel_key(struct snapshot_data *data)
->  {
->  	/* Create a key sealed by the SRK. */
-> -	char *keyinfo = "new\t32\tkeyhandle=0x81000000";
-> +	char *keyinfo = "new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000";
->  	const struct cred *cred = current_cred();
->  	struct tpm_digest *digests = NULL;
->  	struct key *key = NULL;
-> @@ -613,6 +619,8 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
->  
->  	char *keytemplate = "load\t%s\tkeyhandle=0x81000000";
->  	const struct cred *cred = current_cred();
-> +	struct trusted_key_payload *payload;
-> +	char certhash[SHA256_DIGEST_SIZE];
->  	struct tpm_digest *digests = NULL;
->  	char *blobstring = NULL;
->  	struct key *key = NULL;
-> @@ -635,8 +643,10 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
->  
->  	digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
->  			  GFP_KERNEL);
-> -	if (!digests)
-> +	if (!digests) {
-> +		ret = -ENOMEM;
->  		goto out;
-> +	}
->  
->  	for (i = 0; i < chip->nr_allocated_banks; i++) {
->  		digests[i].alg_id = chip->allocated_banks[i].alg_id;
-> @@ -676,6 +686,59 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
->  	if (ret != 0)
->  		goto out;
->  
-> +	/* Verify the creation hash matches the creation data. */
-> +	payload = key->payload.data[0];
-> +	if (!payload->creation || !payload->creation_hash ||
-> +	    (payload->creation_len < 3) ||
+> Did you contact Lenovo to report this issue (i.e. duplicate hashes in their
+> firmware)?
 
-Later accesses are reaching into indexes, 6, 8, 12, 14, etc. Shouldn't
-this test be:
+I CCed Mark Person from Lenovo on this mail, nothing more for now.
 
-	    (payload->creation_len < 14 + SHA256_DIGEST_SIZE) ||
+There seem to more devices than just from Lenovo to be affected:
+* Samsung: https://askubuntu.com/questions/1436856/
+* Acer: https://ubuntuforums.org/showthread.php?t=2478840
+* MSI: https://forum.archlabslinux.com/t/blacklist-problem-blacklisting-hash-13-errors-on-boot/6674/7
+* Micro-Star: https://bbs.archlinux.org/viewtopic.php?id=278860
 
+While there are reports that it helps to reset the blacklist in firmware this
+doesn't seem like a general solution for endusers.
 
-> +	    (payload->creation_hash_len < SHA256_DIGEST_SIZE)) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	sha256(payload->creation + 2, payload->creation_len - 2, certhash);
+FYI I also posted a patch that silences the spurious logs:
+https://lore.kernel.org/lkml/20221104014704.3469-1-linux@weissschuh.net/
 
-Why +2 offset?
+> Could you please provide the list of duplicate hashes?
 
-> +	if (memcmp(payload->creation_hash + 2, certhash, SHA256_DIGEST_SIZE) != 0) {
+bin:80b4d96931bf0d02fd91a61e19d14f1da452e66db2408ca8604d411f92659f0a
+bin:f52f83a3fa9cfbd6920f722824dbe4034534d25b8507246b3b957dac6e1bce7a
+bin:c5d9d8a186e2c82d09afaa2a6f7f2e73870d3e64f72c4e08ef67796a840f0fbd
+bin:1aec84b84b6c65a51220a9be7181965230210d62d6d33c48999c6b295a2b0a06
+bin:c3a99a460da464a057c3586d83cef5f4ae08b7103979ed8932742df0ed530c66
+bin:58fb941aef95a25943b3fb5f2510a0df3fe44c58c95e0ab80487297568ab9771
+bin:5391c3a2fb112102a6aa1edc25ae77e19f5d6f09cd09eeb2509922bfcd5992ea
+bin:d626157e1d6a718bc124ab8da27cbb65072ca03a7b6b257dbdcbbd60f65ef3d1
+bin:d063ec28f67eba53f1642dbf7dff33c6a32add869f6013fe162e2c32f1cbe56d
+bin:29c6eb52b43c3aa18b2cd8ed6ea8607cef3cfae1bafe1165755cf2e614844a44
+bin:90fbe70e69d633408d3e170c6832dbb2d209e0272527dfb63d49d29572a6f44c
+bin:106faceacfecfd4e303b74f480a08098e2d0802b936f8ec774ce21f31686689c
+bin:174e3a0b5b43c6a607bbd3404f05341e3dcf396267ce94f8b50e2e23a9da920c
+bin:2b99cf26422e92fe365fbf4bc30d27086c9ee14b7a6fff44fb2f6b9001699939
+bin:2e70916786a6f773511fa7181fab0f1d70b557c6322ea923b2a8d3b92b51af7d
+bin:3fce9b9fdf3ef09d5452b0f95ee481c2b7f06d743a737971558e70136ace3e73
+bin:47cc086127e2069a86e03a6bef2cd410f8c55a6d6bdb362168c31b2ce32a5adf
+bin:71f2906fd222497e54a34662ab2497fcc81020770ff51368e9e3d9bfcbfd6375
+bin:82db3bceb4f60843ce9d97c3d187cd9b5941cd3de8100e586f2bda5637575f67
+bin:8ad64859f195b5f58dafaa940b6a6167acd67a886e8f469364177221c55945b9
+bin:8d8ea289cfe70a1c07ab7365cb28ee51edd33cf2506de888fbadd60ebf80481c
+bin:aeebae3151271273ed95aa2e671139ed31a98567303a332298f83709a9d55aa1
+bin:c409bdac4775add8db92aa22b5b718fb8c94a1462c1fe9a416b95d8a3388c2fc
+bin:c617c1a8b1ee2a811c28b5a81b4c83d7c98b5b0c27281d610207ebe692c2967f
+bin:c90f336617b8e7f983975413c997f10b73eb267fd8a10cb9e3bdbfc667abdb8b
+bin:64575bd912789a2e14ad56f6341f52af6bf80cf94400785975e9f04e2d64d745
+bin:45c7c8ae750acfbb48fc37527d6412dd644daed8913ccd8a24c94d856967df8e
+bin:47ff1b63b140b6fc04ed79131331e651da5b2e2f170f5daef4153dc2fbc532b1
+bin:5391c3a2fb112102a6aa1edc25ae77e19f5d6f09cd09eeb2509922bfcd5992ea
+bin:80b4d96931bf0d02fd91a61e19d14f1da452e66db2408ca8604d411f92659f0a
+bin:992d359aa7a5f789d268b94c11b9485a6b1ce64362b0edb4441ccc187c39647b
+bin:c452ab846073df5ace25cca64d6b7a09d906308a1a65eb5240e3c4ebcaa9cc0c
+bin:e051b788ecbaeda53046c70e6af6058f95222c046157b8c4c1b9c2cfc65f46e5
 
-And if this is +2 also, shouldn't the earlier test be:
+Thanks,
+Thomas
 
-        (payload->creation_hash_len - 2 != SHA256_DIGEST_SIZE)) {
-
-?
-
-> +	if (be32_to_cpu(*(__be32 *)&payload->creation[2]) != 1) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if (be16_to_cpu(*(__be16 *)&payload->creation[6]) != TPM_ALG_SHA256) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if (*(char *)&payload->creation[8] != 3) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	/* PCR 23 selected */
-> +	if (be32_to_cpu(*(__be32 *)&payload->creation[8]) != 0x03000080) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if (be16_to_cpu(*(__be16 *)&payload->creation[12]) !=
-> +	    SHA256_DIGEST_SIZE) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	/* Verify PCR 23 contained the expected value when the key was created. */
-> +	if (memcmp(&payload->creation[14], expected_digest,
-> +		   SHA256_DIGEST_SIZE) != 0) {
-
-These various literals (2, 6, 8, 3, 8, 0x03000080, 12, 14) should be
-explicit #defines so their purpose/meaning is more clear.
-
-I can guess at it, but better to avoid the guessing. :)
-
-> +
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
->  	data->key = key;
->  	key = NULL;
->  
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-> 
-
--- 
-Kees Cook
+> On 15/10/2022 05:16, Thomas Weißschuh wrote:
+> > Hi,
+> > 
+> > Since 5.19 during boot I see lots of the following entries in dmesg:
+> > 
+> > blacklist: Problem blacklisting hash (-13)
+> > 
+> > This happens because the firmware contains duplicate blacklist entries.
+> > As commit 6364d106e041 [0] modified the "blacklist" keyring to reject updates
+> > this now leads to the spurious error messages.
+> > 
+> > The machine is a Thinkpad X1 Cargon Gen9 with BIOS revision 1.56 and firmware
+> > revision 1.33.
+> > 
+> > [0] 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
