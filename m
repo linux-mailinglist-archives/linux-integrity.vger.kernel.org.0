@@ -2,196 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AD661D98F
-	for <lists+linux-integrity@lfdr.de>; Sat,  5 Nov 2022 12:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8D661DA4A
+	for <lists+linux-integrity@lfdr.de>; Sat,  5 Nov 2022 13:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiKELHP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 5 Nov 2022 07:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
+        id S229938AbiKEMkB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 5 Nov 2022 08:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiKELHK (ORCPT
+        with ESMTP id S229891AbiKEMju (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 5 Nov 2022 07:07:10 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD77FCF6
-        for <linux-integrity@vger.kernel.org>; Sat,  5 Nov 2022 04:07:08 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id p127so7644367oih.9
-        for <linux-integrity@vger.kernel.org>; Sat, 05 Nov 2022 04:07:08 -0700 (PDT)
+        Sat, 5 Nov 2022 08:39:50 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4152B1B785
+        for <linux-integrity@vger.kernel.org>; Sat,  5 Nov 2022 05:39:48 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so6662880pjd.4
+        for <linux-integrity@vger.kernel.org>; Sat, 05 Nov 2022 05:39:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hwpkk+0T3P7HDP5wdM1o198qFAkFJjUu8As78+dhPDo=;
-        b=VzX5D/AMfYuXk8B1NImOWU76p+n63couNJv2zROK4ioXMf5Umfc82z7Y8WC1IdpfCb
-         K/aQHFcdwupQyQ1gTo3Bxyqtu0iWUAxl+qXFZAYBe15kTU8cSxhCm/sxElB2KwcrRaD2
-         g4laGbGDwGZw4lTGa/zZnZD6ia36IACzVozYagEHHfVpr5iT34NhA4yLhYOj0EIcRIRy
-         1jfusp6zrktbWz8fC/YKeMB4/7rQ5W1KBbCqHhrQA8QkviDmA/XM/kfMWzHJcJJjh4li
-         b6pviADGaFdiFE9IN/ztt28oHYQsKVEp114QtopqYysR3I5P6z39DUe7u9NYdeybFA/I
-         Wg5g==
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=mu8m7znM9duu/MEuox3wxE9uI+enJzfHDrHCiCJ0dxXEnbtqlugP30RV4pUA4LaD8D
+         DTqzL6R3iJdygnN0tebcl2jKMC1xnk2qmH9yHj5ZpYJsig0zgAkFbQEJMtQOsyMS9E9+
+         9mZsd+BXbCYizoNZILloIeJgVKBYQDDlfcxWmhtehgP0gShVz6QbysTuA73O0zNW89oN
+         M95vp9qd39mlLDduLYXTQkqHXtcuCB6sr4c0ysKpoCTw5s/vT8zmw06SHC/DLusZ9o66
+         sNkDbmLIhAcJBtA+VmbRSjB+l+4rXBDt3pKOG75zF9L+vjSBjo5n2zZjo+rRsufLH5jZ
+         6xmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Hwpkk+0T3P7HDP5wdM1o198qFAkFJjUu8As78+dhPDo=;
-        b=tFKlatLEG81B07lEqaJeJaomEDEAIcbL7JlhJUsTNtkciJwi10en+pTL45poUxWNOe
-         XFwoe6QL67CmJBgTFOAwZPYjWe7lPZP9lo8AkDeZoH4RE3kuMLzQJ8s5+veIPc0SD9Y1
-         wWA4YX5JdP00HWKH3fwex0hdsRN0v94Lh23hZ5RaySxLvcMW2ckvOC3dkPux63DEsvZi
-         Jov9p7V71EIfdsyPA1UsBJEXIqZJpn3Wke5LxLhGwyiS1f/IX/o+0TzgV0luCRa08c3L
-         UEMvAjXfFEu4hJ8SFTQL/Fjb//8Tznc00H8fmYoNyl1h3bCd+7UE6vB40S5KR59CWD86
-         Mnmg==
-X-Gm-Message-State: ACrzQf0CTh30sZ0/wkMWS9DVKFRCMcYaLAKLgSHsVuxTbLnv851qkMW6
-        hK9D5tBDCvc2I0Vhb2Ifa/ruPEMLd8mQgSN/yN6+
-X-Google-Smtp-Source: AMsMyM4h86Z7+DifOdakoXbvzOvFpefVV62Tmw35gZfVtpz/r5d6FTw0gmgJK537ZLi++bwykSq3eG7z6EOBVOXntzw=
-X-Received: by 2002:a05:6808:1441:b0:35a:4a2d:673b with SMTP id
- x1-20020a056808144100b0035a4a2d673bmr8164462oiv.172.1667646428242; Sat, 05
- Nov 2022 04:07:08 -0700 (PDT)
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=zuFmyYd+jL6UbaiwCoHOYEcufjr6o3ZIYDxXwHXikhOirC8mWLUVAJ+K8eT6rXweWR
+         IUsJ8ge1rNeJurOBseUw7DctXct2FFtbYRcmUd4Xw0Lv5OXK6ovvDaaAbempWDdaK2Ot
+         27JqaPNxIqetP/WJiH05TYI6M3mk7NIqE+8FTTRA9RpoUWB3mFoTNLjHWk8bGJ459cok
+         cmZiGC7mVIXR3K49uV4GlJ9GWHWeBYnR8hCWHtm7e1+6J+9O1cwTy6GOQZc7ZjPDb1bz
+         5f9Ocw6+ETlb3t9RxPXVU7PUQj38L5H9ofz26jZ8A4+Yvggkcs6eqLbkLDEk/YILGGuz
+         cG8Q==
+X-Gm-Message-State: ACrzQf2yi+85iFqFAAKI34NM22Q64eg6lY1DUjwSu1jXiJpAedJ6PtE+
+        8jskusjsdiV0nMzOO375lKFzv6RtlGN6sSJH4dM=
+X-Google-Smtp-Source: AMsMyM5GFe2gsiMaHXHXvp99K7JeNN2UuK6dELDyLpsoJjIUkQcn4q3aD74FbKEapmwctM2YF8x1D4LMLHeg4fM3LVk=
+X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
+ mh3-20020a17090b4ac300b002133918f276mr57022678pjb.19.1667651987563; Sat, 05
+ Nov 2022 05:39:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <Y1lElHVQGT/1Pa6O@archlinux>
-In-Reply-To: <Y1lElHVQGT/1Pa6O@archlinux>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sat, 5 Nov 2022 07:06:56 -0400
-Message-ID: <CAHC9VhRoRQQO5v1J1r_dA6kO0AnC1WvpBGONEe-weJ_=vnntJA@mail.gmail.com>
-Subject: Re: [PATCH v4] evm: Correct inode_init_security hooks behaviors
-To:     Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
-Cc:     linux-integrity@vger.kernel.org, philippe.trebuchet@ssi.gouv.fr,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, casey@schaufler-ca.com, davem@davemloft.net,
-        lucien.xin@gmail.com, vgoyal@redhat.com, omosnace@redhat.com,
-        mortonm@chromium.org, nicolas.bouchinet@ssi.gouv.fr,
-        mic@digikod.net, cgzones@googlemail.com,
-        linux-security-module@vger.kernel.org, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, bpf@vger.kernel.org,
-        roberto.sassu@huaweicloud.com
+Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
+ 05:39:47 -0700 (PDT)
+Reply-To: stefanopessia755@hotmail.com
+From:   Stefano Pessina <wamathaibenard@gmail.com>
+Date:   Sat, 5 Nov 2022 15:39:47 +0300
+Message-ID: <CAN7bvZKO8GxFn7CG_EtS_Of+AZ+KsuqTkq40Mq-yJDNrEHyakg@mail.gmail.com>
+Subject: Geldspende
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 10:30 AM Nicolas Bouchinet
-<nicolas.bouchinet@clip-os.org> wrote:
->
-> From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
->
-> Fixes a NULL pointer dereference occurring in the
-> `evm_protected_xattr_common` function of the EVM LSM. The bug is
-> triggered if a `inode_init_security` hook returns 0 without initializing
-> the given `struct xattr` fields (which is the case of BPF) and if no
-> other LSM overrides thoses fields after. This also leads to memory
-> leaks.
->
-> The `call_int_hook_xattr` macro has been inlined into the
-> `security_inode_init_security` hook in order to check hooks return
-> values and skip ones who doesn't init `xattrs`.
->
-> Modify `evm_init_hmac` function to init the EVM hmac using every
-> entry of the given xattr array.
->
-> The `MAX_LSM_EVM_XATTR` value is now based on the security modules
-> compiled in, which gives room for SMACK, SELinux, Apparmor, BPF and
-> IMA/EVM security attributes.
->
-> Changes the default return value of the `inode_init_security` hook
-> definition to `-EOPNOTSUPP`.
->
-> Changes the hook documentation to match the behavior of the LSMs using
-> it (only xattr->value is initialised with kmalloc and thus is the only
-> one that should be kfreed by the caller).
->
-> Cc: roberto.sassu@huaweicloud.com
-> Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
-> ---
-> Changes since v3:
-> https://lore.kernel.org/linux-integrity/Y1fu4jofqLHVDprT@archlinux/
->
-> * Fixes compilation error reported by the kernel test robot.
-> ---
->  include/linux/lsm_hook_defs.h       |  2 +-
->  include/linux/lsm_hooks.h           |  4 ++--
->  security/integrity/evm/evm.h        |  1 +
->  security/integrity/evm/evm_crypto.c |  9 +++++++--
->  security/integrity/evm/evm_main.c   |  7 ++++---
->  security/security.c                 | 31 ++++++++++++++++++++++-------
->  6 files changed, 39 insertions(+), 15 deletions(-)
-
-...
-
-> diff --git a/security/security.c b/security/security.c
-> index 14d30fec8a00..79524f8734f1 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -30,7 +30,11 @@
->  #include <linux/msg.h>
->  #include <net/flow.h>
->
-> -#define MAX_LSM_EVM_XATTR      2
-> +#define MAX_LSM_EVM_XATTR                                \
-> +       ((IS_ENABLED(CONFIG_EVM) ? 1 : 0) +              \
-> +        (IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0) + \
-> +        (IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) +   \
-> +        (IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0))
-
-...
-
-> @@ -1091,9 +1095,11 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
->                                  const struct qstr *qstr,
->                                  const initxattrs initxattrs, void *fs_data)
->  {
-> +       int i = 0;
-> +       int ret = -EOPNOTSUPP;
->         struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
->         struct xattr *lsm_xattr, *evm_xattr, *xattr;
-> -       int ret;
-> +       struct security_hook_list *hook_ptr;
->
->         if (unlikely(IS_PRIVATE(inode)))
->                 return 0;
-> @@ -1103,15 +1109,26 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
->                                      dir, qstr, NULL, NULL, NULL);
->         memset(new_xattrs, 0, sizeof(new_xattrs));
->         lsm_xattr = new_xattrs;
-> -       ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
-> -                                               &lsm_xattr->name,
-> -                                               &lsm_xattr->value,
-> -                                               &lsm_xattr->value_len);
-> +       hlist_for_each_entry(hook_ptr, &security_hook_heads.inode_init_security,
-> +                            list) {
-> +               ret = hook_ptr->hook.inode_init_security(inode, dir, qstr,
-> +                               &lsm_xattr->name,
-> +                               &lsm_xattr->value,
-> +                               &lsm_xattr->value_len);
-> +               if (ret == -EOPNOTSUPP)
-> +                       continue;
-> +               if (WARN_ON_ONCE(i >= MAX_LSM_EVM_XATTR))
-> +                       ret = -ENOMEM;
-
-It would really like to see us get rid of the MAX_LSM_EVM_XATTR macro
-and determine the array size similar to what we do with the security
-blob sizes.  The macro definition is a kludgy hack that is bound to
-get out of sync at some point and this extra checking inside the hook
-is something we should work to remove.
-
-> +               if (ret != 0)
-> +                       break;
-> +               lsm_xattr++;
-> +               i++;
-> +       }
->         if (ret)
->                 goto out;
->
->         evm_xattr = lsm_xattr + 1;
-> -       ret = evm_inode_init_security(inode, lsm_xattr, evm_xattr);
-> +       ret = evm_inode_init_security(inode, new_xattrs, evm_xattr);
->         if (ret)
->                 goto out;
->         ret = initxattrs(inode, new_xattrs, fs_data);
-> --
-> 2.38.1
-
--- 
-paul-moore.com
+--=20
+Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
+t.
+Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
+stefanopessia755@hotmail.com
