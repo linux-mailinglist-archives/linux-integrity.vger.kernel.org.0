@@ -2,220 +2,198 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E6361F255
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Nov 2022 13:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19ED561F2BF
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Nov 2022 13:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbiKGMDD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Nov 2022 07:03:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
+        id S232095AbiKGMRr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Nov 2022 07:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbiKGMCt (ORCPT
+        with ESMTP id S232042AbiKGMRb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:02:49 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E1E2703
-        for <linux-integrity@vger.kernel.org>; Mon,  7 Nov 2022 04:02:48 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7BKff3011948;
-        Mon, 7 Nov 2022 12:02:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=YWG7onJ0p9122vAyH9hh5EGrn2qJ56Xp5EQxgXIqPe0=;
- b=FJMHXdu/287OjJpOmzVGZi44yhU1svittzwyKTij/28tEc6Bz3TvP9m21QpNplFylg27
- w3D2IM6DARurxhnyH95s9JQ2nPFvtIeAZ+f72UrGzcT95L/0yzGP4/aV1m/vCwszVRNc
- gKV3PAf2nEPt0kpFGQzFBh5/4QHQI0pBjMGqGnpuIkBV/BDa1k5GBMlnVhZBCxWeKdNy
- cZezJLIg2Devy1QYDjFnRw2n/lZLYwKxyQu/+dHyh/ygppKqjq1CeHCm7uw4YlkBqMAe
- wnOy2URSkpdPkhpxlIXnI+4EkWexP0T5zQ+VIEnP+MGY2QkCw7ho6rWa2WBSu4PYPdbI mQ== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kp1tf14b0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 12:02:41 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A7Bqtem027675;
-        Mon, 7 Nov 2022 12:02:40 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma03dal.us.ibm.com with ESMTP id 3kngphua1s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 12:02:40 +0000
-Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A7C2aqr20972158
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Nov 2022 12:02:37 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 86CF358059;
-        Mon,  7 Nov 2022 12:02:38 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 352C75805D;
-        Mon,  7 Nov 2022 12:02:38 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.191.11])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Nov 2022 12:02:38 +0000 (GMT)
-Message-ID: <a2c90d97b2dc2540b3f3010fae47d1f5c6b91057.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v5 02/17] log and reset 'errno' after
- failure to open non-critical files
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        "Dmitry V. Levin" <ldv@altlinux.org>
-Date:   Mon, 07 Nov 2022 07:02:37 -0500
-In-Reply-To: <20221103223516.x5eyb65chj6th3e3@altlinux.org>
-References: <20221103183904.103562-1-zohar@linux.ibm.com>
-         <20221103183904.103562-3-zohar@linux.ibm.com>
-         <20221103220531.ok6bwddhxmq6oxky@altlinux.org>
-         <20221103222421.fhtdymd2spiejvuh@altlinux.org>
-         <20221103223516.x5eyb65chj6th3e3@altlinux.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Mon, 7 Nov 2022 07:17:31 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B35418341;
+        Mon,  7 Nov 2022 04:17:21 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4N5VR84PMgz9ygfw;
+        Mon,  7 Nov 2022 20:09:56 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAX_vn69mhjUrFFAA--.24935S2;
+        Mon, 07 Nov 2022 13:16:04 +0100 (CET)
+Message-ID: <24860ff87aa8098fa934d7de31e4bb28a80bfd95.camel@huaweicloud.com>
+Subject: Re: [PATCH v4] evm: Correct inode_init_security hooks behaviors
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>,
+        Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
+Cc:     linux-integrity@vger.kernel.org, philippe.trebuchet@ssi.gouv.fr,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, casey@schaufler-ca.com, davem@davemloft.net,
+        lucien.xin@gmail.com, vgoyal@redhat.com, omosnace@redhat.com,
+        mortonm@chromium.org, nicolas.bouchinet@ssi.gouv.fr,
+        mic@digikod.net, cgzones@googlemail.com,
+        linux-security-module@vger.kernel.org, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, bpf@vger.kernel.org
+Date:   Mon, 07 Nov 2022 13:15:49 +0100
+In-Reply-To: <CAHC9VhRoRQQO5v1J1r_dA6kO0AnC1WvpBGONEe-weJ_=vnntJA@mail.gmail.com>
+References: <Y1lElHVQGT/1Pa6O@archlinux>
+         <CAHC9VhRoRQQO5v1J1r_dA6kO0AnC1WvpBGONEe-weJ_=vnntJA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jkpcMSJEG-aroynHn3BzJRWzUJ0V88Z9
-X-Proofpoint-ORIG-GUID: jkpcMSJEG-aroynHn3BzJRWzUJ0V88Z9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_04,2022-11-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- suspectscore=0 phishscore=0 priorityscore=1501 adultscore=0 bulkscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211070099
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwAX_vn69mhjUrFFAA--.24935S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWr17KF1rGw4DJr18JrW8Zwb_yoWrtr47pF
+        WUKa45Kr4DJFyxWrWxAF47u3WfKrWrGrWDCrZ3Gw1jvFyDur1xtr1Skr1Y9ryrurW8Cr1v
+        qa17Zwsxuwn0y3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbG2NtUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4Ej1AAAsI
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-11-04 at 01:35 +0300, Vitaly Chikunov wrote:
-> On Fri, Nov 04, 2022 at 01:24:21AM +0300, Vitaly Chikunov wrote:
-> > On Fri, Nov 04, 2022 at 01:05:31AM +0300, Vitaly Chikunov wrote:
-> > > Mimi,
-> > > 
-> > > On Thu, Nov 03, 2022 at 02:38:49PM -0400, Mimi Zohar wrote:
-> > > > Define a log_errno_reset macro to emit the errno string at or near the
-> > > > time of error, similar to the existing log_errno macro, but also reset
-> > > > errno to avoid dangling or duplicate errno messages on exit.
-> > > > 
-> > > > The initial usage is for non-critical file open failures.
-> > > > 
-> > > > Suggested-by: Vitaly Chikunov <vt@altlinux.org>
-> > > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > > ---
-> > > >  src/evmctl.c | 12 ++++++++++--
-> > > >  1 file changed, 10 insertions(+), 2 deletions(-)
-> > > 
-> > > Reviewed-by: Vitaly Chikunov <vt@altlinux.org>
-
-Thanks!
-
-> > > 
-> > > > 
-> > > > diff --git a/src/evmctl.c b/src/evmctl.c
-> > > > index 0412bc0ac2b0..54123bf20f03 100644
-> > > > --- a/src/evmctl.c
-> > > > +++ b/src/evmctl.c
-> > > > @@ -2055,7 +2060,6 @@ static int ima_measurement(const char *file)
-> > > >  	int err_padded = -1;
-> > > >  	int err = -1;
-> > > >  
-> > > > -	errno = 0;
-> > > >  	memset(zero, 0, MAX_DIGEST_SIZE);
-> > > >  
-> > > >  	pseudo_padded_banks = init_tpm_banks(&num_banks);
-> > > > @@ -2072,6 +2076,8 @@ static int ima_measurement(const char *file)
-> > > >  		init_public_keys(imaevm_params.keyfile);
-> > > >  	else				/* assume read pubkey from x509 cert */
-> > > >  		init_public_keys("/etc/keys/x509_evm.der");
-> > > > +	if (errno)
-> > > > +		log_errno_reset(LOG_DEBUG, "Failed to initialize public keys");
-> > > 
-> > > Library prints appropriate error messages, so this is perhaps just to
-> > > clear errno. But it's not necessarily completely failed, but maybe
-> > > failure in one key. So I would say "Failure in initializing public
-> > > keys" to be precise.
-> > > 
-> > > ps.
-> > > 
-> > > BTW, init_public_keys API call cannot return error except by errno,
-> > > but it does not set it consistently so some errors may be missed.
-> > > 
-> > > init_public_keys loops calling read_pub_pkey
-> > > 
-> > >                 entry->key = read_pub_pkey(keyfile, 1);
-> > >                 if (!entry->key) {
-> > >                         free(entry);
-> > >                         continue;
-> > >                 }
-> > > 
-> > > and read_pub_pkey have such code:
-> > > 
-> > >         if (!keyfile)
-> > >                 return NULL;
-> > > 
-> > > In that case some key is not read but we don't get any error notification.
-> > > 
-> > > I think it's legal, by the right of being library, so set `errno =
-> > > EINVAL` there somewhere. But, I'm not sure where - as we should not
-> > > clobber existing errno values. Perhaps, errno setting should be added to
-> > > libimaevm consistently to all functions, but this is huge task, so I
-> > > would not suggest to do it now. Just suggestion for the future
-> > > developments, maybe.
+On Sat, 2022-11-05 at 07:06 -0400, Paul Moore wrote:
+> On Wed, Oct 26, 2022 at 10:30 AM Nicolas Bouchinet
+> <nicolas.bouchinet@clip-os.org> wrote:
+> > From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
 > > 
-> > Just to compare with other library - libtracefs sets errno _sometimes_,
-> 
-> It "is not consistent" in the sense that error in the API call does not
-> have always errno set. And this is unlike we have for common libc API
-> calls where errno is defined. (As a consequence we cannot just add
-> strerror() to the printing errors from these APIs).
-> 
-> But, it's not necessarily there is standard or common practice about
-> this matter.
-
-The perror() man page seems to say that it is optional, but doesn't say
-anything about libraries being self-consistent:  "When system call
-fails, it usually returns -1 and sets the variable errno to a value
-describing what went wrong.  (These values can be found in
-<errno.h>.)  Many library functions do likewise."
-
-> 
-> 
-> > for example, their API call tracefs_dynevent_get have:
+> > Fixes a NULL pointer dereference occurring in the
+> > `evm_protected_xattr_common` function of the EVM LSM. The bug is
+> > triggered if a `inode_init_security` hook returns 0 without initializing
+> > the given `struct xattr` fields (which is the case of BPF) and if no
+> > other LSM overrides thoses fields after. This also leads to memory
+> > leaks.
 > > 
-> >   struct tracefs_dynevent *
-> >   tracefs_dynevent_get(enum tracefs_dynevent_type type, const char *system,
-> > 		       const char *event)
-> >   {
-> >   ...
-> > 	  if (!event) {
-> > 		  errno = -EINVAL;
-> > 		  return NULL;
-> > 	  }
+> > The `call_int_hook_xattr` macro has been inlined into the
+> > `security_inode_init_security` hook in order to check hooks return
+> > values and skip ones who doesn't init `xattrs`.
 > > 
-> > 	  count = get_all_dynevents(type, system, &events);
-> > 	  if (count <= 0)
-> > 		  return NULL;
-> >   ...
+> > Modify `evm_init_hmac` function to init the EVM hmac using every
+> > entry of the given xattr array.
 > > 
-> > So it sets errno sometimes, but not always, which I am not sure is correct
-> > approach. This needs to be discussed more with library experts.
+> > The `MAX_LSM_EVM_XATTR` value is now based on the security modules
+> > compiled in, which gives room for SMACK, SELinux, Apparmor, BPF and
+> > IMA/EVM security attributes.
+> > 
+> > Changes the default return value of the `inode_init_security` hook
+> > definition to `-EOPNOTSUPP`.
+> > 
+> > Changes the hook documentation to match the behavior of the LSMs using
+> > it (only xattr->value is initialised with kmalloc and thus is the only
+> > one that should be kfreed by the caller).
+> > 
+> > Cc: roberto.sassu@huaweicloud.com
+> > Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+> > ---
+> > Changes since v3:
+> > https://lore.kernel.org/linux-integrity/Y1fu4jofqLHVDprT@archlinux/
+> > 
+> > * Fixes compilation error reported by the kernel test robot.
+> > ---
+> >  include/linux/lsm_hook_defs.h       |  2 +-
+> >  include/linux/lsm_hooks.h           |  4 ++--
+> >  security/integrity/evm/evm.h        |  1 +
+> >  security/integrity/evm/evm_crypto.c |  9 +++++++--
+> >  security/integrity/evm/evm_main.c   |  7 ++++---
+> >  security/security.c                 | 31 ++++++++++++++++++++++-------
+> >  6 files changed, 39 insertions(+), 15 deletions(-)
+> 
+> ...
+> 
+> > diff --git a/security/security.c b/security/security.c
+> > index 14d30fec8a00..79524f8734f1 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -30,7 +30,11 @@
+> >  #include <linux/msg.h>
+> >  #include <net/flow.h>
+> > 
+> > -#define MAX_LSM_EVM_XATTR      2
+> > +#define MAX_LSM_EVM_XATTR                                \
+> > +       ((IS_ENABLED(CONFIG_EVM) ? 1 : 0) +              \
+> > +        (IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0) + \
+> > +        (IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) +   \
+> > +        (IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0))
+> 
+> ...
+> 
+> > @@ -1091,9 +1095,11 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+> >                                  const struct qstr *qstr,
+> >                                  const initxattrs initxattrs, void *fs_data)
+> >  {
+> > +       int i = 0;
+> > +       int ret = -EOPNOTSUPP;
+> >         struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+> >         struct xattr *lsm_xattr, *evm_xattr, *xattr;
+> > -       int ret;
+> > +       struct security_hook_list *hook_ptr;
+> > 
+> >         if (unlikely(IS_PRIVATE(inode)))
+> >                 return 0;
+> > @@ -1103,15 +1109,26 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+> >                                      dir, qstr, NULL, NULL, NULL);
+> >         memset(new_xattrs, 0, sizeof(new_xattrs));
+> >         lsm_xattr = new_xattrs;
+> > -       ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
+> > -                                               &lsm_xattr->name,
+> > -                                               &lsm_xattr->value,
+> > -                                               &lsm_xattr->value_len);
+> > +       hlist_for_each_entry(hook_ptr, &security_hook_heads.inode_init_security,
+> > +                            list) {
+> > +               ret = hook_ptr->hook.inode_init_security(inode, dir, qstr,
+> > +                               &lsm_xattr->name,
+> > +                               &lsm_xattr->value,
+> > +                               &lsm_xattr->value_len);
+> > +               if (ret == -EOPNOTSUPP)
+> > +                       continue;
+> > +               if (WARN_ON_ONCE(i >= MAX_LSM_EVM_XATTR))
+> > +                       ret = -ENOMEM;
+> 
+> It would really like to see us get rid of the MAX_LSM_EVM_XATTR macro
+> and determine the array size similar to what we do with the security
+> blob sizes.  The macro definition is a kludgy hack that is bound to
+> get out of sync at some point and this extra checking inside the hook
+> is something we should work to remove.
 
-Perhaps this isn't a question of self-consistency, but of who is
-setting errno.  In the tracefs_dynevent_get() case, nothing else is
-being called, so nothing could have set errno.  In the
-get_all_dynevents() case, without looking at the code, something could
-have already set errno.
+In this case, I already implemented this, as it was originally
+suggested by Casey. I will resend this:
 
-As for the ima-evm-utils example, I agree read_pub_pkey() should return
--EINVAL when keyfile is NULL.  init_public_keys() verifies keyfile is
-not NULL before calling read_pub_pkey(), so read_pub_pkey() returning
--EINVAL, shouldn't affect it.
+https://lore.kernel.org/linux-integrity/20210427113732.471066-1-roberto.sassu@huawei.com/
 
--- 
-Thanks,
+with few minor tweaks.
 
-Mimi
+Roberto
+
+> > +               if (ret != 0)
+> > +                       break;
+> > +               lsm_xattr++;
+> > +               i++;
+> > +       }
+> >         if (ret)
+> >                 goto out;
+> > 
+> >         evm_xattr = lsm_xattr + 1;
+> > -       ret = evm_inode_init_security(inode, lsm_xattr, evm_xattr);
+> > +       ret = evm_inode_init_security(inode, new_xattrs, evm_xattr);
+> >         if (ret)
+> >                 goto out;
+> >         ret = initxattrs(inode, new_xattrs, fs_data);
+> > --
+> > 2.38.1
 
