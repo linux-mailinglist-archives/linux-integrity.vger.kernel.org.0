@@ -2,63 +2,79 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19ED561F2BF
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Nov 2022 13:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C1361F35C
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Nov 2022 13:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbiKGMRr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Nov 2022 07:17:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
+        id S232184AbiKGMdq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Nov 2022 07:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiKGMRb (ORCPT
+        with ESMTP id S232136AbiKGMdp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:17:31 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B35418341;
-        Mon,  7 Nov 2022 04:17:21 -0800 (PST)
+        Mon, 7 Nov 2022 07:33:45 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BFF6251;
+        Mon,  7 Nov 2022 04:33:42 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4N5VR84PMgz9ygfw;
-        Mon,  7 Nov 2022 20:09:56 +0800 (CST)
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4N5Vpt0xBSz9v7Vw;
+        Mon,  7 Nov 2022 20:27:02 +0800 (CST)
 Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAX_vn69mhjUrFFAA--.24935S2;
-        Mon, 07 Nov 2022 13:16:04 +0100 (CET)
-Message-ID: <24860ff87aa8098fa934d7de31e4bb28a80bfd95.camel@huaweicloud.com>
-Subject: Re: [PATCH v4] evm: Correct inode_init_security hooks behaviors
+        by APP2 (Coremail) with SMTP id GxC2BwAX_vkA+2hjCL9FAA--.24967S2;
+        Mon, 07 Nov 2022 13:33:17 +0100 (CET)
+Message-ID: <7ecbf4fff621bb3340422ff668452c0bbf4c4e71.camel@huaweicloud.com>
+Subject: Re: [RESEND][RFC][PATCH 2/3] bpf-lsm: Limit values that can be
+ returned by security modules
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>,
-        Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
-Cc:     linux-integrity@vger.kernel.org, philippe.trebuchet@ssi.gouv.fr,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, casey@schaufler-ca.com, davem@davemloft.net,
-        lucien.xin@gmail.com, vgoyal@redhat.com, omosnace@redhat.com,
-        mortonm@chromium.org, nicolas.bouchinet@ssi.gouv.fr,
-        mic@digikod.net, cgzones@googlemail.com,
-        linux-security-module@vger.kernel.org, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, bpf@vger.kernel.org
-Date:   Mon, 07 Nov 2022 13:15:49 +0100
-In-Reply-To: <CAHC9VhRoRQQO5v1J1r_dA6kO0AnC1WvpBGONEe-weJ_=vnntJA@mail.gmail.com>
-References: <Y1lElHVQGT/1Pa6O@archlinux>
-         <CAHC9VhRoRQQO5v1J1r_dA6kO0AnC1WvpBGONEe-weJ_=vnntJA@mail.gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org
+Date:   Mon, 07 Nov 2022 13:32:57 +0100
+In-Reply-To: <CAADnVQ+K0NMFKV8pQR+ZMHMM9KArRsLSv-F82_qbK4+4xaPxrg@mail.gmail.com>
+References: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
+         <20221028165423.386151-2-roberto.sassu@huaweicloud.com>
+         <CACYkzJ5gFu5a-NoKFD6XFNYMDyP+iPon=kHMimJybmNexbhAPg@mail.gmail.com>
+         <38c3ff70963de4a7a396c0fad84349c7c39c0f07.camel@huaweicloud.com>
+         <CAADnVQ+K0NMFKV8pQR+ZMHMM9KArRsLSv-F82_qbK4+4xaPxrg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAX_vn69mhjUrFFAA--.24935S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr17KF1rGw4DJr18JrW8Zwb_yoWrtr47pF
-        WUKa45Kr4DJFyxWrWxAF47u3WfKrWrGrWDCrZ3Gw1jvFyDur1xtr1Skr1Y9ryrurW8Cr1v
-        qa17Zwsxuwn0y3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+X-CM-TRANSID: GxC2BwAX_vkA+2hjCL9FAA--.24967S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Ar47JFW5uFW5Zr15ur1DAwb_yoW7KF4fpF
+        WxGa4Ykr4vqrW3Ca4ava18Za1Fy3yftr4UWrnrJr1Yvwn0vrn5tr45Gr1Y9F93Gr40kr40
+        vr42qFW3u34DAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
         vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
         xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
         AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
         0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
         64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
         8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
         2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbG2NtUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4Ej1AAAsI
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAJBF1jj4UjMwAEss
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,132 +84,127 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, 2022-11-05 at 07:06 -0400, Paul Moore wrote:
-> On Wed, Oct 26, 2022 at 10:30 AM Nicolas Bouchinet
-> <nicolas.bouchinet@clip-os.org> wrote:
-> > From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+On Fri, 2022-11-04 at 17:42 -0700, Alexei Starovoitov wrote:
+> On Fri, Nov 4, 2022 at 8:29 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Thu, 2022-11-03 at 16:09 +0100, KP Singh wrote:
+> > > On Fri, Oct 28, 2022 at 6:55 PM Roberto Sassu
+> > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > 
+> > > > BPF LSM defines a bpf_lsm_*() function for each LSM hook, so that
+> > > > security modules can define their own implementation for the desired hooks.
+> > > > 
+> > > > Unfortunately, BPF LSM does not restrict which values security modules can
+> > > > return (for non-void LSM hooks). Security modules might follow the
+> > > > conventions stated in include/linux/lsm_hooks.h, or put arbitrary values.
+> > > > 
+> > > > This could cause big troubles, as the kernel is not ready to handle
+> > > > possibly malicious return values from LSMs. Until now, it was not the
+> > > 
+> > > I am not sure I would call this malicious. This would be incorrect, if
+> > > someone is writing a BPF LSM program they already have the powers
+> > > to willingly do a lot of malicious stuff.
+> > > 
+> > > It's about unknowingly returning values that can break the system.
 > > 
-> > Fixes a NULL pointer dereference occurring in the
-> > `evm_protected_xattr_common` function of the EVM LSM. The bug is
-> > triggered if a `inode_init_security` hook returns 0 without initializing
-> > the given `struct xattr` fields (which is the case of BPF) and if no
-> > other LSM overrides thoses fields after. This also leads to memory
-> > leaks.
+> > Maybe it is possible to return specific values that lead to acquire
+> > more information/do actions that the eBPF program is not supposed to
+> > cause.
 > > 
-> > The `call_int_hook_xattr` macro has been inlined into the
-> > `security_inode_init_security` hook in order to check hooks return
-> > values and skip ones who doesn't init `xattrs`.
+> > I don't have a concrete example, so I will use the word you suggested.
 > > 
-> > Modify `evm_init_hmac` function to init the EVM hmac using every
-> > entry of the given xattr array.
+> > > > case, as each LSM is carefully reviewed and it won't be accepted if it
+> > > > does not meet the return value conventions.
+> > > > 
+> > > > The biggest problem is when an LSM returns a positive value, instead of a
+> > > > negative value, as it could be converted to a pointer. Since such pointer
+> > > > escapes the IS_ERR() check, its use later in the code can cause
+> > > > unpredictable consequences (e.g. invalid memory access).
+> > > > 
+> > > > Another problem is returning zero when an LSM is supposed to have done some
+> > > > operations. For example, the inode_init_security hook expects that their
+> > > > implementations return zero only if they set the name and value of the new
+> > > > xattr to be added to the new inode. Otherwise, other kernel subsystems
+> > > > might encounter unexpected conditions leading to a crash (e.g.
+> > > > evm_protected_xattr_common() getting NULL as argument).
+> > > > 
+> > > > Finally, there are LSM hooks which are supposed to return just one as
+> > > > positive value, or non-negative values. Also in these cases, although it
+> > > > seems less critical, it is safer to return to callers of the LSM
+> > > > infrastructure more precisely what they expect.
+> > > > 
+> > > > As eBPF allows code outside the kernel to run, it is its responsibility
+> > > > to ensure that only expected values are returned to LSM infrastructure
+> > > > callers.
+> > > > 
+> > > > Create four new BTF ID sets, respectively for hooks that can return
+> > > > positive values, only one as positive value, that cannot return zero, and
+> > > > that cannot return negative values. Create also corresponding functions to
+> > > > check if the hook a security module is attached to belongs to one of the
+> > > > defined sets.
+> > > > 
+> > > > Finally, check in the eBPF verifier the value returned by security modules
+> > > > for each attached LSM hook, and return -EINVAL (the security module cannot
+> > > > run) if the hook implementation does not satisfy the hook return value
+> > > > policy.
+> > > > 
+> > > > Cc: stable@vger.kernel.org
+> > > > Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > ---
+> > > >  include/linux/bpf_lsm.h | 24 ++++++++++++++++++
+> > > >  kernel/bpf/bpf_lsm.c    | 56 +++++++++++++++++++++++++++++++++++++++++
+> > > >  kernel/bpf/verifier.c   | 35 +++++++++++++++++++++++---
+> > > >  3 files changed, 112 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> > > > index 4bcf76a9bb06..cd38aca4cfc0 100644
+> > > > --- a/include/linux/bpf_lsm.h
+> > > > +++ b/include/linux/bpf_lsm.h
+> > > > @@ -28,6 +28,10 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+> > > >                         const struct bpf_prog *prog);
+> > > > 
+> > > >  bool bpf_lsm_is_sleepable_hook(u32 btf_id);
+> > > > +bool bpf_lsm_can_ret_pos_value(u32 btf_id);
+> > > > +bool bpf_lsm_can_ret_only_one_as_pos_value(u32 btf_id);
+> > > > +bool bpf_lsm_cannot_ret_zero(u32 btf_id);
+> > > > +bool bpf_lsm_cannot_ret_neg_value(u32 btf_id);
+> > > > 
+> > > 
+> > > This does not need to be exported to the rest of the kernel. Please
+> > > have this logic in bpf_lsm.c and export a single verify function.
+> > > 
+> > > Also, these really don't need to be such scattered logic, Could we
+> > > somehow encode this into the LSM_HOOK definition?
 > > 
-> > The `MAX_LSM_EVM_XATTR` value is now based on the security modules
-> > compiled in, which gives room for SMACK, SELinux, Apparmor, BPF and
-> > IMA/EVM security attributes.
+> > The problem is that a new LSM_HOOK definition would apply to every LSM
+> > hook, while we need the ability to select subsets.
 > > 
-> > Changes the default return value of the `inode_init_security` hook
-> > definition to `-EOPNOTSUPP`.
-> > 
-> > Changes the hook documentation to match the behavior of the LSMs using
-> > it (only xattr->value is initialised with kmalloc and thus is the only
-> > one that should be kfreed by the caller).
-> > 
-> > Cc: roberto.sassu@huaweicloud.com
-> > Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
-> > ---
-> > Changes since v3:
-> > https://lore.kernel.org/linux-integrity/Y1fu4jofqLHVDprT@archlinux/
-> > 
-> > * Fixes compilation error reported by the kernel test robot.
-> > ---
-> >  include/linux/lsm_hook_defs.h       |  2 +-
-> >  include/linux/lsm_hooks.h           |  4 ++--
-> >  security/integrity/evm/evm.h        |  1 +
-> >  security/integrity/evm/evm_crypto.c |  9 +++++++--
-> >  security/integrity/evm/evm_main.c   |  7 ++++---
-> >  security/security.c                 | 31 ++++++++++++++++++++++-------
-> >  6 files changed, 39 insertions(+), 15 deletions(-)
+> > I was thinking, but I didn't check yet, what about using BTF_ID_FLAGS,
+> > introducing a flag for each interval (<0, 0, 1, >1) and setting the
+> > appropriate flags for each LSM hook?
 > 
-> ...
-> 
-> > diff --git a/security/security.c b/security/security.c
-> > index 14d30fec8a00..79524f8734f1 100644
-> > --- a/security/security.c
-> > +++ b/security/security.c
-> > @@ -30,7 +30,11 @@
-> >  #include <linux/msg.h>
-> >  #include <net/flow.h>
-> > 
-> > -#define MAX_LSM_EVM_XATTR      2
-> > +#define MAX_LSM_EVM_XATTR                                \
-> > +       ((IS_ENABLED(CONFIG_EVM) ? 1 : 0) +              \
-> > +        (IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0) + \
-> > +        (IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) +   \
-> > +        (IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0))
-> 
-> ...
-> 
-> > @@ -1091,9 +1095,11 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
-> >                                  const struct qstr *qstr,
-> >                                  const initxattrs initxattrs, void *fs_data)
-> >  {
-> > +       int i = 0;
-> > +       int ret = -EOPNOTSUPP;
-> >         struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
-> >         struct xattr *lsm_xattr, *evm_xattr, *xattr;
-> > -       int ret;
-> > +       struct security_hook_list *hook_ptr;
-> > 
-> >         if (unlikely(IS_PRIVATE(inode)))
-> >                 return 0;
-> > @@ -1103,15 +1109,26 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
-> >                                      dir, qstr, NULL, NULL, NULL);
-> >         memset(new_xattrs, 0, sizeof(new_xattrs));
-> >         lsm_xattr = new_xattrs;
-> > -       ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
-> > -                                               &lsm_xattr->name,
-> > -                                               &lsm_xattr->value,
-> > -                                               &lsm_xattr->value_len);
-> > +       hlist_for_each_entry(hook_ptr, &security_hook_heads.inode_init_security,
-> > +                            list) {
-> > +               ret = hook_ptr->hook.inode_init_security(inode, dir, qstr,
-> > +                               &lsm_xattr->name,
-> > +                               &lsm_xattr->value,
-> > +                               &lsm_xattr->value_len);
-> > +               if (ret == -EOPNOTSUPP)
-> > +                       continue;
-> > +               if (WARN_ON_ONCE(i >= MAX_LSM_EVM_XATTR))
-> > +                       ret = -ENOMEM;
-> 
-> It would really like to see us get rid of the MAX_LSM_EVM_XATTR macro
-> and determine the array size similar to what we do with the security
-> blob sizes.  The macro definition is a kludgy hack that is bound to
-> get out of sync at some point and this extra checking inside the hook
-> is something we should work to remove.
+> Before adding infra to all hooks, let's analyze all hooks first.
+> I thought the number of exceptions is very small.
+> 99% of hooks will be fine with IS_ERR.
+> If so, adding an extra flag to every hook will cause too much churn.
 
-In this case, I already implemented this, as it was originally
-suggested by Casey. I will resend this:
+If I counted them correctly, there are 12 hooks which can return a
+positive value. Among them, 6 can return only 1. 3 should not return a
+negative value.
 
-https://lore.kernel.org/linux-integrity/20210427113732.471066-1-roberto.sassu@huawei.com/
+A reason for making this change in the LSM infrastructure would be that
+the return values provided there would be the official reference for
+anyone dealing with LSM hooks (e.g. redefining the LSM_HOOK macro).
 
-with few minor tweaks.
+Another reason would be that for new hooks, the developer introducing
+them would have to provide the information. BPF LSM would use that
+automatically (otherwise it might get out of sync).
+
+The idea would be to use BTF_ID_FLAGS() with the flags coming from
+lsm_hook_defs.h, and to check if a flag is set depending on the
+interval of the return value provided by the eBPF program.
 
 Roberto
-
-> > +               if (ret != 0)
-> > +                       break;
-> > +               lsm_xattr++;
-> > +               i++;
-> > +       }
-> >         if (ret)
-> >                 goto out;
-> > 
-> >         evm_xattr = lsm_xattr + 1;
-> > -       ret = evm_inode_init_security(inode, lsm_xattr, evm_xattr);
-> > +       ret = evm_inode_init_security(inode, new_xattrs, evm_xattr);
-> >         if (ret)
-> >                 goto out;
-> >         ret = initxattrs(inode, new_xattrs, fs_data);
-> > --
-> > 2.38.1
 
