@@ -2,117 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1681661FF72
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Nov 2022 21:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D63A620EC4
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Nov 2022 12:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232846AbiKGUSv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Nov 2022 15:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S233787AbiKHLWv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Nov 2022 06:22:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbiKGUSp (ORCPT
+        with ESMTP id S234120AbiKHLWK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:18:45 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881F61EACF
-        for <linux-integrity@vger.kernel.org>; Mon,  7 Nov 2022 12:18:44 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id q9so33353155ejd.0
-        for <linux-integrity@vger.kernel.org>; Mon, 07 Nov 2022 12:18:44 -0800 (PST)
+        Tue, 8 Nov 2022 06:22:10 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB674D5E3
+        for <linux-integrity@vger.kernel.org>; Tue,  8 Nov 2022 03:22:08 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3691e040abaso130573447b3.9
+        for <linux-integrity@vger.kernel.org>; Tue, 08 Nov 2022 03:22:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=enMdjmIsSbUUYGb+RiHPQULVTIcs0r1uA7QvgYehDfo=;
-        b=cK5mzUepaprD41nCiRUmaLmzTIgcnNw5msQaClmACmYhAcO7XK6rJUBvOqZtgby6y8
-         52QvjVVQH7ojFFZrM7qfAy0IdolyIX8knrA6IaYyvW21uhXHySccJ3/m2Wleu58EVtDt
-         6MIVe9aRiDrWdsThdVgafQbhigdkLUk4g2knQ=
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jD/YBCtOhOa1ipEyheDVa6geA3XolzkSqDbroMLmTEw=;
+        b=er+01UyBqq5yALeXUhYkq20dCtPK4kfDEL6xwUd6OX1xLy20ztdFPVUugdF8WeS456
+         ZvzRIryPtmZtJc0G6cu7K3LGZR/jUnBGwQt38Fo0Zyp+6Y7YNKVjd4doeEcfpjMsbwPJ
+         CkH35bEJZIQkk6cH2lrAcGUwgGT/dZwuulJmut9hSxO2vVsdEtYc6PnOC7QV3kwPzVbf
+         DtqybJ42ilZgEHLvrkJKAJ2+crLKaWld7jOJaW8IBlByFPabKfwbq21HGZ4nPcf1lOvQ
+         P/aCnwLExgaFT7m6JMzmF1kmfhR9x+iMji55oKg2VHAJS7wmkGekUnwZDvzQovIU3u9o
+         u+wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=enMdjmIsSbUUYGb+RiHPQULVTIcs0r1uA7QvgYehDfo=;
-        b=MjLAKCuKYd0qA8enqv/F4ryyKz7YslEXu2XuDglzp1RbnFi3SKDBPw1qEr8Iq2ZKxg
-         BgeBjEX1aUjFDxTV3bj4YAeOzgMMPdA/1v9pU9NGWQBBVnZIvR2+jLtwvuWS+jZ//eRn
-         bRglKKk4cOtWJsd+cMw5CYR+c+pSf1d3stEYo2bWE2L5DzKp6RwCeSR906e+Mc/Wj7VQ
-         TDx2BBVTyRg4kALwh69LLAgKhrLu1M5f5IayEBXE9qt0EmbfDzck8cJuMv+oboVSeqn8
-         m6b2aqSmtsD3s4mjfGit6EIEEv7L2oBVugPbXRZTiy4AH3raTOjC0r/w7lIyNO9NlPLe
-         EJjw==
-X-Gm-Message-State: ACrzQf1U0NeUBJ7zSEc/LfPxnTmr/6TM6Mx9/BWiTCjn0rIaNcUW2QjU
-        eeY1Tx40IqdLCwCk643PpcDYEnSUnbhP8Q==
-X-Google-Smtp-Source: AMsMyM6CAAIftgbPR7aYbrg5AdMWaItErpFuTq06oMPiOutshklj/T6y7flpJnj1nGzkYiKiZMk7QQ==
-X-Received: by 2002:a17:907:8b18:b0:7ad:d1f5:2f80 with SMTP id sz24-20020a1709078b1800b007add1f52f80mr42541262ejc.661.1667852322937;
-        Mon, 07 Nov 2022 12:18:42 -0800 (PST)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id x4-20020aa7d6c4000000b0045cf4f72b04sm4606328edr.94.2022.11.07.12.18.42
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 12:18:42 -0800 (PST)
-Received: by mail-wr1-f54.google.com with SMTP id j15so17907931wrq.3
-        for <linux-integrity@vger.kernel.org>; Mon, 07 Nov 2022 12:18:42 -0800 (PST)
-X-Received: by 2002:a5d:6dc3:0:b0:22a:bcc3:21c6 with SMTP id
- d3-20020a5d6dc3000000b0022abcc321c6mr34070892wrz.450.1667851934711; Mon, 07
- Nov 2022 12:12:14 -0800 (PST)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jD/YBCtOhOa1ipEyheDVa6geA3XolzkSqDbroMLmTEw=;
+        b=fQpiCnt65WeZ6CfT1ggufmezdjJVXEfLbBdTArqJSk/ZJXhBXzt3oJ3K9o28y2YE1z
+         HU7l9M9w/kAIhniqwUy2nLYAIABWho740kn7ccBedlU1g3lCcNPGK7XemKi959IeTwV6
+         euc9j/6U27D/1Huj3vaZlVYmJ/YAs72TK18Vh4NVqszcu6VKVHAw8gmksRu+nZeGu6Kj
+         74zOEw8zP3xQowa4VjTTcfFM4RcrEoOcfnyKbMAMuMH1xFNBZ8x9PqyDpSOzP/jwt52t
+         AD3bGTsi4hZEbMHMeACa4MnVFgmgdhQJ4QBmCKlxlyWjVEnbnle8N5E4vIYkyKtbmfnu
+         XpyQ==
+X-Gm-Message-State: ANoB5pnXSkiULpwWdRVzXHgVeAKQtDdvmeOnVzs75e8U2vsYxf0ukACn
+        tK9UykJUETzsxxrNjiiEQbDzVqx8tGRhDI3YPuc=
+X-Google-Smtp-Source: AA0mqf7s6cLMJ+jFWr1acfH8YtYExw8f3XjIKRBz7jsUlZXoKoLcbLartm0vx3oZfg7AKKmi6fwvspQ61yzbB26sDsQ=
+X-Received: by 2002:a81:9845:0:b0:374:ae5f:a5be with SMTP id
+ p66-20020a819845000000b00374ae5fa5bemr5049661ywg.177.1667906528181; Tue, 08
+ Nov 2022 03:22:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20221103180120.752659-1-evgreen@chromium.org> <20221103105558.v4.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
- <202211041132.E8CB636@keescook>
-In-Reply-To: <202211041132.E8CB636@keescook>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 7 Nov 2022 12:11:38 -0800
-X-Gmail-Original-Message-ID: <CAE=gft4+KHVd_cNApo6EcTtxSDQDNB-nPXdus-0K8pQdWF+tiw@mail.gmail.com>
-Message-ID: <CAE=gft4+KHVd_cNApo6EcTtxSDQDNB-nPXdus-0K8pQdWF+tiw@mail.gmail.com>
-Subject: Re: [PATCH v4 04/11] security: keys: trusted: Include TPM2 creation data
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
-        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, dlunev@google.com,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
+Received: by 2002:a05:7010:a38a:b0:313:c983:1d7e with HTTP; Tue, 8 Nov 2022
+ 03:22:07 -0800 (PST)
+Reply-To: mrinvest1010@gmail.com
+From:   "K. A. Mr. Kairi" <ctocik2@gmail.com>
+Date:   Tue, 8 Nov 2022 03:22:07 -0800
+Message-ID: <CAC9COZe_rZeJQQ2HU7v7uriYCoON1Xu_vFc68+RNzupoN9+uUQ@mail.gmail.com>
+Subject: Re: My Response..
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1131 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrinvest1010[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ctocik2[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ctocik2[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 11:33 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Nov 03, 2022 at 11:01:12AM -0700, Evan Green wrote:
-> > In addition to the private key and public key, the TPM2_Create
-> > command may also return creation data, a creation hash, and a creation
-> > ticket. These fields allow the TPM to attest to the contents of a
-> > specified set of PCRs at the time the trusted key was created. Encrypted
-> > hibernation will use this to ensure that PCRs settable only by the
-> > kernel were set properly at the time of creation, indicating this is an
-> > authentic hibernate key.
-> >
-> > Encode these additional parameters into the ASN.1 created to represent
-> > the key blob. The new fields are made optional so that they don't bloat
-> > key blobs which don't need them, and to ensure interoperability with
-> > old blobs.
-> >
-> > Signed-off-by: Evan Green <evgreen@chromium.org>
->
-> There's a lot of open-coded math for the bounds checking. I didn't
-> immediately see any problems, but it'd be nice if there was a way to
-> hook a fuzzer up to this, or at least write some KUnit tests to check
-> boundary conditions explicitly.
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+-- 
+Hi
 
-Thank you! Yes, agreed about all the bounds checking. I could probably
-pull out the "check for src + 2 > end, then get_unaligned_be16()" into
-a helper function. Let me see if that makes things look better or ends
-up looking the same.
--Evan
+How are you with your family, I have a serious client, whom will be
+interested to invest in your country, I got your Details through the
+Investment Network and world Global Business directory.
+
+If you are interested for more details.....
+
+Sincerely,
+Kairi Andrew
