@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2D2622233
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Nov 2022 03:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF2C62222D
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Nov 2022 03:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiKICug (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Nov 2022 21:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiKICuf (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
+        id S229985AbiKICuf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Tue, 8 Nov 2022 21:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229667AbiKICue (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 8 Nov 2022 21:50:34 -0500
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B62F1F9DD;
-        Tue,  8 Nov 2022 18:50:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC381F61A;
+        Tue,  8 Nov 2022 18:50:32 -0800 (PST)
 From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
         s=mail; t=1667962230;
-        bh=sRBb1yoX5FkhrIkmhhnkMlMgMwZoHsWyWpPUUDhCe1A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ak7T7+oRpA3erDu1wQ3UgJ9+njLjl0ooywpMrO9E2TQReGV77M6io1GeUyqJ5PjKz
-         KsFSLoEJBCcoKbzoaBQj2DZUdon7iKxJ3a1ecUWBtEl0Q8VwU1zB2MUSQh3oib1U4I
-         Be939Vqs0G3jizW1V4dcRC4kcVxgKCxzow/spxBs=
+        bh=COwXzoOJifc0kBYkrsDthoC7PqTOtSdi1o8MWvrZGvg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RFw/Vm2E83YIgHtWCxE5pbYZhS4CloQ/BWpqQZOVwojSlxti2713CWbtT7DfN5yex
+         g+GGsYBsuKhOCeD7QxLbnztD1C/IDyi5+pGFTD9AtpIONjJbQEGJyO1z11FSBTMNjk
+         uEi8dEEMGzSajlt2uIl9vEakOIORMif0rUAKe1AA=
 To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         David Howells <dhowells@redhat.com>,
         David Woodhouse <dwmw2@infradead.org>,
@@ -33,13 +33,15 @@ Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         Mark Pearson <markpearson@lenovo.com>,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v2 0/3] certs: Prevent spurious errors on repeated blacklisting
-Date:   Wed,  9 Nov 2022 03:50:16 +0100
-Message-Id: <20221109025019.1855-1-linux@weissschuh.net>
+Subject: [PATCH v2 1/3] certs: log more information on blacklist error
+Date:   Wed,  9 Nov 2022 03:50:17 +0100
+Message-Id: <20221109025019.1855-2-linux@weissschuh.net>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221109025019.1855-1-linux@weissschuh.net>
+References: <20221109025019.1855-1-linux@weissschuh.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1667962214; l=1370; s=20211113; h=from:subject; bh=sRBb1yoX5FkhrIkmhhnkMlMgMwZoHsWyWpPUUDhCe1A=; b=/FQehqL8oo8cDEvahT+bddamTe3EHhG1k4Xm2iu/e0fdzh+kZ3cQJr+iQWeiWRrEF0sxCWqO/6Z7 0noAI3i7CYaMUGKPSch6B469ssLVsPrwFF2X98m1zrCHluYkpWDD
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1667962214; l=781; s=20211113; h=from:subject; bh=COwXzoOJifc0kBYkrsDthoC7PqTOtSdi1o8MWvrZGvg=; b=9x5DbFNV4IeM4Iy0DtoCRUoozHmclKCE+cEgSF4HGqidC0TEXqxiB6lTgA07FCcRuKVcFFgwwsn5 B8EN0PttAwXE0P3l+2gc7DGNn+b1Zq+W6/XVyg0ViLI7WWqXymfn
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -51,37 +53,27 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When the blacklist keyring was changed to allow updates from the root
-user it gained an ->update() function that disallows all updates.
-When the a hash is blacklisted multiple times from the builtin or
-firmware-provided blacklist this spams prominent logs during boot:
+Without this information these logs are not actionable.
 
-[    0.890814] blacklist: Problem blacklisting hash (-13)
+Fixes: 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ certs/blacklist.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This affects the firmware of various vendors. Reported have been at least:
-* Samsung: https://askubuntu.com/questions/1436856/
-* Acer: https://ubuntuforums.org/showthread.php?t=2478840
-* MSI: https://forum.archlabslinux.com/t/blacklist-problem-blacklisting-hash-13-errors-on-boot/6674/7
-* Micro-Star: https://bbs.archlinux.org/viewtopic.php?id=278860
-
-This series is an extension of the following single patch:
-https://lore.kernel.org/all/20221104014704.3469-1-linux@weissschuh.net/
-
-Only the first patch has been marked for stable as otherwise the whole of
-key_create() would need to be applied to stable.
-
-Thomas Weißschuh (3):
-  certs: log more information on blacklist error
-  KEYS: Add key_create()
-  certs: don't try to update blacklist keys
-
- certs/blacklist.c   |  23 ++++---
- include/linux/key.h |   8 +++
- security/keys/key.c | 149 +++++++++++++++++++++++++++++++++-----------
- 3 files changed, 133 insertions(+), 47 deletions(-)
-
-
-base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
+diff --git a/certs/blacklist.c b/certs/blacklist.c
+index 41f10601cc72..6e260c4b6a19 100644
+--- a/certs/blacklist.c
++++ b/certs/blacklist.c
+@@ -192,7 +192,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
+ 				   KEY_ALLOC_NOT_IN_QUOTA |
+ 				   KEY_ALLOC_BUILT_IN);
+ 	if (IS_ERR(key)) {
+-		pr_err("Problem blacklisting hash (%ld)\n", PTR_ERR(key));
++		pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
+ 		return PTR_ERR(key);
+ 	}
+ 	return 0;
 -- 
 2.38.1
 
