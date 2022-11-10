@@ -2,120 +2,175 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB426245F4
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Nov 2022 16:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBC56246B0
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Nov 2022 17:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiKJPcc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Nov 2022 10:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S230206AbiKJQRp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Nov 2022 11:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiKJPcO (ORCPT
+        with ESMTP id S229531AbiKJQRo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:32:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1122D42F50;
-        Thu, 10 Nov 2022 07:30:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1502619B2;
-        Thu, 10 Nov 2022 15:30:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117F5C4314A;
-        Thu, 10 Nov 2022 15:30:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668094233;
-        bh=LxPoey/Txw9eEAsjMi8I7lrIBlKYQ+GUi78jSLCLmsw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X/8MmAQ4jzybDO0FM4EnvciY0o909vg7RORFRkthrlYFTQH/hYSUJP5KQ1UHS/aAh
-         5IjLCETD67uMhtSRZPFAWhe6aHAyo5cCjvFNv1P2q0PHs2Q7d6S9iAAdpDrsUdcsqg
-         6GE4uuSR3MxU07c0Oom2uDFZnxIvRDhEWaudlGfodGtTvdoXJC5xtPi+eTiquIgsVz
-         ja9QmMQiB7KHHw+psH3Je1bjKqnjze0b/XA4JsOTYT5U2blBIdMcQuxIS/yPN9K1bM
-         mzlQYs4u7edJlck0qSDrGzy+L18yAqVVPredbYqD0kSvVnSQe+qXksx3hdrExzeDRH
-         xdDUVZCZzAwdw==
-Received: by mail-lf1-f48.google.com with SMTP id c1so3934549lfi.7;
-        Thu, 10 Nov 2022 07:30:32 -0800 (PST)
-X-Gm-Message-State: ACrzQf15eZ9rnkAcSCeYQTGlyG8npzDDZyZJb+lSOYbqBlj5f3NrEpaz
-        wVYETrxgBQ5neAvZ1OmSU69H4IEEtJnQVAyHE8I=
-X-Google-Smtp-Source: AMsMyM4zvAX5sAETC9CI+cDlc2ACByQOg0lFOlzCPS65eEG++tMrkP/vj9NOXHY5hJrb5BSfltNUuM/SQvrZljQqoJc=
-X-Received: by 2002:ac2:4c47:0:b0:4a2:c07b:4b62 with SMTP id
- o7-20020ac24c47000000b004a2c07b4b62mr20875682lfk.426.1668094230829; Thu, 10
- Nov 2022 07:30:30 -0800 (PST)
+        Thu, 10 Nov 2022 11:17:44 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09CC19C08
+        for <linux-integrity@vger.kernel.org>; Thu, 10 Nov 2022 08:17:37 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id k5so1896856pjo.5
+        for <linux-integrity@vger.kernel.org>; Thu, 10 Nov 2022 08:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bkSGDXPg6SJzvEs4XpsjJXXciVKxFTGfB+OBGN4kblY=;
+        b=AnFETkrsVJJqBrsF335uPUsaYE8VQwzKw+7NH6AE51dCXKLkIuUl3ydcBWKECQxyzg
+         PRPZcLLeYBI9Dpus6z4kG2pW/16OU6W07kKzanMVdGGnLoNXxeB7bGnefKytK93ExGGG
+         MVJcnNF/YeDEsFFKW0JkD24SvOTLWO9UcKVOY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bkSGDXPg6SJzvEs4XpsjJXXciVKxFTGfB+OBGN4kblY=;
+        b=mg2N+/3h9/E/VKU/XFyrYZea6DhwqzCthjvWiCDDpJPBhLzLJamNNZ4hUdC1cyR1Ev
+         F1Z68DWrjYMRT6/3tfam4kwlrMB+vY833y+S14/jupQZOEPJR2C6NxCJ/u8jrBYJHxdm
+         7+s/MDH62yUTfKaIP7IhiEZFH+3W3FiAcD2H3DGCbWmscNKwICa5fVSNBBn8aGjnofKx
+         5QNYESBS7aNtkyonOoqlcrEO/OpvGl2R9GfDZR6dwlMB0VasZZeu7jlYxNkMHY245rXR
+         rs3lqYUC9uMkdnQnwd6qrSPidk47HR1IipiB7kRD8CIKJwAZHdgMUXxtq7aSMUH2zcvN
+         0fVw==
+X-Gm-Message-State: ACrzQf2Zh7ELpJPahuoWGiAp3xeJ6YMvXcyZTz3DyB5J5QbqhDSkRGc7
+        8Z0VYXRfWeUEYY9GpO3RLAhH3g==
+X-Google-Smtp-Source: AMsMyM7Jrpt3ZFQjF+trFjU+RRUhzpv728jIYoSkYV+1lmT6sxEOWtIaF7lJQzkC53uldCs/vMAO/w==
+X-Received: by 2002:a17:90b:4f45:b0:213:ccc6:87df with SMTP id pj5-20020a17090b4f4500b00213ccc687dfmr61500305pjb.227.1668097057311;
+        Thu, 10 Nov 2022 08:17:37 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z25-20020aa79599000000b0056c702a370dsm10328039pfj.117.2022.11.10.08.17.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 08:17:36 -0800 (PST)
+Date:   Thu, 10 Nov 2022 08:17:35 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
+        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, dlunev@google.com,
+        Eric Biggers <ebiggers@kernel.org>,
+        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
+        Len Brown <len.brown@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v4 09/11] PM: hibernate: Mix user key in encrypted
+ hibernate
+Message-ID: <202211100816.FEF5A3305C@keescook>
+References: <20221103180120.752659-1-evgreen@chromium.org>
+ <20221103105558.v4.9.I87952411cf83f2199ff7a4cc8c828d357b8c8ce3@changeid>
+ <202211041147.DEDC1F64F@keescook>
+ <CAE=gft41=5uWwPfDZ=nyjcOzk21YCAeg6cheUNy-m0j79CgNfQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
- <20211124044124.998170-17-eric.snowberg@oracle.com> <20221110000129.kl6pjy5mafpuptbk@framework>
- <4A479B96-4B41-4323-9920-5A909423F998@oracle.com> <20221110150607.h4iaymkgc4f7kuue@framework>
- <47ae05f8d3a67ee5e1607ab8e718cc4b3e95cebb.camel@HansenPartnership.com>
-In-Reply-To: <47ae05f8d3a67ee5e1607ab8e718cc4b3e95cebb.camel@HansenPartnership.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 10 Nov 2022 16:30:19 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEv3raFtwMmA4gYX=Z5YBfJ5f9GP0L0Zo4FBabwTfhn8Q@mail.gmail.com>
-Message-ID: <CAMj1kXEv3raFtwMmA4gYX=Z5YBfJ5f9GP0L0Zo4FBabwTfhn8Q@mail.gmail.com>
-Subject: Re: [PATCH v8 16/17] integrity: Trust MOK keys if MokListTrustedRT found
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Morten Linderud <morten@linderud.pw>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "lszubowi@redhat.com" <lszubowi@redhat.com>,
-        "jason@zx2c4.com" <jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE=gft41=5uWwPfDZ=nyjcOzk21YCAeg6cheUNy-m0j79CgNfQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 16:27, James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> On Thu, 2022-11-10 at 16:06 +0100, Morten Linderud wrote:
-> > I'm not really sure what Peter means with "much more reliable"
-> > though.
->
-> It's that in-head knowledge you referred to.  You can't see the true
-> MoK variables because they're BootServices, meaning they're not visible
-> in the RunTime, which is why the shadow RT variables exist (this is a
-> security property: BS only variables can only be altered by trusted,
-> signed entities).  However lots of things can create RT variables so
-> you have to run through a sequence of checks on the RT shadows to try
-> to defeat clever attackers (like verifying the variable attributes),
-> because the chain of custody from BS to RT is not guaranteed.  If you
-> use a configuration table instead, that is BS only, the kernel (which
-> is also a trusted entity) has to pick it out before ExitBootServices,
-> so if the kernel has the table, you have a reliable chain of custody
-> for the entries.
->
+On Wed, Nov 09, 2022 at 04:30:10PM -0800, Evan Green wrote:
+> On Fri, Nov 4, 2022 at 11:54 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Thu, Nov 03, 2022 at 11:01:17AM -0700, Evan Green wrote:
+> > > Usermode may have their own data protection requirements when it comes
+> > > to encrypting the hibernate image. For example, users may want a policy
+> > > where the hibernate image is protected by a key derived both from
+> > > platform-level security as well as authentication data (such as a
+> > > password or PIN). This way, even if the platform is compromised (ie a
+> > > stolen laptop), sensitive data cannot be exfiltrated via the hibernate
+> > > image without additional data (like the user's password).
+> > >
+> > > The kernel is already doing the encryption, but will be protecting its
+> > > key with the TPM alone. Allow usermode to mix in key content of their own
+> > > for the data portion of the hibernate image, so that the image
+> > > encryption key is determined both by a TPM-backed secret and
+> > > user-defined data.
+> > >
+> > > To mix the user key in, we hash the kernel key followed by the user key,
+> > > and use the resulting hash as the new key. This allows usermode to mix
+> > > in its key material without giving it too much control over what key is
+> > > actually driving the encryption (which might be used to attack the
+> > > secret kernel key).
+> > >
+> > > Limiting this to the data portion allows the kernel to receive the page
+> > > map and prepare its giant allocation even if this user key is not yet
+> > > available (ie the user has not yet finished typing in their password).
+> > > Once the user key becomes available, the data portion can be pushed
+> > > through to the kernel as well. This enables "preloading" scenarios,
+> > > where the hibernate image is loaded off of disk while the additional
+> > > key material (eg password) is being collected.
+> > >
+> > > One annoyance of the "preloading" scheme is that hibernate image memory
+> > > is effectively double-allocated: first by the usermode process pulling
+> > > encrypted contents off of disk and holding it, and second by the kernel
+> > > in its giant allocation in prepare_image(). An interesting future
+> > > optimization would be to allow the kernel to accept and store encrypted
+> > > page data before the user key is available. This would remove the
+> > > double allocation problem, as usermode could push the encrypted pages
+> > > loaded from disk immediately without storing them. The kernel could defer
+> > > decryption of the data until the user key is available, while still
+> > > knowing the correct page locations to store the encrypted data in.
+> > >
+> > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > > ---
+> > >
+> > > (no changes since v2)
+> > >
+> > > Changes in v2:
+> > >  - Add missing static on snapshot_encrypted_byte_count()
+> > >  - Fold in only the used kernel key bytes to the user key.
+> > >  - Make the user key length 32 (Eric)
+> > >  - Use CRYPTO_LIB_SHA256 for less boilerplate (Eric)
+> > >
+> > >  include/uapi/linux/suspend_ioctls.h |  15 ++-
+> > >  kernel/power/Kconfig                |   1 +
+> > >  kernel/power/power.h                |   1 +
+> > >  kernel/power/snapenc.c              | 158 ++++++++++++++++++++++++++--
+> > >  kernel/power/snapshot.c             |   5 +
+> > >  kernel/power/user.c                 |   4 +
+> > >  kernel/power/user.h                 |  12 +++
+> > >  7 files changed, 185 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/include/uapi/linux/suspend_ioctls.h b/include/uapi/linux/suspend_ioctls.h
+> > > index b73026ef824bb9..f93a22eac52dc2 100644
+> > > --- a/include/uapi/linux/suspend_ioctls.h
+> > > +++ b/include/uapi/linux/suspend_ioctls.h
+> > > @@ -25,6 +25,18 @@ struct uswsusp_key_blob {
+> > >       __u8 nonce[USWSUSP_KEY_NONCE_SIZE];
+> > >  } __attribute__((packed));
+> > >
+> > > +/*
+> > > + * Allow user mode to fold in key material for the data portion of the hibernate
+> > > + * image.
+> > > + */
+> > > +struct uswsusp_user_key {
+> > > +     /* Kernel returns the metadata size. */
+> > > +     __kernel_loff_t meta_size;
+> > > +     __u32 key_len;
+> > > +     __u8 key[32];
+> >
+> > Why is this 32? (Is there a non-literal we can put here?)
+> 
+> Sure, I can make a new define for this: USWSUSP_USER_KEY_SIZE. Really
+> it just needs to be enough key material that usermode feels like
+> they've swizzled things up enough. I wanted to avoid using a
+> particular implementation constant like AES_KEYSIZE_256 because I
+> wanted that to be a kernel implementation detail, and also wanted to
+> avoid adding additional header dependencies to suspend_ioctls.h.
 
-No config table are always accessible, also at runtime under the OS.
+Can this just use __aligned(8) etc?
 
-But they are volatile so they can only have been created since the
-last reset of the system, so in that sense they are similar to the
-volatile RT variables aliases.
-
-The reason for preferring config tables is that you can access them
-much earlier, and without mapping the EFI runtime memory regions etc
-etc
+-- 
+Kees Cook
