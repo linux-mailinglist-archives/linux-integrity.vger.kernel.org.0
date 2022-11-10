@@ -2,144 +2,163 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460C5624515
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Nov 2022 16:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7106245A8
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Nov 2022 16:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiKJPGt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Nov 2022 10:06:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        id S229776AbiKJP0g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Nov 2022 10:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiKJPGs (ORCPT
+        with ESMTP id S231552AbiKJP0U (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:06:48 -0500
-Received: from linderud.pw (linderud.dev [163.172.10.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED97654A;
-        Thu, 10 Nov 2022 07:06:45 -0800 (PST)
-Received: from linderud.pw (localhost [127.0.0.1])
-        by linderud.pw (Postfix) with ESMTP id B5DA3C015B;
-        Thu, 10 Nov 2022 16:06:09 +0100 (CET)
+        Thu, 10 Nov 2022 10:26:20 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7ED2CCB2;
+        Thu, 10 Nov 2022 07:26:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1668093942; bh=xnA9uZjSroQUdAP0TmAbEAYIGefOjLYl/tIHe+qUBiA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=jgVsWQonULu+0YCjdcMM+N+LvCWeqXd4sxYN6qXrM+9r4r0YSdWwIpKhbYeaIE6hG
+         +jIFwf8qd+yQgkH4LTwDFs9G8lkipxeJaIMWlH++gZAgc3RHgdy4cNsoUbPTltCAcQ
+         h94+BiCaeo9B6IMWre3dyotNuxzzeegUK2E9mg4ZPyv3TTL7qOWMZipbWPN3zkEuW/
+         lo0eLg/wOpaTXqgrA52RHy3dCJzT2VCo8C6HVYXxikfPpFjPHYG0p73/XQ01F14I4z
+         6e6m++x/AdecmMtxyk238jAkz8oWYKG4iaGcYyJn8ZcY63FJP80cPeb42mHXCxC4M6
+         qoQo0/b6q0RwA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from Venus.speedport.ip ([84.162.7.17]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M59GG-1os2yI388C-001EYr; Thu, 10
+ Nov 2022 16:25:42 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
+        LinoSanfilippo@gmx.de, lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: [PATCH v9 00/12] TPM IRQ fixes
+Date:   Thu, 10 Nov 2022 16:25:21 +0100
+Message-Id: <20221110152533.24243-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:B6hWA2QYw1iycnhBO3u9WP/DU1QNZD0x/YV23QnZDReYRlGHQW/
+ Lk/aR8+oVin9WScOBzmQUVp18HtRIRMTVLYJaDe5D43kzmOZVI/itiwCd2rACzRCPfVa4bp
+ hxYraxQ0gKUx1DmG2r/+BpSQ6JqpwfGexNmDOhQxmKPf77G9a1f+eO4StmUo2IVJA6Sa9y0
+ ABj4tpXSDqYLRRA1LYpqQ==
+UI-OutboundReport: notjunk:1;M01:P0:g2sHZQkugR8=;B4eSRTW8RnQBbFHdbGQ2cyVlTgG
+ CzSeqf3pYi/SPT0akZclkwvYeTOxKfyp8jkbZ9mfyVB2+EMSA+74oA1A3P1X5Cstn8DQ6auwa
+ e9D2c8qD8Us2SPtWhUIe7jGRc73h+mp2F6zIH7COEDGTfPe8KZaMw7ltTlHpMc+XN00hcfECF
+ Rtxoe+EgzadDesIXWj8yIQiayAbJVKr67k6FHqJbRdEz1z4zWzY8Cl4BF06tKGVGUnOjZn+2B
+ ByqMW2bCeCanIU+oDR9TZwYTBczo1WDyLXl0zvRMxMv3Y5fYbQMWx+byh6nS2EW2C6YyHqpqR
+ hKw+8iSS3/qa9Rn1lWmqEZ2Vh5p/y9iVJXCLSB+Dx6rjGKCPVemQ4U2q0eeq5fMg3X3Pq6Wr7
+ vQu5SdaZZ+5gM9nGkQv7kHPPVW9YeW9QrbI4Xkojdub5vcn2Trd8e5FJrhcTU8jw/Atc3unFX
+ L2UOca3GNPdGFldwzkRyhxYcaooArbCFvfaUzsUOa1Hg9CXyFuTNzh5EO7egL6LcDRKYNYy2w
+ xQmoRMTbS0BCxtVNTwepfL/cwRI3Yd6jWLM69lwGsH+oxvLEl9uzTHXAT7XQzftUC1eLeanPo
+ cwxye0F0bBvZ6BFaZyT5FpiwA+wAuZGN4QPr6UbpiiqVZN1ByZvc2Uw8xvm4jCR2IgH+QyVny
+ +W7Ex2iQZ8c9CJSlgnsucw1+y12HGZJawp4vGSJUSlgznZk/5P5znUOQbIVqfiYjwuLWm37Nw
+ NoIINMk/krkd2nQb2qfgkH6xum8liFhpvmx9ih0pYjsgZA78QkSIUJPo2jBfYiMgF8DIEJ5cS
+ JJJm2gVjoDMiUczIXSvHTN3J81WOpBovNVa+MopgQQQxXGZjvJRVx9DUAK7J5I50q9VtlnmSs
+ ljCftf7WN1Z2yb27R0Q/e9sCZmPisxpMvWZKAOM0I09OPeuGIzSnQd/9vtURFUS19wFgy99Bl
+ /Q+2Cg2jLpyub6IhS6kLyGaESAI=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
-        s=linderud; t=1668092769;
-        bh=I1b2dWCqEXwMKJH2vHZvQa6XE/PkoH+lyJ1N5u9y6FQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=I4DQ05EXSWOhXclVgNBGO3WdLuLlRIgU7bBuzF2VrGd/gVA23cjXotKnUlCP8J4db
-         NSNHzOFSk0hjV/i0PN+VcdwFQ5XE0oirGaIcCHUxEtDosx3yicVQuw1+mIQ4LpjEMN
-         jfRUWLDQvSLej7JqybvsZAKFteMrsMLQDr/byy+zVHoM97zz/yMKGorcckPrDaql8f
-         CzUrl/+4NurAKiUjX+Ipk1H/hHAZlDMR0JwfNY12Z5JYvWEUusSB5SKnAWhiE7yfld
-         +CRIzFfWkQCMVEbJl6GQto7umB+B8T96tHrN/Ot7ZCuxsKJl/pTjrMRxTBtqgj+Zu7
-         qejWy9NFDZ7ct/9w+ivn4VhOPyTPu9jfH9xInfSHcupq7ckuYaxvmw372pj7ZthRPG
-         ktBxZEQzfTelTEYX52nNPIKHQDBjmlbOS7+5lcQdOemz0XHa6r84EgBix/vVJ/QsP7
-         oSvKgGG5E6a/uK9uXqWYMzLFHvQ+SNkFVehBQ0bnVZjuW8MvnOfKIyHKCCDvbjvmdA
-         SUW66V/QZGlxwdAGAonb9Fbh3uwZT4gcq/bLvShJLgNnk/OI+XinP2KLWwG+3il7BM
-         0mLF8KHU1l+zdUnB9dt5ydpALA7MaQF92McRKlh6sfYFbIQF5Eq/6bHdXPi42gw7dP
-         VVly4Wm2Y7u0E5U788Tnad3I=
-Received: from localhost (host-37-191-241-102.lynet.no [37.191.241.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: morten)
-        by linderud.pw (Postfix) with ESMTPSA id 7AF8AC0077;
-        Thu, 10 Nov 2022 16:06:09 +0100 (CET)
-Date:   Thu, 10 Nov 2022 16:06:07 +0100
-From:   Morten Linderud <morten@linderud.pw>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Eric Biggers <ebiggers@google.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "lszubowi@redhat.com" <lszubowi@redhat.com>,
-        "jason@zx2c4.com" <jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Subject: Re: [PATCH v8 16/17] integrity: Trust MOK keys if MokListTrustedRT
- found
-Message-ID: <20221110150607.h4iaymkgc4f7kuue@framework>
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
- <20211124044124.998170-17-eric.snowberg@oracle.com>
- <20221110000129.kl6pjy5mafpuptbk@framework>
- <4A479B96-4B41-4323-9920-5A909423F998@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4A479B96-4B41-4323-9920-5A909423F998@oracle.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 12:54:43AM +0000, Eric Snowberg wrote:
-> 
-> 
-> > On Nov 9, 2022, at 5:01 PM, Morten Linderud <morten@linderud.pw> wrote:
-> > 
-> > On Tue, Nov 23, 2021 at 11:41:23PM -0500, Eric Snowberg wrote:
-> >> A new Machine Owner Key (MOK) variable called MokListTrustedRT has been
-> >> introduced in shim. When this UEFI variable is set, it indicates the
-> >> end-user has made the decision themselves that they wish to trust MOK keys
-> >> within the Linux trust boundary.  It is not an error if this variable
-> >> does not exist. If it does not exist, the MOK keys should not be trusted
-> >> within the kernel.
-> > 
-> > Hi Eric,
-> > 
-> > I've been milling around on this patch-set for a while and I have a few issues
-> > with the description of the commit and what the code actually does.
-> > 
-> > efi_mokvar_entry_find doesn't simply read an UEFI variable as the commit message
-> > suggests, it will look for the MOK variable loaded into the EFI configuration
-> > table. This implies we need this table setup in early boot to take usage of this
-> > patch set.
-> > 
-> > The only bootloader that does setup this table, is the `shim` as described. But
-> > no other bootloader implements support for the MOK EFI configuration table.
-> > 
-> > This effectively means that there is still no way for Machine Owners to load
-> > keys into the keyring, for things like module signing, without the shim present
-> > in the bootchain. I find this a bit weird.
-> > 
-> > Is this an intentional design decision, or could other ways be supported as
-> > well?
-> 
-> In v6 I had it as a RT variable, during the review a request was made [1] to just 
-> use the EFI configuration table.  If there are other boot loaders that want to use this,
-> I don’t see why the code in v6 couldn’t be added back.  If the configuration table isn’t
-> available, it could try reading the RT var next.
-> 
-> 1. https://patchwork.kernel.org/project/linux-integrity/patch/20210914211416.34096-13-eric.snowberg@oracle.com/#24453409
-> 
-
-If we could support both the EFI variables and the EFI configuration table setup
-it would hopefully be easier for others to implement the interface? I wouldn't
-mind trying to write a patch for that if others think it's a good idea.
-
-I'm not really sure what Peter means with "much more reliable" though.
-
--- 
-Morten Linderud
-PGP: 9C02FF419FECBE16
+RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoaXMgc2Vy
+aWVzIGVuYWJsZXMgSVJRIHN1cHBvcnQgZm9yIHRoZSBUUE0gVElTIGNvcmUuIEZvciB0aGlzIHJl
+YXNvbiBhCm51bWJlciBvZiBidWdmaXhlcyBhcm91bmQgdGhlIGludGVycnVwdCBoYW5kbGluZyBh
+cmUgcmVxdWlyZWQgKHBhdGNoZXMgMSB0bwo0KS4KClBhdGNoIDUgdGFrZXMgaW50byBhY2NvdW50
+IHRoYXQgYWNjb3JkaW5nIHRvIHRoZSBUUE0gSW50ZXJmYWNlClNwZWNpZmljYXRpb24gc3RzVmFs
+aWQgYW5kIGNvbW1hbmRSZWFkIGludGVycnVwdHMgbWlnaHQgbm90IGJlIHN1cHBvcnRlZApieSB0
+aGUgaGFyZHdhcmUuIEZvciB0aGlzIHJlYXNvbiB0aGUgc3VwcG9ydGVkIGludGVycnVwdHMgYXJl
+IGZpcnN0IHF1ZXJpZWQKYW5kIHN0b3JlZC4gVGhlbiB3YWl0X2Zvcl90cG1fc3RhdCgpIGlzIGFk
+anVzdGVkIHRvIG5vdCB3YWl0IGZvciBzdGF0dXMKY2hhbmdlcyB0aGF0IGFyZSBub3QgcmVwb3J0
+ZWQgYnkgaW50ZXJydXB0cy4KClBhdGNoIDYgbW92ZXMgdGhlIGludGVycnVwdCBmbGFnIGNoZWNr
+cyBpbnRvIGFuIG93biBmdW5jdGlvbiBhcyBzdWdnZXN0ZWQKYnkgSmFya2tvLgoKUGF0Y2ggNyBS
+ZW1vdmVzIHRoZSBwb3NzaWJpbGl0eSB0aGF0IHRwbV90aXNfZGF0YS0+bG9jYWxpdHkgY2FuIGJl
+IGNoYW5nZWQKYXQgZHJpdmVyIHJ1bnRpbWUgc28gdGhpcyB2YXJpYWJsZSBjYW4gYmUgcmVhZCB3
+aXRob3V0IHRoZSBuZWVkIHRvIHByb3RlY3QKaXQgYWdhaW5zdCBjb25jdXJyZW50IG1vZGlmaWNh
+dGlvbi4gCgpQYXRjaCA4IGFkZHJlc3NlcyB0aGUgaXNzdWUgd2l0aCBjb25jdXJyZW50IGxvY2Fs
+aXR5IGhhbmRsaW5nOgpTaW5jZSB0aGUgaW50ZXJydXB0IGhhbmRsZXIgd3JpdGVzIHRoZSBpbnRl
+cnJ1cHQgc3RhdHVzIHJlZ2lzdGVycyBpdCBuZWVkcwp0byBob2xkIHRoZSBsb2NhbGl0eS4gSG93
+ZXZlciBpdCBydW5zIGNvbmN1cnJlbnRseSB0byB0aGUgdGhyZWFkIHdoaWNoCnRyaWdnZXJlZCB0
+aGUgaW50ZXJydXB0IChlLmcuIGJ5IHJlYWRpbmcgb3Igd3JpdGluZyBkYXRhIHRvIHRoZSBUUE0p
+LiBTbwppdCBtdXN0IHRha2UgY2FyZSB3aGVuIGNsYWltaW5nIGFuZCByZWxlYXNpbmcgdGhlIGxv
+Y2FsaXR5IGl0c2VsZiwKYmVjYXVzZSBpdCBtYXkgcmFjZSB3aXRoIHRoZSBjb25jdXJyZW50IHJ1
+bm5pbmcgdGhyZWFkIHdoaWNoIGFsc28gY2xhaW1zCmFuZCByZWxlYXNlcyB0aGUgbG9jYWxpdHku
+ClRvIGF2b2lkIHRoYXQgYm90aCBpbnRlcnJ1cHQgYW5kIGNvbmN1cnJlbnQgcnVubmluZyB0aHJl
+YWQgaW50ZXJmZXJlIHdpdGgKZWFjaCBvdGhlciBhIGxvY2FsaXR5IGNvdW50ZXIgaXMgdXNlZCB3
+aGljaCBndWFyYW50ZWVzIHRoYXQgYXQgYW55IHRpbWUKdGhlIGxvY2FsaXR5IGlzIGhlbGQgYXMg
+bG9uZyBhcyBpdCBpcyByZXF1aXJlZCBieSBvbmUgb2YgYm90aCBleGVjdXRpb24KcGF0aHMuCgpQ
+YXRjaCA5IGltcGxlbWVudHMgdGhlIHJlcXVlc3Qgb2YgYSB0aHJlYWRlZCBpbnRlcnJ1cHQgaGFu
+ZGxlci4gVGhpcyBpcwpuZWVkZWQgc2luY2UgU1BJIHVzZXMgYSBtdXRleCBmb3IgZGF0YSB0cmFu
+c21pc3Npb24gYW5kIHNpbmNlIHdlIGFjY2VzcyB0aGUKaW50ZXJydXB0IHN0YXR1cyByZWdpc3Rl
+ciB2aWEgU1BJIGluIHRoZSBpcnEgaGFuZGxlciB3ZSBuZWVkIGEgc2xlZXBhYmxlCmNvbnRleHQu
+CgpQYXRjaCAxMCBtYWtlcyBzdXJlIHRoYXQgd3JpdGVzIHRvIHRoZSBpbnRlcnJ1cHQgcmVnaXN0
+ZXIgYXJlIGVmZmVjdGl2ZSBpZgpkb25lIGluIHRoZSBpbnRlcnJ1cHQgaGFuZGxlci4KClBhdGNo
+IDExIG1ha2VzIHN1cmUgdGhhdCB3cml0ZXMgdG8gdGhlIGludGVycnVwdCBhbmQgSU5URVJSVVBU
+X1ZFQ1RPUgphbmQgSU5URVJSVVBUX0VOQUJMRSByZWdpc3RlcnMgYXJlIGVmZmVjdGl2ZSBieSBo
+b2xkaW5nIHRoZSBsb2NhbGl0eS4KClBhdGNoIDEyIGVuYWJsZXMgdGhlIHRlc3QgZm9yIGludGVy
+cnVwdHMgYnkgc2V0dGluZyB0aGUgcmVxdWlyZWQgZmxhZwpiZWZvcmUgdGhlIHRlc3QgaXMgZXhl
+Y3V0ZWQuCgpDaGFuZ2VzIGluIHY5OgotIGFkZCBhIGZpeCBmb3IgYW4gaXNzdWUgd2hlbiBpbnRl
+cnJ1cHRzIGFyZSByZWVuYWJsZWQgb24gcmVzdW1lIChQQVRDSCAxMSkKLSBpbXByb3ZlIHRoZSBj
+b21taXQgbWVzc2FnZSBmb3IgcGF0Y2ggOCBhcyByZXF1ZXN0ZWQgYnkgSmFya2tvCi0gaW1wcm92
+ZWQgZnVuY3Rpb25zIG5hbWluZwotIGNoYW5nZWQgcGF0Y2ggMTIgKHRwbSwgdHBtX3RpczogUmVx
+dWVzdCB0aHJlYWRlZCBpbnRlcnJ1cHQgaGFuZGxlcikgdG8KICBub3QgZGVsZXRlIHRoZSBUUE1f
+Q0hJUF9GTEFHX0lSUSBmbGFnIGFueSBtb3JlIHdoZW4gdHBtMl9nZXRfdHBtX3B0KCkKICBmYWls
+cy4gRHVlIHRvIHRoaXMgY2hhbmdlIHRoZSAnVGVzdGVkLWJ5JyB0YWcgZnJvbSBNaWNoYWVsIGFu
+ZCB0aGUKICAnUmV2aWV3ZWQtYnk6JyB0YWcgZnJvbSBKYXJrbyBoYXMgYmVlbiByZW1vdmVkCgpD
+aGFuZ2VzIGluIHY4OgotIHRwbV90aXNfZGF0YS0+bG9jYWxpdHkgaXMgbm90IGNoYW5nZWQgYXQg
+cnVudGltZSBhbnkgbW9yZSBzbyB0aGF0IGl0IGNhbgpiZSByZWFkIHdpdGhvdXQgYW55IHByb3Rl
+Y3Rpb24gYWdhaW5zdCBjb25jdXJyZW50IG1vZGlmaWNhdGlvbi4KLSBhZGQgbWlzc2luZyBicmFj
+a2V0cyBhcyBwb2ludGVkIG91dCBieSBKYXNvbiBBbmRyeXVrCgpDaGFuZ2VzIGluIHY3OgotIG1v
+dmVkIGludGVycnVwdCBmbGFnIGNoZWNrcyBpbnRvIGFuIG93biBmdW5jdGlvbiBhcyBzdWdnZXN0
+ZWQgYnkgSmFya2tvCi0gYWRkZWQgIlRlc3RlZC1ieSIgdGFncyBmb3IgVGVzdHMgZnJvbSBNaWNo
+YWVsIE5pZXfDtmhuZXIKLSBmaXhlZCBvbmUgY29tbWVudAoKQ2hhbmdlcyBpbiB2NjoKLSBzZXQg
+VFBNX1RJU19JUlFfVEVTVEVEIGluIGZsYWcgbWVtYmVyIG9mIHRoZSB0cG1fdGlzX2RhdGEgc3Ry
+dWN0IGluc3RlYWQKaW4gYW4gb3duIGJpdGZpZWxkIAotIGltcHJvdmUgY29tbWl0IG1lc3NhZ2Vz
+Ci0gdXNlIGludF9tYXNrIGluc3RlYWQgb2YgaXJxc19pbl91c2UgYXMgdmFyaWFibGUgbmFtZQot
+IHVzZSBzdHNfbWFzayBpbnN0ZWFkIG9mIGFjdGl2ZV9pcnFzIGFzIHZhcmlhYmxlIG5hbWUKLSBz
+cXVhc2ggcGF0Y2ggNSBhbmQgNgotIHByZWZpeCBmdW5jdGlvbnMgd2l0aCB0cG1fdGlzXwotIHJl
+bW92ZSAiZml4ZXMiIHRhZwoKQ2hhbmdlcyBpbiB2NToKLSBpbXByb3ZlIGNvbW1pdCBtZXNzYWdl
+IG9mIHBhdGNoIDEgYXMgcmVxdWVzdGVkIGJ5IEphcmtvCi0gZHJvcCBwYXRjaCB0aGF0IG1ha2Vz
+IGxvY2FsaXR5IGhhbmRsaW5nIHNpbXBsZXIgYnkgb25seSBjbGFpbWluZyBpdCBhdAogIGRyaXZl
+ciBzdGFydHVwIGFuZCByZWxlYXNpbmcgaXQgYXQgZHJpdmVyIHNodXRkb3duIChyZXF1ZXN0ZWQg
+YnkgSmFya28pCi0gZHJvcCBwYXRjaCB0aGF0IG1vdmVzIHRoZSBpbnRlcnJ1cHQgdGVzdCBmcm9t
+IHRwbV90aXNfc2VuZCgpCiAgdG8gdG1wX3Rpc19wcm9iZV9pcnFfc2luZ2xlKCkgYXMgcmVxdWVz
+dGVkIGJ5IEphcmtvCi0gYWRkIHBhdGNoIHRvIG1ha2UgbG9jYWxpdHkgaGFuZGxpbmcgdGhyZWFk
+c2FmZSBzbyB0aGF0IGl0IGNhbiBhbHNvIGJlCiAgZG9uZSBieSB0aGUgaXJxIGhhbmRsZXIKLSBz
+ZXBhcmF0ZSBsb2dpY2FsIGNoYW5nZXMgaW50byBvd24gcGF0Y2hlcwotIGFsd2F5cyByZXF1ZXN0
+IHRocmVhZGVkIGludGVycnVwdCBoYW5kbGVyCgpDaGFuZ2VzIGluIHY0OgotIG9ubHkgcmVxdWVz
+dCB0aHJlYWRlZCBpcnEgaW4gY2FzZSBvZiBTUEkgYXMgcmVxdWVzdGVkIGJ5IEphcmtvLgotIHJl
+aW1wbGVtZW50IHBhdGNoIDIgdG8gbGltaXQgbG9jYWxpdHkgaGFuZGxpbmcgY2hhbmdlcyB0byB0
+aGUgVElTIGNvcmUuCi0gc2VwYXJhdGUgZml4ZXMgZnJvbSBjbGVhbnVwcyBhcyByZXF1ZXN0ZWQg
+YnkgSmFya28uCi0gcmVwaHJhc2UgY29tbWl0IG1lc3NhZ2VzIAoKQ2hhbmdlcyBpbiB2MzoKLSBm
+aXhlZCBjb21waWxlciBlcnJvciByZXBvcnRlZCBieSBrZXJuZWwgdGVzdCByb2JvdAotIHJlcGhy
+YXNlZCBjb21taXQgbWVzc2FnZSBhcyBzdWdnZXN0ZWQgYnkgSmFya28gU2Fra2luZW4KLSBhZGRl
+ZCBSZXZpZXdlZC1ieSB0YWcKCkNoYW5nZXMgaW4gdjI6Ci0gcmViYXNlIGFnYWluc3QgNS4xMgot
+IGZyZWUgaXJxIG9uIGVycm9yIHBhdGgKCgoKTGlubyBTYW5maWxpcHBvICgxMik6CiAgdHBtLCB0
+cG1fdGlzOiBBdm9pZCBjYWNoZSBpbmNvaGVyZW5jeSBpbiB0ZXN0IGZvciBpbnRlcnJ1cHRzCiAg
+dHBtLCB0cG1fdGlzOiBDbGFpbSBsb2NhbGl0eSBiZWZvcmUgd3JpdGluZyBUUE1fSU5UX0VOQUJM
+RSByZWdpc3RlcgogIHRwbSwgdHBtX3RpczogRGlzYWJsZSBpbnRlcnJ1cHRzIGlmIHRwbV90aXNf
+cHJvYmVfaXJxKCkgZmFpbGVkCiAgdHBtLCB0bXBfdGlzOiBDbGFpbSBsb2NhbGl0eSBiZWZvcmUg
+d3JpdGluZyBpbnRlcnJ1cHQgcmVnaXN0ZXJzCiAgdHBtLCB0cG1fdGlzOiBPbmx5IGhhbmRsZSBz
+dXBwb3J0ZWQgaW50ZXJydXB0cwogIHRwbSwgdHBtX3RpczogTW92ZSBpbnRlcnJ1cHQgbWFzayBj
+aGVja3MgaW50byBvd24gZnVuY3Rpb24KICB0cG0sIHRwbV90aXM6IGRvIG5vdCBjaGVjayBmb3Ig
+dGhlIGFjdGl2ZSBsb2NhbGl0eSBpbiBpbnRlcnJ1cHQKICAgIGhhbmRsZXIKICB0cG0sIHRwbTog
+SW1wbGVtZW50IHVzYWdlIGNvdW50ZXIgZm9yIGxvY2FsaXR5CiAgdHBtLCB0cG1fdGlzOiBSZXF1
+ZXN0IHRocmVhZGVkIGludGVycnVwdCBoYW5kbGVyCiAgdHBtLCB0cG1fdGlzOiBDbGFpbSBsb2Nh
+bGl0eSBpbiBpbnRlcnJ1cHQgaGFuZGxlcgogIHRwbSwgdHBtX3RpczogQ2xhaW0gbG9jYWxpdHkg
+d2hlbiBpbnRlcnJ1cHRzIGFyZSByZWVuYWJsZWQgb24gcmVzdW1lCiAgdHBtLCB0cG1fdGlzOiBF
+bmFibGUgaW50ZXJydXB0IHRlc3QKCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXMuYyAgICAgIHwg
+ICAyICstCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jIHwgMjc5ICsrKysrKysrKysr
+KysrKysrKysrLS0tLS0tLS0tLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5oIHwg
+ICA1ICstCiAzIGZpbGVzIGNoYW5nZWQsIDE4NSBpbnNlcnRpb25zKCspLCAxMDEgZGVsZXRpb25z
+KC0pCgoKYmFzZS1jb21taXQ6IDMwYTBiOTViMTMzNWUxMmVmZWY4OWRkNzg1MThlZDNlNGE3MWE3
+NjMKLS0gCjIuMzYuMQoK
