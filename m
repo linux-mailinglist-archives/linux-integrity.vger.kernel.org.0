@@ -2,107 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363DB623821
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Nov 2022 01:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5066F623835
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Nov 2022 01:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbiKJA0m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 9 Nov 2022 19:26:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
+        id S230038AbiKJAgr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 9 Nov 2022 19:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiKJA0l (ORCPT
+        with ESMTP id S229551AbiKJAgr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 9 Nov 2022 19:26:41 -0500
-X-Greylist: delayed 900 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Nov 2022 16:26:40 PST
-Received: from linderud.pw (linderud.dev [163.172.10.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFC328E31;
-        Wed,  9 Nov 2022 16:26:40 -0800 (PST)
-Received: from linderud.pw (localhost [127.0.0.1])
-        by linderud.pw (Postfix) with ESMTP id 0E360C0273;
-        Thu, 10 Nov 2022 01:01:35 +0100 (CET)
+        Wed, 9 Nov 2022 19:36:47 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5FC2733
+        for <linux-integrity@vger.kernel.org>; Wed,  9 Nov 2022 16:36:46 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id f5so1193135ejc.5
+        for <linux-integrity@vger.kernel.org>; Wed, 09 Nov 2022 16:36:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nlqLQiiaOaZsIVqPkpURbCqECGxlhLAGf8/oZgDPEwg=;
+        b=TibEJ/dS9oqIAlyw0U4d9Y17tk1l/5W9NiA/VJLZylVbn2FOy3zk5VI/yoCYNAuGoE
+         Oc/Um2qfEuVCzsSWM/0hQdPyYt1cE7yzSxpdx7nS7ovvnFNjrDg/SO+IHB7dUcl1WCSg
+         iWprIbuqzyqir3yxeR8YrLGkhepBTjIioA0E0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nlqLQiiaOaZsIVqPkpURbCqECGxlhLAGf8/oZgDPEwg=;
+        b=uXwdYyBdWQi4BLhXEiKCyWWXe8YIHRk8VZROb/1EtMQUoh2EucGN2I1xGdxQAcGxwz
+         OJEenMqlrTmJykIg/c7kjLMdqYLmlhojv+qSglDONYri4vTO8tpmRlNEcEAygzS1s1lK
+         rVxmeGfkr8n89aUxEwt4aEWWAAK+UifTyAy6vK33q1o+CxOFgaJW9DrbOh7VgPdRKzws
+         Dhtthrs2lpcnj5ZDcgcMEtvfrTblgJGaCW+KK8+lHE693PHKvT+6ChPhdnFHZ+Hfv3Vq
+         cWlj+b7GiXTfhKDR95Y1QHa80fBdf2EH1uEKP++lNSWaiG/8ej+N3XeiFNhrjzdhIIAq
+         iGPQ==
+X-Gm-Message-State: ACrzQf1PpCAdHgBqdOazOa2MnygAcRvVKET3rAtwtePbkBP7sNTHpkXG
+        CVJ/mpozPoiF1/r1GxdZaoLZuGaAENS2xQ==
+X-Google-Smtp-Source: AMsMyM6CDjGieI+1KpCKVssfAJsVEcMeyVeJJQOyBHFLEPe1o5PJ6zw/d+AobOO1Kh5YRSJra2qzgA==
+X-Received: by 2002:a17:907:805:b0:782:1a0d:337f with SMTP id wv5-20020a170907080500b007821a0d337fmr59413499ejb.475.1668040604459;
+        Wed, 09 Nov 2022 16:36:44 -0800 (PST)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id b3-20020a17090630c300b007ae0fde7a9asm6348601ejb.201.2022.11.09.16.36.44
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 16:36:44 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id w14so145243wru.8
+        for <linux-integrity@vger.kernel.org>; Wed, 09 Nov 2022 16:36:44 -0800 (PST)
+X-Received: by 2002:adf:e44f:0:b0:236:59a3:c5a8 with SMTP id
+ t15-20020adfe44f000000b0023659a3c5a8mr40946801wrm.396.1668040203082; Wed, 09
+ Nov 2022 16:30:03 -0800 (PST)
+MIME-Version: 1.0
+References: <20221103180120.752659-1-evgreen@chromium.org> <20221103105558.v4.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+ <202211041132.E8CB636@keescook> <CAE=gft4+KHVd_cNApo6EcTtxSDQDNB-nPXdus-0K8pQdWF+tiw@mail.gmail.com>
+In-Reply-To: <CAE=gft4+KHVd_cNApo6EcTtxSDQDNB-nPXdus-0K8pQdWF+tiw@mail.gmail.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Wed, 9 Nov 2022 16:29:26 -0800
+X-Gmail-Original-Message-ID: <CAE=gft6O6WFbVL4mQ6trS4UkfkvNEFcUT0eN+6QAsXbf6DLdvQ@mail.gmail.com>
+Message-ID: <CAE=gft6O6WFbVL4mQ6trS4UkfkvNEFcUT0eN+6QAsXbf6DLdvQ@mail.gmail.com>
+Subject: Re: [PATCH v4 04/11] security: keys: trusted: Include TPM2 creation data
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
+        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, dlunev@google.com,
+        Eric Biggers <ebiggers@kernel.org>,
+        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
-        s=linderud; t=1668038494;
-        bh=jH0zJFbDnCevPE8tf0c1v6aSJKKT3slV14YINE41imY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=U0dBESQLYHV9bR+lJN7IIwR0s+9MLgjZCaC29vtuBJicKAlUqCJA/8h/XDWPRT+aF
-         5KGr3uiWk0XJtRScrl5QEjn+4vrjGQX6Hms9RmxW4AkcL2KhEOKVdDq0uW6cgGQONK
-         2b4cV4OyG6EX7fiuO9KVbz5Z4vzANcy+Y620PKtCpjpG1K7OO9h5XZTbxi9L0PMK+Q
-         aUS3852wWwcdISxeTKf1y2Ml8l0fUnlcnQV/LArMUSwZMAhyQYLFxrMvag93Kiyk+o
-         rgXzF2R5k8lckO/HVRNen26BJvRNU0SC5YMhd0auAvTQ6dQqce+Sz+TrJdEGUNP5gP
-         uhuBd0M6nP3FPkxnbFRv78o5outAF7pLYBRXxWTRO6i0k9TRWsmacCM6mG6aY36vI1
-         2KniNKKH4W78ldDkHY+gCKUyawFiWTBFaR3XVqCWJVZcQZinjjR9H33JyfBQk0qXIO
-         0N/PymYd9tifdimGEspYZGfkGsfEaGAm3dMD+ZAbK+0eEgGQJvePRoTE/CC2NAH222
-         0UiUBrTyfQVCWSV8PQedyGwLX/QEh9x98BnJnlUCqIPu7J57W2tWzWVuAirp1EdPec
-         EK5Ht57VCNavVXl5d41jZLG7OXYo5osfeImVkvEoryGIuy8lObCOhlYTJNX4Kmi0r2
-         FdQA/J5zBQKLrm8VZGwq9hMs=
-Received: from localhost (host-37-191-241-102.lynet.no [37.191.241.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: morten)
-        by linderud.pw (Postfix) with ESMTPSA id BFB40C007F;
-        Thu, 10 Nov 2022 01:01:34 +0100 (CET)
-Date:   Thu, 10 Nov 2022 01:01:29 +0100
-From:   Morten Linderud <morten@linderud.pw>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        jarkko@kernel.org, jmorris@namei.org, serge@hallyn.com,
-        keescook@chromium.org, torvalds@linux-foundation.org,
-        weiyongjun1@huawei.com, nayna@linux.ibm.com, ebiggers@google.com,
-        ardb@kernel.org, nramas@linux.microsoft.com, lszubowi@redhat.com,
-        jason@zx2c4.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v8 16/17] integrity: Trust MOK keys if MokListTrustedRT
- found
-Message-ID: <20221110000129.kl6pjy5mafpuptbk@framework>
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
- <20211124044124.998170-17-eric.snowberg@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211124044124.998170-17-eric.snowberg@oracle.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 11:41:23PM -0500, Eric Snowberg wrote:
-> A new Machine Owner Key (MOK) variable called MokListTrustedRT has been
-> introduced in shim. When this UEFI variable is set, it indicates the
-> end-user has made the decision themselves that they wish to trust MOK keys
-> within the Linux trust boundary.  It is not an error if this variable
-> does not exist. If it does not exist, the MOK keys should not be trusted
-> within the kernel.
+On Mon, Nov 7, 2022 at 12:11 PM Evan Green <evgreen@chromium.org> wrote:
+>
+> On Fri, Nov 4, 2022 at 11:33 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Thu, Nov 03, 2022 at 11:01:12AM -0700, Evan Green wrote:
+> > > In addition to the private key and public key, the TPM2_Create
+> > > command may also return creation data, a creation hash, and a creation
+> > > ticket. These fields allow the TPM to attest to the contents of a
+> > > specified set of PCRs at the time the trusted key was created. Encrypted
+> > > hibernation will use this to ensure that PCRs settable only by the
+> > > kernel were set properly at the time of creation, indicating this is an
+> > > authentic hibernate key.
+> > >
+> > > Encode these additional parameters into the ASN.1 created to represent
+> > > the key blob. The new fields are made optional so that they don't bloat
+> > > key blobs which don't need them, and to ensure interoperability with
+> > > old blobs.
+> > >
+> > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> >
+> > There's a lot of open-coded math for the bounds checking. I didn't
+> > immediately see any problems, but it'd be nice if there was a way to
+> > hook a fuzzer up to this, or at least write some KUnit tests to check
+> > boundary conditions explicitly.
+> >
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> Thank you! Yes, agreed about all the bounds checking. I could probably
+> pull out the "check for src + 2 > end, then get_unaligned_be16()" into
+> a helper function. Let me see if that makes things look better or ends
+> up looking the same.
 
-Hi Eric,
-
-I've been milling around on this patch-set for a while and I have a few issues
-with the description of the commit and what the code actually does.
-
-efi_mokvar_entry_find doesn't simply read an UEFI variable as the commit message
-suggests, it will look for the MOK variable loaded into the EFI configuration
-table. This implies we need this table setup in early boot to take usage of this
-patch set.
-
-The only bootloader that does setup this table, is the `shim` as described. But
-no other bootloader implements support for the MOK EFI configuration table.
-
-This effectively means that there is still no way for Machine Owners to load
-keys into the keyring, for things like module signing, without the shim present
-in the bootchain. I find this a bit weird.
-
-Is this an intentional design decision, or could other ways be supported as
-well?
-
--- 
-Morten Linderud
-PGP: 9C02FF419FECBE16
+A helper function cleaned this up nicely, so I'll send that in the
+next spin but not yet pick up your reviewed tag.
