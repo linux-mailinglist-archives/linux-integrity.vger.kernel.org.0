@@ -2,25 +2,25 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6751F623EFC
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Nov 2022 10:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22164623F00
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Nov 2022 10:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiKJJrq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Nov 2022 04:47:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
+        id S230048AbiKJJrz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Nov 2022 04:47:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiKJJrg (ORCPT
+        with ESMTP id S230022AbiKJJrq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:47:36 -0500
+        Thu, 10 Nov 2022 04:47:46 -0500
 Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEA46A777;
-        Thu, 10 Nov 2022 01:47:34 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4N7Gzp66pbz9xFHJ;
-        Thu, 10 Nov 2022 17:40:54 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D926AEF3;
+        Thu, 10 Nov 2022 01:47:41 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4N7Gzx6w8Dz9xFHR;
+        Thu, 10 Nov 2022 17:41:01 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCHc3CNyGxjO3hSAA--.1123S3;
-        Thu, 10 Nov 2022 10:47:11 +0100 (CET)
+        by APP1 (Coremail) with SMTP id LxC2BwCHc3CNyGxjO3hSAA--.1123S4;
+        Thu, 10 Nov 2022 10:47:18 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
         paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
@@ -30,35 +30,33 @@ Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
         reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org, Jeff Mahoney <jeffm@suse.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH v4 1/5] reiserfs: Add missing calls to reiserfs_security_free()
-Date:   Thu, 10 Nov 2022 10:46:35 +0100
-Message-Id: <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v4 2/5] security: Rewrite security_old_inode_init_security()
+Date:   Thu, 10 Nov 2022 10:46:36 +0100
+Message-Id: <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
 References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCHc3CNyGxjO3hSAA--.1123S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw4DZFW3Kry8GFWUur4Durg_yoW5AF4xpF
-        47K3WUGr1DJF1kWrn5AanxuF1IgrW3Gay7GrsxG3yqyanxXw18tF4Iy343CrZ3trWDJFZ3
-        ta17Cw45A345J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+X-CM-TRANSID: LxC2BwCHc3CNyGxjO3hSAA--.1123S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr47uw45CrW5tFyfWF1Utrb_yoWrWr47pF
+        43K3WUCr1rJF97WrWfta17u3WSkFWrGrsrAws3C3sFyF1DCr1xtryFyF15Cr15XrW8Jr1v
+        qw4avr15Gwn8J3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
         w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-        JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-        0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-        JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jn9N3UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj4VHBwAAs9
+        WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1sa9DUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBF1jj4FHEgAAsv
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,87 +68,123 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Commit 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes
-during inode creation") defined reiserfs_security_free() to free the name
-and value of a security xattr allocated by the active LSM through
-security_old_inode_init_security(). However, this function is not called
-in the reiserfs code.
+Rewrite security_old_inode_init_security() to call
+security_inode_init_security() before making changes to support multiple
+LSMs providing xattrs. Do it so that the required changes are done only in
+one place.
 
-Thus, add a call to reiserfs_security_free() whenever
-reiserfs_security_init() is called, and initialize value to NULL, to avoid
-to call kfree() on an uninitialized pointer.
+Define the security_initxattrs() callback and pass it to
+security_inode_init_security() as argument, to obtain the first xattr
+provided by LSMs.
 
-Finally, remove the kfree() for the xattr name, as it is not allocated
-anymore.
+This behavior is a bit different from the current one. Before this patch
+calling call_int_hook() could cause multiple LSMs to provide an xattr,
+since call_int_hook() does not stop when an LSM returns zero. The caller of
+security_old_inode_init_security() receives the last xattr set. The pointer
+of the xattr value of previous LSMs is lost, causing memory leaks.
 
-Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes during inode creation")
-Cc: stable@vger.kernel.org
-Cc: Jeff Mahoney <jeffm@suse.com>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+However, in practice, this scenario does not happen as the only in-tree
+LSMs providing an xattr at inode creation time are SELinux and Smack, which
+are mutually exclusive.
+
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- fs/reiserfs/namei.c          | 4 ++++
- fs/reiserfs/xattr_security.c | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ security/security.c | 58 +++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 48 insertions(+), 10 deletions(-)
 
-diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-index 3d7a35d6a18b..b916859992ec 100644
---- a/fs/reiserfs/namei.c
-+++ b/fs/reiserfs/namei.c
-@@ -696,6 +696,7 @@ static int reiserfs_create(struct user_namespace *mnt_userns, struct inode *dir,
- 
- out_failed:
- 	reiserfs_write_unlock(dir->i_sb);
-+	reiserfs_security_free(&security);
- 	return retval;
+diff --git a/security/security.c b/security/security.c
+index 79d82cb6e469..a0e9b4ce2341 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1089,20 +1089,34 @@ int security_dentry_create_files_as(struct dentry *dentry, int mode,
  }
+ EXPORT_SYMBOL(security_dentry_create_files_as);
  
-@@ -779,6 +780,7 @@ static int reiserfs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
- 
- out_failed:
- 	reiserfs_write_unlock(dir->i_sb);
-+	reiserfs_security_free(&security);
- 	return retval;
- }
- 
-@@ -878,6 +880,7 @@ static int reiserfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 	retval = journal_end(&th);
- out_failed:
- 	reiserfs_write_unlock(dir->i_sb);
-+	reiserfs_security_free(&security);
- 	return retval;
- }
- 
-@@ -1194,6 +1197,7 @@ static int reiserfs_symlink(struct user_namespace *mnt_userns,
- 	retval = journal_end(&th);
- out_failed:
- 	reiserfs_write_unlock(parent_dir->i_sb);
-+	reiserfs_security_free(&security);
- 	return retval;
- }
- 
-diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
-index 8965c8e5e172..857a65b05726 100644
---- a/fs/reiserfs/xattr_security.c
-+++ b/fs/reiserfs/xattr_security.c
-@@ -50,6 +50,7 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
- 	int error;
- 
- 	sec->name = NULL;
-+	sec->value = NULL;
- 
- 	/* Don't add selinux attributes on xattrs - they'll never get used */
- 	if (IS_PRIVATE(dir))
-@@ -95,7 +96,6 @@ int reiserfs_security_write(struct reiserfs_transaction_handle *th,
- 
- void reiserfs_security_free(struct reiserfs_security_handle *sec)
++static int security_initxattrs(struct inode *inode, const struct xattr *xattrs,
++			       void *fs_info)
++{
++	struct xattr *dest = (struct xattr *)fs_info;
++
++	dest->name = xattrs->name;
++	dest->value = xattrs->value;
++	dest->value_len = xattrs->value_len;
++	return 0;
++}
++
+ int security_inode_init_security(struct inode *inode, struct inode *dir,
+ 				 const struct qstr *qstr,
+ 				 const initxattrs initxattrs, void *fs_data)
  {
--	kfree(sec->name);
- 	kfree(sec->value);
- 	sec->name = NULL;
- 	sec->value = NULL;
+ 	struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+ 	struct xattr *lsm_xattr, *evm_xattr, *xattr;
+-	int ret;
++	int ret = -EOPNOTSUPP;
+ 
+ 	if (unlikely(IS_PRIVATE(inode)))
+-		return 0;
++		goto out_exit;
+ 
+-	if (!initxattrs)
+-		return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
+-				     dir, qstr, NULL, NULL, NULL);
++	if (!initxattrs ||
++	    (initxattrs == &security_initxattrs && !fs_data)) {
++		ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
++				    dir, qstr, NULL, NULL, NULL);
++		goto out_exit;
++	}
+ 	memset(new_xattrs, 0, sizeof(new_xattrs));
+ 	lsm_xattr = new_xattrs;
+ 	ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
+@@ -1118,8 +1132,19 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+ 		goto out;
+ 	ret = initxattrs(inode, new_xattrs, fs_data);
+ out:
+-	for (xattr = new_xattrs; xattr->value != NULL; xattr++)
++	for (xattr = new_xattrs; xattr->value != NULL; xattr++) {
++		/*
++		 * Xattr value freed by the caller of
++		 * security_old_inode_init_security().
++		 */
++		if (xattr == new_xattrs && initxattrs == &security_initxattrs &&
++		    !ret)
++			continue;
+ 		kfree(xattr->value);
++	}
++out_exit:
++	if (initxattrs == &security_initxattrs)
++		return ret;
+ 	return (ret == -EOPNOTSUPP) ? 0 : ret;
+ }
+ EXPORT_SYMBOL(security_inode_init_security);
+@@ -1136,10 +1161,23 @@ int security_old_inode_init_security(struct inode *inode, struct inode *dir,
+ 				     const struct qstr *qstr, const char **name,
+ 				     void **value, size_t *len)
+ {
+-	if (unlikely(IS_PRIVATE(inode)))
+-		return -EOPNOTSUPP;
+-	return call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir,
+-			     qstr, name, value, len);
++	struct xattr xattr = {};
++	struct xattr *lsm_xattr = (value) ? &xattr : NULL;
++	int ret;
++
++	ret = security_inode_init_security(inode, dir, qstr,
++					   security_initxattrs, lsm_xattr);
++	if (ret)
++		return ret;
++
++	if (name)
++		*name = lsm_xattr->name;
++	if (value)
++		*value = lsm_xattr->value;
++	if (len)
++		*len = lsm_xattr->value_len;
++
++	return 0;
+ }
+ EXPORT_SYMBOL(security_old_inode_init_security);
+ 
 -- 
 2.25.1
 
