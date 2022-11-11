@@ -2,51 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74FC626558
-	for <lists+linux-integrity@lfdr.de>; Sat, 12 Nov 2022 00:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BB362655B
+	for <lists+linux-integrity@lfdr.de>; Sat, 12 Nov 2022 00:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbiKKXTy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Nov 2022 18:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S234527AbiKKXT4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Nov 2022 18:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234320AbiKKXTp (ORCPT
+        with ESMTP id S234454AbiKKXTy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Nov 2022 18:19:45 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AD27BE42
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Nov 2022 15:19:44 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id g62so6080440pfb.10
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Nov 2022 15:19:44 -0800 (PST)
+        Fri, 11 Nov 2022 18:19:54 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23D87F556
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Nov 2022 15:19:46 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id v3so5512093pgh.4
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Nov 2022 15:19:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GWKuj/eVGsjPGfeZMJPQpDngtMSO4dbOJNBV15jTv7M=;
-        b=DG5hhRv0qxpc7vpB6DKVxAhYG849dFoxC467fVtkgj9mQ+rEHe+uxo7VDd5tqqgZ4B
-         syFdacQkQxC7N0D+1/2pJVqQtIVQ3QUgQDLUjhIw2Gb4aOCjP3+C7voHAKPTHl2tVovY
-         3sclybeIlhlxTczEC23A8WU+cHFp2XaGHWAro=
+        bh=f4s2Ct5WtJjQcbMD76vUE/8+7SYUprA4PJX2Fsa+8iU=;
+        b=GZ6Zbh1Vs7Mw1owlByqesif0CGwkiTTLoblLh+3Z+shfK2fButl+p+WzQ+ZuGJS9yu
+         CtWpS+KWD2GAMSHN3h9rSuXHypIj5ETF02SjLU9yqSry6mi/deAJywx3Mbn9MejNeUvN
+         HQAeTbh9jX0gbJZGG5RUxpk6dJb2rUYPB8knE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GWKuj/eVGsjPGfeZMJPQpDngtMSO4dbOJNBV15jTv7M=;
-        b=rbSqZLeZuNRNRwkPXPKuCQkOrJc5USsGoXtOTynrFOZBRJm5rFFaxWBkXLT6qpDuz3
-         rkIloGssk5QnCFltPcRz6dKxmWkh0GDJhKDTv5XRUykM69zMwryJD0Chok4JrYW3H1j2
-         wqnBNd2DBNrhlvIvUGf0FwIXTHqdyJGOBzz8xxcg8EkmLvFOjRKoee4krlh3ucGWaX8D
-         7d7s3kvaol7HmsRBk99gU8B0JPnW6hT4P/uWAPDkXd1pgBK0MNq4KfoYOF0EP41MCyly
-         6RshacMC2/F7YkdkfTWOCnrmT0Og3AV4eHcmfvADSvx7OfS+5gIKOo/CEX33vK9Vqhaa
-         5o9w==
-X-Gm-Message-State: ANoB5pl5a6HN8w0iyjWg/DmbcKl49PH/dPusAHJtZhpXwLCjPHQYyYHN
-        sVaakIgd/KxvzE2Lug/UPJp4DA==
-X-Google-Smtp-Source: AA0mqf4apev+7yemozCqhWY2HYZ232GudZiX3kIrKOTN5nVHHyyj9U9lRgP09L/K5/0G3oTIvRNplA==
-X-Received: by 2002:a63:ce56:0:b0:457:e41:c767 with SMTP id r22-20020a63ce56000000b004570e41c767mr3478159pgi.244.1668208783934;
-        Fri, 11 Nov 2022 15:19:43 -0800 (PST)
+        bh=f4s2Ct5WtJjQcbMD76vUE/8+7SYUprA4PJX2Fsa+8iU=;
+        b=arFnrBaBNuIEHMk3yC2l2Yo8jz3JDZp/6gIeskyfjgnjaMw/F/KMkVvWP713XtWaoH
+         2WCclH99bxC33M0igrzsnl8ZNoposdQp4hgqUc/Bt6qYvE1xgfBOOxM9RzMkGSrAwIdq
+         rCyquzQvfaiUkX2iPCg8n3Jz+c6eeDRGCTnfOtG7kdDV8f852lmyXdtlVfZOZxpa/BkF
+         LNvvZYLubfeLhF71TtgbtK/INPmwPznJIlrcf6jOKT2j6zB8M8Je7I7S7bAA9ow6NxCb
+         9ULAEAQ3I5TYKAhrEu/RdwgrmZYnyd3WgozzeDdAY909C1lP6OR6qVamwbi9fUSSmg58
+         hmVA==
+X-Gm-Message-State: ANoB5pleeWQXV2FwZb4iDh9Cff3h1pA7zYW7HhgqlCvjRS05FTQZB9/0
+        /avs+Y/1A0Dy+d34DRedYO2C4Q==
+X-Google-Smtp-Source: AA0mqf6t3ZA/Jow57kBc6udqyFPJl1GfniBVdpmvbxL+CrjkZl/mljwifHSPTUqxGcu5K9S5OSiI2Q==
+X-Received: by 2002:a63:5603:0:b0:46f:1e8e:dadc with SMTP id k3-20020a635603000000b0046f1e8edadcmr3412095pgb.561.1668208786288;
+        Fri, 11 Nov 2022 15:19:46 -0800 (PST)
 Received: from evgreen-glaptop.lan ([98.45.28.95])
-        by smtp.gmail.com with ESMTPSA id x128-20020a623186000000b0056da2ad6503sm2106900pfx.39.2022.11.11.15.19.41
+        by smtp.gmail.com with ESMTPSA id x128-20020a623186000000b0056da2ad6503sm2106900pfx.39.2022.11.11.15.19.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 15:19:43 -0800 (PST)
+        Fri, 11 Nov 2022 15:19:46 -0800 (PST)
 From:   Evan Green <evgreen@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     corbet@lwn.net, linux-integrity@vger.kernel.org,
@@ -58,11 +58,14 @@ Cc:     corbet@lwn.net, linux-integrity@vger.kernel.org,
         zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
         jarkko@kernel.org, linux-pm@vger.kernel.org,
         Evan Green <evgreen@chromium.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to kernel-only use
-Date:   Fri, 11 Nov 2022 15:16:28 -0800
-Message-Id: <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation data
+Date:   Fri, 11 Nov 2022 15:16:29 -0800
+Message-Id: <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221111231636.3748636-1-evgreen@chromium.org>
 References: <20221111231636.3748636-1-evgreen@chromium.org>
@@ -77,146 +80,466 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
-restricts usermode's ability to extend or reset PCR 23.
+In addition to the private key and public key, the TPM2_Create
+command may also return creation data, a creation hash, and a creation
+ticket. These fields allow the TPM to attest to the contents of a
+specified set of PCRs at the time the trusted key was created. Encrypted
+hibernation will use this to ensure that PCRs settable only by the
+kernel were set properly at the time of creation, indicating this is an
+authentic hibernate key.
 
-Under certain circumstances it might be desirable to enable the creation
-of TPM-backed secrets that are only accessible to the kernel. In an
-ideal world this could be achieved by using TPM localities, but these
-don't appear to be available on consumer systems. An alternative is to
-simply block userland from modifying one of the resettable PCRs, leaving
-it available to the kernel. If the kernel ensures that no userland can
-access the TPM while it is carrying out work, it can reset PCR 23,
-extend it to an arbitrary value, create or load a secret, and then reset
-the PCR again. Even if userland somehow obtains the sealed material, it
-will be unable to unseal it since PCR 23 will never be in the
-appropriate state.
+Encode these additional parameters into the ASN.1 created to represent
+the key blob. The new fields are made optional so that they don't bloat
+key blobs which don't need them, and to ensure interoperability with
+old blobs.
 
-This Kconfig is only properly supported for systems with TPM2 devices.
-For systems with TPM1 devices, having this Kconfig enabled completely
-restricts usermode's access to the TPM. TPM1 contains support for
-tunnelled transports, which usermode could use to smuggle commands
-through that this Kconfig is attempting to restrict.
-
-Link: https://lore.kernel.org/lkml/20210220013255.1083202-3-matthewgarrett@google.com/
-Co-developed-by: Matthew Garrett <mjg59@google.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
 Signed-off-by: Evan Green <evgreen@chromium.org>
-
 ---
 
 Changes in v5:
- - Change tags on RESTRICT_PCR patch (Kees)
- - Rename to TCG_TPM2_RESTRICT_PCR
- - Do nothing on TPM1.2 devices (Jarkko, Doug)
-
-Changes in v4:
- - Augment the commit message (Jarkko)
+ - Factored some math out to a helper function (Kees)
+ - Constified src in tpm2_key_encode().
 
 Changes in v3:
- - Fix up commit message (Jarkko)
- - tpm2_find_and_validate_cc() was split (Jarkko)
- - Simply fully restrict TPM1 since v2 failed to account for tunnelled
-   transport sessions (Stefan and Jarkko).
+ - Fix SoB and -- note ordering (Kees)
+ - Add comments describing the TPM2 spec type names for the new fields
+   in tpm2key.asn1 (Kees)
+ - Add len buffer checks in tpm2_key_encode() (Kees)
 
-Changes in v2:
- - Fixed sparse warnings
+This is a replacement for Matthew's original patch here:
+https://patchwork.kernel.org/patch/12096489/
 
- drivers/char/tpm/Kconfig          | 12 ++++++++++++
- drivers/char/tpm/tpm-dev-common.c |  6 ++++++
- drivers/char/tpm/tpm.h            | 12 ++++++++++++
- drivers/char/tpm/tpm2-cmd.c       | 22 ++++++++++++++++++++++
- 4 files changed, 52 insertions(+)
+That patch was written before the exported key format was switched to
+ASN.1. This patch accomplishes the same thing (saving, loading, and
+getting pointers to the creation data) while utilizing the new ASN.1
+format.
 
-diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-index 927088b2c3d3f2..e6d3aa9f6c694f 100644
---- a/drivers/char/tpm/Kconfig
-+++ b/drivers/char/tpm/Kconfig
-@@ -211,4 +211,16 @@ config TCG_FTPM_TEE
- 	  This driver proxies for firmware TPM running in TEE.
+---
+ include/keys/trusted-type.h               |   8 +
+ security/keys/trusted-keys/tpm2key.asn1   |  15 +-
+ security/keys/trusted-keys/trusted_tpm2.c | 253 +++++++++++++++++++---
+ 3 files changed, 245 insertions(+), 31 deletions(-)
+
+diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+index 4eb64548a74f1a..209086fed240a5 100644
+--- a/include/keys/trusted-type.h
++++ b/include/keys/trusted-type.h
+@@ -22,15 +22,23 @@
+ #define MAX_BLOB_SIZE			512
+ #define MAX_PCRINFO_SIZE		64
+ #define MAX_DIGEST_SIZE			64
++#define MAX_CREATION_DATA		412
++#define MAX_TK				76
  
- source "drivers/char/tpm/st33zp24/Kconfig"
-+
-+config TCG_TPM2_RESTRICT_PCR
-+	bool "Restrict userland access to PCR 23 on TPM2 devices"
-+	depends on TCG_TPM
-+	help
-+	  If set, block userland from extending or resetting PCR 23 on TPM2.0
-+	  and later systems. This allows the PCR to be restricted to in-kernel
-+	  use, preventing userland from being able to make use of data sealed to
-+	  the TPM by the kernel. This is required for secure hibernation
-+	  support, but should be left disabled if any userland may require
-+	  access to PCR23. This is a TPM2-only feature, enabling this on a TPM1
-+	  machine is effectively a no-op.
- endif # TCG_TPM
-diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-index dc4c0a0a512903..66d15a2a967443 100644
---- a/drivers/char/tpm/tpm-dev-common.c
-+++ b/drivers/char/tpm/tpm-dev-common.c
-@@ -198,6 +198,12 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
- 	priv->response_read = false;
- 	*off = 0;
+ struct trusted_key_payload {
+ 	struct rcu_head rcu;
+ 	unsigned int key_len;
+ 	unsigned int blob_len;
++	unsigned int creation_len;
++	unsigned int creation_hash_len;
++	unsigned int tk_len;
+ 	unsigned char migratable;
+ 	unsigned char old_format;
+ 	unsigned char key[MAX_KEY_SIZE + 1];
+ 	unsigned char blob[MAX_BLOB_SIZE];
++	unsigned char *creation;
++	unsigned char *creation_hash;
++	unsigned char *tk;
+ };
  
-+	if (priv->chip->flags & TPM_CHIP_FLAG_TPM2) {
-+		ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
-+		if (ret)
-+			goto out;
-+	}
-+
- 	/*
- 	 * If in nonblocking mode schedule an async job to send
- 	 * the command return the size.
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index f1e0f490176f01..7fb746d210f59d 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -245,4 +245,16 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
- void tpm_bios_log_teardown(struct tpm_chip *chip);
- int tpm_dev_common_init(void);
- void tpm_dev_common_exit(void);
-+
-+#ifdef CONFIG_TCG_TPM2_RESTRICT_PCR
-+#define TPM_RESTRICTED_PCR 23
-+
-+int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
-+#else
-+static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
-+				      size_t size)
+ struct trusted_key_options {
+diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trusted-keys/tpm2key.asn1
+index f57f869ad60068..608f8d9ca95fa8 100644
+--- a/security/keys/trusted-keys/tpm2key.asn1
++++ b/security/keys/trusted-keys/tpm2key.asn1
+@@ -7,5 +7,18 @@ TPMKey ::= SEQUENCE {
+ 	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
+ 	parent		INTEGER ({tpm2_key_parent}),
+ 	pubkey		OCTET STRING ({tpm2_key_pub}),
+-	privkey		OCTET STRING ({tpm2_key_priv})
++	privkey		OCTET STRING ({tpm2_key_priv}),
++	---
++	--- A TPM2B_CREATION_DATA struct as returned from the TPM2_Create command.
++	---
++	creationData	[1] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_data}),
++	---
++	--- A TPM2B_DIGEST of the creationHash as returned from the TPM2_Create
++	--- command.
++	---
++	creationHash	[2] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_hash}),
++	---
++	--- A TPMT_TK_CREATION ticket as returned from the TPM2_Create command.
++	---
++	creationTk	[3] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_tk})
+ 	}
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 2b2c8eb258d5bd..ff2aede8986236 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -28,24 +28,86 @@ static struct tpm2_hash tpm2_hash_map[] = {
+ 
+ static u32 tpm2key_oid[] = { 2, 23, 133, 10, 1, 5 };
+ 
++/* Helper function to advance past a __be16 length + buffer safely */
++static const u8 *get_sized_section(const u8 *src, const u8 *end, u16 *len)
 +{
-+	return 0;
++	u32 length;
++
++	if (src + sizeof(u16) > end)
++		return NULL;
++
++	/* Include the size field in the returned section length. */
++	length = get_unaligned_be16(src) + sizeof(u16);
++	*len = length;
++	if (*len != length)
++		return NULL;
++
++	src += *len;
++	if (src > end)
++		return NULL;
++
++	return src;
 +}
-+#endif
- #endif
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index 303ce2ea02a4b0..3bc5546fddc792 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -778,3 +778,25 @@ int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
++
+ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 			   struct trusted_key_options *options,
+-			   u8 *src, u32 len)
++			   const u8 *src, u32 len)
+ {
+ 	const int SCRATCH_SIZE = PAGE_SIZE;
++	const u8 *end = src + len;
+ 	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+ 	u8 *work = scratch, *work1;
+ 	u8 *end_work = scratch + SCRATCH_SIZE;
+-	u8 *priv, *pub;
++	const u8 *priv, *pub;
++	const u8 *creation_data = NULL, *creation_hash = NULL, *creation_tk = NULL;
++	u16 creation_data_len, creation_hash_len = 0, creation_tk_len = 0;
+ 	u16 priv_len, pub_len;
++	int rc;
  
- 	return -1;
- }
+-	priv_len = get_unaligned_be16(src) + 2;
+ 	priv = src;
++	src = get_sized_section(src, end, &priv_len);
++	if (!src)
++		return -EINVAL;
+ 
+-	src += priv_len;
+-
+-	pub_len = get_unaligned_be16(src) + 2;
+ 	pub = src;
++	src = get_sized_section(src, end, &pub_len);
++	if (!src)
++		return -EINVAL;
 +
-+#ifdef CONFIG_TCG_TPM2_RESTRICT_PCR
-+int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
-+{
-+	int cc = tpm2_find_and_validate_cc(chip, NULL, buffer, size);
-+	__be32 *handle;
++	creation_data = src;
++	src = get_sized_section(src, end, &creation_data_len);
++	if (!src)
++		return -EINVAL;
 +
-+	switch (cc) {
-+	case TPM2_CC_PCR_EXTEND:
-+	case TPM2_CC_PCR_RESET:
-+		if (size < (TPM_HEADER_SIZE + sizeof(u32)))
++	/*
++	 * If the creation data has content, pull out the creation hash and
++	 * ticket as well. Otherwise pretend it doesn't exist.
++	 */
++	if (creation_data_len > sizeof(u16)) {
++		creation_hash = src;
++		src = get_sized_section(src, end, &creation_hash_len);
++		if (!src)
 +			return -EINVAL;
 +
-+		handle = (__be32 *)&buffer[TPM_HEADER_SIZE];
-+		if (be32_to_cpu(*handle) == TPM_RESTRICTED_PCR)
-+			return -EPERM;
-+		break;
++		/*
++		 * The creation ticket (TPMT_TK_CREATION) consists of a 2 byte
++		 * tag, 4 byte handle, and then a TPM2B_DIGEST, which is a 2
++		 * byte length followed by data.
++		 */
++		if (src + 8 > end)
++			return -EINVAL;
++
++		creation_tk = src;
++		src = get_sized_section(src + 6, end, &creation_tk_len);
++		if (!src)
++			return -EINVAL;
++
++		creation_tk_len += 6;
++
++	} else {
++		creation_data_len = 0;
++		creation_data = NULL;
 +	}
+ 
+ 	if (!scratch)
+ 		return -ENOMEM;
+@@ -63,26 +125,81 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 	}
+ 
+ 	/*
+-	 * Assume both octet strings will encode to a 2 byte definite length
++	 * Assume each octet string will encode to a 2 byte definite length.
++	 * Each optional octet string consumes one extra byte.
+ 	 *
+-	 * Note: For a well behaved TPM, this warning should never
+-	 * trigger, so if it does there's something nefarious going on
++	 * Note: For a well behaved TPM, this warning should never trigger, so
++	 * if it does there's something nefarious going on
+ 	 */
+-	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+-		 "BUG: scratch buffer is too small"))
+-		return -EINVAL;
++	if (WARN(work - scratch + pub_len + priv_len + creation_data_len +
++		 creation_hash_len + creation_tk_len + (7 * 5) + 3 >
++		 SCRATCH_SIZE,
++		 "BUG: scratch buffer is too small")) {
++		rc = -EINVAL;
++		goto err;
++	}
+ 
+ 	work = asn1_encode_integer(work, end_work, options->keyhandle);
+ 	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+ 	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
++	if (creation_data_len) {
++		u8 *scratch2 = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
++		u8 *work2;
++		u8 *end_work2 = scratch2 + SCRATCH_SIZE;
++
++		if (!scratch2) {
++			rc = -ENOMEM;
++			goto err;
++		}
++
++		work2 = asn1_encode_octet_string(scratch2,
++						 end_work2,
++						 creation_data,
++						 creation_data_len);
++
++		work = asn1_encode_tag(work,
++				       end_work,
++				       1,
++				       scratch2,
++				       work2 - scratch2);
++
++		work2 = asn1_encode_octet_string(scratch2,
++						 end_work2,
++						 creation_hash,
++						 creation_hash_len);
++
++		work = asn1_encode_tag(work,
++				       end_work,
++				       2,
++				       scratch2,
++				       work2 - scratch2);
++
++		work2 = asn1_encode_octet_string(scratch2,
++						 end_work2,
++						 creation_tk,
++						 creation_tk_len);
++
++		work = asn1_encode_tag(work,
++				       end_work,
++				       3,
++				       scratch2,
++				       work2 - scratch2);
++
++		kfree(scratch2);
++	}
+ 
+ 	work1 = payload->blob;
+ 	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
+ 				     scratch, work - scratch);
+-	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+-		return PTR_ERR(work1);
++	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
++		rc = PTR_ERR(work1);
++		goto err;
++	}
+ 
+ 	return work1 - payload->blob;
++err:
++	kfree(scratch);
++	return rc;
+ }
+ 
+ struct tpm2_key_context {
+@@ -91,15 +208,21 @@ struct tpm2_key_context {
+ 	u32 pub_len;
+ 	const u8 *priv;
+ 	u32 priv_len;
++	const u8 *creation_data;
++	u32 creation_data_len;
++	const u8 *creation_hash;
++	u32 creation_hash_len;
++	const u8 *creation_tk;
++	u32 creation_tk_len;
+ };
+ 
+ static int tpm2_key_decode(struct trusted_key_payload *payload,
+-			   struct trusted_key_options *options,
+-			   u8 **buf)
++			   struct trusted_key_options *options)
+ {
++	u64 data_len;
+ 	int ret;
+ 	struct tpm2_key_context ctx;
+-	u8 *blob;
++	u8 *blob, *buf;
+ 
+ 	memset(&ctx, 0, sizeof(ctx));
+ 
+@@ -108,21 +231,57 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
++	data_len = ctx.priv_len + ctx.pub_len + ctx.creation_data_len +
++		   ctx.creation_hash_len + ctx.creation_tk_len;
++
++	if (data_len > MAX_BLOB_SIZE)
+ 		return -EINVAL;
+ 
+-	blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
+-	if (!blob)
++	buf = kmalloc(data_len + 4, GFP_KERNEL);
++	if (!buf)
+ 		return -ENOMEM;
+ 
+-	*buf = blob;
++	blob = buf;
+ 	options->keyhandle = ctx.parent;
+ 
+ 	memcpy(blob, ctx.priv, ctx.priv_len);
+ 	blob += ctx.priv_len;
+ 
+ 	memcpy(blob, ctx.pub, ctx.pub_len);
++	blob += ctx.pub_len;
++	if (ctx.creation_data_len) {
++		memcpy(blob, ctx.creation_data, ctx.creation_data_len);
++		blob += ctx.creation_data_len;
++	}
+ 
++	if (ctx.creation_hash_len) {
++		memcpy(blob, ctx.creation_hash, ctx.creation_hash_len);
++		blob += ctx.creation_hash_len;
++	}
++
++	if (ctx.creation_tk_len) {
++		memcpy(blob, ctx.creation_tk, ctx.creation_tk_len);
++		blob += ctx.creation_tk_len;
++	}
++
++	/*
++	 * Copy the buffer back into the payload blob since the creation
++	 * info will be used after loading.
++	 */
++	payload->blob_len = blob - buf;
++	memcpy(payload->blob, buf, payload->blob_len);
++	if (ctx.creation_data_len) {
++		payload->creation = payload->blob + ctx.priv_len + ctx.pub_len;
++		payload->creation_len = ctx.creation_data_len;
++		payload->creation_hash = payload->creation + ctx.creation_data_len;
++		payload->creation_hash_len = ctx.creation_hash_len;
++		payload->tk = payload->creation_hash +
++			      payload->creation_hash_len;
++
++		payload->tk_len = ctx.creation_tk_len;
++	}
++
++	kfree(buf);
+ 	return 0;
+ }
+ 
+@@ -185,6 +344,42 @@ int tpm2_key_priv(void *context, size_t hdrlen,
+ 	return 0;
+ }
+ 
++int tpm2_key_creation_data(void *context, size_t hdrlen,
++			   unsigned char tag,
++			   const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++
++	ctx->creation_data = value;
++	ctx->creation_data_len = vlen;
 +
 +	return 0;
 +}
-+#endif
++
++int tpm2_key_creation_hash(void *context, size_t hdrlen,
++			   unsigned char tag,
++			   const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++
++	ctx->creation_hash = value;
++	ctx->creation_hash_len = vlen;
++
++	return 0;
++}
++
++int tpm2_key_creation_tk(void *context, size_t hdrlen,
++			 unsigned char tag,
++			 const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++
++	ctx->creation_tk = value;
++	ctx->creation_tk_len = vlen;
++
++	return 0;
++}
++
+ /**
+  * tpm_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+  *
+@@ -229,6 +424,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 		      struct trusted_key_options *options)
+ {
+ 	int blob_len = 0;
++	unsigned int offset;
+ 	struct tpm_buf buf;
+ 	u32 hash;
+ 	u32 flags;
+@@ -317,13 +513,14 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 		rc = -E2BIG;
+ 		goto out;
+ 	}
+-	if (tpm_buf_length(&buf) < TPM_HEADER_SIZE + 4 + blob_len) {
++	offset = TPM_HEADER_SIZE + 4;
++	if (tpm_buf_length(&buf) < offset + blob_len) {
+ 		rc = -EFAULT;
+ 		goto out;
+ 	}
+ 
+ 	blob_len = tpm2_key_encode(payload, options,
+-				   &buf.data[TPM_HEADER_SIZE + 4],
++				   &buf.data[offset],
+ 				   blob_len);
+ 
+ out:
+@@ -370,13 +567,11 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 	int rc;
+ 	u32 attrs;
+ 
+-	rc = tpm2_key_decode(payload, options, &blob);
+-	if (rc) {
+-		/* old form */
+-		blob = payload->blob;
++	rc = tpm2_key_decode(payload, options);
++	if (rc)
+ 		payload->old_format = 1;
+-	}
+ 
++	blob = payload->blob;
+ 	/* new format carries keyhandle but old format doesn't */
+ 	if (!options->keyhandle)
+ 		return -EINVAL;
+@@ -433,8 +628,6 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
+ 
+ out:
+-	if (blob != payload->blob)
+-		kfree(blob);
+ 	tpm_buf_destroy(&buf);
+ 
+ 	if (rc > 0)
 -- 
 2.38.1.431.g37b22c650d-goog
 
