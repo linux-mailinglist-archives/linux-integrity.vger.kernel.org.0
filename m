@@ -2,78 +2,78 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63179626299
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Nov 2022 21:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74F6626550
+	for <lists+linux-integrity@lfdr.de>; Sat, 12 Nov 2022 00:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbiKKULF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Nov 2022 15:11:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S233220AbiKKXTm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Nov 2022 18:19:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbiKKUK5 (ORCPT
+        with ESMTP id S234248AbiKKXTk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Nov 2022 15:10:57 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4763C862E0
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Nov 2022 12:10:44 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id i10so6351456ejg.6
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Nov 2022 12:10:44 -0800 (PST)
+        Fri, 11 Nov 2022 18:19:40 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05E982C46
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Nov 2022 15:19:37 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id p12so5382634plq.4
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Nov 2022 15:19:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VR4/vWLNP/xpllzCte/Py275g7C9+fB697+OV9oedrk=;
-        b=ktkdUhxKAfB314ijcJ1QieX1M1io04hxWDfVwpSkQEyO9bXAXAwl4af3V9ngsWDdBJ
-         MeCQThrc8DPsqV6JDLqTp43noqe1xjn3mxIzv3W4AIMIJpu8z2GASEntjNl6CQWXP8Zt
-         +ut9MSQPxL1QlapXYkVX5MMvOEjz6lTnoIIVg=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PIpB8rVITnQiLV75Iez0MoucLLsKoDwgwgSNeYFDxFo=;
+        b=nzk9QqkNZX6pz5oA5R++fU/7JJn/1lgiJKup4h+DQwJ2d+UJ/iUfN4nEe+UxgtPrh0
+         0eLwsuSIesIh7+nq66CIeRuJ/z5EBlEFrcEZ9FA4C7hKF7HJ6iLQL1Y0iCXNA66p+++E
+         Nfr0JeWf20MCEDbV1f6F3zZlxQsX/IgQDTWSc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VR4/vWLNP/xpllzCte/Py275g7C9+fB697+OV9oedrk=;
-        b=HQDPTtQz2V3okqMIjN9PleIphCIlVPnsmoY5i7GdoEGyV/+1f4fSip4/TS3u3ggNgh
-         id54F+IYOD9Gc2O67XjuCLHDDvD9/SUCtiiXODolnl4nNgin4AkxmoAYT7CZsJZr8Oi6
-         X5nz3sWrJ24JJHt+suFHQTydw6s8RLTR1tbrfZ6UFYoLYmb999u056lyZetMSSdKKQxP
-         qDaIHELPq7h8mCK/j6IyNK3Tex3S3T+LoRs8czsLRrHNV93sEplpvu9Q/1EFKKbwfCvn
-         9nyk3VUc2nHtX5TJk+6FXxNF1h/W0CEDZsKP9vXZ53V2KvzTYSflNvNSBvfridgH17ec
-         rb4g==
-X-Gm-Message-State: ANoB5pkExcNn24u0eWNQ97kc56S03mkPnZauCY+gQ/lH8SnA4OmHgYA3
-        XmLER26Zk2z3UFPJ+PsPXUQQ/i64zBJyvw==
-X-Google-Smtp-Source: AA0mqf5GvaNc/Ss1YLncY4R08cLQMKVNPkC1foei/UHXitoOzl1nt3ngtNpuZiQXBzDN6gO7RJU9ug==
-X-Received: by 2002:a17:906:3547:b0:7aa:40ea:faae with SMTP id s7-20020a170906354700b007aa40eafaaemr3159902eja.551.1668197442514;
-        Fri, 11 Nov 2022 12:10:42 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170906218200b007aed2057eacsm631445eju.221.2022.11.11.12.10.42
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 12:10:42 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso3793311wmo.1
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Nov 2022 12:10:42 -0800 (PST)
-X-Received: by 2002:a05:600c:4f53:b0:3cf:8896:e1de with SMTP id
- m19-20020a05600c4f5300b003cf8896e1demr2381421wmq.4.1668197088361; Fri, 11 Nov
- 2022 12:04:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20221103180120.752659-1-evgreen@chromium.org> <20221103105558.v4.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <Y2jujfZ01h5JriYc@kernel.org> <CAE=gft750QYs-AWQ9MC1Z1E==v=m-tf4aKUWjrjBtoWqRJz5dQ@mail.gmail.com>
-In-Reply-To: <CAE=gft750QYs-AWQ9MC1Z1E==v=m-tf4aKUWjrjBtoWqRJz5dQ@mail.gmail.com>
+        bh=PIpB8rVITnQiLV75Iez0MoucLLsKoDwgwgSNeYFDxFo=;
+        b=WyHDQEOTi+Bt0EPrtgCOZjOlF+crLAXBJzvJowyPv0TWHkQhayMVkBDCLzbQ64wEfN
+         QBopfGydsObuhyo1Ky7oJynYzHq9ID86/J/LrY1fFF6ZeDV0K20HQHQR1BqZii6GRUaw
+         ixqQjWawijLrIACQaSB0imlmq+7O8JYlZI0+/4Ocz8b9R2XtsnsaJHacQx4FmB+5RH86
+         /yCvPBETrYAv4Tx1K/kB6uyKiytbLkrPfYW4o+aCCo55VvMDED0VcBGNXoVlkWlElydl
+         JyINt3pYJADwO1sNz4LxDKkAABIdBMUpMFzmbGZGivPx8CsX+tKG170Z9WvCgghMVQfB
+         IVmA==
+X-Gm-Message-State: ANoB5pn7XBdBf5gCWmCdEgM32gvrmtE1//sEdcaI0eOZbCtvhBuLdH7s
+        Dmk+6oU14PWppAmKHI7yFVaqaQ==
+X-Google-Smtp-Source: AA0mqf6T1tTau3QB8qtxBh7OFdBlmkbKx4ENAq7cmsEFPewbtal5FGCTC12Ni1swMo1dVhLLLjGy3w==
+X-Received: by 2002:a17:902:8f89:b0:187:a98:7ee5 with SMTP id z9-20020a1709028f8900b001870a987ee5mr4588805plo.142.1668208777361;
+        Fri, 11 Nov 2022 15:19:37 -0800 (PST)
+Received: from evgreen-glaptop.lan ([98.45.28.95])
+        by smtp.gmail.com with ESMTPSA id x128-20020a623186000000b0056da2ad6503sm2106900pfx.39.2022.11.11.15.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 15:19:37 -0800 (PST)
 From:   Evan Green <evgreen@chromium.org>
-Date:   Fri, 11 Nov 2022 12:04:11 -0800
-X-Gmail-Original-Message-ID: <CAE=gft628xoHYRp2Y8DE94ZVbx5TeMz8Gn3AvqeyCx4LZuTUeg@mail.gmail.com>
-Message-ID: <CAE=gft628xoHYRp2Y8DE94ZVbx5TeMz8Gn3AvqeyCx4LZuTUeg@mail.gmail.com>
-Subject: Re: [PATCH v4 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
-        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, dlunev@google.com,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ben Boeckel <me@benboeckel.net>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
+To:     linux-kernel@vger.kernel.org
+Cc:     corbet@lwn.net, linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, jejb@linux.ibm.com,
+        Kees Cook <keescook@chromium.org>, dlunev@google.com,
+        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
+        jarkko@kernel.org, linux-pm@vger.kernel.org,
+        Evan Green <evgreen@chromium.org>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v5 00/11] Encrypted Hibernation
+Date:   Fri, 11 Nov 2022 15:16:25 -0800
+Message-Id: <20221111231636.3748636-1-evgreen@chromium.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -84,210 +84,192 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 10:15 AM Evan Green <evgreen@chromium.org> wrote:
->
-> On Mon, Nov 7, 2022 at 3:40 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Thu, Nov 03, 2022 at 11:01:11AM -0700, Evan Green wrote:
-> > > From: Matthew Garrett <matthewgarrett@google.com>
-> > >
-> > > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
-> > > restricts usermode's ability to extend or reset PCR 23.
-> > >
-> > > Under certain circumstances it might be desirable to enable the creation
-> > > of TPM-backed secrets that are only accessible to the kernel. In an
-> > > ideal world this could be achieved by using TPM localities, but these
-> > > don't appear to be available on consumer systems. An alternative is to
-> > > simply block userland from modifying one of the resettable PCRs, leaving
-> > > it available to the kernel. If the kernel ensures that no userland can
-> > > access the TPM while it is carrying out work, it can reset PCR 23,
-> > > extend it to an arbitrary value, create or load a secret, and then reset
-> > > the PCR again. Even if userland somehow obtains the sealed material, it
-> > > will be unable to unseal it since PCR 23 will never be in the
-> > > appropriate state.
-> > >
-> > > This Kconfig is only properly supported for systems with TPM2 devices.
-> > > For systems with TPM1 devices, having this Kconfig enabled completely
-> > > restricts usermode's access to the TPM. TPM1 contains support for
-> > > tunnelled transports, which usermode could use to smuggle commands
-> > > through that this Kconfig is attempting to restrict.
-> > >
-> > > Link: https://lore.kernel.org/lkml/20210220013255.1083202-3-matthewgarrett@google.com/
-> > > Signed-off-by: Matthew Garrett <mjg59@google.com>
-> > > Signed-off-by: Evan Green <evgreen@chromium.org>
-> > > ---
-> > >
-> > > Changes in v4:
-> > >  - Augment the commit message (Jarkko)
-> > >
-> > > Changes in v3:
-> > >  - Fix up commit message (Jarkko)
-> > >  - tpm2_find_and_validate_cc() was split (Jarkko)
-> > >  - Simply fully restrict TPM1 since v2 failed to account for tunnelled
-> > >    transport sessions (Stefan and Jarkko).
-> > >
-> > > Changes in v2:
-> > >  - Fixed sparse warnings
-> > >
-> > >  drivers/char/tpm/Kconfig          | 12 ++++++++++++
-> > >  drivers/char/tpm/tpm-dev-common.c |  8 ++++++++
-> > >  drivers/char/tpm/tpm.h            | 19 +++++++++++++++++++
-> > >  drivers/char/tpm/tpm1-cmd.c       | 13 +++++++++++++
-> > >  drivers/char/tpm/tpm2-cmd.c       | 22 ++++++++++++++++++++++
-> > >  5 files changed, 74 insertions(+)
-> > >
-> > > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> > > index 927088b2c3d3f2..c8ed54c66e399a 100644
-> > > --- a/drivers/char/tpm/Kconfig
-> > > +++ b/drivers/char/tpm/Kconfig
-> > > @@ -211,4 +211,16 @@ config TCG_FTPM_TEE
-> > >         This driver proxies for firmware TPM running in TEE.
-> > >
-> > >  source "drivers/char/tpm/st33zp24/Kconfig"
-> > > +
-> > > +config TCG_TPM_RESTRICT_PCR
-> > > +     bool "Restrict userland access to PCR 23"
-> > > +     depends on TCG_TPM
-> > > +     help
-> > > +       If set, block userland from extending or resetting PCR 23. This allows it
-> > > +       to be restricted to in-kernel use, preventing userland from being able to
-> > > +       make use of data sealed to the TPM by the kernel. This is required for
-> > > +       secure hibernation support, but should be left disabled if any userland
-> > > +       may require access to PCR23. This is a TPM2-only feature, and if enabled
-> > > +       on a TPM1 machine will cause all usermode TPM commands to return EPERM due
-> > > +       to the complications introduced by tunnelled sessions in TPM1.2.
-> > >  endif # TCG_TPM
-> > > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-> > > index dc4c0a0a512903..7a4e618c7d1942 100644
-> > > --- a/drivers/char/tpm/tpm-dev-common.c
-> > > +++ b/drivers/char/tpm/tpm-dev-common.c
-> > > @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
-> > >       priv->response_read = false;
-> > >       *off = 0;
-> > >
-> > > +     if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
-> > > +             ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
-> > > +     else
-> > > +             ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
-> > > +
-> > > +     if (ret)
-> > > +             goto out;
-> > > +
-> > >       /*
-> > >        * If in nonblocking mode schedule an async job to send
-> > >        * the command return the size.
-> > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > > index f1e0f490176f01..c0845e3f9eda17 100644
-> > > --- a/drivers/char/tpm/tpm.h
-> > > +++ b/drivers/char/tpm/tpm.h
-> > > @@ -245,4 +245,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
-> > >  void tpm_bios_log_teardown(struct tpm_chip *chip);
-> > >  int tpm_dev_common_init(void);
-> > >  void tpm_dev_common_exit(void);
-> > > +
-> > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> > > +#define TPM_RESTRICTED_PCR 23
-> > > +
-> > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
-> > > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
-> > > +#else
-> > > +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
-> > > +                                   size_t size)
-> > > +{
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
-> > > +                                   size_t size)
-> > > +{
-> > > +     return 0;
-> > > +}
-> > > +#endif
-> > >  #endif
-> > > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> > > index cf64c738510529..1869e89215fcb9 100644
-> > > --- a/drivers/char/tpm/tpm1-cmd.c
-> > > +++ b/drivers/char/tpm/tpm1-cmd.c
-> > > @@ -811,3 +811,16 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
-> > >
-> > >       return 0;
-> > >  }
-> > > +
-> > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
-> > > +{
-> > > +     /*
-> > > +      * Restrict all usermode commands on TPM1.2. Ideally we'd just restrict
-> > > +      * TPM_ORD_PCR_EXTEND and TPM_ORD_PCR_RESET, but TPM1.2 also supports
-> > > +      * tunnelled transport sessions where the kernel would be unable to filter
-> > > +      * commands.
-> > > +      */
-> > > +     return -EPERM;
-> > > +}
-> > > +#endif
-> > > diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> > > index 303ce2ea02a4b0..e0503cfd7bcfee 100644
-> > > --- a/drivers/char/tpm/tpm2-cmd.c
-> > > +++ b/drivers/char/tpm/tpm2-cmd.c
-> > > @@ -778,3 +778,25 @@ int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
-> > >
-> > >       return -1;
-> > >  }
-> > > +
-> > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
-> > > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
-> > > +{
-> > > +     int cc = tpm2_find_and_validate_cc(chip, NULL, buffer, size);
-> > > +     __be32 *handle;
-> > > +
-> > > +     switch (cc) {
-> > > +     case TPM2_CC_PCR_EXTEND:
-> > > +     case TPM2_CC_PCR_RESET:
-> > > +             if (size < (TPM_HEADER_SIZE + sizeof(u32)))
-> > > +                     return -EINVAL;
-> > > +
-> > > +             handle = (__be32 *)&buffer[TPM_HEADER_SIZE];
-> > > +             if (be32_to_cpu(*handle) == TPM_RESTRICTED_PCR)
-> > > +                     return -EPERM;
-> > > +             break;
-> > > +     }
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +#endif
-> > > --
-> > > 2.38.1.431.g37b22c650d-goog
-> > >
-> >
-> > This looks otherwise good but I have still one remark: what is the reason
-> > for restricting PCR23 for TPM 1.x?
->
-> Mostly I was trying to do the least surprising thing for someone who
-> had compiled with this RESTRICT_PCR Kconfig enabled but booted a TPM1
-> system. If we do nothing for TPM1, then the encrypted hibernation
-> mechanism appears to work fine, but leaves a gaping hole where
-> usermode can manipulate PCR23 themselves to create forged encrypted
-> hibernate images. Denying all usermode access makes the Kconfig
-> correct on TPM1 systems, at the expense of all usermode access (rather
-> than just access to PCR23).
->
-> An alternative that might be friendlier to users would be to do a
-> runtime check in the encrypted hibernate code to simply fail if this
-> isn't TPM2. The tradeoff there is that it waters down the Kconfig
-> significantly to "RESTRICT_PCR sometimes, if you can, otherwise meh".
-> That seemed a bit dangerous, as any future features that may want to
-> rely on this Kconfig would have to remember to restrict their support
-> to TPM2 as well.
+We are exploring enabling hibernation in some new scenarios. However,
+our security team has a few requirements, listed below:
+1. The hibernate image must be encrypted with protection derived from
+   both the platform (eg TPM) and user authentication data (eg
+   password).
+2. Hibernation must not be a vector by which a malicious userspace can
+   escalate to the kernel.
 
-I got talked into revising my stance here, in that breaking usermode
-access to TPM1.2 if this Kconfig is set means virtually nobody can
-enable this Kconfig. Plus I think doing nothing for TPM1.2 will make
-Jarkko happier :). So my new plan is to rename this config to
-TCG_TPM2_RESTRICT_PCR, and then try to document very clearly that this
-Kconfig only restricts usermode access to the PCR on TPM2.0 devices.
-The hibernate code already blocks TPM1.2 devices, so from this series'
-perspective the upcoming change should be a no-op.
+Requirement #1 can be achieved solely with uswsusp, however requirement
+2 necessitates mechanisms in the kernel to guarantee integrity of the
+hibernate image. The kernel needs a way to authenticate that it generated
+the hibernate image being loaded, and that the image has not been tampered
+with. Adding support for in-kernel AEAD encryption with a TPM-sealed key
+allows us to achieve both requirements with a single computation pass.
 
+Matthew Garrett published a series [1] that aligns closely with this
+goal. His series utilized the fact that PCR23 is a resettable PCR that
+can be blocked from access by usermode. The TPM can create a sealed key
+tied to PCR23 in two ways. First, the TPM can attest to the value of
+PCR23 when the key was created, which the kernel can use on resume to
+verify that the kernel must have created the key (since it is the only
+one capable of modifying PCR23). It can also create a policy that enforces
+PCR23 be set to a specific value as a condition of unsealing the key,
+preventing usermode from unsealing the key by talking directly to the
+TPM.
 
+This series adopts that primitive as a foundation, tweaking and building
+on it a bit. Where Matthew's series used the TPM-backed key to encrypt a
+hash of the image, this series uses the key directly as a gcm(aes)
+encryption key, which the kernel uses to encrypt and decrypt the
+hibernate image in chunks of 16 pages. This provides both encryption and
+integrity, which turns out to be a noticeable performance improvement over
+separate passes for encryption and hashing.
 
--Evan
+The series also introduces the concept of mixing user key material into
+the encryption key. This allows usermode to introduce key material
+based on unspecified external authentication data (in our case derived
+from something like the user password or PIN), without requiring
+usermode to do a separate encryption pass.
+
+Matthew also documented issues his series had [2] related to generating
+fake images by booting alternate kernels without the PCR23 limiting.
+With access to PCR23 on the same machine, usermode can create fake
+hibernate images that are indistinguishable to the new kernel from
+genuine ones. His post outlines a solution that involves adding more
+PCRs into the creation data and policy, with some gyrations to make this
+work well on a standard PC.
+
+Our approach would be similar: on our machines PCR 0 indicates whether
+the system is booted in secure/verified mode or developer mode. By
+adding PCR0 to the policy, we can reject hibernate images made in
+developer mode while in verified mode (or vice versa).
+
+Additionally, mixing in the user authentication data limits both
+data exfiltration attacks (eg a stolen laptop) and forged hibernation
+image attacks to attackers that already know the authentication data (eg
+user's password). This, combined with our relatively sealed userspace
+(dm-verity on the rootfs), and some judicious clearing of the hibernate
+image (such as across an OS update) further reduce the risk of an online
+attack. The remaining attack space of a forgery from someone with
+physical access to the device and knowledge of the authentication data
+is out of scope for us, given that flipping to developer mode or
+reflashing RO firmware trivially achieves the same thing.
+
+A couple of patches still need to be written on top of this series. The
+generalized functionality to OR in additional PCRs via Kconfig (like PCR
+0 or 5) still needs to be added. We'll also need a patch that disallows
+unencrypted forms of resume from hibernation, to fully close the door
+to malicious userspace. However, I wanted to get this series out first
+and get reactions from upstream before continuing to add to it.
+
+[1] https://patchwork.kernel.org/project/linux-pm/cover/20210220013255.1083202-1-matthewgarrett@google.com/
+[2] https://mjg59.dreamwidth.org/58077.html
+
+Changes in v5:
+ - Change to co-developed by Matthew (Kees)
+ - Change tags on RESTRICT_PCR patch (Kees)
+ - Rename to TCG_TPM2_RESTRICT_PCR
+ - Do nothing on TPM1.2 devices (Jarkko, Doug)
+ - Factored some math out to a helper function (Kees)
+ - Constified src in tpm2_key_encode().
+ - Make Matthew's tag match author
+ - Removed default n in Kconfig (Kees)
+ - Expanded commit message (Jarkko)
+ - Use Suggested-by tag instead of made up Sourced-from (Kees)
+ - ENCRYPTED_HIBERNATION should depend on TCG_TPM2_RESTRCT_PCR
+ - Remove pad struct member (Kees)
+ - Use a struct to access creation data (Kees)
+ - Build PCR bitmask programmatically in creation data (Kees)
+
+Changes in v4:
+ - Open code tpm2_pcr_reset implementation in tpm-interface.c (Jarkko)
+ - Rename interface symbol to tpm2_pcr_reset, fix kerneldocs (Jarkko)
+ - Augment the commit message (Jarkko)
+ - Local ordering and whitespace changes (Jarkko)
+ - s/tpm_pcr_reset/tpm2_pcr_reset/ due to change in other patch
+ - Variable ordering and whitespace fixes (Jarkko)
+ - Add NULL check explanation in teardown (Jarkko)
+ - Change strlen+1 to sizeof for static buffer (Jarkko)
+ - Fix nr_allocated_banks loop overflow (found via KASAN)
+ - Local variable reordering (Jarkko)
+ - Local variable ordering (Jarkko)
+
+Changes in v3:
+ - Unify tpm1/2_pcr_reset prototypes (Jarkko)
+ - Wait no, remove the TPM1 stuff altogether (Jarkko)
+ - Remove extra From tag and blank in commit msg (Jarkko).
+ - Split find_and_validate_cc() export to its own patch (Jarkko)
+ - Rename tpm_find_and_validate_cc() to tpm2_find_and_validate_cc().
+ - Fix up commit message (Jarkko)
+ - tpm2_find_and_validate_cc() was split (Jarkko)
+ - Simply fully restrict TPM1 since v2 failed to account for tunnelled
+   transport sessions (Stefan and Jarkko).
+ - Fix SoB and -- note ordering (Kees)
+ - Add comments describing the TPM2 spec type names for the new fields
+   in tpm2key.asn1 (Kees)
+ - Add len buffer checks in tpm2_key_encode() (Kees)
+ - Clarified creationpcrs documentation (Ben)
+ - Changed funky tag to suggested-by (Kees). Matthew, holler if you want
+   something different.
+ - ENCRYPTED_HIBERNATION needs TRUSTED_KEYS builtin for
+   key_type_trusted.
+ - Remove KEYS dependency since it's covered by TRUSTED_KEYS (Kees)
+ - Changed funky tag to Co-developed-by (Kees). Matthew, holler if you
+   want something different.
+ - Changed funky tag to Co-developed-by (Kees)
+
+Changes in v2:
+ - Fixed sparse warnings
+ - Adjust hash len by 2 due to new ASN.1 storage, and add underflow
+   check.
+ - Rework load/create_kernel_key() to eliminate a label (Andrey)
+ - Call put_device() needed from calling tpm_default_chip().
+ - Add missing static on snapshot_encrypted_byte_count()
+ - Fold in only the used kernel key bytes to the user key.
+ - Make the user key length 32 (Eric)
+ - Use CRYPTO_LIB_SHA256 for less boilerplate (Eric)
+ - Fixed some sparse warnings
+ - Use CRYPTO_LIB_SHA256 to get rid of sha256_data() (Eric)
+ - Adjusted offsets due to new ASN.1 format, and added a creation data
+   length check.
+ - Fix sparse warnings
+ - Fix session type comment (Andrey)
+ - Eliminate extra label in get/create_kernel_key() (Andrey)
+ - Call tpm_try_get_ops() before calling tpm2_flush_context().
+
+Evan Green (10):
+  tpm: Add support for in-kernel resetting of PCRs
+  tpm: Export and rename tpm2_find_and_validate_cc()
+  tpm: Allow PCR 23 to be restricted to kernel-only use
+  security: keys: trusted: Include TPM2 creation data
+  security: keys: trusted: Verify creation data
+  PM: hibernate: Add kernel-based encryption
+  PM: hibernate: Use TPM-backed keys to encrypt image
+  PM: hibernate: Mix user key in encrypted hibernate
+  PM: hibernate: Verify the digest encryption key
+  PM: hibernate: seal the encryption key with a PCR policy
+
+Matthew Garrett (1):
+  security: keys: trusted: Allow storage of PCR values in creation data
+
+ Documentation/power/userland-swsusp.rst       |    8 +
+ .../security/keys/trusted-encrypted.rst       |    6 +
+ drivers/char/tpm/Kconfig                      |   12 +
+ drivers/char/tpm/tpm-dev-common.c             |    6 +
+ drivers/char/tpm/tpm-interface.c              |   47 +
+ drivers/char/tpm/tpm.h                        |   15 +
+ drivers/char/tpm/tpm2-cmd.c                   |   29 +-
+ drivers/char/tpm/tpm2-space.c                 |    8 +-
+ include/keys/trusted-type.h                   |    9 +
+ include/linux/tpm.h                           |   19 +
+ include/uapi/linux/suspend_ioctls.h           |   28 +-
+ kernel/power/Kconfig                          |   15 +
+ kernel/power/Makefile                         |    1 +
+ kernel/power/power.h                          |    1 +
+ kernel/power/snapenc.c                        | 1105 +++++++++++++++++
+ kernel/power/snapshot.c                       |    5 +
+ kernel/power/user.c                           |   44 +-
+ kernel/power/user.h                           |  117 ++
+ security/keys/trusted-keys/tpm2key.asn1       |   15 +-
+ security/keys/trusted-keys/trusted_tpm1.c     |    9 +
+ security/keys/trusted-keys/trusted_tpm2.c     |  355 +++++-
+ 21 files changed, 1797 insertions(+), 57 deletions(-)
+ create mode 100644 kernel/power/snapenc.c
+ create mode 100644 kernel/power/user.h
+
+-- 
+2.38.1.431.g37b22c650d-goog
+
