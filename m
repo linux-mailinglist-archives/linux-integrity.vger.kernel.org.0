@@ -2,169 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738A1625A50
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Nov 2022 13:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E03A626221
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Nov 2022 20:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbiKKMM3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Nov 2022 07:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
+        id S234083AbiKKTjN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Nov 2022 14:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbiKKMM1 (ORCPT
+        with ESMTP id S233965AbiKKTjM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:12:27 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2471FFFA;
-        Fri, 11 Nov 2022 04:12:26 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABBdDBb033785;
-        Fri, 11 Nov 2022 12:12:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5fxO2XXG1q6EgEfIA4PG3xVu5GvIdI6fwOZa3jvSFnc=;
- b=IU4iKNhqdmpAUJR059GJX0JdkNrQXK2Kb3UEl7baBEkidDTL4ZhZpfZdKktEDaLZs0sn
- lwpnoEnaiT5uCOk/G8tdkUTI8RtMPP/1vwnal6+2XulE+dtXIOa0TGbPTLUHvQja4sIH
- GlJVuSXiBsTSCneO9E+iQsBTDb3Hi/WQKsUH6buf3kRIPsbsOHK3al1bqMVmKi01A2gi
- exuziGvcOpivWzcjA6/Kuu2hiftk8OlgvcNJn+vK8gnA+GfGNYwyMJ3fv1i7BgIEef5z
- yIvxTU7T2CLJBsc1NtnQAtPzIz/J+k6hBJ5ID9jgDhmboMvxaNop6TMG7fij7QYQRDtc JA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ksnd512nh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 12:12:09 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ABBetEM038546;
-        Fri, 11 Nov 2022 12:12:09 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ksnd512mu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 12:12:09 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ABC6afx009588;
-        Fri, 11 Nov 2022 12:12:07 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma05wdc.us.ibm.com with ESMTP id 3kngpmje7m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 12:12:07 +0000
-Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ABCC5t926935552
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Nov 2022 12:12:05 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D3B658061;
-        Fri, 11 Nov 2022 12:12:06 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7F65B58059;
-        Fri, 11 Nov 2022 12:12:05 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Nov 2022 12:12:05 +0000 (GMT)
-Message-ID: <569c30f7-5dda-4ce2-e2c9-ce4041a74c8e@linux.ibm.com>
-Date:   Fri, 11 Nov 2022 07:12:05 -0500
+        Fri, 11 Nov 2022 14:39:12 -0500
+Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11022016.outbound.protection.outlook.com [40.93.200.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C6A7BE61;
+        Fri, 11 Nov 2022 11:39:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G285MzQRrYzFIyYeIQA5R7s7qTxcEE8ZWyrGEFhpjL0jep3huI2FGiFrnHgw4VRjW8A9rLIg7LWj9nPBjx6PrGrwH97jWB3m9CX6Rs4tw3jShugLNenSAh5WGNA3vubGak29GI1DFGOkofWwgJAsFeqrA3Wg2JBNDbddhch8VJZp5g3FNjWAkPinUmGH3dOD4PoqCmTI1LmvJSiUeENedY5RcUlQs79PF0xAIeEAooDsWXEsYiYa8Qk4QNUQF2kNRumxgN9CjusynA8/F7OV75JFy95uurlvF+cN4GAvruhXluoBCF5+kF/BmP7C4AdPrbTyy7Bqe76gYqkLYkaqXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hZcRkiQm69eJitYu/z+P4Vn/Emzm0MJXaqcISMacPU8=;
+ b=A1rx9bOvA+znD++rrYSf7lyJwI7qO/OLD+0KQ8JudwoKulYdbyd4POzA7dqM/5aJ9TohMy8hZuZFoeSD9WQvcOYMd0Bk9V1lrnniuU+KBU0cSpYW0Bhb5CiA5+2Vbvem0tbRwpsijTsZWiWFICsZopqn6LbFQIoXwMdkOOPwSNYYEKc9UPXYfy8m9sDUFO1x8pHZDsmdrTqM9rpYXAi6xL3ZF3z8BaxtICBQHZz2PT6DiQ9R+TXGeX5Jk0LiSpyYS9waqx+BrczGcOHz8upt2/+tIkkFj2ZZqPPl0QJApF+X80xsK4Z9ntlnuhy0eWXSP7eR07l9Lc6gDSJ0hBK7BA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hZcRkiQm69eJitYu/z+P4Vn/Emzm0MJXaqcISMacPU8=;
+ b=irgoOerRjeDthtPLOf/Tbj7Q+v/4uHK6KpRpDqZ89SPnhiobCxWQq+o7JdQ/4G6uibXIKi+ZvkBcYe/aTjrHv7hc4pJ+yWrO3T+A3kEZfi0JTOKZPoCzWktu6f/1BvLoozKgMdiibOPTwNWfWtJIuulQetw5jItdDWWVvnv2c8k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1370.namprd21.prod.outlook.com (2603:10b6:5:16b::28)
+ by MN2PR21MB1502.namprd21.prod.outlook.com (2603:10b6:208:20b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.2; Fri, 11 Nov
+ 2022 19:39:09 +0000
+Received: from DM6PR21MB1370.namprd21.prod.outlook.com
+ ([fe80::c3e3:a6ef:232c:299b]) by DM6PR21MB1370.namprd21.prod.outlook.com
+ ([fe80::c3e3:a6ef:232c:299b%7]) with mapi id 15.20.5834.002; Fri, 11 Nov 2022
+ 19:39:09 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        tomas.winkler@intel.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     mikelley@microsoft.com
+Subject: [PATCH 1/1] tpm/tpm_crb: Fix error message in __crb_relinquish_locality()
+Date:   Fri, 11 Nov 2022 11:38:53 -0800
+Message-Id: <1668195533-16761-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR03CA0114.namprd03.prod.outlook.com
+ (2603:10b6:303:b7::29) To DM6PR21MB1370.namprd21.prod.outlook.com
+ (2603:10b6:5:16b::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v8 0/4] tpm: Preserve TPM measurement log across kexec
- (ppc64)
-Content-Language: en-US
-To:     Coiby Xu <coxu@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, Baoquan He <bhe@redhat.com>
-References: <20220901214610.768645-1-stefanb@linux.ibm.com>
- <20221111022143.xvpi3pfwwrw4qda2@Rk>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20221111022143.xvpi3pfwwrw4qda2@Rk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7XaGLry-dChDSYeNDXy6AbCJBpJEBkVY
-X-Proofpoint-GUID: TFAPSigYsZEZ_FQvINgy1j1zHKOjnma1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-11_06,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- spamscore=0 mlxscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 phishscore=0 clxscore=1011 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211110081
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR21MB1370:EE_|MN2PR21MB1502:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ae3e7ec-a418-4b52-1548-08dac41c66e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MrIU229qqzQdmsX5SrUHkmJp9cGr4+jBM/bqylT/ZRCDJhHIWWRpOqSFxRv7XsJlsbzo1N1RFny6hs5M2iSTDBKokCHDOITkATFa36+E3fnRVFm+XT2zUoJqYdqeepqwpLDMF0YBCbAfmK2uW+wmIb+LMb97OHbB3DeTnRs2GaOjPoFvyPlPedV2AKO7CiL4fcavPxcioOyQlmdHf1CzCAGDULoGwAXBR0YPGkOQoH2MZfKu05D1S6a7hT0p6KuJh2CdsUw4xWxCY2wIsVXnlWoadMkcW6VOcpQ5oezAI5oGJI0I8mD+M1MD6/doRxr28tWXjpyWlMIZn9UE2daymZINNot6lX++rkK+ANLhBbNaKHeJYfdL3OipuVQ8gyV42FfbUBrEI8h6kqGvALwfHgzic6HLV/HsAqto0NM6V7aM61grOhWsF426lL3a0+EVaha4ruiU/pDqQVtL7SHUkBlV/kLF50zalGr2XwUXHarw/15Ye/ORMgD5TTdFCTkYDsQrPo63ogBduDgYpSZGJI+9L1BShsc1PKeA5ifdFJGE1H0wXyYMOjMvnv14H8v2xfezG4mho9Fc5UZeYGxDUv4nB7IK0sS0F8xv0GicxMDi4P3z1HkqlBkc37jTk1SLhX28jcdVdk/IjTm6JzRNbU/houqObNeS6XhZ19qqaKnsErsBxn48U8ROpmLdjtuTnDGCVPRsuNhT6Vw57eEYWIMOT0BH2jyD1S6fg4oQDwtytUf7tHcbNgpsJNbSREUfG2Q+MHifQyNAB2gk62DLE4leBMd035VvwKeE1dyFU1s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1370.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(376002)(136003)(396003)(451199015)(83380400001)(41300700001)(478600001)(82950400001)(66476007)(6486002)(66946007)(82960400001)(8936002)(5660300002)(4326008)(2906002)(66556008)(38350700002)(8676002)(36756003)(316002)(10290500003)(38100700002)(15650500001)(4744005)(2616005)(107886003)(6512007)(186003)(6666004)(52116002)(26005)(6506007)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?F7FIadfxTOwZJkU2LMC4anYTLz8Te7qQzvtgq0bYqokWeJNnQT3qY9d6b4Ja?=
+ =?us-ascii?Q?hcImDBu2JQHRTVa0+o6YjpAQhQuDTzoVZ8zXv/+Z5IQxAV3jOOAzGdMi7maO?=
+ =?us-ascii?Q?Y8idLGeYzAr1wunCpp3FUGurgrebOL3SRGgXtDbh98BkyFQv05Nx3W6sS8/2?=
+ =?us-ascii?Q?gr4LITUU8XDnZDykoEZJbNkmBPb83nby5gEiF3HbV5CjG9KGaEwaNpx85nvj?=
+ =?us-ascii?Q?XyH0ljg6Qu2ynwF0Pa+5OpXCHoc22bFEVL6bcpC2LyjTxC8YRNh+ammYg6rx?=
+ =?us-ascii?Q?90ZIBGlABvfIUhN/+Isn76UEv0FUo5M+BZB+7vksIhUH62LEjfiw5GtNXwMf?=
+ =?us-ascii?Q?vLPgxuuLsiDaTELvti4WjEWTsjL9yof+6Hs5f3SoKoDNDBmH0C9S8Dy7g0zc?=
+ =?us-ascii?Q?mz+8yxMsGCCBvFaLR8e1l4JnQuPWZIOYBWWBDi+NNBh1Wb0g1dp94Im1GYux?=
+ =?us-ascii?Q?cUA4bV6w1z/D+E4ng0j+huu0b28mVVaJqac5m95Za7nPAyxUyPh1w+yoa9hb?=
+ =?us-ascii?Q?Vh+qkVlXZ2PmSQyrU/lIpN7OawBUXnK/REM5EYOb44zqPungdFxkObdggoW0?=
+ =?us-ascii?Q?CuuHjngRSMV7hKFdphIADSzjX3w6KZ5dT5LOaFfWkIhN1ON6edv3GW60j7F0?=
+ =?us-ascii?Q?ehEm1jOi5yl32pJSgzO3JfCTwHoOL1qXPzCxrMFIXOpBVUMF/1ejSEXUSqju?=
+ =?us-ascii?Q?BnU2SIdqZM95omc2iTqZhFPGPkCTd1D2pG+yjT/4XNFXDEJFOSAcbcf+E+WB?=
+ =?us-ascii?Q?vLoxZgluz7vQgpPNsgN1PbSW09VFiy2JXASurajSAcrIQjTVLKWyeqC/42qn?=
+ =?us-ascii?Q?TJRWK6Twp2FjvHgYKVI0uejVswLIJE9G9qbwsQq1O5nqXlV+2d5WNEWHwKCp?=
+ =?us-ascii?Q?mx/X0909+5o5YLYEEGZhDitBd3DVZ8RPbhk4aSrcaRHxewbSOad+tpJzG26q?=
+ =?us-ascii?Q?+Jl+tvG/Gh+04rnt14KhiKSzh1gqUjy06XpdBW9jCeBHtXVnMvSk6TifdoeR?=
+ =?us-ascii?Q?Kkbc11GhYjF2OkvVO8VhJpyHPj8ksDWU1X95jJrlJZB2xft9664T1BtvT/hq?=
+ =?us-ascii?Q?jpxfYuaiy7fizeAQhHTrlPlPP8jWM8Q7iNhKLxoURdXYz3W8oRgMN8FSHo+l?=
+ =?us-ascii?Q?efTD3p8VnEv/LyCF3hQkgu2+IYnNLGEy3jpHw0lnfKbdnn9RdIrBTl3/NCer?=
+ =?us-ascii?Q?OBNbGoQE6LvW7m0O3uojExCYQliMHdpKixNZxN+wOdjo6OCm4CCfg/ZyBxAM?=
+ =?us-ascii?Q?klye81DhSHI15DxYo5yaGgIZsnNvzFf2ZB5qF55oK7HSWM2r/enfGBN1wMcW?=
+ =?us-ascii?Q?e+X/v6seZ80vpHsHVn+VDuWHUjSDfiXGb/sYPAXUpFoaEzNA338G/m3oulSP?=
+ =?us-ascii?Q?/b1k1Fnp0jPSwcGmK5yLq1oiHXpJj0tJUjqIhB35mIYsxfgm127yGxLCor1L?=
+ =?us-ascii?Q?SQ2t8heKAkv8oDSj6cuoe7aZZtP+fKZOyZMJEBOVi6onVL/8PtMey2j9A19n?=
+ =?us-ascii?Q?AVRgEPNRYMWrLM/cbFDzhh/o51UxXeSeVbmADhAPahT1C3aKaNnmAtxdO79D?=
+ =?us-ascii?Q?4NPwFnikAgB6se8vIc9JUZmuNOdgm1xBJAb3kN3l?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ae3e7ec-a418-4b52-1548-08dac41c66e8
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1370.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 19:39:09.3148
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BmiGsFlRy2hqVksuxgZROl6bS4rotXa51sOj88/w7vp0Cath6v3rn/NK1z2kso8oEe5+YGY0asNqfVOc4tm3lQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR21MB1502
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+The error message in __crb_relinquish_locality() mentions requestAccess
+instead of Relinquish. Fix it.
 
+Fixes: 888d867df441 ("tpm: cmd_ready command can be issued only after granting locality")
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+---
+ drivers/char/tpm/tpm_crb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 11/10/22 21:21, Coiby Xu wrote:
-> Hi Michael,
-> 
-> Could the PowerPC tree take this patch set which resolves a
-> PowerVM/KVM-specific issue?
+diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+index 1860665..65f8f17 100644
+--- a/drivers/char/tpm/tpm_crb.c
++++ b/drivers/char/tpm/tpm_crb.c
+@@ -252,7 +252,7 @@ static int __crb_relinquish_locality(struct device *dev,
+ 	iowrite32(CRB_LOC_CTRL_RELINQUISH, &priv->regs_h->loc_ctrl);
+ 	if (!crb_wait_for_reg_32(&priv->regs_h->loc_state, mask, value,
+ 				 TPM2_TIMEOUT_C)) {
+-		dev_warn(dev, "TPM_LOC_STATE_x.requestAccess timed out\n");
++		dev_warn(dev, "TPM_LOC_STATE_x.Relinquish timed out\n");
+ 		return -ETIME;
+ 	}
+ 
+-- 
+1.8.3.1
 
-Michael has (shown me) an alternative approach that protects the already allocated memory to carry it across the kexec. This seems like a good and potentially better alternative, also from the perspective of the changes need, which is a lot less , and it's already used for other stuff as well.
-
-    Stefan
-
-> 
-> On Thu, Sep 01, 2022 at 05:46:06PM -0400, Stefan Berger wrote:
->> The of-tree subsystem does not currently preserve the IBM vTPM 1.2 and
->> vTPM 2.0 measurement logs across a kexec on PowerVM and PowerKVM. This
->> series fixes this for the kexec_file_load() syscall using the flattened
->> device tree (fdt) to carry the TPM measurement log's buffer across kexec.
->>
->>   Stefan
->>
->> v8:
->> - Added Jarkko's, Coiby's, and Rob's tags
->> - Rebase on v6.0-rc3 that absorbed 2 already upstreamed patches
->>
->> v7:
->> - Added Nageswara's Tested-by tags
->> - Added back original comment to inline function and removed Jarkko's R-b tag
->>
->> v6:
->> - Add __init to get_kexec_buffer as suggested by Jonathan
->> - Fixed issue detected by kernel test robot
->>
->> v5:
->> - Rebased on 1 more patch that would otherwise create merge conflicts
->>
->> v4:
->> - Rebased on 2 patches that would otherwise create merge conflicts;
->>   posting these patches in this series with several tags removed so
->>   krobot can test the series already
->> - Changes to individual patches documented in patch descripitons
->>
->> v3:
->> - Moved TPM Open Firmware related function to drivers/char/tpm/eventlog/tpm_of.c
->>
->> v2:
->> - rearranged patches
->> - fixed compilation issues for x86
->>
->> Palmer Dabbelt (1):
->>  drivers: of: kexec ima: Support 32-bit platforms
->>
->> Stefan Berger (3):
->>  tpm: of: Make of-tree specific function commonly available
->>  of: kexec: Refactor IMA buffer related functions to make them reusable
->>  tpm/kexec: Duplicate TPM measurement log in of-tree for kexec
->>
->> drivers/char/tpm/eventlog/of.c |  31 +--
->> drivers/of/kexec.c             | 336 ++++++++++++++++++++++++++++-----
->> include/linux/kexec.h          |   6 +
->> include/linux/of.h             |   9 +-
->> include/linux/tpm.h            |  36 ++++
->> kernel/kexec_file.c            |   6 +
->> 6 files changed, 346 insertions(+), 78 deletions(-)
->>
->>
->> base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
->> -- 
->> 2.35.1
->>
-> 
