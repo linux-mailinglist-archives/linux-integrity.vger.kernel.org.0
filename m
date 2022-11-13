@@ -2,292 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E708A6272AC
-	for <lists+linux-integrity@lfdr.de>; Sun, 13 Nov 2022 22:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F456272B4
+	for <lists+linux-integrity@lfdr.de>; Sun, 13 Nov 2022 22:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235192AbiKMVUQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 13 Nov 2022 16:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S234149AbiKMV0H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 13 Nov 2022 16:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbiKMVUM (ORCPT
+        with ESMTP id S233795AbiKMV0G (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 13 Nov 2022 16:20:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BF7FD1C;
-        Sun, 13 Nov 2022 13:20:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C17360C55;
-        Sun, 13 Nov 2022 21:20:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02104C433C1;
-        Sun, 13 Nov 2022 21:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668374408;
-        bh=e4x8dm158+t01HeZwuDAJkMqiJRA7iQ9G4cpg0AnyJY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bDN1NhCaF35rwiGhPls7DeRrVTe5FprK11yZl19ww0Qw5uVbl1tsPLzATms6kxcCD
-         IUrgSL8aw0iGLA8UBkkIuDPzJLz6/V6PwO/Q9zZNW59RzxTe3jizt9zU/1NyxA0Uig
-         HifF3t4PGRKvCNFxFs078dnuguUeQ9x/KPsfSAlz2cFYn6a/eJjmb0pA58MQzRxvdp
-         YpTPvv1K8zPIB4EFpFqO+Dzt5ycO40z6qpBokTstfa/7QEw2GwZ2RiacgaTj3bVeqK
-         3Z7z7fwz1Mzcn9ypcL2bJfVfb+9cHsWvi+z0tOEz2maE02kSAh+ngYlAxzCANCtCMd
-         /NADXDVw8ghow==
-Date:   Sun, 13 Nov 2022 13:20:06 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, jejb@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>, dlunev@google.com,
-        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
-        jarkko@kernel.org, linux-pm@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation
- data
-Message-ID: <Y3FfhrgvBNey6T7V@sol.localdomain>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+        Sun, 13 Nov 2022 16:26:06 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A1EB7F7
+        for <linux-integrity@vger.kernel.org>; Sun, 13 Nov 2022 13:26:03 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2ADL3pcu006283;
+        Sun, 13 Nov 2022 21:25:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=L7Ohkd7+ZO05xeU9Ke8KXW9HL4sXk4WR41/3fhPDM0g=;
+ b=GMK9TjM+OHW5KRtETHd6AE9TKwiX6DY7uK+XptVD/P6d2j+bOZ63FrKRTzBiBMOCba1H
+ efvTsk2ROuNkvy7gscpAfclZH6/oT8DfIacrkh1wjnyiI1YNGW+I/STkAksDUo4XSQWZ
+ lJlxeeuGR8FxNSNR8kEbc15wygftahga7x01hN8jjjEZ1OIAcxdTxmleZxP4HKoq4ZZY
+ jUMdR7FKJbtVLAaQwhS1LLpPOt4TB4sunEhWy559oCj8B6Z2MnArLXfXAMbdPZkC0beM
+ LelfV7MG9z7Egw8Hm1nOs+/oDEJukYCmLAOZ6IyFt2EHp7dt9kSlDjFqUJtJ69fE9LXn TA== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ku85u09k0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Nov 2022 21:25:57 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ADLLKiK010427;
+        Sun, 13 Nov 2022 21:25:56 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma04dal.us.ibm.com with ESMTP id 3kt349c9np-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Nov 2022 21:25:56 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com ([9.208.128.113])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ADLPtOX9437764
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 13 Nov 2022 21:25:56 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40D5758055;
+        Sun, 13 Nov 2022 21:25:55 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AC7E55804B;
+        Sun, 13 Nov 2022 21:25:54 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.91.8])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Sun, 13 Nov 2022 21:25:54 +0000 (GMT)
+Message-ID: <84e0ecce227a93ec167563d0892a344c0b9043a9.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils v4 01/17] Revert "Reset 'errno' after
+ failure to open or access a file"
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     Petr Vorel <pvorel@suse.cz>, Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Date:   Sun, 13 Nov 2022 16:25:54 -0500
+In-Reply-To: <20221103225049.6u7xxgn3tk66n3ez@altlinux.org>
+References: <20221101201803.372652-1-zohar@linux.ibm.com>
+         <20221101201803.372652-2-zohar@linux.ibm.com>
+         <0a70ffe5-a35a-f8fa-dfa8-be3bf2e5e29f@linux.ibm.com>
+         <145f4c70ec894c4980d9455485cdac4673e01d04.camel@linux.ibm.com>
+         <52e19952-a1c3-722e-2267-a625e16c37a2@linux.ibm.com>
+         <4db89eab7d21124aa7945ccf4fd150c3ee4d259c.camel@linux.ibm.com>
+         <Y2PREKTdNQhwhPEK@pevik>
+         <6641d0eec7dd91d0d8b2f5dbf1844173a79b13fe.camel@linux.ibm.com>
+         <20221103225049.6u7xxgn3tk66n3ez@altlinux.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9fKJ7OoMpksEpL4SICz8tW83aiOdnye3
+X-Proofpoint-ORIG-GUID: 9fKJ7OoMpksEpL4SICz8tW83aiOdnye3
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-13_14,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
+ suspectscore=0 spamscore=0 clxscore=1015 bulkscore=0 impostorscore=0
+ phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211130146
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:16:29PM -0800, Evan Green wrote:
-> diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trusted-keys/tpm2key.asn1
-> index f57f869ad60068..608f8d9ca95fa8 100644
-> --- a/security/keys/trusted-keys/tpm2key.asn1
-> +++ b/security/keys/trusted-keys/tpm2key.asn1
-> @@ -7,5 +7,18 @@ TPMKey ::= SEQUENCE {
->  	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
->  	parent		INTEGER ({tpm2_key_parent}),
->  	pubkey		OCTET STRING ({tpm2_key_pub}),
-> -	privkey		OCTET STRING ({tpm2_key_priv})
-> +	privkey		OCTET STRING ({tpm2_key_priv}),
-> +	---
-> +	--- A TPM2B_CREATION_DATA struct as returned from the TPM2_Create command.
-> +	---
-> +	creationData	[1] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_data}),
-> +	---
-> +	--- A TPM2B_DIGEST of the creationHash as returned from the TPM2_Create
-> +	--- command.
-> +	---
-> +	creationHash	[2] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_hash}),
-> +	---
-> +	--- A TPMT_TK_CREATION ticket as returned from the TPM2_Create command.
-> +	---
-> +	creationTk	[3] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_tk})
->  	}
+On Fri, 2022-11-04 at 01:50 +0300, Vitaly Chikunov wrote:
+> On Thu, Nov 03, 2022 at 05:35:40PM -0400, Mimi Zohar wrote:
+> > Hi Petr,
+> > 
+> > > > > Is the github repo now the main repo and sourceforge repo is dead?
+> > > 
+> > > > The "next" branch in both repo's are the same.  Before posting patches,
+> > > > I verify that github Actions works.   As a result, the next-testing
+> > > > branch on github is rebased frequently.  Once a patch set is ready, the
+> > > > "next" branch in both repo's is updated.
+> > > 
+> > > > To answer your question the github repo is primary.
+> > > Maybe deleting everything in sourceforge and ad put single file with link to
+> > > github.com would save you work (having master, next and next-testing branches
+> > > with this file).
+> > 
+> > Thanks, definitely appreciate time saving tips!  Vitaly suggested
+> > saving the sourceforge wiki info in ima-evm-utils and updating the
+> > file(s) like any other file.  Before removing "everything"h from
+> > sourceforge, that still needs to be done.
+> 
+> I thought markdown should be downloaded from Edit interface, which is not
+> available on SF for non-admins. But I found recently hbow to download it
+> in Json format via Allura API:
+> 
+>   curl -s https://sourceforge.net/rest/p/linux-ima/wiki/Home  | jq -r .text
+> 
+> Then only end-of-lines need to be fixed.
 
-The commit that added this file claimed:
+There's an admin option to export the wiki, but this is much better.
+-- 
+thanks,
 
-	"The benefit of the ASN.1 format is that it's a standard and thus the
-	exported key can be used by userspace tools (openssl_tpm2_engine,
-	openconnect and tpm2-tss-engine"
+Mimi
 
-Are these new fields in compliance with whatever standard that was referring to?
 
-Or was that just referring to ASN.1 itself?
-
-> +/* Helper function to advance past a __be16 length + buffer safely */
-> +static const u8 *get_sized_section(const u8 *src, const u8 *end, u16 *len)
-> +{
-> +	u32 length;
-> +
-> +	if (src + sizeof(u16) > end)
-> +		return NULL;
-
-'end - src < sizeof(u16)', so the pointer isn't advanced past the end.
-
-> +
-> +	/* Include the size field in the returned section length. */
-> +	length = get_unaligned_be16(src) + sizeof(u16);
-> +	*len = length;
-> +	if (*len != length)
-> +		return NULL;
-> +
-> +	src += *len;
-> +	if (src > end)
-> +		return NULL;
-> +
-> +	return src;
-
-Similarly:
-
-	if (end - src < *len)
-		return NULL;
-
-	return src + *len;
-
-> +		/*
-> +		 * The creation ticket (TPMT_TK_CREATION) consists of a 2 byte
-> +		 * tag, 4 byte handle, and then a TPM2B_DIGEST, which is a 2
-> +		 * byte length followed by data.
-> +		 */
-> +		if (src + 8 > end)
-
-end - src < 8
-
-And actually it really should be 6 instead of 8, to match the code below.
-get_sized_section() already validates that there are at least 2 more bytes.
-
-> +			return -EINVAL;
-> +
-> +		creation_tk = src;
-> +		src = get_sized_section(src + 6, end, &creation_tk_len);
-> +		if (!src)
-> +			return -EINVAL;
-> +
-> +		creation_tk_len += 6;
-> +
-> +	} else {
-> +		creation_data_len = 0;
-> +		creation_data = NULL;
-> +	}
->  
->  	if (!scratch)
->  		return -ENOMEM;
-> @@ -63,26 +125,81 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
->  	}
->  
->  	/*
-> -	 * Assume both octet strings will encode to a 2 byte definite length
-> +	 * Assume each octet string will encode to a 2 byte definite length.
-> +	 * Each optional octet string consumes one extra byte.
->  	 *
-> -	 * Note: For a well behaved TPM, this warning should never
-> -	 * trigger, so if it does there's something nefarious going on
-> +	 * Note: For a well behaved TPM, this warning should never trigger, so
-> +	 * if it does there's something nefarious going on
->  	 */
-> -	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-> -		 "BUG: scratch buffer is too small"))
-> -		return -EINVAL;
-> +	if (WARN(work - scratch + pub_len + priv_len + creation_data_len +
-> +		 creation_hash_len + creation_tk_len + (7 * 5) + 3 >
-> +		 SCRATCH_SIZE,
-> +		 "BUG: scratch buffer is too small")) {
-> +		rc = -EINVAL;
-> +		goto err;
-> +	}
-
-This appears to be fixing a memory leak in the error case.
-
-The same memory leak also still appears above in:
-
-	if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-		return PTR_ERR(w);
-
-Maybe both should be fixed in a separate patch.
-
-> +		work2 = asn1_encode_octet_string(scratch2,
-> +						 end_work2,
-> +						 creation_data,
-> +						 creation_data_len);
-> +
-> +		work = asn1_encode_tag(work,
-> +				       end_work,
-> +				       1,
-> +				       scratch2,
-> +				       work2 - scratch2);
-
-There's no helper function to do these two steps together?
-
-> +
-> -	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
-> -		return PTR_ERR(work1);
-> +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
-> +		rc = PTR_ERR(work1);
-> +		goto err;
-> +	}
->  
->  	return work1 - payload->blob;
-> +err:
-> +	kfree(scratch);
-> +	return rc;
-
-Is this another memory leak fix that is unrelated to the functionality added by
-this patch?
-
-Also, isn't 'scratch' still being leaked in the success case?
-
->  static int tpm2_key_decode(struct trusted_key_payload *payload,
-> -			   struct trusted_key_options *options,
-> -			   u8 **buf)
-> +			   struct trusted_key_options *options)
->  {
-> +	u64 data_len;
->  	int ret;
->  	struct tpm2_key_context ctx;
-> -	u8 *blob;
-> +	u8 *blob, *buf;
->  
->  	memset(&ctx, 0, sizeof(ctx));
->  
-> @@ -108,21 +231,57 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
->  	if (ret < 0)
->  		return ret;
->  
-> -	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
-> +	data_len = ctx.priv_len + ctx.pub_len + ctx.creation_data_len +
-> +		   ctx.creation_hash_len + ctx.creation_tk_len;
-
-It's unclear why 'data_len' is a u64, given that the value assigned to it always
-fits in a u32.  Perhaps you intended to do the additions with 64-bit numbers so
-that they can't overflow.
-
-But shouldn't the lengths already be bounded by size of the ASN.1 blob before
-even reaching here, anyway?
-
-> +
-> +	if (data_len > MAX_BLOB_SIZE)
->  		return -EINVAL;
->  
-> -	blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
-> -	if (!blob)
-> +	buf = kmalloc(data_len + 4, GFP_KERNEL);
-> +	if (!buf)
->  		return -ENOMEM;
-
-It's unclear what the '+ 4' is for.
-
-> @@ -229,6 +424,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->  		      struct trusted_key_options *options)
->  {
->  	int blob_len = 0;
-> +	unsigned int offset;
->  	struct tpm_buf buf;
->  	u32 hash;
->  	u32 flags;
-> @@ -317,13 +513,14 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->  		rc = -E2BIG;
->  		goto out;
->  	}
-> -	if (tpm_buf_length(&buf) < TPM_HEADER_SIZE + 4 + blob_len) {
-> +	offset = TPM_HEADER_SIZE + 4;
-> +	if (tpm_buf_length(&buf) < offset + blob_len) {
->  		rc = -EFAULT;
->  		goto out;
->  	}
->  
->  	blob_len = tpm2_key_encode(payload, options,
-> -				   &buf.data[TPM_HEADER_SIZE + 4],
-> +				   &buf.data[offset],
->  				   blob_len);
-
-This hunk of the patch doesn't seem to serve any purpose.
-
-- Eric
