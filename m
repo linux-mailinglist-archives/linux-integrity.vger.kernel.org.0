@@ -2,149 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E688627398
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Nov 2022 00:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8AD46274D9
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Nov 2022 04:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235377AbiKMXvK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 13 Nov 2022 18:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
+        id S233930AbiKNDQQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 13 Nov 2022 22:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiKMXvJ (ORCPT
+        with ESMTP id S230030AbiKNDQP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 13 Nov 2022 18:51:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9ABB1E2;
-        Sun, 13 Nov 2022 15:51:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF0E160C09;
-        Sun, 13 Nov 2022 23:51:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1385C433C1;
-        Sun, 13 Nov 2022 23:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668383466;
-        bh=KSPW+gb8KZq1GJgr/6V5CJJhPw275z9NwUUesDbF54I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oNpW7+e35iFlHE5dpScwvWbXnQlNJY9W6LdE7LgXvVi5ktPjMEcclIrP4GkbAdwLK
-         jqtDt/Kdje+EaKeSlAzxiZOHgbP03dZvT1BJYKLB8wHc5mcz/wvvN2UOjJBqGwsGY0
-         k/z7b8fBzWAcbfcKB1Fo6XqzGTBDeYUY8Ja13M/cFPkf6nV1KW2fWdoTdGiCzPLI7V
-         9N1L324DATQog2Ys42sRG5MHU59sn+d1f+2+yD+5Lni6EtTk+htdsylE3xwTpnidHS
-         JYllaitr+wSN8K5mZbu2661RMniVtNWrvyDIcD7ivl5M0lD67Gn6qGotroyVHtPVav
-         2ub64ZY36GTGA==
-Date:   Sun, 13 Nov 2022 15:51:04 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, jejb@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>, dlunev@google.com,
-        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
-        jarkko@kernel.org, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, axelj <axelj@axis.com>
-Subject: Re: [PATCH v5 11/11] PM: hibernate: seal the encryption key with a
- PCR policy
-Message-ID: <Y3GC6M6umF+MOu1f@sol.localdomain>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.11.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
+        Sun, 13 Nov 2022 22:16:15 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E877DA46C;
+        Sun, 13 Nov 2022 19:16:13 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id 129-20020a1c0287000000b003cfe48519a6so5308wmc.0;
+        Sun, 13 Nov 2022 19:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IFS/dIJbtJh5TidL+3YZ8qyOFOMNzgN+p4JEU6MF5Ug=;
+        b=Rs8ldB2o9083+xLRguIeJ3IEwMBwyhlg4/2HmHjhOFLOY9vUsf9wE65gkkbXVM7Eco
+         whinPX9kxkkxN+VdrTYCekCz3yAEtXGgPaZ21y5sDGAs015ca7qeTEhDiPEcJ0FYJCpX
+         KPVFquN1XNj5mtG/jQ0Qx6hSAojqKp2JLuGY0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IFS/dIJbtJh5TidL+3YZ8qyOFOMNzgN+p4JEU6MF5Ug=;
+        b=gcvYCGN73EpLlGY3J/s9kHdbcxZ6NbimxHVadP+cbLcjLDIZzLifOvdxveUL+bIhLp
+         kfV5jwY3yR+Tk4Bbyh8iIu1ZjxPr2DWCaEZVSZZOYjHNKIxhpslGBSB7j1zzRyB3dsWM
+         NdoREY95g5tWCZW5GyN0t8URyR5dXgR2O+OwClXXTqFcGaSaRTHKWG3WqaQZ4+Odc66s
+         tihUhW+Tq3Tv5OnNwCYiyUfgpFLZX3WeVhia8E7c0Hq1HnzMQqxTUl3l0TnPC+SdVn2S
+         ob7tyyQhekdBWOSYaijnGDR8pi/IybFuoC/AS+jQ9bao9hPfVJAx2ZAHq6mdX1Bmobyd
+         GB5A==
+X-Gm-Message-State: ANoB5pnA+KZXuKjVPANGTbQpQWyCBZ4QL1vfWbhx1tQHLRPtZADMQUrg
+        vpSsETjRSZ+9SlDVWp6DoW4LpbxSCmaXEaYMWBg=
+X-Google-Smtp-Source: AA0mqf7Oo498tdMbVinJfRhOvkEEFvb8duzicBhA+Ipy707NIlw7LGeTIT9GHgq7aoYwIO7BsC5x0huvavLS4wONCes=
+X-Received: by 2002:a05:600c:a11:b0:3c6:f83e:d1b3 with SMTP id
+ z17-20020a05600c0a1100b003c6f83ed1b3mr6902003wmp.190.1668395772303; Sun, 13
+ Nov 2022 19:16:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111151451.v5.11.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220817200333.305264-1-eajames@linux.ibm.com>
+In-Reply-To: <20220817200333.305264-1-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 14 Nov 2022 03:16:00 +0000
+Message-ID: <CACPK8XfyOCmr_mRmaGTG6oJUNwU23ZoWam0e-RrQxY38=OnVrQ@mail.gmail.com>
+Subject: Re: [PATCH] tpm: tis_i2c: Fix sanity check interrupt enable mask
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander.Steffen@infineon.com, jgg@ziepe.ca, jarkko@kernel.org,
+        peterhuewe@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:16:36PM -0800, Evan Green wrote:
-> +static int tpm_setup_policy(struct tpm_chip *chip, int *session_handle)
-> +{
-> +	struct tpm_header *head;
-> +	struct tpm_buf buf;
-> +	char nonce[32] = {0x00};
-> +	int rc;
-> +
-> +	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS,
-> +			  TPM2_CC_START_AUTH_SESSION);
-> +	if (rc)
-> +		return rc;
-> +
-> +	/* Decrypt key */
-> +	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
-> +
-> +	/* Auth entity */
-> +	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
-> +
-> +	/* Nonce - blank is fine here */
-> +	tpm_buf_append_u16(&buf, sizeof(nonce));
-> +	tpm_buf_append(&buf, nonce, sizeof(nonce));
+On Wed, 17 Aug 2022 at 20:03, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> The sanity check mask for TPM_INT_ENABLE register was off by 8 bits,
+> resulting in failure to probe if the TPM_INT_ENABLE register was a
+> valid value.
+>
+> Fixes: bbc23a07b072 ("tpm: Add tpm_tis_i2c backend for tpm_tis_core")
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-In general, hardcoded nonces are a huge red flag.  If it's fine here, it would
-be helpful to leave a comment explaining why that is.
+Tested-by: Joel Stanley <joel@jms.id.au>
+Fixes: bbc23a07b072 ("tpm: Add tpm_tis_i2c backend for tpm_tis_core")
 
-> +	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
-> +	if (rc)
-> +		goto out;
+Jarkko, do you plan on sending this as a fix?
 
-This is another instance of the bug where TPM2_RC_* codes are being returned
-from a function that is expected to return -errno values.
-
-> +	*session_handle = be32_to_cpu(*(__be32 *)&buf.data[10]);
-
-get_unaligned_be32, to avoid an unaligned memory access.
-
-> @@ -497,11 +602,16 @@ static int snapshot_setup_encryption_common(struct snapshot_data *data)
->  static int snapshot_create_kernel_key(struct snapshot_data *data)
->  {
->  	/* Create a key sealed by the SRK. */
-> -	char *keyinfo = "new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000";
-> +	const char *keytemplate =
-> +		"new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000\tpolicydigest=%s";
->  	const struct cred *cred = current_cred();
->  	struct tpm_digest *digests = NULL;
-> +	char policy[SHA256_DIGEST_SIZE];
-> +	char *policydigest = NULL;
-> +	int session_handle = -1;
->  	struct key *key = NULL;
->  	struct tpm_chip *chip;
-> +	char *keyinfo = NULL;
->  	int ret, i;
->  
->  	chip = tpm_default_chip();
-> @@ -534,6 +644,28 @@ static int snapshot_create_kernel_key(struct snapshot_data *data)
->  	if (ret != 0)
->  		goto out;
->  
-> +	policydigest = kmalloc(SHA256_DIGEST_SIZE * 2 + 1, GFP_KERNEL);
-> +	if (!policydigest) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	ret = tpm_setup_policy(chip, &session_handle);
-> +	if (ret != 0)
-> +		goto out;
-> +
-> +	ret = tpm_policy_get_digest(chip, session_handle, policy);
-> +	if (ret != 0)
-> +		goto out;
-> +
-> +	bin2hex(policydigest, policy, SHA256_DIGEST_SIZE);
-> +	policydigest[SHA256_DIGEST_SIZE * 2] = '\0';
-> +	keyinfo = kasprintf(GFP_KERNEL, keytemplate, policydigest);
-> +	if (!keyinfo) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-
-With the %*phN format specifier, there would be no need for bin2hex().
-
-- Eric
+> ---
+>  drivers/char/tpm/tpm_tis_i2c.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> index 0692510dfcab..635a69dfcbbd 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> @@ -49,7 +49,7 @@
+>
+>  /* Masks with bits that must be read zero */
+>  #define TPM_ACCESS_READ_ZERO 0x48
+> -#define TPM_INT_ENABLE_ZERO 0x7FFFFF6
+> +#define TPM_INT_ENABLE_ZERO 0x7FFFFF60
+>  #define TPM_STS_READ_ZERO 0x23
+>  #define TPM_INTF_CAPABILITY_ZERO 0x0FFFF000
+>  #define TPM_I2C_INTERFACE_CAPABILITY_ZERO 0x80000000
+> --
+> 2.31.1
+>
