@@ -2,112 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5282662F13D
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Nov 2022 10:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5168362F6D3
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Nov 2022 15:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241132AbiKRJcy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 18 Nov 2022 04:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S242103AbiKROJj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 18 Nov 2022 09:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233863AbiKRJcw (ORCPT
+        with ESMTP id S234213AbiKROJi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:32:52 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF5617A9D;
-        Fri, 18 Nov 2022 01:32:51 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NDBHg1NzNz9v7Nl;
-        Fri, 18 Nov 2022 17:26:39 +0800 (CST)
-Received: from [10.206.134.65] (unknown [10.206.134.65])
-        by APP2 (Coremail) with SMTP id GxC2BwCHu_chUXdj9_NzAA--.22300S2;
-        Fri, 18 Nov 2022 10:32:27 +0100 (CET)
-Message-ID: <2e493258-b267-b8ad-0812-53f4e9c849ae@huaweicloud.com>
-Date:   Fri, 18 Nov 2022 10:32:15 +0100
+        Fri, 18 Nov 2022 09:09:38 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747C811160
+        for <linux-integrity@vger.kernel.org>; Fri, 18 Nov 2022 06:09:36 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id s206so5453078oie.3
+        for <linux-integrity@vger.kernel.org>; Fri, 18 Nov 2022 06:09:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JrQNNNmu+VKpUKFaa2u9LGpDItJlV0ZsIlrvBdiYML4=;
+        b=qzUyVqdQ3U398MaCH+c1E3pR5wh7qPanMD3/wPMJ5zc+YOXla/JX7vEfEydtmYJuWZ
+         HGe7hUoBbow++sKp6j+/fTijnKZzlHRYYgLxr3Frum+kb5WfYbAgeqhR9kJAqsf02qs4
+         OVgATGm9xRU/y8wPfyrFGbeM2F58dSTbR9XNAlMMjX1fxzPI/y7HK0Teb1A8XHfwZeBs
+         fd9/YXByFwaOh4GAPwAhU9CblxHl4NzIRcKb8+poJYV1D8FslRTwUCbkeeqtpEp60n/m
+         ZjJms48ZifEZn3RLnHDihvUeUIfUAItUZ22UAoFZ/9YnsiLC15eiqi0oZoJuD1aElh+n
+         KsSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JrQNNNmu+VKpUKFaa2u9LGpDItJlV0ZsIlrvBdiYML4=;
+        b=xQmX+8oJ5eiisrcNvvUg5CI2tiVE9+813AkllkUdzemqz5fqtshrS0yWYv9btSQ7HJ
+         6LG3Sx6oozFcXgg6aaRXph8t1j7AGOrtKgwGmnrh8vFCgNNEg7yK3B1gnufM7qunlepM
+         jSjOTCSXYE5eD/ty74YuGIlCXVK7pVqNFGnCWKIDy63+aWpTiLhtPunJTP2IesEZ1RnC
+         5xmfmGUOKXjhbzlnJXCnyY4YnnbGwcKYSQLVPz4+kP+BUPFTCgA6JU0sv1a+NE3TXtfD
+         uD1FoKEekKTlqruQdOwRVa08QIZFSSukNgHRoUhfLsuDaRC+mEeyxE8w9q9ofZyn/lih
+         Uvmg==
+X-Gm-Message-State: ANoB5plGkNEq7sDgPGWvcDKuz8//00TQVB7+4QgRN+dUFoF0ie1fw12T
+        moRpJYngPwxxOjBjuNfCH8M=
+X-Google-Smtp-Source: AA0mqf7xQKja0++RjotAlx5hUokuxOfFzv8GXX7jpXcZgv4QtbiTzj2OyaPwp6jU9UR4htFIgJ12tg==
+X-Received: by 2002:a05:6808:178b:b0:35a:10ae:ed71 with SMTP id bg11-20020a056808178b00b0035a10aeed71mr3653487oib.299.1668780575667;
+        Fri, 18 Nov 2022 06:09:35 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i10-20020a05683033ea00b00666a5b5d20fsm1582632otu.32.2022.11.18.06.09.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 06:09:35 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 18 Nov 2022 06:09:33 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jan Dabros <jsd@semihalf.com>
+Cc:     linux-integrity@vger.kernel.org, jarkko@kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, gregkh@linuxfoundation.org,
+        arnd@arndb.de, rrangel@chromium.org, timvp@google.com,
+        apronin@google.com, mw@semihalf.com, upstream@semihalf.com
+Subject: Re: [PATCH v2 2/3] char: tpm: cr50: Use generic request/relinquish
+ locality ops
+Message-ID: <20221118140933.GA676681@roeck-us.net>
+References: <20221103145450.1409273-1-jsd@semihalf.com>
+ <20221103145450.1409273-3-jsd@semihalf.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-Content-Language: en-US
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
- <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
- <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
- <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwCHu_chUXdj9_NzAA--.22300S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFyUJF45CrWDXF1rJF48Crg_yoW8Ww45pF
-        Wrta4UCrsYqF1UCFZxta18Wa43KrZ5GF4UJas5JryUAF4DXF1SqryFkF15ua48KrZ3J34q
-        qrWqg343Z3s8Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        xUo0eHDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAABF1jj4GV8QAAsS
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103145450.1409273-3-jsd@semihalf.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/17/2022 6:18 PM, Casey Schaufler wrote:
-> On 11/17/2022 8:05 AM, Mimi Zohar wrote:
->> hOn Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
->>> From: Roberto Sassu <roberto.sassu@huawei.com>
->>>
->>> Currently, security_inode_init_security() supports only one LSM providing
->>> an xattr and EVM calculating the HMAC on that xattr, plus other inode
->>> metadata.
->>>
->>> Allow all LSMs to provide one or multiple xattrs, by extending the security
->>> blob reservation mechanism. Introduce the new lbs_xattr field of the
->>> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
->>> needs, and the LSM infrastructure knows how many xattr slots it should
->>> allocate.
->> Perhaps supporting per LSM multiple xattrs is a nice idea, but EVM
->> doesn't currently support it.  The LSM xattrs are hard coded in
->> evm_config_default_xattrnames[],  based on whether the LSM is
->> configured.  Additional security xattrs may be included in the
->> security.evm calculation, by extending the list via
->> security/integrity/evm/evm_xattrs.
+On Thu, Nov 03, 2022 at 03:54:49PM +0100, Jan Dabros wrote:
+> Instead of using static functions tpm_cr50_request_locality and
+> tpm_cr50_release_locality register callbacks from tpm class chip->ops
+> created for this purpose.
 > 
-> Smack uses multiple xattrs. All file system objects have a SMACK64
-> attribute, which is used for access control. A program file may have
-> a SMACK64EXEC attribute, which is the label the program will run with.
-> A library may have a SMACK64MMAP attribute to restrict loading. A
-> directory may have a SMACK64TRANSMUTE attribute, which modifies the
-> new object creation behavior.
-> 
-> The point being that it may be more than a "nice idea" to support
-> multiple xattrs. It's not a hypothetical situation.
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> ---
+[ ... ]
 
-Ok, that means that I have to change the number of xattrs reserved by 
-Smack in patch 3.
+>  #ifdef CONFIG_ACPI
+> @@ -686,6 +714,7 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
+>  	u32 vendor;
+>  	u8 buf[4];
+>  	int rc;
+> +	int loc;
+>  
+>  	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+>  		return -ENODEV;
+> @@ -728,24 +757,30 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
+>  			 TPM_CR50_TIMEOUT_NOIRQ_MS);
+>  	}
+>  
+> -	rc = tpm_cr50_request_locality(chip);
+> -	if (rc < 0) {
+> +	loc = tpm_cr50_request_locality(chip, TPM_CR50_I2C_DEFAULT_LOC);
+> +	if (loc < 0) {
+>  		dev_err(dev, "Could not request locality\n");
+>  		return rc;
 
-Thanks
+As reported by 0-day and Dan Carpenter:
 
-Roberto
+		return loc;
 
+Guenter
