@@ -2,99 +2,176 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFBA631453
-	for <lists+linux-integrity@lfdr.de>; Sun, 20 Nov 2022 14:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 808876315EB
+	for <lists+linux-integrity@lfdr.de>; Sun, 20 Nov 2022 20:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiKTNcp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 20 Nov 2022 08:32:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S229677AbiKTTnu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 20 Nov 2022 14:43:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiKTNci (ORCPT
+        with ESMTP id S229449AbiKTTns (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 20 Nov 2022 08:32:38 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1CF326;
-        Sun, 20 Nov 2022 05:32:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1668951129; bh=b2p9orljkPQAtfm2cx8Ohv8A3ug+yirHYm4KhuxDbQg=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=cLJ3ZWl4KL9RDxAMDQazxg/pLd+UAJ34UD2jdHsrA8zzTo0oZuodjjbrCIaz6ztdu
-         9cQ11nbp1mfazF3yTPaPX9QZ4cZ3GkCm3iqjKhSud4umBw4KGR98KnmC5X3fbmvoot
-         6pgPZ2vcyLUDUbclQLgzDfdyBmt6AahXVjwkgd7XWXvhxbwN/J535tAo3mRPw7qS76
-         OL75adGNRqhq8oOOysn3HkdJxylcl5o5lIyTJldqnZWL1SbpWmWRtVApJvWWwGK/hz
-         mAaZUx3xI/K+0u1xiKGPtjNb9Ho8oQXYDJ435hDGrPG0sqfEdj1accCwPnm38sOizy
-         xV7mWRLrqQRZQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from Venus.speedport.ip ([84.162.7.17]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8QS2-1osMht1t56-004VDT; Sun, 20
- Nov 2022 14:32:09 +0100
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
-        LinoSanfilippo@gmx.de, lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: [PATCH v10 14/14] tpm, tpm_tis: Enable interrupt test
-Date:   Sun, 20 Nov 2022 14:31:34 +0100
-Message-Id: <20221120133134.28926-15-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221120133134.28926-1-LinoSanfilippo@gmx.de>
-References: <20221120133134.28926-1-LinoSanfilippo@gmx.de>
+        Sun, 20 Nov 2022 14:43:48 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703BD1EC46;
+        Sun, 20 Nov 2022 11:43:47 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 981D16602381;
+        Sun, 20 Nov 2022 19:43:45 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668973425;
+        bh=T3nU7r4TDRBfUE21qBPtx6/vbbqNd5aTZrUhEKVEpe8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eTDOl2wCVRsu/tyZH+YPJZtqzX+lTk+zyDWIOt7B5OERtVQXV05JqgkECzvZaxhvq
+         GWHynwzbAdTGjQc4EiizPb4JzuNJErOOA6MGMcIE1OOBJsR2nJxdyKqik4rZXW8I8S
+         YL9hLYJH9B0qYNlv0ofE25pkedfO3Zr0ukRr6nTWoiYIF0ElBn0uG1ehB/KKpnJkB6
+         LmHZCe95IKsjPugXIHsbUyR3TPbe/Uz/FTgEe5YV5fHfIiRZ+dwYB8lU4/MgAmu4vM
+         BZjO4bgM9A0wAKu6Ub+wy7zE/lgrgtzyeA/1iFwakjmg/vd8UL0auYvToqpQCZqsxv
+         +Bmg67/Ow+Rwg==
+Received: by mercury (Postfix, from userid 1000)
+        id 1C1D2106F223; Sun, 20 Nov 2022 20:43:43 +0100 (CET)
+Date:   Sun, 20 Nov 2022 20:43:43 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-actions@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net
+Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Message-ID: <20221120194343.nnpzhgjapep7iwqk@mercury.elektranox.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:BKMRYOEhyfnkSjTu8QNQmyWBrZ0shgweC98K2S5I+em4v1FZ1vw
- xJm/V0KgsjeT2pkq7QRrr2FLo/CfBqDLcYP60wIBRTvSLhV68R/Ams+kdnFxcYt8jb2L3ou
- pZX5r3uJjv09RWyvQxM4GR0ioUKekCkRPUT1LtkvJkbc4AY47ouqSRekmuK3Rmai8TxViw/
- ynwEGbIg2JzXb0ffAcbEw==
-UI-OutboundReport: notjunk:1;M01:P0:mrSM3TH/Aok=;Dkll088hNQPY5V9rJi8UGOJXlhK
- /cloz7pNK06KOjCzCC7ZWEhOByE0aQhQh/yKhebkyyVJzoIOi7ySiRWEn7/k/WVebebusWZW5
- igSfzp1b/aMLUvcKxZ0zBROBN7QemmtzaJkYVUUVIYx1OAXtndVQOj7LD47Qy7MFIA8yTcdcu
- qUnFLg3CTqrNLkNylDVcxLqPmjv0m4PhCCFuUBsZnkPHnNrn2TJx9mgPdiV2hU1Nf/Tnm+HMV
- gvyIL4YVTruDZ6U6OWhwyl6YTlpJ1XImMPm0F9LRxTegVJmYB18oDaf+3jtySuBYVA7f+6a+g
- RX33Z+uitevMgTTkiEeXgMk2l6AAlLmz/jVusjuAheRxqy7PgDHSVepwAPTGNXvMLSHnwS/aC
- 6MJr5oUJdDfeHFyUgYhpQkPf3HHdCds6xObHFPFqFpd2JP8mSSXoo7zfH72QfwjJ2Alyss9wY
- VQZy9Le8z307WUKTx8nRijLcRWh0a8i5DhlO4LxJ3vYDkUM7g/kkduiowOiFTJnFCDiR2C2Ei
- vRzVFdQgx8HlUQWES9VC/LfFuIotKfPMYFuHRl/8YSF0lfDyvMgGchuTLTDQ6W8VRSGivjsa8
- rBbP2n0JLxVleUFmJJV1qTqWw+ysuXQa992+eD9mJZuuEY0JtOQrgHurJhlBj0kvGLKfxG5Zh
- Dpa6StViIIfspolhEyzYsSG72zgPgrZFLxlgWDR1D11BpSgGWW7iwYBV5Jkx0QzjUn30aVTsJ
- OhyCQYN3bncQigf2207ca5wL+fT8yREiW6y7ZroM4ZA40IoaVAzwQgKWT+JmHioetZg6ZmKJT
- xhXDqh+0DMn6eG1DEG+ch7yUVh8j0zxQKgMTufJBCZNFIIz8T6h81SA3vDnE6JWIQTfwj4hua
- uypPw1ZsctNbDOWQtnjsxDyRpMr4Ngk6/4UYYqNKEKsEi5/+SeMOetD5l2aEExv+qyVhll3ZZ
- MPrTOg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wvm2z6appxwdd5fa"
+Content-Disposition: inline
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoZSB0ZXN0
-IGZvciBpbnRlcnJ1cHRzIGluIHRwbV90aXNfc2VuZCgpIGlzIHNraXBwZWQgaWYgdGhlIGZsYWcK
-VFBNX0NISVBfRkxBR19JUlEgaXMgbm90IHNldC4gU2luY2UgdGhlIGN1cnJlbnQgY29kZSBuZXZl
-ciBzZXRzIHRoZSBmbGFnCmluaXRpYWxseSB0aGUgdGVzdCBpcyBuZXZlciBleGVjdXRlZC4KCkZp
-eCB0aGlzIGJ5IHNldHRpbmcgdGhlIGZsYWcgaW4gdHBtX3Rpc19nZW5faW50ZXJydXB0KCkgcmln
-aHQgYWZ0ZXIKaW50ZXJydXB0cyBoYXZlIGJlZW4gZW5hYmxlZCBhbmQgYmVmb3JlIHRoZSB0ZXN0
-IGlzIGV4ZWN1dGVkLgoKU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlw
-cG9Aa3VuYnVzLmNvbT4KVGVzdGVkLWJ5OiBNaWNoYWVsIE5pZXfDtmhuZXIgPGxpbnV4QG1uaWV3
-b2VobmVyLmRlPgpSZXZpZXdlZC1ieTogSmFya2tvIFNha2tpbmVuIDxqYXJra29Aa2VybmVsLm9y
-Zz4KLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jIHwgMTAgKysrKysrKystLQog
-MSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1n
-aXQgYS9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jIGIvZHJpdmVycy9jaGFyL3RwbS90
-cG1fdGlzX2NvcmUuYwppbmRleCBiOTdjYjMyNWNjYjcuLjYwMmNhNGJiOGUyZiAxMDA2NDQKLS0t
-IGEvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuYworKysgYi9kcml2ZXJzL2NoYXIvdHBt
-L3RwbV90aXNfY29yZS5jCkBAIC03ODcsMTEgKzc4NywxNyBAQCBzdGF0aWMgdm9pZCB0cG1fdGlz
-X2dlbl9pbnRlcnJ1cHQoc3RydWN0IHRwbV9jaGlwICpjaGlwKQogCWNvbnN0IGNoYXIgKmRlc2Mg
-PSAiYXR0ZW1wdGluZyB0byBnZW5lcmF0ZSBhbiBpbnRlcnJ1cHQiOwogCXUzMiBjYXAyOwogCWNh
-cF90IGNhcDsKKwlpbnQgcmV0OworCisJY2hpcC0+ZmxhZ3MgfD0gVFBNX0NISVBfRkxBR19JUlE7
-CiAKIAlpZiAoY2hpcC0+ZmxhZ3MgJiBUUE1fQ0hJUF9GTEFHX1RQTTIpCi0JCXRwbTJfZ2V0X3Rw
-bV9wdChjaGlwLCAweDEwMCwgJmNhcDIsIGRlc2MpOworCQlyZXQgPSB0cG0yX2dldF90cG1fcHQo
-Y2hpcCwgMHgxMDAsICZjYXAyLCBkZXNjKTsKIAllbHNlCi0JCXRwbTFfZ2V0Y2FwKGNoaXAsIFRQ
-TV9DQVBfUFJPUF9USVNfVElNRU9VVCwgJmNhcCwgZGVzYywgMCk7CisJCXJldCA9IHRwbTFfZ2V0
-Y2FwKGNoaXAsIFRQTV9DQVBfUFJPUF9USVNfVElNRU9VVCwgJmNhcCwgZGVzYywgMCk7CisKKwlp
-ZiAocmV0KQorCQljaGlwLT5mbGFncyAmPSB+VFBNX0NISVBfRkxBR19JUlE7CiB9CiAKIC8qIFJl
-Z2lzdGVyIHRoZSBJUlEgYW5kIGlzc3VlIGEgY29tbWFuZCB0aGF0IHdpbGwgY2F1c2UgYW4gaW50
-ZXJydXB0LiBJZiBhbgotLSAKMi4zNi4xCgo=
+
+--wvm2z6appxwdd5fa
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Fri, Nov 18, 2022 at 11:35:34PM +0100, Uwe Kleine-K=F6nig wrote:
+> Hello,
+>=20
+> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type") from 2016 there is a "temporary" alternative probe
+> callback for i2c drivers.
+>=20
+> This series completes all drivers to this new callback (unless I missed
+> something). It's based on current next/master.
+> A part of the patches depend on commit 662233731d66 ("i2c: core:
+> Introduce i2c_client_get_device_id helper function"), there is a branch t=
+hat
+> you can pull into your tree to get it:
+>=20
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client=
+_device_id_helper-immutable
+>=20
+> I don't think it's feasable to apply this series in one go, so I ask the
+> maintainers of the changed files to apply via their tree. I guess it
+> will take a few kernel release iterations until all patch are in, but I
+> think a single tree creates too much conflicts.
+>=20
+> The last patch changes i2c_driver::probe, all non-converted drivers will
+> fail to compile then. So I hope the build bots will tell me about any
+> driver I missed to convert. This patch is obviously not for application
+> now.
+>=20
+> I dropped most individuals from the recipents of this mail to not
+> challenge the mail servers and mailing list filters too much. Sorry if
+> you had extra efforts to find this mail.
+>=20
+> Best regards
+> Uwe
+
+=2E..
+
+>   power: supply: adp5061: Convert to i2c's .probe_new()
+>   power: supply: bq2415x: Convert to i2c's .probe_new()
+>   power: supply: bq24190: Convert to i2c's .probe_new()
+>   power: supply: bq24257: Convert to i2c's .probe_new()
+>   power: supply: bq24735: Convert to i2c's .probe_new()
+>   power: supply: bq2515x: Convert to i2c's .probe_new()
+>   power: supply: bq256xx: Convert to i2c's .probe_new()
+>   power: supply: bq25890: Convert to i2c's .probe_new()
+>   power: supply: bq25980: Convert to i2c's .probe_new()
+>   power: supply: bq27xxx: Convert to i2c's .probe_new()
+>   power: supply: ds2782: Convert to i2c's .probe_new()
+>   power: supply: lp8727: Convert to i2c's .probe_new()
+>   power: supply: ltc2941: Convert to i2c's .probe_new()
+>   power: supply: ltc4162-l: Convert to i2c's .probe_new()
+>   power: supply: max14656: Convert to i2c's .probe_new()
+>   power: supply: max17040: Convert to i2c's .probe_new()
+>   power: supply: max17042_battery: Convert to i2c's .probe_new()
+>   power: supply: rt5033_battery: Convert to i2c's .probe_new()
+>   power: supply: rt9455: Convert to i2c's .probe_new()
+>   power: supply: sbs: Convert to i2c's .probe_new()
+>   power: supply: sbs-manager: Convert to i2c's .probe_new()
+>   power: supply: smb347: Convert to i2c's .probe_new()
+>   power: supply: ucs1002: Convert to i2c's .probe_new()
+>   power: supply: z2_battery: Convert to i2c's .probe_new()
+>   [...]
+
+Thanks, I queued patches 513-536 to the power-supply subsystem.
+
+-- Sebastian
+
+--wvm2z6appxwdd5fa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmN6g2YACgkQ2O7X88g7
++pocPA/+MG7rp45xJuAH0zlIFTM8ovBviXnLvra0hpvK+vMB8SVdh4K8vRCAoeoT
+lxML9oRVfhraHzo/3X6+7V87cw+QzEx3GZbYsIasGqic46MoFYkbA2i3Q8s8hS5y
+qpAcKn/efXJaBtdIxWQnOc0xU0YCiteiIik8Idb9MjHFupUspLxtIjCzTAmvKQ0k
+hJ5u5cqv3d/MP6VpsOCUYPDet9nS9ByPeg8Kr9Ux1a0WEldPYUO+dU0ObqRdhliZ
+agftaEtCvFYkfO9k8ubBL/x00gTn002xOB7gp+5s0V0D3wKfT5EPVYOoUZbeYMIu
+QOZaLHkNkBtV85kGm18h7IFdQZQY9ahcaGTYZplyz/YzHlK/AlfjA2umKS1+rs5m
+A+DDqnAkuWw9fLg0MJ4dLSPwOSPX3VfgmVS3By3Do2gotQkCqXsRdhrG1cIoE1aL
+AZYpSwLTn2rAYF59poL3rgSqx/MhgrLwmKQOH3fjwZ3R7PIAWFhYP1We2UtKdCEM
+Gjpr7QfAUiOuXDKi5OrBbWr4m2eX26A4uifwR62OyldwH8pUWAq3umgkw3rotQAA
+hdwOOPM+cHTyLbtP8kaP1XSR6u0ybuTbw8OQE/XPDNVceoMqR4XxUSYbs0Q0UzY6
+fwljGfbakuGbaNlb7s2LBsy0ESZuiz64Za/0gfJhI5rP1eNRR1U=
+=Dh+o
+-----END PGP SIGNATURE-----
+
+--wvm2z6appxwdd5fa--
