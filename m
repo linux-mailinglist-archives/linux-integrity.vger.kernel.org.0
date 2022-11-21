@@ -2,52 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31DD631B2A
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Nov 2022 09:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C48631D25
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Nov 2022 10:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiKUIVV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Nov 2022 03:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        id S230369AbiKUJqH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Nov 2022 04:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiKUIVO (ORCPT
+        with ESMTP id S230008AbiKUJqF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:21:14 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A683A6DFF2;
-        Mon, 21 Nov 2022 00:21:12 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NG0Xn30dmz9xqcM;
-        Mon, 21 Nov 2022 16:14:17 +0800 (CST)
+        Mon, 21 Nov 2022 04:46:05 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9492E13E08;
+        Mon, 21 Nov 2022 01:46:03 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NG2Ql5CVtz9xGKf;
+        Mon, 21 Nov 2022 17:39:11 +0800 (CST)
 Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwB3YG3KNHtjPkCBAA--.28046S2;
-        Mon, 21 Nov 2022 09:20:40 +0100 (CET)
-Message-ID: <36ec31d29127496531eb08234c4234568cdbdc3b.camel@huaweicloud.com>
-Subject: Re: [PATCH v4] evm: Correct inode_init_security hooks behaviors
+        by APP1 (Coremail) with SMTP id LxC2BwCHcW65SHtjOoSBAA--.28097S2;
+        Mon, 21 Nov 2022 10:45:39 +0100 (CET)
+Message-ID: <aa5fa8c5f231115c58012352124df57d16a01e41.camel@huaweicloud.com>
+Subject: Re: [PATCH v4 2/5] security: Rewrite
+ security_old_inode_init_security()
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
-Cc:     linux-integrity@vger.kernel.org, philippe.trebuchet@ssi.gouv.fr,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
         paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        casey@schaufler-ca.com, davem@davemloft.net, lucien.xin@gmail.com,
-        vgoyal@redhat.com, omosnace@redhat.com, mortonm@chromium.org,
-        nicolas.bouchinet@ssi.gouv.fr, mic@digikod.net,
-        cgzones@googlemail.com, linux-security-module@vger.kernel.org,
-        kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        bpf@vger.kernel.org
-Date:   Mon, 21 Nov 2022 09:20:16 +0100
-In-Reply-To: <Y3eUvBadW87f9PaL@archlinux>
-References: <Y1lElHVQGT/1Pa6O@archlinux>
-         <2b10941d35ab833dbb0e5858489fefc33d11c010.camel@huaweicloud.com>
-         <f292d4f68e540f394504cbc8a4b98132cca09209.camel@huaweicloud.com>
-         <Y3eUvBadW87f9PaL@archlinux>
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        ocfs2-devel@oss.oracle.com
+Date:   Mon, 21 Nov 2022 10:45:19 +0100
+In-Reply-To: <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+         <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
+         <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwB3YG3KNHtjPkCBAA--.28046S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xw4fGrW3Ww18KF4DuFW3Wrg_yoW7CFW8pF
-        WUK3Wakr4kJFy8CrZ2y3W7Za1fK3yrGrWUWryakr1YvF90vFn2qr40kr15uF95CrW8GFy2
-        qF17ZrZxuw1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: LxC2BwCHcW65SHtjOoSBAA--.28097S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCry7Xw1UCFyUJr1ruFWDCFg_yoW5Kr1Dpr
+        W3KF1UKrn8JF97CrWxJFnxWF4I93yfGFZrXrs5AryDAF1DCF1xtr10yry5u343JrWkJ34F
+        qw4xZ3sxZrn8Z3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
         vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
@@ -60,7 +60,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3Xw4fGrW3Ww18KF4DuFW3Wrg_yoW7CFW8pF
         2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
         xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
         c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQADBF1jj4WldwAAsg
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgADBF1jj4GngwACsT
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,130 +70,85 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-11-18 at 15:20 +0100, Nicolas Bouchinet wrote:
-> On Fri, Nov 04, 2022 at 02:43:25PM +0100, Roberto Sassu wrote:
-> > On Thu, 2022-11-03 at 16:27 +0100, Roberto Sassu wrote:
-> > > On Wed, 2022-10-26 at 16:30 +0200, Nicolas Bouchinet wrote:
-> > > > From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
-> > > > 
-> > > > Fixes a NULL pointer dereference occurring in the
-> > > > `evm_protected_xattr_common` function of the EVM LSM. The bug is
-> > > > triggered if a `inode_init_security` hook returns 0 without initializing
-> > > > the given `struct xattr` fields (which is the case of BPF) and if no
-> > > > other LSM overrides thoses fields after. This also leads to memory
-> > > > leaks.
-> > > > 
-> > > > The `call_int_hook_xattr` macro has been inlined into the
-> > > > `security_inode_init_security` hook in order to check hooks return
-> > > > values and skip ones who doesn't init `xattrs`.
-> > > > 
-> > > > Modify `evm_init_hmac` function to init the EVM hmac using every
-> > > > entry of the given xattr array.
-> > > > 
-> > > > The `MAX_LSM_EVM_XATTR` value is now based on the security modules
-> > > > compiled in, which gives room for SMACK, SELinux, Apparmor, BPF and
-> > > > IMA/EVM security attributes.
-> > > > 
-> > > > Changes the default return value of the `inode_init_security` hook
-> > > > definition to `-EOPNOTSUPP`.
-> > > > 
-> > > > Changes the hook documentation to match the behavior of the LSMs using
-> > > > it (only xattr->value is initialised with kmalloc and thus is the only
-> > > > one that should be kfreed by the caller).
-> > > > 
-> > > > Cc: roberto.sassu@huaweicloud.com
-> > > > Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
-> > > > ---
-> > > > Changes since v3:
-> > > > https://lore.kernel.org/linux-integrity/Y1fu4jofqLHVDprT@archlinux/
-> > > > 
-> > > > * Fixes compilation error reported by the kernel test robot.
-> > > > ---
-> > > >  include/linux/lsm_hook_defs.h       |  2 +-
-> > > >  include/linux/lsm_hooks.h           |  4 ++--
-> > > >  security/integrity/evm/evm.h        |  1 +
-> > > >  security/integrity/evm/evm_crypto.c |  9 +++++++--
-> > > >  security/integrity/evm/evm_main.c   |  7 ++++---
-> > > >  security/security.c                 | 31 ++++++++++++++++++++++-------
-> > > >  6 files changed, 39 insertions(+), 15 deletions(-)
-> > > > 
-> > > > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> > > > index 806448173033..e5dd0c0f6345 100644
-> > > > --- a/include/linux/lsm_hook_defs.h
-> > > > +++ b/include/linux/lsm_hook_defs.h
-> > > > @@ -111,7 +111,7 @@ LSM_HOOK(int, 0, path_notify, const struct path *path, u64 mask,
-> > > >  	 unsigned int obj_type)
-> > > >  LSM_HOOK(int, 0, inode_alloc_security, struct inode *inode)
-> > > >  LSM_HOOK(void, LSM_RET_VOID, inode_free_security, struct inode *inode)
-> > > > -LSM_HOOK(int, 0, inode_init_security, struct inode *inode,
-> > > > +LSM_HOOK(int, -EOPNOTSUPP, inode_init_security, struct inode *inode,
-> > > >  	 struct inode *dir, const struct qstr *qstr, const char **name,
-> > > >  	 void **value, size_t *len)
-> > > >  LSM_HOOK(int, 0, inode_init_security_anon, struct inode *inode,
-> > > > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> > > > index 84a0d7e02176..95aff9383de1 100644
-> > > > --- a/include/linux/lsm_hooks.h
-> > > > +++ b/include/linux/lsm_hooks.h
-> > > > @@ -229,8 +229,8 @@
-> > > >   *	This hook is called by the fs code as part of the inode creation
-> > > >   *	transaction and provides for atomic labeling of the inode, unlike
-> > > >   *	the post_create/mkdir/... hooks called by the VFS.  The hook function
-> > > > - *	is expected to allocate the name and value via kmalloc, with the caller
-> > > > - *	being responsible for calling kfree after using them.
-> > > > + *	is expected to allocate the value via kmalloc, with the caller
-> > > > + *	being responsible for calling kfree after using it.
-> > > 
-> > > Please also update the description of @name as well (remove allocated).
-> > 
-> > While you update the patch, I worked on the other patches: reiserfs
-> > fixes, if we want still to apply them; expand the call_int_hook() loop
-> > also for security_old_inode_init_security() to have consistent behavior
-> > across all filesystems.
+On Thu, 2022-11-17 at 08:03 -0500, Mimi Zohar wrote:
+> Hi Roberto,
 > 
-> Thank's I didn't had time to read the patch, will do it.
+> On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Rewrite security_old_inode_init_security() to call
+> > security_inode_init_security() before making changes to support multiple
+> > LSMs providing xattrs. Do it so that the required changes are done only in
+> > one place.
+> 
+> Only security_inode_init_security() has support for EVM.   Making
+> security_old_inode_init_security() a wrapper for
+> security_inode_init_security() could result in security.evm extended
+> attributes being created that previously weren't created.
+> 
+> In fact ocfs2 defines ocfs2_init_security_get() as a wrapper for both
+> the old and new inode_init_security calls based on the caller's
+> preference.   Only mknod and symlink seem to use the old function. 
+> Wondering why do they differentiate between callers?  (Cc'ing the ocfs2
+> mailing list as they're affected by this change.)
+> 
+> "[PATCH v4 1/5] reiserfs: Add missing calls to
+> reiserfs_security_free()"  fixed a memory leak.  I couldn't tell if
+> there was a similar memory leak in ocfs2, the only other user of
+> security_old_inode_init_security().
 
-Hi Nicolas
+From what I see, there is no memory leak there.
 
-in the meantime we went further. As Paul commented that he would prefer
-to use the reservation mechanism for xattrs, instead of a static
-allocation, I resumed my old patch set, which would include also your
-changes.
+> As ocfs2 already defines initxattrs, that leaves only reiserfs missing
+> initxattrs().  A better, cleaner solution would be to define one.
 
-Will send a new version shortly. Will appreciate your feedback!
+If I understood why security_old_inode_init_security() is called
+instead of security_inode_init_security(), the reason seems that the
+filesystem code uses the length of the obtained xattr to make some
+calculations (e.g. reserve space). The xattr is written at a later
+time.
+
+Since for reiserfs there is a plan to deprecate it, it probably
+wouldn't be worth to support the creation of multiple xattrs. I would
+define a callback to take the first xattr and make a copy, so that
+calling security_inode_init_security() + reiserfs_initxattrs() is
+equivalent to calling security_old_inode_init_security().
+
+But then, this is what anyway I was doing with the
+security_initxattrs() callback, for all callers of security_old_inode_i
+nit_security().
+
+Also, security_old_inode_init_security() is exported to kernel modules.
+Maybe, it is used somewhere. So, unless we plan to remove it
+completely, it should be probably be fixed to avoid multiple LSMs
+successfully setting an xattr, and losing the memory of all except the
+last (which this patch fixes by calling security_inode_init_security())
+.
+
+If there is still the preference, I will implement the reiserfs
+callback and make a fix for security_old_inode_init_security().
 
 Thanks
 
 Roberto
 
-> > The patches are available here:
-> > 
-> > https://github.com/robertosassu/linux/tree/evm-multiple-lsms-nicolas-v1-devel-v6
-> > 
-> > Other than Github Actions related patches, there is also TestLSM, which
-> > I developed to ensure that xattrs are correctly created.
-> > 
-> > I also adapted the IMA/EVM tests, which are available here:
-> > 
-> > https://github.com/robertosassu/ima-evm-utils/tree/evm-multiple-lsms-nicolas-v1-devel-v6
-> > 
-> > Nicolas, if you want to test the new patch locally, build the UML
-> > kernel with:
-> Will surely do ! Thanks.
-> > make ARCH=um -j$(nproc)
-> > 
-> > Build ima-evm-utils, and copy linux and certs/signing_key.pem from the
-> > kernel source directory to the ima-evm-utils directory. Then, run:
-> > 
-> > tests/evm_multiple_lsms.test
-> > 
-> > It basically runs the UML kernel with different combinations of LSMs
-> > (some providing an xattr, some not) and compares the HMAC calculated by
-> > EVM in the kernel with the HMAC calculated by evmctl in user space.
-> > 
-> > Roberto
-> > 
+> thanks,
 > 
-> Best regards,
+> Mimi
 > 
-> Nicolas Bouchinet
+> > Define the security_initxattrs() callback and pass it to
+> > security_inode_init_security() as argument, to obtain the first xattr
+> > provided by LSMs.
+> > 
+> > This behavior is a bit different from the current one. Before this patch
+> > calling call_int_hook() could cause multiple LSMs to provide an xattr,
+> > since call_int_hook() does not stop when an LSM returns zero. The caller of
+> > security_old_inode_init_security() receives the last xattr set. The pointer
+> > of the xattr value of previous LSMs is lost, causing memory leaks.
+> > 
+> > However, in practice, this scenario does not happen as the only in-tree
+> > LSMs providing an xattr at inode creation time are SELinux and Smack, which
+> > are mutually exclusive.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>b
 
