@@ -2,176 +2,160 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808876315EB
-	for <lists+linux-integrity@lfdr.de>; Sun, 20 Nov 2022 20:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 801C8631A58
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Nov 2022 08:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiKTTnu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 20 Nov 2022 14:43:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        id S229660AbiKUHbo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Nov 2022 02:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKTTns (ORCPT
+        with ESMTP id S229699AbiKUHbm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 20 Nov 2022 14:43:48 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703BD1EC46;
-        Sun, 20 Nov 2022 11:43:47 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 981D16602381;
-        Sun, 20 Nov 2022 19:43:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668973425;
-        bh=T3nU7r4TDRBfUE21qBPtx6/vbbqNd5aTZrUhEKVEpe8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTDOl2wCVRsu/tyZH+YPJZtqzX+lTk+zyDWIOt7B5OERtVQXV05JqgkECzvZaxhvq
-         GWHynwzbAdTGjQc4EiizPb4JzuNJErOOA6MGMcIE1OOBJsR2nJxdyKqik4rZXW8I8S
-         YL9hLYJH9B0qYNlv0ofE25pkedfO3Zr0ukRr6nTWoiYIF0ElBn0uG1ehB/KKpnJkB6
-         LmHZCe95IKsjPugXIHsbUyR3TPbe/Uz/FTgEe5YV5fHfIiRZ+dwYB8lU4/MgAmu4vM
-         BZjO4bgM9A0wAKu6Ub+wy7zE/lgrgtzyeA/1iFwakjmg/vd8UL0auYvToqpQCZqsxv
-         +Bmg67/Ow+Rwg==
-Received: by mercury (Postfix, from userid 1000)
-        id 1C1D2106F223; Sun, 20 Nov 2022 20:43:43 +0100 (CET)
-Date:   Sun, 20 Nov 2022 20:43:43 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-actions@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <20221120194343.nnpzhgjapep7iwqk@mercury.elektranox.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        Mon, 21 Nov 2022 02:31:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A418A6DFCF
+        for <linux-integrity@vger.kernel.org>; Sun, 20 Nov 2022 23:29:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669015798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PzrpIQOcRog587drqyOgalYCERQdLn/ggTvNzPloyBI=;
+        b=hKTW+BfQMY55SqBtFY9LYsktEBaAYXmU9RV1DItvZ7eo86DbMHwfQMOCA74GI0RvAT0LGT
+        Sg7tnrHM+3ZDEJEkI6ZPmLoguwd5cN5IfDhPIf0bF/M1QQUVBpL2sVbJVnYi3iGT5RHEly
+        6PJ2+9bjcaWqSnmgQmIPN8FBFQD9JQA=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-68-m66XR0Z5Nw-zaN_-REuKRw-1; Mon, 21 Nov 2022 02:29:56 -0500
+X-MC-Unique: m66XR0Z5Nw-zaN_-REuKRw-1
+Received: by mail-pj1-f72.google.com with SMTP id mh8-20020a17090b4ac800b0021348e084a0so11413759pjb.8
+        for <linux-integrity@vger.kernel.org>; Sun, 20 Nov 2022 23:29:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PzrpIQOcRog587drqyOgalYCERQdLn/ggTvNzPloyBI=;
+        b=nH9N091HE4F2qpn4q3JgIThHNHxO+429ULwEUe+actBD0gvqrXhPkB37ffYbjXNcx3
+         oR+iBTtzy64B67FkwPcVKfJ+CyKUtvgB2qi9Ag1LdAPD6eWYDGtEY+ah6pCS8Z1S6kgS
+         NEks8A+0YKrxXlXUEo7mqpUXFBvruyl4xBlvIjPRoSo05znkJguYplMr5iTC8DTUWUAW
+         KbWRR+ExpdqSeXByla+uCf/KQddAfY5s1uZO1aB6LMTWdodxipi+fVyP0na6WP6RQpVK
+         OVdQP58oEVnKeYxZP6f35eLTNY895Gn9rLHexn8tD038vvsJ+AP8/w/33IYg4zG8xSWx
+         ItKg==
+X-Gm-Message-State: ANoB5pnfVNR09HjjYcfiEUUsZcrbI4A5rDh/lX68jXwW5lADzC2jgNd+
+        Sm2CaeuS3hS5pnLeevoEIK8jl/uVrDgLsH3qxS2rWzp/fEDs1qEhYPVHvRfwpa9aHyVljksaHgh
+        Owg7C7sBejO9Ag6CZ8y6ISzsShbqB
+X-Received: by 2002:a17:902:bcc7:b0:188:f42e:6a90 with SMTP id o7-20020a170902bcc700b00188f42e6a90mr926382pls.127.1669015795847;
+        Sun, 20 Nov 2022 23:29:55 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7EcYX61iVqKcEdoBRAEQ94b78zalp2WbshZ4Dz+5rKx3bpryPWxZ9XpTzupJLi96mob2prPA==
+X-Received: by 2002:a17:902:bcc7:b0:188:f42e:6a90 with SMTP id o7-20020a170902bcc700b00188f42e6a90mr926361pls.127.1669015795583;
+        Sun, 20 Nov 2022 23:29:55 -0800 (PST)
+Received: from localhost ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id s16-20020a170902a51000b001869f2120a5sm8886857plq.34.2022.11.20.23.29.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 23:29:54 -0800 (PST)
+From:   Coiby Xu <coxu@redhat.com>
+To:     kexec@lists.infradead.org
+Cc:     Matthew Garrett <mjg59@srcf.ucam.org>, Jiri Bohac <jbohac@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        James Morris <jmorris@namei.org>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] lockdown: kexec_file: prevent unsigned kernel image when KEXEC_SIG not enabled
+Date:   Mon, 21 Nov 2022 15:29:47 +0800
+Message-Id: <20221121072947.836672-1-coxu@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wvm2z6appxwdd5fa"
-Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+A kernel builder may not enable KEXEC_SIG and some architectures like
+ppc64 simply don't have KEXEC_SIG. In these cases, unless both
+IMA_ARCH_POLICY and secure boot also enabled, lockdown doesn't prevent
+unsigned kernel image from being kexec'ed via the kexec_file_load
+syscall whereas it could prevent one via the kexec_load syscall. Mandate
+signature verification for those cases.
 
---wvm2z6appxwdd5fa
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 155bdd30af17 ("kexec_file: Restrict at runtime if the kernel is locked down")
+Cc: Matthew Garrett <mjg59@srcf.ucam.org>
+Cc: Jiri Bohac <jbohac@suse.cz>
+Cc: David Howells <dhowells@redhat.com>
+Cc: kexec@lists.infradead.org
+Cc: linux-integrity@vger.kernel.org
+Signed-off-by: Coiby Xu <coxu@redhat.com>
+---
+ kernel/kexec_file.c | 31 +++++++++++++++++++++----------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
 
-Hi,
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 45637511e0de..04d56b6e6459 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -125,6 +125,20 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+ 	image->image_loader_data = NULL;
+ }
+ 
++static int mandate_signatute_verification(void)
++{
++	/*
++	 * If IMA is guaranteed to appraise a signature on the kexec
++	 * image, permit it even if the kernel is otherwise locked
++	 * down.
++	 */
++	if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
++	    security_locked_down(LOCKDOWN_KEXEC))
++		return -EPERM;
++
++	return 0;
++}
++
+ #ifdef CONFIG_KEXEC_SIG
+ #ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+ int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
+@@ -168,14 +182,9 @@ kimage_validate_signature(struct kimage *image)
+ 			return ret;
+ 		}
+ 
+-		/*
+-		 * If IMA is guaranteed to appraise a signature on the kexec
+-		 * image, permit it even if the kernel is otherwise locked
+-		 * down.
+-		 */
+-		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
+-		    security_locked_down(LOCKDOWN_KEXEC))
+-			return -EPERM;
++		ret = mandate_signatute_verification();
++		if (ret)
++			return ret;
+ 
+ 		pr_debug("kernel signature verification failed (%d).\n", ret);
+ 	}
+@@ -211,10 +220,12 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ 
+ #ifdef CONFIG_KEXEC_SIG
+ 	ret = kimage_validate_signature(image);
+-
++#else
++	ret = mandate_signatute_verification();
++#endif
+ 	if (ret)
+ 		goto out;
+-#endif
++
+ 	/* It is possible that there no initramfs is being loaded */
+ 	if (!(flags & KEXEC_FILE_NO_INITRAMFS)) {
+ 		ret = kernel_read_file_from_fd(initrd_fd, 0, &image->initrd_buf,
+-- 
+2.38.1
 
-On Fri, Nov 18, 2022 at 11:35:34PM +0100, Uwe Kleine-K=F6nig wrote:
-> Hello,
->=20
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
->=20
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch t=
-hat
-> you can pull into your tree to get it:
->=20
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client=
-_device_id_helper-immutable
->=20
-> I don't think it's feasable to apply this series in one go, so I ask the
-> maintainers of the changed files to apply via their tree. I guess it
-> will take a few kernel release iterations until all patch are in, but I
-> think a single tree creates too much conflicts.
->=20
-> The last patch changes i2c_driver::probe, all non-converted drivers will
-> fail to compile then. So I hope the build bots will tell me about any
-> driver I missed to convert. This patch is obviously not for application
-> now.
->=20
-> I dropped most individuals from the recipents of this mail to not
-> challenge the mail servers and mailing list filters too much. Sorry if
-> you had extra efforts to find this mail.
->=20
-> Best regards
-> Uwe
-
-=2E..
-
->   power: supply: adp5061: Convert to i2c's .probe_new()
->   power: supply: bq2415x: Convert to i2c's .probe_new()
->   power: supply: bq24190: Convert to i2c's .probe_new()
->   power: supply: bq24257: Convert to i2c's .probe_new()
->   power: supply: bq24735: Convert to i2c's .probe_new()
->   power: supply: bq2515x: Convert to i2c's .probe_new()
->   power: supply: bq256xx: Convert to i2c's .probe_new()
->   power: supply: bq25890: Convert to i2c's .probe_new()
->   power: supply: bq25980: Convert to i2c's .probe_new()
->   power: supply: bq27xxx: Convert to i2c's .probe_new()
->   power: supply: ds2782: Convert to i2c's .probe_new()
->   power: supply: lp8727: Convert to i2c's .probe_new()
->   power: supply: ltc2941: Convert to i2c's .probe_new()
->   power: supply: ltc4162-l: Convert to i2c's .probe_new()
->   power: supply: max14656: Convert to i2c's .probe_new()
->   power: supply: max17040: Convert to i2c's .probe_new()
->   power: supply: max17042_battery: Convert to i2c's .probe_new()
->   power: supply: rt5033_battery: Convert to i2c's .probe_new()
->   power: supply: rt9455: Convert to i2c's .probe_new()
->   power: supply: sbs: Convert to i2c's .probe_new()
->   power: supply: sbs-manager: Convert to i2c's .probe_new()
->   power: supply: smb347: Convert to i2c's .probe_new()
->   power: supply: ucs1002: Convert to i2c's .probe_new()
->   power: supply: z2_battery: Convert to i2c's .probe_new()
->   [...]
-
-Thanks, I queued patches 513-536 to the power-supply subsystem.
-
--- Sebastian
-
---wvm2z6appxwdd5fa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmN6g2YACgkQ2O7X88g7
-+pocPA/+MG7rp45xJuAH0zlIFTM8ovBviXnLvra0hpvK+vMB8SVdh4K8vRCAoeoT
-lxML9oRVfhraHzo/3X6+7V87cw+QzEx3GZbYsIasGqic46MoFYkbA2i3Q8s8hS5y
-qpAcKn/efXJaBtdIxWQnOc0xU0YCiteiIik8Idb9MjHFupUspLxtIjCzTAmvKQ0k
-hJ5u5cqv3d/MP6VpsOCUYPDet9nS9ByPeg8Kr9Ux1a0WEldPYUO+dU0ObqRdhliZ
-agftaEtCvFYkfO9k8ubBL/x00gTn002xOB7gp+5s0V0D3wKfT5EPVYOoUZbeYMIu
-QOZaLHkNkBtV85kGm18h7IFdQZQY9ahcaGTYZplyz/YzHlK/AlfjA2umKS1+rs5m
-A+DDqnAkuWw9fLg0MJ4dLSPwOSPX3VfgmVS3By3Do2gotQkCqXsRdhrG1cIoE1aL
-AZYpSwLTn2rAYF59poL3rgSqx/MhgrLwmKQOH3fjwZ3R7PIAWFhYP1We2UtKdCEM
-Gjpr7QfAUiOuXDKi5OrBbWr4m2eX26A4uifwR62OyldwH8pUWAq3umgkw3rotQAA
-hdwOOPM+cHTyLbtP8kaP1XSR6u0ybuTbw8OQE/XPDNVceoMqR4XxUSYbs0Q0UzY6
-fwljGfbakuGbaNlb7s2LBsy0ESZuiz64Za/0gfJhI5rP1eNRR1U=
-=Dh+o
------END PGP SIGNATURE-----
-
---wvm2z6appxwdd5fa--
