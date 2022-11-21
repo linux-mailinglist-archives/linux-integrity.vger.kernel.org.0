@@ -2,160 +2,198 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801C8631A58
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Nov 2022 08:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F31DD631B2A
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Nov 2022 09:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiKUHbo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Nov 2022 02:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
+        id S229632AbiKUIVV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Nov 2022 03:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiKUHbm (ORCPT
+        with ESMTP id S229558AbiKUIVO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Nov 2022 02:31:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A418A6DFCF
-        for <linux-integrity@vger.kernel.org>; Sun, 20 Nov 2022 23:29:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669015798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PzrpIQOcRog587drqyOgalYCERQdLn/ggTvNzPloyBI=;
-        b=hKTW+BfQMY55SqBtFY9LYsktEBaAYXmU9RV1DItvZ7eo86DbMHwfQMOCA74GI0RvAT0LGT
-        Sg7tnrHM+3ZDEJEkI6ZPmLoguwd5cN5IfDhPIf0bF/M1QQUVBpL2sVbJVnYi3iGT5RHEly
-        6PJ2+9bjcaWqSnmgQmIPN8FBFQD9JQA=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-68-m66XR0Z5Nw-zaN_-REuKRw-1; Mon, 21 Nov 2022 02:29:56 -0500
-X-MC-Unique: m66XR0Z5Nw-zaN_-REuKRw-1
-Received: by mail-pj1-f72.google.com with SMTP id mh8-20020a17090b4ac800b0021348e084a0so11413759pjb.8
-        for <linux-integrity@vger.kernel.org>; Sun, 20 Nov 2022 23:29:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PzrpIQOcRog587drqyOgalYCERQdLn/ggTvNzPloyBI=;
-        b=nH9N091HE4F2qpn4q3JgIThHNHxO+429ULwEUe+actBD0gvqrXhPkB37ffYbjXNcx3
-         oR+iBTtzy64B67FkwPcVKfJ+CyKUtvgB2qi9Ag1LdAPD6eWYDGtEY+ah6pCS8Z1S6kgS
-         NEks8A+0YKrxXlXUEo7mqpUXFBvruyl4xBlvIjPRoSo05znkJguYplMr5iTC8DTUWUAW
-         KbWRR+ExpdqSeXByla+uCf/KQddAfY5s1uZO1aB6LMTWdodxipi+fVyP0na6WP6RQpVK
-         OVdQP58oEVnKeYxZP6f35eLTNY895Gn9rLHexn8tD038vvsJ+AP8/w/33IYg4zG8xSWx
-         ItKg==
-X-Gm-Message-State: ANoB5pnfVNR09HjjYcfiEUUsZcrbI4A5rDh/lX68jXwW5lADzC2jgNd+
-        Sm2CaeuS3hS5pnLeevoEIK8jl/uVrDgLsH3qxS2rWzp/fEDs1qEhYPVHvRfwpa9aHyVljksaHgh
-        Owg7C7sBejO9Ag6CZ8y6ISzsShbqB
-X-Received: by 2002:a17:902:bcc7:b0:188:f42e:6a90 with SMTP id o7-20020a170902bcc700b00188f42e6a90mr926382pls.127.1669015795847;
-        Sun, 20 Nov 2022 23:29:55 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7EcYX61iVqKcEdoBRAEQ94b78zalp2WbshZ4Dz+5rKx3bpryPWxZ9XpTzupJLi96mob2prPA==
-X-Received: by 2002:a17:902:bcc7:b0:188:f42e:6a90 with SMTP id o7-20020a170902bcc700b00188f42e6a90mr926361pls.127.1669015795583;
-        Sun, 20 Nov 2022 23:29:55 -0800 (PST)
-Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id s16-20020a170902a51000b001869f2120a5sm8886857plq.34.2022.11.20.23.29.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 23:29:54 -0800 (PST)
-From:   Coiby Xu <coxu@redhat.com>
-To:     kexec@lists.infradead.org
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>, Jiri Bohac <jbohac@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        linux-integrity@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        James Morris <jmorris@namei.org>,
-        Matthew Garrett <mjg59@google.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] lockdown: kexec_file: prevent unsigned kernel image when KEXEC_SIG not enabled
-Date:   Mon, 21 Nov 2022 15:29:47 +0800
-Message-Id: <20221121072947.836672-1-coxu@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 21 Nov 2022 03:21:14 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A683A6DFF2;
+        Mon, 21 Nov 2022 00:21:12 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NG0Xn30dmz9xqcM;
+        Mon, 21 Nov 2022 16:14:17 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwB3YG3KNHtjPkCBAA--.28046S2;
+        Mon, 21 Nov 2022 09:20:40 +0100 (CET)
+Message-ID: <36ec31d29127496531eb08234c4234568cdbdc3b.camel@huaweicloud.com>
+Subject: Re: [PATCH v4] evm: Correct inode_init_security hooks behaviors
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
+Cc:     linux-integrity@vger.kernel.org, philippe.trebuchet@ssi.gouv.fr,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        casey@schaufler-ca.com, davem@davemloft.net, lucien.xin@gmail.com,
+        vgoyal@redhat.com, omosnace@redhat.com, mortonm@chromium.org,
+        nicolas.bouchinet@ssi.gouv.fr, mic@digikod.net,
+        cgzones@googlemail.com, linux-security-module@vger.kernel.org,
+        kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        bpf@vger.kernel.org
+Date:   Mon, 21 Nov 2022 09:20:16 +0100
+In-Reply-To: <Y3eUvBadW87f9PaL@archlinux>
+References: <Y1lElHVQGT/1Pa6O@archlinux>
+         <2b10941d35ab833dbb0e5858489fefc33d11c010.camel@huaweicloud.com>
+         <f292d4f68e540f394504cbc8a4b98132cca09209.camel@huaweicloud.com>
+         <Y3eUvBadW87f9PaL@archlinux>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwB3YG3KNHtjPkCBAA--.28046S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xw4fGrW3Ww18KF4DuFW3Wrg_yoW7CFW8pF
+        WUK3Wakr4kJFy8CrZ2y3W7Za1fK3yrGrWUWryakr1YvF90vFn2qr40kr15uF95CrW8GFy2
+        qF17ZrZxuw1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQADBF1jj4WldwAAsg
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-A kernel builder may not enable KEXEC_SIG and some architectures like
-ppc64 simply don't have KEXEC_SIG. In these cases, unless both
-IMA_ARCH_POLICY and secure boot also enabled, lockdown doesn't prevent
-unsigned kernel image from being kexec'ed via the kexec_file_load
-syscall whereas it could prevent one via the kexec_load syscall. Mandate
-signature verification for those cases.
+On Fri, 2022-11-18 at 15:20 +0100, Nicolas Bouchinet wrote:
+> On Fri, Nov 04, 2022 at 02:43:25PM +0100, Roberto Sassu wrote:
+> > On Thu, 2022-11-03 at 16:27 +0100, Roberto Sassu wrote:
+> > > On Wed, 2022-10-26 at 16:30 +0200, Nicolas Bouchinet wrote:
+> > > > From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+> > > > 
+> > > > Fixes a NULL pointer dereference occurring in the
+> > > > `evm_protected_xattr_common` function of the EVM LSM. The bug is
+> > > > triggered if a `inode_init_security` hook returns 0 without initializing
+> > > > the given `struct xattr` fields (which is the case of BPF) and if no
+> > > > other LSM overrides thoses fields after. This also leads to memory
+> > > > leaks.
+> > > > 
+> > > > The `call_int_hook_xattr` macro has been inlined into the
+> > > > `security_inode_init_security` hook in order to check hooks return
+> > > > values and skip ones who doesn't init `xattrs`.
+> > > > 
+> > > > Modify `evm_init_hmac` function to init the EVM hmac using every
+> > > > entry of the given xattr array.
+> > > > 
+> > > > The `MAX_LSM_EVM_XATTR` value is now based on the security modules
+> > > > compiled in, which gives room for SMACK, SELinux, Apparmor, BPF and
+> > > > IMA/EVM security attributes.
+> > > > 
+> > > > Changes the default return value of the `inode_init_security` hook
+> > > > definition to `-EOPNOTSUPP`.
+> > > > 
+> > > > Changes the hook documentation to match the behavior of the LSMs using
+> > > > it (only xattr->value is initialised with kmalloc and thus is the only
+> > > > one that should be kfreed by the caller).
+> > > > 
+> > > > Cc: roberto.sassu@huaweicloud.com
+> > > > Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+> > > > ---
+> > > > Changes since v3:
+> > > > https://lore.kernel.org/linux-integrity/Y1fu4jofqLHVDprT@archlinux/
+> > > > 
+> > > > * Fixes compilation error reported by the kernel test robot.
+> > > > ---
+> > > >  include/linux/lsm_hook_defs.h       |  2 +-
+> > > >  include/linux/lsm_hooks.h           |  4 ++--
+> > > >  security/integrity/evm/evm.h        |  1 +
+> > > >  security/integrity/evm/evm_crypto.c |  9 +++++++--
+> > > >  security/integrity/evm/evm_main.c   |  7 ++++---
+> > > >  security/security.c                 | 31 ++++++++++++++++++++++-------
+> > > >  6 files changed, 39 insertions(+), 15 deletions(-)
+> > > > 
+> > > > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> > > > index 806448173033..e5dd0c0f6345 100644
+> > > > --- a/include/linux/lsm_hook_defs.h
+> > > > +++ b/include/linux/lsm_hook_defs.h
+> > > > @@ -111,7 +111,7 @@ LSM_HOOK(int, 0, path_notify, const struct path *path, u64 mask,
+> > > >  	 unsigned int obj_type)
+> > > >  LSM_HOOK(int, 0, inode_alloc_security, struct inode *inode)
+> > > >  LSM_HOOK(void, LSM_RET_VOID, inode_free_security, struct inode *inode)
+> > > > -LSM_HOOK(int, 0, inode_init_security, struct inode *inode,
+> > > > +LSM_HOOK(int, -EOPNOTSUPP, inode_init_security, struct inode *inode,
+> > > >  	 struct inode *dir, const struct qstr *qstr, const char **name,
+> > > >  	 void **value, size_t *len)
+> > > >  LSM_HOOK(int, 0, inode_init_security_anon, struct inode *inode,
+> > > > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > > > index 84a0d7e02176..95aff9383de1 100644
+> > > > --- a/include/linux/lsm_hooks.h
+> > > > +++ b/include/linux/lsm_hooks.h
+> > > > @@ -229,8 +229,8 @@
+> > > >   *	This hook is called by the fs code as part of the inode creation
+> > > >   *	transaction and provides for atomic labeling of the inode, unlike
+> > > >   *	the post_create/mkdir/... hooks called by the VFS.  The hook function
+> > > > - *	is expected to allocate the name and value via kmalloc, with the caller
+> > > > - *	being responsible for calling kfree after using them.
+> > > > + *	is expected to allocate the value via kmalloc, with the caller
+> > > > + *	being responsible for calling kfree after using it.
+> > > 
+> > > Please also update the description of @name as well (remove allocated).
+> > 
+> > While you update the patch, I worked on the other patches: reiserfs
+> > fixes, if we want still to apply them; expand the call_int_hook() loop
+> > also for security_old_inode_init_security() to have consistent behavior
+> > across all filesystems.
+> 
+> Thank's I didn't had time to read the patch, will do it.
 
-Fixes: 155bdd30af17 ("kexec_file: Restrict at runtime if the kernel is locked down")
-Cc: Matthew Garrett <mjg59@srcf.ucam.org>
-Cc: Jiri Bohac <jbohac@suse.cz>
-Cc: David Howells <dhowells@redhat.com>
-Cc: kexec@lists.infradead.org
-Cc: linux-integrity@vger.kernel.org
-Signed-off-by: Coiby Xu <coxu@redhat.com>
----
- kernel/kexec_file.c | 31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
+Hi Nicolas
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 45637511e0de..04d56b6e6459 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -125,6 +125,20 @@ void kimage_file_post_load_cleanup(struct kimage *image)
- 	image->image_loader_data = NULL;
- }
- 
-+static int mandate_signatute_verification(void)
-+{
-+	/*
-+	 * If IMA is guaranteed to appraise a signature on the kexec
-+	 * image, permit it even if the kernel is otherwise locked
-+	 * down.
-+	 */
-+	if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
-+	    security_locked_down(LOCKDOWN_KEXEC))
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
- #ifdef CONFIG_KEXEC_SIG
- #ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
- int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
-@@ -168,14 +182,9 @@ kimage_validate_signature(struct kimage *image)
- 			return ret;
- 		}
- 
--		/*
--		 * If IMA is guaranteed to appraise a signature on the kexec
--		 * image, permit it even if the kernel is otherwise locked
--		 * down.
--		 */
--		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
--		    security_locked_down(LOCKDOWN_KEXEC))
--			return -EPERM;
-+		ret = mandate_signatute_verification();
-+		if (ret)
-+			return ret;
- 
- 		pr_debug("kernel signature verification failed (%d).\n", ret);
- 	}
-@@ -211,10 +220,12 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 
- #ifdef CONFIG_KEXEC_SIG
- 	ret = kimage_validate_signature(image);
--
-+#else
-+	ret = mandate_signatute_verification();
-+#endif
- 	if (ret)
- 		goto out;
--#endif
-+
- 	/* It is possible that there no initramfs is being loaded */
- 	if (!(flags & KEXEC_FILE_NO_INITRAMFS)) {
- 		ret = kernel_read_file_from_fd(initrd_fd, 0, &image->initrd_buf,
--- 
-2.38.1
+in the meantime we went further. As Paul commented that he would prefer
+to use the reservation mechanism for xattrs, instead of a static
+allocation, I resumed my old patch set, which would include also your
+changes.
+
+Will send a new version shortly. Will appreciate your feedback!
+
+Thanks
+
+Roberto
+
+> > The patches are available here:
+> > 
+> > https://github.com/robertosassu/linux/tree/evm-multiple-lsms-nicolas-v1-devel-v6
+> > 
+> > Other than Github Actions related patches, there is also TestLSM, which
+> > I developed to ensure that xattrs are correctly created.
+> > 
+> > I also adapted the IMA/EVM tests, which are available here:
+> > 
+> > https://github.com/robertosassu/ima-evm-utils/tree/evm-multiple-lsms-nicolas-v1-devel-v6
+> > 
+> > Nicolas, if you want to test the new patch locally, build the UML
+> > kernel with:
+> Will surely do ! Thanks.
+> > make ARCH=um -j$(nproc)
+> > 
+> > Build ima-evm-utils, and copy linux and certs/signing_key.pem from the
+> > kernel source directory to the ima-evm-utils directory. Then, run:
+> > 
+> > tests/evm_multiple_lsms.test
+> > 
+> > It basically runs the UML kernel with different combinations of LSMs
+> > (some providing an xattr, some not) and compares the HMAC calculated by
+> > EVM in the kernel with the HMAC calculated by evmctl in user space.
+> > 
+> > Roberto
+> > 
+> 
+> Best regards,
+> 
+> Nicolas Bouchinet
 
