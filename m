@@ -2,172 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5086330DA
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Nov 2022 00:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E1F63310A
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Nov 2022 00:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbiKUXm4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Nov 2022 18:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
+        id S231536AbiKUX4S (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Nov 2022 18:56:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbiKUXmS (ORCPT
+        with ESMTP id S232012AbiKUX4N (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:42:18 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD510E0B7E
-        for <linux-integrity@vger.kernel.org>; Mon, 21 Nov 2022 15:41:34 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id g62so12751195pfb.10
-        for <linux-integrity@vger.kernel.org>; Mon, 21 Nov 2022 15:41:34 -0800 (PST)
+        Mon, 21 Nov 2022 18:56:13 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29DD4B98C
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Nov 2022 15:56:11 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id b62so12642651pgc.0
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Nov 2022 15:56:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zZc5xOP0xJFdkWXLW4Eh/g4pOZDZTjhdnyoqBFnt7HE=;
-        b=jNx+HyVlbe/WRUrPdLAtxuIfOIMsgVI4ZaDCOO44XHmIolfTb+INLlJKz8tdLq+nqS
-         J3IbGMH3IFSwq4Dfs85xCc21Gz7CgRkDgfNjLpcRUm8YIKFId9K0951jzYNemy+bY0vU
-         mfTMwsOnG1epdDm84gswuKxBCblcJcAf0GlElKhqMJExgupt3aFgNAur5R2ocPLXScin
-         mcNPmdUUpm2ikx4BJjBRMAfD1LOiJz7utyg5AmNvJnnXDpBcrfp40W23Nq5rR4IlofYo
-         AfUEPweAnBMqsGrsakOiWUSPQ+ZL1mUlmsG+WX0OXoi8VI30SMj10JY2V8Fm4SAlmI/1
-         uvDA==
+        bh=sFqoA3xlAXzNwNaJLAB412Ok7P7Z69MnqdPRYsS/dcY=;
+        b=UGMGIxl4MlQMRNDDoJWW1JeWd1Saa+VY7wYO0h5+ALzBmXWpD2TS+rloS5mLWItbTu
+         dmLO6NI0/V1oHyb1t8W3cmApDUm4Tye2vUImDyToVFtk3M6GOw5Inchh/UMvHT2e/+Mq
+         TZ0Zu/FXa04YRFFPQkZkOCpTQLS0EdUOIT0pN4L3oxkVk6sF6dYFnXSdIODc7wwURPgb
+         9uoLDRbPa4Hxw+5ALlkY5tWI5ZiDCeNk3+/eGSw7eJ37LD7LmjdzmNfuwXTxMuQBy69L
+         SQx4AJf0J8sU68MUvZMsMSHdQOZmK/LoNgQ2SeuUcyj1Hy7Nep6MNCRwXKjnXY74GtT0
+         A1eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zZc5xOP0xJFdkWXLW4Eh/g4pOZDZTjhdnyoqBFnt7HE=;
-        b=pxi9ADsc8ihcJ1rmA0jhXkkFP7+9Rp1l9Mu/9EG2diNmctmlbAZVLcnf35nYGkOaut
-         W1ZewlOfWFMdYDl+V0J25dxEUSZnO1foBrI7nIlS5zPrznzkdqPFAgZ9PBrLR/uBvprj
-         jRDOsmYGwY8HpShiyJeBnptiu/vqEvWuV20R6j+wzO8igVZjNb3+yVKC76RYDMEZkqTK
-         DcJN2tBxx5NmjSf6BZ+fx29MNn4W8BH5N1gy6dshOsP6ay1+Cv5p3NrnHhnKFR+w2L24
-         IAQlm77OQDoe31wHWFYvQs1LemEaQw2CpCZegEVlwdKTXkq5wGFUuzKFHOeUkJXRJX6F
-         ufCg==
-X-Gm-Message-State: ANoB5ploOBN457IIS7xwdEFNFlX03BFBW//0uaZQrnucwGkEZCLNeGXq
-        E23HM2w1s0xNZN5CxFnDc6hcZtD8iZ9SX5hv7tfnwx6lQw==
-X-Google-Smtp-Source: AA0mqf5sBQNs28sOBqrnhm1swUcszLklYtHexIa7tffAXM23323DKBFj1U6ylewxwYn+kM0hFFlZjc7knH3ByZlnilU=
-X-Received: by 2002:a63:1f63:0:b0:460:ec46:3645 with SMTP id
- q35-20020a631f63000000b00460ec463645mr20336089pgm.92.1669074088835; Mon, 21
- Nov 2022 15:41:28 -0800 (PST)
+        bh=sFqoA3xlAXzNwNaJLAB412Ok7P7Z69MnqdPRYsS/dcY=;
+        b=Cv9jdAXz8EJpjTIDS5SvjpUbJfoznuBemOxJ4NNkr1ovXs9a6PGI84eL34PnypWQmJ
+         g0+FDsp25WjER8/2XFWIUowb67KBWZem12eoqIccdI3MLxLhZ8cizPnM0U6JOstd02hu
+         rrPV4PXSURitaHuqqm1URv1MOB19yzSLwVQrr4ehXyhVmu7TbV+9gi3+aTAlcmC8I99q
+         KpukbTC/hTDK6pIA/T488Fbh1rmDXQj048wgOjeS5K7RSO/X39L+Oz1LSPRJn/Sv/RTR
+         Wz/7a+y7p86qourgtgfZL4XC1RGq1XR4Koqyq2dkHwRY+xjBFcRipusKzTXUIO/nnvkl
+         fRBw==
+X-Gm-Message-State: ANoB5pmxsPZ5CFed5r5XKuJhakeUbL3Ah+KmoDXalIq3SpdTb1JCl44d
+        8WxgLme1YglwNqbj5CVIgoVfw+Vbhzf5NeU44uZ5
+X-Google-Smtp-Source: AA0mqf7G6c3Nvud9YG/dWkDyX6JZDp8dvZSG4MT1APz5NyskblXGRN/R4W65HJ2mSLW6V+5KIth5yCSQDFWO6JKT7SI=
+X-Received: by 2002:a62:2941:0:b0:573:6a8d:dd15 with SMTP id
+ p62-20020a622941000000b005736a8ddd15mr11936805pfp.2.1669074971136; Mon, 21
+ Nov 2022 15:56:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com> <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+ <20221110094639.3086409-3-roberto.sassu@huaweicloud.com> <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
+ <aa5fa8c5f231115c58012352124df57d16a01e41.camel@huaweicloud.com> <7812899531b2bd936b25fde8fc2f1c2a6080b2bd.camel@linux.ibm.com>
+In-Reply-To: <7812899531b2bd936b25fde8fc2f1c2a6080b2bd.camel@linux.ibm.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 21 Nov 2022 18:41:17 -0500
-Message-ID: <CAHC9VhQ9WftDrF1R--ZYJXOv-YbVU-Pr1Ob_deDwEWm8OcQ-TA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] reiserfs: Add missing calls to reiserfs_security_free()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        linux-integrity@vger.kernel.org,
+Date:   Mon, 21 Nov 2022 18:55:59 -0500
+Message-ID: <CAHC9VhTvcgOjXAH51Vnk66kEjXfjUS2aJjXjJmU-rwLT53vWPw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] security: Rewrite security_old_inode_init_security()
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
         reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         keescook@chromium.org, nicolas.bouchinet@clip-os.org,
         Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org, Jeff Mahoney <jeffm@suse.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+        ocfs2-devel@oss.oracle.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 4:47 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
+On Mon, Nov 21, 2022 at 3:54 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
 >
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Commit 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes
-> during inode creation") defined reiserfs_security_free() to free the name
-> and value of a security xattr allocated by the active LSM through
-> security_old_inode_init_security(). However, this function is not called
-> in the reiserfs code.
->
-> Thus, add a call to reiserfs_security_free() whenever
-> reiserfs_security_init() is called, and initialize value to NULL, to avoid
-> to call kfree() on an uninitialized pointer.
->
-> Finally, remove the kfree() for the xattr name, as it is not allocated
-> anymore.
->
-> Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes during inode creation")
-> Cc: stable@vger.kernel.org
-> Cc: Jeff Mahoney <jeffm@suse.com>
-> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-> Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  fs/reiserfs/namei.c          | 4 ++++
->  fs/reiserfs/xattr_security.c | 2 +-
->  2 files changed, 5 insertions(+), 1 deletion(-)
+> On Mon, 2022-11-21 at 10:45 +0100, Roberto Sassu wrote:
+> > > As ocfs2 already defines initxattrs, that leaves only reiserfs missing
+> > > initxattrs().  A better, cleaner solution would be to define one.
+> >
+> > If I understood why security_old_inode_init_security() is called
+> > instead of security_inode_init_security(), the reason seems that the
+> > filesystem code uses the length of the obtained xattr to make some
+> > calculations (e.g. reserve space). The xattr is written at a later
+> > time.
+> >
+> > Since for reiserfs there is a plan to deprecate it, it probably
+> > wouldn't be worth to support the creation of multiple xattrs. I would
+> > define a callback to take the first xattr and make a copy, so that
+> > calling security_inode_init_security() + reiserfs_initxattrs() is
+> > equivalent to calling security_old_inode_init_security().
 
-If I'm understanding this patch correctly, this is a standalone
-bugfix, right?  Any reason this shouldn't be merged now, independent
-of the rest of patches in this patchset?
+FWIW, reiserfs isn't going to be removed until 2025, I'm hopeful we
+can remove the IMA/EVM special cases before then :)
 
-> diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-> index 3d7a35d6a18b..b916859992ec 100644
-> --- a/fs/reiserfs/namei.c
-> +++ b/fs/reiserfs/namei.c
-> @@ -696,6 +696,7 @@ static int reiserfs_create(struct user_namespace *mnt_userns, struct inode *dir,
->
->  out_failed:
->         reiserfs_write_unlock(dir->i_sb);
-> +       reiserfs_security_free(&security);
->         return retval;
->  }
->
-> @@ -779,6 +780,7 @@ static int reiserfs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
->
->  out_failed:
->         reiserfs_write_unlock(dir->i_sb);
-> +       reiserfs_security_free(&security);
->         return retval;
->  }
->
-> @@ -878,6 +880,7 @@ static int reiserfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
->         retval = journal_end(&th);
->  out_failed:
->         reiserfs_write_unlock(dir->i_sb);
-> +       reiserfs_security_free(&security);
->         return retval;
->  }
->
-> @@ -1194,6 +1197,7 @@ static int reiserfs_symlink(struct user_namespace *mnt_userns,
->         retval = journal_end(&th);
->  out_failed:
->         reiserfs_write_unlock(parent_dir->i_sb);
-> +       reiserfs_security_free(&security);
->         return retval;
->  }
->
-> diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
-> index 8965c8e5e172..857a65b05726 100644
-> --- a/fs/reiserfs/xattr_security.c
-> +++ b/fs/reiserfs/xattr_security.c
-> @@ -50,6 +50,7 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
->         int error;
->
->         sec->name = NULL;
-> +       sec->value = NULL;
->
->         /* Don't add selinux attributes on xattrs - they'll never get used */
->         if (IS_PRIVATE(dir))
-> @@ -95,7 +96,6 @@ int reiserfs_security_write(struct reiserfs_transaction_handle *th,
->
->  void reiserfs_security_free(struct reiserfs_security_handle *sec)
->  {
-> -       kfree(sec->name);
->         kfree(sec->value);
->         sec->name = NULL;
->         sec->value = NULL;
-> --
-> 2.25.1
->
+> > But then, this is what anyway I was doing with the
+> > security_initxattrs() callback, for all callers of security_old_inode_i
+> > nit_security().
+> >
+> > Also, security_old_inode_init_security() is exported to kernel modules.
+> > Maybe, it is used somewhere. So, unless we plan to remove it
+> > completely, it should be probably be fixed to avoid multiple LSMs
+> > successfully setting an xattr, and losing the memory of all except the
+> > last (which this patch fixes by calling security_inode_init_security()).
 
+I would much rather remove security_old_inode_init_security() then
+worry about what out-of-tree modules might be using it.  Hopefully we
+can resolve the ocfs2 usage and get ocfs2 exclusively on the new hook
+without too much trouble, which means all we have left is reiserfs ...
+how difficult would you expect the conversion to be for reiserfs?
+
+> > If there is still the preference, I will implement the reiserfs
+> > callback and make a fix for security_old_inode_init_security().
+>
+> There's no sense in doing both, as the purpose of defining a reiserfs
+> initxattrs function was to clean up this code making it more readable.
+>
+> Mimi
 
 -- 
 paul-moore.com
