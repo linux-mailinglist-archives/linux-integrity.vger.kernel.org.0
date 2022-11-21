@@ -2,150 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12B56323FC
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Nov 2022 14:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2352632C04
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Nov 2022 19:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbiKUNkW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Nov 2022 08:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S229568AbiKUSYx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Nov 2022 13:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbiKUNkD (ORCPT
+        with ESMTP id S229489AbiKUSYw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:40:03 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0118DA7E;
-        Mon, 21 Nov 2022 05:39:57 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NG7cc6Wpxz9xrqG;
-        Mon, 21 Nov 2022 21:33:04 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwDn03CXf3tjASyCAA--.23585S2;
-        Mon, 21 Nov 2022 14:39:43 +0100 (CET)
-Message-ID: <6a3a6f0fba8cf09ce205efb3217cc0cfb8587074.camel@huaweicloud.com>
-Subject: Re: [PATCH] ima: Make a copy of sig and digest in
- asymmetric_verify()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Mon, 21 Nov 2022 14:39:25 +0100
-In-Reply-To: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
-References: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
+        Mon, 21 Nov 2022 13:24:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9B2CDFD1;
+        Mon, 21 Nov 2022 10:24:51 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALGRpHi009307;
+        Mon, 21 Nov 2022 18:24:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=AMtjW6WLFCULVG/XV+qA98xsr1zwM1JGCHIM1oBMy+g=;
+ b=mesbrjG7UOwJd7gfx3lnVVoiKpNXvsmwJ/RBuN0mXq8l2ewijI2edu2Crwk0wOW1pXRE
+ /EbPdnKf9pY2DxX1olRVe95iqd1KZqwHDMdR9+0IlQWHUnDSQmtKj8lSYltYLl7eEEyn
+ tRyYAeIUjVXiVbpE+coLm+7kIFrr1vYl5/vydFmJOdtxBPHJIlV4bwH4OC84Dg7JSxEq
+ 800ikAO4lIhdEleiJk4iGS0HT/KEDRxLyrIkXnw4JQzRvpVzvr6gqCR3PPGjIgyoDI3A
+ WqdRGq6sw/5VAy8CwG1MJNqnehKiOmUz+OGxxlfIT5MygeHKi2/9iFLUC3UlEfLPe77o eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cvg2ky4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 18:24:07 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ALGWIXc028182;
+        Mon, 21 Nov 2022 18:24:07 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cvg2kxw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 18:24:07 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ALIL5h1016971;
+        Mon, 21 Nov 2022 18:24:06 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma01wdc.us.ibm.com with ESMTP id 3kxps970cs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 18:24:06 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ALIO5TQ8717046
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Nov 2022 18:24:05 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 352B458054;
+        Mon, 21 Nov 2022 18:24:05 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2C155805C;
+        Mon, 21 Nov 2022 18:24:03 +0000 (GMT)
+Received: from sig-9-65-226-3.ibm.com (unknown [9.65.226.3])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 21 Nov 2022 18:24:03 +0000 (GMT)
+Message-ID: <5d98172d77a8a0f1e3daab44ad51bf38978cc053.camel@linux.ibm.com>
+Subject: Re: [PATCH] lockdown: kexec_file: prevent unsigned kernel image
+ when KEXEC_SIG not enabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
+Cc:     Matthew Garrett <mjg59@srcf.ucam.org>, Jiri Bohac <jbohac@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        James Morris <jmorris@namei.org>,
+        Matthew Garrett <mjg59@google.com>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Mon, 21 Nov 2022 13:23:57 -0500
+In-Reply-To: <20221121072947.836672-1-coxu@redhat.com>
+References: <20221121072947.836672-1-coxu@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwDn03CXf3tjASyCAA--.23585S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFy3Zr1fXr4DWw43Zr15twb_yoW5XF4xpa
-        ykKa4DKF1UGw1xCa13Cw47WrZ5Wa1rKr47Wa93AryfZ3Z8Xr4vk3s7A3W7Xr98XryxXFWf
-        trnFv3ZrCw1Dt3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQADBF1jj4Wq9wABsu
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3bqLPIylRMF8WNuVop5Oo8wkFbGC0ndk
+X-Proofpoint-ORIG-GUID: myQEqmbxYN6708CMzE6cOpu7wWalPzdx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_16,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 phishscore=0 malwarescore=0 impostorscore=0 mlxscore=0
+ clxscore=1011 priorityscore=1501 suspectscore=0 spamscore=0
+ mlxlogscore=905 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211210139
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-11-04 at 13:20 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> mapping") requires that both the signature and the digest resides in the
-> linear mapping area.
-> 
-> However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> stack support"), made it possible to move the stack in the vmalloc area,
-> which could make the requirement of the first commit not satisfied anymore.
-> 
-> If CONFIG_SG=y and CONFIG_VMAP_STACK=y, the following BUG() is triggered:
+Hi Coiby,
 
-Hi Mimi
+On Mon, 2022-11-21 at 15:29 +0800, Coiby Xu wrote:
+> A kernel builder may not enable KEXEC_SIG and some architectures like
+> ppc64 simply don't have KEXEC_SIG. In these cases, unless both
+> IMA_ARCH_POLICY and secure boot also enabled, lockdown doesn't prevent
+> unsigned kernel image from being kexec'ed via the kexec_file_load
+> syscall whereas it could prevent one via the kexec_load syscall. Mandate
+> signature verification for those cases.
+> 
+> Fixes: 155bdd30af17 ("kexec_file: Restrict at runtime if the kernel is locked down")
+> Cc: Matthew Garrett <mjg59@srcf.ucam.org>
+> Cc: Jiri Bohac <jbohac@suse.cz>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: kexec@lists.infradead.org
+> Cc: linux-integrity@vger.kernel.org
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
 
-did you have the chance to have a look at this patch?
+Other than correcting the function name to mandate_signature_verificati
+on(),
 
-Thanks
-
-Roberto
-
-> [  467.077359] kernel BUG at include/linux/scatterlist.h:163!
-> [  467.077939] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-> 
-> [...]
-> 
-> [  467.095225] Call Trace:
-> [  467.096088]  <TASK>
-> [  467.096928]  ? rcu_read_lock_held_common+0xe/0x50
-> [  467.097569]  ? rcu_read_lock_sched_held+0x13/0x70
-> [  467.098123]  ? trace_hardirqs_on+0x2c/0xd0
-> [  467.098647]  ? public_key_verify_signature+0x470/0x470
-> [  467.099237]  asymmetric_verify+0x14c/0x300
-> [  467.099869]  evm_verify_hmac+0x245/0x360
-> [  467.100391]  evm_inode_setattr+0x43/0x190
-> 
-> The failure happens only for the digest, as the pointer comes from the
-> stack, and not for the signature, which instead was allocated by
-> vfs_getxattr_alloc().
-> 
-> Fix this by making a copy of both in asymmetric_verify(), so that the
-> linear mapping requirement is always satisfied, regardless of the caller.
-> 
-> Cc: stable@vger.kernel.org # 4.9.x
-> Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/integrity/digsig_asymmetric.c | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-> index 895f4b9ce8c6..635238d5c7fe 100644
-> --- a/security/integrity/digsig_asymmetric.c
-> +++ b/security/integrity/digsig_asymmetric.c
-> @@ -122,11 +122,26 @@ int asymmetric_verify(struct key *keyring, const char *sig,
->  		goto out;
->  	}
->  
-> -	pks.digest = (u8 *)data;
-> +	pks.digest = kmemdup(data, datalen, GFP_KERNEL);
-> +	if (!pks.digest) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +
->  	pks.digest_size = datalen;
-> -	pks.s = hdr->sig;
-> +
-> +	pks.s = kmemdup(hdr->sig, siglen, GFP_KERNEL);
-> +	if (!pks.s) {
-> +		kfree(pks.digest);
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +
->  	pks.s_size = siglen;
-> +
->  	ret = verify_signature(key, &pks);
-> +	kfree(pks.digest);
-> +	kfree(pks.s);
->  out:
->  	key_put(key);
->  	pr_debug("%s() = %d\n", __func__, ret);
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
