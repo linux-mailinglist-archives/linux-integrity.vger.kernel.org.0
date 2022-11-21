@@ -2,157 +2,172 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5090C632E48
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Nov 2022 21:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5086330DA
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Nov 2022 00:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiKUU6a (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Nov 2022 15:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S232031AbiKUXm4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Nov 2022 18:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKUU62 (ORCPT
+        with ESMTP id S232047AbiKUXmS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Nov 2022 15:58:28 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58B4CEBAD;
-        Mon, 21 Nov 2022 12:58:27 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALK3lao029070;
-        Mon, 21 Nov 2022 20:58:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=yYc1UjR/X0mjO1Si4MpoQ9ZWzXiCM44IGVCFBM9HksM=;
- b=fHjSzlbvKCNmzvyWRhEFoCgf2kFmVcWJXPbWqTecv0fMIK82bWxcZ9T60FGJ4Kge14LT
- uNry1lRdag0s7wKlV2WF8JJ5HfaS6Tu7xpFOUUp9cip3XNY8DxOw9oURAPFQrXK5lSo/
- AubsE6A5VF9XJHCbKC8vcmx3Ij0aAaqbNYx58HGVpy8NcLGrNeq3s3m5rFp7ldkSO1In
- 0kg4FW+6KBVcM0nfU2wi56MUsGg7jb/sDSBadvye/M5FUEgQM67EK7RJ7jjOMyh8vdP9
- iq58VqneeuRBHSqO6BAdBZwMAM3FEqTV41b7nF3zBAEzSLk4ukHsjyBRoONYc49L0yv5 3A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cfxxfr1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 20:58:09 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ALKqsWC022894;
-        Mon, 21 Nov 2022 20:58:08 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cfxxfqd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 20:58:08 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ALKp4Pi014694;
-        Mon, 21 Nov 2022 20:58:07 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma03wdc.us.ibm.com with ESMTP id 3kxps9fsdk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 20:58:07 +0000
-Received: from smtpav03.dal12v.mail.ibm.com ([9.208.128.129])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ALKw5FL34210120
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Nov 2022 20:58:05 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C7D958060;
-        Mon, 21 Nov 2022 20:58:06 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 96CF55803F;
-        Mon, 21 Nov 2022 20:58:05 +0000 (GMT)
-Received: from sig-9-65-226-3.ibm.com (unknown [9.65.226.3])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Nov 2022 20:58:05 +0000 (GMT)
-Message-ID: <5e88d4bfae90d642fcf84a0c0937a9e4359ef4b2.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        Mon, 21 Nov 2022 18:42:18 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD510E0B7E
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Nov 2022 15:41:34 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id g62so12751195pfb.10
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Nov 2022 15:41:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zZc5xOP0xJFdkWXLW4Eh/g4pOZDZTjhdnyoqBFnt7HE=;
+        b=jNx+HyVlbe/WRUrPdLAtxuIfOIMsgVI4ZaDCOO44XHmIolfTb+INLlJKz8tdLq+nqS
+         J3IbGMH3IFSwq4Dfs85xCc21Gz7CgRkDgfNjLpcRUm8YIKFId9K0951jzYNemy+bY0vU
+         mfTMwsOnG1epdDm84gswuKxBCblcJcAf0GlElKhqMJExgupt3aFgNAur5R2ocPLXScin
+         mcNPmdUUpm2ikx4BJjBRMAfD1LOiJz7utyg5AmNvJnnXDpBcrfp40W23Nq5rR4IlofYo
+         AfUEPweAnBMqsGrsakOiWUSPQ+ZL1mUlmsG+WX0OXoi8VI30SMj10JY2V8Fm4SAlmI/1
+         uvDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zZc5xOP0xJFdkWXLW4Eh/g4pOZDZTjhdnyoqBFnt7HE=;
+        b=pxi9ADsc8ihcJ1rmA0jhXkkFP7+9Rp1l9Mu/9EG2diNmctmlbAZVLcnf35nYGkOaut
+         W1ZewlOfWFMdYDl+V0J25dxEUSZnO1foBrI7nIlS5zPrznzkdqPFAgZ9PBrLR/uBvprj
+         jRDOsmYGwY8HpShiyJeBnptiu/vqEvWuV20R6j+wzO8igVZjNb3+yVKC76RYDMEZkqTK
+         DcJN2tBxx5NmjSf6BZ+fx29MNn4W8BH5N1gy6dshOsP6ay1+Cv5p3NrnHhnKFR+w2L24
+         IAQlm77OQDoe31wHWFYvQs1LemEaQw2CpCZegEVlwdKTXkq5wGFUuzKFHOeUkJXRJX6F
+         ufCg==
+X-Gm-Message-State: ANoB5ploOBN457IIS7xwdEFNFlX03BFBW//0uaZQrnucwGkEZCLNeGXq
+        E23HM2w1s0xNZN5CxFnDc6hcZtD8iZ9SX5hv7tfnwx6lQw==
+X-Google-Smtp-Source: AA0mqf5sBQNs28sOBqrnhm1swUcszLklYtHexIa7tffAXM23323DKBFj1U6ylewxwYn+kM0hFFlZjc7knH3ByZlnilU=
+X-Received: by 2002:a63:1f63:0:b0:460:ec46:3645 with SMTP id
+ q35-20020a631f63000000b00460ec463645mr20336089pgm.92.1669074088835; Mon, 21
+ Nov 2022 15:41:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com> <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 21 Nov 2022 18:41:17 -0500
+Message-ID: <CAHC9VhQ9WftDrF1R--ZYJXOv-YbVU-Pr1Ob_deDwEWm8OcQ-TA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] reiserfs: Add missing calls to reiserfs_security_free()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
         serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     linux-integrity@vger.kernel.org,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
         reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 21 Nov 2022 15:58:05 -0500
-In-Reply-To: <ad7bfa59a3a89ccad52574e2f9fb8965dbaa1620.camel@huaweicloud.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
-         <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
-         <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
-         <fe16a03a-102e-b3e1-cc3f-5bad3c28fad7@huaweicloud.com>
-         <3ffb9bb4ab203b5e0459c3892ded4ae0cd80458b.camel@linux.ibm.com>
-         <fb3f423a-a56e-b6ed-d1e7-476605d607f8@schaufler-ca.com>
-         <ad7bfa59a3a89ccad52574e2f9fb8965dbaa1620.camel@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cw1OJWh_QF1SxB1kA5f_Qwm275_N0FeP
-X-Proofpoint-ORIG-GUID: o0KtNVBV0hgf2nWi3TrF-p_qik3UvULx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_16,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- clxscore=1015 malwarescore=0 impostorscore=0 suspectscore=0
- mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211210155
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org, Jeff Mahoney <jeffm@suse.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-11-21 at 14:29 +0100, Roberto Sassu wrote:
-> On Fri, 2022-11-18 at 09:31 -0800, Casey Schaufler wrote:
-> > On 11/18/2022 7:10 AM, Mimi Zohar wrote:
-> > > On Fri, 2022-11-18 at 10:14 +0100, Roberto Sassu wrote:
-> > > > > > +static int security_check_compact_xattrs(struct xattr *xattrs,
-> > > > > > +                                     int num_xattrs, int *checked_xattrs)
-> > > > > Perhaps the variable naming is off, making it difficult to read.   So
-> > > > > although this is a static function, which normally doesn't require a
-> > > > > comment, it's definitely needs one.
-> > > > Ok, will improve it.
-> > > > 
-> > > > > > +{
-> > > > > > +    int i;
-> > > > > > +
-> > > > > > +    for (i = *checked_xattrs; i < num_xattrs; i++) {
-> > > > > If the number of "checked" xattrs was kept up to date, removing the
-> > > > > empty xattr gaps wouldn't require a loop.  Is the purpose of this loop
-> > > > > to support multiple per LSM xattrs?
-> > > > An LSM might reserve one or more xattrs, but not set it/them (for 
-> > > > example because it is not initialized). In this case, removing the gaps 
-> > > > is needed for all subsequent LSMs.
-> > > Including this sort of info in the function description or as a comment
-> > > in the code would definitely simplify review.
-> > > 
-> > > security_check_compact_xattrs() is called in the loop after getting
-> > > each LSM's xattr(s).  Only the current LSMs xattrs need to be
-> > > compressed, yet the loop goes to the maximum number of xattrs each
-> > > time. Just wondering if there is a way of improving it.
-> > 
-> > At security module registration each module could identify how
-> > many xattrs it uses. That number could be used to limit the range
-> > of the loop. I have to do similar things for the forthcoming LSM
-> > syscalls and module stacking beyond that.
-> 
-> Yes, blob_sizes.lbs_xattr contains the total number of xattrs requested
-> by LSMs. To stop the loop earlier, at the offset of the next LSM, we
-> would need to search the LSM's lsm_info, using the LSM name in
-> the security_hook_list structure. Although it is not optimal, not doing
-> it makes the code simpler. I could do that, if preferred.
+On Thu, Nov 10, 2022 at 4:47 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Commit 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes
+> during inode creation") defined reiserfs_security_free() to free the name
+> and value of a security xattr allocated by the active LSM through
+> security_old_inode_init_security(). However, this function is not called
+> in the reiserfs code.
+>
+> Thus, add a call to reiserfs_security_free() whenever
+> reiserfs_security_init() is called, and initialize value to NULL, to avoid
+> to call kfree() on an uninitialized pointer.
+>
+> Finally, remove the kfree() for the xattr name, as it is not allocated
+> anymore.
+>
+> Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes during inode creation")
+> Cc: stable@vger.kernel.org
+> Cc: Jeff Mahoney <jeffm@suse.com>
+> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Reported-by: Mimi Zohar <zohar@linux.ibm.com>
+> Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  fs/reiserfs/namei.c          | 4 ++++
+>  fs/reiserfs/xattr_security.c | 2 +-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
 
-Either way is fine, as long as the code is readable.  At minimum add a
-comment.
+If I'm understanding this patch correctly, this is a standalone
+bugfix, right?  Any reason this shouldn't be merged now, independent
+of the rest of patches in this patchset?
+
+> diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
+> index 3d7a35d6a18b..b916859992ec 100644
+> --- a/fs/reiserfs/namei.c
+> +++ b/fs/reiserfs/namei.c
+> @@ -696,6 +696,7 @@ static int reiserfs_create(struct user_namespace *mnt_userns, struct inode *dir,
+>
+>  out_failed:
+>         reiserfs_write_unlock(dir->i_sb);
+> +       reiserfs_security_free(&security);
+>         return retval;
+>  }
+>
+> @@ -779,6 +780,7 @@ static int reiserfs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
+>
+>  out_failed:
+>         reiserfs_write_unlock(dir->i_sb);
+> +       reiserfs_security_free(&security);
+>         return retval;
+>  }
+>
+> @@ -878,6 +880,7 @@ static int reiserfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+>         retval = journal_end(&th);
+>  out_failed:
+>         reiserfs_write_unlock(dir->i_sb);
+> +       reiserfs_security_free(&security);
+>         return retval;
+>  }
+>
+> @@ -1194,6 +1197,7 @@ static int reiserfs_symlink(struct user_namespace *mnt_userns,
+>         retval = journal_end(&th);
+>  out_failed:
+>         reiserfs_write_unlock(parent_dir->i_sb);
+> +       reiserfs_security_free(&security);
+>         return retval;
+>  }
+>
+> diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
+> index 8965c8e5e172..857a65b05726 100644
+> --- a/fs/reiserfs/xattr_security.c
+> +++ b/fs/reiserfs/xattr_security.c
+> @@ -50,6 +50,7 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
+>         int error;
+>
+>         sec->name = NULL;
+> +       sec->value = NULL;
+>
+>         /* Don't add selinux attributes on xattrs - they'll never get used */
+>         if (IS_PRIVATE(dir))
+> @@ -95,7 +96,6 @@ int reiserfs_security_write(struct reiserfs_transaction_handle *th,
+>
+>  void reiserfs_security_free(struct reiserfs_security_handle *sec)
+>  {
+> -       kfree(sec->name);
+>         kfree(sec->value);
+>         sec->name = NULL;
+>         sec->value = NULL;
+> --
+> 2.25.1
+>
+
 
 -- 
-thanks,
-
-Mimi
-
-
-
-
+paul-moore.com
