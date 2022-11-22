@@ -2,146 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E8B6347FC
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Nov 2022 21:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272F7634A38
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Nov 2022 23:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234791AbiKVUSW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Nov 2022 15:18:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S234785AbiKVWrx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Nov 2022 17:47:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234789AbiKVUSQ (ORCPT
+        with ESMTP id S235059AbiKVWrp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:18:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D59E0EB
-        for <linux-integrity@vger.kernel.org>; Tue, 22 Nov 2022 12:18:15 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhX-0006Qx-Bo; Tue, 22 Nov 2022 21:17:03 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhR-005v1B-UM; Tue, 22 Nov 2022 21:16:58 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhS-000s7U-3N; Tue, 22 Nov 2022 21:16:58 +0100
-Date:   Tue, 22 Nov 2022 21:16:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        alsa-devel@alsa-project.org, linux-staging@lists.linux.dev,
-        linux-pwm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        gregkh@linuxfoundation.org, linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Purism Kernel Team <kernel@puri.sm>,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <20221122201654.5rdaisqho33buibj@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221122185818.3740200d@jic23-huawei>
+        Tue, 22 Nov 2022 17:47:45 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BD2390
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Nov 2022 14:47:43 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id jn7so13177603plb.13
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Nov 2022 14:47:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OhM08xoktc6ZKNdEIG+FP/1L4abUAxOrd/YTmOzlE3I=;
+        b=6HmnQaIAantqrLzDIs1GjTCygWym7grq9246f18l84sVPSkZfEkVFN+W2jIZ+PKiwV
+         7NV62WeikSpliju9ikhNf0Y5nTCZcwZpG8MvcDxyOKPDWTzYp1I4MmYPc4TKasYJLHMW
+         YHYfcAC63t/ADeojSlZVxmdz4TcX8+FQkvveHe7GRoSHHjcyzqpfcAq45xwfgMQekOGM
+         6DNHDmEFfWIZi6oNNMsf4+ixjZLItHxN38ifIKwu6xGsLZ9plHyTZ6PLhqE2wLii7DhR
+         z3dDzLgBzGz4Yh9tb7q7IAv9AbRsVruHZlo+vrMROW2GZz5qgB1cDCMzhpZd2lIEItoQ
+         L9Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OhM08xoktc6ZKNdEIG+FP/1L4abUAxOrd/YTmOzlE3I=;
+        b=xERn61YUY0FitRua723Y4Lg685BY5paR4lGbgSLliZnV7SkcuNHKQGr6eThpS4ystJ
+         MNydHcIRf/FnCWmTmem4WSHDvxzAIGfTg/+T8Z27EJ7FaJV/PTTJqYUV5R9uFV7x5A/v
+         yBBXS3/A6rOwqtv6O470KZ8OTTuhtpowXMW0c5av+AA77rcN6oVaAz6pJnf4LCt51bfd
+         ithffxIpKoTZ99atdGwYs2J3+6qPhNjxgi2kGE3Zhvd3O1rIPgpnawN/cHErAm05Rj8A
+         3VEvnjzuGiKDtr6N4hZsk7mwpQg54276SB+vUAeZ964vVQcJPUFOvdFAK/knqlDrQmBS
+         AK3A==
+X-Gm-Message-State: ANoB5pkdCMhKtgDTOpm7vXvqZM6lTEdKG2b8ceDu//fVCeHYOQ3Uq5wi
+        wlgp1E8zUJKoN5nKFA0lkz9giBf4S6zjaPm7HT9cmpEVzA==
+X-Google-Smtp-Source: AA0mqf6QAA5jVBAQu3mvzw/vN4N59NNFL17QIHTfT23DcEiL+LSxGEIB4K/rIFCPXNdrfzZaZ0xZgOvxMOdrlkrEjJw=
+X-Received: by 2002:a17:902:6505:b0:186:e568:3442 with SMTP id
+ b5-20020a170902650500b00186e5683442mr18896465plk.56.1669157263144; Tue, 22
+ Nov 2022 14:47:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t3mjk627u66tfbb3"
-Content-Disposition: inline
-In-Reply-To: <20221122185818.3740200d@jic23-huawei>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+ <20221110094639.3086409-2-roberto.sassu@huaweicloud.com> <CAHC9VhQ9WftDrF1R--ZYJXOv-YbVU-Pr1Ob_deDwEWm8OcQ-TA@mail.gmail.com>
+ <aa51b845dca6021282b5b2ae260020a3a5cfb5c6.camel@huaweicloud.com>
+In-Reply-To: <aa51b845dca6021282b5b2ae260020a3a5cfb5c6.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 22 Nov 2022 17:47:31 -0500
+Message-ID: <CAHC9VhRBc_XeeCki3zqP40tpO-z2xja=yyMadr9_yLhGcgU3Vg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] reiserfs: Add missing calls to reiserfs_security_free()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org, Jeff Mahoney <jeffm@suse.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Tue, Nov 22, 2022 at 3:12 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Mon, 2022-11-21 at 18:41 -0500, Paul Moore wrote:
+> > On Thu, Nov 10, 2022 at 4:47 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > >
+> > > Commit 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes
+> > > during inode creation") defined reiserfs_security_free() to free the name
+> > > and value of a security xattr allocated by the active LSM through
+> > > security_old_inode_init_security(). However, this function is not called
+> > > in the reiserfs code.
+> > >
+> > > Thus, add a call to reiserfs_security_free() whenever
+> > > reiserfs_security_init() is called, and initialize value to NULL, to avoid
+> > > to call kfree() on an uninitialized pointer.
+> > >
+> > > Finally, remove the kfree() for the xattr name, as it is not allocated
+> > > anymore.
+> > >
+> > > Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes during inode creation")
+> > > Cc: stable@vger.kernel.org
+> > > Cc: Jeff Mahoney <jeffm@suse.com>
+> > > Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > > Reported-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > ---
+> > >  fs/reiserfs/namei.c          | 4 ++++
+> > >  fs/reiserfs/xattr_security.c | 2 +-
+> > >  2 files changed, 5 insertions(+), 1 deletion(-)
+> >
+> > If I'm understanding this patch correctly, this is a standalone
+> > bugfix, right?  Any reason this shouldn't be merged now, independent
+> > of the rest of patches in this patchset?
+>
+> Yes. It would be fine for me to pick this sooner.
 
---t3mjk627u66tfbb3
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Okay, as it's been almost two weeks with no comments from the reiserfs
+folks and this looks okay to me I'm going to go ahead and pull this
+into the lsm/next branch as it's at least "LSM adjacent" :)  As it is
+lsm/next and not lsm/stable-6.1, this should give the reiserfs folks
+another couple of weeks to object if they find this to be problematic.
 
-On Tue, Nov 22, 2022 at 06:58:18PM +0000, Jonathan Cameron wrote:
->=20
-> Queued all of the below:
-> with one tweaked as per your suggestion and the highlighted one dropped o=
-n basis
-> I was already carrying the equivalent - as you pointed out.
->=20
-> I was already carrying the required dependency.
->=20
-> Includes the IIO ones in staging.
->=20
-> Thanks,
->=20
-> Jonathan
->=20
-> p.s. I perhaps foolishly did this in a highly manual way so as to
-> also pick up Andy's RB.  So might have dropped one...
+Thanks all.
 
-You could have done:
-
-	H=3D$(git rev-parse @)
-	b4 am -P 49-190 20221118224540.619276-1-uwe@kleine-koenig.org
-	git am ...
-	git filter-branch -f --msg-filter "grep -v 'Signed-off-by: Jonathan'; echo=
- 'Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>'; echo '=
-Signed-off-by: Jonathan Cameron <jic23@kernel.org>'" $H..
-
-(untested, but you get the idea).
-
-> Definitely would have been better as one patch per subsystem with
-> a cover letter suitable for replies like Andy's to be picked up
-> by b4.
-
-Next time I will go for one series per subsystem which I like better
-than one patch per subsystem.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---t3mjk627u66tfbb3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN9LjMACgkQwfwUeK3K
-7An96wf/RMtsCSXVJy8BDrXiXMhey9OEm8p08ulRn0lKYlG54KR8nU/s77uuMjGS
-99aUfUU56Abxk02DuBv6N5Bax8nlFyIlUgkfaYPP9iN1TkF5XiucQ0Se4/haYL4A
-q11UqWIcKBS+5BL3K6Bl1Cqv4dPYpRvs99X3jlU6JmhFqJPPhPgAu0p74arSvLie
-kN6wgOGVdCjZTRD+Z7FxfIQPZqvVo7anPAynyk7XfgTXMSAK80JPR2UeMfvQ7yr2
-W28htsacTaJSnPOb1VIrhN8OytpxASYa120EJ8augNmBXC0IzvjosWI0LZnNljAU
-izPd/d6lzDCP0Mz/LU9QCBYUR1jxuQ==
-=KmMu
------END PGP SIGNATURE-----
-
---t3mjk627u66tfbb3--
+-- 
+paul-moore.com
