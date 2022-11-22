@@ -2,149 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCE36344BA
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Nov 2022 20:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E8B6347FC
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Nov 2022 21:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbiKVTjk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Nov 2022 14:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
+        id S234791AbiKVUSW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Nov 2022 15:18:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbiKVTjj (ORCPT
+        with ESMTP id S234789AbiKVUSQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:39:39 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2A56F361;
-        Tue, 22 Nov 2022 11:39:33 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AMJK7WV017593;
-        Tue, 22 Nov 2022 19:39:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=fqhpTDfxPyVsir4ev5LuPPWGRFEF13TzcH6YSeaIS1w=;
- b=G8jWBqLWFXqTpQG4r8K6SdMRQ4noTGA6bfNY+J6/goD0528M16WU1j6TlPKJkKmyT92n
- /6c56pqCLyVysAoIQRp/H4T700K2I+ku8ugUPdm2uKyKwTWN8fdGAYQuzt205sX+cec6
- vZp+XSAI9rU+z+ikPrdt92pyAeVBud/+FCVkhPH/jRISrFlFxLiG5/NGnv9UnkfwKicw
- 4qA9X5ljUADUqDk+Bt4zpJbNsHZz4H+PgUQ0AjdlAPko0NisSaELQ5rVW2fq3pVDscGU
- OhGoxB4w0l7yvWJWl2pQrp70mAbRAT2PRxzgX8kb984NeEPpZx0sAlGwOFED9mI2HkfG PA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0xw7jkej-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 19:39:17 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AMIKP8C015701;
-        Tue, 22 Nov 2022 19:39:17 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0xw7jkeb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 19:39:17 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AMJZgYa022314;
-        Tue, 22 Nov 2022 19:39:16 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma02dal.us.ibm.com with ESMTP id 3kxpsabj2p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 19:39:16 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AMJdF4q5702386
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Nov 2022 19:39:15 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E121058068;
-        Tue, 22 Nov 2022 19:39:14 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3B36E5805C;
-        Tue, 22 Nov 2022 19:39:13 +0000 (GMT)
-Received: from sig-9-65-239-173.ibm.com (unknown [9.65.239.173])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 22 Nov 2022 19:39:13 +0000 (GMT)
-Message-ID: <9ef25f1b8621dab8b3cd4373bf6ce1633daae70e.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Make a copy of sig and digest in
- asymmetric_verify()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Tue, 22 Nov 2022 14:39:12 -0500
-In-Reply-To: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
-References: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: MbnRLYy7-EevjB-8VMKuWNDJgxCXgM9n
-X-Proofpoint-ORIG-GUID: If9WOnpDCGHW3lfXstBPeOmVhSCG9zlM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-22_11,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- adultscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 impostorscore=0
- priorityscore=1501 mlxscore=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211220152
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 15:18:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D59E0EB
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Nov 2022 12:18:15 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxZhX-0006Qx-Bo; Tue, 22 Nov 2022 21:17:03 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxZhR-005v1B-UM; Tue, 22 Nov 2022 21:16:58 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxZhS-000s7U-3N; Tue, 22 Nov 2022 21:16:58 +0100
+Date:   Tue, 22 Nov 2022 21:16:54 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        alsa-devel@alsa-project.org, linux-staging@lists.linux.dev,
+        linux-pwm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        Grant Likely <grant.likely@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        gregkh@linuxfoundation.org, linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Purism Kernel Team <kernel@puri.sm>,
+        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, linux-crypto@vger.kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Message-ID: <20221122201654.5rdaisqho33buibj@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221122185818.3740200d@jic23-huawei>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t3mjk627u66tfbb3"
+Content-Disposition: inline
+In-Reply-To: <20221122185818.3740200d@jic23-huawei>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
 
-On Fri, 2022-11-04 at 13:20 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> mapping") requires that both the signature and the digest resides in the
-> linear mapping area.
-> 
-> However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> stack support"), made it possible to move the stack in the vmalloc area,
-> which could make the requirement of the first commit not satisfied anymore.
-> 
-> If CONFIG_SG=y and CONFIG_VMAP_STACK=y, the following BUG() is triggered:
+--t3mjk627u66tfbb3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-^CONFIG_DEBUG_SG
+On Tue, Nov 22, 2022 at 06:58:18PM +0000, Jonathan Cameron wrote:
+>=20
+> Queued all of the below:
+> with one tweaked as per your suggestion and the highlighted one dropped o=
+n basis
+> I was already carrying the equivalent - as you pointed out.
+>=20
+> I was already carrying the required dependency.
+>=20
+> Includes the IIO ones in staging.
+>=20
+> Thanks,
+>=20
+> Jonathan
+>=20
+> p.s. I perhaps foolishly did this in a highly manual way so as to
+> also pick up Andy's RB.  So might have dropped one...
 
-> 
-> [  467.077359] kernel BUG at include/linux/scatterlist.h:163!
-> [  467.077939] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-> 
-> [...]
-> 
-> [  467.095225] Call Trace:
-> [  467.096088]  <TASK>
-> [  467.096928]  ? rcu_read_lock_held_common+0xe/0x50
-> [  467.097569]  ? rcu_read_lock_sched_held+0x13/0x70
-> [  467.098123]  ? trace_hardirqs_on+0x2c/0xd0
-> [  467.098647]  ? public_key_verify_signature+0x470/0x470
-> [  467.099237]  asymmetric_verify+0x14c/0x300
-> [  467.099869]  evm_verify_hmac+0x245/0x360
-> [  467.100391]  evm_inode_setattr+0x43/0x190
-> 
-> The failure happens only for the digest, as the pointer comes from the
-> stack, and not for the signature, which instead was allocated by
-> vfs_getxattr_alloc().
+You could have done:
 
-Only after enabling CONFIG_DEBUG_SG does EVM fail.
+	H=3D$(git rev-parse @)
+	b4 am -P 49-190 20221118224540.619276-1-uwe@kleine-koenig.org
+	git am ...
+	git filter-branch -f --msg-filter "grep -v 'Signed-off-by: Jonathan'; echo=
+ 'Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>'; echo '=
+Signed-off-by: Jonathan Cameron <jic23@kernel.org>'" $H..
 
-> 
-> Fix this by making a copy of both in asymmetric_verify(), so that the
-> linear mapping requirement is always satisfied, regardless of the caller.
+(untested, but you get the idea).
 
-As only EVM is affected, it would make more sense to limit the change
-to EVM.
+> Definitely would have been better as one patch per subsystem with
+> a cover letter suitable for replies like Andy's to be picked up
+> by b4.
 
--- 
-thanks,
+Next time I will go for one series per subsystem which I like better
+than one patch per subsystem.
 
-Mimi
+Best regards
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--t3mjk627u66tfbb3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN9LjMACgkQwfwUeK3K
+7An96wf/RMtsCSXVJy8BDrXiXMhey9OEm8p08ulRn0lKYlG54KR8nU/s77uuMjGS
+99aUfUU56Abxk02DuBv6N5Bax8nlFyIlUgkfaYPP9iN1TkF5XiucQ0Se4/haYL4A
+q11UqWIcKBS+5BL3K6Bl1Cqv4dPYpRvs99X3jlU6JmhFqJPPhPgAu0p74arSvLie
+kN6wgOGVdCjZTRD+Z7FxfIQPZqvVo7anPAynyk7XfgTXMSAK80JPR2UeMfvQ7yr2
+W28htsacTaJSnPOb1VIrhN8OytpxASYa120EJ8augNmBXC0IzvjosWI0LZnNljAU
+izPd/d6lzDCP0Mz/LU9QCBYUR1jxuQ==
+=KmMu
+-----END PGP SIGNATURE-----
+
+--t3mjk627u66tfbb3--
