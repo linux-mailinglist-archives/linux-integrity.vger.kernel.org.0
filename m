@@ -2,168 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953B4636495
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Nov 2022 16:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ECE6365A6
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Nov 2022 17:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbiKWPtv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Nov 2022 10:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
+        id S238749AbiKWQXj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Nov 2022 11:23:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238741AbiKWPtK (ORCPT
+        with ESMTP id S239045AbiKWQXh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:49:10 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF1EC657C;
-        Wed, 23 Nov 2022 07:49:03 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NHQNf2GDYz9xGKC;
-        Wed, 23 Nov 2022 23:42:10 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD34W6OQH5jUE+LAA--.33660S8;
-        Wed, 23 Nov 2022 16:48:35 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com
+        Wed, 23 Nov 2022 11:23:37 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B214788FA1;
+        Wed, 23 Nov 2022 08:23:35 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANEf8LX026039;
+        Wed, 23 Nov 2022 16:23:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=DGIE0IcQ/4Ob6lIB9Xu6gY2wRn88lzgW3JmHywvHzKA=;
+ b=hKMi4em2yrex+9WFg6mkd4/u+MFEF25CWOax2DqMDNRabnG05st9JP2dlFR3UQPWS0iJ
+ cReqe+AjYto7WBrqkhmsnD/iZOZTbxt3VRmWY574QVbpn0LInmZRjnfpfjZGInoUWQ/2
+ uUmqcCwJI+y922b2xrmjR+cngRdBbqO6HLHFQdkF9h/WK93zqUaKst0LmWJrelPgAna3
+ mH7jZzjJ5VUrPR4g9yKvD6VmrkBeX/vAMlKV96nA1AaPAds/elFZePuoX/RhqIlqzt41
+ BbV9+w0pmwlxHepYFue1BcrWcFEN4vFxnH0LGlsk7kVI5VZ2Oo7+HM2dC3mReTa/A870 bQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10bmjku9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 16:23:04 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ANFg69c013438;
+        Wed, 23 Nov 2022 16:23:04 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10bmjktb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 16:23:04 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ANGLBuu004741;
+        Wed, 23 Nov 2022 16:23:02 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma01wdc.us.ibm.com with ESMTP id 3kxps9ktwn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 16:23:02 +0000
+Received: from smtpav05.dal12v.mail.ibm.com ([9.208.128.132])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ANGN1YO8651402
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Nov 2022 16:23:01 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 730A95805D;
+        Wed, 23 Nov 2022 16:23:01 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C0565804C;
+        Wed, 23 Nov 2022 16:23:00 +0000 (GMT)
+Received: from sig-9-77-136-225.ibm.com (unknown [9.77.136.225])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 23 Nov 2022 16:22:59 +0000 (GMT)
+Message-ID: <33329a29d779096e043f53c681f26ef32b093e5c.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 0/6] evm: Do HMAC of multiple per LSM xattrs for new
+ inodes
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
 Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
         linux-kernel@vger.kernel.org, keescook@chromium.org,
         nicolas.bouchinet@clip-os.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v6 6/6] evm: Support multiple LSMs providing an xattr
-Date:   Wed, 23 Nov 2022 16:47:12 +0100
-Message-Id: <20221123154712.752074-7-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+Date:   Wed, 23 Nov 2022 11:22:59 -0500
 In-Reply-To: <20221123154712.752074-1-roberto.sassu@huaweicloud.com>
 References: <20221123154712.752074-1-roberto.sassu@huaweicloud.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD34W6OQH5jUE+LAA--.33660S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxGryktFy8Jr45JrykAF15CFg_yoW5try5pa
-        n8ta9rCrn5AFyUWr9IyF18ua4SgrWrGw4UKwsxCryjyFnrWrn2qryxtr15ur98Wr95Jrna
-        yw40vw15Aw15t3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20x
-        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj4XL2wAAsk
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: gGxC9VOl9iTb8JqDCP4RJSooTQ4VCFwN
+X-Proofpoint-GUID: rH_XQgNnZzUltVo6EvwgnVCTjKT_8wZj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-23_09,2022-11-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 phishscore=0 spamscore=0 mlxscore=0
+ adultscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211230119
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+Hi Roberto,
 
-Currently, evm_inode_init_security() processes a single LSM xattr from
-the array passed by security_inode_init_security(), and calculates the
-HMAC on it and other inode metadata.
+On Wed, 2022-11-23 at 16:47 +0100, Roberto Sassu wrote:
+> The second problem this patch set addresses is the limitation of the
+> call_int_hook() of stopping the loop when the return value from a hook
+> implementation is not zero. Unfortunately, for the inode_init_security hook
+> it is a legitimate case to return -EOPNOTSUPP, but this would not
+> necessarily mean that there is an error to report to the LSM infrastructure
+> but just that an LSM does not will to set an xattr. Other LSMs should be
+> still consulted as well.
 
-Given that initxattrs() callbacks, called by
-security_inode_init_security(), expect that this array is terminated when
-the xattr name is set to NULL, reuse the same assumption to scan all xattrs
-and to calculate the HMAC on all of them.
+This is just a heads up.  In reviewing the ocfs2 v5 patch, I realized
+the meaning of -EOPNOTSUPP is being overloaded to mean multiple things.
+Originally, -EOPNOTSUPP meant that the file system didn't implement
+xattr support.  Now, it is being used to also mean no LSM xattr.  In
+the former case, none of the LSM xattrs would be written.  In the
+latter case, some of them will be written.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/evm/evm.h        |  2 ++
- security/integrity/evm/evm_crypto.c |  9 ++++++++-
- security/integrity/evm/evm_main.c   | 16 +++++++++++-----
- 3 files changed, 21 insertions(+), 6 deletions(-)
+I'm not convinced that overloading the -EOPNOTSUPP is a good idea.  
+Still reviewing the patch set...
 
-diff --git a/security/integrity/evm/evm.h b/security/integrity/evm/evm.h
-index f8b8c5004fc7..f799d72a59fa 100644
---- a/security/integrity/evm/evm.h
-+++ b/security/integrity/evm/evm.h
-@@ -46,6 +46,8 @@ struct evm_digest {
- 	char digest[IMA_MAX_DIGEST_SIZE];
- } __packed;
- 
-+int evm_protected_xattr(const char *req_xattr_name);
-+
- int evm_init_key(void);
- int evm_update_evmxattr(struct dentry *dentry,
- 			const char *req_xattr_name,
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index 708de9656bbd..68f99faac316 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -389,6 +389,7 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		  char *hmac_val)
- {
- 	struct shash_desc *desc;
-+	const struct xattr *xattr;
- 
- 	desc = init_desc(EVM_XATTR_HMAC, HASH_ALGO_SHA1);
- 	if (IS_ERR(desc)) {
-@@ -396,7 +397,13 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		return PTR_ERR(desc);
- 	}
- 
--	crypto_shash_update(desc, lsm_xattr->value, lsm_xattr->value_len);
-+	for (xattr = lsm_xattr; xattr->name != NULL; xattr++) {
-+		if (!evm_protected_xattr(xattr->name))
-+			continue;
-+
-+		crypto_shash_update(desc, xattr->value, xattr->value_len);
-+	}
-+
- 	hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
- 	kfree(desc);
- 	return 0;
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 0a312cafb7de..1cf6871a0019 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -305,7 +305,7 @@ static int evm_protected_xattr_common(const char *req_xattr_name,
- 	return found;
- }
- 
--static int evm_protected_xattr(const char *req_xattr_name)
-+int evm_protected_xattr(const char *req_xattr_name)
- {
- 	return evm_protected_xattr_common(req_xattr_name, false);
- }
-@@ -851,14 +851,20 @@ int evm_inode_init_security(struct inode *inode, struct inode *dir,
- {
- 	struct evm_xattr *xattr_data;
- 	struct xattr *xattr, *evm_xattr;
-+	bool evm_protected_xattrs = false;
- 	int rc;
- 
--	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs ||
--	    !evm_protected_xattr(xattrs->name))
-+	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs)
- 		return -EOPNOTSUPP;
- 
--	for (xattr = xattrs; xattr->value != NULL; xattr++)
--		;
-+	for (xattr = xattrs; xattr->value != NULL; xattr++) {
-+		if (evm_protected_xattr(xattr->name))
-+			evm_protected_xattrs = true;
-+	}
-+
-+	/* EVM xattr not needed. */
-+	if (!evm_protected_xattrs)
-+		return -EOPNOTSUPP;
- 
- 	evm_xattr = xattr;
- 
 -- 
-2.25.1
+thanks,
+
+Mimi
 
