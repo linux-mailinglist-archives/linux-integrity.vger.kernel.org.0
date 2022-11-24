@@ -2,175 +2,147 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989E86373C3
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Nov 2022 09:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CF46379E5
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Nov 2022 14:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiKXITU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Nov 2022 03:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
+        id S229764AbiKXNZf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Nov 2022 08:25:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiKXITF (ORCPT
+        with ESMTP id S229627AbiKXNZe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:19:05 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2533101DB;
-        Thu, 24 Nov 2022 00:18:34 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NHrLL4Zc5z9xFVr;
-        Thu, 24 Nov 2022 16:11:38 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwB3Y3CzKH9jAWuOAA--.29469S2;
-        Thu, 24 Nov 2022 09:18:06 +0100 (CET)
-Message-ID: <bb63eba9a9f24558f4a1acd9bf012b59b5c6e98e.camel@huaweicloud.com>
-Subject: Re: [PATCH v6 4/6] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 24 Nov 2022 09:17:51 +0100
-In-Reply-To: <13350b79f708cb089e2ff2ee5cead52bafb10982.camel@linux.ibm.com>
-References: <20221123154712.752074-1-roberto.sassu@huaweicloud.com>
-         <20221123154712.752074-5-roberto.sassu@huaweicloud.com>
-         <13350b79f708cb089e2ff2ee5cead52bafb10982.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 24 Nov 2022 08:25:34 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470DE13D3A;
+        Thu, 24 Nov 2022 05:25:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669296307; bh=JR+1ymxijyNQgUsQNpDrkTDOpk2Q7NlTPJlOhYAB4iU=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=UqAqvFZ1zmGr72/X9y28SR33gHSzIxDfUIRk9JdkEyqjmwa9immmulXPebxsCJK0j
+         7bLlMUmyGPJ9mvW2XOn5/BM1pceSyknKW0Lc3tz53aQfOVjLiPEDzbMtZaPRhQNr/9
+         VluzZXmQHlJKQlhyiPKziC4K7flROfBXRX2PP4ZpMqNZL6o+XfH9jce97T4/uPFjVR
+         n29ZJIXjj3Ppd4gbTefOU8VMibwG54eRfb8P++7VsPoqzEsqnGAcY/nWtuowlVjYb7
+         ulIcSzQ2Vu8KFVrOdl8v+V6uabcOHwcLJEek180kq703U6Z0WOej8xnkO/lbT3dAnn
+         +YO+0hWTYvmag==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.2.37] ([84.162.7.17]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MwwZd-1p8Qwb3UMd-00ySke; Thu, 24
+ Nov 2022 14:25:06 +0100
+Subject: Re: [PATCH v10 04/14] tpm, tpm_tis: Do not skip reset of original
+ interrupt vector
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jandryuk@gmail.com,
+        pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com, lukas@wunner.de,
+        p.rosenberger@kunbus.com
+References: <20221120133134.28926-1-LinoSanfilippo@gmx.de>
+ <20221120133134.28926-5-LinoSanfilippo@gmx.de> <Y38V/7kXkWt9Fhy0@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <ce85d555-ae60-d7c1-70b1-b762997e9c94@gmx.de>
+Date:   Thu, 24 Nov 2022 14:25:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwB3Y3CzKH9jAWuOAA--.29469S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF4rKw17Ar4UKF18JryxXwb_yoW5AF1rpF
-        W8t3WDuF15JFyUWryFvr4Y9w4SkFy5GrWDG3srGFy2yFyDCrn3tryavF1Yka98ZrWkJr1v
-        vayjyr1DWwn8J37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUo0eHDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAGBF1jj4XQZgABsA
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y38V/7kXkWt9Fhy0@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ewnx8TV3SRMzArWaDc4NLeLmH85rw76r2BRp5Gth2V5mS5DPFQZ
+ 1VrQRLftH6rB8fUJngG0IAhf5hw5af2gdrZ3vFTlTbpZoUVuUZqNcuv+GSkKSyO4PDbJ4mU
+ 3WV9vqTCdMqnyeZJ+BAmUWta7b87yYCo9pJ26XbIj0O+2SXu+XFZ50BiJ3ip2XMrPpkHOlL
+ 75OE7TSpyx4giRMTE9ApQ==
+UI-OutboundReport: notjunk:1;M01:P0:UdQFGZP+bKo=;NEL2K/2lEfx8QICLNOyjJ4H2pJZ
+ aVPciSeQD7Z7MCQdV4maN8vgZ7U7Fmg/+iPw1YzAlF0u4s4vWUNrpPXLLGHZIbbno6SvuRwU9
+ rXuOmRRWa8i7JQnHiXXTUwLSx2PU7PrQgmlVVcbgWZoRdiZ6sn/1RiDHblZ/cYEI/uHL8A1aA
+ iQTaL7oigT51nJzeta1uqtOfrtMSLFKon96YjdWqrXysS4me9kNwUqnTWHCVUlJpe/vzsjMgP
+ sk14BLCbqejioYXfiXjpoqWrI44/bnzEQoeJbtiBqqZ0dadj96EK9MGgvb/awYCp80c16cfuG
+ IMgM/4YNyH/9bR+Wjx7ht4bClICsLnxruqI2f8BYLJAzsCeKpMZJwzevjVF13Zml1l3ukRTnk
+ LojYWbaDS1jL37Z2Q7RAOPWGibRS0QgnPieyd1m9nzDssMBQrCZJTp9c7ktzKpjBfMyE6D+Au
+ CQia5apBnu/V+bML6Au6eq9WNBRdRxUIjRQqSpstSpUa6C/IeQM6PjxegWt26Kdf46kDFsFQt
+ CULSjccgzsFhP1QSmoPD5rLZAFi1eDlqIgftzhAV7Z6Xx6bbM9DlCdxCyJ7kmKhiT8nlGObEG
+ 1Iasq18l7TuSU/tp27xr/ne9iJc0VHlwRNSsPZJdDijsSQa1jb3OY2xm0IbNMq+DnIsg4YLyZ
+ STJcO0XDXgFypy+KbdMXavuf/fwtNT1xgJwDuS/JCnKGomPrzOB6EKYejsSvJovbeMWrz9FeY
+ GzTpOySdfmOnqf/MqNHz/K+bgVjYE4plTZ/ti3+MzPolrIaZLEBZbkpnorx3ZTWuMgiAXlV1l
+ yETlp9DHVYOhC3lhTvDxYXbbcTlDdmCJf9DsplaUF6zpS0i4/5WK91lDRwPyiHohLxxN2OPwH
+ yiW0iP9JAHUItFkeoiVIdkc5MljqUJPSTiNTKqU8QYlOMP2nnGl4P2d/9W7B/mcok26qYxm+3
+ ynNr0A==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-11-23 at 20:14 -0500, Mimi Zohar wrote:
-> Hi Roberto,
-> 
-> On Wed, 2022-11-23 at 16:47 +0100, Roberto Sassu wrote:
-> >  int security_inode_init_security(struct inode *inode, struct inode *dir,
-> >                                  const struct qstr *qstr,
-> >                                  const initxattrs initxattrs, void *fs_data)
-> >  {
-> > -       struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
-> > -       struct xattr *lsm_xattr, *evm_xattr, *xattr;
-> > -       int ret;
-> > +       struct security_hook_list *P;
-> > +       struct xattr *new_xattrs;
-> > +       struct xattr *xattr;
-> > +       int ret = -EOPNOTSUPP, num_filled_xattrs = 0;
-> >  
-> >         if (unlikely(IS_PRIVATE(inode)))
-> >                 return 0;
-> >  
-> > +       if (!blob_sizes.lbs_xattr)
-> > +               return 0;
-> > +
-> >         if (!initxattrs)
-> >                 return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
-> > -                                    dir, qstr, NULL, NULL, NULL);
-> > -       memset(new_xattrs, 0, sizeof(new_xattrs));
-> > -       lsm_xattr = new_xattrs;
-> > -       ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
-> > -                                               &lsm_xattr->name,
-> > -                                               &lsm_xattr->value,
-> > -                                               &lsm_xattr->value_len);
-> > -       if (ret)
-> > +                                   dir, qstr, NULL);
-> > +       /* Allocate +1 for EVM and +1 as terminator. */
-> > +       new_xattrs = kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*new_xattrs),
-> > +                            GFP_NOFS);
-> > +       if (!new_xattrs)
-> > +               return -ENOMEM;
-> > +
-> > +       hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
-> > +                            list) {
-> > +               ret = P->hook.inode_init_security(inode, dir, qstr, new_xattrs);
-> > +               if (ret && ret != -EOPNOTSUPP)
-> > +                       goto out;
-> > +               if (ret == -EOPNOTSUPP)
-> > +                       continue;
-> 
-> In this context, -EOPNOTSUPP originally signified that the filesystem
-> does not support writing xattrs.  Writing any xattr would fail. 
-> Returning -ENODATA for no LSM xattr(s) data would seem to be more
-> appropriate than -EOPNOTSUPP.
+On 24.11.22 at 07:58, Jarkko Sakkinen wrote:
+> On Sun, Nov 20, 2022 at 02:31:24PM +0100, Lino Sanfilippo wrote:
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> If in tpm_tis_probe_irq_single() an error occurs after the original
+>> interrupt vector has been read, restore the interrupts before the error=
+ is
+>> returned.
+>>
+>> Since the caller does not check the error value, return -1 in any case =
+that
+>> the TPM_CHIP_FLAG_IRQ flag is not set. Since the return value of functi=
+on
+>> tpm_tis_gen_interrupt() is not longer used, make it a void function.
+>>
+>> Fixes: 1107d065fdf1 ("tpm_tis: Introduce intermediate layer for TPM acc=
+ess")
+>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>> ---
+>>  drivers/char/tpm/tpm_tis_core.c | 33 +++++++++++++--------------------
+>>  1 file changed, 13 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
+_core.c
+>> index 603b82ca56da..1eac1279594d 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.c
+>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>> @@ -729,7 +729,7 @@ static irqreturn_t tis_int_handler(int dummy, void =
+*dev_id)
+>>  	return IRQ_HANDLED;
+>>  }
+>>
+>> -static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
+>> +static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
+>>  {
+>>  	const char *desc =3D "attempting to generate an interrupt";
+>>  	u32 cap2;
+>> @@ -738,16 +738,14 @@ static int tpm_tis_gen_interrupt(struct tpm_chip =
+*chip)
+>>
+>>  	ret =3D request_locality(chip, 0);
+>>  	if (ret < 0)
+>> -		return ret;
+>> +		return;
+>>
+>>  	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+>> -		ret =3D tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+>> +		tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+>
+> In a successive patch:
+>
+> -               tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+> +               ret =3D tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+> `
+>
+> BR, Jarkko
+>
 
-Hi Mimi
+If it was a single patch it would be IMHO correct to remove ret, since at =
+this point it
+is not needed any more. But as part of a series it is admittedly a bit odd=
+ to remove the value only
+to re-add it in a later patch of the same series. I will fix this and send=
+ a v11.
 
-I thought about adding new return values. Currently only -EOPNOTSUPP
-and -ENOMEM are expected as errors.
 
-However, changing the conventions would mean revisiting the LSMs code
-and ensuring that they follow the new conventions.
-
-I would be more in favor of not touching it.
-
-Thanks
-
-Roberto
-
-> thanks,
-> 
-> Mimi
-> 
-> > +               /*
-> > +                * As the number of xattrs reserved by LSMs is not directly
-> > +                * available, directly use the total number blob_sizes.lbs_xattr
-> > +                * to keep the code simple, while being not the most efficient
-> > +                * way.
-> > +                */
-> > +               ret = security_check_compact_filled_xattrs(new_xattrs,
-> > +                                                          blob_sizes.lbs_xattr,
-> > +                                                          &num_filled_xattrs);
-> > +               if (ret < 0) {
-> > +                       ret = -ENOMEM;
-> > +                       goto out;
-> > +               }
-> > +       }
-> > +
-> > +       if (!num_filled_xattrs)
-> >                 goto out;
-> >  
-> > -       evm_xattr = lsm_xattr + 1;
-> > -       ret = evm_inode_init_security(inode, lsm_xattr, evm_xattr);
-> > +       ret = evm_inode_init_security(inode, new_xattrs,
-> > +                                     new_xattrs + num_filled_xattrs);
-> >         if (ret)
-> >                 goto out;
-> >         ret = initxattrs(inode, new_xattrs, fs_data);
-> >  out:
-> >         for (xattr = new_xattrs; xattr->value != NULL; xattr++)
-> >                 kfree(xattr->value);
-> > +       kfree(new_xattrs);
-> >         return (ret == -EOPNOTSUPP) ? 0 : ret;
-> >  }
-> b
+Regards,
+Lino
 
