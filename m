@@ -2,132 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E396396E8
-	for <lists+linux-integrity@lfdr.de>; Sat, 26 Nov 2022 16:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72107639B93
+	for <lists+linux-integrity@lfdr.de>; Sun, 27 Nov 2022 16:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiKZPoJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 26 Nov 2022 10:44:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S229550AbiK0PrP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 27 Nov 2022 10:47:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiKZPoI (ORCPT
+        with ESMTP id S229535AbiK0PrO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 26 Nov 2022 10:44:08 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E0EF7A;
-        Sat, 26 Nov 2022 07:44:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669477447; x=1701013447;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=TYZva1qhZaDDzx7ssD6565IlpCg24ayIFbcaC7tY8Tc=;
-  b=afaV5wieNPUjxu0caJC6JdakAXQOqaG+mJP11E9sBOfdvxW/FCdDmoSq
-   uszGkpjb5nf3De548PRwyr8tA0gjYkdzZijT5eCkTI9MaUL7wuDEK5FNd
-   DHxxEedinEuG50v1wryTy8tuS2GfxLpPE0gycyCpJAkwIvhrwC+gn8YZP
-   vqGEDAZKZz5uKM+4zWczaOB+RJUrHWVl1v9DiPG/G1MsaoSG/5NPhScuG
-   JcNKVf2MOUenZM/iTJdfierEPIRgcSWgA7CVeokYeMdRvPe3t3BpDN/xD
-   57LDEQ+dPBOukc9S9pF7aZDWoHCdzdL+VmK/32YN6VaBwDrOJGpoZ9vaZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="376747252"
-X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="376747252"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 07:44:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="620587303"
-X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="620587303"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 26 Nov 2022 07:43:54 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oyxLL-000Bco-1n;
-        Sat, 26 Nov 2022 17:43:51 +0200
-Date:   Sat, 26 Nov 2022 17:43:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        alsa-devel@alsa-project.org, linux-staging@lists.linux.dev,
-        linux-pwm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        gregkh@linuxfoundation.org, linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Purism Kernel Team <kernel@puri.sm>,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <Y4I0N3KpU/LSJYpd@smile.fi.intel.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221122185818.3740200d@jic23-huawei>
- <20221122201654.5rdaisqho33buibj@pengutronix.de>
+        Sun, 27 Nov 2022 10:47:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A2DDEC0;
+        Sun, 27 Nov 2022 07:47:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3567CB80B0E;
+        Sun, 27 Nov 2022 15:47:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58DD3C433D6;
+        Sun, 27 Nov 2022 15:47:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669564030;
+        bh=LD1YKON3zFK4mG5HlyRH/MyGGwYEkQUzCSS1PsDLugw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OqnEQgq6+MI5qH/iq/zewhEN+UWTUcGLro+2ThPBjtRpkQMIXviACZZ1gTKVtLK5C
+         WlrrLK9Yj3eafY0ftTQzsMc7eVzWzRM5KuR/zQ5CkFX7rk22tM450EA+wrozJyO0od
+         YTEppawNlJYmiS8ylhZIKEWgWnLN+av+Ys7KYoxKuJuQ+T9Ij8znyeGmTxYef8ASr7
+         zd2ILbx4yN6sXBtwNusS8nTwx6mIwike1UCN2Wn7QUsQcCMvt1UDKTmYHvD7dHm5KN
+         uHa4dFW2l6px77EGhz+6v+u0CX4mbvoh59EymVSur3Kfc95GkUrpxu8RIM7smcu3Ji
+         +vLoJ/Lswol0Q==
+Date:   Sun, 27 Nov 2022 17:47:06 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, joel@jms.id.au
+Subject: Re: [PATCH v2] tpm: Add flag to use default cancellation policy
+Message-ID: <Y4OGetuMVlweFRir@kernel.org>
+References: <20221107171423.51019-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221122201654.5rdaisqho33buibj@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107171423.51019-1-eajames@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 09:16:54PM +0100, Uwe Kleine-König wrote:
-> On Tue, Nov 22, 2022 at 06:58:18PM +0000, Jonathan Cameron wrote:
-
-> > Queued all of the below:
-> > with one tweaked as per your suggestion and the highlighted one dropped on basis
-> > I was already carrying the equivalent - as you pointed out.
-> > 
-> > I was already carrying the required dependency.
-> > 
-> > Includes the IIO ones in staging.
-> > 
-
-> > p.s. I perhaps foolishly did this in a highly manual way so as to
-> > also pick up Andy's RB.  So might have dropped one...
+On Mon, Nov 07, 2022 at 11:14:23AM -0600, Eddie James wrote:
+> The check for cancelled request depends on the VID of the chip, but
+> some chips share VID which shouldn't share their cancellation
+> behavior. This is the case for the Nuvoton NPCT75X, which should use
+> the default cancellation check, not the Winbond one.
+> To avoid changing the existing behavior, add a new flag to indicate
+> that the chip should use the default cancellation check and set it
+> for the I2C TPM2 TIS driver.
 > 
-> You could have done:
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+> Changes since v1:
+>  - Update switch statement with default: break;
 > 
-> 	H=$(git rev-parse @)
-> 	b4 am -P 49-190 20221118224540.619276-1-uwe@kleine-koenig.org
-> 	git am ...
-> 	git filter-branch -f --msg-filter "grep -v 'Signed-off-by: Jonathan'; echo 'Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>'; echo 'Signed-off-by: Jonathan Cameron <jic23@kernel.org>'" $H..
+>  drivers/char/tpm/tpm_tis_core.c | 20 ++++++++++++--------
+>  drivers/char/tpm/tpm_tis_core.h |  1 +
+>  drivers/char/tpm/tpm_tis_i2c.c  |  1 +
+>  3 files changed, 14 insertions(+), 8 deletions(-)
 > 
-> (untested, but you get the idea).
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 757623bacfd5..3f98e587b3e8 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -682,15 +682,19 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  
+> -	switch (priv->manufacturer_id) {
+> -	case TPM_VID_WINBOND:
+> -		return ((status == TPM_STS_VALID) ||
+> -			(status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
+> -	case TPM_VID_STM:
+> -		return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
+> -	default:
+> -		return (status == TPM_STS_COMMAND_READY);
+> +	if (!test_bit(TPM_TIS_DEFAULT_CANCELLATION, &priv->flags)) {
+> +		switch (priv->manufacturer_id) {
+> +		case TPM_VID_WINBOND:
+> +			return ((status == TPM_STS_VALID) ||
+> +				(status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
+> +		case TPM_VID_STM:
+> +			return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
+> +		default:
+> +			break;
+> +		}
+>  	}
+> +
+> +	return status == TPM_STS_COMMAND_READY;
+>  }
+>  
+>  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index 66a5a13cd1df..b68479e0de10 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -86,6 +86,7 @@ enum tis_defaults {
+>  enum tpm_tis_flags {
+>  	TPM_TIS_ITPM_WORKAROUND		= BIT(0),
+>  	TPM_TIS_INVALID_STATUS		= BIT(1),
+> +	TPM_TIS_DEFAULT_CANCELLATION	= BIT(2),
+>  };
+>  
+>  struct tpm_tis_data {
+> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> index 45f388127f4b..91451ee1ef8d 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> @@ -329,6 +329,7 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev,
+>  	if (!phy->io_buf)
+>  		return -ENOMEM;
+>  
+> +	set_bit(TPM_TIS_DEFAULT_CANCELLATION, &phy->priv.flags);
+>  	phy->i2c_client = dev;
+>  
+>  	/* must precede all communication with the tpm */
+> -- 
+> 2.31.1
+> 
 
-That's, for example (just last from the history as is), how I usually do it
-(tested):
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
- git filter-branch --msg-filter 'sed -e "/Signed-off-by: Andy Shevchenko/ a Tested-by: Daniel Scally <dan.scally@ideasonboard.com>"' -f HEAD~4..HEAD
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+BR, Jarkko
