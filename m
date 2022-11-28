@@ -2,193 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884F463A8C0
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Nov 2022 13:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 597CF63A9B5
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Nov 2022 14:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiK1MyD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Nov 2022 07:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S231983AbiK1NgH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Nov 2022 08:36:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiK1MyC (ORCPT
+        with ESMTP id S231828AbiK1NgC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:54:02 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C768515FE0;
-        Mon, 28 Nov 2022 04:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1669640016; bh=A0fnarZ/PFbQMO+SxuLH2LZkz5obExFbPaQzidAWHX8=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=qnDv8MLG+A0s1yvI5z+fc5OH/hqeTtRffgAlEF+tkwiliUMRwI/taZDS8Y52S4hKk
-         KT4eKgsre6JCqpIj1w9dLre21o+/iFn5Dj/ALPHFquacTrmYkCXCMwJXBR5rFMJjV7
-         rEpW9QYBv4IGAQocoWL9UWsZTHl17PGjzeBo5ysjgzlZlbAac3dM5oLxcQ8Lq8trzi
-         LJgOAZZCB76jwVk+nDs09nX2QDmYxBdgw0iZfn8uC0LJBiMWcIln2ovz3hkFVjnLD1
-         RUQ+oYdczZV/9z15Avqo94sWkOBS8sLMWEl4GhXPwxF3icdhSX0HFihirl3nGZxnLP
-         bc9gZh00L0Fiw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.2.42] ([84.162.7.17]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mxm3K-1oo1TK0Gly-00zHHL; Mon, 28
- Nov 2022 13:53:36 +0100
-Message-ID: <3c8a9353-124a-4ace-320d-b3e811609502@gmx.de>
-Date:   Mon, 28 Nov 2022 13:53:35 +0100
+        Mon, 28 Nov 2022 08:36:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6461EEE1;
+        Mon, 28 Nov 2022 05:35:56 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 25F571F381;
+        Mon, 28 Nov 2022 13:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669642555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TY7/7AgLrq4nTnUbMFstKjsYLVXpbbNEZVUDr1fnyEo=;
+        b=Z64fkzaQ1NzT1oE7SOTCu/aiWrW21a0pepwxqTitNRD+x3vPFnsCXOQv9k26wu10KW2lst
+        +/+lgGlpWCsEUs+jAWcfJF4cAKBM8fTmYcONmxL6TjMUrlwYrDgsAZDvo2/uhKBpPYxrUH
+        /H7eshMzTlA/MHZQm6/hOXvF+rNmzu4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669642555;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TY7/7AgLrq4nTnUbMFstKjsYLVXpbbNEZVUDr1fnyEo=;
+        b=8PcQ3RitgPSEuNjx/4GFpmHA640HgCeS40CwkL+layZUdqOaa63xV7mTs8j+I/24VfCjm/
+        II1gZvdj8ywebMCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EFDD413273;
+        Mon, 28 Nov 2022 13:35:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id M/fIOTq5hGOfCQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 28 Nov 2022 13:35:54 +0000
+Message-ID: <d659c6cc-9c32-1e0b-4fc9-986f124e987b@suse.cz>
+Date:   Mon, 28 Nov 2022 14:35:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v11 13/14] tpm, tpm_tis: startup chip before testing for
- interrupts
+ Thunderbird/102.5.0
+Subject: Re: [REGRESSION] suspend to ram fails in 6.1 due to tpm errors
 Content-Language: en-US
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
- <20221124135538.31020-14-LinoSanfilippo@gmx.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-In-Reply-To: <20221124135538.31020-14-LinoSanfilippo@gmx.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz>
+ <Y4Sjk+Fibcsihg4Y@zx2c4.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y4Sjk+Fibcsihg4Y@zx2c4.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2cTxqiaUcYK828rliV464Ne0ZktJzDIYm492bblahPlIe5NtcIE
- 9hc6g5pONQ2oQ5OUVVMPYot9ZnFh2T5HxvP/ovAS0smLSngHigiY0pTKDoNfEzRvlDtDO1W
- 8mgyaoKySlZ0XZiCLw7m5/PexWVe3041MlSPFv7flciDEzU3PIOevu8PSH1etpnBj8bFb/y
- TfapLCQ45QFVOei5v1O+A==
-UI-OutboundReport: notjunk:1;M01:P0:GZajJQRI1/c=;eGO9EFV96pbVQnnzFIJ8uh3m9O0
- 2dTMJh+PJGqzpGHqsuyp3g07ffTxeAhzm/BvfT16S9uq/I8t7Wjg3RDbQKBVnDOyASqMpjr1L
- ZRSVjG28lU0P/zE8l15P1iA6VA+iTKW4ykQFRQjVfUTUth+65miJGvmAhdjLx8YpPtJ/DUpO2
- DAQx6B0KvwJI6Agsl87jAlaH+5t1CucEQf/5RzEpFyeTkBXyUZOKsLR8CVZVy6cDruB6ac35/
- Low72tZ2CBmyo9xLrBqGZh/rCehmhNOYdKAlN2m0/o3WsVvu3UWr00SS5UPqbttOuLA3NlMU1
- N42MD0Pwj2UUUZG2M3/B9NkkZ21ag28dAnN848p12JbKgUBnKfIPuQU559OC0Zmxq9q3Sq5iZ
- eZ0A7JGkzU/o2m4L50j6Xw1o9Lu4j+si1idoES6FVz3VviiBrPx36aCIXw7j7QJWIy2AYtYaA
- 0lvPj7nSm0Qh2ErmPjajmEHaSp8A/aORGsSuKSRPaYI8CKoIMmVAqFAJkPydxtwRVC/rM0ept
- 9f0aA08mRhJ3tVhfc+UuHr1tsPu8eL2uxHVqqJKd4kdPTjwdoHVvDqVNyVY5nllcrhzHLxNEl
- 6a0ssLztDLXuiKczq38pSAjzKT5AUAYB2njx43gdIIwhSiYSiN5bnWwsujuWi9GqFbF00Wn3r
- zLcKQ/tDe4cIYukzlBG0Gx2OvrqM5QBpBZClVJHUJibn+M75l6FIVkDSWkAdfnHzHVe8J4wAI
- 1hxBdEzouivEhbYOfpIJuG3r7r3DPj0TZqdV01iM2TbJpea5xf2d0/gh3L63HdF6OqRktueMl
- OvcDZLbK0ToS8yDHYshshRRolydtS8rGuRObcnJJUt1lgzoTfJSKafm+MXBYIqeWGnt1jivPr
- PeRZvjGDuUAg+7nTxvzzkzG4EoNgDcLqyGMLzN6nlQdDMqVO+qgbfverzEoazWIjRbBUSgZOL
- RFx4fw==
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 11/28/22 13:03, Jason A. Donenfeld wrote:
+> Hi Vlastimil,
+> 
+> Thanks for CC'ing me.
+> 
+> On Mon, Nov 28, 2022 at 09:15:33AM +0100, Vlastimil Babka wrote:
+>> Dominik on IRC pointed me to commit b006c439d58d ("hwrng: core - start hwrng
+>> kthread also for untrusted sources"), which could make sense if the TPM was not
+>> used at all before and now it's used for randomness. But then it probably "just"
+>> uncovered a pre-existing issue? Maybe there's a race with getting the randomness
+>> and suspend? Could it be exactly what this patch is attempting to fix?
+>> https://lore.kernel.org/all/20221103145450.1409273-2-jsd@semihalf.com/
+> 
+> The commit you referenced just turns on some functionality that most
+> people previously didn't have (but maybe could have, manually). So this
+> is a case of a new commit unearthing a bug in some old code. We had
+> something similar happen with a raspi driver and fixed the bug there.
 
-On 24.11.22 14:55, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->
-> In tpm_tis_gen_interrupt() a request for a property value is sent to the
-> TPM to test if interrupts are generated. However after a power cycle the
-> TPM responds with TPM_RC_INITIALIZE which indicates that the TPM is not
-> yet properly initialized.
-> Fix this by first starting the TPM up before the request is sent. For th=
-is
-> the startup implementation is removed from tpm_chip_register() and put
-> into the new function tpm_chip_startup() which is called before the
-> interrupts are tested.
->
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> ---
->  drivers/char/tpm/tpm-chip.c     | 38 +++++++++++++++++++++------------
->  drivers/char/tpm/tpm.h          |  1 +
->  drivers/char/tpm/tpm_tis_core.c |  5 +++++
->  3 files changed, 30 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index 783d65fc71f0..370aa1f529f2 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -543,6 +543,30 @@ static int tpm_get_pcr_allocation(struct tpm_chip *=
-chip)
->  	return rc;
->  }
->
-> +/*
-> + * tpm_chip_startup() - performs auto startup and allocates the PCRs
-> + * @chip: TPM chip to use.
-> + */
-> +int tpm_chip_startup(struct tpm_chip *chip)
-> +{
-> +	int rc;
-> +
-> +	rc =3D tpm_chip_start(chip);
-> +	if (rc)
-> +		return rc;
-> +
-> +	rc =3D tpm_auto_startup(chip);
-> +	if (rc)
-> +		goto stop;
-> +
-> +	rc =3D tpm_get_pcr_allocation(chip);
-> +stop:
-> +	tpm_chip_stop(chip);
-> +
-> +	return rc;
-> +}
-> +EXPORT_SYMBOL_GPL(tpm_chip_startup);
-> +
->  /*
->   * tpm_chip_register() - create a character device for the TPM chip
->   * @chip: TPM chip to use.
-> @@ -558,20 +582,6 @@ int tpm_chip_register(struct tpm_chip *chip)
->  {
->  	int rc;
->
-> -	rc =3D tpm_chip_start(chip);
-> -	if (rc)
-> -		return rc;
-> -	rc =3D tpm_auto_startup(chip);
-> -	if (rc) {
-> -		tpm_chip_stop(chip);
-> -		return rc;
-> -	}
-> -
-> -	rc =3D tpm_get_pcr_allocation(chip);
-> -	tpm_chip_stop(chip);
-> -	if (rc)
-> -		return rc;
-> -
->  	tpm_sysfs_add_device(chip);
->
->  	tpm_bios_log_setup(chip);
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 24ee4e1cc452..919bb0b88b12 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -190,6 +190,7 @@ static inline void tpm_msleep(unsigned int delay_mse=
-c)
->  		     delay_msec * 1000);
->  };
->
-> +int tpm_chip_startup(struct tpm_chip *chip);
->  int tpm_chip_start(struct tpm_chip *chip);
->  void tpm_chip_stop(struct tpm_chip *chip);
->  struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_=
-core.c
-> index ddaf362e62c1..94a2bfb244b3 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -1129,6 +1129,11 @@ int tpm_tis_core_init(struct device *dev, struct =
-tpm_tis_data *priv, int irq,
->  	/* INTERRUPT Setup */
->  	init_waitqueue_head(&priv->read_queue);
->  	init_waitqueue_head(&priv->int_queue);
-> +
-> +	rc =3D tpm_chip_startup(chip);
-> +	if (rc)
-> +		goto out_err;
-> +
->  	if (irq !=3D -1) {
->  		/*
->  		 * Before doing irq testing issue a command to the TPM in polling mod=
-e
+Right, I suspected as much.
 
-Jarko, thanks for the review so far. What about this patch, are there any =
-concerns from your side?
+> From the looks of the lore link you provided, it sounds like the same
+> thing has happened already there to tpm? That this is already fixed by
+> that commit? I think if you have a system that's readily exhibiting the
 
-Regards,
-Lino
+Well it was a patch series where a v3 was promised with more info about the
+bug it fixes, but I haven't found a v3. So if the author or TPM maintainers
+can confirm that it does (or can) indeed fix such a bug I'm observing, I'd
+hope for it to be fasttracked to 6.1.
+
+> issue, the best thing to do would be to try that series, and report
+> back, maybe even providing your `Tested-by:` line if it works.
+
+Yeah, I have compiled rc7 with patch 1/3, without the rest as that didn't
+seem necessary, and there was some review feedback that some parts need
+fixing. So far it didn't exhibit the bug when suspending/resuming 10 times,
+but that's not yet a guarantee due to nondeterministic nature of the issue
+and usually the suspends weren't happening in such rapid succession... I'll
+keep using that kernel for now on the laptop, fwiw.
+
+> I'll play around and see if I can repro too. Looks like you have a T460?
+> I don't have exactly that but maybe something close enough.
+
+Great, thanks!
+
+> Jason
+
