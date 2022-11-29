@@ -2,75 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E56363BFF7
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Nov 2022 13:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCD163C07D
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Nov 2022 13:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233996AbiK2MWt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Nov 2022 07:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S230151AbiK2M7K (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Nov 2022 07:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiK2MWs (ORCPT
+        with ESMTP id S229900AbiK2M7K (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:22:48 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF2AB1EB;
-        Tue, 29 Nov 2022 04:22:45 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NM1Wf1Zmnz9xGZ0;
-        Tue, 29 Nov 2022 20:15:42 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwDn0W5q+YVjqsimAA--.45795S2;
-        Tue, 29 Nov 2022 13:22:15 +0100 (CET)
-Message-ID: <dca37353573cbf4c9eb3f870c5a9d825e431a680.camel@huaweicloud.com>
-Subject: Re: [PATCH v5] evm: Correct inode_init_security hooks behaviors
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>,
-        linux-integrity@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     philippe.trebuchet@ssi.gouv.fr, dmitry.kasatkin@gmail.com,
+        Tue, 29 Nov 2022 07:59:10 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623A4E0F;
+        Tue, 29 Nov 2022 04:59:08 -0800 (PST)
+Received: (Authenticated sender: nicolas.bouchinet@clip-os.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id F1EC6C0005;
+        Tue, 29 Nov 2022 12:58:59 +0000 (UTC)
+Date:   Tue, 29 Nov 2022 13:58:58 +0100
+From:   Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        philippe.trebuchet@ssi.gouv.fr, dmitry.kasatkin@gmail.com,
         paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
         casey@schaufler-ca.com, davem@davemloft.net, lucien.xin@gmail.com,
         vgoyal@redhat.com, omosnace@redhat.com, mortonm@chromium.org,
         nicolas.bouchinet@ssi.gouv.fr, mic@digikod.net,
         cgzones@googlemail.com, linux-security-module@vger.kernel.org,
         kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        bpf@vger.kernel.org
-Date:   Tue, 29 Nov 2022 13:21:59 +0100
-In-Reply-To: <086b6d26895b84ad4086ac9f191ede6f705f9b6b.camel@linux.ibm.com>
+        bpf@vger.kernel.org, roberto.sassu@huaweicloud.com
+Subject: Re: [PATCH v5] evm: Correct inode_init_security hooks behaviors
+Message-ID: <Y4YCElqX9jp5r8sO@archlinux>
 References: <Y4Dl2yjVRkJvBflq@archlinux>
-         <086b6d26895b84ad4086ac9f191ede6f705f9b6b.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+ <086b6d26895b84ad4086ac9f191ede6f705f9b6b.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwDn0W5q+YVjqsimAA--.45795S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF18JryUCF4xAFWDur17ZFb_yoW8Cw1kpF
-        W5Ga4qkr1Dtr18ZrWIyr4xXw4IkrWFgFWDGFnayw1Yva98Gr10qr1xKr4Y9rWfCr4SkFyv
-        vF47Za13Z3Z0y3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgALBF1jj4IHGQAEsk
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <086b6d26895b84ad4086ac9f191ede6f705f9b6b.camel@linux.ibm.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-11-29 at 06:28 -0500, Mimi Zohar wrote:
+Hi Mimi,
+
+On Tue, Nov 29, 2022 at 06:28:09AM -0500, Mimi Zohar wrote:
 > On Fri, 2022-11-25 at 16:57 +0100, Nicolas Bouchinet wrote:
 > > From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
 > > 
@@ -107,11 +87,17 @@ On Tue, 2022-11-29 at 06:28 -0500, Mimi Zohar wrote:
 > Reported-by tag indicating that your patch set addresses a bug reported
 > by Nicolas.
 
-Agreed, I will add a Reported-by for the bug reported by Nicolas.
+This patch fixes the EVM NULL pointer dereference I have reported, and additionally
+improves the stackability of this LSM hook. This latter improvement was originally
+addressed by Roberto's patchset, and thus I see no problem for my fix to be merged
+within his patchset.
+> 
+> -- 
+> thanks,
+> 
+> Mimi
+> 
 
-For the rest, my patch set introduces a similar functionality, with the
-difference that it uses the reservation mechanism instead of static
-allocation for xattrs, as suggested by Paul.
+Thanks for your time,
 
-Roberto
-
+Nicolas Bouchinet
