@@ -2,114 +2,144 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B7E63C257
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Nov 2022 15:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B0B63C28B
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Nov 2022 15:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235498AbiK2OVE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Nov 2022 09:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
+        id S234716AbiK2OcG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Nov 2022 09:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233498AbiK2OUr (ORCPT
+        with ESMTP id S235498AbiK2Ob7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:20:47 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE46D68C5A;
-        Tue, 29 Nov 2022 06:18:41 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATEDiGK023926;
-        Tue, 29 Nov 2022 14:18:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=wYoNHGUaHFehdnzNT3PBL/KGIrZnJf8txpR6vJqabvQ=;
- b=E7WzhtOpiDo/4PNMBPZG0EpV+5dS+++/e3cDSJL6iFJURtrckOZprQhP9aVkDquQURbn
- YFg6MUojA1mslCFIPNBgJP6g4pSlCG7DkvdT+Eix3RBEn1ZFyX+lFqn9mPRlITJ5inhP
- avMjpsHRCb79j9UZTgc7TkZdnLqdzfsu9GUqIe8q6A3OjVxh1xCcKUlji9ardH7V7B07
- 7zvAkuuOFUZcAp+js8KtWYusRNSGGSRqfkJ4fCFR69HWp1P+END4fZfc8PxvB8oSfV+v
- 2rWjFyovRnEQHLNkBxQXMIXOyOhWSPIefHYXrd5MsW8QAChGuozvjw1sECl4mwimpkj5 4w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5kmv07hs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 14:18:35 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ATEGsI2009705;
-        Tue, 29 Nov 2022 14:18:35 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5kmv07h8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 14:18:35 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ATE5v9H015753;
-        Tue, 29 Nov 2022 14:18:34 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma04dal.us.ibm.com with ESMTP id 3m3aea261c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 14:18:34 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com ([9.208.128.113])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ATEIUCa31195624
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Nov 2022 14:18:31 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5709758067;
-        Tue, 29 Nov 2022 14:18:32 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12EDB58059;
-        Tue, 29 Nov 2022 14:18:31 +0000 (GMT)
-Received: from sig-9-65-233-5.ibm.com (unknown [9.65.233.5])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 29 Nov 2022 14:18:30 +0000 (GMT)
-Message-ID: <d982f5162b4b0486d6b5b0d8f3cfa320e8edf537.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Fix hash dependency to correct algorithm
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 29 Nov 2022 09:18:30 -0500
-In-Reply-To: <20221125121840.88176-1-tianjia.zhang@linux.alibaba.com>
-References: <20221125121840.88176-1-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nXLITWukiqoeofuKsKjrFU5Ile2WHWoS
-X-Proofpoint-ORIG-GUID: 1g2ahZTKKgkxsG9pUrDuSxKd493rxSsN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-29_08,2022-11-29_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
- phishscore=0 clxscore=1011 mlxlogscore=827 bulkscore=0 spamscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211290081
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Nov 2022 09:31:59 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A77156572;
+        Tue, 29 Nov 2022 06:31:57 -0800 (PST)
+Received: (Authenticated sender: nicolas.bouchinet@clip-os.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 280C720015;
+        Tue, 29 Nov 2022 14:31:48 +0000 (UTC)
+Date:   Tue, 29 Nov 2022 15:31:47 +0100
+From:   Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        philippe.trebuchet@ssi.gouv.fr, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        casey@schaufler-ca.com, davem@davemloft.net, lucien.xin@gmail.com,
+        vgoyal@redhat.com, omosnace@redhat.com, mortonm@chromium.org,
+        nicolas.bouchinet@ssi.gouv.fr, mic@digikod.net,
+        cgzones@googlemail.com, linux-security-module@vger.kernel.org,
+        kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v5] evm: Correct inode_init_security hooks behaviors
+Message-ID: <Y4YX0+Bn3uyBO2S+@archlinux>
+References: <Y4Dl2yjVRkJvBflq@archlinux>
+ <086b6d26895b84ad4086ac9f191ede6f705f9b6b.camel@linux.ibm.com>
+ <Y4YCElqX9jp5r8sO@archlinux>
+ <b01474bc5f19e98ff30ddc16a5d783c84ed1a486.camel@huaweicloud.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b01474bc5f19e98ff30ddc16a5d783c84ed1a486.camel@huaweicloud.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-11-25 at 20:18 +0800, Tianjia Zhang wrote:
-> Commit d2825fa9365d ("crypto: sm3,sm4 - move into crypto directory") moves
-> the SM3 and SM4 stand-alone library and the algorithm implementation for
-> the Crypto API into the same directory, and the corresponding relationship
-> of Kconfig is modified, CONFIG_CRYPTO_SM3/4 corresponds to the stand-alone
-> library of SM3/4, and CONFIG_CRYPTO_SM3/4_GENERIC corresponds to the
-> algorithm implementation for the Crypto API. Therefore, it is necessary
-> for this hmodule to depend on the correct algorithm.
+Hi Roberto,
+
+On Tue, Nov 29, 2022 at 02:10:06PM +0100, Roberto Sassu wrote:
+> On Tue, 2022-11-29 at 13:58 +0100, Nicolas Bouchinet wrote:
+> > Hi Mimi,
+> > 
+> > On Tue, Nov 29, 2022 at 06:28:09AM -0500, Mimi Zohar wrote:
+> > > On Fri, 2022-11-25 at 16:57 +0100, Nicolas Bouchinet wrote:
+> > > > From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+> > > > 
+> > > > Fixes a NULL pointer dereference occurring in the
+> > > > `evm_protected_xattr_common` function of the EVM LSM. The bug is
+> > > > triggered if a `inode_init_security` hook returns 0 without initializing
+> > > > the given `struct xattr` fields (which is the case of BPF) and if no
+> > > > other LSM overrides thoses fields after. This also leads to memory
+> > > > leaks.
+> > > > 
+> > > > The `call_int_hook_xattr` macro has been inlined into the
+> > > > `security_inode_init_security` hook in order to check hooks return
+> > > > values and skip ones who doesn't init `xattrs`.
+> > > > 
+> > > > Modify `evm_init_hmac` function to init the EVM hmac using every
+> > > > entry of the given xattr array.
+> > > > 
+> > > > The `MAX_LSM_EVM_XATTR` value is now based on the security modules
+> > > > compiled in, which gives room for SMACK, SELinux, Apparmor, BPF and
+> > > > IMA/EVM security attributes.
+> > > > 
+> > > > Changes the default return value of the `inode_init_security` hook
+> > > > definition to `-EOPNOTSUPP`.
+> > > > 
+> > > > Changes the hook documentation to match the behavior of the LSMs using
+> > > > it (only xattr->value is initialised with kmalloc and thus is the only
+> > > > one that should be kfreed by the caller).
+> > > > 
+> > > > Cc: roberto.sassu@huaweicloud.com
+> > > > Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+> > > 
+> > > What  is the relationship between this patch and Roberto's patch set? 
+> > > Roberto, if there is an overlap, then at minimum there should be a
+> > > Reported-by tag indicating that your patch set addresses a bug reported
+> > > by Nicolas.
+> > 
+> > This patch fixes the EVM NULL pointer dereference I have reported, and additionally
+> > improves the stackability of this LSM hook. This latter improvement was originally
+> > addressed by Roberto's patchset, and thus I see no problem for my fix to be merged
+> > within his patchset.
 > 
-> Fixes: d2825fa9365d ("crypto: sm3,sm4 - move into crypto directory")
-> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-> Cc: stable@vger.kernel.org # v5.19+
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> +       if (!num_filled_xattrs)
+>                 goto out;
+>  
+> -       evm_xattr = lsm_xattr + 1;
+> -       ret = evm_inode_init_security(inode, lsm_xattr, evm_xattr);
+> +       ret = evm_inode_init_security(inode, new_xattrs,
+> +                                     new_xattrs + num_filled_xattrs);
+> 
+> This part of patch 4 should be enough to fix the issue, until EVM is
+> outside the LSM infrastructure.
+> 
+> It prevents EVM from being called if there are no xattrs filled (the
+> panic occurred due to xattr->name being NULL).
+> 
+> Then, this part of patch 6:
+> 
+> +       for (xattr = xattrs; xattr->value != NULL; xattr++) {
+> +               if (evm_protected_xattr(xattr->name))
+> +                       evm_protected_xattrs = true;
+> +       }
+> +
+> +       /* EVM xattr not needed. */
+> +       if (!evm_protected_xattrs)
+> +               return -EOPNOTSUPP;
+> 
+> should be sufficient for when EVM is managed by the LSM infrastructure.
+> 
+> security_check_compact_filled_xattrs() ensures that if xattr->value is
+> not NULL, xattr->name is not NULL too.
+> 
+I think a Reported-by tag should enougth then !
+> Roberto
+> 
+> > > -- 
+> > > thanks,
+> > > 
+> > > Mimi
+> > > 
+> > 
+> > Thanks for your time,
+> > 
+> > Nicolas Bouchinet
+> 
 
-Thanks, Tianjia.
-
+Thanks !
+Nicolas Bouchinet
