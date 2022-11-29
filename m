@@ -2,103 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320C763BF14
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Nov 2022 12:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E56363BFF7
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Nov 2022 13:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbiK2LdZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Nov 2022 06:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S233996AbiK2MWt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Nov 2022 07:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbiK2LdF (ORCPT
+        with ESMTP id S229445AbiK2MWs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Nov 2022 06:33:05 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9E843AC5;
-        Tue, 29 Nov 2022 03:32:57 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATAJN7G018479;
-        Tue, 29 Nov 2022 11:32:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=omSqsIfuyTuoXMdIXJRmFfrCa5/UqH9SOTlZpsA4YNU=;
- b=kPFBXJYg6MZOAp7OBPYVJ8ezrdzwVNfrsswvHEbmM1sSdgaU2DNzcSIcVsON3q5sJPEM
- fPRn4emX27k3NFh69c1SwPezTxrTvYsMSb98muxT1uBecKzIByX/t0CQ3YFBhDW7J3A/
- 6YnPdEAoVX8Pc26C3ah0LlPI5u/Pvq/czRH+oXIhsd5HGGwpVzByFFsGnPGCt82w3RGP
- dHj46jLd+9a1dtEn9vioPx2vpVseqBKJ25jHk+m9l+zDMVgWHworq69XxLGBP36sR1lC
- Vf5oxFWbLviRQNY88aV2yy4jOTgxmjcQ2vk1hEiWK1OzRzp61Bp17p1Rb9OdyLvKs3VW +w== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5e0pngq8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 11:32:49 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ATBLO2L030074;
-        Tue, 29 Nov 2022 11:32:48 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma03wdc.us.ibm.com with ESMTP id 3m3ae9c78g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 11:32:48 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com ([9.208.128.117])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ATBWlSJ10945278
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Nov 2022 11:32:47 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD51C5805F;
-        Tue, 29 Nov 2022 11:32:46 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37A675805D;
-        Tue, 29 Nov 2022 11:32:46 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.96.78])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 29 Nov 2022 11:32:46 +0000 (GMT)
-Message-ID: <895c5afca8f2f39b60b87377c6817ce4eccb1f92.camel@linux.ibm.com>
-Subject: Re: [PATCH] fsverity: simplify fsverity_get_digest()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org
-Cc:     linux-integrity@vger.kernel.org
-Date:   Tue, 29 Nov 2022 06:32:45 -0500
-In-Reply-To: <20221129045139.69803-1-ebiggers@kernel.org>
-References: <20221129045139.69803-1-ebiggers@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Tue, 29 Nov 2022 07:22:48 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF2AB1EB;
+        Tue, 29 Nov 2022 04:22:45 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NM1Wf1Zmnz9xGZ0;
+        Tue, 29 Nov 2022 20:15:42 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDn0W5q+YVjqsimAA--.45795S2;
+        Tue, 29 Nov 2022 13:22:15 +0100 (CET)
+Message-ID: <dca37353573cbf4c9eb3f870c5a9d825e431a680.camel@huaweicloud.com>
+Subject: Re: [PATCH v5] evm: Correct inode_init_security hooks behaviors
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>,
+        linux-integrity@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     philippe.trebuchet@ssi.gouv.fr, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        casey@schaufler-ca.com, davem@davemloft.net, lucien.xin@gmail.com,
+        vgoyal@redhat.com, omosnace@redhat.com, mortonm@chromium.org,
+        nicolas.bouchinet@ssi.gouv.fr, mic@digikod.net,
+        cgzones@googlemail.com, linux-security-module@vger.kernel.org,
+        kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        bpf@vger.kernel.org
+Date:   Tue, 29 Nov 2022 13:21:59 +0100
+In-Reply-To: <086b6d26895b84ad4086ac9f191ede6f705f9b6b.camel@linux.ibm.com>
+References: <Y4Dl2yjVRkJvBflq@archlinux>
+         <086b6d26895b84ad4086ac9f191ede6f705f9b6b.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VRatynt0-z2K7crmC-ckyb-zSmw2C5Rx
-X-Proofpoint-ORIG-GUID: VRatynt0-z2K7crmC-ckyb-zSmw2C5Rx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-29_07,2022-11-29_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 adultscore=0 spamscore=0 clxscore=1011 impostorscore=0
- bulkscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=899
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211290069
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwDn0W5q+YVjqsimAA--.45795S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF18JryUCF4xAFWDur17ZFb_yoW8Cw1kpF
+        W5Ga4qkr1Dtr18ZrWIyr4xXw4IkrWFgFWDGFnayw1Yva98Gr10qr1xKr4Y9rWfCr4SkFyv
+        vF47Za13Z3Z0y3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgALBF1jj4IHGQAEsk
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-11-28 at 20:51 -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
+On Tue, 2022-11-29 at 06:28 -0500, Mimi Zohar wrote:
+> On Fri, 2022-11-25 at 16:57 +0100, Nicolas Bouchinet wrote:
+> > From: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
+> > 
+> > Fixes a NULL pointer dereference occurring in the
+> > `evm_protected_xattr_common` function of the EVM LSM. The bug is
+> > triggered if a `inode_init_security` hook returns 0 without initializing
+> > the given `struct xattr` fields (which is the case of BPF) and if no
+> > other LSM overrides thoses fields after. This also leads to memory
+> > leaks.
+> > 
+> > The `call_int_hook_xattr` macro has been inlined into the
+> > `security_inode_init_security` hook in order to check hooks return
+> > values and skip ones who doesn't init `xattrs`.
+> > 
+> > Modify `evm_init_hmac` function to init the EVM hmac using every
+> > entry of the given xattr array.
+> > 
+> > The `MAX_LSM_EVM_XATTR` value is now based on the security modules
+> > compiled in, which gives room for SMACK, SELinux, Apparmor, BPF and
+> > IMA/EVM security attributes.
+> > 
+> > Changes the default return value of the `inode_init_security` hook
+> > definition to `-EOPNOTSUPP`.
+> > 
+> > Changes the hook documentation to match the behavior of the LSMs using
+> > it (only xattr->value is initialised with kmalloc and thus is the only
+> > one that should be kfreed by the caller).
+> > 
+> > Cc: roberto.sassu@huaweicloud.com
+> > Signed-off-by: Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>
 > 
-> Instead of looking up the algorithm by name in hash_algo_name[] to get
-> its hash_algo ID, just store the hash_algo ID in the fsverity_hash_alg
-> struct.  Verify at build time that every fsverity_hash_alg has a valid
-> hash_algo ID with matching digest size.
-> 
-> Remove an unnecessary memset() of the whole digest array to 0 before the
-> digest is copied into it.
-> 
-> Finally, remove the pr_debug statement.  There is already a pr_debug for
-> the fsverity digest when the file is opened.
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> What  is the relationship between this patch and Roberto's patch set? 
+> Roberto, if there is an overlap, then at minimum there should be a
+> Reported-by tag indicating that your patch set addresses a bug reported
+> by Nicolas.
 
-Agreed, much simpler. 
-   Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Agreed, I will add a Reported-by for the bug reported by Nicolas.
+
+For the rest, my patch set introduces a similar functionality, with the
+difference that it uses the reservation mechanism instead of static
+allocation for xattrs, as suggested by Paul.
+
+Roberto
 
