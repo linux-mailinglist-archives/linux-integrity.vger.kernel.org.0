@@ -2,175 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFA063DA83
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Nov 2022 17:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC3663E274
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Nov 2022 22:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiK3QZ2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Nov 2022 11:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
+        id S229541AbiK3VFq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Nov 2022 16:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiK3QZ1 (ORCPT
+        with ESMTP id S229538AbiK3VFp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Nov 2022 11:25:27 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590CE4EC28;
-        Wed, 30 Nov 2022 08:25:22 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NMks86yx3z9v7RF;
-        Thu,  1 Dec 2022 00:18:20 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAHpXHVg4djmfirAA--.3567S2;
-        Wed, 30 Nov 2022 17:25:02 +0100 (CET)
-Message-ID: <e678d661515a191cb1bbfc41d9378e7cb538ef53.camel@huaweicloud.com>
-Subject: Re: [PATCH] ima: Make a copy of sig and digest in
- asymmetric_verify()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        rusty@rustcorp.com.au, axboe@kernel.dk
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Wed, 30 Nov 2022 17:24:51 +0100
-In-Reply-To: <1658d421c391d0609680b89ca0573fab1ca5e091.camel@linux.ibm.com>
-References: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
-         <9ef25f1b8621dab8b3cd4373bf6ce1633daae70e.camel@linux.ibm.com>
-         <a676b387d23f9ca630418ece20a6761a9437ce76.camel@huaweicloud.com>
-         <c6c448c2acc07caf840046067322f3e1110cedff.camel@linux.ibm.com>
-         <f8f95d37211bac6ce4322a715740d2b2ae20db84.camel@huaweicloud.com>
-         <859f70a2801cffa3cb42ae0d43f5753bb01a7eac.camel@huaweicloud.com>
-         <1658d421c391d0609680b89ca0573fab1ca5e091.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwAHpXHVg4djmfirAA--.3567S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF45GrW5Kw15KFW8KFyxAFb_yoWrCF1fpF
-        48K3WUKr4DJr1IkF4Iywn8C345Kr4rKrWUX34kJw18Zryqqr1xAr48JF1UWFyDWr1xAF1U
-        tFWftFy7Zrn8A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBF1jj4IemAABs+
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Nov 2022 16:05:45 -0500
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Nov 2022 13:05:43 PST
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EDF285676;
+        Wed, 30 Nov 2022 13:05:43 -0800 (PST)
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 2AUKMMDE013659;
+        Wed, 30 Nov 2022 14:22:22 -0600
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 2AUKMKYG013658;
+        Wed, 30 Nov 2022 14:22:20 -0600
+Date:   Wed, 30 Nov 2022 14:22:20 -0600
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, casey@schaufler-ca.com
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to kernel-only use
+Message-ID: <20221130202220.GA13122@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org> <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid> <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <Y4ORZT2t/KhL5jfn@kernel.org> <53e3d7f9cc50e1fe9cf67e7889c6b5498580e5d9.camel@linux.ibm.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53e3d7f9cc50e1fe9cf67e7889c6b5498580e5d9.camel@linux.ibm.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Wed, 30 Nov 2022 14:22:22 -0600 (CST)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-11-30 at 11:22 -0500, Mimi Zohar wrote:
-> On Wed, 2022-11-30 at 15:41 +0100, Roberto Sassu wrote:
-> > On Wed, 2022-11-23 at 14:49 +0100, Roberto Sassu wrote:
-> > > On Wed, 2022-11-23 at 08:40 -0500, Mimi Zohar wrote:
-> > > > On Wed, 2022-11-23 at 13:56 +0100, Roberto Sassu wrote:
-> > > > > On Tue, 2022-11-22 at 14:39 -0500, Mimi Zohar wrote:
-> > > > > > Hi Roberto,
-> > > > > > 
-> > > > > > On Fri, 2022-11-04 at 13:20 +0100, Roberto Sassu wrote:
-> > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > > 
-> > > > > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > > > > > mapping") requires that both the signature and the digest resides in the
-> > > > > > > linear mapping area.
-> > > > > > > 
-> > > > > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > > > > > stack support"), made it possible to move the stack in the vmalloc area,
-> > > > > > > which could make the requirement of the first commit not satisfied anymore.
-> > > > > > > 
-> > > > > > > If CONFIG_SG=y and CONFIG_VMAP_STACK=y, the following BUG() is triggered:
-> > > > > > 
-> > > > > > ^CONFIG_DEBUG_SG
-> > > > > > 
-> > > > > > > [  467.077359] kernel BUG at include/linux/scatterlist.h:163!
-> > > > > > > [  467.077939] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-> > > > > > > 
-> > > > > > > [...]
-> > > > > > > 
-> > > > > > > [  467.095225] Call Trace:
-> > > > > > > [  467.096088]  <TASK>
-> > > > > > > [  467.096928]  ? rcu_read_lock_held_common+0xe/0x50
-> > > > > > > [  467.097569]  ? rcu_read_lock_sched_held+0x13/0x70
-> > > > > > > [  467.098123]  ? trace_hardirqs_on+0x2c/0xd0
-> > > > > > > [  467.098647]  ? public_key_verify_signature+0x470/0x470
-> > > > > > > [  467.099237]  asymmetric_verify+0x14c/0x300
-> > > > > > > [  467.099869]  evm_verify_hmac+0x245/0x360
-> > > > > > > [  467.100391]  evm_inode_setattr+0x43/0x190
-> > > > > > > 
-> > > > > > > The failure happens only for the digest, as the pointer comes from the
-> > > > > > > stack, and not for the signature, which instead was allocated by
-> > > > > > > vfs_getxattr_alloc().
-> > > > > > 
-> > > > > > Only after enabling CONFIG_DEBUG_SG does EVM fail.
-> > > > > > 
-> > > > > > > Fix this by making a copy of both in asymmetric_verify(), so that the
-> > > > > > > linear mapping requirement is always satisfied, regardless of the caller.
-> > > > > > 
-> > > > > > As only EVM is affected, it would make more sense to limit the change
-> > > > > > to EVM.
-> > > > > 
-> > > > > I found another occurrence:
-> > > > > 
-> > > > > static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
-> > > > > 			struct evm_ima_xattr_data *xattr_value, int xattr_len,
-> > > > > 			enum integrity_status *status, const char **cause)
-> > > > > {
-> > > > > 
-> > > > > [...]
-> > > > > 
-> > > > > 		rc = integrity_digsig_verify(INTEGRITY_KEYRING_IMA,
-> > > > > 					     (const char *)xattr_value,
-> > > > > 					     xattr_len, hash.digest,
-> > > > > 					     hash.hdr.length);
-> > > > > 
-> > > > > Should I do two patches?
-> > > > 
-> > > > I'm just not getting it.  Why did you enable CONFIG_DEBUG_SIG?  Were
-> > > > you testing random kernel configs?  Are you actually seeing signature
-> > > > verifications errors without it enabled?  Or is it causing other
-> > > > problems?  Is the "BUG_ON" still needed?
+On Sun, Nov 27, 2022 at 11:41:26AM -0500, James Bottomley wrote:
+
+Good afternoon, I hope the week is going well for everyone.
+
+> On Sun, 2022-11-27 at 18:33 +0200, Jarkko Sakkinen wrote:
+> > On Mon, Nov 14, 2022 at 12:11:20PM -0500, James Bottomley wrote:
+> > > On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
+> > > > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
+> > > > restricts usermode's ability to extend or reset PCR 23.
 > > > 
-> > > When I test patches, I tend to enable more debugging options.
+> > > Could I re ask the question here that I asked of Matthew's patch
+> > > set:
 > > > 
-> > > To be honest, I didn't check if there is any issue without enabling
-> > > CONFIG_DEBUG_SG. I thought that if there is a linear mapping
-> > > requirement, that should be satisfied regardless of whether the
-> > > debugging option is enabled or not.
+> > > https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
 > > > 
-> > > + Rusty, Jens for explanations.
+> > > Which was could we use an NVRAM index in the TPM instead of a PCR???
+> > > The reason for asking was that PCRs are rather precious and might
+> > > get more so now that Lennart has some grand scheme for using more
+> > > of them in his unified boot project.?? Matthew promised to play with
+> > > the idea but never got back to the patch set to say whether he
+> > > investigated this or not.
 > > 
-> > Trying to answer the question, with the help of an old discussion:
+> > Even for PCR case it would be better to have it configurable through
+> > kernel command-line, including a disabled state, which would the
+> > default.
 > > 
-> > https://groups.google.com/g/linux.kernel/c/dpIoiY_qSGc
-> > 
-> > sg_set_buf() calls virt_to_page() to get the page to start from. But if
-> > the buffer spans in two pages, that would not work in the vmalloc area,
-> > since there is no guarantee that the next page is adjiacent.
-> > 
-> > For small areas, much smaller than the page size, it is unlikely that
-> > the situation above would happen. So, integrity_digsig_verify() will
-> > likely succeeed. Although it is possible that it fails if there are
-> > data in the next page.
+> > This would be backwards compatible, and if designed properly, could
+> > more easily extended for NV index later on.
 > 
-> Thanks, Roberto.  Confirmed that as the patch description indicates,
-> without CONFIG_VMAP_STACK configured and with CONFIG_DEBUG_SG enabled
-> there isn't a bug.  Does it make sense to limit this change to just
-> CONFIG_VMAP_STACK?
+> Um how?  The observation is in the above referenced email is that PCR23
+> is reserved in the TCG literature for application usage.  If any
+> application is actually using PCR23 based on that spec then revoking
+> access to user space will cause it to break.  This is an ABI change
+> which is not backwards compatible.  You can call it a distro problem if
+> it's command line configurable, but the default would be what most
+> distros take, so it's rather throwing them under the bus if there is an
+> application using it.
+> 
+> Of course, if no application is actually using PCR23, then it's
+> probably OK to use it in the kernel and make it invisible to user
+> space, but no evidence about this has actually been presented.
 
-Yes, I agree.
+If there isn't, there will be in in the next week or so, if we can
+stay on schedule.  Otherwise, I fear that Casey Schaufler, who I
+believe is holding his breath, may turn irretrievably blue.... :-)
 
-Roberto
+The Trust Orchestration System, Quixote, that we are releasing for
+Linux uses PCR23 to generate an attestation of the functional state
+value for an internally modeled security domain.
 
+TSEM, the LSM based kernel component in all of this, supports the
+ability to implement multiple 'domains', nee namespaces, each of which
+can have a security modeling function attached to it.  Each internally
+modeled domain has to have the ability to independently attest the
+functional value of the security model implemented for the
+domain/namespace.
+
+We have found, and I believe others will find that, particularly the
+resettable registers, are too precious to be constrained from general
+usage.  We actually just finished lifting the PCR23 extension
+functionality out of the TSEM driver and into userspace because having
+it in the kernel was too constraining.
+
+With respect to making the behavior a command-line option.  We've
+slogged through 2+ years of conversations with sizable players who
+have indicated that if the 'distys' don't implement something, it
+isn't a relevant Linux technology, so a command-line option poses a
+barrier to innovation.
+
+> James
+
+Have a good day.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
