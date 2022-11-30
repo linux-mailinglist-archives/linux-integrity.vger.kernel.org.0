@@ -2,184 +2,175 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503C863E2A3
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Nov 2022 22:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF74763E2CE
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Nov 2022 22:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiK3VYc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Nov 2022 16:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
+        id S229660AbiK3Veh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Nov 2022 16:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiK3VYb (ORCPT
+        with ESMTP id S229652AbiK3Vef (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Nov 2022 16:24:31 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453358D67F;
-        Wed, 30 Nov 2022 13:24:30 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AULDSbv004773;
-        Wed, 30 Nov 2022 21:23:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=yifZRjcnME4KdiCrx4XAH30YdBt6VKv7hfRn0v4FRuc=;
- b=l1XUiN1rW6f+ee6TrpN9jk5ssoNSaDOiPcxMdZauO8mKygmAxvaRnHoG31vayk9PgxHr
- bnrusCji3tMF8gNxXVxyKptv/w6DBipSxA+jUHZPaKQlnX1VA6veuNfnO4T0U9hHUmjT
- Y8LtbWrLuqkjh12fLywGfGt8FtkeENfaXiLvCKlhTB3SHROi0j4psDHZlDj/cvAHjVuj
- NL1hijVMJJh4dHNqKg7eBrzLejruYTDP006FlqAY4ckD2FnyWxCDyzWIQDFmuEpogPXV
- 5szbiEKjhNrPIFvt8pvIUWohtN6IFLNqUliTFjBXXkHzaJ4/+uucgc8gQi22pUqMQ2ZO ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ewd86mb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 21:23:48 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AULHKau018482;
-        Wed, 30 Nov 2022 21:23:47 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m6ewd86kt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 21:23:47 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AULKxnj005739;
-        Wed, 30 Nov 2022 21:23:45 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma02wdc.us.ibm.com with ESMTP id 3m3aea6hkq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Nov 2022 21:23:45 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AULNj8B37618096
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Nov 2022 21:23:45 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EEA2E5803F;
-        Wed, 30 Nov 2022 21:23:44 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C5AA458056;
-        Wed, 30 Nov 2022 21:23:43 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.97.169])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 30 Nov 2022 21:23:43 +0000 (GMT)
-Message-ID: <b929e0c597161fd5be79c18163a11649dd7f237f.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 4/6] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        Wed, 30 Nov 2022 16:34:35 -0500
+Received: from sonic317-39.consmr.mail.ne1.yahoo.com (sonic317-39.consmr.mail.ne1.yahoo.com [66.163.184.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CDE91374
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Nov 2022 13:34:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669844073; bh=9U2E94RBlTMblCGWV03HjfJY5rIFmw28+geFCpPgjEk=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=KdRwPc8CSSOrCgYyRF70avJ7X1aowdi1oXeRGWhZNYO0xaGcuKZB4ki2NcTeHE/2LDgv52yZfc5EBH6/Jur9dtVcHgBYtYaPsFJj8g7NkX27vfL47+k8pl8z08melE0bGGqn20wusGNmauqMXSGrk3RwIDkmy1O+9oTEdS5Y95CLRwlf+2U9NSVUTb+Na9dFb4H6vwRLGzRth2bGrHMkCuer24sAgSBQyS0je0k8ZRzXhbAn5jRY7eK/3rlEoxaIa5tHijM4cA0PDDVfkQhsuS8GoUpHAM9n5576REbN/irTBlW/95FeU4wkYTNlXOm+ljGDLlCgmviOfyXqca/Ogw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669844073; bh=R/sUcaEQOXqq221zTjdyFrqZX0l5E9pjfJRj/CquQ9+=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Grhwkcqbj/EtM8OajtMO6ZyvbzZ4vIu9FPqWmU5faeHAQ1RIYCxqF89YfGU5fsF5h5y6Jl7dDbQWkPeq39t1Sk2QVWQFg8lTVjOU7W+zr4FzAUuiwPKqhLgN/l6Z8hQBI+nQ3uJZHpnerCvD6PYdmFSYwmteYX4gghtvFZ61+seB+9faUHjkiNvaGAEqhdcEBJbW8Dul8kOi00huWgVJ0i/xCrV+NJLRwxnxUoM7PfQwWnseYqVAlW5+ESuYx1VtQxIactKtdiiW1hpN8rdUtc/ySesJqlHVHvn1mIzDNg7MuCun9Brej4FswijBsa7yDgxCcHAOMOhV+3vQhmBkdQ==
+X-YMail-OSG: xfTe_vQVM1nYnhbIqNX6OCt2AcVELPuJkL_d65pfNlRofL6uSO_ZlNQULLQ2zOz
+ QWmRxho04NgRS1wQi13igR0Cz.YD1x.BKJNXXMWtEUheg5YxL1xd.1FZW_GZzKGVNCpW8q8eAxCb
+ fWXv6UurSdSBfeeiPjZ0TrYzw5HOPSIFoL.V51Jq0UcZYgfGZCJm.JU2e5N6xNM3FdQ6vFOaNldM
+ goWdVi_2jVzcWHOaI.3ZUgM8c9RedqChxGBRAo3EPUadISjOdoh_Hd3o6gJp0RyIcnQzp3rGQPx1
+ CYyVv2spJm0WswiqmEx._qQOUVQNPr.6zBQZ_w1KdRDoN4xQVXTE76jHeVfGgy3wpXFGzX3K7g5s
+ Oe.imnLYkcAjXAMXfXLfVWsTnIfAUYZsrdEz1Auo2.qAHK2nlX4sIja9qs7NkCz55QAhrxo5mgJR
+ POzqRw6M7vZUzdkbqep2r25Fhszcao4mKjRYdytMoKR_DzPFTNcSSmCJgDDGJAOFKW3jd0RuQL2V
+ DpwHhZQ3FzC008Tf8DvqlZeTpfr1A6GLZaHm3PR6I9Gpml0sRYcZbSd.qEZwKCuSu32Kc2FwiV.a
+ INdZ9cux7vUBDLTeFE.8BiwGStmLkJp_tKZ9q.xhLTK.vhlUka4fn3CHFUyYE4bYH0Gzp1_r_pRp
+ ezGPtnyqIzYnHS3nc7XicgM00s73u0lSoz15YYi.YHiXw.o8cDqI4JlO4Ba8skzZy42cfDgM939q
+ 5WaoU4NkRFQN_oZW.EEPULxbTdn84QJ9J4QK1ytGl.z9WsDbA3x6DJEhvtdAKj2ZyV57Ac5Q6l.K
+ _WWtelYXZwXwEBfJiGkCkUqyPV.DpHkKMXaslL8WFo_kMMVFzz4qKhlsasSOgz5WeUajPtUYE3k0
+ qt54akL3koNUVV7jP1fkd9LNyEVKgVcu9W_6NoH5I3QACv9P3q4LFVnq5kn8opVHOz9zAFDyIvcM
+ W4j2yvr53O1dwFyRUz1_qDR26c_u20VKEBGUsKqtrkr7SptPQugTZJI6S5Xu4Uznfcsxkc7gBfeC
+ CqrcmUB643Saa5yn4yHUg8v0XG_msRR3iWz5s0JQDy5WcLo2izHvIBljD2fBFwkajfnp3pUNg23N
+ aF8clNS9FJQi9IQQZwRxr6E9qmmR5jRu5sQ0yurqyF38iEhUnWAt76qc86yNubNEv1tyTHuikOAU
+ My_ishgGFupUWyLtdvIp.nJ7vzyApxneqqh_wMPjS2pr_RJdef1_z_9i5Y1Af4nGjTvOBx_dzLYy
+ WQVYyTwg72H7mKzKAVWKL.hn2uhpDibFWFsuJ_LVKSNrXQp4Nq1FSAsxOcLjU1P.u0kjLkySLX8h
+ ElYtFezQAFpI16sM_gNnoAoldtSy5kfbp3PFXgyArQAPw1h3lfnZLhdrL2COs_epe2lwn5H0tF3m
+ oShgmwCR_CRkCXvFGE1NSNAB_OwRobiV14pSbonCEestY4uG.3q3e6dhZJ0szZ2Z5cL05rImfycc
+ 1s45guw62MhsB7VDnuxgpK1nVxBgSGUHoqhPyEJF4E1e3LcLpZLqJpt_D2PwJvWGKCOuzCR7k8Ya
+ BYJzyPjDlbT6PAr75ug.8pgqdSd3nIzFYx58Wl.3Fk.PzU3KxpQ2NhD1mdm5Cnp1z48yxPfh02Ui
+ CzKCoTTds0DLkQfWydCKtlAEBOpJrkTVdi5qphu7LLC411EMZEj980uVHq04Hv9lUt6Yf7c.o4S8
+ nE3N3cT70tG0Jp6dtb5J9TpzqmtGtB5a9c9ROZO8bBTiYfse31Bf.TZ8gQa.d5rjEe47GPHFjm_e
+ slC4hq9mk78fM0XkqMQFA8_AUjdEtJWiePDQr0Krg_RSp6ojxzlulMWBHJTWDjiMzwwnfiS1ewRi
+ IbZ_7RXehNQ9XZO02oCO63.8u4A257UHNZkPIsILBgeyAbZ7NStUgGnn4JjZprivlSL0uCnLK2Xk
+ PSA.oJJlPTRKmmVz.NRgKCNBjZNQIbWKMQjkjH8gZH0znFGuyOm9XjvObbWajBRQf9szAD8fxHAZ
+ Gcj2xxyj5EwoFHa7b0_lOxiUDTmBYYoBYrcURHR402m_vPdLM6qmhrzkebWucifu1WJBfbBkP2cO
+ wqopXFoBgKYDdE1IWgsWfjaHyCgzQRsmCCodjO.pjbfHXSNX7zfiSMwOI8WC4p1JGswsXgDNPW6q
+ EDgm.zS6JiPkU3W4lOMy8gjFlzfGwsjG0o9PY1PdDI9RYhtaUyclaDRc2hEY_KmLpetge0wrnacl
+ 1vkPgM_bGINvXrK8Ks7ZEe8Bcex8PLKdCnZzV
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.ne1.yahoo.com with HTTP; Wed, 30 Nov 2022 21:34:33 +0000
+Received: by hermes--production-ne1-7b69748c4d-7vsxg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e1770d4ce4bc5dadcc8ac264e78f86d4;
+          Wed, 30 Nov 2022 21:34:31 +0000 (UTC)
+Message-ID: <5d4b205a-9a6c-aa6a-0c83-17e9861fecf8@schaufler-ca.com>
+Date:   Wed, 30 Nov 2022 13:34:28 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+Content-Language: en-US
+To:     "Dr. Greg" <greg@enjellic.com>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 30 Nov 2022 16:23:43 -0500
-In-Reply-To: <50232f2b-d5ce-1e5a-3f5b-8d3eb53fe1ec@schaufler-ca.com>
-References: <20221123154712.752074-1-roberto.sassu@huaweicloud.com>
-         <20221123154712.752074-5-roberto.sassu@huaweicloud.com>
-         <13350b79f708cb089e2ff2ee5cead52bafb10982.camel@linux.ibm.com>
-         <bb63eba9a9f24558f4a1acd9bf012b59b5c6e98e.camel@huaweicloud.com>
-         <9859294adb0a9b9587ea7fb70a836a312aaf3c69.camel@linux.ibm.com>
-         <50232f2b-d5ce-1e5a-3f5b-8d3eb53fe1ec@schaufler-ca.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, casey@schaufler-ca.com
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+ <Y4ORZT2t/KhL5jfn@kernel.org>
+ <53e3d7f9cc50e1fe9cf67e7889c6b5498580e5d9.camel@linux.ibm.com>
+ <20221130202220.GA13122@wind.enjellic.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20221130202220.GA13122@wind.enjellic.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RFYdom96nPEAcgZBzGdM3xm3tZ0uHlwx
-X-Proofpoint-GUID: gNLYuWXFEUBW_-uMEoVK_Brk6AGGQYmE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-30_04,2022-11-30_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- mlxlogscore=999 spamscore=0 lowpriorityscore=0 priorityscore=1501
- bulkscore=0 mlxscore=0 impostorscore=0 phishscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211300148
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: WebService/1.1.20863 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-11-29 at 07:39 -0800, Casey Schaufler wrote:
-> On 11/29/2022 3:23 AM, Mimi Zohar wrote:
-> > On Thu, 2022-11-24 at 09:17 +0100, Roberto Sassu wrote:
-> >> On Wed, 2022-11-23 at 20:14 -0500, Mimi Zohar wrote:
-> >>> Hi Roberto,
-> >>>
-> >>> On Wed, 2022-11-23 at 16:47 +0100, Roberto Sassu wrote:
-> >>>>  int security_inode_init_security(struct inode *inode, struct inode *dir,
-> >>>>                                  const struct qstr *qstr,
-> >>>>                                  const initxattrs initxattrs, void *fs_data)
-> >>>>  {
-> >>>> -       struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
-> >>>> -       struct xattr *lsm_xattr, *evm_xattr, *xattr;
-> >>>> -       int ret;
-> >>>> +       struct security_hook_list *P;
-> >>>> +       struct xattr *new_xattrs;
-> >>>> +       struct xattr *xattr;
-> >>>> +       int ret = -EOPNOTSUPP, num_filled_xattrs = 0;
-> >>>>  
-> >>>>         if (unlikely(IS_PRIVATE(inode)))
-> >>>>                 return 0;
-> >>>>  
-> >>>> +       if (!blob_sizes.lbs_xattr)
-> >>>> +               return 0;
-> >>>> +
-> >>>>         if (!initxattrs)
-> >>>>                 return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
-> >>>> -                                    dir, qstr, NULL, NULL, NULL);
-> >>>> -       memset(new_xattrs, 0, sizeof(new_xattrs));
-> >>>> -       lsm_xattr = new_xattrs;
-> >>>> -       ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
-> >>>> -                                               &lsm_xattr->name,
-> >>>> -                                               &lsm_xattr->value,
-> >>>> -                                               &lsm_xattr->value_len);
-> >>>> -       if (ret)
-> >>>> +                                   dir, qstr, NULL);
-> >>>> +       /* Allocate +1 for EVM and +1 as terminator. */
-> >>>> +       new_xattrs = kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*new_xattrs),
-> >>>> +                            GFP_NOFS);
-> >>>> +       if (!new_xattrs)
-> >>>> +               return -ENOMEM;
-> >>>> +
-> >>>> +       hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
-> >>>> +                            list) {
-> >>>> +               ret = P->hook.inode_init_security(inode, dir, qstr, new_xattrs);
-> >>>> +               if (ret && ret != -EOPNOTSUPP)
-> >>>> +                       goto out;
-> >>>> +               if (ret == -EOPNOTSUPP)
-> >>>> +                       continue;
-> >>> In this context, -EOPNOTSUPP originally signified that the filesystem
-> >>> does not support writing xattrs.  Writing any xattr would fail. 
-> >>> Returning -ENODATA for no LSM xattr(s) data would seem to be more
-> >>> appropriate than -EOPNOTSUPP.
-> >> Hi Mimi
-> >>
-> >> I thought about adding new return values. Currently only -EOPNOTSUPP
-> >> and -ENOMEM are expected as errors.
-> >>
-> >> However, changing the conventions would mean revisiting the LSMs code
-> >> and ensuring that they follow the new conventions.
-> >>
-> >> I would be more in favor of not touching it.
-> > Casey, Paul, any comment?
-> 
-> I don't see value in adding -ENODATA as a value special to
-> the infrastructure. What would the infrastructure do differently?
-> The use of -EOPNOTSUPP isn't consistent throughout, and the amount
-> of "correctness" you get by returning -ENODATA is really small.
+On 11/30/2022 12:22 PM, Dr. Greg wrote:
+> On Sun, Nov 27, 2022 at 11:41:26AM -0500, James Bottomley wrote:
+>
+> Good afternoon, I hope the week is going well for everyone.
+>
+>> On Sun, 2022-11-27 at 18:33 +0200, Jarkko Sakkinen wrote:
+>>> On Mon, Nov 14, 2022 at 12:11:20PM -0500, James Bottomley wrote:
+>>>> On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
+>>>>> Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
+>>>>> restricts usermode's ability to extend or reset PCR 23.
+>>>> Could I re ask the question here that I asked of Matthew's patch
+>>>> set:
+>>>>
+>>>> https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
+>>>>
+>>>> Which was could we use an NVRAM index in the TPM instead of a PCR???
+>>>> The reason for asking was that PCRs are rather precious and might
+>>>> get more so now that Lennart has some grand scheme for using more
+>>>> of them in his unified boot project.?? Matthew promised to play with
+>>>> the idea but never got back to the patch set to say whether he
+>>>> investigated this or not.
+>>> Even for PCR case it would be better to have it configurable through
+>>> kernel command-line, including a disabled state, which would the
+>>> default.
+>>>
+>>> This would be backwards compatible, and if designed properly, could
+>>> more easily extended for NV index later on.
+>> Um how?  The observation is in the above referenced email is that PCR23
+>> is reserved in the TCG literature for application usage.  If any
+>> application is actually using PCR23 based on that spec then revoking
+>> access to user space will cause it to break.  This is an ABI change
+>> which is not backwards compatible.  You can call it a distro problem if
+>> it's command line configurable, but the default would be what most
+>> distros take, so it's rather throwing them under the bus if there is an
+>> application using it.
+>>
+>> Of course, if no application is actually using PCR23, then it's
+>> probably OK to use it in the kernel and make it invisible to user
+>> space, but no evidence about this has actually been presented.
+> If there isn't, there will be in in the next week or so, if we can
+> stay on schedule.  Otherwise, I fear that Casey Schaufler, who I
+> believe is holding his breath, may turn irretrievably blue.... :-)
 
-Agreed, it isn't worthwhile for this case.  Roberto, to ease code
-review, could you document the overloading of the -EOPNOTSUPP meaning,
-which results in the loop continuing?
+Sorry to disappoint, but my supply of apoplexy is firmly rooted elsewhere
+for the time being. :-( Also, you overestimate my interest in things
+TPM related.
 
-thanks,
+> The Trust Orchestration System, Quixote, that we are releasing for
+> Linux uses PCR23 to generate an attestation of the functional state
+> value for an internally modeled security domain.
+>
+> TSEM, the LSM based kernel component in all of this, supports the
+> ability to implement multiple 'domains', nee namespaces, each of which
+> can have a security modeling function attached to it.  Each internally
+> modeled domain has to have the ability to independently attest the
+> functional value of the security model implemented for the
+> domain/namespace.
 
-Mimi
+I am very interested to see TSEM. I have heard nothing of it to date.
 
+> We have found, and I believe others will find that, particularly the
+> resettable registers, are too precious to be constrained from general
+> usage.  We actually just finished lifting the PCR23 extension
+> functionality out of the TSEM driver and into userspace because having
+> it in the kernel was too constraining.
+>
+> With respect to making the behavior a command-line option.  We've
+> slogged through 2+ years of conversations with sizable players who
+> have indicated that if the 'distys' don't implement something, it
+> isn't a relevant Linux technology, so a command-line option poses a
+> barrier to innovation.
+>
+>> James
+> Have a good day.
+>
+> As always,
+> Dr. Greg
+>
+> The Quixote Project - Flailing at the Travails of Cybersecurity
