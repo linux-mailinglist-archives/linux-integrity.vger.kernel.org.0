@@ -2,169 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B066E63EE40
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Dec 2022 11:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1697F63F7C1
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Dec 2022 19:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiLAKof (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Dec 2022 05:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S230330AbiLASxo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Dec 2022 13:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiLAKnZ (ORCPT
+        with ESMTP id S229723AbiLASxn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Dec 2022 05:43:25 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8132EA13D2;
-        Thu,  1 Dec 2022 02:43:21 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NNCD34g9Rz9v7J7;
-        Thu,  1 Dec 2022 18:36:19 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCHcm_phIhjrxuvAA--.49496S8;
-        Thu, 01 Dec 2022 11:42:52 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        Thu, 1 Dec 2022 13:53:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FE6A7A8A;
+        Thu,  1 Dec 2022 10:53:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDD1FB82006;
+        Thu,  1 Dec 2022 18:53:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40CA3C433D6;
+        Thu,  1 Dec 2022 18:53:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669920818;
+        bh=ameDvPOHiO7Sfjiq370SIFWYrD3x7aXBYKfNTI2VknQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CJG5DaSiMZswICBy5xbTmisnqnfEqbvbiOspjOXT3l234hM72QtWOS/8YcKZh9073
+         y5LIeqrLXD5z+heWqfRTDU919YUCqskssNdPLqNlv1k5/eS2xFznqg9ZhUFEhnIgWM
+         yp32f+CeIxL66naDB0A8Sic6UoW4sZb2Pe1BThGJJLxTih7esxcCGy3EWrMBa8uOqe
+         sk8DDCRcvfEn3bAo5sa0oZk1fLbsbhCtPtrJW5ia0Rq6ST/mPmI8DXI9xOSpqjnCvv
+         r8ssGHyfLYUCTBd1z8MtoAQIsNu2chNNv5Rk8EorOf6GTlLWHZ7mcqYyyS5XfyQu/g
+         N9K8d3FD4F1DQ==
+Date:   Thu, 1 Dec 2022 10:53:36 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
         paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v7 6/6] evm: Support multiple LSMs providing an xattr
-Date:   Thu,  1 Dec 2022 11:41:25 +0100
-Message-Id: <20221201104125.919483-7-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] evm: Alloc evm_digest in evm_verify_hmac() if
+ CONFIG_VMAP_STACK=y
+Message-ID: <Y4j4MJzizgEHf4nv@sol.localdomain>
+References: <20221201100625.916781-1-roberto.sassu@huaweicloud.com>
+ <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCHcm_phIhjrxuvAA--.49496S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxGryktFy8Jr45JrWUJFWfAFb_yoW5tFW5pa
-        n8ta9rCrn5CFyUWr9IyF18uaySg3yrKw4UKwsxCr1jyFnrXrn2qryxtr15ur98Wr95Jrna
-        yw40vw15Cw15t3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20x
-        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj4IjiwAEsU
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, Dec 01, 2022 at 11:06:24AM +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
+> mapping") checks that both the signature and the digest reside in the
+> linear mapping area.
+> 
+> However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
+> stack support"), made it possible to move the stack in the vmalloc area,
+> which is not contiguous, and thus not suitable for sg_set_buf() which needs
+> adjacent pages.
+> 
+> Fix this by checking if CONFIG_VMAP_STACK is enabled. If yes, allocate an
+> evm_digest structure, and use that instead of the in-stack counterpart.
+> 
+> Cc: stable@vger.kernel.org # 4.9.x
+> Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/integrity/evm/evm_main.c | 26 +++++++++++++++++++++-----
+>  1 file changed, 21 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> index 23d484e05e6f..7f76d6103f2e 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -174,6 +174,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+>  	struct signature_v2_hdr *hdr;
+>  	enum integrity_status evm_status = INTEGRITY_PASS;
+>  	struct evm_digest digest;
+> +	struct evm_digest *digest_ptr = &digest;
+>  	struct inode *inode;
+>  	int rc, xattr_len, evm_immutable = 0;
+>  
+> @@ -231,14 +232,26 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+>  		}
+>  
+>  		hdr = (struct signature_v2_hdr *)xattr_data;
+> -		digest.hdr.algo = hdr->hash_algo;
+> +
+> +		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
+> +			digest_ptr = kmalloc(sizeof(*digest_ptr), GFP_NOFS);
+> +			if (!digest_ptr) {
+> +				rc = -ENOMEM;
+> +				break;
+> +			}
+> +		}
+> +
+> +		digest_ptr->hdr.algo = hdr->hash_algo;
+> +
+>  		rc = evm_calc_hash(dentry, xattr_name, xattr_value,
+> -				   xattr_value_len, xattr_data->type, &digest);
+> +				   xattr_value_len, xattr_data->type,
+> +				   digest_ptr);
+>  		if (rc)
+>  			break;
+>  		rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
+>  					(const char *)xattr_data, xattr_len,
+> -					digest.digest, digest.hdr.length);
+> +					digest_ptr->digest,
+> +					digest_ptr->hdr.length);
+>  		if (!rc) {
+>  			inode = d_backing_inode(dentry);
+>  
+> @@ -268,8 +281,11 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+>  		else
+>  			evm_status = INTEGRITY_FAIL;
+>  	}
+> -	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
+> -		  digest.digest);
+> +	pr_debug("digest: (%d) [%*phN]\n", digest_ptr->hdr.length,
+> +		 digest_ptr->hdr.length, digest_ptr->digest);
+> +
+> +	if (digest_ptr && digest_ptr != &digest)
+> +		kfree(digest_ptr);
 
-Currently, evm_inode_init_security() processes a single LSM xattr from
-the array passed by security_inode_init_security(), and calculates the
-HMAC on it and other inode metadata.
+What is the actual problem here?  Where is a scatterlist being created from this
+buffer?  AFAICS it never happens.
 
-Given that initxattrs() callbacks, called by
-security_inode_init_security(), expect that this array is terminated when
-the xattr name is set to NULL, reuse the same assumption to scan all xattrs
-and to calculate the HMAC on all of them.
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
----
- security/integrity/evm/evm.h        |  2 ++
- security/integrity/evm/evm_crypto.c |  9 ++++++++-
- security/integrity/evm/evm_main.c   | 16 +++++++++++-----
- 3 files changed, 21 insertions(+), 6 deletions(-)
-
-diff --git a/security/integrity/evm/evm.h b/security/integrity/evm/evm.h
-index f8b8c5004fc7..f799d72a59fa 100644
---- a/security/integrity/evm/evm.h
-+++ b/security/integrity/evm/evm.h
-@@ -46,6 +46,8 @@ struct evm_digest {
- 	char digest[IMA_MAX_DIGEST_SIZE];
- } __packed;
- 
-+int evm_protected_xattr(const char *req_xattr_name);
-+
- int evm_init_key(void);
- int evm_update_evmxattr(struct dentry *dentry,
- 			const char *req_xattr_name,
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index 708de9656bbd..68f99faac316 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -389,6 +389,7 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		  char *hmac_val)
- {
- 	struct shash_desc *desc;
-+	const struct xattr *xattr;
- 
- 	desc = init_desc(EVM_XATTR_HMAC, HASH_ALGO_SHA1);
- 	if (IS_ERR(desc)) {
-@@ -396,7 +397,13 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		return PTR_ERR(desc);
- 	}
- 
--	crypto_shash_update(desc, lsm_xattr->value, lsm_xattr->value_len);
-+	for (xattr = lsm_xattr; xattr->name != NULL; xattr++) {
-+		if (!evm_protected_xattr(xattr->name))
-+			continue;
-+
-+		crypto_shash_update(desc, xattr->value, xattr->value_len);
-+	}
-+
- 	hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
- 	kfree(desc);
- 	return 0;
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 0a312cafb7de..1cf6871a0019 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -305,7 +305,7 @@ static int evm_protected_xattr_common(const char *req_xattr_name,
- 	return found;
- }
- 
--static int evm_protected_xattr(const char *req_xattr_name)
-+int evm_protected_xattr(const char *req_xattr_name)
- {
- 	return evm_protected_xattr_common(req_xattr_name, false);
- }
-@@ -851,14 +851,20 @@ int evm_inode_init_security(struct inode *inode, struct inode *dir,
- {
- 	struct evm_xattr *xattr_data;
- 	struct xattr *xattr, *evm_xattr;
-+	bool evm_protected_xattrs = false;
- 	int rc;
- 
--	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs ||
--	    !evm_protected_xattr(xattrs->name))
-+	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs)
- 		return -EOPNOTSUPP;
- 
--	for (xattr = xattrs; xattr->value != NULL; xattr++)
--		;
-+	for (xattr = xattrs; xattr->value != NULL; xattr++) {
-+		if (evm_protected_xattr(xattr->name))
-+			evm_protected_xattrs = true;
-+	}
-+
-+	/* EVM xattr not needed. */
-+	if (!evm_protected_xattrs)
-+		return -EOPNOTSUPP;
- 
- 	evm_xattr = xattr;
- 
--- 
-2.25.1
-
+- Eric
