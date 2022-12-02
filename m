@@ -2,162 +2,157 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B96A640DCB
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Dec 2022 19:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA7B640FC0
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Dec 2022 22:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbiLBStR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 2 Dec 2022 13:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
+        id S234276AbiLBVDt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Dec 2022 16:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiLBStQ (ORCPT
+        with ESMTP id S234190AbiLBVDs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 2 Dec 2022 13:49:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB29AE02F6;
-        Fri,  2 Dec 2022 10:49:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BB26B82237;
-        Fri,  2 Dec 2022 18:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E162FC433D6;
-        Fri,  2 Dec 2022 18:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670006953;
-        bh=D2D6Tjlx7oFG/USSfc9cdqvnPs4TmWMa9hoCFFB7rCk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AxoQ4G/HkKoHIHFMoEK8UP5I/7i8em5CgYQ5B9cTiSt+wWri5g4h3G/GFFwWcUdSz
-         NHVqmDnsJg00+O4z/3257nSKPFZZ4S05Snbd2zn5KWZYoKkPMm+59JCOjSn6TAgKrk
-         q2yhYAViLBfLtK9s+lQXGC2//WBvihoQ2D04hgKFqyFnVRqyjkmGEM4rNi9FUJh/pi
-         cNNexYEM3Y06nfuXFZU+JTMU7pLXdGgqar/bNEX4r24tUzt3XZsCrhy7vc+DP59Wuv
-         chYRMkXrPcYp+p0nPGjWpjc5lB7rB7xv5wCM11qJYhnpjQsKNMQU5UrjrtCfuYCiA7
-         v+k8SSmh6Luuw==
-Date:   Fri, 2 Dec 2022 10:49:11 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] evm: Alloc evm_digest in evm_verify_hmac() if
- CONFIG_VMAP_STACK=y
-Message-ID: <Y4pIpxbjBdajymBJ@sol.localdomain>
-References: <20221201100625.916781-1-roberto.sassu@huaweicloud.com>
- <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
- <Y4j4MJzizgEHf4nv@sol.localdomain>
- <c8ef0ab69635b99d5175eaf4c96bb3a8957c6210.camel@huaweicloud.com>
+        Fri, 2 Dec 2022 16:03:48 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B519D80C7;
+        Fri,  2 Dec 2022 13:03:46 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B2IWQgL019814;
+        Fri, 2 Dec 2022 21:03:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=l3YF7d7Osha4HUveR4HvX/7HD6zwUOSpMIQU9u+UtZc=;
+ b=mKsYTYr37ehS3zXP91idG9z9wLRV2TKwsxw+gihdb1OPxKe+XPlnNw7v5XAfYEhooHRe
+ GmhgyRbM/DI7FJ5hYIHntmf/w8yiQzYcDUu7HzmWjcc2raGT9TzSAWBakrXa8lEU6RVx
+ rYah4wRfh5P3FDQMoflcMWA3djz0EtK5qg4SIdlr8i/yi6Iu1bFGQ0N5/ZUYM+bQ0uLE
+ XEQ+UCVLwXkY99bsY2UeuX8Ei6VLHQrZfFmF84zs1t/u+5RSHYLKaK1Dkuy7+tFoNTlS
+ ySF35F8ot6BOPyLY2dRHod/zByDtiOo6MNL1hpTD/PUqzy3l5PPAJD7Egs5wUxhSFsrW iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m7pqwtuam-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 21:03:17 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B2Krx5O004621;
+        Fri, 2 Dec 2022 21:03:16 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m7pqwtua6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 21:03:16 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B2Kp5MW009983;
+        Fri, 2 Dec 2022 21:03:15 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma02wdc.us.ibm.com with ESMTP id 3m3aeam324-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 21:03:15 +0000
+Received: from b03ledav004.gho.boulder.ibm.com ([9.17.130.235])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B2L3EuJ34931234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 2 Dec 2022 21:03:14 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D5B67805E;
+        Fri,  2 Dec 2022 22:13:21 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 42E997805C;
+        Fri,  2 Dec 2022 22:13:18 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.83.181])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  2 Dec 2022 22:13:17 +0000 (GMT)
+Message-ID: <6f66f174af92a9b23bddd72945e94e888b0c9420.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation
+ data
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, linux-integrity@vger.kernel.org,
+        gwendal@chromium.org, dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Fri, 02 Dec 2022 16:03:09 -0500
+In-Reply-To: <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+         <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+         <Y3FfhrgvBNey6T7V@sol.localdomain>
+         <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
+         <CAE=gft63-jdKqKmepB+LXPm6WUWSnz+CMWcWWnyN1y-EnS4kVg@mail.gmail.com>
+         <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
+         <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
+         <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zHzyh_mb8TepzfPQ11qtRN52QY2r-J1v
+X-Proofpoint-ORIG-GUID: sPQup2CTJfvDp6URQ1pmFgRxtBqWs-WP
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c8ef0ab69635b99d5175eaf4c96bb3a8957c6210.camel@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-02_12,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxlogscore=371 spamscore=0 phishscore=0 clxscore=1011 lowpriorityscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212020169
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 08:58:21AM +0100, Roberto Sassu wrote:
-> On Thu, 2022-12-01 at 10:53 -0800, Eric Biggers wrote:
-> > On Thu, Dec 01, 2022 at 11:06:24AM +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > mapping") checks that both the signature and the digest reside in the
-> > > linear mapping area.
-> > > 
-> > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > stack support"), made it possible to move the stack in the vmalloc area,
-> > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > > adjacent pages.
-> > > 
-> > > Fix this by checking if CONFIG_VMAP_STACK is enabled. If yes, allocate an
-> > > evm_digest structure, and use that instead of the in-stack counterpart.
-> > > 
-> > > Cc: stable@vger.kernel.org # 4.9.x
-> > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  security/integrity/evm/evm_main.c | 26 +++++++++++++++++++++-----
-> > >  1 file changed, 21 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> > > index 23d484e05e6f..7f76d6103f2e 100644
-> > > --- a/security/integrity/evm/evm_main.c
-> > > +++ b/security/integrity/evm/evm_main.c
-> > > @@ -174,6 +174,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > >  	struct signature_v2_hdr *hdr;
-> > >  	enum integrity_status evm_status = INTEGRITY_PASS;
-> > >  	struct evm_digest digest;
-> > > +	struct evm_digest *digest_ptr = &digest;
-> > >  	struct inode *inode;
-> > >  	int rc, xattr_len, evm_immutable = 0;
-> > >  
-> > > @@ -231,14 +232,26 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > >  		}
-> > >  
-> > >  		hdr = (struct signature_v2_hdr *)xattr_data;
-> > > -		digest.hdr.algo = hdr->hash_algo;
-> > > +
-> > > +		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-> > > +			digest_ptr = kmalloc(sizeof(*digest_ptr), GFP_NOFS);
-> > > +			if (!digest_ptr) {
-> > > +				rc = -ENOMEM;
-> > > +				break;
-> > > +			}
-> > > +		}
-> > > +
-> > > +		digest_ptr->hdr.algo = hdr->hash_algo;
-> > > +
-> > >  		rc = evm_calc_hash(dentry, xattr_name, xattr_value,
-> > > -				   xattr_value_len, xattr_data->type, &digest);
-> > > +				   xattr_value_len, xattr_data->type,
-> > > +				   digest_ptr);
-> > >  		if (rc)
-> > >  			break;
-> > >  		rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
-> > >  					(const char *)xattr_data, xattr_len,
-> > > -					digest.digest, digest.hdr.length);
-> > > +					digest_ptr->digest,
-> > > +					digest_ptr->hdr.length);
-> > >  		if (!rc) {
-> > >  			inode = d_backing_inode(dentry);
-> > >  
-> > > @@ -268,8 +281,11 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > >  		else
-> > >  			evm_status = INTEGRITY_FAIL;
-> > >  	}
-> > > -	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
-> > > -		  digest.digest);
-> > > +	pr_debug("digest: (%d) [%*phN]\n", digest_ptr->hdr.length,
-> > > +		 digest_ptr->hdr.length, digest_ptr->digest);
-> > > +
-> > > +	if (digest_ptr && digest_ptr != &digest)
-> > > +		kfree(digest_ptr);
+On Mon, 2022-11-14 at 13:00 -0500, James Bottomley wrote:
+> On Mon, 2022-11-14 at 09:43 -0800, Evan Green wrote:
+> > On Mon, Nov 14, 2022 at 8:56 AM James Bottomley
+> > <jejb@linux.ibm.com>
+> > wrote:
+> [...]
+> > > Of course, since openssl_tpm2_engine is the complete reference
+> > > implementation that means I'll have to add the creation PCRs
+> > > implementation to it ... unless you'd like to do it?
 > > 
-> > What is the actual problem here?  Where is a scatterlist being created from this
-> > buffer?  AFAICS it never happens.
+> > I am willing to help as I'm the one making the mess. How does it
+> > sequence along with your draft submission (before, after,
+> > simultaneous)?
 > 
-> Hi Eric
+> At the moment, just send patches.  The openssl_tpm2_engine is
+> developed on a groups.io mailing list:
 > 
-> it is in public_key_verify_signature(), called by asymmetric_verify()
-> and integrity_digsig_verify().
+> https://groups.io/g/openssl-tpm2-engine/
 > 
+> You need an IETF specific tool (xml2rfc) to build the rfc from the
+> xml, but it's available in most distros as python3-xml2rfc.  If you
+> don't want to learn the IETF XML I can help you code up the patch to
+> add that to the draft spec.
 
-Hmm, that's several steps down the stack then.  And not something I had
-expected.
+Just as a heads up, the patch series implementing signed policy (and
+thus taking option [3]) is on the mailing list for review:
 
-Perhaps this should be fixed in public_key_verify_signature() instead?  It
-already does a kmalloc(), so that allocation size just could be made a bit
-larger to get space for a temporary copy of 's' and 'digest'.
+https://groups.io/g/openssl-tpm2-engine/message/296
 
-Or at the very least, struct public_key_signature should have a *very* clear
-comment saying that the 's' and 'digest' fields must be located in physically
-contiguous memory...
+With apologies for the awful lack of threading in the groups.io
+interface.
 
-- Eric
+So you don't have to build the RFC yourself, I published the proposed
+update on my website:
+
+https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
+https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.txt
+
+If you want to use option [4] for the creation data, it's available.
+
+Regards,
+
+James
+
+
