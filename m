@@ -2,111 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA376415BB
-	for <lists+linux-integrity@lfdr.de>; Sat,  3 Dec 2022 11:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 905B7641E0E
+	for <lists+linux-integrity@lfdr.de>; Sun,  4 Dec 2022 17:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiLCKZQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 3 Dec 2022 05:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        id S230035AbiLDQxK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 4 Dec 2022 11:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiLCKZP (ORCPT
+        with ESMTP id S229954AbiLDQxK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 3 Dec 2022 05:25:15 -0500
+        Sun, 4 Dec 2022 11:53:10 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8825E4A05A;
-        Sat,  3 Dec 2022 02:25:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9749FF3;
+        Sun,  4 Dec 2022 08:53:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28C76B802BE;
-        Sat,  3 Dec 2022 10:25:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93045C433C1;
-        Sat,  3 Dec 2022 10:25:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OE1z0XMB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1670063106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B99/rGGxOgBt2SCG0ilJmP42Uqhic94NePrcyql2Y30=;
-        b=OE1z0XMB2PBjouhlOhHQ1424GlPkFJvMb4D+3b+9O03547ABcw8eq7lOWNL27O9hAAzN8E
-        e/THcxh1t18VPT9Uzst/p2p5xJ+MpjH2Km7wJtEjXNVf6QMvuPJvCop2WIM76zxmER/cBa
-        MLrdEdSPaW+11jEn7cc8GHuhP/j+e4Q=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6d6b524c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 3 Dec 2022 10:25:06 +0000 (UTC)
-Date:   Sat, 3 Dec 2022 11:25:02 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        torvalds@linux-foundation.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de,
-        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        linux-integrity@vger.kernel.org, jgg@ziepe.ca,
-        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
-        timvp@google.com, apronin@google.com, mw@semihalf.com,
-        upstream@semihalf.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
-Message-ID: <Y4sj/knxLqqF2Tqr@zx2c4.com>
-References: <20221128195651.322822-1-Jason@zx2c4.com>
- <9793c74f-2dd0-d510-d8b6-b475e34f3587@leemhuis.info>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B992B80ACA;
+        Sun,  4 Dec 2022 16:53:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33C8C433D6;
+        Sun,  4 Dec 2022 16:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670172786;
+        bh=VrQ5fq3fx8KuNp5ylQozI8eq9+U1u9UGalGdEsSX4Uo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tPeu7ur/3uKq+L7UxoYaswwZ8SEoX8GJJ5s/Ph/GHWIwQXek8Aekie7sg35laiMm0
+         UZsBtQadTd75MJfzHeheSa1NMdjg7l4tKK2bmCdluvFzGcdKtXi67JYnwpqerbkHpK
+         b56htLXh6LRJfsIpNlwfqvWu9d8Wv2abETHGXWJljLrrDvuheQT2lgTDLGVvBgm0TH
+         mkIEgcDjiVomeQ3EvK7MtgKzt8pr5Ag2vkFDnfsUf3kbMbMIKR0kY1GHM+279yqB+F
+         XADDeyjKn6S95KWZzBg6yzwkqidBA065TbpLGthNz3hjhR29jzGnFtktY/oWUJiXWO
+         d/tNlllyfzbGA==
+Date:   Sun, 4 Dec 2022 16:53:01 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] certs: log hash value on blacklist error
+Message-ID: <Y4zQbWJZpJV7KTTJ@kernel.org>
+References: <20221118040343.2958-1-linux@weissschuh.net>
+ <20221118040343.2958-2-linux@weissschuh.net>
+ <Y4QK2cmptp4vpRj/@kernel.org>
+ <8b9e9bf8-ae44-485a-9b30-85a71a236f06@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <9793c74f-2dd0-d510-d8b6-b475e34f3587@leemhuis.info>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8b9e9bf8-ae44-485a-9b30-85a71a236f06@t-8ch.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Thorsten / Linus,
-
-On Fri, Dec 02, 2022 at 10:32:31AM +0100, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> On 28.11.22 20:56, Jason A. Donenfeld wrote:
-> 
-> BTW, many thx for taking care of this Jason!
-> 
-> > From: Jan Dabros <jsd@semihalf.com>
+On Mon, Nov 28, 2022 at 02:59:20AM +0100, Thomas Weißschuh wrote:
+> On 2022-11-28 03:11+0200, Jarkko Sakkinen wrote:
+> > "Make blacklisted hash available in klog"
 > > 
-> > Currently tpm transactions are executed unconditionally in
-> > tpm_pm_suspend() function, which may lead to races with other tpm
-> > accessors in the system. Specifically, the hw_random tpm driver makes
-> > use of tpm_get_random(), and this function is called in a loop from a
-> > kthread, which means it's not frozen alongside userspace, and so can
-> > race with the work done during system suspend:
+> > On Fri, Nov 18, 2022 at 05:03:41AM +0100, Thomas Weißschuh wrote:
+> > > Without this information these logs are not actionable.
+> > 
+> > Without blacklisted hash?
+> > 
+> > > For example on duplicate blacklisted hashes reported by the system
+> > > firmware users should be able to report the erroneous hashes to their
+> > > system vendors.
+> > > 
+> > > While we are at it use the dedicated format string for ERR_PTR.
+> > 
+> > Lacks the beef so saying "while we are at it" makes no sense.
 > 
-> Peter, Jarkko, did you look at this patch or even applied it already to
-> send it to Linus soon? Doesn't look like it from here, but maybe I
-> missed something.
+> What about this:
 > 
-> Thing is: the linked regression afaics is overdue fixing (for details
-> see "Prioritize work on fixing regressions" in
-> https://www.kernel.org/doc/html/latest/process/handling-regressions.html
-> ). Hence if this doesn't make any progress I'll likely have to point
-> Linus to this patch and suggest to apply it directly if it looks okay
-> from his perspective.
+>   [PATCH] certs: make blacklisted hash available in klog
+> 
+>   One common situation triggering this log statement are duplicate hashes
+>   reported by the system firmware.
+> 
+>   These duplicates should be removed from the firmware.
+> 
+>   Without logging the blacklisted hash triggering the issue however the users
+>   can not report it properly to the firmware vendors and the firmware vendors
+>   can not easily see which specific hash is duplicated.
+> 
+>   While changing the log message also use the dedicated ERR_PTR format
+>   placeholder for the returned error value.
 
-I'm very concerned about this. Jan posted the original fix a month ago,
-and then it fizzled out. Then I got word of the bug last week and
-revived the fix [1], while also figuring out how to reproduce it
-together with the reporter. I emailed the tpm maintainers offlist to
-poke them, and nobody woke up. And tomorrow is rc8 day. Given that this
-patch is pretty simple, has been tested to fix an annoying regression,
-and that neither of the three maintainers has popped up this week to get
-things rolling, I think we should just commit this now anyway, to make
-sure it gets in for rc8. This way there's still a solid week of testing.
-I'm in general not a big fan of the "nuclear option" of not waiting for
-out to lunch maintainers, but given that it is now December 3, it seems
-like the right decision.
+Looks looks a lot better thank you!
 
-[1] https://lore.kernel.org/all/20221128195651.322822-1-Jason@zx2c4.com/ 
+> > > Fixes: 6364d106e041 ("certs: Allow root user to append signed hashes to the blacklist keyring")
+> > 
+> > Why does this count as a bug?
+> 
+> These error logs are confusing to users, prompting them to waste time
+> investigating them and even mess with their firmware settings.
+> (As indicated in the threads linked from the cover letter)
+> 
+> The most correct fix would be patches 2 and 3 from this series.
+> 
+> I was not sure if patch 2 would be acceptable for stable as it introduces new
+> infrastructure code.
+> So patch 1 enables users to report the issue to their firmware vendors and get
+> the spurious logs resolved that way.
+> 
+> If these assumptions are incorrect I can fold patch 1 into patch 3.
+> 
+> But are patch 2 and 3 material for stable?
 
-Jason
+I cannot say anything conclusive to this before seeing updated version of
+the patch set.
+
+BR, Jarkko
