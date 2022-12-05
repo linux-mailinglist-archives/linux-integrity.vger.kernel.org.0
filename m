@@ -2,178 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493EB642476
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Dec 2022 09:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5E964298D
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Dec 2022 14:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbiLEIXb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Dec 2022 03:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S230350AbiLENjv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Dec 2022 08:39:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiLEIX3 (ORCPT
+        with ESMTP id S231959AbiLENjt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:23:29 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE7E11A10;
-        Mon,  5 Dec 2022 00:23:26 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NQbwh0W6nz9v7Hn;
-        Mon,  5 Dec 2022 16:16:20 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwC3nvpjqo1jpri+AA--.15868S2;
-        Mon, 05 Dec 2022 09:23:07 +0100 (CET)
-Message-ID: <5813b77edf8f8c6c68da8343b7898f2a5c831077.camel@huaweicloud.com>
-Subject: Re: [PATCH v2 1/2] evm: Alloc evm_digest in evm_verify_hmac() if
- CONFIG_VMAP_STACK=y
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Mon, 05 Dec 2022 09:22:31 +0100
-In-Reply-To: <Y4pIpxbjBdajymBJ@sol.localdomain>
-References: <20221201100625.916781-1-roberto.sassu@huaweicloud.com>
-         <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
-         <Y4j4MJzizgEHf4nv@sol.localdomain>
-         <c8ef0ab69635b99d5175eaf4c96bb3a8957c6210.camel@huaweicloud.com>
-         <Y4pIpxbjBdajymBJ@sol.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
+        Mon, 5 Dec 2022 08:39:49 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095851D0CB
+        for <linux-integrity@vger.kernel.org>; Mon,  5 Dec 2022 05:39:49 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5D9w5x001540;
+        Mon, 5 Dec 2022 13:39:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=pPDY1UiSpE18O/qu5pfimZftry6w/eGViAVI7fzvckc=;
+ b=PhK3izt1Jh9x0upz2GjB1RDghRAGbkssyTiVHvQhCl/pTFXB3mfKwMlR2+v2tY+czj3z
+ 6RL3TxifH10ogVz1o9bh1wdmbFtJB8yg31Csr6rKggzObebVktsyFnsteEleBHXH0adf
+ 0v3cPBE0IfqyJysBTHx1qiGvrw9Us5ZprS739jJLhS9jttbEnTbIKTx7Z6N/C2kDZsY8
+ zI3pyGSluIJsf/YNcb4WrYEoHt/W5Kb6c41GV0JAs4+KZXn5A7+gHoFFTsk5HVvwnM5y
+ cLykE80jqynL7boo0sjU+QXUc6QRG2ay2JgHgoRpJ0CKN1c/oDywb1NoIEj0g3mEudXg JA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m8g9qcwx8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Dec 2022 13:39:36 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B5Cgoo3004074;
+        Mon, 5 Dec 2022 13:39:36 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m8g9qcwwt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Dec 2022 13:39:36 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B5DZdGi004092;
+        Mon, 5 Dec 2022 13:39:34 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma03wdc.us.ibm.com with ESMTP id 3m7x39drg2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Dec 2022 13:39:34 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B5DdXgX57278918
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 5 Dec 2022 13:39:33 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C71595805A;
+        Mon,  5 Dec 2022 13:39:33 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 319455803F;
+        Mon,  5 Dec 2022 13:39:33 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.106.247])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  5 Dec 2022 13:39:33 +0000 (GMT)
+Message-ID: <7db27896916a944d8e4a212cad23865166ceb9f4.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils] Experimental fsverity.test related GA CI
+ improvements
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Date:   Mon, 05 Dec 2022 08:39:32 -0500
+In-Reply-To: <20221201002654.2238906-1-vt@altlinux.org>
+References: <20221201002654.2238906-1-vt@altlinux.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwC3nvpjqo1jpri+AA--.15868S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGF47tryrXFW7Jw1xGr1kuFg_yoWrAry5pa
-        1kKF18Kr4rJryfCF1av3WYyan3KrW8try7Wws8Jw1YyF9IqrnIk34xAryUWryF9ry8GF1I
-        qFWFqFsxuF1Yya7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBF1jj4JBLgAAsL
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: M0fC8nqMLAug0NJQ7RTe7KnijOF-e3mV
+X-Proofpoint-ORIG-GUID: Cewme208ngQlwlW2NpqnB4hel4utl8US
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 clxscore=1015 priorityscore=1501 suspectscore=0
+ mlxlogscore=999 adultscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212050110
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-12-02 at 10:49 -0800, Eric Biggers wrote:
-> On Fri, Dec 02, 2022 at 08:58:21AM +0100, Roberto Sassu wrote:
-> > On Thu, 2022-12-01 at 10:53 -0800, Eric Biggers wrote:
-> > > On Thu, Dec 01, 2022 at 11:06:24AM +0100, Roberto Sassu wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > 
-> > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > > mapping") checks that both the signature and the digest reside in the
-> > > > linear mapping area.
-> > > > 
-> > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > > stack support"), made it possible to move the stack in the vmalloc area,
-> > > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > > > adjacent pages.
-> > > > 
-> > > > Fix this by checking if CONFIG_VMAP_STACK is enabled. If yes, allocate an
-> > > > evm_digest structure, and use that instead of the in-stack counterpart.
-> > > > 
-> > > > Cc: stable@vger.kernel.org # 4.9.x
-> > > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > ---
-> > > >  security/integrity/evm/evm_main.c | 26 +++++++++++++++++++++-----
-> > > >  1 file changed, 21 insertions(+), 5 deletions(-)
-> > > > 
-> > > > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> > > > index 23d484e05e6f..7f76d6103f2e 100644
-> > > > --- a/security/integrity/evm/evm_main.c
-> > > > +++ b/security/integrity/evm/evm_main.c
-> > > > @@ -174,6 +174,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > > >  	struct signature_v2_hdr *hdr;
-> > > >  	enum integrity_status evm_status = INTEGRITY_PASS;
-> > > >  	struct evm_digest digest;
-> > > > +	struct evm_digest *digest_ptr = &digest;
-> > > >  	struct inode *inode;
-> > > >  	int rc, xattr_len, evm_immutable = 0;
-> > > >  
-> > > > @@ -231,14 +232,26 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > > >  		}
-> > > >  
-> > > >  		hdr = (struct signature_v2_hdr *)xattr_data;
-> > > > -		digest.hdr.algo = hdr->hash_algo;
-> > > > +
-> > > > +		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-> > > > +			digest_ptr = kmalloc(sizeof(*digest_ptr), GFP_NOFS);
-> > > > +			if (!digest_ptr) {
-> > > > +				rc = -ENOMEM;
-> > > > +				break;
-> > > > +			}
-> > > > +		}
-> > > > +
-> > > > +		digest_ptr->hdr.algo = hdr->hash_algo;
-> > > > +
-> > > >  		rc = evm_calc_hash(dentry, xattr_name, xattr_value,
-> > > > -				   xattr_value_len, xattr_data->type, &digest);
-> > > > +				   xattr_value_len, xattr_data->type,
-> > > > +				   digest_ptr);
-> > > >  		if (rc)
-> > > >  			break;
-> > > >  		rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
-> > > >  					(const char *)xattr_data, xattr_len,
-> > > > -					digest.digest, digest.hdr.length);
-> > > > +					digest_ptr->digest,
-> > > > +					digest_ptr->hdr.length);
-> > > >  		if (!rc) {
-> > > >  			inode = d_backing_inode(dentry);
-> > > >  
-> > > > @@ -268,8 +281,11 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > > >  		else
-> > > >  			evm_status = INTEGRITY_FAIL;
-> > > >  	}
-> > > > -	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
-> > > > -		  digest.digest);
-> > > > +	pr_debug("digest: (%d) [%*phN]\n", digest_ptr->hdr.length,
-> > > > +		 digest_ptr->hdr.length, digest_ptr->digest);
-> > > > +
-> > > > +	if (digest_ptr && digest_ptr != &digest)
-> > > > +		kfree(digest_ptr);
-> > > 
-> > > What is the actual problem here?  Where is a scatterlist being created from this
-> > > buffer?  AFAICS it never happens.
-> > 
-> > Hi Eric
-> > 
-> > it is in public_key_verify_signature(), called by asymmetric_verify()
-> > and integrity_digsig_verify().
-> > 
+Hi Vitaly,
+
+On Thu, 2022-12-01 at 03:26 +0300, Vitaly Chikunov wrote:
+> From: Mimi Zohar <zohar@linux.ibm.com>
 > 
-> Hmm, that's several steps down the stack then.  And not something I had
-> expected.
+> This does not make fsverity.test working on GA CI, though.
 > 
-> Perhaps this should be fixed in public_key_verify_signature() instead?  It
-> already does a kmalloc(), so that allocation size just could be made a bit
-> larger to get space for a temporary copy of 's' and 'digest'.
+> - `--device /dev/loop-control' is required for losetup(8) to work.
+> - `--privileged' is required foo mount(8) to work, and this makes
+>   `--security-opt seccomp=unconfined' redundant.
+> - GA container does not have `/sys/kernel/security' mounted which is
+>   needed for `/sys/kernel/security/integrity/ima/policy'.
+> - Enable `set -x` in CI as the logs is everything we have to analyze on
+>   failures.
+> 
 
-Mimi asked to fix it in both IMA and EVM.
+Agreed, even with these changes the fsverity test will not be executed,
+but skipped.
 
-> Or at the very least, struct public_key_signature should have a *very* clear
-> comment saying that the 's' and 'digest' fields must be located in physically
-> contiguous memory...
+However, the reason for them being skipped is totally different than
+prior to this patch.   Once the distros have enabled both fsverity
+support and are running a recent enough kernel with IMA support for
+fsverity, the fsverity test should succeed.
 
-That I could add as an additional patch.
+So the problem isn't the GitHub actions architecture or the fsverity
+test itself, but the lack of IMA kernel support for it.  In addition to
+the ima-evm-utils distro tests, there needs to be a way for testing new
+kernel integrity features.  Roberto's proposed ima-evm-utils UML patch
+set downloads and uses a UML kernel for this purpose.
 
-Thanks
+Unless someone can recommend a better alternative, a single UML
+"distro" test could be defined and would be executed if a UML kernel is
+supplied.   Additional UML tests could be specified.
 
-Roberto
+thanks,
+
+Mimi
 
