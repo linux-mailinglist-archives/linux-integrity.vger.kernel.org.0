@@ -2,134 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850116430B0
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Dec 2022 19:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E47645168
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Dec 2022 02:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiLESn5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Dec 2022 13:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60954 "EHLO
+        id S229634AbiLGBpG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Dec 2022 20:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiLESnq (ORCPT
+        with ESMTP id S229669AbiLGBpC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:43:46 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21F9BC98
-        for <linux-integrity@vger.kernel.org>; Mon,  5 Dec 2022 10:43:43 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id n20so814112ejh.0
-        for <linux-integrity@vger.kernel.org>; Mon, 05 Dec 2022 10:43:43 -0800 (PST)
+        Tue, 6 Dec 2022 20:45:02 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BF3528A3;
+        Tue,  6 Dec 2022 17:45:01 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id a9so15685761pld.7;
+        Tue, 06 Dec 2022 17:45:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wAi9wb/ccr1V0J6asFIl7Azn5bhshYuD4nE6CW5xW+g=;
-        b=OPVtqaGQfZNdZ4DF7z8NeObdT3sHluUFseqPw49KCbN+wqTHkRGDlCNAdrUqnU5qq6
-         M/dZcdpbg6LMDtINPMHagxvEiD/e+KnOjJz+nt7H4s3lp1pprnp3qe4GMLa/QhYvpUQp
-         yZVn5ofbBDCap0LFHONiDAaGYHExRbkxKOdis=
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QlNl9gT3ypsVBf/LSDoix4N90A3dWAoRGu2fcw4QFdY=;
+        b=OdnHbUTFT/8DmtyOOvv+9E64KEoC8Ar1x7PR3h+pCYBmTIWxvRl6+P227u4lyi6r0c
+         wkgwzWhEyx0sWHCMfPfcPysz+c3CWrSmVSjL2Vf6qnxBKCjOu3Yni1u68Lnkt+WwthN5
+         IQsWZtYG0Fn9upvsw2LDaFoH/PjCOoSn5LNFc+ojV5jDYW/bo/eERrmUwyPSC9TZyhBK
+         9r4p7HoaMXBLMIVdBSOJLGt/sL645J+PkZqCvG0pldZsSmePLuYC0GBsUOPtA7z7syTS
+         fVCpcEm3jRmkMeHTSiNb9k8X9xU8OYod0D51V0RwKH3oMHDFfjqlmcZXZNdH70ojpKti
+         wcng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wAi9wb/ccr1V0J6asFIl7Azn5bhshYuD4nE6CW5xW+g=;
-        b=F9Ba2z/OhTGDQJI5ZOSUh3xs85Mqei4Cwp9RR1ZT5Z3uNm7ofsm2p8i6CYQDxN8cDO
-         nCp1U8GFxFBbHw5Ew5josXEQ+DyHEfR14kRWGIivgafOuP4BRYSglV6goGwIWW2KL489
-         9+lQoSqG70UfMCG4ePZOhzYyo695S3wk0pc26zr3TFpzvjIpFr13igNwXjEEyFlJK5Jq
-         f+suEX+tPhIz0XMOrw+JIf8Qp0pv6B8ZuZu5r/JT/lJ6aVrflKkgwIQdiPe1SKHxYNer
-         n8X88XnTqt65FwKescpZrnCQ7r0idXwKy8CE4rMetMfNzve7iio2hQm2r6+CHvekHrws
-         wkpw==
-X-Gm-Message-State: ANoB5pnlteEs3iRd3U9IfcnFppKorcLcL87k/dQi3m0qiOIYd5F5Ue8N
-        BzxmGFqxSFeXL+A9RqI1uZLWETFz4/goJHNT
-X-Google-Smtp-Source: AA0mqf5MQKofA29CYv254vaQYS2zGs5OnXeIoHzRcWlJKKwBfF9KCnH3xNkioHxIGYyHayDtUHheEw==
-X-Received: by 2002:a17:906:3096:b0:7ae:eae9:25a5 with SMTP id 22-20020a170906309600b007aeeae925a5mr70525735ejv.394.1670265821788;
-        Mon, 05 Dec 2022 10:43:41 -0800 (PST)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id fe17-20020a1709072a5100b0073d7b876621sm6466336ejc.205.2022.12.05.10.43.41
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 10:43:41 -0800 (PST)
-Received: by mail-wm1-f52.google.com with SMTP id n9-20020a05600c3b8900b003d0944dba41so6133254wms.4
-        for <linux-integrity@vger.kernel.org>; Mon, 05 Dec 2022 10:43:41 -0800 (PST)
-X-Received: by 2002:a05:600c:4e4c:b0:3cf:87c6:890b with SMTP id
- e12-20020a05600c4e4c00b003cf87c6890bmr62524251wmq.194.1670265821267; Mon, 05
- Dec 2022 10:43:41 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QlNl9gT3ypsVBf/LSDoix4N90A3dWAoRGu2fcw4QFdY=;
+        b=HhX91PDA5obvH8WWgs+1wTl92DZ1LQwoKSRttqHrUHOZg6WhwB0HnEygkADJ3O/mkb
+         sLmW3MjB0+HKVKIVK1y4kM0bg2zD08v3QmseOkCnmLudXGO52o3KfA+ITqqXu8J98egi
+         D0l2SxtnBeliQ7LFNexmYl1znk67FOkuT+hztbawOiIK5nf5cfSfk7n9hOk5k4DetpSb
+         X6Ko6L5PDpPs7JFIjDu5Q/dFf84+sqx/1LiMTSFugiGUR1wXKihAJOVDGvbFpBmnfoNW
+         S3vH6cWJdIWkv9PHgk9Pit+eVXB1vv2vtiQz37jgeZbDQgfiHY20LvTOjM9v5kGlOl5O
+         M0kA==
+X-Gm-Message-State: ANoB5plpj8avy99z+N9Hi9ZhaIdG5Jcev0L1j5BE87JLTHyTAfJG+iTN
+        VoxHVmgIgd0wLMzI1GHP7Twk4igtk8o=
+X-Google-Smtp-Source: AA0mqf6zk6QFzFHpFHKobXxmzNmxQ2D1eKrrBFdOplSBR0uPGNBCXet52/l1L6AYIp7uOVkEkxXbnQ==
+X-Received: by 2002:a17:902:9a92:b0:189:9031:6758 with SMTP id w18-20020a1709029a9200b0018990316758mr12236402plp.138.1670377501029;
+        Tue, 06 Dec 2022 17:45:01 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:7a61:38c7:d37a:7f43])
+        by smtp.gmail.com with ESMTPSA id a23-20020a621a17000000b0057630286100sm9853945pfa.164.2022.12.06.17.44.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 17:45:00 -0800 (PST)
+Date:   Tue, 6 Dec 2022 17:44:57 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v3] tpm: st33zp24: remove pointless checks on probe
+Message-ID: <Y4/wGWTgYfR/Jb9D@google.com>
 MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
- <Y3FfhrgvBNey6T7V@sol.localdomain> <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
- <CAE=gft63-jdKqKmepB+LXPm6WUWSnz+CMWcWWnyN1y-EnS4kVg@mail.gmail.com>
- <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
- <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
- <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com> <6f66f174af92a9b23bddd72945e94e888b0c9420.camel@linux.ibm.com>
-In-Reply-To: <6f66f174af92a9b23bddd72945e94e888b0c9420.camel@linux.ibm.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 5 Dec 2022 10:43:05 -0800
-X-Gmail-Original-Message-ID: <CAE=gft4wvxOZ4CS2hJzYANRNbCtYUznmsEE-3n4=EDx-+L_f9Q@mail.gmail.com>
-Message-ID: <CAE=gft4wvxOZ4CS2hJzYANRNbCtYUznmsEE-3n4=EDx-+L_f9Q@mail.gmail.com>
-Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation data
-To:     jejb@linux.ibm.com
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-integrity@vger.kernel.org,
-        gwendal@chromium.org, dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 1:03 PM James Bottomley <jejb@linux.ibm.com> wrote:
->
-> On Mon, 2022-11-14 at 13:00 -0500, James Bottomley wrote:
-> > On Mon, 2022-11-14 at 09:43 -0800, Evan Green wrote:
-> > > On Mon, Nov 14, 2022 at 8:56 AM James Bottomley
-> > > <jejb@linux.ibm.com>
-> > > wrote:
-> > [...]
-> > > > Of course, since openssl_tpm2_engine is the complete reference
-> > > > implementation that means I'll have to add the creation PCRs
-> > > > implementation to it ... unless you'd like to do it?
-> > >
-> > > I am willing to help as I'm the one making the mess. How does it
-> > > sequence along with your draft submission (before, after,
-> > > simultaneous)?
-> >
-> > At the moment, just send patches.  The openssl_tpm2_engine is
-> > developed on a groups.io mailing list:
-> >
-> > https://groups.io/g/openssl-tpm2-engine/
-> >
-> > You need an IETF specific tool (xml2rfc) to build the rfc from the
-> > xml, but it's available in most distros as python3-xml2rfc.  If you
-> > don't want to learn the IETF XML I can help you code up the patch to
-> > add that to the draft spec.
->
-> Just as a heads up, the patch series implementing signed policy (and
-> thus taking option [3]) is on the mailing list for review:
->
-> https://groups.io/g/openssl-tpm2-engine/message/296
->
-> With apologies for the awful lack of threading in the groups.io
-> interface.
->
-> So you don't have to build the RFC yourself, I published the proposed
-> update on my website:
->
-> https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
-> https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.txt
->
-> If you want to use option [4] for the creation data, it's available.
+Remove tests for SPI device or I2C client to be non-NULL because
+driver core will never call driver's probe method without having
+a valid device structure.
 
-Perfect, thanks James!
--Evan
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+
+v3: no changes
+v2: reworked commit message
+
+This was a part of a 3-patch series, the first 2 dealt with dropping
+support for platform data and converting the driver to gpiod API, and
+were applied, this one got reviewed-by from Jarkko but for some reason
+was left out.
+
+ drivers/char/tpm/st33zp24/i2c.c | 6 ------
+ drivers/char/tpm/st33zp24/spi.c | 7 -------
+ 2 files changed, 13 deletions(-)
+
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index 614c7d8ed84f..8156bb2af78c 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -106,12 +106,6 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
+ {
+ 	struct st33zp24_i2c_phy *phy;
+ 
+-	if (!client) {
+-		pr_info("%s: i2c client is NULL. Device not accessible.\n",
+-			__func__);
+-		return -ENODEV;
+-	}
+-
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
+ 		dev_info(&client->dev, "client not i2c capable\n");
+ 		return -ENODEV;
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index ff4adbe104cf..2154059f0235 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -223,13 +223,6 @@ static int st33zp24_spi_probe(struct spi_device *dev)
+ {
+ 	struct st33zp24_spi_phy *phy;
+ 
+-	/* Check SPI platform functionnalities */
+-	if (!dev) {
+-		pr_info("%s: dev is NULL. Device is not accessible.\n",
+-			__func__);
+-		return -ENODEV;
+-	}
+-
+ 	phy = devm_kzalloc(&dev->dev, sizeof(struct st33zp24_spi_phy),
+ 			   GFP_KERNEL);
+ 	if (!phy)
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
+
+-- 
+Dmitry
