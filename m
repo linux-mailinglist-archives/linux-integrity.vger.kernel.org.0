@@ -2,131 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E47645168
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 Dec 2022 02:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6D764584A
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Dec 2022 11:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiLGBpG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Dec 2022 20:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        id S229560AbiLGKz2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 7 Dec 2022 05:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiLGBpC (ORCPT
+        with ESMTP id S229437AbiLGKz1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:45:02 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BF3528A3;
-        Tue,  6 Dec 2022 17:45:01 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id a9so15685761pld.7;
-        Tue, 06 Dec 2022 17:45:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QlNl9gT3ypsVBf/LSDoix4N90A3dWAoRGu2fcw4QFdY=;
-        b=OdnHbUTFT/8DmtyOOvv+9E64KEoC8Ar1x7PR3h+pCYBmTIWxvRl6+P227u4lyi6r0c
-         wkgwzWhEyx0sWHCMfPfcPysz+c3CWrSmVSjL2Vf6qnxBKCjOu3Yni1u68Lnkt+WwthN5
-         IQsWZtYG0Fn9upvsw2LDaFoH/PjCOoSn5LNFc+ojV5jDYW/bo/eERrmUwyPSC9TZyhBK
-         9r4p7HoaMXBLMIVdBSOJLGt/sL645J+PkZqCvG0pldZsSmePLuYC0GBsUOPtA7z7syTS
-         fVCpcEm3jRmkMeHTSiNb9k8X9xU8OYod0D51V0RwKH3oMHDFfjqlmcZXZNdH70ojpKti
-         wcng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QlNl9gT3ypsVBf/LSDoix4N90A3dWAoRGu2fcw4QFdY=;
-        b=HhX91PDA5obvH8WWgs+1wTl92DZ1LQwoKSRttqHrUHOZg6WhwB0HnEygkADJ3O/mkb
-         sLmW3MjB0+HKVKIVK1y4kM0bg2zD08v3QmseOkCnmLudXGO52o3KfA+ITqqXu8J98egi
-         D0l2SxtnBeliQ7LFNexmYl1znk67FOkuT+hztbawOiIK5nf5cfSfk7n9hOk5k4DetpSb
-         X6Ko6L5PDpPs7JFIjDu5Q/dFf84+sqx/1LiMTSFugiGUR1wXKihAJOVDGvbFpBmnfoNW
-         S3vH6cWJdIWkv9PHgk9Pit+eVXB1vv2vtiQz37jgeZbDQgfiHY20LvTOjM9v5kGlOl5O
-         M0kA==
-X-Gm-Message-State: ANoB5plpj8avy99z+N9Hi9ZhaIdG5Jcev0L1j5BE87JLTHyTAfJG+iTN
-        VoxHVmgIgd0wLMzI1GHP7Twk4igtk8o=
-X-Google-Smtp-Source: AA0mqf6zk6QFzFHpFHKobXxmzNmxQ2D1eKrrBFdOplSBR0uPGNBCXet52/l1L6AYIp7uOVkEkxXbnQ==
-X-Received: by 2002:a17:902:9a92:b0:189:9031:6758 with SMTP id w18-20020a1709029a9200b0018990316758mr12236402plp.138.1670377501029;
-        Tue, 06 Dec 2022 17:45:01 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:7a61:38c7:d37a:7f43])
-        by smtp.gmail.com with ESMTPSA id a23-20020a621a17000000b0057630286100sm9853945pfa.164.2022.12.06.17.44.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 17:45:00 -0800 (PST)
-Date:   Tue, 6 Dec 2022 17:44:57 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v3] tpm: st33zp24: remove pointless checks on probe
-Message-ID: <Y4/wGWTgYfR/Jb9D@google.com>
+        Wed, 7 Dec 2022 05:55:27 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6223611C21;
+        Wed,  7 Dec 2022 02:55:19 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NRvBy3lkhz9yF8q;
+        Wed,  7 Dec 2022 18:48:10 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAnDvrycJBjWe_HAA--.20736S2;
+        Wed, 07 Dec 2022 11:54:53 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        ebiggers@kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH] public_key: Add a comment to public_key_signature struct definition
+Date:   Wed,  7 Dec 2022 11:54:30 +0100
+Message-Id: <20221207105430.248613-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwAnDvrycJBjWe_HAA--.20736S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw4xJw4DCw4rKr4rXF13urg_yoW8GF4UpF
+        s3Gr1rKryjgrn3AFs7C3WfC34rGa1UCr17Ww4DZ3y3uanxXw1kCw4Ika13W3Z5XrWkXay7
+        ArZFgw1Yvw15Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4Jj+AACs-
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Remove tests for SPI device or I2C client to be non-NULL because
-driver core will never call driver's probe method without having
-a valid device structure.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+public_key_verify_signature() calls sg_set_buf() to set the signature and
+digest for the signature verification.
+
+As sg_set_buf() requires the buffer to be in physically contiguous memory,
+see commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in
+linear mapping"), mention that in a comment for the signature and digest
+fields of the public_key_signature structure.
+
+Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
+Suggested-by: Eric Biggers <ebiggers@kernel.org>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
+ include/crypto/public_key.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v3: no changes
-v2: reworked commit message
-
-This was a part of a 3-patch series, the first 2 dealt with dropping
-support for platform data and converting the driver to gpiod API, and
-were applied, this one got reviewed-by from Jarkko but for some reason
-was left out.
-
- drivers/char/tpm/st33zp24/i2c.c | 6 ------
- drivers/char/tpm/st33zp24/spi.c | 7 -------
- 2 files changed, 13 deletions(-)
-
-diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-index 614c7d8ed84f..8156bb2af78c 100644
---- a/drivers/char/tpm/st33zp24/i2c.c
-+++ b/drivers/char/tpm/st33zp24/i2c.c
-@@ -106,12 +106,6 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
- {
- 	struct st33zp24_i2c_phy *phy;
- 
--	if (!client) {
--		pr_info("%s: i2c client is NULL. Device not accessible.\n",
--			__func__);
--		return -ENODEV;
--	}
--
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
- 		dev_info(&client->dev, "client not i2c capable\n");
- 		return -ENODEV;
-diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-index ff4adbe104cf..2154059f0235 100644
---- a/drivers/char/tpm/st33zp24/spi.c
-+++ b/drivers/char/tpm/st33zp24/spi.c
-@@ -223,13 +223,6 @@ static int st33zp24_spi_probe(struct spi_device *dev)
- {
- 	struct st33zp24_spi_phy *phy;
- 
--	/* Check SPI platform functionnalities */
--	if (!dev) {
--		pr_info("%s: dev is NULL. Device is not accessible.\n",
--			__func__);
--		return -ENODEV;
--	}
--
- 	phy = devm_kzalloc(&dev->dev, sizeof(struct st33zp24_spi_phy),
- 			   GFP_KERNEL);
- 	if (!phy)
+diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
+index 68f7aa2a7e55..6d623e063034 100644
+--- a/include/crypto/public_key.h
++++ b/include/crypto/public_key.h
+@@ -37,8 +37,8 @@ extern void public_key_free(struct public_key *key);
+  */
+ struct public_key_signature {
+ 	struct asymmetric_key_id *auth_ids[3];
+-	u8 *s;			/* Signature */
+-	u8 *digest;
++	u8 *s;			/* Signature (in physically contiguous mem) */
++	u8 *digest;		/* Digest (in physically contiguous mem) */
+ 	u32 s_size;		/* Number of bytes in signature */
+ 	u32 digest_size;	/* Number of bytes in digest */
+ 	const char *pkey_algo;
 -- 
-2.39.0.rc0.267.gcb52ba06e7-goog
+2.25.1
 
-
--- 
-Dmitry
