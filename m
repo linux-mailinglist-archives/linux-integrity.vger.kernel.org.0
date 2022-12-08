@@ -2,48 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5318D646DB9
-	for <lists+linux-integrity@lfdr.de>; Thu,  8 Dec 2022 12:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59A164745B
+	for <lists+linux-integrity@lfdr.de>; Thu,  8 Dec 2022 17:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiLHLAi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 8 Dec 2022 06:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
+        id S229678AbiLHQdW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 8 Dec 2022 11:33:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiLHLAM (ORCPT
+        with ESMTP id S229478AbiLHQdU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:00:12 -0500
+        Thu, 8 Dec 2022 11:33:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633DFD6B;
-        Thu,  8 Dec 2022 02:55:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81AF61533;
+        Thu,  8 Dec 2022 08:33:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01FE461DE5;
-        Thu,  8 Dec 2022 10:55:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E67D5C433D6;
-        Thu,  8 Dec 2022 10:55:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44E8761FD3;
+        Thu,  8 Dec 2022 16:33:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D9F1C433D2;
+        Thu,  8 Dec 2022 16:33:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670496933;
-        bh=iYeAEc4ZLYi0xIdQc68SWywlFEDmr+ZGN4S15o+/kgY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e/BSybCYR2Tu0ZEx+VCukVwHkkaLchDzgGRZj2JKU3nkzKGVVwzGD+/inbJb+c2hd
-         Df5q7VL7eP/DSIVqxcCwNRkejqpzlv8PwGs7A3I+maLFu+b8807nKHtmj9Y8whtOaV
-         gUE0kQwg3JXjGjxLlkgu/YQ7RDH8vucLI/Mu95lDLnxTct2fVAvmtzPm+e2DNnUTpw
-         FN6ODNTVugf31y8OgMjJYZEmx+DLrTl3ToqXuer0ywymq1E5HFIUjNmYxVbm2L5+8h
-         98OWoFlNv1F2JRCCCDO4QnN7YODjB2XkdP92CFnxGTWnxYuKzw+Wd8K1F/8X27DmSA
-         iHtFg2/gnMAiA==
-Date:   Thu, 8 Dec 2022 10:55:29 +0000
+        s=k20201202; t=1670517198;
+        bh=eP1E6RkrVjyINFJHL+hVeqSDWsVXBEt1602/LPV10Bs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i9TwCW/wcwgG3gZobIVdF1rZ5ICljOXCgVi6M3Tb3BzW+G624iorxweE0dgtTGWab
+         pCSPP7ff+YXqeQWklrBC71MDiHRLEAlGNm0QXa1ozPtAQph299eOM5Q0uZINKrM5vS
+         Oz6o6TM2kR0fisErMX/7WlhURyrln4C3H11XEsUhKmL/uX5GX9lr0LDNQXc2MJ5g34
+         ZtVQwzRALpCdTqh9/PNWje8M99arNKYQwl69NWQlzoDES8RP2bUXCFTq62cU87giIw
+         ikLofJiluOQwsGYm5bPu/1vNFMc879SsY2JZ9txR8rtsvylsgUGER9eCm0sM1ad2Jt
+         x6+UJYGsjSYYQ==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v3] tpm: st33zp24: remove pointless checks on probe
-Message-ID: <Y5HCoRxYxES0hiFd@kernel.org>
-References: <Y4/wGWTgYfR/Jb9D@google.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] tpmdd updates for tpmdd-next-v6.2-rc1
+Date:   Thu,  8 Dec 2022 16:33:08 +0000
+Message-Id: <20221208163308.9989-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4/wGWTgYfR/Jb9D@google.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,69 +58,68 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:44:57PM -0800, Dmitry Torokhov wrote:
-> Remove tests for SPI device or I2C client to be non-NULL because
-> driver core will never call driver's probe method without having
-> a valid device structure.
-> 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
-> 
-> v3: no changes
-> v2: reworked commit message
-> 
-> This was a part of a 3-patch series, the first 2 dealt with dropping
-> support for platform data and converting the driver to gpiod API, and
-> were applied, this one got reviewed-by from Jarkko but for some reason
-> was left out.
-> 
->  drivers/char/tpm/st33zp24/i2c.c | 6 ------
->  drivers/char/tpm/st33zp24/spi.c | 7 -------
->  2 files changed, 13 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-> index 614c7d8ed84f..8156bb2af78c 100644
-> --- a/drivers/char/tpm/st33zp24/i2c.c
-> +++ b/drivers/char/tpm/st33zp24/i2c.c
-> @@ -106,12 +106,6 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
->  {
->  	struct st33zp24_i2c_phy *phy;
->  
-> -	if (!client) {
-> -		pr_info("%s: i2c client is NULL. Device not accessible.\n",
-> -			__func__);
-> -		return -ENODEV;
-> -	}
-> -
->  	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
->  		dev_info(&client->dev, "client not i2c capable\n");
->  		return -ENODEV;
-> diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-> index ff4adbe104cf..2154059f0235 100644
-> --- a/drivers/char/tpm/st33zp24/spi.c
-> +++ b/drivers/char/tpm/st33zp24/spi.c
-> @@ -223,13 +223,6 @@ static int st33zp24_spi_probe(struct spi_device *dev)
->  {
->  	struct st33zp24_spi_phy *phy;
->  
-> -	/* Check SPI platform functionnalities */
-> -	if (!dev) {
-> -		pr_info("%s: dev is NULL. Device is not accessible.\n",
-> -			__func__);
-> -		return -ENODEV;
-> -	}
-> -
->  	phy = devm_kzalloc(&dev->dev, sizeof(struct st33zp24_spi_phy),
->  			   GFP_KERNEL);
->  	if (!phy)
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
-> 
-> 
-> -- 
-> Dmitry
+Hi,
 
-Thanks, applied.
+This PR contains an unsorted collection of TPM fixes and one bug fix
+for trusted keys.
 
 BR, Jarkko
+
+The following changes since commit 479174d402bcf60789106eedc4def3957c060bad:
+
+  Merge tag 'platform-drivers-x86-v6.1-5' of git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86 (2022-12-07 12:37:35 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v6.2-rc1
+
+for you to fetch changes up to eaabc245b02a0e0063068178624d2fc12ba91d69:
+
+  tpm: st33zp24: remove pointless checks on probe (2022-12-08 16:20:47 +0000)
+
+----------------------------------------------------------------
+tpmdd updates for Linux v6.2-rc1
+
+----------------------------------------------------------------
+Ard Biesheuvel (1):
+      tpm: Avoid function type cast of put_device()
+
+Dmitry Torokhov (3):
+      tpm: st33zp24: drop support for platform data
+      tpm: st33zp24: switch to using gpiod API
+      tpm: st33zp24: remove pointless checks on probe
+
+Eddie James (2):
+      tpm: tis_i2c: Fix sanity check interrupt enable mask
+      tpm: Add flag to use default cancellation policy
+
+Hanjun Guo (3):
+      tpm: acpi: Call acpi_put_table() to fix memory leak
+      tpm: tpm_crb: Add the missed acpi_put_table() to fix memory leak
+      tpm: tpm_tis: Add the missed acpi_put_table() to fix memory leak
+
+Michael Kelley (1):
+      tpm/tpm_crb: Fix error message in __crb_relinquish_locality()
+
+Sumit Garg (1):
+      KEYS: trusted: tee: Make registered shm dependency explicit
+
+Yuan Can (1):
+      tpm/tpm_ftpm_tee: Fix error handling in ftpm_mod_init()
+
+ drivers/char/tpm/eventlog/acpi.c         |  12 ++-
+ drivers/char/tpm/st33zp24/i2c.c          | 142 +-----------------------------
+ drivers/char/tpm/st33zp24/spi.c          | 145 +------------------------------
+ drivers/char/tpm/st33zp24/st33zp24.c     |  39 +++++++--
+ drivers/char/tpm/st33zp24/st33zp24.h     |   7 +-
+ drivers/char/tpm/tpm-chip.c              |   7 +-
+ drivers/char/tpm/tpm_crb.c               |  31 ++++---
+ drivers/char/tpm/tpm_ftpm_tee.c          |   8 +-
+ drivers/char/tpm/tpm_tis.c               |   9 +-
+ drivers/char/tpm/tpm_tis_core.c          |  20 +++--
+ drivers/char/tpm/tpm_tis_core.h          |   1 +
+ drivers/char/tpm/tpm_tis_i2c.c           |   3 +-
+ include/linux/platform_data/st33zp24.h   |  16 ----
+ security/keys/trusted-keys/trusted_tee.c |   3 +-
+ 14 files changed, 108 insertions(+), 335 deletions(-)
+ delete mode 100644 include/linux/platform_data/st33zp24.h
