@@ -2,143 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F65D646BC6
-	for <lists+linux-integrity@lfdr.de>; Thu,  8 Dec 2022 10:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DF4646D7E
+	for <lists+linux-integrity@lfdr.de>; Thu,  8 Dec 2022 11:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiLHJXL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 8 Dec 2022 04:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S229915AbiLHKsX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 8 Dec 2022 05:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiLHJXJ (ORCPT
+        with ESMTP id S229964AbiLHKrr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:23:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC1458BF8;
-        Thu,  8 Dec 2022 01:23:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DAE61E04;
-        Thu,  8 Dec 2022 09:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91A1C433C1;
-        Thu,  8 Dec 2022 09:23:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670491387;
-        bh=Pyvsh6dNxc4HyaxTZC50pJ+mJJTEHkJ0yEeOFq7Ogtg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lM0mxqNbjFKVZaNSAF2Q5ScBfU3ZH4tDZo69w55WIKrcund6O1FP1G6l6We9svoNA
-         3JNiDHPn6h5Fx6TY0CZnUxf01ApSvRurtC39cHYouBmnjwCo06eX7Sjy1O/X7NVxXN
-         fOxhB6gj8sTLHUMLH6VVKFW7iJBWxBe0xC3MhLpQaZHRG34tPaZgNOMQtWNMPY2I55
-         AIBQvF2V0RFrOQiXZJQ0LWtM2inYP3kcTVwGb8LyzSSYdm6X6nEQ009UCSnPzQ0m1p
-         gwKhpc4a6EkDJ92mtU8vNHY3eoFTxHkwCPWaYegdYF+nq8WMvJjEUpWHBhVa5iheg9
-         gYFIXksKNL+pg==
-Date:   Thu, 8 Dec 2022 09:23:02 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
-        timvp@google.com, apronin@google.com, mw@semihalf.com,
-        upstream@semihalf.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
-Message-ID: <Y5Gs9jaSIGTNdRbV@kernel.org>
-References: <20221128195651.322822-1-Jason@zx2c4.com>
- <Y4zTnhgunXuwVXHe@kernel.org>
- <Y4zUotH0UeHlRBGP@kernel.org>
- <Y4zxly0XABDg1OhU@zx2c4.com>
+        Thu, 8 Dec 2022 05:47:47 -0500
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEAC83E9B;
+        Thu,  8 Dec 2022 02:43:05 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id h11so1089887wrw.13;
+        Thu, 08 Dec 2022 02:43:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iUo4kly/SxIUcC+vLycW1YJtMzv9qCSvF1SehegNZGU=;
+        b=KS1wRje9DjDMcBCCt7/ZxE1IUY9zs5T0/iggKT1z+yo/ER6joa82Uze4K4G6emTtDH
+         sW5J2vzyCOevhS+Qvity6qVIzu5l1cjeRS6IPAtJEceKKHC89SsjcKHml3rZ3f7x19WQ
+         N2g52fjctqX/qgaf21ehWrwF4aTmvxwV5aWyw6JYEEoEilmfvksoQceYpLhQpAGx/Gts
+         EiUESniYzElKUO+sJGMLtgMebXwWaMW4i4PUf2J/+fwVg3i85FofEXrPNYIRjPNfQfIV
+         YueyqPNOtPSTBRhZHvN4hACGpBIfEWGjDGCy+CiabZnciejuYPDmmQ82+YjOh4OzSqbp
+         vJLg==
+X-Gm-Message-State: ANoB5pl5CF0j2t2owEvgeSLBgBrPD8+cue2QeVOGKVa6uVz6mz6yfbwF
+        DW2aoESMm/Q/5eeMejbYdKCxx4exR4g=
+X-Google-Smtp-Source: AA0mqf67rhW153rTSwtf3W+5CZ6U49VL0f7fl+HmWmcMJVmJPOpZVfz7rGANlqd26RCoM8ZRYS4oFw==
+X-Received: by 2002:adf:e8c2:0:b0:242:832c:5524 with SMTP id k2-20020adfe8c2000000b00242832c5524mr2906021wrn.297.1670496183620;
+        Thu, 08 Dec 2022 02:43:03 -0800 (PST)
+Received: from localhost ([2a01:4b00:d307:1000:f1d3:eb5e:11f4:a7d9])
+        by smtp.gmail.com with ESMTPSA id i1-20020adfaac1000000b002238ea5750csm27101005wrc.72.2022.12.08.02.43.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 02:43:03 -0800 (PST)
+Message-ID: <eea9b4dc9314da2de39b4181a4dac59fda8b0754.camel@debian.org>
+Subject: Re: [PATCH] fsverity: mark builtin signatures as deprecated
+From:   Luca Boccassi <bluca@debian.org>
+To:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org
+Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-btrfs@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Jes Sorensen <jsorensen@meta.com>,
+        Victor Hsieh <victorhsieh@google.com>
+Date:   Thu, 08 Dec 2022 10:43:01 +0000
+In-Reply-To: <20221208033548.122704-1-ebiggers@kernel.org>
+References: <20221208033548.122704-1-ebiggers@kernel.org>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-uyN2eFFU7heJKfazMuQe"
+User-Agent: Evolution 3.38.3-1+plugin 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4zxly0XABDg1OhU@zx2c4.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 08:14:31PM +0100, Jason A. Donenfeld wrote:
-> On Sun, Dec 04, 2022 at 05:10:58PM +0000, Jarkko Sakkinen wrote:
-> > On Sun, Dec 04, 2022 at 05:06:41PM +0000, Jarkko Sakkinen wrote:
-> > > On Mon, Nov 28, 2022 at 08:56:51PM +0100, Jason A. Donenfeld wrote:
-> > > > From: Jan Dabros <jsd@semihalf.com>
-> > > > 
-> > > > Currently tpm transactions are executed unconditionally in
-> > > > tpm_pm_suspend() function, which may lead to races with other tpm
-> > > > accessors in the system. Specifically, the hw_random tpm driver makes
-> > > > use of tpm_get_random(), and this function is called in a loop from a
-> > > > kthread, which means it's not frozen alongside userspace, and so can
-> > > > race with the work done during system suspend:
-> > > > 
-> > > > [    3.277834] tpm tpm0: tpm_transmit: tpm_recv: error -52
-> > > > [    3.278437] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
-> > > > [    3.278445] CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc5+ #135
-> > > > [    3.278450] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
-> > > > [    3.278453] Call Trace:
-> > > > [    3.278458]  <TASK>
-> > > > [    3.278460]  dump_stack_lvl+0x34/0x44
-> > > > [    3.278471]  tpm_tis_status.cold+0x19/0x20
-> > > > [    3.278479]  tpm_transmit+0x13b/0x390
-> > > > [    3.278489]  tpm_transmit_cmd+0x20/0x80
-> > > > [    3.278496]  tpm1_pm_suspend+0xa6/0x110
-> > > > [    3.278503]  tpm_pm_suspend+0x53/0x80
-> > > > [    3.278510]  __pnp_bus_suspend+0x35/0xe0
-> > > > [    3.278515]  ? pnp_bus_freeze+0x10/0x10
-> > > > [    3.278519]  __device_suspend+0x10f/0x350
-> > > > 
-> > > > Fix this by calling tpm_try_get_ops(), which itself is a wrapper around
-> > > > tpm_chip_start(), but takes the appropriate mutex.
-> > > > 
-> > > > Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> > > > Reported-by: Vlastimil Babka <vbabka@suse.cz>
-> > > > Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > > Tested-by: Vlastimil Babka <vbabka@suse.cz>
-> > > > Link: https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
-> > > > Cc: stable@vger.kernel.org
-> > > > Fixes: e891db1a18bf ("tpm: turn on TPM on suspend for TPM 1.x")
-> > > > [Jason: reworked commit message, added metadata]
-> > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > > ---
-> > > >  drivers/char/tpm/tpm-interface.c | 5 +++--
-> > > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> > > > index 1621ce818705..d69905233aff 100644
-> > > > --- a/drivers/char/tpm/tpm-interface.c
-> > > > +++ b/drivers/char/tpm/tpm-interface.c
-> > > > @@ -401,13 +401,14 @@ int tpm_pm_suspend(struct device *dev)
-> > > >  	    !pm_suspend_via_firmware())
-> > > >  		goto suspended;
-> > > >  
-> > > > -	if (!tpm_chip_start(chip)) {
-> > > > +	rc = tpm_try_get_ops(chip);
-> > > > +	if (!rc) {
-> > > >  		if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > > >  			tpm2_shutdown(chip, TPM2_SU_STATE);
-> > > >  		else
-> > > >  			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
-> > > >  
-> > > > -		tpm_chip_stop(chip);
-> > > > +		tpm_put_ops(chip);
-> > > >  	}
-> > > >  
-> > > >  suspended:
-> > > > -- 
-> > > > 2.38.1
-> > > > 
-> > > 
-> > > Hi, sorry for the latency.
-> > > 
-> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > 
-> > Applied to  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-> 
-> Oh thank goodness. You'll send this in for rc8 today?
 
-for 6.2-rc1
+--=-uyN2eFFU7heJKfazMuQe
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-BR, Jarkko
+On Wed, 2022-12-07 at 19:35 -0800, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+>=20
+> fsverity builtin signatures, at least as currently implemented, are a
+> mistake and should not be used.  They mix the authentication policy
+> between the kernel and userspace, which is not a clean design and causes
+> confusion.  For builtin signatures to actually provide any security
+> benefit, userspace still has to enforce that specific files have
+> fsverity enabled.  Since userspace needs to do this, a better design is
+> to have that same userspace code do the signature check too.
+>=20
+> That allows better signature formats and algorithms to be used, avoiding
+> in-kernel parsing of the notoriously bad PKCS#7 format.  It is also
+> needed anyway when different keys need to be trusted for different
+> files, or when it's desired to use fsverity for integrity-only or
+> auditing on some files and for authenticity on other files.  Basically,
+> the builtin signatures don't work for any nontrivial use case.
+>=20
+> (IMA appraisal is another alternative.  It goes in the opposite
+> direction -- the full policy is moved into the kernel.)
+>=20
+> For these reasons, the master branch of AOSP no longer uses builtin
+> signatures.  It still uses fsverity for some files, but signatures are
+> verified in userspace when needed.
+>=20
+> None of the public uses of builtin signatures outside Android seem to
+> have gotten going, either.  Support for builtin signatures was added to
+> RPM.  However, https://fedoraproject.org/wiki/Changes/FsVerityRPM was
+> subsequently rejected from Fedora and seems to have been abandoned.
+> There is also https://github.com/ostreedev/ostree/pull/2269, which was
+> never merged.  Neither proposal mentioned a plan to set
+> fs.verity.require_signatures=3D1 and enforce that files have fs-verity
+> enabled -- so, they would have had no security benefit on their own.
+>=20
+> I'd be glad to hear about any other users of builtin signatures that may
+> exist, and help with the details of what should be used instead.
+>=20
+> Anyway, the feature can't simply be removed, due to the need to maintain
+> backwards compatibility.  But let's at least make it clear that it's
+> deprecated.  Update the documentation accordingly, and rename the
+> kconfig option to CONFIG_FS_VERITY_DEPRECATED_BUILTINSIG.  Also remove
+> the kconfig option from the s390 defconfigs, as it's unneeded there.
+
+Hi,
+
+Thanks for starting this discussion, it's an interesting topic.
+
+At MSFT we use fsverity in production, with signatures enforced by the
+kernel (and policy enforced by the IPE LSM). It's just too easy to fool
+userspace with well-timed swaps and who knows what else. This is not
+any different from dm-verity from our POV, it complements it. I very
+much want the kernel to be in charge of verification and validation, at
+the time of use.
+
+In essence, I very strongly object to marking this as deprecated. It is
+entirely ok if at Google you want to move everything out of the kernel,
+you know your use case best so if that works better for you that's
+absolutely fine (and thus your other patch looks good to me), but I
+don't think it should be deprecated for everybody else too.
+
+
+--=20
+Kind regards,
+Luca Boccassi
+
+--=-uyN2eFFU7heJKfazMuQe
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCSqx93EIPGOymuRKGv37813JB4FAmORv7UACgkQKGv37813
+JB70dw//SWlwiv/J6POjog19YTaToZXYmwjH761/vs2IMCbmgNdI5sjj71XaPvTs
+fP4i/zeqNnJM6jTW686c+N4xSdnSZR9Hx+mgkdAg/D7Ype2iutIfoQMO5zmjHY8z
+eDaOLyK5Eya/yC+rOU1sBN6Itnda6bjcpx8bC02HtqFz07CcG18CBb5LVY8okv7L
+5A45fGHo577vvCjxdRwGzfp4x2V1fg7xKSK6ghb7jZNLL6w1CAxgNDzqZuKZDR3J
+eh/NuWe1cbrVlHVQInK5Vd3TU9BlPTweNmoXlO2zqTyhcefDPlBAJxoHTGh8QaPd
+aL4pdoMdjEXvA2DlwLJvk1Vxbdiv/K3nuPwiUeq8Cleq6CKoOwnKd8hfY7pmHS7o
+t/UrdeeclY+ASgLdjXK+ijIG6vO31MiISgOWwv3YZc5cP1Rqmsx0Kpd1AElKUMgf
+3WaBIboamyfWZcGRnEZBjosdTjiEeufvNv1DpIjlUOOfTL6t3w76U6yfadGuGsKG
+zxf+W7I+IBnZIn6lFR3w5vtZKjQUnpQoI0jnf95szfhScAQddNFjee7UtrX1gdWm
+PlJnbmmzovfHjdK358uTXGNWXFpD8N1poGiRk/IoFPZvq6RH9btaY+inAn7BotE7
+bl0Mi024mGiuiwqD09X0us+jOUdp3cZgDV/x7B/+en/p4OBL1H8=
+=xrXs
+-----END PGP SIGNATURE-----
+
+--=-uyN2eFFU7heJKfazMuQe--
