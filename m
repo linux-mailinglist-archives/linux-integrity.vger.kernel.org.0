@@ -2,194 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC4A646A97
-	for <lists+linux-integrity@lfdr.de>; Thu,  8 Dec 2022 09:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F65D646BC6
+	for <lists+linux-integrity@lfdr.de>; Thu,  8 Dec 2022 10:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiLHIdH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 8 Dec 2022 03:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S229675AbiLHJXL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 8 Dec 2022 04:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiLHIdG (ORCPT
+        with ESMTP id S229650AbiLHJXJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:33:06 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6CB27161;
-        Thu,  8 Dec 2022 00:33:03 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NSS0G66C5z9xHw7;
-        Thu,  8 Dec 2022 16:25:50 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBHM3AjoZFjn3rMAA--.59558S2;
-        Thu, 08 Dec 2022 09:32:43 +0100 (CET)
-Message-ID: <971b28db46dfb4437080b18ba042b290abaf960f.camel@huaweicloud.com>
-Subject: Re: [PATCH v2 1/2] evm: Alloc evm_digest in evm_verify_hmac() if
- CONFIG_VMAP_STACK=y
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Thu, 08 Dec 2022 09:32:33 +0100
-In-Reply-To: <b3d0cfa7f5391968ce332977eb602305cd57e891.camel@linux.ibm.com>
-References: <20221201100625.916781-1-roberto.sassu@huaweicloud.com>
-         <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
-         <Y4j4MJzizgEHf4nv@sol.localdomain>
-         <c8ef0ab69635b99d5175eaf4c96bb3a8957c6210.camel@huaweicloud.com>
-         <Y4pIpxbjBdajymBJ@sol.localdomain>
-         <5813b77edf8f8c6c68da8343b7898f2a5c831077.camel@huaweicloud.com>
-         <b3d0cfa7f5391968ce332977eb602305cd57e891.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 8 Dec 2022 04:23:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC1458BF8;
+        Thu,  8 Dec 2022 01:23:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DAE61E04;
+        Thu,  8 Dec 2022 09:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91A1C433C1;
+        Thu,  8 Dec 2022 09:23:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670491387;
+        bh=Pyvsh6dNxc4HyaxTZC50pJ+mJJTEHkJ0yEeOFq7Ogtg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lM0mxqNbjFKVZaNSAF2Q5ScBfU3ZH4tDZo69w55WIKrcund6O1FP1G6l6We9svoNA
+         3JNiDHPn6h5Fx6TY0CZnUxf01ApSvRurtC39cHYouBmnjwCo06eX7Sjy1O/X7NVxXN
+         fOxhB6gj8sTLHUMLH6VVKFW7iJBWxBe0xC3MhLpQaZHRG34tPaZgNOMQtWNMPY2I55
+         AIBQvF2V0RFrOQiXZJQ0LWtM2inYP3kcTVwGb8LyzSSYdm6X6nEQ009UCSnPzQ0m1p
+         gwKhpc4a6EkDJ92mtU8vNHY3eoFTxHkwCPWaYegdYF+nq8WMvJjEUpWHBhVa5iheg9
+         gYFIXksKNL+pg==
+Date:   Thu, 8 Dec 2022 09:23:02 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
+        timvp@google.com, apronin@google.com, mw@semihalf.com,
+        upstream@semihalf.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
+Message-ID: <Y5Gs9jaSIGTNdRbV@kernel.org>
+References: <20221128195651.322822-1-Jason@zx2c4.com>
+ <Y4zTnhgunXuwVXHe@kernel.org>
+ <Y4zUotH0UeHlRBGP@kernel.org>
+ <Y4zxly0XABDg1OhU@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwBHM3AjoZFjn3rMAA--.59558S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFy8Ww4DuF1UGF15ZryUGFg_yoW7JF4kpa
-        1kK3W8Kr45Jr1fCF12v3WYy3Z5KrW8tryUWrs8Jw1YyFyqqrnFyw1Iyr1UWryFgry8GF12
-        qFW8trnxCr15Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4ZryQADsT
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4zxly0XABDg1OhU@zx2c4.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-12-07 at 20:26 -0500, Mimi Zohar wrote:
-> On Mon, 2022-12-05 at 09:22 +0100, Roberto Sassu wrote:
-> > On Fri, 2022-12-02 at 10:49 -0800, Eric Biggers wrote:
-> > > On Fri, Dec 02, 2022 at 08:58:21AM +0100, Roberto Sassu wrote:
-> > > > On Thu, 2022-12-01 at 10:53 -0800, Eric Biggers wrote:
-> > > > > On Thu, Dec 01, 2022 at 11:06:24AM +0100, Roberto Sassu wrote:
-> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > 
-> > > > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > > > > mapping") checks that both the signature and the digest reside in the
-> > > > > > linear mapping area.
-> > > > > > 
-> > > > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > > > > stack support"), made it possible to move the stack in the vmalloc area,
-> > > > > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > > > > > adjacent pages.
-> > > > > > 
-> > > > > > Fix this by checking if CONFIG_VMAP_STACK is enabled. If yes, allocate an
-> > > > > > evm_digest structure, and use that instead of the in-stack counterpart.
-> > > > > > 
-> > > > > > Cc: stable@vger.kernel.org # 4.9.x
-> > > > > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > ---
-> > > > > >  security/integrity/evm/evm_main.c | 26 +++++++++++++++++++++-----
-> > > > > >  1 file changed, 21 insertions(+), 5 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> > > > > > index 23d484e05e6f..7f76d6103f2e 100644
-> > > > > > --- a/security/integrity/evm/evm_main.c
-> > > > > > +++ b/security/integrity/evm/evm_main.c
-> > > > > > @@ -174,6 +174,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > > > > >  	struct signature_v2_hdr *hdr;
-> > > > > >  	enum integrity_status evm_status = INTEGRITY_PASS;
-> > > > > >  	struct evm_digest digest;
-> > > > > > +	struct evm_digest *digest_ptr = &digest;
-> > > > > >  	struct inode *inode;
-> > > > > >  	int rc, xattr_len, evm_immutable = 0;
-> > > > > >  
-> > > > > > @@ -231,14 +232,26 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > > > > >  		}
-> > > > > >  
-> > > > > >  		hdr = (struct signature_v2_hdr *)xattr_data;
-> > > > > > -		digest.hdr.algo = hdr->hash_algo;
-> > > > > > +
-> > > > > > +		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-> > > > > > +			digest_ptr = kmalloc(sizeof(*digest_ptr), GFP_NOFS);
-> > > > > > +			if (!digest_ptr) {
-> > > > > > +				rc = -ENOMEM;
-> > > > > > +				break;
-> > > > > > +			}
-> > > > > > +		}
-> > > > > > +
-> > > > > > +		digest_ptr->hdr.algo = hdr->hash_algo;
-> > > > > > +
-> > > > > >  		rc = evm_calc_hash(dentry, xattr_name, xattr_value,
-> > > > > > -				   xattr_value_len, xattr_data->type, &digest);
-> > > > > > +				   xattr_value_len, xattr_data->type,
-> > > > > > +				   digest_ptr);
-> > > > > >  		if (rc)
-> > > > > >  			break;
-> > > > > >  		rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
-> > > > > >  					(const char *)xattr_data, xattr_len,
-> > > > > > -					digest.digest, digest.hdr.length);
-> > > > > > +					digest_ptr->digest,
-> > > > > > +					digest_ptr->hdr.length);
-> > > > > >  		if (!rc) {
-> > > > > >  			inode = d_backing_inode(dentry);
-> > > > > >  
-> > > > > > @@ -268,8 +281,11 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > > > > >  		else
-> > > > > >  			evm_status = INTEGRITY_FAIL;
-> > > > > >  	}
-> > > > > > -	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
-> > > > > > -		  digest.digest);
-> > > > > > +	pr_debug("digest: (%d) [%*phN]\n", digest_ptr->hdr.length,
-> > > > > > +		 digest_ptr->hdr.length, digest_ptr->digest);
-> > > > > > +
-> > > > > > +	if (digest_ptr && digest_ptr != &digest)
-> > > > > > +		kfree(digest_ptr);
-> > > > > 
-> > > > > What is the actual problem here?  Where is a scatterlist being created from this
-> > > > > buffer?  AFAICS it never happens.
+On Sun, Dec 04, 2022 at 08:14:31PM +0100, Jason A. Donenfeld wrote:
+> On Sun, Dec 04, 2022 at 05:10:58PM +0000, Jarkko Sakkinen wrote:
+> > On Sun, Dec 04, 2022 at 05:06:41PM +0000, Jarkko Sakkinen wrote:
+> > > On Mon, Nov 28, 2022 at 08:56:51PM +0100, Jason A. Donenfeld wrote:
+> > > > From: Jan Dabros <jsd@semihalf.com>
 > > > > 
-> > > > Hi Eric
+> > > > Currently tpm transactions are executed unconditionally in
+> > > > tpm_pm_suspend() function, which may lead to races with other tpm
+> > > > accessors in the system. Specifically, the hw_random tpm driver makes
+> > > > use of tpm_get_random(), and this function is called in a loop from a
+> > > > kthread, which means it's not frozen alongside userspace, and so can
+> > > > race with the work done during system suspend:
 > > > > 
-> > > > it is in public_key_verify_signature(), called by asymmetric_verify()
-> > > > and integrity_digsig_verify().
+> > > > [    3.277834] tpm tpm0: tpm_transmit: tpm_recv: error -52
+> > > > [    3.278437] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
+> > > > [    3.278445] CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc5+ #135
+> > > > [    3.278450] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
+> > > > [    3.278453] Call Trace:
+> > > > [    3.278458]  <TASK>
+> > > > [    3.278460]  dump_stack_lvl+0x34/0x44
+> > > > [    3.278471]  tpm_tis_status.cold+0x19/0x20
+> > > > [    3.278479]  tpm_transmit+0x13b/0x390
+> > > > [    3.278489]  tpm_transmit_cmd+0x20/0x80
+> > > > [    3.278496]  tpm1_pm_suspend+0xa6/0x110
+> > > > [    3.278503]  tpm_pm_suspend+0x53/0x80
+> > > > [    3.278510]  __pnp_bus_suspend+0x35/0xe0
+> > > > [    3.278515]  ? pnp_bus_freeze+0x10/0x10
+> > > > [    3.278519]  __device_suspend+0x10f/0x350
+> > > > 
+> > > > Fix this by calling tpm_try_get_ops(), which itself is a wrapper around
+> > > > tpm_chip_start(), but takes the appropriate mutex.
+> > > > 
+> > > > Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> > > > Reported-by: Vlastimil Babka <vbabka@suse.cz>
+> > > > Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > > > Tested-by: Vlastimil Babka <vbabka@suse.cz>
+> > > > Link: https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
+> > > > Cc: stable@vger.kernel.org
+> > > > Fixes: e891db1a18bf ("tpm: turn on TPM on suspend for TPM 1.x")
+> > > > [Jason: reworked commit message, added metadata]
+> > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > > > ---
+> > > >  drivers/char/tpm/tpm-interface.c | 5 +++--
+> > > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> > > > index 1621ce818705..d69905233aff 100644
+> > > > --- a/drivers/char/tpm/tpm-interface.c
+> > > > +++ b/drivers/char/tpm/tpm-interface.c
+> > > > @@ -401,13 +401,14 @@ int tpm_pm_suspend(struct device *dev)
+> > > >  	    !pm_suspend_via_firmware())
+> > > >  		goto suspended;
+> > > >  
+> > > > -	if (!tpm_chip_start(chip)) {
+> > > > +	rc = tpm_try_get_ops(chip);
+> > > > +	if (!rc) {
+> > > >  		if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> > > >  			tpm2_shutdown(chip, TPM2_SU_STATE);
+> > > >  		else
+> > > >  			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+> > > >  
+> > > > -		tpm_chip_stop(chip);
+> > > > +		tpm_put_ops(chip);
+> > > >  	}
+> > > >  
+> > > >  suspended:
+> > > > -- 
+> > > > 2.38.1
 > > > > 
 > > > 
-> > > Hmm, that's several steps down the stack then.  And not something I had
-> > > expected.
+> > > Hi, sorry for the latency.
 > > > 
-> > > Perhaps this should be fixed in public_key_verify_signature() instead?  It
-> > > already does a kmalloc(), so that allocation size just could be made a bit
-> > > larger to get space for a temporary copy of 's' and 'digest'.
+> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 > > 
-> > Mimi asked to fix it in both IMA and EVM.
+> > Applied to  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
 > 
-> At the time I thought the problem was limited to
-> integrity_digsig_verify() and just to the digest.
-> 
-> I'll leave it up to you and Eric to decide what is the preferable
-> solution.
+> Oh thank goodness. You'll send this in for rc8 today?
 
-Ok, yes. I think Eric's suggestion of making a copy in
-public_key_verify_signature() is better. Will do it.
+for 6.2-rc1
 
-> > > Or at the very least, struct public_key_signature should have a *very* clear
-> > > comment saying that the 's' and 'digest' fields must be located in physically
-> > > contiguous memory...
-> > 
-> > That I could add as an additional patch.
-> 
-> Thanks, the new patch containing the comment looks fine.
-
-Thanks, not sure if I need to keep it with the new patch (probably
-not).
-
-Roberto
-
+BR, Jarkko
