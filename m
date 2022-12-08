@@ -2,162 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0322647494
-	for <lists+linux-integrity@lfdr.de>; Thu,  8 Dec 2022 17:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AFC64750C
+	for <lists+linux-integrity@lfdr.de>; Thu,  8 Dec 2022 18:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiLHQqv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 8 Dec 2022 11:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        id S229530AbiLHRlx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 8 Dec 2022 12:41:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiLHQqu (ORCPT
+        with ESMTP id S229752AbiLHRlw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:46:50 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4005AD9B9;
-        Thu,  8 Dec 2022 08:46:47 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NSfy10j7pz9xG9q;
-        Fri,  9 Dec 2022 00:39:37 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwDHs3DWFJJjUyvOAA--.59467S2;
-        Thu, 08 Dec 2022 17:46:23 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     dhowells@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH] KEYS: asymmetric: Make a copy of sig and digest in vmalloced stack
-Date:   Thu,  8 Dec 2022 17:46:10 +0100
-Message-Id: <20221208164610.867747-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 8 Dec 2022 12:41:52 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFF4A13E5
+        for <linux-integrity@vger.kernel.org>; Thu,  8 Dec 2022 09:41:49 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d7so2185631pll.9
+        for <linux-integrity@vger.kernel.org>; Thu, 08 Dec 2022 09:41:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Epi0wvoArwdi93QgOlOJRom7wYA62WnSexI8WZ5n4Kc=;
+        b=N+6Aj206qvb7iNXVdFQBPg6dnnVNI4o7tNTkSe6INV7p1MkBDypskH6ph7HPR2qqjY
+         KCQ6bPOZjbY0MTDlYnXLXzABESm0l2DHnVDDYQQMJeKl0zRPAsQBwj6KR1VRaOI1O5gf
+         4Vi3JvR+pav++uv81Rq2FxKSxA2RLAoLZgyjxSk7CphL0/sX0B4pveNMGid5X1ml5gWU
+         Dam3H+j4msCo8w7a88s1CSEY83uKMIj3TtSZSbVpcw59ErrVsAAxYcTimgn1e8Y9CI0R
+         rM34D9Y2fHYVEuSJ07l2l/3pknRxqPqVwafNeiKJ2scypppjp58BNAxuUzPvn14xjGMF
+         6T2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Epi0wvoArwdi93QgOlOJRom7wYA62WnSexI8WZ5n4Kc=;
+        b=6dF7Iwv3l2TJtPAN3bL3pfaKxTRe/knXl25fJeO6V2/13XfO/Yq1POBAqxN0KWqBsD
+         +KxiE/zHwi876vcxudjTPcl81j/oWzfk/EEIi884maDki0wipwMq1uEaldePuihnhGKx
+         ouHKMQ9cnX6o6uKmHuwjWQX+EfM9jPO9AIbHWo0sQkQzNu/gNV48kaNNWR+1FSZAGcI1
+         rTCtDFQrh+tm/s2riGi65meKQGQWYG5ZPTiOLKbd1ZyFKfg/pnIG/5eFw89Mk42dn4t7
+         IyW9XUEQgWSeI2wdmIoYlHsKbpB1lU7bTxsRkl4H1+LsdwttVGj2QbFZGfpGt/+7d96l
+         kmDw==
+X-Gm-Message-State: ANoB5plS83STIF2r98rfXvjC29jZmmv6v4JMfjni5mj5EttmZ3miCPkd
+        a8DLYOahigt5Zd23AN3P+IHKaCqAJU4DNVAw7Z3Z
+X-Google-Smtp-Source: AA0mqf77gpQVrYnOfWw3zdor+Q9b7Q2VDfHXiSgWE1uUCovE3iY2apN7bXxoa9t+H9Tct88fbwCVN8p9mCZ+UQGODpA=
+X-Received: by 2002:a17:902:9892:b0:186:c3b2:56d1 with SMTP id
+ s18-20020a170902989200b00186c3b256d1mr79125339plp.15.1670521309385; Thu, 08
+ Dec 2022 09:41:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwDHs3DWFJJjUyvOAA--.59467S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF4xCry8tF4DCr43Kr4fuFg_yoW5uFWkpa
-        95Wr15tryUGr1Ik3y3C3WxK345Aw4vkr17Ww4fZw45CFsxXrW8C3yIva13WFyfJrykXFWx
-        trWvqws8uF1UXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
-        w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW8JVW3JwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        xUxo7KDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAABF1jj4JxzwAAsL
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 8 Dec 2022 12:41:38 -0500
+Message-ID: <CAHC9VhTtdYsX5+j-j7sis_dzCOTtrv_=EvU35KRBg+x0gA5p+A@mail.gmail.com>
+Subject: Re: [PATCH] fsverity: mark builtin signatures as deprecated
+To:     bluca@debian.org
+Cc:     ebiggers@kernel.org, jsorensen@meta.com,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fscrypt@vger.kernel.org, linux-integrity@vger.kernel.org,
+        victorhsieh@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, 08 Dec 2022 10:43:01 +0000, Luca Boccassi wrote:
+> On Wed, 2022-12-07 at 19:35 -0800, Eric Biggers wrote:
+> > From: Eric Biggers <ebiggers@google.com>
+> >
+> > fsverity builtin signatures, at least as currently implemented, are a
+> > mistake and should not be used.  They mix the authentication policy
+> > between the kernel and userspace, which is not a clean design and causes
+> > confusion.  For builtin signatures to actually provide any security
+> > benefit, userspace still has to enforce that specific files have
+> > fsverity enabled.  Since userspace needs to do this, a better design is
+> > to have that same userspace code do the signature check too.
+> >
+> > That allows better signature formats and algorithms to be used, avoiding
+> > in-kernel parsing of the notoriously bad PKCS#7 format.  It is also
+> > needed anyway when different keys need to be trusted for different
+> > files, or when it's desired to use fsverity for integrity-only or
+> > auditing on some files and for authenticity on other files.  Basically,
+> > the builtin signatures don't work for any nontrivial use case.
+> >
+> > (IMA appraisal is another alternative.  It goes in the opposite
+> > direction -- the full policy is moved into the kernel.)
+> >
+> > For these reasons, the master branch of AOSP no longer uses builtin
+> > signatures.  It still uses fsverity for some files, but signatures are
+> > verified in userspace when needed.
+> >
+> > None of the public uses of builtin signatures outside Android seem to
+> > have gotten going, either.  Support for builtin signatures was added to
+> > RPM.  However, https://fedoraproject.org/wiki/Changes/FsVerityRPM was
+> > subsequently rejected from Fedora and seems to have been abandoned.
+> > There is also https://github.com/ostreedev/ostree/pull/2269, which was
+> > never merged.  Neither proposal mentioned a plan to set
+> > fs.verity.require_signatures=1 and enforce that files have fs-verity
+> > enabled -- so, they would have had no security benefit on their own.
+> >
+> > I'd be glad to hear about any other users of builtin signatures that may
+> > exist, and help with the details of what should be used instead.
+> >
+> > Anyway, the feature can't simply be removed, due to the need to maintain
+> > backwards compatibility.  But let's at least make it clear that it's
+> > deprecated.  Update the documentation accordingly, and rename the
+> > kconfig option to CONFIG_FS_VERITY_DEPRECATED_BUILTINSIG.  Also remove
+> > the kconfig option from the s390 defconfigs, as it's unneeded there.
+>
+> Hi,
+>
+> Thanks for starting this discussion, it's an interesting topic.
+>
+> At MSFT we use fsverity in production, with signatures enforced by the
+> kernel (and policy enforced by the IPE LSM). It's just too easy to fool
+> userspace with well-timed swaps and who knows what else. This is not
+> any different from dm-verity from our POV, it complements it. I very
+> much want the kernel to be in charge of verification and validation, at
+> the time of use.
+>
+> In essence, I very strongly object to marking this as deprecated. It is
+> entirely ok if at Google you want to move everything out of the kernel,
+> you know your use case best so if that works better for you that's
+> absolutely fine (and thus your other patch looks good to me), but I
+> don't think it should be deprecated for everybody else too.
 
-Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-mapping") checks that both the signature and the digest reside in the
-linear mapping area.
+To add some more background on the IPE LSM, it has gone through
+several rounds of review on the LSM list and the developers working on
+it are in the process of readying it for the next review cycle.
 
-However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-stack support"), made it possible to move the stack in the vmalloc area,
-which is not contiguous, and thus not suitable for sg_set_buf() which needs
-adjacent pages.
-
-Check if the signature and digest passed to public_key_verify_signature()
-are in the linear mapping area and, for those which are not, make a copy in
-the linear mapping area with kmalloc() and adjust the pointer passed to
-sg_set_buf(). Reuse the existing kmalloc() and increase the allocation size
-as needed.
-
-Minimize the number of copies with the compile-time check of
-CONFIG_VMAP_STACK and with the run-time check virt_addr_valid().
-
-Cc: stable@vger.kernel.org # 4.9.x
-Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-Suggested-by: Eric Biggers <ebiggers@kernel.org>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- crypto/asymmetric_keys/public_key.c | 39 +++++++++++++++++++++++++----
- 1 file changed, 34 insertions(+), 5 deletions(-)
-
-diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-index 2f8352e88860..307799ffbc3e 100644
---- a/crypto/asymmetric_keys/public_key.c
-+++ b/crypto/asymmetric_keys/public_key.c
-@@ -363,7 +363,8 @@ int public_key_verify_signature(const struct public_key *pkey,
- 	struct scatterlist src_sg[2];
- 	char alg_name[CRYPTO_MAX_ALG_NAME];
- 	char *key, *ptr;
--	int ret;
-+	char *sig_s, *digest;
-+	int ret, verif_bundle_len;
- 
- 	pr_devel("==>%s()\n", __func__);
- 
-@@ -400,8 +401,21 @@ int public_key_verify_signature(const struct public_key *pkey,
- 	if (!req)
- 		goto error_free_tfm;
- 
--	key = kmalloc(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
--		      GFP_KERNEL);
-+	verif_bundle_len = pkey->keylen + sizeof(u32) * 2 + pkey->paramlen;
-+
-+	sig_s = sig->s;
-+	digest = sig->digest;
-+
-+	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-+		if (!virt_addr_valid(sig_s))
-+			verif_bundle_len += sig->s_size;
-+
-+		if (!virt_addr_valid(digest))
-+			verif_bundle_len += sig->digest_size;
-+	}
-+
-+	/* key points to a buffer which could contain the sig and digest too. */
-+	key = kmalloc(verif_bundle_len, GFP_KERNEL);
- 	if (!key)
- 		goto error_free_req;
- 
-@@ -424,9 +438,24 @@ int public_key_verify_signature(const struct public_key *pkey,
- 			goto error_free_key;
- 	}
- 
-+	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-+		ptr += pkey->paramlen;
-+
-+		if (!virt_addr_valid(sig_s)) {
-+			sig_s = ptr;
-+			memcpy(sig_s, sig->s, sig->s_size);
-+			ptr += sig->s_size;
-+		}
-+
-+		if (!virt_addr_valid(digest)) {
-+			digest = ptr;
-+			memcpy(digest, sig->digest, sig->digest_size);
-+		}
-+	}
-+
- 	sg_init_table(src_sg, 2);
--	sg_set_buf(&src_sg[0], sig->s, sig->s_size);
--	sg_set_buf(&src_sg[1], sig->digest, sig->digest_size);
-+	sg_set_buf(&src_sg[0], sig_s, sig->s_size);
-+	sg_set_buf(&src_sg[1], digest, sig->digest_size);
- 	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
- 				   sig->digest_size);
- 	crypto_init_wait(&cwait);
 -- 
-2.25.1
-
+paul-moore.com
