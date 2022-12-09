@@ -2,134 +2,173 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED896480F4
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Dec 2022 11:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5C0648205
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Dec 2022 13:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiLIK1q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Dec 2022 05:27:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S229879AbiLIMAr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Dec 2022 07:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLIK12 (ORCPT
+        with ESMTP id S229470AbiLIMAn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Dec 2022 05:27:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B9D6B996;
-        Fri,  9 Dec 2022 02:27:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4A97621F8;
-        Fri,  9 Dec 2022 10:27:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B36DAC433EF;
-        Fri,  9 Dec 2022 10:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670581646;
-        bh=Vg/jY9jXOQpKUYcFCDt33qBBzBN62AJVK6EstpsyWhA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GQGrmX1vI7TVUCo7Jt2fONuyjVf4WbekcRa5FZpsSLfT7l6b90PU5P5C1/SmawZcm
-         Yto4TJA/eFeDAtJ+x4Kbn8zRMR61esofMf9eP2Qr7iv9c1wpU1aUbDyRZsQ1dx51O+
-         9DaUKFKy+Vbx5vU2QOEWt0dGCYzhWbvlIfIK2NMY=
-Date:   Fri, 9 Dec 2022 11:27:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        Paul Moore <paul@paul-moore.com>, sds@tycho.nsa.gov,
-        eparis@parisplace.org, sashal@kernel.org, selinux@vger.kernel.org,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        stable@vger.kernel.org
-Subject: Re: [RFC] IMA LSM based rule race condition issue on 4.19 LTS
-Message-ID: <Y5MNi85uzgXIMxX2@kroah.com>
-References: <389334fe-6e12-96b2-6ce9-9f0e8fcb85bf@huawei.com>
- <Y5Lf8SRgyrqDJwiH@kroah.com>
- <93d137dc-e0d3-3741-7e01-dca1ba9c0903@huawei.com>
- <Y5L10fjvxmU3klRu@kroah.com>
- <58219c48-840d-b4f3-b195-82b2a1465b37@huawei.com>
- <Y5L5RZlOOd9RMeWw@kroah.com>
- <d69f9bd3-de1f-aa32-7c6b-30d909f724d0@huawei.com>
- <Y5L+Tpym6XRrZSLB@kroah.com>
- <8e409a81-dc00-f022-08fe-c1c26e9cf5e8@huawei.com>
- <415d44a2-33a1-c100-1ffc-ad6f1409afd8@huawei.com>
+        Fri, 9 Dec 2022 07:00:43 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156312FFFA
+        for <linux-integrity@vger.kernel.org>; Fri,  9 Dec 2022 04:00:38 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id n20so11063762ejh.0
+        for <linux-integrity@vger.kernel.org>; Fri, 09 Dec 2022 04:00:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
+        b=blV6eki9f/dE3yt8k9vQjmYbdmKqtjXhWL8aRDi0+PTy9DZ7PoASn6Hb4YDawt6/Pq
+         TOTWkNyJ1bQ0LXeAOKmZsgrohPEAxg4I9Vxq8Iql4MCfOpzd9bk59Kg8A1l2aCabzc1i
+         Pwb8zUD5pTagBDWz9wlqw8be8RXHOe4ntLhBEh7HXgPppKgizTPX68btz3fJ69iSfJef
+         zAFAyKFjvCY4s0mBfuw+77i/sj6ivMcyXsKkk5Q+7miuQY1uqqYMcxvazgbad3gQhSeN
+         osKwSC1CYREx2mikz7Rsbjiro/V/gVq1uBZVJYbtUMGcexuFEHFb/xJK0jJPCO1YVyoF
+         GpZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
+        b=nMHXmPvqorgZTcs6vGlR8vrCCRPUFePkcOUoMBTURCQwlKG4AcMwK5+VCKywDYpHdk
+         x9tlafeOBVJ5S1bHQLaGQ7COf41zunOhm/RV58ffHEUt2JNQ7rrRF7V+gPHaAuIfA974
+         JyBnQIZ6tWskJVH5pDXncG2nV/xFkNvggha+jSW0zWux9XY7BOTJj1e+ijLdjZ8zIQN8
+         wETSQuZlsLKHRhYGcGXNKyaVjeGFgC9KMMEiu3BWeR5DuerQeyo2XoNEccEsX/MZrT59
+         TDbDDf6BRehpLBXXTOsAKg4U4pA6jSY1LLDXeuVtzzhg2bKxFcnQsCTZhHFufxQHYd68
+         tFjQ==
+X-Gm-Message-State: ANoB5pln6H6mCpQO98m+kiw5ZSwLFvW4k4Z7toFllGsomnyfM3yjWowi
+        eTVbrShdEwdPiPR9Fn4/1KDMww==
+X-Google-Smtp-Source: AA0mqf7P1uuFrcKToZQL1Qs7OSMRUELHntqUphTx86r+y9eGx8OMntNtg5Twtz4wxSVo6DNFFYUZgg==
+X-Received: by 2002:a17:906:4907:b0:7c0:d4fa:3151 with SMTP id b7-20020a170906490700b007c0d4fa3151mr4765674ejq.17.1670587236522;
+        Fri, 09 Dec 2022 04:00:36 -0800 (PST)
+Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
+        by smtp.gmail.com with ESMTPSA id o23-20020a170906861700b007c0a7286c0asm489597ejx.58.2022.12.09.04.00.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 04:00:35 -0800 (PST)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-spi@vger.kernel.org, kernel@pengutronix.de,
+        Purism Kernel Team <kernel@puri.sm>,
+        linux-rpi-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
+        linux-actions@lists.infradead.org, netdev@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-staging@lists.linux.dev, chrome-platform@lists.linux.dev,
+        linux-crypto@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linuxppc-dev@lists.ozlabs.org, patches@opensource.cirrus.com,
+        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Date:   Fri,  9 Dec 2022 13:00:14 +0100
+Message-Id: <167058708567.1651663.18170722235132459286.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <415d44a2-33a1-c100-1ffc-ad6f1409afd8@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 05:38:00PM +0800, Guozihua (Scott) wrote:
-> On 2022/12/9 17:32, Guozihua (Scott) wrote:
-> > On 2022/12/9 17:22, Greg KH wrote:
-> >> On Fri, Dec 09, 2022 at 05:11:40PM +0800, Guozihua (Scott) wrote:
-> >>> On 2022/12/9 17:00, Greg KH wrote:
-> >>>> On Fri, Dec 09, 2022 at 04:59:17PM +0800, Guozihua (Scott) wrote:
-> >>>>> On 2022/12/9 16:46, Greg KH wrote:
-> >>>>>> On Fri, Dec 09, 2022 at 03:53:25PM +0800, Guozihua (Scott) wrote:
-> >>>>>>> On 2022/12/9 15:12, Greg KH wrote:
-> >>>>>>>> On Fri, Dec 09, 2022 at 03:00:35PM +0800, Guozihua (Scott) wrote:
-> >>>>>>>>> Hi community.
-> >>>>>>>>>
-> >>>>>>>>> Previously our team reported a race condition in IMA relates to LSM based
-> >>>>>>>>> rules which would case IMA to match files that should be filtered out under
-> >>>>>>>>> normal condition. The issue was originally analyzed and fixed on mainstream.
-> >>>>>>>>> The patch and the discussion could be found here:
-> >>>>>>>>> https://lore.kernel.org/all/20220921125804.59490-1-guozihua@huawei.com/
-> >>>>>>>>>
-> >>>>>>>>> After that, we did a regression test on 4.19 LTS and the same issue arises.
-> >>>>>>>>> Further analysis reveled that the issue is from a completely different
-> >>>>>>>>> cause.
-> >>>>>>>>
-> >>>>>>>> What commit in the tree fixed this in newer kernels?  Why can't we just
-> >>>>>>>> backport that one to 4.19.y as well?
-> >>>>>>>>
-> >>>>>>>> thanks,
-> >>>>>>>>
-> >>>>>>>> greg k-h
-> >>>>>>>
-> >>>>>>> Hi Greg,
-> >>>>>>>
-> >>>>>>> The fix for mainline is now on linux-next, commit 	d57378d3aa4d ("ima:
-> >>>>>>> Simplify ima_lsm_copy_rule") and 	c7423dbdbc9ece ("ima: Handle -ESTALE
-> >>>>>>> returned by ima_filter_rule_match()"). However, these patches cannot be
-> >>>>>>> picked directly into 4.19.y due to code difference.
-> >>>>>>
-> >>>>>> Ok, so it's much more than just 4.19 that's an issue here.  And are
-> >>>>>> those commits tagged for stable inclusion?
-> >>>>>
-> >>>>> Not actually, not on the commit itself.
-> >>>>
-> >>>> That's not good.  When they hit Linus's tree, please submit backports to
-> >>>> the stable mailing list so that they can be picked up.
-> >>> Thing is these commits cannot be simply backported to 4.19.y. Preceding
-> >>> patches are missing. How do we do backporting in this situation? Do we
-> >>> first backport the preceding patches? Or maybe we develop another
-> >>> solution for 4.19.y?
-> >>
-> >> First they need to go to newer kernel trees, and then worry about 4.19.
-> >> We never want anyone to upgrade to a newer kernel and have a regression.
-> >>
-> >> Also, we can't do anything until they hit Linus's tree, as per the
-> >> stable kernel rules.
-> > Alright. We'll wait for these patches to be in Linus' tree. But should
-> > we stick to a backport from mainstream or we form a different solution
-> > for LTS?
+On Fri, 18 Nov 2022 23:35:34 +0100, Uwe Kleine-König wrote:
+> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type") from 2016 there is a "temporary" alternative probe
+> callback for i2c drivers.
+> 
+> This series completes all drivers to this new callback (unless I missed
+> something). It's based on current next/master.
+> A part of the patches depend on commit 662233731d66 ("i2c: core:
+> Introduce i2c_client_get_device_id helper function"), there is a branch that
+> you can pull into your tree to get it:
+> 
+> [...]
 
-We always want to have a normal backport of what is in Linus's tree if
-at all possible.  Whenever we diverge from that, we almost always get it
-wrong and have to fix it up again later.
+Applied all patches that build.
 
-> BTW, I have a look into it and if we are backporting mainstream's
-> solution, we would also needs to backport b16942455193 ("ima: use the
-> lsm policy update notifier")
+Patches excluded:
+ - ps8622
+ - ti-sn65dsi83
+ - adv7511
 
-That's fine, please just send a patch series to the stable list when
-needed.
+Repo: https://cgit.freedesktop.org/drm/drm-misc/
 
-thanks,
 
-greg k-h
+[014/606] drm/bridge: adv7511: Convert to i2c's .probe_new()
+          (no commit info)
+[015/606] drm/bridge/analogix/anx6345: Convert to i2c's .probe_new()
+          (no commit info)
+[016/606] drm/bridge/analogix/anx78xx: Convert to i2c's .probe_new()
+          (no commit info)
+[017/606] drm/bridge: anx7625: Convert to i2c's .probe_new()
+          (no commit info)
+[018/606] drm/bridge: icn6211: Convert to i2c's .probe_new()
+          (no commit info)
+[019/606] drm/bridge: chrontel-ch7033: Convert to i2c's .probe_new()
+          commit: 8dc6de280f01c0f7b8d40435736f3c975368ad70
+[020/606] drm/bridge: it6505: Convert to i2c's .probe_new()
+          (no commit info)
+[021/606] drm/bridge: it66121: Convert to i2c's .probe_new()
+          (no commit info)
+[022/606] drm/bridge: lt8912b: Convert to i2c's .probe_new()
+          (no commit info)
+[023/606] drm/bridge: lt9211: Convert to i2c's .probe_new()
+          (no commit info)
+[024/606] drm/bridge: lt9611: Convert to i2c's .probe_new()
+          (no commit info)
+[025/606] drm/bridge: lt9611uxc: Convert to i2c's .probe_new()
+          (no commit info)
+[026/606] drm/bridge: megachips: Convert to i2c's .probe_new()
+          (no commit info)
+[027/606] drm/bridge: nxp-ptn3460: Convert to i2c's .probe_new()
+          (no commit info)
+[028/606] drm/bridge: parade-ps8622: Convert to i2c's .probe_new()
+          (no commit info)
+[029/606] drm/bridge: sii902x: Convert to i2c's .probe_new()
+          (no commit info)
+[030/606] drm/bridge: sii9234: Convert to i2c's .probe_new()
+          (no commit info)
+[031/606] drm/bridge: sii8620: Convert to i2c's .probe_new()
+          (no commit info)
+[032/606] drm/bridge: tc358767: Convert to i2c's .probe_new()
+          (no commit info)
+[033/606] drm/bridge: tc358768: Convert to i2c's .probe_new()
+          (no commit info)
+[034/606] drm/bridge/tc358775: Convert to i2c's .probe_new()
+          (no commit info)
+[035/606] drm/bridge: ti-sn65dsi83: Convert to i2c's .probe_new()
+          (no commit info)
+[037/606] drm/bridge: tfp410: Convert to i2c's .probe_new()
+          (no commit info)
+
+
+
+rob
+
