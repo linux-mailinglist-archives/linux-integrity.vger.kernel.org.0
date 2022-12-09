@@ -2,84 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5CA648662
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Dec 2022 17:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7D46488C5
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Dec 2022 20:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiLIQQE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Dec 2022 11:16:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
+        id S229720AbiLITE1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Dec 2022 14:04:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiLIQPv (ORCPT
+        with ESMTP id S229556AbiLITE0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Dec 2022 11:15:51 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C0A80A18;
-        Fri,  9 Dec 2022 08:15:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1670602550;
-        bh=+mlKx63NA5e7YuHIFGoTjYHHNKewPSbGFbu2Vyi7sd4=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=a027KazE/8xLuI/TT95Mgn1z5OoboU0d0cslu0LMzyfXdXbDZr28KAvyXVbke9MM3
-         IrWpSeadTjd5oeAVuIQTl16BomOw7hlkAPht0vG4I5gVk5T+0ox8rF9IeR6KeFk7jV
-         vWGpIuTZR0RL1hKSd91hrVrpIyZiKs4H2BQK2hLc=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D734E1285ED4;
-        Fri,  9 Dec 2022 11:15:50 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id kjuxsnYbrp2c; Fri,  9 Dec 2022 11:15:50 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1670602550;
-        bh=+mlKx63NA5e7YuHIFGoTjYHHNKewPSbGFbu2Vyi7sd4=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=a027KazE/8xLuI/TT95Mgn1z5OoboU0d0cslu0LMzyfXdXbDZr28KAvyXVbke9MM3
-         IrWpSeadTjd5oeAVuIQTl16BomOw7hlkAPht0vG4I5gVk5T+0ox8rF9IeR6KeFk7jV
-         vWGpIuTZR0RL1hKSd91hrVrpIyZiKs4H2BQK2hLc=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 40AAA1285E6B;
-        Fri,  9 Dec 2022 11:15:50 -0500 (EST)
-Message-ID: <4406801fabc0c9dee9a17b045a392e5f8ab27aa6.camel@HansenPartnership.com>
-Subject: Re: [PATCH 06/11] tpm: Add full HMAC and encrypt/decrypt session
- handling code
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org
-Date:   Fri, 09 Dec 2022 11:15:48 -0500
-In-Reply-To: <20221209160611.30207-7-James.Bottomley@HansenPartnership.com>
-References: <20221209160611.30207-1-James.Bottomley@HansenPartnership.com>
-         <20221209160611.30207-7-James.Bottomley@HansenPartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Fri, 9 Dec 2022 14:04:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE373DF83;
+        Fri,  9 Dec 2022 11:04:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AA926230A;
+        Fri,  9 Dec 2022 19:04:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B0F6C433EF;
+        Fri,  9 Dec 2022 19:04:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670612664;
+        bh=yUWQOgEIaDmtTjkbKrKQhx+5Ioj4N+tSig1q86SSvhw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tLMnJl1PGg+JaRv9e0cov1W2dQSwupzZoGE56bhg8Hwg4PA3WcR5BIYhw7mVCEttj
+         iGHhEdfj7hyfUZz2uSLQ2iEXhc12d6p8wLdj2j//mBJ92/voNdjVjFS19amXkWVj5N
+         pwtXFLpr2NIckxsu3ultA4YzewH8cWptBr78vn10xjt0vEsNQPo3+LW9G4GVoufS6I
+         vrYW9c3eqMxE16+glX6oDbEE+Cq3QoLOFT5WB4a552VhRNK/nbES24rE8MK8ZRZZyI
+         O2v1QfkwgNdjfj9R1IMi10JM9xKAljGWriKvqkNPillS6YZ5ZQo6P6X+K3YcZRJzJS
+         yo5mmZFHUhc8Q==
+Date:   Fri, 9 Dec 2022 11:04:15 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] KEYS: asymmetric: Copy sig and digest in
+ public_key_verify_signature()
+Message-ID: <Y5OGr59A9wo86rYY@sol.localdomain>
+References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-12-09 at 11:06 -0500, James Bottomley wrote:
-> Signed-off-by: James Bottomley
-> <James.Bottomley@HansenPartnership.com>
-> Reviewed-by: Ard Biesheuvel <ard.biesheuvel@linaro.org> # crypto API
-> parts
+On Fri, Dec 09, 2022 at 04:06:33PM +0100, Roberto Sassu wrote:
+> +	/* key is used to store the sig and digest too. */
+> +	key = kmalloc(key_max_len, GFP_KERNEL);
+>  	if (!key)
+>  		goto error_free_req;
 
-Ard,
+Maybe just call this 'buf', as the key is just one of the purposes the buffer is
+used for now.
 
-I kept your reviewed by because the only minor change to this code over
-the last four years I've been running it is to accommodate the crypto
-layer move of the curve type from the key to the algorithm specifier
-(6763f5ea2d9a crypto: ecdh - move curve_id of ECDH from the key to
-algorithm name)
+> +	/* Cannot use one scatterlist. The first needs to be s->s_size long. */
+> +	sg_set_buf(&src_sg[0], key, sig->s_size);
+> +	sg_set_buf(&src_sg[1], key + sig->s_size, sig->digest_size);
+>  	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
+>  				   sig->digest_size);
 
-Regards,
+AFAIK, none of the crypto APIs that operate on 'scatterlist' are supposed to
+care how the data is divided up into scatterlist elements.  So it sounds like
+there is another bug that needs to be fixed.  It should be fixed, not worked
+around.
 
-James
-
+- Eric
