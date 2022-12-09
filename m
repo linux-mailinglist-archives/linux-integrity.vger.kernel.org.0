@@ -2,42 +2,43 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B4764863E
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Dec 2022 17:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B968D648640
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Dec 2022 17:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiLIQI4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Dec 2022 11:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S229704AbiLIQJX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Dec 2022 11:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLIQIz (ORCPT
+        with ESMTP id S229468AbiLIQJV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Dec 2022 11:08:55 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485995FBD;
-        Fri,  9 Dec 2022 08:08:54 -0800 (PST)
+        Fri, 9 Dec 2022 11:09:21 -0500
+X-Greylist: delayed 67 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Dec 2022 08:09:18 PST
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4155D6277;
+        Fri,  9 Dec 2022 08:09:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1670602133;
-        bh=qofRxaNJD3RRJqDlfi5G8exduyfqEZhmC9bEyj3GaRw=;
+        d=hansenpartnership.com; s=20151216; t=1670602157;
+        bh=SACuZ9qQZKFkIBEj5nHX9mpXGYN9nESZN0qGMbrT3zI=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-        b=hWhQDhHbaWRr76RzGFDbdQPPNx3/HiQMTRTgf1gaN34GjgCG/wxz0rCCHn4IKHlJI
-         3Vt22Jzp7bBqL61kZa/MfQfVUs9fIMjOwsoZPCBsFz5S75urhxnSJWHjmib7l6MXin
-         lUnGTLTlsN8gvVMknKAA35DM/n1cY9Kzqt0YwI/g=
+        b=WAI0Q4XJqH6gwOseZhyBSYync/4JuGdOsZ4hZ3bsx8Jm+3MTeuIhOfz2kpzeMbtZm
+         MtuV3Dn4sQpmxnMhgBuSVNBSoU/FQ68VAFAcx1sBmdgKIqID9lSbRuuCKR70rbRc7r
+         QQwiPm89d3Ra6aPsDQDbyT7ClUFSsMs9b5Is4+og=
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id BD94C128631F;
-        Fri,  9 Dec 2022 11:08:53 -0500 (EST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id F0B691281045;
+        Fri,  9 Dec 2022 11:09:17 -0500 (EST)
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id m_2GeTIuwY8p; Fri,  9 Dec 2022 11:08:53 -0500 (EST)
+        with ESMTP id AGWXrmwOh_sM; Fri,  9 Dec 2022 11:09:17 -0500 (EST)
 Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2E9B1128631C;
-        Fri,  9 Dec 2022 11:08:53 -0500 (EST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6555112803C0;
+        Fri,  9 Dec 2022 11:09:17 -0500 (EST)
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org
-Subject: [PATCH 04/11] tpm: add buffer function to point to returned parameters
-Date:   Fri,  9 Dec 2022 11:06:04 -0500
-Message-Id: <20221209160611.30207-5-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH 05/11] tpm: export the context save and load commands
+Date:   Fri,  9 Dec 2022 11:06:05 -0500
+Message-Id: <20221209160611.30207-6-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20221209160611.30207-1-James.Bottomley@HansenPartnership.com>
 References: <20221209160611.30207-1-James.Bottomley@HansenPartnership.com>
@@ -52,51 +53,57 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Introducing encryption sessions changes where the return parameters
-are located in the buffer because if a return session is present
-they're 4 bytes beyond the header with those 4 bytes showing the
-parameter length.  If there is no return session, then they're in the
-usual place immediately after the header.  The tpm_buf_parameters()
-encapsulates this calculation and should be used everywhere
-&buf.data[TPM_HEADER_SIZE] is used now
+The TPM2 session HMAC and encryption handling code needs to save and
+restore a single volatile context for the elliptic curve version of
+the NULL seed, so export the APIs which do this for internal use.
 
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
- drivers/char/tpm/tpm-buf.c | 10 ++++++++++
- include/linux/tpm.h        |  2 ++
- 2 files changed, 12 insertions(+)
+ drivers/char/tpm/tpm.h        | 4 ++++
+ drivers/char/tpm/tpm2-space.c | 8 ++++----
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-index 046b00bf7a81..b054aa2fc84b 100644
---- a/drivers/char/tpm/tpm-buf.c
-+++ b/drivers/char/tpm/tpm-buf.c
-@@ -184,3 +184,13 @@ u32 tpm_get_inc_u32(const u8 **ptr)
- 	return val;
- }
- EXPORT_SYMBOL_GPL(tpm_get_inc_u32);
-+
-+u8 *tpm_buf_parameters(struct tpm_buf *buf)
-+{
-+	int offset = TPM_HEADER_SIZE;
-+
-+	if (tpm_buf_tag(buf) == TPM2_ST_SESSIONS)
-+		offset += 4;
-+
-+	return &buf->data[offset];
-+}
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index f7cff1d114b0..fa8d1f932c0f 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -339,6 +339,8 @@ u8 tpm_get_inc_u8(const u8 **ptr);
- u16 tpm_get_inc_u16(const u8 **ptr);
- u32 tpm_get_inc_u32(const u8 **ptr);
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 24ee4e1cc452..a5fe37977103 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -237,6 +237,10 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
+ 		      size_t *bufsiz);
+ int tpm_devs_add(struct tpm_chip *chip);
+ void tpm_devs_remove(struct tpm_chip *chip);
++int tpm2_save_context(struct tpm_chip *chip, u32 handle, u8 *buf,
++		      unsigned int buf_size, unsigned int *offset);
++int tpm2_load_context(struct tpm_chip *chip, u8 *buf,
++		      unsigned int *offset, u32 *handle);
  
-+u8 *tpm_buf_parameters(struct tpm_buf *buf);
-+
- /*
-  * Check if TPM device is in the firmware upgrade mode.
-  */
+ void tpm_bios_log_setup(struct tpm_chip *chip);
+ void tpm_bios_log_teardown(struct tpm_chip *chip);
+diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+index ffb35f0154c1..d77ee4af9d65 100644
+--- a/drivers/char/tpm/tpm2-space.c
++++ b/drivers/char/tpm/tpm2-space.c
+@@ -68,8 +68,8 @@ void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
+ 	kfree(space->session_buf);
+ }
+ 
+-static int tpm2_load_context(struct tpm_chip *chip, u8 *buf,
+-			     unsigned int *offset, u32 *handle)
++int tpm2_load_context(struct tpm_chip *chip, u8 *buf,
++		      unsigned int *offset, u32 *handle)
+ {
+ 	struct tpm_buf tbuf;
+ 	struct tpm2_context *ctx;
+@@ -119,8 +119,8 @@ static int tpm2_load_context(struct tpm_chip *chip, u8 *buf,
+ 	return 0;
+ }
+ 
+-static int tpm2_save_context(struct tpm_chip *chip, u32 handle, u8 *buf,
+-			     unsigned int buf_size, unsigned int *offset)
++int tpm2_save_context(struct tpm_chip *chip, u32 handle, u8 *buf,
++		      unsigned int buf_size, unsigned int *offset)
+ {
+ 	struct tpm_buf tbuf;
+ 	unsigned int body_size;
 -- 
 2.35.3
 
