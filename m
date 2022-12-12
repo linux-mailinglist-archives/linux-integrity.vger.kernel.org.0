@@ -2,104 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5150649829
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Dec 2022 04:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE1C649AAD
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Dec 2022 10:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiLLDQs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 11 Dec 2022 22:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
+        id S231676AbiLLJIW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Dec 2022 04:08:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLLDQr (ORCPT
+        with ESMTP id S231371AbiLLJIV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 11 Dec 2022 22:16:47 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D466336;
-        Sun, 11 Dec 2022 19:16:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1670815006;
-        bh=BtVRd1FtJTUyfciKR9BvdNVB9YPPZcl6EszfMRXpmNg=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=mPexR1lxM4FsqNRmVtTPbRZ4uZShIakQEFu9Mtrae1UyCpaf6AgqgpafRktUA0bs3
-         IbBIrVrMwz7J7Bqlb6XKUg7rKjs+OcLIAiGFGaX0tef4loibn47M3WrA3PYyawxxOO
-         r3J7x8YjBBtQmnUKplXQdzL77caEkDEBrkehw0h0=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0EEB41280FBF;
-        Sun, 11 Dec 2022 22:16:46 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ocz4WpDq3ua2; Sun, 11 Dec 2022 22:16:45 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1670815005;
-        bh=BtVRd1FtJTUyfciKR9BvdNVB9YPPZcl6EszfMRXpmNg=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=dmZxNTgi0uagVSqzfjRRh/onb5nYHX4KeZ6vxUFw9ZBjyNZLkI/yhgP859dIKxHgf
-         MPX6k+YXKcx7mTHO5MkJFrr69ex/VJiXWDYHIPZg2L5PS/sqhn9t97cQOXL13K7HiP
-         MMIUZ5X9NoncKT6vXhXgRT6e+ef/XdOLujly/3iE=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id D9492128064E;
-        Sun, 11 Dec 2022 22:16:44 -0500 (EST)
-Message-ID: <e32ead8270f65fe7bf828fe90d457caac4234dce.camel@HansenPartnership.com>
-Subject: Re: [PATCH 01/11] tpm: move buffer handling from static inlines to
- real functions
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        keyrings@vger.kernel.org
-Date:   Sun, 11 Dec 2022 22:16:42 -0500
-In-Reply-To: <Y5Z7awuHL9Wsn2l/@kernel.org>
-References: <20221209160611.30207-1-James.Bottomley@HansenPartnership.com>
-         <20221209160611.30207-2-James.Bottomley@HansenPartnership.com>
-         <Y5PqRdlEdBjj72KM@kernel.org>
-         <704a88efc2a7cf5c2679af2ca37a682efd6ceaa2.camel@HansenPartnership.com>
-         <Y5Z7awuHL9Wsn2l/@kernel.org>
+        Mon, 12 Dec 2022 04:08:21 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17477B1B;
+        Mon, 12 Dec 2022 01:08:20 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NVwb538bmz9xFH5;
+        Mon, 12 Dec 2022 17:01:05 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDnbwth75ZjYBEIAA--.129S2;
+        Mon, 12 Dec 2022 10:07:55 +0100 (CET)
+Message-ID: <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
+Subject: Re: [PATCH v2] KEYS: asymmetric: Copy sig and digest in
+ public_key_verify_signature()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Mon, 12 Dec 2022 10:07:38 +0100
+In-Reply-To: <Y5OGr59A9wo86rYY@sol.localdomain>
+References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
+         <Y5OGr59A9wo86rYY@sol.localdomain>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwDnbwth75ZjYBEIAA--.129S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFy3uw1rGrWUZryxKrWfKrg_yoW8XF4Upw
+        43Zr4DtrWDWrW8Cw1xua4xt3yFg3yYyFWUGa40k345urn8Wr9YkrykWayI9FWUtrykWrs2
+        vrWUWan8Zr9xAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4KGBgABsw
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-12-12 at 00:52 +0000, Jarkko Sakkinen wrote:
-> On Sun, Dec 11, 2022 at 03:01:57PM -0500, James Bottomley wrote:
-> > On Sat, 2022-12-10 at 02:09 +0000, Jarkko Sakkinen wrote:
-> > > On Fri, Dec 09, 2022 at 11:06:01AM -0500, James Bottomley wrote:
-> > > > This separates out the old tpm_buf_... handling functions from
-> > > > static
-> > > > inlines in tpm.h and makes them their own tpm-buf.c file.  This
-> > > > is
-> > > > a
-> > > > precursor so we can add new functions for other TPM type
-> > > > handling
-> > > > 
-> > > > Signed-off-by: James Bottomley
-> > > > <James.Bottomley@HansenPartnership.com>
-> > > 
-> > > I don't comprehend that explanation at all.
-> > > 
-> > > Please, add a bit more detail why this precursory change is
-> > > required.
-> > 
-> > It's the usual submitting-patches requirement of moving code first
-> > before modifying it.  Since it's the recommended way of doing
-> > things in our process docs, I'm not sure how much more explanation
-> > can be given.
+On Fri, 2022-12-09 at 11:04 -0800, Eric Biggers wrote:
+> On Fri, Dec 09, 2022 at 04:06:33PM +0100, Roberto Sassu wrote:
+> > +	/* key is used to store the sig and digest too. */
+> > +	key = kmalloc(key_max_len, GFP_KERNEL);
+> >  	if (!key)
+> >  		goto error_free_req;
 > 
-> It doesn not contain any reasonable argument for not continue
-> using inline functions.
+> Maybe just call this 'buf', as the key is just one of the purposes the buffer is
+> used for now.
 
-In principle nothing prevents them being inlines in tpm.h.  There's
-quite a lot of them, so it's growing unweildy and __tpm_buf_init can't
-be hidden in that scenario but it could, in theory, be done.
+Yes, better.
 
-James
+> > +	/* Cannot use one scatterlist. The first needs to be s->s_size long. */
+> > +	sg_set_buf(&src_sg[0], key, sig->s_size);
+> > +	sg_set_buf(&src_sg[1], key + sig->s_size, sig->digest_size);
+> >  	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
+> >  				   sig->digest_size);
+> 
+> AFAIK, none of the crypto APIs that operate on 'scatterlist' are supposed to
+> care how the data is divided up into scatterlist elements.  So it sounds like
+> there is another bug that needs to be fixed.  It should be fixed, not worked
+> around.
 
+The problem is a misalignment between req->src_len (set to sig->s_size
+by akcipher_request_set_crypt()) and the length of the scatterlist (if
+we set the latter to sig->s_size + sig->digest_size).
+
+When rsa_enc() calls mpi_read_raw_from_sgl(), it passes req->src_len as
+argument, and the latter allocates the MPI according to that. However,
+it does parsing depending on the length of the scatterlist.
+
+If there are two scatterlists, it is not a problem, there is no
+misalignment. mpi_read_raw_from_sgl() picks the first. If there is just
+one, mpi_read_raw_from_sgl() parses all data there.
+
+Roberto
 
