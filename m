@@ -2,83 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB9C649779
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Dec 2022 01:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5416497F6
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Dec 2022 03:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiLLAxJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 11 Dec 2022 19:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
+        id S230461AbiLLCj3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 11 Dec 2022 21:39:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiLLAxI (ORCPT
+        with ESMTP id S230364AbiLLCj2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 11 Dec 2022 19:53:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49E15F78;
-        Sun, 11 Dec 2022 16:53:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D929BB80884;
-        Mon, 12 Dec 2022 00:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A1CC433D2;
-        Mon, 12 Dec 2022 00:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670806383;
-        bh=i25NifDmKXiZMFx/NkvrxhOa+pPsxs5GuEdk96SEk3Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H+Pk8n3AdxbVGq5XSCvZzbGHmhMrEau03AmWDuoPX5Kxs5y3mBbCjDUZLZs4ON/fV
-         Fr/qFyMSjGQTT1B+WxUMkhYW9DgubNsSU/RQOt8FdpIuxQgq/SHG8OOpz38Wieuk7w
-         VNJWFGGKJUcwcQYttxa4nN0BFlBAKOVteZdN+vI6NjD4Tkufbdm0+jL6kA0zySZY15
-         gZDHMgT3BmSNctX4LVFT2QbiCJLnRyVPg1FpzK1dZsfdGZE/HJdV5KyePurDOhtFrM
-         N1gzePiW4iHXDz7wgzEiOG0rCYeuD6s72mHw+eKsDWlo/a6Jv52VKx4CJpw3yn7t7V
-         XW0uIZI/EtKIA==
-Date:   Mon, 12 Dec 2022 00:52:59 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        keyrings@vger.kernel.org
-Subject: Re: [PATCH 01/11] tpm: move buffer handling from static inlines to
- real functions
-Message-ID: <Y5Z7awuHL9Wsn2l/@kernel.org>
-References: <20221209160611.30207-1-James.Bottomley@HansenPartnership.com>
- <20221209160611.30207-2-James.Bottomley@HansenPartnership.com>
- <Y5PqRdlEdBjj72KM@kernel.org>
- <704a88efc2a7cf5c2679af2ca37a682efd6ceaa2.camel@HansenPartnership.com>
+        Sun, 11 Dec 2022 21:39:28 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DCEBC97;
+        Sun, 11 Dec 2022 18:39:27 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NVm2Y4bt3zJpHK;
+        Mon, 12 Dec 2022 10:35:49 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Mon, 12 Dec 2022 10:39:25 +0800
+Message-ID: <300eab0e-271f-7dac-615c-e8594e1cd4a4@huawei.com>
+Date:   Mon, 12 Dec 2022 10:39:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <704a88efc2a7cf5c2679af2ca37a682efd6ceaa2.camel@HansenPartnership.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [RFC] IMA LSM based rule race condition issue on 4.19 LTS
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>, <sds@tycho.nsa.gov>,
+        <eparis@parisplace.org>, <sashal@kernel.org>,
+        <selinux@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        <stable@vger.kernel.org>
+References: <389334fe-6e12-96b2-6ce9-9f0e8fcb85bf@huawei.com>
+ <Y5Lf8SRgyrqDJwiH@kroah.com>
+ <93d137dc-e0d3-3741-7e01-dca1ba9c0903@huawei.com>
+ <Y5L10fjvxmU3klRu@kroah.com>
+ <58219c48-840d-b4f3-b195-82b2a1465b37@huawei.com>
+ <Y5L5RZlOOd9RMeWw@kroah.com>
+ <d69f9bd3-de1f-aa32-7c6b-30d909f724d0@huawei.com>
+ <Y5L+Tpym6XRrZSLB@kroah.com>
+ <8e409a81-dc00-f022-08fe-c1c26e9cf5e8@huawei.com>
+ <415d44a2-33a1-c100-1ffc-ad6f1409afd8@huawei.com>
+ <Y5MNi85uzgXIMxX2@kroah.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <Y5MNi85uzgXIMxX2@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 03:01:57PM -0500, James Bottomley wrote:
-> On Sat, 2022-12-10 at 02:09 +0000, Jarkko Sakkinen wrote:
-> > On Fri, Dec 09, 2022 at 11:06:01AM -0500, James Bottomley wrote:
-> > > This separates out the old tpm_buf_... handling functions from
-> > > static
-> > > inlines in tpm.h and makes them their own tpm-buf.c file.  This is
-> > > a
-> > > precursor so we can add new functions for other TPM type handling
-> > > 
-> > > Signed-off-by: James Bottomley
-> > > <James.Bottomley@HansenPartnership.com>
-> > 
-> > I don't comprehend that explanation at all.
-> > 
-> > Please, add a bit more detail why this precursory change is required.
+On 2022/12/9 18:27, Greg KH wrote:
+> On Fri, Dec 09, 2022 at 05:38:00PM +0800, Guozihua (Scott) wrote:
+>> On 2022/12/9 17:32, Guozihua (Scott) wrote:
+>>> On 2022/12/9 17:22, Greg KH wrote:
+>>>> On Fri, Dec 09, 2022 at 05:11:40PM +0800, Guozihua (Scott) wrote:
+>>>>> On 2022/12/9 17:00, Greg KH wrote:
+>>>>>> On Fri, Dec 09, 2022 at 04:59:17PM +0800, Guozihua (Scott) wrote:
+>>>>>>> On 2022/12/9 16:46, Greg KH wrote:
+>>>>>>>> On Fri, Dec 09, 2022 at 03:53:25PM +0800, Guozihua (Scott) wrote:
+>>>>>>>>> On 2022/12/9 15:12, Greg KH wrote:
+>>>>>>>>>> On Fri, Dec 09, 2022 at 03:00:35PM +0800, Guozihua (Scott) wrote:
+>>>>>>>>>>> Hi community.
+>>>>>>>>>>>
+>>>>>>>>>>> Previously our team reported a race condition in IMA relates to LSM based
+>>>>>>>>>>> rules which would case IMA to match files that should be filtered out under
+>>>>>>>>>>> normal condition. The issue was originally analyzed and fixed on mainstream.
+>>>>>>>>>>> The patch and the discussion could be found here:
+>>>>>>>>>>> https://lore.kernel.org/all/20220921125804.59490-1-guozihua@huawei.com/
+>>>>>>>>>>>
+>>>>>>>>>>> After that, we did a regression test on 4.19 LTS and the same issue arises.
+>>>>>>>>>>> Further analysis reveled that the issue is from a completely different
+>>>>>>>>>>> cause.
+>>>>>>>>>>
+>>>>>>>>>> What commit in the tree fixed this in newer kernels?  Why can't we just
+>>>>>>>>>> backport that one to 4.19.y as well?
+>>>>>>>>>>
+>>>>>>>>>> thanks,
+>>>>>>>>>>
+>>>>>>>>>> greg k-h
+>>>>>>>>>
+>>>>>>>>> Hi Greg,
+>>>>>>>>>
+>>>>>>>>> The fix for mainline is now on linux-next, commit 	d57378d3aa4d ("ima:
+>>>>>>>>> Simplify ima_lsm_copy_rule") and 	c7423dbdbc9ece ("ima: Handle -ESTALE
+>>>>>>>>> returned by ima_filter_rule_match()"). However, these patches cannot be
+>>>>>>>>> picked directly into 4.19.y due to code difference.
+>>>>>>>>
+>>>>>>>> Ok, so it's much more than just 4.19 that's an issue here.  And are
+>>>>>>>> those commits tagged for stable inclusion?
+>>>>>>>
+>>>>>>> Not actually, not on the commit itself.
+>>>>>>
+>>>>>> That's not good.  When they hit Linus's tree, please submit backports to
+>>>>>> the stable mailing list so that they can be picked up.
+>>>>> Thing is these commits cannot be simply backported to 4.19.y. Preceding
+>>>>> patches are missing. How do we do backporting in this situation? Do we
+>>>>> first backport the preceding patches? Or maybe we develop another
+>>>>> solution for 4.19.y?
+>>>>
+>>>> First they need to go to newer kernel trees, and then worry about 4.19.
+>>>> We never want anyone to upgrade to a newer kernel and have a regression.
+>>>>
+>>>> Also, we can't do anything until they hit Linus's tree, as per the
+>>>> stable kernel rules.
+>>> Alright. We'll wait for these patches to be in Linus' tree. But should
+>>> we stick to a backport from mainstream or we form a different solution
+>>> for LTS?
 > 
-> It's the usual submitting-patches requirement of moving code first
-> before modifying it.  Since it's the recommended way of doing things in
-> our process docs, I'm not sure how much more explanation can be given.
+> We always want to have a normal backport of what is in Linus's tree if
+> at all possible.  Whenever we diverge from that, we almost always get it
+> wrong and have to fix it up again later.
+> 
+>> BTW, I have a look into it and if we are backporting mainstream's
+>> solution, we would also needs to backport b16942455193 ("ima: use the
+>> lsm policy update notifier")
+> 
+> That's fine, please just send a patch series to the stable list when
+> needed.
+> 
+> thanks,
+> 
+> greg k-h
 
-It doesn not contain any reasonable argument for not continue
-using inline functions.
+Thanks Greg.
 
-BR, Jarkko
+Any thought from Mimi?
+
+-- 
+Best
+GUO Zihua
+
