@@ -2,91 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D7164B86D
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Dec 2022 16:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8572964BDE3
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Dec 2022 21:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236175AbiLMPad (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 13 Dec 2022 10:30:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
+        id S238078AbiLMUYq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 13 Dec 2022 15:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235463AbiLMPad (ORCPT
+        with ESMTP id S237848AbiLMUYR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:30:33 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F8911829;
-        Tue, 13 Dec 2022 07:30:31 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDF9XNa028390;
-        Tue, 13 Dec 2022 15:30:13 GMT
+        Tue, 13 Dec 2022 15:24:17 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683E527DD5;
+        Tue, 13 Dec 2022 12:20:09 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDJXNTZ008119;
+        Tue, 13 Dec 2022 20:20:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=nVPaX5QJ+Zz8gxqvh/aOCvC4eDf3fQpQJTn1yo4HVEs=;
- b=r/2rSbfzdTApeNx0iEplqCK53ZzWs0PqKa2J/MiKyjrMZMBvnVfugsgyDBLzF+6SkQHf
- G+wiZZatvtuQ1MqzI2jOnbgrSos1O7iJzgYPWI0vIkJ8pu7YcOX4jeu6MiZ2YGqjARWk
- 6bALfaZfDW20HCOGNyLOUggKSn3021ariWRfAsfZpovWx8X9dGiEzOa4fcWpKKMCykK4
- mo4tj5EW+HI5kH4wjqaOzTs1DtNuKbaCV4izVWzSlz8YIVkp4ic+3qH39sT3+es0XkUT
- R7hOYS+AHP1Yt+kQsSZwj5OTOg4EmsPLQbXUJb019ZhRzGr7+XEYG6sfrWTXV+7cg2eA 7w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mesmxckab-1
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=zkFJ3+RBL9CmYP4LHNdAMRtSER55VO4d7qnzzXFPKNk=;
+ b=iQj1lFJYrYi3TfvtvGYK8oLXUNAD5Yr8YkUwnpdzDiuaqeZ9sW89BKfAue4GwRFYB3E7
+ UssIwnzdMvVyzCMwhBscGyiNZhhuKyJFDhvUZsuLY+c+nEVxhDqi+zk75uS5WFb/hDyB
+ 1jDZ7cxIP5ZhTGvYOEOUJ5aUzNXL6SMjHdGJ0X0scXdcc0EmTnuJeAIaX88lbtN+THvM
+ LsopWvzAFE7oXbDgNwespQPPar4DooRsLonGWOgWah7v48j+13h08szh41JaRaDnnoue
+ ItYAq6whStiHQnfBH8pVuP47gsOIu4e31D398fOCwdzJ3jzDi0sThC8+HkGuDDT0NMEC 3g== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3meyn5h2e3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 15:30:13 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BDFCHb0006064;
-        Tue, 13 Dec 2022 15:30:12 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mesmxck9d-1
+        Tue, 13 Dec 2022 20:20:08 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDJsrKe011789;
+        Tue, 13 Dec 2022 20:20:07 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3meyyhg6j7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 15:30:12 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.16.1.2) with ESMTP id 2BDEj9Lx019468;
-        Tue, 13 Dec 2022 15:30:11 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3mchr6s71e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 15:30:11 +0000
-Received: from smtpav01.dal12v.mail.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDFUATI48365978
+        Tue, 13 Dec 2022 20:20:06 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDKK5UQ36110628
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Dec 2022 15:30:10 GMT
-Received: from smtpav01.dal12v.mail.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E3D3458061;
-        Tue, 13 Dec 2022 15:30:09 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D95A58058;
-        Tue, 13 Dec 2022 15:30:09 +0000 (GMT)
+        Tue, 13 Dec 2022 20:20:05 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62FB958062;
+        Tue, 13 Dec 2022 20:20:05 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 805D358054;
+        Tue, 13 Dec 2022 20:20:04 +0000 (GMT)
 Received: from sig-9-65-192-247.ibm.com (unknown [9.65.192.247])
-        by smtpav01.dal12v.mail.com (Postfix) with ESMTP;
-        Tue, 13 Dec 2022 15:30:09 +0000 (GMT)
-Message-ID: <efd4ce83299a10b02b1c04cc94934b8d51969e1c.camel@linux.ibm.com>
-Subject: Re: [RFC] IMA LSM based rule race condition issue on 4.19 LTS
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 13 Dec 2022 20:20:04 +0000 (GMT)
+Message-ID: <7b388195aa5e10f1da934ed251809a6f21bf427e.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity: susbsytem updates for v6.2
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>,
-        dmitry.kasatkin@gmail.com, Paul Moore <paul@paul-moore.com>,
-        sds@tycho.nsa.gov, eparis@parisplace.org,
-        Greg KH <gregkh@linuxfoundation.org>, sashal@kernel.org
-Cc:     selinux@vger.kernel.org,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        stable@vger.kernel.org
-Date:   Tue, 13 Dec 2022 10:30:08 -0500
-In-Reply-To: <389334fe-6e12-96b2-6ce9-9f0e8fcb85bf@huawei.com>
-References: <389334fe-6e12-96b2-6ce9-9f0e8fcb85bf@huawei.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 13 Dec 2022 15:20:04 -0500
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zOxeuoPUB74ZbgwDoR4_FV4X8X9oesGG
-X-Proofpoint-ORIG-GUID: k67Y2O8uFLeNPHT5Y8ttIusX1iE9c5-p
+X-Proofpoint-ORIG-GUID: lOsr9YuEthwvn5bDQEn4nApY5vUhZzy-
+X-Proofpoint-GUID: lOsr9YuEthwvn5bDQEn4nApY5vUhZzy-
 Content-Transfer-Encoding: 7bit
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 bulkscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0
- mlxlogscore=999 priorityscore=1501 phishscore=0 suspectscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212130133
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 impostorscore=0 mlxlogscore=999
+ lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212130175
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -96,119 +82,71 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-12-09 at 15:00 +0800, Guozihua (Scott) wrote:
-> Hi community.
-> 
-> Previously our team reported a race condition in IMA relates to LSM 
-> based rules which would case IMA to match files that should be filtered 
-> out under normal condition. The issue was originally analyzed and fixed 
-> on mainstream. The patch and the discussion could be found here: 
-> https://lore.kernel.org/all/20220921125804.59490-1-guozihua@huawei.com/
-> 
-> After that, we did a regression test on 4.19 LTS and the same issue 
-> arises. Further analysis reveled that the issue is from a completely 
-> different cause.
-> 
-> The cause is that selinux_audit_rule_init() would set the rule (which is 
-> a second level pointer) to NULL immediately after called. The relevant 
-> codes are as shown:
-> 
-> security/selinux/ss/services.c:
-> > int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
-> > {
-> >         struct selinux_state *state = &selinux_state;
-> >         struct policydb *policydb = &state->ss->policydb;
-> >         struct selinux_audit_rule *tmprule;
-> >         struct role_datum *roledatum;
-> >         struct type_datum *typedatum;
-> >         struct user_datum *userdatum;
-> >         struct selinux_audit_rule **rule = (struct selinux_audit_rule **)vrule;
-> >         int rc = 0;
-> > 
-> >         *rule = NULL;
-> *rule is set to NULL here, which means the rule on IMA side is also NULL.
-> > 
-> >         if (!state->initialized)
-> >                 return -EOPNOTSUPP;
-> ...
-> > out:
-> >         read_unlock(&state->ss->policy_rwlock);
-> > 
-> >         if (rc) {
-> >                 selinux_audit_rule_free(tmprule);
-> >                 tmprule = NULL;
-> >         }
-> > 
-> >         *rule = tmprule;
-> rule is updated at the end of the function.
-> > 
-> >         return rc;
-> > }
-> 
-> security/integrity/ima/ima_policy.c:
-> > static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
-> >                             const struct cred *cred, u32 secid,
-> >                             enum ima_hooks func, int mask)
-> > {...
-> > for (i = 0; i < MAX_LSM_RULES; i++) {
-> >                 int rc = 0;
-> >                 u32 osid;
-> >                 int retried = 0;
-> > 
-> >                 if (!rule->lsm[i].rule)
-> >                         continue;
-> Setting rule to NULL would lead to LSM based rule matching being skipped.
-> > retry:
-> >                 switch (i) {
-> 
-> To solve this issue, there are multiple approaches we might take and I 
-> would like some input from the community.
-> 
-> The first proposed solution would be to change 
-> selinux_audit_rule_init(). Remove the set to NULL bit and update the 
-> rule pointer with cmpxchg.
-> 
-> > diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-> > index a9f2bc8443bd..aa74b04ccaf7 100644
-> > --- a/security/selinux/ss/services.c
-> > +++ b/security/selinux/ss/services.c
-> > @@ -3297,10 +3297,9 @@ int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
-> >         struct type_datum *typedatum;
-> >         struct user_datum *userdatum;
-> >         struct selinux_audit_rule **rule = (struct selinux_audit_rule **)vrule;
-> > +       struct selinux_audit_rule *orig = rule;
-> >         int rc = 0;
-> >  
-> > -       *rule = NULL;
-> > -
-> >         if (!state->initialized)
-> >                 return -EOPNOTSUPP;
-> >  
-> > @@ -3382,7 +3381,8 @@ int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
-> >                 tmprule = NULL;
-> >         }
-> >  
-> > -       *rule = tmprule;
-> > +       if (cmpxchg(rule, orig, tmprule) != orig)
-> > +               selinux_audit_rule_free(tmprule);
-> >  
-> >         return rc;
-> >  }
-> 
-> This solution would be an easy fix, but might influence other modules 
-> calling selinux_audit_rule_init() directly or indirectly (on 4.19 LTS, 
-> only auditfilter and IMA it seems). And it might be worth returning an 
-> error code such as -EAGAIN.
-> 
-> Or, we can access rules via RCU, similar to what we do on 5.10. This 
-> could means more code change and testing.
+Hi Linus,
 
-In the 4.19 kernel, IMA is doing a lazy LSM based policy rule update as
-needed.  IMA waits for selinux_audit_rule_init() to complete and
-shouldn't see NULL, unless there is an SELinux failure.  Before
-"fixing" the problem, what exactly is the problem?
+Aside from the one cleanup, the other changes are bug fixes:
+
+Cleanup:
+- Include missing iMac Pro 2017 in list of Macs with T2 security chip
+
+Bugs:
+- Improper instantiation of "encrypted" keys with user provided data
+- Not handling delay in updating LSM label based IMA policy rules (-
+ESTALE)
+- IMA and integrity memory leaks on error paths
+- CONFIG_IMA_DEFAULT_HASH_SM3 hash algorithm renamed
 
 thanks,
 
 Mimi
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.2
+
+for you to fetch changes up to b6018af440a07bd0d74b58c4e18045f4a8dbfe6b:
+
+  ima: Fix hash dependency to correct algorithm (2022-11-28 16:44:34 -0500)
+
+----------------------------------------------------------------
+integrity-v6.2
+
+----------------------------------------------------------------
+Aditya Garg (1):
+      efi: Add iMac Pro 2017 to uefi skip cert quirk
+
+GUO Zihua (3):
+      ima: Simplify ima_lsm_copy_rule
+      ima: Handle -ESTALE returned by ima_filter_rule_match()
+      integrity: Fix memory leakage in keyring allocation error path
+
+Huaxin Lu (1):
+      ima: Fix a potential NULL pointer access in ima_restore_measurement_list
+
+Nikolaus Voss (1):
+      KEYS: encrypted: fix key instantiation with user-provided data
+
+Roberto Sassu (1):
+      ima: Fix memory leak in __ima_inode_hash()
+
+Tianjia Zhang (1):
+      ima: Fix hash dependency to correct algorithm
+
+Xiu Jianfeng (1):
+      ima: Fix misuse of dereference of pointer in template_desc_init_fields()
+
+ Documentation/security/keys/trusted-encrypted.rst |  3 +-
+ security/integrity/digsig.c                       |  6 ++-
+ security/integrity/ima/Kconfig                    |  2 +-
+ security/integrity/ima/ima_main.c                 |  7 +++-
+ security/integrity/ima/ima_policy.c               | 51 ++++++++++++++++-------
+ security/integrity/ima/ima_template.c             |  9 ++--
+ security/integrity/platform_certs/load_uefi.c     |  1 +
+ security/keys/encrypted-keys/encrypted.c          |  6 +--
+ 8 files changed, 59 insertions(+), 26 deletions(-)
+
 
