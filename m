@@ -2,187 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4187864DA39
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Dec 2022 12:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F5864DB92
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Dec 2022 13:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiLOLZ6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Dec 2022 06:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S229462AbiLOMsP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Dec 2022 07:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiLOLZ4 (ORCPT
+        with ESMTP id S229627AbiLOMrv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Dec 2022 06:25:56 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEDC2A95A;
-        Thu, 15 Dec 2022 03:25:55 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFBKUPV032337;
-        Thu, 15 Dec 2022 11:25:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=z7xOxeP/BmvlbavOrsl3suBVa3QPrzmm4oon1sLgOmw=;
- b=N4QyD7EwXjl/JhDDCMeqSKuPUz2VI+dVnbzjPmz3DVLeJXwC6qBs2e57JzBs8gExwUnb
- uAS7HmatZphU7niRTxcjSBjqI+IMuqGYabA1re9nX8MXsJLhhGPBHTSYxK+kDVdJO8lB
- ro9AY2p+w7KdEQY49XTaVOQslEbbcI+BnbWDtMe0+5TYlwhO68Tr2BX96ZFjp6dC1Zf9
- N+woK5beSE5Qw0DuoDKHhtJHy0H9qD5sWUD2cmzRyL9EnJ7d6NknjV+ycG7JNh2hxtXW
- /jLBwrMlDkdkxnSUe9mZrtaf6llQgfnD/UPS1AEHug8zyJSQ7p7zTLebXdry+okawLtA dQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg2meg2cc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 11:25:29 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BFBKlje000961;
-        Thu, 15 Dec 2022 11:25:28 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mg2meg2bv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 11:25:28 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFAgVAL011783;
-        Thu, 15 Dec 2022 11:25:27 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3meyyhwc8v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 11:25:27 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BFBPQeD7930554
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Dec 2022 11:25:26 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 09A1F58060;
-        Thu, 15 Dec 2022 11:25:26 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E71F5805E;
-        Thu, 15 Dec 2022 11:25:24 +0000 (GMT)
-Received: from sig-9-65-242-118.ibm.com (unknown [9.65.242.118])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Dec 2022 11:25:24 +0000 (GMT)
-Message-ID: <26bb48845023a4e6515e1d4f6e1f38eb7e96e16d.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 04/10] KEYS: X.509: Parse Key Usage
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, noodles@fb.com, tiwai@suse.de,
-        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
-        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Thu, 15 Dec 2022 06:25:24 -0500
-In-Reply-To: <20221214003401.4086781-5-eric.snowberg@oracle.com>
-References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
-         <20221214003401.4086781-5-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ve0kohc5bjUKS47Woj99Hr9fxVMuq-dS
-X-Proofpoint-ORIG-GUID: Y-cu894W-yZrl_eyoCdOUDvzzh0O-NTr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-15_05,2022-12-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 suspectscore=0 clxscore=1015 phishscore=0 bulkscore=0
- impostorscore=0 adultscore=0 priorityscore=1501 mlxscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212150086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Dec 2022 07:47:51 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CF923C
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Dec 2022 04:47:14 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NXsJC0Wlsz9xFQL
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Dec 2022 20:39:55 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAHkQxCF5tjfOoVAA--.22936S2;
+        Thu, 15 Dec 2022 13:47:05 +0100 (CET)
+Message-ID: <b438365f99bef86056d679252f9799136a4bda35.camel@huaweicloud.com>
+Subject: Re: IMA & tpm_unsealdata with PCR 10
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     =?ISO-8859-1?Q?Micha=EBl?= Musset <mickamusset@gmail.com>,
+        linux-integrity@vger.kernel.org
+Date:   Thu, 15 Dec 2022 13:46:54 +0100
+In-Reply-To: <CAF+MRt=yraJgxyXtv==30_drA=wLi36RVBPwK_34WCzw=C_Z3A@mail.gmail.com>
+References: <CAF+MRt=yraJgxyXtv==30_drA=wLi36RVBPwK_34WCzw=C_Z3A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwAHkQxCF5tjfOoVAA--.22936S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WrW5Kr1kXr4fuw47tw4fKrg_yoW8Kw4kpa
+        1agr1akF4DJ3WSkryIkr1UW340vrZ5Ja1UX3s5G348Zay5Gryv9r40ka4Y9Fy2qr4vvw1Y
+        y3W09r1fJ3s8JaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj4auLwABs1
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-12-13 at 19:33 -0500, Eric Snowberg wrote:
-> Parse the X.509 Key Usage.  The key usage extension defines the purpose of
-> the key contained in the certificate.
+On Thu, 2022-12-15 at 11:54 +0100, Michaël Musset wrote:
+> Hi,
 > 
->    id-ce-keyUsage OBJECT IDENTIFIER ::=  { id-ce 15 }
+> I've enabled IMA , policy that are enabled, checked only binary file and module.
 > 
->       KeyUsage ::= BIT STRING {
->            digitalSignature        (0),
->            contentCommitment       (1),
->            keyEncipherment         (2),
->            dataEncipherment        (3),
->            keyAgreement            (4),
->            keyCertSign             (5),
->            cRLSign                 (6),
->            encipherOnly            (7),
->            decipherOnly            (8) }
+> The problem is that the booting of systemd is not predictable, so
+> after each boot the PCR 10 is different.
+
+Hi Michael
+
+yes, this is one of the problems of doing file measurements with
+parallel execution. It is a property of the TPM PCR extension, to bind
+the current measurement to the previous ones. It is for security
+reasons, to avoid an attacker to go back to when there were only good
+measurements.
+
+> Then I'm unable to use tpm_unsealdata at PCR 10 .
+
+Yes, with the current measurement approach it is not feasible.
+
+> I would like to have your opinion on that. What is the point of PCR 10
+> if it's not the same at a certain moment on the linux boot.
+
+PCR 10 was intended to protect the integrity of measurements, to be
+sent to remote verifiers. Those verifiers, by seeing the measurements,
+can conclude if the properties they are interested in are successfully
+verified or not.
+
+> I wanted to use PCR 10 to protect a key based on the hash of each
+> binary in my linux SD.
+
+I have developed a solution that does what you want. It is called
+DIGLIM:
+
+https://lore.kernel.org/linux-integrity/20210914163401.864635-1-roberto.sassu@huawei.com/
+
+At boot time, before init, it extends a PCR with a list of digests of
+files from your disk (or better, from your Linux distribution, signed
+by the vendor). IMA then searches the digest of the files being
+accessed at run-time in that preloaded list. If it finds it, it does
+not further extend the PCR. Otherwise, it extends the PCR.
+
+With this scheme, the PCR is again predictable and you can seal keys
+with it. After an unknown file was accessed, the key becomes unusable
+(due to the PCR extend).
+
+I actually implemented a library:
+
+https://github.com/openeuler-mirror/attest-tools
+
+to generate keys and certificates to be used for a TLS connection. The
+key is bound to the list of file digests (and to the other components
+involved in the boot process). It requires openssl_tpm2_engine from
+James Bottomley.
+
+> looks like this is not the correct way,
 > 
-> If the keyCertSign is set, store it in the x509_certificate structure.
-> This will be used in a follow on patch that requires knowing the
-> certificate key usage type.
-
-Either in this patch or separately, the "digitalSignature" key usage
-flag needs to be saved.
-
+> I've an idea to fix it :
 > 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> ---
->  crypto/asymmetric_keys/x509_cert_parser.c | 22 ++++++++++++++++++++++
->  crypto/asymmetric_keys/x509_parser.h      |  1 +
->  2 files changed, 23 insertions(+)
-> 
-> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-> index b4443e507153..edb22cf04eed 100644
-> --- a/crypto/asymmetric_keys/x509_cert_parser.c
-> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
-> @@ -579,6 +579,28 @@ int x509_process_extension(void *context, size_t hdrlen,
->  		return 0;
->  	}
->  
-> +	if (ctx->last_oid == OID_keyUsage) {
-> +		/*
-> +		 * Get hold of the keyUsage bit string to validate keyCertSign
-> +		 * v[1] is the encoding size
-> +		 *       (Expect either 0x02 or 0x03, making it 1 or 2 bytes)
-> +		 * v[2] is the number of unused bits in the bit string
-> +		 *       (If >= 3 keyCertSign is missing)
-> +		 * v[3] and possibly v[4] contain the bit string
-> +		 * 0x04 is where KeyCertSign lands in this bit string (from
-> +		 *      RFC 5280 4.2.1.3)
-> +		 */
-> +		if (v[0] != ASN1_BTS)
-> +			return -EBADMSG;
-> +		if (vlen < 4)
-> +			return -EBADMSG;
-> +		if (v[1] == 0x02 && v[2] <= 2 && (v[3] & 0x04))
-> +			ctx->cert->kcs_set = true;
-> +		else if (vlen > 4 && v[1] == 0x03 && (v[3] & 0x04))
-> +			ctx->cert->kcs_set = true;
-> +		return 0;
-> +	}
-> +
->  	if (ctx->last_oid == OID_authorityKeyIdentifier) {
->  		/* Get hold of the CA key fingerprint */
->  		ctx->raw_akid = v;
-> diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
-> index 7c5c0ad1c22e..74a9f929e400 100644
-> --- a/crypto/asymmetric_keys/x509_parser.h
-> +++ b/crypto/asymmetric_keys/x509_parser.h
-> @@ -39,6 +39,7 @@ struct x509_certificate {
->  	bool		unsupported_sig;	/* T if signature uses unsupported crypto */
->  	bool		blacklisted;
->  	bool		root_ca;		/* T if basic constraints CA is set */
-> +	bool		kcs_set;		/* T if keyCertSign is set */
+> sort -k 5 /sys/kernel/security/ima/ascii_runtime_measurements > somefile.txt
+> sha1sum somefile.txt
+> with this somefile.txt contain a hash that is always the same after each boot
 
-Using acronyms as variable names makes reviewing code more difficult. 
-Perhaps rename "kcs_set" to either "key_cert_sign" or "keycertsign".
+Yes, this is more or less what DIGLIM was at the beginning.
 
->  };
->  
->  /*
-
--- 
-thanks,
-
-Mimi
-
+Roberto
 
