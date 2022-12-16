@@ -2,179 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A9464E377
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Dec 2022 22:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D459664E5FC
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Dec 2022 03:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiLOVqM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Dec 2022 16:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        id S229691AbiLPChC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Dec 2022 21:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiLOVqK (ORCPT
+        with ESMTP id S229517AbiLPChC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Dec 2022 16:46:10 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1A314020;
-        Thu, 15 Dec 2022 13:46:07 -0800 (PST)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFL3goN028003;
-        Thu, 15 Dec 2022 21:45:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=vr6dQhsnrUzsbvKu7DPi7CQjlNopj17Ddj1ugUG7vvQ=;
- b=j1WBpNKXlaUlrWTL+wa7b033/WGf3YTJSL+sCeNpBBZI9ulOm2RuvEAEgIDZmoXEjEFE
- ZIvMF2JDJcig+QfrvAEEW+EUFtBo3SNV9rKYeVyLRTjxv3OCCwAQCv92oZDi3xz56hSD
- jKsEUXYbRtXBzzFhw/nbcaWvycWPDiZt/213fZvDonpVwh3VhL1y7BqV4o3wMRyL1Oyx
- 4GSt09gsFkEbOpuMBl5qHt0JEBorsHTvVs7Oct8rGxZQ/JrVU1ZdDZnBL5sCdyi/qwVo
- sSkfmBajFZHMSvRoFIDKnQETzVUFpXI8J5hhTxF6oo+bP5sl755Kt+oooWt6baRQ5LGw 9Q== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3meyeu6bnh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Dec 2022 21:45:41 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2BFKxE3B010004;
-        Thu, 15 Dec 2022 21:45:40 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3meyepnjtn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Dec 2022 21:45:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BlL3F1H3a5Q9x9+PDrbxayfoNwecdnKpBIG2zyOLujq5/B9mylCSTQlRLo8TkNlrlChp8ouUsfmutURWZjaunBQ/onQnoLUlGdunanD65xb+db6c8F4rH40LiIi4taEdbpsz0nnU9lXPCTgOPJgpHDC310ytDPzBiyw8XCTEx8ib+KE2r9kFTnjfb22v649X8uluOR+lwGM2rMsGAKXYLSw04vWe9UV7AArGY9mXJ4c2T5CY4xCQxES90dDt94NMtmQY1gFVknuK1IfCEh8ntnX9J9N7QhX4puqoLftsoqDJu9KSecoIGVu+qohqoRAc8+X1k/SgnRJHoovangEwSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vr6dQhsnrUzsbvKu7DPi7CQjlNopj17Ddj1ugUG7vvQ=;
- b=PyfyES+xYn+ZmXfX1u50RGeYbSkFEi2s/RLLCgkyCaSCGq2zXHnpeSl1wZpY4yZR8k95i7qqan8Pm9pGS1/KBVTJPup/J3mPVS+IXcoR3wdoTBnUPMqwBoDky/pAsienOSQXholnZdeK9e5vfMIM5edJe8BOMCJ3kHLzMcCaKcctaiAUils+o0Bbhn8PpvuGtlSkL1pXVxItxGWp1aAKsEg+bnegT8mDSyj0yOmxYdLypbYL+9ocFF03vPN41Al7h5sRdPvMkTotd6s80uYaWy/uOkD5POJkjg9uTldDVgIj5iTfMFgzlXEh9/7jt5CcwJTKsKS8/m7AHgAHtGjhRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vr6dQhsnrUzsbvKu7DPi7CQjlNopj17Ddj1ugUG7vvQ=;
- b=MB3bHYsEzhijYrYwpC5kxSXLA1J8uu4noJaw4a/XrYizS8PVz4ADONIo3GPpeGtsVRVtTk1sQ4PK5L6yJcX4vJBrrDvm2uSi2xyoAS48NY/9dhfub2LBjuPVPnpXSFhT496g/4ET5YOt84DXu3SHE9vKOjHVWWU1awhaK5ahJh4=
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by DM8PR10MB5397.namprd10.prod.outlook.com (2603:10b6:8:39::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.12; Thu, 15 Dec
- 2022 21:45:38 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::f006:f411:9056:63a4]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::f006:f411:9056:63a4%4]) with mapi id 15.20.5880.019; Thu, 15 Dec 2022
- 21:45:38 +0000
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-CC:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>,
-        "noodles@fb.com" <noodles@fb.com>, "tiwai@suse.de" <tiwai@suse.de>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        Elaine Palmer <erpalmer@linux.vnet.ibm.com>,
-        Coiby Xu <coxu@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v3 00/10] Add CA enforcement keyring restrictions
-Thread-Topic: [PATCH v3 00/10] Add CA enforcement keyring restrictions
-Thread-Index: AQHZD1PCFegbrli1zUCp/3TmJTzIr65uvzMAgABmOoCAADsnAIAACGGAgAAJu4CAAAvJAA==
-Date:   Thu, 15 Dec 2022 21:45:37 +0000
-Message-ID: <21E52C3E-0778-4908-AF44-F65D57BEC4E0@oracle.com>
-References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
- <b8e54d077da633132eb6da03ea536face095a425.camel@linux.ibm.com>
- <4CE6F17D-9D87-4024-9E1A-FDFE7C29D5FC@oracle.com>
- <1c51910a35a1d113256494827fd66ccc7473632e.camel@linux.ibm.com>
- <17855993-519C-4DAC-B62F-9DB473CF249B@oracle.com>
- <7df94da37c100c160436892a6996ba30e3fd6dc8.camel@linux.ibm.com>
-In-Reply-To: <7df94da37c100c160436892a6996ba30e3fd6dc8.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR10MB4150:EE_|DM8PR10MB5397:EE_
-x-ms-office365-filtering-correlation-id: 798f99b1-66ce-4878-68b6-08dadee5b441
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /ekekQbWdKSBAVnlg9nPXAL6In5uRIv+0O8eT9V6Wtb8qxdGODjU+AniyP8JLYHlwd1zUNgE9C23FFClFRc8xU5FxbE7vYqgZniB5FP26mtN2PiuMD61IBRaqPkXLxIwxn7vOup3iDDZWM8Td6Ojj6JPO0pzXppThGJY+Y6JujHN8eaPLPuvxj07Ty+gt5bNX/cGkjMl6CXgibgCGrRFlWykEiSTL8oeD7EzAC0RLROtDnEnPd+QUsGLsy0yu1kznV7v4nEsKD2e/R3zcmI88rh7aRb9yTRsLGRHl57fMPX69r8DRmVECpUsEU75QV5IL5VXybUTGKo73urfC8LvgYMi8uYB6kGtT0eBXXRwd8/SU8it0v31tlh78YAKId5YCR2o2xOAc4wOofyrfO7cGh625w6Nkt7NdvTnyROM3M2JBxeODfNbO9lGxbP0a81g+PhmITPTn1S3DoIVLOawrpKsO7bFoe4RW4acEMf5U2lf8aQoMCDs8QNl9XB5ka1MSxWD/15VTK40SbL2KkCe20hBVyQjF0Pnrz6OoHvniDb1tK6z8v/2tj9ZsYD806Vt8s+V2JnMXFTbHskAvOsc/iKQiqeX84BLZMDOMMWF5REwQUbwyAeelgHCUjJDH/UCtGbfZmV4ihUypPIrjtAp6hY2nIyCuq4+NjDgdNsyTnU0etCylnedGWVOSH+OKg84aoOf0G6SzJY1eebtTuxeKf9ji3R4Bp/pu9wvK7XkmEs=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(376002)(366004)(396003)(39860400002)(451199015)(44832011)(316002)(83380400001)(6916009)(38100700002)(122000001)(8936002)(36756003)(41300700001)(5660300002)(64756008)(7416002)(66446008)(66556008)(66476007)(76116006)(2616005)(8676002)(91956017)(4326008)(54906003)(66946007)(6486002)(478600001)(71200400001)(186003)(6512007)(4001150100001)(33656002)(86362001)(2906002)(6506007)(53546011)(38070700005)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZmZ1bUMzTEhZWkROampUdk90V1VlS3djZEtscFByZXRIMDNGL3IxUVFoS2Rk?=
- =?utf-8?B?TUdON0puWHZqOXkyaXJEYkR5Wng0ZEZuSlB5SnZiRjRqOWF1MlVCcFlxcTRw?=
- =?utf-8?B?TkhxK2UyZHUwTzRzZ1pkbGwyU2F2SlZBcFFINXRaZTl3a1ZhQWlzdDdUUzBt?=
- =?utf-8?B?bTBsY0tYZTJBRW5TSVc0NnZHMmZRNnhheFJmMkhrUnAyb2dqdjVuMjhESkxP?=
- =?utf-8?B?Z3lreERpMm9hNno1WmcrWEY2RUQyRTZ3RUc0ckpEbHBzUXhKRlRsdnJCMWps?=
- =?utf-8?B?NFZRZEtubFJlaGJlVGMyUUppUXdoclhMc2dMUWlWVU5EWnlCNkNuVmpCVmhQ?=
- =?utf-8?B?QkM3ZXpTQTV6cXNDdWlTRkRQQ3BVYnpMOWliK2d4QVNZMDNsTHFoVWlaWTEr?=
- =?utf-8?B?VmNrcjlDM3dMN2RtZ1pPRGdOck9DR3JVcWNZNXo4MGpXUW81U2pKbHp6YWJm?=
- =?utf-8?B?VDFXclhMa25YQXpTVWxZU3J3VllLMm1FanhsdklPVVVyVy9UcXAveVp4dm1Q?=
- =?utf-8?B?OWFKYUZoY2ZJZm0rOG9yalJwRDJ4WnpNZ2Nuc0xnbUd0N1JBamtReGxFcWFP?=
- =?utf-8?B?dTd0elpjQWVmcXUzUTFXTFJkcG5DdUN2M3hudW5VUFlPZFp0ajlkTm1JVlkx?=
- =?utf-8?B?bG90VFNWbFZwZHRrZnZaQTgvNHNydWFkY3ppSnlaa012bjVoOFgxc3ZaRTY3?=
- =?utf-8?B?Vlc2M0JMRytRSWs0aHEyRDZucDhMQVo1S1diSno1VVUvY0FOa3FrZ0p6Ny9h?=
- =?utf-8?B?N2kzRlJWbm02c0NXZzBLZ001T2QwV2Y1WkVLRm5CblJ4K0FDcXQzbTdnUHl0?=
- =?utf-8?B?ZFg0MEVZWU5YUjdhb292ektqbjRsQ0ozejAreVErWC9RcVM1Nmk5ZG9GWEth?=
- =?utf-8?B?VlRkNHZjRmExRXk5VUVNajh5dVI1czYyaVBRZTVDalNlZ1UraGpXMDJ6endu?=
- =?utf-8?B?MWxsNG9SN0YwUnNUUlR5ZmNKRmk1MWJoVlJmVU9Xd1dYdVFvaXVNRnM2Tk5Q?=
- =?utf-8?B?RzRqT2t2blo2UmQvTDBKSDFUVEhZL0xXVGhva09KRUhFY1MxS2syWHpuQjZy?=
- =?utf-8?B?cUd2WEhVeHptR1dYYUVJTnkvNzBGcXVJN3RuNTB6NHBQQmNscWl0YzVjTUZK?=
- =?utf-8?B?ZmtxMDg0Q1FodmYwRlhybU45elJaSXJYaG03WDdIaEJETExHb1U1cTJqVEM0?=
- =?utf-8?B?RHJ1YzdqQTJETjhGWU9mdXFsSENJWmQxTFhpb2hyOU9sWHlUSyswL01jNCs2?=
- =?utf-8?B?cllMQWFVa0tVSUFsRERhZXZFaUIxS3dFcjVuQmRpSGp3ekNpQ0k2NGZQNEhE?=
- =?utf-8?B?QUI4WXVMa2NlYmh0dUJnQ2tXM3V4NFpRbllWL3B3c0dqdks1ZTVrdTJPbzZJ?=
- =?utf-8?B?Z3RkUEZteTlqZGtKaEJPaW5oR0hxdWduOXNCMU1mNkgxZlNjQVU0WStZdE9u?=
- =?utf-8?B?cHRUU3FQWjBvWDJjS0hjRDdyNkt1L3dldG9peFNRL2FsZUFBWms0S3pDWlFk?=
- =?utf-8?B?eXF5YlN2SGhUdW5qUlJYUzB2bGtoYUw5Q3ZXK2NRZzNpT1doSlptUHJWNzIx?=
- =?utf-8?B?NUlXQ3UxWHdzaGRNK0wvSXRMWlhEeC9wKzRXQk9Xak5QMHhSUXh5WTNqY0Rk?=
- =?utf-8?B?OW5pVXBnK0R2WHJCUUZOQnFRbTlXNnNtK0Q4Sk9UTEQvTlk5R2w1NjJEOWtJ?=
- =?utf-8?B?YXcvZzh4dlVpSWpKbm1UajczODRzQXV6TzNXUlF3VEdSUU0vOThORUFsNmFZ?=
- =?utf-8?B?THVIckU5RFYvbXQ0TEI4T3ZLQXYwN2w2L0pPUnh0c3UrVzNUQUZPUk16U2NY?=
- =?utf-8?B?ODREdmRxKzQzQy8wVlV0UFEzL0xFVk5hcWtmSWd3ekhBZk1iUG9PcUFJcGhL?=
- =?utf-8?B?Q3FOTXRuR1QzcGZjaVA3Y0dEKzlLSzlLU21vZEFsMnhrSlhEWXBzVFQzQ3Nm?=
- =?utf-8?B?cE5QQWdER2hrNmk3N2dBV3lHRXNFcDROTlpZSE83SzJPVkJMUklzS1d0ZStL?=
- =?utf-8?B?WEJKUU5DYjhhWUdYbUpXRExBRGplN1lEUXgvUjFNREtDVEJTRXBmY2dDMlpa?=
- =?utf-8?B?ZFU3UXU3aE1hMldPb0w4N3RHbW4rTnBzRjVZdk1FeUhPcklha2dCSTh6WWhy?=
- =?utf-8?B?Wk1KbjNxalFRaTFIaDNjSkVDcjlpRDA5eEdGdFFTUS9XNzBHWVlNL3c1bnl3?=
- =?utf-8?Q?Rt6IUtNn1N10FUqOIJvp+GHjzF8Z8VMpV3eXXVxAU6Or?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <67EC6CF00690274E94600F280F52FD7E@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 15 Dec 2022 21:37:02 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF4654343;
+        Thu, 15 Dec 2022 18:36:59 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NYCrr4SnHzmWl5;
+        Fri, 16 Dec 2022 10:35:56 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 16 Dec 2022 10:36:57 +0800
+Message-ID: <fc11076f-1760-edf3-c0e4-8f58d5e0335c@huawei.com>
+Date:   Fri, 16 Dec 2022 10:36:57 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 798f99b1-66ce-4878-68b6-08dadee5b441
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2022 21:45:37.8784
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WZi3AsFL5id+R3sEaOo7dnlUOLGOY0MxBO7gRFoRKkDYapIPf6Rc+3YjDNqlSf7gcJ31QaL8gUb0gUIa2sVv9/QDxPX56lYDiMWhAfkRQOw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR10MB5397
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-15_11,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- mlxlogscore=999 suspectscore=0 spamscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212150181
-X-Proofpoint-ORIG-GUID: DucpHKEhUvbm_xkLZgt7RgBwFx6RwtSi
-X-Proofpoint-GUID: DucpHKEhUvbm_xkLZgt7RgBwFx6RwtSi
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [RFC] IMA LSM based rule race condition issue on 4.19 LTS
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>
+CC:     <dmitry.kasatkin@gmail.com>, <sds@tycho.nsa.gov>,
+        <eparis@parisplace.org>, Greg KH <gregkh@linuxfoundation.org>,
+        <sashal@kernel.org>, <selinux@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        <stable@vger.kernel.org>
+References: <389334fe-6e12-96b2-6ce9-9f0e8fcb85bf@huawei.com>
+ <efd4ce83299a10b02b1c04cc94934b8d51969e1c.camel@linux.ibm.com>
+ <6a5bc829-b788-5742-cbfc-dba348065dbe@huawei.com>
+ <566721e9e8d639c82d841edef4d11d30a4d29694.camel@linux.ibm.com>
+ <fffb29b7-a1ac-33fb-6aca-989e5567f565@huawei.com>
+ <40cf70a96d2adbff1c0646d3372f131413989854.camel@linux.ibm.com>
+ <a63d5d4b-d7a9-fdcb-2b90-b5e2a974ca4c@huawei.com>
+ <757bc525f7d3fe6db5f3ee1f86de2f4d02d8286b.camel@linux.ibm.com>
+ <CAHC9VhR2mfaVjXz3sBzbkBamt8nE-9aV+jSOs9jH1ESnKvDrvw@mail.gmail.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <CAHC9VhR2mfaVjXz3sBzbkBamt8nE-9aV+jSOs9jH1ESnKvDrvw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -182,112 +61,224 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-DQoNCj4gT24gRGVjIDE1LCAyMDIyLCBhdCAyOjAzIFBNLCBNaW1pIFpvaGFyIDx6b2hhckBsaW51
-eC5pYm0uY29tPiB3cm90ZToNCj4gDQo+IE9uIFRodSwgMjAyMi0xMi0xNSBhdCAyMDoyOCArMDAw
-MCwgRXJpYyBTbm93YmVyZyB3cm90ZToNCj4+IA0KPj4+IE9uIERlYyAxNSwgMjAyMiwgYXQgMTI6
-NTggUE0sIE1pbWkgWm9oYXIgPHpvaGFyQGxpbnV4LmlibS5jb20+IHdyb3RlOg0KPj4+IA0KPj4+
-IE9uIFRodSwgMjAyMi0xMi0xNSBhdCAxNjoyNiArMDAwMCwgRXJpYyBTbm93YmVyZyB3cm90ZToN
-Cj4+Pj4gDQo+Pj4+PiBPbiBEZWMgMTUsIDIwMjIsIGF0IDM6MjEgQU0sIE1pbWkgWm9oYXIgPHpv
-aGFyQGxpbnV4LmlibS5jb20+IHdyb3RlOg0KPj4+Pj4gDQo+Pj4+PiBPbiBUdWUsIDIwMjItMTIt
-MTMgYXQgMTk6MzMgLTA1MDAsIEVyaWMgU25vd2Jlcmcgd3JvdGU6DQo+Pj4+Pj4gUHJpb3IgdG8g
-dGhlIGludHJvZHVjdGlvbiBvZiB0aGUgbWFjaGluZSBrZXlyaW5nLCBtb3N0IGRpc3Ryb3Mgc2lt
-cGx5IA0KPj4+Pj4+IGFsbG93ZWQgYWxsIGtleXMgY29udGFpbmVkIHdpdGhpbiB0aGUgcGxhdGZv
-cm0ga2V5cmluZyB0byBiZSB1c2VkDQo+Pj4+Pj4gZm9yIGJvdGgga2VybmVsIGFuZCBtb2R1bGUg
-dmVyaWZpY2F0aW9uLiAgVGhpcyB3YXMgZG9uZSBieSBhbiBvdXQgb2YNCj4+Pj4+PiB0cmVlIHBh
-dGNoLiAgU29tZSBkaXN0cm9zIHRvb2sgaXQgZXZlbiBmdXJ0aGVyIGFuZCBsb2FkZWQgYWxsIHRo
-ZXNlIGtleXMNCj4+Pj4+PiBpbnRvIHRoZSBzZWNvbmRhcnkgdHJ1c3RlZCBrZXlyaW5nLiAgVGhp
-cyBhbHNvIGFsbG93ZWQgdGhlIHN5c3RlbSBvd25lciANCj4+Pj4+PiB0byBhZGQgdGhlaXIgb3du
-IGtleSBmb3IgSU1BIHVzYWdlLg0KPj4+Pj4+IA0KPj4+Pj4+IEVhY2ggZGlzdHJvIGNvbnRhaW5z
-IHNpbWlsYXIgZG9jdW1lbnRhdGlvbiBvbiBob3cgdG8gc2lnbiBrZXJuZWwgbW9kdWxlcw0KPj4+
-Pj4+IGFuZCBlbnJvbGwgdGhlIGtleSBpbnRvIHRoZSBNT0suICBUaGUgcHJvY2VzcyBpcyBmYWly
-bHkgc3RyYWlnaHRmb3J3YXJkLg0KPj4+Pj4+IFdpdGggdGhlIGludHJvZHVjdGlvbiBvZiB0aGUg
-bWFjaGluZSBrZXlyaW5nLCB0aGUgcHJvY2VzcyByZW1haW5zDQo+Pj4+Pj4gYmFzaWNhbGx5IHRo
-ZSBzYW1lLCB3aXRob3V0IHRoZSBuZWVkIGZvciBhbnkgb3V0IG9mIHRyZWUgcGF0Y2hlcy4NCj4+
-Pj4+PiANCj4+Pj4+PiBUaGUgbWFjaGluZSBrZXlyaW5nIGFsbG93ZWQgZGlzdHJvcyB0byBlbGlt
-aW5hdGUgdGhlIG91dCBvZiB0cmVlIHBhdGNoZXMNCj4+Pj4+PiBmb3Iga2VybmVsIG1vZHVsZSBz
-aWduaW5nLiAgSG93ZXZlciwgaXQgZmFsbHMgc2hvcnQgaW4gYWxsb3dpbmcgdGhlIGVuZCANCj4+
-Pj4+PiB1c2VyIHRvIGFkZCB0aGVpciBvd24ga2V5cyBmb3IgSU1BLiBDdXJyZW50bHkgdGhlIG1h
-Y2hpbmUga2V5cmluZyBjYW4gbm90IA0KPj4+Pj4+IGJlIHVzZWQgYXMgYW5vdGhlciB0cnVzdCBh
-bmNob3IgZm9yIGFkZGluZyBrZXlzIHRvIHRoZSBpbWEga2V5cmluZywgc2luY2UgDQo+Pj4+Pj4g
-Q0EgZW5mb3JjZW1lbnQgZG9lcyBub3QgY3VycmVudGx5IGV4aXN0LiAgVGhpcyB3b3VsZCBleHBh
-bmQgdGhlIGN1cnJlbnQgDQo+Pj4+Pj4gaW50ZWdyaXR5IGdhcC4gVGhlIElNQV9LRVlSSU5HU19Q
-RVJNSVRfU0lHTkVEX0JZX0JVSUxUSU5fT1JfU0VDT05EQVJZIA0KPj4+Pj4+IEtjb25maWcgc3Rh
-dGVzIHRoYXQga2V5cyBtYXkgYmUgYWRkZWQgdG8gdGhlIGltYSBrZXlyaW5ncyBpZiB0aGUga2V5
-IGlzIA0KPj4+Pj4+IHZhbGlkbHkgc2lnbmVkIGJ5IGEgQ0EgY2VydCBpbiB0aGUgc3lzdGVtIGJ1
-aWx0LWluIG9yIHNlY29uZGFyeSB0cnVzdGVkIA0KPj4+Pj4+IGtleXJpbmcuICBDdXJyZW50bHkg
-dGhlcmUgaXMgbm90IGNvZGUgdGhhdCBlbmZvcmNlcyB0aGUgY29udGVudHMgb2YgYQ0KPj4+Pj4+
-IENBIGNlcnQuIEFueSBrZXkgaW4gdGhlIGJ1aWx0aW4gb3Igc2Vjb25kYXJ5IGtleXJpbmcgY2Fu
-IGJlIHVzZWQuIA0KPj4+Pj4+IA0KPj4+Pj4+IFRvIGFsbG93IElNQSB0byBiZSBlbmFibGVkIHdp
-dGggdGhlIG1hY2hpbmUga2V5cmluZywgdGhpcyBzZXJpZXMgaW50cm9kdWNlcw0KPj4+Pj4+IGVu
-Zm9yY2VtZW50IG9mIGtleSB1c2FnZSBpbiB0aGUgY2VydGlmaWNhdGUuIFRoaXMgc2VyaWVzIGFs
-c28gYXBwbGllcw0KPj4+Pj4+IHRoaXMgZW5mb3JjZW1lbnQgYWNyb3NzIGFsbCBrZXJuZWwga2V5
-cmluZ3MuDQo+Pj4+Pj4gDQo+Pj4+Pj4gVGhlIG1hY2hpbmUga2V5cmluZyBzaGFyZXMgIHNpbWls
-YXJpdGllcyB3aXRoIGJvdGggdGhlIGJ1aWx0aW4gYW5kDQo+Pj4+Pj4gc2Vjb25kYXJ5IGtleXJp
-bmdzLiAgU2ltaWxhciB0byB0aGUgYnVpbHRpbiwgbm8ga2V5cyBtYXkgYmUgYWRkZWQgdG8gdGhl
-DQo+Pj4+Pj4gbWFjaGluZSBrZXlyaW5nIGZvbGxvd2luZyBib290LiBUaGUgc2Vjb25kYXJ5IGtl
-eXJpbmcgYWxsb3dzIHVzZXINCj4+Pj4+PiBwcm92aWRlZCBrZXlzIHRvIGJlIGFkZGVkIGZvbGxv
-d2luZyBib290OyBob3dldmVyLCBhIHByZXZpb3VzbHkgZW5yb2xsZWQNCj4+Pj4+PiBrZXJuZWwg
-a2V5IG11c3Qgdm91Y2ggZm9yIHRoZSBrZXkgYmVmb3JlIGl0IG1heSBiZSBpbmNsdWRlZC4gVGhl
-IHN5c3RlbQ0KPj4+Pj4+IG93bmVyIG1heSBpbmNsdWRlIHRoZWlyIG93biBrZXlzIGludG8gdGhl
-IG1hY2hpbmUga2V5cmluZyBwcmlvciB0byBib290Lg0KPj4+Pj4+IElmIHRoZSBlbmQtdXNlciBp
-cyBub3QgdGhlIHN5c3RlbSBvd25lciwgdGhleSBtYXkgbm90IGFkZCB0aGVpciBvd24ga2V5cw0K
-Pj4+Pj4+IHRvIHRoZSBtYWNoaW5lIGtleXJpbmcuICANCj4+Pj4+PiANCj4+Pj4+PiBUaGUgbWFj
-aGluZSBrZXlyaW5nIGlzIG9ubHkgcG9wdWxhdGVkIHdoZW4gU2VjdXJlIEJvb3QgaXMgZW5hYmxl
-ZC4gIEENCj4+Pj4+PiBzeXN0ZW0gb3duZXIgaGFzIHRoZSBhYmlsaXR5IHRvIGNvbnRyb2wgdGhl
-IGVudGlyZSBTZWN1cmUgQm9vdCBrZXljaGFpbg0KPj4+Pj4+IChQSywgS0VLLCBEQiwgYW5kIERC
-WCkuICBUaGUgc3lzdGVtIG93bmVyIGNhbiBhbHNvIHR1cm4gU2VjdXJlIEJvb3Qgb2ZmLg0KPj4+
-Pj4+IFdpdGggdGhpcyBjb250cm9sLCB0aGV5IG1heSB1c2UgaW5zZXJ0LXN5cy1jZXJ0IHRvIGlu
-Y2x1ZGUgdGhlaXIgb3duIGtleSANCj4+Pj4+PiBhbmQgcmUtc2lnbiB0aGVpciBrZXJuZWwgYW5k
-IGhhdmUgaXQgYm9vdC4gIFRoZSBzeXN0ZW0gb3duZXIgYWxzbyBoYXMgDQo+Pj4+Pj4gY29udHJv
-bCB0byBpbmNsdWRlIG9yIGV4Y2x1ZGUgTU9LIGtleXMuIFRoaXMgc2VyaWVzIGRvZXMgbm90IHRy
-eSB0byANCj4+Pj4+PiBpbnRlcnByZXQgaG93IGEgc3lzdGVtIG93bmVyIGhhcyBjb25maWd1cmVk
-IHRoZWlyIG1hY2hpbmUuICBJZiB0aGUgc3lzdGVtIA0KPj4+Pj4+IG93bmVyIGhhcyB0YWtlbiB0
-aGUgc3RlcHMgdG8gYWRkIHRoZWlyIG93biBNT0sga2V5cywgdGhleSB3aWxsIGJlIA0KPj4+Pj4+
-IGluY2x1ZGVkIGluIHRoZSBtYWNoaW5lIGtleXJpbmcgYW5kIHVzZWQgZm9yIHZlcmlmaWNhdGlv
-biwgZXhhY3RseSANCj4+Pj4+PiB0aGUgc2FtZSB3YXkgYXMga2V5cyBjb250YWluZWQgaW4gdGhl
-IGJ1aWx0aW4gYW5kIHNlY29uZGFyeSBrZXlyaW5ncy4NCj4+Pj4+PiBTaW5jZSB0aGUgc3lzdGVt
-IG93bmVyIGhhcyB0aGUgYWJpbGl0eSB0byBhZGQga2V5cyBiZWZvcmUgYm9vdGluZyB0bw0KPj4+
-Pj4+IGVpdGhlciB0aGUgbWFjaGluZSBvciBidWlsdGluIGtleXJpbmdzLCBpdCBpcyB2aWV3ZWQg
-YXMgaW5jb25zZXF1ZW50aWFsIA0KPj4+Pj4+IGlmIHRoZSBrZXkgb3JpZ2luYXRlZCBmcm9tIG9u
-ZSBvciB0aGUgb3RoZXIuDQo+Pj4+Pj4gDQo+Pj4+Pj4gVGhpcyBzZXJpZXMgaW50cm9kdWNlcyB0
-d28gZGlmZmVyZW50IHdheXMgdG8gY29uZmlndXJlIHRoZSBtYWNoaW5lIGtleXJpbmcuDQo+Pj4+
-Pj4gQnkgZGVmYXVsdCwgbm90aGluZyBjaGFuZ2VzIGFuZCBhbGwgTU9LIGtleXMgYXJlIGxvYWRl
-ZCBpbnRvIGl0LiAgV2hlbmV2ZXINCj4+Pj4+PiBhIENBIGNlcnQgaXMgZm91bmQgd2l0aGluIHRo
-ZSBtYWNoaW5lLCBidWlsdGluLCBvciBzZWNvbmRhcnksIGEgZmxhZyANCj4+Pj4+PiBpbmRpY2F0
-aW5nIHRoaXMgaXMgc3RvcmVkIGluIHRoZSBwdWJsaWMga2V5IHN0cnVjdC4gIFRoZSBvdGhlciBv
-cHRpb24gaXMgDQo+Pj4+Pj4gaWYgdGhlIG5ldyBLY29uZmlnIElOVEVHUklUWV9DQV9NQUNISU5F
-X0tFWVJJTkcgaXMgZW5hYmxlZCwgb25seSBDQSBjZXJ0cyANCj4+Pj4+PiB3aWxsIGJlIGxvYWRl
-ZCBpbnRvIHRoZSBtYWNoaW5lIGtleXJpbmcuIEFsbCByZW1haW5pbmcgTU9LIGtleXMgd2lsbCBi
-ZSANCj4+Pj4+PiBsb2FkZWQgaW50byB0aGUgcGxhdGZvcm0ga2V5cmluZy4NCj4+Pj4+PiANCj4+
-Pj4+PiBBIENBIGNlcnQgc2hhbGwgYmUgZGVmaW5lZCBhcyBhbnkgWDUwOSBjZXJ0aWZpY2F0ZSB0
-aGF0IGNvbnRhaW5zIHRoZSANCj4+Pj4+PiBrZXlDZXJ0U2lnbiBrZXkgdXNhZ2UgYW5kIGhhcyB0
-aGUgQ0EgYml0IHNldCB0byB0cnVlLg0KPj4+Pj4gDQo+Pj4+PiBIaSBFcmljLA0KPj4+Pj4gDQo+
-Pj4+PiBBbGxvd2luZyBDQSBjZXJ0aWZpY2F0ZXMgd2l0aCB0aGUgZGlnaXRhbFNpZ25hdHVyZSBr
-ZXkgdXNhZ2UgZmxhZw0KPj4+Pj4gZW5hYmxlZCBkZWZlYXRzIHRoZSBwdXJwb3NlIG9mIHRoZSBu
-ZXcgS2NvbmZpZy4gIFBsZWFzZSB1cGRhdGUgdGhlDQo+Pj4+PiBhYm92ZSBkZWZpbml0aW9uIHRv
-IGV4Y2x1ZGUgdGhlIGRpZ2l0YWxTaWduYXR1cmUga2V5IHVzYWdlIGZsYWcgYW5kDQo+Pj4+PiBt
-b2RpZnkgdGhlIGNvZGUgYWNjb3JkaW5nbHkuDQo+Pj4+IA0KPj4+PiBXaXRoaW4gdjIsIHRoZSBy
-ZXF1ZXN0IHdhcyBtYWRlIHRvIGFsbG93IEludGVybWVkaWF0ZSBDQSBjZXJ0aWZpY2F0ZXMgdG8g
-YmUgDQo+Pj4+IGxvYWRlZCBkaXJlY3RseS4gIFRoZSBJbnRlcm1lZGlhdGUgQ0EgcmVmZXJlbmNl
-ZCB3YXMgdGhlIG9uZSB1c2VkIGJ5IGtlcm5lbC5vcmcuICANCj4+Pj4gVGhpcyBJbnRlcm1lZGlh
-dGUgQ0EgY29udGFpbnMgYm90aCBkaWdpdGFsU2lnbmF0dXJlIGFuZCBrZXlDZXJ0U2lnbi4gIElm
-IHRoZSBjb2RlIA0KPj4+PiBpcyBjaGFuZ2VkIHRvIGV4Y2x1ZGUgdGhpcyBjZXJ0aWZpY2F0ZSwg
-bm93IHRoZSByb290IENBIGhhcyB0byBiZSBsb2FkZWQgYWdhaW4uICBJcyB0aGF0IA0KPj4+PiB0
-aGUgaW50ZW50Pw0KPj4+IA0KPj4+IFRoYXQgZGVmaW5pdGVseSB3YXMgbm90IHRoZSBpbnRlbnQu
-ICBOb3Igd291bGQgaXQgYWRkcmVzcyB0aGUgaXNzdWUgb2YNCj4+PiBhIHBhcnRpY3VsYXIgaW50
-ZXJtZWRpYXRlIENBIGNlcnRpZmljYXRlIGhhdmluZyBib3RoIGtleUNlcnRTaWduIGFuZA0KPj4+
-IGRpZ2l0YWxTaWduYXR1cmUuDQo+PiANCj4+IFNvcnJ5LCBJ4oCZbSBub3QgZm9sbG93aW5nLiAg
-V2h5IGlzIGl0IGFuIGlzc3VlIHRoYXQgYW4gaW50ZXJtZWRpYXRlIENBIGNlcnRpZmljYXRlIGNv
-bnRhaW5zIA0KPj4gYm90aCBrZXlDZXJ0U2lnbiBhbmQgZGlnaXRhbFNpZ25hdHVyZT8gV2h5IHdv
-dWxkIHdlIHdhbnQgdG8gZXhjbHVkZSBhbiBJbnRlcm1lZGlhdGUNCj4+IENBIGNlcnQgbGlrZSB0
-aGUgb25lIHVzZWQgb24ga2VybmVsLm9yZz8NCj4gDQo+IEkgbXVzdCBiZSBtaXNzaW5nIHNvbWV0
-aGluZy4gIElzbid0IHRoZSBwdXJwb3NlIG9mICJrZXlVc2FnZSIgdG8NCj4gbWluaW1pemUgaG93
-IGEgY2VydGlmaWNhdGUgbWF5IGJlIHVzZWQ/ICAgV2h5IHdvdWxkIHdlIHdhbnQgdGhlIHNhbWUN
-Cj4gY2VydGlmaWNhdGUgdG8gYmUgdXNlZCBmb3IgYm90aCBjZXJ0aWZpY2F0ZSBzaWduaW5nIGFu
-ZCBjb2RlIHNpZ25pbmc/DQoNCkV2ZXJ5IDNyZCBwYXJ0eSBpbnRlcm1lZGlhdGUgQ0EgSSBoYXZl
-IGxvb2tlZCBhdCBzbyBmYXIgY29udGFpbnMgYm90aCBzZXQuIE1vc3QgaGF2ZSBDUkxTaWduIHNl
-dC4gIA0KVHlwaWNhbGx5IHRoZSByb290IENBIGNvbnRhaW5zIGtleUNlcnRTaWduIGFuZCBDUkxT
-aWduLCBidXQgc29tZSBhbHNvIGhhdmUgZGlnaXRhbFNpZ25hdHVyZSANCnNldC4gIEZpbmRpbmcg
-YSAzcmQgcGFydHkgSW50ZXJtZWRpYXRlIENBIHdpdGhvdXQgZGlnaXRhbFNpZ25hdHVyZSBzZXQg
-aXMgcHJvYmFibHkgZ29pbmcgdG8gYmUgDQpjaGFsbGVuZ2luZyBhbmQgd2lsbCBzZXZlcmVseSBs
-aW1pdCB1c2FnZS4NCg0K
+On 2022/12/16 5:04, Paul Moore wrote:
+> On Thu, Dec 15, 2022 at 9:30 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>>
+>> On Thu, 2022-12-15 at 21:15 +0800, Guozihua (Scott) wrote:
+>>> On 2022/12/15 18:49, Mimi Zohar wrote:
+>>>> On Thu, 2022-12-15 at 16:51 +0800, Guozihua (Scott) wrote:
+>>>>> On 2022/12/14 20:19, Mimi Zohar wrote:
+>>>>>> On Wed, 2022-12-14 at 09:33 +0800, Guozihua (Scott) wrote:
+>>>>>>> On 2022/12/13 23:30, Mimi Zohar wrote:
+>>>>>>>> On Fri, 2022-12-09 at 15:00 +0800, Guozihua (Scott) wrote:
+>>>>>>>>> Hi community.
+>>>>>>>>>
+>>>>>>>>> Previously our team reported a race condition in IMA relates to LSM
+>>>>>>>>> based rules which would case IMA to match files that should be filtered
+>>>>>>>>> out under normal condition. The issue was originally analyzed and fixed
+>>>>>>>>> on mainstream. The patch and the discussion could be found here:
+>>>>>>>>> https://lore.kernel.org/all/20220921125804.59490-1-guozihua@huawei.com/
+>>>>>>>>>
+>>>>>>>>> After that, we did a regression test on 4.19 LTS and the same issue
+>>>>>>>>> arises. Further analysis reveled that the issue is from a completely
+>>>>>>>>> different cause.
+>>>>>>>>>
+>>>>>>>>> The cause is that selinux_audit_rule_init() would set the rule (which is
+>>>>>>>>> a second level pointer) to NULL immediately after called. The relevant
+>>>>>>>>> codes are as shown:
+>>>>>>>>>
+>>>>>>>>> security/selinux/ss/services.c:
+>>>>>>>>>> int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
+>>>>>>>>>> {
+>>>>>>>>>>         struct selinux_state *state = &selinux_state;
+>>>>>>>>>>         struct policydb *policydb = &state->ss->policydb;
+>>>>>>>>>>         struct selinux_audit_rule *tmprule;
+>>>>>>>>>>         struct role_datum *roledatum;
+>>>>>>>>>>         struct type_datum *typedatum;
+>>>>>>>>>>         struct user_datum *userdatum;
+>>>>>>>>>>         struct selinux_audit_rule **rule = (struct selinux_audit_rule **)vrule;
+>>>>>>>>>>         int rc = 0;
+>>>>>>>>>>
+>>>>>>>>>>         *rule = NULL;
+>>>>>>>>> *rule is set to NULL here, which means the rule on IMA side is also NULL.
+>>>>>>>>>>
+>>>>>>>>>>         if (!state->initialized)
+>>>>>>>>>>                 return -EOPNOTSUPP;
+>>>>>>>>> ...
+>>>>>>>>>> out:
+>>>>>>>>>>         read_unlock(&state->ss->policy_rwlock);
+>>>>>>>>>>
+>>>>>>>>>>         if (rc) {
+>>>>>>>>>>                 selinux_audit_rule_free(tmprule);
+>>>>>>>>>>                 tmprule = NULL;
+>>>>>>>>>>         }
+>>>>>>>>>>
+>>>>>>>>>>         *rule = tmprule;
+>>>>>>>>> rule is updated at the end of the function.
+>>>>>>>>>>
+>>>>>>>>>>         return rc;
+>>>>>>>>>> }
+>>>>>>>>>
+>>>>>>>>> security/integrity/ima/ima_policy.c:
+>>>>>>>>>> static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
+>>>>>>>>>>                             const struct cred *cred, u32 secid,
+>>>>>>>>>>                             enum ima_hooks func, int mask)
+>>>>>>>>>> {...
+>>>>>>>>>> for (i = 0; i < MAX_LSM_RULES; i++) {
+>>>>>>>>>>                 int rc = 0;
+>>>>>>>>>>                 u32 osid;
+>>>>>>>>>>                 int retried = 0;
+>>>>>>>>>>
+>>>>>>>>>>                 if (!rule->lsm[i].rule)
+>>>>>>>>>>                         continue;
+>>>>>>>>> Setting rule to NULL would lead to LSM based rule matching being skipped.
+>>>>>>>>>> retry:
+>>>>>>>>>>                 switch (i) {
+>>>>>>>>>
+>>>>>>>>> To solve this issue, there are multiple approaches we might take and I
+>>>>>>>>> would like some input from the community.
+>>>>>>>>>
+>>>>>>>>> The first proposed solution would be to change
+>>>>>>>>> selinux_audit_rule_init(). Remove the set to NULL bit and update the
+>>>>>>>>> rule pointer with cmpxchg.
+>>>>>>>>>
+>>>>>>>>>> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+>>>>>>>>>> index a9f2bc8443bd..aa74b04ccaf7 100644
+>>>>>>>>>> --- a/security/selinux/ss/services.c
+>>>>>>>>>> +++ b/security/selinux/ss/services.c
+>>>>>>>>>> @@ -3297,10 +3297,9 @@ int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
+>>>>>>>>>>         struct type_datum *typedatum;
+>>>>>>>>>>         struct user_datum *userdatum;
+>>>>>>>>>>         struct selinux_audit_rule **rule = (struct selinux_audit_rule **)vrule;
+>>>>>>>>>> +       struct selinux_audit_rule *orig = rule;
+>>>>>>>>>>         int rc = 0;
+>>>>>>>>>>
+>>>>>>>>>> -       *rule = NULL;
+>>>>>>>>>> -
+>>>>>>>>>>         if (!state->initialized)
+>>>>>>>>>>                 return -EOPNOTSUPP;
+>>>>>>>>>>
+>>>>>>>>>> @@ -3382,7 +3381,8 @@ int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
+>>>>>>>>>>                 tmprule = NULL;
+>>>>>>>>>>         }
+>>>>>>>>>>
+>>>>>>>>>> -       *rule = tmprule;
+>>>>>>>>>> +       if (cmpxchg(rule, orig, tmprule) != orig)
+>>>>>>>>>> +               selinux_audit_rule_free(tmprule);
+>>>>>>>>>>
+>>>>>>>>>>         return rc;
+>>>>>>>>>>  }
+>>>>>>>>>
+>>>>>>>>> This solution would be an easy fix, but might influence other modules
+>>>>>>>>> calling selinux_audit_rule_init() directly or indirectly (on 4.19 LTS,
+>>>>>>>>> only auditfilter and IMA it seems). And it might be worth returning an
+>>>>>>>>> error code such as -EAGAIN.
+>>>>>>>>>
+>>>>>>>>> Or, we can access rules via RCU, similar to what we do on 5.10. This
+>>>>>>>>> could means more code change and testing.
+>>>>>>>>
+>>>>>>>> In the 4.19 kernel, IMA is doing a lazy LSM based policy rule update as
+>>>>>>>> needed.  IMA waits for selinux_audit_rule_init() to complete and
+>>>>>>>> shouldn't see NULL, unless there is an SELinux failure.  Before
+>>>>>>>> "fixing" the problem, what exactly is the problem?
+>>>>>>>
+>>>>>>> IMA runs on multiple cores. On 4.19 kernel, IMA do a lazy update on ALL
+>>>>>>> LSM based rules in one go without using RCU, which would still allow
+>>>>>>> other cores to access the rule being updated. And that's the issue.
+>>>>>>>
+>>>>>>> An example scenario would be:
+>>>>>>>  CPU1                    |       CPU2
+>>>>>>> opened a file and starts |
+>>>>>>> updating LSM based rules.        |
+>>>>>>>                          | opened a file and starts
+>>>>>>>                          | matching rules.
+>>>>>>>                          |
+>>>>>>> set a LSM based rule to NULL.    | access the same LSM based rule and
+>>>>>>>                                  | see that it's NULL.
+>>>>>>>
+>>>>>>> In this situation, CPU 2 would recognize this rule as not LSM based and
+>>>>>>> ignore the LSM part of the rule while matching.
+>>>>>>
+>>>>>> Would picking up just ima_lsm_update_rule(), without changing to the
+>>>>>> lsm policy update notifier, from upstream and calling it from
+>>>>>> ima_lsm_update_rules() resolve the RCU locking issue?  Or are there
+>>>>>> other issues?
+>>>>>
+>>>>> Hi Mimi,
+>>>>>
+>>>>> That should resolve the issue just fine. However, that'd mean having a
+>>>>> customized ima_lsm_update_rules as well as a customized
+>>>>> ima_lsm_update_rule functions on 4.19.y, potentially decrease the
+>>>>> maintainability. The customization of the two functions mentioned above
+>>>>> would be to ripoff the RCU part so that we can leave the other rule-list
+>>>>> access untouched.
+>>>>
+>>>> Hi Scott,
+>>>>
+>>>> Neither do we want to backport new functionality.  Perhaps it is only a
+>>>> subset of commit b16942455193 ("ima: use the lsm policy update
+>>>> notifier").
+>>> Yes we are able to backport part of this commit to get a mainline-like
+>>> behavior which would solve the issue at hand as well. However from a
+>>> maintenance standpoint it might be better to form a different commit and
+>>> not re-use the commit message from mainline commit.
+>>
+>> I assume that is fine, but cherry-pick the original commit with the -x
+>> option, so there is a correlation to the upstream commit.  The patch
+>> description would mention that the patch is a partial backport.
+> 
+> FWIW, if the changes in the backport are significant I tend to use the
+> following approach as it captures both the original commit as well as
+> the details on what changes were made and why.
+> 
+>>>>
+> ima: use the lsm policy update notifier
+> 
+> Really good explanation of what changes were necessary from the
+> original patch, including why they were necessary in the first place.
+> 
+>    commit b169424551930a9325f700f502802f4d515194e5
+>    Author: Janne Karhunen <janne.karhunen@gmail.com>
+>    Date:   Fri Jun 14 15:20:15 2019 +0300
+> 
+>    ima: use the lsm policy update notifier
+> 
+>    Don't do lazy policy updates while running the rule matching,
+>    run the updates as they happen.
+> 
+>    Depends on commit f242064c5df3 ("LSM: switch to blocking policy update
+>                                    notifiers")
+> 
+>    Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
+>    Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+>>>>
+Thanks for the suggestion Mimi and Paul.
+> 
+>>>> Although your suggested solution of using "cmpxchg" isn't needed in
+>>>> recent kernels,  it wouldn't hurt either, right?  Assuming that Paul
+>>>> would be willing to accept it, that could be another option.
+>>> The cmpxchg part is merely to avoid multiple updates on the same rule
+>>> item. However I am not so sure why SELinux would set the rule to NULL.
+>>> My guess is that SELinux is trying to stop others from using an
+>>> invalidated rule?
+>>>
+>>> Would Paul be able to provide some insight? as well as some Comment on
+>>> the proposed solution?
+> 
+> I'm not comfortable with what might happen with a cmpxchg assignment
+> when multiple threads are in a related RCU critical section; I'm
+> assuming they would see the new value immediately (it is atomic,
+> right?), which I imagine could cause some consistency problems.
+> However, if someone who understands the intersection of cmpxchg/RCU
+> better than I do can assure me this isn't a problem we can consider
+> it.
+> 
+> How bad is the backport really?  Perhaps it is worth doing it to see
+> what it looks like?
+> 
+It might not be that bad, I'll try to post a version next Monday.
+
+-- 
+Best
+GUO Zihua
+
