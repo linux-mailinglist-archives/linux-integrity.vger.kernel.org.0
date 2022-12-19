@@ -2,98 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A286508DC
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Dec 2022 09:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F06346509FC
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Dec 2022 11:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbiLSIvG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Dec 2022 03:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S231320AbiLSKVM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Dec 2022 05:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiLSIub (ORCPT
+        with ESMTP id S231743AbiLSKVG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Dec 2022 03:50:31 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ECCCE02;
-        Mon, 19 Dec 2022 00:50:11 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NbCs63L1Mz9ttD8;
-        Mon, 19 Dec 2022 16:43:06 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBHywagJaBjl6AmAA--.3254S2;
-        Mon, 19 Dec 2022 09:49:46 +0100 (CET)
-Message-ID: <0f80852578436dbba7a0fce03d86c3fa2d38c571.camel@huaweicloud.com>
-Subject: Re: [PATCH v2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Eric Biggers <ebiggers@kernel.org>, dhowells@redhat.com,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Mon, 19 Dec 2022 09:49:29 +0100
-In-Reply-To: <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
-References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
-         <Y5OGr59A9wo86rYY@sol.localdomain>
-         <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
-         <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 19 Dec 2022 05:21:06 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4F82DCD
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Dec 2022 02:21:00 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id i188so2245769vsi.8
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Dec 2022 02:21:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GUpr7ovRgR/UWEsQ3Fe+jNuGKxRQ+tHrCUEHY6ZYx80=;
+        b=ViLxqvOkn3RGBEpW5txZocgCA93ZE6UhUixWNy8ogfZ3gEjE/ReRA2Y/HyBzTrvqb8
+         03W2yKHaMZVaU+ulEKthMMzF05UJZyuqH7MExtesTrDpshWbqYOQxPTNt+yPeZmlkIaF
+         C/mUfaj7QfollhaNKgriKvK0GebADQp0lqSEwtL++B4t5u8WOkDJ5h/H9Nj5FvuV9x1I
+         LTmkyCy1DPVWTqz18Q9P9WzhrFJ8qEydb4JvXkxb3ydIsZj/GmvI7BbJq9aFjC4oPo3z
+         hC+bcY/UmDiaZrs+YtdgZq4lxS/pb+usTaZAZhOxrUF2Sw8zUOFh9ui9XCVS/m8BYS15
+         xsuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GUpr7ovRgR/UWEsQ3Fe+jNuGKxRQ+tHrCUEHY6ZYx80=;
+        b=p1vveVsGhGusaj6mxr3HldPFglorPsRw95cPrNxCJAjYDTtdBfZrQ9t3shdtgKrZde
+         m15Y7IOp3D+rOm3qk8ICw5jFxz3TiDy+opFbjzagG+x7iYtM2LUCXtkCaERB1vGrTI8p
+         fiiHFxAUcCkVIFNmVe7z7R6SmWsQGtaCeZ5Eaau285MbhYEfMRdBn0dlqX/5QLcDoewX
+         oruWzyBa1iExUzUmpvBIiJ4Aj9+gbvITIyibw0idsz225YqObhw/wLE7bZ7X3wYH3DRq
+         BaLd23MoM8MdjuREUlthTa4dPqZ31DSPSB9JnIKui1XVO03Dg1Jp1Lg4PT5zLCEijJzm
+         3HiA==
+X-Gm-Message-State: ANoB5pkhII0ss3csqG2UCrRx9uGywITLgUL2Pq7XCUrvZ4EBa5EqOFjf
+        5RbpTFjIcmy3hrleSIrSJSnRlwMl4Gpr2n012gG8gXapIhacY2r7
+X-Google-Smtp-Source: AA0mqf5bGiizSNLJhEAri4uEfJg8DxvByg09JklVd4kphf/joz288XqYAg9mtygwxIc1uda0Rydpy1OvsJQ0of8H9eI=
+X-Received: by 2002:a05:6102:5ee:b0:3b1:a1c:3cab with SMTP id
+ w14-20020a05610205ee00b003b10a1c3cabmr20675424vsf.46.1671445259661; Mon, 19
+ Dec 2022 02:20:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwBHywagJaBjl6AmAA--.3254S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JF43Gr1UCw18Gr47ZFWUJwb_yoWfuwbEgF
-        y3CF4kX34Fvr17tF4rtr4qqrs3GrWkAry7Xr4Ig3sxJ3s5Jws7WrsYkrs3Wr1xXr4rJF9F
-        gryrZ347X3W29jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4bHxwAAs5
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Sughosh Ganu <sughosh.ganu@linaro.org>
+Date:   Mon, 19 Dec 2022 15:50:48 +0530
+Message-ID: <CADg8p96Obiio+CUOCKzKqqc6m+B+zSDgs6SWLKSpSo5po94ApQ@mail.gmail.com>
+Subject: Question on loading trusted key with keyctl command
+To:     linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2022-12-12 at 17:15 +0800, Herbert Xu wrote:
-> On Mon, Dec 12, 2022 at 10:07:38AM +0100, Roberto Sassu wrote:
-> > The problem is a misalignment between req->src_len (set to sig->s_size
-> > by akcipher_request_set_crypt()) and the length of the scatterlist (if
-> > we set the latter to sig->s_size + sig->digest_size).
-> > 
-> > When rsa_enc() calls mpi_read_raw_from_sgl(), it passes req->src_len as
-> > argument, and the latter allocates the MPI according to that. However,
-> > it does parsing depending on the length of the scatterlist.
-> > 
-> > If there are two scatterlists, it is not a problem, there is no
-> > misalignment. mpi_read_raw_from_sgl() picks the first. If there is just
-> > one, mpi_read_raw_from_sgl() parses all data there.
-> 
-> Thanks for the explanation.  That's definitely a bug which should
-> be fixed either in the RSA code or in MPI.
-> 
-> I'll look into it.
+hi,
+I am trying to enable the evm hmac solution on my qemu arm64 virt
+platform running Debian. I am using the swtpm 2.0 implementation for
+the TPM trusted source. Before I get into trying out the evm hmac
+solution on the target system, I wanted to check creating the trusted
+and encrypted keys.  Other details on my set up are as follows
 
-Hi Herbert
+Distro - Debian 11
+TPM - swtpm
+Linux kernel - Linux version 6.1.0-13032, commit 77856d911a8c [1]
+keyctl --version
+keyctl from keyutils-1.6.1 (Built 2020-02-10)
 
-do you have any news on this bug?
+When trying to follow the steps highlighted in the
+Documentation/security/keys/trusted-encrypted.rst, I can generate the
+trusted key. However, when I try to load the trusted key using the
+command shown in the document, it throws an error. Has there been a
+change in the code, or am I missing some step when trying to load the
+trusted key?
 
-Thanks
+Steps that I am following (after having created the SRK).
 
-Roberto
+# keyctl add trusted kmk "new 32 keyhandle=0x81000001" @u
+# keyctl show
+Session Keyring
+ 442944693 --alswrv      0     0  keyring: _ses
+ 925986946 --alswrv      0 65534   \_ keyring: _uid.0
+ 401286062 --alswrv      0     0       \_ trusted: kmk
+# keyctl pipe 401286062 > kmk.blob
+# keyctl add trusted kmk "load `cat kmk.blob` keyhandle=0x81000001" @u
+add_key: Invalid argument
 
+-sughosh
+
+[1] - I enable trusted and encrypted keys above the said commit
