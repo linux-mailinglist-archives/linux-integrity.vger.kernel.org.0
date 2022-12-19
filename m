@@ -2,80 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E341F650AE7
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Dec 2022 12:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D783650C28
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Dec 2022 13:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbiLSLoo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Dec 2022 06:44:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
+        id S231949AbiLSMul (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Dec 2022 07:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbiLSLoW (ORCPT
+        with ESMTP id S231838AbiLSMuh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Dec 2022 06:44:22 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3D3FCCF
-        for <linux-integrity@vger.kernel.org>; Mon, 19 Dec 2022 03:43:45 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJBFCmX029747;
-        Mon, 19 Dec 2022 11:43:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=/mjacplkWceJWQoPGNcz8N9jXthMmKcfAV48emUnXDI=;
- b=ZDx1P0BUhTK694NFUMJ28lzYTIX2/tqDwRZrwlAC+HePZqOTLhkWbAFg+TQXwAThAOnt
- h8pfsd4sUVWqWzLQK5gU+EHh39DEX2biWK6+Qeg6c4ZpktBUA+i6avxXofpMdqL8h08y
- oXapzfm4d4oGqK6ix9itdQerAuaqR7wFcMqMYZR3U+dkQx2hbWYu1QLVzlN1ziMRhyWq
- fUhKhgtrq0N1IEK7/WJUUxkKHxhJM7YlYd6LPoJVZHctq9NiR2Gd5hYjzHZ2NiqI51VM
- MHKQr1tGQuNLZSHmhlWxrGwZLXMY7ebPyb/w/a4D1TiZeBRLcXLtz3IobjvUFzeNO6QX UQ== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mjpwygs04-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 11:43:44 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BJ90uUx007611;
-        Mon, 19 Dec 2022 11:43:43 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3mh6yxd21n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Dec 2022 11:43:43 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BJBhf9060555708
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Dec 2022 11:43:42 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87CD95803F;
-        Mon, 19 Dec 2022 11:43:41 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 497435805A;
-        Mon, 19 Dec 2022 11:43:41 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.175.166])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 19 Dec 2022 11:43:41 +0000 (GMT)
-Message-ID: <1a74e603cb6924a19e4995ede5190d2488b2da36.camel@linux.ibm.com>
+        Mon, 19 Dec 2022 07:50:37 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FD2FD2B
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Dec 2022 04:50:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1671454233;
+        bh=Csj51R5RzmD5CqDeAKOhkurKiLCQsHh765r+9++NrA0=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=ns4nqeecNnC23ou3F+AHEDCeojzbpD+WtBbihC20D7f8jy1tenLZI1gGbYQa1CCSC
+         pU5cyxhEGIk35EGD9pE2jH5vKzq5+028QlgqL6naGcnVeACEmb9+hOweRF9HDLYV7M
+         BfzYKI293T2RR4SywHzN25hhUNV8aSmX3FyQVWok=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id AC1031281C3E;
+        Mon, 19 Dec 2022 07:50:33 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yC7vtZA51NKb; Mon, 19 Dec 2022 07:50:33 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1671454233;
+        bh=Csj51R5RzmD5CqDeAKOhkurKiLCQsHh765r+9++NrA0=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=ns4nqeecNnC23ou3F+AHEDCeojzbpD+WtBbihC20D7f8jy1tenLZI1gGbYQa1CCSC
+         pU5cyxhEGIk35EGD9pE2jH5vKzq5+028QlgqL6naGcnVeACEmb9+hOweRF9HDLYV7M
+         BfzYKI293T2RR4SywHzN25hhUNV8aSmX3FyQVWok=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 381CE128194E;
+        Mon, 19 Dec 2022 07:50:33 -0500 (EST)
+Message-ID: <ddefa55ad5c5f0dc0248a4017ea31e8e5d7a5328.camel@HansenPartnership.com>
 Subject: Re: Question on loading trusted key with keyctl command
-From:   Mimi Zohar <zohar@linux.ibm.com>
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     Sughosh Ganu <sughosh.ganu@linaro.org>,
         linux-integrity@vger.kernel.org
-Date:   Mon, 19 Dec 2022 06:43:40 -0500
+Date:   Mon, 19 Dec 2022 07:50:32 -0500
 In-Reply-To: <CADg8p96Obiio+CUOCKzKqqc6m+B+zSDgs6SWLKSpSo5po94ApQ@mail.gmail.com>
 References: <CADg8p96Obiio+CUOCKzKqqc6m+B+zSDgs6SWLKSpSo5po94ApQ@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: c6RWeqErLTO5vt6rdYlcDbd8iW2_B8LK
-X-Proofpoint-GUID: c6RWeqErLTO5vt6rdYlcDbd8iW2_B8LK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-19_01,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- bulkscore=0 adultscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
- spamscore=0 mlxlogscore=999 clxscore=1011 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212190102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,7 +68,7 @@ On Mon, 2022-12-19 at 15:50 +0530, Sughosh Ganu wrote:
 > platform running Debian. I am using the swtpm 2.0 implementation for
 > the TPM trusted source. Before I get into trying out the evm hmac
 > solution on the target system, I wanted to check creating the trusted
-> and encrypted keys.  Other details on my set up are as follows
+> and encrypted keys.  Other details on my set up are as follows
 > 
 > Distro - Debian 11
 > TPM - swtpm
@@ -109,23 +88,16 @@ On Mon, 2022-12-19 at 15:50 +0530, Sughosh Ganu wrote:
 > # keyctl add trusted kmk "new 32 keyhandle=0x81000001" @u
 > # keyctl show
 > Session Keyring
->  442944693 --alswrv      0     0  keyring: _ses
->  925986946 --alswrv      0 65534   \_ keyring: _uid.0
->  401286062 --alswrv      0     0       \_ trusted: kmk
+>  442944693 --alswrv      0     0  keyring: _ses
+>  925986946 --alswrv      0 65534   \_ keyring: _uid.0
+>  401286062 --alswrv      0     0       \_ trusted: kmk
 > # keyctl pipe 401286062 > kmk.blob
-> # keyctl add trusted kmk "load `cat kmk.blob` keyhandle=0x81000001" @u
+> # keyctl add trusted kmk "load `cat kmk.blob` keyhandle=0x81000001"
+> @u
 > add_key: Invalid argument
-> 
-> -sughosh
-> 
-> [1] - I enable trusted and encrypted keys above the said commit
 
-Try deleting/unlinking the existing kmk key before re-loading it.
+kmk is your invalid argument ... you already have a key there.  Either
+unlink %trusted:kmk or add the new key at kmk1.
 
--- 
-thanks,
-
-Mimi
-
-
+James
 
