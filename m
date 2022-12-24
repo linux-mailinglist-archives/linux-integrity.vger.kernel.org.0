@@ -2,150 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D5B655405
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Dec 2022 20:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4775655846
+	for <lists+linux-integrity@lfdr.de>; Sat, 24 Dec 2022 04:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbiLWTpp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Dec 2022 14:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S231272AbiLXDlw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Dec 2022 22:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbiLWTpo (ORCPT
+        with ESMTP id S229871AbiLXDlv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Dec 2022 14:45:44 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5388E;
-        Fri, 23 Dec 2022 11:45:41 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BNJKiee013113;
-        Fri, 23 Dec 2022 19:45:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=0VjRcbZCBRXe7JgT235ScT0fzvlM6Z0t7ke8K+PgjZo=;
- b=SQ3WmqmQOM3ZhaismvJbxmOPz3rwhpoJ5Qlk94QxhWFWr3d189YE9yZvCMgXoma979VL
- d2ga/ijWJiCJKWlkMGYtpHTSduqpXd+ZY7uVvE3XCOecbBKMm0pP3L1jf03f3uEs9Zoe
- MOeHhafVTZ0B587ysju6bwgsLuMvTQ1EF0nt9ya2Opp6VWgNDXwjISVZsBmXmCFp5iMZ
- t7SFxEf8QiVgrSBXfKma3zqi6lsQts9RpJm0CttnjpfBHzNlLhgoRnw3vlpYcH8zUub7
- jLQJdZyT1A5nI9tdk5/ONTyO1oRaOVa48QK+vrmyLwuR+QnIsZSiEG5B5UqQ03lVF1M/ 0w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mnjdfgrmg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Dec 2022 19:45:08 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BNJLlUt015476;
-        Fri, 23 Dec 2022 19:45:07 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mnjdfgrm5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Dec 2022 19:45:07 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BNGFm9h007421;
-        Fri, 23 Dec 2022 19:45:06 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3mh6yy980e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Dec 2022 19:45:06 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BNJj4sm65011974
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 23 Dec 2022 19:45:04 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8DBCD5804C;
-        Fri, 23 Dec 2022 19:45:04 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BEF8758056;
-        Fri, 23 Dec 2022 19:45:02 +0000 (GMT)
-Received: from sig-9-65-251-3.ibm.com (unknown [9.65.251.3])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 23 Dec 2022 19:45:02 +0000 (GMT)
-Message-ID: <3d959e693630e7f45a60df2c63be7815cb8136ad.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 00/10] Add CA enforcement keyring restrictions
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, Coiby Xu <coxu@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>,
-        "noodles@fb.com" <noodles@fb.com>, "tiwai@suse.de" <tiwai@suse.de>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        Elaine Palmer <erpalmer@linux.vnet.ibm.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        Fri, 23 Dec 2022 22:41:51 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8193BE0EA;
+        Fri, 23 Dec 2022 19:41:49 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Nf8rl1vHKzJpRq;
+        Sat, 24 Dec 2022 11:37:59 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 24 Dec 2022 11:41:47 +0800
+Message-ID: <3a3da3e3-6bab-8aef-0e07-00bef8a13dce@huawei.com>
+Date:   Sat, 24 Dec 2022 11:41:47 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [RFC] IMA LSM based rule race condition issue on 4.19 LTS
+Content-Language: en-US
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>
+CC:     <dmitry.kasatkin@gmail.com>, <sds@tycho.nsa.gov>,
+        <eparis@parisplace.org>, Greg KH <gregkh@linuxfoundation.org>,
+        <sashal@kernel.org>, <selinux@vger.kernel.org>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Fri, 23 Dec 2022 14:45:02 -0500
-In-Reply-To: <61C653C2-A972-40DB-9738-B418A1C601FC@oracle.com>
-References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
-         <b8e54d077da633132eb6da03ea536face095a425.camel@linux.ibm.com>
-         <4CE6F17D-9D87-4024-9E1A-FDFE7C29D5FC@oracle.com>
-         <1c51910a35a1d113256494827fd66ccc7473632e.camel@linux.ibm.com>
-         <17855993-519C-4DAC-B62F-9DB473CF249B@oracle.com>
-         <7df94da37c100c160436892a6996ba30e3fd6dc8.camel@linux.ibm.com>
-         <21E52C3E-0778-4908-AF44-F65D57BEC4E0@oracle.com>
-         <20221216140648.h32gn5qf3igorpzi@Rk>
-         <2d75dfd105f8558ecd1074d64e4252ddd63b698b.camel@linux.ibm.com>
-         <0DAFCFC7-29EB-4481-8FF7-616336383378@oracle.com>
-         <0fb737ab42ef093f7031a80c8a73f582b1d5c1ae.camel@linux.ibm.com>
-         <6AAEC343-E581-4355-ABD8-FE32A1BD16D8@oracle.com>
-         <4ac6b5bd1b57bfc0c548e5711e46b341fd5cfe39.camel@linux.ibm.com>
-         <D1BF8D7B-F9E4-4C87-9288-534F3AE38ECF@oracle.com>
-         <c2b4054c32a24e83186a953ef6e1e3e85aec603b.camel@linux.ibm.com>
-         <61C653C2-A972-40DB-9738-B418A1C601FC@oracle.com>
+        <stable@vger.kernel.org>, luhuaxin <luhuaxin1@huawei.com>
+References: <389334fe-6e12-96b2-6ce9-9f0e8fcb85bf@huawei.com>
+ <efd4ce83299a10b02b1c04cc94934b8d51969e1c.camel@linux.ibm.com>
+ <6a5bc829-b788-5742-cbfc-dba348065dbe@huawei.com>
+ <566721e9e8d639c82d841edef4d11d30a4d29694.camel@linux.ibm.com>
+ <fffb29b7-a1ac-33fb-6aca-989e5567f565@huawei.com>
+ <40cf70a96d2adbff1c0646d3372f131413989854.camel@linux.ibm.com>
+ <a63d5d4b-d7a9-fdcb-2b90-b5e2a974ca4c@huawei.com>
+ <757bc525f7d3fe6db5f3ee1f86de2f4d02d8286b.camel@linux.ibm.com>
+ <CAHC9VhR2mfaVjXz3sBzbkBamt8nE-9aV+jSOs9jH1ESnKvDrvw@mail.gmail.com>
+ <fc11076f-1760-edf3-c0e4-8f58d5e0335c@huawei.com>
+ <CAHC9VhT0SRWMi2gQKaBPOj1owqUh-24O9L2DyOZ8JDgEr+ZQiQ@mail.gmail.com>
+ <381efcb7-604f-7f89-e950-efc142350417@huawei.com>
+ <6348a26f165c27c562db48eb39b04417cbe1380c.camel@linux.ibm.com>
+ <944ea86a-2e6b-ce95-a6cb-fcf6b30ad78b@huawei.com>
+ <578081a5-9ddd-b9bd-002d-f4f14bee79a3@huawei.com>
+ <caa37e22-fed4-e3f1-d956-620e9c5ad648@huawei.com>
+In-Reply-To: <caa37e22-fed4-e3f1-d956-620e9c5ad648@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4sof8-uop4afPEMZjyn-if4A_yEd-XJZ
-X-Proofpoint-ORIG-GUID: FablEb3N1zuRZLOJ8I0k5jfK7BPUlzce
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-23_06,2022-12-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=536
- suspectscore=0 clxscore=1015 bulkscore=0 impostorscore=0
- priorityscore=1501 adultscore=0 phishscore=0 malwarescore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212230164
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-12-23 at 18:17 +0000, Eric Snowberg wrote:
-> >> Fair enough.  If this will be viewed as justification for adding the additional 
-> >> code, I can work on adding it.  Above you mentioned a warning would be needed 
-> >> at a minimum and a restriction could be placed behind a Kconfig.  How about for 
-> >> the default case I add the warning and when compiling with 
-> >> INTEGRITY_CA_MACHINE_KEYRING the restriction will be enforced.
-> > 
-> > Sounds good to me.  To avoid misunderstandings, will there be a Kconfig
-> > menu with 3 options?  
+On 2022/12/23 16:04, Guozihua (Scott) wrote:
+> On 2022/12/21 18:51, Guozihua (Scott) wrote:
+>> On 2022/12/20 9:11, Guozihua (Scott) wrote:
+>>> On 2022/12/19 21:11, Mimi Zohar wrote:
+>>>> On Mon, 2022-12-19 at 15:10 +0800, Guozihua (Scott) wrote:
+>>>>> On 2022/12/16 11:04, Paul Moore wrote:
+>>>>>> On Thu, Dec 15, 2022 at 9:36 PM Guozihua (Scott) <guozihua@huawei.com> wrote:
+>>>>>>> On 2022/12/16 5:04, Paul Moore wrote:
+>>>>>>
+>>>>>> ...
+>>>>>>
+>>>>>>>> How bad is the backport really?  Perhaps it is worth doing it to see
+>>>>>>>> what it looks like?
+>>>>>>>>
+>>>>>>> It might not be that bad, I'll try to post a version next Monday.
+>>>>>>
+>>>>>> Thanks for giving it a shot.
+>>>>>>
+>>>>> When I am trying a partial backport of b16942455193 ("ima: use the lsm
+>>>>> policy update notifier"), I took a closer look into it and if we rip off
+>>>>> the RCU and the notifier part, there would be a potential UAF issue when
+>>>>> multiple processes are calling ima_lsm_update_rule() and
+>>>>> ima_match_rules() at the same time. ima_lsm_update_rule() would free the
+>>>>> old rule if the new rule is successfully copied and initialized, leading
+>>>>> to ima_match_rules() accessing a freed rule.
+>>>>>
+>>>>> To reserve the mainline solution, we would have to either introduce RCU
+>>>>> for rule access, which would work better with notifier mechanism or the
+>>>>> same rule would be updated multiple times, or we would have to introduce
+>>>>> a lock for LSM based rule update.
+>>>>
+>>>> Even with the RCU changes, the rules will be updated multiple times. 
+>>>> With your "ima: Handle -ESTALE returned by ima_filter_rule_match()"
+>>>> patch, upstream makes a single local copy of the rule to avoid updating
+>>>> it multiple times.  Without the notifier, it's updating all the rules.
+>>> That's true. However, in the mainline solution, we are only making a
+>>> local copy of the rule. In 4.19, because of the lazy update mechanism,
+>>> we are replacing the rule on the rule list multiple times and is trying
+>>> to free the original rule.
+>>>>
+>>>> Perhaps an atomic variable to detect if the rules are already being
+>>>> updated would suffice.  If the atomic variable is set, make a single
+>>>> local copy of the rule.
+>>> That should do it. I'll send a patch set soon.
+>>>
+>> Including Huaxin Lu in the loop. Sorry for forgotten about it for quite
+>> some time.
+>>
+>> I tried the backported solution, it seems that it's causing RCU stall.
+>> It seems on 4.19.y IMA is already accessing rules through RCU. Still
+>> debugging it.
+> It seems that after the backport, a NULL pointer deference pops out.
+> I'll have to look into it.
 > 
-> I will add the three options in the next round.
-> 
-> > There were a couple of other comments having to
-> > do with variable names.  Will you address them as well?
-> 
-> And take care of the variable name changes.  I won’t get back to this until January.
-
-Enjoy your vacation and the holidays.  Looking forward to the next
-version.
+It seems that any other means except from a full RCU or locking won't be
+able to prevent race condition between policy update and rule match. Any
+other suggestions?
 
 -- 
-thanks,
-
-Mimi
+Best
+GUO Zihua
 
