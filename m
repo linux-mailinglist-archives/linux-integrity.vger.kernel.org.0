@@ -2,55 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217DF6564E1
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Dec 2022 21:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 478B16564E3
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Dec 2022 21:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbiLZUDh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Dec 2022 15:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S231349AbiLZUGb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Dec 2022 15:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiLZUDg (ORCPT
+        with ESMTP id S229547AbiLZUGa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Dec 2022 15:03:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BC6E7F;
-        Mon, 26 Dec 2022 12:03:35 -0800 (PST)
+        Mon, 26 Dec 2022 15:06:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27199310;
+        Mon, 26 Dec 2022 12:06:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68C0AB80D71;
-        Mon, 26 Dec 2022 20:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D6BAC433F0;
-        Mon, 26 Dec 2022 20:03:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC9C7B80D6E;
+        Mon, 26 Dec 2022 20:06:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A36C433D2;
+        Mon, 26 Dec 2022 20:06:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672085013;
-        bh=ruvWFFpoU47k2uWNCQx9jR/dxjDlgYDepRVz1qrUACk=;
+        s=k20201202; t=1672085187;
+        bh=i/+iCN3V0qJo7Kx2tgwHs7KV6/3d8Eqm1Fc+T1qjgu8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YHqu5TEAAiEMhjsA4+REG3drQw7+7hTP3RSiXwZKXDYmuZ5qz0bNuu0VlUUQXgTH1
-         gJG3vcgVM0v8uj8xJ8e94enxqhDGjdtvSIP71Lqiv67vwwMFfM67Xk9n5SNTP1WmaF
-         jFsBZxxTc3VS3EHZwGRIG7bfFK5Ux9CParSeX7wMINQwXj4IRmRshcxifLuLdrJlmv
-         6kslj+YM9CmN/3dbx//uQo1woCDrQL6eQLN+fOstiFSdDp+5+mih8IvwZbg5a6652p
-         +xR+odmlpnlCZpAFPSXDW9aqjhZPq75ST8ZZ717h5ddw2DVdHqdd7tIF7XW1sRDliv
-         tWxj9X4NRYdsQ==
-Date:   Mon, 26 Dec 2022 20:03:27 +0000
+        b=mDEpFF4wVi4iq7cwLKv4yZkMWdYyTDVG9HDPILZrBl0x1lJQ1KQxXpx0C9qcdcooC
+         Lw0R6qPbQdPR+U4JpO4JhNMV69BIJuOxdTis/paE5QFz22y9oPCD4/UU+Qd+Zv7NYQ
+         3bm7/kH/Z1klSTKi4TWPEvkFp214xTDUuFuF90i/T+Qa2qT0HzxrOs4YsXIUKUAZ+9
+         oxNVb3YKy8DA/Prac4hacU7OUjTrCmt5RDu5GiaWzMlivPlG/kQ/F72BEEasFXFysh
+         YUGcDfWDFZMIohKTtYxVHty7Bte5yGhXIXIBpCofvn4IszaDplMffv+vuykCvo3N8L
+         j2pmbOz+kMaYA==
+Date:   Mon, 26 Dec 2022 20:06:21 +0000
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>
 Cc:     linux-integrity@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
         keyrings@vger.kernel.org
-Subject: Re: [PATCH 01/11] tpm: move buffer handling from static inlines to
- real functions
-Message-ID: <Y6n+D37PYXyuRILN@kernel.org>
+Subject: Re: [PATCH 03/11] tpm: add cursor based buffer functions for
+ response parsing
+Message-ID: <Y6n+vZSdE5KEZ4eJ@kernel.org>
 References: <20221209160611.30207-1-James.Bottomley@HansenPartnership.com>
- <20221209160611.30207-2-James.Bottomley@HansenPartnership.com>
- <Y5PqRdlEdBjj72KM@kernel.org>
- <704a88efc2a7cf5c2679af2ca37a682efd6ceaa2.camel@HansenPartnership.com>
- <Y5Z7awuHL9Wsn2l/@kernel.org>
- <e32ead8270f65fe7bf828fe90d457caac4234dce.camel@HansenPartnership.com>
+ <20221209160611.30207-4-James.Bottomley@HansenPartnership.com>
+ <Y5Z62HPEDHGaK+Uq@kernel.org>
+ <08f138d9df19b508bc4892d34f117ac15db9570a.camel@HansenPartnership.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e32ead8270f65fe7bf828fe90d457caac4234dce.camel@HansenPartnership.com>
+In-Reply-To: <08f138d9df19b508bc4892d34f117ac15db9570a.camel@HansenPartnership.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,41 +58,31 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 10:16:42PM -0500, James Bottomley wrote:
-> On Mon, 2022-12-12 at 00:52 +0000, Jarkko Sakkinen wrote:
-> > On Sun, Dec 11, 2022 at 03:01:57PM -0500, James Bottomley wrote:
-> > > On Sat, 2022-12-10 at 02:09 +0000, Jarkko Sakkinen wrote:
-> > > > On Fri, Dec 09, 2022 at 11:06:01AM -0500, James Bottomley wrote:
-> > > > > This separates out the old tpm_buf_... handling functions from
-> > > > > static
-> > > > > inlines in tpm.h and makes them their own tpm-buf.c file.  This
-> > > > > is
-> > > > > a
-> > > > > precursor so we can add new functions for other TPM type
-> > > > > handling
-> > > > > 
-> > > > > Signed-off-by: James Bottomley
-> > > > > <James.Bottomley@HansenPartnership.com>
-> > > > 
-> > > > I don't comprehend that explanation at all.
-> > > > 
-> > > > Please, add a bit more detail why this precursory change is
-> > > > required.
+On Sun, Dec 11, 2022 at 10:13:12PM -0500, James Bottomley wrote:
+> On Mon, 2022-12-12 at 00:50 +0000, Jarkko Sakkinen wrote:
+> > On Fri, Dec 09, 2022 at 11:06:03AM -0500, James Bottomley wrote:
+> > > It's very convenient when parsing responses to have a cursor you
+> > > simply move over the response extracting the data.  Add such cursor
+> > > functions for the TPM unsigned integer types.
 > > > 
-> > > It's the usual submitting-patches requirement of moving code first
-> > > before modifying it.  Since it's the recommended way of doing
-> > > things in our process docs, I'm not sure how much more explanation
-> > > can be given.
+> > > Signed-off-by: James Bottomley
+> > > <James.Bottomley@HansenPartnership.com>
 > > 
-> > It doesn not contain any reasonable argument for not continue
-> > using inline functions.
+> > Saying that something is convenient is not really an argument.
+> > 
+> > What you are going to use it for? Is it complex enough that what we
+> > have not doesn't scale. I'd just answer these questions and write
+> > more reasonable commit message.
 > 
-> In principle nothing prevents them being inlines in tpm.h.  There's
-> quite a lot of them, so it's growing unweildy and __tpm_buf_init can't
-> be hidden in that scenario but it could, in theory, be done.
+> It's all used int patch 6 which gets into the complex building of
+> authenticated and hmac'd requests and responses via sessions using
+> these primitives.
 
-So: all I'm asking write this down. I'm cool with it, i.e. since complexity
-will grow heavily because of TPM2B structure handling etc. it is better to
-encapsulate he implementation, correct?
+Again state obvious, even if you think it is obvious. It is really useful
+to have that kind of that as refresher in the commit log.
+
+I'm setting rpi 3b + tpm2 chip gpio to try this out. I thought it would be
+a cool test sytem because later on I can test both fTPM in TZ and SPI dTPM
+with it...
 
 BR, Jarkko
