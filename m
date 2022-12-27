@@ -2,303 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAA8656A5A
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Dec 2022 13:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A7F656A1E
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Dec 2022 12:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiL0MBM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Dec 2022 07:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S231204AbiL0L44 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Dec 2022 06:56:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiL0L4K (ORCPT
+        with ESMTP id S229679AbiL0L4c (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Dec 2022 06:56:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9F3A199
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Dec 2022 03:56:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE38461013
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Dec 2022 11:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F5BC433EF;
-        Tue, 27 Dec 2022 11:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672142168;
-        bh=MCbP4nE0gudJ57KgNOjmSML4VRM/9Rin7eC3pGC2/SI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LDFsP8sA0Sf/gPTXcb7AYLnbBcx/xFPIq46v6EmrCVLlxzYswPKTTYrFCEfpVDp9H
-         27bgBleBFihecrwxWD4emz5yyJYs9ov5cSKwCqQb/HOLzQIjE/7I89Nf0fwzb8/aQn
-         DjA4eLzdW2py6+gBLhRwgkgzVafyqVBx6sl3Rh845gsXiE6TsRuemcVSJlAstwRh15
-         BFd3Gle3mj7sCkYkaFLNrJZhV6h7h/5bkfJpOUE+q5L+e/RZQkZlTWuH5llplPL59e
-         JWtgwEgJzGtegwmhMgKoQJIIXnHaZlVOpPAQhobKHnWl+4c8GQ4aKesxw/ITlZvLcQ
-         K7qEfFn4GB9Vg==
-Date:   Tue, 27 Dec 2022 11:56:02 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] tpm_crb: Add support for CRB devices based on Pluton
-Message-ID: <Y6rdUvQhwIczoKXX@kernel.org>
-References: <20221212104220.455658-1-mjg59@srcf.ucam.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212104220.455658-1-mjg59@srcf.ucam.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Dec 2022 06:56:32 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26762191;
+        Tue, 27 Dec 2022 03:56:28 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BRAug9p015465;
+        Tue, 27 Dec 2022 11:56:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=D8Dmx1UxuS+JHTxv5lC60zrzyi7pxK0+1j1ZUQBGI+s=;
+ b=cZIyMnbgRM8ill5SmM3x9C23RqRUDIWzIjD6q8bV1hMzjZAY0V9PqJtqhjxe67C1hS83
+ ivw1VylxITSIC0UwRmlSf74w+n4sSzNm7gwR7iUoTcksb35S9hvnah5xgS9NwHt6RWHz
+ 7IIvZ/J19rLpm/oqpGJUiuey6HP/xS2iMqfrHLRrHrjljmtnl2+yMz8VdZ3/09cPNMms
+ tDkfr/hE9K4j1UYvvP/z8jrjB00QTu6xlfiTaEQ2x6sDgj1hVpVwamgazpidzFNDlE9d
+ CChx/DB4f8coDrsdQj/2CroC4dUdWXxN68w3V2edxhOaS3yzMFbsm/b+m6D0C1OVu/Qh Yw== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mqyd9gwpa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Dec 2022 11:56:19 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BRBIBda013133;
+        Tue, 27 Dec 2022 11:56:18 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3mns27rumj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Dec 2022 11:56:17 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BRBuHOC31326674
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Dec 2022 11:56:17 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAA6B58054;
+        Tue, 27 Dec 2022 11:56:16 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E03D858058;
+        Tue, 27 Dec 2022 11:56:15 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.23.56])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 27 Dec 2022 11:56:15 +0000 (GMT)
+Message-ID: <d65e2d46bf41e3d58c0fa18bd274faf20dadb523.camel@linux.ibm.com>
+Subject: Re: [PATCH 2/2] ima: Handle -ESTALE returned by
+ ima_filter_rule_match()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        GUO Zihua <guozihua@huawei.com>
+Cc:     stable@vger.kernel.org, paul@paul-moore.com,
+        linux-integrity@vger.kernel.org, luhuaxin1@huawei.com
+Date:   Tue, 27 Dec 2022 06:56:15 -0500
+In-Reply-To: <Y6qgqO/LJ/wHUk5x@kroah.com>
+References: <20221227014729.4799-1-guozihua@huawei.com>
+         <20221227014729.4799-3-guozihua@huawei.com> <Y6qgqO/LJ/wHUk5x@kroah.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pS52XCwEjMORToRoUGn0RngLWm0ogdc-
+X-Proofpoint-ORIG-GUID: pS52XCwEjMORToRoUGn0RngLWm0ogdc-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-27_08,2022-12-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 mlxscore=0 clxscore=1011 spamscore=0
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212270091
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 02:42:20AM -0800, Matthew Garrett wrote:
-> Pluton is an integrated security processor present in some recent Ryzen
-> parts. If it's enabled, it presents two devices - an MSFT0101 ACPI device
-> that's broadly an implementation of a Command Response Buffer TPM2, and
-> an MSFT0200 ACPI device whose functionality I haven't examined in detail
-> yet. This patch only attempts to add support for the TPM device.
+On Tue, 2022-12-27 at 08:37 +0100, Greg KH wrote:
+> On Tue, Dec 27, 2022 at 09:47:29AM +0800, GUO Zihua wrote:
+> > [ Upstream commit c7423dbdbc9ecef7fff5239d144cad4b9887f4de ]
 > 
-> There's a few things that need to be handled here. The first is that the
-> TPM2 ACPI table uses a previously undefined start method identifier. The
-> table format appears to include 16 bytes of startup data, which corresponds
-> to one 64-bit address for a start message and one 64-bit address for a
-> completion response. The second is that the ACPI tables on the Thinkpad Z13
-> I'm testing this on don't define any memory windows in _CRS (or, more
-> accurately, there are two empty memory windows). This check doesn't seem
-> strictly necessary, so I've skipped that.
+> For obvious reasons we can not only take this patch (from 6.2-rc1) into
+> 4.19.y as that would cause people who upgrade from 4.19.y to a newer
+> stable kernel to have a regression.
 > 
-> Finally, it seems like chip needs to be explicitly asked to transition into
-> ready status on every command. Failing to do this means that if two commands
-> are sent in succession without an idle/ready transition in between,
-> everything will appear to work fine but the response is simply the original
-> command. I'm working without any docs here, so I'm not sure if this is
-> actually the required behaviour or if I'm missing something somewhere else,
-> but doing this results in the chip working reliably.
+> Please submit backports for all stable kernels if you wish to see this
+> in older ones to prevent problems like this from happening.
+
+Sasha has already queued the original commit and the dependencies for
+the 6.1, 6.0, and 5.15 stable kernels.  Those kernels all had the
+call_lsm_notifier() to call_blocking_lsm_notifier() change.  Prior to
+5.3, the change to the blocking notifier would need to be backported as
+well.  This version of the backport still needs to be reviewed.
+
+thanks,
+
+Mimi
+
 > 
-> Signed-off-by: Matthew Garrett <mjg59@srcf.ucam.org>
-> ---
->  drivers/char/tpm/tpm_crb.c | 96 ++++++++++++++++++++++++++++++++++----
->  include/acpi/actbl3.h      |  1 +
->  2 files changed, 88 insertions(+), 9 deletions(-)
+> But also, why are you still on 4.19.y?  What is wrong with 5.4.y at this
+> point in time?  If we dropped support for 4.19.y in January, what would
+> that cause to happen for your systems?
 > 
-> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-> index 18606651d1aa..7c6ec3aafce8 100644
-> --- a/drivers/char/tpm/tpm_crb.c
-> +++ b/drivers/char/tpm/tpm_crb.c
-> @@ -98,6 +98,8 @@ struct crb_priv {
->  	u8 __iomem *rsp;
->  	u32 cmd_size;
->  	u32 smc_func_id;
-> +	u32 __iomem *pluton_start_addr;
-> +	u32 __iomem *pluton_reply_addr;
->  };
->  
->  struct tpm2_crb_smc {
-> @@ -108,6 +110,11 @@ struct tpm2_crb_smc {
->  	u32 smc_func_id;
->  };
->  
-> +struct tpm2_crb_pluton {
-> +	u64 start_addr;
-> +	u64 reply_addr;
-> +};
-> +
->  static bool crb_wait_for_reg_32(u32 __iomem *reg, u32 mask, u32 value,
->  				unsigned long timeout)
->  {
-> @@ -127,6 +134,24 @@ static bool crb_wait_for_reg_32(u32 __iomem *reg, u32 mask, u32 value,
->  	return ((ioread32(reg) & mask) == value);
->  }
->  
-> +static int crb_do_pluton_doorbell(struct crb_priv *priv, bool wait_for_complete)
-> +{
-> +	if (!crb_wait_for_reg_32(priv->pluton_reply_addr,
-> +				 0xffffffff, 1, 200)) {
-
-        if (!crb_wait_for_reg_32(priv->pluton_reply_addr, ~0, 1, TPM2_TIMEOUT_C)
-
-> +		return -EINVAL;
-
-Hmm... shouldn't this also return -ETIME?
-
-> +	}
-> +
-> +	iowrite32(1, priv->pluton_start_addr);
-> +	if (wait_for_complete == false)
-> +		return 0;
-> +
-> +	if (!crb_wait_for_reg_32(priv->pluton_start_addr,
-> +				 0xffffffff, 0, 200))
-> +		return -ETIME;
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * __crb_go_idle - request tpm crb device to go the idle state
->   *
-> @@ -145,6 +170,8 @@ static bool crb_wait_for_reg_32(u32 __iomem *reg, u32 mask, u32 value,
->   */
->  static int __crb_go_idle(struct device *dev, struct crb_priv *priv)
->  {
-> +	int rc = 0;
-> +
->  	if ((priv->sm == ACPI_TPM2_START_METHOD) ||
->  	    (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD) ||
->  	    (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC))
-> @@ -152,6 +179,12 @@ static int __crb_go_idle(struct device *dev, struct crb_priv *priv)
->  
->  	iowrite32(CRB_CTRL_REQ_GO_IDLE, &priv->regs_t->ctrl_req);
->  
-> +	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON)
-> +		rc = crb_do_pluton_doorbell(priv, true);
-> +
-> +	if (rc)
-> +		return rc;
-
-Since the impact to latency is insignificant, wouldn't it be better
-idea to name the function just: crg_try_pluton_doorbell() and in the
-beginning of that function do:
-
-static int crb_try_pluton_doorbell(struct crb_priv *priv, bool wait_for_complete)
-{
-        if (priv->sm != ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON)
-                return 0;
-
-The you don't have to repeat the same condition everywhere, and you don't
-have to initialize 'rc' in the beginning of the function.
-
-> +
->  	if (!crb_wait_for_reg_32(&priv->regs_t->ctrl_req,
->  				 CRB_CTRL_REQ_GO_IDLE/* mask */,
->  				 0, /* value */
-> @@ -194,6 +227,10 @@ static int __crb_cmd_ready(struct device *dev, struct crb_priv *priv)
->  		return 0;
->  
->  	iowrite32(CRB_CTRL_REQ_CMD_READY, &priv->regs_t->ctrl_req);
-> +
-> +	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON)
-> +		crb_do_pluton_doorbell(priv, true);
-> +
->  	if (!crb_wait_for_reg_32(&priv->regs_t->ctrl_req,
->  				 CRB_CTRL_REQ_CMD_READY /* mask */,
->  				 0, /* value */
-> @@ -371,6 +408,10 @@ static int crb_send(struct tpm_chip *chip, u8 *buf, size_t len)
->  		return -E2BIG;
->  	}
->  
-> +	/* Seems to be necessary for every command */
-> +	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON)
-> +		__crb_cmd_ready(&chip->dev, priv);
-> +
->  	memcpy_toio(priv->cmd, buf, len);
->  
->  	/* Make sure that cmd is populated before issuing start. */
-> @@ -394,6 +435,9 @@ static int crb_send(struct tpm_chip *chip, u8 *buf, size_t len)
->  		rc = tpm_crb_smc_start(&chip->dev, priv->smc_func_id);
->  	}
->  
-> +	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON)
-> +		rc = crb_do_pluton_doorbell(priv, false);
-> +
->  	return rc;
->  }
->  
-> @@ -524,15 +568,18 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
->  		return ret;
->  	acpi_dev_free_resource_list(&acpi_resource_list);
->  
-> -	if (resource_type(iores_array) != IORESOURCE_MEM) {
-> -		dev_err(dev, FW_BUG "TPM2 ACPI table does not define a memory resource\n");
-> -		return -EINVAL;
-> -	} else if (resource_type(iores_array + TPM_CRB_MAX_RESOURCES) ==
-> -		IORESOURCE_MEM) {
-> -		dev_warn(dev, "TPM2 ACPI table defines too many memory resources\n");
-> -		memset(iores_array + TPM_CRB_MAX_RESOURCES,
-> -		       0, sizeof(*iores_array));
-> -		iores_array[TPM_CRB_MAX_RESOURCES].flags = 0;
-> +	/* Pluton doesn't appear to define ACPI memory regions */
-> +	if (priv->sm != ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON) {
-> +		if (resource_type(iores_array) != IORESOURCE_MEM) {
-> +			dev_err(dev, FW_BUG "TPM2 ACPI table does not define a memory resource\n");
-> +			return -EINVAL;
-> +		} else if (resource_type(iores_array + TPM_CRB_MAX_RESOURCES) ==
-> +			   IORESOURCE_MEM) {
-> +			dev_warn(dev, "TPM2 ACPI table defines too many memory resources\n");
-> +			memset(iores_array + TPM_CRB_MAX_RESOURCES,
-> +			       0, sizeof(*iores_array));
-> +			iores_array[TPM_CRB_MAX_RESOURCES].flags = 0;
-> +		}
->  	}
->  
->  	iores = NULL;
-> @@ -656,6 +703,22 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
->  	return ret;
->  }
->  
-> +static int crb_map_pluton(struct device *dev, struct crb_priv *priv,
-> +	       struct acpi_table_tpm2 *buf, struct tpm2_crb_pluton *crb_pluton)
-> +{
-> +	priv->pluton_start_addr = crb_map_res(dev, NULL, NULL,
-> +					      crb_pluton->start_addr, 4);
-> +	if (IS_ERR(priv->pluton_start_addr))
-> +		return PTR_ERR(priv->pluton_start_addr);
-> +
-> +	priv->pluton_reply_addr = crb_map_res(dev, NULL, NULL,
-> +					      crb_pluton->reply_addr, 4);
-> +	if (IS_ERR(priv->pluton_reply_addr))
-> +		return PTR_ERR(priv->pluton_reply_addr);
-> +
-> +	return 0;
-> +}
-> +
->  static int crb_acpi_add(struct acpi_device *device)
->  {
->  	struct acpi_table_tpm2 *buf;
-> @@ -663,6 +726,7 @@ static int crb_acpi_add(struct acpi_device *device)
->  	struct tpm_chip *chip;
->  	struct device *dev = &device->dev;
->  	struct tpm2_crb_smc *crb_smc;
-> +	struct tpm2_crb_pluton *crb_pluton;
->  	acpi_status status;
->  	u32 sm;
->  	int rc;
-> @@ -695,6 +759,20 @@ static int crb_acpi_add(struct acpi_device *device)
->  		priv->smc_func_id = crb_smc->smc_func_id;
->  	}
->  
-> +	if (sm == ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON) {
-> +		if (buf->header.length < (sizeof(*buf) + sizeof(*crb_pluton))) {
-> +			dev_err(dev,
-> +				FW_BUG "TPM2 ACPI table has wrong size %u for start method type %d\n",
-> +				buf->header.length,
-> +				ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON);
-> +			return -EINVAL;
-> +		}
-> +		crb_pluton = ACPI_ADD_PTR(struct tpm2_crb_pluton, buf, sizeof(*buf));
-> +		rc = crb_map_pluton(dev, priv, buf, crb_pluton);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
->  	priv->sm = sm;
->  	priv->hid = acpi_device_hid(device);
->  
-> diff --git a/include/acpi/actbl3.h b/include/acpi/actbl3.h
-> index 7b9571e00cc4..832c6464f063 100644
-> --- a/include/acpi/actbl3.h
-> +++ b/include/acpi/actbl3.h
-> @@ -443,6 +443,7 @@ struct acpi_tpm2_phy {
->  #define ACPI_TPM2_RESERVED10                        10
->  #define ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC       11	/* V1.2 Rev 8 */
->  #define ACPI_TPM2_RESERVED                          12
-> +#define ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON        13
->  
->  /* Optional trailer appears after any start_method subtables */
->  
-> -- 
-> 2.38.1
+> thanks,
+> 
+> greg k-h
 > 
 
-BR, Jarkko
