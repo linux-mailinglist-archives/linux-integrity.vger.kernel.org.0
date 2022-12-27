@@ -2,119 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A7F656A1E
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Dec 2022 12:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A745F656BC3
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Dec 2022 15:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiL0L44 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Dec 2022 06:56:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
+        id S230326AbiL0O2p (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Dec 2022 09:28:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiL0L4c (ORCPT
+        with ESMTP id S229445AbiL0O2n (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Dec 2022 06:56:32 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26762191;
-        Tue, 27 Dec 2022 03:56:28 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BRAug9p015465;
-        Tue, 27 Dec 2022 11:56:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=D8Dmx1UxuS+JHTxv5lC60zrzyi7pxK0+1j1ZUQBGI+s=;
- b=cZIyMnbgRM8ill5SmM3x9C23RqRUDIWzIjD6q8bV1hMzjZAY0V9PqJtqhjxe67C1hS83
- ivw1VylxITSIC0UwRmlSf74w+n4sSzNm7gwR7iUoTcksb35S9hvnah5xgS9NwHt6RWHz
- 7IIvZ/J19rLpm/oqpGJUiuey6HP/xS2iMqfrHLRrHrjljmtnl2+yMz8VdZ3/09cPNMms
- tDkfr/hE9K4j1UYvvP/z8jrjB00QTu6xlfiTaEQ2x6sDgj1hVpVwamgazpidzFNDlE9d
- CChx/DB4f8coDrsdQj/2CroC4dUdWXxN68w3V2edxhOaS3yzMFbsm/b+m6D0C1OVu/Qh Yw== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mqyd9gwpa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Dec 2022 11:56:19 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BRBIBda013133;
-        Tue, 27 Dec 2022 11:56:18 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3mns27rumj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Dec 2022 11:56:17 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BRBuHOC31326674
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Dec 2022 11:56:17 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EAA6B58054;
-        Tue, 27 Dec 2022 11:56:16 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E03D858058;
-        Tue, 27 Dec 2022 11:56:15 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.23.56])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Dec 2022 11:56:15 +0000 (GMT)
-Message-ID: <d65e2d46bf41e3d58c0fa18bd274faf20dadb523.camel@linux.ibm.com>
-Subject: Re: [PATCH 2/2] ima: Handle -ESTALE returned by
- ima_filter_rule_match()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        GUO Zihua <guozihua@huawei.com>
-Cc:     stable@vger.kernel.org, paul@paul-moore.com,
-        linux-integrity@vger.kernel.org, luhuaxin1@huawei.com
-Date:   Tue, 27 Dec 2022 06:56:15 -0500
-In-Reply-To: <Y6qgqO/LJ/wHUk5x@kroah.com>
-References: <20221227014729.4799-1-guozihua@huawei.com>
-         <20221227014729.4799-3-guozihua@huawei.com> <Y6qgqO/LJ/wHUk5x@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: pS52XCwEjMORToRoUGn0RngLWm0ogdc-
-X-Proofpoint-ORIG-GUID: pS52XCwEjMORToRoUGn0RngLWm0ogdc-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-27_08,2022-12-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 suspectscore=0 phishscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 mlxscore=0 clxscore=1011 spamscore=0
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212270091
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Dec 2022 09:28:43 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8277B6432;
+        Tue, 27 Dec 2022 06:28:39 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NhGzT0GwYz9xFGW;
+        Tue, 27 Dec 2022 22:21:09 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAH3WP1AKtjzU5JAA--.42546S2;
+        Tue, 27 Dec 2022 15:28:15 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, ebiggers@kernel.org
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v5 0/2] KEYS: asymmetric: Copy sig and digest in public_key_verify_signature()
+Date:   Tue, 27 Dec 2022 15:27:38 +0100
+Message-Id: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwAH3WP1AKtjzU5JAA--.42546S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw1UGF4xAry5CFy7CFyfJFb_yoWfArcEkF
+        y8KasrXF18XF1IyFy2yF1kKry2krWDGr18KF18trWxZry3Kw1aqrsrWFWFvrWUXrs8AayU
+        Gr15XryfJr9FgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb7AYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1rMa5UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4cI0gADs5
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-12-27 at 08:37 +0100, Greg KH wrote:
-> On Tue, Dec 27, 2022 at 09:47:29AM +0800, GUO Zihua wrote:
-> > [ Upstream commit c7423dbdbc9ecef7fff5239d144cad4b9887f4de ]
-> 
-> For obvious reasons we can not only take this patch (from 6.2-rc1) into
-> 4.19.y as that would cause people who upgrade from 4.19.y to a newer
-> stable kernel to have a regression.
-> 
-> Please submit backports for all stable kernels if you wish to see this
-> in older ones to prevent problems like this from happening.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Sasha has already queued the original commit and the dependencies for
-the 6.1, 6.0, and 5.15 stable kernels.  Those kernels all had the
-call_lsm_notifier() to call_blocking_lsm_notifier() change.  Prior to
-5.3, the change to the blocking notifier would need to be backported as
-well.  This version of the backport still needs to be reviewed.
+Changelog:
 
-thanks,
+v4:
+ - Replace sg_init_table()/sg_set_buf() with sg_init_one() (suggested by
+   Eric)
 
-Mimi
+v3:
 
-> 
-> But also, why are you still on 4.19.y?  What is wrong with 5.4.y at this
-> point in time?  If we dropped support for 4.19.y in January, what would
-> that cause to happen for your systems?
-> 
-> thanks,
-> 
-> greg k-h
-> 
+v2:
+ - Add patch by Herbert to take only the needed bytes for a MPI from the
+   scatterlist
+ - Use only one scatterlist for signature and digest (suggested by Eric)
+ - Rename key variable to buf (suggested by Eric)
+ - Rename key_max_len variable to buf_len
+ - Use size_t for the buf_len variable instead of u32
+
+v1:
+ - Unconditionally copy the signature and digest to the buffer to keep the
+   code simple (suggested by Eric)
+
+Herbert Xu (1):
+  lib/mpi: Fix buffer overrun when SG is too long
+
+Roberto Sassu (1):
+  KEYS: asymmetric: Copy sig and digest in public_key_verify_signature()
+
+ crypto/asymmetric_keys/public_key.c | 38 ++++++++++++++++-------------
+ lib/mpi/mpicoder.c                  |  3 ++-
+ 2 files changed, 23 insertions(+), 18 deletions(-)
+
+-- 
+2.25.1
 
