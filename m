@@ -2,37 +2,39 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3517465669C
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Dec 2022 02:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F06CA65669E
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Dec 2022 02:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiL0BtV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Dec 2022 20:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
+        id S232521AbiL0Bux (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Dec 2022 20:50:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiL0BtU (ORCPT
+        with ESMTP id S232499AbiL0Bus (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Dec 2022 20:49:20 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7587FF21
-        for <linux-integrity@vger.kernel.org>; Mon, 26 Dec 2022 17:49:19 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NgyGT6RjczmWSl;
-        Tue, 27 Dec 2022 09:48:01 +0800 (CST)
+        Mon, 26 Dec 2022 20:50:48 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AF426E;
+        Mon, 26 Dec 2022 17:50:47 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NgyJN3m4rzJqfG;
+        Tue, 27 Dec 2022 09:49:40 +0800 (CST)
 Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
  (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 27 Dec
- 2022 09:49:17 +0800
+ 2022 09:50:45 +0800
 From:   GUO Zihua <guozihua@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>
-CC:     <linux-integrity@vger.kernel.org>
-Subject: [PATCH] ima: Handle error code from security_audit_rule_match
-Date:   Tue, 27 Dec 2022 09:46:33 +0800
-Message-ID: <20221227014633.4449-1-guozihua@huawei.com>
+To:     <stable@vger.kernel.org>, <gregkh@linuxfoundation.org>,
+        <zohar@linux.ibm.com>
+CC:     <paul@paul-moore.com>, <linux-integrity@vger.kernel.org>,
+        <luhuaxin1@huawei.com>
+Subject: [PATCH 0/2] ima: Fix IMA mishandling of LSM based rule during
+Date:   Tue, 27 Dec 2022 09:47:27 +0800
+Message-ID: <20221227014729.4799-1-guozihua@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  dggpemm500024.china.huawei.com (7.185.36.203)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -43,31 +45,24 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-commit c7423dbdbc9e ("ima: Handle -ESTALE returned by
-ima_filter_rule_match()") introduced the handling of -ESTALE returned by
-security_audit_rule_match(). However, security_audit_rule_match() might
-return other error codes if some error occurred. We should handle those
-error codes as well.
+Backports the following two patches to fix the issue of IMA mishandling
+LSM based rule during LSM policy update, causing a file to match an
+unexpected rule.
 
-Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
- security/integrity/ima/ima_policy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Some changes were made to these patches, which was stated in the commit
+message of corresponding patch.
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 6a68ec270822..5561e1b2c376 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -663,7 +663,7 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 			break;
- 		}
- 
--		if (rc == -ESTALE && !rule_reinitialized) {
-+		if (rc < 0 && !rule_reinitialized) {
- 			lsm_rule = ima_lsm_copy_rule(rule);
- 			if (lsm_rule) {
- 				rule_reinitialized = true;
+GUO Zihua (1):
+  ima: Handle -ESTALE returned by ima_filter_rule_match()
+
+Janne Karhunen (1):
+  ima: use the lsm policy update notifier
+
+ security/integrity/ima/ima.h        |   2 +
+ security/integrity/ima/ima_main.c   |   8 ++
+ security/integrity/ima/ima_policy.c | 146 +++++++++++++++++++++++-----
+ 3 files changed, 130 insertions(+), 26 deletions(-)
+
 -- 
 2.17.1
 
