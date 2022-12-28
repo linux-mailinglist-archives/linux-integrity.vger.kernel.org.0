@@ -2,101 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C19D6586AF
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Dec 2022 21:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC526586C7
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Dec 2022 21:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiL1UYt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Dec 2022 15:24:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S229716AbiL1UkW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Dec 2022 15:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiL1UYs (ORCPT
+        with ESMTP id S229668AbiL1UkV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Dec 2022 15:24:48 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6548B1573E;
-        Wed, 28 Dec 2022 12:24:47 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BBA5C21A21;
-        Wed, 28 Dec 2022 20:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672259084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PNZQeMoVy7KGBZd3TY/hjBMsT8Wahi2q2P3jL0HXUCM=;
-        b=tM2qJZhfi+SXzV27m5JEZd9GV5wClY52zAhFoccQlN8dpIzzvNouvfILmLE8cQzFBjYvVM
-        Up8RcjucQd8KQncfBVF95Rg7GDne7MDMkFzQrY7GZqjh3YsvAq3svw8ba8J0AJSonHr6nO
-        /18RRjOBU7cGfGUGEH/FzUPKCKsWyxI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672259084;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PNZQeMoVy7KGBZd3TY/hjBMsT8Wahi2q2P3jL0HXUCM=;
-        b=FXKd3ScYdOkNc6F3uKQe/h4ql4UCQ6G+bOr0MMaKzWX4QuYZRE2kDI+6DyTGkmuOehsMUE
-        pbMZ/jPF58AUBODw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F496134F5;
-        Wed, 28 Dec 2022 20:24:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6y7VGQymrGNrRQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 28 Dec 2022 20:24:44 +0000
-Message-ID: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
-Date:   Wed, 28 Dec 2022 21:22:56 +0100
+        Wed, 28 Dec 2022 15:40:21 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A94165AE
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Dec 2022 12:40:20 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id e24so3780160uam.10
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Dec 2022 12:40:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lKDYx6Ecy9/r2FM7TTQ4aQ5xrn1QPytf3YNqwTn+XSc=;
+        b=sp9TJ2gQgUGBpgLxvEh/5t+OmM9wwBjbQNKsdF9hGzyTCbMgzcK6mFjWMftMG8ED0R
+         VX6m0rTZ0AkP/Brp4lveZQdqivUj5f8bXgDC98e/E3RYQDmbcEdq4pyed9SfAPjVu9du
+         7NY3CUO2D+imaVDaf5v17bMxG+8kostIQ/BeP5ZqCETUtRh5OwoGY+C2aOtWvxyx2zp7
+         tnPDEwpOI4+3O/NYGojqR+hp/OTIjJQTSLdNWTAAESnXq2FB4grelKeOxz533mTIjrJz
+         tAYKpYXCLXs3/qAXBQ8J3m+B99jsLib/MXj5rY4Yn7GhHFgC6qh6aMh0W9gsMnApc3Mc
+         Dg2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lKDYx6Ecy9/r2FM7TTQ4aQ5xrn1QPytf3YNqwTn+XSc=;
+        b=NWaWI5G9UT+sr0Mkil64f4kXsUXRkjK88467358qUQC3v+rUZBw78Z1X4k/VsKvFGm
+         xqRkrvaHYtr6tKk/fa3LInx9UxKO19dYWeOUWJGjV1Aeo2E3KgudRi20kmZhtB+fgKAP
+         /ysnDhiOyhVvMko8zMmBYjgOnIWK0k5t3WJMU5Hjs6CCNatw9pQ4+01GUVYBWRa14TLN
+         oAdY0b2YJ9d6lCZUvEvvIXIkZJn5r9x9UKlSoaGLLVnSklYBKxGO3sXAu6qHYw4cicWb
+         PfIOj6maGLZDajDxDGJhhylqA8xGlLvwuhWNfA0SkzQrHrDy5lfVpUREWICltOwxHoZN
+         +Q9g==
+X-Gm-Message-State: AFqh2krKNRJ6GLJbLjTCT8PAdIHy9DJQ0quxXF6KObnDnur+kaAs9MKb
+        /qpZZG3Wmho+bXXJATbfxOo0eSJyepgDDR6o6E7rv+L5T4yD3VFx
+X-Google-Smtp-Source: AMrXdXs275TDfbjwrMyFDOxP7eJKDl/7sCCSCHjCRBLe+NE+/nJUHau88ZMFhPOlsZvIRTJv4A2+hFbMjs0Fa6+nfFI=
+X-Received: by 2002:ab0:6182:0:b0:419:2865:3ae7 with SMTP id
+ h2-20020ab06182000000b0041928653ae7mr2522451uan.70.1672260019408; Wed, 28 Dec
+ 2022 12:40:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>
-Cc:     regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+References: <CADg8p94+rY5B937YweMo=5aGS4Dhz2z4QW-BiAdkVdiWCm-u9w@mail.gmail.com>
+ <3bd7c0b2c9937c30082381f92624e98902c72ece.camel@HansenPartnership.com>
+In-Reply-To: <3bd7c0b2c9937c30082381f92624e98902c72ece.camel@HansenPartnership.com>
+From:   Sughosh Ganu <sughosh.ganu@linaro.org>
+Date:   Thu, 29 Dec 2022 02:10:08 +0530
+Message-ID: <CADg8p94qd-Kx9Xn2LwqypFeAsV734wv7CvswPmGqJZa+ENPpRg@mail.gmail.com>
+Subject: Re: Seal/Unseal trusted keys against PCR policy
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Ugh, while the problem [1] was fixed in 6.1, it's now happening again on
-the T460 with 6.2-rc1. Except I didn't see any oops message or
-"tpm_try_transmit" error this time. The first indication of a problem is
-this during a resume from suspend to ram:
+hi James,
 
-tpm tpm0: A TPM error (28) occurred continue selftest
+On Tue, 27 Dec 2022 at 21:10, James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> On Tue, 2022-12-27 at 09:44 +0530, Sughosh Ganu wrote:
+> > hi,
+> > I am looking to use PCR policy to seal and unseal trusted keys. I
+> > tried using the interface described in the documentation [1], but I
+> > get an unseal error at the time of a key load operation. I came
+> > across a thread [2] which is pretty much the error that I get. As per
+> > my understanding of what James had explained on that thread, the API
+> > was broken for TPM2.0 based devices. Has that since been fixed.
+>
+> Yes, that's been fixed for a while:
+>
+> f2219745250f security: keys: trusted: use ASN.1 TPM2 key format for the
+> blobs
+>
+> >  If so, has there been a change in the user interface for sealing and
+> > unsealing the trusted keys.
+> >
+> > Here are the steps that I follow.
+> >
+> > # tpm2_createpolicy --policy-pcr --pcr-list sha256:10 --policy
+> > pcr10_bin.policy > pcr.policy
+> >
+> > # cat pcr.policy
+> > 16ef916486174ed6f68b09629d2920dd7493d0918fff1247420934c3836100d3
+> >
+> > #keyctl add trusted kmk-pcr "new 32 keyhandle=0x81000001 hash=sha256
+> > policydigest=`cat pcr.policy`" @u
+> > 588568314
+> >
+> > # keyctl pipe 588568314 > kmk-pcr.blob
+> >
+> > On a reboot (or even w/o a reboot, after deleting the key)
+> > #keyctl add trusted kmk-pcr "load `cat kmk-pcr.blob`
+> > keyhandle=0x81000001 hash=sha256 policydigest=`cat pcr.policy`" @u
+> > add_key: Operation not permitted
+>
+> To reload a sealed key, you have to construct a policy session with the
+> matching policy digest and pass it down to the kernel with
+> policyhandle=
 
-and then periodically 
+Thanks for your reply. For reloading the sealed key, I am trying to
+start a policy session through the tpm2_startauthsession command,
+followed by the tpm2_policypcr command to get the same policy digest.
+However, I am not sure how to get the session handle. As per my
+understanding, the policyhandle is a uint32_t object. However, none of
+the above two commands give back the session handle. I tried the
+tpm2_getcap command with the handles-saved-session, which shows a
+handle once I have run the tpm2_startauthsession command. However,
+providing this value to the keyctl command as policyhandle does not
+work. Can you please point out what I am doing wrong?
 
-tpm tpm0: A TPM error (28) occurred attempting get random
-
-and further suspend to ram attempts fail:
-
-tpm tpm0: Error (28) sending savestate before suspend
-tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
-tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
-tpm_tis 00:08: PM: failed to suspend: error 28
-PM: Some devices failed to suspend, or early wake event detected
-
-Unfortunately I doubt I would be able to bisect it as any "good" kernel might
-be a false negative.
-
-[1] https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
-
-#regzbot introduced: v6.1..v6.2-rc1
+-sughosh
