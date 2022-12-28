@@ -2,55 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAFD65875D
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Dec 2022 23:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 332576587CA
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Dec 2022 00:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiL1WsS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Dec 2022 17:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S231169AbiL1XHr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Dec 2022 18:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiL1WsQ (ORCPT
+        with ESMTP id S232929AbiL1XHg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Dec 2022 17:48:16 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1348D140E9
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Dec 2022 14:48:15 -0800 (PST)
+        Wed, 28 Dec 2022 18:07:36 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDBB15FC7
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Dec 2022 15:07:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1672267692;
-        bh=jwypNmDm+dqCnQKy6QR9l1upy1LgBc/TRyYYj2qjbhM=;
+        d=hansenpartnership.com; s=20151216; t=1672268848;
+        bh=z/pnCfuIKIXDj13eYnbayH6ODEfVRX13nZ1+QqmRYgA=;
         h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=CFLtMnvBndi2qLUAAl6RjQ1AWt2okBcGln55NpaKbq33k+bkynBJTtYxwOvQ0QQoP
-         9a7FxikVRO+IAtXBmDU59U/ShdAnXHygBEqhgOQ9il6oKq6/Zv0JzTsSmmfY+W3Rbc
-         2ny1erBjH0w+8ehB1tWShbpTyVj0EPDyf/rgDXP8=
+        b=Q6WQmYfolCRjLBquRpO0qucEzV1fSLJIbfILDph8IzKzjADKWxWMGMcsKz3BNKNMt
+         1kFKAm/LwiaDSvIWv+cMifusbm4Hy/7xDxtlAKFYdYJ0/MMDgHrGvZNqFOk6w+Bk6w
+         KPL8W4xQ43t85O5e3jOAq38XYlFGfSzAWs/N/EBQ=
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C72FD128142F;
-        Wed, 28 Dec 2022 17:48:12 -0500 (EST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 42EA61285ECE;
+        Wed, 28 Dec 2022 18:07:28 -0500 (EST)
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3o6Vzy84mX-P; Wed, 28 Dec 2022 17:48:12 -0500 (EST)
+        with ESMTP id wBBD4wdbpq5X; Wed, 28 Dec 2022 18:07:28 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1672267692;
-        bh=jwypNmDm+dqCnQKy6QR9l1upy1LgBc/TRyYYj2qjbhM=;
+        d=hansenpartnership.com; s=20151216; t=1672268848;
+        bh=z/pnCfuIKIXDj13eYnbayH6ODEfVRX13nZ1+QqmRYgA=;
         h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=CFLtMnvBndi2qLUAAl6RjQ1AWt2okBcGln55NpaKbq33k+bkynBJTtYxwOvQ0QQoP
-         9a7FxikVRO+IAtXBmDU59U/ShdAnXHygBEqhgOQ9il6oKq6/Zv0JzTsSmmfY+W3Rbc
-         2ny1erBjH0w+8ehB1tWShbpTyVj0EPDyf/rgDXP8=
+        b=Q6WQmYfolCRjLBquRpO0qucEzV1fSLJIbfILDph8IzKzjADKWxWMGMcsKz3BNKNMt
+         1kFKAm/LwiaDSvIWv+cMifusbm4Hy/7xDxtlAKFYdYJ0/MMDgHrGvZNqFOk6w+Bk6w
+         KPL8W4xQ43t85O5e3jOAq38XYlFGfSzAWs/N/EBQ=
 Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits))
         (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 4E6291280E5B;
-        Wed, 28 Dec 2022 17:48:12 -0500 (EST)
-Message-ID: <2910376b6912885f696afebf43b820513c004dbb.camel@HansenPartnership.com>
-Subject: Re: Seal/Unseal trusted keys against PCR policy
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 20D761281B54;
+        Wed, 28 Dec 2022 18:07:27 -0500 (EST)
+Message-ID: <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Sughosh Ganu <sughosh.ganu@linaro.org>
-Cc:     linux-integrity@vger.kernel.org
-Date:   Wed, 28 Dec 2022 17:48:09 -0500
-In-Reply-To: <CADg8p94qd-Kx9Xn2LwqypFeAsV734wv7CvswPmGqJZa+ENPpRg@mail.gmail.com>
-References: <CADg8p94+rY5B937YweMo=5aGS4Dhz2z4QW-BiAdkVdiWCm-u9w@mail.gmail.com>
-         <3bd7c0b2c9937c30082381f92624e98902c72ece.camel@HansenPartnership.com>
-         <CADg8p94qd-Kx9Xn2LwqypFeAsV734wv7CvswPmGqJZa+ENPpRg@mail.gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>
+Cc:     regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 28 Dec 2022 18:07:25 -0500
+In-Reply-To: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
+References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
@@ -64,72 +69,24 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2022-12-29 at 02:10 +0530, Sughosh Ganu wrote:
-[...]
-> Thanks for your reply. For reloading the sealed key, I am trying to
-> start a policy session through the tpm2_startauthsession command,
-> followed by the tpm2_policypcr command to get the same policy digest.
-> However, I am not sure how to get the session handle. As per my
-> understanding, the policyhandle is a uint32_t object. However, none
-> of the above two commands give back the session handle. I tried the
-> tpm2_getcap command with the handles-saved-session, which shows a
-> handle once I have run the tpm2_startauthsession command. However,
-> providing this value to the keyctl command as policyhandle does not
-> work. Can you please point out what I am doing wrong?
+On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
+> Ugh, while the problem [1] was fixed in 6.1, it's now happening again
+> on the T460 with 6.2-rc1. Except I didn't see any oops message or
+> "tpm_try_transmit" error this time. The first indication of a problem
+> is this during a resume from suspend to ram:
+> 
+> tpm tpm0: A TPM error (28) occurred continue selftest
+> 
+> and then periodically 
+> 
+> tpm tpm0: A TPM error (28) occurred attempting get random
 
-I'm afraid I gave up on the Intel toolkit long ago because of the
-constantly changing command options.  I can show you how to do it with
-the IBM toolkit, though:
-
-https://build.opensuse.org/package/show/security/ibmtss
-
-The main thing you have to do is connect to the TPM not through the
-resource manager so the policy session survives multiple commands
-
-export TPM_DEVICE=/dev/tpm0
-
-Then you can seal to say PCR7 which simply records the secure boot
-state:
-
-root@testdeb:~# cat /sys/class/tpm/tpm0/pcr-sha256/7
-65CAF8DD1E0EA7A6347B635D2B379C93B9A1351EDC2AFC3ECDA700E534EB3068
-
-So you can now construct the policy exactly and ask policymaker what
-its hash is:
-
-root@testdeb:~# tsspolicymakerpcr -pr -bm 000080 -if /sys/class/tpm/tpm0/pcr-sha256/7 > tmp.policy
-root@testdeb:~# tsspolicymaker -if ~/tmp.policy -ns
-policy digest:
-4cc48043aedaae487452bb407e8fc21d25c3a412ffc9473cf2552ddc659e97c1
-
-So now you know the policy hash, you can create a key
-
-root@testdeb:~# keyctl add trusted kmk "new 32 keyhandle=0x81000001 hash=sha256 policydigest=4cc48043aedaae487452bb407e8fc21d25c3a412ffc9473cf2552ddc659e97c1" @u
-214245338
-keyctl pipe %trusted:kmk > key.tpm
-keyctl unlink %trusted:kmk
-1 links removed
-
-Now you can reload it if you construct the correct policy
-
-root@testdeb:~# tssstartauthsession -se p
-Handle 03000000
-root@testdeb:~# tsspolicypcr -ha 03000000 -bm 000080
-
-Now you can check this policy register matches the hash you have above:
-
-root@testdeb:~# tsspolicygetdigest -ha 03000000
- policyDigest length 32
- 4c c4 80 43 ae da ae 48 74 52 bb 40 7e 8f c2 1d 
- 25 c3 a4 12 ff c9 47 3c f2 55 2d dc 65 9e 97 c1 
-
-And you can now use this policy handle as the reload policy for the
-key:
-
-root@testdeb:~# keyctl add trusted kmk "load `cat ~/key.tpm` policyhandle=0x03000000" @u
-872397032
-
+That's a TPM 1.2 error which means the TPM failed the selftest.  The
+original problem was reported against TPM 2.0  because of a missing
+try_get_ops().  The tpm 1.2 command path was never changed to require
+this (and in fact hasn't changed for ages, TPM 1.2 being a bit
+obsolete).  So this looks like a new problem with TPM 1.2 and
+suspend/resume, likely in the BIOS of your system.
 
 James
-
 
