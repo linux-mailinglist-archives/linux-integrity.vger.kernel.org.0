@@ -2,126 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069516598C0
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Dec 2022 14:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E54E659A0F
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Dec 2022 16:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbiL3NfR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Dec 2022 08:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
+        id S235204AbiL3PlK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Dec 2022 10:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiL3NfP (ORCPT
+        with ESMTP id S235259AbiL3Pkb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Dec 2022 08:35:15 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116C01A83D
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Dec 2022 05:35:12 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-314-HWfElW15Mq-_iaahh_74GQ-1; Fri, 30 Dec 2022 13:35:09 +0000
-X-MC-Unique: HWfElW15Mq-_iaahh_74GQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Dec
- 2022 13:35:07 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 30 Dec 2022 13:35:07 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Roberto Sassu' <roberto.sassu@huaweicloud.com>,
+        Fri, 30 Dec 2022 10:40:31 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEA01C12A;
+        Fri, 30 Dec 2022 07:39:58 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pBHTm-00CPNM-VQ; Fri, 30 Dec 2022 23:39:32 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 30 Dec 2022 23:39:30 +0800
+Date:   Fri, 30 Dec 2022 23:39:30 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Roberto Sassu' <roberto.sassu@huaweicloud.com>,
         "dhowells@redhat.com" <dhowells@redhat.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
         "davem@davemloft.net" <davem@davemloft.net>,
         "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
         "paul@paul-moore.com" <paul@paul-moore.com>,
         "jmorris@namei.org" <jmorris@namei.org>,
         "serge@hallyn.com" <serge@hallyn.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
         "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
-Thread-Topic: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
-Thread-Index: AQHZGf+Li10Ctze9/ky4tLizwqJmjK6Gb6hQ
-Date:   Fri, 30 Dec 2022 13:35:07 +0000
-Message-ID: <6949ced7c1014488b2d00ff26eba6b6b@AcuMS.aculab.com>
+Subject: Re: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
+Message-ID: <Y68GMsGKROsgDbcs@gondor.apana.org.au>
 References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
  <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <6949ced7c1014488b2d00ff26eba6b6b@AcuMS.aculab.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6949ced7c1014488b2d00ff26eba6b6b@AcuMS.aculab.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu
-> Sent: 27 December 2022 14:28
-> 
-> From: Herbert Xu <herbert@gondor.apana.org.au>
-> 
-> The helper mpi_read_raw_from_sgl sets the number of entries in
-> the SG list according to nbytes.  However, if the last entry
-> in the SG list contains more data than nbytes, then it may overrun
-> the buffer because it only allocates enough memory for nbytes.
-> 
-> Fixes: 2d4d1eea540b ("lib/mpi: Add mpi sgl helpers")
-> Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-> ---
->  lib/mpi/mpicoder.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/mpi/mpicoder.c b/lib/mpi/mpicoder.c
-> index 39c4c6731094..3cb6bd148fa9 100644
-> --- a/lib/mpi/mpicoder.c
-> +++ b/lib/mpi/mpicoder.c
-> @@ -504,7 +504,8 @@ MPI mpi_read_raw_from_sgl(struct scatterlist *sgl, unsigned int nbytes)
-> 
->  	while (sg_miter_next(&miter)) {
->  		buff = miter.addr;
-> -		len = miter.length;
-> +		len = min_t(unsigned, miter.length, nbytes);
+On Fri, Dec 30, 2022 at 01:35:07PM +0000, David Laight wrote:
+>
+> miter.length is size_t (unsigned long on 64bit) and nbytes unsigned int.
 
-Technically that min_t() is incorrect.
-miter.length is size_t (unsigned long on 64bit) and nbytes unsigned int.
-Any cast needs to force the smaller type to the larger one.
-(Clearly here the domain of the values is probably than 4G - but that isn't
-the point. There must be some places where the sg length needs to
-be size_t because 32 bits isn't enough.)
+miter.length is bounded by sg->length which is unsigned int.
 
-In reality min() is being completely over-zealous in its checking and
-should allow comparisons where the signed-ness of the two values matches.
-Search for the patch I posted before xmas.
-
-	David
-
-
-> +		nbytes -= len;
-> 
->  		for (x = 0; x < len; x++) {
->  			a <<= 8;
-> --
-> 2.25.1
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
