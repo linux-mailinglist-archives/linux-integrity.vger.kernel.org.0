@@ -2,90 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB17659282
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Dec 2022 23:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C14659559
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Dec 2022 07:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiL2WjK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Dec 2022 17:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S234557AbiL3GSl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Dec 2022 01:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiL2WjJ (ORCPT
+        with ESMTP id S234412AbiL3GSl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Dec 2022 17:39:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7289B14024;
-        Thu, 29 Dec 2022 14:39:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12944B819CD;
-        Thu, 29 Dec 2022 22:39:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AF5C433EF;
-        Thu, 29 Dec 2022 22:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672353545;
-        bh=Vl16ZrQ6FIVlc0MsbXC4FP4xe8sX0FhBJ0Zr7gy0p3k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RDiEvnsJ7m+xWx1JB3ZXOqwxK6gfQ7FhGem0LZdefcr//JxgTkvMhIyjggykSOjPg
-         G43lW/GXie2JOFvIxuNZlN+IYJJnFvjb3nI5NOuCMwUo/ED57wAR+Aa6lwrshtNexq
-         Kye9wmMjHimuhiRfKWJsta2EFquKEHR7lCLLZBPFY0vYzXVFyD/ZBN182WMYZA/6BX
-         51utRGlceQI7eHvg0dJV0lb03uVjcgOnI/9+udBgzRmAOfZOyzzmrnCWiCfJb6TwFM
-         m7jp72RYb6mVoOV4hM5DaWmX8O2ljVwfmbA8uuYoi7KSa3CLFlbzpyVsx0I1Wrz1wN
-         IFMjGZyxi8r1Q==
-Date:   Thu, 29 Dec 2022 14:39:03 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v5 2/2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-Message-ID: <Y64XB0yi24yjeBDw@sol.localdomain>
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
- <20221227142740.2807136-3-roberto.sassu@huaweicloud.com>
+        Fri, 30 Dec 2022 01:18:41 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F083AFAEB;
+        Thu, 29 Dec 2022 22:18:37 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Njw5n1KKjz16LwK;
+        Fri, 30 Dec 2022 14:17:17 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 30 Dec 2022 14:18:35 +0800
+Message-ID: <80260e5c-51c9-ec97-c546-ddde0c302e62@huawei.com>
+Date:   Fri, 30 Dec 2022 14:18:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221227142740.2807136-3-roberto.sassu@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 2/2] ima: Handle -ESTALE returned by
+ ima_filter_rule_match()
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <paul@paul-moore.com>,
+        <linux-integrity@vger.kernel.org>, <luhuaxin1@huawei.com>
+References: <20221227014729.4799-1-guozihua@huawei.com>
+ <20221227014729.4799-3-guozihua@huawei.com> <Y6qgqO/LJ/wHUk5x@kroah.com>
+ <d65e2d46bf41e3d58c0fa18bd274faf20dadb523.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <d65e2d46bf41e3d58c0fa18bd274faf20dadb523.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 03:27:40PM +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> mapping") checks that both the signature and the digest reside in the
-> linear mapping area.
-> 
-> However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> stack support") made it possible to move the stack in the vmalloc area,
-> which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> adjacent pages.
-> 
-> Always make a copy of the signature and digest in the same buffer used to
-> store the key and its parameters, and pass them to sg_init_one(). Prefer it
-> to conditionally doing the copy if necessary, to keep the code simple. The
-> buffer allocated with kmalloc() is in the linear mapping area.
-> 
-> Cc: stable@vger.kernel.org # 4.9.x
-> Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-> Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  crypto/asymmetric_keys/public_key.c | 38 ++++++++++++++++-------------
->  1 file changed, 21 insertions(+), 17 deletions(-)
+Hi Greg and Mimi.
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Fall sick for a couple days.
 
-- Eric
+On 2022/12/27 19:56, Mimi Zohar wrote:
+> On Tue, 2022-12-27 at 08:37 +0100, Greg KH wrote:
+>> On Tue, Dec 27, 2022 at 09:47:29AM +0800, GUO Zihua wrote:
+>>> [ Upstream commit c7423dbdbc9ecef7fff5239d144cad4b9887f4de ]
+>>
+>> For obvious reasons we can not only take this patch (from 6.2-rc1) into
+>> 4.19.y as that would cause people who upgrade from 4.19.y to a newer
+>> stable kernel to have a regression.
+>>
+>> Please submit backports for all stable kernels if you wish to see this
+>> in older ones to prevent problems like this from happening.
+> 
+> Sasha has already queued the original commit and the dependencies for
+> the 6.1, 6.0, and 5.15 stable kernels.  Those kernels all had the
+> call_lsm_notifier() to call_blocking_lsm_notifier() change.  Prior to
+> 5.3, the change to the blocking notifier would need to be backported as
+> well.  This version of the backport still needs to be reviewed.
+Indeed the current solution needs further testing and review. One of the
+concern raised by Huaxin is a possible UAF caused by the call to free
+rule in update_rule. Will it be possible to backport also the change
+which turn call_lsm_notifier() into call_blocking_lsm_notifier()?
+> 
+> thanks,
+> 
+> Mimi
+> 
+>>
+>> But also, why are you still on 4.19.y?  What is wrong with 5.4.y at this
+>> point in time?  If we dropped support for 4.19.y in January, what would
+>> that cause to happen for your systems?
+Well it's all about backward compatibility. We still got some products
+using the 4.19.y LTS kernel and we would still needs to provide support
+for this version of the kernel. If 4.19.y got EOL or EOS in January next
+year, our company surely would develop corresponding plans to handle
+that change.
+>>
+>> thanks,
+>>
+>> greg k-h
+>>
+> 
+
+-- 
+Best
+GUO Zihua
+
