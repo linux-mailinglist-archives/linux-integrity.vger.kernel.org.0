@@ -2,47 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25ACC659596
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Dec 2022 08:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 069516598C0
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Dec 2022 14:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiL3HF6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Dec 2022 02:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S235021AbiL3NfR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Dec 2022 08:35:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiL3HF5 (ORCPT
+        with ESMTP id S230093AbiL3NfP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Dec 2022 02:05:57 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0629D18B2C
-        for <linux-integrity@vger.kernel.org>; Thu, 29 Dec 2022 23:05:56 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Njx8L5ybQzbc8W;
-        Fri, 30 Dec 2022 15:04:34 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 30 Dec 2022 15:05:54 +0800
-Message-ID: <a13ba825-fd4b-75ef-d279-17e0840d1135@huawei.com>
-Date:   Fri, 30 Dec 2022 15:05:54 +0800
+        Fri, 30 Dec 2022 08:35:15 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116C01A83D
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Dec 2022 05:35:12 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-314-HWfElW15Mq-_iaahh_74GQ-1; Fri, 30 Dec 2022 13:35:09 +0000
+X-MC-Unique: HWfElW15Mq-_iaahh_74GQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Dec
+ 2022 13:35:07 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Fri, 30 Dec 2022 13:35:07 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Roberto Sassu' <roberto.sassu@huaweicloud.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
+Thread-Topic: [PATCH v5 1/2] lib/mpi: Fix buffer overrun when SG is too long
+Thread-Index: AQHZGf+Li10Ctze9/ky4tLizwqJmjK6Gb6hQ
+Date:   Fri, 30 Dec 2022 13:35:07 +0000
+Message-ID: <6949ced7c1014488b2d00ff26eba6b6b@AcuMS.aculab.com>
+References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
+ <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221227142740.2807136-2-roberto.sassu@huaweicloud.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH] ima: Handle error code from security_audit_rule_match
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>
-CC:     <linux-integrity@vger.kernel.org>
-References: <20221227014633.4449-1-guozihua@huawei.com>
- <537bd46f8392c031e2792ef50b5e73bf9aa2f875.camel@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <537bd46f8392c031e2792ef50b5e73bf9aa2f875.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,41 +72,56 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2022/12/27 19:22, Mimi Zohar wrote:
-> On Tue, 2022-12-27 at 09:46 +0800, GUO Zihua wrote:
->> commit c7423dbdbc9e ("ima: Handle -ESTALE returned by
->> ima_filter_rule_match()") introduced the handling of -ESTALE returned by
->> security_audit_rule_match(). However, security_audit_rule_match() might
->> return other error codes if some error occurred. We should handle those
->> error codes as well.
->>
->> Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
->> Signed-off-by: GUO Zihua <guozihua@huawei.com>
->> ---
->>  security/integrity/ima/ima_policy.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->> index 6a68ec270822..5561e1b2c376 100644
->> --- a/security/integrity/ima/ima_policy.c
->> +++ b/security/integrity/ima/ima_policy.c
->> @@ -663,7 +663,7 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
->>  			break;
->>  		}
->>  
->> -		if (rc == -ESTALE && !rule_reinitialized) {
->> +		if (rc < 0 && !rule_reinitialized) {
+From: Roberto Sassu
+> Sent: 27 December 2022 14:28
 > 
-> Which other error codes are resolved by retrying?
-Well I re-checked security_audit_rule_match() and it seems that only
--ESTALE can be handled. This patch could be ignored.
+> From: Herbert Xu <herbert@gondor.apana.org.au>
 > 
->>  			lsm_rule = ima_lsm_copy_rule(rule);
->>  			if (lsm_rule) {
->>  				rule_reinitialized = true;
+> The helper mpi_read_raw_from_sgl sets the number of entries in
+> the SG list according to nbytes.  However, if the last entry
+> in the SG list contains more data than nbytes, then it may overrun
+> the buffer because it only allocates enough memory for nbytes.
 > 
+> Fixes: 2d4d1eea540b ("lib/mpi: Add mpi sgl helpers")
+> Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> ---
+>  lib/mpi/mpicoder.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/mpi/mpicoder.c b/lib/mpi/mpicoder.c
+> index 39c4c6731094..3cb6bd148fa9 100644
+> --- a/lib/mpi/mpicoder.c
+> +++ b/lib/mpi/mpicoder.c
+> @@ -504,7 +504,8 @@ MPI mpi_read_raw_from_sgl(struct scatterlist *sgl, unsigned int nbytes)
+> 
+>  	while (sg_miter_next(&miter)) {
+>  		buff = miter.addr;
+> -		len = miter.length;
+> +		len = min_t(unsigned, miter.length, nbytes);
 
--- 
-Best
-GUO Zihua
+Technically that min_t() is incorrect.
+miter.length is size_t (unsigned long on 64bit) and nbytes unsigned int.
+Any cast needs to force the smaller type to the larger one.
+(Clearly here the domain of the values is probably than 4G - but that isn't
+the point. There must be some places where the sg length needs to
+be size_t because 32 bits isn't enough.)
+
+In reality min() is being completely over-zealous in its checking and
+should allow comparisons where the signed-ness of the two values matches.
+Search for the patch I posted before xmas.
+
+	David
+
+
+> +		nbytes -= len;
+> 
+>  		for (x = 0; x < len; x++) {
+>  			a <<= 8;
+> --
+> 2.25.1
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
