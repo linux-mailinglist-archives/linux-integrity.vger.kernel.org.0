@@ -2,43 +2,45 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A06165B73B
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Jan 2023 21:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2708C65B73F
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Jan 2023 21:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbjABUp3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Jan 2023 15:45:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S233438AbjABUpl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Jan 2023 15:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbjABUp2 (ORCPT
+        with ESMTP id S232696AbjABUpj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Jan 2023 15:45:28 -0500
+        Mon, 2 Jan 2023 15:45:39 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA687625E;
-        Mon,  2 Jan 2023 12:45:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652166258;
+        Mon,  2 Jan 2023 12:45:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=j48yPVZNZykOfBtnBZN/w6IQQSUbkxhAZzjH5nmdOpY=; b=aeWYW+F3K9FQy03p5UI3TDc5Ss
-        dJFiz6pnXVT7kJFWdiwxEt0y+Hz/UQv7430l1a0sXgBglwRYVmghVvoroHWC3QQ6SxIcYzBckA2/q
-        IKctPVK+25pvR062VL2DqKOrV4uk0TikGiWSVSKBwKwzj57Ie0L/OWjs/XJ5wScGjIaZcaljtYDr/
-        +5LblBfnDZA0pPG8DJ+aMTsv+W3tyKkJX8KPAMXbWhXTBE8JK2gmOSNiQ2HBXw7x00FgguQpi+JF4
-        JofKcwyeCMTZyS5AY4FsDB9pUdnhmP9Ejw9Y9+AjqLjlh0SjeXTOKwhfPy/G0Hhrk2Q93UIa4LcBk
-        cGIOEF7A==;
+        bh=ejlIdJXYeoZP28gEN4XiJsWW1JI0RWVlmmFbAagiLr8=; b=Zh0O4kJThdX9L+WM8tXGxFJvyv
+        rOO87L+qdrBbBaMIs361h5ZVLITnJ+kf70XEMbkpKkumRSwNQKZHtaX2XgNzNxuTPlsTyLdAk3oI8
+        aF7KXbcW4Pa3VdNmi5zNqfmoBBmdF8aqvDqrOAFhISEft8jfW+uhyqBa6LmOeYIOoCGJ2g8IROm0g
+        JgiNpw3wloozWvIRXZ5FwU8Znq03PVFcisVmyXjYZ2DLyHDI/v4EqPDUsHN2b9OSHU6kaXEV7NONc
+        v4xsvPxM0gzj7XwDJ0zEu8MTzJKF7eGIlqKFxxaJGkkZFGw40nN4dV9byEaWX0ZyT9kVJv8tw0MET
+        e+gBVdUA==;
 Received: from [2601:1c2:d80:3110::a2e7] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pCRgT-00EFZ2-TP; Mon, 02 Jan 2023 20:45:26 +0000
+        id 1pCRgg-00EFad-Hi; Mon, 02 Jan 2023 20:45:38 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-security-module@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>
-Subject: [PATCH] ima: fix ima_delete_rules() kernel-doc warning
-Date:   Mon,  2 Jan 2023 12:45:25 -0800
-Message-Id: <20230102204525.4399-1-rdunlap@infradead.org>
+Subject: [PATCH] KEYS: trusted: tpm2: use correct function name in kernel-doc
+Date:   Mon,  2 Jan 2023 12:45:37 -0800
+Message-Id: <20230102204537.4842-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,32 +53,33 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Use correct kernel-doc syntax in the function description to
-prevent a kernel-doc warning:
+Correct the function name in the kernel-doc notation to prevent
+a kernel-doc warning:
 
-security/integrity/ima/ima_policy.c:1964: warning: expecting prototype for ima_delete_rules() called to cleanup invalid in(). Prototype was for ima_delete_rules() instead
+security/keys/trusted-keys/trusted_tpm2.c:203: warning: expecting prototype for tpm_buf_append_auth(). Prototype was for tpm2_buf_append_auth() instead
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: James Bottomley <jejb@linux.ibm.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
 Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
 Cc: linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org
 Cc: Paul Moore <paul@paul-moore.com>
 Cc: James Morris <jmorris@namei.org>
 Cc: "Serge E. Hallyn" <serge@hallyn.com>
 ---
- security/integrity/ima/ima_policy.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ security/keys/trusted-keys/trusted_tpm2.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff -- a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1955,7 +1955,8 @@ ssize_t ima_parse_add_rule(char *rule)
+diff -- a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -186,7 +186,7 @@ int tpm2_key_priv(void *context, size_t
  }
  
  /**
-- * ima_delete_rules() called to cleanup invalid in-flight policy.
-+ * ima_delete_rules() - called to cleanup invalid in-flight policy.
-+ *
-  * We don't need locking as we operate on the temp list, which is
-  * different from the active one.  There is also only one user of
-  * ima_delete_rules() at a time.
+- * tpm_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
++ * tpm2_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+  *
+  * @buf: an allocated tpm_buf instance
+  * @session_handle: session handle
