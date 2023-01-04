@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAE265D1B2
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 12:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A53465D1B8
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 12:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234980AbjADLoE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Jan 2023 06:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
+        id S239091AbjADLp2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Jan 2023 06:45:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233785AbjADLoD (ORCPT
+        with ESMTP id S239069AbjADLp1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Jan 2023 06:44:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5BAA446;
-        Wed,  4 Jan 2023 03:44:02 -0800 (PST)
+        Wed, 4 Jan 2023 06:45:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56E81EAC4;
+        Wed,  4 Jan 2023 03:45:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE4F7B80E65;
-        Wed,  4 Jan 2023 11:44:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A7C7C433EF;
-        Wed,  4 Jan 2023 11:43:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A4BDB810FA;
+        Wed,  4 Jan 2023 11:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E91CEC433EF;
+        Wed,  4 Jan 2023 11:45:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672832639;
-        bh=FtkrwQKPjIIQt23JL1N2L/B3ATEaO9C/KeRdtMfkWVU=;
+        s=k20201202; t=1672832723;
+        bh=u/1lpQoEwwOhaC64Ks/47LutzmlTIKS8L19spQ22zeI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HN5AWRVJSrpcHcVcHjUWCvfocTPr2rDXdhKqmiImR4SXWZ9oayeIznJDbRdMUmo9s
-         Ol8rvC2Jt7aj2Lk6o3Y7ygHh5qTky88VeXEtlgEgIRY11Zc54kv5YzCcgawvu3kvjc
-         PcIo/KirUyZanXaX9mSCYkyAcaGbNnBeirZRyxMHslmIo8DqR8BM50x4HQhMpqidKc
-         SsPGE5MQaqJ+5kRH80it/kwXck/uWI//y8oVC69oYyXKRWL9ARsgnTeg9YF6Wt5E5w
-         gQ/qOQRNwNBQvDfKtOQxTKZpTQM4ZmZ8F/45r2QRaWUeUDKl6SRvadBO/2GFWDagHX
-         F6+nJaSfT28SQ==
-Date:   Wed, 4 Jan 2023 11:43:56 +0000
+        b=Mfo/ycR0qy92CF/pRxMJrMUnEosIex8CofHbfFmBQ7MeuzSIs0xfxugcMSLXy8qLz
+         ECNUyVd49h1K+8q9gm5q5/hVXtH8w/4Uo1QcZ4f9ZP+kiORcuwPKqzS3b/dgLL6dK1
+         xN3hpHRY3B+DQprZGkmOb0Y/TMi7CrB7d5t9yO6DLZlmxBo6y2XWvzIdKIGAiobS/t
+         lpaZWaptHYHn4cHqITpdeyEV3mvbz2vCSXvpE0ZOhkzGFjTsDo9+b7AXsUm1OBkBzQ
+         lv4TAlKZaF/uPSVEbJK3rM/I4ILaQETGqcHqQWkIQHtsWp69X7vf18U76MqLJ8OkEs
+         +QM0Ha4xJboVQ==
+Date:   Wed, 4 Jan 2023 11:45:20 +0000
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Eric Snowberg <eric.snowberg@oracle.com>
 Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
@@ -44,14 +44,14 @@ Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
         keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 04/10] KEYS: X.509: Parse Key Usage
-Message-ID: <Y7VmfLUAacYOjn9y@kernel.org>
+Subject: Re: [PATCH v3 05/10] KEYS: Introduce a CA endorsed flag
+Message-ID: <Y7Vm0IPUhJ9aDpgk@kernel.org>
 References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
- <20221214003401.4086781-5-eric.snowberg@oracle.com>
+ <20221214003401.4086781-6-eric.snowberg@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221214003401.4086781-5-eric.snowberg@oracle.com>
+In-Reply-To: <20221214003401.4086781-6-eric.snowberg@oracle.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,86 +61,104 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 07:33:55PM -0500, Eric Snowberg wrote:
-> Parse the X.509 Key Usage.  The key usage extension defines the purpose of
-> the key contained in the certificate.
+On Tue, Dec 13, 2022 at 07:33:56PM -0500, Eric Snowberg wrote:
+> Some subsystems are interested in knowing if a key has been endorsed
+> as or by a Certificate Authority (CA). From the data contained in struct
+> key, it is not possible to make this determination after the key
+> parsing is complete.  Introduce a new Endorsed Certificate Authority
+> flag called KEY_FLAG_ECA.
 > 
->    id-ce-keyUsage OBJECT IDENTIFIER ::=  { id-ce 15 }
-> 
->       KeyUsage ::= BIT STRING {
->            digitalSignature        (0),
->            contentCommitment       (1),
->            keyEncipherment         (2),
->            dataEncipherment        (3),
->            keyAgreement            (4),
->            keyCertSign             (5),
->            cRLSign                 (6),
->            encipherOnly            (7),
->            decipherOnly            (8) }
-> 
-> If the keyCertSign is set, store it in the x509_certificate structure.
-> This will be used in a follow on patch that requires knowing the
-> certificate key usage type.
+> The first type of key to use this is X.509.  When a X.509 certificate
+> has the keyCertSign Key Usage set and contains the CA bit set, this new
+> flag is set. In the future, other usage fields could be added as flags,
+> i.e. digitialSignature.
 > 
 > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 > ---
->  crypto/asymmetric_keys/x509_cert_parser.c | 22 ++++++++++++++++++++++
->  crypto/asymmetric_keys/x509_parser.h      |  1 +
->  2 files changed, 23 insertions(+)
+>  crypto/asymmetric_keys/x509_public_key.c | 3 +++
+>  include/linux/key-type.h                 | 2 ++
+>  include/linux/key.h                      | 2 ++
+>  security/keys/key.c                      | 8 ++++++++
+>  4 files changed, 15 insertions(+)
 > 
-> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-> index b4443e507153..edb22cf04eed 100644
-> --- a/crypto/asymmetric_keys/x509_cert_parser.c
-> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
-> @@ -579,6 +579,28 @@ int x509_process_extension(void *context, size_t hdrlen,
->  		return 0;
+> diff --git a/crypto/asymmetric_keys/x509_public_key.c b/crypto/asymmetric_keys/x509_public_key.c
+> index 0b4943a4592b..fd1d7d6e68e7 100644
+> --- a/crypto/asymmetric_keys/x509_public_key.c
+> +++ b/crypto/asymmetric_keys/x509_public_key.c
+> @@ -208,6 +208,9 @@ static int x509_key_preparse(struct key_preparsed_payload *prep)
+>  		goto error_free_kids;
 >  	}
 >  
-> +	if (ctx->last_oid == OID_keyUsage) {
-> +		/*
-> +		 * Get hold of the keyUsage bit string to validate keyCertSign
-> +		 * v[1] is the encoding size
-> +		 *       (Expect either 0x02 or 0x03, making it 1 or 2 bytes)
-> +		 * v[2] is the number of unused bits in the bit string
-> +		 *       (If >= 3 keyCertSign is missing)
-> +		 * v[3] and possibly v[4] contain the bit string
-> +		 * 0x04 is where KeyCertSign lands in this bit string (from
-> +		 *      RFC 5280 4.2.1.3)
-> +		 */
-> +		if (v[0] != ASN1_BTS)
-> +			return -EBADMSG;
-> +		if (vlen < 4)
-> +			return -EBADMSG;
-> +		if (v[1] == 0x02 && v[2] <= 2 && (v[3] & 0x04))
-> +			ctx->cert->kcs_set = true;
-> +		else if (vlen > 4 && v[1] == 0x03 && (v[3] & 0x04))
-> +			ctx->cert->kcs_set = true;
-> +		return 0;
 
-This is much more easier to follow thanks to explanation.
+A comment here?
 
-> +	}
+> +	if (cert->kcs_set && cert->root_ca)
+> +		prep->payload_flags |= KEY_ALLOC_PECA;
 > +
->  	if (ctx->last_oid == OID_authorityKeyIdentifier) {
->  		/* Get hold of the CA key fingerprint */
->  		ctx->raw_akid = v;
-> diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
-> index 7c5c0ad1c22e..74a9f929e400 100644
-> --- a/crypto/asymmetric_keys/x509_parser.h
-> +++ b/crypto/asymmetric_keys/x509_parser.h
-> @@ -39,6 +39,7 @@ struct x509_certificate {
->  	bool		unsupported_sig;	/* T if signature uses unsupported crypto */
->  	bool		blacklisted;
->  	bool		root_ca;		/* T if basic constraints CA is set */
-> +	bool		kcs_set;		/* T if keyCertSign is set */
->  };
+>  	/* We're pinning the module by being linked against it */
+>  	__module_get(public_key_subtype.owner);
+>  	prep->payload.data[asym_subtype] = &public_key_subtype;
+> diff --git a/include/linux/key-type.h b/include/linux/key-type.h
+> index 7d985a1dfe4a..0b500578441c 100644
+> --- a/include/linux/key-type.h
+> +++ b/include/linux/key-type.h
+> @@ -36,6 +36,8 @@ struct key_preparsed_payload {
+>  	size_t		datalen;	/* Raw datalen */
+>  	size_t		quotalen;	/* Quota length for proposed payload */
+>  	time64_t	expiry;		/* Expiry time of key */
+> +	unsigned int	payload_flags;  /* Proposed payload flags */
+> +#define KEY_ALLOC_PECA	0x0001		/* Proposed Endorsed CA (ECA) key */
+>  } __randomize_layout;
 >  
->  /*
+>  typedef int (*request_key_actor_t)(struct key *auth_key, void *aux);
+> diff --git a/include/linux/key.h b/include/linux/key.h
+> index d27477faf00d..21d5a13ee4a9 100644
+> --- a/include/linux/key.h
+> +++ b/include/linux/key.h
+> @@ -236,6 +236,7 @@ struct key {
+>  #define KEY_FLAG_ROOT_CAN_INVAL	7	/* set if key can be invalidated by root without permission */
+>  #define KEY_FLAG_KEEP		8	/* set if key should not be removed */
+>  #define KEY_FLAG_UID_KEYRING	9	/* set if key is a user or user session keyring */
+> +#define KEY_FLAG_ECA		10	/* set if key is an Endorsed CA key */
+>  
+>  	/* the key type and key description string
+>  	 * - the desc is used to match a key against search criteria
+> @@ -296,6 +297,7 @@ extern struct key *key_alloc(struct key_type *type,
+>  #define KEY_ALLOC_BYPASS_RESTRICTION	0x0008	/* Override the check on restricted keyrings */
+>  #define KEY_ALLOC_UID_KEYRING		0x0010	/* allocating a user or user session keyring */
+>  #define KEY_ALLOC_SET_KEEP		0x0020	/* Set the KEEP flag on the key/keyring */
+> +#define KEY_ALLOC_ECA			0x0040	/* Add Endorsed CA key */
+>  
+>  extern void key_revoke(struct key *key);
+>  extern void key_invalidate(struct key *key);
+> diff --git a/security/keys/key.c b/security/keys/key.c
+> index c45afdd1dfbb..e6b4946aca70 100644
+> --- a/security/keys/key.c
+> +++ b/security/keys/key.c
+> @@ -305,6 +305,8 @@ struct key *key_alloc(struct key_type *type, const char *desc,
+>  		key->flags |= 1 << KEY_FLAG_UID_KEYRING;
+>  	if (flags & KEY_ALLOC_SET_KEEP)
+>  		key->flags |= 1 << KEY_FLAG_KEEP;
+> +	if (flags & KEY_ALLOC_ECA)
+> +		key->flags |= 1 << KEY_FLAG_ECA;
+>  
+>  #ifdef KEY_DEBUGGING
+>  	key->magic = KEY_DEBUG_MAGIC;
+> @@ -929,6 +931,12 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
+>  			perm |= KEY_POS_WRITE;
+>  	}
+>  
+> +	/* Only allow KEY_ALLOC_ECA flag to be set by preparser contents */
+> +	if (prep.payload_flags & KEY_ALLOC_PECA)
+> +		flags |= KEY_ALLOC_ECA;
+> +	else
+> +		flags &= ~KEY_ALLOC_ECA;
+> +
+>  	/* allocate a new key */
+>  	key = key_alloc(index_key.type, index_key.description,
+>  			cred->fsuid, cred->fsgid, cred, perm, flags, NULL);
 > -- 
 > 2.27.0
 > 
-
-LGTM but I'll hold with reviewed-by's up until the patch set overally
-looks good to me and I have actually tested it.
 
 BR, Jarkko
