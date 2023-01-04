@@ -2,150 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F5465CCE5
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 07:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A6965CD36
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 07:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjADGRo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Jan 2023 01:17:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S233498AbjADGkg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Jan 2023 01:40:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjADGRl (ORCPT
+        with ESMTP id S229590AbjADGkK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:17:41 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D5C18383;
-        Tue,  3 Jan 2023 22:17:40 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NmzrV0rZzzJqpx;
-        Wed,  4 Jan 2023 14:16:26 +0800 (CST)
-Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
- 2023 14:17:37 +0800
-From:   GUO Zihua <guozihua@huawei.com>
-To:     <stable@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <zohar@linux.ibm.com>
-CC:     <paul@paul-moore.com>, <linux-integrity@vger.kernel.org>,
-        <luhuaxin1@huawei.com>
-Subject: [PATCH v3 3/3] ima: Handle -ESTALE returned by ima_filter_rule_match()
-Date:   Wed, 4 Jan 2023 14:14:58 +0800
-Message-ID: <20230104061458.8878-4-guozihua@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230104061458.8878-1-guozihua@huawei.com>
-References: <20230104061458.8878-1-guozihua@huawei.com>
+        Wed, 4 Jan 2023 01:40:10 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB9918383
+        for <linux-integrity@vger.kernel.org>; Tue,  3 Jan 2023 22:40:09 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id 124so22188799pfy.0
+        for <linux-integrity@vger.kernel.org>; Tue, 03 Jan 2023 22:40:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
+        b=lxucC7WdJqs/f6vnO0xyjDIiYvkO1zIUbY5dvzc1gS3dAy3OfQQYNJY3qgkIp4IvGC
+         Oi3Qiq2J4RL2YPCvlge/HIY6+nyJiUXFhgSIFyzAmwWVXagd97/PUtXlb5jfygBt6BRf
+         fwWN260uJVbK/yc9R8WuWezkJeUQdhpjES8XGIHyH3AdF/AFkNlz+YfQuZN2gO1EmOPc
+         8KKIj6/qhE8i3Fe0WWEG9u5kvwBFlkiVo2YRHtZuVzM09AJ0QQD44w0muYyCcKVpzTF1
+         KpA5Z3tjS1NOBVAYcaIMzzN2x6CIMAwuhChhhugpiMtk+ck5Mr24ICxbQ/8nSTPVum7J
+         QJOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
+        b=JsT2CAPPRAFOF6eKa6azLHXUustTj/ZI0Nmgf4VYvXP0acbcVvhBpXsHfVkVk7Isd9
+         4vzV+jQu7VJiFu2wCAMa4Fa4FyN14YzE9GPzJR4BOa9ToCAKUujlghzGbnKboLTua3mU
+         hHTLRVu2ZYDnj/RVXHBsHgcON5OlumfBwH21mwGUb1FxpdGDcGNlbSu5wzJWdVla7gjl
+         FreHCqem/OyNaQoWvEBKWfNe4oQeg53qnAl8decohdNHxStsRNC2iTR4soi+B8EFg49A
+         C7uPlKp48iknYsbSX+GtuEp9xRu//SfrCQQb7oXteGe0F+zDyYSB61oLGdNi9A4+78Uo
+         WWFg==
+X-Gm-Message-State: AFqh2koN11EJL20XfZ/biHlGC9DulFyeZakjPxtexpW+4h7Iu07KXyUJ
+        U4PZ+CI69GcTLBHr69JSFlHnfZJtpMeP0MDXTqg=
+X-Google-Smtp-Source: AMrXdXtzEgdGNYXviASYnSqNJC0ZiQxlpsBhKtwlV/fC9EHlEQAD4b0ufCVYBzwI8FMubEJLf3ti+D5YEYUYV8QjtJ4=
+X-Received: by 2002:a62:1d07:0:b0:582:e7c:f6f3 with SMTP id
+ d7-20020a621d07000000b005820e7cf6f3mr1157112pfd.8.1672814408803; Tue, 03 Jan
+ 2023 22:40:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: mrs.maryander1947@gmail.com
+Sender: mrs.janeval197@gmail.com
+Received: by 2002:a05:7300:7652:b0:94:fcda:856a with HTTP; Tue, 3 Jan 2023
+ 22:40:08 -0800 (PST)
+From:   "Mrs. Mary Anderson" <amrsmary16@gmail.com>
+Date:   Wed, 4 Jan 2023 06:40:08 +0000
+X-Google-Sender-Auth: jTqv_0vHyo2y0EStaK-jLA4ClSk
+Message-ID: <CAL+V8fx8n5YVCBnyPw3TzcFWBtXqZO5w+9A_JwP7BB54jJSoEA@mail.gmail.com>
+Subject: Dear Beloved,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5800]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:436 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrs.janeval197[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrs.maryander1947[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [amrsmary16[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[ Upstream commit c7423dbdbc9ecef7fff5239d144cad4b9887f4de ]
+Hello,
 
-IMA relies on the blocking LSM policy notifier callback to update the
-LSM based IMA policy rules.
+Dear Beloved,
 
-When SELinux update its policies, IMA would be notified and starts
-updating all its lsm rules one-by-one. During this time, -ESTALE would
-be returned by ima_filter_rule_match() if it is called with a LSM rule
-that has not yet been updated. In ima_match_rules(), -ESTALE is not
-handled, and the LSM rule is considered a match, causing extra files
-to be measured by IMA.
+I am Mrs. Mary Anderson, It is understandable that you may be a bit
+apprehensive because you do not know me, I found your email address
+from a Human resources database and decided to contact you. I would
+love to employ you into my charity work, I am ready to donate some
+money to you to carry on the Charity work in your country. Please
+reply so that i will give you further details and tell you about
+myself.
 
-Fix it by re-initializing a temporary rule if -ESTALE is returned by
-ima_filter_rule_match(). The origin rule in the rule list would be
-updated by the LSM policy notifier callback.
-
-Fixes: b16942455193 ("ima: use the lsm policy update notifier")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
-Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
- security/integrity/ima/ima_policy.c | 35 ++++++++++++++++++++++-------
- 1 file changed, 27 insertions(+), 8 deletions(-)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 5eab5087074b..4eec7fd350dc 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -379,6 +379,9 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- 			    enum ima_hooks func, int mask)
- {
- 	int i;
-+	bool result = false;
-+	struct ima_rule_entry *lsm_rule = rule;
-+	bool rule_reinitialized = false;
- 
- 	if ((rule->flags & IMA_FUNC) &&
- 	    (rule->func != func && func != POST_SETATTR))
-@@ -417,35 +420,51 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- 		int rc = 0;
- 		u32 osid;
- 
--		if (!rule->lsm[i].rule)
-+		if (!lsm_rule->lsm[i].rule)
- 			continue;
- 
-+retry:
- 		switch (i) {
- 		case LSM_OBJ_USER:
- 		case LSM_OBJ_ROLE:
- 		case LSM_OBJ_TYPE:
- 			security_inode_getsecid(inode, &osid);
- 			rc = security_filter_rule_match(osid,
--							rule->lsm[i].type,
-+							lsm_rule->lsm[i].type,
- 							Audit_equal,
--							rule->lsm[i].rule,
-+							lsm_rule->lsm[i].rule,
- 							NULL);
- 			break;
- 		case LSM_SUBJ_USER:
- 		case LSM_SUBJ_ROLE:
- 		case LSM_SUBJ_TYPE:
- 			rc = security_filter_rule_match(secid,
--							rule->lsm[i].type,
-+							lsm_rule->lsm[i].type,
- 							Audit_equal,
--							rule->lsm[i].rule,
-+							lsm_rule->lsm[i].rule,
- 							NULL);
- 		default:
- 			break;
- 		}
--		if (!rc)
--			return false;
-+
-+		if (rc == -ESTALE && !rule_reinitialized) {
-+			lsm_rule = ima_lsm_copy_rule(rule);
-+			if (lsm_rule) {
-+				rule_reinitialized = true;
-+				goto retry;
-+			}
-+		}
-+		if (!rc) {
-+			result = false;
-+			goto out;
-+		}
- 	}
--	return true;
-+	result = true;
-+
-+out:
-+	if (rule_reinitialized)
-+		ima_lsm_free_rule(lsm_rule);
-+	return result;
- }
- 
- /*
--- 
-2.17.1
-
+Yours Sincerely
+Mrs. Mary Anderson
