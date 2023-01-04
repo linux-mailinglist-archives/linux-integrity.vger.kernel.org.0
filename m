@@ -2,58 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3625C65CC35
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 04:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 768C165CC36
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 04:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233384AbjADDl4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Jan 2023 22:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S233940AbjADDmE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Jan 2023 22:42:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjADDlz (ORCPT
+        with ESMTP id S230060AbjADDmD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Jan 2023 22:41:55 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACF57678
-        for <linux-integrity@vger.kernel.org>; Tue,  3 Jan 2023 19:41:53 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id q2so34233785ljp.6
-        for <linux-integrity@vger.kernel.org>; Tue, 03 Jan 2023 19:41:53 -0800 (PST)
+        Tue, 3 Jan 2023 22:42:03 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FB27678
+        for <linux-integrity@vger.kernel.org>; Tue,  3 Jan 2023 19:42:02 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b3so48698581lfv.2
+        for <linux-integrity@vger.kernel.org>; Tue, 03 Jan 2023 19:42:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XR38m6wRuoFurmyv4e2Bdb3xHZPRylEfyg8XCP3krPg=;
-        b=Dx5JpE+afrRYQbHWSnj05LbgcLO5gLVpIdWv9tucJuWzgCwKHRJhVmQ4DNAe5j1Xqz
-         0WSGn53tEr6zZXRk9psMDIWoqsBAbffrexT1mPpPw5h53eXE9UP+UBjOhXuikPbb2rcS
-         HpOHisnvrQRMlOJgGUZPOQyz1rRfZwgGE0P3Kj1n2ev9EVV08pfNYINbT69xt+OZ2T0T
-         y4DMPgM7twFLCpiHU7DNCaFsSrGbwWxW0/StwAXe3kWD5UisP72TP7gJ4qupQxb/i8kL
-         2b5j5XjhVN5Mfkky71guYV1LGna1zyFmgXMugHzimuk8CC+kbW7btXglVBAUso8MCPlR
-         Gc6g==
+        bh=s0Z9P5zAl8OMVW0iNoSbJoRO8gW6HoM/PUn42UgSrQU=;
+        b=ecPK2dNgDdt6UAwTIszHkWH2ig/5+MsB5C0VshWk1nLizcH0kEqDd21t9UVEZwLDvM
+         6F8FyO42Fy/p1hEIC2z6+NTMvbzul8n+U70Yd4dUZwNfMYfBKVmBHJNXt+TgATcMrKXA
+         R7luMzd95y7NtRXs21VQPpdPG+NjlhUTEHW+xN8Agc7NuYPWmSpfBMzOJz33q9f8v+Hi
+         h1bmvXRV759ga0b+ZnyhCcC9/3PfMPdO71Kkiq+YNkVpFPDJOUp/ScNvflJfJsDdU45p
+         alXt6QJV3bTxt4jwdXiGz9PngBZzrh7/YC5GNhnJDY0cCzbHQggCABUHTA/uOo2wGke3
+         4RrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XR38m6wRuoFurmyv4e2Bdb3xHZPRylEfyg8XCP3krPg=;
-        b=r9fTVZEgohV02kzPeBR7sA3WS7ySu5fkBm2MYZ6YuzR5zWKBUdNIORjKKUI3PmfiqE
-         y27GG2BWn/tsNo6s8HttseBkiLrj6tRVjv1cm42PSCIvTmweA8Y/m1H5R/PUjiwre0oP
-         K9XLYqSya0Nb17V79XHtCK2C2Y365QmXc9941SJBOIV8kFpoFMdXwPJlDOrm0kbpmRqL
-         XPWIRIarh6vWqWUeQdCRyn+i9oteoD+Tj0mmY31MbpR08Fw+qFCR+wwjgSwcwquI7GOt
-         0aMM0tmzbj4ICH3Wse2nTpv4Hj+tauc6ZOAi8P+FM95F2+AfA44lf0KtYG4LM9qYgzh3
-         HdzQ==
-X-Gm-Message-State: AFqh2kqGvhhDPp7K2OpbBQWUkfqutvjxUqdWhEPKsj+rugAZrGczPib8
-        9g8svvzCnIbRmlnXMPG6/W7UxQ==
-X-Google-Smtp-Source: AMrXdXubQAi7y62wTodP2qSo9tgZBBDIJ7beKjH90j+b9sQYf4T19xSsN2BcyQR3B6AVOLzLZm+ndA==
-X-Received: by 2002:a2e:86c6:0:b0:27f:b68e:8e9d with SMTP id n6-20020a2e86c6000000b0027fb68e8e9dmr9413760ljj.19.1672803711271;
-        Tue, 03 Jan 2023 19:41:51 -0800 (PST)
+        bh=s0Z9P5zAl8OMVW0iNoSbJoRO8gW6HoM/PUn42UgSrQU=;
+        b=ZAiJhUeY6s2NnSyG3rsa6VFHcBlzgCIuB6qqAVkSZY4q6Mb+VuyCNeyRi9VGrfFYas
+         /IFj7eboDwgweCP2WipsEVvqbuGHtmkCUTCf9YW5cFwAW7hMrRmzSgsscY7UvdDiFGA0
+         +RxcVDTfDYhJoVY6QcMuUnXYkCQEg3U38RbrGu3QJ5KNBfoao5whnPKH4vD/94tWNDr7
+         NpMjHU40I5yrCwBWmebuxAADsn7ytXY5q8Oj6lU+GXTFewIk6RwyaseMKkS6TdjvbzFi
+         ItOf5WA0dbuEn3EtrAa474PrMyJ5fFFb08cbrrytkZG4hxHmVY9XGmliBJMA4ajs6qIK
+         fz1Q==
+X-Gm-Message-State: AFqh2ko/6Qc2bgZXmFyVx3AVH8Exv8K0B3oGSizBeIbKOpsDlC6Id/b1
+        sQ327LH+nYmv0ZHndcPXmQB+6g==
+X-Google-Smtp-Source: AMrXdXuzUvRj8L8bHlwyCor4UJUQ9mtURazlh2thLXW7r0/nCbOxEInB079cGisW4pF1tvDeEFn2EA==
+X-Received: by 2002:a05:6512:10c3:b0:4b6:e64c:aec6 with SMTP id k3-20020a05651210c300b004b6e64caec6mr15613053lfg.63.1672803720794;
+        Tue, 03 Jan 2023 19:42:00 -0800 (PST)
 Received: from google.com (38.165.88.34.bc.googleusercontent.com. [34.88.165.38])
-        by smtp.gmail.com with ESMTPSA id u8-20020a2eb808000000b0027fdfe3b85fsm1169111ljo.109.2023.01.03.19.41.50
+        by smtp.gmail.com with ESMTPSA id v24-20020a05651203b800b004b4e6dab30esm5009037lfp.222.2023.01.03.19.42.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 19:41:50 -0800 (PST)
-Date:   Wed, 4 Jan 2023 03:41:44 +0000
+        Tue, 03 Jan 2023 19:42:00 -0800 (PST)
+Date:   Wed, 4 Jan 2023 03:41:56 +0000
 From:   Matt Bobrowski <mattbobrowski@google.com>
 To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org
-Subject: [PATCH] ima: fix error handling logic when file measurement failed
-Message-ID: <Y7T1eAAVXoZ70MPM@google.com>
+Cc:     linux-integrity@vger.kernel.org, revest@google.com,
+        kpsingh@google.com, roberto.sassu@huawei.com
+Subject: [PATCH] ima: return IMA digest value only when IMA_COLLECTED flag is
+ set
+Message-ID: <Y7T1hEhIL5TEmLEN@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -68,43 +70,34 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Restore the error handling logic so that when file measurement fails,
-the respective iint entry is not left with the digest data being
-populated with zeroes.
+The IMA_COLLECTED flag indicates whether the IMA subsystem has
+successfully collected a measurement for a given file object. Ensure
+that we return the respective digest value stored within the iint
+entry only when this flag has been set.
 
-Fixes: 54f03916fb89 ("ima: permit fsverity's file digests in the IMA measurement list")
+Failing to check for the presence of this flag exposes consumers of
+this IMA API to receive potentially undesired IMA digest values when
+an erroneous condition has been experienced in some of the lower level
+IMA API code.
+
 Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
 ---
- security/integrity/ima/ima_api.c  | 2 +-
  security/integrity/ima/ima_main.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index c1e76282b5ee..1e3a7a4f8833 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -292,7 +292,7 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 		result = ima_calc_file_hash(file, &hash.hdr);
- 	}
- 
--	if (result == -ENOMEM)
-+	if (result && result != -EBADF && result != -EINVAL)
- 		goto out;
- 
- 	length = sizeof(hash.hdr) + hash.hdr.length;
 diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 377300973e6c..b1ae0f2751f1 100644
+index b1ae0f2751f1..1d40cdfa23d5 100644
 --- a/security/integrity/ima/ima_main.c
 +++ b/security/integrity/ima/ima_main.c
-@@ -337,7 +337,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	hash_algo = ima_get_hash_algo(xattr_value, xattr_len);
- 
- 	rc = ima_collect_measurement(iint, file, buf, size, hash_algo, modsig);
--	if (rc == -ENOMEM)
-+	if (rc != 0 && rc != -EBADF && rc != -EINVAL)
- 		goto out_locked;
- 
- 	if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
+@@ -563,7 +563,7 @@ static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
+ 	 * ima_file_hash can be called when ima_collect_measurement has still
+ 	 * not been called, we might not always have a hash.
+ 	 */
+-	if (!iint->ima_hash) {
++	if (!iint->ima_hash || !(iint->flags & IMA_COLLECTED)) {
+ 		mutex_unlock(&iint->mutex);
+ 		return -EOPNOTSUPP;
+ 	}
 -- 
 2.39.0.314.g84b9a713c41-goog
 
