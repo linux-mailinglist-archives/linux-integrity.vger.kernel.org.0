@@ -2,150 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDFB65CDEB
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 08:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7D965CF40
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 10:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjADHzE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Jan 2023 02:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
+        id S234002AbjADJLk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Jan 2023 04:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjADHzD (ORCPT
+        with ESMTP id S239072AbjADJLR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Jan 2023 02:55:03 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36602F68;
-        Tue,  3 Jan 2023 23:55:02 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Nn20b1fjDz16MN5;
-        Wed,  4 Jan 2023 15:53:35 +0800 (CST)
-Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 4 Jan
- 2023 15:55:00 +0800
-From:   GUO Zihua <guozihua@huawei.com>
-To:     <stable@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <zohar@linux.ibm.com>
-CC:     <paul@paul-moore.com>, <linux-integrity@vger.kernel.org>,
-        <luhuaxin1@huawei.com>
-Subject: [PATCH v4 3/3] ima: Handle -ESTALE returned by ima_filter_rule_match()
-Date:   Wed, 4 Jan 2023 15:52:17 +0800
-Message-ID: <20230104075217.32746-4-guozihua@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230104075217.32746-1-guozihua@huawei.com>
-References: <20230104075217.32746-1-guozihua@huawei.com>
+        Wed, 4 Jan 2023 04:11:17 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CF9DC;
+        Wed,  4 Jan 2023 01:11:16 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id g1so33463339edj.8;
+        Wed, 04 Jan 2023 01:11:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EwljbFY9Lfjs8WqYNdIuIbwZd1SqYR0YdLKGV8vB66I=;
+        b=BLHa+qhetCVIaxZ2fzWLFOSv3sXntflfxV9QOIndkE6ywBBR19tqJHGiYB4lqLjMXR
+         7xaQSvuPe4qMZ89saXEr8cwls4o+8WC2oxDOeM592v31F8qq9Q+3l3DEgjh16d1zyngT
+         qsPG3QgGoKOGaXbuMY36Dzue08wDJIJGLTp+hLsNvrhi8eKWsjjbH/4ZgCR2a8iTmSB9
+         /PmCXya7qZ4bWjEoN08GBX+V8J1/WJLz88ldudVNIWUbo2biFgFaHQLcSy8IQcNew2wD
+         Cur3zHsjL2DOXfuqYRZqh3T5vRnOXDnwyTyGQUVN7vvSOU2E6ZQOUshcFuYQqB8ZqXjr
+         ucwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EwljbFY9Lfjs8WqYNdIuIbwZd1SqYR0YdLKGV8vB66I=;
+        b=OzT7sCoJXZaK6tUVo3Kig9u8gu/roCxtYcS8nPKAqembpWZ3TlsBRRXP7C9oqEr1hA
+         CtC299hk1Ha7FquGU/KHDe//hCIQvAOq33oYRl+5qfVhoOfNLO0CX1drFY2Ib3J4TMxn
+         MSB0Zt2jtPqUAPlZh8rmSDaHesBbXG6IjrRhZ7IlTGSclwjdk7s93eHmAQb97hSR0BPl
+         k4x14yKa0OPSxnw9yWy/2t53o18PzXiexg9+fXlDK2NcdzJnWyiKIYx+1eB8qBUxbbT2
+         KYLCQK9InSvZrfv3fK2fiG2uzXCoJbCpPHPr7Lu/gxVkKrwb+5tujWTYULm8/ySwXIxR
+         ZCjQ==
+X-Gm-Message-State: AFqh2koy+nQbIWRS1MWhvzR46tnKAc/fpWklbTHfvd9HYjh9cre12BQa
+        OFqqAOZoNOU3sH6QA9Kqk2g=
+X-Google-Smtp-Source: AMrXdXvwM+6Mbb80KUkrXkmtrQ9IxQGbERV+Bjh6Dt31qvk4eaOptGabK546Ivunu0L1ByeYK6Exdw==
+X-Received: by 2002:a05:6402:538f:b0:45c:835c:1ebb with SMTP id ew15-20020a056402538f00b0045c835c1ebbmr49094439edb.9.1672823474738;
+        Wed, 04 Jan 2023 01:11:14 -0800 (PST)
+Received: from gmail.com (cpe90-146-206-21.liwest.at. [90.146.206.21])
+        by smtp.gmail.com with ESMTPSA id h13-20020a0564020e0d00b0046b00a9eeb5sm14571437edh.49.2023.01.04.01.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 01:11:14 -0800 (PST)
+Date:   Wed, 4 Jan 2023 10:10:10 +0100
+From:   Johannes Altmanninger <aclopte@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+Message-ID: <Y7VCcgHUC6JtnO2b@gmail.com>
+References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[ Upstream commit c7423dbdbc9ecef7fff5239d144cad4b9887f4de ]
+On Wed, Dec 28, 2022 at 09:22:56PM +0100, Vlastimil Babka wrote:
+> Ugh, while the problem [1] was fixed in 6.1, it's now happening again on
+> the T460 with 6.2-rc1. Except I didn't see any oops message or
+> "tpm_try_transmit" error this time. The first indication of a problem is
+> this during a resume from suspend to ram:
+> 
+> tpm tpm0: A TPM error (28) occurred continue selftest
+> 
+> and then periodically 
+> 
+> tpm tpm0: A TPM error (28) occurred attempting get random
+> 
+> and further suspend to ram attempts fail:
+> 
+> tpm tpm0: Error (28) sending savestate before suspend
+> tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
+> tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
+> tpm_tis 00:08: PM: failed to suspend: error 28
+> PM: Some devices failed to suspend, or early wake event detected
+> 
+> Unfortunately I doubt I would be able to bisect it as any "good" kernel might
+> be a false negative.
+> 
+> [1] https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
+> 
+> #regzbot introduced: v6.1..v6.2-rc1
 
-IMA relies on the blocking LSM policy notifier callback to update the
-LSM based IMA policy rules.
+I see almost exactly the same symptoms with v6.1.1 on a T460s.
+No "tpm_try_transmit" etc. The only difference is that I get 0x20 instead
+of 0x10 (that's probably immaterial).
 
-When SELinux update its policies, IMA would be notified and starts
-updating all its lsm rules one-by-one. During this time, -ESTALE would
-be returned by ima_filter_rule_match() if it is called with a LSM rule
-that has not yet been updated. In ima_match_rules(), -ESTALE is not
-handled, and the LSM rule is considered a match, causing extra files
-to be measured by IMA.
+Also, I have this line immediately before the tpm error.
 
-Fix it by re-initializing a temporary rule if -ESTALE is returned by
-ima_filter_rule_match(). The origin rule in the rule list would be
-updated by the LSM policy notifier callback.
+	psmouse serio2: Failed to disable mouse on synaptics-pt/serio0
+	tpm tpm0: Error (28) sending savestate before suspend
+	[...]
 
-Fixes: b16942455193 ("ima: use the lsm policy update notifier")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
-Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
- security/integrity/ima/ima_policy.c | 35 ++++++++++++++++++++++-------
- 1 file changed, 27 insertions(+), 8 deletions(-)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 9c891758f9a8..9d7eabe9c491 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -368,6 +368,9 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- 			    enum ima_hooks func, int mask)
- {
- 	int i;
-+	bool result = false;
-+	struct ima_rule_entry *lsm_rule = rule;
-+	bool rule_reinitialized = false;
- 
- 	if ((rule->flags & IMA_FUNC) &&
- 	    (rule->func != func && func != POST_SETATTR))
-@@ -406,35 +409,51 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- 		int rc = 0;
- 		u32 osid;
- 
--		if (!rule->lsm[i].rule)
-+		if (!lsm_rule->lsm[i].rule)
- 			continue;
- 
-+retry:
- 		switch (i) {
- 		case LSM_OBJ_USER:
- 		case LSM_OBJ_ROLE:
- 		case LSM_OBJ_TYPE:
- 			security_inode_getsecid(inode, &osid);
- 			rc = security_filter_rule_match(osid,
--							rule->lsm[i].type,
-+							lsm_rule->lsm[i].type,
- 							Audit_equal,
--							rule->lsm[i].rule,
-+							lsm_rule->lsm[i].rule,
- 							NULL);
- 			break;
- 		case LSM_SUBJ_USER:
- 		case LSM_SUBJ_ROLE:
- 		case LSM_SUBJ_TYPE:
- 			rc = security_filter_rule_match(secid,
--							rule->lsm[i].type,
-+							lsm_rule->lsm[i].type,
- 							Audit_equal,
--							rule->lsm[i].rule,
-+							lsm_rule->lsm[i].rule,
- 							NULL);
- 		default:
- 			break;
- 		}
--		if (!rc)
--			return false;
-+
-+		if (rc == -ESTALE && !rule_reinitialized) {
-+			lsm_rule = ima_lsm_copy_rule(rule);
-+			if (lsm_rule) {
-+				rule_reinitialized = true;
-+				goto retry;
-+			}
-+		}
-+		if (!rc) {
-+			result = false;
-+			goto out;
-+		}
- 	}
--	return true;
-+	result = true;
-+
-+out:
-+	if (rule_reinitialized)
-+		ima_free_rule(lsm_rule);
-+	return result;
- }
- 
- /*
--- 
-2.17.1
-
+In the past I have had similar problems on another Thinkpad where a touchpad
+driver prevented suspend.  Unloading the module (I think psmouse, not sure)
+helped. I haven't tried this here since it only happens sometimes.
