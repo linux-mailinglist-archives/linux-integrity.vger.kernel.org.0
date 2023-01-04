@@ -2,50 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EA665CB65
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 02:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3625C65CC35
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jan 2023 04:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjADB1k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Jan 2023 20:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S233384AbjADDl4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Jan 2023 22:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjADB1j (ORCPT
+        with ESMTP id S230060AbjADDlz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Jan 2023 20:27:39 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F52013F28;
-        Tue,  3 Jan 2023 17:27:37 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NmsPS2MRmzRqZJ;
-        Wed,  4 Jan 2023 09:26:04 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 4 Jan 2023 09:27:35 +0800
-Message-ID: <98dd7fd9-6060-b13a-96d4-9be91c477278@huawei.com>
-Date:   Wed, 4 Jan 2023 09:27:35 +0800
+        Tue, 3 Jan 2023 22:41:55 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACF57678
+        for <linux-integrity@vger.kernel.org>; Tue,  3 Jan 2023 19:41:53 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id q2so34233785ljp.6
+        for <linux-integrity@vger.kernel.org>; Tue, 03 Jan 2023 19:41:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XR38m6wRuoFurmyv4e2Bdb3xHZPRylEfyg8XCP3krPg=;
+        b=Dx5JpE+afrRYQbHWSnj05LbgcLO5gLVpIdWv9tucJuWzgCwKHRJhVmQ4DNAe5j1Xqz
+         0WSGn53tEr6zZXRk9psMDIWoqsBAbffrexT1mPpPw5h53eXE9UP+UBjOhXuikPbb2rcS
+         HpOHisnvrQRMlOJgGUZPOQyz1rRfZwgGE0P3Kj1n2ev9EVV08pfNYINbT69xt+OZ2T0T
+         y4DMPgM7twFLCpiHU7DNCaFsSrGbwWxW0/StwAXe3kWD5UisP72TP7gJ4qupQxb/i8kL
+         2b5j5XjhVN5Mfkky71guYV1LGna1zyFmgXMugHzimuk8CC+kbW7btXglVBAUso8MCPlR
+         Gc6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XR38m6wRuoFurmyv4e2Bdb3xHZPRylEfyg8XCP3krPg=;
+        b=r9fTVZEgohV02kzPeBR7sA3WS7ySu5fkBm2MYZ6YuzR5zWKBUdNIORjKKUI3PmfiqE
+         y27GG2BWn/tsNo6s8HttseBkiLrj6tRVjv1cm42PSCIvTmweA8Y/m1H5R/PUjiwre0oP
+         K9XLYqSya0Nb17V79XHtCK2C2Y365QmXc9941SJBOIV8kFpoFMdXwPJlDOrm0kbpmRqL
+         XPWIRIarh6vWqWUeQdCRyn+i9oteoD+Tj0mmY31MbpR08Fw+qFCR+wwjgSwcwquI7GOt
+         0aMM0tmzbj4ICH3Wse2nTpv4Hj+tauc6ZOAi8P+FM95F2+AfA44lf0KtYG4LM9qYgzh3
+         HdzQ==
+X-Gm-Message-State: AFqh2kqGvhhDPp7K2OpbBQWUkfqutvjxUqdWhEPKsj+rugAZrGczPib8
+        9g8svvzCnIbRmlnXMPG6/W7UxQ==
+X-Google-Smtp-Source: AMrXdXubQAi7y62wTodP2qSo9tgZBBDIJ7beKjH90j+b9sQYf4T19xSsN2BcyQR3B6AVOLzLZm+ndA==
+X-Received: by 2002:a2e:86c6:0:b0:27f:b68e:8e9d with SMTP id n6-20020a2e86c6000000b0027fb68e8e9dmr9413760ljj.19.1672803711271;
+        Tue, 03 Jan 2023 19:41:51 -0800 (PST)
+Received: from google.com (38.165.88.34.bc.googleusercontent.com. [34.88.165.38])
+        by smtp.gmail.com with ESMTPSA id u8-20020a2eb808000000b0027fdfe3b85fsm1169111ljo.109.2023.01.03.19.41.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 19:41:50 -0800 (PST)
+Date:   Wed, 4 Jan 2023 03:41:44 +0000
+From:   Matt Bobrowski <mattbobrowski@google.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org
+Subject: [PATCH] ima: fix error handling logic when file measurement failed
+Message-ID: <Y7T1eAAVXoZ70MPM@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 1/2] ima: use the lsm policy update notifier
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, <stable@vger.kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <paul@paul-moore.com>, <linux-integrity@vger.kernel.org>,
-        <luhuaxin1@huawei.com>
-References: <20230103022011.15741-1-guozihua@huawei.com>
- <20230103022011.15741-2-guozihua@huawei.com>
- <a93e895499a32160298b19636ab3157c541aee88.camel@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <a93e895499a32160298b19636ab3157c541aee88.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,51 +68,44 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2023/1/4 2:50, Mimi Zohar wrote:
-> On Tue, 2023-01-03 at 10:20 +0800, GUO Zihua wrote:
->> From: Janne Karhunen <janne.karhunen@gmail.com>
->>
->> [ Upstream commit b169424551930a9325f700f502802f4d515194e5 ]
->>
->> This patch is backported to resolve the issue of IMA ignoreing LSM part of
->> an LSM based rule. As the LSM notifier chain was an atomic notifier
->> chain, we'll not be able to call synchronize_rcu() within our notifier
->> handling function. Instead, we call the call_rcu() function to resolve
->> the freeing issue. To do that, we would needs to include a rcu_head
->> member in our rule, as well as wrap the call to ima_lsm_free_rule() into
->> a rcu_callback_t type callback function.
->>
->> Original patch message is as follows:
->>
->> commit b169424551930a9325f700f502802f4d515194e5
->> Author: Janne Karhunen <janne.karhunen@gmail.com>
->> Date:   Fri Jun 14 15:20:15 2019 +0300
->>
->>   Don't do lazy policy updates while running the rule matching,
->>   run the updates as they happen.
->>
->>   Depends on commit f242064c5df3 ("LSM: switch to blocking policy update
->>                                   notifiers")
->>
->>   Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
->>   Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
->>
->> Cc: stable@vger.kernel.org #4.19.y
->> Signed-off-by: GUO Zihua <guozihua@huawei.com>
-> 
-> There was quite a bit of discussion regarding converting the atomic
-> notifier to blocking, but this backport doesn't make that change.
-> 
-> Refer to 
-> https://lore.kernel.org/linux-integrity/CAHC9VhS=GsEVUmxtiV64o8G6i2nJpkzxzpyTADgN-vhV8pzZbg@mail.gmail.com/
-Well it seems that the bug mentioned here is still valid on 4.19.y.
-Which is worrying. I'll try backporting the blocking notifier change as
-well.
-> 
-> Mimi
-> 
+Restore the error handling logic so that when file measurement fails,
+the respective iint entry is not left with the digest data being
+populated with zeroes.
 
+Fixes: 54f03916fb89 ("ima: permit fsverity's file digests in the IMA measurement list")
+Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+---
+ security/integrity/ima/ima_api.c  | 2 +-
+ security/integrity/ima/ima_main.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index c1e76282b5ee..1e3a7a4f8833 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -292,7 +292,7 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+ 		result = ima_calc_file_hash(file, &hash.hdr);
+ 	}
+ 
+-	if (result == -ENOMEM)
++	if (result && result != -EBADF && result != -EINVAL)
+ 		goto out;
+ 
+ 	length = sizeof(hash.hdr) + hash.hdr.length;
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 377300973e6c..b1ae0f2751f1 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -337,7 +337,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	hash_algo = ima_get_hash_algo(xattr_value, xattr_len);
+ 
+ 	rc = ima_collect_measurement(iint, file, buf, size, hash_algo, modsig);
+-	if (rc == -ENOMEM)
++	if (rc != 0 && rc != -EBADF && rc != -EINVAL)
+ 		goto out_locked;
+ 
+ 	if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
 -- 
-Best
-GUO Zihua
+2.39.0.314.g84b9a713c41-goog
 
+/M
