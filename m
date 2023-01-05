@@ -2,40 +2,40 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5355D65EF31
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jan 2023 15:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2EB65EF59
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jan 2023 15:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjAEOsm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Jan 2023 09:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
+        id S231843AbjAEOxh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Jan 2023 09:53:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234204AbjAEOsJ (ORCPT
+        with ESMTP id S234213AbjAEOx0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Jan 2023 09:48:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3B037273;
-        Thu,  5 Jan 2023 06:48:08 -0800 (PST)
+        Thu, 5 Jan 2023 09:53:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCB85B16A;
+        Thu,  5 Jan 2023 06:53:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 172E361ADB;
-        Thu,  5 Jan 2023 14:48:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78C3C433D2;
-        Thu,  5 Jan 2023 14:48:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 153E4B81AF7;
+        Thu,  5 Jan 2023 14:53:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F176C433EF;
+        Thu,  5 Jan 2023 14:53:21 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="qGFtc44q"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bCa54Qce"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672930083;
+        t=1672930399;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=j0ck3abVJY2ouhKZmMHaxzbj9CCExwJe2tQnda+R1m0=;
-        b=qGFtc44q5akffwi5JVAownpi+dfiyBqRDRp7CQGSrlezApoND+xq4NLG+G6s2V/rWeV/kV
-        pFTSnVhXlz93c9qkE8tZQ2HQfo4y+ZoxZ50Mr4q9wgUexGWJIWMgHtuaGHYIaJ8tUc35HI
-        WQMb5q5soEW63quDCcmwK0QcFqMhtwk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3ea1ba23 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 5 Jan 2023 14:48:02 +0000 (UTC)
+        bh=7wXtl0YIk8f5F9hz4Q5DT4Lbxgp1+7NErVmX1yTs2lA=;
+        b=bCa54Qce/zw9oxX0JUjvVX0t9gwff2BIE1btUpipAPv9ZEfdumst+BeBDORKG22lal0dH0
+        q/afhhv+DRbfXEdL0SzG5FiMccg5Si5YzV/OTYXvUwYRTtBeIpGPd0MUI86vSO7X5ZFeg8
+        PAimxhfpwIW38jLFfWruqoQwMCIVlXQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7d15d76a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 5 Jan 2023 14:53:19 +0000 (UTC)
+Date:   Thu, 5 Jan 2023 15:53:16 +0100
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     Thorsten Leemhuis <regressions@leemhuis.info>,
         James Bottomley <James.Bottomley@HansenPartnership.com>,
@@ -47,16 +47,16 @@ To:     Thorsten Leemhuis <regressions@leemhuis.info>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Johannes Altmanninger <aclopte@gmail.com>
 Cc:     stable@vger.kernel.org
-Subject: [PATCH] tpm: Disable hwrng for TPM 1 if PM_SLEEP is enabled
-Date:   Thu,  5 Jan 2023 15:47:42 +0100
-Message-Id: <20230105144742.3219571-1-Jason@zx2c4.com>
-In-Reply-To: <370a2808-a19b-b512-4cd3-72dc69dfe8b0@suse.cz>
+Subject: Re: [PATCH] tpm: Disable hwrng for TPM 1 if PM_SLEEP is enabled
+Message-ID: <Y7bkXAxIT+sp9fvb@zx2c4.com>
 References: <370a2808-a19b-b512-4cd3-72dc69dfe8b0@suse.cz>
+ <20230105144742.3219571-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230105144742.3219571-1-Jason@zx2c4.com>
 X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -67,60 +67,71 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-TPM 1's support for its hardware RNG is broken across system suspends,
-due to races or locking issues or something else that haven't been
-diagnosed or fixed yet. These issues prevent the system from actually
-suspending. So disable the driver in this case. Later, when this is
-fixed properly, we can remove this.
+On Thu, Jan 05, 2023 at 03:47:42PM +0100, Jason A. Donenfeld wrote:
+> TPM 1's support for its hardware RNG is broken across system suspends,
+> due to races or locking issues or something else that haven't been
+> diagnosed or fixed yet. These issues prevent the system from actually
+> suspending. So disable the driver in this case. Later, when this is
+> fixed properly, we can remove this.
+> 
+> Current breakage amounts to something like:
+> 
+>   tpm tpm0: A TPM error (28) occurred continue selftest
+>   ...
+>   tpm tpm0: A TPM error (28) occurred attempting get random
+>   ...
+>   tpm tpm0: Error (28) sending savestate before suspend
+>   tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
+>   tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
+>   tpm_tis 00:08: PM: failed to suspend: error 28
+>   PM: Some devices failed to suspend, or early wake event detected
+> 
+> This issue was partially fixed by 23393c646142 ("char: tpm: Protect
+> tpm_pm_suspend with locks"), in a last minute 6.1 commit that Linus took
+> directly because the TPM maintainers weren't available. However, it
+> seems like this just addresses the most common cases of the bug, rather
+> than addressing it entirely. So there are more things to fix still,
+> apparently.
+> 
+> The hwrng driver appears already to be occasionally disabled due to
+> other conditions, so this shouldn't be too large of a surprise.
+> 
+> Link: https://lore.kernel.org/lkml/7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz/
+> Cc: stable@vger.kernel.org # 6.1+
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Current breakage amounts to something like:
+Quoting from my previous email:
 
-  tpm tpm0: A TPM error (28) occurred continue selftest
-  ...
-  tpm tpm0: A TPM error (28) occurred attempting get random
-  ...
-  tpm tpm0: Error (28) sending savestate before suspend
-  tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
-  tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
-  tpm_tis 00:08: PM: failed to suspend: error 28
-  PM: Some devices failed to suspend, or early wake event detected
+| I spent a long time working through the TPM code when this came up
+| during 6.1. I set up the TPM emulator with QEMU and reproduced this and
+| had a whole test setup and S3 fuzzer. It took a long time, and when I was
+| done, I paged it all out of my brain. When I found that patch from Jan
+| that fixed the problem most of the time (but not all the time), I wasted
+| tons of time trying to get the TPM maintainers to take the patch and
+| send it to Linus as part of rc7 or rc8. But they all ignored me, and
+| eventually Linus just took that patch directly.
+| 
+| So I don't think I want to go down another rabbit hole here, having
+| experienced the TPM maintainers not really caring much, and that sucking
+| away the remaining energy I had before to keep looking at the issue and
+| its edge cases not handled by Jan's patch.
+| 
+| On the contrary, it'd make a big difference if the TPM maintainers could
+| actually help analyze the code that they're most familiar with, so that
+| we can get to the bottom of this. That's a lot better than some random
+| drive-by patches from a non-TPM person like me; before the 6.1 bug, I'd
+| never even looked at these drivers.
+| 
+| My plan is to therefore be available to help and analyze and test and
+| maybe even write some code, if the TPM maintainers take the lead on
+| getting to the bottom of this. But if this hits neglect again like last
+| time, I'll just send a `depends on BROKEN if PM` patch to the TPM
+| hw_random driver and see what happens... That's a really awful solution
+| though, so I hope the maintainers will wake up this cycle.
 
-This issue was partially fixed by 23393c646142 ("char: tpm: Protect
-tpm_pm_suspend with locks"), in a last minute 6.1 commit that Linus took
-directly because the TPM maintainers weren't available. However, it
-seems like this just addresses the most common cases of the bug, rather
-than addressing it entirely. So there are more things to fix still,
-apparently.
+Seeing as there's still no life from the TPM maintainers, here's the
+patch to make the problem go away until they wake up. When they do wake
+up, though, I will be available to start looking into this again in
+whatever capacity I might be useful.
 
-The hwrng driver appears already to be occasionally disabled due to
-other conditions, so this shouldn't be too large of a surprise.
-
-Link: https://lore.kernel.org/lkml/7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz/
-Cc: stable@vger.kernel.org # 6.1+
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/tpm/tpm-chip.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 741d8f3e8fb3..eed67ea8d3a7 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -524,6 +524,14 @@ static int tpm_add_hwrng(struct tpm_chip *chip)
- 	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip))
- 		return 0;
- 
-+	/*
-+	 * This driver's support for using the RNG across suspend is broken on
-+	 * TPM1. Until somebody fixes this, just stop registering a HWRNG in
-+	 * that case.
-+	 */
-+	if (!(chip->flags & TPM_CHIP_FLAG_TPM2) && IS_ENABLED(CONFIG_PM_SLEEP))
-+		return 0;
-+
- 	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
- 		 "tpm-rng-%d", chip->dev_num);
- 	chip->hwrng.name = chip->hwrng_name;
--- 
-2.39.0
-
+Jason
