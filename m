@@ -2,138 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76EE65F2D7
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jan 2023 18:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552E165F652
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jan 2023 22:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235210AbjAERfo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Jan 2023 12:35:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S235669AbjAEV7J (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Jan 2023 16:59:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235300AbjAERfW (ORCPT
+        with ESMTP id S235664AbjAEV7I (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Jan 2023 12:35:22 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B3310555;
-        Thu,  5 Jan 2023 09:35:20 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305HEqAJ007075;
-        Thu, 5 Jan 2023 17:35:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=luc5WyRo2KogGJsCDxru6UV95e0RwpyQSyjG3pihxMI=;
- b=K/30oRIxJHfPfROFGTOd60N92VRl/Yaut8piY+aHCb+jd2Y3nOVQX0U+nSzSu09/4Vqt
- sbyYB6v/POJx8gx9Q3pMCOwZy6sJ/jcTfrh6qYrzzXoq/BtLzPZyt/LvUHfglv+ffGhb
- EWLSc68rnofaOWuEbkvFDj0dERn2Hno5iQsDpfAAwWTThN6KfbF3Ny0Ckd5Q/MsnlaHs
- 9E5zTdEIeYOOZxGCwRlwglrYVRhSLfRZYTrYQldM05tOvVjGn28GPxunY/MJffUE9oQc
- L2Qq9B8ySwEz4//c/UJaEAUVjZqDgvuKKXZ+xCGoncwPviBaVafEDlBUlSiapwcLlvgx Jg== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mx2sage1u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 17:35:10 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 305GUkj2009523;
-        Thu, 5 Jan 2023 17:35:09 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3mtcq7q27s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Jan 2023 17:35:09 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 305HZ8h359834874
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 Jan 2023 17:35:08 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B5AC58055;
-        Thu,  5 Jan 2023 17:35:08 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B370158043;
-        Thu,  5 Jan 2023 17:35:07 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.84.210])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  5 Jan 2023 17:35:07 +0000 (GMT)
-Message-ID: <d11ea8036738664ec7a796d56b38f63ce0b64ae5.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 2/3] ima: use the lsm policy update notifier
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     GUO Zihua <guozihua@huawei.com>, stable@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     paul@paul-moore.com, linux-integrity@vger.kernel.org,
-        luhuaxin1@huawei.com
-Date:   Thu, 05 Jan 2023 12:35:07 -0500
-In-Reply-To: <20230105062312.14325-3-guozihua@huawei.com>
-References: <20230105062312.14325-1-guozihua@huawei.com>
-         <20230105062312.14325-3-guozihua@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wfRU6Bzq6Lmtn8WrfPUMoYumqcxo49_2
-X-Proofpoint-ORIG-GUID: wfRU6Bzq6Lmtn8WrfPUMoYumqcxo49_2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-05_08,2023-01-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
- suspectscore=0 spamscore=0 malwarescore=0 phishscore=0 impostorscore=0
- mlxlogscore=858 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301050139
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 16:59:08 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E9D6950D
+        for <linux-integrity@vger.kernel.org>; Thu,  5 Jan 2023 13:59:07 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id h21so31222103qta.12
+        for <linux-integrity@vger.kernel.org>; Thu, 05 Jan 2023 13:59:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j0w58Jmxv23GOP82cSaTaJVOpSQ/WlFhaNSuDNLLtbw=;
+        b=ZWrnuV/+oK0I3Jv9lK5gtYSMcmV/0S825Fft8v4+B9jE01S0vbNlAglhlXm1JBzOnt
+         hA789qQ/CxOJyLAVaAiljJ8LwxY9uzFDesBGbhGuh64/4VlEraovgbmSdg4YkcLxbAsy
+         KmBIDGAcYFHhTBTNHQpsOXZR/a/BtttWpNy4I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j0w58Jmxv23GOP82cSaTaJVOpSQ/WlFhaNSuDNLLtbw=;
+        b=KGctyBvKWG3EpzR2fDs3CdSF40oKB5LWSzAKwPKXT3JZgNU/6iGZROL/QrLGRAf44i
+         pCGoJyYSFdhj7YjitHdRGXJU2Tpee30zkKBeP5Y3tEpBU/U3/PD9ihIAsZtEP+U0nQqT
+         kyUClzBwiYl5uUcMBCpU0+7F/pLUijCraDwpymgGrYW+NAzYOMGP6CvL7kJdf+NMLuo/
+         ZXok30Jh5moJuMVf3X2e5Ge/Gv4gIpksy3z/c3tIoDC4QNH26zhbVRHWniUU6lbwy8b4
+         8aF3RMs9HAdKz7QgvvxRp41992MrchJ25FeUkwgEJavh6xbHwy3U3C+5FZtTZ47GPQSR
+         JhOg==
+X-Gm-Message-State: AFqh2kokwLpVgvRLN9CQf8BCkLkD5pjzD+16fwUGK+DrMw9GlzvVDYiT
+        VMGi1VI2rVOuwyXhJCW0NFtbr/7/3PjXihAl
+X-Google-Smtp-Source: AMrXdXsIH0CkoxQZzGHKUdUVcvT/b0PoIhZEfAtVPb0fzLAaA/9s6ydZU80nNayxgCT8vfbcY1B6zg==
+X-Received: by 2002:ac8:450e:0:b0:3a9:6b73:fb91 with SMTP id q14-20020ac8450e000000b003a96b73fb91mr66098732qtn.64.1672955946108;
+        Thu, 05 Jan 2023 13:59:06 -0800 (PST)
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com. [209.85.222.180])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05620a2a4c00b006fef61300fesm26689763qkp.16.2023.01.05.13.59.04
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jan 2023 13:59:04 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id o14so18567958qkk.5
+        for <linux-integrity@vger.kernel.org>; Thu, 05 Jan 2023 13:59:04 -0800 (PST)
+X-Received: by 2002:a37:a93:0:b0:6ff:812e:a82f with SMTP id
+ 141-20020a370a93000000b006ff812ea82fmr2294712qkk.336.1672955943954; Thu, 05
+ Jan 2023 13:59:03 -0800 (PST)
+MIME-Version: 1.0
+References: <370a2808-a19b-b512-4cd3-72dc69dfe8b0@suse.cz> <20230105144742.3219571-1-Jason@zx2c4.com>
+In-Reply-To: <20230105144742.3219571-1-Jason@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 5 Jan 2023 13:58:48 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whxaSHcHeo10JGz3EMJZBfC1LarcrerLos7uHbE1URhtQ@mail.gmail.com>
+Message-ID: <CAHk-=whxaSHcHeo10JGz3EMJZBfC1LarcrerLos7uHbE1URhtQ@mail.gmail.com>
+Subject: Re: [PATCH] tpm: Disable hwrng for TPM 1 if PM_SLEEP is enabled
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Johannes Altmanninger <aclopte@gmail.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> +static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
-> +{
-> +	struct ima_rule_entry *nentry;
-> +	int i, result;
-> +
-> +	nentry = kmalloc(sizeof(*nentry), GFP_KERNEL);
-> +	if (!nentry)
-> +		return NULL;
-> +
-> +	/*
-> +	 * Immutable elements are copied over as pointers and data; only
-> +	 * lsm rules can change
-> +	 */
-> +	memcpy(nentry, entry, sizeof(*nentry));
-> +	memset(nentry->lsm, 0, FIELD_SIZEOF(struct ima_rule_entry, lsm));
-> +
->  	for (i = 0; i < MAX_LSM_RULES; i++) {
-> -		security_filter_rule_free(entry->lsm[i].rule);
-> -		kfree(entry->lsm[i].args_p);
-> +		if (!entry->lsm[i].rule)
-> +			continue;
-> +
-> +		nentry->lsm[i].type = entry->lsm[i].type;
-> +		nentry->lsm[i].args_p = kstrdup(entry->lsm[i].args_p,
-> +						GFP_KERNEL);
-> +		if (!nentry->lsm[i].args_p)
-> +			goto out_err;
-> +
-> +		result = security_filter_rule_init(nentry->lsm[i].type,
-> +						   Audit_equal,
-> +						   nentry->lsm[i].args_p,
-> +						   &nentry->lsm[i].rule);
-> +		if (result == -EINVAL)
-> +			pr_warn("ima: rule for LSM \'%d\' is undefined\n",
-> +				entry->lsm[i].type);
->  	}
-> +	return nentry;
-> +
-> +out_err:
-> +	ima_lsm_free_rule(entry);
->  	kfree(entry);
+On Thu, Jan 5, 2023 at 6:48 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> TPM 1's support for its hardware RNG is broken across system suspends,
+> due to races or locking issues or something else that haven't been
+> diagnosed or fixed yet. These issues prevent the system from actually
+> suspending. So disable the driver in this case. Later, when this is
+> fixed properly, we can remove this.
 
-This should be "nentry".   Otherwise, it looks good.
+How about just keeping it enabled, but not making it a fatal error if
+the TPM saving doesn't work? IOW, just print the warning, and then
+"return 0" from the suspend function.
 
-thanks,
+I doubt anybody cares, but your patch disables that TPM device just
+because PM is *enabled*. That's basically "all the time".
 
-Mimi
+Imagine being on a desktop with a distro kernel that enables suspend -
+because that kernel obviously is expected to work on laptops too.
+You're never actually going to suspend things on that machine, but
+maybe you still want to register it as a source of hw random data?
 
-> +	return NULL;
-> +}
-
+          Linus
