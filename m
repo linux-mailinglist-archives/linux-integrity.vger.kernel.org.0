@@ -2,134 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686AA65F020
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jan 2023 16:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A76EE65F2D7
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jan 2023 18:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjAEPcf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Jan 2023 10:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
+        id S235210AbjAERfo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Jan 2023 12:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbjAEPcJ (ORCPT
+        with ESMTP id S235300AbjAERfW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Jan 2023 10:32:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03BB1C134;
-        Thu,  5 Jan 2023 07:32:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63EAA61AFB;
-        Thu,  5 Jan 2023 15:32:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C1BFC433F0;
-        Thu,  5 Jan 2023 15:32:05 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jdvT5lkh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672932723;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IeZGnYRH9T7WJ2VSE08aDmiWGF7wYWpmACCmuXS+lbE=;
-        b=jdvT5lkhYyOjEH5H6szyNkicjxd1HoMWHAeliNoF1ziKS0+rcFb252yCX5/2Dbu/RMLq2k
-        nCbLzMu4qBpFim455LpqrqhszI/l8fCdbGEZNctr0QhF01nDvdmVkdlDT7DdxhJ2FANL+k
-        +de0l60KLlQfVSu3MSKKTSdceayTuL8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 32ec48c7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 5 Jan 2023 15:32:03 +0000 (UTC)
-Date:   Thu, 5 Jan 2023 16:32:00 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Altmanninger <aclopte@gmail.com>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-Message-ID: <Y7btcIGI0LpiqN68@zx2c4.com>
-References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
- <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
- <Y60RoP77HnwaukEA@zx2c4.com>
- <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <2d07d185384ed444bef46648316354ef5afd481a.camel@HansenPartnership.com>
- <Y7bsRufCECNoPW+T@zx2c4.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y7bsRufCECNoPW+T@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 5 Jan 2023 12:35:22 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B3310555;
+        Thu,  5 Jan 2023 09:35:20 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 305HEqAJ007075;
+        Thu, 5 Jan 2023 17:35:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=luc5WyRo2KogGJsCDxru6UV95e0RwpyQSyjG3pihxMI=;
+ b=K/30oRIxJHfPfROFGTOd60N92VRl/Yaut8piY+aHCb+jd2Y3nOVQX0U+nSzSu09/4Vqt
+ sbyYB6v/POJx8gx9Q3pMCOwZy6sJ/jcTfrh6qYrzzXoq/BtLzPZyt/LvUHfglv+ffGhb
+ EWLSc68rnofaOWuEbkvFDj0dERn2Hno5iQsDpfAAwWTThN6KfbF3Ny0Ckd5Q/MsnlaHs
+ 9E5zTdEIeYOOZxGCwRlwglrYVRhSLfRZYTrYQldM05tOvVjGn28GPxunY/MJffUE9oQc
+ L2Qq9B8ySwEz4//c/UJaEAUVjZqDgvuKKXZ+xCGoncwPviBaVafEDlBUlSiapwcLlvgx Jg== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mx2sage1u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Jan 2023 17:35:10 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 305GUkj2009523;
+        Thu, 5 Jan 2023 17:35:09 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3mtcq7q27s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Jan 2023 17:35:09 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 305HZ8h359834874
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 Jan 2023 17:35:08 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B5AC58055;
+        Thu,  5 Jan 2023 17:35:08 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B370158043;
+        Thu,  5 Jan 2023 17:35:07 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.84.210])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  5 Jan 2023 17:35:07 +0000 (GMT)
+Message-ID: <d11ea8036738664ec7a796d56b38f63ce0b64ae5.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 2/3] ima: use the lsm policy update notifier
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     GUO Zihua <guozihua@huawei.com>, stable@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     paul@paul-moore.com, linux-integrity@vger.kernel.org,
+        luhuaxin1@huawei.com
+Date:   Thu, 05 Jan 2023 12:35:07 -0500
+In-Reply-To: <20230105062312.14325-3-guozihua@huawei.com>
+References: <20230105062312.14325-1-guozihua@huawei.com>
+         <20230105062312.14325-3-guozihua@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wfRU6Bzq6Lmtn8WrfPUMoYumqcxo49_2
+X-Proofpoint-ORIG-GUID: wfRU6Bzq6Lmtn8WrfPUMoYumqcxo49_2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-05_08,2023-01-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 phishscore=0 impostorscore=0
+ mlxlogscore=858 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301050139
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 04:27:02PM +0100, Jason A. Donenfeld wrote:
-> On Thu, Jan 05, 2023 at 10:17:57AM -0500, James Bottomley wrote:
-> > On Thu, 2023-01-05 at 14:59 +0100, Thorsten Leemhuis wrote:
-> > > On 29.12.22 05:03, Jason A. Donenfeld wrote:
-> > > > On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
-> > > > > On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
-> > > > > > Ugh, while the problem [1] was fixed in 6.1, it's now happening
-> > > > > > again on the T460 with 6.2-rc1. Except I didn't see any oops
-> > > > > > message or "tpm_try_transmit" error this time. The first
-> > > > > > indication of a problem is this during a resume from suspend to
-> > > > > > ram:
-> > > > > > 
-> > > > > > tpm tpm0: A TPM error (28) occurred continue selftest
-> > > > > > 
-> > > > > > and then periodically 
-> > > > > > 
-> > > > > > tpm tpm0: A TPM error (28) occurred attempting get random
-> > > > > 
-> > > > > That's a TPM 1.2 error which means the TPM failed the selftest. 
-> > > > > The original problem was reported against TPM 2.0  because of a
-> > > > > missing try_get_ops().
-> > > > 
-> > > > No, I'm pretty sure the original bug, which was fixed by "char:
-> > > > tpm: Protect tpm_pm_suspend with locks" regards 1.2 as well,
-> > > > especially considering it's the same hardware from Vlastimil
-> > > > causing this. I also recall seeing this in 1.2 when I ran this with
-> > > > the TPM emulator. So that's not correct.
-> > > 
-> > > James, are you or some other TPM developer looking into this? Or is
-> > > this deadlocked now?
-> > 
-> > Not really: TPM 1.2 way predates my interest in the TPM subsystem, and
-> > I've only ever done patches to 2.0.  I can look at the paths
-> > theoretically, but I don't have any hardware.  Self Test failures tend
-> > to be hardware specific, so even poking around in the emulator is
-> > unlikely to give what might be the cause.
-> > 
-> > >  And if so: how can we get this unstuck to get this regression
-> > > solved?
-> > 
-> > One of the TPM maintainers with hardware (possibly the specific TPM ...
-> > what is it, by the way?) needs to get involved.
-> 
-> I already wrote in my last email [1] that this simply isn't the case.
-> The issue reproduces in QEMU + the emulator. It's far more likely to be
-> a locking/race situation [2] than some kind of obscure hardware bug.
-> 
-> Jason
-> 
-> [1] https://lore.kernel.org/lkml/Y60RoP77HnwaukEA@zx2c4.com/
-> [2] https://lore.kernel.org/lkml/Y60Uu8HcGyXasnOO@zx2c4.com/
+> +static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+> +{
+> +	struct ima_rule_entry *nentry;
+> +	int i, result;
+> +
+> +	nentry = kmalloc(sizeof(*nentry), GFP_KERNEL);
+> +	if (!nentry)
+> +		return NULL;
+> +
+> +	/*
+> +	 * Immutable elements are copied over as pointers and data; only
+> +	 * lsm rules can change
+> +	 */
+> +	memcpy(nentry, entry, sizeof(*nentry));
+> +	memset(nentry->lsm, 0, FIELD_SIZEOF(struct ima_rule_entry, lsm));
+> +
+>  	for (i = 0; i < MAX_LSM_RULES; i++) {
+> -		security_filter_rule_free(entry->lsm[i].rule);
+> -		kfree(entry->lsm[i].args_p);
+> +		if (!entry->lsm[i].rule)
+> +			continue;
+> +
+> +		nentry->lsm[i].type = entry->lsm[i].type;
+> +		nentry->lsm[i].args_p = kstrdup(entry->lsm[i].args_p,
+> +						GFP_KERNEL);
+> +		if (!nentry->lsm[i].args_p)
+> +			goto out_err;
+> +
+> +		result = security_filter_rule_init(nentry->lsm[i].type,
+> +						   Audit_equal,
+> +						   nentry->lsm[i].args_p,
+> +						   &nentry->lsm[i].rule);
+> +		if (result == -EINVAL)
+> +			pr_warn("ima: rule for LSM \'%d\' is undefined\n",
+> +				entry->lsm[i].type);
+>  	}
+> +	return nentry;
+> +
+> +out_err:
+> +	ima_lsm_free_rule(entry);
+>  	kfree(entry);
 
-I should add, though, that I don't fault you for lack of interest in TPM
-1.2. Folks work on what they care about. If the rest of the TPM team has
-a similar feeling, maybe it's best to just merge [3], rather than let
-the bug linger forever? And possibly talk about sunsetting TPM 1 support
-entirely if there's nobody to work on it and fix issues that inevitably
-will come up? Just trying to look at the big picture here, you know...
+This should be "nentry".   Otherwise, it looks good.
 
-[3] https://lore.kernel.org/lkml/20230105144742.3219571-1-Jason@zx2c4.com/
+thanks,
+
+Mimi
+
+> +	return NULL;
+> +}
+
