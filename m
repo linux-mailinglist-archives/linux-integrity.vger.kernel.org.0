@@ -2,97 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E98166097A
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Jan 2023 23:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6447660A13
+	for <lists+linux-integrity@lfdr.de>; Sat,  7 Jan 2023 00:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235960AbjAFW2V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Jan 2023 17:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
+        id S230269AbjAFXHo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Jan 2023 18:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjAFW2U (ORCPT
+        with ESMTP id S234760AbjAFXHX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Jan 2023 17:28:20 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD9F85C90
-        for <linux-integrity@vger.kernel.org>; Fri,  6 Jan 2023 14:28:19 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id j16so3374644qtv.4
-        for <linux-integrity@vger.kernel.org>; Fri, 06 Jan 2023 14:28:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QXQOUJjcoX1hrsbbTN+Z+gwuy5Yx5WlxprMyzhgXuL0=;
-        b=FSwATMmksAKMdpu1wQNSAU4HfcxbtJpqP5jg4jxAia7ZjIAJt4LpHBViEiX5ZkvhWV
-         XA077dHR8grrfxkhZnG7h3W83Y6u9reeX0IgVJqi16hhxZZAnt1gx0ImUTDz0+wZcva6
-         cB9bwoRmvnDNak/FU5AzQ18NzyvaFmMkZwKoA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QXQOUJjcoX1hrsbbTN+Z+gwuy5Yx5WlxprMyzhgXuL0=;
-        b=KwRI1W4sDypfz7fOWc6mfbDwMDysDaG4SwKFDbzixiyDPJI48HkdktN7bcMplEKYsv
-         88hY9gybrP3A50i6L9G9zDSyYO+7EV3MeWxx7KyWO1feZRxy3A2GXH/fgigve99br/+G
-         uI1wBpOu2/Ai72tyP6K95bw6zmR63TSRNZBoVc7peCY/xT5D7rfcglctEDSGt+NbSsrj
-         NvKgcw49wbK04Vv6ITGXsWWaGzsP3pjrTo5PA2VuinUOeOxIfVioW2zfM2AGLf7vhv0N
-         5aVHOsadP9ci5P4kmhTXpakYqpWQ7AC9NSNHEtxWln4KLdGzrXR2RZywQe8IKonaJ4R3
-         gI7g==
-X-Gm-Message-State: AFqh2krqhrJCUoiUESzNNSFKaA52qOC3PzH3AEpxcElVP4dBFQ8mM0Tl
-        Q7zapmJ37bmYYYxAC6tNdR/7SK59unnxnDq4
-X-Google-Smtp-Source: AMrXdXsN9DjbVAOtCO+TKFHech4ym172vY9p/3PbwgS3PSXAAxl9GzALuf+D7WcjBJ46RmjD9T4R0w==
-X-Received: by 2002:ac8:4a93:0:b0:3a7:ec9b:e00b with SMTP id l19-20020ac84a93000000b003a7ec9be00bmr76901333qtq.68.1673044098658;
-        Fri, 06 Jan 2023 14:28:18 -0800 (PST)
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com. [209.85.219.49])
-        by smtp.gmail.com with ESMTPSA id cm8-20020a05622a250800b003a50ef44a77sm1099300qtb.28.2023.01.06.14.28.16
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 14:28:17 -0800 (PST)
-Received: by mail-qv1-f49.google.com with SMTP id h10so1930615qvq.7
-        for <linux-integrity@vger.kernel.org>; Fri, 06 Jan 2023 14:28:16 -0800 (PST)
-X-Received: by 2002:a0c:df09:0:b0:4f0:656b:c275 with SMTP id
- g9-20020a0cdf09000000b004f0656bc275mr3791255qvl.129.1673044096460; Fri, 06
- Jan 2023 14:28:16 -0800 (PST)
-MIME-Version: 1.0
-References: <Y7dPV5BK6jk1KvX+@zx2c4.com> <20230106030156.3258307-1-Jason@zx2c4.com>
- <CAHk-=wjin0Rn6j+EvYV9pzrbA0G2xnHKdp_EAB6XnansQ8kpUA@mail.gmail.com> <CAA25o9Sbkg=qD+DH-aqXY9H5R_oBtePcnqagwAGCgoUk8D-Vyg@mail.gmail.com>
-In-Reply-To: <CAA25o9Sbkg=qD+DH-aqXY9H5R_oBtePcnqagwAGCgoUk8D-Vyg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 6 Jan 2023 14:28:00 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi60PhJRzaBJ9uvVCpOpqSsKy=oXkGDq7t844BJ6dRcmA@mail.gmail.com>
-Message-ID: <CAHk-=wi60PhJRzaBJ9uvVCpOpqSsKy=oXkGDq7t844BJ6dRcmA@mail.gmail.com>
-Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM suspend fails
-To:     Luigi Semenzato <semenzato@chromium.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Johannes Altmanninger <aclopte@gmail.com>,
-        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        tbroch@chromium.org, dbasehore@chromium.org,
-        Kees Cook <keescook@chromium.org>
+        Fri, 6 Jan 2023 18:07:23 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1E1848C7
+        for <linux-integrity@vger.kernel.org>; Fri,  6 Jan 2023 15:07:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1673046441;
+        bh=mIthU9c3zj9xl1liW+MF7UkCZEp01AqlKuinZGELToI=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=YuxoapSarkUPh7xMQhLppAAYsaZIglqruRpjHmLFGhsAQlVfGvpiSU9NtU5Z5rgmD
+         FTQfiLA8D4gWxGdo9HZ4GGVPdHVFA2l/ouGVNfAyrTZPKVhJBvDGV8hwgdbBjxjgsq
+         DwJvub/ArfB8XPx//363iQl4JEPMrfHChvnFS+NU=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 65BE81285D21;
+        Fri,  6 Jan 2023 18:07:21 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id T7b1_sigD9UK; Fri,  6 Jan 2023 18:07:21 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1673046441;
+        bh=mIthU9c3zj9xl1liW+MF7UkCZEp01AqlKuinZGELToI=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=YuxoapSarkUPh7xMQhLppAAYsaZIglqruRpjHmLFGhsAQlVfGvpiSU9NtU5Z5rgmD
+         FTQfiLA8D4gWxGdo9HZ4GGVPdHVFA2l/ouGVNfAyrTZPKVhJBvDGV8hwgdbBjxjgsq
+         DwJvub/ArfB8XPx//363iQl4JEPMrfHChvnFS+NU=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id BF65F12819F6;
+        Fri,  6 Jan 2023 18:07:20 -0500 (EST)
+Message-ID: <a763fdc8e247e217b5efe860be4aebccb708b245.camel@HansenPartnership.com>
+Subject: Re: Seal/Unseal trusted keys against PCR policy
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     William Roberts <bill.c.roberts@gmail.com>,
+        Ken Goldman <kgold@linux.ibm.com>
+Cc:     Sughosh Ganu <sughosh.ganu@linaro.org>,
+        linux-integrity@vger.kernel.org
+Date:   Fri, 06 Jan 2023 18:07:18 -0500
+In-Reply-To: <CAFftDdr6qs33HaaPK3MMmyi9-mMjUuLURt9PAum6hJ3N3m=_iw@mail.gmail.com>
+References: <CADg8p94+rY5B937YweMo=5aGS4Dhz2z4QW-BiAdkVdiWCm-u9w@mail.gmail.com>
+         <3bd7c0b2c9937c30082381f92624e98902c72ece.camel@HansenPartnership.com>
+         <CADg8p94qd-Kx9Xn2LwqypFeAsV734wv7CvswPmGqJZa+ENPpRg@mail.gmail.com>
+         <2910376b6912885f696afebf43b820513c004dbb.camel@HansenPartnership.com>
+         <63a8c022-1407-d701-e756-070e299b5803@linux.ibm.com>
+         <CAFftDdr6qs33HaaPK3MMmyi9-mMjUuLURt9PAum6hJ3N3m=_iw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 12:04 PM Luigi Semenzato <semenzato@chromium.org> wrote:
->
-> I think it's fine to go ahead with your change, for multiple reasons.
+On Fri, 2023-01-06 at 16:23 -0600, William Roberts wrote:
+> On Fri, Jan 6, 2023, 15:55 Ken Goldman <kgold@linux.ibm.com> wrote:
+> > 
+> > On 12/28/2022 5:48 PM, James Bottomley wrote:
+> > > The main thing you have to do is connect to the TPM not through
+> > > the
+> > > resource manager so the policy session survives multiple commands
+> > > 
+> > > export TPM_DEVICE=/dev/tpm0
+> > 
+> > Just FYI, as James says, command line utilities interact with the
+> > resource manager.  When I want to run command line programs through
+> > the
+> > resource manager, I use a proxy to keep the /dev/tpmrm0 session
+> > connected.
+> > 
+> > https://github.com/kgoldman/ibmtss/blob/master/utils/tpmproxy.c hol
+> > ds an
+> > open source proxy.
+> > 
+> 
+> If you need to do this in production that tpmproxy allows anyone to
+> connect to it. So while it's open it would circumvent the permissions
+> on /dev/tpmrm0. You can just use tpm2-tools, which uses contexts and
+> avoids this problem.
 
-Ok, I've applied the patch (although I did end up editing it to use
-dev_err() before doing that just to make myself happier about the
-printout).
+The specific issue with this is that using contexts, no-one could
+figure out a way to pass the session into the kernel:
 
-            Linus
+https://lore.kernel.org/linux-integrity/CADg8p94kTNkoByjLhEij3KkigLxhwU8PxnO82cRaO0Ejh7T3Zg@mail.gmail.com/
+
+How should this be done?
+
+James
+
+
