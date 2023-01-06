@@ -2,156 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAF866078A
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Jan 2023 21:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83CE56608A6
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Jan 2023 22:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbjAFUEx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Jan 2023 15:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S235845AbjAFVPB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Jan 2023 16:15:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjAFUEw (ORCPT
+        with ESMTP id S229870AbjAFVPA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Jan 2023 15:04:52 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6818BA1
-        for <linux-integrity@vger.kernel.org>; Fri,  6 Jan 2023 12:04:51 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id i83so1219458ioa.11
-        for <linux-integrity@vger.kernel.org>; Fri, 06 Jan 2023 12:04:51 -0800 (PST)
+        Fri, 6 Jan 2023 16:15:00 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D96A81C2B
+        for <linux-integrity@vger.kernel.org>; Fri,  6 Jan 2023 13:14:59 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id f3so1998491pgc.2
+        for <linux-integrity@vger.kernel.org>; Fri, 06 Jan 2023 13:14:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=paul-moore.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MzDYy7xH3h8odSKsfYc3qRpLkXTC2bMipKsVQCeG9FI=;
-        b=LppGhafXep900ETRX0WoS44tL4OJE5U/oiAMFVHG9hQ0mds8BDedt6H6Bw1FrzaM4t
-         N4iN+eaxJ90iKHNasykQ02gS0Ik5BRQ9Gn/Ch5b5p8hIX+WAipztit/AA7bm7flrp2hU
-         dq28Syy8Q+Mdab8MPFuej1FbyZ91btaR7d6dQ=
+        bh=CwOLnK2ifzFuyr165LNzqz5GnvMFyliD+SS3u04GcaQ=;
+        b=fQ3uOApcxQR/IsZivYDkfhBOj3GhwFU3tAsLTFuEVAPRPR10Inv7wS4kVorYVsJLlG
+         8n0xE/1sTmVOH0hu+adBfEjI8JaSxtmQsvOScWoHbuCb/zC7iXJRmVjUi/zMHRyp1Woj
+         aIkxixCOv2op1sVjyL0pqY0STzhYHHIKifcn+SV2YQ7lkhVjAP0pQ0BDvW7rWSaf9BcM
+         FbrWjT1sIdJKfH5SiffG/z0ZWEfSoZqDaCViQqjeNsv5lVZHXzUN/xFq4XiDMSOWk69M
+         Dl+f8JPEzAA1dBCgkT8/ssw8M92FVA43pnEzRE7ZHzoxOquhEfiJ7M967D5W8gGtWKtV
+         vDKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MzDYy7xH3h8odSKsfYc3qRpLkXTC2bMipKsVQCeG9FI=;
-        b=YJHQkB6JLcpWvqQUzlVE7l4BnQOzyLig3FrF2P7REJmlBjRZxbfiNxoC5fJdKnapVp
-         tny/mlm1hkhnhkmo0cs/bryN+ze6hRNLsf2JDwqWLmR7/t4buKVU+fyWKJAHv3LdOhls
-         0Ayv7KPW4NVhnBreaItVgj66b8Ov37E7aB0rc2hKGEIrhwa391r2zOrpCqWCKpdu+wNN
-         tuKRM6kJA/o1wxr8PuATKxlyqvmw/bZvaZVy7GaycZSZ5Hi95bVkqVrR1yOn1fVTiaF6
-         F+lZt4vfhDik85kxeJNtnFbOGCCQfCEo+xDzWjsE7L/fwQVvrqs9HlKfk+gM4bTzUwrr
-         xPSg==
-X-Gm-Message-State: AFqh2kqogez9U2Lz6yceOg8RSWxxc7kvTFOwLwhpsN1AeIBvwvHmrsnK
-        nBya2X1zVxUYrsJR/ZwPYzjPuOeghBctEsEjcLBEpA==
-X-Google-Smtp-Source: AMrXdXt+OvGRW73oMucqsNbQBvW95NaKoS/i4Q0oSWPahJsIrZlzWwcHZyn2Uwc7cUnXowlDV8MNakYCs0MmrINVMWY=
-X-Received: by 2002:a02:665f:0:b0:376:1ab0:7bd5 with SMTP id
- l31-20020a02665f000000b003761ab07bd5mr5197244jaf.8.1673035489129; Fri, 06 Jan
- 2023 12:04:49 -0800 (PST)
+        bh=CwOLnK2ifzFuyr165LNzqz5GnvMFyliD+SS3u04GcaQ=;
+        b=ePK02eqh2iQAxsaSaZ/xw1MAoRqIS6E5lVPEiUbMYdpc29COtrhPx+vhgeV7IuVcrX
+         fMELpe3TOKRKxWuy15moQ9JAu4IhFiRkyARSi9zhx9x5iXwcwv/MEEw5/dNXeONIQjWb
+         StztDDRxU2s6bPiQzE4oycj8vTXDxo77bgGACWguM0M2lFRhP0bSiv3hDhtwQ8D9bMa9
+         cgYif5AYOEqWEZjEQAm/02kuiSk5XWdixRFLaDP8rTLyb8pYqhc+9xAUMsDx7pWEeMLc
+         np4W0VNtvv6AofxCWkhggl59UVPIZMa3CKMBU7sb5HCYXdRado+F2cXPfV3TieYEPELS
+         JM4A==
+X-Gm-Message-State: AFqh2kp616oz4Y2k2753gIIlYvBHGHWcCK5KV3JsU1BPrEsVjYe/n06O
+        vt2SIt755acXbHALibcOsq5YcUl1vt3MCv04+KDw
+X-Google-Smtp-Source: AMrXdXunbq8svWmpL5uzJpDIG9dH1bnChWXrVS5uoNEeJGgqDMuv7i47INaTjXl1feUFwaMf91aGmisI+GELaFzB0V8=
+X-Received: by 2002:a05:6a00:1345:b0:582:5f1a:97c2 with SMTP id
+ k5-20020a056a00134500b005825f1a97c2mr1477126pfu.3.1673039698452; Fri, 06 Jan
+ 2023 13:14:58 -0800 (PST)
 MIME-Version: 1.0
-References: <Y7dPV5BK6jk1KvX+@zx2c4.com> <20230106030156.3258307-1-Jason@zx2c4.com>
- <CAHk-=wjin0Rn6j+EvYV9pzrbA0G2xnHKdp_EAB6XnansQ8kpUA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjin0Rn6j+EvYV9pzrbA0G2xnHKdp_EAB6XnansQ8kpUA@mail.gmail.com>
-From:   Luigi Semenzato <semenzato@chromium.org>
-Date:   Fri, 6 Jan 2023 12:04:37 -0800
-Message-ID: <CAA25o9Sbkg=qD+DH-aqXY9H5R_oBtePcnqagwAGCgoUk8D-Vyg@mail.gmail.com>
-Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM suspend fails
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 6 Jan 2023 16:14:47 -0500
+Message-ID: <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
+Subject: Re: [PATCH v2] security: Restore passing final prot to ima_file_mmap()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com
+Cc:     jmorris@namei.org, serge@hallyn.com,
         linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Johannes Altmanninger <aclopte@gmail.com>,
-        stable@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        tbroch@chromium.org, dbasehore@chromium.org,
-        Kees Cook <keescook@chromium.org>
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-I think it's fine to go ahead with your change, for multiple reasons.
+On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Commit 98de59bfe4b2f ("take calculation of final prot in
+> security_mmap_file() into a helper") moved the code to update prot with the
+> actual protection flags to be granted to the requestor by the kernel to a
+> helper called mmap_prot(). However, the patch didn't update the argument
+> passed to ima_file_mmap(), making it receive the requested prot instead of
+> the final computed prot.
+>
+> A possible consequence is that files mmapped as executable might not be
+> measured/appraised if PROT_EXEC is not requested but subsequently added in
+> the final prot.
+>
+> Replace prot with mmap_prot(file, prot) as the second argument of
+> ima_file_mmap() to restore the original behavior.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/security.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/security/security.c b/security/security.c
+> index d1571900a8c7..0d2359d588a1 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
+>                                         mmap_prot(file, prot), flags);
+>         if (ret)
+>                 return ret;
+> -       return ima_file_mmap(file, prot);
+> +       return ima_file_mmap(file, mmap_prot(file, prot));
+>  }
 
-1. I doubt that any of the ChromeOS devices using TPM 1.2 are still
-being updated.
-2. If the SAVESTATE command fails, it is probably better to continue
-the transition to S3, and fail at resume, than to block the suspend.
-The suspend is often triggered by closing the lid, so users would not
-see what's going on and might put their running laptop in a backpack,
-where it could overheat.
-3. I don't recall bugs due to failures of TPM suspend, and I didn't
-find any such bug in our database.  Many (most?) ChromeOS devices left
-the TPM powered on in S3, so didn't use the suspend/resume path.
+This seems like a reasonable fix, although as the original commit is
+~10 years old at this point I am a little concerned about the impact
+this might have on IMA.  Mimi, what do you think?
 
-Thank you for asking!
+Beyond that, my only other comment would be to only call mmap_prot()
+once and cache the results in a local variable.  You could also fix up
+some of the ugly indentation crimes in security_mmap_file() while you
+are at it, e.g. something like this:
 
+diff --git a/security/security.c b/security/security.c
+index d1571900a8c7..2f9cad9ecac8 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1662,11 +1662,12 @@ int security_mmap_file(struct file *file, unsigned long
+prot,
+                       unsigned long flags)
+{
+       int ret;
+-       ret = call_int_hook(mmap_file, 0, file, prot,
+-                                       mmap_prot(file, prot), flags);
++       unsigned long prot_adj = mmap_prot(file, prot);
++
++       ret = call_int_hook(mmap_file, 0, file, prot, prot_adj, flags);
+       if (ret)
+               return ret;
+-       return ima_file_mmap(file, prot);
++       return ima_file_mmap(file, prot_adj);
+}
 
-On Fri, Jan 6, 2023 at 11:00 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Jan 5, 2023 at 7:02 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > In lieu of actually fixing the underlying bug, just allow system suspend
-> > to continue, so that laptops still go to sleep fine. Later, this can be
-> > reverted when the real bug is fixed.
->
-> So the patch looks fine to me, but since there's still the ChromeOS
-> discussion pending I'll wait for that to finish.
->
-> Perhaps re-send or at least remind me if/when it does?
->
-> Also, a query about the printout:
->
-> > +       if (rc)
-> > +               pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
-> > +                      chip->dev_num, rc);
->
-> so I suspect that 99% of the time the dev_num isn't actually all that
-> useful, but what *might* be useful is which tpm driver it is.
->
-> Just comparing the error dmesg output you had:
->
->   ..
->   tpm tpm0: Error (28) sending savestate before suspend
->   tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
->   ..
->
-> that "tpm tpm0" output is kind of useless compared to the "tpm_tis 00:08" one.
->
-> So I think "dev_err(dev, ...)" would be more useful here.
->
-> Finally - and maybe I'm just being difficult here, I will note here
-> again that TPM2 devices don't have this issue, because the TPM2 path
-> for suspend doesn't do any of this at all.
->
-> It just does
->
->         tpm_transmit_cmd(..);
->
-> with a TPM2_CC_SHUTDOWN TPM_SU_STATE command, and doesn't even check
-> the return value. In fact, the tpm2 code *used* to have this comment:
->
->         /* In places where shutdown command is sent there's no much we can do
->          * except print the error code on a system failure.
->          */
->         if (rc < 0 && rc != -EPIPE)
->                 dev_warn(&chip->dev, "transmit returned %d while
-> stopping the TPM",
->                          rc);
->
-> but it was summarily removed when doing some re-organization around
-> buffer handling.
->
-> So just by looking at what tpm2 does, I'm not 100% convinced that tpm1
-> should do this dance at all.
->
-> But having a dev_err() is probably a good idea at least as a transitional thing.
->
->                   Linus
+--
+paul-moore.com
