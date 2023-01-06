@@ -2,152 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF6265F919
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Jan 2023 02:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A1D65F9E3
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Jan 2023 04:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjAFB3O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Jan 2023 20:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        id S231610AbjAFDEY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Jan 2023 22:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAFB2j (ORCPT
+        with ESMTP id S232036AbjAFDDl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Jan 2023 20:28:39 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E8D65AF6;
-        Thu,  5 Jan 2023 17:23:51 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Np5DX3gD8zJrFM;
-        Fri,  6 Jan 2023 09:22:36 +0800 (CST)
-Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 6 Jan
- 2023 09:23:45 +0800
-From:   GUO Zihua <guozihua@huawei.com>
-To:     <stable@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <zohar@linux.ibm.com>
-CC:     <paul@paul-moore.com>, <linux-integrity@vger.kernel.org>,
-        <luhuaxin1@huawei.com>
-Subject: [PATCH v7 3/3] ima: Handle -ESTALE returned by ima_filter_rule_match()
-Date:   Fri, 6 Jan 2023 09:21:06 +0800
-Message-ID: <20230106012106.21559-4-guozihua@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230106012106.21559-1-guozihua@huawei.com>
-References: <20230106012106.21559-1-guozihua@huawei.com>
+        Thu, 5 Jan 2023 22:03:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D4A6B5C6;
+        Thu,  5 Jan 2023 19:02:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 464D961CC8;
+        Fri,  6 Jan 2023 03:02:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170B1C433EF;
+        Fri,  6 Jan 2023 03:02:09 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="R4BcOF1Q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1672974126;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=efZSHt3YcBRsaUeR6mOr7PEUQW1tGnk6xcgIkVA9P44=;
+        b=R4BcOF1QA8mj1a+6y7oEGCzd6sbEa8PsR9N/ECutO2ta5Mh8weq4/jjAA1D2vLFyffHB5v
+        p+HV7w5Ydj4ZLXFu4fr2sJjgIJNf6O8uxYml0nO1ESo5Y0cHbuBC5b0W9zqtwIhr+6u7ke
+        XUE7xCY89+EX3PJv8QbQ//54E+N58qI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7620b3ca (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 6 Jan 2023 03:02:06 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Johannes Altmanninger <aclopte@gmail.com>,
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v2] tpm: Allow system suspend to continue when TPM suspend fails
+Date:   Fri,  6 Jan 2023 04:01:56 +0100
+Message-Id: <20230106030156.3258307-1-Jason@zx2c4.com>
+In-Reply-To: <Y7dPV5BK6jk1KvX+@zx2c4.com>
+References: <Y7dPV5BK6jk1KvX+@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[ Upstream commit c7423dbdbc9ecef7fff5239d144cad4b9887f4de ]
+TPM 1 is sometimes broken across system suspends, due to races or
+locking issues or something else that haven't been diagnosed or fixed
+yet, most likely having to do with concurrent reads from the TPM's
+hardware random number generator driver. These issues prevent the system
+from actually suspending, with errors like:
 
-IMA relies on the blocking LSM policy notifier callback to update the
-LSM based IMA policy rules.
+  tpm tpm0: A TPM error (28) occurred continue selftest
+  ...
+  tpm tpm0: A TPM error (28) occurred attempting get random
+  ...
+  tpm tpm0: Error (28) sending savestate before suspend
+  tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
+  tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
+  tpm_tis 00:08: PM: failed to suspend: error 28
+  PM: Some devices failed to suspend, or early wake event detected
 
-When SELinux update its policies, IMA would be notified and starts
-updating all its lsm rules one-by-one. During this time, -ESTALE would
-be returned by ima_filter_rule_match() if it is called with a LSM rule
-that has not yet been updated. In ima_match_rules(), -ESTALE is not
-handled, and the LSM rule is considered a match, causing extra files
-to be measured by IMA.
+This issue was partially fixed by 23393c646142 ("char: tpm: Protect
+tpm_pm_suspend with locks"), in a last minute 6.1 commit that Linus took
+directly because the TPM maintainers weren't available. However, it
+seems like this just addresses the most common cases of the bug, rather
+than addressing it entirely. So there are more things to fix still,
+apparently.
 
-Fix it by re-initializing a temporary rule if -ESTALE is returned by
-ima_filter_rule_match(). The origin rule in the rule list would be
-updated by the LSM policy notifier callback.
+In lieu of actually fixing the underlying bug, just allow system suspend
+to continue, so that laptops still go to sleep fine. Later, this can be
+reverted when the real bug is fixed.
 
-Fixes: b16942455193 ("ima: use the lsm policy update notifier")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
-Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
+Link: https://lore.kernel.org/lkml/7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz/
+Cc: stable@vger.kernel.org # 6.1+
+Reported-by: Vlastimil Babka <vbabka@suse.cz>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- security/integrity/ima/ima_policy.c | 37 ++++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 8 deletions(-)
+This is basically untested and I haven't worked out if there are any
+awful implications of letting the system sleep when TPM suspend fails.
+Maybe some PCRs get cleared and that will make everything explode on
+resume? Maybe it doesn't matter? Somebody well versed in TPMology should
+probably [n]ack this approach.
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 5a15524bca4c..9d500a06c710 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -375,6 +375,9 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- 			    enum ima_hooks func, int mask)
- {
- 	int i;
-+	bool result = false;
-+	struct ima_rule_entry *lsm_rule = rule;
-+	bool rule_reinitialized = false;
- 
- 	if ((rule->flags & IMA_FUNC) &&
- 	    (rule->func != func && func != POST_SETATTR))
-@@ -413,35 +416,53 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
- 		int rc = 0;
- 		u32 osid;
- 
--		if (!rule->lsm[i].rule)
-+		if (!lsm_rule->lsm[i].rule)
- 			continue;
- 
-+retry:
- 		switch (i) {
- 		case LSM_OBJ_USER:
- 		case LSM_OBJ_ROLE:
- 		case LSM_OBJ_TYPE:
- 			security_inode_getsecid(inode, &osid);
- 			rc = security_filter_rule_match(osid,
--							rule->lsm[i].type,
-+							lsm_rule->lsm[i].type,
- 							Audit_equal,
--							rule->lsm[i].rule,
-+							lsm_rule->lsm[i].rule,
- 							NULL);
- 			break;
- 		case LSM_SUBJ_USER:
- 		case LSM_SUBJ_ROLE:
- 		case LSM_SUBJ_TYPE:
- 			rc = security_filter_rule_match(secid,
--							rule->lsm[i].type,
-+							lsm_rule->lsm[i].type,
- 							Audit_equal,
--							rule->lsm[i].rule,
-+							lsm_rule->lsm[i].rule,
- 							NULL);
- 		default:
- 			break;
- 		}
--		if (!rc)
--			return false;
-+
-+		if (rc == -ESTALE && !rule_reinitialized) {
-+			lsm_rule = ima_lsm_copy_rule(rule);
-+			if (lsm_rule) {
-+				rule_reinitialized = true;
-+				goto retry;
-+			}
-+		}
-+		if (!rc) {
-+			result = false;
-+			goto out;
-+		}
-+	}
-+	result = true;
-+
-+out:
-+	if (rule_reinitialized) {
-+		ima_lsm_free_rule(lsm_rule);
-+		kfree(lsm_rule);
+ drivers/char/tpm/tpm-interface.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index d69905233aff..6df9067ef7f9 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
  	}
--	return true;
-+	return result;
- }
  
- /*
+ suspended:
+-	return rc;
++	if (rc)
++		pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
++		       chip->dev_num, rc);
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+ 
 -- 
-2.17.1
+2.39.0
 
