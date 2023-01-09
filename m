@@ -2,41 +2,41 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008E7662BE8
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Jan 2023 17:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D8A662BE9
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Jan 2023 17:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbjAIQ5q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Jan 2023 11:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        id S235031AbjAIQ5r (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Jan 2023 11:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjAIQ5P (ORCPT
+        with ESMTP id S229789AbjAIQ51 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:57:15 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F0EE0DC
-        for <linux-integrity@vger.kernel.org>; Mon,  9 Jan 2023 08:57:14 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NrKfc0Dvtz9v7Vg
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Jan 2023 00:49:28 +0800 (CST)
+        Mon, 9 Jan 2023 11:57:27 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DE3614F
+        for <linux-integrity@vger.kernel.org>; Mon,  9 Jan 2023 08:57:18 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NrKfn31Q5z9v7Yw
+        for <linux-integrity@vger.kernel.org>; Tue, 10 Jan 2023 00:49:37 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwCXHWQ9R7xjPQWBAA--.14103S9;
-        Mon, 09 Jan 2023 17:57:00 +0100 (CET)
+        by APP2 (Coremail) with SMTP id GxC2BwCXHWQ9R7xjPQWBAA--.14103S10;
+        Mon, 09 Jan 2023 17:57:04 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
 Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH ima-evm-utils 7/8] Adapt fsverity.test to work with UML kernel
-Date:   Mon,  9 Jan 2023 17:55:51 +0100
-Message-Id: <20230109165552.3409716-8-roberto.sassu@huaweicloud.com>
+Subject: [PATCH ima-evm-utils 8/8] Use in-place built fsverity binary instead of installing it
+Date:   Mon,  9 Jan 2023 17:55:52 +0100
+Message-Id: <20230109165552.3409716-9-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230109165552.3409716-1-roberto.sassu@huaweicloud.com>
 References: <20230109165552.3409716-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwCXHWQ9R7xjPQWBAA--.14103S9
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ar17Wr43ZF1DWFWDJr18Krg_yoW8Wr43pF
-        yUWFyYkrZ3tFyIyw4xWay7AFy0k3y5Zr4UWr97Z3Z5ur95Ar1qyr48tw12gFy5CrZFqa1r
-        C3yF9F15G3srCrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: GxC2BwCXHWQ9R7xjPQWBAA--.14103S10
+X-Coremail-Antispam: 1UD129KBjvJXoW7XrWfCw1xJryDJr4fAw1kKrg_yoW8JrWfp3
+        Wjv3W0krn3XFnrCr18GFsFya4Ik395Wr1UZrWkXa4xZFWkAr4Utr1S9r4rWr1fXrWUXrna
+        yw40vrn5Ka1DArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
         Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -50,7 +50,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7Ar17Wr43ZF1DWFWDJr18Krg_yoW8Wr43pF
         C0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY
         6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
         CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jxwIDUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj4dfhQABsk
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBF1jj4NhnQAAsE
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,57 +62,41 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Adapt fsverity.test by adding calls to the UML kernel API in functions.sh.
-If the UML_MODE environment variable is set to 1, run first the UML kernel
-specified as first argument of _run_user_mode() and execute the tests in
-the new environment. Otherwise, keep the current behavior.
+Instead of making changes to the system, use in-place built fsverity binary
+by adding ../fsverity-utils to the PATH variable, so that the binary can be
+found with the 'which' command.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- tests/fsverity.test | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ tests/fsverity.test       | 2 +-
+ tests/install-fsverity.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tests/fsverity.test b/tests/fsverity.test
-index 549c42a32608..84312aa08a30 100755
+index 84312aa08a30..e05978be7ea6 100755
 --- a/tests/fsverity.test
 +++ b/tests/fsverity.test
-@@ -49,7 +49,7 @@ _require dd mkfs blkid e2fsck tune2fs evmctl setfattr
+@@ -30,7 +30,7 @@
+ # custom policy rules might take precedence.
  
- trap cleanup SIGINT SIGTERM EXIT
+ cd "$(dirname "$0")" || exit 1
+-PATH=../src:$PATH
++PATH=../src:../fsverity-utils:$PATH
+ source ./functions.sh
  
--cleanup() {
-+_cleanup() {
-         if [ -e $TST_MNT ]; then
- 		if [ $LOOPBACK_MOUNTED -eq 1 ]; then
- 			umount $TST_MNT
-@@ -61,6 +61,11 @@ cleanup() {
- 	_report_exit_and_cleanup
- }
+ # Base VERBOSE on the environment variable, if set.
+diff --git a/tests/install-fsverity.sh b/tests/install-fsverity.sh
+index 418fc42f472b..d00674c0d3a2 100755
+--- a/tests/install-fsverity.sh
++++ b/tests/install-fsverity.sh
+@@ -2,6 +2,6 @@
  
-+cleanup() {
-+	_cleanup_user_mode _cleanup
-+	_report_exit_and_cleanup
-+}
-+
- # Loopback mount a file
- mount_loopback_file() {
- 	local ret
-@@ -309,6 +314,15 @@ measure-ima() {
- 	return "$error"
- }
- 
-+# Run in User Mode Linux.
-+_run_user_mode ../linux $PWD/$(basename $0) "UML_MODE=$UML_MODE PATH=$PATH LD_LIBRARY_PATH=$LD_LIBRARY_PATH VERBOSE=$VERBOSE"
-+
-+# Exit from the parent if UML was used.
-+_exit_user_mode ../linux
-+
-+# Mount filesystems in UML environment.
-+_init_user_mode
-+
- # Dependency on being able to read and write the IMA policy file.
- # Requires both CONFIG_IMA_WRITE_POLICY, CONFIG_IMA_READ_POLICY be
- # enabled.
+ git clone https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/fsverity-utils.git
+ cd fsverity-utils
+-CC=gcc make -j$(nproc) && sudo make install
++CC=gcc make -j$(nproc)
+ cd ..
+ rm -rf fsverity-utils
 -- 
 2.25.1
 
