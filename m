@@ -2,55 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F4E662BE2
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Jan 2023 17:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0161B662BE5
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Jan 2023 17:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbjAIQ5R (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Jan 2023 11:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        id S234288AbjAIQ5T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Jan 2023 11:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236983AbjAIQ47 (ORCPT
+        with ESMTP id S237040AbjAIQ5E (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:56:59 -0500
+        Mon, 9 Jan 2023 11:57:04 -0500
 Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EBD22A
-        for <linux-integrity@vger.kernel.org>; Mon,  9 Jan 2023 08:56:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED672C3
+        for <linux-integrity@vger.kernel.org>; Mon,  9 Jan 2023 08:57:03 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NrKfQ5x1jz9v7YP
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Jan 2023 00:49:18 +0800 (CST)
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NrKfV3Rhgz9v7YP
+        for <linux-integrity@vger.kernel.org>; Tue, 10 Jan 2023 00:49:22 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwCXHWQ9R7xjPQWBAA--.14103S5;
-        Mon, 09 Jan 2023 17:56:45 +0100 (CET)
+        by APP2 (Coremail) with SMTP id GxC2BwCXHWQ9R7xjPQWBAA--.14103S6;
+        Mon, 09 Jan 2023 17:56:49 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
 Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH ima-evm-utils 3/8] Compile the UML kernel and download it in Github Actions
-Date:   Mon,  9 Jan 2023 17:55:47 +0100
-Message-Id: <20230109165552.3409716-4-roberto.sassu@huaweicloud.com>
+Subject: [PATCH ima-evm-utils 4/8] Add support for UML in functions.sh
+Date:   Mon,  9 Jan 2023 17:55:48 +0100
+Message-Id: <20230109165552.3409716-5-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230109165552.3409716-1-roberto.sassu@huaweicloud.com>
 References: <20230109165552.3409716-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwCXHWQ9R7xjPQWBAA--.14103S5
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF1fCrW5Xw13JF17Kr17KFg_yoW7AF4xp3
-        4Yy34Yvrs7J3W7Awn2vr18Cw4Y9393Ar13C34xJ345AF9xJayv9FsaqryYvF17ZrWxKF4f
-        ZFWUWFyDKayxZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07j6dgAUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj4dfhAABsl
+X-CM-TRANSID: GxC2BwCXHWQ9R7xjPQWBAA--.14103S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw45WrWfuFW5KFykJr13Jwb_yoWrGr4kpw
+        1UWFyYqas7XF9FvaySg3yxWF1fJrWrCr10qr9xX398Awn8Kr4vqr4IvF1aqry5GrWYg3y0
+        q3yIqr4rG3W7CwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
+        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jD6p9UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBF1jj4NhnAAAsF
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,185 +62,164 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add a build job, prerequisite of the existing job, to compile the UML
-kernel and upload it and the signing key to a cache. Github configuration
-should have two secrets: LINUX_URL, the full URL of the kernel repository;
-LINUX_BRANCH, the branch to check out as fallback if the name of the
-ima-evm-utils branch is not found in the kernel repository.
+Add the new functions _run_user_mode(), _exit_user_mode(),
+_init_user_mode() and _cleanup_user_mode() to run the tests inside a system
+booted with the UML kernel.
 
-If there is a cache hit (same kernel commit and same kernel configuration),
-next time the UML kernel will not be rebuilt. To use the cache, it is
-necessary to install zstd in the container. Add this dependency to
-ci/fedora.sh.
+A typical structure of a script with tests is:
 
-The cache can be managed at the following URL:
+trap cleanup SIGINT SIGTERM SIGSEGV EXIT
 
-https://github.com/<username>/ima-evm-utils/actions/caches
+_cleanup() {
+	<test cleanup>
+}
 
-The page also offers the possibility to clean the cache, to force
-rebuilding the kernel.
+cleanup() {
+	_cleanup_user_mode _cleanup
+	_report_exit_and_cleanup
+}
 
-Add a new entry in the testing matrix, for the fedora-latest container
-image, to run the tests with the UML kernel. The entry differs from the
-others for the new environment variable UML_MODE, set to 1.
+<tests implementations>
 
-Add a new volume to the container, /dev/shm from the host, as it is
-required for running the UML kernel.
+_run_user_mode ../linux $PWD/$(basename $0) "env_var1=$env_var1 ..."
 
-Extend the existing job with steps to download the UML kernel and signing
-key from the cache. The new steps are executed only if the matrix entry has
-UML_MODE set to 1.
+_exit_user_mode ../linux
 
-Finally, pass UML_MODE to the tests. A test should also propagate this
-variable to the environment created with the UML kernel, by passing it to
-the kernel command line.
+_init_user_mode
+
+<tests init>
+
+<tests call>
+
+If the UML_MODE environment variable is not set to 1, ignore the UML kernel
+execution and initialization requests, and perform the cleanup in the
+current environment. Ignore the same also if the script is already run in
+the UML environment, to avoid loops. Instead, for cleanup, do it only in
+the UML environment and skip it in the host environment.
+
+Signal to the host environment failures of tests run in the UML environment
+with an unclean shutdown of the UML kernel.
+
+Add haveged and systemd as dependencies for the tests in ci/fedora.sh,
+respectively for initializing the random number generator and for shutting
+down the system in the environment created by the UML kernel.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- .github/workflows/ci.yml | 92 +++++++++++++++++++++++++++++++++++++++-
- ci/fedora.sh             |  3 +-
- 2 files changed, 92 insertions(+), 3 deletions(-)
+ ci/fedora.sh       |  4 ++-
+ tests/functions.sh | 79 +++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 81 insertions(+), 2 deletions(-)
 
-diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
-index d2afdfe15467..2e05d0027f83 100644
---- a/.github/workflows/ci.yml
-+++ b/.github/workflows/ci.yml
-@@ -3,7 +3,72 @@ name: "distros"
- on: [push, pull_request]
- 
- jobs:
-+  build:
-+    runs-on: ubuntu-latest
-+    outputs:
-+      LINUX_SHA: ${{ steps.last-commit.outputs.LINUX_SHA }}
-+    name: build
-+    timeout-minutes: 100
-+    strategy:
-+      fail-fast: false
-+
-+    env:
-+      linux_url: ${{ secrets.LINUX_URL }}
-+      linux_branch: ${{ secrets.LINUX_BRANCH }}
-+
-+    steps:
-+      - uses: actions/checkout@v3
-+
-+      - name: Determine last kernel commit
-+        id: last-commit
-+        shell: bash
-+        run: |
-+          mkdir linux-integrity
-+          pushd linux-integrity
-+          git init
-+          git branch -m ${{ secrets.LINUX_BRANCH }}
-+          git remote add origin ${{ secrets.LINUX_URL }}
-+          LINUX_SHA=$(git ls-remote origin $GITHUB_REF_NAME | awk '{print $1}')
-+          [ -z "$LINUX_SHA" ] && LINUX_SHA=$(git ls-remote origin ${{ secrets.LINUX_BRANCH }} | awk '{print $1}')
-+          echo "LINUX_SHA=$LINUX_SHA" >> $GITHUB_OUTPUT
-+          popd
-+
-+      - name: Cache UML kernel
-+        id: cache-linux
-+        uses: actions/cache@v3
-+        with:
-+          path: linux
-+          key: linux-${{ steps.last-commit.outputs.LINUX_SHA }}-${{ hashFiles('**/config-uml') }}
-+
-+      - name: Cache signing key
-+        id: cache-key
-+        uses: actions/cache@v3
-+        with:
-+          path: signing_key.pem
-+          key: signing_key.pem-${{ steps.last-commit.outputs.LINUX_SHA }}-${{ hashFiles('**/config-uml') }}
-+
-+      - name: Compile UML kernel
-+        if: steps.cache-linux.outputs.cache-hit != 'true' || steps.cache-key.outputs.cache-hit != 'true'
-+        shell: bash
-+        run: |
-+          if [ "$DEVTOOLSET" = "yes" ]; then
-+                  source /opt/rh/devtoolset-10/enable
-+          fi
-+          if [ "$ARCH" = "i386" ]; then
-+                  CROSS_COMPILE_OPT="CROSS_COMPILE=i686-linux-gnu-"
-+          fi
-+          pushd linux-integrity
-+          git pull --depth 5 origin ${{ secrets.LINUX_BRANCH }}
-+          ./scripts/kconfig/merge_config.sh -m .config ../config-uml
-+          make ARCH=um olddefconfig
-+          make ARCH=um $CROSS_COMPILE_OPT -j$(nproc)
-+          chmod +x linux
-+          cp linux ..
-+          cp certs/signing_key.pem ..
-+          popd
-+
-   job:
-+    needs: build
-     runs-on: ubuntu-latest
- 
-     strategy:
-@@ -75,6 +140,12 @@ jobs:
-               CC: clang
-               TSS: ibmtss
- 
-+          - container: "fedora:latest"
-+            env:
-+              CC: clang
-+              TSS: ibmtss
-+              UML_MODE: 1
-+
-           - container: "centos:7"
-             env:
-               CC: gcc
-@@ -98,7 +169,7 @@ jobs:
-     container:
-       image: ${{ matrix.container }}
-       env: ${{ matrix.env }}
--      options: --privileged --device /dev/loop-control
-+      options: --privileged --device /dev/loop-control -v /dev/shm:/dev/shm
- 
-     steps:
-     - name: Show OS
-@@ -125,8 +196,25 @@ jobs:
-             fi
-         fi
- 
-+    - name: Retrieve UML kernel
-+      if: ${{ matrix.env.UML_MODE && fromJSON(matrix.env.UML_MODE) == 1 }}
-+      uses: actions/cache@v3
-+      continue-on-error: false
-+      with:
-+        path: linux
-+        key: linux-${{ needs.build.outputs.LINUX_SHA }}-${{ hashFiles('**/config-uml') }}
-+
-+    - name: Retrieve signing key
-+      if: ${{ matrix.env.UML_MODE && fromJSON(matrix.env.UML_MODE) == 1 }}
-+      continue-on-error: false
-+      uses: actions/cache@v3
-+      with:
-+        path: signing_key.pem
-+        key: signing_key.pem-${{ needs.build.outputs.LINUX_SHA }}-${{ hashFiles('**/config-uml') }}
-+
-     - name: Compiler version
-       run: $CC --version
- 
-     - name: Compile
--      run: CC="$CC" VARIANT="$VARIANT" COMPILE_SSL="$COMPILE_SSL" ./build.sh
-+      run: |
-+        CC="$CC" VARIANT="$VARIANT" COMPILE_SSL="$COMPILE_SSL" UML_MODE="$UML_MODE" ./build.sh
 diff --git a/ci/fedora.sh b/ci/fedora.sh
-index 2272bbc57fae..e60de7981c60 100755
+index e60de7981c60..198034a34e3c 100755
 --- a/ci/fedora.sh
 +++ b/ci/fedora.sh
-@@ -44,7 +44,8 @@ yum -y install \
- 	util-linux \
+@@ -45,7 +45,9 @@ yum -y install \
  	vim-common \
  	wget \
--	which
-+	which \
-+	zstd
+ 	which \
+-	zstd
++	zstd \
++	haveged \
++	systemd
  
  yum -y install docbook5-style-xsl || true
  yum -y install swtpm || true
+diff --git a/tests/functions.sh b/tests/functions.sh
+index 8f6f02dfcd95..98829d94fae1 100755
+--- a/tests/functions.sh
++++ b/tests/functions.sh
+@@ -267,6 +267,16 @@ _report_exit_and_cleanup() {
+   [ $testsfail -gt 0 ] && echo -n "$RED" || echo -n "$NORM"
+   echo " FAIL: $testsfail"
+   echo "$NORM"
++  # Signal failure to UML caller with an unclean shutdown.
++  if [ -n "$UML_MODE" ] && [ "$UML_MODE" -eq 1 ] && [ $$ -eq 1 ]; then
++    if [ -z "$(which poweroff)" ]; then
++      echo "Warning: cannot properly shutdown system"
++    fi
++
++    if [ $testsfail -eq 0 ]; then
++      poweroff -f
++    fi
++  fi
+   if [ $testsfail -gt 0 ]; then
+     exit "$FAIL"
+   elif [ $testspass -gt 0 ]; then
+@@ -312,4 +322,71 @@ _softhsm_teardown() {
+   rm -rf "${SOFTHSM_SETUP_CONFIGDIR}"
+   unset SOFTHSM_SETUP_CONFIGDIR SOFTHSM2_CONF PKCS11_KEYURI \
+     EVMCTL_ENGINE OPENSSL_ENGINE OPENSSL_KEYFORM
+-}
+\ No newline at end of file
++}
++
++# Syntax: _run_user_mode <UML binary> <init> <additional kernel parameters>
++_run_user_mode() {
++  if [ -z "$UML_MODE" ] || [ "$UML_MODE" -ne 1 ]; then
++    return
++  fi
++
++  if [ $$ -eq 1 ]; then
++    return
++  fi
++
++  expect_pass $1 rootfstype=hostfs rw init=$2 quiet mem=256M $3
++}
++
++# Syntax: _exit_user_mode <UML binary>
++_exit_user_mode() {
++  if [ -z "$UML_MODE" ] || [ "$UML_MODE" -ne 1 ]; then
++    return
++  fi
++
++  if [ $$ -eq 1 ]; then
++    return
++  fi
++
++  if [ -f "$1" ]; then
++    exit $OK
++  fi
++}
++
++# Syntax: _init_user_mode
++_init_user_mode() {
++  if [ -z "$UML_MODE" ] || [ "$UML_MODE" -ne 1 ]; then
++    return
++  fi
++
++  if [ $$ -ne 1 ]; then
++    return
++  fi
++
++  mount -t proc proc /proc
++  mount -t sysfs sysfs /sys
++  mount -t securityfs securityfs /sys/kernel/security
++
++  if [ -n "$(which haveged 2> /dev/null)" ]; then
++    $(which haveged) -w 1024 &> /dev/null
++  fi
++
++  pushd $PWD > /dev/null
++}
++
++# Syntax: _cleanup_user_mode <cleanup function>
++_cleanup_user_mode() {
++  if [ -z "$UML_MODE" ] || [ "$UML_MODE" -ne 1 ]; then
++    $1
++    return
++  fi
++
++  if [ $$ -ne 1 ]; then
++    return
++  fi
++
++  $1
++
++  umount /sys/kernel/security
++  umount /sys
++  umount /proc
++}
 -- 
 2.25.1
 
