@@ -2,93 +2,78 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFD2660AF7
-	for <lists+linux-integrity@lfdr.de>; Sat,  7 Jan 2023 01:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3062661F7A
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Jan 2023 08:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjAGAjZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Jan 2023 19:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
+        id S233304AbjAIHw5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Jan 2023 02:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236934AbjAGAjH (ORCPT
+        with ESMTP id S234343AbjAIHwz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Jan 2023 19:39:07 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0998140C21
-        for <linux-integrity@vger.kernel.org>; Fri,  6 Jan 2023 16:38:21 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id v81so1381534vkv.5
-        for <linux-integrity@vger.kernel.org>; Fri, 06 Jan 2023 16:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=16DiRT24orN0zb1yErEFu4asPxKZ4t1JLEzl6HIfrYk=;
-        b=ZedktWh1+arDwnqUb4n87IMLjyyhxPkDdRzFU+3XHrTMAG5N5kydOX9e+I63SW6tqv
-         PS4IATp3avXvrs2ULpeG7Sp2ILb0vCUmcYb2pvJW+2GEf1zEm7wKh7/8SvcA/7VSyoqj
-         YB+cGcTEaFNVE/+zgIMrO7VZGMzdStOlIX4cmBqrGQ2qpAVe5Rf32D7wYNWNlL8c7Wa4
-         B2gPPRRLepz0XMZYYjHMu/Kr/bdxTTiLq6eq5CtBd6/MR3Lp6CKG32rDXg0A7AoQC1+i
-         YDtAkao5iqky4zva5Bni5FzP1mQaBhzMBYZR8EyniSJQzb1xLla/M/VSM/AWgJvJEMWe
-         tTag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=16DiRT24orN0zb1yErEFu4asPxKZ4t1JLEzl6HIfrYk=;
-        b=QYnaNqvRFCMHvG5Wk78BBSdwQETmCR5pulKVvWK31dLJkS+zlrhc7BtZVDeaK5eg6S
-         KGVcrmwComy5os/UHg0iQiqHVxFc54J+J1TpmwWApY17vMn+dw5yu9sFMfF6TxD6KXwW
-         FK2o0sA0lKFA5T/MC6Lf7ToOsvdLCnhQBuk51tViP1tYNMo8Lrf/unVvYyo8CjoQMC74
-         l1evoHJQTQ4ERHS9h7Ujr7VHAmqdhwJ55g6sUPsxFZU5yd7FEBSeB8k+TJBN+gG5O7YP
-         WLYybWOgCaoegcd5xI+Ln5Qcag81drCeoWBa/grqTBfFoNurZgc0mJ+59+JNiVB8CZf+
-         Dw1Q==
-X-Gm-Message-State: AFqh2kpKP9XwlFLiIeCYvoaijmLaHtHT59fSQFQnuCpkfdgqcE8ztV/p
-        sHIQVUXX0OxNHsqEqXg8OVZ6lZ9Aunla0CU2c8E=
-X-Google-Smtp-Source: AMrXdXuRKVy/CFhdv2eWZAVDq/bK6E59sVtXj+IbLt4K5kSHkRJS0hpPTD/W95KlBzHWcbeR3PYWom/9s1iJrmgxNVU=
-X-Received: by 2002:a1f:2714:0:b0:3cc:1019:57ef with SMTP id
- n20-20020a1f2714000000b003cc101957efmr6464072vkn.6.1673051900183; Fri, 06 Jan
- 2023 16:38:20 -0800 (PST)
+        Mon, 9 Jan 2023 02:52:55 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4634113D46
+        for <linux-integrity@vger.kernel.org>; Sun,  8 Jan 2023 23:52:53 -0800 (PST)
+Received: from msexch01.omp.ru (10.188.4.12) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 9 Jan 2023
+ 10:52:48 +0300
+Received: from msexch01.omp.ru ([fe80::4020:d881:621a:6b6b]) by
+ msexch01.omp.ru ([fe80::4020:d881:621a:6b6b%5]) with mapi id 15.02.0986.014;
+ Mon, 9 Jan 2023 10:52:48 +0300
+From:   Alberto Mardegan <a.mardegan@omp.ru>
+To:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Subject: [PATCH] libimaevm: do not crash if the certificate cannot be read
+Thread-Topic: [PATCH] libimaevm: do not crash if the certificate cannot be
+ read
+Thread-Index: AQHZI/9dfJNfwkhsDk2eAu6wq9tXpA==
+Date:   Mon, 9 Jan 2023 07:52:48 +0000
+Message-ID: <20230109075230.20484-1-a.mardegan@omp.ru>
+References: <f4359a91a31b9b46f5cb7eb0e96c45c0c46ac282.camel@linux.ibm.com>
+In-Reply-To: <f4359a91a31b9b46f5cb7eb0e96c45c0c46ac282.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.188.4.41]
+x-kse-serverinfo: msexch01.omp.ru, 9
+x-kse-attachmentfiltering-interceptor-info: protection disabled
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: Clean, bases: 1/9/2023 3:20:00 AM
+x-kse-bulkmessagesfiltering-scan-result: InTheLimit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <CADg8p94+rY5B937YweMo=5aGS4Dhz2z4QW-BiAdkVdiWCm-u9w@mail.gmail.com>
- <3bd7c0b2c9937c30082381f92624e98902c72ece.camel@HansenPartnership.com>
- <CADg8p94qd-Kx9Xn2LwqypFeAsV734wv7CvswPmGqJZa+ENPpRg@mail.gmail.com>
- <2910376b6912885f696afebf43b820513c004dbb.camel@HansenPartnership.com>
- <63a8c022-1407-d701-e756-070e299b5803@linux.ibm.com> <CAFftDdr6qs33HaaPK3MMmyi9-mMjUuLURt9PAum6hJ3N3m=_iw@mail.gmail.com>
- <25e8bd43-f73c-f3b0-bec7-32e9b3a5b876@linux.ibm.com>
-In-Reply-To: <25e8bd43-f73c-f3b0-bec7-32e9b3a5b876@linux.ibm.com>
-From:   William Roberts <bill.c.roberts@gmail.com>
-Date:   Fri, 6 Jan 2023 18:38:08 -0600
-Message-ID: <CAFftDdqxtbvWHhdjCzyPqwcM=uiSC9GcRCS3uG8J++Uf47X_MQ@mail.gmail.com>
-Subject: Re: Seal/Unseal trusted keys against PCR policy
-To:     Ken Goldman <kgold@linux.ibm.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Sughosh Ganu <sughosh.ganu@linaro.org>,
-        linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 5:17 PM Ken Goldman <kgold@linux.ibm.com> wrote:
->
-> I discourage anyone from using scripted command line tools as production
-> code.  IMHO, they're fine for learning and prototyping but that's all.
+This code path can be triggered if someone inadvertedly swaps the key
+with the certificate in the evmctl command line. Our `x` variable would
+be NULL, and we need to abort further processing of the certificate.
 
-Well you can discourage it all you want but:
-1. People do it
-2. Shell languages exist for a reason
-3. There is no semantic difference between a shell script and a program.
+Signed-off-by: Alberto Mardegan <a.mardegan@omp.ru>
+---
+ src/libimaevm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-This is one of those pedantry vs pragmatism idioms.
-
->
-> On 1/6/2023 5:23 PM, William Roberts wrote:
-> > If you need to do this in production that tpmproxy allows anyone to
-> > connect to it. So while it's open it
-> > would circumvent the permissions on /dev/tpmrm0. You can just use
-> > tpm2-tools, which uses
-> > contexts and avoids this problem.
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index c09ed98..5b22462 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -923,6 +923,7 @@ static int read_keyid_from_cert(uint32_t *keyid_be, const char *certfile, int tr
+ 		ERR_print_errors_fp(stderr);
+ 		log_err("read keyid: %s: Error reading x509 certificate\n",
+ 			certfile);
++		return -1;
+ 	}
+ 
+ 	if (!(skid = x509_get_skid(x, &skid_len))) {
+-- 
+2.34.1
