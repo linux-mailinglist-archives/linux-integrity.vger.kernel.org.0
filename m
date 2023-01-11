@@ -2,155 +2,148 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A88E664754
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Jan 2023 18:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07938665789
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Jan 2023 10:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233250AbjAJRWc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Jan 2023 12:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
+        id S234190AbjAKJeO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Jan 2023 04:34:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238360AbjAJRVv (ORCPT
+        with ESMTP id S238635AbjAKJdl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:21:51 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9961DDC2;
-        Tue, 10 Jan 2023 09:21:40 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 00A604D7C5;
-        Tue, 10 Jan 2023 17:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673371299; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vei1DaE8uRB41yRSAQ17aS0iN4+zXK6p5LrdkYiuYxg=;
-        b=wvN0azli41yMAHd9srw3ORxqNblSGyo9JARChP9gUggYeK9bhuSBt6t8vAt0+OxW2HbY62
-        wx0b5ZKcr7/UM4xDAJ3dCUwZ+jjS8bqOP5FdCw+dxKfIR7aTJMeJJm9UBXitwBaVSCj2G+
-        mMqXk7QtBLcfxWECBuyRohRPvRjhthA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673371299;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vei1DaE8uRB41yRSAQ17aS0iN4+zXK6p5LrdkYiuYxg=;
-        b=k+M/vQfzO4ApPTp4qGb+Ff+OSNq5+frWvkA+9bImmzz6lLX3tkzF7ChaA5oGAL2AFgBp12
-        Ek7XXMgf2yRDbnCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A7B431358A;
-        Tue, 10 Jan 2023 17:21:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PbD2J6KevWOCPgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 10 Jan 2023 17:21:38 +0000
-Message-ID: <58d7a42c-9e6b-ab2a-617f-d5e373bf63cb@suse.cz>
-Date:   Tue, 10 Jan 2023 18:19:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        Wed, 11 Jan 2023 04:33:41 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACCA2180;
+        Wed, 11 Jan 2023 01:31:48 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsMgh2pz9z9v7Nd;
+        Wed, 11 Jan 2023 17:24:00 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwB3AAzugb5jAlOJAA--.2952S2;
+        Wed, 11 Jan 2023 10:31:34 +0100 (CET)
+Message-ID: <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
+Subject: Re: [PATCH v2] security: Restore passing final prot to
+ ima_file_mmap()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com
+Cc:     jmorris@namei.org, serge@hallyn.com,
         linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Altmanninger <aclopte@gmail.com>
-References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
- <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
- <Y60RoP77HnwaukEA@zx2c4.com>
- <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <Y7w74EBYP3+FHlkw@zx2c4.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y7w74EBYP3+FHlkw@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Wed, 11 Jan 2023 10:30:59 +0100
+In-Reply-To: <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
+References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
+         <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwB3AAzugb5jAlOJAA--.2952S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF18JrWUZFWxWw43uryUZFb_yoW5AFy8pF
+        s8t3WUKrs5JFySyrn7XF17CFySk3y3KFyDWa1vgryqy3Z8WF1xKr1akFW29F18ZrWkuFy0
+        qa17urZxC3WqyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj4dyAQAAsO
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 1/9/23 17:08, Jason A. Donenfeld wrote:
-> Hi Thorsten,
+On Fri, 2023-01-06 at 16:14 -0500, Paul Moore wrote:
+> On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Commit 98de59bfe4b2f ("take calculation of final prot in
+> > security_mmap_file() into a helper") moved the code to update prot with the
+> > actual protection flags to be granted to the requestor by the kernel to a
+> > helper called mmap_prot(). However, the patch didn't update the argument
+> > passed to ima_file_mmap(), making it receive the requested prot instead of
+> > the final computed prot.
+> > 
+> > A possible consequence is that files mmapped as executable might not be
+> > measured/appraised if PROT_EXEC is not requested but subsequently added in
+> > the final prot.
+> > 
+> > Replace prot with mmap_prot(file, prot) as the second argument of
+> > ima_file_mmap() to restore the original behavior.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  security/security.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/security/security.c b/security/security.c
+> > index d1571900a8c7..0d2359d588a1 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
+> >                                         mmap_prot(file, prot), flags);
+> >         if (ret)
+> >                 return ret;
+> > -       return ima_file_mmap(file, prot);
+> > +       return ima_file_mmap(file, mmap_prot(file, prot));
+> >  }
 > 
-> On Thu, Jan 05, 2023 at 02:59:15PM +0100, Thorsten Leemhuis wrote:
->> On 29.12.22 05:03, Jason A. Donenfeld wrote:
->>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
->>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
->>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening again
->>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
->>>>> "tpm_try_transmit" error this time. The first indication of a problem
->>>>> is this during a resume from suspend to ram:
->>>>>
->>>>> tpm tpm0: A TPM error (28) occurred continue selftest
->>>>>
->>>>> and then periodically 
->>>>>
->>>>> tpm tpm0: A TPM error (28) occurred attempting get random
->>>>
->>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
->>>> original problem was reported against TPM 2.0  because of a missing
->>>> try_get_ops().
->>>
->>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
->>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
->>> considering it's the same hardware from Vlastimil causing this. I also
->>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
->>> that's not correct.
->>
->> James, are you or some other TPM developer looking into this? Or is this
->> deadlocked now? And if so: how can we get this unstuck to get this
->> regression solved?
->>
->> Side note: I wonder if the problem that Johannes reported yesterday in
->> this thread (
->> https://lore.kernel.org/all/Y7VCcgHUC6JtnO2b@gmail.com/
->> ) is related or something else, as it seems his issue happens with 6.1,
->> while Vlastimil's problems should be fixed there. Or am I missing something?
+> This seems like a reasonable fix, although as the original commit is
+> ~10 years old at this point I am a little concerned about the impact
+> this might have on IMA.  Mimi, what do you think?
 > 
-> So, this is now in rc3:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1382999aa0548a171a272ca817f6c38e797c458c
+> Beyond that, my only other comment would be to only call mmap_prot()
+> once and cache the results in a local variable.  You could also fix up
+> some of the ugly indentation crimes in security_mmap_file() while you
+> are at it, e.g. something like this:
+
+Hi Paul
+
+thanks for the comments. With the patch set to move IMA and EVM to the
+LSM infrastructure we will be back to calling mmap_prot() only once,
+but I guess we could do anyway, as the patch (if accepted) would be
+likely backported to stable kernels.
+
+Thanks
+
+Roberto
+
+> diff --git a/security/security.c b/security/security.c
+> index d1571900a8c7..2f9cad9ecac8 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1662,11 +1662,12 @@ int security_mmap_file(struct file *file, unsigned long
+> prot,
+>                        unsigned long flags)
+> {
+>        int ret;
+> -       ret = call_int_hook(mmap_file, 0, file, prot,
+> -                                       mmap_prot(file, prot), flags);
+> +       unsigned long prot_adj = mmap_prot(file, prot);
+> +
+> +       ret = call_int_hook(mmap_file, 0, file, prot, prot_adj, flags);
+>        if (ret)
+>                return ret;
+> -       return ima_file_mmap(file, prot);
+> +       return ima_file_mmap(file, prot_adj);
+> }
 > 
-> That should help avoid the worst of the issue -- laptop not sleeping.
-> But the race or whatever it is still does exist. So you might want to
-> keep this in your tracker to periodically nudge the TPM folks about it.
-
-Heh, booted rc3 and managed to hit it on very first suspend to ram attempt:
-
-tpm tpm0: A TPM error (28) occurred continue selftest
-
-But thanks to the patch, the next suspend worked:
-
-[  236.598900] tpm tpm0: Error (28) sending savestate before suspend
-[  236.598915] tpm_tis 00:08: Ignoring error 28 while suspending
-
-and on resume again:
-
-[  238.196645] tpm tpm0: A TPM error (28) occurred continue selftest
-
-and indeed now I keep getting (as expected)
-
-[  399.671077] tpm tpm0: A TPM error (28) occurred attempting get random
-
-So hopefully somebody will look into the root cause at some point.
-
-> Jason
-> 
-> 
+> --
+> paul-moore.com
 
