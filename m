@@ -2,189 +2,262 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F20667791
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jan 2023 15:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BECD6678B4
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jan 2023 16:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239990AbjALOpe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Jan 2023 09:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
+        id S240352AbjALPMU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Jan 2023 10:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239959AbjALOov (ORCPT
+        with ESMTP id S229748AbjALPLr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:44:51 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2069C551D4
-        for <linux-integrity@vger.kernel.org>; Thu, 12 Jan 2023 06:33:06 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CEK7P3027607;
-        Thu, 12 Jan 2023 14:32:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=voRyZCXflP+9zzmoOnLus4UQaTWISfo/beMuPDesy0g=;
- b=Ciw7507amsUuS7ZUNMbrBta9JajPj2mL+QGFY5tlpZj9Z/4vohSY7tvTyI0VSTUs9VqE
- DWH0AuVn2B8kvkkjP0FzCuJistCQbhDgB50vzr46NXkxSe7DSFnhagqwd2ti0ZMtJ+RR
- HxS1pMfR8LIkF2v6S+l901dk0Etj6jeLAAW7r7QYCTrKAuVOeVRHbXt4ZFb6qzwtHn82
- TsSfEtfiTxNSZIm7zkv2I3pX9OfK5WVoFDxS5q5sqivA8hmVglXEgKgv4j4d6tLgAcfL
- h6ggVcNlX5kvFCAtyWPGwYLgVmEfJodizGhJ7tOdzvF+SspSyvYrhzdbPZthsEv8MY/b +g== 
+        Thu, 12 Jan 2023 10:11:47 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412E7120AE
+        for <linux-integrity@vger.kernel.org>; Thu, 12 Jan 2023 07:00:47 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CEh9rQ020443;
+        Thu, 12 Jan 2023 15:00:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=978pL6F/vm35tI5WgrHu8LPgFjuAeBEDsH/2P6m+yS0=;
+ b=W+OCj58Opwhhs3RWmMbuUc0bfq/ywYllK0mUp2QR0lkr7UmwjrhlxmSr7Lq3q/qgyvlK
+ rXhCCNGcFTDt1/RUatjUoo8/q/uQ85GEe0Bu+bfMUW3QebZaYI7os+eLFNeiY1IkErXX
+ 19gnzyMSl7KQ4DMHhkYOSnPgzAdi7ctXZCC9mRo+GOITCbuo4HcDWsL6mJSz/J6duZRS
+ rxkPoQSIvZhLUDivrSvGbS0gEDo6oqQbD685CMnutSongzCskoS1JQZKPBsRPtHjNTZX
+ JTNxVF2TLEoKYCDzF3k1SsfFB49af+q4QZSdb+c61i+38EOb0hqqC+iJ1Bcn5nzunY/O tQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n2kvmr9y6-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n2m7agdu7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 14:32:37 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30CEM33N032698;
-        Thu, 12 Jan 2023 14:32:37 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n2kvmr9x0-1
+        Thu, 12 Jan 2023 15:00:06 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30CEhpsg022523;
+        Thu, 12 Jan 2023 15:00:05 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n2m7agdtq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 14:32:37 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30CEC9IV018953;
-        Thu, 12 Jan 2023 14:32:34 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3n1knv1pcg-1
+        Thu, 12 Jan 2023 15:00:05 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30CEb7r9004569;
+        Thu, 12 Jan 2023 15:00:05 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3n1kk7hsvn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 14:32:34 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30CEWXXS1311310
+        Thu, 12 Jan 2023 15:00:05 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30CF04fO30802354
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Jan 2023 14:32:33 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 56FF958054;
-        Thu, 12 Jan 2023 14:32:33 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2928C5805A;
-        Thu, 12 Jan 2023 14:32:32 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.60.72])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 12 Jan 2023 14:32:32 +0000 (GMT)
-Message-ID: <dea102f0039af12d3eb4f1e1961096c157624d7c.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v2 0/9] Support testing with UML kernel
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Thu, 12 Jan 2023 15:00:04 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F1CC758054;
+        Thu, 12 Jan 2023 15:00:03 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD03158060;
+        Thu, 12 Jan 2023 15:00:02 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 12 Jan 2023 15:00:02 +0000 (GMT)
+Message-ID: <8d15733c-67bc-ce58-0724-fa5a9cdc905e@linux.ibm.com>
+Date:   Thu, 12 Jan 2023 10:00:02 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH ima-evm-utils v2 4/9] Add support for UML in functions.sh
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
         dmitry.kasatkin@gmail.com
 Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 12 Jan 2023 09:32:31 -0500
-In-Reply-To: <20230112122426.3759938-1-roberto.sassu@huaweicloud.com>
+        Roberto Sassu <roberto.sassu@huawei.com>
 References: <20230112122426.3759938-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+ <20230112122426.3759938-5-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230112122426.3759938-5-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: a4rKSubY1Wi5WD6OuOc2jK0PM4OxnTvE
-X-Proofpoint-GUID: GSZcqK1Q52YWcphwTSwIJBjxpdbv6a6m
+X-Proofpoint-ORIG-GUID: xTiwE5Fqh_KEuGInB9DcoOv1nCGFrVRh
+X-Proofpoint-GUID: 5njSCujJ6tuH2ZdeBsZkEYLp1anP7fr1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-12_08,2023-01-12_01,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 lowpriorityscore=0 mlxlogscore=999 malwarescore=0 spamscore=0
- bulkscore=0 impostorscore=0 clxscore=1015 mlxscore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ mlxlogscore=999 spamscore=0 malwarescore=0 phishscore=0 impostorscore=0
+ mlxscore=0 clxscore=1011 bulkscore=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2301120105
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2023-01-12 at 13:24 +0100, Roberto Sassu wrote:
+On 1/12/23 07:24, Roberto Sassu wrote:
 > From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> UML kernels differ from other kernels for the ability of being executed as
-> processes in the current environment, without requirements such as
-> virtualization. It is sufficient to execute the binary, like the other
-> binaries.
+> Add the new functions _run_user_mode(), _exit_user_mode(),
+> _init_user_mode() and _cleanup_user_mode() to run the tests inside a system
+> booted with the UML kernel.
 > 
-> In addition, UML kernels have the ability to see the host filesystem and
-> thus they could for example run an executable from the host as init and
-> have a fully working system without creating an image, as it would happen
-> if a regular virtual machine is used.
+> A typical structure of a script with tests is:
 > 
-> These features make UML kernels very suitable for integration in existing
-> test suites designed to perform the tests in the current environment such
-> as ima-evm-utils. In the current environment, test suites cannot test new
-> functionality not yet integrated in the host kernel, or with custom kernel
-> configuration options not usually enabled in production. Also, test suites
-> might not be able to set/reset kernel settings for security reasons.
+> trap cleanup SIGINT SIGTERM SIGSEGV EXIT
 > 
-> With the ability to do kernel testing more in depth, ima-evm-utils might
-> introduce specific tests for that, separated from the tests to verify the
-> ima-evm-utils user space functionality. At the moment, there is no such
-> distinction, existing tests verify both.
+> _cleanup() {
+> 	<test cleanup>
+> }
 > 
-> The goal of this patch set is to overcome the limitations by making the
-> test suite in ima-evm-utils able to run in an environment created by the
-> UML kernel, with minimal changes. At the same time, it will preserve the
-> ability of the test suite to run in the current environment.
+> cleanup() {
+> 	_cleanup_user_mode _cleanup
+> 	_report_exit_and_cleanup
+> }
 > 
-> First, fix error messages and a variable in evmctl. Then, add the
-> config-uml file with custom kernel configuration options for the tests, to
-> be merged with the default configuration. Add a new job in the Github
-> workflow to build the UML kernel from a repository and branch specified in
-> the LINUX_URL and LINUX_BRANCH variables. Per Github documentation, these
-> variables can be defined at organization, repository and environment level.
+> <tests implementations>
 > 
-> Introduce a new API for using UML kernels for existing and new test
-> scripts. Unless the environment variable UML_MODE is set to 1, calling the
-> API results in a nop, and tests are executed in the current environment.
+> _run_user_mode ../linux $PWD/$(basename $0) "env_var1=$env_var1 ..."
 > 
-> Add the possibility to select individual tests to run in a test script,
-> with the TST_LIST variable, so that the UML kernel can be launched multiple
-> times with a subset of tests (useful if for example a test require kernel
-> settings different from the previous test).
+> _exit_user_mode ../linux
 > 
-> Add tests for EVM portable signatures supporting UML kernels and port
-> fsverity.test to use UML kernels.
+> _init_user_mode
 > 
-> Finally, don't require making changes to the system to run fsverity.test
-> and install a software dependency after the appropriate repository has been
-> set up.
+> <tests init>
+> 
+> <tests call>
+> 
+> If the UML_MODE environment variable is not set to 1, ignore the UML kernel
+> execution and initialization requests, and perform the cleanup in the
+> current environment. Ignore the same also if the script is already run in
+> the UML environment, to avoid loops. Instead, for cleanup, do it only in
+> the UML environment and skip it in the host environment.
+> 
+> Signal to the host environment failures of tests run in the UML environment
+> with an unclean shutdown of the UML kernel.
+> 
+> Add haveged and systemd as dependencies for the tests in ci/fedora.sh,
+> respectively for initializing the random number generator and for shutting
+> down the system in the environment created by the UML kernel.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>   ci/fedora.sh       |  4 ++-
+>   tests/functions.sh | 79 +++++++++++++++++++++++++++++++++++++++++++++-
+>   2 files changed, 81 insertions(+), 2 deletions(-)
+> 
+> diff --git a/ci/fedora.sh b/ci/fedora.sh
+> index e60de7981c60..198034a34e3c 100755
+> --- a/ci/fedora.sh
+> +++ b/ci/fedora.sh
+> @@ -45,7 +45,9 @@ yum -y install \
+>   	vim-common \
+>   	wget \
+>   	which \
+> -	zstd
+> +	zstd \
+> +	haveged \
+> +	systemd
+>   
+>   yum -y install docbook5-style-xsl || true
+>   yum -y install swtpm || true
+> diff --git a/tests/functions.sh b/tests/functions.sh
+> index 8f6f02dfcd95..98829d94fae1 100755
+> --- a/tests/functions.sh
+> +++ b/tests/functions.sh
+> @@ -267,6 +267,16 @@ _report_exit_and_cleanup() {
+>     [ $testsfail -gt 0 ] && echo -n "$RED" || echo -n "$NORM"
+>     echo " FAIL: $testsfail"
+>     echo "$NORM"
+> +  # Signal failure to UML caller with an unclean shutdown.
+> +  if [ -n "$UML_MODE" ] && [ "$UML_MODE" -eq 1 ] && [ $$ -eq 1 ]; then
+> +    if [ -z "$(which poweroff)" ]; then
+> +      echo "Warning: cannot properly shutdown system"
+> +    fi
+> +
+> +    if [ $testsfail -eq 0 ]; then
+> +      poweroff -f
+> +    fi
+> +  fi
+>     if [ $testsfail -gt 0 ]; then
+>       exit "$FAIL"
+>     elif [ $testspass -gt 0 ]; then
+> @@ -312,4 +322,71 @@ _softhsm_teardown() {
+>     rm -rf "${SOFTHSM_SETUP_CONFIGDIR}"
+>     unset SOFTHSM_SETUP_CONFIGDIR SOFTHSM2_CONF PKCS11_KEYURI \
+>       EVMCTL_ENGINE OPENSSL_ENGINE OPENSSL_KEYFORM
+> -}
+> \ No newline at end of file
+> +}
+> +
+> +# Syntax: _run_user_mode <UML binary> <init> <additional kernel parameters>
+> +_run_user_mode() {
+> +  if [ -z "$UML_MODE" ] || [ "$UML_MODE" -ne 1 ]; then
+> +    return
+> +  fi
+> +
+> +  if [ $$ -eq 1 ]; then
+> +    return
+> +  fi
+> +
+> +  expect_pass $1 rootfstype=hostfs rw init=$2 quiet mem=256M $3
+> +}
+> +
+> +# Syntax: _exit_user_mode <UML binary>
+> +_exit_user_mode() {
+> +  if [ -z "$UML_MODE" ] || [ "$UML_MODE" -ne 1 ]; then
+> +    return
+> +  fi
+> +
+> +  if [ $$ -eq 1 ]; then
+> +    return
+> +  fi
+> +
+> +  if [ -f "$1" ]; then
+> +    exit $OK
+> +  fi
+> +}
+> +
+> +# Syntax: _init_user_mode
+> +_init_user_mode() {
+> +  if [ -z "$UML_MODE" ] || [ "$UML_MODE" -ne 1 ]; then
+> +    return
+> +  fi
+> +
+> +  if [ $$ -ne 1 ]; then
+> +    return
+> +  fi
+> +
+> +  mount -t proc proc /proc
+> +  mount -t sysfs sysfs /sys
+> +  mount -t securityfs securityfs /sys/kernel/security
+> +
+> +  if [ -n "$(which haveged 2> /dev/null)" ]; then
+> +    $(which haveged) -w 1024 &> /dev/null
+> +  fi
 
-Thank you, Roberto!   The UML support should simplify testing new
-kernel features before they are upstreamed and/or configured/enabled by
-the distros.  Building a UML kernel is relatively quick (~8 minutes). 
-With the UML kernel and image caching, the impact should be minimal.
+What's different when it's missing?
 
-Once everyone has had a chance to review, comment, and test this patch
-set, we'll release a new version of ima-evm-utils.
+> +
+> +  pushd $PWD > /dev/null
+> +}
+> +
+> +# Syntax: _cleanup_user_mode <cleanup function>
+> +_cleanup_user_mode() {
+> +  if [ -z "$UML_MODE" ] || [ "$UML_MODE" -ne 1 ]; then
+> +    $1
+> +    return
+> +  fi
+> +
+> +  if [ $$ -ne 1 ]; then
+> +    return
+> +  fi
+> +
+> +  $1
+> +
+> +  umount /sys/kernel/security
+> +  umount /sys
+> +  umount /proc
+> +}
 
-thanks,
-
-Mimi
-> 
-> Mimi Zohar (1):
->   ci: haveged requires EPEL on CentOS stream:8
-> 
-> Roberto Sassu (8):
->   Fix error messages and mdlen init in calc_evm_hmac()
->   Add config for UML kernel
->   Compile the UML kernel and download it in Github Actions
->   Add support for UML in functions.sh
->   Introduce TST_LIST variable to select a test to execute
->   Add tests for EVM portable signatures
->   Adapt fsverity.test to work with UML kernel
->   Use in-place built fsverity binary instead of installing it
-> 
->  .github/workflows/ci.yml        |   96 ++-
->  build.sh                        |    5 +
->  ci/fedora.sh                    |   12 +-
->  config-uml                      |  235 +++++++
->  src/evmctl.c                    |    8 +-
->  tests/Makefile.am               |    2 +-
->  tests/fsverity.test             |   18 +-
->  tests/functions.sh              |   91 ++-
->  tests/install-fsverity.sh       |    2 +-
->  tests/install-mount-idmapped.sh |    7 +
->  tests/portable_signatures.test  | 1173 +++++++++++++++++++++++++++++++
->  11 files changed, 1637 insertions(+), 12 deletions(-)
->  create mode 100644 config-uml
->  create mode 100755 tests/install-mount-idmapped.sh
->  create mode 100755 tests/portable_signatures.test
-> 
-
-
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
