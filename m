@@ -2,78 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBAC668BD9
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Jan 2023 06:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997A1669455
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Jan 2023 11:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbjAMFxN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Jan 2023 00:53:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
+        id S241313AbjAMKi2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Jan 2023 05:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbjAMFv7 (ORCPT
+        with ESMTP id S241306AbjAMKhs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Jan 2023 00:51:59 -0500
-X-Greylist: delayed 345 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 21:51:46 PST
-Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24221216;
-        Thu, 12 Jan 2023 21:51:46 -0800 (PST)
-Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 1738270E5B;
-        Fri, 13 Jan 2023 05:46:00 +0000 (UTC)
-Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
-        by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id CFE0826892;
-        Fri, 13 Jan 2023 05:45:59 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: 3.651
-X-Spam-Level: ******
-X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_99,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS,SUBJ_ALL_CAPS autolearn=no autolearn_force=no version=3.4.6
-Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
-        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
-        with ESMTP id 5nKEStyxmCAA; Fri, 13 Jan 2023 05:45:59 +0000 (UTC)
-Received: from localhost (unknown [208.85.220.72])
-        by mail.ca.inter.net (Postfix) with ESMTP id 2C31E2688E;
-        Fri, 13 Jan 2023 05:45:58 +0000 (UTC)
-Received: from reverse.rain.network (reverse.rain.network [197.184.176.8])
- by webmail.ca.inter.net (Horde Framework) with HTTP; Fri, 13 Jan 2023
- 00:45:57 -0500
-Message-ID: <20230113004557.1776655zih3sj09h@webmail.ca.inter.net>
-Date:   Fri, 13 Jan 2023 00:45:57 -0500
-From:   INFO <boothg@istar.ca>
-Reply-to: s.g0392440821@gmail.com
-To:     undisclosed-recipients:;
-Subject: IST DIESE E-MAIL AKTIV?
+        Fri, 13 Jan 2023 05:37:48 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0B01AA0B;
+        Fri, 13 Jan 2023 02:35:58 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Ntd0p03Kqz9xGZ1;
+        Fri, 13 Jan 2023 18:28:10 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwC3PAjkM8Fj60SSAA--.55533S2;
+        Fri, 13 Jan 2023 11:35:28 +0100 (CET)
+Message-ID: <7e8af24bc175b425777c1e689c26562dc743bfd5.camel@huaweicloud.com>
+Subject: Re: [PATCH v7 0/6] evm: Do HMAC of multiple per LSM xattrs for new
+ inodes
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 13 Jan 2023 11:35:13 +0100
+In-Reply-To: <CAHC9VhS0SnEb46-FBpn2JpC2dJ7OnkeJ2EtLBvVvkOLdfFmcbg@mail.gmail.com>
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+         <CAHC9VhS0SnEb46-FBpn2JpC2dJ7OnkeJ2EtLBvVvkOLdfFmcbg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=ISO-8859-1;
- DelSp="Yes";
- format="flowed"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Internet Messaging Program (IMP) H3 (4.3.7)
-X-Originating-User-Info: boothg@istar.ca 208.85.219.96
-X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 0.9984]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [s.g0392440821[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwC3PAjkM8Fj60SSAA--.55533S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFW8WF18ZFW5ury8Ar1UWrg_yoW8CFWUpa
+        9xt3Wagr4kWFyUKr43A3yjk3yUGr4fGF13X34fK34jyrnxuFn2gF1xGayrua4DJrn3u3sY
+        vFW3W3sru3Z5u3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj4eOnQAAsw
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, 2023-01-12 at 12:15 -0500, Paul Moore wrote:
+> On Thu, Dec 1, 2022 at 5:42 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > One of the major goals of LSM stacking is to run multiple LSMs side by side
+> > without interfering with each other. The ultimate decision will depend on
+> > individual LSM decision.
+> > 
+> > Several changes need to be made to the LSM infrastructure to be able to
+> > support that. This patch set tackles one of them: gives to each LSM the
+> > ability to specify one or multiple xattrs to be set at inode creation
+> > time and, at the same time, gives to EVM the ability to access all those
+> > xattrs and calculate the HMAC on them.
+> 
+> ...
+> 
+> > The patch set has been tested with both the SElinux and Smack test suites.
+> > Below, there is the summary of the test results:
+> > 
+> > SELinux Test Suite result (without patches):
+> > Files=73, Tests=1346, 225 wallclock secs ( 0.43 usr  0.23 sys +  6.11 cusr 58.70 csys = 65.47 CPU)
+> > Result: FAIL
+> > Failed 4/73 test programs. 13/1346 subtests failed.
+> > 
+> > SELinux Test Suite result (with patches):
+> > Files=73, Tests=1346, 225 wallclock secs ( 0.44 usr  0.22 sys +  6.15 cusr 59.94 csys = 66.75 CPU)
+> > Result: FAIL
+> > Failed 4/73 test programs. 13/1346 subtests failed.
+> 
+> Can you provide some more information on which of the
+> selinux-testsuite tests failed?  That shouldn't be happening and I'm a
+> little concerned that these test failures, even if unrelated to your
+> work here, could be masking failures which are related.
 
+Uhm, my virtual machine has been used for many tests and was not clean.
+This time, I installed a fresh Fedora 37 and compiled the kernel with
+the same configuration as the shipped kernel.
 
-Sehr geehrter E-Mail-Begünstigter, Sie wurden für eine Spende in Höhe  
-von 3.500.000,00 ? ausgewählt. Wenden Sie sich an diese  
-E-Mail-Adresse: s.g0392440821@gmail.com, um weitere Informationen zum  
-Erhalt Ihrer Spende zu erhalten. Vielen Dank
+Everything works now:
+
+All tests successful.
+Files=74, Tests=1363, 210 wallclock secs ( 0.42 usr  0.11 sys +  6.66
+cusr 22.33 csys = 29.52 CPU)
+Result: PASS
+
+Roberto
 
