@@ -2,63 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C41666C081
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Jan 2023 15:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0061266C126
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Jan 2023 15:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjAPOAs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Jan 2023 09:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
+        id S231822AbjAPOID (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Jan 2023 09:08:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbjAPOA0 (ORCPT
+        with ESMTP id S232027AbjAPOHL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:00:26 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA71D21A16;
-        Mon, 16 Jan 2023 06:00:04 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 16 Jan 2023 09:07:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4FE241D4;
+        Mon, 16 Jan 2023 06:03:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A16613765F;
-        Mon, 16 Jan 2023 14:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673877603; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17BBE60FCA;
+        Mon, 16 Jan 2023 14:03:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2B2C433F0;
+        Mon, 16 Jan 2023 14:03:35 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="VawOqSVQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1673877811;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=z97s89bx2ilPOW9UqwgUScH5OfS1ybbn2p0m+3QWpCU=;
-        b=XWq7RGyfYnE0B+M0Wv2lkFIM7N6yXS4lZd16Jlcv464CBESPPCxOOSjg45mv82oukVoFsH
-        JvMSPIU1U3d3aOZtKuRode0Tmq0sb5l3lykGk8z0ISEzZ1mjAemF5avshQJ2zutG4C6PF/
-        gZ5BxmN7+hN9mZrqhmFtf/rp0ZzMcGw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673877603;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z97s89bx2ilPOW9UqwgUScH5OfS1ybbn2p0m+3QWpCU=;
-        b=Rc2krZfWcSlw2BqRt9aOe+ckPIlATBAlcERNETTAUfGGDhzHhcO2QinpDpuG7UVmprkb2f
-        lnJZWtKtjULKegCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 72B14138FE;
-        Mon, 16 Jan 2023 14:00:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gx9PG2NYxWNFUgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 16 Jan 2023 14:00:03 +0000
-Message-ID: <af2e5a17-514b-8759-2464-7ebb384a17ba@suse.cz>
-Date:   Mon, 16 Jan 2023 15:00:03 +0100
+        bh=c/usgNs9pfu7FbT7iKyXt726LjP2SjSeWRrj88OxrK8=;
+        b=VawOqSVQURtyfqU3uNej2kfSXR57CyMBmawE0EuKEiBo/bhl29iOcpkswenRdLS3P4nWV+
+        OsubsVJ0gAbx3obnJfFFDFjS7TalV968ODb/D3HG4dUE7zle3+USa1zlfhc8aoGT4WIfT3
+        HRTf7Jkm85MUuiO2N6KHjX2493gxXE0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 94b23cb7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 16 Jan 2023 14:03:30 +0000 (UTC)
+Received: by mail-yb1-f174.google.com with SMTP id d62so14209605ybh.8;
+        Mon, 16 Jan 2023 06:03:30 -0800 (PST)
+X-Gm-Message-State: AFqh2kr2X2tdrM5zFGUQ0lTVO5oKFtKGUWZqXiAz8bzVj5hcyTwvc7BD
+        8bFICRvlbs5pKcHJDqsJbmDyErbeF29HjUBENts=
+X-Google-Smtp-Source: AMrXdXs6GZpmdrfgweNbQS8/0Y8RCAaey/orcLg0xTcwW9Lkwr5FCig6Y6BbUhGpPa1tiDm7gXovA9Lmm+NFJz34R64=
+X-Received: by 2002:a25:5189:0:b0:7bf:d201:60cb with SMTP id
+ f131-20020a255189000000b007bfd20160cbmr1958247ybb.365.1673877808634; Mon, 16
+ Jan 2023 06:03:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM suspend
- fails
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
+References: <Y7dPV5BK6jk1KvX+@zx2c4.com> <20230106030156.3258307-1-Jason@zx2c4.com>
+ <Y8UG77zvJeic7Cyc@kernel.org>
+In-Reply-To: <Y8UG77zvJeic7Cyc@kernel.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 16 Jan 2023 15:03:17 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
+Message-ID: <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
+Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM suspend fails
+To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
         James Bottomley <James.Bottomley@hansenpartnership.com>,
         Peter Huewe <peterhuewe@gmx.de>,
@@ -69,117 +63,57 @@ Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Johannes Altmanninger <aclopte@gmail.com>,
         stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <Y7dPV5BK6jk1KvX+@zx2c4.com>
- <20230106030156.3258307-1-Jason@zx2c4.com> <Y8U4kwTPpMet13Ks@kernel.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y8U4kwTPpMet13Ks@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 1/16/23 12:44, Jarkko Sakkinen wrote:
-> On Fri, Jan 06, 2023 at 04:01:56AM +0100, Jason A. Donenfeld wrote:
->> TPM 1 is sometimes broken across system suspends, due to races or
->> locking issues or something else that haven't been diagnosed or fixed
->> yet, most likely having to do with concurrent reads from the TPM's
->> hardware random number generator driver. These issues prevent the system
->> from actually suspending, with errors like:
->> 
->>   tpm tpm0: A TPM error (28) occurred continue selftest
->>   ...
-> 
-> <REMOVE>
-> 
->>   tpm tpm0: A TPM error (28) occurred attempting get random
->>   ...
->>   tpm tpm0: Error (28) sending savestate before suspend
->>   tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
->>   tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
->>   tpm_tis 00:08: PM: failed to suspend: error 28
->>   PM: Some devices failed to suspend, or early wake event detected
-> 
-> </REMOVE>
-> 
-> Unrelated to thix particular fix.
+Hi Jarkko,
 
-Not sure I understand.
-AFAIK this is not a proper fix, but a workaround for when laptop suspend no
-longer works because TPM fails to suspend. The error messages quoted above
-are very much related to the problem of suspend not working, and this patch
-did work as advertised at least for me. I see errors but they don't prevent
-suspend anymore:
+On Mon, Jan 16, 2023 at 9:12 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> > index d69905233aff..6df9067ef7f9 100644
+> > --- a/drivers/char/tpm/tpm-interface.c
+> > +++ b/drivers/char/tpm/tpm-interface.c
+> > @@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
+> >       }
+> >
+> >  suspended:
+> > -     return rc;
+> > +     if (rc)
+> > +             pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
+> > +                    chip->dev_num, rc);
+> > +     return 0;
+> >  }
+> >  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+> >
+> > --
+> > 2.39.0
+> >
+>
+> Let me read all the threads through starting from the original report. I've
+> had emails piling up because of getting sick before holiday, and holiday
+> season after that.
+>
+> This looks sane
 
-https://lore.kernel.org/all/58d7a42c-9e6b-ab2a-617f-d5e373bf63cb@suse.cz/
+No, not really. I mean, it was sane under the circumstances of, "I'm
+not going to spend time fixing this for real if the maintainers aren't
+around," and it fixed the suspend issue. But it doesn't actually fix
+any real tpm issue. The real issue, AFAICT, is there's some sort of
+race between the tpm rng read command and either suspend or wakeup or
+selftest. One of these is missing some locking. And then commands step
+on each other and the tpm gets upset. This is probably something that
+should be fixed. I assume the "Fixes: ..." tag will actually go quite
+far back, with recent things only unearthing a somewhat old bug. But
+just a hunch.
 
->> This issue was partially fixed by 23393c646142 ("char: tpm: Protect
->> tpm_pm_suspend with locks"), in a last minute 6.1 commit that Linus took
->> directly because the TPM maintainers weren't available. However, it
->> seems like this just addresses the most common cases of the bug, rather
->> than addressing it entirely. So there are more things to fix still,
->> apparently.
->> 
->> In lieu of actually fixing the underlying bug, just allow system suspend
->> to continue, so that laptops still go to sleep fine. Later, this can be
->> reverted when the real bug is fixed.
->> 
->> Link: https://lore.kernel.org/lkml/7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz/
->> Cc: stable@vger.kernel.org # 6.1+
->> Reported-by: Vlastimil Babka <vbabka@suse.cz>
->> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
->> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->> ---
->> This is basically untested and I haven't worked out if there are any
->> awful implications of letting the system sleep when TPM suspend fails.
->> Maybe some PCRs get cleared and that will make everything explode on
->> resume? Maybe it doesn't matter? Somebody well versed in TPMology should
->> probably [n]ack this approach.
->> 
->>  drivers/char/tpm/tpm-interface.c | 5 ++++-
->>  1 file changed, 4 insertions(+), 1 deletion(-)
->> 
->> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
->> index d69905233aff..6df9067ef7f9 100644
->> --- a/drivers/char/tpm/tpm-interface.c
->> +++ b/drivers/char/tpm/tpm-interface.c
->> @@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
->>  	}
->>  
->>  suspended:
->> -	return rc;
->> +	if (rc)
->> +		pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
->> +		       chip->dev_num, rc);
->> +	return 0;
->>  }
->>  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
->>  
->> -- 
->> 2.39.0
->> 
-> 
-> This tpm_tis local issue, nothing to do with tpm_pm_suspend(). Executing
-> the selftest as part of wake up, is TPM 1.2 dTPM specific requirement, and
-> the call is located in tpm_tis_resume() [*].
-> 
-> [*] https://lore.kernel.org/lkml/Y8U1QxA4GYvPWDky@kernel.org/
-
-Yes the changelog at the top does say "due to races or locking issues or
-something else that haven't been diagnosed or fixed yet"
-
-I don't know what causes the TPM to start returning error 28 on resume and
-never recover from it. But it didn't happen before hwrng started using the
-TPM. Before that, it was probably just the selftest ever doing anything with
-the TPM, and on its own I don't recall it ever (before 6.1) failing and
-preventing further suspend/resume.
-
-> BR, Jarkko
-
+Jason
