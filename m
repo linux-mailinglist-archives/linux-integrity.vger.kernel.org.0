@@ -2,118 +2,235 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0061266C126
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Jan 2023 15:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB6766E1B2
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Jan 2023 16:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbjAPOID (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Jan 2023 09:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S233169AbjAQPJr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Jan 2023 10:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbjAPOHL (ORCPT
+        with ESMTP id S233278AbjAQPJd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:07:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4FE241D4;
-        Mon, 16 Jan 2023 06:03:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17BBE60FCA;
-        Mon, 16 Jan 2023 14:03:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2B2C433F0;
-        Mon, 16 Jan 2023 14:03:35 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="VawOqSVQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1673877811;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c/usgNs9pfu7FbT7iKyXt726LjP2SjSeWRrj88OxrK8=;
-        b=VawOqSVQURtyfqU3uNej2kfSXR57CyMBmawE0EuKEiBo/bhl29iOcpkswenRdLS3P4nWV+
-        OsubsVJ0gAbx3obnJfFFDFjS7TalV968ODb/D3HG4dUE7zle3+USa1zlfhc8aoGT4WIfT3
-        HRTf7Jkm85MUuiO2N6KHjX2493gxXE0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 94b23cb7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 16 Jan 2023 14:03:30 +0000 (UTC)
-Received: by mail-yb1-f174.google.com with SMTP id d62so14209605ybh.8;
-        Mon, 16 Jan 2023 06:03:30 -0800 (PST)
-X-Gm-Message-State: AFqh2kr2X2tdrM5zFGUQ0lTVO5oKFtKGUWZqXiAz8bzVj5hcyTwvc7BD
-        8bFICRvlbs5pKcHJDqsJbmDyErbeF29HjUBENts=
-X-Google-Smtp-Source: AMrXdXs6GZpmdrfgweNbQS8/0Y8RCAaey/orcLg0xTcwW9Lkwr5FCig6Y6BbUhGpPa1tiDm7gXovA9Lmm+NFJz34R64=
-X-Received: by 2002:a25:5189:0:b0:7bf:d201:60cb with SMTP id
- f131-20020a255189000000b007bfd20160cbmr1958247ybb.365.1673877808634; Mon, 16
- Jan 2023 06:03:28 -0800 (PST)
-MIME-Version: 1.0
-References: <Y7dPV5BK6jk1KvX+@zx2c4.com> <20230106030156.3258307-1-Jason@zx2c4.com>
- <Y8UG77zvJeic7Cyc@kernel.org>
-In-Reply-To: <Y8UG77zvJeic7Cyc@kernel.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 16 Jan 2023 15:03:17 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
-Message-ID: <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
-Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM suspend fails
+        Tue, 17 Jan 2023 10:09:33 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5371140BC3;
+        Tue, 17 Jan 2023 07:09:29 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HF5oks035847;
+        Tue, 17 Jan 2023 15:09:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=dWXZ2e63jmmSSVEE1KNFRF1xjIVGL5WConxn21nLixg=;
+ b=rWckHt71ud3lqsuEqRADoGDQPS6q1Ds12mDwdUbBu/4n19FQbCJXoHYrt2pfSwgk4gpM
+ rJ0SqlvG8yfQJ7kBroynfSJfoinJTevCHXhx+op0NwSCWL7bqVokGvhMZqakgLx3pMgO
+ sAsCJ1BRDDLZfgYFyLhKBHKrE+dDNCgFjsSE95bj/jWRM0brcnhFB9dLvR0t0u//Ug3B
+ 5IsWXpdtT/vN6/004BMh4KJEbg4RDO9DZfko3PuNctl+WXFLoPQt+uEK1xaGSCDkXjRE
+ LuTqek2U/J5l3XFJsR0hetVaQ1GORTPqZGC0EBMl/vsqovFXTOZXw74FWthO5KS05yhN mA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n5qb62a3p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 15:09:22 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30HEpbBg005234;
+        Tue, 17 Jan 2023 15:09:22 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n5qb62a2r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 15:09:22 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30HF0Ck7005659;
+        Tue, 17 Jan 2023 15:09:21 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3n3m17dws0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 15:09:21 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30HF9Jqc38732096
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Jan 2023 15:09:19 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC0FB58056;
+        Tue, 17 Jan 2023 15:09:19 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EFC855805E;
+        Tue, 17 Jan 2023 15:09:18 +0000 (GMT)
+Received: from [9.160.177.68] (unknown [9.160.177.68])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 17 Jan 2023 15:09:18 +0000 (GMT)
+Message-ID: <e11dfc19-d531-a574-e8f9-abab63398564@linux.ibm.com>
+Date:   Tue, 17 Jan 2023 09:09:18 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] tpm: Add reserved memory event log
+Content-Language: en-US
 To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Johannes Altmanninger <aclopte@gmail.com>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jgg@ziepe.ca, peterhuewe@gmx.de, joel@jms.id.au
+References: <20230103162010.381214-1-eajames@linux.ibm.com>
+ <Y8T0VxQiCQH5sDEs@kernel.org>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <Y8T0VxQiCQH5sDEs@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 93cufhhzV66qlnb3uzPYv36jr0YaEfmg
+X-Proofpoint-ORIG-GUID: wbt_CvqwwwQAP7FXAzT790RIVEpOqTHP
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-17_06,2023-01-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1011 bulkscore=0 malwarescore=0 mlxlogscore=999
+ suspectscore=0 impostorscore=0 adultscore=0 phishscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301170122
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko,
 
-On Mon, Jan 16, 2023 at 9:12 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> > index d69905233aff..6df9067ef7f9 100644
-> > --- a/drivers/char/tpm/tpm-interface.c
-> > +++ b/drivers/char/tpm/tpm-interface.c
-> > @@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
-> >       }
-> >
-> >  suspended:
-> > -     return rc;
-> > +     if (rc)
-> > +             pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
-> > +                    chip->dev_num, rc);
-> > +     return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
-> >
-> > --
-> > 2.39.0
-> >
+On 1/16/23 00:53, Jarkko Sakkinen wrote:
+> On Tue, Jan 03, 2023 at 10:20:10AM -0600, Eddie James wrote:
+>> Some platforms may desire to pass the event log up to linux in the
+>> form of a reserved memory region. Add support for this in the TPM
+>> core to find the reserved memory region and map it.
+>>
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Which platforms?
 >
-> Let me read all the threads through starting from the original report. I've
-> had emails piling up because of getting sick before holiday, and holiday
-> season after that.
+> I do not see information of
 >
-> This looks sane
+> +	void (*release)(void *ptr);
+>
+> in the commit message. The description of the implemenation approach is
+> missing.
 
-No, not really. I mean, it was sane under the circumstances of, "I'm
-not going to spend time fixing this for real if the maintainers aren't
-around," and it fixed the suspend issue. But it doesn't actually fix
-any real tpm issue. The real issue, AFAICT, is there's some sort of
-race between the tpm rng read command and either suspend or wakeup or
-selftest. One of these is missing some locking. And then commands step
-on each other and the tpm gets upset. This is probably something that
-should be fixed. I assume the "Fixes: ..." tag will actually go quite
-far back, with recent things only unearthing a somewhat old bug. But
-just a hunch.
 
-Jason
+Hi, please see v2 which is a two patch series. I have changed the 
+implementation to avoid this release pointer. 
+https://patchwork.kernel.org/project/linux-integrity/list/?series=711832
+
+
+Thanks,
+
+Eddie
+
+
+>
+>
+>> ---
+>>   drivers/char/tpm/eventlog/of.c | 38 +++++++++++++++++++++++++++++++++-
+>>   drivers/char/tpm/tpm-chip.c    |  3 ++-
+>>   include/linux/tpm.h            |  1 +
+>>   3 files changed, 40 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+>> index a9ce66d09a75..0455d7f61c10 100644
+>> --- a/drivers/char/tpm/eventlog/of.c
+>> +++ b/drivers/char/tpm/eventlog/of.c
+>> @@ -11,12 +11,48 @@
+>>    */
+>>   
+>>   #include <linux/slab.h>
+>> +#include <linux/io.h>
+>> +#include <linux/ioport.h>
+>>   #include <linux/of.h>
+>> +#include <linux/of_address.h>
+>> +#include <linux/of_reserved_mem.h>
+>>   #include <linux/tpm_eventlog.h>
+>>   
+>>   #include "../tpm.h"
+>>   #include "common.h"
+>>   
+>> +static int tpm_read_log_memory_region(struct tpm_chip *chip)
+>> +{
+>> +	struct device_node *node;
+>> +	struct resource res;
+>> +	int rc;
+>> +
+>> +	node = of_parse_phandle(chip->dev.parent->of_node, "memory-region", 0);
+>> +	if (!node) {
+>> +		dev_info(&chip->dev, "no phandle\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	rc = of_address_to_resource(node, 0, &res);
+>> +	of_node_put(node);
+>> +	if (rc) {
+>> +		dev_info(&chip->dev, "no mem\n");
+>> +		return rc;
+>> +	}
+>> +
+>> +	chip->log.bios_event_log = memremap(res.start, resource_size(&res), MEMREMAP_WB);
+>> +	if (!chip->log.bios_event_log) {
+>> +		dev_info(&chip->dev, "err memremap\n");
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	chip->log.release = memunmap;
+>> +	chip->log.bios_event_log_end = chip->log.bios_event_log + resource_size(&res);
+>> +
+>> +	return chip->flags & TPM_CHIP_FLAG_TPM2 ? EFI_TCG2_EVENT_LOG_FORMAT_TCG_2 :
+>> +		EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
+>> +}
+> We do not want to support TPM 1.2 for new features.
+>
+>> +
+>>   int tpm_read_log_of(struct tpm_chip *chip)
+>>   {
+>>   	struct device_node *np;
+>> @@ -38,7 +74,7 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>>   	sizep = of_get_property(np, "linux,sml-size", NULL);
+>>   	basep = of_get_property(np, "linux,sml-base", NULL);
+>>   	if (sizep == NULL && basep == NULL)
+>> -		return -ENODEV;
+>> +		return tpm_read_log_memory_region(chip);
+>>   	if (sizep == NULL || basep == NULL)
+>>   		return -EIO;
+>>   
+>> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+>> index 741d8f3e8fb3..09ea8145d7c6 100644
+>> --- a/drivers/char/tpm/tpm-chip.c
+>> +++ b/drivers/char/tpm/tpm-chip.c
+>> @@ -267,7 +267,7 @@ static void tpm_dev_release(struct device *dev)
+>>   	idr_remove(&dev_nums_idr, chip->dev_num);
+>>   	mutex_unlock(&idr_lock);
+>>   
+>> -	kfree(chip->log.bios_event_log);
+>> +	chip->log.release(chip->log.bios_event_log);
+>>   	kfree(chip->work_space.context_buf);
+>>   	kfree(chip->work_space.session_buf);
+>>   	kfree(chip->allocated_banks);
+>> @@ -324,6 +324,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+>>   	init_rwsem(&chip->ops_sem);
+>>   
+>>   	chip->ops = ops;
+>> +	chip->log.release = (void(*)(void *))kfree;
+> Why do you need this cast?
+>
+>>   
+>>   	mutex_lock(&idr_lock);
+>>   	rc = idr_alloc(&dev_nums_idr, NULL, 0, TPM_NUM_DEVICES, GFP_KERNEL);
+>> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+>> index dfeb25a0362d..f1c0b0eb20a5 100644
+>> --- a/include/linux/tpm.h
+>> +++ b/include/linux/tpm.h
+>> @@ -109,6 +109,7 @@ struct tpm_space {
+>>   struct tpm_bios_log {
+>>   	void *bios_event_log;
+>>   	void *bios_event_log_end;
+>> +	void (*release)(void *ptr);
+>>   };
+>>   
+>>   struct tpm_chip_seqops {
+>> -- 
+>> 2.31.1
+>>
+> BR, Jarkko
