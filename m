@@ -2,89 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9F8671E12
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Jan 2023 14:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2E9671E9A
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Jan 2023 14:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjARNhM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Jan 2023 08:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
+        id S230362AbjARN4p (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Jan 2023 08:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjARNgz (ORCPT
+        with ESMTP id S229847AbjARN4Z (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Jan 2023 08:36:55 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18A313D48;
-        Wed, 18 Jan 2023 05:06:44 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IAi0rW026699;
-        Wed, 18 Jan 2023 13:06:39 GMT
+        Wed, 18 Jan 2023 08:56:25 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6094E50C;
+        Wed, 18 Jan 2023 05:27:54 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IC9YAU023085;
+        Wed, 18 Jan 2023 13:27:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=11F5W4kgtyrTauFVB8uYzAjdtt8KXsuDnaKPia2vpWo=;
- b=KUkYvJvX2A2pgM6goO+xyYhpvQi/4jQhFk53HCLb4HwOVUtooWKsws6iay4hMHy2Zy3V
- zuqL0Oq19URHDcaPDUUhEHzpQgJcpkiSb4elUWkUv5rmyJlvFuGXbVAhQFXfEmW6Hbqc
- ng5CNe7bm9+YcWL4qZe2Bk+u6jctE2vFS9AJ48fGF73TdSiIflZ1j3HoBaP9h8jM23HX
- Ia8ZaVcs8jU0PcJqx1KVTEA/LRZMUdDKamjEuoCmu3cGOICf5M7Dl/cKLkDFv+uX/cB5
- ryq2tPH8bqkiiEVKnl+M68hpRToXcuB9bXQXUTy+vmvyeIyga8Qo2G61A6JfKYNh+5im eg== 
+ bh=h8QKC9HBsZ2WVliqH8imjRco0PuJfspcpxoo1zsNtVE=;
+ b=mx/d8yWMiE6S50H3T36223LS1iesd+OPxFaAE98FOgwrqDDKqJFbOvWHp1xS9RmhcC1m
+ bz0aHVXPJ3fON7IByG2KQDA6vQ3xo4YoYtsih3tA0X9+ubhII6t+9HDwtOCgtoNRDTNA
+ vUb8OP20e6ZROWM0VjNRjbexErnRe/8d5ANW2+guWRvYuqK4UPJ8ZeAFLuljdi2SOPIg
+ qLDn1fcr1eMcFjk77r8WlDfdWDJq3Fff3DFGyZ3Yx6r/W61qqkd/92WwWlddvlcPYca4
+ ThJFsWzcZoTLSCCip0r7TWL3OjpPyghDu5MN6kr4xf1QZo6Iu+M88L6qJbQjYP1cgRD2 5A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6gh79v8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 13:27:51 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30ICt57m014116;
+        Wed, 18 Jan 2023 13:27:51 GMT
 Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6f91u3p1-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6gh79v8h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 13:06:39 +0000
+        Wed, 18 Jan 2023 13:27:51 +0000
 Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30ICGGVG009728;
-        Wed, 18 Jan 2023 13:06:38 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3n3m17w5yd-1
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30ICTpsF009766;
+        Wed, 18 Jan 2023 13:27:50 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3n3m17w9fc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 13:06:38 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30ID6btP61145550
+        Wed, 18 Jan 2023 13:27:49 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30IDRmb97799342
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Jan 2023 13:06:37 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1921758055;
-        Wed, 18 Jan 2023 13:06:37 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E35785803F;
-        Wed, 18 Jan 2023 13:06:35 +0000 (GMT)
+        Wed, 18 Jan 2023 13:27:48 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 68D5358053;
+        Wed, 18 Jan 2023 13:27:48 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA1D858043;
+        Wed, 18 Jan 2023 13:27:47 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Jan 2023 13:06:35 +0000 (GMT)
-Message-ID: <3389cf1c-e0ab-0b41-f3fc-bfe8c4054510@linux.ibm.com>
-Date:   Wed, 18 Jan 2023 08:06:34 -0500
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 18 Jan 2023 13:27:47 +0000 (GMT)
+Message-ID: <d30d23f2-46d0-acfc-4356-49e82b027a9b@linux.ibm.com>
+Date:   Wed, 18 Jan 2023 08:27:47 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH v3 22/24] powerpc/pseries: Implement secvars for dynamic
- secure boot
+Subject: Re: [PATCH v2 2/2] tpm: Add reserved memory event log
 Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        gjoyce@linux.ibm.com, gcwilson@linux.ibm.com
-References: <20230118061049.1006141-1-ajd@linux.ibm.com>
- <20230118061049.1006141-23-ajd@linux.ibm.com>
+To:     Eddie James <eajames@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jgg@ziepe.ca, jarkko@kernel.org,
+        peterhuewe@gmx.de
+References: <20230113161017.1079299-1-eajames@linux.ibm.com>
+ <20230113161017.1079299-3-eajames@linux.ibm.com>
 From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230118061049.1006141-23-ajd@linux.ibm.com>
+In-Reply-To: <20230113161017.1079299-3-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2SW6o4YXcougiWxelxHtZ_h_v2uFSdOg
-X-Proofpoint-ORIG-GUID: 2SW6o4YXcougiWxelxHtZ_h_v2uFSdOg
+X-Proofpoint-ORIG-GUID: ooca7sjD3K_a790sg7sDX5mPBW6zs6zE
+X-Proofpoint-GUID: xxnsxAvXmht50VRNwlVhMPSMYt4BwMJy
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- adultscore=0 clxscore=1011 impostorscore=0 malwarescore=0 mlxlogscore=999
- bulkscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=999 clxscore=1011 priorityscore=1501 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
  definitions=main-2301180113
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -93,48 +97,80 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 
-On 1/18/23 01:10, Andrew Donnellan wrote:
+On 1/13/23 11:10, Eddie James wrote:
+> Some platforms may desire to pass the event log up to linux in the
 
-> +
-> +// PLPKS dynamic secure boot doesn't give us a format string in the same way OPAL does.
-> +// Instead, report the format using the SB_VERSION variable in the keystore.
-> +static ssize_t plpks_secvar_format(char *buf)
+Which platforms are these that work like this?
 
-Ideally there would be a size_t accompanying this buffer...
+    Stefan
 
+> form of a reserved memory region. Add support for this in the TPM
+> core to find the reserved memory region and map it.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>   drivers/char/tpm/eventlog/of.c | 38 +++++++++++++++++++++++++++++++++-
+>   1 file changed, 37 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> index 741ab2204b11..c815cadf00a4 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -12,12 +12,48 @@
+>   
+>   #include <linux/device.h>
+>   #include <linux/slab.h>
+> +#include <linux/io.h>
+> +#include <linux/ioport.h>
+>   #include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_reserved_mem.h>
+>   #include <linux/tpm_eventlog.h>
+>   
+>   #include "../tpm.h"
+>   #include "common.h"
+>   
+> +static int tpm_read_log_memory_region(struct tpm_chip *chip)
 > +{
-> +	struct plpks_var var = {0};
-> +	ssize_t ret;
+> +	struct device_node *node;
+> +	struct resource res;
+> +	int rc;
 > +
-> +	var.component = NULL;
-> +	// Only the signed variables have null bytes in their names, this one doesn't
-> +	var.name = "SB_VERSION";
-> +	var.namelen = 10;
-> +	var.datalen = 1;
-> +	var.data = kzalloc(1, GFP_KERNEL);
-
-NULL pointer check?
-
-> +
-> +	// Unlike the other vars, SB_VERSION is owned by firmware instead of the OS
-> +	ret = plpks_read_fw_var(&var);
-> +	if (ret) {
-> +		if (ret == -ENOENT) {
-> +			ret = snprintf(buf, SECVAR_MAX_FORMAT_LEN, "ibm,plpks-sb-unknown");
-> +		} else {
-> +			pr_err("Error %ld reading SB_VERSION from firmware\n", ret);
-> +			ret = -EIO;
-> +		}
-> +		goto err;
+> +	node = of_parse_phandle(chip->dev.parent->of_node, "memory-region", 0);
+> +	if (!node) {
+> +		dev_info(&chip->dev, "no phandle\n");
+> +		return -ENODEV;
 > +	}
 > +
-> +	// This string is made up by us - the hypervisor doesn't provide us
-> +	// with a format string in the way that OPAL firmware does. Hypervisor
-> +	// defines SB_VERSION as a "1 byte unsigned integer value".
-> +	ret = snprintf(buf, SECVAR_MAX_FORMAT_LEN, "ibm,plpks-sb-v%hhu", var.data[0]);
+> +	rc = of_address_to_resource(node, 0, &res);
+> +	of_node_put(node);
+> +	if (rc) {
+> +		dev_info(&chip->dev, "no mem\n");
+> +		return rc;
+> +	}
 > +
-> +err:
-> +	kfree(var.data);
-> +	return ret;
+> +	chip->log.bios_event_log = devm_memremap(&chip->dev, res.start, resource_size(&res),
+> +						 MEMREMAP_WB);
+> +	if (!chip->log.bios_event_log) {
+> +		dev_info(&chip->dev, "err memremap\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	chip->log.bios_event_log_end = chip->log.bios_event_log + resource_size(&res);
+> +
+> +	return chip->flags & TPM_CHIP_FLAG_TPM2 ? EFI_TCG2_EVENT_LOG_FORMAT_TCG_2 :
+> +		EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
 > +}
 > +
+>   int tpm_read_log_of(struct tpm_chip *chip)
+>   {
+>   	struct device_node *np;
+> @@ -39,7 +75,7 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>   	sizep = of_get_property(np, "linux,sml-size", NULL);
+>   	basep = of_get_property(np, "linux,sml-base", NULL);
+>   	if (sizep == NULL && basep == NULL)
+> -		return -ENODEV;
+> +		return tpm_read_log_memory_region(chip);
+>   	if (sizep == NULL || basep == NULL)
+>   		return -EIO;
+>   
