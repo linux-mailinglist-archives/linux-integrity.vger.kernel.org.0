@@ -2,161 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81878672AC8
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Jan 2023 22:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1EF672DC7
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Jan 2023 01:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjARVpX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Jan 2023 16:45:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S229481AbjASA7W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Jan 2023 19:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjARVpW (ORCPT
+        with ESMTP id S229637AbjASA7W (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Jan 2023 16:45:22 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E7710CC;
-        Wed, 18 Jan 2023 13:45:21 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ILSRgZ031782;
-        Wed, 18 Jan 2023 21:45:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=UzADFY1L/BfeucqpU0xMyyeXHhyIthrN7gMK7UVkCb8=;
- b=fKn02Sj9buheV6gLQVxSd0Rr1EcU0yDl3ubhyaIxSTxPWf9tBHr6s5Upwr0GZ3PN9u3+
- FMDpYwia+vrLhozvKCL2rtB++JNPLH7naf1uChsAnUSpBv+i4Tluq1Qqhs7roDor/mH3
- Yjhm62JuFsI4LEc9750Ga6YDISqqHw3zoDMxRhS7ZhUR3Hq5j7N4gPEQVTOFNRpel1Pg
- WbxX3HIiuVIhNroiYWQuSOLmMykxO+DeL4iQSf/8XqQWUJQk1y6DNzfo+xuAPtIIygU3
- gF4H9cch7yWI3jLlVKaS1IVp5X7h+Ie74WcReXrGD6UP8KMjotv8RxnULrIqCcC6p7UU Gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6h5evf57-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 21:45:05 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30ILj0YL005466;
-        Wed, 18 Jan 2023 21:45:04 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n6h5evf4p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 21:45:04 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30IK4h9D022043;
-        Wed, 18 Jan 2023 21:45:04 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3n3m17g5sn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Jan 2023 21:45:03 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30ILj37U63308280
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Jan 2023 21:45:03 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0D8FC58052;
-        Wed, 18 Jan 2023 21:45:03 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F3105805A;
-        Wed, 18 Jan 2023 21:45:02 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.7.111])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Jan 2023 21:45:02 +0000 (GMT)
-Message-ID: <3c34c1e8c74722110e5d7e87146b090791734916.camel@linux.ibm.com>
-Subject: Re: [PATCH -next] evm: Use __vfs_setxattr() to update security.evm
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 18 Jan 2023 16:45:02 -0500
-In-Reply-To: <20221228030248.94285-1-xiujianfeng@huawei.com>
-References: <20221228030248.94285-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+        Wed, 18 Jan 2023 19:59:22 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC961683D1;
+        Wed, 18 Jan 2023 16:59:20 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id g205so313821pfb.6;
+        Wed, 18 Jan 2023 16:59:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JU+eYoCUYw7OUrQ34xBj/dGRvIDzcpEGZXWLrE7d4zs=;
+        b=gz85+iNW2Y3eSbshAzxzfhFFiBk15RBYYo/Ta22Cx4vNnkGWBnv61NxZF0xrGZP/fd
+         LaA+Uf5VWLMzLkiJwEDaP+bh/zwItSGvisR/Thh89Far9EXZssVWqeAuRqKLyJDhEbsS
+         0hKFQw82MizFDTA6gDKiyiDOV8HssxWG11Fpukyy+wzf1SYfVnThV1z0P09wr6ipx1ay
+         Npfy77cwwQ0eVt3CVdE5V+dLlYjXpFFF2wZE6VS6drERmj0Q0+PTz2kCBZww/gkVSAdQ
+         Q+zi/+JSxaCsY/rnBk+T4KC9GpATG5f/5XlGEWFkk6KWqlwFAxPAWCAVAONGF2ADFCJc
+         tRXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JU+eYoCUYw7OUrQ34xBj/dGRvIDzcpEGZXWLrE7d4zs=;
+        b=khGClFdjHYmHE3BDt/0hFUCsSNrrRDSOtn7eLVnwtahM317YSQl0pRYxWnL5hM23tt
+         cUHJ6Y8LHjWDZ3yKnRAqadcy9Kfs+HO1Qer4a5Xdr9B81QsJlHQOAW3i2+A7zQrAkEy8
+         aotK8ebNeVVv3DbKRz+URlq5peOTjtEpLJo5WODg3rZTb+TfJHx0feKUkZPHnZTLhjj7
+         6oo2+9PYiggtcoEv55LCFtFRVHGUJIa1F5MnLFstaURdG4P4YsFFtjgCVoKPaMSen1bW
+         SDkYn17S4kWHnYUWur4vtFbkicgwYmfUuTw0/qEw2RSsirz8es7VKhlB1NyT3DD3qf4E
+         4muQ==
+X-Gm-Message-State: AFqh2krk9vx2ehVvR0XlPLsUmYFGFATcMwMgBSHeUR27oemuwvha22bd
+        4xGy7ssd2w45WKrfAUfCwHE=
+X-Google-Smtp-Source: AMrXdXucjHz8FZFT/NIriPu9GE/0b4TrRV4+MCEE7H0qbs59fRDHyGXP1sClacAUrp2o7QCsUMenpg==
+X-Received: by 2002:a05:6a00:4207:b0:580:eeae:e4ba with SMTP id cd7-20020a056a00420700b00580eeaee4bamr10242724pfb.4.1674089960161;
+        Wed, 18 Jan 2023 16:59:20 -0800 (PST)
+Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
+        by smtp.gmail.com with ESMTPSA id 134-20020a62148c000000b0056bc30e618dsm22728931pfu.38.2023.01.18.16.59.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 16:59:19 -0800 (PST)
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zEE8R_E7ZXjdtyO48DZjtIZp6t3ze7zy
-X-Proofpoint-ORIG-GUID: _FNfmYn35NGQBAGX_ShXks7MvFjettbF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0 phishscore=0
- mlxscore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301180180
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 19 Jan 2023 10:59:12 +1000
+Message-Id: <CPVRCZ8Z84K4.337F5K1N7RCRS@bobo>
+To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
+Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
+        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
+        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
+        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>,
+        <gcwilson@linux.ibm.com>
+Subject: Re: [PATCH v3 02/24] powerpc/secvar: WARN_ON_ONCE() if multiple
+ secvar ops are set
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+X-Mailer: aerc 0.13.0
+References: <20230118061049.1006141-1-ajd@linux.ibm.com>
+ <20230118061049.1006141-3-ajd@linux.ibm.com>
+In-Reply-To: <20230118061049.1006141-3-ajd@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2022-12-28 at 11:02 +0800, Xiu Jianfeng wrote:
-> Currently it uses __vfs_setxattr_noperm() to update "security.evm",
-> however there are two lsm hooks(inode_post_setxattr and inode_setsecurity)
-> being called inside this function, which don't make any sense for xattr
-> "security.evm", because the handlers of these two hooks, such as selinux
-> and smack, only care about their own xattr.
-
-Updating the security.ima hash triggers re-calculating and writing the
-security.evm HMAC.  Refer to evm_inode_post_setxattr().
-
-Mimi
-
-> 
-> On the other hand, there is a literally rather than actually cyclical
-> callchain as follows:
-> security_inode_post_setxattr
->   ->evm_inode_post_setxattr
->     ->evm_update_evmxattr
->       ->__vfs_setxattr_noperm
->         ->security_inode_post_setxattr
-> 
-> So use __vfs_setxattr() to update "security.evm".
-> 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
+> From: Russell Currey <ruscur@russell.cc>
+>
+> The secvar code only supports one consumer at a time.
+>
+> Multiple consumers aren't possible at this point in time, but we'd want
+> it to be obvious if it ever could happen.
+>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
 > ---
->  security/integrity/evm/evm_crypto.c   | 7 +++----
->  security/integrity/ima/ima_appraise.c | 8 ++++----
->  2 files changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-> index fa5ff13fa8c9..d8275dfa49ef 100644
-> --- a/security/integrity/evm/evm_crypto.c
-> +++ b/security/integrity/evm/evm_crypto.c
-> @@ -376,10 +376,9 @@ int evm_update_evmxattr(struct dentry *dentry, const char *xattr_name,
->  			   xattr_value_len, &data);
->  	if (rc == 0) {
->  		data.hdr.xattr.sha1.type = EVM_XATTR_HMAC;
-> -		rc = __vfs_setxattr_noperm(&init_user_ns, dentry,
-> -					   XATTR_NAME_EVM,
-> -					   &data.hdr.xattr.data[1],
-> -					   SHA1_DIGEST_SIZE + 1, 0);
-> +		rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
-> +				    XATTR_NAME_EVM, &data.hdr.xattr.data[1],
-> +				    SHA1_DIGEST_SIZE + 1, 0);
->  	} else if (rc == -ENODATA && (inode->i_opflags & IOP_XATTR)) {
->  		rc = __vfs_removexattr(&init_user_ns, dentry, XATTR_NAME_EVM);
->  	}
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index ee6f7e237f2e..d2de9dc6c345 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -98,10 +98,10 @@ static int ima_fix_xattr(struct dentry *dentry,
->  		iint->ima_hash->xattr.ng.type = IMA_XATTR_DIGEST_NG;
->  		iint->ima_hash->xattr.ng.algo = algo;
->  	}
-> -	rc = __vfs_setxattr_noperm(&init_user_ns, dentry, XATTR_NAME_IMA,
-> -				   &iint->ima_hash->xattr.data[offset],
-> -				   (sizeof(iint->ima_hash->xattr) - offset) +
-> -				   iint->ima_hash->length, 0);
-> +	rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
-> +			    XATTR_NAME_IMA, &iint->ima_hash->xattr.data[offset],
-> +			    (sizeof(iint->ima_hash->xattr) - offset) +
-> +			    iint->ima_hash->length, 0);
->  	return rc;
->  }
->  
+>  arch/powerpc/kernel/secvar-ops.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/powerpc/kernel/secvar-ops.c b/arch/powerpc/kernel/secva=
+r-ops.c
+> index 6a29777d6a2d..aa1b2adc2710 100644
+> --- a/arch/powerpc/kernel/secvar-ops.c
+> +++ b/arch/powerpc/kernel/secvar-ops.c
+> @@ -8,10 +8,12 @@
+> =20
+>  #include <linux/cache.h>
+>  #include <asm/secvar.h>
+> +#include <asm/bug.h>
+> =20
+> -const struct secvar_operations *secvar_ops __ro_after_init;
+> +const struct secvar_operations *secvar_ops __ro_after_init =3D NULL;
+> =20
+>  void set_secvar_ops(const struct secvar_operations *ops)
+>  {
+> +	WARN_ON_ONCE(secvar_ops);
+>  	secvar_ops =3D ops;
 
+You could make it return error here and two line patch in the caller to
+handle the error and then things wouldn't get corrupted.
 
+Thanks,
+Nick
