@@ -2,76 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D80E672E0D
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Jan 2023 02:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E24267376B
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Jan 2023 12:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjASBYE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Jan 2023 20:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S230287AbjASLv4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Jan 2023 06:51:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbjASBWC (ORCPT
+        with ESMTP id S230169AbjASLvv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:22:02 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967566D36E;
-        Wed, 18 Jan 2023 17:17:56 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id g205so341032pfb.6;
-        Wed, 18 Jan 2023 17:17:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4qvSylj76pkjJK0liJzUPIoE16nX8cS6scNFJeg8uss=;
-        b=O5M4vcD4Xd6NlKslWlR4eDnUdGeq4ovEo0+vMwvb8XIHogfL5rfP//GQVWFgt0mgPc
-         XwQMTdggmDrbYWl8JeTk/1F6Mi6UqPGZnNI3rntnGaCNPozvnQtZ4HlkUiFERuAQuI63
-         Gb5gS6Wl2ASjTAG78Ihvrr68wo6jDgXUXcSsdvVQV1N7F3lXMOU05hhGJqBGGocXOeGj
-         5ohvftx7sulbxTkM7Mn3JYO5SqNFn828fTp1wgY9F4fin1E710xq6p1fPpgc3HvJQYv6
-         TZ7AQPl5H+nEV/KsWXOx3eeMDME++GtVAyJ0Ra/ns1LPxdxnxQvsFOnBW+Cvdbj5Fdve
-         1D+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4qvSylj76pkjJK0liJzUPIoE16nX8cS6scNFJeg8uss=;
-        b=Ha+JKSZjuCN/UbP/1WbY8FOa30B7fJGiWajOJUD05kqAVwPgkjIOn00gwwgndS9igq
-         jB597YToGGHgSa13SXX8aLGUkYYk7e08aVgfRc+5YDx1j7y777cVMxZibf7wRbXphBBo
-         Bfi+/0bN6vcy3hTa69IPJWhYiVPBdHn8PcjoU192+0Gz+4TBaxtNTmv5c8AJjJJ0bHZl
-         J/jGuiYyEcDTKW6ksSoNFnwAX4Mq6oGTmpM/757Xr84eeyk/iztoxe6EV5CxRpzQnIBk
-         bg7iFiCe5tAyeIF+BtGuWSKm4yYLCWtANvl/9EXrEy/zgTPFqqMvVFsOIlV2ORNGAIKg
-         A7ew==
-X-Gm-Message-State: AFqh2krsLcY6W90VL9IY1o7B0OApAnSquKOKfzMNmeakSkcV1nqiDudJ
-        2ApbQyxbyjca6/PRHbWwt2E=
-X-Google-Smtp-Source: AMrXdXvuftfAEVkHFKNo/wDV5xp7EjIbGUCEj2qZ0VaidNV7nooG4/Xwhn7ZX3U38U3XBhaAHwkioA==
-X-Received: by 2002:aa7:9399:0:b0:58d:272a:52a0 with SMTP id t25-20020aa79399000000b0058d272a52a0mr8120300pfe.32.1674091076111;
-        Wed, 18 Jan 2023 17:17:56 -0800 (PST)
-Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
-        by smtp.gmail.com with ESMTPSA id f24-20020aa79698000000b0058bc60dd98dsm8788019pfk.23.2023.01.18.17.17.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 17:17:55 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 19 Jan 2023 11:17:49 +1000
-Message-Id: <CPVRR82TD4YN.2330YD9C5FHMQ@bobo>
-Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
-        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>,
-        <gcwilson@linux.ibm.com>
-Subject: Re: [PATCH v3 04/24] powerpc/secvar: Handle format string in the
- consumer
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.13.0
-References: <20230118061049.1006141-1-ajd@linux.ibm.com>
- <20230118061049.1006141-5-ajd@linux.ibm.com>
-In-Reply-To: <20230118061049.1006141-5-ajd@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 19 Jan 2023 06:51:51 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1168F46086
+        for <linux-integrity@vger.kernel.org>; Thu, 19 Jan 2023 03:51:49 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J9phJG017732;
+        Thu, 19 Jan 2023 11:51:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=MeyJhQmEHEbmYYRKJeE9uQ5O6zw3TUHNe3agZvmch4I=;
+ b=CW6y0tx2TcvAH9HNHP7DsT2EYvZTxBRaFu7oDqzwfQ7VDJVHyXNYGySoY/G7iXS8ZnNQ
+ 2DtXEndLTufpWpF898opk5SV7VBAKPL5Qjg/lW6f4FW3D5/FyjH8UjWxUX6CBoRY1YyN
+ ghMPLH0JpxXoHOkC2jvArwu8yEPOAVEJ3oC/J6+GLiIu8mTcoJYHXtJmhaZrKTsgc74g
+ uvMEwwGm2U43i2y05tt4adZl/2K/ZMFc32vBFLGLw6Z6U+Dy8yxI07C1Xe8y3TDZNte6
+ vGtCM9je16L9mFmbwtfjhhZO8nczKCtY1OUBRQDUJS1Wa+794J7X2yqWhSR7/AZAdqfH lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7311bg15-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 11:51:33 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30JBfJNU025891;
+        Thu, 19 Jan 2023 11:51:33 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7311bg0n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 11:51:33 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30J9h3h4018747;
+        Thu, 19 Jan 2023 11:51:31 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3n3m17kvqd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 11:51:31 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JBpUtP3539652
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Jan 2023 11:51:30 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D18B58058;
+        Thu, 19 Jan 2023 11:51:30 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2C1858063;
+        Thu, 19 Jan 2023 11:51:29 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.185.113])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 19 Jan 2023 11:51:29 +0000 (GMT)
+Message-ID: <a84ddb6329f9729fc864464b5c81a60944f66762.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils v2 8/9] Use in-place built fsverity binary
+ instead of installing it
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 19 Jan 2023 06:51:29 -0500
+In-Reply-To: <faad3f8a6356ec8be90a66ce9bd80d40576f3cc2.camel@huaweicloud.com>
+References: <20230112122426.3759938-1-roberto.sassu@huaweicloud.com>
+         <20230112122426.3759938-9-roberto.sassu@huaweicloud.com>
+         <42a75a49-31c8-4987-2b0d-83fef07d6cde@linux.ibm.com>
+         <d6b9a9084c887372157e2deea29c20c9520ea63b.camel@huaweicloud.com>
+         <b2081222-c8d7-0bc2-1e0a-368258c8a1c9@linux.ibm.com>
+         <faad3f8a6356ec8be90a66ce9bd80d40576f3cc2.camel@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: G2v0vgdtli5QXqx4X08u-9IqdOLmpCO3
+X-Proofpoint-GUID: UPF8CLgCAFcEsL5O7542zBQ48c_Eirpr
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_09,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 impostorscore=0 malwarescore=0 clxscore=1015 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190091
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,79 +100,67 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
->
-> The code that handles the format string in secvar-sysfs.c is entirely
-> OPAL specific, so create a new "format" op in secvar_operations to make
-> the secvar code more generic.  No functional change.
->
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
->
-> ---
->
-> v2: Use sysfs_emit() instead of sprintf() (gregkh)
->
-> v3: Enforce format string size limit (ruscur)
-> ---
->  arch/powerpc/include/asm/secvar.h            |  3 +++
->  arch/powerpc/kernel/secvar-sysfs.c           | 23 ++++--------------
->  arch/powerpc/platforms/powernv/opal-secvar.c | 25 ++++++++++++++++++++
->  3 files changed, 33 insertions(+), 18 deletions(-)
->
-> diff --git a/arch/powerpc/include/asm/secvar.h b/arch/powerpc/include/asm=
-/secvar.h
-> index 07ba36f868a7..8b6475589120 100644
-> --- a/arch/powerpc/include/asm/secvar.h
-> +++ b/arch/powerpc/include/asm/secvar.h
-> @@ -11,12 +11,15 @@
->  #include <linux/types.h>
->  #include <linux/errno.h>
-> =20
-> +#define SECVAR_MAX_FORMAT_LEN	30 // max length of string returned by ->f=
-ormat()
-> +
->  extern const struct secvar_operations *secvar_ops;
-> =20
->  struct secvar_operations {
->  	int (*get)(const char *key, u64 key_len, u8 *data, u64 *data_size);
->  	int (*get_next)(const char *key, u64 *key_len, u64 keybufsize);
->  	int (*set)(const char *key, u64 key_len, u8 *data, u64 data_size);
-> +	ssize_t (*format)(char *buf);
->  };
-> =20
->  #ifdef CONFIG_PPC_SECURE_BOOT
-> diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/sec=
-var-sysfs.c
-> index 462cacc0ca60..d3858eedd72c 100644
-> --- a/arch/powerpc/kernel/secvar-sysfs.c
-> +++ b/arch/powerpc/kernel/secvar-sysfs.c
-> @@ -21,26 +21,13 @@ static struct kset *secvar_kset;
->  static ssize_t format_show(struct kobject *kobj, struct kobj_attribute *=
-attr,
->  			   char *buf)
->  {
-> -	ssize_t rc =3D 0;
-> -	struct device_node *node;
-> -	const char *format;
-> -
-> -	node =3D of_find_compatible_node(NULL, NULL, "ibm,secvar-backend");
-> -	if (!of_device_is_available(node)) {
-> -		rc =3D -ENODEV;
-> -		goto out;
-> -	}
-> +	char tmp[SECVAR_MAX_FORMAT_LEN];
-> +	ssize_t len =3D secvar_ops->format(tmp);
-> =20
-> -	rc =3D of_property_read_string(node, "format", &format);
-> -	if (rc)
-> -		goto out;
-> +	if (len <=3D 0)
-> +		return -EIO;
+On Thu, 2023-01-12 at 17:28 +0100, Roberto Sassu wrote:
+> On Thu, 2023-01-12 at 11:26 -0500, Stefan Berger wrote:
+> > 
+> > On 1/12/23 11:20, Roberto Sassu wrote:
+> > > On Thu, 2023-01-12 at 11:11 -0500, Stefan Berger wrote:
+> > > > On 1/12/23 07:24, Roberto Sassu wrote:
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > 
+> > > > > Instead of making changes to the system, use in-place built fsverity binary
+> > > > > by adding ../fsverity-utils to the PATH variable, so that the binary can be
+> > > > > found with the 'which' command.
+> > > > > 
+> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > 
+> > > > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > 
+> > > > > ---
+> > > > >    tests/fsverity.test       | 2 +-
+> > > > >    tests/install-fsverity.sh | 2 +-
+> > > > >    2 files changed, 2 insertions(+), 2 deletions(-)
+> > > > > 
+> > > > > diff --git a/tests/fsverity.test b/tests/fsverity.test
+> > > > > index 84312aa08a30..e05978be7ea6 100755
+> > > > > --- a/tests/fsverity.test
+> > > > > +++ b/tests/fsverity.test
+> > > > > @@ -30,7 +30,7 @@
+> > > > >    # custom policy rules might take precedence.
+> > > > >    
+> > > > >    cd "$(dirname "$0")" || exit 1
+> > > > > -PATH=../src:$PATH
+> > > > > +PATH=../src:../fsverity-utils:$PATH
+> > > > >    source ./functions.sh
+> > > > >    
+> > > > >    # Base VERBOSE on the environment variable, if set.
+> > > > > diff --git a/tests/install-fsverity.sh b/tests/install-fsverity.sh
+> > > > > index 418fc42f472b..d00674c0d3a2 100755
+> > > > > --- a/tests/install-fsverity.sh
+> > > > > +++ b/tests/install-fsverity.sh
+> > > > > @@ -2,6 +2,6 @@
+> > > > >    
+> > > > >    git clone https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/fsverity-utils.git
+> > > > >    cd fsverity-utils
+> > > > > -CC=gcc make -j$(nproc) && sudo make install
+> > > > > +CC=gcc make -j$(nproc)
+> > > > >    cd ..
+> > > > >    rm -rf fsverity-utils
+> > > 
+> > > Argh... same problem.
+> > > 
+> > > Will just delete the last two lines. It is just for CI.
+> > 
+> > Must be skipping tests when the tool is not found
+> 
+> Yes, it does:
+> 
+> SKIP: fsverity is not installed
+> PASS: 0 SKIP: 0 FAIL: 0
 
-AFAIKS this does have a functional change, it loses the return value.
-Why not return len if it is < 0, and -EIO if len =3D=3D 0?
+RH doesn't have the fsverity-utils package.  tests/install-fsverity.sh
+builds and installs it.  The script ci/fedora.sh builds and installs
+it.
 
-Thanks,
-Nick
+Mimi
+
