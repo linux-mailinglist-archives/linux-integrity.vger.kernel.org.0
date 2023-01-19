@@ -2,73 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1EF672DC7
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Jan 2023 01:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F88672DCB
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Jan 2023 02:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjASA7W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Jan 2023 19:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S229622AbjASBCq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Jan 2023 20:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjASA7W (ORCPT
+        with ESMTP id S229483AbjASBCp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Jan 2023 19:59:22 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC961683D1;
-        Wed, 18 Jan 2023 16:59:20 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id g205so313821pfb.6;
-        Wed, 18 Jan 2023 16:59:20 -0800 (PST)
+        Wed, 18 Jan 2023 20:02:45 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B44C59552;
+        Wed, 18 Jan 2023 17:02:44 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so4285720pjg.4;
+        Wed, 18 Jan 2023 17:02:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JU+eYoCUYw7OUrQ34xBj/dGRvIDzcpEGZXWLrE7d4zs=;
-        b=gz85+iNW2Y3eSbshAzxzfhFFiBk15RBYYo/Ta22Cx4vNnkGWBnv61NxZF0xrGZP/fd
-         LaA+Uf5VWLMzLkiJwEDaP+bh/zwItSGvisR/Thh89Far9EXZssVWqeAuRqKLyJDhEbsS
-         0hKFQw82MizFDTA6gDKiyiDOV8HssxWG11Fpukyy+wzf1SYfVnThV1z0P09wr6ipx1ay
-         Npfy77cwwQ0eVt3CVdE5V+dLlYjXpFFF2wZE6VS6drERmj0Q0+PTz2kCBZww/gkVSAdQ
-         Q+zi/+JSxaCsY/rnBk+T4KC9GpATG5f/5XlGEWFkk6KWqlwFAxPAWCAVAONGF2ADFCJc
-         tRXw==
+        bh=bzC0sU/N12ncEGDzD9fPcibOi5DmMLZMi0fdgF9XEqw=;
+        b=AYtPSQ8/l89DagqqXtQI6yiVXSzsTcUBaQiMk2f1jiZyJ5ELiIGB0pZLTJnp8amdI2
+         E9USP8ckmgFNAtbnEoOYYEmnUi5knwgQiQIsu+XBK87SrVt3G4Z7NEK00vhQjdlc4uAe
+         cUWuQ9+EIWNEUEecO15jMDjh7K8C3W/p/vLOToGoVZwCyALXyYsxihbAnAW9nkojB1jD
+         W4PyN1pMYXFeHmI2ySiO/3SOQnFtrWf3y7kddaOhygH3d8MNWuA//hY+i/Lb0SZ6YloL
+         AS9FQBWer3V6rNXX0e0CrLQATvoZgKgHf3OyQiHAf0umnVjJScE+CMG+PuftHWcDfxSI
+         KSeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=JU+eYoCUYw7OUrQ34xBj/dGRvIDzcpEGZXWLrE7d4zs=;
-        b=khGClFdjHYmHE3BDt/0hFUCsSNrrRDSOtn7eLVnwtahM317YSQl0pRYxWnL5hM23tt
-         cUHJ6Y8LHjWDZ3yKnRAqadcy9Kfs+HO1Qer4a5Xdr9B81QsJlHQOAW3i2+A7zQrAkEy8
-         aotK8ebNeVVv3DbKRz+URlq5peOTjtEpLJo5WODg3rZTb+TfJHx0feKUkZPHnZTLhjj7
-         6oo2+9PYiggtcoEv55LCFtFRVHGUJIa1F5MnLFstaURdG4P4YsFFtjgCVoKPaMSen1bW
-         SDkYn17S4kWHnYUWur4vtFbkicgwYmfUuTw0/qEw2RSsirz8es7VKhlB1NyT3DD3qf4E
-         4muQ==
-X-Gm-Message-State: AFqh2krk9vx2ehVvR0XlPLsUmYFGFATcMwMgBSHeUR27oemuwvha22bd
-        4xGy7ssd2w45WKrfAUfCwHE=
-X-Google-Smtp-Source: AMrXdXucjHz8FZFT/NIriPu9GE/0b4TrRV4+MCEE7H0qbs59fRDHyGXP1sClacAUrp2o7QCsUMenpg==
-X-Received: by 2002:a05:6a00:4207:b0:580:eeae:e4ba with SMTP id cd7-20020a056a00420700b00580eeaee4bamr10242724pfb.4.1674089960161;
-        Wed, 18 Jan 2023 16:59:20 -0800 (PST)
+        bh=bzC0sU/N12ncEGDzD9fPcibOi5DmMLZMi0fdgF9XEqw=;
+        b=DhtYQrVP7/6ydcAhzZh4GzL046UxGqzzP7Nx9dgmIEmU3b1dUS+sJIqoG+PKwylhxL
+         ha1pxTBqFPFYQzwT7dvEF7goVqYWfXGHuBwLyRs2zxO01KxyCKqCFvWKqil16GJBdihy
+         XvTsS+dXrMYsSa1SYpRR9ffR55HM3wMe0+xK9oczOL2qNfDC/IEC3nrOya5wK6mmQvGd
+         1m/dbiEa8xcV1WTDvCBqdXPpTmYENnkKaZTYN7z4wpOti8H3W//XgqHvB9cFxEoyg56L
+         o3Ox74GpxSYOlMCpc62rlmwKtEMB7ucy3bur3lcwgQXIap9f3gMjKDPeN6PYXjaaE2GB
+         XrnQ==
+X-Gm-Message-State: AFqh2krBdcYV4CugroocLyjefY8pTsdwM8YMR71qVwgzdLv0/pgheZ9o
+        XRMo9vGZALst+b+BAiyZwpU=
+X-Google-Smtp-Source: AMrXdXt4gseTnAfOPrChP9m2wVf26VWcohagyq74svl8eO9K6vlv12wRtzJHCZkfmem+ShkJYon6sA==
+X-Received: by 2002:a05:6a20:ba87:b0:af:8e92:3eeb with SMTP id fb7-20020a056a20ba8700b000af8e923eebmr9175136pzb.9.1674090163920;
+        Wed, 18 Jan 2023 17:02:43 -0800 (PST)
 Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
-        by smtp.gmail.com with ESMTPSA id 134-20020a62148c000000b0056bc30e618dsm22728931pfu.38.2023.01.18.16.59.15
+        by smtp.gmail.com with ESMTPSA id e3-20020a63f543000000b004cd2eebc551sm5414418pgk.62.2023.01.18.17.02.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 16:59:19 -0800 (PST)
+        Wed, 18 Jan 2023 17:02:43 -0800 (PST)
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 19 Jan 2023 10:59:12 +1000
-Message-Id: <CPVRCZ8Z84K4.337F5K1N7RCRS@bobo>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
+Date:   Thu, 19 Jan 2023 11:02:36 +1000
+Message-Id: <CPVRFKZUFEFE.3IPS9CFR9KPD6@bobo>
 Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
         <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
         <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
         <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>,
         <gcwilson@linux.ibm.com>
-Subject: Re: [PATCH v3 02/24] powerpc/secvar: WARN_ON_ONCE() if multiple
- secvar ops are set
+Subject: Re: [PATCH v3 04/24] powerpc/secvar: Handle format string in the
+ consumer
 From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
 X-Mailer: aerc 0.13.0
 References: <20230118061049.1006141-1-ajd@linux.ibm.com>
- <20230118061049.1006141-3-ajd@linux.ibm.com>
-In-Reply-To: <20230118061049.1006141-3-ajd@linux.ibm.com>
+ <20230118061049.1006141-5-ajd@linux.ibm.com>
+In-Reply-To: <20230118061049.1006141-5-ajd@linux.ibm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -82,38 +82,46 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
 > From: Russell Currey <ruscur@russell.cc>
 >
-> The secvar code only supports one consumer at a time.
->
-> Multiple consumers aren't possible at this point in time, but we'd want
-> it to be obvious if it ever could happen.
+> The code that handles the format string in secvar-sysfs.c is entirely
+> OPAL specific, so create a new "format" op in secvar_operations to make
+> the secvar code more generic.  No functional change.
 >
 > Signed-off-by: Russell Currey <ruscur@russell.cc>
 > Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> ---
->  arch/powerpc/kernel/secvar-ops.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/arch/powerpc/kernel/secvar-ops.c b/arch/powerpc/kernel/secva=
-r-ops.c
-> index 6a29777d6a2d..aa1b2adc2710 100644
-> --- a/arch/powerpc/kernel/secvar-ops.c
-> +++ b/arch/powerpc/kernel/secvar-ops.c
-> @@ -8,10 +8,12 @@
+> ---
+>
+> v2: Use sysfs_emit() instead of sprintf() (gregkh)
+>
+> v3: Enforce format string size limit (ruscur)
+> ---
+>  arch/powerpc/include/asm/secvar.h            |  3 +++
+>  arch/powerpc/kernel/secvar-sysfs.c           | 23 ++++--------------
+>  arch/powerpc/platforms/powernv/opal-secvar.c | 25 ++++++++++++++++++++
+>  3 files changed, 33 insertions(+), 18 deletions(-)
+>
+> diff --git a/arch/powerpc/include/asm/secvar.h b/arch/powerpc/include/asm=
+/secvar.h
+> index 07ba36f868a7..8b6475589120 100644
+> --- a/arch/powerpc/include/asm/secvar.h
+> +++ b/arch/powerpc/include/asm/secvar.h
+> @@ -11,12 +11,15 @@
+>  #include <linux/types.h>
+>  #include <linux/errno.h>
 > =20
->  #include <linux/cache.h>
->  #include <asm/secvar.h>
-> +#include <asm/bug.h>
+> +#define SECVAR_MAX_FORMAT_LEN	30 // max length of string returned by ->f=
+ormat()
+> +
+>  extern const struct secvar_operations *secvar_ops;
 > =20
-> -const struct secvar_operations *secvar_ops __ro_after_init;
-> +const struct secvar_operations *secvar_ops __ro_after_init =3D NULL;
-> =20
->  void set_secvar_ops(const struct secvar_operations *ops)
->  {
-> +	WARN_ON_ONCE(secvar_ops);
->  	secvar_ops =3D ops;
+>  struct secvar_operations {
+>  	int (*get)(const char *key, u64 key_len, u8 *data, u64 *data_size);
+>  	int (*get_next)(const char *key, u64 *key_len, u64 keybufsize);
+>  	int (*set)(const char *key, u64 key_len, u8 *data, u64 data_size);
+> +	ssize_t (*format)(char *buf);
 
-You could make it return error here and two line patch in the caller to
-handle the error and then things wouldn't get corrupted.
+Maybe pass the buf size as an argument here? Which is a bit less error
+prone and more flexible than finding the right #define for it.
 
 Thanks,
 Nick
