@@ -2,72 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3AD675F64
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Jan 2023 22:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3016B675FDB
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Jan 2023 23:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjATVEu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Jan 2023 16:04:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S229837AbjATWAb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Jan 2023 17:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjATVEt (ORCPT
+        with ESMTP id S229825AbjATWAa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Jan 2023 16:04:49 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B286DBC8
-        for <linux-integrity@vger.kernel.org>; Fri, 20 Jan 2023 13:04:48 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id jl3so6383712plb.8
-        for <linux-integrity@vger.kernel.org>; Fri, 20 Jan 2023 13:04:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y172KwacIm4200KA0aG6WBm3XKs0N6jHhBKXK9WD9mI=;
-        b=dPladbV/U1GCgz/wNJzUOoElEIPdmUvwE4kDWOjJjbDQQZMOKjXNsnc7gnxqSbhYKZ
-         /Lhpq+lffC3UGqVkVkfj+B1dLPCpkLBaNmZokuMG1AV1R6hMBi9v1KrSp2Lmp9GdjMjS
-         ouWjx4YdvjCeOhemuBcaEx4hDL8qhARp9pZ8/3YvsFAS+lEK96CBKjZYLevo2iy4P4BJ
-         Wcl96HKNDP7F61wZJ+z1gkNRbgjija1ouMrRQhonT0mf6RUaDeuyluFubcfg17ljxzpf
-         w4g2X1wMCGeoL8ZCybtmTgpxZGTiiE/mSH4Z7a5ogW0uYbpRbU2e11bJhaIHJ/vf2LUG
-         jpCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y172KwacIm4200KA0aG6WBm3XKs0N6jHhBKXK9WD9mI=;
-        b=5TnvuuB91zCs3qfvAMkGKGoovtqkAwFqgfRlxFQ9laXynFzxsgtCkt5r1mgOUVa3Kg
-         Aght2EvCGUEkDfq/a0l92XZhmqCOe9b+AqTCRDLEOq30TVF1aJVAz6hbXVrGb+ld0wh+
-         FC/suzd/C0O8mY3Ug8SWrZmEhOC/yrSMY7DMO1W9QmT26n23uNW+lb38fFuj1oUGoX4u
-         HzbGKH2Y3E6UqFLqWLh/U1yx6UojZtl4TomL2vKe7D+BtjM21xIkGuSWtOY2rMnprQbJ
-         1NaxGKW4W5ZvNglbLvRZVNx17yaD44Y4h7xs2NzQ5Rqo05F7aM65De6MA7y94btiiJNZ
-         mlsA==
-X-Gm-Message-State: AFqh2koDxUDtgLD2FlL+BoopDCj2CAJLgTJ449tiTnTHu9lkyneYWap4
-        tioLPbQIWKfgOfdcWSupwCKSf/7fJsCTXXFTCW4l
-X-Google-Smtp-Source: AMrXdXs8Faave2YJu+g6n6M+4QYmBNMXF46Qu59oZgfKnPdvJ6mTQUJOkGwrJVa4sN47D3aEIVz8WuCvphKHlFQ05+A=
-X-Received: by 2002:a17:902:bd97:b0:191:2b33:606f with SMTP id
- q23-20020a170902bd9700b001912b33606fmr1493982pls.32.1674248687946; Fri, 20
- Jan 2023 13:04:47 -0800 (PST)
+        Fri, 20 Jan 2023 17:00:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA28F81988;
+        Fri, 20 Jan 2023 14:00:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49360B82A89;
+        Fri, 20 Jan 2023 22:00:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71090C4339B;
+        Fri, 20 Jan 2023 22:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674252026;
+        bh=By4+wnFOmO9TMaanbIqfOWU4AfMzOHH61k0H3Sw32qM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MgwgAR3zHuMa9eD2fpqe8ruSNglll1MsLtSdaqDKlSSmSf6kUgaOu3fVXBXmHzhVA
+         4O9bIdGAHYqttTBF4hNbUopWqXumnxKvX7KrEuWJiSrDmrIAp/xQ7r1ofJCYuaVaxI
+         0mye2Q8DS87TjietT9qC7TsKC/L1j5utNy4i0I3LbSIMQML6Fh++CjzKwPWVn/oMV+
+         RjEV4UJtlCJSZL+lqgfBB8jARpvFTUxZeuVTDOSXB5kQ+dY5n6dL6ov1xI7NAoyleX
+         AuU2UG7D6x5lj6D83kYnlOb3kOOrx3w+6OOFeskPml5F14JvZBZ2ds9BpV5qz59T8M
+         WzFbqlYIzivWg==
+Date:   Fri, 20 Jan 2023 22:00:23 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Grant Likely <grant.likely@linaro.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 001/606] tpm: st33zp24: Convert to Convert to i2c's
+ .probe_new()
+Message-ID: <Y8sO93QxH+lUPBtf@kernel.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-2-uwe@kleine-koenig.org>
+ <20221216090904.qlekgvtpriijmvay@pengutronix.de>
+ <Y696MSvhEUWlHSoK@kernel.org>
+ <20230106175617.d3tlyb4lfdv34pvw@pengutronix.de>
 MIME-Version: 1.0
-References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
- <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
- <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
- <CAHC9VhSamRVpgrDrSuc2dsbbw3-pvjDi9BsFWoWssHkAD2W5vA@mail.gmail.com>
- <a764acb285d0616c8608eaab8671ceb9c22cb390.camel@huaweicloud.com>
- <058f1bdf4ba75c3a00918cefbf1be32477b51639.camel@linux.ibm.com> <e1a1fe029aea21ba533cb6196e64f29c7b052c57.camel@huaweicloud.com>
-In-Reply-To: <e1a1fe029aea21ba533cb6196e64f29c7b052c57.camel@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 20 Jan 2023 16:04:36 -0500
-Message-ID: <CAHC9VhT--Q8QkFmKTpD3zjryDL19V9myfr3PuzSRo_bDzDRyqQ@mail.gmail.com>
-Subject: Re: [PATCH v2] security: Restore passing final prot to ima_file_mmap()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230106175617.d3tlyb4lfdv34pvw@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,59 +70,25 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 5:53 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Thu, 2023-01-12 at 12:45 -0500, Mimi Zohar wrote:
-> > On Thu, 2023-01-12 at 13:36 +0100, Roberto Sassu wrote:
-> > > On Wed, 2023-01-11 at 09:25 -0500, Paul Moore wrote:
-> > > > On Wed, Jan 11, 2023 at 4:31 AM Roberto Sassu
-> > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > On Fri, 2023-01-06 at 16:14 -0500, Paul Moore wrote:
-> > > > > > On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
-> > > > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > >
-> > > > > > > Commit 98de59bfe4b2f ("take calculation of final prot in
-> > > > > > > security_mmap_file() into a helper") moved the code to update prot with the
-> > > > > > > actual protection flags to be granted to the requestor by the kernel to a
-> > > > > > > helper called mmap_prot(). However, the patch didn't update the argument
-> > > > > > > passed to ima_file_mmap(), making it receive the requested prot instead of
-> > > > > > > the final computed prot.
-> > > > > > >
-> > > > > > > A possible consequence is that files mmapped as executable might not be
-> > > > > > > measured/appraised if PROT_EXEC is not requested but subsequently added in
-> > > > > > > the final prot.
-> > > > > > >
-> > > > > > > Replace prot with mmap_prot(file, prot) as the second argument of
-> > > > > > > ima_file_mmap() to restore the original behavior.
-> > > > > > >
-> > > > > > > Cc: stable@vger.kernel.org
-> > > > > > > Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
-> > > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > > ---
-> > > > > > >  security/security.c | 2 +-
-> > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > > >
-> > > > > > > diff --git a/security/security.c b/security/security.c
-> > > > > > > index d1571900a8c7..0d2359d588a1 100644
-> > > > > > > --- a/security/security.c
-> > > > > > > +++ b/security/security.c
-> > > > > > > @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
-> > > > > > >                                         mmap_prot(file, prot), flags);
-> > > > > > >         if (ret)
-> > > > > > >                 return ret;
-> > > > > > > -       return ima_file_mmap(file, prot);
-> > > > > > > +       return ima_file_mmap(file, mmap_prot(file, prot));
-> > > > > > >  }
-> > > > > >
-> > > > > > This seems like a reasonable fix, although as the original commit is
-> > > > > > ~10 years old at this point I am a little concerned about the impact
-> > > > > > this might have on IMA.  Mimi, what do you think?
+On Fri, Jan 06, 2023 at 06:56:17PM +0100, Uwe Kleine-König wrote:
+> Hello Jarkko,
+> 
+> On Fri, Dec 30, 2022 at 11:54:25PM +0000, Jarkko Sakkinen wrote:
+> > I picked it now.
+> > 
+> > BR, Jarkko
+> > 
+> > On Fri, Dec 16, 2022 at 10:09:04AM +0100, Uwe Kleine-König wrote:
+> > > while rebasing my series onto today's next I noticed the Subject being
+> > > broken:
+> > > 
+> > > 	$Subject ~= s/Convert to //
+> 
+> I see you picked this patch, but you didn't drop the duplicated "Convert
+> to " :-\
+> 
+> Also you didn't pick patches #2 - #5 which are tpm related, too.
 
-So ... where do we stand on this patch, Mimi, Roberto?  I stand by my
-original comment, but I would want to see an ACK from Mimi at the very
-least before merging this upstream.  If this isn't ACK-able, do we
-have a plan to resolve this soon?
+Should be good now.
 
--- 
-paul-moore.com
+BR, Jarkko
