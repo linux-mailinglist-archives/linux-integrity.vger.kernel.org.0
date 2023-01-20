@@ -2,210 +2,211 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD37A67444C
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Jan 2023 22:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59DD67484E
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Jan 2023 01:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbjASV0G (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 19 Jan 2023 16:26:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
+        id S229456AbjATAvh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Jan 2023 19:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbjASVYe (ORCPT
+        with ESMTP id S229437AbjATAvf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 19 Jan 2023 16:24:34 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC357CCDF;
-        Thu, 19 Jan 2023 13:18:51 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JJBrw9028405;
-        Thu, 19 Jan 2023 21:18:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=fOmHjl45i/BOeBlFY+5ny3aN3s26Qml7s+k+CJ5/H8k=;
- b=PXyL1e0HKxKgQ6CCPRCuJVVrKNQSA2AHnZNCkZ4tz/83b8N4eFouwZb+tT5JLv8uQVHK
- KDhZzkLJy91eNPZQFZFKCsc56vdl01y7IOHqei2f1HSNx4ZZB0sPp+Xqdn+Ydh0Q4BM8
- q6wXfe09qzKvKBgWl+cjMfHHfxFuq7Ao6y7KsenfWlv4lFAq9gZFExfBKyba9YGeUN22
- MIfyI4YYtyTPdhy/GDMe3LfieOfpRji6r8yCGZxmLMT4PjD19gOLC+xaNEOb32V7DOL7
- 55spVAkHNp0LHohaayNSfWXUa80ImaVHixMaTXi941MzbYPw4+9RKfycuETqLOOtn6jw Ag== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n7btajthp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 21:18:38 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30JIfEq0027310;
-        Thu, 19 Jan 2023 21:18:37 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3n3m186hek-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Jan 2023 21:18:37 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30JLIamb10748592
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Jan 2023 21:18:36 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3FF0358057;
-        Thu, 19 Jan 2023 21:18:36 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 15C725805D;
-        Thu, 19 Jan 2023 21:18:34 +0000 (GMT)
-Received: from rhel-laptop.ibm.com (unknown [9.160.28.21])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 19 Jan 2023 21:18:33 +0000 (GMT)
-Message-ID: <a991c60c5c10a37cc0385663705e8b39d8e23c09.camel@linux.vnet.ibm.com>
-Subject: Re: [PATCH v3 05/24] powerpc/secvar: Handle max object size in the
+        Thu, 19 Jan 2023 19:51:35 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05F42719;
+        Thu, 19 Jan 2023 16:51:32 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 663865C0041;
+        Thu, 19 Jan 2023 19:51:31 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 19 Jan 2023 19:51:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=russell.cc; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1674175891; x=
+        1674262291; bh=oVodv+f7tO66O7huZdWKERwv7Beigm5tN48FcTUIthc=; b=m
+        Hrv+P2KS6He5GJADam0ymxMgPpSjBSs0fPLtwhPwL6V7rjBYswNdNvugTQOIJ+Dy
+        5awXIu77v5YBmJIw9qsFOv01IVRtF1y6nKHlTTMuzFRhu/fCRl3GK3sCOerjph2w
+        SkTaYIz9o5C+aTeTY3Yzajdq4g7OJN+iFydgUJiDMNbFdqWypg+VJpCPeHtBhR5B
+        oygQTVHXy7Xmn4p6YaFvp6EqsW1mX/GPxCgkYVI5KQ6XV/oN6c6SfRITRvAZZEd/
+        D39pqLOdc+wSWHjkD0Xk8wee3AiSNjNyh/nWQU/Aoqtw2qvkPHTbgg2GNUwl/YEt
+        KSLR68cKOcRBU0le6/SsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674175891; x=
+        1674262291; bh=oVodv+f7tO66O7huZdWKERwv7Beigm5tN48FcTUIthc=; b=m
+        py5pc4Y2rCa/bfxvG8c/0IDTR8Idu8DxfDeWdixFkb1e7DMaIzfvvcTaeFf4t0RH
+        Qi4vF/dBWRuw2wlH3CYlIph5krdY2Ygbi647jn6xavgeKyGgITh0nkqnEyd/p/SZ
+        JzrNaoX3tIZ+XoqFU+EFIwkQBEdl32eCKMeo+AOUU9fJbl5dcSU532dUsxPFVESB
+        UhZESekMjsQ970nLj2UL/JVPEsO5pXRy9/cM/157F8rbERSqB6qEDCD9tJVKgTMX
+        qzmxcLKo/L+Iar8RAhyBSrU8lXU3mY9bAu+4Ng/Jzz529g+usEcBejj3hpGyc8KE
+        goHUqmvzHbuotZT9/sYeg==
+X-ME-Sender: <xms:k-XJY1Y6arPjWIo4a1gJXxsGlC2UvOFtV5yFLxQNSmdCUo2aKl52lg>
+    <xme:k-XJY8Y24ncutrKZQ3_CXiFIC4ILLo42YkW1DG6rk3kf1iRXO1Jj40WwyMOOyA1HV
+    6IxAgRSUE7IOXKD8A>
+X-ME-Received: <xmr:k-XJY3-Ob3LUc0hMAyyEduWZc8XiMxYWhs-ikc1pys7SPJBL8XYs4pRcEkdoQRh0MfkPvYrsgvOtKbvDvJyVULosP79cDMHVNrnMJhhyLoqQPg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduuddgvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdludehmdenucfjughrpefkuffhvfevffgjfhgtgfgfggesthhqredt
+    tderjeenucfhrhhomheptfhushhsvghllhcuvehurhhrvgihuceorhhushgtuhhrsehruh
+    hsshgvlhhlrdgttgeqnecuggftrfgrthhtvghrnheptefgieelhfeufeevvdekheeifeej
+    gfefgeehtedukeeigfduuddtueekteevleelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprhhushgtuhhrsehruhhsshgvlhhlrdgttg
+X-ME-Proxy: <xmx:k-XJYzoyfbcSAlEER27ZarmJ_hbUsoU23B0eW8fQIGh9aoiCM_DNGg>
+    <xmx:k-XJYwpDKnFpwt9GYqUy-hK4XRU00g7ltsKPlzCOrnNtAgWONwF1qA>
+    <xmx:k-XJY5QjWCGMHwbwP2g5T0-vqtcznSP-CJTKQICX5vxKb4m2vO1KQg>
+    <xmx:k-XJY1RDTgVQBiZmUbfoXzrECbMHy28KEIsgHiNQeqbay0Jh5JiORg>
+Feedback-ID: i4421424f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 19 Jan 2023 19:51:27 -0500 (EST)
+Message-ID: <26945a8372ddde0c2bea9f2382ea9f1e74b9fe63.camel@russell.cc>
+Subject: Re: [PATCH v3 04/24] powerpc/secvar: Handle format string in the
  consumer
-From:   Greg Joyce <gjoyce@linux.vnet.ibm.com>
-Reply-To: gjoyce@linux.vnet.ibm.com
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
+From:   Russell Currey <ruscur@russell.cc>
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
         linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
-        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
-        ruscur@russell.cc, zohar@linux.ibm.com, mpe@ellerman.id.au,
-        gjoyce@linux.ibm.com, sudhakar@linux.ibm.com, bgray@linux.ibm.com,
-        erichte@linux.ibm.com
-Date:   Thu, 19 Jan 2023 15:18:33 -0600
-In-Reply-To: <20230118061049.1006141-6-ajd@linux.ibm.com>
+Cc:     gjoyce@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        sudhakar@linux.ibm.com, bgray@linux.ibm.com, gcwilson@linux.ibm.com
+Date:   Fri, 20 Jan 2023 11:51:24 +1100
+In-Reply-To: <CPVRR82TD4YN.2330YD9C5FHMQ@bobo>
 References: <20230118061049.1006141-1-ajd@linux.ibm.com>
-         <20230118061049.1006141-6-ajd@linux.ibm.com>
+         <20230118061049.1006141-5-ajd@linux.ibm.com>
+         <CPVRR82TD4YN.2330YD9C5FHMQ@bobo>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: V-10U9LXaj_bHAbA5CbFq6q2JBh89Jt7
-X-Proofpoint-ORIG-GUID: V-10U9LXaj_bHAbA5CbFq6q2JBh89Jt7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-19_14,2023-01-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- bulkscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 spamscore=0
- suspectscore=0 lowpriorityscore=0 adultscore=0 clxscore=1011
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301190176
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2023-01-18 at 17:10 +1100, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
-> 
-> Currently the max object size is handled in the core secvar code with
-> an
-> entirely OPAL-specific implementation, so create a new max_size() op
-> and
-> move the existing implementation into the powernv platform.  Should
-> be
-> no functional change.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> 
-> ---
-> 
-> v3: Change uint64_t type to u64 (mpe)
-> ---
->  arch/powerpc/include/asm/secvar.h            |  1 +
->  arch/powerpc/kernel/secvar-sysfs.c           | 17 +++--------------
->  arch/powerpc/platforms/powernv/opal-secvar.c | 19
-> +++++++++++++++++++
->  3 files changed, 23 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/powerpc/include/asm/secvar.h
-> b/arch/powerpc/include/asm/secvar.h
-> index 8b6475589120..b2cb9bb7c540 100644
-> --- a/arch/powerpc/include/asm/secvar.h
-> +++ b/arch/powerpc/include/asm/secvar.h
-> @@ -20,6 +20,7 @@ struct secvar_operations {
->  	int (*get_next)(const char *key, u64 *key_len, u64 keybufsize);
->  	int (*set)(const char *key, u64 key_len, u8 *data, u64
-> data_size);
->  	ssize_t (*format)(char *buf);
-> +	int (*max_size)(u64 *max_size);
->  };
->  
->  #ifdef CONFIG_PPC_SECURE_BOOT
-> diff --git a/arch/powerpc/kernel/secvar-sysfs.c
-> b/arch/powerpc/kernel/secvar-sysfs.c
-> index d3858eedd72c..031ef37bca99 100644
-> --- a/arch/powerpc/kernel/secvar-sysfs.c
-> +++ b/arch/powerpc/kernel/secvar-sysfs.c
-> @@ -128,27 +128,16 @@ static struct kobj_type secvar_ktype = {
->  static int update_kobj_size(void)
->  {
->  
-> -	struct device_node *node;
->  	u64 varsize;
-> -	int rc = 0;
-> +	int rc = secvar_ops->max_size(&varsize);
->  
-> -	node = of_find_compatible_node(NULL, NULL, "ibm,secvar-
-> backend");
-> -	if (!of_device_is_available(node)) {
-> -		rc = -ENODEV;
-> -		goto out;
-> -	}
-> -
-> -	rc = of_property_read_u64(node, "max-var-size", &varsize);
->  	if (rc)
-> -		goto out;
-> +		return rc;
->  
->  	data_attr.size = varsize;
->  	update_attr.size = varsize;
->  
-> -out:
-> -	of_node_put(node);
-> -
-> -	return rc;
-> +	return 0;
->  }
->  
->  static int secvar_sysfs_load(void)
-> diff --git a/arch/powerpc/platforms/powernv/opal-secvar.c
-> b/arch/powerpc/platforms/powernv/opal-secvar.c
-> index 623c6839e66c..c9b9fd3730df 100644
-> --- a/arch/powerpc/platforms/powernv/opal-secvar.c
-> +++ b/arch/powerpc/platforms/powernv/opal-secvar.c
-> @@ -122,11 +122,30 @@ static ssize_t opal_secvar_format(char *buf)
->  	return rc;
->  }
->  
-> +static int opal_secvar_max_size(u64 *max_size)
-> +{
-> +	int rc;
-> +	struct device_node *node;
-> +
-> +	node = of_find_compatible_node(NULL, NULL, "ibm,secvar-
-> backend");
+On Thu, 2023-01-19 at 11:17 +1000, Nicholas Piggin wrote:
+> On Wed Jan 18, 2023 at 4:10 PM AEST, Andrew Donnellan wrote:
+> > From: Russell Currey <ruscur@russell.cc>
+> >=20
+> > The code that handles the format string in secvar-sysfs.c is
+> > entirely
+> > OPAL specific, so create a new "format" op in secvar_operations to
+> > make
+> > the secvar code more generic.=C2=A0 No functional change.
+> >=20
+> > Signed-off-by: Russell Currey <ruscur@russell.cc>
+> > Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> >=20
+> > ---
+> >=20
+> > v2: Use sysfs_emit() instead of sprintf() (gregkh)
+> >=20
+> > v3: Enforce format string size limit (ruscur)
+> > ---
+> > =C2=A0arch/powerpc/include/asm/secvar.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 3 +++
+> > =C2=A0arch/powerpc/kernel/secvar-sysfs.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 23 ++++------------
+> > --
+> > =C2=A0arch/powerpc/platforms/powernv/opal-secvar.c | 25
+> > ++++++++++++++++++++
+> > =C2=A03 files changed, 33 insertions(+), 18 deletions(-)
+> >=20
+> > diff --git a/arch/powerpc/include/asm/secvar.h
+> > b/arch/powerpc/include/asm/secvar.h
+> > index 07ba36f868a7..8b6475589120 100644
+> > --- a/arch/powerpc/include/asm/secvar.h
+> > +++ b/arch/powerpc/include/asm/secvar.h
+> > @@ -11,12 +11,15 @@
+> > =C2=A0#include <linux/types.h>
+> > =C2=A0#include <linux/errno.h>
+> > =C2=A0
+> > +#define SECVAR_MAX_FORMAT_LEN=C2=A0=C2=A030 // max length of string re=
+turned
+> > by ->format()
+> > +
+> > =C2=A0extern const struct secvar_operations *secvar_ops;
+> > =C2=A0
+> > =C2=A0struct secvar_operations {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int (*get)(const char *=
+key, u64 key_len, u8 *data, u64
+> > *data_size);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int (*get_next)(const c=
+har *key, u64 *key_len, u64
+> > keybufsize);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int (*set)(const char *=
+key, u64 key_len, u8 *data, u64
+> > data_size);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ssize_t (*format)(char *buf)=
+;
+> > =C2=A0};
+> > =C2=A0
+> > =C2=A0#ifdef CONFIG_PPC_SECURE_BOOT
+> > diff --git a/arch/powerpc/kernel/secvar-sysfs.c
+> > b/arch/powerpc/kernel/secvar-sysfs.c
+> > index 462cacc0ca60..d3858eedd72c 100644
+> > --- a/arch/powerpc/kernel/secvar-sysfs.c
+> > +++ b/arch/powerpc/kernel/secvar-sysfs.c
+> > @@ -21,26 +21,13 @@ static struct kset *secvar_kset;
+> > =C2=A0static ssize_t format_show(struct kobject *kobj, struct
+> > kobj_attribute *attr,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 char *buf)
+> > =C2=A0{
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ssize_t rc =3D 0;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct device_node *node;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const char *format;
+> > -
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0node =3D of_find_compatible_=
+node(NULL, NULL, "ibm,secvar-
+> > backend");
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!of_device_is_available(=
+node)) {
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0rc =3D -ENODEV;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0goto out;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char tmp[SECVAR_MAX_FORMAT_L=
+EN];
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ssize_t len =3D secvar_ops->=
+format(tmp);
+> > =C2=A0
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rc =3D of_property_read_stri=
+ng(node, "format", &format);
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rc)
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0goto out;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (len <=3D 0)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return -EIO;
+>=20
+> AFAIKS this does have a functional change, it loses the return value.
+> Why not return len if it is < 0, and -EIO if len =3D=3D 0?
 
-I assume that node could be NULL and this code relies on
-of_device_is_available() and of_node_put() checking for a NULL node
-pointer? Would it be safer just to return -ENODEV if node is NULL?
+In v2 mpe suggested the following:
 
-> +	if (!of_device_is_available(node)) {
-> +		rc = -ENODEV;
-> +		goto out;
-> +	}
-> +
-> +	rc = of_property_read_u64(node, "max-var-size", max_size);
-> +
-> +out:
-> +	of_node_put(node);
-> +	return rc;
-> +}
-> +
->  static const struct secvar_operations opal_secvar_ops = {
->  	.get = opal_get_variable,
->  	.get_next = opal_get_next_variable,
->  	.set = opal_set_variable,
->  	.format = opal_secvar_format,
-> +	.max_size = opal_secvar_max_size,
->  };
->  
->  static int opal_secvar_probe(struct platform_device *pdev)
+   I'm not sure you should pass that raw error back to sysfs. Some of
+   the
+   values could be confusing, eg. if you return -EINVAL it looks like a
+   parameter to the read() syscall was invalid. Might be better to just
+   return -EIO.
+  =20
+Following that advice, I don't think we should return something other
+than -EIO, but we should at least pr_err() to document the error - this
+isn't something that should ever fail.
+
+>=20
+> Thanks,
+> Nick
 
