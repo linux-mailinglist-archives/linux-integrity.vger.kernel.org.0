@@ -2,62 +2,49 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C08A6761E2
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Jan 2023 01:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D53806761EA
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Jan 2023 01:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjAUAHR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Jan 2023 19:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S229464AbjAUAL4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Jan 2023 19:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjAUAHR (ORCPT
+        with ESMTP id S229379AbjAUALz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:07:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6389C7B2FF;
-        Fri, 20 Jan 2023 16:07:12 -0800 (PST)
+        Fri, 20 Jan 2023 19:11:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CDC36474;
+        Fri, 20 Jan 2023 16:11:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF47B620BE;
-        Sat, 21 Jan 2023 00:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A019C433EF;
-        Sat, 21 Jan 2023 00:07:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB3E4B82AA3;
+        Sat, 21 Jan 2023 00:11:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31158C433D2;
+        Sat, 21 Jan 2023 00:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674259631;
-        bh=p3Y079nnkl3K5cMAQ/Y53zKuPpFrZ5vU9hR0A7lmpqk=;
+        s=k20201202; t=1674259910;
+        bh=oeflYO/FzcUbxQAMi5p6VjdDtqp1ZHCffKVR3C/+CsM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YELDPd1k9OyyD5e4D/rOONQPFPMDNok955AbR4Zgm2U5vhyJy8sg44W4YO/E92Una
-         hCXxltJOYLqdhoVvJAsTFT52PYG25MDOtQFSZ0BJskTyh4A0/oR3nyoz+Imz6RXRP/
-         AKsotEJ/KiBui8rBDxjyifweSTDzkG4dObOzfupoKA/tJepmJBzQyU1vp50XboctRB
-         HV8zJ3Ytu5z4cgmmKOvUq84ZrjN9i1vO8dfKpyTD52tIbSACo0icjst2YFyyyQxZfc
-         MpTnapVsEV/6HbuUi0ZZHwxuOTuddbzOJ5+iOssbDEqgDuiCiki3qsDVAShRbxOv6c
-         LaHwJ+u0lRIpw==
-Date:   Sat, 21 Jan 2023 00:07:08 +0000
+        b=KSIHNrbB81dhd/QyS09hPzaXJNd6RUJySA8IPAGruXNud6RiPlY0WDf3opptfQ9kb
+         Yio7Hlp1yKwAzqF+7B3LGP86aRZMbK7pCJNKuDWIRR5WrUNgDWN5FX9q74q+endjCV
+         du4nVsgE8svwAtsHOohlRTz4AkGtMRLNDlJ4n+SnQCz1MJLqxmClTNGXHqprLF8w6Y
+         FENOZCWDOum+3nE7ApXzbPe/DqP5IucfAKX5PMTkG8u62VHB7PJVCsv+4KPXTBoREN
+         b1/acXff5y1fIaI73k26xEPGn3/K0nlJauAipeiC78ucwpQPq5d1U/d6B4YpjVjjd1
+         hg4DOCB87gnUw==
+Date:   Sat, 21 Jan 2023 00:11:48 +0000
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Johannes Altmanninger <aclopte@gmail.com>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM
- suspend fails
-Message-ID: <Y8ssrKlWh9rsptKe@kernel.org>
-References: <Y7dPV5BK6jk1KvX+@zx2c4.com>
- <20230106030156.3258307-1-Jason@zx2c4.com>
- <Y8UG77zvJeic7Cyc@kernel.org>
- <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jgg@ziepe.ca, peterhuewe@gmx.de
+Subject: Re: [PATCH v2 1/2] tpm: Use managed allocation for bios event log
+Message-ID: <Y8stxF+2XfSFN9wt@kernel.org>
+References: <20230113161017.1079299-1-eajames@linux.ibm.com>
+ <20230113161017.1079299-2-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
+In-Reply-To: <20230113161017.1079299-2-eajames@linux.ibm.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,53 +54,134 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 03:03:17PM +0100, Jason A. Donenfeld wrote:
-> Hi Jarkko,
+On Fri, Jan 13, 2023 at 10:10:16AM -0600, Eddie James wrote:
+> Since the bios event log is freed in the device release function,
+> let devres handle the deallocation. This will allow other memory
+> allocation/mapping functions to be used for the bios event log.
 > 
-> On Mon, Jan 16, 2023 at 9:12 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> > > index d69905233aff..6df9067ef7f9 100644
-> > > --- a/drivers/char/tpm/tpm-interface.c
-> > > +++ b/drivers/char/tpm/tpm-interface.c
-> > > @@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
-> > >       }
-> > >
-> > >  suspended:
-> > > -     return rc;
-> > > +     if (rc)
-> > > +             pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
-> > > +                    chip->dev_num, rc);
-> > > +     return 0;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
-> > >
-> > > --
-> > > 2.39.0
-> > >
-> >
-> > Let me read all the threads through starting from the original report. I've
-> > had emails piling up because of getting sick before holiday, and holiday
-> > season after that.
-> >
-> > This looks sane
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  drivers/char/tpm/eventlog/acpi.c |  5 +++--
+>  drivers/char/tpm/eventlog/efi.c  | 13 +++++++------
+>  drivers/char/tpm/eventlog/of.c   |  3 ++-
+>  drivers/char/tpm/tpm-chip.c      |  1 -
+>  4 files changed, 12 insertions(+), 10 deletions(-)
 > 
-> No, not really. I mean, it was sane under the circumstances of, "I'm
-> not going to spend time fixing this for real if the maintainers aren't
-> around," and it fixed the suspend issue. But it doesn't actually fix
-> any real tpm issue. The real issue, AFAICT, is there's some sort of
-> race between the tpm rng read command and either suspend or wakeup or
-> selftest. One of these is missing some locking. And then commands step
-> on each other and the tpm gets upset. This is probably something that
-> should be fixed. I assume the "Fixes: ..." tag will actually go quite
-> far back, with recent things only unearthing a somewhat old bug. But
-> just a hunch.
+> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+> index 0913d3eb8d51..40360e599bc3 100644
+> --- a/drivers/char/tpm/eventlog/acpi.c
+> +++ b/drivers/char/tpm/eventlog/acpi.c
+> @@ -14,6 +14,7 @@
+>   * Access to the event log extended by the TCG BIOS of PC platform
+>   */
+>  
+> +#include <linux/device.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/fs.h>
+>  #include <linux/security.h>
+> @@ -135,7 +136,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+>  	}
+>  
+>  	/* malloc EventLog space */
+> -	log->bios_event_log = kmalloc(len, GFP_KERNEL);
+> +	log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
+>  	if (!log->bios_event_log)
+>  		return -ENOMEM;
+>  
+> @@ -160,7 +161,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+>  	return format;
+>  
+>  err:
+> -	kfree(log->bios_event_log);
+> +	devm_kfree(&chip->dev, log->bios_event_log);
+
+I wonder do we want to do devm_kfree's at all as the memory is freed during
+detach, i.e. taken care by devres.
+
+>  	log->bios_event_log = NULL;
+>  	return ret;
+>  }
+> diff --git a/drivers/char/tpm/eventlog/efi.c b/drivers/char/tpm/eventlog/efi.c
+> index e6cb9d525e30..4e9d7c2bf32e 100644
+> --- a/drivers/char/tpm/eventlog/efi.c
+> +++ b/drivers/char/tpm/eventlog/efi.c
+> @@ -6,6 +6,7 @@
+>   *      Thiebaud Weksteen <tweek@google.com>
+>   */
+>  
+> +#include <linux/device.h>
+>  #include <linux/efi.h>
+>  #include <linux/tpm_eventlog.h>
+>  
+> @@ -55,7 +56,7 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+>  	}
+>  
+>  	/* malloc EventLog space */
+> -	log->bios_event_log = kmemdup(log_tbl->log, log_size, GFP_KERNEL);
+> +	log->bios_event_log = devm_kmemdup(&chip->dev, log_tbl->log, log_size, GFP_KERNEL);
+>  	if (!log->bios_event_log) {
+>  		ret = -ENOMEM;
+>  		goto out;
+> @@ -76,7 +77,7 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+>  			     MEMREMAP_WB);
+>  	if (!final_tbl) {
+>  		pr_err("Could not map UEFI TPM final log\n");
+> -		kfree(log->bios_event_log);
+> +		devm_kfree(&chip->dev, log->bios_event_log);
+>  		ret = -ENOMEM;
+>  		goto out;
+>  	}
+> @@ -91,11 +92,11 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+>  	 * Allocate memory for the 'combined log' where we will append the
+>  	 * 'final events log' to.
+>  	 */
+> -	tmp = krealloc(log->bios_event_log,
+> -		       log_size + final_events_log_size,
+> -		       GFP_KERNEL);
+> +	tmp = devm_krealloc(&chip->dev, log->bios_event_log,
+> +			    log_size + final_events_log_size,
+> +			    GFP_KERNEL);
+>  	if (!tmp) {
+> -		kfree(log->bios_event_log);
+> +		devm_kfree(&chip->dev, log->bios_event_log);
+>  		ret = -ENOMEM;
+>  		goto out;
+>  	}
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> index a9ce66d09a75..741ab2204b11 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -10,6 +10,7 @@
+>   * Read the event log created by the firmware on PPC64
+>   */
+>  
+> +#include <linux/device.h>
+>  #include <linux/slab.h>
+>  #include <linux/of.h>
+>  #include <linux/tpm_eventlog.h>
+> @@ -65,7 +66,7 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>  		return -EIO;
+>  	}
+>  
+> -	log->bios_event_log = kmemdup(__va(base), size, GFP_KERNEL);
+> +	log->bios_event_log = devm_kmemdup(&chip->dev, __va(base), size, GFP_KERNEL);
+>  	if (!log->bios_event_log)
+>  		return -ENOMEM;
+>  
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 741d8f3e8fb3..b99f55f2d4fd 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -267,7 +267,6 @@ static void tpm_dev_release(struct device *dev)
+>  	idr_remove(&dev_nums_idr, chip->dev_num);
+>  	mutex_unlock(&idr_lock);
+>  
+> -	kfree(chip->log.bios_event_log);
+>  	kfree(chip->work_space.context_buf);
+>  	kfree(chip->work_space.session_buf);
+>  	kfree(chip->allocated_banks);
+> -- 
+> 2.31.1
 > 
-> Jason
-
-See my response to Vlastimil:
-
-https://lore.kernel.org/linux-integrity/Y8sr7YJ8e8eSpPFv@kernel.org/
-
-Can you try what happens if you do not call tpm_add_hwrng()?
 
 BR, Jarkko
