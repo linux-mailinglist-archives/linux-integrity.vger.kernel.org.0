@@ -2,65 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DA7676362
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Jan 2023 04:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031A167638C
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Jan 2023 04:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjAUD33 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Jan 2023 22:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S229540AbjAUD6l (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Jan 2023 22:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjAUD33 (ORCPT
+        with ESMTP id S229523AbjAUD6k (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Jan 2023 22:29:29 -0500
+        Fri, 20 Jan 2023 22:58:40 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E226E0FE;
-        Fri, 20 Jan 2023 19:29:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD127687;
+        Fri, 20 Jan 2023 19:58:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6825B82B88;
-        Sat, 21 Jan 2023 03:29:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBEDC433D2;
-        Sat, 21 Jan 2023 03:29:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F89FB8100E;
+        Sat, 21 Jan 2023 03:58:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A63C433EF;
+        Sat, 21 Jan 2023 03:58:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674271765;
-        bh=AYvipXoxxMR9pl1bocKxT+7lCm00qzXfNi41jjeo4Wk=;
+        s=k20201202; t=1674273516;
+        bh=wg5jTsUCu0bY1Y9UuVLkIRRHJB5eL/aLUkOVq0pCRZI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=er5t2tASHFYKk0OJBKJiOnxjFVaDN8aKTqe5xn+MrOB/ee4MvR51nUO9noQhy8ixC
-         8LVSuNl4hE82lJEJhkGKLcmr8yEWcSg12B5bD78uuFfAlA1a0f45pXWPPELTn7HFsp
-         UmkjL6bAwgo5Mzp7gsQbjKWrawcOdJSsesLK5oMCaPLx0YgEiJ6Xafj9M5heyPYyWM
-         TZ/LAkDLnAjrX5k7svpFn5dDcOlM/5o2Iz1cXdNYtMNGTi+t8zGlOo7kgf1cMpKVwW
-         e1PNaqP2R10Yw8S9ueD/Lkpa75UtJIomzvQZreAZBp/tIjJ9J4W6Fu9r8o1Kl2fj5a
-         bl65PtvH+NoQg==
-Date:   Sat, 21 Jan 2023 03:29:22 +0000
+        b=fm6Vkk32VR4dLTTwIxgiqPnn5kna97SsHFgPlFj6PYcTnhtiPGz20NA+HhdjdZ7jC
+         wqVExPC1ugvRJJlg8S/h3rHcEmpOKFLKVb2iMAA88ge3U2diPZ54inRvzVEnDdQsJU
+         hldripdqbwqxjoONEa3HL3F8x4O5LioMA5odidZE6eakx40FN76xgTd+HvEVc93ctG
+         zQeOPRcNBcqljW3N4peR1rXvT0jbXn/YeAcO/PLo7UM1lTbPTBPyIvpEUuEdR5CL4q
+         fcjpT69g1BOhZ1ntaxfeNHY4K5VoUpTE4ydtq+4V+S1hNLnEL5XP41gsprPWxjuA70
+         ZIYYa0z02Ci8w==
+Date:   Sat, 21 Jan 2023 03:58:33 +0000
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Matthew Garrett <mgarrett@aurora.tech>,
-        William Roberts <bill.c.roberts@gmail.com>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-Message-ID: <Y8tcEtr8Kl3p4qtA@kernel.org>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
- <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
- <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
- <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
- <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Eddie James <eajames@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jgg@ziepe.ca, peterhuewe@gmx.de
+Subject: Re: [PATCH v2 2/2] tpm: Add reserved memory event log
+Message-ID: <Y8ti6RVfLAf2+tau@kernel.org>
+References: <20230113161017.1079299-1-eajames@linux.ibm.com>
+ <20230113161017.1079299-3-eajames@linux.ibm.com>
+ <d30d23f2-46d0-acfc-4356-49e82b027a9b@linux.ibm.com>
+ <3161efa3-2e72-bcc4-95d9-736a55f6535e@linux.ibm.com>
+ <adced60c-3abe-8f14-9146-e15cee98d5ee@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
+In-Reply-To: <adced60c-3abe-8f14-9146-e15cee98d5ee@linux.ibm.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,40 +58,25 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > <bill.c.roberts@gmail.com> wrote:
-> > 
-> > > What's the use case of using the creation data and ticket in this
-> > > context? Who gets the creationData and the ticket?
-> > > Could a user supplied outsideInfo work? IIRC I saw some patches
-> > > flying around where the sessions will get encrypted and presumably
-> > > correctly as well. This would allow the transfer of that
-> > > outsideInfo, like the NV Index PCR value to be included and
-> > > integrity protected by the session HMAC.
-> > 
-> > The goal is to ensure that the key was generated by the kernel. In
-> > the absence of the creation data, an attacker could generate a
-> > hibernation image using their own key and trick the kernel into
-> > resuming arbitrary code. We don't have any way to pass secret data
-> > from the hibernate kernel to the resume kernel, so I don't think
-> > there's any easy way to do it with outsideinfo.
+On Wed, Jan 18, 2023 at 10:01:16AM -0500, Stefan Berger wrote:
 > 
-> Can we go back again to why you can't use locality?  It's exactly
-> designed for this since locality is part of creation data.  Currently
-> everything only uses locality 0, so it's impossible for anyone on Linux
-> to produce a key with anything other than 0 in the creation data for
-> locality.  However, the dynamic launch people are proposing that the
-> Kernel should use Locality 2 for all its operations, which would allow
-> you to distinguish a key created by the kernel from one created by a
-> user by locality.
 > 
-> I think the previous objection was that not all TPMs implement
-> locality, but then not all laptops have TPMs either, so if you ever
-> come across one which has a TPM but no locality, it's in a very similar
-> security boat to one which has no TPM.
+> On 1/18/23 09:49, Eddie James wrote:
+> > 
+> > On 1/18/23 07:27, Stefan Berger wrote:
+> > > 
+> > > 
+> > > On 1/13/23 11:10, Eddie James wrote:
+> > > > Some platforms may desire to pass the event log up to linux in the
+> > > 
+> > > Which platforms are these that work like this?
+> > 
+> > 
+> > Platforms booting from U-Boot without EFI. So at the moment, IBM's OpenBMC systems hope to use this.
+> 
+> It may be worth to mention this in the patch description in case someone wonders which
+> systems would take that path.
 
-Kernel could try to use locality 2 and use locality 0 as fallback.
++1
 
 BR, Jarkko
