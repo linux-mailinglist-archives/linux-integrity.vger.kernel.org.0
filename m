@@ -2,62 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9136761BE
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Jan 2023 00:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADAD6761DC
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Jan 2023 01:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjATXrQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Jan 2023 18:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S229518AbjAUAEU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Jan 2023 19:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjATXrQ (ORCPT
+        with ESMTP id S229511AbjAUAET (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Jan 2023 18:47:16 -0500
+        Fri, 20 Jan 2023 19:04:19 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A50712855;
-        Fri, 20 Jan 2023 15:47:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489921630A;
+        Fri, 20 Jan 2023 16:04:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD695B82A99;
-        Fri, 20 Jan 2023 23:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009E0C433EF;
-        Fri, 20 Jan 2023 23:47:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00BE2B81FA4;
+        Sat, 21 Jan 2023 00:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515AAC433D2;
+        Sat, 21 Jan 2023 00:04:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674258432;
-        bh=0UTo512SxTtTGc9vnyttJwZavTdapDdH6OHtTgTtZTw=;
+        s=k20201202; t=1674259455;
+        bh=iQb7Fc/u/8EmQtoJ7rN3tFo8n6W4Tiv/o4BAl7ymRus=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e5MjcFSMgJO/CmMsqY474TOH38GxPhM6n8jFnx/2OseJ8ZRTETCPKn1+jlBmh+lH+
-         /CWSgT+iYE6ExbFf8Rl0txUbmMPIi01alCKYwEy3FysA05TgsWjUSlE92t7rfeN7lF
-         LwnUm/RYi9jaApJ7NQ16WmyJ+7o1KDeZm+SYKnfqxBhqzoeORSK3EJF4bchN+mlHJd
-         4b26CX7C8tpyBP74oQ2QzvGd01+zuQ2X19sZZ2En4ixI9XKra9Ds+DaOt16lTXzOHy
-         rIeAIXPXnUDWMZ8vxJlYn1o7ctSzkNSNKr+ptDz8P0Dfm/od80iT9vvF/GI+qeUlG/
-         1iO3KVVpalIJQ==
-Date:   Fri, 20 Jan 2023 23:47:09 +0000
+        b=HB+uNgKwCoCcYgYcMpRtfzWDeu2zVr2B0nX18L3kazH1qCLkmyM24gfj8k1ZMelrG
+         Knk1Q7sxvMY3GnUW2DLmRNgaf6BsMAs8rQOaKqFUGti6PY64w5RyJDyVFhiyE0/hzV
+         g5pEkJOThxPEuNBTE51aGRUh26H6itAvWFmebBrVd7V6pK9rDI5Ukl0VMV4mB/BPkN
+         IZlCL8fcDJeRPsGcsT/n1zXbuFdc9TQO79PX1hrSXDIbohrL5LBO/c1jVJyH8sVUMb
+         VfGCnrx3QmbGYdzQXGOaVJEha27fUo5bRGTAN8lOYdVnGZtgAfXtMxDz/LfOo5ulW1
+         JX0MXuUkqzhpw==
+Date:   Sat, 21 Jan 2023 00:03:57 +0000
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Vlastimil Babka <vbabka@suse.cz>
 Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
         Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
         regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
         linux-integrity@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Altmanninger <aclopte@gmail.com>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-Message-ID: <Y8sn/fLG0PGr4WA5@kernel.org>
-References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
- <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
- <Y60RoP77HnwaukEA@zx2c4.com>
- <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <Y7w74EBYP3+FHlkw@zx2c4.com>
- <58d7a42c-9e6b-ab2a-617f-d5e373bf63cb@suse.cz>
+        Johannes Altmanninger <aclopte@gmail.com>,
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM
+ suspend fails
+Message-ID: <Y8sr7YJ8e8eSpPFv@kernel.org>
+References: <Y7dPV5BK6jk1KvX+@zx2c4.com>
+ <20230106030156.3258307-1-Jason@zx2c4.com>
+ <Y8U4kwTPpMet13Ks@kernel.org>
+ <af2e5a17-514b-8759-2464-7ebb384a17ba@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <58d7a42c-9e6b-ab2a-617f-d5e373bf63cb@suse.cz>
+In-Reply-To: <af2e5a17-514b-8759-2464-7ebb384a17ba@suse.cz>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,74 +67,110 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 06:19:48PM +0100, Vlastimil Babka wrote:
-> On 1/9/23 17:08, Jason A. Donenfeld wrote:
-> > Hi Thorsten,
+On Mon, Jan 16, 2023 at 03:00:03PM +0100, Vlastimil Babka wrote:
+> On 1/16/23 12:44, Jarkko Sakkinen wrote:
+> > On Fri, Jan 06, 2023 at 04:01:56AM +0100, Jason A. Donenfeld wrote:
+> >> TPM 1 is sometimes broken across system suspends, due to races or
+> >> locking issues or something else that haven't been diagnosed or fixed
+> >> yet, most likely having to do with concurrent reads from the TPM's
+> >> hardware random number generator driver. These issues prevent the system
+> >> from actually suspending, with errors like:
+> >> 
+> >>   tpm tpm0: A TPM error (28) occurred continue selftest
+> >>   ...
 > > 
-> > On Thu, Jan 05, 2023 at 02:59:15PM +0100, Thorsten Leemhuis wrote:
-> >> On 29.12.22 05:03, Jason A. Donenfeld wrote:
-> >>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
-> >>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
-> >>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening again
-> >>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
-> >>>>> "tpm_try_transmit" error this time. The first indication of a problem
-> >>>>> is this during a resume from suspend to ram:
-> >>>>>
-> >>>>> tpm tpm0: A TPM error (28) occurred continue selftest
-> >>>>>
-> >>>>> and then periodically 
-> >>>>>
-> >>>>> tpm tpm0: A TPM error (28) occurred attempting get random
-> >>>>
-> >>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
-> >>>> original problem was reported against TPM 2.0  because of a missing
-> >>>> try_get_ops().
-> >>>
-> >>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
-> >>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
-> >>> considering it's the same hardware from Vlastimil causing this. I also
-> >>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
-> >>> that's not correct.
-> >>
-> >> James, are you or some other TPM developer looking into this? Or is this
-> >> deadlocked now? And if so: how can we get this unstuck to get this
-> >> regression solved?
-> >>
-> >> Side note: I wonder if the problem that Johannes reported yesterday in
-> >> this thread (
-> >> https://lore.kernel.org/all/Y7VCcgHUC6JtnO2b@gmail.com/
-> >> ) is related or something else, as it seems his issue happens with 6.1,
-> >> while Vlastimil's problems should be fixed there. Or am I missing something?
+> > <REMOVE>
 > > 
-> > So, this is now in rc3:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1382999aa0548a171a272ca817f6c38e797c458c
+> >>   tpm tpm0: A TPM error (28) occurred attempting get random
+> >>   ...
+> >>   tpm tpm0: Error (28) sending savestate before suspend
+> >>   tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
+> >>   tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
+> >>   tpm_tis 00:08: PM: failed to suspend: error 28
+> >>   PM: Some devices failed to suspend, or early wake event detected
 > > 
-> > That should help avoid the worst of the issue -- laptop not sleeping.
-> > But the race or whatever it is still does exist. So you might want to
-> > keep this in your tracker to periodically nudge the TPM folks about it.
+> > </REMOVE>
+> > 
+> > Unrelated to thix particular fix.
 > 
-> Heh, booted rc3 and managed to hit it on very first suspend to ram attempt:
+> Not sure I understand.
+> AFAIK this is not a proper fix, but a workaround for when laptop suspend no
+> longer works because TPM fails to suspend. The error messages quoted above
+> are very much related to the problem of suspend not working, and this patch
+> did work as advertised at least for me. I see errors but they don't prevent
+> suspend anymore:
 > 
-> tpm tpm0: A TPM error (28) occurred continue selftest
+> https://lore.kernel.org/all/58d7a42c-9e6b-ab2a-617f-d5e373bf63cb@suse.cz/
 > 
-> But thanks to the patch, the next suspend worked:
+> >> This issue was partially fixed by 23393c646142 ("char: tpm: Protect
+> >> tpm_pm_suspend with locks"), in a last minute 6.1 commit that Linus took
+> >> directly because the TPM maintainers weren't available. However, it
+> >> seems like this just addresses the most common cases of the bug, rather
+> >> than addressing it entirely. So there are more things to fix still,
+> >> apparently.
+> >> 
+> >> In lieu of actually fixing the underlying bug, just allow system suspend
+> >> to continue, so that laptops still go to sleep fine. Later, this can be
+> >> reverted when the real bug is fixed.
+> >> 
+> >> Link: https://lore.kernel.org/lkml/7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz/
+> >> Cc: stable@vger.kernel.org # 6.1+
+> >> Reported-by: Vlastimil Babka <vbabka@suse.cz>
+> >> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> >> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> >> ---
+> >> This is basically untested and I haven't worked out if there are any
+> >> awful implications of letting the system sleep when TPM suspend fails.
+> >> Maybe some PCRs get cleared and that will make everything explode on
+> >> resume? Maybe it doesn't matter? Somebody well versed in TPMology should
+> >> probably [n]ack this approach.
+> >> 
+> >>  drivers/char/tpm/tpm-interface.c | 5 ++++-
+> >>  1 file changed, 4 insertions(+), 1 deletion(-)
+> >> 
+> >> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> >> index d69905233aff..6df9067ef7f9 100644
+> >> --- a/drivers/char/tpm/tpm-interface.c
+> >> +++ b/drivers/char/tpm/tpm-interface.c
+> >> @@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
+> >>  	}
+> >>  
+> >>  suspended:
+> >> -	return rc;
+> >> +	if (rc)
+> >> +		pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
+> >> +		       chip->dev_num, rc);
+> >> +	return 0;
+> >>  }
+> >>  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+> >>  
+> >> -- 
+> >> 2.39.0
+> >> 
+> > 
+> > This tpm_tis local issue, nothing to do with tpm_pm_suspend(). Executing
+> > the selftest as part of wake up, is TPM 1.2 dTPM specific requirement, and
+> > the call is located in tpm_tis_resume() [*].
+> > 
+> > [*] https://lore.kernel.org/lkml/Y8U1QxA4GYvPWDky@kernel.org/
 > 
-> [  236.598900] tpm tpm0: Error (28) sending savestate before suspend
-> [  236.598915] tpm_tis 00:08: Ignoring error 28 while suspending
+> Yes the changelog at the top does say "due to races or locking issues or
+> something else that haven't been diagnosed or fixed yet"
 > 
-> and on resume again:
-> 
-> [  238.196645] tpm tpm0: A TPM error (28) occurred continue selftest
-> 
-> and indeed now I keep getting (as expected)
-> 
-> [  399.671077] tpm tpm0: A TPM error (28) occurred attempting get random
-> 
-> So hopefully somebody will look into the root cause at some point.
+> I don't know what causes the TPM to start returning error 28 on resume and
+> never recover from it. But it didn't happen before hwrng started using the
+> TPM. Before that, it was probably just the selftest ever doing anything with
+> the TPM, and on its own I don't recall it ever (before 6.1) failing and
+> preventing further suspend/resume.
 
-I would start by using tpm1_auto_startup() also here, and see
-the effect:
+Would it be possible to test this theory by commenting out tpm_add_hwrng()
+call from tpm_chip_register()?
 
-https://lore.kernel.org/linux-integrity/Y8U1QxA4GYvPWDky@kernel.org/
+Since they are called sequentially any sort of concurrency issue can be
+probably ruled out.
+
+One thing that I noticed is that probably it would be more safe-play to
+move tpm_add_hwrng() call after creating the character device, as there's
+no need to do it before anything else.
 
 BR, Jarkko
