@@ -2,125 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3711967725A
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Jan 2023 21:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAE9677386
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Jan 2023 00:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjAVUac (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 22 Jan 2023 15:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
+        id S230263AbjAVXmC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 22 Jan 2023 18:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjAVUab (ORCPT
+        with ESMTP id S230023AbjAVXmB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 22 Jan 2023 15:30:31 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F57193CE;
-        Sun, 22 Jan 2023 12:30:26 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30MEZ4m8011623;
-        Sun, 22 Jan 2023 20:29:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=7ovEDdouXJfZvNrAmKNf72ri1q//XHfeiPgg8MjldS4=;
- b=Fp0TLzjiEkDT3v4QJfXxGwxG1mL+yLLNa8VQw1UA7E16NryPcdcsg3F5fhBLE38QXnEX
- I9v77vTbpKoCMMkAqJuHXOSynCmoj8yf1Q/j3cmNCeK03puqMEk76fMf+6ROS94WCiJ6
- +EFVp3ng+6uT26Rvewt1tLFsUQEYjGr7625xl6RUV3vQkmYSSrFWDF3NSDuusWSIdgSB
- GACPNbK55tEMWfbI+TtqStYge9TAxmEVq3bkFq1SIKjCGZNZ7gIm5eIH2NXNRRpRaEQR
- mwjmxBIvbm9X7Z1grd7UiAeDty54bIh4qJyoexdTWsIoXAMDMoMWhtUDk9fRKkNBpe0b YA== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n8swmea5n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 22 Jan 2023 20:29:58 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30MHRtuv019851;
-        Sun, 22 Jan 2023 20:29:58 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3n87p6tt2u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 22 Jan 2023 20:29:58 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30MKTuR246400000
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 22 Jan 2023 20:29:57 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B608E58052;
-        Sun, 22 Jan 2023 20:29:56 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AAEF058050;
-        Sun, 22 Jan 2023 20:29:55 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.45.232])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Sun, 22 Jan 2023 20:29:55 +0000 (GMT)
-Message-ID: <23e4bce238bee0591ba6fb3566f7b42f6719331f.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] security: Restore passing final prot to
- ima_file_mmap()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Sun, 22 Jan 2023 15:29:54 -0500
-In-Reply-To: <e1a1fe029aea21ba533cb6196e64f29c7b052c57.camel@huaweicloud.com>
-References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
-         <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
-         <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
-         <CAHC9VhSamRVpgrDrSuc2dsbbw3-pvjDi9BsFWoWssHkAD2W5vA@mail.gmail.com>
-         <a764acb285d0616c8608eaab8671ceb9c22cb390.camel@huaweicloud.com>
-         <058f1bdf4ba75c3a00918cefbf1be32477b51639.camel@linux.ibm.com>
-         <e1a1fe029aea21ba533cb6196e64f29c7b052c57.camel@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: s6BgAZpAIkV9EueSx_57O9LauKbcJdq5
-X-Proofpoint-GUID: s6BgAZpAIkV9EueSx_57O9LauKbcJdq5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-22_16,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=699
- priorityscore=1501 bulkscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 spamscore=0 mlxscore=0 suspectscore=0
- impostorscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301220196
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 22 Jan 2023 18:42:01 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A47411EB2
+        for <linux-integrity@vger.kernel.org>; Sun, 22 Jan 2023 15:41:57 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id x40so15743710lfu.12
+        for <linux-integrity@vger.kernel.org>; Sun, 22 Jan 2023 15:41:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zjuqfJ4N+xivLIIZdZR8REthLcBLstWRajPLFyBTaEM=;
+        b=a9/90LjEvgCbhxaGnOoPEm4zqqLRCeb5duaUXVogxmilJ/35ztYjEX3+tQDqB3F7YQ
+         lY4tZe0AuAaK9AIP/0Xs7hqArb9cTQnRqz7/4Phn4HaqmqulhESY5AqqQgN1nZ2kt7tC
+         Al//YuXfP/nvgnYEfjcr1wT/qsPnfLzfvbwczz3ZC1bYoSBLn2OLUkhrBHRxcDPOv70Q
+         9xALPWdYznHC8njE63PqAV8iuzmnpRgFbOLjxVJMfWQTB27EgdR1E9Hpsi38udaPvcpT
+         2GZlDX59al6ZYx0Px5b9iGTUyCo2CY5Z+2UbY/9u9cZP2Rxh5XRhl68Bw8s8O7cYB2H0
+         aRsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zjuqfJ4N+xivLIIZdZR8REthLcBLstWRajPLFyBTaEM=;
+        b=o3kJORHErEry8DDF87oVfjAN1+frpEUJNi0pU8NR45IRVgo906O+tb4Lg5G2JORq0x
+         6pEOFZ1Z1DaxHtnP7wHyTq64u4BKwTLH10zQzoQYLz8mnFruUeXj7+F0PCnIpWHZfUJc
+         yFxle6oXn4Nnu5YAmVdW+9SwQ6/C7ZFgcW9/x3ctVCD19rssYMCqF5vNGS5Mc6XPB9eb
+         bL7i6EbK/zMxACVRY6o2+8Imj1XVeYzFRbIlMyJ+meTpMXYuGp5UJvIeQM8CU8CMhM6v
+         13J2eF9NhOG62kP+hEJ+ynV6KwrrBMDwJhnthHjJ6fhNQQFBqSvx+scEsN/zcBZB149V
+         H8WQ==
+X-Gm-Message-State: AFqh2krHpKcSNI7+azJyuSuXFFfouv19SrdNRzpfEfEkJ90m02oFoqhP
+        J4s9roFiweM+qdG1Km7JWwQP5WT3sWCEgUHBVQo=
+X-Google-Smtp-Source: AMrXdXtUy0a6sr4zx3aywzpUHIn1MpaBaJ0ugHd3D9BRltbjkguHIEKrCNRAql0zSVfjm7ZZiFYdBQ==
+X-Received: by 2002:a19:2d46:0:b0:4a4:68b7:d645 with SMTP id t6-20020a192d46000000b004a468b7d645mr4761304lft.44.1674430914987;
+        Sun, 22 Jan 2023 15:41:54 -0800 (PST)
+Received: from google.com (38.165.88.34.bc.googleusercontent.com. [34.88.165.38])
+        by smtp.gmail.com with ESMTPSA id a4-20020a056512390400b004949f7cbb6esm6403590lfu.79.2023.01.22.15.41.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 15:41:54 -0800 (PST)
+Date:   Sun, 22 Jan 2023 23:41:48 +0000
+From:   Matt Bobrowski <mattbobrowski@google.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] ima: fix error handling logic when file measurement
+ failed
+Message-ID: <Y83JvB7+IwxqRgMZ@google.com>
+References: <Y7T1eAAVXoZ70MPM@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7T1eAAVXoZ70MPM@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2023-01-13 at 11:52 +0100, Roberto Sassu wrote:
+Hey Mimi,
 
-> > > If we add a new policy keyword, existing policies would not be updated
-> > > unless the system administrator notices it. If a remote attestation
-> > > fails, the administrator has to look into it.
-> > 
-> > Verifying the measurement list against a TPM quote should work
-> > regardless of additional measurements.  The attestation server,
-> > however, should also check for unknown files.
-> > 
-> > > Maybe we can introduce a new hook called MMAP_CHECK_REQ, so that an
-> > > administrator could change the policy to have the current behavior, if
-> > > the administrator wishes so.
+Just a gentle ping on this one. 
 
-<snip>
-
-> > However "_REQ" could mean either requested or required.
+On Wed, Jan 04, 2023 at 03:41:44AM +0000, Matt Bobrowski wrote:
+> Restore the error handling logic so that when file measurement fails,
+> the respective iint entry is not left with the digest data being
+> populated with zeroes.
 > 
-> It was to recall reqprot. I could rename to MMAP_CHECK_REQPROT.
+> Fixes: 54f03916fb89 ("ima: permit fsverity's file digests in the IMA measurement list")
+> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+> ---
+>  security/integrity/ima/ima_api.c  | 2 +-
+>  security/integrity/ima/ima_main.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+> index c1e76282b5ee..1e3a7a4f8833 100644
+> --- a/security/integrity/ima/ima_api.c
+> +++ b/security/integrity/ima/ima_api.c
+> @@ -292,7 +292,7 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+>  		result = ima_calc_file_hash(file, &hash.hdr);
+>  	}
+>  
+> -	if (result == -ENOMEM)
+> +	if (result && result != -EBADF && result != -EINVAL)
+>  		goto out;
+>  
+>  	length = sizeof(hash.hdr) + hash.hdr.length;
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 377300973e6c..b1ae0f2751f1 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -337,7 +337,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+>  	hash_algo = ima_get_hash_algo(xattr_value, xattr_len);
+>  
+>  	rc = ima_collect_measurement(iint, file, buf, size, hash_algo, modsig);
+> -	if (rc == -ENOMEM)
+> +	if (rc != 0 && rc != -EBADF && rc != -EINVAL)
+>  		goto out_locked;
+>  
+>  	if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 
-That sounds good.
-
--- 
-thanks,
-
-Mimib
-
-
+/M
