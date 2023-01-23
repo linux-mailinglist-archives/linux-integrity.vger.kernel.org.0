@@ -2,132 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1AE67838F
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Jan 2023 18:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CB867890D
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Jan 2023 22:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjAWRsj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Jan 2023 12:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S232777AbjAWVEA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Jan 2023 16:04:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAWRsi (ORCPT
+        with ESMTP id S232353AbjAWVD7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:48:38 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63897ED7;
-        Mon, 23 Jan 2023 09:48:37 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id 3so13765340vsq.7;
-        Mon, 23 Jan 2023 09:48:37 -0800 (PST)
+        Mon, 23 Jan 2023 16:03:59 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CBF3526C
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Jan 2023 13:03:57 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id o13so12882031pjg.2
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Jan 2023 13:03:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=paul-moore.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5T0R8xw8fLnWbY1bVzZ9vubTFqhlFK/RWCUsjgwBlk0=;
-        b=mQ/DwTxG5eOQGFJv2eC2szm9EanBABfaeHDADhlyiz5KEeo1n5ITjX65tdcjBCu0gc
-         Vklg1PLCIG6T3B1XiWYLzg3Zsbj9GpmCeGTzlWDtBEwZB1GHD5vLtJL4mcnkTSRcDGME
-         KqncecNfpF+ufysoO3TTLOdHm2ugvGP8UFCYTYLDDLybVDXO5MODUAfuYGS5OOLgq73I
-         LO3pGeS1yEiR+OltOytCdnIfPM19fmQpFYpWaQtJugD2wAOk0IUIZjbYqL1FVZ6lI9fq
-         kwriEf2MOBjM2d/1IF8uYY8HUjFQOHVOVwHC7UDRf3DWsuY34ZIyevNzWVysYu4fjKat
-         d3Eg==
+        bh=QYRKS6tK0AlWUYVU3JpIqYKEaEflzI/5b9bQPlwSQRk=;
+        b=RQJpS5bvHF4bxpPevxaJjNW3kpOhnZzXPQGREFopGamxR7V572BdQUe4yPrg8PUVsd
+         zFzcPI2g0DbV0kWC1xfx50eoLy2Nn/YHpllWhCHCA1NPVYz7oJnQrktxBVsJe6T1e+V8
+         p1c+ycDNxaZnW0SDTwbjdRWLossVWgxd5bLaU4Qq2ezwha56am0ywXzm0rgui6vsXkc9
+         5wW6a/smQp3381B4MXFvGbvAoVO8ekkw8orzE8EDSsTJUknsKutErStCvDlkj54w76BB
+         YRBtgncznYske9y2p7AEf6SzbFhv4RiC/GmH4ActQD0mCR3x0zhNg5jVmQP2R5I3APFP
+         6rUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5T0R8xw8fLnWbY1bVzZ9vubTFqhlFK/RWCUsjgwBlk0=;
-        b=NfQXkVDmKVwM2s/hPevCRYJWUpKdSK6Vl2vllhYJ/mQTv9/5TdyFt9fZBwh3zaKWAX
-         W+fDsfn1kZSaqf4cLXOLK70mOKTx368q4Fs9g6fk0o4oQw4i1iTE8eh/U0OgtmPiDhnA
-         F0QPrPcro4beWk+HalgmNxl6gx773DaKTT7GqvaYgkS62Dvfyo/8cEWzy54T3h/CNVru
-         MAuslWOtPr0U2ZbvvHlx67MrPXCxaUayazd87RXX8eUmp/zwJypql5KpcYXGxO8Ta8jL
-         uYeIjt5CgAPOND1uaNhr7L45rIDh1gbi1geP6/jUoJ2q5ottoqbKDdsP/1sTq4DGy8A8
-         6lQQ==
-X-Gm-Message-State: AFqh2kqsHBd9i/wa2kJDBHZ4C0bclKPh+LJ62/xsu0a3Y57fATkUwu9I
-        M3wPubY10kspWnnL80p1dPtwNq8cuK2TL0YRSy0=
-X-Google-Smtp-Source: AMrXdXvuPwYtIEZpsWrv4ZFsxzPB4C+HGxA0g+XpqN1OFuaz75cvM0xxhTuLaS2ziKK3sI9p9uaL/zAk4sliCAhbxEc=
-X-Received: by 2002:a67:efc2:0:b0:3d0:d941:d598 with SMTP id
- s2-20020a67efc2000000b003d0d941d598mr4303312vsp.8.1674496116700; Mon, 23 Jan
- 2023 09:48:36 -0800 (PST)
+        bh=QYRKS6tK0AlWUYVU3JpIqYKEaEflzI/5b9bQPlwSQRk=;
+        b=nurt4TSGiXvbtmwlGrOkBxP+3+ycTLPS3s0jnLx5Bpqum6a6uY2viQ+p8s3B+OWFQo
+         REHBc4msecBt7kP3p/tpm84Jk3WhhWP4QKeBXJGjZkbjKCKb+yjX7ddK59EDU0D+P4zx
+         myeGaOxaSurVQuS1TbT6t/GDskki64XYJGsPCnvEhqUtIsmiP5EgVwpcXE4t/aGXpDWm
+         Qbe8UiUE93Ggte/jDReXC1mrMVB17S8Jr7zp4AfzsnL2o/ya53scZH/Z/fs8sEcN4sUQ
+         maBQkjp+RzTILlUGxJCFr1DWk6VBFhHu49oxGlfcYIS6YBW9sZTDAKD7v9/DNQ0vMWb3
+         vW6A==
+X-Gm-Message-State: AFqh2kqZh/p6wK0NOM/hQ8tmT+IWAmc3I7tT11RVqpqHyKBFsCTPlt3D
+        XCAb9+c8pep4r6kDUxu6rb6sJwenJvSIMWTX7WZu
+X-Google-Smtp-Source: AMrXdXux2G/SuTCc/RUxY/DLSxHTuuQuPv2N05DFnASMKwMSo03QpwuFQI1Y9345VD/C3jEW3vlPiDkvTVqmGTEGkio=
+X-Received: by 2002:a17:90a:17a1:b0:229:9ffe:135b with SMTP id
+ q30-20020a17090a17a100b002299ffe135bmr2899277pja.72.1674507837468; Mon, 23
+ Jan 2023 13:03:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
- <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
- <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
- <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
- <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com> <Y8tcEtr8Kl3p4qtA@kernel.org>
-In-Reply-To: <Y8tcEtr8Kl3p4qtA@kernel.org>
-From:   William Roberts <bill.c.roberts@gmail.com>
-Date:   Mon, 23 Jan 2023 11:48:25 -0600
-Message-ID: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
+ <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
+ <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
+ <CAHC9VhSamRVpgrDrSuc2dsbbw3-pvjDi9BsFWoWssHkAD2W5vA@mail.gmail.com>
+ <a764acb285d0616c8608eaab8671ceb9c22cb390.camel@huaweicloud.com>
+ <058f1bdf4ba75c3a00918cefbf1be32477b51639.camel@linux.ibm.com>
+ <e1a1fe029aea21ba533cb6196e64f29c7b052c57.camel@huaweicloud.com>
+ <CAHC9VhT--Q8QkFmKTpD3zjryDL19V9myfr3PuzSRo_bDzDRyqQ@mail.gmail.com> <dfb387003ee50db5fe0d71bc825cc39df47f74ed.camel@huaweicloud.com>
+In-Reply-To: <dfb387003ee50db5fe0d71bc825cc39df47f74ed.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 23 Jan 2023 16:03:46 -0500
+Message-ID: <CAHC9VhSkx58Q=U8GfyCSn5MvRv95myOwu9yweoYsG82a7K3oCQ@mail.gmail.com>
+Subject: Re: [PATCH v2] security: Restore passing final prot to ima_file_mmap()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > > <bill.c.roberts@gmail.com> wrote:
-> > >
-> > > > What's the use case of using the creation data and ticket in this
-> > > > context? Who gets the creationData and the ticket?
-> > > > Could a user supplied outsideInfo work? IIRC I saw some patches
-> > > > flying around where the sessions will get encrypted and presumably
-> > > > correctly as well. This would allow the transfer of that
-> > > > outsideInfo, like the NV Index PCR value to be included and
-> > > > integrity protected by the session HMAC.
-> > >
-> > > The goal is to ensure that the key was generated by the kernel. In
-> > > the absence of the creation data, an attacker could generate a
-> > > hibernation image using their own key and trick the kernel into
-> > > resuming arbitrary code. We don't have any way to pass secret data
-> > > from the hibernate kernel to the resume kernel, so I don't think
-> > > there's any easy way to do it with outsideinfo.
+On Mon, Jan 23, 2023 at 3:30 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Fri, 2023-01-20 at 16:04 -0500, Paul Moore wrote:
+> > On Fri, Jan 13, 2023 at 5:53 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On Thu, 2023-01-12 at 12:45 -0500, Mimi Zohar wrote:
+> > > > On Thu, 2023-01-12 at 13:36 +0100, Roberto Sassu wrote:
+> > > > > On Wed, 2023-01-11 at 09:25 -0500, Paul Moore wrote:
+> > > > > > On Wed, Jan 11, 2023 at 4:31 AM Roberto Sassu
+> > > > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > > > On Fri, 2023-01-06 at 16:14 -0500, Paul Moore wrote:
+> > > > > > > > On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
+> > > > > > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > > > >
+> > > > > > > > > Commit 98de59bfe4b2f ("take calculation of final prot in
+> > > > > > > > > security_mmap_file() into a helper") moved the code to update prot with the
+> > > > > > > > > actual protection flags to be granted to the requestor by the kernel to a
+> > > > > > > > > helper called mmap_prot(). However, the patch didn't update the argument
+> > > > > > > > > passed to ima_file_mmap(), making it receive the requested prot instead of
+> > > > > > > > > the final computed prot.
+> > > > > > > > >
+> > > > > > > > > A possible consequence is that files mmapped as executable might not be
+> > > > > > > > > measured/appraised if PROT_EXEC is not requested but subsequently added in
+> > > > > > > > > the final prot.
+> > > > > > > > >
+> > > > > > > > > Replace prot with mmap_prot(file, prot) as the second argument of
+> > > > > > > > > ima_file_mmap() to restore the original behavior.
+> > > > > > > > >
+> > > > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > > > Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
+> > > > > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > > > > ---
+> > > > > > > > >  security/security.c | 2 +-
+> > > > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/security/security.c b/security/security.c
+> > > > > > > > > index d1571900a8c7..0d2359d588a1 100644
+> > > > > > > > > --- a/security/security.c
+> > > > > > > > > +++ b/security/security.c
+> > > > > > > > > @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
+> > > > > > > > >                                         mmap_prot(file, prot), flags);
+> > > > > > > > >         if (ret)
+> > > > > > > > >                 return ret;
+> > > > > > > > > -       return ima_file_mmap(file, prot);
+> > > > > > > > > +       return ima_file_mmap(file, mmap_prot(file, prot));
+> > > > > > > > >  }
+> > > > > > > >
+> > > > > > > > This seems like a reasonable fix, although as the original commit is
+> > > > > > > > ~10 years old at this point I am a little concerned about the impact
+> > > > > > > > this might have on IMA.  Mimi, what do you think?
 > >
-> > Can we go back again to why you can't use locality?  It's exactly
-> > designed for this since locality is part of creation data.  Currently
-> > everything only uses locality 0, so it's impossible for anyone on Linux
-> > to produce a key with anything other than 0 in the creation data for
-> > locality.  However, the dynamic launch people are proposing that the
-> > Kernel should use Locality 2 for all its operations, which would allow
-> > you to distinguish a key created by the kernel from one created by a
-> > user by locality.
-> >
-> > I think the previous objection was that not all TPMs implement
-> > locality, but then not all laptops have TPMs either, so if you ever
-> > come across one which has a TPM but no locality, it's in a very similar
-> > security boat to one which has no TPM.
+> > So ... where do we stand on this patch, Mimi, Roberto?  I stand by my
+> > original comment, but I would want to see an ACK from Mimi at the very
+> > least before merging this upstream.  If this isn't ACK-able, do we
+> > have a plan to resolve this soon?
 >
-> Kernel could try to use locality 2 and use locality 0 as fallback.
+> Sorry, I had business trips last week. Will send the patches this week.
 
-I don't think that would work for Matthew, they need something
-reliable to indicate key provenance.
+No worries, I just wasn't sure of the status and wanted to check in on this.
 
-I was informed that all 5 localities should be supported starting
-with Gen 7 Kaby Lake launched in 2016. Don't know if this is
-still "too new".
-
->
-> BR, Jarkko
+-- 
+paul-moore.com
