@@ -2,110 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F3A678052
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Jan 2023 16:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1AE67838F
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Jan 2023 18:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbjAWPqp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Jan 2023 10:46:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
+        id S231705AbjAWRsj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Jan 2023 12:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbjAWPqo (ORCPT
+        with ESMTP id S229551AbjAWRsi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:46:44 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9554B5FFD
-        for <linux-integrity@vger.kernel.org>; Mon, 23 Jan 2023 07:46:43 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P0vQW3rC1z9xFGW
-        for <linux-integrity@vger.kernel.org>; Mon, 23 Jan 2023 23:38:43 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAX6F7Nq85j+wS9AA--.11533S2;
-        Mon, 23 Jan 2023 16:46:28 +0100 (CET)
-Message-ID: <9eecfa1cd628d3d7c832f2002c0663259d9a587a.camel@huaweicloud.com>
-Subject: Re: [PATCH ima-evm-utils v2 6/9] Add tests for EVM portable
- signatures
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 23 Jan 2023 16:46:06 +0100
-In-Reply-To: <4237c8d0c61038abfce21aa461611305bbe19adc.camel@linux.ibm.com>
-References: <20230112122426.3759938-1-roberto.sassu@huaweicloud.com>
-         <20230112122426.3759938-7-roberto.sassu@huaweicloud.com>
-         <4b39d880d2ddfec667608222d7ca7a0eed5fe28b.camel@linux.ibm.com>
-         <724585556e02178d0b9ce29af057a93ac72f0a87.camel@huaweicloud.com>
-         <4237c8d0c61038abfce21aa461611305bbe19adc.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 23 Jan 2023 12:48:38 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63897ED7;
+        Mon, 23 Jan 2023 09:48:37 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id 3so13765340vsq.7;
+        Mon, 23 Jan 2023 09:48:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5T0R8xw8fLnWbY1bVzZ9vubTFqhlFK/RWCUsjgwBlk0=;
+        b=mQ/DwTxG5eOQGFJv2eC2szm9EanBABfaeHDADhlyiz5KEeo1n5ITjX65tdcjBCu0gc
+         Vklg1PLCIG6T3B1XiWYLzg3Zsbj9GpmCeGTzlWDtBEwZB1GHD5vLtJL4mcnkTSRcDGME
+         KqncecNfpF+ufysoO3TTLOdHm2ugvGP8UFCYTYLDDLybVDXO5MODUAfuYGS5OOLgq73I
+         LO3pGeS1yEiR+OltOytCdnIfPM19fmQpFYpWaQtJugD2wAOk0IUIZjbYqL1FVZ6lI9fq
+         kwriEf2MOBjM2d/1IF8uYY8HUjFQOHVOVwHC7UDRf3DWsuY34ZIyevNzWVysYu4fjKat
+         d3Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5T0R8xw8fLnWbY1bVzZ9vubTFqhlFK/RWCUsjgwBlk0=;
+        b=NfQXkVDmKVwM2s/hPevCRYJWUpKdSK6Vl2vllhYJ/mQTv9/5TdyFt9fZBwh3zaKWAX
+         W+fDsfn1kZSaqf4cLXOLK70mOKTx368q4Fs9g6fk0o4oQw4i1iTE8eh/U0OgtmPiDhnA
+         F0QPrPcro4beWk+HalgmNxl6gx773DaKTT7GqvaYgkS62Dvfyo/8cEWzy54T3h/CNVru
+         MAuslWOtPr0U2ZbvvHlx67MrPXCxaUayazd87RXX8eUmp/zwJypql5KpcYXGxO8Ta8jL
+         uYeIjt5CgAPOND1uaNhr7L45rIDh1gbi1geP6/jUoJ2q5ottoqbKDdsP/1sTq4DGy8A8
+         6lQQ==
+X-Gm-Message-State: AFqh2kqsHBd9i/wa2kJDBHZ4C0bclKPh+LJ62/xsu0a3Y57fATkUwu9I
+        M3wPubY10kspWnnL80p1dPtwNq8cuK2TL0YRSy0=
+X-Google-Smtp-Source: AMrXdXvuPwYtIEZpsWrv4ZFsxzPB4C+HGxA0g+XpqN1OFuaz75cvM0xxhTuLaS2ziKK3sI9p9uaL/zAk4sliCAhbxEc=
+X-Received: by 2002:a67:efc2:0:b0:3d0:d941:d598 with SMTP id
+ s2-20020a67efc2000000b003d0d941d598mr4303312vsp.8.1674496116700; Mon, 23 Jan
+ 2023 09:48:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAX6F7Nq85j+wS9AA--.11533S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF17Xr47uryUXFy3Jr1kZrb_yoW8GF1Dp3
-        yxt3W3KrZIk3s3Jr9Yg3WIqwn2yFn7Kr48X34Ygr4rAr1vv3WDZF1IkF15uFW3KryUCF4S
-        9FWDXw43ZrW7J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgGb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJw
-        CI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnI
-        WIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAGBF1jj4fyBwAAsA
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+ <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+ <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+ <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
+ <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com> <Y8tcEtr8Kl3p4qtA@kernel.org>
+In-Reply-To: <Y8tcEtr8Kl3p4qtA@kernel.org>
+From:   William Roberts <bill.c.roberts@gmail.com>
+Date:   Mon, 23 Jan 2023 11:48:25 -0600
+Message-ID: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-01-23 at 10:43 -0500, Mimi Zohar wrote:
-> On Mon, 2023-01-23 at 16:31 +0100, Roberto Sassu wrote:
-> > On Mon, 2023-01-23 at 09:40 -0500, Mimi Zohar wrote:
-> > > Hi Roberto,
-> > > 
-> > > On Thu, 2023-01-12 at 13:24 +0100, Roberto Sassu wrote:
-> > > > +
-> > > > +key_path="/lib/modules/$(uname -r)/source/certs/signing_key.pem"
-> > > > +if [ -f "$PWD/../signing_key.pem" ]; then
-> > > > +       key_path=$PWD/../signing_key.pem
-> > > > +fi
-> > > > +
-> > > 
-> > > For testing locally, how about first checking the file exists, before
-> > > setting key_path?  On not finding it, perhaps check whether
-> > > "/lib/modules/$(uname -r)/build/certs/signing_key.pem" exists.
-> > 
-> > The precedence is:
-> > 
-> > TST_KEY_PATH -> ../signing_key.pem -> /lib/modules...
-> 
-> This is still /lib/modules, just not "source/", but "build/".
-> 
-> -key_path="/lib/modules/$(uname -r)/source/certs/signing_key.pem"
-> +if [ -f "/lib/modules/$(uname -r)/source/certs/signing_key.pem" ]; then
-> +       key_path="/lib/modules/$(uname -r)/source/certs/signing_key.pem"
-> +elif [ -f "/lib/modules/$(uname -r)/build/certs/signing_key.pem" ]; then
-> +       key_path="/lib/modules/$(uname -r)/build/certs/signing_key.pem"
-> +fi
-> +
+On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
+> > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
+> > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
+> > > <bill.c.roberts@gmail.com> wrote:
+> > >
+> > > > What's the use case of using the creation data and ticket in this
+> > > > context? Who gets the creationData and the ticket?
+> > > > Could a user supplied outsideInfo work? IIRC I saw some patches
+> > > > flying around where the sessions will get encrypted and presumably
+> > > > correctly as well. This would allow the transfer of that
+> > > > outsideInfo, like the NV Index PCR value to be included and
+> > > > integrity protected by the session HMAC.
+> > >
+> > > The goal is to ensure that the key was generated by the kernel. In
+> > > the absence of the creation data, an attacker could generate a
+> > > hibernation image using their own key and trick the kernel into
+> > > resuming arbitrary code. We don't have any way to pass secret data
+> > > from the hibernate kernel to the resume kernel, so I don't think
+> > > there's any easy way to do it with outsideinfo.
+> >
+> > Can we go back again to why you can't use locality?  It's exactly
+> > designed for this since locality is part of creation data.  Currently
+> > everything only uses locality 0, so it's impossible for anyone on Linux
+> > to produce a key with anything other than 0 in the creation data for
+> > locality.  However, the dynamic launch people are proposing that the
+> > Kernel should use Locality 2 for all its operations, which would allow
+> > you to distinguish a key created by the kernel from one created by a
+> > user by locality.
+> >
+> > I think the previous objection was that not all TPMs implement
+> > locality, but then not all laptops have TPMs either, so if you ever
+> > come across one which has a TPM but no locality, it's in a very similar
+> > security boat to one which has no TPM.
+>
+> Kernel could try to use locality 2 and use locality 0 as fallback.
 
-Ok, will add it.
+I don't think that would work for Matthew, they need something
+reliable to indicate key provenance.
 
-Thanks
+I was informed that all 5 localities should be supported starting
+with Gen 7 Kaby Lake launched in 2016. Don't know if this is
+still "too new".
 
-Roberto
-
-> Mimi
-> 
-> > If TST_KEY_PATH is not found, probably it is a good idea to not
-> > fallback to the other alternatives, as it is user input.
-> 
-> 
-
+>
+> BR, Jarkko
