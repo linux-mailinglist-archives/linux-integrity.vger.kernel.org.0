@@ -2,115 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B2A677E39
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Jan 2023 15:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CB0677FCD
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Jan 2023 16:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbjAWOkc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Jan 2023 09:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
+        id S231696AbjAWPcB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Jan 2023 10:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbjAWOka (ORCPT
+        with ESMTP id S231644AbjAWPcA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Jan 2023 09:40:30 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B922202B
-        for <linux-integrity@vger.kernel.org>; Mon, 23 Jan 2023 06:40:27 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30NDMnhI019198;
-        Mon, 23 Jan 2023 14:40:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=abkZgWU+vS4e/zI/Gb803wWkOGEkJ1GdiTlQYddplLo=;
- b=i2EV2uU0XnJSWd8pw3Kay36UkpADRYxfcdfP6SuZJ5GclWArWUp6RsvXxXH87sgwK5zy
- ioRhXn/b/bb3WBM1FXfHJkQmBoSzO3mRD8Jh9gHaZZp/3J23+1K8jGy3vFc+DAyQtuAt
- SPCCIS3E7j1ctptWthvpyC3pabFDbpI4KEMDTdcl7aCC1fxGyrk9whs6N4bWU6kB0XXT
- C5f7VQhXETpcUJqOcjmGeU41Tg9Bu+6FczGBXormBQCvtx62MnGXHytTYiM+pTVMhhbe
- 01vEBCxGY8ya66YzGL+lLbMusnbj+/c7csl5XenX7jEIIgIbjMfVBWEIPXXTvDkNjjOG tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n9u2st66n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 14:40:05 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30NDNMef021489;
-        Mon, 23 Jan 2023 14:40:04 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n9u2st65m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 14:40:04 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30NDkVgs003161;
-        Mon, 23 Jan 2023 14:40:03 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3n87p6vvn5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 14:40:03 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30NEe24E32375512
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Jan 2023 14:40:02 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2505B5805A;
-        Mon, 23 Jan 2023 14:40:02 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1E29B58056;
-        Mon, 23 Jan 2023 14:40:01 +0000 (GMT)
-Received: from sig-9-77-133-110.ibm.com (unknown [9.77.133.110])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 23 Jan 2023 14:40:01 +0000 (GMT)
-Message-ID: <4b39d880d2ddfec667608222d7ca7a0eed5fe28b.camel@linux.ibm.com>
+        Mon, 23 Jan 2023 10:32:00 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4855CF1
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Jan 2023 07:31:59 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P0v5R1lzKz9xFmc
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Jan 2023 23:23:55 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDnbAhaqM5jl82+AA--.11669S2;
+        Mon, 23 Jan 2023 16:31:45 +0100 (CET)
+Message-ID: <724585556e02178d0b9ce29af057a93ac72f0a87.camel@huaweicloud.com>
 Subject: Re: [PATCH ima-evm-utils v2 6/9] Add tests for EVM portable
  signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com
 Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
         stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 23 Jan 2023 09:40:00 -0500
-In-Reply-To: <20230112122426.3759938-7-roberto.sassu@huaweicloud.com>
+Date:   Mon, 23 Jan 2023 16:31:23 +0100
+In-Reply-To: <4b39d880d2ddfec667608222d7ca7a0eed5fe28b.camel@linux.ibm.com>
 References: <20230112122426.3759938-1-roberto.sassu@huaweicloud.com>
          <20230112122426.3759938-7-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+         <4b39d880d2ddfec667608222d7ca7a0eed5fe28b.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3sQakxXrMKwfR4fjBWKZYSkc1XUwowcL
-X-Proofpoint-GUID: dkQCSg3rGGo5XVzCBN3-62pOwtpdnERV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_10,2023-01-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- priorityscore=1501 phishscore=0 clxscore=1015 spamscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301230139
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwDnbAhaqM5jl82+AA--.11669S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFyfJF4UJry8WF1DCw15Arb_yoWxKwbE9F
+        4DtFykuayfZa1DX39YkF4Uta1DCw4kJr4Yvr93ArW7A3909w13Aa97AryfuFykXryxAFZ8
+        uryUKFy3K3W29jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbOAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+        JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
+        kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
+        6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIx
+        AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAGBF1jj4fxuAAAs8
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
+On Mon, 2023-01-23 at 09:40 -0500, Mimi Zohar wrote:
+> Hi Roberto,
+> 
+> On Thu, 2023-01-12 at 13:24 +0100, Roberto Sassu wrote:
+> > +
+> > +key_path="/lib/modules/$(uname -r)/source/certs/signing_key.pem"
+> > +if [ -f "$PWD/../signing_key.pem" ]; then
+> > +       key_path=$PWD/../signing_key.pem
+> > +fi
+> > +
+> 
+> For testing locally, how about first checking the file exists, before
+> setting key_path?  On not finding it, perhaps check whether
+> "/lib/modules/$(uname -r)/build/certs/signing_key.pem" exists.
 
-On Thu, 2023-01-12 at 13:24 +0100, Roberto Sassu wrote:
-> +
-> +key_path="/lib/modules/$(uname -r)/source/certs/signing_key.pem"
-> +if [ -f "$PWD/../signing_key.pem" ]; then
-> +       key_path=$PWD/../signing_key.pem
-> +fi
-> +
+The precedence is:
 
-For testing locally, how about first checking the file exists, before
-setting key_path?  On not finding it, perhaps check whether
-"/lib/modules/$(uname -r)/build/certs/signing_key.pem" exists.
+TST_KEY_PATH -> ../signing_key.pem -> /lib/modules...
 
--- 
-thanks,
+If TST_KEY_PATH is not found, probably it is a good idea to not
+fallback to the other alternatives, as it is user input.
 
-Mimi
-
+Roberto
 
