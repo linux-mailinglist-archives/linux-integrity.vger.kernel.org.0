@@ -2,209 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68066678F4C
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Jan 2023 05:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A86C678F65
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Jan 2023 05:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjAXEgV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Jan 2023 23:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
+        id S232297AbjAXEkj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Jan 2023 23:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjAXEgU (ORCPT
+        with ESMTP id S231760AbjAXEki (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Jan 2023 23:36:20 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471DA367EA;
-        Mon, 23 Jan 2023 20:36:19 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso8530487pjp.3;
-        Mon, 23 Jan 2023 20:36:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b8U31/JHK1SijUo9KNZPEWC0iXAuh3371iOKZ7pi7Bc=;
-        b=W90qqbnL3dTHE2ye/e6FMaljY7HETG1lSjyj160P0TbMDriUzz1kKpEUmWDtWz4oEr
-         wqi/vc9+WGKslLj1ar75bAKzXBjdBif4nE5AJIzEpCctiaurnH5iWGnjP0RZYNR/SEt3
-         6PbuLYKU8VN0Coi0k29d/ZFZw8XQCf0fGBtaFrMj8SPawzghG/OTOCxz8MLe+zk3pJcq
-         HusQm34LkSMgestXlQnlUjyix3VGKm5bTZo8ESfyXzK5hWB2VJQwEYl0QSgvnfff5SkN
-         YEwLeMs2CZ7T6eE3EJdfZS8ak2uSeb931u3a9sQ9/x5/JZieGfr0czCT8JQZ8zOU3GwJ
-         Y6+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=b8U31/JHK1SijUo9KNZPEWC0iXAuh3371iOKZ7pi7Bc=;
-        b=aqi8nngjtBpT40m/v6EodnCA4qeLIH3WYpxb8OmbVVVt6cdaNNqubjW+rmHbw791II
-         DTkOSZDrfbm6MMFjE07cFkaYgbWlcfyNmlcnIVrGqEwQkshOTnYVtPjJsD0yBdVyzKSA
-         9ywvMoDq8xksIE5ZUN8tX8akp563fvytCFnm1z2sT00lm2jkjTm6/J9W0dRLvv9IwMn+
-         WLSwhZ1mlhl/h7E6VnGioJuPDZIR2xxOIstKNr61oUdaO1+tlZGKRpj8ky7IOJLBlmdt
-         lw2eMWr8K/2xWIeeqQz6eIl8Ljy3tT9VIv3gUN4jAYKJUIEShlNa0SRivH/pR6FErpQW
-         +CoA==
-X-Gm-Message-State: AFqh2kr54kj42HiOcT5xYOxKlQIUHZNHCyvo4VMX78wdy/f2Mq00cmAI
-        B1jobSCSflLux5Bps8t4ow5ennxE5Ug=
-X-Google-Smtp-Source: AMrXdXuD6RDsupccsQ917UGoQ9sV7IX7GmlnFerU/q/bSmCF+jS1YWw4T/NrOM9TzeECVLYeCUIWYA==
-X-Received: by 2002:a17:902:f2c5:b0:194:b745:5eaf with SMTP id h5-20020a170902f2c500b00194b7455eafmr20974064plc.42.1674534978795;
-        Mon, 23 Jan 2023 20:36:18 -0800 (PST)
-Received: from localhost (121-44-64-35.tpgi.com.au. [121.44.64.35])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170902aa4100b001960441f604sm520307plr.277.2023.01.23.20.36.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 20:36:18 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 24 Jan 2023 14:36:11 +1000
-Message-Id: <CQ053TUZQIPP.1OHV7MVS4F4HT@bobo>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
-Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
-        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>, <ruscur@russell.cc>,
-        <gcwilson@linux.ibm.com>, <joel@jms.id.au>
+        Mon, 23 Jan 2023 23:40:38 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A26C367D9;
+        Mon, 23 Jan 2023 20:40:37 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30O3hoIi017523;
+        Tue, 24 Jan 2023 04:40:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=QXLqE/T7bAwvJzJIWwATw3ktqa0p9YuklkWDkkB+t7Y=;
+ b=ewHPJkLr6OXLDUZLAlBlk4wz0aEuXKApKPl7oMDA76Npz8ZxMWBxRd5pLCUjnuRM0T4c
+ TylpAVYWeXaaK4int1Mnr/BEgckwbIfsTqRR2dPF1o7gMcpfEEi7K+r5CXFsv/1CoPOp
+ vR9AQXO5lYjF2h1Q+Y7ovRLSjPRDkmgqvQ75sEAmt/ov/IbNfGPS9TlbuW/txwjTlrhW
+ xkCvEjWZw5cDUmhrZUJ28bN8WFU0jTNx9addQec6FwF5YpFaIro5Lb21BYN4xsd+/DIO
+ kkyOJklx/by8ysYRaPYP8I4K7VRFmv5T0v45QBVaBknzL4gYLbr31zAh/UqpmzQ34Lid ZA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na7pb0vf2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 04:40:25 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30O4TMZZ020274;
+        Tue, 24 Jan 2023 04:40:25 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na7pb0ven-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 04:40:25 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30NImXpl015356;
+        Tue, 24 Jan 2023 04:40:23 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3n87afb6kv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 04:40:23 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30O4eKdg46989570
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 04:40:21 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E49262004D;
+        Tue, 24 Jan 2023 04:40:20 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69CC420040;
+        Tue, 24 Jan 2023 04:40:20 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 04:40:20 +0000 (GMT)
+Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id BE41C60142;
+        Tue, 24 Jan 2023 15:40:18 +1100 (AEDT)
+Message-ID: <700184879c5f78c72930ba69f09c9d4eddaf933f.camel@linux.ibm.com>
 Subject: Re: [PATCH v4 21/24] powerpc/pseries: Pass PLPKS password on kexec
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-X-Mailer: aerc 0.13.0
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-integrity@vger.kernel.org
+Cc:     sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        gjoyce@linux.ibm.com, ruscur@russell.cc, gcwilson@linux.ibm.com,
+        joel@jms.id.au
+Date:   Tue, 24 Jan 2023 15:40:13 +1100
+In-Reply-To: <CQ053TUZQIPP.1OHV7MVS4F4HT@bobo>
 References: <20230120074306.1326298-1-ajd@linux.ibm.com>
- <20230120074306.1326298-22-ajd@linux.ibm.com>
-In-Reply-To: <20230120074306.1326298-22-ajd@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+         <20230120074306.1326298-22-ajd@linux.ibm.com>
+         <CQ053TUZQIPP.1OHV7MVS4F4HT@bobo>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HAUHhfmb7pqsS75y3Dq3ZvgVkJnnapud
+X-Proofpoint-ORIG-GUID: Js0yc_bJV1-sIKYIoa7j66PpAaWLICbF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=679
+ suspectscore=0 spamscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ mlxscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301240039
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Jan 20, 2023 at 5:43 PM AEST, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
->
-> Before interacting with the PLPKS, we ask the hypervisor to generate a
-> password for the current boot, which is then required for most further
-> PLPKS operations.
->
-> If we kexec into a new kernel, the new kernel will try and fail to
-> generate a new password, as the password has already been set.
->
-> Pass the password through to the new kernel via the device tree, in
-> /chosen/plpks-pw. Check for the presence of this property before trying
+T24gVHVlLCAyMDIzLTAxLTI0IGF0IDE0OjM2ICsxMDAwLCBOaWNob2xhcyBQaWdnaW4gd3JvdGU6
+Cj4gCj4gPiArwqDCoMKgwqDCoMKgwqBwcm9wID0gb2ZfZmluZF9wcm9wZXJ0eShvZl9jaG9zZW4s
+ICJpYm0scGxwa3MtcHciLCAmbGVuKTsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChwcm9wKSB7Cj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgb3NwYXNzd29yZGxlbmd0aCA9ICh1MTYp
+bGVuOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG9zcGFzc3dvcmQgPSBremFs
+bG9jKG9zcGFzc3dvcmRsZW5ndGgsIEdGUF9LRVJORUwpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoGlmICghb3NwYXNzd29yZCkgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBvZl9yZW1vdmVfcHJvcGVydHkob2ZfY2hvc2VuLCBw
+cm9wKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+cmV0dXJuIC1FTk9NRU07Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG1lbWNweShvc3Bhc3N3b3JkLCBwcm9wLT52
+YWx1ZSwgbGVuKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gb2Zf
+cmVtb3ZlX3Byb3BlcnR5KG9mX2Nob3NlbiwgcHJvcCk7Cj4gCj4gV2h5IGRvIHlvdSByZW1vdmUg
+dGhlIHByb3BlcnR5IGFmdGVyd2FyZD8KCkJlY2F1c2Ugb3RoZXJ3aXNlIHRoZSBwYXNzd29yZCB3
+aWxsIGJlIHNpdHRpbmcgYXJvdW5kIGluIC9wcm9jL2RldmljZS0KdHJlZSBmb3IgdGhlIHdvcmxk
+IHRvIGdvIGFuZCByZWFkLgoKLS0gCkFuZHJldyBEb25uZWxsYW4gICAgT3pMYWJzLCBBREwgQ2Fu
+YmVycmEKYWpkQGxpbnV4LmlibS5jb20gICBJQk0gQXVzdHJhbGlhIExpbWl0ZWQK
 
-In /chosen/ibm,plpks-pw
-
-> to generate a new password - if it exists, use the existing password and
-> remove it from the device tree.
->
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
->
-> ---
->
-> v3: New patch
->
-> v4: Fix compile when CONFIG_PSERIES_PLPKS=3Dn (snowpatch)
->
->     Fix error handling on fdt_path_offset() call (ruscur)
-> ---
->  arch/powerpc/kexec/file_load_64.c      | 18 ++++++++++++++++++
->  arch/powerpc/platforms/pseries/plpks.c | 18 +++++++++++++++++-
->  2 files changed, 35 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/powerpc/kexec/file_load_64.c b/arch/powerpc/kexec/file_=
-load_64.c
-> index af8854f9eae3..0c9130af60cc 100644
-> --- a/arch/powerpc/kexec/file_load_64.c
-> +++ b/arch/powerpc/kexec/file_load_64.c
-> @@ -27,6 +27,7 @@
->  #include <asm/kexec_ranges.h>
->  #include <asm/crashdump-ppc64.h>
->  #include <asm/prom.h>
-> +#include <asm/plpks.h>
-> =20
->  struct umem_info {
->  	u64 *buf;		/* data buffer for usable-memory property */
-> @@ -1156,6 +1157,9 @@ int setup_new_fdt_ppc64(const struct kimage *image,=
- void *fdt,
->  {
->  	struct crash_mem *umem =3D NULL, *rmem =3D NULL;
->  	int i, nr_ranges, ret;
-> +#ifdef CONFIG_PSERIES_PLPKS
-> +	int chosen_offset;
-> +#endif
-
-Could put this in plpks_is_available and avoid an ifdef.
-
-> =20
->  	/*
->  	 * Restrict memory usage for kdump kernel by setting up
-> @@ -1230,6 +1234,20 @@ int setup_new_fdt_ppc64(const struct kimage *image=
-, void *fdt,
->  		}
->  	}
-> =20
-> +#ifdef CONFIG_PSERIES_PLPKS
-> +	// If we have PLPKS active, we need to provide the password
-> +	if (plpks_is_available()) {
-> +		chosen_offset =3D fdt_path_offset(fdt, "/chosen");
-> +		if (chosen_offset < 0) {
-> +			pr_err("Can't find chosen node: %s\n",
-> +			       fdt_strerror(chosen_offset));
-> +			goto out;
-> +		}
-> +		ret =3D fdt_setprop(fdt, chosen_offset, "ibm,plpks-pw",
-> +				  plpks_get_password(), plpks_get_passwordlen());
-> +	}
-> +#endif // CONFIG_PSERIES_PLPKS
-
-I think if you define plpks_get_password and plpks_get_passwordlen as
-BUILD_BUG_ON when PLPKS is not configured and plpks_is_available as
-false, you could remove the ifdef entirely.
-
-> +
->  out:
->  	kfree(rmem);
->  	kfree(umem);
-> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platfo=
-rms/pseries/plpks.c
-> index b3c7410a4f13..0350f10e1755 100644
-> --- a/arch/powerpc/platforms/pseries/plpks.c
-> +++ b/arch/powerpc/platforms/pseries/plpks.c
-> @@ -16,6 +16,7 @@
->  #include <linux/slab.h>
->  #include <linux/string.h>
->  #include <linux/types.h>
-> +#include <linux/of.h>
->  #include <asm/hvcall.h>
->  #include <asm/machdep.h>
->  #include <asm/plpks.h>
-> @@ -126,7 +127,22 @@ static int plpks_gen_password(void)
->  {
->  	unsigned long retbuf[PLPAR_HCALL_BUFSIZE] =3D { 0 };
->  	u8 *password, consumer =3D PLPKS_OS_OWNER;
-> -	int rc;
-> +	struct property *prop;
-> +	int rc, len;
-> +
-> +	// Before we generate the password, we may have been booted by kexec an=
-d
-> +	// provided with a previous password.  Check for that first.
-
-So not really generating the password then. Should it be in a different
-function the caller makes first?
-
-> +	prop =3D of_find_property(of_chosen, "ibm,plpks-pw", &len);
-> +	if (prop) {
-> +		ospasswordlength =3D (u16)len;
-> +		ospassword =3D kzalloc(ospasswordlength, GFP_KERNEL);
-> +		if (!ospassword) {
-> +			of_remove_property(of_chosen, prop);
-> +			return -ENOMEM;
-> +		}
-> +		memcpy(ospassword, prop->value, len);
-> +		return of_remove_property(of_chosen, prop);
-
-Why do you remove the property afterward?
-
-Thanks,
-Nick
