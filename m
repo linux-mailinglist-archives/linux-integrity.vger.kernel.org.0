@@ -2,178 +2,172 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E3C679CE4
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Jan 2023 16:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16661679D21
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Jan 2023 16:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234585AbjAXPGF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Jan 2023 10:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S234525AbjAXPPL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Jan 2023 10:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234450AbjAXPGE (ORCPT
+        with ESMTP id S234552AbjAXPPJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Jan 2023 10:06:04 -0500
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035C9166F9;
-        Tue, 24 Jan 2023 07:06:03 -0800 (PST)
-Received: by mail-ua1-x929.google.com with SMTP id b18so3795841uan.11;
-        Tue, 24 Jan 2023 07:06:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xk4NzLn775SqBcZ9Gdxs085F6GDZQ3PRAe8LMT1ju+U=;
-        b=opkDBuFFr0iqHbk1+WK1en1LCdiewYwnnrcBIpbNpI+rj6VK1o0plpD9kOQP03etTU
-         zuyjkjFpCIe91cMdry3vD8yjnFL7Q7qfYjlmiUmBiBC9DeSG/dt1Uh6/M0kbYRNI8Pzp
-         MJnBNieAp9FzNSlPbMH/pdqyHdsLUG2PjQGEJd+ElZG4b0arLzxTrONQ38e57dCtF3mx
-         OMAUKhtnDQKU6gUeiLdt2X60efjUHbQWOjGeC9zLwC5JlnqweNcXyYjiSENhDU9+tNo0
-         aQ/fuH31TNoIvjSCpIrwoMGruvUIUcp/GoABW26wxDubQo6Yje3WW+Jp8xMK4fXri2r6
-         pUDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xk4NzLn775SqBcZ9Gdxs085F6GDZQ3PRAe8LMT1ju+U=;
-        b=WYpgkoOLLSM4sAiQZxQ0m5tn9/AcsmKD5ul72ohUdTKjWx64oFi9ucQPKEAIocweKy
-         PY+rB1Iwb5vxtpGr/Dh0xaOCmQfU1RFZCvBsW2zuG18U+ynvdJsejI/CR9GVVfkXWHKf
-         1gbg31DLoyjRnnq49OjjClX53lYubgfM24cjX7ZuHaxUOfo0RIsrwW42eI2Pc9uDWl1z
-         8HARmWua3TJ0lVkV1ApJ+4Ak46U07pZyft/Mbmq1GCGo/XxEBayGB04WjskMcvFLU1IP
-         Hdw1KAZaj4llYRi2vOlSrzRkONr8cQgMhKiEtkSWylrBdSX+UiIFw+551cCltDmDEVDv
-         TVhg==
-X-Gm-Message-State: AO0yUKVeQ89gSMHGcbRglSHsbcDihYBTAWglZXqh/B4kpUbkqmMGWCnp
-        4utSFtfZtnVeWe14qd9peqazG4/ZlFILhXKEQeQ=
-X-Google-Smtp-Source: AK7set9SxL8+BSSAQ+mGJmncufvAe48UOmzcxwxelwoZtvwfaIYGMbwfRem2FF7dyTqHGOxPxpCP4PWKX5CxGxWC588=
-X-Received: by 2002:ab0:71ca:0:b0:655:c9e7:b4d2 with SMTP id
- n10-20020ab071ca000000b00655c9e7b4d2mr46376uao.78.1674572762009; Tue, 24 Jan
- 2023 07:06:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
- <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
- <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
- <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
- <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
- <Y8tcEtr8Kl3p4qtA@kernel.org> <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
- <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com>
-In-Reply-To: <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com>
-From:   William Roberts <bill.c.roberts@gmail.com>
-Date:   Tue, 24 Jan 2023 09:05:50 -0600
-Message-ID: <CAFftDdpC4BAqYHP=26T-bkntv-mdrwJD2MP6HBWzHvBSEXRDFw@mail.gmail.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-To:     jejb@linux.ibm.com
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 10:15:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E494B490;
+        Tue, 24 Jan 2023 07:15:08 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ODuoHa024626;
+        Tue, 24 Jan 2023 15:14:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=SKlWUkhibLKyGL2pkbPla6v3326+q/H8/sBojv/+5ec=;
+ b=qKLK+RwifLxJBHY/PTZ5oV2BqPVrQA4clt+I3W9/lEmw2bvdMvdHydJJvosbvkAz99yJ
+ RWN31OK0NflVapyl75GBJxHeHfgl8xTSv/kphoGHSj7uw4kfXTLWn5tKHni623tno5uk
+ EzjZ989yKX/kTBxgPadvNzY0cjC2OXzlvp+pIeUYge4vIxzH3yiCHaBNvVPd7fRqCnQX
+ FO95hgDXUxkD+J0qKQmeF6BmdVsWqzKRbh21hxhzCiiBkQ5kAjcwWl02c+0wfNeZyPuM
+ ewae316OMMll08OSs2k4Ex0pIMjmEJYSPwFuj+CQuoFxRqbzcDJFpWq4lGJmzUlmhXu/ 8Q== 
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nac958p65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 15:14:56 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OCHP0L007908;
+        Tue, 24 Jan 2023 15:14:55 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3n87p6tsvc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 15:14:55 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OFEsHF64553392
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 15:14:54 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 421DA58056;
+        Tue, 24 Jan 2023 15:14:54 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5A3F5803F;
+        Tue, 24 Jan 2023 15:14:52 +0000 (GMT)
+Received: from sig-9-65-196-40.ibm.com (unknown [9.65.196.40])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 15:14:52 +0000 (GMT)
+Message-ID: <57dca1ea3ef66bc0935bdd1dab4536f1151f4004.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 24/24] integrity/powerpc: Support loading keys from
+ pseries secvar
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
+        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
+        ruscur@russell.cc, mpe@ellerman.id.au, gjoyce@linux.ibm.com,
+        sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
+        joel@jms.id.au
+Date:   Tue, 24 Jan 2023 10:14:52 -0500
+In-Reply-To: <20230120074306.1326298-25-ajd@linux.ibm.com>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+         <20230120074306.1326298-25-ajd@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iMPfIwpgug5KNB5appsq8SwGgbZCR_4G
+X-Proofpoint-ORIG-GUID: iMPfIwpgug5KNB5appsq8SwGgbZCR_4G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240136
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 6:38 AM James Bottomley <jejb@linux.ibm.com> wrote:
->
-> On Mon, 2023-01-23 at 11:48 -0600, William Roberts wrote:
-> > On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org>
-> > wrote:
-> > >
-> > > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> > > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > > > > <bill.c.roberts@gmail.com> wrote:
-> > > > >
-> > > > > > What's the use case of using the creation data and ticket in
-> > > > > > this context? Who gets the creationData and the ticket?
-> > > > > > Could a user supplied outsideInfo work? IIRC I saw some
-> > > > > > patches flying around where the sessions will get encrypted
-> > > > > > and presumably correctly as well. This would allow the
-> > > > > > transfer of that outsideInfo, like the NV Index PCR value to
-> > > > > > be included and integrity protected by the session HMAC.
-> > > > >
-> > > > > The goal is to ensure that the key was generated by the kernel.
-> > > > > In the absence of the creation data, an attacker could generate
-> > > > > a hibernation image using their own key and trick the kernel
-> > > > > into resuming arbitrary code. We don't have any way to pass
-> > > > > secret data from the hibernate kernel to the resume kernel, so
-> > > > > I don't think there's any easy way to do it with outsideinfo.
-> > > >
-> > > > Can we go back again to why you can't use locality?  It's exactly
-> > > > designed for this since locality is part of creation data.
-> > > > Currently everything only uses locality 0, so it's impossible for
-> > > > anyone on Linux to produce a key with anything other than 0 in
-> > > > the creation data for locality.  However, the dynamic launch
-> > > > people are proposing that the Kernel should use Locality 2 for
-> > > > all its operations, which would allow you to distinguish a key
-> > > > created by the kernel from one created by a user by locality.
-> > > >
-> > > > I think the previous objection was that not all TPMs implement
-> > > > locality, but then not all laptops have TPMs either, so if you
-> > > > ever come across one which has a TPM but no locality, it's in a
-> > > > very similar security boat to one which has no TPM.
-> > >
-> > > Kernel could try to use locality 2 and use locality 0 as fallback.
-> >
-> > I don't think that would work for Matthew, they need something
-> > reliable to indicate key provenance.
->
-> No, I think it would be good enough: locality 0 means anyone (including
-> the kernel on a machine which doesn't function correctly) could have
-> created this key.  Locality 2 would mean only the kernel could have
-> created this key.
+On Fri, 2023-01-20 at 18:43 +1100, Andrew Donnellan wrote:
+> From: Russell Currey <ruscur@russell.cc>
+> 
+> The secvar object format is only in the device tree under powernv.
+> We now have an API call to retrieve it in a generic way, so we should
+> use that instead of having to handle the DT here.
+> 
+> Add support for pseries secvar, with the "ibm,plpks-sb-v1" format.
+> The object format is expected to be the same, so there shouldn't be any
+> functional differences between objects retrieved from powernv and
+> pseries.
+> 
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> 
+> ---
+> 
+> v3: New patch
+> 
+> v4: Pass format buffer size (stefanb, npiggin)
+> ---
+>  .../integrity/platform_certs/load_powerpc.c     | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
+> index dee51606d5f4..d4ce91bf3fec 100644
+> --- a/security/integrity/platform_certs/load_powerpc.c
+> +++ b/security/integrity/platform_certs/load_powerpc.c
+> @@ -10,7 +10,6 @@
+>  #include <linux/cred.h>
+>  #include <linux/err.h>
+>  #include <linux/slab.h>
+> -#include <linux/of.h>
+>  #include <asm/secure_boot.h>
+>  #include <asm/secvar.h>
+>  #include "keyring_handler.h"
+> @@ -59,16 +58,22 @@ static int __init load_powerpc_certs(void)
+>  	void *db = NULL, *dbx = NULL;
+>  	u64 dbsize = 0, dbxsize = 0;
+>  	int rc = 0;
+> -	struct device_node *node;
+> +	ssize_t len;
+> +	char buf[32];
+>  
+>  	if (!secvar_ops)
+>  		return -ENODEV;
+>  
+> -	/* The following only applies for the edk2-compat backend. */
+> -	node = of_find_compatible_node(NULL, NULL, "ibm,edk2-compat-v1");
+> -	if (!node)
+> +	len = secvar_ops->format(buf, 32);
 
-That's exactly what I was saying, for this feature to be functional
-2 localities need to be supported.
+"powerpc/secvar: Handle format string in the consumer"  defines
+opal_secvar_format() for the object format "ibm,secvar-backend".  Here
+shouldn't it being returning the format for "ibm,edk2-compat-v1"?
 
->
-> By the time the kernel boots and before it loads the hibernation image
-> it will know the answer to the question "does my TPM support locality
-> 2", so it can use that in its security assessment: if the kernel
-> supports locality 2 and the key wasn't created in locality 2 then
-> assume an attack.  Obviously, if the kernel doesn't support locality 2
-> then the hibernation resume has to accept any old key, but that's the
-> same as the situation today.
->
+Mimi
 
-Yep, we had this conversation offline on a thread, i'm in agreement here
-as well.
+> +	if (len <= 0)
+>  		return -ENODEV;
+>  
+> +	// Check for known secure boot implementations from OPAL or PLPKS
+> +	if (strcmp("ibm,edk2-compat-v1", buf) && strcmp("ibm,plpks-sb-v1", buf)) {
+> +		pr_err("Unsupported secvar implementation \"%s\", not loading certs\n", buf);
+> +		return -ENODEV;
+> +	}
+> +
+>  	/*
+>  	 * Get db, and dbx. They might not exist, so it isn't an error if we
+>  	 * can't get them.
+> @@ -103,8 +108,6 @@ static int __init load_powerpc_certs(void)
+>  		kfree(dbx);
+>  	}
+>  
+> -	of_node_put(node);
+> -
+>  	return rc;
+>  }
+>  late_initcall(load_powerpc_certs);
 
-> > I was informed that all 5 localities should be supported starting
-> > with Gen 7 Kaby Lake launched in 2016. Don't know if this is
-> > still "too new".
->
-> It's probably good enough.  Current laptops which can't use locality 2
-> are in the same position as now, but newer ones can provide more
-> security guarantees.
->
-> There is, however, another wrinkle: can Kaby Lake be persuaded, though
-> bios settings perhaps, to shut off the non zero localities?
 
-I have no idea, and I don't have one handy, but I can ask around.
-
-> This would
-> allow for a downgrade attack where you shut off locality 2 then present
-> a forged locality 0 key and hibernation image; the kernel will think,
-> because it can't access locality 2, that it's in a reduced security
-> environment so the key might be OK.  We could fix this by requiring
-> Kaby Lake and beyond to have locality 2 and refusing to hibernate if it
-> can't be accessed and building "is this Kaby lake or beyond" into the
-> check for should I have locality 2, but this is getting complex and
-> error prone.
->
-> James
->
