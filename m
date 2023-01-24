@@ -2,73 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1B3678F32
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Jan 2023 05:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA06678F3B
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Jan 2023 05:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjAXEQf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Jan 2023 23:16:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S231584AbjAXE03 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Jan 2023 23:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjAXEQe (ORCPT
+        with ESMTP id S229891AbjAXE0Z (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Jan 2023 23:16:34 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5182E0E9;
-        Mon, 23 Jan 2023 20:16:32 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id be8so670225plb.7;
-        Mon, 23 Jan 2023 20:16:32 -0800 (PST)
+        Mon, 23 Jan 2023 23:26:25 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E035031E25;
+        Mon, 23 Jan 2023 20:26:24 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id q9so10543584pgq.5;
+        Mon, 23 Jan 2023 20:26:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1urGv0mHJ7YJYJNJOzM1m8Twx0srW6ZZUopL2pa7yvk=;
-        b=prWn9RufzbUdIxdrCBTqxlvlDhB2nZTXXo9FuZLk4bJa65H6zYekYGRzNiJNrKfZg3
-         UgcSiCo/D69OjJEYuwoEmgNLA/VYs7dl9gumw8ynQnWf651mpvbumodhdQt7UhERqwM3
-         fdM9/jmZ84IoEds5rX0kzv4rhs/lb8m3RV1uZZvoj+dqRJ/3eiEBUk71T+MmMCtFvCmG
-         3VCkyxjbVOQtfwTXVRiXK1+x2JYWpNPqugwwyEMBPdfk0M+zTNMYCAnP8ujfNu9IC+om
-         KP67nyALTqSNFyHPgM/Ik2eE3iXITmzFBuLiLAUWanZlt/st1Wf0K3YKnS0pcvk0yQ10
-         9SAw==
+        bh=ikIw7tYX2YkOjJ1SBheZ8OfWLQDqLfvM0gBP+Ityw34=;
+        b=YNlNht7gd21co35WmXhV01ktN9SoD09xYeIHaYwsev8FzKFhr5Ny+jRT+oSkqttK/a
+         K/BJMen8KHFwmsjrqhGD/YRaWrS08UzGHW4YbOE7Hdr4uoSXXSJ0v0x6kqV+H5IdfQro
+         iuuulzywBlLaGHcWPDFDf/MDUY5iB4M0EksWeVGBvP/2wRSg0ZU72fX0cZh2FSv2k90O
+         ylcAuC/EP+v6pG+zsgwJN/AYFwQ1SGhGL9z3NCk5yqWONR4gjNKeZ5h1I6T3U/YG6N6y
+         XJQzIemFQbtyoIl3vpdhO47cyRn/GQtjRDKa1uMSEfBpzmLyR9KBGCAQrb1C1cfDYn/B
+         TLFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=1urGv0mHJ7YJYJNJOzM1m8Twx0srW6ZZUopL2pa7yvk=;
-        b=pxNp4a3a8E93HYRKkrUX9+m6hyPWD5l5O86aMCrDue/TmXve5xmmLzVkWpahJ3QbS5
-         PffdmLIp+V6lWZa3AWdrh7OjnPgkq/TWQemtCNYotsULjDOVzX74559C2QIbE7a3zVYa
-         VOV430jVCEwqOtb7b2gm8BsJDXVB4PYcjoZNTlhGCA1NRRZ//JYpjg2FSOnNijFn4VQA
-         Ntmp7miQenw0iPDChN8hvDu5pfr+Naz0FhZZgPIGP3dRWAnZGEce52Y4fbVyKynMHHSO
-         cpr0TOW3DuQHqegz+d44IGUwZjuSPMkD3PF4O+IbpGi2BgzfiqydiocWd4EBnkYLldBs
-         pmMw==
-X-Gm-Message-State: AFqh2krldjB0EvjBRcegf1sZPW6Kgy0kkJwAf9CwfMy1IoooKz8k4g9v
-        FX5wVi5givkRAxguhTN+MLxANCFq9pU4wQ==
-X-Google-Smtp-Source: AMrXdXuSVtrTllW9RCM77BotoTrsr7sGbJ91c+Msy2yWlokuP6tycoBTZ9CnrNQiDLj02Dfj8ugNzg==
-X-Received: by 2002:a05:6a20:4c8a:b0:b8:8e17:901c with SMTP id fq10-20020a056a204c8a00b000b88e17901cmr24234111pzb.52.1674533792376;
-        Mon, 23 Jan 2023 20:16:32 -0800 (PST)
+        bh=ikIw7tYX2YkOjJ1SBheZ8OfWLQDqLfvM0gBP+Ityw34=;
+        b=GKoECWMkjtSA8B1sKiHXbULZXRNTUTcT7yp8BcXv+7CjIetWA3gsW2C9sEiHNgNj5q
+         cuzdJOCNC39oyDt92VSOGxOt1LvS6beHwpQxV2KtzwiCNUetMMraxsTp1r5Fsi6zD+D7
+         KqpKqBTX+dwTZiSapc36bpsugeH9YYlOq78YRVjNhhP7DW1VGeOcF/wZESzczqaxVien
+         5xi8CvoSl6Q3r7WZfnzE8kb1/xPduePF6BliNTkH9zwbCNU7P7t/7/P8EBUvbOUgowV1
+         Lk5RftpV5rydiMmurvgz9LOZl8Lauu33H6cK7UGHeLpAo16iSthfA1001PcyknZD69Oc
+         qB0w==
+X-Gm-Message-State: AFqh2ko9xKQDISVRCpIfNpBUtbb2ubt09Wzquq51apf4jcRRxPxdNcpU
+        oGMDZK7mr6a/WTpCOD6biJI=
+X-Google-Smtp-Source: AMrXdXsLjmAMJ1SONTARwenlQNQ6MHRz8aPxQSqwXjj4XO+jhxTE8p6ynWlTQmYvGB+ZI66aMrWXxw==
+X-Received: by 2002:a05:6a00:2354:b0:580:cf1a:f2b5 with SMTP id j20-20020a056a00235400b00580cf1af2b5mr39660928pfj.12.1674534384476;
+        Mon, 23 Jan 2023 20:26:24 -0800 (PST)
 Received: from localhost (121-44-64-35.tpgi.com.au. [121.44.64.35])
-        by smtp.gmail.com with ESMTPSA id b20-20020a170902d31400b0019603cb63d4sm487043plc.280.2023.01.23.20.16.26
+        by smtp.gmail.com with ESMTPSA id p35-20020a056a0026e300b005898fcb7c1bsm426882pfw.177.2023.01.23.20.26.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 20:16:31 -0800 (PST)
+        Mon, 23 Jan 2023 20:26:23 -0800 (PST)
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 24 Jan 2023 14:16:24 +1000
-Message-Id: <CQ04OOT6CW1A.MCLZN2B4BTWK@bobo>
+Date:   Tue, 24 Jan 2023 14:26:16 +1000
+Message-Id: <CQ04W8MPPQT5.KT3IQUOE2YPG@bobo>
+Subject: Re: [PATCH v4 19/24] powerpc/pseries: Turn PSERIES_PLPKS into a
+ hidden option
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
 Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
         <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
         <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
         <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>, <ruscur@russell.cc>,
         <gcwilson@linux.ibm.com>, <joel@jms.id.au>
-Subject: Re: [PATCH v4 16/24] powerpc/pseries: Implement signed update for
- PLPKS objects
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
 X-Mailer: aerc 0.13.0
 References: <20230120074306.1326298-1-ajd@linux.ibm.com>
- <20230120074306.1326298-17-ajd@linux.ibm.com>
-In-Reply-To: <20230120074306.1326298-17-ajd@linux.ibm.com>
+ <20230120074306.1326298-20-ajd@linux.ibm.com>
+In-Reply-To: <20230120074306.1326298-20-ajd@linux.ibm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,194 +79,67 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Jan 20, 2023 at 5:42 PM AEST, Andrew Donnellan wrote:
-> From: Nayna Jain <nayna@linux.ibm.com>
+On Fri Jan 20, 2023 at 5:43 PM AEST, Andrew Donnellan wrote:
+> It seems a bit unnecessary for the PLPKS code to have a user-visible
+> config option when it doesn't do anything on its own, and there's existin=
+g
+> options for enabling Secure Boot-related features.
 >
-> The Platform Keystore provides a signed update interface which can be use=
-d
-> to create, replace or append to certain variables in the PKS in a secure
-> fashion, with the hypervisor requiring that the update be signed using th=
-e
-> Platform Key.
+> It should be enabled by PPC_SECURE_BOOT, which will eventually be what
+> uses PLPKS to populate keyrings.
 >
-> Implement an interface to the H_PKS_SIGNED_UPDATE hcall in the plpks
-> driver to allow signed updates to PKS objects.
+> However, we can't get of the separate option completely, because it will
+> also be used for SED Opal purposes.
 >
-> (The plpks driver doesn't need to do any cryptography or otherwise handle
-> the actual signed variable contents - that will be handled by userspace
-> tooling.)
+> Change PSERIES_PLPKS into a hidden option, which is selected by
+> PPC_SECURE_BOOT.
 >
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> [ajd: split patch, add timeout handling and misc cleanups]
-> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
 > Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
 > Signed-off-by: Russell Currey <ruscur@russell.cc>
 >
 > ---
 >
-> v3: Merge plpks fixes and signed update series with secvar series
->
->     Fix error code handling in plpks_confirm_object_flushed() (ruscur)
->
->     Pass plpks_var struct to plpks_signed_update_var() by reference (mpe)
->
->     Consistent constant naming scheme (ruscur)
->
-> v4: Fix MAX_HCALL_OPCODE rebasing issue (npiggin)
+> v3: New patch
 > ---
->  arch/powerpc/include/asm/hvcall.h      |  1 +
->  arch/powerpc/include/asm/plpks.h       |  5 ++
->  arch/powerpc/platforms/pseries/plpks.c | 71 ++++++++++++++++++++++++--
->  3 files changed, 72 insertions(+), 5 deletions(-)
+>  arch/powerpc/Kconfig                   |  1 +
+>  arch/powerpc/platforms/pseries/Kconfig | 11 +----------
+>  2 files changed, 2 insertions(+), 10 deletions(-)
 >
-> diff --git a/arch/powerpc/include/asm/hvcall.h b/arch/powerpc/include/asm=
-/hvcall.h
-> index 95fd7f9485d5..c099780385dd 100644
-> --- a/arch/powerpc/include/asm/hvcall.h
-> +++ b/arch/powerpc/include/asm/hvcall.h
-> @@ -335,6 +335,7 @@
->  #define H_RPT_INVALIDATE	0x448
->  #define H_SCM_FLUSH		0x44C
->  #define H_GET_ENERGY_SCALE_INFO	0x450
-> +#define H_PKS_SIGNED_UPDATE	0x454
->  #define H_WATCHDOG		0x45C
->  #define MAX_HCALL_OPCODE	H_WATCHDOG
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index b8c4ac56bddc..d4ed46101bec 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -1029,6 +1029,7 @@ config PPC_SECURE_BOOT
+>  	depends on PPC_POWERNV || PPC_PSERIES
+>  	depends on IMA_ARCH_POLICY
+>  	imply IMA_SECURE_AND_OR_TRUSTED_BOOT
+> +	select PSERIES_PLPKS if PPC_PSERIES
+>  	help
+>  	  Systems with firmware secure boot enabled need to define security
+>  	  policies to extend secure boot to the OS. This config allows a user
+> diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platfo=
+rms/pseries/Kconfig
+> index a3b4d99567cb..82b6f993be0f 100644
+> --- a/arch/powerpc/platforms/pseries/Kconfig
+> +++ b/arch/powerpc/platforms/pseries/Kconfig
+> @@ -151,16 +151,7 @@ config IBMEBUS
 > =20
-> diff --git a/arch/powerpc/include/asm/plpks.h b/arch/powerpc/include/asm/=
-plpks.h
-> index 7c5f51a9af7c..e7204e6c0ca4 100644
-> --- a/arch/powerpc/include/asm/plpks.h
-> +++ b/arch/powerpc/include/asm/plpks.h
-> @@ -68,6 +68,11 @@ struct plpks_var_name_list {
->  	struct plpks_var_name varlist[];
->  };
-> =20
-> +/**
-> + * Updates the authenticated variable. It expects NULL as the component.
-> + */
-> +int plpks_signed_update_var(struct plpks_var *var, u64 flags);
-> +
->  /**
->   * Writes the specified var and its data to PKS.
->   * Any caller of PKS driver should present a valid component type for
-> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platfo=
-rms/pseries/plpks.c
-> index 1189246b03dc..796ed5544ee5 100644
-> --- a/arch/powerpc/platforms/pseries/plpks.c
-> +++ b/arch/powerpc/platforms/pseries/plpks.c
-> @@ -81,6 +81,12 @@ static int pseries_status_to_err(int rc)
->  		err =3D -ENOENT;
->  		break;
->  	case H_BUSY:
-> +	case H_LONG_BUSY_ORDER_1_MSEC:
-> +	case H_LONG_BUSY_ORDER_10_MSEC:
-> +	case H_LONG_BUSY_ORDER_100_MSEC:
-> +	case H_LONG_BUSY_ORDER_1_SEC:
-> +	case H_LONG_BUSY_ORDER_10_SEC:
-> +	case H_LONG_BUSY_ORDER_100_SEC:
->  		err =3D -EBUSY;
->  		break;
->  	case H_AUTHORITY:
+>  config PSERIES_PLPKS
+>  	depends on PPC_PSERIES
+> -	bool "Support for the Platform Key Storage"
+> -	help
+> -	  PowerVM provides an isolated Platform Keystore(PKS) storage
+> -	  allocation for each LPAR with individually managed access
+> -	  controls to store sensitive information securely. It can be
+> -	  used to store asymmetric public keys or secrets as required
+> -	  by different usecases. Select this config to enable
+> -	  operating system interface to hypervisor to access this space.
 
-This is a bit sad to maintain here. It's duplicating bits with
-hvcs_convert, and a bunch of open coded places. Probably not the
-series to do anything about. Would be nice if we could standardise
-it though.
-
-> @@ -184,14 +190,17 @@ static struct label *construct_label(char *componen=
-t, u8 varos, u8 *name,
->  				     u16 namelen)
->  {
->  	struct label *label;
-> -	size_t slen;
-> +	size_t slen =3D 0;
-> =20
->  	if (!name || namelen > PLPKS_MAX_NAME_SIZE)
->  		return ERR_PTR(-EINVAL);
-> =20
-> -	slen =3D strlen(component);
-> -	if (component && slen > sizeof(label->attr.prefix))
-> -		return ERR_PTR(-EINVAL);
-> +	// Support NULL component for signed updates
-> +	if (component) {
-> +		slen =3D strlen(component);
-> +		if (slen > sizeof(label->attr.prefix))
-> +			return ERR_PTR(-EINVAL);
-> +	}
-
-Is this already a bug? Code checks for component !=3D NULL but previously
-calls strlen which would oops on NULL component AFAIKS. Granted nothing
-is actually using any of this these days.
-
-It already seems like it's supposed to be allowed to rad NULL component
-with read_var though? Why the differences, why not always allow NULL
-component? (I assume there is some reason, I just don't know anything
-about secvar or secure boot).
-
-> =20
->  	// The label structure must not cross a page boundary, so we align to t=
-he next power of 2
->  	label =3D kzalloc(roundup_pow_of_two(sizeof(*label)), GFP_KERNEL);
-> @@ -397,6 +406,58 @@ static int plpks_confirm_object_flushed(struct label=
- *label,
->  	return pseries_status_to_err(rc);
->  }
-> =20
-> +int plpks_signed_update_var(struct plpks_var *var, u64 flags)
-> +{
-> +	unsigned long retbuf[PLPAR_HCALL9_BUFSIZE] =3D {0};
-> +	int rc;
-> +	struct label *label;
-> +	struct plpks_auth *auth;
-> +	u64 continuetoken =3D 0;
-> +	u64 timeout =3D 0;
-> +
-> +	if (!var->data || var->datalen <=3D 0 || var->namelen > PLPKS_MAX_NAME_=
-SIZE)
-> +		return -EINVAL;
-> +
-> +	if (!(var->policy & PLPKS_SIGNEDUPDATE))
-> +		return -EINVAL;
-> +
-> +	auth =3D construct_auth(PLPKS_OS_OWNER);
-> +	if (IS_ERR(auth))
-> +		return PTR_ERR(auth);
-> +
-> +	label =3D construct_label(var->component, var->os, var->name, var->name=
-len);
-> +	if (IS_ERR(label)) {
-> +		rc =3D PTR_ERR(label);
-> +		goto out;
-> +	}
-> +
-> +	do {
-> +		rc =3D plpar_hcall9(H_PKS_SIGNED_UPDATE, retbuf,
-> +				  virt_to_phys(auth), virt_to_phys(label),
-> +				  label->size, var->policy, flags,
-> +				  virt_to_phys(var->data), var->datalen,
-> +				  continuetoken);
-> +
-> +		continuetoken =3D retbuf[0];
-> +		if (pseries_status_to_err(rc) =3D=3D -EBUSY) {
-> +			int delay_ms =3D get_longbusy_msecs(rc);
-> +			mdelay(delay_ms);
-> +			timeout +=3D delay_ms;
-> +		}
-> +		rc =3D pseries_status_to_err(rc);
-> +	} while (rc =3D=3D -EBUSY && timeout < PLPKS_MAX_TIMEOUT);
-> +
-> +	if (!rc)
-> +		rc =3D plpks_confirm_object_flushed(label, auth);
-> +
-> +	kfree(label);
-> +out:
-> +	kfree(auth);
-> +
-> +	return rc;
-> +}
-> +EXPORT_SYMBOL(plpks_signed_update_var);
-
-Sorry I missed it before -- can this be a _GPL export?
+Not a big deal but you could turn this into a small Kconfig comment
+instead (people got strangely angry when I tried to just use help text
+in hidden options as comments). But if it's easy enough to grep for and
+pretty straightforward then maybe it doesn't matter. I like know what
+these things do at a glance.
 
 Thanks,
 Nick
