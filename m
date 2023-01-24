@@ -2,138 +2,140 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9182678FCB
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Jan 2023 06:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7954C67973B
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Jan 2023 13:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjAXFYk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Jan 2023 00:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S233161AbjAXMFx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Jan 2023 07:05:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAXFYj (ORCPT
+        with ESMTP id S229935AbjAXMFw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Jan 2023 00:24:39 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757542DE60;
-        Mon, 23 Jan 2023 21:24:38 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d3so13658621plr.10;
-        Mon, 23 Jan 2023 21:24:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EPflxlzn7J3IhwXMqkbeD44ht96unETWIQ75Qp5FCss=;
-        b=ZfxguGrgsLcY0Sq2+g0kbtCLDOQn3UY9YpncBNNH3WXAXs6UuShB7ggTMjxNLWBRjS
-         4S2X4T6qfadLoMDptTXfGxpyzDxNWD0Mvm6hXftn2Lo1du7fO/Wgelose8ln1gXxxAnV
-         1ufbzEVQ1fiSBbzhMDfUDsZRajZhptf2gdv4k5wJZ3zuhE/qJ94/PW6HVgFQwyCBJkih
-         J2w2im5PbQOYqqfvagGdJqgoYAIFOzd3c57/LwIlI/igZvZSBJZVoxo5fvn/y9QHxZXS
-         6RgHH6s63RFqcET7pCffXuuFWsoLNKYoKi47uZwKzlT5UZMJkVSxosnChe+QDzKFoFtL
-         rpXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EPflxlzn7J3IhwXMqkbeD44ht96unETWIQ75Qp5FCss=;
-        b=1QTVPrzgpp7VYXqWBvN/8xusGEaXwAA5IA1Pl8nPkNrM+8ptx6pc0s2n2mZd/50Fkx
-         2cA2RCoKriFbHd3NCXRS2U8UVoxOakdlN56wNO7JnAYuODtKPVeXDsT4he8ZcbxNiuIF
-         65JYzrV5l260RHZp7K1SGOM6rPE7x1PLUuQOf7njJKpaZOb3fCf/Q1tkqI1muHUMzeCa
-         hKuliaJYCU5KVYUuXDAQo+bulpFu10Nrlnvt3QSUjdF93pU9TTfJv5NHucYtFnzBelgN
-         PiQjwi8Sn5vGS1CNBybIl8XaY4cH6GpQLW9B+l0BYW5LUUY32FTwTpzefUWp4/lAHCK7
-         opnQ==
-X-Gm-Message-State: AFqh2kqKnHJbbpKTYEVadRPjYbyUcRUPtd4UvUnURbdfzs4Gk5oTGekG
-        cInCBwceIlchWBFl1VwQKj4=
-X-Google-Smtp-Source: AMrXdXsxQsqTnL+GRVS6OYc23i7BV4V8GyCJ1wcsXO8yFBZz0e4RWJrhVbXXTmgGKft8W5rGH5tVOg==
-X-Received: by 2002:a05:6a20:3d0f:b0:af:9539:a2c0 with SMTP id y15-20020a056a203d0f00b000af9539a2c0mr35468533pzi.26.1674537877942;
-        Mon, 23 Jan 2023 21:24:37 -0800 (PST)
-Received: from localhost (121-44-64-35.tpgi.com.au. [121.44.64.35])
-        by smtp.gmail.com with ESMTPSA id g5-20020a170902c38500b00196047fc25dsm657743plg.42.2023.01.23.21.24.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 21:24:37 -0800 (PST)
+        Tue, 24 Jan 2023 07:05:52 -0500
+X-Greylist: delayed 843 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Jan 2023 04:05:50 PST
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 347022333A;
+        Tue, 24 Jan 2023 04:05:50 -0800 (PST)
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 30OBp2L3017928;
+        Tue, 24 Jan 2023 05:51:02 -0600
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 30OBp0bo017927;
+        Tue, 24 Jan 2023 05:51:00 -0600
+Date:   Tue, 24 Jan 2023 05:51:00 -0600
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     William Roberts <bill.c.roberts@gmail.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to kernel-only use
+Message-ID: <20230124115100.GA17771@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org> <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid> <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com> <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com> <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com> <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com> <Y8tcEtr8Kl3p4qtA@kernel.org> <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 24 Jan 2023 15:24:25 +1000
-Message-Id: <CQ064REW0ZEO.1LUHVNN78TBRJ@bobo>
-Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
-        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>, <ruscur@russell.cc>,
-        <gcwilson@linux.ibm.com>, <joel@jms.id.au>
-Subject: Re: [PATCH v4 24/24] integrity/powerpc: Support loading keys from
- pseries secvar
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.13.0
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
- <20230120074306.1326298-25-ajd@linux.ibm.com>
-In-Reply-To: <20230120074306.1326298-25-ajd@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Tue, 24 Jan 2023 05:51:02 -0600 (CST)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Jan 20, 2023 at 5:43 PM AEST, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
->
-> The secvar object format is only in the device tree under powernv.
-> We now have an API call to retrieve it in a generic way, so we should
-> use that instead of having to handle the DT here.
->
-> Add support for pseries secvar, with the "ibm,plpks-sb-v1" format.
-> The object format is expected to be the same, so there shouldn't be any
-> functional differences between objects retrieved from powernv and
-> pseries.
->
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
->
-> ---
->
-> v3: New patch
->
-> v4: Pass format buffer size (stefanb, npiggin)
-> ---
->  .../integrity/platform_certs/load_powerpc.c     | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
->
-> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/=
-integrity/platform_certs/load_powerpc.c
-> index dee51606d5f4..d4ce91bf3fec 100644
-> --- a/security/integrity/platform_certs/load_powerpc.c
-> +++ b/security/integrity/platform_certs/load_powerpc.c
-> @@ -10,7 +10,6 @@
->  #include <linux/cred.h>
->  #include <linux/err.h>
->  #include <linux/slab.h>
-> -#include <linux/of.h>
->  #include <asm/secure_boot.h>
->  #include <asm/secvar.h>
->  #include "keyring_handler.h"
-> @@ -59,16 +58,22 @@ static int __init load_powerpc_certs(void)
->  	void *db =3D NULL, *dbx =3D NULL;
->  	u64 dbsize =3D 0, dbxsize =3D 0;
->  	int rc =3D 0;
-> -	struct device_node *node;
-> +	ssize_t len;
-> +	char buf[32];
-> =20
->  	if (!secvar_ops)
->  		return -ENODEV;
-> =20
-> -	/* The following only applies for the edk2-compat backend. */
-> -	node =3D of_find_compatible_node(NULL, NULL, "ibm,edk2-compat-v1");
-> -	if (!node)
-> +	len =3D secvar_ops->format(buf, 32);
+On Mon, Jan 23, 2023 at 11:48:25AM -0600, William Roberts wrote:
 
-sizeof(buf)?
+Good morning, I hope the week is going well for everyone.
 
-Thanks,
-Nick
+> On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
+> > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
+> > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
+> > > > <bill.c.roberts@gmail.com> wrote:
+> > > >
+> > > > > What's the use case of using the creation data and ticket in this
+> > > > > context? Who gets the creationData and the ticket?
+> > > > > Could a user supplied outsideInfo work? IIRC I saw some patches
+> > > > > flying around where the sessions will get encrypted and presumably
+> > > > > correctly as well. This would allow the transfer of that
+> > > > > outsideInfo, like the NV Index PCR value to be included and
+> > > > > integrity protected by the session HMAC.
+> > > >
+> > > > The goal is to ensure that the key was generated by the kernel. In
+> > > > the absence of the creation data, an attacker could generate a
+> > > > hibernation image using their own key and trick the kernel into
+> > > > resuming arbitrary code. We don't have any way to pass secret data
+> > > > from the hibernate kernel to the resume kernel, so I don't think
+> > > > there's any easy way to do it with outsideinfo.
+> > >
+> > > Can we go back again to why you can't use locality?  It's exactly
+> > > designed for this since locality is part of creation data.  Currently
+> > > everything only uses locality 0, so it's impossible for anyone on Linux
+> > > to produce a key with anything other than 0 in the creation data for
+> > > locality.  However, the dynamic launch people are proposing that the
+> > > Kernel should use Locality 2 for all its operations, which would allow
+> > > you to distinguish a key created by the kernel from one created by a
+> > > user by locality.
+> > >
+> > > I think the previous objection was that not all TPMs implement
+> > > locality, but then not all laptops have TPMs either, so if you ever
+> > > come across one which has a TPM but no locality, it's in a very similar
+> > > security boat to one which has no TPM.
+> >
+> > Kernel could try to use locality 2 and use locality 0 as fallback.
 
+> I don't think that would work for Matthew, they need something
+> reliable to indicate key provenance.
+
+Indeed, I was going to mention that.  Falling back means that the
+security guarantee is lost, perhaps silently and lost on the owner of
+the system, if they are not paying attention to things like the boot
+logs.
+
+One of the persistent challenges with these hardware security
+technologies is that they need to be ubiquitous to be useful,
+something that has historically plagued all of these technologies.
+
+> I was informed that all 5 localities should be supported starting
+> with Gen 7 Kaby Lake launched in 2016. Don't know if this is still
+> "too new".
+
+It will be necessary, and important, to differentiate between
+'supported' and 'available'.
+
+Historically, security features have been SKU'ified, in other words,
+made available only on specific SKU's, even when the platform writ
+large has the necessary support.  These SKU's are designed to be
+directed at various verticals or OEM's who are perceived to be willing
+to pay more for enhanced security.
+
+I've had conversations on whether or not hardware technologies would
+be available and the conversation usually ends with the equivalent of:
+"Show us the business case for supporting this."
+
+Which translates, roughly, into how much money are we going to make if
+we offer this.
+
+Unfortunately, without being ubiquitous, as you note for a long period
+of time, there is no development interest, which in turn translates
+into no market 'pull'.  A rather troublesome dilemma for security
+innovation.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
