@@ -2,167 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C72767BFF9
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jan 2023 23:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C69167C020
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jan 2023 23:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjAYWe7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 25 Jan 2023 17:34:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
+        id S229570AbjAYWpu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Jan 2023 17:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjAYWe6 (ORCPT
+        with ESMTP id S229475AbjAYWpt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 25 Jan 2023 17:34:58 -0500
+        Wed, 25 Jan 2023 17:45:49 -0500
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D034941C
-        for <linux-integrity@vger.kernel.org>; Wed, 25 Jan 2023 14:34:57 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PLwoE2021489;
-        Wed, 25 Jan 2023 22:34:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=At/ibUiFul1pnPHZexUrIJ54VvvyfqXoEP/IHJNjDyA=;
- b=BcCXcWR87KyJBCtjlKHvlZ3jZbCtlaKQHw+U6TKdT/gSg/DZF0sPlotajMpRnsTxYh97
- tlV08OZErN/oghw9vLrXU5763LOpY4d7qN78FalL0tEnYXYRzNgOnqZwTKgJzbCbRRlQ
- qZ7L6D/B4q/kO5ddo6O3sXefoyONxUVCRlACXFgQEhzzX/360dlAdePQiHjZ7TKZNKkq
- mqKU1tm8hPHd7u53EiZPTEugnthqe2zl8SXDWkO/DhsfrEo5MviIGPP80hyWH75b8Mrx
- GIMtZh4Kw5WSc/T14AZWhmhibBjaHv2idC+EW3kAn7E2gNuCAct6tPdcrU4ptZPzo7TJ vQ== 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7591311165
+        for <linux-integrity@vger.kernel.org>; Wed, 25 Jan 2023 14:45:48 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PMAR03011696;
+        Wed, 25 Jan 2023 22:45:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=P1R753LsKPlSs5lwo1+SIlk0dG4LOtQAwJX5ePgwoFU=;
+ b=cIs+usAGDphQ46a/w3ffu3Ny3s+q66/EOkMBEvr7AHMT/3FjNmP/Ndvf28AJyJEoU96o
+ Xny+DuqB0QNUU+mdl/c//QpxVZxNH2I/Twar2xQr8LmgvHenITC8QfDiOvW0TGe5S0+j
+ V7sNmHZJZkeoFLXZYP89FV4bOmFiyuoV1ho31671H9STdr3eIUEdIt+6lqXhhQTipl+g
+ ZZT6NG6LH/pMgFiHCfWuyfnwmqO9e8vU139xvsMeTYru65mjfZ2RqCKmRRqpnFJsGh6a
+ lx262PhVRAQfOd+4i8PJuUTksEqbtSvjCkMxGl2QQyahgptkUKxJqkeYTbnmUoT3dkhz kg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg2381q-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na839hmb2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 22:34:49 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30PMV3oZ000624;
-        Wed, 25 Jan 2023 22:34:48 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg2380m-1
+        Wed, 25 Jan 2023 22:45:31 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30PMjVfJ016195;
+        Wed, 25 Jan 2023 22:45:31 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na839hmaa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 22:34:48 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKQ1MS010736;
-        Wed, 25 Jan 2023 22:34:47 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3n87p7a8te-1
+        Wed, 25 Jan 2023 22:45:31 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKSZdi012824;
+        Wed, 25 Jan 2023 22:45:29 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3n87p7tb12-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 22:34:47 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PMYkla7602730
+        Wed, 25 Jan 2023 22:45:29 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PMjSER66454006
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 22:34:46 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 447D75805E;
-        Wed, 25 Jan 2023 22:34:46 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D074758062;
-        Wed, 25 Jan 2023 22:34:45 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.18.164])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Jan 2023 22:34:45 +0000 (GMT)
-Message-ID: <bfee27d7b5cca377f43c0e9beaf7bfefda6ec0de.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils] Experimental fsverity.test related GA CI
- improvements
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>
-Date:   Wed, 25 Jan 2023 17:34:45 -0500
-In-Reply-To: <20221205144447.4mtmteolbvcabzzp@altlinux.org>
-References: <20221201002654.2238906-1-vt@altlinux.org>
-         <7db27896916a944d8e4a212cad23865166ceb9f4.camel@linux.ibm.com>
-         <20221205144447.4mtmteolbvcabzzp@altlinux.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QRfMhRHBk2Q_eGDuAG-Vm76xK1JFo47Y
-X-Proofpoint-GUID: Il6tuFAN8EvFVrJ1Jw7MNkXPr6jPYOY4
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 25 Jan 2023 22:45:28 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B3AE758066;
+        Wed, 25 Jan 2023 22:45:28 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E877358055;
+        Wed, 25 Jan 2023 22:45:27 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 25 Jan 2023 22:45:27 +0000 (GMT)
+Message-ID: <cbfb1860-5b22-910d-6a85-9ee01657fc2a@linux.ibm.com>
+Date:   Wed, 25 Jan 2023 17:45:27 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH ima-evm-utils v3 08/11] Adapt fsverity.test to be able to
+ run in a new testing environment
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20230125085030.1568256-1-roberto.sassu@huaweicloud.com>
+ <20230125085030.1568256-9-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230125085030.1568256-9-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Sd_yMTw1QfAzngTrOFRsoHCw9fLwzBBi
+X-Proofpoint-ORIG-GUID: umiAi6HXN_Y7oH8Gl1kCvxF1kOpmTwAJ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250200
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ spamscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0 bulkscore=0
+ clxscore=1015 malwarescore=0 mlxscore=0 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301250200
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Vitaly,
 
-On Mon, 2022-12-05 at 17:44 +0300, Vitaly Chikunov wrote:
-> On Mon, Dec 05, 2022 at 08:39:32AM -0500, Mimi Zohar wrote:
-> > 
-> > On Thu, 2022-12-01 at 03:26 +0300, Vitaly Chikunov wrote:
-> > > From: Mimi Zohar <zohar@linux.ibm.com>
-> > > 
-> > > This does not make fsverity.test working on GA CI, though.
-> > > 
-> > > - `--device /dev/loop-control' is required for losetup(8) to work.
-> > > - `--privileged' is required foo mount(8) to work, and this makes
-> > >   `--security-opt seccomp=unconfined' redundant.
-> > > - GA container does not have `/sys/kernel/security' mounted which is
-> > >   needed for `/sys/kernel/security/integrity/ima/policy'.
-> > > - Enable `set -x` in CI as the logs is everything we have to analyze on
-> > >   failures.
-> > > 
-> > 
-> > Agreed, even with these changes the fsverity test will not be executed,
-> > but skipped.
-> > 
-> > However, the reason for them being skipped is totally different than
-> > prior to this patch.   Once the distros have enabled both fsverity
-> > support and are running a recent enough kernel with IMA support for
-> > fsverity, the fsverity test should succeed.
-> > 
-> > So the problem isn't the GitHub actions architecture or the fsverity
-> > test itself, but the lack of IMA kernel support for it.  In addition to
-> > the ima-evm-utils distro tests, there needs to be a way for testing new
-> > kernel integrity features.  Roberto's proposed ima-evm-utils UML patch
-> > set downloads and uses a UML kernel for this purpose.
-> > 
-> > Unless someone can recommend a better alternative, a single UML
-> > "distro" test could be defined and would be executed if a UML kernel is
-> > supplied.   Additional UML tests could be specified.
+
+On 1/25/23 03:50, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> Just as an idea. I did some CI testing for LKRG on GA,
->   https://github.com/lkrg-org/lkrg/blob/main/.github/workflows/docker-boot.yml
->   https://github.com/lkrg-org/lkrg/blob/main/.github/workflows/docker-boot.sh
+> Adapt fsverity.test by adding calls to the testing environment API in
+> functions.sh. If TST_ENV is set, create a new environment and run the
+> kernel specified with the TST_KERNEL environment variable. Otherwise, keep
+> the current behavior.
 > 
-> It's possible to boot in QEMU system created in Docker (alas without
-> KVM as GA does not support it). But this will install distribution's kernel.
-> So it would need to find distribution with the appropriate kernel.
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>   tests/fsverity.test | 11 ++++++++++-
+>   1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> Also, GA have cache functionality, so there could be dependent job
-> to build the kernel with required options and then save it into a cache
-> (to save time, bandwidth, and CPU resources).
-> 
-> And another possibility is, instead of using Docker it's possible to use
-> cloud images that many distributions have, and then same as with docker
-> (install or build kernel, save into cache and use in next CI runs).
-> Never tried this method myself. AFAIK this will require to use cloud-init
-> to set up system on first boot.
+> diff --git a/tests/fsverity.test b/tests/fsverity.test
+> index be9594010de5..8261de4ea3c9 100755
+> --- a/tests/fsverity.test
+> +++ b/tests/fsverity.test
+> @@ -47,7 +47,7 @@ FSVERITY="$(which fsverity)"
+>   _require dd mkfs blkid e2fsck tune2fs evmctl setfattr
+>   ./gen-keys.sh >/dev/null 2>&1
+>   
+> -trap '_report_exit_and_cleanup cleanup' SIGINT SIGTERM EXIT
+> +trap '_report_exit_and_cleanup _cleanup_env cleanup' SIGINT SIGTERM EXIT
+>   
+>   cleanup() {
+>           if [ -e $TST_MNT ]; then
+> @@ -308,6 +308,15 @@ measure-ima() {
+>   	return "$error"
+>   }
+>   
+> +# Run in the new environment if TST_ENV is set.
+> +_run_env "$TST_KERNEL" "$PWD/$(basename "$0")" "TST_ENV=$TST_ENV TST_KERNEL=$TST_KERNEL PATH=$PATH LD_LIBRARY_PATH=$LD_LIBRARY_PATH VERBOSE=$VERBOSE"
+> +
+> +# Exit from the creator of the new environment.
+> +_exit_env "$TST_KERNEL"
+> +
+> +# Mount filesystems in the new environment.
+> +_init_env
+> +
+>   # Dependency on being able to read and write the IMA policy file.
+>   # Requires both CONFIG_IMA_WRITE_POLICY, CONFIG_IMA_READ_POLICY be
+>   # enabled.
 
-Roberto's v3 "Support testing in new enviroments" patch adds the UML
-support, but leaves open the option for using other environments like
-virtual machines.
-
-With the support for building a UML kernel with the appropriate Kconfig
-options, the fsverity.test is now working properly.  I just posted "ci:
-cleanup build.sh test log output".   With these changes, I'd appreciate
-your updating this patch accordingly.
-
--- 
-thanks,
-
-Mimi
-
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
