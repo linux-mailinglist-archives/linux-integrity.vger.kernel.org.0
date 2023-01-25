@@ -2,88 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6C767ACD9
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jan 2023 09:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A7767B2CF
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jan 2023 13:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbjAYIwd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 25 Jan 2023 03:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S234393AbjAYM7X (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Jan 2023 07:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbjAYIwc (ORCPT
+        with ESMTP id S232999AbjAYM7W (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:52:32 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20F4116
-        for <linux-integrity@vger.kernel.org>; Wed, 25 Jan 2023 00:52:31 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P1y7d2mV3z9xHvZ
-        for <linux-integrity@vger.kernel.org>; Wed, 25 Jan 2023 16:44:29 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD3fQmG7dBjf2fGAA--.15976S13;
-        Wed, 25 Jan 2023 09:52:18 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH ima-evm-utils v3 11/11] Temporarily remove CONFIG_DEBUG_SG to test portable signatures
-Date:   Wed, 25 Jan 2023 09:50:30 +0100
-Message-Id: <20230125085030.1568256-12-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230125085030.1568256-1-roberto.sassu@huaweicloud.com>
-References: <20230125085030.1568256-1-roberto.sassu@huaweicloud.com>
+        Wed, 25 Jan 2023 07:59:22 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B38360BC;
+        Wed, 25 Jan 2023 04:59:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1674651557;
+        bh=1h3KVU06lOoLOdYsLnIUqpA3XQTq9kVXFFNylvoJSj4=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=fLl7cZctumr8AVdN7FmYgB13dp34nE9HVcbzGxjc82nv4AaSZ9Mk/tuyz9rLFq2Ca
+         hgl4o4Pm61VsA8fF6CKqrQS+JgiWQ5cWZ3Whw53pw/lhE/qxlczQtpXwkSkhiyjE5F
+         1coOIgSs7XLle+cEOuDkhn/D2uCIbtnkFibEWASk=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C4FF81285D02;
+        Wed, 25 Jan 2023 07:59:17 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id U2IzwpUjJlAo; Wed, 25 Jan 2023 07:59:17 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1674651556;
+        bh=1h3KVU06lOoLOdYsLnIUqpA3XQTq9kVXFFNylvoJSj4=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=KHrbss3JSFUfsu551V5G8E4NYE+iqjoAF+X6M/wwKXS5p99pQQ6ct8GC0ENn7tCVG
+         SOnz1dlwGMPXlYzoSo1DoH85M7FbgkU+y2ZxYq5to0O5mEwzj8e0TIrQoRXvyJFdY+
+         RSDI2z8Jky+cBYk7wbj53LHuKzukoP2j4Rjae954=
+Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id D87361281E04;
+        Wed, 25 Jan 2023 07:59:15 -0500 (EST)
+Message-ID: <a588a74bb930f38c9322dd51d21661398b5e2bb8.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 06/11] tpm: Add full HMAC and encrypt/decrypt session
+ handling code
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     kernel test robot <lkp@intel.com>, linux-integrity@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Jarkko Sakkinen <jarkko@kernel.org>,
+        keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 25 Jan 2023 07:59:09 -0500
+In-Reply-To: <202301250706.deGvd0yq-lkp@intel.com>
+References: <20230124175516.5984-7-James.Bottomley@HansenPartnership.com>
+         <202301250706.deGvd0yq-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD3fQmG7dBjf2fGAA--.15976S13
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xr4fWFWDKr4UAFWfZrWfGrg_yoWxKFb_Zr
-        4fCw48Ar4UJr1xuF4fW3yxX3s2va4kXr1rWF15JF1aqF47KrWDWws5Gr45Ww45W3WUW3y3
-        ZayrAF9IyryjqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb38YFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r126s
-        0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-        Y2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-        v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
-        42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjxUFgAwUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAIBF1jj4gLOQABsH
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Mimi Zohar <zohar@linux.ibm.com>
+On Wed, 2023-01-25 at 07:11 +0800, kernel test robot wrote:
+> Hi James,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on char-misc/char-misc-testing]
+> [also build test WARNING on char-misc/char-misc-next char-misc/char-
+> misc-linus zohar-integrity/next-integrity linus/master v6.2-rc5 next-
+> 20230124]
+> [If your patch is applied to the wrong git tree, kindly drop us a
+> note.
+> And when submitting patch, we suggest to use '--base' as documented
+> in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:   
+> https://github.com/intel-lab-lkp/linux/commits/James-Bottomley/tpm-move-buffer-handling-from-static-inlines-to-real-functions/20230125-020146
+> patch link:   
+> https://lore.kernel.org/r/20230124175516.5984-7-James.Bottomley%40HansenPartnership.com
+> patch subject: [PATCH v2 06/11] tpm: Add full HMAC and
+> encrypt/decrypt session handling code
+> config: arc-allyesconfig
+> (https://download.01.org/0day-ci/archive/20230125/202301250706.deGvd0
+> yq-lkp@intel.com/config)
+> compiler: arceb-elf-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget
+> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+>  -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         #
+> https://github.com/intel-lab-lkp/linux/commit/dc0fc74718b4a786aba4a954233e8ab3afdcc03c
+>         git remote add linux-review
+> https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review James-Bottomley/tpm-move-
+> buffer-handling-from-static-inlines-to-real-functions/20230125-020146
+>         git checkout dc0fc74718b4a786aba4a954233e8ab3afdcc03c
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0
+> make.cross W=1 O=build_dir ARCH=arc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0
+> make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/char/tpm/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/char/tpm/tpm2-sessions.c:1184:5: warning: no previous
+> prototype for 'tpm2_create_null_primary' [-Wmissing-prototypes]
+>     1184 | int tpm2_create_null_primary(struct tpm_chip *chip) {
+>          |     ^~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/char/tpm/tpm2-sessions.c: In function
+> 'tpm_buf_check_hmac_response':
+> > > drivers/char/tpm/tpm2-sessions.c:831:1: warning: the frame size
+> > > of 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>      831 | }
+>          | ^
+>    drivers/char/tpm/tpm2-sessions.c: In function
+> 'tpm_buf_fill_hmac_session':
+>    drivers/char/tpm/tpm2-sessions.c:579:1: warning: the frame size of
+> 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>      579 | }
+>          | ^
 
-Enabling CONFIG_DEBUG_SG requires two kernel fixes. For now don't
-enable CONFIG_DEBUG_SG.
+Is this a test problem?  I can't see why the code would only blow the
+stack on the arc architecture and not on any other ... does it have
+something funny with on stack crypto structures?
 
-Fixes: 62b0afd25f38 ("Add config for UML kernel")
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- config-uml | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/config-uml b/config-uml
-index 2d3bb8ba8edb..fcf2da7d2626 100644
---- a/config-uml
-+++ b/config-uml
-@@ -221,7 +221,6 @@ CONFIG_TRACE_IRQFLAGS=y
- CONFIG_DEBUG_IRQFLAGS=y
- CONFIG_DEBUG_LIST=y
- CONFIG_DEBUG_PLIST=y
--CONFIG_DEBUG_SG=y
- CONFIG_DEBUG_NOTIFIERS=y
- CONFIG_BUG_ON_DATA_CORRUPTION=y
- CONFIG_PROVE_RCU=y
--- 
-2.25.1
+James
 
