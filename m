@@ -2,130 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514F867A970
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jan 2023 04:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D987667AA2A
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jan 2023 07:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjAYD7y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Jan 2023 22:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S229778AbjAYGDs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Jan 2023 01:03:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjAYD7x (ORCPT
+        with ESMTP id S229611AbjAYGDr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Jan 2023 22:59:53 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A96C3B3DD;
-        Tue, 24 Jan 2023 19:59:52 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P2G2Sr002408;
-        Wed, 25 Jan 2023 03:59:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=uuiJH8YjO2+c+q+zzr4MO1DxH/FNu9H2XTbtEmBynsI=;
- b=ku5DMrJp7p9pIzkgme7aE+7kpx9kvlNOMQXK0Kh4TM5A5F5+4GWLNev6FL9WdifkMhZE
- zjrgZ+26x07Gsm4P2tK3xQZjwFsL8DlPruMpJXZaj7BnRoXyd41BCO5byZDbUJrvXC/d
- Ui8GADcT7EgTjA+6/Hzp+uHTmZcY856B+/94eZjHGJtxAWGZhECHwrUPRRhDRa9BPthj
- 3WV7si3C7mlLK1ssnaq9+7wXaSteSUhzt6mtqTlfnzNcqJem50NzMgzSixs8spqyecSo
- Nfine21x5q+9Mp+7/dMwxKej2cV6+4ihjTqDsliLDJQdEOE2/JlKpGDtxNwIN3vkmjxS lA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na838wfte-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 03:59:40 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30P3uLDH016680;
-        Wed, 25 Jan 2023 03:59:39 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na838wfsp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 03:59:39 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30P3dEdE019104;
-        Wed, 25 Jan 2023 03:59:37 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6mjv5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 03:59:37 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30P3xZZ322610280
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 03:59:35 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF64D20043;
-        Wed, 25 Jan 2023 03:59:34 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 71A5A20040;
-        Wed, 25 Jan 2023 03:59:34 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Jan 2023 03:59:34 +0000 (GMT)
-Received: from localhost (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id B9CF6600D5;
-        Wed, 25 Jan 2023 14:59:30 +1100 (AEDT)
-From:   Michael Ellerman <michaele@au1.ibm.com>
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        gjoyce@linux.ibm.com, ruscur@russell.cc, gcwilson@linux.ibm.com,
-        joel@jms.id.au
-Subject: Re: [PATCH v4 21/24] powerpc/pseries: Pass PLPKS password on kexec
-In-Reply-To: <700184879c5f78c72930ba69f09c9d4eddaf933f.camel@linux.ibm.com>
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
- <20230120074306.1326298-22-ajd@linux.ibm.com>
- <CQ053TUZQIPP.1OHV7MVS4F4HT@bobo>
- <700184879c5f78c72930ba69f09c9d4eddaf933f.camel@linux.ibm.com>
-Date:   Wed, 25 Jan 2023 14:59:30 +1100
-Message-ID: <874jsfqn6l.fsf@mpe.ellerman.id.au>
+        Wed, 25 Jan 2023 01:03:47 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982C21BCA;
+        Tue, 24 Jan 2023 22:03:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674626626; x=1706162626;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=k/+PLowZYVwtAdQHjzair5kZNl5YiNS6TKYVrXA87d4=;
+  b=HHlj+agwj21y6ZLP3HyMT6nHWiCcM3UnJyGIFircK3MHF26NUp5IF0sq
+   LcCTtnfHb7rcoFNdX6L+bHWA8ft9CzOaD/NeOvNo566hwe2E5VgQd8srf
+   kXk/UCtaJpRKTZUVSKPAk5RMth0Y3yzEooddXZVxUriTrL5dW8ufdXCFw
+   m66dBkhbCteXbVbocPjaW5sm0P2klF0G/FTYG67YMUsjbcOT3G/tOUyJL
+   DgwMINIB1KHI51cnFUKeIIX/kMdRfUWkDPyuiokUVF0k87D5wVQwOYy+5
+   pl8+sQ23DE6rh84UlbjWOs0encF8nJcsDCm2AsBma8lica87g+bcE45q7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="390994531"
+X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
+   d="scan'208";a="390994531"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 22:03:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="836250608"
+X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
+   d="scan'208";a="836250608"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Jan 2023 22:03:44 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKYsp-00075g-1S;
+        Wed, 25 Jan 2023 06:03:43 +0000
+Date:   Wed, 25 Jan 2023 14:03:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Jarkko Sakkinen <jarkko@kernel.org>,
+        keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v2 06/11] tpm: Add full HMAC and encrypt/decrypt session
+ handling code
+Message-ID: <202301251326.r0t0nGZc-lkp@intel.com>
+References: <20230124175516.5984-7-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: AgAjsWGpYHV2XTXQpjMH7k-gf4lfKQj6
-X-Proofpoint-ORIG-GUID: 78vV16f0SF1vqq5MSoZDpsLm-ddIFycf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-24_17,2023-01-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- spamscore=0 mlxlogscore=819 adultscore=0 lowpriorityscore=0 bulkscore=0
- clxscore=1011 malwarescore=0 mlxscore=0 priorityscore=1501 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301250029
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124175516.5984-7-James.Bottomley@HansenPartnership.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-QW5kcmV3IERvbm5lbGxhbiA8YWpkQGxpbnV4LmlibS5jb20+IHdyaXRlczoNCj4gT24gVHVlLCAy
-MDIzLTAxLTI0IGF0IDE0OjM2ICsxMDAwLCBOaWNob2xhcyBQaWdnaW4gd3JvdGU6DQo+PiANCj4+
-ID4gK8KgwqDCoMKgwqDCoMKgcHJvcCA9IG9mX2ZpbmRfcHJvcGVydHkob2ZfY2hvc2VuLCAiaWJt
-LHBscGtzLXB3IiwgJmxlbik7DQo+PiA+ICvCoMKgwqDCoMKgwqDCoGlmIChwcm9wKSB7DQo+PiA+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBvc3Bhc3N3b3JkbGVuZ3RoID0gKHUxNils
-ZW47DQo+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBvc3Bhc3N3b3JkID0ga3ph
-bGxvYyhvc3Bhc3N3b3JkbGVuZ3RoLCBHRlBfS0VSTkVMKTsNCj4+ID4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoGlmICghb3NwYXNzd29yZCkgew0KPj4gPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG9mX3JlbW92ZV9wcm9wZXJ0eShvZl9jaG9z
-ZW4sIHByb3ApOw0KPj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHJldHVybiAtRU5PTUVNOw0KPj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgfQ0KPj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbWVtY3B5KG9zcGFzc3dv
-cmQsIHByb3AtPnZhbHVlLCBsZW4pOw0KPj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgcmV0dXJuIG9mX3JlbW92ZV9wcm9wZXJ0eShvZl9jaG9zZW4sIHByb3ApOw0KPj4gDQo+PiBX
-aHkgZG8geW91IHJlbW92ZSB0aGUgcHJvcGVydHkgYWZ0ZXJ3YXJkPw0KPg0KPiBCZWNhdXNlIG90
-aGVyd2lzZSB0aGUgcGFzc3dvcmQgd2lsbCBiZSBzaXR0aW5nIGFyb3VuZCBpbiAvcHJvYy9kZXZp
-Y2UtDQo+IHRyZWUgZm9yIHRoZSB3b3JsZCB0byBnbyBhbmQgcmVhZC4NCg0KVGhlIGFib3ZlIHJl
-bW92ZXMgaXQgZnJvbSB0aGUgdW5mbGF0dGVuZWQgdHJlZSwgYnV0IGl0IHdpbGwgc3RpbGwgZXhp
-c3QNCmluIHRoZSBmbGF0dGVuZWQgdHJlZSwgd2hpY2ggaXMgcmVhZGFibGUgYnkgcm9vdCBpbiAv
-c3lzL2Zpcm13YXJlL2ZkdC4NCg0KSSdtIG5vdCBzdXJlIGlmIHRoYXQncyBhIG1ham9yIHNlY3Vy
-aXR5IHByb2JsZW0sIGJ1dCBpdCBkb2VzIHNlZW0gcmlza3kuDQoNClRvIHNjcnViIGl0IGZyb20g
-dGhlIGZsYXQgdHJlZSB5b3UnZCBuZWVkIHRvIGhhdmUgYW4gZWFybHlfaW5pdF9kdCBzdHlsZQ0K
-cm91dGluZSB0aGF0IGZpbmRzIHRoZSBwYXNzd29yZCBlYXJseSwgc2F2ZXMgdGhlIHZhbHVlIHNv
-bWV3aGVyZSBmb3IgdGhlDQpwbHBrcyBkcml2ZXIsIGFuZCB0aGVuIHplcm9lcyBvdXQgdGhlIHZh
-bHVlIGluIHRoZSBmbGF0IHRyZWUuIFNlZSB0aGUNCmV4YW1wbGUgb2Ygcm5nLXNlZWQgaW4gZWFy
-bHlfaW5pdF9kdF9zY2FuX2Nob3NlbigpLg0KDQpjaGVlcnMNCg==
+Hi James,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus zohar-integrity/next-integrity linus/master v6.2-rc5 next-20230124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/James-Bottomley/tpm-move-buffer-handling-from-static-inlines-to-real-functions/20230125-020146
+patch link:    https://lore.kernel.org/r/20230124175516.5984-7-James.Bottomley%40HansenPartnership.com
+patch subject: [PATCH v2 06/11] tpm: Add full HMAC and encrypt/decrypt session handling code
+config: i386-randconfig-s002-20230123 (https://download.01.org/0day-ci/archive/20230125/202301251326.r0t0nGZc-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/dc0fc74718b4a786aba4a954233e8ab3afdcc03c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review James-Bottomley/tpm-move-buffer-handling-from-static-inlines-to-real-functions/20230125-020146
+        git checkout dc0fc74718b4a786aba4a954233e8ab3afdcc03c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/char/tpm/tpm2-sessions.c:1184:5: sparse: sparse: symbol 'tpm2_create_null_primary' was not declared. Should it be static?
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
