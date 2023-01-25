@@ -2,129 +2,152 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADA067B3C9
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jan 2023 15:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A2567B3DA
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jan 2023 15:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235102AbjAYOB5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 25 Jan 2023 09:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
+        id S235053AbjAYOHP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Jan 2023 09:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234845AbjAYOB4 (ORCPT
+        with ESMTP id S235045AbjAYOHO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 25 Jan 2023 09:01:56 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF10A46167;
-        Wed, 25 Jan 2023 06:01:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1674655315;
-        bh=mOb5g9Y6fpziO8sZahIkRFgvrUxahBGEJYC92LSBRUQ=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=cw/5flAwvjyXclH1HnW04plVsCkM7xHH59NQ/1KeyhV7uGnsPo33ethpG7IQLAuHw
-         +xq3MUJcOHgEKpROI/2JygkUuF0zZC4+08WHqmjyRHJ/wpB3VYux0xdQPEq7CzKvkI
-         Ac3h0lKDTqye55CyIhtrCFMkxkdPAuK7riD3evCE=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 170A11286199;
-        Wed, 25 Jan 2023 09:01:55 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id T3KzLZZsZejS; Wed, 25 Jan 2023 09:01:54 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1674655314;
-        bh=mOb5g9Y6fpziO8sZahIkRFgvrUxahBGEJYC92LSBRUQ=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=pqaz8dlsw2Gjw+sVezF9iVZVJITI5Wb9Y1nxlPIlOZNtjEYZVnmYfb+SCH3SAZvwm
-         wlxE3SAxfppcF6KXRj0c2d6aowUnmz24azJirsBrMX+ktWM1XnWCQxfkeb1whDV6Fl
-         /W6TrdMhJRf0Fhvam9rVQ1E2Mb2J7VNw9wMk2Hy4=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 3BC9A1286141;
-        Wed, 25 Jan 2023 09:01:54 -0500 (EST)
-Message-ID: <0c69d737684c5b1232090c1a501198852bf15b9c.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 01/11] tpm: move buffer handling from static inlines
- to real functions
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     kernel test robot <lkp@intel.com>, linux-integrity@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jarkko Sakkinen <jarkko@kernel.org>,
-        keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 25 Jan 2023 09:01:52 -0500
-In-Reply-To: <202301250315.ZgtsNzSm-lkp@intel.com>
-References: <20230124175516.5984-2-James.Bottomley@HansenPartnership.com>
-         <202301250315.ZgtsNzSm-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Wed, 25 Jan 2023 09:07:14 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D944B44BC8
+        for <linux-integrity@vger.kernel.org>; Wed, 25 Jan 2023 06:07:09 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PC0CDr006278;
+        Wed, 25 Jan 2023 14:06:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=H7Xj+9aqxxd2PYEZatZyNWP3g/juBry/HD3iiF5WoIg=;
+ b=TraG7pRz19YW6FAKOJgiEdnq8aavqLjVHfpvrXethywtP2FrZPQv/jXHFa81HVYV5qKw
+ JT9Kt5zRpdQ5HL2we136mOcQEIdqY3J2LOuqWA4r7tCqUdb/gs2ZW8kS6XbRVvPWxxPU
+ n4l0EVNGWaTZO2RqopcxWsCZCAJnJT5IgED9VBq6mjYZ21NxX2sPg10niBRFqMWbmex6
+ 5ER10nz+rogatLm+v0mDO0Kq6FDnD4WVu3xSW/ThFYADL+G7+hStj8skjrXcQ+vkSd3Y
+ PdWJ/J4zFEjWrJPfRJml/wH35EEJMtmCJorD196OiC9WgcBThI2rC9X0MawbbOWXueAW UQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3naakpqk75-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 14:06:48 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30PDwMCN000597;
+        Wed, 25 Jan 2023 14:06:47 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3naakpqk6n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 14:06:47 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PALrlU010674;
+        Wed, 25 Jan 2023 14:06:47 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3n87p786dh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 14:06:46 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PE6jHJ2228864
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Jan 2023 14:06:46 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E3105805E;
+        Wed, 25 Jan 2023 14:06:45 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8CC4558068;
+        Wed, 25 Jan 2023 14:06:44 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 25 Jan 2023 14:06:44 +0000 (GMT)
+Message-ID: <db318103-c9a8-1e42-0d6f-7e9d139ab201@linux.ibm.com>
+Date:   Wed, 25 Jan 2023 09:06:44 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH ima-evm-utils v3 06/11] Introduce TST_LIST variable to
+ select a test to execute
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20230125085030.1568256-1-roberto.sassu@huaweicloud.com>
+ <20230125085030.1568256-7-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230125085030.1568256-7-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4urMPRcNGqIszcVoq_Q_GFlZlD6PotS7
+X-Proofpoint-GUID: xhMPDfSy3fepT3gtNmfR12wfJoajTaf0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_08,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 spamscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250126
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2023-01-25 at 03:57 +0800, kernel test robot wrote:
-> Hi James,
-> 
-> I love your patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on char-misc/char-misc-testing]
-> [also build test WARNING on char-misc/char-misc-next char-misc/char-
-> misc-linus zohar-integrity/next-integrity linus/master v6.2-rc5 next-
-> 20230124]
-> [If your patch is applied to the wrong git tree, kindly drop us a
-> note.
-> And when submitting patch, we suggest to use '--base' as documented
-> in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:   
-> https://github.com/intel-lab-lkp/linux/commits/James-Bottomley/tpm-move-buffer-handling-from-static-inlines-to-real-functions/20230125-020146
-> patch link:   
-> https://lore.kernel.org/r/20230124175516.5984-2-James.Bottomley%40HansenPartnership.com
-> patch subject: [PATCH v2 01/11] tpm: move buffer handling from static
-> inlines to real functions
-> config: sparc-allyesconfig
-> (https://download.01.org/0day-ci/archive/20230125/202301250315.ZgtsNz
-> Sm-lkp@intel.com/config)
-> compiler: sparc64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget
-> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
->  -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         #
-> https://github.com/intel-lab-lkp/linux/commit/484b879d0bfceec899fea147a76d12f7072d9f23
->         git remote add linux-review
-> https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review James-Bottomley/tpm-move-
-> buffer-handling-from-static-inlines-to-real-functions/20230125-020146
->         git checkout 484b879d0bfceec899fea147a76d12f7072d9f23
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0
-> make.cross W=1 O=build_dir ARCH=sparc olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0
-> make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash
-> drivers/char/tpm/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> > > drivers/char/tpm/tpm-buf.c:46:5: warning: no previous prototype
-> > > for 'tpm_buf_tag' [-Wmissing-prototypes]
->       46 | u16 tpm_buf_tag(struct tpm_buf *buf)
->          |     ^~~~~~~~~~~
 
 
-This looks like an initial header got missed in the code motion. 
-However, the fact that nothing broke shows that tpm_buf_tag isn't used
-outside of the tpm-buf.c functions, so I think I can make it static to
-them.
+On 1/25/23 03:50, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> It might be desirable, due to restrictions in the testing environment, to
+> execute tests individually. Introduce the TST_LIST variable, which can be
+> set with the name of the test to execute. If the variable is set,
+> expect_pass and expect_fail automatically skip the tests when the first
+> argument of those functions does not match the value of TST_LIST.
+> 
+> TST_LIST can be also used in new environments, to execute a subset of
+> defined tests for each environment. It is sufficient to add the variable
+> and its value to the kernel command line.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>   tests/functions.sh | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/tests/functions.sh b/tests/functions.sh
+> index 9dc9b96d1d7a..d2edd8514e85 100755
+> --- a/tests/functions.sh
+> +++ b/tests/functions.sh
+> @@ -72,6 +72,12 @@ declare -i TNESTED=0 # just for sanity checking
+>   expect_pass() {
+>     local -i ret
+>   
+> +  if [ -n "$TST_LIST" ] && [ "${TST_LIST/$1/}" = "$TST_LIST" ]; then
+> +    [ "$VERBOSE" -gt 1 ] && echo "____ SKIP test: $*"
+> +    testsskip+=1
+> +    return $SKIP
+> +  fi
+> +
+>     if [ $TNESTED -gt 0 ]; then
+>       echo $RED"expect_pass should not be run nested"$NORM
+>       testsfail+=1
+> @@ -98,6 +104,12 @@ expect_pass() {
+>   expect_fail() {
+>     local ret
+>   
+> +  if [ -n "$TST_LIST" ] && [ "${TST_LIST/$1/}" = "$TST_LIST" ]; then
+> +    [ "$VERBOSE" -gt 1 ] && echo "____ SKIP test: $*"
+> +    testsskip+=1
+> +    return $SKIP
+> +  fi
+> +
+>     if [ $TNESTED -gt 0 ]; then
+>       echo $RED"expect_fail should not be run nested"$NORM
+>       testsfail+=1
 
-James
+return "$SKIP" would be better.
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
