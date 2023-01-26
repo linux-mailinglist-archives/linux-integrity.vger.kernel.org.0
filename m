@@ -2,145 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C5467D0B1
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jan 2023 16:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E05F567D1D9
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jan 2023 17:39:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbjAZPzx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Jan 2023 10:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
+        id S231952AbjAZQj1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Jan 2023 11:39:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjAZPzx (ORCPT
+        with ESMTP id S231710AbjAZQj0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:55:53 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092782BF39
-        for <linux-integrity@vger.kernel.org>; Thu, 26 Jan 2023 07:55:51 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QDjJiw023104;
-        Thu, 26 Jan 2023 15:55:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=/7M08UJI+vnWWb7eEGpP4T9TJTm6za6JM8+gB7+kyiU=;
- b=Py7Wzy2OkxeTlCCKq/W8lwWiLJUXIZiNHQEXYWRgjkuVXIiPMbO3qvVB6EpJZfUx0WNo
- AaVpRixJIsH7CN9psqWLmmrtSBwTVtJ7qyygRK912opH4z4bT+qsDZN1gYkC7TtZ9dew
- VEVKkMJeFQ3X3QyOFdUMmhdhHcmePvYwxbITZH0Sl1IXIJV5/zPGmxm+EYwiJVErQKyG
- gPc2G2s3hmODQ/EHvJKcqZ/XfXjBC4gkjxuqnlqysnrQmHsrl/SedNOPCddAqFWkV45+
- 5hhtyLEEAtJ1mpLbmGrhO88l8FKB5bdHc9xPgywPaJr4WyY5+ec9FLUdpgYH35+nYv4t kA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbtp43cv0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 15:55:27 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QFALrQ021354;
-        Thu, 26 Jan 2023 15:55:26 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbtp43cup-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 15:55:26 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QF75bK004823;
-        Thu, 26 Jan 2023 15:55:26 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3n87p8dk16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 15:55:26 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QFtP7q62193960
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 15:55:25 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5229658055;
-        Thu, 26 Jan 2023 15:55:25 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9ABCC5803F;
-        Thu, 26 Jan 2023 15:55:24 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Jan 2023 15:55:24 +0000 (GMT)
-Message-ID: <335c6fd0-20d2-1050-2bb4-091aab929514@linux.ibm.com>
-Date:   Thu, 26 Jan 2023 10:55:23 -0500
+        Thu, 26 Jan 2023 11:39:26 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5788183;
+        Thu, 26 Jan 2023 08:39:24 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P2mRl0Xqsz9v7Ys;
+        Fri, 27 Jan 2023 00:31:15 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwCHXGOnrNJjEzvKAA--.36334S2;
+        Thu, 26 Jan 2023 17:39:10 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
+        viro@zeniv.linux.org.uk, Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v3 1/2] ima: Align ima_file_mmap() parameters with mmap_file LSM hook
+Date:   Thu, 26 Jan 2023 17:38:10 +0100
+Message-Id: <20230126163812.1870942-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH ima-evm-utils v4 05/11] Add support for creating a new
- testing environment in functions.sh
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230126135807.1848668-1-roberto.sassu@huaweicloud.com>
- <20230126135807.1848668-6-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230126135807.1848668-6-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: v0RZC4sRYr6XoUHlFsvPTPsW64E4ui87
-X-Proofpoint-GUID: 6WxujnYt-6tAdc4rs6NGptTiKe0AE9oc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_07,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=975 clxscore=1015 bulkscore=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 impostorscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260151
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwCHXGOnrNJjEzvKAA--.36334S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr1UXF1fAFWUuw13Kw1fCrg_yoWrtF1rpF
+        98Ka4UGrZ5JFy09r97uay7Za43K34xKrWUWayIg340y3Z8XF1v9r13AFy29r1rCr95AFyI
+        q347KrW5C3WqyFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvqb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x02
+        62kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280
+        aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07jzQ6JUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4Ql4wACs+
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
+Commit 98de59bfe4b2f ("take calculation of final prot in
+security_mmap_file() into a helper") moved the code to update prot, to be
+the actual protections applied to the kernel, to a new helper called
+mmap_prot().
 
-On 1/26/23 08:58, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Add the new functions _run_env(), _exit_env(), _init_env() and
-> _cleanup_env() to run the tests inside a new environment specified with the
-> TST_ENV environment variable.
-> 
-> A typical structure of a script with tests is:
-> 
-> trap '_report_exit_and_cleanup _cleanup_env cleanup' \
->      SIGINT SIGTERM SIGSEGV EXIT
-> 
-> cleanup() {
-> 	<test cleanup>
-> }
-> 
-> <tests implementations>
-> 
-> _run_env "$TST_KERNEL" "$PWD/$(basename "$0")" "env_var1=$env_var1 ..."
-> 
-> _exit_env "$TST_KERNEL"
-> 
-> _init_env
-> 
-> <tests init>
-> 
-> <tests call>
-> 
-> If TST_ENV is not set or empty, don't create a new testing environment and
-> perform the cleanup in the current environment. Don't create a new testing
-> environment also if the script is already executed in a new environment, to
-> avoid loops. Instead, for cleanup, do it in the new environment and skip it
-> in the host environment (if the cleanup function is passed to
-> _cleanup_env()).
-> 
-> Signal to the creator of the environment failures of tests or of the script
-> itself run in the new environment (if the exit code is 1 ($FAIL) or 99
-> ($HARDFAIL)) with an unclean shutdown of the system.
-> 
-> Add haveged and systemd as dependencies for the tests in ci/fedora.sh,
-> respectively for initializing the random number generator and for shutting
-> down the system in the new environment.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+However, while without the helper ima_file_mmap() was getting the updated
+prot, with the helper ima_file_mmap() gets the original prot, which
+contains the protections requested by the application.
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+A possible consequence of this change is that, if an application calls
+mmap() with only PROT_READ, and the kernel applies PROT_EXEC in addition,
+that application would have access to executable memory without having this
+event recorded in the IMA measurement list. This situation would occur for
+example if the application, before mmap(), calls the personality() system
+call with READ_IMPLIES_EXEC as the first argument.
+
+Align ima_file_mmap() parameters with those of the mmap_file LSM hook, so
+that IMA can receive both the requested prot and the final prot. Since the
+requested protections are stored in a new variable, and the final
+protections are stored in the existing variable, this effectively restores
+the original behavior of the MMAP_CHECK hook.
+
+Cc: stable@vger.kernel.org
+Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ include/linux/ima.h               | 6 ++++--
+ security/integrity/ima/ima_main.c | 7 +++++--
+ security/security.c               | 7 ++++---
+ 3 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 5a0b2a285a18..d79fee67235e 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -21,7 +21,8 @@ extern int ima_file_check(struct file *file, int mask);
+ extern void ima_post_create_tmpfile(struct user_namespace *mnt_userns,
+ 				    struct inode *inode);
+ extern void ima_file_free(struct file *file);
+-extern int ima_file_mmap(struct file *file, unsigned long prot);
++extern int ima_file_mmap(struct file *file, unsigned long reqprot,
++			 unsigned long prot, unsigned long flags);
+ extern int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot);
+ extern int ima_load_data(enum kernel_load_data_id id, bool contents);
+ extern int ima_post_load_data(char *buf, loff_t size,
+@@ -76,7 +77,8 @@ static inline void ima_file_free(struct file *file)
+ 	return;
+ }
+ 
+-static inline int ima_file_mmap(struct file *file, unsigned long prot)
++static inline int ima_file_mmap(struct file *file, unsigned long reqprot,
++				unsigned long prot, unsigned long flags)
+ {
+ 	return 0;
+ }
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 377300973e6c..f48f4e694921 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -397,7 +397,9 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ /**
+  * ima_file_mmap - based on policy, collect/store measurement.
+  * @file: pointer to the file to be measured (May be NULL)
+- * @prot: contains the protection that will be applied by the kernel.
++ * @reqprot: protection requested by the application
++ * @prot: protection that will be applied by the kernel
++ * @flags: operational flags
+  *
+  * Measure files being mmapped executable based on the ima_must_measure()
+  * policy decision.
+@@ -405,7 +407,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
+  * On success return 0.  On integrity appraisal error, assuming the file
+  * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+  */
+-int ima_file_mmap(struct file *file, unsigned long prot)
++int ima_file_mmap(struct file *file, unsigned long reqprot,
++		  unsigned long prot, unsigned long flags)
+ {
+ 	u32 secid;
+ 
+diff --git a/security/security.c b/security/security.c
+index d1571900a8c7..174afa4fad81 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1661,12 +1661,13 @@ static inline unsigned long mmap_prot(struct file *file, unsigned long prot)
+ int security_mmap_file(struct file *file, unsigned long prot,
+ 			unsigned long flags)
+ {
++	unsigned long prot_adj = mmap_prot(file, prot);
+ 	int ret;
+-	ret = call_int_hook(mmap_file, 0, file, prot,
+-					mmap_prot(file, prot), flags);
++
++	ret = call_int_hook(mmap_file, 0, file, prot, prot_adj, flags);
+ 	if (ret)
+ 		return ret;
+-	return ima_file_mmap(file, prot);
++	return ima_file_mmap(file, prot, prot_adj, flags);
+ }
+ 
+ int security_mmap_addr(unsigned long addr)
+-- 
+2.25.1
+
