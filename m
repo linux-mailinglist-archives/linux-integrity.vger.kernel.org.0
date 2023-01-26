@@ -2,137 +2,242 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B4867C0AA
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jan 2023 00:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3A467C6A6
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jan 2023 10:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjAYXPg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 25 Jan 2023 18:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S233508AbjAZJKA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Jan 2023 04:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjAYXPf (ORCPT
+        with ESMTP id S236732AbjAZJJ7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 25 Jan 2023 18:15:35 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5466442FF
-        for <linux-integrity@vger.kernel.org>; Wed, 25 Jan 2023 15:15:34 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PMNDsR012733;
-        Wed, 25 Jan 2023 23:15:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=VaiJ8/pZoaza9XPsFNIvvCCvMQW63kq1saZxTn8Gfsg=;
- b=V8dZvksSer5tOjfZZWxv2In8iCT2zwrBN710mgbu1PfFqSyaQFWKBDh7ZoXh3kSiM5tF
- cweOIeUxcv0oAoSnIsWsNhUEIs61WLY+Ozoz1+vf4Pu7icHsXII6p9AFfnbc9eJZch6w
- 5rGdh9yHdi5YYo0AFLx2CdQ0kvnX7tsFZw7TjYx4n+80v5pE5jLmZ2QPrpJZR6YQDMYR
- Lb7RsMQfYED52bKt9gvXEUkDoe1IHDXnGyL/A1jNwi7A1gZg3095qaEx4StzrRSPXoPt
- CG8MowxPHym5w1s4UOLMVdGpjQOANtGVNlAq9Lz4rMKtxR6QVI53AEnEB4tmkopDSjA3 sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nac21dvp2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 23:15:18 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30PNFHSk000952;
-        Wed, 25 Jan 2023 23:15:17 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nac21dvnj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 23:15:17 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKADLb008021;
-        Wed, 25 Jan 2023 23:15:16 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3n87p72ejs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 23:15:16 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PNFFm339715430
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 23:15:16 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6F3958052;
-        Wed, 25 Jan 2023 23:15:15 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6873A5805A;
-        Wed, 25 Jan 2023 23:15:15 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Jan 2023 23:15:15 +0000 (GMT)
-Message-ID: <d9c60317-5371-6d3a-3f7c-c71011e0a126@linux.ibm.com>
-Date:   Wed, 25 Jan 2023 18:15:14 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH ima-evm-utils v3 07/11] Add tests for EVM portable
- signatures
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com
+        Thu, 26 Jan 2023 04:09:59 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D513E60B
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Jan 2023 01:09:57 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P2ZT82RLrz9xtV0
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Jan 2023 17:01:48 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDnbmVMQ9JjdtTIAA--.57168S2;
+        Thu, 26 Jan 2023 10:09:41 +0100 (CET)
+Message-ID: <5fb96b900cb734a6dfa53b5d83bac2b5b3baf64d.camel@huaweicloud.com>
+Subject: Re: [PATCH ima-evm-utils v3 03/11] Compile the UML kernel and
+ download it in Github Actions
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com
 Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        Roberto Sassu <roberto.sassu@huawei.com>
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 26 Jan 2023 10:09:14 +0100
+In-Reply-To: <a5ef0f7a7c7b7c955833fb5d1eae7239c3d2d219.camel@linux.ibm.com>
 References: <20230125085030.1568256-1-roberto.sassu@huaweicloud.com>
- <20230125085030.1568256-8-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230125085030.1568256-8-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+         <20230125085030.1568256-4-roberto.sassu@huaweicloud.com>
+         <a5ef0f7a7c7b7c955833fb5d1eae7239c3d2d219.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Xyoq_c_hY2uxhY0p1HaYgQDls7wK5uXp
-X-Proofpoint-ORIG-GUID: Eoq2aZDqSFDzOEKL1G99DXtkcChTPDcJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- impostorscore=0 mlxlogscore=818 lowpriorityscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250205
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwDnbmVMQ9JjdtTIAA--.57168S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKr1ftrWrZw15Wr48Jr43KFg_yoWxGF4rpr
+        WYka45Kr4kXa47AwsF9ryruFWrt397Jr17G34xJ34rAF1DAFyvvFs2kFW5uFnFvrWxKF47
+        ZayFgFy2kw48ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4QctQABsS
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 1/25/23 03:50, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Wed, 2023-01-25 at 14:17 -0500, Mimi Zohar wrote:
+> On Wed, 2023-01-25 at 09:50 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Add a build job, prerequisite of the existing job, to compile the UML
+> > kernel and upload it and the signing key to a cache. Github configuration
+> > should have two variables: LINUX_URL, the full URL of the kernel
+> > repository; LINUX_BRANCH, the branch to check out as fallback if the kernel
+> > repository does not have the same branch name as the one being pushed for
+> > ima-evm-utils. See:
+> > 
+> > https://docs.github.com/en/actions/learn-github-actions/variables
+> > 
+> > for directions on how to define those variables.
+> > 
+> > If the two variables are not defined, the default values are:
+> > 
+> > LINUX_URL=https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+> > LINUX_BRANCH=next-integrity
+> > 
+> > If there is a cache hit (same kernel commit and same kernel configuration),
+> > next time the UML kernel will not be rebuilt. To use the cache, it is
+> > necessary to install zstd in the container. Add this dependency to
+> > ci/fedora.sh.
+> > 
+> > The cache can be managed at the following URL:
+> > 
+> > https://github.com/<username>/ima-evm-utils/actions/caches
+> > 
+> > The page also offers the possibility to clean the cache, to force
+> > rebuilding the kernel.
+> > 
+> > Add a new entry in the testing matrix, for the fedora-latest container
+> > image, to run the tests with the UML kernel. The entry differs from the
+> > others for the new environment variable TST_ENV, set to 'um', and
+> > TST_KERNEL set to '../linux', as the tests will be executed from the
+> > tests/ directory in ima-evm-utils.
+> > 
+> > Add a new volume to the container, /dev/shm from the host, as it is
+> > required for running the UML kernel.
+> > 
+> > Extend the existing job with steps to download the UML kernel and signing
+> > key from the cache. The new steps are executed only if the matrix entry has
+> > TST_ENV set.
+> > 
+> > Finally, pass TST_ENV and TST_KERNEL to the tests. A test should also
+> > propagate these variables to the new environment, by passing them to the
+> > kernel command line.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > 
+> Thanks, Roberto.   Just a couple of comments/questions below.
+> 
+> > ---
+> >  .github/workflows/ci.yml | 99 +++++++++++++++++++++++++++++++++++++++-
+> >  ci/fedora.sh             |  3 +-
+> >  2 files changed, 99 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+> > index d2afdfe15467..110c8065237b 100644
+> > --- a/.github/workflows/ci.yml
+> > +++ b/.github/workflows/ci.yml
+> > @@ -3,7 +3,79 @@ name: "distros"
+> >  on: [push, pull_request]
+> >  
+> >  jobs:
+> > +  build:
+> > +    runs-on: ubuntu-latest
+> > +    outputs:
+> > +      LINUX_SHA: ${{ steps.last-commit.outputs.LINUX_SHA }}
+> > +    name: build
+> > +    timeout-minutes: 100
+> > +    strategy:
+> > +      fail-fast: false
+> > +
+> > +    steps:
+> > +      - uses: actions/checkout@v3
+> > +
+> > +      - name: Determine last kernel commit
+> > +        id: last-commit
+> > +        shell: bash
+> > +        run: |
+> > +          mkdir linux-integrity
+> > +          pushd linux-integrity
+> > +          git init
+> > +          LINUX_URL=${{ vars.LINUX_URL }}
+> > +          if [ -z "$LINUX_URL" ]; then
+> > +              LINUX_URL=https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+> > +          fi
+> > +          LINUX_BRANCH=${{ vars.LINUX_BRANCH }}
+> > +          if [ -z "$LINUX_BRANCH" ]; then
+> > +              LINUX_BRANCH=next-integrity
+> > +          fi
+> > +          git remote add origin $LINUX_URL
+> > +          LINUX_SHA=$(git ls-remote origin $GITHUB_REF_NAME | awk '{print $1}')
+> > +          [ -z "$LINUX_SHA" ] && LINUX_SHA=$(git ls-remote origin $LINUX_BRANCH | awk '{print $1}')
+> > +          echo "LINUX_SHA=$LINUX_SHA" >> $GITHUB_OUTPUT
+> > +          popd
+> > +
+> > +      - name: Cache UML kernel
+> > +        id: cache-linux
+> > +        uses: actions/cache@v3
+> > +        with:
+> > +          path: linux
+> > +          key: linux-${{ steps.last-commit.outputs.LINUX_SHA }}-${{ hashFiles('**/config-uml') }}
+> > +
+> > +      - name: Cache signing key
+> > +        id: cache-key
+> > +        uses: actions/cache@v3
+> > +        with:
+> > +          path: signing_key.pem
+> > +          key: signing_key.pem-${{ steps.last-commit.outputs.LINUX_SHA }}-${{ hashFiles('**/config-uml') }}
+> > +
+> > +      - name: Compile UML kernel
+> > +        if: steps.cache-linux.outputs.cache-hit != 'true' || steps.cache-key.outputs.cache-hit != 'true'
+> > +        shell: bash
+> > +        run: |
+> > +          if [ "$DEVTOOLSET" = "yes" ]; then
+> > +                  source /opt/rh/devtoolset-10/enable
+> > +          fi
+> > +          if [ "$ARCH" = "i386" ]; then
+> > +                  CROSS_COMPILE_OPT="CROSS_COMPILE=i686-linux-gnu-"
+> > +          fi
+> > +          pushd linux-integrity
+> > +          git pull --depth 1 origin ${{ steps.last-commit.outputs.LINUX_SHA }}
+> > +          make ARCH=um olddefconfig
+> > +          ./scripts/kconfig/merge_config.sh -m .config ../config-uml
+> 
+> merge_config.sh supports merging multiple config files.  To simplify
+> review, instead of having all the Kconfigs defined in config-uml,
+> consider grouping them based on topic.  For example one file could
+> contain integrity, IMA and EVM, while another file could contain
+> debugging info.
+> 
+> Is it absolutely necessary to do now, no, but going forward it would be
+> nice.  For example, any changes specifically needed for virtual
+> machines, could be defined in a separate file.
 
-> +
-> +	last_char=${ima_xattr: -1}
+Ok. Actually, virtual machines work with the same configuration.
 
-To avoid last_char from spilling into the global variable space I would declare it as local. I would do this for **every** variable.
+I added this at the bottom of config-uml to exclude unneeded drivers:
 
-An example from functions.sh:
+CONFIG_DRM=n
+CONFIG_USB=n
+CONFIG_SOUND=n
 
-_evmctl_run() {
-   local op=$1 out=$1-$$.out
-   local text_for=${FOR:+for $ADD_TEXT_FOR}
-   # Additional parameters:
-   # ADD_DEL: additional files to rm on failure
-   # ADD_TEXT_FOR: append to text as 'for $ADD_TEXT_FOR'
+Since this would apply to both cases, I could just rename config-uml to
+config-test.
 
-   cmd="evmctl $V $EVMCTL_ENGINE $*"
-   echo $YELLOW$TMODE "$cmd"$NORM
-   $cmd >"$out" 2>&1
-   ret=$?
+Also, it seems that the correct way to generate the kernel
+configuration at the beginning is 'make defconfig' not 'make
+olddefconfig', which in my system takes the config from /boot.
 
-[...]
-}
+> > +          # Update manually, to specify ARCH=um
+> > +          make ARCH=um olddefconfig
+> > +          # Make everything built-in
+> > +          make ARCH=um localyesconfig
+> 
+> Updating the .config is happening so many times.  Previously it worked
+> without the additional "localyesconfig", why is it necessary now?
 
-If I have a function like this here calling _evmctl_run() it will clobber even my local-declared ret and cmd variables because neither is declared as local in _evmctl_run.
+It ensures that everything is built-in, since we are not installing
+kernel modules.
 
-foo() {
-   local ret=123
-   local cmd="mycmd"
-   [...]
-   _evmctl_run ...
-   # my ret and cmd are now clobbered!
-}
+Roberto
 
+> > +          make ARCH=um $CROSS_COMPILE_OPT -j$(nproc)
+> > +          chmod +x linux
+> > +          cp linux ..
+> > +          cp certs/signing_key.pem ..
+> > +          popd
+> > +
+> >    job:
+> > +    needs: build
+> >      runs-on: ubuntu-latest
+> >  
+> >      strategy:
 
-   Stefan
