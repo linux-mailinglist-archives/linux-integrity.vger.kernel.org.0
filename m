@@ -2,53 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDB867D32D
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jan 2023 18:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707F467D32F
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jan 2023 18:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjAZRbL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Jan 2023 12:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
+        id S230102AbjAZRbS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Jan 2023 12:31:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjAZRbK (ORCPT
+        with ESMTP id S230110AbjAZRbQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:31:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AD535B8;
-        Thu, 26 Jan 2023 09:31:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84BBEB81EC6;
-        Thu, 26 Jan 2023 17:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD7F6C433EF;
-        Thu, 26 Jan 2023 17:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674754267;
-        bh=9Vz8fsXf+lHADl26EgvxVXAxd89VK+kOoYuLdZ04b8Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R+ZaJ1JwbBRLypCEQqsJZmWtlCPbI5wt169vH7JxK9Apz5CcunVhrHEvK2lsSkiOK
-         Ih3ji3HAp7SeZAT6S24knFOp4Ci2fTFwTDnb2//ifYpYquodw/i1cU3/5VOC5YrqUU
-         OZsz5Sems8kakccPgt5R8N90+ZxJJ5p+loABXvXXqMdSzvJWywyxeivwxx3PNBsQCW
-         B5OQHXC9NTX9vxPxOoX7F7P12pEdjiTFFQxN5e/ia7nSMloqKuufQrvBh0B0Pu14AJ
-         rTV9h/YPJ5U8ypKzyjJX6v3f0kQE6rvow5ppua1nXfq2SFvW83cp95j2UrDz5uN+K7
-         NPDEUglJ2HwkA==
-Date:   Thu, 26 Jan 2023 17:31:04 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jgg@ziepe.ca, peterhuewe@gmx.de
-Subject: Re: [PATCH v2 1/2] tpm: Use managed allocation for bios event log
-Message-ID: <Y9K42OYk3WX7VH4E@kernel.org>
-References: <20230113161017.1079299-1-eajames@linux.ibm.com>
- <20230113161017.1079299-2-eajames@linux.ibm.com>
- <Y8stxF+2XfSFN9wt@kernel.org>
- <ea8e873f-c052-832f-b4a5-0164f5cd6947@linux.ibm.com>
+        Thu, 26 Jan 2023 12:31:16 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6229D5D13B
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Jan 2023 09:31:14 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-76-f12lco4sMJ-UFDGfrgpghw-1; Thu, 26 Jan 2023 17:31:11 +0000
+X-MC-Unique: f12lco4sMJ-UFDGfrgpghw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Thu, 26 Jan
+ 2023 17:31:09 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Thu, 26 Jan 2023 17:31:09 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Segher Boessenkool' <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     "gjoyce@linux.ibm.com" <gjoyce@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        "erichte@linux.ibm.com" <erichte@linux.ibm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "sudhakar@linux.ibm.com" <sudhakar@linux.ibm.com>,
+        "ruscur@russell.cc" <ruscur@russell.cc>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "bgray@linux.ibm.com" <bgray@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "gcwilson@linux.ibm.com" <gcwilson@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: RE: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
+ structures and buffers
+Thread-Topic: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
+ structures and buffers
+Thread-Index: AQHZMarbHHGSrma/kEeRKp/dNdgk5K6w84Ew
+Date:   Thu, 26 Jan 2023 17:31:09 +0000
+Message-ID: <5118edd7f1f445afa1812d2b9b62dd4f@AcuMS.aculab.com>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+ <20230120074306.1326298-3-ajd@linux.ibm.com>
+ <87pmb2pxpa.fsf@mpe.ellerman.id.au>
+ <20230126171925.GN25951@gate.crashing.org>
+In-Reply-To: <20230126171925.GN25951@gate.crashing.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea8e873f-c052-832f-b4a5-0164f5cd6947@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,65 +74,46 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 01:06:31PM -0600, Eddie James wrote:
+From: Segher Boessenkool
+> Sent: 26 January 2023 17:19
 > 
-> On 1/20/23 18:11, Jarkko Sakkinen wrote:
-> > On Fri, Jan 13, 2023 at 10:10:16AM -0600, Eddie James wrote:
-> > > Since the bios event log is freed in the device release function,
-> > > let devres handle the deallocation. This will allow other memory
-> > > allocation/mapping functions to be used for the bios event log.
-> > > 
-> > > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> > > ---
-> > >   drivers/char/tpm/eventlog/acpi.c |  5 +++--
-> > >   drivers/char/tpm/eventlog/efi.c  | 13 +++++++------
-> > >   drivers/char/tpm/eventlog/of.c   |  3 ++-
-> > >   drivers/char/tpm/tpm-chip.c      |  1 -
-> > >   4 files changed, 12 insertions(+), 10 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-> > > index 0913d3eb8d51..40360e599bc3 100644
-> > > --- a/drivers/char/tpm/eventlog/acpi.c
-> > > +++ b/drivers/char/tpm/eventlog/acpi.c
-> > > @@ -14,6 +14,7 @@
-> > >    * Access to the event log extended by the TCG BIOS of PC platform
-> > >    */
-> > > +#include <linux/device.h>
-> > >   #include <linux/seq_file.h>
-> > >   #include <linux/fs.h>
-> > >   #include <linux/security.h>
-> > > @@ -135,7 +136,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
-> > >   	}
-> > >   	/* malloc EventLog space */
-> > > -	log->bios_event_log = kmalloc(len, GFP_KERNEL);
-> > > +	log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
-> > >   	if (!log->bios_event_log)
-> > >   		return -ENOMEM;
-> > > @@ -160,7 +161,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
-> > >   	return format;
-> > >   err:
-> > > -	kfree(log->bios_event_log);
-> > > +	devm_kfree(&chip->dev, log->bios_event_log);
-> > I wonder do we want to do devm_kfree's at all as the memory is freed during
-> > detach, i.e. taken care by devres.
+> On Thu, Jan 26, 2023 at 12:09:53AM +1100, Michael Ellerman wrote:
+> > Andrew Donnellan <ajd@linux.ibm.com> writes:
+> > > A number of structures and buffers passed to PKS hcalls have alignment
+> > > requirements, which could on occasion cause problems:
+> > >
+> > > - Authorisation structures must be 16-byte aligned and must not cross a
+> > >   page boundary
+> > >
+> > > - Label structures must not cross page boundaries
+> > >
+> > > - Password output buffers must not cross page boundaries
+> > >
+> > > Round up the allocations of these structures/buffers to the next power of
+> > > 2 to make sure this happens.
+> >
+> > It's not the *next* power of 2, it's the *nearest* power of 2, including
+> > the initial value if it's already a power of 2.
 > 
+> It's not the nearest either, the nearest power of two to 65 is 64.  You
+> could say "but, round up" to which I would say "round?"  :-P
 > 
-> I think we should since the chip/tpm driver will continue to probe without
-> the bios event log. Therefore that memory will be wasted if there is some
-> error during bios log setup.
-
-OK, I buy this!
-
-For this patch:
-
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-If you could refine the description for the 2nd, then these would be ready
-to be picked.
-
-> Thanks,
+> "Adjust the allocation size to be the smallest power of two greater than
+> or equal to the given size."
 > 
-> Eddie
+> "Pad to a power of two" in shorthand.  "Padded to a power of two if
+> necessary" if you want to emphasise it can be a no-op.
 
-BR, Jarkko
+Changing the size to kzalloc() doesn't help.
+The alignment depends on the allocator and is only required to have
+a relatively small alignment (ARCH_MINALIGN?) regardless of the size.
+
+IIRC one of the allocators adds a small header to every item.
+It won't return 16 byte aligned items at all.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
