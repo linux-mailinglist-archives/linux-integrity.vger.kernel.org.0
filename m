@@ -2,172 +2,211 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D3267D33B
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jan 2023 18:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C58D67D564
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jan 2023 20:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbjAZRcj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Jan 2023 12:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S232186AbjAZThd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Jan 2023 14:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjAZRcg (ORCPT
+        with ESMTP id S229469AbjAZThc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:32:36 -0500
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A47714203;
-        Thu, 26 Jan 2023 09:32:35 -0800 (PST)
-Received: by mail-ua1-x929.google.com with SMTP id r10so507372ual.3;
-        Thu, 26 Jan 2023 09:32:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Kvan1cE5TszXm3b20r5mPyE1X4Ro0snfMtMiTJyF3M=;
-        b=qgu8hWtCalIXRBaY8ckd2nhMjzCFHsQN4d7oK5nX70FFa3MiKXnw1SzYkMYOY+ViQS
-         vCSDCU6IfzFcVfRWnKHvfrrEN+BxQPXCyxPKdnMNwCoZzCT7WYXZ/qC3EzqlFo7Fibo8
-         mo3E3iJnXcuj7iUnTetRBawnskCSXLUera5pDdDwD4UwHLhmfYwHR/RjgKTSAOeg4BHD
-         cRkHSL1pZrhuLc0WR23rgqw60VY1u6SqJ9LCZfTYI1cTol6B9gwjdO3IaTOYN8TNhVii
-         p8QdVjL7V+fvrgYE/6RRahDhcyTT4Qwr/g3T4qyY2zHS/dq+0A19bDWrzuDv45FXz43n
-         AdxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8Kvan1cE5TszXm3b20r5mPyE1X4Ro0snfMtMiTJyF3M=;
-        b=OnwuGqltAYNaL1TEybfEI2paj6E5xB/+KdA6a/NjEUfxH91IbZcE2LME84tJr9OlHN
-         qXbAUbnnPXLUzSDc91BgEmBDkUqrMNfiPuRJAtvml4vKv/L6gflqpLSO6ahNJgII9MDi
-         EETYKbrPrz5ia6H96fIEzwyggO08VLl6U0HtFigFQ1iydx+0zSk7Jg8MPtjfIVCY6m15
-         M7+UQe4+tYxSDS9ZFwBdjz2o2vOYDiVOix3SPB0g51RD0tF4bVSPrADX0jcqPBljjmk2
-         /lNVLofA9bbLnpLA9O83HxCVFUsZkH2iuonhstgTAJeMLqekLj4sNZjjAcBISj0BlX4X
-         IxzQ==
-X-Gm-Message-State: AFqh2kpoHHgqCNMwFGesr03FanXMeFNV9UNUYQB6dUjlO7+ykcLihQCp
-        z2TeUMJsKxPf+h8pkGwgsdBW5vn1pvputPxGuo8=
-X-Google-Smtp-Source: AMrXdXuABD3oR5/YWZU62q2k2T36A2P/sZc6EOA2y4ZKKLnK5zo2vxEVYaWtNmsZx+JvoBHcUSmm5W07YhRVYqB2cVk=
-X-Received: by 2002:a9f:3767:0:b0:512:da2a:c925 with SMTP id
- a36-20020a9f3767000000b00512da2ac925mr4017787uae.71.1674754354176; Thu, 26
- Jan 2023 09:32:34 -0800 (PST)
+        Thu, 26 Jan 2023 14:37:32 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3217262249;
+        Thu, 26 Jan 2023 11:37:31 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QJTwFo030972;
+        Thu, 26 Jan 2023 19:37:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=rCLiOQgZ5W2CcpkkBJonDoRIJRw4iwthIr9UcqgpBlg=;
+ b=ngwsD6WnJW1Xj7LagOU+AiED5+DULo1+u8KXu+Yz7uTPeyz/D6OiSJPeQpSTg7h41SUf
+ bMOoZL/5umdfULzv7lyJ8DLjzdnQA8VpOnoF22xeWiCxDJoLbNUGGiN09sHHWvRvv7ES
+ bKtMGKA41lcJ7rDQVbrDzPvsutE83w5WN8htXB6dF5YrAzNWV4RSmUhslCdD1iCufTcI
+ 98Bt9if2J3DJxUlCxLTVLZR+GKKru18HTVplqaPhPxIcRZZXZlvSnKeikNHQzYZc/6pN
+ Fkxw9nkqOGEM/JQq/+ASLPNUoMdJujb1PBGFEA4wTnEipguX85Ja3/jNLDyVNv/BYFVY Nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbyqw86hn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 19:37:11 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QJVP9Q006289;
+        Thu, 26 Jan 2023 19:37:11 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbyqw86h9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 19:37:11 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QGBLvq012685;
+        Thu, 26 Jan 2023 19:37:10 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3n87p7y00e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 19:37:10 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QJb9295767764
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 Jan 2023 19:37:09 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E53A05805D;
+        Thu, 26 Jan 2023 19:37:08 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BC1AE58059;
+        Thu, 26 Jan 2023 19:37:06 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 26 Jan 2023 19:37:06 +0000 (GMT)
+Message-ID: <295c5915-b680-16be-3d51-b7c1d2ca5e4f@linux.ibm.com>
+Date:   Thu, 26 Jan 2023 14:37:06 -0500
 MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
- <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
- <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
- <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
- <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
- <Y8tcEtr8Kl3p4qtA@kernel.org> <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
- <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com> <Y9K2mOsmB1+CFk9l@kernel.org>
-In-Reply-To: <Y9K2mOsmB1+CFk9l@kernel.org>
-From:   William Roberts <bill.c.roberts@gmail.com>
-Date:   Thu, 26 Jan 2023 11:32:22 -0600
-Message-ID: <CAFftDdqq-eeryycv_11m=-1+aR=cgCUU7C_BFDrmYRwFF13i5w@mail.gmail.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 1/2] ima: Align ima_file_mmap() parameters with
+ mmap_file LSM hook
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+References: <20230126163812.1870942-1-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230126163812.1870942-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NfNEmCmLqNI_cxjCjovshsD1QTPofcwh
+X-Proofpoint-ORIG-GUID: 7wEGGLFZQHKdEFUOpYlYYau9LXYWh6df
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 phishscore=0 spamscore=0
+ clxscore=1011 mlxlogscore=999 priorityscore=1501 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301260183
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:21 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Tue, Jan 24, 2023 at 07:38:04AM -0500, James Bottomley wrote:
-> > On Mon, 2023-01-23 at 11:48 -0600, William Roberts wrote:
-> > > On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org>
-> > > wrote:
-> > > >
-> > > > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> > > > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > > > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > > > > > <bill.c.roberts@gmail.com> wrote:
-> > > > > >
-> > > > > > > What's the use case of using the creation data and ticket in
-> > > > > > > this context? Who gets the creationData and the ticket?
-> > > > > > > Could a user supplied outsideInfo work? IIRC I saw some
-> > > > > > > patches flying around where the sessions will get encrypted
-> > > > > > > and presumably correctly as well. This would allow the
-> > > > > > > transfer of that outsideInfo, like the NV Index PCR value to
-> > > > > > > be included and integrity protected by the session HMAC.
-> > > > > >
-> > > > > > The goal is to ensure that the key was generated by the kernel.
-> > > > > > In the absence of the creation data, an attacker could generate
-> > > > > > a hibernation image using their own key and trick the kernel
-> > > > > > into resuming arbitrary code. We don't have any way to pass
-> > > > > > secret data from the hibernate kernel to the resume kernel, so
-> > > > > > I don't think there's any easy way to do it with outsideinfo.
-> > > > >
-> > > > > Can we go back again to why you can't use locality?  It's exactly
-> > > > > designed for this since locality is part of creation data.
-> > > > > Currently everything only uses locality 0, so it's impossible for
-> > > > > anyone on Linux to produce a key with anything other than 0 in
-> > > > > the creation data for locality.  However, the dynamic launch
-> > > > > people are proposing that the Kernel should use Locality 2 for
-> > > > > all its operations, which would allow you to distinguish a key
-> > > > > created by the kernel from one created by a user by locality.
-> > > > >
-> > > > > I think the previous objection was that not all TPMs implement
-> > > > > locality, but then not all laptops have TPMs either, so if you
-> > > > > ever come across one which has a TPM but no locality, it's in a
-> > > > > very similar security boat to one which has no TPM.
-> > > >
-> > > > Kernel could try to use locality 2 and use locality 0 as fallback.
-> > >
-> > > I don't think that would work for Matthew, they need something
-> > > reliable to indicate key provenance.
-> >
-> > No, I think it would be good enough: locality 0 means anyone (including
-> > the kernel on a machine which doesn't function correctly) could have
-> > created this key.  Locality 2 would mean only the kernel could have
-> > created this key.
-> >
-> > By the time the kernel boots and before it loads the hibernation image
-> > it will know the answer to the question "does my TPM support locality
-> > 2", so it can use that in its security assessment: if the kernel
-> > supports locality 2 and the key wasn't created in locality 2 then
-> > assume an attack.  Obviously, if the kernel doesn't support locality 2
-> > then the hibernation resume has to accept any old key, but that's the
-> > same as the situation today.
->
-> This sounds otherwise great to me but why bother even allowing a
-> machine with no-locality TPM to be involved with hibernate? Simply
-> detect locality support during driver initialization and disallow
-> sealed hibernation (or whatever the feature was called) if localities
-> were not detected.
->
-> I get supporting old hardware with old features but it does not make
-> sense to maintain new features with hardware, which clearly does not
-> scale, right?
->
-> BR, Jarkko
 
-Here's a thought, what if we had a static/cmd line configurable
-no-auth NV Index and writelocked it with the expected key information,
-name or something. I guess the problem is atomicity with write/lock,
-but can't the kernel lock out all other users?
 
-An attacker would need to issue tpm2_startup, which in this case would DOS
-the kernel in both scenarios. If an attacker already wrote and locked the NV
-index, that would also be a DOS. If they already wrote it, the kernel simply
-writes whatever they want. Is there an attack I am missing?
+On 1/26/23 11:38, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Commit 98de59bfe4b2f ("take calculation of final prot in
+> security_mmap_file() into a helper") moved the code to update prot, to be
+> the actual protections applied to the kernel, to a new helper called
+> mmap_prot().
+> 
+> However, while without the helper ima_file_mmap() was getting the updated
+> prot, with the helper ima_file_mmap() gets the original prot, which
+> contains the protections requested by the application.
+> 
+> A possible consequence of this change is that, if an application calls
+> mmap() with only PROT_READ, and the kernel applies PROT_EXEC in addition,
+> that application would have access to executable memory without having this
+> event recorded in the IMA measurement list. This situation would occur for
+> example if the application, before mmap(), calls the personality() system
+> call with READ_IMPLIES_EXEC as the first argument.
+> 
+> Align ima_file_mmap() parameters with those of the mmap_file LSM hook, so
+> that IMA can receive both the requested prot and the final prot. Since the
+> requested protections are stored in a new variable, and the final
+> protections are stored in the existing variable, this effectively restores
+> the original behavior of the MMAP_CHECK hook.
+> 
+And flags is being passed in preparation for IMA to meet the interface
+requirements of the LSM hooks - I suppose in preparation for IMA to become an LSM.
 
-I guess the issue here would be setup, since creating the NV index requires
-hierarchy auth, does the kernel have platform auth or is that already shut down
-by firmware (I can't recall)? A null hierarchy volatile lockable index would be
-nice for this, too bad that doesn't exist.
+> Cc: stable@vger.kernel.org
+> Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+
+> ---
+>   include/linux/ima.h               | 6 ++++--
+>   security/integrity/ima/ima_main.c | 7 +++++--
+>   security/security.c               | 7 ++++---
+>   3 files changed, 13 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 5a0b2a285a18..d79fee67235e 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -21,7 +21,8 @@ extern int ima_file_check(struct file *file, int mask);
+>   extern void ima_post_create_tmpfile(struct user_namespace *mnt_userns,
+>   				    struct inode *inode);
+>   extern void ima_file_free(struct file *file);
+> -extern int ima_file_mmap(struct file *file, unsigned long prot);
+> +extern int ima_file_mmap(struct file *file, unsigned long reqprot,
+> +			 unsigned long prot, unsigned long flags);
+>   extern int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot);
+>   extern int ima_load_data(enum kernel_load_data_id id, bool contents);
+>   extern int ima_post_load_data(char *buf, loff_t size,
+> @@ -76,7 +77,8 @@ static inline void ima_file_free(struct file *file)
+>   	return;
+>   }
+>   
+> -static inline int ima_file_mmap(struct file *file, unsigned long prot)
+> +static inline int ima_file_mmap(struct file *file, unsigned long reqprot,
+> +				unsigned long prot, unsigned long flags)
+>   {
+>   	return 0;
+>   }
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 377300973e6c..f48f4e694921 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -397,7 +397,9 @@ static int process_measurement(struct file *file, const struct cred *cred,
+>   /**
+>    * ima_file_mmap - based on policy, collect/store measurement.
+>    * @file: pointer to the file to be measured (May be NULL)
+> - * @prot: contains the protection that will be applied by the kernel.
+> + * @reqprot: protection requested by the application
+> + * @prot: protection that will be applied by the kernel
+> + * @flags: operational flags
+>    *
+>    * Measure files being mmapped executable based on the ima_must_measure()
+>    * policy decision.
+> @@ -405,7 +407,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
+>    * On success return 0.  On integrity appraisal error, assuming the file
+>    * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+>    */
+> -int ima_file_mmap(struct file *file, unsigned long prot)
+> +int ima_file_mmap(struct file *file, unsigned long reqprot,
+> +		  unsigned long prot, unsigned long flags)
+>   {
+>   	u32 secid;
+>   
+> diff --git a/security/security.c b/security/security.c
+> index d1571900a8c7..174afa4fad81 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1661,12 +1661,13 @@ static inline unsigned long mmap_prot(struct file *file, unsigned long prot)
+>   int security_mmap_file(struct file *file, unsigned long prot,
+>   			unsigned long flags)
+>   {
+> +	unsigned long prot_adj = mmap_prot(file, prot);
+>   	int ret;
+> -	ret = call_int_hook(mmap_file, 0, file, prot,
+> -					mmap_prot(file, prot), flags);
+> +
+> +	ret = call_int_hook(mmap_file, 0, file, prot, prot_adj, flags);
+>   	if (ret)
+>   		return ret;
+> -	return ima_file_mmap(file, prot);
+> +	return ima_file_mmap(file, prot, prot_adj, flags);
+>   }
+>   
+>   int security_mmap_addr(unsigned long addr)
