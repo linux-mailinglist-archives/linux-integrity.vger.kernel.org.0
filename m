@@ -2,106 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF5267DF1A
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Jan 2023 09:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D9B67DFA4
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Jan 2023 10:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbjA0I2p (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 27 Jan 2023 03:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38356 "EHLO
+        id S232129AbjA0JFn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 27 Jan 2023 04:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjA0I2o (ORCPT
+        with ESMTP id S229560AbjA0JFm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 27 Jan 2023 03:28:44 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860552D44;
-        Fri, 27 Jan 2023 00:28:42 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P39WC0sLYz9xyNp;
-        Fri, 27 Jan 2023 16:20:39 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwD3xl0Ti9Nj7gjNAA--.18823S2;
-        Fri, 27 Jan 2023 09:28:15 +0100 (CET)
-Message-ID: <d2a54ddec403cad12c003132542070bf781d5e26.camel@huaweicloud.com>
-Subject: Re: [PATCH v5 2/2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     dhowells@redhat.com
-Cc:     Eric Biggers <ebiggers@kernel.org>, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 27 Jan 2023 09:27:58 +0100
-In-Reply-To: <Y64XB0yi24yjeBDw@sol.localdomain>
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
-         <20221227142740.2807136-3-roberto.sassu@huaweicloud.com>
-         <Y64XB0yi24yjeBDw@sol.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 27 Jan 2023 04:05:42 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E871CF51
+        for <linux-integrity@vger.kernel.org>; Fri, 27 Jan 2023 01:05:40 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-207-p-8H2nnBPfSw_AWgsS6nQg-1; Fri, 27 Jan 2023 09:05:38 +0000
+X-MC-Unique: p-8H2nnBPfSw_AWgsS6nQg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Fri, 27 Jan
+ 2023 09:05:37 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Fri, 27 Jan 2023 09:05:37 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andrew Donnellan' <ajd@linux.ibm.com>,
+        'Segher Boessenkool' <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     "gjoyce@linux.ibm.com" <gjoyce@linux.ibm.com>,
+        "erichte@linux.ibm.com" <erichte@linux.ibm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "sudhakar@linux.ibm.com" <sudhakar@linux.ibm.com>,
+        "ruscur@russell.cc" <ruscur@russell.cc>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "bgray@linux.ibm.com" <bgray@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "gcwilson@linux.ibm.com" <gcwilson@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: RE: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
+ structures and buffers
+Thread-Topic: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
+ structures and buffers
+Thread-Index: AQHZMarbHHGSrma/kEeRKp/dNdgk5K6w84EwgAClz4CAAF8Y4A==
+Date:   Fri, 27 Jan 2023 09:05:37 +0000
+Message-ID: <b016aefff9514ed1ad40620cea6d3b9f@AcuMS.aculab.com>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+         <20230120074306.1326298-3-ajd@linux.ibm.com>
+         <87pmb2pxpa.fsf@mpe.ellerman.id.au>
+         <20230126171925.GN25951@gate.crashing.org>
+         <5118edd7f1f445afa1812d2b9b62dd4f@AcuMS.aculab.com>
+ <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
+In-Reply-To: <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwD3xl0Ti9Nj7gjNAA--.18823S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr15ur18uw4DGFyfGryfJFb_yoW8XFy5pF
-        W3G3W5GF1jqryxCFsIv3yFva4rG3ykJr13Xw43X3s5Zr18urs8Wr1IqF4fWFyDAry8KFWF
-        yFW5Xr1qgw1YkaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4goZAABs7
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2022-12-29 at 14:39 -0800, Eric Biggers wrote:
-> On Tue, Dec 27, 2022 at 03:27:40PM +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > mapping") checks that both the signature and the digest reside in the
-> > linear mapping area.
-> > 
-> > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > stack support") made it possible to move the stack in the vmalloc area,
-> > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > adjacent pages.
-> > 
-> > Always make a copy of the signature and digest in the same buffer used to
-> > store the key and its parameters, and pass them to sg_init_one(). Prefer it
-> > to conditionally doing the copy if necessary, to keep the code simple. The
-> > buffer allocated with kmalloc() is in the linear mapping area.
-> > 
-> > Cc: stable@vger.kernel.org # 4.9.x
-> > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-> > Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  crypto/asymmetric_keys/public_key.c | 38 ++++++++++++++++-------------
-> >  1 file changed, 21 insertions(+), 17 deletions(-)
-> 
-> Reviewed-by: Eric Biggers <ebiggers@google.com>
-
-Hi David
-
-could you please take this patch in your repo, if it is ok?
-
-Thanks
-
-Roberto
+RnJvbTogQW5kcmV3IERvbm5lbGxhbg0KPiBTZW50OiAyNyBKYW51YXJ5IDIwMjMgMDM6MjENCj4g
+DQo+IE9uIFRodSwgMjAyMy0wMS0yNiBhdCAxNzozMSArMDAwMCwgRGF2aWQgTGFpZ2h0IHdyb3Rl
+Og0KPiA+IENoYW5naW5nIHRoZSBzaXplIHRvIGt6YWxsb2MoKSBkb2Vzbid0IGhlbHAuDQo+ID4g
+VGhlIGFsaWdubWVudCBkZXBlbmRzIG9uIHRoZSBhbGxvY2F0b3IgYW5kIGlzIG9ubHkgcmVxdWly
+ZWQgdG8gaGF2ZQ0KPiA+IGEgcmVsYXRpdmVseSBzbWFsbCBhbGlnbm1lbnQgKEFSQ0hfTUlOQUxJ
+R04/KSByZWdhcmRsZXNzIG9mIHRoZSBzaXplLg0KPiA+DQo+ID4gSUlSQyBvbmUgb2YgdGhlIGFs
+bG9jYXRvcnMgYWRkcyBhIHNtYWxsIGhlYWRlciB0byBldmVyeSBpdGVtLg0KPiA+IEl0IHdvbid0
+IHJldHVybiAxNiBieXRlIGFsaWduZWQgaXRlbXMgYXQgYWxsLg0KPiANCj4gSSdtIHJlbHlpbmcg
+b24gdGhlIGJlaGF2aW91ciBkZXNjcmliZWQgaW4gRG9jdW1lbnRhdGlvbi9jb3JlLQ0KPiBhcGkv
+bWVtb3J5LWFsbG9jYXRpb24ucnN0Og0KPiANCj4gICAgIFRoZSBhZGRyZXNzIG9mIGEgY2h1bmsg
+YWxsb2NhdGVkIHdpdGgga21hbGxvYyBpcyBhbGlnbmVkIHRvIGF0DQo+ICAgICBsZWFzdCBBUkNI
+X0tNQUxMT0NfTUlOQUxJR04gYnl0ZXMuIEZvciBzaXplcyB3aGljaCBhcmUgYSBwb3dlciBvZg0K
+PiAgICAgdHdvLCB0aGUgYWxpZ25tZW50IGlzIGFsc28gZ3VhcmFudGVlZCB0byBiZSBhdCBsZWFz
+dCB0aGUgcmVzcGVjdGl2ZQ0KPiAgICAgc2l6ZS4NCj4gDQo+IElzIHRoaXMgd3Jvbmc/DQoNClRo
+ZSBhbGlnbm1lbnQgZm9yIHBvd2VyIG9mIHR3byBkb2Vzbid0IG1hdGNoIHdoYXQgSSd2ZSBpbmZl
+cnJlZA0KZnJvbSByZWFkaW5nIGNvbW1lbnRzIG9uIG90aGVyIHBhdGNoZXMuDQoNCkl0IGlzIHRy
+dWUgZm9yIGRtYV9tYWxsb2NfY29oZXJlbnQoKSAtIHRoYXQgZG9lcyBndWFyYW50ZWUgdGhhdCBh
+DQoxNmsgYWxsb2NhdGUgd2lsbCBiZSBhbGlnbmVkIG9uIGEgMTZrIHBoeXNpY2FsIGFkZHJlc3Mg
+Ym91bmRhcnkuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJy
+YW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lz
+dHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
