@@ -2,103 +2,144 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0A867FF4E
-	for <lists+linux-integrity@lfdr.de>; Sun, 29 Jan 2023 14:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2011867FF9F
+	for <lists+linux-integrity@lfdr.de>; Sun, 29 Jan 2023 15:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234813AbjA2NGg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 29 Jan 2023 08:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
+        id S231183AbjA2Oxa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 29 Jan 2023 09:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjA2NGg (ORCPT
+        with ESMTP id S229617AbjA2Ox3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 29 Jan 2023 08:06:36 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8231821972;
-        Sun, 29 Jan 2023 05:06:24 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id B32E73200A1B;
-        Sun, 29 Jan 2023 08:06:21 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sun, 29 Jan 2023 08:06:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1674997581; x=1675083981; bh=WI
-        iGLgM5lUUCvnAd3EHS+Z21BQAFwL9/K1vm6nT+YhA=; b=PW8eXYcheY6Y9fo3Yu
-        mUYKMIxsk32kgz57TyqPAfKAdxjn+LjeM2VqQZo69N1PYrrHfrYB0Y4nnfUtG0/7
-        CHfajPws6cFE6pIsYh1ywmsiCxnNvF0cZTczSN7mitunjjqT0FjIPxFLQNCGUXx+
-        EvMKIS/fRBRqVoWfOE1YN6PH2g8Nfj0aPpSDu8r4+o3GhElOlmRgzTBlgV3mS8k3
-        UHaredj6sp00CFf4nQymEB5HpWs1IGWub1NGqewvRQLnscesf2h1Idon7kH3vOPh
-        yMPCQ5X3iGT561CJT5xyDJDodMmzxdubkWkqG403p7zapbmC8IwbV79F/RzY8fln
-        1joQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674997581; x=1675083981; bh=WIiGLgM5lUUCvnAd3EHS+Z21BQAF
-        wL9/K1vm6nT+YhA=; b=Eno7DSIRShLpNPQ4vKqL1cLFsWPhgf16E7fdeSLbbYEL
-        CH3raKl7+0DxzOjudi2t3W8Th0KbYqgQOY0YpwIYIGvTkUPpq71c/Q1SBwbsuiMj
-        nyNVaWRMCC5kB7tKiaFg6N5Ij9jJdQ3UkAgZw7hEQ9v2CmUdiWvDpsilhOSMa4fW
-        0UneFY4GaYZVKQdwGfA7dmHSWKdaiBQmvJZb6uA5u7CxoivGGJEcyq7d5NMazuIN
-        WmOGj2dlL+gOPXq6VXFDM2cIbEWHiaVT3hAHUEXRaTungIlWiHTUEuAsmV8kIgxg
-        tmIiSbDt8YBoMkQA0joEqZGFN/JiM5mkcQyZKeX5hA==
-X-ME-Sender: <xms:TG_WY3Mdd7DJGS1v6XPW9TWsCrARL5n0xr5bL7aUIU7nBKBFzezTHw>
-    <xme:TG_WYx_4Jk-oo-dQVzDBJIfP0i47wRloYeId_5HnTlEV7EyT9WrnUP2Td1dqP2GSK
-    MCaz8hHyJQD_K0El4o>
-X-ME-Received: <xmr:TG_WY2TXd0wROLw3w98VQ-f97d-Bzo1EwI3D-Nf5zHih2-QiJ-vUMhagFrO4viKjOSvqjNVy36R1ozRn5WSAdrpSTxl5Zpo_3sv_>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeftddggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujggfsehttdertddtreejnecuhfhrohhmpeeuvghn
-    uceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlhdrnhgvtheqnecuggftrfgrth
-    htvghrnhepffelgeffveelkeffkeehiefgtdeluedvtdfghfdtvdefgfejheffudeuveek
-    vddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    gvsegsvghnsghovggtkhgvlhdrnhgvth
-X-ME-Proxy: <xmx:TG_WY7v5nceOQDLuJ0Y7k-9at4kINlkm2iT0nnRuH4U_3LMDn6eU0A>
-    <xmx:TG_WY_caSYviY8yajfVUUBRoblnsUzMWq-_eySNIbWcxOe-Qo_SChQ>
-    <xmx:TG_WY30B9Yq7Hu1f-5KrN2P3UqGEzVAFKLgZ68mMtEjL_3aGgoZBhA>
-    <xmx:TW_WY745O9WeSaElaNcnl48Fo8aLOu-z1FBD4BvGDT-2TEDHqyAbZQ>
-Feedback-ID: iffc1478b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 29 Jan 2023 08:06:20 -0500 (EST)
-Date:   Sun, 29 Jan 2023 08:06:19 -0500
-From:   Ben Boeckel <me@benboeckel.net>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+        Sun, 29 Jan 2023 09:53:29 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B266E9D;
+        Sun, 29 Jan 2023 06:53:29 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TCv8Ib025247;
+        Sun, 29 Jan 2023 14:52:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=BTymnEY7PdY80oj3gRAnHrWAC+GyrmyhWWU2S+Zj73M=;
+ b=RFoFGx9pwVVxGyIk1MddbV0KLfpN9U41KpQ9FxTmLnwqQI4sCebFLvbFp8hajQXLvYge
+ aonnbfbixryzO+/n8WzpKkLR/e8HNlNEZcF24GOi5A08UzfqJrtUJQSGldzlGhvMtUzc
+ UeI9pvf1yCdpdmXi/prILbmc5yHQURhl5rYhFGOplMI1NYy6K/9pZtl+IWBYJ/t4HDK0
+ 5yrahFMspYjI3O30721zg0pRNb4xvw8f48GhMcq5O5p8RAwkG1CkZ81mB8tgX/e9lwsG
+ Rh5M9vB8qXDCEVGnLOfvZ1d+er0GPTIKjMNwBZfU8pxTVV1OFaMNZNbyoyD4Q/ahVRVZ ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ndd5gtsu9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 14:52:56 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30TEqtQu003193;
+        Sun, 29 Jan 2023 14:52:55 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ndd5gtsu5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 14:52:55 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30TDoI61028521;
+        Sun, 29 Jan 2023 14:52:54 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ncvuy6c2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 14:52:54 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30TEqrV27144064
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 29 Jan 2023 14:52:53 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DA3D5805C;
+        Sun, 29 Jan 2023 14:52:53 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C10058051;
+        Sun, 29 Jan 2023 14:52:52 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.14.97])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Sun, 29 Jan 2023 14:52:52 +0000 (GMT)
+Message-ID: <89a7cc7efe1545e18c9af6c3ec53468d6f528a7a.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/2] ima: Introduce MMAP_CHECK_REQPROT hook
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
 Cc:     linux-integrity@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v2 09/11] KEYS: trusted: Add session encryption
- protection to the seal/unseal path
-Message-ID: <Y9ZvS9PozyX5AxpZ@farprobe>
-References: <20230124175516.5984-1-James.Bottomley@HansenPartnership.com>
- <20230124175516.5984-10-James.Bottomley@HansenPartnership.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230124175516.5984-10-James.Bottomley@HansenPartnership.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
+        viro@zeniv.linux.org.uk, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Sun, 29 Jan 2023 09:52:51 -0500
+In-Reply-To: <20230126163812.1870942-2-roberto.sassu@huaweicloud.com>
+References: <20230126163812.1870942-1-roberto.sassu@huaweicloud.com>
+         <20230126163812.1870942-2-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BS8bjdh3i4i2-dHgYMWyer4ug3yZgapU
+X-Proofpoint-ORIG-GUID: WUP_hBEkzHovIyANyxgtmqdLjZUXpGux
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-29_09,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1015 suspectscore=0
+ bulkscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301290143
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 12:55:14 -0500, James Bottomley wrote:
-> If some entity is snooping the TPM bus, the can see the data going in
-                                          ^^^ they
-> to be sealed and the data coming out as it is unsealed.  Add parameter
-> and response encryption to these cases to ensure that no secrets are
-> leaked even if the bus is snooped.
+On Thu, 2023-01-26 at 17:38 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> As part of doing this conversion it was discovered that policy
-> sessions can't work with HMAC protected authority because of missing
-> pieces (the tpm Nonce).  I've added code to work the same way as
-> before, which will result in potential authority exposure (while still
-> adding security for the command and the returned blob), and a fixme to
-> redo the API to get rid of this security hole.
+> Commit 98de59bfe4b2f ("take calculation of final prot in
+> security_mmap_file() into a helper") caused ima_file_mmap() to receive the
+> protections requested by the application and not those applied by the
+> kernel.
+> 
+> After restoring the original MMAP_CHECK behavior with a patch, existing
+> systems might be broken due to not being ready to handle new entries
+> (previously missing) in the IMA measurement list.
 
---Ben
+Is this a broken system or a broken attestation server?  The
+attestation server might not be able to handle the additional
+measurements, but the system, itself, is not broken.
+
+"with a patch" is unnecessary.
+
+> 
+> Restore the original correct MMAP_CHECK behavior instead of keeping the
+
+^ add missing comma after "behavior"
+
+> current buggy one and introducing a new hook with the correct behavior. The
+> second option 
+
+^ The second option -> Otherwise,
+
+> would have had the risk of IMA users not noticing the problem
+> at all, as they would actively have to update the IMA policy, to switch to
+> the correct behavior.
+> 
+> Also, introduce the new MMAP_CHECK_REQPROT hook to keep the current
+> behavior, so that IMA users could easily fix a broken system, although this
+> approach is discouraged due to potentially missing measurements.
+
+Again, is this a broken system or a broken attestation server? 
+
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Otherwise, the patch looks good.
+
+-- 
+thanks,
+
+Mimi
+
