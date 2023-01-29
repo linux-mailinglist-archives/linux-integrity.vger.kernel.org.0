@@ -2,106 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA9E67E2BA
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Jan 2023 12:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D9967FC02
+	for <lists+linux-integrity@lfdr.de>; Sun, 29 Jan 2023 01:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjA0LJJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 27 Jan 2023 06:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S234039AbjA2AtG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 28 Jan 2023 19:49:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjA0LJH (ORCPT
+        with ESMTP id S230302AbjA2AtF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:09:07 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950A980F9B;
-        Fri, 27 Jan 2023 03:09:03 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P3FFR5p05z4xHV;
-        Fri, 27 Jan 2023 22:08:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1674817740;
-        bh=Y9utl1kOHVvMVILv+GUuqyaSSu0UglfF0XYXjmDGNlo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Lss0HKdluvv5JI2rpIb69PH0xbX1GwXooNuCM9bRM7tTwmfiwMopaz3cHjNvc53Yc
-         6PKoVjuxokRqj/c0yq2Nf2PxqkZi+vEvchyBacGOZJMdsQwnTEOTEEnl+bdHtHVaLY
-         spGCu4jYruPxPt5SFluIcaUw5KigftfZ1t9ynldKha4s6rFp3QHirPk3pRVZYZcwDi
-         b1fbYVZNEpbA76c//EU4p0d5wElXGMHu5zKwz8zP1jAmNr6T/6dbAINrpssgby+vnz
-         x1Irji28fWg2yKJ+uvIHHtCEMr/L8+FSR2OIk9Mr5yj34gRv3LCcT4CqggX7UpyKQS
-         jXyI/sdcB8eSw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        'Segher Boessenkool' <segher@kernel.crashing.org>
-Cc:     "gjoyce@linux.ibm.com" <gjoyce@linux.ibm.com>,
-        "erichte@linux.ibm.com" <erichte@linux.ibm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "sudhakar@linux.ibm.com" <sudhakar@linux.ibm.com>,
-        "ruscur@russell.cc" <ruscur@russell.cc>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "bgray@linux.ibm.com" <bgray@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "gcwilson@linux.ibm.com" <gcwilson@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
- structures and buffers
-In-Reply-To: <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
- <20230120074306.1326298-3-ajd@linux.ibm.com>
- <87pmb2pxpa.fsf@mpe.ellerman.id.au>
- <20230126171925.GN25951@gate.crashing.org>
- <5118edd7f1f445afa1812d2b9b62dd4f@AcuMS.aculab.com>
- <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
-Date:   Fri, 27 Jan 2023 22:08:59 +1100
-Message-ID: <87y1pos08k.fsf@mpe.ellerman.id.au>
+        Sat, 28 Jan 2023 19:49:05 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089AF23109;
+        Sat, 28 Jan 2023 16:49:02 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P4CMM6zcDzJqdw;
+        Sun, 29 Jan 2023 08:47:27 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sun, 29 Jan 2023 08:49:00 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] evm: call dump_security_xattr() in all cases to remove code duplication
+Date:   Sun, 29 Jan 2023 08:46:37 +0800
+Message-ID: <20230129004637.191106-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Andrew Donnellan <ajd@linux.ibm.com> writes:
-> On Thu, 2023-01-26 at 17:31 +0000, David Laight wrote:
->> Changing the size to kzalloc() doesn't help.
->> The alignment depends on the allocator and is only required to have
->> a relatively small alignment (ARCH_MINALIGN?) regardless of the size.
->> 
->> IIRC one of the allocators adds a small header to every item.
->> It won't return 16 byte aligned items at all.
->
-> I'm relying on the behaviour described in Documentation/core-
-> api/memory-allocation.rst:
->
->     The address of a chunk allocated with kmalloc is aligned to at
->     least ARCH_KMALLOC_MINALIGN bytes. For sizes which are a power of
->     two, the alignment is also guaranteed to be at least the respective
->     size.
->
-> Is this wrong?
+Currently dump_security_xattr() is used to dump security xattr value
+which is larger than 64 bytes, otherwise, pr_debug() is used. In order
+to remove code duplication, refator dump_security_xattr() and call it in
+all cases.
 
-I believe it's correct.
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ security/integrity/evm/evm_crypto.c | 33 ++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 17 deletions(-)
 
-For SLAB and SLUB it boils down to:
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/slab_common.c?commit=830b3c68c1fb1e9176028d02ef86f3cf76aa2476#n640
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index 52b811da6989..033804f5a5f2 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -183,8 +183,8 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
+  * Dump large security xattr values as a continuous ascii hexademical string.
+  * (pr_debug is limited to 64 bytes.)
+  */
+-static void dump_security_xattr(const char *prefix, const void *src,
+-				size_t count)
++static void dump_security_xattr_l(const char *prefix, const void *src,
++				  size_t count)
+ {
+ #if defined(DEBUG) || defined(CONFIG_DYNAMIC_DEBUG)
+ 	char *asciihex, *p;
+@@ -200,6 +200,16 @@ static void dump_security_xattr(const char *prefix, const void *src,
+ #endif
+ }
+ 
++static void dump_security_xattr(const char *name, const char *value,
++				size_t value_len)
++{
++	if (value_len < 64)
++		pr_debug("%s: (%zu) [%*phN]\n", name, value_len,
++			 (int)value_len, value);
++	else
++		dump_security_xattr_l(name, value, value_len);
++}
++
+ /*
+  * Calculate the HMAC value across the set of protected security xattrs.
+  *
+@@ -254,15 +264,9 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 			if (is_ima)
+ 				ima_present = true;
+ 
+-			if (req_xattr_value_len < 64)
+-				pr_debug("%s: (%zu) [%*phN]\n", req_xattr_name,
+-					 req_xattr_value_len,
+-					 (int)req_xattr_value_len,
+-					 req_xattr_value);
+-			else
+-				dump_security_xattr(req_xattr_name,
+-						    req_xattr_value,
+-						    req_xattr_value_len);
++			dump_security_xattr(req_xattr_name,
++					    req_xattr_value,
++					    req_xattr_value_len);
+ 			continue;
+ 		}
+ 		size = vfs_getxattr_alloc(&nop_mnt_idmap, dentry, xattr->name,
+@@ -286,12 +290,7 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 		if (is_ima)
+ 			ima_present = true;
+ 
+-		if (xattr_size < 64)
+-			pr_debug("%s: (%zu) [%*phN]", xattr->name, xattr_size,
+-				 (int)xattr_size, xattr_value);
+-		else
+-			dump_security_xattr(xattr->name, xattr_value,
+-					    xattr_size);
++		dump_security_xattr(xattr->name, xattr_value, xattr_size);
+ 	}
+ 	hmac_add_misc(desc, inode, type, data->digest);
+ 
+-- 
+2.17.1
 
-That's where the kmalloc slabs are created (see create_kmalloc_cache())
-just below.
-
-If you create your own slab (with kmem_cache_create()) then the
-alignment is up to you, so that's why there's no power-of-2 logic in
-calculate_alignment().
-
-And SLOB (which we don't use) does something similar:
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/slob.c?commit=830b3c68c1fb1e9176028d02ef86f3cf76aa2476#n493
-
-cheers
