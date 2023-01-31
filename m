@@ -2,251 +2,163 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86AF6827F4
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 10:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BD868289B
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 10:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbjAaJC0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Jan 2023 04:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
+        id S232079AbjAaJVy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Jan 2023 04:21:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbjAaJCG (ORCPT
+        with ESMTP id S231201AbjAaJVy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:02:06 -0500
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EAC4C0FC;
-        Tue, 31 Jan 2023 00:58:31 -0800 (PST)
-Received: by mail-pj1-f45.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so13813842pjl.0;
-        Tue, 31 Jan 2023 00:58:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BX0UGZfxPS8os5colbRVKgpsLWa69is39Zj4v+JhyhE=;
-        b=ly0D4nk2P9aSK/sJZkoo1mEiXcBf0LFW4bUt/kneiPrTebL8wpsmv3JyKC3mn5ZVSP
-         YAkI1sOsbu3zOFiVT1ODfpFPx1hmgIrnj7I07uLcxggNAod//gU5VDQu2iteHd2ZtCS2
-         zf1HLto4/d2h/Wl8DB9NNJGMC43ucjEfGWTqpMmL/czk4oMCb+9F8YN0gUkXO7i9zA55
-         l0gf7ZJmgqyf5zUvkDjYgtXEqOJbsV4dIlMXpAp6mvPndLtPLpMU3BXQyfaRr6OEXmr9
-         yqwrXQUX+VPe1TtubHYWSvA5DdmFJWfnuJVKxWZbuTdd9bOi/T1Fw29npIpCR5tq7AGz
-         NZEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BX0UGZfxPS8os5colbRVKgpsLWa69is39Zj4v+JhyhE=;
-        b=frSDO1pHj/azoteBLAWNSZwf1lKuIM/46E4o7z5vy39EYq++JoFe65Yf6slk7BKuHj
-         Xk94f/mdnxfSkSkCVzQu1OL9jioy0kI2FLi7CiszAwJbQXNLlTRbPxcq0zJbp32mzyET
-         Si96c2z7lCBpA6N/DNtWd9633WKt+GepkytBaM70V0fn57B1XgBan3pB8951xWTYa+sq
-         5rBcb2ElzmoBm6wn9Mc9r/9ZNCv4Z5kI4SZJYx9hDOMwc/xIXequaDTqDjnnJ9VsD4SM
-         9YUaiUCU4M9vf5f711DQ1JTRT6SfSoLZEbAre9+BwH3zfINIfPQudJxGL+b/KdCTdBst
-         N6zg==
-X-Gm-Message-State: AO0yUKWEwlDY0glwuxqloH6G+rb2QxCNaPMmSZDvDb1YAPPIDidS5ppJ
-        JzNDZUTr/c1kIf3XlmKeJ0c=
-X-Google-Smtp-Source: AK7set/bgmw4FQVYher8ierqKhzmTrpUi6hwBXZSwOO5OSdUlvgGYSEN6+dlGxNHjZixrCuy4IITLg==
-X-Received: by 2002:a05:6a20:7f90:b0:be:9fff:48e2 with SMTP id d16-20020a056a207f9000b000be9fff48e2mr6572327pzj.39.1675155366415;
-        Tue, 31 Jan 2023 00:56:06 -0800 (PST)
-Received: from localhost ([203.194.37.234])
-        by smtp.gmail.com with ESMTPSA id q15-20020a056a00150f00b00593e84f2d08sm1303203pfu.52.2023.01.31.00.56.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 00:56:05 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 31 Jan 2023 18:55:58 +1000
-Message-Id: <CQ690JS6Q5RG.8KHL6V7BODI0@bobo>
-Cc:     <sudhakar@linux.ibm.com>, <bgray@linux.ibm.com>,
-        <erichte@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <nayna@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <zohar@linux.ibm.com>, <gjoyce@linux.ibm.com>, <ruscur@russell.cc>,
-        <gcwilson@linux.ibm.com>, <joel@jms.id.au>
-Subject: Re: [PATCH v4 22/24] powerpc/pseries: Implement secvars for dynamic
- secure boot
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.13.0
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
- <20230120074306.1326298-23-ajd@linux.ibm.com>
- <CQ05ZDYG6KNU.1G9O3ITQDIHEM@bobo>
- <9f16d86e855f22823ee24e6a6236a16556425f29.camel@linux.ibm.com>
-In-Reply-To: <9f16d86e855f22823ee24e6a6236a16556425f29.camel@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 31 Jan 2023 04:21:54 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B5892
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 01:21:52 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P5f7d1f0bz9xFg3
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 16:57:17 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwD3wlnB2dhj9TPeAA--.10220S2;
+        Tue, 31 Jan 2023 10:05:10 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH ima-evm-utils] Introduce expect_pass_if() and expect_fail_if()
+Date:   Tue, 31 Jan 2023 09:59:55 +0100
+Message-Id: <20230131085955.2312243-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwD3wlnB2dhj9TPeAA--.10220S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJFWfXF1DGr17GrW3Xr15XFb_yoW5Gw4xp3
+        93Wr13C3WDZ3WfAF93GF1vya4rCw48JrWUJrZ3X3yUur4avFZ2ya1fKr4UuFyjgrn5ZF93
+        Ja1Fvrn5GF1UAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4NB_UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj4RRhgABsr
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Jan 31, 2023 at 12:54 PM AEST, Andrew Donnellan wrote:
-> On Tue, 2023-01-24 at 15:17 +1000, Nicholas Piggin wrote:
-> > > +static const char * const plpks_var_names[] =3D {
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"PK",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"KEK",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"db",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"dbx",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"grubdb",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"grubdbx",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"sbat",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"moduledb",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"trustedcadb",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NULL,
-> > > +};
-> >=20
-> > Var and key are used somewhat interchangeably? These are keys, I
-> > think?
-> > And plpks could have other vars but we're only interested in (at
-> > least a
-> > subset of) keys here if I understood right.
-> >=20
-> > I guess the terminology is like that throughout secvar so maybe
-> > nothing
-> > to be done.
->
-> The "key" terminology seems to come from OPAL, while on the PLPKS side
-> it's a bit of a mess but "var" follows the usage in existing code (the
-> spec refers more to "objects").
->
-> >=20
-> > > +
-> > > +static int plpks_get_variable(const char *key, u64 key_len, u8
-> > > *data,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 *data_size)
-> > > +{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct plpks_var var =3D {=
-0};
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int rc =3D 0;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.name =3D kcalloc(key_l=
-en - 1, sizeof(wchar_t),
-> > > GFP_KERNEL);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!var.name)
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return -ENOMEM;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rc =3D utf8s_to_utf16s(key=
-, key_len - 1, UTF16_LITTLE_ENDIAN,
-> > > (wchar_t *)var.name,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 key_len - 1);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rc < 0)
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0goto err;
-> >=20
-> > Okay I can't work out why it's key_len - 1 rather than key_len.
->
-> The existing code in secvar-sysfs.c calls secvar_ops->get() with
-> key_len =3D strlen(name) + 1, to include the null byte, which is what
-> OPAL expects. For PLPKS, the variable name explicitly does not include
-> a trailing null byte.
->
-> I'll add a comment indicating as such, perhaps at some later point it
-> can be reworked.
->
-> >=20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.namelen =3D rc * 2;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.os =3D PLPKS_VAR_LINUX=
-;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (data) {
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0var.data =3D data;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0var.datalen =3D *data_size;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rc =3D plpks_read_os_var(&=
-var);
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rc)
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0goto err;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*data_size =3D var.datalen=
-;
-> > > +
-> > > +err:
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kfree(var.name);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rc && rc !=3D -ENOENT)=
- {
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0pr_err("Failed to read variable '%s': %d\n", key,
-> > > rc);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0// Return -EIO since userspace probably doesn't
-> > > care about the
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0// specific error
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0rc =3D -EIO;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return rc;
-> > > +}
-> > > +
-> > > +static int plpks_set_variable(const char *key, u64 key_len, u8
-> > > *data,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 data_size)
-> > > +{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct plpks_var var =3D {=
-0};
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int rc =3D 0;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 flags;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// Secure variables need t=
-o be prefixed with 8 bytes of
-> > > flags.
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// We only want to perform=
- the write if we have at least
-> > > one byte of data.
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (data_size <=3D sizeof(=
-flags))
-> >=20
-> > So it's unstructured 8 byte of flags, not a u64 integer? Why not u8
-> > flags[8] then?
->
-> No, it's a u64 and it's passed in the hcall as a single u64.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-In host endian? This is done so userspace can acces it with the existing
-secvar API, right? I suppose that's okay...
+Introduce these functions to let the developer specify which kernel patches
+are required for the tests to be successful (either pass or fail). If a
+test is not successful, print those patches in the test result summary.
 
-> > > +static ssize_t plpks_secvar_format(char *buf, size_t bufsize)
-> > > +{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct plpks_var var =3D {=
-0};
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ssize_t ret;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.component =3D NULL;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// Only the signed variabl=
-es have null bytes in their
-> > > names, this one doesn't
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.name =3D "SB_VERSION";
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.namelen =3D 10;
-> >=20
-> > Could you make that strlen(var.name) for the benefit of those of us
-> > with
-> > missing fingers?
->
-> Will do.
->
-> >=20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.datalen =3D 1;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.data =3D kzalloc(1, GF=
-P_KERNEL);
-> >=20
-> > This could just point to a u8 on stack I think?
->
-> Until we get VMAP_STACK and we'll have to switch back.
+First, the developer should declare an array, named PATCHES, with the list
+of all kernel patches that are required by the tests. For example:
 
-AFAIKS plpks_read_var does not require linear map, so should not be
-required. IMO that's the right way to go for an external API, so
-actually plpks_write_var is the outlier there and should be changed
-to follow read and remove in not requiring special pointers.
+PATCHES=(
+'patch 1 title'
+...
+'patch N title'
+)
 
-Thanks,
-Nick
+Second, the developer could replace the existing expect_pass() and
+expect_fail() respectively with expect_pass_if() and expect_fail_if(), and
+add the indexes in the PATCHES array as the first argument, enclosed with
+quotes. The other parameters of expect_pass() and expect_fail() remain the
+same.
+
+In the following example, the PATCHES array has been added to a new test
+script, tests/mmap_check.test:
+
+PATCHES=(
+'ima: Align ima_file_mmap() parameters with mmap_file LSM hook'
+'ima: Introduce MMAP_CHECK_REQPROT hook'
+)
+
+Then, expect_pass() has been replaced with expect_pass_if():
+
+expect_pass_if '0' check_mmap "MMAP_CHECK" "read_implies_exec"
+
+The resulting output when a test fails (if the required patch is not
+applied) is:
+
+Test: check_mmap (hook="MMAP_CHECK", test_mmap arg: "read_implies_exec")
+Result (expect found): not found
+Possibly missing patches:
+ - ima: Align ima_file_mmap() parameters with mmap_file LSM hook
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ tests/functions.sh | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/tests/functions.sh b/tests/functions.sh
+index 2c4d20536316..3cc5a792a5e7 100755
+--- a/tests/functions.sh
++++ b/tests/functions.sh
+@@ -100,6 +100,25 @@ expect_pass() {
+   return $ret
+ }
+ 
++expect_pass_if() {
++  local indexes="$1"
++  local ret
++
++  shift
++
++  expect_pass "$@"
++  ret=$?
++
++  if [ $ret -ne 0 ] && [ $ret -ne 77 ] && [ -n "$PATCHES" ]; then
++    echo $YELLOW"Possibly missing patches:"$NORM
++    for idx in $indexes; do
++      echo $YELLOW" - ${PATCHES[$((idx))]}"$NORM
++    done
++  fi
++
++  return $ret
++}
++
+ # Eval negative test (one that should fail) and account its result
+ expect_fail() {
+   local ret
+@@ -137,6 +156,25 @@ expect_fail() {
+   return $ret
+ }
+ 
++expect_fail_if() {
++  local indexes="$1"
++  local ret
++
++  shift
++
++  expect_fail "$@"
++  ret=$?
++
++  if { [ $ret -eq 0 ] || [ $ret -eq 99 ]; } && [ -n "$PATCHES" ]; then
++    echo $YELLOW"Possibly missing patches:"$NORM
++    for idx in $indexes; do
++      echo $YELLOW" - ${PATCHES[$((idx))]}"$NORM
++    done
++  fi
++
++  return $ret
++}
++
+ # return true if current test is positive
+ _test_expected_to_pass() {
+   [ ! $TFAIL ]
+-- 
+2.25.1
+
