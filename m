@@ -2,333 +2,836 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157A168330A
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 17:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D1F683368
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 18:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjAaQwW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Jan 2023 11:52:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
+        id S231705AbjAaRMA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Jan 2023 12:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjAaQwV (ORCPT
+        with ESMTP id S231724AbjAaRL4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:52:21 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F3F2BF08;
-        Tue, 31 Jan 2023 08:52:20 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VGFp0a017743;
-        Tue, 31 Jan 2023 16:52:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=4n8MyIdQwf8lXurw4fkxxKv88LvIqCvjwDBXGT/lB9w=;
- b=kfW6NYeej77Jq5gyPi4MP7IPvPsyLeaRkqCjURH0oEGlxCPH7UESjDsHPfLFLOjnzDyo
- 02iT7wxkdckF1oNHdUXaz4hMs0Fau5k+R9Gyt7jInKvfpbWMu1gu5+0SqeI5FJFyKAsc
- Ii/34T8IKq4uzGJh8/RgRhyn8l2eA+iE3vGfW5Qo/eKM9hqSPMsoJVMDk43UdhJ69H51
- mVZhf2HLVyDrxT+wqfybvS6BQaX+U5GKsKWmpJ0jEHlDRw3biLt/wEdxC4cKFt52RZLF
- 2x/YViAPavtlKyIIZzdm8RhXEDTHcb97j6L8JbtC5M8hKesGjdXR7oSyv/eUV67SoMR5 GQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf6bvs2a0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:52:10 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VGS2cQ007836;
-        Tue, 31 Jan 2023 16:52:09 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf6bvs29n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:52:09 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VGe7jc008920;
-        Tue, 31 Jan 2023 16:52:09 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ncvw2n8yn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:52:09 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VGq7Rb24379716
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 16:52:07 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 70BC05805A;
-        Tue, 31 Jan 2023 16:52:07 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A6625803F;
-        Tue, 31 Jan 2023 16:52:05 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 16:52:05 +0000 (GMT)
-Message-ID: <6a56a427-1f38-d3d8-63e2-7ed67198c31d@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 11:52:05 -0500
+        Tue, 31 Jan 2023 12:11:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1018D23C76
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 09:11:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675185065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yntr+OXayVRbKBTd8ymJCMOByp9K7d7gLFaDiL9OB9Y=;
+        b=UFNBzxAqjwY9eifSoQdirdBR84JY5sR3T/WYUCgCMSrIxI50rxXXohvU+Pl/dXYCn1pK+G
+        C1qYjYp0+O2IykJphJRALKJufvr94MFmVH6KeayY9EVBndA6VY/4uFbAVB+jiKwdWeGUAp
+        CPLGK93GOJOfpeCPgskk09hElKe8DzM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-483-iGras36oNeehrFb4acio0Q-1; Tue, 31 Jan 2023 12:11:01 -0500
+X-MC-Unique: iGras36oNeehrFb4acio0Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0667D887405;
+        Tue, 31 Jan 2023 17:10:59 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.17.134])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 27CAD112132C;
+        Tue, 31 Jan 2023 17:10:57 +0000 (UTC)
+From:   Steve Grubb <sgrubb@redhat.com>
+To:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-audit@redhat.com
+Cc:     Fan Wu <wufan@linux.microsoft.com>, dm-devel@redhat.com,
+        linux-doc@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        roberto.sassu@huawei.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-audit@redhat.com,
+        linux-integrity@vger.kernel.org, Fan Wu <wufan@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 07/16] uapi|audit|ipe: add ipe auditing support
+Date:   Tue, 31 Jan 2023 12:10:56 -0500
+Message-ID: <3723852.kQq0lBPeGt@x2>
+Organization: Red Hat
+In-Reply-To: <1675119451-23180-8-git-send-email-wufan@linux.microsoft.com>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-8-git-send-email-wufan@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 22/25] powerpc/pseries: Pass PLPKS password on kexec
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-23-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-23-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: asXG1Ov5dGaD8y8gvQ7DQB0bEurHFuEn
-X-Proofpoint-ORIG-GUID: LFp8T5_Fs6meJ_TmUGtyJWc9aDrf6mZb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 bulkscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 adultscore=0
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310146
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hello,
 
+On Monday, January 30, 2023 5:57:22 PM EST Fan Wu wrote:
+> From: Deven Bowers <deven.desai@linux.microsoft.com>
+> 
+> Users of IPE require a way to identify when and why an operation fails,
+> allowing them to both respond to violations of policy and be notified
+> of potentially malicious actions on their systens with respect to IPE
+> itself.
+> 
+> The new 1420 audit, AUDIT_IPE_ACCESS indicates the result of a policy
+> evaulation of a resource. The other two events, AUDIT_MAC_POLICY_LOAD,
+> and AUDIT_MAC_CONFIG_CHANGE represent a new policy was loaded into the
+> kernel and the currently active policy changed, respectively.
 
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
+Typically when you reuse an existing record type, it is expected to maintain 
+the same fields in the same order. Also, it is expect that fields that are 
+common across diferent records have the same meaning. To aid in this, we have 
+a field dictionary here:
+
+https://github.com/linux-audit/audit-documentation/blob/main/specs/fields/
+field-dictionary.csv
+
+For example, dev is expected to be 2 hex numbers separated by a colon which 
+are the device major and minor numbers. But down a couple lines from here, we 
+find dev="tmpfs". But isn't that a filesystem type?
+
+> This patch also adds support for success auditing, allowing users to
+> identify how a resource passed policy. It is recommended to use this
+> option with caution, as it is quite noisy.
 > 
-> Before interacting with the PLPKS, we ask the hypervisor to generate a
-> password for the current boot, which is then required for most further
-> PLPKS operations.
+> This patch adds the following audit records:
 > 
-> If we kexec into a new kernel, the new kernel will try and fail to
-> generate a new password, as the password has already been set.
+>   audit: AUDIT1420 path="/tmp/tmpwxmam366/deny/bin/hello" dev="tmpfs"
+>     ino=72 rule="DEFAULT op=EXECUTE action=DENY"
+
+Do we really need to log the whole rule?
+
+>   The above audit record shows IPE blocked a file
+>     /tmp/tmpwxmam366/deny/bin/hello in the temp file system.
 > 
-> Pass the password through to the new kernel via the device tree, in
-> /chosen/ibm,plpks-pw. Check for the presence of this property before
-> trying to generate a new password - if it exists, use the existing
-> password and remove it from the device tree.
+>   audit: AUDIT1420 path="/tmp/tmpxkvb3d9x/deny/bin/hello" dev="tmpfs"
+>     ino=157 rule="DEFAULT action=DENY"
 > 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+>   The above audit record shows IPE blocked a file
+>     /tmp/tmpxkvb3d9x/deny/bin/hello in the temp file system via another
+>     rule.
 > 
+>   audit: MAC_POLICY_LOAD policy_name="dmverity_roothash"
+>     policy_version=0.0.0 sha256=DC67AC19E05894EFB3170A8E55DE529794E248C2
+>     auid=4294967295 ses=4294967295 lsm=ipe res=1
+
+The MAC_POLICY_LOAD record type simply states the lsm that had it's policy 
+loaded. There isn't name, version, and hash information. I'd prefer to see 
+all users of this record type decide if it should be extended because they 
+also have that information available to record.
+
+>   The above audit record shows IPE loaded a new policy named
+>     "dmverity_roothash" with the sha256 hash of the policy.
+> 
+>   audit: MAC_CONFIG_CHANGE old_active_pol_name="Allow_All"
+>     old_active_pol_version=0.0.0
+>     old_sha256=DA39A3EE5E6B4B0D3255BFEF95601890AFD80709
+>     new_active_pol_name="dmverity_roothash" new_active_pol_version=0.0.0
+>     new_sha256=DC67AC19E05894EFB3170A8E55DE529794E248C2
+>     auid=4294967295 ses=4294967295 lsm=ipe res=1
+> 
+>   The above audit record shows IPE's active policy switched from
+>     "Allow_All" to "dmverity_roothash".
+
+Shouldn't this just be another MAC_POLICY_LOAD? That would match other LSM's. 
+The MAC_CONFIG_CHANGE is to denote that a changeable option was modified from 
+one value to another. But it is still operating under the same policy.
+
+-Steve
+
+> These result in the following events (the audit records are always
+> prior to a SYSCALL record):
+> 
+>   audit: AUDIT1420 path="/tmp/tmpwxmam366/deny/bin/hello" dev="tmpfs"
+>     ino=72 rule="DEFAULT op=EXECUTE action=DENY"
+>   audit[476]: SYSCALL arch=c000003e syscall=59 success=no exit=-13
+>     a0=7f7d01b5e890 a1=7f7d01f80e80 a2=7ffde535f230 a3=0 items=0 ppid=229
+>     pid=476 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0
+> fsgid=0 tty=pts0 ses=4294967295 comm="python3" exe="/usr/bin/python3.10"
+> key=(null)
+>   audit: PROCTITLE
+>     proctitle=707974686F6E3300746573742F6D61696E2E7079002D66002E2E
+> 
+>   The above events shows IPE blocked the hello file which python was
+>     trying to execute.
+> 
+>   audit: AUDIT1420 path="/tmp/tmpxkvb3d9x/deny/bin/hello" dev="tmpfs"
+>     ino=157 rule="DEFAULT action=DENY"
+>   audit[1195]: SYSCALL arch=c000003e syscall=9 success=no
+>     exit=-13 a0=0 a1=18020 a2=6 a3=2 items=0 ppid=997 pid=1195
+>     auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0
+> tty=pts0 ses=4294967295 comm="mmap_test"
+>     exe="/tmp/ipe-test/bin/mmap_test" key=(null)
+>   audit: PROCTITLE
+>     proctitle=2F746D702F6970652D746573742F62696E2F6D6D61705F746573
+> 
+>   The above events shows IPE blocked the hello file which
+>     /tmp/ipe-test/bin/mmap_test was trying to mmap.
+> 
+>   audit: MAC_POLICY_LOAD policy_name="dmverity_roothash"
+>     policy_version=0.0.0 sha256=DC67AC19E05894EFB3170A8E55DE529794E248C2
+>     auid=4294967295 ses=4294967295 lsm=ipe res=1
+>   audit[229]: SYSCALL arch=c000003e syscall=1 success=yes exit=2567 a0=3
+>     a1=5596fcae1fb0 a2=a07 a3=2 items=0 ppid=184 pid=229 auid=4294967295
+>     uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sg
+>     id=0 fsgid=0 tty=pts0 ses=4294967295 comm="python3"
+>     exe="/usr/bin/python3.10" key=(null)
+>   audit: PROCTITLE
+>     proctitle=707974686F6E3300746573742F6D61696E2E7079002D66002E2E
+> 
+>   The above events shows IPE loaded a new policy "dmverity_roothash"
+>     because python used write system call.
+> 
+>   audit: MAC_CONFIG_CHANGE old_active_pol_name="Allow_All"
+>     old_active_pol_version=0.0.0
+>     old_sha256=DA39A3EE5E6B4B0D3255BFEF95601890AFD80709
+>     new_active_pol_name="dmverity_roothash" new_active_pol_version=0.0.0
+>     new_sha256=DC67AC19E05894EFB3170A8E55DE529794E248C2
+>     auid=4294967295 ses=4294967295 lsm=ipe res=1
+>   audit[229]: SYSCALL arch=c000003e syscall=1 success=yes exit=2 a0=3
+>     a1=5596fcae1fb0 a2=2 a3=2 items=0 ppid=184 pid=229 auid=4294967295
+> uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0
+>     fsgid=0 tty=pts0 ses=4294967295 comm="python3"
+> exe="/usr/bin/python3.10" key=(null)
+>   audit: PROCTITLE
+>     proctitle=707974686F6E3300746573742F6D61696E2E7079002D66002E2
+>   The above events shows IPE switched to a new active policy
+>     "dmverity_roothash" because python used write system call.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 > ---
 > 
-> v3: New patch
+> v2:
+>   + Split evaluation loop, access control hooks,
+>     and evaluation loop from policy parser and userspace
+>     interface to pass mailing list character limit
 > 
-> v4: Fix compile when CONFIG_PSERIES_PLPKS=n (snowpatch)
+> v3:
+>   + Move ipe_load_properties to patch 04.
+>   + Remove useless 0-initializations
+>   + Prefix extern variables with ipe_
+>   + Remove kernel module parameters, as these are
+>     exposed through sysctls.
+>   + Add more prose to the IPE base config option
+>     help text.
+>   + Use GFP_KERNEL for audit_log_start.
+>   + Remove unnecessary caching system.
+>   + Remove comments from headers
+>   + Use rcu_access_pointer for rcu-pointer null check
+>   + Remove usage of reqprot; use prot only.
+>   + Move policy load and activation audit event to 03/12
 > 
->      Fix error handling on fdt_path_offset() call (ruscur)
+> v4:
+>   + Remove sysctls in favor of securityfs nodes
+>   + Re-add kernel module parameters, as these are now
+>     exposed through securityfs.
+>   + Refactor property audit loop to a separate function.
 > 
-> v5: Fix DT property name in commit message (npiggin)
+> v5:
+>   + fix minor grammatical errors
+>   + do not group rule by curly-brace in audit record,
+>     reconstruct the exact rule.
 > 
->      Clear prop in FDT during init to prevent password exposure (mpe)
+> v6:
+>   + No changes
 > 
->      Rework to remove ifdefs from C code (npiggin)
+> v7:
+>   + Further split lsm creation, the audit system, the evaluation loop,
+>     and access control hooks into separate patches.
+>   + Further split audit system patch into two separate patches; one
+>     for include/uapi, and the usage of the new defines.
+>   + Split out the permissive functionality into another separate patch,
+>     for easier review.
+>   + Correct misuse of audit_log_n_untrusted string to audit_log_format
+>   + Use get_task_comm instead of comm directly.
+>   + Quote certain audit values
+>   + Remove unnecessary help text on choice options - these were
+>     previously
+>     idented at the wrong level
+>   + Correct a stale string constant (ctx_ns_enforce to ctx_enforce)
+> 
+> v8:
+> 
+>   + Change dependency for CONFIG_AUDIT to CONFIG_AUDITSYSCALL
+>   + Drop ctx_* prefix
+>   + Reuse, where appropriate, the audit fields from the field
+>     dictionary. This transforms:
+>       ctx_pathname  -> path
+>       ctx_ino       -> ino
+>       ctx_dev       -> dev
+> 
+>   + Add audit records and event examples to commit description.
+>   + Remove new_audit_ctx, replace with audit_log_start. All data that
+>     would provided by new_audit_ctx is already present in the syscall
+>     audit record, that is always emitted on these actions. The audit
+>     records should be correlated as such.
+>   + Change audit types:
+>     + AUDIT_TRUST_RESULT                -> AUDIT_IPE_ACCESS
+>       +  This prevents overloading of the AVC type.
+>     + AUDIT_TRUST_POLICY_ACTIVATE       -> AUDIT_MAC_CONFIG_CHANGE
+>     + AUDIT_TRUST_POLICY_LOAD           -> AUDIT_MAC_POLICY_LOAD
+>       + There were no significant difference in meaning between
+>         these types.
+> 
+>   + Remove enforcing parameter passed from the context structure
+>     for AUDIT_IPE_ACCESS.
+>     +  This field can be inferred from the SYSCALL audit event,
+>        based on the success field.
+> 
+>   + Remove all fields already captured in the syscall record. "hook",
+>     an IPE specific field, can be determined via the syscall field in
+>     the syscall record itself, so it has been removed.
+>       + ino, path, and dev in IPE's record refer to the subject of the
+>         syscall, while the syscall record refers to the calling process.
+> 
+>   + remove IPE prefix from policy load/policy activation events
+>   + fix a bug wherein a policy change audit record was not fired when
+>     updating a policy
+> 
+> v9:
+>   + Merge the AUDIT_IPE_ACCESS definition with the audit support commit
+>   + Change the audit format of policy load and siwtch
+>   + Remove the ipe audit kernel switch
 > ---
->   arch/powerpc/include/asm/plpks.h       | 14 ++++++
->   arch/powerpc/kernel/prom.c             |  4 ++
->   arch/powerpc/kexec/file_load_64.c      | 15 +++++--
->   arch/powerpc/platforms/pseries/plpks.c | 60 ++++++++++++++++++++++++++
->   4 files changed, 90 insertions(+), 3 deletions(-)
+>  include/uapi/linux/audit.h |   1 +
+>  security/ipe/Kconfig       |   2 +-
+>  security/ipe/Makefile      |   1 +
+>  security/ipe/audit.c       | 196 +++++++++++++++++++++++++++++++++++++
+>  security/ipe/audit.h       |  18 ++++
+>  security/ipe/eval.c        |  26 ++++-
+>  security/ipe/eval.h        |   8 ++
+>  security/ipe/fs.c          |  68 +++++++++++++
+>  security/ipe/policy.c      |   5 +
+>  9 files changed, 321 insertions(+), 4 deletions(-)
+>  create mode 100644 security/ipe/audit.c
+>  create mode 100644 security/ipe/audit.h
 > 
-> diff --git a/arch/powerpc/include/asm/plpks.h b/arch/powerpc/include/asm/plpks.h
-> index 757313e00521..23b77027c916 100644
-> --- a/arch/powerpc/include/asm/plpks.h
-> +++ b/arch/powerpc/include/asm/plpks.h
-> @@ -176,6 +176,20 @@ u64 plpks_get_signedupdatealgorithms(void);
->    */
->   u16 plpks_get_passwordlen(void);
->   
-> +/**
-> + * Called in early init to retrieve and clear the PLPKS password from the DT.
+> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+> index d676ed2b246e..ee3b3db95076 100644
+> --- a/include/uapi/linux/audit.h
+> +++ b/include/uapi/linux/audit.h
+> @@ -143,6 +143,7 @@
+>  #define AUDIT_MAC_UNLBL_STCDEL	1417	/* NetLabel: del a static label 
+*/
+>  #define AUDIT_MAC_CALIPSO_ADD	1418	/* NetLabel: add CALIPSO DOI entry 
+*/
+>  #define AUDIT_MAC_CALIPSO_DEL	1419	/* NetLabel: del CALIPSO DOI 
+entry */
+> +#define AUDIT_IPE_ACCESS	1420	/* IPE Denial or Grant */
+> 
+>  #define AUDIT_FIRST_KERN_ANOM_MSG   1700
+>  #define AUDIT_LAST_KERN_ANOM_MSG    1799
+> diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
+> index e4875fb04883..ac4d558e69d5 100644
+> --- a/security/ipe/Kconfig
+> +++ b/security/ipe/Kconfig
+> @@ -5,7 +5,7 @@
+> 
+>  menuconfig SECURITY_IPE
+>  	bool "Integrity Policy Enforcement (IPE)"
+> -	depends on SECURITY && SECURITYFS
+> +	depends on SECURITY && SECURITYFS && AUDIT && AUDITSYSCALL
+>  	select PKCS7_MESSAGE_PARSER
+>  	select SYSTEM_DATA_VERIFICATION
+>  	help
+> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+> index 8602d71250b4..89a76ad72301 100644
+> --- a/security/ipe/Makefile
+> +++ b/security/ipe/Makefile
+> @@ -13,3 +13,4 @@ obj-$(CONFIG_SECURITY_IPE) += \
+>  	policy.o \
+>  	policy_fs.o \
+>  	policy_parser.o \
+> +	audit.o \
+> diff --git a/security/ipe/audit.c b/security/ipe/audit.c
+> new file mode 100644
+> index 000000000000..295e9f9f5146
+> --- /dev/null
+> +++ b/security/ipe/audit.c
+> @@ -0,0 +1,196 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
 > + */
-> +void plpks_early_init_devtree(void);
+> +
+> +#include "ipe.h"
+> +#include "eval.h"
+> +#include "hooks.h"
+> +#include "policy.h"
+> +#include "audit.h"
+> +#include "digest.h"
+> +
+> +#include <linux/slab.h>
+> +#include <linux/audit.h>
+> +#include <linux/types.h>
+> +#include <crypto/hash.h>
+> +
+> +#define ACTSTR(x) ((x) == ipe_action_allow ? "ALLOW" : "DENY")
+> +
+> +#define IPE_AUDIT_HASH_ALG "sha256"
+> +
+> +#define AUDIT_POLICY_LOAD_FMT "policy_name=\"%s\"
+> policy_version=%hu.%hu.%hu "\ +			      IPE_AUDIT_HASH_ALG 
+"="
+> +#define AUDIT_OLD_ACTIVE_POLICY_FMT "old_active_pol_name=\"%s\" "\
+> +				    "old_active_pol_version=%hu.%hu.%hu "\
+> +				    "old_" IPE_AUDIT_HASH_ALG "="
+> +#define AUDIT_NEW_ACTIVE_POLICY_FMT "new_active_pol_name=\"%s\" "\
+> +				    "new_active_pol_version=%hu.%hu.%hu "\
+> +				    "new_" IPE_AUDIT_HASH_ALG "="
+> +
+> +static const char *const audit_op_names[ipe_op_max] = {
+> +	"EXECUTE",
+> +	"FIRMWARE",
+> +	"KMODULE",
+> +	"KEXEC_IMAGE",
+> +	"KEXEC_INITRAMFS",
+> +	"IMA_POLICY",
+> +	"IMA_X509_CERT",
+> +};
+> +
+> +static const char *const audit_prop_names[ipe_prop_max] = {
+> +	"boot_verified=FALSE",
+> +	"boot_verified=TRUE",
+> +};
 > +
 > +/**
-> + * Populates the FDT with the PLPKS password to prepare for kexec.
-> + */
-> +int plpks_populate_fdt(void *fdt);
-> +#else // CONFIG_PSERIES_PLPKS
-> +static inline bool plpks_is_available(void) { return false; }
-> +static inline u16 plpks_get_passwordlen(void) { BUILD_BUG(); }
-> +static inline void plpks_early_init_devtree(void) { }
-> +static inline int plpks_populate_fdt(void *fdt) { BUILD_BUG(); }
->   #endif // CONFIG_PSERIES_PLPKS
->   
->   #endif // _ASM_POWERPC_PLPKS_H
-> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> index 4f1c920aa13e..8a13b378770f 100644
-> --- a/arch/powerpc/kernel/prom.c
-> +++ b/arch/powerpc/kernel/prom.c
-> @@ -56,6 +56,7 @@
->   #include <asm/drmem.h>
->   #include <asm/ultravisor.h>
->   #include <asm/prom.h>
-> +#include <asm/plpks.h>
->   
->   #include <mm/mmu_decl.h>
->   
-> @@ -893,6 +894,9 @@ void __init early_init_devtree(void *params)
->   		powerpc_firmware_features |= FW_FEATURE_PS3_POSSIBLE;
->   #endif
->   
-> +	/* If kexec left a PLPKS password in the DT, get it and clear it */
-> +	plpks_early_init_devtree();
-> +
->   	tm_init();
->   
->   	DBG(" <- early_init_devtree()\n");
-> diff --git a/arch/powerpc/kexec/file_load_64.c b/arch/powerpc/kexec/file_load_64.c
-> index af8854f9eae3..3f5740fb01a4 100644
-> --- a/arch/powerpc/kexec/file_load_64.c
-> +++ b/arch/powerpc/kexec/file_load_64.c
-> @@ -27,6 +27,7 @@
->   #include <asm/kexec_ranges.h>
->   #include <asm/crashdump-ppc64.h>
->   #include <asm/prom.h>
-> +#include <asm/plpks.h>
->   
->   struct umem_info {
->   	u64 *buf;		/* data buffer for usable-memory property */
-> @@ -977,12 +978,16 @@ static unsigned int cpu_node_size(void)
->    */
->   unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
->   {
-> -	unsigned int cpu_nodes, extra_size;
-> +	unsigned int cpu_nodes, extra_size = 0;
->   	struct device_node *dn;
->   	u64 usm_entries;
->   
-> +	// Make room for the PLPKS password, plus node overhead for ibm,plpks-pw.
-> +	if (plpks_is_available())
-> +		extra_size += (unsigned int)plpks_get_passwordlen() + 32;
-
-Is there nothing better than a '32'?
-  
-> +
->   	if (image->type != KEXEC_TYPE_CRASH)
-> -		return 0;
-> +		return extra_size;
->   
->   	/*
->   	 * For kdump kernel, account for linux,usable-memory and
-> @@ -992,7 +997,7 @@ unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
->   	usm_entries = ((memblock_end_of_DRAM() / drmem_lmb_size()) +
->   		       (2 * (resource_size(&crashk_res) / drmem_lmb_size())));
->   
-> -	extra_size = (unsigned int)(usm_entries * sizeof(u64));
-> +	extra_size += (unsigned int)(usm_entries * sizeof(u64));
->   
->   	/*
->   	 * Get the number of CPU nodes in the current DT. This allows to
-> @@ -1230,6 +1235,10 @@ int setup_new_fdt_ppc64(const struct kimage *image, void *fdt,
->   		}
->   	}
->   
-> +	// If we have PLPKS active, we need to provide the password to the new kernel
-> +	if (plpks_is_available())
-> +		ret = plpks_populate_fdt(fdt);
-> +
->   out:
->   	kfree(rmem);
->   	kfree(umem);
-> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
-> index 6940280ae94a..481a669845c5 100644
-> --- a/arch/powerpc/platforms/pseries/plpks.c
-> +++ b/arch/powerpc/platforms/pseries/plpks.c
-> @@ -16,6 +16,9 @@
->   #include <linux/slab.h>
->   #include <linux/string.h>
->   #include <linux/types.h>
-> +#include <linux/of_fdt.h>
-> +#include <linux/libfdt.h>
-> +#include <linux/memblock.h>
->   #include <asm/hvcall.h>
->   #include <asm/machdep.h>
->   #include <asm/plpks.h>
-> @@ -128,6 +131,12 @@ static int plpks_gen_password(void)
->   	u8 *password, consumer = PLPKS_OS_OWNER;
->   	int rc;
->   
-> +	// If we booted from kexec, we could be reusing an existing password already
-> +	if (ospassword) {
-> +		pr_debug("Password of length %u already in use\n", ospasswordlength);
-> +		return 0;
-> +	}
-> +
->   	// The password must not cross a page boundary, so we align to the next power of 2
->   	password = kzalloc(roundup_pow_of_two(maxpwsize), GFP_KERNEL);
->   	if (!password)
-> @@ -621,6 +630,57 @@ int plpks_read_bootloader_var(struct plpks_var *var)
->   	return plpks_read_var(PLPKS_BOOTLOADER_OWNER, var);
->   }
->   
-> +int plpks_populate_fdt(void *fdt)
+> + * audit_rule - audit an IPE policy rule approximation.
+> + * @ab: Supplies a poniter to the audit_buffer to append to.
+> + * @r: Supplies a pointer to the ipe_rule to approximate a string form
+> for. + */
+> +static void audit_rule(struct audit_buffer *ab, const struct ipe_rule *r)
 > +{
-> +	int chosen_offset = fdt_path_offset(fdt, "/chosen");
-
-Newline here?
-> +	if (chosen_offset < 0) {
-> +		pr_err("Can't find chosen node: %s\n",
-> +		       fdt_strerror(chosen_offset));
-> +		return chosen_offset;
+> +	const struct ipe_prop *ptr;
+> +
+> +	audit_log_format(ab, "rule=\"op=%s ", audit_op_names[r->op]);
+> +
+> +	list_for_each_entry(ptr, &r->props, next) {
+> +		audit_log_format(ab, "%s", audit_prop_names[ptr->type]);
+> +		audit_log_format(ab, " ");
 > +	}
 > +
-> +	return fdt_setprop(fdt, chosen_offset, "ibm,plpks-pw", ospassword, ospasswordlength);
+> +	audit_log_format(ab, "action=%s\"", ACTSTR(r->action));
 > +}
 > +
-> +// Once a password is registered with the hypervisor it cannot be cleared without
-> +// rebooting the LPAR, so to keep using the PLPKS across kexec boots we need to
-> +// recover the previous password from the FDT.
-> +//
-> +// There are a few challenges here.  We don't want the password to be visible to
-> +// users, so we need to clear it from the FDT.  This has to be done in early boot.
-> +// Clearing it from the FDT would make the FDT's checksum invalid, so we have to
-> +// manually cause the checksum to be recalculated.
-> +void __init plpks_early_init_devtree(void)
+> +/**
+> + * ipe_audit_match - audit a match for IPE policy.
+> + * @ctx: Supplies a poniter to the evaluation context that was used in the
+> + *	 evaluation.
+> + * @match_type: Supplies the scope of the match: rule, operation default,
+> + *		global default.
+> + * @act: Supplies the IPE's evaluation decision, deny or allow.
+> + * @r: Supplies a pointer to the rule that was matched, if possible.
+> + * @enforce: Supplies the enforcement/permissive state at the point
+> + *	     the enforcement decision was made.
+> + */
+> +void ipe_audit_match(const struct ipe_eval_ctx *const ctx,
+> +		     enum ipe_match match_type,
+> +		     enum ipe_action_type act, const struct ipe_rule *const r)
 > +{
-> +	void *fdt = initial_boot_params;
-> +	int chosen_node = fdt_path_offset(fdt, "/chosen");
-> +	u8 *password;
-
-const u8 *password ?
-
-> +	int len;
+> +	struct inode *inode;
+> +	struct audit_buffer *ab;
+> +	const char *op = audit_op_names[ctx->op];
 > +
-> +	if (chosen_node < 0)
+> +	if (act != ipe_action_deny && !READ_ONCE(success_audit))
 > +		return;
 > +
-> +	password = (u8 *)fdt_getprop(fdt, chosen_node, "ibm,plpks-pw", &len);
-> +	if (len <= 0) {
-> +		pr_debug("Couldn't find ibm,plpks-pw node.\n");
+> +	ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_IPE_ACCESS);
+> +	if (!ab)
 > +		return;
+> +
+> +	if (ctx->file) {
+> +		audit_log_d_path(ab, "path=", &ctx->file->f_path);
+> +		inode = file_inode(ctx->file);
+> +		if (inode) {
+> +			audit_log_format(ab, " dev=");
+> +			audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> +			audit_log_format(ab, " ino=%lu ", inode->i_ino);
+> +		}
 > +	}
 > +
-> +	ospassword = memblock_alloc_raw(len, SMP_CACHE_BYTES);
-> +	if (!ospassword) {
-> +		pr_err("Error allocating memory for password.\n");
-
-Also display 'len' here?
-
+> +	if (match_type == ipe_match_rule)
+> +		audit_rule(ab, r);
+> +	else if (match_type == ipe_match_table)
+> +		audit_log_format(ab, "rule=\"DEFAULT op=%s action=%s\"", op,
+> +				 ACTSTR(act));
+> +	else
+> +		audit_log_format(ab, "rule=\"DEFAULT action=%s\"",
+> +				 ACTSTR(act));
+> +
+> +	audit_log_end(ab);
+> +}
+> +
+> +/**
+> + * audit_policy - Audit a policy's name, version and thumbprint to @ab.
+> + * @ab: Supplies a pointer to the audit buffer to append to.
+> + * @p: Supplies a pointer to the policy to audit.
+> + */
+> +static void audit_policy(struct audit_buffer *ab,
+> +			 const char *audit_format,
+> +			 const struct ipe_policy *const p)
+> +{
+> +	u8 *digest = NULL;
+> +	struct crypto_shash *tfm;
+> +	SHASH_DESC_ON_STACK(desc, tfm);
+> +
+> +	tfm = crypto_alloc_shash(IPE_AUDIT_HASH_ALG, 0, 0);
+> +	if (IS_ERR(tfm))
+> +		return;
+> +
+> +	desc->tfm = tfm;
+> +
+> +	digest = kzalloc(crypto_shash_digestsize(tfm), GFP_KERNEL);
+> +	if (!digest)
 > +		goto out;
-> +	}
 > +
-> +	memcpy(ospassword, password, len);
-> +	ospasswordlength = (u16)len;
+> +	if (crypto_shash_init(desc))
+> +		goto out;
+> +
+> +	if (crypto_shash_update(desc, p->pkcs7, p->pkcs7len))
+> +		goto out;
+> +
+> +	if (crypto_shash_final(desc, digest))
+> +		goto out;
+> +
+> +	audit_log_format(ab, audit_format, p->parsed->name,
+> +			 p->parsed->version.major, p->parsed->version.minor,
+> +			 p->parsed->version.rev);
+> +	audit_log_n_hex(ab, digest, crypto_shash_digestsize(tfm));
 > +
 > +out:
-> +	fdt_nop_property(fdt, chosen_node, "ibm,plpks-pw");
-> +	// Since we've cleared the password, we must update the FDT checksum
-> +	early_init_dt_verify(fdt);
+> +	kfree(digest);
+> +	crypto_free_shash(tfm);
 > +}
 > +
->   static __init int pseries_plpks_init(void)
->   {
->   	int rc;
+> +/**
+> + * ipe_audit_policy_activation - Audit a policy being made the active
+> policy. + * @p: Supplies a pointer to the policy to audit.
+> + */
+> +void ipe_audit_policy_activation(const struct ipe_policy *const op,
+> +				 const struct ipe_policy *const np)
+> +{
+> +	struct audit_buffer *ab;
+> +
+> +	ab = audit_log_start(audit_context(), GFP_KERNEL,
+> AUDIT_MAC_CONFIG_CHANGE); +	if (!ab)
+> +		return;
+> +
+> +	audit_policy(ab, AUDIT_OLD_ACTIVE_POLICY_FMT, op);
+> +	audit_log_format(ab, " ");
+> +	audit_policy(ab, AUDIT_NEW_ACTIVE_POLICY_FMT, np);
+> +	audit_log_format(ab, " auid=%u ses=%u lsm=ipe res=1",
+> +			 from_kuid(&init_user_ns, audit_get_loginuid(current)),
+> +			 audit_get_sessionid(current));
+> +
+> +	audit_log_end(ab);
+> +}
+> +
+> +/**
+> + * ipe_audit_policy_load - Audit a policy being loaded into the kernel.
+> + * @p: Supplies a pointer to the policy to audit.
+> + */
+> +void ipe_audit_policy_load(const struct ipe_policy *const p)
+> +{
+> +	struct audit_buffer *ab;
+> +
+> +	ab = audit_log_start(audit_context(), GFP_KERNEL, 
+AUDIT_MAC_POLICY_LOAD);
+> +	if (!ab)
+> +		return;
+> +
+> +	audit_policy(ab, AUDIT_POLICY_LOAD_FMT, p);
+> +	audit_log_format(ab, " auid=%u ses=%u lsm=ipe res=1",
+> +			 from_kuid(&init_user_ns, audit_get_loginuid(current)),
+> +			 audit_get_sessionid(current));
+> +
+> +	audit_log_end(ab);
+> +}
+> diff --git a/security/ipe/audit.h b/security/ipe/audit.h
+> new file mode 100644
+> index 000000000000..2e9b99737f97
+> --- /dev/null
+> +++ b/security/ipe/audit.h
+> @@ -0,0 +1,18 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+> +
+> +#ifndef IPE_AUDIT_H
+> +#define IPE_AUDIT_H
+> +
+> +#include "policy.h"
+> +
+> +void ipe_audit_match(const struct ipe_eval_ctx *const ctx,
+> +		     enum ipe_match match_type,
+> +		     enum ipe_action_type act, const struct ipe_rule *const 
+r);
+> +void ipe_audit_policy_load(const struct ipe_policy *const p);
+> +void ipe_audit_policy_activation(const struct ipe_policy *const op,
+> +				 const struct ipe_policy *const np);
+> +
+> +#endif /* IPE_AUDIT_H */
+> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> index 48b5104a3463..d713808cad9c 100644
+> --- a/security/ipe/eval.c
+> +++ b/security/ipe/eval.c
+> @@ -7,6 +7,7 @@
+>  #include "eval.h"
+>  #include "hooks.h"
+>  #include "policy.h"
+> +#include "audit.h"
+> 
+>  #include <linux/fs.h>
+>  #include <linux/types.h>
+> @@ -15,8 +16,10 @@
+>  #include <linux/sched.h>
+>  #include <linux/rcupdate.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/moduleparam.h>
+> 
+>  struct ipe_policy __rcu *ipe_active_policy;
+> +bool success_audit;
+> 
+>  static struct super_block *pinned_sb;
+>  static DEFINE_SPINLOCK(pin_lock);
+> @@ -117,6 +120,7 @@ int ipe_evaluate_event(const struct ipe_eval_ctx *const
+> ctx) int rc = 0;
+>  	bool match = false;
+>  	enum ipe_action_type action;
+> +	enum ipe_match match_type;
+>  	struct ipe_policy *pol = NULL;
+>  	const struct ipe_rule *rule = NULL;
+>  	const struct ipe_op_table *rules = NULL;
+> @@ -131,6 +135,7 @@ int ipe_evaluate_event(const struct ipe_eval_ctx *const
+> ctx)
+> 
+>  	if (ctx->op == ipe_op_max) {
+>  		action = pol->parsed->global_default_action;
+> +		match_type = ipe_match_global;
+>  		goto eval;
+>  	}
+> 
+> @@ -146,14 +151,20 @@ int ipe_evaluate_event(const struct ipe_eval_ctx
+> *const ctx) break;
+>  	}
+> 
+> -	if (match)
+> +	if (match) {
+>  		action = rule->action;
+> -	else if (rules->default_action != ipe_action_max)
+> +		match_type = ipe_match_rule;
+> +	} else if (rules->default_action != ipe_action_max) {
+>  		action = rules->default_action;
+> -	else
+> +		match_type = ipe_match_table;
+> +	} else {
+>  		action = pol->parsed->global_default_action;
+> +		match_type = ipe_match_global;
+> +	}
+> 
+>  eval:
+> +	ipe_audit_match(ctx, match_type, action, rule);
+> +
+>  	if (action == ipe_action_deny)
+>  		rc = -EACCES;
+> 
+> @@ -178,3 +189,12 @@ void ipe_invalidate_pinned_sb(const struct super_block
+> *mnt_sb)
+> 
+>  	spin_unlock(&pin_lock);
+>  }
+> +
+> +/* Set the right module name */
+> +#ifdef KBUILD_MODNAME
+> +#undef KBUILD_MODNAME
+> +#define KBUILD_MODNAME "ipe"
+> +#endif
+> +
+> +module_param(success_audit, bool, 0400);
+> +MODULE_PARM_DESC(success_audit, "Start IPE with success auditing
+> enabled"); diff --git a/security/ipe/eval.h b/security/ipe/eval.h
+> index 887797438b9b..b83730d0b5ae 100644
+> --- a/security/ipe/eval.h
+> +++ b/security/ipe/eval.h
+> @@ -13,6 +13,7 @@
+>  #include "policy.h"
+> 
+>  extern struct ipe_policy __rcu *ipe_active_policy;
+> +extern bool success_audit;
+> 
+>  struct ipe_eval_ctx {
+>  	enum ipe_op_type op;
+> @@ -21,6 +22,13 @@ struct ipe_eval_ctx {
+>  	bool from_init_sb;
+>  };
+> 
+> +enum ipe_match {
+> +	ipe_match_rule = 0,
+> +	ipe_match_table,
+> +	ipe_match_global,
+> +	ipe_match_max
+> +};
+> +
+>  void build_eval_ctx(struct ipe_eval_ctx *ctx, const struct file *file,
+> enum ipe_op_type op); int ipe_evaluate_event(const struct ipe_eval_ctx
+> *const ctx);
+>  void ipe_invalidate_pinned_sb(const struct super_block *mnt_sb);
+> diff --git a/security/ipe/fs.c b/security/ipe/fs.c
+> index 9f6a4867bec2..c99616f36f32 100644
+> --- a/security/ipe/fs.c
+> +++ b/security/ipe/fs.c
+> @@ -4,7 +4,9 @@
+>   */
+>  #include "ipe.h"
+>  #include "fs.h"
+> +#include "eval.h"
+>  #include "policy.h"
+> +#include "audit.h"
+> 
+>  #include <linux/dcache.h>
+>  #include <linux/security.h>
+> @@ -12,6 +14,57 @@
+>  static struct dentry *np __ro_after_init;
+>  static struct dentry *root __ro_after_init;
+>  struct dentry *policy_root __ro_after_init;
+> +static struct dentry *audit_node __ro_after_init;
+> +
+> +/**
+> + * setaudit - Write handler for the securityfs node, "ipe/success_audit"
+> + * @f: Supplies a file structure representing the securityfs node.
+> + * @data: Supplies a buffer passed to the write syscall.
+> + * @len: Supplies the length of @data.
+> + * @offset: unused.
+> + *
+> + * Return:
+> + * * >0	- Success, Length of buffer written
+> + * * <0	- Error
+> + */
+> +static ssize_t setaudit(struct file *f, const char __user *data,
+> +			size_t len, loff_t *offset)
+> +{
+> +	int rc = 0;
+> +	bool value;
+> +
+> +	if (!file_ns_capable(f, &init_user_ns, CAP_MAC_ADMIN))
+> +		return -EPERM;
+> +
+> +	rc = kstrtobool_from_user(data, len, &value);
+> +	if (rc)
+> +		return rc;
+> +
+> +	WRITE_ONCE(success_audit, value);
+> +
+> +	return len;
+> +}
+> +
+> +/**
+> + * getaudit - Read handler for the securityfs node, "ipe/success_audit"
+> + * @f: Supplies a file structure representing the securityfs node.
+> + * @data: Supplies a buffer passed to the read syscall
+> + * @len: Supplies the length of @data
+> + * @offset: unused.
+> + *
+> + * Return:
+> + * * >0	- Success, Length of buffer written
+> + * * <0	- Error
+> + */
+> +static ssize_t getaudit(struct file *f, char __user *data,
+> +			size_t len, loff_t *offset)
+> +{
+> +	const char *result;
+> +
+> +	result = ((READ_ONCE(success_audit)) ? "1" : "0");
+> +
+> +	return simple_read_from_buffer(data, len, offset, result, 1);
+> +}
+> 
+>  /**
+>   * new_policy - Write handler for the securityfs node, "ipe/new_policy".
+> @@ -50,6 +103,8 @@ static ssize_t new_policy(struct file *f, const char
+> __user *data, if (rc)
+>  		goto err;
+> 
+> +	ipe_audit_policy_load(p);
+> +
+>  err:
+>  	return (rc < 0) ? rc : len;
+>  }
+> @@ -58,6 +113,11 @@ static const struct file_operations np_fops = {
+>  	.write = new_policy,
+>  };
+> 
+> +static const struct file_operations audit_fops = {
+> +	.write = setaudit,
+> +	.read = getaudit,
+> +};
+> +
+>  /**
+>   * ipe_init_securityfs - Initialize IPE's securityfs tree at fsinit.
+>   *
+> @@ -84,6 +144,13 @@ static int __init ipe_init_securityfs(void)
+>  		goto err;
+>  	}
+> 
+> +	audit_node = securityfs_create_file("success_audit", 0600, root,
+> +					    NULL, &audit_fops);
+> +	if (IS_ERR(audit_node)) {
+> +		rc = PTR_ERR(audit_node);
+> +		goto err;
+> +	}
+> +
+>  	policy_root = securityfs_create_dir("policies", root);
+>  	if (IS_ERR(policy_root)) {
+>  		rc = PTR_ERR(policy_root);
+> @@ -94,6 +161,7 @@ static int __init ipe_init_securityfs(void)
+>  err:
+>  	securityfs_remove(np);
+>  	securityfs_remove(root);
+> +	securityfs_remove(audit_node);
+>  	securityfs_remove(policy_root);
+>  	return rc;
+>  }
+> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> index a5e9c6e5691b..703b3fd9cf4c 100644
+> --- a/security/ipe/policy.c
+> +++ b/security/ipe/policy.c
+> @@ -9,6 +9,7 @@
+>  #include "policy.h"
+>  #include "policy_parser.h"
+>  #include "digest.h"
+> +#include "audit.h"
+> 
+>  #include <linux/verification.h>
+> 
+> @@ -124,6 +125,9 @@ struct ipe_policy *ipe_update_policy(struct ipe_policy
+> __rcu **addr, swap(new->policyfs, old->policyfs);
+>  	ipe_free_policy(old);
+> 
+> +	if (!rc)
+> +		ipe_audit_policy_load(new);
+> +
+>  	goto out;
+>  err:
+>  	ipe_free_policy(new);
+> @@ -230,6 +234,7 @@ int ipe_set_active_pol(const struct ipe_policy *p)
+>  	spin_unlock(&ipe_policy_lock);
+>  	synchronize_rcu();
+> 
+> +	ipe_audit_policy_activation(ap, p);
+>  out:
+>  	return rc;
+>  }
+
+
+
+
