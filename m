@@ -2,77 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA8D6833F9
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 18:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBBD683403
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 18:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjAaReU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Jan 2023 12:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S229686AbjAaRhz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Jan 2023 12:37:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjAaReC (ORCPT
+        with ESMTP id S229565AbjAaRhy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:34:02 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99DE539B1
-        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 09:33:59 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VG07Ub018578
-        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 17:33:59 GMT
+        Tue, 31 Jan 2023 12:37:54 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2875539B1
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 09:37:50 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VHVXUE009946
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 17:37:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : mime-version : content-transfer-encoding; s=pp1;
  bh=Ud7RImv6nGeEgaaIaebNkKEr5q/G7CGrPdK79lYS6f8=;
- b=Sn67NXZ25taPtinFeQUWd1ACCgiteKpqFzSyvJC2pIGrYfFQMYt1w6WvYbeSrxDWnjhK
- KZ5EgFqrKECZARubtiWJva7KOb6JQgalRj9srZ2TUutxLqVklXKYLMhpA/RmNOnN2ghO
- 4Bb9OqhoMUlmtQOV2iVgGTq9znkMEugeq2iYPFjxztj4N06NZiBCiLIjBad7XYtshn79
- 4UmMZBUCvD3jXyt/b/GXcGA0mMdOcgmFuOU0ADuu+5xiOR/fOhtfNHbsu57N6r+/R12K
- jnEAb2aVsm03REEr7KE1I7E/rua4aCmPi86VXXCYLDldPUQATTA6EcmNnQEgbRZ9nHa8 Vw== 
+ b=j3NKny35fsYBBAS9IooGwNoQc2Cfpxgp0C1rc9pwJgFXZ6i2hSJCosZLoqHz5Sfe+gGL
+ HUxDWEAygyQi2/q4xQkQOhbJX3SNdgQHdy+UOTW5uk5k8nYb6RkWqRLjpTzpB2fI9l13
+ wgbmWkALv1aMpAK0Zsasg1gKOSz/vga+/0okZgnjCSnT3MDrTraOTG9fPpwXwRnTWpbk
+ tyHJWVnbvLvABKjGL8/WleZfPKIPIJL0zLfLWwX2tZWjS2LJ8R8hPuoOfZK8bZH1I4QI
+ Li/dhi2P+hekda2Y/YmpOUVv9pGO7T7MHFdnzUucyIWc4e6ugg6zMpZ+k1k7pbpebZBG mg== 
 Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf519vmgt-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf7fcg3x9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 17:33:58 +0000
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 17:37:50 +0000
 Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VEGX5o013445
-        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 17:33:57 GMT
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VEGX5x013445
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 17:37:47 GMT
 Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3ncvtybsc3-1
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3ncvtybsfw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 17:33:57 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VHXrxo45613488
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 17:37:47 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VHbiwj40698196
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 17:33:53 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7504E20043;
-        Tue, 31 Jan 2023 17:33:53 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36BBE2004B;
-        Tue, 31 Jan 2023 17:33:52 +0000 (GMT)
+        Tue, 31 Jan 2023 17:37:44 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4062620049;
+        Tue, 31 Jan 2023 17:37:44 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C45D20040;
+        Tue, 31 Jan 2023 17:37:43 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.77.155.214])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 17:33:51 +0000 (GMT)
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 17:37:43 +0000 (GMT)
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH] Fix reading the TPM 2.0 PCRs
-Date:   Tue, 31 Jan 2023 12:33:44 -0500
-Message-Id: <20230131173344.8147-1-zohar@linux.ibm.com>
+Subject: [PATCH ima-evm-utils] Fix reading the TPM 2.0 PCRs
+Date:   Tue, 31 Jan 2023 12:37:40 -0500
+Message-Id: <20230131173740.8707-1-zohar@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: n6tgLnGQajKn8pPP7Yzm04jSxj5BdmCi
-X-Proofpoint-GUID: n6tgLnGQajKn8pPP7Yzm04jSxj5BdmCi
+X-Proofpoint-GUID: V2rIq7YMXgBAc6_crU6SR2vMe0Q5Ay9e
+X-Proofpoint-ORIG-GUID: V2rIq7YMXgBAc6_crU6SR2vMe0Q5Ay9e
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301310155
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ bulkscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 adultscore=0
+ priorityscore=1501 mlxlogscore=999 phishscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310155
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
