@@ -2,96 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027E36831D1
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 16:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B19A16831D8
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 16:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjAaPtw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Jan 2023 10:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S233466AbjAaPug (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Jan 2023 10:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjAaPtv (ORCPT
+        with ESMTP id S233462AbjAaPuf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:49:51 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55AC18168;
-        Tue, 31 Jan 2023 07:49:49 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VEjBul029047;
-        Tue, 31 Jan 2023 15:49:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=o/mHRBcLaJ60ur4maF29Xi6uQ8jBvLv5l7cqFVKMfk4=;
- b=DXAw7w1+ouz4uI2hzY0uwgtiC0RdU9VNM7/786icl81UH9AIAhsKt0W4a+xQXrk9h4lz
- wSmuctXG3kqEFnbQaxvTPZOOmiMDyYd/3/V8g5j+Ut2WoJCZP+QFAQ0TaRWEu0LbcH7V
- Zg1pKa/fR3bX/LDbWCKjytr+SIkDMS3ulALh7NVORbCUOSeNSEr6zhC5T64bZENT2UMc
- 2KlOZ1Wqv3NQFzamxt7iw91/zCYDItLq6UiINfuF/nLQs5ftKzOyKicvdY+lC7ZdUQ8l
- EaA9xfvgr6fZjUzrMW+u5zfSuZrwnOPFZL35RiCoIHEZZI1ddfaUV7Ax6hBlHYH/wynh qQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf519squf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:49:39 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VFnYKX004633;
-        Tue, 31 Jan 2023 15:49:39 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf519squ8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:49:39 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFf8ua007760;
-        Tue, 31 Jan 2023 15:49:38 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3ncvtert18-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:49:38 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFnbxA12387010
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 15:49:37 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1E7ED5805B;
-        Tue, 31 Jan 2023 15:49:37 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B3E8A5805C;
-        Tue, 31 Jan 2023 15:49:35 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 15:49:35 +0000 (GMT)
-Message-ID: <aac15eb0-ca25-5012-6346-86a89ec461ac@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 10:49:35 -0500
+        Tue, 31 Jan 2023 10:50:35 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1DC25287;
+        Tue, 31 Jan 2023 07:50:31 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P5q710dNZz9xGYd;
+        Tue, 31 Jan 2023 23:42:21 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDnvGOiONljTIjfAA--.49040S2;
+        Tue, 31 Jan 2023 16:50:07 +0100 (CET)
+Message-ID: <061df661004a06ef1e8790d48157c7ba4ecfc009.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v9 03/16] ipe: add evaluation loop and introduce
+ 'boot_verified' as a trust provider
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com,
+        paul@paul-moore.com
+Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Date:   Tue, 31 Jan 2023 16:49:44 +0100
+In-Reply-To: <1675119451-23180-4-git-send-email-wufan@linux.microsoft.com>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+         <1675119451-23180-4-git-send-email-wufan@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 10/25] powerpc/secvar: Extend sysfs to include config
- vars
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-11-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-11-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jW1wSN4d1F4T6Se--m6havXEtaqCI7EQ
-X-Proofpoint-GUID: W8jG_Wnur3hspHNv4L2HpQ4uMkI6t0G7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301310137
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+X-CM-TRANSID: GxC2BwDnvGOiONljTIjfAA--.49040S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3CFy7WrWkKr1UCF1UJF4xJFb_yoW8GFykto
+        WfXa13uF4xtry3CrWj9a17AFW7Wa9Ygw4kJFZ0qrZrJFn2v34UKw1kAa1UXF45uF1rJr15
+        K3s7ZayrZF45t3Z5n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUY17kC6x804xWl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU7OJ5UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj4hYgAABsr
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,119 +70,484 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
+On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> From: Deven Bowers <deven.desai@linux.microsoft.com>
 > 
-> The forthcoming pseries consumer of the secvar API wants to expose a
-> number of config variables.  Allowing secvar implementations to provide
-> their own sysfs attributes makes it easy for consumers to expose what
-> they need to.
-> 
-> This is not being used by the OPAL secvar implementation at present, and
-> the config directory will not be created if no attributes are set.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> IPE must have a centralized function to evaluate incoming callers
+> against IPE's policy. This iteration of the policy against the rules
+> for that specific caller is known as the evaluation loop.
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Not sure if you check the properties at every access.
 
+From my previous comments (also for previous versions of the patches)
+you could evaluate the property once, by calling the respective
+functions in the other subsystems.
+
+Then, you reserve space in the security blob for inodes and superblocks
+to cache the decision. The format could be a policy sequence number, to
+ensure that the cache is valid only for the current policy, and a bit
+for every hook you enforce.
+
+Also, currently you rely on the fact that the properties you defined
+are immutable and the immutability is guaranteed by the other
+subsystems, so no write can occur.
+
+But if you remove this limitation, the immutability is not guaranteed
+anymore by the other subsystems (for example if a file is in an ext4
+filesystem), the LSM needs to take extra care to ensure that the
+properties are still verified. This would be required for example if
+IPE is used in conjuction with DIGLIM.
+
+In my opinion, IPE value would increase if the generic enforcement
+mechanism is property-agnostic.
+
+Roberto
+
+> In addition, IPE is designed to provide system level trust guarantees,
+> this usually implies that trust starts from bootup with a hardware root
+> of trust, which validates the bootloader. After this, the bootloader
+> verifies the kernel and the initramfs.
+> 
+> As there's no currently supported integrity method for initramfs, and
+> it's typically already verified by the bootloader, introduce a property
+> that causes the first superblock to have an execution to be "pinned",
+> which is typically initramfs.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 > 
 > ---
+> v2:
+>   + Split evaluation loop, access control hooks,
+>     and evaluation loop from policy parser and userspace
+>     interface to pass mailing list character limit
 > 
-> v3: Remove unnecessary "secvar:" prefix from error messages (ajd)
+> v3:
+>   + Move ipe_load_properties to patch 04.
+>   + Remove useless 0-initializations
+>   + Prefix extern variables with ipe_
+>   + Remove kernel module parameters, as these are
+>     exposed through sysctls.
+>   + Add more prose to the IPE base config option
+>     help text.
+>   + Use GFP_KERNEL for audit_log_start.
+>   + Remove unnecessary caching system.
+>   + Remove comments from headers
+>   + Use rcu_access_pointer for rcu-pointer null check
+>   + Remove usage of reqprot; use prot only.
+>   + Move policy load and activation audit event to 03/12
 > 
->      Merge config attributes into secvar_operations (mpe)
+> v4:
+>   + Remove sysctls in favor of securityfs nodes
+>   + Re-add kernel module parameters, as these are now
+>     exposed through securityfs.
+>   + Refactor property audit loop to a separate function.
+> 
+> v5:
+>   + fix minor grammatical errors
+>   + do not group rule by curly-brace in audit record,
+>     reconstruct the exact rule.
+> 
+> v6:
+>   + No changes
+> 
+> v7:
+>   + Further split lsm creation into a separate commit from the
+>     evaluation loop and audit system, for easier review.
+> 
+>   + Propogating changes to support the new ipe_context structure in the
+>     evaluation loop.
+> 
+> v8:
+>   + Remove ipe_hook enumeration; hooks can be correlated via syscall
+>     record.
+> 
+> v9:
+>   + Remove ipe_context related code and simplify the evaluation loop.
+>   + Merge the evaluation loop commit with the boot_verified commit.
 > ---
->   arch/powerpc/include/asm/secvar.h  |  2 ++
->   arch/powerpc/kernel/secvar-sysfs.c | 33 +++++++++++++++++++++++++-----
->   2 files changed, 30 insertions(+), 5 deletions(-)
+>  security/ipe/Makefile        |   1 +
+>  security/ipe/eval.c          | 180 +++++++++++++++++++++++++++++++++++
+>  security/ipe/eval.h          |  28 ++++++
+>  security/ipe/hooks.c         |  25 +++++
+>  security/ipe/hooks.h         |  14 +++
+>  security/ipe/ipe.c           |   1 +
+>  security/ipe/policy.c        |  20 ++++
+>  security/ipe/policy.h        |   3 +
+>  security/ipe/policy_parser.c |   8 +-
+>  9 files changed, 279 insertions(+), 1 deletion(-)
+>  create mode 100644 security/ipe/eval.c
+>  create mode 100644 security/ipe/eval.h
+>  create mode 100644 security/ipe/hooks.c
+>  create mode 100644 security/ipe/hooks.h
 > 
-> diff --git a/arch/powerpc/include/asm/secvar.h b/arch/powerpc/include/asm/secvar.h
-> index bf396215903d..011a53a8076c 100644
-> --- a/arch/powerpc/include/asm/secvar.h
-> +++ b/arch/powerpc/include/asm/secvar.h
-> @@ -10,6 +10,7 @@
->   
->   #include <linux/types.h>
->   #include <linux/errno.h>
-> +#include <linux/sysfs.h>
->   
->   extern const struct secvar_operations *secvar_ops;
->   
-> @@ -19,6 +20,7 @@ struct secvar_operations {
->   	int (*set)(const char *key, u64 key_len, u8 *data, u64 data_size);
->   	ssize_t (*format)(char *buf, size_t bufsize);
->   	int (*max_size)(u64 *max_size);
-> +	const struct attribute **config_attrs;
->   };
->   
->   #ifdef CONFIG_PPC_SECURE_BOOT
-> diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/secvar-sysfs.c
-> index 8f3deff94009..7df32be86507 100644
-> --- a/arch/powerpc/kernel/secvar-sysfs.c
-> +++ b/arch/powerpc/kernel/secvar-sysfs.c
-> @@ -144,6 +144,19 @@ static int update_kobj_size(void)
->   	return 0;
->   }
->   
-> +static int secvar_sysfs_config(struct kobject *kobj)
+> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+> index 16bbe80991f1..d7f2870d7c09 100644
+> --- a/security/ipe/Makefile
+> +++ b/security/ipe/Makefile
+> @@ -6,6 +6,7 @@
+>  #
+>  
+>  obj-$(CONFIG_SECURITY_IPE) += \
+> +	eval.o \
+>  	hooks.o \
+>  	ipe.o \
+>  	policy.o \
+> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> new file mode 100644
+> index 000000000000..48b5104a3463
+> --- /dev/null
+> +++ b/security/ipe/eval.c
+> @@ -0,0 +1,180 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+> +
+> +#include "ipe.h"
+> +#include "eval.h"
+> +#include "hooks.h"
+> +#include "policy.h"
+> +
+> +#include <linux/fs.h>
+> +#include <linux/types.h>
+> +#include <linux/slab.h>
+> +#include <linux/file.h>
+> +#include <linux/sched.h>
+> +#include <linux/rcupdate.h>
+> +#include <linux/spinlock.h>
+> +
+> +struct ipe_policy __rcu *ipe_active_policy;
+> +
+> +static struct super_block *pinned_sb;
+> +static DEFINE_SPINLOCK(pin_lock);
+> +#define FILE_SUPERBLOCK(f) ((f)->f_path.mnt->mnt_sb)
+> +
+> +/**
+> + * pin_sb - Pin the underlying superblock of @f, marking it as trusted.
+> + * @f: Supplies a file structure to source the super_block from.
+> + */
+> +static void pin_sb(const struct file *f)
 > +{
-> +	struct attribute_group config_group = {
-> +		.name = "config",
-> +		.attrs = (struct attribute **)secvar_ops->config_attrs,
-> +	};
-> +
-> +	if (secvar_ops->config_attrs)
-> +		return sysfs_create_group(kobj, &config_group);
-> +
-> +	return 0;
+> +	if (!f)
+> +		return;
+> +	spin_lock(&pin_lock);
+> +	if (pinned_sb)
+> +		goto out;
+> +	pinned_sb = FILE_SUPERBLOCK(f);
+> +out:
+> +	spin_unlock(&pin_lock);
 > +}
 > +
->   static int secvar_sysfs_load(void)
->   {
->   	struct kobject *kobj;
-> @@ -208,26 +221,36 @@ static int secvar_sysfs_init(void)
->   
->   	rc = sysfs_create_file(secvar_kobj, &format_attr.attr);
->   	if (rc) {
-> -		kobject_put(secvar_kobj);
-> -		return -ENOMEM;
-> +		pr_err("Failed to create format object\n");
-> +		rc = -ENOMEM;
-> +		goto err;
->   	}
->   
->   	secvar_kset = kset_create_and_add("vars", NULL, secvar_kobj);
->   	if (!secvar_kset) {
->   		pr_err("sysfs kobject registration failed\n");
-> -		kobject_put(secvar_kobj);
-> -		return -ENOMEM;
-> +		rc = -ENOMEM;
-> +		goto err;
->   	}
->   
->   	rc = update_kobj_size();
->   	if (rc) {
->   		pr_err("Cannot read the size of the attribute\n");
-> -		return rc;
-> +		goto err;
+> +/**
+> + * from_pinned - Determine whether @f is source from the pinned super_block.
+> + * @f: Supplies a file structure to check against the pinned super_block.
+> + *
+> + * Return:
+> + * * true	- @f is sourced from the pinned super_block
+> + * * false	- @f is not sourced from the pinned super_block
+> + */
+> +static bool from_pinned(const struct file *f)
+> +{
+> +	bool rv;
+> +
+> +	if (!f)
+> +		return false;
+> +	spin_lock(&pin_lock);
+> +	rv = !IS_ERR_OR_NULL(pinned_sb) && pinned_sb == FILE_SUPERBLOCK(f);
+> +	spin_unlock(&pin_lock);
+> +	return rv;
+> +}
+> +
+> +/**
+> + * build_eval_ctx - Build an evaluation context.
+> + * @ctx: Supplies a pointer to the context to be populdated.
+> + * @file: Supplies a pointer to the file to associated with the evaluation.
+> + * @op: Supplies the IPE policy operation associated with the evaluation.
+> + */
+> +void build_eval_ctx(struct ipe_eval_ctx *ctx,
+> +		    const struct file *file,
+> +		    enum ipe_op_type op)
+> +{
+> +	ctx->file = file;
+> +	ctx->op = op;
+> +	ctx->from_init_sb = from_pinned(file);
+> +}
+> +
+> +/**
+> + * evaluate_property - Analyze @ctx against a property.
+> + * @ctx: Supplies a pointer to the context to be evaluated.
+> + * @p: Supplies a pointer to the property to be evaluated.
+> + *
+> + * Return:
+> + * * true	- The current @ctx match the @p
+> + * * false	- The current @ctx doesn't match the @p
+> + */
+> +static bool evaluate_property(const struct ipe_eval_ctx *const ctx,
+> +			      struct ipe_prop *p)
+> +{
+> +	bool eval = false;
+> +
+> +	switch (p->type) {
+> +	case ipe_prop_boot_verified_false:
+> +		eval = !ctx->from_init_sb;
+> +		break;
+> +	case ipe_prop_boot_verified_true:
+> +		eval = ctx->from_init_sb;
+> +		break;
+> +	default:
+> +		eval = false;
 > +	}
 > +
-> +	rc = secvar_sysfs_config(secvar_kobj);
-> +	if (rc) {
-> +		pr_err("Failed to create config directory\n");
-> +		goto err;
->   	}
->   
->   	secvar_sysfs_load();
->   
->   	return 0;
-> +err:
-> +	kobject_put(secvar_kobj);
+> +	return eval;
+> +}
+> +
+> +/**
+> + * ipe_evaluate_event - Analyze @ctx against the current active policy.
+> + * @ctx: Supplies a pointer to the context to be evaluated.
+> + *
+> + * This is the loop where all policy evaluation happens against IPE policy.
+> + *
+> + * Return:
+> + * * 0		- OK
+> + * * -EACCES	- @ctx did not pass evaluation.
+> + * * !0		- Error
+> + */
+> +int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx)
+> +{
+> +	int rc = 0;
+> +	bool match = false;
+> +	enum ipe_action_type action;
+> +	struct ipe_policy *pol = NULL;
+> +	const struct ipe_rule *rule = NULL;
+> +	const struct ipe_op_table *rules = NULL;
+> +	struct ipe_prop *prop = NULL;
+> +
+> +	if (ctx->op == ipe_op_exec)
+> +		pin_sb(ctx->file);
+> +
+> +	pol = ipe_get_policy_rcu(ipe_active_policy);
+> +	if (!pol)
+> +		goto out;
+> +
+> +	if (ctx->op == ipe_op_max) {
+> +		action = pol->parsed->global_default_action;
+> +		goto eval;
+> +	}
+> +
+> +	rules = &pol->parsed->rules[ctx->op];
+> +
+> +	list_for_each_entry(rule, &rules->rules, next) {
+> +		match = true;
+> +
+> +		list_for_each_entry(prop, &rule->props, next)
+> +			match = match && evaluate_property(ctx, prop);
+> +
+> +		if (match)
+> +			break;
+> +	}
+> +
+> +	if (match)
+> +		action = rule->action;
+> +	else if (rules->default_action != ipe_action_max)
+> +		action = rules->default_action;
+> +	else
+> +		action = pol->parsed->global_default_action;
+> +
+> +eval:
+> +	if (action == ipe_action_deny)
+> +		rc = -EACCES;
+> +
+> +out:
 > +	return rc;
->   }
->   
->   late_initcall(secvar_sysfs_init);
+> +}
+> +
+> +/**
+> + * ipe_invalidate_pinned_sb - invalidte the ipe pinned super_block.
+> + * @mnt_sb: super_block to check against the pinned super_block.
+> + *
+> + * This function is called a super_block like the initramfs's is freed,
+> + * if the super_block is currently pinned by ipe it will be invalided,
+> + * so ipe won't consider the block device is boot verified afterward.
+> + */
+> +void ipe_invalidate_pinned_sb(const struct super_block *mnt_sb)
+> +{
+> +	spin_lock(&pin_lock);
+> +
+> +	if (!IS_ERR_OR_NULL(pinned_sb) && mnt_sb == pinned_sb)
+> +		pinned_sb = ERR_PTR(-EIO);
+> +
+> +	spin_unlock(&pin_lock);
+> +}
+> diff --git a/security/ipe/eval.h b/security/ipe/eval.h
+> new file mode 100644
+> index 000000000000..887797438b9b
+> --- /dev/null
+> +++ b/security/ipe/eval.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+> +
+> +#ifndef IPE_EVAL_H
+> +#define IPE_EVAL_H
+> +
+> +#include <linux/file.h>
+> +#include <linux/types.h>
+> +
+> +#include "hooks.h"
+> +#include "policy.h"
+> +
+> +extern struct ipe_policy __rcu *ipe_active_policy;
+> +
+> +struct ipe_eval_ctx {
+> +	enum ipe_op_type op;
+> +
+> +	const struct file *file;
+> +	bool from_init_sb;
+> +};
+> +
+> +void build_eval_ctx(struct ipe_eval_ctx *ctx, const struct file *file, enum ipe_op_type op);
+> +int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx);
+> +void ipe_invalidate_pinned_sb(const struct super_block *mnt_sb);
+> +
+> +#endif /* IPE_EVAL_H */
+> diff --git a/security/ipe/hooks.c b/security/ipe/hooks.c
+> new file mode 100644
+> index 000000000000..335b773c7ae1
+> --- /dev/null
+> +++ b/security/ipe/hooks.c
+> @@ -0,0 +1,25 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+> +
+> +#include "ipe.h"
+> +#include "hooks.h"
+> +#include "eval.h"
+> +
+> +#include <linux/fs.h>
+> +#include <linux/types.h>
+> +#include <linux/binfmts.h>
+> +#include <linux/mman.h>
+> +
+> +/**
+> + * ipe_sb_free_security - ipe security hook function for super_block.
+> + * @mnt_sb: Supplies a pointer to a super_block is about to be freed.
+> + *
+> + * IPE does not have any structures with mnt_sb, but uses this hook to
+> + * invalidate a pinned super_block.
+> + */
+> +void ipe_sb_free_security(struct super_block *mnt_sb)
+> +{
+> +	ipe_invalidate_pinned_sb(mnt_sb);
+> +}
+> diff --git a/security/ipe/hooks.h b/security/ipe/hooks.h
+> new file mode 100644
+> index 000000000000..30fe455389bf
+> --- /dev/null
+> +++ b/security/ipe/hooks.h
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+> +#ifndef IPE_HOOKS_H
+> +#define IPE_HOOKS_H
+> +
+> +#include <linux/fs.h>
+> +#include <linux/binfmts.h>
+> +#include <linux/security.h>
+> +
+> +void ipe_sb_free_security(struct super_block *mnt_sb);
+> +
+> +#endif /* IPE_HOOKS_H */
+> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> index 9ed3bf4dcc04..551c6d90ac11 100644
+> --- a/security/ipe/ipe.c
+> +++ b/security/ipe/ipe.c
+> @@ -9,6 +9,7 @@ static struct lsm_blob_sizes ipe_blobs __lsm_ro_after_init = {
+>  };
+>  
+>  static struct security_hook_list ipe_hooks[] __lsm_ro_after_init = {
+> +	LSM_HOOK_INIT(sb_free_security, ipe_sb_free_security),
+>  };
+>  
+>  /**
+> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> index e446f4b84152..772d876b1087 100644
+> --- a/security/ipe/policy.c
+> +++ b/security/ipe/policy.c
+> @@ -97,3 +97,23 @@ struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
+>  err:
+>  	return ERR_PTR(rc);
+>  }
+> +
+> +/**
+> + * ipe_get_policy_rcu - Dereference a rcu-protected policy pointer.
+> + *
+> + * @p: rcu-protected pointer to a policy.
+> + *
+> + * Not safe to call on IS_ERR.
+> + *
+> + * Return: the value of @p
+> + */
+> +struct ipe_policy *ipe_get_policy_rcu(struct ipe_policy __rcu *p)
+> +{
+> +	struct ipe_policy *rv = NULL;
+> +
+> +	rcu_read_lock();
+> +	rv = rcu_dereference(p);
+> +	rcu_read_unlock();
+> +
+> +	return rv;
+> +}
+> diff --git a/security/ipe/policy.h b/security/ipe/policy.h
+> index 6af2d9a811ec..967d816cd5cd 100644
+> --- a/security/ipe/policy.h
+> +++ b/security/ipe/policy.h
+> @@ -26,6 +26,8 @@ enum ipe_action_type {
+>  };
+>  
+>  enum ipe_prop_type {
+> +	ipe_prop_boot_verified_false,
+> +	ipe_prop_boot_verified_true,
+>  	ipe_prop_max
+>  };
+>  
+> @@ -73,5 +75,6 @@ struct ipe_policy {
+>  struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
+>  				  const char *pkcs7, size_t pkcs7len);
+>  void ipe_free_policy(struct ipe_policy *pol);
+> +struct ipe_policy *ipe_get_policy_rcu(struct ipe_policy __rcu *p);
+>  
+>  #endif /* IPE_POLICY_H */
+> diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parser.c
+> index c7ba0e865366..7efafc482e46 100644
+> --- a/security/ipe/policy_parser.c
+> +++ b/security/ipe/policy_parser.c
+> @@ -265,7 +265,9 @@ static enum ipe_action_type parse_action(char *t)
+>  }
+>  
+>  static const match_table_t property_tokens = {
+> -	{ipe_prop_max,					NULL}
+> +	{ipe_prop_boot_verified_false,	"boot_verified=FALSE"},
+> +	{ipe_prop_boot_verified_true,	"boot_verified=TRUE"},
+> +	{ipe_prop_max,			NULL}
+>  };
+>  
+>  /**
+> @@ -295,6 +297,10 @@ int parse_property(char *t, struct ipe_rule *r)
+>  	token = match_token(t, property_tokens, args);
+>  
+>  	switch (token) {
+> +	case ipe_prop_boot_verified_false:
+> +	case ipe_prop_boot_verified_true:
+> +		p->type = token;
+> +		break;
+>  	case ipe_prop_max:
+>  	default:
+>  		rc = -EBADMSG;
+
