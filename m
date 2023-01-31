@@ -2,185 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8124B682FAC
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 15:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63A0683105
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 16:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbjAaOtW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Jan 2023 09:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        id S231847AbjAaPNk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Jan 2023 10:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbjAaOtR (ORCPT
+        with ESMTP id S232968AbjAaPNY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:49:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4828218B36;
-        Tue, 31 Jan 2023 06:49:09 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VDFF2K021574;
-        Tue, 31 Jan 2023 14:48:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=TRDtapeBXXxtYB+Zw5r/qRo4BG/ybRq1Zq9gzcJUADY=;
- b=O76487c/ei1cxJB0H21HrP9pNmzPtst+OpABXhSWJd65vaQZkPEjgKReYaVFFZQ7vtsx
- 9EGvlJZEx/LmaBwN0GgnPIq7z6iNa5As8Ji1afJZzJXeXckJKAlM9wLsGshdxAKdrUSJ
- PZ2dJkGtCteNqIqbc4UBFAaYPc6hjh4f3pc3qDtbyHsHmxoVq6Qxbgvbhp5Mdk04VAXT
- E8zwUCiSjoM6hAqxBUc5qCKuN3Eh7SENvyM6E+RWektH/qKLvu/wTwb7Cq3g7AeOLhl5
- LmQK/78J++isclYo0MOfXByfkgintleZc6VSjquCgIpzxNLNDNAkgqoM6VAyC8T2gnnZ 0A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3q7te86-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 14:48:58 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VECZ3r013224;
-        Tue, 31 Jan 2023 14:48:58 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3q7te7g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 14:48:57 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VDdr0T008520;
-        Tue, 31 Jan 2023 14:48:56 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ncvw2mmft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 14:48:55 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VEmsf837749206
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 14:48:54 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D62658058;
-        Tue, 31 Jan 2023 14:48:54 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6E6B58054;
-        Tue, 31 Jan 2023 14:48:52 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 14:48:52 +0000 (GMT)
-Message-ID: <fa04bca6-23c4-d5e9-c1dc-468bd9bcd8f9@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 09:48:52 -0500
+        Tue, 31 Jan 2023 10:13:24 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BE759273
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 07:11:22 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id v13so14662553eda.11
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 07:11:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XP53Z8DqFPdzcQhD/cnUiDrRVDZLpCF2Yb8rq991hL8=;
+        b=LCo288fkbRBrw6OWKnlOWfHe8hB6eo7gWN49/7Ly4x8P18ZyAqyi7QY8N1EUx7sVJr
+         gqIfbbtyRd1QLQD2JPzuJEm6jexF+I9dcUQ0QWImEcVmPde8IJw6sQSs9snFq2IiOfLt
+         sc5tV3lv5p8UKub/ZY/EwKDb7UzCZfKFcRnQbc5d3gKxB5EZDAyh0AIa1cbws1jT/sMG
+         gaQvzHmIb5XRJytL92V59IImij762t5HyKL/EIcsmnT3T5FPqVVmP4QuVcWDRzS0GK4m
+         q2C8An5U7uwqxnM3h/QoBESI6LSyKaE5O19LiZfJr11KxR1z5dPS2MGOBu+OYMOaKv2x
+         hD+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XP53Z8DqFPdzcQhD/cnUiDrRVDZLpCF2Yb8rq991hL8=;
+        b=QP2HvkRQYNHzO/Ku6IS8Q+Q8SpH/K53mdvMkjLCmGsgF8wizBHixRqw/K0dn/JsksN
+         h2WnR+u9voJuiHKzvMQ3cbIx5jqVMzA/8UQ1JghfduLpHuPRy4RzTv6b68ZB5tlRkIkl
+         O1NKyPacXZFc0ea4Aw8al6YBVrm39Uf7nbe/0ub+kipGn42t3jUdrKZ7jrm6Z0g/Z9n1
+         0nqBTqIBZirOs6f7UIWdiCfbbTOB8o6xT3BH/wOk3pHV07UKTn3n259hrfYHcd2lB05S
+         +LtzS4pdpThc0ulie64pR1p8vQMPQ+CI9UIlfVa5jNyUzaXeZOT4f+qhr9m2MJh5rcUy
+         b45g==
+X-Gm-Message-State: AO0yUKVU2f7wl5YIB14TBUK18YdKf8Xc+PlXMPMMsUbcdPWNELEbpvo8
+        Dtycyx2yTl0F3J8DyG07wvhfFwXSaWo/1CYjMdY=
+X-Google-Smtp-Source: AK7set9jEHAabwIgCFcEEARF2ChjQzZc5Zzj/Gs4wQLhCAHFK208+/lXyLZstPzH6ZENL7nCkDpM7FOdoU4wADE9Tvc=
+X-Received: by 2002:a05:6402:254e:b0:4a2:4abf:b5ed with SMTP id
+ l14-20020a056402254e00b004a24abfb5edmr2476910edb.52.1675177866042; Tue, 31
+ Jan 2023 07:11:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 05/25] powerpc/secvar: Warn and error if multiple
- secvar ops are set
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-6-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-6-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -PKkExnNQjocgjTkV335iOcEUV_46i9Z
-X-Proofpoint-GUID: gNRO77ddtui0AkIPMyxCxs_fGTZBlADp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- mlxscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0
- priorityscore=1501 suspectscore=0 clxscore=1011 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301310131
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:4b43:b0:885:64e9:aebf with HTTP; Tue, 31 Jan 2023
+ 07:11:05 -0800 (PST)
+Reply-To: infor.atmbankofafrican@gmail.com
+From:   Kristalina Georgieva <mr.johnsonwray@gmail.com>
+Date:   Tue, 31 Jan 2023 15:11:05 +0000
+Message-ID: <CAFbsNHPHM=efX-jF68Oy8VZnpuZMqfNq-_NYhVua6pGNq+UmhA@mail.gmail.com>
+Subject: =?UTF-8?Q?R=C3=A9clamez_votre_carte_ATM_de_1=2C5_million?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:529 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mr.johnsonwray[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Cher propri=C3=A9taire/destinataire de l'e-mail,
+
+Nous vous avons envoy=C3=A9 cette lettre pr=C3=A9c=C3=A9demment sans avoir =
+de vos
+nouvelles, je ne suis pas s=C3=BBr que vous l'ayez re=C3=A7ue, et c'est pou=
+rquoi
+je le r=C3=A9p=C3=A8te. Premi=C3=A8rement,
+
+Je m'appelle Mme Kristalina Georgieva, pr=C3=A9sidente du FMI. Vous avez
+abandonn=C3=A9 votre million cinq cent mille dollars des =C3=89tats-Unis av=
+ec
+United Bank of African. Quelle est la raison, qui essaie de vous
+tromper? Parce que c'est la seule banque autoris=C3=A9e avec M. Emeka Chris
+comme agent agr=C3=A9=C3=A9. Si vous refusez de contacter M. Emeka Chris, l=
+e FMI
+ne vous permettra pas de recevoir de paiement et vous continuerez =C3=A0
+travailler avec de mauvaises personnes tous les jours de votre vie
+sans bonnes nouvelles. Votre argent reste toujours chez UBA au Togo et
+vous devez contacter M. Emeka Chris si vous vous souciez de la
+signature et de l'approbation du FMI.
+
+Agent agr=C3=A9=C3=A9 : M. emeka chris
+Nom de la banque : United Bank of African
+Courriel=C2=A0: infor.atmbankofafrican@gmail.com
 
 
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
-> 
-> The secvar code only supports one consumer at a time.
-> 
-> Multiple consumers aren't possible at this point in time, but we'd want
-> it to be obvious if it ever could happen.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> 
-> ---
-> 
-> v4: Return an error and don't actually try to set secvar_operations if the
->      warning is triggered (npiggin)
-> 
-> v5: Drop "extern" to fix a checkpatch check (snowpatch)
-> ---
->   arch/powerpc/include/asm/secvar.h            | 4 ++--
->   arch/powerpc/kernel/secvar-ops.c             | 8 ++++++--
->   arch/powerpc/platforms/powernv/opal-secvar.c | 4 +---
->   3 files changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/powerpc/include/asm/secvar.h b/arch/powerpc/include/asm/secvar.h
-> index 07ba36f868a7..a2b5f2203dc5 100644
-> --- a/arch/powerpc/include/asm/secvar.h
-> +++ b/arch/powerpc/include/asm/secvar.h
-> @@ -21,11 +21,11 @@ struct secvar_operations {
->   
->   #ifdef CONFIG_PPC_SECURE_BOOT
->   
-> -extern void set_secvar_ops(const struct secvar_operations *ops);
-> +int set_secvar_ops(const struct secvar_operations *ops);
->   
->   #else
->   
-> -static inline void set_secvar_ops(const struct secvar_operations *ops) { }
-> +static inline int set_secvar_ops(const struct secvar_operations *ops) { return 0; }
->   
->   #endif
->   
-> diff --git a/arch/powerpc/kernel/secvar-ops.c b/arch/powerpc/kernel/secvar-ops.c
-> index 6a29777d6a2d..9c8dd4e7c270 100644
-> --- a/arch/powerpc/kernel/secvar-ops.c
-> +++ b/arch/powerpc/kernel/secvar-ops.c
-> @@ -8,10 +8,14 @@
->   
->   #include <linux/cache.h>
->   #include <asm/secvar.h>
-> +#include <asm/bug.h>
->   
-> -const struct secvar_operations *secvar_ops __ro_after_init;
-> +const struct secvar_operations *secvar_ops __ro_after_init = NULL;
->   
-> -void set_secvar_ops(const struct secvar_operations *ops)
-> +int set_secvar_ops(const struct secvar_operations *ops)
->   {
-> +	if (WARN_ON_ONCE(secvar_ops))
-> +		return -1;
+t=C3=A9l. : +228 93983877
 
-The calling function  opal_secvar_probe() returns an errno (-ENODEV for example). Return also an errno here?
+Il s'agit de la banque approuv=C3=A9e par les Nations Unies, le FMI, la
+Banque mondiale et la CEDEAO et sans cette banque mentionn=C3=A9e, aucun de
+cet agent ne vous soutiendra ni n'approuvera le paiement pour vous.
+Veuillez contacter la banque maintenant et recevez sans d=C3=A9lai votre
+carte de guichet automatique d'une valeur de 1,5 million de dollars.
 
->   	secvar_ops = ops;
-> +	return 0;
->   }
-> diff --git a/arch/powerpc/platforms/powernv/opal-secvar.c b/arch/powerpc/platforms/powernv/opal-secvar.c
-> index ef89861569e0..4c0a3b030fe0 100644
-> --- a/arch/powerpc/platforms/powernv/opal-secvar.c
-> +++ b/arch/powerpc/platforms/powernv/opal-secvar.c
-> @@ -113,9 +113,7 @@ static int opal_secvar_probe(struct platform_device *pdev)
->   		return -ENODEV;
-
-
-This is the errno.
->   	}
->   
-> -	set_secvar_ops(&opal_secvar_ops);
-> -
-> -	return 0;
-> +	return set_secvar_ops(&opal_secvar_ops);
-
-    Stefan
+Sinc=C3=A8rement
+Kristalina Georgieva
+Pr=C3=A9sident du FMI.
