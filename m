@@ -2,125 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFC66821CA
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 03:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5206821DA
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 03:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjAaCDJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Jan 2023 21:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        id S231296AbjAaCFl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Jan 2023 21:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbjAaCDI (ORCPT
+        with ESMTP id S229874AbjAaCFk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Jan 2023 21:03:08 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3577C1A97B;
-        Mon, 30 Jan 2023 18:03:07 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P5SxX6FM0zfYrx;
-        Tue, 31 Jan 2023 10:02:56 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
+        Mon, 30 Jan 2023 21:05:40 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B4B1C582;
+        Mon, 30 Jan 2023 18:05:39 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P5Sxq5WXYzRrKx;
+        Tue, 31 Jan 2023 10:03:11 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
  dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 31 Jan 2023 10:03:05 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
+ 15.1.2375.34; Tue, 31 Jan 2023 10:05:22 +0800
+Message-ID: <29f45743-ba43-c2ec-4494-7253170ab9ce@huawei.com>
+Date:   Tue, 31 Jan 2023 10:05:22 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH -next] evm: call dump_security_xattr() in all cases to
+ remove code duplication
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        Christian Brauner b <brauner@kernel.org>
 CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] evm: call dump_security_xattr() in all cases to remove code duplication
-Date:   Tue, 31 Jan 2023 10:00:31 +0800
-Message-ID: <20230131020031.114086-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+References: <20230129004637.191106-1-xiujianfeng@huawei.com>
+ <a7f1324e88023a86c3489d53268bde17069ece1f.camel@linux.ibm.com>
+ <c95487db-f304-2610-5e93-41d7b39934d7@huawei.com>
+ <9c6826bb7e5aa85be06865f5a2bed0e30b4ad33e.camel@linux.ibm.com>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+In-Reply-To: <9c6826bb7e5aa85be06865f5a2bed0e30b4ad33e.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpeml500023.china.huawei.com (7.185.36.114)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Currently dump_security_xattr() is used to dump security xattr value
-which is larger than 64 bytes, otherwise, pr_debug() is used. In order
-to remove code duplication, refator dump_security_xattr() and call it in
-all cases.
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- security/integrity/evm/evm_crypto.c | 33 ++++++++++++++---------------
- 1 file changed, 16 insertions(+), 17 deletions(-)
 
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index fa5ff13fa8c9..0fe6c9cd8eab 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -183,8 +183,8 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
-  * Dump large security xattr values as a continuous ascii hexademical string.
-  * (pr_debug is limited to 64 bytes.)
-  */
--static void dump_security_xattr(const char *prefix, const void *src,
--				size_t count)
-+static void dump_security_xattr_l(const char *prefix, const void *src,
-+				  size_t count)
- {
- #if defined(DEBUG) || defined(CONFIG_DYNAMIC_DEBUG)
- 	char *asciihex, *p;
-@@ -200,6 +200,16 @@ static void dump_security_xattr(const char *prefix, const void *src,
- #endif
- }
- 
-+static void dump_security_xattr(const char *name, const char *value,
-+				size_t value_len)
-+{
-+	if (value_len < 64)
-+		pr_debug("%s: (%zu) [%*phN]\n", name, value_len,
-+			 (int)value_len, value);
-+	else
-+		dump_security_xattr_l(name, value, value_len);
-+}
-+
- /*
-  * Calculate the HMAC value across the set of protected security xattrs.
-  *
-@@ -254,15 +264,9 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
- 			if (is_ima)
- 				ima_present = true;
- 
--			if (req_xattr_value_len < 64)
--				pr_debug("%s: (%zu) [%*phN]\n", req_xattr_name,
--					 req_xattr_value_len,
--					 (int)req_xattr_value_len,
--					 req_xattr_value);
--			else
--				dump_security_xattr(req_xattr_name,
--						    req_xattr_value,
--						    req_xattr_value_len);
-+			dump_security_xattr(req_xattr_name,
-+					    req_xattr_value,
-+					    req_xattr_value_len);
- 			continue;
- 		}
- 		size = vfs_getxattr_alloc(&init_user_ns, dentry, xattr->name,
-@@ -286,12 +290,7 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
- 		if (is_ima)
- 			ima_present = true;
- 
--		if (xattr_size < 64)
--			pr_debug("%s: (%zu) [%*phN]", xattr->name, xattr_size,
--				 (int)xattr_size, xattr_value);
--		else
--			dump_security_xattr(xattr->name, xattr_value,
--					    xattr_size);
-+		dump_security_xattr(xattr->name, xattr_value, xattr_size);
- 	}
- 	hmac_add_misc(desc, inode, type, data->digest);
- 
--- 
-2.17.1
+On 2023/1/30 20:17, Mimi Zohar wrote:
+> [Cc: Christian Brauner <brauner@kernel.org>]
+> 
+> On Mon, 2023-01-30 at 12:02 +0800, xiujianfeng wrote:
+>> Hi,
+>>
+>> On 2023/1/30 0:15, Mimi Zohar wrote:
+>>>> @@ -254,15 +264,9 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+>>>>  			if (is_ima)
+>>>>  				ima_present = true;
+>>>>  
+>>>> -			if (req_xattr_value_len < 64)
+>>>> -				pr_debug("%s: (%zu) [%*phN]\n", req_xattr_name,
+>>>> -					 req_xattr_value_len,
+>>>> -					 (int)req_xattr_value_len,
+>>>> -					 req_xattr_value);
+>>>> -			else
+>>>> -				dump_security_xattr(req_xattr_name,
+>>>> -						    req_xattr_value,
+>>>> -						    req_xattr_value_len);
+>>>> +			dump_security_xattr(req_xattr_name,
+>>>> +					    req_xattr_value,
+>>>> +					    req_xattr_value_len);
+>>>>  			continue;
+>>>>  		}
+>>>>  		size = vfs_getxattr_alloc(&nop_mnt_idmap, dentry, xattr->name,
+>>>
+>>> Hm, this patch doesn't apply properly.
+>>
+>> I noticed that the patch fails to apply on linux master, however this
+>> patch is meant for linux-next, would you please maybe have a look?
+> 
+> I wasn't aware of the change.  However, merge conflicts should not be
+> "fixed", but mentioned immediately after the patch break line ("---") .
+> FYI, this merge conflict is a result of commit 4609e1f18e19 ("fs: port
+> ->permission() to pass mnt_idmap").
+> 
+> Patches for the linux-integrity branch should be based on the next-
+> integrity branch.
 
+Thanks mimi, I assume you mean next-integrity branch on
+https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/,
+new patch already sent.
