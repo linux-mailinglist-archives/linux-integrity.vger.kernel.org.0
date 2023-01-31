@@ -2,165 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A49683208
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 17:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B707B683221
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 17:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbjAaQAV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Jan 2023 11:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        id S230060AbjAaQDc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Jan 2023 11:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbjAaQAR (ORCPT
+        with ESMTP id S229962AbjAaQDb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:00:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C00E4DBFE;
-        Tue, 31 Jan 2023 08:00:16 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VG080i009268;
-        Tue, 31 Jan 2023 16:00:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=QhnY2LtE17z4R7y31f+Vs6DSz5B7T93PdcPupTXylLg=;
- b=EJmi0eAkn8G64zQYLoVW2Byz0C8VKszQurvTFoxYSKjoD2l4ObcRMakgvx2wOXslekUn
- vIEBNHVCJDLL750ZRJdZIW/frFJDyqki09M+VNzcDhH/klY10rCGSFtfriHiluN+SeKN
- MYOWpCXOV7mZ2asF3Jk6QbgDR7H8H9SvriBWGvde5z5YCqeW2LkLIG/uEgWjzfE3551q
- YQYL7oczMj4jScgMXtQNwQ1w70uTJQuI1xb5fk/9DoeBHRkuI4OcxCu8IKXaySrnCp3u
- 26cGzRNbBPy48wK8YGbwhF/4nmbLelU9PTTR6WsizDQJQIwRvuoadPFr7Hj0tLJjXUxD sA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ndfpx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:00:07 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VG06gu009078;
-        Tue, 31 Jan 2023 16:00:06 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ndfgs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:00:06 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VExGD0012295;
-        Tue, 31 Jan 2023 15:59:56 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3ncvvdgsw9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:59:56 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFxsEQ34406840
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 15:59:54 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 75BD258065;
-        Tue, 31 Jan 2023 15:59:54 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9430758067;
-        Tue, 31 Jan 2023 15:59:53 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 15:59:53 +0000 (GMT)
-Message-ID: <4bc7245d-15f4-cb9c-dddc-4a05a3de98db@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 10:59:53 -0500
+        Tue, 31 Jan 2023 11:03:31 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318CA3A597
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 08:03:19 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P5qPq5W3vz9xFGX
+        for <linux-integrity@vger.kernel.org>; Tue, 31 Jan 2023 23:55:11 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAn+2GzO9ljT5LfAA--.11028S2;
+        Tue, 31 Jan 2023 17:03:05 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH ima-evm-utils v2] Introduce expect_pass_if() and expect_fail_if()
+Date:   Tue, 31 Jan 2023 17:02:30 +0100
+Message-Id: <20230131160230.2327345-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 14/25] powerpc/pseries: Move plpks.h to include
- directory
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-15-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-15-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: otwtGfecQnNQ_VfRy5RR16rJ7i63x8n-
-X-Proofpoint-GUID: 4Y4lJK87A0fpbmhZoI9heAsZUPmhu2jx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
- phishscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301310137
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwAn+2GzO9ljT5LfAA--.11028S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJFWfXF1DGr17GrW3Xr15XFb_yoW5Xw15p3
+        93Wr13C3WkX3WxAF93GF1vy3WrCw48JrWUJrZ3J3yUur4a9F97ta1fKrWUuF1jgrn5ZF93
+        Ja1Fvrn5WF1UAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUy0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6r
+        W3Jr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        YxBIdaVFxhVjvjDU0xZFpf9x07UCg4fUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj4hY2gAAsw
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
+Introduce these functions to let the developer specify which kernel patches
+are required for the tests to be successful (either pass or fail). If a
+test is not successful, print those patches in the test result summary.
 
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
-> 
-> Move plpks.h from platforms/pseries/ to include/asm/. This is necessary
-> for later patches to make use of the PLPKS from code in other subsystems.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> 
-> ---
-> 
-> v3: New patch
-> ---
->   .../powerpc/{platforms/pseries => include/asm}/plpks.h | 10 +++++++---
->   arch/powerpc/platforms/pseries/plpks.c                 |  3 +--
->   2 files changed, 8 insertions(+), 5 deletions(-)
->   rename arch/powerpc/{platforms/pseries => include/asm}/plpks.h (89%)
-> 
-> diff --git a/arch/powerpc/platforms/pseries/plpks.h b/arch/powerpc/include/asm/plpks.h
-> similarity index 89%
-> rename from arch/powerpc/platforms/pseries/plpks.h
-> rename to arch/powerpc/include/asm/plpks.h
-> index 275ccd86bfb5..8295502ee93b 100644
-> --- a/arch/powerpc/platforms/pseries/plpks.h
-> +++ b/arch/powerpc/include/asm/plpks.h
-> @@ -6,8 +6,10 @@
->    * Platform keystore for pseries LPAR(PLPKS).
->    */
->   
-> -#ifndef _PSERIES_PLPKS_H
-> -#define _PSERIES_PLPKS_H
-> +#ifndef _ASM_POWERPC_PLPKS_H
-> +#define _ASM_POWERPC_PLPKS_H
-> +
-> +#ifdef CONFIG_PSERIES_PLPKS
->   
->   #include <linux/types.h>
->   #include <linux/list.h>
-> @@ -68,4 +70,6 @@ int plpks_read_fw_var(struct plpks_var *var);
->    */
->   int plpks_read_bootloader_var(struct plpks_var *var);
->   
-> -#endif
-> +#endif // CONFIG_PSERIES_PLPKS
-> +
-> +#endif // _ASM_POWERPC_PLPKS_H
-> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
-> index a01cf2ff140a..13e6daadb179 100644
-> --- a/arch/powerpc/platforms/pseries/plpks.c
-> +++ b/arch/powerpc/platforms/pseries/plpks.c
-> @@ -18,8 +18,7 @@
->   #include <linux/types.h>
->   #include <asm/hvcall.h>
->   #include <asm/machdep.h>
-> -
-> -#include "plpks.h"
-> +#include <asm/plpks.h>
->   
->   #define PKS_FW_OWNER	     0x1
->   #define PKS_BOOTLOADER_OWNER 0x2
+First, the developer should declare an array, named PATCHES, with the list
+of all kernel patches that are required by the tests. For example:
 
+PATCHES=(
+'patch 1 title'
+...
+'patch N title'
+)
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Second, the developer could replace the existing expect_pass() and
+expect_fail() respectively with expect_pass_if() and expect_fail_if(), and
+add the indexes in the PATCHES array as the first argument, enclosed with
+quotes. The other parameters of expect_pass() and expect_fail() remain the
+same.
+
+In the following example, the PATCHES array has been added to a new test
+script, tests/mmap_check.test:
+
+PATCHES=(
+'ima: Align ima_file_mmap() parameters with mmap_file LSM hook'
+'ima: Introduce MMAP_CHECK_REQPROT hook'
+)
+
+Then, expect_pass() has been replaced with expect_pass_if():
+
+expect_pass_if '0' check_mmap "MMAP_CHECK" "read_implies_exec"
+
+The resulting output when a test fails (if the required patch is not
+applied) is:
+
+Test: check_mmap (hook="MMAP_CHECK", test_mmap arg: "read_implies_exec")
+Result (expect found): not found
+Possibly missing patches:
+ - ima: Align ima_file_mmap() parameters with mmap_file LSM hook
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+Changelog
+
+v1:
+- Declare idx variables as local
+
+ tests/functions.sh | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/tests/functions.sh b/tests/functions.sh
+index 2c4d20536316..ed06040b394d 100755
+--- a/tests/functions.sh
++++ b/tests/functions.sh
+@@ -100,6 +100,25 @@ expect_pass() {
+   return $ret
+ }
+ 
++expect_pass_if() {
++  local indexes="$1"
++  local ret idx
++
++  shift
++
++  expect_pass "$@"
++  ret=$?
++
++  if [ $ret -ne 0 ] && [ $ret -ne 77 ] && [ -n "$PATCHES" ]; then
++    echo $YELLOW"Possibly missing patches:"$NORM
++    for idx in $indexes; do
++      echo $YELLOW" - ${PATCHES[$((idx))]}"$NORM
++    done
++  fi
++
++  return $ret
++}
++
+ # Eval negative test (one that should fail) and account its result
+ expect_fail() {
+   local ret
+@@ -137,6 +156,25 @@ expect_fail() {
+   return $ret
+ }
+ 
++expect_fail_if() {
++  local indexes="$1"
++  local ret idx
++
++  shift
++
++  expect_fail "$@"
++  ret=$?
++
++  if { [ $ret -eq 0 ] || [ $ret -eq 99 ]; } && [ -n "$PATCHES" ]; then
++    echo $YELLOW"Possibly missing patches:"$NORM
++    for idx in $indexes; do
++      echo $YELLOW" - ${PATCHES[$((idx))]}"$NORM
++    done
++  fi
++
++  return $ret
++}
++
+ # return true if current test is positive
+ _test_expected_to_pass() {
+   [ ! $TFAIL ]
+-- 
+2.25.1
+
