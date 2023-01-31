@@ -2,110 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0754F682135
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 02:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFC66821CA
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 03:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjAaBEH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Jan 2023 20:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S230094AbjAaCDJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Jan 2023 21:03:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjAaBEG (ORCPT
+        with ESMTP id S231264AbjAaCDI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:04:06 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36852FCE7;
-        Mon, 30 Jan 2023 17:04:03 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UNtdLr012160;
-        Tue, 31 Jan 2023 01:03:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Z/WVbO8gN4wPG1dnX9SSO/A5Ayug/qmMRUvrltJ14kI=;
- b=aW4+wnNbgFF4xvepgnWYWtHo+yCBWEcomolmCmETQjTeceUvINz7y+KvhXULPBGtWRY0
- UokC4HcGwRo1rOfdEBDrsCPYxaRvcU/uew3z/rqBZ/5wEyJChLM4v93w3xGpC3Mpwv21
- 0UccGchtz5xD5EqYyvPQ0r6tnDNz6AIvbXrJlS1Y2N4xhRdGX43duZ4n+m67f63JpkSN
- NzIPX+Id4vlCkenV/sq3tHHi0RfYqfALHhPmJSLk0LpF5mfHfGxb9ErdCrrWQ4WOk+Vu
- PLIx7lnSwQWHf7hsNGzlHkd2ziRqC3OQhg218c2geH35q41recriDTaEsdNO5pruJ1J4 uw== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nen9cnksq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 01:03:51 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30U9ZAGl031351;
-        Tue, 31 Jan 2023 01:03:50 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3ncvv6a1tf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 01:03:50 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30V13lNH43516286
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 01:03:47 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B695D2004B;
-        Tue, 31 Jan 2023 01:03:47 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3866720040;
-        Tue, 31 Jan 2023 01:03:47 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 01:03:47 +0000 (GMT)
-Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 8AF3F60425;
-        Tue, 31 Jan 2023 12:03:44 +1100 (AEDT)
-Message-ID: <a2dd2067cf4eee3362a02e76ec335710e8bb04b8.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 24/24] integrity/powerpc: Support loading keys from
- pseries secvar
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Russell Currey <ruscur@russell.cc>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
-        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
-        mpe@ellerman.id.au, gjoyce@linux.ibm.com, sudhakar@linux.ibm.com,
-        bgray@linux.ibm.com, erichte@linux.ibm.com, joel@jms.id.au
-Date:   Tue, 31 Jan 2023 12:03:44 +1100
-In-Reply-To: <adbb8d2f438f01f32d9e09b508cde31b3efdc3a4.camel@linux.ibm.com>
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
-         <20230120074306.1326298-25-ajd@linux.ibm.com>
-         <57dca1ea3ef66bc0935bdd1dab4536f1151f4004.camel@linux.ibm.com>
-         <71b48934e26a991eaf62c9869a8dfee769e0799d.camel@russell.cc>
-         <adbb8d2f438f01f32d9e09b508cde31b3efdc3a4.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Mon, 30 Jan 2023 21:03:08 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3577C1A97B;
+        Mon, 30 Jan 2023 18:03:07 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P5SxX6FM0zfYrx;
+        Tue, 31 Jan 2023 10:02:56 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 31 Jan 2023 10:03:05 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] evm: call dump_security_xattr() in all cases to remove code duplication
+Date:   Tue, 31 Jan 2023 10:00:31 +0800
+Message-ID: <20230131020031.114086-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: EEMhfqoPOJmHQ3bm8UrBtAwhoYFSu34E
-X-Proofpoint-GUID: EEMhfqoPOJmHQ3bm8UrBtAwhoYFSu34E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_19,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- mlxscore=0 phishscore=0 malwarescore=0 adultscore=0 clxscore=1015
- mlxlogscore=999 priorityscore=1501 spamscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310008
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2023-01-24 at 21:47 -0500, Mimi Zohar wrote:
-> Agreed.=C2=A0 Thank you for the explanation.=C2=A0 To simplify review, I
-> suggest
-> either adding this explanation in the patch description or stage the
-> change by replacing the existing "ibm,edk2-compat-v1" usage first.
+Currently dump_security_xattr() is used to dump security xattr value
+which is larger than 64 bytes, otherwise, pr_debug() is used. In order
+to remove code duplication, refator dump_security_xattr() and call it in
+all cases.
 
-Will clarify in the commit message of the next revision.
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ security/integrity/evm/evm_crypto.c | 33 ++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 17 deletions(-)
 
---=20
-Andrew Donnellan    OzLabs, ADL Canberra
-ajd@linux.ibm.com   IBM Australia Limited
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index fa5ff13fa8c9..0fe6c9cd8eab 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -183,8 +183,8 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
+  * Dump large security xattr values as a continuous ascii hexademical string.
+  * (pr_debug is limited to 64 bytes.)
+  */
+-static void dump_security_xattr(const char *prefix, const void *src,
+-				size_t count)
++static void dump_security_xattr_l(const char *prefix, const void *src,
++				  size_t count)
+ {
+ #if defined(DEBUG) || defined(CONFIG_DYNAMIC_DEBUG)
+ 	char *asciihex, *p;
+@@ -200,6 +200,16 @@ static void dump_security_xattr(const char *prefix, const void *src,
+ #endif
+ }
+ 
++static void dump_security_xattr(const char *name, const char *value,
++				size_t value_len)
++{
++	if (value_len < 64)
++		pr_debug("%s: (%zu) [%*phN]\n", name, value_len,
++			 (int)value_len, value);
++	else
++		dump_security_xattr_l(name, value, value_len);
++}
++
+ /*
+  * Calculate the HMAC value across the set of protected security xattrs.
+  *
+@@ -254,15 +264,9 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 			if (is_ima)
+ 				ima_present = true;
+ 
+-			if (req_xattr_value_len < 64)
+-				pr_debug("%s: (%zu) [%*phN]\n", req_xattr_name,
+-					 req_xattr_value_len,
+-					 (int)req_xattr_value_len,
+-					 req_xattr_value);
+-			else
+-				dump_security_xattr(req_xattr_name,
+-						    req_xattr_value,
+-						    req_xattr_value_len);
++			dump_security_xattr(req_xattr_name,
++					    req_xattr_value,
++					    req_xattr_value_len);
+ 			continue;
+ 		}
+ 		size = vfs_getxattr_alloc(&init_user_ns, dentry, xattr->name,
+@@ -286,12 +290,7 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 		if (is_ima)
+ 			ima_present = true;
+ 
+-		if (xattr_size < 64)
+-			pr_debug("%s: (%zu) [%*phN]", xattr->name, xattr_size,
+-				 (int)xattr_size, xattr_value);
+-		else
+-			dump_security_xattr(xattr->name, xattr_value,
+-					    xattr_size);
++		dump_security_xattr(xattr->name, xattr_value, xattr_size);
+ 	}
+ 	hmac_add_misc(desc, inode, type, data->digest);
+ 
+-- 
+2.17.1
+
