@@ -2,187 +2,374 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B01C682B8A
-	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 12:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0200682D06
+	for <lists+linux-integrity@lfdr.de>; Tue, 31 Jan 2023 13:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjAaLdO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Jan 2023 06:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S231901AbjAaMwi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Jan 2023 07:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjAaLdM (ORCPT
+        with ESMTP id S230146AbjAaMwh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:33:12 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B594AA7F;
-        Tue, 31 Jan 2023 03:32:28 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VARSXR031547;
-        Tue, 31 Jan 2023 11:32:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=QDH1LT0pPC43JQfZiLTfm89mEd2bhyJeJF13YAeb7qk=;
- b=MMxnz7oBOiJTG6usma+/4pO0r6W+YhG547qXCNfjA8UhvnJtiyzvYqF5n6FJ1+7styDT
- zGPwMUryFlhHT6mSPEkVWn6WKcaQ4gSplbA52YxfDxc0FBWND8i9Ofcd5hykrDE74nAT
- uukVmj99qe96oYMq4HNuYF5gRXvLOT9gtbtvXI0pcZ0lCCdJ1eaf9hL936U6IiRajiYl
- 5eRK4phya5BO2TaLijbm18JqJNFGeuvAK8LIb5JNBQNMtC/oBTKmuMBx0oassYFIwK0F
- z7uk2HFZ1tp85bgVzqaYc5sy+JJVpP9mQJfceP6hsz1thPbMS3o4NBVMRh5M9MQzBQUS Ew== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf18k9h2a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 11:32:09 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VAuU25001653;
-        Tue, 31 Jan 2023 11:32:05 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf18k9h13-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 11:32:05 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VA7aQ7008390;
-        Tue, 31 Jan 2023 11:31:58 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ncvw2kpf6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 11:31:58 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VBVvPG28377788
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 11:31:57 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 765D058043;
-        Tue, 31 Jan 2023 11:31:57 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4F99058053;
-        Tue, 31 Jan 2023 11:31:56 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.114.140])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 11:31:56 +0000 (GMT)
-Message-ID: <1c7d861a143106e56cfe382d1ab6c293fa43aff1.camel@linux.ibm.com>
-Subject: Re: [PATCH -next] evm: Use __vfs_setxattr() to update security.evm
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 31 Jan 2023 06:31:55 -0500
-In-Reply-To: <f90bd732-a3a0-80b5-07ce-386500b12968@huawei.com>
-References: <20221228030248.94285-1-xiujianfeng@huawei.com>
-         <3c34c1e8c74722110e5d7e87146b090791734916.camel@linux.ibm.com>
-         <f90bd732-a3a0-80b5-07ce-386500b12968@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Tue, 31 Jan 2023 07:52:37 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC26234EE;
+        Tue, 31 Jan 2023 04:52:26 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P5l9N3FsTz9v7cG;
+        Tue, 31 Jan 2023 20:44:08 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCXHwvlDtljpffgAA--.10854S2;
+        Tue, 31 Jan 2023 13:52:02 +0100 (CET)
+Message-ID: <412da9a9da2e75e896911f01bfd735dd4b5789f4.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v9 06/16] ipe: add LSM hooks on execution and kernel
+ read
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com,
+        paul@paul-moore.com
+Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Date:   Tue, 31 Jan 2023 13:51:39 +0100
+In-Reply-To: <1675119451-23180-7-git-send-email-wufan@linux.microsoft.com>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+         <1675119451-23180-7-git-send-email-wufan@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: k1J4jdshPFAghjaFNQUhFJk--GXo2MFR
-X-Proofpoint-ORIG-GUID: e4R8ym3jzWQSeWxpdSHIOD22Jn58m8re
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_05,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 clxscore=1015 malwarescore=0 adultscore=0 suspectscore=0
- mlxscore=0 impostorscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwCXHwvlDtljpffgAA--.10854S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WrW8XF13Jry8Aw4DGF4xCrg_yoWfXw18pF
+        9xJ3ZxGrWDXF9a9r1xJa1UuanxK395Kr4UW3sxWFy8AanFqr10kr1aqF17ZFW5Grn5t3ZY
+        v3W2vr42g34qyrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj4hR2wAAs4
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-01-30 at 09:53 +0800, Guozihua (Scott) wrote:
-> On 2023/1/19 5:45, Mimi Zohar wrote:
-> > On Wed, 2022-12-28 at 11:02 +0800, Xiu Jianfeng wrote:
-> >> Currently it uses __vfs_setxattr_noperm() to update "security.evm",
-> >> however there are two lsm hooks(inode_post_setxattr and inode_setsecurity)
-> >> being called inside this function, which don't make any sense for xattr
-> >> "security.evm", because the handlers of these two hooks, such as selinux
-> >> and smack, only care about their own xattr.
-> > 
-> > Updating the security.ima hash triggers re-calculating and writing the
-> > security.evm HMAC.  Refer to evm_inode_post_setxattr().
+On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> From: Deven Bowers <deven.desai@linux.microsoft.com>
 > 
-> Hi Mimi,
+> IPE's initial goal is to control both execution and the loading of
+> kernel modules based on the system's definition of trust. It
+> accomplishes this by plugging into the security hooks for
+> bprm_check_security, file_mprotect, mmap_file, kernel_load_data,
+> and kernel_read_data.
 > 
-> I believe what Jianfeng is trying to do is to avoid re-triggering
-> security_inode_post_setxattr if we are updating security.evm. I can't
-> think of any other xattr that could "absorb" security.evm.
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> ---
+> v2:
+>   + Split evaluation loop, access control hooks,
+>     and evaluation loop from policy parser and userspace
+>     interface to pass mailing list character limit
+> 
+> v3:
+>   + Move ipe_load_properties to patch 04.
+>   + Remove useless 0-initializations
+>   + Prefix extern variables with ipe_
+>   + Remove kernel module parameters, as these are
+>     exposed through sysctls.
+>   + Add more prose to the IPE base config option
+>     help text.
+>   + Use GFP_KERNEL for audit_log_start.
+>   + Remove unnecessary caching system.
+>   + Remove comments from headers
+>   + Use rcu_access_pointer for rcu-pointer null check
+>   + Remove usage of reqprot; use prot only.
+>   + Move policy load and activation audit event to 03/12
+> 
+> v4:
+>   + Remove sysctls in favor of securityfs nodes
+>   + Re-add kernel module parameters, as these are now
+>     exposed through securityfs.
+>   + Refactor property audit loop to a separate function.
+> 
+> v5:
+>   + fix minor grammatical errors
+>   + do not group rule by curly-brace in audit record,
+>     reconstruct the exact rule.
+> 
+> v6:
+>   + No changes
+> 
+> v7:
+>   + Further split lsm creation, the audit system, the evaluation loop
+>     and access control hooks into separate commits.
+> 
+> v8:
+>   + Rename hook functions to follow the lsmname_hook_name convention
+>   + Remove ipe_hook enumeration, can be derived from correlation with
+>     syscall audit record.
+> 
+> v9:
+>   + Minor changes for adapting to the new parser
+> ---
+>  security/ipe/hooks.c | 169 +++++++++++++++++++++++++++++++++++++++++++
+>  security/ipe/hooks.h |  13 ++++
+>  security/ipe/ipe.c   |   6 ++
+>  3 files changed, 188 insertions(+)
+> 
+> diff --git a/security/ipe/hooks.c b/security/ipe/hooks.c
+> index 335b773c7ae1..fd5109e29c76 100644
+> --- a/security/ipe/hooks.c
+> +++ b/security/ipe/hooks.c
+> @@ -23,3 +23,172 @@ void ipe_sb_free_security(struct super_block *mnt_sb)
+>  {
+>  	ipe_invalidate_pinned_sb(mnt_sb);
+>  }
+> +
+> +/**
+> + * ipe_bprm_check_security - ipe security hook function for bprm check.
+> + * @bprm: Supplies a pointer to a linux_binprm structure to source the file
+> + *	  being evaluated.
+> + *
+> + * This LSM hook is called when a binary is loaded through the exec
+> + * family of system calls.
+> + * Return:
+> + * *0	- OK
+> + * *!0	- Error
+> + */
+> +int ipe_bprm_check_security(struct linux_binprm *bprm)
+> +{
+> +	struct ipe_eval_ctx ctx = { 0 };
+> +
+> +	build_eval_ctx(&ctx, bprm->file, ipe_op_exec);
+> +	return ipe_evaluate_event(&ctx);
+> +}
+> +
+> +/**
+> + * ipe_mmap_file - ipe security hook function for mmap check.
+> + * @f: File being mmap'd. Can be NULL in the case of anonymous memory.
+> + * @reqprot: The requested protection on the mmap, passed from usermode.
+> + * @prot: The effective protection on the mmap, resolved from reqprot and
+> + *	  system configuration.
+> + * @flags: Unused.
+> + *
+> + * This hook is called when a file is loaded through the mmap
+> + * family of system calls.
+> + *
+> + * Return:
+> + * * 0	- OK
+> + * * !0	- Error
+> + */
+> +int ipe_mmap_file(struct file *f, unsigned long reqprot, unsigned long prot,
+> +		  unsigned long flags)
+> +{
+> +	struct ipe_eval_ctx ctx = { 0 };
+> +
+> +	if (prot & PROT_EXEC || reqprot & PROT_EXEC) {
 
-I understand.  Comments below ...
-> > 
-> >>
-> >> On the other hand, there is a literally rather than actually cyclical
-> >> callchain as follows:
-> >> security_inode_post_setxattr
-> >>   ->evm_inode_post_setxattr
-> >>     ->evm_update_evmxattr
-> >>       ->__vfs_setxattr_noperm
-> >>         ->security_inode_post_setxattr
-> >>
-> >> So use __vfs_setxattr() to update "security.evm".
-> >>
-> >> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> >> ---
-> >>  security/integrity/evm/evm_crypto.c   | 7 +++----
-> >>  security/integrity/ima/ima_appraise.c | 8 ++++----
-> >>  2 files changed, 7 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-> >> index fa5ff13fa8c9..d8275dfa49ef 100644
-> >> --- a/security/integrity/evm/evm_crypto.c
-> >> +++ b/security/integrity/evm/evm_crypto.c
-> >> @@ -376,10 +376,9 @@ int evm_update_evmxattr(struct dentry *dentry, const char *xattr_name,
-> >>  			   xattr_value_len, &data);
-> >>  	if (rc == 0) {
-> >>  		data.hdr.xattr.sha1.type = EVM_XATTR_HMAC;
-> >> -		rc = __vfs_setxattr_noperm(&init_user_ns, dentry,
-> >> -					   XATTR_NAME_EVM,
-> >> -					   &data.hdr.xattr.data[1],
-> >> -					   SHA1_DIGEST_SIZE + 1, 0);
-> >> +		rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
-> >> +				    XATTR_NAME_EVM, &data.hdr.xattr.data[1],
-> >> +				    SHA1_DIGEST_SIZE + 1, 0);
+Since the kernel only adds flags and doesn't clear them, isn't safe to
+just consider prot? Oh, you mentioned it in the changelog, maybe just
+for ipe_file_mprotect().
 
-Although __vfs_setxattr_noperm() doesn't do any permission checking, it
-does other things - make sure the filesystem supports writing xattrs,
-calls fsnotify_xattr().
+> +		build_eval_ctx(&ctx, f, ipe_op_exec);
+> +		return ipe_evaluate_event(&ctx);
+> +	}
 
-> >>  	} else if (rc == -ENODATA && (inode->i_opflags & IOP_XATTR)) {
-> >>  		rc = __vfs_removexattr(&init_user_ns, dentry, XATTR_NAME_EVM);
-> >>  	}
-> >> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> >> index ee6f7e237f2e..d2de9dc6c345 100644
-> >> --- a/security/integrity/ima/ima_appraise.c
-> >> +++ b/security/integrity/ima/ima_appraise.c
-> >> @@ -98,10 +98,10 @@ static int ima_fix_xattr(struct dentry *dentry,
-> >>  		iint->ima_hash->xattr.ng.type = IMA_XATTR_DIGEST_NG;
-> >>  		iint->ima_hash->xattr.ng.algo = algo;
-> >>  	}
-> >> -	rc = __vfs_setxattr_noperm(&init_user_ns, dentry, XATTR_NAME_IMA,
-> >> -				   &iint->ima_hash->xattr.data[offset],
-> >> -				   (sizeof(iint->ima_hash->xattr) - offset) +
-> >> -				   iint->ima_hash->length, 0);
-> >> +	rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
-> >> +			    XATTR_NAME_IMA, &iint->ima_hash->xattr.data[offset],
-> >> +			    (sizeof(iint->ima_hash->xattr) - offset) +
-> >> +			    iint->ima_hash->length, 0);
+Uhm, I think some considerations that IMA does for mmap() are relevant
+also for IPE.
 
-To clarify, ima_fix_xattr() is either directly called when in "fix"
-mode or from ima_update_xattr().  With this change, the recalculated
-file hash would be written to security.ima, but security.evm would not
-be updated.
+For example, look at mmap_violation_check(). It checks if there are
+writable mappings, and if yes, it denies the access.
 
-> >>  	return rc;
-> >>  }
+Similarly for mprotect(), is adding PROT_EXEC safe?
 
--- 
-thanks,
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * ipe_file_mprotect - ipe security hook function for mprotect check.
+> + * @vma: Existing virtual memory area created by mmap or similar.
+> + * @reqprot: The requested protection on the mmap, passed from usermode.
+> + * @prot: The effective protection on the mmap, resolved from reqprot and
+> + *	  system configuration.
+> + *
+> + * This LSM hook is called when a mmap'd region of memory is changing
+> + * its protections via mprotect.
+> + *
+> + * Return:
+> + * * 0	- OK
+> + * * !0	- Error
+> + */
+> +int ipe_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
+> +		      unsigned long prot)
+> +{
+> +	struct ipe_eval_ctx ctx = { 0 };
+> +
+> +	/* Already Executable */
+> +	if (vma->vm_flags & VM_EXEC)
+> +		return 0;
+> +
+> +	if (prot & PROT_EXEC) {
+> +		build_eval_ctx(&ctx, vma->vm_file, ipe_op_exec);
+> +		return ipe_evaluate_event(&ctx);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * ipe_kernel_read_file - ipe security hook function for kernel read.
+> + * @file: Supplies a pointer to the file structure being read in from disk.
+> + * @id: Supplies the enumeration identifying the purpose of the read.
+> + * @contents: Unused.
+> + *
+> + * This LSM hook is called when a file is being read in from disk from
+> + * the kernel.
+> + *
+> + * Return:
+> + * 0 - OK
+> + * !0 - Error
+> + */
+> +int ipe_kernel_read_file(struct file *file, enum kernel_read_file_id id,
+> +			 bool contents)
+> +{
+> +	enum ipe_op_type op;
+> +	struct ipe_eval_ctx ctx;
+> +
+> +	switch (id) {
+> +	case READING_FIRMWARE:
+> +		op = ipe_op_firmware;
+> +		break;
+> +	case READING_MODULE:
+> +		op = ipe_op_kernel_module;
+> +		break;
+> +	case READING_KEXEC_INITRAMFS:
+> +		op = ipe_op_kexec_initramfs;
+> +		break;
+> +	case READING_KEXEC_IMAGE:
+> +		op = ipe_op_kexec_image;
+> +		break;
+> +	case READING_POLICY:
+> +		op = ipe_op_ima_policy;
+> +		break;
+> +	case READING_X509_CERTIFICATE:
+> +		op = ipe_op_ima_x509;
+> +		break;
+> +	default:
+> +		op = ipe_op_max;
+> +		WARN(op == ipe_op_max, "no rule setup for enum %d", id);
+> +	}
+> +
+> +	build_eval_ctx(&ctx, file, op);
+> +	return ipe_evaluate_event(&ctx);
+> +}
+> +
+> +/**
+> + * ipe_kernel_load_data - ipe security hook function for kernel load data.
+> + * @id: Supplies the enumeration identifying the purpose of the read.
+> + * @contents: Unused.
+> + *
+> + * This LSM hook is called when a buffer is being read in from disk.
+> + *
+> + * Return:
+> + * * 0	- OK
+> + * * !0	- Error
+> + */
+> +int ipe_kernel_load_data(enum kernel_load_data_id id, bool contents)
+> +{
+> +	enum ipe_op_type op;
+> +	struct ipe_eval_ctx ctx = { 0 };
+> +
+> +	switch (id) {
+> +	case LOADING_FIRMWARE:
+> +		op = ipe_op_firmware;
+> +		break;
+> +	case LOADING_MODULE:
+> +		op = ipe_op_kernel_module;
+> +		break;
+> +	case LOADING_KEXEC_INITRAMFS:
+> +		op = ipe_op_kexec_initramfs;
+> +		break;
+> +	case LOADING_KEXEC_IMAGE:
+> +		op = ipe_op_kexec_image;
+> +		break;
+> +	case LOADING_POLICY:
+> +		op = ipe_op_ima_policy;
+> +		break;
+> +	case LOADING_X509_CERTIFICATE:
+> +		op = ipe_op_ima_x509;
+> +		break;
+> +	default:
+> +		op = ipe_op_max;
+> +		WARN(op == ipe_op_max, "no rule setup for enum %d", id);
+> +	}
+> +
+> +	build_eval_ctx(&ctx, NULL, op);
+> +	return ipe_evaluate_event(&ctx);
+> +}
+> diff --git a/security/ipe/hooks.h b/security/ipe/hooks.h
+> index 30fe455389bf..857cae69678c 100644
+> --- a/security/ipe/hooks.h
+> +++ b/security/ipe/hooks.h
+> @@ -11,4 +11,17 @@
+>  
+>  void ipe_sb_free_security(struct super_block *mnt_sb);
+>  
+> +int ipe_bprm_check_security(struct linux_binprm *bprm);
+> +
+> +int ipe_mmap_file(struct file *f, unsigned long reqprot, unsigned long prot,
+> +		  unsigned long flags);
+> +
+> +int ipe_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
+> +		      unsigned long prot);
+> +
+> +int ipe_kernel_read_file(struct file *file, enum kernel_read_file_id id,
+> +			 bool contents);
+> +
+> +int ipe_kernel_load_data(enum kernel_load_data_id id, bool contents);
+> +
+>  #endif /* IPE_HOOKS_H */
+> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> index bef923026b50..7af2f942decd 100644
+> --- a/security/ipe/ipe.c
+> +++ b/security/ipe/ipe.c
+> @@ -4,6 +4,7 @@
+>   */
+>  
+>  #include "ipe.h"
+> +#include "hooks.h"
+>  
+>  bool ipe_enabled;
+>  
+> @@ -12,6 +13,11 @@ static struct lsm_blob_sizes ipe_blobs __lsm_ro_after_init = {
+>  
+>  static struct security_hook_list ipe_hooks[] __lsm_ro_after_init = {
+>  	LSM_HOOK_INIT(sb_free_security, ipe_sb_free_security),
+> +	LSM_HOOK_INIT(bprm_check_security, ipe_bprm_check_security),
+> +	LSM_HOOK_INIT(mmap_file, ipe_mmap_file),
+> +	LSM_HOOK_INIT(file_mprotect, ipe_file_mprotect),
+> +	LSM_HOOK_INIT(kernel_read_file, ipe_kernel_read_file),
+> +	LSM_HOOK_INIT(kernel_load_data, ipe_kernel_load_data),
+>  };
 
-Mimi
+Uhm, maybe I would incorporate patch 1 with this.
+
+Roberto
 
