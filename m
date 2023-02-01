@@ -2,34 +2,35 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00D6685FDE
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Feb 2023 07:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BE1686052
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Feb 2023 08:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjBAGmZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Feb 2023 01:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S229761AbjBAHK0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Feb 2023 02:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjBAGmY (ORCPT
+        with ESMTP id S231769AbjBAHKR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Feb 2023 01:42:24 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3800D144B9;
-        Tue, 31 Jan 2023 22:42:23 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4P6C373FcVz16MpL;
-        Wed,  1 Feb 2023 14:40:19 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+        Wed, 1 Feb 2023 02:10:17 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A152A7AA6;
+        Tue, 31 Jan 2023 23:10:13 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P6Cgm0BqtzJs7K;
+        Wed,  1 Feb 2023 15:08:36 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 1 Feb 2023 14:42:21 +0800
-Message-ID: <701ef534-f716-efa4-15bc-f69b45e11bf7@huawei.com>
-Date:   Wed, 1 Feb 2023 14:42:21 +0800
+ 15.1.2375.34; Wed, 1 Feb 2023 15:10:11 +0800
+Message-ID: <c58c1c63-d886-04ee-97cb-2de2545d85cc@huawei.com>
+Date:   Wed, 1 Feb 2023 15:10:11 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
+ Thunderbird/102.7.0
 Subject: Re: [PATCH -next] evm: Use __vfs_setxattr() to update security.evm
+Content-Language: en-US
 To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Guozihua (Scott)" <guozihua@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
         <dmitry.kasatkin@gmail.com>, <paul@paul-moore.com>,
         <jmorris@namei.org>, <serge@hallyn.com>
 CC:     <linux-integrity@vger.kernel.org>,
@@ -39,14 +40,13 @@ References: <20221228030248.94285-1-xiujianfeng@huawei.com>
  <3c34c1e8c74722110e5d7e87146b090791734916.camel@linux.ibm.com>
  <f90bd732-a3a0-80b5-07ce-386500b12968@huawei.com>
  <1c7d861a143106e56cfe382d1ab6c293fa43aff1.camel@linux.ibm.com>
-Content-Language: en-US
-From:   xiujianfeng <xiujianfeng@huawei.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
 In-Reply-To: <1c7d861a143106e56cfe382d1ab6c293fa43aff1.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500023.china.huawei.com (7.185.36.114)
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -56,8 +56,6 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
-
-Hi,
 
 On 2023/1/31 19:31, Mimi Zohar wrote:
 > On Mon, 2023-01-30 at 09:53 +0800, Guozihua (Scott) wrote:
@@ -116,6 +114,8 @@ On 2023/1/31 19:31, Mimi Zohar wrote:
 > Although __vfs_setxattr_noperm() doesn't do any permission checking, it
 > does other things - make sure the filesystem supports writing xattrs,
 > calls fsnotify_xattr().
+
+Thanks for the explanation Mimi, this makes sense.
 > 
 >>>>  	} else if (rc == -ENODATA && (inode->i_opflags & IOP_XATTR)) {
 >>>>  		rc = __vfs_removexattr(&init_user_ns, dentry, XATTR_NAME_EVM);
@@ -142,9 +142,14 @@ On 2023/1/31 19:31, Mimi Zohar wrote:
 > file hash would be written to security.ima, but security.evm would not
 > be updated.
 
-Thanks for you explanation, I will drop this patch.
-
+Sorry I missed this part. I agree that it is not a good idea to alter
+ima_fix_xattr().
 > 
 >>>>  	return rc;
 >>>>  }
 > 
+
+-- 
+Best
+GUO Zihua
+
