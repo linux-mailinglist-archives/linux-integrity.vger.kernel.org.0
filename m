@@ -2,96 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E219E685C68
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Feb 2023 01:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F07685D44
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Feb 2023 03:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjBAAsy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Jan 2023 19:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S231644AbjBACQv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Jan 2023 21:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjBAAsx (ORCPT
+        with ESMTP id S231614AbjBACQu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Jan 2023 19:48:53 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB297125A3;
-        Tue, 31 Jan 2023 16:48:52 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id 6F5F120E0A00; Tue, 31 Jan 2023 16:48:52 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6F5F120E0A00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675212532;
-        bh=QtJOGoJNRx6Y5psopcsbrkvVOd9n83DwG6TAX2fVAEM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qhvwMPCpPd9vbDNzrPjs1oZIe5jI0seyMdSzUuuc5HR6DkZ14Hf6P0cI2f+oh6DGv
-         76VMuAXIVoCv65wvxPld5tZex+OTLKcBVka2rNlJJBrhjS44ZIHEQ+lFV1y4yUS9qY
-         CduWMrllvFR26wDQtbMgNAHH2QmUm72WhSPXXT2E=
-Date:   Tue, 31 Jan 2023 16:48:52 -0800
-From:   Fan Wu <wufan@linux.microsoft.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v9 00/16] Integrity Policy Enforcement LSM (IPE)
-Message-ID: <20230201004852.GB30104@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <033335b26f6becdc3dc0325ef926efd94fcc4dda.camel@huaweicloud.com>
+        Tue, 31 Jan 2023 21:16:50 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8560D59E72;
+        Tue, 31 Jan 2023 18:16:21 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3111oluq023897;
+        Wed, 1 Feb 2023 02:15:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Ho+SQWgunhWn2uxNrx0yviUSD97MXJLY5CWAiWZD+4g=;
+ b=s3jBH64ZJEouTL3ffF2clt474hmaXpN2uWNlxcc3hVbonOkHKNEowo2o0454fMWGhfWc
+ 1Hbn4lchCGuXGnZb98o1QPA99Lo7C3Oryt6ZbXb0nks4LkupQ9maKNvaeOLr+Qhkp45O
+ se6TraOgAYnrV7TyhHOXyKk7T54QltiIRW8visVBXsrzPxrCHzYujSjrWm9lnbQxy14u
+ YDyllh12621bjn0ST7hYB+WE332sItXHzhvEmTMNHKOQwRgUT+6pRWbKIAL3rwatAYJH
+ aC8DQzcl5u2zBkg1IVVVE4EzSYd4wEW3x9oSj24/n3Meu5RjTfLl8UC+aB75NR04nt9v Sg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfescgdty-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 02:15:30 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3112FTgV026299;
+        Wed, 1 Feb 2023 02:15:29 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfescgdt5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 02:15:29 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30V82jFu013346;
+        Wed, 1 Feb 2023 02:15:27 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3ncvshb05p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 02:15:27 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3112FOPa23593400
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Feb 2023 02:15:24 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ABD0A2004B;
+        Wed,  1 Feb 2023 02:15:24 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B2F320040;
+        Wed,  1 Feb 2023 02:15:24 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Feb 2023 02:15:24 +0000 (GMT)
+Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 67AE360425;
+        Wed,  1 Feb 2023 13:15:22 +1100 (AEDT)
+Message-ID: <1afe8de217d4436b6cdc91d65729c9baacff9274.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 22/24] powerpc/pseries: Implement secvars for dynamic
+ secure boot
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-integrity@vger.kernel.org
+Cc:     sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        gjoyce@linux.ibm.com, ruscur@russell.cc, gcwilson@linux.ibm.com,
+        joel@jms.id.au
+Date:   Wed, 01 Feb 2023 13:15:22 +1100
+In-Reply-To: <CQ690JS6Q5RG.8KHL6V7BODI0@bobo>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+         <20230120074306.1326298-23-ajd@linux.ibm.com>
+         <CQ05ZDYG6KNU.1G9O3ITQDIHEM@bobo>
+         <9f16d86e855f22823ee24e6a6236a16556425f29.camel@linux.ibm.com>
+         <CQ690JS6Q5RG.8KHL6V7BODI0@bobo>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <033335b26f6becdc3dc0325ef926efd94fcc4dda.camel@huaweicloud.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bMAgIRIRLbVC4BxySEJlhsuFJhDg__M-
+X-Proofpoint-GUID: HPzhPeOEA4jsEy8uXl5BCn7OebAh-IEW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 suspectscore=0 spamscore=0 priorityscore=1501 mlxscore=0
+ impostorscore=0 bulkscore=0 phishscore=0 clxscore=1015 mlxlogscore=935
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302010015
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 03:22:05PM +0100, Roberto Sassu wrote:
-> On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
-> > IPE has two known gaps:
-> > 
-> > 1. IPE cannot verify the integrity of anonymous executable memory, such as
-> >   the trampolines created by gcc closures and libffi (<3.4.2), or JIT'd code.
-> >   Unfortunately, as this is dynamically generated code, there is no way
-> >   for IPE to ensure the integrity of this code to form a trust basis. In all
-> >   cases, the return result for these operations will be whatever the admin
-> >   configures the DEFAULT action for "EXECUTE".
-> 
-> I think it would be useful to handle special cases, for example you
-> could allow a process that created a file with memfd to use it, at the
-> condition that nobody else writes it.
-> 
-> This would be required during the boot, otherwise services could fail
-> to start (depending on the policy).
-> 
-Thanks for the suggestion. I agree with your opinion and I think supporting
-memfd is possible but restricting read/write needs more hooks. We would like
-to avoid adding more complexity to this initial posting as necessary. 
-We will consider this as a future work and will post follow-on patches
-in the future.
+On Tue, 2023-01-31 at 18:55 +1000, Nicholas Piggin wrote:
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.datalen =3D 1;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0var.data =3D kzalloc(1, =
+GFP_KERNEL);
+> > >=20
+> > > This could just point to a u8 on stack I think?
+> >=20
+> > Until we get VMAP_STACK and we'll have to switch back.
+>=20
+> AFAIKS plpks_read_var does not require linear map, so should not be
+> required. IMO that's the right way to go for an external API, so
+> actually plpks_write_var is the outlier there and should be changed
+> to follow read and remove in not requiring special pointers.
 
--Fan
+Indeed, I was confused - in the read case, the buffer doesn't get
+directly passed to the hcall.
 
-> > 2. IPE cannot verify the integrity of interpreted languages' programs when
-> >   these scripts invoked via ``<interpreter> <file>``. This is because the
-> >   way interpreters execute these files, the scripts themselves are not
-> >   evaluated as executable code through one of IPE's hooks. Interpreters
-> >   can be enlightened to the usage of IPE by trying to mmap a file into
-> >   executable memory (+X), after opening the file and responding to the
-> >   error code appropriately. This also applies to included files, or high
-> >   value files, such as configuration files of critical system components.
-> 
-> Ok, it is a well known issue. Hopefully, it will be fixed soon.
-> 
-> Roberto
-> 
+I'll wait a little bit longer for more feedback on v5 of this series
+and maybe fix this in v6 if mpe thinks I should respin it again.
+
+--=20
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
