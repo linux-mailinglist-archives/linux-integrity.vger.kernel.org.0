@@ -2,185 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0D8687A2B
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Feb 2023 11:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D84687BCF
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Feb 2023 12:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbjBBK20 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Feb 2023 05:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S231935AbjBBLMd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Feb 2023 06:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjBBK2X (ORCPT
+        with ESMTP id S231737AbjBBLM2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Feb 2023 05:28:23 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0A239BB8;
-        Thu,  2 Feb 2023 02:28:21 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pNWpH-0008CR-12; Thu, 02 Feb 2023 11:28:19 +0100
-Message-ID: <3a196414-68d8-29c9-24cc-2b8cb4c9d358@leemhuis.info>
-Date:   Thu, 2 Feb 2023 11:28:16 +0100
+        Thu, 2 Feb 2023 06:12:28 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D4879634;
+        Thu,  2 Feb 2023 03:12:24 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P6wLH1s6Xz9xHw6;
+        Thu,  2 Feb 2023 18:40:55 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBnNl3+lNtjGVTnAA--.14834S2;
+        Thu, 02 Feb 2023 11:48:42 +0100 (CET)
+Message-ID: <7dc9963c563d0b55bb35109be012e355eef13882.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v9 00/16] Integrity Policy Enforcement LSM (IPE)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
+Date:   Thu, 02 Feb 2023 11:48:18 +0100
+In-Reply-To: <20230201004852.GB30104@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+         <033335b26f6becdc3dc0325ef926efd94fcc4dda.camel@huaweicloud.com>
+         <20230201004852.GB30104@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US, de-DE
-From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        reach622@mailcuk.com, 1138267643@qq.com,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 216989 - since 6.1 systems with AMD Ryzen stutter
- when fTPM is enabled
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675333701;09b4a742;
-X-HE-SMSGID: 1pNWpH-0008CR-12
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwBnNl3+lNtjGVTnAA--.14834S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw4rWw4DXFWxCryUCF1xXwb_yoW5CFW8pF
+        WagayYkr1DKFs2yw1vy3WSqayYv395Ja1UJr98tryUAa15ur1UZF43Ka4Y93W7ur1kZ34Y
+        vF42vr9rAF1UCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj4RztQAEsh
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+On Tue, 2023-01-31 at 16:48 -0800, Fan Wu wrote:
+> On Tue, Jan 31, 2023 at 03:22:05PM +0100, Roberto Sassu wrote:
+> > On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > > IPE has two known gaps:
+> > > 
+> > > 1. IPE cannot verify the integrity of anonymous executable memory, such as
+> > >   the trampolines created by gcc closures and libffi (<3.4.2), or JIT'd code.
+> > >   Unfortunately, as this is dynamically generated code, there is no way
+> > >   for IPE to ensure the integrity of this code to form a trust basis. In all
+> > >   cases, the return result for these operations will be whatever the admin
+> > >   configures the DEFAULT action for "EXECUTE".
+> > 
+> > I think it would be useful to handle special cases, for example you
+> > could allow a process that created a file with memfd to use it, at the
+> > condition that nobody else writes it.
+> > 
+> > This would be required during the boot, otherwise services could fail
+> > to start (depending on the policy).
+> > 
+> Thanks for the suggestion. I agree with your opinion and I think supporting
+> memfd is possible but restricting read/write needs more hooks. We would like
+> to avoid adding more complexity to this initial posting as necessary. 
+> We will consider this as a future work and will post follow-on patches
+> in the future.
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developer don't keep an eye on it, I decided to forward it by
-mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216989 :
+Ok, maybe it is necessary to specify better the scope of IPE, why the
+current implementation can be considered as complete.
 
->  reach622@mailcuk.com 2023-02-02 02:49:48 UTC
-> 
-> Linux kernel >=6.1 exhibits a stuttering issue that occurs once every few hours. See https://www.reddit.com/r/archlinux/comments/zvgev0/audio_stuttering_issues_with_kernel_611/ https://www.reddit.com/r/linux_gaming/comments/zzqaf7/having_intermittent_stutters_with_a_ryzen_cpu/ https://bbs.archlinux.org/viewtopic.php?id=282333 for detailed information.
-> 
-> The stutter lasts for 1-2 seconds and causes the framerate of the display to decrease dramatically and causes bursts in audio output.
-> 
-> Additional info:
-> 
-> * linux 6.1.0 or later
-> 
-> Steps to reproduce:
-> 
-> * Use Linux kernel >=6.1
-> 
-> * Use AMD Ryzen CPU with fTPM enabled
-> 
-> * Wait for a few hours
-> 
-> [reply] [−] Comment 1 Bell 2023-02-02 03:33:24 UTC
-> 
-> Hey, Let me add some extra information to help.
-> 1. this issue can happen in 6.2-rc6 without loading third-party kernel modules. (NVIDIA or Virtualbox and so)
-> 2. some guy on the Desktop/Laptop who can disable ftpm and did eliminate the problem.
-> 3. this problem can happen in newer AMD processors from the 4000 series to the 6000 series.
-> 4. this problem isn't caused by the dedicated graphics card I guess, here are some combinations that stuttering can happen:
-> AMD(built-in GPU) + NVIDIA  Laptop
-> AMD(No built-in GPU) + AMD(dedicated) Desktop
-> AMD(built-in GPU) + AMD(dedicated) Laptop/Desktop
-> AMD + AMD(Built-in GPU only) Laptop
-> all suffer from this.
-> 
-> Hope this can help :)
+If we say, IPE can only allow/deny operations on system components with
+immutable security properties, clearly memfd as a component cannot
+fullfill this goal due to the non-immutability. This would apply to any
+component allowing modifications.
 
-See the ticket for more details.
+How to address this? What is the immutable property then?
 
-I briefly looked into the links and found this:
-https://www.amd.com/en/support/kb/faq/pa-410
+In the case of memfd, intuitively, a useful property for integrity
+could be for example that the content can be accessed/modified by only
+one process. No other (possibly malicious) processes can tamper with
+that file.
 
-> 
-> Intermittent System Stutter Experienced with fTPM Enabled on Windows® 10
-> and 11
-> Article Number
-> PA-410
-> 
-> This documentation provides information on improving intermittent
-> performance stutter(s) on select PCs running Windows® 10 and 11 with
-> Firmware Trusted Platform Module (“fTPM”) enabled.
-> 
-> 
-> 
-> Issue Description
-> 
-> AMD has determined that select AMD Ryzen™ system configurations may
-> intermittently perform extended fTPM-related memory transactions in SPI
-> flash memory (“SPIROM”) located on the motherboard, which can lead to
-> temporary pauses in system interactivity or responsiveness until the
-> transaction is concluded.
-> 
-> 
-> 
-> Update and Workaround
-> 
->     Update: Affected PCs will require a motherboard system BIOS (sBIOS)
-> update containing enhanced modules for fTPM interaction with SPIROM. AMD
-> expects that flashable customer sBIOS files to be available starting in
-> early May, 2022. Exact BIOS availability timing for a specific
-> motherboard depends on the testing and integration schedule of your
-> manufacturer. Flashable updates for motherboards will be based on AMD
-> AGESA 1207 (or newer).
-> 
->     Workaround: As an immediate solution, affected customers dependent
-> on fTPM functionality for Trusted Platform Module support may instead
-> use a hardware TPM (“dTPM”) device for trusted computing. Platform dTPM
-> modules utilize onboard non-volatile memory (NVRAM) that supersedes the
-> TPM/SPIROM interaction described in this article.
-> 
->         COMPATIBILITY: Please check with your system or motherboard
-> manufacturer to ensure that your platform supports add-in dTPM modules
-> before attempting or implementing this workaround.
-> 
->         WARNING: If switching an active system from fTPM to dTPM, it is
-> critical that you disable TPM-backed encryption systems (e.g. BitLocker
-> Drive Encryption) and/or back up vital system data prior to switching
-> TPM devices. You must have full administrative access to the system, or
-> explicit support from your IT administrator if the system is managed.
-> For more information on transferring ownership to a new TPM device,
-> please visit this Microsoft webpage.
-> 
+So, it is true, to make this property immutable more hooks are needed.
+But should it be something that IPE does? Or it should be done by an
+external component (another LSM) that does the enforcement and reports
+to IPE that the property is true? Theoretically (with a proper policy),
+existing LSMs could be used for that purpose too.
 
-So it's a firmware problem, but apparently one that Linux only triggers
-since 6.1.
+I would say more the second, it should not be IPE job, so that IPE can
+exclusively focus on evaluating properties, not making sure that the
+properties are immutable.
 
-Jason, could the hwrng changes have anything to do with this?
+Roberto
 
-A bisection really would be helpful, but I guess that is not easy as the
-problem apparently only shows up after some time...
+> -Fan
+> 
+> > > 2. IPE cannot verify the integrity of interpreted languages' programs when
+> > >   these scripts invoked via ``<interpreter> <file>``. This is because the
+> > >   way interpreters execute these files, the scripts themselves are not
+> > >   evaluated as executable code through one of IPE's hooks. Interpreters
+> > >   can be enlightened to the usage of IPE by trying to mmap a file into
+> > >   executable memory (+X), after opening the file and responding to the
+> > >   error code appropriately. This also applies to included files, or high
+> > >   value files, such as configuration files of critical system components.
+> > 
+> > Ok, it is a well known issue. Hopefully, it will be fixed soon.
+> > 
+> > Roberto
+> > 
 
-
-Anyway:
-
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: v6.0..v6.1
-https://bugzilla.kernel.org/show_bug.cgi?id=216989
-#regzbot title: tpm: systems with AMD Ryzen stutter when fTPM is enabled
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
