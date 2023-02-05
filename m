@@ -2,175 +2,211 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD4268A945
-	for <lists+linux-integrity@lfdr.de>; Sat,  4 Feb 2023 10:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE48168B11E
+	for <lists+linux-integrity@lfdr.de>; Sun,  5 Feb 2023 18:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbjBDJsq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 4 Feb 2023 04:48:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        id S229503AbjBERi2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 5 Feb 2023 12:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbjBDJsp (ORCPT
+        with ESMTP id S229379AbjBERi1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 4 Feb 2023 04:48:45 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA32B3800A;
-        Sat,  4 Feb 2023 01:48:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675504123; x=1707040123;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vxN9Bf20URGxek3+/6jCLwHL5JDiPApDEdSYAgzw+pc=;
-  b=CuwpSXZAd0wJcO0Uj1c4fvke/qbtZW3v74IwqecbQ6302uHHSJxs1Qut
-   xqUtbAm50YG3UBC1WnhWB1rZjtZxUK/XgBK7PhWb67r8l6TtRssvlKeaX
-   M+2SapkqvSHMUR/HsbAIz304ZZnS61UeCGiDLdlCHA4ZpTXHoxZO676zv
-   xGhpoToIp4MwoMj8PeR9/Emq19Ny6Gm2XnKfXARTAWtCPpGFilACjEigL
-   wQOlQ9syyEXcfoxFwoiAtgfo19InYatOKoBwuEfCbVNsW4G07UZSuWXBF
-   lIfpqqpjeGKA337mj794JU0i7R0woJU2/arCNsvyQvveDrjR9zvtQH6vK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="391326583"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="391326583"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 01:48:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="789955489"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="789955489"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 Feb 2023 01:48:39 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pOF9z-0001DE-0L;
-        Sat, 04 Feb 2023 09:48:39 +0000
-Date:   Sat, 4 Feb 2023 17:48:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
-        broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: Re: [Patch V2 2/4] tpm: tegra: Support SPI tpm wait state detect
-Message-ID: <202302041737.v2JywR8Y-lkp@intel.com>
-References: <20230203130133.32901-3-kyarlagadda@nvidia.com>
+        Sun, 5 Feb 2023 12:38:27 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50914420E;
+        Sun,  5 Feb 2023 09:38:26 -0800 (PST)
+Received: from [46.183.103.17] (helo=[172.18.99.178]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pOiy6-0001nS-HZ; Sun, 05 Feb 2023 18:38:22 +0100
+Message-ID: <1c04756b-574b-210d-9580-a4de2aa16a20@leemhuis.info>
+Date:   Sun, 5 Feb 2023 18:38:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203130133.32901-3-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [regression] Bug 216989 - since 6.1 systems with AMD Ryzen
+ stutter when fTPM is enabled
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        reach622@mailcuk.com, 1138267643@qq.com,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <3a196414-68d8-29c9-24cc-2b8cb4c9d358@leemhuis.info>
+Content-Language: en-US, de-DE
+In-Reply-To: <3a196414-68d8-29c9-24cc-2b8cb4c9d358@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675618706;f47b7259;
+X-HE-SMSGID: 1pOiy6-0001nS-HZ
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Krishna,
+[ccing Dominik (who authored the culprit) and Herbert (who merged it)]
 
-Thank you for the patch! Perhaps something to improve:
+On 02.02.23 11:28, Linux kernel regression tracking (Thorsten Leemhuis)
+wrote:
+> 
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216989 :
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus broonie-spi/for-next robh/for-next linus/master v6.2-rc6 next-20230203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Turns out according to a bisection from one of the reporters that
+b006c439d58d ("hwrng: core - start hwrng kthread also for untrusted
+sources") (merged for 6.1) apparently makes this hardware issue occur
+quicker/more frequently a lot quicker on any board that didn't get the
+firmware update yet. So it could be argued that from the point of the
+kernel it *might* be considered a regression.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-210314
-patch link:    https://lore.kernel.org/r/20230203130133.32901-3-kyarlagadda%40nvidia.com
-patch subject: [Patch V2 2/4] tpm: tegra: Support SPI tpm wait state detect
-config: loongarch-buildonly-randconfig-r003-20230204 (https://download.01.org/0day-ci/archive/20230204/202302041737.v2JywR8Y-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/825363f7e8d0d426c45bbba6cb3c5d9b79b7e6aa
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-210314
-        git checkout 825363f7e8d0d426c45bbba6cb3c5d9b79b7e6aa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/char/tpm/
+For details see the ticket.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-All warnings (new ones prefixed by >>):
+#regzbot introduced: b006c439d58d
 
->> drivers/char/tpm/tpm_tis_spi_tegra.c:23:5: warning: no previous prototype for 'tpm_tis_spi_tegra_transfer' [-Wmissing-prototypes]
-      23 | int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/tpm_tis_spi_tegra_transfer +23 drivers/char/tpm/tpm_tis_spi_tegra.c
-
-    22	
-  > 23	int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-    24				       u8 *in, const u8 *out)
-    25	{
-    26		struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-    27		int ret = 0;
-    28		struct spi_message m;
-    29		struct spi_transfer spi_xfer[3];
-    30		u8 transfer_len;
-    31	
-    32		spi_bus_lock(phy->spi_device->master);
-    33	
-    34		while (len) {
-    35			transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-    36	
-    37			spi_message_init(&m);
-    38			phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-    39			phy->iobuf[1] = 0xd4;
-    40			phy->iobuf[2] = addr >> 8;
-    41			phy->iobuf[3] = addr;
-    42	
-    43			memset(&spi_xfer, 0, sizeof(spi_xfer));
-    44	
-    45			spi_xfer[0].tx_buf = phy->iobuf;
-    46			spi_xfer[0].len = 1;
-    47			spi_message_add_tail(&spi_xfer[0], &m);
-    48	
-    49			spi_xfer[1].tx_buf = phy->iobuf + 1;
-    50			spi_xfer[1].len = 3;
-    51			spi_message_add_tail(&spi_xfer[1], &m);
-    52	
-    53			if (out) {
-    54				spi_xfer[2].tx_buf = &phy->iobuf[4];
-    55				spi_xfer[2].rx_buf = NULL;
-    56				memcpy(&phy->iobuf[4], out, transfer_len);
-    57				out += transfer_len;
-    58			}
-    59			if (in) {
-    60				spi_xfer[2].tx_buf = NULL;
-    61				spi_xfer[2].rx_buf = &phy->iobuf[4];
-    62			}
-    63			spi_xfer[2].len = transfer_len;
-    64			spi_message_add_tail(&spi_xfer[2], &m);
-    65	
-    66			reinit_completion(&phy->ready);
-    67			ret = spi_sync_locked(phy->spi_device, &m);
-    68			if (ret < 0)
-    69				goto exit;
-    70	
-    71			if (in) {
-    72				memcpy(in, &phy->iobuf[4], transfer_len);
-    73				in += transfer_len;
-    74			}
-    75	
-    76			len -= transfer_len;
-    77		}
-    78	
-    79	exit:
-    80		spi_bus_unlock(phy->spi_device->master);
-    81		return ret;
-    82	}
-    83	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>>  reach622@mailcuk.com 2023-02-02 02:49:48 UTC
+>>
+>> Linux kernel >=6.1 exhibits a stuttering issue that occurs once every few hours. See https://www.reddit.com/r/archlinux/comments/zvgev0/audio_stuttering_issues_with_kernel_611/ https://www.reddit.com/r/linux_gaming/comments/zzqaf7/having_intermittent_stutters_with_a_ryzen_cpu/ https://bbs.archlinux.org/viewtopic.php?id=282333 for detailed information.
+>>
+>> The stutter lasts for 1-2 seconds and causes the framerate of the display to decrease dramatically and causes bursts in audio output.
+>>
+>> Additional info:
+>>
+>> * linux 6.1.0 or later
+>>
+>> Steps to reproduce:
+>>
+>> * Use Linux kernel >=6.1
+>>
+>> * Use AMD Ryzen CPU with fTPM enabled
+>>
+>> * Wait for a few hours
+>>
+>> [reply] [−] Comment 1 Bell 2023-02-02 03:33:24 UTC
+>>
+>> Hey, Let me add some extra information to help.
+>> 1. this issue can happen in 6.2-rc6 without loading third-party kernel modules. (NVIDIA or Virtualbox and so)
+>> 2. some guy on the Desktop/Laptop who can disable ftpm and did eliminate the problem.
+>> 3. this problem can happen in newer AMD processors from the 4000 series to the 6000 series.
+>> 4. this problem isn't caused by the dedicated graphics card I guess, here are some combinations that stuttering can happen:
+>> AMD(built-in GPU) + NVIDIA  Laptop
+>> AMD(No built-in GPU) + AMD(dedicated) Desktop
+>> AMD(built-in GPU) + AMD(dedicated) Laptop/Desktop
+>> AMD + AMD(Built-in GPU only) Laptop
+>> all suffer from this.
+>>
+>> Hope this can help :)
+> 
+> See the ticket for more details.
+> 
+> I briefly looked into the links and found this:
+> https://www.amd.com/en/support/kb/faq/pa-410
+> 
+>>
+>> Intermittent System Stutter Experienced with fTPM Enabled on Windows® 10
+>> and 11
+>> Article Number
+>> PA-410
+>>
+>> This documentation provides information on improving intermittent
+>> performance stutter(s) on select PCs running Windows® 10 and 11 with
+>> Firmware Trusted Platform Module (“fTPM”) enabled.
+>>
+>>
+>>
+>> Issue Description
+>>
+>> AMD has determined that select AMD Ryzen™ system configurations may
+>> intermittently perform extended fTPM-related memory transactions in SPI
+>> flash memory (“SPIROM”) located on the motherboard, which can lead to
+>> temporary pauses in system interactivity or responsiveness until the
+>> transaction is concluded.
+>>
+>>
+>>
+>> Update and Workaround
+>>
+>>     Update: Affected PCs will require a motherboard system BIOS (sBIOS)
+>> update containing enhanced modules for fTPM interaction with SPIROM. AMD
+>> expects that flashable customer sBIOS files to be available starting in
+>> early May, 2022. Exact BIOS availability timing for a specific
+>> motherboard depends on the testing and integration schedule of your
+>> manufacturer. Flashable updates for motherboards will be based on AMD
+>> AGESA 1207 (or newer).
+>>
+>>     Workaround: As an immediate solution, affected customers dependent
+>> on fTPM functionality for Trusted Platform Module support may instead
+>> use a hardware TPM (“dTPM”) device for trusted computing. Platform dTPM
+>> modules utilize onboard non-volatile memory (NVRAM) that supersedes the
+>> TPM/SPIROM interaction described in this article.
+>>
+>>         COMPATIBILITY: Please check with your system or motherboard
+>> manufacturer to ensure that your platform supports add-in dTPM modules
+>> before attempting or implementing this workaround.
+>>
+>>         WARNING: If switching an active system from fTPM to dTPM, it is
+>> critical that you disable TPM-backed encryption systems (e.g. BitLocker
+>> Drive Encryption) and/or back up vital system data prior to switching
+>> TPM devices. You must have full administrative access to the system, or
+>> explicit support from your IT administrator if the system is managed.
+>> For more information on transferring ownership to a new TPM device,
+>> please visit this Microsoft webpage.
+>>
+> 
+> So it's a firmware problem, but apparently one that Linux only triggers
+> since 6.1.
+> 
+> Jason, could the hwrng changes have anything to do with this?
+> 
+> A bisection really would be helpful, but I guess that is not easy as the
+> problem apparently only shows up after some time...
+> 
+> 
+> Anyway:
+> 
+> [TLDR for the rest of this mail: I'm adding this report to the list of
+> tracked Linux kernel regressions; the text you find below is based on a
+> few templates paragraphs you might have encountered already in similar
+> form.]
+> 
+> BTW, let me use this mail to also add the report to the list of tracked
+> regressions to ensure it's doesn't fall through the cracks:
+> 
+> #regzbot introduced: v6.0..v6.1
+> https://bugzilla.kernel.org/show_bug.cgi?id=216989
+> #regzbot title: tpm: systems with AMD Ryzen stutter when fTPM is enabled
+> #regzbot ignore-activity
+> 
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply and tell me -- ideally
+> while also telling regzbot about it, as explained by the page listed in
+> the footer of this mail.
+> 
+> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+> this thread sees some discussion). See page linked in footer for details.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
