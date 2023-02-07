@@ -2,122 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F7868CEDF
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Feb 2023 06:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B41268D3E5
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Feb 2023 11:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBGF0C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Feb 2023 00:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
+        id S230203AbjBGKRR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Feb 2023 05:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjBGFZ7 (ORCPT
+        with ESMTP id S229535AbjBGKRQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Feb 2023 00:25:59 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174D323337;
-        Mon,  6 Feb 2023 21:25:55 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3173RcDC031589;
-        Tue, 7 Feb 2023 05:25:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=MDDY2xtAagBPSEC6o2U7J4JQZ3D1QDD9r7/0FqNQWgE=;
- b=bnVp5EiJvF8XQTF7p6NDpZ8zdthL6lGbH3IZVQTjJqQG8kXhRDOr34/7yYbOPc3X8g3/
- SVMjyiFG6TNWbCApCuzAfzZEdBW8XK0c4L/dAoCqVB8jekx+j+D9Q41AKfT9zT8WYcda
- N6xeXOCz+TQTMJeFzWHycC+D74LJrfvnh98KwO/Ec33XqqzlcHDkEjJUUOwHS7yy6fcE
- RL2Q6n17/tJ8vBXkxAHsAy/7vdPy8YVGkZvfGgLxOV2ayrJDJbQWur3kedLyZm1JGRPx
- vDpVe97+8D9ON/VTZGxqNcRf6C/5pggzOSbj0NPaFarbF5VCLlpMy2a2aSFk5O8bSUwB wA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkda0v1s4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 05:25:44 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31751726028763;
-        Tue, 7 Feb 2023 05:25:44 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkda0v1rf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 05:25:44 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 316HgKLO023711;
-        Tue, 7 Feb 2023 05:25:42 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3nhf06u5ja-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 05:25:42 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3175Pd5R25100566
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Feb 2023 05:25:39 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CDB0020049;
-        Tue,  7 Feb 2023 05:25:39 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48BC620040;
-        Tue,  7 Feb 2023 05:25:39 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Feb 2023 05:25:39 +0000 (GMT)
-Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 6925A6010B;
-        Tue,  7 Feb 2023 16:25:35 +1100 (AEDT)
-Message-ID: <1be52a01d4d467300b9197f384498174a6942c10.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 19/25] powerpc/pseries: Make caller pass buffer to
- plpks_read_var()
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com,
-        Michael Ellerman <mpe@ellerman.id.au>
-Date:   Tue, 07 Feb 2023 16:25:35 +1100
-In-Reply-To: <5c335c29-ecb6-70eb-ab8e-caadde774434@linux.ibm.com>
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
-         <20230131063928.388035-20-ajd@linux.ibm.com>
-         <5c335c29-ecb6-70eb-ab8e-caadde774434@linux.ibm.com>
+        Tue, 7 Feb 2023 05:17:16 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216CB22016;
+        Tue,  7 Feb 2023 02:17:14 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P9zP50dcBz9v7Hy;
+        Tue,  7 Feb 2023 18:08:57 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBnMVgUJeJjjRf9AA--.25523S2;
+        Tue, 07 Feb 2023 11:17:00 +0100 (CET)
+Message-ID: <d6efb292273eee6caff9afc8b64e42984a3ae517.camel@huaweicloud.com>
+Subject: Re: [PATCH ima-evm-utils v5] Add tests for MMAP_CHECK and
+ MMAP_CHECK_REQPROT hooks
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
+        viro@zeniv.linux.org.uk, pvorel@suse.cz,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 07 Feb 2023 11:16:45 +0100
+In-Reply-To: <cd21f0d2a65f9673a0abe7f0a7219d5f1fe55911.camel@linux.ibm.com>
+References: <20230203125637.2673781-1-roberto.sassu@huaweicloud.com>
+         <cd21f0d2a65f9673a0abe7f0a7219d5f1fe55911.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: keLy3LWDQ3lADihVWqrZMz-wTfKF0X8V
-X-Proofpoint-ORIG-GUID: 7rgOvipZPeOTAfmpqpzrtsmAs6LUkjzc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- mlxlogscore=743 phishscore=0 clxscore=1015 priorityscore=1501
- malwarescore=0 impostorscore=0 spamscore=0 adultscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070044
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwBnMVgUJeJjjRf9AA--.25523S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr4fZr4xAF45AFyxtFW8WFg_yoW5Jr4kpF
+        Z3Xas0kFs5JF1Ik34Ikay8Xr4Fvw4xtayUJ34DA340k3ZxXFn2kr43JFW3urykGrs5Wwnr
+        ZF43t3yUuwnFkFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4Sq1gAAsO
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2023-01-31 at 11:38 -0500, Stefan Berger wrote:
->=20
->=20
-> On 1/31/23 01:39, Andrew Donnellan wrote:
-> > Currently, plpks_read_var() allocates a buffer to pass to the
-> > H_PKS_READ_OBJECT hcall, then allocates another buffer, of the
-> > caller's
->=20
->=20
-> -> buffer of the (no comma)
+On Mon, 2023-02-06 at 08:20 -0500, Mimi Zohar wrote:
+> On Fri, 2023-02-03 at 13:56 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Add tests to ensure that, after applying the kernel patch 'ima: Align
+> > ima_file_mmap() parameters with mmap_file LSM hook', the MMAP_CHECK hook
+> > checks the protections applied by the kernel and not those requested by the
+> > application.
+> > 
+> > Also ensure that after applying 'ima: Introduce MMAP_CHECK_REQPROT hook',
+> > the MMAP_CHECK_REQPROT hook checks the protections requested by the
+> > application.
+> > 
+> > Test both with the test_mmap application that by default requests the
+> > PROT_READ protection flag. Its syntax is:
+> > 
+> > test_mmap <file> <mode>
+> > 
+> > where mode can be:
+> > - exec: adds the PROT_EXEC protection flag to mmap()
+> > - read_implies_exec: calls the personality() system call with
+> >                      READ_IMPLIES_EXEC as the first argument before mmap()
+> > - mprotect: adds the PROT_EXEC protection flag to a memory area in addition
+> >             to PROT_READ
+> > - exec_on_writable: calls mmap() with PROT_EXEC on a file which has a
+> >                     writable mapping
+> > 
+> > Check the different combinations of hooks/modes and ensure that a
+> > measurement entry is found in the IMA measurement list only when it is
+> > expected. No measurement entry should be found when only the PROT_READ
+> > protection flag is requested or the matching policy rule has the
+> > MMAP_CHECK_REQPROT hook and the personality() system call was called with
+> > READ_IMPLIES_EXEC.
+> > 
+> > mprotect() with PROT_EXEC on an existing memory area protected with
+> > PROT_READ should be denied (with an appraisal rule), regardless of the MMAP
+> > hook specified in the policy. The same applies for mmap() with PROT_EXEC on
+> > a file with a writable mapping.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Thanks, Roberto.  Other than the one comment below, it looks good.
+> 
+> > +
+> > +if ! awk '$0 ~ /^(measure|appraise)/ && $0 !~ /fsuuid=/ && $0 !~ /fowner=/ { exit 1 }' < /sys/kernel/security/ima/policy; then
+> > +	echo "${CYAN}IMA policy rules without fsuuid= and fowner=, cannot continue due to possible interference with the tests${NORM}"
+> > +	exit "$SKIP"
+> > +fi
+> 
+> The test should be limited to just MMAP_CHECK and MMAP_CHECK_REQPROT
+> policy rules.
+> 
+> +if ! awk '$0 ~ /^(measure|appraise)/ && $0 ~ /func=MMAP_CHECK/ && $0 !~ /fsuuid=/ && ...
 
-I'll just remove that clause entirely, it's not really necessary
+Oh, yes. Better.
 
+Thanks
 
---=20
-Andrew Donnellan    OzLabs, ADL Canberra
-ajd@linux.ibm.com   IBM Australia Limited
+Roberto
+
