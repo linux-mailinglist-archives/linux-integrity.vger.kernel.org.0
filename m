@@ -2,55 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E3968E620
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Feb 2023 03:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452E368E644
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Feb 2023 03:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjBHCkB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Feb 2023 21:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
+        id S229557AbjBHCtx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Feb 2023 21:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBHCkA (ORCPT
+        with ESMTP id S229505AbjBHCtw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Feb 2023 21:40:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DE22528B;
-        Tue,  7 Feb 2023 18:39:58 -0800 (PST)
+        Tue, 7 Feb 2023 21:49:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251803A5B4;
+        Tue,  7 Feb 2023 18:49:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91FC5B81B2C;
-        Wed,  8 Feb 2023 02:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29FA7C4339B;
-        Wed,  8 Feb 2023 02:39:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2720B816D4;
+        Wed,  8 Feb 2023 02:49:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596ACC433EF;
+        Wed,  8 Feb 2023 02:49:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675823996;
-        bh=nW1JQejgpwxI/J74A+QINk7F8fZY6PLGrEawNBPPqsg=;
+        s=k20201202; t=1675824588;
+        bh=knypg8koZd0Cab7ZNIquVYoIC2yiDFKnUF5sBSze0OY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cB9bu8lUhnQlJYEt9d86M5p4l0xf2pXte432mkrFvcTS01h/NzycHoNH1Uo49cqCw
-         R98c2NEx51XgB04PCxLMpVJTjEhHEij9uuNADrAK2aR9FitMfONYp/ju3Tth/Nwvts
-         H3Dsh5YU68SanFIe4h1jXdHWro7akfmgougCAFsuklOIqZdGvV/T6RZw9jKS2g9fP3
-         tBCeW6ccsLSuUW1501ivUM30BBP7UugCWkwTQdfgXgNrhBdiq8shfsvcC9qw8z7nPB
-         mpg9tezt6CqMM2qbevKDPGjqvTwQ8lRqWPrwRv5ms7pRo2hCCrpsZBWsfFki3+YaXJ
-         2ch2/cvDibtvw==
-Date:   Wed, 8 Feb 2023 04:39:50 +0200
+        b=Ln6SE7qKLNlCxURgnFWS2pz87VmUxsTJFUVDy9axapk9r8gmn+7/btmDOXzpUphLH
+         uJgLIs/klzPh33IX2kyB839ee9/+AZWdocpIFJxkEt9kH9NSG4NYi4YRVjQLqviuaJ
+         9cUegj+Q8x1UXEPSUW+Q8ybVwTH7B8gK6qNGLQF+41lMwxd1iLMndTB1JtRN9/fCx1
+         VMpKTOA3sL5wjs4V2QiKB+jbLNhz4mmJbyt27VTnh0gcKe4DQYl48IJGpx5k5xEd5g
+         j+gpWN8pDlGCo9NAA4f/jbYBxUmgB2lqTJ8Jz5RFP4ATii37XMh3d7EbZwf1ctuQ3U
+         OZFG7qEKyHIZg==
+Date:   Wed, 8 Feb 2023 04:49:42 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
-Message-ID: <Y+MLdjdjMvcLuhbC@kernel.org>
-References: <20230202161750.21210-1-kyarlagadda@nvidia.com>
- <20230202161750.21210-3-kyarlagadda@nvidia.com>
+To:     Yujie Liu <yujie.liu@intel.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-integrity@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+        keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v2 06/11] tpm: Add full HMAC and encrypt/decrypt session
+ handling code
+Message-ID: <Y+MNxmzlILarAlZA@kernel.org>
+References: <20230124175516.5984-7-James.Bottomley@HansenPartnership.com>
+ <202301250706.deGvd0yq-lkp@intel.com>
+ <a588a74bb930f38c9322dd51d21661398b5e2bb8.camel@HansenPartnership.com>
+ <Y9ykeASyzhSKQCmx@yujie-X299>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230202161750.21210-3-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9ykeASyzhSKQCmx@yujie-X299>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,227 +60,100 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 09:47:48PM +0530, Krishna Yarlagadda wrote:
-> Tegra234 and Tegra241 chips have QSPI controller that supports TCG
-> TIS hardware flow control. Since the controller only supports half
-> duplex, sw wait polling method implemented in tpm_tis_spi does not
-> suffice. Added extending driver to disable sw flow control and send
-
-s/Added/Add/
-
-> all transfers in single message.
-
-I've never heard the term "extended driver" before.
-
+On Fri, Feb 03, 2023 at 02:06:48PM +0800, Yujie Liu wrote:
+> Hi James,
 > 
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->  drivers/char/tpm/Makefile            |   1 +
->  drivers/char/tpm/tpm_tis_spi.h       |   1 +
->  drivers/char/tpm/tpm_tis_spi_main.c  |   4 +-
->  drivers/char/tpm/tpm_tis_spi_tegra.c | 123 +++++++++++++++++++++++++++
->  4 files changed, 128 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/char/tpm/tpm_tis_spi_tegra.c
+> On Wed, Jan 25, 2023 at 07:59:09AM -0500, James Bottomley wrote:
+> > On Wed, 2023-01-25 at 07:11 +0800, kernel test robot wrote:
+> > > Hi James,
+> > > 
+> > > I love your patch! Perhaps something to improve:
+> > > 
+> > > [auto build test WARNING on char-misc/char-misc-testing]
+> > > [also build test WARNING on char-misc/char-misc-next char-misc/char-
+> > > misc-linus zohar-integrity/next-integrity linus/master v6.2-rc5 next-
+> > > 20230124]
+> > > [If your patch is applied to the wrong git tree, kindly drop us a
+> > > note.
+> > > And when submitting patch, we suggest to use '--base' as documented
+> > > in
+> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > > 
+> > > url:   
+> > > https://github.com/intel-lab-lkp/linux/commits/James-Bottomley/tpm-move-buffer-handling-from-static-inlines-to-real-functions/20230125-020146
+> > > patch link:   
+> > > https://lore.kernel.org/r/20230124175516.5984-7-James.Bottomley%40HansenPartnership.com
+> > > patch subject: [PATCH v2 06/11] tpm: Add full HMAC and
+> > > encrypt/decrypt session handling code
+> > > config: arc-allyesconfig
+> > > (https://download.01.org/0day-ci/archive/20230125/202301250706.deGvd0
+> > > yq-lkp@intel.com/config)
+> > > compiler: arceb-elf-gcc (GCC) 12.1.0
+> > > reproduce (this is a W=1 build):
+> > >         wget
+> > > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+> > >  -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         #
+> > > https://github.com/intel-lab-lkp/linux/commit/dc0fc74718b4a786aba4a954233e8ab3afdcc03c
+> > >         git remote add linux-review
+> > > https://github.com/intel-lab-lkp/linux
+> > >         git fetch --no-tags linux-review James-Bottomley/tpm-move-
+> > > buffer-handling-from-static-inlines-to-real-functions/20230125-020146
+> > >         git checkout dc0fc74718b4a786aba4a954233e8ab3afdcc03c
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0
+> > > make.cross W=1 O=build_dir ARCH=arc olddefconfig
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0
+> > > make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/char/tpm/
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > >    drivers/char/tpm/tpm2-sessions.c:1184:5: warning: no previous
+> > > prototype for 'tpm2_create_null_primary' [-Wmissing-prototypes]
+> > >     1184 | int tpm2_create_null_primary(struct tpm_chip *chip) {
+> > >          |     ^~~~~~~~~~~~~~~~~~~~~~~~
+> > >    drivers/char/tpm/tpm2-sessions.c: In function
+> > > 'tpm_buf_check_hmac_response':
+> > > > > drivers/char/tpm/tpm2-sessions.c:831:1: warning: the frame size
+> > > > > of 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+> > >      831 | }
+> > >          | ^
+> > >    drivers/char/tpm/tpm2-sessions.c: In function
+> > > 'tpm_buf_fill_hmac_session':
+> > >    drivers/char/tpm/tpm2-sessions.c:579:1: warning: the frame size of
+> > > 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+> > >      579 | }
+> > >          | ^
+> > 
+> > Is this a test problem?  I can't see why the code would only blow the
+> > stack on the arc architecture and not on any other ... does it have
+> > something funny with on stack crypto structures?
 > 
-> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-> index 0222b1ddb310..445b15493cb3 100644
-> --- a/drivers/char/tpm/Makefile
-> +++ b/drivers/char/tpm/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_TCG_TIS_SYNQUACER) += tpm_tis_synquacer.o
->  
->  obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
->  tpm_tis_spi-y := tpm_tis_spi_main.o
-> +tpm_tis_spi-y += tpm_tis_spi_tegra.o
->  tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
->  
->  obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
-> diff --git a/drivers/char/tpm/tpm_tis_spi.h b/drivers/char/tpm/tpm_tis_spi.h
-> index d0f66f6f1931..feaea14b428b 100644
-> --- a/drivers/char/tpm/tpm_tis_spi.h
-> +++ b/drivers/char/tpm/tpm_tis_spi.h
-> @@ -31,6 +31,7 @@ extern int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
->  extern int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
->  				u8 *in, const u8 *out);
->  
-> +extern int tegra_tpm_spi_probe(struct spi_device *spi);
->  #ifdef CONFIG_TCG_TIS_SPI_CR50
->  extern int cr50_spi_probe(struct spi_device *spi);
->  #else
-> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> index a0963a3e92bd..5d4502a4461a 100644
-> --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> @@ -198,7 +198,7 @@ static int tpm_tis_spi_driver_probe(struct spi_device *spi)
->  	const struct spi_device_id *spi_dev_id = spi_get_device_id(spi);
->  	tpm_tis_spi_probe_func probe_func;
->  
-> -	probe_func = of_device_get_match_data(&spi->dev);
-> +	probe_func = device_get_match_data(&spi->dev);
->  	if (!probe_func) {
->  		if (spi_dev_id) {
->  			probe_func = (tpm_tis_spi_probe_func)spi_dev_id->driver_data;
-> @@ -227,6 +227,7 @@ static const struct spi_device_id tpm_tis_spi_id[] = {
->  	{ "tpm_tis_spi", (unsigned long)tpm_tis_spi_probe },
->  	{ "tpm_tis-spi", (unsigned long)tpm_tis_spi_probe },
->  	{ "cr50", (unsigned long)cr50_spi_probe },
-> +	{ "tegra-tpm-spi", (unsigned long)tegra_tpm_spi_probe },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(spi, tpm_tis_spi_id);
-> @@ -236,6 +237,7 @@ static const struct of_device_id of_tis_spi_match[] = {
->  	{ .compatible = "infineon,slb9670", .data = tpm_tis_spi_probe },
->  	{ .compatible = "tcg,tpm_tis-spi", .data = tpm_tis_spi_probe },
->  	{ .compatible = "google,cr50", .data = cr50_spi_probe },
-> +	{ .compatible = "nvidia,tegra-tpm-spi", .data = tegra_tpm_spi_probe },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, of_tis_spi_match);
-> diff --git a/drivers/char/tpm/tpm_tis_spi_tegra.c b/drivers/char/tpm/tpm_tis_spi_tegra.c
-> new file mode 100644
-> index 000000000000..23f20684513d
-> --- /dev/null
-> +++ b/drivers/char/tpm/tpm_tis_spi_tegra.c
-> @@ -0,0 +1,123 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 NVIDIA CORPORATION.
-> + *
-> + * This device driver implements TEGRA QSPI hw wait detection for chips
-> + *
-> + * It is based on tpm_tis_spi driver by Peter Huewe and Christophe Ricard.
-> + */
-> +
-> +#include <linux/completion.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/pm.h>
-> +#include <linux/spi/spi.h>
-> +#include <linux/wait.h>
-> +
-> +#include "tpm_tis_core.h"
-> +#include "tpm_tis_spi.h"
-> +
-> +#define MAX_SPI_FRAMESIZE 64
-> +
-> +int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> +			       u8 *in, const u8 *out)
-> +{
-> +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> +	int ret = 0;
-
-Why do you need to initialize ret?
-
-> +	struct spi_message m;
-> +	struct spi_transfer spi_xfer[3];
-> +	u8 transfer_len;
-
-Please reorder declarations to reverse christmas tree order.
-
-> +
-> +	spi_bus_lock(phy->spi_device->master);
-> +
-> +	while (len) {
-> +		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-> +
-> +		spi_message_init(&m);
-> +		phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-> +		phy->iobuf[1] = 0xd4;
-> +		phy->iobuf[2] = addr >> 8;
-> +		phy->iobuf[3] = addr;
-> +
-> +		memset(&spi_xfer, 0, sizeof(spi_xfer));
-> +
-> +		spi_xfer[0].tx_buf = phy->iobuf;
-> +		spi_xfer[0].len = 1;
-> +		spi_message_add_tail(&spi_xfer[0], &m);
-> +
-> +		spi_xfer[1].tx_buf = phy->iobuf + 1;
-> +		spi_xfer[1].len = 3;
-> +		spi_message_add_tail(&spi_xfer[1], &m);
-> +
-> +		if (out) {
-> +			spi_xfer[2].tx_buf = &phy->iobuf[4];
-> +			spi_xfer[2].rx_buf = NULL;
-> +			memcpy(&phy->iobuf[4], out, transfer_len);
-> +			out += transfer_len;
-> +		}
-
-Empty line here.
-
-> +		if (in) {
-> +			spi_xfer[2].tx_buf = NULL;
-> +			spi_xfer[2].rx_buf = &phy->iobuf[4];
-> +		}
-
-Ditto.
-
-> +		spi_xfer[2].len = transfer_len;
-> +		spi_message_add_tail(&spi_xfer[2], &m);
-> +
-> +		reinit_completion(&phy->ready);
-
-Ditto.
-
-> +		ret = spi_sync_locked(phy->spi_device, &m);
-> +		if (ret < 0)
-> +			goto exit;
-> +
-> +		if (in) {
-> +			memcpy(in, &phy->iobuf[4], transfer_len);
-> +			in += transfer_len;
-> +		}
-> +
-> +		len -= transfer_len;
-> +	}
-> +
-> +exit:
-> +	spi_bus_unlock(phy->spi_device->master);
-> +	return ret;
-> +}
-> +
-> +static int tpm_tis_spi_tegra_read_bytes(struct tpm_tis_data *data, u32 addr,
-> +					u16 len, u8 *result,
-> +					enum tpm_tis_io_mode io_mode)
-> +{
-> +	return tpm_tis_spi_tegra_transfer(data, addr, len, result, NULL);
-> +}
-> +
-> +static int tpm_tis_spi_tegra_write_bytes(struct tpm_tis_data *data, u32 addr,
-> +					 u16 len, const u8 *value,
-> +					 enum tpm_tis_io_mode io_mode)
-> +{
-> +	return tpm_tis_spi_tegra_transfer(data, addr, len, NULL, value);
-> +}
-> +
-> +static const struct tpm_tis_phy_ops tegra_tpm_spi_phy_ops = {
-> +	.read_bytes = tpm_tis_spi_tegra_read_bytes,
-> +	.write_bytes = tpm_tis_spi_tegra_write_bytes,
-> +};
-> +
-> +int tegra_tpm_spi_probe(struct spi_device *dev)
-> +{
-> +	struct tpm_tis_spi_phy *phy;
-> +	int irq;
-> +
-> +	phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_spi_phy),
-> +			   GFP_KERNEL);
-> +	if (!phy)
-> +		return -ENOMEM;
-> +
-> +	phy->flow_control = NULL;
-> +
-> +	/* If the SPI device has an IRQ then use that */
-> +	if (dev->irq > 0)
-> +		irq = dev->irq;
-> +	else
-> +		irq = -1;
-> +
-> +	init_completion(&phy->ready);
-> +	return tpm_tis_spi_init(dev, phy, irq, &tegra_tpm_spi_phy_ops);
-> +}
-> -- 
-> 2.17.1
+> This warning is controlled by the value of CONFIG_FRAME_WARN.
 > 
+> For "make ARCH=arc allyesconfig", the default value is 1024, so this
+> frame warning shows up during the build.
+> 
+> For other arch such as "make ARCH=x86_64 allyesconfig", the default
+> value would be 2048 and won't have this warning.
+> 
+> Not sure if this is a real problem that need to be fixed, here just
+> providing above information for your reference.
+> 
+> --
+> Best Regards,
+> Yujie
+
+*Must* be fixed given that it is how the default value is set now. This
+is wrong place to reconsider.
+
+And we do not want to add functions that bloat the stack this way.
+
+Shash just needs to be allocated from heap instead of stack.
 
 BR, Jarkko
