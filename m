@@ -2,173 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B1268EF23
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Feb 2023 13:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5BE68F0E6
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Feb 2023 15:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjBHMjl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Feb 2023 07:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
+        id S231517AbjBHOd7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Feb 2023 09:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjBHMjk (ORCPT
+        with ESMTP id S231405AbjBHOd6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:39:40 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAB63A879;
-        Wed,  8 Feb 2023 04:39:38 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318CXYvC007368;
-        Wed, 8 Feb 2023 12:38:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=IRzwm9AVGgskVp8h3mjPNd2/4+TK1U8rD6DSXrUD8DM=;
- b=EfrAWiezbwrEuDSNLKkJAJJInfdyoKMNQ42ncgDZV3CTUzFm1WpQDCNKgqwLkAflhY8W
- 3j/UcR8IYtq2sj/aJJVqAVEFGs/ClyucM/0GaMphi0B/AJ/aDTNn3E4h32WeX0SY83Ed
- 1ntyjyvAgKm8GK7MfRLLFoFt+8mpRG2IGH3dP0ifh5o2SY8+kzD9jEhoF6gvW9nmzb+k
- R40XhJPeCOO8hUHE6p38ajmj61xFE6m0FDxDE52TQJaN+VLcsms38hD8JlRIaN4Q/T/P
- re4OlVAVc1PEu7YbKKmvov0CaNJp8Q9MN5GnNcppbN/dAvlnskksvGEgVCV8XXFCk4PS zw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nmbukg5bc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 12:38:59 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 318CaID3017889;
-        Wed, 8 Feb 2023 12:38:58 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nmbukg5aq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 12:38:58 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 318BFQA4020070;
-        Wed, 8 Feb 2023 12:38:57 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3nhf07dbnx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 12:38:57 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 318CcuP339322000
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Feb 2023 12:38:56 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A23F258056;
-        Wed,  8 Feb 2023 12:38:56 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D78B85804E;
-        Wed,  8 Feb 2023 12:38:54 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.35.178])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Feb 2023 12:38:54 +0000 (GMT)
-Message-ID: <41dffdaeb7eb7840f7e38bc691fbda836635c9f9.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 0/6] Add CA enforcement keyring restrictions
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org,
-        dhowells@redhat.com, dwmw2@infradead.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, tadeusz.struk@intel.com,
-        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
-        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        "Lee, Chun-Yi" <jlee@suse.com>
-Date:   Wed, 08 Feb 2023 07:38:54 -0500
-In-Reply-To: <20230207025958.974056-1-eric.snowberg@oracle.com>
-References: <20230207025958.974056-1-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Wed, 8 Feb 2023 09:33:58 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1BE901A;
+        Wed,  8 Feb 2023 06:33:56 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PBj2p2jCBz9v7gn;
+        Wed,  8 Feb 2023 22:25:38 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwC3PQmssuNjUbIEAQ--.46196S2;
+        Wed, 08 Feb 2023 15:33:27 +0100 (CET)
+Message-ID: <dc973294e5ad2d05705954b433bb550b04a86325.camel@huaweicloud.com>
+Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 08 Feb 2023 15:33:12 +0100
+In-Reply-To: <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
+         <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
+         <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fyZ3pT9D0GHxvR0UwdzOlRn_yDOSgX35
-X-Proofpoint-GUID: wRw-yqSDbypCUtr1XIWbFxRUbQoSLijl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_04,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 mlxscore=0 adultscore=0
- malwarescore=0 suspectscore=0 spamscore=0 priorityscore=1501 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302080112
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwC3PQmssuNjUbIEAQ--.46196S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4fJF43Kr4fAr43Jr4fKrg_yoW8Wr45pF
+        W3t3WakFsxJF18Kr1fKwsxWayIk3yxGws8Xws8GryUZwn8WFy3Kr4xtr409343WrZ7CFWS
+        vw4fJFZ3X3WDA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj4i4pgAAsg
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[CC'ing: Lee, Chun-Yi]
-
-On Mon, 2023-02-06 at 21:59 -0500, Eric Snowberg wrote:
-> Prior to the introduction of the machine keyring, most distros simply 
-> allowed all keys contained within the platform keyring to be used
-> for both kernel and module verification.  This was done by an out of
-> tree patch.  Some distros took it even further and loaded all these keys
-> into the secondary trusted keyring.  This also allowed the system owner 
-> to add their own key for IMA usage.
+On Thu, 2023-01-12 at 12:21 -0500, Paul Moore wrote:
+> On Tue, Jan 10, 2023 at 3:56 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > In preparation for removing security_old_inode_init_security(), switch to
+> > > security_inode_init_security().
+> > > 
+> > > Extend the existing ocfs2_initxattrs() to take the
+> > > ocfs2_security_xattr_info structure from fs_info, and populate the
+> > > name/value/len triple with the first xattr provided by LSMs.
+> > 
+> > Hi Mark, Joel, Joseph
+> > 
+> > some time ago I sent this patch set to switch to the newer
+> > function security_inode_init_security(). Almost all the other parts of
+> > this patch set have been reviewed, and the patch set itself should be
+> > ready to be merged.
+> > 
+> > I kindly ask if you could have a look at this patch and give your
+> > Reviewed-by, so that Paul could take the patch set.
 > 
-> Each distro contains similar documentation on how to sign kernel modules
-> and enroll the key into the MOK.  The process is fairly straightforward.
-> With the introduction of the machine keyring, the process remains
-> basically the same, without the need for any out of tree patches.
+> I've been pushing to clean up some of the LSM interfaces to try and
+> simplify things and remove as many special cases as possible,
+> Roberto's work in this patchset is part of that.  I would really
+> appreciate it if the vfs/ocfs2 folks could give patch 2/6 a quick look
+> to make sure you are okay with the changes.
 > 
-> The machine keyring allowed distros to eliminate the out of tree patches
-> for kernel module signing.  However, it falls short in allowing the end 
-> user to add their own keys for IMA. Currently, the machine keyring can not 
-> be used as another trust anchor for adding keys to the ima keyring, since 
-> CA enforcement does not currently exist.  This would expand the current 
-> integrity gap. The IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY 
-> Kconfig states that keys may be added to the ima keyrings if the key is 
-> validly signed by a CA cert in the system built-in or secondary trusted 
-> keyring.  Currently, there is not code that enforces the contents of a
-> CA cert.
-> 
-> This series introduces a way to do CA enforement with the machine
-> keyring. It introduces three different ways to configure the machine
-> keyring. A new menu option is added to control the type of keys that may
-> be added to it.  The options include none, min, and max restrictions. The
-> default is CONFIG_INTEGRITY_CA_MACHINE_KEYRING_NONE. This allows all MOK
-> keys into the machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MIN
-> is selected, the X.509 CA bit must be true.  Also, the key usage must
-> contain keyCertSign, any other usage field may also be set. When 
-> CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is selected, the X.509 CA bit
-> must be true.  Also, the key usage must contain keyCertSign and the
-> digitialSignature usage may not be set. If a key doesn't pass the CA
-> restriction check, instead of going into the machine keyring, it is
-> added to the platform keyring. With the ability to configure the machine
-> keyring with CA restrictions, code that prevented the machine keyring
-> from being enabled with IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
-> has been removed.
-> 
-> Changelog:
-> v4:
-> - Removed all code that validated the certificate chain back to the root
->   CA. Now the only restriction is what is initially placed in the
->   machine keyring.
-> - Check and store if the X.509 usage contains digitalSignature
-> - New Kconfig menu item with none, min and max CA restriction on the 
->   machine keyring
+> I realize that the various end-of-year holidays tend to slow things
+> down a bit, but this patchset has been on the lists for over a month
+> now; if I don't hear anything in the next week or two I'll assume you
+> folks are okay with these patches ...
 
-Thank you, Eric.
+Hi Paul
 
-For complete separation of certificate usage, at least in the "max" CA
-restriction case, the next step would be to limit certificates being
-loaded onto the IMA keyring to those with key usage of
-"digitalSignature".
+is this patch set going to land in 6.3?
 
-Perhaps also require a "codeSigning" extendedKeyUsage, though that
-might break existing usages.  The "codeSigning" checking could
-piggyback on Joey's proposed "Check codeSigning extended key usage
-extension" patch set.
+Thanks
 
-What do you think?  Do you have any concerns with limiting the type of
-certificate being loaded onto the IMA keyring to those with
-"digitalSignature"?
-
--- 
-thanks,
-
-Mimi
+Roberto
 
