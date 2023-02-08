@@ -2,122 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E9268E4F8
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Feb 2023 01:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2386668E556
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Feb 2023 02:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjBHAbG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Feb 2023 19:31:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S229623AbjBHBS4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Feb 2023 20:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBHAbF (ORCPT
+        with ESMTP id S230156AbjBHBSw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Feb 2023 19:31:05 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CFC93AAC;
-        Tue,  7 Feb 2023 16:31:04 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id 91E3120C7E38; Tue,  7 Feb 2023 16:31:03 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 91E3120C7E38
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675816263;
-        bh=LeJteH6AJ9Cbyv23AKIZT9Zr5jPTl5CR5NBjrB7jEH0=;
+        Tue, 7 Feb 2023 20:18:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB56642BC8
+        for <linux-integrity@vger.kernel.org>; Tue,  7 Feb 2023 17:18:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 876DC6145B
+        for <linux-integrity@vger.kernel.org>; Wed,  8 Feb 2023 01:18:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B437C433EF;
+        Wed,  8 Feb 2023 01:18:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675819124;
+        bh=OOUl0rRu7QOot8KbJKdw3AMyDs/1Xei2X4+RK0XXbQA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bs+VMgppVphlNRwXazqjLvcderqyiIoxWf+J92+m0ALQDuvgh/o/nhk1BNWcBQsPh
-         gz0C3u2HuwTEnY5P1iqMjO1CzkD/+HiRK+CfRh+GX6szjyKALHkQS/5Vqjg1EHw7/2
-         kMQ7Bn9LNIzaQRwZ/K5EZ4sZYQKeFDqpGmC9IVrc=
-Date:   Tue, 7 Feb 2023 16:31:03 -0800
-From:   Fan Wu <wufan@linux.microsoft.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v9 00/16] Integrity Policy Enforcement LSM (IPE)
-Message-ID: <20230208003103.GC5107@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <033335b26f6becdc3dc0325ef926efd94fcc4dda.camel@huaweicloud.com>
- <20230201004852.GB30104@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <7dc9963c563d0b55bb35109be012e355eef13882.camel@huaweicloud.com>
+        b=STsY2BuQZbs06oikM7O+JmLxLBFR4NCewv1QX9pTpoBRrssPE9jV9EvyVwVZpcPm3
+         ANd+8ez4m/a6DD+IpUeoTgF+SosoCpxb+X8QqaDfArSuNNbjVSbAlVNpHVHmM2dyp9
+         WTNvFmqkQ356nUFgbS7oZH+h0xWoHBOjhN42AA99+NtwVQ9v3a06naQsbLUZRDAE5q
+         atD4eEyL59fFvgx7Csq+KCWeEOWMXYh8xohUwmSOmg/W3EzNC6qbimt0mmvFh0HNsX
+         1+NI8QV0kOreJiYuryfYFbkudZBA5NX1sPTFjFVCUG2NB9agRZ3GFhjKUE3giW0I2p
+         prG2EiaF4ZeYg==
+Date:   Wed, 8 Feb 2023 03:18:39 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        eajames@linux.ibm.com
+Subject: Re: [PATCH -next] tpm: of: fix return value check in
+ tpm_read_log_memory_region()
+Message-ID: <Y+L4b2rLYUe8091O@kernel.org>
+References: <20230129072637.279576-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7dc9963c563d0b55bb35109be012e355eef13882.camel@huaweicloud.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230129072637.279576-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 11:48:18AM +0100, Roberto Sassu wrote:
-> On Tue, 2023-01-31 at 16:48 -0800, Fan Wu wrote:
-> > On Tue, Jan 31, 2023 at 03:22:05PM +0100, Roberto Sassu wrote:
-> > > On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
-> > > > IPE has two known gaps:
-> > > > 
-> > > > 1. IPE cannot verify the integrity of anonymous executable memory, such as
-> > > >   the trampolines created by gcc closures and libffi (<3.4.2), or JIT'd code.
-> > > >   Unfortunately, as this is dynamically generated code, there is no way
-> > > >   for IPE to ensure the integrity of this code to form a trust basis. In all
-> > > >   cases, the return result for these operations will be whatever the admin
-> > > >   configures the DEFAULT action for "EXECUTE".
-> > > 
-> > > I think it would be useful to handle special cases, for example you
-> > > could allow a process that created a file with memfd to use it, at the
-> > > condition that nobody else writes it.
-> > > 
-> > > This would be required during the boot, otherwise services could fail
-> > > to start (depending on the policy).
-> > > 
-> > Thanks for the suggestion. I agree with your opinion and I think supporting
-> > memfd is possible but restricting read/write needs more hooks. We would like
-> > to avoid adding more complexity to this initial posting as necessary. 
-> > We will consider this as a future work and will post follow-on patches
-> > in the future.
+On Sun, Jan 29, 2023 at 03:26:37PM +0800, Yang Yingliang wrote:
+> devm_memremap() never returns NULL pointer, it will return
+> ERR_PTR() when it fails, so replace the check with IS_ERR().
 > 
-> Ok, maybe it is necessary to specify better the scope of IPE, why the
-> current implementation can be considered as complete.
+> Fixes: b0474a20b153 ("tpm: Add reserved memory event log")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/char/tpm/eventlog/of.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> If we say, IPE can only allow/deny operations on system components with
-> immutable security properties, clearly memfd as a component cannot
-> fullfill this goal due to the non-immutability. This would apply to any
-> component allowing modifications.
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> index c815cadf00a4..6a818a026c94 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -43,7 +43,7 @@ static int tpm_read_log_memory_region(struct tpm_chip *chip)
+>  
+>  	chip->log.bios_event_log = devm_memremap(&chip->dev, res.start, resource_size(&res),
+>  						 MEMREMAP_WB);
+> -	if (!chip->log.bios_event_log) {
+> +	if (IS_ERR(chip->log.bios_event_log)) {
+>  		dev_info(&chip->dev, "err memremap\n");
+>  		return -ENOMEM;
+>  	}
+> -- 
+> 2.25.1
 > 
-> How to address this? What is the immutable property then?
-> 
-> In the case of memfd, intuitively, a useful property for integrity
-> could be for example that the content can be accessed/modified by only
-> one process. No other (possibly malicious) processes can tamper with
-> that file.
-> 
-> So, it is true, to make this property immutable more hooks are needed.
-> But should it be something that IPE does? Or it should be done by an
-> external component (another LSM) that does the enforcement and reports
-> to IPE that the property is true? Theoretically (with a proper policy),
-> existing LSMs could be used for that purpose too.
-> 
-> I would say more the second, it should not be IPE job, so that IPE can
-> exclusively focus on evaluating properties, not making sure that the
-> properties are immutable.
-> 
-> Roberto
-> 
-I think the issue here is not about the scope of IPE but the use cases
-of IPE. 
 
-We use IPE on fixed-function devices, which are completely locked down.
-In our system, IPE denies all anonymous memory execution so memfd will
-not work on our system.
+Thanks. I will squash this with the patch and add your sob.
 
-Therefore, to make memfd useable with IPE we must add more properties.
-
--Fan
+BR, Jarkko
