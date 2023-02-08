@@ -2,114 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5BE68F0E6
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Feb 2023 15:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C10A68F81D
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Feb 2023 20:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbjBHOd7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Feb 2023 09:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S231852AbjBHTc2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Feb 2023 14:32:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbjBHOd6 (ORCPT
+        with ESMTP id S231844AbjBHTc0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:33:58 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1BE901A;
-        Wed,  8 Feb 2023 06:33:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PBj2p2jCBz9v7gn;
-        Wed,  8 Feb 2023 22:25:38 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwC3PQmssuNjUbIEAQ--.46196S2;
-        Wed, 08 Feb 2023 15:33:27 +0100 (CET)
-Message-ID: <dc973294e5ad2d05705954b433bb550b04a86325.camel@huaweicloud.com>
-Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Feb 2023 15:33:12 +0100
-In-Reply-To: <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-         <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
-         <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 8 Feb 2023 14:32:26 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F08E4672F
+        for <linux-integrity@vger.kernel.org>; Wed,  8 Feb 2023 11:32:25 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id v3so625397pfn.6
+        for <linux-integrity@vger.kernel.org>; Wed, 08 Feb 2023 11:32:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ulrUQLJUP9RxcM6ZD9CxmoB1+p/LmgjBqM64v5ROwNg=;
+        b=Y/wZleiJgYDPwrKFBcrlT6u/1xcORwHwg87WEGQkc0RtFFNVVqtz+yNTJEUllPEFc0
+         +bXL1ZBGllwAn5k5jAHnZzdVPjsI3nfCU7FOGg7doqM90u8cZwVlNEiKkD/oLtjyRAas
+         xcclPYcRcRNy0VMcz8uuQEFaJ9CREVxPaU9zg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ulrUQLJUP9RxcM6ZD9CxmoB1+p/LmgjBqM64v5ROwNg=;
+        b=hB7L9URUqYR3o7ZEicGKTK3xXlzFcwGTYezJQSufU76A86roeEySs9Cn/BQQFJT6B6
+         HFo/knjApnhRuwbh5hp1mYcqx11j143d8ZmsUN51rNS+wMqEY40g6phaPd7k+nrN6uBP
+         Tjm29zLrerEC03TZWWoeurDVoSNEGJoz9sORtwXYjS20El9lt+TvZqJQrk6DxRT6U53V
+         CxPiW1xHVJTChQPoc6AoPZqSjpMIuEa0UfG+o6zCT3eUnzlls7djc3kLwEc6y+NOjLFQ
+         XXtU0PAgpgU524hbwJDSc8UEOBgnvKKkzhcwVMU6dg3G4cEIYzHmQEH5TaPvmVaswvD5
+         CoUQ==
+X-Gm-Message-State: AO0yUKVOdKEX331GLYVNKAQG/RJRwva12IG29f54u9gUwuMJUwi6Gh7B
+        BoIKYx3ILyK0jaS8XvaB4IhkNQ==
+X-Google-Smtp-Source: AK7set+P7rm+dGDTETrU2yzMMvUtrqjrfbTlBVXOCaBnQQFdsubS7A0XGoLGi5keRbMZOiZCbhxF5Q==
+X-Received: by 2002:a62:1b8a:0:b0:592:de72:4750 with SMTP id b132-20020a621b8a000000b00592de724750mr6518043pfb.23.1675884744778;
+        Wed, 08 Feb 2023 11:32:24 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t2-20020a056a0021c200b0058173c4b3d1sm11604471pfj.80.2023.02.08.11.32.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 11:32:24 -0800 (PST)
+Message-ID: <63e3f8c8.050a0220.c0b3f.434b@mx.google.com>
+X-Google-Original-Message-ID: <202302081129.@keescook>
+Date:   Wed, 8 Feb 2023 11:32:23 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     concord@gentoo.org, linux-hardening@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+References: <20220321161557.495388-1-mic@digikod.net>
+ <202204041130.F649632@keescook>
+ <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+ <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
+ <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
+ <202204041451.CC4F6BF@keescook>
+ <CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com>
+ <7e8d9f8a-f119-6d1a-7861-0493dc513aa7@digikod.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwC3PQmssuNjUbIEAQ--.46196S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4fJF43Kr4fAr43Jr4fKrg_yoW8Wr45pF
-        W3t3WakFsxJF18Kr1fKwsxWayIk3yxGws8Xws8GryUZwn8WFy3Kr4xtr409343WrZ7CFWS
-        vw4fJFZ3X3WDA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj4i4pgAAsg
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7e8d9f8a-f119-6d1a-7861-0493dc513aa7@digikod.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2023-01-12 at 12:21 -0500, Paul Moore wrote:
-> On Tue, Jan 10, 2023 at 3:56 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > In preparation for removing security_old_inode_init_security(), switch to
-> > > security_inode_init_security().
-> > > 
-> > > Extend the existing ocfs2_initxattrs() to take the
-> > > ocfs2_security_xattr_info structure from fs_info, and populate the
-> > > name/value/len triple with the first xattr provided by LSMs.
-> > 
-> > Hi Mark, Joel, Joseph
-> > 
-> > some time ago I sent this patch set to switch to the newer
-> > function security_inode_init_security(). Almost all the other parts of
-> > this patch set have been reviewed, and the patch set itself should be
-> > ready to be merged.
-> > 
-> > I kindly ask if you could have a look at this patch and give your
-> > Reviewed-by, so that Paul could take the patch set.
+*thread necromancy*
+
+On Tue, Apr 05, 2022 at 06:09:03PM +0200, Mickaël Salaün wrote:
 > 
-> I've been pushing to clean up some of the LSM interfaces to try and
-> simplify things and remove as many special cases as possible,
-> Roberto's work in this patchset is part of that.  I would really
-> appreciate it if the vfs/ocfs2 folks could give patch 2/6 a quick look
-> to make sure you are okay with the changes.
+> On 05/04/2022 01:26, Linus Torvalds wrote:
+> > On Mon, Apr 4, 2022 at 3:25 PM Kees Cook <keescook@chromium.org> wrote:
 > 
-> I realize that the various end-of-year holidays tend to slow things
-> down a bit, but this patchset has been on the lists for over a month
-> now; if I don't hear anything in the next week or two I'll assume you
-> folks are okay with these patches ...
+> [...]
+> 
+> > 
+> > > I think this already exists as AT_EACCESS? It was added with
+> > > faccessat2() itself, if I'm reading the history correctly.
+> > 
+> > Yeah, I noticed myself, I just hadn't looked (and I don't do enough
+> > user-space programming to be aware of if that way).
+> 
+> I think AT_EACCESS should be usable with the new EXECVE_OK too.
+> 
+> 
+> > 
+> > > >      (a) "what about suid bits that user space cannot react to"
+> > > 
+> > > What do you mean here? Do you mean setid bits on the file itself?
+> > 
+> > Right.
+> > 
+> > Maybe we don't care.
+> 
+> I think we don't. I think the only corner case that could be different is
+> for files that are executable, SUID and non-readable. In this case it
+> wouldn't matter because userspace could not read the file, which is required
+> for interpretation/execution. Anyway, S[GU]ID bits in scripts are just
+> ignored by execve and we want to follow the same semantic.
 
-Hi Paul
+Hi Mickaël,
 
-is this patch set going to land in 6.3?
+Is there a new version of this being worked on? It would be really nice
+to have the O_MAYEXEC/faccessat2() visibility for script execution control
+in userspace. It seems like it would be mainly a respin of an earlier
+version of this series before trusted_for() was proposed.
 
-Thanks
+-Kees
 
-Roberto
-
+-- 
+Kees Cook
