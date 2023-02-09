@@ -2,111 +2,218 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A246905A7
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Feb 2023 11:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6236690D02
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Feb 2023 16:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbjBIKvF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Feb 2023 05:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S230487AbjBIPb7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Feb 2023 10:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjBIKuq (ORCPT
+        with ESMTP id S230410AbjBIPb6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Feb 2023 05:50:46 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E5E23C7E;
-        Thu,  9 Feb 2023 02:49:59 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PCD1z0Vqsz9v7Yl;
-        Thu,  9 Feb 2023 18:41:43 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwDHTgqyz+RjuWYIAQ--.48002S2;
-        Thu, 09 Feb 2023 11:49:33 +0100 (CET)
-Message-ID: <857eedc5ad18eddae7686dca63cf8c613a051be4.camel@huaweicloud.com>
-Subject: Re: [PATCH v5 2/2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     dhowells@redhat.com
-Cc:     Eric Biggers <ebiggers@kernel.org>, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 09 Feb 2023 11:49:19 +0100
-In-Reply-To: <d2a54ddec403cad12c003132542070bf781d5e26.camel@huaweicloud.com>
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
-         <20221227142740.2807136-3-roberto.sassu@huaweicloud.com>
-         <Y64XB0yi24yjeBDw@sol.localdomain>
-         <d2a54ddec403cad12c003132542070bf781d5e26.camel@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 9 Feb 2023 10:31:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CEC4226;
+        Thu,  9 Feb 2023 07:31:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C532B61AA2;
+        Thu,  9 Feb 2023 15:31:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 324E4C433EF;
+        Thu,  9 Feb 2023 15:31:46 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="inW/2snd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1675956701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TgBq3MqvxYZXue4Xz/yBrfYt3XfuzRFTCNB40SKCI8E=;
+        b=inW/2sndNOy0O90MQLt2a7rWYimKGnG7saScn4Vxf4Y7/y2y4CmdswXyMVsqDG0GBn1/8v
+        yOoQ+pEL2QYBHJRpnycM4JSI6yzYNnb+AqaCMxiDL2t5M0KFB49cvEP0OYmSe6dTGWQHjU
+        pP5o+3Q6OtmqBaxsJ9AfwaGCM8TAKXk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7033f5f3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 9 Feb 2023 15:31:40 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     regressions@lists.linux.dev, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: [PATCH RFC] tpm: disable hwrng for known-defective AMD RNGs
+Date:   Thu,  9 Feb 2023 12:31:20 -0300
+Message-Id: <20230209153120.261904-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwDHTgqyz+RjuWYIAQ--.48002S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AryUCw1fKr1kZF1DKr48WFg_yoW8AF18pF
-        W3G3W5AF4qqryfCFsIv3yF9ayFy3ykJr43Xw43X34Fvr1kurn8ur1IgF4fWFyDAry8KFWF
-        yFW5XFnrW34YyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgADBF1jj4TD3wAAss
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2023-01-27 at 09:27 +0100, Roberto Sassu wrote:
-> On Thu, 2022-12-29 at 14:39 -0800, Eric Biggers wrote:
-> > On Tue, Dec 27, 2022 at 03:27:40PM +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > mapping") checks that both the signature and the digest reside in the
-> > > linear mapping area.
-> > > 
-> > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > stack support") made it possible to move the stack in the vmalloc area,
-> > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > > adjacent pages.
-> > > 
-> > > Always make a copy of the signature and digest in the same buffer used to
-> > > store the key and its parameters, and pass them to sg_init_one(). Prefer it
-> > > to conditionally doing the copy if necessary, to keep the code simple. The
-> > > buffer allocated with kmalloc() is in the linear mapping area.
-> > > 
-> > > Cc: stable@vger.kernel.org # 4.9.x
-> > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > > Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-> > > Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  crypto/asymmetric_keys/public_key.c | 38 ++++++++++++++++-------------
-> > >  1 file changed, 21 insertions(+), 17 deletions(-)
-> > 
-> > Reviewed-by: Eric Biggers <ebiggers@google.com>
-> 
-> Hi David
-> 
-> could you please take this patch in your repo, if it is ok?
+Do not register a hwrng for certain AMD TPMs that are running an old
+known-buggy revision. Do this by probing the TPM2_PT_MANUFACTURER,
+TPM2_PT_FIRMWARE_VERSION_1, and TPM2_PT_FIRMWARE_VERSION_2 properties,
+and failing when an "AMD"-manufactured TPM2 chip is below a threshold.
 
-Kindly ask your support here. Has this patch been queued somewhere?
-Wasn't able to find it, also it is not in linux-next.
+BROKEN BROKEN BROKEN - I just made the version numbers up and haven't
+tested this because I don't actually have hardware for it. I'm posting
+this so that Mario can take over its development and submit a v2 himself
+once he has confirmed the versioning info from inside AMD.
 
-Thanks
+Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Thorsten Leemhuis <regressions@leemhuis.info>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/tpm/tpm-chip.c | 34 ++++++++++++++++-
+ drivers/char/tpm/tpm.h      | 73 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 106 insertions(+), 1 deletion(-)
 
-Roberto
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 741d8f3e8fb3..e0f8134d31a3 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -512,6 +512,37 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
+ 	return 0;
+ }
+ 
++static bool tpm_is_rng_defective(struct tpm_chip *chip)
++{
++	int ret;
++	u32 val1, val2;
++	u64 version;
++
++	/* No known-broken TPM1 chips. */
++	if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
++		return false;
++
++	/* Only known-broken are AMD. */
++	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val1, NULL);
++	if (ret < 0 || val1 != 0x414D4400U /* AMD */)
++		return false;
++
++	/* Grab and concat the version values. */
++	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_1, &val1, NULL);
++	if (ret < 0)
++		return false;
++	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_2, &val2, NULL);
++	if (ret < 0)
++		return false;
++	version = ((u64)val1 << 32) | val2;
++
++	/* Versions below 3.4e.2.9 are broken. */
++	if (version < 0x0003004E0002009ULL)
++		return true;
++
++	return false;
++}
++
+ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ {
+ 	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
+@@ -521,7 +552,8 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ 
+ static int tpm_add_hwrng(struct tpm_chip *chip)
+ {
+-	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip))
++	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip) ||
++	    tpm_is_rng_defective(chip))
+ 		return 0;
+ 
+ 	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 24ee4e1cc452..830014a26609 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -150,6 +150,79 @@ enum tpm_sub_capabilities {
+ 	TPM_CAP_PROP_TIS_DURATION = 0x120,
+ };
+ 
++enum tpm2_pt_props {
++	TPM2_PT_NONE = 0x00000000,
++	TPM2_PT_GROUP = 0x00000100,
++	TPM2_PT_FIXED = TPM2_PT_GROUP * 1,
++	TPM2_PT_FAMILY_INDICATOR = TPM2_PT_FIXED + 0,
++	TPM2_PT_LEVEL = TPM2_PT_FIXED + 1,
++	TPM2_PT_REVISION = TPM2_PT_FIXED + 2,
++	TPM2_PT_DAY_OF_YEAR = TPM2_PT_FIXED + 3,
++	TPM2_PT_YEAR = TPM2_PT_FIXED + 4,
++	TPM2_PT_MANUFACTURER = TPM2_PT_FIXED + 5,
++	TPM2_PT_VENDOR_STRING_1 = TPM2_PT_FIXED + 6,
++	TPM2_PT_VENDOR_STRING_2 = TPM2_PT_FIXED + 7,
++	TPM2_PT_VENDOR_STRING_3 = TPM2_PT_FIXED + 8,
++	TPM2_PT_VENDOR_STRING_4 = TPM2_PT_FIXED + 9,
++	TPM2_PT_VENDOR_TPM_TYPE = TPM2_PT_FIXED + 10,
++	TPM2_PT_FIRMWARE_VERSION_1 = TPM2_PT_FIXED + 11,
++	TPM2_PT_FIRMWARE_VERSION_2 = TPM2_PT_FIXED + 12,
++	TPM2_PT_INPUT_BUFFER = TPM2_PT_FIXED + 13,
++	TPM2_PT_HR_TRANSIENT_MIN = TPM2_PT_FIXED + 14,
++	TPM2_PT_HR_PERSISTENT_MIN = TPM2_PT_FIXED + 15,
++	TPM2_PT_HR_LOADED_MIN = TPM2_PT_FIXED + 16,
++	TPM2_PT_ACTIVE_SESSIONS_MAX = TPM2_PT_FIXED + 17,
++	TPM2_PT_PCR_COUNT = TPM2_PT_FIXED + 18,
++	TPM2_PT_PCR_SELECT_MIN = TPM2_PT_FIXED + 19,
++	TPM2_PT_CONTEXT_GAP_MAX = TPM2_PT_FIXED + 20,
++	TPM2_PT_NV_COUNTERS_MAX = TPM2_PT_FIXED + 22,
++	TPM2_PT_NV_INDEX_MAX = TPM2_PT_FIXED + 23,
++	TPM2_PT_MEMORY = TPM2_PT_FIXED + 24,
++	TPM2_PT_CLOCK_UPDATE = TPM2_PT_FIXED + 25,
++	TPM2_PT_CONTEXT_HASH = TPM2_PT_FIXED + 26,
++	TPM2_PT_CONTEXT_SYM = TPM2_PT_FIXED + 27,
++	TPM2_PT_CONTEXT_SYM_SIZE = TPM2_PT_FIXED + 28,
++	TPM2_PT_ORDERLY_COUNT = TPM2_PT_FIXED + 29,
++	TPM2_PT_MAX_COMMAND_SIZE = TPM2_PT_FIXED + 30,
++	TPM2_PT_MAX_RESPONSE_SIZE = TPM2_PT_FIXED + 31,
++	TPM2_PT_MAX_DIGEST = TPM2_PT_FIXED + 32,
++	TPM2_PT_MAX_OBJECT_CONTEXT = TPM2_PT_FIXED + 33,
++	TPM2_PT_MAX_SESSION_CONTEXT = TPM2_PT_FIXED + 34,
++	TPM2_PT_PS_FAMILY_INDICATOR = TPM2_PT_FIXED + 35,
++	TPM2_PT_PS_LEVEL = TPM2_PT_FIXED + 36,
++	TPM2_PT_PS_REVISION = TPM2_PT_FIXED + 37,
++	TPM2_PT_PS_DAY_OF_YEAR = TPM2_PT_FIXED + 38,
++	TPM2_PT_PS_YEAR = TPM2_PT_FIXED + 39,
++	TPM2_PT_SPLIT_MAX = TPM2_PT_FIXED + 40,
++	TPM2_PT_TOTAL_COMMANDS = TPM2_PT_FIXED + 41,
++	TPM2_PT_LIBRARY_COMMANDS = TPM2_PT_FIXED + 42,
++	TPM2_PT_VENDOR_COMMANDS = TPM2_PT_FIXED + 43,
++	TPM2_PT_NV_BUFFER_MAX = TPM2_PT_FIXED + 44,
++	TPM2_PT_MODES = TPM2_PT_FIXED + 45,
++	TPM2_PT_MAX_CAP_BUFFER = TPM2_PT_FIXED + 46,
++	TPM2_PT_VAR = TPM2_PT_GROUP * 2,
++	TPM2_PT_PERMANENT = TPM2_PT_VAR + 0,
++	TPM2_PT_STARTUP_CLEAR = TPM2_PT_VAR + 1,
++	TPM2_PT_HR_NV_INDEX = TPM2_PT_VAR + 2,
++	TPM2_PT_HR_LOADED = TPM2_PT_VAR + 3,
++	TPM2_PT_HR_LOADED_AVAIL = TPM2_PT_VAR + 4,
++	TPM2_PT_HR_ACTIVE = TPM2_PT_VAR + 5,
++	TPM2_PT_HR_ACTIVE_AVAIL = TPM2_PT_VAR + 6,
++	TPM2_PT_HR_TRANSIENT_AVAIL = TPM2_PT_VAR + 7,
++	TPM2_PT_HR_PERSISTENT = TPM2_PT_VAR + 8,
++	TPM2_PT_HR_PERSISTENT_AVAIL = TPM2_PT_VAR + 9,
++	TPM2_PT_NV_COUNTERS = TPM2_PT_VAR + 10,
++	TPM2_PT_NV_COUNTERS_AVAIL = TPM2_PT_VAR + 11,
++	TPM2_PT_ALGORITHM_SET = TPM2_PT_VAR + 12,
++	TPM2_PT_LOADED_CURVES = TPM2_PT_VAR + 13,
++	TPM2_PT_LOCKOUT_COUNTER = TPM2_PT_VAR + 14,
++	TPM2_PT_MAX_AUTH_FAIL = TPM2_PT_VAR + 15,
++	TPM2_PT_LOCKOUT_INTERVAL = TPM2_PT_VAR + 16,
++	TPM2_PT_LOCKOUT_RECOVERY = TPM2_PT_VAR + 17,
++	TPM2_PT_NV_WRITE_RECOVERY = TPM2_PT_VAR + 18,
++	TPM2_PT_AUDIT_COUNTER_0 = TPM2_PT_VAR + 19,
++	TPM2_PT_AUDIT_COUNTER_1 = TPM2_PT_VAR + 20,
++};
+ 
+ /* 128 bytes is an arbitrary cap. This could be as large as TPM_BUFSIZE - 18
+  * bytes, but 128 is still a relatively large number of random bytes and
+-- 
+2.39.1
 
