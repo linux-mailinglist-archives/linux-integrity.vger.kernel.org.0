@@ -2,130 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD75691268
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Feb 2023 22:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B580F69132C
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Feb 2023 23:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjBIVGG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Feb 2023 16:06:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S230231AbjBIWV5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Feb 2023 17:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjBIVGE (ORCPT
+        with ESMTP id S230206AbjBIWV4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Feb 2023 16:06:04 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755DA6ADC4
-        for <linux-integrity@vger.kernel.org>; Thu,  9 Feb 2023 13:06:00 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id 16so2192536pfo.8
-        for <linux-integrity@vger.kernel.org>; Thu, 09 Feb 2023 13:06:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1675976759;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CAVkyD8Nx/y2ynXnSDseAghmgwxLpM4z5TAXS1lVdl4=;
-        b=fsToE02Ydbw9AM0LhMk4fOKIsHvVkm870EKJvtvUsHlgdxofGdKjWtExVXrQcwqyOD
-         SaJHwxPVUhVv+Zb8PdG9Cl7AkSweZegmZgJovsF60EdVp7XWUSfeDyRdOdh1BqrRM5N2
-         Vi4N/kTKjg/T3MKWf9zptDhGtRkG3SMgQxag1fqnQPXX8xl2CMLbs3PoA2hsrFrGc/Ny
-         03aku/22aS9evBeXGC+9QqOFU0n1VQzmcMeerqis2tI7xZt9hTTp8vbKnPNrpR0nwUEH
-         m1og74/72VCF/OpMF8luJl9jkO5kXYh1wuIMTBwX+PKBuUN4pLSyfeTfeph7UYAu0/ty
-         tIqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1675976759;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CAVkyD8Nx/y2ynXnSDseAghmgwxLpM4z5TAXS1lVdl4=;
-        b=U7iO7/ItLiHFWjMBRmu1TdYUQx3KhGl1ZW1CmgQZIRFzQo3T55sknvBeRKmPCu56vR
-         5Tb2Qm6jyHz/1+YjYl/YfDw5IfTrO0IY6mTuIVOVcZZlMXZ/3YJGiqS+/Qx7s/qZaho9
-         3FuWsoDaaKJUrMyx6BO/RyC5fNpL3rbvMqnZ+8OVdys2AOul9kkfGm7wlIA6XecCSQtT
-         S0y+HSTnKtaRn27bbPTUeQO8+OyXnND279iS8K9AG00PNhDC6YqDjInYMZTjM1TZpU/0
-         C1e8BzboF+8IttKtMq7q+vMhi/IJsCSgcAGG95hegKmA0Jy4oIKty3OT8AwO/JMiWSGq
-         LoaA==
-X-Gm-Message-State: AO0yUKXDaaCIipHUC+XmDKUn2nyeFJaAJ8QH6jIW0Ss6eS8kj1Pon5n7
-        lMROhpMNdnqe1eoytkhfru1Y0JoquFPNYCXGeIyx
-X-Google-Smtp-Source: AK7set/gyzwIbVdcBNq34ovXolGAJFru/qdEdGqxzqLnB8dNXT0qLl/7mTz9ti+D2+MdSQqLp43XM5PhpV37m725smk=
-X-Received: by 2002:a62:5f02:0:b0:5a8:5247:2589 with SMTP id
- t2-20020a625f02000000b005a852472589mr832403pfb.7.1675976759040; Thu, 09 Feb
- 2023 13:05:59 -0800 (PST)
+        Thu, 9 Feb 2023 17:21:56 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17EC331E01;
+        Thu,  9 Feb 2023 14:21:54 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 89F6A20C8AF3; Thu,  9 Feb 2023 14:21:53 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 89F6A20C8AF3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675981313;
+        bh=RUdC5B9WQx/P13jBYCe9d9UCa08CXDooaF6pn5xM0XU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ACCtgB1V7Pj9HpbZCzfkwRaa8mEyqbQ0An9AlLvmPyHKDFnGuWFzikGMzAkAnnOnV
+         6un5wxDChEKMJoG7iGI7AGL8y3IjmRdgvalSdG1Nt3mQ4jy/DFmmUFx2did+hj91Sf
+         +O7rYKknS0EHfFnT9Mu+AfuLB7ZENeKJWbKO5+wU=
+Date:   Thu, 9 Feb 2023 14:21:53 -0800
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
+        snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 12/16] fsverity: consume builtin signature via LSM
+ hook
+Message-ID: <20230209222153.GA6647@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-13-git-send-email-wufan@linux.microsoft.com>
+ <Y+Ro2Uor21d/Gfqc@sol.localdomain>
 MIME-Version: 1.0
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
- <20221201104125.919483-3-roberto.sassu@huaweicloud.com> <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
- <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com> <dc973294e5ad2d05705954b433bb550b04a86325.camel@huaweicloud.com>
-In-Reply-To: <dc973294e5ad2d05705954b433bb550b04a86325.camel@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 9 Feb 2023 16:05:47 -0500
-Message-ID: <CAHC9VhQoGNWDOvLU8U3dEvdCa8-23O0JpaeVbUOAa2udEpcVqw@mail.gmail.com>
-Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+Ro2Uor21d/Gfqc@sol.localdomain>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 9:33 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Thu, 2023-01-12 at 12:21 -0500, Paul Moore wrote:
-> > On Tue, Jan 10, 2023 at 3:56 AM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > >
-> > > > In preparation for removing security_old_inode_init_security(), switch to
-> > > > security_inode_init_security().
-> > > >
-> > > > Extend the existing ocfs2_initxattrs() to take the
-> > > > ocfs2_security_xattr_info structure from fs_info, and populate the
-> > > > name/value/len triple with the first xattr provided by LSMs.
-> > >
-> > > Hi Mark, Joel, Joseph
-> > >
-> > > some time ago I sent this patch set to switch to the newer
-> > > function security_inode_init_security(). Almost all the other parts of
-> > > this patch set have been reviewed, and the patch set itself should be
-> > > ready to be merged.
-> > >
-> > > I kindly ask if you could have a look at this patch and give your
-> > > Reviewed-by, so that Paul could take the patch set.
-> >
-> > I've been pushing to clean up some of the LSM interfaces to try and
-> > simplify things and remove as many special cases as possible,
-> > Roberto's work in this patchset is part of that.  I would really
-> > appreciate it if the vfs/ocfs2 folks could give patch 2/6 a quick look
-> > to make sure you are okay with the changes.
-> >
-> > I realize that the various end-of-year holidays tend to slow things
-> > down a bit, but this patchset has been on the lists for over a month
-> > now; if I don't hear anything in the next week or two I'll assume you
-> > folks are okay with these patches ...
->
-> Hi Paul
->
-> is this patch set going to land in 6.3?
+On Wed, Feb 08, 2023 at 07:30:33PM -0800, Eric Biggers wrote:
+> So disregarding the fact that using the fsverity builtin signatures still seems
+> like a bad idea to me, here's a few comments on the diff itself:
+> 
+Thanks for the review. I have verified the headers are indeed unnecessary,
+I will remove them in the next version.
 
-Hi Roberto,
+> On Mon, Jan 30, 2023 at 02:57:27PM -0800, Fan Wu wrote:
+> > diff --git a/fs/verity/open.c b/fs/verity/open.c
+> > index 81ff94442f7b..7e6fa52c0e9c 100644
+> > --- a/fs/verity/open.c
+> > +++ b/fs/verity/open.c
+> > @@ -7,7 +7,9 @@
+> >  
+> >  #include "fsverity_private.h"
+> >  
+> > +#include <linux/security.h>
+> >  #include <linux/slab.h>
+> > +#include <crypto/public_key.h>
+> 
+> There's no need to include <crypto/public_key.h>.
+> 
+> >  
+> > +	if (err) {
+> > +		fsverity_err(inode, "Error %d verifying signature", err);
+> > +		goto out;
+> > +	}
+> 
+> The above error message is unnecessary because fsverity_verify_signature()
+> already prints an error message on failure.
+> 
+> > +
+> > +	err = security_inode_setsecurity(inode, FS_VERITY_INODE_SEC_NAME, desc->signature,
+> > +					 le32_to_cpu(desc->sig_size), 0);
+> 
+> This runs even if CONFIG_FS_VERITY_BUILTIN_SIGNATURES is disabled.  Is that
+> really the right behavior?
+> 
+Yes the hook call should better depend on a KCONFIG. After second thought I think it
+should depend on CONFIG_IPE_PROP_FS_VERITY, which also indirectly introduces the
+dependency on CONFIG_FS_VERITY_BUILTIN_SIGNATURES.
 
-I had really hoped the vfs/ocfs2 folks would have commented on this by
-now, but it's been over two months now with no comments that I can see
-so I think we have to do it ourselves via the LSM tree.  It's
-obviously too late for the upcoming merge window, so no v6.3, but I
-think we can merge it *after* the upcoming merge window closes,
-assuming we get ACKs from Mimi on the EVM bits (I still need to review
-it too, but I'm not expecting anything too bad).
+Currently security_inode_setsecurity only allows one LSM to save data with a given name.
+In our case IPE will be the only LSM that saves the signature.
 
--- 
-paul-moore.com
+I will update this part in the next version.
+
+> Also a nit: please stick to the preferred line length of 80 characters.
+> See Documentation/process/coding-style.rst
+> 
+> > diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+> > index 143a530a8008..5d7b9496f9c4 100644
+> > --- a/fs/verity/signature.c
+> > +++ b/fs/verity/signature.c
+> > @@ -9,6 +9,7 @@
+> >  
+> >  #include <linux/cred.h>
+> >  #include <linux/key.h>
+> > +#include <linux/security.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/verification.h>
+> 
+> This change is unnecessary.
+> 
+> > diff --git a/include/linux/fsverity.h b/include/linux/fsverity.h
+> > index 40f14e5fed9d..29e9888287ba 100644
+> > --- a/include/linux/fsverity.h
+> > +++ b/include/linux/fsverity.h
+> > @@ -254,4 +254,6 @@ static inline bool fsverity_active(const struct inode *inode)
+> >  	return fsverity_get_info(inode) != NULL;
+> >  }
+> >  
+> > +#define FS_VERITY_INODE_SEC_NAME "fsverity.inode-info"
+> 
+> "inode-info" is very vague.  Shouldn't it be named "builtin-sig" or something?
+> 
+> - Eric
+
+I agree this name works better, I will change it to "fsverity.builtin-sig".
+-Fan
