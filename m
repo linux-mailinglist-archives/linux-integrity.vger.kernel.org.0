@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A245F69174C
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Feb 2023 04:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FA9691751
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Feb 2023 04:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbjBJDqM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Feb 2023 22:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S230315AbjBJDsX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Feb 2023 22:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjBJDqL (ORCPT
+        with ESMTP id S229839AbjBJDsW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Feb 2023 22:46:11 -0500
+        Thu, 9 Feb 2023 22:48:22 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381A355E5A;
-        Thu,  9 Feb 2023 19:46:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36BF5D3EE;
+        Thu,  9 Feb 2023 19:48:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A007A61C2C;
-        Fri, 10 Feb 2023 03:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F6EC433EF;
-        Fri, 10 Feb 2023 03:46:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EBB861C63;
+        Fri, 10 Feb 2023 03:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8134CC433EF;
+        Fri, 10 Feb 2023 03:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676000769;
-        bh=SdTCzJ5SE1wCc+dKpUCyb30OZnXseVrJzbdbPDI3zQk=;
+        s=k20201202; t=1676000900;
+        bh=MaSAZXV/No0UcjiEoj7F+YrE0sF6n9bZwMI1L9WNbnk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IRp4xwgxfql92gzCSbtGbF/CtWcEoMqBUsP8NaEbxEUcjMnF4mn8hC4DXhRSXuBs/
-         /YYmXWIQ3akhM3EPMt64l0Tv3Xnp750VKOGESXtsX55GpDc85xvHai5ZP/vLNWkLry
-         MF0F9vPnvYGwLis+L1bDxQsA3N9pUZxAb3HRIu0DaRbOX/e2nnmYt2Vo/sMxO8blUW
-         jTAR+vHfEXt3c2VLncGCtBbYiqY9yl3wBOiH/GZMz+iESZe94cUtsyWEF6rQGpdGEl
-         RjqCeG2ert/ykC47aFzigrNvE7QTEGM79BiZMZlsCPgW6ptu3EtPdzIsmffe2WkXyk
-         vjSRwxOgtdEAQ==
-Date:   Fri, 10 Feb 2023 05:46:06 +0200
+        b=Zikd3dn2iPso54IY5J+qyhagDKwMEhpEdpwULPpgWF69WJiQ2iYpM6vCjsB0UqeT+
+         GYnRzdKAMqLU9sUKlkqy4I6ca2dbY/xTk8kEaCQbGhBOZfVbsyyVTfsYVLHBdtLjMS
+         1C7RkHgSEk0cravR4dznaAsQ6RBZ2rhxQNliOfbtWfiyQFaGjjbdm0d5Q0Eh5+ekYk
+         dYSeBqDHEaL3C5ZHt3RBbIQ1BbP3iEIlUwgCWS0s1uQ1BQ6W4yWlbdFvXd7RtN20Wn
+         jy8PGZW8cQyLCAO6DETLtEPDjCwTYQ2BwnI2qapIbhx/jXvvGVJ2CJC9IyildPIjxl
+         Sd1FahUAlEl+w==
+Date:   Fri, 10 Feb 2023 05:48:18 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Eric Snowberg <eric.snowberg@oracle.com>
 Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
@@ -44,14 +44,14 @@ Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
         keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 3/6] KEYS: X.509: Parse Basic Constraints for CA
-Message-ID: <Y+W9/rzzfWhidjCU@kernel.org>
+Subject: Re: [PATCH v4 4/6] KEYS: X.509: Parse Key Usage
+Message-ID: <Y+W+glb35hn9AS7H@kernel.org>
 References: <20230207025958.974056-1-eric.snowberg@oracle.com>
- <20230207025958.974056-4-eric.snowberg@oracle.com>
+ <20230207025958.974056-5-eric.snowberg@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230207025958.974056-4-eric.snowberg@oracle.com>
+In-Reply-To: <20230207025958.974056-5-eric.snowberg@oracle.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,74 +61,92 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 09:59:55PM -0500, Eric Snowberg wrote:
-> Parse the X.509 Basic Constraints.  The basic constraints extension
-> identifies whether the subject of the certificate is a CA.
+On Mon, Feb 06, 2023 at 09:59:56PM -0500, Eric Snowberg wrote:
+> Parse the X.509 Key Usage.  The key usage extension defines the purpose of
+> the key contained in the certificate.
 > 
-> BasicConstraints ::= SEQUENCE {
->         cA                      BOOLEAN DEFAULT FALSE,
->         pathLenConstraint       INTEGER (0..MAX) OPTIONAL }
+>    id-ce-keyUsage OBJECT IDENTIFIER ::=  { id-ce 15 }
 > 
-> If the CA is true, store it in the public_key.  This will be used
-> in a follow on patch that requires knowing if the public key is a CA.
+>       KeyUsage ::= BIT STRING {
+>            digitalSignature        (0),
+>            contentCommitment       (1),
+>            keyEncipherment         (2),
+>            dataEncipherment        (3),
+>            keyAgreement            (4),
+>            keyCertSign             (5),
+>            cRLSign                 (6),
+>            encipherOnly            (7),
+>            decipherOnly            (8) }
 > 
-> Link: https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.9
+> If the keyCertSign or digitalSignature is set, store it in the
+> public_key structure.  This will be used in a follow on patch that
+> requires knowing the certificate key usage type.
+
+It would be better to shortly explain why we want to know key usage
+type, rather than give zero information with "follow on patch".
+
+> 
+> Link: https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.3
 > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 > ---
->  crypto/asymmetric_keys/x509_cert_parser.c | 22 ++++++++++++++++++++++
+>  crypto/asymmetric_keys/x509_cert_parser.c | 28 +++++++++++++++++++++++
 >  include/crypto/public_key.h               |  2 ++
->  2 files changed, 24 insertions(+)
+>  2 files changed, 30 insertions(+)
 > 
 > diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-> index 7a9b084e2043..77547d4bd94d 100644
+> index 77547d4bd94d..0a7049b470c1 100644
 > --- a/crypto/asymmetric_keys/x509_cert_parser.c
 > +++ b/crypto/asymmetric_keys/x509_cert_parser.c
-> @@ -586,6 +586,28 @@ int x509_process_extension(void *context, size_t hdrlen,
+> @@ -579,6 +579,34 @@ int x509_process_extension(void *context, size_t hdrlen,
 >  		return 0;
 >  	}
 >  
-> +	if (ctx->last_oid == OID_basicConstraints) {
+> +	if (ctx->last_oid == OID_keyUsage) {
 > +		/*
-> +		 * Get hold of the basicConstraints
+> +		 * Get hold of the keyUsage bit string
 > +		 * v[1] is the encoding size
-> +		 *	(Expect 0x2 or greater, making it 1 or more bytes)
-> +		 * v[2] is the encoding type
-> +		 *	(Expect an ASN1_BOOL for the CA)
-> +		 * v[3] is the contents of the ASN1_BOOL
-> +		 *      (Expect 1 if the CA is TRUE)
-> +		 * vlen should match the entire extension size
+> +		 *       (Expect either 0x02 or 0x03, making it 1 or 2 bytes)
+> +		 * v[2] is the number of unused bits in the bit string
+> +		 *       (If >= 3 keyCertSign is missing when v[1] = 0x02)
+> +		 * v[3] and possibly v[4] contain the bit string
+> +		 *
+> +		 * From RFC 5280 4.2.1.3:
+> +		 *   0x04 is where keyCertSign lands in this bit string
+> +		 *   0x80 is where digitalSignature lands in this bit string
 > +		 */
-> +		if (v[0] != (ASN1_CONS_BIT | ASN1_SEQ))
+> +		if (v[0] != ASN1_BTS)
 > +			return -EBADMSG;
-> +		if (vlen < 2)
+> +		if (vlen < 4)
 > +			return -EBADMSG;
-> +		if (v[1] != vlen - 2)
+> +		if (v[2] >= 8)
 > +			return -EBADMSG;
-> +		if (vlen >= 4 && v[1] != 0 && v[2] == ASN1_BOOL && v[3] == 1)
-> +			ctx->cert->pub->key_eflags |= 1 << KEY_EFLAG_CA;
+> +		if (v[3] & 0x80)
+> +			ctx->cert->pub->key_eflags |= 1 << KEY_EFLAG_DIGITALSIG;
+> +		if (v[1] == 0x02 && v[2] <= 2 && (v[3] & 0x04))
+> +			ctx->cert->pub->key_eflags |= 1 << KEY_EFLAG_KEYCERTSIGN;
+> +		else if (vlen > 4 && v[1] == 0x03 && (v[3] & 0x04))
+> +			ctx->cert->pub->key_eflags |= 1 << KEY_EFLAG_KEYCERTSIGN;
 > +		return 0;
 > +	}
 > +
->  	return 0;
->  }
->  
+>  	if (ctx->last_oid == OID_authorityKeyIdentifier) {
+>  		/* Get hold of the CA key fingerprint */
+>  		ctx->raw_akid = v;
 > diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
-> index 6d61695e1cde..c401762850f2 100644
+> index c401762850f2..03c3fb990d59 100644
 > --- a/include/crypto/public_key.h
 > +++ b/include/crypto/public_key.h
-> @@ -28,6 +28,8 @@ struct public_key {
->  	bool key_is_private;
->  	const char *id_type;
+> @@ -30,6 +30,8 @@ struct public_key {
 >  	const char *pkey_algo;
-> +	unsigned long key_eflags;	/* key extension flags */
-> +#define KEY_EFLAG_CA		0	/* set if the CA basic constraints is set */
+>  	unsigned long key_eflags;	/* key extension flags */
+>  #define KEY_EFLAG_CA		0	/* set if the CA basic constraints is set */
+> +#define KEY_EFLAG_DIGITALSIG	1	/* set if the digitalSignature usage is set */
+> +#define KEY_EFLAG_KEYCERTSIGN	2	/* set if the keyCertSign usage is set */
 >  };
 >  
 >  extern void public_key_free(struct public_key *key);
 > -- 
 > 2.27.0
 > 
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
