@@ -2,98 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A670269160D
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Feb 2023 02:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0F1691731
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Feb 2023 04:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjBJBI1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Feb 2023 20:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
+        id S230490AbjBJDjg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Feb 2023 22:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBJBI1 (ORCPT
+        with ESMTP id S229825AbjBJDjf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:08:27 -0500
+        Thu, 9 Feb 2023 22:39:35 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8632007C;
-        Thu,  9 Feb 2023 17:08:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01ECD50A;
+        Thu,  9 Feb 2023 19:39:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8254B82399;
-        Fri, 10 Feb 2023 01:08:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9524DC4339B;
-        Fri, 10 Feb 2023 01:08:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AKVCFBcC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1675991300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TGifqOoR9bZo8/vQwUBuPjj6tQBc+UX+xXtpTfNPi00=;
-        b=AKVCFBcCRxl5vn5Sv8oY4GoA7mDM8xAJUkPanrttxiBdkce2ec81CZPbBinmB+bERwwcoG
-        IeIqlJK99DbEr3v9Qd7yG1MyjbEB0TdH7pgrN+MvI8FxguOjVzrVgS1B8rlmi57NoZJQkX
-        PmG/sdP/rID4Cid29hQpYnsnATY2qn4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9a095af6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 10 Feb 2023 01:08:19 +0000 (UTC)
-Date:   Fri, 10 Feb 2023 02:08:17 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     regressions@lists.linux.dev, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH RFC] tpm: disable hwrng for known-defective AMD RNGs
-Message-ID: <Y+WZAV10cp7zKo1R@zx2c4.com>
-References: <20230209153120.261904-1-Jason@zx2c4.com>
- <Y+WVzAt/ZCBdLEkx@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55A70B819FF;
+        Fri, 10 Feb 2023 03:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE552C433A0;
+        Fri, 10 Feb 2023 03:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676000372;
+        bh=xj47ybbF7LI1Wrz6w6+Q/zE1oBtiQ7WkVJ8gYj3Z8yc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ulPIXuoGBO891EXyVOKqbaLIDplW7SI8JhbdWl6lbINdlqR24Xa0JieSlZfQULpJl
+         LaBTjJ/fp1nDH0k33nEp8grRay2z1Q3mSd6P1HYxGCvHPW5+LVt9Qwm5iRV2X/lcVj
+         c+KnyPAF3wP5PL0aBu83IsuVS04KxANBqJXS8VGed++cBqTu1odY0P7Ss1GrPAFtD1
+         7LYUMbjh/J6wthNqNLHGTmszJMNh9dNCTTCPcB1OSvZ3H45M9+nosuDKiQ3U/J0WyI
+         +4tF5Zyd2jwVV24KR14KttgXAkhLr1qZr9E0EdBkftiChbzjwyTSBASCk0Jgm18V/w
+         wQ6O9gOyKpqWg==
+Date:   Fri, 10 Feb 2023 05:39:29 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, pvorel@suse.cz, tadeusz.struk@intel.com,
+        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
+        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 1/6] KEYS: Create static version of
+ public_key_verify_signature
+Message-ID: <Y+W8VQnCw2RlwFnH@kernel.org>
+References: <20230207025958.974056-1-eric.snowberg@oracle.com>
+ <20230207025958.974056-2-eric.snowberg@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+WVzAt/ZCBdLEkx@kernel.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230207025958.974056-2-eric.snowberg@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 02:54:36AM +0200, Jarkko Sakkinen wrote:
-> On Thu, Feb 09, 2023 at 12:31:20PM -0300, Jason A. Donenfeld wrote:
-> > Do not register a hwrng for certain AMD TPMs that are running an old
+On Mon, Feb 06, 2023 at 09:59:53PM -0500, Eric Snowberg wrote:
+> The kernel test robot reports undefined reference to
+> public_key_verify_signature when CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE is
+> not defined. Create a static version in this case and return -EINVAL.
 > 
-> What do you mean by "certain AMD TPMs"?
-> 
-> > known-buggy revision. Do this by probing the TPM2_PT_MANUFACTURER,
-> 
-> Which revision?
-> 
-> > TPM2_PT_FIRMWARE_VERSION_1, and TPM2_PT_FIRMWARE_VERSION_2 properties,
-> > and failing when an "AMD"-manufactured TPM2 chip is below a threshold.
-> 
-> What do you mean by "threshold"?
-> 
-> This also lacks desription of:
-> 
-> 1. What kind of changes are done.
-> 2. Why do they they are reasonable.
+> Fixes: db6c43bd2132 ("crypto: KEYS: convert public key and digsig asym to the akcipher api")
+> Reported-by: kernel test robot <lkp@intel.com>
 
-YEP! And guess what? It doesn't matter at all one bit. Why? Because
-Mario, the AMD engineer working on this, is tuned into the goal here and
-he's the one who will be reworking this PoC draft into a real non-RFC
-commit. We've been discussing this over on the bugzilla Thorsten sent to
-you on Feb 2: https://bugzilla.kernel.org/show_bug.cgi?id=216989
+What is this reported-by is good for?
 
-> > BROKEN BROKEN BROKEN - I just made the version numbers up and haven't
-> > tested this because I don't actually have hardware for it. I'm posting
-> > this so that Mario can take over its development and submit a v2 himself
-> > once he has confirmed the versioning info from inside AMD.
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> ---
+>  include/crypto/public_key.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> Is this paragraph meant for commit log?
+> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
+> index 68f7aa2a7e55..6d61695e1cde 100644
+> --- a/include/crypto/public_key.h
+> +++ b/include/crypto/public_key.h
+> @@ -80,7 +80,16 @@ extern int create_signature(struct kernel_pkey_params *, const void *, void *);
+>  extern int verify_signature(const struct key *,
+>  			    const struct public_key_signature *);
+>  
+> +#if IS_REACHABLE(CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
+>  int public_key_verify_signature(const struct public_key *pkey,
+>  				const struct public_key_signature *sig);
+> +#else
+> +static inline
+> +int public_key_verify_signature(const struct public_key *pkey,
+> +				const struct public_key_signature *sig)
+> +{
+> +	return -EINVAL;
+> +}
+> +#endif
+>  
+>  #endif /* _LINUX_PUBLIC_KEY_H */
+> -- 
+> 2.27.0
+> 
 
-Obviously not; did you read it?
-
-Jason
+BR, Jarkko
