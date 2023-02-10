@@ -2,236 +2,613 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89D1691F81
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Feb 2023 14:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE656920E2
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Feb 2023 15:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbjBJNG2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Feb 2023 08:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
+        id S232223AbjBJOen (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Feb 2023 09:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjBJNG1 (ORCPT
+        with ESMTP id S231749AbjBJOem (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Feb 2023 08:06:27 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223E47AE11;
-        Fri, 10 Feb 2023 05:06:11 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ACtYDD018947;
-        Fri, 10 Feb 2023 13:05:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=RMH9PfxrEZmXBs5HlCWUIj1nqHeW1n/Z8WQHJeUWOqg=;
- b=nMt2jStB/RyQux4u1Jx1XzrM4NLw3uCBkSDZCIp2aNgoNfJ4pGeT1Y/kk078Byp90BnV
- yUgF7S/5cMzap2aA0R9smC6uVk2S1F1jAjDTJxbDGTOK7GCOJvg2MeCm96kEFBsLtR5y
- t4y3BnORfZzeRx+t/1fqPI0ntbAF8ngd9nRPCAy3rbfIqbRAozNJZzP7YaCX+53QAb7D
- owd8RK9BPnecBwXbYsrmQdYh4qjvPyEU5dRyTu88TVP1z0N7gUlU+k597c43icFZdViX
- fY0ZvR26BmwTpvxds9r8vlapHfeIQp5EoyTfcxPV+q2fm0djdc7zOAdAhEPuzHKxadpU vA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnpc0ga0v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 13:05:28 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31ACu6NA020617;
-        Fri, 10 Feb 2023 13:05:27 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnpc0g9xx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 13:05:27 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31ACCrSX001971;
-        Fri, 10 Feb 2023 13:05:25 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3nhf07xsp3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 13:05:25 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31AD5Ouf56754632
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 13:05:24 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D1F95803F;
-        Fri, 10 Feb 2023 13:05:24 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BAA9D58060;
-        Fri, 10 Feb 2023 13:05:22 +0000 (GMT)
-Received: from sig-9-77-142-160.ibm.com (unknown [9.77.142.160])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Feb 2023 13:05:22 +0000 (GMT)
-Message-ID: <4bda209dfc891ac9044ce847785c383e89f14f97.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 6/6] integrity: machine keyring CA configuration
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org,
-        dhowells@redhat.com, dwmw2@infradead.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, tadeusz.struk@intel.com,
-        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
-        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Fri, 10 Feb 2023 08:05:22 -0500
-In-Reply-To: <20230207025958.974056-7-eric.snowberg@oracle.com>
-References: <20230207025958.974056-1-eric.snowberg@oracle.com>
-         <20230207025958.974056-7-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Fri, 10 Feb 2023 09:34:42 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F4D5B764
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Feb 2023 06:34:39 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PCwyd6wgMz9v7gN
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Feb 2023 22:26:17 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAH3GLqVeZjCk4LAQ--.1604S2;
+        Fri, 10 Feb 2023 15:34:24 +0100 (CET)
+Message-ID: <6eacde8a2be5e7256b4758999d5b99d846ccf3ce.camel@huaweicloud.com>
+Subject: Re: [PATCH ima-evm-utils] Add ima_policy_check.awk and
+ ima_policy_check.test
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 10 Feb 2023 15:34:15 +0100
+In-Reply-To: <20230209172759.3144105-1-roberto.sassu@huaweicloud.com>
+References: <20230209172759.3144105-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: iRVp5qk64i13A31hNdiBJVZrE8vj_KXY
-X-Proofpoint-GUID: x5mR7gi2FFWd4BNQqSF3zFvhIVEUIIbL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_07,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 clxscore=1015 phishscore=0
- mlxscore=0 impostorscore=0 adultscore=0 malwarescore=0 priorityscore=1501
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302100108
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwAH3GLqVeZjCk4LAQ--.1604S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfuFyftr13Gr1rCr4fAFWUurg_yoW8KFW8Xo
+        WfKrs0vF47KFy5A348CrsFgrW8W3ZxJr4kXay5ZF4FkFnFgr4qkayDXw1rXFWkGan8WF1U
+        JFy8X3sYyasrJasxn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUU5Q7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+        6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+        CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+        0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3w
+        CI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVF
+        xhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4TTNwABsS
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Eric,
-
-On Mon, 2023-02-06 at 21:59 -0500, Eric Snowberg wrote:
-> Add a machine keyring CA restriction menu option to control the type of
-> keys that may be added to it. The options include none, min and max
-> restrictions.
+On Thu, 2023-02-09 at 18:27 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> When no restrictions are selected, all Machine Owner Keys (MOK) are added
-> to the machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MIN is
-> selected, the CA bit must be true.  Also the key usage must contain
-> keyCertSign, any other usage field may be set as well.
+> Add the awk script to check for possible interference of a rule added by a
+> test with the existing IMA policy (policy replacement at the first policy
+> load is not taken into account).
 > 
-> When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is selected, the CA bit must
-> be true. Also the key usage must contain keyCertSign and the
-> digitialSignature usage may not be set.
+> The script expects the rule to be added to be the first, and the existing
+> IMA policy to be after.
 > 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> Rules are considered as interfering if they don't overlap, or they overlap
+> but they have the same action and same policy options with the same values.
 
-Missing from the patch description is the motivation for this change.  
-The choices none, min, max implies a progression, which is good, and
-the technical differences between the choices, but not the reason.
+Rules are considered as not interfering...
 
-The motivation, at least from my perspective, is separation of
-certificate signing from code signing keys, where "none" is no
-separation and "max" being total separation of keys based on usage.
+However, if rules with the same action overlap, they can interfer too.
 
-Subsequent work, as discussed in the cover letter thread, will limit
-certificates being loaded onto the IMA keyring to code signing keys
-used for signature verification.
+Example, suppose that the policy is:
 
-thanks,
+measure func=FILE_CHECK
 
-Mimi
+and we want to add:
+
+measure func=MMAP_CHECK
+
+If the goal of the test is to have the file measured, the fact that
+there are other rules with the same action that might or might not
+match is irrelevant. The important thing is that the file is measured.
+
+However, if the goal is to have the file measured in specific
+conditions, then overlapping rules can become a problem.
+
+test_mmap is opening the file created by the test, to get a file
+descriptor and pass it to mmap(). The goal of the test is to show that
+no measurement entry is created if the protections passed to mmap() are
+just PROT_READ.
+
+This test fails, because the existing rule with the FILE_CHECK hook
+causes the file to be measured, while the test didn't expect that (the
+new rule causes a new measurement entry to be added when the
+protections passed to mmap() contain PROT_EXEC).
+
+I think it is too complicated to determine if the current configuration
+could interfer with the tests. We should simply ensure that tests use
+non-overlapping rules or existing rules.
+
+We can just print a warning if there are overlapping rules.
+
+Roberto
+
+> Combinations of MMAP_CHECK and MMAP_CHECK_REQPROT hooks are always
+> considered as interfering, due to the different behavior of those hooks.
+> 
+> Finally add a test, to ensure that the awk script behaves as expected.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  crypto/asymmetric_keys/restrict.c |  2 ++
->  security/integrity/Kconfig        | 39 ++++++++++++++++++++++++++++++-
->  security/integrity/digsig.c       |  8 +++++--
->  3 files changed, 46 insertions(+), 3 deletions(-)
+>  tests/Makefile.am           |   2 +-
+>  tests/ima_policy_check.awk  | 142 ++++++++++++++++
+>  tests/ima_policy_check.test | 319 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 462 insertions(+), 1 deletion(-)
+>  create mode 100755 tests/ima_policy_check.awk
+>  create mode 100755 tests/ima_policy_check.test
 > 
-> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
-> index 48457c6f33f9..633021ea7901 100644
-> --- a/crypto/asymmetric_keys/restrict.c
-> +++ b/crypto/asymmetric_keys/restrict.c
-> @@ -140,6 +140,8 @@ int restrict_link_by_ca(struct key *dest_keyring,
->  		return -ENOKEY;
->  	if (!test_bit(KEY_EFLAG_KEYCERTSIGN, &pkey->key_eflags))
->  		return -ENOKEY;
-> +	if (IS_ENABLED(CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MIN))
-> +		return 0;
->  	if (test_bit(KEY_EFLAG_DIGITALSIG, &pkey->key_eflags))
->  		return -ENOKEY;
+> diff --git a/tests/Makefile.am b/tests/Makefile.am
+> index a0463b7b5b5..9a7d8a1f989 100644
+> --- a/tests/Makefile.am
+> +++ b/tests/Makefile.am
+> @@ -2,7 +2,7 @@ check_SCRIPTS =
+>  TESTS = $(check_SCRIPTS)
 >  
-> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-> index 599429f99f99..eba6fd59fd16 100644
-> --- a/security/integrity/Kconfig
-> +++ b/security/integrity/Kconfig
-> @@ -68,13 +68,50 @@ config INTEGRITY_MACHINE_KEYRING
->  	depends on INTEGRITY_ASYMMETRIC_KEYS
->  	depends on SYSTEM_BLACKLIST_KEYRING
->  	depends on LOAD_UEFI_KEYS
-> -	depends on !IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
->  	help
->  	 If set, provide a keyring to which Machine Owner Keys (MOK) may
->  	 be added. This keyring shall contain just MOK keys.  Unlike keys
->  	 in the platform keyring, keys contained in the .machine keyring will
->  	 be trusted within the kernel.
+>  check_SCRIPTS += ima_hash.test sign_verify.test boot_aggregate.test \
+> -		 fsverity.test portable_signatures.test
+> +		 fsverity.test portable_signatures.test ima_policy_check.test
 >  
-> +choice
-> +	prompt "Enforce Machine Keyring CA Restrictions"
-> +	default INTEGRITY_CA_MACHINE_KEYRING_NONE
-> +	depends on INTEGRITY_MACHINE_KEYRING
-> +	help
-> +	  The .machine keyring can be configured to enforce CA restriction
-> +	  on any key added to it. The options include none, min and max
-> +	  restrictions. By default no restrictions are in place and all
-> +	  Machine Owner Keys (MOK) are added to the machine keyring.
+>  .PHONY: check_logs
+>  check_logs:
+> diff --git a/tests/ima_policy_check.awk b/tests/ima_policy_check.awk
+> new file mode 100755
+> index 00000000000..bb39153c182
+> --- /dev/null
+> +++ b/tests/ima_policy_check.awk
+> @@ -0,0 +1,142 @@
+> +#! /usr/bin/awk -f
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Copyright (C) 2023 Roberto Sassu <roberto.sassu@huawei.com>
+> +#
+> +# Check possible interference of a new rule with the existing IMA policy.
 > +
-> +config INTEGRITY_CA_MACHINE_KEYRING_NONE
-> +	bool "No restrictions"
-> +	help
-> +	  When no restrictions are selected, all Machine Owner Keys (MOK)
-> +	  are added to the machine keyring. MOK keys do not require the
-> +	  CA bit to be set. The key usage field is ignored. This is the
-> +	  default setting.
+> +# Documentation/ABI/testing/ima_policy (Linux kernel)
+> +# base:	[[func=] [mask=] [fsmagic=] [fsuuid=] [fsname=]
+> +#	[uid=] [euid=] [gid=] [egid=]
+> +#	[fowner=] [fgroup=]]
+> +# lsm:	[[subj_user=] [subj_role=] [subj_type=]
+> +#	[obj_user=] [obj_role=] [obj_type=]]
+> +# option:	[digest_type=] [template=] [permit_directio]
+> +#		[appraise_type=] [appraise_flag=]
+> +#		[appraise_algos=] [keyrings=]
+> +#
+> +# Non interference if:
+> +# - non-overlapping rules (different values for policy keywords)
+> +# - overlapping rules with same action and same policy options
+> +#
+> +# Rules overlap if they have different policy keywords or same policy keywords
+> +# and same values.
+> +#
+> +# The same policy options and value requirement is needed as otherwise tests
+> +# might match an overlapping rule with undesired/missing policy options.
+> +#
+> +# Rules with MMAP_CHECK and MMAP_CHECK_REQPROT are considered as an exception.
+> +# They overlap, despite they have a different name. In addition, combinations of
+> +# them are reported as interference, since they are matched depending on
+> +# external factors, not inferrable from the policy (a MMAP_CHECK rule might
+> +# cause a measurement, while a MMAP_CHECK_REQPROT one might not).
+> +#
+> +# More/less specific rules are considered as overlapping.
+> +#
+> +# Overlapping rules must have the same policy options, or tests might match
+> +# policy rules set by other tests with undesired policy options.
 > +
-> +config INTEGRITY_CA_MACHINE_KEYRING_MIN
-> +	bool "Only CA keys (with or without DigitialSignature usage set)"
-> +	help
-> +	  When min is selected, only load CA keys into the machine keyring.
-> +	  The CA bit must be set along with the keyCertSign Usage field.
-> +	  Keys containing the digitialSignature Usage field will also be
-> +	  loaded. The remaining MOK keys are loaded into the .platform
-> +	  keyring.
+> +BEGIN {
+> +	keywords_str="func mask fsmagic fsuuid fsname uid euid gid egid fowner fgroup subj_user subj_role subj_type obj_user obj_role obj_type";
+> +	split(keywords_str, keywords_array, " ");
+> +	options_str="digest_type template permit_directio appraise_type appraise_flag appraise_algos keyrings";
+> +	split(options_str, options_array, " ");
+> +	key_type_unknown=0;
+> +	key_type_keyword=1;
+> +	key_type_option=2;
+> +	for (keyword in keywords_array)
+> +		key_types[keywords_array[keyword]]=key_type_keyword;
+> +	for (option in options_array)
+> +		key_types[options_array[option]]=key_type_option;
+> +	new_rule=1;
+> +	mmap_check_interference=0;
+> +}
+> +{
+> +	if (new_rule) {
+> +		new_rule_action=$1;
+> +		# Strip dont_ from the action of the new rule.
+> +		new_rule_action_sub=new_rule_action;
+> +		gsub(/dont_/, "", new_rule_action_sub);
+> +	} else {
+> +		current_action=$1;
+> +		# Strip dont_ from the action of the current rule.
+> +		current_action_sub=current_action;
+> +		gsub(/dont_/, "", current_action_sub);
+> +		# Unrelated action, ignore.
+> +		if (new_rule_action_sub != current_action_sub) {
+> +			next;
+> +		}
+> +		# Store policy options of the new rule into an array, to compare with the options of the current rule.
+> +		delete new_rule_extra_options;
+> +		for (key in new_rule_array) {
+> +			if (key_types[key] == key_type_option) {
+> +				new_rule_extra_options[key]=new_rule_array[key];
+> +			}
+> +		}
+> +		current_rule_extra_options=0;
+> +	}
+> +	for (i=2; i<=NF; i++) {
+> +		# Parse key/value pair.
+> +		split($i, key_value_array, "=");
+> +		key=key_value_array[1];
+> +		value=key_value_array[2];
+> +		if (key == "func") {
+> +			# Normalize values of IMA hooks.
+> +			if (value == "FILE_MMAP") {
+> +				value="MMAP_CHECK";
+> +			} else if (value == "PATH_CHECK") {
+> +				value="FILE_CHECK";
+> +			}
+> +		}
+> +		# Store key/value pair from the new rule into an array.
+> +		if (new_rule) {
+> +			# Check if the key is valid.
+> +			if (key_types[key] == key_type_unknown) {
+> +				exit 1;
+> +			}
+> +			new_rule_array[key]=value;
+> +		} else {
+> +			if (key_types[key] == key_type_keyword) {
+> +				# No overlap and no operators, no interference.
+> +				if (key in new_rule_array && new_rule_array[key] != value && value !~ /^[<,>,^]/) {
+> +					# Exception: MMAP_CHECK and MMAP_CHECK_REQPROT overlap and have different behavior, interference if overlap (cannot be determined yet).
+> +					if (key == "func" && new_rule_array[key] ~ /MMAP_CHECK/ && value ~ /MMAP_CHECK/) {
+> +						mmap_check_interference=1;
+> +						continue;
+> +					}
+> +					next;
+> +				}
+> +			} else if (key_types[key] == key_type_option) {
+> +				# Possible overlap and different policy options, interference if overlap (cannot be determined yet).
+> +				if (!(key in new_rule_extra_options)) {
+> +					current_rule_extra_options=1;
+> +				# Possible overlap, same policy option and same value, current option can be deleted from the new_rule_extra_options array.
+> +				} else if (new_rule_extra_options[key] == value) {
+> +					delete new_rule_extra_options[key];
+> +				}
+> +				# Possible overlap and same policy option but with different value, interference if overlap (cannot be determined yet).
+> +			}
+> +		}
+> +	}
+> +	# Always ok to parse a new rule.
+> +	if (new_rule) {
+> +		new_rule=0;
+> +		next;
+> +	}
+> +	# Overlap and different related action, interference.
+> +	if (current_action != new_rule_action) {
+> +		exit 1;
+> +	}
+> +	# Overlap and different policy options or different option values, interference.
+> +	for (key in new_rule_extra_options) {
+> +		exit 1;
+> +	}
+> +	if (current_rule_extra_options) {
+> +		exit 1;
+> +	}
+> +	# Overlap and MMAP_CHECK/MMAP_CHECK_REQPROT, interference.
+> +	if (mmap_check_interference) {
+> +		exit 1;
+> +	}
+> +	# Overlap with same related action and same policy options, ok.
+> +}
+> diff --git a/tests/ima_policy_check.test b/tests/ima_policy_check.test
+> new file mode 100755
+> index 00000000000..f1e79ca451f
+> --- /dev/null
+> +++ b/tests/ima_policy_check.test
+> @@ -0,0 +1,319 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Copyright (C) 2023 Roberto Sassu <roberto.sassu@huawei.com>
+> +#
+> +# Test for ima_policy_check.awk
 > +
-> +config INTEGRITY_CA_MACHINE_KEYRING_MAX
-> +	bool "Only CA keys"
-> +	help
-> +	  When max is selected, only load CA keys into the machine keyring.
-> +	  The CA bit must be set along with the keyCertSign Usage field.
-> +	  Keys containing the digitialSignature Usage field will not be
-> +	  loaded. The remaining MOK keys are loaded into the .platform
-> +	  keyring.
+> +trap '_report_exit_and_cleanup' SIGINT SIGTERM EXIT
 > +
-> +endchoice
+> +cd "$(dirname "$0")" || exit 1
+> +. ./functions.sh
 > +
->  config LOAD_UEFI_KEYS
->         depends on INTEGRITY_PLATFORM_KEYRING
->         depends on EFI
-> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-> index f2193c531f4a..3385f534f1da 100644
-> --- a/security/integrity/digsig.c
-> +++ b/security/integrity/digsig.c
-> @@ -132,7 +132,8 @@ int __init integrity_init_keyring(const unsigned int id)
->  		| KEY_USR_READ | KEY_USR_SEARCH;
->  
->  	if (id == INTEGRITY_KEYRING_PLATFORM ||
-> -	    id == INTEGRITY_KEYRING_MACHINE) {
-> +	    (id == INTEGRITY_KEYRING_MACHINE &&
-> +	    IS_ENABLED(CONFIG_INTEGRITY_CA_MACHINE_KEYRING_NONE))) {
->  		restriction = NULL;
->  		goto out;
->  	}
-> @@ -144,7 +145,10 @@ int __init integrity_init_keyring(const unsigned int id)
->  	if (!restriction)
->  		return -ENOMEM;
->  
-> -	restriction->check = restrict_link_to_ima;
-> +	if (id == INTEGRITY_KEYRING_MACHINE)
-> +		restriction->check = restrict_link_by_ca;
+> +export PATH=$PWD:$PATH
+> +
+> +# Base VERBOSE on the environment variable, if set.
+> +VERBOSE="${VERBOSE:-0}"
+> +
+> +check_interference() {
+> +	echo -e "\nTest: $1"
+> +	echo "New rule: $2"
+> +	echo "IMA policy: $3"
+> +
+> +	if [ "$TFAIL" != "yes" ]; then
+> +		echo -n "Result (expect no interference): "
 > +	else
-> +		restriction->check = restrict_link_to_ima;
->  
->  	/*
->  	 * MOK keys can only be added through a read-only runtime services
-
+> +		echo -n "Result (expect interference): "
+> +	fi
+> +
+> +	if ! echo -e "$2\n$3" | ima_policy_check.awk; then
+> +		if [ "$TFAIL" != "yes" ]; then
+> +			echo "${RED}interference${NORM}"
+> +		else
+> +			echo "${GREEN}interference${NORM}"
+> +		fi
+> +		return "$FAIL"
+> +	fi
+> +
+> +	if [ "$TFAIL" != "yes" ]; then
+> +		echo "${GREEN}no interference${NORM}"
+> +	else
+> +		echo "${RED}no interference${NORM}"
+> +	fi
+> +	return "$OK"
+> +}
+> +
+> +# Basic check.
+> +desc="empty IMA policy"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy=""
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Wrong new rule.
+> +desc="Wrong new rule"
+> +rule="measure fun=FILE_CHECK"
+> +ima_policy=""
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Unrelated/related actions.
+> +desc="unrelated actions measure/appraise"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="appraise func=FILE_CHECK"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="unrelated actions appraise/measure"
+> +rule="appraise func=FILE_CHECK"
+> +ima_policy="measure func=FILE_CHECK"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="unrelated actions appraise/dont_measure"
+> +rule="appraise func=FILE_CHECK"
+> +ima_policy="dont_measure func=FILE_CHECK"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="related actions measure/dont_measure"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="dont_measure func=FILE_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="related actions dont_measure/measure"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="dont_measure func=FILE_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="related actions dont_appraise/appraise"
+> +rule="dont_appraise func=FILE_CHECK"
+> +ima_policy="appraise func=FILE_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Unrelated rules by different values for policy keywords.
+> +desc="same action, unrelated by func"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="measure func=MMAP_CHECK"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, unrelated by func"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="dont_measure func=MMAP_CHECK"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, unrelated by mask"
+> +rule="measure func=FILE_CHECK mask=MAY_EXEC"
+> +ima_policy="dont_measure func=FILE_CHECK mask=MAY_READ"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, unrelated by fowner"
+> +rule="measure func=FILE_CHECK fowner=1 mask=MAY_EXEC"
+> +ima_policy="dont_measure func=FILE_CHECK mask=MAY_EXEC fowner=0"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Unrelated rules with different policy options.
+> +desc="different action, unrelated by fowner, different policy options"
+> +rule="measure func=FILE_CHECK fowner=1 mask=MAY_EXEC"
+> +ima_policy="dont_measure func=FILE_CHECK mask=MAY_EXEC fowner=0 permit_directio"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, unrelated by fowner, different policy options"
+> +rule="measure func=FILE_CHECK fowner=1 mask=MAY_EXEC"
+> +ima_policy="measure func=FILE_CHECK mask=MAY_EXEC fowner=0 permit_directio"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Related rules by different policy keywords.
+> +desc="same action, add with uid, existing with func, no policy options"
+> +rule="measure uid=0"
+> +ima_policy="measure func=FILE_CHECK"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, add with uid, existing with func, no policy options"
+> +rule="measure uid=0"
+> +ima_policy="dont_measure func=FILE_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with uid, existing with func, different policy options"
+> +rule="measure uid=0 permit_directio"
+> +ima_policy="measure func=FILE_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with uid, existing with func, different policy options"
+> +rule="measure uid=0"
+> +ima_policy="measure func=FILE_CHECK permit_directio"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with uid, existing with func, same policy options"
+> +rule="measure uid=0 permit_directio"
+> +ima_policy="measure func=FILE_CHECK permit_directio"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Related rules by same policy keywords and same value, with policy options.
+> +desc="same action, add with func, existing with func, same policy options"
+> +rule="measure func=FILE_CHECK permit_directio"
+> +ima_policy="measure func=FILE_CHECK permit_directio"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func, existing with func, different policy options"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="measure func=FILE_CHECK permit_directio"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func, existing with func, different policy options"
+> +rule="measure func=FILE_CHECK permit_directio"
+> +ima_policy="measure func=FILE_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, add with func, existing with func, no policy options"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="dont_measure func=FILE_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, add with func, existing with func, no policy options"
+> +rule="dont_measure func=FILE_CHECK"
+> +ima_policy="measure func=FILE_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, add with func, existing with func, same policy options"
+> +rule="dont_measure func=FILE_CHECK permit_directio"
+> +ima_policy="measure func=FILE_CHECK permit_directio"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, add with func, existing with func, same policy options"
+> +rule="measure func=FILE_CHECK permit_directio"
+> +ima_policy="dont_measure func=FILE_CHECK permit_directio"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Related rules by same policy keywords and different value but with unsupported operator.
+> +desc="different action, add with func and uid, existing with func and different uid"
+> +rule="dont_measure func=FILE_CHECK uid=>0"
+> +ima_policy="measure func=FILE_CHECK uid=>1"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func and uid, existing with func and different uid"
+> +rule="measure func=FILE_CHECK uid=>0"
+> +ima_policy="measure func=FILE_CHECK uid=>1"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func and uid, existing with func and different uid, different policy options"
+> +rule="measure func=FILE_CHECK uid=>0 permit_directio"
+> +ima_policy="measure func=FILE_CHECK uid=>1"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func and uid, existing with func and different uid, same policy options"
+> +rule="measure func=FILE_CHECK uid=>0 permit_directio"
+> +ima_policy="measure func=FILE_CHECK uid=>1 permit_directio"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Related rules by subset/superset policy keywords.
+> +desc="different action, add with func and uid, existing with func"
+> +rule="dont_measure func=FILE_CHECK uid=0"
+> +ima_policy="measure func=FILE_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func and uid, existing with func"
+> +rule="measure func=FILE_CHECK uid=0"
+> +ima_policy="measure func=FILE_CHECK"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func and uid, existing with func"
+> +rule="dont_measure func=FILE_CHECK uid=0"
+> +ima_policy="dont_measure func=FILE_CHECK"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func and uid, existing with func, different policy options"
+> +rule="measure func=FILE_CHECK uid=0"
+> +ima_policy="measure func=FILE_CHECK permit_directio"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func and uid, existing with func, same policy options"
+> +rule="measure func=FILE_CHECK uid=0 permit_directio"
+> +ima_policy="measure func=FILE_CHECK permit_directio"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func, existing with func and uid, same policy options (multiple)"
+> +rule="measure func=FILE_CHECK uid=0 permit_directio appraise_type=imasig"
+> +ima_policy="measure func=FILE_CHECK permit_directio appraise_type=imasig"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, add with func, existing with func and uid"
+> +rule="dont_measure func=FILE_CHECK"
+> +ima_policy="measure func=FILE_CHECK uid=0"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func, existing with func and uid"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="measure func=FILE_CHECK uid=0"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func, existing with func and uid"
+> +rule="dont_measure func=FILE_CHECK"
+> +ima_policy="dont_measure func=FILE_CHECK uid=0"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func and uid, existing with func, different policy options"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="measure func=FILE_CHECK uid=0 permit_directio"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func, existing with func and uid, same policy options"
+> +rule="measure func=FILE_CHECK permit_directio"
+> +ima_policy="measure func=FILE_CHECK uid=0 permit_directio"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, add with func, existing with func and uid, same policy options (multiple)"
+> +rule="measure func=FILE_CHECK permit_directio appraise_type=imasig"
+> +ima_policy="measure func=FILE_CHECK uid=0 permit_directio appraise_type=imasig"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Different policy options in a non-overlapping rule.
+> +desc="same action, add with func, existing with func and uid, no policy options"
+> +rule="measure func=FILE_CHECK uid=1"
+> +ima_policy="measure func=FILE_CHECK permit_directio uid=0"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Same policy option with different value in an overlapping rule.
+> +desc="same action, add with func, existing with func and uid, same policy option with different value"
+> +rule="measure func=FILE_CHECK permit_directio appraise_type=imasig"
+> +ima_policy="measure func=FILE_CHECK uid=0 permit_directio appraise_type=sigv3"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Same policy option with different value in an non-overlapping rule.
+> +desc="same action, add with func and uid, existing with func and different uid, same policy option with different value"
+> +rule="measure func=FILE_CHECK uid=1 permit_directio appraise_type=imasig"
+> +ima_policy="measure func=FILE_CHECK uid=0 permit_directio appraise_type=sigv3"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Same policy option with different value in an non-overlapping rule, uid is the last.
+> +desc="same action, add with func and uid, existing with func and different uid, same policy option with different value"
+> +rule="measure func=FILE_CHECK permit_directio appraise_type=imasig uid=1"
+> +ima_policy="measure func=FILE_CHECK permit_directio appraise_type=sigv3 uid=0"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# MMAP_CHECK and MMAP_CHECK_REQPROT hooks.
+> +desc="same action, MMAP_CHECK and MMAP_CHECK_REQPROT hooks"
+> +rule="measure func=MMAP_CHECK"
+> +ima_policy="measure func=MMAP_CHECK_REQPROT"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="different action, MMAP_CHECK and MMAP_CHECK_REQPROT hooks"
+> +rule="measure func=MMAP_CHECK"
+> +ima_policy="dont_measure func=MMAP_CHECK_REQPROT"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, MMAP_CHECK and MMAP_CHECK_REQPROT hooks, overlapping rules and IMA policy more specific"
+> +rule="measure func=MMAP_CHECK"
+> +ima_policy="measure func=MMAP_CHECK_REQPROT uid=0"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, MMAP_CHECK and MMAP_CHECK_REQPROT hooks, non-overlapping rules"
+> +rule="measure func=MMAP_CHECK uid=1"
+> +ima_policy="measure func=MMAP_CHECK_REQPROT uid=0"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +desc="same action, same hook MMAP_CHECK"
+> +rule="measure func=MMAP_CHECK"
+> +ima_policy="measure func=MMAP_CHECK"
+> +expect_pass check_interference "$desc" "$rule" "$ima_policy"
+> +
+> +# Hook aliases.
+> +desc="different action, FILE_CHECK hook and its alias"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="dont_measure func=PATH_CHECK"
+> +expect_fail check_interference "$desc" "$rule" "$ima_policy"
 
