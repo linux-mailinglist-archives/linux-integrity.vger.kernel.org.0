@@ -2,308 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FCA698B1F
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Feb 2023 04:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08823698E71
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Feb 2023 09:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjBPDXB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Feb 2023 22:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
+        id S229521AbjBPIQk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Feb 2023 03:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjBPDXA (ORCPT
+        with ESMTP id S229681AbjBPIQk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Feb 2023 22:23:00 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9973583
-        for <linux-integrity@vger.kernel.org>; Wed, 15 Feb 2023 19:22:48 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31G2ijRX028128;
-        Thu, 16 Feb 2023 03:22:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=mUvtWjTcAC9Vx5evhRJMWuWvOyI5qN7ipGKYX4t/nt0=;
- b=hin5Kv9ZaqL0p5M5X7iH1tmrZXtCyCXSYEGINRrF+Zv4WcNHIGtqewMdmPzhB0rVlc8W
- pcRRlvzqU3OjKw8OBt+KGFr4Hj0meRUD376hAmCBXxpcIMxHlZO06HZ/Zqz0JSxDuohy
- yfhib5/rjvCcdRgxWwpFEVS7xKz5TKZZm3gJLPdQNC+Z/Y0IjgL8rFegTLOQjL3CUQv5
- Nz0GzQfBG9r4lx9ttloahU92Ui6kEeVY6b7UpEYZ+/hri+kDXHuqknGJVhaS/D7lgOIS
- tGXm1LfwWbkuWnk4KagqMiNysPYMcP2aShQiUg2QuRwYU7/gyQdSrRlRwfh0h41IK5B3 Ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsbypgk94-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 03:22:25 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31G2vLHo004260;
-        Thu, 16 Feb 2023 03:22:25 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsbypgk90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 03:22:25 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31FNqBNp017171;
-        Thu, 16 Feb 2023 03:22:24 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3np2n70eb9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 03:22:24 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31G3MNqn37618344
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Feb 2023 03:22:23 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0F9FE58051;
-        Thu, 16 Feb 2023 03:22:23 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F6D05805F;
-        Thu, 16 Feb 2023 03:22:22 +0000 (GMT)
-Received: from sig-9-65-193-223.ibm.com (unknown [9.65.193.223])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Feb 2023 03:22:22 +0000 (GMT)
-Message-ID: <f00d6ea8df825b38f1df62cd2487fb4467c7ab48.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v2] Add ima_policy_check.awk and
- ima_policy_check.test
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 15 Feb 2023 22:22:21 -0500
-In-Reply-To: <20230214152258.3553294-1-roberto.sassu@huaweicloud.com>
-References: <20230214152258.3553294-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 16 Feb 2023 03:16:40 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CBF23850
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Feb 2023 00:16:33 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PHSHV45Hzz9xFQK
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Feb 2023 16:08:06 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBHHGNM5u1jgMYkAQ--.44907S2;
+        Thu, 16 Feb 2023 09:16:19 +0100 (CET)
+Message-ID: <006bceba21b205f862d92a50c7095397f30d1b9e.camel@huaweicloud.com>
+Subject: Re: [PATCH ima-evm-utils 0/3] CI: Tumbleweed openSSL fix
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
+        linux-integrity@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     dmitry.kasatkin@gmail.com, vt@altlinux.org, stefanb@linux.ibm.com
+Date:   Thu, 16 Feb 2023 09:16:07 +0100
+In-Reply-To: <8c65e64026e33caf6cf756c616f3effe249cae4b.camel@linux.ibm.com>
+References: <20230214210035.585395-1-pvorel@suse.cz>
+         <Y+1gTC0cjCo6Aw0v@pevik>
+         <8c65e64026e33caf6cf756c616f3effe249cae4b.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: crzebuwP8La4wbbhpDQ_lerEZqrhe_Eg
-X-Proofpoint-ORIG-GUID: _CwfE5WH6gJKBxQJT0bFqAzD7g75bWPC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-15_15,2023-02-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- suspectscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 phishscore=0 malwarescore=0 spamscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302160023
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwBHHGNM5u1jgMYkAQ--.44907S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGF18Zw15tFyxWFyxZw4Utwb_yoW5Xr4kpr
+        Wv9FWxKr48tFyDAw1xJr4Ivw40yrZ5Ary5JryrAw18Ga45J3Z7tF4IyF45WrWDGw1DAryS
+        vFZrtryjgr4kAr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4kKuQAAsE
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
-
-> diff --git a/tests/ima_policy_check.awk b/tests/ima_policy_check.awk
-> new file mode 100755
-> index 00000000000..73107d01083
-> --- /dev/null
-> +++ b/tests/ima_policy_check.awk
-> @@ -0,0 +1,176 @@
-> +#! /usr/bin/gawk -f
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Copyright (C) 2023 Roberto Sassu <roberto.sassu@huawei.com>
-> +#
-> +# Check a new rule against the loaded IMA policy.
-> +#
-> +# Documentation/ABI/testing/ima_policy (Linux kernel)
-> +# base:	[[func=] [mask=] [fsmagic=] [fsuuid=] [fsname=]
-> +#	[uid=] [euid=] [gid=] [egid=]
-> +#	[fowner=] [fgroup=]]
-> +# lsm:	[[subj_user=] [subj_role=] [subj_type=]
-> +#	[obj_user=] [obj_role=] [obj_type=]]
-> +# option:	[digest_type=] [template=] [permit_directio]
-> +#		[appraise_type=] [appraise_flag=]
-> +#		[appraise_algos=] [keyrings=]
-> +#
-> +# Rules don't overlap if there is at least one policy keyword (in base or lsm)
-> +# providing a different value.
-
-The above comment needs to be updated to reflect the overlapping tests.
-
-> Currently, the < > operators and the ^ modifier
-> +# are not supported and overlap is asserted even if intervals are disjoint.
-> +# Also, despite the MMAP_CHECK and MMAP_CHECK_REQPROT hooks have different
-> +# names, they are basically the same hook but with different behavior depending
-> +# on external factors, so also in this case overlap has to be asserted. Finally,
-> +# the existing aliases PATH_CHECK and FILE_MMAP are converted to the current
-> +# hook names, respectively FILE_CHECK and MMAP_CHECK.
-> +#
-> +# Rule equivalence is determined by checking each key/value pair, regardless of
-> +# their order. However, the action must always be at the beginning of the rules.
-> +# Rules with aliases are considered equivalent.
-> +#
-> +# Return a bit mask with the following values:
-> +# - 1: invalid new rule;
-> +# - 2: overlap of the new rule with an existing rule in the IMA policy;
-> +# - 4: new rule exists in the IMA policy.
+On Wed, 2023-02-15 at 18:19 -0500, Mimi Zohar wrote:
+> Hi Petr,
 > 
-> diff --git a/tests/ima_policy_check.test b/tests/ima_policy_check.test
-> new file mode 100755
-> index 00000000000..ba8747a74b1
-> --- /dev/null
-> +++ b/tests/ima_policy_check.test
-> @@ -0,0 +1,225 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Copyright (C) 2023 Roberto Sassu <roberto.sassu@huawei.com>
-> +#
-> +# Test for ima_policy_check.awk
-> +
-> +trap '_report_exit_and_cleanup' SIGINT SIGTERM EXIT
-> +
-> +cd "$(dirname "$0")" || exit 1
-> +. ./functions.sh
-> +
-> +export PATH=$PWD:$PATH
-> +
-> +check_result() {
-> +	local result
-> +
-> +	echo -e "\nTest: $1"
-> +	echo "New rule: $2"
-> +	echo "IMA policy: $3"
-> +
-> +	echo -n "Result (expect $4): "
-> +
-> +	echo -e "$2\n$3" | ima_policy_check.awk
-> +	result=$?
-> +
-> +	if [ "$result" -ne "$4" ]; then
-> +		echo "${RED}$result${NORM}"
-> +		return "$FAIL"
-> +	fi
-> +
-> +	echo "${GREEN}$result${NORM}"
-> +	return "$OK"
-> +}
-> +
-> +# Basic checks.
-> +desc="empty IMA policy"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy=""
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> On Wed, 2023-02-15 at 23:44 +0100, Petr Vorel wrote:
+> > Hi Mimi,
+> > 
+> > > Tested:
+> > > https://github.com/pevik/ima-evm-utils/actions/runs/4177976359/jobs/7236222413
+> > 
+> > Thanks for merging this.
+> 
+> I actually pushed out the patches to "next-testing" to make sure it
+> works.  In doing so, I dropped a couple of Roberto's patches, which
+> aren't quite ready and one of mine as well.  In general, I'm not sure
+> pushing patches out to "next-integrity" should be considered "merging"
+> quite yet.  In this case, your patches are fine.  (Perhaps there needs
+> to be a better work flow.)
+> 
+> > My test was working:
+> > https://github.com/pevik/ima-evm-utils/actions/runs/4177976359
+> 
+> Yes, I saw.
+> 
+> > But the same code now fails for Fedora.
+> > I wonder what exactly is wrong now:
+> > https://github.com/mimizohar/ima-evm-utils/actions/runs/4188686859/jobs/7260231106
+> > https://github.com/pevik/ima-evm-utils/actions/runs/4188761663/jobs/7260289846
+> 
+> The UML kernel built properly, but for some reason the fsverity and
+> portable_signature tests aren't finding it.
 
-Include the comment, before the tests, as to what the expected return
-values mean:
-# Return a bit mask with the following values:
-# - 1: invalid new rule;
-# - 2: overlap of the new rule with an existing rule in the IMA policy;
-# - 4: new rule exists in the IMA policy.
+It could be this (in the logs):
 
-> +desc="Empty new rule"
-> +rule=""
-> +ima_policy=""
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
-> +
-> +desc="Wrong func"
+There exist one or more cache(s) with similar key but they have
+different version or scope.
 
-"FILE_CHECK" is actually fine, but the condition keyword "fun" is
-invalid. 
+I would try:
 
-> +rule="measure fun=FILE_CHECK"
-> +ima_policy=""
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
-> +
-> +desc="Missing action"
-> +rule="func=FILE_CHECK"
-> +ima_policy=""
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
-> +
-> +# Non-overlapping rules.
-> +desc="Non-overlapping by func"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy="appraise func=MMAP_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+enableCrossOsArchive: true
 
-All of the non-overlapping tests are non-overlapping by action as well.
-Is this intentional?
+after:
 
-> +
-> +desc="Non-overlapping by uid, func is equal"
-> +rule="measure func=FILE_CHECK uid=0"
-> +ima_policy="appraise uid=1 func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+      uses: actions/cache@v3
+      with:
+        path:
+        key:
 
-> +desc="Non-overlapping by uid, func is equal, same policy options"
-> +rule="measure func=FILE_CHECK uid=0 permit_directio"
-> +ima_policy="appraise uid=1 func=FILE_CHECK permit_directio"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by mask, func and uid are equal, same policy options"
-> +rule="measure func=FILE_CHECK uid=0 permit_directio mask=MAY_READ"
-> +ima_policy="appraise uid=0 mask=MAY_EXEC func=FILE_CHECK permit_directio"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by mask, func and uid are equal, different policy options"
-> +rule="measure func=FILE_CHECK uid=0 permit_directio mask=MAY_READ"
-> +ima_policy="appraise uid=0 mask=MAY_EXEC func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +# Overlapping and different rules.
-> +desc="same actions, different keywords"
-> +rule="appraise func=FILE_CHECK"
-> +ima_policy="appraise uid=0"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="different actions, same func"
-> +rule="appraise func=FILE_CHECK"
-> +ima_policy="measure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+for every step using the cache.
 
-Ok, a "measure" rule overlapping with an existing "appraise" rule could
-impact a test,  but the reverse an "appraise" rule overlapping with an
-existing "measure" rule should not impact tests.  So overlapping rules
-are not necessarily interferring.
+Cache version is a hash generated for a combination of compression tool
+used (Gzip, Zstd, etc. based on the runner OS) and the path of
+directories being cached.
 
-> +desc="different actions, same func"
-> +rule="appraise func=FILE_CHECK"
-> +ima_policy="dont_measure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+Maybe there was some change from the time the kernel and signing key
+were cached.
 
-Similarly, an "appraise" rule should not be impacted by an existing
-"dont_measure" rule.
+Roberto
 
-> +desc="different actions, same func"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy="dont_measure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-
-Right, measure/dont_measure rules for the same func hook overlap.
-
-> +
-> +desc="different actions, same func, different policy options"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy="dont_measure func=FILE_CHECK permit_directio"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-
-Right, any combination of measure rules or measure/dont_measure rules
-for the same func hook should overlap, if one rule is more restrictive
-than the other.
-
-> +desc="different actions, same func, different policy options"
-> +rule="measure func=FILE_CHECK permit_directio"
-> +ima_policy="dont_measure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="same actions, same func, same mask with different modifier"
-> +rule="measure func=FILE_CHECK mask=MAY_EXEC"
-> +ima_policy="measure func=FILE_CHECK mask=^MAY_EXEC"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="same actions, same func, different mask with same modifier"
-> +rule="measure func=FILE_CHECK mask=^MAY_READ"
-> +ima_policy="measure func=FILE_CHECK mask=^MAY_EXEC"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-
-Right, these rules are equally restrictive, but would overlap when a
-file is opened RW. 
-
--- 
-thanks,
-
-Mimi
+> > FAIL: fsverity
+> > ==============
+> > 
+> > which: no fsverity in (../src:../fsverity-utils:/github/home/ima-evm-utils-install/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin)
+> > dd is /usr/bin/dd
+> > mkfs is /usr/sbin/mkfs
+> > blkid is /usr/sbin/blkid
+> > e2fsck is /usr/sbin/e2fsck
+> > tune2fs is /usr/sbin/tune2fs
+> > evmctl is ../src/evmctl
+> > setfattr is /usr/bin/setfattr
+> > ./functions.sh: line 90: ../linux: No such file or directory
+> > =================================
+> >  Run with FAILEARLY=1 ./fsverity.test _cleanup_env cleanup
+> >  To stop after first failure
+> > =================================
+> > PASS: 0 SKIP: 0 FAIL: 1
+> > 
+> > FAIL fsverity.test (exit status: 1)
+> > 
+> > FAIL: portable_signatures
+> > =========================
+> > 
+> > evmctl is /__w/ima-evm-utils/ima-evm-utils/tests/../src/evmctl
+> > ./functions.sh: line 90: ../linux: No such file or directory
+> > ./functions.sh: line 90: ../linux: No such file or directory
 
