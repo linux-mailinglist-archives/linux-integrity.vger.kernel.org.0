@@ -2,94 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A326995FA
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Feb 2023 14:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F30D6997E6
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Feb 2023 15:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjBPNlE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Feb 2023 08:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
+        id S230108AbjBPOww (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Feb 2023 09:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjBPNk5 (ORCPT
+        with ESMTP id S230049AbjBPOwv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Feb 2023 08:40:57 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8665455C
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Feb 2023 05:40:55 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GCmDBR029594;
-        Thu, 16 Feb 2023 13:40:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=TBh4oylSVQmqxAq6PoYwEfkJSRRuWASDCC1zmzK/l2Y=;
- b=IFORGn6XR48H2eC0TCmSP6MR+YD8ZBt/5qBCFHSCOpxZS/6uGdXEVxFnJ/J/4C5qLMPq
- bqjBWnJstoHoLD1ADlR7YhTtwE0E/61y1WKE/3hJNINrSPM3waHeAA7lIsJ/uZEISgwR
- RS2/9XeZl9zvYNN2Z62+Ztf9uu88tvUWIMavFM24NE/5D23NXuUOwR3K97RPMdbzoA6c
- aQ+KegRv7Y41wqNDOughf0TJ8jscTLY7Jwi7uyKFYyxbTbbpZ/BrWbkAGujwXipmc/rK
- fHWtuilFQQO95yLOcRYXprk10N/QK4QKE+R1xXJpyCP4yxtkXjboQXQ2QLDjstfMtK9w wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsgebqvwk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 13:40:38 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31GCPw1S021054;
-        Thu, 16 Feb 2023 13:40:38 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsgebqvw5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 13:40:37 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31GBxKNe019914;
-        Thu, 16 Feb 2023 13:40:37 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3np2n7apxx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 13:40:37 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31GDeaH35309114
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Feb 2023 13:40:36 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 411AC58054;
-        Thu, 16 Feb 2023 13:40:36 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 543DF5803F;
-        Thu, 16 Feb 2023 13:40:35 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.163.119])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Feb 2023 13:40:35 +0000 (GMT)
-Message-ID: <20ff32785d8279b140cb5979975dcfd71195cccd.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v2] Add ima_policy_check.awk and
- ima_policy_check.test
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 16 Feb 2023 08:40:34 -0500
-In-Reply-To: <6dc1c55d499187c55dbf88b19b52c3923001b8af.camel@huaweicloud.com>
-References: <20230214152258.3553294-1-roberto.sassu@huaweicloud.com>
-         <f00d6ea8df825b38f1df62cd2487fb4467c7ab48.camel@linux.ibm.com>
-         <c462ad3e9b77990691b3cf0aff64ea64a5d77586.camel@huaweicloud.com>
-         <87c98608540c6b482614ac90bcf7819c3fd058e5.camel@linux.ibm.com>
-         <6dc1c55d499187c55dbf88b19b52c3923001b8af.camel@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TH0_IDIbmdcTkCoEGIYkTU2W65hciJbd
-X-Proofpoint-ORIG-GUID: eMFccCFsPFLPUHfCKH4WV-lsgyMd0X9N
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-16_10,2023-02-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 phishscore=0 impostorscore=0 suspectscore=0
- adultscore=0 spamscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302160116
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        Thu, 16 Feb 2023 09:52:51 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D734D616;
+        Thu, 16 Feb 2023 06:52:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1676559160;
+        bh=MaekqW8Y2lVTvmHenF8QlHyCe47i2wgNLvs0U8LNOZE=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=vNtOLBVTEWi5kcjQSMxinCmqkNyPJFrNV1KjuMy8SCQcVHIUQTjCDoEFCqulNkyy3
+         8r7tHiUHSbfExTmIelCG44dr70vU1NMhzHV4IgAGyvlZ++QHkknS/cVbDFImn0V3UG
+         MzTdOhHVdMApySQoReXiXDf/c2BAQm7Pfp6ESULA=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 678A9128121D;
+        Thu, 16 Feb 2023 09:52:40 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id SaJfseYx8dAH; Thu, 16 Feb 2023 09:52:40 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1676559160;
+        bh=MaekqW8Y2lVTvmHenF8QlHyCe47i2wgNLvs0U8LNOZE=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=vNtOLBVTEWi5kcjQSMxinCmqkNyPJFrNV1KjuMy8SCQcVHIUQTjCDoEFCqulNkyy3
+         8r7tHiUHSbfExTmIelCG44dr70vU1NMhzHV4IgAGyvlZ++QHkknS/cVbDFImn0V3UG
+         MzTdOhHVdMApySQoReXiXDf/c2BAQm7Pfp6ESULA=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 745201280E69;
+        Thu, 16 Feb 2023 09:52:39 -0500 (EST)
+Message-ID: <6caed4e0ae21528d3b6bb5bc5eefecf6df714d72.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 06/11] tpm: Add full HMAC and encrypt/decrypt session
+ handling code
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Yujie Liu <yujie.liu@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-integrity@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+        keyrings@vger.kernel.org
+Date:   Thu, 16 Feb 2023 09:52:36 -0500
+In-Reply-To: <CAMj1kXHC+9urxeXCmHPj1Ecdb7aF+QDriGE1W4Azuw+_it6u2w@mail.gmail.com>
+References: <20230124175516.5984-7-James.Bottomley@HansenPartnership.com>
+         <202301250706.deGvd0yq-lkp@intel.com>
+         <a588a74bb930f38c9322dd51d21661398b5e2bb8.camel@HansenPartnership.com>
+         <Y9ykeASyzhSKQCmx@yujie-X299> <Y+MNxmzlILarAlZA@kernel.org>
+         <3109ff421139af6b0d9e66a06d8399135e546fa7.camel@HansenPartnership.com>
+         <Y+nqpLm2YyYkcZ+H@kernel.org>
+         <CAMj1kXECgmUMjKZk41oeXWWQpX5wB22YtBt2CSAQzEq8SqbY_g@mail.gmail.com>
+         <a71b8b39505ce936c8bde0d61943c6cc0a9efb81.camel@HansenPartnership.com>
+         <CAMj1kXHC+9urxeXCmHPj1Ecdb7aF+QDriGE1W4Azuw+_it6u2w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,27 +75,75 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2023-02-16 at 14:30 +0100, Roberto Sassu wrote:
-> > > > > +# Rules don't overlap if there is at least one policy keyword (in base or lsm)
-> > > > > +# providing a different value.
-> > > > 
-> > > > The above comment needs to be updated to reflect the overlapping tests.
+On Tue, 2023-02-14 at 15:36 +0100, Ard Biesheuvel wrote:
+> On Tue, 14 Feb 2023 at 15:28, James Bottomley
+> <James.Bottomley@hansenpartnership.com> wrote:
+> > On Tue, 2023-02-14 at 14:54 +0100, Ard Biesheuvel wrote:
+[...]
 > > > 
-> > > Not sure what is missing. Maybe: rules don't overlap also when they are
-> > > equivalent (they have the same keys and values)?
+> > > Can we avoid shashes and sync skciphers at all? We have sha256
+> > > and AES library routines these days, and AES in CFB mode seems
+> > > like a good candidate for a library implementation as well - it
+> > > uses AES encryption only, and is quite straight forward to
+> > > implement. [0]
 > > 
-> > The above "overlap" definition doesn't take into account one rule being
-> > more restrictive (having more "keys" than the other.)
+> > Yes, sure.  I originally suggested something like this way back
+> > four years ago, but it got overruled on the grounds that if I
+> > didn't use shashes and skciphers some architectures would be unable
+> > to use crypto acceleration.  If that's no longer a consideration,
+> > I'm all for simplification of static cipher types.
+> > 
+
+I now have this all implemented, and I looked over your code, so you
+can add my tested/reviewed-by to the aescfb implementation.  On the
+acceleration issue, I'm happy to ignore external accelerators because
+they're a huge pain for small fragments of encryption like the TPM, but
+it would be nice if we could integrate CPU instruction acceleration
+(like AES-NI on x86) into the library functions. 
+
+I also got a test rig to investigate arc.  It seems there is a huge
+problem with the SKCIPHER stack structure on that platform.  For
+reasons I still can't fathom, the compiler thinks it needs at least
+0.5k of stack for this one structure.  I'm sure its something to do
+with an incorrect crypto alignment on arc, but I can't yet find the
+root cause.
+
+> I don't know if that is a consideration or not. The AES library code
+> is generic C code that was written to be constant-time, rather than
+> fast. The fact that CFB only uses the encryption side of it is
+> fortunate, because decryption is even slower.
+
+I think for the TPM, since the encryption isn't exactly bulk (it's
+really under 1k for command and response encryption) it doesn't matter
+... in fact setting up the accelerator is likely a bigger overhead.
+
+> So the question is whether this will actually be a bottleneck in this
+> particular scenario. The synchronous accelerated AES implementations
+> are all SIMD based, which means there is some overhead, and some
+> degree of parallelism is also needed to take full advantage, and CFB
+> only allows this for decryption to begin with, as encryption uses
+> ciphertext block N-1 as AES input for encrypting block N.
 > 
-> Ok, I see.
+> So maybe this is terrible advice, but the code will look so much
+> better for it, and we can always add back the performance later if it
+> is really an impediment.
+
+It's definitely smaller and neater, yes.  I'll post a v3 based on this,
+but when might it go upstream?  In my post I'll put your aescfb as
+patch 1 so the static checkers don't go haywire about missing function
+exports, and we can drop that patch when it is upstream.
+
+James
+
 > 
-> Rules don't overlap if both include the same policy keyword (in base or
-> lsm), at least one, with a different value.
+> 
+> > > The crypto API is far too clunky for synchronous operations of
+> > > algorithms that are known at compile time, and the requirement to
+> > > use scatterlists for skciphers is especially horrid.
+> > > 
+> > > [0]
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=crypto-aes-cfb-library
+> > 
+> > OK, let me have a go at respinning based on this.
 
-^keyword(s)
-
--- 
-thanks,
-
-Mimi
 
