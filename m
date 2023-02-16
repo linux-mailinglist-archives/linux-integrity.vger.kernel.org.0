@@ -2,148 +2,190 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F30D6997E6
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Feb 2023 15:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1C96998E2
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Feb 2023 16:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjBPOww (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Feb 2023 09:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
+        id S229973AbjBPPaS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Feb 2023 10:30:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjBPOwv (ORCPT
+        with ESMTP id S229765AbjBPPaR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:52:51 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D734D616;
-        Thu, 16 Feb 2023 06:52:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1676559160;
-        bh=MaekqW8Y2lVTvmHenF8QlHyCe47i2wgNLvs0U8LNOZE=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=vNtOLBVTEWi5kcjQSMxinCmqkNyPJFrNV1KjuMy8SCQcVHIUQTjCDoEFCqulNkyy3
-         8r7tHiUHSbfExTmIelCG44dr70vU1NMhzHV4IgAGyvlZ++QHkknS/cVbDFImn0V3UG
-         MzTdOhHVdMApySQoReXiXDf/c2BAQm7Pfp6ESULA=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 678A9128121D;
-        Thu, 16 Feb 2023 09:52:40 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id SaJfseYx8dAH; Thu, 16 Feb 2023 09:52:40 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1676559160;
-        bh=MaekqW8Y2lVTvmHenF8QlHyCe47i2wgNLvs0U8LNOZE=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=vNtOLBVTEWi5kcjQSMxinCmqkNyPJFrNV1KjuMy8SCQcVHIUQTjCDoEFCqulNkyy3
-         8r7tHiUHSbfExTmIelCG44dr70vU1NMhzHV4IgAGyvlZ++QHkknS/cVbDFImn0V3UG
-         MzTdOhHVdMApySQoReXiXDf/c2BAQm7Pfp6ESULA=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 745201280E69;
-        Thu, 16 Feb 2023 09:52:39 -0500 (EST)
-Message-ID: <6caed4e0ae21528d3b6bb5bc5eefecf6df714d72.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 06/11] tpm: Add full HMAC and encrypt/decrypt session
- handling code
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Yujie Liu <yujie.liu@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-integrity@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-        keyrings@vger.kernel.org
-Date:   Thu, 16 Feb 2023 09:52:36 -0500
-In-Reply-To: <CAMj1kXHC+9urxeXCmHPj1Ecdb7aF+QDriGE1W4Azuw+_it6u2w@mail.gmail.com>
-References: <20230124175516.5984-7-James.Bottomley@HansenPartnership.com>
-         <202301250706.deGvd0yq-lkp@intel.com>
-         <a588a74bb930f38c9322dd51d21661398b5e2bb8.camel@HansenPartnership.com>
-         <Y9ykeASyzhSKQCmx@yujie-X299> <Y+MNxmzlILarAlZA@kernel.org>
-         <3109ff421139af6b0d9e66a06d8399135e546fa7.camel@HansenPartnership.com>
-         <Y+nqpLm2YyYkcZ+H@kernel.org>
-         <CAMj1kXECgmUMjKZk41oeXWWQpX5wB22YtBt2CSAQzEq8SqbY_g@mail.gmail.com>
-         <a71b8b39505ce936c8bde0d61943c6cc0a9efb81.camel@HansenPartnership.com>
-         <CAMj1kXHC+9urxeXCmHPj1Ecdb7aF+QDriGE1W4Azuw+_it6u2w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Thu, 16 Feb 2023 10:30:17 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BA01EBDE
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Feb 2023 07:30:16 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GEMjCa033700;
+        Thu, 16 Feb 2023 15:29:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=TUe0P5cgHVD8t3pZ5YG5j2ur1dyM7Luo6oOAL/Vm2+8=;
+ b=a09tzVo5+mz7BkbOSOgsdIvkNALt08C4JTwgjanjsu+i/uV8540E85eL0DQHqvoWqVBX
+ ieHFElEyGekWkOZjW1SNeESohy7x2Ei0abYVX7qRibIIt7TK2aonHVmlwAdLlkiDdhFe
+ zi6TvvAdPnfuPrJaFEKMPKw+UUJUsXPvF2v82tiNiPJyv0G7YYX5MENlqFO0ySspHFTU
+ zFVNlEAdjw08Z+xqe4N7ri6nEzbehBV9H/NG1w4rAk5EmTPb2yblUjxmQQx8DShecONd
+ AfyA4RpC6MJQHpc++ujKFhyHu1EtERL/S410Sx28/TIBNdhCiMExxarK619qfKu1WOyD KA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsp6v1u1c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Feb 2023 15:29:56 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31GEPEOV003238;
+        Thu, 16 Feb 2023 15:29:56 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsp6v1u0k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Feb 2023 15:29:55 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31GCLD7Q016681;
+        Thu, 16 Feb 2023 15:29:54 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3np2n7k69y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Feb 2023 15:29:54 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31GFTrYw37028548
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Feb 2023 15:29:53 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E4E558054;
+        Thu, 16 Feb 2023 15:29:53 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 99BF658055;
+        Thu, 16 Feb 2023 15:29:52 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.163.119])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 16 Feb 2023 15:29:52 +0000 (GMT)
+Message-ID: <237824c946ab55dd14fc39d4e34cd73a0d620cb3.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils 0/3] CI: Tumbleweed openSSL fix
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Petr Vorel <pvorel@suse.cz>, linux-integrity@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     dmitry.kasatkin@gmail.com, vt@altlinux.org, stefanb@linux.ibm.com
+Date:   Thu, 16 Feb 2023 10:29:52 -0500
+In-Reply-To: <006bceba21b205f862d92a50c7095397f30d1b9e.camel@huaweicloud.com>
+References: <20230214210035.585395-1-pvorel@suse.cz>
+         <Y+1gTC0cjCo6Aw0v@pevik>
+         <8c65e64026e33caf6cf756c616f3effe249cae4b.camel@linux.ibm.com>
+         <006bceba21b205f862d92a50c7095397f30d1b9e.camel@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: YGddsoDJSB2sk2lMWeKkVQcZGeOMmGoI
+X-Proofpoint-ORIG-GUID: xihcdO2Zvaa2NmJF02c8LNFOqnejbLOk
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-16_11,2023-02-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302160130
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2023-02-14 at 15:36 +0100, Ard Biesheuvel wrote:
-> On Tue, 14 Feb 2023 at 15:28, James Bottomley
-> <James.Bottomley@hansenpartnership.com> wrote:
-> > On Tue, 2023-02-14 at 14:54 +0100, Ard Biesheuvel wrote:
-[...]
+On Thu, 2023-02-16 at 09:16 +0100, Roberto Sassu wrote:
+> On Wed, 2023-02-15 at 18:19 -0500, Mimi Zohar wrote:
+> > Hi Petr,
+> > 
+> > On Wed, 2023-02-15 at 23:44 +0100, Petr Vorel wrote:
+> > > Hi Mimi,
 > > > 
-> > > Can we avoid shashes and sync skciphers at all? We have sha256
-> > > and AES library routines these days, and AES in CFB mode seems
-> > > like a good candidate for a library implementation as well - it
-> > > uses AES encryption only, and is quite straight forward to
-> > > implement. [0]
-> > 
-> > Yes, sure.  I originally suggested something like this way back
-> > four years ago, but it got overruled on the grounds that if I
-> > didn't use shashes and skciphers some architectures would be unable
-> > to use crypto acceleration.  If that's no longer a consideration,
-> > I'm all for simplification of static cipher types.
-> > 
-
-I now have this all implemented, and I looked over your code, so you
-can add my tested/reviewed-by to the aescfb implementation.  On the
-acceleration issue, I'm happy to ignore external accelerators because
-they're a huge pain for small fragments of encryption like the TPM, but
-it would be nice if we could integrate CPU instruction acceleration
-(like AES-NI on x86) into the library functions. 
-
-I also got a test rig to investigate arc.  It seems there is a huge
-problem with the SKCIPHER stack structure on that platform.  For
-reasons I still can't fathom, the compiler thinks it needs at least
-0.5k of stack for this one structure.  I'm sure its something to do
-with an incorrect crypto alignment on arc, but I can't yet find the
-root cause.
-
-> I don't know if that is a consideration or not. The AES library code
-> is generic C code that was written to be constant-time, rather than
-> fast. The fact that CFB only uses the encryption side of it is
-> fortunate, because decryption is even slower.
-
-I think for the TPM, since the encryption isn't exactly bulk (it's
-really under 1k for command and response encryption) it doesn't matter
-... in fact setting up the accelerator is likely a bigger overhead.
-
-> So the question is whether this will actually be a bottleneck in this
-> particular scenario. The synchronous accelerated AES implementations
-> are all SIMD based, which means there is some overhead, and some
-> degree of parallelism is also needed to take full advantage, and CFB
-> only allows this for decryption to begin with, as encryption uses
-> ciphertext block N-1 as AES input for encrypting block N.
-> 
-> So maybe this is terrible advice, but the code will look so much
-> better for it, and we can always add back the performance later if it
-> is really an impediment.
-
-It's definitely smaller and neater, yes.  I'll post a v3 based on this,
-but when might it go upstream?  In my post I'll put your aescfb as
-patch 1 so the static checkers don't go haywire about missing function
-exports, and we can drop that patch when it is upstream.
-
-James
-
-> 
-> 
-> > > The crypto API is far too clunky for synchronous operations of
-> > > algorithms that are known at compile time, and the requirement to
-> > > use scatterlists for skciphers is especially horrid.
+> > > > Tested:
+> > > > https://github.com/pevik/ima-evm-utils/actions/runs/4177976359/jobs/7236222413
 > > > 
-> > > [0]
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=crypto-aes-cfb-library
+> > > Thanks for merging this.
 > > 
-> > OK, let me have a go at respinning based on this.
+> > I actually pushed out the patches to "next-testing" to make sure it
+> > works.  In doing so, I dropped a couple of Roberto's patches, which
+> > aren't quite ready and one of mine as well.  In general, I'm not sure
+> > pushing patches out to "next-integrity" should be considered "merging"
+> > quite yet.  In this case, your patches are fine.  (Perhaps there needs
+> > to be a better work flow.)
+> > 
+> > > My test was working:
+> > > https://github.com/pevik/ima-evm-utils/actions/runs/4177976359
+> > 
+> > Yes, I saw.
+> > 
+> > > But the same code now fails for Fedora.
+> > > I wonder what exactly is wrong now:
+> > > https://github.com/mimizohar/ima-evm-utils/actions/runs/4188686859/jobs/7260231106
+> > > https://github.com/pevik/ima-evm-utils/actions/runs/4188761663/jobs/7260289846
+> > 
+> > The UML kernel built properly, but for some reason the fsverity and
+> > portable_signature tests aren't finding it.
+> 
+> It could be this (in the logs):
+> 
+> There exist one or more cache(s) with similar key but they have
+> different version or scope.
+> 
+> I would try:
+> 
+> enableCrossOsArchive: true
+> 
+> after:
+> 
+>       uses: actions/cache@v3
+>       with:
+>         path:
+>         key:
+> 
+> for every step using the cache.
+> 
+> Cache version is a hash generated for a combination of compression tool
+> used (Gzip, Zstd, etc. based on the runner OS) and the path of
+> directories being cached.
+> 
+> Maybe there was some change from the time the kernel and signing key
+> were cached.
+
+Adding "enableCrossOsArchive: true" didn't help, nor did clearing the
+cache.
+
+Mimi
+
+
+> 
+> > > FAIL: fsverity
+> > > ==============
+> > > 
+> > > which: no fsverity in (../src:../fsverity-utils:/github/home/ima-evm-utils-install/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin)
+> > > dd is /usr/bin/dd
+> > > mkfs is /usr/sbin/mkfs
+> > > blkid is /usr/sbin/blkid
+> > > e2fsck is /usr/sbin/e2fsck
+> > > tune2fs is /usr/sbin/tune2fs
+> > > evmctl is ../src/evmctl
+> > > setfattr is /usr/bin/setfattr
+> > > ./functions.sh: line 90: ../linux: No such file or directory
+> > > =================================
+> > >  Run with FAILEARLY=1 ./fsverity.test _cleanup_env cleanup
+> > >  To stop after first failure
+> > > =================================
+> > > PASS: 0 SKIP: 0 FAIL: 1
+> > > 
+> > > FAIL fsverity.test (exit status: 1)
+> > > 
+> > > FAIL: portable_signatures
+> > > =========================
+> > > 
+> > > evmctl is /__w/ima-evm-utils/ima-evm-utils/tests/../src/evmctl
+> > > ./functions.sh: line 90: ../linux: No such file or directory
+> > > ./functions.sh: line 90: ../linux: No such file or directory
+> 
 
 
