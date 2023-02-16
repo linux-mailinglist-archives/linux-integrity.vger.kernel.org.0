@@ -2,190 +2,198 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1C96998E2
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Feb 2023 16:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 900D7699D70
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Feb 2023 21:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjBPPaS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Feb 2023 10:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S229614AbjBPUOz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Feb 2023 15:14:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjBPPaR (ORCPT
+        with ESMTP id S229561AbjBPUOz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Feb 2023 10:30:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BA01EBDE
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Feb 2023 07:30:16 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GEMjCa033700;
-        Thu, 16 Feb 2023 15:29:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=TUe0P5cgHVD8t3pZ5YG5j2ur1dyM7Luo6oOAL/Vm2+8=;
- b=a09tzVo5+mz7BkbOSOgsdIvkNALt08C4JTwgjanjsu+i/uV8540E85eL0DQHqvoWqVBX
- ieHFElEyGekWkOZjW1SNeESohy7x2Ei0abYVX7qRibIIt7TK2aonHVmlwAdLlkiDdhFe
- zi6TvvAdPnfuPrJaFEKMPKw+UUJUsXPvF2v82tiNiPJyv0G7YYX5MENlqFO0ySspHFTU
- zFVNlEAdjw08Z+xqe4N7ri6nEzbehBV9H/NG1w4rAk5EmTPb2yblUjxmQQx8DShecONd
- AfyA4RpC6MJQHpc++ujKFhyHu1EtERL/S410Sx28/TIBNdhCiMExxarK619qfKu1WOyD KA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsp6v1u1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 15:29:56 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31GEPEOV003238;
-        Thu, 16 Feb 2023 15:29:56 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nsp6v1u0k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 15:29:55 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31GCLD7Q016681;
-        Thu, 16 Feb 2023 15:29:54 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3np2n7k69y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Feb 2023 15:29:54 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31GFTrYw37028548
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Feb 2023 15:29:53 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E4E558054;
-        Thu, 16 Feb 2023 15:29:53 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 99BF658055;
-        Thu, 16 Feb 2023 15:29:52 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.163.119])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Feb 2023 15:29:52 +0000 (GMT)
-Message-ID: <237824c946ab55dd14fc39d4e34cd73a0d620cb3.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils 0/3] CI: Tumbleweed openSSL fix
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Petr Vorel <pvorel@suse.cz>, linux-integrity@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     dmitry.kasatkin@gmail.com, vt@altlinux.org, stefanb@linux.ibm.com
-Date:   Thu, 16 Feb 2023 10:29:52 -0500
-In-Reply-To: <006bceba21b205f862d92a50c7095397f30d1b9e.camel@huaweicloud.com>
-References: <20230214210035.585395-1-pvorel@suse.cz>
-         <Y+1gTC0cjCo6Aw0v@pevik>
-         <8c65e64026e33caf6cf756c616f3effe249cae4b.camel@linux.ibm.com>
-         <006bceba21b205f862d92a50c7095397f30d1b9e.camel@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: YGddsoDJSB2sk2lMWeKkVQcZGeOMmGoI
-X-Proofpoint-ORIG-GUID: xihcdO2Zvaa2NmJF02c8LNFOqnejbLOk
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 16 Feb 2023 15:14:55 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D624C6D7;
+        Thu, 16 Feb 2023 12:14:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1676578492;
+        bh=+dnVPJOdvuGdwKj422DXgXTJQx+Ly0OViaaPctNmusw=;
+        h=From:To:Subject:Date:Message-Id:From;
+        b=JeABtkC0Q6Fuj2q8/rCrb+gKljaD4ok0JauLSODHa8xkUCeKc5WXd3LITdhAHS+xQ
+         SlAEmOmzeKKx9xFEBzh4HqOsudTMn9LO0xmBeQi/15XjxoDeObYYkSWAB5AZEARt/D
+         m0Mdt13mQZfEGMn/68XxxMRHU1GWhUp6GNl4H17o=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 76C541286F45;
+        Thu, 16 Feb 2023 15:14:52 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mhF5QzzyLpSD; Thu, 16 Feb 2023 15:14:52 -0500 (EST)
+Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CFD251286E47;
+        Thu, 16 Feb 2023 15:14:51 -0500 (EST)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 00/12] add integrity and security to TPM2 transactions
+Date:   Thu, 16 Feb 2023 15:13:58 -0500
+Message-Id: <20230216201410.15010-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-16_11,2023-02-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- malwarescore=0 phishscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
- clxscore=1015 lowpriorityscore=0 mlxscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302160130
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2023-02-16 at 09:16 +0100, Roberto Sassu wrote:
-> On Wed, 2023-02-15 at 18:19 -0500, Mimi Zohar wrote:
-> > Hi Petr,
-> > 
-> > On Wed, 2023-02-15 at 23:44 +0100, Petr Vorel wrote:
-> > > Hi Mimi,
-> > > 
-> > > > Tested:
-> > > > https://github.com/pevik/ima-evm-utils/actions/runs/4177976359/jobs/7236222413
-> > > 
-> > > Thanks for merging this.
-> > 
-> > I actually pushed out the patches to "next-testing" to make sure it
-> > works.  In doing so, I dropped a couple of Roberto's patches, which
-> > aren't quite ready and one of mine as well.  In general, I'm not sure
-> > pushing patches out to "next-integrity" should be considered "merging"
-> > quite yet.  In this case, your patches are fine.  (Perhaps there needs
-> > to be a better work flow.)
-> > 
-> > > My test was working:
-> > > https://github.com/pevik/ima-evm-utils/actions/runs/4177976359
-> > 
-> > Yes, I saw.
-> > 
-> > > But the same code now fails for Fedora.
-> > > I wonder what exactly is wrong now:
-> > > https://github.com/mimizohar/ima-evm-utils/actions/runs/4188686859/jobs/7260231106
-> > > https://github.com/pevik/ima-evm-utils/actions/runs/4188761663/jobs/7260289846
-> > 
-> > The UML kernel built properly, but for some reason the fsverity and
-> > portable_signature tests aren't finding it.
-> 
-> It could be this (in the logs):
-> 
-> There exist one or more cache(s) with similar key but they have
-> different version or scope.
-> 
-> I would try:
-> 
-> enableCrossOsArchive: true
-> 
-> after:
-> 
->       uses: actions/cache@v3
->       with:
->         path:
->         key:
-> 
-> for every step using the cache.
-> 
-> Cache version is a hash generated for a combination of compression tool
-> used (Gzip, Zstd, etc. based on the runner OS) and the path of
-> directories being cached.
-> 
-> Maybe there was some change from the time the kernel and signing key
-> were cached.
+The interest in securing the TPM against interposers, both active and
+passive has risen to fever pitch with the demonstration of key
+recovery against windows bitlocker:
 
-Adding "enableCrossOsArchive: true" didn't help, nor did clearing the
-cache.
+https://dolosgroup.io/blog/2021/7/9/from-stolen-laptop-to-inside-the-company-network
 
-Mimi
+And subsequently the same attack being successful against all the
+Linux TPM based security solutions:
 
+https://www.secura.com/blog/tpm-sniffing-attacks-against-non-bitlocker-targets
 
-> 
-> > > FAIL: fsverity
-> > > ==============
-> > > 
-> > > which: no fsverity in (../src:../fsverity-utils:/github/home/ima-evm-utils-install/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin)
-> > > dd is /usr/bin/dd
-> > > mkfs is /usr/sbin/mkfs
-> > > blkid is /usr/sbin/blkid
-> > > e2fsck is /usr/sbin/e2fsck
-> > > tune2fs is /usr/sbin/tune2fs
-> > > evmctl is ../src/evmctl
-> > > setfattr is /usr/bin/setfattr
-> > > ./functions.sh: line 90: ../linux: No such file or directory
-> > > =================================
-> > >  Run with FAILEARLY=1 ./fsverity.test _cleanup_env cleanup
-> > >  To stop after first failure
-> > > =================================
-> > > PASS: 0 SKIP: 0 FAIL: 1
-> > > 
-> > > FAIL fsverity.test (exit status: 1)
-> > > 
-> > > FAIL: portable_signatures
-> > > =========================
-> > > 
-> > > evmctl is /__w/ima-evm-utils/ima-evm-utils/tests/../src/evmctl
-> > > ./functions.sh: line 90: ../linux: No such file or directory
-> > > ./functions.sh: line 90: ../linux: No such file or directory
-> 
+The attacks fall into two categories:
 
+1. Passive Interposers, which sit on the bus and merely observe
+2. Active Interposers, which try to manipulate TPM transactions on the
+   bus using man in the middle and packet stealing to create TPM state
+   the interposer owner desires.
+
+Our broadest interposer target is the use of TPM_RS_PW for password
+authorization which sends the actual password to the TPM without any
+obfuscation and effectively hands it to any interposer. The way to fix
+this is to use real sessions for HMAC capabilities to ensure integrity
+and to use parameter and response encryption to ensure confidentiality
+of the data flowing over the TPM bus.  HMAC sessions by agreeing a
+challenge with the TPM and then giving a response which is a HMAC of
+the password and the challenge, so the application proves knowledge of
+the password to the TPM without ever transmitting the password itself.
+Using HMAC sessions when sending commands to the TPM also provides
+some measure of protection against active interposers, since the
+interposer can't interfere with or delete a HMAC'd command (because
+they can't manufacture a response with the correct HMAC).
+
+To protect TPM transactions where there isn't a shared secret
+(i.e. the command is something like a PCR extension which doesn't
+involve a TPM object with a password) we have to do a bit more work to
+set up sessions with a passed in encrypted secret (called a salt) to
+act in place of the shared secret in the HMAC.  This secret salt is
+effectively a random number encrypted to a public key of the TPM.  The
+final piece of the puzzle is using parameter input and response return
+encryption, so any interposer can't see the data passing from the
+application to the TPM and vice versa.
+
+The most insidious interposer attack of all is a reset attack: since
+the interposer has access to the TPM bus, it can assert the TPM reset
+line any time it wants.  When a TPM resets it mostly comes back in the
+same state except that all the PCRs are reset to their initial values.
+Controlling the reset line allows the interposer to change the PCR
+state after the fact by resetting the TPM and then replaying PCR
+extends to get the PCRs into a valid state to release secrets, so even
+if an attack event was recorded, the record is erased.  This reset
+attack violates the fundamental princible of non-repudiability of TPM
+logs.  Defeating the reset attack involves tying all TPM operations
+within the kernel to a property which will change detectably if the
+TPM is reset.  For that reason, we tie all TPM sessions to the null
+hierarchy we obtain at start of day and whose seed changes on every
+reset.  If an active interposer asserts a TPM reset, the new null
+primary won't match the kernel's stored one and all TPM operations
+will start failing because of HMAC mismatches in the sessions.  So if
+the kernel TPM code keeps operating, it guarantees that a reset hasn't
+occurred.
+
+The final part of the puzzle is that the machine owner must have a
+fixed idea of the EK of their TPM and should have certified this with
+the TPM manufacturer.  On every boot, the certified EK public key
+should be used to do a make credential/activate credential attestation
+key insertion and then the null key certified with the attestation
+key.  We can follow a trust on first use model where an OS
+installation will extract and verify a public EK and save it to a read
+only file.
+
+This patch series adds a simple API which can ensure the above
+properties as a layered addition to the existing TPM handling code.
+This series now includes protections for PCR extend, getting random
+numbers from the TPM and data sealing and unsealing.  It therefore
+eliminates all uses of TPM2_RS_PW in the kernel and adds encryption
+protection to sensitive data flowing into and out of the TPM.  The
+first four patches add more sophisticated buffer handling to the TPM
+which is needed to build the more complex encryption and
+authentication based commands.  Patch 6 adds all the generic
+cryptography primitives and patches 7-9 use them in critical TPM
+operations where we want to avoid or detect interposers.  Patch 10
+exports the name of the null key we used for boot/run time
+verification and patch 11 documents the security guarantees and
+expectations.
+
+This was originally sent over four years ago, with the last iteration
+being:
+
+https://lore.kernel.org/linux-integrity/1568031515.6613.31.camel@HansenPartnership.com/
+
+I'm dusting it off now because various forces at Microsoft and Google
+via the Open Compute Platform are making a lot of noise about
+interposers and we in the linux kernel look critically lacking in that
+regard, particularly for TPM trusted keys.
+
+---
+v2 fixes the problems smatch reported and adds more explanation about
+the code motion in the first few patches
+v3 rebases the encryption to be against Ard's new library function, the
+aescfb addition of which appears as patch 1.
+
+James
+
+---
+
+Ard Biesheuvel (1):
+  crypto: lib - implement library version of AES in CFB mode
+
+James Bottomley (11):
+  tpm: move buffer handling from static inlines to real functions
+  tpm: add buffer handling for TPM2B types
+  tpm: add cursor based buffer functions for response parsing
+  tpm: add buffer function to point to returned parameters
+  tpm: export the context save and load commands
+  tpm: Add full HMAC and encrypt/decrypt session handling code
+  tpm: add hmac checks to tpm2_pcr_extend()
+  tpm: add session encryption protection to tpm2_get_random()
+  KEYS: trusted: Add session encryption protection to the seal/unseal
+    path
+  tpm: add the null key name as a sysfs export
+  Documentation: add tpm-security.rst
+
+ Documentation/security/tpm/tpm-security.rst |  216 ++++
+ drivers/char/tpm/Kconfig                    |   13 +
+ drivers/char/tpm/Makefile                   |    2 +
+ drivers/char/tpm/tpm-buf.c                  |  196 ++++
+ drivers/char/tpm/tpm-chip.c                 |    3 +
+ drivers/char/tpm/tpm-sysfs.c                |   18 +
+ drivers/char/tpm/tpm.h                      |   14 +
+ drivers/char/tpm/tpm2-cmd.c                 |   52 +-
+ drivers/char/tpm/tpm2-sessions.c            | 1160 +++++++++++++++++++
+ drivers/char/tpm/tpm2-space.c               |    8 +-
+ include/crypto/aes.h                        |    5 +
+ include/linux/tpm.h                         |  257 ++--
+ lib/crypto/Kconfig                          |    5 +
+ lib/crypto/Makefile                         |    3 +
+ lib/crypto/aescfb.c                         |   75 ++
+ security/keys/trusted-keys/trusted_tpm2.c   |   82 +-
+ 16 files changed, 1984 insertions(+), 125 deletions(-)
+ create mode 100644 Documentation/security/tpm/tpm-security.rst
+ create mode 100644 drivers/char/tpm/tpm-buf.c
+ create mode 100644 drivers/char/tpm/tpm2-sessions.c
+ create mode 100644 lib/crypto/aescfb.c
+
+-- 
+2.35.3
 
