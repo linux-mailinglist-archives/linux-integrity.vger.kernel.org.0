@@ -2,59 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABEA69B51B
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Feb 2023 22:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7392D69B538
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Feb 2023 23:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjBQVvQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 17 Feb 2023 16:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S229659AbjBQWF1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Feb 2023 17:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjBQVvO (ORCPT
+        with ESMTP id S229591AbjBQWF1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:51:14 -0500
+        Fri, 17 Feb 2023 17:05:27 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B184A1E5;
-        Fri, 17 Feb 2023 13:51:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2EB64B19;
+        Fri, 17 Feb 2023 14:05:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4082B82E20;
-        Fri, 17 Feb 2023 21:51:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69BABC433D2;
-        Fri, 17 Feb 2023 21:51:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1108EB82B45;
+        Fri, 17 Feb 2023 22:05:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4BB3C433EF;
+        Fri, 17 Feb 2023 22:05:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676670670;
-        bh=Zdc2juHFxUSJ+qe/tfeNLynwKrd3JRGjk7XKv1VCm8s=;
+        s=k20201202; t=1676671520;
+        bh=rvwbMc7UtbeDFPAPiqKfh0di31mOV8zk+Vkgf9kqo9Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AqqlbZLuNM1RqNqZJptZeQW/rqaZrT5D8VSMq5ZSjTU/E5r1TQKRF7PkbIVLcUH/2
-         8cuRUeicsGNcl8XEw5qTuFKAYIKb504ce9jGALV1RS+4ve04PmknJvlZ5fUXEzr8h7
-         aqUEvF6eURlnfPKkGRoQn1sUCX6U6NJMiQnQPaZiA24sK7zKdtp9yGcb5xNpRaF4OW
-         TDNvXz2AsJ5E2vg5D1EDuiCqf1FB2wo6sF7fiI+ebz78n4/15uAI3hee6Oxm7YwEak
-         zpQOMPBNUqcJtQOH32Y66S0vhBxpXKlezsJob1oVeSMV6BodOu3aK3TvIwIBgHiEmQ
-         TwxcC0Nk94YGA==
-Date:   Fri, 17 Feb 2023 23:51:05 +0200
+        b=j+iAq0nNES+YgbQHKdW2bQljZVU9aRu3RdsBSGqHaF3OSzKaNtCQuvfRmj9LJtsL5
+         /ZrPRBlZC9uHDS/TYtIf4aATaBuRWgpLsT9LnyvdlveaLHIsMImD0GAcrtcBADPBw1
+         7Ye8hNH6XtMo5655Dff3cv2kbS+jLFnoSYfZ3+A3Au32iYf6QVoT/CMDApIM1WiNEw
+         Uwm2z1ya2owVhf1yLjwHnv7HbiLBn5qpYcIJErAvKoaNCvUOZXA+A00Kas6LKMxQVd
+         Rxz+KwPBsfGEw1PWAhRtrhEjtQ+ItE6wpqqAXW/y192kwr6R9SiQ2I/Ou/NXk47kP9
+         X3xv/Nz+NeEcg==
+Date:   Sat, 18 Feb 2023 00:05:15 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Yujie Liu <yujie.liu@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-integrity@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-        keyrings@vger.kernel.org
-Subject: Re: [PATCH v2 06/11] tpm: Add full HMAC and encrypt/decrypt session
- handling code
-Message-ID: <Y+/2yRBjOKAAjiF+@kernel.org>
-References: <20230124175516.5984-7-James.Bottomley@HansenPartnership.com>
- <202301250706.deGvd0yq-lkp@intel.com>
- <a588a74bb930f38c9322dd51d21661398b5e2bb8.camel@HansenPartnership.com>
- <Y9ykeASyzhSKQCmx@yujie-X299>
- <Y+MNxmzlILarAlZA@kernel.org>
- <3109ff421139af6b0d9e66a06d8399135e546fa7.camel@HansenPartnership.com>
- <Y+nqpLm2YyYkcZ+H@kernel.org>
- <CAMj1kXECgmUMjKZk41oeXWWQpX5wB22YtBt2CSAQzEq8SqbY_g@mail.gmail.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jason@zx2c4.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
+Message-ID: <Y+/6G+UlTI7GpW6o@kernel.org>
+References: <20230214201955.7461-1-mario.limonciello@amd.com>
+ <20230214201955.7461-2-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXECgmUMjKZk41oeXWWQpX5wB22YtBt2CSAQzEq8SqbY_g@mail.gmail.com>
+In-Reply-To: <20230214201955.7461-2-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,145 +57,220 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 02:54:02PM +0100, Ard Biesheuvel wrote:
-> On Mon, 13 Feb 2023 at 08:45, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Fri, Feb 10, 2023 at 09:48:15AM -0500, James Bottomley wrote:
-> > > On Wed, 2023-02-08 at 04:49 +0200, Jarkko Sakkinen wrote:
-> > > > On Fri, Feb 03, 2023 at 02:06:48PM +0800, Yujie Liu wrote:
-> > > > > Hi James,
-> > > > >
-> > > > > On Wed, Jan 25, 2023 at 07:59:09AM -0500, James Bottomley wrote:
-> > > > > > On Wed, 2023-01-25 at 07:11 +0800, kernel test robot wrote:
-> > > > > > > Hi James,
-> > > > > > >
-> > > > > > > I love your patch! Perhaps something to improve:
-> > > > > > >
-> > > > > > > [auto build test WARNING on char-misc/char-misc-testing]
-> > > > > > > [also build test WARNING on char-misc/char-misc-next char-
-> > > > > > > misc/char-
-> > > > > > > misc-linus zohar-integrity/next-integrity linus/master v6.2-rc5
-> > > > > > > next-
-> > > > > > > 20230124]
-> > > > > > > [If your patch is applied to the wrong git tree, kindly drop us
-> > > > > > > a
-> > > > > > > note.
-> > > > > > > And when submitting patch, we suggest to use '--base' as
-> > > > > > > documented
-> > > > > > > in
-> > > > > > > https://git-scm.com/docs/git-format-patch#_base_tree_information
-> > > > > > > ]
-> > > > > > >
-> > > > > > > url:
-> > > > > > > https://github.com/intel-lab-lkp/linux/commits/James-Bottomley/tpm-move-buffer-handling-from-static-inlines-to-real-functions/20230125-020146
-> > > > > > > patch link:
-> > > > > > > https://lore.kernel.org/r/20230124175516.5984-7-James.Bottomley%40HansenPartnership.com
-> > > > > > > patch subject: [PATCH v2 06/11] tpm: Add full HMAC and
-> > > > > > > encrypt/decrypt session handling code
-> > > > > > > config: arc-allyesconfig
-> > > > > > > (
-> > > > > > > https://download.01.org/0day-ci/archive/20230125/202301250706.de
-> > > > > > > Gvd0
-> > > > > > > yq-lkp@intel.com/config)
-> > > > > > > compiler: arceb-elf-gcc (GCC) 12.1.0
-> > > > > > > reproduce (this is a W=1 build):
-> > > > > > >         wget
-> > > > > > > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
-> > > > > > >  -O ~/bin/make.cross
-> > > > > > >         chmod +x ~/bin/make.cross
-> > > > > > >         #
-> > > > > > > https://github.com/intel-lab-lkp/linux/commit/dc0fc74718b4a786aba4a954233e8ab3afdcc03c
-> > > > > > >         git remote add linux-review
-> > > > > > > https://github.com/intel-lab-lkp/linux
-> > > > > > >         git fetch --no-tags linux-review James-Bottomley/tpm-
-> > > > > > > move-
-> > > > > > > buffer-handling-from-static-inlines-to-real-functions/20230125-
-> > > > > > > 020146
-> > > > > > >         git checkout dc0fc74718b4a786aba4a954233e8ab3afdcc03c
-> > > > > > >         # save the config file
-> > > > > > >         mkdir build_dir && cp config build_dir/.config
-> > > > > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0
-> > > > > > > make.cross W=1 O=build_dir ARCH=arc olddefconfig
-> > > > > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0
-> > > > > > > make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-> > > > > > > drivers/char/tpm/
-> > > > > > >
-> > > > > > > If you fix the issue, kindly add following tag where applicable
-> > > > > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > > >
-> > > > > > > All warnings (new ones prefixed by >>):
-> > > > > > >
-> > > > > > >    drivers/char/tpm/tpm2-sessions.c:1184:5: warning: no
-> > > > > > > previous
-> > > > > > > prototype for 'tpm2_create_null_primary' [-Wmissing-prototypes]
-> > > > > > >     1184 | int tpm2_create_null_primary(struct tpm_chip *chip)
-> > > > > > > {
-> > > > > > >          |     ^~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > > >    drivers/char/tpm/tpm2-sessions.c: In function
-> > > > > > > 'tpm_buf_check_hmac_response':
-> > > > > > > > > drivers/char/tpm/tpm2-sessions.c:831:1: warning: the frame
-> > > > > > > > > size
-> > > > > > > > > of 1132 bytes is larger than 1024 bytes [-Wframe-larger-
-> > > > > > > > > than=]
-> > > > > > >      831 | }
-> > > > > > >          | ^
-> > > > > > >    drivers/char/tpm/tpm2-sessions.c: In function
-> > > > > > > 'tpm_buf_fill_hmac_session':
-> > > > > > >    drivers/char/tpm/tpm2-sessions.c:579:1: warning: the frame
-> > > > > > > size of
-> > > > > > > 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-> > > > > > >      579 | }
-> > > > > > >          | ^
-> > > > > >
-> > > > > > Is this a test problem?  I can't see why the code would only blow
-> > > > > > the
-> > > > > > stack on the arc architecture and not on any other ... does it
-> > > > > > have
-> > > > > > something funny with on stack crypto structures?
-> > > > >
-> > > > > This warning is controlled by the value of CONFIG_FRAME_WARN.
-> > > > >
-> > > > > For "make ARCH=arc allyesconfig", the default value is 1024, so
-> > > > > this frame warning shows up during the build.
-> > > > >
-> > > > > For other arch such as "make ARCH=x86_64 allyesconfig", the default
-> > > > > value would be 2048 and won't have this warning.
-> > > > >
-> > > > > Not sure if this is a real problem that need to be fixed, here just
-> > > > > providing above information for your reference.
-> > > > >
-> > > > > --
-> > > > > Best Regards,
-> > > > > Yujie
-> > > >
-> > > > *Must* be fixed given that it is how the default value is set now.
-> > > > This is wrong place to reconsider.
-> > > >
-> > > >
-> > > > And we do not want to add functions that bloat the stack this way.
-> > > >
-> > > > Shash just needs to be allocated from heap instead of stack.
-> > >
-> > > On x86_64 the stack usage is measured at 984 bytes, so rather than
-> > > jumping to conclusions let's root cause why this is a problem only on
-> > > the arc architecture.  I suspect it's something to do with the
-> > > alignment constraints of shash.  I've also noted it shouldn't actually
-> > > warn on arc because the default stack warning size there should be 2048
-> > > (like x86_64).
-> >
-> > Would it such a big deal to allocate shash from heap? That would
-> > be IMHO more robust in the end.
-> >
+On Tue, Feb 14, 2023 at 02:19:55PM -0600, Mario Limonciello wrote:
+> AMD has issued an advisory indicating that having fTPM enabled in
+> BIOS can cause "stuttering" in the OS.  This issue has been fixed
+> in newer versions of the fTPM firmware, but it's up to system
+> designers to decide whether to distribute it.
 > 
-> Can we avoid shashes and sync skciphers at all? We have sha256 and AES
-> library routines these days, and AES in CFB mode seems like a good
-> candidate for a library implementation as well - it uses AES
-> encryption only, and is quite straight forward to implement. [0]
+> This issue has existed for a while, but is more prevalent starting
+> with kernel 6.1 because commit b006c439d58db ("hwrng: core - start
+> hwrng kthread also for untrusted sources") started to use the fTPM
+> for hwrng by default. However, all uses of /dev/hwrng result in
+> unacceptable stuttering.
 > 
-> The crypto API is far too clunky for synchronous operations of
-> algorithms that are known at compile time, and the requirement to use
-> scatterlists for skciphers is especially horrid.
+> So, simply disable registration of the defective hwrng when detecting
+> these faulty fTPM versions.
+> 
+> Link: https://www.amd.com/en/support/kb/faq/pa-410
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216989
+> Link: https://lore.kernel.org/all/20230209153120.261904-1-Jason@zx2c4.com/
+> Fixes: b006c439d58d ("hwrng: core - start hwrng kthread also for untrusted sources")
+> Cc: stable@vger.kernel.org
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Thorsten Leemhuis <regressions@leemhuis.info>
+> Cc: James Bottomley <James.Bottomley@hansenpartnership.com>
+> Co-developed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 62 ++++++++++++++++++++++++++++++-
+>  drivers/char/tpm/tpm.h      | 73 +++++++++++++++++++++++++++++++++++++
+>  2 files changed, 134 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 741d8f3e8fb3a..348dd5705fbb6 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -512,6 +512,65 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
+>  	return 0;
+>  }
+>  
+> +static bool tpm_is_rng_defective(struct tpm_chip *chip)
 
-I'm cool with any solution not polluting the stack to its limits...
+Perhaps tpm_amd_* ?
+
+Also, just a question: is there any legit use for fTPM's, which are not
+updated? I.e. why would want tpm_crb to initialize with a dysfunctional
+firmware?
+
+I.e. the existential question is: is it better to workaround the issue and
+let pass through, or make the user aware that the firmware would really
+need an update.
+
+> +{
+> +	int ret;
+> +	u64 version;
+> +	u32 val1, val2;
+
+I'd use reverse christmas tree order here.
+
+> +
+> +	/* No known-broken TPM1 chips. */
+> +	if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
+> +		return false;
+> +
+> +	ret = tpm_request_locality(chip);
+> +	if (ret)
+> +		return false;
+> +
+> +	/* Some AMD fTPM versions may cause stutter */
+> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val1, NULL);
+> +	if (ret)
+> +		goto release;
+> +	if (val1 != 0x414D4400U /* AMD */) {
+> +		ret = -ENODEV;
+> +		goto release;
+> +	}
+> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_1, &val1, NULL);
+> +	if (ret)
+> +		goto release;
+> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_2, &val2, NULL);
+> +	if (ret)
+> +		goto release;
+> +
+> +release:
+> +	tpm_relinquish_locality(chip);
+> +
+> +	if (ret)
+> +		return false;
+> +
+> +	version = ((u64)val1 << 32) | val2;
+> +	/*
+> +	 * Fixes for stutter as described in
+> +	 * https://www.amd.com/en/support/kb/faq/pa-410
+> +	 * are available in two series of fTPM firmware:
+> +	 *   6.x.y.z series: 6.0.18.6 +
+> +	 *   3.x.y.z series: 3.57.x.5 +
+> +	 */
+> +	if ((version >> 48) == 6) {
+> +		if (version >= 0x0006000000180006ULL)
+> +			return false;
+> +	} else if ((version >> 48) == 3) {
+> +		if (version >= 0x0003005700000005ULL)
+> +			return false;
+> +	} else {
+> +		return false;
+> +	}
+
+You can drop the curly braces here.
+
+> +	dev_warn(&chip->dev,
+> +		 "AMD fTPM version 0x%llx causes system stutter; hwrng disabled\n",
+> +		 version);
+> +
+> +	return true;
+> +}
+> +
+>  static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+>  {
+>  	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
+> @@ -521,7 +580,8 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+>  
+>  static int tpm_add_hwrng(struct tpm_chip *chip)
+>  {
+> -	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip))
+> +	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip) ||
+> +	    tpm_is_rng_defective(chip))
+>  		return 0;
+>  
+>  	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 24ee4e1cc452a..830014a266090 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -150,6 +150,79 @@ enum tpm_sub_capabilities {
+>  	TPM_CAP_PROP_TIS_DURATION = 0x120,
+>  };
+>  
+> +enum tpm2_pt_props {
+> +	TPM2_PT_NONE = 0x00000000,
+> +	TPM2_PT_GROUP = 0x00000100,
+> +	TPM2_PT_FIXED = TPM2_PT_GROUP * 1,
+> +	TPM2_PT_FAMILY_INDICATOR = TPM2_PT_FIXED + 0,
+> +	TPM2_PT_LEVEL = TPM2_PT_FIXED + 1,
+> +	TPM2_PT_REVISION = TPM2_PT_FIXED + 2,
+> +	TPM2_PT_DAY_OF_YEAR = TPM2_PT_FIXED + 3,
+> +	TPM2_PT_YEAR = TPM2_PT_FIXED + 4,
+> +	TPM2_PT_MANUFACTURER = TPM2_PT_FIXED + 5,
+> +	TPM2_PT_VENDOR_STRING_1 = TPM2_PT_FIXED + 6,
+> +	TPM2_PT_VENDOR_STRING_2 = TPM2_PT_FIXED + 7,
+> +	TPM2_PT_VENDOR_STRING_3 = TPM2_PT_FIXED + 8,
+> +	TPM2_PT_VENDOR_STRING_4 = TPM2_PT_FIXED + 9,
+> +	TPM2_PT_VENDOR_TPM_TYPE = TPM2_PT_FIXED + 10,
+> +	TPM2_PT_FIRMWARE_VERSION_1 = TPM2_PT_FIXED + 11,
+> +	TPM2_PT_FIRMWARE_VERSION_2 = TPM2_PT_FIXED + 12,
+> +	TPM2_PT_INPUT_BUFFER = TPM2_PT_FIXED + 13,
+> +	TPM2_PT_HR_TRANSIENT_MIN = TPM2_PT_FIXED + 14,
+> +	TPM2_PT_HR_PERSISTENT_MIN = TPM2_PT_FIXED + 15,
+> +	TPM2_PT_HR_LOADED_MIN = TPM2_PT_FIXED + 16,
+> +	TPM2_PT_ACTIVE_SESSIONS_MAX = TPM2_PT_FIXED + 17,
+> +	TPM2_PT_PCR_COUNT = TPM2_PT_FIXED + 18,
+> +	TPM2_PT_PCR_SELECT_MIN = TPM2_PT_FIXED + 19,
+> +	TPM2_PT_CONTEXT_GAP_MAX = TPM2_PT_FIXED + 20,
+> +	TPM2_PT_NV_COUNTERS_MAX = TPM2_PT_FIXED + 22,
+> +	TPM2_PT_NV_INDEX_MAX = TPM2_PT_FIXED + 23,
+> +	TPM2_PT_MEMORY = TPM2_PT_FIXED + 24,
+> +	TPM2_PT_CLOCK_UPDATE = TPM2_PT_FIXED + 25,
+> +	TPM2_PT_CONTEXT_HASH = TPM2_PT_FIXED + 26,
+> +	TPM2_PT_CONTEXT_SYM = TPM2_PT_FIXED + 27,
+> +	TPM2_PT_CONTEXT_SYM_SIZE = TPM2_PT_FIXED + 28,
+> +	TPM2_PT_ORDERLY_COUNT = TPM2_PT_FIXED + 29,
+> +	TPM2_PT_MAX_COMMAND_SIZE = TPM2_PT_FIXED + 30,
+> +	TPM2_PT_MAX_RESPONSE_SIZE = TPM2_PT_FIXED + 31,
+> +	TPM2_PT_MAX_DIGEST = TPM2_PT_FIXED + 32,
+> +	TPM2_PT_MAX_OBJECT_CONTEXT = TPM2_PT_FIXED + 33,
+> +	TPM2_PT_MAX_SESSION_CONTEXT = TPM2_PT_FIXED + 34,
+> +	TPM2_PT_PS_FAMILY_INDICATOR = TPM2_PT_FIXED + 35,
+> +	TPM2_PT_PS_LEVEL = TPM2_PT_FIXED + 36,
+> +	TPM2_PT_PS_REVISION = TPM2_PT_FIXED + 37,
+> +	TPM2_PT_PS_DAY_OF_YEAR = TPM2_PT_FIXED + 38,
+> +	TPM2_PT_PS_YEAR = TPM2_PT_FIXED + 39,
+> +	TPM2_PT_SPLIT_MAX = TPM2_PT_FIXED + 40,
+> +	TPM2_PT_TOTAL_COMMANDS = TPM2_PT_FIXED + 41,
+> +	TPM2_PT_LIBRARY_COMMANDS = TPM2_PT_FIXED + 42,
+> +	TPM2_PT_VENDOR_COMMANDS = TPM2_PT_FIXED + 43,
+> +	TPM2_PT_NV_BUFFER_MAX = TPM2_PT_FIXED + 44,
+> +	TPM2_PT_MODES = TPM2_PT_FIXED + 45,
+> +	TPM2_PT_MAX_CAP_BUFFER = TPM2_PT_FIXED + 46,
+> +	TPM2_PT_VAR = TPM2_PT_GROUP * 2,
+> +	TPM2_PT_PERMANENT = TPM2_PT_VAR + 0,
+> +	TPM2_PT_STARTUP_CLEAR = TPM2_PT_VAR + 1,
+> +	TPM2_PT_HR_NV_INDEX = TPM2_PT_VAR + 2,
+> +	TPM2_PT_HR_LOADED = TPM2_PT_VAR + 3,
+> +	TPM2_PT_HR_LOADED_AVAIL = TPM2_PT_VAR + 4,
+> +	TPM2_PT_HR_ACTIVE = TPM2_PT_VAR + 5,
+> +	TPM2_PT_HR_ACTIVE_AVAIL = TPM2_PT_VAR + 6,
+> +	TPM2_PT_HR_TRANSIENT_AVAIL = TPM2_PT_VAR + 7,
+> +	TPM2_PT_HR_PERSISTENT = TPM2_PT_VAR + 8,
+> +	TPM2_PT_HR_PERSISTENT_AVAIL = TPM2_PT_VAR + 9,
+> +	TPM2_PT_NV_COUNTERS = TPM2_PT_VAR + 10,
+> +	TPM2_PT_NV_COUNTERS_AVAIL = TPM2_PT_VAR + 11,
+> +	TPM2_PT_ALGORITHM_SET = TPM2_PT_VAR + 12,
+> +	TPM2_PT_LOADED_CURVES = TPM2_PT_VAR + 13,
+> +	TPM2_PT_LOCKOUT_COUNTER = TPM2_PT_VAR + 14,
+> +	TPM2_PT_MAX_AUTH_FAIL = TPM2_PT_VAR + 15,
+> +	TPM2_PT_LOCKOUT_INTERVAL = TPM2_PT_VAR + 16,
+> +	TPM2_PT_LOCKOUT_RECOVERY = TPM2_PT_VAR + 17,
+> +	TPM2_PT_NV_WRITE_RECOVERY = TPM2_PT_VAR + 18,
+> +	TPM2_PT_AUDIT_COUNTER_0 = TPM2_PT_VAR + 19,
+> +	TPM2_PT_AUDIT_COUNTER_1 = TPM2_PT_VAR + 20,
+> +};
+>  
+>  /* 128 bytes is an arbitrary cap. This could be as large as TPM_BUFSIZE - 18
+>   * bytes, but 128 is still a relatively large number of random bytes and
+> -- 
+> 2.25.1
+> 
 
 BR, Jarkko
