@@ -2,211 +2,172 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB73E6A4172
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Feb 2023 13:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566386A433F
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Feb 2023 14:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjB0MID (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 27 Feb 2023 07:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
+        id S229943AbjB0NuH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Feb 2023 08:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjB0MIC (ORCPT
+        with ESMTP id S229545AbjB0NuG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 27 Feb 2023 07:08:02 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11hn2222.outbound.protection.outlook.com [52.100.172.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E0D1F5D0;
-        Mon, 27 Feb 2023 04:07:43 -0800 (PST)
+        Mon, 27 Feb 2023 08:50:06 -0500
+Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BCAEC57;
+        Mon, 27 Feb 2023 05:50:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenovo.com;
+        s=Selector; t=1677505092; i=@lenovo.com;
+        bh=trwLOMRGoK6X1mYWhmqAcbd0EhKdgZLfX9O5b20Z29o=;
+        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=MXSlUfj7GL6Ub54qkGhG+bLrTNoTN4jnAZwxPo2bwHRydJOlvTUE9t1yisMC2dZOr
+         oNseL6zDKY5hYTzkkg+QYSpqeHBWf7OBYq+kqNzMmd4e8N7Stnj0m/DaHtXujm6n81
+         5Blwn5eRHyvkz0bFUj52luLgM4rUvoOKcinpRCFQFO+KR+JzxPd0f5dJB/4SMUtf47
+         EV3Adx0UvtmY/i37J7CULEtH/unSqSSMOFrPvkzHSlMoRlLth4W7fKcHY3PTKwuwPj
+         r5YrPzhevV3O/HYuFBHpK8UDN4UH+mR4oVlUzKQ6bKeIomg3m6IOrbtMUgUWkut0lZ
+         bVk+IMKZhOF2A==
+X-Brightmail-Tracker: H4sIAAAAAAAAA1WTf0wbZRjHee+u16Oj5GhhfYfCtNsSM+y5Jiq
+  niTA3lzUaoxnJNqaLO+BGm9EW74p002hX4o+VOX60kVE7dRMQ0I20dHRFGZYwBo3CRIYbOAnI
+  foTIgAkKDIzX3jbxv8/3+T7v83zf5H0JVDGFJxOs1cJyJqZAjcsw/RMmjWarbyl3U8gmpW/b7
+  2J0RYMTpSsXygH9y2dC7eyvdpzu7u2S0j+3enB6+ugYTg+56zG6Y7IK3yzTDZz/BtE5gqcRXX
+  P9Rp2v8Qiumzp/Gdd9WnMF0/3pS31VukdiMOWYrfsk+j7X6sJyibXGOyOxAQfmADICkLUodHb
+  MSUVxSgJ7pmckonAi8Pq1w1FHQZ5A4N9ePxDF9wicbhyNOpC8CGBpxxlEdI4AOD8RxkRRicBl
+  1zAqinEAr5y+dW/AGIA3Wz8RHIKQk8/BpuM7HSCWwMgN8K/fZpEIy8kE2FM9jkU4icyGH7aei
+  9aVAh9e8EgijJIqODT+eXR1IlkFoHvWF82OkgEE1o03SMRtbgR6Z9ujR3AyDfr9i3iEY8kdcO
+  C7RVQcRcMv/whJRV4LA5OeaF1BroOLZX3RpJB8BJ6x742UIbkPlrguAJHXwMGrl6Qip8ALP3o
+  wkTNh1YIdFfll2O623etJheGPexGR18KgdxgrB4+7V1zaveJy7hXp3CvSfQGwRvA0z3JvsZxG
+  +ySVwxny9RYjYyigmEMahiriNSzDWzRaiinmKZbnKf6gMbcgjzKxFh8Q3l4eh71/DkwdW6Y6w
+  BoCUSfJT21ZylXE55jzDuoZXv8GV1TA8h3gYYJQQ3lik+AlcGw+a91vKBBe8H0bEnHqRPm7jY
+  It5wsZI2/IF60w0BADLW1tqAIzmU1sskqe4BWayEiTvsj0YMT9f9APUpKVchATE6OIK2Q5o8H
+  yf38CqAigVspt9cKUOIPJ8mDThBACEUIERucjISzMf1ayDfEgrfaimea533Ht9tdSB5UhXVvp
+  3uKgzLXppOorz/alzaU/xe7y164fCdLN6UH3P7DioZoK5e2UwWtEl0VbVq03O8uWVWVjRGfnR
+  1mve+q3Da/b2RM4sapSn9F/50b47KVA4ovdWxQZP3Ru2OatS2tJCKSvfqp5V3x6KC6z/YUS7f
+  zulle6R/zPyhD/AWfdsaznYwcW8UfvZHOuPmvD8pu1zgZ/JUWcrOMyw8VlfPlE9o2ZQzdLqNp
+  x9WMpTsNd49t8dX/XS4W1pmcWskLHj+7PeufrySRw3Zx1+Vvb0A4qf2sj05R28b31mg9kupo9
+  u9H4A6tGRnqbMlJHHcpbVxPm1BivZ7QbUY5n/gUXybrUggQAAA==
+X-Env-Sender: markpearson@lenovo.com
+X-Msg-Ref: server-11.tower-706.messagelabs.com!1677505089!316570!1
+X-Originating-IP: [104.47.110.45]
+X-SYMC-ESS-Client-Auth: mailfrom-relay-check=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.103.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 22627 invoked from network); 27 Feb 2023 13:38:10 -0000
+Received: from mail-tyzapc01lp2045.outbound.protection.outlook.com (HELO APC01-TYZ-obe.outbound.protection.outlook.com) (104.47.110.45)
+  by server-11.tower-706.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Feb 2023 13:38:10 -0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DHrNTDNdpwxNuShTBCPVj8jdDcIwtGh9/PiqeXLjizxX8kyoHXauJjRxEpa74+4AnQZ83U2/psygiirBfF6XsAQrVtPm2uq/9GGb/4OKJllaBLbp+BcS8n9CTIR5l4By5u+P8hARRTWD1lTdIj7Kcww6uMy0v0AmuM42jQTRI+xMxB4o7kbFbXLx66mVv/5Mvrss358P2T8xxRJ1zDCvknK3/foIj7isF7r+/zTN4Xa+HAw6jAVHtP+UTGYDwqnra4TQ7nMpbMHgoW8o2dyJfk6QGfvdi6IbQgXoa9R6ap1dap6hM7QhUHT4Z81SHLUuYQk4IhkfTaJQVNI5kHRpCA==
+ b=Z1D5wXH4TSbH4HtZacDonN/4i1YFSiCwb2M0rwSU+A7PfCv0WSi2ZIVXhzDzt0mx8SNkVgCzFIcxdtnYEADx6Fi2rJo7y+7U5jki17gWo70636wjt6p9b3APVliQzkDLa9O6qA09Ozyj+Ie31NagPs1Jc3arPyA+wTZsJyQMseBNOnHzNwzmWDx7Oc+GSAbgHI8ywnAN1oCMtx6LqOrnMATtdUqvvt9sxAqd0lkJr9oNb78UVqwJeS06F7FkGbsUvuUMoaw6zhBXmP+g5mdNP072Dgp0lFm+6pMaBGUxI34t+jChEIGvcfb7VoY5yBATQShICOS4XA5k6vy0BEe2aw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HpKHpbqOPtWGpwP1tKVnq5lfCOEd70QTpkDFyU21Mqk=;
- b=XWck96eBJR1Q8Ka9wSpjXLUdjY3vfApQDmRQoeKCv39tiNPvVmGu6eWcGpmxquTEkhlvE+UjJWG0rx4k6Vse51yfooXmFtD/IZd5PHEjD1M2IFFQQBuya3QfewZo7+bBe68H+WdHm0b0iX2eMz78Uog5IdXxc1HiALX4mALB/qI6v6K2CxIpZ3AJwDQ/dfgh7i15IuLZhvRJZ4F7XtqR9zJE+rRATvX+XK7Q5Nesk77jVq11sUA+H+6JrzkiKLGqAMpQIvTy76p4UFlWkqQOnqioefPtCQAoQA6RWE+Xsk5E4qFcORly87MpDi8oVIiHp1PhEdLfw7PC5X+ASOA7/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HpKHpbqOPtWGpwP1tKVnq5lfCOEd70QTpkDFyU21Mqk=;
- b=Nz2GWA5dJvSkrIgoQxUvTBgUTEeEykyiZx5b+zWU29vxldZNpQL2CfyNdNa/NTraeX8vJNQvmehDLPdpTRflpEE0hxtNWoFAxRgsw4pKnwL+ege3PaXE5MS1MJzL8KuLuykUz/Jtw/Zh+bpzCEW19dA1GaXEhO0vPQzJfvwBi/Do+rGHqAveQcCU5PZhEdP7KURUAIJ2tRzsc9HJwN76LLulo9G+PeQChpuTNcdMSXOBYmamqC/0XrKp8aM7yvBHD6WCRsPiDyeZDGErOw7xTS7YxVhcqjk/uNzt6f5BA0+nYIJjH3NfUBwaHAqzUg4lIbbwRuMiqUkzhmkcgmU3QA==
-Received: from BN9P223CA0008.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::13)
- by BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14) with
+ bh=trwLOMRGoK6X1mYWhmqAcbd0EhKdgZLfX9O5b20Z29o=;
+ b=Xn2Igr+/UaS+ssxdzC2NILReOise8v2pMflsrgGtI1kTBkc7tP2yK/bXsruaZOZO7Brkxw6N50DzGMONmIWMCxY2/5Ej65+GsWE0pNfzVmw2E+pfs0y2TTyywHlqb8irS82WNQqwtbdIE837YnCnB35Qss8Qv9oYqfBjtzt/t4tRND3XgxjhJnag12mC5SnNzW97+zXZPngi8s98H8LA1paH4mqPfvgKZhb0RYeNuQTTRBFubmVMOkKnpJR6adw9xJSns41I6OGLGW9U+B3LkkejIQUDTY6n3HlSgtIZh6D4sI0aef0wvxbzSXeAM5+RK42YyPqFUUTGngqLhGn5og==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 104.232.225.7) smtp.rcpttodomain=codeconstruct.com.au
+ smtp.mailfrom=lenovo.com; dmarc=fail (p=none sp=none pct=100) action=none
+ header.from=lenovo.com; dkim=none (message not signed); arc=none
+Received: from TYCPR01CA0101.jpnprd01.prod.outlook.com (2603:1096:405:4::17)
+ by KL1PR03MB5713.apcprd03.prod.outlook.com (2603:1096:820:73::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.28; Mon, 27 Feb
- 2023 12:07:40 +0000
-Received: from BN8NAM11FT046.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10b:cafe::d2) by BN9P223CA0008.outlook.office365.com
- (2603:10b6:408:10b::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Mon, 27 Feb
+ 2023 13:38:08 +0000
+Received: from TYZAPC01FT033.eop-APC01.prod.protection.outlook.com
+ (2603:1096:405:4:cafe::8) by TYCPR01CA0101.outlook.office365.com
+ (2603:1096:405:4::17) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29 via Frontend
- Transport; Mon, 27 Feb 2023 12:07:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN8NAM11FT046.mail.protection.outlook.com (10.13.177.127) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.14 via Frontend Transport; Mon, 27 Feb 2023 12:07:40 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 27 Feb
- 2023 04:07:27 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Mon, 27 Feb 2023 04:07:27 -0800
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.5 via Frontend
- Transport; Mon, 27 Feb 2023 04:07:22 -0800
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <robh+dt@kernel.org>, <broonie@kernel.org>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>, <jarkko@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [Patch V5 3/3] spi: tegra210-quad: Enable TPM wait polling
-Date:   Mon, 27 Feb 2023 17:37:02 +0530
-Message-ID: <20230227120702.13180-4-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230227120702.13180-1-kyarlagadda@nvidia.com>
-References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
-X-NVConfidentiality: public
+ Transport; Mon, 27 Feb 2023 13:38:07 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 104.232.225.7) smtp.mailfrom=lenovo.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=lenovo.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ lenovo.com discourages use of 104.232.225.7 as permitted sender)
+Received: from mail.lenovo.com (104.232.225.7) by
+ TYZAPC01FT033.mail.protection.outlook.com (10.118.152.187) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.16 via Frontend Transport; Mon, 27 Feb 2023 13:38:07 +0000
+Received: from reswpmail01.lenovo.com (10.62.32.20) by mail.lenovo.com
+ (10.62.123.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.21; Mon, 27 Feb
+ 2023 08:38:06 -0500
+Received: from [10.46.218.88] (10.46.218.88) by reswpmail01.lenovo.com
+ (10.62.32.20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.21; Mon, 27 Feb
+ 2023 08:38:05 -0500
+Message-ID: <2a215e4d-bf55-b063-3f1f-a63f51cbdbfb@lenovo.com>
+Date:   Mon, 27 Feb 2023 08:38:05 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [External] Re: [BUG] blacklist: Problem blacklisting hash (-13)
+ during boot
+Content-Language: en-US
+To:     Jeremy Kerr <jk@codeconstruct.com.au>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+CC:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+References: <c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de>
+ <af0d6881-76c0-f570-0c5b-f664e261c4cf@digikod.net>
+ <632d2180-02f8-4a5f-803a-57a6443a60f4@t-8ch.de>
+ <12ceffb8-4e90-4eb5-2110-a0e69b412cea@lenovo.com>
+ <fec5e8eb3803068a11267f386ddda389a1211736.camel@codeconstruct.com.au>
+From:   Mark Pearson <markpearson@lenovo.com>
+In-Reply-To: <fec5e8eb3803068a11267f386ddda389a1211736.camel@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.46.218.88]
+X-ClientProxiedBy: reswpmail01.lenovo.com (10.62.32.20) To
+ reswpmail01.lenovo.com (10.62.32.20)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT046:EE_|BN9PR12MB5115:EE_
-X-MS-Office365-Filtering-Correlation-Id: cfe91f0a-b878-4fda-ba07-08db18bb39a3
+X-MS-TrafficTypeDiagnostic: TYZAPC01FT033:EE_|KL1PR03MB5713:EE_
+X-MS-Office365-Filtering-Correlation-Id: bab264b4-1443-4532-3fb7-08db18c7dc2e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NygylvNpcYHHmoGZzwUljsuhh4rqavwLGFnEj3xI58i45rSCKLNiZdztzqtRqFZk9eJT0HIlWzgxWokABoJDXU1CvTrTs/eH5px5MfCLz08ck3nALHyaC+NL4aDX1a06WHOyci2AXyFCR0UdAhN5AyOb/G3TT6dDAIzx28o/TBM2FzJIhzr9PZow8MArL8G2hr+Lqgy8UIpcb/ox9vQ2mwnJgSA2Y3Xi9NAqwCkeyUEZwEdAGC5b3UpzG+1038D/nV54r/f/7itd2GeDHXzh8TbJ9ww1bUZMTXc8yVN4xbLv2dykUOFRVUVg3MT7w4YcvKAh5WKMIsSLFqrwTjorqq30HDEWp95VQ08XWvWNBow4JYnICgm9ZsGISSriCVFvoOMGmUpTj68zJqGHxnd4Fl+n2jZ+meqQTgfriXXUVHZjIG6dSyJE+5TcXlRcZkRR8SLwz9b6zY80tT7TZ7IXb3tsK/HEqNDAuIPafqbF1NhkkDultN1JvR4T13mCwr0L2n5/BZXqaqO0usIRQ+TAbbOGaaXYh3d8yRo0cbJqpRTAmjUQC3KbPqD/0BeYWwqNUcX7u/FdnEldob+drw+lTh9s/M4CYNf3GJXPjO+LogUYYxFS59iw0UcC4OyuSWEcgel/65h4v7zQJ4ucJvySd2qhYfBPO7afHi7g8OB4GC5u++tk3rzmHYd0EscKVXozRtDvDE58vy56xVCwLc9i3+XA3mLLebF8L40UfJ/OVipm4T8h7v2BLQFB8+yjMIF8O7bAP5jWeN/hA4+ULZZB9GiICayTzGtn+CL/lEBb9GXHR3fqHrbzy9rStneWb1rweq2Wb+vynPPLUP/NXI1DBg==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(39860400002)(376002)(346002)(5400799012)(451199018)(36840700001)(46966006)(40470700004)(40460700003)(186003)(7636003)(83380400001)(82740400003)(921005)(356005)(8936002)(4326008)(2906002)(70586007)(41300700001)(70206006)(7416002)(8676002)(36860700001)(5660300002)(34020700004)(7696005)(40480700001)(47076005)(478600001)(1076003)(426003)(26005)(336012)(6666004)(107886003)(2616005)(316002)(36756003)(110136005)(82310400005)(86362001)(54906003)(83996005)(2101003)(12100799018);DIR:OUT;SFP:1501;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 12:07:40.6008
+X-Microsoft-Antispam-Message-Info: sBQpj569Wrji1t2sRaiW0ld2PuD+d7xflkwX6hz2FxVf9J0uhujNc/QSI7Y8z0uqxGZPu2ryKBm4ErYreWmM4JWhU0lNzM+U7E+PNXQ2M0NGkoZE0ET8qB9pCqnCoTnFw8XaoPfXbHVJDjobqm2Cep20Ti4kPvt1p897MoWxzOKGKRDla/zOK/+R/T6hQz7L1ufplivE0qFp+xVZvkEVTVEl/tU3g9NWpYBu+vFI1URBETos9dgxaygwuqL5z89AuFrsNse6V/JOFtBluWVX3EFyWeHyqq1CIveWcoGq8vF4ZVl8G9D+izCmTWaymvzvlx+d/xJXupAeLUaYOo35Z1UC0Pamw4weJjtFUQvTqPY6Bof0j1U0ZDPgCq6+GQxiHZpR/jviy29ZN04InLtxbLAY6j1H6BW1lXYEhaJuEnEHMZKEHTC+fWb5ve4mQ49S5aFm3TRFkWcVq3cL4cVXhnS1vecaiGhAuwAXPWZuiHGF0YYNZslfi876JUqpepfOS06TS5Y9fzD4O0aejrHZ39rSVV6Rqsb3qRDzZOrQQsQfoJZO4Dvn1s8aoQvpQyjx3pFKgWaI3uvMQYb4322zTJpGuCPC26WUq2HHNi1Rne6iR6tyjk8KI2YNMPw5HQ5a/i3uQ1fwDGTtUmll8gJvi8DUvi05TQjuA2KF/kHfRPyWxtF+Qvax/6gWn2Vd+P/UZ9aJuxudVT4v/cydovo/K/IhShKgtfUcc0mSh0e9doGzB1ecCjYg4SX2mNrJzdWnM/jVQ+CavUvUHVUn+0bea2Uczp8q9H9MIr3O2wAx5vo=
+X-Forefront-Antispam-Report: CIP:104.232.225.7;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.lenovo.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199018)(36840700001)(40470700004)(46966006)(31686004)(26005)(186003)(70586007)(70206006)(8936002)(7416002)(40480700001)(5660300002)(478600001)(53546011)(16526019)(54906003)(16576012)(110136005)(316002)(336012)(47076005)(2616005)(426003)(4744005)(82740400003)(356005)(82960400001)(40460700003)(8676002)(4326008)(41300700001)(31696002)(2906002)(36756003)(81166007)(82310400005)(86362001)(36860700001)(3940600001)(43740500002)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: lenovo.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2023 13:38:07.0729
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfe91f0a-b878-4fda-ba07-08db18bb39a3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT046.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bab264b4-1443-4532-3fb7-08db18c7dc2e
+X-MS-Exchange-CrossTenant-Id: 5c7d0b28-bdf8-410c-aa93-4df372b16203
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5c7d0b28-bdf8-410c-aa93-4df372b16203;Ip=[104.232.225.7];Helo=[mail.lenovo.com]
+X-MS-Exchange-CrossTenant-AuthSource: TYZAPC01FT033.eop-APC01.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5115
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB5713
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Trusted Platform Module requires flow control. As defined in TPM
-interface specification, client would drive MISO line at same cycle as
-last address bit on MOSI.
-Tegra241 QSPI controller has TPM wait state detection feature which is
-enabled for TPM client devices reported in SPI device mode bits.
-Set half duplex flag for TPM device to detect and send entire message
-to controller in one shot.
+Hi
 
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- drivers/spi/spi-tegra210-quad.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+On 2/25/23 22:42, Jeremy Kerr wrote:
+> Hi Mark,
+>
+>> I have flagged this to the FW team (LO-2105) to get their feedback
+>> and see if we can get it addressed on our platforms.
+> Any progress from the FW team about this? I have a fresh-out-of-the-box
+> T14s with this issue, there's 33 duplicated hashes in dbx:
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index b967576b6c96..fe15fa6eecd1 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -142,6 +142,7 @@
- 
- #define QSPI_GLOBAL_CONFIG			0X1a4
- #define QSPI_CMB_SEQ_EN				BIT(0)
-+#define QSPI_TPM_WAIT_POLL_EN			BIT(1)
- 
- #define QSPI_CMB_SEQ_ADDR			0x1a8
- #define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
-@@ -164,6 +165,7 @@
- struct tegra_qspi_soc_data {
- 	bool has_dma;
- 	bool cmb_xfer_capable;
-+	bool tpm_wait_poll;
- 	unsigned int cs_count;
- };
- 
-@@ -991,6 +993,14 @@ static void tegra_qspi_dump_regs(struct tegra_qspi *tqspi)
- 	dev_dbg(tqspi->dev, "TRANS_STAT:  0x%08x | FIFO_STATUS: 0x%08x\n",
- 		tegra_qspi_readl(tqspi, QSPI_TRANS_STATUS),
- 		tegra_qspi_readl(tqspi, QSPI_FIFO_STATUS));
-+	dev_dbg(tqspi->dev, "GLOBAL_CFG: 0x%08x\n",
-+		tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG));
-+	dev_dbg(tqspi->dev, "CMB_CMD: 0x%08x | CMB_CMD_CFG: 0x%08x\n",
-+		tegra_qspi_readl(tqspi, QSPI_CMB_SEQ_CMD),
-+		tegra_qspi_readl(tqspi, QSPI_CMB_SEQ_CMD_CFG));
-+	dev_dbg(tqspi->dev, "CMB_ADDR: 0x%08x | CMB_ADDR_CFG: 0x%08x\n",
-+		tegra_qspi_readl(tqspi, QSPI_CMB_SEQ_ADDR),
-+		tegra_qspi_readl(tqspi, QSPI_CMB_SEQ_ADDR_CFG));
- }
- 
- static void tegra_qspi_handle_error(struct tegra_qspi *tqspi)
-@@ -1065,6 +1075,12 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
- 
- 	/* Enable Combined sequence mode */
- 	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
-+	if (spi->mode & SPI_TPM_HW_FLOW) {
-+		if (tqspi->soc_data->tpm_wait_poll)
-+			val |= QSPI_TPM_WAIT_POLL_EN;
-+		else
-+			return -EIO;
-+	}
- 	val |= QSPI_CMB_SEQ_EN;
- 	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
- 	/* Process individual transfer list */
-@@ -1192,6 +1208,7 @@ static int tegra_qspi_non_combined_seq_xfer(struct tegra_qspi *tqspi,
- 	/* Disable Combined sequence mode */
- 	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
- 	val &= ~QSPI_CMB_SEQ_EN;
-+	val &= ~QSPI_TPM_WAIT_POLL_EN;
- 	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
- 	list_for_each_entry(transfer, &msg->transfers, transfer_list) {
- 		struct spi_transfer *xfer = transfer;
-@@ -1450,24 +1467,28 @@ static irqreturn_t tegra_qspi_isr_thread(int irq, void *context_data)
- static struct tegra_qspi_soc_data tegra210_qspi_soc_data = {
- 	.has_dma = true,
- 	.cmb_xfer_capable = false,
-+	.tpm_wait_poll = false,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra186_qspi_soc_data = {
- 	.has_dma = true,
- 	.cmb_xfer_capable = true,
-+	.tpm_wait_poll = false,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra234_qspi_soc_data = {
- 	.has_dma = false,
- 	.cmb_xfer_capable = true,
-+	.tpm_wait_poll = true,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra241_qspi_soc_data = {
- 	.has_dma = false,
- 	.cmb_xfer_capable = true,
-+	.tpm_wait_poll = true,
- 	.cs_count = 4,
- };
- 
--- 
-2.17.1
+I've been looking at this and the FW team are claiming that it's not 
+caused by duplicate entries in the dbx table, which is honestly a bit 
+confusing.
+
+We've been doing some more digging - but is there a possibility this is 
+caused by something else? I was poking around at the kernel code but 
+haven't got to the bottom of it yet.
+
+Mark
 
