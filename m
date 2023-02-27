@@ -2,85 +2,207 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C128A6A3636
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Feb 2023 02:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EAB6A3BD2
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Feb 2023 08:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjB0Bmo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 26 Feb 2023 20:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
+        id S230024AbjB0Hrz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Feb 2023 02:47:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjB0Bmn (ORCPT
+        with ESMTP id S229669AbjB0Hry (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 26 Feb 2023 20:42:43 -0500
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B93A11644;
-        Sun, 26 Feb 2023 17:42:42 -0800 (PST)
-Received: from pecola.lan (unknown [159.196.93.152])
-        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 117952003E;
-        Mon, 27 Feb 2023 09:42:40 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=codeconstruct.com.au; s=2022a; t=1677462160;
-        bh=t8Y/0oReh9Y8o+O3hMl5s2yRIWqSmv7FKI4yv0RdW+k=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=cM8HqswmGuQ17SQ3m6NCv9PX1IPiZh4lVUH91a8jesK3i7Zr/1Kt/cz+dDJl+IiVE
-         ieAmiqE5Ei4/1pyBs8xa2WaAnCTvqua8nPFDH8MRX4NDHosgGnQ16QMKwKu/IgU22/
-         NmrlhTZqdem51FcNMm5tXpYzolpkLmoRBwdQaQjNgFGwJpReH3mdUg9XGE1YDKBXal
-         SrzLqf8iPsl4hxYXiLtxfwOWu7bhb72ucaJvcKj2X/bljhmLCRIL/TVI+MJMRpoawy
-         ft0jDd8vZ69HqCrnBvOkRx061AsGFIw+9RQOpNClHosWgqu+Rb0C5vr4GUNuruDOm6
-         HajOXRXDFhfmg==
-Message-ID: <e8190083513e08b2d237ee428ee6606de2c29b91.camel@codeconstruct.com.au>
-Subject: Re: [External] Re: [BUG] blacklist: Problem blacklisting hash (-13)
- during boot
-From:   Jeremy Kerr <jk@codeconstruct.com.au>
-To:     Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     Mark Pearson <markpearson@lenovo.com>,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-integrity@vger.kernel.org
-Date:   Mon, 27 Feb 2023 09:42:39 +0800
-In-Reply-To: <860048ca-d827-4319-9755-9b44ba3c4157@t-8ch.de>
-References: <c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de>
-         <af0d6881-76c0-f570-0c5b-f664e261c4cf@digikod.net>
-         <632d2180-02f8-4a5f-803a-57a6443a60f4@t-8ch.de>
-         <12ceffb8-4e90-4eb5-2110-a0e69b412cea@lenovo.com>
-         <fec5e8eb3803068a11267f386ddda389a1211736.camel@codeconstruct.com.au>
-         <860048ca-d827-4319-9755-9b44ba3c4157@t-8ch.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3-1 
+        Mon, 27 Feb 2023 02:47:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB64E8E;
+        Sun, 26 Feb 2023 23:47:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51367B80CA6;
+        Mon, 27 Feb 2023 07:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09518C433D2;
+        Mon, 27 Feb 2023 07:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677484069;
+        bh=IOfVTKzkzpmk/a2RVqDjpjAlItxmYpDshlK/A3JmEg4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rfc+SfQCE+10mWLFriszu0RrnI5hayPP6hN4fcpLBvJvKVaiqb/CWZ5LmRZsXsWyf
+         DzEjMwLb7btcJu/itlBrEYV6ik5XJ2HX8PFpZluirOinNoSw94mEK52fUjOFveX57X
+         B2Fgk45vsMTKT+/Y3mOyiIjC6dN1pEm4AcUw+PGCy1mOLEevYNufuNePlz2ekPjYii
+         f+SS12CC+GOrOtqJdY6PWbSGXWgt/BJiPVhgeIEDN9Rdgml/jSQ6cM1f4FRpGWj5i+
+         xXhmHsl9HIblmPBpudrV72LSvNvWzQuxqrTRmJb7oI8MCU+pqPs8QZWXH7WfX2c9M0
+         yqsAlunecW4vw==
+Date:   Mon, 27 Feb 2023 09:47:47 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH 01/12] crypto: lib - implement library version of AES in
+ CFB mode
+Message-ID: <Y/xgIzTC854qhr+G@kernel.org>
+References: <20230216201410.15010-1-James.Bottomley@HansenPartnership.com>
+ <20230216201410.15010-2-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230216201410.15010-2-James.Bottomley@HansenPartnership.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Thomas,
+On Thu, Feb 16, 2023 at 03:13:59PM -0500, James Bottomley wrote:
+> From: Ard Biesheuvel <ardb@kernel.org>
+> 
+> Implement AES in CFB mode using the existing, mostly constant-time
+> generic AES library implementation.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> ---
+>  include/crypto/aes.h |  5 +++
+>  lib/crypto/Kconfig   |  5 +++
+>  lib/crypto/Makefile  |  3 ++
+>  lib/crypto/aescfb.c  | 75 ++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 88 insertions(+)
+>  create mode 100644 lib/crypto/aescfb.c
+> 
+> diff --git a/include/crypto/aes.h b/include/crypto/aes.h
+> index 2090729701ab..7b9e1df1ccb0 100644
+> --- a/include/crypto/aes.h
+> +++ b/include/crypto/aes.h
+> @@ -87,4 +87,9 @@ void aes_decrypt(const struct crypto_aes_ctx *ctx, u8 *out, const u8 *in);
+>  extern const u8 crypto_aes_sbox[];
+>  extern const u8 crypto_aes_inv_sbox[];
+>  
+> +void aescfb_encrypt(const struct crypto_aes_ctx *ctx, u8 *dst, const u8 *src,
+> +		    int len, const u8 *iv);
+> +void aescfb_decrypt(const struct crypto_aes_ctx *ctx, u8 *dst, const u8 *src,
+> +		    int len, const u8 *iv);
+> +
+>  #endif
+> diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
+> index 45436bfc6dff..b01253cac70a 100644
+> --- a/lib/crypto/Kconfig
+> +++ b/lib/crypto/Kconfig
+> @@ -8,6 +8,11 @@ config CRYPTO_LIB_UTILS
+>  config CRYPTO_LIB_AES
+>  	tristate
+>  
+> +config CRYPTO_LIB_AESCFB
+> +	tristate
+> +	select CRYPTO_LIB_AES
+> +	select CRYPTO_LIB_UTILS
+> +
+>  config CRYPTO_LIB_AESGCM
+>  	tristate
+>  	select CRYPTO_LIB_AES
+> diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
+> index 6ec2d4543d9c..33213a01aab1 100644
+> --- a/lib/crypto/Makefile
+> +++ b/lib/crypto/Makefile
+> @@ -10,6 +10,9 @@ obj-$(CONFIG_CRYPTO_LIB_CHACHA_GENERIC)		+= libchacha.o
+>  obj-$(CONFIG_CRYPTO_LIB_AES)			+= libaes.o
+>  libaes-y					:= aes.o
+>  
+> +obj-$(CONFIG_CRYPTO_LIB_AESCFB)			+= libaescfb.o
+> +libaescfb-y					:= aescfb.o
+> +
+>  obj-$(CONFIG_CRYPTO_LIB_AESGCM)			+= libaesgcm.o
+>  libaesgcm-y					:= aesgcm.o
+>  
+> diff --git a/lib/crypto/aescfb.c b/lib/crypto/aescfb.c
+> new file mode 100644
+> index 000000000000..e9de1c6d874a
+> --- /dev/null
+> +++ b/lib/crypto/aescfb.c
+> @@ -0,0 +1,75 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Minimal library implementation of AES in CFB mode
+> + *
+> + * Copyright 2023 Google LLC
+> + */
+> +
+> +#include <linux/module.h>
+> +
+> +#include <crypto/algapi.h>
+> +#include <crypto/aes.h>
+> +
+> +#include <asm/irqflags.h>
 
-> > Given there's (at least) a few months' worth of GA machines with
-> > this issue, can we suppress the warning?
->=20
-> In 6.3 this message will be downgraded to a warning.
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3Dc95e8f6fd157b45ef0685c221931561e943e82da
+I'd remove the newlines in-between.
 
-Nice, thanks for that.
+> +
+> +static void aescfb_encrypt_block(const struct crypto_aes_ctx *ctx, void *dst,
+> +				 const void *src)
+> +{
+> +	unsigned long flags;
+> +
+> +	/*
+> +	 * In AES-CFB, the AES encryption operates on known 'plaintext' (the IV
+> +	 * and ciphertext), making it susceptible to timing attacks on the
+> +	 * encryption key. The AES library already mitigates this risk to some
+> +	 * extent by pulling the entire S-box into the caches before doing any
+> +	 * substitutions, but this strategy is more effective when running with
+> +	 * interrupts disabled.
+> +	 */
+> +	local_irq_save(flags);
+> +	aes_encrypt(ctx, dst, src);
+> +	local_irq_restore(flags);
+> +}
+> +
+> +void aescfb_encrypt(const struct crypto_aes_ctx *ctx, u8 *dst, const u8 *src,
+> +		    int len, const u8 *iv)
+> +{
+> +	while (len > 0) {
+> +		u8 ks[AES_BLOCK_SIZE];
+> +
+> +		aescfb_encrypt_block(ctx, ks, iv);
+> +		crypto_xor_cpy(dst, src, ks, min(len, AES_BLOCK_SIZE));
+> +		iv = dst;
+> +
+> +		dst += AES_BLOCK_SIZE;
+> +		src += AES_BLOCK_SIZE;
+> +		len -= AES_BLOCK_SIZE;
+> +	}
+> +}
+> +
+> +void aescfb_decrypt(const struct crypto_aes_ctx *ctx, u8 *dst, const u8 *src,
+> +		    int len, const u8 *iv)
+> +{
+> +	u8 ks[2][AES_BLOCK_SIZE];
+> +
+> +	aescfb_encrypt_block(ctx, ks[0], iv);
+> +
+> +	for (int i = 0; len > 0; i ^= 1) {
+> +		if (len > AES_BLOCK_SIZE)
+> +			/*
+> +			 * Generate the keystream for the next block before
+> +			 * performing the XOR, as that may update in place and
+> +			 * overwrite the ciphertext.
+> +			 */
+> +			aescfb_encrypt_block(ctx, ks[!i], src);
+> +
+> +		crypto_xor_cpy(dst, src, ks[i], min(len, AES_BLOCK_SIZE));
+> +
+> +		dst += AES_BLOCK_SIZE;
+> +		src += AES_BLOCK_SIZE;
+> +		len -= AES_BLOCK_SIZE;
+> +	}
+> +}
+> +
+> +MODULE_DESCRIPTION("Generic AES-CFB library");
+> +MODULE_AUTHOR("Ard Biesheuvel <ardb@kernel.org>");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.35.3
+> 
 
-> A fixed firmware is still desirable, though.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Yep, definitely.
-
-Not to discourage a firmware fix, but I could look at adding support to
-one of the utils (mokutil?) to delete duplicate kek/db/dbx entries...
-
-Cheers,
-
-
-Jeremy
+BR, Jarkko
