@@ -2,51 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205BB6A3D5C
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Feb 2023 09:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350186A3D68
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Feb 2023 09:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbjB0Iih (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 27 Feb 2023 03:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S231358AbjB0Ise (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Feb 2023 03:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbjB0IiM (ORCPT
+        with ESMTP id S229742AbjB0IsH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 27 Feb 2023 03:38:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4089755;
-        Mon, 27 Feb 2023 00:33:40 -0800 (PST)
+        Mon, 27 Feb 2023 03:48:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A67252A6;
+        Mon, 27 Feb 2023 00:40:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25F6160DC4;
-        Mon, 27 Feb 2023 08:31:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E8BC4339C;
-        Mon, 27 Feb 2023 08:31:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1DD33B80BE8;
+        Mon, 27 Feb 2023 08:34:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC76C433EF;
+        Mon, 27 Feb 2023 08:34:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677486703;
-        bh=gdg9RUQ+0dn+UKr5UGRdJ4g1625WFoipyqIstYrZ4vM=;
+        s=k20201202; t=1677486842;
+        bh=daN4vxGRyKHsdZInFbqx1YolKOv5AHiq+a5Oe5Jn9Wo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uQa51uFUY+1YsDw5JtU18QmLNuR6d5suyNE8nn6rDmzWErytbcoZufejANP4cixUH
-         1ctpdP/9MZ+OBaFDOq+HldakBGwaSQNFNhIM2TtsiSVDcW2QzyGfvHNK5cpyNzZWiA
-         RJQNFdQitTCBBn8wSqFEz+Cx36cGEzSDnWgR/zGwrrvRxlG4XfF8iwtmMGjToFsiSB
-         Fr6Z0WUSDgimmgSxNN2y5g0EciswgT2K+sy7LlMjJAnwfFMN1M78afKAUpfaKf0/JM
-         8v8PEEZHYnfsxvCvy8h8Y3J/VbGdw3nmCtEo0/GbvYOqa+S42xmrTRWGYQyVUGLenC
-         QhmoSVIu7FlSA==
-Date:   Mon, 27 Feb 2023 10:31:40 +0200
+        b=DQH+P69bpThkbkW+NT0Sdt+nxbeE+/RtDKCuENW1QCHhHQIPLQVh6Hd7QoXd2eshH
+         SCkOxOyrbotUisEQnX2LZ6Cyb50BO9lnQxmI1UQCKTBZ2BjupWltSAZhIlxekF3Yej
+         5mqp8H1FxwTE/UtwO4YuSHGep9rdyZRzgSx8mO0bdIJML49R5nfz40EmNnwNT/S9Ue
+         jvnQCI2AwOJ/RM6W1bR79JgULY+QHhYONcf0qA987cCNvv0w8i5R1N/LtVGRY+j4zU
+         u33zAf2htQLKzOLzs2LMFtXgotqOLP1s6doV5mTqogx1S7zu3nCPPI+tRSRHxdTRHo
+         SQgtiL1HdDIVg==
+Date:   Mon, 27 Feb 2023 10:34:00 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     James Bottomley <James.Bottomley@hansenpartnership.com>
 Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH 03/12] tpm: add buffer handling for TPM2B types
-Message-ID: <Y/xqbCwh+VBmJ1ZL@kernel.org>
+Subject: Re: [PATCH 04/12] tpm: add cursor based buffer functions for
+ response parsing
+Message-ID: <Y/xq+MgLgJequlOk@kernel.org>
 References: <20230216201410.15010-1-James.Bottomley@HansenPartnership.com>
- <20230216201410.15010-4-James.Bottomley@HansenPartnership.com>
+ <20230216201410.15010-5-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230216201410.15010-4-James.Bottomley@HansenPartnership.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230216201410.15010-5-James.Bottomley@HansenPartnership.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,185 +55,80 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 03:14:01PM -0500, James Bottomley wrote:
-> Most complex TPM commands require appending TPM2B buffers to the
-> command body.  Since TPM2B types are essentially variable size arrays,
-> it makes it impossible to represent these complex command arguments as
-> structures and we simply have to build them up using append primitives
-> like these.
+On Thu, Feb 16, 2023 at 03:14:02PM -0500, James Bottomley wrote:
+> Once we have encryption and authentication, marshalling and
+> unmarshalling sessions becomes hugely complex.  Add cursor based
+> functions which update the current pointer to make response parsing
+> easier.
+
+You need to properly introduce the concept of cursor based function,
+and how that maps into implementation.
+
+I understand absolutely nothing of the change just by reading the
+commit message, it is pretty much useless peace of text.
+
 > 
 > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 > ---
->  drivers/char/tpm/tpm-buf.c | 71 +++++++++++++++++++++++++++++++++++---
->  include/linux/tpm.h        |  3 ++
->  2 files changed, 69 insertions(+), 5 deletions(-)
+>  drivers/char/tpm/tpm-buf.c | 29 +++++++++++++++++++++++++++++
+>  include/linux/tpm.h        |  3 +++
+>  2 files changed, 32 insertions(+)
 > 
 > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-> index ca59b92e0f95..292c6f14f72c 100644
+> index 292c6f14f72c..b76158f9bcd0 100644
 > --- a/drivers/char/tpm/tpm-buf.c
 > +++ b/drivers/char/tpm/tpm-buf.c
-> @@ -7,17 +7,16 @@
+> @@ -7,6 +7,8 @@
 >  #include <linux/module.h>
 >  #include <linux/tpm.h>
 >  
-> -int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
-> +static int __tpm_buf_init(struct tpm_buf *buf)
+> +#include <asm/unaligned.h>
+> +
+>  static int __tpm_buf_init(struct tpm_buf *buf)
 >  {
 >  	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
->  	if (!buf->data)
->  		return -ENOMEM;
->  
->  	buf->flags = 0;
-> -	tpm_buf_reset(buf, tag, ordinal);
-> +
->  	return 0;
+> @@ -154,3 +156,30 @@ void tpm_buf_append_2b(struct tpm_buf *buf, struct tpm_buf *tpm2b)
+>  	tpm_buf_reset_int(tpm2b);
 >  }
-> -EXPORT_SYMBOL_GPL(tpm_buf_init);
->  
->  void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
->  {
-> @@ -29,17 +28,60 @@ void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
->  }
->  EXPORT_SYMBOL_GPL(tpm_buf_reset);
->  
-> +int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
+>  EXPORT_SYMBOL_GPL(tpm_buf_append_2b);
+> +
+> +/* functions for unmarshalling data and moving the cursor */
+> +u8 tpm_get_inc_u8(const u8 **ptr)
 > +{
-> +	int rc;
-> +
-> +	rc = __tpm_buf_init(buf);
-> +	if (rc)
-> +		return rc;
-> +
-> +	tpm_buf_reset(buf, tag, ordinal);
-> +
-> +	return 0;
+> +	return *((*ptr)++);
 > +}
-> +EXPORT_SYMBOL_GPL(tpm_buf_init);
+> +EXPORT_SYMBOL_GPL(tpm_get_inc_u8);
 > +
-> +int tpm_buf_init_2b(struct tpm_buf *buf)
-
-kdoc
-
+> +u16 tpm_get_inc_u16(const u8 **ptr)
 > +{
-> +	struct tpm_header *head;
-> +	int rc;
+> +	u16 val;
 > +
-> +	rc = __tpm_buf_init(buf);
-> +	if (rc)
-> +		return rc;
-> +
-> +	head = (struct tpm_header *) buf->data;
-> +
-> +	head->length = cpu_to_be32(sizeof(*head));
-> +
-> +	buf->flags = TPM_BUF_2B;
-
-Please make tpm_buf_init() and tpm_buf_reset() to work for both cases.
-
-This explodes the whole thing into an unmaintainable mess. It is better
-to have a type as a parameter for tpm_buf_init() and have only single
-flow instead of open coded and patched variation.
-
-I'd simply just put it as:
-
-struct tpm_buf *tpm_buf_init(u16 tag, u32 ordinal, bool tpm2b)
-
-> +	return 0;
+> +	val = get_unaligned_be16(*ptr);
+> +	*ptr += sizeof(val);
+> +	return val;
 > +}
-> +EXPORT_SYMBOL_GPL(tpm_buf_init_2b);
+> +EXPORT_SYMBOL_GPL(tpm_get_inc_u16);
 > +
->  void tpm_buf_destroy(struct tpm_buf *buf)
->  {
->  	free_page((unsigned long)buf->data);
->  }
->  EXPORT_SYMBOL_GPL(tpm_buf_destroy);
->  
-> +static void *tpm_buf_data(struct tpm_buf *buf)
+> +u32 tpm_get_inc_u32(const u8 **ptr)
 > +{
-> +	if (buf->flags & TPM_BUF_2B)
-> +		return buf->data + TPM_HEADER_SIZE;
-> +	return buf->data;
+> +	u32 val;
+> +
+> +	val = get_unaligned_be32(*ptr);
+> +	*ptr += sizeof(val);
+> +	return val;
 > +}
-> +
->  u32 tpm_buf_length(struct tpm_buf *buf)
->  {
->  	struct tpm_header *head = (struct tpm_header *)buf->data;
-> +	u32 len;
->  
-> -	return be32_to_cpu(head->length);
-> +	len = be32_to_cpu(head->length);
-> +	if (buf->flags & TPM_BUF_2B)
-> +		len -= sizeof(*head);
-> +	return len;
->  }
->  EXPORT_SYMBOL_GPL(tpm_buf_length);
->  
-> @@ -55,7 +97,7 @@ void tpm_buf_append(struct tpm_buf *buf,
->  		    unsigned int new_len)
->  {
->  	struct tpm_header *head = (struct tpm_header *) buf->data;
-> -	u32 len = tpm_buf_length(buf);
-> +	u32 len = be32_to_cpu(head->length);
->  
->  	/* Return silently if overflow has already happened. */
->  	if (buf->flags & TPM_BUF_OVERFLOW)
-> @@ -93,3 +135,22 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
->  	tpm_buf_append(buf, (u8 *) &value2, 4);
->  }
->  EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
-> +
-> +static void tpm_buf_reset_int(struct tpm_buf *buf)
-> +{
-> +	struct tpm_header *head;
-> +
-> +	head = (struct tpm_header *)buf->data;
-> +	head->length = cpu_to_be32(sizeof(*head));
-> +}
-> +
-> +void tpm_buf_append_2b(struct tpm_buf *buf, struct tpm_buf *tpm2b)
-> +{
-> +	u16 len = tpm_buf_length(tpm2b);
-> +
-> +	tpm_buf_append_u16(buf, len);
-> +	tpm_buf_append(buf, tpm_buf_data(tpm2b), len);
-> +	/* clear the buf for reuse */
-> +	tpm_buf_reset_int(tpm2b);
-> +}
-> +EXPORT_SYMBOL_GPL(tpm_buf_append_2b);
+> +EXPORT_SYMBOL_GPL(tpm_get_inc_u32);
 > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 150b39b6190e..f2d4dab6d832 100644
+> index f2d4dab6d832..f7cff1d114b0 100644
 > --- a/include/linux/tpm.h
 > +++ b/include/linux/tpm.h
-> @@ -300,6 +300,7 @@ struct tpm_header {
->  
->  enum tpm_buf_flags {
->  	TPM_BUF_OVERFLOW	= BIT(0),
-> +	TPM_BUF_2B		= BIT(1),
->  };
-
-
-This is IMHO unnecessary complex.
-
-I think we could just have two bools:
-
-        bool overflow;
-        bool tpm2b;
-
->  
->  struct tpm_buf {
-> @@ -324,6 +325,7 @@ struct tpm2_hash {
->  
->  
->  int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
-> +int tpm_buf_init_2b(struct tpm_buf *buf);
->  void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal);
->  void tpm_buf_destroy(struct tpm_buf *buf);
->  u32 tpm_buf_length(struct tpm_buf *buf);
-> @@ -332,6 +334,7 @@ void tpm_buf_append(struct tpm_buf *buf, const unsigned char *new_data,
->  void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value);
+> @@ -335,6 +335,9 @@ void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value);
 >  void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value);
 >  void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value);
-> +void tpm_buf_append_2b(struct tpm_buf *buf, struct tpm_buf *tpm2b);
+>  void tpm_buf_append_2b(struct tpm_buf *buf, struct tpm_buf *tpm2b);
+> +u8 tpm_get_inc_u8(const u8 **ptr);
+> +u16 tpm_get_inc_u16(const u8 **ptr);
+> +u32 tpm_get_inc_u32(const u8 **ptr);
 >  
 >  /*
 >   * Check if TPM device is in the firmware upgrade mode.
