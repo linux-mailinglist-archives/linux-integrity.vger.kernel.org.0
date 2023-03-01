@@ -2,46 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4386A6BF8
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 12:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD6D6A6C53
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 13:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjCAL5C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Mar 2023 06:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S229530AbjCAM1y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Mar 2023 07:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjCAL47 (ORCPT
+        with ESMTP id S229511AbjCAM1w (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Mar 2023 06:56:59 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2044.outbound.protection.outlook.com [40.107.223.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764BD2CC46;
-        Wed,  1 Mar 2023 03:56:58 -0800 (PST)
+        Wed, 1 Mar 2023 07:27:52 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2060.outbound.protection.outlook.com [40.107.101.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079BB38E9D;
+        Wed,  1 Mar 2023 04:27:50 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WDNaiQhykfqerTvP1OpHGth3wNtibK+x599XGrtSIb4dy9078rH0WslSglPcJjyobdWqTqp7QaS8x/Frk0Y0i8Dg9l3yGFuNC8nIqzm6bKhU2xGRsFePi6B/0/96xAVgkKTBH0tIDazY82BvVCC1WWBNj16MWa2dAwYj0jFlFDCvrI4W0VdzZDR60+bP4iWtzoMgJ5g8APytHzI7FDBWtigFMiUgKtPnSNQ2zCiG1cyjmNy7hiZQG2fpt+Q3TKr+TmDOSsVRutSid6pfDkHiRjjaXmG32Rnx7WmL0icAY3O51U5mJSfdiGkVd+WeOSMILKuSm/SjwXkuf0b1smDZ4g==
+ b=hNDjRKmzMij2rda7+mDNeIx7hU4cOUFZ2wsfcW+ZfqnaMGXW0kYvizdr8rzJlSj7IgSYZyRQStYcisNeAuck7hrWG7QhNHWUjnIix+pxIyl4FmYSrp/X6kq4Is0pYbLnL66JcxxPQMtWrJbWieA9nxFGikFq1zWZ3xq1GTRR05a/d9Xw2JhhBVxkcN8/vp3FuXEVBIz0vOxh9SGsBz52c/F6SnPym5RSnS7a82AqeWR3VnuL0f6Ysbe4VLO6vG6KtkyoKFgskBi7rDPELHTarlg6T8lttJT9MXCfqtXHoYg6z5Z3iwTSr80pcNJXkug8J1H3fdTwHdyN9nxc7g/CHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rdaX/H/FfIl7iktSsMfLiTNGaIQXFdQFw7iT/cpOO/U=;
- b=mdlK2IvDqsT81hppbDLNhyJfIJLmQA18QJ4oIvomSKWV5VvvR83yLeYkehjvTaVI4EvRDRfTEJ62OW22+kXDeFSWBEh6k9h6TEmvT8zRp3E7ZwZ2qcpUs37UDuU87223j1BJr7ajQeCYbD3qsfL2pOW+0KASU9C6DB8c85nnQrcxW/N6J7yzTdAylAFbQgq64BJGzclWEJL4TBLlkwNvy6NyonEYD3kvrP/XsGKkbWzf7upaR5Gg1+f5kwuo/zhFDwz6MignxGSaCuaIogTVMUTv9UKPfxih6LWHdepH6+9snCR3ZRzfO43fb+PhnzainApTUTIr4sb/kVaKQ7qL8Q==
+ bh=jmvmFsTVMRZSXs4VXPncbRCb5IgwkcmcLhU2wCklck4=;
+ b=gQctiDIXG4fdU0W/1A8dF4uPi91+FqY/YB8ezOrE/FGYLvUj9CyqCQl9rrhSwF2ZZiOETDA6ASr8P/KBhnPJRPPxSBeEPSFnC0LqTH62f1LqxfPrqlSxW9JNeCnDL6f1JYS5HBLdiXsr1RnruLpIKz/Cv8rASGcbYJw/IybWa+zbNwzQ/eP+j5M8W9qXMLdi0dOE3I74fKhaw9Y5j6FVIXFCgIxHrnmOYlAUBotavdHGLhyKEM0A/qzUcK+ohMcANTycmtbwJzrUIU0q4ADjIp3otgC1IJSGQGmTL+bmdwYBIgmKzicmXyltqgdPfN8yImZCS9U5Ak4Q8b3i05euEw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rdaX/H/FfIl7iktSsMfLiTNGaIQXFdQFw7iT/cpOO/U=;
- b=KwAhIYH1bEmUfGT9+zf3/6CYJnfLOEg2uxHN2tNurXFssQYmZfWT6iI7h98WfvQEDqWtadM9J7uzavEACI9LQiQwEtbqsZha9AIjxz1sgm9oRWUfrwlrIVqjCRm63F8D39MiIp97pfBm6CvvNGtIDBjfzxjROdB4PVSQSTT9n/vjL46R1IrAF4OOmVN+y5RttHQKa84ua5sTp0UTKIRYOMQQGHB4HuapNPRJDNUeHfVcOsCUt1PF+geF+X91H/214H3ORYvktqTFdaqDIBZ7BPSp3hqoSCq5CDckhhbxcvm0zMPueeCb9HE02lEF9lC/Ru0lIZLN60+rcrcP4w4S1Q==
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
- DS0PR12MB8270.namprd12.prod.outlook.com (2603:10b6:8:fe::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.30; Wed, 1 Mar 2023 11:56:53 +0000
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0]) by DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::bca7:6774:36b1:78a0%9]) with mapi id 15.20.6134.030; Wed, 1 Mar 2023
- 11:56:53 +0000
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+ bh=jmvmFsTVMRZSXs4VXPncbRCb5IgwkcmcLhU2wCklck4=;
+ b=CrmQX0aVLZhkU4XIyVtrIgThOtsZjXvwiHUc1zftOra9Kb7gjQXLDnBVU/t2fAkVMP0iKAW/nGe9trpyUt7EDoUy6pu5cE5ND4qyWLC+bxJsudPtfqiiYM4sP9N+AEQbAnEoa+tQH2mzPnVDduVfZ2vB9ymSo9kL7rx3lYx8pwsihJ9vMGSZyZ3b8dmHgkGFEEcfL1SBg2+/J+G9bqDgu+HINahGhJaNyRKmyAV8ldQSltY9R9bFnVTPs2tsij7Axo94xGIrDYm9ArUZuFrBuJYFeNJ5nEXpP5kyP9gL0871upQq9Fz+LY0yuYvS5S0GNIGeC3L2CWDPa+ZiO7CTLQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by CY5PR12MB6300.namprd12.prod.outlook.com (2603:10b6:930:f::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Wed, 1 Mar
+ 2023 12:27:47 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.029; Wed, 1 Mar 2023
+ 12:27:47 +0000
+Date:   Wed, 1 Mar 2023 08:27:45 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "broonie@kernel.org" <broonie@kernel.org>,
         "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
         "krzysztof.kozlowski+dt@linaro.org" 
@@ -54,71 +58,67 @@ CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>
-Subject: RE: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Thread-Topic: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Thread-Index: AQHZSqQUcW4yC19F/EyRW9qbZsaOO67jpaAAgAClToCAAYhzAA==
-Date:   Wed, 1 Mar 2023 11:56:53 +0000
-Message-ID: <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
+Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
+Message-ID: <Y/9EwTtmxcVBjiHz@nvidia.com>
 References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
- <20230227120702.13180-3-kyarlagadda@nvidia.com> <Y/1oqr0RfD7KVA4y@kernel.org>
+ <20230227120702.13180-3-kyarlagadda@nvidia.com>
+ <Y/1oqr0RfD7KVA4y@kernel.org>
  <Y/3zVdgnVz8BvGGl@ziepe.ca>
-In-Reply-To: <Y/3zVdgnVz8BvGGl@ziepe.ca>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5769:EE_|DS0PR12MB8270:EE_
-x-ms-office365-filtering-correlation-id: 29d8a4af-1396-4832-1584-08db1a4c0ca8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +hJNQWbrCoqsuYJXd932RemB01gHBazBVQaRnlpzSVeNrrgZ+cBjH71czrcc6sPkJJ9cBYIRMA2G5CnnD0aqbLQUBN9IJcHacwFrcSNhPmfp8hzP6ZqKIeJoCBG4i7dJ4mAxNSOekGGTGIpe2fvniVjo89i9gx10dQF40/J7Nwe3mpalhKfW9rRBtmYG4x4HMCuI+2gCqu2pGIqG1KNOZW2NJUpf0ywif/5R66D3HbuWLIfbYQUI681GeUZE3dFMwLh4UHsBRCHzh3EHGLXMrfJ66ft0KwI+spi39f21frRib7z/nB6xgJ7onauvviKP1jYUAQy2A7tKLJsXzHaM6a6EgGOBgLxZczxTbQtLrPCihrpvKpuVtVxVZj03fYTn413MOM6dgcX4uiNlfqfHQBs180QDKY9JAThYue+ItH8QZ29Qk1+TjVrnLXWh6UEk3/DLHP54wBqT3BYJVb5n0Gt1xnA7iqxAApvPL8vxWMtIqapNv3d3RgGvpfDvZBFvQn4a+1r2+s9TJ2jubVaV8pqPDjLorThDwrLERBmaMtW+HortMHERYolaAiIVGgcx78NNo8wRLltqlR8RsWEMEnIyKVwBuxod17IbcaQT8pIgCkgNwd28ib4pHIXq6L+be07c2pqhwPTHyQdKE60e2UcRCjMOWOyf/RGdUP8ejU0D08VxMS2ybk2/j4H+H2m5jk/S+CPAvq+Q6BEUkTfeSQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(451199018)(122000001)(38100700002)(38070700005)(52536014)(86362001)(2906002)(7416002)(64756008)(66556008)(66476007)(66446008)(5660300002)(55016003)(66946007)(8676002)(4326008)(41300700001)(8936002)(478600001)(76116006)(53546011)(9686003)(6506007)(186003)(26005)(83380400001)(110136005)(54906003)(316002)(7696005)(71200400001)(33656002)(107886003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3Dik6+/PG+LL2mIg6JgE6CBaPuQZrDMi+QIg0eVPyzTwD+i3weXelMoHQXSr?=
- =?us-ascii?Q?0fouohplr0M5m+RLVG+5nOaqMO4ztcQ1nPRT6WyakmZ0XCp9p4tWaLQT/yQC?=
- =?us-ascii?Q?lQ7jk31oi6U7bG8jmf6ChjdhyT8FUD0gkAOfChklP65m9uetRO9uxZnwy5mj?=
- =?us-ascii?Q?EoJKV+2Sp4KYiHC3tvFICDoVthMBXEfgDY0JYEop74IN1RZ0XA6VeAe1pC4c?=
- =?us-ascii?Q?+D5A3bFHAUaaFJOjCvqN1MC0wHbljkI6CMqUTUPHm/BeGq50JwktIZBXRy0D?=
- =?us-ascii?Q?ayU9ci18J+rO2+TDCM/PLpVMudU/86g1kV3pOzF651tmHA5F5CZOrrcUM7n9?=
- =?us-ascii?Q?hFfX/20Y8DT/BqqA3pMZ3vbOfmSrMrEMEyX0HKeKgOKe+BGdjAVnVPSouNtu?=
- =?us-ascii?Q?tBvbeHGFhFDL9Efv7u2GDHpaGevBYOC0s5AbWzWAIRNVNfTDfotAXyNrPWcf?=
- =?us-ascii?Q?rwz9xW4eVO5LH589AtOE6BhaI7Eq+J8sZ/oFg/bCWjQcRhwn2R7iJxaLZ+O9?=
- =?us-ascii?Q?N1QRlrzj6f27+fsEu7nLBUAa0A+T4Qq31kuhM2M+QArT/0K+bkh+KFShh2HT?=
- =?us-ascii?Q?i/MZf2l4WsQvrksUuOATPQqB9Vgsre6auMEMo70gmv6OFjqdN/RWdwljTExG?=
- =?us-ascii?Q?vF06JhfZ36Z5l3IMyxZcRUxPccki697Km+94S47R6zWV1Hz+2i3swN4QY/EC?=
- =?us-ascii?Q?oudQmBINI2qkHl0aISsjgQlSq+U5M+Grd8WZE4PmkrI5X6h7vcYVOwcNr8i2?=
- =?us-ascii?Q?t5BakPlZ+JUwSjLhR6RDJ9KroZ5jMwobvJleIcCYyGFVIi5wiTWCUNmWgBvy?=
- =?us-ascii?Q?BuHqmI3XinOJ+w9GU/TqPLYIp2N4xe7ojIQaxOLSHkqrSok0VvFJgEVTbE+b?=
- =?us-ascii?Q?Hu6IXdUXT2MFBVhjZ5iBFmWG29Sar5DISTWRi+ma4I+/FZ3KpowDZN7eCk3X?=
- =?us-ascii?Q?I5ch2NpcA9T4Zh5B47C4eM7QRl7a1kMQR6SFbqoEm8/LTeeoRUfUgQdTSydE?=
- =?us-ascii?Q?7Rq26U6s4BXJttU6PDqUdlOcOjFuQC/Vj7RqrZ4hjnLjuWnpd+LeJvG+TelB?=
- =?us-ascii?Q?Op/K7tQ95rACOSMinS4uPdIsoVsmexN3aXWO/5ECP96Z36EEjpYv9BUk+IC1?=
- =?us-ascii?Q?6VDwGKRE9qGuep8PdcP0SizIVN9uMPbygxopUH2Q0Oi0S3kLL7Kos5fkeLi7?=
- =?us-ascii?Q?REnkbGuH0jfok3prgt32jvwSoLM766i6Qhd1igMllTiL0GbFX8Vh3S9Wvb79?=
- =?us-ascii?Q?A4vsLvghNQUjLBpPZFjWN2dTiG8VYtYQ7gTFm60MZ5AB01i6n0WS0lQCuEQ5?=
- =?us-ascii?Q?rht4D/cuZ40DQ2GQiSnUJfqVGWEBE51JiypAGPF1GBowuLbe6gjc6n/74ZSz?=
- =?us-ascii?Q?/ZDwYR6sGZhVXDqYjeRYP990D0caSjL/djQNARL2J4rVd3UfMgBsMKu3wAD+?=
- =?us-ascii?Q?lXucg4pZb22Iy2MjCNIADmleGSNsb3h4gcHozDL61OCf/qbpNZZwnuenCPOb?=
- =?us-ascii?Q?NswQREZbxm3FnMs5uNijMP8mpBzhjO4uKeSxpbzdq0A3vRSP0Ra3qjUCL3HD?=
- =?us-ascii?Q?a611yEt9JeWu9erNOj8v2/TgOiYNfPvulXHsQ5Bi?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
+X-ClientProxiedBy: YT4PR01CA0128.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d5::25) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY5PR12MB6300:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3f534aa-e353-41cc-efd3-08db1a505d41
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dlMel9oAmy03y1r8rJACwcKEIeW0w9P0Ahf8pxtAvNKf9lwB1OJaIWUhtH+9SGvgiFObah1NwTncPES/xhpgxgI+ZkQs3RmKrGbQuw0Dn+UlvbtondZBp+DSd561F5XxTY6ATO3BHoE/UqPCdDprlxAt5syF7c1yynls5hulULrc+m8uTaNA8kInGSE6rE+sbHB3hjiaGioLWEFyxEDdifuSFQ3rv/e1qeJOh6Im/oVt2a4Y0sw6d+lJfRXFp5C6xA9VfcfLPGP1w6KDMZHHAtI7TioMtiXLgkGCc+tIgO6q73YWn48y6x3MLj5wfIB3VXA2QBL8McUEyBYwG3/yV/4jT3VTVrzU2XfKAOGhyLLgaiCzUUcqo1iSkzOjwWtSX91JEYBxO+8Tk8ilyZl9gMqmDUyPgtjzMAzHVN6fz3eYIfDWKi6mylKLXh/UlZDDH1nQy1Fz4PGq2p0I/jNaYVLFiN/lYFZSI0kljkP0KhTFw1Qd4l+YpJRWakTfDrI1vygYaYptSXxjGI9MHTJrGkuoIxJWA5Yfvh7w0QWvPdAL0rB0EkAlA+Bz4PgXuhD+Mzz1Qhlr/GqcfHOEg6KkOu2u7VIZtMhsFcV3LQZcMoQdd5+1MDEBuKTvWws4izdraSodo/40AZcKIbaQEzOBEg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39860400002)(346002)(396003)(376002)(451199018)(2906002)(66556008)(66476007)(8676002)(8936002)(41300700001)(7416002)(6862004)(38100700002)(86362001)(36756003)(5660300002)(66946007)(316002)(107886003)(478600001)(37006003)(6512007)(26005)(6506007)(186003)(4326008)(54906003)(6636002)(6486002)(83380400001)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JTWhNZT90gLfibXosdGIYwHLWJ/z7V80hYNEim1R2J+EpyEL+kACS2uQg9OO?=
+ =?us-ascii?Q?s87w/2XEMCIeN76wWZYngOsiG7ZEb2ynT2Pu/BRn9/BPBmGk2CUL0opkrilS?=
+ =?us-ascii?Q?G4MNWTgk7AfySzS1mGyVgCuic4Owx9Gv/U+facktEh8YJVFkfv+wKNMbrJq4?=
+ =?us-ascii?Q?u6JQ71TssrveKxUcxM6Phj3rpBdvuPvb0ou2gpleM9SKfgGc0GmESPV9DPfS?=
+ =?us-ascii?Q?Rj7KsZlKhEVs1V6jjZc4qRdheTbvJtBrCL8wbPonmSvPmuSV+yOAdDLmdvuE?=
+ =?us-ascii?Q?6QAQrsbnyQpBCc33n6q5yyqYZO0/3FoR4wXmjLxXYoWC/OpfxCH4cbxL3ILS?=
+ =?us-ascii?Q?7xLqEDAjaj8obIL8Nqo6KdkHzSo3GENx0aDWTCoiNeVdNgB3iwtmC0WZaGfo?=
+ =?us-ascii?Q?kC2IfcdKlNJtZVX8bNX9T4RfhWRHPXXvOzuOV54lQCxR/UJUdDA1Mdkr2yBx?=
+ =?us-ascii?Q?w4WyA2YF/ePUCK15KOBpK34XF+BVKl70932bM5qShScZSC9GIwv4E6TdGSCK?=
+ =?us-ascii?Q?CEXSUoR2nAFtTP+zQhzmtVqw04br6FXANsB4QJ3g55tWj8gV/pCiZ295Dp0h?=
+ =?us-ascii?Q?crUCRUG5XzEHMSnZvCMU7iVgW47egESa5CUTx4B3+Yo0w8DoKg7WSGKOe+69?=
+ =?us-ascii?Q?ziTgav9LgvvvErfvgc/Ha4zmG6kWxMhbLSZ8mTob5nlg86Exhwmt0OBMplI3?=
+ =?us-ascii?Q?1/VqW+tiyQgGk6Isg8OCEnMf2jFGEKC9P/EgFZrk1PuZNOefpujaut05X5SG?=
+ =?us-ascii?Q?zzvFuLiYkF9VPttzx2Z2xHdqHthrdLMe1FsMavNPBgYr85XjbT7/vJjnBG9g?=
+ =?us-ascii?Q?iuE6jCzSMK67PJR2z6T/UdFzPXol8pBTE/2FfxHdphbiMsaBUqc+Fo+IHqxu?=
+ =?us-ascii?Q?J9i9G8gwMJHK2DJKr6vaFvZaMLm9L9p6GInVuAOX6D38pnLzureyPMlDhmda?=
+ =?us-ascii?Q?GsTQLz8CG8WKS+BAOuCBPXRGwqJoy7HH2na6imeEDStrH/Bf/ruJ2iqqD5hP?=
+ =?us-ascii?Q?6skA/vCb11nhi80J3A3GyP0Oo+CqRiAc2sSer4zrRcjfh+6r9Nj4SrTp31Qu?=
+ =?us-ascii?Q?cuRjVtFHBEaobXRBInBCVdZfd+nrt4UgndlV84XOnPnI0k6MHmjuPgn/+xmR?=
+ =?us-ascii?Q?4kQIWGtms3K17q7GjzEeNOwD5lIPGWeyIDOToYzxIPgIsK/LUkU9gTST1WLJ?=
+ =?us-ascii?Q?sWuGa07d+iogItpRQtxGvRJuABV25isuj1qpvb/zAb+owHKMgkAuPttmLzdN?=
+ =?us-ascii?Q?8NnfusokjUuZFX9nDpxZ4tTtfp72Pcdibcz4Ox4K62+0T5s2K5sRsUPVZOT4?=
+ =?us-ascii?Q?+GLSVyqwmYQ5O7BAhYODahSMVHUUku91pF8IWhf/f9kLfpcDJJSRm56OjAlS?=
+ =?us-ascii?Q?z0ma2t4aJfGAOmyckNBLUa4moxPFYlEsr73VSQ6L1jEaTK1SVVRcprW4biP/?=
+ =?us-ascii?Q?4fNdQYh0AEmzv916zjVMWf5ktwC/ea7DGSndMZ0T8jqNq9zQsUj2iMlM+7/n?=
+ =?us-ascii?Q?8h7VSQKQOhWz7ZJyr9ryH/5EY7eeMBffv8fkyqhqnO9mQw0zDo1Hh8eDaJOD?=
+ =?us-ascii?Q?ZF4OS+t2M1dH6RKwvJD4Sfcj9PlWiOcaOStj+QyF?=
 X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3f534aa-e353-41cc-efd3-08db1a505d41
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29d8a4af-1396-4832-1584-08db1a4c0ca8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2023 11:56:53.4611
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 12:27:46.9083
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4Y+mIEc9kNi1ikl1MYxyQVIp/nk0yr8v8zEClKVe8voS/gNCOi26mHnImHb1uUdbuVkyF6oxHe0y/t6FCCLmvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8270
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 81S9Rhlu+BIJirFv1tDYWqGQxWeJc2q1EYUxBKgCsVVboZrhTlV159CRF5EOTlmi
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6300
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -129,70 +129,33 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Wed, Mar 01, 2023 at 11:56:53AM +0000, Krishna Yarlagadda wrote:
 
-> -----Original Message-----
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: 28 February 2023 17:58
-> To: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Krishna Yarlagadda <kyarlagadda@nvidia.com>; robh+dt@kernel.org;
-> broonie@kernel.org; peterhuewe@gmx.de;
-> krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org; linux-
-> tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> kernel@vger.kernel.org; thierry.reding@gmail.com; Jonathan Hunter
-> <jonathanh@nvidia.com>; Sowjanya Komatineni
-> <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>
-> Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
->=20
-> On Tue, Feb 28, 2023 at 04:36:26AM +0200, Jarkko Sakkinen wrote:
-> > On Mon, Feb 27, 2023 at 05:37:01PM +0530, Krishna Yarlagadda wrote:
-> > > TPM devices raise wait signal on last addr cycle. This can be detecte=
-d
-> > > by software driver by reading MISO line on same clock which requires
-> > > full duplex support. In case of half duplex controllers wait detectio=
-n
-> > > has to be implemented in HW.
-> > > Support hardware wait state detection by sending entire message and l=
-et
-> > > controller handle flow control.
-> >
-> > When a is started sentence with the word "support" it translates to "I'=
-m
-> > too lazy to write a proper and verbose description of the implementatio=
-n"
-> > :-)
-> >
-> > It has some abstract ideas of the implementation, I give you that, but =
-do
-> > you think anyone ever will get any value of reading that honestly? A bi=
-t
-> > more concrette description of the change helps e.g. when bisecting bugs=
-.
->=20
-> I would expect SPI_TPM_HW_FLOW to be documented in the kdocs to a
-> level that any other HW could implement it as well.
-HW implementation can be controller specific. I would add comments in the
-header to say CMD-ADDR-DATA is sent as single message with this flag.
->=20
-> > > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 le=
-n,
-> > > +			 u8 *in, const u8 *out)
-> > > +{
-> > > +	struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
-> > > +	struct spi_controller *ctlr =3D phy->spi_device->controller;
-> > > +
-> > > +	/*
-> > > +	 * TPM flow control over SPI requires full duplex support.
-> > > +	 * Send entire message to a half duplex controller to handle
-> > > +	 * wait polling in controller.
-> > > +	 * Set TPM HW flow control flag..
-> > > +	 */
-> > > +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX) {
-> > > +		phy->spi_device->mode |=3D SPI_TPM_HW_FLOW;
->=20
-> Shouldn't we check that this special flow is supported when the SPI
-> device is bound to the tpm in the first place?
-TPM device connected behind half duplex controller can only work
-this way. So, no additional flag needed to check.
-KY
->=20
-> Jason
+> > > > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+> > > > +			 u8 *in, const u8 *out)
+> > > > +{
+> > > > +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+> > > > +	struct spi_controller *ctlr = phy->spi_device->controller;
+> > > > +
+> > > > +	/*
+> > > > +	 * TPM flow control over SPI requires full duplex support.
+> > > > +	 * Send entire message to a half duplex controller to handle
+> > > > +	 * wait polling in controller.
+> > > > +	 * Set TPM HW flow control flag..
+> > > > +	 */
+> > > > +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX) {
+> > > > +		phy->spi_device->mode |= SPI_TPM_HW_FLOW;
+> > 
+> > Shouldn't we check that this special flow is supported when the SPI
+> > device is bound to the tpm in the first place?
+> TPM device connected behind half duplex controller can only work
+> this way. So, no additional flag needed to check.
+
+Just because a DT hooks it up this way doesn't mean the kernel driver
+can support it, eg support hasn't been implemented in an older SPI
+driver or something.
+
+If the failure mode is anything other than the TPM doesn't probe we
+will need to check for support.
+
+Jason
