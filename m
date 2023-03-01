@@ -2,717 +2,197 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD636A6A83
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 11:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4386A6BF8
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 12:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjCAKJa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Mar 2023 05:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S229700AbjCAL5C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Mar 2023 06:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjCAKJI (ORCPT
+        with ESMTP id S229691AbjCAL47 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Mar 2023 05:09:08 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184613BD97
-        for <linux-integrity@vger.kernel.org>; Wed,  1 Mar 2023 02:08:45 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PRV8h3QzGz9v7Nc
-        for <linux-integrity@vger.kernel.org>; Wed,  1 Mar 2023 18:00:04 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnbmUaJP9jUNZeAQ--.64381S2;
-        Wed, 01 Mar 2023 11:08:31 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH ima-evm-utils v6] Add tests for MMAP_CHECK and MMAP_CHECK_REQPROT hooks
-Date:   Wed,  1 Mar 2023 11:08:22 +0100
-Message-Id: <20230301100822.232187-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 1 Mar 2023 06:56:59 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2044.outbound.protection.outlook.com [40.107.223.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764BD2CC46;
+        Wed,  1 Mar 2023 03:56:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WDNaiQhykfqerTvP1OpHGth3wNtibK+x599XGrtSIb4dy9078rH0WslSglPcJjyobdWqTqp7QaS8x/Frk0Y0i8Dg9l3yGFuNC8nIqzm6bKhU2xGRsFePi6B/0/96xAVgkKTBH0tIDazY82BvVCC1WWBNj16MWa2dAwYj0jFlFDCvrI4W0VdzZDR60+bP4iWtzoMgJ5g8APytHzI7FDBWtigFMiUgKtPnSNQ2zCiG1cyjmNy7hiZQG2fpt+Q3TKr+TmDOSsVRutSid6pfDkHiRjjaXmG32Rnx7WmL0icAY3O51U5mJSfdiGkVd+WeOSMILKuSm/SjwXkuf0b1smDZ4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rdaX/H/FfIl7iktSsMfLiTNGaIQXFdQFw7iT/cpOO/U=;
+ b=mdlK2IvDqsT81hppbDLNhyJfIJLmQA18QJ4oIvomSKWV5VvvR83yLeYkehjvTaVI4EvRDRfTEJ62OW22+kXDeFSWBEh6k9h6TEmvT8zRp3E7ZwZ2qcpUs37UDuU87223j1BJr7ajQeCYbD3qsfL2pOW+0KASU9C6DB8c85nnQrcxW/N6J7yzTdAylAFbQgq64BJGzclWEJL4TBLlkwNvy6NyonEYD3kvrP/XsGKkbWzf7upaR5Gg1+f5kwuo/zhFDwz6MignxGSaCuaIogTVMUTv9UKPfxih6LWHdepH6+9snCR3ZRzfO43fb+PhnzainApTUTIr4sb/kVaKQ7qL8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rdaX/H/FfIl7iktSsMfLiTNGaIQXFdQFw7iT/cpOO/U=;
+ b=KwAhIYH1bEmUfGT9+zf3/6CYJnfLOEg2uxHN2tNurXFssQYmZfWT6iI7h98WfvQEDqWtadM9J7uzavEACI9LQiQwEtbqsZha9AIjxz1sgm9oRWUfrwlrIVqjCRm63F8D39MiIp97pfBm6CvvNGtIDBjfzxjROdB4PVSQSTT9n/vjL46R1IrAF4OOmVN+y5RttHQKa84ua5sTp0UTKIRYOMQQGHB4HuapNPRJDNUeHfVcOsCUt1PF+geF+X91H/214H3ORYvktqTFdaqDIBZ7BPSp3hqoSCq5CDckhhbxcvm0zMPueeCb9HE02lEF9lC/Ru0lIZLN60+rcrcP4w4S1Q==
+Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
+ DS0PR12MB8270.namprd12.prod.outlook.com (2603:10b6:8:fe::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.30; Wed, 1 Mar 2023 11:56:53 +0000
+Received: from DM4PR12MB5769.namprd12.prod.outlook.com
+ ([fe80::bca7:6774:36b1:78a0]) by DM4PR12MB5769.namprd12.prod.outlook.com
+ ([fe80::bca7:6774:36b1:78a0%9]) with mapi id 15.20.6134.030; Wed, 1 Mar 2023
+ 11:56:53 +0000
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: RE: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
+Thread-Topic: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
+Thread-Index: AQHZSqQUcW4yC19F/EyRW9qbZsaOO67jpaAAgAClToCAAYhzAA==
+Date:   Wed, 1 Mar 2023 11:56:53 +0000
+Message-ID: <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
+References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
+ <20230227120702.13180-3-kyarlagadda@nvidia.com> <Y/1oqr0RfD7KVA4y@kernel.org>
+ <Y/3zVdgnVz8BvGGl@ziepe.ca>
+In-Reply-To: <Y/3zVdgnVz8BvGGl@ziepe.ca>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB5769:EE_|DS0PR12MB8270:EE_
+x-ms-office365-filtering-correlation-id: 29d8a4af-1396-4832-1584-08db1a4c0ca8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +hJNQWbrCoqsuYJXd932RemB01gHBazBVQaRnlpzSVeNrrgZ+cBjH71czrcc6sPkJJ9cBYIRMA2G5CnnD0aqbLQUBN9IJcHacwFrcSNhPmfp8hzP6ZqKIeJoCBG4i7dJ4mAxNSOekGGTGIpe2fvniVjo89i9gx10dQF40/J7Nwe3mpalhKfW9rRBtmYG4x4HMCuI+2gCqu2pGIqG1KNOZW2NJUpf0ywif/5R66D3HbuWLIfbYQUI681GeUZE3dFMwLh4UHsBRCHzh3EHGLXMrfJ66ft0KwI+spi39f21frRib7z/nB6xgJ7onauvviKP1jYUAQy2A7tKLJsXzHaM6a6EgGOBgLxZczxTbQtLrPCihrpvKpuVtVxVZj03fYTn413MOM6dgcX4uiNlfqfHQBs180QDKY9JAThYue+ItH8QZ29Qk1+TjVrnLXWh6UEk3/DLHP54wBqT3BYJVb5n0Gt1xnA7iqxAApvPL8vxWMtIqapNv3d3RgGvpfDvZBFvQn4a+1r2+s9TJ2jubVaV8pqPDjLorThDwrLERBmaMtW+HortMHERYolaAiIVGgcx78NNo8wRLltqlR8RsWEMEnIyKVwBuxod17IbcaQT8pIgCkgNwd28ib4pHIXq6L+be07c2pqhwPTHyQdKE60e2UcRCjMOWOyf/RGdUP8ejU0D08VxMS2ybk2/j4H+H2m5jk/S+CPAvq+Q6BEUkTfeSQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(451199018)(122000001)(38100700002)(38070700005)(52536014)(86362001)(2906002)(7416002)(64756008)(66556008)(66476007)(66446008)(5660300002)(55016003)(66946007)(8676002)(4326008)(41300700001)(8936002)(478600001)(76116006)(53546011)(9686003)(6506007)(186003)(26005)(83380400001)(110136005)(54906003)(316002)(7696005)(71200400001)(33656002)(107886003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3Dik6+/PG+LL2mIg6JgE6CBaPuQZrDMi+QIg0eVPyzTwD+i3weXelMoHQXSr?=
+ =?us-ascii?Q?0fouohplr0M5m+RLVG+5nOaqMO4ztcQ1nPRT6WyakmZ0XCp9p4tWaLQT/yQC?=
+ =?us-ascii?Q?lQ7jk31oi6U7bG8jmf6ChjdhyT8FUD0gkAOfChklP65m9uetRO9uxZnwy5mj?=
+ =?us-ascii?Q?EoJKV+2Sp4KYiHC3tvFICDoVthMBXEfgDY0JYEop74IN1RZ0XA6VeAe1pC4c?=
+ =?us-ascii?Q?+D5A3bFHAUaaFJOjCvqN1MC0wHbljkI6CMqUTUPHm/BeGq50JwktIZBXRy0D?=
+ =?us-ascii?Q?ayU9ci18J+rO2+TDCM/PLpVMudU/86g1kV3pOzF651tmHA5F5CZOrrcUM7n9?=
+ =?us-ascii?Q?hFfX/20Y8DT/BqqA3pMZ3vbOfmSrMrEMEyX0HKeKgOKe+BGdjAVnVPSouNtu?=
+ =?us-ascii?Q?tBvbeHGFhFDL9Efv7u2GDHpaGevBYOC0s5AbWzWAIRNVNfTDfotAXyNrPWcf?=
+ =?us-ascii?Q?rwz9xW4eVO5LH589AtOE6BhaI7Eq+J8sZ/oFg/bCWjQcRhwn2R7iJxaLZ+O9?=
+ =?us-ascii?Q?N1QRlrzj6f27+fsEu7nLBUAa0A+T4Qq31kuhM2M+QArT/0K+bkh+KFShh2HT?=
+ =?us-ascii?Q?i/MZf2l4WsQvrksUuOATPQqB9Vgsre6auMEMo70gmv6OFjqdN/RWdwljTExG?=
+ =?us-ascii?Q?vF06JhfZ36Z5l3IMyxZcRUxPccki697Km+94S47R6zWV1Hz+2i3swN4QY/EC?=
+ =?us-ascii?Q?oudQmBINI2qkHl0aISsjgQlSq+U5M+Grd8WZE4PmkrI5X6h7vcYVOwcNr8i2?=
+ =?us-ascii?Q?t5BakPlZ+JUwSjLhR6RDJ9KroZ5jMwobvJleIcCYyGFVIi5wiTWCUNmWgBvy?=
+ =?us-ascii?Q?BuHqmI3XinOJ+w9GU/TqPLYIp2N4xe7ojIQaxOLSHkqrSok0VvFJgEVTbE+b?=
+ =?us-ascii?Q?Hu6IXdUXT2MFBVhjZ5iBFmWG29Sar5DISTWRi+ma4I+/FZ3KpowDZN7eCk3X?=
+ =?us-ascii?Q?I5ch2NpcA9T4Zh5B47C4eM7QRl7a1kMQR6SFbqoEm8/LTeeoRUfUgQdTSydE?=
+ =?us-ascii?Q?7Rq26U6s4BXJttU6PDqUdlOcOjFuQC/Vj7RqrZ4hjnLjuWnpd+LeJvG+TelB?=
+ =?us-ascii?Q?Op/K7tQ95rACOSMinS4uPdIsoVsmexN3aXWO/5ECP96Z36EEjpYv9BUk+IC1?=
+ =?us-ascii?Q?6VDwGKRE9qGuep8PdcP0SizIVN9uMPbygxopUH2Q0Oi0S3kLL7Kos5fkeLi7?=
+ =?us-ascii?Q?REnkbGuH0jfok3prgt32jvwSoLM766i6Qhd1igMllTiL0GbFX8Vh3S9Wvb79?=
+ =?us-ascii?Q?A4vsLvghNQUjLBpPZFjWN2dTiG8VYtYQ7gTFm60MZ5AB01i6n0WS0lQCuEQ5?=
+ =?us-ascii?Q?rht4D/cuZ40DQ2GQiSnUJfqVGWEBE51JiypAGPF1GBowuLbe6gjc6n/74ZSz?=
+ =?us-ascii?Q?/ZDwYR6sGZhVXDqYjeRYP990D0caSjL/djQNARL2J4rVd3UfMgBsMKu3wAD+?=
+ =?us-ascii?Q?lXucg4pZb22Iy2MjCNIADmleGSNsb3h4gcHozDL61OCf/qbpNZZwnuenCPOb?=
+ =?us-ascii?Q?NswQREZbxm3FnMs5uNijMP8mpBzhjO4uKeSxpbzdq0A3vRSP0Ra3qjUCL3HD?=
+ =?us-ascii?Q?a611yEt9JeWu9erNOj8v2/TgOiYNfPvulXHsQ5Bi?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDnbmUaJP9jUNZeAQ--.64381S2
-X-Coremail-Antispam: 1UD129KBjvAXoWftw45Xr45WrWxJFWfGr17ZFb_yoW8ZFyxuo
-        WIgFZIv3WIyw13A3s8uF4kAa4UWa4kCan8Ar1a9w45GF1vqry3C3WkAw1ftFWakr4rWrWv
-        kF97X3WrZFWDJry3n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUU5i7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
-        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Gr0_Zr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8imRUUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQADBF1jj4oQ4wAAsO
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29d8a4af-1396-4832-1584-08db1a4c0ca8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Mar 2023 11:56:53.4611
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4Y+mIEc9kNi1ikl1MYxyQVIp/nk0yr8v8zEClKVe8voS/gNCOi26mHnImHb1uUdbuVkyF6oxHe0y/t6FCCLmvw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8270
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add tests to ensure that, after applying the kernel patch 'ima: Align
-ima_file_mmap() parameters with mmap_file LSM hook', the MMAP_CHECK hook
-checks the protections applied by the kernel and not those requested by the
-application.
-
-Also ensure that after applying 'ima: Introduce MMAP_CHECK_REQPROT hook',
-the MMAP_CHECK_REQPROT hook checks the protections requested by the
-application.
-
-Test both with the test_mmap application that by default requests the
-PROT_READ protection flag. Its syntax is:
-
-test_mmap <file> <mode>
-
-where mode can be:
-- exec: adds the PROT_EXEC protection flag to mmap()
-- read_implies_exec: calls the personality() system call with
-                     READ_IMPLIES_EXEC as the first argument before mmap()
-- mprotect: adds the PROT_EXEC protection flag to a memory area in addition
-            to PROT_READ
-- exec_on_writable: calls mmap() with PROT_EXEC on a file which has a
-                    writable mapping
-
-Check the different combinations of hooks/modes and ensure that a
-measurement entry is found in the IMA measurement list only when it is
-expected. No measurement entry should be found when only the PROT_READ
-protection flag is requested or the matching policy rule has the
-MMAP_CHECK_REQPROT hook and the personality() system call was called with
-READ_IMPLIES_EXEC.
-
-mprotect() with PROT_EXEC on an existing memory area protected with
-PROT_READ should be denied (with an appraisal rule), regardless of the MMAP
-hook specified in the policy. The same applies for mmap() with PROT_EXEC on
-a file with a writable mapping.
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
-
-Changelog
-
-v5:
-- Use the new awk script ima_policy_check.awk to check for policy overlap
-- Replace exit "$FAIL" with exit 1 when changing directory at the beginning
-  of the script, as FAIL is not yet defined
-- Add fsmagic=0xef53 to the policy rules, to avoid overlap with the default
-  ima_tcb policy (there is still overlap with the mmap rule)
-- Add colors to the test results
-- Replace i_version with iversion in the mount options
-- Require EVM disabled or HMAC mode
-
-v4:
-- Use separate UIDs for fowner= in measure and appraise policies
-- Add error messages for unexpected failed mmap() (reported by Mimi) and
-  mprotect()
-
-v3:
-- Check if there are IMA policy rules without fowner= and fsuuid=, and
-  if yes, skip the tests due to possible interference (suggested by Mimi)
-- Fix style issues in tests/mmap_check.test
-
-v2:
-- Distinguish setup-related errors from test-related errors in test_mmap
-- Rename key_path and key_path_der variables to g_key_path and
-  g_key_path_der (suggested by Stefan)
-- Write data to the test file in check_mmap()
-- Ensure that there are no setup-related errors from test_mmap in
-  tests/mmap_check.test
-- Print the found entry in the IMA measurement list (suggested by Mimi)
-- Check for errors when writing the test file in check_deny()
-- Pass TST_KEY_PATH to the new environment
-- Add description to each test (suggested by Mimi)
-
-v1:
-- Declare PATCHES and uses new expect_pass_if() and expect_fail_if()
-  (suggested by Stefan)
-- Replace $FAIL with $HARDFAIL when the error occurs in the setup phase of
-  the test (to not make an expect_fail test successful for other reasons
-  than the focus of the test)
-- Declare local variables in one line (suggested by Stefan)
-- Print the test being executed at the beginning, so that the message
-  always appears also if an error occurs
-- Print the result of the tests in a separate line and separate the output
-  of each test
-
- tests/Makefile.am     |   5 +-
- tests/mmap_check.test | 407 ++++++++++++++++++++++++++++++++++++++++++
- tests/test_mmap.c     | 128 +++++++++++++
- 3 files changed, 539 insertions(+), 1 deletion(-)
- create mode 100755 tests/mmap_check.test
- create mode 100644 tests/test_mmap.c
-
-diff --git a/tests/Makefile.am b/tests/Makefile.am
-index 9a7d8a1f989..03aa5b76088 100644
---- a/tests/Makefile.am
-+++ b/tests/Makefile.am
-@@ -2,7 +2,10 @@ check_SCRIPTS =
- TESTS = $(check_SCRIPTS)
- 
- check_SCRIPTS += ima_hash.test sign_verify.test boot_aggregate.test \
--		 fsverity.test portable_signatures.test ima_policy_check.test
-+		 fsverity.test portable_signatures.test ima_policy_check.test \
-+		 mmap_check.test
-+
-+check_PROGRAMS := test_mmap
- 
- .PHONY: check_logs
- check_logs:
-diff --git a/tests/mmap_check.test b/tests/mmap_check.test
-new file mode 100755
-index 00000000000..3a42fec179e
---- /dev/null
-+++ b/tests/mmap_check.test
-@@ -0,0 +1,407 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (C) 2022-2023 Roberto Sassu <roberto.sassu@huawei.com>
-+#
-+# Check the behavior of MMAP_CHECK and MMAP_CHECK_REQPROT
-+
-+trap '_report_exit_and_cleanup _cleanup_env cleanup' SIGINT SIGTERM SIGSEGV EXIT
-+
-+PATCHES=(
-+'ima: Align ima_file_mmap() parameters with mmap_file LSM hook'
-+'ima: Introduce MMAP_CHECK_REQPROT hook'
-+)
-+
-+(( ret_invalid_rule=1 ))
-+(( ret_rule_overlap=2 ))
-+(( ret_same_rule_exists=4 ))
-+
-+(( EVM_INIT_HMAC=0x0001 ))
-+(( EVM_INIT_X509=0x0002 ))
-+
-+# Base VERBOSE on the environment variable, if set.
-+VERBOSE="${VERBOSE:-0}"
-+
-+# Errors defined in test_mmap
-+ERR_SETUP=1
-+ERR_TEST=2
-+
-+cd "$(dirname "$0")" || exit 1
-+export PATH=$PWD/../src:$PWD:$PATH
-+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-+. ./functions.sh
-+_require evmctl
-+
-+cleanup() {
-+	if [ "$g_loop_mounted" = "1" ]; then
-+		popd > /dev/null || exit "$FAIL"
-+		umount "$g_mountpoint"
-+	fi
-+
-+	if [ -n "$g_dev" ]; then
-+		losetup -d "$g_dev"
-+	fi
-+
-+	if [ -n "$g_image" ]; then
-+		rm -f "$g_image"
-+	fi
-+
-+	if [ -n "$g_mountpoint" ]; then
-+		rm -Rf "$g_mountpoint"
-+	fi
-+
-+	if [ -n "$g_key_path_der" ]; then
-+		rm -f "$g_key_path_der"
-+	fi
-+}
-+
-+# Use the fsuuid= IMA policy keyword to select only files created/used by the
-+# tests below. Also use fowner= to differentiate between files created/used by
-+# individual tests.
-+IMA_UUID="28b23254-9467-44c0-b6ba-34b12e85a26e"
-+MEASURE_MMAP_CHECK_FOWNER=2000
-+MEASURE_MMAP_CHECK_REQPROT_FOWNER=2001
-+MEASURE_MMAP_CHECK_RULE="measure func=MMAP_CHECK fsmagic=0xef53 fsuuid=$IMA_UUID fowner=$MEASURE_MMAP_CHECK_FOWNER"
-+MEASURE_MMAP_CHECK_REQPROT_RULE="measure func=MMAP_CHECK_REQPROT fsmagic=0xef53 fsuuid=$IMA_UUID fowner=$MEASURE_MMAP_CHECK_REQPROT_FOWNER"
-+APPRAISE_MMAP_CHECK_FOWNER=2002
-+APPRAISE_MMAP_CHECK_REQPROT_FOWNER=2003
-+APPRAISE_MMAP_CHECK_RULE="appraise func=MMAP_CHECK fsmagic=0xef53 fsuuid=$IMA_UUID fowner=$APPRAISE_MMAP_CHECK_FOWNER"
-+APPRAISE_MMAP_CHECK_REQPROT_RULE="appraise func=MMAP_CHECK_REQPROT fsmagic=0xef53 fsuuid=$IMA_UUID fowner=$APPRAISE_MMAP_CHECK_REQPROT_FOWNER"
-+
-+check_load_ima_rule() {
-+	local result new_policy color
-+
-+	echo -e "$1\n$(cat /sys/kernel/security/ima/policy)" | ima_policy_check.awk
-+	result=$?
-+
-+	if [ $((result & ret_invalid_rule)) -eq $ret_invalid_rule ]; then
-+		echo "${RED}Invalid rule${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	if [ $((result & ret_rule_overlap)) -eq $ret_rule_overlap ]; then
-+		color=${YELLOW}
-+		if [ -n "$TST_ENV" ]; then
-+			color=${RED}
-+		fi
-+
-+		echo "${color}Possible interference with existing IMA policy rule${NORM}"
-+		if [ -n "$TST_ENV" ]; then
-+			return "$HARDFAIL"
-+		fi
-+	fi
-+
-+	if [ $((result & ret_same_rule_exists)) -eq $ret_same_rule_exists ]; then
-+		return "$OK"
-+	fi
-+
-+	new_policy=$(mktemp -p "$g_mountpoint")
-+	echo "$1" > "$new_policy"
-+	echo "$new_policy" > /sys/kernel/security/ima/policy
-+	result=$?
-+	rm -f "$new_policy"
-+
-+	if [ "$result" -ne 0 ]; then
-+		echo "${RED}Failed to set IMA policy${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	return "$OK"
-+}
-+
-+check_mmap() {
-+	local hook="$1"
-+	local arg="$2"
-+	local test_file fowner rule result test_file_entry
-+
-+	echo -e "\nTest: ${FUNCNAME[0]} (hook=\"$hook\", test_mmap arg: \"$arg\")"
-+
-+	if ! test_file=$(mktemp -p "$PWD"); then
-+		echo "${RED}Cannot create $test_file${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	if ! echo "test" > "$test_file"; then
-+		echo "${RED}Cannot write $test_file${NORM}"
-+		return "$FAIL"
-+	fi
-+
-+	fowner="$MEASURE_MMAP_CHECK_FOWNER"
-+	rule="$MEASURE_MMAP_CHECK_RULE"
-+
-+	if [ "$hook" = "MMAP_CHECK_REQPROT" ]; then
-+		fowner="$MEASURE_MMAP_CHECK_REQPROT_FOWNER"
-+		rule="$MEASURE_MMAP_CHECK_REQPROT_RULE"
-+	fi
-+
-+	if ! chown "$fowner" "$test_file"; then
-+		echo "${RED}Cannot change owner of $test_file${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	check_load_ima_rule "$rule"
-+	result=$?
-+	if [ $result -ne "$OK" ]; then
-+		return $result
-+	fi
-+
-+	test_mmap "$test_file" "$arg"
-+	result=$?
-+
-+	if [ $result -ne 0 ] && [ $result -ne "$ERR_TEST" ]; then
-+		echo "${RED}Unexpected exit status $result from test_mmap${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	if [ "$TFAIL" != "yes" ]; then
-+		echo -n "Result (expect found): "
-+	else
-+		echo -n "Result (expect not found): "
-+	fi
-+
-+	test_file_entry=$(awk '$5 == "'"$test_file"'"' < /sys/kernel/security/ima/ascii_runtime_measurements)
-+	if [ -z "$test_file_entry" ]; then
-+		if [ "$TFAIL" != "yes" ]; then
-+			echo "${RED}not found${NORM}"
-+		else
-+			echo "${GREEN}not found${NORM}"
-+		fi
-+		return "$FAIL"
-+	fi
-+
-+	if [ "$TFAIL" != "yes" ]; then
-+		echo "${GREEN}found${NORM}"
-+	else
-+		echo "${RED}found${NORM}"
-+	fi
-+
-+	if [ "$VERBOSE" -gt 0 ]; then
-+		echo "$test_file_entry"
-+	fi
-+
-+	return "$OK"
-+}
-+
-+check_deny() {
-+	local hook="$1"
-+	local arg="$2"
-+	local test_file fowner rule result
-+
-+	echo -e "\nTest: ${FUNCNAME[0]} (hook=\"$hook\", test_mmap arg: \"$arg\")"
-+
-+	if ! test_file=$(mktemp -p "$PWD"); then
-+		echo "${RED}Cannot create $test_file${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	if ! echo "test" > "$test_file"; then
-+		echo "${RED}Cannot write $test_file${NORM}"
-+		return "$FAIL"
-+	fi
-+
-+	if ! evmctl ima_sign -a sha256 --key "$g_key_path" "$test_file" &> /dev/null; then
-+		echo "${RED}Cannot sign $test_file${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	fowner="$APPRAISE_MMAP_CHECK_FOWNER"
-+	rule="$APPRAISE_MMAP_CHECK_RULE"
-+
-+	if [ "$hook" = "MMAP_CHECK_REQPROT" ]; then
-+		fowner="$APPRAISE_MMAP_CHECK_REQPROT_FOWNER"
-+		rule="$APPRAISE_MMAP_CHECK_REQPROT_RULE"
-+	fi
-+
-+	if ! chown "$fowner" "$test_file"; then
-+		echo "${RED}Cannot change owner of $test_file${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	check_load_ima_rule "$rule"
-+	result=$?
-+	if [ $result -ne "$OK" ]; then
-+		return $result
-+	fi
-+
-+	test_mmap "$test_file" exec
-+	result=$?
-+
-+	if [ $result -ne 0 ] && [ $result -ne "$ERR_TEST" ]; then
-+		echo "${RED}Unexpected exit status $result from test_mmap${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	test_mmap "$test_file" "$arg"
-+	result=$?
-+
-+	if [ $result -ne 0 ] && [ $result -ne "$ERR_TEST" ]; then
-+		echo "${RED}Unexpected exit status $result from test_mmap${NORM}"
-+		return "$HARDFAIL"
-+	fi
-+
-+	if [ "$TFAIL" != "yes" ]; then
-+		echo -n "Result (expect denied): "
-+	else
-+		echo -n "Result (expect allowed): "
-+	fi
-+
-+	if [ $result -eq 0 ]; then
-+		if [ "$TFAIL" != "yes" ]; then
-+			echo "${RED}allowed${NORM}"
-+		else
-+			echo "${GREEN}allowed${NORM}"
-+		fi
-+		return "$FAIL"
-+	fi
-+
-+	if [ "$TFAIL" != "yes" ]; then
-+		echo "${GREEN}denied${NORM}"
-+	else
-+		echo "${RED}denied${NORM}"
-+	fi
-+
-+	return "$OK"
-+}
-+
-+# Run in the new environment if TST_ENV is set.
-+_run_env "$TST_KERNEL" "$PWD/$(basename "$0")" "TST_ENV=$TST_ENV TST_KERNEL=$TST_KERNEL PATH=$PATH LD_LIBRARY_PATH=$LD_LIBRARY_PATH VERBOSE=$VERBOSE TST_KEY_PATH=$TST_KEY_PATH"
-+
-+# Exit from the creator of the new environment.
-+_exit_env "$TST_KERNEL"
-+
-+# Mount filesystems in the new environment.
-+_init_env
-+
-+if [ "$(whoami)" != "root" ]; then
-+	echo "${CYAN}This script must be executed as root${NORM}"
-+	exit "$SKIP"
-+fi
-+
-+if [ ! -f /sys/kernel/security/ima/policy ]; then
-+	echo "${CYAN}IMA policy file not found${NORM}"
-+	exit "$SKIP"
-+fi
-+
-+if ! cat /sys/kernel/security/ima/policy &> /dev/null; then
-+	echo "${CYAN}IMA policy file is not readable${NORM}"
-+	exit "$SKIP"
-+fi
-+
-+if [ -n "$TST_KEY_PATH" ]; then
-+	if [ "${TST_KEY_PATH:0:1}" != "/" ]; then
-+		echo "${RED}Absolute path required for the signing key${NORM}"
-+		exit "$FAIL"
-+	fi
-+
-+	if [ ! -f "$TST_KEY_PATH" ]; then
-+		echo "${RED}Kernel signing key not found in $TST_KEY_PATH${NORM}"
-+		exit "$FAIL"
-+	fi
-+
-+	g_key_path="$TST_KEY_PATH"
-+elif [ -f "$PWD/../signing_key.pem" ]; then
-+	g_key_path="$PWD/../signing_key.pem"
-+elif [ -f "/lib/modules/$(uname -r)/source/certs/signing_key.pem" ]; then
-+	g_key_path="/lib/modules/$(uname -r)/source/certs/signing_key.pem"
-+elif [ -f "/lib/modules/$(uname -r)/build/certs/signing_key.pem" ]; then
-+	g_key_path="/lib/modules/$(uname -r)/build/certs/signing_key.pem"
-+else
-+	echo "${CYAN}Kernel signing key not found${NORM}"
-+	exit "$SKIP"
-+fi
-+
-+evm_value=$(cat /sys/kernel/security/evm)
-+if [ $((evm_value & EVM_INIT_X509)) -eq "$EVM_INIT_X509" ]; then
-+	if [ $((evm_value & EVM_INIT_HMAC)) -ne "$EVM_INIT_HMAC" ]; then
-+		echo "${CYAN}Incompatible EVM mode $evm_value${NORM}"
-+		exit "$SKIP"
-+	fi
-+fi
-+
-+g_key_path_der=$(mktemp)
-+
-+openssl x509 -in "$g_key_path" -out "$g_key_path_der" -outform der
-+if ! keyctl padd asymmetric pubkey %keyring:.ima < "$g_key_path_der" &> /dev/null; then
-+	echo "${RED}Public key cannot be added to the IMA keyring${NORM}"
-+	exit "$FAIL"
-+fi
-+
-+g_mountpoint=$(mktemp -d)
-+g_image=$(mktemp)
-+
-+if [ -z "$g_mountpoint" ]; then
-+	echo "${RED}Mountpoint directory not created${NORM}"
-+	exit "$FAIL"
-+fi
-+
-+if ! dd if=/dev/zero of="$g_image" bs=1M count=20 &> /dev/null; then
-+	echo "${RED}Cannot create test image${NORM}"
-+	exit "$FAIL"
-+fi
-+
-+g_dev=$(losetup -f "$g_image" --show)
-+if [ -z "$g_dev" ]; then
-+	echo "${RED}Cannot create loop device${NORM}"
-+	exit "$FAIL"
-+fi
-+
-+if ! mkfs.ext4 -U "$IMA_UUID" -b 4096 "$g_dev" &> /dev/null; then
-+	echo "${RED}Cannot format $g_dev${NORM}"
-+	exit "$FAIL"
-+fi
-+
-+if ! mount -o iversion "$g_dev" "$g_mountpoint"; then
-+	echo "${RED}Cannot mount loop device${NORM}"
-+	exit "$FAIL"
-+fi
-+
-+g_loop_mounted=1
-+pushd "$g_mountpoint" > /dev/null || exit "$FAIL"
-+
-+# Ensure that IMA does not add a new measurement entry if an application calls
-+# mmap() with PROT_READ, and a policy rule contains the MMAP_CHECK hook.
-+# In this case, both the protections requested by the application and the final
-+# protections applied by the kernel contain only PROT_READ, so there is no
-+# match with the IMA rule, which expects PROT_EXEC to be set.
-+expect_fail check_mmap "MMAP_CHECK" ""
-+
-+# Ensure that IMA adds a new measurement entry if an application calls mmap()
-+# with PROT_READ | PROT_EXEC, and a policy rule contains the MMAP_CHECK hook.
-+expect_pass check_mmap "MMAP_CHECK" "exec"
-+
-+# Same as in the first test, but in this case the application calls the
-+# personality() system call with READ_IMPLIES_EXEC, which causes the kernel to
-+# add PROT_EXEC in the final protections passed to the MMAP_CHECK hook.
-+#
-+# Ensure that the bug introduced by 98de59bfe4b2 ("take calculation of final
-+# protections in security_mmap_file() into a helper") is fixed, by passing the
-+# final protections again to the MMAP_CHECK hook. Due to the bug, the hook
-+# received the protections requested by the application. Since those protections
-+# don't have PROT_EXEC, IMA was not creating a measurement entry.
-+expect_pass_if '0' check_mmap "MMAP_CHECK" "read_implies_exec"
-+
-+# Repeat the previous three tests, but with the new MMAP_CHECK_REQPROT hook,
-+# which behaves like the buggy MMAP_CHECK hook. In the third test, expect that
-+# no new measurement entry is created, since the MMAP_CHECK_REQPROT hook sees
-+# the protections requested by the application (PROT_READ).
-+expect_fail_if '1' check_mmap "MMAP_CHECK_REQPROT" ""
-+expect_pass_if '1' check_mmap "MMAP_CHECK_REQPROT" "exec"
-+expect_fail_if '1' check_mmap "MMAP_CHECK_REQPROT" "read_implies_exec"
-+
-+# Ensure that IMA refuses an mprotect() with PROT_EXEC on a memory area
-+# obtained with an mmap() with PROT_READ. This is due to the inability of IMA
-+# to measure/appraise the file for which mmap() was called (locking issue).
-+expect_pass check_deny "MMAP_CHECK" "mprotect"
-+
-+# Ensure that MMAP_CHECK_REQPROT has the same behavior of MMAP_CHECK for the
-+# previous test.
-+expect_pass_if '1' check_deny "MMAP_CHECK_REQPROT" "mprotect"
-+
-+# Ensure that there cannot be an mmap() with PROT_EXEC on a file with writable
-+# mappings, due to the inability of IMA to make a reliable measurement of that
-+# file.
-+expect_pass check_deny "MMAP_CHECK" "exec_on_writable"
-+
-+# Ensure that MMAP_CHECK_REQPROT has the same behavior of MMAP_CHECK for the
-+# previous test.
-+expect_pass_if '1' check_deny "MMAP_CHECK_REQPROT" "exec_on_writable"
-diff --git a/tests/test_mmap.c b/tests/test_mmap.c
-new file mode 100644
-index 00000000000..63e7597f29a
---- /dev/null
-+++ b/tests/test_mmap.c
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Tool to test IMA MMAP_CHECK and MMAP_CHECK_REQPROT hooks.
-+ */
-+#include <stdio.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/stat.h>
-+#include <sys/mman.h>
-+#include <sys/personality.h>
-+
-+/*
-+ * Convention: return 1 for errors that should not occur, as they are
-+ * setup-related, return 2 for errors that might occur due to testing
-+ * conditions.
-+ */
-+#define ERR_SETUP 1
-+#define ERR_TEST 2
-+
-+int main(int argc, char *argv[])
-+{
-+	struct stat st;
-+	void *ptr, *ptr_write = NULL;
-+	int ret, fd, fd_write, prot = PROT_READ;
-+
-+	if (!argv[1]) {
-+		printf("Missing file parameter\n");
-+		return ERR_SETUP;
-+	}
-+
-+	if (argv[2] && !strcmp(argv[2], "read_implies_exec")) {
-+		ret = personality(READ_IMPLIES_EXEC);
-+		if (ret == -1) {
-+			printf("Failed to set personality, err: %d (%s)\n",
-+			       -errno, strerror(errno));
-+			return ERR_SETUP;
-+		}
-+	}
-+
-+	if (stat(argv[1], &st) == -1) {
-+		printf("Failed to access %s, err: %d (%s)\n", argv[1], -errno,
-+		       strerror(errno));
-+		return ERR_SETUP;
-+	}
-+
-+	if (argv[2] && !strcmp(argv[2], "exec_on_writable")) {
-+		fd_write = open(argv[1], O_RDWR);
-+		if (fd_write == -1) {
-+			printf("Failed to open %s in r/w, err: %d (%s)\n",
-+			       argv[1], -errno, strerror(errno));
-+			return ERR_SETUP;
-+		}
-+
-+		ptr_write = mmap(0, st.st_size, PROT_WRITE, MAP_SHARED,
-+				 fd_write, 0);
-+		close(fd_write);
-+
-+		if (ptr_write == MAP_FAILED) {
-+			printf("Failed mmap() with PROT_WRITE on %s, err: %d (%s)\n",
-+			       argv[1], -errno, strerror(errno));
-+			return ERR_SETUP;
-+		}
-+	}
-+
-+	fd = open(argv[1], O_RDONLY);
-+	if (fd == -1) {
-+		printf("Failed to open %s in ro, err: %d (%s)\n", argv[1],
-+		       -errno, strerror(errno));
-+
-+		if (ptr_write && munmap(ptr_write, st.st_size) == -1)
-+			printf("Failed munmap() of writable mapping on %s, err: %d (%s)\n",
-+			       argv[1], -errno, strerror(errno));
-+
-+		return ERR_SETUP;
-+	}
-+
-+	if (argv[2] && !strncmp(argv[2], "exec", 4))
-+		prot |= PROT_EXEC;
-+
-+	ptr = mmap(0, st.st_size, prot, MAP_PRIVATE, fd, 0);
-+
-+	close(fd);
-+
-+	if (ptr_write && munmap(ptr_write, st.st_size) == -1) {
-+		printf("Failed munmap() of writable mapping on %s, err: %d (%s)\n",
-+		       argv[1], -errno, strerror(errno));
-+		return ERR_SETUP;
-+	}
-+
-+	if (ptr == MAP_FAILED) {
-+		ret = ERR_SETUP;
-+		if (argv[2] && !strcmp(argv[2], "exec_on_writable") &&
-+		    errno == EACCES)
-+			ret = ERR_TEST;
-+		else
-+			printf("Failed mmap() with PROT_READ%s on %s, err: %d (%s)\n",
-+			       (prot & PROT_EXEC) ? " | PROT_EXEC" : "",
-+			       argv[1], -errno, strerror(errno));
-+
-+		return ret;
-+	}
-+
-+	ret = 0;
-+
-+	if (argv[2] && !strcmp(argv[2], "mprotect")) {
-+		ret = mprotect(ptr, st.st_size, PROT_EXEC);
-+		if (ret == -1) {
-+			ret = ERR_SETUP;
-+			if (errno == EPERM)
-+				ret = ERR_TEST;
-+			else
-+				printf("Unexpected mprotect() error on %s, err: %d (%s)\n",
-+				       argv[1], -errno, strerror(errno));
-+		}
-+	}
-+
-+	if (munmap(ptr, st.st_size) == -1) {
-+		printf("Failed munmap() of mapping on %s, err: %d (%s)\n",
-+		       argv[1], -errno, strerror(errno));
-+		return ERR_SETUP;
-+	}
-+
-+	return ret;
-+}
--- 
-2.25.1
-
+> -----Original Message-----
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: 28 February 2023 17:58
+> To: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Krishna Yarlagadda <kyarlagadda@nvidia.com>; robh+dt@kernel.org;
+> broonie@kernel.org; peterhuewe@gmx.de;
+> krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org; linux-
+> tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
+> kernel@vger.kernel.org; thierry.reding@gmail.com; Jonathan Hunter
+> <jonathanh@nvidia.com>; Sowjanya Komatineni
+> <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>
+> Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
+>=20
+> On Tue, Feb 28, 2023 at 04:36:26AM +0200, Jarkko Sakkinen wrote:
+> > On Mon, Feb 27, 2023 at 05:37:01PM +0530, Krishna Yarlagadda wrote:
+> > > TPM devices raise wait signal on last addr cycle. This can be detecte=
+d
+> > > by software driver by reading MISO line on same clock which requires
+> > > full duplex support. In case of half duplex controllers wait detectio=
+n
+> > > has to be implemented in HW.
+> > > Support hardware wait state detection by sending entire message and l=
+et
+> > > controller handle flow control.
+> >
+> > When a is started sentence with the word "support" it translates to "I'=
+m
+> > too lazy to write a proper and verbose description of the implementatio=
+n"
+> > :-)
+> >
+> > It has some abstract ideas of the implementation, I give you that, but =
+do
+> > you think anyone ever will get any value of reading that honestly? A bi=
+t
+> > more concrette description of the change helps e.g. when bisecting bugs=
+.
+>=20
+> I would expect SPI_TPM_HW_FLOW to be documented in the kdocs to a
+> level that any other HW could implement it as well.
+HW implementation can be controller specific. I would add comments in the
+header to say CMD-ADDR-DATA is sent as single message with this flag.
+>=20
+> > > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 le=
+n,
+> > > +			 u8 *in, const u8 *out)
+> > > +{
+> > > +	struct tpm_tis_spi_phy *phy =3D to_tpm_tis_spi_phy(data);
+> > > +	struct spi_controller *ctlr =3D phy->spi_device->controller;
+> > > +
+> > > +	/*
+> > > +	 * TPM flow control over SPI requires full duplex support.
+> > > +	 * Send entire message to a half duplex controller to handle
+> > > +	 * wait polling in controller.
+> > > +	 * Set TPM HW flow control flag..
+> > > +	 */
+> > > +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX) {
+> > > +		phy->spi_device->mode |=3D SPI_TPM_HW_FLOW;
+>=20
+> Shouldn't we check that this special flow is supported when the SPI
+> device is bound to the tpm in the first place?
+TPM device connected behind half duplex controller can only work
+this way. So, no additional flag needed to check.
+KY
+>=20
+> Jason
