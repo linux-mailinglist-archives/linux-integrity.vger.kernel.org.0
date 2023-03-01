@@ -2,45 +2,40 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02C46A7223
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 18:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE7A6A7226
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 18:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjCAReQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Mar 2023 12:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
+        id S230029AbjCAReX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Mar 2023 12:34:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjCAReP (ORCPT
+        with ESMTP id S229984AbjCAReW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:34:15 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2048.outbound.protection.outlook.com [40.107.92.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCDC22782;
-        Wed,  1 Mar 2023 09:34:13 -0800 (PST)
+        Wed, 1 Mar 2023 12:34:22 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2052.outbound.protection.outlook.com [40.107.243.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547F222782;
+        Wed,  1 Mar 2023 09:34:21 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tc8eKmINbzOZJK4awpuARWoh5XmgTVagOIh0kE2t0XQhXMiU8qGt+txXuCKT1+5gYJWyL3K0OBweQCy0XbPivoZkaCkqcJnqWT4L7cgXpn2JttvWlx7oeb9SpMSTiH/sAuUmD57B79yRG0S2ck36CZhV6MkrpRlYwCcWwrLkacp7yeugz8PCx54aztBLIJV001YJRMtBPSylrKNGNhy9tarfdK8n98DAtKIS59sNbQplJawXeLeqo3YuSskkKMVHSx+yymFhckjiAvnWPxZmE30NqDxFJ00gxggcd0Eh7aI/vN/dJZjEBKLGnRO5luS9RCRhHhkWxo97q53a5WFzhg==
+ b=CubqDvy7iU6C6gPWlWTjFzns0RqNt+XVpaI7R74JWL4ZGxFdOTgooVjmSLA2hTqqixzZ/Q8mE7VxCfggRDNVTUJJoWnevOa57vJz4rpu8BAzC7Ng/4lZWzepz8Az5X+zVVzpji3t+DPyjTbTjBzrsUJOpM4wFtC2Deqq90fnOaKIJgybVvcDHn+t+gQa/qT1Knx3CSR14EbuKlN61Tlpx/bf+TRKGl1TKQhFIOO2Rm2pFIeg8PvfhmlBGKr7Mn/8t8iWpMqZSLTuLySI4+/eM6kJKEkiBQW75QyZdY6lUHbQkjnp/0m0sFUBuHp3vcVJ63X/BE/eyCM0Qo/gmiY/8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wBpqDaMkEVmKXySxVI+2HjWfAB6R2pwtHL+AmuLzPW0=;
- b=V1y5mFQSTxiAmB+zI6QEuGUdt74xlFSx8aUW6UbfJ5ZNYl4s+NFfAtUm+Su/TcqYenFVZJvr8DDcTObmoMAPLkOxYtNy5BhBfPenvZPAH+CKqZeiSMw9gRoyROFuN57PNksQ8w8QlQ0bP8Dfr1zCrZ45bSm53Tzuha9rsCVSCC1Wvt29d11y8fLJ9P8XARVkF+LBL/5YLiCFUQ8I36e4kq3YAPdUbH6hTRhqSZus68c3srY9OZoufUPT1HAVWvSdf7okObtEeK6eLESHZcnZTEcRF18yy7SgevC0I9Dx+nakv261Xwwzc5Webl1EnD/32H7ngRlkfMQIYh2ET4SPOw==
+ bh=Mh9Ua9+PFTGOWRtWUmLN86IqbLOmxsmrJzCJu52I840=;
+ b=iQum9Pizew/Xr6B0fSTLyKS00g2Cq7uMuf6ch6vkYIVtGzegnl694fWclnjuVkJ//gm3AwnIVVllJpf21ZyZRZOUtuoFtOpv1kvYletf8htiGkdCtd1kxOMaiJBb5VI2vOptoEi4IxI9fw0wryWFShq2mOCW4B8oHbiGUssgBgdU8KbhnMwCqLMaMshTe6O9m5JP+rcK1ycEESsU9gxvo3SoBRru33oaampvpBbaPu22NXaSy48GAz0Sw0uQckM2LrRp30jG+WZzHVm9hGNEzV+A9ye4G/Yng+30uI+M/uQVNKZGlVT6xhvtWOpJyhBK2muqbEXWPhQgQQ3BT+Rn7g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.118.232) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wBpqDaMkEVmKXySxVI+2HjWfAB6R2pwtHL+AmuLzPW0=;
- b=gBX/oeiJoxq1rNNtd9gZ5mWrPZzo+ZFNN/iMXMyU5nV4oAVjTKsDqCzw+B83lVi5VLHGk8AHQ9CJ1fJxaEfOC2YaAmrIw9OSpZjym3cWBGzRX95kDu/7xXWa0yL2o2F963TURVQo4sYRwuPUp98nLJTOKoBR9FsSahivwrU8IIussu/0EdGvbgQ3lM6VH4y+6CKrsQsnRmSZTvDD4u0ayw37sJ6F3QJZ4dQZCx2MhT9CZ90TJPbC+flXWUMkVmhd/hd2GwJ+reW5dk9zi+EWYyAxlSv4jwTHSwpaq5yHEIgUg/egtHuBu7exLGkuuInBHfhI/PEJ8h/ycwH182uxgg==
-Received: from BN0PR04CA0166.namprd04.prod.outlook.com (2603:10b6:408:eb::21)
- by DM6PR12MB4402.namprd12.prod.outlook.com (2603:10b6:5:2a5::18) with
+Received: from BN0PR04CA0155.namprd04.prod.outlook.com (2603:10b6:408:eb::10)
+ by IA1PR12MB6530.namprd12.prod.outlook.com (2603:10b6:208:3a5::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Wed, 1 Mar
- 2023 17:34:12 +0000
+ 2023 17:34:18 +0000
 Received: from BL02EPF00010206.namprd05.prod.outlook.com
- (2603:10b6:408:eb:cafe::af) by BN0PR04CA0166.outlook.office365.com
- (2603:10b6:408:eb::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
- Transport; Wed, 1 Mar 2023 17:34:11 +0000
+ (2603:10b6:408:eb:cafe::7c) by BN0PR04CA0155.outlook.office365.com
+ (2603:10b6:408:eb::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17 via Frontend
+ Transport; Wed, 1 Mar 2023 17:34:17 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -50,18 +45,18 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
 Received: from mail.nvidia.com (216.228.118.232) by
  BL02EPF00010206.mail.protection.outlook.com (10.167.241.196) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.12 via Frontend Transport; Wed, 1 Mar 2023 17:34:11 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ 15.20.6156.12 via Frontend Transport; Wed, 1 Mar 2023 17:34:17 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
  (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 1 Mar 2023
- 09:34:00 -0800
+ 09:34:05 -0800
 Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 1 Mar 2023 09:34:00 -0800
+ 15.2.986.37; Wed, 1 Mar 2023 09:34:05 -0800
 Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
  (10.126.190.181) with Microsoft SMTP Server id 15.2.986.5 via Frontend
- Transport; Wed, 1 Mar 2023 09:33:56 -0800
+ Transport; Wed, 1 Mar 2023 09:34:01 -0800
 From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
 To:     <robh+dt@kernel.org>, <broonie@kernel.org>, <peterhuewe@gmx.de>,
         <jgg@ziepe.ca>, <jarkko@kernel.org>,
@@ -71,34 +66,35 @@ To:     <robh+dt@kernel.org>, <broonie@kernel.org>, <peterhuewe@gmx.de>,
 CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
         <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
         Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [Patch V7 0/3] Tegra TPM driver with HW flow control
-Date:   Wed, 1 Mar 2023 23:03:50 +0530
-Message-ID: <20230301173353.28673-1-kyarlagadda@nvidia.com>
+Subject: [Patch V7 1/3] spi: Add TPM HW flow flag
+Date:   Wed, 1 Mar 2023 23:03:51 +0530
+Message-ID: <20230301173353.28673-2-kyarlagadda@nvidia.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230301173353.28673-1-kyarlagadda@nvidia.com>
+References: <20230301173353.28673-1-kyarlagadda@nvidia.com>
 X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00010206:EE_|DM6PR12MB4402:EE_
-X-MS-Office365-Filtering-Correlation-Id: dc5fa5b4-b4f6-41db-a7fa-08db1a7b2ba8
+X-MS-TrafficTypeDiagnostic: BL02EPF00010206:EE_|IA1PR12MB6530:EE_
+X-MS-Office365-Filtering-Correlation-Id: b62dbcff-3aff-46a2-8018-08db1a7b2f4a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QdyGX/Bw6aAI1euTKcTOhXpWYyA1oVM5Tlb2YdtP6B3buYvqVCkZYphMvnBu7ashzeL3DvMvzrWGgbvi2wAgtOMjjT+1u5yVQWMFEDR8277K7Edxi59iieqf2m4SRlaJS9Iu7QOQp8Y6ZVqRoDZZv2mIofTkkNseOSDDsS2ov7QqM/wNfsuJQDPmfmblMJqYjWvtbVWlOgebjPG+Yv40guxuiZSJ+rS9Y9gR+sh9Poq6ddqrwvD1R1NpJsJWJtM+ySaVjS3n8aEVswaghqXkerBPwQGra97mXau+2EkcEVociyX3FMKTgaR9oil+yGYdx/5G5tirwQu9qxYBGPcc1KIitJOeJJVdg1pZ7e73wx3lJxRjGMhvlG5rWPnElTyliHPDuRWyeI4Bsbfqha85SLGg0jpSXSqSTD4vzWVPMpWkhFmnBTGw09m6lvQI1Z/q7HCvWiC7WhJDLDRornurZ0VKdgIRWcBCXBw2BcMcRZIH6/mQhV9OTTOIh7gnKk/Wy4qZweJ9IVfjDXYaQOpSEmb5TbkLHmwOVBCmnqNCO6XwK3aL8x1YpyVBkO+T+JcecPZPmjW6wrwgZJ2UgJcydZqjJlRMCQL7zpGFIrCSG0mOclTPPxAToFOSKoi/EYBux3k5bHtU+a9oEEWSbEO/5Swsll9S4woLnXL3VguadezRbpOYYJ90SEvXs66HMDJ3TTaubq0Trwmersh7wlpwyDkizPXNU+V1AO4XCrMWjFwS14vfWqzUfFUWoMCqsJTav2JgrEuIL9r96BboIx7Pnw==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(376002)(136003)(451199018)(40470700004)(36840700001)(46966006)(36756003)(82310400005)(54906003)(336012)(426003)(110136005)(478600001)(316002)(83380400001)(47076005)(107886003)(7696005)(186003)(2616005)(1076003)(40460700003)(26005)(6666004)(7416002)(8936002)(41300700001)(2906002)(921005)(356005)(86362001)(70586007)(5660300002)(70206006)(36860700001)(40480700001)(4326008)(7636003)(8676002)(82740400003)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: GkhL9DmFTZXdIWP+Orpjd131zb6ME1tqm5dlwjBYDnL+2+ApMjJfGPdwUrDCuGMfqiMrJW9YbjCrSALzL5pDFHazVXY4B1HVkl2m7HQuUtryaT4YxGa8lKnU4A2gwbz7HqQQO9BteE2pUnTevjbsiAjahBkH9hdpcow0Q2pFu+EKUV9mlXxD5cq5fiFP/s8Pk/DQdi7yLlai8Mu2RfwS9ziInPY5xdP9PDdfqxCb1Ac4RIHJJ6sitEcg4+rnm9aLr0p3ILx8zIKWgXQ6+vxBEGvEAiGxa/vCMFfXQ8xu2uYYr+GW6Los7J2HZpngItimNnY5tMfKXCkUyBtkGRNMsUMlFT6eA8Gab2Jt47uQpJQCTvjZjMhSJKApNlG5Xx8ZMRU6SMnQX3UjSpnlXcCCdkXzrdNYhr+eahfe1Jn5HC6AIEudBFmhZ5bG6II//0FAHJsgo0EhZNA94FppZWlChNM3UdL3crvIK9CP52pf1u4/JrSqhWd8H8zYiA0YQ2zq6NqtVdU9aHETt8hlv2izFKJEarFQwYlHEVQLfajG5OTlCDo9YZvDYY6q6L9s2GJwRc5dMib9fx4rLJeH1q97sck0zW8el6HDnqzJVkxsNGx6FK8wUh6X8keKxRaxJbkar4meGrLnfJ3QtT5yCci/BqbuS3xX07RvX8f5KLppwhxfF5efdcjFTIRakU4bCgv6DRqUIIlKQM1jlgH1wypoeMjI/COUjxXdYp5Ji2bWRrkGfkGK2mlS4iPtAnlAvj8HxnLPoVVdUf2rsdwqMSB9HykwqvdOD2TUxis8cZAu03Gb9pPCI38tBVdp+sUVelo9
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(376002)(136003)(396003)(451199018)(40470700004)(36840700001)(46966006)(5660300002)(2616005)(40480700001)(7416002)(54906003)(110136005)(7696005)(107886003)(82740400003)(6666004)(7636003)(921005)(356005)(478600001)(966005)(41300700001)(186003)(36756003)(40460700003)(8936002)(316002)(26005)(86362001)(1076003)(4326008)(8676002)(70586007)(36860700001)(70206006)(82310400005)(83380400001)(2906002)(426003)(47076005)(336012)(2101003)(83996005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:34:11.6955
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:34:17.7737
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc5fa5b4-b4f6-41db-a7fa-08db1a7b2ba8
+X-MS-Exchange-CrossTenant-Network-Message-Id: b62dbcff-3aff-46a2-8018-08db1a7b2f4a
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010206.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4402
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6530
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -107,58 +103,59 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-TPM devices may insert wait state on last clock cycle of ADDR phase.
-For SPI controllers that support full-duplex transfers, this can be
-detected using software by reading the MISO line. For SPI controllers
-that only support half-duplex transfers, such as the Tegra QSPI, it is
-not possible to detect the wait signal from software. The QSPI
-controller in Tegra234 and Tegra241 implement hardware detection of the
-wait signal which can be enabled in the controller for TPM devices.
+TPM specification [1] defines flow control over SPI. Client device can
+insert a wait state on MISO when address is transmitted by controller
+on MOSI. Detecting the wait state in software is only possible for
+full duplex controllers. For controllers that support only half-
+duplex, the wait state detection needs to be implemented in hardware.
 
-Add HW flow control in TIS driver and a flag in SPI data to indicate
-wait detection is required in HW. SPI controller driver determines if
-this is supported. Add HW detection in Tegra QSPI controller.
+Add a flag SPI_TPM_HW_FLOW for TPM device to set when software flow
+control is not possible and hardware flow control is expected from
+SPI controller.
 
-Updates in this patch set 
- - Tegra QSPI identifies itself as half duplex.
- - TPM TIS SPI driver skips flow control for half duplex and send
-   transfers in single message for controller to handle it.
- - TPM device identifies as TPM device for controller to detect and
-   enable HW TPM wait poll feature.
+Reference:
+[1] https://trustedcomputinggroup.org/resource/pc-client-work-group-
+pc-client-specific-tpm-interface-specification-tis/
 
-Verified with a TPM device on Tegra241 ref board using TPM2 tools.
+Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+---
+ include/linux/spi/spi.h | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-V7:
- - updated patch description.
- - TPM flag set in probe.
- - minor comments.
-V6:
- - Fix typo in chip name Tegra234.
- - Debug logs change skipped to be sent later.
- - Consistent usage of soc flag.
-V5:
- - No SPI bus locking.
-V4:
- - Split api change to different patch.
- - Describe TPM HW flow control.
-V3:
- - Use SPI device mode flag and SPI controller flags.
- - Drop usage of device tree flags.
- - Generic TPM half duplex controller handling.
- - HW & SW flow control for TPM. Drop additional driver.
-V2:
- - Fix dt schema errors.
-
-Krishna Yarlagadda (3):
-  spi: Add TPM HW flow flag
-  tpm_tis-spi: Add hardware wait polling
-  spi: tegra210-quad: Enable TPM wait polling
-
- drivers/char/tpm/tpm_tis_spi_main.c | 96 ++++++++++++++++++++++++++++-
- drivers/spi/spi-tegra210-quad.c     | 14 +++++
- include/linux/spi/spi.h             | 16 ++++-
- 3 files changed, 121 insertions(+), 5 deletions(-)
-
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 4fa26b9a3572..b9e49ed42955 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -184,8 +184,18 @@ struct spi_device {
+ 	u8			chip_select;
+ 	u8			bits_per_word;
+ 	bool			rt;
+-#define SPI_NO_TX	BIT(31)		/* No transmit wire */
+-#define SPI_NO_RX	BIT(30)		/* No receive wire */
++#define SPI_NO_TX		BIT(31)		/* No transmit wire */
++#define SPI_NO_RX		BIT(30)		/* No receive wire */
++	/*
++	 * TPM specification defines flow control over SPI. Client device
++	 * can insert a wait state on MISO when address is transmitted by
++	 * controller on MOSI. Detecting the wait state in software is only
++	 * possible for full duplex controllers. For controllers that support
++	 * only half-duplex, the wait state detection needs to be implemented
++	 * in hardware. TPM devices would set this flag when hardware flow
++	 * control is expected from SPI controller.
++	 */
++#define SPI_TPM_HW_FLOW		BIT(29)		/* TPM HW flow control */
+ 	/*
+ 	 * All bits defined above should be covered by SPI_MODE_KERNEL_MASK.
+ 	 * The SPI_MODE_KERNEL_MASK has the SPI_MODE_USER_MASK counterpart,
+@@ -195,7 +205,7 @@ struct spi_device {
+ 	 * These bits must not overlap. A static assert check should make sure of that.
+ 	 * If adding extra bits, make sure to decrease the bit index below as well.
+ 	 */
+-#define SPI_MODE_KERNEL_MASK	(~(BIT(30) - 1))
++#define SPI_MODE_KERNEL_MASK	(~(BIT(29) - 1))
+ 	u32			mode;
+ 	int			irq;
+ 	void			*controller_state;
 -- 
 2.17.1
 
