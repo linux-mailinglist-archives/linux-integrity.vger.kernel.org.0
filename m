@@ -2,70 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96A26A6C72
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 13:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 425876A6D12
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 14:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjCAMhh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Mar 2023 07:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S229702AbjCANeW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Mar 2023 08:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjCAMhh (ORCPT
+        with ESMTP id S229437AbjCANeV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Mar 2023 07:37:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBC13C794;
-        Wed,  1 Mar 2023 04:37:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D1026B81029;
-        Wed,  1 Mar 2023 12:37:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAE6C4339B;
-        Wed,  1 Mar 2023 12:37:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677674253;
-        bh=MBQdWxbSmZQ5JdSzxRhSfN/JHRqs463vKGEv9B/9RBw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P2EYmLCQISZ/1K8ZrVhLUPXg9ffoV5BTo/0cvYM7U6SeEV7e7ALoKxh4VzWqppiea
-         eJvvZXCiAt74bgLP0hpqeyBbmegHzBlsc/Wo1/+RvB02N2TKy00mzryhHeLF2U92r9
-         qeq22inFTafqJSUOexyeVy1abWF398L40sbBowUrXi3Mj1FYXFpy5MhFwvXlwoRBjZ
-         kHVpvs0L7KPmh5Dyf0WKiF3be7Ibo7NjZXyXWaqoQ4GC6OjZGty+mjmPxb5xG9gtab
-         FcdxWbYn9ben6BVCYGgkmTC+84tPWRGH3LbKUYQ5op1UeT2i8ezSLo+EIM+Albox0t
-         FtxFuaPOaKTnw==
-Date:   Wed, 1 Mar 2023 12:37:27 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Message-ID: <Y/9HB/KF2Kjkihkg@sirena.org.uk>
-References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
- <20230227120702.13180-3-kyarlagadda@nvidia.com>
- <Y/1oqr0RfD7KVA4y@kernel.org>
- <Y/3zVdgnVz8BvGGl@ziepe.ca>
- <DM4PR12MB576942B7C00F446BDF58D984C3AD9@DM4PR12MB5769.namprd12.prod.outlook.com>
- <Y/9EwTtmxcVBjiHz@nvidia.com>
+        Wed, 1 Mar 2023 08:34:21 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F2423840;
+        Wed,  1 Mar 2023 05:34:15 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id da10so53897787edb.3;
+        Wed, 01 Mar 2023 05:34:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677677653;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j7iN7Wsd8fSC+Wjlu891vl1hb2hoVyWo0R4dgiebbOQ=;
+        b=K3BHO+GnvQzMRfxDYXi/Eeme0n+qr0UIIGF8CY48MZ9YJxZEQWJ/++71lhiPSFKTnN
+         YX9B4VVQx+l4997lkb8DyKhC+f3PkXwFhV/oKeP0KA7IuoL9lAPkDNk3pkIFlhXT+IpY
+         vZ72K0WOXuc3ACehxRZrLzv3DDzjDbDoTunwDiaAErxx0J16z2iZHYxpiJkG8amU9UvQ
+         ImvKmMTEu30+VaTBOsU2DkrGPGFn6U9Z5RY1tpdCIoSkrKlv4GVndBoA/y/MMmrZjCzk
+         kCohAdyZWrDDOqfLEyMVsorzTPdkc/fuY+hxy0ZiccnJPXLNkhzt4D/MKsknLCMy2S9S
+         6zxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677677653;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j7iN7Wsd8fSC+Wjlu891vl1hb2hoVyWo0R4dgiebbOQ=;
+        b=WBRaub0JvdRsafY5oIqjHrM24GZYaw8BWpS8wpF+52ygSve8Seg0QxlgupleLJbBMW
+         eJhJiLaBNHFqIWIk//YXVOZ+0Qp7mWyUYOfeB+sfJo1w4HhgObhmXKLJQXcFFkT6qnAy
+         Lhv9WyVtrwLIhUHTSJcpAzt3umT4CT9YlQGv2KrLvU3UUBdm3crwB989TE+ebNRLXQ8v
+         WkIcJG1I2l54JqabHDSSVXly+VnJVrK6ElFVASWzfRImh5hDx4h7QtaT9Ac8U76yFtXk
+         wx3Dwu9mi2WNt9OJqCMGPPX6OAdxQwftBCfmkxPWWN+exHVn+/TD/eDZHTUQJ+N0LF9/
+         mKYg==
+X-Gm-Message-State: AO0yUKVIaH/cT/vzFD55+GCGAJldHaQP2/jJcVZnXPz/4mVdjqxub2z3
+        RbetS++lPtHJt7q9SrO4VPQ=
+X-Google-Smtp-Source: AK7set+9dAHeexh7+d0N6+p7qHcs6ks+YxVyjpIhQEBnpYkCw1HRU0xFHAbN5jlrk8PolfC1pLov6A==
+X-Received: by 2002:a17:906:5e12:b0:8b2:8857:5963 with SMTP id n18-20020a1709065e1200b008b288575963mr6448515eju.8.1677677653422;
+        Wed, 01 Mar 2023 05:34:13 -0800 (PST)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id g19-20020a1709061c9300b008cf8c6f5c43sm5668412ejh.83.2023.03.01.05.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Mar 2023 05:34:12 -0800 (PST)
+Date:   Wed, 1 Mar 2023 14:34:11 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
+        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
+Subject: Re: [Patch V6 1/3] spi: Add TPM HW flow flag
+Message-ID: <Y/9UU8UA5R9eJFuZ@orome>
+References: <20230227172108.8206-1-kyarlagadda@nvidia.com>
+ <20230227172108.8206-2-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZNm/cRTLJKLEOJhn"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="fOvuqwjzPmirnJCq"
 Content-Disposition: inline
-In-Reply-To: <Y/9EwTtmxcVBjiHz@nvidia.com>
-X-Cookie: Life -- Love It or Leave It.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230227172108.8206-2-kyarlagadda@nvidia.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,41 +79,100 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---ZNm/cRTLJKLEOJhn
+--fOvuqwjzPmirnJCq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 01, 2023 at 08:27:45AM -0400, Jason Gunthorpe wrote:
-> On Wed, Mar 01, 2023 at 11:56:53AM +0000, Krishna Yarlagadda wrote:
+On Mon, Feb 27, 2023 at 10:51:06PM +0530, Krishna Yarlagadda wrote:
+> TPM spec defines flow control over SPI. Client device can insert a wait
 
-> > TPM device connected behind half duplex controller can only work
-> > this way. So, no additional flag needed to check.
+Maybe add a reference to where in the TPM specification this can be
+found? It looks like the specifications are publicly available, though
+I'm less sure about stability of the links, so perhaps it's enough to
+name the document and section that this can be found in. QEMU seems to
+be using this link to point to the specification, which I suppose has a
+good chance of remaining stable:
 
-> Just because a DT hooks it up this way doesn't mean the kernel driver
-> can support it, eg support hasn't been implemented in an older SPI
-> driver or something.
+	https://trustedcomputinggroup.org/resource/pc-client-work-group-pc-client-=
+specific-tpm-interface-specification-tis/
 
-> If the failure mode is anything other than the TPM doesn't probe we
-> will need to check for support.
+It looks like the latest version is 1.3 revision 27 and the details of
+this flow control mechanism are in section "6.4.5. Flow Control".
 
-It's not like these buses are hot pluggable - someone would have to
-design and manufacture a board which doesn't work.  It's probably
-reasonable for this to fail with the SPI subsystem saying it can't
-support things when the operation is tried.
+> state on MISO when address is trasmitted by controller on MOSI. It can
 
---ZNm/cRTLJKLEOJhn
+"transmitted"
+
+> work only on full duplex.
+> Half duplex controllers need to implement flow control in HW.
+
+This is a bit confusing because you first say it will only work for full
+duplex controllers and then you say it's also possible for half-duplex
+controllers.
+
+Maybe reword this to something like:
+
+	Detecting the wait state in software is only possible for full
+	duplex controllers. For controllers that support only half-
+	duplex, the wait state detection needs to be implemented in
+	hardware.
+
+> Add a flag for TPM to indicate flow control is expected in controller.
+
+That's not exactly what the flag indicates, though, is it? It primarily
+indicates that the device uses TPM flow control. It's then up to the
+controller to configure itself accordingly (i.e. if it supports half-
+duplex, enable detection of the wait state, otherwise leave it up to the
+client driver to detect the wait state).
+
+>=20
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> ---
+>  include/linux/spi/spi.h | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 4fa26b9a3572..6b32c90e9e20 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -184,8 +184,9 @@ struct spi_device {
+>  	u8			chip_select;
+>  	u8			bits_per_word;
+>  	bool			rt;
+> -#define SPI_NO_TX	BIT(31)		/* No transmit wire */
+> -#define SPI_NO_RX	BIT(30)		/* No receive wire */
+> +#define SPI_NO_TX		BIT(31)		/* No transmit wire */
+> +#define SPI_NO_RX		BIT(30)		/* No receive wire */
+> +#define SPI_TPM_HW_FLOW		BIT(29)		/* TPM flow control */
+
+Maybe some (or all?) of the information in the commit message should be
+duplicated here? That way people wouldn't need to go look for the commit
+message in order to find out.
+
+Given what I said above about the flag, it may be better to name this
+SPI_TPM_FLOW_CONTROL, but I suppose what you have here is fine, too.
+
+Thierry
+
+--fOvuqwjzPmirnJCq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP/RwYACgkQJNaLcl1U
-h9Awdgf9Gw5DpsYEJgXj8lUPLqMn95/TGZDmecFTQXKHdEen+ujsVZy31oCvd7ct
-BhopZRYQF917zCDkIS8EkkSgvpuXkQrzimXFKj4aroFtw5C0V4K4T+csnz8FqCKg
-37/nfu0481Gwf6vY+7wd4oOuOzNJDGp6lOBBFNlSxoxL7tnV0JHm2eqmu0ndhPe7
-UmdHEH5q3pgmZScrSptALSoqQRxCABT2n4Tdv9yayeNhc+x+fB3lvkt9yivIRqdG
-wzntZGHATWgBkAulA89yauPXvRFvD2HnLSxaDPJtdEYZOy9RqwIdXzt5tWU6yhNp
-jLUK4sBw8hwflLWmguFloPaZXnAzew==
-=ePN6
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP/VFAACgkQ3SOs138+
+s6GcHRAAgAdVqqF9rjgriXHZPJTGUpsvbYJgETvJR7ksAo2iuREoiuSUx8Dr6hB/
+nIHNW1Td/awiwK1aNtUyKLaWL9lITbYPhKvKRQVOrqWrbAqyT3w5CLZ+dfvcGoLE
+e9hFG/U9Q2CqnKbWbdzyJMj2m1VpADrd6F9qwSS2zBLA9xh2LleICa4M3HB94nIG
+ZxKw56WFnjUkphwniJMQvKNMZEagMRpMukQh7pLn/9KXIN+6aEmgv1YcLQjbIwQN
+PYMdN49eFget7hBw1qYHSqSK7LN+51S4hAcL5AQAhW4ar9y0XbIwToOKh0xTdAGv
+QQPTRjXosWBx6DmzDn6u0Dw18Kl2UOJWRqs4fAS1KKDKleBOUTBz2NQhd7V0+a/P
+2sJhI9BKRLHmxn9oRb9NYd1fnCyJm6VvtqOm67jcD42gQJ3cT7m7SlIp7NlsiFIP
+chmJh6TLRP04aLcIDx+UoVO/2ylCK/34eDTGZOhBL9TFZjMnpLvW6fR5w2gSF+It
+3pt/m9B78ByAHohLa3tmdKIL0+PIlMSfPACYVaTBJIWUScDLfVdN10SH6Gc9oCIH
++Rbll//Vn6Rw0vdKW/6Jr+8QzWGE98yi3UGoG6ROU3t44aDt4kD82ezCfHhlazWA
+w7PBgYEDWj+p88PoHkwqXOo6b+3LbJddLlRCOP/FqfSFpaZkRvk=
+=9E1l
 -----END PGP SIGNATURE-----
 
---ZNm/cRTLJKLEOJhn--
+--fOvuqwjzPmirnJCq--
