@@ -2,55 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB04B6A6D29
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 14:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A79F26A6D32
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 14:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjCANjg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Mar 2023 08:39:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
+        id S229692AbjCANlI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Mar 2023 08:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjCANje (ORCPT
+        with ESMTP id S229684AbjCANlI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Mar 2023 08:39:34 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE53330DF;
-        Wed,  1 Mar 2023 05:39:33 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id cw28so4768170edb.5;
-        Wed, 01 Mar 2023 05:39:33 -0800 (PST)
+        Wed, 1 Mar 2023 08:41:08 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F7D39BAC;
+        Wed,  1 Mar 2023 05:41:07 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id cw28so4787265edb.5;
+        Wed, 01 Mar 2023 05:41:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677677972;
+        d=gmail.com; s=20210112; t=1677678065;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qlqXxPhHUGf+ZMStbk2u65C8VeGJJmG1x4p4aNMo314=;
-        b=EFGYbXGRzMcDGa2uoJVTno+ZYO6aNFraJOGz3YaQ3BF35UVa0uAPwmJNEBXVxVOQ5I
-         JDzqzZRx9miLp+/LL3WdtdxYSWE2BeZIT8nSxOoQPOr3q/2V3PpiFZUD0TKRmhcZWIfo
-         5M7lRit9kaDI2LsrxnulibdYe23fFbPbnu2rpEGDlmRF5AVxxZYiwznxXjdRaB0VwFpJ
-         DglxAwdFqIU5w1W3LVMcwpW4Ts948msKlsvMpkZhSj09V5EylR18Ye9afgXt8xjT5Ht6
-         8ZpcEsLtivsLATxpRhDWmiATL6yzN20/qdfV/BwuOXBIKovXp6BKCJXMfTFy4TEfdEvR
-         56og==
+        bh=/qXAb53taSbccEZagai0EBEgCI96MXIqMCVHM5azkUc=;
+        b=OJZKGTc4qcrLMT6/BKM/Ya5MayDg2mw6migma8Nj1FDOxfkPtPK8fD631yPxhfqZ8T
+         bzuIj84l0Jf52GwbCS7SQ64yY5broVHqJJIOubxMW74rzhxLXKMUOWrbsZQFWLLVlNN/
+         RsoHNaqT5DAqhzoPJHKUnfyqLGIKrG0rJzdLjO7e8iZ4SJEoRdMwDVr8S0T/NXmHJcGc
+         extQKeKXgC3eEPcKMDUCxTHJwpnoFVXqv9mOnP/LeD03LPKDiUalr492xEAQjwRC3Ci4
+         RwyjLFq2R6NUjUa/V/m6bjviTddi/1gzJWsBwYjhD3AntWXRvCBZulTrBEHtTsACn7nS
+         nRBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677677972;
+        d=1e100.net; s=20210112; t=1677678065;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qlqXxPhHUGf+ZMStbk2u65C8VeGJJmG1x4p4aNMo314=;
-        b=ontdEsHKklsvo1HXf+SJYAnlo5L0Kgg7C0qc3PJfkhZ+1Ssu1gDe1DVrMOJWPqALKZ
-         CPxY/dlgtft2d01hr6giFKVeWeHEsIhGFj9Sp2MhOl2zizJ3/siNJ1uUnm/gQyFTzY6w
-         vlThUzd+AWsux+cbEX7gkWzaVzBtLuijoRMimGpqK950T7tw3YdaRcNunZR/4lUXmGxJ
-         Qk4wj0irgWXz2AsqhjO7nns/UZEo7IY4Pbc5vLED5WOGpRcZEhG+m1CrA4t4wra2dcxK
-         3ESHerW/SNd4MrXeYTyCb4qaoS+wZPYwG0h8v49yJJB3V6l//Y66HnFRNIJiXHFmfGGZ
-         aD/w==
-X-Gm-Message-State: AO0yUKWX4C0uDNCGw9uebQp1ROyskUuxdBWxSHz8TTS3NMvmicG7zYQU
-        IN1XwWj9KSuB/wNKhU7f08E=
-X-Google-Smtp-Source: AK7set+Jusjn82oiZYWpg97yY9K8MmneoqJmwZKq5CQgd1wC8xEu0EBkkk8Rewu/CjtyEJAnl6P4jQ==
-X-Received: by 2002:a17:907:2d1f:b0:88f:8a5:b4cd with SMTP id gs31-20020a1709072d1f00b0088f08a5b4cdmr7956882ejc.1.1677677972412;
-        Wed, 01 Mar 2023 05:39:32 -0800 (PST)
+        bh=/qXAb53taSbccEZagai0EBEgCI96MXIqMCVHM5azkUc=;
+        b=p8g+Ep5WO5WYM3xXXRI/gn2112+QgCtzIeHuDkeYlAYg0mi71NN6dEf2u+E8O6tyhJ
+         4eiHa50hAmbqcUEsNU87xLG+flCNTxEaxbuet+W4lMPkcE5qJx7gsVwDrfmz6WYQWcPK
+         nMRp2hOxU0sCq/IO7WvhidGMD9d/2uyFKqdijgvvFxTgRkYYlICFjc99UAZIpc5/aVe3
+         3qMeyt1FeCsDQRXwG3GK4PU8TQ1iFI7P2PCPeh+jsGRjm1YfWVkGrFMAlosbE4+DQ7Uk
+         UZuwj7tle7cXtMhrju/ovsCoPaMnGWVw0ON6ty1Ia/XjN1P+7jK7v0sUI7iHrCUOIIe8
+         2tjw==
+X-Gm-Message-State: AO0yUKXSso/ITOGRQe6PAME3yCJ/JH3lN9icFgfGeHFusiaixpmlpeKW
+        ZRi2GCTKsjKALcai3zyZ+u8=
+X-Google-Smtp-Source: AK7set8FHkfSDXUUcd5t8RiBLiu5Zmr74vuTJic7kmmP31ZCfUWccx0n18ESE2U2YZxF3oiyHelwZw==
+X-Received: by 2002:a17:907:7245:b0:8cf:fda0:5b9b with SMTP id ds5-20020a170907724500b008cffda05b9bmr6663074ejc.22.1677678065397;
+        Wed, 01 Mar 2023 05:41:05 -0800 (PST)
 Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id c89-20020a509fe2000000b004aeeb476c5bsm5563086edf.24.2023.03.01.05.39.31
+        by smtp.gmail.com with ESMTPSA id lb4-20020a170907784400b008d6e551e1bcsm5750277ejc.2.2023.03.01.05.41.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Mar 2023 05:39:31 -0800 (PST)
-Date:   Wed, 1 Mar 2023 14:39:30 +0100
+        Wed, 01 Mar 2023 05:41:04 -0800 (PST)
+Date:   Wed, 1 Mar 2023 14:41:03 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
 Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
@@ -59,12 +59,12 @@ Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
 Subject: Re: [Patch V6 3/3] spi: tegra210-quad: Enable TPM wait polling
-Message-ID: <Y/9Vkk1ioFWq+XLm@orome>
+Message-ID: <Y/9V71ZYy7FGiK4g@orome>
 References: <20230227172108.8206-1-kyarlagadda@nvidia.com>
  <20230227172108.8206-4-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7CYPnN6GGv8TW0P1"
+        protocol="application/pgp-signature"; boundary="anIYPVtUQRiK+ddV"
 Content-Disposition: inline
 In-Reply-To: <20230227172108.8206-4-kyarlagadda@nvidia.com>
 User-Agent: Mutt/2.2.9 (2022-11-12)
@@ -79,7 +79,7 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---7CYPnN6GGv8TW0P1
+--anIYPVtUQRiK+ddV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -97,27 +97,49 @@ On Mon, Feb 27, 2023 at 10:51:08PM +0530, Krishna Yarlagadda wrote:
 > ---
 >  drivers/spi/spi-tegra210-quad.c | 14 ++++++++++++++
 >  1 file changed, 14 insertions(+)
+>=20
+> diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-q=
+uad.c
+> index b967576b6c96..e1165584a20a 100644
+> --- a/drivers/spi/spi-tegra210-quad.c
+> +++ b/drivers/spi/spi-tegra210-quad.c
+> @@ -142,6 +142,7 @@
+> =20
+>  #define QSPI_GLOBAL_CONFIG			0X1a4
+>  #define QSPI_CMB_SEQ_EN				BIT(0)
+> +#define QSPI_TPM_WAIT_POLL_EN			BIT(1)
+> =20
+>  #define QSPI_CMB_SEQ_ADDR			0x1a8
+>  #define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
+> @@ -164,6 +165,7 @@
+>  struct tegra_qspi_soc_data {
+>  	bool has_dma;
+>  	bool cmb_xfer_capable;
+> +	bool support_tpm;
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Nit: this could be "supports_tpm" for slightly more consistency with
+"has_dma".
 
---7CYPnN6GGv8TW0P1
+Thierry
+
+--anIYPVtUQRiK+ddV
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP/VZIACgkQ3SOs138+
-s6Hi8hAAjC6P2k1n6s/uy9sFmSyNUN/z/M+jWR/gtGEeEB2CmOGxgUPfx4MJVOQb
-OVq8lRF2Qi/5e5dihv7AxwjJMzZamGlvrmhCUtx1YeFwlIkwFbCKCfyI2y/JB15X
-v8qHzE48qmJfYlhpXlTKaYvsUs4X/oEIU9edj+tLM6u4+OtcXr+ncVCqXN64oZHy
-izDYTEBoa7tTSSeDzgsRg/x7+gpcfmMdGV6TtUlVItGwaLrdaSR/r2fs3LLAcO/e
-yA5VPepoYSBKMYm+vz5p40zVBT/BmlAWX8D7J8Lys9lOvTSyMJtmIPDaiseHMF9V
-ZOCKRWp904yKW5zDMWW7025S7AjM2CmATw25kLTSBcHxh4Y9DrRIKbyh+ucQwm6h
-t3SBITPhg/xefb2VURunt9MvcnyakbvBPR0XCLGQ7tsdGU+UWIsMF/Mg4sB7T7p7
-8yyFf0Zn9nGt8pTislbgubs8k/XXCrqGBh2/CaJ/6t0pCmzAdJlaQnrhpTWQhSwo
-UUXwFMR94nUS0/NbYYvkf034E9GytHZI3uqT2ooUJQwxjtrAunPIr8chFlKCiGId
-0N7imv9UE3KW5vlr0mHd+jw2Hc4hwdraQKu/rIKx3eWqmd5/N41W76oAoM4f3Hf3
-ox26xXqnNZkH+ZXpPloE7+spd7P2gMgzy8MINpArstbZwa75iS4=
-=Pxsk
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmP/Ve8ACgkQ3SOs138+
+s6HzVg/+Koo8cW9lLDnUsaNXV0MQJN99mkT5rJx5t4WjnBdiw1Zs9/ypgImIxJ5G
+yVEIgDhD2HhwKrgPE/Zk6lAd7zXzvbLyzJp0iVrGztWGq8w1vGrIHbQWWltLfoKq
+kRkEwxNX+MTmsI1PbboX1goTQLeZJZbSPAnUN/bltBIiT2V8mSqA1qA9B2QkSy7S
+WKJD1fWBA2mDj7JJq/SFBNk0AbaujWhCjNvQ2p+nwe0SAlmIHo1eeiujA05jWl+A
+27BzR+q5Uxnfgq4WUikEApJO1KyuBXaVsY6aEQB0JhRdDq64mnW+EaL4Wus2HEqf
+pLJ9HUA9Csq/t2fUYsBx5O0KM1bt3fkWGt/ZZSroiHQzg5exGKKSUyJOnixTXrlL
+wpy1qF2Xc+E8nQYdvMdsVLbVpS1XUQjm6HzERam6x7+Ap2pc2YcNoub32Rc8VYZk
+YzRCQdDITM/sChRBKgXNYD6cttI9t+J2kJhuYYvtlvB2Csv1za7DEWdz+5V64lu7
+CbK+MCGfIPuNP0v852tyFl2on/y4kE2GfNNfHHHEYa1cNUuM46pc0q6OWnVjpJTu
+ZNOCokv9dAKTLptpiZZFa5joJtAtcOLuQ/E5EPdX4R6u4u8v5nbuxHTXaK5ZKyko
+3gWEzSTxQWUChpr5fyQbErVX9S3mmd9QL8P4Jm5V3EUVwEnjKws=
+=Yd6F
 -----END PGP SIGNATURE-----
 
---7CYPnN6GGv8TW0P1--
+--anIYPVtUQRiK+ddV--
