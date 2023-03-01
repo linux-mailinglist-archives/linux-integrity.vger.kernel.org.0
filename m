@@ -2,190 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A506A7231
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 18:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5C06A76F3
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Mar 2023 23:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjCARfI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Mar 2023 12:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S229761AbjCAWns (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Mar 2023 17:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCARfH (ORCPT
+        with ESMTP id S229494AbjCAWnr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Mar 2023 12:35:07 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11hn2218.outbound.protection.outlook.com [52.100.172.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CCE2594B;
-        Wed,  1 Mar 2023 09:34:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZtdTbMVKx5Q3HJLd0llM2hup9vLYPsHScZVjhWZgVPxRY7aaROglHiNm01l3aq265BEXmoR6lhsyBSXGe26p2pyx+51dBdOXaVmYuBQXocNshszlpIdxgQjrSxvH8f469JX3bHVAMPxbFNgzjCjxkDGSOK4Aq3ytMStM7jFNekU3B6O5ICT6zNml9eWh2zvn0uCyK4nAJcyJ1RKsqGkdmXyo5mCZ8Otff3KhGKMVa7SLjgJ4S8KkQ32yOfWvsHzUSPhYraWmDtg6U3D4WABvc2/DIM6W6vSaHxMDYHxvX9XxfA47P3guS3OVw5U2IJtmGOIAokxGPxzQwvMFRNgKDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z6cfpwnnVrUbHlknS5XSwMZgssAwk958FxhAcSDRmG8=;
- b=DD+IoJK8eHUu/603kDmc8WVbcuIEhIQtvkjFQMyrcIwhcSwPSyEKJHW4Uj74D1FDQp5NjF5MfIB0cr8tMSdqbnYdux6UUVwFnQceQWN59GyCJfChK5fWfQ39pFA5cG5PtGqlSGZ1BOFXsjeNNa/Cm/IK4DOel9qib8mpwQ9ks9r0X/EwblOxl6vMYzu2zSDzWy7BLyrz1usmfIV2tC9JaJADdGO42RDVlrL+ccRTFpmqV6dB7wgjgV9CcgbrDHtNFHzpVZHide1YRYUtqWgM4tNoytcLllHEHvreZ40//0niXBv1tKjH7PvRh8eFyJwi/ghtNjoKhxebo50OXRIDag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-Received: from BN1PR12CA0027.namprd12.prod.outlook.com (2603:10b6:408:e1::32)
- by SJ0PR12MB5439.namprd12.prod.outlook.com (2603:10b6:a03:3ae::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Wed, 1 Mar
- 2023 17:34:27 +0000
-Received: from BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e1:cafe::75) by BN1PR12CA0027.outlook.office365.com
- (2603:10b6:408:e1::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
- Transport; Wed, 1 Mar 2023 17:34:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BN8NAM11FT048.mail.protection.outlook.com (10.13.177.117) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.14 via Frontend Transport; Wed, 1 Mar 2023 17:34:27 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 1 Mar 2023
- 09:34:15 -0800
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 1 Mar 2023 09:34:14 -0800
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server id 15.2.986.5 via Frontend
- Transport; Wed, 1 Mar 2023 09:34:10 -0800
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <robh+dt@kernel.org>, <broonie@kernel.org>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>, <jarkko@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
+        Wed, 1 Mar 2023 17:43:47 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762971A66B;
+        Wed,  1 Mar 2023 14:43:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677710623; x=1709246623;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QcM62RcTYi5zvoGJymyxGLnQj3e1/GlbLkfJR0EShdo=;
+  b=AULRsfYdZyqxS0WG/ztpDuMe+RLMHl48R8BfLqGyDFI6H5TaPYd8R67V
+   Z95mlpIGr4Mye76jPSe45/f1eozgGTnl/FwyIHdnpIxiKqlph5yfh/lYn
+   AoQGjGx5meNOqXdL4Lwh9zQ/KlWsLImCVvMcf9uq4NiGmbQFKij7K0oHo
+   BTWMT7ftL+APcPI+NB1YWPHNod3pK4IJ9V/+gwun/cmAXVCY1rOP0+IMS
+   e3Xq9S9KnAkhNbXY2ttis8QN7vLj5ScYhwm6H9IrgRXOdUZDECzu1x+yt
+   7q2Bi/gTk9kPXGq/nXbyEJFcli9OT82dLrOCkUApe7RnhBQd0ICFdLqei
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="334571891"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="334571891"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 14:43:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="848838873"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="848838873"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Mar 2023 14:43:37 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pXVAe-0006TP-38;
+        Wed, 01 Mar 2023 22:43:36 +0000
+Date:   Thu, 2 Mar 2023 06:43:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
+        broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
         Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [Patch V7 3/3] spi: tegra210-quad: Enable TPM wait polling
-Date:   Wed, 1 Mar 2023 23:03:53 +0530
-Message-ID: <20230301173353.28673-4-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230301173353.28673-1-kyarlagadda@nvidia.com>
-References: <20230301173353.28673-1-kyarlagadda@nvidia.com>
-X-NVConfidentiality: public
+Subject: Re: [Patch V7 2/3] tpm_tis-spi: Add hardware wait polling
+Message-ID: <202303020622.v3NqL5mg-lkp@intel.com>
+References: <20230301173353.28673-3-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT048:EE_|SJ0PR12MB5439:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a90ca49-c1d3-4e51-a8f2-08db1a7b34e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3a2fgbN0F47Rs4XTOA+HvHNN2ohx4ZZ6PK15miBMYDr1bZiJR7EZERPLlMyNHxnUa/SzFgVu8zvKtkh/sxOmGTKCCit0rTEvE/bIu2/H5bz0T52YUxu+YZ3MkLWaayXo3mHh37OmkHf6MAtZoTcllMdFACd1499chNKz1ToLiaoDFALFu9Pweflbxa4MSH9cRJ/huzsk/9hiJ9UARENu2mXLuRblxJMv9bGBd904xapDCFWaI8WN5rdvp7JQcN8e3NWZfcQI/ChAJpMGeBWb1C1RmJVfIRj/L5TwL/OsIRCEOpTcy5092tSsNNLBkq8NhUV3VTpH/zRiq2HUZziYGapHLlIng0iYJMTZ50/N24Y/DLumhX6zNt2KtwUWm/FOGHYW8SJASxdOG/QDgzsNT9NW+Fexn5ax0/NiYlYeG8mzzIwXEdWFhtxe7nV3jmgPPOvVBS3IshzPBHQehjHCNq0NZtGslNA9d3cUAXJ6/jgbAL83BB3g6h4SH4LbvaJDjXeNvcyfUvQnfmoRP73k2d0j1JFcjTgF+pMyMeEaESGza3wkZpkmJQsoUoJGx+qujYHcqUDqHoGCSzNHZbXLM59ZYeGCqnLYOQR5SGIO8eypefljq+gsiUYibRGVSamDfcexR9mFIGhD6MtyLaXNiO/bFhySNuE9HUcgLK4GuLnBGi/0vYi09kQXm38Vz7llLSfCwSKuSz84NF6NsXxT76w0ikYTWF7OESLC6m2NXD0R1SVDjCirVE6YIULB//XnLZ0pjJiX9OryHts4qEMOeT4vYR9H7sfj8NL6FQytTxPMoXYaz4lyo/OOb07VYei+driH3GUy2wE9HmFhDAGF5w==
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(136003)(376002)(396003)(451199018)(5400799012)(46966006)(36840700001)(40470700004)(82740400003)(7636003)(36860700001)(316002)(2906002)(34020700004)(40460700003)(7416002)(5660300002)(40480700001)(36756003)(8936002)(86362001)(26005)(4326008)(70206006)(70586007)(186003)(8676002)(1076003)(110136005)(921005)(54906003)(356005)(41300700001)(426003)(336012)(47076005)(82310400005)(478600001)(83380400001)(7696005)(2616005)(6666004)(107886003)(83996005)(2101003)(12100799018);DIR:OUT;SFP:1501;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 17:34:27.1529
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a90ca49-c1d3-4e51-a8f2-08db1a7b34e1
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5439
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301173353.28673-3-kyarlagadda@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Trusted Platform Module requires flow control. As defined in TPM
-interface specification, client would drive MISO line at same cycle as
-last address bit on MOSI.
-Tegra234 and Tegra241 QSPI controllers have TPM wait state detection
-feature which is enabled for TPM client devices reported in SPI device
-mode bits.
+Hi Krishna,
 
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- drivers/spi/spi-tegra210-quad.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index 0b9bc3b7f53a..82aec6cb7863 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -142,6 +142,7 @@
- 
- #define QSPI_GLOBAL_CONFIG			0X1a4
- #define QSPI_CMB_SEQ_EN				BIT(0)
-+#define QSPI_TPM_WAIT_POLL_EN			BIT(1)
- 
- #define QSPI_CMB_SEQ_ADDR			0x1a8
- #define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
-@@ -164,6 +165,7 @@
- struct tegra_qspi_soc_data {
- 	bool has_dma;
- 	bool cmb_xfer_capable;
-+	bool supports_tpm;
- 	unsigned int cs_count;
- };
- 
-@@ -1065,6 +1067,12 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
- 
- 	/* Enable Combined sequence mode */
- 	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
-+	if (spi->mode & SPI_TPM_HW_FLOW) {
-+		if (tqspi->soc_data->supports_tpm)
-+			val |= QSPI_TPM_WAIT_POLL_EN;
-+		else
-+			return -EIO;
-+	}
- 	val |= QSPI_CMB_SEQ_EN;
- 	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
- 	/* Process individual transfer list */
-@@ -1196,6 +1204,8 @@ static int tegra_qspi_non_combined_seq_xfer(struct tegra_qspi *tqspi,
- 	/* Disable Combined sequence mode */
- 	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
- 	val &= ~QSPI_CMB_SEQ_EN;
-+	if (tqspi->soc_data->supports_tpm)
-+		val &= ~QSPI_TPM_WAIT_POLL_EN;
- 	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
- 	list_for_each_entry(transfer, &msg->transfers, transfer_list) {
- 		struct spi_transfer *xfer = transfer;
-@@ -1454,24 +1464,28 @@ static irqreturn_t tegra_qspi_isr_thread(int irq, void *context_data)
- static struct tegra_qspi_soc_data tegra210_qspi_soc_data = {
- 	.has_dma = true,
- 	.cmb_xfer_capable = false,
-+	.supports_tpm = false,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra186_qspi_soc_data = {
- 	.has_dma = true,
- 	.cmb_xfer_capable = true,
-+	.supports_tpm = false,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra234_qspi_soc_data = {
- 	.has_dma = false,
- 	.cmb_xfer_capable = true,
-+	.supports_tpm = true,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra241_qspi_soc_data = {
- 	.has_dma = false,
- 	.cmb_xfer_capable = true,
-+	.supports_tpm = true,
- 	.cs_count = 4,
- };
- 
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.2 next-20230301]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/spi-Add-TPM-HW-flow-flag/20230302-013628
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20230301173353.28673-3-kyarlagadda%40nvidia.com
+patch subject: [Patch V7 2/3] tpm_tis-spi: Add hardware wait polling
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230302/202303020622.v3NqL5mg-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d47344c6b9ab634483742457f6692b01f02c4698
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Yarlagadda/spi-Add-TPM-HW-flow-flag/20230302-013628
+        git checkout d47344c6b9ab634483742457f6692b01f02c4698
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/char/tpm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303020622.v3NqL5mg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/char/tpm/tpm_tis_spi_main.c:335:36: warning: 'acpi_tis_spi_match' defined but not used [-Wunused-const-variable=]
+     335 | static const struct acpi_device_id acpi_tis_spi_match[] = {
+         |                                    ^~~~~~~~~~~~~~~~~~
+   drivers/char/tpm/tpm_tis_spi_main.c: In function 'tpm_tis_spi_probe':
+>> drivers/char/tpm/tpm_tis_spi_main.c:263:42: warning: 'phy' is used uninitialized [-Wuninitialized]
+     263 |         struct spi_controller *ctlr = phy->spi_device->controller;
+         |                                       ~~~^~~~~~~~~~~~
+   drivers/char/tpm/tpm_tis_spi_main.c:262:33: note: 'phy' was declared here
+     262 |         struct tpm_tis_spi_phy *phy;
+         |                                 ^~~
+
+
+vim +/phy +263 drivers/char/tpm/tpm_tis_spi_main.c
+
+   259	
+   260	static int tpm_tis_spi_probe(struct spi_device *dev)
+   261	{
+   262		struct tpm_tis_spi_phy *phy;
+ > 263		struct spi_controller *ctlr = phy->spi_device->controller;
+   264		int irq;
+   265	
+   266		phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_spi_phy),
+   267				   GFP_KERNEL);
+   268		if (!phy)
+   269			return -ENOMEM;
+   270	
+   271		phy->flow_control = tpm_tis_spi_flow_control;
+   272	
+   273		if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
+   274			phy->spi_device->mode |= SPI_TPM_HW_FLOW;
+   275	
+   276		/* If the SPI device has an IRQ then use that */
+   277		if (dev->irq > 0)
+   278			irq = dev->irq;
+   279		else
+   280			irq = -1;
+   281	
+   282		init_completion(&phy->ready);
+   283		return tpm_tis_spi_init(dev, phy, irq, &tpm_spi_phy_ops);
+   284	}
+   285	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
