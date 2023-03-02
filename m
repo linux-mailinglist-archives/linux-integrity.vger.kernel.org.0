@@ -2,146 +2,153 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626D36A8918
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Mar 2023 20:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA3E6A8B76
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Mar 2023 23:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCBTI1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Mar 2023 14:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S229876AbjCBWGP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Mar 2023 17:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjCBTIU (ORCPT
+        with ESMTP id S229861AbjCBWGJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:08:20 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEE23609E
-        for <linux-integrity@vger.kernel.org>; Thu,  2 Mar 2023 11:08:15 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id bo22so141372pjb.4
-        for <linux-integrity@vger.kernel.org>; Thu, 02 Mar 2023 11:08:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1677784095;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vdu6kOAJ1Ups+aUuKMhdxW9mbKAGnc9mpfEPZtQ5oYc=;
-        b=QCBxot5UEe92USFtl63SUB/c1YdLVxScPQJ1P4QKkUVllAOjkExvExOlk22Y+cAPLp
-         7weEoPvxZ0D+WDb8BBKIVp9dG4Qk6OQkdh8kKA3dGVcxvksE7MJCCR2RE4qhTXvYfGvU
-         jgj/tDTwkb4LQQic+6FFlgFTo6sCZEIGs5slvhlNdP2IW3PkjwzxqzAKtaNvhqrh1ARk
-         Fk945S48pTjqSBexPAR6DDMtcXU3MwN4FBw5DjJSxESA4tj2RXONXJlXtInGbuPs/1lK
-         6Em3Vjg2pr05lfKVnhLnuoPez7jPU4XUgCaO4BKItyg6p/BwZcZW+iA8dgGN98E+y8bW
-         DE3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677784095;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vdu6kOAJ1Ups+aUuKMhdxW9mbKAGnc9mpfEPZtQ5oYc=;
-        b=3OUgi4KGZCuQYQV4wz2Y8CLNH5uALUfunvbHvaCz9YFHEc8Ay9Buq4j6pxwFMyEnDy
-         jjaPMQrSYgX9WZUzBbdeD+d1LPSlLqreX/cZzOiuejrFHasWHKpTlPOnFp08q7exZ52y
-         uHOgyqDi23vrYLC93mv6CUMgbx9/LKXVR34wg5B2/TvcOYOLylemN/w+Bsxr8T2fhriQ
-         xusyXpg5U1tUNQ2TY5bTP4PGT18kGMj/EZ63R291StlNiSIAhfhO3XyRJNMmLTCChhjx
-         1blhn4hLgBnZqgzX3cwi+n7im7AAbcL2FzonJsrsMgABd+d0yfHpksehafZPIQgI9uLL
-         04/g==
-X-Gm-Message-State: AO0yUKXTG/u9yphUYBsxc4lqHfC7ZIv25J/Wn/F7A1fNaV5+3N9ixKMS
-        +BAV+AlHzOpg1J0AsGT7hyR07CGJaCjoFYHS80z9
-X-Google-Smtp-Source: AK7set9s3MxX+z1dx88uX1Fs1h5mTCDHnH5bToYcnqr8ZticQMwTWq2upjnKLw2DFG5CIW3NG3MUdlWUtltns+RDwxc=
-X-Received: by 2002:a17:903:1d1:b0:19c:cb32:bfef with SMTP id
- e17-20020a17090301d100b0019ccb32bfefmr4510758plh.3.1677784095231; Thu, 02 Mar
- 2023 11:08:15 -0800 (PST)
+        Thu, 2 Mar 2023 17:06:09 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EDB55AA
+        for <linux-integrity@vger.kernel.org>; Thu,  2 Mar 2023 14:06:01 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PSQCk4Np4z4x5X;
+        Fri,  3 Mar 2023 09:05:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1677794756;
+        bh=njD69v3qeL/tVCMhfNiTs5MobAt0JdOQQTm+aBdwWRc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=rmPnvfMg3GoJQDDhJlf4Rvyw1ed7sbTv5te2/xeBfNddk5N49v7FTLME4/8hWIb5S
+         3Ho/Cm+zvbgRm94hvzNc9YijkJUXUz2g9ojCzEIZQSnkhNQ8/Pjdm4ZXTT2s/8L6mR
+         QEXDW8Ru3Udc1/rlxh1DDPs67+cDO9MhgQD3O5tQMa4NbILJ3m5GqxZByAjEYFTpdc
+         Xf2H4ymHuSYPneDuilR0lJsuQIyai36uQzxJfSjp/OBPI2SNBgfgR5gJcMGfd8AFnZ
+         U/HW7AKZrxkED75qP+/Sayt+7/nO4TzS075iK6bh49qxf59dh5DEZf0tDCMcdx9L15
+         z5IqKwkVoyTgQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     linux-integrity@vger.kernel.org, yangyingliang@huawei.com,
+        eajames@linux.ibm.com, jgg@ziepe.ca, jarkko@kernel.org,
+        peterhuewe@gmx.de
+Subject: Re: [PATCH 2/2] powerpc/tpm: Reserve SML log when kexec'ing
+In-Reply-To: <6c5ee8fe-9970-54cb-263e-b8af7a25ed95@linux.ibm.com>
+References: <20230224032508.3331281-1-mpe@ellerman.id.au>
+ <20230224032508.3331281-2-mpe@ellerman.id.au>
+ <6c5ee8fe-9970-54cb-263e-b8af7a25ed95@linux.ibm.com>
+Date:   Fri, 03 Mar 2023 09:05:47 +1100
+Message-ID: <87bklalsg4.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com> <1675119451-23180-12-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1675119451-23180-12-git-send-email-wufan@linux.microsoft.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 2 Mar 2023 14:08:04 -0500
-Message-ID: <CAHC9VhRdm_xpXNQvSVO2hkx2js=_zzo2DiQ6PvEjAEet4OjxNw@mail.gmail.com>
-Subject: Re: [RFC PATCH v9 11/16] ipe: add support for dm-verity as a trust provider
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 5:58=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
-wrote:
+Stefan Berger <stefanb@linux.ibm.com> writes:
+> On 2/23/23 22:25, Michael Ellerman wrote:
+>> The TPM code in prom_init.c creates a small buffer of memory to store
+>> the TPM's SML (Stored Measurement Log). It's communicated to Linux via
+>> the linux,sml-base/size device tree properties of the TPM node.
+>> 
+>> When kexec'ing that buffer can be overwritten, or when kdump'ing it may
+>> not be mapped by the second kernel. The latter can lead to a crash when
+>> booting the second kernel such as:
+>> 
+>>    tpm_ibmvtpm 71000003: CRQ initialization completed
+>>    BUG: Unable to handle kernel data access on read at 0xc00000002ffb0000
+>>    Faulting instruction address: 0xc0000000200a70e0
+>>    Oops: Kernel access of bad area, sig: 11 [#1]
+>>    LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
+>>    Modules linked in:
+>>    CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc2-00134-g9307ce092f5d #314
+>>    Hardware name: IBM pSeries (emulated by qemu) POWER9 (raw) 0x4e1200 0xf000005 of:SLOF,git-5b4c5a pSeries
+>>    NIP:  c0000000200a70e0 LR: c0000000203dd5dc CTR: 0000000000000800
+>>    REGS: c000000024543280 TRAP: 0300   Not tainted  (6.2.0-rc2-00134-g9307ce092f5d)
+>>    MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 24002280  XER: 00000006
+>>    CFAR: c0000000200a70c8 DAR: c00000002ffb0000 DSISR: 40000000 IRQMASK: 0
+>>    ...
+>>    NIP memcpy_power7+0x400/0x7d0
+>>    LR  kmemdup+0x5c/0x80
+>>    Call Trace:
+>>      memcpy_power7+0x274/0x7d0 (unreliable)
+>>      kmemdup+0x5c/0x80
+>>      tpm_read_log_of+0xe8/0x1b0
+>>      tpm_bios_log_setup+0x60/0x210
+>>      tpm_chip_register+0x134/0x320
+>>      tpm_ibmvtpm_probe+0x520/0x7d0
+>>      vio_bus_probe+0x9c/0x460
+>>      really_probe+0x104/0x420
+>>      __driver_probe_device+0xb0/0x170
+>>      driver_probe_device+0x58/0x180
+>>      __driver_attach+0xd8/0x250
+>>      bus_for_each_dev+0xb4/0x140
+>>      driver_attach+0x34/0x50
+>>      bus_add_driver+0x1e8/0x2d0
+>>      driver_register+0xb4/0x1c0
+>>      __vio_register_driver+0x74/0x9c
+>>      ibmvtpm_module_init+0x34/0x48
+>>      do_one_initcall+0x80/0x320
+>>      kernel_init_freeable+0x304/0x3ac
+>>      kernel_init+0x30/0x1a0
+>>      ret_from_kernel_thread+0x5c/0x64
 >
-> From: Deven Bowers <deven.desai@linux.microsoft.com>
+> I have not been able to reproduce this particular crash issue with a
+> 6.2 kernel running on P10 PowerVM when NOT applying your patches.
+
+The crash only happens for a crashdump kernel, not a regular kexec.
+
+And depending on where the SML is in memory, compared to where the
+crashkernel is, the SML might be mapped accidentally in which case there
+is no crash.
+
+> For my tests I have used the following parameter with the 16GB VM:
+> crashkernel=2G-4G:384M,4G-16G:1G,16G-64G:2G,64G-128G:2G,128G-:4G
+
+So you should be seeing a 2GB crashkernel reservation at 512MB.
+
+> What I noticed is that the log gets corrupted when the 2 patches are applied:
 >
-> Allows author of IPE policy to indicate trust for a singular dm-verity
-> volume, identified by roothash, through "dmverity_roothash" and all
-> signed dm-verity volumes, through "dmverity_signature".
+> After fresh boot:
 >
-> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-
-...
-
-> ---
->  security/ipe/Kconfig         |  20 +++++
->  security/ipe/Makefile        |   2 +
->  security/ipe/audit.c         |  24 ++++++
->  security/ipe/digest.c        | 144 +++++++++++++++++++++++++++++++++++
->  security/ipe/digest.h        |  26 +++++++
->  security/ipe/eval.c          | 103 +++++++++++++++++++++++++
->  security/ipe/eval.h          |  13 ++++
->  security/ipe/hooks.c         |  51 +++++++++++++
->  security/ipe/hooks.h         |   8 ++
->  security/ipe/ipe.c           |  15 ++++
->  security/ipe/ipe.h           |   4 +
->  security/ipe/policy.h        |   3 +
->  security/ipe/policy_parser.c |  16 ++++
->  13 files changed, 429 insertions(+)
->  create mode 100644 security/ipe/digest.c
->  create mode 100644 security/ipe/digest.h
+>> cp /sys/kernel/security/tpm0/binary_bios_measurements ./
+>> ls -l binary_bios_measurements
+> -r--r-----. 1 root root 10051 Feb 28 12:09 binary_bios_measurements
 >
-> diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
-> index ac4d558e69d5..16e835ce61b0 100644
-> --- a/security/ipe/Kconfig
-> +++ b/security/ipe/Kconfig
-> @@ -15,3 +15,23 @@ menuconfig SECURITY_IPE
->           admins to reconfigure trust requirements on the fly.
 >
->           If unsure, answer N.
-> +
-> +if SECURITY_IPE
-> +menu "IPE Trust Providers"
-> +
-> +config IPE_PROP_DM_VERITY
-> +       bool "Enable support for dm-verity volumes"
-> +       depends on DM_VERITY && DM_VERITY_VERIFY_ROOTHASH_SIG
-> +       default Y
-> +       help
-> +         This option enables the properties 'dmverity_signature' and
-> +         'dmverity_roothash' in IPE policy. These properties evaluates
-> +         to TRUE when a file is evaluated against a dm-verity volume
-> +         that was mounted with a signed root-hash or the volume's
-> +         root hash matches the supplied value in the policy.
-> +
-> +         If unsure, answer Y.
+>> kexec -l /boot/vmlinuz-6.2.0+ --initrd /boot/initramfs-6.2.0+.img '--append=BOOT_IMAGE=/vmlinuz-6.2.0+ root=/dev/mapper/rhel_XYZ ro crashkernel=2G-4G:384M,4G-16G:1G,16G-64G:2G,64G-128G:2G,128G-:4G rd.lvm.lv=rhel_XYZ/root rd.lvm.lv=rhel_XYZ/swap biosdevname=0' -s
+>> kexec -e
 
-If you had both IPE and dm-verity enabled in your kernel build, is
-there ever a case where you wouldn't want IPE_PROP_DM_VERITY?  I
-suspect you can just have IPE and dm-verity select IPE_PROP_DM_VERITY
-and not bother the user/admin with the additional Kconfig knob.
+That's a normal kexec, not a crash kexec, so it doesn't use the
+crashkernel region mentioned above.
 
-> +endmenu
-> +
-> +endif
+>> cp /sys/kernel/security/tpm0/binary_bios_measurements ./
+>> ls -l binary_bios_measurements
+> -r--r-----. 1 root root 32 Feb 28 12:10 binary_bios_measurements
+>
+>> od -t x1 < binary_bios_measurements
+> 0000000 d0 0d fe ed 00 00 77 80 00 00 00 a0 00 00 4f 4c
+> 0000020 00 00 00 28 00 00 00 11 00 00 00 11 00 00 00 00
+> 0000040
 
---
-paul-moore.com
+That's a device tree header !? O_o
+
+#define OF_DT_HEADER		0xd00dfeed	/* marker */
+
+> The contents have changed and these first 4 bytes of it are always the
+> same once it has become this 32 byte file, otherwise they would be
+> zero.
+
+I'm not sure what's happening there. We'll need to debug it some more :/
+
+cheers
