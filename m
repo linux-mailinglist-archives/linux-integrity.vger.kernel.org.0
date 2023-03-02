@@ -2,245 +2,367 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5176A779F
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Mar 2023 00:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A676A7850
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Mar 2023 01:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjCAXRz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Mar 2023 18:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S229567AbjCBATD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Mar 2023 19:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjCAXRx (ORCPT
+        with ESMTP id S229563AbjCBATC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Mar 2023 18:17:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0B6457C6;
-        Wed,  1 Mar 2023 15:17:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 672A7B81183;
-        Wed,  1 Mar 2023 23:17:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC06C433EF;
-        Wed,  1 Mar 2023 23:17:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677712668;
-        bh=a5p54BH4pGYiXavR+aIFVBU1D29SfcQwo6GgaAoUoPs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mOl4c0nj89BA+58NY0R4VkaRxweQOYPTE2GLtYsVclHreqQI7Sz8bow96o4iJ8c0P
-         BY2xw5HYPD6pcP0yh87GJB5CVhPRjxR2MPBLfDRkZxsyX1l5aqcMJ/RlTRLNi66vxI
-         Bl8Xkg5JXdTXf3hdAfJ36j3wgKCPqw9JZ1YFDLA0RtlpxMagsJRIkLVR8TbkR3eZ2I
-         KvZNASV+1/+txQRmRNq4WjYukUnNawYKuQi9Px4epadSZ4M/MVbAY9s68/ZpF0DxTJ
-         C4veeSY7QrLKEZf3FvTiq3cxEUEfF0mANlcKCfC3mcCqCMbaS2bi/AQJ8eqSLyZyAg
-         4SSOAmrasF1+g==
-Date:   Thu, 2 Mar 2023 01:17:45 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-Message-ID: <Y//dGe+uXnvNjkvn@kernel.org>
-References: <20230227120702.13180-1-kyarlagadda@nvidia.com>
- <20230227120702.13180-3-kyarlagadda@nvidia.com>
- <Y/1oqr0RfD7KVA4y@kernel.org>
- <DM4PR12MB5769BCBCD410C75DF3EB26FBC3AC9@DM4PR12MB5769.namprd12.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB5769BCBCD410C75DF3EB26FBC3AC9@DM4PR12MB5769.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Mar 2023 19:19:02 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C81E4AFFA
+        for <linux-integrity@vger.kernel.org>; Wed,  1 Mar 2023 16:19:01 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321NOt6S015442;
+        Thu, 2 Mar 2023 00:18:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=1KD/pJ7JjyHRU5ZHhasLIKR4nRETKmSTFvn8DOL4Mpo=;
+ b=lUrLcrMOnhXIH2TJAMsEHM2AnSUerzHG88DISE9+44vyyS+DaQqPq4VdQhbbcbT2NNr9
+ B/oOcxexzLkdEB8I4u0+47A3qwoad+Vi1Q08By/cDcJ5hDkr+K+F4zTuppJk6SxL6xoW
+ ZdpODkLNEenClU2jXzvUmrcPF0SB6lV5boLbeef7p6qxd0eIsXEu185VhQdQjdA+q0oQ
+ 6/cQSbocVQxO25IuoFoOXFKuMEHsjRvN25kWXKKeufkqZCO5xt+7OATZGn+B03bZJMIa
+ HxykJ7anRaCxIEWXlqL+fNznGrgu/LDMLGY0cosyxezsCWtPJnMfktVKPr9vY64NgxTl +w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2gbt14hh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 00:18:44 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32206Es5029556;
+        Thu, 2 Mar 2023 00:18:43 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2gbt14h2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 00:18:43 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 321MjA2Z020135;
+        Thu, 2 Mar 2023 00:18:43 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3nybe21ut4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 00:18:42 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3220IfK455378242
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Mar 2023 00:18:41 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7BD9858056;
+        Thu,  2 Mar 2023 00:18:41 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0082258052;
+        Thu,  2 Mar 2023 00:18:41 +0000 (GMT)
+Received: from sig-9-65-203-8.ibm.com (unknown [9.65.203.8])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Mar 2023 00:18:40 +0000 (GMT)
+Message-ID: <0d74908c26c59c9605c80060fd78f543f2f4f470.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils v3] Add ima_policy_check.awk and
+ ima_policy_check.test
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 01 Mar 2023 19:18:40 -0500
+In-Reply-To: <20230228175859.193798-1-roberto.sassu@huaweicloud.com>
+References: <20230228175859.193798-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kEC5gsaMjmJfIraOE-A8XpNwb5IzKV01
+X-Proofpoint-ORIG-GUID: esBgMKhfGfH07d_6_0IFAxXV0kxccaiN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-01_15,2023-03-01_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 adultscore=0 spamscore=0
+ suspectscore=0 malwarescore=0 clxscore=1011 mlxlogscore=999
+ impostorscore=0 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2303010189
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 03:32:24AM +0000, Krishna Yarlagadda wrote:
-> > -----Original Message-----
-> > From: Jarkko Sakkinen <jarkko@kernel.org>
-> > Sent: 28 February 2023 08:06
-> > To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> > Cc: robh+dt@kernel.org; broonie@kernel.org; peterhuewe@gmx.de;
-> > jgg@ziepe.ca; krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org;
-> > linux-tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; thierry.reding@gmail.com; Jonathan Hunter
-> > <jonathanh@nvidia.com>; Sowjanya Komatineni
-> > <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>
-> > Subject: Re: [Patch V5 2/3] tpm_tis-spi: Support hardware wait polling
-> > 
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > On Mon, Feb 27, 2023 at 05:37:01PM +0530, Krishna Yarlagadda wrote:
-> > > TPM devices raise wait signal on last addr cycle. This can be detected
-> > > by software driver by reading MISO line on same clock which requires
-> > > full duplex support. In case of half duplex controllers wait detection
-> > > has to be implemented in HW.
-> > > Support hardware wait state detection by sending entire message and let
-> > > controller handle flow control.
-> > 
-> > When a is started sentence with the word "support" it translates to "I'm
-> > too lazy to write a proper and verbose description of the implementation"
-> > :-)
-> > 
-> > It has some abstract ideas of the implementation, I give you that, but do
-> > you think anyone ever will get any value of reading that honestly? A bit
-> > more concrette description of the change helps e.g. when bisecting bugs.
-> > 
-> I presented why we are making the change. Will add explanation on how
-> it is implemented as well.
+Hi Roberto,
 
-OK, cool, thank you.
+Just a couple of comments below.
 
-> 
-> > > QSPI controller in Tegra236 & Tegra241 implement TPM wait polling.
-> > >
-> > > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> > > ---
-> > >  drivers/char/tpm/tpm_tis_spi_main.c | 92
-> > ++++++++++++++++++++++++++++-
-> > >  1 file changed, 90 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/char/tpm/tpm_tis_spi_main.c
-> > b/drivers/char/tpm/tpm_tis_spi_main.c
-> > > index a0963a3e92bd..5f66448ee09e 100644
-> > > --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> > > +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> > > @@ -71,8 +71,74 @@ static int tpm_tis_spi_flow_control(struct
-> > tpm_tis_spi_phy *phy,
-> > >       return 0;
-> > >  }
-> > >
-> > > -int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > > -                      u8 *in, const u8 *out)
-> > > +/*
-> > > + * Half duplex controller with support for TPM wait state detection like
-> > > + * Tegra241 need cmd, addr & data sent in single message to manage HW
-> > flow
-> > > + * control. Each phase sent in different transfer for controller to idenity
-> > > + * phase.
-> > > + */
-> > > +int tpm_tis_spi_hw_flow_transfer(struct tpm_tis_data *data, u32 addr,
-> > u16 len,
-> > > +                              u8 *in, const u8 *out)
-> > > +{
-> > > +     struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > > +     struct spi_transfer spi_xfer[3];
-> > > +     struct spi_message m;
-> > > +     u8 transfer_len;
-> > > +     int ret;
-> > > +
-> > > +     while (len) {
-> > > +             transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-> > > +
-> > > +             spi_message_init(&m);
-> > > +             phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-> > > +             phy->iobuf[1] = 0xd4;
-> > > +             phy->iobuf[2] = addr >> 8;
-> > > +             phy->iobuf[3] = addr;
-> > > +
-> > > +             memset(&spi_xfer, 0, sizeof(spi_xfer));
-> > > +
-> > > +             spi_xfer[0].tx_buf = phy->iobuf;
-> > > +             spi_xfer[0].len = 1;
-> > > +             spi_message_add_tail(&spi_xfer[0], &m);
-> > > +
-> > > +             spi_xfer[1].tx_buf = phy->iobuf + 1;
-> > > +             spi_xfer[1].len = 3;
-> > > +             spi_message_add_tail(&spi_xfer[1], &m);
-> > > +
-> > > +             if (out) {
-> > > +                     spi_xfer[2].tx_buf = &phy->iobuf[4];
-> > > +                     spi_xfer[2].rx_buf = NULL;
-> > > +                     memcpy(&phy->iobuf[4], out, transfer_len);
-> > > +                     out += transfer_len;
-> > > +             }
-> > > +
-> > > +             if (in) {
-> > > +                     spi_xfer[2].tx_buf = NULL;
-> > > +                     spi_xfer[2].rx_buf = &phy->iobuf[4];
-> > > +             }
-> > > +
-> > > +             spi_xfer[2].len = transfer_len;
-> > > +             spi_message_add_tail(&spi_xfer[2], &m);
-> > > +
-> > > +             reinit_completion(&phy->ready);
-> > > +
-> > > +             ret = spi_sync_locked(phy->spi_device, &m);
-> > > +             if (ret < 0)
-> > > +                     return ret;
-> > > +
-> > > +             if (in) {
-> > > +                     memcpy(in, &phy->iobuf[4], transfer_len);
-> > > +                     in += transfer_len;
-> > > +             }
-> > > +
-> > > +             len -= transfer_len;
-> > > +     }
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +int tpm_tis_spi_sw_flow_transfer(struct tpm_tis_data *data, u32 addr,
-> > u16 len,
-> > > +                              u8 *in, const u8 *out)
-> > >  {
-> > >       struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > >       int ret = 0;
-> > > @@ -140,6 +206,28 @@ int tpm_tis_spi_transfer(struct tpm_tis_data
-> > *data, u32 addr, u16 len,
-> > >       return ret;
-> > >  }
-> > >
-> > > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > > +                      u8 *in, const u8 *out)
-> > > +{
-> > > +     struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > > +     struct spi_controller *ctlr = phy->spi_device->controller;
-> > > +
-> > > +     /*
-> > > +      * TPM flow control over SPI requires full duplex support.
-> > > +      * Send entire message to a half duplex controller to handle
-> > > +      * wait polling in controller.
-> > > +      * Set TPM HW flow control flag..
-> > > +      */
-> > > +     if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX) {
-> > > +             phy->spi_device->mode |= SPI_TPM_HW_FLOW;
-> > > +             return tpm_tis_spi_hw_flow_transfer(data, addr, len, in,
-> > > +                                                 out);
-> > > +     } else {
-> > > +             return tpm_tis_spi_sw_flow_transfer(data, addr, len, in,
-> > > +                                                 out);
-> > > +     }
-> > > +}
-> > > +
-> > >  static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
-> > >                                 u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
-> > >  {
-> > > --
-> > > 2.17.1
-> > >
-> > 
-> > Looking pretty good but do you really want to export
-> > tpm_tis_spi_{hw,sw}_flow_transfer?
-> > 
-> > BR, Jarkko
-> No need to export tpm_tis_spi_{hw,sw}_flow_transfer as well.
-> I will update this in next version.
 
-Great.
+> diff --git a/tests/ima_policy_check.test b/tests/ima_policy_check.test
+> new file mode 100755
+> index 00000000000..3549009bb1c
+> --- /dev/null
+> +++ b/tests/ima_policy_check.test
+> @@ -0,0 +1,245 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Copyright (C) 2023 Roberto Sassu <roberto.sassu@huawei.com>
+> +#
+> +# Test for ima_policy_check.awk
+> +
+> +trap '_report_exit_and_cleanup' SIGINT SIGTERM EXIT
+> +
+> +cd "$(dirname "$0")" || exit 1
+> +. ./functions.sh
+> +
+> +export PATH=$PWD:$PATH
+> +
+> +check_result() {
+> +	local result
+> +
+> +	echo -e "\nTest: $1"
+> +	echo "New rule: $2"
+> +	echo "IMA policy: $3"
+> +
+> +	echo -n "Result (expect $4): "
+> +
+> +	echo -e "$2\n$3" | ima_policy_check.awk
+> +	result=$?
+> +
+> +	if [ "$result" -ne "$4" ]; then
+> +		echo "${RED}$result${NORM}"
+> +		return "$FAIL"
+> +	fi
+> +
+> +	echo "${GREEN}$result${NORM}"
+> +	return "$OK"
+> +}
+> +
+> +# ima_policy_check.awk returns a bit mask with the following values:
+> +# - 1: invalid new rule;
+> +# - 2: overlap of the new rule with an existing rule in the IMA policy;
+> +# - 4: new rule exists in the IMA policy.
+> +
+> +# Basic checks.
+> +desc="empty IMA policy"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy=""
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="Empty new rule"
+> +rule=""
+> +ima_policy=""
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
+> +
+> +desc="Unknown policy keyword fun"
+> +rule="measure fun=FILE_CHECK"
+> +ima_policy=""
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
+> +
+> +desc="Missing action"
+> +rule="func=FILE_CHECK"
+> +ima_policy=""
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
+> +
+> +# Non-overlapping rules.
+> +desc="Non-overlapping by action measure/dont_appraise, same func"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="dont_appraise func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="Non-overlapping by action audit/dont_appraise, same func"
+> +rule="audit func=FILE_CHECK"
+> +ima_policy="dont_appraise func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="Non-overlapping by action appraise/dont_measure, same func"
+> +rule="appraise func=FILE_CHECK"
+> +ima_policy="dont_measure func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="Non-overlapping by action dont_measure/hash, same func"
+> +rule="dont_measure func=FILE_CHECK"
+> +ima_policy="hash func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="Non-overlapping by func"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="measure func=MMAP_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="Non-overlapping by uid, func is equal"
+> +rule="measure func=FILE_CHECK uid=0"
+> +ima_policy="measure uid=1 func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="Non-overlapping by uid, func is equal, same policy options"
+> +rule="measure func=FILE_CHECK uid=0 permit_directio"
+> +ima_policy="measure uid=1 func=FILE_CHECK permit_directio"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="Non-overlapping by mask, func and uid are equal, same policy options"
+> +rule="measure func=FILE_CHECK uid=0 permit_directio mask=MAY_READ"
+> +ima_policy="measure uid=0 mask=MAY_EXEC func=FILE_CHECK permit_directio"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="Non-overlapping by mask, func and uid are equal, different policy options"
+> +rule="measure func=FILE_CHECK uid=0 permit_directio mask=MAY_READ"
+> +ima_policy="measure uid=0 mask=MAY_EXEC func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +# Overlapping and different rules.
+> +desc="same actions, different keywords"
+> +rule="appraise func=FILE_CHECK"
+> +ima_policy="appraise uid=0"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +desc="unrelated actions with appraise and a do action, same func"
+> +rule="appraise func=FILE_CHECK"
+> +ima_policy="measure func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
 
-BR, Jarkko
+All the different actions - appraise, measure, audit - are applied for
+the same hook.  If the appraise rule func is "FILE_CHECK", then for any
+other func, the rules would overlap. 
+
+> +
+> +desc="related actions, same func"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="dont_measure func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +desc="related actions, same func, different policy options"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="dont_measure func=FILE_CHECK permit_directio"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +desc="related actions, same func, different policy options"
+> +rule="measure func=FILE_CHECK permit_directio"
+> +ima_policy="dont_measure func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +desc="same actions, same func, same mask with different modifier"
+> +rule="measure func=FILE_CHECK mask=MAY_EXEC"
+> +ima_policy="measure func=FILE_CHECK mask=^MAY_EXEC"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +desc="same actions, same func, different mask with same modifier"
+> +rule="measure func=FILE_CHECK mask=^MAY_READ"
+> +ima_policy="measure func=FILE_CHECK mask=^MAY_EXEC"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +desc="same actions, same func, different policy options"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="measure func=FILE_CHECK permit_directio"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +desc="same actions, same func, different policy options"
+> +rule="measure func=FILE_CHECK permit_directio"
+> +ima_policy="measure func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +desc="same actions, MMAP_CHECK and MMAP_CHECK_REQPROT hooks"
+> +rule="measure func=MMAP_CHECK"
+> +ima_policy="measure func=MMAP_CHECK_REQPROT"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +desc="related actions, same func, same mask with same modifier"
+> +rule="measure func=FILE_CHECK mask=^MAY_EXEC"
+> +ima_policy="dont_measure func=FILE_CHECK mask=^MAY_EXEC"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+
+> +desc="same actions, same func, different uid with same operator"
+> +rule="measure func=FILE_CHECK uid>0"
+> +ima_policy="measure func=FILE_CHECK uid>1"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+
+Please add a comment here before the < > test, indicating these
+operators are currently not supported.
+
+> +desc="same actions, same func, same uid with different operator"
+> +rule="measure func=FILE_CHECK uid>1"
+> +ima_policy="measure func=FILE_CHECK uid<1"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> +
+> +# Overlapping and same rules.
+> +desc="same actions, same func"
+> +rule="appraise func=FILE_CHECK"
+> +ima_policy="appraise func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> +
+> +desc="same actions, same func, same mask"
+> +rule="appraise mask=MAY_READ func=FILE_CHECK"
+> +ima_policy="appraise func=FILE_CHECK mask=MAY_READ"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> +
+> +desc="same actions, same func, same mask, same policy options"
+> +rule="appraise mask=MAY_READ func=FILE_CHECK permit_directio appraise_type=imasig"
+> +ima_policy="appraise func=FILE_CHECK mask=MAY_READ permit_directio appraise_type=imasig"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> +
+> +desc="same actions, same func"
+> +rule="measure func=MMAP_CHECK_REQPROT"
+> +ima_policy="measure func=MMAP_CHECK_REQPROT"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> +
+> +desc="same actions, same func with alias"
+> +rule="measure func=FILE_CHECK"
+> +ima_policy="measure func=PATH_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> +
+> +desc="same actions, same func with alias, same mask with same modifiers"
+> +rule="measure mask=^MAY_READ func=FILE_CHECK"
+> +ima_policy="measure func=PATH_CHECK mask=^MAY_READ"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> +
+> +desc="same actions, same func with alias and same mask with same modifiers, same uid with same operators"
+> +rule="measure mask=^MAY_READ uid>0 func=FILE_CHECK"
+> +ima_policy="measure func=PATH_CHECK mask=^MAY_READ uid>0"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> +
+> +desc="same actions, same func with alias and same mask with same modifiers, same uid with same operators"
+> +rule="measure mask=^MAY_READ uid<1 func=FILE_CHECK"
+> +ima_policy="measure func=PATH_CHECK mask=^MAY_READ uid<1"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> +
+> +# Overlapping and two rules (one same, one different).
+> +desc="first: same actions, same func, second: unrelated actions with appraise and a do action"
+> +rule="appraise func=FILE_CHECK"
+> +ima_policy="appraise func=FILE_CHECK\nmeasure func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
+
+Refer to comment above on different action rules for same func.
+
+> +desc="first: unrelated actions with appraise and a do action, same func, second: same actions"
+> +rule="appraise func=FILE_CHECK"
+> +ima_policy="measure func=FILE_CHECK\nappraise func=FILE_CHECK"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
+> +
+> +desc="first: same actions, same func, same mask, second: different policy options"
+> +rule="appraise mask=MAY_READ func=FILE_CHECK"
+> +ima_policy="appraise func=FILE_CHECK mask=MAY_READ\nappraise func=FILE_CHECK mask=MAY_READ permit_directio"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
+> +
+> +desc="first: same actions, same func with alias, same mask, second: different policy options"
+> +rule="appraise mask=MAY_READ func=FILE_CHECK"
+> +ima_policy="appraise func=PATH_CHECK mask=MAY_READ\nappraise func=FILE_CHECK mask=MAY_READ permit_directio"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
+> +
+> +# Non-overlapping and three rules.
+> +desc="same actions, same func and mask, different uid"
+> +rule="appraise mask=MAY_READ func=FILE_CHECK uid=0"
+> +ima_policy="appraise mask=MAY_READ func=FILE_CHECK uid=1\nappraise mask=MAY_READ func=FILE_CHECK uid=2\nappraise mask=MAY_READ func=FILE_CHECK uid=3"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> +
+> +desc="same actions, same func and mask, different uid, except one that is the same"
+> +rule="appraise mask=MAY_READ func=FILE_CHECK uid=0"
+> +ima_policy="appraise mask=MAY_READ func=FILE_CHECK uid=1\nappraise mask=MAY_READ func=FILE_CHECK uid=0\nappraise mask=MAY_READ func=FILE_CHECK uid=3"
+> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+
+-- 
+thanks,
+
+Mimi
+
+
