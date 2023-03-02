@@ -2,196 +2,345 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3366A7A70
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Mar 2023 05:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3E36A8279
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Mar 2023 13:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjCBETX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Mar 2023 23:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S229496AbjCBMlm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Mar 2023 07:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjCBESd (ORCPT
+        with ESMTP id S229457AbjCBMll (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Mar 2023 23:18:33 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12hn2213.outbound.protection.outlook.com [52.100.167.213])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A222305E5;
-        Wed,  1 Mar 2023 20:18:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NYSXb8/jJg9GS+G8Pe2HeJG0AH3P3HLjlK6iQKtFB++/2q2G+fN+cvlLRuYBWKafOt0xBGGkLbvt0XyOugk6sL/aM3LC0XKlcJEsmjDkpaf52YcPr7Sf4qcFs0q/xFaRLoRoCei47G/e1/421E5Tj70JHdBiJv9gRHcaEcWZieKNmI6xcTfbD4RR4yl1/OrvpfALszob/zSyUKq3Vco57gmAtUNyF691tr+4poUYJKABUtfxAE/ibdy1scfK9rNrYZ+/LMi/X+AfORvpRGAyUeo3nV54vw3iRUyfnrGaoFU+i0A80L7YemZ84uIbBCSgq0maIXxwqHRjHHOX7Btauw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z6cfpwnnVrUbHlknS5XSwMZgssAwk958FxhAcSDRmG8=;
- b=m/YloCqmFeGPT2pnNeB/25qddEtuQsEEC4qb9Knond/DJKGSlwRxH+zYMxxgIUwcuizNukRWmw9ukZHarzpVXwbEtHgOqInYIhKStkfh74G+b+jz2hz+tqAVlzV0M0S8reCPTPV4ZaJDhiaa0q0Qk/GP4NBo1yayxQ93jujvUyCXGdWBdVJq82LcI7nngQL3CgcWj+Y+KBhuDuGLwRtc3GS1yGRf9AY88+2AIyb6X6F66CHeiKquNS2p67DUJBHG6gGQYQYZfe5EG+1hkLihbc5LRcsExhHBEqdeu3J5QbK90EfkpctxwhmgbE2TVd6npGYpLeeYLF/1CFIjYXcbPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z6cfpwnnVrUbHlknS5XSwMZgssAwk958FxhAcSDRmG8=;
- b=ApID+C0tU3YeKgax7/oe9ObeCkjwYLl9VcnBwn6QqxKk7fUhzE3BTgRBxk7oZMdXpISm/8JLRtClyhd/f8uE+C85OtzZ5QZ2yvc+oZJPsrHIzmwnQpWQVnDWgXv2sQ+c8O4F3XuHcXsfovQKwZOtaB/tCyjMkFYooVypTdYjbhMC/mTfdS1waJIeQhyY2kpYmztemlO1yeNrjjwuEcaJhn8v3O9rWi6ugtU6KdBm+wMtqugEajDadbhM5z/NLO+kknq7PfxaGayz3ZAnSuB5FC48RNjURROWN2k/hmKGQirKmB1J++vkUYhzDKqYsN9wQx6cWUicultvEgqhMJy1gg==
-Received: from DS7PR03CA0029.namprd03.prod.outlook.com (2603:10b6:5:3b8::34)
- by DS7PR12MB6238.namprd12.prod.outlook.com (2603:10b6:8:96::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17; Thu, 2 Mar
- 2023 04:18:29 +0000
-Received: from DM6NAM11FT114.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b8:cafe::a7) by DS7PR03CA0029.outlook.office365.com
- (2603:10b6:5:3b8::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18 via Frontend
- Transport; Thu, 2 Mar 2023 04:18:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT114.mail.protection.outlook.com (10.13.172.206) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.12 via Frontend Transport; Thu, 2 Mar 2023 04:18:29 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 1 Mar 2023
- 20:18:28 -0800
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Wed, 1 Mar 2023
- 20:18:27 -0800
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server id 15.2.986.5 via Frontend
- Transport; Wed, 1 Mar 2023 20:18:23 -0800
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <robh+dt@kernel.org>, <broonie@kernel.org>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>, <jarkko@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [Patch V8 3/3] spi: tegra210-quad: Enable TPM wait polling
-Date:   Thu, 2 Mar 2023 09:48:04 +0530
-Message-ID: <20230302041804.24718-4-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230302041804.24718-1-kyarlagadda@nvidia.com>
-References: <20230302041804.24718-1-kyarlagadda@nvidia.com>
-X-NVConfidentiality: public
+        Thu, 2 Mar 2023 07:41:41 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A41446148
+        for <linux-integrity@vger.kernel.org>; Thu,  2 Mar 2023 04:41:23 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PS9Tn2hVLz9xxmq
+        for <linux-integrity@vger.kernel.org>; Thu,  2 Mar 2023 20:32:13 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBnOF9emQBk_ZtjAQ--.9401S2;
+        Thu, 02 Mar 2023 13:41:08 +0100 (CET)
+Message-ID: <f1400ec253c961fb7bf321f6a0a44c75e15940c2.camel@huaweicloud.com>
+Subject: Re: [PATCH ima-evm-utils v3] Add ima_policy_check.awk and
+ ima_policy_check.test
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 02 Mar 2023 13:40:57 +0100
+In-Reply-To: <0d74908c26c59c9605c80060fd78f543f2f4f470.camel@linux.ibm.com>
+References: <20230228175859.193798-1-roberto.sassu@huaweicloud.com>
+         <0d74908c26c59c9605c80060fd78f543f2f4f470.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT114:EE_|DS7PR12MB6238:EE_
-X-MS-Office365-Filtering-Correlation-Id: a81d767b-eea6-4059-44e8-08db1ad52d93
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Bym+l8Iz0mv1GqPrwH1cs2oLtYefLreGcb5oxl9U9TuommyORAu+Okz5rYMoRnXAXDxSKty0AK0IMsdXL53VO3oGK8XwOufOAN/A2I8rkBPtm667nOR8dTFs+Qs2f4Yp32gcsiFV1uGJM0g9RXMcZ0tUs9moDRxiHndSTKkze0XRroyN2M2VWo7CzSqaoWWE8+g8FjIQsRcJFtZCVun5vxLjVyHrmkOXxY92x1N23v+D9HP1wC+jRCuGV/ao17ycwUSr22hAzvUVdhiXqK4Ez1lsZCk+1aI1zOYc2QGRTcNvLAPUtR8Bnr0P033BRf6N1BV1/YqAwawBsTJ8gF/fBh6/zaIAgNm3B5HW72iNcb+TlT3SWEjI+p2zD4KA1HEf4pTOj2qySVI++RCqhwYiMW/9pWNN96lcKOVQGG20g1zX8n+TovkyJPx5W7rKDdjPAZQ9rpnUwzmG1PWXO86f5BjBpj7VyuueTL/x85jgPX2zkGuoSFyr4t5L+7vMeIp0pIb/JcTGB7TZRAGHb2cD9/X5nWxXXc6MEuJZqPk9ktgvwrEAE8AHl2jNsDK/0N+oqpFepKxlvsP4YAvnmoCh4TZ8oqYQO9b76F616CR6sZ4UUPVIMwkIoIGME5gvQvs9xVx4wp+ZBWw/PpICEa2tBG5VfevLiAXpLlMUZVQypwGCG2rEhH782GJKRLA6SFi+AqLv1x/zNEwVAz2D2m5Lkd8eFDgc/km4/o9d7o7pr+cLN/oylK6ljhM6SRWrQJbVMNiQTAw0PjKMS5mQzcmab9rqC48oQFumXgQ1EsFzzk0/TtGP2wMfuOhV3z8UFH60ryDxrQLdU5X449ZoGYX00w==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199018)(5400799012)(36840700001)(46966006)(40470700004)(4326008)(70206006)(36756003)(40480700001)(41300700001)(7416002)(8936002)(5660300002)(2906002)(86362001)(7636003)(921005)(356005)(8676002)(34020700004)(82740400003)(36860700001)(82310400005)(6666004)(107886003)(7696005)(54906003)(316002)(478600001)(110136005)(70586007)(83380400001)(47076005)(426003)(186003)(2616005)(40460700003)(1076003)(336012)(26005)(2101003)(83996005)(12100799018);DIR:OUT;SFP:1501;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 04:18:29.6633
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a81d767b-eea6-4059-44e8-08db1ad52d93
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT114.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6238
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwBnOF9emQBk_ZtjAQ--.9401S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3ur18Gr47AryUWr1DWry3Arb_yoW8Jr13uo
+        WfKrn0vFWUKF9Ik3WkCrs2qrWUW3Wfurs7J3y5Aa1YyFnFgr4kGay5Xw1YyF4kGwn8GF1S
+        kFyxX3s5AFyUKasxn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUU5Q7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+        6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+        CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+        0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3w
+        CI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVF
+        xhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAEBF1jj4ofOAACsf
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Trusted Platform Module requires flow control. As defined in TPM
-interface specification, client would drive MISO line at same cycle as
-last address bit on MOSI.
-Tegra234 and Tegra241 QSPI controllers have TPM wait state detection
-feature which is enabled for TPM client devices reported in SPI device
-mode bits.
+On Wed, 2023-03-01 at 19:18 -0500, Mimi Zohar wrote:
+> Hi Roberto,
+> 
+> Just a couple of comments below.
+> 
+> 
+> > diff --git a/tests/ima_policy_check.test b/tests/ima_policy_check.test
+> > new file mode 100755
+> > index 00000000000..3549009bb1c
+> > --- /dev/null
+> > +++ b/tests/ima_policy_check.test
+> > @@ -0,0 +1,245 @@
+> > +#!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +#
+> > +# Copyright (C) 2023 Roberto Sassu <roberto.sassu@huawei.com>
+> > +#
+> > +# Test for ima_policy_check.awk
+> > +
+> > +trap '_report_exit_and_cleanup' SIGINT SIGTERM EXIT
+> > +
+> > +cd "$(dirname "$0")" || exit 1
+> > +. ./functions.sh
+> > +
+> > +export PATH=$PWD:$PATH
+> > +
+> > +check_result() {
+> > +	local result
+> > +
+> > +	echo -e "\nTest: $1"
+> > +	echo "New rule: $2"
+> > +	echo "IMA policy: $3"
+> > +
+> > +	echo -n "Result (expect $4): "
+> > +
+> > +	echo -e "$2\n$3" | ima_policy_check.awk
+> > +	result=$?
+> > +
+> > +	if [ "$result" -ne "$4" ]; then
+> > +		echo "${RED}$result${NORM}"
+> > +		return "$FAIL"
+> > +	fi
+> > +
+> > +	echo "${GREEN}$result${NORM}"
+> > +	return "$OK"
+> > +}
+> > +
+> > +# ima_policy_check.awk returns a bit mask with the following values:
+> > +# - 1: invalid new rule;
+> > +# - 2: overlap of the new rule with an existing rule in the IMA policy;
+> > +# - 4: new rule exists in the IMA policy.
+> > +
+> > +# Basic checks.
+> > +desc="empty IMA policy"
+> > +rule="measure func=FILE_CHECK"
+> > +ima_policy=""
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="Empty new rule"
+> > +rule=""
+> > +ima_policy=""
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
+> > +
+> > +desc="Unknown policy keyword fun"
+> > +rule="measure fun=FILE_CHECK"
+> > +ima_policy=""
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
+> > +
+> > +desc="Missing action"
+> > +rule="func=FILE_CHECK"
+> > +ima_policy=""
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
+> > +
+> > +# Non-overlapping rules.
+> > +desc="Non-overlapping by action measure/dont_appraise, same func"
+> > +rule="measure func=FILE_CHECK"
+> > +ima_policy="dont_appraise func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="Non-overlapping by action audit/dont_appraise, same func"
+> > +rule="audit func=FILE_CHECK"
+> > +ima_policy="dont_appraise func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="Non-overlapping by action appraise/dont_measure, same func"
+> > +rule="appraise func=FILE_CHECK"
+> > +ima_policy="dont_measure func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="Non-overlapping by action dont_measure/hash, same func"
+> > +rule="dont_measure func=FILE_CHECK"
+> > +ima_policy="hash func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="Non-overlapping by func"
+> > +rule="measure func=FILE_CHECK"
+> > +ima_policy="measure func=MMAP_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="Non-overlapping by uid, func is equal"
+> > +rule="measure func=FILE_CHECK uid=0"
+> > +ima_policy="measure uid=1 func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="Non-overlapping by uid, func is equal, same policy options"
+> > +rule="measure func=FILE_CHECK uid=0 permit_directio"
+> > +ima_policy="measure uid=1 func=FILE_CHECK permit_directio"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="Non-overlapping by mask, func and uid are equal, same policy options"
+> > +rule="measure func=FILE_CHECK uid=0 permit_directio mask=MAY_READ"
+> > +ima_policy="measure uid=0 mask=MAY_EXEC func=FILE_CHECK permit_directio"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="Non-overlapping by mask, func and uid are equal, different policy options"
+> > +rule="measure func=FILE_CHECK uid=0 permit_directio mask=MAY_READ"
+> > +ima_policy="measure uid=0 mask=MAY_EXEC func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +# Overlapping and different rules.
+> > +desc="same actions, different keywords"
+> > +rule="appraise func=FILE_CHECK"
+> > +ima_policy="appraise uid=0"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +desc="unrelated actions with appraise and a do action, same func"
+> > +rule="appraise func=FILE_CHECK"
+> > +ima_policy="measure func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> 
+> All the different actions - appraise, measure, audit - are applied for
+> the same hook.  If the appraise rule func is "FILE_CHECK", then for any
+> other func, the rules would overlap. 
 
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- drivers/spi/spi-tegra210-quad.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Hi Mimi
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index 0b9bc3b7f53a..82aec6cb7863 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -142,6 +142,7 @@
- 
- #define QSPI_GLOBAL_CONFIG			0X1a4
- #define QSPI_CMB_SEQ_EN				BIT(0)
-+#define QSPI_TPM_WAIT_POLL_EN			BIT(1)
- 
- #define QSPI_CMB_SEQ_ADDR			0x1a8
- #define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
-@@ -164,6 +165,7 @@
- struct tegra_qspi_soc_data {
- 	bool has_dma;
- 	bool cmb_xfer_capable;
-+	bool supports_tpm;
- 	unsigned int cs_count;
- };
- 
-@@ -1065,6 +1067,12 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
- 
- 	/* Enable Combined sequence mode */
- 	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
-+	if (spi->mode & SPI_TPM_HW_FLOW) {
-+		if (tqspi->soc_data->supports_tpm)
-+			val |= QSPI_TPM_WAIT_POLL_EN;
-+		else
-+			return -EIO;
-+	}
- 	val |= QSPI_CMB_SEQ_EN;
- 	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
- 	/* Process individual transfer list */
-@@ -1196,6 +1204,8 @@ static int tegra_qspi_non_combined_seq_xfer(struct tegra_qspi *tqspi,
- 	/* Disable Combined sequence mode */
- 	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
- 	val &= ~QSPI_CMB_SEQ_EN;
-+	if (tqspi->soc_data->supports_tpm)
-+		val &= ~QSPI_TPM_WAIT_POLL_EN;
- 	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
- 	list_for_each_entry(transfer, &msg->transfers, transfer_list) {
- 		struct spi_transfer *xfer = transfer;
-@@ -1454,24 +1464,28 @@ static irqreturn_t tegra_qspi_isr_thread(int irq, void *context_data)
- static struct tegra_qspi_soc_data tegra210_qspi_soc_data = {
- 	.has_dma = true,
- 	.cmb_xfer_capable = false,
-+	.supports_tpm = false,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra186_qspi_soc_data = {
- 	.has_dma = true,
- 	.cmb_xfer_capable = true,
-+	.supports_tpm = false,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra234_qspi_soc_data = {
- 	.has_dma = false,
- 	.cmb_xfer_capable = true,
-+	.supports_tpm = true,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra241_qspi_soc_data = {
- 	.has_dma = false,
- 	.cmb_xfer_capable = true,
-+	.supports_tpm = true,
- 	.cs_count = 4,
- };
- 
--- 
-2.17.1
+yes. But also, if two tests add respectively appraise func=MMAP_CHECK
+and measure func=FILE_CHECK, if we say that they don't overlap, we are
+implying that there won't be mmap operations in the second test.
+
+I would be more on the safe side, and say that if there is an appraise
+rule, different func values won't lead to no overlap.
+
+> > +
+> > +desc="related actions, same func"
+> > +rule="measure func=FILE_CHECK"
+> > +ima_policy="dont_measure func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +desc="related actions, same func, different policy options"
+> > +rule="measure func=FILE_CHECK"
+> > +ima_policy="dont_measure func=FILE_CHECK permit_directio"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +desc="related actions, same func, different policy options"
+> > +rule="measure func=FILE_CHECK permit_directio"
+> > +ima_policy="dont_measure func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +desc="same actions, same func, same mask with different modifier"
+> > +rule="measure func=FILE_CHECK mask=MAY_EXEC"
+> > +ima_policy="measure func=FILE_CHECK mask=^MAY_EXEC"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +desc="same actions, same func, different mask with same modifier"
+> > +rule="measure func=FILE_CHECK mask=^MAY_READ"
+> > +ima_policy="measure func=FILE_CHECK mask=^MAY_EXEC"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +desc="same actions, same func, different policy options"
+> > +rule="measure func=FILE_CHECK"
+> > +ima_policy="measure func=FILE_CHECK permit_directio"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +desc="same actions, same func, different policy options"
+> > +rule="measure func=FILE_CHECK permit_directio"
+> > +ima_policy="measure func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +desc="same actions, MMAP_CHECK and MMAP_CHECK_REQPROT hooks"
+> > +rule="measure func=MMAP_CHECK"
+> > +ima_policy="measure func=MMAP_CHECK_REQPROT"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +desc="related actions, same func, same mask with same modifier"
+> > +rule="measure func=FILE_CHECK mask=^MAY_EXEC"
+> > +ima_policy="dont_measure func=FILE_CHECK mask=^MAY_EXEC"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +desc="same actions, same func, different uid with same operator"
+> > +rule="measure func=FILE_CHECK uid>0"
+> > +ima_policy="measure func=FILE_CHECK uid>1"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> 
+> Please add a comment here before the < > test, indicating these
+> operators are currently not supported.
+
+Ok.
+
+Thanks
+
+Roberto
+
+> > +desc="same actions, same func, same uid with different operator"
+> > +rule="measure func=FILE_CHECK uid>1"
+> > +ima_policy="measure func=FILE_CHECK uid<1"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
+> > +
+> > +# Overlapping and same rules.
+> > +desc="same actions, same func"
+> > +rule="appraise func=FILE_CHECK"
+> > +ima_policy="appraise func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> > +
+> > +desc="same actions, same func, same mask"
+> > +rule="appraise mask=MAY_READ func=FILE_CHECK"
+> > +ima_policy="appraise func=FILE_CHECK mask=MAY_READ"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> > +
+> > +desc="same actions, same func, same mask, same policy options"
+> > +rule="appraise mask=MAY_READ func=FILE_CHECK permit_directio appraise_type=imasig"
+> > +ima_policy="appraise func=FILE_CHECK mask=MAY_READ permit_directio appraise_type=imasig"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> > +
+> > +desc="same actions, same func"
+> > +rule="measure func=MMAP_CHECK_REQPROT"
+> > +ima_policy="measure func=MMAP_CHECK_REQPROT"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> > +
+> > +desc="same actions, same func with alias"
+> > +rule="measure func=FILE_CHECK"
+> > +ima_policy="measure func=PATH_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> > +
+> > +desc="same actions, same func with alias, same mask with same modifiers"
+> > +rule="measure mask=^MAY_READ func=FILE_CHECK"
+> > +ima_policy="measure func=PATH_CHECK mask=^MAY_READ"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> > +
+> > +desc="same actions, same func with alias and same mask with same modifiers, same uid with same operators"
+> > +rule="measure mask=^MAY_READ uid>0 func=FILE_CHECK"
+> > +ima_policy="measure func=PATH_CHECK mask=^MAY_READ uid>0"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> > +
+> > +desc="same actions, same func with alias and same mask with same modifiers, same uid with same operators"
+> > +rule="measure mask=^MAY_READ uid<1 func=FILE_CHECK"
+> > +ima_policy="measure func=PATH_CHECK mask=^MAY_READ uid<1"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
+> > +
+> > +# Overlapping and two rules (one same, one different).
+> > +desc="first: same actions, same func, second: unrelated actions with appraise and a do action"
+> > +rule="appraise func=FILE_CHECK"
+> > +ima_policy="appraise func=FILE_CHECK\nmeasure func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
+> 
+> Refer to comment above on different action rules for same func.
+> 
+> > +desc="first: unrelated actions with appraise and a do action, same func, second: same actions"
+> > +rule="appraise func=FILE_CHECK"
+> > +ima_policy="measure func=FILE_CHECK\nappraise func=FILE_CHECK"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
+> > +
+> > +desc="first: same actions, same func, same mask, second: different policy options"
+> > +rule="appraise mask=MAY_READ func=FILE_CHECK"
+> > +ima_policy="appraise func=FILE_CHECK mask=MAY_READ\nappraise func=FILE_CHECK mask=MAY_READ permit_directio"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
+> > +
+> > +desc="first: same actions, same func with alias, same mask, second: different policy options"
+> > +rule="appraise mask=MAY_READ func=FILE_CHECK"
+> > +ima_policy="appraise func=PATH_CHECK mask=MAY_READ\nappraise func=FILE_CHECK mask=MAY_READ permit_directio"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
+> > +
+> > +# Non-overlapping and three rules.
+> > +desc="same actions, same func and mask, different uid"
+> > +rule="appraise mask=MAY_READ func=FILE_CHECK uid=0"
+> > +ima_policy="appraise mask=MAY_READ func=FILE_CHECK uid=1\nappraise mask=MAY_READ func=FILE_CHECK uid=2\nappraise mask=MAY_READ func=FILE_CHECK uid=3"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
+> > +
+> > +desc="same actions, same func and mask, different uid, except one that is the same"
+> > +rule="appraise mask=MAY_READ func=FILE_CHECK uid=0"
+> > +ima_policy="appraise mask=MAY_READ func=FILE_CHECK uid=1\nappraise mask=MAY_READ func=FILE_CHECK uid=0\nappraise mask=MAY_READ func=FILE_CHECK uid=3"
+> > +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
 
