@@ -2,367 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A676A7850
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Mar 2023 01:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9692C6A7984
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Mar 2023 03:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCBATD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Mar 2023 19:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
+        id S229453AbjCBCde (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Mar 2023 21:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjCBATC (ORCPT
+        with ESMTP id S229451AbjCBCdd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Mar 2023 19:19:02 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C81E4AFFA
-        for <linux-integrity@vger.kernel.org>; Wed,  1 Mar 2023 16:19:01 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 321NOt6S015442;
-        Thu, 2 Mar 2023 00:18:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=1KD/pJ7JjyHRU5ZHhasLIKR4nRETKmSTFvn8DOL4Mpo=;
- b=lUrLcrMOnhXIH2TJAMsEHM2AnSUerzHG88DISE9+44vyyS+DaQqPq4VdQhbbcbT2NNr9
- B/oOcxexzLkdEB8I4u0+47A3qwoad+Vi1Q08By/cDcJ5hDkr+K+F4zTuppJk6SxL6xoW
- ZdpODkLNEenClU2jXzvUmrcPF0SB6lV5boLbeef7p6qxd0eIsXEu185VhQdQjdA+q0oQ
- 6/cQSbocVQxO25IuoFoOXFKuMEHsjRvN25kWXKKeufkqZCO5xt+7OATZGn+B03bZJMIa
- HxykJ7anRaCxIEWXlqL+fNznGrgu/LDMLGY0cosyxezsCWtPJnMfktVKPr9vY64NgxTl +w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2gbt14hh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 00:18:44 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32206Es5029556;
-        Thu, 2 Mar 2023 00:18:43 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2gbt14h2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 00:18:43 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 321MjA2Z020135;
-        Thu, 2 Mar 2023 00:18:43 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3nybe21ut4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 00:18:42 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3220IfK455378242
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Mar 2023 00:18:41 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7BD9858056;
-        Thu,  2 Mar 2023 00:18:41 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0082258052;
-        Thu,  2 Mar 2023 00:18:41 +0000 (GMT)
-Received: from sig-9-65-203-8.ibm.com (unknown [9.65.203.8])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Mar 2023 00:18:40 +0000 (GMT)
-Message-ID: <0d74908c26c59c9605c80060fd78f543f2f4f470.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v3] Add ima_policy_check.awk and
- ima_policy_check.test
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 01 Mar 2023 19:18:40 -0500
-In-Reply-To: <20230228175859.193798-1-roberto.sassu@huaweicloud.com>
-References: <20230228175859.193798-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: kEC5gsaMjmJfIraOE-A8XpNwb5IzKV01
-X-Proofpoint-ORIG-GUID: esBgMKhfGfH07d_6_0IFAxXV0kxccaiN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-01_15,2023-03-01_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 spamscore=0
- suspectscore=0 malwarescore=0 clxscore=1011 mlxlogscore=999
- impostorscore=0 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303010189
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Mar 2023 21:33:33 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4E61ACFC
+        for <linux-integrity@vger.kernel.org>; Wed,  1 Mar 2023 18:33:31 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id i10so16094571plr.9
+        for <linux-integrity@vger.kernel.org>; Wed, 01 Mar 2023 18:33:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1677724410;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b0lZNoVt9lJ6J8uwaJdMmpDSpbdScMq/0KTuhIjVkUQ=;
+        b=LBK+rKiKoXKZ/dbsn6xOP1h/1DdhUKpftUh9e+mkGx24Ct1QSUdx91ynl9oxmsdOmu
+         AY8rWlxThr7PyU90SvB4UXjE6M5VHvjWx4KfK9GsYGkN3hLA/9NX+ZGRYO521cn5HoV/
+         L4jLAkDTaJkUj2nKsaBy/Az+XIjOhnJpuKJKZ477nIPry0z8rgcjlZ2QsKxicDEtQVKp
+         qFpzchl85bH4lVPP54ms7k/a61sS9zFQWXTwWJRVD0naVRlEs9F3Hyi4XBBHf5kj6brb
+         ssow4TEkTpN1pS5sL1n+r5CheMH8kPZkPSRkwSE7afnWqqvApSlU63NoKvUKbd68prZj
+         EoXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677724410;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b0lZNoVt9lJ6J8uwaJdMmpDSpbdScMq/0KTuhIjVkUQ=;
+        b=kqG1ly/EHZyA/70Z81CKssHkDHRo2ygM0Zaam9pKAyyBP4/N4vsHrYd6cBn4n5uVrM
+         K5YZjxm/rcuYVoKkmoulp9qF/NGBwdRtWmerwWfno10bwn0+nl2CJMFU9+HkCMNgKxhl
+         ybeji0nmGy1eh3/H7Fl/uI0VZdX7xLVHar1POj8mqvX7WcRj+qfIrdhtqkmn0HsHZo0O
+         1BVyw8RKFc7MiPaP42j7Uer/tkrt3mwFrMLVd6FyaIk/0Ulg0sORYKgRgVOric3ALmgi
+         ZVY3E+FtfhoUP4YIOnXIixZY5nueJkQliP3kE1La6yfSMwlODvZg93dOD5+mc4+uNpyr
+         bhdg==
+X-Gm-Message-State: AO0yUKXq3EXX55Fu3eSKyQDBZdG4KVz499r0YILJ7qWA6z3gprSPjgMP
+        RwgIxW9YuKq5tfq5bvRLleBsQmB/zkxHOoTevtuP
+X-Google-Smtp-Source: AK7set+xzLCM6twBgJCibMqi0G3TLp91UnzEQU5FoUMwEXykcRoWlNU/HbsG/K6w+XprDCA87nJQJ5CJfxasDk2ZryU=
+X-Received: by 2002:a17:903:2782:b0:19b:373:94ad with SMTP id
+ jw2-20020a170903278200b0019b037394admr3206594plb.3.1677724410550; Wed, 01 Mar
+ 2023 18:33:30 -0800 (PST)
+MIME-Version: 1.0
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-4-git-send-email-wufan@linux.microsoft.com>
+ <061df661004a06ef1e8790d48157c7ba4ecfc009.camel@huaweicloud.com> <20230210232154.GA17962@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20230210232154.GA17962@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 1 Mar 2023 21:33:19 -0500
+Message-ID: <CAHC9VhShcgFtdxxoFX9x+QOM3Qb7xWa-AJuJGrHgaK_N8nKtzQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v9 03/16] ipe: add evaluation loop and introduce
+ 'boot_verified' as a trust provider
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
+On Fri, Feb 10, 2023 at 6:21=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+wrote:
+> On Tue, Jan 31, 2023 at 04:49:44PM +0100, Roberto Sassu wrote:
+> > On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > >
+> > > IPE must have a centralized function to evaluate incoming callers
+> > > against IPE's policy. This iteration of the policy against the rules
+> > > for that specific caller is known as the evaluation loop.
+> >
+> > Not sure if you check the properties at every access.
+> >
+> > >From my previous comments (also for previous versions of the patches)
+> > you could evaluate the property once, by calling the respective
+> > functions in the other subsystems.
+> >
+> > Then, you reserve space in the security blob for inodes and superblocks
+> > to cache the decision. The format could be a policy sequence number, to
+> > ensure that the cache is valid only for the current policy, and a bit
+> > for every hook you enforce.
+>
+> Thanks for raising this idea. I agree that if the property evaluation
+> leads to a performance issue, it will be better to cache the evaluation
+> result. But for this version, all the property evaluations are simple,
+> so it is just as fast as accessing a cache. Also, for the initial
+> version we prefer to keep the patch as minimal as possible.
 
-Just a couple of comments below.
+FWIW, I think that is the right decision.  Keeping the initial
+submission relatively small and focused has a lot of advantages when
+it comes both to review and prematurely optimizing things that might
+not need optimization.
 
-
-> diff --git a/tests/ima_policy_check.test b/tests/ima_policy_check.test
-> new file mode 100755
-> index 00000000000..3549009bb1c
-> --- /dev/null
-> +++ b/tests/ima_policy_check.test
-> @@ -0,0 +1,245 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Copyright (C) 2023 Roberto Sassu <roberto.sassu@huawei.com>
-> +#
-> +# Test for ima_policy_check.awk
-> +
-> +trap '_report_exit_and_cleanup' SIGINT SIGTERM EXIT
-> +
-> +cd "$(dirname "$0")" || exit 1
-> +. ./functions.sh
-> +
-> +export PATH=$PWD:$PATH
-> +
-> +check_result() {
-> +	local result
-> +
-> +	echo -e "\nTest: $1"
-> +	echo "New rule: $2"
-> +	echo "IMA policy: $3"
-> +
-> +	echo -n "Result (expect $4): "
-> +
-> +	echo -e "$2\n$3" | ima_policy_check.awk
-> +	result=$?
-> +
-> +	if [ "$result" -ne "$4" ]; then
-> +		echo "${RED}$result${NORM}"
-> +		return "$FAIL"
-> +	fi
-> +
-> +	echo "${GREEN}$result${NORM}"
-> +	return "$OK"
-> +}
-> +
-> +# ima_policy_check.awk returns a bit mask with the following values:
-> +# - 1: invalid new rule;
-> +# - 2: overlap of the new rule with an existing rule in the IMA policy;
-> +# - 4: new rule exists in the IMA policy.
-> +
-> +# Basic checks.
-> +desc="empty IMA policy"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy=""
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Empty new rule"
-> +rule=""
-> +ima_policy=""
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
-> +
-> +desc="Unknown policy keyword fun"
-> +rule="measure fun=FILE_CHECK"
-> +ima_policy=""
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
-> +
-> +desc="Missing action"
-> +rule="func=FILE_CHECK"
-> +ima_policy=""
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 1
-> +
-> +# Non-overlapping rules.
-> +desc="Non-overlapping by action measure/dont_appraise, same func"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy="dont_appraise func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by action audit/dont_appraise, same func"
-> +rule="audit func=FILE_CHECK"
-> +ima_policy="dont_appraise func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by action appraise/dont_measure, same func"
-> +rule="appraise func=FILE_CHECK"
-> +ima_policy="dont_measure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by action dont_measure/hash, same func"
-> +rule="dont_measure func=FILE_CHECK"
-> +ima_policy="hash func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by func"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy="measure func=MMAP_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by uid, func is equal"
-> +rule="measure func=FILE_CHECK uid=0"
-> +ima_policy="measure uid=1 func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by uid, func is equal, same policy options"
-> +rule="measure func=FILE_CHECK uid=0 permit_directio"
-> +ima_policy="measure uid=1 func=FILE_CHECK permit_directio"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by mask, func and uid are equal, same policy options"
-> +rule="measure func=FILE_CHECK uid=0 permit_directio mask=MAY_READ"
-> +ima_policy="measure uid=0 mask=MAY_EXEC func=FILE_CHECK permit_directio"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="Non-overlapping by mask, func and uid are equal, different policy options"
-> +rule="measure func=FILE_CHECK uid=0 permit_directio mask=MAY_READ"
-> +ima_policy="measure uid=0 mask=MAY_EXEC func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +# Overlapping and different rules.
-> +desc="same actions, different keywords"
-> +rule="appraise func=FILE_CHECK"
-> +ima_policy="appraise uid=0"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="unrelated actions with appraise and a do action, same func"
-> +rule="appraise func=FILE_CHECK"
-> +ima_policy="measure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-
-All the different actions - appraise, measure, audit - are applied for
-the same hook.  If the appraise rule func is "FILE_CHECK", then for any
-other func, the rules would overlap. 
-
-> +
-> +desc="related actions, same func"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy="dont_measure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="related actions, same func, different policy options"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy="dont_measure func=FILE_CHECK permit_directio"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="related actions, same func, different policy options"
-> +rule="measure func=FILE_CHECK permit_directio"
-> +ima_policy="dont_measure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="same actions, same func, same mask with different modifier"
-> +rule="measure func=FILE_CHECK mask=MAY_EXEC"
-> +ima_policy="measure func=FILE_CHECK mask=^MAY_EXEC"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="same actions, same func, different mask with same modifier"
-> +rule="measure func=FILE_CHECK mask=^MAY_READ"
-> +ima_policy="measure func=FILE_CHECK mask=^MAY_EXEC"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="same actions, same func, different policy options"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy="measure func=FILE_CHECK permit_directio"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="same actions, same func, different policy options"
-> +rule="measure func=FILE_CHECK permit_directio"
-> +ima_policy="measure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="same actions, MMAP_CHECK and MMAP_CHECK_REQPROT hooks"
-> +rule="measure func=MMAP_CHECK"
-> +ima_policy="measure func=MMAP_CHECK_REQPROT"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +desc="related actions, same func, same mask with same modifier"
-> +rule="measure func=FILE_CHECK mask=^MAY_EXEC"
-> +ima_policy="dont_measure func=FILE_CHECK mask=^MAY_EXEC"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-
-> +desc="same actions, same func, different uid with same operator"
-> +rule="measure func=FILE_CHECK uid>0"
-> +ima_policy="measure func=FILE_CHECK uid>1"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-
-Please add a comment here before the < > test, indicating these
-operators are currently not supported.
-
-> +desc="same actions, same func, same uid with different operator"
-> +rule="measure func=FILE_CHECK uid>1"
-> +ima_policy="measure func=FILE_CHECK uid<1"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 2
-> +
-> +# Overlapping and same rules.
-> +desc="same actions, same func"
-> +rule="appraise func=FILE_CHECK"
-> +ima_policy="appraise func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
-> +
-> +desc="same actions, same func, same mask"
-> +rule="appraise mask=MAY_READ func=FILE_CHECK"
-> +ima_policy="appraise func=FILE_CHECK mask=MAY_READ"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
-> +
-> +desc="same actions, same func, same mask, same policy options"
-> +rule="appraise mask=MAY_READ func=FILE_CHECK permit_directio appraise_type=imasig"
-> +ima_policy="appraise func=FILE_CHECK mask=MAY_READ permit_directio appraise_type=imasig"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
-> +
-> +desc="same actions, same func"
-> +rule="measure func=MMAP_CHECK_REQPROT"
-> +ima_policy="measure func=MMAP_CHECK_REQPROT"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
-> +
-> +desc="same actions, same func with alias"
-> +rule="measure func=FILE_CHECK"
-> +ima_policy="measure func=PATH_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
-> +
-> +desc="same actions, same func with alias, same mask with same modifiers"
-> +rule="measure mask=^MAY_READ func=FILE_CHECK"
-> +ima_policy="measure func=PATH_CHECK mask=^MAY_READ"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
-> +
-> +desc="same actions, same func with alias and same mask with same modifiers, same uid with same operators"
-> +rule="measure mask=^MAY_READ uid>0 func=FILE_CHECK"
-> +ima_policy="measure func=PATH_CHECK mask=^MAY_READ uid>0"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
-> +
-> +desc="same actions, same func with alias and same mask with same modifiers, same uid with same operators"
-> +rule="measure mask=^MAY_READ uid<1 func=FILE_CHECK"
-> +ima_policy="measure func=PATH_CHECK mask=^MAY_READ uid<1"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
-> +
-> +# Overlapping and two rules (one same, one different).
-> +desc="first: same actions, same func, second: unrelated actions with appraise and a do action"
-> +rule="appraise func=FILE_CHECK"
-> +ima_policy="appraise func=FILE_CHECK\nmeasure func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
-
-Refer to comment above on different action rules for same func.
-
-> +desc="first: unrelated actions with appraise and a do action, same func, second: same actions"
-> +rule="appraise func=FILE_CHECK"
-> +ima_policy="measure func=FILE_CHECK\nappraise func=FILE_CHECK"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
-> +
-> +desc="first: same actions, same func, same mask, second: different policy options"
-> +rule="appraise mask=MAY_READ func=FILE_CHECK"
-> +ima_policy="appraise func=FILE_CHECK mask=MAY_READ\nappraise func=FILE_CHECK mask=MAY_READ permit_directio"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
-> +
-> +desc="first: same actions, same func with alias, same mask, second: different policy options"
-> +rule="appraise mask=MAY_READ func=FILE_CHECK"
-> +ima_policy="appraise func=PATH_CHECK mask=MAY_READ\nappraise func=FILE_CHECK mask=MAY_READ permit_directio"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 6
-> +
-> +# Non-overlapping and three rules.
-> +desc="same actions, same func and mask, different uid"
-> +rule="appraise mask=MAY_READ func=FILE_CHECK uid=0"
-> +ima_policy="appraise mask=MAY_READ func=FILE_CHECK uid=1\nappraise mask=MAY_READ func=FILE_CHECK uid=2\nappraise mask=MAY_READ func=FILE_CHECK uid=3"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 0
-> +
-> +desc="same actions, same func and mask, different uid, except one that is the same"
-> +rule="appraise mask=MAY_READ func=FILE_CHECK uid=0"
-> +ima_policy="appraise mask=MAY_READ func=FILE_CHECK uid=1\nappraise mask=MAY_READ func=FILE_CHECK uid=0\nappraise mask=MAY_READ func=FILE_CHECK uid=3"
-> +expect_pass check_result "$desc" "$rule" "$ima_policy" 4
-
--- 
-thanks,
-
-Mimi
-
-
+--=20
+paul-moore.com
