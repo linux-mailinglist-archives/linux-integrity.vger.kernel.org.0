@@ -2,153 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA3E6A8B76
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Mar 2023 23:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CB46A8E78
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Mar 2023 02:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjCBWGP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Mar 2023 17:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
+        id S229535AbjCCBEn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Mar 2023 20:04:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjCBWGJ (ORCPT
+        with ESMTP id S229513AbjCCBEn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:06:09 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EDB55AA
-        for <linux-integrity@vger.kernel.org>; Thu,  2 Mar 2023 14:06:01 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PSQCk4Np4z4x5X;
-        Fri,  3 Mar 2023 09:05:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1677794756;
-        bh=njD69v3qeL/tVCMhfNiTs5MobAt0JdOQQTm+aBdwWRc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=rmPnvfMg3GoJQDDhJlf4Rvyw1ed7sbTv5te2/xeBfNddk5N49v7FTLME4/8hWIb5S
-         3Ho/Cm+zvbgRm94hvzNc9YijkJUXUz2g9ojCzEIZQSnkhNQ8/Pjdm4ZXTT2s/8L6mR
-         QEXDW8Ru3Udc1/rlxh1DDPs67+cDO9MhgQD3O5tQMa4NbILJ3m5GqxZByAjEYFTpdc
-         Xf2H4ymHuSYPneDuilR0lJsuQIyai36uQzxJfSjp/OBPI2SNBgfgR5gJcMGfd8AFnZ
-         U/HW7AKZrxkED75qP+/Sayt+7/nO4TzS075iK6bh49qxf59dh5DEZf0tDCMcdx9L15
-         z5IqKwkVoyTgQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     linux-integrity@vger.kernel.org, yangyingliang@huawei.com,
-        eajames@linux.ibm.com, jgg@ziepe.ca, jarkko@kernel.org,
-        peterhuewe@gmx.de
-Subject: Re: [PATCH 2/2] powerpc/tpm: Reserve SML log when kexec'ing
-In-Reply-To: <6c5ee8fe-9970-54cb-263e-b8af7a25ed95@linux.ibm.com>
-References: <20230224032508.3331281-1-mpe@ellerman.id.au>
- <20230224032508.3331281-2-mpe@ellerman.id.au>
- <6c5ee8fe-9970-54cb-263e-b8af7a25ed95@linux.ibm.com>
-Date:   Fri, 03 Mar 2023 09:05:47 +1100
-Message-ID: <87bklalsg4.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Mar 2023 20:04:43 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3711B3E09B
+        for <linux-integrity@vger.kernel.org>; Thu,  2 Mar 2023 17:04:42 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3230v9nH009459;
+        Fri, 3 Mar 2023 01:04:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=sleqTtULt6bjITmKyTy80hL2r2xO8rYgJCVBPumQel8=;
+ b=m5ztyFGdI5A1RiS3KGw0q1E9BRhURbamYQHa6s2tT+riTBpcJRXt8/95afO+BQUfRrN9
+ iFvjeke3+DEFoZkyYzcEkRnZY5xxoiyKANfyimVVIVj4Sc5lPoU9VQ54FtXNw8X0PYEa
+ AC1mjIi8YOPwBKEpeiBb88VV8447Gd1rJEocjL3yx7OiXQe3cwZ20yNoWFmHJMhkE5D1
+ 8zMa2WW53d9hq9samBLGZ057+02zAKtPX0UY/i2Ua2rGb5MHfFU8+M9Sr5Z1N9vZcQwG
+ YKghVNjkh8iswgMCs1z3SPbVly8lKLkxDRn8sn9viDiBZwhB9iV4iIllPLIz/pVHJ3JI sA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p36e90n8f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 01:04:21 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3230vNM2010456;
+        Fri, 3 Mar 2023 01:04:20 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p36e90n7y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 01:04:20 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3230EFvb016107;
+        Fri, 3 Mar 2023 01:04:20 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3nybdm7tgs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 01:04:20 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32314IRV3277478
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Mar 2023 01:04:19 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AA61F5805F;
+        Fri,  3 Mar 2023 01:04:18 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D232258059;
+        Fri,  3 Mar 2023 01:04:17 +0000 (GMT)
+Received: from sig-9-65-202-48.ibm.com (unknown [9.65.202.48])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Mar 2023 01:04:17 +0000 (GMT)
+Message-ID: <2525a40a145cc51cf10d0b211ef9f58c9128482b.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils v7] Add tests for MMAP_CHECK and
+ MMAP_CHECK_REQPROT hooks
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 02 Mar 2023 20:04:17 -0500
+In-Reply-To: <20230302180502.618368-1-roberto.sassu@huaweicloud.com>
+References: <20230302180502.618368-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: F3jV38I8QDo6MFMYqo4ftEvORgUgfUo-
+X-Proofpoint-ORIG-GUID: tJ0kf1x1s1GWye2mz8HcFmDI15LkORD4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-02_15,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 spamscore=0 mlxscore=0 priorityscore=1501
+ suspectscore=0 mlxlogscore=865 phishscore=0 impostorscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303030003
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Stefan Berger <stefanb@linux.ibm.com> writes:
-> On 2/23/23 22:25, Michael Ellerman wrote:
->> The TPM code in prom_init.c creates a small buffer of memory to store
->> the TPM's SML (Stored Measurement Log). It's communicated to Linux via
->> the linux,sml-base/size device tree properties of the TPM node.
->> 
->> When kexec'ing that buffer can be overwritten, or when kdump'ing it may
->> not be mapped by the second kernel. The latter can lead to a crash when
->> booting the second kernel such as:
->> 
->>    tpm_ibmvtpm 71000003: CRQ initialization completed
->>    BUG: Unable to handle kernel data access on read at 0xc00000002ffb0000
->>    Faulting instruction address: 0xc0000000200a70e0
->>    Oops: Kernel access of bad area, sig: 11 [#1]
->>    LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
->>    Modules linked in:
->>    CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc2-00134-g9307ce092f5d #314
->>    Hardware name: IBM pSeries (emulated by qemu) POWER9 (raw) 0x4e1200 0xf000005 of:SLOF,git-5b4c5a pSeries
->>    NIP:  c0000000200a70e0 LR: c0000000203dd5dc CTR: 0000000000000800
->>    REGS: c000000024543280 TRAP: 0300   Not tainted  (6.2.0-rc2-00134-g9307ce092f5d)
->>    MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 24002280  XER: 00000006
->>    CFAR: c0000000200a70c8 DAR: c00000002ffb0000 DSISR: 40000000 IRQMASK: 0
->>    ...
->>    NIP memcpy_power7+0x400/0x7d0
->>    LR  kmemdup+0x5c/0x80
->>    Call Trace:
->>      memcpy_power7+0x274/0x7d0 (unreliable)
->>      kmemdup+0x5c/0x80
->>      tpm_read_log_of+0xe8/0x1b0
->>      tpm_bios_log_setup+0x60/0x210
->>      tpm_chip_register+0x134/0x320
->>      tpm_ibmvtpm_probe+0x520/0x7d0
->>      vio_bus_probe+0x9c/0x460
->>      really_probe+0x104/0x420
->>      __driver_probe_device+0xb0/0x170
->>      driver_probe_device+0x58/0x180
->>      __driver_attach+0xd8/0x250
->>      bus_for_each_dev+0xb4/0x140
->>      driver_attach+0x34/0x50
->>      bus_add_driver+0x1e8/0x2d0
->>      driver_register+0xb4/0x1c0
->>      __vio_register_driver+0x74/0x9c
->>      ibmvtpm_module_init+0x34/0x48
->>      do_one_initcall+0x80/0x320
->>      kernel_init_freeable+0x304/0x3ac
->>      kernel_init+0x30/0x1a0
->>      ret_from_kernel_thread+0x5c/0x64
->
-> I have not been able to reproduce this particular crash issue with a
-> 6.2 kernel running on P10 PowerVM when NOT applying your patches.
+On Thu, 2023-03-02 at 19:05 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Add tests to ensure that, after applying the kernel patch 'ima: Align
+> ima_file_mmap() parameters with mmap_file LSM hook', the MMAP_CHECK hook
+> checks the protections applied by the kernel and not those requested by the
+> application.
+> 
+> Also ensure that after applying 'ima: Introduce MMAP_CHECK_REQPROT hook',
+> the MMAP_CHECK_REQPROT hook checks the protections requested by the
+> application.
+> 
+> Test both with the test_mmap application that by default requests the
+> PROT_READ protection flag. Its syntax is:
+> 
+> test_mmap <file> <mode>
+> 
+> where mode can be:
+> - exec: adds the PROT_EXEC protection flag to mmap()
+> - read_implies_exec: calls the personality() system call with
+>                      READ_IMPLIES_EXEC as the first argument before mmap()
+> - mprotect: adds the PROT_EXEC protection flag to a memory area in addition
+>             to PROT_READ
+> - exec_on_writable: calls mmap() with PROT_EXEC on a file which has a
+>                     writable mapping
+> 
+> Check the different combinations of hooks/modes and ensure that a
+> measurement entry is found in the IMA measurement list only when it is
+> expected. No measurement entry should be found when only the PROT_READ
+> protection flag is requested or the matching policy rule has the
+> MMAP_CHECK_REQPROT hook and the personality() system call was called with
+> READ_IMPLIES_EXEC.
+> 
+> mprotect() with PROT_EXEC on an existing memory area protected with
+> PROT_READ should be denied (with an appraisal rule), regardless of the MMAP
+> hook specified in the policy. The same applies for mmap() with PROT_EXEC on
+> a file with a writable mapping.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-The crash only happens for a crashdump kernel, not a regular kexec.
+Thanks, Roberto.  Both this and the ima_policy_check test are now
+queued in next-testing.
 
-And depending on where the SML is in memory, compared to where the
-crashkernel is, the SML might be mapped accidentally in which case there
-is no crash.
+-- 
+thanks,
 
-> For my tests I have used the following parameter with the 16GB VM:
-> crashkernel=2G-4G:384M,4G-16G:1G,16G-64G:2G,64G-128G:2G,128G-:4G
+Mimi
 
-So you should be seeing a 2GB crashkernel reservation at 512MB.
-
-> What I noticed is that the log gets corrupted when the 2 patches are applied:
->
-> After fresh boot:
->
->> cp /sys/kernel/security/tpm0/binary_bios_measurements ./
->> ls -l binary_bios_measurements
-> -r--r-----. 1 root root 10051 Feb 28 12:09 binary_bios_measurements
->
->
->> kexec -l /boot/vmlinuz-6.2.0+ --initrd /boot/initramfs-6.2.0+.img '--append=BOOT_IMAGE=/vmlinuz-6.2.0+ root=/dev/mapper/rhel_XYZ ro crashkernel=2G-4G:384M,4G-16G:1G,16G-64G:2G,64G-128G:2G,128G-:4G rd.lvm.lv=rhel_XYZ/root rd.lvm.lv=rhel_XYZ/swap biosdevname=0' -s
->> kexec -e
-
-That's a normal kexec, not a crash kexec, so it doesn't use the
-crashkernel region mentioned above.
-
->> cp /sys/kernel/security/tpm0/binary_bios_measurements ./
->> ls -l binary_bios_measurements
-> -r--r-----. 1 root root 32 Feb 28 12:10 binary_bios_measurements
->
->> od -t x1 < binary_bios_measurements
-> 0000000 d0 0d fe ed 00 00 77 80 00 00 00 a0 00 00 4f 4c
-> 0000020 00 00 00 28 00 00 00 11 00 00 00 11 00 00 00 00
-> 0000040
-
-That's a device tree header !? O_o
-
-#define OF_DT_HEADER		0xd00dfeed	/* marker */
-
-> The contents have changed and these first 4 bytes of it are always the
-> same once it has become this 32 byte file, otherwise they would be
-> zero.
-
-I'm not sure what's happening there. We'll need to debug it some more :/
-
-cheers
