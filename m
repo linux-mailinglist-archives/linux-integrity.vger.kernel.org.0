@@ -2,201 +2,712 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1431C6AE107
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Mar 2023 14:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DE86AE794
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Mar 2023 17:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjCGNql (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Mar 2023 08:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        id S231287AbjCGQ7G (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Mar 2023 11:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbjCGNqR (ORCPT
+        with ESMTP id S230504AbjCGQ6M (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:46:17 -0500
-Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A5F838A4;
-        Tue,  7 Mar 2023 05:45:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenovo.com;
-        s=Selector; t=1678196745; i=@lenovo.com;
-        bh=5TKtPd3FIrRGX5rbWKXZw7weseOfLoQkBcYoBvOS0p4=;
-        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-         In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        b=jTT7v17TVQv+LxJ4aPSUjlYnCUq/qa1Q6NJybE81gCFhAQxSMRljA7beCTfr13P7o
-         jVmjLYamryl87xeCYLGV3f5C9oizjuONAqBc1kTPlTCGY1zP0yw5NV04yL8zIUchl3
-         SYDZAk/LKcCdlWtVMfNTIdThSvE+6atjTiJc4ib7hU3bWrxl4ztXM9G9/+viHrYsnP
-         TO/YhuQ5O+U3QKqkjpCl5GAFxYkfCWIkZR6x+xjAlrnuqJnfLv/rdW6nEfgth11lzj
-         EhRwCjCL0z2uLxEmhdTm0TdcVughPinG/ZVMivm1+YFhAV9YYJ5HIsMLlomZbNeV9d
-         f8tdUpS52laLA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA1WTf0wTZxjH+95dr0fllqOV8VIRWEFdcO0kLu7
-  CAjiTxbpoJMaYoNnksGfbpBTWK4gsy1r8Y4Db5NcklE6GsvJDplAZvxywIbDCRBq0TituwfHD
-  EXCom4LOZdceOvbf5/t+n/d9vk/yvAQqW8AVBJtrYc0mxqjEpZj+dYVKRWyVaDctzr9K38t/i
-  tElDWUoXbpUDOifT1kl9Lfj+TjtvjIooa92OXB64dM7OO2z12N033wFvlWqudbThGiKOr9BNB
-  fq4zSuxkJc80ePF9dU1d7ANA9dkSmS/WKDKT0zN02s97WcRrOWyNzK83cRK6hbVQSkBKC+RmG
-  JZxYVxGkxrG3qFguiDIFTt20Sv5BRXyLw9/xSRBD9CPxipBz4BaR+BPB437llpxDAxdlhTBAl
-  CPxusJYvC+LFbwAWNMkFYwLAmuKpgEFSibB+ekzsZ4yKhVcn6pbPQ+BQ5STm51AqFX7S1YH4W
-  c6zbckRqEepMOibrA60Xk1VAGj/0xXIjlLtCHRONoiFduUo9I55A1dwaiNsbX2CFwGCCKL2wM
-  tznPASDc/M/SAROAq2zztQIXYMfHJiNMCQioZnZ0aBwGnwWPnAMofD6zc9EoHXwoERByZwMnQ
-  32MUC74K2xw8QgSPh8GdXljkKdrbcworBa/YVQ9tXDGdfEc++It5XAGsEWzjWnMOaVfGb1Olm
-  g05vyWAMRjWTp2LU2ZyKZTiLKl7NHOHULMepuaMZh4xatYm1uAC/fFoz3tEBbnz+TN0HwglEG
-  Uo+XCPRyl5Kz9Qe1TOc/qA528hyfSCCIJSQ7HiL90LMrI7NPWww8iv83IZEsHI1WbqFt0kui8
-  ngDDrBGgYq4lpbdzcqw0yZJlYRRqYm8UWUv0ifbXrxxPOPMAbWKuQkEIlEsuAs1pxhsPzfnwV
-  hBFDKSY8/SbDBZHnRaZYPgfAhPL2YP4SF+c9SWBH3QIje5r1X4y0Y2nz7mHOfYd2e8bzEW872
-  66H9zdNBF0Ic0/mp730Q4og0hUvbBi/vrp4k9w8N6tJHLnYdlk/8tDN1LqrgYu2G5v6P3yY8v
-  Tk5j6I+WlU5cWlRsv6dxEKXOxxasQN5697cvvmkt+qgJyZIfqgiKfqNmZng8GcKkXmb8fsdWM
-  9f8cEfvtK6V647EbPB1VvnznVvrKblcdr8x859I72u2F9j2+KolJuPyjyj23danZ2LyS9HJCT
-  8UpVceRf9W+edcytaG+cSoi9Z70+sx8elR878s2abrWaHKOn9+827W/bGnwSJD/JOpRy/87R6
-  gSPfjbAf2IX7fN6as2lTSozTM/FxqJlj/gXvxYmsgwQAAA==
-X-Env-Sender: markpearson@lenovo.com
-X-Msg-Ref: server-12.tower-706.messagelabs.com!1678196742!237258!1
-X-Originating-IP: [104.47.26.45]
-X-SYMC-ESS-Client-Auth: mailfrom-relay-check=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.103.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 10077 invoked from network); 7 Mar 2023 13:45:44 -0000
-Received: from mail-psaapc01lp2045.outbound.protection.outlook.com (HELO APC01-PSA-obe.outbound.protection.outlook.com) (104.47.26.45)
-  by server-12.tower-706.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 7 Mar 2023 13:45:44 -0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L2sxlvWnpJ6lCBotGUFFfqM4Mod3vIb8FI9X6sUK+1Ykt+MK930SakSuBBKRuCCBgGb3TmM5es3SPR8lRTU3Z8m4TdekG+a8yB2O7XwhWolxVgd5CLP8tE5UBpiAdqigQQ4k2vlNOOXJeR6KqZ1Ukjps6WniAOIQgr1K/1EekQlWnzMDYCrHdq3Q//JV+7O+FU+qW6g++3Z6CRa0jc5IH9AEcjtUcapF64lIHVWdx5GnXpeQVeYCVxsQkUgGFQve9Gp0QyCHJ1SPVjr+2CcLAOWDWpWKeYNOKBA6lJrix1EQpRT8MLqdkgTl/+cw9mrQhcLLgLe3M/NR4kC9+l/TCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5TKtPd3FIrRGX5rbWKXZw7weseOfLoQkBcYoBvOS0p4=;
- b=MdF6HnX3UEl+oVm1MNfHQoqMAaVE8fmjaePeud8MYVLpPXdTsiqfGWxSQmAp3yd6PmZjraS4dESewwtl3MQsV4tRbDppLBlIl8VrpgruGvolaZuzYqGq10fNB220QS3gB66dAe5i4Kf699N6TGU2ordZGiz0/7e3DrvpoAG5Wsvm3QDog17+hEhKUa5A/P0Jy28Z1n6q88hUBDyeFgFQX5oIgGDZ+8Xjs8+U2+QL3LWJz6+uh6Z9Rj9E5S/U0jQEXQNZl/PQxqLBU/8PbthhApSTmgneWxcuIwv/O2LruLEZ21DoqgITlqEeKaSdjajF4hR4Y9cqwMtKjSy6CCfNTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 104.232.225.7) smtp.rcpttodomain=codeconstruct.com.au
- smtp.mailfrom=lenovo.com; dmarc=fail (p=none sp=none pct=100) action=none
- header.from=lenovo.com; dkim=none (message not signed); arc=none
-Received: from TYCP286CA0095.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2b4::18)
- by SI2PR03MB5195.apcprd03.prod.outlook.com (2603:1096:4:108::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 13:45:41 +0000
-Received: from TYZAPC01FT020.eop-APC01.prod.protection.outlook.com
- (2603:1096:400:2b4:cafe::95) by TYCP286CA0095.outlook.office365.com
- (2603:1096:400:2b4::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.16 via Frontend
- Transport; Tue, 7 Mar 2023 13:45:41 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 104.232.225.7) smtp.mailfrom=lenovo.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=lenovo.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- lenovo.com discourages use of 104.232.225.7 as permitted sender)
-Received: from mail.lenovo.com (104.232.225.7) by
- TYZAPC01FT020.mail.protection.outlook.com (10.118.152.133) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.16 via Frontend Transport; Tue, 7 Mar 2023 13:45:40 +0000
-Received: from reswpmail01.lenovo.com (10.62.32.20) by mail.lenovo.com
- (10.62.123.117) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.21; Tue, 7 Mar
- 2023 08:45:39 -0500
-Received: from [10.46.192.34] (10.46.192.34) by reswpmail01.lenovo.com
- (10.62.32.20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.21; Tue, 7 Mar
- 2023 08:45:39 -0500
-Message-ID: <1bb01e6c-3829-6af4-b2c5-5dc82bd75b72@lenovo.com>
-Date:   Tue, 7 Mar 2023 08:45:38 -0500
+        Tue, 7 Mar 2023 11:58:12 -0500
+Received: from sonic317-38.consmr.mail.ne1.yahoo.com (sonic317-38.consmr.mail.ne1.yahoo.com [66.163.184.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C194E93128
+        for <linux-integrity@vger.kernel.org>; Tue,  7 Mar 2023 08:54:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678208086; bh=e09rthYJIwYdSXWRI5OVgTvc5Dgr/3J4cmUnkCZ9DOI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ZNVLmbO0Y6GnFbnVg1EXAsQ325ZSVlpwfVulyrjjcVh2YUHtg8hqamAZbMp5yEuNfLu7RSq+7Ay9x0EzItKovXEItJhaBIQwCGmqWMNJxvDvOF/AWLSAQjZDaw7BcQYpE0TTTlZSnSV20u7S5/pZFYU1HdiVSTD4WDUDR7k2xU+4d5KFx8niVsmY6n/GLxlUdqITqTGUloN9RiBs07u5p29CSdi4W3HU5rzYO46vwaw6lIJl48m0vPYR3PGA2HjokxAy92/uI6HTDshc0xQKNwBGZqZurEiM2G9IiVOFXZ8cf91BuVsUNnzdZtq//pLjb6hFKFgRHEJ9M4zu6HU76w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678208086; bh=Jy0TQ2g/dLg/klSoUzexr70vgvuVrBMyD8O3cfH2nud=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=aKToDeA1dzBhJwO4XwxQWyi1RM8sksLiIEu2kvV3OGb1p5PeRwMLs3ZjLy98tspg5QQvKGZInOVt0ghIHFd15cjbZQ2efdFGuqld7ZlThqrl0ACc5nkfwvI0gfrJPH4WDKB4MwmwSYoYl3muKJjBMuQt9OJo0dCMMdhk6iaH+zkX5NcKciLqflICBK3X6l+fh6hImbBYHM6pCQ7zvwCx7uimAVN+iEwZfJ73Wa9SZhXSEzwExJbfOkTb7fGxizuCrGApS/IFTtbyjYXVyBZEVrJW9rqBereqnBScQJz6RIEyGHpLps/je13oYZ31HCjvGuJ1MrU7GroAdmoJMGt04w==
+X-YMail-OSG: t9O3mF0VM1l1jJVWc4_YiQ00ORjNJsWXIgQKG43BKrYfXB2P2NqlSFE9fiy2i_T
+ Dyk75n5nM8N83M1y4SofPZFEo1_NBCmT6LWtGmxh1n08.dWL9nPE4OqmXKfDbrBQRnFaHXVz6HYI
+ wcXpnuDPhptOWeEdvvLDSgYzlYS8EOqAxB7Un2gZs3AfUCA5dxEd4OdoghoYpq91hGi4c1qc.yzi
+ 5uOQmM4UQSdIBpgxeBfu5kNc5rJ2AdAgB56lLRKjKXAdgE1NzZ5voV6HAz1O5NpDoqUapC403Bkp
+ cHcx1JVi6Ft0.LpOTllIJzBfTV.0p4YBaJa0e0fc0aS2LzVabsxpVAJxC5go0dg3zB7FcKZZBzD6
+ 9PJ6BQm3dO62A1UbEvFp.Rn4oO9WS8Jkd5vLYiSSi6BNjnlprca3bq7mA_OHxGAe5ELDVggI6wp7
+ t68.OYSvyVkn4lXytLt_HZjB1E_XN58kdq1alHmE0er5m6PwDeXSaB.5jZBJywDzYFQTUPjeo.gR
+ AhPs5NaiW7fUOm6tJlkELCfCYx4ZOQ5XbpAOWiJfkCs0clCgnyJeZhd9UV16j3mTjyb.TogV4Sz2
+ BvrUnm4XUVOJrJPkZ0cKTCR9njuPRiMkK0z7eIkyCawc2NGPEvyN5gjl8fOXu1yawrtecO.VMWvB
+ prDZb9Ewp4CeyTG2wfn0o49oT0id98agvDyjsgR6iHf0pQP5x6ceqV5dXzaBq65NV519t0ut0R.Y
+ 8ls0L_4P4FkyowAlk.ZBJNw6HeZ41mI.08w_RR8IFC7Q36K5yM0jRjwZVVHICIkuzeaYZLHPl6jH
+ AUYkBrG73dhpDnlOLTM4zdRrBlIqaA1V4coggamFBPvW2p4ZulHVJ.UJrSA6vGU5bPCocVtQ2B9n
+ azCSpZH18zphKd5c7UNY9gD6XE802f6hf0IG58544rFFQvFSKrEwVchRXx9Na4cUgewWPxpqQaef
+ 4cXGaMfDrWRICYFQjY6_tckuEBZArB25D48igrazQDQJA5vaGJXWOhA5fTR9k2rVZ8vDbOlC1UwN
+ FDFdKD5RbpFKzrVy7Ho2gHp0xiYx3T0QRNaLbPq4CscFaNNarDsRLlAOk3nr.XJGZaOaQ8vifjKj
+ .4IMS_HakGpgwd_zdt6w2IJeqgm5pUxUqyIIHLnCfNvEMpmP8Fr4xciGVHLmqQJgmd97f6CYHmE1
+ Wultc9V28_Nl4RUraslhPHmoPSenKTrO84usPP.FkTZIss.InJql6Whx1QBM_tb1fwRSdoEkMLES
+ o7zO6pPPHvmb.v0UHPwIkDkJBT0mlOG1ZonY24oDGItiHwlAK2pJPyGQtq_RVBiHknBlQ7CqVRoF
+ u_3B_xXHzd0viw9uL4ERHD9HQ7dVOwHiXbNTOsg_R6AT4kGgkK23ZoBAVE3y_XtZW3ZV6nk6lRUU
+ 8C0y_2GRd20FYdD8sFz55qjgp62T4VF6MG_UXEQm8nvBCQTO_oZECPq43P_QohkQqHcoivDhfU6n
+ NAz67HRIn4fpu3jiBdTr22davL3T2jkyn_4yvxMpVLeEfiGwOPY6lCue4SwKH7ijq1Bjx6ajb4av
+ rdLhiIKUk8aXZ6uC_kLqSHHMRft_oQxWhwCB7.ClXSVj.IVn3sZWaqeTd3FMl6gv0I._qCoWwBkW
+ jh2sIbPGxYx0rfbtvaf_kcFjIqWIgn7CUVCvGk14qh6u.MDsg07rr0bFpugQ2Cl7nCfr4b4CPYpM
+ 4lj4FYD9DakBXlF.fgq1fVbPhQeJoCraTcLy13Udlf7U7N8T1BHS0WEzsDGWuVoURGSPKGuQpRJj
+ IUx5TEa3vyGm.tBbgsl42AKbVBM0Tm8I0pC2Si0QdiOtIK9bBbYXvzegWUzPSwLAOKUBWl8Ng40b
+ wjBVJgthud9pJ.4p8TCIC5d8SOxJgAx69Cek0jQYi0mVg3pgPqFOW5lh3KoQ3qRC_cNQCktkjuzj
+ rXAk7lsbPpje.KaeKZiM8hrg8RRcNTU1z5k9DBUKCfkChMl1g3wDCrvaRrpvgzxG8.nNs9o78Z9w
+ Pnh3s5_ho97w5gbLumDBDmAM9LmLTPWghOVtiY0Tjt.qA63w1aYOsMVv06nH5iTH23JwvXQwWULH
+ _hS3eDMqunwHkW3atUC.Q7X47IgbMY91icCq9z2QvGAylskhVrcsZt8GmenwqWilPohMcnS2PqBY
+ nVhCJHUHAvhhqKgTKiFaAJkhuwaMRRRRfkgJ3yh7cBPTSBXkmUR9WZEAVl56ypOJxrDFqgZ8uU0d
+ z7IqBfFFK3qGb4Rtn2nDZKTN7oEtep0jvbR3n
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.ne1.yahoo.com with HTTP; Tue, 7 Mar 2023 16:54:46 +0000
+Received: by hermes--production-ne1-7688d778d7-vzmh7 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a7264be0cae17bd731fec4e0cbd509f9;
+          Tue, 07 Mar 2023 16:54:40 +0000 (UTC)
+Message-ID: <cfbf35c1-deb8-08d0-ecf7-958a56d6c3b6@schaufler-ca.com>
+Date:   Tue, 7 Mar 2023 08:54:38 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [External] Re: [BUG] blacklist: Problem blacklisting hash (-13)
- during boot
+Subject: Re: [PATCH 26/28] evm: Move to LSM infrastructure
 Content-Language: en-US
-To:     Jeremy Kerr <jk@codeconstruct.com.au>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-CC:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-References: <c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de>
- <af0d6881-76c0-f570-0c5b-f664e261c4cf@digikod.net>
- <632d2180-02f8-4a5f-803a-57a6443a60f4@t-8ch.de>
- <12ceffb8-4e90-4eb5-2110-a0e69b412cea@lenovo.com>
- <fec5e8eb3803068a11267f386ddda389a1211736.camel@codeconstruct.com.au>
- <2a215e4d-bf55-b063-3f1f-a63f51cbdbfb@lenovo.com>
- <c5d674bd67735de460b19fd955f718bf8b604c1d.camel@codeconstruct.com.au>
-From:   Mark Pearson <markpearson@lenovo.com>
-In-Reply-To: <c5d674bd67735de460b19fd955f718bf8b604c1d.camel@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>,
+        casey@schaufler-ca.com
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+ <20230303182602.1088032-4-roberto.sassu@huaweicloud.com>
+ <688527a9-c164-581e-ae60-f82bd8ccccad@schaufler-ca.com>
+ <dc3f43e0f445b0339aac510ecd4a74accc83dd6a.camel@huaweicloud.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <dc3f43e0f445b0339aac510ecd4a74accc83dd6a.camel@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.46.192.34]
-X-ClientProxiedBy: reswpmail01.lenovo.com (10.62.32.20) To
- reswpmail01.lenovo.com (10.62.32.20)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZAPC01FT020:EE_|SI2PR03MB5195:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c99766e-e35e-428f-ac4d-08db1f123dfc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MzvNWdfLybihXyZVjLSqE+UdVySQFhzF7A2wTSxVxYfHKSue0BP1sEC5XAr5l34fH7RzDU+Lw88Stlht6pEb8GhFyikeuvo5iOvFTJcVlEbMi19DyY/FL5SDuSn3LI72/99psqyqi6dAokTEdT+Z1A3mDpTNP0R6rKLfEhXzvguA4KWafXGYnOpfHgVPMlJL0vxUsVRb2pxUWmweG0IYp9rG7sLfcgTnTTIZ4Dy7cPdiED1QIPRCNlM+a9KbbNOj2m2ST2zbf1vsaHIx+stM8ZvyI2XugQQuOWL+Dqemx1IdpOS5s2yEKZXKbuY1izb7vAjn9doe0nPir1jT6yrVqDzfnmAZ2SxuNKrw9+CdPO9+4quvNxtI40VVQDEYTUZRkPGe49IgjlZ7UruPSNEjNPuRlgGh1q5EJqJcGMCZ7UyTGt4ESK0481wLY2/2FOJ52lnGC7EYs7ih2G9Qx+/yYPH0uwpVlabdtOCCWWv4eAJVxjcwLXz/Hvc2sCF30c7fwKku/ZiLneS+ro9KwbscDS2XNX3H8GneMc1s7ghwx80JOXZuuQMTGV/c+hgSMcD52+21zbJ9B330zJIDoqTX9OVqPgJP9SfKU5PU1g0eBwfFx7u7ouCmF5JbJDVUxU5LyXHNQwA0ybi0duyeaqJ40Y+boqOK7tz1Yet/EJPIIEtknvZqg2zYe46+i2FdFsZ64nKh5cV7cquvFR4ZoFWmL1dbfubotwMFSwMuvKMfj3JpSCED1MyBfhqBTy3iPYd5tcrMUnBfBu6GScV/fs9IjwgZc+1FscSAXiZCyTnkWXOpdZe4+8l3iNUTjXb7ZT2rX/Vn+ZYEmfQrnTZHJn6S8g==
-X-Forefront-Antispam-Report: CIP:104.232.225.7;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.lenovo.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(136003)(346002)(396003)(451199018)(46966006)(40470700004)(36840700001)(31686004)(8676002)(36756003)(4326008)(70586007)(70206006)(40480700001)(41300700001)(8936002)(5660300002)(7416002)(2906002)(356005)(82740400003)(81166007)(31696002)(86362001)(82960400001)(36860700001)(26005)(966005)(54906003)(316002)(110136005)(478600001)(16576012)(82310400005)(47076005)(83380400001)(426003)(2616005)(186003)(40460700003)(16526019)(53546011)(336012)(3940600001)(43740500002)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: lenovo.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 13:45:40.8993
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c99766e-e35e-428f-ac4d-08db1f123dfc
-X-MS-Exchange-CrossTenant-Id: 5c7d0b28-bdf8-410c-aa93-4df372b16203
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5c7d0b28-bdf8-410c-aa93-4df372b16203;Ip=[104.232.225.7];Helo=[mail.lenovo.com]
-X-MS-Exchange-CrossTenant-AuthSource: TYZAPC01FT020.eop-APC01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB5195
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: WebService/1.1.21284 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi all,
-
-On 2/27/23 09:36, Jeremy Kerr wrote:
-> Hi Mark,
+On 3/6/2023 1:21 AM, Roberto Sassu wrote:
+> On Sat, 2023-03-04 at 13:36 -0800, Casey Schaufler wrote:
+>> On 3/3/2023 10:26 AM, Roberto Sassu wrote:
+>>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>>
+>>> As for IMA, remove hardcoded EVM function calls from the LSM infrastructure
+>>> and the VFS. Make EVM functions as static (except for
+>>> evm_inode_init_security(), which is exported), and register them as hook
+>>> implementations in init_evm_lsm(), called from integrity_lsm_init().
+>>>
+>>> Finally, switch to the LSM reservation mechanism for the EVM xattr, by
+>>> setting the lbs_xattr field of the lsm_blob_sizes structure, and
+>>> consequently decrement the number of xattrs to allocate in
+>>> security_inode_init_security().
+>>>
+>>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+>>> ---
+>>>  fs/attr.c                         |   2 -
+>>>  fs/posix_acl.c                    |   3 -
+>>>  fs/xattr.c                        |   2 -
+>>>  include/linux/evm.h               | 116 ------------------------------
+>>>  security/integrity/evm/evm_main.c | 106 ++++++++++++++++++++++-----
+>>>  security/integrity/iint.c         |   7 ++
+>>>  security/integrity/integrity.h    |   9 +++
+>>>  security/security.c               |  41 +++--------
+>>>  8 files changed, 115 insertions(+), 171 deletions(-)
+>>>
+>>> diff --git a/fs/attr.c b/fs/attr.c
+>>> index 406d782dfab..1b911a627fe 100644
+>>> --- a/fs/attr.c
+>>> +++ b/fs/attr.c
+>>> @@ -16,7 +16,6 @@
+>>>  #include <linux/fcntl.h>
+>>>  #include <linux/filelock.h>
+>>>  #include <linux/security.h>
+>>> -#include <linux/evm.h>
+>>>  
+>>>  #include "internal.h"
+>>>  
+>>> @@ -485,7 +484,6 @@ int notify_change(struct mnt_idmap *idmap, struct dentry *dentry,
+>>>  	if (!error) {
+>>>  		fsnotify_change(dentry, ia_valid);
+>>>  		security_inode_post_setattr(idmap, dentry, ia_valid);
+>>> -		evm_inode_post_setattr(idmap, dentry, ia_valid);
+>>>  	}
+>>>  
+>>>  	return error;
+>>> diff --git a/fs/posix_acl.c b/fs/posix_acl.c
+>>> index 5b8c92fce0c..608cb0a9f84 100644
+>>> --- a/fs/posix_acl.c
+>>> +++ b/fs/posix_acl.c
+>>> @@ -26,7 +26,6 @@
+>>>  #include <linux/mnt_idmapping.h>
+>>>  #include <linux/iversion.h>
+>>>  #include <linux/security.h>
+>>> -#include <linux/evm.h>
+>>>  #include <linux/fsnotify.h>
+>>>  #include <linux/filelock.h>
+>>>  
+>>> @@ -1103,7 +1102,6 @@ int vfs_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+>>>  	if (!error) {
+>>>  		fsnotify_xattr(dentry);
+>>>  		security_inode_post_set_acl(dentry, acl_name, kacl);
+>>> -		evm_inode_post_set_acl(dentry, acl_name, kacl);
+>>>  	}
+>>>  
+>>>  out_inode_unlock:
+>>> @@ -1214,7 +1212,6 @@ int vfs_remove_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+>>>  	if (!error) {
+>>>  		fsnotify_xattr(dentry);
+>>>  		security_inode_post_remove_acl(idmap, dentry, acl_name);
+>>> -		evm_inode_post_remove_acl(idmap, dentry, acl_name);
+>>>  	}
+>>>  
+>>>  out_inode_unlock:
+>>> diff --git a/fs/xattr.c b/fs/xattr.c
+>>> index 10c959d9fc6..7708ffdacca 100644
+>>> --- a/fs/xattr.c
+>>> +++ b/fs/xattr.c
+>>> @@ -16,7 +16,6 @@
+>>>  #include <linux/mount.h>
+>>>  #include <linux/namei.h>
+>>>  #include <linux/security.h>
+>>> -#include <linux/evm.h>
+>>>  #include <linux/syscalls.h>
+>>>  #include <linux/export.h>
+>>>  #include <linux/fsnotify.h>
+>>> @@ -535,7 +534,6 @@ __vfs_removexattr_locked(struct mnt_idmap *idmap,
+>>>  	if (!error) {
+>>>  		fsnotify_xattr(dentry);
+>>>  		security_inode_post_removexattr(dentry, name);
+>>> -		evm_inode_post_removexattr(dentry, name);
+>>>  	}
+>>>  
+>>>  out:
+>>> diff --git a/include/linux/evm.h b/include/linux/evm.h
+>>> index 8c043273552..61794299f09 100644
+>>> --- a/include/linux/evm.h
+>>> +++ b/include/linux/evm.h
+>>> @@ -21,46 +21,6 @@ extern enum integrity_status evm_verifyxattr(struct dentry *dentry,
+>>>  					     void *xattr_value,
+>>>  					     size_t xattr_value_len,
+>>>  					     struct integrity_iint_cache *iint);
+>>> -extern int evm_inode_setattr(struct mnt_idmap *idmap,
+>>> -			     struct dentry *dentry, struct iattr *attr);
+>>> -extern void evm_inode_post_setattr(struct mnt_idmap *idmap,
+>>> -				   struct dentry *dentry, int ia_valid);
+>>> -extern int evm_inode_setxattr(struct mnt_idmap *idmap,
+>>> -			      struct dentry *dentry, const char *name,
+>>> -			      const void *value, size_t size, int flags);
+>>> -extern void evm_inode_post_setxattr(struct dentry *dentry,
+>>> -				    const char *xattr_name,
+>>> -				    const void *xattr_value,
+>>> -				    size_t xattr_value_len,
+>>> -				    int flags);
+>>> -extern int evm_inode_removexattr(struct mnt_idmap *idmap,
+>>> -				 struct dentry *dentry, const char *xattr_name);
+>>> -extern void evm_inode_post_removexattr(struct dentry *dentry,
+>>> -				       const char *xattr_name);
+>>> -static inline void evm_inode_post_remove_acl(struct mnt_idmap *idmap,
+>>> -					     struct dentry *dentry,
+>>> -					     const char *acl_name)
+>>> -{
+>>> -	evm_inode_post_removexattr(dentry, acl_name);
+>>> -}
+>>> -extern int evm_inode_set_acl(struct mnt_idmap *idmap,
+>>> -			     struct dentry *dentry, const char *acl_name,
+>>> -			     struct posix_acl *kacl);
+>>> -static inline int evm_inode_remove_acl(struct mnt_idmap *idmap,
+>>> -				       struct dentry *dentry,
+>>> -				       const char *acl_name)
+>>> -{
+>>> -	return evm_inode_set_acl(idmap, dentry, acl_name, NULL);
+>>> -}
+>>> -static inline void evm_inode_post_set_acl(struct dentry *dentry,
+>>> -					  const char *acl_name,
+>>> -					  struct posix_acl *kacl)
+>>> -{
+>>> -	return evm_inode_post_setxattr(dentry, acl_name, NULL, 0, 0);
+>>> -}
+>>> -extern int evm_inode_init_security(struct inode *inode, struct inode *dir,
+>>> -				   const struct qstr *qstr,
+>>> -				   struct xattr *xattrs);
+>>>  extern bool evm_revalidate_status(const char *xattr_name);
+>>>  extern int evm_protected_xattr_if_enabled(const char *req_xattr_name);
+>>>  extern int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
+>>> @@ -92,82 +52,6 @@ static inline enum integrity_status evm_verifyxattr(struct dentry *dentry,
+>>>  }
+>>>  #endif
+>>>  
+>>> -static inline int evm_inode_setattr(struct mnt_idmap *idmap,
+>>> -				    struct dentry *dentry, struct iattr *attr)
+>>> -{
+>>> -	return 0;
+>>> -}
+>>> -
+>>> -static inline void evm_inode_post_setattr(struct mnt_idmap *idmap,
+>>> -					  struct dentry *dentry, int ia_valid)
+>>> -{
+>>> -	return;
+>>> -}
+>>> -
+>>> -static inline int evm_inode_setxattr(struct mnt_idmap *idmap,
+>>> -				     struct dentry *dentry, const char *name,
+>>> -				     const void *value, size_t size, int flags)
+>>> -{
+>>> -	return 0;
+>>> -}
+>>> -
+>>> -static inline void evm_inode_post_setxattr(struct dentry *dentry,
+>>> -					   const char *xattr_name,
+>>> -					   const void *xattr_value,
+>>> -					   size_t xattr_value_len,
+>>> -					   int flags)
+>>> -{
+>>> -	return;
+>>> -}
+>>> -
+>>> -static inline int evm_inode_removexattr(struct mnt_idmap *idmap,
+>>> -					struct dentry *dentry,
+>>> -					const char *xattr_name)
+>>> -{
+>>> -	return 0;
+>>> -}
+>>> -
+>>> -static inline void evm_inode_post_removexattr(struct dentry *dentry,
+>>> -					      const char *xattr_name)
+>>> -{
+>>> -	return;
+>>> -}
+>>> -
+>>> -static inline void evm_inode_post_remove_acl(struct mnt_idmap *idmap,
+>>> -					     struct dentry *dentry,
+>>> -					     const char *acl_name)
+>>> -{
+>>> -	return;
+>>> -}
+>>> -
+>>> -static inline int evm_inode_set_acl(struct mnt_idmap *idmap,
+>>> -				    struct dentry *dentry, const char *acl_name,
+>>> -				    struct posix_acl *kacl)
+>>> -{
+>>> -	return 0;
+>>> -}
+>>> -
+>>> -static inline int evm_inode_remove_acl(struct mnt_idmap *idmap,
+>>> -				       struct dentry *dentry,
+>>> -				       const char *acl_name)
+>>> -{
+>>> -	return 0;
+>>> -}
+>>> -
+>>> -static inline void evm_inode_post_set_acl(struct dentry *dentry,
+>>> -					  const char *acl_name,
+>>> -					  struct posix_acl *kacl)
+>>> -{
+>>> -	return;
+>>> -}
+>>> -
+>>> -static inline int evm_inode_init_security(struct inode *inode, struct inode *dir,
+>>> -					  const struct qstr *qstr,
+>>> -					  struct xattr *xattrs)
+>>> -{
+>>> -	return 0;
+>>> -}
+>>> -
+>>>  static inline bool evm_revalidate_status(const char *xattr_name)
+>>>  {
+>>>  	return false;
+>>> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+>>> index 8b5c472f78b..c45bc97277c 100644
+>>> --- a/security/integrity/evm/evm_main.c
+>>> +++ b/security/integrity/evm/evm_main.c
+>>> @@ -19,6 +19,7 @@
+>>>  #include <linux/xattr.h>
+>>>  #include <linux/integrity.h>
+>>>  #include <linux/evm.h>
+>>> +#include <linux/lsm_hooks.h>
+>>>  #include <linux/magic.h>
+>>>  #include <linux/posix_acl_xattr.h>
+>>>  
+>>> @@ -566,9 +567,9 @@ static int evm_protect_xattr(struct mnt_idmap *idmap,
+>>>   * userspace from writing HMAC value.  Writing 'security.evm' requires
+>>>   * requires CAP_SYS_ADMIN privileges.
+>>>   */
+>>> -int evm_inode_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>>> -		       const char *xattr_name, const void *xattr_value,
+>>> -		       size_t xattr_value_len, int flags)
+>>> +static int evm_inode_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>>> +			      const char *xattr_name, const void *xattr_value,
+>>> +			      size_t xattr_value_len, int flags)
+>>>  {
+>>>  	const struct evm_ima_xattr_data *xattr_data = xattr_value;
+>>>  
+>>> @@ -598,8 +599,8 @@ int evm_inode_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>>>   * Removing 'security.evm' requires CAP_SYS_ADMIN privileges and that
+>>>   * the current value is valid.
+>>>   */
+>>> -int evm_inode_removexattr(struct mnt_idmap *idmap,
+>>> -			  struct dentry *dentry, const char *xattr_name)
+>>> +static int evm_inode_removexattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>>> +				 const char *xattr_name)
+>>>  {
+>>>  	/* Policy permits modification of the protected xattrs even though
+>>>  	 * there's no HMAC key loaded
+>>> @@ -649,9 +650,11 @@ static inline int evm_inode_set_acl_change(struct mnt_idmap *idmap,
+>>>   * Prevent modifying posix acls causing the EVM HMAC to be re-calculated
+>>>   * and 'security.evm' xattr updated, unless the existing 'security.evm' is
+>>>   * valid.
+>>> + *
+>>> + * Return: zero on success, -EPERM on failure.
+>>>   */
+>>> -int evm_inode_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+>>> -		      const char *acl_name, struct posix_acl *kacl)
+>>> +static int evm_inode_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+>>> +			     const char *acl_name, struct posix_acl *kacl)
+>>>  {
+>>>  	enum integrity_status evm_status;
+>>>  
+>>> @@ -690,6 +693,24 @@ int evm_inode_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+>>>  	return -EPERM;
+>>>  }
+>>>  
+>>> +/**
+>>> + * evm_inode_remove_acl - Protect the EVM extended attribute from posix acls
+>>> + * @idmap: idmap of the mount
+>>> + * @dentry: pointer to the affected dentry
+>>> + * @acl_name: name of the posix acl
+>>> + *
+>>> + * Prevent removing posix acls causing the EVM HMAC to be re-calculated
+>>> + * and 'security.evm' xattr updated, unless the existing 'security.evm' is
+>>> + * valid.
+>>> + *
+>>> + * Return: zero on success, -EPERM on failure.
+>>> + */
+>>> +static int evm_inode_remove_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+>>> +				const char *acl_name)
+>>> +{
+>>> +	return evm_inode_set_acl(idmap, dentry, acl_name, NULL);
+>>> +}
+>>> +
+>>>  static void evm_reset_status(struct inode *inode)
+>>>  {
+>>>  	struct integrity_iint_cache *iint;
+>>> @@ -738,9 +759,11 @@ bool evm_revalidate_status(const char *xattr_name)
+>>>   * __vfs_setxattr_noperm().  The caller of which has taken the inode's
+>>>   * i_mutex lock.
+>>>   */
+>>> -void evm_inode_post_setxattr(struct dentry *dentry, const char *xattr_name,
+>>> -			     const void *xattr_value, size_t xattr_value_len,
+>>> -			     int flags)
+>>> +static void evm_inode_post_setxattr(struct dentry *dentry,
+>>> +				    const char *xattr_name,
+>>> +				    const void *xattr_value,
+>>> +				    size_t xattr_value_len,
+>>> +				    int flags)
+>>>  {
+>>>  	if (!evm_revalidate_status(xattr_name))
+>>>  		return;
+>>> @@ -756,6 +779,21 @@ void evm_inode_post_setxattr(struct dentry *dentry, const char *xattr_name,
+>>>  	evm_update_evmxattr(dentry, xattr_name, xattr_value, xattr_value_len);
+>>>  }
+>>>  
+>>> +/**
+>>> + * evm_inode_post_set_acl - Update the EVM extended attribute from posix acls
+>>> + * @dentry: pointer to the affected dentry
+>>> + * @acl_name: name of the posix acl
+>>> + * @kacl: pointer to the posix acls
+>>> + *
+>>> + * Update the 'security.evm' xattr with the EVM HMAC re-calculated after setting
+>>> + * posix acls.
+>>> + */
+>>> +static void evm_inode_post_set_acl(struct dentry *dentry, const char *acl_name,
+>>> +				   struct posix_acl *kacl)
+>>> +{
+>>> +	return evm_inode_post_setxattr(dentry, acl_name, NULL, 0, 0);
+>>> +}
+>>> +
+>>>  /**
+>>>   * evm_inode_post_removexattr - update 'security.evm' after removing the xattr
+>>>   * @dentry: pointer to the affected dentry
+>>> @@ -766,7 +804,8 @@ void evm_inode_post_setxattr(struct dentry *dentry, const char *xattr_name,
+>>>   * No need to take the i_mutex lock here, as this function is called from
+>>>   * vfs_removexattr() which takes the i_mutex.
+>>>   */
+>>> -void evm_inode_post_removexattr(struct dentry *dentry, const char *xattr_name)
+>>> +static void evm_inode_post_removexattr(struct dentry *dentry,
+>>> +				       const char *xattr_name)
+>>>  {
+>>>  	if (!evm_revalidate_status(xattr_name))
+>>>  		return;
+>>> @@ -782,6 +821,22 @@ void evm_inode_post_removexattr(struct dentry *dentry, const char *xattr_name)
+>>>  	evm_update_evmxattr(dentry, xattr_name, NULL, 0);
+>>>  }
+>>>  
+>>> +/**
+>>> + * evm_inode_post_remove_acl - Update the EVM extended attribute from posix acls
+>>> + * @idmap: idmap of the mount
+>>> + * @dentry: pointer to the affected dentry
+>>> + * @acl_name: name of the posix acl
+>>> + *
+>>> + * Update the 'security.evm' xattr with the EVM HMAC re-calculated after
+>>> + * removing posix acls.
+>>> + */
+>>> +static inline void evm_inode_post_remove_acl(struct mnt_idmap *idmap,
+>>> +					     struct dentry *dentry,
+>>> +					     const char *acl_name)
+>>> +{
+>>> +	evm_inode_post_removexattr(dentry, acl_name);
+>>> +}
+>>> +
+>>>  static int evm_attr_change(struct mnt_idmap *idmap,
+>>>  			   struct dentry *dentry, struct iattr *attr)
+>>>  {
+>>> @@ -805,8 +860,8 @@ static int evm_attr_change(struct mnt_idmap *idmap,
+>>>   * Permit update of file attributes when files have a valid EVM signature,
+>>>   * except in the case of them having an immutable portable signature.
+>>>   */
+>>> -int evm_inode_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>>> -		      struct iattr *attr)
+>>> +static int evm_inode_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>>> +			     struct iattr *attr)
+>>>  {
+>>>  	unsigned int ia_valid = attr->ia_valid;
+>>>  	enum integrity_status evm_status;
+>>> @@ -853,8 +908,8 @@ int evm_inode_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>>>   * This function is called from notify_change(), which expects the caller
+>>>   * to lock the inode's i_mutex.
+>>>   */
+>>> -void evm_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>>> -			    int ia_valid)
+>>> +static void evm_inode_post_setattr(struct mnt_idmap *idmap,
+>>> +				   struct dentry *dentry, int ia_valid)
+>>>  {
+>>>  	if (!evm_revalidate_status(NULL))
+>>>  		return;
+>>> @@ -892,7 +947,7 @@ int evm_inode_init_security(struct inode *inode, struct inode *dir,
+>>>  	if (!evm_protected_xattrs)
+>>>  		return -EOPNOTSUPP;
+>>>  
+>>> -	evm_xattr = xattr;
+>>> +	evm_xattr = xattrs + integrity_blob_sizes.lbs_xattr;
+>> Please don't do this inline. Convention is to use a function,
+>> intergrity_xattrs() for this.
+> Ok.
 >
+>>>  
+>>>  	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
+>>>  	if (!xattr_data)
+>>> @@ -952,4 +1007,23 @@ static int __init init_evm(void)
+>>>  	return error;
+>>>  }
+>>>  
+>>> +static struct security_hook_list evm_hooks[] __lsm_ro_after_init = {
+>>> +	LSM_HOOK_INIT(inode_setattr, evm_inode_setattr),
+>>> +	LSM_HOOK_INIT(inode_post_setattr, evm_inode_post_setattr),
+>>> +	LSM_HOOK_INIT(inode_setxattr, evm_inode_setxattr),
+>>> +	LSM_HOOK_INIT(inode_set_acl, evm_inode_set_acl),
+>>> +	LSM_HOOK_INIT(inode_post_set_acl, evm_inode_post_set_acl),
+>>> +	LSM_HOOK_INIT(inode_remove_acl, evm_inode_remove_acl),
+>>> +	LSM_HOOK_INIT(inode_post_remove_acl, evm_inode_post_remove_acl),
+>>> +	LSM_HOOK_INIT(inode_post_setxattr, evm_inode_post_setxattr),
+>>> +	LSM_HOOK_INIT(inode_removexattr, evm_inode_removexattr),
+>>> +	LSM_HOOK_INIT(inode_post_removexattr, evm_inode_post_removexattr),
+>>> +	LSM_HOOK_INIT(inode_init_security, evm_inode_init_security),
+>>> +};
+>>> +
+>>> +void __init init_evm_lsm(void)
+>>> +{
+>>> +	security_add_hooks(evm_hooks, ARRAY_SIZE(evm_hooks), "integrity");
+>>> +}
+>>> +
+>>>  late_initcall(init_evm);
+>>> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+>>> index bbadf974b31..952d5ea4e18 100644
+>>> --- a/security/integrity/iint.c
+>>> +++ b/security/integrity/iint.c
+>>> @@ -179,12 +179,19 @@ static int __init integrity_lsm_init(void)
+>>>  			      0, SLAB_PANIC, init_once);
+>>>  
+>>>  	init_ima_lsm();
+>>> +	init_evm_lsm();
+>>>  	return 0;
+>>>  }
+>>> +
+>>> +struct lsm_blob_sizes integrity_blob_sizes __lsm_ro_after_init = {
+>>> +	.lbs_xattr = 1,
+>> Really? 1 byte? Don't even think of storing number of elements in lbs_xattr.
+>> The linux_blob_size structure contains sizes of blobs, not number of elements.
+> Oh, I see it can be confusing.
 >
->> I've been looking at this and the FW team are claiming that it's not
->> caused by duplicate entries in the dbx table, which is honestly a bit
->> confusing.
->>
->> We've been doing some more digging - but is there a possibility this
->> is caused by something else?
-> I can't quite trace where the EACCES is coming from, I can't see any
-> obvious causes there - the blacklist key type doesn't have an ->update
-> operation, and the assoc_array insert doesn't look like it would fail.
+> However, lbs_xattr does not help to position in the security blob but
+> in the new_xattrs array, allocated in security_inode_init_security()
+> (see below). Any suggestion on how to make this part better?
+
+On further review, your current use is perfectly reasonable.
+The patch that introduces lbs_xattr (not in this set, I see)
+needs to document the use so other LSMs can use is correctly.
+
 >
-> However: if I delete one of the duplicate keys using the bios UI, then
-> the number of errors logged decreases by one.
+> Thanks
 >
-Got to the bottom of this, after a longer exercise than it should have 
-been. I have some answers.
-
-The entries are indeed duplicated in our DBX. The reason for this is the 
-FW team took three different DBX list published by UEFI forum in 
-different time series and combined them. They did this as they found 
-some distinct hashes in previously published ones and chose to combine 
-them for safety/completeness sake.
-
-I haven't myself dug into the revocation lists hosted on 
-https://uefi.org/revocationlistfile but it sounds like there was some 
-churn there? The FW team agreed that duplicates should not have been 
-created.
-
-The FW team have pushed back on doing another update for this generation 
-of platforms. Updating the DBX to make these changes, particularly 
-removing entries, will apparently be difficult. I prodded a bit into the 
-details but given the issue is essentially cosmetic I do understand 
-their concerns (the last DBX update caused enough issues...I'm not sure 
-I want to go through it again in a hurry).
-
-They have said they will fix the tables for future platforms.
-
-Hope that helps
-
-Mark
-
-
+> Roberto
+>
+>>> +};
+>>> +
+>>>  DEFINE_LSM(integrity) = {
+>>>  	.name = "integrity",
+>>>  	.init = integrity_lsm_init,
+>>>  	.order = LSM_ORDER_LAST,
+>>> +	.blobs = &integrity_blob_sizes,
+>>>  };
+>>>  
+>>>  /*
+>>> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+>>> index c72d375a356..76e7eda6651 100644
+>>> --- a/security/integrity/integrity.h
+>>> +++ b/security/integrity/integrity.h
+>>> @@ -188,6 +188,7 @@ int integrity_kernel_read(struct file *file, loff_t offset,
+>>>  #define INTEGRITY_KEYRING_MAX		4
+>>>  
+>>>  extern struct dentry *integrity_dir;
+>>> +extern struct lsm_blob_sizes integrity_blob_sizes;
+>>>  
+>>>  struct modsig;
+>>>  
+>>> @@ -199,6 +200,14 @@ static inline void __init init_ima_lsm(void)
+>>>  }
+>>>  #endif
+>>>  
+>>> +#ifdef CONFIG_EVM
+>>> +void __init init_evm_lsm(void);
+>>> +#else
+>>> +static inline void __init init_evm_lsm(void)
+>>> +{
+>>> +}
+>>> +#endif
+>>> +
+>>>  #ifdef CONFIG_INTEGRITY_SIGNATURE
+>>>  
+>>>  int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
+>>> diff --git a/security/security.c b/security/security.c
+>>> index 9bc6a4ef758..74abf04feef 100644
+>>> --- a/security/security.c
+>>> +++ b/security/security.c
+>>> @@ -20,13 +20,13 @@
+>>>  #include <linux/kernel_read_file.h>
+>>>  #include <linux/lsm_hooks.h>
+>>>  #include <linux/integrity.h>
+>>> -#include <linux/evm.h>
+>>>  #include <linux/fsnotify.h>
+>>>  #include <linux/mman.h>
+>>>  #include <linux/mount.h>
+>>>  #include <linux/personality.h>
+>>>  #include <linux/backing-dev.h>
+>>>  #include <linux/string.h>
+>>> +#include <linux/xattr.h>
+>>>  #include <linux/msg.h>
+>>>  #include <net/flow.h>
+>>>  
+>>> @@ -1662,8 +1662,8 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+>>>  	if (!initxattrs)
+>>>  		return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
+>>>  				    dir, qstr, NULL);
+>>> -	/* Allocate +1 for EVM and +1 as terminator. */
+>>> -	new_xattrs = kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*new_xattrs),
+>>> +	/* Allocate +1 for terminator. */
+>>> +	new_xattrs = kcalloc(blob_sizes.lbs_xattr + 1, sizeof(*new_xattrs),
+>>>  			     GFP_NOFS);
+>>>  	if (!new_xattrs)
+>>>  		return -ENOMEM;
+>>> @@ -1699,9 +1699,6 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+>>>  	if (!num_filled_xattrs)
+>>>  		goto out;
+>>>  
+>>> -	ret = evm_inode_init_security(inode, dir, qstr, new_xattrs);
+>>> -	if (ret && ret != -EOPNOTSUPP)
+>>> -		goto out;
+>>>  	ret = initxattrs(inode, new_xattrs, fs_data);
+>>>  out:
+>>>  	for (xattr = new_xattrs; xattr->value != NULL; xattr++)
+>>> @@ -2201,14 +2198,9 @@ int security_inode_permission(struct inode *inode, int mask)
+>>>  int security_inode_setattr(struct mnt_idmap *idmap,
+>>>  			   struct dentry *dentry, struct iattr *attr)
+>>>  {
+>>> -	int ret;
+>>> -
+>>>  	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+>>>  		return 0;
+>>> -	ret = call_int_hook(inode_setattr, 0, idmap, dentry, attr);
+>>> -	if (ret)
+>>> -		return ret;
+>>> -	return evm_inode_setattr(idmap, dentry, attr);
+>>> +	return call_int_hook(inode_setattr, 0, idmap, dentry, attr);
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(security_inode_setattr);
+>>>  
+>>> @@ -2272,9 +2264,7 @@ int security_inode_setxattr(struct mnt_idmap *idmap,
+>>>  
+>>>  	if (ret == 1)
+>>>  		ret = cap_inode_setxattr(dentry, name, value, size, flags);
+>>> -	if (ret)
+>>> -		return ret;
+>>> -	return evm_inode_setxattr(idmap, dentry, name, value, size, flags);
+>>> +	return ret;
+>>>  }
+>>>  
+>>>  /**
+>>> @@ -2293,15 +2283,10 @@ int security_inode_set_acl(struct mnt_idmap *idmap,
+>>>  			   struct dentry *dentry, const char *acl_name,
+>>>  			   struct posix_acl *kacl)
+>>>  {
+>>> -	int ret;
+>>> -
+>>>  	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+>>>  		return 0;
+>>> -	ret = call_int_hook(inode_set_acl, 0, idmap, dentry, acl_name,
+>>> -			    kacl);
+>>> -	if (ret)
+>>> -		return ret;
+>>> -	return evm_inode_set_acl(idmap, dentry, acl_name, kacl);
+>>> +	return call_int_hook(inode_set_acl, 0, idmap, dentry, acl_name,
+>>> +			     kacl);
+>>>  }
+>>>  
+>>>  /**
+>>> @@ -2354,14 +2339,9 @@ int security_inode_get_acl(struct mnt_idmap *idmap,
+>>>  int security_inode_remove_acl(struct mnt_idmap *idmap,
+>>>  			      struct dentry *dentry, const char *acl_name)
+>>>  {
+>>> -	int ret;
+>>> -
+>>>  	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+>>>  		return 0;
+>>> -	ret = call_int_hook(inode_remove_acl, 0, idmap, dentry, acl_name);
+>>> -	if (ret)
+>>> -		return ret;
+>>> -	return evm_inode_remove_acl(idmap, dentry, acl_name);
+>>> +	return call_int_hook(inode_remove_acl, 0, idmap, dentry, acl_name);
+>>>  }
+>>>  
+>>>  /**
+>>> @@ -2397,7 +2377,6 @@ void security_inode_post_setxattr(struct dentry *dentry, const char *name,
+>>>  	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+>>>  		return;
+>>>  	call_void_hook(inode_post_setxattr, dentry, name, value, size, flags);
+>>> -	evm_inode_post_setxattr(dentry, name, value, size, flags);
+>>>  }
+>>>  
+>>>  /**
+>>> @@ -2458,9 +2437,7 @@ int security_inode_removexattr(struct mnt_idmap *idmap,
+>>>  	ret = call_int_hook(inode_removexattr, 1, idmap, dentry, name);
+>>>  	if (ret == 1)
+>>>  		ret = cap_inode_removexattr(idmap, dentry, name);
+>>> -	if (ret)
+>>> -		return ret;
+>>> -	return evm_inode_removexattr(idmap, dentry, name);
+>>> +	return ret;
+>>>  }
+>>>  
+>>>  /**
