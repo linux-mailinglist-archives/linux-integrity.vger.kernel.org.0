@@ -2,65 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F096B0E91
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Mar 2023 17:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8486B0FE2
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Mar 2023 18:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjCHQYP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Mar 2023 11:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S229683AbjCHRLx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Mar 2023 12:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjCHQYN (ORCPT
+        with ESMTP id S229611AbjCHRLx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:24:13 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ACEC1C0C;
-        Wed,  8 Mar 2023 08:24:02 -0800 (PST)
+        Wed, 8 Mar 2023 12:11:53 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF00136DC;
+        Wed,  8 Mar 2023 09:11:50 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PWy7j4CqPz9xHM1;
-        Thu,  9 Mar 2023 00:14:41 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBHHGN5tghkH4B+AQ--.22743S2;
-        Wed, 08 Mar 2023 17:23:35 +0100 (CET)
-Message-ID: <0a15c85e9de2235c313b10839aabf750f276552f.camel@huaweicloud.com>
-Subject: Re: [PATCH 00/28] security: Move IMA and EVM to the LSM
- infrastructure
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PWzCW3J82z9xGnQ;
+        Thu,  9 Mar 2023 01:03:03 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDnbwu8wQhkZuyAAQ--.23704S2;
+        Wed, 08 Mar 2023 18:11:31 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
-        chuck.lever@oracle.com, jlayton@kernel.org,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Mar 2023 17:23:18 +0100
-In-Reply-To: <59eb6d6d2ffd5522b2116000ab48b1711d57f5e5.camel@linux.ibm.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
-         <59eb6d6d2ffd5522b2116000ab48b1711d57f5e5.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2] security: Introduce LSM_ORDER_LAST and set it for the integrity LSM
+Date:   Wed,  8 Mar 2023 18:11:18 +0100
+Message-Id: <20230308171119.1784326-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwBHHGN5tghkH4B+AQ--.22743S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxArW7Aw17XFWDGryDJw4fXwb_yoW5ZF15pF
-        Z8K3W5Kr4ktF109rs2v3y8uFWfCa1fJ3yUJr95K34UZa45GF1FqFWvkF15uFyDG3s0kFyF
-        qF4jq3s5Z3WDZrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwDnbwu8wQhkZuyAAQ--.23704S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryrZw4xKw1kur47tr4rAFb_yoW5Crykpa
+        yDtFWfGr18AFWS93ZrA3Wak3WfK39YkFy7GrZ8Ww1DAa95Xry0vr4akrySkryUXFyvyF1I
+        vr42vr4ak3Wqy3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
         vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
         xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
         AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4pXogABsA
+        6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+        n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE
+        14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUsrcTDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj4ZaNAAAsV
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -70,70 +61,93 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2023-03-08 at 10:14 -0500, Mimi Zohar wrote:
-> Hi Roberto,
-> 
-> On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > This patch set depends on:
-> > - https://lore.kernel.org/linux-integrity/20221201104125.919483-1-roberto.sassu@huaweicloud.com/ (there will be a v8 shortly)
-> > - https://lore.kernel.org/linux-security-module/20230217032625.678457-1-paul@paul-moore.com/
-> > 
-> > IMA and EVM are not effectively LSMs, especially due the fact that in the
-> > past they could not provide a security blob while there is another LSM
-> > active.
-> > 
-> > That changed in the recent years, the LSM stacking feature now makes it
-> > possible to stack together multiple LSMs, and allows them to provide a
-> > security blob for most kernel objects. While the LSM stacking feature has
-> > some limitations being worked out, it is already suitable to make IMA and
-> > EVM as LSMs.
-> > 
-> > In short, while this patch set is big, it does not make any functional
-> > change to IMA and EVM. IMA and EVM functions are called by the LSM
-> > infrastructure in the same places as before (except ima_post_path_mknod()),
-> > rather being hardcoded calls, and the inode metadata pointer is directly
-> > stored in the inode security blob rather than in a separate rbtree.
-> > 
-> > More specifically, patches 1-13 make IMA and EVM functions suitable to
-> > be registered to the LSM infrastructure, by aligning function parameters.
-> > 
-> > Patches 14-22 add new LSM hooks in the same places where IMA and EVM
-> > functions are called, if there is no LSM hook already.
-> > 
-> > Patch 23 adds the 'last' ordering strategy for LSMs, so that IMA and EVM
-> > functions are called in the same order as of today. Also, like with the
-> > 'first' strategy, LSMs using it are always enabled, so IMA and EVM
-> > functions will be always called (if IMA and EVM are compiled built-in).
-> > 
-> > Patches 24-27 do the bulk of the work, remove hardcoded calls to IMA and
-> > EVM functions, register those functions in the LSM infrastructure, and let
-> > the latter call them. In addition, they also reserve one slot for EVM to 
-> > supply an xattr to the inode_init_security hook.
-> > 
-> > Finally, patch 28 removes the rbtree used to bind metadata to the inodes,
-> > and instead reserve a space in the inode security blob to store the pointer
-> > to metadata. This also brings performance improvements due to retrieving
-> > metadata in constant time, as opposed to logarithmic.
-> 
-> Prior to IMA being upstreamed, it went through a number of iterations,
-> first on the security hooks, then as a separate parallel set of
-> integrity hooks, and, finally, co-located with the security hooks,
-> where they exist.  With this patch set we've come full circle.
-> 
-> With the LSM stacking support, multiple LSMs can now use the
-> 'i_security' field removing the need for the rbtree indirection for
-> accessing integrity state info.
-> 
-> Roberto, thank you for making this change.  Mostly it looks good.  
-> Reviewing the patch set will be easier once the prereq's and this patch
-> set can be properly applied.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Welcome. Yes, once Paul reviews the other patch set, we can
-progressively apply the patches.
+Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs willing to be
+the last, e.g. the 'integrity' LSM, without changing the kernel command
+line or configuration.
 
-Thanks
+Also, set this order for the 'integrity' LSM. While not enforced, this is
+the only LSM expected to use it.
 
-Roberto
+Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
+and put at the end of the LSM list.
+
+Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
+LSM is found, regardless of its order. In this way, the kernel would not
+wrongly report that the LSM is not built-in in the kernel if its order is
+LSM_ORDER_LAST.
+
+Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+
+Changelog
+
+v1:
+- Add comment for LSM_ORDER_LAST definition (suggested by Mimi)
+- Add Fixes tag (suggested by Mimi)
+- Do minor corrections in the commit messages (suggested by Mimi and Stefan)
+
+ include/linux/lsm_hooks.h |  1 +
+ security/integrity/iint.c |  1 +
+ security/security.c       | 12 +++++++++---
+ 3 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index 6e156d2acff..c55761d93a2 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -1716,6 +1716,7 @@ extern void security_add_hooks(struct security_hook_list *hooks, int count,
+ enum lsm_order {
+ 	LSM_ORDER_FIRST = -1,	/* This is only for capabilities. */
+ 	LSM_ORDER_MUTABLE = 0,
++	LSM_ORDER_LAST = 1,	/* This is only for integrity. */
+ };
+ 
+ struct lsm_info {
+diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+index 8638976f799..b97eb59e0e3 100644
+--- a/security/integrity/iint.c
++++ b/security/integrity/iint.c
+@@ -182,6 +182,7 @@ static int __init integrity_iintcache_init(void)
+ DEFINE_LSM(integrity) = {
+ 	.name = "integrity",
+ 	.init = integrity_iintcache_init,
++	.order = LSM_ORDER_LAST,
+ };
+ 
+ 
+diff --git a/security/security.c b/security/security.c
+index cf6cc576736..2f36229d5b6 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -284,9 +284,9 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+ 		bool found = false;
+ 
+ 		for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+-			if (lsm->order == LSM_ORDER_MUTABLE &&
+-			    strcmp(lsm->name, name) == 0) {
+-				append_ordered_lsm(lsm, origin);
++			if (strcmp(lsm->name, name) == 0) {
++				if (lsm->order == LSM_ORDER_MUTABLE)
++					append_ordered_lsm(lsm, origin);
+ 				found = true;
+ 			}
+ 		}
+@@ -306,6 +306,12 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+ 		}
+ 	}
+ 
++	/* LSM_ORDER_LAST is always last. */
++	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
++		if (lsm->order == LSM_ORDER_LAST)
++			append_ordered_lsm(lsm, "   last");
++	}
++
+ 	/* Disable all LSMs not in the ordered list. */
+ 	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+ 		if (exists_ordered_lsm(lsm))
+-- 
+2.25.1
 
