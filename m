@@ -2,174 +2,166 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1826B0B5A
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Mar 2023 15:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD466B0C49
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Mar 2023 16:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjCHOgZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Mar 2023 09:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44086 "EHLO
+        id S231977AbjCHPPW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Mar 2023 10:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232013AbjCHOgY (ORCPT
+        with ESMTP id S231987AbjCHPPT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:36:24 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F995B1EE6;
-        Wed,  8 Mar 2023 06:36:22 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PWvlV2x71z9v7br;
-        Wed,  8 Mar 2023 22:27:02 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCHDQlBnQhk6W+AAQ--.41041S2;
-        Wed, 08 Mar 2023 15:35:57 +0100 (CET)
-Message-ID: <384be560fdc4c37f056acc655de68372049560c7.camel@huaweicloud.com>
-Subject: Re: [PATCH 23/28] security: Introduce LSM_ORDER_LAST
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
-        chuck.lever@oracle.com, jlayton@kernel.org,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
+        Wed, 8 Mar 2023 10:15:19 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0700B7883;
+        Wed,  8 Mar 2023 07:15:17 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328DqI1V017279;
+        Wed, 8 Mar 2023 15:14:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=wsSNtYNth8vWVB0WyhnfA9Yf92sFqjOF34GLKBIYDtY=;
+ b=L5gTvcQu9D1aNW3M3WNJy2YCSXzdKhAmoBWdLMec8qR002EkuU/Xx9XQseETv61ieNpQ
+ 7d4jR4A3U01kEGKtK6da/PnVXIjkZrNyoipC+22sGpaPaLnDVFTN5EYZEPCb0FAMp6/L
+ FRfWu4hR+XdiRJz0OYcId29IpmKNhRwU1c1nRPg5necu2ThO7nKwit2rFQUZFVnEKXMA
+ 4mD/0cCel+G5RjvzELK2l0qYiT1ips3KtaDkAINihQG0xeK+Q0p23MEBcl3iPmlJwxgU
+ 61fgRPEiTfihZMhidUjRW/Ng8NCmUBY7tKOL+OV3PbW5WKT8GqgCLinWF8QGck0ANMJ5 ww== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6s9a5uc5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 15:14:49 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 328DpfI0032917;
+        Wed, 8 Mar 2023 15:14:49 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6s9a5ubk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 15:14:48 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 328EB1Qi022786;
+        Wed, 8 Mar 2023 15:14:47 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3p6fkxmryy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 15:14:47 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 328FEkac10158630
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Mar 2023 15:14:46 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 18E7258065;
+        Wed,  8 Mar 2023 15:14:46 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A91A58043;
+        Wed,  8 Mar 2023 15:14:43 +0000 (GMT)
+Received: from sig-9-77-134-135.ibm.com (unknown [9.77.134.135])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Mar 2023 15:14:43 +0000 (GMT)
+Message-ID: <59eb6d6d2ffd5522b2116000ab48b1711d57f5e5.camel@linux.ibm.com>
+Subject: Re: [PATCH 00/28] security: Move IMA and EVM to the LSM
+ infrastructure
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
+        jarkko@kernel.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com, brauner@kernel.org
 Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
         stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Mar 2023 15:35:42 +0100
-In-Reply-To: <1d02222998cf465fa7080ffb910bcf5815b7f857.camel@linux.ibm.com>
+Date:   Wed, 08 Mar 2023 10:14:43 -0500
+In-Reply-To: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
 References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
-         <20230303182602.1088032-1-roberto.sassu@huaweicloud.com>
-         <a0320926ebfe732dabc4e53c3a35ede450c75474.camel@linux.ibm.com>
-         <ee5d9eb3addb9d408408fd748d52686bd9b85e24.camel@huaweicloud.com>
-         <1d02222998cf465fa7080ffb910bcf5815b7f857.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zdCOlqUF6T3fV5T9q5Vlng-KzKLsjuRP
+X-Proofpoint-GUID: _d4khsLow4UcGpqeUVXzZJSGP8iQWKTJ
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwCHDQlBnQhk6W+AAQ--.41041S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFW5AFyxAryDWF4Dur1fXrb_yoWrGFW8pa
-        y8tF43Gr4ktF1xG3Wqv3ZxK3WIq397GFyUWFZ8Xw1UZayvqF9a9F4xCry3uFykXFyDCF10
-        vr4av3yfCrn8AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4pWQgAAsg
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-08_08,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 phishscore=0 clxscore=1015 impostorscore=0 mlxlogscore=999
+ priorityscore=1501 suspectscore=0 mlxscore=0 spamscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303080129
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2023-03-08 at 09:00 -0500, Mimi Zohar wrote:
-> On Wed, 2023-03-08 at 14:26 +0100, Roberto Sassu wrote:
-> > On Wed, 2023-03-08 at 08:13 -0500, Mimi Zohar wrote:
-> > > Hi Roberto,
-> > > 
-> > > On Fri, 2023-03-03 at 19:25 +0100, Roberto Sassu wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > 
-> > > > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs willing to be
-> > > > the last, e.g. the 'integrity' LSM, without changing the kernel command
-> > > > line or configuration.
-> > > 
-> > > Please reframe this as a bug fix for 79f7865d844c ("LSM: Introduce
-> > > "lsm=" for boottime LSM selection") and upstream it first, with
-> > > 'integrity' as the last LSM.   The original bug fix commit 92063f3ca73a
-> > > ("integrity: double check iint_cache was initialized") could then be
-> > > removed.
-> > 
-> > Ok, I should complete the patch by checking the cache initialization in
-> > iint.c.
-> > 
-> > > > As for LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled and put
-> > > > at the end of the LSM list in no particular order.
-> > > 
-> > > ^Similar to LSM_ORDER_FIRST ...
-> > > 
-> > > And remove "in no particular order".
-> > 
-> > The reason for this is that I originally thought that the relative
-> > order of LSMs specified in the kernel configuration or the command line
-> > was respected (if more than one LSM specifies LSM_ORDER_LAST). In fact
-> > not. To do this, we would have to parse the LSM string again, as it is
-> > done for LSM_ORDER_MUTABLE LSMs.
+Hi Roberto,
+
+On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> IMA and EVM are only configurable if 'integrity' is enabled.  Similar
-> to how LSM_ORDER_FIRST is reserved for capabilities, LSM_ORDER_LAST
-> should be reserved for integrity (LSMs), if it is configured, for the
-> reason as described in the "[PATCH 24/28] ima: Move to LSM
-> infrastructure" patch description.
+> This patch set depends on:
+> - https://lore.kernel.org/linux-integrity/20221201104125.919483-1-roberto.sassu@huaweicloud.com/ (there will be a v8 shortly)
+> - https://lore.kernel.org/linux-security-module/20230217032625.678457-1-paul@paul-moore.com/
+> 
+> IMA and EVM are not effectively LSMs, especially due the fact that in the
+> past they could not provide a security blob while there is another LSM
+> active.
+> 
+> That changed in the recent years, the LSM stacking feature now makes it
+> possible to stack together multiple LSMs, and allows them to provide a
+> security blob for most kernel objects. While the LSM stacking feature has
+> some limitations being worked out, it is already suitable to make IMA and
+> EVM as LSMs.
+> 
+> In short, while this patch set is big, it does not make any functional
+> change to IMA and EVM. IMA and EVM functions are called by the LSM
+> infrastructure in the same places as before (except ima_post_path_mknod()),
+> rather being hardcoded calls, and the inode metadata pointer is directly
+> stored in the inode security blob rather than in a separate rbtree.
+> 
+> More specifically, patches 1-13 make IMA and EVM functions suitable to
+> be registered to the LSM infrastructure, by aligning function parameters.
+> 
+> Patches 14-22 add new LSM hooks in the same places where IMA and EVM
+> functions are called, if there is no LSM hook already.
+> 
+> Patch 23 adds the 'last' ordering strategy for LSMs, so that IMA and EVM
+> functions are called in the same order as of today. Also, like with the
+> 'first' strategy, LSMs using it are always enabled, so IMA and EVM
+> functions will be always called (if IMA and EVM are compiled built-in).
+> 
+> Patches 24-27 do the bulk of the work, remove hardcoded calls to IMA and
+> EVM functions, register those functions in the LSM infrastructure, and let
+> the latter call them. In addition, they also reserve one slot for EVM to 
+> supply an xattr to the inode_init_security hook.
+> 
+> Finally, patch 28 removes the rbtree used to bind metadata to the inodes,
+> and instead reserve a space in the inode security blob to store the pointer
+> to metadata. This also brings performance improvements due to retrieving
+> metadata in constant time, as opposed to logarithmic.
 
-Yes, it is just that nothing prevents to have multiple LSMs with order
-LSM_ORDER_LAST. I guess we will enforce that it is only one by
-reviewing the code.
+Prior to IMA being upstreamed, it went through a number of iterations,
+first on the security hooks, then as a separate parallel set of
+integrity hooks, and, finally, co-located with the security hooks,
+where they exist.  With this patch set we've come full circle.
 
-Thanks
+With the LSM stacking support, multiple LSMs can now use the
+'i_security' field removing the need for the rbtree indirection for
+accessing integrity state info.
 
-Roberto
+Roberto, thank you for making this change.  Mostly it looks good.  
+Reviewing the patch set will be easier once the prereq's and this patch
+set can be properly applied.
 
-> > Thanks
-> > 
-> > Roberto
-> > 
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > ---
-> > > >  include/linux/lsm_hooks.h |  1 +
-> > > >  security/security.c       | 12 +++++++++---
-> > > >  2 files changed, 10 insertions(+), 3 deletions(-)
-> > > > 
-> > > > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> > > > index 21a8ce23108..05c4b831d99 100644
-> > > > --- a/include/linux/lsm_hooks.h
-> > > > +++ b/include/linux/lsm_hooks.h
-> > > > @@ -93,6 +93,7 @@ extern void security_add_hooks(struct security_hook_list *hooks, int count,
-> > > >  enum lsm_order {
-> > > >  	LSM_ORDER_FIRST = -1,	/* This is only for capabilities. */
-> > > >  	LSM_ORDER_MUTABLE = 0,
-> > > > +	LSM_ORDER_LAST = 1,
-> > > >  };
-> > > >  
-> > > >  struct lsm_info {
-> > > > diff --git a/security/security.c b/security/security.c
-> > > > index 322090a50cd..24f52ba3218 100644
-> > > > --- a/security/security.c
-> > > > +++ b/security/security.c
-> > > > @@ -284,9 +284,9 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
-> > > >  		bool found = false;
-> > > >  
-> > > >  		for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
-> > > > -			if (lsm->order == LSM_ORDER_MUTABLE &&
-> > > > -			    strcmp(lsm->name, name) == 0) {
-> > > > -				append_ordered_lsm(lsm, origin);
-> > > > +			if (strcmp(lsm->name, name) == 0) {
-> > > > +				if (lsm->order == LSM_ORDER_MUTABLE)
-> > > > +					append_ordered_lsm(lsm, origin);
-> > > >  				found = true;
-> > > >  			}
-> > > >  		}
-> > > > @@ -306,6 +306,12 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
-> > > >  		}
-> > > >  	}
-> > > >  
-> > > > +	/* LSM_ORDER_LAST is always last. */
-> > > > +	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
-> > > > +		if (lsm->order == LSM_ORDER_LAST)
-> > > > +			append_ordered_lsm(lsm, "   last");
-> > > > +	}
-> > > > +
-> > > >  	/* Disable all LSMs not in the ordered list. */
-> > > >  	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
-> > > >  		if (exists_ordered_lsm(lsm))
+-- 
+thanks,
+
+Mimi
 
