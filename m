@@ -2,130 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1086B302D
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Mar 2023 23:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4883A6B309D
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Mar 2023 23:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjCIWFE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Mar 2023 17:05:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S231218AbjCIWac (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Mar 2023 17:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbjCIWEt (ORCPT
+        with ESMTP id S230154AbjCIWab (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:04:49 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60091E9CF1
-        for <linux-integrity@vger.kernel.org>; Thu,  9 Mar 2023 14:04:43 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id q23so1964303pgt.7
-        for <linux-integrity@vger.kernel.org>; Thu, 09 Mar 2023 14:04:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1678399482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TecKA/qLSHNqUo87Vcc7qjzuRFiAfxthOVOs0V+b0QM=;
-        b=B/ifo454RThSbwsVJ1GiBxsO5yR0YgC0QC8xCrJPI+zw/5vKzpZV1K+3D7eENg9Wsy
-         NhM4rCbxaG+Lyfoo0bx+IQiPsmsPor9J52RV4wdVYji2kDxCGlrgBH6gAn5rHatZaZvn
-         IrmgDfkgCnX4VQgzpiTR3UdvFawHccoownBfvGk+fkWO3p8QhM/EUn38nsGj3bqAoHrM
-         EBu6GEwkP1B5t0E2+UxhfOzRVKkwGD0RXQq1SitNmj400OqF7EQ60JSX41H/WOdgKLm8
-         uBDloVEVY8ScotG0HkCdRT88uRgKKOMDrBvcKBUgrtmv4C6uYHu/E/Fxxh9H1PYBnoeh
-         iQ2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678399482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TecKA/qLSHNqUo87Vcc7qjzuRFiAfxthOVOs0V+b0QM=;
-        b=jJJ+5AgYNFfXFNqiVEBLdctGyIP2U7H0rk//03BQmBFnz+hJtvtuUKUApsV1zEF09G
-         eNWlfFYb7hO5HO9G7I7EMcbRNqEzEy8QDakoI9cjE6E4fzJp5N/CeNo+nYer3FoS+bSN
-         BvS5ucRAeb6taJ9aYk2Sqp5xQajYTMHSsNiGCs4x/u+Ytm7zuuW4hGyOfsm9xLVYiTTm
-         9gtWf/QpVEQIyFe98zIuavUk9rySp5AnWnk8dDTchYrdIiU+Rzko0S4S2fEnxa3KiZmx
-         30uJgAI7Aizp9TPge11lwQ9ADJKqMOYtBdPrUlnos9hsEIo1JeNCeiq+U6lju6Fi5d9I
-         pvmA==
-X-Gm-Message-State: AO0yUKX67rcjmeZNM1iv7x49tLwZT6kIyI8oYujKXGOh+a1fwo5gpqG0
-        MAZbER3U5Owdl7Oxd15UojJQQdlQ4XKLK4FlLJ/D
-X-Google-Smtp-Source: AK7set8bKYOJHSfTo3V36f2sVcFEqHiyfmKQ2F1unir5j8GMf0wWI3fvuuhPCS9zXNc+lm8Vuuq+UCQ/qTAM7wPhaDU=
-X-Received: by 2002:a05:6a00:14d6:b0:5aa:310c:e65b with SMTP id
- w22-20020a056a0014d600b005aa310ce65bmr10450213pfu.2.1678399482624; Thu, 09
- Mar 2023 14:04:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
- <20230309085433.1810314-2-roberto.sassu@huaweicloud.com> <397cb437bbd41e7eb223a07bc92a10bb57df696e.camel@linux.ibm.com>
-In-Reply-To: <397cb437bbd41e7eb223a07bc92a10bb57df696e.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 9 Mar 2023 17:04:31 -0500
-Message-ID: <CAHC9VhTt7xZqkfZQsWVLRHzza_9idzxkY7bXxzBMq=Xxfc6+Cg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it for
- the integrity LSM
-To:     Mimi Zohar <zohar@linux.ibm.com>
+        Thu, 9 Mar 2023 17:30:31 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1927BF8F22
+        for <linux-integrity@vger.kernel.org>; Thu,  9 Mar 2023 14:30:30 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329L2IoA012167;
+        Thu, 9 Mar 2023 22:30:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=25IVFFbtfnFIVKiKYt6caNGcIYa31y9UhPYjNQH5NCQ=;
+ b=jKlBOO0NmV5iGdVvT4uSQapkZtER1017uZHKRVryMXWORw04gT8Fje2LqPYSimVWtW6Y
+ yfxyT7lsJEXJf3l78rNjeEJF+PdknK/8lpr0Btow6UFBwwtqx2Q0NGGHlKYFno8AQ0ES
+ 0pBEyfuHam02BDl8SMA1DB2KTcTeBOFq7ZRtSkdYAMJeBnvqmhRAwk5xl8ty0d5xa9Es
+ GxAYc22xTmLM+SqrY1VypW//DRUhSgPGqkAe9ihslj3tPR58PV38sHvNs3iT69X07wqS
+ rNyjIqtYMP6hzqNDbj5WH5MBYgn/9kRuDfT9jfjPhId+k4nPrNAmabo/HDhhjKzqbYzP zA== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6rdhf0ev-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 22:30:17 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329ImuEo025847;
+        Thu, 9 Mar 2023 22:30:16 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3p6g9jbfp5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 22:30:15 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329MUEEk7406214
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Mar 2023 22:30:15 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D744D58058;
+        Thu,  9 Mar 2023 22:30:14 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3EA855805B;
+        Thu,  9 Mar 2023 22:30:14 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.72.201])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 22:30:14 +0000 (GMT)
+Message-ID: <7360f93f5189b64efc1e1c1aeeb2f3cbed986db0.camel@linux.ibm.com>
+Subject: ima-evm-utils: version 1.5 released
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity <linux-integrity@vger.kernel.org>
 Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        mic@digikod.net, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@us.ibm.com>
+Date:   Thu, 09 Mar 2023 17:30:13 -0500
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 40esAeexXHngZx2zCzrInQXEsnBLHXuD
+X-Proofpoint-ORIG-GUID: 40esAeexXHngZx2zCzrInQXEsnBLHXuD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_12,2023-03-09_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 mlxlogscore=769
+ priorityscore=1501 clxscore=1015 adultscore=0 mlxscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303090177
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 8:21=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wro=
-te:
-> On Thu, 2023-03-09 at 09:54 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> >
-> > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to=
- be
-> > last, e.g. the 'integrity' LSM, without changing the kernel command lin=
-e or
-> > configuration.
-> >
-> > Also, set this order for the 'integrity' LSM. While not enforced, this =
-is
-> > the only LSM expected to use it.
-> >
-> > Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabl=
-ed
-> > and put at the end of the LSM list.
-> >
-> > Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if =
-an
-> > LSM is found, regardless of its order. In this way, the kernel would no=
-t
-> > wrongly report that the LSM is not built-in in the kernel if its order =
-is
-> > LSM_ORDER_LAST.
-> >
-> > Fixes: 79f7865d844c ("LSM: Introduce "lsm=3D" for boottime LSM selectio=
-n")
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+There have been many changes since the last release.  The most notable
+change is CI support for testing new kernel integrity features not yet
+upstreamed and bugfixes, or functionality not enabled by distros in a
+User Mode Linux (UML) environment.  Testing in a UML environment also
+allows saving CI build artifacts, such as private keys, needed for
+creating and loading public keys onto the trusted kernel keyrings. 
+These public keys may be used for code - file data and metadata -
+signature verification.
 
-Warning: procedural nitpicking ahead ...
+I'd like to thank Roberto Sassu for the UML work and the various tests.
+I'd also like to call out Petr Vorel's, Vitaly Chikunov's, and Stefan
+Berger's contributions - advice, patches and code review.  And to thank
+the community in general.
 
-The 'Signed-off-by' tag is in reference to the DCO, which makes sense
-to add if you are a patch author or are merging a patch into a tree,
-but it doesn't make much sense as a ACK/thumbs-up; this is why we have
-the 'Acked-by' and 'Reviewed-by' tags.  I generally read the
-'Acked-by' tag as "I'm the one responsible for a chunk of code
-affected by this patch and I'm okay with this change" and the
-'Reviewed-by' tag as "I looked at this patch and it looks like a good
-change to me".  Perhaps surprisingly to some, while an 'Acked-by' is a
-requirement for merging in a lot of cases, I appreciate 'Reviewed-by'
-tags much more as it indicates the patch is getting some third-part
-eyeballs on it ... so all you lurkers on this list, if you're
-reviewing patches as they hit your inbox, don't be shy about posting
-your 'Reviewed-by' tag if your comfortable doing so, we all welcome
-the help :)
+Please refer to the NEWS file for the short summary and the git history
+for details of the ima-evm-utils v1.5 release.
 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign=
--your-work-the-developer-s-certificate-of-origin
+-- 
+Mimi
 
---=20
-paul-moore.com
