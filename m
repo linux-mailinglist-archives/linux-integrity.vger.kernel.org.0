@@ -2,91 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14656B322D
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Mar 2023 00:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FC86B37E9
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Mar 2023 08:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjCIXpZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Mar 2023 18:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S230061AbjCJH6K (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Mar 2023 02:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbjCIXpY (ORCPT
+        with ESMTP id S229761AbjCJH6J (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Mar 2023 18:45:24 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92F8FAEDE
-        for <linux-integrity@vger.kernel.org>; Thu,  9 Mar 2023 15:45:23 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so8031166pjh.0
-        for <linux-integrity@vger.kernel.org>; Thu, 09 Mar 2023 15:45:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1678405523;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=joK1iLs9YJ7HYS6kSzl2rZbt/PuSCafHcz/xrLe7jGo=;
-        b=bJFC/lAxRaHk+mJqFSplHzH565OHscdq/bY/9CaWiQOg8ijsx/QWt+KjSnlFrcR+xR
-         4I1MJqqwVstjWukbZY6XdRsy9bNQSN/vXnzu/GEMWzZTYVGIw135HxxyK2++JSB1jCwy
-         bP7vzNceDo79Gggr+2xGhQQcleXlWrDTzDQUlFJMW8ZQE1RtzafjjlEqdvydZ4fz8OTD
-         Y6VnRI+sJpkqAnzSvB0URvwz+nejVbgHzuJuAT+kACmJuxKTloH6ahZu62YHu56dSLtK
-         pQvzd09T9tcOEZKDsBrx1zvXbF56C2jQ+8HzE0y00ywXkIa00ErlFPhBOm7+RwTIXAz6
-         4XTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678405523;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=joK1iLs9YJ7HYS6kSzl2rZbt/PuSCafHcz/xrLe7jGo=;
-        b=EPtY7j0b5mO0iw3UsPHWmgdjpkv1Byl/ON3emzKvGMiJBl76knvMvKowVfCvOuCP68
-         x87IEe4l766MbxPN9Nbm37wV6sRUz9p/YiivMK5zyxBkStAnuIdONBYRJXtDzzK+ApBe
-         wo7Rub30Cxwk1Tk5lNGnhQWoukvo6faGv7EZjyGMuL4UHh0hCNuNwXhEXzs7ZLl/af8f
-         jtAeOLKgqDXuHTaQ+CtCmV3scTgxWbXeErFOIRoyi0rrmcERvIlrnhAqrwp8Wa5aidNr
-         Y3ii7F4X0UciJCKo9OGltUvH4OIvfXT0DpR3eI56FmSo1QvqxHu+Q3LRzEJtRGrwGWGQ
-         gvRQ==
-X-Gm-Message-State: AO0yUKW+RMcEA67T8nxs8x1v8GQGmrmjd3IXpc7kCx5pi+K5p1KyTqNU
-        VCjvMjuXEiFwr/ug5mMOLldeyZFi8WmwmJ8jHx0v
-X-Google-Smtp-Source: AK7set9RqqZSFE77wMatvCcE/t3Pq4nptu8SVgLeYYg9Y3Xs8cDwkREIi1LMWiYTY9uI7Ha62QlVV3bMgcEiTsZhy9c=
-X-Received: by 2002:a17:903:485:b0:19a:f22b:31d4 with SMTP id
- jj5-20020a170903048500b0019af22b31d4mr9142241plb.7.1678405523115; Thu, 09 Mar
- 2023 15:45:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com> <20230309085433.1810314-4-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20230309085433.1810314-4-roberto.sassu@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 9 Mar 2023 18:45:12 -0500
-Message-ID: <CAHC9VhSuXxpS_eae0gi4zGFYWEXrxFZD7joaV-qhNmmvf_tcMg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] security: Remove integrity from the LSM list in Kconfig
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+        Fri, 10 Mar 2023 02:58:09 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4D414216;
+        Thu,  9 Mar 2023 23:58:06 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXyqb4fT0z9v7H3;
+        Fri, 10 Mar 2023 15:49:15 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDnvGPz4gpkCr6FAQ--.63736S2;
+        Fri, 10 Mar 2023 08:57:47 +0100 (CET)
+Message-ID: <93b680a9a31357b21610dd988d3c653a9ace3492.camel@huaweicloud.com>
+Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it
+ for the integrity LSM
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
 Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
         serge@hallyn.com, mic@digikod.net, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, keescook@chromium.org,
         Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 10 Mar 2023 08:57:36 +0100
+In-Reply-To: <CAHC9VhRBxPnQeQ4SPHKXP_k1epoaZRGNUzCa+QJR9se_t+4+-Q@mail.gmail.com>
+References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
+         <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
+         <CAHC9VhRBxPnQeQ4SPHKXP_k1epoaZRGNUzCa+QJR9se_t+4+-Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwDnvGPz4gpkCr6FAQ--.63736S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4kJryrtr45uw1rtFW7CFg_yoW8XFWUpF
+        W7KayrCr1qvFWrCa9xA3W3ua48C393GFnrGrsxZw1DZas5Zry0kr1IgrZ7WryDXF4vyFyS
+        9Fy3WFyakw1DArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj4ppUQACsI
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 3:55=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Remove 'integrity' from the list of LSMs in Kconfig, as it is no longer
-> necessary. Since the recent change (set order to LSM_ORDER_LAST), the
-> 'integrity' LSM is always enabled.
+On Thu, 2023-03-09 at 18:44 -0500, Paul Moore wrote:
+> On Thu, Mar 9, 2023 at 3:55 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to be
+> > last, e.g. the 'integrity' LSM, without changing the kernel command line or
+> > configuration.
+> > 
+> > Also, set this order for the 'integrity' LSM. While not enforced, this is
+> > the only LSM expected to use it.
+> > 
+> > Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
+> > and put at the end of the LSM list.
+> 
+> Since you are respinning this patchset anyway, I might make it clear
+> that the LSM_ORDER_LAST LSMs are always enabled only when they are
+> enabled at kernel configure/build time.  Simply marking a LSM as
+> LSM_ORDER_LAST does not mean you don't have to explicitly select the
+> LSM in the rest of the Kconfig.
 
-See my comment in 1/3 about "always enabled".
+Ok, yes, better to clarify.
 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/Kconfig | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+Thanks
 
---=20
-paul-moore.com
+Roberto
+
+> > Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
+> > LSM is found, regardless of its order. In this way, the kernel would not
+> > wrongly report that the LSM is not built-in in the kernel if its order is
+> > LSM_ORDER_LAST.
+> > 
+> > Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  include/linux/lsm_hooks.h |  1 +
+> >  security/integrity/iint.c |  1 +
+> >  security/security.c       | 12 +++++++++---
+> >  3 files changed, 11 insertions(+), 3 deletions(-)
+
