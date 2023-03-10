@@ -2,97 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009256B4095
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Mar 2023 14:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617D06B4CD0
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Mar 2023 17:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjCJNjH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Mar 2023 08:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
+        id S231597AbjCJQ0S (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Mar 2023 11:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjCJNjH (ORCPT
+        with ESMTP id S231589AbjCJQ0E (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Mar 2023 08:39:07 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E67F10A13F;
-        Fri, 10 Mar 2023 05:39:02 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ACCCBE015250;
-        Fri, 10 Mar 2023 13:38:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=CPsFbZYndVlyFYB19JflEEI+kjqoJVDliu8k0oxQOSU=;
- b=h8Lyc7XU0upk7G9ZEuCGeD/LB7YL2WbsR1cHMXAy9fUePpRlaXzJm0dMhT3ZTyQQhXRd
- AsSmxRt/B+qAktUfGBKvDQA2DECwfYrWhXoCI4jiSMNAH23oZtIj0WdTW25hgfQlpkxN
- xauiFmPoQGFjUY00mA+WFIJeC1Q24ibY4BXSKIT5O1rzHDvBrVKgnLTXIBN2QTDBoLQw
- t6QITb/8br6Fm+VK8F5BZRNqjkY0bzaxQE3o3W8tJt4GcPu6O+Nj6JrLxjAElCZA8pU3
- ndckA+e/C+g8AJ0hbUNmtXipUAxk/vB5HuJ9PiscMc6GiN/rx2ci9hCiHekT06mKJHQW Tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p84be21rg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 13:38:41 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32ADcQxw030762;
-        Fri, 10 Mar 2023 13:38:41 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p84be21r7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 13:38:41 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32ACEOJr022813;
-        Fri, 10 Mar 2023 13:38:40 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3p6fky2w7m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 13:38:40 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ADccWu50463030
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 13:38:39 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3D6D58066;
-        Fri, 10 Mar 2023 13:38:38 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 359675805D;
-        Fri, 10 Mar 2023 13:38:37 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.71.208])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Mar 2023 13:38:37 +0000 (GMT)
-Message-ID: <3c2ad86758d13939afa9dceaab87fee2ded8201f.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it
- for the integrity LSM
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Paul Moore <paul@paul-moore.com>
+        Fri, 10 Mar 2023 11:26:04 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C2810F0
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Mar 2023 08:22:31 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id h17-20020a17090aea9100b0023739b10792so5681685pjz.1
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Mar 2023 08:22:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1678465342;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a1xKJv7I43t6QQTItfrGRf70Ny8ji2NWl1/miCvddqg=;
+        b=OCevYKE85PtLl+hcvLgkZwQ3myHlzDiEeMuoDh23Zzra4od6divy+o1JQQWdUhuk9A
+         o4/mgex6y9FDuZP3YNRgPHvXlyeMxVZl9OubIvYXQvW78EvctrppmPeakW5g8LZ61vjI
+         vWlBHtkqDhwJ/7KPaoyQ/JAsJhJk5BvulX6le0dXxyrKDw/5ho2SkEydVEBrLfOMYdN4
+         Zl/piiv2GK4Ycw+i0t34hH41UELJkzVOJ+aB3MTTnOaYrocKdG7AhEhhFCM0UJFBoPWD
+         IRUc8VGFMj9wnEVSfLtr5OG1mz/vRgfCXsWz0dgx+voqI/DjOmVSO7IcTRjwKyneN0xe
+         iHfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678465342;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a1xKJv7I43t6QQTItfrGRf70Ny8ji2NWl1/miCvddqg=;
+        b=eN4UtHQE4ItyiZMM1eHIvcRsgAJFPIpgER2hQxFHdzPVGuPEbWq1kL8ld3ElUv4424
+         W6KxezxBBglpNLSBXba9dbaElTdCAzH1ASuofqwepRZUCpOAVchJiLqtx9YpVtQuc5zO
+         qq01rYsC3TIW5Dof+2jBdSJODOEA/Uo1pgzjriYTGIlrkgG23nwZyewR+/nlzIf5Kkl0
+         7gIYRLTJ1MBOgiKEF5mrZfMwzW8IZaZ9xD9QbdXkry5WgltoicwPIJtNoHxyGSIE7qyR
+         8lgpQ2u5ABiKosdjVuxDhF9tMNXSj3V6zGIjujEjUS7u2yLMYSfNlEZdQKxO2HgF2b5g
+         qp2w==
+X-Gm-Message-State: AO0yUKWJL55/UHv1vYlmQAiut6ryo5cop2cYOzTboo2aII5F4RgeUur3
+        lwHzMChniAEF8nHVe22WAsLWCkGBdNeWWHj/nFpB
+X-Google-Smtp-Source: AK7set9wiX9m/wyVQBYpK751vhyyv8tPww9RBQvJarvcNt2JTkPo0CSGYU9kGj441+l+YuH9JiTiVzuzQQpKcYNdobY=
+X-Received: by 2002:a17:90a:dc0d:b0:235:1fb7:393c with SMTP id
+ i13-20020a17090adc0d00b002351fb7393cmr1121568pjv.1.1678465342401; Fri, 10 Mar
+ 2023 08:22:22 -0800 (PST)
+MIME-Version: 1.0
+References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
+ <20230309085433.1810314-2-roberto.sassu@huaweicloud.com> <397cb437bbd41e7eb223a07bc92a10bb57df696e.camel@linux.ibm.com>
+ <CAHC9VhTt7xZqkfZQsWVLRHzza_9idzxkY7bXxzBMq=Xxfc6+Cg@mail.gmail.com> <3c2ad86758d13939afa9dceaab87fee2ded8201f.camel@linux.ibm.com>
+In-Reply-To: <3c2ad86758d13939afa9dceaab87fee2ded8201f.camel@linux.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 10 Mar 2023 11:22:11 -0500
+Message-ID: <CAHC9VhQ80t8z79iYaY8xpoiQ5fTURoesaau+5r0bCXZrsO5GUQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it for
+ the integrity LSM
+To:     Mimi Zohar <zohar@linux.ibm.com>
 Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
         dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
         mic@digikod.net, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, keescook@chromium.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 10 Mar 2023 08:38:36 -0500
-In-Reply-To: <CAHC9VhTt7xZqkfZQsWVLRHzza_9idzxkY7bXxzBMq=Xxfc6+Cg@mail.gmail.com>
-References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
-         <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
-         <397cb437bbd41e7eb223a07bc92a10bb57df696e.camel@linux.ibm.com>
-         <CAHC9VhTt7xZqkfZQsWVLRHzza_9idzxkY7bXxzBMq=Xxfc6+Cg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iryH_5qnHU-5Ujt9fx_k9Up4rmBSetUC
-X-Proofpoint-ORIG-GUID: shjOtSWiP1adOUJiu-6Rsxphj375H_UX
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-10_03,2023-03-09_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0
- impostorscore=0 clxscore=1015 bulkscore=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303100109
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,56 +76,106 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2023-03-09 at 17:04 -0500, Paul Moore wrote:
-> On Thu, Mar 9, 2023 at 8:21 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > On Thu, 2023-03-09 at 09:54 +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+On Fri, Mar 10, 2023 at 8:39=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wr=
+ote:
+> On Thu, 2023-03-09 at 17:04 -0500, Paul Moore wrote:
+> > On Thu, Mar 9, 2023 at 8:21=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com>=
+ wrote:
+> > > On Thu, 2023-03-09 at 09:54 +0100, Roberto Sassu wrote:
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > >
+> > > > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needin=
+g to be
+> > > > last, e.g. the 'integrity' LSM, without changing the kernel command=
+ line or
+> > > > configuration.
+> > > >
+> > > > Also, set this order for the 'integrity' LSM. While not enforced, t=
+his is
+> > > > the only LSM expected to use it.
+> > > >
+> > > > Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always e=
+nabled
+> > > > and put at the end of the LSM list.
+> > > >
+> > > > Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true=
+ if an
+> > > > LSM is found, regardless of its order. In this way, the kernel woul=
+d not
+> > > > wrongly report that the LSM is not built-in in the kernel if its or=
+der is
+> > > > LSM_ORDER_LAST.
+> > > >
+> > > > Fixes: 79f7865d844c ("LSM: Introduce "lsm=3D" for boottime LSM sele=
+ction")
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > > >
-> > > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to be
-> > > last, e.g. the 'integrity' LSM, without changing the kernel command line or
-> > > configuration.
-> > >
-> > > Also, set this order for the 'integrity' LSM. While not enforced, this is
-> > > the only LSM expected to use it.
-> > >
-> > > Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
-> > > and put at the end of the LSM list.
-> > >
-> > > Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
-> > > LSM is found, regardless of its order. In this way, the kernel would not
-> > > wrongly report that the LSM is not built-in in the kernel if its order is
-> > > LSM_ORDER_LAST.
-> > >
-> > > Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 > >
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> Warning: procedural nitpicking ahead ...
-> 
-> The 'Signed-off-by' tag is in reference to the DCO, which makes sense
-> to add if you are a patch author or are merging a patch into a tree,
-> but it doesn't make much sense as a ACK/thumbs-up; this is why we have
-> the 'Acked-by' and 'Reviewed-by' tags.  I generally read the
-> 'Acked-by' tag as "I'm the one responsible for a chunk of code
-> affected by this patch and I'm okay with this change" and the
-> 'Reviewed-by' tag as "I looked at this patch and it looks like a good
-> change to me".  Perhaps surprisingly to some, while an 'Acked-by' is a
-> requirement for merging in a lot of cases, I appreciate 'Reviewed-by'
-> tags much more as it indicates the patch is getting some third-part
-> eyeballs on it ... so all you lurkers on this list, if you're
-> reviewing patches as they hit your inbox, don't be shy about posting
-> your 'Reviewed-by' tag if your comfortable doing so, we all welcome
-> the help :)
-> 
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+> > Warning: procedural nitpicking ahead ...
+> >
+> > The 'Signed-off-by' tag is in reference to the DCO, which makes sense
+> > to add if you are a patch author or are merging a patch into a tree,
+> > but it doesn't make much sense as a ACK/thumbs-up; this is why we have
+> > the 'Acked-by' and 'Reviewed-by' tags.  I generally read the
+> > 'Acked-by' tag as "I'm the one responsible for a chunk of code
+> > affected by this patch and I'm okay with this change" and the
+> > 'Reviewed-by' tag as "I looked at this patch and it looks like a good
+> > change to me".  Perhaps surprisingly to some, while an 'Acked-by' is a
+> > requirement for merging in a lot of cases, I appreciate 'Reviewed-by'
+> > tags much more as it indicates the patch is getting some third-part
+> > eyeballs on it ... so all you lurkers on this list, if you're
+> > reviewing patches as they hit your inbox, don't be shy about posting
+> > your 'Reviewed-by' tag if your comfortable doing so, we all welcome
+> > the help :)
+> >
+> > https://www.kernel.org/doc/html/latest/process/submitting-patches.html#=
+sign-your-work-the-developer-s-certificate-of-origin
+>
+> In this case, it was a bit unclear who actually was going to upstream
+> this patch set.
 
-In this case, it was a bit unclear who actually was going to upstream
-this patch set.  It's better that you upstream it,  but since this
-affects subsequent IMA and EVM patches, please create a topic branch.
+FWIW, I wasn't expecting to see your sign-off without a note that you
+had merged it.  Normally I would have expected either an acked-by or a
+note that you had merged it, a sign-off without a merge notice seemed
+a little odd to me so I thought I would mention the above :)  No harm
+either way, I just figured a little discussion on process might not be
+a terrible idea to make sure we are all on the same page.
 
--- 
-thanks,
+> It's better that you upstream it,  but since this
+> affects subsequent IMA and EVM patches, please create a topic branch.
 
-Mimi
+I generally don't do topic branches for work that has been merged into
+a -next or -stable branch. I prefer to limit topic branches to
+special-cases where there is some value in keeping a central branch
+for multiple people to coordinate while the patchset is still in
+development; once a patchset has progressed far enough to be merged
+into a -stable or -next branch I stop maintaining the topic branch.
 
+In this particular case the changes to the IMA/EVM code looked very
+minor, so I doubt there would be a significant merge conflict with the
+IMA/EVM tree during this development cycle, but if you would prefer to
+take this patchset via the IMA/EVM tree that is okay with me; just let
+me know so I can ACK the two LSM-related patches (I'm going to review
+the latest posting today).
+
+As a bit of an aside, while this doesn't cover topic branches (once
+again, I consider those special cases), when managing the LSM tree I
+follow the process that is documented here:
+
+https://github.com/LinuxSecurityModule/kernel/blob/main/README.md
+
+[NOTE: the above GH repo is a read-only mirror of the canonical LSM
+kernel.org repo, it just happens that GH does a better job rendering
+txt]
+
+The main LSM repo process "docs" / pointers can be found in the main
+README or "about" page:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/about
+
+If people have suggestions for a different approach to managing the
+LSM tree I'm always open to discussion.
+
+--=20
+paul-moore.com
