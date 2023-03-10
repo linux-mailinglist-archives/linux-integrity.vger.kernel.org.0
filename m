@@ -2,70 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEA46B54E6
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Mar 2023 23:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D55026B558F
+	for <lists+linux-integrity@lfdr.de>; Sat, 11 Mar 2023 00:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjCJWzn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Mar 2023 17:55:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S231974AbjCJXXk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Mar 2023 18:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbjCJWzU (ORCPT
+        with ESMTP id S231917AbjCJXX2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:55:20 -0500
+        Fri, 10 Mar 2023 18:23:28 -0500
 Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE29E3A90;
-        Fri, 10 Mar 2023 14:54:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1369223109;
+        Fri, 10 Mar 2023 15:23:10 -0800 (PST)
 Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 2A16D60502;
-        Fri, 10 Mar 2023 23:53:52 +0100 (CET)
+        by domac.alu.hr (Postfix) with ESMTP id DABC6604EF;
+        Sat, 11 Mar 2023 00:23:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678488832; bh=rk862eW1fTcupKjZCZV4qVJp30st+OAtyH4yxU602sA=;
+        t=1678490587; bh=thvE290k7D9fKCuXiWV3PdNOaCPUOdzAVZV5qp0MFaI=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gh14jWjYA/a24Rlf+B/mu5aMRXom5NEcthcprianGO7qR2gXEhomWktW39oGPISWg
-         QYkKoYue26tNJDaOflRLiqEOb4ukOJbly4tGo3EaGiZtVryMqi0cCciSc/hh/6aqHw
-         ahPRefbuuqU8+m2MOZEKzAUKd+a0HvEmKRiKIRJwL18bKncrKQ/ydulVx2Q61Zi93V
-         Ttepdik0pVnuX8kS2cfKpMn07I/yYA+zGo2ydg88lCR0LGHBefKNdC03qo9PYhgwKP
-         +6U04ULbrnmHNNeGA9fFX3pTI/5Jy8deO28iDXYqK1qmqx5w0pMiiXSQpVt08mHypp
-         yoWzIR6zPEUYg==
+        b=XelauMt9V0BR30I2DeSWVdLMp3fjRRprGISVaGa/2PpBAPkZsgXlA6nCnXDCh8G/5
+         FVLcrk+9BvrqrNoaP6Jsyngk6CpZZK8iIkfWk88hZogbtXF1IFJHVg6h8kL2KDlT/X
+         +BycPFoh5srfm5q0FooCnC/aMTFE/IMqW3C74Them1WbA5Wj7sBB6rCUpzo7/bHrA5
+         cDtcxBRKzm6KzeEzKxtS4u0yvm7LUrzAPj4lD8gL6hj5r1XUNFOZpIMaKdPAMWL8AK
+         sD/7pJTUCJp1UJx7iCtqga3v4ZwfkoXbHwN0rKB2kpJsV6mb5zBDf5CUb6QSPbuLsa
+         X3ne6+cswserA==
 X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
 Received: from domac.alu.hr ([127.0.0.1])
         by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id KCbVmp58HOj0; Fri, 10 Mar 2023 23:53:49 +0100 (CET)
+        with ESMTP id lJ1aZtSHt-_N; Sat, 11 Mar 2023 00:23:05 +0100 (CET)
 Received: from [192.168.1.4] (unknown [77.237.109.125])
-        by domac.alu.hr (Postfix) with ESMTPSA id 9587D60501;
-        Fri, 10 Mar 2023 23:53:48 +0100 (CET)
+        by domac.alu.hr (Postfix) with ESMTPSA id D9E26604ED;
+        Sat, 11 Mar 2023 00:23:04 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678488829; bh=rk862eW1fTcupKjZCZV4qVJp30st+OAtyH4yxU602sA=;
+        t=1678490585; bh=thvE290k7D9fKCuXiWV3PdNOaCPUOdzAVZV5qp0MFaI=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rb02J2SL5VwuGmsVv2ZmT4p3iXHYBJ+pWMncN3jgvOwPSMRI3wGXdeByKWt/zSdsw
-         AvvfY92T0vJ4obbKNCh7Oz4LWWr0dMhKW/wOq1+Ri8JsXhHnmFbm+TYKEjEY37Ahr2
-         iV3BH14NK9YGhQI4BggHts7jXP9kJztAgg0JXTW2qDuqtm4lfaDvfgZklNDs3Qtp5a
-         SWRX5aIA/wT5q5ACdXIvwnPOfoNJe5WlgGhWA/xhc3yjeLWKGWIylw7cjTQD3y51Z5
-         h1Vqg2GxBA/24Tg6xIEZKy6MUJQ+A9p/tGpmWFuFElickvhUVSOB7esJqOlY384FAW
-         lc5zViSLa2OWQ==
-Message-ID: <c1c1cbcc-10b6-de3f-81e8-78e6b173d46f@alu.unizg.hr>
-Date:   Fri, 10 Mar 2023 23:53:48 +0100
+        b=zj0O/soo4ROwwe0iFHEL956mOPrscivw9/KyXdlEYay/TmHSKxNcC+N00BcIjgCAZ
+         Kea6VF2TXL84G1OEwbZC7+XmzAYGUqWq5L50VQLNTbuA3yo+VUfi69k2tOzOyKBhVu
+         9ONlAxf43LkYTipcm+hpCeCIIGc7rI1HjqOaORnfdfndP8ragw5opbWFSFqfn2glxq
+         B8bkq2abg0sis5n5FGp6QDXfeJ0qsdfJ9+btSBVR9HShvwksoF66FOnm2tdhU74GhM
+         DknS9KHOLDOx2AhUnWx3+ayIkZWXe88Zk8JOWLgcGidmXrvk7BQJlAGkuZ6jW2NDqr
+         lE0ttaSAeUp/g==
+Message-ID: <d20c7249-d407-1ddf-7903-ff1037d69656@alu.unizg.hr>
+Date:   Sat, 11 Mar 2023 00:23:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v1 0/2] Add destructor hook to LSM modules
+Subject: Re: [PATCH v1 1/2] Add release hook to LSM
 Content-Language: en-US, hr
-To:     Paul Moore <paul@paul-moore.com>,
-        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
         Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Paul Moore <paul@paul-moore.com>,
         Casey Schaufler <casey@schaufler-ca.com>,
         =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
         =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
         Frederick Lawler <fred@cloudflare.com>
-References: <20230310192614.GA528@domac.alu.hr>
- <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
+References: <20230310194159.GB528@domac.alu.hr>
+ <ZAuJY1MM3hEiT0ri@smile.fi.intel.com>
+ <47129238-d98e-0561-0921-adfe40b6b85f@alu.unizg.hr>
+ <ZAuPNm3UdC/c1EXm@smile.fi.intel.com>
 From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
+In-Reply-To: <ZAuPNm3UdC/c1EXm@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,34 +79,53 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 10. 03. 2023. 23:33, Paul Moore wrote:
-> On Fri, Mar 10, 2023 at 2:26 PM Mirsad Goran Todorovac
-> <mirsad.goran.todorovac@alu.hr> wrote:
+On 10. 03. 2023. 21:12, Andy Shevchenko wrote:
+> On Fri, Mar 10, 2023 at 08:52:32PM +0100, Mirsad Goran Todorovac wrote:
+>> On 10. 03. 2023. 20:47, Andy Shevchenko wrote:
+>>> On Fri, Mar 10, 2023 at 08:42:00PM +0100, Mirsad Goran Todorovac wrote:
+>>>>
+>>>> Add release() hook to the definition of the LSM modules, to enable calling
+>>>> destructors and deallocating allocated resources cleanly.
+>>>>
+>>>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>>>
+>>>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>>
+>>> I haven't given you this tag. Sorry, you must not add something
+>>> which was not explicitly given.
 >>
->> LSM security/integrity/iint.c had the case of kmem_cache_create() w/o a proper
->> kmem_cache_destroy() destructor.
+>> Mea culpa.
 >>
->> Introducing the release() hook would enable LSMs to release allocated resources
->> on exit, and in proper order, rather than dying all together with kernel shutdown
->> in an undefined order.
->>
->> Thanks,
->>         Mirsad
->>
->> ---
->>  include/linux/lsm_hooks.h | 1 +
->>  security/integrity/iint.c | 7 +++++++
->>  2 files changed, 8 insertions(+)
+>> I misunderstood that you have approved the change when saying that I should
+>> file a formal patch. It worked with Florian Westphal in my first patch, so I
+>> thought it would be inappropriate to leave out who endorsed the patch.
 > 
-> I only see the 1/2 patch, did you send the 2/2 patch to the LSM list?
-> If not, you need to do that
+> We have Suggested-by tag for that.
 
-I will resend everything, because this first attempt was buggy and
-incorrect regarding the credits. Will try this, Andy said that I wait
-for the comments, but I did not expect them before the weekend.
+Done exactly that, and now I have to reward myself for the first
+successful multi-part patch submission.
 
-Thank you guys for patience, I am just finishing the test of devres
-patch and then I will proceed with integrity LSM patch submission.
+>> Thousand apologies. This is my second patch, so I am asking for some extra
+>> grace ...
+> 
+>> What should I do now?
+> 
+> Wait at least a couple of days (even more, since it's weekend) for other
+> comments and then send a v2 of the series with the comments addressed.
+
+Actually, Mr. Paul Moore requested the rest of the patch, so I
+did a complete resend immediately.
+
+> Btw, you may take my "smart" script [1] for sending patch series. It
+> makes much less headache on how to do that properly.
+> 
+> [1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh
+
+Thanks for the tip.
+
+It's pleasure to be working with you guys, it's a great brainstorming
+session and I really enjoyed it. It's a privilege to assist your
+excellent team.
 
 Best regards,
 Mirsad
