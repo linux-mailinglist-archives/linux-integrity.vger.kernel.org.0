@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDBC6B6154
-	for <lists+linux-integrity@lfdr.de>; Sat, 11 Mar 2023 23:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E1D6B615B
+	for <lists+linux-integrity@lfdr.de>; Sat, 11 Mar 2023 23:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjCKWIq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 11 Mar 2023 17:08:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
+        id S229910AbjCKWJa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 11 Mar 2023 17:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCKWIp (ORCPT
+        with ESMTP id S229861AbjCKWJ0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 11 Mar 2023 17:08:45 -0500
+        Sat, 11 Mar 2023 17:09:26 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E40128D03;
-        Sat, 11 Mar 2023 14:08:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570DD2C657;
+        Sat, 11 Mar 2023 14:09:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44285B801C0;
-        Sat, 11 Mar 2023 22:08:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94435C433EF;
-        Sat, 11 Mar 2023 22:08:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEBCDB80A4C;
+        Sat, 11 Mar 2023 22:09:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE68C433D2;
+        Sat, 11 Mar 2023 22:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678572520;
-        bh=cvXfDDykxxfYGk46M0OkqXKmbkOI0nsIQUPWX8yb3+g=;
+        s=k20201202; t=1678572562;
+        bh=NgiWMNJtkUzRU0XTwb1NsTnqkVQlYUjvRD15pzpC4s4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RleDyoWNClDXmEcoLzMOqB0UGdNLxOxo2SKBsQW08qYkkWTVzqNJ+OiIFglUFR5C7
-         GzI/d/HH21GYsGw/8T/lTnhI7DPgS0SVkzd+W594rg7CKO8Yvd++1YGuJJlbY/Mvo2
-         uIQLUywKmjuqz4ys8nu1En4C5sD7GptOk3dZjldhw0nVoyhxl4X0H8mBlZqM+QWDhv
-         0ymmkEB2Da/rTpt1JMKOaSD51ziDxfh0I4vlyYZCy4l4+GhjHTsJv6P7ATsUqVJLSR
-         9iAPKynbWJBp+d1WvCQKm3WMMFEGDDmTNIGn7TR8P+F/8akmrGtllCIMM0M9krS8Y/
-         +A54btyAbaZRA==
-Date:   Sun, 12 Mar 2023 00:08:38 +0200
+        b=QWCGY0D1/Eo0cUanlTMdyhEM54kgkwQT/LLlSgElasmgDyPTEC2r8NovdlA+Wqg9A
+         0nygExiSACkdi1bEYXwXvMryoLjOF+iDT3VUGnldO6jRAdm2sQBE2Lzq6sw+bH5jux
+         IufqCSCe2VcBoTegQMMe8+t2uWYzPJc+1ARt5QtIlKkK2ITpOiI/BmX0s5RJepng80
+         8DViZM5EJNY0KfZ2/UhGcoWaVGZSy0wH82DXiAfaLCbEOo5dSR3dsJlrzu4em2sJiB
+         lTQAXLZ1T3ENrDl2MIGJEPvE4pbuf/YeGRg04VXtMknckD5MRb/9SfnUQftrZkhqdj
+         5Mi/qzrb6p6NQ==
+Date:   Sun, 12 Mar 2023 00:09:19 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Eric Snowberg <eric.snowberg@oracle.com>
 Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
@@ -44,88 +44,111 @@ Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
         linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 2/6] KEYS: Add missing function documentation
-Message-ID: <ZAz75hRBDw9b+USq@kernel.org>
+Subject: Re: [PATCH v5 4/6] KEYS: X.509: Parse Key Usage
+Message-ID: <ZAz8DztGzR/W+VWL@kernel.org>
 References: <20230302164652.83571-1-eric.snowberg@oracle.com>
- <20230302164652.83571-3-eric.snowberg@oracle.com>
+ <20230302164652.83571-5-eric.snowberg@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230302164652.83571-3-eric.snowberg@oracle.com>
+In-Reply-To: <20230302164652.83571-5-eric.snowberg@oracle.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 11:46:48AM -0500, Eric Snowberg wrote:
-> Compiling with 'W=1' results in warnings that 'Function parameter or member
-> not described'
+On Thu, Mar 02, 2023 at 11:46:50AM -0500, Eric Snowberg wrote:
+> Parse the X.509 Key Usage.  The key usage extension defines the purpose of
+> the key contained in the certificate.
 > 
-> Add the missing parameters for
-> restrict_link_by_builtin_and_secondary_trusted and
-> restrict_link_to_builtin_trusted.
+>    id-ce-keyUsage OBJECT IDENTIFIER ::=  { id-ce 15 }
 > 
-> Use /* instead of /** for get_builtin_and_secondary_restriction, since
-> it is a static function.
+>       KeyUsage ::= BIT STRING {
+>            digitalSignature        (0),
+>            contentCommitment       (1),
+>            keyEncipherment         (2),
+>            dataEncipherment        (3),
+>            keyAgreement            (4),
+>            keyCertSign             (5),
+>            cRLSign                 (6),
+>            encipherOnly            (7),
+>            decipherOnly            (8) }
 > 
-> Fix wrong function name restrict_link_to_builtin_trusted.
+> If the keyCertSign or digitalSignature is set, store it in the
+> public_key structure. Having the purpose of the key being stored
+> during parsing, allows enforcement on the usage field in the future.
+> This will be used in a follow on patch that requires knowing the
+> certificate key usage type.
 > 
-> Fixes: d3bfe84129f6 ("certs: Add a secondary system keyring that can be added to dynamically")
+> Link: https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.3
 > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> Reviewed-by: Petr Vorel <pvorel@suse.cz>
 > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 > ---
->  certs/system_keyring.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
+>  crypto/asymmetric_keys/x509_cert_parser.c | 28 +++++++++++++++++++++++
+>  include/crypto/public_key.h               |  2 ++
+>  2 files changed, 30 insertions(+)
 > 
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index 5042cc54fa5e..a7a49b17ceb1 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -33,7 +33,11 @@ extern __initconst const unsigned long system_certificate_list_size;
->  extern __initconst const unsigned long module_cert_size;
+> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
+> index 77547d4bd94d..0a7049b470c1 100644
+> --- a/crypto/asymmetric_keys/x509_cert_parser.c
+> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
+> @@ -579,6 +579,34 @@ int x509_process_extension(void *context, size_t hdrlen,
+>  		return 0;
+>  	}
 >  
->  /**
-> - * restrict_link_to_builtin_trusted - Restrict keyring addition by built in CA
-> + * restrict_link_by_builtin_trusted - Restrict keyring addition by built-in CA
-> + * @dest_keyring: Keyring being linked to.
-> + * @type: The type of key being added.
-> + * @payload: The payload of the new key.
-> + * @restriction_key: A ring of keys that can be used to vouch for the new cert.
->   *
->   * Restrict the addition of keys into a keyring based on the key-to-be-added
->   * being vouched for by a key in the built in system keyring.
-> @@ -50,7 +54,11 @@ int restrict_link_by_builtin_trusted(struct key *dest_keyring,
->  #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
->  /**
->   * restrict_link_by_builtin_and_secondary_trusted - Restrict keyring
-> - *   addition by both builtin and secondary keyrings
-> + *   addition by both built-in and secondary keyrings.
-> + * @dest_keyring: Keyring being linked to.
-> + * @type: The type of key being added.
-> + * @payload: The payload of the new key.
-> + * @restrict_key: A ring of keys that can be used to vouch for the new cert.
->   *
->   * Restrict the addition of keys into a keyring based on the key-to-be-added
->   * being vouched for by a key in either the built-in or the secondary system
-> @@ -75,7 +83,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
->  					  secondary_trusted_keys);
->  }
+> +	if (ctx->last_oid == OID_keyUsage) {
+> +		/*
+> +		 * Get hold of the keyUsage bit string
+> +		 * v[1] is the encoding size
+> +		 *       (Expect either 0x02 or 0x03, making it 1 or 2 bytes)
+> +		 * v[2] is the number of unused bits in the bit string
+> +		 *       (If >= 3 keyCertSign is missing when v[1] = 0x02)
+> +		 * v[3] and possibly v[4] contain the bit string
+> +		 *
+> +		 * From RFC 5280 4.2.1.3:
+> +		 *   0x04 is where keyCertSign lands in this bit string
+> +		 *   0x80 is where digitalSignature lands in this bit string
+> +		 */
+> +		if (v[0] != ASN1_BTS)
+> +			return -EBADMSG;
+> +		if (vlen < 4)
+> +			return -EBADMSG;
+> +		if (v[2] >= 8)
+> +			return -EBADMSG;
+> +		if (v[3] & 0x80)
+> +			ctx->cert->pub->key_eflags |= 1 << KEY_EFLAG_DIGITALSIG;
+> +		if (v[1] == 0x02 && v[2] <= 2 && (v[3] & 0x04))
+> +			ctx->cert->pub->key_eflags |= 1 << KEY_EFLAG_KEYCERTSIGN;
+> +		else if (vlen > 4 && v[1] == 0x03 && (v[3] & 0x04))
+> +			ctx->cert->pub->key_eflags |= 1 << KEY_EFLAG_KEYCERTSIGN;
+> +		return 0;
+> +	}
+> +
+>  	if (ctx->last_oid == OID_authorityKeyIdentifier) {
+>  		/* Get hold of the CA key fingerprint */
+>  		ctx->raw_akid = v;
+> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
+> index c401762850f2..03c3fb990d59 100644
+> --- a/include/crypto/public_key.h
+> +++ b/include/crypto/public_key.h
+> @@ -30,6 +30,8 @@ struct public_key {
+>  	const char *pkey_algo;
+>  	unsigned long key_eflags;	/* key extension flags */
+>  #define KEY_EFLAG_CA		0	/* set if the CA basic constraints is set */
+> +#define KEY_EFLAG_DIGITALSIG	1	/* set if the digitalSignature usage is set */
+> +#define KEY_EFLAG_KEYCERTSIGN	2	/* set if the keyCertSign usage is set */
+>  };
 >  
-> -/**
-> +/*
->   * Allocate a struct key_restriction for the "builtin and secondary trust"
->   * keyring. Only for use in system_trusted_keyring_init().
->   */
+>  extern void public_key_free(struct public_key *key);
 > -- 
 > 2.27.0
 > 
 
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
