@@ -2,97 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8246B62C3
-	for <lists+linux-integrity@lfdr.de>; Sun, 12 Mar 2023 02:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 261736B62C5
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Mar 2023 02:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbjCLBxt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 11 Mar 2023 20:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
+        id S229614AbjCLBzH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 11 Mar 2023 20:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCLBxs (ORCPT
+        with ESMTP id S229473AbjCLBzG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 11 Mar 2023 20:53:48 -0500
+        Sat, 11 Mar 2023 20:55:06 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479C92BEC4;
-        Sat, 11 Mar 2023 17:53:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F0466D1C;
+        Sat, 11 Mar 2023 17:55:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE01AB801BC;
-        Sun, 12 Mar 2023 01:53:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A05C433D2;
-        Sun, 12 Mar 2023 01:53:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F03CEB8068D;
+        Sun, 12 Mar 2023 01:55:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65791C433EF;
+        Sun, 12 Mar 2023 01:55:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678586021;
-        bh=Jr0TCWVtnr0wBrUGBTPMCwE+/Ah/WegiwRPHWL99yMw=;
+        s=k20201202; t=1678586102;
+        bh=jaNEP3yh0HvZR2Mwx2cX/K+G8zCgyUSqv216UWVcgac=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eYyUbr+32tE2RrqBnLB+bpDR6Q9QOhqR7CEzoFI0XvBcjDFncwq+ZIadNNVU3g+G7
-         yJJ8kwQuacbJe7xj7qV8IWgQoO1spRcZjvrOAHZzE/stRECRaeOvFTkxv+oc3jdkjD
-         5mQ200xt4G48oWMsGXPo7G9qYP93kNKxbpKMjSWSKVUlMARH0kP7sqdwW/ZrSJqQDA
-         U4WOU0mVvUZfybA3maiB2kablrVvXzpOOQo/XuAbuXT9cR8vLiIGvMX5NYJFwqlSaa
-         PgjjKZT+JzB/Y6pH5IqEzOq48gXVj4TxqOEnbTAuLroEpnO5SwIdAmO3CyQenmjPBM
-         HlxzOLn1eds6Q==
-Date:   Sun, 12 Mar 2023 03:53:38 +0200
+        b=IFeeorJ6F1QhwLQ/kHk8gwF3b1FxgHaJXJPlpQWlXRR8XutGkXSlk0cKLJSAY1oh6
+         RWjCSL7sBr22Aa0eUOtby9s2IBVKh5ONjMuhYrRkZBbb2O1PfTaOwY5ip4YzZP2j3u
+         2O6hwgV7l9D/yd4XSDvS8/W5eFxvSWLn3L3Aem0sVR5zgiraL2AjJJdH0jPeYY+zeZ
+         omspuP+hVsIihCEdzHJk3ltBnO+ZDk6ZEQ4UOVfUdWMnatebLVgEP6e+lK2WtALzQS
+         x+0GyAZjp02CmE35Rdmw7QbsFA+Xmvi5AQSv4jVDxE1spVdLh3OK/G4NxSSkmdlYwN
+         g0pxkLcIKwPfg==
+Date:   Sun, 12 Mar 2023 03:55:00 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] tpm: tpm_tis_spi: Mark ACPI and OF related data as
- maybe unused
-Message-ID: <ZA0wor67TlOdBOs/@kernel.org>
-References: <20230311173541.262949-1-krzysztof.kozlowski@linaro.org>
- <20230311173541.262949-2-krzysztof.kozlowski@linaro.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        reach622@mailcuk.com, Bell <1138267643@qq.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v3] tpm: disable hwrng for fTPM on some AMD designs
+Message-ID: <ZA0w9IjDqcm4YxhO@kernel.org>
+References: <20230228024439.27156-1-mario.limonciello@amd.com>
+ <Y/1wuXbaPcG9olkt@kernel.org>
+ <5e535bf9-c662-c133-7837-308d67dfac94@leemhuis.info>
+ <85df6dda-c1c9-f08e-9e64-2007d44f6683@leemhuis.info>
+ <ZA0sScO47IMKPhtG@kernel.org>
+ <ZA0t/8Tz1Lbz25BZ@kernel.org>
+ <CAHmME9pudxP07Jx77yUecDLqm2xku3cPJFtk=bY6ACmfL1j5xw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230311173541.262949-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHmME9pudxP07Jx77yUecDLqm2xku3cPJFtk=bY6ACmfL1j5xw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DIET_1,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 06:35:41PM +0100, Krzysztof Kozlowski wrote:
-> The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
-> unused:
+On Sun, Mar 12, 2023 at 02:49:17AM +0100, Jason A. Donenfeld wrote:
+> On 3/12/23, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > On Sun, Mar 12, 2023 at 03:35:08AM +0200, Jarkko Sakkinen wrote:
+> >> On Fri, Mar 10, 2023 at 06:43:47PM +0100, Thorsten Leemhuis wrote:
+> >> > [adding Linux to the list of recipients]
+> >> >
+> >> > On 08.03.23 10:42, Linux regression tracking (Thorsten Leemhuis) wrote:
+> >> > > Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+> >> > > for once, to make this easily accessible to everyone.
+> >> > >
+> >> > > Jarkko, thx for reviewing and picking below fix up. Are you planning
+> >> > > to
+> >> > > send this to Linus anytime soon, now that the patch was a few days in
+> >> > > next? It would be good to get this 6.1 regression finally fixed, it
+> >> > > already took way longer then the time frame
+> >> > > Documentation/process/handling-regressions.rst outlines for a case
+> >> > > like
+> >> > > this. But well, that's how it is sometimes...
+> >> >
+> >> > Linus, would you consider picking this fix up directly from here or
+> >> > from
+> >> > linux-next (8699d5244e37)? It's been in the latter for 9 days now
+> >> > afaics. And the issue seems to bug more than just one or two users, so
+> >> > it IMHO would be good to get this finally resolved.
+> >> >
+> >> > Jarkko didn't reply to my inquiry, guess something else keeps him busy.
+> >>
+> >> That's a bit arrogant. You emailed only 4 days ago.
+> >>
+> >> I'm open to do PR for rc3 with the fix, if it cannot wait to v6.4 pr.
+> >
+> > If this is about slow response with kernel bugzilla: it is not *enforced*
+> > part of the process. If it was, I would use it. Since it isn't, I don't
+> > really want to add any extra weight to my workflow.
+> >
+> > It's not only extra time but also it is not documented how exactly and in
+> > detail you would use it. For email we have all that documented. And when
+> > you don't have guidelines, then it is too flakky to use properly.
 > 
->   drivers/char/tpm/tpm_tis_spi_main.c:234:34: error: ‘of_tis_spi_match’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/char/tpm/tpm_tis_spi_main.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> index a0963a3e92bd..1f5207974a17 100644
-> --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> @@ -231,7 +231,7 @@ static const struct spi_device_id tpm_tis_spi_id[] = {
->  };
->  MODULE_DEVICE_TABLE(spi, tpm_tis_spi_id);
->  
-> -static const struct of_device_id of_tis_spi_match[] = {
-> +static const struct of_device_id of_tis_spi_match[] __maybe_unused = {
->  	{ .compatible = "st,st33htpm-spi", .data = tpm_tis_spi_probe },
->  	{ .compatible = "infineon,slb9670", .data = tpm_tis_spi_probe },
->  	{ .compatible = "tcg,tpm_tis-spi", .data = tpm_tis_spi_probe },
-> @@ -240,7 +240,7 @@ static const struct of_device_id of_tis_spi_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, of_tis_spi_match);
->  
-> -static const struct acpi_device_id acpi_tis_spi_match[] = {
-> +static const struct acpi_device_id acpi_tis_spi_match[] __maybe_unused = {
->  	{"SMO0768", 0},
->  	{}
->  };
-> -- 
-> 2.34.1
-> 
+> No interest in wading into a process argument. But if you're able to
+> send this for rc3, please please do so. Users keep getting hit by
+> this, some email me directly, and I keep replying saying the fix
+> should be released any day now. So let's make that happen.
 
-Ditto.
+Sure, that shouldn't be a problem. I'll queue this for rc3.
 
 BR, Jarkko
