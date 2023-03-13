@@ -2,110 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3FE46B6CC3
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Mar 2023 01:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AECB96B700E
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Mar 2023 08:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjCMAQG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 12 Mar 2023 20:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
+        id S229505AbjCMHWh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Mar 2023 03:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjCMAQF (ORCPT
+        with ESMTP id S229578AbjCMHWg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 12 Mar 2023 20:16:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9CC37F2D;
-        Sun, 12 Mar 2023 17:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=P/sel3BtUOQTvgaqpVzYhV2ah2rUR9TtQOcd7tdtyuI=; b=CnW5AWrX0qyjrZVlFC/txc9nfS
-        Ec6869Tai/NmyyLx53gX3ofEDnAf2VSFOhlUSsACFRTEUv1fqy5LrAUyq29IiSfzOk0e3TJJZrado
-        So9kZKBPYjz8xv+M5Qr9RT9mOi2Q1G7XsFJ4anV8DMC0o5JTW4keyOTwJjW5kinXEl25Ee666GPzk
-        cVAhOeMjG/O6dD9UfSHKCbgrVBuHAg8IJx95w9Fgd1LVmhcDhed6enVkqHaZif9JWOaGlyt+lNhvn
-        aWXCA2veyP0Npr1x7YJRKIYUTk13Ahjtwx+KmGKBNcfNQkoBZieeq6uiEHwBzGk5d0SX6aphBAb7D
-        K3MO7VOw==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pbVr5-003s13-Dj; Mon, 13 Mar 2023 00:15:59 +0000
-Message-ID: <4ebfb363-6552-d387-9912-47eb4acfd9f8@infradead.org>
-Date:   Sun, 12 Mar 2023 17:15:58 -0700
+        Mon, 13 Mar 2023 03:22:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248E15072F
+        for <linux-integrity@vger.kernel.org>; Mon, 13 Mar 2023 00:22:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BF8CA225B1;
+        Mon, 13 Mar 2023 07:22:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678692144;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y7GGJJyQjMWOVje4/QCOYl82zjp49KCIMHSKga2o9hM=;
+        b=IiKpe7l+wzfyAl6E7JehIeo/BhcgzhjU5asRpKX3kQvqwmzjrBwz0llfM0w0R++KEy3PFa
+        RHQi4xAzv6kdb985jD2kk/L/eqEZlpFl4ut+ik8UZfkk/D+xr3QYml5WfI1m8B3jMQZFpH
+        E21oD3quC6H0c6EoPUH5PxTB4wbT/O4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678692144;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y7GGJJyQjMWOVje4/QCOYl82zjp49KCIMHSKga2o9hM=;
+        b=0oLyLAn7cbB3+1YAOgH1cHAHW9i2g+WPnsIOUxHywTw8ZqvAjPFhnyfZ1rpFonhQe/j1pg
+        7OrepbukbMSAyRBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8966013517;
+        Mon, 13 Mar 2023 07:22:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3CmxHzDPDmQaWgAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Mon, 13 Mar 2023 07:22:24 +0000
+Date:   Mon, 13 Mar 2023 08:22:22 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org
+Subject: Re: [PATCH ima-evm-utils] fsverity.test: Add /usr/sbin into $PATH
+Message-ID: <20230313072222.GA550975@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20230310104729.32078-1-pvorel@suse.cz>
+ <fee39e794cec39474b54d5a3da3a79e40acdce47.camel@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] IMA: allow/fix UML builds
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>,
-        Rajiv Andrade <srajiv@linux.vnet.ibm.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org
-References: <20230224032703.7789-1-rdunlap@infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230224032703.7789-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fee39e794cec39474b54d5a3da3a79e40acdce47.camel@linux.ibm.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-ping?
+Hi Mimi,
 
-On 2/23/23 19:27, Randy Dunlap wrote:
-> UML supports HAS_IOMEM since 0bbadafdc49d (um: allow disabling
-> NO_IOMEM).
-> 
-> Current IMA build on UML fails on allmodconfig (with TCG_TPM=m):
-> 
-> ld: security/integrity/ima/ima_queue.o: in function `ima_add_template_entry':
-> ima_queue.c:(.text+0x2d9): undefined reference to `tpm_pcr_extend'
-> ld: security/integrity/ima/ima_init.o: in function `ima_init':
-> ima_init.c:(.init.text+0x43f): undefined reference to `tpm_default_chip'
-> ld: security/integrity/ima/ima_crypto.o: in function `ima_calc_boot_aggregate_tfm':
-> ima_crypto.c:(.text+0x1044): undefined reference to `tpm_pcr_read'
-> ld: ima_crypto.c:(.text+0x10d8): undefined reference to `tpm_pcr_read'
-> 
-> Modify the IMA Kconfig entry so that it selects TCG_TPM if HAS_IOMEM
-> is set, regardless of the UML Kconfig setting.
-> This updates TCG_TPM from =m to =y and fixes the linker errors.
-> 
-> Fixes: f4a0391dfa91 ("ima: fix Kconfig dependencies")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Cc: linux-integrity@vger.kernel.org
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: Rajiv Andrade <srajiv@linux.vnet.ibm.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: linux-um@lists.infradead.org
-> ---
->  security/integrity/ima/Kconfig |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff -- a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -8,7 +8,7 @@ config IMA
->  	select CRYPTO_HMAC
->  	select CRYPTO_SHA1
->  	select CRYPTO_HASH_INFO
-> -	select TCG_TPM if HAS_IOMEM && !UML
-> +	select TCG_TPM if HAS_IOMEM
->  	select TCG_TIS if TCG_TPM && X86
->  	select TCG_CRB if TCG_TPM && ACPI
->  	select TCG_IBMVTPM if TCG_TPM && PPC_PSERIES
+> On Fri, 2023-03-10 at 11:47 +0100, Petr Vorel wrote:
+> > Unlike GitHub CI, tests which run by packaging tools often run as non-root,
+> > thus required tools aren't visible:
 
--- 
-~Randy
+> > ./functions.sh: line 45: type: mkfs: not found
+> > mkfs is required for test
+> > ./functions.sh: line 45: type: blkid: not found
+> > blkid is required for test
+> > ./functions.sh: line 45: type: e2fsck: not found
+> > e2fsck is required for test
+> > ./functions.sh: line 45: type: tune2fs: not found
+> > tune2fs is required for test
+
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > ---
+> > Hi Mimi,
+
+> > some would maybe appreciate option to skip all tests,
+> > but this is enough for me.
+
+> Hi Petr,
+
+> Thank you for the patch.  It's now queued in next-testing.
+Thank you.
+
+> The UML kernel opens up a lot of options going forward.  For now all
+> the tests are lumped together, but they should be separated based on
+> ima-evm-utils selftests vs. the kernel tests.  Even that might not be
+> granular enough.
+Thanks for info, sounds reasonable.
+
+> For now from the command line, the environment variable "TESTS"
+> overrides the set of tests as defined in the Makefile to execute.  For
+> example, "export TESTS="ima_sign.test sign_verify.test"; make -e check"
+> executes just the two tests.
+Also, TESTS= would skip all the tests (but prefer to run them).
+
+> Also commit b573b7d4a186 ("Introduce TST_LIST variable to select a test
+> to execute")  can define the set of tests to execute.
+Good to know (this one is hidden in test functions).
+
+Kind regards,
+Petr
