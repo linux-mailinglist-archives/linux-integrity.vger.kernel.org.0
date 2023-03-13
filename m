@@ -2,78 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A3C6B6C91
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Mar 2023 00:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FE46B6CC3
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Mar 2023 01:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjCLXeB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 12 Mar 2023 19:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S229514AbjCMAQG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 12 Mar 2023 20:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCLXeA (ORCPT
+        with ESMTP id S229470AbjCMAQF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 12 Mar 2023 19:34:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49933F770;
-        Sun, 12 Mar 2023 16:33:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D60E060F84;
-        Sun, 12 Mar 2023 23:33:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 40203C433D2;
-        Sun, 12 Mar 2023 23:33:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678664038;
-        bh=9hQ64muwXIXfO9NNRhHxBVK0eY6fJamQWVhPBL5Esck=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=RwOactAP1ueypWL0A9z34kwqCd0d0BeZQaOuIZkXlgsEqOhup490NAAhRMmw0aWTU
-         wV6f790mruKHNJrf32HycCvT6t9vOFoZJLO3FgZ+DNckqbW6CeqQIeEhQl4Em2sck3
-         2bL5QBOkyYwFBybW92VJh31VQ741npxK/BlV8NyDgUkGNmhgPe5++/JNtJOvvafV9k
-         HAFpubrdfUTHvRpLisCDfnvGsNHJE5pMmpThCe0zq4rSXkH4fO89K1UT3wWP9ji7CX
-         v6sNZf6nyp4gRi7USkA9j++HOn1WuajCqhueyqkTxImjcd+IMZ+sJD57Y7aBbCzVUx
-         AN569amIu6keA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2CD34E61B75;
-        Sun, 12 Mar 2023 23:33:58 +0000 (UTC)
-Subject: Re: [GIT PULL] tpm: changes for v6.3-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <698049d487a816fe3579200b2e02648d8d60b2be.camel@kernel.org>
-References: <698049d487a816fe3579200b2e02648d8d60b2be.camel@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <698049d487a816fe3579200b2e02648d8d60b2be.camel@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpm-v6.3-rc3
-X-PR-Tracked-Commit-Id: f1324bbc4011ed8aef3f4552210fc429bcd616da
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c4ecd87f75ec4d5ac3006ef21ce07e812982e46e
-Message-Id: <167866403817.1417.646090000604786585.pr-tracker-bot@kernel.org>
-Date:   Sun, 12 Mar 2023 23:33:58 +0000
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 12 Mar 2023 20:16:05 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9CC37F2D;
+        Sun, 12 Mar 2023 17:16:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=P/sel3BtUOQTvgaqpVzYhV2ah2rUR9TtQOcd7tdtyuI=; b=CnW5AWrX0qyjrZVlFC/txc9nfS
+        Ec6869Tai/NmyyLx53gX3ofEDnAf2VSFOhlUSsACFRTEUv1fqy5LrAUyq29IiSfzOk0e3TJJZrado
+        So9kZKBPYjz8xv+M5Qr9RT9mOi2Q1G7XsFJ4anV8DMC0o5JTW4keyOTwJjW5kinXEl25Ee666GPzk
+        cVAhOeMjG/O6dD9UfSHKCbgrVBuHAg8IJx95w9Fgd1LVmhcDhed6enVkqHaZif9JWOaGlyt+lNhvn
+        aWXCA2veyP0Npr1x7YJRKIYUTk13Ahjtwx+KmGKBNcfNQkoBZieeq6uiEHwBzGk5d0SX6aphBAb7D
+        K3MO7VOw==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pbVr5-003s13-Dj; Mon, 13 Mar 2023 00:15:59 +0000
+Message-ID: <4ebfb363-6552-d387-9912-47eb4acfd9f8@infradead.org>
+Date:   Sun, 12 Mar 2023 17:15:58 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] IMA: allow/fix UML builds
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        Rajiv Andrade <srajiv@linux.vnet.ibm.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org
+References: <20230224032703.7789-1-rdunlap@infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230224032703.7789-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Sun, 12 Mar 2023 23:34:33 +0200:
+ping?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpm-v6.3-rc3
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c4ecd87f75ec4d5ac3006ef21ce07e812982e46e
-
-Thank you!
+On 2/23/23 19:27, Randy Dunlap wrote:
+> UML supports HAS_IOMEM since 0bbadafdc49d (um: allow disabling
+> NO_IOMEM).
+> 
+> Current IMA build on UML fails on allmodconfig (with TCG_TPM=m):
+> 
+> ld: security/integrity/ima/ima_queue.o: in function `ima_add_template_entry':
+> ima_queue.c:(.text+0x2d9): undefined reference to `tpm_pcr_extend'
+> ld: security/integrity/ima/ima_init.o: in function `ima_init':
+> ima_init.c:(.init.text+0x43f): undefined reference to `tpm_default_chip'
+> ld: security/integrity/ima/ima_crypto.o: in function `ima_calc_boot_aggregate_tfm':
+> ima_crypto.c:(.text+0x1044): undefined reference to `tpm_pcr_read'
+> ld: ima_crypto.c:(.text+0x10d8): undefined reference to `tpm_pcr_read'
+> 
+> Modify the IMA Kconfig entry so that it selects TCG_TPM if HAS_IOMEM
+> is set, regardless of the UML Kconfig setting.
+> This updates TCG_TPM from =m to =y and fixes the linker errors.
+> 
+> Fixes: f4a0391dfa91 ("ima: fix Kconfig dependencies")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> Cc: linux-integrity@vger.kernel.org
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: Rajiv Andrade <srajiv@linux.vnet.ibm.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: linux-um@lists.infradead.org
+> ---
+>  security/integrity/ima/Kconfig |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff -- a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+> --- a/security/integrity/ima/Kconfig
+> +++ b/security/integrity/ima/Kconfig
+> @@ -8,7 +8,7 @@ config IMA
+>  	select CRYPTO_HMAC
+>  	select CRYPTO_SHA1
+>  	select CRYPTO_HASH_INFO
+> -	select TCG_TPM if HAS_IOMEM && !UML
+> +	select TCG_TPM if HAS_IOMEM
+>  	select TCG_TIS if TCG_TPM && X86
+>  	select TCG_CRB if TCG_TPM && ACPI
+>  	select TCG_IBMVTPM if TCG_TPM && PPC_PSERIES
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+~Randy
