@@ -2,122 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E306B7A61
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Mar 2023 15:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A566B8041
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Mar 2023 19:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbjCMOdL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Mar 2023 10:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
+        id S230380AbjCMSUM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Mar 2023 14:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbjCMOdG (ORCPT
+        with ESMTP id S230516AbjCMSTz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:33:06 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30201BBB7;
-        Mon, 13 Mar 2023 07:33:02 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32DDw8fL020315;
-        Mon, 13 Mar 2023 14:27:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=EB0cwcFCZq1QLZZYrEEn68+CuFIz0tlLaFF5ULkdTrk=;
- b=f21UmAlv7MrKkKkvYFQWyRSm+St/EO8iiq0Sv7VRtq5QYNWajhG1TENN2hPgxZR64Hfv
- rQ4pCLqiiOapWqbo4GkUxKlp2Spkz9CU2KyjLHiUsOqaOb1j++jEvqc+a52V/AALd60a
- 9GIbberPbVQklB6jvPQtReFHHzowO0pd3naWhp/4jLJO4NHGLS4KmStwvypfnzJ63anr
- CbZZ9vqWP2mceT0f8RJjrn01xGng0SOysxSLU9ubaM4YM/ElViacKZM3Ul9e3eq+Hla1
- 7+W5F5liGaCuviypPNac/vjP+vGfPCs6wjthgmvfYz0wo4qMpuwmSzCJKWfGc00zA/LA SQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pa3sbupxs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 14:27:03 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32DCMJdB020816;
-        Mon, 13 Mar 2023 14:27:02 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pa3sbupx8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 14:27:02 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32DDwa9Z008599;
-        Mon, 13 Mar 2023 14:27:01 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3p8h96x5d0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 14:27:01 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32DER01f37355910
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Mar 2023 14:27:00 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 84B9C5805C;
-        Mon, 13 Mar 2023 14:27:00 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A26A5805A;
-        Mon, 13 Mar 2023 14:26:59 +0000 (GMT)
-Received: from sig-9-77-159-147.ibm.com (unknown [9.77.159.147])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Mar 2023 14:26:59 +0000 (GMT)
-Message-ID: <32ec16c9c3caa731c3de69371de6318da7f7ea91.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 6/6] integrity: machine keyring CA configuration
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org,
-        dhowells@redhat.com, dwmw2@infradead.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, kanth.ghatraju@oracle.com,
-        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
-        coxu@redhat.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Mon, 13 Mar 2023 10:26:47 -0400
-In-Reply-To: <20230302164652.83571-7-eric.snowberg@oracle.com>
-References: <20230302164652.83571-1-eric.snowberg@oracle.com>
-         <20230302164652.83571-7-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: AVn6e_N1RxRLy5krPqhqwYoTOHO05acB
-X-Proofpoint-GUID: Ns97NCTx73M2atYukwJYoFiNIAEjPIeb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-13_06,2023-03-13_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- adultscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- impostorscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303130112
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Mar 2023 14:19:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30DA77CA5;
+        Mon, 13 Mar 2023 11:19:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 634B061471;
+        Mon, 13 Mar 2023 18:19:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C6CC433EF;
+        Mon, 13 Mar 2023 18:19:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678731564;
+        bh=egvsBA0xTYE8cPXmnqy+IsmLfVywJIuZpjOIMPUg1GU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rNOQeNcgi7cuC5pqUmi5P77h8F+XyCf5UGuxFE4oxYLpbMQxtR6+GzbSTGqNWENV3
+         mEqTbW47Om9NGXmcyvr8r6AvQSl/CEBDANlT+oF1iECVk2P7/9fNbYlxUvPL3QTIOg
+         95xqsLYtxuJN0pVjcnrP7BRg71DLB7ZYNLKzftEM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     rafael@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Subject: [PATCH 10/12] tpm: fix up the tpm_class shutdown_pre pointer when created
+Date:   Mon, 13 Mar 2023 19:18:41 +0100
+Message-Id: <20230313181843.1207845-10-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230313181843.1207845-1-gregkh@linuxfoundation.org>
+References: <20230313181843.1207845-1-gregkh@linuxfoundation.org>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2648; i=gregkh@linuxfoundation.org; h=from:subject; bh=egvsBA0xTYE8cPXmnqy+IsmLfVywJIuZpjOIMPUg1GU=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn8mcxtF9kXf8xd/Fl1Z7lvecqW4Nc7bBdUKYqzBWcIH F+nafGoI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACZyP4RhQdv0SW6vu2961G5U O6e4xO5kBZ90JMM8TeN55p9PRvhNubj0WuMygbVJnlubAQ==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2023-03-02 at 11:46 -0500, Eric Snowberg wrote:
-> Add machine keyring CA restriction options to control the type of
-> keys that may be added to it. The motivation is separation of
-> certificate signing from code signing keys. Subsquent work will
-> limit certificates being loaded into the IMA keyring to code
-> signing keys used for signature verification.
-> 
-> When no restrictions are selected, all Machine Owner Keys (MOK) are added
-> to the machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING is
-> selected, the CA bit must be true.  Also the key usage must contain
-> keyCertSign, any other usage field may be set as well.
-> 
-> When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is selected, the CA bit must
-> be true. Also the key usage must contain keyCertSign and the
-> digitialSignature usage may not be set.
-> 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+Do not wait until long after the struct class has been created to set
+the shutdown_pre pointer for the tpm_class, assign it right away.
 
-Thanks, Eric.
+This is the only in-kernel offender that tries to modify the
+device->class pointer contents after it has been assigned to a device,
+so fix that up by doing the function pointer assignment before it is
+matched with the device.  Because of this, the patch should go through
+the driver core tree to allow later changes to struct device to be
+possible.
 
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-integrity@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/char/tpm/tpm-chip.c      | 3 +--
+ drivers/char/tpm/tpm-interface.c | 1 +
+ drivers/char/tpm/tpm.h           | 1 +
+ 3 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index b99f55f2d4fd..7c444209a256 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -282,7 +282,7 @@ static void tpm_dev_release(struct device *dev)
+  *
+  * Return: always 0 (i.e. success)
+  */
+-static int tpm_class_shutdown(struct device *dev)
++int tpm_class_shutdown(struct device *dev)
+ {
+ 	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
+ 
+@@ -337,7 +337,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+ 	device_initialize(&chip->dev);
+ 
+ 	chip->dev.class = tpm_class;
+-	chip->dev.class->shutdown_pre = tpm_class_shutdown;
+ 	chip->dev.release = tpm_dev_release;
+ 	chip->dev.parent = pdev;
+ 	chip->dev.groups = chip->groups;
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 8763c820d1f8..43e23a04433a 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -467,6 +467,7 @@ static int __init tpm_init(void)
+ 	int rc;
+ 
+ 	tpm_class = class_create("tpm");
++	tpm_class->shutdown_pre = tpm_class_shutdown;
+ 	if (IS_ERR(tpm_class)) {
+ 		pr_err("couldn't create tpm class\n");
+ 		return PTR_ERR(tpm_class);
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 24ee4e1cc452..a45eb39db0c4 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -183,6 +183,7 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip);
+ unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+ int tpm_pm_suspend(struct device *dev);
+ int tpm_pm_resume(struct device *dev);
++int tpm_class_shutdown(struct device *dev);
+ 
+ static inline void tpm_msleep(unsigned int delay_msec)
+ {
+-- 
+2.39.2
 
