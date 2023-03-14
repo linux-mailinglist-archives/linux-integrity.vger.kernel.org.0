@@ -2,128 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F186B950D
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 13:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 634CD6B9516
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 14:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbjCNM7u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Mar 2023 08:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
+        id S230333AbjCNNAM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Mar 2023 09:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjCNM7V (ORCPT
+        with ESMTP id S232461AbjCNM7y (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:59:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAF9366AA;
-        Tue, 14 Mar 2023 05:55:10 -0700 (PDT)
+        Tue, 14 Mar 2023 08:59:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CFF9C98C;
+        Tue, 14 Mar 2023 05:55:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96573B811F5;
-        Tue, 14 Mar 2023 12:47:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB90C433A4;
-        Tue, 14 Mar 2023 12:47:45 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="b5R/jWL6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1678798060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XOFa9e8BNmMVgxHJvgqbkR1KMTLdpurluNOIJewz+Gw=;
-        b=b5R/jWL60Qdm0/QQGpwEW25FVxsdqdyNFniHB+QAGf5lMwEjUybNaTT3jo3XHmni5GiUrZ
-        pIUjvJNZz0AjdVWiFNraUGu4cP5kEfYf42zJr9iavZL/4yz7xk3n/IBZ4pEqA/cOcEa9zK
-        jTi8AHO/zVlKVDIOP9RWtsR5JY4R/d4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d2cd63a4 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 14 Mar 2023 12:47:40 +0000 (UTC)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-53d277c1834so301996047b3.10;
-        Tue, 14 Mar 2023 05:47:40 -0700 (PDT)
-X-Gm-Message-State: AO0yUKWTRSn/zQBGltMBNoRBYZNkMCnWqnJgA9daj9WhrsjfQ/yQokWm
-        a1RqMVMesZKLwmZqG7MFL+cJ8Y5jAzEDIoa81fE=
-X-Google-Smtp-Source: AK7set8cHiziQ5N/k4D1qIDmhTeKT6cHmqgyz1r29oB+Y8BS84yMnsHlNg8FYtL/MJx4qt3C8z7VprHNLvqFX6ZEdVc=
-X-Received: by 2002:a81:ac61:0:b0:544:6828:3c0f with SMTP id
- z33-20020a81ac61000000b0054468283c0fmr864005ywj.4.1678798058695; Tue, 14 Mar
- 2023 05:47:38 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:7110:53ce:b0:1f4:dffd:2c5c with HTTP; Tue, 14 Mar 2023
- 05:47:38 -0700 (PDT)
-In-Reply-To: <ZBBmVhwsTf/URoqs@kernel.org>
-References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz> <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
- <Y60RoP77HnwaukEA@zx2c4.com> <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <Y7w74EBYP3+FHlkw@zx2c4.com> <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
- <ZBBmVhwsTf/URoqs@kernel.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 14 Mar 2023 13:47:38 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
-Message-ID: <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 824916176D;
+        Tue, 14 Mar 2023 12:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92526C433D2;
+        Tue, 14 Mar 2023 12:54:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678798441;
+        bh=h6T6NxRhsioLJU8OZd7AELH/NfnEdUfNw+s6n1Y4l0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fBljyzqj653YS9UNM9yNDS+FxurtrsJr9yh2ZtY8wd+nk1IVZLMTKyoducAHeWd3f
+         XipDg3R66l88dAqItrevVkVN4gOxzGzmqGpVibi2XgiFLH2z9oCxR7r9fD6UabnpTv
+         X7T5GwcdpQ5Ge++vblHU0o5Akg0io8sV5hP26ZA8=
+Date:   Tue, 14 Mar 2023 13:53:59 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
         Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Altmanninger <aclopte@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 10/12] tpm: fix up the tpm_class shutdown_pre pointer
+ when created
+Message-ID: <ZBBuZ9dLtM2iQyg3@kroah.com>
+References: <20230313181843.1207845-1-gregkh@linuxfoundation.org>
+ <20230313181843.1207845-10-gregkh@linuxfoundation.org>
+ <ZBBV0N+eHSf2TYli@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBBV0N+eHSf2TYli@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/14/23, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> On Tue, Mar 14, 2023 at 10:35:33AM +0100, Thorsten Leemhuis wrote:
->> On 09.01.23 17:08, Jason A. Donenfeld wrote:
->> > On Thu, Jan 05, 2023 at 02:59:15PM +0100, Thorsten Leemhuis wrote:
->> >> On 29.12.22 05:03, Jason A. Donenfeld wrote:
->> >>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
->> >>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
->> >>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening
->> >>>>> again
->> >>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
->> >>>>> "tpm_try_transmit" error this time. The first indication of a
->> >>>>> problem
->> >>>>> is this during a resume from suspend to ram:
->> >>>>> tpm tpm0: A TPM error (28) occurred continue selftest
->> >>>>> and then periodically
->> >>>>> tpm tpm0: A TPM error (28) occurred attempting get random
->> >>>>
->> >>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
->> >>>> original problem was reported against TPM 2.0  because of a missing
->> >>>> try_get_ops().
->> >>>
->> >>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
->> >>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
->> >>> considering it's the same hardware from Vlastimil causing this. I
->> >>> also
->> >>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
->> >>> that's not correct.
->> > [...]
->> > So, this is now in rc3:
->> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1382999aa0548a171a272ca817f6c38e797c458c
->> >
->> > That should help avoid the worst of the issue -- laptop not sleeping.
->> > But the race or whatever it is still does exist. So you might want to
->> > keep this in your tracker to periodically nudge the TPM folks about it.
->>
->> I did, and with -rc2 out now is a good time to remind everybody about
->> it. Jarkko even looked into it, but no real fix emerged afaics. Or did
->> it?
->
-> Jason's workaround was picked. I asked some questions in the thread but
-> have not received any responses.
+On Tue, Mar 14, 2023 at 01:09:04PM +0200, Jarkko Sakkinen wrote:
+> On Mon, Mar 13, 2023 at 07:18:41PM +0100, Greg Kroah-Hartman wrote:
+> > Do not wait until long after the struct class has been created to set
+> > the shutdown_pre pointer for the tpm_class, assign it right away.
+> > 
+> > This is the only in-kernel offender that tries to modify the
+> > device->class pointer contents after it has been assigned to a device,
+> > so fix that up by doing the function pointer assignment before it is
+> > matched with the device.  Because of this, the patch should go through
+> > the driver core tree to allow later changes to struct device to be
+> > possible.
+> > 
+> > Cc: Peter Huewe <peterhuewe@gmx.de>
+> > Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > Cc: linux-integrity@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/char/tpm/tpm-chip.c      | 3 +--
+> >  drivers/char/tpm/tpm-interface.c | 1 +
+> >  drivers/char/tpm/tpm.h           | 1 +
+> >  3 files changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> > index b99f55f2d4fd..7c444209a256 100644
+> > --- a/drivers/char/tpm/tpm-chip.c
+> > +++ b/drivers/char/tpm/tpm-chip.c
+> > @@ -282,7 +282,7 @@ static void tpm_dev_release(struct device *dev)
+> >   *
+> >   * Return: always 0 (i.e. success)
+> >   */
+> > -static int tpm_class_shutdown(struct device *dev)
+> > +int tpm_class_shutdown(struct device *dev)
+> >  {
+> >  	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
+> >  
+> > @@ -337,7 +337,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+> >  	device_initialize(&chip->dev);
+> >  
+> >  	chip->dev.class = tpm_class;
+> > -	chip->dev.class->shutdown_pre = tpm_class_shutdown;
+> >  	chip->dev.release = tpm_dev_release;
+> >  	chip->dev.parent = pdev;
+> >  	chip->dev.groups = chip->groups;
+> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> > index 8763c820d1f8..43e23a04433a 100644
+> > --- a/drivers/char/tpm/tpm-interface.c
+> > +++ b/drivers/char/tpm/tpm-interface.c
+> > @@ -467,6 +467,7 @@ static int __init tpm_init(void)
+> >  	int rc;
+> >  
+> >  	tpm_class = class_create("tpm");
+> > +	tpm_class->shutdown_pre = tpm_class_shutdown;
+> >  	if (IS_ERR(tpm_class)) {
+> >  		pr_err("couldn't create tpm class\n");
+> >  		return PTR_ERR(tpm_class);
+> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > index 24ee4e1cc452..a45eb39db0c4 100644
+> > --- a/drivers/char/tpm/tpm.h
+> > +++ b/drivers/char/tpm/tpm.h
+> > @@ -183,6 +183,7 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip);
+> >  unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+> >  int tpm_pm_suspend(struct device *dev);
+> >  int tpm_pm_resume(struct device *dev);
+> > +int tpm_class_shutdown(struct device *dev);
+> >  
+> >  static inline void tpm_msleep(unsigned int delay_msec)
+> >  {
+> > -- 
+> > 2.39.2
+> > 
+> 
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> Are you going to pick this?
 
-As I've written several times now, that patch doesn't fix the issue.
-It makes it less common but it still exists and needs to be addressed.
-Please re-read my various messages describing this. I have nothing new
-at all to add; you just need to review my prior comments. There's a
-bug that probably needs to be fixed here by somebody who understands
-the tpm1 code.
+Yes, as the changelog text said, I'd like to take it through my tree,
+thanks!
+
+greg k-h
