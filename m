@@ -2,146 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C943A6B9DD5
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 19:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB986B9E5B
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 19:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjCNSF2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Mar 2023 14:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        id S230350AbjCNS3X (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Mar 2023 14:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCNSF1 (ORCPT
+        with ESMTP id S230123AbjCNS3O (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:05:27 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D739DAA702;
-        Tue, 14 Mar 2023 11:05:24 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d36so21121717lfv.8;
-        Tue, 14 Mar 2023 11:05:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678817123;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=I+SJo7YeDndJJb9FcmfHJ+g0nvcfZuSS+pxPPhUkPAU=;
-        b=UGnWP9EmS66UCtKniWs1Hw5mCG0uydsiW4xUKvCUMnps5+8A3rLtdYnI9LBz/EHvKG
-         ON9M+56cNm+oTlDzbQfTfG+hN8OKOYclhTdCNKhhkNXZ+yGE86ResfD2UCtdJic+6RDz
-         rlkEt1hGzzClX4bLKtoQJRSH+Id1X3Wcg/tcxl6lW3eRBY7aReFUaVPKLcDk0h4Z8D28
-         owpkxXUoldWNG8uaF1ZgSXe2Zbs1vVlpZYoUPXAPtVvW5j7Rc3TUakFVo32A3Cn5/nbW
-         zVU+8a3nGx+U9S0045wub3gCM4SNH+sPTqw2Ef31UauC5bLLbmeRT6Qu200DC1xBPpJJ
-         RjSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678817123;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I+SJo7YeDndJJb9FcmfHJ+g0nvcfZuSS+pxPPhUkPAU=;
-        b=pFQzPHO7GrWKgCfXXx0BR3wFaMR3SP3IOdwwmt82DX/LfI0wLS3sPaq25VxChCvor8
-         v1EoNDV0iMQKeaA+TJ5U/T4JdJz2370rmOwsWrd2IV0VLOIw33CH1mnumsqLo7vKnutL
-         tK5bA7MxoX2M/wOd7CUA5URkhK+/A7S64j7ebwHt6szsChKVj9fLvYEgyMj+msHXFeWw
-         AhnHwzd2stfxAFbgc0IL3GSuXVkPv+cnDb80GOQbkKUawfmjd7/Ah4kq4mg0u2Q6FezH
-         wlfIl9gxgpKtd0MAbqppEyCk0+d9PMgCoLEH4cGKZQXJYxgBnZDMaFqxmvn1cy0xMrbj
-         lzcw==
-X-Gm-Message-State: AO0yUKVdHDKj60jKeYLo14yIHeHiKhmSKpwdj3eUKVA0EzqQnsJgdf0x
-        wcpXIkzfQ+6CsdkEp3WSsCTq6jbpxsDcakPu
-X-Google-Smtp-Source: AK7set9ldhL13HwpN98o3SKvC2f9q0OhO5BPfCWqgY9EUa/hdg84oFxwbxUXj+YyZstEjC1wl6kFSg==
-X-Received: by 2002:ac2:4a83:0:b0:4e8:4a21:9ca2 with SMTP id l3-20020ac24a83000000b004e84a219ca2mr1016760lfp.3.1678817123008;
-        Tue, 14 Mar 2023 11:05:23 -0700 (PDT)
-Received: from roman-MRC-WX0.. ([2a00:1370:819a:3aea:9345:682:eb4a:aa71])
-        by smtp.gmail.com with ESMTPSA id v20-20020ac25614000000b004dc83d04840sm482915lfd.79.2023.03.14.11.05.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 11:05:22 -0700 (PDT)
-From:   Roman Danilov <romanosauce57@gmail.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Roman Danilov <romanosauce57@gmail.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        GUO Zihua <guozihua@huawei.com>,
+        Tue, 14 Mar 2023 14:29:14 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DDA96C06;
+        Tue, 14 Mar 2023 11:28:51 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EGx4M5002703;
+        Tue, 14 Mar 2023 18:28:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=MoBys2a5a2aIW+4UTVOsTIdo1J8fju5GYhkuW+NpRrs=;
+ b=AhRn3PYDkXKDiEEBaHHLN05n34zaWMpzc5kzMtp78yAtviLF7q7NglMV53OqyZJ/ABZ/
+ 0ZmvWe7oOMki3VKYfO4unaX7Eo8r/fqIH+l2Sf+A6ljMz5q0tgv0iEqUIQ7n3wQwUbJH
+ ivJ0qUFETPJhv9v9hjR/XVtuOr9o64/ciKODKHDwCxYQwGw00y8XOIRXiLKw9qjdNhUw
+ XjwWq7KhoCrazef4UDUsNkuyge4OHYljFROQmc3cTsgJ22YXlG+SBbCnJ3oyYUOjl/FX
+ DeeTXOytRxXkVVfHc1V1lKn60L48mcCi0zG7l9XyzQYg9UpJEORO907+pewMdOj4CI0i aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pampv303j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 18:28:33 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EHlh6o037756;
+        Tue, 14 Mar 2023 18:28:33 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pampv303a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 18:28:33 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32EICdbJ004888;
+        Tue, 14 Mar 2023 18:28:32 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3p8h97tg1r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 18:28:32 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32EISVVI39518754
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Mar 2023 18:28:31 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1AE8158066;
+        Tue, 14 Mar 2023 18:28:31 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9540358043;
+        Tue, 14 Mar 2023 18:28:29 +0000 (GMT)
+Received: from sig-9-65-194-57.ibm.com (unknown [9.65.194.57])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Mar 2023 18:28:29 +0000 (GMT)
+Message-ID: <ab1e29c1620ac492b9194b4c7a465b20cd39076a.camel@linux.ibm.com>
+Subject: Re: [PATCH] IMA: allow/fix UML builds
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH] ima: Fix potential NULL pointer access in ima_match_rules()
-Date:   Tue, 14 Mar 2023 21:03:08 +0300
-Message-Id: <20230314180308.17909-1-romanosauce57@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fabio Estevam <festevam@gmail.com>,
+        Rajiv Andrade <srajiv@linux.vnet.ibm.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org
+Date:   Tue, 14 Mar 2023 14:28:29 -0400
+In-Reply-To: <20230224032703.7789-1-rdunlap@infradead.org>
+References: <20230224032703.7789-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DLevhJuZLcRgOUMV72YS6jyn3vaayjw1
+X-Proofpoint-GUID: uMGPTO-j01lF7ok9TnXILXgamzP26jVA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-14_10,2023-03-14_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 suspectscore=0 mlxscore=0 clxscore=1011
+ priorityscore=1501 bulkscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303140144
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-In ima_match_rules(), when ima_lsm_copy_rule() fails, NULL pointer
-is assigned to lsm_rule. After that, in the next step of the loop
-NULL pointer is dereferenced in lsm_rule->lsm[i].rule.
+On Thu, 2023-02-23 at 19:27 -0800, Randy Dunlap wrote:
+> UML supports HAS_IOMEM since 0bbadafdc49d (um: allow disabling
+> NO_IOMEM).
+> 
+> Current IMA build on UML fails on allmodconfig (with TCG_TPM=m):
+> 
+> ld: security/integrity/ima/ima_queue.o: in function `ima_add_template_entry':
+> ima_queue.c:(.text+0x2d9): undefined reference to `tpm_pcr_extend'
+> ld: security/integrity/ima/ima_init.o: in function `ima_init':
+> ima_init.c:(.init.text+0x43f): undefined reference to `tpm_default_chip'
+> ld: security/integrity/ima/ima_crypto.o: in function `ima_calc_boot_aggregate_tfm':
+> ima_crypto.c:(.text+0x1044): undefined reference to `tpm_pcr_read'
+> ld: ima_crypto.c:(.text+0x10d8): undefined reference to `tpm_pcr_read'
+> 
+> Modify the IMA Kconfig entry so that it selects TCG_TPM if HAS_IOMEM
+> is set, regardless of the UML Kconfig setting.
+> This updates TCG_TPM from =m to =y and fixes the linker errors.
+> 
+> Fixes: f4a0391dfa91 ("ima: fix Kconfig dependencies")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
-As far as ima_match_rules() is not designed to return error code,
-add __GFP_NOFAIL to make sure memory allocation succeeds.
+Indicating this resolves a commit which was upstreamed in linux-3.4,
+while the fix for that commit 0bbadafdc49d ("um: allow disabling
+NO_IOMEM") was upstreamed only in linux-5.14, leaves out an important
+detail.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Is the proper way of indicating this disconnect by adding to the fixes
+line the kernel?
+Fixes: f4a0391dfa91 ("ima: fix Kconfig dependencies") # v5.14+
 
-Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
-Signed-off-by: Roman Danilov <romanosauce57@gmail.com>
-Reviewed-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
- security/integrity/ima/ima_policy.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 3ca8b7348c2e..1b6bfcbcdeac 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -401,7 +401,8 @@ static void ima_free_rule(struct ima_rule_entry *entry)
- 	kfree(entry);
- }
- 
--static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
-+static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry,
-+						gfp_t gfp)
- {
- 	struct ima_rule_entry *nentry;
- 	int i;
-@@ -410,7 +411,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 	 * Immutable elements are copied over as pointers and data; only
- 	 * lsm rules can change
- 	 */
--	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
-+	nentry = kmemdup(entry, sizeof(*nentry), gfp);
- 	if (!nentry)
- 		return NULL;
- 
-@@ -438,7 +439,7 @@ static int ima_lsm_update_rule(struct ima_rule_entry *entry)
- 	int i;
- 	struct ima_rule_entry *nentry;
- 
--	nentry = ima_lsm_copy_rule(entry);
-+	nentry = ima_lsm_copy_rule(entry, GFP_KERNEL);
- 	if (!nentry)
- 		return -ENOMEM;
- 
-@@ -664,11 +665,10 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 		}
- 
- 		if (rc == -ESTALE && !rule_reinitialized) {
--			lsm_rule = ima_lsm_copy_rule(rule);
--			if (lsm_rule) {
--				rule_reinitialized = true;
--				goto retry;
--			}
-+			lsm_rule = ima_lsm_copy_rule(rule,
-+						     GFP_KERNEL | __GFP_NOFAIL);
-+			rule_reinitialized = true;
-+			goto retry;
- 		}
- 		if (!rc) {
- 			result = false;
 -- 
-2.34.1
+thanks,
+
+Mimi
+
 
