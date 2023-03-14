@@ -2,176 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCFE6B97D7
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 15:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389E56B98EE
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 16:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjCNOYg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Mar 2023 10:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S231152AbjCNPZ5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Mar 2023 11:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCNOYf (ORCPT
+        with ESMTP id S231194AbjCNPZ4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:24:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF2A64B22;
-        Tue, 14 Mar 2023 07:24:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0373B81999;
-        Tue, 14 Mar 2023 14:24:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39E8C433EF;
-        Tue, 14 Mar 2023 14:23:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678803840;
-        bh=aQ57cJoWuOqPcdScGMzodxGhUAhK9wHEsdJIH8flygQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M+cKkEPNFcexOgXohZaB+iNjkQHzIZL5XPZWPJjXRLPN/ewFERyszb3skfJGCpkP2
-         a1UMjJwggYl3JB9yXlVIJZ9sC0jL3u0JnA8TawI1wX/mTcdk7nJhm6Ul+r3w/Q/oev
-         FSsWYaEJ9LvekhF+u06AvlJGoDm1evzTuLnq47hx3Unc/Ex2aK96XXwcMHV2m1wNWD
-         LAehdJpawro1d2PwDQ8YkY5IYagp3TJbImbtNtAdrhK6+cllEp6x7iskmUF6u2XbKE
-         84aqJ0D5hx187U8xi4QdoXQNAmr+NTZY+ZWhoPPkRSV9uSvdymVnQobcQxut8tJl/5
-         rwMy9E+LU7aCw==
-Date:   Tue, 14 Mar 2023 16:23:54 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Altmanninger <aclopte@gmail.com>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-Message-ID: <ZBCDeleGG/fFlkt+@kernel.org>
-References: <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
- <Y60RoP77HnwaukEA@zx2c4.com>
- <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <Y7w74EBYP3+FHlkw@zx2c4.com>
- <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
- <ZBBmVhwsTf/URoqs@kernel.org>
- <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
- <ZBBxMl5rVjY9FGS9@kernel.org>
- <ZBBxxftnXHVOjm92@kernel.org>
- <ZBB8R9H3CyQnNfCt@zx2c4.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBB8R9H3CyQnNfCt@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 14 Mar 2023 11:25:56 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45DB8A9082;
+        Tue, 14 Mar 2023 08:25:52 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id B5AC02B069D9;
+        Tue, 14 Mar 2023 11:08:43 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 14 Mar 2023 11:08:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678806523; x=1678813723; bh=K4
+        tQ8ndVOUfpM0Pr+iYsgl8sdiO//rofLCiHgEHKHaw=; b=Bs89wlqsdZVa4k07Fb
+        epoolTHKszWvfBhS2lZVBBRcF2IS0ywxX526WC1eBDNhzycvLK/kat0+XRfJx2W3
+        7bMNtqMaeH4ZJIdGU9yRt8ThnhgzDS7LLG23ou/0reQhjVATwpoCDU2V8vqm2W1g
+        J+1jlCnkFsdB00fs75PZcsnbMJQ5s0C5KPnLZjhqSn8SwimhhuRyHr4X0dC/PTsg
+        runNfLuCg/cSr0AkAoZgfQFS4waYRIDooAHqrMWtZtpzKTnjgRDZ+8reMknQWs0Z
+        eoZ852c0rPiprZQoIxvBFd9ZExdObLmVVzDXAkThfBx5XDZj6gfT51hkb+yCSOEK
+        qb1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678806523; x=1678813723; bh=K4tQ8ndVOUfpM
+        0Pr+iYsgl8sdiO//rofLCiHgEHKHaw=; b=FcVdEJUEJOBFn8vyntSfSiv6vsKGS
+        hxzdTfs9AcxmtwZ5y1sR0yXhzJ99CF9MXTpWC+ABwuF7Rtpv1TkBGNjNpsV6Om5f
+        dtPB6w6JUNhXycjYrxPIg/RAWfQny5kcjIIZY4MsTNL5WQMkK9FZ5JVjfkhq6000
+        I4KrV9UjqLokn4iBCs+nAu+QFd5+zWcdFsaymVn1JdQjXp5p6OIcBjLpx4QgreLj
+        wYQZ3SOWH6tcEuqWKW6Z+BaR70e/RUZ9Fa/F4u+0ul++229JrQKHN7GgAgMbAdAD
+        4cns8a5dDWvtxvYx+83RxxNxPzNTvcFgOby7T3TIytlb8ZsA7HgRcFHmw==
+X-ME-Sender: <xms:-o0QZK7P_IOpvfkXAJTvZsGq0nxcIFi21rXd_e5XDXLyhDMebh2_nA>
+    <xme:-o0QZD7dmPVC77qe5xy7iIFqqccVdVdsSEIY2cJ65en99sOTy5DG8bDWDMZEjjCjK
+    kg8yMOB41kCCRQNqFA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedgjeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:-o0QZJc_ZJnv__s_0rxNyhivqegZK7Z_v0h4mlYw68ZNd9X5urONyg>
+    <xmx:-o0QZHIp6DY7kGHp39y5XRCh11PF4bviEV4MGoRs_tuGNYI_P-Cn5g>
+    <xmx:-o0QZOLVcUPTfqPTZ6w7QlCi-H2uAW7eIfDzED9woacZag2egABCvQ>
+    <xmx:-40QZDB8FC5V93wwc2nXAo4BNIGlkdi-SW-0xyTxCo85UPhNMS4EWPMW1F4>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 018F2B60086; Tue, 14 Mar 2023 11:08:41 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <9894438c-dca7-40cf-adb8-4bc7cb7b5c02@app.fastmail.com>
+In-Reply-To: <CAMuHMdXXapUNn2-_+WWULq1ELLJEzVgJ7CZ-OJpbTSy-=JjZVA@mail.gmail.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-4-schnelle@linux.ibm.com>
+ <CAMuHMdXXapUNn2-_+WWULq1ELLJEzVgJ7CZ-OJpbTSy-=JjZVA@mail.gmail.com>
+Date:   Tue, 14 Mar 2023 16:08:20 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Corey Minyard" <minyard@acm.org>,
+        "Peter Huewe" <peterhuewe@gmx.de>,
+        "Jarkko Sakkinen" <jarkko@kernel.org>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v3 03/38] char: impi, tpm: depend on HAS_IOPORT
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 02:53:11PM +0100, Jason A. Donenfeld wrote:
-> On Tue, Mar 14, 2023 at 03:08:21PM +0200, Jarkko Sakkinen wrote:
-> > On Tue, Mar 14, 2023 at 03:06:47PM +0200, Jarkko Sakkinen wrote:
-> > > On Tue, Mar 14, 2023 at 01:47:38PM +0100, Jason A. Donenfeld wrote:
-> > > > On 3/14/23, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > > On Tue, Mar 14, 2023 at 10:35:33AM +0100, Thorsten Leemhuis wrote:
-> > > > >> On 09.01.23 17:08, Jason A. Donenfeld wrote:
-> > > > >> > On Thu, Jan 05, 2023 at 02:59:15PM +0100, Thorsten Leemhuis wrote:
-> > > > >> >> On 29.12.22 05:03, Jason A. Donenfeld wrote:
-> > > > >> >>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
-> > > > >> >>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
-> > > > >> >>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening
-> > > > >> >>>>> again
-> > > > >> >>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
-> > > > >> >>>>> "tpm_try_transmit" error this time. The first indication of a
-> > > > >> >>>>> problem
-> > > > >> >>>>> is this during a resume from suspend to ram:
-> > > > >> >>>>> tpm tpm0: A TPM error (28) occurred continue selftest
-> > > > >> >>>>> and then periodically
-> > > > >> >>>>> tpm tpm0: A TPM error (28) occurred attempting get random
-> > > > >> >>>>
-> > > > >> >>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
-> > > > >> >>>> original problem was reported against TPM 2.0  because of a missing
-> > > > >> >>>> try_get_ops().
-> > > > >> >>>
-> > > > >> >>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
-> > > > >> >>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
-> > > > >> >>> considering it's the same hardware from Vlastimil causing this. I
-> > > > >> >>> also
-> > > > >> >>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
-> > > > >> >>> that's not correct.
-> > > > >> > [...]
-> > > > >> > So, this is now in rc3:
-> > > > >> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1382999aa0548a171a272ca817f6c38e797c458c
-> > > > >> >
-> > > > >> > That should help avoid the worst of the issue -- laptop not sleeping.
-> > > > >> > But the race or whatever it is still does exist. So you might want to
-> > > > >> > keep this in your tracker to periodically nudge the TPM folks about it.
-> > > > >>
-> > > > >> I did, and with -rc2 out now is a good time to remind everybody about
-> > > > >> it. Jarkko even looked into it, but no real fix emerged afaics. Or did
-> > > > >> it?
-> > > > >
-> > > > > Jason's workaround was picked. I asked some questions in the thread but
-> > > > > have not received any responses.
-> > > > 
-> > > > As I've written several times now, that patch doesn't fix the issue.
-> > > > It makes it less common but it still exists and needs to be addressed.
-> > > > Please re-read my various messages describing this. I have nothing new
-> > > > at all to add; you just need to review my prior comments. There's a
-> > > > bug that probably needs to be fixed here by somebody who understands
-> > > > the tpm1 code.
-> > > 
-> > > I'll try qemu path to see if I can reproduce it with/without the already
-> > > merged workaround.
-> > 
-> > BTW, what sort of environment you had for your qemu run? I'm creating a
-> > simple initramfs with buildroot for this.
-> 
-> Nothing special at all in the userspace.
-> 
-> I think details of my test bed might be in some other thread from when
-> that original patch went in or when the original bug report came, but
-> from memory, I believe what I did to reliably reproduce various issues
-> was comment out the sleep in random.c so that it keeps asking the TPM
-> for more bytes from the kthread, like this:
-> 
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index ce3ccd172cc8..708110c780aa 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -934,20 +934,20 @@ EXPORT_SYMBOL(add_device_randomness);
->  void add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy, bool sleep_after)
->  {
->  	mix_pool_bytes(buf, len);
->  	credit_init_bits(entropy);
-> 
->  	/*
->  	 * Throttle writing to once every reseed interval, unless we're not yet
->  	 * initialized or no entropy is credited.
->  	 */
-> -	if (sleep_after && !kthread_should_stop() && (crng_ready() || !entropy))
-> -		schedule_timeout_interruptible(crng_reseed_interval());
-> +//	if (sleep_after && !kthread_should_stop() && (crng_ready() || !entropy))
-> +//		schedule_timeout_interruptible(crng_reseed_interval());
->  }
->  EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
-> 
->  /*
->   * Handle random seed passed by bootloader, and credit it depending
->   * on the command line option 'random.trust_bootloader'.
->   */
->  void __init add_bootloader_randomness(const void *buf, size_t len)
->  {
-> 
-> Then I hooked the tpm emulator up to qemu and put it in tpm1 mode. I had
-> userspace `echo mem > /sys/power/state` every couple of seconds (or
-> continuously maybe?), and then I used the qemu monitor interface to wake
-> the system from sleep. And kaboom.
+On Tue, Mar 14, 2023, at 15:17, Geert Uytterhoeven wrote:
+>> --- a/drivers/char/Kconfig
+>> +++ b/drivers/char/Kconfig
+>> @@ -34,6 +34,7 @@ config TTY_PRINTK_LEVEL
+>>  config PRINTER
+>>         tristate "Parallel printer support"
+>>         depends on PARPORT
+>> +       depends on HAS_IOPORT
+>
+> This looks wrong to me.
+> drivers/char/lp.c uses the parport API, no direct I/O port access.
 
-Thanks for the tips! I'll try various patch combinations and see what
-happens.
+It looks like include/linux/parport.h requires I/O port access
+when PARPORT_PC is enabled and PARPORT_NOT_PC is disabled.
+Maybe this would work:
 
-BR, Jarkko
+      depends on PARPORT
+      depends on HAS_IOPORT || PARPORT_NOT_PC
+
+       Arnd
