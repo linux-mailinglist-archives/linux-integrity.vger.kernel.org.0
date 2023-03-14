@@ -2,175 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6432E6B9B97
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 17:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C943A6B9DD5
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 19:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCNQdC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Mar 2023 12:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
+        id S229691AbjCNSF2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Mar 2023 14:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbjCNQc7 (ORCPT
+        with ESMTP id S229665AbjCNSF1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:32:59 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C779008E
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Mar 2023 09:32:41 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5416b0ab0ecso186125737b3.6
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Mar 2023 09:32:41 -0700 (PDT)
+        Tue, 14 Mar 2023 14:05:27 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D739DAA702;
+        Tue, 14 Mar 2023 11:05:24 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id d36so21121717lfv.8;
+        Tue, 14 Mar 2023 11:05:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1678811561;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b85EPB17+oEFtvuVLS7pjbvgxBH7B6j5VMNkZta2dsI=;
-        b=aRxhXZqxGJlYvW0/kbH4ymUQx8mnwM+MdFKi4TLnegF5PG3ylcN+ERc8VXhv/QO9eB
-         j7EBNDoHKyNLm4QoHGvscMy37ZBKEs+8zDRPq56DhNdnX88Cq9SpWl36b+9hGS+M3QtV
-         TB2WnDXGUh1FwFZ7hGlChkAzyR3Oakl/ltjMltcF+5rjC07tnL2Y8UpFJuTNHL9FhBhQ
-         Ns+snrvvkVBwu1nKFqhVH9a2E99hYbaPT3lBaFs+LGhQ9JAI5fSYC3gM1lK1cbZai0tZ
-         +0b0pzSvNkS6KLaVLkNHmZg0YAL2Rm+OErvfDNCqtTPBVjcWBAdW+VHSdCurQYeiKdWo
-         F+cg==
+        d=gmail.com; s=20210112; t=1678817123;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I+SJo7YeDndJJb9FcmfHJ+g0nvcfZuSS+pxPPhUkPAU=;
+        b=UGnWP9EmS66UCtKniWs1Hw5mCG0uydsiW4xUKvCUMnps5+8A3rLtdYnI9LBz/EHvKG
+         ON9M+56cNm+oTlDzbQfTfG+hN8OKOYclhTdCNKhhkNXZ+yGE86ResfD2UCtdJic+6RDz
+         rlkEt1hGzzClX4bLKtoQJRSH+Id1X3Wcg/tcxl6lW3eRBY7aReFUaVPKLcDk0h4Z8D28
+         owpkxXUoldWNG8uaF1ZgSXe2Zbs1vVlpZYoUPXAPtVvW5j7Rc3TUakFVo32A3Cn5/nbW
+         zVU+8a3nGx+U9S0045wub3gCM4SNH+sPTqw2Ef31UauC5bLLbmeRT6Qu200DC1xBPpJJ
+         RjSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678811561;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b85EPB17+oEFtvuVLS7pjbvgxBH7B6j5VMNkZta2dsI=;
-        b=lbifIhLpKVx4YYHIYmVJh0TcHrDP/tR7VV0oAxNZm+7/34nRycGwgsXbSdyDid7m/U
-         J6aalKYYNKsyUFk7YUWd8iI3DoGfa8bD4WjBiQSfuEEzQpGGvkP7DAobNweurPSxx4mS
-         0BOvPrVtyjj+Dy9fJztmaFXRQQHJXnGNYwnhuBd0J5NhZX1ymo5LFNjwAu38EDDz5MCM
-         y9uZAafGWu6WGlHcYnxy00FlhhYqVzApWoXFWvLR/7tauOMUJfLG35OUIvXteMRQy3Vi
-         nLkLJQdBnanrjj+AqnVq4BzM8AHIVozZcEYgdoIM+g/tU0dtlakkEu7rnNK9IIi/e0XM
-         goYA==
-X-Gm-Message-State: AO0yUKU7GR9K3S7UUaGma1Qbq9we9Jqvi5ziSuFIX/CABt1dvc4mpohC
-        Ko2g5Lnkd0CHCyKRv8cnohEfHI2k9Al+cbr1t0f9
-X-Google-Smtp-Source: AK7set9jXAnKEIerlCQTH/fhrcZasdDtAc6VU4b20coSWiHPjprD1U1EHV3TBe1B3goWwNCo9Cs22k94pipz/rRtQkY=
-X-Received: by 2002:a81:4424:0:b0:536:3c2c:bf5e with SMTP id
- r36-20020a814424000000b005363c2cbf5emr25366437ywa.8.1678811560787; Tue, 14
- Mar 2023 09:32:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230310192614.GA528@domac.alu.hr> <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
- <c1c1cbcc-10b6-de3f-81e8-78e6b173d46f@alu.unizg.hr> <CAHC9VhRFQtqTZku==BkW0uz1oZgG63j15GoQD1iexW4aPoAPcA@mail.gmail.com>
- <ZA7tyrscjwavzY3a@smile.fi.intel.com> <CAHC9VhTMoCAFhaa36Bq7_jiKGiaeMbYTuWv7tTQP1OHpY0EUsg@mail.gmail.com>
- <ZBBU9diKqetWQztO@smile.fi.intel.com>
-In-Reply-To: <ZBBU9diKqetWQztO@smile.fi.intel.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 14 Mar 2023 12:32:30 -0400
-Message-ID: <CAHC9VhTenpSXwvorisXYWYGfx345ZOL9fOrwyhntoUFsLX_ENw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] Add destructor hook to LSM modules
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1678817123;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I+SJo7YeDndJJb9FcmfHJ+g0nvcfZuSS+pxPPhUkPAU=;
+        b=pFQzPHO7GrWKgCfXXx0BR3wFaMR3SP3IOdwwmt82DX/LfI0wLS3sPaq25VxChCvor8
+         v1EoNDV0iMQKeaA+TJ5U/T4JdJz2370rmOwsWrd2IV0VLOIw33CH1mnumsqLo7vKnutL
+         tK5bA7MxoX2M/wOd7CUA5URkhK+/A7S64j7ebwHt6szsChKVj9fLvYEgyMj+msHXFeWw
+         AhnHwzd2stfxAFbgc0IL3GSuXVkPv+cnDb80GOQbkKUawfmjd7/Ah4kq4mg0u2Q6FezH
+         wlfIl9gxgpKtd0MAbqppEyCk0+d9PMgCoLEH4cGKZQXJYxgBnZDMaFqxmvn1cy0xMrbj
+         lzcw==
+X-Gm-Message-State: AO0yUKVdHDKj60jKeYLo14yIHeHiKhmSKpwdj3eUKVA0EzqQnsJgdf0x
+        wcpXIkzfQ+6CsdkEp3WSsCTq6jbpxsDcakPu
+X-Google-Smtp-Source: AK7set9ldhL13HwpN98o3SKvC2f9q0OhO5BPfCWqgY9EUa/hdg84oFxwbxUXj+YyZstEjC1wl6kFSg==
+X-Received: by 2002:ac2:4a83:0:b0:4e8:4a21:9ca2 with SMTP id l3-20020ac24a83000000b004e84a219ca2mr1016760lfp.3.1678817123008;
+        Tue, 14 Mar 2023 11:05:23 -0700 (PDT)
+Received: from roman-MRC-WX0.. ([2a00:1370:819a:3aea:9345:682:eb4a:aa71])
+        by smtp.gmail.com with ESMTPSA id v20-20020ac25614000000b004dc83d04840sm482915lfd.79.2023.03.14.11.05.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 11:05:22 -0700 (PDT)
+From:   Roman Danilov <romanosauce57@gmail.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Roman Danilov <romanosauce57@gmail.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        GUO Zihua <guozihua@huawei.com>,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Frederick Lawler <fred@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: [PATCH] ima: Fix potential NULL pointer access in ima_match_rules()
+Date:   Tue, 14 Mar 2023 21:03:08 +0300
+Message-Id: <20230314180308.17909-1-romanosauce57@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 7:05=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Mar 13, 2023 at 04:27:42PM -0400, Paul Moore wrote:
-> > On Mon, Mar 13, 2023 at 5:33=E2=80=AFAM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Sat, Mar 11, 2023 at 09:59:17AM -0500, Paul Moore wrote:
-> > > > On Fri, Mar 10, 2023 at 5:53=E2=80=AFPM Mirsad Goran Todorovac
-> > > > <mirsad.todorovac@alu.unizg.hr> wrote:
->
-> ...
->
-> > > > With that out of the way, I wanted to make a quick comment on the
-> > > > patch itself.  Currently LSMs do not support unloading, or dynamic
-> > > > loading for that matter.  There are several reasons for this, but
-> > > > perhaps the most important is that in order to help meet the securi=
-ty
-> > > > goals for several of the LSMs they need to be present in the kernel
-> > > > from the very beginning and remain until the very end.  Adding a
-> > > > proper "release" method to a LSM is going to be far more complicate=
-d
-> > > > than what you've done with this patchset, involving a lot of
-> > > > discussion both for the LSM layer itself and all of the currently
-> > > > supported LSMs, and ultimately I don't believe it is something we w=
-ill
-> > > > want to support.
-> > > >
-> > > > I appreciate your desire to help, and I want to thank you for your
-> > > > patch and the effort behind it, but I don't believe the kobject mem=
-ory
-> > > > leak you saw at kernel shutdown was a real issue (it was only "leak=
-ed"
-> > > > because the system was shutting down) and I'm not sure the current
-> > > > behavior is something we want to change in the near future.
-> > >
-> > > Currently the security module so secure that even adds an unneeded no=
-ise to
-> > > the debugging output.
-> > >
-> > > At very least it would be nice to add a stub and put a big comment
-> > > (on your taste) explaining why we do not do anything there.
-> > >
-> > > Agree?
-> >
-> > No.
->
-> Are you sure? I'm proposing to add a stub which is no-op, but with a comm=
-ent
-> inside explaining why. In such case we:
->
-> 1) shut the kobject infra up;
-> 2) keep the status quo in LSM;
-> 3) put in the code a good explanation for others on what's going on.
->
-> > At least not without a lot of additional work beyond what was
-> > presented in this patchset.  What about all of the other kobject
-> > caches created by other LSMs, this is more than just the IMA
-> > iint_cache.  I'm also skeptical that this patchset was ever tested and
-> > verified as the newly added release() method was never actually called
-> > from anywhere that I could see.
->
-> I'm not talking about this patchset, but you are right that it wasn't
-> tested.
->
-> > I think we would need to see a proper, verified fix before I could say
-> > for certain.
->
-> And continuing to spread the noise in the logs just because LSM is stubbo=
-rn?
->
-> > If you want to discuss potential designs, we can do that
-> > too, but please remember the constraints that were already mentioned
-> > about intentionally not allowing the LSMs to be unloaded (prior to
-> > system shutdown).
-> >
-> > I don't know the answer to this, but I'm guessing the LSMs aren't the
-> > only kernel subsystems to "leak" memory on system shutdown; working on
-> > the assumption that this is the case, how are those "leaked"
-> > allocations handled?
->
-> Note, I'm full for the proper fix, but the current issue is logs flooding=
- done
-> by LSM that needs to be addressed.
+In ima_match_rules(), when ima_lsm_copy_rule() fails, NULL pointer
+is assigned to lsm_rule. After that, in the next step of the loop
+NULL pointer is dereferenced in lsm_rule->lsm[i].rule.
 
-If you want to introduce a change to add a release method, do it
-properly so it does the right thing for all the LSMs and not just the
-one you happen to care about at this moment.  If you don't do the
-change properly it means I'm going to have to complete the work and
-I've got more important things relating to the LSM that need my
-attention.
+As far as ima_match_rules() is not designed to return error code,
+add __GFP_NOFAIL to make sure memory allocation succeeds.
 
---=20
-paul-moore.com
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
+Signed-off-by: Roman Danilov <romanosauce57@gmail.com>
+Reviewed-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ security/integrity/ima/ima_policy.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 3ca8b7348c2e..1b6bfcbcdeac 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -401,7 +401,8 @@ static void ima_free_rule(struct ima_rule_entry *entry)
+ 	kfree(entry);
+ }
+ 
+-static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
++static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry,
++						gfp_t gfp)
+ {
+ 	struct ima_rule_entry *nentry;
+ 	int i;
+@@ -410,7 +411,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+ 	 * Immutable elements are copied over as pointers and data; only
+ 	 * lsm rules can change
+ 	 */
+-	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
++	nentry = kmemdup(entry, sizeof(*nentry), gfp);
+ 	if (!nentry)
+ 		return NULL;
+ 
+@@ -438,7 +439,7 @@ static int ima_lsm_update_rule(struct ima_rule_entry *entry)
+ 	int i;
+ 	struct ima_rule_entry *nentry;
+ 
+-	nentry = ima_lsm_copy_rule(entry);
++	nentry = ima_lsm_copy_rule(entry, GFP_KERNEL);
+ 	if (!nentry)
+ 		return -ENOMEM;
+ 
+@@ -664,11 +665,10 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
+ 		}
+ 
+ 		if (rc == -ESTALE && !rule_reinitialized) {
+-			lsm_rule = ima_lsm_copy_rule(rule);
+-			if (lsm_rule) {
+-				rule_reinitialized = true;
+-				goto retry;
+-			}
++			lsm_rule = ima_lsm_copy_rule(rule,
++						     GFP_KERNEL | __GFP_NOFAIL);
++			rule_reinitialized = true;
++			goto retry;
+ 		}
+ 		if (!rc) {
+ 			result = false;
+-- 
+2.34.1
+
