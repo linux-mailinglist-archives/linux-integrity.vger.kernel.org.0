@@ -2,133 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696306B912F
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 12:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 121E56B92A1
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Mar 2023 13:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCNLKu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Mar 2023 07:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
+        id S230212AbjCNMGH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Mar 2023 08:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjCNLJp (ORCPT
+        with ESMTP id S230182AbjCNMFx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:09:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B7526856;
-        Tue, 14 Mar 2023 04:09:18 -0700 (PDT)
+        Tue, 14 Mar 2023 08:05:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3079FE4B;
+        Tue, 14 Mar 2023 05:05:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACE15B8188A;
-        Tue, 14 Mar 2023 11:09:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA72C433D2;
-        Tue, 14 Mar 2023 11:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678792154;
-        bh=6z7AvWibY1m3HbV3qEjuHzKTiYNR/Z3/ajtZAfltp40=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1F8B61755;
+        Tue, 14 Mar 2023 12:04:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3E9C4339B;
+        Tue, 14 Mar 2023 12:04:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678795465;
+        bh=HrESUByicZY6tKB+bQV1ycPzUQEMp7f5+Cr/Z8QKMsI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s6Id6ONZZN8Q/L/XOKTMVyXvEFOaICIflEDqke2jysCpcPTm3z7rz6XZVVTXxCk9V
-         k+x40PaBZABIukmeuJemqznL4yD/CeHpdjTDwQDKsYPKnUW+WDHe0eBt99vRJ790pk
-         xwG+HJhFIc6cr8eCy8ZRZk6wHQU+/INvYcn9LSbJTngSBv7BZ3vPguPZ1yHE20h+Wh
-         7XWuzbtCYzyMIpT5tkCvNX2hec8ZLaGh2i6qkULcIN2Q05GJ5dMa7hjvTWzggMsyA0
-         CzSlYrRQ1kOfhS5oySM/h+gHwu+br5Wf17FxWQVw713Kwo/VXQ7TNhFccrcKrdZOJq
-         OpJejE7uImwjw==
-Date:   Tue, 14 Mar 2023 13:09:04 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 10/12] tpm: fix up the tpm_class shutdown_pre pointer
- when created
-Message-ID: <ZBBV0N+eHSf2TYli@kernel.org>
-References: <20230313181843.1207845-1-gregkh@linuxfoundation.org>
- <20230313181843.1207845-10-gregkh@linuxfoundation.org>
+        b=U5waYEKyWiaG0ZABQ72PXJWMpljOYq9tKwFpPxY01DK4lhLA/M4S4V+RHLXt1w0jE
+         ZXcjtWqnyTuTr5/s9Diz/ukrnFdT5OzP4cdgbhxcCd/6gSJNHPYfgDsrWu8CwUpKUN
+         JujyX2FSnj/mKM9GKQCQbV00WnxyTGLbaj4QqApw=
+Date:   Tue, 14 Mar 2023 13:04:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Frederick Lawler <fred@cloudflare.com>
+Subject: Re: [PATCH v1 0/2] Add destructor hook to LSM modules
+Message-ID: <ZBBixqnSCfjWZvyn@kroah.com>
+References: <20230310192614.GA528@domac.alu.hr>
+ <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
+ <c1c1cbcc-10b6-de3f-81e8-78e6b173d46f@alu.unizg.hr>
+ <CAHC9VhRFQtqTZku==BkW0uz1oZgG63j15GoQD1iexW4aPoAPcA@mail.gmail.com>
+ <ZA7tyrscjwavzY3a@smile.fi.intel.com>
+ <CAHC9VhTMoCAFhaa36Bq7_jiKGiaeMbYTuWv7tTQP1OHpY0EUsg@mail.gmail.com>
+ <ZBBU9diKqetWQztO@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230313181843.1207845-10-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZBBU9diKqetWQztO@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 07:18:41PM +0100, Greg Kroah-Hartman wrote:
-> Do not wait until long after the struct class has been created to set
-> the shutdown_pre pointer for the tpm_class, assign it right away.
+On Tue, Mar 14, 2023 at 01:05:25PM +0200, Andy Shevchenko wrote:
+> On Mon, Mar 13, 2023 at 04:27:42PM -0400, Paul Moore wrote:
+> > On Mon, Mar 13, 2023 at 5:33 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Sat, Mar 11, 2023 at 09:59:17AM -0500, Paul Moore wrote:
+> > > > On Fri, Mar 10, 2023 at 5:53 PM Mirsad Goran Todorovac
+> > > > <mirsad.todorovac@alu.unizg.hr> wrote:
 > 
-> This is the only in-kernel offender that tries to modify the
-> device->class pointer contents after it has been assigned to a device,
-> so fix that up by doing the function pointer assignment before it is
-> matched with the device.  Because of this, the patch should go through
-> the driver core tree to allow later changes to struct device to be
-> possible.
+> ...
 > 
-> Cc: Peter Huewe <peterhuewe@gmx.de>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: linux-integrity@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/char/tpm/tpm-chip.c      | 3 +--
->  drivers/char/tpm/tpm-interface.c | 1 +
->  drivers/char/tpm/tpm.h           | 1 +
->  3 files changed, 3 insertions(+), 2 deletions(-)
+> > > > With that out of the way, I wanted to make a quick comment on the
+> > > > patch itself.  Currently LSMs do not support unloading, or dynamic
+> > > > loading for that matter.  There are several reasons for this, but
+> > > > perhaps the most important is that in order to help meet the security
+> > > > goals for several of the LSMs they need to be present in the kernel
+> > > > from the very beginning and remain until the very end.  Adding a
+> > > > proper "release" method to a LSM is going to be far more complicated
+> > > > than what you've done with this patchset, involving a lot of
+> > > > discussion both for the LSM layer itself and all of the currently
+> > > > supported LSMs, and ultimately I don't believe it is something we will
+> > > > want to support.
+> > > >
+> > > > I appreciate your desire to help, and I want to thank you for your
+> > > > patch and the effort behind it, but I don't believe the kobject memory
+> > > > leak you saw at kernel shutdown was a real issue (it was only "leaked"
+> > > > because the system was shutting down) and I'm not sure the current
+> > > > behavior is something we want to change in the near future.
+> > >
+> > > Currently the security module so secure that even adds an unneeded noise to
+> > > the debugging output.
+> > >
+> > > At very least it would be nice to add a stub and put a big comment
+> > > (on your taste) explaining why we do not do anything there.
+> > >
+> > > Agree?
+> > 
+> > No.
 > 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index b99f55f2d4fd..7c444209a256 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -282,7 +282,7 @@ static void tpm_dev_release(struct device *dev)
->   *
->   * Return: always 0 (i.e. success)
->   */
-> -static int tpm_class_shutdown(struct device *dev)
-> +int tpm_class_shutdown(struct device *dev)
->  {
->  	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
->  
-> @@ -337,7 +337,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->  	device_initialize(&chip->dev);
->  
->  	chip->dev.class = tpm_class;
-> -	chip->dev.class->shutdown_pre = tpm_class_shutdown;
->  	chip->dev.release = tpm_dev_release;
->  	chip->dev.parent = pdev;
->  	chip->dev.groups = chip->groups;
-> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> index 8763c820d1f8..43e23a04433a 100644
-> --- a/drivers/char/tpm/tpm-interface.c
-> +++ b/drivers/char/tpm/tpm-interface.c
-> @@ -467,6 +467,7 @@ static int __init tpm_init(void)
->  	int rc;
->  
->  	tpm_class = class_create("tpm");
-> +	tpm_class->shutdown_pre = tpm_class_shutdown;
->  	if (IS_ERR(tpm_class)) {
->  		pr_err("couldn't create tpm class\n");
->  		return PTR_ERR(tpm_class);
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 24ee4e1cc452..a45eb39db0c4 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -183,6 +183,7 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip);
->  unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
->  int tpm_pm_suspend(struct device *dev);
->  int tpm_pm_resume(struct device *dev);
-> +int tpm_class_shutdown(struct device *dev);
->  
->  static inline void tpm_msleep(unsigned int delay_msec)
->  {
-> -- 
-> 2.39.2
+> Are you sure? I'm proposing to add a stub which is no-op, but with a comment
+> inside explaining why. In such case we:
 > 
+> 1) shut the kobject infra up;
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Please do not do anything just to "shut up" the kobject code, that
+warning is in there on purpose, fix the problem properly and do not try
+to work around it as that is totally wrong.
 
-Are you going to pick this?
-
-BR, Jarkko
+greg k-h
