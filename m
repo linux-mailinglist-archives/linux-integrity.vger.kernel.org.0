@@ -2,128 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230056BA3F8
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Mar 2023 01:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21AC6BAB44
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Mar 2023 09:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjCOARx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Mar 2023 20:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        id S229974AbjCOIzk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Mar 2023 04:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjCOARw (ORCPT
+        with ESMTP id S230266AbjCOIzg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Mar 2023 20:17:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A61410AF;
-        Tue, 14 Mar 2023 17:17:51 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ENoJOM022049;
-        Wed, 15 Mar 2023 00:17:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=/xItYpSlSXkmWgakFckcb3pK1C/l+P6F65k0vZXytZM=;
- b=cQpS/M/zG/RUYfGbyRjjq7Ih20/9UjnZbkazNBd0rqmPW2iuyoZ+Ejv5DCXKEurlVvc7
- qF599/eYwsZ1Nyg7tCRADdpfGbGH4CH5TfFJ7sszyk98g4Zj9+kCYYLe3gm4egyNJU2R
- 9DW91NQnkELVLtZ49zBxwUJloXhuDrakI+CC143ha5AvjlI/R4TFg/kRE2qnJVCFXDhd
- M8Uvt3jyIlVjRZGg7glkIYAs5SY5BJ2qijErPvqjtoVo4hN/LVCingOSyDGAmiRfLFR2
- K4jIiogF2MCp5gq+y8jzicOLY/h3BD3HtxCOCfswuW+glJRFPCKlXB4hM2YESUfxJmrw dg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pb2xx8h5u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 00:17:06 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32ENoa4M022881;
-        Wed, 15 Mar 2023 00:17:06 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pb2xx8h5k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 00:17:05 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32EN5hOB010490;
-        Wed, 15 Mar 2023 00:17:05 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3pb29tgbcy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 00:17:04 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32F0H31I11469482
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Mar 2023 00:17:03 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CAA8358067;
-        Wed, 15 Mar 2023 00:17:03 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0711758056;
-        Wed, 15 Mar 2023 00:17:03 +0000 (GMT)
-Received: from sig-9-65-194-57.ibm.com (unknown [9.65.194.57])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Mar 2023 00:17:02 +0000 (GMT)
-Message-ID: <ef330bdbf0e0a176a2e5c32121e86dc2c46934b6.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Fix potential NULL pointer access in
- ima_match_rules()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roman Danilov <romanosauce57@gmail.com>
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        GUO Zihua <guozihua@huawei.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Date:   Tue, 14 Mar 2023 20:17:02 -0400
-In-Reply-To: <20230314180308.17909-1-romanosauce57@gmail.com>
-References: <20230314180308.17909-1-romanosauce57@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fm_xGXehMN9UzVFo63IadlZq9xz4Z9dw
-X-Proofpoint-GUID: ynuiJB6pcg0-dg7-GWNRj44cQqznIre7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-14_15,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- clxscore=1011 impostorscore=0 mlxscore=0 malwarescore=0 adultscore=0
- phishscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
- mlxlogscore=810 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2302240000 definitions=main-2303140189
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 04:55:36 -0400
+Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBDB23854
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Mar 2023 01:55:36 -0700 (PDT)
+Received: by mail.corrib.pl (Postfix, from userid 1001)
+        id B9FEEA3777; Wed, 15 Mar 2023 08:55:35 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
+        t=1678870540; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
+        h=Date:From:To:Subject:From;
+        b=EohVYXqFW8ImvQVHVkizOdokdkTVDaTXAmyPgRFpqe1pKHI+KRCKz+xfpcB3dIIyK
+         b9X8cclS5teoCJ5R+A4SXxw2zOYmPeFWMXQQedCAIH0MnSbBOQNUqTeJGLRXkUg5u4
+         MvOS9YnIAmTcQI/lmjaWXJE1EXI3+enXShP9voFE9alcLSyU5gZ0q87Vf6icjX4hLM
+         FY2WEehR/siKc/n6q7fB7SMZdlbLkMyM7q1aR1xN15W/XTuK0ACMwNmVRt6jvajcpr
+         8UVkjmTxybXnoMwakdqUa5KFG4F99p48ewTLzihIiWz6eAsZGcK+zxqB4gbKGXy656
+         PHnuLy9dpSKOA==
+Received: by mail.corrib.pl for <linux-integrity@vger.kernel.org>; Wed, 15 Mar 2023 08:55:32 GMT
+Message-ID: <20230315074501-0.1.62.ivb6.0.8c1k5i7p30@corrib.pl>
+Date:   Wed, 15 Mar 2023 08:55:32 GMT
+From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
+        <szczepan.kielbasa@corrib.pl>
+To:     <linux-integrity@vger.kernel.org>
+Subject: Faktoring
+X-Mailer: mail.corrib.pl
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2023-03-14 at 21:03 +0300, Roman Danilov wrote:
-> In ima_match_rules(), when ima_lsm_copy_rule() fails, NULL pointer
-> is assigned to lsm_rule. After that, in the next step of the loop
-> NULL pointer is dereferenced in lsm_rule->lsm[i].rule.
+Dzie=C5=84 dobry,
 
-I must being missing something.  The next step of the loop tests
-whether rule_reinitialized is set before accessing lsm_rule-
->lsm[i].rule.
+rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
+ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
+wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
 
-> 
-> As far as ima_match_rules() is not designed to return error code,
-> add __GFP_NOFAIL to make sure memory allocation succeeds.
+Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
+stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
+z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
+ kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
+adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
+Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
 
-Using  __GFP_NOFAIL here would be safer.
 
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
-> Signed-off-by: Roman Danilov <romanosauce57@gmail.com>
-> Reviewed-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-
--- 
-thanks,
-
-Mimi
-
+Pozdrawiam
+Szczepan Kie=C5=82basa
