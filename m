@@ -2,68 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1EA6BDAB0
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Mar 2023 22:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDA96BDB67
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Mar 2023 23:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjCPVQH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Mar 2023 17:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
+        id S230133AbjCPWL0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Mar 2023 18:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCPVQH (ORCPT
+        with ESMTP id S229800AbjCPWLU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Mar 2023 17:16:07 -0400
-Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E765DC97F0
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Mar 2023 14:16:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
-         h=mime-version:content-type:content-transfer-encoding:date:from
-        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
-        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=s/4306Hr0CRFrQneVNpgBYm1
-        0OwWlTCumTaArtvKMInsiq91LDY30bwQoc3Yqbl2iG0028dtJsFD6KtRxu4nU6Un
-        8ssrDwyizN2o9H4BlfANUb6nIl2Iqrn6ZLvBxojv9hZ4a95uYqEmbrsWg2Rm8+jL
-        sPPIo8iepvxHv+T2Tp3knWeaSho+AThUekvUxpwC0TSZpNTbzLSvEthUJ9Sf69vM
-        P/JmGvyQREIdGKk/NiwwNsUkgHitgXLfxNXyWJztdzoJsHs0MiyVt94oKR47idfN
-        8IFAZgrZgSvuTOAYFHwv2vrw7DdaQokp8pNwzwYeuzDATkWS76fl/NrLVuCUng==
-Received: (qmail 67657 invoked from network); 15 Mar 2023 02:20:27 -0000
-Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
-  by localhost with SMTP; 15 Mar 2023 02:20:27 -0000
+        Thu, 16 Mar 2023 18:11:20 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 197DA18B3B;
+        Thu, 16 Mar 2023 15:10:57 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 49B962057034; Thu, 16 Mar 2023 15:10:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 49B962057034
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679004636;
+        bh=91dVpHPjN0I18MHMEPytTYoAIcj3tyyfhEHK1iqzMPQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HqM5s8Lv4cdYH4FTxM8ECxW+qlq9xYC5uyrjWzmUgAox9VPD8YUiKBlVI33RA3C4V
+         Fldv/wo+3U0Z71kycUAZ9D1j/mCkqhwZbRpTf8J90aOuMRBDyDQ/3lf1roICQ0vkut
+         tuKKCPaYpChsjgoYGO1HOGIC8r40sD49SxPTvRaA=
+Date:   Thu, 16 Mar 2023 15:10:36 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 11/16] ipe: add support for dm-verity as a trust
+ provider
+Message-ID: <20230316221036.GA22567@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-12-git-send-email-wufan@linux.microsoft.com>
+ <CAHC9VhRdm_xpXNQvSVO2hkx2js=_zzo2DiQ6PvEjAEet4OjxNw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 14 Mar 2023 19:20:25 -0700
-From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
-To:     undisclosed-recipients:;
-Subject: LOAN OPPORTUNITY AT LOW-INTEREST RATE.!
-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Message-ID: <e79ef4b1d556b9a61e5b0c7702d0b4f5@sragenkab.go.id>
-X-Sender: jurnalsukowati@sragenkab.go.id
-User-Agent: Roundcube Webmail/0.8.1
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        SUBJ_ALL_CAPS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhRdm_xpXNQvSVO2hkx2js=_zzo2DiQ6PvEjAEet4OjxNw@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, Mar 02, 2023 at 02:08:04PM -0500, Paul Moore wrote:
+> 
+> If you had both IPE and dm-verity enabled in your kernel build, is
+> there ever a case where you wouldn't want IPE_PROP_DM_VERITY?  I
+> suspect you can just have IPE and dm-verity select IPE_PROP_DM_VERITY
+> and not bother the user/admin with the additional Kconfig knob.
+> 
+Sorry for the late reply, I was relocating to a new country and it
+took me some time to settle down.
 
+I have read your comments and I will try to answer some questions
+that I can answer right now. For the remaining questions, I need more
+time to get more context and information. I will get back to you
+as soon as possible.
 
--- 
-Greetings,
-   I am contacting you based on the Investment/Loan opportunity for 
-companies in need of financing a project/business, We have developed a 
-new method of financing that doesn't take long to receive financing from 
-our clients.
-    If you are looking for funds to finance your project/Business or if 
-you are willing to work as our agent in your country to find clients in 
-need of financing and earn commissions, then get back to me for more 
-details.
+For this one I agree just have IPE and dm-verity select IPE_PROP_DM_VERITY
+is better, I will update this in the next version.
 
-Regards,
-Ibrahim Tafa
-ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
+> 
+> --
+> paul-moore.com
