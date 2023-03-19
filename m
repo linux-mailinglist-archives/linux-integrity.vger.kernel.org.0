@@ -2,48 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488CB6C0216
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Mar 2023 14:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AA36C021E
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 Mar 2023 14:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjCSNgw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 19 Mar 2023 09:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S229745AbjCSNmk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 19 Mar 2023 09:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjCSNgu (ORCPT
+        with ESMTP id S229508AbjCSNmj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 19 Mar 2023 09:36:50 -0400
+        Sun, 19 Mar 2023 09:42:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F3A1ACC2;
-        Sun, 19 Mar 2023 06:36:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9BC1EBED;
+        Sun, 19 Mar 2023 06:42:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 098B5B80B8C;
-        Sun, 19 Mar 2023 13:36:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B58C433EF;
-        Sun, 19 Mar 2023 13:36:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05F63B80B93;
+        Sun, 19 Mar 2023 13:42:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23062C433D2;
+        Sun, 19 Mar 2023 13:42:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679233003;
-        bh=c29uAlib8R0W2OqrGL3EdVP/0alALH7EvntPLY4DR+c=;
+        s=k20201202; t=1679233355;
+        bh=XW28SiAdE1y4C0WY0yU92It1pSLjH0atea5xcEjiF5A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OtC89uFX6NkoWvbISGP86yhT2SI7MnG7pnjbCqLhq3X0PTCFk/OhzuC6EzDYN/2QH
-         vCh051qxtLpqb40Qx4gKul5Hp/gq4UH/6dHEfhrH3EcfuxfG4SHNZvb1hQzqzTy6Dr
-         860GVVxf+UoFNHnpeqaCGF8fZbmHPeFXgEgfC4VQa2OSofEOrOC8xXO5KJ4sn1uVlt
-         lqBZ7sBoHJvJ8FXMwfsNc5q3NAN1wbz2NYUCaVOR0e63785IglnUP2blivi2P/qtEv
-         AvMqH1gb2Ib9Zf7lJ6VjtP/ZumxcZPzadwcyBbpW/SXkR5tJU7hj1lp4v1LriIOTd3
-         tYWM25UOFwN6A==
-Date:   Sun, 19 Mar 2023 15:36:39 +0200
+        b=I9yWFTqLR2JGlBPFzFmDDRQcgN2yR1p/TpStQI6vefWn9mdWXLed/GGB/hV1JyZOL
+         pqTq+DP1B7p1bztMIinDLte9cZKtiXuq1ZLV8SKkxHhROrnZIDZqMtmiX4SEIRS3si
+         wuuaBUVfeWzOl1gvYVfRM082aYX0NT+sjRJLZfgLFX5MzB6FL/sMlA17IanM7mW6gu
+         huZQKNrCTuTtOJ5o3vMsBUEILe7rqBuRTwqmTsLtTfmA7kb3/OMFkyckEhr8p6KHxr
+         l34BhosglXUMcUSQb9MuvosUqtp/upweK8dt8parKWpuRhjFvteU63BPTdvBC8fncn
+         ZtndsjZod/AzA==
+Date:   Sun, 19 Mar 2023 15:42:32 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mark Hasemeyer <markhas@chromium.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tpm: cr50: i2c: use jiffies to wait for tpm ready irq
-Message-ID: <20230319133639.s3isrd35ul4ldiof@kernel.org>
-References: <20230314135400.1.I5561dfbc4438418281626e43e345e8acc879cd7c@changeid>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: Re: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
+Message-ID: <20230319134232.wzjvk4ddwqrbexil@kernel.org>
+References: <20230302041804.24718-1-kyarlagadda@nvidia.com>
+ <20230302041804.24718-3-kyarlagadda@nvidia.com>
+ <01959c869e01075705cd436afa822f2586d0509c.camel@kernel.org>
+ <DM4PR12MB576911FA514FAFEBE6B3A39FC3BF9@DM4PR12MB5769.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314135400.1.I5561dfbc4438418281626e43e345e8acc879cd7c@changeid>
+In-Reply-To: <DM4PR12MB576911FA514FAFEBE6B3A39FC3BF9@DM4PR12MB5769.namprd12.prod.outlook.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,37 +68,53 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 01:54:04PM -0600, Mark Hasemeyer wrote:
-> When waiting for a tpm ready completion, the cr50 i2c driver incorrectly
-> assumes that the value of timeout_a is represented in milliseconds
-> instead of jiffies.
+On Wed, Mar 15, 2023 at 03:47:33PM +0000, Krishna Yarlagadda wrote:
 > 
-> Remove the msecs_to_jiffies conversion.
-> 
-> Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
-> ---
-> 
->  drivers/char/tpm/tpm_tis_i2c_cr50.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> index 77cea5b31c6e4..376ae18a04ebb 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> @@ -100,8 +100,7 @@ static int tpm_cr50_i2c_wait_tpm_ready(struct tpm_chip *chip)
->  	}
->  
->  	/* Wait for interrupt to indicate TPM is ready to respond */
-> -	if (!wait_for_completion_timeout(&priv->tpm_ready,
-> -					 msecs_to_jiffies(chip->timeout_a))) {
-> +	if (!wait_for_completion_timeout(&priv->tpm_ready, chip->timeout_a)) {
->  		dev_warn(&chip->dev, "Timeout waiting for TPM ready\n");
->  		return -ETIMEDOUT;
->  	}
-> -- 
-> 2.40.0.rc2.332.ga46443480c-goog
-> 
+> > -----Original Message-----
+> > From: Jarkko Sakkinen <jarkko@kernel.org>
+> > Sent: 12 March 2023 03:19
+> > To: Krishna Yarlagadda <kyarlagadda@nvidia.com>; robh+dt@kernel.org;
+> > broonie@kernel.org; peterhuewe@gmx.de; jgg@ziepe.ca;
+> > krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org; linux-
+> > tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
+> > kernel@vger.kernel.org
+> > Cc: thierry.reding@gmail.com; Jonathan Hunter <jonathanh@nvidia.com>;
+> > Sowjanya Komatineni <skomatineni@nvidia.com>; Laxman Dewangan
+> > <ldewangan@nvidia.com>
+> > Subject: Re: [Patch V8 2/3] tpm_tis-spi: Add hardware wait polling
+> > 
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On Thu, 2023-03-02 at 09:48 +0530, Krishna Yarlagadda wrote:
+> > > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16
+> > > len,
+> > > +                        u8 *in, const u8 *out)
+> > > +{
+> > > +       struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+> > > +       struct spi_controller *ctlr = phy->spi_device->controller;
+> > > +
+> > > +       /*
+> > > +        * TPM flow control over SPI requires full duplex support.
+> > > +        * Send entire message to a half duplex controller to handle
+> > > +        * wait polling in controller.
+> > > +        * Set TPM HW flow control flag..
+> > > +        */
+> > > +       if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
+> > > +               return tpm_tis_spi_hw_flow_transfer(data, addr, len,
+> > > in,
+> > > +                                                   out);
+> > > +       else
+> > > +               return tpm_tis_spi_sw_flow_transfer(data, addr, len,
+> > > in,
+> > > +                                                   out);
+> > > +}
+> > > +
+> > 
+> > Based on the condition, better names would be
+> Though condition is based on half duplex, functions are implementing
+> HW or SW flow of the transfer.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Both are hardwaw flows in the sense that you are controlling a piece of hardware.
 
 BR, Jarkko
