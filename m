@@ -2,56 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A113F6C022B
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Mar 2023 14:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B4F6C0249
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 Mar 2023 15:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjCSNxr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 19 Mar 2023 09:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
+        id S230304AbjCSOOB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 19 Mar 2023 10:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjCSNxq (ORCPT
+        with ESMTP id S229622AbjCSOOA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 19 Mar 2023 09:53:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D5C3C3C;
-        Sun, 19 Mar 2023 06:53:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E2936104E;
-        Sun, 19 Mar 2023 13:53:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1612FC433EF;
-        Sun, 19 Mar 2023 13:53:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679234022;
-        bh=atzLq0ljpe2wvCEeleutRsuuEvNHf4Tkz4uhbcklOec=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YfcVr5iZ/WZqUQMVR+voKxxCABhRzb2Jheid+UFkjWPNKh5ix0wQcWQ6by3oOtS4+
-         LK4BAfhZT3Hjhu2JSly/BIuUsmkKypd4innDREcGd764pIoHm3EtuNxrnR2sxNOh8K
-         vcB+4PNUsoYjCLtPKUoyZoMwuSB2F+RPUW8aWkQK4Jxi00VlzV1Gd802q+gPfdnpj/
-         SA1zS6awVZ4icd9nIbRDzslAhh0WfjeaUH/hpq2JqoXcXAUY8STaQth6vIYJOAvFaW
-         Em3hMsPDKK27WNqUTgkscw7mwAxDeEfmYKWkmkaf98Ok9n6J4pS+ZyDnVtAvIzkRzg
-         MxPP5t/er3Tdg==
-Date:   Sun, 19 Mar 2023 15:53:38 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Michael =?utf-8?Q?Niew=C3=B6hner?= <linux@mniewoehner.de>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v11 00/14] TPM IRQ fixes
-Message-ID: <20230319135338.c7k6r3ws6lby5qgv@kernel.org>
-References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
- <4c094418-7725-b815-f1f9-8b12f1ac4d72@gmx.de>
- <c02493fac223707de39e44d51b0a0ce512565250.camel@mniewoehner.de>
+        Sun, 19 Mar 2023 10:14:00 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB71014E9A
+        for <linux-integrity@vger.kernel.org>; Sun, 19 Mar 2023 07:13:58 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id eg48so37317708edb.13
+        for <linux-integrity@vger.kernel.org>; Sun, 19 Mar 2023 07:13:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679235237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5h5ofl9KKUhrjR7negFQ4f5ler/o7Dhg36fLIrhRAc=;
+        b=Ai7++6+aY05cVSDp59+T7LeeF+Cun1dhLEcqFosyhAc7I034fOOznPXcVIQlrfl1D4
+         lqnGnSZewjrygIFJxoPDi4H16xWzFCfbg30AeW0+AJo8B9uIl2uzFpcIAFX6+lD8mCgr
+         Z+C9Yhe032vSB9NsHf4MN7kipOjbk/BYbrYb+lKlAWW7ZX6HlVRUilNo1n2JZ+CB+mI0
+         /p7S0TugbN6YdU3J0DwzDmDHioac3LQMqturckMbbK9K/kaS5PKuE77wi5bZEscaHoYz
+         l891EVtKKQC47NR/0FBw5g1zsziJ6hkSXRjWJ6++bR3vygzJlmhuXimU9aTFf7DF62lW
+         zNJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679235237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q5h5ofl9KKUhrjR7negFQ4f5ler/o7Dhg36fLIrhRAc=;
+        b=F7Cqr+dEnO1VmbvCQOGlvk7JImJSDFMxVaWykn4vmoZhn6KzrciuxHQEPxGM+wmUTc
+         3KJz3CngEoyhPu+cb2vzRNV95wU7CutAKvDPxnjoEZdmfBHs69wJGORyA1audAYVGnQt
+         9RuonSgMI8/fXerxo0X538Fz8Tz8qxat1qnGpt4kpvonvTZD+9xGQKXsdsJ9Vg4uVeWH
+         zfvr/PDgrOl6ioFK0pHE3/lDYYlks09cR7SCcwMwPvr66zPI1kMU+BMbW7mglsrMKW9w
+         Rh0IQAAhyabcTVhRworZ/vf4yfpTdroy2HRbW+ByzGKPAmLK4o3KEPRxcBHGsfkP0nYo
+         s7uw==
+X-Gm-Message-State: AO0yUKV3x/xrLcw4aV6Hf17Fbs/FbpE7e6KhcEGpHXQo6E/FbcaqPWNn
+        HCu/k/lM1tZWrmULW7I8CQ21CMI/qwncA1mTY+w=
+X-Google-Smtp-Source: AK7set9VLgLOFLpI9k8tMUp+EUnJsYP+QKe0Ps442caQ2pD4i0SM2QXtqQduQ+MgDAWL/o+RJWkYfQ==
+X-Received: by 2002:aa7:cc09:0:b0:4fc:e605:556a with SMTP id q9-20020aa7cc09000000b004fce605556amr9678786edt.5.1679235237279;
+        Sun, 19 Mar 2023 07:13:57 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
+        by smtp.gmail.com with ESMTPSA id t21-20020a50d715000000b004af7191fe35sm3540689edi.22.2023.03.19.07.13.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 07:13:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/2] tpm: st33zp24: Mark ACPI and OF related data as maybe unused
+Date:   Sun, 19 Mar 2023 15:13:53 +0100
+Message-Id: <20230319141354.22907-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c02493fac223707de39e44d51b0a0ce512565250.camel@mniewoehner.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,169 +71,64 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 06:18:11PM +0100, Michael Niewöhner wrote:
-> On Fri, 2023-02-24 at 15:48 +0100, Lino Sanfilippo wrote:
-> > On 24.11.22 at 14:55, Lino Sanfilippo wrote:
-> > > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > > 
-> > > This series enables IRQ support for the TPM TIS core. For this reason a
-> > > number of bugfixes around the interrupt handling are required (patches 1 to
-> > > 5).
-> > > 
-> > > Patch 6 takes into account that according to the TPM Interface
-> > > Specification stsValid and commandRead interrupts might not be supported
-> > > by the hardware. For this reason the supported interrupts are first queried
-> > > and stored. Then wait_for_tpm_stat() is adjusted to not wait for status
-> > > changes that are not reported by interrupts.
-> > > 
-> > > Patch 7 moves the interrupt flag checks into an own function as suggested
-> > > by Jarkko.
-> > > 
-> > > Patch 8 Removes the possibility that tpm_tis_data->locality can be changed
-> > > at driver runtime so this variable can be read without the need to protect
-> > > it against concurrent modification.
-> > > 
-> > > Patch 9 addresses the issue with concurrent locality handling:
-> > > Since the interrupt handler writes the interrupt status registers it needs
-> > > to hold the locality. However it runs concurrently to the thread which
-> > > triggered the interrupt (e.g. by reading or writing data to the TPM). So
-> > > it must take care when claiming and releasing the locality itself,
-> > > because it may race with the concurrent running thread which also claims
-> > > and releases the locality.
-> > > To avoid that both interrupt and concurrent running thread interfere with
-> > > each other a locality counter is used which guarantees that at any time
-> > > the locality is held as long as it is required by one of both execution
-> > > paths.
-> > > 
-> > > Patch 10 implements the request of a threaded interrupt handler. This is
-> > > needed since SPI uses a mutex for data transmission and since we access the
-> > > interrupt status register via SPI in the irq handler we need a sleepable
-> > > context.
-> > > 
-> > > Patch 11 makes sure that writes to the interrupt register are effective if
-> > > done in the interrupt handler.
-> > > 
-> > > Patch 12 makes sure that writes to the interrupt and INTERRUPT_VECTOR
-> > > and INTERRUPT_ENABLE registers are effective by holding the locality.
-> > > 
-> > > Patch 13 makes sure that the TPM is properly initialized after power cycle
-> > > before the irq test is done.
-> > > 
-> > > Patch 14 enables the test for interrupts by setting the required flag
-> > > before the test is executed.
-> > > 
-> > > Changes in v11:
-> > > - adjust patches 4,5 and 14 slightly to void the consecutive removal and
-> > >   re-addition of the "ret" variable in tpm_tis_gen_interrupt()
-> > > 
-> > > Changes in v10:
-> > > - fix typo in subject line as pointed out by Jason Andryuk
-> > > - improve patch "tpm, tpm_tis: Claim locality before writing interrupt
-> > >   registers" by extending the scope with held locality". For this reason
-> > >   the "Reviewed-by" tag by Jarko and the "Tested-by" tag by Michael have
-> > >   been removed.
-> > > - add fix to avoid TPM_RC_INITIALIZE after power cycle when testing irqs
-> > >   (PATCH 13)
-> > > - add fix to restore the old interrupt vector at error (PATCH 4)
-> > > 
-> > > 
-> > > Changes in v9:
-> > > - add a fix for an issue when interrupts are reenabled on resume (PATCH 11)
-> > > - improve the commit message for patch 8 as requested by Jarkko
-> > > - improved functions naming
-> > > - changed patch 12 (tpm, tpm_tis: Enable interrupt test) to not delete the
-> > >   TPM_CHIP_FLAG_IRQ flag any more when tpm2_get_tpm_pt() fails. Due to this
-> > >   change the 'Tested-by' tag from Michael and the 'Reviewed-by:' tag from
-> > >   Jarko has been removed
-> > > 
-> > > Changes in v8:
-> > > - tpm_tis_data->locality is not changed at runtime any more so that it can
-> > > be read without any protection against concurrent modification.
-> > > - add missing brackets as pointed out by Jason Andryuk
-> > > 
-> > > Changes in v7:
-> > > - moved interrupt flag checks into an own function as suggested by Jarkko
-> > > - added "Tested-by" tags for Tests from Michael Niewöhner
-> > > - fixed one comment
-> > > 
-> > > Changes in v6:
-> > > - set TPM_TIS_IRQ_TESTED in flag member of the tpm_tis_data struct instead
-> > > in an own bitfield
-> > > - improve commit messages
-> > > - use int_mask instead of irqs_in_use as variable name
-> > > - use sts_mask instead of active_irqs as variable name
-> > > - squash patch 5 and 6
-> > > - prefix functions with tpm_tis_
-> > > - remove "fixes" tag
-> > > 
-> > > Changes in v5:
-> > > - improve commit message of patch 1 as requested by Jarko
-> > > - drop patch that makes locality handling simpler by only claiming it at
-> > >   driver startup and releasing it at driver shutdown (requested by Jarko)
-> > > - drop patch that moves the interrupt test from tpm_tis_send()
-> > >   to tmp_tis_probe_irq_single() as requested by Jarko
-> > > - add patch to make locality handling threadsafe so that it can also be
-> > >   done by the irq handler
-> > > - separate logical changes into own patches
-> > > - always request threaded interrupt handler
-> > > 
-> > > Changes in v4:
-> > > - only request threaded irq in case of SPI as requested by Jarko.
-> > > - reimplement patch 2 to limit locality handling changes to the TIS core.
-> > > - separate fixes from cleanups as requested by Jarko.
-> > > - rephrase commit messages
-> > > 
-> > > Changes in v3:
-> > > - fixed compiler error reported by kernel test robot
-> > > - rephrased commit message as suggested by Jarko Sakkinen
-> > > - added Reviewed-by tag
-> > > 
-> > > Changes in v2:
-> > > - rebase against 5.12
-> > > - free irq on error path
-> > > 
-> > > 
-> > > Lino Sanfilippo (14):
-> > >   tpm, tpm_tis: Avoid cache incoherency in test for interrupts
-> > >   tpm, tpm_tis: Claim locality before writing TPM_INT_ENABLE register
-> > >   tpm, tpm_tis: Disable interrupts if tpm_tis_probe_irq() failed
-> > >   tpm, tpm_tis: Do not skip reset of original interrupt vector
-> > >   tpm, tpm_tis: Claim locality before writing interrupt registers
-> > >   tpm, tpm_tis: Only handle supported interrupts
-> > >   tpm, tpm_tis: Move interrupt mask checks into own function
-> > >   tpm, tpm_tis: do not check for the active locality in interrupt
-> > >     handler
-> > >   tpm, tpm: Implement usage counter for locality
-> > >   tpm, tpm_tis: Request threaded interrupt handler
-> > >   tpm, tpm_tis: Claim locality in interrupt handler
-> > >   tpm, tpm_tis: Claim locality when interrupts are reenabled on resume
-> > >   tpm, tpm_tis: startup chip before testing for interrupts
-> > >   tpm, tpm_tis: Enable interrupt test
-> > > 
-> > >  drivers/char/tpm/tpm-chip.c     |  38 ++--
-> > >  drivers/char/tpm/tpm.h          |   1 +
-> > >  drivers/char/tpm/tpm_tis.c      |   2 +-
-> > >  drivers/char/tpm/tpm_tis_core.c | 299 ++++++++++++++++++++------------
-> > >  drivers/char/tpm/tpm_tis_core.h |   5 +-
-> > >  5 files changed, 214 insertions(+), 131 deletions(-)
-> > > 
-> > 
-> > Hi Jarkko,
-> > 
-> > its been a while now since the review of this series has been completed. Will
-> > it be merged in the
-> > near future? Or is there anything left to do (from my side)?
-> > 
-> > Regards,
-> > Lino
-> > 
-> 
-> @Jarkko ping ;)
-> 
+The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
+unused.  This fixes compile tests with W=1 by annotating device ID table
+as possibly unused:
 
-Thanks for reminding. I was wondering this week what was the situation
-but latest version I had bookmarked from lore was 10.
+  drivers/char/tpm/st33zp24/i2c.c:141:34: error: â€˜of_st33zp24_i2c_matchâ€™ defined but not used [-Werror=unused-const-variable=]
+  drivers/char/tpm/st33zp24/spi.c:258:34: error: â€˜of_st33zp24_spi_matchâ€™ defined but not used [-Werror=unused-const-variable=]
 
-Please ping earlier! I'll get on testing this, apologies.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-BR, Jarkko
+---
+
+Changes since v1:
+1. Enhance commit msg.
+---
+ drivers/char/tpm/st33zp24/i2c.c | 4 ++--
+ drivers/char/tpm/st33zp24/spi.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index c4d0b744e3cc..2d28f55ef490 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -138,13 +138,13 @@ static const struct i2c_device_id st33zp24_i2c_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, st33zp24_i2c_id);
+ 
+-static const struct of_device_id of_st33zp24_i2c_match[] = {
++static const struct of_device_id of_st33zp24_i2c_match[] __maybe_unused = {
+ 	{ .compatible = "st,st33zp24-i2c", },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, of_st33zp24_i2c_match);
+ 
+-static const struct acpi_device_id st33zp24_i2c_acpi_match[] = {
++static const struct acpi_device_id st33zp24_i2c_acpi_match[] __maybe_unused = {
+ 	{"SMO3324"},
+ 	{}
+ };
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index 2154059f0235..f5811b301d3b 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -255,13 +255,13 @@ static const struct spi_device_id st33zp24_spi_id[] = {
+ };
+ MODULE_DEVICE_TABLE(spi, st33zp24_spi_id);
+ 
+-static const struct of_device_id of_st33zp24_spi_match[] = {
++static const struct of_device_id of_st33zp24_spi_match[] __maybe_unused = {
+ 	{ .compatible = "st,st33zp24-spi", },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, of_st33zp24_spi_match);
+ 
+-static const struct acpi_device_id st33zp24_spi_acpi_match[] = {
++static const struct acpi_device_id st33zp24_spi_acpi_match[] __maybe_unused = {
+ 	{"SMO3324"},
+ 	{}
+ };
+-- 
+2.34.1
+
