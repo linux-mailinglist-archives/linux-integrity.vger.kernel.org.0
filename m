@@ -2,50 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626EE6C13E9
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Mar 2023 14:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7382C6C13EE
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Mar 2023 14:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCTNsU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Mar 2023 09:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
+        id S229866AbjCTNtR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Mar 2023 09:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjCTNsT (ORCPT
+        with ESMTP id S229901AbjCTNtR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:48:19 -0400
+        Mon, 20 Mar 2023 09:49:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8CA4237
-        for <linux-integrity@vger.kernel.org>; Mon, 20 Mar 2023 06:48:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E623D19A7;
+        Mon, 20 Mar 2023 06:49:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7923B80E60
-        for <linux-integrity@vger.kernel.org>; Mon, 20 Mar 2023 13:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D66C433EF;
-        Mon, 20 Mar 2023 13:48:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 920F9B80E8D;
+        Mon, 20 Mar 2023 13:49:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01961C4339B;
+        Mon, 20 Mar 2023 13:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679320095;
-        bh=QBqjhMphxTss/lzOhTHC4mpc8kNHIm+N3wJZGZ4gHo8=;
+        s=k20201202; t=1679320153;
+        bh=VmTUm29g5fQJPCFkHOsQO97gEWW99IjKMVbBlfj6YX4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JwfCksflNyEOvrpB1ETXqZWY/e5b63TxYeLx1R6Fklhj17BiuOtIa9jyQIz1Xdeqj
-         ckbs+nL7RoRwvXgIqPYq9E8vsoMhBP+aBwsF3fWY0nB4z/8YCSe2vWW03zKtFLYhdu
-         mnTxaTgVrk3EofTECwcRxlTKcSM+cVWH1FF1NiuAR29Pb7ta/DFu4wNMK9OSbFShEC
-         6l7HCJ3nyHSi3OM1CFZozizRZDOdN/weGbqxIWNEWGe0q4ccmqC76G81LFTxmWRhVA
-         t87y1/6HKRsI55+6dnvJO/pcNfdeh18R6Ikyda/Ho5n01u7hZwW+Qe6wkpKslL2de7
-         YFw8NcQLlhAtA==
-Date:   Mon, 20 Mar 2023 15:48:12 +0200
+        b=kmcKMQhxEKcBKSlnbH2T4ohyXCCjpzDmCqKWiTSs6x8tT+90SSTGOixouiWziZzgJ
+         vA08B9kbWilbhQhdkVtaheAZnq4hLQCEZKG35Xj1kVrd8z5U3oJ0bSQvnsFvCpV/kS
+         /9E11NH4egkYPND9gl/jlpAemq7JfC1BqXcZKX98eoZgIsigu75cc7Simu2KV0y8EX
+         Xo9sj1mRrMuaGtj1W/q7jr0QH9y4MUqdda1fMHS8i4mIr61oSxniRdUp/whDZVwlvm
+         gnIUdg5TSL1nw2ubWBlYpZ8IFLiIbsrN1WoaUY5gk5tBi0etuiVlt4f2DyntpJLpsz
+         ejNU5zIefsvpw==
+Date:   Mon, 20 Mar 2023 15:49:09 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 0/3] tpm: Convert to platform remove callback returning
- void
-Message-ID: <20230320134812.t5jyhyl4khlxdte6@kernel.org>
-References: <20230320080607.306495-1-u.kleine-koenig@pengutronix.de>
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] tpm: st33zp24: Mark ACPI and OF related data as
+ maybe unused
+Message-ID: <20230320134909.kzemkumkibiu7bwe@kernel.org>
+References: <20230319141354.22907-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230320080607.306495-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230319141354.22907-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,41 +55,73 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 09:06:04AM +0100, Uwe Kleine-K�nig wrote:
-> Hello,
+On Sun, Mar 19, 2023 at 03:13:53PM +0100, Krzysztof Kozlowski wrote:
+> The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
+> unused.  This fixes compile tests with W=1 by annotating device ID table
+> as possibly unused:
 > 
-> this series adapts the platform drivers below drivers/char/tpm to use the
-> .remove_new() callback. Compared to the traditional .remove() callback
-> .remove_new() returns no value. This is a good thing because the driver core
-> doesn't (and cannot) cope for errors during remove. The only effect of a
-> non-zero return value in .remove() is that the driver core emits a warning. The
-> device is removed anyhow and an early return from .remove() usually yields a
-> resource leak.
+>   drivers/char/tpm/st33zp24/i2c.c:141:34: error: ‘of_st33zp24_i2c_match’ defined but not used [-Werror=unused-const-variable=]
+>   drivers/char/tpm/st33zp24/spi.c:258:34: error: ‘of_st33zp24_spi_match’ defined but not used [-Werror=unused-const-variable=]
 > 
-> The drivers converted here returned zero in their remove callback, to the
-> transformation was easy.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Best regards
-> Uwe
+> ---
 > 
-> Uwe Kleine-K�nig (3):
->   tpm/tpm_ftpm_tee: Convert to platform remove callback returning void
->   tpm/tpm_tis: Convert to platform remove callback returning void
->   tpm/tpm_tis_synquacer: Convert to platform remove callback returning
->     void
+> Changes since v1:
+> 1. Enhance commit msg.
+> ---
+>  drivers/char/tpm/st33zp24/i2c.c | 4 ++--
+>  drivers/char/tpm/st33zp24/spi.c | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
->  drivers/char/tpm/tpm_ftpm_tee.c      | 6 +++---
->  drivers/char/tpm/tpm_tis.c           | 6 ++----
->  drivers/char/tpm/tpm_tis_synquacer.c | 6 ++----
->  3 files changed, 7 insertions(+), 11 deletions(-)
-> 
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+> index c4d0b744e3cc..2d28f55ef490 100644
+> --- a/drivers/char/tpm/st33zp24/i2c.c
+> +++ b/drivers/char/tpm/st33zp24/i2c.c
+> @@ -138,13 +138,13 @@ static const struct i2c_device_id st33zp24_i2c_id[] = {
+>  };
+>  MODULE_DEVICE_TABLE(i2c, st33zp24_i2c_id);
+>  
+> -static const struct of_device_id of_st33zp24_i2c_match[] = {
+> +static const struct of_device_id of_st33zp24_i2c_match[] __maybe_unused = {
+>  	{ .compatible = "st,st33zp24-i2c", },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, of_st33zp24_i2c_match);
+>  
+> -static const struct acpi_device_id st33zp24_i2c_acpi_match[] = {
+> +static const struct acpi_device_id st33zp24_i2c_acpi_match[] __maybe_unused = {
+>  	{"SMO3324"},
+>  	{}
+>  };
+> diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+> index 2154059f0235..f5811b301d3b 100644
+> --- a/drivers/char/tpm/st33zp24/spi.c
+> +++ b/drivers/char/tpm/st33zp24/spi.c
+> @@ -255,13 +255,13 @@ static const struct spi_device_id st33zp24_spi_id[] = {
+>  };
+>  MODULE_DEVICE_TABLE(spi, st33zp24_spi_id);
+>  
+> -static const struct of_device_id of_st33zp24_spi_match[] = {
+> +static const struct of_device_id of_st33zp24_spi_match[] __maybe_unused = {
+>  	{ .compatible = "st,st33zp24-spi", },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, of_st33zp24_spi_match);
+>  
+> -static const struct acpi_device_id st33zp24_spi_acpi_match[] = {
+> +static const struct acpi_device_id st33zp24_spi_acpi_match[] __maybe_unused = {
+>  	{"SMO3324"},
+>  	{}
+>  };
 > -- 
-> 2.39.2
+> 2.34.1
 > 
 
-To all:
+To both:
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
+
+
