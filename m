@@ -2,56 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4356C13BA
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Mar 2023 14:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB2A6C13E5
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Mar 2023 14:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbjCTNmo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Mar 2023 09:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
+        id S229849AbjCTNr1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Mar 2023 09:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbjCTNma (ORCPT
+        with ESMTP id S229696AbjCTNr0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:42:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E64E18F;
-        Mon, 20 Mar 2023 06:42:28 -0700 (PDT)
+        Mon, 20 Mar 2023 09:47:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46BC1984
+        for <linux-integrity@vger.kernel.org>; Mon, 20 Mar 2023 06:47:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30D2AB80E94;
-        Mon, 20 Mar 2023 13:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80055C433EF;
-        Mon, 20 Mar 2023 13:42:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DBBC614DA
+        for <linux-integrity@vger.kernel.org>; Mon, 20 Mar 2023 13:47:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55441C433EF;
+        Mon, 20 Mar 2023 13:47:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679319745;
-        bh=naVEH+QIViA3UHAdeSosAsZFojj7/UKSfsNTRhm77zA=;
+        s=k20201202; t=1679320044;
+        bh=pdJ6cMn/UIys2C4sYaixmogenKds8YtbMdRBmEbjrIQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VSFll3J+o9LlFKwVlEKuDjkF+IAg469ABeibMrvFj8S1GJxYxxO7oiQk3YdnKuf24
-         EKqyooi5wRxUKM6PVPMQUvBDwVjHtZJXmBZ9Ln81ptr3FCkWoyURlGwDSB4DDEes0j
-         2+qfRMZUPe/AYMcZOmvDhVdrPgHdS6QWEhhpBPSkjeXQ6TPVw52rvuPYZk8vYODeUy
-         pZuwuHl5RrCLh6RKQYG2EE/ezs4NVJJlRCdcrcKm0XRB2ouAmiNvCkDJLDFuifxJ3L
-         g05gMH18P6L+wyBUBxVi7+47t/Iy5UE2zlMrU7eU+82iGMvwhKsZznDX3sDm4yu+pj
-         RpWNsjlGiQAGw==
-Date:   Mon, 20 Mar 2023 15:42:22 +0200
+        b=SO5GuT97tIfuAf6HKxu6uRKL1DLvcY9lzfhtDZkhw8Pog51wqPrp9XFP5ecmT1kxb
+         mYhJLEcEI9hr121JVHeAFWzFdePH7uYBTcJ81IPaKEmhmygajExvQfPgbX4dTclSPE
+         Zto53T9Zij1xsVWUTk7i7vnAxJu76ev7pJK4ZEjun531Bn4DUShwFlp3EaBNOixDSb
+         0d9MScEZbMwAxfn8NOGl96W6jyithh/zSuqdl3yDE+QEyHkFhgLuxnVtuGYvkga6jh
+         a+fCqcIWnm/nskdnJTliWvcjCmSNJkmqpXGSZr4a4yvRi+SoYtR1r04ud097gxq5oG
+         D5AvXLPvl7jsQ==
+Date:   Mon, 20 Mar 2023 15:47:21 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas =?utf-8?B?PT9JU08tODg1OS0xP1E/V2VpPURGc2NodWg/PQ==?= 
-        <linux@weissschuh.net>, Matthew Garrett <mgarrett@aurora.tech>,
-        Uwe =?utf-8?B?PT9JU08tODg1OS0xP1E/S2xlaW5lLUs9RjZuaWc/PQ==?= 
-        <u.kleine-koenig@pengutronix.de>, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] tpm: changes for v6.3-rc4
-Message-ID: <20230320134222.3pdn4l7nydgtg52w@kernel.org>
-References: <20230320133718.m2z4kal4nxhofvbx@kernel.org>
- <20230320134015.k55kgzrzb4zdhjjn@kernel.org>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     linux-integrity@vger.kernel.org,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: tpm: fix build break in tpm-chip.c caused by AMD fTPM quirk
+Message-ID: <20230320134721.w7rcpk7ecbqvxrtg@kernel.org>
+References: <de3ee520780be213c421685805c751dcda0754df.camel@HansenPartnership.com>
+ <5cf966e97f9a0fabdf8d3b5a0cbae90abe484813.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230320134015.k55kgzrzb4zdhjjn@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5cf966e97f9a0fabdf8d3b5a0cbae90abe484813.camel@HansenPartnership.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,48 +56,35 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 03:40:18PM +0200, Jarkko Sakkinen wrote:
-> On Mon, Mar 20, 2023 at 03:37:18PM +0200, Jarkko Sakkinen wrote:
-> > Hi,
+On Mon, Mar 20, 2023 at 07:22:52AM -0400, James Bottomley wrote:
+> On Mon, 2023-03-20 at 07:15 -0400, James Bottomley wrote:
+> > The test for the AMD fTPM problem, which just went in, actually uses
+> > the wrong function template for request_locality().  It's missing an
+> > argument so the build breaks:
 > > 
-> > Sent because of a build fix for previous PR. Also couple of less important
-> > fixes.
+> > drivers/char/tpm/tpm-chip.c:568:8: error: too few arguments to
+> > function ‘tpm_request_locality’
+> >   ret = tpm_request_locality(chip);
+> >         ^~~~~~~~~~~~~~~~~~~~
+> > drivers/char/tpm/tpm-chip.c:43:12: note: declared here
+> >  static int tpm_request_locality(struct tpm_chip *chip, int locality)
+> >             ^~~~~~~~~~~~~~~~~~~~
 > > 
-> > BR, Jarkko
-> > 
-> > The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-> > 
-> >   Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpm-v6.3-rc4
-> > 
-> > for you to fetch changes up to 923c8dfa9a3640d4dcedd7df12b53254f7e6e4fc:
-> > 
-> >   tpm: fix build break in tpm-chip.c caused by AMD fTPM quirk (2023-03-20 15:27:03 +0200)
-> > 
-> > ----------------------------------------------------------------
-> > tpm: v6.3-rc4
-> > 
-> > ----------------------------------------------------------------
-> > James Bottomley (1):
-> >       tpm: fix build break in tpm-chip.c caused by AMD fTPM quirk
-> > 
-> > Mark Hasemeyer (1):
-> >       tpm: cr50: i2c: use jiffies to wait for tpm ready irq
-> > 
-> > Yu Zhe (1):
-> >       tpm: remove unnecessary (void*) conversions
-> > 
-> >  drivers/char/tpm/eventlog/common.c  | 6 +++---
-> >  drivers/char/tpm/tpm-chip.c         | 2 +-
-> >  drivers/char/tpm/tpm_tis_i2c_cr50.c | 3 +--
-> >  3 files changed, 5 insertions(+), 6 deletions(-)
+> > Fix this by requesting zero locality.
 > 
-> Please ignore. Had a dependency to non-upstream bad. My mistake:
-> I tested with a branch containing encrypted hibernation patches.
+> Actually, this is a bad interaction with the non-upstream patch to run
+> the kernel in locality two to allow key policy to distinguish kernel
+> release from user space release, which goes back to the debate over
+> hibernation keys.  I'll carry it separately until (or if ever) we get a
+> resolution on how to do this.
 
-Ugh :-( "I" = James
+BTW, do you have a newer version of
+
+https://lore.kernel.org/linux-integrity/20230216201410.15010-1-James.Bottomley@HansenPartnership.com/
+
+I'm planning to flush testing queue as I have now more bandwidth
+for TPM and keyring (actually I'm looking RISC-V fTPM's at work).
+
+BR, Jarkko
 
 BR, Jarkko
