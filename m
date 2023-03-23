@@ -2,51 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29F96C6C60
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Mar 2023 16:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A973E6C740A
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Mar 2023 00:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjCWPep (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 23 Mar 2023 11:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S231299AbjCWXd4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 23 Mar 2023 19:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjCWPen (ORCPT
+        with ESMTP id S231231AbjCWXdz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:34:43 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648F8AD11
-        for <linux-integrity@vger.kernel.org>; Thu, 23 Mar 2023 08:34:40 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 16:34:36 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679585678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=LVp4pkaZTAa2Pm4n5l7CpJunHSxqocoaqX8/zGFYMEA=;
-        b=U0RuVqB2wWe1RpgGkGvG980EjhqofvIqXk7qUxksq98UEETeXFX7QcKrhhu7cr1jXLrkoj
-        CSOGrYf+RfqX4n3AcDQz8uXORT9cV1dU3ssPejyEn1ooO7KpDWRXJcoEvLk1+ZwiojFdXy
-        Kgvx7P9Wp6GDtkGCUXT1Mx+iqDJTieNtgenVfVHDfsdWZKSoFbyVPauYcUczWI4vR1v5zm
-        X1ZY178Al6AMfSy2l2DzcB2gtQtQAq7Ibi9VxCSn7FFLDCB3bubC2aebAPPNXwKbhF5QvA
-        bUFT54rwAvwPValbHmp1LpYCiXQWGiYWLSarWdWJEV6wdZW1u/R9cZeoZ72kBA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679585678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=LVp4pkaZTAa2Pm4n5l7CpJunHSxqocoaqX8/zGFYMEA=;
-        b=Leotz5KjQFfLkbasVU2Is1xWvKP7Ys8OZHYwkcVNS8UYIbtPla4q5SQlCwScK2RgHMeGFZ
-        Q4Tq0GdkGqULk1Ag==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     linux-integrity@vger.kernel.org
-Cc:     Haris Okanovic <haris.okanovic@ni.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH] tpm_tis: fix stall after iowrite*()s
-Message-ID: <20230323153436.B2SATnZV@linutronix.de>
+        Thu, 23 Mar 2023 19:33:55 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADE2241CB
+        for <linux-integrity@vger.kernel.org>; Thu, 23 Mar 2023 16:33:51 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id p15so275969ybl.9
+        for <linux-integrity@vger.kernel.org>; Thu, 23 Mar 2023 16:33:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1679614431;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I4UQt9s0uViyb6ofhmfjXLpk2tpOHMTrFO4xtiTE1F0=;
+        b=B/0sSV7njn/GnbdGsZmwGqohjHyQKCvOu/6lA3UnCwY5crL557lHVTU44KJxZHT7yP
+         aPP+W3L7LsThfn1d73iOPDaxJ4xaogwioYx8PIMl/sbmCYK2QpbhQ/C3TGah4c41AH7d
+         34VK1xWYZtimyZLICoxE+b9Eqs8qV62zR0LZst+Hl5muiDzrsbLT4VjJQjVnxo20RgOx
+         QS6XgqmI6PTjN2jji+M23xYUJA5aMnZhcnEc1UWcg8cyTAqJUozNTyGh4D0U2mOYANmT
+         m2TjS6e7s7ht3ZDMN60F3ByMAURAMBiNlLvT9cSW4f6JHrOJwK9tvY7F3QFHQYSulqjZ
+         TNsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679614431;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I4UQt9s0uViyb6ofhmfjXLpk2tpOHMTrFO4xtiTE1F0=;
+        b=DR9lcm2qT/Atfl1YoGNzSWGRcRG0yIoI+QJWTc0ADB2DPo+m+VUUafV2mUuSIUyaNk
+         vKAfxthZ0FD6KM278ogN2Yo12DH83kcxxHbMItLqOkeddT20RH7zGGpzN3DqPBBlmtvf
+         idO/ev7rJb0Y4d/ZaVzDN0Ve8Qz4caVEir9jlJEqrrf0h6c7oIBlRxLe0UgybT2lmUNP
+         YcLciaWx8/1W02tMe7lVhMPSgsBK1CIeWWtv/qe8TdlIQz/wlkr+5qF6yTdMxc+Dj6gv
+         6EfDFBDmqS/CrDE5utFcaJ0irTVy+pMxktYqMPkdRRiITiPQmFFvMrgke4gv01zJg3ls
+         U0HA==
+X-Gm-Message-State: AAQBX9fXI7EAZClEw/nkmwP2J1hd5Cq/g4iOiP0aPOxn0yWesij5jlp8
+        jbWSpkO/bTa7f/EfRxLpZRCYgbD5TQ/vjnB2T830
+X-Google-Smtp-Source: AKy350Ythv2mrmo7XSEuLMBIjFRTDHgBFPhqt6X4Wf9cwlS+qXqGx6EuJGwGC9z42MtKE37zO8JrjgFxkcxJXq4nSaI=
+X-Received: by 2002:a25:abee:0:b0:b68:7a4a:5258 with SMTP id
+ v101-20020a25abee000000b00b687a4a5258mr211351ybi.3.1679614430992; Thu, 23 Mar
+ 2023 16:33:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com> <20230314081720.4158676-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230314081720.4158676-2-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 23 Mar 2023 19:33:40 -0400
+Message-ID: <CAHC9VhS1htA=cFqbc3KJsrZ3by6_m=f3Bd0sTbztC=qMZEvedA@mail.gmail.com>
+Subject: Re: [PATCH v8 1/6] reiserfs: Switch to security_inode_init_security()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,87 +76,41 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Haris Okanovic <haris.okanovic@ni.com>
+On Tue, Mar 14, 2023 at 4:18=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> In preparation for removing security_old_inode_init_security(), switch to
+> security_inode_init_security(). Commit 572302af1258 ("reiserfs: Add missi=
+ng
+> calls to reiserfs_security_free()") fixed possible memory leaks and anoth=
+er
+> issue related to adding an xattr at inode creation time.
+>
+> Define the initxattrs callback reiserfs_initxattrs(), to populate the
+> name/value/len triple in the reiserfs_security_handle() with the first
+> xattr provided by LSMs. Make a copy of the xattr value, as
+> security_inode_init_security() frees it.
+>
+> After the call to security_inode_init_security(), remove the check for
+> returning -EOPNOTSUPP, as security_inode_init_security() changes it to
+> zero.
+>
+> Multiple xattrs are currently not supported, as the
+> reiserfs_security_handle structure is exported to user space. As a
+> consequence, even if EVM is invoked, it will not provide an xattr (if it
+> is not the first to set it, its xattr will be discarded; if it is the
+> first, it does not have xattrs to calculate the HMAC on).
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  fs/reiserfs/xattr_security.c | 23 ++++++++++++++++++-----
+>  1 file changed, 18 insertions(+), 5 deletions(-)
 
-ioread8() operations to TPM MMIO addresses can stall the CPU when
-immediately following a sequence of iowrite*()'s to the same region.
+Merged into lsm/next, thanks.
 
-For example, cyclitest measures ~400us latency spikes when a non-RT
-usermode application communicates with an SPI-based TPM chip (Intel Atom
-E3940 system, PREEMPT_RT kernel). The spikes are caused by a
-stalling ioread8() operation following a sequence of 30+ iowrite8()s to
-the same address. I believe this happens because the write sequence is
-buffered (in CPU or somewhere along the bus), and gets flushed on the
-first LOAD instruction (ioread*()) that follows.
-
-The enclosed change appears to fix this issue: read the TPM chip's
-access register (status code) after every iowrite*() operation to
-amortize the cost of flushing data to chip across multiple instructions.
-
-Signed-off-by: Haris Okanovic <haris.okanovic@ni.com>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-
-I don't know how performance critical this is so that it should be
-restricted to PREEMPT_RT. This has been in RT queue since late 2017 and
-I have no idea how to deal with this differently/ in a more generic way.
-Original thread:
-	https://lore.kernel.org/20170804215651.29247-1-haris.okanovic@ni.com
-
- drivers/char/tpm/tpm_tis.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index ed5dabd3c72d6..513e0d1c349a6 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -50,6 +50,31 @@ static inline struct tpm_tis_tcg_phy *to_tpm_tis_tcg_phy(struct tpm_tis_data *da
- 	return container_of(data, struct tpm_tis_tcg_phy, priv);
- }
- 
-+#ifdef CONFIG_PREEMPT_RT
-+/*
-+ * Flushes previous write operations to chip so that a subsequent
-+ * ioread*()s won't stall a CPU.
-+ */
-+static inline void tpm_tis_flush(void __iomem *iobase)
-+{
-+	ioread8(iobase + TPM_ACCESS(0));
-+}
-+#else
-+#define tpm_tis_flush(iobase) do { } while (0)
-+#endif
-+
-+static inline void tpm_tis_iowrite8(u8 b, void __iomem *iobase, u32 addr)
-+{
-+	iowrite8(b, iobase + addr);
-+	tpm_tis_flush(iobase);
-+}
-+
-+static inline void tpm_tis_iowrite32(u32 b, void __iomem *iobase, u32 addr)
-+{
-+	iowrite32(b, iobase + addr);
-+	tpm_tis_flush(iobase);
-+}
-+
- static int interrupts = -1;
- module_param(interrupts, int, 0444);
- MODULE_PARM_DESC(interrupts, "Enable interrupts");
-@@ -186,12 +211,12 @@ static int tpm_tcg_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
- 	switch (io_mode) {
- 	case TPM_TIS_PHYS_8:
- 		while (len--)
--			iowrite8(*value++, phy->iobase + addr);
-+			tpm_tis_iowrite8(*value++, phy->iobase, addr);
- 		break;
- 	case TPM_TIS_PHYS_16:
- 		return -EINVAL;
- 	case TPM_TIS_PHYS_32:
--		iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase + addr);
-+		tpm_tis_iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase, addr);
- 		break;
- 	}
- 
--- 
-2.40.0
-
+--=20
+paul-moore.com
