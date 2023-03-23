@@ -2,63 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E116C6817
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Mar 2023 13:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29F96C6C60
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 Mar 2023 16:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjCWMVz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 23 Mar 2023 08:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        id S230398AbjCWPep (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 23 Mar 2023 11:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbjCWMVi (ORCPT
+        with ESMTP id S231796AbjCWPen (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:21:38 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC4627D73
-        for <linux-integrity@vger.kernel.org>; Thu, 23 Mar 2023 05:20:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1679574033;
-        bh=kYLZN8L512l8O3JwSJz8bPf2xfvhTMgM0pomg73LtYE=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=WcBRsCK/432+mSzWZA/sXHq18+3OoRd/YcczomDmy815OblGXL65NbrM38oyYSq+C
-         g0RSo51cbAKfAxEk3fsvjAvfInLBv+ui578Gqr8bP+cvt2BC0jzD9JRz0frW8sBYGo
-         V4PMtTkfiptwF0jSTsENlirrKOoL2009K8ms3L3Y=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 11E2C1285E12;
-        Thu, 23 Mar 2023 08:20:33 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id PCrML0fDYFWH; Thu, 23 Mar 2023 08:20:32 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1679574032;
-        bh=kYLZN8L512l8O3JwSJz8bPf2xfvhTMgM0pomg73LtYE=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=MYI15VqRinh4Pck4hcOW/BVVDDgrE0y6YmF/ez16okyCDCdekqnqoRpsU+u/8Azeg
-         bknDIYD3YBd+iOWvPHfLNXkLYZZv9Bi7HWutMM3gnJZwVq50uLw3zfaAx3dAAu7DFD
-         o276Df/45FSDnDj8TcnJO/+e5fXEn6lJbOH6lc1o=
-Received: from [153.66.160.227] (unknown [153.66.160.227])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id E70931281E14;
-        Thu, 23 Mar 2023 08:20:31 -0400 (EDT)
-Message-ID: <2a8671aaae43738f45f7812a9e0d93a99c5ebc69.camel@HansenPartnership.com>
-Subject: Re: tpm: fix build break in tpm-chip.c caused by AMD fTPM quirk
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Date:   Thu, 23 Mar 2023 08:20:29 -0400
-In-Reply-To: <20230320134721.w7rcpk7ecbqvxrtg@kernel.org>
-References: <de3ee520780be213c421685805c751dcda0754df.camel@HansenPartnership.com>
-         <5cf966e97f9a0fabdf8d3b5a0cbae90abe484813.camel@HansenPartnership.com>
-         <20230320134721.w7rcpk7ecbqvxrtg@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Thu, 23 Mar 2023 11:34:43 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648F8AD11
+        for <linux-integrity@vger.kernel.org>; Thu, 23 Mar 2023 08:34:40 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 16:34:36 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679585678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=LVp4pkaZTAa2Pm4n5l7CpJunHSxqocoaqX8/zGFYMEA=;
+        b=U0RuVqB2wWe1RpgGkGvG980EjhqofvIqXk7qUxksq98UEETeXFX7QcKrhhu7cr1jXLrkoj
+        CSOGrYf+RfqX4n3AcDQz8uXORT9cV1dU3ssPejyEn1ooO7KpDWRXJcoEvLk1+ZwiojFdXy
+        Kgvx7P9Wp6GDtkGCUXT1Mx+iqDJTieNtgenVfVHDfsdWZKSoFbyVPauYcUczWI4vR1v5zm
+        X1ZY178Al6AMfSy2l2DzcB2gtQtQAq7Ibi9VxCSn7FFLDCB3bubC2aebAPPNXwKbhF5QvA
+        bUFT54rwAvwPValbHmp1LpYCiXQWGiYWLSarWdWJEV6wdZW1u/R9cZeoZ72kBA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679585678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=LVp4pkaZTAa2Pm4n5l7CpJunHSxqocoaqX8/zGFYMEA=;
+        b=Leotz5KjQFfLkbasVU2Is1xWvKP7Ys8OZHYwkcVNS8UYIbtPla4q5SQlCwScK2RgHMeGFZ
+        Q4Tq0GdkGqULk1Ag==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     linux-integrity@vger.kernel.org
+Cc:     Haris Okanovic <haris.okanovic@ni.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] tpm_tis: fix stall after iowrite*()s
+Message-ID: <20230323153436.B2SATnZV@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,43 +54,87 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-03-20 at 15:47 +0200, Jarkko Sakkinen wrote:
-> On Mon, Mar 20, 2023 at 07:22:52AM -0400, James Bottomley wrote:
-> > On Mon, 2023-03-20 at 07:15 -0400, James Bottomley wrote:
-> > > The test for the AMD fTPM problem, which just went in, actually
-> > > uses the wrong function template for request_locality().  It's
-> > > missing an argument so the build breaks:
-> > > 
-> > > drivers/char/tpm/tpm-chip.c:568:8: error: too few arguments to
-> > > function ‘tpm_request_locality’
-> > >   ret = tpm_request_locality(chip);
-> > >         ^~~~~~~~~~~~~~~~~~~~
-> > > drivers/char/tpm/tpm-chip.c:43:12: note: declared here
-> > >  static int tpm_request_locality(struct tpm_chip *chip, int
-> > > locality)
-> > >             ^~~~~~~~~~~~~~~~~~~~
-> > > 
-> > > Fix this by requesting zero locality.
-> > 
-> > Actually, this is a bad interaction with the non-upstream patch to
-> > run the kernel in locality two to allow key policy to distinguish
-> > kernel release from user space release, which goes back to the
-> > debate over hibernation keys.  I'll carry it separately until (or
-> > if ever) we get a resolution on how to do this.
-> 
-> BTW, do you have a newer version of
-> 
-> https://lore.kernel.org/linux-integrity/20230216201410.15010-1-James.Bottomley@HansenPartnership.com/
-> 
-> I'm planning to flush testing queue as I have now more bandwidth
-> for TPM and keyring (actually I'm looking RISC-V fTPM's at work).
+From: Haris Okanovic <haris.okanovic@ni.com>
 
-Hopefully next week.  I'm on a business trip and conference this week,
-so most of my cycles have been going into that and converting the TPM2
-engine to a provider, but I'm back home next week and the provider
-conversion is pretty much done.
+ioread8() operations to TPM MMIO addresses can stall the CPU when
+immediately following a sequence of iowrite*()'s to the same region.
 
-Regards,
+For example, cyclitest measures ~400us latency spikes when a non-RT
+usermode application communicates with an SPI-based TPM chip (Intel Atom
+E3940 system, PREEMPT_RT kernel). The spikes are caused by a
+stalling ioread8() operation following a sequence of 30+ iowrite8()s to
+the same address. I believe this happens because the write sequence is
+buffered (in CPU or somewhere along the bus), and gets flushed on the
+first LOAD instruction (ioread*()) that follows.
 
-James
+The enclosed change appears to fix this issue: read the TPM chip's
+access register (status code) after every iowrite*() operation to
+amortize the cost of flushing data to chip across multiple instructions.
+
+Signed-off-by: Haris Okanovic <haris.okanovic@ni.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+
+I don't know how performance critical this is so that it should be
+restricted to PREEMPT_RT. This has been in RT queue since late 2017 and
+I have no idea how to deal with this differently/ in a more generic way.
+Original thread:
+	https://lore.kernel.org/20170804215651.29247-1-haris.okanovic@ni.com
+
+ drivers/char/tpm/tpm_tis.c | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index ed5dabd3c72d6..513e0d1c349a6 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -50,6 +50,31 @@ static inline struct tpm_tis_tcg_phy *to_tpm_tis_tcg_phy(struct tpm_tis_data *da
+ 	return container_of(data, struct tpm_tis_tcg_phy, priv);
+ }
+ 
++#ifdef CONFIG_PREEMPT_RT
++/*
++ * Flushes previous write operations to chip so that a subsequent
++ * ioread*()s won't stall a CPU.
++ */
++static inline void tpm_tis_flush(void __iomem *iobase)
++{
++	ioread8(iobase + TPM_ACCESS(0));
++}
++#else
++#define tpm_tis_flush(iobase) do { } while (0)
++#endif
++
++static inline void tpm_tis_iowrite8(u8 b, void __iomem *iobase, u32 addr)
++{
++	iowrite8(b, iobase + addr);
++	tpm_tis_flush(iobase);
++}
++
++static inline void tpm_tis_iowrite32(u32 b, void __iomem *iobase, u32 addr)
++{
++	iowrite32(b, iobase + addr);
++	tpm_tis_flush(iobase);
++}
++
+ static int interrupts = -1;
+ module_param(interrupts, int, 0444);
+ MODULE_PARM_DESC(interrupts, "Enable interrupts");
+@@ -186,12 +211,12 @@ static int tpm_tcg_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
+ 	switch (io_mode) {
+ 	case TPM_TIS_PHYS_8:
+ 		while (len--)
+-			iowrite8(*value++, phy->iobase + addr);
++			tpm_tis_iowrite8(*value++, phy->iobase, addr);
+ 		break;
+ 	case TPM_TIS_PHYS_16:
+ 		return -EINVAL;
+ 	case TPM_TIS_PHYS_32:
+-		iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase + addr);
++		tpm_tis_iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase, addr);
+ 		break;
+ 	}
+ 
+-- 
+2.40.0
 
