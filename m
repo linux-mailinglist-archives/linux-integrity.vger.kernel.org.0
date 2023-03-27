@@ -2,106 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2316C9020
-	for <lists+linux-integrity@lfdr.de>; Sat, 25 Mar 2023 19:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100FB6C9C04
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Mar 2023 09:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjCYSfJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 25 Mar 2023 14:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S232536AbjC0Har (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 27 Mar 2023 03:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjCYSfG (ORCPT
+        with ESMTP id S229610AbjC0Har (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 25 Mar 2023 14:35:06 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11hn2204.outbound.protection.outlook.com [52.100.173.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96640EC69;
-        Sat, 25 Mar 2023 11:34:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gU5JbaNZw0Z+drBr2foxXt5ZF/+Ipyy7dHCF5d85zsRHwVVPO1X1lX/GwLaXE3/dhzI0RRSHxNrtoj4gWrlfGV3NAKHwMWQUq55+ySAYLhK3GsJ/begRIPFZ9EqpNIX1Gg0rMg6WKZNROkr9DUr5SODUKpZ6EKM4JdFXid7a7d9k8hv8DP0XcPT3DToxlqpzqMY/OKLdae372BiivYIrzOlgUy1qHtchm8dw5NzV+vGwD9E5xyRcoXaFvQtEcI8d/bDJarOX/3eT37VVR5DizRO+fpwNpCm/cf+6OemFc5htwL6XADl8TuSglq/1fOdphhDDIufopuHZP0yJIVkONQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XHUi5v9Gc3/D8leeYb11n8pDVawxq0/2mLSkzw+ypPE=;
- b=i0Lbp1JyybLDPF763QuKXDhS8ZQkj4YartgkLMKwlV14EsZakQcdIhwwfohJaI2UGChNRACrEw3WgDZliVBmejpRw7bL0ZZw6CCbNA4WLDMdRydDbv3eBor5D+cP2/B/8AEpSp0NBBozy9s0YqpRPByJk83p9/7qQLNQGfhaapIPdYbZpPk6V3+0gcscK8z9xVr0ESWiSS2duJLBQSXXtTkxANkhZeGTAQ8sO9/DR+bJ7QNK4DAiAkaotUxyGL81MKJmTgkucTBCZhdSZOo/AHKE573hVH2LqVHvb51bzNi0oSbsFcAE1+z44RCvZHKx8wZ3gT5O5IN8n/YAXwD1kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XHUi5v9Gc3/D8leeYb11n8pDVawxq0/2mLSkzw+ypPE=;
- b=MX2PG2IVQYtYnyliaRG+manL34apFTeyTZPhpkKe3P0U44x3vUn+O6RhGX/3XylJaWsviHmw7hiJmlQeVCC7nz8sssSdI746Yk9v2t/ARkyjxGBpKTq69kKJeFyJDZFIGcCb9XBeC8+t99+kH9T+mIo2BA8SPKCTgZshzWq0sMnNdfhh7A4Jgg+RkmixPy1wTdqXvsLpG0/7atWqTPgyVWLmjGsa13Y44bA4sY7LtoHb3w10OBTEfIcS9rgqfImjE/SqRWL++ahSfq72ppfcVQocrx834Xo1aUci9Dt1qXsOEvLGNL5xZ92op0WXY27Etc/3ZiRTTNw7HIAbF2osVQ==
-Received: from BN0PR04CA0193.namprd04.prod.outlook.com (2603:10b6:408:e9::18)
- by DM4PR12MB5940.namprd12.prod.outlook.com (2603:10b6:8:6b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Sat, 25 Mar
- 2023 18:34:53 +0000
-Received: from BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e9:cafe::51) by BN0PR04CA0193.outlook.office365.com
- (2603:10b6:408:e9::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41 via Frontend
- Transport; Sat, 25 Mar 2023 18:34:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT064.mail.protection.outlook.com (10.13.176.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.22 via Frontend Transport; Sat, 25 Mar 2023 18:34:52 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Sat, 25 Mar 2023
- 11:34:52 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Sat, 25 Mar
- 2023 11:34:51 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.5 via Frontend
- Transport; Sat, 25 Mar 2023 11:34:47 -0700
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <robh+dt@kernel.org>, <broonie@kernel.org>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>, <jarkko@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [Patch V9 3/3] spi: tegra210-quad: Enable TPM wait polling
-Date:   Sun, 26 Mar 2023 00:04:09 +0530
-Message-ID: <20230325183409.7695-4-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230325183409.7695-1-kyarlagadda@nvidia.com>
-References: <20230325183409.7695-1-kyarlagadda@nvidia.com>
-X-NVConfidentiality: public
+        Mon, 27 Mar 2023 03:30:47 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A1B4C30;
+        Mon, 27 Mar 2023 00:30:43 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PlPNz3KSkz9xFqm;
+        Mon, 27 Mar 2023 15:20:51 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAHQg32RSFk1UzSAQ--.51278S2;
+        Mon, 27 Mar 2023 08:30:11 +0100 (CET)
+Message-ID: <8b63d00d8ac3f686e51889ea4fc8d83f8ecb300d.camel@huaweicloud.com>
+Subject: Re: [PATCH v8 4/6] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 27 Mar 2023 09:29:54 +0200
+In-Reply-To: <CAHC9VhRNjvjMOF5KLM6BoGfk=QpEBs_ur_CgRdGL5R1bA-JAwg@mail.gmail.com>
+References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com>
+         <20230314081720.4158676-5-roberto.sassu@huaweicloud.com>
+         <CAHC9VhTD3EyDiJs9+NQrgp84JcUs_sx8WONtRk2YYH4m1C8nVw@mail.gmail.com>
+         <939e6c88662ad90b963993c4cc1b702083e74a7a.camel@huaweicloud.com>
+         <ffc86b3907f7b87d3c568ae62bea3cdb3275be4e.camel@huaweicloud.com>
+         <CAHC9VhRNjvjMOF5KLM6BoGfk=QpEBs_ur_CgRdGL5R1bA-JAwg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT064:EE_|DM4PR12MB5940:EE_
-X-MS-Office365-Filtering-Correlation-Id: d6f97a4d-3c4d-4d0a-7ab3-08db2d5f9ff4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FO4dGUjyWZKMeLK4TM48bmWJm34kPMcN6gU/Mzo3XJUPIxzB589u1Azx+IQLa/VEc3ZOD7LAM5iwqrAr7rCOHHtevNdukAMMi3GQDr8TDl28PFAUH0kjPZ3RTvx1sZ4luD3gysBK6a5EtkgM8WAKMb6YzsWN0/kcGcSy0ZcbI5Uz+TKbedReHWrW/hO/VH2wqufdq5Cr3dskWV0eDl+n4rxrcbGN/gPBRM0XexPMdd8JL5rn4u3IczaFWv28CGE44z8qPMLpjbLUN26QJZDZQ65AG9KI8xSz8iPJWIzf1bMOVoCzyD2pXXU8NRwawprR1eCJJPMDmZ2pmhSRYbpP3wUGaXu7kniLO7PjkoBBO25NziKJSttOY1OLLyHzio1v0mG0/eMHaNehI6mjYp/SLR2fR186aq9XBotxEhpSLDWd38tSNNZBJb9Uy+iAM6uAqJHMt5LLKPJ/0cDpk1c1PrD2jrq1f3P31T4hxTpsiD1bfyT8bNJcmyHe+Au8wT/fPfFMUWgkYKmfe6JDsDv5E8f+saakG7r2dcbp286w4Jh4l3LmdjxUR3Mu9JxApvR50y16ckvfOeKH4uLXdasSxzifiF+GKEHUMIUnbURH2oHTsKJhVYtHg6h8nTgGGLT0pKBhU4pCsOktVX6rpqjdf2SGiHkR3fXT/Ns7LIv2KrGUDRZAYgL78hzdTfGfKFX2KGdrD5qM+e6nvaZuP+mPGoev6vq0VK7q++G2EZwiLfaRQdIKkrcWeKYfgIjdkG2JtYYKjAKS2GyzKIOK4yitrlrDRoJZ9hnKaJQgRG0+8jrWC660QHcO6TsW7f2C0esZBxN1Mv+1Hu2GuQ8j/eGAHwMu4A1cgMc27ZXXbAs2rrRzGJSu/DAB6fhlaxnlQAJp
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(39860400002)(376002)(396003)(451199021)(5400799015)(36840700001)(40470700004)(46966006)(921005)(356005)(40460700003)(40480700001)(426003)(47076005)(83380400001)(2616005)(2906002)(36756003)(336012)(34070700002)(36860700001)(316002)(110136005)(54906003)(107886003)(6666004)(70586007)(70206006)(7696005)(478600001)(8936002)(7416002)(5660300002)(26005)(8676002)(4326008)(186003)(41300700001)(82310400005)(7636003)(82740400003)(1076003)(86362001)(83996005)(2101003)(12100799027);DIR:OUT;SFP:1501;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2023 18:34:52.9768
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6f97a4d-3c4d-4d0a-7ab3-08db2d5f9ff4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5940
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwAHQg32RSFk1UzSAQ--.51278S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFW7GF4UJw48tr13Zw13urg_yoW3tr1DpF
+        WUt3Wjkrs8JFyUCrySqa1ru3WS9rWrGrW7WrsxGryUAF90yr1xtryFkr45uFykXrWkGr1q
+        qr4UAFsxuwn8A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAJBF1jj4ssWQAAsD
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,89 +74,195 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Trusted Platform Module requires flow control. As defined in TPM
-interface specification, client would drive MISO line at same cycle as
-last address bit on MOSI.
-Tegra234 and Tegra241 QSPI controllers have TPM wait state detection
-feature which is enabled for TPM client devices reported in SPI device
-mode bits.
+On Fri, 2023-03-24 at 17:39 -0400, Paul Moore wrote:
+> On Fri, Mar 24, 2023 at 9:26 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Fri, 2023-03-24 at 11:18 +0100, Roberto Sassu wrote:
+> > > On Thu, 2023-03-23 at 20:09 -0400, Paul Moore wrote:
+> > > > On Tue, Mar 14, 2023 at 4:19 AM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > 
+> > > > > Currently, security_inode_init_security() supports only one LSM providing
+> > > > > an xattr and EVM calculating the HMAC on that xattr, plus other inode
+> > > > > metadata.
+> > > > > 
+> > > > > Allow all LSMs to provide one or multiple xattrs, by extending the security
+> > > > > blob reservation mechanism. Introduce the new lbs_xattr field of the
+> > > > > lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
+> > > > > needs, and the LSM infrastructure knows how many xattr slots it should
+> > > > > allocate.
+> > > > > 
+> > > > > Dynamically allocate the xattrs array to be populated by LSMs with the
+> > > > > inode_init_security hook, and pass it to the latter instead of the
+> > > > > name/value/len triple. Update the documentation accordingly, and fix the
+> > > > > description of the xattr name, as it is not allocated anymore.
+> > > > > 
+> > > > > Since the LSM infrastructure, at initialization time, updates the number of
+> > > > > the requested xattrs provided by each LSM with a corresponding offset in
+> > > > > the security blob (in this case the xattr array), it makes straightforward
+> > > > > for an LSM to access the right position in the xattr array.
+> > > > > 
+> > > > > There is still the issue that an LSM might not fill the xattr, even if it
+> > > > > requests it (legitimate case, for example it might have been loaded but not
+> > > > > initialized with a policy). Since users of the xattr array (e.g. the
+> > > > > initxattrs() callbacks) detect the end of the xattr array by checking if
+> > > > > the xattr name is NULL, not filling an xattr would cause those users to
+> > > > > stop scanning xattrs prematurely.
+> > > > > 
+> > > > > Solve that issue by introducing security_check_compact_filled_xattrs(),
+> > > > > which does a basic check of the xattr array (if the xattr name is filled,
+> > > > > the xattr value should be too, and viceversa), and compacts the xattr array
+> > > > > by removing the holes.
+> > > > > 
+> > > > > An alternative solution would be to let users of the xattr array know the
+> > > > > number of elements of that array, so that they don't have to check the
+> > > > > termination. However, this seems more invasive, compared to a simple move
+> > > > > of few array elements.
+> > > > > 
+> > > > > security_check_compact_filled_xattrs() also determines how many xattrs in
+> > > > > the xattr array have been filled. If there is none, skip
+> > > > > evm_inode_init_security() and initxattrs(). Skipping the former also avoids
+> > > > > EVM to crash the kernel, as it is expecting a filled xattr.
+> > > > > 
+> > > > > Finally, adapt both SELinux and Smack to use the new definition of the
+> > > > > inode_init_security hook, and to correctly fill the designated slots in the
+> > > > > xattr array. For Smack, reserve space for the other defined xattrs although
+> > > > > they are not set yet in smack_inode_init_security().
+> > > > > 
+> > > > > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org> (EVM crash)
+> > > > > Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
+> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> > > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > > ---
+> > > > >  include/linux/lsm_hook_defs.h |   3 +-
+> > > > >  include/linux/lsm_hooks.h     |   1 +
+> > > > >  security/security.c           | 119 +++++++++++++++++++++++++++++-----
+> > > > >  security/selinux/hooks.c      |  19 ++++--
+> > > > >  security/smack/smack_lsm.c    |  33 ++++++----
+> > > > >  5 files changed, 137 insertions(+), 38 deletions(-)
+> 
+> ...
+> 
+> > > > > @@ -1604,33 +1654,66 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+> > > > >                                  const struct qstr *qstr,
+> > > > >                                  const initxattrs initxattrs, void *fs_data)
+> > > > >  {
+> > > > > -       struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+> > > > > -       struct xattr *lsm_xattr, *evm_xattr, *xattr;
+> > > > > -       int ret;
+> > > > > +       struct security_hook_list *P;
+> > > > > +       struct xattr *new_xattrs;
+> > > > > +       struct xattr *xattr;
+> > > > > +       int ret = -EOPNOTSUPP, num_filled_xattrs = 0;
+> > > > > 
+> > > > >         if (unlikely(IS_PRIVATE(inode)))
+> > > > >                 return 0;
+> > > > > 
+> > > > > +       if (!blob_sizes.lbs_xattr)
+> > > > > +               return 0;
+> > > > > +
+> > > > >         if (!initxattrs)
+> > > > >                 return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
+> > > > > -                                    dir, qstr, NULL, NULL, NULL);
+> > > > > -       memset(new_xattrs, 0, sizeof(new_xattrs));
+> > > > > -       lsm_xattr = new_xattrs;
+> > > > > -       ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
+> > > > > -                           &lsm_xattr->name,
+> > > > > -                           &lsm_xattr->value,
+> > > > > -                           &lsm_xattr->value_len);
+> > > > > -       if (ret)
+> > > > > +                                   dir, qstr, NULL);
+> > > > > +       /* Allocate +1 for EVM and +1 as terminator. */
+> > > > > +       new_xattrs = kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*new_xattrs),
+> > > > > +                            GFP_NOFS);
+> > > > > +       if (!new_xattrs)
+> > > > > +               return -ENOMEM;
+> > > > > +
+> > > > > +       hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
+> > > > > +                            list) {
+> > > > > +               ret = P->hook.inode_init_security(inode, dir, qstr, new_xattrs);
+> > > > > +               if (ret && ret != -EOPNOTSUPP)
+> > > > > +                       goto out;
+> > > > > +               /*
+> > > > > +                * As documented in lsm_hooks.h, -EOPNOTSUPP in this context
+> > > > > +                * means that the LSM is not willing to provide an xattr, not
+> > > > > +                * that it wants to signal an error. Thus, continue to invoke
+> > > > > +                * the remaining LSMs.
+> > > > > +                */
+> > > > > +               if (ret == -EOPNOTSUPP)
+> > > > > +                       continue;
+> > > > > +               /*
+> > > > > +                * As the number of xattrs reserved by LSMs is not directly
+> > > > > +                * available, directly use the total number blob_sizes.lbs_xattr
+> > > > > +                * to keep the code simple, while being not the most efficient
+> > > > > +                * way.
+> > > > > +                */
+> > > > 
+> > > > Is there a good reason why the LSM can't return the number of xattrs
+> > > > it is adding to the xattr array?  It seems like it should be fairly
+> > > > trivial for the individual LSMs to determine and it could save a lot
+> > > > of work.  However, given we're at v8 on this patchset I'm sure I'm
+> > > > missing something obvious, can you help me understand why the idea
+> > > > above is crazy stupid? ;)
+> > 
+> > Much simple answer. Yes, LSMs could return the number of xattrs set,
+> > but security_check_compact_filled_xattrs() also needs to know from
+> > which offset (the lbs_xattr of each LSM) it should start compacting.
+> > 
+> > Example: suppose that you have three LSMs with:
+> > 
+> > LSM#1: lbs_xattr 1
+> > LSM#2: lbs_xattr 2 (disabled)
+> > LSM#3: lbs_xattr 1
+> > 
+> > The current compaction interval is: already compacted xattrs - end of
+> > new_xattr array.
+> > 
+> > When the security_inode_init_security() loop calls LSM#3, the
+> > compaction interval is: 1 - 2 (LSM#2 returns 0), which clearly isn't
+> > right. The correct compaction interval should be: 3 - 4.
+> > 
+> > Going to the end of new_xattrs is an approximation, but it ensures
+> > that security_check_compact_filled_xattrs() reaches the xattr set by
+> > LSM#3.
+> > 
+> > The alternative I was mentioning of passing num_filled_xattrs to LSMs
+> > goes again in the direction of doing on-the-fly compaction, while LSMs
+> > are more familiar with using the lbs_* fields.
+> 
+> I guess I was thinking of the case where the LSM layer, i.e.
+> security_inode_init_security(), allocates an xattr array like it does
+> now based on the maximum number of xattrs possible using the
+> lsm_blob_sizes values and passes a pointer to the individual LSMs
+> which is incremented based on how many xattrs are created by the
+> individual LSMs.  Here is some *very* rough pseudo code:
+> 
+> int security_inode_init_security(...)
+> {
+> 
+>   /* allocate an xattr array */
+>   xattrs = kcalloc(blob_sizes, sizeof(*xattrs), GFP_BLAH);
+> 
+>   /* loop on the lsms */
+>   xa_cnt = 0;
+>   while (lsm_hooks) {
+>     rc = call_hook(lsm_hook, &xattrs[xa_cnt]);
+>     if (rc > 0)
+>       xa_cnt += rc;
+>   }
+> 
+>   /* evm magic */
+>   evm_inode_init_security(...)
+> }
+> 
+> Does that work?  Am I missing something?
 
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- drivers/spi/spi-tegra210-quad.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Oh, unfortunately not. EVM needs to see all xattrs (when it is moved to
+the LSM infrastructure).
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index 325b4427491c..de6aafe4448c 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -142,6 +142,7 @@
- 
- #define QSPI_GLOBAL_CONFIG			0X1a4
- #define QSPI_CMB_SEQ_EN				BIT(0)
-+#define QSPI_TPM_WAIT_POLL_EN			BIT(1)
- 
- #define QSPI_CMB_SEQ_ADDR			0x1a8
- #define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
-@@ -164,6 +165,7 @@
- struct tegra_qspi_soc_data {
- 	bool has_dma;
- 	bool cmb_xfer_capable;
-+	bool supports_tpm;
- 	unsigned int cs_count;
- };
- 
-@@ -1065,6 +1067,12 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
- 
- 	/* Enable Combined sequence mode */
- 	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
-+	if (spi->mode & SPI_TPM_HW_FLOW) {
-+		if (tqspi->soc_data->supports_tpm)
-+			val |= QSPI_TPM_WAIT_POLL_EN;
-+		else
-+			return -EIO;
-+	}
- 	val |= QSPI_CMB_SEQ_EN;
- 	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
- 	/* Process individual transfer list */
-@@ -1196,6 +1204,8 @@ static int tegra_qspi_non_combined_seq_xfer(struct tegra_qspi *tqspi,
- 	/* Disable Combined sequence mode */
- 	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
- 	val &= ~QSPI_CMB_SEQ_EN;
-+	if (tqspi->soc_data->supports_tpm)
-+		val &= ~QSPI_TPM_WAIT_POLL_EN;
- 	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
- 	list_for_each_entry(transfer, &msg->transfers, transfer_list) {
- 		struct spi_transfer *xfer = transfer;
-@@ -1454,24 +1464,28 @@ static irqreturn_t tegra_qspi_isr_thread(int irq, void *context_data)
- static struct tegra_qspi_soc_data tegra210_qspi_soc_data = {
- 	.has_dma = true,
- 	.cmb_xfer_capable = false,
-+	.supports_tpm = false,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra186_qspi_soc_data = {
- 	.has_dma = true,
- 	.cmb_xfer_capable = true,
-+	.supports_tpm = false,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra234_qspi_soc_data = {
- 	.has_dma = false,
- 	.cmb_xfer_capable = true,
-+	.supports_tpm = true,
- 	.cs_count = 1,
- };
- 
- static struct tegra_qspi_soc_data tegra241_qspi_soc_data = {
- 	.has_dma = false,
- 	.cmb_xfer_capable = true,
-+	.supports_tpm = true,
- 	.cs_count = 4,
- };
- 
--- 
-2.17.1
+Thanks
+
+Roberto
 
