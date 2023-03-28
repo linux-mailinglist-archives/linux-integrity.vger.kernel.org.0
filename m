@@ -2,62 +2,80 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5606CCAD8
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Mar 2023 21:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6766CCB68
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Mar 2023 22:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjC1TmR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Mar 2023 15:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
+        id S229564AbjC1UUK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 Mar 2023 16:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjC1TmQ (ORCPT
+        with ESMTP id S229540AbjC1UUJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:42:16 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653539F;
-        Tue, 28 Mar 2023 12:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1680032532;
-        bh=EnCIZR9L3TlBlrVGMnuA5qvZ9gv41Av4SPp4vWEd8Zw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=CGDvjj2hkMeFEVn2JyDmbuRZktoKUo6bBE48kp2fncOJceVjg7bJbYfvDyYWhpEKP
-         oqIcHgIaA/kjXyeCJ+EEdCJzfDCwmuSm5Z2ME0jZXpuPISt6NDtc64EiT9EB2e+C5A
-         /fKQI279uzVCyopu4wbpH3cZmj7Cgaawu0c7v+7c=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id B238E12807C5;
-        Tue, 28 Mar 2023 15:42:12 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id Hn-nqg_EzYuD; Tue, 28 Mar 2023 15:42:12 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1680032532;
-        bh=EnCIZR9L3TlBlrVGMnuA5qvZ9gv41Av4SPp4vWEd8Zw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=CGDvjj2hkMeFEVn2JyDmbuRZktoKUo6bBE48kp2fncOJceVjg7bJbYfvDyYWhpEKP
-         oqIcHgIaA/kjXyeCJ+EEdCJzfDCwmuSm5Z2ME0jZXpuPISt6NDtc64EiT9EB2e+C5A
-         /fKQI279uzVCyopu4wbpH3cZmj7Cgaawu0c7v+7c=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 0ABE012806FC;
-        Tue, 28 Mar 2023 15:42:11 -0400 (EDT)
-Message-ID: <981c339a6f09cd16a1d677e0fc2df1bdf1a5baec.camel@HansenPartnership.com>
-Subject: Re: [PATCH 03/12] tpm: add buffer handling for TPM2B types
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 28 Mar 2023 15:42:09 -0400
-In-Reply-To: <Y/xqbCwh+VBmJ1ZL@kernel.org>
-References: <20230216201410.15010-1-James.Bottomley@HansenPartnership.com>
-         <20230216201410.15010-4-James.Bottomley@HansenPartnership.com>
-         <Y/xqbCwh+VBmJ1ZL@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Tue, 28 Mar 2023 16:20:09 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3934A40C7
+        for <linux-integrity@vger.kernel.org>; Tue, 28 Mar 2023 13:20:07 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id z83so16746815ybb.2
+        for <linux-integrity@vger.kernel.org>; Tue, 28 Mar 2023 13:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1680034806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YTUjsnH0pjAMPCdWUs8KgtrmbEQ7uRQfh39xHtc1mOI=;
+        b=ZISzzUBAp2B86WTvie3LaaTm+XXMV1NsBYT+ss9Ay2P2TZV18c736vvSEzIoAMgiAD
+         yyMfrBITnvGzSe0zitTngdlv9FE5B7kqtcVHa5dUfi5qBhCuM018z5BcpYSoI7bEVt2z
+         ZC3kowL2cQRNQzFOhwJRwPeyH2MQqrp8NURsIr5JDzQpyL3WseVUnD7mAC626z6TQglg
+         UoOeDKCOiKNAkc7HGHrpOlFtTEimlh5Dg4uX3bQo4lcrs02hnNHTYJq/Kw3dPuYr2VQI
+         hXkP49aeyOtDyuAYueE49r0lldY98MycnxQ5Y1KBuHU/CwgwrBTDgx/qGu38MPY3mDw7
+         CiGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680034806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YTUjsnH0pjAMPCdWUs8KgtrmbEQ7uRQfh39xHtc1mOI=;
+        b=iA3UonPe5vibbA6Nfni4SvhZKqrzF+x9GHnpNcrHIjr/FSMpa9gAfEVz5aN3ku1J/M
+         FtfsdHSjhrUfuLEBYsymi+KoGdLPzZpvKEitDufU5PElEzNmc2MIoNYLl5HvenAuWsNM
+         pZLJyzk5PBd10DUev5Nj9dhAkH6MYrxd3op4s2d3Ix64zOEmNkbc66ogfmbof0qqJ4S8
+         NEluKxH/0lPh1ax8upojualWex0c0FfL793Xb08/pcSEqyKPjNpQKdErN+tWVCHZ1IpF
+         42qY1etdWYWnJ7L83ajCwaG7fuqsbEK4tCnOSU+EMW+X7B9PdHDgNbUkrpIXtFwR+Gnx
+         LANA==
+X-Gm-Message-State: AAQBX9fJkWUfNlM3tn2vlnPa0ZT74Q7ELd9P7JOdAISdo5y8xtBkCfIb
+        j6wjmeEfMQp5kEhd/6oheNg38c6Zs5ngPldXOVo1
+X-Google-Smtp-Source: AKy350ZEFOCwjRsMkv4tCJSQFPlfwfLVNNFZyIK63atBOV/sH54NXrYaRWqhboUJbp5+ys+9+LucpxgK3fri3wARgIs=
+X-Received: by 2002:a05:6902:102a:b0:b71:f49f:8d22 with SMTP id
+ x10-20020a056902102a00b00b71f49f8d22mr8605060ybt.3.1680034806304; Tue, 28 Mar
+ 2023 13:20:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com>
+ <20230314081720.4158676-5-roberto.sassu@huaweicloud.com> <CAHC9VhTD3EyDiJs9+NQrgp84JcUs_sx8WONtRk2YYH4m1C8nVw@mail.gmail.com>
+ <939e6c88662ad90b963993c4cc1b702083e74a7a.camel@huaweicloud.com>
+ <ffc86b3907f7b87d3c568ae62bea3cdb3275be4e.camel@huaweicloud.com>
+ <CAHC9VhRNjvjMOF5KLM6BoGfk=QpEBs_ur_CgRdGL5R1bA-JAwg@mail.gmail.com>
+ <8b63d00d8ac3f686e51889ea4fc8d83f8ecb300d.camel@huaweicloud.com>
+ <CAHC9VhRaKtsM=CuNhDy0Kx0NGSUrVhG+MhwKnHiyJxfgUwx7nA@mail.gmail.com> <1e08006f9011efa48deaf656c358ca3d438b9768.camel@huaweicloud.com>
+In-Reply-To: <1e08006f9011efa48deaf656c358ca3d438b9768.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 28 Mar 2023 16:19:55 -0400
+Message-ID: <CAHC9VhRNWeZtxain_Hi-EfS49Vac8_vg7KRRyV4a9Sq3XPhZsg@mail.gmail.com>
+Subject: Re: [PATCH v8 4/6] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,139 +83,54 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-02-27 at 10:31 +0200, Jarkko Sakkinen wrote:
-> On Thu, Feb 16, 2023 at 03:14:01PM -0500, James Bottomley wrote:
-> > Most complex TPM commands require appending TPM2B buffers to the
-> > command body.  Since TPM2B types are essentially variable size
-> > arrays, it makes it impossible to represent these complex command
-> > arguments as structures and we simply have to build them up using
-> > append primitives like these.
-> > 
-> > Signed-off-by: James Bottomley
-> > <James.Bottomley@HansenPartnership.com>
-> > ---
-> >  drivers/char/tpm/tpm-buf.c | 71
-> > +++++++++++++++++++++++++++++++++++---
-> >  include/linux/tpm.h        |  3 ++
-> >  2 files changed, 69 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-
-> > buf.c
-> > index ca59b92e0f95..292c6f14f72c 100644
-> > --- a/drivers/char/tpm/tpm-buf.c
-> > +++ b/drivers/char/tpm/tpm-buf.c
-> > @@ -7,17 +7,16 @@
-> >  #include <linux/module.h>
-> >  #include <linux/tpm.h>
-> >  
-> > -int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
-> > +static int __tpm_buf_init(struct tpm_buf *buf)
-> >  {
-> >         buf->data = (u8 *)__get_free_page(GFP_KERNEL);
-> >         if (!buf->data)
-> >                 return -ENOMEM;
-> >  
-> >         buf->flags = 0;
-> > -       tpm_buf_reset(buf, tag, ordinal);
-> > +
-> >         return 0;
-> >  }
-> > -EXPORT_SYMBOL_GPL(tpm_buf_init);
-> >  
-> >  void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
-> >  {
-> > @@ -29,17 +28,60 @@ void tpm_buf_reset(struct tpm_buf *buf, u16
-> > tag, u32 ordinal)
-> >  }
-> >  EXPORT_SYMBOL_GPL(tpm_buf_reset);
-> >  
-> > +int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
-> > +{
-> > +       int rc;
-> > +
-> > +       rc = __tpm_buf_init(buf);
-> > +       if (rc)
-> > +               return rc;
-> > +
-> > +       tpm_buf_reset(buf, tag, ordinal);
-> > +
-> > +       return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(tpm_buf_init);
-> > +
-> > +int tpm_buf_init_2b(struct tpm_buf *buf)
-> 
-> kdoc
+On Tue, Mar 28, 2023 at 3:47=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> On Mon, 2023-03-27 at 17:02 -0400, Paul Moore wrote:
+> > On Mon, Mar 27, 2023 at 3:30=E2=80=AFAM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On Fri, 2023-03-24 at 17:39 -0400, Paul Moore wrote:
+> > > > On Fri, Mar 24, 2023 at 9:26=E2=80=AFAM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > On Fri, 2023-03-24 at 11:18 +0100, Roberto Sassu wrote:
+> > > > > > On Thu, 2023-03-23 at 20:09 -0400, Paul Moore wrote:
+> > > > > > > On Tue, Mar 14, 2023 at 4:19=E2=80=AFAM Roberto Sassu
+> > > > > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
 
-I'm currently working on adding kdoc to everything.  However:
+...
 
-> > +{
-> > +       struct tpm_header *head;
-> > +       int rc;
-> > +
-> > +       rc = __tpm_buf_init(buf);
-> > +       if (rc)
-> > +               return rc;
-> > +
-> > +       head = (struct tpm_header *) buf->data;
-> > +
-> > +       head->length = cpu_to_be32(sizeof(*head));
-> > +
-> > +       buf->flags = TPM_BUF_2B;
-> 
-> Please make tpm_buf_init() and tpm_buf_reset() to work for both
-> cases.
+> > Okay, that's fair, but we could still pass the full xattrs array and a
+> > reference to the current count which could be both read and updated by
+> > the individual LSMs, right?
+>
+> Yes, we could do.
+>
+> > The issue is that the separate compaction stage is not something we
+> > want to have to do if we can avoid it.  Maybe we're stuck with it, but
+> > I'm not yet convinced that we can't make some minor changes to the
+> > LSMs to avoid the compaction step.
+>
+> I liked more the idea that LSMs do what they are most familiar with,
+> get an offset in a security blob or, in this case, a starting slot in
+> the new_xattrs array, and write there.
+>
+> v3 had the lsm_find_xattr_slot() helper, to get the starting slot, but
+> somehow I find it less intuitive.
+>
+> Ok, if you prefer to avoid the compaction stage, I will rewrite this
+> patch.
 
-That's not a good idea: tpm_buf_init() and tpm_buf_reset() are used to
-initialize *command* buffers.  tpm_buf_init_2b() is used for parameters
-within commands and can't encompass whole commands, so the arguments
-are different (that's why tpm_buf_init_2b() has no tag or ordinal).
+My concern is having to look through the xattr array after each LSM
+has been run and in at least one case having to then do a memcpy() to
+keep the array packed.  There are some cases where there is no way to
+avoid all that extra work, but here I think we have the LSMs do the
+Right Thing with respect to packing the xattr array without overly
+burdening the individual LSMs.
 
-> This explodes the whole thing into an unmaintainable mess. It is
-> better to have a type as a parameter for tpm_buf_init() and have only
-> single flow instead of open coded and patched variation.
-> 
-> I'd simply just put it as:
-> 
-> struct tpm_buf *tpm_buf_init(u16 tag, u32 ordinal, bool tpm2b)
+Does that make sense?  It basically comes down to being smart about
+our abstractions and both selectively, and carefully, breaking them
+when there is a reasonable performance gain to be had.
 
-The convention in Linux is that it's better to have named initializers
-if we can rather than use less obvious booleans or flags ... think the
-conversion from printk(KERN_ERR, ...) to pr_err(...)
-
-Additionally tag and ordinal have no meaning for a tpm2b, so you're
-really gluing two incompatible initializations into one which is bound
-to cause confusion.
-
-I've no objection in principle to doing a reset of a tpm2b (except,
-again, it has no use for tag or ordinal) but I've just not got any code
-that would use it, so I was leaving it out until someone had an actual
-use case.
-
-[...]
-> > index 150b39b6190e..f2d4dab6d832 100644
-> > --- a/include/linux/tpm.h
-> > +++ b/include/linux/tpm.h
-> > @@ -300,6 +300,7 @@ struct tpm_header {
-> >  
-> >  enum tpm_buf_flags {
-> >         TPM_BUF_OVERFLOW        = BIT(0),
-> > +       TPM_BUF_2B              = BIT(1),
-> >  };
-> 
-> 
-> This is IMHO unnecessary complex.
-> 
-> I think we could just have two bools:
-> 
->         bool overflow;
->         bool tpm2b;
-
-The advice (in the coding-style.rst bool section) is not to do this but
-go the other way (so use flags instead of a string of bools).  The
-reason is that even though bool represents a true/false value, it
-usually takes one machine word (32 bits or sometimes more) to do it, so
-bools tend to bloat structures over single bit fields.
-
-James
-
+--=20
+paul-moore.com
