@@ -2,46 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBBF6CD5D2
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Mar 2023 11:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CEC6CD9EB
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Mar 2023 15:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjC2JEE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Mar 2023 05:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
+        id S229639AbjC2NFM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Mar 2023 09:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjC2JEC (ORCPT
+        with ESMTP id S229739AbjC2NFJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Mar 2023 05:04:02 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C740144BE
-        for <linux-integrity@vger.kernel.org>; Wed, 29 Mar 2023 02:03:34 -0700 (PDT)
-Received: from lhrpeml500003.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PmgYP0c0Kz6J7wn
-        for <linux-integrity@vger.kernel.org>; Wed, 29 Mar 2023 17:02:33 +0800 (CST)
-Received: from mscphispre00062.huawei.com (10.123.70.102) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 29 Mar 2023 10:03:09 +0100
-From:   Denis Semakin <denis.semakin@huawei.com>
-To:     <linux-integrity@vger.kernel.org>
-CC:     <artem.kuzin@huawei.com>, <konstantin.meskhidze@huawei.com>,
-        <ilya.hanov@huawei-partners.com>, <yusongping@huawei.com>,
-        <hukeping@huawei.com>, <denis.semakin@huawei-partners.com>
-Subject: [RFC PATCH v1 1/1] ima: obtain child measurement list from init namespace
-Date:   Wed, 29 Mar 2023 17:03:00 +0800
-Message-ID: <20230329090300.279061-1-denis.semakin@huawei.com>
-X-Mailer: git-send-email 2.38.GIT
-In-Reply-To: <20230127081953.7534-1-ilya.hanov@huawei-partners.com>
-References: <20230127081953.7534-1-ilya.hanov@huawei-partners.com>
+        Wed, 29 Mar 2023 09:05:09 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48414D2;
+        Wed, 29 Mar 2023 06:05:07 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pmmjr17whz9v7bT;
+        Wed, 29 Mar 2023 20:55:12 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCXFABgNyRk2AzcAQ--.1625S2;
+        Wed, 29 Mar 2023 14:04:43 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v9 0/4] evm: Do HMAC of multiple per LSM xattrs for new inodes
+Date:   Wed, 29 Mar 2023 15:04:11 +0200
+Message-Id: <20230329130415.2312521-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.123.70.102]
-X-ClientProxiedBy: mscpeml100002.china.huawei.com (7.188.26.75) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwCXFABgNyRk2AzcAQ--.1625S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3ur48CFyUKrW8Ar1DCFW3Jrb_yoWkCFWfpF
+        WUK3WYkrn8AFWUGrWfAa1xuw4SgrWrGrZrGFZ3Jryjy3Z8Wr1xtrySyry5Ca4rXrZ5JFWv
+        qa17Arn8urn0y37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+        F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+        kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+        xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
+        73UjIFyTuYvjxUxo7KDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4tPOgABsA
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.1 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,341 +65,246 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
----
- security/integrity/ima/ima.h             |   1 +
- security/integrity/ima/ima_fs.c          | 164 ++++++++++++++++++++++-
- security/integrity/ima/ima_init_ima_ns.c |   2 +
- security/integrity/ima/ima_ns.c          |  31 +++++
- 4 files changed, 193 insertions(+), 5 deletions(-)
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index a717be9685ed..b46d6944f6ca 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -178,6 +178,7 @@ struct ima_namespace {
- 	int ima_extra_slots;
- 	struct vpcr_entry vpcr;
- 	uuid_t uuid;
-+	struct dentry *parent_dentry;
- } __randomize_layout;
- extern struct ima_namespace init_ima_ns;
- 
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 570e5d00a454..78d9f967e1f4 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -24,6 +24,7 @@
- #include <linux/ima.h>
- 
- #include "ima.h"
-+#define INUM_BUF_SIZE	16
- 
- extern struct list_head vpcr_list;
- static bool vpcr_mutex_acquired;
-@@ -84,9 +85,8 @@ static const struct file_operations ima_measurements_count_ops = {
- };
- 
- /* returns pointer to hlist_node */
--static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
-+static void *__ima_measurements_start(struct ima_namespace *ns, loff_t *pos)
- {
--	struct ima_namespace *ns = ima_ns_from_file(m->file);
- 	loff_t l = *pos;
- 	struct ima_queue_entry *qe;
- 
-@@ -102,9 +102,16 @@ static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
- 	return NULL;
- }
- 
--static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
-+static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
- {
- 	struct ima_namespace *ns = ima_ns_from_file(m->file);
-+
-+	return __ima_measurements_start(ns, pos);
-+}
-+
-+static void *__ima_measurements_next(struct ima_namespace *ns, void *v,
-+				     loff_t *pos)
-+{
- 	struct ima_queue_entry *qe = v;
- 
- 	/* lock protects when reading beyond last element
-@@ -118,6 +125,13 @@ static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
- 	return (&qe->later == &ns->ima_measurements) ? NULL : qe;
- }
- 
-+static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
-+{
-+	struct ima_namespace *ns = ima_ns_from_file(m->file);
-+
-+	return __ima_measurements_next(ns, v, pos);
-+}
-+
- static void ima_measurements_stop(struct seq_file *m, void *v)
- {
- }
-@@ -237,10 +251,10 @@ void ima_print_digest(struct seq_file *m, u8 *digest, u32 size)
- }
- 
- /* print in ascii */
--static int ima_ascii_measurements_show(struct seq_file *m, void *v)
-+static int __ima_ascii_measurements_show(struct ima_namespace *ns,
-+					 struct seq_file *m, void *v)
- {
- 	/* the list never shrinks, so we don't need a lock here */
--	struct ima_namespace *ns = ima_ns_from_file(m->file);
- 	struct ima_queue_entry *qe = v;
- 	struct ima_template_entry *e;
- 	char *template_name;
-@@ -276,6 +290,13 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
- 	return 0;
- }
- 
-+static int ima_ascii_measurements_show(struct seq_file *m, void *v)
-+{
-+	struct ima_namespace *ns = ima_ns_from_file(m->file);
-+
-+	return __ima_ascii_measurements_show(ns, m, v);
-+}
-+
- static const struct seq_operations ima_ascii_measurements_seqops = {
- 	.start = ima_measurements_start,
- 	.next = ima_measurements_next,
-@@ -706,6 +727,94 @@ static const struct file_operations ima_ascii_vpcr_fops = {
- 	.release = seq_release,
- };
- 
-+static void *child_ns_measure_start(struct seq_file *m, loff_t *pos)
-+{
-+	struct ima_namespace *ns = (struct ima_namespace *)m->private;
-+
-+	return __ima_measurements_start(ns, pos);
-+}
-+
-+static void *child_ns_measure_next(struct seq_file *m, void *v, loff_t *pos)
-+{
-+	struct ima_namespace *ns = (struct ima_namespace *)m->private;
-+
-+	return __ima_measurements_next(ns, v, pos);
-+}
-+
-+static void child_ns_measure_stop(struct seq_file *m, void *v)
-+{
-+}
-+
-+static int ascii_child_ns_measure_show(struct seq_file *m, void *v)
-+{
-+	struct ima_namespace *ns = (struct ima_namespace *)m->private;
-+
-+	return __ima_ascii_measurements_show(ns, m, v);
-+}
-+
-+static int child_ns_measure_show(struct seq_file *m, void *v)
-+{
-+	struct ima_namespace *ns = (struct ima_namespace *)m->private;
-+
-+	return ima_ns_measurements_show(ns, m, v);
-+}
-+
-+
-+const struct seq_operations ascii_child_ns_measure_seqops = {
-+	.start = child_ns_measure_start,
-+	.next  = child_ns_measure_next,
-+	.stop  = child_ns_measure_stop,
-+	.show  = ascii_child_ns_measure_show,
-+};
-+
-+const struct seq_operations child_ns_measure_seqops = {
-+	.start = child_ns_measure_start,
-+	.next  = child_ns_measure_next,
-+	.stop  = child_ns_measure_stop,
-+	.show  = child_ns_measure_show,
-+};
-+
-+static int child_ns_measure_open(struct inode *inode, struct file *filp,
-+				 struct seq_operations *seq_ops)
-+{
-+	int ret;
-+	struct seq_file *m;
-+
-+	ret = seq_open(filp, seq_ops);
-+	if (ret)
-+		return ret;
-+
-+	m = filp->private_data;
-+	m->private = inode->i_private;
-+
-+	return 0;
-+}
-+
-+static int ascii_child_ns_measure_open(struct inode *inode, struct file *filp)
-+{
-+	return child_ns_measure_open(inode, filp,
-+				     &ascii_child_ns_measure_seqops);
-+}
-+static int bin_child_ns_measure_open(struct inode *inode, struct file *filp)
-+{
-+	return child_ns_measure_open(inode, filp, &child_ns_measure_seqops);
-+}
-+
-+
-+static const struct file_operations ascii_ima_child_ns_measure_fops = {
-+	.open = ascii_child_ns_measure_open,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = seq_release,
-+};
-+
-+static const struct file_operations ima_child_ns_measure_fops = {
-+	.open = bin_child_ns_measure_open,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = seq_release,
-+};
-+
- int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
- {
- 	struct ima_namespace *ns = ima_ns_from_user_ns(user_ns);
-@@ -718,6 +827,9 @@ int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
- 	struct dentry *violations = NULL;
- 	struct dentry *binary_vpcr = NULL;
- 	struct dentry *ascii_vpcr = NULL;
-+	struct dentry *child_dir;
-+	struct dentry *child_ascii_dentry;
-+	struct dentry *child_bin_dentry;
- 	int ret;
- 
- 	/*
-@@ -821,6 +933,12 @@ int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
- 			ret = PTR_ERR(ascii_vpcr);
- 			goto out;
- 		}
-+
-+		ns->parent_dentry = securityfs_create_dir("children", ima_dir);
-+		if (IS_ERR(ima_dir)) {
-+			ret = PTR_ERR(ima_dir);
-+			goto out;
-+		}
- 	}
- 
- 	if (!ns->ima_policy_removed) {
-@@ -834,11 +952,47 @@ int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
- 		}
- 	}
- 
-+	if (ns != &init_ima_ns) {
-+		char buf[INUM_BUF_SIZE];
-+		snprintf(buf, INUM_BUF_SIZE, "%u", user_ns->ns.inum);
-+		child_dir =
-+			securityfs_create_dir(buf, init_ima_ns.parent_dentry);
-+
-+		if (IS_ERR(child_dir)) {
-+			ret = PTR_ERR(child_dir);
-+			if (ret != -EEXIST) /* Ignore only EEXIST */
-+				goto out;
-+		} else {
-+			child_ascii_dentry =
-+				securityfs_create_file("ascii_measurement",
-+						S_IRUSR | S_IWUSR | S_IRGRP,
-+						child_dir, ns,
-+						&ascii_ima_child_ns_measure_fops);
-+			if (IS_ERR(child_ascii_dentry)) {
-+				ret = PTR_ERR(child_ascii_dentry);
-+				goto out;
-+			}
-+
-+			child_bin_dentry =
-+				securityfs_create_file("binary_measurement",
-+						    S_IRUSR | S_IWUSR | S_IRGRP,
-+						    child_dir, ns,
-+						    &ima_child_ns_measure_fops);
-+			if (IS_ERR(child_bin_dentry)) {
-+				ret = PTR_ERR(child_bin_dentry);
-+				goto out;
-+			}
-+		}
-+	}
-+
- 	if (!ima_ns_from_user_ns(user_ns))
- 		user_ns_set_ima_ns(user_ns, ns);
- 
- 	return 0;
- out:
-+	securityfs_remove(child_bin_dentry);
-+	securityfs_remove(child_ascii_dentry);
-+	securityfs_remove(child_dir);
- 	securityfs_remove(ascii_vpcr);
- 	securityfs_remove(binary_vpcr);
- 	securityfs_remove(ns->ima_policy);
-diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
-index 53d5539f67d6..c989bbb22a97 100644
---- a/security/integrity/ima/ima_init_ima_ns.c
-+++ b/security/integrity/ima/ima_init_ima_ns.c
-@@ -86,6 +86,8 @@ int ima_init_namespace(struct ima_namespace *ns)
- 		/* Also the child ns inherits the algo array from init ns */
- 		ns->ima_algo_array = init_ima_ns.ima_algo_array;
- 
-+		ns->parent_dentry = init_ima_ns.parent_dentry;
-+
- 		mutex_lock(&vpcr_list_mutex);
- 		list_add_tail(&ns->vpcr.list, &vpcr_list);
- 		mutex_unlock(&vpcr_list_mutex);
-diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
-index 3f65bfbba98d..de49abfdf9e9 100644
---- a/security/integrity/ima/ima_ns.c
-+++ b/security/integrity/ima/ima_ns.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/ima.h>
-+#include <linux/namei.h>
- 
- #include "ima.h"
- 
-@@ -48,11 +49,41 @@ void ima_free_ima_ns(struct ima_namespace *ns)
- 	kmem_cache_free(imans_cachep, ns);
- }
- 
-+#define DENTRY_BUF_SIZE 16
-+
-+static void remove_ima_child_dentry(struct user_namespace *user_ns)
-+{
-+	char inum_dir[DENTRY_BUF_SIZE];
-+	char ascii_fname[DENTRY_BUF_SIZE * 2];
-+	char bin_fname[DENTRY_BUF_SIZE * 2];
-+	struct dentry *dentry_dir, *ascii_file, *bin_file;
-+
-+	snprintf(inum_dir, DENTRY_BUF_SIZE, "%u", user_ns->ns.inum);
-+	snprintf(ascii_fname, DENTRY_BUF_SIZE * 2, "%u/ascii", user_ns->ns.inum);
-+	snprintf(bin_fname, DENTRY_BUF_SIZE * 2, "%u/bin", user_ns->ns.inum);
-+
-+	inode_lock(d_inode(init_ima_ns.parent_dentry));
-+
-+	dentry_dir = lookup_one_len(inum_dir, init_ima_ns.parent_dentry,
-+				    strlen(inum_dir));
-+	ascii_file = lookup_one_len(ascii_fname, init_ima_ns.parent_dentry,
-+				     strlen(ascii_fname));
-+	bin_file = lookup_one_len(bin_fname, init_ima_ns.parent_dentry,
-+				     strlen(bin_fname));
-+
-+	inode_unlock(d_inode(init_ima_ns.parent_dentry));
-+
-+	securityfs_remove(ascii_file);
-+	securityfs_remove(bin_file);
-+	securityfs_remove(dentry_dir);
-+}
-+
- void free_ima_ns(struct user_namespace *user_ns)
- {
- 	struct ima_namespace *ns = ima_ns_from_user_ns(user_ns);
- 
- 	ima_free_ima_ns(ns);
-+	remove_ima_child_dentry(user_ns);
- 
- 	user_ns->ima_ns = NULL;
- }
+One of the major goals of LSM stacking is to run multiple LSMs side by side
+without interfering with each other. The ultimate decision will depend on
+individual LSM decision.
+
+Several changes need to be made to the LSM infrastructure to be able to
+support that. This patch set tackles one of them: gives to each LSM the
+ability to specify one or multiple xattrs to be set at inode creation
+time and, at the same time, gives to EVM the ability to access all those
+xattrs and calculate the HMAC on them.
+
+The first problem that this patch set addresses is to make the
+inode_init_security hook definition suitable to use with EVM which, unlike
+other LSMs, needs to have visibility of all xattrs and not only the one
+that the LSM infrastructure passes to the LSM to be set.
+
+The solution is to replace in the inode_init_security definition the
+name/value/len parameters with the beginning of the array containing all
+xattrs set by LSMs. Due to security_old_inode_init_security() API
+limitation of setting only one xattr, it has been dropped and the remaining
+users, ocfs2 and reiserfs, switch to security_inode_init_security().
+However, due to the complexity of the changes required to fully exploit the
+ability of security_inode_init_security() to set multiple xattrs, those
+users can still set only one xattr (the first set in the xattr array) where
+previously they called security_old_inode_init_security().
+
+Furthermore, while EVM is invoked unlike before, its xattr will not be set
+as it would not be the first set in the xattr array, or if it is the first,
+there would not be protected xattrs to calculate the HMAC on.
+
+Reiserfs, regardless of the switch had anyway another problem: it was
+setting xattrs without the security prefix in the xattr name. That has been
+solved too, by writing the full xattr name in a temporary buffer, before
+passing it to the function which actually writes the xattr.
+
+The second problem this patch set addresses is the limitation of the
+call_int_hook() of stopping the loop when the return value from a hook
+implementation is not zero. Unfortunately, for the inode_init_security hook
+it is a legitimate case to return -EOPNOTSUPP, but this would not
+necessarily mean that there is an error to report to the LSM infrastructure
+but just that an LSM does not will to set an xattr. Other LSMs should be
+still consulted as well.
+
+The solution for this specific case is to replace the call_int_hook() with
+the loop itself, so that -EOPNOTSUPP can be ignored. In addition, the
+default return value of inode_init_security had also to be changed to
+-EOPNOTSUPP, so that the whole security_inode_init_security() does not fail
+due to BPF LSM returning zero and not providing an xattr.
+
+Next, this patch set removes the limitation of creating only two xattrs,
+one by an active LSM and another by EVM. This patch set extends the
+reservation mechanism of the LSM infrastructure, to allow each LSM to
+request one or multiple xattrs. While this could potentially lead to
+reaching the filesystem limits of number/size of the xattrs, it seems not
+an issue that need to be solved by the LSM infrastructure but by the
+filesystems themselves. Currently, if the limit is reached, the only
+workaround would be to use fewer LSMs.
+
+The reservation mechanism concept would have made it very easy for LSMs to
+position themselves correctly in the xattr array, as the LSM infrastructure
+at initialization time changes the number of xattrs requested by each LSM
+with an offset.
+
+However, this opens for the possibility of having gaps in the xattr array,
+due to the fact that an LSM can request xattr slots to the LSM
+infrastructure but not fill them (if it was loaded but not initialized).
+
+Instead, the decision was to add an additional parameter to the
+inode_init_security_hook, the number of filled slots in the xattr array,
+which each LSM is expected to update for each xattr it provides. In this
+way, the next LSM starts to fill after the last filled slot, regardless of
+whether previous LSMs were initialized or not. SELinux, Smack and EVM have
+been updated to use this new mechanism.
+
+Finally, this patch set modifies the evm_inode_init_security() definition
+to be compatible with the inode_init_security hook definition and adds
+support for scanning the whole xattr array and for calculating the HMAC
+on all xattrs provided by LSMs.
+
+This patch set has been tested by introducing several instances of a
+TestLSM (some providing an xattr, some not, one with a wrong implementation
+to see how the LSM infrastructure handles it, one providing multiple xattrs
+and another providing an xattr but in a disabled state). The patch is not
+included in this set but it is available here:
+
+https://github.com/robertosassu/linux/commit/8fba3224e3f7698114ae721fb8e899d322cc1f4c
+
+The test, added to ima-evm-utils, is available here:
+
+https://github.com/robertosassu/ima-evm-utils/blob/evm-multiple-lsms-v9-devel-v2/tests/evm_multiple_lsms.test
+
+The test takes a UML kernel built by Github Actions and launches it several
+times, each time with a different combination of LSMs and filesystems (ext4,
+reiserfs, ocfs2). After boot, it first checks that there is an xattr for each
+LSM providing it (for reiserfs and ocfs2 just the first LSM), and then (for
+ext4) calculates the HMAC in user space and compares it with the HMAC
+calculated by EVM in kernel space.
+
+A test report can be obtained here:
+
+https://github.com/robertosassu/ima-evm-utils/actions/runs/4553749294/jobs/8030902168
+
+The patch set has been tested with both the SElinux and Smack test suites.
+Below, there is the summary of the test results:
+
+SELinux Test Suite result (without patches):
+All tests successful.
+Files=76, Tests=1357, 229 wallclock secs ( 0.45 usr  0.12 sys + 12.76 cusr 16.03 csys = 29.36 CPU)
+Result: PASS
+
+SELinux Test Suite result (with patches):
+All tests successful.
+Files=76, Tests=1357, 231 wallclock secs ( 0.48 usr  0.11 sys + 12.44 cusr 16.21 csys = 29.24 CPU)
+Result: PASS
+
+Smack Test Suite result (without patches):
+95 Passed, 0 Failed, 100% Success rate
+
+Smack Test Suite result (with patches):
+95 Passed, 0 Failed, 100% Success rate
+
+Changelog
+
+v8:
+- Add a new reiserfs patch to write the full xattr name
+- Add num_filled_xattrs parameter to inode_init_security hook (suggested by
+  Paul) and evm_inode_init_security()
+- Change default return value of inode_init_security hook to -EOPNOTSUPP
+- Rename lbs_xattr field of lsm_blob_sizes to lbs_xattr_count
+- Introduce lsm_find_xattr_slot() helper
+- Rename lsm_xattr parameter of evm_init_hmac() to xattrs
+- Retrieve the EVM xattr slot with lsm_find_xattr_slot() and double check
+  with the xattr array terminator
+- Remove security_check_compact_filled_xattrs() (suggested by Paul)
+- Update security_inode_init_security() documentation
+- Ensure that inode_init_security hook incremented the number of filled
+  slots if it returned zero
+- Ensure that xattr name and value are non-NULL in the filled slots
+- Add the xattr name assignment after the xattr value one (suggested by
+  Paul)
+- Drop patches 1 - 3 (already in lsm/next)
+
+v7:
+- Add a patch dependency comment in patch 1 (suggested by Mimi)
+- Restore check of -EOPNOTSUPP status in ocfs2_mknod() and ocfs2_symlink()
+  (reported by Mimi)
+- Add explanation in evm_inode_init_security() why walking through the
+  xattrs array is safe (suggested by Mimi)
+- Document the lbs_xattr field of struct lsm_blob_sizes (suggested by
+  Casey)
+- Move documentation changes of the inode_init_security hook to security.c,
+  after LSM documentation reorganization by Paul
+- Use attributes in plural form in the description of the xattrs parameter
+  of smack_inode_init_security()
+- Check xattr name instead of xattr value in evm_inode_init_security(),
+  for consistency with evm_init_hmac(); equivalent, since
+  security_check_compact_filled_xattrs() rejects xattrs with xattr name
+  NULL and value not NULL, and viceversa
+
+v6:
+- Add a comment in Smack to introduce its xattrs (suggested by Casey)
+- Document the overloaded meaning of -EOPNOTSUPP in
+  security_inode_init_security() (suggested by Mimi)
+
+v5:
+- Modify the cover letter to explain that the goal of this patch set is
+  supporting multiple per LSM xattrs in EVM, and not moving IMA and EVM to
+  the LSM infrastructure (suggested by Mimi)
+- Remove references in the patches description about moving IMA and EVM
+  to the LSM infrastructure (suggested by Mimi)
+- Explain that the additional EVM invocation due to the switch to
+  security_inode_init_security() will not cause the EVM xattr to be added
+  (suggested by Mimi)
+
+v4:
+- Remove patch to call reiserfs_security_free(), already queued
+- Switch ocfs2 and reiserfs to security_inode_init_security() (suggested by
+  Mimi)
+- Remove security_old_inode_init_security() (suggested by Paul)
+- Rename security_check_compact_xattrs() to
+  security_check_compact_filled_xattrs() and add function description
+  (suggested by Mimi)
+- Rename checked_xattrs parameter of security_check_compact_filled_xattrs()
+  to num_filled_xattrs (suggested by Mimi)
+- Rename cur_xattrs variable in security_inode_init_security() to
+  num_filled_xattrs (suggested by Mimi)
+
+v3:
+- Don't free the xattr name in reiserfs_security_free()
+- Don't include fs_data parameter in inode_init_security hook
+- Don't change evm_inode_init_security(), as it will be removed if EVM is
+  stacked
+- Fix inode_init_security hook documentation
+- Drop lsm_find_xattr_slot(), use simple xattr reservation mechanism and
+  introduce security_check_compact_xattrs() to compact the xattr array
+- Don't allocate xattr array if LSMs didn't reserve any xattr
+- Return zero if initxattrs() is not provided to
+  security_inode_init_security(), -EOPNOTSUPP if value is not provided to
+  security_old_inode_init_security()
+- Request LSMs to fill xattrs if only value (not the triple) is provided to
+  security_old_inode_init_security(), to avoid unnecessary memory
+  allocation
+
+v2:
+- rewrite selinux_old_inode_init_security() to use
+  security_inode_init_security()
+- add lbs_xattr field to lsm_blob_sizes structure, to give the ability to
+  LSMs to reserve slots in the xattr array (suggested by Casey)
+- add new parameter base_slot to inode_init_security hook definition
+
+v1:
+- add calls to reiserfs_security_free() and initialize sec->value to NULL
+  (suggested by Tetsuo and Mimi)
+- change definition of inode_init_security hook, replace the name, value
+  and len triple with the xattr array (suggested by Casey)
+- introduce lsm_find_xattr_slot() helper for LSMs to find an unused slot in
+  the passed xattr array
+
+Roberto Sassu (4):
+  reiserfs: Add security prefix to xattr name in
+    reiserfs_security_write()
+  security: Allow all LSMs to provide xattrs for inode_init_security
+    hook
+  evm: Align evm_inode_init_security() definition with LSM
+    infrastructure
+  evm: Support multiple LSMs providing an xattr
+
+ fs/reiserfs/xattr_security.c        |  8 ++-
+ include/linux/evm.h                 | 14 +++--
+ include/linux/lsm_hook_defs.h       |  6 +-
+ include/linux/lsm_hooks.h           | 14 +++++
+ security/integrity/evm/evm.h        |  4 +-
+ security/integrity/evm/evm_crypto.c | 11 +++-
+ security/integrity/evm/evm_main.c   | 41 ++++++++++---
+ security/security.c                 | 94 ++++++++++++++++++++++-------
+ security/selinux/hooks.c            | 18 +++---
+ security/smack/smack_lsm.c          | 33 ++++++----
+ 10 files changed, 179 insertions(+), 64 deletions(-)
+
 -- 
-2.38.GIT
+2.25.1
 
