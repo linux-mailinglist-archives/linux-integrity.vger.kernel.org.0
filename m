@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700C76CF644
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Mar 2023 00:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C656CF67C
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Mar 2023 00:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjC2WSr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Mar 2023 18:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
+        id S229484AbjC2Wkq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Mar 2023 18:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjC2WSr (ORCPT
+        with ESMTP id S229519AbjC2Wkp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Mar 2023 18:18:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4C55251;
-        Wed, 29 Mar 2023 15:18:45 -0700 (PDT)
+        Wed, 29 Mar 2023 18:40:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87758DF;
+        Wed, 29 Mar 2023 15:40:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F9F0B820FC;
-        Wed, 29 Mar 2023 22:18:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5989C433EF;
-        Wed, 29 Mar 2023 22:18:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2895661E7C;
+        Wed, 29 Mar 2023 22:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BD9C433EF;
+        Wed, 29 Mar 2023 22:40:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680128323;
-        bh=LPKXNP+sV6Paa9ixM06V+mjOA1SRzRyMcJDWgx2RNSY=;
+        s=k20201202; t=1680129643;
+        bh=r2Bu7SOHZYY6vqkwLuAPr4UshEnubGbGM1rQHHmqeGY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sFcQapHIc9bvQSPY97pmEtiVTYOa1MVH04gcgBdbcelaXnuBIl0j4XUVgp4h33ZV4
-         pBHKyHjvzZZu5AaPK521AUZqzmenrPBxkLlGFCa+BGQK8b1L+FUOeOniMlK3zCsMja
-         RQIzQI5TtlYYhXBXwHY1Q9A4Ipm9x8K3aIfDG7IlS4xdCX73YHzeZOeUOf79AxDu1u
-         0F4o58j/FYrqYHyRONLQWSTSEpJ4WUY6FM4v2xD8BGeetRgft8igyUEH5D3NS5TVSl
-         JkUOmUJnWgr0+tbpu74OfvfNQwNXCX3uTSwtmmVVTrtzoEQlalhmisNMsq3txJy8jK
-         RySSu6RSeXj1g==
-Date:   Thu, 30 Mar 2023 01:18:40 +0300
+        b=CmI/TUhkfQJ1NbA3bMrEIa1UXewlgGXwIglRtpY5ZAf1IwpasV7gKTfZshIfkbNxc
+         suT9mkz2WlyJpFa7ajsjebqC6EImIQkJUkI2hipatLgCrKjhZTPm3d6xIHXWMJF7Gp
+         GcN3YfZH45NHWm+ympobTODC/t2dUnxppDPwW6axEM+mYqbxhfCkZL9VjcxYfhI50T
+         9vqrgRUu9xRZSlhnyZ3LkJ6MecH4QTxSRrKUZITzw5GBJr72qJhksxSmef4josT9op
+         idPaD4XzGGPIVRd07sEXCazGCmuY8FZjBwTdeZLdeQLopj4KfiXEkNFA9YVyjq2OzI
+         TWOU3NUevLYIw==
+Date:   Thu, 30 Mar 2023 01:40:40 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
 Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
@@ -41,15 +41,16 @@ Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         thierry.reding@gmail.com, jonathanh@nvidia.com,
         skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V9 0/3] Tegra TPM driver with HW flow control
-Message-ID: <20230329221840.dijkt2jnww6e45rg@kernel.org>
+Subject: Re: [Patch V9 1/3] spi: Add TPM HW flow flag
+Message-ID: <20230329224040.5junvjsyqwfcmbyc@kernel.org>
 References: <20230325183409.7695-1-kyarlagadda@nvidia.com>
+ <20230325183409.7695-2-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230325183409.7695-1-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20230325183409.7695-2-kyarlagadda@nvidia.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,68 +58,65 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 12:04:06AM +0530, Krishna Yarlagadda wrote:
-> TPM devices may insert wait state on last clock cycle of ADDR phase.
-> For SPI controllers that support full-duplex transfers, this can be
-> detected using software by reading the MISO line. For SPI controllers
-> that only support half-duplex transfers, such as the Tegra QSPI, it is
-> not possible to detect the wait signal from software. The QSPI
-> controller in Tegra234 and Tegra241 implement hardware detection of the
-> wait signal which can be enabled in the controller for TPM devices.
+On Sun, Mar 26, 2023 at 12:04:07AM +0530, Krishna Yarlagadda wrote:
+> TPM specification [1] defines flow control over SPI. Client device can
+> insert a wait state on MISO when address is transmitted by controller
+> on MOSI. Detecting the wait state in software is only possible for
+> full duplex controllers. For controllers that support only half-
+> duplex, the wait state detection needs to be implemented in hardware.
 > 
-> Add HW flow control in TIS driver and a flag in SPI data to indicate
-> wait detection is required in HW. SPI controller driver determines if
-> this is supported. Add HW detection in Tegra QSPI controller.
+> Add a flag SPI_TPM_HW_FLOW for TPM device to set when software flow
+> control is not possible and hardware flow control is expected from
+> SPI controller.
 > 
-> Updates in this patch set 
->  - Tegra QSPI identifies itself as half duplex.
->  - TPM TIS SPI driver skips flow control for half duplex and send
->    transfers in single message for controller to handle it.
->  - TPM device identifies as TPM device for controller to detect and
->    enable HW TPM wait poll feature.
+> Reference:
+> [1] https://trustedcomputinggroup.org/resource/pc-client-work-group-
+> pc-client-specific-tpm-interface-specification-tis/
 > 
-> Verified with a TPM device on Tegra241 ref board using TPM2 tools.
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> ---
+>  include/linux/spi/spi.h | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
 > 
-> V9
->  - renamed tpm spi transfer functions
-> V8:
->  - fix compile warning.
-> V7:
->  - updated patch description.
->  - TPM flag set in probe.
->  - minor comments.
-> V6:
->  - Fix typo in chip name Tegra234.
->  - Debug logs change skipped to be sent later.
->  - Consistent usage of soc flag.
-> V5:
->  - No SPI bus locking.
-> V4:
->  - Split api change to different patch.
->  - Describe TPM HW flow control.
-> V3:
->  - Use SPI device mode flag and SPI controller flags.
->  - Drop usage of device tree flags.
->  - Generic TPM half duplex controller handling.
->  - HW & SW flow control for TPM. Drop additional driver.
-> V2:
->  - Fix dt schema errors.
-> 
-> Krishna Yarlagadda (3):
->   spi: Add TPM HW flow flag
->   tpm_tis-spi: Add hardware wait polling
->   spi: tegra210-quad: Enable TPM wait polling
-> 
->  drivers/char/tpm/tpm_tis_spi_main.c | 91 ++++++++++++++++++++++++++++-
->  drivers/spi/spi-tegra210-quad.c     | 14 +++++
->  include/linux/spi/spi.h             | 16 ++++-
->  3 files changed, 116 insertions(+), 5 deletions(-)
-> 
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 873ced6ae4ca..cfe42f8cd7a4 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -184,8 +184,18 @@ struct spi_device {
+>  	u8			chip_select;
+>  	u8			bits_per_word;
+>  	bool			rt;
+> -#define SPI_NO_TX	BIT(31)		/* No transmit wire */
+> -#define SPI_NO_RX	BIT(30)		/* No receive wire */
+> +#define SPI_NO_TX		BIT(31)		/* No transmit wire */
+> +#define SPI_NO_RX		BIT(30)		/* No receive wire */
+> +	/*
+> +	 * TPM specification defines flow control over SPI. Client device
+> +	 * can insert a wait state on MISO when address is transmitted by
+> +	 * controller on MOSI. Detecting the wait state in software is only
+> +	 * possible for full duplex controllers. For controllers that support
+> +	 * only half-duplex, the wait state detection needs to be implemented
+> +	 * in hardware. TPM devices would set this flag when hardware flow
+> +	 * control is expected from SPI controller.
+> +	 */
+> +#define SPI_TPM_HW_FLOW		BIT(29)		/* TPM HW flow control */
+>  	/*
+>  	 * All bits defined above should be covered by SPI_MODE_KERNEL_MASK.
+>  	 * The SPI_MODE_KERNEL_MASK has the SPI_MODE_USER_MASK counterpart,
+> @@ -195,7 +205,7 @@ struct spi_device {
+>  	 * These bits must not overlap. A static assert check should make sure of that.
+>  	 * If adding extra bits, make sure to decrease the bit index below as well.
+>  	 */
+> -#define SPI_MODE_KERNEL_MASK	(~(BIT(30) - 1))
+> +#define SPI_MODE_KERNEL_MASK	(~(BIT(29) - 1))
+>  	u32			mode;
+>  	int			irq;
+>  	void			*controller_state;
 > -- 
 > 2.17.1
 > 
 
-Looks quite sane to me. Can anyone peer test these (i.e. provide
-tested-by)?
+
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
