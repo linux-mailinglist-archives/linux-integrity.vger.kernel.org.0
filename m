@@ -2,152 +2,212 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED5A6CF617
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Mar 2023 00:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736EC6CF63C
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Mar 2023 00:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjC2WCm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Mar 2023 18:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S230296AbjC2WQo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Mar 2023 18:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjC2WCh (ORCPT
+        with ESMTP id S229525AbjC2WQn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Mar 2023 18:02:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAF640CB;
-        Wed, 29 Mar 2023 15:02:36 -0700 (PDT)
+        Wed, 29 Mar 2023 18:16:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F8A4C2B;
+        Wed, 29 Mar 2023 15:16:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FF0EB82340;
-        Wed, 29 Mar 2023 22:02:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2E3C433D2;
-        Wed, 29 Mar 2023 22:02:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7872FCE1AD9;
+        Wed, 29 Mar 2023 22:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F01C433EF;
+        Wed, 29 Mar 2023 22:16:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680127354;
-        bh=OPo9sN5zimeGshEw5ozbepDahpS2FQOu8mYPSuSsopg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tasVUR3w/7HbUcUvL71+kUUOR2MiGkb6hDmAOpNYol06pl/SoE9IuDRPp0KFThY9V
-         fveh77XYXgcolVwkJ+lcc6KNHqprlC/97bIAl9y1crNi6vFIRrsJ3vqSc3nevdsgXs
-         ebw7rAEbJ6PwVkQz5fQAeVUP1ORyGCzBLTFgV9JhoTHKqH9sLZN98DvrfDO42PNUxx
-         LQ8iXzXM3eyfRp+1hf6x1EaHv6REJ8kXIi15E2cxN4ggo0Cg1BtsQJniNVlvCUygoZ
-         l4eA3F4v8hxotquzPMr4YsDxWgNxG35HQQUipge4NNqeAnfBnKLW0uj/X1SdaQMxa4
-         /qPjrnWm6XIjA==
-Date:   Thu, 30 Mar 2023 01:02:31 +0300
+        s=k20201202; t=1680128198;
+        bh=qEzWWxe3urV5mH4fniwtoC5mrsTPABA1ybxLsxhpVxI=;
+        h=Date:From:To:Cc:From;
+        b=KybuRhACBdxfmbi2RI38GbS1qwi8My813WI8etEamc0jo12a0GgEDZAi+BWHBHu5h
+         h792VHG0xfwoLqcrofdMjZUf7P89K5JwQNYjyNPDyfO/F3XnGBWKDEdS3b0ZsHw/fh
+         uPBSRYYfbP1uFqhF8/JlUTUXK3JYUwHXNdS2F22Pk1ZQxY1fzzmtcwDk3CNAwskqQF
+         XfmDzgmv8OZV4BxUyJRzycCuIyd+8jhatqs7ZllSqw9jLb0z7HlJU8u6KN8LJyKK9P
+         7NdjHP9RCv+C2lj/3dB/T88+iiIaMxqEF26TSz/b+Ea4kLb8NhfQoLr1bFDJvCdjr1
+         TnIgNaaUaSKmA==
+Date:   Thu, 30 Mar 2023 01:16:35 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, kanth.ghatraju@oracle.com,
-        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
-        coxu@redhat.com, jlee@suse.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v6 0/6] Add CA enforcement keyring restrictions
-Message-ID: <20230329220231.h6afgarrvdlwwdjc@kernel.org>
-References: <20230322161634.2233838-1-eric.snowberg@oracle.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Message-ID: <20230329221635.eh4x764ec5iiu3q7@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230322161634.2233838-1-eric.snowberg@oracle.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_SUBJECT,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:16:28PM -0400, Eric Snowberg wrote:
-> Prior to the introduction of the machine keyring, most distros simply 
-> allowed all keys contained within the platform keyring to be used
-> for both kernel and module verification.  This was done by an out of
-> tree patch.  Some distros took it even further and loaded all these keys
-> into the secondary trusted keyring.  This also allowed the system owner 
-> to add their own key for IMA usage.
-> 
-> Each distro contains similar documentation on how to sign kernel modules
-> and enroll the key into the MOK.  The process is fairly straightforward.
-> With the introduction of the machine keyring, the process remains
-> basically the same, without the need for any out of tree patches.
-> 
-> The machine keyring allowed distros to eliminate the out of tree patches
-> for kernel module signing.  However, it falls short in allowing the end 
-> user to add their own keys for IMA. Currently, the machine keyring can not 
-> be used as another trust anchor for adding keys to the ima keyring, since 
-> CA enforcement does not currently exist.  This would expand the current 
-> integrity gap. The IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY 
-> Kconfig states that keys may be added to the ima keyrings if the key is 
-> validly signed by a CA cert in the system built-in or secondary trusted 
-> keyring.  Currently, there is not code that enforces the contents of a
-> CA cert.
-> 
-> This series introduces a way to do CA enforcement with the machine
-> keyring.  It introduces three different ways to configure the machine
-> keyring.  New Kconfig options are added to control the types of keys
-> that may be added to it.  The default option allows all MOK keys into the
-> machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING is selected,
-> the X.509 CA bit must be true and the key usage must contain keyCertSign; 
-> any other usage field may also be set.  When
-> CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is also selected, the X.509 CA
-> bit must be true and the key usage must contain keyCertSign. With this
-> option digitialSignature usage may not be set.  If a key doesn't pass 
-> the CA restriction check, instead of going into the machine keyring, it 
-> is added to the platform keyring.  With the ability to configure the
-> machine keyring with CA restrictions, code that prevented the machine
-> keyring from being enabled with
-> IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY has been removed.
-> 
-> Changelog:
-> v6:
-> - No new code changes
-> - Added Reviewed-by and ACKs
-> - Formatting change requested by Jarkko
-> 
-> v5:
-> - Removed the Kconfig _MIN Kconfig option and split it into different
->   entries.
-> - Added requested commit message changes
-> 
-> v4:
-> - Removed all code that validated the certificate chain back to the root
->   CA. Now the only restriction is what is initially placed in the
->   machine keyring.
-> - Check and store if the X.509 usage contains digitalSignature
-> - New Kconfig menu item with none, min and max CA restriction on the 
->   machine keyring
-> 
-> v3:
-> - Allow Intermediate CA certs to be enrolled through the MOK. The
->   Intermediate CA cert must contain keyCertSign key usage and have the 
->   CA bit set to true. This was done by removing the self signed
->   requirement.
-> 
-> Eric Snowberg (6):
->   KEYS: Create static version of public_key_verify_signature
->   KEYS: Add missing function documentation
->   KEYS: X.509: Parse Basic Constraints for CA
->   KEYS: X.509: Parse Key Usage
->   KEYS: CA link restriction
->   integrity: machine keyring CA configuration
-> 
->  certs/system_keyring.c                    | 14 +++++--
->  crypto/asymmetric_keys/restrict.c         | 45 ++++++++++++++++++++
->  crypto/asymmetric_keys/x509_cert_parser.c | 50 +++++++++++++++++++++++
->  include/crypto/public_key.h               | 28 +++++++++++++
->  security/integrity/Kconfig                | 23 ++++++++++-
->  security/integrity/digsig.c               |  8 +++-
->  6 files changed, 162 insertions(+), 6 deletions(-)
-> 
-> 
-> base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
-> -- 
-> 2.27.0
-> 
+Bcc:
+Subject: Re: [PATCH 03/12] tpm: add buffer handling for TPM2B types
+Reply-To:
+In-Reply-To: <981c339a6f09cd16a1d677e0fc2df1bdf1a5baec.camel@HansenPartnership.com>
 
-I can pick this, and I guess I can add Mimi's tested-by's to all of the
-patches?
+On Tue, Mar 28, 2023 at 03:42:09PM -0400, James Bottomley wrote:
+> On Mon, 2023-02-27 at 10:31 +0200, Jarkko Sakkinen wrote:
+> > On Thu, Feb 16, 2023 at 03:14:01PM -0500, James Bottomley wrote:
+> > > Most complex TPM commands require appending TPM2B buffers to the
+> > > command body.  Since TPM2B types are essentially variable size
+> > > arrays, it makes it impossible to represent these complex command
+> > > arguments as structures and we simply have to build them up using
+> > > append primitives like these.
+> > > 
+> > > Signed-off-by: James Bottomley
+> > > <James.Bottomley@HansenPartnership.com>
+> > > ---
+> > >  drivers/char/tpm/tpm-buf.c | 71
+> > > +++++++++++++++++++++++++++++++++++---
+> > >  include/linux/tpm.h        |  3 ++
+> > >  2 files changed, 69 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-
+> > > buf.c
+> > > index ca59b92e0f95..292c6f14f72c 100644
+> > > --- a/drivers/char/tpm/tpm-buf.c
+> > > +++ b/drivers/char/tpm/tpm-buf.c
+> > > @@ -7,17 +7,16 @@
+> > >  #include <linux/module.h>
+> > >  #include <linux/tpm.h>
+> > >  
+> > > -int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
+> > > +static int __tpm_buf_init(struct tpm_buf *buf)
+> > >  {
+> > >         buf->data = (u8 *)__get_free_page(GFP_KERNEL);
+> > >         if (!buf->data)
+> > >                 return -ENOMEM;
+> > >  
+> > >         buf->flags = 0;
+> > > -       tpm_buf_reset(buf, tag, ordinal);
+> > > +
+> > >         return 0;
+> > >  }
+> > > -EXPORT_SYMBOL_GPL(tpm_buf_init);
+> > >  
+> > >  void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
+> > >  {
+> > > @@ -29,17 +28,60 @@ void tpm_buf_reset(struct tpm_buf *buf, u16
+> > > tag, u32 ordinal)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(tpm_buf_reset);
+> > >  
+> > > +int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
+> > > +{
+> > > +       int rc;
+> > > +
+> > > +       rc = __tpm_buf_init(buf);
+> > > +       if (rc)
+> > > +               return rc;
+> > > +
+> > > +       tpm_buf_reset(buf, tag, ordinal);
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(tpm_buf_init);
+> > > +
+> > > +int tpm_buf_init_2b(struct tpm_buf *buf)
+> > 
+> > kdoc
+> 
+> I'm currently working on adding kdoc to everything.  However:
+> 
+> > > +{
+> > > +       struct tpm_header *head;
+> > > +       int rc;
+> > > +
+> > > +       rc = __tpm_buf_init(buf);
+> > > +       if (rc)
+> > > +               return rc;
+> > > +
+> > > +       head = (struct tpm_header *) buf->data;
+> > > +
+> > > +       head->length = cpu_to_be32(sizeof(*head));
+> > > +
+> > > +       buf->flags = TPM_BUF_2B;
+> > 
+> > Please make tpm_buf_init() and tpm_buf_reset() to work for both
+> > cases.
+> 
+> That's not a good idea: tpm_buf_init() and tpm_buf_reset() are used to
+> initialize *command* buffers.  tpm_buf_init_2b() is used for parameters
+> within commands and can't encompass whole commands, so the arguments
+> are different (that's why tpm_buf_init_2b() has no tag or ordinal).
+
+Hmm... OK, I get this. I think this would a really good documentation
+for this function to make it dead obvious.
+
+> > This explodes the whole thing into an unmaintainable mess. It is
+> > better to have a type as a parameter for tpm_buf_init() and have only
+> > single flow instead of open coded and patched variation.
+> > 
+> > I'd simply just put it as:
+> > 
+> > struct tpm_buf *tpm_buf_init(u16 tag, u32 ordinal, bool tpm2b)
+> 
+> The convention in Linux is that it's better to have named initializers
+> if we can rather than use less obvious booleans or flags ... think the
+> conversion from printk(KERN_ERR, ...) to pr_err(...)
+> 
+> Additionally tag and ordinal have no meaning for a tpm2b, so you're
+> really gluing two incompatible initializations into one which is bound
+> to cause confusion.
+> 
+> I've no objection in principle to doing a reset of a tpm2b (except,
+> again, it has no use for tag or ordinal) but I've just not got any code
+> that would use it, so I was leaving it out until someone had an actual
+> use case.
+> 
+> [...]
+> > > index 150b39b6190e..f2d4dab6d832 100644
+> > > --- a/include/linux/tpm.h
+> > > +++ b/include/linux/tpm.h
+> > > @@ -300,6 +300,7 @@ struct tpm_header {
+> > >  
+> > >  enum tpm_buf_flags {
+> > >         TPM_BUF_OVERFLOW        = BIT(0),
+> > > +       TPM_BUF_2B              = BIT(1),
+> > >  };
+> > 
+> > 
+> > This is IMHO unnecessary complex.
+> > 
+> > I think we could just have two bools:
+> > 
+> >         bool overflow;
+> >         bool tpm2b;
+> 
+> The advice (in the coding-style.rst bool section) is not to do this but
+> go the other way (so use flags instead of a string of bools).  The
+> reason is that even though bool represents a true/false value, it
+> usually takes one machine word (32 bits or sometimes more) to do it, so
+> bools tend to bloat structures over single bit fields.
+
+I'm in process getting this tested ASAP. For past two weeks I've been putting
+together a better QA environment for TPM so that I can run same tests with
+NUC, Rapsberry PI3B, QEMU (for 1.2, I do not possess hardware chip anymore,
+would be good to get one though), and possibly later Vision Quest 2
+RISC-V board.
+
+I was planning to get this, Lino's patch set, and reproduce bug reported
+by Jason over the weekend but unfortunately got sick on Friday, and was
+back at work on Tue. Anyway, please have some patience and I'll get over
+these :-)
+
+I think this new QA will over time pay itself back.
 
 BR, Jarkko
