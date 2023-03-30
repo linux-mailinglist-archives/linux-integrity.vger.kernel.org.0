@@ -2,179 +2,202 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4915C6CF836
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Mar 2023 02:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E37C96CFB2D
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Mar 2023 08:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjC3AZk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Mar 2023 20:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S230024AbjC3GCp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Mar 2023 02:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjC3AZk (ORCPT
+        with ESMTP id S229717AbjC3GCo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Mar 2023 20:25:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8F21FED
-        for <linux-integrity@vger.kernel.org>; Wed, 29 Mar 2023 17:25:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CBB761EA4
-        for <linux-integrity@vger.kernel.org>; Thu, 30 Mar 2023 00:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF3CC433D2;
-        Thu, 30 Mar 2023 00:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680135937;
-        bh=25ZJMrTw3QsyGmG3wewPCga8phpYFesiLGZ3PD69QF8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hcovzbTiSErnEjZeWz28BiwFnJ9k+G/5VRFWqyPxwnuzlvY5tAxsFnOqVsSqvN3JX
-         pjFg/4i2W5xlGq6OaLfUyRGoNzhEg7v9IuRf7vG+OA/9F1JQjcRjO0+DUNAAmt3CxS
-         e0MIaM8hy4lxTDSerRrSBvYfAEcibgZEznCFuIitoqLW+3raNbPHOfWvO2xnghvYes
-         2RXprNqJxxT4j5oLocKYkKHnAE4JSq+f+BjGetJHLEFeqfk5tCCXuXWiGrdBiGxJ5C
-         XT/rusT68fnzBr8gIHWnISvF+xRAaovyoXjPxDyYQ6ABBddO8ncufsg13x3dRnaik+
-         IDWgXEPkwcANQ==
-Date:   Thu, 30 Mar 2023 03:25:34 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-integrity@vger.kernel.org,
-        Haris Okanovic <haris.okanovic@ni.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] tpm_tis: fix stall after iowrite*()s
-Message-ID: <20230330002534.teqpltcmpkdms72t@kernel.org>
-References: <20230323153436.B2SATnZV@linutronix.de>
+        Thu, 30 Mar 2023 02:02:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0E761B5;
+        Wed, 29 Mar 2023 23:02:30 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U5cVhZ015618;
+        Thu, 30 Mar 2023 06:02:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=D8BLJKqTKr4rrKXsGkt3MWAUhN1P3ddzzG00QTMTrcA=;
+ b=CIgbVvP8nY4lSzLuwgFNXcbkpi0+yT2OAzGlRC+5Xf1sH7i6BE+m1AZPjX0MYkzPllSt
+ iNNjguigA39uPBENAZfX1cB+KjR28PFsjmCGwPLFGJr49g9+YGRqtNtv96m0zXmA2p4d
+ UfEKZUxd5z5TVgV4ugp9aELRGs0Xpk/1fJNSBTUXQyp4TrDXBDpSw+gW8CsoGig1rPO1
+ mRNiPHxZw7YXc8+AY1VbYpXdoCETJtfUyM1n24NZ/dq9O7G2hjSXiOPCcyc+vyAkox/t
+ bA17STqHKwXVy9rH7r+tte/exp1PVFL9ImCHQP5hWw5D4uXi3zzD/ZgQI6UxmPCMGWck rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmph951bn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 06:02:01 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32U5qwwR026070;
+        Thu, 30 Mar 2023 06:02:01 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pmph951au-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 06:02:00 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32U2JgfY002608;
+        Thu, 30 Mar 2023 06:01:59 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3phrk7jc4t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 06:01:59 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32U61wF239322280
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Mar 2023 06:01:58 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8AFCF580FF;
+        Thu, 30 Mar 2023 06:01:58 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE5DF580F9;
+        Thu, 30 Mar 2023 06:01:53 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.174.114])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 30 Mar 2023 06:01:53 +0000 (GMT)
+Message-ID: <55b5c21ee1cf47aff0b2e5a94ec65fe326c8d6ba.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 5/6] KEYS: CA link restriction
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "pvorel@suse.cz" <pvorel@suse.cz>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        "erpalmer@linux.vnet.ibm.com" <erpalmer@linux.vnet.ibm.com>,
+        "coxu@redhat.com" <coxu@redhat.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Thu, 30 Mar 2023 02:01:52 -0400
+In-Reply-To: <20230329232735.dvmxvwis2psbvyw5@kernel.org>
+References: <20230302164652.83571-1-eric.snowberg@oracle.com>
+         <20230302164652.83571-6-eric.snowberg@oracle.com>
+         <ZAz8QlynTSMD7kuE@kernel.org>
+         <07FFED83-501D-418C-A4BB-862A547DD7B0@oracle.com>
+         <20230320182822.6xyh6ibatrz5yrhb@kernel.org>
+         <84d46fb108f6ce2a322b6486529fc6dd0f8deea5.camel@linux.ibm.com>
+         <20230329232735.dvmxvwis2psbvyw5@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -AYgNS0hJQzkaFq2dbj8oeeSCLCBxsU7
+X-Proofpoint-ORIG-GUID: dV2z4ZQOEAl_wn7WkpC7Te5PoSYskE6S
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323153436.B2SATnZV@linutronix.de>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_02,2023-03-30_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 priorityscore=1501 clxscore=1011
+ impostorscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303300047
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 04:34:36PM +0100, Sebastian Andrzej Siewior wrote:
-> From: Haris Okanovic <haris.okanovic@ni.com>
+On Thu, 2023-03-30 at 02:27 +0300, Jarkko Sakkinen wrote:
+> On Mon, Mar 20, 2023 at 04:35:33PM -0400, Mimi Zohar wrote:
+> > On Mon, 2023-03-20 at 20:28 +0200, Jarkko Sakkinen wrote:
+> > > On Mon, Mar 20, 2023 at 05:35:05PM +0000, Eric Snowberg wrote:
+> > > > 
+> > > > 
+> > > > > On Mar 11, 2023, at 3:10 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > > > 
+> > > > > On Thu, Mar 02, 2023 at 11:46:51AM -0500, Eric Snowberg wrote:
+> > > > >> Add a new link restriction.  Restrict the addition of keys in a keyring
+> > > > >> based on the key to be added being a CA.
+> > > > >> 
+> > > > >> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> > > > >> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > >> ---
+> > > > >> crypto/asymmetric_keys/restrict.c | 38 +++++++++++++++++++++++++++++++
+> > > > >> include/crypto/public_key.h       | 15 ++++++++++++
+> > > > >> 2 files changed, 53 insertions(+)
+> > > > >> 
+> > > > >> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
+> > > > >> index 6b1ac5f5896a..48457c6f33f9 100644
+> > > > >> --- a/crypto/asymmetric_keys/restrict.c
+> > > > >> +++ b/crypto/asymmetric_keys/restrict.c
+> > > > >> @@ -108,6 +108,44 @@ int restrict_link_by_signature(struct key *dest_keyring,
+> > > > >> 	return ret;
+> > > > >> }
+> > > > >> 
+> > > > >> +/**
+> > > > >> + * restrict_link_by_ca - Restrict additions to a ring of CA keys
+> > > > >> + * @dest_keyring: Keyring being linked to.
+> > > > >> + * @type: The type of key being added.
+> > > > >> + * @payload: The payload of the new key.
+> > > > >> + * @trust_keyring: Unused.
+> > > > >> + *
+> > > > >> + * Check if the new certificate is a CA. If it is a CA, then mark the new
+> > > > >> + * certificate as being ok to link.
+> > > > >> + *
+> > > > >> + * Returns 0 if the new certificate was accepted, -ENOKEY if the
+> > > > >> + * certificate is not a CA. -ENOPKG if the signature uses unsupported
+> > > > >> + * crypto, or some other error if there is a matching certificate but
+> > > > >> + * the signature check cannot be performed.
+> > > > >> + */
+> > > > >> +int restrict_link_by_ca(struct key *dest_keyring,
+> > > > >> +			const struct key_type *type,
+> > > > >> +			const union key_payload *payload,
+> > > > >> +			struct key *trust_keyring)
+> > > > >> +{
+> > > > >> +	const struct public_key *pkey;
+> > > > >> +
+> > > > >> +	if (type != &key_type_asymmetric)
+> > > > >> +		return -EOPNOTSUPP;
+> > > > >> +
+> > > > >> +	pkey = payload->data[asym_crypto];
+> > > > >> +	if (!pkey)
+> > > > >> +		return -ENOPKG;
+> > > > >> +	if (!test_bit(KEY_EFLAG_CA, &pkey->key_eflags))
+> > > > >> +		return -ENOKEY;
+> > > > >> +	if (!test_bit(KEY_EFLAG_KEYCERTSIGN, &pkey->key_eflags))
+> > > > >> +		return -ENOKEY;
+> > > > >> +	if (test_bit(KEY_EFLAG_DIGITALSIG, &pkey->key_eflags))
+> > > > >> +		return -ENOKEY;
+> > > > > 
+> > > > > nit: would be more readable, if conditions were separated by
+> > > > > empty lines.
+> > > > 
+> > > > Ok, I will make this change in the next round.  Thanks.
+> > > 
+> > > Cool! Mimi have you tested these patches with IMA applied?
+> > 
+> > Yes, it's working as expected.
 > 
-> ioread8() operations to TPM MMIO addresses can stall the CPU when
-> immediately following a sequence of iowrite*()'s to the same region.
+> Thank you. Please check that I filled additional tags correctly:
 > 
-> For example, cyclitest measures ~400us latency spikes when a non-RT
-> usermode application communicates with an SPI-based TPM chip (Intel Atom
-> E3940 system, PREEMPT_RT kernel). The spikes are caused by a
-> stalling ioread8() operation following a sequence of 30+ iowrite8()s to
-> the same address. I believe this happens because the write sequence is
-> buffered (in CPU or somewhere along the bus), and gets flushed on the
-> first LOAD instruction (ioread*()) that follows.
+> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/
 > 
-> The enclosed change appears to fix this issue: read the TPM chip's
-> access register (status code) after every iowrite*() operation to
-> amortize the cost of flushing data to chip across multiple instructions.
-> 
-> Signed-off-by: Haris Okanovic <haris.okanovic@ni.com>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
-> 
-> I don't know how performance critical this is so that it should be
-> restricted to PREEMPT_RT. This has been in RT queue since late 2017 and
-> I have no idea how to deal with this differently/ in a more generic way.
-> Original thread:
-> 	https://lore.kernel.org/20170804215651.29247-1-haris.okanovic@ni.com
-> 
->  drivers/char/tpm/tpm_tis.c | 29 +++++++++++++++++++++++++++--
->  1 file changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index ed5dabd3c72d6..513e0d1c349a6 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -50,6 +50,31 @@ static inline struct tpm_tis_tcg_phy *to_tpm_tis_tcg_phy(struct tpm_tis_data *da
->  	return container_of(data, struct tpm_tis_tcg_phy, priv);
->  }
->  
-> +#ifdef CONFIG_PREEMPT_RT
-> +/*
-> + * Flushes previous write operations to chip so that a subsequent
-> + * ioread*()s won't stall a CPU.
-> + */
+> I will then put these also to my 'next' branch and they will get mirrored
+> to linux-next.
 
-I would replace this with:
+Thanks, Jarkko.  The tags look good.
 
-/*
- * Flush previous write operations with a dummy read operation to the 
- * TPM MMIO base address.
- */
+-- 
+thanks,
 
- I think rest of the reasoning would be better place to the functions,
- which are call sites for this helper, and here it would be make more
- sense to explain what it actually does.
+Mimi
 
-> +static inline void tpm_tis_flush(void __iomem *iobase)
-> +{
-> +	ioread8(iobase + TPM_ACCESS(0));
-> +}
-> +#else
-> +#define tpm_tis_flush(iobase) do { } while (0)
-> +#endif
-> +
-> +static inline void tpm_tis_iowrite8(u8 b, void __iomem *iobase, u32 addr)
-
-/*
- * Write a byte to the TPM MMIO address, and flush the write queue. The
- * flush amortizes the cost of the IO operations, and thus avoids unwanted
- * latency peaks.
- */
-
-> +{
-> +	iowrite8(b, iobase + addr);
-> +	tpm_tis_flush(iobase);
-> +}
-> +
-
-/*
- * Write a 32-bit word to the TPM MMIO address, and flush the write queue.
- * The flush amortizes the cost of the IO operations, and thus avoids
- * unwanted latency peaks.
- *
-
-> +static inline void tpm_tis_iowrite32(u32 b, void __iomem *iobase, u32 addr)
-> +{
-> +	iowrite32(b, iobase + addr);
-> +	tpm_tis_flush(iobase);
-> +}
-> +
->  static int interrupts = -1;
->  module_param(interrupts, int, 0444);
->  MODULE_PARM_DESC(interrupts, "Enable interrupts");
-> @@ -186,12 +211,12 @@ static int tpm_tcg_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
->  	switch (io_mode) {
->  	case TPM_TIS_PHYS_8:
->  		while (len--)
-> -			iowrite8(*value++, phy->iobase + addr);
-> +			tpm_tis_iowrite8(*value++, phy->iobase, addr);
->  		break;
->  	case TPM_TIS_PHYS_16:
->  		return -EINVAL;
->  	case TPM_TIS_PHYS_32:
-> -		iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase + addr);
-> +		tpm_tis_iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase, addr);
->  		break;
->  	}
->  
-> -- 
-> 2.40.0
-> 
-
-Thanks for catching this up. It is a small code change but I think that it
-would deserve just a bit more documentation, as it would make sure that the
-reasoning you gave is taken into account in the future code reviews.
-
-I think that if you append what I suggested above (you can use your
-judgement and edit as you will), it should be sufficient.
-
-BR, Jarkko
-
-BR, Jarkko
