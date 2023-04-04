@@ -2,49 +2,63 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452966D53F9
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Apr 2023 23:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10A46D5645
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Apr 2023 03:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233484AbjDCVta (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Apr 2023 17:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S232607AbjDDBt5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Apr 2023 21:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbjDCVt1 (ORCPT
+        with ESMTP id S232099AbjDDBt4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:49:27 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B996469D;
-        Mon,  3 Apr 2023 14:49:22 -0700 (PDT)
+        Mon, 3 Apr 2023 21:49:56 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD6FB4;
+        Mon,  3 Apr 2023 18:49:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1680558561;
-        bh=X0Q0v99eN2KxDgCMEZHqzTucfel3h4EGsfBLUoiMmnw=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-        b=rVwye6mOMIcMtHBJT+cu9MyszmfxjpCnVHCqEIgl0a4uVVpT0v2477CalU++WtWPd
-         VSDnZg8xCrUgGk2wrbe9ezy8FORQKeX2wQfb6NjVUonFlQVnswD5e94gKn4dcAJ9Mc
-         P92iALeElKcNMAmA+1peBzmjjA5VF3USF5RhgRTo=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id DD25A1280619;
-        Mon,  3 Apr 2023 17:49:21 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id OpAbpxzKcQ2F; Mon,  3 Apr 2023 17:49:21 -0400 (EDT)
-Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 4F8CB1280097;
-        Mon,  3 Apr 2023 17:49:21 -0400 (EDT)
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v4 13/13] Documentation: add tpm-security.rst
-Date:   Mon,  3 Apr 2023 17:40:03 -0400
-Message-Id: <20230403214003.32093-14-James.Bottomley@HansenPartnership.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
-References: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680572994; x=1712108994;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gN+KKoPKHIZ18Kz3GcxyRGQuAOc/wMIGMeJHrc6u2Fc=;
+  b=Jm3pVbfjh3Ll6Wfb9Ly9NooJ+Tte8DD8/jnyRrlyvtKeReWXbvuD202s
+   8qTxhTSEIOhbtuT82gVHaIu4xZL4XvMn0oZKuSVY5JiTjavsRW5pRYJZi
+   GQdlS1J+KUy6FVu+A2wDsSldPHhfdL9AKk3kXPi9+vn+qKTNkQ16nducD
+   Jgl84rj1ma4z2Rg6YI7t3VvRPbugRGz8VdTq62DY41IIGTw6GlRcsElGQ
+   mfJz3QiwH+HX9mA5qw9SCSG8vSdLcPAUvAj6jaFml/uO2c9F7cgYdBFq+
+   Y/6Xq/qE1zlpx/z3q5dHt9u4xwgbKVZFMrQn2p05Xi6p2Q9RyOzRCmzmM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="326081487"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="326081487"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 18:49:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="686181689"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="686181689"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 03 Apr 2023 18:49:52 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjVnz-000P1G-2c;
+        Tue, 04 Apr 2023 01:49:51 +0000
+Date:   Tue, 4 Apr 2023 09:49:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Jarkko Sakkinen <jarkko@kernel.org>,
+        keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v4 08/13] tpm: Add full HMAC and encrypt/decrypt session
+ handling code
+Message-ID: <202304040920.8D4b7ebX-lkp@intel.com>
+References: <20230403214003.32093-9-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403214003.32093-9-James.Bottomley@HansenPartnership.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,237 +66,123 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Document how the new encrypted secure interface for TPM2 works and how
-security can be assured after boot by certifying the NULL seed.
+Hi James,
 
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- Documentation/security/tpm/tpm-security.rst | 216 ++++++++++++++++++++
- 1 file changed, 216 insertions(+)
- create mode 100644 Documentation/security/tpm/tpm-security.rst
+kernel test robot noticed the following build warnings:
 
-diff --git a/Documentation/security/tpm/tpm-security.rst b/Documentation/security/tpm/tpm-security.rst
-new file mode 100644
-index 000000000000..4f633f251033
---- /dev/null
-+++ b/Documentation/security/tpm/tpm-security.rst
-@@ -0,0 +1,216 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+TPM Security
-+============
-+
-+The object of this document is to describe how we make the kernel's
-+use of the TPM reasonably robust in the face of external snooping and
-+packet alteration attacks (called passive and active interposer attack
-+in the literature).  The current security document is for TPM 2.0.
-+
-+Introduction
-+------------
-+
-+The TPM is usually a discrete chip attached to a PC via some type of
-+low bandwidth bus.  There are exceptions to this such as the Intel
-+PTT, which is a software TPM running inside a software environment
-+close to the CPU, which are subject to different attacks, but right at
-+the moment, most hardened security environments require a discrete
-+hardware TPM, which is the use case discussed here.
-+
-+Snooping and Alteration Attacks against the bus
-+-----------------------------------------------
-+
-+The current state of the art for snooping the `TPM Genie`_ hardware
-+interposer which is a simple external device that can be installed in
-+a couple of seconds on any system or laptop.  Recently attacks were
-+successfully demonstrated against the `Windows Bitlocker TPM`_ system.
-+Most recently the same `attack against TPM based Linux disk
-+encryption`_ schemes.  The next phase of research seems to be hacking
-+existing devices on the bus to act as interposers, so the fact that
-+the attacker requires physical access for a few seconds might
-+evaporate.  However, the goal of this document is to protect TPM
-+secrets and integrity as far as we are able in this environment and to
-+try to insure that if we can't prevent the attack then at least we can
-+detect it.
-+
-+Unfortunately, most of the TPM functionality, including the hardware
-+reset capability can be controlled by an attacker who has access to
-+the bus, so we'll discuss some of the disruption possibilities below.
-+
-+Measurement (PCR) Integrity
-+---------------------------
-+
-+Since the attacker can send their own commands to the TPM, they can
-+send arbitrary PCR extends and thus disrupt the measurement system,
-+which would be an annoying denial of service attack.  However, there
-+are two, more serious, classes of attack aimed at entities sealed to
-+trust measurements.
-+
-+1. The attacker could intercept all PCR extends coming from the system
-+   and completely substitute their own values, producing a replay of
-+   an untampered state that would cause PCR measurements to attest to
-+   a trusted state and release secrets
-+
-+2. At some point in time the attacker could reset the TPM, clearing
-+   the PCRs and then send down their own measurements which would
-+   effectively overwrite the boot time measurements the TPM has
-+   already done.
-+
-+The first can be thwarted by always doing HMAC protection of the PCR
-+extend and read command meaning measurement values cannot be
-+substituted without producing a detectable HMAC failure in the
-+response.  However, the second can only really be detected by relying
-+on some sort of mechanism for protection which would change over TPM
-+reset.
-+
-+Secrets Guarding
-+----------------
-+
-+Certain information passing in and out of the TPM, such as key sealing
-+and private key import and random number generation, is vulnerable to
-+interception which HMAC protection alone cannot protect against, so
-+for these types of command we must also employ request and response
-+encryption to prevent the loss of secret information.
-+
-+Establishing Initial Trust with the TPM
-+---------------------------------------
-+
-+In order to provide security from the beginning, an initial shared or
-+asymmetric secret must be established which must also be unknown to
-+the attacker.  The most obvious avenues for this are the endorsement
-+and storage seeds, which can be used to derive asymmetric keys.
-+However, using these keys is difficult because the only way to pass
-+them into the kernel would be on the command line, which requires
-+extensive support in the boot system, and there's no guarantee that
-+either hierarchy would not have some type of authorization.
-+
-+The mechanism chosen for the Linux Kernel is to derive the primary
-+elliptic curve key from the null seed using the standard storage seed
-+parameters.  The null seed has two advantages: firstly the hierarchy
-+physically cannot have an authorization, so we are always able to use
-+it and secondly, the null seed changes across TPM resets, meaning if
-+we establish trust on the null seed at start of day, all sessions
-+salted with the derived key will fail if the TPM is reset and the seed
-+changes.
-+
-+Obviously using the null seed without any other prior shared secrets,
-+we have to create and read the initial public key which could, of
-+course, be intercepted and substituted by the bus interposer.
-+However, the TPM has a key certification mechanism (using the EK
-+endorsement certificate, creating an attestation identity key and
-+certifying the null seed primary with that key) which is too complex
-+to run within the kernel, so we keep a copy of the null primary key
-+name, which is what is exported via sysfs so user-space can run the
-+full certification when it boots.  The definitive guarantee here is
-+that if the null primary key certifies correctly, you know all your
-+TPM transactions since start of day were secure and if it doesn't, you
-+know there's an interposer on your system (and that any secret used
-+during boot may have been leaked).
-+
-+Stacking Trust
-+--------------
-+
-+In the current null primary scenario, the TPM must be completely
-+cleared before handing it on to the next consumer.  However the kernel
-+hands to user-space the name of the derived null seed key which can
-+then be verified by certification in user-space.  Therefore, this chain
-+of name handoff can be used between the various boot components as
-+well (via an unspecified mechanism).  For instance, grub could use the
-+null seed scheme for security and hand the name off to the kernel in
-+the boot area.  The kernel could make its own derivation of the key
-+and the name and know definitively that if they differ from the handed
-+off version that tampering has occurred.  Thus it becomes possible to
-+chain arbitrary boot components together (UEFI to grub to kernel) via
-+the name handoff provided each successive component knows how to
-+collect the name and verifies it against its derived key.
-+
-+Session Properties
-+------------------
-+
-+All TPM commands the kernel uses allow sessions.  HMAC sessions may be
-+used to check the integrity of requests and responses and decrypt and
-+encrypt flags may be used to shield parameters and responses.  The
-+HMAC and encryption keys are usually derived from the shared
-+authorization secret, but for a lot of kernel operations that is well
-+known (and usually empty).  Thus, every HMAC session used by the
-+kernel must be created using the null primary key as the salt key
-+which thus provides a cryptographic input into the session key
-+derivation.  Thus, the kernel creates the null primary key once (as a
-+volatile TPM handle) and keeps it around in a saved context stored in
-+tpm_chip for every in-kernel use of the TPM.  Currently, because of a
-+lack of de-gapping in the in-kernel resource manager, the session must
-+be created and destroyed for each operation, but, in future, a single
-+session may also be reused for the in-kernel HMAC, encryption and
-+decryption sessions.
-+
-+Protection Types
-+----------------
-+
-+For every in-kernel operation we use null primary salted HMAC to
-+protect the integrity.  Additionally, we use parameter encryption to
-+protect key sealing and parameter decryption to protect key unsealing
-+and random number generation.
-+
-+Null Primary Key Certification in Userspace
-+===========================================
-+
-+Every TPM comes shipped with a couple of X.509 certificates for the
-+primary endorsement key.  This document assumes that the Elliptic
-+Curve version of the certificate exists at 01C00002, but will work
-+equally well with the RSA certificate (at 01C00001).
-+
-+The first step in the certification is primary creation using the
-+template from the `TCG EK Credential Profile`_ which allows comparison
-+of the generated primary key against the one in the certificate (the
-+public key must match).  Note that generation of the EK primary
-+requires the EK hierarchy password, but a pre-generated version of the
-+EC primary should exist at 81010002 and a TPM2_ReadPublic() may be
-+performed on this without needing the key authority.  Next, the
-+certificate itself must be verified to chain back to the manufacturer
-+root (which should be published on the manufacturer website).  Once
-+this is done, an attestation key (AK) is generated within the TPM and
-+it's name and the EK public key can be used to encrypt a secret using
-+TPM2_MakeCredential.  The TPM then runs TPM2_ActivateCredential which
-+will only recover the secret if the binding between the TPM, the EK
-+and the AK is true. the generated AK may now be used to run a
-+certification of the null primary key whose name the kernel has
-+exported.  Since TPM2_MakeCredential/ActivateCredential are somewhat
-+complicated, a more simplified process involving an externally
-+generated private key is described below.
-+
-+This process is a simplified abbreviation of the usual privacy CA
-+based attestation process.  The assumption here is that the
-+attestation is done by the TPM owner who thus has access to only the
-+owner hierarchy.  The owner creates an external public/private key
-+pair (assume elliptic curve in this case) and wraps the private key
-+for import using an inner wrapping process and parented to the EC
-+derived storage primary.  The TPM2_Import() is done using a parameter
-+decryption HMAC session salted to the EK primary (which also does not
-+require the EK key authority) meaning that the inner wrapping key is
-+the encrypted parameter and thus the TPM will not be able to perform
-+the import unless is possesses the certified EK so if the command
-+succeeds and the HMAC verifies on return we know we have a loadable
-+copy of the private key only for the certified TPM.  This key is now
-+loaded into the TPM and the Storage primary flushed (to free up space
-+for the null key generation).
-+
-+The null EC primary is now generated using the Storage profile
-+outlined in the `TCG TPM v2.0 Provisioning Guidance`_; the name of
-+this key (the hash of the public area) is computed and compared to the
-+null seed name presented by the kernel in
-+/sys/class/tpm/tpm0/null_name.  If the names do not match, the TPM is
-+compromised.  If the names match, the user performs a TPM2_Certify()
-+using the null primary as the object handle and the loaded private key
-+as the sign handle and providing randomized qualifying data.  The
-+signature of the returned certifyInfo is verified against the public
-+part of the loaded private key and the qualifying data checked to
-+prevent replay.  If all of these tests pass, the user is now assured
-+that TPM integrity and privacy was preserved across the entire boot
-+sequence of this kernel.
-+
-+.. _TPM Genie: https://www.nccgroup.trust/globalassets/about-us/us/documents/tpm-genie.pdf
-+.. _Windows Bitlocker TPM: https://dolosgroup.io/blog/2021/7/9/from-stolen-laptop-to-inside-the-company-network
-+.. _attack against TPM based Linux disk encryption: https://www.secura.com/blog/tpm-sniffing-attacks-against-non-bitlocker-targets
-+.. _TCG EK Credential Profile: https://trustedcomputinggroup.org/resource/tcg-ek-credential-profile-for-tpm-family-2-0/
-+.. _TCG TPM v2.0 Provisioning Guidance: https://trustedcomputinggroup.org/resource/tcg-tpm-v2-0-provisioning-guidance/
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v6.3-rc5 next-20230403]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/James-Bottomley/crypto-lib-implement-library-version-of-AES-in-CFB-mode/20230404-055053
+patch link:    https://lore.kernel.org/r/20230403214003.32093-9-James.Bottomley%40HansenPartnership.com
+patch subject: [PATCH v4 08/13] tpm: Add full HMAC and encrypt/decrypt session handling code
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230404/202304040920.8D4b7ebX-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2fbef78e6bdb1d5385ac75a5a5e750fed42e53e2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review James-Bottomley/crypto-lib-implement-library-version-of-AES-in-CFB-mode/20230404-055053
+        git checkout 2fbef78e6bdb1d5385ac75a5a5e750fed42e53e2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/char/tpm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304040920.8D4b7ebX-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/char/tpm/tpm2-sessions.c:337: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * tpm_buf_append_hmac_session() append a TPM session element
+
+
+vim +337 drivers/char/tpm/tpm2-sessions.c
+
+   335	
+   336	/**
+ > 337	 * tpm_buf_append_hmac_session() append a TPM session element
+   338	 * @chip: the TPM chip structure
+   339	 * @buf: The buffer to be appended
+   340	 * @attributes: The session attributes
+   341	 * @passphrase: The session authority (NULL if none)
+   342	 * @passphraselen: The length of the session authority (0 if none)
+   343	 *
+   344	 * This fills in a session structure in the TPM command buffer, except
+   345	 * for the HMAC which cannot be computed until the command buffer is
+   346	 * complete.  The type of session is controlled by the @attributes,
+   347	 * the main ones of which are TPM2_SA_CONTINUE_SESSION which means the
+   348	 * session won't terminate after tpm_buf_check_hmac_response(),
+   349	 * TPM2_SA_DECRYPT which means this buffers first parameter should be
+   350	 * encrypted with a session key and TPM2_SA_ENCRYPT, which means the
+   351	 * response buffer's first parameter needs to be decrypted (confusing,
+   352	 * but the defines are written from the point of view of the TPM).
+   353	 *
+   354	 * Any session appended by this command must be finalized by calling
+   355	 * tpm_buf_fill_hmac_session() otherwise the HMAC will be incorrect
+   356	 * and the TPM will reject the command.
+   357	 *
+   358	 * As with most tpm_buf operations, success is assumed because failure
+   359	 * will be caused by an incorrect programming model and indicated by a
+   360	 * kernel message.
+   361	 */
+   362	void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
+   363					 u8 attributes, u8 *passphrase,
+   364					 int passphraselen)
+   365	{
+   366		u8 nonce[SHA256_DIGEST_SIZE];
+   367		u32 len;
+   368		struct tpm2_auth *auth = chip->auth;
+   369	
+   370		/*
+   371		 * The Architecture Guide requires us to strip trailing zeros
+   372		 * before computing the HMAC
+   373		 */
+   374		while (passphrase && passphraselen > 0
+   375		       && passphrase[passphraselen - 1] == '\0')
+   376			passphraselen--;
+   377	
+   378		auth->attrs = attributes;
+   379		auth->passphraselen = passphraselen;
+   380		if (passphraselen)
+   381			memcpy(auth->passphrase, passphrase, passphraselen);
+   382	
+   383		if (auth->session != tpm_buf_length(buf)) {
+   384			/* we're not the first session */
+   385			len = get_unaligned_be32(&buf->data[auth->session]);
+   386			if (4 + len + auth->session != tpm_buf_length(buf)) {
+   387				WARN(1, "session length mismatch, cannot append");
+   388				return;
+   389			}
+   390	
+   391			/* add our new session */
+   392			len += 9 + 2 * SHA256_DIGEST_SIZE;
+   393			put_unaligned_be32(len, &buf->data[auth->session]);
+   394		} else {
+   395			tpm_buf_append_u32(buf, 9 + 2 * SHA256_DIGEST_SIZE);
+   396		}
+   397	
+   398		/* random number for our nonce */
+   399		get_random_bytes(nonce, sizeof(nonce));
+   400		memcpy(auth->our_nonce, nonce, sizeof(nonce));
+   401		tpm_buf_append_u32(buf, auth->handle);
+   402		/* our new nonce */
+   403		tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
+   404		tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
+   405		tpm_buf_append_u8(buf, auth->attrs);
+   406		/* and put a placeholder for the hmac */
+   407		tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
+   408		tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
+   409	}
+   410	EXPORT_SYMBOL(tpm_buf_append_hmac_session);
+   411	
+
 -- 
-2.35.3
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
