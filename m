@@ -2,63 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10A46D5645
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Apr 2023 03:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EE06D6C01
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Apr 2023 20:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjDDBt5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Apr 2023 21:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
+        id S236435AbjDDS3K (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Apr 2023 14:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbjDDBt4 (ORCPT
+        with ESMTP id S236436AbjDDS2y (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Apr 2023 21:49:56 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD6FB4;
-        Mon,  3 Apr 2023 18:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680572994; x=1712108994;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gN+KKoPKHIZ18Kz3GcxyRGQuAOc/wMIGMeJHrc6u2Fc=;
-  b=Jm3pVbfjh3Ll6Wfb9Ly9NooJ+Tte8DD8/jnyRrlyvtKeReWXbvuD202s
-   8qTxhTSEIOhbtuT82gVHaIu4xZL4XvMn0oZKuSVY5JiTjavsRW5pRYJZi
-   GQdlS1J+KUy6FVu+A2wDsSldPHhfdL9AKk3kXPi9+vn+qKTNkQ16nducD
-   Jgl84rj1ma4z2Rg6YI7t3VvRPbugRGz8VdTq62DY41IIGTw6GlRcsElGQ
-   mfJz3QiwH+HX9mA5qw9SCSG8vSdLcPAUvAj6jaFml/uO2c9F7cgYdBFq+
-   Y/6Xq/qE1zlpx/z3q5dHt9u4xwgbKVZFMrQn2p05Xi6p2Q9RyOzRCmzmM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="326081487"
-X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="326081487"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 18:49:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="686181689"
-X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="686181689"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 Apr 2023 18:49:52 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pjVnz-000P1G-2c;
-        Tue, 04 Apr 2023 01:49:51 +0000
-Date:   Tue, 4 Apr 2023 09:49:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jarkko Sakkinen <jarkko@kernel.org>,
-        keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v4 08/13] tpm: Add full HMAC and encrypt/decrypt session
- handling code
-Message-ID: <202304040920.8D4b7ebX-lkp@intel.com>
-References: <20230403214003.32093-9-James.Bottomley@HansenPartnership.com>
+        Tue, 4 Apr 2023 14:28:54 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13BA903B
+        for <linux-integrity@vger.kernel.org>; Tue,  4 Apr 2023 11:26:08 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id j7so39847297ybg.4
+        for <linux-integrity@vger.kernel.org>; Tue, 04 Apr 2023 11:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1680632765;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xyjoFpVijlAvxTCbOhJJ22iDzQUactcN5oOMXtPKyqU=;
+        b=fcxPf/i8xq/kSQfoVdznWlATaPoee6x4Dem/NHTsVKRgZLeTmjolTZLa/+wlaVzoo2
+         9wvH9iZDHP0vTlVzDnxPCaPpHN3tDUjPt67SQO61fkm34DihtHBMRLAFcs2rMItJTIhy
+         I6ffUk8HIw91u9pqKUvjV5A2g74DjoemZoBP07KThvSgH49wdGzmNq3+3McXhZUTP6Pp
+         haNgzYnEbjtZi+tD+GbjOtszKTPwrkXxqpENHShf5NPe98Q7/dEGAs3IkKkA7iFl8wl0
+         Nim2er0csMAF8UUSFkm0qwDshTzU0tzM7EOY6pkH15hkYpDAVagWgrcgvIf+Y7NEmhNw
+         8ElQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680632765;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xyjoFpVijlAvxTCbOhJJ22iDzQUactcN5oOMXtPKyqU=;
+        b=Wb4PsFig7EnvxcPXmgufm/XNZcrLiM/9xZdpklbvaeRxH6p2Yb9+pitOeIYemd7ytb
+         gOm1EYDEAKIewWZ5LofMssJwBatt/Pus8Mfi4KGp1yrR9Abc6275QkHPya2LL9O1T/cL
+         PvNP16Rb1wFZbvIlazXjSLAoCEVu47ua/SL4XDpRCZsSHWEEu1RcL2z+cmqXNVoR8/2s
+         tijsSyuk4cC0kfnAhDR5VvQ5zaw9RLxiqEdzfux7kSUJy7SXhiB91REgYJ4ZkAvi0/2Z
+         9qjWoKTa06Z6X6sy0AUSffckgnEbLyn0dXfxbXrGlTmchjfeW36+H1s0p0aipM2o9U32
+         0vTQ==
+X-Gm-Message-State: AAQBX9frJyveY3e6RZST/xnhKCjfQJWxJdP3eK4NMQl/G6rzSSsABi7H
+        SJxwdZx7Oq9AtVJOWDNyrT32RUPBjMadWed98y8h
+X-Google-Smtp-Source: AKy350Z1zr2YlO7SKFTwlplbfhoyc2wR4q7sivsyQWkkLJjxdDoxjxyefjzb/C0u+bqpRWOrC8ylutsAT9jk1XyHS7o=
+X-Received: by 2002:a25:7449:0:b0:b75:8ac3:d5d9 with SMTP id
+ p70-20020a257449000000b00b758ac3d5d9mr2436296ybc.3.1680632765167; Tue, 04 Apr
+ 2023 11:26:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403214003.32093-9-James.Bottomley@HansenPartnership.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com> <20230331123221.3273328-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230331123221.3273328-2-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 4 Apr 2023 14:25:54 -0400
+Message-ID: <CAHC9VhT17mtnncuKVNzqr0zTU+E5R+8wMaxF4AYXS_bG9L0HZQ@mail.gmail.com>
+Subject: Re: [PATCH v10 1/4] reiserfs: Add security prefix to xattr name in reiserfs_security_write()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,123 +76,43 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi James,
+On Fri, Mar 31, 2023 at 8:33=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Reiserfs sets a security xattr at inode creation time in two stages: firs=
+t,
+> it calls reiserfs_security_init() to obtain the xattr from active LSMs;
+> then, it calls reiserfs_security_write() to actually write that xattr.
+>
+> Unfortunately, it seems there is a wrong expectation that LSMs provide th=
+e
+> full xattr name in the form 'security.<suffix>'. However, LSMs always
+> provided just the suffix, causing reiserfs to not write the xattr at all
+> (if the suffix is shorter than the prefix), or to write an xattr with the
+> wrong name.
+>
+> Add a temporary buffer in reiserfs_security_write(), and write to it the
+> full xattr name, before passing it to reiserfs_xattr_set_handle().
+>
+> Also replace the name length check with a check that the full xattr name =
+is
+> not larger than XATTR_NAME_MAX.
+>
+> Cc: stable@vger.kernel.org # v2.6.x
+> Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes=
+ during inode creation")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  fs/reiserfs/xattr_security.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 
-kernel test robot noticed the following build warnings:
+This looks good to me, thanks.  While normally I would merge something
+like this into the lsm/stable-X.Y branch, I'm going to merge it into
+lsm/next to give it a week or two of extra testing.  I think anyone
+who is using reiserfs+LSM (doubtful as it looks horribly broken) would
+be okay with waiting a few more days at this point :)
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v6.3-rc5 next-20230403]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/James-Bottomley/crypto-lib-implement-library-version-of-AES-in-CFB-mode/20230404-055053
-patch link:    https://lore.kernel.org/r/20230403214003.32093-9-James.Bottomley%40HansenPartnership.com
-patch subject: [PATCH v4 08/13] tpm: Add full HMAC and encrypt/decrypt session handling code
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230404/202304040920.8D4b7ebX-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2fbef78e6bdb1d5385ac75a5a5e750fed42e53e2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review James-Bottomley/crypto-lib-implement-library-version-of-AES-in-CFB-mode/20230404-055053
-        git checkout 2fbef78e6bdb1d5385ac75a5a5e750fed42e53e2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/char/tpm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304040920.8D4b7ebX-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/char/tpm/tpm2-sessions.c:337: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * tpm_buf_append_hmac_session() append a TPM session element
-
-
-vim +337 drivers/char/tpm/tpm2-sessions.c
-
-   335	
-   336	/**
- > 337	 * tpm_buf_append_hmac_session() append a TPM session element
-   338	 * @chip: the TPM chip structure
-   339	 * @buf: The buffer to be appended
-   340	 * @attributes: The session attributes
-   341	 * @passphrase: The session authority (NULL if none)
-   342	 * @passphraselen: The length of the session authority (0 if none)
-   343	 *
-   344	 * This fills in a session structure in the TPM command buffer, except
-   345	 * for the HMAC which cannot be computed until the command buffer is
-   346	 * complete.  The type of session is controlled by the @attributes,
-   347	 * the main ones of which are TPM2_SA_CONTINUE_SESSION which means the
-   348	 * session won't terminate after tpm_buf_check_hmac_response(),
-   349	 * TPM2_SA_DECRYPT which means this buffers first parameter should be
-   350	 * encrypted with a session key and TPM2_SA_ENCRYPT, which means the
-   351	 * response buffer's first parameter needs to be decrypted (confusing,
-   352	 * but the defines are written from the point of view of the TPM).
-   353	 *
-   354	 * Any session appended by this command must be finalized by calling
-   355	 * tpm_buf_fill_hmac_session() otherwise the HMAC will be incorrect
-   356	 * and the TPM will reject the command.
-   357	 *
-   358	 * As with most tpm_buf operations, success is assumed because failure
-   359	 * will be caused by an incorrect programming model and indicated by a
-   360	 * kernel message.
-   361	 */
-   362	void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
-   363					 u8 attributes, u8 *passphrase,
-   364					 int passphraselen)
-   365	{
-   366		u8 nonce[SHA256_DIGEST_SIZE];
-   367		u32 len;
-   368		struct tpm2_auth *auth = chip->auth;
-   369	
-   370		/*
-   371		 * The Architecture Guide requires us to strip trailing zeros
-   372		 * before computing the HMAC
-   373		 */
-   374		while (passphrase && passphraselen > 0
-   375		       && passphrase[passphraselen - 1] == '\0')
-   376			passphraselen--;
-   377	
-   378		auth->attrs = attributes;
-   379		auth->passphraselen = passphraselen;
-   380		if (passphraselen)
-   381			memcpy(auth->passphrase, passphrase, passphraselen);
-   382	
-   383		if (auth->session != tpm_buf_length(buf)) {
-   384			/* we're not the first session */
-   385			len = get_unaligned_be32(&buf->data[auth->session]);
-   386			if (4 + len + auth->session != tpm_buf_length(buf)) {
-   387				WARN(1, "session length mismatch, cannot append");
-   388				return;
-   389			}
-   390	
-   391			/* add our new session */
-   392			len += 9 + 2 * SHA256_DIGEST_SIZE;
-   393			put_unaligned_be32(len, &buf->data[auth->session]);
-   394		} else {
-   395			tpm_buf_append_u32(buf, 9 + 2 * SHA256_DIGEST_SIZE);
-   396		}
-   397	
-   398		/* random number for our nonce */
-   399		get_random_bytes(nonce, sizeof(nonce));
-   400		memcpy(auth->our_nonce, nonce, sizeof(nonce));
-   401		tpm_buf_append_u32(buf, auth->handle);
-   402		/* our new nonce */
-   403		tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
-   404		tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
-   405		tpm_buf_append_u8(buf, auth->attrs);
-   406		/* and put a placeholder for the hmac */
-   407		tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
-   408		tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
-   409	}
-   410	EXPORT_SYMBOL(tpm_buf_append_hmac_session);
-   411	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+paul-moore.com
