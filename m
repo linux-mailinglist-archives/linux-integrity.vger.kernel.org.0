@@ -2,62 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5E36D8716
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Apr 2023 21:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572A26D8788
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Apr 2023 21:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjDETmP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 5 Apr 2023 15:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S232904AbjDET7w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 5 Apr 2023 15:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbjDETmO (ORCPT
+        with ESMTP id S233825AbjDET7t (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:42:14 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749B97D9F;
-        Wed,  5 Apr 2023 12:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1680723673;
-        bh=WwuIsKsRnrJXpbGBbSebam2VU6JJdv+oDgyM0sUtqsk=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=irLWqNk7bsFN7ntwyOQdzgY+DX1YoxV6cOD+CdSO9nKK07Ds3TqSqdjqHsEm1bFK1
-         4fpsr+4ibkufxfmd+pLA2Pbi6C5hTNg1N+d14peenAoyXu4mi0P+8PyZ09YvmCqFuR
-         BbiNkmmlFHd2Zlm8H4vq9bysn8uxfgWIYPQZtUDE=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CDBAF1281873;
-        Wed,  5 Apr 2023 15:41:13 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id TXq4f9sDP_mt; Wed,  5 Apr 2023 15:41:13 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1680723673;
-        bh=WwuIsKsRnrJXpbGBbSebam2VU6JJdv+oDgyM0sUtqsk=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=irLWqNk7bsFN7ntwyOQdzgY+DX1YoxV6cOD+CdSO9nKK07Ds3TqSqdjqHsEm1bFK1
-         4fpsr+4ibkufxfmd+pLA2Pbi6C5hTNg1N+d14peenAoyXu4mi0P+8PyZ09YvmCqFuR
-         BbiNkmmlFHd2Zlm8H4vq9bysn8uxfgWIYPQZtUDE=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2D0A71281826;
-        Wed,  5 Apr 2023 15:41:13 -0400 (EDT)
-Message-ID: <a94021ce2b2a9fc74ad1609f114f62c7b9f279d5.camel@HansenPartnership.com>
-Subject: Re: [PATCH v4 00/13] add integrity and security to TPM2 transactions
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     William Roberts <bill.c.roberts@gmail.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 05 Apr 2023 15:41:11 -0400
-In-Reply-To: <CAFftDdpbJ1Y7tupzPicXbX352Xk0zE-gSShg1WXGyTFJ22mdbA@mail.gmail.com>
-References: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
-         <CAFftDdpbJ1Y7tupzPicXbX352Xk0zE-gSShg1WXGyTFJ22mdbA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Wed, 5 Apr 2023 15:59:49 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC4340D2
+        for <linux-integrity@vger.kernel.org>; Wed,  5 Apr 2023 12:59:47 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id f188so25497813ybb.3
+        for <linux-integrity@vger.kernel.org>; Wed, 05 Apr 2023 12:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1680724787;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=16oMn1NNzoMGhRBfxhPQbT5X5eCgj0j1VfPTFGPRXYA=;
+        b=M6bRM2KlH9Lx5lsl1rif9t0ScqLJIdivfDowNos4t0MnSqxdPlWxdu1CtgPNVsf6PQ
+         8U5VUfoOsmfJmq2XRa8ctGuBct1KIf4mat5CVl4r9vCtgWvPc73og4XPAPJKiOsAPB+Q
+         TzbfcFogPV6U8zGTa4ijQ6IBjmsU6UYaRrrgV+MOlHiWQwISa6b0bt+EsHa7MUmooDWm
+         1rx7Y/edmVIxZTJxu4jBKhmeO+u5C9tr4U0UPwgtrDnUgxq6zmZDc1w3LPqaQTij0hMF
+         tRaNkccvCmTc4mjM2PROEHzoz75i9wuaWNb56YFKuf2qr5UxdsWp10j3px0yPT+mbFd2
+         LPNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680724787;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=16oMn1NNzoMGhRBfxhPQbT5X5eCgj0j1VfPTFGPRXYA=;
+        b=nOLbp8pS/qZLaQqA4HR7y4i8yLFA+QD5+x39VDE28MZF5Foi6gWfa/BOqXdor7ZT2I
+         qTKPyS6DKwLQwsceS0yakq+w/E+EVux1S35lWwP5XWFPl8M8qZXJPYYoKGoj7qrq6NJG
+         +bN1kfp3vq8W7MsjaM4r/10KwVyqDJF1eS+hzKLnzAZ0Pp0znHEypyeFeZ5TmUuQJTqQ
+         UZ3lmmcgujb+FF82BQuWcgdx09h5v6eYC2OSb8gnRUIvxeqeWBtR1I7VN0KgrgA/6XFi
+         /zvWaML5faOMWcoRHqkooswJtgORNIWTs8/O1aWKU3CWa4K45Np9spgD3fPCUcLkskIq
+         KbGA==
+X-Gm-Message-State: AAQBX9cdrSiWpAtucX9P5r1u7LGQ2fIhB6nPB9rRHb34mciq8Tcd9YVg
+        21z+Q1a9e7wPZ7H3q2oYDIGIs605FUHr9GVCq6Pq
+X-Google-Smtp-Source: AKy350Z4agPWqKP3S9SXcOAMKHENY/iZ5KsoGSPHS8QSL3pWzVPqwyrXG0+vzOYZvsNJa9+F9yj3Fqs4TEDZfwYCMxc=
+X-Received: by 2002:a25:d707:0:b0:b68:7a4a:5258 with SMTP id
+ o7-20020a25d707000000b00b687a4a5258mr390159ybg.3.1680724786891; Wed, 05 Apr
+ 2023 12:59:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
+ <20230331123221.3273328-3-roberto.sassu@huaweicloud.com> <CAHC9VhSbGdij6xz9D49my37kD9qYrBmh2x7=cNFFDL2dZ=EZTw@mail.gmail.com>
+ <5dbb9430-1e26-ec12-26a2-3718c84e33c2@schaufler-ca.com> <7549b624-421e-30b9-ca99-de42929354c7@huaweicloud.com>
+In-Reply-To: <7549b624-421e-30b9-ca99-de42929354c7@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 5 Apr 2023 15:59:36 -0400
+Message-ID: <CAHC9VhTsSUM6_g5+ZOqZ=P6307hCAJW+-xEc4fKQcymPs5pYjQ@mail.gmail.com>
+Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,50 +78,63 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2023-04-05 at 13:39 -0500, William Roberts wrote:
-> On Mon, Apr 3, 2023 at 4:44 PM James Bottomley
-> <James.Bottomley@hansenpartnership.com> wrote:
-[...]
-> > The most insidious interposer attack of all is a reset attack:
-> > since the interposer has access to the TPM bus, it can assert the
-> > TPM reset line any time it wants.  When a TPM resets it mostly
-> > comes back in the same state except that all the PCRs are reset to
-> > their initial values.
-> > Controlling the reset line allows the interposer to change the PCR
-> > state after the fact by resetting the TPM and then replaying PCR
-> > extends to get the PCRs into a valid state to release secrets, so
-> > even if an attack event was recorded, the record is erased.  This
-> > reset attack violates the fundamental princible of non-
-> > repudiability of TPM logs.  Defeating the reset attack involves
-> > tying all TPM operations within the kernel to a property which will
-> > change detectably if the TPM is reset.  For that reason, we tie all
-> > TPM sessions to the null hierarchy we obtain at start of day and
-> > whose seed changes on every reset.
-> 
-> Rather than doing this, wouldn't the session be flushed from the TPM
-> on reset and thus subsequent commands using the session and session
-> key fail?
+On Wed, Apr 5, 2023 at 5:44=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On 4/5/2023 4:08 AM, Casey Schaufler wrote:
+> > On 4/4/2023 11:54 AM, Paul Moore wrote:
+> >> On Fri, Mar 31, 2023 at 8:33=E2=80=AFAM Roberto Sassu
+> >> <roberto.sassu@huaweicloud.com> wrote:
 
-That would happen only if we kept a context saved session, which we
-can't because the current session manager doesn't do de-gapping.  To
-get around this we start a new, short lived, session for most
-operations.
+...
 
-There has been a thought that it would be faster if we did context save
-a session to keep re-using it, so adding de-gapping is on the list
-somewhere, it's just not near the top yet.
+> >>> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> >>> index cfcbb748da2..8392983334b 100644
+> >>> --- a/security/smack/smack_lsm.c
+> >>> +++ b/security/smack/smack_lsm.c
+> >>> @@ -52,6 +52,15 @@
+> >>>   #define SMK_RECEIVING  1
+> >>>   #define SMK_SENDING    2
+> >>>
+> >>> +/*
+> >>> + * Smack uses multiple xattrs.
+> >>> + * SMACK64 - for access control, SMACK64EXEC - label for the program=
+,
+> >> I think it would be good to move SMACK64EXEC to its own line; it took
+> >> me a minute to figure out why SMACK_INODE_INIT_XATTRS was set to '4'
+> >> when I only say three comment lines ... ;)
+> >>
+> >>> + * SMACK64MMAP - controls library loading,
+> >>> + * SMACK64TRANSMUTE - label initialization,
+> >>> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT
+> >>> + */
+> >>> +#define SMACK_INODE_INIT_XATTRS 4
+> >>
+> >> If smack_inode_init_security() only ever populates a single xattr, and
+> >> that is the only current user of SMACK_INODE_INIT_XATTRS, can we make
+> >> this '1' and shrink the xattr allocation a bit?
+> >
+> > If the parent directory is marked with SMACK64_TRANSMUTE, the access
+> > rule allowing the access has the "t" mode, and the object being initial=
+ized
+> > is a directory, the new inode should get the SMACK64_TRANSMUTE attribut=
+e.
+> > The callers of security_inode_init_security() don't seem to care.
+> > I can't say if the evm code is getting SMACK64_TRANSMUTE or, for that
+> > matter, SMACK64_EXEC and SMACK64_MMAP, some other way. The older system
+> > allowed for multiple Smack xattrs, but I'm not clear on exactly how.
+>
+> If you like to set an additional xattr, that would be possible now.
+> Since we reserve multiple xattrs, we can call lsm_get_xattr_slot()
+> another time and set SMACK64_TRANSMUTE.
+>
+> I think, if the kernel config has CONFIG_EVM_EXTRA_SMACK_XATTRS set,
+> EVM would protect SMACK64_TRANSMUTE too.
 
-> If that's true, couldn't we just pin the trust to an existing trusted
-> key that we have the name of and move on? The kernel would know that
-> something happened when session protections started failing without
-> the complexity and time of generating a key in the NULL hierarchy and
-> certifying it.
+Ooookay, but can someone explain to me how either the current, or
+patched, smack_inode_init_security() function can return multiple
+xattrs via the security_inode_init_security() LSM hook?  I'm hoping
+I'm missing something really obvious, but I can only see a single
+Smack xattr being returned ...
 
-If the goal is to check not only the kernel but also the boot
-components (like OVMF/EDK2), then we need a handoff protocol.  The
-beauty of the NULL seed is the name is a nice short thing to handoff. 
-If we relied on sessions, we'd have to hand off a whole context saved
-session and all its nonces, which is a bit of a security risk.
-
-James
-
+--=20
+paul-moore.com
