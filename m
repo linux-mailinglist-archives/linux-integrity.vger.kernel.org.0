@@ -2,174 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9F66DA5CA
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Apr 2023 00:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A676EBFDD
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Apr 2023 16:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236901AbjDFW11 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Apr 2023 18:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S229470AbjDWOLA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Apr 2023 10:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbjDFW10 (ORCPT
+        with ESMTP id S229458AbjDWOK7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:27:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30EA7EC6;
-        Thu,  6 Apr 2023 15:27:25 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336L1kNm024134;
-        Thu, 6 Apr 2023 22:27:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=tp0ZMX9fedTeOqsKlgu0LboxYUsAYjzLrcmCZQUaefg=;
- b=JoBzb4Vv6GrgeKf8CrIrIir+Oz6TANBZOl20nyPiZH4PsxcKYB3Uq08D/vl9of7q1PwH
- eSS+mLbLN4L1OMRKRr2zRgbnDHBlu08WQBTirVHhIj7EopC1mKMyl3V4zbEB+e1ogoYC
- IPziTaddarFtOB1jdqTq9Bz7zPLK4VH647CfCONpzYYB0KdWZhFAVbnd1trkWgf6jEaG
- ItxItv1Jtybvb5PjnBCUNfIUcNiwdX/V0EGz4auJkssi/RSA22VyCojFppR+kh2naxRu
- sOYWGr82A0N47aVhkbzZB6G2FsDUW4OH4dqeHZX7aOjEtpCXGh/IYLEAyg7MoOftwHiF sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3psta9uer1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 22:27:20 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 336MRKm5016417;
-        Thu, 6 Apr 2023 22:27:20 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3psta9ueqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 22:27:20 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 336MDCe7016957;
-        Thu, 6 Apr 2023 22:27:19 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3ppc89c37y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 22:27:18 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 336MRH8A7864842
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Apr 2023 22:27:17 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9A715803F;
-        Thu,  6 Apr 2023 22:27:17 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2EBBF58061;
-        Thu,  6 Apr 2023 22:27:17 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Apr 2023 22:27:17 +0000 (GMT)
-Message-ID: <b78a9cd9-f3ab-3834-991c-3c15590dcbd8@linux.ibm.com>
-Date:   Thu, 6 Apr 2023 18:27:16 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
- writes
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        miklos@szeredi.hu, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        amir73il@gmail.com
-References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
- <20230406-diffamieren-langhaarig-87511897e77d@brauner>
- <CAHC9VhQsnkLzT7eTwVr-3SvUs+mcEircwztfaRtA+4ZaAh+zow@mail.gmail.com>
- <a6c6e0e4-047f-444b-3343-28b71ddae7ae@linux.ibm.com>
- <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
- <20230406-wasser-zwanzig-791bc0bf416c@brauner>
- <546145ecbf514c4c1a997abade5f74e65e5b1726.camel@kernel.org>
- <45a9c575-0b7e-f66a-4765-884865d14b72@linux.ibm.com>
- <60339e3bd08a18358ac8c8a16dc67c74eb8ba756.camel@kernel.org>
- <d61ed13b-0fd2-0283-96d2-0ff9c5e0a2f9@linux.ibm.com>
- <4f739cc6847975991874d56ef9b9716c82cf62a3.camel@kernel.org>
- <7d8f05e26dc7152dfad771dfc867dec145aa054b.camel@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <7d8f05e26dc7152dfad771dfc867dec145aa054b.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: L000C40uecQVektj65LivkFRw4HDW1oS
-X-Proofpoint-ORIG-GUID: nAcuqTFzyn3mas3y2tFBMlAeYKDG1jyw
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 23 Apr 2023 10:10:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4554AB9
+        for <linux-integrity@vger.kernel.org>; Sun, 23 Apr 2023 07:10:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D342A60F0A
+        for <linux-integrity@vger.kernel.org>; Sun, 23 Apr 2023 14:10:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7452C433EF
+        for <linux-integrity@vger.kernel.org>; Sun, 23 Apr 2023 14:10:56 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=fail reason="key not found in DNS" (0-bit key) header.d=dmarto.com header.i=@dmarto.com header.b="hsLVHup6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dmarto.com; s=20210105;
+        t=1682259053;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=16GrWFsXFtLcLcuCYz6AyZR5lgmkhngK3uBfm36OlS0=;
+        b=hsLVHup6qgASrxy52tljvYoXCd+YbPu35t2ojRonmi3eeSq1In6cmeGgTpFh8hGGDycA8r
+        4RTrlpFWC3iqAdTdMaEegjQwJLMXdUvyBYpR4xOUJqMvzD5gAulkPAHvMzpEj4E75vy2LI
+        wSV0pHr1fXzN5DETjZE7T3SCUttfxQI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 752d6d67 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-integrity@vger.kernel.org>;
+        Sun, 23 Apr 2023 14:10:53 +0000 (UTC)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_12,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 clxscore=1015 phishscore=0 spamscore=0 adultscore=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 mlxscore=0
- mlxlogscore=999 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304060194
-X-Spam-Status: No, score=-2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Date:   Thu, 06 Apr 2023 22:51:39 +0000
+Content-Type: text/plain; charset="utf-8"
+From:   "Martin Dimov" <martin@dmarto.com>
+Message-ID: <3d1d7e9dbfb8c96125bc93b6b58b90a7@dmarto.com>
+Subject: bug in "tpm_chip_unregister"
+To:     jarkko@kernel.org, Jason@zx2c4.com
+Cc:     linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+        DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hello and excuse me if I am not following the proper steps while
+reporting this.
 
+I believe "tpm_chip_unregister" needs to call
+"tpm_amd_is_rng_defective", as introduced and used in
+commit f1324bbc4011ed8aef3f4552210fc429bcd616da.
 
-On 4/6/23 18:04, Jeff Layton wrote:
-> On Thu, 2023-04-06 at 17:24 -0400, Jeff Layton wrote:
->> On Thu, 2023-04-06 at 16:22 -0400, Stefan Berger wrote:
->>>
->>> On 4/6/23 15:37, Jeff Layton wrote:
->>>> On Thu, 2023-04-06 at 15:11 -0400, Stefan Berger wrote:
->>>>>
->>>>> On 4/6/23 14:46, Jeff Layton wrote:
->>>>>> On Thu, 2023-04-06 at 17:01 +0200, Christian Brauner wrote:
->>>>>>> On Thu, Apr 06, 2023 at 10:36:41AM -0400, Paul Moore wrote:
->>>>>
->>>>>>
->>>>>> Correct. As long as IMA is also measuring the upper inode then it seems
->>>>>> like you shouldn't need to do anything special here.
->>>>>
->>>>> Unfortunately IMA does not notice the changes. With the patch provided in the other email IMA works as expected.
->>>>>
->>>>
->>>>
->>>> It looks like remeasurement is usually done in ima_check_last_writer.
->>>> That gets called from __fput which is called when we're releasing the
->>>> last reference to the struct file.
->>>>
->>>> You've hooked into the ->release op, which gets called whenever
->>>> filp_close is called, which happens when we're disassociating the file
->>>> from the file descriptor table.
->>>>
->>>> So...I don't get it. Is ima_file_free not getting called on your file
->>>> for some reason when you go to close it? It seems like that should be
->>>> handling this.
->>>
->>> I would ditch the original proposal in favor of this 2-line patch shown here:
->>>
->>> https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468-ecbde3b221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
->>>
->>>
->>
->> Ok, I think I get it. IMA is trying to use the i_version from the
->> overlayfs inode.
->>
->> I suspect that the real problem here is that IMA is just doing a bare
->> inode_query_iversion. Really, we ought to make IMA call
->> vfs_getattr_nosec (or something like it) to query the getattr routine in
->> the upper layer. Then overlayfs could just propagate the results from
->> the upper layer in its response.
->>
->> That sort of design may also eventually help IMA work properly with more
->> exotic filesystems, like NFS or Ceph.
->>
->>
->>
-> 
-> Maybe something like this? It builds for me but I haven't tested it. It
-> looks like overlayfs already should report the upper layer's i_version
-> in getattr, though I haven't tested that either:
-
-
-Thank you! I will give it a try once I am back.
-
-     Stefan
+[ 1950.279393] list_del corruption, ffff99560d485790->next is NULL
+[ 1950.279400] ------------[ cut here ]------------
+[ 1950.279401] kernel BUG at lib/list_debug.c:49!
+[ 1950.279405] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+[ 1950.279407] CPU: 11 PID: 5886 Comm: modprobe Tainted: G O 6.2.8_1 #1
+[ 1950.279409] Hardware name: Gigabyte Technology Co., Ltd. B550M AORUS PRO-P/B550M AORUS PRO-P,
+BIOS F15c 05/11/2022
+[ 1950.279410] RIP: 0010:__list_del_entry_valid+0x59/0xc0
+[ 1950.279415] Code: 48 8b 01 48 39 f8 75 5a 48 8b 72 08 48 39 c6 75 65 b8 01 00 00 00 c3 cc cc cc
+cc 48 89 fe 48 c7 c7 08 a8 13 9e e8 b7 0a bc ff <0f> 0b 48 89 fe 48 c7 c7 38 a8 13 9e e8 a6 0a bc
+ff 0f 0b 48 89 fe
+[ 1950.279416] RSP: 0018:ffffa96d05647e08 EFLAGS: 00010246
+[ 1950.279418] RAX: 0000000000000033 RBX: ffff99560d485750 RCX: 0000000000000000
+[ 1950.279419] RDX: 0000000000000000 RSI: ffffffff9e107c59 RDI: 00000000ffffffff
+[ 1950.279420] RBP: ffffffffc19c5168 R08: 0000000000000000 R09: ffffa96d05647cc8
+[ 1950.279421] R10: 0000000000000003 R11: ffffffff9ea2a568 R12: 0000000000000000
+[ 1950.279422] R13: ffff99560140a2e0 R14: ffff99560127d2e0 R15: 0000000000000000
+[ 1950.279422] FS: 00007f67da795380(0000) GS:ffff995d1f0c0000(0000) knlGS:0000000000000000
+[ 1950.279424] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1950.279424] CR2: 00007f67da7e65c0 CR3: 00000001feed2000 CR4: 0000000000750ee0
+[ 1950.279426] PKRU: 55555554
+[ 1950.279426] Call Trace:
+[ 1950.279428] <TASK>
+[ 1950.279430] hwrng_unregister+0x28/0xe0 [rng_core]
+[ 1950.279436] tpm_chip_unregister+0xd5/0xf0 [tpm]
+[ 1950.279441] acpi_device_remove+0x52/0x90
+[ 1950.279445] device_release_driver_internal+0x1b2/0x230
+[ 1950.279449] driver_detach+0x44/0x90
+[ 1950.279451] bus_remove_driver+0x55/0xe0
+[ 1950.279453] __do_sys_delete_module+0x1a9/0x2f0
+[ 1950.279456] ? fpregs_assert_state_consistent+0x22/0x50
+[ 1950.279459] ? exit_to_user_mode_prepare+0x3c/0x1a0
+[ 1950.279462] ? syscall_exit_to_user_mode+0x17/0x40
+[ 1950.279465] ? do_syscall_64+0x67/0x80
+[ 1950.279467] do_syscall_64+0x5b/0x80
+[ 1950.279468] ? do_syscall_64+0x67/0x80
+[ 1950.279470] entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[ 1950.279474] RIP: 0033:0x7f67da8a59c7
+[ 1950.279475] Code: 73 01 c3 48 8b 0d 59 f4 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00
+00 00 00 00 0f 1f 44 00 00 b8 b0 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 29 f4 0c 00
+f7 d8 64 89 01 48
+[ 1950.279476] RSP: 002b:00007ffde7a53bf8 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
+[ 1950.279478] RAX: ffffffffffffffda RBX: 0000563607acca80 RCX: 00007f67da8a59c7
+[ 1950.279479] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 0000563607accae8
+[ 1950.279479] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[ 1950.279480] R10: 00007f67da91aac0 R11: 0000000000000206 R12: 0000000000000000
+[ 1950.279481] R13: 0000000000000000 R14: 00007ffde7a53c30 R15: 0000563607ad44d0
+[ 1950.279482] </TASK>
+[ 1950.279483] Modules linked in: joydev hid_magicmouse hidp snd_seq_dummy snd_hrtimer cmac
+algif_hash algif_skcipher af_alg bnep snd_hda_codec_realtek intel_rapl_msr intel_rapl_common
+snd_hda_codec_generic edac_mce_amd ledtrig_audio snd_hda_codec_hdmi kvm_amd snd_hda_intel btusb
+snd_intel_dspcfg snd_intel_sdw_acpi btrtl kvm snd_hda_codec snd_hda_core btbcm snd_hwdep irqbypass
+btintel input_leds rapl cdc_acm r8169 pcspkr btmtk wmi_bmof gigabyte_wmi k10temp snd_pcm i2c_piix4
+realtek thermal tpm_crb(-) evdev gpio_amdpt mac_hid tpm gpio_generic acpi_cpufreq tiny_power_button
+vboxnetflt(O) vboxnetadp(O) vboxdrv(O) snd_seq snd_seq_device snd_timer snd soundcore vhost_vsock
+vmw_vsock_virtio_transport_common vsock vhost_net vhost vhost_iotlb tap uhid hci_vhci bluetooth
+ecdh_generic rfkill ecc vfio_iommu_type1 vfio iommufd uinput userio ppp_generic slhc tun loop nvram
+cuse fuse amdgpu iommu_v2 drm_buddy gpu_sched video i2c_algo_bit ext4 drm_display_helper sd_mod cec
+hid_generic crc16 rc_core
+[ 1950.279518] usbmouse mbcache usbkbd usbhid hid jbd2 drm_kms_helper syscopyarea sysfillrect
+crct10dif_pclmul crc32_pclmul sysimgblt ahci polyval_clmulni drm_ttm_helper polyval_generic libahci
+gf128mul xhci_pci ghash_clmulni_intel ttm sha512_ssse3 xhci_pci_renesas libata xhci_hcd aesni_intel
+crypto_simd drm cryptd ccp usbcore scsi_mod sp5100_tco rng_core agpgart usb_common scsi_common wmi
+button dm_mirror dm_region_hash dm_log dm_mod btrfs blake2b_generic xor raid6_pq libcrc32c
+crc32c_generic crc32c_intel [last unloaded: tpm_tis_core]
+[ 1950.279540] ---[ end trace 0000000000000000 ]---
