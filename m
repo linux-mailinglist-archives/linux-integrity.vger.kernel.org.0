@@ -2,198 +2,203 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4133F6D9D56
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Apr 2023 18:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165866DA02B
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Apr 2023 20:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239958AbjDFQRT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 Apr 2023 12:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
+        id S240374AbjDFSqO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 6 Apr 2023 14:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239881AbjDFQRS (ORCPT
+        with ESMTP id S240279AbjDFSqM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:17:18 -0400
-Received: from sonic305-8.consmr.mail.bf2.yahoo.com (sonic305-8.consmr.mail.bf2.yahoo.com [74.6.133.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6567B40E0
-        for <linux-integrity@vger.kernel.org>; Thu,  6 Apr 2023 09:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680797835; bh=VuSERGq4d+Cfe8sCq/lVtoww/oUbwbdKqqQ64i5D7LE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=CsZM3TfsFQb7BNQgiB/R9kYXLI4Q2KKUe9O9pONITa1Dx+4yOTGTRTKpQ446oHSdudyl0+JADNfEqGgygI9f2Pm34+rCj2P+WjSIVpf2mVoy4z0L4yAgmJazkEmQXyBK5ftOECMulXkgn68LXi0pMiJAiMidP9hz3z+S39wbNliwxB3nN/OGViHW/D3C8U7dTQySEP1QB0ikfvsYBbr0kQ2hFjLjYmEn27YL8OcKXlQfw93drrHiXkrQ2KYMSFU3IQDYMTnJRpvDB/by4+0quD9/FZQzBpclu4WcnavOD1XptAMxhJVsXeu6RrtvH5+ziDnJ9KdXG3qxxqZqc02cJA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680797835; bh=v7+6uJ/gTTHM32UIrDPLnkqewRfrVmpO9kVwo6uf8Ae=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=DX9NxAD4QaVMT6cTyZN5NRiifiNAypC1h5aP7OLFADPjqRcxUDCyVF3icU093dfGYG1rpWtyH0kymCyMP2J3yFVD93Bfsy0D4PXNNAc2lJ2HW2zuGny55ZZzcgwR3xy74dTTBIcdeLXoktX2Pc9piBaUC/Nw0iR77iaUmeWvJDazg2IRz7D+eNM/itt2MCEFZqwnoDAcy8zuIswtJ0qKcAbdQnfRVqMt/NmX3TtKGYRM0Gut/9wQRaA9Pat8QFXvz/SHdBj9sQ94ErYfntak5udtYEnAE44ZaxQs/GmjNjPZzC9ORJZcjc0Bv9NDE3TANAkhhNrdWo+qvu9UTmjIRw==
-X-YMail-OSG: tUl9KEgVM1nZI52wCWlixedTkWjoD82z33IB7eYk.U.gLbKfV00IOSqzvK0IKoj
- G3ge29ww6dMqQd_DL3lZh2GQUwNkQjIg1dxxbB3QOtPeMZ5kP4TLxyonjCa9JGqZsrLYZdTB1WZD
- xriXzcbUzYX_aHD_WxwVQ783Y28dDq80HY1MiUTQInClC4N2_O4_lxcY9ZkygdCATm4tZHs9Ts..
- sd51Z_yQ7n32roXV8qE46ezdc3wD3cjnYWMmD.MFWrH4tQQvrTPFvMYgCrxiNx7N2mm7LIW2nd2k
- GwGI0ETmkMEKEQkMueJz0njns11ZG50ti9Bu4lZmHG9rpz2pqREQU.jqqYJGKsckrtfBE7OcV3hv
- nUDu78ugyve1Uf37Dqe2l.GoRuwEJnbcco4W8C..79Jdcwth5G2ikiCfIZhvqGJ7DnxIbLPqJkb5
- ku1H5q.Z8CX7zDcHGfUIa27p.SXe6OBBQmFZB3DPKmpGshvOlTenY_Nc9jpYgRTh9yvDrdJvT3sA
- pj.vIXfraVL.Q0G6s2xkvXY69xrnqxUSyDIkARl8ckbdZ2dGJtPZe12z36RLS.ZDrauDO7wD0Abf
- u.v7ooL4zzY8zbGlhZebQ.1AiXDPtUMSmvhz76KxDRhbwQlqVeUK9fkvgp3N4EPpFw05nVOHNKUj
- WNVzUKUWLXjI2P05JQ6q1ZLBNiBhpeDUzPlFvfLcBCoJZABD7CxAiyuWtaSKjDgO5_0yg4v3wLZr
- kwuhN2YhiM0w.xd4Y0LG4md0TQtt50bjXTM92hr2sAqlRNzPjKKCgIRCn_VElhaND08YOIMpSC3y
- huSQgyj0.XHRFJEdkkTrPrnZW4zOQUixljoICU73WmPyZy2TL.bANJ5L_pqtvggKXE2TV7J7SjOD
- MrVF.XhIpSkVoULX4JBYjeHVuqDAJjx_EQIE7cLDg6SssE5_xgeZB11ERI7U9FPWiANKxjjOwWDf
- BDavf94W3izvMHPAGMlj2jOH5OyUqloJr6pjDYRawTqb4J94fJHQqzZ62xtSA24NfgCnrXXN132v
- z.75vIBpXqWmAM2pvdkOWebMt9DemPfVoLxso6HOuw49bYUwBgXznRJ_rGjR3Qd8FAkoa8GNTLqx
- zyFTD2Zu_y9qD5fqUGSzA475juGX7AjwYSArdfA.P3z6G7KIbeMi8p6TlU8JPNKJjVZ_j466PWMy
- jTp7XfhA2ch9LTMN_eEG4fsrSN4G.R1WUTpCVWVUoJ9jLgW18GYUb2SstccyUuloZ_P3_gIYSprO
- zYoFnJbot9PgRepf8.XjUE2X7UO84O.QiLKtdPnYM5lEm93J5DRF7o6feNAphPGkkAepjKozmEPJ
- iSm0V2Tb.QR3C1hoQpqtFZQ_ipDfpfj140ItI8w9cmqFW.tjSSXZ.CU0dKXIXhvGaf1i62lRgxlU
- TfHXUB7vBZobFxop2lMEFqLnKoNv.vVUvIflnH0GHxyM1z0TI1hslusOc7bmj1DUXyKsIKaFcgeb
- v_d5ltbqCMIK2m31AfxFNu4RDiO9pkhbW0W4.5AkESY.Y5QkwbpZpjc7Ydogu_M5n5HhAQcSxlYq
- azCQ65opt4hTxncUJXBToKLelbu0_IB8z22kUTulktDRp_kg2pVwp3QXRMQA47jZ8Qm1K8SDt6fr
- oVmuyT9GjQVK_8bAuV0Xt.jsD2yvuMiDJZDuE8juy4yNg9Dg4Fx7AEtrujLggWPoWMj_C.DAatMA
- TtjL3z.7POVPurCd_c8O0hbwJqNhTs1zEhuD07rcAQTN8Jz1SkLEjwOxvWodWOM5nW_oVXEcccNb
- BN8YfHKqbfuuZcRd3exnLLnr3t_2lA7skqny7gH6okQTPFiRhs0cx8RsDcVwlnl3VsN027SnMz2F
- BOsVqMMtGaPd72OF4XQzR9PGuX8WI9L3F8kLtxRWgEvQB9q57SynSDtBvglRRaj0S3bFuZ.Q6zZR
- JaKou5M9syXv7pU1JTbWwh0iYgj2ruFMFSvp7ToscTvcbPuwUEU4yL.1yCwtgUmWrjUt0ZjoncmJ
- WrNbwsNajw86RaVWWM.h_vCIVbZoTrlfIacRxKBPRCfKMbOS6u8sGizS0Jkc4hXfgnQ_i09JIXr4
- wMlVWD1iSOt9GbpzqruE8raC5UBH3UsrQb2b9XEVgh54Rk79.QIpdT1fqhZVUhB1b50LNLOdMAKz
- QYEXi3ZqlHsSPZOgaYWW7CDPSSzUMCUwUa.DdYql2GOml3wcrPXNEPUpWH2HUcWWje23W6EVGutF
- sirSNvz1SqsikKqYxTAetEMUZp2ri303tGVy7tw--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: a5a8ccf3-a3b9-4c0d-b117-55a4932d35a3
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Thu, 6 Apr 2023 16:17:15 +0000
-Received: by hermes--production-ne1-7dbd98dd99-nn8pc (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 24a7d9931c2812c4db7376cbcf2cd759;
-          Thu, 06 Apr 2023 16:17:08 +0000 (UTC)
-Message-ID: <733a7896-0b0e-f86f-0068-0285d646d563@schaufler-ca.com>
-Date:   Thu, 6 Apr 2023 09:17:05 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Thu, 6 Apr 2023 14:46:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FA87A83;
+        Thu,  6 Apr 2023 11:46:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A19564B0D;
+        Thu,  6 Apr 2023 18:46:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC39C433EF;
+        Thu,  6 Apr 2023 18:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680806769;
+        bh=ioBTux9TyKxfDLourbPnWQ5D6ISPpHzr8NS+3yBHlTY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=bC0DqFg1Q469ljKPrnDlNud/O/dFS4scOSrf/DNuvFDizr1PmcliZrRe1Z6yUa+rd
+         PK7cLno/SNN5bs4YWswe3GmAkXspVORvC3H7VGoI2IU8CwOuyOM2yePHsOpq6UMYWu
+         DcSere1OmVCG5DudND7Xbe6CBDbqUJKhu6HCeglWzAThoMa5WMZVe4oF7S8ltv/Q4i
+         WHseoGksdyxqHT7MjKTHsEhCjVhuwFxbGHW8PLiFzwI98XVc6f1N+CRJ/bwOEXApOP
+         pinKALRl5k/2P+RNaQlPXml7QizG6QBjGwlqohcEF0QNi5sTj8NqGWDVIt3k4oqDl4
+         TbW6SlS3fAlAw==
+Message-ID: <546145ecbf514c4c1a997abade5f74e65e5b1726.camel@kernel.org>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
+ after writes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>,
         Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, reiserfs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
- <20230331123221.3273328-3-roberto.sassu@huaweicloud.com>
- <CAHC9VhSbGdij6xz9D49my37kD9qYrBmh2x7=cNFFDL2dZ=EZTw@mail.gmail.com>
- <5dbb9430-1e26-ec12-26a2-3718c84e33c2@schaufler-ca.com>
- <7549b624-421e-30b9-ca99-de42929354c7@huaweicloud.com>
- <CAHC9VhTsSUM6_g5+ZOqZ=P6307hCAJW+-xEc4fKQcymPs5pYjQ@mail.gmail.com>
- <83ddfcb9-b4a6-71b4-a20c-62f484c8e040@schaufler-ca.com>
- <CAHC9VhTO02CGUt0DUUmx=TUYS7Q81fas_Qy5miOFonaye0NEmw@mail.gmail.com>
- <c3751b2b-aa4b-2105-c238-29816bc85607@schaufler-ca.com>
- <841747d7-ab17-2904-ea1d-6adb3d35c711@huaweicloud.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <841747d7-ab17-2904-ea1d-6adb3d35c711@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.21284 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Cc:     Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        amir73il@gmail.com
+Date:   Thu, 06 Apr 2023 14:46:07 -0400
+In-Reply-To: <20230406-wasser-zwanzig-791bc0bf416c@brauner>
+References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
+         <20230406-diffamieren-langhaarig-87511897e77d@brauner>
+         <CAHC9VhQsnkLzT7eTwVr-3SvUs+mcEircwztfaRtA+4ZaAh+zow@mail.gmail.com>
+         <a6c6e0e4-047f-444b-3343-28b71ddae7ae@linux.ibm.com>
+         <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
+         <20230406-wasser-zwanzig-791bc0bf416c@brauner>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 4/6/2023 2:14 AM, Roberto Sassu wrote:
-> On 4/5/2023 11:07 PM, Casey Schaufler wrote:
->> On 4/5/2023 1:49 PM, Paul Moore wrote:
->>> On Wed, Apr 5, 2023 at 4:43 PM Casey Schaufler
->>> <casey@schaufler-ca.com> wrote:
->>>> On 4/5/2023 12:59 PM, Paul Moore wrote:
->>>>> On Wed, Apr 5, 2023 at 5:44 AM Roberto Sassu
->>>>> <roberto.sassu@huaweicloud.com> wrote:
->>>>>> On 4/5/2023 4:08 AM, Casey Schaufler wrote:
->>>>>>> On 4/4/2023 11:54 AM, Paul Moore wrote:
->>>>>>>> On Fri, Mar 31, 2023 at 8:33 AM Roberto Sassu
->>>>>>>> <roberto.sassu@huaweicloud.com> wrote:
->>>>> ..
->>>>>
->>>>>>>>> diff --git a/security/smack/smack_lsm.c
->>>>>>>>> b/security/smack/smack_lsm.c
->>>>>>>>> index cfcbb748da2..8392983334b 100644
->>>>>>>>> --- a/security/smack/smack_lsm.c
->>>>>>>>> +++ b/security/smack/smack_lsm.c
->>>>>>>>> @@ -52,6 +52,15 @@
->>>>>>>>>    #define SMK_RECEIVING  1
->>>>>>>>>    #define SMK_SENDING    2
->>>>>>>>>
->>>>>>>>> +/*
->>>>>>>>> + * Smack uses multiple xattrs.
->>>>>>>>> + * SMACK64 - for access control, SMACK64EXEC - label for the
->>>>>>>>> program,
->>>>>>>> I think it would be good to move SMACK64EXEC to its own line;
->>>>>>>> it took
->>>>>>>> me a minute to figure out why SMACK_INODE_INIT_XATTRS was set
->>>>>>>> to '4'
->>>>>>>> when I only say three comment lines ... ;)
->>>>>>>>
->>>>>>>>> + * SMACK64MMAP - controls library loading,
->>>>>>>>> + * SMACK64TRANSMUTE - label initialization,
->>>>>>>>> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT
->>>>>>>>> + */
->>>>>>>>> +#define SMACK_INODE_INIT_XATTRS 4
->>>>>>>> If smack_inode_init_security() only ever populates a single
->>>>>>>> xattr, and
->>>>>>>> that is the only current user of SMACK_INODE_INIT_XATTRS, can
->>>>>>>> we make
->>>>>>>> this '1' and shrink the xattr allocation a bit?
->>>>>>> If the parent directory is marked with SMACK64_TRANSMUTE, the
->>>>>>> access
->>>>>>> rule allowing the access has the "t" mode, and the object being
->>>>>>> initialized
->>>>>>> is a directory, the new inode should get the SMACK64_TRANSMUTE
->>>>>>> attribute.
->>>>>>> The callers of security_inode_init_security() don't seem to care.
->>>>>>> I can't say if the evm code is getting SMACK64_TRANSMUTE or, for
->>>>>>> that
->>>>>>> matter, SMACK64_EXEC and SMACK64_MMAP, some other way. The older
->>>>>>> system
->>>>>>> allowed for multiple Smack xattrs, but I'm not clear on exactly
->>>>>>> how.
->>>>>> If you like to set an additional xattr, that would be possible now.
->>>>>> Since we reserve multiple xattrs, we can call lsm_get_xattr_slot()
->>>>>> another time and set SMACK64_TRANSMUTE.
->>>>>>
->>>>>> I think, if the kernel config has CONFIG_EVM_EXTRA_SMACK_XATTRS set,
->>>>>> EVM would protect SMACK64_TRANSMUTE too.
->>>>> Ooookay, but can someone explain to me how either the current, or
->>>>> patched, smack_inode_init_security() function can return multiple
->>>>> xattrs via the security_inode_init_security() LSM hook?
->>>> It can't.
->>> I didn't think so.
->>>
->>> To be really specific, that's what we're talking about with this
->>> patch: the number of xattrs that smack_inode_init_security() can
->>> return to the LSM hook (and EVM, and the caller ...).  If it's only
->>> ever going to be one, I think we can adjust the
->>> 'SMACK_INODE_INIT_XATTRS' down to '1' and save ourselves some
->>> allocation space.
->>
->> Does evm have an expectation that mumble_inode_init_security() is
->> going to report all the relevant attributes? It has to be getting
->> them somehow, which leads me to wonder if we might want to extend
->> smack_inode_init_security() to do so. Even if we did, the maximum
->> value would be '2', SMACK64 and SMACK64_TRANSMUTE. Now that would
->> require a whole lot of work in the calling filesystems, as setting
->> the transmute attribute would be moving out of smack_d_instantiate()
->> and into the callers. Or something like that.
->
-> After changing the inode_init_security hook definition to pass the
-> full xattr array, this is not going to be a problem. EVM sees all
-> xattrs that are going to be set when an inode is created, and adds its
-> own too.
->
-> If you have enough information to set security.SMACK_TRANSMUTE64 in
-> smack_inode_init_security(),
+On Thu, 2023-04-06 at 17:01 +0200, Christian Brauner wrote:
+> On Thu, Apr 06, 2023 at 10:36:41AM -0400, Paul Moore wrote:
+> > On Thu, Apr 6, 2023 at 10:20=E2=80=AFAM Stefan Berger <stefanb@linux.ib=
+m.com> wrote:
+> > > On 4/6/23 10:05, Paul Moore wrote:
+> > > > On Thu, Apr 6, 2023 at 6:26=E2=80=AFAM Christian Brauner <brauner@k=
+ernel.org> wrote:
+> > > > > On Wed, Apr 05, 2023 at 01:14:49PM -0400, Stefan Berger wrote:
+> > > > > > Overlayfs fails to notify IMA / EVM about file content modifica=
+tions
+> > > > > > and therefore IMA-appraised files may execute even though their=
+ file
+> > > > > > signature does not validate against the changed hash of the fil=
+e
+> > > > > > anymore. To resolve this issue, add a call to integrity_notify_=
+change()
+> > > > > > to the ovl_release() function to notify the integrity subsystem=
+ about
+> > > > > > file changes. The set flag triggers the re-evaluation of the fi=
+le by
+> > > > > > IMA / EVM once the file is accessed again.
+> > > > > >=20
+> > > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > > > ---
+> > > > > >   fs/overlayfs/file.c       |  4 ++++
+> > > > > >   include/linux/integrity.h |  6 ++++++
+> > > > > >   security/integrity/iint.c | 13 +++++++++++++
+> > > > > >   3 files changed, 23 insertions(+)
+> > > > > >=20
+> > > > > > diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+> > > > > > index 6011f955436b..19b8f4bcc18c 100644
+> > > > > > --- a/fs/overlayfs/file.c
+> > > > > > +++ b/fs/overlayfs/file.c
+> > > > > > @@ -13,6 +13,7 @@
+> > > > > >   #include <linux/security.h>
+> > > > > >   #include <linux/mm.h>
+> > > > > >   #include <linux/fs.h>
+> > > > > > +#include <linux/integrity.h>
+> > > > > >   #include "overlayfs.h"
+> > > > > >=20
+> > > > > >   struct ovl_aio_req {
+> > > > > > @@ -169,6 +170,9 @@ static int ovl_open(struct inode *inode, st=
+ruct file *file)
+> > > > > >=20
+> > > > > >   static int ovl_release(struct inode *inode, struct file *file=
+)
+> > > > > >   {
+> > > > > > +     if (file->f_flags & O_ACCMODE)
+> > > > > > +             integrity_notify_change(inode);
+> > > > > > +
+> > > > > >        fput(file->private_data);
+> > > > > >=20
+> > > > > >        return 0;
+> > > > > > diff --git a/include/linux/integrity.h b/include/linux/integrit=
+y.h
+> > > > > > index 2ea0f2f65ab6..cefdeccc1619 100644
+> > > > > > --- a/include/linux/integrity.h
+> > > > > > +++ b/include/linux/integrity.h
+> > > > > > @@ -23,6 +23,7 @@ enum integrity_status {
+> > > > > >   #ifdef CONFIG_INTEGRITY
+> > > > > >   extern struct integrity_iint_cache *integrity_inode_get(struc=
+t inode *inode);
+> > > > > >   extern void integrity_inode_free(struct inode *inode);
+> > > > > > +extern void integrity_notify_change(struct inode *inode);
+> > > > >=20
+> > > > > I thought we concluded that ima is going to move into the securit=
+y hook
+> > > > > infrastructure so it seems this should be a proper LSM hook?
+> > > >=20
+> > > > We are working towards migrating IMA/EVM to the LSM layer, but ther=
+e
+> > > > are a few things we need to fix/update/remove first; if anyone is
+> > > > curious, you can join the LSM list as we've been discussing some of
+> > > > these changes this week.  Bug fixes like this should probably remai=
+n
+> > > > as IMA/EVM calls for the time being, with the understanding that th=
+ey
+> > > > will migrate over with the rest of IMA/EVM.
+> > > >=20
+> > > > That said, we should give Mimi a chance to review this patch as it =
+is
+> > > > possible there is a different/better approach.  A bit of patience m=
+ay
+> > > > be required as I know Mimi is very busy at the moment.
+> > >=20
+> > > There may be a better approach actually by increasing the inode's i_v=
+ersion,
+> > > which then should trigger the appropriate path in ima_check_last_writ=
+er().
+> >=20
+> > I'm not the VFS/inode expert here, but I thought the inode's i_version
+> > field was only supposed to be bumped when the inode metadata changed,
+> > not necessarily the file contents, right?
+> >=20
 
-I think there's enough information to do that. I'm going to have to look
-at your patch more closely.
+No. The i_version should change any time there is a "deliberate change"
+to the file. That can be to the data or metadata, but it has to be in
+response to some sort of deliberate, observable change -- something that
+would cause an mtime or ctime change.
 
-> this patch sets already allows to set both xattrs at the same time. We
-> would just need to call lsm_get_xattr_slot() another time, assuming
-> that we reserve two xattrs.
+In practice, the i_version changes whenever the ctime changes, as
+changing the mtime also changes the ctime.
+
+> > That said, overlayfs is a bit different so maybe that's okay, but I
+> > think we would need to hear from the VFS folks if this is acceptable.
+>=20
+> Ccing Jeff for awareness since he did the i_version rework a short time a=
+go.
+>=20
+> The documentation in include/linux/iversion.h states:
+>=20
+>  * [...] The i_version must
+>  * appear larger to observers if there was an explicit change to the inod=
+e's
+>  * data or metadata since it was last queried.
+>=20
+> what I'm less sure in all of this is why this is called in ovl_release() =
+and
+> whether it's correct to increment the overlayfs inode's i_version.
 >
-> Roberto
->
+
+Yeah, not sure what's special about doing this on close(). Seems like
+someone could just hold the file open to prevent triggering the
+remeasurement?
+
+> The change is done to the inode of the copied up/modified file's inode in=
+ the
+> upper layer. So the i_version should already be incremented when we call =
+into
+> the upper layer usually via vfs_*() methods.
+
+Correct. As long as IMA is also measuring the upper inode then it seems
+like you shouldn't need to do anything special here.
+
+What sort of fs are you using for the upper layer?
+--=20
+Jeff Layton <jlayton@kernel.org>
