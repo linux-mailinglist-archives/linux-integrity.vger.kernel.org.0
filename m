@@ -2,71 +2,41 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2FA6E4821
-	for <lists+linux-integrity@lfdr.de>; Mon, 17 Apr 2023 14:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074FA6E49C1
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Apr 2023 15:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjDQMp6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 17 Apr 2023 08:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S230179AbjDQNTX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 17 Apr 2023 09:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjDQMp5 (ORCPT
+        with ESMTP id S230123AbjDQNTT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:45:57 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8E1E6;
-        Mon, 17 Apr 2023 05:45:55 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33HCh8uY022220;
-        Mon, 17 Apr 2023 12:45:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Me3xl4OpCSeGXaMuaTCLA7+/DYZluuE1PRxzYqFhpEg=;
- b=ETbjwJmLvWd2Op/GmOgktP8anNkCO8a0bH3soeywbbpx2eE2YgUySA6EGFyxRzON6HRz
- 9YjfKGEj43rfjaTo/JAU75GdS0WtudD9HGE/gnGklBumcVLAOu5vR8iBzGVcRIANEpvn
- HqdDTneTt54nfvSVXCvuLxWvsmLVyAr12n2N9RgytSVpiVFo9C3ywd+KyfJnQ0T1/87H
- 7pT4XM70OZuyFWkTWceyb70bNd9SvY5ehfus3QE+HJAxvxNZh251eKc+aDWUYUoW3OUI
- nnbx9nMZPjVtzg7QnGYSO5t2w7juxTrbLdlTSht5PnVQHSBoBlm/nDqXgueQH+lDBIYJ Tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q13jtvpky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 12:45:44 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33HCaUxV003374;
-        Mon, 17 Apr 2023 12:45:44 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q13jtvpkh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 12:45:44 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33HBo8Ve015441;
-        Mon, 17 Apr 2023 12:45:43 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3pykj72vx4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 Apr 2023 12:45:43 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33HCjgAm15467250
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Apr 2023 12:45:42 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 09EE658062;
-        Mon, 17 Apr 2023 12:45:42 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C48D75803F;
-        Mon, 17 Apr 2023 12:45:40 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 17 Apr 2023 12:45:40 +0000 (GMT)
-Message-ID: <176640ae-3ff7-c3e9-218a-2952425336e7@linux.ibm.com>
-Date:   Mon, 17 Apr 2023 08:45:40 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
- writes
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>,
+        Mon, 17 Apr 2023 09:19:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A44B461;
+        Mon, 17 Apr 2023 06:18:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82F9561AB0;
+        Mon, 17 Apr 2023 13:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE74BC433D2;
+        Mon, 17 Apr 2023 13:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681737534;
+        bh=PyeeTfI8QXYJ6B2oTWU56K56KQLpF2XskjQp6upqB/o=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HbyeZIClPQqGSJyeLLvmyIDGi1jlGksR+Zs8xddBe2bnS2xJedIuqmwDaJu8+tIcs
+         LCVvOd9fr+4GMdKrer0sQ+walMErAYp1K63yWEcnsG1bAsasvJtZWCqOkLZ6zQnPwh
+         11DALm6faqP+9X9KuN4aDgRtE9mA/MTaEGoTl1HpPhfXXk8pnigTGYll+rZnzUFdCQ
+         G9qMlO/tlHbU+rXwxZxdHxXNljZy8iVWe/NidepLYDLOGDmt43ucO+35NUk4zwJDh/
+         dHijeMCE5irAUPq7JPXT2bfEzYMrknWvXHAk0uLUPPwIGq9abYnoX7tWRunK5mQ0MV
+         PFL5w/h2PsbUg==
+Message-ID: <7596d06350a556741e1d1e54d0927d1a65b26939.camel@kernel.org>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
+ after writes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
         Christian Brauner <brauner@kernel.org>,
         Amir Goldstein <amir73il@gmail.com>
 Cc:     Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com,
@@ -74,103 +44,122 @@ Cc:     Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com,
         linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
+Date:   Mon, 17 Apr 2023 09:18:52 -0400
+In-Reply-To: <176640ae-3ff7-c3e9-218a-2952425336e7@linux.ibm.com>
 References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
- <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
- <e2455c0e-5a17-7fc1-95e3-5f2aca2eb409@linux.ibm.com>
- <94c2aadfb2fe7830d0289ffe6084581b99505a58.camel@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <94c2aadfb2fe7830d0289ffe6084581b99505a58.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 85Q8tAJWRbLCXkztfuFx5wGoC_6DRp6r
-X-Proofpoint-GUID: M7pTikFpMhcOf2yCNYob2HPnxFymdJ7z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-17_07,2023-04-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- lowpriorityscore=0 clxscore=1015 malwarescore=0 suspectscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=989 mlxscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304170113
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+         <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
+         <e2455c0e-5a17-7fc1-95e3-5f2aca2eb409@linux.ibm.com>
+         <94c2aadfb2fe7830d0289ffe6084581b99505a58.camel@kernel.org>
+         <176640ae-3ff7-c3e9-218a-2952425336e7@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Mon, 2023-04-17 at 08:45 -0400, Stefan Berger wrote:
+>=20
+> On 4/17/23 06:05, Jeff Layton wrote:
+> > On Sun, 2023-04-16 at 21:57 -0400, Stefan Berger wrote:
+> > >=20
+> > > On 4/7/23 09:29, Jeff Layton wrote:
+>=20
+> > > >=20
+> > > > Note that there Stephen is correct that calling getattr is probably
+> > > > going to be less efficient here since we're going to end up calling
+> > > > generic_fillattr unnecessarily, but I still think it's the right th=
+ing
+> > > > to do.
+> > >=20
+> > > I was wondering whether to use the existing inode_eq_iversion() for a=
+ll
+> > > other filesystems than overlayfs, nfs, and possibly other ones (which=
+ ones?)
+> > > where we would use the vfs_getattr_nosec() via a case on inode->i_sb-=
+>s_magic?
+> > > If so, would this function be generic enough to be a public function =
+for libfs.c?
+> > >=20
+> > > I'll hopefully be able to test the proposed patch tomorrow.
+> > >=20
+> > >=20
+> >=20
+> > No, you don't want to use inode_eq_iversion here because (as the commen=
+t
+> > over it says):
+>=20
+> In the ima_check_last_writer() case the usage of inode_eq_iversion() was =
+correct since
+> at this point no record of  its value was made and therefore no writer ne=
+eded to change
+> the i_value again due to IMA:
+>=20
+> 		update =3D test_and_clear_bit(IMA_UPDATE_XATTR,
+> 					    &iint->atomic_flags);
+> 		if (!IS_I_VERSION(inode) ||
+> 		    !inode_eq_iversion(inode, iint->version) ||
+> 		    (iint->flags & IMA_NEW_FILE)) {
+> 			iint->flags &=3D ~(IMA_DONE_MASK | IMA_NEW_FILE);
+> 			iint->measured_pcrs =3D 0;
+> 			if (update)
+> 				ima_update_xattr(iint, file);
+> 		}
+>=20
+> The record of the value is only made when the actual measurement is done =
+in
+> ima_collect_measurement()
+>=20
 
+True, but we don't have a generic mechanism to do a this. What you're
+doing only works for IS_I_VERSION inodes.
 
-On 4/17/23 06:05, Jeff Layton wrote:
-> On Sun, 2023-04-16 at 21:57 -0400, Stefan Berger wrote:
->>
->> On 4/7/23 09:29, Jeff Layton wrote:
+> Compared to this the usage of vfs_getattr_nosec() is expensive since it r=
+esets the flag.
+>=20
+>          if ((request_mask & STATX_CHANGE_COOKIE) && IS_I_VERSION(inode))=
+ {
+>                  stat->result_mask |=3D STATX_CHANGE_COOKIE;
+>                  stat->change_cookie =3D inode_query_iversion(inode);
+>          }
+>=20
+> 	idmap =3D mnt_idmap(path->mnt);
+> 	if (inode->i_op->getattr)
+> 		return inode->i_op->getattr(idmap, path, stat,
+> 					    request_mask, query_flags);
+>=20
+> Also, many filesystems will have their getattr now called as well.
+>=20
 
->>>
->>> Note that there Stephen is correct that calling getattr is probably
->>> going to be less efficient here since we're going to end up calling
->>> generic_fillattr unnecessarily, but I still think it's the right thing
->>> to do.
->>
->> I was wondering whether to use the existing inode_eq_iversion() for all
->> other filesystems than overlayfs, nfs, and possibly other ones (which ones?)
->> where we would use the vfs_getattr_nosec() via a case on inode->i_sb->s_magic?
->> If so, would this function be generic enough to be a public function for libfs.c?
->>
->> I'll hopefully be able to test the proposed patch tomorrow.
->>
->>
-> 
-> No, you don't want to use inode_eq_iversion here because (as the comment
-> over it says):
+...as they should!
 
-In the ima_check_last_writer() case the usage of inode_eq_iversion() was correct since
-at this point no record of  its value was made and therefore no writer needed to change
-the i_value again due to IMA:
+> I understand Christian's argument about the maintenance headache to a cer=
+tain degree...
+>=20
 
-		update = test_and_clear_bit(IMA_UPDATE_XATTR,
-					    &iint->atomic_flags);
-		if (!IS_I_VERSION(inode) ||
-		    !inode_eq_iversion(inode, iint->version) ||
-		    (iint->flags & IMA_NEW_FILE)) {
-			iint->flags &= ~(IMA_DONE_MASK | IMA_NEW_FILE);
-			iint->measured_pcrs = 0;
-			if (update)
-				ima_update_xattr(iint, file);
-		}
+IMA is not equipped to understand the subtleties of how the i_version
+counter is implemented on different filesystems. In the past it dealt
+with this by limiting its usage to IS_I_VERSION inodes, but that is
+already problematic today. For instance: xfs currently sets the
+SB_I_VERSION flag, but its i_version counter also bumps the value on
+atime updates. That means that IMA is doing more remeasurements on xfs
+than are needed.
 
-The record of the value is only made when the actual measurement is done in
-ima_collect_measurement()
+I'm trying to clean a lot of this up, but IMA's current usage isn't
+really helping since it's poking around in areas it shouldn't be. Doing
+a getattr is the canonical way to query this value since it leaves it up
+to the filesystem how to report this value.
 
-Compared to this the usage of vfs_getattr_nosec() is expensive since it resets the flag.
-
-         if ((request_mask & STATX_CHANGE_COOKIE) && IS_I_VERSION(inode)) {
-                 stat->result_mask |= STATX_CHANGE_COOKIE;
-                 stat->change_cookie = inode_query_iversion(inode);
-         }
-
-	idmap = mnt_idmap(path->mnt);
-	if (inode->i_op->getattr)
-		return inode->i_op->getattr(idmap, path, stat,
-					    request_mask, query_flags);
-
-Also, many filesystems will have their getattr now called as well.
-
-I understand Christian's argument about the maintenance headache to a certain degree...
-
-    Stefan
-
-> 
->   * Note that we don't need to set the QUERIED flag in this case, as the value
->   * in the inode is not being recorded for later use.
-> 
-> The IMA code _does_ record the value for later use. Furthermore, it's
-> not valid to use inode_eq_iversion on a non-IS_I_VERSION inode, so it's
-> better to just use vfs_getattr_nosec which allows IMA to avoid all of
-> those gory details.
-> 
-> Thanks,
+If this turns out to cause a performance regression we can look at
+adding a getattr-like routine that _only_ reports the change attribute.
+I wouldn't want to do that though unless the need were clear (and backed
+up by performance numbers).
+--=20
+Jeff Layton <jlayton@kernel.org>
