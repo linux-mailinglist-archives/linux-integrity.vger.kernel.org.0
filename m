@@ -2,148 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A596E4EA4
-	for <lists+linux-integrity@lfdr.de>; Mon, 17 Apr 2023 18:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1A86E4FDB
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Apr 2023 20:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjDQQz6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 17 Apr 2023 12:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
+        id S229727AbjDQSGz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 17 Apr 2023 14:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDQQz5 (ORCPT
+        with ESMTP id S229575AbjDQSG1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:55:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B90E9;
-        Mon, 17 Apr 2023 09:55:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7982B62851;
-        Mon, 17 Apr 2023 16:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E5FC433D2;
-        Mon, 17 Apr 2023 16:55:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681750554;
-        bh=+d/lVi1J7BqYOvVt6PAqOL5mAcrAhRVB95e6IpiVqjo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sE+FKdeXE4ervgvpNrQ1+ziY+As3s8uAvlcMWrQjT9aYUT5D3UzeRmpsUzoo1sBL5
-         pu2JeoGNMvuqrxSbinwViDMtMkQpSh97DCxkHQHm6p4ppmDJ7vFD/zrSim3ChUSu9W
-         nJS5dvKL2yCtAm3Z/kK1OoQKYlChb4ejr9SIs44rdl4id2Wv5TOhANM3zmUVy1VKAv
-         vnLavpfrej46/KoEwl8rCSwkQxrNo8RV1JLqVRpzWv/P22vtrRKCWNHr94G1EzUkxf
-         NiNf9FMhGk13yi8qH3a/giUsruCbJ3jdslOHhfPRGFjNSo9wedR3FNQxW6lVyor2xr
-         g1/lDTvtyu29w==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Christian Brauner <brauner@kernel.org>, amir73il@gmail.com,
-        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Stefan Berger <stefanb@linux.ibm.com>,
+        Mon, 17 Apr 2023 14:06:27 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2205FAF15;
+        Mon, 17 Apr 2023 11:06:06 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 627AA21C1E42; Mon, 17 Apr 2023 11:06:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 627AA21C1E42
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1681754765;
+        bh=PjG74HOKXwe7va7p2A9jFByxA/BP+3mUkctDdGY/Zmw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ipOJl4sHtP4MosUagWDfkLRxaakERXlkvVNtSL+yWRdW+u/MZwdek29UIuC+s2Olc
+         iflWufz/4Z0zo7AOuyThvZFM1U7EPXcdfGops8XtfxDhvZsEXUt5hCBaejNJhNpHmD
+         E5bXgrGu6xGy+ERVXHDwBp1XqaykYLwf0ng09oug=
+Date:   Mon, 17 Apr 2023 11:06:05 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] IMA: use vfs_getattr_nosec to get the i_version
-Date:   Mon, 17 Apr 2023 12:55:51 -0400
-Message-Id: <20230417165551.31130-1-jlayton@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 05/16] ipe: add userspace interface
+Message-ID: <20230417180605.GA402@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-6-git-send-email-wufan@linux.microsoft.com>
+ <CAHC9VhRa+NwKzLfQBmHfMgUp6_d5soQG7JBq-Vn=MUeUAt4tuQ@mail.gmail.com>
+ <20230410191035.GB18827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CAHC9VhQDvWDshaZvJrHmjcwyHFxv9oYTN9bn0xiTtFZQRp+GPg@mail.gmail.com>
+ <20230412233606.GA16658@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CAHC9VhTs3Njfg=1baQ6=58rPLBmyB3cW0R-MfAaEcRF-jAaYBw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhTs3Njfg=1baQ6=58rPLBmyB3cW0R-MfAaEcRF-jAaYBw@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA currently accesses the i_version out of the inode directly when it
-does a measurement. This is fine for most simple filesystems, but can be
-problematic with more complex setups (e.g. overlayfs).
+On Thu, Apr 13, 2023 at 02:45:07PM -0400, Paul Moore wrote:
+> On Wed, Apr 12, 2023 at 7:36???PM Fan Wu <wufan@linux.microsoft.com> wrote:
+> > On Tue, Apr 11, 2023 at 05:45:41PM -0400, Paul Moore wrote:
+> > > On Mon, Apr 10, 2023 at 3:10???PM Fan Wu <wufan@linux.microsoft.com> wrote:
+> > > > On Thu, Mar 02, 2023 at 02:04:42PM -0500, Paul Moore wrote:
+> > > > > On Mon, Jan 30, 2023 at 5:58???PM Fan Wu <wufan@linux.microsoft.com> wrote:
+> 
+> ...
+> 
+> > > I guess this does make me wonder about keeping a non-active policy
+> > > loaded in the kernel, what purpose does that serve?
+> > >
+> >
+> > The non-active policy doesn't serve anything unless it is activated. User can
+> > even delete a policy if that is no longer needed. Non-active is just the default
+> > state when a new policy is loaded.
+> >
+> > If IPE supports namespace, there is another use case where different containers
+> > can select different policies as the active policy from among multiple loaded
+> > policies. Deven has presented a demo of this during LSS 2021. But this goes
+> > beyond the scope of this version.
+> 
+> Do you plan to add namespace support at some point in the
+> not-too-distant future?  If so, I'm okay with keeping support for
+> multiple policies, but if you think you're only going to support one
+> active policy at a time, it might be better to remove support for
+> multiple (inactive) policies.
+> 
+> -- 
+> paul-moore.com
 
-Make IMA instead call vfs_getattr_nosec to get this info. This allows
-the filesystem to determine whether and how to report the i_version, and
-should allow IMA to work properly with a broader class of filesystems in
-the future.
+Another benefit of having multiple policies is that it provides isolation
+between different policies. For instance, if we have two policies named
+"policy_a" and "policy_b," we can ensure that only team a can update "policy_a,"
+and only team b can update "policy_b." This way, both teams can update
+their policy without affecting others. However, if there is only one policy
+in the system, both teams will have to operate on the same policy, making it
+less manageable.
 
-Reported-and-Tested-by: Stefan Berger <stefanb@linux.ibm.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- security/integrity/ima/ima_api.c  |  9 ++++++---
- security/integrity/ima/ima_main.c | 12 ++++++++----
- 2 files changed, 14 insertions(+), 7 deletions(-)
+Besides, removing multiple (inactive) policies support will
+render the policy_name field meaningless, and we should only audit the policy
+hash. I am fine if we decide to go for the single policy option.
 
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index d3662f4acadc..c45902e72044 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -13,7 +13,6 @@
- #include <linux/fs.h>
- #include <linux/xattr.h>
- #include <linux/evm.h>
--#include <linux/iversion.h>
- #include <linux/fsverity.h>
- 
- #include "ima.h"
-@@ -246,10 +245,11 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 	struct inode *inode = file_inode(file);
- 	const char *filename = file->f_path.dentry->d_name.name;
- 	struct ima_max_digest_data hash;
-+	struct kstat stat;
- 	int result = 0;
- 	int length;
- 	void *tmpbuf;
--	u64 i_version;
-+	u64 i_version = 0;
- 
- 	/*
- 	 * Always collect the modsig, because IMA might have already collected
-@@ -268,7 +268,10 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 	 * to an initial measurement/appraisal/audit, but was modified to
- 	 * assume the file changed.
- 	 */
--	i_version = inode_query_iversion(inode);
-+	result = vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_COOKIE,
-+				   AT_STATX_SYNC_AS_STAT);
-+	if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
-+		i_version = stat.change_cookie;
- 	hash.hdr.algo = algo;
- 	hash.hdr.length = hash_digest_size[algo];
- 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index d66a0a36415e..365db0e43d7c 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -24,7 +24,6 @@
- #include <linux/slab.h>
- #include <linux/xattr.h>
- #include <linux/ima.h>
--#include <linux/iversion.h>
- #include <linux/fs.h>
- 
- #include "ima.h"
-@@ -164,11 +163,16 @@ static void ima_check_last_writer(struct integrity_iint_cache *iint,
- 
- 	mutex_lock(&iint->mutex);
- 	if (atomic_read(&inode->i_writecount) == 1) {
-+		struct kstat stat;
-+
- 		update = test_and_clear_bit(IMA_UPDATE_XATTR,
- 					    &iint->atomic_flags);
--		if (!IS_I_VERSION(inode) ||
--		    !inode_eq_iversion(inode, iint->version) ||
--		    (iint->flags & IMA_NEW_FILE)) {
-+		if ((iint->flags & IMA_NEW_FILE) ||
-+		    vfs_getattr_nosec(&file->f_path, &stat,
-+				      STATX_CHANGE_COOKIE,
-+				      AT_STATX_SYNC_AS_STAT) ||
-+		    !(stat.result_mask & STATX_CHANGE_COOKIE) ||
-+		    stat.change_cookie != iint->version) {
- 			iint->flags &= ~(IMA_DONE_MASK | IMA_NEW_FILE);
- 			iint->measured_pcrs = 0;
- 			if (update)
--- 
-2.39.2
-
+-Fan
