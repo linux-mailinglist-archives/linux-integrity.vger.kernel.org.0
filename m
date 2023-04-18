@@ -2,109 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00EF6E6929
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Apr 2023 18:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417CC6E6B6A
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Apr 2023 19:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjDRQQT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Apr 2023 12:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S232569AbjDRRud (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Apr 2023 13:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbjDRQQQ (ORCPT
+        with ESMTP id S232605AbjDRRu2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Apr 2023 12:16:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D13AC
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Apr 2023 09:16:08 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IFdjdh023583
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Apr 2023 16:16:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=Xixctmug59dXz+qyQhiScPHYHKV7k4erIWhsqZ5W92o=;
- b=nlchz0FK8jK2q0jlE8pYy4lqCMBFjPmmUkqp+7QLzD19ec424L9/cw0nWV9mNkR8Ju5/
- JLpV0I2cu8qBU92HvaJDzC7JJNz0n9VXWKgptypB7kjH98n5Gj+qf4QN0POPeL4fBffJ
- Rafz7z9jltEHjirhNDU8aEZR1cIUv02FfYz2r/OHYhhpakedBvV1vY/Tf0KOlI8Vjw3R
- DDh1H1E0WvFGbgaMvXCnFrmmbA3HiWu2kb7ZNCgEg2muULk1XM1z/N6lJN3ZpAyFRQzP
- Jjtyn95hv6VWH3u8+vaNCPmFxiPiGH7WL6BsaJPp5cobLeP0l06P35FPgptiwL0BYVzm YQ== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q1pww73dg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Apr 2023 16:16:07 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33IFANBe024272
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Apr 2023 16:16:05 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3pykj7htxj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Apr 2023 16:16:05 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33IGG4oe4457008
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Apr 2023 16:16:04 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C3BDD58066;
-        Tue, 18 Apr 2023 16:16:04 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 788AB58065;
-        Tue, 18 Apr 2023 16:16:04 +0000 (GMT)
-Received: from sbct-2.pok.ibm.com (unknown [9.47.158.152])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Apr 2023 16:16:04 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH ima-evm-utils] Do not get 'generation' using ioctl when evm_portable is true
-Date:   Tue, 18 Apr 2023 12:16:02 -0400
-Message-Id: <20230418161602.86219-1-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 18 Apr 2023 13:50:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A515D31D;
+        Tue, 18 Apr 2023 10:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681840216; x=1713376216;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7EmeuTp2AWwh1GqSAAygCLfWauOKIDuUnAJOtFCpvdI=;
+  b=LJpTNBMSSdyIQkGwdFUmjxtLSGPlTC5Epjzz9HLLw1dGnQnuIHbRwVYK
+   JyOuvdD9JMwjHeyVUgOHJdpW69M+UN60SBb0pYyU18emApTyemGVKX6Fj
+   OMxJguEitnwSHOa6SP5FKrTWFgnP02h4xUj/4F8ohnD5O5feof/1R+syh
+   1l/YMAblWvbmVkkInQDowA7l1Q4dIL/QuggmkTgZ62v629wcnoAGL+hqY
+   HNe7hfhWSh2c+W4Mxm3EGB5O+GkT++OK9LGXqVz16REwrfphdJuz53TBc
+   UWbiV7qsoEkxh0QmJJhkXs9lx4LAJCnCEVM8tksKO634sbW+F4Im1DLMG
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="334051375"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="334051375"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:50:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="937337180"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="937337180"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 18 Apr 2023 10:50:05 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1popSp-000dpl-1r;
+        Tue, 18 Apr 2023 17:49:59 +0000
+Date:   Wed, 19 Apr 2023 01:49:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>, kexec@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     oe-kbuild-all@lists.linux.dev, nayna@linux.ibm.com,
+        nasastry@in.ibm.com, mpe@ellerman.id.au,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>,
+        Coiby Xu <coxu@redhat.com>
+Subject: Re: [PATCH v9 4/4] tpm/kexec: Duplicate TPM measurement log in
+ of-tree for kexec
+Message-ID: <202304190146.FrlhoboB-lkp@intel.com>
+References: <20230418134409.177485-5-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3WA8yv1u--0DD4iPmWpUwqAkbwtDMim5
-X-Proofpoint-ORIG-GUID: 3WA8yv1u--0DD4iPmWpUwqAkbwtDMim5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_11,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- impostorscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=934
- bulkscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304180136
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418134409.177485-5-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-If a signatures is detected as being portable do not attempt to read the
-generation with the ioctl since in some cases this may not be supported
-by the filesystem and is also not needed for computing a portable
-signature.
+Hi Stefan,
 
-This avoids the current work-around of passing --generation 0 when the
-ioctl is not supported by the filesystem.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- src/evmctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[auto build test WARNING on 6a8f57ae2eb07ab39a6f0ccad60c760743051026]
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 6d2bb67..c35a28c 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -376,7 +376,7 @@ static int calc_evm_hash(const char *file, unsigned char *hash)
- 	if (mode_str)
- 		st.st_mode = strtoul(mode_str, NULL, 10);
- 
--	if (!evm_immutable) {
-+	if (!evm_immutable && !evm_portable) {
- 		if (S_ISREG(st.st_mode) && !generation_str) {
- 			int fd = open(file, 0);
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Berger/drivers-of-kexec-ima-Support-32-bit-platforms/20230418-214600
+base:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
+patch link:    https://lore.kernel.org/r/20230418134409.177485-5-stefanb%40linux.ibm.com
+patch subject: [PATCH v9 4/4] tpm/kexec: Duplicate TPM measurement log in of-tree for kexec
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20230419/202304190146.FrlhoboB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/16a833d47b9aca53a1b099dea4066b76b7f14ee1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stefan-Berger/drivers-of-kexec-ima-Support-32-bit-platforms/20230418-214600
+        git checkout 16a833d47b9aca53a1b099dea4066b76b7f14ee1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash drivers/input/mouse/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304190146.FrlhoboB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/irqdomain.h:36,
+                    from include/linux/acpi.h:13,
+                    from include/linux/i2c.h:13,
+                    from drivers/input/mouse/synaptics.c:30:
+>> include/linux/of.h:1664:48: warning: 'struct kimage' declared inside parameter list will not be visible outside of this definition or declaration
+    1664 | static inline void tpm_add_kexec_buffer(struct kimage *image) { }
+         |                                                ^~~~~~
+   drivers/input/mouse/synaptics.c:164:27: warning: 'smbus_pnp_ids' defined but not used [-Wunused-const-variable=]
+     164 | static const char * const smbus_pnp_ids[] = {
+         |                           ^~~~~~~~~~~~~
+
+
+vim +1664 include/linux/of.h
+
+  1660	
+  1661	#if defined(CONFIG_KEXEC_FILE) && defined(CONFIG_OF_FLATTREE)
+  1662	void tpm_add_kexec_buffer(struct kimage *image);
+  1663	#else
+> 1664	static inline void tpm_add_kexec_buffer(struct kimage *image) { }
+  1665	#endif
+  1666	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
