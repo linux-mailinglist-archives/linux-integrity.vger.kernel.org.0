@@ -2,92 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33136E6635
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Apr 2023 15:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CA86E6633
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Apr 2023 15:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232292AbjDRNo5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Apr 2023 09:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        id S232086AbjDRNo4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Apr 2023 09:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbjDRNom (ORCPT
+        with ESMTP id S232170AbjDRNon (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:44:42 -0400
+        Tue, 18 Apr 2023 09:44:43 -0400
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C84D325;
-        Tue, 18 Apr 2023 06:44:35 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IDQEB5014851;
-        Tue, 18 Apr 2023 13:44:18 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3374EB762;
+        Tue, 18 Apr 2023 06:44:37 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IDZYqv023534;
+        Tue, 18 Apr 2023 13:44:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=TEGBONkyuog+F35viyuYWUr10yzGVlxA8iH4QwsmVSU=;
- b=QsYDnL4lS3xM5aT8KiHJbr7kZOK1ahu1Y7J00QkOimGxoPN2GKRL6vr7K0ubEJeMSx2O
- nyqlOQIPaSIR55ZeeZ6p/nVHMuU+i1HBkeJ36vLadtvATdVxTpFDIugeZmVj0MNwudtR
- 4lIZ79fXWbnxxh4fUyRNZQXaIYN7gszfl7Fdd1IbvXPbfuvpa+YIhO5gvumL/yIvFTh0
- rgX7qAmaVEzvrbiiAs0pKTGMwXaJQ8PYEBEmgHZoXzs84vBro2ISdfBWWwy4FL9k1aSE
- fbkPsE+H2yPCUAvzpX7KQYpTeozCJUC54+9nSZCFlm4EY/GYl+J5BV+7kNSVjKpKz8e3 xg== 
+ bh=51cRZTu6UcwHcnS/YEaTbCAFxBFW4qP0HhtDLNdb/t8=;
+ b=qARhLlWamqcSKP1ajprwbSEKilGJjFrq/fkD56J0IS+ttXYNUK9qHpkl8I/fA8Ynx3bW
+ GzR6n7MkxFwUbP+YrJ4J8z7V2k1U7BfAo4A0jTgBocJjSwbTMqhgqdozX205hzSUfZNG
+ CisApsTyjHDtid5HDDHPLb0e6EMswhYYSY7ccp7Bq/ktMtRwYj0uljFE2/lLYgxbq7RR
+ /15WQuIIZGHrxGNSe/wGI8A/l/5XZGrxw4DbZ94j3G0AIV1TerZ3oX7mOaNWzty3gDZ2
+ l/2pSH/lP/CIRVR3TM5PIPTaTOzSx9kA3b0TUh5s+xguHw6lGOWnlC8/dX9OrRDIzlww SA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q1q529xx0-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q1ntu4ntq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 13:44:20 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33IDf3UV013921;
+        Tue, 18 Apr 2023 13:44:19 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q1ntu4nt7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 13:44:19 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33ID7nqm014077;
+        Tue, 18 Apr 2023 13:44:18 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pykj75fnq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 18 Apr 2023 13:44:18 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33ICK4CU026346;
-        Tue, 18 Apr 2023 13:44:17 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q1q529xwg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 13:44:17 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33ID0C8J003732;
-        Tue, 18 Apr 2023 13:44:16 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3pykj7weej-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 13:44:16 +0000
 Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33IDiEDE33620586
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33IDiGZK16122518
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Apr 2023 13:44:14 GMT
+        Tue, 18 Apr 2023 13:44:16 GMT
 Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A3EF058063;
+        by IMSVA (Postfix) with ESMTP id 2CEA05805B;
+        Tue, 18 Apr 2023 13:44:16 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D48E858066;
         Tue, 18 Apr 2023 13:44:14 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4F86958066;
-        Tue, 18 Apr 2023 13:44:13 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Apr 2023 13:44:13 +0000 (GMT)
+        Tue, 18 Apr 2023 13:44:14 +0000 (GMT)
 From:   Stefan Berger <stefanb@linux.ibm.com>
 To:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
 Cc:     nayna@linux.ibm.com, nasastry@in.ibm.com, mpe@ellerman.id.au,
         Stefan Berger <stefanb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
+        Rob Herring <robh@kernel.org>,
         Nageswara R Sastry <rnsastry@linux.ibm.com>,
         Coiby Xu <coxu@redhat.com>
-Subject: [PATCH v9 2/4] tpm: of: Make of-tree specific function commonly available
-Date:   Tue, 18 Apr 2023 09:44:07 -0400
-Message-Id: <20230418134409.177485-3-stefanb@linux.ibm.com>
+Subject: [PATCH v9 3/4] of: kexec: Refactor IMA buffer related functions to make them reusable
+Date:   Tue, 18 Apr 2023 09:44:08 -0400
+Message-Id: <20230418134409.177485-4-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230418134409.177485-1-stefanb@linux.ibm.com>
 References: <20230418134409.177485-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i92gmyUBa8RFw3E1tvHzitilikJ19_tg
-X-Proofpoint-ORIG-GUID: BumNmB7KdGlnfVAk3Q2It202VDnZXF5P
+X-Proofpoint-GUID: Pwp111NWjBf_1uPsxdSi9TX58YRyvY5o
+X-Proofpoint-ORIG-GUID: qpJqY9r643D89DdQGiclnMF1hI8Argjt
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-18_09,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- suspectscore=0 impostorscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0
- mlxscore=0 priorityscore=1501 mlxlogscore=999 malwarescore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ suspectscore=0 mlxscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ phishscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
  definitions=main-2304180118
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -99,132 +98,228 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Simplify tpm_read_log_of() by moving reusable parts of the code into
-an inline function that makes it commonly available so it can be
-used also for kexec support. Call the new of_tpm_get_sml_parameters()
-function from the TPM Open Firmware driver.
+Refactor IMA buffer related functions to make them reusable for carrying
+TPM logs across kexec.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
 Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
 Tested-by: Coiby Xu <coxu@redhat.com>
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 ---
-v9:
- - Rebased on 6.3-rc7; call tpm_read_log_memory_region if -ENODEV returned
+v6:
+ - Add __init to get_kexec_buffer as suggested by Jonathan
 
-v7:
- - Added original comment back into inlined function
-
+v5:
+ - Rebased on Jonathan McDowell's commit "b69a2afd5afc x86/kexec: Carry
+   forward IMA measurement log on kexec"
 v4:
- - converted to inline function
+ - Move debug output into setup_buffer()
 ---
- drivers/char/tpm/eventlog/of.c | 30 +++++-----------------------
- include/linux/tpm.h            | 36 ++++++++++++++++++++++++++++++++++
- 2 files changed, 41 insertions(+), 25 deletions(-)
+ drivers/of/kexec.c | 126 ++++++++++++++++++++++++++-------------------
+ 1 file changed, 74 insertions(+), 52 deletions(-)
 
-diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-index 930fe43d5daf..41688d9cbd3b 100644
---- a/drivers/char/tpm/eventlog/of.c
-+++ b/drivers/char/tpm/eventlog/of.c
-@@ -51,11 +51,10 @@ static int tpm_read_log_memory_region(struct tpm_chip *chip)
- int tpm_read_log_of(struct tpm_chip *chip)
- {
- 	struct device_node *np;
--	const u32 *sizep;
--	const u64 *basep;
- 	struct tpm_bios_log *log;
- 	u32 size;
- 	u64 base;
-+	int ret;
- 
- 	log = &chip->log;
- 	if (chip->dev.parent && chip->dev.parent->of_node)
-@@ -66,30 +65,11 @@ int tpm_read_log_of(struct tpm_chip *chip)
- 	if (of_property_read_bool(np, "powered-while-suspended"))
- 		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
- 
--	sizep = of_get_property(np, "linux,sml-size", NULL);
--	basep = of_get_property(np, "linux,sml-base", NULL);
--	if (sizep == NULL && basep == NULL)
-+	ret = of_tpm_get_sml_parameters(np, &base, &size);
-+	if (ret == -ENODEV)
- 		return tpm_read_log_memory_region(chip);
--	if (sizep == NULL || basep == NULL)
--		return -EIO;
--
--	/*
--	 * For both vtpm/tpm, firmware has log addr and log size in big
--	 * endian format. But in case of vtpm, there is a method called
--	 * sml-handover which is run during kernel init even before
--	 * device tree is setup. This sml-handover function takes care
--	 * of endianness and writes to sml-base and sml-size in little
--	 * endian format. For this reason, vtpm doesn't need conversion
--	 * but physical tpm needs the conversion.
--	 */
--	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
--	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
--		size = be32_to_cpup((__force __be32 *)sizep);
--		base = be64_to_cpup((__force __be64 *)basep);
--	} else {
--		size = *sizep;
--		base = *basep;
--	}
-+	if (ret < 0)
-+		return ret;
- 
- 	if (size == 0) {
- 		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 4dc97b9f65fb..dd9a376a1dbb 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -461,4 +461,40 @@ static inline struct tpm_chip *tpm_default_chip(void)
- 	return NULL;
+diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+index 1373d7e0a9b3..fa8c0c75adf9 100644
+--- a/drivers/of/kexec.c
++++ b/drivers/of/kexec.c
+@@ -117,45 +117,57 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
  }
- #endif
-+
-+#ifdef CONFIG_OF
-+static inline int of_tpm_get_sml_parameters(struct device_node *np,
-+					    u64 *base, u32 *size)
-+{
-+	const u32 *sizep;
-+	const u64 *basep;
-+
-+	sizep = of_get_property(np, "linux,sml-size", NULL);
-+	basep = of_get_property(np, "linux,sml-base", NULL);
-+	if (sizep == NULL && basep == NULL)
-+		return -ENODEV;
-+	if (sizep == NULL || basep == NULL)
-+		return -EIO;
-+
-+	/*
-+	 * For both vtpm/tpm, firmware has log addr and log size in big
-+	 * endian format. But in case of vtpm, there is a method called
-+	 * sml-handover which is run during kernel init even before
-+	 * device tree is setup. This sml-handover function takes care
-+	 * of endianness and writes to sml-base and sml-size in little
-+	 * endian format. For this reason, vtpm doesn't need conversion
-+	 * but physical tpm needs the conversion.
-+	 */
-+	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
-+	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
-+		*size = be32_to_cpup((__force __be32 *)sizep);
-+		*base = be64_to_cpup((__force __be64 *)basep);
-+	} else {
-+		*size = *sizep;
-+		*base = *basep;
-+	}
+ 
+ #ifdef CONFIG_HAVE_IMA_KEXEC
+-/**
+- * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+- * @addr:	On successful return, set to point to the buffer contents.
+- * @size:	On successful return, set to the buffer size.
+- *
+- * Return: 0 on success, negative errno on error.
+- */
+-int __init ima_get_kexec_buffer(void **addr, size_t *size)
++static int __init get_kexec_buffer(const char *name, unsigned long *addr,
++				   size_t *size)
+ {
+ 	int ret, len;
+-	unsigned long tmp_addr;
+ 	unsigned long start_pfn, end_pfn;
+-	size_t tmp_size;
+ 	const void *prop;
+ 
+-	prop = of_get_property(of_chosen, "linux,ima-kexec-buffer", &len);
++	prop = of_get_property(of_chosen, name, &len);
+ 	if (!prop)
+ 		return -ENOENT;
+ 
+-	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
++	ret = do_get_kexec_buffer(prop, len, addr, size);
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Do some sanity on the returned size for the ima-kexec buffer */
+-	if (!tmp_size)
++	/* Do some sanity on the returned size for the kexec buffer */
++	if (!*size)
+ 		return -ENOENT;
+ 
+ 	/*
+ 	 * Calculate the PFNs for the buffer and ensure
+ 	 * they are with in addressable memory.
+ 	 */
+-	start_pfn = PHYS_PFN(tmp_addr);
+-	end_pfn = PHYS_PFN(tmp_addr + tmp_size - 1);
++	start_pfn = PHYS_PFN(*addr);
++	end_pfn = PHYS_PFN(*addr + *size - 1);
+ 	if (!page_is_ram(start_pfn) || !page_is_ram(end_pfn)) {
+-		pr_warn("IMA buffer at 0x%lx, size = 0x%zx beyond memory\n",
+-			tmp_addr, tmp_size);
++		pr_warn("%s buffer at 0x%lx, size = 0x%zx beyond memory\n",
++			name, *addr, *size);
+ 		return -EINVAL;
+ 	}
+ 
 +	return 0;
 +}
-+#endif
 +
++/**
++ * ima_get_kexec_buffer - get IMA buffer from the previous kernel
++ * @addr:	On successful return, set to point to the buffer contents.
++ * @size:	On successful return, set to the buffer size.
++ *
++ * Return: 0 on success, negative errno on error.
++ */
++int __init ima_get_kexec_buffer(void **addr, size_t *size)
++{
++	int ret;
++	unsigned long tmp_addr;
++	size_t tmp_size;
++
++	ret = get_kexec_buffer("linux,ima-kexec-buffer", &tmp_addr, &tmp_size);
++	if (ret)
++		return ret;
++
+ 	*addr = __va(tmp_addr);
+ 	*size = tmp_size;
+ 
+@@ -188,72 +200,82 @@ int __init ima_free_kexec_buffer(void)
+ }
  #endif
+ 
+-/**
+- * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
+- *
+- * @fdt: Flattened Device Tree to update
+- * @chosen_node: Offset to the chosen node in the device tree
+- *
+- * The IMA measurement buffer is of no use to a subsequent kernel, so we always
+- * remove it from the device tree.
+- */
+-static void remove_ima_buffer(void *fdt, int chosen_node)
++static int remove_buffer(void *fdt, int chosen_node, const char *name)
+ {
+ 	int ret, len;
+ 	unsigned long addr;
+ 	size_t size;
+ 	const void *prop;
+ 
+-	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+-		return;
+-
+-	prop = fdt_getprop(fdt, chosen_node, "linux,ima-kexec-buffer", &len);
++	prop = fdt_getprop(fdt, chosen_node, name, &len);
+ 	if (!prop)
+-		return;
++		return -ENOENT;
+ 
+ 	ret = do_get_kexec_buffer(prop, len, &addr, &size);
+-	fdt_delprop(fdt, chosen_node, "linux,ima-kexec-buffer");
++	fdt_delprop(fdt, chosen_node, name);
+ 	if (ret)
+-		return;
++		return ret;
+ 
+ 	ret = fdt_find_and_del_mem_rsv(fdt, addr, size);
+ 	if (!ret)
+-		pr_debug("Removed old IMA buffer reservation.\n");
++		pr_debug("Remove old %s buffer reserveration", name);
++	return ret;
+ }
+ 
+-#ifdef CONFIG_IMA_KEXEC
+ /**
+- * setup_ima_buffer - add IMA buffer information to the fdt
+- * @image:		kexec image being loaded.
+- * @fdt:		Flattened device tree for the next kernel.
+- * @chosen_node:	Offset to the chosen node.
++ * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
+  *
+- * Return: 0 on success, or negative errno on error.
++ * @fdt: Flattened Device Tree to update
++ * @chosen_node: Offset to the chosen node in the device tree
++ *
++ * The IMA measurement buffer is of no use to a subsequent kernel, so we always
++ * remove it from the device tree.
+  */
+-static int setup_ima_buffer(const struct kimage *image, void *fdt,
+-			    int chosen_node)
++static void remove_ima_buffer(void *fdt, int chosen_node)
++{
++	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
++		return;
++
++	remove_buffer(fdt, chosen_node, "linux,ima-kexec-buffer");
++}
++
++#ifdef CONFIG_IMA_KEXEC
++static int setup_buffer(void *fdt, int chosen_node, const char *name,
++			phys_addr_t addr, size_t size)
+ {
+ 	int ret;
+ 
+-	if (!image->ima_buffer_size)
++	if (!size)
+ 		return 0;
+ 
+ 	ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
+-				       "linux,ima-kexec-buffer",
+-				       image->ima_buffer_addr,
+-				       image->ima_buffer_size);
++				       name, addr, size);
+ 	if (ret < 0)
+ 		return -EINVAL;
+ 
+-	ret = fdt_add_mem_rsv(fdt, image->ima_buffer_addr,
+-			      image->ima_buffer_size);
++	ret = fdt_add_mem_rsv(fdt, addr, size);
+ 	if (ret)
+ 		return -EINVAL;
+ 
+-	pr_debug("IMA buffer at 0x%pa, size = 0x%zx\n",
+-		 &image->ima_buffer_addr, image->ima_buffer_size);
++	pr_debug("%s at 0x%pa, size = 0x%zx\n", name, &addr, size);
+ 
+ 	return 0;
++
++}
++
++/**
++ * setup_ima_buffer - add IMA buffer information to the fdt
++ * @image:		kexec image being loaded.
++ * @fdt:		Flattened device tree for the next kernel.
++ * @chosen_node:	Offset to the chosen node.
++ *
++ * Return: 0 on success, or negative errno on error.
++ */
++static int setup_ima_buffer(const struct kimage *image, void *fdt,
++			    int chosen_node)
++{
++	return setup_buffer(fdt, chosen_node, "linux,ima-kexec-buffer",
++			    image->ima_buffer_addr, image->ima_buffer_size);
+ }
+ #else /* CONFIG_IMA_KEXEC */
+ static inline int setup_ima_buffer(const struct kimage *image, void *fdt,
 -- 
 2.38.1
 
