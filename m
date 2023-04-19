@@ -2,187 +2,199 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFAE6E7E86
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Apr 2023 17:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B666E81D7
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Apr 2023 21:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbjDSPlg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Apr 2023 11:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S230301AbjDSTZs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Apr 2023 15:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbjDSPlf (ORCPT
+        with ESMTP id S229887AbjDSTZr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:41:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3329E4490
-        for <linux-integrity@vger.kernel.org>; Wed, 19 Apr 2023 08:41:34 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 17:41:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681918891;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4/YfXKV5b0StPu508z4GRS2uAmm2oisxiF22pdKUUnw=;
-        b=e/yuoalzU9dA24XJvzZCp2JVS0zw8xW1FEiHz83ON4/99DRm5MLjfie2zzGQaB/VdHTXmr
-        Jczg75aNxqwnHMwrw+CipaD/l9C3UH0jepCsXjdMMdi9edi8Bv2h8+KEgb3hkhvbLVbbC6
-        MugdzwLivMa6V1xrGGaxWEXRFrABNzeBMZHlicybQuG3TigrfKo4CBq02z4SFfOa/4EJjx
-        8j8C0eP2zgDd+tdZiQ+xgqX2LANOk3F0rBF6scD/6EiDR+gHtWwEJwoG+i02jDqKelrNnX
-        XoCCfmD5iVL7XjemdoTONgIi25ra48DOa3BE18fu+GpauQiJRq6Ua0ZFgZw+MQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681918891;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4/YfXKV5b0StPu508z4GRS2uAmm2oisxiF22pdKUUnw=;
-        b=r+AuIlArX4ov/q87M0FPIcSe68gdWPhTOBeCZHfq0wjdvW9TtLFs4zMYbxc4dP0W6Kuiq3
-        RcgMhc+2sEayshCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Haris Okanovic <haris.okanovic@ni.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH v2] tpm_tis: fix stall after iowrite*()s
-Message-ID: <20230419154130.b392MbTl@linutronix.de>
-References: <20230323153436.B2SATnZV@linutronix.de>
- <20230330002534.teqpltcmpkdms72t@kernel.org>
+        Wed, 19 Apr 2023 15:25:47 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387535BBA;
+        Wed, 19 Apr 2023 12:25:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1681932340; x=1713468340;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SsYQyINsS1Fk4lVA4C/fRqc9lh6pGxoW0r4tOSla9cU=;
+  b=XrnsG0+RtLL63yP7qQ4MRLL2cN2IvQusmgEI+sKdrqt0x5S/6v0aMuKf
+   CPS7fLS74VXiLf2TCePdYTIy/bOpSzncmDV3EmsEQdlYRRzrn62ZZV1Kb
+   PJABhafS0BHzigVlvfTDeyWTnY6+nnqtKw9i+uy3Ws6NmG4aIJL07TJs2
+   I=;
+X-IronPort-AV: E=Sophos;i="5.99,210,1677542400"; 
+   d="scan'208";a="1124137496"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-9694bb9e.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 19:25:36 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-m6i4x-9694bb9e.us-east-1.amazon.com (Postfix) with ESMTPS id 5FDA8818D0;
+        Wed, 19 Apr 2023 19:25:30 +0000 (UTC)
+Received: from EX19D028UWA002.ant.amazon.com (10.13.138.248) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Wed, 19 Apr 2023 19:25:29 +0000
+Received: from uda95858fd22f53.ant.amazon.com (10.106.101.53) by
+ EX19D028UWA002.ant.amazon.com (10.13.138.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
+ Wed, 19 Apr 2023 19:25:27 +0000
+From:   Mengchi Cheng <mengcc@amazon.com>
+To:     <roberto.sassu@huaweicloud.com>
+CC:     <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
+        <dmitry.kasatkin@gmail.com>, <eparis@parisplace.org>,
+        <jmorris@namei.org>, <kamatam@amazon.com>, <keescook@chromium.org>,
+        <kpsingh@kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-unionfs@vger.kernel.org>, <mengcc@amazon.com>,
+        <miklos@szeredi.hu>, <nicolas.bouchinet@clip-os.org>,
+        <paul@paul-moore.com>, <reiserfs-devel@vger.kernel.org>,
+        <roberto.sassu@huawei.com>, <selinux@vger.kernel.org>,
+        <serge@hallyn.com>, <stephen.smalley.work@gmail.com>,
+        <yoonjaeh@amazon.com>, <zohar@linux.ibm.com>
+Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to provide xattrs for inode_init_security hook
+Date:   Wed, 19 Apr 2023 12:25:16 -0700
+Message-ID: <20230419192516.757220-1-mengcc@amazon.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
+References: <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230330002534.teqpltcmpkdms72t@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.106.101.53]
+X-ClientProxiedBy: EX19D035UWA001.ant.amazon.com (10.13.139.101) To
+ EX19D028UWA002.ant.amazon.com (10.13.138.248)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-=46rom: Haris Okanovic <haris.okanovic@ni.com>
+> 
+> I got some errors during xattr removal, so not sure if my patch was
+> working properly or not (it happened also without it, didn't
+> investigate more).
+> 
+> However, I saw another discussion related to transmute:
+> 
+> https://lore.kernel.org/linux-security-module/20230419002338.566487-1-mengcc@amazon.com/
+> 
+> I add the people in CC.
+> 
+> The steps described were so easy to understand and executed, I tried
+> without and with overlayfs.
+> 
+> Without:
+> 
+> # echo "_ system rwxatl" > /sys/fs/smackfs/load2
+> # mkdir /data
+> # chsmack -a "system" /data
+> # chsmack -t /data
+> # mkdir -p /data/dir1/dir2
+> # chsmack /data/dir1
+> /data/dir1 access="system" transmute="TRUE"
+> # chsmack /data/dir1/dir2
+> /data/dir1/dir2 access="system" transmute="TRUE"
+> 
+> It seems to work, right?
+> 
+> With overlay fs it didn't work, same result as the one Mengchi
+> reported. Since Mengchi's solution was to set SMK_INODE_CHANGED, and I
+> want to get rid of it, I thought to investigate more.
+> 
+> Looking at smack_dentry_create_files_as(), I see that the label of the
+> process is overwritten with the label of the transmuting directory.
+> 
+> That causes smack_inode_init_security() to lookup the transmuting rule
+> on the overridden credential, and not on the original one.
+> 
+> In the example above, it means that, when overlayfs is creating the new
+> inode, the label of the process is system, not _. So no transmute
+> permission, and also the xattr will not be added, as observed by
+> Mengchi.
+> 
+> Hopefully I undertood the code, so in this particular case we would not
+> need to override the label of the process in smack_dentry_create_files_
+> as().
+> 
+> If you see smack_inode_init_security():
+> 
+> 	struct smack_known *skp = smk_of_current();
+> 	struct smack_known *isp = smk_of_inode(inode);
+> 	struct smack_known *dsp = smk_of_inode(dir);
+> 
+> [...]
+> 
+> 		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
+> 		    smk_inode_transmutable(dir)) {
+> 			isp = dsp;
+> [...]
+> 
+> 		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> 
+> This code is telling, if there is a transmute rule, and the directory
+> is transmuting, set the label of the new inode to the label of the
+> directory. That should be already the result that we wanted to obtain.
+> 
+> The current code should have been doing it by overriding the label of
+> the process in smack_dentry_create_files_as() with the label of the
+> parent directory, and letting the inode being created with the
+> overridden label of the process. The transmute xattr is not set due to
+> the problem described above.
+> 
+> So, as a quick test, I kept this patch with the change to xattr2->name, 
+> and skipped the label override in smack_dentry_create_files_as(). It
+> worked, I get the same result as without overlayfs. Wondering if the
+> process label override is necessary in other cases.
 
-ioread8() operations to TPM MMIO addresses can stall the CPU when
-immediately following a sequence of iowrite*()'s to the same region.
+If I understand correctly, removing the if block below is what you suggested.
 
-For example, cyclitest measures ~400us latency spikes when a non-RT
-usermode application communicates with an SPI-based TPM chip (Intel Atom
-E3940 system, PREEMPT_RT kernel). The spikes are caused by a
-stalling ioread8() operation following a sequence of 30+ iowrite8()s to
-the same address. I believe this happens because the write sequence is
-buffered (in CPU or somewhere along the bus), and gets flushed on the
-first LOAD instruction (ioread*()) that follows.
-
-The enclosed change appears to fix this issue: read the TPM chip's
-access register (status code) after every iowrite*() operation to
-amortize the cost of flushing data to chip across multiple instructions.
-
-Signed-off-by: Haris Okanovic <haris.okanovic@ni.com>
-Link: https://lore.kernel.org/r/20230323153436.B2SATnZV@linutronix.de
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-v1=E2=80=A6v2:
-  - Updated/ added comments as per Jarkko Sakkinen.
-
-On 2023-03-30 03:25:34 [+0300], Jarkko Sakkinen wrote:
-=E2=80=A6
-> I would replace this with:
->=20
-> /*
->  * Flush previous write operations with a dummy read operation to the=20
->  * TPM MMIO base address.
->  */
->=20
->  I think rest of the reasoning would be better place to the functions,
->  which are call sites for this helper, and here it would be make more
->  sense to explain what it actually does.
-=E2=80=A6
->=20
-> Thanks for catching this up. It is a small code change but I think that it
-> would deserve just a bit more documentation, as it would make sure that t=
-he
-> reasoning you gave is taken into account in the future code reviews.
->=20
-> I think that if you append what I suggested above (you can use your
-> judgement and edit as you will), it should be sufficient.
-
-Did as asked. However, it is a bit misleading given that the comment
-above tpm_tis_iowrite*() describes the flush behaviour which is
-conditional on CONFIG_PREEMPT_RT. Do you want this flush unconditionally
-or you fine the way it is?
-
- drivers/char/tpm/tpm_tis.c |   43 ++++++++++++++++++++++++++++++++++++++++=
-+--
- 1 file changed, 41 insertions(+), 2 deletions(-)
-
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -50,6 +50,45 @@ static inline struct tpm_tis_tcg_phy *to
- 	return container_of(data, struct tpm_tis_tcg_phy, priv);
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index cfcbb748da25..a867288e9de9 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -4769,8 +4769,8 @@ static int smack_dentry_create_files_as(struct dentry *dentry, int mode,
+                 * providing access is transmuting use the containing
+                 * directory label instead of the process label.
+                 */
+-               if (may > 0 && (may & MAY_TRANSMUTE))
+-                       ntsp->smk_task = isp->smk_inode;
++//             if (may > 0 && (may & MAY_TRANSMUTE))
++//                     ntsp->smk_task = isp->smk_inode;
+        }
+        return 0;
  }
-=20
-+#ifdef CONFIG_PREEMPT_RT
-+/*
-+ * Flush previous write operations with a dummy read operation to the
-+ * TPM MMIO base address.
-+ */
-+static inline void tpm_tis_flush(void __iomem *iobase)
-+{
-+	ioread8(iobase + TPM_ACCESS(0));
-+}
-+#else
-+#define tpm_tis_flush(iobase) do { } while (0)
-+#endif
-+
-+/*
-+ * Write a byte word to the TPM MMIO address, and flush the write queue.
-+ * The flush ensures that the data is sent immediately over the bus and not
-+ * aggregated with further requests and transferred later in a batch. The =
-large
-+ * write requests can lead to unwanted latency spikes by blocking the CPU =
-until
-+ * the complete batch has been transferred.
-+ */
-+static inline void tpm_tis_iowrite8(u8 b, void __iomem *iobase, u32 addr)
-+{
-+	iowrite8(b, iobase + addr);
-+	tpm_tis_flush(iobase);
-+}
-+
-+/*
-+ * Write a 32-bit word to the TPM MMIO address, and flush the write queue.
-+ * The flush ensures that the data is sent immediately over the bus and not
-+ * aggregated with further requests and transferred later in a batch. The =
-large
-+ * write requests can lead to unwanted latency spikes by blocking the CPU =
-until
-+ * the complete batch has been transferred.
-+ */
-+static inline void tpm_tis_iowrite32(u32 b, void __iomem *iobase, u32 addr)
-+{
-+	iowrite32(b, iobase + addr);
-+	tpm_tis_flush(iobase);
-+}
-+
- static int interrupts =3D -1;
- module_param(interrupts, int, 0444);
- MODULE_PARM_DESC(interrupts, "Enable interrupts");
-@@ -186,12 +225,12 @@ static int tpm_tcg_write_bytes(struct tp
- 	switch (io_mode) {
- 	case TPM_TIS_PHYS_8:
- 		while (len--)
--			iowrite8(*value++, phy->iobase + addr);
-+			tpm_tis_iowrite8(*value++, phy->iobase, addr);
- 		break;
- 	case TPM_TIS_PHYS_16:
- 		return -EINVAL;
- 	case TPM_TIS_PHYS_32:
--		iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase + addr);
-+		tpm_tis_iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase, addr);
- 		break;
- 	}
-=20
 
+This way will have issue in the following situation on the vanila kernel.
+data in the lowerdir has "_" label before overlay and dir1 is already
+created in the lowerdir.
+# chsmack /data
+/data access="_"
+# chsmack /data/dir1
+/data/dir1 access="system" transmute="TRUE"
+Apply overlay on data directory and set the smack rule in the same way.
+data has the same smack label.
+# chsmack /data
+/data access="system" transmute="TRUE"
+After that, remove dir1 and mkdir dir1 again. dir1 did not get the correct
+label.
+# rm -r /data/dir1
+# mkdir -p /data/dir1
+# chsmack /data/dir1
+/data/dir1 access="_"
+
+Since I am not very familiar your change. Could you help check with your
+patch will this issue also happen? 
+
+
+Best,
+Mengchi
+
+>  
+> Roberto
