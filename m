@@ -2,78 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCCD6E7B78
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Apr 2023 16:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFAE6E7E86
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Apr 2023 17:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbjDSOEE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Apr 2023 10:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
+        id S232897AbjDSPlg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Apr 2023 11:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbjDSOED (ORCPT
+        with ESMTP id S232036AbjDSPlf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Apr 2023 10:04:03 -0400
-X-Greylist: delayed 975 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 07:04:00 PDT
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF451A1;
-        Wed, 19 Apr 2023 07:04:00 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Q1hfd0jD5z9xFmc;
-        Wed, 19 Apr 2023 21:37:13 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDXrGPQ8D9kQto3Ag--.1738S2;
-        Wed, 19 Apr 2023 14:47:12 +0100 (CET)
-Message-ID: <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
-Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to
- provide xattrs for inode_init_security hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Mengchi Cheng <mengcc@amazon.com>, miklos@szeredi.hu,
-        linux-unionfs@vger.kernel.org, kamatam@amazon.com,
-        yoonjaeh@amazon.com
-Date:   Wed, 19 Apr 2023 15:46:53 +0200
-In-Reply-To: <48c6073f-59b0-f5d1-532e-fe4b912b939d@schaufler-ca.com>
-References: <c7f38789-fe47-8289-e73a-4d07fbaf791d@schaufler-ca.com>
-         <20230411172337.340518-1-roberto.sassu@huaweicloud.com>
-         <2dc6486f-ce9b-f171-14fe-48a90386e1b7@schaufler-ca.com>
-         <8e7705972a0f306922d8bc4893cf940e319abb19.camel@huaweicloud.com>
-         <72b46d0f-75c7-ac18-4984-2bf1d6dad352@schaufler-ca.com>
-         <82ee6ddf66bb34470aa7b591df4d70783fdb2422.camel@huaweicloud.com>
-         <91f05dc4-a4b7-b40a-ba1a-0ccc489c84b2@schaufler-ca.com>
-         <5c50d98f1e5745c88270ae4ad3de6d9a803db4c6.camel@huaweicloud.com>
-         <48c6073f-59b0-f5d1-532e-fe4b912b939d@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 19 Apr 2023 11:41:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3329E4490
+        for <linux-integrity@vger.kernel.org>; Wed, 19 Apr 2023 08:41:34 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 17:41:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681918891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4/YfXKV5b0StPu508z4GRS2uAmm2oisxiF22pdKUUnw=;
+        b=e/yuoalzU9dA24XJvzZCp2JVS0zw8xW1FEiHz83ON4/99DRm5MLjfie2zzGQaB/VdHTXmr
+        Jczg75aNxqwnHMwrw+CipaD/l9C3UH0jepCsXjdMMdi9edi8Bv2h8+KEgb3hkhvbLVbbC6
+        MugdzwLivMa6V1xrGGaxWEXRFrABNzeBMZHlicybQuG3TigrfKo4CBq02z4SFfOa/4EJjx
+        8j8C0eP2zgDd+tdZiQ+xgqX2LANOk3F0rBF6scD/6EiDR+gHtWwEJwoG+i02jDqKelrNnX
+        XoCCfmD5iVL7XjemdoTONgIi25ra48DOa3BE18fu+GpauQiJRq6Ua0ZFgZw+MQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681918891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4/YfXKV5b0StPu508z4GRS2uAmm2oisxiF22pdKUUnw=;
+        b=r+AuIlArX4ov/q87M0FPIcSe68gdWPhTOBeCZHfq0wjdvW9TtLFs4zMYbxc4dP0W6Kuiq3
+        RcgMhc+2sEayshCg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Haris Okanovic <haris.okanovic@ni.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH v2] tpm_tis: fix stall after iowrite*()s
+Message-ID: <20230419154130.b392MbTl@linutronix.de>
+References: <20230323153436.B2SATnZV@linutronix.de>
+ <20230330002534.teqpltcmpkdms72t@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDXrGPQ8D9kQto3Ag--.1738S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3CF18KF4xKF45Zr15uFWxJFb_yoWkGrWxpF
-        WUG3W7Kr4kJF1DGryFqF4UWw12k3y8Gr4UWwnxJr17AF1Dtr1xJryrJr1UCr1xXr1kuw1F
-        qr4jqry3Wrn8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBF1jj4g8MgAAs9
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230330002534.teqpltcmpkdms72t@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,276 +63,126 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2023-04-18 at 09:02 -0700, Casey Schaufler wrote:
-> On 4/18/2023 12:05 AM, Roberto Sassu wrote:
-> > On Mon, 2023-04-17 at 09:41 -0700, Casey Schaufler wrote:
-> > > On 4/13/2023 12:11 AM, Roberto Sassu wrote:
-> > > > On Wed, 2023-04-12 at 13:29 -0700, Casey Schaufler wrote:
-> > > > > On 4/12/2023 12:22 AM, Roberto Sassu wrote:
-> > > > > > On Tue, 2023-04-11 at 10:54 -0700, Casey Schaufler wrote:
-> > > > > > > On 4/11/2023 10:23 AM, Roberto Sassu wrote:
-> > > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > > > 
-> > > > > > > > Very very quick modification. Not tested.
-> > > > > > > > 
-> > > > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > > > ---
-> > > > > > > >  security/smack/smack.h     |  2 +-
-> > > > > > > >  security/smack/smack_lsm.c | 42 ++++++++++++++++++++------------------
-> > > > > > > >  2 files changed, 23 insertions(+), 21 deletions(-)
-> > > > > > > > 
-> > > > > > > > diff --git a/security/smack/smack.h b/security/smack/smack.h
-> > > > > > > > index e2239be7bd6..f00c8498c60 100644
-> > > > > > > > --- a/security/smack/smack.h
-> > > > > > > > +++ b/security/smack/smack.h
-> > > > > > > > @@ -127,7 +127,7 @@ struct task_smack {
-> > > > > > > >  
-> > > > > > > >  #define	SMK_INODE_INSTANT	0x01	/* inode is instantiated */
-> > > > > > > >  #define	SMK_INODE_TRANSMUTE	0x02	/* directory is transmuting */
-> > > > > > > > -#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted */
-> > > > > > > > +#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted (unused) */
-> > > > > > > See below ...
-> > > > > > > 
-> > > > > > > >  #define	SMK_INODE_IMPURE	0x08	/* involved in an impure transaction */
-> > > > > > > >  
-> > > > > > > >  /*
-> > > > > > > > diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> > > > > > > > index 8392983334b..b43820bdbd0 100644
-> > > > > > > > --- a/security/smack/smack_lsm.c
-> > > > > > > > +++ b/security/smack/smack_lsm.c
-> > > > > > > > @@ -54,12 +54,12 @@
-> > > > > > > >  
-> > > > > > > >  /*
-> > > > > > > >   * Smack uses multiple xattrs.
-> > > > > > > > - * SMACK64 - for access control, SMACK64EXEC - label for the program,
-> > > > > > > > - * SMACK64MMAP - controls library loading,
-> > > > > > > > + * SMACK64 - for access control,
-> > > > > > > >   * SMACK64TRANSMUTE - label initialization,
-> > > > > > > > - * Not saved on files - SMACK64IPIN and SMACK64IPOUT
-> > > > > > > > + * Not saved on files - SMACK64IPIN and SMACK64IPOUT,
-> > > > > > > > + * Must be set explicitly - SMACK64EXEC and SMACK64MMAP
-> > > > > > > >   */
-> > > > > > > > -#define SMACK_INODE_INIT_XATTRS 4
-> > > > > > > > +#define SMACK_INODE_INIT_XATTRS 2
-> > > > > > > >  
-> > > > > > > >  #ifdef SMACK_IPV6_PORT_LABELING
-> > > > > > > >  static DEFINE_MUTEX(smack_ipv6_lock);
-> > > > > > > > @@ -957,11 +957,11 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
-> > > > > > > >  				     const struct qstr *qstr,
-> > > > > > > >  				     struct xattr *xattrs, int *xattr_count)
-> > > > > > > >  {
-> > > > > > > > -	struct inode_smack *issp = smack_inode(inode);
-> > > > > > > >  	struct smack_known *skp = smk_of_current();
-> > > > > > > >  	struct smack_known *isp = smk_of_inode(inode);
-> > > > > > > >  	struct smack_known *dsp = smk_of_inode(dir);
-> > > > > > > >  	struct xattr *xattr = lsm_get_xattr_slot(xattrs, xattr_count);
-> > > > > > > > +	struct xattr *xattr2;
-> > > > > > > I'm going to channel Paul and suggest this be xattr_transmute instead of xattr2.
-> > > > > > > It also looks like it could move to be declared in the if clause.
-> > > > > > > 
-> > > > > > > >  	int may;
-> > > > > > > >  
-> > > > > > > >  	if (xattr) {
-> > > > > > > > @@ -979,7 +979,17 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
-> > > > > > > >  		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
-> > > > > > > >  		    smk_inode_transmutable(dir)) {
-> > > > > > > >  			isp = dsp;
-> > > > > > > > -			issp->smk_flags |= SMK_INODE_CHANGED;
-> > > > > > > I think you need to keep this. More below.
-> > > > > > > 
-> > > > > > > > +			xattr2 = lsm_get_xattr_slot(xattrs, xattr_count);
-> > > > > > > > +			if (xattr2) {
-> > > > > > > > +				xattr2->value = kmemdup(TRANS_TRUE,
-> > > > > > > > +							TRANS_TRUE_SIZE,
-> > > > > > > > +							GFP_NOFS);
-> > > > > > > > +				if (xattr2->value == NULL)
-> > > > > > > > +					return -ENOMEM;
-> > > > > > > > +
-> > > > > > > > +				xattr2->value_len = TRANS_TRUE_SIZE;
-> > > > > > > > +				xattr2->name = XATTR_NAME_SMACKTRANSMUTE;
-> > > > > > > > +			}
-> > > > > > > >  		}
-> > > > > > > >  
-> > > > > > > >  		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
-> > > > > > > > @@ -3512,20 +3522,12 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
-> > > > > > > >  			 * If there is a transmute attribute on the
-> > > > > > > >  			 * directory mark the inode.
-> > > > > > > >  			 */
-> > > > > > > > -			if (isp->smk_flags & SMK_INODE_CHANGED) {
-> > > > > > > > -				isp->smk_flags &= ~SMK_INODE_CHANGED;
-> > > > > > > > -				rc = __vfs_setxattr(&nop_mnt_idmap, dp, inode,
-> > > > > > > > -					XATTR_NAME_SMACKTRANSMUTE,
-> > > > > > > > -					TRANS_TRUE, TRANS_TRUE_SIZE,
-> > > > > > > > -					0);
-> > > > > > > > -			} else {
-> > > > > > > > -				rc = __vfs_getxattr(dp, inode,
-> > > > > > > > -					XATTR_NAME_SMACKTRANSMUTE, trattr,
-> > > > > > > > -					TRANS_TRUE_SIZE);
-> > > > > > > > -				if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> > > > > > > > -						       TRANS_TRUE_SIZE) != 0)
-> > > > > > > > -					rc = -EINVAL;
-> > > > > > > > -			}
-> > > > > > > > +			rc = __vfs_getxattr(dp, inode,
-> > > > > > > > +					    XATTR_NAME_SMACKTRANSMUTE, trattr,
-> > > > > > > > +					    TRANS_TRUE_SIZE);
-> > > > > > > > +			if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> > > > > > > > +					       TRANS_TRUE_SIZE) != 0)
-> > > > > > > > +				rc = -EINVAL;
-> > > > > > > Where is the SMACK64_TRANSMUTE attribute going to get set on the file?
-> > > > > > > It's not going to get set in smack_init_inode_security(). The inode will
-> > > > > > Isn't that the purpose of the inode_init_security hook?
-> > > > > No. It initializes the in-memory inode. 
-> > > > I hope I'm not mistaken here...
-> > > > 
-> > > > I make a small example. Filesystems call
-> > > > security_inode_init_security(). Ext4 does:
-> > > > 
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/ext4/xattr_security.c?h=v6.3-rc6#n54
-> > > > 
-> > > > security_inode_init_security() allocates new_xattrs. Each LSM fills
-> > > > new_xattrs. At the end of the loop, if there is at least one xattr
-> > > > filled, the initxattrs() callback passed by the caller of
-> > > > security_inode_init_security() is called.
-> > > > 
-> > > > The ext4 initxattrs() callback is:
-> > > > 
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/ext4/xattr_security.c?h=v6.3-rc6#n35
-> > > > 
-> > > > which scans the xattr array and, for each xattr,
-> > > > calls ext4_xattr_set_handle().
-> > > > 
-> > > > Maybe I'm overlooking it, but ext4_xattr_set_handle() is setting xattrs
-> > > > on the disk. Am I wrong?
-> > > Yes, you're wrong. I tried your change, and the SMACK64_TRANSMUTE isn't
-> > > set on the sub-directory when it's created. The __vfs_setxattr() call really
-> > > is necessary. 
-> > Could you please also check if there is any change with this fix:
-> > 
-> > Replace:
-> > 
-> > 	xattr2->name = XATTR_NAME_SMACKTRANSMUTE;
-> > 
-> > with:
-> > 
-> > 	xattr2->name = XATTR_SMACK_TRANSMUTE;
-> > 
-> > Thanks
-> 
-> Unless I'm missing something really obvious there's no way that any
-> of the evm/ima changes would obviate the need for the __vfs_setxattr() call.
-> It's real easy to verify correct behavior, see the attached script.
-> (you'll want to change the "notroot" value to a user on your system)
+=46rom: Haris Okanovic <haris.okanovic@ni.com>
 
-I got some errors during xattr removal, so not sure if my patch was
-working properly or not (it happened also without it, didn't
-investigate more).
+ioread8() operations to TPM MMIO addresses can stall the CPU when
+immediately following a sequence of iowrite*()'s to the same region.
 
-However, I saw another discussion related to transmute:
+For example, cyclitest measures ~400us latency spikes when a non-RT
+usermode application communicates with an SPI-based TPM chip (Intel Atom
+E3940 system, PREEMPT_RT kernel). The spikes are caused by a
+stalling ioread8() operation following a sequence of 30+ iowrite8()s to
+the same address. I believe this happens because the write sequence is
+buffered (in CPU or somewhere along the bus), and gets flushed on the
+first LOAD instruction (ioread*()) that follows.
 
-https://lore.kernel.org/linux-security-module/20230419002338.566487-1-mengcc@amazon.com/
+The enclosed change appears to fix this issue: read the TPM chip's
+access register (status code) after every iowrite*() operation to
+amortize the cost of flushing data to chip across multiple instructions.
 
-I add the people in CC.
+Signed-off-by: Haris Okanovic <haris.okanovic@ni.com>
+Link: https://lore.kernel.org/r/20230323153436.B2SATnZV@linutronix.de
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+v1=E2=80=A6v2:
+  - Updated/ added comments as per Jarkko Sakkinen.
 
-The steps described were so easy to understand and executed, I tried
-without and with overlayfs.
+On 2023-03-30 03:25:34 [+0300], Jarkko Sakkinen wrote:
+=E2=80=A6
+> I would replace this with:
+>=20
+> /*
+>  * Flush previous write operations with a dummy read operation to the=20
+>  * TPM MMIO base address.
+>  */
+>=20
+>  I think rest of the reasoning would be better place to the functions,
+>  which are call sites for this helper, and here it would be make more
+>  sense to explain what it actually does.
+=E2=80=A6
+>=20
+> Thanks for catching this up. It is a small code change but I think that it
+> would deserve just a bit more documentation, as it would make sure that t=
+he
+> reasoning you gave is taken into account in the future code reviews.
+>=20
+> I think that if you append what I suggested above (you can use your
+> judgement and edit as you will), it should be sufficient.
 
-Without:
+Did as asked. However, it is a bit misleading given that the comment
+above tpm_tis_iowrite*() describes the flush behaviour which is
+conditional on CONFIG_PREEMPT_RT. Do you want this flush unconditionally
+or you fine the way it is?
 
-# echo "_ system rwxatl" > /sys/fs/smackfs/load2
-# mkdir /data
-# chsmack -a "system" /data
-# chsmack -t /data
-# mkdir -p /data/dir1/dir2
-# chsmack /data/dir1
-/data/dir1 access="system" transmute="TRUE"
-# chsmack /data/dir1/dir2
-/data/dir1/dir2 access="system" transmute="TRUE"
+ drivers/char/tpm/tpm_tis.c |   43 ++++++++++++++++++++++++++++++++++++++++=
++--
+ 1 file changed, 41 insertions(+), 2 deletions(-)
 
-It seems to work, right?
-
-With overlay fs it didn't work, same result as the one Mengchi
-reported. Since Mengchi's solution was to set SMK_INODE_CHANGED, and I
-want to get rid of it, I thought to investigate more.
-
-Looking at smack_dentry_create_files_as(), I see that the label of the
-process is overwritten with the label of the transmuting directory.
-
-That causes smack_inode_init_security() to lookup the transmuting rule
-on the overridden credential, and not on the original one.
-
-In the example above, it means that, when overlayfs is creating the new
-inode, the label of the process is system, not _. So no transmute
-permission, and also the xattr will not be added, as observed by
-Mengchi.
-
-Hopefully I undertood the code, so in this particular case we would not
-need to override the label of the process in smack_dentry_create_files_
-as().
-
-If you see smack_inode_init_security():
-
-	struct smack_known *skp = smk_of_current();
-	struct smack_known *isp = smk_of_inode(inode);
-	struct smack_known *dsp = smk_of_inode(dir);
-
-[...]
-
-		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
-		    smk_inode_transmutable(dir)) {
-			isp = dsp;
-[...]
-
-		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
-
-This code is telling, if there is a transmute rule, and the directory
-is transmuting, set the label of the new inode to the label of the
-directory. That should be already the result that we wanted to obtain.
-
-The current code should have been doing it by overriding the label of
-the process in smack_dentry_create_files_as() with the label of the
-parent directory, and letting the inode being created with the
-overridden label of the process. The transmute xattr is not set due to
-the problem described above.
-
-So, as a quick test, I kept this patch with the change to xattr2->name, 
-and skipped the label override in smack_dentry_create_files_as(). It
-worked, I get the same result as without overlayfs. Wondering if the
-process label override is necessary in other cases.
-
-Roberto
-
-> > Roberto
-> > 
-> > > > Thanks
-> > > > 
-> > > > Roberto
-> > > > 
-> > > > > > After all LSMs provide one or multiple xattrs, xattrs are going to be
-> > > > > > written to the disk with the initxattr() callback of filesystems.
-> > > > > > 
-> > > > > > There is a small mistake above (XATTR_SMACK_TRANSMUTE instead
-> > > > > > of XATTR_NAME_SMACKTRANSMUTE, as we are providing just the suffix).
-> > > > > but I'm pretty sure the __vfs_setxattr() call is necessary to get
-> > > > > the attribute written out. With your change the in-memory inode will
-> > > > > get the attribute, but if you reboot it won't be on the directory.
-> > > > > 
-> > > > > > 95 Passed, 0 Failed, 100% Success rate
-> > > > > > 
-> > > > > > There was a test failing in dir-transmute.sh, before I fixed the xattr
-> > > > > > name.
-> > > > > > 
-> > > > > > Thanks
-> > > > > > 
-> > > > > > Roberto
-> > > > > > 
-> > > > > > > know it's transmuting, but it won't get to disk without the __vfs_setxattr()
-> > > > > > > here in smack_d_instantiate(). Now, it's been a long time since that code
-> > > > > > > was written, so I could be wrong, but I'm pretty sure about that.
-> > > > > > > 
-> > > > > > > I think that you should be fine with the changes in smack_init_inode_security(),
-> > > > > > > and leaving smack_d_instantiate() untouched. 
-> > > > > > > 
-> > > > > > > >  			if (rc >= 0)
-> > > > > > > >  				transflag = SMK_INODE_TRANSMUTE;
-> > > > > > > >  		}
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -50,6 +50,45 @@ static inline struct tpm_tis_tcg_phy *to
+ 	return container_of(data, struct tpm_tis_tcg_phy, priv);
+ }
+=20
++#ifdef CONFIG_PREEMPT_RT
++/*
++ * Flush previous write operations with a dummy read operation to the
++ * TPM MMIO base address.
++ */
++static inline void tpm_tis_flush(void __iomem *iobase)
++{
++	ioread8(iobase + TPM_ACCESS(0));
++}
++#else
++#define tpm_tis_flush(iobase) do { } while (0)
++#endif
++
++/*
++ * Write a byte word to the TPM MMIO address, and flush the write queue.
++ * The flush ensures that the data is sent immediately over the bus and not
++ * aggregated with further requests and transferred later in a batch. The =
+large
++ * write requests can lead to unwanted latency spikes by blocking the CPU =
+until
++ * the complete batch has been transferred.
++ */
++static inline void tpm_tis_iowrite8(u8 b, void __iomem *iobase, u32 addr)
++{
++	iowrite8(b, iobase + addr);
++	tpm_tis_flush(iobase);
++}
++
++/*
++ * Write a 32-bit word to the TPM MMIO address, and flush the write queue.
++ * The flush ensures that the data is sent immediately over the bus and not
++ * aggregated with further requests and transferred later in a batch. The =
+large
++ * write requests can lead to unwanted latency spikes by blocking the CPU =
+until
++ * the complete batch has been transferred.
++ */
++static inline void tpm_tis_iowrite32(u32 b, void __iomem *iobase, u32 addr)
++{
++	iowrite32(b, iobase + addr);
++	tpm_tis_flush(iobase);
++}
++
+ static int interrupts =3D -1;
+ module_param(interrupts, int, 0444);
+ MODULE_PARM_DESC(interrupts, "Enable interrupts");
+@@ -186,12 +225,12 @@ static int tpm_tcg_write_bytes(struct tp
+ 	switch (io_mode) {
+ 	case TPM_TIS_PHYS_8:
+ 		while (len--)
+-			iowrite8(*value++, phy->iobase + addr);
++			tpm_tis_iowrite8(*value++, phy->iobase, addr);
+ 		break;
+ 	case TPM_TIS_PHYS_16:
+ 		return -EINVAL;
+ 	case TPM_TIS_PHYS_32:
+-		iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase + addr);
++		tpm_tis_iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase, addr);
+ 		break;
+ 	}
+=20
 
