@@ -2,266 +2,243 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C266E8873
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Apr 2023 05:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E28586E8D2E
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Apr 2023 10:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbjDTDMy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Apr 2023 23:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S234520AbjDTIvp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 Apr 2023 04:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233304AbjDTDMo (ORCPT
+        with ESMTP id S234179AbjDTIuy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Apr 2023 23:12:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098502117
-        for <linux-integrity@vger.kernel.org>; Wed, 19 Apr 2023 20:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681960318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WJkzeJvwCETUjWcwNy+63mU9+yCXou1XIKFoGxVIfQ0=;
-        b=UzlpK56KozcxWUUR2VWbvemwuxkAcB4A5hqCA2PpI1Bsfv4Mjg344YOqjN4stmrqvKoVsq
-        PHlVHUgOkiZdJXdF8d+wbQeep+78LVaIo8p2LLxqiIkRhAP/GNXtYVLLa/irVKOKBjWCaU
-        dbnFddmUOBSsbR0q6C5EwEDsz/DeIa8=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-460-5u-vdQKUNsGbqOQAupHW2Q-1; Wed, 19 Apr 2023 23:11:57 -0400
-X-MC-Unique: 5u-vdQKUNsGbqOQAupHW2Q-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1a52677bd54so3721585ad.3
-        for <linux-integrity@vger.kernel.org>; Wed, 19 Apr 2023 20:11:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681960316; x=1684552316;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WJkzeJvwCETUjWcwNy+63mU9+yCXou1XIKFoGxVIfQ0=;
-        b=gtSDiCSzO8byYD920ryrR+L9jn3VgotIJH3BigyROzUOW3xkTVw193DXZTu2Eavq3T
-         Y9Y0cEiWcMIQcx75/cuiuHO5MPm3BNePgwKiZl4vE5sdrjgf1/bnuZT0c1Cc0YLIyfz/
-         omefGjo5OKuoaCl/P8ZE+aGTKKIp/6JbOqTCq8Cc5aRR1GamFpG1neLm1GkKb9IWkDXs
-         cFw0ijW7tq7jwSPjuhksIN/7QAzIbIM0QUF0mUNc3wd6h+pz/VTsmAaRXwvc0skljgaz
-         dU/sNR+TgYXs+F1NgD8C2XQEh3WHLJpz0F9+v6V4lvSyLf6EE3MCR1pA7zts8bOzZ47/
-         8tlQ==
-X-Gm-Message-State: AAQBX9eiVq5TxU3IA7JEvGVYqZE7c9wnrMa5b/S07UulxBTXQWaSho6+
-        ts873vUhpCndjsKNS8LaciaSbUBOofOXghlVmigYLnsz51erln4QmbZhi9D9rCsuRSmUupz5UCY
-        DVYCzm0PM7UhsJ4+kkI6txzDLm1qx
-X-Received: by 2002:a17:902:e0cc:b0:19e:dc0e:1269 with SMTP id e12-20020a170902e0cc00b0019edc0e1269mr76471pla.7.1681960316376;
-        Wed, 19 Apr 2023 20:11:56 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ax8FFXo3OHHtKHTICA0kOA/Q49kpcfJ7vYva+HjvLXcSzVkRLCzrjx53STrgpygHaJ1jeLfg==
-X-Received: by 2002:a17:902:e0cc:b0:19e:dc0e:1269 with SMTP id e12-20020a170902e0cc00b0019edc0e1269mr76444pla.7.1681960316010;
-        Wed, 19 Apr 2023 20:11:56 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id a13-20020a1709027d8d00b001a647709860sm153930plm.157.2023.04.19.20.11.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 20:11:55 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 20:11:54 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [Patch V9 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <enfduqgdgrdpfw73suydlbmu3mopk545vwrpoat2chkop375np@o3fxh5k7wc76>
-References: <20230325183409.7695-1-kyarlagadda@nvidia.com>
- <20230325183409.7695-3-kyarlagadda@nvidia.com>
- <a6jhf7wghnos6yjvgt3rbudhwsx4r4r7kurm35euofz3mjwmdu@74z44ohjgmre>
+        Thu, 20 Apr 2023 04:50:54 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4F34C18;
+        Thu, 20 Apr 2023 01:49:11 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Q2B0T5nZ7z9v7Gw;
+        Thu, 20 Apr 2023 16:39:21 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAXxTtK_EBkfX87Ag--.1933S2;
+        Thu, 20 Apr 2023 09:48:24 +0100 (CET)
+Message-ID: <2f90828cc8e9e1ab369790a3da687790c4348b0f.camel@huaweicloud.com>
+Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to
+ provide xattrs for inode_init_security hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mengchi Cheng <mengcc@amazon.com>
+Cc:     bpf@vger.kernel.org, casey@schaufler-ca.com,
+        dmitry.kasatkin@gmail.com, eparis@parisplace.org,
+        jmorris@namei.org, kamatam@amazon.com, keescook@chromium.org,
+        kpsingh@kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        nicolas.bouchinet@clip-os.org, paul@paul-moore.com,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        selinux@vger.kernel.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, yoonjaeh@amazon.com,
+        zohar@linux.ibm.com
+Date:   Thu, 20 Apr 2023 10:48:06 +0200
+In-Reply-To: <20230419192516.757220-1-mengcc@amazon.com>
+References: <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
+         <20230419192516.757220-1-mengcc@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a6jhf7wghnos6yjvgt3rbudhwsx4r4r7kurm35euofz3mjwmdu@74z44ohjgmre>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAXxTtK_EBkfX87Ag--.1933S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gw18ur43Cw13Kr48AF4ktFb_yoW7Aw4xpF
+        Z8Ga43Krs5Jw17CayvvF47AF4F9rWkGa15XFnFgry7AF13Kr1Igr98Xr12kryxJrsY93Wq
+        vF4jvr9xZr4Uu37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj4hE8wAAsF
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 07:32:40PM -0700, Jerry Snitselaar wrote:
-> On Sun, Mar 26, 2023 at 12:04:08AM +0530, Krishna Yarlagadda wrote:
-> > TPM devices may insert wait state on last clock cycle of ADDR phase.
-> > For SPI controllers that support full-duplex transfers, this can be
-> > detected using software by reading the MISO line. For SPI controllers
-> > that only support half-duplex transfers, such as the Tegra QSPI, it is
-> > not possible to detect the wait signal from software. The QSPI
-> > controller in Tegra234 and Tegra241 implement hardware detection of the
-> > wait signal which can be enabled in the controller for TPM devices.
+On Wed, 2023-04-19 at 12:25 -0700, Mengchi Cheng wrote:
+> > I got some errors during xattr removal, so not sure if my patch was
+> > working properly or not (it happened also without it, didn't
+> > investigate more).
 > > 
-> > The current TPM TIS driver only supports software detection of the wait
-> > signal. To support SPI controllers that use hardware to detect the wait
-> > signal, add the function tpm_tis_spi_hw_flow_transfer() and move the
-> > existing code for software based detection into a function called
-> > tpm_tis_spi_sw_flow_transfer(). SPI controllers that only support
-> > half-duplex transfers will always call tpm_tis_spi_hw_flow_transfer()
-> > because they cannot support software based detection. The bit
-> > SPI_TPM_HW_FLOW is set to indicate to the SPI controller that hardware
-> > detection is required and it is the responsibility of the SPI controller
-> > driver to determine if this is supported or not.
+> > However, I saw another discussion related to transmute:
 > > 
-> > For hardware flow control, CMD-ADDR-DATA messages are combined into a
-> > single message where as for software flow control exiting method of
-> > CMD-ADDR in a message and DATA in another is followed.
+> > https://lore.kernel.org/linux-security-module/20230419002338.566487-1-mengcc@amazon.com/
 > > 
-> > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> > ---
-> >  drivers/char/tpm/tpm_tis_spi_main.c | 91 ++++++++++++++++++++++++++++-
-> >  1 file changed, 89 insertions(+), 2 deletions(-)
+> > I add the people in CC.
 > > 
-> > diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> > index a0963a3e92bd..db9afd0b83da 100644
-> > --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> > +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> > @@ -71,8 +71,74 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi_phy *phy,
-> >  	return 0;
-> >  }
-> >  
-> > -int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > -			 u8 *in, const u8 *out)
-> > +/*
-> > + * Half duplex controller with support for TPM wait state detection like
-> > + * Tegra QSPI need CMD, ADDR & DATA sent in single message to manage HW flow
-> > + * control. Each phase sent in different transfer for controller to idenity
-> > + * phase.
-> > + */
-> > +static int tpm_tis_spi_transfer_half(struct tpm_tis_data *data,	u32 addr,
-> > +				     u16 len, u8 *in, const u8 *out)
-> > +{
-> > +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > +	struct spi_transfer spi_xfer[3];
-> > +	struct spi_message m;
-> > +	u8 transfer_len;
-> > +	int ret;
-> > +
-> > +	while (len) {
-> > +		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-> > +
-> > +		spi_message_init(&m);
-> > +		phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-> > +		phy->iobuf[1] = 0xd4;
-> > +		phy->iobuf[2] = addr >> 8;
-> > +		phy->iobuf[3] = addr;
+> > The steps described were so easy to understand and executed, I tried
+> > without and with overlayfs.
+> > 
+> > Without:
+> > 
+> > # echo "_ system rwxatl" > /sys/fs/smackfs/load2
+> > # mkdir /data
+> > # chsmack -a "system" /data
+> > # chsmack -t /data
+> > # mkdir -p /data/dir1/dir2
+> > # chsmack /data/dir1
+> > /data/dir1 access="system" transmute="TRUE"
+> > # chsmack /data/dir1/dir2
+> > /data/dir1/dir2 access="system" transmute="TRUE"
+> > 
+> > It seems to work, right?
+> > 
+> > With overlay fs it didn't work, same result as the one Mengchi
+> > reported. Since Mengchi's solution was to set SMK_INODE_CHANGED, and I
+> > want to get rid of it, I thought to investigate more.
+> > 
+> > Looking at smack_dentry_create_files_as(), I see that the label of the
+> > process is overwritten with the label of the transmuting directory.
+> > 
+> > That causes smack_inode_init_security() to lookup the transmuting rule
+> > on the overridden credential, and not on the original one.
+> > 
+> > In the example above, it means that, when overlayfs is creating the new
+> > inode, the label of the process is system, not _. So no transmute
+> > permission, and also the xattr will not be added, as observed by
+> > Mengchi.
+> > 
+> > Hopefully I undertood the code, so in this particular case we would not
+> > need to override the label of the process in smack_dentry_create_files_
+> > as().
+> > 
+> > If you see smack_inode_init_security():
+> > 
+> > 	struct smack_known *skp = smk_of_current();
+> > 	struct smack_known *isp = smk_of_inode(inode);
+> > 	struct smack_known *dsp = smk_of_inode(dir);
+> > 
+> > [...]
+> > 
+> > 		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
+> > 		    smk_inode_transmutable(dir)) {
+> > 			isp = dsp;
+> > [...]
+> > 
+> > 		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> > 
+> > This code is telling, if there is a transmute rule, and the directory
+> > is transmuting, set the label of the new inode to the label of the
+> > directory. That should be already the result that we wanted to obtain.
+> > 
+> > The current code should have been doing it by overriding the label of
+> > the process in smack_dentry_create_files_as() with the label of the
+> > parent directory, and letting the inode being created with the
+> > overridden label of the process. The transmute xattr is not set due to
+> > the problem described above.
+> > 
+> > So, as a quick test, I kept this patch with the change to xattr2->name, 
+> > and skipped the label override in smack_dentry_create_files_as(). It
+> > worked, I get the same result as without overlayfs. Wondering if the
+> > process label override is necessary in other cases.
 > 
-> I haven't looked at much TPM code in the past couple of years, but
-> perhaps some defines instead of magic numbers here? 0x80 is the rw bit,
-> and 0xd4 the transaction offset?
-> 
-> > +
-> > +		memset(&spi_xfer, 0, sizeof(spi_xfer));
-> > +
-> > +		spi_xfer[0].tx_buf = phy->iobuf;
-> > +		spi_xfer[0].len = 1;
-> > +		spi_message_add_tail(&spi_xfer[0], &m);
-> > +
-> > +		spi_xfer[1].tx_buf = phy->iobuf + 1;
-> > +		spi_xfer[1].len = 3;
-> > +		spi_message_add_tail(&spi_xfer[1], &m);
-> > +
-> > +		if (out) {
-> > +			spi_xfer[2].tx_buf = &phy->iobuf[4];
-> > +			spi_xfer[2].rx_buf = NULL;
-> > +			memcpy(&phy->iobuf[4], out, transfer_len);
-> > +			out += transfer_len;
-> > +		}
-> > +
-> > +		if (in) {
-> > +			spi_xfer[2].tx_buf = NULL;
-> > +			spi_xfer[2].rx_buf = &phy->iobuf[4];
-> > +		}
-> > +
-> > +		spi_xfer[2].len = transfer_len;
-> > +		spi_message_add_tail(&spi_xfer[2], &m);
-> > +
-> > +		reinit_completion(&phy->ready);
-> > +
-> > +		ret = spi_sync_locked(phy->spi_device, &m);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		if (in) {
-> > +			memcpy(in, &phy->iobuf[4], transfer_len);
-> > +			in += transfer_len;
-> > +		}
-> > +
-> > +		len -= transfer_len;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> 
-> Does tpm_tis_spi_transfer_half not need to lock the bus?  The doc comments for spi_sync_locked
-> state:
-> 
->  This call should be used by drivers that require exclusive access to the
->  SPI bus. It has to be preceded by a spi_bus_lock call. The SPI bus must
->  be released by a spi_bus_unlock call when the exclusive access is over.
-> 
-> If that isn't the case should it be using spi_sync instead of spi_sync_locked?
-> 
-> Regards,
-> Jerry
+> If I understand correctly, removing the if block below is what you suggested.
 
-b4 mbox -c to the rescue. I found the earlier discussion with Mark about
-the lock, so I guess the question is just should this call spi_sync
-instead of spi_sync_locked then?
+Yes, more or less is what I did.
 
-The magic numbers is a minor nit, and can probably be cleaned up
-separately since the full duplex code was already doing the same
-thing. The only other nit is just the older tcg spec being referenced
-in patch 1.
-
-Regards,
-Jerry
-
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index cfcbb748da25..a867288e9de9 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -4769,8 +4769,8 @@ static int smack_dentry_create_files_as(struct dentry *dentry, int mode,
+>                  * providing access is transmuting use the containing
+>                  * directory label instead of the process label.
+>                  */
+> -               if (may > 0 && (may & MAY_TRANSMUTE))
+> -                       ntsp->smk_task = isp->smk_inode;
+> +//             if (may > 0 && (may & MAY_TRANSMUTE))
+> +//                     ntsp->smk_task = isp->smk_inode;
+>         }
+>         return 0;
+>  }
 > 
-> > +
-> > +static int tpm_tis_spi_transfer_full(struct tpm_tis_data *data, u32 addr,
-> > +				     u16 len, u8 *in, const u8 *out)
-> >  {
-> >  	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> >  	int ret = 0;
-> > @@ -140,6 +206,24 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> >  	return ret;
-> >  }
-> >  
-> > +int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> > +			 u8 *in, const u8 *out)
-> > +{
-> > +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> > +	struct spi_controller *ctlr = phy->spi_device->controller;
-> > +
-> > +	/*
-> > +	 * TPM flow control over SPI requires full duplex support.
-> > +	 * Send entire message to a half duplex controller to handle
-> > +	 * wait polling in controller.
-> > +	 * Set TPM HW flow control flag..
-> > +	 */
-> > +	if (ctlr->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> > +		return tpm_tis_spi_transfer_half(data, addr, len, in, out);
-> > +	else
-> > +		return tpm_tis_spi_transfer_full(data, addr, len, in, out);
-> > +}
-> > +
-> >  static int tpm_tis_spi_read_bytes(struct tpm_tis_data *data, u32 addr,
-> >  				  u16 len, u8 *result, enum tpm_tis_io_mode io_mode)
-> >  {
-> > @@ -181,6 +265,9 @@ static int tpm_tis_spi_probe(struct spi_device *dev)
-> >  
-> >  	phy->flow_control = tpm_tis_spi_flow_control;
-> >  
-> > +	if (dev->controller->flags & SPI_CONTROLLER_HALF_DUPLEX)
-> > +		dev->mode |= SPI_TPM_HW_FLOW;
-> > +
-> >  	/* If the SPI device has an IRQ then use that */
-> >  	if (dev->irq > 0)
-> >  		irq = dev->irq;
-> > -- 
-> > 2.17.1
-> > 
+> This way will have issue in the following situation on the vanila kernel.
+> data in the lowerdir has "_" label before overlay and dir1 is already
+> created in the lowerdir.
+> # chsmack /data
+> /data access="_"
+> # chsmack /data/dir1
+> /data/dir1 access="system" transmute="TRUE"
+> Apply overlay on data directory and set the smack rule in the same way.
+> data has the same smack label.
+> # chsmack /data
+> /data access="system" transmute="TRUE"
+
+I'm using an older kernel, but I get _ instead of system.
+
+> After that, remove dir1 and mkdir dir1 again. dir1 did not get the correct
+> label.
+> # rm -r /data/dir1
+> # mkdir -p /data/dir1
+> # chsmack /data/dir1
+> /data/dir1 access="_"
+
+Unfortunately, it cannot work:
+
+Thread 3 hit Breakpoint 1, smack_inode_init_security (...) at security/smack/smack_lsm.c:959
+959	{
+(gdb) p dir->i_ino
+$12 = 9169116
+(gdb) p dsp
+$13 = (struct smack_known *) 0xffffffff831fc0a0 <smack_known_floor>
+
+
+ls -i /home/root/data_work/
+9169116 work
+
+So, transmuting is decided on the working directory.
+
+If I do:
+
+# chsmack -a system -t /home/root/data_work/work/
+# mkdir /data/dir1
+# chsmack /data/dir1
+/data/dir1 access="system" transmute="TRUE"
+
+I obtain the expected result. However, this problem is due to how overlayfs works:
+
+static int ovl_create_over_whiteout(struct dentry *dentry, struct inode *inode,
+				    struct ovl_cattr *cattr)
+{
+
+[...]
+
+	newdentry = ovl_create_temp(ofs, workdir, cattr);
+	err = PTR_ERR(newdentry);
+	if (IS_ERR(newdentry))
+		goto out_dput;
+
+
+The good news seems to be that, once you set the label to the correct
+directory, transmuting works with the changes I proposed.
+
+Roberto
+
+> Since I am not very familiar your change. Could you help check with your
+> patch will this issue also happen? 
 > 
+> 
+> Best,
+> Mengchi
+> 
+> >  
+> > Roberto
 
