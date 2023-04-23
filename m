@@ -2,47 +2,46 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FB66EBD2F
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Apr 2023 07:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876826EBD31
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Apr 2023 07:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjDWF3s (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Apr 2023 01:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
+        id S229854AbjDWFc0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Apr 2023 01:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjDWF3r (ORCPT
+        with ESMTP id S229560AbjDWFcZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Apr 2023 01:29:47 -0400
+        Sun, 23 Apr 2023 01:32:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBAD1736;
-        Sat, 22 Apr 2023 22:29:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561CBE44;
+        Sat, 22 Apr 2023 22:32:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF44B60BCC;
-        Sun, 23 Apr 2023 05:29:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B11C433EF;
-        Sun, 23 Apr 2023 05:29:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6A92616F5;
+        Sun, 23 Apr 2023 05:32:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4469BC433D2;
+        Sun, 23 Apr 2023 05:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682227785;
-        bh=do70prUP7Yp/qQZpHtKiAoZB66OjY1P/f8crHCgNYE4=;
+        s=k20201202; t=1682227943;
+        bh=ySo8KV6Boj1X+um9nPNFjCKSdasvy2Wx/qvdzH0B34Y=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=RY7WpJA3gnRsXf0YGxR5aD+dSH5iF5AkgsjAj3E719k3dDNYcIeJn51JJqFg8qSEU
-         9ydpQi9A0W5zmPqsTYdRKduUxblcx5Y+WR5F3+9WzObujtJnC3yKHup2TWhjp9n3Eg
-         pvYt7lSqSiZ2W8nafL+i9TLcluFknRev/YmXwlQJWn177MesIeMCYZTUUhg+CgEbMl
-         KseB1a1VrJHQ60mZJ0f9MWihc6QHam3xtBmub3MFOyRG5oDeDN1DKUxNUwweCL3sRQ
-         DjHhFUlgKuA4me0i3o7O/HJYuqGIe2+l3PYOfSGVUFm4EEWuiKUInbtTphf+FQ43Gq
-         zpvHgWxJHf8Cw==
-Message-ID: <adad1047b7935b4f4d982dcd40f1fe92edcfd2d3.camel@kernel.org>
-Subject: Re: [PATCH v4 08/13] tpm: Add full HMAC and encrypt/decrypt session
- handling code
+        b=Oq65pUqYMDYFg/VLhFnoN/SlLmb1a0jH0686Ji17AZB/rjQP9WtrSzEnjbzGLlOen
+         yFm2YhdDYWfC8ip/LljIq+76o7CmAZXU2BguAnYa7bFg/wtrWIFf9xj16RtCEmzn5m
+         ygf+AhsZ2s1sfTl64Xg++6llGbzpXPU/tqARn2+H7URr9FMP1GbfUdOXJCZiyeEqaI
+         62t5/lWp7DA4F2eKf39kdgmSYIKUs9MM8TQnhVXNzt1lBA5/yYJLtxlg9efXcLlvrs
+         iURsyvoEewtFxnAvPpkxbNXzCy0kLxBTVY3z+GEwnxdcuIP/E1FVELHEEnwcwLU5sq
+         p5DTtQ5crCtdA==
+Message-ID: <3dd2e6924de435f28a20f0054f710ac83fb093b6.camel@kernel.org>
+Subject: Re: [PATCH v4 09/13] tpm: add hmac checks to tpm2_pcr_extend()
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         linux-integrity@vger.kernel.org
 Cc:     keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Date:   Sun, 23 Apr 2023 08:29:42 +0300
-In-Reply-To: <20230403214003.32093-9-James.Bottomley@HansenPartnership.com>
+Date:   Sun, 23 Apr 2023 08:32:20 +0300
+In-Reply-To: <20230403214003.32093-10-James.Bottomley@HansenPartnership.com>
 References: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
-         <20230403214003.32093-9-James.Bottomley@HansenPartnership.com>
+         <20230403214003.32093-10-James.Bottomley@HansenPartnership.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.48.0-1 
@@ -58,121 +57,90 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 On Mon, 2023-04-03 at 17:39 -0400, James Bottomley wrote:
-> Add true session based HMAC authentication plus parameter decryption
-> and response encryption using AES. The basic design is to segregate
-> all the nasty crypto, hash and hmac code into tpm2-sessions.c and
-> export a usable API.  The API first of all starts off by gaining a
-> session with
->=20
-> tpm2_start_auth_session()
->=20
-> Which initiates a session with the TPM and allocates an opaque
-> tpm2_auth structure to handle the session parameters.  Then the use is
-> simply:
->=20
-> * tpm_buf_append_name() in place of the tpm_buf_append_u32 for the
->   handles
->=20
-> * tpm_buf_append_hmac_session() where tpm2_append_auth() would go
->=20
-> * tpm_buf_fill_hmac_session() called after the entire command buffer
->   is finished but before tpm_transmit_cmd() is called which computes
->   the correct HMAC and places it in the command at the correct
->   location.
->=20
-> Finally, after tpm_transmit_cmd() is called,
-> tpm_buf_check_hmac_response() is called to check that the returned
-> HMAC matched and collect the new state for the next use of the
-> session, if any.
->=20
-> The features of the session is controlled by the session attributes
-> set in tpm_buf_append_hmac_session().  If TPM2_SA_CONTINUE_SESSION is
-> not specified, the session will be flushed and the tpm2_auth structure
-> freed in tpm_buf_check_hmac_response(); otherwise the session may be
-> used again.  Parameter encryption is specified by or'ing the flag
-> TPM2_SA_DECRYPT and response encryption by or'ing the flag
-> TPM2_SA_ENCRYPT.  the various encryptions will be taken care of by
-> tpm_buf_fill_hmac_session() and tpm_buf_check_hmac_response()
-> respectively.
->=20
-> To get all of this to work securely, the Kernel needs a primary key to
-> encrypt the session salt to, so an EC key from the NULL seed is
-> derived and its context saved in the tpm_chip structure.  The context
-> is loaded on demand into an available volatile handle when
-> tpm_start_auth_session() is called, but is flushed before that
-> function exits to conserve handles.
+> tpm2_pcr_extend() is used by trusted keys to extend a PCR to prevent a
+> key from being re-loaded until the next reboot.  To use this
+> functionality securely, that extend must be protected by a session
+> hmac.  This patch adds HMAC protection so tampering with the
+> tpm2_pcr_extend() command in flight is detected.
 >=20
 > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Reviewed-by: Ard Biesheuvel <ard.biesheuvel@linaro.org> # crypto API part=
-s
->=20
+
+What the heck is "check"?
+
+The code change adds hmac pipeline for the command.
+
+I get the code change but the description is misleading as this
+does more than just add a check.
+
 > ---
+>  drivers/char/tpm/tpm2-cmd.c | 27 ++++++++++-----------------
+>  1 file changed, 10 insertions(+), 17 deletions(-)
 >=20
-> v2: fix memory leaks from smatch; adjust for name hash size
-> v3: make tpm2_make_null_primary static
-> v4: use crypto library functions
-> ---
->  drivers/char/tpm/Kconfig         |   13 +
->  drivers/char/tpm/Makefile        |    1 +
->  drivers/char/tpm/tpm-buf.c       |    1 +
->  drivers/char/tpm/tpm-chip.c      |    3 +
->  drivers/char/tpm/tpm.h           |   10 +
->  drivers/char/tpm/tpm2-cmd.c      |    5 +
->  drivers/char/tpm/tpm2-sessions.c | 1158 ++++++++++++++++++++++++++++++
->  include/linux/tpm.h              |  165 +++++
->  8 files changed, 1356 insertions(+)
->  create mode 100644 drivers/char/tpm/tpm2-sessions.c
->=20
-> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> index 927088b2c3d3..8af3afc48511 100644
-> --- a/drivers/char/tpm/Kconfig
-> +++ b/drivers/char/tpm/Kconfig
-> @@ -27,6 +27,19 @@ menuconfig TCG_TPM
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index b0e72fb563d9..a53a843294ed 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -216,13 +216,6 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx=
+,
+>  	return rc;
+>  }
 > =20
->  if TCG_TPM
+> -struct tpm2_null_auth_area {
+> -	__be32  handle;
+> -	__be16  nonce_size;
+> -	u8  attributes;
+> -	__be16  auth_size;
+> -} __packed;
+> -
+>  /**
+>   * tpm2_pcr_extend() - extend a PCR value
+>   *
+> @@ -236,24 +229,22 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_=
+idx,
+>  		    struct tpm_digest *digests)
+>  {
+>  	struct tpm_buf buf;
+> -	struct tpm2_null_auth_area auth_area;
+>  	int rc;
+>  	int i;
 > =20
-> +config TPM_BUS_SECURITY
+> -	rc =3D tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
+> +	rc =3D tpm2_start_auth_session(chip);
+>  	if (rc)
+>  		return rc;
+> =20
+> -	tpm_buf_append_u32(&buf, pcr_idx);
+> +	rc =3D tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
+> +	if (rc) {
+> +		tpm2_end_auth_session(chip);
+> +		return rc;
+> +	}
+> =20
+> -	auth_area.handle =3D cpu_to_be32(TPM2_RS_PW);
+> -	auth_area.nonce_size =3D 0;
+> -	auth_area.attributes =3D 0;
+> -	auth_area.auth_size =3D 0;
+> +	tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
+> +	tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
+> =20
+> -	tpm_buf_append_u32(&buf, sizeof(struct tpm2_null_auth_area));
+> -	tpm_buf_append(&buf, (const unsigned char *)&auth_area,
+> -		       sizeof(auth_area));
+>  	tpm_buf_append_u32(&buf, chip->nr_allocated_banks);
+> =20
+>  	for (i =3D 0; i < chip->nr_allocated_banks; i++) {
+> @@ -262,7 +253,9 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_id=
+x,
+>  			       chip->allocated_banks[i].digest_size);
+>  	}
+> =20
+> +	tpm_buf_fill_hmac_session(chip, &buf);
+>  	rc =3D tpm_transmit_cmd(chip, &buf, 0, "attempting extend a PCR value")=
+;
+> +	rc =3D tpm_buf_check_hmac_response(chip, &buf, rc);
+> =20
+>  	tpm_buf_destroy(&buf);
+> =20
 
-"bus security" means nothing.
+BR, Jarkko
 
-
-> +	bool "Use secure transactions on the TPM bus"
-
-Neither does "secure transactions"
-
-
-> +	default y
-> +	select CRYPTO_ECDH
-> +	select CRYPTO_LIB_AESCFB
-> +	select CRYPTO_LIB_SHA256
-> +	help
-> +	  Setting this causes us to deploy a tamper resistent scheme
-> +	  for communicating with the TPM to prevent or detect bus
-> +	  snooping and iterposer attacks like TPM Genie.  Saying Y here
-> +	  adds some encryption overhead to all kernel to TPM
-> +	  transactions.
-
-AFAIK, tamper resistance is part of the physical security. Software
-does not provide tamper resistance. Or at least I've not heard that
-term used with software before.
-
-Please provide URL to TPM Genie because you can't assume it being
-"commmon terminology". Or if you don't want to do that, remove it
-from the description as it has on function in kconfig.
-
-From that description it is impossible to say what this *actually*
-does, if we assume that the reader is kernel developer/maintainer.
-It is just gibberish.
-
-To fix all this maybe to flag could be something like
-TCG_TPM_HMAC_ENCRYPTION because it adds layer of protection.
-
-The kconfig description should essentially two things:
-
-1. The HMAC scheme very broadly.
-2. Keys generated/used, e.g. it would be nice to know if there
-   is a protection key for each boot cycle and that kind of stuff.
-
-The current stuff helps no one to understand this feature.
-
-R, Jarkko
