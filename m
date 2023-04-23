@@ -2,46 +2,46 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876826EBD31
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Apr 2023 07:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2771A6EBD3A
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Apr 2023 07:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjDWFc0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Apr 2023 01:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
+        id S230018AbjDWFig (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Apr 2023 01:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjDWFcZ (ORCPT
+        with ESMTP id S229516AbjDWFif (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Apr 2023 01:32:25 -0400
+        Sun, 23 Apr 2023 01:38:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561CBE44;
-        Sat, 22 Apr 2023 22:32:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42DF1987;
+        Sat, 22 Apr 2023 22:38:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6A92616F5;
-        Sun, 23 Apr 2023 05:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4469BC433D2;
-        Sun, 23 Apr 2023 05:32:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 825E060B56;
+        Sun, 23 Apr 2023 05:38:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF6EC433D2;
+        Sun, 23 Apr 2023 05:38:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682227943;
-        bh=ySo8KV6Boj1X+um9nPNFjCKSdasvy2Wx/qvdzH0B34Y=;
+        s=k20201202; t=1682228313;
+        bh=jKBT3M4WsVf8+YXtMpgMXF2xTajOHL++vIkdz8yvVtE=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Oq65pUqYMDYFg/VLhFnoN/SlLmb1a0jH0686Ji17AZB/rjQP9WtrSzEnjbzGLlOen
-         yFm2YhdDYWfC8ip/LljIq+76o7CmAZXU2BguAnYa7bFg/wtrWIFf9xj16RtCEmzn5m
-         ygf+AhsZ2s1sfTl64Xg++6llGbzpXPU/tqARn2+H7URr9FMP1GbfUdOXJCZiyeEqaI
-         62t5/lWp7DA4F2eKf39kdgmSYIKUs9MM8TQnhVXNzt1lBA5/yYJLtxlg9efXcLlvrs
-         iURsyvoEewtFxnAvPpkxbNXzCy0kLxBTVY3z+GEwnxdcuIP/E1FVELHEEnwcwLU5sq
-         p5DTtQ5crCtdA==
-Message-ID: <3dd2e6924de435f28a20f0054f710ac83fb093b6.camel@kernel.org>
-Subject: Re: [PATCH v4 09/13] tpm: add hmac checks to tpm2_pcr_extend()
+        b=GXRrVZsPPDG8abTVwl8Q68XjpR+pSgIH5/5WrScI2sQC36jDB8AgQPBgbSSXUs+Vb
+         3ZJoQdwcjbikXeHuOmecOOyeD0wTAxKfHrjE7xtYphTXWyueUZPv3YXbjk/qb+hijn
+         gHhF03H5qACCYdrqaTP3TzRNUvWuyC6gEjZ1p98SdmMTbOjIiizsHnLyZLIAtyv4Rn
+         Ipz6hfYC26F+a7wGVJGX3jAYxn3O4yO3J82YXcgv26dVeCC0u4skqsD1ULN/mUg2Fv
+         rXirZRfpkqGRNryZIpv0mO78LTAymvjlUzUfAOkFQqtgbxvHDgQtHy8zYGkN+OhciT
+         CTbwbz/M+kduw==
+Message-ID: <b1f3b34ec40b86fe74c128cdcd549a294da122f7.camel@kernel.org>
+Subject: Re: [PATCH v4 12/13] tpm: add the null key name as a sysfs export
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         linux-integrity@vger.kernel.org
 Cc:     keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Date:   Sun, 23 Apr 2023 08:32:20 +0300
-In-Reply-To: <20230403214003.32093-10-James.Bottomley@HansenPartnership.com>
+Date:   Sun, 23 Apr 2023 08:38:30 +0300
+In-Reply-To: <20230403214003.32093-13-James.Bottomley@HansenPartnership.com>
 References: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
-         <20230403214003.32093-10-James.Bottomley@HansenPartnership.com>
+         <20230403214003.32093-13-James.Bottomley@HansenPartnership.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.48.0-1 
@@ -56,91 +56,14 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-04-03 at 17:39 -0400, James Bottomley wrote:
-> tpm2_pcr_extend() is used by trusted keys to extend a PCR to prevent a
-> key from being re-loaded until the next reboot.  To use this
-> functionality securely, that extend must be protected by a session
-> hmac.  This patch adds HMAC protection so tampering with the
-> tpm2_pcr_extend() command in flight is detected.
->=20
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+On Mon, 2023-04-03 at 17:40 -0400, James Bottomley wrote:
+> This is the last component of encrypted tpm2 session handling that
+> allows us to verify from userspace that the key derived from the NULL
+> seed genuinely belongs to the TPM and has not been spoofed.
 
-What the heck is "check"?
+How would you do this in practice with the help of this file?
 
-The code change adds hmac pipeline for the command.
-
-I get the code change but the description is misleading as this
-does more than just add a check.
-
-> ---
->  drivers/char/tpm/tpm2-cmd.c | 27 ++++++++++-----------------
->  1 file changed, 10 insertions(+), 17 deletions(-)
->=20
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index b0e72fb563d9..a53a843294ed 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -216,13 +216,6 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx=
-,
->  	return rc;
->  }
-> =20
-> -struct tpm2_null_auth_area {
-> -	__be32  handle;
-> -	__be16  nonce_size;
-> -	u8  attributes;
-> -	__be16  auth_size;
-> -} __packed;
-> -
->  /**
->   * tpm2_pcr_extend() - extend a PCR value
->   *
-> @@ -236,24 +229,22 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_=
-idx,
->  		    struct tpm_digest *digests)
->  {
->  	struct tpm_buf buf;
-> -	struct tpm2_null_auth_area auth_area;
->  	int rc;
->  	int i;
-> =20
-> -	rc =3D tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
-> +	rc =3D tpm2_start_auth_session(chip);
->  	if (rc)
->  		return rc;
-> =20
-> -	tpm_buf_append_u32(&buf, pcr_idx);
-> +	rc =3D tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
-> +	if (rc) {
-> +		tpm2_end_auth_session(chip);
-> +		return rc;
-> +	}
-> =20
-> -	auth_area.handle =3D cpu_to_be32(TPM2_RS_PW);
-> -	auth_area.nonce_size =3D 0;
-> -	auth_area.attributes =3D 0;
-> -	auth_area.auth_size =3D 0;
-> +	tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
-> +	tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
-> =20
-> -	tpm_buf_append_u32(&buf, sizeof(struct tpm2_null_auth_area));
-> -	tpm_buf_append(&buf, (const unsigned char *)&auth_area,
-> -		       sizeof(auth_area));
->  	tpm_buf_append_u32(&buf, chip->nr_allocated_banks);
-> =20
->  	for (i =3D 0; i < chip->nr_allocated_banks; i++) {
-> @@ -262,7 +253,9 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_id=
-x,
->  			       chip->allocated_banks[i].digest_size);
->  	}
-> =20
-> +	tpm_buf_fill_hmac_session(chip, &buf);
->  	rc =3D tpm_transmit_cmd(chip, &buf, 0, "attempting extend a PCR value")=
-;
-> +	rc =3D tpm_buf_check_hmac_response(chip, &buf, rc);
-> =20
->  	tpm_buf_destroy(&buf);
-> =20
+The current description does not make a case to have this file, unless
+it is supported by an usage example to do what you claim above.
 
 BR, Jarkko
-
