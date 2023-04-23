@@ -2,52 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3784F6EBDD7
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Apr 2023 10:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F646EC04E
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Apr 2023 16:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjDWICS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Apr 2023 04:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S229516AbjDWORn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Apr 2023 10:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjDWICR (ORCPT
+        with ESMTP id S230269AbjDWORf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Apr 2023 04:02:17 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E146CC
-        for <linux-integrity@vger.kernel.org>; Sun, 23 Apr 2023 01:02:13 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pqUff-0002l7-W2; Sun, 23 Apr 2023 10:02:08 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pqUfe-00DCU5-LB; Sun, 23 Apr 2023 10:02:06 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pqUfd-00FVst-V2; Sun, 23 Apr 2023 10:02:05 +0200
-Date:   Sun, 23 Apr 2023 10:02:05 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 0/3] tpm: Convert to platform remove callback returning
- void
-Message-ID: <20230423080205.3jeyqjaacfmo3eej@pengutronix.de>
-References: <20230320080607.306495-1-u.kleine-koenig@pengutronix.de>
- <20230417060533.guw7kqfbf4t3dytr@pengutronix.de>
- <f8e9ef81082ecdde4e73e27e33ad8648bb70ab9a.camel@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7ehhmyaykftyzkq4"
-Content-Disposition: inline
-In-Reply-To: <f8e9ef81082ecdde4e73e27e33ad8648bb70ab9a.camel@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Sun, 23 Apr 2023 10:17:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E461D9;
+        Sun, 23 Apr 2023 07:17:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FBC661207;
+        Sun, 23 Apr 2023 14:16:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4C63C433EF;
+        Sun, 23 Apr 2023 14:15:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682259360;
+        bh=kQEraV2IoNz+cpAy+V4YEyMCX+50s5aHdtSWErZBi44=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QX4gcmYxzR/ltkDAk5inIIH45ra6iqMsJIzSLzYoaELfiKgmejbJm5gBsu971DDFu
+         vPvsxixEwZEZN0FCRyQVwDmOt6x7QOKeHB7KciiI6BVyo20SGLcekPLQ3VKrhZZv/5
+         wAL4MBK9hJ0M2OX33VO5vU5fYPqsY6TVcaYoqqBX5mvr1tqr/CHL/hlACkO2nllpCC
+         jCQ+MV8aI2FPSkqNkArR4WlRuY6yjiybKKQ6q34rEYsftB7F+IlA+lMIkoxT2gySxu
+         aDDBjdL4IjxAfi8zg5XFV924V4JfHa4D72yDSx0k/vKOpJ3fnxU4MO2P7cxy5brtEB
+         SNtWyQiEoYoIw==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 23 Apr 2023 17:15:56 +0300
+Message-Id: <CS4767IVV0V2.2E9IH70NE7FGQ@suppilovahvero>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>,
+        =?utf-8?q?Michael_Niew=C3=B6hner?= <linux@mniewoehner.de>
+Cc:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>, <stefanb@linux.vnet.ibm.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jandryuk@gmail.com>, <pmenzel@molgen.mpg.de>,
+        <l.sanfilippo@kunbus.com>, <lukas@wunner.de>,
+        <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH v11 00/14] TPM IRQ fixes
+X-Mailer: aerc 0.14.0
+References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
+ <4c094418-7725-b815-f1f9-8b12f1ac4d72@gmx.de>
+ <c02493fac223707de39e44d51b0a0ce512565250.camel@mniewoehner.de>
+ <20230319135338.c7k6r3ws6lby5qgv@kernel.org> <ZEK+w3Q++vu4Kl5x@kernel.org>
+ <a93b6222-edda-d43c-f010-a59701f2aeef@gmx.de>
+In-Reply-To: <a93b6222-edda-d43c-f010-a59701f2aeef@gmx.de>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,69 +63,32 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Sat Apr 22, 2023 at 3:59 AM EEST, Lino Sanfilippo wrote:
+> Hi,
+>
+> On 21.04.23 18:50, Jarkko Sakkinen wrote:
+>
+> >
+> > I tested this with libvirt/QEMU/swtpm and did the following tests:
+> >
+> > 1. TPM 1.2 suspend/resume.
+> > 2. TPM 2.0 kselftest.
+> > 3. TPM 2.0 suspend/resume + kselftest.
+> >
+> > I see no issues so I can pick this for my pull request.
+> >
+> > Tests were performed on top of v6.3-rc7.
+> >
+> > For all:
+> >
+> > Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> >
+> > BR, Jarkko
+>
+> Thats great, thanks a lot for testing this!
 
---7ehhmyaykftyzkq4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the patience! I'm sorry it took so long but at least all the
+steps in v11 make perfect sense and I see nothing that would rise red
+flags. So we can land this with good confidence I think.
 
-Hello Jarkko,
-
-On Sun, Apr 23, 2023 at 09:13:57AM +0300, Jarkko Sakkinen wrote:
-> On Mon, 2023-04-17 at 08:05 +0200, Uwe Kleine-K=F6nig wrote:
-> > Hello,
-> >=20
-> > On Mon, Mar 20, 2023 at 09:06:04AM +0100, Uwe Kleine-K=F6nig wrote:
-> > > this series adapts the platform drivers below drivers/char/tpm to use=
- the
-> > > .remove_new() callback. Compared to the traditional .remove() callback
-> > > .remove_new() returns no value. This is a good thing because the driv=
-er core
-> > > doesn't (and cannot) cope for errors during remove. The only effect o=
-f a
-> > > non-zero return value in .remove() is that the driver core emits a wa=
-rning. The
-> > > device is removed anyhow and an early return from .remove() usually y=
-ields a
-> > > resource leak.
-> > >=20
-> > > The drivers converted here returned zero in their remove callback, to=
- the
-> > > transformation was easy.
-> >=20
-> > who is responsible to pick up this patch set (or express their concerns
-> > when not applying it)?
-> >=20
-> > There is (for now) no coordination necessary, the final conversion of
-> > platform_driver's remove callback is still far away. So applying it via
-> > it's usual repo would be great.
->=20
-> Please check https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux=
--tpmdd.git/
-
-Looking at the topmost three commits in your next branch (i.e.
-0760dc1b2f58fe741bddb6a0030720dfd6ac4689) it looks fine to me.
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7ehhmyaykftyzkq4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRE5fwACgkQj4D7WH0S
-/k7JTQgAnuwxK8akss4S52XeX005xNFz+mnSQe3Lp8Iscw1RLr/wDBQrqrOORLZO
-2tIcWkug8zLxuHLUtvRndDmw8kJ49+ZBgAU1Z6UwW4aa0AkNIoxs7d68YvqNvi6v
-4lzN/eD+LB5rkJcCD2Z1Cqr2tERvHVKeoqdfD89siZigcDtaMnK6KGa8EPNmlUQm
-3NqFkLP4TcWE9HcBsDNg93fW+ngEE7bVX2x8wY9rWADB+TQju/cpx2YgMoU3Mtzf
-N+dydjsoPha4hpDZ+zgt/O/uU/YKm/Qsm24XrbLvSRwpP272da8btkcKNkM74/pE
-Tamz3TRk/j2ScPMFouaRKIbC8vVB+Q==
-=a5Cu
------END PGP SIGNATURE-----
-
---7ehhmyaykftyzkq4--
+BR, Jarkko
