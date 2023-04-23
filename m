@@ -2,196 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1CC6EC0D1
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Apr 2023 17:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEE66EC0D4
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Apr 2023 17:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjDWPeu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Apr 2023 11:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        id S229499AbjDWPjI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Apr 2023 11:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjDWPet (ORCPT
+        with ESMTP id S229458AbjDWPjI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Apr 2023 11:34:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A5310FC
-        for <linux-integrity@vger.kernel.org>; Sun, 23 Apr 2023 08:34:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E4D460F89
-        for <linux-integrity@vger.kernel.org>; Sun, 23 Apr 2023 15:34:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AFCDC433D2;
-        Sun, 23 Apr 2023 15:34:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682264087;
-        bh=kGxXr4WewbASHdQwHogHDGBrarhgsGMmhUQCvi7mj5c=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=T7rxHWmpLDBFnf2cbEIHFbIN6xHuDVO0mYuJSOToywmwzQ5zR/kNUUrejdKGg/H+5
-         fwrME1Lmr8ffT+3vH5+yOu5ClnT6YNvbOFGS/V7NKiVTk3XuwwkDjIbMLdcjSAgx0p
-         TqxPuQhJk2NaMzq1Gcg+IaBy72Nk17gloXQAD6BynF4D4wvwnRYI3+V/DyjxLOZkfa
-         GPmxnraCdPQNL8Em0cRuh1G9HNKJZd03OSe+qdXpYSTfQOo5cFY85JmZ+2hqDkqdUg
-         i0Z/yx/cVF1rXJQbUfg/o1q28NOEwAXI/qoNdMxVK55IHJ2mrv8E33WHj9Pp79+cd/
-         4A0B7ESqynUSQ==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 23 Apr 2023 18:34:44 +0300
-Message-Id: <CS48UJACBMXA.3RS4N6JIAPBFZ@suppilovahvero>
-Cc:     <linux-integrity@vger.kernel.org>,
-        "Haris Okanovic" <haris.okanovic@ni.com>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH v2] tpm_tis: fix stall after iowrite*()s
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>
-X-Mailer: aerc 0.14.0
-References: <20230323153436.B2SATnZV@linutronix.de>
- <20230330002534.teqpltcmpkdms72t@kernel.org>
- <20230419154130.b392MbTl@linutronix.de>
-In-Reply-To: <20230419154130.b392MbTl@linutronix.de>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 23 Apr 2023 11:39:08 -0400
+X-Greylist: delayed 124 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 23 Apr 2023 08:39:05 PDT
+Received: from sender4-of-o54.zoho.com (sender4-of-o54.zoho.com [136.143.188.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE25E51;
+        Sun, 23 Apr 2023 08:39:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1682264195; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Bh7XQtHGggdE7cuEvFrhZ4CIcjkF8HYF7tja5twkCWuPVUzDnBhqbyVYlVtGTLDCNZesXaDB/QmwlzM1D1JpXENQqlvoN6US8w/hWIRgHJh7fpfS2N31xM0vAR7q80NbLMvbFuY0Jkcfd6ZLj0xR/rOISYBo/4d9q6qaKNdOJBE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1682264195; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=KP5usS+I85x0A0fFTywcu5eB7jZljNhZSWfv/ljyeL8=; 
+        b=Ej7lzvqGGt0ViE7ayEOFLXIWmKKULq7Avt4J43UWUWjfXYHBd+oy2cUA2ijXdgrQkrPqaTcuqt7qrm5zjZEORkPzv8jDyr2Dxb0oUwJsA2kCOhyYaWVI3MRr38tEFKJFWdFUEOpVaNySumCEBbRpe5ifNEBjJgqcwk5MjJHB7Ns=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (31.187.91.190 [31.187.91.190]) by mx.zohomail.com
+        with SMTPS id 1682264189997859.8986172259391; Sun, 23 Apr 2023 08:36:29 -0700 (PDT)
+Message-ID: <87d022be08cf911178cfb8182598a1689b050845.camel@mniewoehner.de>
+Subject: Re: [PATCH v11 00/14] TPM IRQ fixes
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+In-Reply-To: <CS4767IVV0V2.2E9IH70NE7FGQ@suppilovahvero>
+References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
+         <4c094418-7725-b815-f1f9-8b12f1ac4d72@gmx.de>
+         <c02493fac223707de39e44d51b0a0ce512565250.camel@mniewoehner.de>
+         <20230319135338.c7k6r3ws6lby5qgv@kernel.org> <ZEK+w3Q++vu4Kl5x@kernel.org>
+         <a93b6222-edda-d43c-f010-a59701f2aeef@gmx.de>
+         <CS4767IVV0V2.2E9IH70NE7FGQ@suppilovahvero>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+Date:   Sun, 23 Apr 2023 17:36:25 +0200
+MIME-Version: 1.0
+User-Agent: Evolution 3.44.4 
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Apr 19, 2023 at 6:41 PM EEST, Sebastian Andrzej Siewior wrote:
-> From: Haris Okanovic <haris.okanovic@ni.com>
->
-> ioread8() operations to TPM MMIO addresses can stall the CPU when
-> immediately following a sequence of iowrite*()'s to the same region.
->
-> For example, cyclitest measures ~400us latency spikes when a non-RT
-> usermode application communicates with an SPI-based TPM chip (Intel Atom
-> E3940 system, PREEMPT_RT kernel). The spikes are caused by a
-> stalling ioread8() operation following a sequence of 30+ iowrite8()s to
-> the same address. I believe this happens because the write sequence is
-> buffered (in CPU or somewhere along the bus), and gets flushed on the
-> first LOAD instruction (ioread*()) that follows.
->
-> The enclosed change appears to fix this issue: read the TPM chip's
-> access register (status code) after every iowrite*() operation to
-> amortize the cost of flushing data to chip across multiple instructions.
->
-> Signed-off-by: Haris Okanovic <haris.okanovic@ni.com>
-> Link: https://lore.kernel.org/r/20230323153436.B2SATnZV@linutronix.de
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
-> v1=E2=80=A6v2:
->   - Updated/ added comments as per Jarkko Sakkinen.
->
-> On 2023-03-30 03:25:34 [+0300], Jarkko Sakkinen wrote:
-> =E2=80=A6
-> > I would replace this with:
-> >=20
-> > /*
-> >  * Flush previous write operations with a dummy read operation to the=
-=20
-> >  * TPM MMIO base address.
-> >  */
-> >=20
-> >  I think rest of the reasoning would be better place to the functions,
-> >  which are call sites for this helper, and here it would be make more
-> >  sense to explain what it actually does.
-> =E2=80=A6
-> >=20
-> > Thanks for catching this up. It is a small code change but I think that=
- it
-> > would deserve just a bit more documentation, as it would make sure that=
- the
-> > reasoning you gave is taken into account in the future code reviews.
-> >=20
-> > I think that if you append what I suggested above (you can use your
-> > judgement and edit as you will), it should be sufficient.
->
-> Did as asked. However, it is a bit misleading given that the comment
-> above tpm_tis_iowrite*() describes the flush behaviour which is
-> conditional on CONFIG_PREEMPT_RT. Do you want this flush unconditionally
-> or you fine the way it is?
->
->  drivers/char/tpm/tpm_tis.c |   43 ++++++++++++++++++++++++++++++++++++++=
-+++--
->  1 file changed, 41 insertions(+), 2 deletions(-)
->
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -50,6 +50,45 @@ static inline struct tpm_tis_tcg_phy *to
->  	return container_of(data, struct tpm_tis_tcg_phy, priv);
->  }
-> =20
-> +#ifdef CONFIG_PREEMPT_RT
-> +/*
-> + * Flush previous write operations with a dummy read operation to the
-> + * TPM MMIO base address.
-> + */
-> +static inline void tpm_tis_flush(void __iomem *iobase)
-> +{
-> +	ioread8(iobase + TPM_ACCESS(0));
-> +}
-> +#else
-> +#define tpm_tis_flush(iobase) do { } while (0)
-> +#endif
-> +
-> +/*
-> + * Write a byte word to the TPM MMIO address, and flush the write queue.
-> + * The flush ensures that the data is sent immediately over the bus and =
-not
-> + * aggregated with further requests and transferred later in a batch. Th=
-e large
-> + * write requests can lead to unwanted latency spikes by blocking the CP=
-U until
-> + * the complete batch has been transferred.
-> + */
-> +static inline void tpm_tis_iowrite8(u8 b, void __iomem *iobase, u32 addr=
-)
-> +{
-> +	iowrite8(b, iobase + addr);
-> +	tpm_tis_flush(iobase);
-> +}
-> +
-> +/*
-> + * Write a 32-bit word to the TPM MMIO address, and flush the write queu=
-e.
-> + * The flush ensures that the data is sent immediately over the bus and =
-not
-> + * aggregated with further requests and transferred later in a batch. Th=
-e large
-> + * write requests can lead to unwanted latency spikes by blocking the CP=
-U until
-> + * the complete batch has been transferred.
-> + */
-> +static inline void tpm_tis_iowrite32(u32 b, void __iomem *iobase, u32 ad=
-dr)
-> +{
-> +	iowrite32(b, iobase + addr);
-> +	tpm_tis_flush(iobase);
-> +}
-> +
->  static int interrupts =3D -1;
->  module_param(interrupts, int, 0444);
->  MODULE_PARM_DESC(interrupts, "Enable interrupts");
-> @@ -186,12 +225,12 @@ static int tpm_tcg_write_bytes(struct tp
->  	switch (io_mode) {
->  	case TPM_TIS_PHYS_8:
->  		while (len--)
-> -			iowrite8(*value++, phy->iobase + addr);
-> +			tpm_tis_iowrite8(*value++, phy->iobase, addr);
->  		break;
->  	case TPM_TIS_PHYS_16:
->  		return -EINVAL;
->  	case TPM_TIS_PHYS_32:
-> -		iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase + addr);
-> +		tpm_tis_iowrite32(le32_to_cpu(*((__le32 *)value)), phy->iobase, addr);
->  		break;
->  	}
-> =20
+On Sun, 2023-04-23 at 17:15 +0300, Jarkko Sakkinen wrote:
+> On Sat Apr 22, 2023 at 3:59 AM EEST, Lino Sanfilippo wrote:
+> > Hi,
+> > 
+> > On 21.04.23 18:50, Jarkko Sakkinen wrote:
+> > 
+> > > 
+> > > I tested this with libvirt/QEMU/swtpm and did the following tests:
+> > > 
+> > > 1. TPM 1.2 suspend/resume.
+> > > 2. TPM 2.0 kselftest.
+> > > 3. TPM 2.0 suspend/resume + kselftest.
+> > > 
+> > > I see no issues so I can pick this for my pull request.
+> > > 
+> > > Tests were performed on top of v6.3-rc7.
+> > > 
+> > > For all:
+> > > 
+> > > Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > 
+> > > BR, Jarkko
+> > 
+> > Thats great, thanks a lot for testing this!
+> 
+> Thanks for the patience! I'm sorry it took so long but at least all the
+> steps in v11 make perfect sense and I see nothing that would rise red
+> flags. So we can land this with good confidence I think.
+> 
+> BR, Jarkko
 
+I wonder, if it makes sense to submit this patch series to longterm and/or at
+least stable?
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+BR Michael
 
-BR, Jarkko
