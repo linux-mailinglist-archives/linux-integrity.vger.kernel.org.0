@@ -2,53 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855B66ECD45
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Apr 2023 15:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0130E6ED06F
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Apr 2023 16:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbjDXNWA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Apr 2023 09:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
+        id S230343AbjDXOli (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Apr 2023 10:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbjDXNVz (ORCPT
+        with ESMTP id S229522AbjDXOli (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Apr 2023 09:21:55 -0400
+        Mon, 24 Apr 2023 10:41:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBA555A2;
-        Mon, 24 Apr 2023 06:21:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2350A61AB;
+        Mon, 24 Apr 2023 07:41:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CF5562242;
-        Mon, 24 Apr 2023 13:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4D1C433D2;
-        Mon, 24 Apr 2023 13:21:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6500619F4;
+        Mon, 24 Apr 2023 14:41:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9714FC433D2;
+        Mon, 24 Apr 2023 14:41:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682342502;
-        bh=ALxdl1WkZwvyVJ+h0DnMAEX7Ukk2uYfLG+nzutr9Xpo=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=bDY/QL3ihJHnEHGlbXzqlmiE+9xqWhgLx7XVqClIyZyqqzFcV4/ZMT53DjFRfSpjr
-         D6DTngInppkpH7aXPuDoStiMKkdSqdJky9IdMgnK0xcVneSx5gd52MvwR9gDigizdi
-         3814JhyyBVuRdylNmiTYoF25fZx6cn5XedcZwCgtcbde1JpoFCH55qrVo1voxbIAtt
-         xo+550lJ8SAfmarY/IQ4kSyD3gRJkYVeZulG/bRzlSTQ6kFGoH11Lq0ISuRt9Cyw/s
-         c8ccdQcp9RUnrWP2mER6HSSx7xmNKpwxBdIVWRbtAt1T9HnWbWM6mDC0fTjDUFWWRY
-         0kXImrYKHkZmg==
-From:   Mark Brown <broonie@kernel.org>
-To:     jsnitsel@redhat.com, robh+dt@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-In-Reply-To: <20230421091309.2672-1-kyarlagadda@nvidia.com>
-References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
-Subject: Re: (subset) [Patch V10 0/3] Tegra TPM driver with HW flow control
-Message-Id: <168234249853.85980.16863845615990531114.b4-ty@kernel.org>
-Date:   Mon, 24 Apr 2023 14:21:38 +0100
+        s=k20201202; t=1682347296;
+        bh=fSrcPcZw/GPmGI8FgVzCOdJ5NelYMqDiFY1OsK1Lsgs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z5+L3YkKOEerC6ue9wx2P+AUWTXrB4HFZ452zckBf6Nb9lUGt/oqqRm8l/rCm1Z85
+         6vuyM9+GEIz7wkbvVGET3vQDuWQ1HcKsCrAWcN5XbSwcD5Mnle6oOVOboMS5P3VPbu
+         sLjnTgfPiZZuvk9ebWQAumNrRgx78fYkVAQSNEWeQWeSLdOWRh3k2vA/QrmD1fhSLN
+         o0l+QGEsdSzFptQNxH+OCQVcQUye4gMyeG9unGDClkZ/CvBGmLXzD6tQJd4Tf4Qk6B
+         iLf6NXWbE1IvRuOCOQjmwbKPURtwRQmaGcCZrNG8xqDJUP9i8RDEtCnCYYedApV+lA
+         U9xWUXUslokeA==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Martin Dimov <martin@dmarto.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] tpmdd: changes for v6.4-rc1
+Date:   Mon, 24 Apr 2023 17:41:30 +0300
+Message-Id: <20230424144130.1084795-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00e42
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,44 +58,100 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 21 Apr 2023 14:43:06 +0530, Krishna Yarlagadda wrote:
-> TPM devices may insert wait state on last clock cycle of ADDR phase.
-> For SPI controllers that support full-duplex transfers, this can be
-> detected using software by reading the MISO line. For SPI controllers
-> that only support half-duplex transfers, such as the Tegra QSPI, it is
-> not possible to detect the wait signal from software. The QSPI
-> controller in Tegra234 and Tegra241 implement hardware detection of the
-> wait signal which can be enabled in the controller for TPM devices.
-> 
-> [...]
+The following changes since commit 457391b0380335d5e9a5babdec90ac53928b23b4:
 
-Applied to
+  Linux 6.3 (2023-04-23 12:02:52 -0700)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+are available in the Git repository at:
 
-Thanks!
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-v6.4-rc1
 
-[1/3] spi: Add TPM HW flow flag
-      commit: 67a142dc9eb96a5cc018e5db62390665eb5f038c
-[3/3] spi: tegra210-quad: Enable TPM wait polling
-      commit: 967ca91a996f82219f2883e9e53d8e20df49025a
+for you to fetch changes up to bd8621ca1510e6e802df9855bdc35a04a3cfa932:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+  tpm: Add !tpm_amd_is_rng_defective() to the hwrng_unregister() call site (2023-04-24 16:15:53 +0300)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+----------------------------------------------------------------
+Two major features are included into this pull request. The links for
+the landed patch sets are below.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+The .machine keyring, used for Machine Owner Keys (MOK), acquired the
+ability to store only CA enforced keys, and put rest to the .platform
+keyring, thus separating the code signing keys from the keys that are
+used to sign certificates. This essentially unlocks the use of the
+.machine keyring as a trust anchor for IMA. It is an opt-in feature,
+meaning that the additional contraints won't brick anyone who does not
+care about them.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+The 2nd feature is the enablement of interrupt based transactions with
+discrete TPM chips (tpm_tis). There was code for this existing but it
+never really worked so I consider this a new feature rather than a bug
+fix. Before the driver just falled back to the polling mode.
 
-Thanks,
-Mark
+Link: https://lore.kernel.org/linux-integrity/a93b6222-edda-d43c-f010-a59701f2aeef@gmx.de/
+Link: https://lore.kernel.org/linux-integrity/20230302164652.83571-1-eric.snowberg@oracle.com/
 
+----------------------------------------------------------------
+Eric Snowberg (6):
+      KEYS: Create static version of public_key_verify_signature
+      KEYS: Add missing function documentation
+      KEYS: X.509: Parse Basic Constraints for CA
+      KEYS: X.509: Parse Key Usage
+      KEYS: CA link restriction
+      integrity: machine keyring CA configuration
+
+Haris Okanovic (1):
+      tpm_tis: fix stall after iowrite*()s
+
+Jarkko Sakkinen (1):
+      tpm: Add !tpm_amd_is_rng_defective() to the hwrng_unregister() call site
+
+Krzysztof Kozlowski (2):
+      tpm: st33zp24: Mark ACPI and OF related data as maybe unused
+      tpm: tpm_tis_spi: Mark ACPI and OF related data as maybe unused
+
+Lino Sanfilippo (14):
+      tpm, tpm_tis: Avoid cache incoherency in test for interrupts
+      tpm, tpm_tis: Claim locality before writing TPM_INT_ENABLE register
+      tpm, tpm_tis: Disable interrupts if tpm_tis_probe_irq() failed
+      tpm, tpm_tis: Do not skip reset of original interrupt vector
+      tpm, tpm_tis: Claim locality before writing interrupt registers
+      tpm, tpm_tis: Only handle supported interrupts
+      tpm, tpm_tis: Move interrupt mask checks into own function
+      tpm, tpm_tis: do not check for the active locality in interrupt handler
+      tpm, tpm: Implement usage counter for locality
+      tpm, tpm_tis: Request threaded interrupt handler
+      tpm, tpm_tis: Claim locality in interrupt handler
+      tpm, tpm_tis: Claim locality when interrupts are reenabled on resume
+      tpm, tpm_tis: startup chip before testing for interrupts
+      tpm, tpm_tis: Enable interrupt test
+
+Mark Hasemeyer (1):
+      tpm: cr50: i2c: use jiffies to wait for tpm ready irq
+
+Uwe Kleine-König (3):
+      tpm/tpm_ftpm_tee: Convert to platform remove callback returning void
+      tpm/tpm_tis: Convert to platform remove callback returning void
+      tpm/tpm_tis_synquacer: Convert to platform remove callback returning void
+
+Yu Zhe (1):
+      tpm: remove unnecessary (void*) conversions
+
+ certs/system_keyring.c                    |  14 +-
+ crypto/asymmetric_keys/restrict.c         |  40 ++++
+ crypto/asymmetric_keys/x509_cert_parser.c |  50 +++++
+ drivers/char/tpm/eventlog/common.c        |   6 +-
+ drivers/char/tpm/st33zp24/i2c.c           |   4 +-
+ drivers/char/tpm/st33zp24/spi.c           |   4 +-
+ drivers/char/tpm/tpm-chip.c               |  41 ++--
+ drivers/char/tpm/tpm.h                    |   1 +
+ drivers/char/tpm/tpm_ftpm_tee.c           |   6 +-
+ drivers/char/tpm/tpm_tis.c                |  51 ++++-
+ drivers/char/tpm/tpm_tis_core.c           | 299 ++++++++++++++++++------------
+ drivers/char/tpm/tpm_tis_core.h           |   5 +-
+ drivers/char/tpm/tpm_tis_i2c_cr50.c       |   3 +-
+ drivers/char/tpm/tpm_tis_spi_main.c       |   4 +-
+ drivers/char/tpm/tpm_tis_synquacer.c      |   6 +-
+ include/crypto/public_key.h               |  28 +++
+ security/integrity/Kconfig                |  23 ++-
+ security/integrity/digsig.c               |   8 +-
+ 18 files changed, 431 insertions(+), 162 deletions(-)
