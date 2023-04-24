@@ -2,57 +2,39 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E196ED085
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Apr 2023 16:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E2F6ED127
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Apr 2023 17:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjDXOq4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Apr 2023 10:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S231140AbjDXPTE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Apr 2023 11:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbjDXOqn (ORCPT
+        with ESMTP id S232042AbjDXPTA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Apr 2023 10:46:43 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DAE7DB4;
-        Mon, 24 Apr 2023 07:46:29 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5052caa1e32so8069955a12.2;
-        Mon, 24 Apr 2023 07:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682347587; x=1684939587;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VCQLHZ8uZl5RhoE45wRxXGl0sq5oZ8VUfOTDUiq565Q=;
-        b=J3cse2Ha23Crwf+tPG1vxBhKr8IYToqYJZcJSkK05/rCUmZ8MbZzgXjSaGKRdAT/bh
-         DkLOeqsC6PjshEM5XNVTWr2G1TOFa7oeplu+Xr3eowxsv9GcL8Im8OTqlp/FKFblluR3
-         Tgl/pwl/zMo7oulExkk1ignONx0eP8+ZxNcG6Ef3Cf2rxN3CHB8WxUEavtUYyKPl8ZAl
-         ugBkORBuNLAS7t7ubKTqqvf4Z3GUeTdAHTCrdhhXSrPI/gQ0nZSq4SX+cioQE9HQQZ32
-         lgA0zt3XnApHXUvZBQyj2ZkV9HrlJFvjJHLC1sfQdccDCTSe4maryf/U3FzUhbdC0yp1
-         nw8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682347587; x=1684939587;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VCQLHZ8uZl5RhoE45wRxXGl0sq5oZ8VUfOTDUiq565Q=;
-        b=Nq/yd+CkY9ZFRFRGrXOj9SmlPiPNY9qPGk41lY/8S4rvXg6BMQ6xziy4s6T3XD7Hu7
-         XzPh68H6meQJ9M8ADCIWxKJhapxcA0si3TUd/tXr65GDLD6qBOUz6iuZtoIEUWX5LZYK
-         h+dBLAXlhB/3AmYl3CRKkN+p3fb1cu7uTBFNC8FE2cQvKiIwbqN/vDZffl+xiKufgOi3
-         ATulzOjaaSTMhGGDXDpla4CyMRzzVYpFvOZejK/4c1yvPFO2cB9lryo6/BWtHfGl6bok
-         UvF/pZ7Yt95nW3+5c2cyr5f6ueTZYu8S+tKvtWCMENtyMhYIAF53W9mcxMRuBszHu/OK
-         kzMg==
-X-Gm-Message-State: AAQBX9fZppfuxJjOYg6hb/wGjVJYy3o942TAOWPw8W/kHDSSUicJ07lR
-        /GxrFp9b3xUCfntFOFBn99U=
-X-Google-Smtp-Source: AKy350bfq3wl+sejieaLJsTfB8wIK2a+bpIxVfb0kmH61yEYFDtS2hKxYnxAiDBTqj+lQLtH8oD7QA==
-X-Received: by 2002:a05:6402:3d1:b0:506:be3f:ebb1 with SMTP id t17-20020a05640203d100b00506be3febb1mr11496356edw.26.1682347586947;
-        Mon, 24 Apr 2023 07:46:26 -0700 (PDT)
-Received: from orome (p200300e41f053a00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f05:3a00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id f20-20020a056402069400b00504ecfea8b2sm4779836edy.85.2023.04.24.07.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 07:46:26 -0700 (PDT)
-Date:   Mon, 24 Apr 2023 16:46:24 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
+        Mon, 24 Apr 2023 11:19:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26B08A50;
+        Mon, 24 Apr 2023 08:18:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A8E3625F5;
+        Mon, 24 Apr 2023 15:18:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 788DCC433EF;
+        Mon, 24 Apr 2023 15:18:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682349532;
+        bh=WNhrzb+two7LSArpEYTM4KxCfhgBU/6AXoKRPek2FD4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O+0e9hekrRTYM0TjAunzdz9BezS0atWyS8DcUnKSaTQ5nSraFCAdjaltJtk6yN4nh
+         FbHL1hd6RTSuRbEIOulZtHxybTcYq6v3XYKpF6IFs+IUPFAuEG4VZgRp9nB7rTjkPG
+         Vyy7E52k158r121lPyvmfcrGZzrKrMi6GDyP21wjFxe6/sWy5k+662hJi6O4hhr8Lk
+         6Ped7sexk5PwgjuvyCjfvlcue4MTsCn/wLqWug5u6EbhTDE8XfluyYtuc3ZTH68kzy
+         sbK+Kn/vxP7sHoKmCZ4FBsTay4YhQARymw7i9ztT4Rb44YFYn6RQ/2PbXBhzDLQiPE
+         AqRn5OnfTjuzA==
+Date:   Mon, 24 Apr 2023 16:18:45 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
 Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
         Krishna Yarlagadda <kyarlagadda@nvidia.com>,
         jsnitsel@redhat.com, robh+dt@kernel.org, peterhuewe@gmx.de,
@@ -61,21 +43,22 @@ Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com
 Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <ZEaWQD_QTs2usVl8@orome>
+Message-ID: <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
 References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
  <20230421091309.2672-3-kyarlagadda@nvidia.com>
  <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
  <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
+ <ZEaWQD_QTs2usVl8@orome>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="57FmpnLZgcFuqbAA"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7lPOdm6vGo8h/yZ6"
 Content-Disposition: inline
-In-Reply-To: <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZEaWQD_QTs2usVl8@orome>
+X-Cookie: A rolling disk gathers no MOS.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,46 +66,36 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---57FmpnLZgcFuqbAA
+--7lPOdm6vGo8h/yZ6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 24, 2023 at 12:56:25PM +0100, Mark Brown wrote:
-> On Sun, Apr 23, 2023 at 06:08:16PM +0300, Jarkko Sakkinen wrote:
->=20
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->=20
-> > Should I pick these patches?
->=20
-> I've queued the spi side already.
+On Mon, Apr 24, 2023 at 04:46:24PM +0200, Thierry Reding wrote:
 
-Mark,
+> Would it make sense for you to pick up patch 2/3 as well? As far as I
+> can tell there's a build dependency on patch 1/3 because of the newly
+> added SPI_TPM_HW_FLOW symbol.
 
-Would it make sense for you to pick up patch 2/3 as well? As far as I
-can tell there's a build dependency on patch 1/3 because of the newly
-added SPI_TPM_HW_FLOW symbol.
+I'll include it in my pull request for spi this time round so it should
+end up in -rc1, my thinking was that I was happy with the SPI bits and
+if it was in -rc1 then the TPM bits could be handled without cross tree
+issues when the review was sorted (which it is now but wasn't at the
+time).  If the SPI side doesn't make -rc1 for some reason I can pick up
+the TPM bit as well, and/or do a signed tag.
 
-Thierry
-
---57FmpnLZgcFuqbAA
+--7lPOdm6vGo8h/yZ6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRGlkAACgkQ3SOs138+
-s6Hg+Q/7B8MmnWqq687vs4joQwJ6x9+OVi+ErMSAxVv+TJpPLQKCcxGPQ7QVe5kt
-Pix6tMfC2cu30a1t7lHRrBLltO8cTZSGRA9wkht+UqIBGtH6ULSI7wzqVdWvT+de
-OsRWLLRSVY8IdWmoUVs3rLZ1vpZ2mwPWdQ8rkB5LiqnLSS4qfdDtt+fYduwjkNqz
-pGJj3qpDfmEBJxLpo8s9qsyl5uK8ngvQzcuPyi7N6DejZ5v4ZAhTrzg1RIoCT15m
-MGf1NyMOovaTdY7qEAgURdVgGJPL9FG86MuaKL7Mx90JvianPshZThKzm6+qXWLU
-o1DrTRAwC1kkuGolxp+St+TEY7ughRxucrR13LalAp4nLZcWgbsxKyH+90YRGOUf
-vxkesoxaJJvr/OgJRyRpPwuyVGBItriYqyk8299CWvt/DXDYlKkmpQh8rDNlBnPL
-/DPsQe0B3qyAScqTibimKsF6PpfXVBBTaSgSzhLDrGPNKVm0a4bGtlzINHeAyPaP
-FV527OCn+v1NXBOXes8iGkcp8GVuWlpEqS3Kb7E3O/JPUWg2PoJ5aWUV+IXgS3tt
-FKOahRvnm1GfvcW1b3vS8hVadFS+UPrtoR42FfT7a/qpNrVj+RTsgg0l2C0903V5
-PHbihTvR9OgNw6a0dbX7SpVeDNIqG3yq8kIj/rLdPXHQ5isSJ8o=
-=TBED
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRGndQACgkQJNaLcl1U
+h9ADuAf+K3fSxfQBMYgj1jBglBFx5Ww6piOvrVw4uby6KKj9nDBve1456ikcc80Z
+hOQx1cJ3Cw191WSRTtUPX/I1xzuSEDfeks6kqK0JuaohVmQ3sGrSuo4vg3x8xiCs
+3UTACSsJ4WzHlup+63eWyToow5bigO+kXLz6k/tHUbqrtkiKbgRxjbPePVLzAcox
+dVJzpSFURHMzow92183nneyk+8FCEHeNTGTdYEnSRrtByFoqaCKwn8J1t6OhP46a
+S6whcV5g0AbnNM0eT4W44aLcQTyEnI9wxpq0uF8a4PF+0EWj/lVlayuRQItK/nqN
+D1QAtXhaCHRoCFt473q6C9cjcezxtA==
+=q1nE
 -----END PGP SIGNATURE-----
 
---57FmpnLZgcFuqbAA--
+--7lPOdm6vGo8h/yZ6--
