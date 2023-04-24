@@ -2,347 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC2C6ECBF1
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Apr 2023 14:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834FA6ECC92
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Apr 2023 15:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjDXMWj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 24 Apr 2023 08:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S231584AbjDXNGJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 24 Apr 2023 09:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjDXMWi (ORCPT
+        with ESMTP id S231445AbjDXNGI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 24 Apr 2023 08:22:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAD726B7
-        for <linux-integrity@vger.kernel.org>; Mon, 24 Apr 2023 05:22:36 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33OC4scn018498;
-        Mon, 24 Apr 2023 12:22:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=bcnfAW69whwONsbLU6nu5P5tS//n3d4IxjpspdlKeOc=;
- b=jgy4ydqTpGrI/pUfSBxGSo3fBVdeU2+9uAwIOUxjPDrbGgedi4Ij8OY4IgXpB65qs0UJ
- 3UuTjq5rTzPOkosqQWGrIKhwy9EiBrTSZH+eJyDSXE16XcEHXyABtNE57Advc/OIP2EZ
- rBec9DJhuO0Fg5VFhKXZgvjweIMcWRHt2UJKA0w8qiyEJXs7I+4I9Wjn7CFebc/Vr0Av
- vYMJBokJfrBP75d6juflWSuR1wgVw3CHzrIMl6+vB2ptV1XDZgwMXKnXnWefD+iIfu7o
- 63zT+Gj5QHYwOnblzszum2hpt1PUz7d8WQx+jfPYOqckSjlCh6diprIgigM4zhHwyOc6 WQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q48jktfgf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 12:22:12 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33OCKqiP009127;
-        Mon, 24 Apr 2023 12:22:11 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q48jktfg1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 12:22:11 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33O9jXca016566;
-        Mon, 24 Apr 2023 12:22:11 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3q4777wse5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Apr 2023 12:22:10 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33OCM9SS27656878
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Apr 2023 12:22:09 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24B2058056;
-        Mon, 24 Apr 2023 12:22:09 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A718058052;
-        Mon, 24 Apr 2023 12:22:08 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.17.10])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Apr 2023 12:22:08 +0000 (GMT)
-Message-ID: <037f9c70d402d65813c03b0fe457ec73dabcbea3.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils 2/2] Add simple test to check EVM HMAC
- calculation
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 24 Apr 2023 08:22:08 -0400
-In-Reply-To: <20230324181149.44694-2-roberto.sassu@huaweicloud.com>
-References: <20230324181149.44694-1-roberto.sassu@huaweicloud.com>
-         <20230324181149.44694-2-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: XACwl2swzK2hCZg9VZB1tCCXirxUYy0v
-X-Proofpoint-GUID: Zz66vj3o9XaXHjCkdG51TB2SeaybDftT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_07,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 adultscore=0 suspectscore=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- malwarescore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304240109
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Apr 2023 09:06:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856313AA6;
+        Mon, 24 Apr 2023 06:06:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E5D9620F9;
+        Mon, 24 Apr 2023 13:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBADC433D2;
+        Mon, 24 Apr 2023 13:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682341565;
+        bh=QSnFkZkoFX69XCDmzpAUC+OzbmzNwl9i9p1eGhLZ+Us=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ryL4bRKaJP/1BUsyHdbssriX7nUVH5fml0wtPfEO6lfIAzP2reEFLpMQGGos/RXet
+         BvJKHnB/erBiGcdpuvgKK/L58x5VU0ESo4vL1it6B6cxVgxoDW7SI9U68vKjk4dAzp
+         siKj+kiA8V3lFVMHVMNtYIPZP/n8Jxthb88Eo6TTkF844/naPNeukVlxIaBBZjEY0y
+         eUVYVfrKoWiVJUHLmTx0Lxg9LAJOkFF7n0+IM0juHm/3B632UY7IaegKAqATXSRwAR
+         fkLE5DWAZYXWvs/oMrMvvDpjhsBfm+OlHxkxLEqfEfd7TVCgUyTkuoyShu5EYN7tHj
+         VWmpV/7dZa1ag==
+Message-ID: <2772fde600710b99d482edee903f30bd87ea9aa8.camel@kernel.org>
+Subject: Re: [PATCH] tpm: Add !tpm_amd_is_rng_defective() to the
+ hwrng_unregister() call site
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Martin Dimov <martin@dmarto.com>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 24 Apr 2023 16:06:01 +0300
+In-Reply-To: <20230423154958.805992-1-jarkko@kernel.org>
+References: <20230423154958.805992-1-jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.0-1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
-
-On Fri, 2023-03-24 at 19:11 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Add a simple test to ensure that the kernel and evmctl provide the same
-> result for the HMAC calculation.
-
-Based on the LSM discussions, including a test for a file in a Smack
-transmuting directory would be nice.
-
-> This test requires that, unless the UML kernel is used, the
-> TST_EVM_CHANGE_MODE environment variable is set to 1.
-
-Agreed requring permission to enable EVM HMAC with a well known HMAC
-value is 
-a good idea.   Please update the patch description with an explanation.
-
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On Sun, 2023-04-23 at 18:49 +0300, Jarkko Sakkinen wrote:
+> The following crash was reported:
+>=20
+> [ 1950.279393] list_del corruption, ffff99560d485790->next is NULL
+> [ 1950.279400] ------------[ cut here ]------------
+> [ 1950.279401] kernel BUG at lib/list_debug.c:49!
+> [ 1950.279405] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> [ 1950.279407] CPU: 11 PID: 5886 Comm: modprobe Tainted: G O 6.2.8_1 #1
+> [ 1950.279409] Hardware name: Gigabyte Technology Co., Ltd. B550M AORUS P=
+RO-P/B550M AORUS PRO-P,
+> BIOS F15c 05/11/2022
+> [ 1950.279410] RIP: 0010:__list_del_entry_valid+0x59/0xc0
+> [ 1950.279415] Code: 48 8b 01 48 39 f8 75 5a 48 8b 72 08 48 39 c6 75 65 b=
+8 01 00 00 00 c3 cc cc cc
+> cc 48 89 fe 48 c7 c7 08 a8 13 9e e8 b7 0a bc ff <0f> 0b 48 89 fe 48 c7 c7=
+ 38 a8 13 9e e8 a6 0a bc
+> ff 0f 0b 48 89 fe
+> [ 1950.279416] RSP: 0018:ffffa96d05647e08 EFLAGS: 00010246
+> [ 1950.279418] RAX: 0000000000000033 RBX: ffff99560d485750 RCX: 000000000=
+0000000
+> [ 1950.279419] RDX: 0000000000000000 RSI: ffffffff9e107c59 RDI: 00000000f=
+fffffff
+> [ 1950.279420] RBP: ffffffffc19c5168 R08: 0000000000000000 R09: ffffa96d0=
+5647cc8
+> [ 1950.279421] R10: 0000000000000003 R11: ffffffff9ea2a568 R12: 000000000=
+0000000
+> [ 1950.279422] R13: ffff99560140a2e0 R14: ffff99560127d2e0 R15: 000000000=
+0000000
+> [ 1950.279422] FS: 00007f67da795380(0000) GS:ffff995d1f0c0000(0000) knlGS=
+:0000000000000000
+> [ 1950.279424] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [ 1950.279424] CR2: 00007f67da7e65c0 CR3: 00000001feed2000 CR4: 000000000=
+0750ee0
+> [ 1950.279426] PKRU: 55555554
+> [ 1950.279426] Call Trace:
+> [ 1950.279428] <TASK>
+> [ 1950.279430] hwrng_unregister+0x28/0xe0 [rng_core]
+> [ 1950.279436] tpm_chip_unregister+0xd5/0xf0 [tpm]
+>=20
+> Add the forgotten !tpm_amd_is_rng_defective() invariant to the
+> hwrng_unregister() call site inside tpm_chip_unregister().
+>=20
+> Reported-by: Martin Dimov <martin@dmarto.com>
+> Link: https://lore.kernel.org/linux-integrity/3d1d7e9dbfb8c96125bc93b6b58=
+b90a7@dmarto.com/
+> Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs")
+> Fixes: b006c439d58d ("hwrng: core - start hwrng kthread also for untruste=
+d sources")
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 > ---
->  kernel-configs/base |   4 +-
->  tests/Makefile.am   |   2 +-
->  tests/evm_hmac.test | 170 ++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 174 insertions(+), 2 deletions(-)
->  create mode 100755 tests/evm_hmac.test
-> 
-> diff --git a/kernel-configs/base b/kernel-configs/base
-> index 7acbd5b3b2a..0d8714d8f98 100644
-> --- a/kernel-configs/base
-> +++ b/kernel-configs/base
-> @@ -46,11 +46,13 @@ CONFIG_TMPFS_XATTR=y
->  CONFIG_CONFIGFS_FS=y
->  CONFIG_KEYS=y
->  CONFIG_ENCRYPTED_KEYS=y
-> +CONFIG_USER_DECRYPTED_DATA=y
->  CONFIG_SECURITY=y
->  CONFIG_SECURITYFS=y
->  CONFIG_SECURITY_NETWORK=y
->  CONFIG_SECURITY_PATH=y
-> -CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,bpf"
-> +CONFIG_SECURITY_SMACK=y
-> +CONFIG_LSM="lockdown,yama,loadpin,safesetid,smack,integrity,bpf"
->  CONFIG_CRYPTO_AEAD2=y
->  CONFIG_CRYPTO_SKCIPHER=y
->  CONFIG_CRYPTO_SKCIPHER2=y
-> diff --git a/tests/Makefile.am b/tests/Makefile.am
-> index 03aa5b76088..a28f671398f 100644
-> --- a/tests/Makefile.am
-> +++ b/tests/Makefile.am
-> @@ -3,7 +3,7 @@ TESTS = $(check_SCRIPTS)
->  
->  check_SCRIPTS += ima_hash.test sign_verify.test boot_aggregate.test \
->  		 fsverity.test portable_signatures.test ima_policy_check.test \
-> -		 mmap_check.test
-> +		 mmap_check.test evm_hmac.test
->  
->  check_PROGRAMS := test_mmap
->  
-> diff --git a/tests/evm_hmac.test b/tests/evm_hmac.test
-> new file mode 100755
-> index 00000000000..de8b6a9a4d9
-> --- /dev/null
-> +++ b/tests/evm_hmac.test
-> @@ -0,0 +1,170 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Copyright (C) 2023 Roberto Sassu <roberto.sassu@huawei.com>
-> +#
-> +# Check if the kernel and evmctl provide the same result for HMAC calculation.
-> +
-> +trap '_report_exit_and_cleanup _cleanup_env cleanup' SIGINT SIGTERM SIGSEGV EXIT
-> +
-> +# Base VERBOSE on the environment variable, if set.
-> +VERBOSE="${VERBOSE:-0}"
-> +TST_EVM_CHANGE_MODE="${TST_EVM_CHANGE_MODE:-0}"
-> +
-> +# From security/integrity/evm/evm.h in kernel source directory
-> +(( EVM_INIT_HMAC=0x0001 ))
-> +
-> +cd "$(dirname "$0")" || exit 1
-> +export PATH=$PWD/../src:$PATH
-> +export LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-> +. ./functions.sh
-> +_require evmctl
-> +
-> +cleanup() {
-> +	if [ "$g_loop_mounted" = "1" ]; then
-> +		popd > /dev/null || exit "$FAIL"
-> +		umount "$g_mountpoint"
-> +	fi
-> +
-> +	if [ -n "$g_dev" ]; then
-> +		losetup -d "$g_dev"
-> +	fi
-> +
-> +	if [ -n "$g_image" ]; then
-> +		rm -f "$g_image"
-> +	fi
-> +
-> +	if [ -n "$g_mountpoint" ]; then
-> +		rm -Rf "$g_mountpoint"
-> +	fi
-> +}
-> +
-> +get_xattr() {
-> +	local format="hex"
-> +
-> +	if [ "$1" = "security.selinux" ]; then
-> +		format="text"
-> +	fi
-> +
-> +	getfattr -n "$1" -e "$format" -d "$2" 2> /dev/null | awk -F "=" '$1 == "'"$1"'" {if ("'"$format"'" == "hex") v=substr($2, 3); else { split($2, temp, "\""); v=temp[2] }; print v}'
-> +}
-> +
-> +IMA_UUID="28b23254-9467-44c0-b6ba-34b12e85a26f"
-> +
-> +# The purpose of this test is to verify if the kernel and evmctl produce the
-> +# same HMAC.
-> +check_evm_hmac() {
-> +	local evm_xattr evm_xattr_evmctl test_file_digest
-> +
-> +	echo "Test: ${FUNCNAME[0]} (evm_hash: $1, evm_value: $g_evm_value, algo: $1, fs: $2)"
-> +
-> +	if ! touch test-file; then
-> +		echo "${RED}Cannot create test-file${NORM}"
-> +		return "$FAIL"
-> +	fi
-> +
-> +	# Compare HMAC calculated by the kernel with that calculated by evmctl.
-> +	evm_xattr="$(get_xattr security.evm test-file)"
-> +	test_file_digest=$("$1"sum test-file | awk '{print $1}')
-> +	# evm_xattr has an extra byte at the beginning for the xattr type.
-> +	if [ "${#evm_xattr}" != $(( ${#test_file_digest} + 2 )) ]; then
-> +		echo "${RED}Unexpected size of security.evm${NORM}"
-> +		return "$FAIL"
-> +	fi
-> +
-> +	evm_xattr_evmctl="$(evmctl hmac -v -n test-file --uuid=$IMA_UUID -a "$1" --hmackey "$g_hmackey" 2>&1 | awk -F " " '$1 == "hmac:" {print $2}')"
-> +	if [ "$evm_xattr" != "02$evm_xattr_evmctl" ]; then
-> +		echo "${RED}security.evm mismatch between the kernel and evmctl${NORM}"
-> +		return "$FAIL"
-> +	fi
-> +
-> +	return "$OK"
-> +}
-> +
-> +cleanup_evm_hmac() {
-> +	rm -f test-file
-> +}
-> +
-> +_run_env "$TST_KERNEL" "$PWD/$(basename "$0")" "TST_ENV=$TST_ENV TST_KERNEL=$TST_KERNEL PATH=$PATH LD_LIBRARY_PATH=$LD_LIBRARY_PATH VERBOSE=$VERBOSE"
-> +
-> +# Exit from the creator of the new environment.
-> +_exit_env "$TST_KERNEL"
-> +
-> +# Mount filesystems in the new environment.
-> +_init_env
-> +
-> +# Assume that the EVM mode can be changed in a new environment.
-> +if [ -z "$TST_ENV" ] && [ "$TST_EVM_CHANGE_MODE" -eq 0 ]; then
-> +	echo "${CYAN}TST_EVM_CHANGE_MODE env variable must be set to 1${NORM}"
-> +	exit "$SKIP"
-> +fi
-> +
-> +g_lsm_init_xattr=$(awk '$1 ~ /(smack|selinux)/' < /sys/kernel/security/lsm)
-> +if [ -z "$g_lsm_init_xattr" ]; then
-> +	echo "${CYAN}Either SMACK or SELinux must be active in the system${NORM}"
-> +	exit "$SKIP"
-> +fi
-> +
-> +g_mountpoint="$(mktemp -d)"
-> +g_image="$(mktemp)"
-> +
-> +if [ -z "$g_mountpoint" ]; then
-> +	echo "${RED}Mountpoint directory not created${NORM}"
-> +	exit "$FAIL"
-> +fi
-> +
-> +if [ "$(whoami)" != "root" ]; then
-> +	echo "${CYAN}This script must be executed as root${NORM}"
-> +	exit "$SKIP"
-> +fi
-> +
-> +if ! dd if=/dev/zero of="$g_image" bs=1M count=10 &> /dev/null; then
-> +	echo "${RED}Cannot create test image${NORM}"
-> +	exit "$FAIL"
-> +fi
-> +
-> +g_dev="$(losetup -f "$g_image" --show)"
-> +if [ -z "$g_dev" ]; then
-> +	echo "${RED}Cannot create loop device${NORM}"
-> +	exit "$FAIL"
-> +fi
-> +
-> +if ! mkfs.ext4 -U $IMA_UUID -b 4096 "$g_dev" &> /dev/null; then
-> +	echo "${RED}Cannot format $g_dev${NORM}"
-> +	exit "$FAIL"
-> +fi
-> +
-> +if ! mount -o i_version "$g_dev" "$g_mountpoint"; then
-> +	echo "${RED}Cannot mount loop device${NORM}"
-> +	exit "$FAIL"
-> +fi
-> +
-> +g_loop_mounted=1
-> +chmod 777 "$g_mountpoint"
-> +pushd "$g_mountpoint" > /dev/null || exit "$FAIL"
-> +
-> +if [ -f /sys/kernel/security/evm ]; then
-> +	g_evm_value=$(cat /sys/kernel/security/evm)
-> +fi
-> +
-> +g_hmackey_data="abcdefABCDEF1234567890aaaaaaaaaaabcdefABCDEF1234567890aaaaaaaaaa"
-> +
-> +g_hmackey="$(mktemp)"
-> +echo $g_hmackey_data | xxd -r -p > "$g_hmackey"
-> +
-> +if [ -n "$g_evm_value" ] && [ $((g_evm_value & EVM_INIT_HMAC)) -ne $EVM_INIT_HMAC ]; then
-> +	g_evm_id="$(keyctl add encrypted evm-key "new enc32 user:kmk 32 $g_hmackey_data" @u)"
+>  drivers/char/tpm/tpm-chip.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 33319a78767f..6fdfa65a00c3 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -692,7 +692,8 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
+>  void tpm_chip_unregister(struct tpm_chip *chip)
+>  {
+>  	tpm_del_legacy_sysfs(chip);
+> -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chip))
+> +	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chip) =
+&&
+> +	    !tpm_amd_is_rng_defective(chip))
+>  		hwrng_unregister(&chip->hwrng);
+>  	tpm_bios_log_teardown(chip);
+>  	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip))
 
-The above command fails on kernels without encrypted key support for
-user provided decrypted data.
+I'll apply this and apply tested-by from Martin. Thanks for reporting!
 
-Required commits:
-5adedd42245a ("KEYS: encrypted: fix key instantiation with user-
-provided data")
-cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
-decrypted data")
-
-> +	if ! echo "$EVM_INIT_HMAC" | tee /sys/kernel/security/evm &> /dev/null; then
-> +		# Retry with sudo -i, to force search in the root user keyring.
-> +		if ! echo "$EVM_INIT_HMAC" | sudo -i tee /sys/kernel/security/evm &> /dev/null; then
-> +			keyctl unlink "$g_evm_id"
-> +			echo "${RED}Failed to initialize EVM${NORM}"
-> +			exit "$FAIL"
-> +		fi
-> +	fi
-> +
-> +	g_evm_value=$(cat /sys/kernel/security/evm)
-> +fi
-> +
-> +expect_pass check_evm_hmac sha1 ext4
-> +cleanup_evm_hmac
-
--- 
-thanks,
-
-Mimi
-
+BR, Jarkko
 
