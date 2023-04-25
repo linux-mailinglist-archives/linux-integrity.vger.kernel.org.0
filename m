@@ -2,224 +2,193 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63676EE54E
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Apr 2023 18:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540796EEB00
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Apr 2023 01:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234700AbjDYQLB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 Apr 2023 12:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S234454AbjDYXed (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 Apr 2023 19:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbjDYQKv (ORCPT
+        with ESMTP id S231391AbjDYXec (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 Apr 2023 12:10:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B27A15470
-        for <linux-integrity@vger.kernel.org>; Tue, 25 Apr 2023 09:10:49 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PG8uLl029953
-        for <linux-integrity@vger.kernel.org>; Tue, 25 Apr 2023 16:10:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=/oiWxKbEcjblk4iiJXxLkyn95x7AYvkxP/xAs8xlWKg=;
- b=NdkRMggI2Xm2dpc9Eco7quEIc25xd3q4d2spbxd/HlQK3WFtPF0FnO5CIfpFqXOSYBu7
- zrgmcNE21Evg80y1C+Zyp33LZ/ixqRep4qQvmYZT/6C74Bq/uFJShSIABHp+QolRNc6h
- vfkeWQ+T3rBBwyQwc1+Y2qu/Z/PftolPTzPNI3p5DZhhfNva/6phmkgi/gfTOq9SB+gV
- rS7qrjc4dkCgLgFolMPhCROuBkqhBh5Gn5nD7+4mfvgxtvMzPjq+YCuda0rD1aDr5cVb
- MCLNMKki497Ble2zK3rvQmyMzMPkm3k9ILu2tT1MRI8vmsns7WkfumUJMSqlMa/Szq1r jQ== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q6hr40wbn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 25 Apr 2023 16:10:46 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33PFCGZ5014344
-        for <linux-integrity@vger.kernel.org>; Tue, 25 Apr 2023 16:10:22 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3q4777s26y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 25 Apr 2023 16:10:22 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33PGAKJb36962842
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Apr 2023 16:10:20 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A9C458061;
-        Tue, 25 Apr 2023 16:10:20 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2AE7F58058;
-        Tue, 25 Apr 2023 16:10:20 +0000 (GMT)
-Received: from sbct-2.pok.ibm.com (unknown [9.47.158.152])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Apr 2023 16:10:20 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH ima-evm-utils v2 2/2] examples: Add examples for elliptic curve key and certs generation
-Date:   Tue, 25 Apr 2023 12:10:15 -0400
-Message-Id: <20230425161015.593988-3-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230425161015.593988-1-stefanb@linux.ibm.com>
-References: <20230425161015.593988-1-stefanb@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9CXNFor3eqUwZbhS-SBdz-4tYdW0KJkm
-X-Proofpoint-GUID: 9CXNFor3eqUwZbhS-SBdz-4tYdW0KJkm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_07,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 adultscore=0 mlxlogscore=997 suspectscore=0
- clxscore=1015 spamscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304250144
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 25 Apr 2023 19:34:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6964C17A;
+        Tue, 25 Apr 2023 16:34:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34038631FF;
+        Tue, 25 Apr 2023 23:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B055C433EF;
+        Tue, 25 Apr 2023 23:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682465670;
+        bh=K1s+noYHRNni1Pq8/RE/Mli4hvd2z61+wK3Y1vv2LyM=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=IvyVDNCDCp2/r5VUoQebr/oJMDXprGJWwwUPukWZJTyggmDDXq2zfulSb8y5dg3S+
+         ity3qLWMdUtRj2O7fQVWOoUcT6wIbHMuf5Ng9ZXVSeKwxpDcNgPO9nBj9c5fJNsRzQ
+         1/wPHzv7d4OYTly4E7Vb1DB7MAIbXJ0WkaJVZ5LYE2Ycl+kztWZAYZ8gF1e3OSzYWT
+         45lUd9QwH9I3gSxrpKHJARTqNcEVu68C50jshkFFkizf0AE5nmIcDTQ0XTurTuV+ou
+         Cf4JFjB++Jc/5fT8ylTV0sTaSUooMn3ENKxf/NVHnCBghFauxj735kaHOEmrMx+t/3
+         tnwGYgaMPdoTw==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 26 Apr 2023 02:34:25 +0300
+Message-Id: <CS68AWILHXS4.3M36M1EKZLUMS@suppilovahvero>
+Cc:     "Thorsten Leemhuis" <regressions@leemhuis.info>,
+        "James Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Peter Huewe" <peterhuewe@gmx.de>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>, "Jan Dabros" <jsd@semihalf.com>,
+        <regressions@lists.linux.dev>,
+        "LKML" <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Johannes Altmanninger" <aclopte@gmail.com>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Jarkko Sakkinen" <jarkko@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+X-Mailer: aerc 0.14.0
+References: <Y60RoP77HnwaukEA@zx2c4.com>
+ <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
+ <Y7w74EBYP3+FHlkw@zx2c4.com>
+ <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
+ <ZBBmVhwsTf/URoqs@kernel.org>
+ <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
+ <ZBBxMl5rVjY9FGS9@kernel.org> <ZBBxxftnXHVOjm92@kernel.org>
+ <ZBB8R9H3CyQnNfCt@zx2c4.com> <ZBCDeleGG/fFlkt+@kernel.org>
+ <ZEKlzaQhjd8sbE7I@kernel.org>
+ <CAHmME9q9DZyYo7G__ks=XSrS4kS8sUUZ+eF3c1VSnGCAvfBR+Q@mail.gmail.com>
+ <CS48U6SYIBVB.V05DUEX5I01F@suppilovahvero>
+In-Reply-To: <CS48U6SYIBVB.V05DUEX5I01F@suppilovahvero>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add example scripts for ECC key and certificate creation and reference
-them from the README.
+On Sun Apr 23, 2023 at 6:34 PM EEST, Jarkko Sakkinen wrote:
+> On Fri Apr 21, 2023 at 9:27 PM EEST, Jason A. Donenfeld wrote:
+> > Did you use the patch I sent you and suspend and resume according to
+> > the instructions I gave you? If not, I don't have much to add.
+>
+> Finally, I got it reproduced at my side with TPM 1.2:
+>
+> [    0.379677] tpm_tis 00:00: 1.2 TPM (device-id 0x1, rev-id 1)
+> [   32.453447] tpm tpm0: tpm_transmit: tpm_recv: error -5
+> [   33.450601] tpm tpm0: Unable to read header
+> [   33.450607] tpm tpm0: tpm_transmit: tpm_recv: error -62
+>
+> I'll look at this further after I've sent v6.3 PR.
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- README                           |  3 +++
- examples/ima-gen-local-ca-ecc.sh | 29 ++++++++++++++++++++++++++++
- examples/ima-genkey-ecc.sh       | 33 ++++++++++++++++++++++++++++++++
- examples/ima-genkey-self-ecc.sh  | 29 ++++++++++++++++++++++++++++
- 4 files changed, 94 insertions(+)
- create mode 100755 examples/ima-gen-local-ca-ecc.sh
- create mode 100755 examples/ima-genkey-ecc.sh
- create mode 100755 examples/ima-genkey-self-ecc.sh
+OK, so this gives the exact tpm_transmit call where it fails:
 
-diff --git a/README b/README
-index fd12680..ef7f475 100644
---- a/README
-+++ b/README
-@@ -469,6 +469,9 @@ Examples of scripts to generate X509 public key certificates:
-  /usr/share/doc/ima-evm-utils/ima-genkey-self.sh
-  /usr/share/doc/ima-evm-utils/ima-genkey.sh
-  /usr/share/doc/ima-evm-utils/ima-gen-local-ca.sh
-+ /usr/share/doc/ima-evm-utils/ima-genkey-self-ecc.sh
-+ /usr/share/doc/ima-evm-utils/ima-genkey-ecc.sh
-+ /usr/share/doc/ima-evm-utils/ima-gen-local-ca-ecc.sh
- 
- 
- AUTHOR
-diff --git a/examples/ima-gen-local-ca-ecc.sh b/examples/ima-gen-local-ca-ecc.sh
-new file mode 100755
-index 0000000..ee2aeb6
---- /dev/null
-+++ b/examples/ima-gen-local-ca-ecc.sh
-@@ -0,0 +1,29 @@
-+#!/bin/sh
-+
-+GENKEY=ima-local-ca.genkey
-+
-+cat << __EOF__ >$GENKEY
-+[ req ]
-+distinguished_name = req_distinguished_name
-+prompt = no
-+string_mask = utf8only
-+x509_extensions = v3_ca
-+
-+[ req_distinguished_name ]
-+O = IMA-CA
-+CN = IMA/EVM certificate signing key
-+emailAddress = ca@ima-ca
-+
-+[ v3_ca ]
-+basicConstraints=CA:TRUE
-+subjectKeyIdentifier=hash
-+authorityKeyIdentifier=keyid:always,issuer
-+# keyUsage = cRLSign, keyCertSign
-+__EOF__
-+
-+openssl req -new -x509 -utf8 -sha1 -days 3650 -batch -config $GENKEY \
-+		-outform DER -out ima-local-ca.x509 -keyout ima-local-ca.priv \
-+		-newkey ec -pkeyopt ec_paramgen_curve:prime256v1
-+
-+openssl x509 -inform DER -in ima-local-ca.x509 -out ima-local-ca.pem
-+
-diff --git a/examples/ima-genkey-ecc.sh b/examples/ima-genkey-ecc.sh
-new file mode 100755
-index 0000000..735c665
---- /dev/null
-+++ b/examples/ima-genkey-ecc.sh
-@@ -0,0 +1,33 @@
-+#!/bin/sh
-+
-+GENKEY=ima.genkey
-+
-+cat << __EOF__ >$GENKEY
-+[ req ]
-+distinguished_name = req_distinguished_name
-+prompt = no
-+string_mask = utf8only
-+x509_extensions = v3_usr
-+
-+[ req_distinguished_name ]
-+O = `hostname`
-+CN = `whoami` signing key
-+emailAddress = `whoami`@`hostname`
-+
-+[ v3_usr ]
-+basicConstraints=critical,CA:FALSE
-+#basicConstraints=CA:FALSE
-+keyUsage=digitalSignature
-+#keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-+subjectKeyIdentifier=hash
-+authorityKeyIdentifier=keyid
-+#authorityKeyIdentifier=keyid,issuer
-+__EOF__
-+
-+openssl req -new -nodes -utf8 -sha1 -days 365 -batch -config $GENKEY \
-+		-out csr_ima.pem -keyout privkey_ima.pem \
-+		-newkey ec -pkeyopt ec_paramgen_curve:prime256v1
-+openssl x509 -req -in csr_ima.pem -days 365 -extfile $GENKEY -extensions v3_usr \
-+		-CA ima-local-ca.pem -CAkey ima-local-ca.priv -CAcreateserial \
-+		-outform DER -out x509_ima.der
-+
-diff --git a/examples/ima-genkey-self-ecc.sh b/examples/ima-genkey-self-ecc.sh
-new file mode 100755
-index 0000000..3d8f11f
---- /dev/null
-+++ b/examples/ima-genkey-self-ecc.sh
-@@ -0,0 +1,29 @@
-+#!/bin/sh
-+
-+GENKEY=x509_evm.genkey
-+
-+cat << __EOF__ >$GENKEY
-+[ req ]
-+distinguished_name = req_distinguished_name
-+prompt = no
-+string_mask = utf8only
-+x509_extensions = myexts
-+
-+[ req_distinguished_name ]
-+O = `hostname`
-+CN = `whoami` signing key
-+emailAddress = `whoami`@`hostname`
-+
-+[ myexts ]
-+basicConstraints=critical,CA:FALSE
-+keyUsage=digitalSignature
-+subjectKeyIdentifier=hash
-+authorityKeyIdentifier=keyid
-+__EOF__
-+
-+openssl req -x509 -new -nodes -utf8 -sha1 -days 3650 -batch -config $GENKEY \
-+		-outform DER -out x509_evm.der -keyout privkey_evm.pem \
-+		-newkey ec -pkeyopt ec_paramgen_curve:prime256v1
-+
-+openssl ec -pubout -in privkey_evm.pem -out pubkey_evm.pem
-+
--- 
-2.39.2
+$ sudo bpftrace -e 'kprobe:tpm_transmit { @[kstack] =3D count(); }'
+[sudo] password for jarkko:
+Attaching 1 probe...
+^C
 
+@[
+    tpm_transmit+1
+    tpm1_pcr_read+177
+    tpm1_do_selftest+287
+    tpm_tis_resume+443
+    pnp_bus_resume+102
+    dpm_run_callback+81
+    device_resume+173
+    dpm_resume+238
+    dpm_resume_end+17
+    suspend_devices_and_enter+473
+    enter_state+563
+    pm_suspend+68
+    state_store+43
+    kobj_attr_store+15
+    sysfs_kf_write+59
+    kernfs_fop_write_iter+304
+    vfs_write+590
+    ksys_write+115
+    __x64_sys_write+25
+    do_syscall_64+88
+    entry_SYSCALL_64_after_hwframe+114
+]: 1
+@[
+    tpm_transmit+1
+    tpm1_do_selftest+179
+    tpm_tis_resume+443
+    pnp_bus_resume+102
+    dpm_run_callback+81
+    device_resume+173
+    dpm_resume+238
+    dpm_resume_end+17
+    suspend_devices_and_enter+473
+    enter_state+563
+    pm_suspend+68
+    state_store+43
+    kobj_attr_store+15
+    sysfs_kf_write+59
+    kernfs_fop_write_iter+304
+    vfs_write+590
+    ksys_write+115
+    __x64_sys_write+25
+    do_syscall_64+88
+    entry_SYSCALL_64_after_hwframe+114
+]: 1
+@[
+    tpm_transmit+1
+    tpm1_pm_suspend+203
+    tpm_pm_suspend+131
+    __pnp_bus_suspend+65
+    pnp_bus_suspend+19
+    dpm_run_callback+81
+    __device_suspend+329
+    dpm_suspend+432
+    dpm_suspend_start+155
+    suspend_devices_and_enter+370
+    enter_state+563
+    pm_suspend+68
+    state_store+43
+    kobj_attr_store+15
+    sysfs_kf_write+59
+    kernfs_fop_write_iter+304
+    vfs_write+590
+    ksys_write+115
+    __x64_sys_write+25
+    do_syscall_64+88
+    entry_SYSCALL_64_after_hwframe+114
+]: 1
+@[
+    tpm_transmit+1
+    tpm1_get_random+206
+    tpm_get_random+70
+    tpm_hwrng_read+21
+    hwrng_fillfn+234
+    kthread+230
+    ret_from_fork+41
+]: 75897
+
+So it is the very first PCR read in tpm1_do_selftest.
+
+There is a bug at plain sight in tpm1_tis_resume(): before
+tpm_tis_resume() calls tpm1_do_selftest(), it only requests
+and relinquishes locality. This is not sufficient: it should
+also disable clkrun protocol.
+
+tpm1_do_selftest() is called also during the driver initialization
+successfully, the difference being that clkrun protocol is disabled.
+
+I'm compiling now a kernel with a test fix that calls tpm_chip_start()
+and tpm_chip_stop() as a substitute for request/relinquish locality.
+These should be used anyway instead of ad-hoc code.
+
+BR, Jarkko
+
+BR, Jarkko
