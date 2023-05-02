@@ -2,60 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E2B6F36C2
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 May 2023 21:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973D66F3BBC
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 May 2023 03:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbjEAT12 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 May 2023 15:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S233128AbjEBBQK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 May 2023 21:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbjEAT1Q (ORCPT
+        with ESMTP id S232402AbjEBBQJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 May 2023 15:27:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD892733;
-        Mon,  1 May 2023 12:26:55 -0700 (PDT)
+        Mon, 1 May 2023 21:16:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C27A3A9C;
+        Mon,  1 May 2023 18:16:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7E9161EDE;
-        Mon,  1 May 2023 19:26:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1E0D7C4339B;
-        Mon,  1 May 2023 19:26:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9731861BFD;
+        Tue,  2 May 2023 01:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA18C433EF;
+        Tue,  2 May 2023 01:16:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682969166;
-        bh=7MZ2MVRLq4Meevru6ymYnE9bcWrLvZQXxpYf6Cp3nkk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=AJsXnRxaLD+X8FLwchuMIkNoKnk48UL/ir4A67OWpOMmlKTqjjcdhZAtCEyyspm7N
-         Ii3FkYv418ThYorL3+RpNmWDH6sUGfnNvGJuQ8gTK9vBqC+aOkhF8mdss4XCZMoFJi
-         N1yYl1/uOtIDNtLAHINNQkNhNgBkP6F+uAua8TuriwCavdieT6J9HfyKqJnMErZY2d
-         3Cxz/NMhtrtJMrtfIY6S4tN9xk91sBV8fstcLNKZHWlBrD+nzMkck7xgBHt2L1OQ+o
-         4TeoP05B3s8AeuE2YiOOD0NwNIOEKuSK2xjSUureq32tcC3R1QtuZdyc8GFARSs5Ib
-         fUi878T6nN6Rg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0B815C395C8;
-        Mon,  1 May 2023 19:26:06 +0000 (UTC)
-Subject: Re: [GIT PULL] tpmdd: a critical bug fix for v6.4-rc1 (v2)
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230430143342.790113-1-jarkko@kernel.org>
-References: <20230430143342.790113-1-jarkko@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230430143342.790113-1-jarkko@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-v6.4-rc1-fix-v2
-X-PR-Tracked-Commit-Id: 0c8862de05c1a087795ee0a87bf61a6394306cc0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ed9a65e575cc3c52a7f130d824671fe48a72da0c
-Message-Id: <168296916604.17937.12524264752923841862.pr-tracker-bot@kernel.org>
-Date:   Mon, 01 May 2023 19:26:06 +0000
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        s=k20201202; t=1682990167;
+        bh=mpizqtC9n7gms+NgcPrguFcPPmQI6Fuzo7V2f0cMDa4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RzXIqAlcvmLbZKzQCurP61KJBmXAQpcTUBtXyghMwpEF613okk/tcfVTZ4vJYyJR2
+         rbbysmSArzN9JXJtwh3s8OxrbOqwxK3ZYh3zztRzCteqa49JDhVxi+f/NJsaV10v9s
+         Xi3XoJnTXZ5caQqMH+9yZvx5Q337twKn9IkyB4X8UFuv978XhuSlKE86iqVGdU1rw2
+         Ik/xirR+8zL08M1yNSRPga+V5JXF15a0D67Xe9yzLOiMMO+yjHGsStmB588WhVR+mX
+         I/lSf9tu3V0b5F8Y/m2yCwM/ljx6lJq4cWRs0jnqGnFyYXWg8YinVwUMpQvff0004J
+         kMH7NDkcRckOw==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Subject: [PATCH v2 0/2] Fix TPM 1.2 resume
+Date:   Tue,  2 May 2023 04:15:56 +0300
+Message-Id: <20230502011558.10743-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,15 +55,30 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Sun, 30 Apr 2023 17:33:42 +0300:
+During TPM 1.2 resume, the first PCR read operation used inside
+tpm1_do_selftest() fails. Fix the bugs preventing resume from working.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-v6.4-rc1-fix-v2
+v2:
+* Added Jerry's reviewed-by's.
+* Rebased to 865fdb08197e ("Merge tag 'input-for-v6.4-rc0' of git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input").
+* Mirrored patches to linux-next.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ed9a65e575cc3c52a7f130d824671fe48a72da0c
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Jerry Snitselaar <jsnitsel@redhat.com>
 
-Thank you!
+Link: https://lore.kernel.org/linux-integrity/CS6UJMSTVA4L.FRQ5VL1I1EF4@suppilovahvero/T/#m236d62184229cc035605143fde10933bcde60065
+Jarkko Sakkinen (2):
+  tpm_tis: Use tpm_chip_{start,stop} decoration inside tpm_tis_resume
+  tpm: Prevent hwrng from activating during resume
+
+ drivers/char/tpm/tpm-chip.c      |  4 +++
+ drivers/char/tpm/tpm-interface.c | 10 ++++++++
+ drivers/char/tpm/tpm_tis_core.c  | 43 ++++++++++++++------------------
+ include/linux/tpm.h              |  1 +
+ 4 files changed, 34 insertions(+), 24 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.39.2
+
