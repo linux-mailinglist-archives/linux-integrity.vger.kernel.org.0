@@ -2,51 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973D66F3BBC
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 May 2023 03:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6816F3BBF
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 May 2023 03:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbjEBBQK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 May 2023 21:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
+        id S233380AbjEBBQO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 May 2023 21:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjEBBQJ (ORCPT
+        with ESMTP id S233368AbjEBBQN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 May 2023 21:16:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C27A3A9C;
-        Mon,  1 May 2023 18:16:09 -0700 (PDT)
+        Mon, 1 May 2023 21:16:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400243AAB;
+        Mon,  1 May 2023 18:16:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9731861BFD;
-        Tue,  2 May 2023 01:16:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA18C433EF;
-        Tue,  2 May 2023 01:16:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AF1461BCB;
+        Tue,  2 May 2023 01:16:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A88AC433EF;
+        Tue,  2 May 2023 01:16:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682990167;
-        bh=mpizqtC9n7gms+NgcPrguFcPPmQI6Fuzo7V2f0cMDa4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RzXIqAlcvmLbZKzQCurP61KJBmXAQpcTUBtXyghMwpEF613okk/tcfVTZ4vJYyJR2
-         rbbysmSArzN9JXJtwh3s8OxrbOqwxK3ZYh3zztRzCteqa49JDhVxi+f/NJsaV10v9s
-         Xi3XoJnTXZ5caQqMH+9yZvx5Q337twKn9IkyB4X8UFuv978XhuSlKE86iqVGdU1rw2
-         Ik/xirR+8zL08M1yNSRPga+V5JXF15a0D67Xe9yzLOiMMO+yjHGsStmB588WhVR+mX
-         I/lSf9tu3V0b5F8Y/m2yCwM/ljx6lJq4cWRs0jnqGnFyYXWg8YinVwUMpQvff0004J
-         kMH7NDkcRckOw==
+        s=k20201202; t=1682990170;
+        bh=eXbsWUEm5rfH7tVRp1FkbSx71ul691d63mXN77lfDz0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tnImXpIiGPwCS/61hLJyR6mv9N2a6EsMlKFONkoymo3eF1AaqQduOEUH6qFr4B4PJ
+         Mmkoxc5/qGkbVyGYX3/b1RAVxpfta6Gk9mNyhV11uswntuML03E6kzPU+OzPmBgwWz
+         LwJbFDoWbRyd4MANlemsvKMKgw+ikximDAM5T5oIntgT/0pPllejl0ZKctL/C/ENtn
+         laJINLPrVvo4HekZBfUpM7zF8lgcVuB5Rdvz5Z/HaUGY/hqi+3TaIRE4/SQKZkrY1K
+         qxRp2noTUaMcyfAVZuqfALNuq+P77qXiDNupX20WnQ2qLC4zwM5SXkR7w2eGXjaWy+
+         n3+MNrpbu2S/A==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         "Jason A . Donenfeld" <Jason@zx2c4.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Subject: [PATCH v2 0/2] Fix TPM 1.2 resume
-Date:   Tue,  2 May 2023 04:15:56 +0300
-Message-Id: <20230502011558.10743-1-jarkko@kernel.org>
+        Jerry Snitselaar <jsnitsel@redhat.com>, stable@vger.kernel.org
+Subject: [PATCH v2 1/2] tpm_tis: Use tpm_chip_{start,stop} decoration inside tpm_tis_resume
+Date:   Tue,  2 May 2023 04:15:57 +0300
+Message-Id: <20230502011558.10743-2-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230502011558.10743-1-jarkko@kernel.org>
+References: <20230502011558.10743-1-jarkko@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,30 +57,103 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-During TPM 1.2 resume, the first PCR read operation used inside
-tpm1_do_selftest() fails. Fix the bugs preventing resume from working.
+Before sending a TPM command, CLKRUN protocol must be disabled. This is not
+done in the case of tpm1_do_selftest() call site inside tpm_tis_resume().
 
-v2:
-* Added Jerry's reviewed-by's.
-* Rebased to 865fdb08197e ("Merge tag 'input-for-v6.4-rc0' of git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input").
-* Mirrored patches to linux-next.
+Address this by decorating the calls with tpm_chip_{start,stop}, which
+should be always used to arm and disarm the TPM chip for transmission.
 
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Jerry Snitselaar <jsnitsel@redhat.com>
+Finally, move the call to the main TPM driver callback as the last step
+because it should arm the chip by itself, if it needs that type of
+functionality.
 
-Link: https://lore.kernel.org/linux-integrity/CS6UJMSTVA4L.FRQ5VL1I1EF4@suppilovahvero/T/#m236d62184229cc035605143fde10933bcde60065
-Jarkko Sakkinen (2):
-  tpm_tis: Use tpm_chip_{start,stop} decoration inside tpm_tis_resume
-  tpm: Prevent hwrng from activating during resume
+Cc: stable@vger.kernel.org
+Reported-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Closes: https://lore.kernel.org/linux-integrity/CS68AWILHXS4.3M36M1EKZLUMS@suppilovahvero/
+Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/char/tpm/tpm_tis_core.c | 43 +++++++++++++++------------------
+ 1 file changed, 19 insertions(+), 24 deletions(-)
 
- drivers/char/tpm/tpm-chip.c      |  4 +++
- drivers/char/tpm/tpm-interface.c | 10 ++++++++
- drivers/char/tpm/tpm_tis_core.c  | 43 ++++++++++++++------------------
- include/linux/tpm.h              |  1 +
- 4 files changed, 34 insertions(+), 24 deletions(-)
-
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 02945d53fcef..558144fa707a 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -1209,25 +1209,20 @@ static void tpm_tis_reenable_interrupts(struct tpm_chip *chip)
+ 	u32 intmask;
+ 	int rc;
+ 
+-	if (chip->ops->clk_enable != NULL)
+-		chip->ops->clk_enable(chip, true);
+-
+-	/* reenable interrupts that device may have lost or
+-	 * BIOS/firmware may have disabled
++	/*
++	 * Re-enable interrupts that device may have lost or BIOS/firmware may
++	 * have disabled.
+ 	 */
+ 	rc = tpm_tis_write8(priv, TPM_INT_VECTOR(priv->locality), priv->irq);
+-	if (rc < 0)
+-		goto out;
++	if (rc < 0) {
++		dev_err(&chip->dev, "Setting IRQ failed.\n");
++		return;
++	}
+ 
+ 	intmask = priv->int_mask | TPM_GLOBAL_INT_ENABLE;
+-
+-	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+-
+-out:
+-	if (chip->ops->clk_enable != NULL)
+-		chip->ops->clk_enable(chip, false);
+-
+-	return;
++	rc = tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
++	if (rc < 0)
++		dev_err(&chip->dev, "Enabling interrupts failed.\n");
+ }
+ 
+ int tpm_tis_resume(struct device *dev)
+@@ -1235,27 +1230,27 @@ int tpm_tis_resume(struct device *dev)
+ 	struct tpm_chip *chip = dev_get_drvdata(dev);
+ 	int ret;
+ 
+-	ret = tpm_tis_request_locality(chip, 0);
+-	if (ret < 0)
++	ret = tpm_chip_start(chip);
++	if (ret)
+ 		return ret;
+ 
+ 	if (chip->flags & TPM_CHIP_FLAG_IRQ)
+ 		tpm_tis_reenable_interrupts(chip);
+ 
+-	ret = tpm_pm_resume(dev);
+-	if (ret)
+-		goto out;
+-
+ 	/*
+ 	 * TPM 1.2 requires self-test on resume. This function actually returns
+ 	 * an error code but for unknown reason it isn't handled.
+ 	 */
+ 	if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
+ 		tpm1_do_selftest(chip);
+-out:
+-	tpm_tis_relinquish_locality(chip, 0);
+ 
+-	return ret;
++	tpm_chip_stop(chip);
++
++	ret = tpm_pm_resume(dev);
++	if (ret)
++		return ret;
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(tpm_tis_resume);
+ #endif
 -- 
 2.39.2
 
