@@ -2,279 +2,385 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C136F6465
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 May 2023 07:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECE06F6E07
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 May 2023 16:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjEDFbG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 May 2023 01:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
+        id S231129AbjEDOvS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 May 2023 10:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjEDFbE (ORCPT
+        with ESMTP id S230208AbjEDOvL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 May 2023 01:31:04 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0F01BEB
-        for <linux-integrity@vger.kernel.org>; Wed,  3 May 2023 22:31:00 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-766588051b3so1437339f.2
-        for <linux-integrity@vger.kernel.org>; Wed, 03 May 2023 22:31:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683178260; x=1685770260;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LvlYAZ3Me0ZvWK0peP7KkabrrzZnc1AAxIMZTphZeG0=;
-        b=f9H0XZR+C9Az8AD2hZD/r6LSMLMIOq07l/HkRg9kP+w+s7JE2cv8MFtChksW0gjMOw
-         hVbFS1C2m9EVFvAGbUpkcIvGJixPPrPO/7ov3ZtXgT/loJUDkWmt9mVdz8f38Wdy4SaA
-         Za9bIZ6Cmg9Wc+1cdecXTOoQkdBrqLt/T6AFiVOaN9LzrOhgUK6heBzcVEyS+6Kpo2in
-         HJ2LYD+hBMsMEMGiqgbHtjoyuAwaFdqO3pkOzSQwB5Ih1uYidcLwSItoILbI3NgRJM6H
-         J7jXZNLrnE0fkcPUvhT/8lWRtYUrQGg61lGRHn9My0KQsJaD7rbRUTBgbyqyZ41K3Qht
-         7cFw==
-X-Gm-Message-State: AC+VfDxFNKPwn33yn1Ub6THnCOHZ4P5oXFRhuVbvKdW/lsfAegP4ldhW
-        EEnkbY48LLf59SGDIxeCGt1wnSXIKSf7UwNKmiMt3OzCyS7m
-X-Google-Smtp-Source: ACHHUZ7Q9s0CaW0Fz9AD9scK66AIspx3NzAxoNU/dHnaFO7CaRSjRE/tkFPi6PHsJFkQEYg+F4uAjBIGV67ZDihI7Cu2O0xSsFjd
+        Thu, 4 May 2023 10:51:11 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AB6D7;
+        Thu,  4 May 2023 07:51:09 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344DTVNL023329;
+        Thu, 4 May 2023 14:50:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2023-03-30;
+ bh=QBU9YNZubc8zqVNWB/PTENoA1AhZaoYQ7Vs7k4/xXEc=;
+ b=hu17v+TFksF9w/TAfsnQept10B8RyD4jwChc76R6vLdi/a+m2cqRWCDjvo0Ebce/Pbor
+ lu1mW1qFttr7PSn8h4LWJ2hCicLdk5nMXTA8xH3lY9VF7pLV6x8IP6P5OFRS8l9HBs2T
+ e9dLiW3KYD0rMzeSJLqhUfLf7Ue1kadyo5qQvlSihP+tARIlu4l8ULr7aqgXYLosgkGD
+ XvSOyUhXxA6utLSYhF7GGOipZrBcyWtbijSy5taM83+v6Wf7AizfM+5HGwWU7+D99IwX
+ MjLOJcgTxR3nyBlYuEKlVr8bd/Um5EG2lbRi8Hc6XNiRux/1QzYUjF9cX9twBgFdw5U7 sQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q8u4aswha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 04 May 2023 14:50:30 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 344ECLSI027573;
+        Thu, 4 May 2023 14:50:29 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2046.outbound.protection.outlook.com [104.47.51.46])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3q8spevry0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 04 May 2023 14:50:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hoCIrlGKbWheSVX6QwU1PAwDybZz3e+17zfVKnR/myloptxexRykSvUZtJTBd/cBi85QcvgjJGu04SUqnoXfIFwrkvvCEw/85TemJfuhEemP7+jZqrTUDaxhMJmYwl5u1T9uFMpdx9IChHfFhqzYl4k0cvEpE7n8dd/kaA49JFdJKjbZz730fz21wUsx6Z4sqs+MgjlhApNY2UIugYb0Z+0XSqZkGbivn0Gk1BIvP1vrHSY43Kg+6UjXbCZYgR1nO5VTk+g3kinvGux0WSk4D8d2dcggPf5zyWrwub4ln5BDFvJX7RrjZevtf1y4naBJMbExTtgLma2yRzhWV3D7uA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QBU9YNZubc8zqVNWB/PTENoA1AhZaoYQ7Vs7k4/xXEc=;
+ b=UmT/YPj0DAPVsnOOxBqkJrQDJ1iql8Of5VxUg1Z49Ad006ze6yOw7V/JhuL4vpemr4fkfPW/5fluJXe8qNo9bBSN7oGfEbWxLtmD2E3EhorUIz9CTD0nvs/wuirx/6Ej9E3hONky1GcnO8ewE/heW1nEobEFHWE9y4XjCySrr3tsxzzuXwJJOsu1szkKpcoYlHXTfs2KHogXaAOWMBBtmmPmuxT01R4E8nXFKi5NE4PtsYVDXY+EojEnm65UUDjgI678C3KDCNnZdcQkSiw6u3Qwa1rm69igpX9AeXIavGx5oMw9XPJ8B2X4ZHSCzEw5Bfo5OXzx+Zg3+6KB4w+sZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QBU9YNZubc8zqVNWB/PTENoA1AhZaoYQ7Vs7k4/xXEc=;
+ b=puw7Ka1cu8Om/dk1/fpEUNzcyZ6z8fRYxPrwmJ/ZgEkilSiVCuASvvnjnbHmzuSkeJJ+2ablPZSCxT7tZefYLuzIwGwB8MShBPd1ocQgPcaX98i0Vnl0ZWsGe6oyjHY+56mtJILipoPwEAXs9uLOqHOPslcHFgn1z9ks2ymf4lc=
+Received: from BY5PR10MB3793.namprd10.prod.outlook.com (2603:10b6:a03:1f6::14)
+ by DM4PR10MB7505.namprd10.prod.outlook.com (2603:10b6:8:18a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
+ 2023 14:50:26 +0000
+Received: from BY5PR10MB3793.namprd10.prod.outlook.com
+ ([fe80::a007:b0c1:5cb:329a]) by BY5PR10MB3793.namprd10.prod.outlook.com
+ ([fe80::a007:b0c1:5cb:329a%5]) with mapi id 15.20.6363.026; Thu, 4 May 2023
+ 14:50:26 +0000
+From:   Ross Philipson <ross.philipson@oracle.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org
+Cc:     ross.philipson@oracle.com, dpsmith@apertussolutions.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+Subject: [PATCH v6 00/14] x86: Trenchboot secure dynamic launch Linux kernel support
+Date:   Thu,  4 May 2023 14:50:09 +0000
+Message-Id: <20230504145023.835096-1-ross.philipson@oracle.com>
+X-Mailer: git-send-email 2.31.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DS7PR03CA0270.namprd03.prod.outlook.com
+ (2603:10b6:5:3b3::35) To BY5PR10MB3793.namprd10.prod.outlook.com
+ (2603:10b6:a03:1f6::14)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:114:b0:745:5e5c:f091 with SMTP id
- s20-20020a056602011400b007455e5cf091mr11544478iot.0.1683178259880; Wed, 03
- May 2023 22:30:59 -0700 (PDT)
-Date:   Wed, 03 May 2023 22:30:59 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004623de05fad77acc@google.com>
-Subject: [syzbot] [integrity?] [lsm?] possible deadlock in ima_file_free
-From:   syzbot <syzbot+a2bbe9020e59fdeab932@syzkaller.appspotmail.com>
-To:     dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, paul@paul-moore.com,
-        serge@hallyn.com, syzkaller-bugs@googlegroups.com,
-        zohar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB3793:EE_|DM4PR10MB7505:EE_
+X-MS-Office365-Filtering-Correlation-Id: c817b1f9-a272-4a80-de65-08db4caee575
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OiARhmCkF+J20V8klbl5xiEs5FcHBfZlHBPFM7+YgTjFp7fC/+dzdpEVe7WbqCG+0wYFImPwWNxn9m95OeqgbkxBlBzIfXb4LvOB48ZQIeqHvUpCSqWED6txB+sVvSAHHtjl72iXSeZFncpF0ysFdf59ZVAbI7nqPliq2EE7BBhELhtbrwKgkSbWsajZtvW/crnTxnXYyBraj6rph6m74eXh7tQusuF95EqBU//7RNRioFEgQlSns9tNiHU9wO90pR61LoLPKt2xYrAJWxod+0TCPv8ac0Qv+IIOcP8NN5bLa+JvI94KHPSxN32z741UltQ4EduH6+vWNmNS4uybYWNj1EiDPVX6pdDoXTfOszac/6yKkhBYEi5aFUhH3+We7lpZ7KM1c9Jm3K0Dc6QCH8PQwCJyI72xMOnYgYyG3Ii3xBVIiu1ku/uBr2psfMA5zqsffgsVZoCERFOnAAU8JbhLKkEf8HZMg7UEFynkoDqvtJYdWn6KBSPl9+9UuML1rGkPkAESAuCeRddGGhX46DX77oxGNjCpWmm8W3heo0bZcwpluvILLNjRoYWJdmpDe4VxiVmfWPKOnxvZ4FNC0A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3793.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(396003)(136003)(39860400002)(376002)(451199021)(83380400001)(6486002)(2906002)(478600001)(316002)(5660300002)(8936002)(41300700001)(8676002)(44832011)(66946007)(66476007)(66556008)(4326008)(38100700002)(7416002)(86362001)(36756003)(6666004)(186003)(1076003)(26005)(6512007)(6506007)(966005)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?q3cnr7Bsldtxbj1ij2Sjqf41LDA08Q9Gyq64p4t3o+r4MY58xSB+Wca1OgtC?=
+ =?us-ascii?Q?DIyVsAdxGv20k3PscXiry+QgPKVptuLgJtue5zT9O4Y9ejGhF+j/HwsKh/W5?=
+ =?us-ascii?Q?6UB6YhtBkeriVuPzpl9fpPl19O75qGwJednQNRqXbiALNTBGnANjTfJZ8n/P?=
+ =?us-ascii?Q?E15C7emYqVdGOY9zgzTgCEcVOkP8MxJv63wVIInhq7j4GfeJPxjDf5q4qB9D?=
+ =?us-ascii?Q?7XmG4cwtgdi9C+7aFx9srPyzgiHQlveOzPx/1AJRJcWLr+fsjbdZlS4GD83O?=
+ =?us-ascii?Q?goKq78vwe6L0evw/mK7kZmUTGwY75Ggzb8Vp8HW0oRzwBRe8yPpIUzrasPwM?=
+ =?us-ascii?Q?aLKil3Bqks6w1Bp1LnXq9gVUtp8zXslUoI89p6hmRZst/onbFTWAKq6o3wnp?=
+ =?us-ascii?Q?NIrZQb3K6bJ85OVGJxRi0gzVrJwfr/O1JynjaMffxj2AFVvmRMFW/jPE3bgh?=
+ =?us-ascii?Q?I4G0z/XR3D0IDTV/fDAeXdraQSem0ioje4KbCEP1Aipsk16wkJjyHl18GQfA?=
+ =?us-ascii?Q?e1yHx2rQxpI60a+77qVa/6ygs3cmnl7n8TJ0AlstNEoQT+BAK1zifp5wAPEV?=
+ =?us-ascii?Q?CwylIcz2I5gkUU2zdsy3iqwd6HyA6tnlKNUFi3JlA+iWgAP2uApSM4Q3gkvG?=
+ =?us-ascii?Q?xl60anyMPzGKYgCb19/pWLrX7jz796BCv4v6ZC0LfmPOiPR/PHGG9PRgRHsW?=
+ =?us-ascii?Q?ZMMllcaoScFIEgC++OM/ecKDqVT6Wzxfk3NhEE6bWTrLQ/lB5oogWycBvw43?=
+ =?us-ascii?Q?GeoYIYFUesIb1LTm2f1s9V/nCghWljl0vXZndlY6uh1f0Okvf0RfUTBfT4rz?=
+ =?us-ascii?Q?XpGTiBA762t2ARoxU3lis23jtntyMmj86x7w0qPKsopRmS2KS1JkwRRL8VGP?=
+ =?us-ascii?Q?9NIEa+Hmrbl8g5MV4b4WBGdjZhXTxia00PKp9ne7eD7CmDoiNB0HI9dadCgj?=
+ =?us-ascii?Q?vrw2hoJBCAA7QOEUm82S878SEwbO2iOz49qI7cmAsbrmrAA/6UrSYM1FjD8U?=
+ =?us-ascii?Q?FWGkT9EXjN8sKsAm//elOu7jP0xuSVcuIkx5jZRE5fIxI6yyt4sPZr0cuQFv?=
+ =?us-ascii?Q?86dk/byZHprWMZbeziFIxE8JGeWJxaFhZ6NQ7qMQcwNxese+zpULh9EBac38?=
+ =?us-ascii?Q?rlXDvyBC17ju3V5o9lGA4PowzPcBZ4brG5nbjJX6TLvXaQ/Ts4CXTeH4OxBm?=
+ =?us-ascii?Q?E8IM0q+e/Nw2KVBSC2pZehkFgAHM/1PeJseFdHgNIgd/a56nhaadWsCE4hTt?=
+ =?us-ascii?Q?y4loYV/u4tT0MGj2EMsLThBtmwkxJ3aziMBXv6c3heTzKndHxP5UuTnhR4xL?=
+ =?us-ascii?Q?PwME85S1vABl2j6mS35Gt9ZKxr7RloIPBqeGLgHmN1TUSh887HOJ+5dHmafm?=
+ =?us-ascii?Q?691N2m+x5Y4rGNJmpeo7p5s5TUm9mAmzj2j2CpSHI9pz2i09wHkZ2DIBfs46?=
+ =?us-ascii?Q?hlK1LxEzub0mapiWa++QC3qSJHlZPqoGKfN6rHMfT+pFV63Bx1m3bYJOBRbc?=
+ =?us-ascii?Q?uFo28mOytZhJKdZB5uERuYXBYadt7R2kXEImKhYVrL8knJCpTrnPQUnqEBqF?=
+ =?us-ascii?Q?y7mx/xRb++ao+xRvtiQJuLnwq2rTN8lTyzkdwgNt50Z2l0BvrMfRlyz7k3nP?=
+ =?us-ascii?Q?9g=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?K6HYzu1CNM6b+p003/73BhXJ3ogYdjyM/YEm6WTnJvtuXCxMVCYxwMJl1m0P?=
+ =?us-ascii?Q?C1xYg+4FUKRFdArHeX29AqAtJ296us5l6IlBuB4t28oYVbC+nU+cbXOkPOSW?=
+ =?us-ascii?Q?xYK4+tCrijHwDVB31bLBUSuI8sFX4XIXQK7CpUj0lghRHEAlRNGLVjQhE4ld?=
+ =?us-ascii?Q?4wVVM9tAuxtkzsI+utsZx/uEeYjtRt8CqePcx4S+SGaCzMaTfsYZ+0RxoR9F?=
+ =?us-ascii?Q?VqY0qsgDbKu7ivcZfwSSTkzyHzmRolCRZFKB4isfi1fu+tgJt7Bln9+s4enT?=
+ =?us-ascii?Q?i80ifKfoo0D4kJ6oin5qNiSrYN9NMzMn5XClIPpxEW4F3vzLTixsrTCzAjf/?=
+ =?us-ascii?Q?ADke4sbDOjrlCfgk4cR+XqnoP6mDrUrNRsLNsPsjW8WLh5G1qPBncqIPj22K?=
+ =?us-ascii?Q?3t4KaJxaHcnztE7Kbl9kWHdk3bV4z6OzCWrD8m30M+S8MQVF9jf1/aecn8wn?=
+ =?us-ascii?Q?XKy2uI0iy4b9laB3SHU8pKC1ezFn81kHkn1e+hIzcs7ITf0a7NApu7kZHNIB?=
+ =?us-ascii?Q?74Ty2Hvd+s7kDrlppHOgxQHGddadvzfqcHLf6r2mg145Intj7dDEQjibnh4l?=
+ =?us-ascii?Q?vCgkYl0ZZcuKHB9UmudrY7XJR7TgBOrmXGw/fUNOhbs06TY/ybAFNQEx1S7M?=
+ =?us-ascii?Q?FHU/at4TOIoILME2+B6SOjiR9afW0/EcGDTHr6nQ8jZVKAyUt8aUj8k9/Tf0?=
+ =?us-ascii?Q?A6MFWbYy0MUIgQWEOrZtWblZPoHpYTzBlB/FHd0gL318CjSQaBEgMXCZaBlx?=
+ =?us-ascii?Q?heE9GdLRifIREL88O0xUjzS9faYqVr9tZKLlSZenav072Ic2gVXXlQzw8e+T?=
+ =?us-ascii?Q?p3A6rh7F5ENy51idm8j1Okm0MemxuNHlWCKYl0zcBrYDigGLlEe5ooNeXFTI?=
+ =?us-ascii?Q?LT93/LglxGZSjzPLIpBi426dLyAwWphf25cvNHaG7p2lpQ/lTG+g4nq8pTAU?=
+ =?us-ascii?Q?WgmsFUoEJ/l3T0JmuhaonNcJhj54OE7AaWKAWy4Wpk5HvMzfjizEz20hCFeg?=
+ =?us-ascii?Q?EXNklVQOgDmvHtZ5TAt8sD5AtWf7i6RJ2Td2+bNiwwRWn5FKKZdiKpk7Facp?=
+ =?us-ascii?Q?m8kKNL44e9McIBUnZBl41N4P2oXKKy+nCJM9lpKfqG1hM8gFeBPiT2+5pnar?=
+ =?us-ascii?Q?Daz+ASRztjKUXux0Cmtj2UwcLGF6CHrDUkPx1EcrHTS+jfvQsI3OrZeHMN4r?=
+ =?us-ascii?Q?f+HO4qXBdcexZtU0ypvlMBYiMMpTqaxoD0NiLji7ZdCd62Ck7LadvWR0C6jX?=
+ =?us-ascii?Q?SvwXI/lepTz5Mg0JcxnBZNzp4veQHps6mA70WsSWfCBKc9YS54dJ4zq9KWWX?=
+ =?us-ascii?Q?jKE=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c817b1f9-a272-4a80-de65-08db4caee575
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB3793.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 14:50:26.2085
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PHQxA+FcIt1F0RPe/1GDR45cSty1Mr3Rlf9UyJ9wQjj2Gg3CWUmjJywJx3B+7AdONaXcw+JUknqeZdh3QemtP3JQoBdTPQVSYsCoc8uHqbs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB7505
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_10,2023-05-04_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 phishscore=0 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2305040122
+X-Proofpoint-GUID: YEDdriiYXV8eUfdAbuX75ZfJF5do7bf5
+X-Proofpoint-ORIG-GUID: YEDdriiYXV8eUfdAbuX75ZfJF5do7bf5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello,
+The larger focus of the TrenchBoot project (https://github.com/TrenchBoot) is to
+enhance the boot security and integrity in a unified manner. The first area of
+focus has been on the Trusted Computing Group's Dynamic Launch for establishing
+a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
+Trust for Measurement). The project has been and continues to work on providing
+a unified means to Dynamic Launch that is a cross-platform (Intel and AMD) and
+cross-architecture (x86 and Arm), with our recent involvment in the upcoming
+Arm DRTM specification. The order of introducing DRTM to the Linux kernel
+follows the maturity of DRTM in the architectures. Intel's Trusted eXecution
+Technology (TXT) is present today and only requires a preamble loader, e.g. a
+boot loader, and an OS kernel that is TXT-aware. AMD DRTM implementation has
+been present since the introduction of AMD-V but requires an additional
+component that is AMD specific and referred to in the specification as the
+Secure Loader, which the TrenchBoot project has an active prototype in
+development. Finally Arm's implementation is in specification development stage
+and the project is looking to support it when it becomes available.
 
-syzbot found the following issue on:
+This patchset provides detailed documentation of DRTM, the approach used for
+adding the capbility, and relevant API/ABI documentation. In addition to the
+documentation the patch set introduces Intel TXT support as the first platform
+for Linux Secure Launch.
 
-HEAD commit:    c8c655c34e33 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=142ad18c280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5eadbf0d3c2ece89
-dashboard link: https://syzkaller.appspot.com/bug?extid=a2bbe9020e59fdeab932
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+A quick note on terminology. The larger open source project itself is called
+TrenchBoot, which is hosted on Github (links below). The kernel feature enabling
+the use of Dynamic Launch technology is referred to as "Secure Launch" within
+the kernel code. As such the prefixes sl_/SL_ or slaunch/SLAUNCH will be seen
+in the code. The stub code discussed above is referred to as the SL stub.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+The Secure Launch feature starts with patch #2. Patch #1 was authored by Arvind
+Sankar. There is no further status on this patch at this point but
+Secure Launch depends on it so it is included with the set.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/618b22e20036/disk-c8c655c3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1388ab23cc1b/vmlinux-c8c655c3.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/79496e207412/bzImage-c8c655c3.xz
+Links:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a2bbe9020e59fdeab932@syzkaller.appspotmail.com
+The TrenchBoot project including documentation:
 
-syz-executor.1: attempt to access beyond end of device
-loop1: rw=2049, sector=77824, nr_sectors = 2048 limit=63271
-syz-executor.1: attempt to access beyond end of device
-loop1: rw=2049, sector=79872, nr_sectors = 2048 limit=63271
-======================================================
-WARNING: possible circular locking dependency detected
-6.3.0-syzkaller-12378-gc8c655c34e33 #0 Not tainted
-------------------------------------------------------
-syz-executor.1/26208 is trying to acquire lock:
-ffff8880294dc1a0 (&iint->mutex){+.+.}-{3:3}, at: ima_check_last_writer security/integrity/ima/ima_main.c:165 [inline]
-ffff8880294dc1a0 (&iint->mutex){+.+.}-{3:3}, at: ima_file_free+0x110/0x3c0 security/integrity/ima/ima_main.c:199
+https://trenchboot.org
 
-but task is already holding lock:
-ffff88805b928448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
-ffff88805b928448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0xa10/0x1d50 fs/f2fs/data.c:2842
+The TrenchBoot project on Github:
 
-which lock already depends on the new lock.
+https://github.com/trenchboot
 
+Intel TXT is documented in its own specification and in the SDM Instruction Set volume:
 
-the existing dependency chain (in reverse order) is:
+https://www.intel.com/content/dam/www/public/us/en/documents/guides/intel-txt-software-development-guide.pdf
+https://software.intel.com/en-us/articles/intel-sdm
 
--> #4 (&sbi->node_write){++++}-{3:3}:
-       reacquire_held_locks+0x3aa/0x660 kernel/locking/lockdep.c:5216
-       __lock_release kernel/locking/lockdep.c:5405 [inline]
-       lock_release+0x36f/0x9d0 kernel/locking/lockdep.c:5711
-       up_write+0x79/0x580 kernel/locking/rwsem.c:1625
-       f2fs_write_checkpoint+0x13a4/0x1f90 fs/f2fs/checkpoint.c:1651
-       __write_checkpoint_sync fs/f2fs/checkpoint.c:1768 [inline]
-       __checkpoint_and_complete_reqs+0xda/0x3b0 fs/f2fs/checkpoint.c:1787
-       issue_checkpoint_thread+0xda/0x260 fs/f2fs/checkpoint.c:1818
-       kthread+0x2b8/0x350 kernel/kthread.c:379
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+AMD SKINIT is documented in the System Programming manual:
 
--> #3 (&sbi->cp_rwsem){++++}-{3:3}:
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
-       down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
-       f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
-       f2fs_lock_op fs/f2fs/f2fs.h:2130 [inline]
-       f2fs_convert_inline_inode+0x578/0x800 fs/f2fs/inline.c:218
-       f2fs_vm_page_mkwrite+0x32c/0x13d0 fs/f2fs/file.c:79
-       do_page_mkwrite+0x1a4/0x600 mm/memory.c:2931
-       do_shared_fault mm/memory.c:4595 [inline]
-       do_fault mm/memory.c:4663 [inline]
-       do_pte_missing mm/memory.c:3647 [inline]
-       handle_pte_fault mm/memory.c:4947 [inline]
-       __handle_mm_fault mm/memory.c:5089 [inline]
-       handle_mm_fault+0x2140/0x5860 mm/memory.c:5243
-       do_user_addr_fault arch/x86/mm/fault.c:1440 [inline]
-       handle_page_fault arch/x86/mm/fault.c:1534 [inline]
-       exc_page_fault+0x7d2/0x910 arch/x86/mm/fault.c:1590
-       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+https://www.amd.com/system/files/TechDocs/24593.pdf
 
--> #2 (&mm->mmap_lock){++++}-{3:3}:
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
-       internal_get_user_pages_fast+0x244/0x2ce0 mm/gup.c:2967
-       __iov_iter_get_pages_alloc+0x3c9/0x940 lib/iov_iter.c:1509
-       iov_iter_get_pages+0xd9/0x130 lib/iov_iter.c:1552
-       __bio_iov_iter_get_pages block/bio.c:1269 [inline]
-       bio_iov_iter_get_pages+0x480/0x12b0 block/bio.c:1340
-       iomap_dio_bio_iter+0xac2/0x1430 fs/iomap/direct-io.c:325
-       __iomap_dio_rw+0x12c3/0x22e0 fs/iomap/direct-io.c:598
-       iomap_dio_rw+0x46/0xa0 fs/iomap/direct-io.c:688
-       xfs_file_dio_write_aligned+0x222/0x350 fs/xfs/xfs_file.c:543
-       xfs_file_dio_write fs/xfs/xfs_file.c:655 [inline]
-       xfs_file_write_iter+0x508/0x620 fs/xfs/xfs_file.c:797
-       do_iter_write+0x7b1/0xcb0 fs/read_write.c:860
-       vfs_writev fs/read_write.c:933 [inline]
-       do_pwritev+0x21a/0x360 fs/read_write.c:1030
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+GRUB2 pre-launch support branch (WIP):
 
--> #1 (&sb->s_type->i_mutex_key#26){++++}-{3:3}:
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
-       down_read_nested+0x40/0x60 kernel/locking/rwsem.c:1645
-       xfs_ilock+0x10e/0x3a0 fs/xfs/xfs_inode.c:198
-       xfs_ilock_iocb fs/xfs/xfs_file.c:211 [inline]
-       xfs_file_buffered_read+0x160/0x320 fs/xfs/xfs_file.c:274
-       xfs_file_read_iter+0x262/0x4d0 fs/xfs/xfs_file.c:302
-       __kernel_read+0x422/0x8a0 fs/read_write.c:428
-       integrity_kernel_read+0xb0/0xf0 security/integrity/iint.c:192
-       ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:485 [inline]
-       ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
-       ima_calc_file_hash+0x1643/0x1d20 security/integrity/ima/ima_crypto.c:573
-       ima_collect_measurement+0x3a7/0x880 security/integrity/ima/ima_api.c:293
-       process_measurement+0xfdb/0x1ce0 security/integrity/ima/ima_main.c:341
-       ima_file_check+0xf1/0x170 security/integrity/ima/ima_main.c:539
-       do_open fs/namei.c:3638 [inline]
-       path_openat+0x280a/0x3170 fs/namei.c:3791
-       do_filp_open+0x234/0x490 fs/namei.c:3818
-       do_sys_openat2+0x13f/0x500 fs/open.c:1356
-       do_sys_open fs/open.c:1372 [inline]
-       __do_sys_open fs/open.c:1380 [inline]
-       __se_sys_open fs/open.c:1376 [inline]
-       __x64_sys_open+0x225/0x270 fs/open.c:1376
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+https://github.com/TrenchBoot/grub/tree/grub-sl-fc-38-dlstub
 
--> #0 (&iint->mutex){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3108 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
-       validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
-       __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
-       __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
-       ima_check_last_writer security/integrity/ima/ima_main.c:165 [inline]
-       ima_file_free+0x110/0x3c0 security/integrity/ima/ima_main.c:199
-       __fput+0x32e/0x890 fs/file_table.c:315
-       task_work_run+0x24a/0x300 kernel/task_work.c:179
-       get_signal+0x1606/0x17e0 kernel/signal.c:2650
-       arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
-       exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
-       exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
-       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
-       syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
-       do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Thanks
+Ross Philipson and Daniel P. Smith
 
-other info that might help us debug this:
+Changes in v2:
 
-Chain exists of:
-  &iint->mutex --> &sbi->cp_rwsem --> &sbi->node_write
+ - Modified 32b entry code to prevent causing relocations in the compressed
+   kernel.
+ - Dropped patches for compressed kernel TPM PCR extender.
+ - Modified event log code to insert log delimiter events and not rely
+   on TPM access.
+ - Stop extending PCRs in the early Secure Launch stub code.
+ - Removed Kconfig options for hash algorithms and use the algorithms the
+   ACM used.
+ - Match Secure Launch measurement algorithm use to those reported in the
+   TPM 2.0 event log.
+ - Read the TPM events out of the TPM and extend them into the PCRs using
+   the mainline TPM driver. This is done in the late initcall module.
+ - Allow use of alternate PCR 19 and 20 for post ACM measurements.
+ - Add Kconfig constraints needed by Secure Launch (disable KASLR
+   and add x2apic dependency).
+ - Fix testing of SL_FLAGS when determining if Secure Launch is active
+   and the architecture is TXT.
+ - Use SYM_DATA_START_LOCAL macros in early entry point code.
+ - Security audit changes:
+   - Validate buffers passed to MLE do not overlap the MLE and are
+     properly laid out.
+   - Validate buffers and memory regions used by the MLE are
+     protected by IOMMU PMRs.
+ - Force IOMMU to not use passthrough mode during a Secure Launch.
+ - Prevent KASLR use during a Secure Launch.
 
- Possible unsafe locking scenario:
+Changes in v3:
 
-       CPU0                    CPU1
-       ----                    ----
-  rlock(&sbi->node_write);
-                               lock(&sbi->cp_rwsem);
-                               lock(&sbi->node_write);
-  lock(&iint->mutex);
+ - Introduce x86 documentation patch to provide background, overview
+   and configuration/ABI information for the Secure Launch kernel
+   feature.
+ - Remove the IOMMU patch with special cases for disabling IOMMU
+   passthrough. Configuring the IOMMU is now a documentation matter
+   in the previously mentioned new patch.
+ - Remove special case KASLR disabling code. Configuring KASLR is now
+   a documentation matter in the previously mentioned new patch.
+ - Fix incorrect panic on TXT public register read.
+ - Properly handle and measure setup_indirect bootparams in the early
+   launch code.
+ - Use correct compressed kernel image base address when testing buffers
+   in the early launch stub code. This bug was introduced by the changes
+   to avoid relocation in the compressed kernel.
+ - Use CPUID feature bits instead of CPUID vendor strings to determine
+   if SMX mode is supported and the system is Intel.
+ - Remove early NMI re-enable on the BSP. This can be safely done later
+   on the BSP after an IDT is setup.
 
- *** DEADLOCK ***
+Changes in v4:
+ - Expand the cover letter to provide more context to the order that DRTM
+   support will be added.
+ - Removed debug tracing in TPM request locality funciton and fixed
+   local variable declarations.
+ - Fixed missing break in default case in slmodule.c.
+ - Reworded commit messages in patches 1 and 2 per suggestions.
 
-1 lock held by syz-executor.1/26208:
- #0: ffff88805b928448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
- #0: ffff88805b928448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0xa10/0x1d50 fs/f2fs/data.c:2842
+Changes in v5:
+ - Comprehensive documentation rewrite.
+ - Use boot param loadflags to communicate Secure Launch status to
+   kernel proper.
+ - Fix incorrect check of X86_FEATURE_BIT_SMX bit.
+ - Rename the alternate details and authorities PCR support.
+ - Refactor the securityfs directory and file setup in slmodule.c.
+ - Misc. cleanup from internal code reviews.
+ - Use reverse fir tree format for variables.
 
-stack backtrace:
-CPU: 0 PID: 26208 Comm: syz-executor.1 Not tainted 6.3.0-syzkaller-12378-gc8c655c34e33 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3108 [inline]
- check_prevs_add kernel/locking/lockdep.c:3227 [inline]
- validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
- __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
- __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
- ima_check_last_writer security/integrity/ima/ima_main.c:165 [inline]
- ima_file_free+0x110/0x3c0 security/integrity/ima/ima_main.c:199
- __fput+0x32e/0x890 fs/file_table.c:315
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- get_signal+0x1606/0x17e0 kernel/signal.c:2650
- arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
- exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
- exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f8281a8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f82827f4168 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
-RAX: fffffffffffffffb RBX: 00007f8281babf80 RCX: 00007f8281a8c169
-RDX: 0000000000000001 RSI: 0000000020000240 RDI: 0000000000000004
-RBP: 00007f8281ae7ca1 R08: 0000000000000000 R09: 0000000000000003
-R10: 0000000000001400 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe420958ff R14: 00007f82827f4300 R15: 0000000000022000
- </TASK>
+Changes in v6:
+ - Support for the new Secure Launch Resourse Table that standardizes
+   the information passed and forms the ABI between the pre and post
+   launch code.
+ - Support for booting Linux through the EFI stub entry point and
+   then being able to do a Secure Launch once EFI stub is done and EBS
+   is called.
+ - Updates to the documentation to reflect the previous two items listed.
 
+Arvind Sankar (1):
+  x86/boot: Place kernel_info at a fixed offset
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Daniel P. Smith (2):
+  x86: Add early SHA support for Secure Launch early measurements
+  x86: Secure Launch late initcall platform module
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Ross Philipson (11):
+  Documentation/x86: Secure Launch kernel documentation
+  x86: Secure Launch Kconfig
+  x86: Secure Launch Resource Table header file
+  x86: Secure Launch main header file
+  x86: Secure Launch kernel early boot stub
+  x86: Secure Launch kernel late boot stub
+  x86: Secure Launch SMP bringup support
+  kexec: Secure Launch kexec SEXIT support
+  reboot: Secure Launch SEXIT support on reboot paths
+  tpm: Allow locality 2 to be set when initializing the TPM for Secure
+    Launch
+  x86: EFI stub DRTM launch support for Secure Launch
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+ Documentation/arch/x86/boot.rst                    |  21 +
+ Documentation/security/index.rst                   |   1 +
+ Documentation/security/launch-integrity/index.rst  |  10 +
+ .../security/launch-integrity/principles.rst       | 313 ++++++++++
+ .../launch-integrity/secure_launch_details.rst     | 564 +++++++++++++++++
+ .../launch-integrity/secure_launch_overview.rst    | 220 +++++++
+ arch/x86/Kconfig                                   |  12 +
+ arch/x86/boot/compressed/Makefile                  |   3 +
+ arch/x86/boot/compressed/early_sha1.c              |  97 +++
+ arch/x86/boot/compressed/early_sha1.h              |  17 +
+ arch/x86/boot/compressed/early_sha256.c            |   7 +
+ arch/x86/boot/compressed/head_64.S                 |  37 ++
+ arch/x86/boot/compressed/kernel_info.S             |  53 +-
+ arch/x86/boot/compressed/kernel_info.h             |  12 +
+ arch/x86/boot/compressed/sl_main.c                 | 599 ++++++++++++++++++
+ arch/x86/boot/compressed/sl_stub.S                 | 690 +++++++++++++++++++++
+ arch/x86/boot/compressed/vmlinux.lds.S             |   6 +
+ arch/x86/include/asm/realmode.h                    |   3 +
+ arch/x86/include/uapi/asm/bootparam.h              |   1 +
+ arch/x86/kernel/Makefile                           |   2 +
+ arch/x86/kernel/asm-offsets.c                      |  20 +
+ arch/x86/kernel/reboot.c                           |  10 +
+ arch/x86/kernel/setup.c                            |   3 +
+ arch/x86/kernel/slaunch.c                          | 566 +++++++++++++++++
+ arch/x86/kernel/slmodule.c                         | 520 ++++++++++++++++
+ arch/x86/kernel/smpboot.c                          |  86 +++
+ arch/x86/realmode/rm/header.S                      |   3 +
+ arch/x86/realmode/rm/trampoline_64.S               |  37 ++
+ drivers/char/tpm/tpm-chip.c                        |   9 +-
+ drivers/firmware/efi/libstub/x86-stub.c            |  55 ++
+ drivers/iommu/intel/dmar.c                         |   4 +
+ include/linux/slaunch.h                            | 513 +++++++++++++++
+ include/linux/slr_table.h                          | 270 ++++++++
+ kernel/kexec_core.c                                |   4 +
+ lib/crypto/sha1.c                                  |   4 +
+ lib/crypto/sha256.c                                |   8 +
+ 36 files changed, 4775 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/security/launch-integrity/index.rst
+ create mode 100644 Documentation/security/launch-integrity/principles.rst
+ create mode 100644 Documentation/security/launch-integrity/secure_launch_details.rst
+ create mode 100644 Documentation/security/launch-integrity/secure_launch_overview.rst
+ create mode 100644 arch/x86/boot/compressed/early_sha1.c
+ create mode 100644 arch/x86/boot/compressed/early_sha1.h
+ create mode 100644 arch/x86/boot/compressed/early_sha256.c
+ create mode 100644 arch/x86/boot/compressed/kernel_info.h
+ create mode 100644 arch/x86/boot/compressed/sl_main.c
+ create mode 100644 arch/x86/boot/compressed/sl_stub.S
+ create mode 100644 arch/x86/kernel/slaunch.c
+ create mode 100644 arch/x86/kernel/slmodule.c
+ create mode 100644 include/linux/slaunch.h
+ create mode 100644 include/linux/slr_table.h
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+-- 
+1.8.3.1
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
