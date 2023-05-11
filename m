@@ -2,185 +2,215 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3092A6FF3F2
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 May 2023 16:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDBC6FF426
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 May 2023 16:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238407AbjEKOWY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 11 May 2023 10:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S238459AbjEKO1B (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 May 2023 10:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238414AbjEKOWV (ORCPT
+        with ESMTP id S238227AbjEKO0s (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 11 May 2023 10:22:21 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2083.outbound.protection.outlook.com [40.107.8.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BC5D2D3;
-        Thu, 11 May 2023 07:22:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lqQAX5Ybpz3djPLRrOHXsRfzB0TWBIclFNtwxkvW6FAplwQei+1M4pIG1i3gP9DIgdRx+zgKanhpUesD0C9LZ2cq9QAsJitVG/oBCcwEyVSC20GEA2R7jzj5ePHtLjJGm+yrrDeNboc2owl5TGFeEcrN5CnaQooVsrhyn+XAhAGlTjRdjGo70ncXhn2vZh8zjLLuDpOar4UMJQhy7teioJsALqdKNbCxwkKeGs6OGMFp1OoaXgiLjfXxXmepvlDFeWNbLJAYyNQcYIDo8ENKNjDaFGtALZT/nN40Vk49f+KtghsnjD2ytSk9SG/Ilr1Bs2jLebJvcIazRHMJYjZZTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XHEswNYGD4isK3XikShGJsjsdVHpmKUFb/aFmyj7e4Y=;
- b=dXQsdl2YdiGYYM8yRYqomTixF8PCcrNJ7lj/cBke3RR4QOwBrjXJWPOPninNco9hyd5+zRvsTjLoqMyPTtC1NOW6PbYnWwRbWSnj1MFBD2nA8bUpJGYH0Z28hxEVj9yokEsKb+DRFTfebU/AsW1rnBAXhByjExtF6S3hAVF5FGhFOFmbGp/tjnlOZTVPnCHcbCvJEVI2LOF7VU9t+0K6da1sYj6yS4iXVYoLkiwUK5beSAAAmgIupqtlNXE8RNZiz1nrWKWZ0f/NqFn6GLyR1wKuH5X9Wjrf2Ca93mZNKp5EcBh1mt4bgA1oVkJwRBSmnc4WU+iijDKS7D6dsUz+tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
- dkim=pass header.d=kunbus.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XHEswNYGD4isK3XikShGJsjsdVHpmKUFb/aFmyj7e4Y=;
- b=GsIf+SSP89uwiSg76zucjH3vJ74mC7O0rTsv6e1vu4Bj/6pKb2JYHVIesAbm3VPsjKSBDPqAhq/5qc9j0w7yGgFNGHe8NYmNdw1pRAm71lH6h/wg4O9ghUMI4zIZlE34JGYa+qeCT25bDfVCmo9zJaUek+Ub8GKBSNi+IscW0KQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kunbus.com;
-Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM (2603:10a6:803:4e::14)
- by DB8P193MB0695.EURP193.PROD.OUTLOOK.COM (2603:10a6:10:147::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.6; Thu, 11 May
- 2023 14:22:04 +0000
-Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- ([fe80::6727:e3fb:8fec:72a6]) by VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- ([fe80::6727:e3fb:8fec:72a6%6]) with mapi id 15.20.6387.019; Thu, 11 May 2023
- 14:22:03 +0000
-Message-ID: <1a8ecf90-80a4-9aac-95e1-9ce0c4e09ba5@kunbus.com>
-Date:   Thu, 11 May 2023 16:22:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [linus:master] [tpm, tpm_tis] e644b2f498: RIP:acpi_safe_halt
-Content-Language: en-US
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Michael_Niew=c3=b6hner?= <linux@mniewoehner.de>,
-        linux-integrity@vger.kernel.org,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        jsnitsel@redhat.com, peterz@infradead.org
-References: <202305041325.ae8b0c43-yujie.liu@intel.com>
- <d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org>
- <42ea93a1-3186-b8ff-c317-d51f3e13856e@kunbus.com>
- <20230511141607.GA32208@wunner.de>
-From:   Lino Sanfilippo <l.sanfilippo@kunbus.com>
-In-Reply-To: <20230511141607.GA32208@wunner.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0016.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:15::21) To VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:803:4e::14)
+        Thu, 11 May 2023 10:26:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C853A93
+        for <linux-integrity@vger.kernel.org>; Thu, 11 May 2023 07:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683815167;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1NVAsWuTUdtV3FvE/HY7Tvs03PjNNe8XbtOW3AoDUkk=;
+        b=X33h8sgk4TNUpYuLM9DwyE/UNhX3TEW7NwnaZnkJwclRT9S/JpoAFMK+ipuyKzcmWHmnpJ
+        K/6MrQu5zkQ24ElXeOC7IRxNE+wx+Yrzk7RB5eKAdqYTjhEQILV126TBurmqWngKBeD3eu
+        EedLm1JB4yJ1LmWdtMWvc7bYgric4qQ=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-447-WoBPz9zVMf6ZoIb5XoNNQg-1; Thu, 11 May 2023 10:26:05 -0400
+X-MC-Unique: WoBPz9zVMf6ZoIb5XoNNQg-1
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-53017eb8b2eso5015253a12.0
+        for <linux-integrity@vger.kernel.org>; Thu, 11 May 2023 07:26:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683815165; x=1686407165;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1NVAsWuTUdtV3FvE/HY7Tvs03PjNNe8XbtOW3AoDUkk=;
+        b=iQORsemYJEiPz+0/+58rAfmvFCzf+/bTpPiQTmR6QxRXajFK2ALfVx4kN41olqsyi1
+         RyM9sfgQFTWsbcUFLRXf8bz5Mw5j/3f8vMTpsN/vRis16dhyam9sCrPqwRyMpcYknJSp
+         B4D6rKgQP1wqivGGXwZAPEvqwqzFi2JZr6l0fkd+ewDCWokmZdeTud09IjRR3RmuJQYU
+         oDxe2p7kSIUO5eMlvUQYhkIFD+nsLcGC0bc/koyaKQoGH0QTCyzKA3QvCcsZCs7uWMpi
+         xvPazbw7F5gojbvDoCGF+9ecGnX1WRsA9CSdKoYZaICOEAeMeanoyOz0gRDfIZ+P/QwN
+         Gd2A==
+X-Gm-Message-State: AC+VfDxcIde9I3VjmDld3GkusY0lXyNCfpa5iZxbmgOFruV2a8zImoW9
+        L+hwrLMXCSrq5GKUgUgTxYpOMEi8ENPbBege6L2jaIzj5kxkWewf5O3P6CUBG6X0cMaO0P98Scx
+        MNu7RUtjEkDqrlOzBu635HSG+GAQR
+X-Received: by 2002:a05:6a20:4285:b0:100:7ac0:b32d with SMTP id o5-20020a056a20428500b001007ac0b32dmr18270863pzj.44.1683815164919;
+        Thu, 11 May 2023 07:26:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5h3/GInsB+C1Tn0Mu8SMLFGfS9+jYc9QHhiqn/I1hUm8zEx1CaW8QtGpTjermfMJ1acIPa5w==
+X-Received: by 2002:a05:6a20:4285:b0:100:7ac0:b32d with SMTP id o5-20020a056a20428500b001007ac0b32dmr18270836pzj.44.1683815164514;
+        Thu, 11 May 2023 07:26:04 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id j10-20020a62e90a000000b0063f16daf7dbsm5332604pfh.55.2023.05.11.07.26.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 07:26:04 -0700 (PDT)
+Date:   Thu, 11 May 2023 07:26:02 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, peterhuewe@gmx.de,
+        hdegoede@redhat.com, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: tpm_sis IRQ storm on ThinkStation P360 Tiny
+Message-ID: <23q52ryztbplfclg3nksc2f4f6p7ywm4gp5htnijbasyrmj2ag@ncl47vuhglpx>
+References: <20230505130731.GO83892@hirez.programming.kicks-ass.net>
+ <toe7jsgedknsqj3dgw2fasjlqcpgpiqgloifxow4vnt3tntabw@l6emb5zpbff5>
+ <CSJ0AD1CFYQP.T6T68M6ZVK49@suppilovahvero>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P193MB0413:EE_|DB8P193MB0695:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0b8228b5-72c2-4a44-ef7d-08db522b1798
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oHkQanu5B6MeIMRBCRbFXIo3g5iU6AaW1LEb7g/3OdHqCTsVCBpQ2eyLg6dBZQefx3sXGqjJKptWtVjpKvtCJFoLt3hDRKgeU+cZLPyrQy/Nq6h5/3q8m2K3e7q2V3pNoUFgx3ef0nk1kzXU+AX7hiPNOPBtzHuZ+GZEP10rMjI+TlYr2+2oQqsHBPvs9F2WE2mfDCrO26egSk0+AcA6/LQJXcYc1WUqU7datn/+dL4rMgVtCTGMEIThT3vMHNhPbgRTIr73QvMUfdFbFpsl0/r1IopcuvbXJaP6fFUQg2kyNb1LnxD4kgVSK4B6asOPFVMykO8aC9lMt44y5rwTrwB1GykHz6CZKtG5h5nGCRbk3Ae+Oxan0FIeOIiAZVG9wBmx+H6sJsLx6ZH0J8X8jkqGdjF7Qid2fRgK663wksmU6kqgu5D2u9Ld4KoCNYJytNpUyruvAOWi37MVanOpc8Lgf88Qwcan7gcRJAP0CJAKKm7Z+FPcA08KVx6N7diNQbh0Dc5OmHGJXqimSOhQEgH7PmbOlqsS/RV7NyOQ8gRc9fqB0gVQyUBYb+hL3tqEWfemP95NSEtmo7ZwXu7KO76cEkaOjzklQslCuuX7phwZdJ+CbMmQPr3q3WHPXIDKfZlIkEEFd7w/YgbTySrYmw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P193MB0413.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(366004)(39840400004)(346002)(451199021)(36756003)(38100700002)(86362001)(31696002)(31686004)(8676002)(52116002)(5660300002)(478600001)(6506007)(6512007)(6486002)(8936002)(186003)(53546011)(2616005)(83380400001)(2906002)(66946007)(66556008)(54906003)(316002)(41300700001)(66476007)(6916009)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VE9pNGVsTWFuTnorNG9XU3VTeUlEbUJiR25nUk16MkdpTU55ck9lSStkTG0v?=
- =?utf-8?B?RFRiQW42WXB1RXA0UVNiZyswa0xvaGdNdU9DY0M2T3dDV2UzVUpZRDk2V3g0?=
- =?utf-8?B?bTJMbDhYdjhibHU0YjFETUc4VHpOWndxSytWaGMrVnAzWVJUNmx1Ymx5Z2dJ?=
- =?utf-8?B?T3kyQlJpQ0g4QnhEdG02b2lmTytUTGFVcURkS1paRWJHMWh4S3dBd1FPSVEr?=
- =?utf-8?B?TzlYZExLNHoxNWpCU2tGNWlHMUMxMVJ6NWpXVTFlOE9WOUFNZkY1K1g1THRZ?=
- =?utf-8?B?RlJqMmNndVoxbFRkbEp4NHhoTXlqaEFBblBEVUluVXVkdU9HU1RLOVQ0Y3VG?=
- =?utf-8?B?ZzEwVGdmOVplK0hSaTZ1SlN5aVJ2RWwybEdJakRKU24zeEhhVGlDZkZDVFRy?=
- =?utf-8?B?cWxWT2pFN0UzcnpSaytyZWtLMTJxcy9oRERKckJDS0FOajJiY2JUajFtTTYw?=
- =?utf-8?B?Wk5UUUxVZU5USlVpa1ROajdDVUNFZEVnOWZ1UE1kUmZCWDNYYkZKQ1ZpWmxP?=
- =?utf-8?B?Q2dxOEphVFJWWlNtQWtCTCtZMjdDYzMzbE9LcnlhVU9xVU15cWFVUGlXNXZa?=
- =?utf-8?B?U2l2d3ZNMTlHUEE2T2ROS2pqSHdQSVVyUEJUNTdsdzRYUCs1OWhHTk85a2tB?=
- =?utf-8?B?RVpXcms0QmdLWnJEdE5RdGNUdlBNVHUyNVpLbit4NkRWUnhnMWxwUWphUHkz?=
- =?utf-8?B?c3NtSXM3UmdVVkdVblkzQ25HdjFsclZHYUJmTVlSWXN0Yjd4eVdvSjV6SnND?=
- =?utf-8?B?cHhrbmhDWXA0SlRHNVRUaVJZWjJ2N25TTUR0WmswcU8zRHlQUmRYb3VSV2Ji?=
- =?utf-8?B?dURGWDZXUFBNTWVYZ2lUWDRFeXZYZTBvVEREZzMwaGJ3YVE4b2ZGb3pCdTkz?=
- =?utf-8?B?Nzc2SEJ0SHhwcEIvZVFrZjl5dXVyUmRCSENmUzMxRnNscnR3eVhreGt2d3hC?=
- =?utf-8?B?V1FaNWMxazMyWDlXSW5TVk11d2NlVml4WE1mODRwUnA1Sy8yeGdIQS9TSTBl?=
- =?utf-8?B?U01qUXdQY2FYaHhEeStwYVlac0NqSHpLb0xMOGRiSWIzbWJxY3E3WjU1bENW?=
- =?utf-8?B?RTFGT0pwdXpva3RmaStrcWl3bUZIdW5JUGhpVEg3Vjc4TW8xT3k5K3pnY09H?=
- =?utf-8?B?ck1IR2owSFVRZWFvNlhUcUM1NVppV054TWh0d01vZ3UwMUpVQnQwZlRxSWpt?=
- =?utf-8?B?TW84elp0eDI1em56RXlpSTJObHdlbjJMWFVrbUppcXVweVR3UWJPRlk4Zkox?=
- =?utf-8?B?OSt0Tm5FaXJjNHV3ckVmZU5iK3BhT1dyRlhkUk1yaUVNWnN2b0d1RzNDd1cz?=
- =?utf-8?B?TFB2aFVsV3dNTnp5bFBQSU9wUmdwc3V0akNXMDZUY0N0U2VQWGZvNHBrOW9Y?=
- =?utf-8?B?MHlnbmo4a1QrUmFYRjkxaThsRExzL1IwcEE3N1FhTUVCblVrY0NlNkhwb0w2?=
- =?utf-8?B?bk9UV0ozbFdrb2puOU0ycnhGbkRhQ2RuTEMwNTZDR3p4cmNHZm1QaGF3UkN2?=
- =?utf-8?B?bDIvZEM5U0VNZUx0QklmOVB6eEpWU2xNT3J0c0daV2pHa3hxSVFhdC9oN2RN?=
- =?utf-8?B?eFNTcTgzZDBDaDJWR1hqb2FPTzNTTjN1Vld6MVkvWDJDMG9FTmJNdUtRNUh4?=
- =?utf-8?B?cysxbDgzaHNQU3dQUHZWRE9WaWhaNG1Xd1QzTzlrN3dVVlV4V2wrZmdpNkJS?=
- =?utf-8?B?ZDZRbVhZaGtkRUFJejF4VVQ3NDFGcnhab3NMV0JQTzRqWmNCRWRLNjdFS3Rp?=
- =?utf-8?B?S3pyemV2NWZDTlV6d0NtWnh0c1IxVitJV3hkTzFDZ3VXUXN0b1Fza3hGZjRS?=
- =?utf-8?B?K012Z2RReDRHcTB3TFIyT3gzeWpXRCtiOFYySkt2TGtRT1dvWnZiU1ZKblhk?=
- =?utf-8?B?SThTdlhPNk44ZDgzZ2dwSUlWdWVURDQybDRMUWdnTVlBWjBVYVRVS0ZGeUxB?=
- =?utf-8?B?UjZucmVEYnVkZE9tZTdpOCtNMVlqZk96RDhwL3RnZkpkZFZ4UW0wRmFLR0Jp?=
- =?utf-8?B?dlJNWDhDaVRSM1lUUGxsOVJobENHNzZOM2dLa2EzVS9zeGRvdVNjdUlEM0Zw?=
- =?utf-8?B?emM3bUVOTmJIaU9lUXlFWkdIV3RDdGw1YTRPeHliV2FBUXN2aFRxeThZVVpq?=
- =?utf-8?B?bFB6VTdzVk5ESEUzN2NDS2ozV1lsbGNtMTEzTlpLRElzNS8zUktHajVTVHh2?=
- =?utf-8?B?WkZ0NU9pd0xFbURDUkh4Y3J3N3dBUHhqMDBqTk8wQTdWT1BZREROTWFtQkY0?=
- =?utf-8?B?eVRObDVQdUNDQTZTallOUXRLVklnPT0=?=
-X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b8228b5-72c2-4a44-ef7d-08db522b1798
-X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 14:22:03.7548
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a0Cwl47axlk1/eRzaOHWWR/U/jO2OLp+rj2HwhWN0738V6/vaf+UMq6aG9e8jbe+Lsysn4m0sd5ZpxbwTUoGsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P193MB0695
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CSJ0AD1CFYQP.T6T68M6ZVK49@suppilovahvero>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-Hi Lukas,
-
-On 11.05.23 16:16, Lukas Wunner wrote:
-> ATTENTION: This e-mail is from an external sender. Please check attachments and links before opening e.g. with mouseover.
+On Thu, May 11, 2023 at 03:02:13AM +0300, Jarkko Sakkinen wrote:
+> On Fri May 5, 2023 at 6:05 PM EEST, Jerry Snitselaar wrote:
+> > On Fri, May 05, 2023 at 03:07:31PM +0200, Peter Zijlstra wrote:
+> > > Hi,
+> > > 
+> > > I recently saw my Alderlake NUC spewing on boot:
+> > > 
+> > > [   13.166514] irq 109: nobody cared (try booting with the "irqpoll" option)
+> > > [   13.166614] CPU: 5 PID: 0 Comm: swapper/5 Not tainted 6.3.0+ #66
+> > > [   13.166694] Hardware name: LENOVO 30FBS0B800/330E, BIOS M4GKT18A 04/26/2022
+> > > [   13.166779] Call Trace:
+> > > [   13.166812]  <IRQ>
+> > > [   13.166840]  dump_stack_lvl+0x5b/0x90
+> > > [   13.166891]  __report_bad_irq+0x2b/0xc0
+> > > [   13.166941]  note_interrupt+0x2ac/0x2f0
+> > > [   13.166991]  handle_irq_event+0x6f/0x80
+> > > [   13.167041]  handle_fasteoi_irq+0x94/0x1f0
+> > > [   13.167093]  __common_interrupt+0x72/0x160
+> > > [   13.167112] intel_rapl_common: Found RAPL domain package
+> > > [   13.167141]  common_interrupt+0xb8/0xe0
+> > > [   13.167200] intel_rapl_common: Found RAPL domain core
+> > > [   13.167242]  </IRQ>
+> > > [   13.167297] intel_rapl_common: Found RAPL domain uncore
+> > > [   13.167322]  <TASK>
+> > > [   13.167437]  asm_common_interrupt+0x26/0x40
+> > > [   13.167492] RIP: 0010:cpuidle_enter_state+0xff/0x500
+> > > [   13.167554] Code: c0 48 0f a3 05 72 34 ad 01 0f 82 fc 02 00 00 31 ff e8 35 b3 52 ff 45 84 ff 0f 85 cc 02 00 00 e8 f7 13 64 ff fb 0f 1f 44 00 00 <45> 85 f6 0f 88 eb 01 00 00 49 63 d6 48 8d 04 52 48 8d 04 82 49 8d
+> > > [   13.167766] RSP: 0018:ffffc900001ebe90 EFLAGS: 00000206
+> > > [   13.167843] RAX: 000000000012a8f3 RBX: ffffe8ffff480a00 RCX: 0000000000000000
+> > > [   13.167928] RDX: 0000000000000000 RSI: ffffffff8244c6ee RDI: ffffffff8242ca22
+> > > [   13.168021] RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000001
+> > > [   13.168105] R10: 0000000000000003 R11: 000000000000000a R12: ffffffff83625a80
+> > > [   13.168189] R13: 0000000310c8ee5e R14: 0000000000000001 R15: 0000000000000000
+> > > [   13.168289]  cpuidle_enter+0x2d/0x40
+> > > [   13.168339]  do_idle+0x231/0x290
+> > > [   13.168383]  cpu_startup_entry+0x1d/0x20
+> > > [   13.168432]  start_secondary+0x11b/0x140
+> > > [   13.168482]  secondary_startup_64_no_verify+0xf9/0xfb
+> > > [   13.168549]  </TASK>
+> > > [   13.168587] handlers:
+> > > [   13.168617] [<00000000497ef927>] irq_default_primary_handler threaded [<00000000cf102de1>] tis_int_handler
+> > > [   13.168767] Disabling IRQ #109
+> > > 
+> > > this is apparently:
+> > > 
+> > > root@alderlake:~# cat /proc/interrupts | grep 109
+> > > 109:          0          0          0          0          0     100002          0          0          0          0          0          0          0          0          0          0          0          0          0          0          00          0          0  IR-IO-APIC  109-fasteoi   tpm0
+> > > 
+> > > the TPM thing, which per same dmesg above is:
+> > > 
+> > > [   10.948058] tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1D, rev-id 54)
+> > > 
+> > > Booting with tpm_tis.interrupts=0 seems to cure things, and AFAICT the
+> > > tpm device actually works -- that is, tpm2 getcap -l and tpm2 pcrread
+> > > both give output, I'm presuming this is 'good'. I've never operated a
+> > > TPM before.
+> > > 
+> > > The machine in question is:
+> > > 
+> > > 	Manufacturer: LENOVO
+> > > 	Product Name: 30FBS0B800
+> > > 	Version: ThinkStation P360 Tiny
+> > > 
+> > > So I'm thinking that perhaps Lenovo carried the bug mentioned in commit:
+> > > b154ce11ead9 ("tpm_tis: Disable interrupts on ThinkPad T490s") to more
+> > > products.
+> >
+> > Hi Peter,
+> >
+> > It will poll like it has for years with tpm_tis.interrupts=0 so that
+> > should be working as it was prior to 6.3 when interrupts were re-enabled
+> > for tpm_tis. Are you seeing this with 6.2 as well? IIRC with that Thinkpad
+> > case is when it was first realized that interrupts had accidentally been
+> > disabled for tpm_tis at one point by a change.
+> >
+> > I guess myself or someone else needs to revisit catching this in
+> > general when the irq storm happens, and disabling interrupts for
+> > tpm_tis. I think last time I was incorporating some feedback from
+> > tglx, let my adhd get me distracted with some other issue and never
+> > returned to it.
+> >
+> > The diff below should (compile tested) work for the P360, but
+> > tpm_tis.interrupts=0 is a good work-around.
+> >
+> > Regards,
+> > Jerry
+> >
+> >
+> > diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> > index 7af389806643..12dfdbef574d 100644
+> > --- a/drivers/char/tpm/tpm_tis.c
+> > +++ b/drivers/char/tpm/tpm_tis.c
+> > @@ -122,6 +122,14 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+> >  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
+> >  		},
+> >  	},
+> > +	{
+> > +		.callback = tpm_tis_disable_irq,
+> > +		.ident = "ThinkStation P360 Tiny",
+> > +		.matches = {
+> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> > +			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P360 Tiny"),
+> > +		},
+> > +	},
+> >  	{}
+> >  };
 > 
+> OK, this is correct :-) I wonder how my fix candidate passed the
+> compiler. Can you send this as a formal patch, which I can then
+> ack?
 > 
-> On Thu, May 11, 2023 at 01:22:19PM +0200, Lino Sanfilippo wrote:
->> Since beside the one reported by Peter Zijlstra
->> (https://lore.kernel.org/linux-integrity/CSJ0AD1CFYQP.T6T68M6ZVK49@suppilovahvero/T/#t)
->> we have another interrupt storm here, it is probably the best to handle those in general
->> and to disable interrupts in this case to fall back to polling (this is also what Jerry
->> suggested in the thread above).
->>
->> I will try to provide a patch for this.
-> 
-> In tpm_tis_probe_irq_single(), after you've requested the irq,
-> you could convert it to a struct irq_desc (via irq_to_desc()
-> from <linux/irqnr.h>) and cache that pointer in priv.
-> 
-> Then in tis_int_handler(), you could access the irqs_unhandled
-> member of struct irq_desc (from <linux/irqdesc.h>) and check
-> if it exceeds, say, 5000.
+> BR, Jarkko
 
-This is the solution I am currently working on, but thanks for confirming that 
-I am on the right track with this :)
+Patch sent. Is there a way to stack matches in one entry instead of
+having complete separate entries for each one? I did a quick scan last
+night, but didn't see anything.
 
-> 
-> If it does, schedule a work_struct which calls disable_interrupts().
-> You can't call that from the IRQ handler because devm_free_irq()
-> waits for the IRQ handler to finish, so you'd deadlock.  You *can*
-> of course clear the TPM_GLOBAL_INT_ENABLE bit from the IRQ handler,
-> though it's unclear to me if that's sufficient to quiesce the
-> interrupt line.
-> 
+I went looking for my craptacular attempt to catch this happening in
+general from before.  IIRC one problem was I couldn't just increment a
+counter when the handler fired, which is how I ended up coming across
+the open coded kstat_irqs in one of the network drivers, and then
+thrilled Thomas by trying to export that :). The other issue was doing
+the clean up, because disable_interrupts couldn't be called in the
+interrupt context. I'm wondering if you can just clear the interrupt
+enable when it is caught, and then schedule_work to deal with the
+devm_free_irq and other tidying up.
 
-Will try this, thx.
-
-> By reusing the genirq subsystem's irqs_unhandled infrastructure,
-> you avoid having to reimplement all of that.
-> 
-
-Agreed.
+Lino definitely understands the interrupt bits of the tpm better than I
+do, so I imagine Lino's attempt will be better than mine was. :)
 
 Regards,
-Lino
+Jerry
 
-> Thanks,
-> 
-> Lukas
