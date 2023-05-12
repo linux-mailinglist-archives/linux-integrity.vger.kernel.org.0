@@ -2,22 +2,22 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E372670063B
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 May 2023 13:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E3A70065B
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 May 2023 13:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240644AbjELLE1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 May 2023 07:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S240998AbjELLJ4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 May 2023 07:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240164AbjELLE0 (ORCPT
+        with ESMTP id S241040AbjELLJu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 May 2023 07:04:26 -0400
+        Fri, 12 May 2023 07:09:50 -0400
 Received: from cavan.codon.org.uk (irc.codon.org.uk [IPv6:2a00:1098:84:22e::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20181720;
-        Fri, 12 May 2023 04:04:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E817E4C1F;
+        Fri, 12 May 2023 04:09:49 -0700 (PDT)
 Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 39D4242527; Fri, 12 May 2023 11:55:54 +0100 (BST)
-Date:   Fri, 12 May 2023 11:55:54 +0100
+        id C03E142529; Fri, 12 May 2023 12:00:03 +0100 (BST)
+Date:   Fri, 12 May 2023 12:00:03 +0100
 From:   Matthew Garrett <mjg59@srcf.ucam.org>
 To:     Ross Philipson <ross.philipson@oracle.com>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
@@ -29,14 +29,14 @@ Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         James.Bottomley@hansenpartnership.com, luto@amacapital.net,
         nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
         trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v6 04/14] x86: Secure Launch Resource Table header file
-Message-ID: <20230512105554.GB14461@srcf.ucam.org>
+Subject: Re: [PATCH v6 05/14] x86: Secure Launch main header file
+Message-ID: <20230512110003.GC14461@srcf.ucam.org>
 References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-5-ross.philipson@oracle.com>
+ <20230504145023.835096-6-ross.philipson@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230504145023.835096-5-ross.philipson@oracle.com>
+In-Reply-To: <20230504145023.835096-6-ross.philipson@oracle.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,SPF_HELO_NEUTRAL,
@@ -48,27 +48,65 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 04, 2023 at 02:50:13PM +0000, Ross Philipson wrote:
+On Thu, May 04, 2023 at 02:50:14PM +0000, Ross Philipson wrote:
 
-> +#define SLR_TABLE_MAGIC		0x4452544d
+> +static inline int tpm12_log_event(void *evtlog_base, u32 evtlog_size,
+> +				  u32 event_size, void *event)
+> +{
+> +	struct tpm12_event_log_header *evtlog =
+> +		(struct tpm12_event_log_header *)evtlog_base;
+> +
+> +	if (memcmp(evtlog->signature, TPM12_EVTLOG_SIGNATURE,
+> +		   sizeof(TPM12_EVTLOG_SIGNATURE)))
+> +		return -EINVAL;
+> +
+> +	if (evtlog->container_size > evtlog_size)
+> +		return -EINVAL;
+> +
+> +	if (evtlog->next_event_offset + event_size > evtlog->container_size)
+> +		return -E2BIG;
+> +
+> +	memcpy(evtlog_base + evtlog->next_event_offset, event, event_size);
+> +	evtlog->next_event_offset += event_size;
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int tpm20_log_event(struct txt_heap_event_log_pointer2_1_element *elem,
+> +				  void *evtlog_base, u32 evtlog_size,
+> +				  u32 event_size, void *event)
+> +{
+> +	struct tcg_pcr_event *header =
+> +		(struct tcg_pcr_event *)evtlog_base;
+> +
+> +	/* Has to be at least big enough for the signature */
+> +	if (header->event_size < sizeof(TCG_SPECID_SIG))
+> +		return -EINVAL;
+> +
+> +	if (memcmp((u8 *)header + sizeof(struct tcg_pcr_event),
+> +		   TCG_SPECID_SIG, sizeof(TCG_SPECID_SIG)))
+> +		return -EINVAL;
+> +
+> +	if (elem->allocated_event_container_size > evtlog_size)
+> +		return -EINVAL;
+> +
+> +	if (elem->next_record_offset + event_size >
+> +	    elem->allocated_event_container_size)
+> +		return -E2BIG;
+> +
+> +	memcpy(evtlog_base + elem->next_record_offset, event, event_size);
+> +	elem->next_record_offset += event_size;
+> +
+> +	return 0;
+> +}
+> +
 
-From convention I'd expect this to be 0x534c5254, but not really an 
-issue.
+These seem like they'd potentially be useful outside the context of SL, 
+maybe put them in a more generic location? Very much a nice to have, not 
+a blocker from my side.
 
-> +/* SLR defined bootloaders */
-> +#define SLR_BOOTLOADER_INVALID	0
-> +#define SLR_BOOTLOADER_GRUB	1
+> +/*
+> + * External functions avalailable in mainline kernel.
 
-Oof. Having the kernel know about bootloaders has not worked out super 
-well for us in the past. If someone writes a new bootloader, are they 
-unable to Secure Launch any existing kernels? The pragmatic thing for 
-them to do would be to just pretend they're grub, which kind of defeats 
-the point of having this definition...
+Nit: "available"
 
-> +} __packed;
-
-Random nit - why are they all packed? Are there circumstances where two 
-pieces of code with different assumptions about alignment will be 
-looking at a single instance of a table? It doesn't seem likely we're 
-going to be doing DRTM in a 32-bit firmware environment while launching 
-a 64-bit kernel?
