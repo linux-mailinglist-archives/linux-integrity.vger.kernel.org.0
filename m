@@ -2,68 +2,51 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261BA703F95
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 May 2023 23:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 999DC7040F3
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 May 2023 00:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242789AbjEOVYl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 15 May 2023 17:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
+        id S243053AbjEOW0F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 15 May 2023 18:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234496AbjEOVYl (ORCPT
+        with ESMTP id S234623AbjEOW0E (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 15 May 2023 17:24:41 -0400
-Received: from sender3-of-o57.zoho.com (sender3-of-o57.zoho.com [136.143.184.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BAE213D
-        for <linux-integrity@vger.kernel.org>; Mon, 15 May 2023 14:24:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684185838; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ZIiZUK8CbsCjiTqifI36HGbNwdFEP03mJGK5C8Kha6tVgBHP7kTeDgac2+tm/3XKsbDwlkOFJ/4w8cRPeVL3VnzwjCti5eH0DCyA7nRLJ2JNfQf3waGrN8Im9OQOKRHiOK1HYANwB1hR+/nL++Mh9g4UH04TowwykuQggdzSLmU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1684185838; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=J3jOAuTNmPzCg2cyhMylK3GtU6TzEwrGngq9Y/KQJiQ=; 
-        b=cnbHjhH3F53ydRLRJExkPQrkix1xEpSDV/QLM4ZhENvB8JWNC30Qi41n8QwfXr1lfHGN/YmMLLMNwyQsTv98sg/0V4f3O+tHQDqhjAIoHYJZ/thkTLADCVHMRTTvyki4fJ4V30mYXdS1uR0cpUEo47jhgIfqJnxd1do0v+cYM9w=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=apertussolutions.com;
-        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-        dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684185838;
-        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=J3jOAuTNmPzCg2cyhMylK3GtU6TzEwrGngq9Y/KQJiQ=;
-        b=XF+jDcK+OfGZgLIcK5u+YeWep9XEHHVW3HEudShXbrPiGjD416u8N3ktwtum2gO8
-        xSPKV0oxzwGtK22V0BdbpwSgPx1tr1Qoh2O3kC8eLgIaZyoZg/aGR/nx+B+DzAORE+R
-        bVNcnaWzhPNJytg3mqqDi8s/XkcQS8WIaNwB+E+c=
-Received: from [10.10.1.128] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-        with SMTPS id 1684185838046320.453113662738; Mon, 15 May 2023 14:23:58 -0700 (PDT)
-Message-ID: <9f0db589-e7b4-09c0-aed2-588b2a2e1bf5@apertussolutions.com>
-Date:   Mon, 15 May 2023 17:23:55 -0400
+        Mon, 15 May 2023 18:26:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1D2A3;
+        Mon, 15 May 2023 15:26:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86E23623F6;
+        Mon, 15 May 2023 22:26:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 644E7C433D2;
+        Mon, 15 May 2023 22:26:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684189562;
+        bh=mgXb0mwxaOmdxBcgoHsqCUvWmllYoas8WLQZmW80/0U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tljRDJNRgEs51+Df/dmJVTibiTt1wcAE1beiT9OvcO/Cm+pyikMJrPEY7Ow/IoO2d
+         bUGy2qRQc6S0rEP10IdJk5MKv+FffbtjlIMNKpOWdMyMUGuS/s9z0zPSFiDWcAz6h2
+         JMl0WdK67n5pWI2IQgtE5jaUJyz61CK2XH2Y3QSQX0r/mveGntgl/kUYHds+phMic9
+         blq8A1GjpsF6reZQaCYe2I66VDmCXsGpQHOhsNOXQdfM/AeFcPn/hEl5QCodVAjM0F
+         kIcB7I0KbNEvbnaLGiacadd+aMGNiIjO9xqbmqMkqRubhauD8tjKp+NKg3joFabTnJ
+         S5ws7+8XA/xEQ==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] tpm: tpm_vtpm_proxy: fix a race condition in /dev/vtpmx creation
+Date:   Tue, 16 May 2023 01:25:54 +0300
+Message-Id: <20230515222554.2783592-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
- early measurements
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Ross Philipson <ross.philipson@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        ardb@kernel.org, mjg59@srcf.ucam.org,
-        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
-        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
-        trenchboot-devel@googlegroups.com
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-7-ross.philipson@oracle.com>
- <20230510012144.GA1851@quark.localdomain>
-From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
-In-Reply-To: <20230510012144.GA1851@quark.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,45 +55,84 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 5/9/23 21:21, Eric Biggers wrote:
-> On Thu, May 04, 2023 at 02:50:15PM +0000, Ross Philipson wrote:
->> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
->>
->> The SHA algorithms are necessary to measure configuration information into
->> the TPM as early as possible before using the values. This implementation
->> uses the established approach of #including the SHA libraries directly in
->> the code since the compressed kernel is not uncompressed at this point.
->>
->> The SHA code here has its origins in the code from the main kernel:
->>
->> commit c4d5b9ffa31f ("crypto: sha1 - implement base layer for SHA-1")
->>
->> That code could not be pulled directly into the setup portion of the
->> compressed kernel because of other dependencies it pulls in. The result
->> is this is a modified copy of that code that still leverages the core
->> SHA algorithms.
->>
->> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
->> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
-> 
-> SHA-1 is insecure.  Why are you still using SHA-1?  Don't TPMs support SHA-2
-> now?
+From: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
 
-I think others have commented as to why SHA-1 is provided.
+/dev/vtpmx is made visible before 'workqueue' is initialized, which can
+lead to a memory corruption in the worst case scenario.
 
-> And if you absolutely MUST use SHA-1 despite it being insecure, please at least
-> don't obfuscate it by calling it simply "SHA".
+Address this by initializing 'workqueue' as the very first step of the
+driver initialization.
 
-Apologies that it appears that way to you. Typically when referring to 
-the family or a subset of the SHA algorithms, SHA-0, SHA-1, SHA-2, and 
-SHA-3, it is generally accepted to refer to them as the "SHA 
-algorithms". And this is contrasted to the SM algorithms which the TCG 
-spec provides for which we have no intentions to support ourselves, 
-though others are welcome to contribute.
+Cc: stable@vger.kernel.org
+Fixes: 6f99612e2500 ("tpm: Proxy driver for supporting multiple emulated TPMs")
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
+---
+v2:
+- Replace vtpmx_cleanup() with destroy_workqueue():
+  https://lore.kernel.org/linux-integrity/CSLCEYDKKWWE.36POIXVT65SLE@suppilovahvero/
+- Fix typo:
+  https://lore.kernel.org/linux-integrity/4651cf1c-423d-05c2-b4c3-9d829a2eadf4@linux.ibm.com/
+---
+ drivers/char/tpm/tpm_vtpm_proxy.c | 30 +++++++-----------------------
+ 1 file changed, 7 insertions(+), 23 deletions(-)
 
-Again, apologies for misunderstanding and thank you for taking the time 
-to review the series.
-
-v/r,
-dps
+diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+index 5c865987ba5c..30e953988cab 100644
+--- a/drivers/char/tpm/tpm_vtpm_proxy.c
++++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -683,37 +683,21 @@ static struct miscdevice vtpmx_miscdev = {
+ 	.fops = &vtpmx_fops,
+ };
+ 
+-static int vtpmx_init(void)
+-{
+-	return misc_register(&vtpmx_miscdev);
+-}
+-
+-static void vtpmx_cleanup(void)
+-{
+-	misc_deregister(&vtpmx_miscdev);
+-}
+-
+ static int __init vtpm_module_init(void)
+ {
+ 	int rc;
+ 
+-	rc = vtpmx_init();
+-	if (rc) {
+-		pr_err("couldn't create vtpmx device\n");
+-		return rc;
+-	}
+-
+ 	workqueue = create_workqueue("tpm-vtpm");
+ 	if (!workqueue) {
+ 		pr_err("couldn't create workqueue\n");
+-		rc = -ENOMEM;
+-		goto err_vtpmx_cleanup;
++		return -ENOMEM;
+ 	}
+ 
+-	return 0;
+-
+-err_vtpmx_cleanup:
+-	vtpmx_cleanup();
++	rc = misc_register(&vtpmx_miscdev);
++	if (rc) {
++		pr_err("couldn't create vtpmx device\n");
++		destroy_workqueue(workqueue);
++	}
+ 
+ 	return rc;
+ }
+@@ -721,7 +705,7 @@ static int __init vtpm_module_init(void)
+ static void __exit vtpm_module_exit(void)
+ {
+ 	destroy_workqueue(workqueue);
+-	vtpmx_cleanup();
++	misc_deregister(&vtpmx_miscdev);
+ }
+ 
+ module_init(vtpm_module_init);
+-- 
+2.39.2
 
