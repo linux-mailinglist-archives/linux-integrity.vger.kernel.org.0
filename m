@@ -2,108 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5A8705C46
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 May 2023 03:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A8C706816
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 May 2023 14:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjEQBTQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 May 2023 21:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
+        id S230378AbjEQM2l (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 May 2023 08:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbjEQBTL (ORCPT
+        with ESMTP id S230307AbjEQM2k (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 May 2023 21:19:11 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED3946B8;
-        Tue, 16 May 2023 18:18:57 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H1Brql017084;
-        Wed, 17 May 2023 01:18:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=vIE2W4w77++8cdSRWw17/uGI+S/ioy1NWgJSZqgWq0k=;
- b=Say9xVllENx5owHUYNktS930wTKTj8lYf4apWDiNJdmpkFN1fzA4xTIhwLDuA4L5zsrJ
- 34n+lbO/P2Lmr4FjE3CSCZdrofFeXXRTgioGz0U31BpRh4j7QfSA6HxxtJHPjE0h1Sz6
- diqtBA7PNZlLOjYUt07LJF6fcl3T1cJj4Hzxusz8QC2ccj1toR2v+26xc2GOHeaFRcM5
- sC0o7moIQWWxPEHc04l39r7n/5Zqwdc8+LYNW5gtJkkzkJ7LSeG5dsV5Kz7lwoSYhjsz
- NmyMY+IZJtnGzfD6VzClwT0I/cRc4J/Kd0Y9GDj1Ql99a2GJ1rRRFPeylz+stamOoldo zw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmn22r4hu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 01:18:36 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34H1EoQV024877;
-        Wed, 17 May 2023 01:18:35 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmn22r4h6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 01:18:35 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H0JDLU025221;
-        Wed, 17 May 2023 01:18:34 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3qj265yy73-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 01:18:34 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34H1IXeB31392250
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 01:18:33 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE9915805D;
-        Wed, 17 May 2023 01:18:32 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C63755805C;
-        Wed, 17 May 2023 01:18:30 +0000 (GMT)
-Received: from sig-9-77-133-203.ibm.com (unknown [9.77.133.203])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 17 May 2023 01:18:30 +0000 (GMT)
-Message-ID: <e8c470bcf50282680300cd04a6aba0d0dbdef035.camel@linux.ibm.com>
-Subject: Re: [PATCH 3/3] integrity: Remove EXPERIMENTAL from Kconfig
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
-        dwmw2@infradead.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, jlee@suse.com, kanth.ghatraju@oracle.com,
-        konrad.wilk@oracle.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Tue, 16 May 2023 21:18:30 -0400
-In-Reply-To: <20230508220708.2888510-4-eric.snowberg@oracle.com>
-References: <20230508220708.2888510-1-eric.snowberg@oracle.com>
-         <20230508220708.2888510-4-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LwaftEa0i45zaMhbeCaoP0_meuq_ur0_
-X-Proofpoint-GUID: YOAFi2lIcuThCqoQJupaJ-ottlMst4CO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- suspectscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305170006
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 08:28:40 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF6B10DA;
+        Wed, 17 May 2023 05:28:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684326519; x=1715862519;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=X2f39L4vZwZUOK/jkj4uPaCR2SriTj538cYcK+gs4jo=;
+  b=hx7hLmchS1rMD/O8DpfUT2UC+A91YI09d3x15i618uekizG3On7Sn2L1
+   ydJhINEr0oZi/QfLm4qn7M3jsIIvT/G2jdcyXNToIC04qEXTEGFTgpO/y
+   HsD59ijFc8f+iBFRyP3vagbVxphUxb5ebOtCaLI7mxDoyxRYzTIlBA+IM
+   UhYxeiBqAB9Yx20gw+kw551WsMTe8qYkNBhfXtKr2L69rXVV2Elv8ctGx
+   BrEwQOUFxQBHJIWDOth7PuyV0QDDdrkGcAG8D0Tmu6BhaGcm27DnzhUqO
+   vvorbJI327KHVImdHIlFk6QggqPVtzc9wvGU4AqMlr4IRGDzoa3trSw1s
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="415156753"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="415156753"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 05:28:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="652213946"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="652213946"
+Received: from fabiobar-mobl.ger.corp.intel.com (HELO pujfalus-desk.ger.corp.intel.com) ([10.251.219.163])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 05:28:35 -0700
+From:   Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+To:     peterhuewe@gmx.de, jarkko@kernel.org
+Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        peter.ujfalusi@linux.intel.com, jsnitsel@redhat.com
+Subject: [PATCH - for 6.4] tpm: tpm_tis: Disable interrupts for AEON UPX-i11
+Date:   Wed, 17 May 2023 15:29:31 +0300
+Message-Id: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-05-08 at 18:07 -0400, Eric Snowberg wrote:
-> Remove the EXPERIMENTAL from the
-> IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY Kconfig
-> now that digitalSignature usage enforcement is set.
-> 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+The interrupts initially works on the device but they will stop arriving
+after about 200 interrupts.
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+On system reboot/shutdown this will cause a long wait (120000 jiffies).
+
+The interrupts on this device got enabled by commit
+e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+
+Prior to this point the interrupts were not enabled on this machine.
+
+Complements: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+---
+Hi,
+
+This patch applies on top of mainline since 6.4-rc1 takes about 2 minutes to
+reboot on this machine, linux-next have
+e7d3e5c4b1dd tpm/tpm_tis: Disable interrupts for more Lenovo devices
+
+I'm not sure if I shouold send this on top of next or mainline is fine, please
+let me know the preferred way to get this to 6.4.
+
+Regards,
+Peter
+
+ drivers/char/tpm/tpm_tis.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index 7af389806643..aad682c2ab21 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -122,6 +122,13 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
+ 		},
+ 	},
++	{
++		.callback = tpm_tis_disable_irq,
++		.ident = "UPX-TGL",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "AAEON"),
++		},
++	},
+ 	{}
+ };
+ 
+-- 
+2.40.1
 
