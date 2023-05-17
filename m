@@ -2,97 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B30706EC8
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 May 2023 18:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E7A706EE4
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 May 2023 18:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjEQQxk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 May 2023 12:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
+        id S229654AbjEQQ7F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 May 2023 12:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjEQQxG (ORCPT
+        with ESMTP id S229510AbjEQQ7E (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 May 2023 12:53:06 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A5C59F6
-        for <linux-integrity@vger.kernel.org>; Wed, 17 May 2023 09:52:40 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bc456cc39so1563069a12.1
-        for <linux-integrity@vger.kernel.org>; Wed, 17 May 2023 09:52:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684342357; x=1686934357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WbLIWNwbWi1oPfkJYehay++7vldUE9mgEn/i2k6StuA=;
-        b=LOT6zd+dCqQmaTvAuzv+iEr0Jw4BhTBe521buKQszAUMoN1iBVTP9sWxjD8uf8VN2d
-         jl6HA6GVlY3gmKGnODyfN7mElerddiKMdf+q0GNJ659dsKmskJOC1wlUfdZY1nYkub4a
-         zl8RwPvQ+lareVeMcG84Xi48Aa8OFZ9lN1HsQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684342357; x=1686934357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WbLIWNwbWi1oPfkJYehay++7vldUE9mgEn/i2k6StuA=;
-        b=VnG7FFeCoQx4ZDb/HKZlA5uN8C/grU7SrjcpXqBtnSxRiUD5OJfNhtzOz/5tUBzKCQ
-         Jm8/1WyXptbGgCSS/Qrssr7Av2ME1aaIQtRq0FjkP7RWEiQA0+QxxVt8R9F+0+Zct5Qj
-         /5vJBHZQHJ34NmaCYwnf9D/ElcbD1j3qoJeD1MGhCO8/B/prpORj95dXJB7YKI2KlM/O
-         z1IxGhhSBWHttosfEJuaeRgqht+OVgClRDjxFSFp+K2n4pO8XKWizcF/oKyrCYthHTBc
-         tb3a8/ae1pSq4viKxpLu6GJ0LedHH9W/Ma+tJXu6UsXfpCcAplrjxysShNBb5JW3TItT
-         UmJA==
-X-Gm-Message-State: AC+VfDysGlaBB56MKMH7d76wwrgy2Gb21n/jQ2KO8WlU5dhT+oShyGV+
-        Am86iZpTIxUM8Z5e3EDYShZ3Eo/tYi15NHcQ2jfEqDd/
-X-Google-Smtp-Source: ACHHUZ7xsWBR5HX6Ur2r9D0gXsD/yGZEbuw7Stxkg25sd+4G5rwheNuwlf8AHtuFfeW2JNXV70Ljew==
-X-Received: by 2002:a17:906:478b:b0:96b:1608:3563 with SMTP id cw11-20020a170906478b00b0096b16083563mr11724591ejc.58.1684342356956;
-        Wed, 17 May 2023 09:52:36 -0700 (PDT)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id hg14-20020a1709072cce00b009662de1937dsm12496062ejc.131.2023.05.17.09.52.36
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 09:52:36 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-96a2b6de3cbso156765766b.1
-        for <linux-integrity@vger.kernel.org>; Wed, 17 May 2023 09:52:36 -0700 (PDT)
-X-Received: by 2002:a17:907:7d9e:b0:969:f54c:dee2 with SMTP id
- oz30-20020a1709077d9e00b00969f54cdee2mr28364544ejc.26.1684342355901; Wed, 17
- May 2023 09:52:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230516000208.4008443-1-jarkko@kernel.org>
-In-Reply-To: <20230516000208.4008443-1-jarkko@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 17 May 2023 09:52:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiEYewsSM0SbdBbdX2DhUNcaZptvS8NPKZES41vr_H=bA@mail.gmail.com>
-Message-ID: <CAHk-=wiEYewsSM0SbdBbdX2DhUNcaZptvS8NPKZES41vr_H=bA@mail.gmail.com>
+        Wed, 17 May 2023 12:59:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D277A44A3;
+        Wed, 17 May 2023 09:59:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A73163BC6;
+        Wed, 17 May 2023 16:59:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C3952C433D2;
+        Wed, 17 May 2023 16:59:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684342742;
+        bh=ERXUBXNpQ1MjhATCNmLtRdswE1u494Y+EiberA5l7zA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=uYy8ihrQj1klfAplJHR/dG+NykmbQn0SBEqzRPUCuwarrx8wSq/MmmcLSl4vrULF9
+         TGEwpMLPIPE9BO43LkW/Fx2geC2Qm+4/CxaFKx6nrHAWZDPiyGYWXaWF6xoD33/EIZ
+         A82cAZK0KLtuzmqt5f87FanrIAUWUhiGUJPHyG3LRDkxFw1CCoAFVZf5ZvE0BUWKpf
+         VelXzXH14jeBVu2emHd8pyYRPBGlyrG5qFs3i9IWA0xDL9j/tOK3W3tJcqYCIlu/dL
+         59H5NZ80QpbB8b26i3W9Xwr8YocTAYiq9eKVVaOjrKDk46nPu5Vbyw2z+5deafyxNK
+         EPrkykkHlsnPQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B1B60E5421C;
+        Wed, 17 May 2023 16:59:02 +0000 (UTC)
 Subject: Re: [GIT PULL] tpmdd: three bug fixes for v6.4-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230516000208.4008443-1-jarkko@kernel.org>
+References: <20230516000208.4008443-1-jarkko@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230516000208.4008443-1-jarkko@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkkojs/linux-tpmdd.git/ tpmdd-v6.4-rc2
+X-PR-Tracked-Commit-Id: e7d3e5c4b1dd50a70b31524c3228c62bb41bbab2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: cba582631ee40772c6dbe24e945b9173572dfca0
+Message-Id: <168434274271.11371.345913756875656071.pr-tracker-bot@kernel.org>
+Date:   Wed, 17 May 2023 16:59:02 +0000
 To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, May 15, 2023 at 5:02=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org>=
- wrote:
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/jarkkojs/linux-tpmdd.git/=
- tpmdd-v6.4-rc2
+The pull request you sent on Tue, 16 May 2023 03:02:08 +0300:
 
-That didn't work at all.
+> git://git.kernel.org/pub/scm/linux/kernel/git/jarkkojs/linux-tpmdd.git/ tpmdd-v6.4-rc2
 
-That "jarkkojs" part of the path seems to be just wrong, and it should
-be - like always before - just "jarkko".
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/cba582631ee40772c6dbe24e945b9173572dfca0
 
-I pulled it from the correct location, but I don't know how you messed
-that up - maybe just a fat-fingered mistaken edit, or maybe something
-else.
+Thank you!
 
-So you might try to see what went wrong...
-
-              Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
