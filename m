@@ -2,96 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DF37087C7
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 May 2023 20:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084817087E4
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 May 2023 20:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjERS3h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 May 2023 14:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
+        id S229967AbjERSiK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 May 2023 14:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjERS3g (ORCPT
+        with ESMTP id S229934AbjERSiJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 May 2023 14:29:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5B71B6
-        for <linux-integrity@vger.kernel.org>; Thu, 18 May 2023 11:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684434528;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZoOCyUhfshjqiWx1RRGNm+zxB7amhG6MwKVi2N7UXyc=;
-        b=UI/PjRfEAKrFiWKjf8fISTg6AEyXPzMiCsFhglIv+hvqLWQqNU373i70pzSrJteHYzEVZj
-        JYdiLTdoVvVqcHn7sTgEesR+d8qObsXVIyr6cqYjCO3MnQK9nlauo58lV4IUUKWUQc0LPi
-        oIaKpQFU34PN2YoqKlmwtSxBcoF/3WE=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-298-O-ko5b3GNF2Z3eLEROJ04g-1; Thu, 18 May 2023 14:28:46 -0400
-X-MC-Unique: O-ko5b3GNF2Z3eLEROJ04g-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f6872ff794so18744051cf.1
-        for <linux-integrity@vger.kernel.org>; Thu, 18 May 2023 11:28:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684434526; x=1687026526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZoOCyUhfshjqiWx1RRGNm+zxB7amhG6MwKVi2N7UXyc=;
-        b=UskmZ3kL/Aj+0cQIfmAi3VHDv1mjmcp/PsXX69lPadT8Ln+L5iFk6vV5pnfcRrfpAj
-         6rqp1oys/0NFYTcyONGWYtia1rF9POwsLqO+ziTtbgq2SMPDn1xBJUkS2yS44nH+Z7yf
-         XERgsOqo2fmAYpbsxBeX9YF83Jg+XhArn2p1QjSFRHYWI0HgcIt94ejjOKON3D+oyzLj
-         QLBmCkf+Er3BgpD3MVOVw81UbpgsM9JflT/6/kR8uo0CswbZcoMT7+kYgQyHV9hRtUL2
-         3z7zBJVUjvMoojhldEnM8HJwC3aNcB8/0lzwnw65MLCwJ21c13D0ANu6lY2xldwRU7tY
-         SvhQ==
-X-Gm-Message-State: AC+VfDysm3Uj7WsPwVKhi28NHl24zrnQbwH29gxoNfwK8VZCNsSsHnDT
-        bzuW9hWfVS7TEHRoxV1J7dHAS4CV3U0KFcH3Bi2FAeTZ4G4NT+sYwtV7R2+CIl5T9xaJASds62P
-        6c8/kzI66HplNx/Lbbe6RSmx+G86q
-X-Received: by 2002:a05:622a:152:b0:3f5:41d9:fddb with SMTP id v18-20020a05622a015200b003f541d9fddbmr1163444qtw.47.1684434526269;
-        Thu, 18 May 2023 11:28:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ78W2zAGWvSvDR1brUGAqTFQs3yXE6GKD14ttBdpFaqUXpLV7M9B6iNBpNGztxVS1Q6I6uXdw==
-X-Received: by 2002:a05:622a:152:b0:3f5:41d9:fddb with SMTP id v18-20020a05622a015200b003f541d9fddbmr1163415qtw.47.1684434526063;
-        Thu, 18 May 2023 11:28:46 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id x5-20020a05620a01e500b0074fb15e2319sm557599qkn.122.2023.05.18.11.28.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 11:28:45 -0700 (PDT)
-Date:   Thu, 18 May 2023 11:28:43 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>, stable@vger.kernel.org,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts for more Lenovo devices
-Message-ID: <h7pelzgnae6kgrydhbp2ffoj4xctux3vx3s5yhiexskaykhcha@stxphc5cc3gy>
-References: <20230511005403.24689-1-jsnitsel@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511005403.24689-1-jsnitsel@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 18 May 2023 14:38:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDE5E5A;
+        Thu, 18 May 2023 11:38:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F73C64477;
+        Thu, 18 May 2023 18:38:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B17C4339C;
+        Thu, 18 May 2023 18:37:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684435080;
+        bh=r+ClYm7GTru2kk362VSMk6GPkzRzYA5gxt+SrnLlS+8=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=rlRlzMWWHdRvAFU4VZW8wbNtz9nY2h3t+x3ZUS31ThHm3Qns04PWlvwupH8MPrAVa
+         VP3kmZje7f0TbnusH1O8DtC+lKEDf55reX+IfUhH4vUbYD9/UhLkJwGpodQstbheEY
+         MnmHYvG9i/i78904SKjNourhsFGx8gA793LTcxH0g9M9iLlYwbC8io9IShaq+ixrCc
+         FZt+QRrwIKUkKagJr5yttJ6DV8jwffzqVSDoeETGFGgj6yKko49dYCDJsoLXHqZLbA
+         wjQVmnEdrpLzob8jovr+tnjC/ZcgDfWy5QuCY8zgoE77MOSILLUfzhCISUyMK6j5dC
+         sWdPrKhfIC0Zg==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 18 May 2023 21:37:56 +0300
+Message-Id: <CSPMEFNB9ADX.1N4JNLRA0A9TD@suppilovahvero>
+Cc:     <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
+        <jsnitsel@redhat.com>
+Subject: Re: [PATCH - for 6.4] tpm: tpm_tis: Disable interrupts for AEON
+ UPX-i11
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Peter Ujfalusi" <peter.ujfalusi@linux.intel.com>,
+        <peterhuewe@gmx.de>
+X-Mailer: aerc 0.14.0
+References: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
+In-Reply-To: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 10, 2023 at 05:54:03PM -0700, Jerry Snitselaar wrote:
-> The P360 Tiny suffers from an irq storm issue like the T490s, so add
-> an entry for it to tpm_tis_dmi_table, and force polling. There also
-> previously was a report from the previous attempt to enable interrupts
-> that involved a ThinkPad L490. So an entry is added for it as well.
-> 
-> Reported-by: Peter Zijlstra <peterz@infradead.org> # P360 Tiny
-> Closes: https://lore.kernel.org/linux-integrity/20230505130731.GO83892@hirez.programming.kicks-ass.net/
-> Cc: stable@vger.kernel.org # 6.2
+On Wed May 17, 2023 at 3:29 PM EEST, Peter Ujfalusi wrote:
+> The interrupts initially works on the device but they will stop arriving
+> after about 200 interrupts.
+>
+> On system reboot/shutdown this will cause a long wait (120000 jiffies).
+>
+> The interrupts on this device got enabled by commit
+> e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+>
+> Prior to this point the interrupts were not enabled on this machine.
+>
+> Complements: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
 
-For the stable folks this can be ignored though it won't hurt anything if someone does
-backport it. The code enabling interrupts went into 6.4-rc1, not 6.2.
+Complements -> Fixes
 
-Regards,
-Jerry
+> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> ---
+> Hi,
+>
+> This patch applies on top of mainline since 6.4-rc1 takes about 2 minutes=
+ to
+> reboot on this machine, linux-next have
+> e7d3e5c4b1dd tpm/tpm_tis: Disable interrupts for more Lenovo devices
+>
+> I'm not sure if I shouold send this on top of next or mainline is fine, p=
+lease
+> let me know the preferred way to get this to 6.4.
+>
+> Regards,
+> Peter
+>
+>  drivers/char/tpm/tpm_tis.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index 7af389806643..aad682c2ab21 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -122,6 +122,13 @@ static const struct dmi_system_id tpm_tis_dmi_table[=
+] =3D {
+>  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
+>  		},
+>  	},
+> +	{
+> +		.callback =3D tpm_tis_disable_irq,
+> +		.ident =3D "UPX-TGL",
+> +		.matches =3D {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "AAEON"),
+> +		},
+> +	},
+>  	{}
+>  };
+> =20
+> --=20
+> 2.40.1
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko
 
