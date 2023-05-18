@@ -2,65 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7FD70896E
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 May 2023 22:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B217089BF
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 May 2023 22:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjERUX2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 May 2023 16:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S230147AbjERUqz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 May 2023 16:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjERUX1 (ORCPT
+        with ESMTP id S230144AbjERUqs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 May 2023 16:23:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A817130;
-        Thu, 18 May 2023 13:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684441406; x=1715977406;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ybjj05zy7xSUH4PUjMHoDZVpWTZZESgAwZFWIP9wSvg=;
-  b=Yg8sf6/MLUrt7o7pn8t4iHx/QaJThJNO3csYy/J67K0iw19dIXh3lAdl
-   5UfsgFCRWFek4Y3G3wI1RnRwbCwVkn92IS1tl/iHaSEkk6LrMlp+SfhVl
-   8VaE0zLU+tfNtYdKvXHfIO7csf2DWbzLdkhJMpe+aFXElz/0WkpZaH45x
-   i9lQSYO/l9xQDHC32y0tMFGqUeLdQOqfPwi/vGLu5CypkNgcsJaC+fmps
-   sh4B1Q3Le6D6sfgLpT+ThLo0UPGbdqZEfmiX90+cKn1HjwHYu2eVplneZ
-   t2d3yDnQiFvoSmwROr91x4dRqG3xr03yvkjDWEouykofiy5YOs0hnaaTU
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="355402892"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="355402892"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 13:23:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="652801626"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="652801626"
-Received: from ibanaga-mobl.ger.corp.intel.com (HELO [10.252.50.207]) ([10.252.50.207])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 13:23:22 -0700
-Message-ID: <432df3cf-da16-1f2a-02dc-e2c371c1f29c@linux.intel.com>
-Date:   Thu, 18 May 2023 23:24:19 +0300
+        Thu, 18 May 2023 16:46:48 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A9410D0
+        for <linux-integrity@vger.kernel.org>; Thu, 18 May 2023 13:46:42 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-561d249f045so20473547b3.2
+        for <linux-integrity@vger.kernel.org>; Thu, 18 May 2023 13:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1684442801; x=1687034801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ceRGVx/G/DIAtzoiWa4XydM/1i0e0FVfY4COrvhs3MU=;
+        b=f3lAmIY6pXJsw2oWtyM6mMS+jpx4Rl6M61SR+LixhHxuPTSkl55UpVUTtpqAtW3ECd
+         SkSHp6dsMUTIQRXyCa/VmIfIQde+Cblzk7shN4RTrv0X6+n3vGG+Rboae9GqEYkOzbRt
+         KgJC4j0T2KzDHYkhHZ05XlH1G54OSrIQTPu/TmiNKqM+2WhiNsqvxquIj/YfL2hni7Md
+         oLXb4ehJX/DBoA8ETkFhdpgb7nXMYkogVAbgvK9UgJAEoqNteYa2Z0jVmt37lwJAt8Nq
+         jT8MDtSQh8Fn9jZ8VpWQo29agACImh5m8pOaCUvbjB82agUALx82/JX/2CzsKZYI+Kzg
+         1NVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684442801; x=1687034801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ceRGVx/G/DIAtzoiWa4XydM/1i0e0FVfY4COrvhs3MU=;
+        b=UPsPZAdHgPoul/rOMi2Fr5ctPsgoARh2XGTkvrlcrFPoJEzUOrAD2H0keEHfssWclX
+         zOtIXbjRm2BJ5ZJrOHuCVrT81vLg9D69fl3pa187K3vDjuSdC5A+61OmPL3jylemkZAU
+         Oq2+/Zx0NN3DmsF1RHP5G83ofmfc9dmFDYyBugxr0zrKyLr9HPWGPELIdZDvnfJIMWrL
+         BQldm7+dWb6BaZamzdmAWsTu8CPk8ui2Q4piJ27xUQTBiK3JBwesgQVmEk6uBR9e8IKs
+         C65os2GUeHfgbJEwd2N4EyI6BatYCoucXuxyc08qdlvxcC/yUo9pOXd358o8h4jY+9Nr
+         27NA==
+X-Gm-Message-State: AC+VfDz7WGq8azMOXONeekw83fwqKXIGeLxonR7LpCWY236fcM2dd8Eu
+        NbEqN263YKYBDUJQNOgJeLeY/IkJ89MRyMRwCuKQ
+X-Google-Smtp-Source: ACHHUZ4eL17jrcySmxt9X35Rh5Et3YQ+GGqU79cdnwTL2tIi9T9iIRnbebiNAOfzGfnlla+q/zh/RWedcu4H6IybIdI=
+X-Received: by 2002:a25:aba5:0:b0:ba8:1089:3338 with SMTP id
+ v34-20020a25aba5000000b00ba810893338mr264525ybi.39.1684442801146; Thu, 18 May
+ 2023 13:46:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH - for 6.4] tpm: tpm_tis: Disable interrupts for AEON
- UPX-i11
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com
-References: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
- <ohdpul6hax5bj5hhsnpt7i3ejbttivufmoolzunbhipexjkczi@meg3zx2yqkc7>
- <CSPMQ03V3G7G.EBWKDRE4B0XY@suppilovahvero>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-In-Reply-To: <CSPMQ03V3G7G.EBWKDRE4B0XY@suppilovahvero>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
+ <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org> <cbffa3dee65ecc0884dd16eb3af95c09a28f4297.camel@linux.ibm.com>
+In-Reply-To: <cbffa3dee65ecc0884dd16eb3af95c09a28f4297.camel@linux.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 18 May 2023 16:46:30 -0400
+Message-ID: <CAHC9VhSeBn-4UN48NcQWhJqLvQuydt4OvdyUsk9AXcviJ9Cqyw@mail.gmail.com>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after writes
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,84 +76,156 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, Apr 21, 2023 at 10:44=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> w=
+rote:
+> On Fri, 2023-04-07 at 09:29 -0400, Jeff Layton wrote:
+> > > > > >
+> > > > > > I would ditch the original proposal in favor of this 2-line pat=
+ch shown here:
+> > > > > >
+> > > > > > https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468=
+-ecbde3b221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
+> > >
+> > > We should cool it with the quick hacks to fix things. :)
+> > >
+> >
+> > Yeah. It might fix this specific testcase, but I think the way it uses
+> > the i_version is "gameable" in other situations. Then again, I don't
+> > know a lot about IMA in this regard.
+> >
+> > When is it expected to remeasure? If it's only expected to remeasure on
+> > a close(), then that's one thing. That would be a weird design though.
+>
+> Historical background:
+>
+> Prior to IMA being upstreamed there was a lot of discussion about how
+> much/how frequently to measure files.  Re-measuring files after each
+> write would impact performance.  Instead of re-measuring files after
+> each write, if a file already opened for write was opened for read
+> (open writers) or a file already opened for read was opened for write
+> (Time of Measure/Time of Use) the IMA meausrement list was invalidated
+> by including a violation record in the measurement list.
+>
+> Only the BPRM hook prevents a file from being opened for write.
+>
+> >
+> > > > > >
+> > > > > >
+> > > > >
+> > > > > Ok, I think I get it. IMA is trying to use the i_version from the
+> > > > > overlayfs inode.
+> > > > >
+> > > > > I suspect that the real problem here is that IMA is just doing a =
+bare
+> > > > > inode_query_iversion. Really, we ought to make IMA call
+> > > > > vfs_getattr_nosec (or something like it) to query the getattr rou=
+tine in
+> > > > > the upper layer. Then overlayfs could just propagate the results =
+from
+> > > > > the upper layer in its response.
+> > > > >
+> > > > > That sort of design may also eventually help IMA work properly wi=
+th more
+> > > > > exotic filesystems, like NFS or Ceph.
+> > > > >
+> > > > >
+> > > > >
+> > > >
+> > > > Maybe something like this? It builds for me but I haven't tested it=
+. It
+> > > > looks like overlayfs already should report the upper layer's i_vers=
+ion
+> > > > in getattr, though I haven't tested that either:
+> > > >
+> > > > -----------------------8<---------------------------
+> > > >
+> > > > [PATCH] IMA: use vfs_getattr_nosec to get the i_version
+> > > >
+> > > > IMA currently accesses the i_version out of the inode directly when=
+ it
+> > > > does a measurement. This is fine for most simple filesystems, but c=
+an be
+> > > > problematic with more complex setups (e.g. overlayfs).
+> > > >
+> > > > Make IMA instead call vfs_getattr_nosec to get this info. This allo=
+ws
+> > > > the filesystem to determine whether and how to report the i_version=
+, and
+> > > > should allow IMA to work properly with a broader class of filesyste=
+ms in
+> > > > the future.
+> > > >
+> > > > Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > > ---
+> > >
+> > > So, I think we want both; we want the ovl_copyattr() and the
+> > > vfs_getattr_nosec() change:
+> > >
+> > > (1) overlayfs should copy up the inode version in ovl_copyattr(). Tha=
+t
+> > >     is in line what we do with all other inode attributes. IOW, the
+> > >     overlayfs inode's i_version counter should aim to mirror the
+> > >     relevant layer's i_version counter. I wouldn't know why that
+> > >     shouldn't be the case. Asking the other way around there doesn't
+> > >     seem to be any use for overlayfs inodes to have an i_version that
+> > >     isn't just mirroring the relevant layer's i_version.
+> >
+> > It's less than ideal to do this IMO, particularly with an IS_I_VERSION
+> > inode.
+> >
+> > You can't just copy up the value from the upper. You'll need to call
+> > inode_query_iversion(upper_inode), which will flag the upper inode for =
+a
+> > logged i_version update on the next write. IOW, this could create some
+> > (probably minor) metadata write amplification in the upper layer inode
+> > with IS_I_VERSION inodes.
+> >
+> >
+> > > (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
+> > >     Currently, ima assumes that it will get the correct i_version fro=
+m
+> > >     an inode but that just doesn't hold for stacking filesystem.
+> > >
+> > > While (1) would likely just fix the immediate bug (2) is correct and
+> > > _robust_. If we change how attributes are handled vfs_*() helpers wil=
+l
+> > > get updated and ima with it. Poking at raw inodes without using
+> > > appropriate helpers is much more likely to get ima into trouble.
+> >
+> > This will fix it the right way, I think (assuming it actually works),
+> > and should open the door for IMA to work properly with networked
+> > filesystems that support i_version as well.
+>
+> On a local filesystem, there are guarantees that the calculated file
+> hash is that of the file being used.  Reminder IMA reads a file, page
+> size chunk at a time into a single buffer, calculating the file hash.
+> Once the file hash is calculated, the memory is freed.
+>
+> There are no guarantees on a fuse filesystem, for example, that the
+> original file read and verified is the same as the one being executed.
+> I'm not sure that the integrity guarantees of a file on a remote
+> filesystem will be the same as those on a local file system.
+>
+> >
+> > Note that there Stephen is correct that calling getattr is probably
+> > going to be less efficient here since we're going to end up calling
+> > generic_fillattr unnecessarily, but I still think it's the right thing
+> > to do.
+> >
+> > If it turns out to cause measurable performance regressions though,
+> > maybe we can look at adding a something that still calls ->getattr if i=
+t
+> > exists but only returns the change_cookie value.
+>
+> Sure.  For now,
+>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
+I'm going through my review queue to make sure I haven't missed
+anything and this thread popped up ... Stefan, Mimi, did you get a fix
+into an upstream tree somewhere?  If not, is it because you are
+waiting on a review/merge from me into the LSM tree?
 
-On 18/05/2023 21:53, Jarkko Sakkinen wrote:
-> On Thu May 18, 2023 at 9:50 PM EEST, Jerry Snitselaar wrote:
->> On Wed, May 17, 2023 at 03:29:31PM +0300, Peter Ujfalusi wrote:
->>> The interrupts initially works on the device but they will stop arriving
->>> after about 200 interrupts.
->>>
->>> On system reboot/shutdown this will cause a long wait (120000 jiffies).
->>>
->>> The interrupts on this device got enabled by commit
->>> e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
->>>
->>> Prior to this point the interrupts were not enabled on this machine.
->>>
->>> Complements: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
->>> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
->>> ---
->>> Hi,
->>>
->>> This patch applies on top of mainline since 6.4-rc1 takes about 2 minutes to
->>> reboot on this machine, linux-next have
->>> e7d3e5c4b1dd tpm/tpm_tis: Disable interrupts for more Lenovo devices
->>>
->>> I'm not sure if I shouold send this on top of next or mainline is fine, please
->>> let me know the preferred way to get this to 6.4.
->>>
->>> Regards,
->>> Peter
->>>
->>>  drivers/char/tpm/tpm_tis.c | 7 +++++++
->>>  1 file changed, 7 insertions(+)
->>>
->>> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
->>> index 7af389806643..aad682c2ab21 100644
->>> --- a/drivers/char/tpm/tpm_tis.c
->>> +++ b/drivers/char/tpm/tpm_tis.c
->>> @@ -122,6 +122,13 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
->>>  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
->>>  		},
->>>  	},
->>> +	{
->>> +		.callback = tpm_tis_disable_irq,
->>> +		.ident = "UPX-TGL",
->>
->> Is this the product version returned by dmidecode? If yes,
->> then the entry could be made more specific by adding a
->> DMI_MATCH(DMI_PRODUCT_VERSION, "UPX-TGL"), and only disable
->> for this device instead of any system that matches the vendor
->> AAEON.
-
-The version is used to differentiate the revisions of the UPX-i11
-boards, and this issue present in all revisions.
-
-> I can squash this to the commit I pushed (it is not yet mirrored
-> to linux-next), if I get the dmidecode info.
-
-System Information
-        Manufacturer: AAEON
-        Product Name: UPX-TGL01
-        Version: V1.0
-        Serial Number: Default string
-        UUID: a300091d-fb1c-ce1c-1d30-0007328efc11
-        Wake-up Type: Power Switch
-        SKU Number: Default string
-        Family: Default string
-
-I have used this description as it it is used for SOF, probably
-DMI_MATCH(DMI_PRODUCT_NAME, "UPX-TGL01")
-should be added?
-
-Oh, yes, the product name match should be there, we have TigerLake
-specific matching, so SOF is looking for AAEON device with TGL.
-
-Sorry for missing this.
-
-> 
-> BR, Jarkko
-
--- 
-Péter
+--=20
+paul-moore.com
