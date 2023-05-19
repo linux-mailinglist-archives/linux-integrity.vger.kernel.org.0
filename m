@@ -2,101 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C390D709ABC
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 May 2023 16:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA7370A003
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 May 2023 21:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbjESO6o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 May 2023 10:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S230477AbjESTm4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 May 2023 15:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbjESO6n (ORCPT
+        with ESMTP id S229788AbjESTmz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 May 2023 10:58:43 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960CEC7
-        for <linux-integrity@vger.kernel.org>; Fri, 19 May 2023 07:58:42 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-561bb2be5f8so42908057b3.0
-        for <linux-integrity@vger.kernel.org>; Fri, 19 May 2023 07:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684508322; x=1687100322;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AajyqWszb0uY6qD9cS3VXYrfDU988bXtZCs1rPMruhw=;
-        b=CVjYLnK8pZSm+0s+2JgmOpL6fd7Fh3xe0DrvRV47kW58O8GUdqascT+ihAWb+4/PB5
-         57l1fSbdpzDrjebhCKxmt8dH+h8nzNnzfGUC6O47kcvj+/tq7D0PSJjuIJJayEMDuPTp
-         RZmYcbvGlGStIcUkuVCBO7399/guNv++G9I5Asoz5DROlHagoZjpYdqO7T9i1NOAzJ1w
-         Du4lToaIIcFchOrn0Nn//43a6dCasI0vQfLXRVHExkpStSbCh+g9ayLmw5x0ghVHqblw
-         Dsm6QLKodk9RMwxd+A5A9Ln0JG71pTOJEq/9kFiLF97zE4pLcdM5N8FRzbB5GfM0mP18
-         P5iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684508322; x=1687100322;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AajyqWszb0uY6qD9cS3VXYrfDU988bXtZCs1rPMruhw=;
-        b=PsqBc8wy0yG7UtLBBa4/uqWuDmSXX6C5Sajgftlah4HM05RboCRjJCN+sPsJz04BNH
-         9laSe6rQ7c2TYoBlh2YdE2aPeZxbrO1hUf5gcm6B6oxLgVJiiaB3NO+/jE3xxyhCAokG
-         AnZWDWZlgSUHiyLhf/N7Cxd13XYvpWfbRU5j38HQvr64Rg71tp3szIVsESulZy3eapic
-         ginsknPlB2RnUbPrnhA0vxUBPwsFHUpRkzOlAKemnBgWvXM3UqdCwd0fXmqP1AroLHnE
-         sA2+U7R9a7gAdBerFH8ueaoMzLv4sb0Q5X2tfpfCkJDv5SinjswXmRu5GUY1KeVYyb6f
-         pzTw==
-X-Gm-Message-State: AC+VfDxjMhM3XnI0BUuEm6f295At0bFAsENHdE+yaKGWFzXo4yQfunYZ
-        iJDv0WPr6QpPXGBoJRHxlWz98FfpEZEeGrjOAg8tjpLUdgmn3Ys=
-X-Google-Smtp-Source: ACHHUZ4wVQ8Htbed+cTytEWUQf0lb6NRULZiiMX8VBBzsWBICc5rj9+tiqRxdZAlDEbFGOiNVwJSMMDulwZ/apnybkg=
-X-Received: by 2002:a81:4e92:0:b0:561:d6dd:bc84 with SMTP id
- c140-20020a814e92000000b00561d6ddbc84mr2216527ywb.48.1684508321812; Fri, 19
- May 2023 07:58:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
- <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
- <cbffa3dee65ecc0884dd16eb3af95c09a28f4297.camel@linux.ibm.com>
- <CAHC9VhSeBn-4UN48NcQWhJqLvQuydt4OvdyUsk9AXcviJ9Cqyw@mail.gmail.com> <49a31515666cb0ecf78909f09d40d29eb5528e0f.camel@linux.ibm.com>
-In-Reply-To: <49a31515666cb0ecf78909f09d40d29eb5528e0f.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 19 May 2023 10:58:30 -0400
-Message-ID: <CAHC9VhS7uMMgvwRRDzpZPUQDAeibdkLi0OCdp=j_Q-EcMHm0cw@mail.gmail.com>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after writes
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
+        Fri, 19 May 2023 15:42:55 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40EC186;
+        Fri, 19 May 2023 12:42:53 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JJb0aX023123;
+        Fri, 19 May 2023 19:42:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=XsOHwqSus0ATATt2cux6Mgrp0/sHwsa6ufvz+q0MK8g=;
+ b=c9ELQp+Re9BiKXDXTxlE0rFLbKbhdTmPV7aKJsnIAVCyEYJ5wdS1pyzDF/1q127Se3eJ
+ acLqWr8DruMmg7pbMDK9/9HWMxGmr753ygh0j6NIopweYQ80CKmihTT18tTdjH2GxLDC
+ d0LT7c4Gys94/z7+Q7le/6wwf5Jv/opLotpAnOMtY/BfuXBJcPgChzk1nEWpudQyOVwC
+ iFPgh+IXGMuqNkfEs+hLIRGprjbrc1idmvR+Wy7J9mY6hb9oUw/r/syVUka5IQtRyE+K
+ kUoaXa204wkk+VKa6RnXHnic/5Hp0x++2ctSqUJD6ptgJZTNGT3QX3OXV+5DGuR51U54 FA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qpem8198y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 19:42:43 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34JJb6ED023940;
+        Fri, 19 May 2023 19:42:42 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qpem8198h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 19:42:42 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34JJBZ5F005254;
+        Fri, 19 May 2023 19:42:41 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3qj266rjv1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 19:42:41 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34JJgeAi57082344
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 May 2023 19:42:40 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E25495805E;
+        Fri, 19 May 2023 19:42:39 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 247025805A;
+        Fri, 19 May 2023 19:42:39 +0000 (GMT)
+Received: from wecm-9-67-22-188.wecm.ibm.com (unknown [9.67.22.188])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 19 May 2023 19:42:39 +0000 (GMT)
+Message-ID: <078d8c1fd6b6de59cde8aa85f8e59a056cb78614.camel@linux.ibm.com>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
+ after writes
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Christian Brauner <brauner@kernel.org>,
         Amir Goldstein <amir73il@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
         linux-integrity@vger.kernel.org, miklos@szeredi.hu,
         linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        Ignaz Forster <iforster@suse.de>, Petr Vorel <pvorel@suse.cz>
+Date:   Fri, 19 May 2023 15:42:38 -0400
+In-Reply-To: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
+References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zr_Pq2V2khX2xqvpCsnZD1Mjxeh_EExZ
+X-Proofpoint-ORIG-GUID: ks43xaZjg_1cB0zk9Sgi9XaOBDVpYPRs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_14,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 mlxlogscore=999 clxscore=1011
+ phishscore=0 malwarescore=0 adultscore=0 impostorscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305190168
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 18, 2023 at 4:56=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Thu, 2023-05-18 at 16:46 -0400, Paul Moore wrote:
-> > On Fri, Apr 21, 2023 at 10:44=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.co=
-m> wrote:
-> > > On Fri, 2023-04-07 at 09:29 -0400, Jeff Layton wrote:
+On Fri, 2023-04-07 at 10:31 +0200, Christian Brauner wrote:
+> So, I think we want both; we want the ovl_copyattr() and the
+> vfs_getattr_nosec() change:
+> 
+> (1) overlayfs should copy up the inode version in ovl_copyattr(). That
+>     is in line what we do with all other inode attributes. IOW, the
+>     overlayfs inode's i_version counter should aim to mirror the
+>     relevant layer's i_version counter. I wouldn't know why that
+>     shouldn't be the case. Asking the other way around there doesn't
+>     seem to be any use for overlayfs inodes to have an i_version that
+>     isn't just mirroring the relevant layer's i_version.
+> (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
+>     Currently, ima assumes that it will get the correct i_version from
+>     an inode but that just doesn't hold for stacking filesystem.
+> 
+> While (1) would likely just fix the immediate bug (2) is correct and
+> _robust_. If we change how attributes are handled vfs_*() helpers will
+> get updated and ima with it. Poking at raw inodes without using
+> appropriate helpers is much more likely to get ima into trouble.
 
-...
+In addition to properly setting the i_version for IMA, EVM has a
+similar issue with i_generation and s_uuid. Adding them to
+ovl_copyattr() seems to resolve it.   Does that make sense?
 
-> > I'm going through my review queue to make sure I haven't missed
-> > anything and this thread popped up ... Stefan, Mimi, did you get a fix
-> > into an upstream tree somewhere?  If not, is it because you are
-> > waiting on a review/merge from me into the LSM tree?
->
-> Sorry for the delay.  Between vacation and LSS, I just started testing
-> Jeff Layton's patch.
+diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
+index 923d66d131c1..cd0aeb828868 100644
+--- a/fs/overlayfs/util.c
++++ b/fs/overlayfs/util.c
+@@ -1118,5 +1118,8 @@ void ovl_copyattr(struct inode *inode)
+ 	inode->i_atime = realinode->i_atime;
+ 	inode->i_mtime = realinode->i_mtime;
+ 	inode->i_ctime = realinode->i_ctime;
++	inode->i_generation = realinode->i_generation;
++	if (inode->i_sb)
++		uuid_copy(&inode->i_sb->s_uuid, &realinode->i_sb-
+>s_uuid);
+ 	i_size_write(inode, i_size_read(realinode));
+ }
+-- 
+thanks,
 
-No worries, I'm a bit behind too, I just wanted to make sure I wasn't
-blocking this thread :)
+Mimib
 
---=20
-paul-moore.com
