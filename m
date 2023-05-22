@@ -2,163 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796B970B1D2
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 May 2023 00:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCDC70B5EC
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 May 2023 09:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbjEUWt5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 21 May 2023 18:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S230050AbjEVHKX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 May 2023 03:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjEUWt4 (ORCPT
+        with ESMTP id S232097AbjEVHJm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 21 May 2023 18:49:56 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16A8C7
-        for <linux-integrity@vger.kernel.org>; Sun, 21 May 2023 15:49:54 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-53469299319so2944717a12.3
-        for <linux-integrity@vger.kernel.org>; Sun, 21 May 2023 15:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1684709394; x=1687301394;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YfaiIW3biZ2nDYazMreEHIKSLRhntSglWJTWt2nlD0A=;
-        b=IP5yZ0MMUZe32WseJQj3R2egNthpjmyvm+ciAk24LX8IEV7id8mpJCFeDWFj0Omm2f
-         GfW41TZ5PxSnakzCNRnqNV5+26u2zf1il0w5TpmJjsm5guGJqcVuzI450S8ezK7xGm53
-         aJ+fCiUOOMUejIoPQNcQOFm0coGehr46kezzbLLHU6Q6EjhrP/LicNOwUetRXPpSn6i5
-         RPkrxmRKW1B0Yhp7ttk/tDuPOX7wOFhQJaeQTyXvqn9eQXqAZzuXWhDS+uGXNL3iUomt
-         VQ6hKc0ZeYG9IesB6W0x2zNu/R+dTIeyCjtaPv6dKj8VfMkra6Sdh0kFoP2Mws2cdHgr
-         mUCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684709394; x=1687301394;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YfaiIW3biZ2nDYazMreEHIKSLRhntSglWJTWt2nlD0A=;
-        b=KlGX2WOoYXlwd4989XQnElruoLLIR/sBV+BbKYR6+aIAV6u1QoNKUzpGSfDqsyH99h
-         2//DBsk3LSFYQYleMbm/AxVxIqcO5bl+g+HiLvcN5tXkd6Gn8KuYFhqzDDjMJOQ+TKKn
-         eiNrgLcCprBGcZ+zNxu6zUPxWtUWxNSIX2M3QSCKyo3bdPtWE3IeRzzrfJzOYwmTt1g9
-         +z4uNHL/sCSbiWuuu51WMAMQurRYxk3ANzUNMGQYOCK65FGezaHl1QcTUOxAEK5OvtPo
-         2/v6UWNWvKXKOCjDZ1M1xbIt7s2uZ50GkG7OGvdRJ1KVjJGFmmV2LAhmEi2B6fkt/UcX
-         xXNA==
-X-Gm-Message-State: AC+VfDwHwGo9bbljF2gtDQs65218Hdz302LUqnKbtc0Y8IpyWN5WTRc5
-        14EI1hRjH/UnnV6mY9QDEZiTng==
-X-Google-Smtp-Source: ACHHUZ72WQJhhCaeNMhFrQWZeqaQ3D4XEC9Issa3Qxfnr9+ou9y0ZTpJBeGEsgMJX5F+VThTgg1fcw==
-X-Received: by 2002:a17:902:c1c4:b0:1af:b681:5313 with SMTP id c4-20020a170902c1c400b001afb6815313mr820157plc.33.1684709394215;
-        Sun, 21 May 2023 15:49:54 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
-        by smtp.gmail.com with ESMTPSA id ja15-20020a170902efcf00b001ac55a5e5eesm3425837plb.121.2023.05.21.15.49.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 15:49:53 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q0rs6-002J36-1t;
-        Mon, 22 May 2023 08:49:50 +1000
-Date:   Mon, 22 May 2023 08:49:50 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        Ignaz Forster <iforster@suse.de>, Petr Vorel <pvorel@suse.cz>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
- writes
-Message-ID: <ZGqgDjJqFSlpIkz/@dread.disaster.area>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
- <078d8c1fd6b6de59cde8aa85f8e59a056cb78614.camel@linux.ibm.com>
- <20230520-angenehm-orangen-80fdce6f9012@brauner>
+        Mon, 22 May 2023 03:09:42 -0400
+X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 00:08:29 PDT
+Received: from smtp.cecloud.com (sg-smtp01.cecloud.com [13.251.65.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2ACABCA
+        for <linux-integrity@vger.kernel.org>; Mon, 22 May 2023 00:08:29 -0700 (PDT)
+Received: from smtp.cecloud.com (unknown [103.166.174.66])
+        by smtp.cecloud.com (Postfix) with ESMTP id AC7CB167
+        for <linux-integrity@vger.kernel.org>; Mon, 22 May 2023 07:02:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.cecloud.com (Postfix) with ESMTP id 17E69900113;
+        Mon, 22 May 2023 15:01:53 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [111.48.58.11])
+        by smtp.cecloud.com (postfix) whith ESMTP id P2917246T281458643890544S1684738912085108_;
+        Mon, 22 May 2023 15:01:53 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <cc80ce2c510edff53b2dd528a9553ba8>
+X-RL-SENDER: shaopeijie@cestc.cn
+X-SENDER: shaopeijie@cestc.cn
+X-LOGIN-NAME: shaopeijie@cestc.cn
+X-FST-TO: jarkko@kernel.org
+X-RCPT-COUNT: 6
+X-SENDER-IP: 111.48.58.11
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   shaopeijie@cestc.cn
+To:     jarkko@kernel.org
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peijie Shao <shaopeijie@cestc.cn>
+Subject: [PATCH v2] tpm_tis_spi: fix:release chip select when flow control fails
+Date:   Mon, 22 May 2023 15:01:40 +0800
+Message-Id: <20230522070140.33719-1-shaopeijie@cestc.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230520-angenehm-orangen-80fdce6f9012@brauner>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, May 20, 2023 at 11:17:35AM +0200, Christian Brauner wrote:
-> On Fri, May 19, 2023 at 03:42:38PM -0400, Mimi Zohar wrote:
-> > On Fri, 2023-04-07 at 10:31 +0200, Christian Brauner wrote:
-> > > So, I think we want both; we want the ovl_copyattr() and the
-> > > vfs_getattr_nosec() change:
-> > > 
-> > > (1) overlayfs should copy up the inode version in ovl_copyattr(). That
-> > >     is in line what we do with all other inode attributes. IOW, the
-> > >     overlayfs inode's i_version counter should aim to mirror the
-> > >     relevant layer's i_version counter. I wouldn't know why that
-> > >     shouldn't be the case. Asking the other way around there doesn't
-> > >     seem to be any use for overlayfs inodes to have an i_version that
-> > >     isn't just mirroring the relevant layer's i_version.
-> > > (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
-> > >     Currently, ima assumes that it will get the correct i_version from
-> > >     an inode but that just doesn't hold for stacking filesystem.
-> > > 
-> > > While (1) would likely just fix the immediate bug (2) is correct and
-> > > _robust_. If we change how attributes are handled vfs_*() helpers will
-> > > get updated and ima with it. Poking at raw inodes without using
-> > > appropriate helpers is much more likely to get ima into trouble.
-> > 
-> > In addition to properly setting the i_version for IMA, EVM has a
-> > similar issue with i_generation and s_uuid. Adding them to
-> > ovl_copyattr() seems to resolve it.   Does that make sense?
-> > 
-> > diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
-> > index 923d66d131c1..cd0aeb828868 100644
-> > --- a/fs/overlayfs/util.c
-> > +++ b/fs/overlayfs/util.c
-> > @@ -1118,5 +1118,8 @@ void ovl_copyattr(struct inode *inode)
-> >  	inode->i_atime = realinode->i_atime;
-> >  	inode->i_mtime = realinode->i_mtime;
-> >  	inode->i_ctime = realinode->i_ctime;
-> > +	inode->i_generation = realinode->i_generation;
-> > +	if (inode->i_sb)
-> > +		uuid_copy(&inode->i_sb->s_uuid, &realinode->i_sb-
-> 
-> Overlayfs can consist of multiple lower layers and each of those lower
-> layers may have a different uuid. So everytime you trigger a
-> ovl_copyattr() on a different layer this patch would alter the uuid of
-> the overlayfs superblock.
-> 
-> In addition the uuid should be set when the filesystem is mounted.
-> Unless the filesystem implements a dedicated ioctl() - like ext4 - to
-> change the uuid.
+From: Peijie Shao <shaopeijie@cestc.cn>
 
-IMO, that ext4 functionality is a landmine waiting to be stepped on.
+The failure paths in tpm_tis_spi_transfer() do not deactivate
+chip select. Send an empty message (cs_select == 0) to overcome
+this.
 
-We should not be changing the sb->s_uuid of filesysetms dynamically.
-The VFS does not guarantee in any way that it is safe to change the
-sb->s_uuid (i.e. no locking, no change notifications, no udev
-events, etc). Various subsystems - both in the kernel and in
-userspace - use the sb->s_uuid as a canonical and/or persistent
-filesystem/device identifier and are unprepared to have it change
-while the filesystem is mounted and active.
+Signed-off-by: Peijie Shao <shaopeijie@cestc.cn>
+---
+Changes since v1:
+    1. Deactive cs all of the failure path, not only flow control.
+    2. change and update comments.
+---
+ drivers/char/tpm/tpm_tis_spi_main.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-I commented on this from an XFS perspective here when it was
-proposed to copy this ext4 mis-feature in XFS:
-
-https://lore.kernel.org/linux-xfs/20230314062847.GQ360264@dread.disaster.area/
-
-Further to this, I also suspect that changing uuids online will
-cause issues with userspace caching of fs uuids (e.g. libblkid and
-anything that uses it) and information that uses uuids to identify
-the filesystem that are set up at mount time (/dev/disk/by-uuid/
-links, etc) by kernel events sent to userspace helpers...
-
-IMO, we shouldn't even be considering dynamic sb->s_uuid changes
-without first working through the full system impacts of having
-persistent userspace-visible filesystem identifiers change
-dynamically...
-
--Dave.
+diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+index 1f5207974..9bfaba092 100644
+--- a/drivers/char/tpm/tpm_tis_spi_main.c
++++ b/drivers/char/tpm/tpm_tis_spi_main.c
+@@ -136,6 +136,14 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+ 	}
+ 
+ exit:
++	if (ret < 0) {
++		/* Deactivate chip select */
++		memset(&spi_xfer, 0, sizeof(spi_xfer));
++		spi_message_init(&m);
++		spi_message_add_tail(&spi_xfer, &m);
++		spi_sync_locked(phy->spi_device, &m);
++	}
++
+ 	spi_bus_unlock(phy->spi_device->master);
+ 	return ret;
+ }
 -- 
-Dave Chinner
-david@fromorbit.com
+2.39.1
+
+
+
