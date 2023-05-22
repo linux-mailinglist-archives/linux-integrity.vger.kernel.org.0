@@ -2,205 +2,191 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DBA70C09E
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 May 2023 16:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB1170C128
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 May 2023 16:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbjEVOCr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 May 2023 10:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S233657AbjEVOc2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 May 2023 10:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234287AbjEVOCc (ORCPT
+        with ESMTP id S233574AbjEVOc2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 May 2023 10:02:32 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CC3E53;
-        Mon, 22 May 2023 07:00:21 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-43931d2b92eso942572137.2;
-        Mon, 22 May 2023 07:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684764020; x=1687356020;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PEIsFZ8irdYi/r84zw/P7G0vXgtk/uWzE9ABb35GWWY=;
-        b=pqM2tRNgow4mYTRczgh4sEK3eiXY0fD5ph8vUaSqn4GN4KZfaeurTtpkSIyubVxH1I
-         YVL7LATdQBxUD9AfoUv0YaSQ1cWNNTWV6+ybH4yK3z7IzJDV5GpucCqsuCI5muRJyev6
-         fsnf+WvCZctHlVJ4QRJOrUq4Dng7j+GqtlpVgxDCnL4yJ309QPdGk2n959jNhkCeNn+Q
-         eMeKhSaxAFBFlCEeroPFzQ+46I5YIIBOtAlU7KjuccMcQ65HAfd2J1+0nBtD+HHUR5T4
-         GVBsgHDapxb1Jt7w2PsMVrhkRbKR/OmkyjjyoiASOgdAyXVhc76NY6P9Mqhi7b/e6RBb
-         C0Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684764020; x=1687356020;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PEIsFZ8irdYi/r84zw/P7G0vXgtk/uWzE9ABb35GWWY=;
-        b=BLWk/01NKQ6698tXrjHU7bB0CNnWJBXum4uli74XepYuFsK/m97cec3LaykkthJv71
-         NR3wKfho90jKssfydEqB2JwUhoBLRbk74hEXUtjEyN5nQ3+nQ7yu8iad/YBwdxhO4o4g
-         O/dIbXZwAFmvlEw8et0hzxV2TbsBZ84qytkLQUmudA1ZImFk54DjhYULmWaxwK3mj/Uj
-         8CG58//t9rh9/J1dE+J1unddSdnv7s+/wvr3RX1J9d6LR2Ypu9vHb+Wv/k5lwKddYP8M
-         cGUqd1QzRqrs9hfCLx9T9FxtqELfz4jXw/hqE4KCxuM5bug1FOD3Jyb53QHTHWj36tYV
-         Hy7A==
-X-Gm-Message-State: AC+VfDxPKoihGqjY/gDJhPN8OqC7i12URnnQBywZIhBSiPK46nfVvs0Z
-        rIeUI8+KBqJAOILXnefLKgCPMQzUfXoi1FPvlpM=
-X-Google-Smtp-Source: ACHHUZ7B4hMBeYBsVxL5wraCCIO1z1bJH8HaKsoApI4gs/rTg6c29bjtZp2N+rvlwHwjVxa8kjKbNrG9QV/AgCw/yEg=
-X-Received: by 2002:a67:ff86:0:b0:434:6d1b:8b15 with SMTP id
- v6-20020a67ff86000000b004346d1b8b15mr2608457vsq.25.1684764020472; Mon, 22 May
- 2023 07:00:20 -0700 (PDT)
+        Mon, 22 May 2023 10:32:28 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3132BA9;
+        Mon, 22 May 2023 07:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684765901; i=linosanfilippo@gmx.de;
+        bh=lwQ+t7RCqn9sjjERhaQcuu0ceFAVx7n0LyVEjPw+TWs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=TDxYqCU9CtVWVrlfU1RaliEa09utKq9fw1wfmUq7CqDOeK5xPtbL9lAaqGO7GWqzM
+         z3/o+MylPzTBZskzESGi2YoWElc7sljBW3ieIPVoE0lem41Erauj+m8OJFki8aXlGQ
+         6XTPfVG4LHofz1Bx4XunH/cvqMOLATg6cBQfvjZQhEdR7b9GJvJiBpyqqCX0KwG8iw
+         svAnco1yeeGU5ZlgmKiKrZAxwNqDLtYVuJbhIPXyZvZaBRL80uXboOH7JSl28cbnbh
+         qgfDfnxzee8UkSoaVlwHX53qQkxFw87r8Cowab78xUqOffHmKanxP2AxVbKyUbkjmC
+         z8nmVh2nlCB5Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from Venus.speedport.ip ([84.162.2.106]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4hvR-1qADD027vD-011gMN; Mon, 22
+ May 2023 16:31:41 +0200
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     jsnitsel@redhat.com, hdegoede@redhat.com, oe-lkp@lists.linux.dev,
+        lkp@intel.com, peter.ujfalusi@linux.intel.com,
+        peterz@infradead.org, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com, LinoSanfilippo@gmx.de, lukas@wunner.de,
+        p.rosenberger@kunbus.com
+Subject: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+Date:   Mon, 22 May 2023 16:31:04 +0200
+Message-Id: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
- <078d8c1fd6b6de59cde8aa85f8e59a056cb78614.camel@linux.ibm.com>
- <CAOQ4uxi7PFPPUuW9CZAZB9tvU2GWVpmpdBt=EUYyw60K=WX-Yg@mail.gmail.com> <9aced306f134628221c55530643535b89874ccc0.camel@linux.ibm.com>
-In-Reply-To: <9aced306f134628221c55530643535b89874ccc0.camel@linux.ibm.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Mon, 22 May 2023 17:00:09 +0300
-Message-ID: <CAOQ4uxjjLLGQM5BUgDrFdghYsFgShNA6tDpvC8vNg_jOh9WGAQ@mail.gmail.com>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after writes
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        Ignaz Forster <iforster@suse.de>, Petr Vorel <pvorel@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:yIe+WGyH1ASzJ7ENp03LTV4IXOeonm6dRKoNYtjMLPwcfYAi2iq
+ bsV98q//ftrbGfjns3dZRRrI8a0UPsJzqcfUV3ea8Pg/tF5VZGL1bX7WEsGetOCdoX/WwFA
+ GQvGPY7rnu6kc3KPfzmEEfx0MQXnyZweOUAuaSmk8Bnsc6ZrWh4uo7+yfvYQbFJxrcs/EIF
+ f6xWuxrA2CptkCSbSY0/w==
+UI-OutboundReport: notjunk:1;M01:P0:btJ3+woI3As=;es3Q1meS12RE+lnRJ4+NzVouEpm
+ /8b8hj2thexAdcK5YFJ/GTvX3FAw+yLNuCKhp7Vrpuc52EHwzUHYEY6tu/6oKPWDfzApqveMl
+ eHUSqnH5lU6Gg6HdOuNcURfE9QxCFqWdc6V9rrXSlOZSH/isqt2ieKoOTdU2MBFhm7Ejl66vX
+ RcmXz2mgx56Byh9wHBTRBhgvziYs4AVdGWOA5XznZh0YCFCHaSXJWfEefpRZwHSDfL4ipyYIB
+ GYBEyKz/SblbSy6mMN2VlC+1EAQBoKX4fkb1A4yoOyxpaIDpRqwEvSx/vABUvTX13SMMuu5TR
+ PNxhDLV569Ms5UGlgta5qe79fHaDfplaqZufVBmcaeVaeYlULtGCAlGIp7DGaZroy9sEt2j48
+ E6Khx86YLAjBmcjkASEnA26+bYAruJkCHkNyknY6CC6XN6O2irhv33t5p5wOuLANJGfCxWMSQ
+ SfdVKY2hAdtXoPnf6MX6i1/h5fWEXgHIXQn4HiKhGjIwjeMbeMbeKQNelv+H/FycwV0eCQIMa
+ VgwcJzgKiJ0t9Hi26GXBz+8f8x3wYCgRVcRUmanaPZrmGCeIWaVJZgCF1JQEMJyik9bNyw8jj
+ cD/WBZ6J0YS1SEa7+uBeIicABcJdWU9AYcOkWOesG0VOVCSJLD0S2/l88rZFMSFCHTxeYdvwD
+ Y19hgBdHJZi1iaLyWB9fVQhNSSr2tjGCksO6EBkeNhekDaIR8ilet8LesGUl9yeNRbLJBt8O3
+ Di0uWzMxEBEECIKMT+CIrJeztQMHknzQMYM3zxx5d9b3dqMkjD1Ie/5pwZ92vXI14pSpmp/7W
+ XaNecdyWSR9QKvqRgjMb6o4thr0ateiXCcAFd3tkZ/JE7ChO959fVXP3TUUJm6ZEZ/XQ+3ju5
+ DIJlCJVnXEAmyo2eYg2htxMTvFXP8wbE62XI88N0sqHmQhY2QCFobKxhHYm63wIbgefUJle9C
+ kALmVPKqb2KoWjEhFO2CM8KUmv0=
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, May 22, 2023 at 3:18=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
->
-> On Sat, 2023-05-20 at 12:15 +0300, Amir Goldstein wrote:
-> > On Fri, May 19, 2023 at 10:42=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.co=
-m> wrote:
-> > >
-> > > On Fri, 2023-04-07 at 10:31 +0200, Christian Brauner wrote:
-> > > > So, I think we want both; we want the ovl_copyattr() and the
-> > > > vfs_getattr_nosec() change:
-> > > >
-> > > > (1) overlayfs should copy up the inode version in ovl_copyattr(). T=
-hat
-> > > >     is in line what we do with all other inode attributes. IOW, the
-> > > >     overlayfs inode's i_version counter should aim to mirror the
-> > > >     relevant layer's i_version counter. I wouldn't know why that
-> > > >     shouldn't be the case. Asking the other way around there doesn'=
-t
-> > > >     seem to be any use for overlayfs inodes to have an i_version th=
-at
-> > > >     isn't just mirroring the relevant layer's i_version.
-> > > > (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
-> > > >     Currently, ima assumes that it will get the correct i_version f=
-rom
-> > > >     an inode but that just doesn't hold for stacking filesystem.
-> > > >
-> > > > While (1) would likely just fix the immediate bug (2) is correct an=
-d
-> > > > _robust_. If we change how attributes are handled vfs_*() helpers w=
-ill
-> > > > get updated and ima with it. Poking at raw inodes without using
-> > > > appropriate helpers is much more likely to get ima into trouble.
-> > >
-> > > In addition to properly setting the i_version for IMA, EVM has a
-> > > similar issue with i_generation and s_uuid. Adding them to
-> > > ovl_copyattr() seems to resolve it.   Does that make sense?
-> > >
-> > > diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
-> > > index 923d66d131c1..cd0aeb828868 100644
-> > > --- a/fs/overlayfs/util.c
-> > > +++ b/fs/overlayfs/util.c
-> > > @@ -1118,5 +1118,8 @@ void ovl_copyattr(struct inode *inode)
-> > >         inode->i_atime =3D realinode->i_atime;
-> > >         inode->i_mtime =3D realinode->i_mtime;
-> > >         inode->i_ctime =3D realinode->i_ctime;
-> > > +       inode->i_generation =3D realinode->i_generation;
-> > > +       if (inode->i_sb)
-> > > +               uuid_copy(&inode->i_sb->s_uuid, &realinode->i_sb-
-> > > >s_uuid);
-> >
-> > That is not a possible solution Mimi.
-> >
-> > The i_gneration copy *may* be acceptable in "all layers on same fs"
-> > setup, but changing overlayfs s_uuid over and over is a non-starter.
-> >
-> > If you explain the problem, I may be able to help you find a better sol=
-ution.
->
-> EVM calculates an HMAC of the file metadata (security xattrs, i_ino,
-> i_generation, i_uid, i_gid, i_mode, s_uuid)  and stores it as
-> security.evm.  Notrmally this would be used for mutable files, which
-> cannot be signed.  The i_generation and s_uuid on the lower layer and
-> the overlay are not the same, causing the EVM HMAC verification to
-> fail.
->
-
-OK, so EVM expects i_ino, i_generation, i_uid, i_gid, i_mode, s_uuid
-and security xattr to remain stable and persistent (survive umount/mount).
-Correct?
-
-You cannot expect that the same EVM xattr will correctly describe both
-the overlayfs inode and the underlying real fs inode, because they may
-vary in some of the metadata, so need to decide if you only want to attest
-overlayfs inodes, real underlying inodes or both.
-If both, then the same EVM xattr cannot be used, but as it is, overlayfs
-inode has no "private" xattr version, it stores its xattr on the underlying
-real inode.
-
-i_uid, i_gid, i_mode:
-Should be stable and persistent for overlayfs inode and survive copy up.
-Should be identical to the underlying inode.
-
-security xattr:
-Overlayfs tries to copy up all security.* xattr and also calls the LSM
-hook security_inode_copy_up_xattr() to approve each copied xattr.
-Should be identical to the underlying inode.
-
-s_uuid:
-So far, overlayfs sb has a null uuid.
-With this patch, overlayfs will gain a persistent s_uuid, just like any
-other disk fs with the opt-in feature index=3Don:
-https://lore.kernel.org/linux-unionfs/20230425132223.2608226-4-amir73il@gma=
-il.com/
-Should be different from the underlying fs uuid when there is more
-than one underlying fs.
-We can consider inheriting s_uuid from underlying fs when all layers
-are on the same fs.
-
-i_ino:
-As documented in:
-https://github.com/torvalds/linux/blob/master/Documentation/filesystems/ove=
-rlayfs.rst#inode-properties
-It should be persistent and survive copy up with the
-xino=3Dauto feature (module param or mount option) or
-CONFIG_OVERLAY_FS_XINO_AUTO=3Dy
-which is not the kernel default, but already set by some distros.
-Will be identical to the underlying inode only in some special cases
-such as pure upper (not copied up) inodes.
-Will be different from the underlying lower file inode many in other cases.
-
-i_generation:
-For xino=3Dauto, we could follow the same rules as i_ino and get similar
-qualities -
-i_generation will become persistent and survive copy up, but it will not be
-identical to the real underlying inode i_generation in many cases.
-
-Bottom line:
-If you only want to attest overlayfs inodes - shouldn't be too hard
-If you want to attest both overlayfs inodes AND their backing "real" inodes=
- -
-much more challenging.
-
-Hope that this writeup helps more than it confuses.
-
-Thanks,
-Amir.
+RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KCkNvbW1pdCBl
+NjQ0YjJmNDk4ZDIgKCJ0cG0sIHRwbV90aXM6IEVuYWJsZSBpbnRlcnJ1cHQgdGVzdCIpIGVuYWJs
+ZWQKaW50ZXJydXB0cyBpbnN0ZWFkIG9mIHBvbGxpbmcgb24gYWxsIGNhcGFibGUgVFBNcy4gVW5m
+b3J0dW5hdGVseSwgb24gc29tZQpwcm9kdWN0cyB0aGUgaW50ZXJydXB0IGxpbmUgaXMgZWl0aGVy
+IG5ldmVyIGFzc2VydGVkIG9yIG5ldmVyIGRlYXNzZXJ0ZWQuCgpUaGUgZm9ybWVyIGNhdXNlcyBp
+bnRlcnJ1cHQgdGltZW91dHMgYW5kIGlzIGRldGVjdGVkIGJ5CnRwbV90aXNfY29yZV9pbml0KCku
+IFRoZSBsYXR0ZXIgcmVzdWx0cyBpbiBpbnRlcnJ1cHQgc3Rvcm1zLgoKUmVjZW50IHJlcG9ydHMg
+Y29uY2VybiB0aGUgTGVub3ZvIFRoaW5rU3RhdGlvbiBQMzYwIFRpbnksIExlbm92byBUaGlua1Bh
+ZApMNDkwIGFuZCBJbnNwdXIgTkY1MTgwTTY6CgpodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51
+eC1pbnRlZ3JpdHkvMjAyMzA1MTEwMDU0MDMuMjQ2ODktMS1qc25pdHNlbEByZWRoYXQuY29tLwpo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1pbnRlZ3JpdHkvZDgwYjE4MGE1NjlhOWYwNjhk
+M2EyNjE0ZjA2MmNmYTNhNzhhZjVhNi5jYW1lbEBrZXJuZWwub3JnLwoKVGhlIGN1cnJlbnQgYXBw
+cm9hY2ggdG8gYXZvaWQgdGhvc2Ugc3Rvcm1zIGlzIHRvIGRpc2FibGUgaW50ZXJydXB0cyBieQph
+ZGRpbmcgYSBETUkgcXVpcmsgZm9yIHRoZSBjb25jZXJuZWQgZGV2aWNlLgoKSG93ZXZlciB0aGlz
+IGlzIGEgbWFpbnRlbmFuY2UgYnVyZGVuIGluIHRoZSBsb25nIHJ1biwgc28gdXNlIGEgZ2VuZXJp
+YwphcHByb2FjaDoKCkRldGVjdCBhbiBpbnRlcnJ1cHQgc3Rvcm0gYnkgY291bnRpbmcgdGhlIG51
+bWJlciBvZiB1bmhhbmRsZWQgaW50ZXJydXB0cwp3aXRoaW4gYSAxMCBtcyB0aW1lIGludGVydmFs
+LiBJbiBjYXNlIHRoYXQgbW9yZSB0aGFuIDEwMDAgd2VyZSB1bmhhbmRsZWQKZGVhY3RpdmF0ZSBp
+bnRlcnJ1cHRzLCBkZXJlZ2lzdGVyIHRoZSBoYW5kbGVyIGFuZCBmYWxsIGJhY2sgdG8gcG9sbGlu
+Zy4KClRoaXMgZXF1YWxzIHRoZSBpbXBsZW1lbnRhdGlvbiB0aGF0IGhhbmRsZXMgaW50ZXJydXB0
+IHN0b3JtcyBpbgpub3RlX2ludGVycnVwdCgpIGJ5IG1lYW5zIG9mIHRpbWVzdGFtcHMgYW5kIGNv
+dW50ZXJzIGluIHN0cnVjdCBpcnFfZGVzYy4KSG93ZXZlciB0aGUgZnVuY3Rpb24gdG8gYWNjZXNz
+IHRoaXMgc3RydWN0dXJlIGlzIHByaXZhdGUgc28gdGhlIGxvZ2ljIGhhcwp0byBiZSByZWltcGxl
+bWVudGVkIGluIHRoZSBUUE0gVElTIGNvcmUuCgpTaW5jZSBoYW5kbGVyIGRlcmVnaXN0cmF0aW9u
+IHdvdWxkIGRlYWRsb2NrIGZyb20gd2l0aGluIHRoZSBpbnRlcnJ1cHQKcm91dGluZSB0cmlnZ2Vy
+IGEgd29ya2VyIHRocmVhZCB0aGF0IGV4ZWN1dGVzIHRoZSB1bnJlZ2lzdHJhdGlvbi4KClN1Z2dl
+c3RlZC1ieTogTHVrYXMgV3VubmVyIDxsdWthc0B3dW5uZXIuZGU+ClNpZ25lZC1vZmYtYnk6IExp
+bm8gU2FuZmlsaXBwbyA8bC5zYW5maWxpcHBvQGt1bmJ1cy5jb20+Ci0tLQogZHJpdmVycy9jaGFy
+L3RwbS90cG1fdGlzX2NvcmUuYyB8IDcxICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKyst
+LQogZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuaCB8ICA2ICsrKwogMiBmaWxlcyBjaGFu
+Z2VkLCA3NCBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29y
+ZS5jCmluZGV4IDU1ODE0NGZhNzA3YS4uNDU4ZWJmOGMyZjE2IDEwMDY0NAotLS0gYS9kcml2ZXJz
+L2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCisrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19j
+b3JlLmMKQEAgLTc1Miw2ICs3NTIsNTUgQEAgc3RhdGljIGJvb2wgdHBtX3Rpc19yZXFfY2FuY2Vs
+ZWQoc3RydWN0IHRwbV9jaGlwICpjaGlwLCB1OCBzdGF0dXMpCiAJcmV0dXJuIHN0YXR1cyA9PSBU
+UE1fU1RTX0NPTU1BTkRfUkVBRFk7CiB9CiAKK3N0YXRpYyB2b2lkIHRwbV90aXNfaGFuZGxlX2ly
+cV9zdG9ybShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXApCit7CisJc3RydWN0IHRwbV90aXNfZGF0YSAq
+cHJpdiA9IGRldl9nZXRfZHJ2ZGF0YSgmY2hpcC0+ZGV2KTsKKwlpbnQgaW50bWFzayA9IDA7CisK
+KwlkZXZfZXJyKCZjaGlwLT5kZXYsIEhXX0VSUgorCQkiVFBNIGludGVycnVwdCBzdG9ybSBkZXRl
+Y3RlZCwgcG9sbGluZyBpbnN0ZWFkXG4iKTsKKworCXRwbV90aXNfcmVhZDMyKHByaXYsIFRQTV9J
+TlRfRU5BQkxFKHByaXYtPmxvY2FsaXR5KSwgJmludG1hc2spOworCisJaW50bWFzayAmPSB+VFBN
+X0dMT0JBTF9JTlRfRU5BQkxFOworCisJdHBtX3Rpc19yZXF1ZXN0X2xvY2FsaXR5KGNoaXAsIDAp
+OworCXRwbV90aXNfd3JpdGUzMihwcml2LCBUUE1fSU5UX0VOQUJMRShwcml2LT5sb2NhbGl0eSks
+IGludG1hc2spOworCXRwbV90aXNfcmVsaW5xdWlzaF9sb2NhbGl0eShjaGlwLCAwKTsKKworCWNo
+aXAtPmZsYWdzICY9IH5UUE1fQ0hJUF9GTEFHX0lSUTsKKworCS8qCisJICogV2UgbXVzdCBub3Qg
+Y2FsbCBkZXZtX2ZyZWVfaXJxKCkgZnJvbSB3aXRoaW4gdGhlIGludGVycnVwdCBoYW5kbGVyLAor
+CSAqIHNpbmNlIHRoaXMgZnVuY3Rpb24gd2FpdHMgZm9yIHJ1bm5pbmcgaW50ZXJydXB0IGhhbmRs
+ZXJzIHRvIGZpbmlzaAorCSAqIGFuZCB0aHVzIGl0IHdvdWxkIGRlYWRsb2NrLiBJbnN0ZWFkIHRy
+aWdnZXIgYSB3b3JrZXIgdGhhdCBkb2VzIHRoZQorCSAqIHVucmVnaXN0cmF0aW9uLgorCSAqLwor
+CXNjaGVkdWxlX3dvcmsoJnByaXYtPmZyZWVfaXJxX3dvcmspOworfQorCitzdGF0aWMgdm9pZCB0
+cG1fdGlzX3Byb2Nlc3NfdW5oYW5kbGVkX2ludGVycnVwdChzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAp
+Cit7CisJY29uc3QgdW5zaWduZWQgaW50IE1BWF9VTkhBTkRMRURfSVJRUyA9IDEwMDA7CisJc3Ry
+dWN0IHRwbV90aXNfZGF0YSAqcHJpdiA9IGRldl9nZXRfZHJ2ZGF0YSgmY2hpcC0+ZGV2KTsKKwkv
+KgorCSAqIFRoZSB3b3JrZXIgdG8gZnJlZSB0aGUgVFBNIGludGVycnVwdCAoZnJlZV9pcnFfd29y
+aykgbWF5IGFscmVhZHkKKwkgKiBiZSBzY2hlZHVsZWQsIHNvIG1ha2Ugc3VyZSBpdCBpcyBub3Qg
+c2NoZWR1bGVkIGFnYWluLgorCSAqLworCWlmICghKGNoaXAtPmZsYWdzICYgVFBNX0NISVBfRkxB
+R19JUlEpKQorCQlyZXR1cm47CisKKwlpZiAodGltZV9hZnRlcihqaWZmaWVzLCBwcml2LT5sYXN0
+X3VuaGFuZGxlZF9pcnEgKyBIWi8xMCkpCisJCXByaXYtPnVuaGFuZGxlZF9pcnFzID0gMTsKKwll
+bHNlCisJCXByaXYtPnVuaGFuZGxlZF9pcnFzKys7CisKKwlwcml2LT5sYXN0X3VuaGFuZGxlZF9p
+cnEgPSBqaWZmaWVzOworCisJaWYgKHByaXYtPnVuaGFuZGxlZF9pcnFzID4gTUFYX1VOSEFORExF
+RF9JUlFTKQorCQl0cG1fdGlzX2hhbmRsZV9pcnFfc3Rvcm0oY2hpcCk7Cit9CisKIHN0YXRpYyBp
+cnFyZXR1cm5fdCB0aXNfaW50X2hhbmRsZXIoaW50IGR1bW15LCB2b2lkICpkZXZfaWQpCiB7CiAJ
+c3RydWN0IHRwbV9jaGlwICpjaGlwID0gZGV2X2lkOwpAQCAtNzYxLDEwICs4MTAsMTAgQEAgc3Rh
+dGljIGlycXJldHVybl90IHRpc19pbnRfaGFuZGxlcihpbnQgZHVtbXksIHZvaWQgKmRldl9pZCkK
+IAogCXJjID0gdHBtX3Rpc19yZWFkMzIocHJpdiwgVFBNX0lOVF9TVEFUVVMocHJpdi0+bG9jYWxp
+dHkpLCAmaW50ZXJydXB0KTsKIAlpZiAocmMgPCAwKQotCQlyZXR1cm4gSVJRX05PTkU7CisJCWdv
+dG8gdW5oYW5kbGVkOwogCiAJaWYgKGludGVycnVwdCA9PSAwKQotCQlyZXR1cm4gSVJRX05PTkU7
+CisJCWdvdG8gdW5oYW5kbGVkOwogCiAJc2V0X2JpdChUUE1fVElTX0lSUV9URVNURUQsICZwcml2
+LT5mbGFncyk7CiAJaWYgKGludGVycnVwdCAmIFRQTV9JTlRGX0RBVEFfQVZBSUxfSU5UKQpAQCAt
+NzgwLDEwICs4MjksMTQgQEAgc3RhdGljIGlycXJldHVybl90IHRpc19pbnRfaGFuZGxlcihpbnQg
+ZHVtbXksIHZvaWQgKmRldl9pZCkKIAlyYyA9IHRwbV90aXNfd3JpdGUzMihwcml2LCBUUE1fSU5U
+X1NUQVRVUyhwcml2LT5sb2NhbGl0eSksIGludGVycnVwdCk7CiAJdHBtX3Rpc19yZWxpbnF1aXNo
+X2xvY2FsaXR5KGNoaXAsIDApOwogCWlmIChyYyA8IDApCi0JCXJldHVybiBJUlFfTk9ORTsKKwkJ
+Z290byB1bmhhbmRsZWQ7CiAKIAl0cG1fdGlzX3JlYWQzMihwcml2LCBUUE1fSU5UX1NUQVRVUyhw
+cml2LT5sb2NhbGl0eSksICZpbnRlcnJ1cHQpOwogCXJldHVybiBJUlFfSEFORExFRDsKKwordW5o
+YW5kbGVkOgorCXRwbV90aXNfcHJvY2Vzc191bmhhbmRsZWRfaW50ZXJydXB0KGNoaXApOworCXJl
+dHVybiBJUlFfSEFORExFRDsKIH0KIAogc3RhdGljIHZvaWQgdHBtX3Rpc19nZW5faW50ZXJydXB0
+KHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKQEAgLTgwNCw2ICs4NTcsMTUgQEAgc3RhdGljIHZvaWQg
+dHBtX3Rpc19nZW5faW50ZXJydXB0KHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAkJY2hpcC0+Zmxh
+Z3MgJj0gflRQTV9DSElQX0ZMQUdfSVJROwogfQogCitzdGF0aWMgdm9pZCB0cG1fdGlzX2ZyZWVf
+aXJxX2Z1bmMoc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQoreworCXN0cnVjdCB0cG1fdGlzX2Rh
+dGEgKnByaXYgPSBjb250YWluZXJfb2Yod29yaywgdHlwZW9mKCpwcml2KSwgZnJlZV9pcnFfd29y
+ayk7CisJc3RydWN0IHRwbV9jaGlwICpjaGlwID0gcHJpdi0+Y2hpcDsKKworCWRldm1fZnJlZV9p
+cnEoY2hpcC0+ZGV2LnBhcmVudCwgcHJpdi0+aXJxLCBjaGlwKTsKKwlwcml2LT5pcnEgPSAwOwor
+fQorCiAvKiBSZWdpc3RlciB0aGUgSVJRIGFuZCBpc3N1ZSBhIGNvbW1hbmQgdGhhdCB3aWxsIGNh
+dXNlIGFuIGludGVycnVwdC4gSWYgYW4KICAqIGlycSBpcyBzZWVuIHRoZW4gbGVhdmUgdGhlIGNo
+aXAgc2V0dXAgZm9yIElSUSBvcGVyYXRpb24sIG90aGVyd2lzZSByZXZlcnNlCiAgKiBldmVyeXRo
+aW5nIGFuZCBsZWF2ZSBpbiBwb2xsaW5nIG1vZGUuIFJldHVybnMgMCBvbiBzdWNjZXNzLgpAQCAt
+ODE2LDYgKzg3OCw3IEBAIHN0YXRpYyBpbnQgdHBtX3Rpc19wcm9iZV9pcnFfc2luZ2xlKHN0cnVj
+dCB0cG1fY2hpcCAqY2hpcCwgdTMyIGludG1hc2ssCiAJaW50IHJjOwogCXUzMiBpbnRfc3RhdHVz
+OwogCisJSU5JVF9XT1JLKCZwcml2LT5mcmVlX2lycV93b3JrLCB0cG1fdGlzX2ZyZWVfaXJxX2Z1
+bmMpOwogCiAJcmMgPSBkZXZtX3JlcXVlc3RfdGhyZWFkZWRfaXJxKGNoaXAtPmRldi5wYXJlbnQs
+IGlycSwgTlVMTCwKIAkJCQkgICAgICAgdGlzX2ludF9oYW5kbGVyLCBJUlFGX09ORVNIT1QgfCBm
+bGFncywKQEAgLTkxOCw2ICs5ODEsNyBAQCB2b2lkIHRwbV90aXNfcmVtb3ZlKHN0cnVjdCB0cG1f
+Y2hpcCAqY2hpcCkKIAkJaW50ZXJydXB0ID0gMDsKIAogCXRwbV90aXNfd3JpdGUzMihwcml2LCBy
+ZWcsIH5UUE1fR0xPQkFMX0lOVF9FTkFCTEUgJiBpbnRlcnJ1cHQpOworCWZsdXNoX3dvcmsoJnBy
+aXYtPmZyZWVfaXJxX3dvcmspOwogCiAJdHBtX3Rpc19jbGtydW5fZW5hYmxlKGNoaXAsIGZhbHNl
+KTsKIApAQCAtMTAyMSw2ICsxMDg1LDcgQEAgaW50IHRwbV90aXNfY29yZV9pbml0KHN0cnVjdCBk
+ZXZpY2UgKmRldiwgc3RydWN0IHRwbV90aXNfZGF0YSAqcHJpdiwgaW50IGlycSwKIAljaGlwLT50
+aW1lb3V0X2IgPSBtc2Vjc190b19qaWZmaWVzKFRJU19USU1FT1VUX0JfTUFYKTsKIAljaGlwLT50
+aW1lb3V0X2MgPSBtc2Vjc190b19qaWZmaWVzKFRJU19USU1FT1VUX0NfTUFYKTsKIAljaGlwLT50
+aW1lb3V0X2QgPSBtc2Vjc190b19qaWZmaWVzKFRJU19USU1FT1VUX0RfTUFYKTsKKwlwcml2LT5j
+aGlwID0gY2hpcDsKIAlwcml2LT50aW1lb3V0X21pbiA9IFRQTV9USU1FT1VUX1VTRUNTX01JTjsK
+IAlwcml2LT50aW1lb3V0X21heCA9IFRQTV9USU1FT1VUX1VTRUNTX01BWDsKIAlwcml2LT5waHlf
+b3BzID0gcGh5X29wczsKZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3Jl
+LmggYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5oCmluZGV4IGU5NzhmNDU3ZmQ0ZC4u
+NmZjODZiYWE0Mzk4IDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5o
+CisrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmgKQEAgLTkxLDEyICs5MSwxOCBA
+QCBlbnVtIHRwbV90aXNfZmxhZ3MgewogfTsKIAogc3RydWN0IHRwbV90aXNfZGF0YSB7CisJc3Ry
+dWN0IHRwbV9jaGlwICpjaGlwOwogCXUxNiBtYW51ZmFjdHVyZXJfaWQ7CiAJc3RydWN0IG11dGV4
+IGxvY2FsaXR5X2NvdW50X211dGV4OwogCXVuc2lnbmVkIGludCBsb2NhbGl0eV9jb3VudDsKIAlp
+bnQgbG9jYWxpdHk7CisJLyogSW50ZXJydXB0cyAqLwogCWludCBpcnE7CisJc3RydWN0IHdvcmtf
+c3RydWN0IGZyZWVfaXJxX3dvcms7CisJdW5zaWduZWQgbG9uZyBsYXN0X3VuaGFuZGxlZF9pcnE7
+CisJdW5zaWduZWQgaW50IHVuaGFuZGxlZF9pcnFzOwogCXVuc2lnbmVkIGludCBpbnRfbWFzazsK
+KwogCXVuc2lnbmVkIGxvbmcgZmxhZ3M7CiAJdm9pZCBfX2lvbWVtICppbGJfYmFzZV9hZGRyOwog
+CXUxNiBjbGtydW5fZW5hYmxlZDsKCmJhc2UtY29tbWl0OiA0NGMwMjZhNzNiZTgwMzhmMDNkYmRl
+ZWYwMjhiNjQyODgwY2YxNTExCi0tIAoyLjQwLjEKCg==
