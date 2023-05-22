@@ -2,111 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B0670B6AA
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 May 2023 09:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70CA70B769
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 May 2023 10:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbjEVHjz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 May 2023 03:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S230109AbjEVISP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 May 2023 04:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjEVHjy (ORCPT
+        with ESMTP id S229490AbjEVISO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 May 2023 03:39:54 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EB0AC;
-        Mon, 22 May 2023 00:39:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684741193; x=1716277193;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=7cMpYequ3bVujnTZAQ0+mCVTPIv6VCv9TnnX/b7NE50=;
-  b=IuH3d+hunhfU2aMTWZQUOG+3Luc/C5OrAsHtfyXiW6erLTI+N4tB/gr7
-   KHHsGdDJq/VLz57joSFXNWFFn90cs3BH/F00qKHYl+tat6uXQOFan+4cU
-   WokEN0Ra6TGAtsf7lTowtbRpu7bTyy/TvU1R9/0xmfsm8NXo5r6avTF8J
-   nQV6Sm62RCCTFOaDoYkzIH9KgGp/TuE6kNLHYBFzXua6QwRd6jVBWTH71
-   OK8dD1/hjnTCqluy8/xAdhb1HPeZrl8L3+TaWyIZkIzDKJXUZ4x6VfaJN
-   +ykwy85HhLP9n56AKCbcfi+OUvGSYrnGJCH3OBlFyR+hycub6e5vblEfA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="342304616"
-X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="342304616"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 00:39:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="703408569"
-X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="703408569"
-Received: from bbattach-mobl.ger.corp.intel.com (HELO [10.251.220.157]) ([10.251.220.157])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 00:39:51 -0700
-Message-ID: <2c94260b-ac97-3f5e-331b-76f1a17ec5b5@linux.intel.com>
-Date:   Mon, 22 May 2023 10:40:49 +0300
+        Mon, 22 May 2023 04:18:14 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753B3B4;
+        Mon, 22 May 2023 01:18:12 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aecf5.dynamic.kabel-deutschland.de [95.90.236.245])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 0AC9B61E4052B;
+        Mon, 22 May 2023 10:17:46 +0200 (CEST)
+Message-ID: <7840f8c2-a903-7d80-c4bd-8568ad1c8682@molgen.mpg.de>
+Date:   Mon, 22 May 2023 10:17:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH - for 6.4] tpm: tpm_tis: Disable interrupts for AEON
- UPX-i11
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] tpm_tis_spi: fix:release chip select when flow control
+ fails
 Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com
-References: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
- <ohdpul6hax5bj5hhsnpt7i3ejbttivufmoolzunbhipexjkczi@meg3zx2yqkc7>
- <CSPMQ03V3G7G.EBWKDRE4B0XY@suppilovahvero>
- <432df3cf-da16-1f2a-02dc-e2c371c1f29c@linux.intel.com>
-In-Reply-To: <432df3cf-da16-1f2a-02dc-e2c371c1f29c@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Peijie Shao <shaopeijie@cestc.cn>
+Cc:     jarkko@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230522070140.33719-1-shaopeijie@cestc.cn>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230522070140.33719-1-shaopeijie@cestc.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Dear Peijie,
 
-On 18/05/2023 23:24, Péter Ujfalusi wrote:
+
+Thank you for your patch.
+
+The fix: tag in your commit message summary is uncommon. I suggest:
+
+> tpm_tis_spi: Release chip select when flow control fails
+
+
+Am 22.05.23 um 09:01 schrieb shaopeijie@cestc.cn:
+> From: Peijie Shao <shaopeijie@cestc.cn>
 > 
-> The version is used to differentiate the revisions of the UPX-i11
-> boards, and this issue present in all revisions.
+> The failure paths in tpm_tis_spi_transfer() do not deactivate
+> chip select. Send an empty message (cs_select == 0) to overcome
+> this.
+
+Does the standard require to deactivate it?
+
+A note on your test setup would be nice to have in the commit message.
+
+> Signed-off-by: Peijie Shao <shaopeijie@cestc.cn>
+> ---
+> Changes since v1:
+>      1. Deactive cs all of the failure path, not only flow control.
+
+Deactivate
+
+
+Kind regards,
+
+Paul
+
+
+>      2. change and update comments.
+> ---
+>   drivers/char/tpm/tpm_tis_spi_main.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
 > 
->> I can squash this to the commit I pushed (it is not yet mirrored
->> to linux-next), if I get the dmidecode info.
-> 
-> System Information
->         Manufacturer: AAEON
->         Product Name: UPX-TGL01
->         Version: V1.0
->         Serial Number: Default string
->         UUID: a300091d-fb1c-ce1c-1d30-0007328efc11
->         Wake-up Type: Power Switch
->         SKU Number: Default string
->         Family: Default string
-> 
-> I have used this description as it it is used for SOF, probably
-> DMI_MATCH(DMI_PRODUCT_NAME, "UPX-TGL01")
-> should be added?
-
-Jarkko: I have tested that adding the
-DMI_MATCH(DMI_PRODUCT_NAME, "UPX-TGL01")
-works.
-
-I would also do a small update to commit message: "120000 jiffies"  to
-"120000 msec".
-On my setup 120000 msec ends up to be 120000 jiffies.
-
-How do you prefer to handle this?
-I can send a v2 on top of linux-next / mainline
-I can send a fixup patch which can be squashed to the patch you have in
-your master branch atm
-Or you add this line by yourself?
-
-Either way is fine for me, whichever works best for you.
-
--- 
-Péter
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+> index 1f5207974..9bfaba092 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -136,6 +136,14 @@ int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+>   	}
+>   
+>   exit:
+> +	if (ret < 0) {
+> +		/* Deactivate chip select */
+> +		memset(&spi_xfer, 0, sizeof(spi_xfer));
+> +		spi_message_init(&m);
+> +		spi_message_add_tail(&spi_xfer, &m);
+> +		spi_sync_locked(phy->spi_device, &m);
+> +	}
+> +
+>   	spi_bus_unlock(phy->spi_device->master);
+>   	return ret;
+>   }
