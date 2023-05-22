@@ -2,122 +2,284 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FEC70C127
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 May 2023 16:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC4570CE30
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 May 2023 00:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjEVOc2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 May 2023 10:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S234612AbjEVWpr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 May 2023 18:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjEVOc1 (ORCPT
+        with ESMTP id S234083AbjEVWpp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 May 2023 10:32:27 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E19E;
-        Mon, 22 May 2023 07:32:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684765902; i=linosanfilippo@gmx.de;
-        bh=23KmM5Vjp/r+0CEVZoYhx1NZ0LhMxpN04GBEUCeHBaA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Dotd6gRN0IZGqFv0g+0zOBKVgPxT9vZS7OwjQLeoqXusmJGOTOETnLkeT91QPpT3k
-         7/qLO6HpAoLMkkRogeeMO2zvQ1FglYnEUgQ5ZteuUvSTeJUa4LEtLG//U2qHsk2kHf
-         F9ELFT3uoQIfTY5rJFpharCFXIkJsj9om3vlpFT4e5mQIAJdl28pYUKdfdW/tMuQ6l
-         eyKFcDzJ7YSyngaCbWhD3+LgX/KOMSUFyRqS5+hWmvyqJbiiC4/jOLE/AmQgcDQisL
-         /pEjFRcTh8MPiM/AQsDpUhCMjM716aBGKv4NFqFe4kPhPX5IbJLqdIk4MRr32i3FRa
-         yYZouriZOBzHg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from Venus.speedport.ip ([84.162.2.106]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQv8n-1po5rm4Akh-00Nxtb; Mon, 22
- May 2023 16:31:42 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     jsnitsel@redhat.com, hdegoede@redhat.com, oe-lkp@lists.linux.dev,
-        lkp@intel.com, peter.ujfalusi@linux.intel.com,
-        peterz@infradead.org, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, LinoSanfilippo@gmx.de, lukas@wunner.de,
-        p.rosenberger@kunbus.com
-Subject: [PATCH 2/2] tpm, tpm_tis: reuse code in disable_interrupts()
-Date:   Mon, 22 May 2023 16:31:05 +0200
-Message-Id: <20230522143105.8617-2-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+        Mon, 22 May 2023 18:45:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD60ADB
+        for <linux-integrity@vger.kernel.org>; Mon, 22 May 2023 15:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684795499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DaVz2A4ookrYy0bG1/ownvewposvWWNIhPO/rg/szCc=;
+        b=Sy6kS60bcbWm5wsu8nHLqGZJczvtHYz7SaWlKpQ/wOP9JbrbrzJqJBJkDQ8sAI64zQVmP+
+        Are5ro30YqvKQ0WQLmWkHlt/hsMekNdW3Wzphha/uUwcpIhzdwO/PcttTa6e/RcsyAL6J3
+        RXb7DZhj/6iFiFxOgcshgy+fM6mErz0=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-31-7jq7zHtkNc6Td7CCcipaNQ-1; Mon, 22 May 2023 18:44:57 -0400
+X-MC-Unique: 7jq7zHtkNc6Td7CCcipaNQ-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75b02da6949so194464085a.2
+        for <linux-integrity@vger.kernel.org>; Mon, 22 May 2023 15:44:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684795497; x=1687387497;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DaVz2A4ookrYy0bG1/ownvewposvWWNIhPO/rg/szCc=;
+        b=dTH7MMv/ZopEYLwtcu18P0CbDPVSYTumQelyO6O8q+dHVT8d8cL73PUYd6H756ipGQ
+         a2xUanvSF2beZK+zoH+yvVr9H92qFnKqH2Vg1Kyujc/NyfHxSnyLhkxDGwC2z/CJ6bXM
+         wwUID9vZVAOjGPPTuvdDzeFRBRZxIuvlUlm7lJJrVIPkiSnbQ0foSiMUQG02IhhWJwTe
+         z2yuEs5yWRP4EvTZEeodvLpEanP4Ph7e6rdGxqn6q+8Q+qAQNdjsj3IFSsLyh4T6zOgs
+         FsmFjroj3Ylx2GcTnNH/yl+nK85eYwKQe03i/cfZC5XSNZquCtVFkkChLoOe6zDfM8wg
+         6x4g==
+X-Gm-Message-State: AC+VfDx+psmWPtglPZgFQoxB2qA3tRgNBoYB27ybzaVTmbl2vq8RPp3C
+        RaBZSDo5/cALOmV73zgj/8jCdff0qGhVfb0suhx53n6q7QEjkpAu30dOw6Gqw+iQKh/3SsUCjHN
+        gQPkyFbuxqCKSKGMNaR39igwMIiHt
+X-Received: by 2002:a05:620a:678e:b0:75b:23a1:424 with SMTP id rr14-20020a05620a678e00b0075b23a10424mr2265045qkn.58.1684795497388;
+        Mon, 22 May 2023 15:44:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5E0z/Qztg9m+Xz89ofUOSQ7AaHC2ufX/Shd5E+wODIrQUEtmQTN9GTxHTglw3KD+jjSWGHrA==
+X-Received: by 2002:a05:620a:678e:b0:75b:23a1:424 with SMTP id rr14-20020a05620a678e00b0075b23a10424mr2265021qkn.58.1684795496967;
+        Mon, 22 May 2023 15:44:56 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id q27-20020a05620a039b00b0074411b03972sm2053343qkm.51.2023.05.22.15.44.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 15:44:56 -0700 (PDT)
+Date:   Mon, 22 May 2023 15:44:54 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        hdegoede@redhat.com, oe-lkp@lists.linux.dev, lkp@intel.com,
+        peter.ujfalusi@linux.intel.com, peterz@infradead.org,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+Message-ID: <ur6ype3ki6sxmpbzh53vfoewhq5oiqucioz3nwbdcda2vkaut7@sjt2hr33j3xk>
 References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:5nyh3VGLVlEBuWb2yLT46GgisZGdkKDMI/UWxmOTevTZoUkILFN
- 5DjVRTH5d5hzFJlQS1ULHkRfnneGFDdSoRfMOb9sjCydsrYvGujtZOf7CzvPzhA2Dsw7ClI
- tv/JxikT3Cc2tY4FE0yPx5A4RGHgOzn0BpRdvlsh2B2CDd27f6w8JP2uc0mW1qKWcL9l+VB
- gbNMTK1x9tr2Y43IxM3Aw==
-UI-OutboundReport: notjunk:1;M01:P0:PYvem97hXWc=;JEbL4U403GY4pF3llnOIcrIDa+1
- eY9Xw3t0hyQtzqrQ0aeN028TNUfWO//NJBUDjgZwgYIllqk2ss0OGmUFKvGpOC+/5OXi18Bkp
- KFyfpTAaRrvvJj49qW4i9uCmYUx47xoSL0jIF4ZSXxUNSVdi5gBgj6GwGijSnEAyFMOq0WuvJ
- JkXMXyjBt5G2+Zx57TCHEFOFPDsyE+EJH4dHcUGCgKi5oN/rKMUzHiKs5jZDU4qwSFiMeFMjV
- mSUF+aWb7pzuyxSUpvKmnAjWF6JPqfzVrRVp/aU5tOuyHkSMYJrBthQ2hwEfaqHpyhrGv0lDa
- YPeX2fq6dqNcn8tnfIJRl+d/n5BzfHqqyHJ2Ks9g2rzKm1/BTeNaYvs+6elNC39HyJOVXiOcm
- ZNDwmbQaPMB1bI+36CpxeOKiVESlGkMK0kBfKp1r7KQDguZ4HTNIKusVr76svFarcREW+pOCi
- +M5BjY8A3RIyJ6ry3w3FwqI8i69sbMN4+EVzcBILasLEhOfwSEasqI4bXAQYFBlW4TyWCj9VB
- E+fPvk/cFxJvf0p6Qb9xrU5YoTkQwwO5zra2WWdd1VanFG4GHd53kprZtfPibpjgjvEfqsP+Q
- pYQTAi6COMA32lPhOOU43DtSeSNrGV5liSv+ds56D3XMlAhaC25lcQfs/nbM2lRMNAya+6lTP
- mYExtOafF0hKsSvpDWdMBQLS1Ee3TAmAtq4NBHNtJ1Ij29jeLAa/6KGEX5faVR7+JXASqqlPL
- ZHpMSbG+p8ZQ+Ask7wtue8iaqyCwFjf+W5U8q+Lfqtb0mtDnxRjWJTv6+CE300J7bJ2sAxVk7
- AKyRB85fUGxikbuxWndZO3x5i41ACAPa6pn2MOheXHDCWix856MX13PtZ517FjaR9bISucqZo
- nEEDN/A3Sn2t6SMJdP4s1C+AFH2i46Ev3RUIhSU3tvEzhl0EUjY4rDTqkW29C2n3hMJ2lmR7+
- tlAHQw==
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KCkF2b2lkIGNv
-ZGUgcmVkdW5kYW5jeSBieSBzaGlmdGluZyBwYXJ0IG9mIHRoZSBjb2RlIGluIGRpc2FibGVfaW50
-ZXJydXB0cygpCmludG8gYSBzdWJmdW5jdGlvbiBhbmQgcmV1c2luZyB0aGlzIGZ1bmN0aW9uIGlu
-IHRwbV90aXNfaGFuZGxlX2lycV9zdG9ybSgpLgpNYWtlIHN1cmUgdGhhdCBpbiB0aGUgc3ViZnVu
-Y3Rpb24gdGhlIElOVF9FTkFCTEUgcmVnaXN0ZXIgaXMgd3JpdHRlbiB3aXRoIGEKY2xhaW1lZCBs
-b2NhbGl0eSBldmVuIGlmIHRoZSBjYWxsZXIgZGlkIG5vdCBjbGFpbSBpdCBiZWZvcmUuCgpJbiB0
-aGUgc2hpZnRlZCBjb2RlIGdldCByaWQgb2YgdGhlIHZhcmlhYmxlICJyYyIgYnkgaW5pdGlhbGl6
-aW5nIHRoZQppbnRlcnJ1cHQgbWFzayB0byB6ZXJvIGF0IHZhcmlhYmxlIGRlY2xhcmF0aW9uLgoK
-U2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4K
-LS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jIHwgMzYgKysrKysrKysrKysrKysr
-Ky0tLS0tLS0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKSwgMTkg
-ZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUu
-YyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMKaW5kZXggNDU4ZWJmOGMyZjE2Li44
-ZjRmMmNiNTUyMGYgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMK
-KysrIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuYwpAQCAtNDY4LDI1ICs0NjgsMzIg
-QEAgc3RhdGljIGludCB0cG1fdGlzX3NlbmRfZGF0YShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAsIGNv
-bnN0IHU4ICpidWYsIHNpemVfdCBsZW4pCiAJcmV0dXJuIHJjOwogfQogCitzdGF0aWMgdm9pZCBf
-X3RwbV90aXNfZGlzYWJsZV9pbnRlcnJ1cHRzKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKK3sKKwlz
-dHJ1Y3QgdHBtX3Rpc19kYXRhICpwcml2ID0gZGV2X2dldF9kcnZkYXRhKCZjaGlwLT5kZXYpOwor
-CXUzMiBpbnRtYXNrID0gMDsKKworCXRwbV90aXNfcmVhZDMyKHByaXYsIFRQTV9JTlRfRU5BQkxF
-KHByaXYtPmxvY2FsaXR5KSwgJmludG1hc2spOworCWludG1hc2sgJj0gflRQTV9HTE9CQUxfSU5U
-X0VOQUJMRTsKKworCXRwbV90aXNfcmVxdWVzdF9sb2NhbGl0eShjaGlwLCAwKTsKKwl0cG1fdGlz
-X3dyaXRlMzIocHJpdiwgVFBNX0lOVF9FTkFCTEUocHJpdi0+bG9jYWxpdHkpLCBpbnRtYXNrKTsK
-Kwl0cG1fdGlzX3JlbGlucXVpc2hfbG9jYWxpdHkoY2hpcCwgMCk7CisKKwljaGlwLT5mbGFncyAm
-PSB+VFBNX0NISVBfRkxBR19JUlE7Cit9CisKIHN0YXRpYyB2b2lkIGRpc2FibGVfaW50ZXJydXB0
-cyhzdHJ1Y3QgdHBtX2NoaXAgKmNoaXApCiB7CiAJc3RydWN0IHRwbV90aXNfZGF0YSAqcHJpdiA9
-IGRldl9nZXRfZHJ2ZGF0YSgmY2hpcC0+ZGV2KTsKLQl1MzIgaW50bWFzazsKLQlpbnQgcmM7CiAK
-IAlpZiAocHJpdi0+aXJxID09IDApCiAJCXJldHVybjsKIAotCXJjID0gdHBtX3Rpc19yZWFkMzIo
-cHJpdiwgVFBNX0lOVF9FTkFCTEUocHJpdi0+bG9jYWxpdHkpLCAmaW50bWFzayk7Ci0JaWYgKHJj
-IDwgMCkKLQkJaW50bWFzayA9IDA7Ci0KLQlpbnRtYXNrICY9IH5UUE1fR0xPQkFMX0lOVF9FTkFC
-TEU7Ci0JcmMgPSB0cG1fdGlzX3dyaXRlMzIocHJpdiwgVFBNX0lOVF9FTkFCTEUocHJpdi0+bG9j
-YWxpdHkpLCBpbnRtYXNrKTsKKwlfX3RwbV90aXNfZGlzYWJsZV9pbnRlcnJ1cHRzKGNoaXApOwog
-CiAJZGV2bV9mcmVlX2lycShjaGlwLT5kZXYucGFyZW50LCBwcml2LT5pcnEsIGNoaXApOwogCXBy
-aXYtPmlycSA9IDA7Ci0JY2hpcC0+ZmxhZ3MgJj0gflRQTV9DSElQX0ZMQUdfSVJROwogfQogCiAv
-KgpAQCAtNzU1LDIwICs3NjIsMTEgQEAgc3RhdGljIGJvb2wgdHBtX3Rpc19yZXFfY2FuY2VsZWQo
-c3RydWN0IHRwbV9jaGlwICpjaGlwLCB1OCBzdGF0dXMpCiBzdGF0aWMgdm9pZCB0cG1fdGlzX2hh
-bmRsZV9pcnFfc3Rvcm0oc3RydWN0IHRwbV9jaGlwICpjaGlwKQogewogCXN0cnVjdCB0cG1fdGlz
-X2RhdGEgKnByaXYgPSBkZXZfZ2V0X2RydmRhdGEoJmNoaXAtPmRldik7Ci0JaW50IGludG1hc2sg
-PSAwOwogCiAJZGV2X2VycigmY2hpcC0+ZGV2LCBIV19FUlIKIAkJIlRQTSBpbnRlcnJ1cHQgc3Rv
-cm0gZGV0ZWN0ZWQsIHBvbGxpbmcgaW5zdGVhZFxuIik7CiAKLQl0cG1fdGlzX3JlYWQzMihwcml2
-LCBUUE1fSU5UX0VOQUJMRShwcml2LT5sb2NhbGl0eSksICZpbnRtYXNrKTsKLQotCWludG1hc2sg
-Jj0gflRQTV9HTE9CQUxfSU5UX0VOQUJMRTsKLQotCXRwbV90aXNfcmVxdWVzdF9sb2NhbGl0eShj
-aGlwLCAwKTsKLQl0cG1fdGlzX3dyaXRlMzIocHJpdiwgVFBNX0lOVF9FTkFCTEUocHJpdi0+bG9j
-YWxpdHkpLCBpbnRtYXNrKTsKLQl0cG1fdGlzX3JlbGlucXVpc2hfbG9jYWxpdHkoY2hpcCwgMCk7
-Ci0KLQljaGlwLT5mbGFncyAmPSB+VFBNX0NISVBfRkxBR19JUlE7CisJX190cG1fdGlzX2Rpc2Fi
-bGVfaW50ZXJydXB0cyhjaGlwKTsKIAogCS8qCiAJICogV2UgbXVzdCBub3QgY2FsbCBkZXZtX2Zy
-ZWVfaXJxKCkgZnJvbSB3aXRoaW4gdGhlIGludGVycnVwdCBoYW5kbGVyLAotLSAKMi40MC4xCgo=
+On Mon, May 22, 2023 at 04:31:04PM +0200, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> 
+> Commit e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test") enabled
+> interrupts instead of polling on all capable TPMs. Unfortunately, on some
+> products the interrupt line is either never asserted or never deasserted.
+> 
+> The former causes interrupt timeouts and is detected by
+> tpm_tis_core_init(). The latter results in interrupt storms.
+> 
+> Recent reports concern the Lenovo ThinkStation P360 Tiny, Lenovo ThinkPad
+> L490 and Inspur NF5180M6:
+> 
+> https://lore.kernel.org/linux-integrity/20230511005403.24689-1-jsnitsel@redhat.com/
+> https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org/
+> 
+> The current approach to avoid those storms is to disable interrupts by
+> adding a DMI quirk for the concerned device.
+> 
+> However this is a maintenance burden in the long run, so use a generic
+> approach:
+> 
+> Detect an interrupt storm by counting the number of unhandled interrupts
+> within a 10 ms time interval. In case that more than 1000 were unhandled
+> deactivate interrupts, deregister the handler and fall back to polling.
+> 
+> This equals the implementation that handles interrupt storms in
+> note_interrupt() by means of timestamps and counters in struct irq_desc.
+> However the function to access this structure is private so the logic has
+> to be reimplemented in the TPM TIS core.
+> 
+> Since handler deregistration would deadlock from within the interrupt
+> routine trigger a worker thread that executes the unregistration.
+> 
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 71 +++++++++++++++++++++++++++++++--
+>  drivers/char/tpm/tpm_tis_core.h |  6 +++
+>  2 files changed, 74 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 558144fa707a..458ebf8c2f16 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -752,6 +752,55 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+>  	return status == TPM_STS_COMMAND_READY;
+>  }
+>  
+> +static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
+> +{
+> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	int intmask = 0;
+> +
+> +	dev_err(&chip->dev, HW_ERR
+> +		"TPM interrupt storm detected, polling instead\n");
+> +
+> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> +
+> +	intmask &= ~TPM_GLOBAL_INT_ENABLE;
+> +
+> +	tpm_tis_request_locality(chip, 0);
+> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> +	tpm_tis_relinquish_locality(chip, 0);
+> +
+> +	chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+> +
+> +	/*
+> +	 * We must not call devm_free_irq() from within the interrupt handler,
+> +	 * since this function waits for running interrupt handlers to finish
+> +	 * and thus it would deadlock. Instead trigger a worker that does the
+> +	 * unregistration.
+> +	 */
+> +	schedule_work(&priv->free_irq_work);
+> +}
+> +
+> +static void tpm_tis_process_unhandled_interrupt(struct tpm_chip *chip)
+> +{
+> +	const unsigned int MAX_UNHANDLED_IRQS = 1000;
+> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	/*
+> +	 * The worker to free the TPM interrupt (free_irq_work) may already
+> +	 * be scheduled, so make sure it is not scheduled again.
+> +	 */
+> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
+> +		return;
+> +
+> +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
+> +		priv->unhandled_irqs = 1;
+> +	else
+> +		priv->unhandled_irqs++;
+> +
+> +	priv->last_unhandled_irq = jiffies;
+> +
+> +	if (priv->unhandled_irqs > MAX_UNHANDLED_IRQS)
+> +		tpm_tis_handle_irq_storm(chip);
+> +}
+> +
+>  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  {
+>  	struct tpm_chip *chip = dev_id;
+> @@ -761,10 +810,10 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  
+>  	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+>  	if (rc < 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+>  
+>  	if (interrupt == 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+>  
+>  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
+>  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
+> @@ -780,10 +829,14 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
+>  	tpm_tis_relinquish_locality(chip, 0);
+>  	if (rc < 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+>  
+>  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+>  	return IRQ_HANDLED;
+> +
+> +unhandled:
+> +	tpm_tis_process_unhandled_interrupt(chip);
+> +	return IRQ_HANDLED;
+>  }
+>  
+>  static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
+> @@ -804,6 +857,15 @@ static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
+>  		chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+>  }
+>  
+> +static void tpm_tis_free_irq_func(struct work_struct *work)
+> +{
+> +	struct tpm_tis_data *priv = container_of(work, typeof(*priv), free_irq_work);
+> +	struct tpm_chip *chip = priv->chip;
+> +
+> +	devm_free_irq(chip->dev.parent, priv->irq, chip);
+> +	priv->irq = 0;
+> +}
+> +
+>  /* Register the IRQ and issue a command that will cause an interrupt. If an
+>   * irq is seen then leave the chip setup for IRQ operation, otherwise reverse
+>   * everything and leave in polling mode. Returns 0 on success.
+> @@ -816,6 +878,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+>  	int rc;
+>  	u32 int_status;
+>  
+> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
+>  
+>  	rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+>  				       tis_int_handler, IRQF_ONESHOT | flags,
+> @@ -918,6 +981,7 @@ void tpm_tis_remove(struct tpm_chip *chip)
+>  		interrupt = 0;
+>  
+>  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
+> +	flush_work(&priv->free_irq_work);
+>  
+>  	tpm_tis_clkrun_enable(chip, false);
+>  
+> @@ -1021,6 +1085,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  	chip->timeout_b = msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
+>  	chip->timeout_c = msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
+>  	chip->timeout_d = msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
+> +	priv->chip = chip;
+>  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
+>  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
+>  	priv->phy_ops = phy_ops;
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index e978f457fd4d..6fc86baa4398 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -91,12 +91,18 @@ enum tpm_tis_flags {
+>  };
+>  
+>  struct tpm_tis_data {
+> +	struct tpm_chip *chip;
+>  	u16 manufacturer_id;
+>  	struct mutex locality_count_mutex;
+>  	unsigned int locality_count;
+>  	int locality;
+> +	/* Interrupts */
+>  	int irq;
+> +	struct work_struct free_irq_work;
+> +	unsigned long last_unhandled_irq;
+> +	unsigned int unhandled_irqs;
+>  	unsigned int int_mask;
+> +
+>  	unsigned long flags;
+>  	void __iomem *ilb_base_addr;
+>  	u16 clkrun_enabled;
+> 
+> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+> -- 
+> 2.40.1
+> 
+
