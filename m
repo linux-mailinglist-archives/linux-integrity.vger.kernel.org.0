@@ -2,57 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CEA70E51B
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 May 2023 21:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACF270E526
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 May 2023 21:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237983AbjEWTHx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 23 May 2023 15:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S229560AbjEWTNI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 23 May 2023 15:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbjEWTHw (ORCPT
+        with ESMTP id S237742AbjEWTNH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 23 May 2023 15:07:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560C8119;
-        Tue, 23 May 2023 12:07:49 -0700 (PDT)
+        Tue, 23 May 2023 15:13:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BA1119;
+        Tue, 23 May 2023 12:12:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1407601D7;
-        Tue, 23 May 2023 19:07:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 737D4C433EF;
-        Tue, 23 May 2023 19:07:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 148E161D46;
+        Tue, 23 May 2023 19:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 734AFC433D2;
+        Tue, 23 May 2023 19:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684868868;
-        bh=UjoI8KoEuWKKny/a0/2Y5UC4GhbSgwmY9f8yoNGDBVE=;
+        s=k20201202; t=1684869174;
+        bh=e2+88Fpdes7sDNr1lFo4AJXADvwOPDkDtwtQu+Fn7KI=;
         h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=HsU4mJiq0+kQivmSwVpMkf5uxpXXhoM+pBA1jUMtHg5go78AmqSu7l72l92zJRXpv
-         RJDDMwBOfFz/CMHXXIo7nw/p0IR76yzwBSAQHGT+YpvEYdq5kR6jiFQdNlP3aY6fWG
-         fS7oB7GkQF8kmMaALLK7SQVAlHbOYD4SZPNVZxrMIXLMFWSxVz7EibcX9xCtyERUtD
-         VRHWI0/3US9byvmSj06WSC17q7A7FutLewiIrWw/99uoSyvNf+fclRo2Ot8VD0qtjo
-         QjuRcKLW2Fy4Kd66uIecU9w9pGA/kNL4iLARhPA+Cq4f/Jwwl6E4ThioYaT0FOqoMR
-         w42g9stpb0+dA==
+        b=b2QDMZT75fspvpIHJtMwx9QUeWemKM9oXLhFLuLu1clAf4QyCX3qnBEKSPNynYSkm
+         Qr1B67ra1/wIb7+VxQpSPCHwkBD36PQ0cohLrYjUKdI/4CMh7W7RHnJh/egaFhJd8Z
+         4RHyIsIzuLStIRJC4yK/26NewusGaRaIO+ZTR9LoU24VEoiKhfW5PMjg6DqklUls49
+         5GK1fDtWjST3rRfTPbI13po7WIPuncvE/I5dy0oNVhqe89gwRITeNtt5aCHJMfUVDJ
+         0qyoXbed7BFafxuZk5FARJ2xN8wZIMiiK5lylPCpdTcorusPpk7Bq8pY/7g+txatVb
+         3TAc3gJrnO9PQ==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 23 May 2023 22:07:43 +0300
-Message-Id: <CSTW5YGZ50O1.16RYO14HOQRH2@suppilovahvero>
+Date:   Tue, 23 May 2023 22:12:49 +0300
+Message-Id: <CSTW9UX4ERDZ.VBD1QIWLBM75@suppilovahvero>
 Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
         <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
         <peter.ujfalusi@linux.intel.com>, <peterz@infradead.org>,
         <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
         <lukas@wunner.de>, <p.rosenberger@kunbus.com>
-Subject: Re: [PATCH 2/2] tpm, tpm_tis: reuse code in disable_interrupts()
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
+To:     "Jarkko Sakkinen" <jarkko@kernel.org>,
+        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
         <jgg@ziepe.ca>
 X-Mailer: aerc 0.14.0
 References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <20230522143105.8617-2-LinoSanfilippo@gmx.de>
-In-Reply-To: <20230522143105.8617-2-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+ <CSTVVFNKUVJW.P69FKI6IF3ZN@suppilovahvero>
+In-Reply-To: <CSTVVFNKUVJW.P69FKI6IF3ZN@suppilovahvero>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,105 +62,63 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon May 22, 2023 at 5:31 PM EEST, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+On Tue May 23, 2023 at 9:53 PM EEST, Jarkko Sakkinen wrote:
+> On Mon May 22, 2023 at 5:31 PM EEST, Lino Sanfilippo wrote:
+> > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> >
+> > Commit e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test") enabled
+> > interrupts instead of polling on all capable TPMs. Unfortunately, on so=
+me
+> > products the interrupt line is either never asserted or never deasserte=
+d.
+> >
+> > The former causes interrupt timeouts and is detected by
+> > tpm_tis_core_init(). The latter results in interrupt storms.
+> >
+> > Recent reports concern the Lenovo ThinkStation P360 Tiny, Lenovo ThinkP=
+ad
+> > L490 and Inspur NF5180M6:
+> >
+> > https://lore.kernel.org/linux-integrity/20230511005403.24689-1-jsnitsel=
+@redhat.com/
+> > https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062cfa=
+3a78af5a6.camel@kernel.org/
+> >
+> > The current approach to avoid those storms is to disable interrupts by
+> > adding a DMI quirk for the concerned device.
+> >
+> > However this is a maintenance burden in the long run, so use a generic
+> > approach:
 >
-> Avoid code redundancy by shifting part of the code in disable_interrupts(=
-)
-> into a subfunction and reusing this function in tpm_tis_handle_irq_storm(=
-).
-> Make sure that in the subfunction the INT_ENABLE register is written with=
- a
-> claimed locality even if the caller did not claim it before.
+> I'm trying to comprehend how you evaluate, how big maintenance burden
+> this would be. Adding even a few dozen table entries is not a
+> maintenance burden.
 >
-> In the shifted code get rid of the variable "rc" by initializing the
-> interrupt mask to zero at variable declaration.
+> On the other hand any new functionality is objectively a maintanance
+> burden of some measure (applies to any functionality). So how do we know
+> that taking this change is less of a maintenance burden than just add
+> new table entries, as they come up?
 >
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 36 ++++++++++++++++-----------------
->  1 file changed, 17 insertions(+), 19 deletions(-)
+> > Detect an interrupt storm by counting the number of unhandled interrupt=
+s
+> > within a 10 ms time interval. In case that more than 1000 were unhandle=
+d
+> > deactivate interrupts, deregister the handler and fall back to polling.
 >
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
-ore.c
-> index 458ebf8c2f16..8f4f2cb5520f 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -468,25 +468,32 @@ static int tpm_tis_send_data(struct tpm_chip *chip,=
- const u8 *buf, size_t len)
->  	return rc;
->  }
-> =20
-> +static void __tpm_tis_disable_interrupts(struct tpm_chip *chip)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	u32 intmask =3D 0;
-> +
-> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> +	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> +
-> +	tpm_tis_request_locality(chip, 0);
-> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> +	tpm_tis_relinquish_locality(chip, 0);
-> +
-> +	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
-> +}
-> +
->  static void disable_interrupts(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> -	u32 intmask;
-> -	int rc;
-> =20
->  	if (priv->irq =3D=3D 0)
->  		return;
-> =20
-> -	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> -	if (rc < 0)
-> -		intmask =3D 0;
-> -
-> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> -	rc =3D tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> +	__tpm_tis_disable_interrupts(chip);
-> =20
->  	devm_free_irq(chip->dev.parent, priv->irq, chip);
->  	priv->irq =3D 0;
-> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->  }
-> =20
->  /*
-> @@ -755,20 +762,11 @@ static bool tpm_tis_req_canceled(struct tpm_chip *c=
-hip, u8 status)
->  static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> -	int intmask =3D 0;
-> =20
->  	dev_err(&chip->dev, HW_ERR
->  		"TPM interrupt storm detected, polling instead\n");
-> =20
-> -	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> -
-> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> -
-> -	tpm_tis_request_locality(chip, 0);
-> -	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> -	tpm_tis_relinquish_locality(chip, 0);
-> -
-> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
-> +	__tpm_tis_disable_interrupts(chip);
-> =20
->  	/*
->  	 * We must not call devm_free_irq() from within the interrupt handler,
-> --=20
-> 2.40.1
+> I know it can be sometimes hard to evaluate but can you try to explain
+> how you came up to the 10 ms sampling period and 1000 interrupt
+> threshold? I just don't like abritrary numbers.
 
-NAK as invidual change w/o further discussion.
+Also here I wonder how you came up with this computational model. This
+is not same as saying it is wrong. There's just whole stack of options.
 
-Would need to be seen in context. This does not change kernel for
-better.
+Out of top of my head you could e.g. window average the duration between
+IRQs. When the average goes beyond threshold, then you shutdown
+interrupts.
 
-If you want to wrap, please do it in 1/2 and then we can evaluate
-whether it makes sense or not.
+The pro I would see in this that it is much easier intuitively discuss
+how much there should be time in-between interrupts that the kernel
+handles it, than how many IRQs you can stack into time interval, which
+blows my head tbh.
 
 BR, Jarkko
