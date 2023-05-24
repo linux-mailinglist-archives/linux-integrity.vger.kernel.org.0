@@ -2,142 +2,199 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D1D70F1CC
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 May 2023 11:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1550B70F6C3
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 May 2023 14:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240454AbjEXJJT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 May 2023 05:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S234376AbjEXMnc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 May 2023 08:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240446AbjEXJJT (ORCPT
+        with ESMTP id S234264AbjEXMn1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 May 2023 05:09:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910AF8E
-        for <linux-integrity@vger.kernel.org>; Wed, 24 May 2023 02:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684919311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2Ba3cVMN5JYb7eY+YLCMjuGa5u5FrljiykCHYgPsetc=;
-        b=a3+Aul89pcXvgAKpAMe45AAp0+jvERzjvsRA/DPLOfH5qSlfkOTxAoP24XSIIBAM3OWZyE
-        Gh8tx7mZpdx85oukIpM8lFOrX2XGXkYfl5zeU5OBctGy7yPFxOoQfRqYAZAbE6wgJno4bS
-        ydgiUfI+NlbkizdXuhy1IZFWDrKmyoE=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-635-Tz8aJIioNga9iCz6EVZeBQ-1; Wed, 24 May 2023 05:08:30 -0400
-X-MC-Unique: Tz8aJIioNga9iCz6EVZeBQ-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-513fd7d56c8so941330a12.2
-        for <linux-integrity@vger.kernel.org>; Wed, 24 May 2023 02:08:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684919309; x=1687511309;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Ba3cVMN5JYb7eY+YLCMjuGa5u5FrljiykCHYgPsetc=;
-        b=CW9kfH78AqN6pDlWgWwuCN7AGRo1Tst0YrrS9I9XtXbYpwQUNPrNmtBe6tqCimuSpE
-         cHQqcpLDYLf9hdneBcz/wFO+0jserWqav4T0UgKrsjIGN58Y4MKXh5f/vXhqzmmSTUUD
-         bS218l/ETOLFDAAsboD7oFD/C4Qwm2osVGvnY8OrH+UoY6aM4OysvF8vpKRZwmHfNnMH
-         6F+k9dcbEGRFC5KRaVzX/FWhE1b+MjWrpIMj9RTt74BsCJUHIW48gscF1EQK3W9ifV76
-         tGmPx4fbLQpk5tmx5SOPbAsTxyF083h1k2ZFPcAxKBk8AclKpCM6Q3HQwbeeSOofT905
-         GKYA==
-X-Gm-Message-State: AC+VfDwAdGd32OYTDZnYq0JzPEswOZE424wXXaHJ/y72/7O0FbcNpET2
-        DLGw/s0TBoBP0TLM2ZWwSUglyiEKf1oHUt+g9rzMiNK3Yk5jmuhvJzsq+Q3f6brshsVs/HtcOxz
-        zQhoTHWGyfLo3cviWcJNjGcC3Adjl
-X-Received: by 2002:a17:907:7ea3:b0:96a:57fe:3bfb with SMTP id qb35-20020a1709077ea300b0096a57fe3bfbmr17636580ejc.26.1684919309215;
-        Wed, 24 May 2023 02:08:29 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ73F3kbO0SmGWBsYMmVzety237b+nVthkK/CLP2W6JhWQfl6pbCE7hOBDeO04CB7wWiFaOCXg==
-X-Received: by 2002:a17:907:7ea3:b0:96a:57fe:3bfb with SMTP id qb35-20020a1709077ea300b0096a57fe3bfbmr17636561ejc.26.1684919308953;
-        Wed, 24 May 2023 02:08:28 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id m13-20020a17090607cd00b0096f603dc8ddsm5561226ejc.142.2023.05.24.02.08.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 02:08:28 -0700 (PDT)
-Message-ID: <4f9e3da1-5cfa-c3cd-a8e5-f97a2dd1cede@redhat.com>
-Date:   Wed, 24 May 2023 11:08:27 +0200
+        Wed, 24 May 2023 08:43:27 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2087.outbound.protection.outlook.com [40.107.220.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED2A12F;
+        Wed, 24 May 2023 05:43:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gOkWgiLvYhfw5ylCKvlX3iFPhc4BoTAEohO9ga1gfHhJwmUhaIHmawKKQM3gVe9jtdpF8NQbD4OkO8TuKgYRJGnFdon37A5yxHTMzHIQ0TSI0b+J5wUjLnLF94QCRqtvQZXdBagnIeGjan9N0A0HyhlFaXLMd4CcsZaUDZzmdyyhGa/Dg5Lrryvslb6Cg4+knmWbdNzNEJ3+TpJnBPtN9FRG+yCMwy8pIdR68aKn8w5hqWqHfu4t4ByEhEeEkd03CTq0LmC4k1jj17hkIIFAIjLcB7k9JnFinSZ0Al9cfWLqdLVJLZTpNP9hgUaNETnAce00/oxaWCChxdgyluhmRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MG1sWKrVdRu8BYqfkBdToxws12tlZyXzw4CIG+tpniQ=;
+ b=aeF7ZJBUHt5SUU3ZAvaShE2JoTZyYdgntFz/8A7K7x2grRj4jxdwvkAAcokmzn7VN7w2dIVdEZis/XHyK4oiNLWSr8sMz//cu8h0LwfIGJMw9uQjOwTrVsmrSMLiq0AfxAVBn1zeTsD6j4/X298UlOz7fkUUl+lPI3D0Q20Qzoypsx5tOScjHxWlCLAjALI/89nlZePcoIBYOF6X+JHagchYWkg698m21n1fRwsss21xSCsEM4lzyzjtZFM2J0gziL2ehwGrejr+p2qnW1Q++oIB+SD7nfyz/8jju+jAdQwYc0ZKqXm063kqk5C9kyOTLw/IezS2RagJRD94e6cUYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MG1sWKrVdRu8BYqfkBdToxws12tlZyXzw4CIG+tpniQ=;
+ b=FjpCiQweGRUWmd1KJ6zjtl6q3VYdFj/4IBLOrMBolHNm4ik8C1xbMI4QNtG7sScHcDBnkgHhoVJ0sRfqItd+08j9CF1tmOZZdK3swoDgTfpP/gkbelNnow/r+pB3QTKOlc6HDPjmkPXaHw4mzrNXID5pR4KEhDICmvB0+SBGl8+ohDjW2m1Aci0WVqEGlB+6Xg5jTzwXwhevyB0M6Qy0ZrobyeLQE2gu5pjmiEiTdWWY4sd1h8CPM/Q9VsrdMJiz7uTTzPmbQEaL3QEda8CD8cz9jzU7ka3Sv9mWDJQYptZ5aj/YkQJ5c+ER4ToAJgjglHZ6aFMC/hajKxKe1TZM5Q==
+Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
+ SN7PR12MB7956.namprd12.prod.outlook.com (2603:10b6:806:328::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
+ 2023 12:43:12 +0000
+Received: from DM4PR12MB5769.namprd12.prod.outlook.com
+ ([fe80::2c4d:1cf:626a:370d]) by DM4PR12MB5769.namprd12.prod.outlook.com
+ ([fe80::2c4d:1cf:626a:370d%7]) with mapi id 15.20.6433.015; Wed, 24 May 2023
+ 12:43:12 +0000
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+CC:     Thierry Reding <thierry.reding@gmail.com>,
+        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: RE: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+Thread-Topic: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+Thread-Index: AQHZdDGUn7qO3n0DaEywabZxmXB7Nq85AnkAgAFcuoCAAC9+AIAACQqAgAADlQCAGR6r0IAV1ZKg
+Date:   Wed, 24 May 2023 12:43:12 +0000
+Message-ID: <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com>
+References: <20230421091309.2672-1-kyarlagadda@nvidia.com>
+ <20230421091309.2672-3-kyarlagadda@nvidia.com>
+ <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
+ <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk> <ZEaWQD_QTs2usVl8@orome>
+ <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk> <ZEag1lAonYcmNFXk@orome>
+ <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com>
+In-Reply-To: <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB5769:EE_|SN7PR12MB7956:EE_
+x-ms-office365-filtering-correlation-id: 836e641e-1c06-4aee-a415-08db5c546fc9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8bxg4RiGBL0AsHWSHwFKoc421o4PD8+QMCD04IzLR8iDzL5F1dMXPa6Xg4zsXaWF2F9o2AlGfWz/I+l+zhN2yn5EhfqbEiYn7x2QGJDRfMmdZzC2GD9AR6FPdfRmlFnd1kzMhz6UF8REAX2+YeY/i45qLWj8HCl1A9td8YzpC8hj3W19Ki3SSmwsntdiPYj+6Sk+ntSRw3FfOjwc+LV/M5uQxhYBdHM4bW/qGDqg+RcsTrlFi70pM4H1SFAwjxHgLOs7zU4LDegieCdcfyWiXFQZA075x6tk9MOrLbOsWCR+9oPLYHu27FNFy7P+CUtdxnAD+Wo4gzsGSp5vaC9fg6Ri8eOl/B2DI4p0ZDCicPjtMX+2Nb9CFFvxskitAY5ML05OXXgZ7hvTehGxwzE3Cj6ERnHuFiP8dZ3Svjy6j9Ik1seQlpbVRkOewmEMKg0wne4XgSzzLKqJ7nFV8IxvI/8cwMCp/0r6BtJphVgUjoS56uR500rVmAMdUzgOqgUt7gphRwCOO0rUHUKFfEmqNX0JDL/2SRgr+RVNTbDvZhYuAXiLvopXVf7aPIhJcXik/2vjZmQTIgCBf99CFFAXq6v4KYzZ5PuN5/SFRYQMGhCcktmj2/QDnmk3P6wA2feG
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(39860400002)(396003)(136003)(451199021)(55016003)(110136005)(4326008)(66556008)(66446008)(66476007)(66946007)(76116006)(478600001)(64756008)(86362001)(54906003)(41300700001)(7696005)(316002)(71200400001)(38070700005)(52536014)(8936002)(5660300002)(8676002)(83380400001)(107886003)(6506007)(38100700002)(26005)(33656002)(186003)(53546011)(122000001)(9686003)(7416002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gKajHSBc//Q2s/qMi8718copcdFqqfOT/Mub0n8F38Yjsawb7eig0tp+aZZk?=
+ =?us-ascii?Q?4+iAsn4HKVYoAcJwcpqAcGkD77wEsO8jHPaYnj04jp0Bj+KpOi3m/SHUfCdT?=
+ =?us-ascii?Q?s38vPbRn0aUgv7HyeQhnZ7MBhvm5sOTVcdPQzbr7Jp149SFGOSH1QJ5rmjdR?=
+ =?us-ascii?Q?H0dUGnkWP/tUNxGbiCuysaT7R3evGOz735WKNXTJHkG1ieYfe3u8w2UmdXf6?=
+ =?us-ascii?Q?8qKHWEjsZ+SVtC2g/JVyI1G7QJJem4vopmkE0Hy5Rm6pHtjwvevRYu3PMast?=
+ =?us-ascii?Q?8PhPBEbuVMPrM7X2KmdkfMsY42l8yNaHMvhaT+TdmkamR2Ge6e409dLlSQ14?=
+ =?us-ascii?Q?z9nt04MXqKhF3m3cVfxFOVIaAQruL7+8QmUv1fLCmFEcDvlMg7igl2m3QG3Z?=
+ =?us-ascii?Q?7ox9U5jby1/FMjoveOSMn2wTnvw+2wxfGcYYZEGSC9J1nwfFTdlxJ5KedOuy?=
+ =?us-ascii?Q?vGmHywzQtjaR/TAORFRJWroAMX/aTYSPgKAi7By2cuK1Hu8GLUcrqOZakfQG?=
+ =?us-ascii?Q?XO28aT3sZ1dCaAfaSDmaCVvHS8f+DZsd7/6sTEF6QUVaVgiy6k5NJvTZTuSV?=
+ =?us-ascii?Q?in2mD2yRKklkCribPeKNqitufZRSZGWXSxMTWJFgYbyxjWEJCi5c0BPeVHd0?=
+ =?us-ascii?Q?DJJQ1pdJD8bnq2zWmMMQtjgCzTRTyX5PeGmfHyQDxz8nBl5ngoNReXO+60gX?=
+ =?us-ascii?Q?6WTP2dBQlxRjC79ZkWBCTWrroC4ljGsjKcqRL4kpsA+INgGbfxWEjuJSdXi1?=
+ =?us-ascii?Q?alg7sfAj+oy9alcBdr6nErZ9rkCd4nNwfiknBAtqniiXmvu7dMqmXcA/tQoa?=
+ =?us-ascii?Q?XHHGSW60eH5uiOyvqnj0XCi3TwpqNzbrhnAJW4G0jp42mIDzIScA2BG1gLCD?=
+ =?us-ascii?Q?HRObSBasPl9lG4Nr81yrX2kzfiqIIB5e0olkxLImpBEqa1s6zWbMWyWQLsu4?=
+ =?us-ascii?Q?phN4ePYmn9pLXdorGEDVJXRAgyqq1ZIlu+DciE6cZTEYsnhgLoWAbUP92Xrj?=
+ =?us-ascii?Q?JvH8nk1xSy474tNJOeOnWV1sgYVALCVq8XfoLMfiaesRwrZQZxgWh5gutCvk?=
+ =?us-ascii?Q?wRpXQUjIPrtJWeWLaBjfzHlt0/dY6EqSEuF5aRpuiNeiSsvgiultQ8aanOIQ?=
+ =?us-ascii?Q?PfRT9XcjiMePIJYsfYA3IBh5uCPf7DMXIaA5KQNYB93V1hXMuRg5rMIBcf0f?=
+ =?us-ascii?Q?Qal5DfIHG0tihJ8hyBWZir5o6V91Dv3MqE+sv7AxIbX6fxjXmyo//tSGEeZw?=
+ =?us-ascii?Q?vAK0/6fxO7tazwPUDkehTUA8YMJRV285lwAOsbH37bjrR9QueKyq2uEOQuVH?=
+ =?us-ascii?Q?AHN/q3BRECHuETuAAy+z66lL0FeIxB+5S83c4DRf0KFLrj5YQN0dDy21MzBN?=
+ =?us-ascii?Q?/kCAefOJt919WhRvRWp43ryMRv9D5LNgbcJCMB6h8NAxca21frsUG3QE3kOE?=
+ =?us-ascii?Q?58Hv4Azs3c218NvAKPCI3uBYwYhPOCvYs6hw8LHXS0iDXO9L/4Cti6oPu3pT?=
+ =?us-ascii?Q?uL4Uhyay9hK4b/Qtkdef9FGDdsXiFVBLXSONHwYfETXxClo9GUc68pQaA8e9?=
+ =?us-ascii?Q?RkzjeGsV2u4OlJm/HNI5f9hy5CYeZiuSOsK7fOWS?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-Content-Language: en-US, nl
-To:     Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, jsnitsel@redhat.com,
-        oe-lkp@lists.linux.dev, lkp@intel.com, peterz@infradead.org,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        p.rosenberger@kunbus.com
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <c772bcdf-8256-2682-857c-9a6d344606d0@linux.intel.com>
- <20230523074443.GA21236@wunner.de>
- <98f7dc1a-6bed-a66f-650e-10caeb7d0bca@linux.intel.com>
- <20230523151642.GA31298@wunner.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230523151642.GA31298@wunner.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 836e641e-1c06-4aee-a415-08db5c546fc9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2023 12:43:12.5502
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FAtwtUYpOTjfP9WNYVOCxQ/5ZPQouwKZ+WnsrSO2keFdXweOJ0+KthvDEAyR3lfI9VJge59moddEDVN3E/Y+2g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7956
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Lukas,
+> -----Original Message-----
+> From: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> Sent: Wednesday, May 10, 2023 8:41 PM
+> To: Thierry Reding <thierry.reding@gmail.com>; Mark Brown
+> <broonie@kernel.org>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>; jsnitsel@redhat.com;
+> robh+dt@kernel.org; peterhuewe@gmx.de; jgg@ziepe.ca;
+> krzysztof.kozlowski+dt@linaro.org; linux-spi@vger.kernel.org; linux-
+> tegra@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
+> kernel@vger.kernel.org; Jonathan Hunter <jonathanh@nvidia.com>;
+> Sowjanya Komatineni <skomatineni@nvidia.com>; Laxman Dewangan
+> <ldewangan@nvidia.com>
+> Subject: RE: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+>=20
+>=20
+> > -----Original Message-----
+> > From: Thierry Reding <thierry.reding@gmail.com>
+> > Sent: 24 April 2023 21:02
+> > To: Mark Brown <broonie@kernel.org>
+> > Cc: Jarkko Sakkinen <jarkko@kernel.org>; Krishna Yarlagadda
+> > <kyarlagadda@nvidia.com>; jsnitsel@redhat.com; robh+dt@kernel.org;
+> > peterhuewe@gmx.de; jgg@ziepe.ca; krzysztof.kozlowski+dt@linaro.org;
+> > linux-spi@vger.kernel.org; linux-tegra@vger.kernel.org; linux-
+> > integrity@vger.kernel.org; linux-kernel@vger.kernel.org; Jonathan Hunte=
+r
+> > <jonathanh@nvidia.com>; Sowjanya Komatineni
+> > <skomatineni@nvidia.com>; Laxman Dewangan <ldewangan@nvidia.com>
+> > Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+> >
+> > On Mon, Apr 24, 2023 at 04:18:45PM +0100, Mark Brown wrote:
+> > > On Mon, Apr 24, 2023 at 04:46:24PM +0200, Thierry Reding wrote:
+> > >
+> > > > Would it make sense for you to pick up patch 2/3 as well? As far as=
+ I
+> > > > can tell there's a build dependency on patch 1/3 because of the new=
+ly
+> > > > added SPI_TPM_HW_FLOW symbol.
+> > >
+> > > I'll include it in my pull request for spi this time round so it shou=
+ld
+> > > end up in -rc1, my thinking was that I was happy with the SPI bits an=
+d
+> > > if it was in -rc1 then the TPM bits could be handled without cross tr=
+ee
+> > > issues when the review was sorted (which it is now but wasn't at the
+> > > time).  If the SPI side doesn't make -rc1 for some reason I can pick =
+up
+> > > the TPM bit as well, and/or do a signed tag.
+> >
+> > Sounds good.
+> >
+> > Thanks,
+> > Thierry
+>=20
+> Mark,
+> Now that SPI changes are in, can we pull this TPM change for rc2.
+> Will this be picked into SPI or TPM list?
+Jarkko, Mark,
+Can we pick this change in TPM list since SPI header changes are in.
 
-On 5/23/23 17:16, Lukas Wunner wrote:
-> On Tue, May 23, 2023 at 12:14:28PM +0300, Péter Ujfalusi wrote:
->> On 23/05/2023 10:44, Lukas Wunner wrote:
-
-<snip>
-
->>> The corresponding message emitted in tpm_tis_core_init() for
->>> an interrupt that's *never* asserted uses dev_err(), so using
->>> dev_err() here as well serves consistency:
->>>
->>> 	dev_err(&chip->dev, FW_BUG
->>> 		"TPM interrupt not working, polling instead\n");
->>>
->>> That way the same severity is used both for the never asserted and
->>> the never deasserted interrupt case.
->>
->> Oh, OK.
->> Is there anything the user can do to have a ERROR less boot?
-> 
-> You're right that the user can't do anything about it and that
-> toning the message down to KERN_WARN or even KERN_NOTICE severity
-> may be appropriate.
-> 
-> However the above-quoted message for the never asserted interrupt
-> in tpm_tis_core_init() should then likewise be toned down to the
-> same severity.
-> 
-> I'm wondering why that message uses FW_BUG.  That doesn't make any
-> sense to me.  It's typically not a firmware bug, but a hardware issue,
-> e.g. an interrupt pin may erroneously not be connected or may be
-> connected to ground.  Lino used HW_ERR, which seems more appropriate
-> to me.
-
-This issue seems to have mostly been seen on x86/ACPI systems and
-the issue seems to mostly be a misconfiguration of the IOAPIC
-(e.g. wrong trigger type).
-
-Besides this, the IRQ info always comes from either the ACPI tables
-or from devicetree both of which are firmware and if the IRQ does not
-work on a specific board then the firmware should simply not provide
-any IRQ info to the driver rather the pointing to a broken IRQ.
-
-Hence my suggestion to use dev_warn(dev, FW_BUG "....", ...);
-
-Regards,
-
-Hans
-
-
+Regards
+KY
+> Thanks,
+> KY
