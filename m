@@ -2,57 +2,49 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7DA70ED6E
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 May 2023 07:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1704970EF64
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 May 2023 09:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236309AbjEXF5U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 May 2023 01:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
+        id S236332AbjEXH3k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 May 2023 03:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233759AbjEXF5T (ORCPT
+        with ESMTP id S239561AbjEXH3j (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 May 2023 01:57:19 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE831132;
-        Tue, 23 May 2023 22:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684907838; x=1716443838;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=O2khWCZpYpaAuiJUEy1FdFjA3ykBxyXgTWC0NJSEmZA=;
-  b=C4+lc4zy4Kb8ZH1xra/2GXw3sfN36YRL2mz/QgheTdgxiXocRPgzbJ2P
-   eyrMAmVgUZ9IoAfGybOycAehTVMN3DwA7EbfptGEM5hWmORF+oViQlexS
-   paVDzKCdjw87cf7p5cXe4blCVudyIpu/LzcTDXGFhnC8JQPkcnDj6IXP9
-   BTG5LtaVhbQQ7TtJlTiOilFA3zlhaemSlMgrYnHkt4OGndr+3Etji579S
-   Mw8ga9vUaebarAH6iHTwZX4BqsqubNy/T9QkMJpI7jvBPH9P47VBTt1gA
-   Ut2N3HS0BTiobjJPkRNbtu3OzafaCXACaXqIr7Mg50UA/3N6jRN3oq64e
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="381711522"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="381711522"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 22:57:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="769310141"
-X-IronPort-AV: E=Sophos;i="6.00,188,1681196400"; 
-   d="scan'208";a="769310141"
-Received: from mhakkine-mobl4.ger.corp.intel.com (HELO pujfalus-desk.ger.corp.intel.com) ([10.252.53.214])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 22:57:15 -0700
-From:   Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-To:     peterhuewe@gmx.de, jarkko@kernel.org
-Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        Wed, 24 May 2023 03:29:39 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3E7A1;
+        Wed, 24 May 2023 00:29:33 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 9C6F230025BE0;
+        Wed, 24 May 2023 09:29:31 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 8DF7A31373E; Wed, 24 May 2023 09:29:31 +0200 (CEST)
+Date:   Wed, 24 May 2023 09:29:31 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, jsnitsel@redhat.com, hdegoede@redhat.com,
+        oe-lkp@lists.linux.dev, lkp@intel.com,
+        peter.ujfalusi@linux.intel.com, peterz@infradead.org,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        peter.ujfalusi@linux.intel.com, jsnitsel@redhat.com
-Subject: [PATCH] tpm: tpm_tis: Narrow the AAEON DMI quirk to UPX-i11 only
-Date:   Wed, 24 May 2023 08:58:15 +0300
-Message-Id: <20230524055815.10165-1-peter.ujfalusi@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
+        p.rosenberger@kunbus.com
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+Message-ID: <20230524072931.GA31483@wunner.de>
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <CSU7G2UZSZ8K.22EGXU5CJTZBB@suppilovahvero>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CSU7G2UZSZ8K.22EGXU5CJTZBB@suppilovahvero>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,43 +52,34 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The original patch which added the quirk would apply to all AAEON machines,
-which might or might not be valid.
+On Wed, May 24, 2023 at 06:58:08AM +0300, Jarkko Sakkinen wrote:
+> On Mon May 22, 2023 at 5:31 PM EEST, Lino Sanfilippo wrote:
+> > +	/*
+> > +	 * The worker to free the TPM interrupt (free_irq_work) may already
+> > +	 * be scheduled, so make sure it is not scheduled again.
+> > +	 */
+> > +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
+> > +		return;
+> > +
+> > +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
+> > +		priv->unhandled_irqs = 1;
+> > +	else
+> > +		priv->unhandled_irqs++;
+> > +
+> > +	priv->last_unhandled_irq = jiffies;
+> > +
+> > +	if (priv->unhandled_irqs > MAX_UNHANDLED_IRQS)
+> > +		tpm_tis_handle_irq_storm(chip);
+> 
+> Why wouldn't we switch to polling mode even when there is a single
+> unhandled IRQ?
 
-The issue was discovered on UPX-i11 (TigerLake), it is not known if the
-i12 (AlderLake) version is affected.
-UP2 (ApolloLake) does not even have TMP module (no TPM drivers probing
-and confirmed by dmidecode).
+An unhandled IRQ can be legitimate if the interrupt is shared
+with other devices and the IRQ was raised by one of them.
 
-Let's make the quirk to be applicable for UPX-i11 (UPX-TGL01) only.
+So you only want to switch to polling if there's a significant
+amount of unhandled IRQs in a short period of time.
 
-Fixes: 95a9359ee22f ("tpm: tpm_tis: Disable interrupts for AEON UPX-i11")
-Suggested-by: Jerry Snitselaar <jsnitsel@redhat.com>
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
----
-Hi Jarkko,
+Thanks,
 
-the patch is generated on top of your
-git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git : irq-storm
-
-Regards,
-Peter
-
- drivers/char/tpm/tpm_tis.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index 7db3593941ea..4357d4ba8f9e 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -143,6 +143,7 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
- 		.ident = "UPX-TGL",
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "AAEON"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "UPX-TGL01"),
- 		},
- 	},
- 	{}
--- 
-2.40.1
-
+Lukas
