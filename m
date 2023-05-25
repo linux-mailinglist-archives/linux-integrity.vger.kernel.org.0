@@ -2,130 +2,161 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376CB710EE9
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 May 2023 17:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DE671180F
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 May 2023 22:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236243AbjEYPAu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 May 2023 11:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
+        id S241448AbjEYUZE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 May 2023 16:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235299AbjEYPAt (ORCPT
+        with ESMTP id S233441AbjEYUZD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 May 2023 11:00:49 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47188191;
-        Thu, 25 May 2023 08:00:44 -0700 (PDT)
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PEuBK2013223;
-        Thu, 25 May 2023 15:00:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=HEaA0SnACFr+FUUA4vFdDc5HJuDhxRyje+Mm0nAY+ZM=;
- b=p8Ye07mO8CTSu1WRW+JgiPjAYwph3UffmX0LQlbe9ujJvK82JkjkXIHgNMR/lgHL4CCt
- eB1cg368Lc7VfnQi1aSajKLJsfCBn3KczawHxm1lCZKmrqiy2riw/RvXcDGzeqpb5pMr
- zjSZTyg14AB/Auhumf0Bup/DqsFsNNifnusI9VdV2VYDtlYjvfROuCmRrLTBWq2ZC33n
- RmOpc+gDd6EQAmx45jSDf2/WLA4a8rxs9AfVtsJyrnw5nqgb5/MBUZypQ3lzw//oBWcR
- 3ztem2nX6pnaC1PiX3LMhf3exh8+duebJ3jYW9T0oy6l6XnkUf/P1UectOks+gzCWvle 5w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qt9vdg2nk-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 15:00:32 +0000
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34PEU9FY019836;
-        Thu, 25 May 2023 14:43:30 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qt9fngdq2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 14:43:30 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34PCoFgv016415;
-        Thu, 25 May 2023 14:43:29 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3qppdta0vr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 14:43:29 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34PEhSCP60424648
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 May 2023 14:43:28 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4ED2C58055;
-        Thu, 25 May 2023 14:43:28 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2B7D558059;
-        Thu, 25 May 2023 14:43:27 +0000 (GMT)
-Received: from wecm-9-67-23-194.wecm.ibm.com (unknown [9.67.23.194])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 25 May 2023 14:43:27 +0000 (GMT)
-Message-ID: <ba494e92990e520bd8660208b3cc10bb9af8dd26.camel@linux.ibm.com>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
- after writes
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
-Date:   Thu, 25 May 2023 10:43:26 -0400
-In-Reply-To: <CAHC9VhS7uMMgvwRRDzpZPUQDAeibdkLi0OCdp=j_Q-EcMHm0cw@mail.gmail.com>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
-         <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
-         <cbffa3dee65ecc0884dd16eb3af95c09a28f4297.camel@linux.ibm.com>
-         <CAHC9VhSeBn-4UN48NcQWhJqLvQuydt4OvdyUsk9AXcviJ9Cqyw@mail.gmail.com>
-         <49a31515666cb0ecf78909f09d40d29eb5528e0f.camel@linux.ibm.com>
-         <CAHC9VhS7uMMgvwRRDzpZPUQDAeibdkLi0OCdp=j_Q-EcMHm0cw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 25 May 2023 16:25:03 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5AFE2
+        for <linux-integrity@vger.kernel.org>; Thu, 25 May 2023 13:24:53 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q2HVd-0004Pg-VS; Thu, 25 May 2023 22:24:30 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q2HVb-002njl-ES; Thu, 25 May 2023 22:24:27 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q2HVa-007xRo-Jw; Thu, 25 May 2023 22:24:26 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Peter Senna Tschudin <peter.senna@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-integrity@vger.kernel.org, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] tpm: Switch i2c drivers back to use .probe()
+Date:   Thu, 25 May 2023 22:24:24 +0200
+Message-Id: <20230525202424.630260-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3875; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=s4gzQpu/cnWE/azhbPTFeCDvBQGiwpuB+zul42Ilj3k=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkb8PvnJP6QYPqtuF1ADwvHbyGmWy0tct9ADxv9 k1TlEhk2pmJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZG/D7wAKCRCPgPtYfRL+ TuYlB/44PConlpiAujaRiCguop25vfvRm9DPggOQSg27VtYHSQpFywJiWpUNTYdi8u+fWMA5n/q EFoj0zJCZ8CleKK8U0dcTlJzYs627/sLiv8N48H2aiCXhacsREZgMt5hV0+fu8kFnDwFS/zctCM HBEjRPoOfugopZP59U8SJB89J94j07PaKCgxOxZ65+iWlkgsKoS5d7FX3CzjsB/O3yi3yuPXTtH 4iZ1V8jEt2m2Xgv8oTaA+8LcJRdyg6nlKHslu9pBTvTXfmJpqUQA4u994rf34Wyxo1uKAD1MVDE tHORWOKPuUilYWoW2+kazAUigq6VNFKlBuSUEE0e6xWOud8e
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uwPqM4NirCy91ZQJ05ShddySVI9qgyX1
-X-Proofpoint-GUID: 7QZbnswjjeRPFa_t9axwduAacG9ioe-q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_08,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250119
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2023-05-19 at 10:58 -0400, Paul Moore wrote:
-> On Thu, May 18, 2023 at 4:56 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > On Thu, 2023-05-18 at 16:46 -0400, Paul Moore wrote:
-> > > On Fri, Apr 21, 2023 at 10:44 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > > > On Fri, 2023-04-07 at 09:29 -0400, Jeff Layton wrote:
-> 
-> ...
-> 
-> > > I'm going through my review queue to make sure I haven't missed
-> > > anything and this thread popped up ... Stefan, Mimi, did you get a fix
-> > > into an upstream tree somewhere?  If not, is it because you are
-> > > waiting on a review/merge from me into the LSM tree?
-> >
-> > Sorry for the delay.  Between vacation and LSS, I just started testing
-> > Jeff Layton's patch.
-> 
-> No worries, I'm a bit behind too, I just wanted to make sure I wasn't
-> blocking this thread :)
+After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+call-back type"), all drivers being converted to .probe_new() and then
+03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
+convert back to (the new) .probe() to be able to eventually drop
+.probe_new() from struct i2c_driver.
 
-FYI, Jeff Layton's patch is now queued in next-integrity.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/char/tpm/st33zp24/i2c.c     | 2 +-
+ drivers/char/tpm/tpm_i2c_atmel.c    | 2 +-
+ drivers/char/tpm/tpm_i2c_infineon.c | 2 +-
+ drivers/char/tpm/tpm_i2c_nuvoton.c  | 2 +-
+ drivers/char/tpm/tpm_tis_i2c.c      | 2 +-
+ drivers/char/tpm/tpm_tis_i2c_cr50.c | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index 2d28f55ef490..661574bb0acf 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -160,7 +160,7 @@ static struct i2c_driver st33zp24_i2c_driver = {
+ 		.of_match_table = of_match_ptr(of_st33zp24_i2c_match),
+ 		.acpi_match_table = ACPI_PTR(st33zp24_i2c_acpi_match),
+ 	},
+-	.probe_new = st33zp24_i2c_probe,
++	.probe = st33zp24_i2c_probe,
+ 	.remove = st33zp24_i2c_remove,
+ 	.id_table = st33zp24_i2c_id
+ };
+diff --git a/drivers/char/tpm/tpm_i2c_atmel.c b/drivers/char/tpm/tpm_i2c_atmel.c
+index 8f77154e0550..301a95b3734f 100644
+--- a/drivers/char/tpm/tpm_i2c_atmel.c
++++ b/drivers/char/tpm/tpm_i2c_atmel.c
+@@ -203,7 +203,7 @@ static SIMPLE_DEV_PM_OPS(i2c_atmel_pm_ops, tpm_pm_suspend, tpm_pm_resume);
+ 
+ static struct i2c_driver i2c_atmel_driver = {
+ 	.id_table = i2c_atmel_id,
+-	.probe_new = i2c_atmel_probe,
++	.probe = i2c_atmel_probe,
+ 	.remove = i2c_atmel_remove,
+ 	.driver = {
+ 		.name = I2C_DRIVER_NAME,
+diff --git a/drivers/char/tpm/tpm_i2c_infineon.c b/drivers/char/tpm/tpm_i2c_infineon.c
+index 7cdaff52a96d..81d8a78dc655 100644
+--- a/drivers/char/tpm/tpm_i2c_infineon.c
++++ b/drivers/char/tpm/tpm_i2c_infineon.c
+@@ -716,7 +716,7 @@ static void tpm_tis_i2c_remove(struct i2c_client *client)
+ 
+ static struct i2c_driver tpm_tis_i2c_driver = {
+ 	.id_table = tpm_tis_i2c_table,
+-	.probe_new = tpm_tis_i2c_probe,
++	.probe = tpm_tis_i2c_probe,
+ 	.remove = tpm_tis_i2c_remove,
+ 	.driver = {
+ 		   .name = "tpm_i2c_infineon",
+diff --git a/drivers/char/tpm/tpm_i2c_nuvoton.c b/drivers/char/tpm/tpm_i2c_nuvoton.c
+index a026e98add50..d7be03c41098 100644
+--- a/drivers/char/tpm/tpm_i2c_nuvoton.c
++++ b/drivers/char/tpm/tpm_i2c_nuvoton.c
+@@ -650,7 +650,7 @@ static SIMPLE_DEV_PM_OPS(i2c_nuvoton_pm_ops, tpm_pm_suspend, tpm_pm_resume);
+ 
+ static struct i2c_driver i2c_nuvoton_driver = {
+ 	.id_table = i2c_nuvoton_id,
+-	.probe_new = i2c_nuvoton_probe,
++	.probe = i2c_nuvoton_probe,
+ 	.remove = i2c_nuvoton_remove,
+ 	.driver = {
+ 		.name = "tpm_i2c_nuvoton",
+diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+index c8c34adc14c0..11b4196b7136 100644
+--- a/drivers/char/tpm/tpm_tis_i2c.c
++++ b/drivers/char/tpm/tpm_tis_i2c.c
+@@ -379,7 +379,7 @@ static struct i2c_driver tpm_tis_i2c_driver = {
+ 		.pm = &tpm_tis_pm,
+ 		.of_match_table = of_match_ptr(of_tis_i2c_match),
+ 	},
+-	.probe_new = tpm_tis_i2c_probe,
++	.probe = tpm_tis_i2c_probe,
+ 	.remove = tpm_tis_i2c_remove,
+ 	.id_table = tpm_tis_i2c_id,
+ };
+diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+index 376ae18a04eb..e70abd69e1ae 100644
+--- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
++++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+@@ -779,7 +779,7 @@ static void tpm_cr50_i2c_remove(struct i2c_client *client)
+ static SIMPLE_DEV_PM_OPS(cr50_i2c_pm, tpm_pm_suspend, tpm_pm_resume);
+ 
+ static struct i2c_driver cr50_i2c_driver = {
+-	.probe_new = tpm_cr50_i2c_probe,
++	.probe = tpm_cr50_i2c_probe,
+ 	.remove = tpm_cr50_i2c_remove,
+ 	.driver = {
+ 		.name = "cr50_i2c",
 -- 
-thanks,
-
-Mimi
+2.39.2
 
