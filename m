@@ -2,348 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5FF7101F6
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 May 2023 02:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376CB710EE9
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 May 2023 17:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbjEYAYR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 May 2023 20:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
+        id S236243AbjEYPAu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 May 2023 11:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjEYAYQ (ORCPT
+        with ESMTP id S235299AbjEYPAt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 May 2023 20:24:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C8E99;
-        Wed, 24 May 2023 17:24:15 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P0IoxI015451;
-        Thu, 25 May 2023 00:23:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=GYXORPH9Aa0sbSNOwTnYvmbKlPz6c29vHnbAXsZauHI=;
- b=eLDNp/BskAxxEEIV5595cp3/gJeXOpQs+h+/NAXtLLMTdI523m7Fjo5fa8dhl4BCMoAe
- qOjEwwRp8kjnxtmHhQrT5s/VJuc2fjp8VK9fbseBX4mEgy6YHymSS0jaWkPCFUVcuohv
- dUXszQOUavnKBWnd7RUCh42cEkDWPo0S2NuvrI1W1DISIDztnDeydaw6b1rXHluM7Chc
- HRgyJTbLnWY0qssMXcxL/ZBYDkyz40bXQ5IZ9eL/xao1ihhBPoYgy0WaLaivOumgSXQ6
- N5b6WNWdbVOmv62dJMG0DeoKNKLBlihXu3f/scQETm+CP/bdNOue6dGuFZpI1E/5EtnN mQ== 
+        Thu, 25 May 2023 11:00:49 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47188191;
+        Thu, 25 May 2023 08:00:44 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PEuBK2013223;
+        Thu, 25 May 2023 15:00:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=HEaA0SnACFr+FUUA4vFdDc5HJuDhxRyje+Mm0nAY+ZM=;
+ b=p8Ye07mO8CTSu1WRW+JgiPjAYwph3UffmX0LQlbe9ujJvK82JkjkXIHgNMR/lgHL4CCt
+ eB1cg368Lc7VfnQi1aSajKLJsfCBn3KczawHxm1lCZKmrqiy2riw/RvXcDGzeqpb5pMr
+ zjSZTyg14AB/Auhumf0Bup/DqsFsNNifnusI9VdV2VYDtlYjvfROuCmRrLTBWq2ZC33n
+ RmOpc+gDd6EQAmx45jSDf2/WLA4a8rxs9AfVtsJyrnw5nqgb5/MBUZypQ3lzw//oBWcR
+ 3ztem2nX6pnaC1PiX3LMhf3exh8+duebJ3jYW9T0oy6l6XnkUf/P1UectOks+gzCWvle 5w== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qsw14r1wq-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qt9vdg2nk-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 00:23:55 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34P0JbuN017418;
-        Thu, 25 May 2023 00:23:55 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qsw14r1wd-1
+        Thu, 25 May 2023 15:00:32 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34PEU9FY019836;
+        Thu, 25 May 2023 14:43:30 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qt9fngdq2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 00:23:55 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34OKD9wR030486;
-        Thu, 25 May 2023 00:23:53 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3qppe7pxbq-1
+        Thu, 25 May 2023 14:43:30 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34PCoFgv016415;
+        Thu, 25 May 2023 14:43:29 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3qppdta0vr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 00:23:53 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34P0NpVV30736832
+        Thu, 25 May 2023 14:43:29 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34PEhSCP60424648
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 May 2023 00:23:52 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CFD0B5803F;
-        Thu, 25 May 2023 00:23:51 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F00D358056;
-        Thu, 25 May 2023 00:23:50 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 25 May 2023 00:23:50 +0000 (GMT)
-Message-ID: <c002e44a-826a-ea1a-8720-e8dea05a26ad@linux.ibm.com>
-Date:   Wed, 24 May 2023 20:23:50 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v9 3/4] of: kexec: Refactor IMA buffer related functions
- to make them reusable
-Content-Language: en-US
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>,
-        Nageswara R Sastry <rnsastry@linux.ibm.com>,
-        Coiby Xu <coxu@redhat.com>
-References: <20230418134409.177485-1-stefanb@linux.ibm.com>
- <20230418134409.177485-4-stefanb@linux.ibm.com>
- <m3gasjgsxlggzsayurbzjaeiallxeobtggtzifnivqfyvexqn6@7rv7oumuq46x>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <m3gasjgsxlggzsayurbzjaeiallxeobtggtzifnivqfyvexqn6@7rv7oumuq46x>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 25 May 2023 14:43:28 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4ED2C58055;
+        Thu, 25 May 2023 14:43:28 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B7D558059;
+        Thu, 25 May 2023 14:43:27 +0000 (GMT)
+Received: from wecm-9-67-23-194.wecm.ibm.com (unknown [9.67.23.194])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 25 May 2023 14:43:27 +0000 (GMT)
+Message-ID: <ba494e92990e520bd8660208b3cc10bb9af8dd26.camel@linux.ibm.com>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
+ after writes
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
+Date:   Thu, 25 May 2023 10:43:26 -0400
+In-Reply-To: <CAHC9VhS7uMMgvwRRDzpZPUQDAeibdkLi0OCdp=j_Q-EcMHm0cw@mail.gmail.com>
+References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
+         <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
+         <cbffa3dee65ecc0884dd16eb3af95c09a28f4297.camel@linux.ibm.com>
+         <CAHC9VhSeBn-4UN48NcQWhJqLvQuydt4OvdyUsk9AXcviJ9Cqyw@mail.gmail.com>
+         <49a31515666cb0ecf78909f09d40d29eb5528e0f.camel@linux.ibm.com>
+         <CAHC9VhS7uMMgvwRRDzpZPUQDAeibdkLi0OCdp=j_Q-EcMHm0cw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: DqJp5bfZGdppm45NHAZGUR2XEZATPYuN
-X-Proofpoint-ORIG-GUID: MK9BHyVxceNUUI8v3cNO18slT98UCmiu
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: uwPqM4NirCy91ZQJ05ShddySVI9qgyX1
+X-Proofpoint-GUID: 7QZbnswjjeRPFa_t9axwduAacG9ioe-q
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_17,2023-05-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- lowpriorityscore=0 mlxlogscore=999 suspectscore=0 spamscore=0
- impostorscore=0 mlxscore=0 adultscore=0 priorityscore=1501 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305240202
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+ definitions=2023-05-25_08,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250119
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 5/24/23 19:16, Jerry Snitselaar wrote:
-> On Tue, Apr 18, 2023 at 09:44:08AM -0400, Stefan Berger wrote:
->> Refactor IMA buffer related functions to make them reusable for carrying
->> TPM logs across kexec.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Frank Rowand <frowand.list@gmail.com>
->> Cc: Mimi Zohar <zohar@linux.ibm.com>
->> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
->> Tested-by: Coiby Xu <coxu@redhat.com>
->>
+On Fri, 2023-05-19 at 10:58 -0400, Paul Moore wrote:
+> On Thu, May 18, 2023 at 4:56 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > On Thu, 2023-05-18 at 16:46 -0400, Paul Moore wrote:
+> > > On Fri, Apr 21, 2023 at 10:44 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > > On Fri, 2023-04-07 at 09:29 -0400, Jeff Layton wrote:
 > 
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-
-Thanks a lot for looking at the patches. Unfortunately this series only resolves the issue with the newer kexec call but we have seen systems where the older one is used for setting a crash kernel and when the crash happens we're back to square one. I have been trying to embed the log into the memory of the flattened of-device tree but that also turns out to be not so straight forward.
-
-     Stefan
->> ---
->> v6:
->>   - Add __init to get_kexec_buffer as suggested by Jonathan
->>
->> v5:
->>   - Rebased on Jonathan McDowell's commit "b69a2afd5afc x86/kexec: Carry
->>     forward IMA measurement log on kexec"
->> v4:
->>   - Move debug output into setup_buffer()
->> ---
->>   drivers/of/kexec.c | 126 ++++++++++++++++++++++++++-------------------
->>   1 file changed, 74 insertions(+), 52 deletions(-)
->>
->> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
->> index 1373d7e0a9b3..fa8c0c75adf9 100644
->> --- a/drivers/of/kexec.c
->> +++ b/drivers/of/kexec.c
->> @@ -117,45 +117,57 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
->>   }
->>   
->>   #ifdef CONFIG_HAVE_IMA_KEXEC
->> -/**
->> - * ima_get_kexec_buffer - get IMA buffer from the previous kernel
->> - * @addr:	On successful return, set to point to the buffer contents.
->> - * @size:	On successful return, set to the buffer size.
->> - *
->> - * Return: 0 on success, negative errno on error.
->> - */
->> -int __init ima_get_kexec_buffer(void **addr, size_t *size)
->> +static int __init get_kexec_buffer(const char *name, unsigned long *addr,
->> +				   size_t *size)
->>   {
->>   	int ret, len;
->> -	unsigned long tmp_addr;
->>   	unsigned long start_pfn, end_pfn;
->> -	size_t tmp_size;
->>   	const void *prop;
->>   
->> -	prop = of_get_property(of_chosen, "linux,ima-kexec-buffer", &len);
->> +	prop = of_get_property(of_chosen, name, &len);
->>   	if (!prop)
->>   		return -ENOENT;
->>   
->> -	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
->> +	ret = do_get_kexec_buffer(prop, len, addr, size);
->>   	if (ret)
->>   		return ret;
->>   
->> -	/* Do some sanity on the returned size for the ima-kexec buffer */
->> -	if (!tmp_size)
->> +	/* Do some sanity on the returned size for the kexec buffer */
->> +	if (!*size)
->>   		return -ENOENT;
->>   
->>   	/*
->>   	 * Calculate the PFNs for the buffer and ensure
->>   	 * they are with in addressable memory.
->>   	 */
->> -	start_pfn = PHYS_PFN(tmp_addr);
->> -	end_pfn = PHYS_PFN(tmp_addr + tmp_size - 1);
->> +	start_pfn = PHYS_PFN(*addr);
->> +	end_pfn = PHYS_PFN(*addr + *size - 1);
->>   	if (!page_is_ram(start_pfn) || !page_is_ram(end_pfn)) {
->> -		pr_warn("IMA buffer at 0x%lx, size = 0x%zx beyond memory\n",
->> -			tmp_addr, tmp_size);
->> +		pr_warn("%s buffer at 0x%lx, size = 0x%zx beyond memory\n",
->> +			name, *addr, *size);
->>   		return -EINVAL;
->>   	}
->>   
->> +	return 0;
->> +}
->> +
->> +/**
->> + * ima_get_kexec_buffer - get IMA buffer from the previous kernel
->> + * @addr:	On successful return, set to point to the buffer contents.
->> + * @size:	On successful return, set to the buffer size.
->> + *
->> + * Return: 0 on success, negative errno on error.
->> + */
->> +int __init ima_get_kexec_buffer(void **addr, size_t *size)
->> +{
->> +	int ret;
->> +	unsigned long tmp_addr;
->> +	size_t tmp_size;
->> +
->> +	ret = get_kexec_buffer("linux,ima-kexec-buffer", &tmp_addr, &tmp_size);
->> +	if (ret)
->> +		return ret;
->> +
->>   	*addr = __va(tmp_addr);
->>   	*size = tmp_size;
->>   
->> @@ -188,72 +200,82 @@ int __init ima_free_kexec_buffer(void)
->>   }
->>   #endif
->>   
->> -/**
->> - * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
->> - *
->> - * @fdt: Flattened Device Tree to update
->> - * @chosen_node: Offset to the chosen node in the device tree
->> - *
->> - * The IMA measurement buffer is of no use to a subsequent kernel, so we always
->> - * remove it from the device tree.
->> - */
->> -static void remove_ima_buffer(void *fdt, int chosen_node)
->> +static int remove_buffer(void *fdt, int chosen_node, const char *name)
->>   {
->>   	int ret, len;
->>   	unsigned long addr;
->>   	size_t size;
->>   	const void *prop;
->>   
->> -	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
->> -		return;
->> -
->> -	prop = fdt_getprop(fdt, chosen_node, "linux,ima-kexec-buffer", &len);
->> +	prop = fdt_getprop(fdt, chosen_node, name, &len);
->>   	if (!prop)
->> -		return;
->> +		return -ENOENT;
->>   
->>   	ret = do_get_kexec_buffer(prop, len, &addr, &size);
->> -	fdt_delprop(fdt, chosen_node, "linux,ima-kexec-buffer");
->> +	fdt_delprop(fdt, chosen_node, name);
->>   	if (ret)
->> -		return;
->> +		return ret;
->>   
->>   	ret = fdt_find_and_del_mem_rsv(fdt, addr, size);
->>   	if (!ret)
->> -		pr_debug("Removed old IMA buffer reservation.\n");
->> +		pr_debug("Remove old %s buffer reserveration", name);
->> +	return ret;
->>   }
->>   
->> -#ifdef CONFIG_IMA_KEXEC
->>   /**
->> - * setup_ima_buffer - add IMA buffer information to the fdt
->> - * @image:		kexec image being loaded.
->> - * @fdt:		Flattened device tree for the next kernel.
->> - * @chosen_node:	Offset to the chosen node.
->> + * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
->>    *
->> - * Return: 0 on success, or negative errno on error.
->> + * @fdt: Flattened Device Tree to update
->> + * @chosen_node: Offset to the chosen node in the device tree
->> + *
->> + * The IMA measurement buffer is of no use to a subsequent kernel, so we always
->> + * remove it from the device tree.
->>    */
->> -static int setup_ima_buffer(const struct kimage *image, void *fdt,
->> -			    int chosen_node)
->> +static void remove_ima_buffer(void *fdt, int chosen_node)
->> +{
->> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
->> +		return;
->> +
->> +	remove_buffer(fdt, chosen_node, "linux,ima-kexec-buffer");
->> +}
->> +
->> +#ifdef CONFIG_IMA_KEXEC
->> +static int setup_buffer(void *fdt, int chosen_node, const char *name,
->> +			phys_addr_t addr, size_t size)
->>   {
->>   	int ret;
->>   
->> -	if (!image->ima_buffer_size)
->> +	if (!size)
->>   		return 0;
->>   
->>   	ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
->> -				       "linux,ima-kexec-buffer",
->> -				       image->ima_buffer_addr,
->> -				       image->ima_buffer_size);
->> +				       name, addr, size);
->>   	if (ret < 0)
->>   		return -EINVAL;
->>   
->> -	ret = fdt_add_mem_rsv(fdt, image->ima_buffer_addr,
->> -			      image->ima_buffer_size);
->> +	ret = fdt_add_mem_rsv(fdt, addr, size);
->>   	if (ret)
->>   		return -EINVAL;
->>   
->> -	pr_debug("IMA buffer at 0x%pa, size = 0x%zx\n",
->> -		 &image->ima_buffer_addr, image->ima_buffer_size);
->> +	pr_debug("%s at 0x%pa, size = 0x%zx\n", name, &addr, size);
->>   
->>   	return 0;
->> +
->> +}
->> +
->> +/**
->> + * setup_ima_buffer - add IMA buffer information to the fdt
->> + * @image:		kexec image being loaded.
->> + * @fdt:		Flattened device tree for the next kernel.
->> + * @chosen_node:	Offset to the chosen node.
->> + *
->> + * Return: 0 on success, or negative errno on error.
->> + */
->> +static int setup_ima_buffer(const struct kimage *image, void *fdt,
->> +			    int chosen_node)
->> +{
->> +	return setup_buffer(fdt, chosen_node, "linux,ima-kexec-buffer",
->> +			    image->ima_buffer_addr, image->ima_buffer_size);
->>   }
->>   #else /* CONFIG_IMA_KEXEC */
->>   static inline int setup_ima_buffer(const struct kimage *image, void *fdt,
->> -- 
->> 2.38.1
->>
+> ...
 > 
+> > > I'm going through my review queue to make sure I haven't missed
+> > > anything and this thread popped up ... Stefan, Mimi, did you get a fix
+> > > into an upstream tree somewhere?  If not, is it because you are
+> > > waiting on a review/merge from me into the LSM tree?
+> >
+> > Sorry for the delay.  Between vacation and LSS, I just started testing
+> > Jeff Layton's patch.
 > 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
+> No worries, I'm a bit behind too, I just wanted to make sure I wasn't
+> blocking this thread :)
+
+FYI, Jeff Layton's patch is now queued in next-integrity.
+
+-- 
+thanks,
+
+Mimi
+
