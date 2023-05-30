@@ -2,46 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7833D715300
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 May 2023 03:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5565F715364
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 May 2023 04:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjE3Bjw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 May 2023 21:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S229998AbjE3CE1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 May 2023 22:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjE3Bjv (ORCPT
+        with ESMTP id S229753AbjE3CEZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 May 2023 21:39:51 -0400
+        Mon, 29 May 2023 22:04:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F78D9;
-        Mon, 29 May 2023 18:39:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1CA10A;
+        Mon, 29 May 2023 19:03:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C4D2628E2;
-        Tue, 30 May 2023 01:39:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38849C433EF;
-        Tue, 30 May 2023 01:39:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB6BC629AB;
+        Tue, 30 May 2023 02:01:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77CA4C433D2;
+        Tue, 30 May 2023 02:01:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685410788;
-        bh=Fc2RpQel+qFTuy8pAbXgl1N/NoGp11aHR8zxbS1/fzs=;
+        s=k20201202; t=1685412105;
+        bh=k9eghuxYpGj4/wVpX1B6WX24RA+gPm9dTmY/xLxTuY0=;
         h=From:To:Cc:Subject:Date:From;
-        b=axYUFodp8nl3/X+l5R/JV70OISdLXtY8c6vptkG0y1k5D1oySZWdSp7FrD7u3eYA9
-         a8jXDCciKA22Z+OaithlS/EDeqVeHZm+iEwUGvAxqaMPsUsIC9zLFU3zjvlJGRII52
-         bm04xsjs23C9qttFGTPgMXOEmCuw5wp/yPzXo12IBiZCsXOeU5tYX1RXFDJZxqKRQC
-         makGZ+wygan3Lb7nArHGPR/wQfLnH9fI+8wQUlS7mXuPLDIOXQSge9sFKgXJC/54U+
-         8bmn0GO1o9EASbVWa0rCoioTyxe3qi0zllBWof2HZK0T1fSs6UIQwhMmR/Nnt4qu6c
-         7FN4gf94kXiNQ==
+        b=q+c0VsJG2rCWfnyG4P3hpyZwueFtaL/RnQppU/JL3jzuf6qnYmCCv9zHx9L9OORNU
+         Erls76MId6q1NGOzYLZF/o4tr5h6tP3B4xbb6YaB9FjgFrfAVI9DWOUj/EBLz3mdDU
+         jnrvv0CKx2TT0iZ5PHrd/2bcAl4amuL8hoyc1YSoyaAuNxv1cZX5k41PaJ8IxwvpAD
+         wh7tHeefBB+B1Dobu9dLF3CraVr/jRaxJWdk+psAXwmMXMYYRzz4V5h93wZoDcTzVY
+         ZbJAzbef3o4NofmbiWTGUcGEr/GJ6iAYWl2VQyeFFY171dIcjXW1exjMljvnyU4j81
+         j0WRuoZeugm9Q==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-integrity@vger.kernel.org
 Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Alejandro Cabrera <alejandro.cabreraaldaya@tuni.fi>,
         Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
         stable@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
         Stefan Berger <stefanb@linux.vnet.ibm.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH RFC] tpm: tpm_vtpm_proxy: fix a race condition in the locality change
-Date:   Tue, 30 May 2023 04:39:41 +0300
-Message-Id: <20230530013942.232590-1-jarkko@kernel.org>
+Subject: [PATCH RFC v2] tpm: tpm_vtpm_proxy: do not reference kernel memory as user memory
+Date:   Tue, 30 May 2023 05:01:32 +0300
+Message-Id: <20230530020133.235765-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,14 +58,11 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
 
-The driver has three issues (in priority order) in the locality change:
+The driver has two issues (in priority order) in the locality change:
 
-1. Because of mutex_unlock(&proxy_dev->buf_lock) in-between write and read
-   operations in the locality change, another thread can send a TPM command
-   in-between.
-2. The driver uses __user pointer and copy_to_user() and
+1. The driver uses __user pointer and copy_to_user() and
    copy_from_user() with a kernel address during the locality change.
-3. For invalid locality change request from user space, the driver
+2. For invalid locality change request from user space, the driver
    sets errno to EFAULT, while for invalid input data EINVAL should
    be used.
 
@@ -79,8 +77,10 @@ Cc: stable@vger.kernel.org
 Fixes: be4c9acfe297 ("tpm: vtpm_proxy: Implement request_locality function.")
 Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
 ---
-NOTE: I did not have test env available, when I wrote this. Thus, it has
-an RFC tag for the moment.
+v2:
+* Acquiring and releasing mutex in-between should not be an issue
+  because they are executed with the chip locked.
+---
  drivers/char/tpm/tpm_vtpm_proxy.c | 162 ++++++++++++++----------------
  1 file changed, 73 insertions(+), 89 deletions(-)
 
