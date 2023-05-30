@@ -2,70 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32076716B86
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 May 2023 19:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A77716BB8
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 May 2023 19:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjE3RsQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 May 2023 13:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
+        id S232558AbjE3R6A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 May 2023 13:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjE3RsP (ORCPT
+        with ESMTP id S232777AbjE3R55 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 May 2023 13:48:15 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9FEB2;
-        Tue, 30 May 2023 10:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1685468859; i=linosanfilippo@gmx.de;
-        bh=++AWfGg+huXGq6oS7nTH1/C1B8ZsQI4CHiv2Tr/rOQg=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=MGxErC8KrqcS+ussukmTT8GRSHHm8QIlE8GxT/J8r9/rKabfKPqivojQEbULZ4W7a
-         NCcOQoRDEszWdQK8oD732maLD80BRFbzBm0Cx9ASqMZFV9ShV3KNFFoWNsgFHAY0Ll
-         Q8ZNdnlIUd6u2z7Yub2nxZzvwZJOXnk6C3x/fOMXo/vRdsoqzrIjP2wZPhIPnDYT3B
-         LIjSC8KDFWov2wHm+uT7SIDFtRgJx1akgokJw/j0ZEf053S//reF8AkI6L0FXAlkeR
-         dv67AQ2PQUKgvBDiIOh62Qv3pE10FDIYLeoADl64J+J5y9wWbuWZqaU1MwtQ1lnKeo
-         svULC9Zhi10rQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from Venus.speedport.ip ([84.162.2.106]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTzf6-1pd8en0aeY-00QyBO; Tue, 30
- May 2023 19:47:39 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     jsnitsel@redhat.com, hdegoede@redhat.com, oe-lkp@lists.linux.dev,
-        lkp@intel.com, peter.ujfalusi@linux.intel.com,
-        peterz@infradead.org, linux@mniewoehner.de,
+        Tue, 30 May 2023 13:57:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A17311F
+        for <linux-integrity@vger.kernel.org>; Tue, 30 May 2023 10:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685469421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GyKFKLtIu90hBDIg15YSYvy11Kb1QZe6D7iw0TE90QU=;
+        b=hv2Z4F4zOeKFRxZ6U39bSgBJskMyFWAWdUWuzTTDqnMhqqHwZRGMND1EKheHgAx/Pl7blV
+        zYiRyjSr2x22beM/c8V13fODiC21mJmW3Ux8CYMaJjG9SOAtTYoatTR/DYfrpe/l6Oi31/
+        Q1cXsNK8oWksizZtuEHwDKrEmJo6KZ8=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-96-kKtJy-XRM3ep7ABwXrr6aw-1; Tue, 30 May 2023 13:56:59 -0400
+X-MC-Unique: kKtJy-XRM3ep7ABwXrr6aw-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f6accf92e2so587171cf.0
+        for <linux-integrity@vger.kernel.org>; Tue, 30 May 2023 10:56:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685469419; x=1688061419;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GyKFKLtIu90hBDIg15YSYvy11Kb1QZe6D7iw0TE90QU=;
+        b=CqV58it56XgqmH6GKERQkDt3ygALrGaZb2tB2Xm0ZZlCdWF+yjMNAgcTvb+Lr5rm3B
+         wkFpXLHhQx92BItda+gNGBuEQTnmZ26S+PoDAgkrVHQNl2cYvc7lnj6yr9emef8CtyKL
+         QLM3PDNsfEsMOIT4EJ+K8iYqELABGfoy16fEDur3h4pxSGVpoDtOCA2FISOR9GcJZ/jy
+         M44int9t0OkRNBsmL3GpaAVVg3I9aZIZ32trUkE9L5ihf1cvc1rmU6Zl7GEDwPs4Hvqp
+         u0qPqp7Pai3khqX3PkM7RYj8UC9vLAu9Loghf6AldWGvPN2oLIUaB/fVyXt6Jq7emmha
+         0o3g==
+X-Gm-Message-State: AC+VfDxwp/NZDoIoF8b1VG7ybqYa5tyU4EoNhHhnD5jU94djjrdOjKaw
+        bPteLvgE7tJszPkFVdQXRzj8ZoL6kAmwQsGDfnsdN1voPAtiZBEyh+c54S5ZCVAEtp3Uwcut6E1
+        fdSMMec42dlo29NdJW1UAuHZGTpb5
+X-Received: by 2002:a05:622a:1009:b0:3f6:b4bf:8ac6 with SMTP id d9-20020a05622a100900b003f6b4bf8ac6mr12054073qte.27.1685469418994;
+        Tue, 30 May 2023 10:56:58 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4slbTuvpq5c7Z5B8w/Gq7x3c0ZpfM7wOsA7FmfXU6XF++zKQp9rZ/sglxYsXPhMx3TdqsiAg==
+X-Received: by 2002:a05:622a:1009:b0:3f6:b4bf:8ac6 with SMTP id d9-20020a05622a100900b003f6b4bf8ac6mr12054049qte.27.1685469418687;
+        Tue, 30 May 2023 10:56:58 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id z4-20020ac84544000000b003f38f55e71asm4878069qtn.47.2023.05.30.10.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 10:56:58 -0700 (PDT)
+Date:   Tue, 30 May 2023 10:56:56 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     =?utf-8?B?UMOpdGVy?= Ujfalusi <peter.ujfalusi@linux.intel.com>
+Cc:     Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, hdegoede@redhat.com, oe-lkp@lists.linux.dev,
+        lkp@intel.com, peterz@infradead.org, linux@mniewoehner.de,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, LinoSanfilippo@gmx.de, lukas@wunner.de,
-        p.rosenberger@kunbus.com, kernel test robot <yujie.liu@intel.com>
-Subject: [PATCH v2] tpm,tpm_tis: Handle interrupt storm
-Date:   Tue, 30 May 2023 19:47:12 +0200
-Message-Id: <20230530174712.6989-1-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.40.1
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+Message-ID: <xkp3zaclvqx6pv4qh4wv7jttqby4lp2atsrareb63ofi7sy2qp@hfugy3pyac4o>
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <CSTVVFNKUVJW.P69FKI6IF3ZN@suppilovahvero>
+ <da435e0d-5f22-fac7-bc10-96a0fd4c6d54@kunbus.com>
+ <a84c447f-cdfb-d33c-62cb-bb5d9aa8510b@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:6I6uOiEXoQ914p4DH3/mKhxPboZliuI1/kHOD8HviEPdYFnOAIF
- UImaGD1j11GryfRWdZ9+Cz5WKBy6G74kFm0cavF+jNcx/UKjELl+kJcgv03hbaNN3z/LiJu
- lQRUxHLN9htBKIoOfaMlWHsqV12ESz++5btTXWEad1aD1J7eiEBpIh2aOyrGtieOpRV3eig
- 8XfHAvahfI04oX6muDz6w==
-UI-OutboundReport: notjunk:1;M01:P0:5MoqWh4wBzk=;I1siaBsEOSZY6/rpiK4svW0k1sK
- VjKtY0yzx/hI22+Xjt26Wq1ggeYJr0rt0P+fU15X40YbBWydESaU8Y4Vp6F/20DlNR99VM0vO
- SOgu5opqh6gYBioTPCSU8ANYdveQHFhHWdsekq9ZhSuTu/EfD0N5sK/bfy1Enhqt22PhOteY0
- bE/frup9hqkuHW17eSsF4xygm34phxf1AttLzjk9Sy1vAewOy7kkBqkoPY4hzeQ2LE1Tix5S+
- itS0lhGk0fiMoZWt/JrsQnmcD+dItbcBUYj5P2yGsTii1Yo3xfERFpkrVQWKVKZVvlLMMVReX
- RsWVFdyiWl621A3ZqCp8jNb/eU69Ntg4drNUFK25kMzhkiVx+lnv+od+/3uGHUV4OzxXqOwEk
- xxbXI6M4pmCQo094CKSATqQ5Y7OD2lbxOB2xVPKWxp30M0O3SbckvvT2rDjnR4cUoOyHkOAwG
- sDgqLIPUxTrlciVZaBErPSpxYdGqxW4PRWsle3XE1UhYZ5MAm7Ujx5eEaZ8/QIUXoj0AGSIbO
- LVnyqWXW03cf+QMRSJInB/MuJ9JOtV57CpDo000IpbeLXH4k7unwY0Ik7YTLi7lf6H/eZxFTN
- jTk3DVviiVLHNykkPacQLPTm7iZGUUZ0ZBWAy+43dAwklxDGbGRrEG5U//mmkRswXv2ULkCUw
- t5mIieBwlw/+Xq435js0C6sU5kpQK42Y0P/AzVOHyZ+ZCBYARhdFZzlKOOJSfoxK7gAib/gQq
- ripoOLSTT0QhvnqTb3U8f+h8Y5KpsWODXi5yDcFWVFlSsh2jRQW8SL5JDO69WFDHc936exGGU
- aZMIi6xlA2blzEMDFEQnAMTy/icdD/RaMQYh1EY16KIIDFCi+tRDwfW1KsKfWg7dmmFXQwTBz
- VNNDrEFUA0RSCfpXFvWcNTsyRjXxCuu0AfYQ1aoUJ9+d6utj5xhojnOkwSsmuE20eSPBeR235
- 1S4nsX9F2zQU2TYcoFYKYhzBqbw=
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a84c447f-cdfb-d33c-62cb-bb5d9aa8510b@linux.intel.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,133 +87,91 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KCkFmdGVyIGFj
-dGl2YXRpb24gb2YgaW50ZXJydXB0cyBmb3IgVFBNIFRJUyBkcml2ZXJzIDAtZGF5IHJlcG9ydHMg
-YW4KaW50ZXJydXB0IHN0b3JtIG9uIGFuIEluc3B1ciBORjUxODBNNi9ORjUxODBNNiBzZXJ2ZXIu
-CgpGaXggdGhpcyBieSBkZXRlY3RpbmcgdGhlIHN0b3JtIGFuZCBmYWxsaW5nIGJhY2sgdG8gcG9s
-bGluZzoKQ291bnQgdGhlIG51bWJlciBvZiB1bmhhbmRsZWQgaW50ZXJydXB0cyB3aXRoaW4gYSAx
-MCBtcyB0aW1lIGludGVydmFsLiBJbgpjYXNlIHRoYXQgbW9yZSB0aGFuIDEwMDAgd2VyZSB1bmhh
-bmRsZWQgZGVhY3RpdmF0ZSBpbnRlcnJ1cHRzIGVudGlyZWx5LApkZXJlZ2lzdGVyIHRoZSBoYW5k
-bGVyIGFuZCB1c2UgcG9sbGluZyBpbnN0ZWFkLgoKVGhlIHN0b3JtIGRldGVjdGlvbiBsb2dpYyBl
-cXVhbHMgdGhlIGltcGxlbWVudGF0aW9uIGluIG5vdGVfaW50ZXJydXB0KCkKd2hpY2ggdXNlcyB0
-aW1lc3RhbXBzIGFuZCBjb3VudGVycyBzdG9yZWQgaW4gc3RydWN0IGlycV9kZXNjLiBTaW5jZSB0
-aGlzCnN0cnVjdHVyZSBpcyBwcml2YXRlIHRvIHRoZSBnZW5lcmljIGludGVycnVwdCBjb3JlIHRo
-ZSBUUE0gVElTIGNvcmUgdXNlcwppdHMgb3duIHRpbWVzdGFtcHMgYW5kIGNvdW50ZXJzLiBGdXJ0
-aGVybW9yZSB0aGUgVFBNIGludGVycnVwdCBoYW5kbGVyCmFsd2F5cyByZXR1cm5zIElSUV9IQU5E
-TEVEIHRvIHByZXZlbnQgdGhlIGdlbmVyaWMgaW50ZXJydXB0IGNvcmUgZnJvbQpwcm9jZXNzaW5n
-IHRoZSBpbnRlcnJ1cHQgc3Rvcm0uCgpTaW5jZSB0aGUgaW50ZXJydXB0IGRlcmVnaXN0cmF0aW9u
-IGZ1bmN0aW9uIGRldm1fZnJlZV9pcnEoKSB3YWl0cyBmb3IgYWxsCmludGVycnVwdCBoYW5kbGVy
-cyB0byBmaW5pc2gsIG9ubHkgdHJpZ2dlciBhIHdvcmtlciBpbiB0aGUgaW50ZXJydXB0CmhhbmRs
-ZXIgYW5kIGRvIHRoZSB1bnJlZ2lzdHJhdGlvbiBpbiB0aGUgd29ya2VyIHRvIGF2b2lkIGEgZGVh
-ZGxvY2suCgpSZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPHl1amllLmxpdUBpbnRlbC5j
-b20+CkNsb3NlczogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvb2UtbGtwLzIwMjMwNTA0MTMyNS5h
-ZThiMGM0My15dWppZS5saXVAaW50ZWwuY29tLwpTdWdnZXN0ZWQtYnk6IEx1a2FzIFd1bm5lciA8
-bHVrYXNAd3VubmVyLmRlPgpTaWduZWQtb2ZmLWJ5OiBMaW5vIFNhbmZpbGlwcG8gPGwuc2FuZmls
-aXBwb0BrdW5idXMuY29tPgotLS0KIGRyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMgfCA5
-MyArKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0KIGRyaXZlcnMvY2hhci90cG0vdHBt
-X3Rpc19jb3JlLmggfCAgNCArKwogMiBmaWxlcyBjaGFuZ2VkLCA4NSBpbnNlcnRpb25zKCspLCAx
-MiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29y
-ZS5jIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuYwppbmRleCA1NTgxNDRmYTcwN2Eu
-LjdhZTgyMjhlODAzZiAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUu
-YworKysgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCkBAIC00NjgsMjUgKzQ2OCwz
-MiBAQCBzdGF0aWMgaW50IHRwbV90aXNfc2VuZF9kYXRhKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCwg
-Y29uc3QgdTggKmJ1Ziwgc2l6ZV90IGxlbikKIAlyZXR1cm4gcmM7CiB9CiAKK3N0YXRpYyB2b2lk
-IF9fdHBtX3Rpc19kaXNhYmxlX2ludGVycnVwdHMoc3RydWN0IHRwbV9jaGlwICpjaGlwKQorewor
-CXN0cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYgPSBkZXZfZ2V0X2RydmRhdGEoJmNoaXAtPmRldik7
-CisJdTMyIGludG1hc2sgPSAwOworCisJdHBtX3Rpc19yZWFkMzIocHJpdiwgVFBNX0lOVF9FTkFC
-TEUocHJpdi0+bG9jYWxpdHkpLCAmaW50bWFzayk7CisJaW50bWFzayAmPSB+VFBNX0dMT0JBTF9J
-TlRfRU5BQkxFOworCisJdHBtX3Rpc19yZXF1ZXN0X2xvY2FsaXR5KGNoaXAsIDApOworCXRwbV90
-aXNfd3JpdGUzMihwcml2LCBUUE1fSU5UX0VOQUJMRShwcml2LT5sb2NhbGl0eSksIGludG1hc2sp
-OworCXRwbV90aXNfcmVsaW5xdWlzaF9sb2NhbGl0eShjaGlwLCAwKTsKKworCWNoaXAtPmZsYWdz
-ICY9IH5UUE1fQ0hJUF9GTEFHX0lSUTsKK30KKwogc3RhdGljIHZvaWQgZGlzYWJsZV9pbnRlcnJ1
-cHRzKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIHsKIAlzdHJ1Y3QgdHBtX3Rpc19kYXRhICpwcml2
-ID0gZGV2X2dldF9kcnZkYXRhKCZjaGlwLT5kZXYpOwotCXUzMiBpbnRtYXNrOwotCWludCByYzsK
-IAogCWlmIChwcml2LT5pcnEgPT0gMCkKIAkJcmV0dXJuOwogCi0JcmMgPSB0cG1fdGlzX3JlYWQz
-Mihwcml2LCBUUE1fSU5UX0VOQUJMRShwcml2LT5sb2NhbGl0eSksICZpbnRtYXNrKTsKLQlpZiAo
-cmMgPCAwKQotCQlpbnRtYXNrID0gMDsKLQotCWludG1hc2sgJj0gflRQTV9HTE9CQUxfSU5UX0VO
-QUJMRTsKLQlyYyA9IHRwbV90aXNfd3JpdGUzMihwcml2LCBUUE1fSU5UX0VOQUJMRShwcml2LT5s
-b2NhbGl0eSksIGludG1hc2spOworCV9fdHBtX3Rpc19kaXNhYmxlX2ludGVycnVwdHMoY2hpcCk7
-CiAKIAlkZXZtX2ZyZWVfaXJxKGNoaXAtPmRldi5wYXJlbnQsIHByaXYtPmlycSwgY2hpcCk7CiAJ
-cHJpdi0+aXJxID0gMDsKLQljaGlwLT5mbGFncyAmPSB+VFBNX0NISVBfRkxBR19JUlE7CiB9CiAK
-IC8qCkBAIC03NTIsNiArNzU5LDUzIEBAIHN0YXRpYyBib29sIHRwbV90aXNfcmVxX2NhbmNlbGVk
-KHN0cnVjdCB0cG1fY2hpcCAqY2hpcCwgdTggc3RhdHVzKQogCXJldHVybiBzdGF0dXMgPT0gVFBN
-X1NUU19DT01NQU5EX1JFQURZOwogfQogCitzdGF0aWMgdm9pZCB0cG1fdGlzX3JlZW5hYmxlX3Bv
-bGxpbmcoc3RydWN0IHRwbV9jaGlwICpjaGlwKQoreworCXN0cnVjdCB0cG1fdGlzX2RhdGEgKnBy
-aXYgPSBkZXZfZ2V0X2RydmRhdGEoJmNoaXAtPmRldik7CisKKwlkZXZfd2FybigmY2hpcC0+ZGV2
-LCBGV19CVUcKKwkJICJUUE0gaW50ZXJydXB0IHN0b3JtIGRldGVjdGVkLCBwb2xsaW5nIGluc3Rl
-YWRcbiIpOworCisJX190cG1fdGlzX2Rpc2FibGVfaW50ZXJydXB0cyhjaGlwKTsKKworCS8qCisJ
-ICogZGV2bV9mcmVlX2lycSgpIG11c3Qgbm90IGJlIGNhbGxlZCBmcm9tIHdpdGhpbiB0aGUgaW50
-ZXJydXB0IGhhbmRsZXIsCisJICogc2luY2UgdGhpcyBmdW5jdGlvbiB3YWl0cyBmb3IgcnVubmlu
-ZyBoYW5kbGVycyB0byBmaW5pc2ggYW5kIHRodXMgaXQKKwkgKiB3b3VsZCBkZWFkbG9jay4gSW5z
-dGVhZCB0cmlnZ2VyIGEgd29ya2VyIHRoYXQgdGFrZXMgY2FyZSBvZiB0aGUKKwkgKiB1bnJlZ2lz
-dHJhdGlvbi4KKwkgKi8KKwlzY2hlZHVsZV93b3JrKCZwcml2LT5mcmVlX2lycV93b3JrKTsKK30K
-Kworc3RhdGljIGlycXJldHVybl90IHRwbV90aXNfY2hlY2tfZm9yX2ludGVycnVwdF9zdG9ybShz
-dHJ1Y3QgdHBtX2NoaXAgKmNoaXApCit7CisJc3RydWN0IHRwbV90aXNfZGF0YSAqcHJpdiA9IGRl
-dl9nZXRfZHJ2ZGF0YSgmY2hpcC0+ZGV2KTsKKwljb25zdCB1bnNpZ25lZCBpbnQgTUFYX1VOSEFO
-RExFRF9JUlFTID0gMTAwMDsKKworCS8qCisJICogVGhlIHdvcmtlciB0byBmcmVlIHRoZSBUUE0g
-aW50ZXJydXB0IChmcmVlX2lycV93b3JrKSBtYXkgYWxyZWFkeQorCSAqIGJlIHNjaGVkdWxlZCwg
-c28gbWFrZSBzdXJlIGl0IGlzIG5vdCBzY2hlZHVsZWQgYWdhaW4uCisJICovCisJaWYgKCEoY2hp
-cC0+ZmxhZ3MgJiBUUE1fQ0hJUF9GTEFHX0lSUSkpCisJCXJldHVybiBJUlFfSEFORExFRDsKKwor
-CWlmICh0aW1lX2FmdGVyKGppZmZpZXMsIHByaXYtPmxhc3RfdW5oYW5kbGVkX2lycSArIEhaLzEw
-KSkKKwkJcHJpdi0+dW5oYW5kbGVkX2lycXMgPSAxOworCWVsc2UKKwkJcHJpdi0+dW5oYW5kbGVk
-X2lycXMrKzsKKworCXByaXYtPmxhc3RfdW5oYW5kbGVkX2lycSA9IGppZmZpZXM7CisKKwlpZiAo
-cHJpdi0+dW5oYW5kbGVkX2lycXMgPiBNQVhfVU5IQU5ETEVEX0lSUVMpCisJCXRwbV90aXNfcmVl
-bmFibGVfcG9sbGluZyhjaGlwKTsKKworCS8qCisJICogUHJldmVudCB0aGUgZ2VuaXJxIGNvZGUg
-ZnJvbSBzdGFydGluZyBpdHMgb3duIGludGVycnVwdCBzdG9ybQorCSAqIGhhbmRsaW5nIGJ5IGFs
-d2F5cyByZXBvcnRpbmcgdGhhdCB0aGUgaW50ZXJydXB0IHdhcyBoYW5kbGVkLgorCSAqLworCXJl
-dHVybiBJUlFfSEFORExFRDsKK30KKwogc3RhdGljIGlycXJldHVybl90IHRpc19pbnRfaGFuZGxl
-cihpbnQgZHVtbXksIHZvaWQgKmRldl9pZCkKIHsKIAlzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAgPSBk
-ZXZfaWQ7CkBAIC03NjEsMTAgKzgxNSwxMCBAQCBzdGF0aWMgaXJxcmV0dXJuX3QgdGlzX2ludF9o
-YW5kbGVyKGludCBkdW1teSwgdm9pZCAqZGV2X2lkKQogCiAJcmMgPSB0cG1fdGlzX3JlYWQzMihw
-cml2LCBUUE1fSU5UX1NUQVRVUyhwcml2LT5sb2NhbGl0eSksICZpbnRlcnJ1cHQpOwogCWlmIChy
-YyA8IDApCi0JCXJldHVybiBJUlFfTk9ORTsKKwkJZ290byB1bmhhbmRsZWQ7CiAKIAlpZiAoaW50
-ZXJydXB0ID09IDApCi0JCXJldHVybiBJUlFfTk9ORTsKKwkJZ290byB1bmhhbmRsZWQ7CiAKIAlz
-ZXRfYml0KFRQTV9USVNfSVJRX1RFU1RFRCwgJnByaXYtPmZsYWdzKTsKIAlpZiAoaW50ZXJydXB0
-ICYgVFBNX0lOVEZfREFUQV9BVkFJTF9JTlQpCkBAIC03ODAsMTAgKzgzNCwxMyBAQCBzdGF0aWMg
-aXJxcmV0dXJuX3QgdGlzX2ludF9oYW5kbGVyKGludCBkdW1teSwgdm9pZCAqZGV2X2lkKQogCXJj
-ID0gdHBtX3Rpc193cml0ZTMyKHByaXYsIFRQTV9JTlRfU1RBVFVTKHByaXYtPmxvY2FsaXR5KSwg
-aW50ZXJydXB0KTsKIAl0cG1fdGlzX3JlbGlucXVpc2hfbG9jYWxpdHkoY2hpcCwgMCk7CiAJaWYg
-KHJjIDwgMCkKLQkJcmV0dXJuIElSUV9OT05FOworCQlnb3RvIHVuaGFuZGxlZDsKIAogCXRwbV90
-aXNfcmVhZDMyKHByaXYsIFRQTV9JTlRfU1RBVFVTKHByaXYtPmxvY2FsaXR5KSwgJmludGVycnVw
-dCk7CiAJcmV0dXJuIElSUV9IQU5ETEVEOworCit1bmhhbmRsZWQ6CisJcmV0dXJuIHRwbV90aXNf
-Y2hlY2tfZm9yX2ludGVycnVwdF9zdG9ybShjaGlwKTsKIH0KIAogc3RhdGljIHZvaWQgdHBtX3Rp
-c19nZW5faW50ZXJydXB0KHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKQEAgLTgwNCw2ICs4NjEsMTUg
-QEAgc3RhdGljIHZvaWQgdHBtX3Rpc19nZW5faW50ZXJydXB0KHN0cnVjdCB0cG1fY2hpcCAqY2hp
-cCkKIAkJY2hpcC0+ZmxhZ3MgJj0gflRQTV9DSElQX0ZMQUdfSVJROwogfQogCitzdGF0aWMgdm9p
-ZCB0cG1fdGlzX2ZyZWVfaXJxX2Z1bmMoc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQoreworCXN0
-cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYgPSBjb250YWluZXJfb2Yod29yaywgdHlwZW9mKCpwcml2
-KSwgZnJlZV9pcnFfd29yayk7CisJc3RydWN0IHRwbV9jaGlwICpjaGlwID0gcHJpdi0+Y2hpcDsK
-KworCWRldm1fZnJlZV9pcnEoY2hpcC0+ZGV2LnBhcmVudCwgcHJpdi0+aXJxLCBjaGlwKTsKKwlw
-cml2LT5pcnEgPSAwOworfQorCiAvKiBSZWdpc3RlciB0aGUgSVJRIGFuZCBpc3N1ZSBhIGNvbW1h
-bmQgdGhhdCB3aWxsIGNhdXNlIGFuIGludGVycnVwdC4gSWYgYW4KICAqIGlycSBpcyBzZWVuIHRo
-ZW4gbGVhdmUgdGhlIGNoaXAgc2V0dXAgZm9yIElSUSBvcGVyYXRpb24sIG90aGVyd2lzZSByZXZl
-cnNlCiAgKiBldmVyeXRoaW5nIGFuZCBsZWF2ZSBpbiBwb2xsaW5nIG1vZGUuIFJldHVybnMgMCBv
-biBzdWNjZXNzLgpAQCAtODE2LDYgKzg4Miw3IEBAIHN0YXRpYyBpbnQgdHBtX3Rpc19wcm9iZV9p
-cnFfc2luZ2xlKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCwgdTMyIGludG1hc2ssCiAJaW50IHJjOwog
-CXUzMiBpbnRfc3RhdHVzOwogCisJSU5JVF9XT1JLKCZwcml2LT5mcmVlX2lycV93b3JrLCB0cG1f
-dGlzX2ZyZWVfaXJxX2Z1bmMpOwogCiAJcmMgPSBkZXZtX3JlcXVlc3RfdGhyZWFkZWRfaXJxKGNo
-aXAtPmRldi5wYXJlbnQsIGlycSwgTlVMTCwKIAkJCQkgICAgICAgdGlzX2ludF9oYW5kbGVyLCBJ
-UlFGX09ORVNIT1QgfCBmbGFncywKQEAgLTkxOCw2ICs5ODUsNyBAQCB2b2lkIHRwbV90aXNfcmVt
-b3ZlKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAkJaW50ZXJydXB0ID0gMDsKIAogCXRwbV90aXNf
-d3JpdGUzMihwcml2LCByZWcsIH5UUE1fR0xPQkFMX0lOVF9FTkFCTEUgJiBpbnRlcnJ1cHQpOwor
-CWZsdXNoX3dvcmsoJnByaXYtPmZyZWVfaXJxX3dvcmspOwogCiAJdHBtX3Rpc19jbGtydW5fZW5h
-YmxlKGNoaXAsIGZhbHNlKTsKIApAQCAtMTAyMSw2ICsxMDg5LDcgQEAgaW50IHRwbV90aXNfY29y
-ZV9pbml0KHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IHRwbV90aXNfZGF0YSAqcHJpdiwgaW50
-IGlycSwKIAljaGlwLT50aW1lb3V0X2IgPSBtc2Vjc190b19qaWZmaWVzKFRJU19USU1FT1VUX0Jf
-TUFYKTsKIAljaGlwLT50aW1lb3V0X2MgPSBtc2Vjc190b19qaWZmaWVzKFRJU19USU1FT1VUX0Nf
-TUFYKTsKIAljaGlwLT50aW1lb3V0X2QgPSBtc2Vjc190b19qaWZmaWVzKFRJU19USU1FT1VUX0Rf
-TUFYKTsKKwlwcml2LT5jaGlwID0gY2hpcDsKIAlwcml2LT50aW1lb3V0X21pbiA9IFRQTV9USU1F
-T1VUX1VTRUNTX01JTjsKIAlwcml2LT50aW1lb3V0X21heCA9IFRQTV9USU1FT1VUX1VTRUNTX01B
-WDsKIAlwcml2LT5waHlfb3BzID0gcGh5X29wczsKZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2hhci90
-cG0vdHBtX3Rpc19jb3JlLmggYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5oCmluZGV4
-IGU5NzhmNDU3ZmQ0ZC4uYjFmYTQyMzY3MDUyIDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBt
-L3RwbV90aXNfY29yZS5oCisrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmgKQEAg
-LTkxLDExICs5MSwxNSBAQCBlbnVtIHRwbV90aXNfZmxhZ3MgewogfTsKIAogc3RydWN0IHRwbV90
-aXNfZGF0YSB7CisJc3RydWN0IHRwbV9jaGlwICpjaGlwOwogCXUxNiBtYW51ZmFjdHVyZXJfaWQ7
-CiAJc3RydWN0IG11dGV4IGxvY2FsaXR5X2NvdW50X211dGV4OwogCXVuc2lnbmVkIGludCBsb2Nh
-bGl0eV9jb3VudDsKIAlpbnQgbG9jYWxpdHk7CiAJaW50IGlycTsKKwlzdHJ1Y3Qgd29ya19zdHJ1
-Y3QgZnJlZV9pcnFfd29yazsKKwl1bnNpZ25lZCBsb25nIGxhc3RfdW5oYW5kbGVkX2lycTsKKwl1
-bnNpZ25lZCBpbnQgdW5oYW5kbGVkX2lycXM7CiAJdW5zaWduZWQgaW50IGludF9tYXNrOwogCXVu
-c2lnbmVkIGxvbmcgZmxhZ3M7CiAJdm9pZCBfX2lvbWVtICppbGJfYmFzZV9hZGRyOwoKYmFzZS1j
-b21taXQ6IDc4NzdjYjkxZjEwODE3NTRhMTQ4N2MxNDRkODVkYzBkMmUyZTdmYzQKLS0gCjIuNDAu
-MQoK
+On Mon, May 29, 2023 at 09:46:08AM +0300, Péter Ujfalusi wrote:
+> Hi Lino,
+> 
+> On 23/05/2023 23:46, Lino Sanfilippo wrote:
+> >> On the other hand any new functionality is objectively a maintanance
+> >> burden of some measure (applies to any functionality). So how do we know
+> >> that taking this change is less of a maintenance burden than just add
+> >> new table entries, as they come up?
+> >>
+> > 
+> > Initially this set was created as a response to this 0-day bug report which you asked me
+> > to have a look at:
+> > 
+> > https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org/
+> > 
+> > My hope was that it could also avoid some of (existing or future) DMI entries. But even if it does not
+> > (e.g. the problem Péter Ujfalusi reported with the UPX-i11 cannot be fixed by this patch set and thus
+> > needs the DMI quirk) we may at least avoid more bug reports due to interrupt storms once
+> > 6.4 is released. 
+> 
+> I'm surprised that there is a need for a storm detection in the first
+> place... Do we have something else on the same IRQ line on the affected
+> devices which might have a bug or no driver at all?
+> It is hard to believe that a TPM (Trusted Platform Module) is integrated
+> so poorly ;)
+> 
+> But put that aside: I think the storm detection is good given that there
+> is no other way to know which machine have sloppy TPM integration.
+> There are machines where this happens, so it is a know integration
+> issue, right?
+> 
+> My only 'nitpick' is with the printk level to be used.
+> The ERR level is not correct as we know the issue and we handle it, so
+> all is under control.
+> If we want to add these machines to the quirk list then WARN is a good
+> level to gain attention but I'm not sure if a user will know how to get
+> the machine in the quirk (where to file a bug).
+> If we only want the quirk to be used for machines like UPX-i11 which
+> simply just have broken (likely floating) IRQ line then the WARN is too
+> high level, INFO or even DBG would be appropriate as you are not going
+> to update the quirk, it is just handled under the hood (which is a great
+> thing, but on the other hand you will have the storm never the less and
+> that is not a nice thing).
+> 
+> It is a matter on how this is going to be handled in a long term. Add
+> quirk for all the known machines with either stormy or plain broken IRQ
+> line or handle the stormy ones and quirk the broken ones only.
+> 
+> >>> Detect an interrupt storm by counting the number of unhandled interrupts
+> >>> within a 10 ms time interval. In case that more than 1000 were unhandled
+> >>> deactivate interrupts, deregister the handler and fall back to polling.
+> >>
+> >> I know it can be sometimes hard to evaluate but can you try to explain
+> >> how you came up to the 10 ms sampling period and 1000 interrupt
+> >> threshold? I just don't like abritrary numbers.
+> > 
+> > At least the 100 ms is not plucked out of thin air but its the same time period
+> > that the generic code in note_interrupt() uses - I assume for a good reason.
+> > Not only this number but the whole irq storm detection logic is taken from 
+> > there: 
+> > 
+> >>
+> >>> This equals the implementation that handles interrupt storms in
+> >>> note_interrupt() by means of timestamps and counters in struct irq_desc.
+> >> The number of 1000 unhandled interrupts is still far below the 99900
+> used in
+> > note_interrupt() but IMHO enough to indicate that there is something seriously
+> > wrong with interrupt processing and it is probably saver to fall back to polling.
+> 
+> Except that if the line got the spurious designation in core, the
+> interrupt line will be disabled while the TPM driver will think that it
+> is still using IRQ mode and will not switch to polling.
+> 
+> A storm of 1000 is better than a storm of 99900 for sure but quirking
+> these would be the desired final solution. imho
+
+If that is the case, then output could probably be sent to the console
+detailing the dmi info needed to update the table.
+
+Regards,
+Jerry
+
+> 
+> There are many buts around this ;)
+> 
+> -- 
+> Péter
+
