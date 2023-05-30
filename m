@@ -2,139 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14CC715BD8
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 May 2023 12:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84217715EB1
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 May 2023 14:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjE3Kcc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 May 2023 06:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S231716AbjE3MPG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 May 2023 08:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbjE3Kcb (ORCPT
+        with ESMTP id S231735AbjE3MPE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 May 2023 06:32:31 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFFF93;
-        Tue, 30 May 2023 03:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1685442714; i=linosanfilippo@gmx.de;
-        bh=HLrwqdUJuqN16B/qjsE6jcWhUvILRIzmNm5SbVmJ4dY=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=BrPAynvcb6fpBI2DaSXRYjAr9zhgXRkTsbysxdy0gvSn00kbbPcFNbGT0ROmNuJue
-         fd2xmSFnL0dGmANe0uxL2qoy/ScCYi/3opedQRCYOz7auHnmxu+/QRmuX8A9eFV8Qa
-         QlFFBonjkHV+JtMYxIqbuYLNYmrl/2YnQm3QLGJwxFpKsTLQ3TDyufs4moKn8DnqIz
-         nesByy0gXla/eJ4a0HwZ/AhMt05p5GULjW1Ac8/5t4mY4KbkQ6q9ZSw8GcDq5dsTRw
-         /y2laYytEPXhaRCbjQOV32Hd9U6aVX9SZ+JXetr9NvYHbKl1CWFkUaRtQIznd7rTAi
-         PKX5BKC/TYGTQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.2.37] ([84.162.2.106]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MnakX-1qSs0d0xqX-00jWHZ; Tue, 30
- May 2023 12:31:54 +0200
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-To:     Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de,
-        jgg@ziepe.ca
-Cc:     jsnitsel@redhat.com, hdegoede@redhat.com, oe-lkp@lists.linux.dev,
-        lkp@intel.com, peter.ujfalusi@linux.intel.com,
-        peterz@infradead.org, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <CSU7G2UZSZ8K.22EGXU5CJTZBB@suppilovahvero>
- <CSUM65JDEX5D.8GL20PUI2XDV@suppilovahvero>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <fa9d4714-1c26-7f3b-9d27-04295ef74a6c@gmx.de>
-Date:   Tue, 30 May 2023 12:31:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 30 May 2023 08:15:04 -0400
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CADDC5;
+        Tue, 30 May 2023 05:15:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vjtf.r0_1685448895;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Vjtf.r0_1685448895)
+          by smtp.aliyun-inc.com;
+          Tue, 30 May 2023 20:14:56 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] integrity: Fix possible multiple allocation in integrity_inode_get()
+Date:   Tue, 30 May 2023 20:14:53 +0800
+Message-Id: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-In-Reply-To: <CSUM65JDEX5D.8GL20PUI2XDV@suppilovahvero>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:TZ4ZU+3gKuoxi5e6X3XtMH0VAzfEjg22iznnnKShF9rUjvFZbci
- 9wocekfP/wJHdYRVPXkj7Jwh1wTWRm5fRYG8IngxSyTKOEklONBuyVfUo9Yr4Bav/ovajf5
- Np6Rhsya9u7Fvdqobsla/rEizzX1v8LKWRYsBVX8weJNmvLM++h3CC9IK+/b++xRVjY9DRg
- 7ICAvpRdEgZi08EpgGSxQ==
-UI-OutboundReport: notjunk:1;M01:P0:L/+dLP6F3pw=;OcvV0FoqD0LcMLZqCtBrgSMwCe5
- 3+wgn+HVy6Qfuz9bgGMS51iiHkzqfNH76B++ujeTnoZBbMMNXa76k19m2W+pDus77L2BGGrEj
- gIyejMGMWjcW4KyeEnwGzf5H+uKIveYfj8X8NymS41TR2VN3VilAuzxHQq18qMzrwJr/ZXMrn
- pECu8EEzLDLnWqeMZCQ58m9/4XAJ3QlsHgJ1IX3HA0CiCC3hDO5+vzlvTo3c9tSkTsQ7h0k27
- 9Ky37HDJXFHrB6xGv2P57w3LFDsTBK/I53gJaS032P30DssVmJ5CrGmauY36pAe+MMWqba+Je
- LcEV1+VR9Q1RB4w+cv+SL/9zMPh/1VKJHmMutnRUHM6guz0wAXAIgOEk0/XmQ5AB69u7r/Gko
- 2Aux36dUBcWBhx4pwv4r/Xt+0TzL1k2rSuQndGGR4CZxSvHh+Vk+eXl70/QLJVlhBzFPWgc7R
- xzNHrMNKoZ+F55cU518hu0CdBvWl15yK3fe+b9kMEsYtWRldghpBgPFTQluAlB7rcI2tB0CBA
- RgQAbCEZ6t2/0odxlb9whujZwNU5cX2x4oVuTLykOi4PfRgEka6z79ZkDYM9rPTXZ2l9gWid7
- 1gpF95dceOHbW/i9y+ugRMZqNrAKGb3EKfJpJbaaLmXFo4pVZReZVd+/gki5MXvgqTWWfVfBt
- 24s4pmvLmJr/3S7WIZrH6LaC3TMYQ6I0RXeT7ZbPqvZS6rDWOQyuK2FeYoyK+1tA/BHobaCfk
- WM/rZgMwKpsQ5QT+qwEFo+XF2O3CCegpPo6m5m6hfUX6h4T4SFblsDsb8QY8YYnl/A9M9PIl/
- zFfbv+B0xLBCiHLZCaPPBeY1W/CixPj/joHPJJkkRexxAEUhVoYxSv/OrpyJO9BpxpK+M/mr7
- noAAy5MLeiElSQRlNNfUzYN8HbObuQebmgPehRcHgccsJKgxpG5gp5qsAwxEbtxA8bdMpxLKB
- YCIu9A==
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 24.05.23 at 17:30, Jarkko Sakkinen wrote:
-> On Wed May 24, 2023 at 6:58 AM EEST, Jarkko Sakkinen wrote:
->>>  	rc =3D tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interru=
-pt);
->>>  	if (rc < 0)
->>> -		return IRQ_NONE;
->>> +		goto unhandled;
->>>
->>>  	if (interrupt =3D=3D 0)
->>> -		return IRQ_NONE;
->>> +		goto unhandled;
->>>
->>>  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->>>  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
->>> @@ -780,10 +829,14 @@ static irqreturn_t tis_int_handler(int dummy, vo=
-id *dev_id)
->>>  	rc =3D tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interru=
-pt);
->>>  	tpm_tis_relinquish_locality(chip, 0);
->>>  	if (rc < 0)
->>> -		return IRQ_NONE;
->>> +		goto unhandled;
->>>
->>>  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
->>>  	return IRQ_HANDLED;
->>> +
->>> +unhandled:
->>> +	tpm_tis_process_unhandled_interrupt(chip);
->>> +	return IRQ_HANDLED;
->>>  }
->
-> Some minor glitches I noticed.
->
-> You could simplify the flow by making the helper to return IRQ_NONE.
->
-> E.g.
->
-> 	tpm_tis_relinquish_locality(chip, 0);
-> 	if (rc < 0)
-> 		return tpm_tis_process_unhandled_interrupt(chip);
->
-> I'd recommend changing the function name simply tpm_tis_rollback_interru=
-pt().
->
+When integrity_inode_get() is querying and inserting the cache, there
+is a conditional race in the concurrent environment.
 
-IMHO this name is worse, since this function does actually _not_ rollback =
-interrupts
-most of the times it is called. Only after an interrupt storm is detected =
-(so currently
-after it has been called at least 1000 times without rollback) it actually
-rolls back interrupts and falls back to polling.
+Query iint within the read-lock. If there is no result, allocate iint
+first and insert the iint cache in the write-lock protection. When the
+iint cache does not exist, and when multiple execution streams come at
+the same time, there will be a race condition, and multiple copies of
+iint will be allocated at the same time, and then put into the cache
+one by one under the write-lock protection.
 
-Maybe rather tpm_tis_check_for_interrupt_storm()?
+This is mainly because the red-black tree insertion does not perform
+duplicate detection. This is not the desired result, when this
+happens, the repeated allocation should be freed and the existing
+iint cache should be returned.
 
-Regards,
-Lino
+Fixes: bf2276d10ce5 ("ima: allocating iint improvements")
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: <stable@vger.kernel.org> # v3.10+
+---
+ security/integrity/iint.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
+diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+index c73858e8c6d5..d49c843a88ee 100644
+--- a/security/integrity/iint.c
++++ b/security/integrity/iint.c
+@@ -43,12 +43,10 @@ static struct integrity_iint_cache *__integrity_iint_find(struct inode *inode)
+ 		else if (inode > iint->inode)
+ 			n = n->rb_right;
+ 		else
+-			break;
++			return iint;
+ 	}
+-	if (!n)
+-		return NULL;
+ 
+-	return iint;
++	return NULL;
+ }
+ 
+ /*
+@@ -115,8 +113,13 @@ struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
+ 				     rb_node);
+ 		if (inode < test_iint->inode)
+ 			p = &(*p)->rb_left;
+-		else
++		else if (inode > test_iint->inode)
+ 			p = &(*p)->rb_right;
++		else {
++			write_unlock(&integrity_iint_lock);
++			kmem_cache_free(iint_cache, iint);
++			return test_iint;
++		}
+ 	}
+ 
+ 	iint->inode = inode;
+-- 
+2.24.3 (Apple Git-128)
 
