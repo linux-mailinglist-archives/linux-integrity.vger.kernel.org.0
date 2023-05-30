@@ -2,87 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B817150C7
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 May 2023 22:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7833D715300
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 May 2023 03:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjE2U7G (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 May 2023 16:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S229712AbjE3Bjw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 May 2023 21:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjE2U7D (ORCPT
+        with ESMTP id S229597AbjE3Bjv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 May 2023 16:59:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21D2CF
-        for <linux-integrity@vger.kernel.org>; Mon, 29 May 2023 13:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685393894;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mV2kHVRcfcyRbrdpPRjIZ0JKYy4IfekVjpRlLT3ji4M=;
-        b=gGKD5gA1OiKBiKUSJT3clZXepL+TQ6RVH9RtUi63u1SkHUkFHBoL4ergqkh1RscweKxrSx
-        ndKqCojTE5UJ5AZXLvaQwblZl6iljkiGrs+3BNi6QDRP1YNLfHgCdljr5lucI4GMLUROs8
-        n5ZcLOXOlwiOEzRtN5uvgeEMjK+9FEg=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-cdvekndBPNaW6U7Ind5v7g-1; Mon, 29 May 2023 16:58:12 -0400
-X-MC-Unique: cdvekndBPNaW6U7Ind5v7g-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-624b4176bf7so25270996d6.1
-        for <linux-integrity@vger.kernel.org>; Mon, 29 May 2023 13:58:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685393892; x=1687985892;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mV2kHVRcfcyRbrdpPRjIZ0JKYy4IfekVjpRlLT3ji4M=;
-        b=mD0yHL67X4X11B4eGUJ7LGfv7QmgG01agqF2M3oz5k6/BYy7jDEFxNWRsZHuhzgqJW
-         oTERaoOh2ErIF8b5Q5A9C/20STSCXm1J8TdbMehj3QwzB3cf/rzBDduPd6vak7USBgcu
-         DCpWFXvBcrpoIZ0WdGxe2c2TIf5wbQV7yxuUPJ9P2SXOtySAQ+Wu3/tvxB3O6UdcLtqL
-         c1q+nek+A3nK8RNiiTBgcQaDeSsrQF99+0FHnTULmF/nSKddDChmRhNHGWgvVPeBYWw9
-         BDoLBFIxvpFBhBhf9/fmx1Khs5m9uNSy8a9u7xKbtIbi3SM6Ex0yN8nWZOK1l47/VW8p
-         FQHA==
-X-Gm-Message-State: AC+VfDyMZdVNQhe96s7mykyMsLBBfAyz8VtKL05ON58YmI1/Ny9GBty1
-        zKLDklCzACHQhuJlG8KCtSxwUXEwPD0UXh9dRyc5C3a7mE75gGvfFsZE+pE13QRfkmsSSDvshJo
-        OxWcBl/XEf6jNH3AxPO+2h0b6peU3
-X-Received: by 2002:a05:6214:212e:b0:621:6548:d192 with SMTP id r14-20020a056214212e00b006216548d192mr14671152qvc.49.1685393892317;
-        Mon, 29 May 2023 13:58:12 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ62pZJSF9EG0XG2rv8Pp9vsLFjquc2gpXw/2+onp7YrQzk59kKXZlVMqOssTBoCVkFXIL04Dw==
-X-Received: by 2002:a05:6214:212e:b0:621:6548:d192 with SMTP id r14-20020a056214212e00b006216548d192mr14671137qvc.49.1685393892080;
-        Mon, 29 May 2023 13:58:12 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id ej14-20020ad45a4e000000b00606750abaf9sm1851949qvb.136.2023.05.29.13.58.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 13:58:11 -0700 (PDT)
-Date:   Mon, 29 May 2023 13:58:09 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Michael =?utf-8?Q?Niew=C3=B6hner?= <linux@mniewoehner.de>
-Cc:     Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        peterz@infradead.org
-Subject: Re: [linus:master] [tpm, tpm_tis] e644b2f498: RIP:acpi_safe_halt
-Message-ID: <6hbzssr2byskuiznx6vvatcuvjkrbhscvorzm4qcheh3n6n4zj@2nrfawn6rbst>
-References: <202305041325.ae8b0c43-yujie.liu@intel.com>
- <d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org>
- <42ea93a1-3186-b8ff-c317-d51f3e13856e@kunbus.com>
- <20230511141607.GA32208@wunner.de>
- <1a8ecf90-80a4-9aac-95e1-9ce0c4e09ba5@kunbus.com>
- <6nf5n6fdnkhx6taa2mecnsmyw7sdgaz6fbvkqy7jqkyd7jq2u7@ogsi6ije32in>
- <fcdc5a27817b17d91df84bb06ad5d382829d5467.camel@mniewoehner.de>
+        Mon, 29 May 2023 21:39:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F78D9;
+        Mon, 29 May 2023 18:39:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C4D2628E2;
+        Tue, 30 May 2023 01:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38849C433EF;
+        Tue, 30 May 2023 01:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685410788;
+        bh=Fc2RpQel+qFTuy8pAbXgl1N/NoGp11aHR8zxbS1/fzs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=axYUFodp8nl3/X+l5R/JV70OISdLXtY8c6vptkG0y1k5D1oySZWdSp7FrD7u3eYA9
+         a8jXDCciKA22Z+OaithlS/EDeqVeHZm+iEwUGvAxqaMPsUsIC9zLFU3zjvlJGRII52
+         bm04xsjs23C9qttFGTPgMXOEmCuw5wp/yPzXo12IBiZCsXOeU5tYX1RXFDJZxqKRQC
+         makGZ+wygan3Lb7nArHGPR/wQfLnH9fI+8wQUlS7mXuPLDIOXQSge9sFKgXJC/54U+
+         8bmn0GO1o9EASbVWa0rCoioTyxe3qi0zllBWof2HZK0T1fSs6UIQwhMmR/Nnt4qu6c
+         7FN4gf94kXiNQ==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
+        stable@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RFC] tpm: tpm_vtpm_proxy: fix a race condition in the locality change
+Date:   Tue, 30 May 2023 04:39:41 +0300
+Message-Id: <20230530013942.232590-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fcdc5a27817b17d91df84bb06ad5d382829d5467.camel@mniewoehner.de>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,72 +55,286 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, May 29, 2023 at 05:07:54PM +0200, Michael Niewöhner wrote:
-> Hi Jerry,
-> 
-> On Thu, 2023-05-11 at 07:59 -0700, Jerry Snitselaar wrote:
-> > 
-> > IIRC trying to catch the irq storm didn't work in the L490 case for
-> > some reason, so we might still need the dmi entry for that one.
-> > 
-> > The info that the T490s had a pin wired up wrong came from Lenovo, but
-> > this one even looks to be a different vendor so I wonder how often
-> > this happens or if there is something else going on. Is it possible to
-> > get info about the tpm used in the Inspur system? The datasheet online
-> > doesn't mention it.
-> 
-> Are you sure about T490s? To me the wiring looks right on both s and non-s: Pin
-> 18 / PIRQ# goes to PIRQA# of the PCH/SoC.
-> 
-> However on L490 Pin 18 / PIRQ# is wired wrongly to SERIRQ, which probably is the
-> reason that catching the interrupt storm didn't work: I guess this completely
-> messes up LPC communication and causes way more problems. In this case only a
-> DMI quirk can help.
-> 
-> BR
-> Michael
-> 
+From: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
 
-I'm searching to see if I can find the old bug/email where that info
-from Lenovo originated.  It could be that the info was wrong, and
-it was some firmware issue instead. IIRC the the T490s issue could be
-solved with the code looking for the irq storm, but the L490 needed
-the dmi check even with the irq storm checking code.
+The driver has three issues (in priority order) in the locality change:
 
+1. Because of mutex_unlock(&proxy_dev->buf_lock) in-between write and read
+   operations in the locality change, another thread can send a TPM command
+   in-between.
+2. The driver uses __user pointer and copy_to_user() and
+   copy_from_user() with a kernel address during the locality change.
+3. For invalid locality change request from user space, the driver
+   sets errno to EFAULT, while for invalid input data EINVAL should
+   be used.
 
-I haven't found the info yet, but I did find some other reports from back
-then.
+Address this by:
 
-Spurious irq reported with 5.5.7, so after the irq reverts in v5.5:
+1. Introduce __vtpm_proxy_read_unlocked(),  __vtpm_proxy_write_unlocked()
+   and __vtpm_proxy_read_write_locked().
+2. Make locality change atomic by calling __vtpm_proxy_read_write_locked(),
+   instead of tpm_transmit_cmd().
 
-tpm_tis IFX0785:00: 2.0 TPM
-Hardware name: Entroware Proteus/Proteus, BIOS 1.07.07TE0 11/15/2019
+Cc: stable@vger.kernel.org
+Fixes: be4c9acfe297 ("tpm: vtpm_proxy: Implement request_locality function.")
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
+---
+NOTE: I did not have test env available, when I wrote this. Thus, it has
+an RFC tag for the moment.
+ drivers/char/tpm/tpm_vtpm_proxy.c | 162 ++++++++++++++----------------
+ 1 file changed, 73 insertions(+), 89 deletions(-)
 
-Thinkpad P53
-tpm_tis STM7308:00: 2.0 TPM
-Hardware name: LENOVO 20QNCTO1WW/20QNCTO1WW, BIOS N2NET34W (1.19 ) 11/28/2019
-
-
-
-Reports from before the 5.5 reverts:
-
-tpm_tis MSFT0101:00: 2.0 TPM
-Hyperbook NH5/Clevo NH55RCQ
-
-tpm_tis IFX0785:00: 2.0 TPM 
-Clevo N151CU-derived notebook
-
-
-Regards,
-Jerry
-
-> > 
-> > Regards,
-> > Jerry
-> > 
-> > > > Thanks,
-> > > > 
-> > > > Lukas
-> > 
-> 
+diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+index 30e953988cab..8f43a82e5590 100644
+--- a/drivers/char/tpm/tpm_vtpm_proxy.c
++++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -38,7 +38,6 @@ struct proxy_dev {
+ #define STATE_OPENED_FLAG        BIT(0)
+ #define STATE_WAIT_RESPONSE_FLAG BIT(1)  /* waiting for emulator response */
+ #define STATE_REGISTERED_FLAG	 BIT(2)
+-#define STATE_DRIVER_COMMAND     BIT(3)  /* sending a driver specific command */
+ 
+ 	size_t req_len;              /* length of queued TPM request */
+ 	size_t resp_len;             /* length of queued TPM response */
+@@ -58,106 +57,112 @@ static void vtpm_proxy_delete_device(struct proxy_dev *proxy_dev);
+  * Functions related to 'server side'
+  */
+ 
+-/**
+- * vtpm_proxy_fops_read - Read TPM commands on 'server side'
+- *
+- * @filp: file pointer
+- * @buf: read buffer
+- * @count: number of bytes to read
+- * @off: offset
+- *
+- * Return:
+- *	Number of bytes read or negative error code
+- */
+-static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
+-				    size_t count, loff_t *off)
++static ssize_t __vtpm_proxy_read_unlocked(struct proxy_dev *proxy_dev, char __user *buf,
++					  size_t count)
+ {
+-	struct proxy_dev *proxy_dev = filp->private_data;
+ 	size_t len;
+-	int sig, rc;
+-
+-	sig = wait_event_interruptible(proxy_dev->wq,
+-		proxy_dev->req_len != 0 ||
+-		!(proxy_dev->state & STATE_OPENED_FLAG));
+-	if (sig)
+-		return -EINTR;
+-
+-	mutex_lock(&proxy_dev->buf_lock);
++	int rc;
+ 
+-	if (!(proxy_dev->state & STATE_OPENED_FLAG)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
++	if (!(proxy_dev->state & STATE_OPENED_FLAG))
+ 		return -EPIPE;
+-	}
+ 
+ 	len = proxy_dev->req_len;
+ 
+ 	if (count < len || len > sizeof(proxy_dev->buffer)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
+ 		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
+ 			 count, len);
+ 		return -EIO;
+ 	}
+ 
+-	rc = copy_to_user(buf, proxy_dev->buffer, len);
++	if (buf)
++		rc = copy_to_user(buf, proxy_dev->buffer, len);
++
+ 	memset(proxy_dev->buffer, 0, len);
+ 	proxy_dev->req_len = 0;
+ 
+ 	if (!rc)
+ 		proxy_dev->state |= STATE_WAIT_RESPONSE_FLAG;
+ 
+-	mutex_unlock(&proxy_dev->buf_lock);
+-
+ 	if (rc)
+ 		return -EFAULT;
+ 
+ 	return len;
+ }
+ 
+-/**
+- * vtpm_proxy_fops_write - Write TPM responses on 'server side'
+- *
+- * @filp: file pointer
+- * @buf: write buffer
+- * @count: number of bytes to write
+- * @off: offset
+- *
+- * Return:
+- *	Number of bytes read or negative error value
+- */
+-static ssize_t vtpm_proxy_fops_write(struct file *filp, const char __user *buf,
+-				     size_t count, loff_t *off)
++static ssize_t __vtpm_proxy_write_unlocked(struct proxy_dev *proxy_dev, const char __user *buf,
++					   size_t count)
+ {
+-	struct proxy_dev *proxy_dev = filp->private_data;
+-
+-	mutex_lock(&proxy_dev->buf_lock);
+-
+-	if (!(proxy_dev->state & STATE_OPENED_FLAG)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
++	if (!(proxy_dev->state & STATE_OPENED_FLAG))
+ 		return -EPIPE;
+-	}
+ 
+ 	if (count > sizeof(proxy_dev->buffer) ||
+-	    !(proxy_dev->state & STATE_WAIT_RESPONSE_FLAG)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
++	    !(proxy_dev->state & STATE_WAIT_RESPONSE_FLAG))
+ 		return -EIO;
+-	}
+ 
+ 	proxy_dev->state &= ~STATE_WAIT_RESPONSE_FLAG;
+ 
+ 	proxy_dev->req_len = 0;
+ 
+-	if (copy_from_user(proxy_dev->buffer, buf, count)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
++	if (buf && copy_from_user(proxy_dev->buffer, buf, count))
+ 		return -EFAULT;
+-	}
+ 
+ 	proxy_dev->resp_len = count;
++	return count;
++}
+ 
++static ssize_t __vtpm_proxy_read_write_unlocked(struct proxy_dev *proxy_dev, char __user *buf,
++						size_t count)
++{
++	ssize_t rc;
++
++	do {
++		rc = __vtpm_proxy_write_unlocked(proxy_dev, buf, count);
++		if (rc < 0)
++			break;
++		rc = __vtpm_proxy_read_unlocked(proxy_dev, buf, rc);
++	} while (0);
++
++	return rc;
++}
++
++/*
++ * See struct file_operations.
++ */
++static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
++				    size_t count, loff_t *off)
++{
++	struct proxy_dev *proxy_dev = filp->private_data;
++	ssize_t rc;
++	int sig;
++
++	sig = wait_event_interruptible(proxy_dev->wq,
++		proxy_dev->req_len != 0 ||
++		!(proxy_dev->state & STATE_OPENED_FLAG));
++	if (sig)
++		return -EINTR;
++
++	mutex_lock(&proxy_dev->buf_lock);
++	rc = __vtpm_proxy_read_unlocked(proxy_dev, buf, count);
+ 	mutex_unlock(&proxy_dev->buf_lock);
+ 
++	return rc;
++}
++
++/*
++ * See struct file_operations.
++ */
++static ssize_t vtpm_proxy_fops_write(struct file *filp, const char __user *buf,
++				     size_t count, loff_t *off)
++{
++	struct proxy_dev *proxy_dev = filp->private_data;
++	int rc;
++
++	mutex_lock(&proxy_dev->buf_lock);
++	rc = __vtpm_proxy_write_unlocked(proxy_dev, buf, count);
++	mutex_unlock(&proxy_dev->buf_lock);
+ 	wake_up_interruptible(&proxy_dev->wq);
+ 
+-	return count;
++	return rc;
+ }
+ 
+ /*
+@@ -295,28 +300,6 @@ static int vtpm_proxy_tpm_op_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ 	return len;
+ }
+ 
+-static int vtpm_proxy_is_driver_command(struct tpm_chip *chip,
+-					u8 *buf, size_t count)
+-{
+-	struct tpm_header *hdr = (struct tpm_header *)buf;
+-
+-	if (count < sizeof(struct tpm_header))
+-		return 0;
+-
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+-		switch (be32_to_cpu(hdr->ordinal)) {
+-		case TPM2_CC_SET_LOCALITY:
+-			return 1;
+-		}
+-	} else {
+-		switch (be32_to_cpu(hdr->ordinal)) {
+-		case TPM_ORD_SET_LOCALITY:
+-			return 1;
+-		}
+-	}
+-	return 0;
+-}
+-
+ /*
+  * Called when core TPM driver forwards TPM requests to 'server side'.
+  *
+@@ -330,6 +313,7 @@ static int vtpm_proxy_is_driver_command(struct tpm_chip *chip,
+ static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ {
+ 	struct proxy_dev *proxy_dev = dev_get_drvdata(&chip->dev);
++	unsigned int ord = ((struct tpm_header *)buf)->ordinal;
+ 
+ 	if (count > sizeof(proxy_dev->buffer)) {
+ 		dev_err(&chip->dev,
+@@ -338,9 +322,11 @@ static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ 		return -EIO;
+ 	}
+ 
+-	if (!(proxy_dev->state & STATE_DRIVER_COMMAND) &&
+-	    vtpm_proxy_is_driver_command(chip, buf, count))
+-		return -EFAULT;
++	if ((chip->flags & TPM_CHIP_FLAG_TPM2) && ord == TPM2_CC_SET_LOCALITY)
++		return -EINVAL;
++
++	if (ord == TPM_ORD_SET_LOCALITY)
++		return -EINVAL;
+ 
+ 	mutex_lock(&proxy_dev->buf_lock);
+ 
+@@ -409,12 +395,10 @@ static int vtpm_proxy_request_locality(struct tpm_chip *chip, int locality)
+ 		return rc;
+ 	tpm_buf_append_u8(&buf, locality);
+ 
+-	proxy_dev->state |= STATE_DRIVER_COMMAND;
+-
+-	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to set locality");
+-
+-	proxy_dev->state &= ~STATE_DRIVER_COMMAND;
+-
++	mutex_lock(&proxy_dev->buf_lock);
++	memcpy(proxy_dev->buffer, buf.data, tpm_buf_length(&buf));
++	rc = __vtpm_proxy_read_write_unlocked(proxy_dev, NULL, tpm_buf_length(&buf));
++	mutex_unlock(&proxy_dev->buf_lock);
+ 	if (rc < 0) {
+ 		locality = rc;
+ 		goto out;
+-- 
+2.39.2
 
