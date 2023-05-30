@@ -2,178 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BBE7162C8
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 May 2023 15:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324CF71647D
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 May 2023 16:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbjE3N6i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 May 2023 09:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S232651AbjE3OlM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 May 2023 10:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbjE3N6h (ORCPT
+        with ESMTP id S232479AbjE3OlH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 May 2023 09:58:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AB7E8;
-        Tue, 30 May 2023 06:58:35 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UDoD6H003097;
-        Tue, 30 May 2023 13:58:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=rGG+oPY9bJ/m4dGb9PBIheOdj6gCxk4udPGdzcR3ybo=;
- b=n/LHYIO0XGq73K7CtORMpKU0h3jRSmWo5J/qEOAGWW0yTWwn9xPAuu+L30Jk52ax4ALQ
- XFIVh+kD9FovsJs4TIDhVPxiVszDugPPIYZkU44GBjrzeWFAIPO6gKWwSuMtJJ6MQScH
- 5SdCWYhWeBCmv7QiFXFTqlXFX+APhONqFblBVkG3lUcvh5fr7dnrDeYOsGhjIxXocCfD
- tYt2K8EIH7dpwxgAMpVT5TNZN0+17Ci9E7b+Df+3A9/KPIWoZm3f+9B2lf+gqZajM1WN
- pYVco/9p/ennDh6kAle4wqXSzM8Np/gNWyZN/E9zYLwuWJ9CYLpsPFvEyJkFOtgnGrXi cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwhy1s08u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 13:58:24 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34UDtBPI022792;
-        Tue, 30 May 2023 13:58:24 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwhy1s08h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 13:58:24 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34UDPKXH009542;
-        Tue, 30 May 2023 13:58:23 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g5q3ps-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 13:58:23 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34UDwMjY4391596
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 May 2023 13:58:22 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE63758054;
-        Tue, 30 May 2023 13:58:21 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D83B358056;
-        Tue, 30 May 2023 13:58:20 +0000 (GMT)
-Received: from wecm-9-67-184-149.wecm.ibm.com (unknown [9.67.184.149])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 30 May 2023 13:58:20 +0000 (GMT)
-Message-ID: <01739d83cf13c83e0545c6d0d661ebea5ac39b6c.camel@linux.ibm.com>
-Subject: Re: [PATCH] integrity: Fix possible multiple allocation in
- integrity_inode_get()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
+        Tue, 30 May 2023 10:41:07 -0400
+Received: from sender4-of-o54.zoho.com (sender4-of-o54.zoho.com [136.143.188.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3A5133;
+        Tue, 30 May 2023 07:40:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685457632; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=NodDAN8jT2f3ZiV5uM1Sf1F2TeqLOOf1uMtemS/b2+xWk2M667hrwH5NRLG5oYgqn4zU9Ic2eJi6wJM68wATTj1IWUi4LXTYO6Vt/gmdgPscl8/WOt3t2O0paXShabvMd4EJY2wnRB+iLTYEhly086sTtrZXg3xkYcVfLoX7u3A=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1685457632; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=V1GWmIY+CwXqmNGcS38lD96AhFE4C+yB1cMB5Uk2MWc=; 
+        b=NqNW5iwvFO3KyRvwxfdV87L9+h79C3vge95/cUbGDEWXTaR62B1XA1iMU+CfRiSjEhhiwIIvIBJkPrYJ24n4YepZm7makTXISsGGQxCCglqkLRlPVrHPxrMBPd2YYUchL7oWwcrY2og/yNRxxAyWz8wS+5NBfc6lAk2WxErdLWk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (31.187.91.190 [31.187.91.190]) by mx.zohomail.com
+        with SMTPS id 1685457630706946.7287440721707; Tue, 30 May 2023 07:40:30 -0700 (PDT)
+Message-ID: <0e837a2e859b4c633b068368f3c28ba30fc1af70.camel@mniewoehner.de>
+Subject: Re: [linus:master] [tpm, tpm_tis] e644b2f498: RIP:acpi_safe_halt
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 30 May 2023 09:58:20 -0400
-In-Reply-To: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
-References: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kdruNtFI7USR8EuFpGKSawc3EYq4bV4I
-X-Proofpoint-GUID: zX7zzHrxDgEGeSW-YJV5F9FnqIj723W3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_10,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 mlxlogscore=458 impostorscore=0 malwarescore=0
- phishscore=0 mlxscore=0 clxscore=1015 suspectscore=0 bulkscore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305300110
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        peterz@infradead.org
+In-Reply-To: <6hbzssr2byskuiznx6vvatcuvjkrbhscvorzm4qcheh3n6n4zj@2nrfawn6rbst>
+References: <202305041325.ae8b0c43-yujie.liu@intel.com>
+         <d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org>
+         <42ea93a1-3186-b8ff-c317-d51f3e13856e@kunbus.com>
+         <20230511141607.GA32208@wunner.de>
+         <1a8ecf90-80a4-9aac-95e1-9ce0c4e09ba5@kunbus.com>
+         <6nf5n6fdnkhx6taa2mecnsmyw7sdgaz6fbvkqy7jqkyd7jq2u7@ogsi6ije32in>
+         <fcdc5a27817b17d91df84bb06ad5d382829d5467.camel@mniewoehner.de>
+         <6hbzssr2byskuiznx6vvatcuvjkrbhscvorzm4qcheh3n6n4zj@2nrfawn6rbst>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+Date:   Tue, 30 May 2023 16:40:26 +0200
+MIME-Version: 1.0
+User-Agent: Evolution 3.44.4 
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Tianjia,
-
-On Tue, 2023-05-30 at 20:14 +0800, Tianjia Zhang wrote:
-> When integrity_inode_get() is querying and inserting the cache, there
-> is a conditional race in the concurrent environment.
+On Mon, 2023-05-29 at 13:58 -0700, Jerry Snitselaar wrote:
+> On Mon, May 29, 2023 at 05:07:54PM +0200, Michael Niewöhner wrote:
+> > Hi Jerry,
+> > 
+> > On Thu, 2023-05-11 at 07:59 -0700, Jerry Snitselaar wrote:
+> > > 
+> > > IIRC trying to catch the irq storm didn't work in the L490 case for
+> > > some reason, so we might still need the dmi entry for that one.
+> > > 
+> > > The info that the T490s had a pin wired up wrong came from Lenovo, but
+> > > this one even looks to be a different vendor so I wonder how often
+> > > this happens or if there is something else going on. Is it possible to
+> > > get info about the tpm used in the Inspur system? The datasheet online
+> > > doesn't mention it.
+> > 
+> > Are you sure about T490s? To me the wiring looks right on both s and non-s:
+> > Pin
+> > 18 / PIRQ# goes to PIRQA# of the PCH/SoC.
+> > 
+> > However on L490 Pin 18 / PIRQ# is wired wrongly to SERIRQ, which probably is
+> > the
+> > reason that catching the interrupt storm didn't work: I guess this
+> > completely
+> > messes up LPC communication and causes way more problems. In this case only
+> > a
+> > DMI quirk can help.
+> > 
+> > BR
+> > Michael
+> > 
 > 
-> Query iint within the read-lock. If there is no result, allocate iint
-> first and insert the iint cache in the write-lock protection. When the
-> iint cache does not exist, and when multiple execution streams come at
-> the same time, there will be a race condition, and multiple copies of
-> iint will be allocated at the same time, and then put into the cache
-> one by one under the write-lock protection.
+> I'm searching to see if I can find the old bug/email where that info
+> from Lenovo originated.  It could be that the info was wrong, and
+> it was some firmware issue instead. IIRC the the T490s issue could be
+> solved with the code looking for the irq storm, but the L490 needed
+> the dmi check even with the irq storm checking code.
 
-Right, the race condition is the result of not properly implementing
-"double-checked locking".  In this case, it first checks to see if the
-iint cache record exists before taking the lock, but doesn't check
-again after taking the integrity_iint_lock.
+Tbh I wonder why the T490s suffers from that interrupt storm at all, but that
+might be a FW bug (it's not handling the interrupt). L490 definitely needs that
+DMI check, right.
 
 > 
-> This is mainly because the red-black tree insertion does not perform
-> duplicate detection. This is not the desired result, when this
-> happens, the repeated allocation should be freed and the existing
-> iint cache should be returned.
 > 
-> Fixes: bf2276d10ce5 ("ima: allocating iint improvements")
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Cc: <stable@vger.kernel.org> # v3.10+
-> ---
->  security/integrity/iint.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+> I haven't found the info yet, but I did find some other reports from back
+> then.
 > 
-> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-> index c73858e8c6d5..d49c843a88ee 100644
-> --- a/security/integrity/iint.c
-> +++ b/security/integrity/iint.c
-> @@ -43,12 +43,10 @@ static struct integrity_iint_cache *__integrity_iint_find(struct inode *inode)
->  		else if (inode > iint->inode)
->  			n = n->rb_right;
->  		else
-> -			break;
-> +			return iint;
->  	}
-> -	if (!n)
-> -		return NULL;
->  
-> -	return iint;
-> +	return NULL;
->  }
->  
->  /*
-> @@ -115,8 +113,13 @@ struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
->  				     rb_node);
->  		if (inode < test_iint->inode)
->  			p = &(*p)->rb_left;
-> -		else
-> +		else if (inode > test_iint->inode)
->  			p = &(*p)->rb_right;
-> +		else {
-> +			write_unlock(&integrity_iint_lock);
-> +			kmem_cache_free(iint_cache, iint);
-> +			return test_iint;
-> +		}
->  	}
->  
->  	iint->inode = inode;
+> Spurious irq reported with 5.5.7, so after the irq reverts in v5.5:
+> 
+> tpm_tis IFX0785:00: 2.0 TPM
+> Hardware name: Entroware Proteus/Proteus, BIOS 1.07.07TE0 11/15/2019
 
-scripts/checkpatch.pl with the -strict option complains:
+That's actually a Clevo N151CU. According to schematics it's wired correctly to
+PIRQA#, so probably a FW bug as well.
 
-CHECK: Unbalanced braces around else statement
-#56: FILE: security/integrity/iint.c:118:
-+		else {
+> 
+> Thinkpad P53
+> tpm_tis STM7308:00: 2.0 TPM
+> Hardware name: LENOVO 20QNCTO1WW/20QNCTO1WW, BIOS N2NET34W (1.19 ) 11/28/2019
+> 
+> 
+> 
+> Reports from before the 5.5 reverts:
+> 
+> tpm_tis MSFT0101:00: 2.0 TPM
+> Hyperbook NH5/Clevo NH55RCQ
 
-total: 0 errors, 0 warnings, 1 checks, 28 lines checked
+PIRQ# wired to GPP_B0 - needs correct setup in firmware -> probably a firmware
+bug.
 
--- 
-thanks,
+> 
+> tpm_tis IFX0785:00: 2.0 TPM 
+> Clevo N151CU-derived notebook
 
-Mimi
+Same device as Entroware Proteus.
+
+> 
+> 
+> Regards,
+> Jerry
+> 
+> > > 
+> > > Regards,
+> > > Jerry
+> > > 
+> > > > > Thanks,
+> > > > > 
+> > > > > Lukas
+> > > 
+> > 
+> 
 
