@@ -2,219 +2,170 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB53C71F454
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Jun 2023 23:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A15D71F920
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Jun 2023 06:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjFAVAp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Jun 2023 17:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S232292AbjFBELC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Jun 2023 00:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjFAVAo (ORCPT
+        with ESMTP id S231241AbjFBELB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:00:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BDCB3;
-        Thu,  1 Jun 2023 14:00:42 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351Kr83v026695;
-        Thu, 1 Jun 2023 21:00:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=f5x0/rJos9gwvHYQA7IE2LGxiRmwdpLZcGH5jW2WHfo=;
- b=btXPeQEICBBLmEWOhCgPFOH4l+6zPjE+E13XFC9Tz92C+OkcvfGDK0ClaRjUGbrxJZ9X
- Ajxq5pKK2+H3UJeO1/tXuvHuGSFKGif4sHD6v6qUjPZD3d3HEHq9Zo2hi0Ilwb4ae8ak
- zh0Pkdl7nhnfv2/1FhC3AD0M6+5h1Jd0JHi4AgEuiOg2EndWRsTFJ8zePsMranCFAtDX
- oG9lpfDomlRAHH4JCnxYmxVhzCoPyW2eCCuRLMJ667dlyb9mXfYcLA3qVmtufUHUAAj8
- Apr5WCPd7jKa9yu0NJwBujIcR3BFZrmvJclA4+A0rWUSZawOWQas44T2ZMNNzU/S56c4 lA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qy2rv05kq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 21:00:13 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351KrLjY027711;
-        Thu, 1 Jun 2023 21:00:12 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qy2rv05j4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 21:00:12 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 351FfL7C017372;
-        Thu, 1 Jun 2023 21:00:10 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3qu9g5ac14-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 21:00:10 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 351L084i31523462
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Jun 2023 21:00:09 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CDD7658067;
-        Thu,  1 Jun 2023 21:00:08 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2842A58063;
-        Thu,  1 Jun 2023 21:00:07 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Jun 2023 21:00:07 +0000 (GMT)
-Message-ID: <fd161de5-61ce-94bf-96cf-65965115f981@linux.ibm.com>
-Date:   Thu, 1 Jun 2023 17:00:02 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 2/2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, dhowells@redhat.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        ebiggers@kernel.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
- <20221227142740.2807136-3-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20221227142740.2807136-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: c9Sbz3X_pkw-aUsteyk-p_sfXxfvsNe5
-X-Proofpoint-ORIG-GUID: CG_mh8o8SpS0AnCLrMfMk75Yx0y4ZAKd
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 2 Jun 2023 00:11:01 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AC4128;
+        Thu,  1 Jun 2023 21:10:59 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id 006d021491bc7-558565cc59bso1174074eaf.0;
+        Thu, 01 Jun 2023 21:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685679059; x=1688271059;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w3vGr4MbPaoToAJSxQ1XgzEMr0Rv0l9r0UfL6JK0LX0=;
+        b=O3izkDexVYpVytp697sLFBUaDAL3TQBgau0ZtAB2z38rzZvTd2IFvN6d0JK+GqBuey
+         sC6j/Q/VCdxBz3Fq2/y8bpotHg0NxjTuCAEg8UJFJYFWfBuc5AmGwS534Rz4R48FunTq
+         Ysg1q3SGJUilWu2N4VrDEoFLh7QT7ZU5o5KlP+8c+269LwKuvIuH1YskoATT3QCXPjok
+         J2iOiZ19xqPONlSS0f05/2o2c7OWk5tdpMEYdmbGk+z60ZXYHNC5R5tgvpq+sqtXGqnR
+         p4fBtVbg0Feaihk7Yf9aSXE2Q7x3Ko//Ir3VSCb1dKBLgx9w+CN46tUR5UB1KnO2iO5d
+         2ILQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685679059; x=1688271059;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w3vGr4MbPaoToAJSxQ1XgzEMr0Rv0l9r0UfL6JK0LX0=;
+        b=gijtxuKIPXKqyGRZYta5Np+RG9bgsBhMlqSm+Nhg7Ie0BDsUThRtSPbmsZ6lXFcr1W
+         QbLwCwjKQJg2dZqSCoxjNyVAQVm1nWJUg/C0PMFuXNJoAm2MZ7Daw0DbOh2LnHOY+5Kg
+         OK0YqiRF8M5xrdxIjv1JDNBvYhfiAGlhZDhsGbikkbx+4RT0WE8visEmc89YfbvMiHp3
+         ldzLr6FcCr8JPC49XfF0Q/6ghl8hQWYTbHNHqE4e68bllWWlUgNi6RM+dOLYMDzKJncb
+         ud1YxtJPw+TJ+Irprq6Nk7g9Mf2I/OCewziGlYrhjthooSF6/1MxE1opdOCUaIYKAnWL
+         RvYw==
+X-Gm-Message-State: AC+VfDz3uiRDJa9OEdnD0RhqwsnaPXU3lCds/pYRhcc4ENhJLaQ/TY2N
+        Y0dxm//qu04jj4Aoskj3ConJVD7zrkuJ5w==
+X-Google-Smtp-Source: ACHHUZ7mLqQADDAStnoyYcPCXJCgP9RkieHihEgYSRjgKP1T2VHn9UZXYlPhaJPWE6mLiAWcff0yjg==
+X-Received: by 2002:a05:6358:3106:b0:125:68c4:572f with SMTP id c6-20020a056358310600b0012568c4572fmr9964351rwe.6.1685679058953;
+        Thu, 01 Jun 2023 21:10:58 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-21.three.co.id. [180.214.233.21])
+        by smtp.gmail.com with ESMTPSA id fa2-20020a17090af0c200b00256353eb8f2sm2205846pjb.5.2023.06.01.21.10.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 21:10:58 -0700 (PDT)
+Message-ID: <2b09d2ed-0852-bbc9-b792-aad92235c7fa@gmail.com>
+Date:   Fri, 2 Jun 2023 11:10:53 +0700
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- spamscore=0 bulkscore=0 priorityscore=1501 phishscore=0 adultscore=0
- impostorscore=0 clxscore=1011 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010177
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
+ (and 5.15.113)
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
+ <ZHQIFLWvrWUNMVxb@debian.me>
+ <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 12/27/22 09:27, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 5/29/23 09:37, Chris Packham wrote:
 > 
-> Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> mapping") checks that both the signature and the digest reside in the
-> linear mapping area.
+> On 29/05/23 14:04, Bagas Sanjaya wrote:
+>> On Sun, May 28, 2023 at 11:42:50PM +0000, Chris Packham wrote:
+>>> Hi,
+>>>
+>>> We have an embedded product with an Infineon SLM9670 TPM. After updating
+>>> to a newer LTS kernel version we started seeing the following warning at
+>>> boot.
+>>>
+>>> [    4.741025] ------------[ cut here ]------------
+>>> [    4.749894] irq 38 handler tis_int_handler+0x0/0x154 enabled interrupts
+>>> [    4.756555] WARNING: CPU: 0 PID: 0 at kernel/irq/handle.c:159
+>>> __handle_irq_event_percpu+0xf4/0x180
+>>> [    4.765557] Modules linked in:
+>>> [    4.768626] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.15.113 #1
+>>> [    4.774747] Hardware name: Allied Telesis x250-18XS (DT)
+>>> [    4.780080] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS
+>>> BTYPE=--)
+>>> [    4.787072] pc : __handle_irq_event_percpu+0xf4/0x180
+>>> [    4.792146] lr : __handle_irq_event_percpu+0xf4/0x180
+>>> [    4.797220] sp : ffff800008003e40
+>>> [    4.800547] x29: ffff800008003e40 x28: ffff8000093951c0 x27:
+>>> ffff80000902a9b8
+>>> [    4.807716] x26: ffff800008fe8d28 x25: ffff8000094a62bd x24:
+>>> ffff000001b92400
+>>> [    4.814885] x23: 0000000000000026 x22: ffff800008003ec4 x21:
+>>> 0000000000000000
+>>> [    4.822053] x20: 0000000000000001 x19: ffff000002381200 x18:
+>>> ffffffffffffffff
+>>> [    4.829222] x17: ffff800076962000 x16: ffff800008000000 x15:
+>>> ffff800088003b57
+>>> [    4.836390] x14: 0000000000000000 x13: ffff8000093a5078 x12:
+>>> 000000000000035d
+>>> [    4.843558] x11: 000000000000011f x10: ffff8000093a5078 x9 :
+>>> ffff8000093a5078
+>>> [    4.850727] x8 : 00000000ffffefff x7 : ffff8000093fd078 x6 :
+>>> ffff8000093fd078
+>>> [    4.857895] x5 : 000000000000bff4 x4 : 0000000000000000 x3 :
+>>> 0000000000000000
+>>> [    4.865062] x2 : 0000000000000000 x1 : 0000000000000000 x0 :
+>>> ffff8000093951c0
+>>> [    4.872230] Call trace:
+>>> [    4.874686]  __handle_irq_event_percpu+0xf4/0x180
+>>> [    4.879411]  handle_irq_event+0x64/0xec
+>>> [    4.883264]  handle_level_irq+0xc0/0x1b0
+>>> [    4.887202]  generic_handle_irq+0x30/0x50
+>>> [    4.891229]  mvebu_gpio_irq_handler+0x11c/0x2a0
+>>> [    4.895780]  handle_domain_irq+0x60/0x90
+>>> [    4.899720]  gic_handle_irq+0x4c/0xd0
+>>> [    4.903398]  call_on_irq_stack+0x20/0x4c
+>>> [    4.907338]  do_interrupt_handler+0x54/0x60
+>>> [    4.911538]  el1_interrupt+0x30/0x80
+>>> [    4.915130]  el1h_64_irq_handler+0x18/0x24
+>>> [    4.919244]  el1h_64_irq+0x78/0x7c
+>>> [    4.922659]  arch_cpu_idle+0x18/0x2c
+>>> [    4.926249]  do_idle+0xc4/0x150
+>>> [    4.929404]  cpu_startup_entry+0x28/0x60
+>>> [    4.933343]  rest_init+0xe4/0xf4
+>>> [    4.936584]  arch_call_rest_init+0x10/0x1c
+>>> [    4.940699]  start_kernel+0x600/0x640
+>>> [    4.944375]  __primary_switched+0xbc/0xc4
+>>> [    4.948402] ---[ end trace 940193047b35b311 ]---
+>>>
+>>> Initially I dismissed this as a warning that would probably be cleaned
+>>> up when we did more work on the TPM support for our product but we also
+>>> seem to be getting some new i2c issues and possibly a kernel stack
+>>> corruption that we've conflated with this TPM warning.
+>> Can you reproduce this issue on mainline? Can you also bisect to find
+>> the culprit?
 > 
-> However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> stack support") made it possible to move the stack in the vmalloc area,
-> which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> adjacent pages.
+> No the error doesn't appear on a recent mainline kernel. I do still get
 > 
-> Always make a copy of the signature and digest in the same buffer used to
-> store the key and its parameters, and pass them to sg_init_one(). Prefer it
-> to conditionally doing the copy if necessary, to keep the code simple. The
-> buffer allocated with kmalloc() is in the linear mapping area.
+> tpm_tis_spi spi1.1: 2.0 TPM (device-id 0x1B, rev-id 22)
+> tpm tpm0: [Firmware Bug]: TPM interrupt not working, polling instead
+> tpm tpm0: A TPM error (256) occurred attempting the self test
 > 
-> Cc: stable@vger.kernel.org # 4.9.x
-> Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-> Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Eric Biggers <ebiggers@google.com>
-
-I just ran into an issue with OpenBMC on ARM where EVM ECDSA signature verification failed due to invalid hashes being passed to the ECDSA signature verification algorithm. This patch here resolved the issue.
-
-Tested-by: Stefan Berger <stefanb@linux.ibm.com>
-
-
-
-> ---
->   crypto/asymmetric_keys/public_key.c | 38 ++++++++++++++++-------------
->   1 file changed, 21 insertions(+), 17 deletions(-)
+> but I think I was getting that on v5.15.110
 > 
-> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-> index 2f8352e88860..49a3f7c01149 100644
-> --- a/crypto/asymmetric_keys/public_key.c
-> +++ b/crypto/asymmetric_keys/public_key.c
-> @@ -360,9 +360,10 @@ int public_key_verify_signature(const struct public_key *pkey,
->   	struct crypto_wait cwait;
->   	struct crypto_akcipher *tfm;
->   	struct akcipher_request *req;
-> -	struct scatterlist src_sg[2];
-> +	struct scatterlist src_sg;
->   	char alg_name[CRYPTO_MAX_ALG_NAME];
-> -	char *key, *ptr;
-> +	char *buf, *ptr;
-> +	size_t buf_len;
->   	int ret;
->   
->   	pr_devel("==>%s()\n", __func__);
-> @@ -400,34 +401,37 @@ int public_key_verify_signature(const struct public_key *pkey,
->   	if (!req)
->   		goto error_free_tfm;
->   
-> -	key = kmalloc(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-> -		      GFP_KERNEL);
-> -	if (!key)
-> +	buf_len = max_t(size_t, pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-> +			sig->s_size + sig->digest_size);
-> +
-> +	buf = kmalloc(buf_len, GFP_KERNEL);
-> +	if (!buf)
->   		goto error_free_req;
->   
-> -	memcpy(key, pkey->key, pkey->keylen);
-> -	ptr = key + pkey->keylen;
-> +	memcpy(buf, pkey->key, pkey->keylen);
-> +	ptr = buf + pkey->keylen;
->   	ptr = pkey_pack_u32(ptr, pkey->algo);
->   	ptr = pkey_pack_u32(ptr, pkey->paramlen);
->   	memcpy(ptr, pkey->params, pkey->paramlen);
->   
->   	if (pkey->key_is_private)
-> -		ret = crypto_akcipher_set_priv_key(tfm, key, pkey->keylen);
-> +		ret = crypto_akcipher_set_priv_key(tfm, buf, pkey->keylen);
->   	else
-> -		ret = crypto_akcipher_set_pub_key(tfm, key, pkey->keylen);
-> +		ret = crypto_akcipher_set_pub_key(tfm, buf, pkey->keylen);
->   	if (ret)
-> -		goto error_free_key;
-> +		goto error_free_buf;
->   
->   	if (strcmp(pkey->pkey_algo, "sm2") == 0 && sig->data_size) {
->   		ret = cert_sig_digest_update(sig, tfm);
->   		if (ret)
-> -			goto error_free_key;
-> +			goto error_free_buf;
->   	}
->   
-> -	sg_init_table(src_sg, 2);
-> -	sg_set_buf(&src_sg[0], sig->s, sig->s_size);
-> -	sg_set_buf(&src_sg[1], sig->digest, sig->digest_size);
-> -	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
-> +	memcpy(buf, sig->s, sig->s_size);
-> +	memcpy(buf + sig->s_size, sig->digest, sig->digest_size);
-> +
-> +	sg_init_one(&src_sg, buf, sig->s_size + sig->digest_size);
-> +	akcipher_request_set_crypt(req, &src_sg, NULL, sig->s_size,
->   				   sig->digest_size);
->   	crypto_init_wait(&cwait);
->   	akcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG |
-> @@ -435,8 +439,8 @@ int public_key_verify_signature(const struct public_key *pkey,
->   				      crypto_req_done, &cwait);
->   	ret = crypto_wait_req(crypto_akcipher_verify(req), &cwait);
->   
-> -error_free_key:
-> -	kfree(key);
-> +error_free_buf:
-> +	kfree(buf);
->   error_free_req:
->   	akcipher_request_free(req);
->   error_free_tfm:
+>>
+
+I repeat: Can you bisect between v5.15 and v5.15.112?
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
