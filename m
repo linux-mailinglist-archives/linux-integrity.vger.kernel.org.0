@@ -2,54 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03B6722999
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 16:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CC5722B3C
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 17:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbjFEOsz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Jun 2023 10:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S234425AbjFEPgc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Jun 2023 11:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbjFEOsj (ORCPT
+        with ESMTP id S234322AbjFEPgb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:48:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C4AF2
-        for <linux-integrity@vger.kernel.org>; Mon,  5 Jun 2023 07:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685976475;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GKnTrK6N8fyx8N4wY6ury0F8xx6HRQHrf6vLk5OPOl8=;
-        b=MHvVdRvJbnLsNaBYsaU7p5zu2a2oNui0f1mP7PqpvRDrKIec9yOvni9Nx69lNkJ+Hg3Mej
-        hURYtQ/YOVWXcCcZ9Xc/109fuVgapLGX19gZV/f/0IcGxNkJZp++GDjKjzJnW35Pzm9cJL
-        /Ge7q3YctLT3Gt9/Sktwe0khrXeiNWk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-3qv7PdMlP5-fXF9d25ZGlg-1; Mon, 05 Jun 2023 10:47:52 -0400
-X-MC-Unique: 3qv7PdMlP5-fXF9d25ZGlg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 5 Jun 2023 11:36:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C641F7;
+        Mon,  5 Jun 2023 08:36:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE563101A55C;
-        Mon,  5 Jun 2023 14:47:50 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5292A1121314;
-        Mon,  5 Jun 2023 14:47:47 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25B0462720;
+        Mon,  5 Jun 2023 15:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 68998C4339B;
+        Mon,  5 Jun 2023 15:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685979384;
+        bh=YdamecFINNCEd7qN4wE3PtBR9T5k9xrbpuFxPFkqLHI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=RMPY3LwpOCY/mrT9wYDvGsqbAzDaHm7CJni6fiO+keKHR+t1lU3wddmZo3zJE88N0
+         f37FVWCFdUAd4d6YyVWvelhsHEuCKBgwwh+LN8Ypu1rB8MTWfwX8Ow5IMA+NqcvmXR
+         4NqzTgdu2D8lS7AJ1cywCNZ+0CEbicumUnHhniMgThBlyKTgf0FiymizXeHS4co4GU
+         5emHEBNnyZSSDHiBISOAo3iKJ7PvcqNxFjiKO55Fu1Ku94gWzDgoNvg3PHqTio8DY4
+         V2486cTNYseo3PYmVQVDD/8ku/Pg4TzLoYqlEq/xnGGKAR95ALxt/+hgm1H+/LS1sg
+         JBlJnorf5jHeQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C461E87231;
+        Mon,  5 Jun 2023 15:36:24 +0000 (UTC)
+Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
+From:   pr-tracker-bot@kernel.org
 In-Reply-To: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
 References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
+X-PR-Tracked-Remote: https://github.com/robertosassu/linux.git tags/asym-keys-fix-for-linus-v6.4-rc5
+X-PR-Tracked-Commit-Id: c3d03e8e35e005e1a614e51bb59053eeb5857f76
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f8dba31b0a826e691949cd4fdfa5c30defaac8c5
+Message-Id: <168597938430.2179.8103170042142681716.pr-tracker-bot@kernel.org>
+Date:   Mon, 05 Jun 2023 15:36:24 +0000
 To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     dhowells@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Eric Biggers <ebiggers@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.ibm.com>, dhowells@redhat.com,
         herbert@gondor.apana.org.au, davem@davemloft.net,
         zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
         paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
@@ -58,16 +61,9 @@ Cc:     dhowells@redhat.com,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
-Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1727998.1685976466.1@warthog.procyon.org.uk>
-Date:   Mon, 05 Jun 2023 15:47:46 +0100
-Message-ID: <1727999.1685976466@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,15 +71,15 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+The pull request you sent on Fri, 02 Jun 2023 16:41:04 +0200:
 
-> Here is a small fix to make an unconditional copy of the buffer passed
-> to crypto operations, to take into account the case of the stack not in
-> the linear mapping area.
+> https://github.com/robertosassu/linux.git tags/asym-keys-fix-for-linus-v6.4-rc5
 
-I wonder if evm_verify_hmac() and other such callers of the signature
-verification service should be placing the data and crypto material in slab
-memory rather than it being on the stack.  But, for the moment:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f8dba31b0a826e691949cd4fdfa5c30defaac8c5
 
-Acked-by: David Howells <dhowells@redhat.com>
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
