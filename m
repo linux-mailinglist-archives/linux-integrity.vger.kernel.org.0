@@ -2,63 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A277211D5
-	for <lists+linux-integrity@lfdr.de>; Sat,  3 Jun 2023 21:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B9472212D
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 10:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjFCTRH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 3 Jun 2023 15:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S229745AbjFEIjV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Jun 2023 04:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbjFCTQy (ORCPT
+        with ESMTP id S229655AbjFEIjU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 3 Jun 2023 15:16:54 -0400
-Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1F2E72;
-        Sat,  3 Jun 2023 12:16:44 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QYTqc0sXZz9xGhC;
-        Sun,  4 Jun 2023 03:06:20 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCnCuZXkXtkAEoJAw--.3607S6;
-        Sat, 03 Jun 2023 20:16:21 +0100 (CET)
+        Mon, 5 Jun 2023 04:39:20 -0400
+Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CCFB0;
+        Mon,  5 Jun 2023 01:39:19 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QZRYV6S2zz9xtV7;
+        Mon,  5 Jun 2023 16:27:26 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAH110In31k6doIAw--.3833S2;
+        Mon, 05 Jun 2023 09:38:47 +0100 (CET)
+Message-ID: <9f4b7bef5d090da9de50ed1aa1e103abc19b125f.camel@huaweicloud.com>
+Subject: Re: [PATCH v11 2/4] smack: Set the SMACK64TRANSMUTE xattr in
+ smack_inode_init_security()
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+To:     Mengchi Cheng <mengcc@amazon.com>
+Cc:     miklos@szeredi.hu, linux-unionfs@vger.kernel.org,
+        kamatam@amazon.com, yoonjaeh@amazon.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
         bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
         nicolas.bouchinet@clip-os.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v11 4/4] evm: Support multiple LSMs providing an xattr
-Date:   Sat,  3 Jun 2023 21:15:18 +0200
-Message-Id: <20230603191518.1397490-5-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230603191518.1397490-1-roberto.sassu@huaweicloud.com>
+Date:   Mon, 05 Jun 2023 10:38:29 +0200
+In-Reply-To: <20230603191518.1397490-3-roberto.sassu@huaweicloud.com>
 References: <20230603191518.1397490-1-roberto.sassu@huaweicloud.com>
+         <20230603191518.1397490-3-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCnCuZXkXtkAEoJAw--.3607S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxGryktFy8JF1rur1rGr1kGrg_yoWrKF4Upa
-        98tas8Arn5JFy7Wr9aya18ua4SgrW8Cw1UK393JryjyFnIqr1IvryIyr15ur98WrW8JrnI
-        yw4Yvw15C3W5t3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28Icx
-        kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42
-        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBF1jj4oUiwAAsz
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAH110In31k6doIAw--.3833S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gw43ZrykCFyrJrWfWr1kAFb_yoW7Xr4rpF
+        WUKa43Kr4rtF1DGrWFyF4UW3ya9ayrGrWUW3sxWrWfZ3ZrXr1xKrykXr1YkF17XrykurnY
+        qF4jvry5Xrn0y37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4o2BAAAsc
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
         PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
@@ -68,137 +72,141 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Sat, 2023-06-03 at 21:15 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> With the newly added ability of LSMs to supply multiple xattrs, set
+> SMACK64TRASMUTE in smack_inode_init_security(), instead of d_instantiate().
+> Do it by incrementing SMACK_INODE_INIT_XATTRS to 2 and by calling
+> lsm_get_xattr_slot() a second time, if the transmuting conditions are met.
+> 
+> The LSM infrastructure passes all xattrs provided by LSMs to the
+> filesystems through the initxattrs() callback, so that filesystems can
+> store xattrs in the disk.
+> 
+> After the change, the SMK_INODE_TRANSMUTE inode flag is always set by
+> d_instantiate() after fetching SMACK64TRANSMUTE from the disk. Before it
+> was done by smack_inode_post_setxattr() as result of the __vfs_setxattr()
+> call.
+> 
+> Removing __vfs_setxattr() also prevents invalidating the EVM HMAC, by
+> adding a new xattr without checking and updating the existing HMAC.
 
-Currently, evm_inode_init_security() processes a single LSM xattr from the
-array passed by security_inode_init_security(), and calculates the HMAC on
-it and other inode metadata.
+Hi Mengchi
 
-As the LSM infrastructure now can pass to EVM an array with multiple
-xattrs, scan them until the terminator (xattr name NULL), and calculate the
-HMAC on all of them.
+could you please redo your tests with this patch set applied?
 
-Also, double check that the xattrs array terminator is the first non-filled
-slot (obtained with lsm_get_xattr_slot()). Consumers of the xattrs array,
-such as the initxattrs() callbacks, rely on the terminator.
+https://lore.kernel.org/linux-integrity/20230603191518.1397490-1-roberto.sassu@huaweicloud.com/
 
-Finally, change the name of the lsm_xattr parameter of evm_init_hmac() to
-xattrs, to reflect the new type of information passed.
+You need:
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
----
- security/integrity/evm/evm.h        |  4 +++-
- security/integrity/evm/evm_crypto.c | 11 +++++++++--
- security/integrity/evm/evm_main.c   | 29 +++++++++++++++++++++++++----
- 3 files changed, 37 insertions(+), 7 deletions(-)
+https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/log/?h=next
 
-diff --git a/security/integrity/evm/evm.h b/security/integrity/evm/evm.h
-index f8b8c5004fc..53bd7fec93f 100644
---- a/security/integrity/evm/evm.h
-+++ b/security/integrity/evm/evm.h
-@@ -46,6 +46,8 @@ struct evm_digest {
- 	char digest[IMA_MAX_DIGEST_SIZE];
- } __packed;
- 
-+int evm_protected_xattr(const char *req_xattr_name);
-+
- int evm_init_key(void);
- int evm_update_evmxattr(struct dentry *dentry,
- 			const char *req_xattr_name,
-@@ -58,7 +60,7 @@ int evm_calc_hash(struct dentry *dentry, const char *req_xattr_name,
- 		  const char *req_xattr_value,
- 		  size_t req_xattr_value_len, char type,
- 		  struct evm_digest *data);
--int evm_init_hmac(struct inode *inode, const struct xattr *xattr,
-+int evm_init_hmac(struct inode *inode, const struct xattr *xattrs,
- 		  char *hmac_val);
- int evm_init_secfs(void);
- 
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index 033804f5a5f..0fdd382b58e 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -385,10 +385,11 @@ int evm_update_evmxattr(struct dentry *dentry, const char *xattr_name,
- 	return rc;
- }
- 
--int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
-+int evm_init_hmac(struct inode *inode, const struct xattr *xattrs,
- 		  char *hmac_val)
- {
- 	struct shash_desc *desc;
-+	const struct xattr *xattr;
- 
- 	desc = init_desc(EVM_XATTR_HMAC, HASH_ALGO_SHA1);
- 	if (IS_ERR(desc)) {
-@@ -396,7 +397,13 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		return PTR_ERR(desc);
- 	}
- 
--	crypto_shash_update(desc, lsm_xattr->value, lsm_xattr->value_len);
-+	for (xattr = xattrs; xattr->name != NULL; xattr++) {
-+		if (!evm_protected_xattr(xattr->name))
-+			continue;
-+
-+		crypto_shash_update(desc, xattr->value, xattr->value_len);
-+	}
-+
- 	hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
- 	kfree(desc);
- 	return 0;
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 475196ce712..e9441419a81 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -306,7 +306,7 @@ static int evm_protected_xattr_common(const char *req_xattr_name,
- 	return found;
- }
- 
--static int evm_protected_xattr(const char *req_xattr_name)
-+int evm_protected_xattr(const char *req_xattr_name)
- {
- 	return evm_protected_xattr_common(req_xattr_name, false);
- }
-@@ -870,14 +870,35 @@ int evm_inode_init_security(struct inode *inode, struct inode *dir,
- 			    int *xattr_count)
- {
- 	struct evm_xattr *xattr_data;
--	struct xattr *evm_xattr;
-+	struct xattr *xattr, *evm_xattr;
-+	bool evm_protected_xattrs = false;
- 	int rc;
- 
--	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs ||
--	    !evm_protected_xattr(xattrs->name))
-+	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs)
-+		return 0;
-+
-+	/*
-+	 * security_inode_init_security() makes sure that the xattrs array is
-+	 * contiguous, there is enough space for security.evm, and that there is
-+	 * a terminator at the end of the array.
-+	 */
-+	for (xattr = xattrs; xattr->name != NULL; xattr++) {
-+		if (evm_protected_xattr(xattr->name))
-+			evm_protected_xattrs = true;
-+	}
-+
-+	/* EVM xattr not needed. */
-+	if (!evm_protected_xattrs)
- 		return 0;
- 
- 	evm_xattr = lsm_get_xattr_slot(xattrs, xattr_count);
-+	/*
-+	 * Array terminator (xattr name = NULL) must be the first non-filled
-+	 * xattr slot.
-+	 */
-+	WARN_ONCE(evm_xattr != xattr,
-+		  "%s: xattrs terminator is not the first non-filled slot\n",
-+		  __func__);
- 
- 	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
- 	if (!xattr_data)
--- 
-2.25.1
+https://github.com/cschaufler/smack-next/commits/next
+
+Thanks
+
+Roberto
+
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/smack/smack.h     |  2 +-
+>  security/smack/smack_lsm.c | 43 +++++++++++++++++++++++---------------
+>  2 files changed, 27 insertions(+), 18 deletions(-)
+> 
+> diff --git a/security/smack/smack.h b/security/smack/smack.h
+> index aa15ff56ed6..041688e5a77 100644
+> --- a/security/smack/smack.h
+> +++ b/security/smack/smack.h
+> @@ -128,7 +128,7 @@ struct task_smack {
+>  
+>  #define	SMK_INODE_INSTANT	0x01	/* inode is instantiated */
+>  #define	SMK_INODE_TRANSMUTE	0x02	/* directory is transmuting */
+> -#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted */
+> +#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted (unused) */
+>  #define	SMK_INODE_IMPURE	0x08	/* involved in an impure transaction */
+>  
+>  /*
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index a1c30275692..b67d901ee74 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -52,7 +52,14 @@
+>  #define SMK_RECEIVING	1
+>  #define SMK_SENDING	2
+>  
+> -#define SMACK_INODE_INIT_XATTRS 1
+> +/*
+> + * Smack uses multiple xattrs.
+> + * SMACK64 - for access control,
+> + * SMACK64TRANSMUTE - label initialization,
+> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT,
+> + * Must be set explicitly - SMACK64EXEC and SMACK64MMAP
+> + */
+> +#define SMACK_INODE_INIT_XATTRS 2
+>  
+>  #ifdef SMACK_IPV6_PORT_LABELING
+>  static DEFINE_MUTEX(smack_ipv6_lock);
+> @@ -935,7 +942,6 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+>  				     struct xattr *xattrs, int *xattr_count)
+>  {
+>  	struct task_smack *tsp = smack_cred(current_cred());
+> -	struct inode_smack *issp = smack_inode(inode);
+>  	struct smack_known *skp = smk_of_task(tsp);
+>  	struct smack_known *isp = smk_of_inode(inode);
+>  	struct smack_known *dsp = smk_of_inode(dir);
+> @@ -963,6 +969,8 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+>  		if ((tsp->smk_task == tsp->smk_transmuted) ||
+>  		    (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
+>  		     smk_inode_transmutable(dir))) {
+> +			struct xattr *xattr_transmute;
+> +
+>  			/*
+>  			 * The caller of smack_dentry_create_files_as()
+>  			 * should have overridden the current cred, so the
+> @@ -971,7 +979,16 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+>  			 */
+>  			if (tsp->smk_task != tsp->smk_transmuted)
+>  				isp = dsp;
+> -			issp->smk_flags |= SMK_INODE_CHANGED;
+> +			xattr_transmute = lsm_get_xattr_slot(xattrs, xattr_count);
+> +			if (xattr_transmute) {
+> +				xattr_transmute->value = kmemdup(TRANS_TRUE,
+> +						TRANS_TRUE_SIZE, GFP_NOFS);
+> +				if (xattr_transmute->value == NULL)
+> +					return -ENOMEM;
+> +
+> +				xattr_transmute->value_len = TRANS_TRUE_SIZE;
+> +				xattr_transmute->name = XATTR_SMACK_TRANSMUTE;
+> +			}
+>  		}
+>  
+>  		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> @@ -3518,20 +3535,12 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
+>  			 * If there is a transmute attribute on the
+>  			 * directory mark the inode.
+>  			 */
+> -			if (isp->smk_flags & SMK_INODE_CHANGED) {
+> -				isp->smk_flags &= ~SMK_INODE_CHANGED;
+> -				rc = __vfs_setxattr(&nop_mnt_idmap, dp, inode,
+> -					XATTR_NAME_SMACKTRANSMUTE,
+> -					TRANS_TRUE, TRANS_TRUE_SIZE,
+> -					0);
+> -			} else {
+> -				rc = __vfs_getxattr(dp, inode,
+> -					XATTR_NAME_SMACKTRANSMUTE, trattr,
+> -					TRANS_TRUE_SIZE);
+> -				if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
+> -						       TRANS_TRUE_SIZE) != 0)
+> -					rc = -EINVAL;
+> -			}
+> +			rc = __vfs_getxattr(dp, inode,
+> +					    XATTR_NAME_SMACKTRANSMUTE, trattr,
+> +					    TRANS_TRUE_SIZE);
+> +			if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
+> +					       TRANS_TRUE_SIZE) != 0)
+> +				rc = -EINVAL;
+>  			if (rc >= 0)
+>  				transflag = SMK_INODE_TRANSMUTE;
+>  		}
 
