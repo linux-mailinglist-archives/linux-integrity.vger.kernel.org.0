@@ -2,68 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CC5722B3C
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 17:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001F6722D18
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 18:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234425AbjFEPgc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Jun 2023 11:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S232484AbjFEQ4i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Jun 2023 12:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbjFEPgb (ORCPT
+        with ESMTP id S229529AbjFEQ4h (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:36:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C641F7;
-        Mon,  5 Jun 2023 08:36:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25B0462720;
-        Mon,  5 Jun 2023 15:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 68998C4339B;
-        Mon,  5 Jun 2023 15:36:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685979384;
-        bh=YdamecFINNCEd7qN4wE3PtBR9T5k9xrbpuFxPFkqLHI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=RMPY3LwpOCY/mrT9wYDvGsqbAzDaHm7CJni6fiO+keKHR+t1lU3wddmZo3zJE88N0
-         f37FVWCFdUAd4d6YyVWvelhsHEuCKBgwwh+LN8Ypu1rB8MTWfwX8Ow5IMA+NqcvmXR
-         4NqzTgdu2D8lS7AJ1cywCNZ+0CEbicumUnHhniMgThBlyKTgf0FiymizXeHS4co4GU
-         5emHEBNnyZSSDHiBISOAo3iKJ7PvcqNxFjiKO55Fu1Ku94gWzDgoNvg3PHqTio8DY4
-         V2486cTNYseo3PYmVQVDD/8ku/Pg4TzLoYqlEq/xnGGKAR95ALxt/+hgm1H+/LS1sg
-         JBlJnorf5jHeQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C461E87231;
-        Mon,  5 Jun 2023 15:36:24 +0000 (UTC)
-Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
-References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
-X-PR-Tracked-Remote: https://github.com/robertosassu/linux.git tags/asym-keys-fix-for-linus-v6.4-rc5
-X-PR-Tracked-Commit-Id: c3d03e8e35e005e1a614e51bb59053eeb5857f76
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f8dba31b0a826e691949cd4fdfa5c30defaac8c5
-Message-Id: <168597938430.2179.8103170042142681716.pr-tracker-bot@kernel.org>
-Date:   Mon, 05 Jun 2023 15:36:24 +0000
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>, dhowells@redhat.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 5 Jun 2023 12:56:37 -0400
+Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBBDE6
+        for <linux-integrity@vger.kernel.org>; Mon,  5 Jun 2023 09:56:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QZfcy37TJz9ypbn
+        for <linux-integrity@vger.kernel.org>; Tue,  6 Jun 2023 00:46:10 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDXU_+pE35kXiQSAw--.3839S2;
+        Mon, 05 Jun 2023 17:56:16 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        stefanb@linux.ibm.com, paul@paul-moore.com, casey@schaufler-ca.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 ima-evm-utils 0/4] Simple EVM HMAC calculation tests
+Date:   Mon,  5 Jun 2023 18:55:50 +0200
+Message-Id: <20230605165554.1965238-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwDXU_+pE35kXiQSAw--.3839S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFyDXr4kZrW3KFW7Jw15CFg_yoW8XFWxp3
+        yvgwnak34kAF1fK34fJa1xG343Aa1IkF45Xr97Xr13CFsxG3WUtr1fKr45ua4Iqr1vqrWU
+        Zw1UKr1S93WDAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4467QAAs+
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,15 +60,48 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Fri, 02 Jun 2023 16:41:04 +0200:
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-> https://github.com/robertosassu/linux.git tags/asym-keys-fix-for-linus-v6.4-rc5
+Add two simple tests to check whether or not the HMAC calculated by the
+kernel and evmctl matches. Do the tests for a regular file, and for a
+directory successfully transmuted with Smack.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f8dba31b0a826e691949cd4fdfa5c30defaac8c5
+Also add two bug fixes to include the filesystem UUID and the inode
+generation in the HMAC calculation, and the new option --hmackey to specify
+an alternate location of the HMAC key.
 
-Thank you!
+Changelog
+
+v1:
+- Add documentation for --hmackey option of evmctl (suggested by Mimi)
+- Update kernel configuration for CI
+- Include inode generation in HMAC calculation for directories
+- Specify kernel patches required for the tests (suggested by Mimi)
+- Move xattr compare code to compare_xattr()
+- Add new Smack-specific test to check HMAC of transmuting directory
+  (suggested by Mimi)
+- Check in the test that the --hmackey option is available (suggested by
+  Mimi)
+- Remove i_version mount option (should be default in ext4)
+- Mount smackfs if the UML kernel is used
+
+Roberto Sassu (4):
+  Include the filesystem UUID in HMAC calculation
+  Restore correct HMAC calculation for directories
+  Add --hmackey option for evmctl
+  Add simple test to check EVM HMAC calculation
+
+ README                   |   3 +-
+ kernel-configs/base      |   4 +-
+ kernel-configs/integrity |   1 +
+ src/evmctl.c             |  31 ++++-
+ src/imaevm.h             |   1 +
+ tests/Makefile.am        |   2 +-
+ tests/evm_hmac.test      | 251 +++++++++++++++++++++++++++++++++++++++
+ tests/functions.sh       |   6 +
+ 8 files changed, 293 insertions(+), 6 deletions(-)
+ create mode 100755 tests/evm_hmac.test
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+
