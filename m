@@ -2,99 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C8672272D
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 15:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03B6722999
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 16:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjFENQv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Jun 2023 09:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
+        id S234642AbjFEOsz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Jun 2023 10:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbjFENOn (ORCPT
+        with ESMTP id S234491AbjFEOsj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:14:43 -0400
-Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B5610D;
-        Mon,  5 Jun 2023 06:14:38 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QZYhq5LLMz9y4yN;
-        Mon,  5 Jun 2023 21:04:11 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAHc+6p331kUnURAw--.3902S2;
-        Mon, 05 Jun 2023 14:14:24 +0100 (CET)
-Message-ID: <02a411f0b2cf4dd7908c8810035a166928870f3e.camel@huaweicloud.com>
-Subject: Re: [PATCH] evm: Complete description of evm_inode_setattr()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 05 Jun 2023 15:14:14 +0200
-In-Reply-To: <5560351701e78a0dfb9b7d2eef703395a0d531b0.camel@linux.ibm.com>
-References: <20230306104036.1298529-1-roberto.sassu@huaweicloud.com>
-         <c2b7b5531660befc66a25477abc0cc069d08926c.camel@huaweicloud.com>
-         <5560351701e78a0dfb9b7d2eef703395a0d531b0.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 5 Jun 2023 10:48:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C4AF2
+        for <linux-integrity@vger.kernel.org>; Mon,  5 Jun 2023 07:47:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685976475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GKnTrK6N8fyx8N4wY6ury0F8xx6HRQHrf6vLk5OPOl8=;
+        b=MHvVdRvJbnLsNaBYsaU7p5zu2a2oNui0f1mP7PqpvRDrKIec9yOvni9Nx69lNkJ+Hg3Mej
+        hURYtQ/YOVWXcCcZ9Xc/109fuVgapLGX19gZV/f/0IcGxNkJZp++GDjKjzJnW35Pzm9cJL
+        /Ge7q3YctLT3Gt9/Sktwe0khrXeiNWk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-314-3qv7PdMlP5-fXF9d25ZGlg-1; Mon, 05 Jun 2023 10:47:52 -0400
+X-MC-Unique: 3qv7PdMlP5-fXF9d25ZGlg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE563101A55C;
+        Mon,  5 Jun 2023 14:47:50 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5292A1121314;
+        Mon,  5 Jun 2023 14:47:47 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
+References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     dhowells@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwAHc+6p331kUnURAw--.3902S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruFWkXw1fCFW8Ar4rXryfCrg_yoWDCwb_ur
-        1jyr1fu3yDXFs7GrZ0gFW7Wrs29ayFvr90gw4DGrnxZwsxG3srXFs7KFWFvw1kGF48Ar9x
-        uFyftFZ8Cry2gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbo8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-        JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-        kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
-        6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
-        xhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4o68wABsm
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1727998.1685976466.1@warthog.procyon.org.uk>
+Date:   Mon, 05 Jun 2023 15:47:46 +0100
+Message-ID: <1727999.1685976466@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-06-05 at 09:12 -0400, Mimi Zohar wrote:
-> On Mon, 2023-06-05 at 13:57 +0200, Roberto Sassu wrote:
-> > On Mon, 2023-03-06 at 11:40 +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > Add the description for missing parameters of evm_inode_setattr() to
-> > > avoid the warning arising with W=n compile option.
-> > > 
-> > > Fixes: 817b54aa45db ("evm: add evm_inode_setattr to prevent updating an invalid security.evm")
-> > > Fixes: c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Hi Mimi
-> > 
-> > this probably got lost. It was also reviewed by Stefan:
-> > 
-> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> > 
-> > Could you please take it?
-> 
-> Thanks for the reminder.  In case kernel-doc changes are backported to
-> stable, I've added # v3.2+ and # v6.3+ respectively to the Fixes lines.
+Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
 
-Thanks!
+> Here is a small fix to make an unconditional copy of the buffer passed
+> to crypto operations, to take into account the case of the stack not in
+> the linear mapping area.
 
-> There are two other warnings in EVM.  Any chance you're planning on
-> fixing them as well?
+I wonder if evm_verify_hmac() and other such callers of the signature
+verification service should be placing the data and crypto material in slab
+memory rather than it being on the stack.  But, for the moment:
 
-Yes, will do.
-
-Roberto
+Acked-by: David Howells <dhowells@redhat.com>
 
