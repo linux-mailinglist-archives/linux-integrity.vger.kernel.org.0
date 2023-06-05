@@ -2,211 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B9472212D
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 10:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA79722164
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 10:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjFEIjV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Jun 2023 04:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S230178AbjFEItl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Jun 2023 04:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjFEIjU (ORCPT
+        with ESMTP id S229459AbjFEItk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:39:20 -0400
-Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CCFB0;
-        Mon,  5 Jun 2023 01:39:19 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QZRYV6S2zz9xtV7;
-        Mon,  5 Jun 2023 16:27:26 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAH110In31k6doIAw--.3833S2;
-        Mon, 05 Jun 2023 09:38:47 +0100 (CET)
-Message-ID: <9f4b7bef5d090da9de50ed1aa1e103abc19b125f.camel@huaweicloud.com>
-Subject: Re: [PATCH v11 2/4] smack: Set the SMACK64TRANSMUTE xattr in
- smack_inode_init_security()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mengchi Cheng <mengcc@amazon.com>
-Cc:     miklos@szeredi.hu, linux-unionfs@vger.kernel.org,
-        kamatam@amazon.com, yoonjaeh@amazon.com, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 05 Jun 2023 10:38:29 +0200
-In-Reply-To: <20230603191518.1397490-3-roberto.sassu@huaweicloud.com>
-References: <20230603191518.1397490-1-roberto.sassu@huaweicloud.com>
-         <20230603191518.1397490-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 5 Jun 2023 04:49:40 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C785CD;
+        Mon,  5 Jun 2023 01:49:39 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1q65ti-00GsWv-Lb; Mon, 05 Jun 2023 16:49:07 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 05 Jun 2023 16:49:06 +0800
+Date:   Mon, 5 Jun 2023 16:49:06 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        David Howells <dhowells@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>, davem@davemloft.net,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
+Message-ID: <ZH2hgrV6po9dkxi+@gondor.apana.org.au>
+References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
+ <CAHk-=wj4S0t5RnJQmF_wYwv+oMTKggwdLnrA9D1uMNKq4H4byw@mail.gmail.com>
+ <CAHk-=wgCUzRNTg4fC8DF=UFnznK0M=mNUBDcsnLt7D4+HP2_1Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAH110In31k6doIAw--.3833S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Gw43ZrykCFyrJrWfWr1kAFb_yoW7Xr4rpF
-        WUKa43Kr4rtF1DGrWFyF4UW3ya9ayrGrWUW3sxWrWfZ3ZrXr1xKrykXr1YkF17XrykurnY
-        qF4jvry5Xrn0y37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4o2BAAAsc
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgCUzRNTg4fC8DF=UFnznK0M=mNUBDcsnLt7D4+HP2_1Q@mail.gmail.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, 2023-06-03 at 21:15 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> With the newly added ability of LSMs to supply multiple xattrs, set
-> SMACK64TRASMUTE in smack_inode_init_security(), instead of d_instantiate().
-> Do it by incrementing SMACK_INODE_INIT_XATTRS to 2 and by calling
-> lsm_get_xattr_slot() a second time, if the transmuting conditions are met.
-> 
-> The LSM infrastructure passes all xattrs provided by LSMs to the
-> filesystems through the initxattrs() callback, so that filesystems can
-> store xattrs in the disk.
-> 
-> After the change, the SMK_INODE_TRANSMUTE inode flag is always set by
-> d_instantiate() after fetching SMACK64TRANSMUTE from the disk. Before it
-> was done by smack_inode_post_setxattr() as result of the __vfs_setxattr()
-> call.
-> 
-> Removing __vfs_setxattr() also prevents invalidating the EVM HMAC, by
-> adding a new xattr without checking and updating the existing HMAC.
+On Fri, Jun 02, 2023 at 08:02:23PM -0400, Linus Torvalds wrote:
+>
+> I absolutely abhor the crypto interfaces. They all seem designed for
+> that "external DMA engine" case that seems so horrendously pointless
+> and slow.  In practice so few of them are that, and we have all those
+> optimized routines for doing it all on the CPU - but have in the
+> meantime wasted all that time and effort into copying everything,
+> turning simple buffers into sg-bufs etc etc. The amount of indirection
+> and "set this state in the state machine" is just nasty, and this
+> seems to all be a prime example of it all. With some of it then
+> randomly going through some kthread too.
 
-Hi Mengchi
+You're right.  Originally SG lists were used as the majority of
+our input came from network packets, in the form of skb's.  They
+are easily translated into SG lists.  This is still somewhat the
+case for parts of the Crypto API (e.g., skcipher and ahash).
 
-could you please redo your tests with this patch set applied?
+However, for akcipher the only user of the underlying API is the
+file in question so I absolutely agree that forcing it to go through
+an SG list is just wrong.
 
-https://lore.kernel.org/linux-integrity/20230603191518.1397490-1-roberto.sassu@huaweicloud.com/
+I'll change the underlying akcipher interface to take pointers
+instead and hide the SG list stuff (along with the copying) inside
+API.
 
-You need:
+In the mean time feel free to take this patch as it appears to be
+correct and should keep things chugging along while we work on the
+API.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/log/?h=next
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-https://github.com/cschaufler/smack-next/commits/next
-
-Thanks
-
-Roberto
-
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/smack/smack.h     |  2 +-
->  security/smack/smack_lsm.c | 43 +++++++++++++++++++++++---------------
->  2 files changed, 27 insertions(+), 18 deletions(-)
-> 
-> diff --git a/security/smack/smack.h b/security/smack/smack.h
-> index aa15ff56ed6..041688e5a77 100644
-> --- a/security/smack/smack.h
-> +++ b/security/smack/smack.h
-> @@ -128,7 +128,7 @@ struct task_smack {
->  
->  #define	SMK_INODE_INSTANT	0x01	/* inode is instantiated */
->  #define	SMK_INODE_TRANSMUTE	0x02	/* directory is transmuting */
-> -#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted */
-> +#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted (unused) */
->  #define	SMK_INODE_IMPURE	0x08	/* involved in an impure transaction */
->  
->  /*
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index a1c30275692..b67d901ee74 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -52,7 +52,14 @@
->  #define SMK_RECEIVING	1
->  #define SMK_SENDING	2
->  
-> -#define SMACK_INODE_INIT_XATTRS 1
-> +/*
-> + * Smack uses multiple xattrs.
-> + * SMACK64 - for access control,
-> + * SMACK64TRANSMUTE - label initialization,
-> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT,
-> + * Must be set explicitly - SMACK64EXEC and SMACK64MMAP
-> + */
-> +#define SMACK_INODE_INIT_XATTRS 2
->  
->  #ifdef SMACK_IPV6_PORT_LABELING
->  static DEFINE_MUTEX(smack_ipv6_lock);
-> @@ -935,7 +942,6 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
->  				     struct xattr *xattrs, int *xattr_count)
->  {
->  	struct task_smack *tsp = smack_cred(current_cred());
-> -	struct inode_smack *issp = smack_inode(inode);
->  	struct smack_known *skp = smk_of_task(tsp);
->  	struct smack_known *isp = smk_of_inode(inode);
->  	struct smack_known *dsp = smk_of_inode(dir);
-> @@ -963,6 +969,8 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
->  		if ((tsp->smk_task == tsp->smk_transmuted) ||
->  		    (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
->  		     smk_inode_transmutable(dir))) {
-> +			struct xattr *xattr_transmute;
-> +
->  			/*
->  			 * The caller of smack_dentry_create_files_as()
->  			 * should have overridden the current cred, so the
-> @@ -971,7 +979,16 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
->  			 */
->  			if (tsp->smk_task != tsp->smk_transmuted)
->  				isp = dsp;
-> -			issp->smk_flags |= SMK_INODE_CHANGED;
-> +			xattr_transmute = lsm_get_xattr_slot(xattrs, xattr_count);
-> +			if (xattr_transmute) {
-> +				xattr_transmute->value = kmemdup(TRANS_TRUE,
-> +						TRANS_TRUE_SIZE, GFP_NOFS);
-> +				if (xattr_transmute->value == NULL)
-> +					return -ENOMEM;
-> +
-> +				xattr_transmute->value_len = TRANS_TRUE_SIZE;
-> +				xattr_transmute->name = XATTR_SMACK_TRANSMUTE;
-> +			}
->  		}
->  
->  		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
-> @@ -3518,20 +3535,12 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
->  			 * If there is a transmute attribute on the
->  			 * directory mark the inode.
->  			 */
-> -			if (isp->smk_flags & SMK_INODE_CHANGED) {
-> -				isp->smk_flags &= ~SMK_INODE_CHANGED;
-> -				rc = __vfs_setxattr(&nop_mnt_idmap, dp, inode,
-> -					XATTR_NAME_SMACKTRANSMUTE,
-> -					TRANS_TRUE, TRANS_TRUE_SIZE,
-> -					0);
-> -			} else {
-> -				rc = __vfs_getxattr(dp, inode,
-> -					XATTR_NAME_SMACKTRANSMUTE, trattr,
-> -					TRANS_TRUE_SIZE);
-> -				if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> -						       TRANS_TRUE_SIZE) != 0)
-> -					rc = -EINVAL;
-> -			}
-> +			rc = __vfs_getxattr(dp, inode,
-> +					    XATTR_NAME_SMACKTRANSMUTE, trattr,
-> +					    TRANS_TRUE_SIZE);
-> +			if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> +					       TRANS_TRUE_SIZE) != 0)
-> +				rc = -EINVAL;
->  			if (rc >= 0)
->  				transflag = SMK_INODE_TRANSMUTE;
->  		}
-
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
