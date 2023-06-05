@@ -2,130 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C523722714
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 15:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C8672272D
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 15:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbjFENNW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Jun 2023 09:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S231531AbjFENQv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Jun 2023 09:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbjFENNU (ORCPT
+        with ESMTP id S234010AbjFENOn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:13:20 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC91F4;
-        Mon,  5 Jun 2023 06:12:50 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355CqWgt010725;
-        Mon, 5 Jun 2023 13:12:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=SismmB2jOXNY3RE+Pa8blteeHkwywh0TE1sSJloiJdM=;
- b=K/XjRhAFltU2zziBgfEFYGGbt/R6Hp1E+KhNpwolANOpXwuonWJNgtVLe4Hm78eS1kqs
- lxlvEvqV7RIQ2XP3P7JY2jdMLDFGM1qrzzL4jklVXV01rZe8mDtzhTYFuc3ceEpDyM3M
- +jj5dNGo8C4fI6gp04xlzSO6TyX75+faKKeXPrUdTdCPvz3tniuY2K51/kYIWEUxwDR2
- wRk9ALWyvLNx+Okk3bsyhyMrtIBTBle9FXqYWOJDjcADpPYx5Nw73jwnMh/iXMBZxYu1
- Tib1X2jiGjB4O0bFeZk1Kre7hwItLbHVdVIqjA6b4QF3oWktmwvWNr9yWHNFffBgUCzW qA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r1g3jrf8e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 13:12:30 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 355D8Ldw009129;
-        Mon, 5 Jun 2023 13:12:29 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r1g3jrf82-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 13:12:29 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 355BWUIV026046;
-        Mon, 5 Jun 2023 13:12:28 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3qyxnvfef3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 13:12:28 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 355DCRaL33030404
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 5 Jun 2023 13:12:27 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4950E58067;
-        Mon,  5 Jun 2023 13:12:27 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D65758054;
-        Mon,  5 Jun 2023 13:12:26 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.0.86])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  5 Jun 2023 13:12:26 +0000 (GMT)
-Message-ID: <5560351701e78a0dfb9b7d2eef703395a0d531b0.camel@linux.ibm.com>
+        Mon, 5 Jun 2023 09:14:43 -0400
+Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B5610D;
+        Mon,  5 Jun 2023 06:14:38 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QZYhq5LLMz9y4yN;
+        Mon,  5 Jun 2023 21:04:11 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAHc+6p331kUnURAw--.3902S2;
+        Mon, 05 Jun 2023 14:14:24 +0100 (CET)
+Message-ID: <02a411f0b2cf4dd7908c8810035a166928870f3e.camel@huaweicloud.com>
 Subject: Re: [PATCH] evm: Complete description of evm_inode_setattr()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
 Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 05 Jun 2023 09:12:25 -0400
-In-Reply-To: <c2b7b5531660befc66a25477abc0cc069d08926c.camel@huaweicloud.com>
+Date:   Mon, 05 Jun 2023 15:14:14 +0200
+In-Reply-To: <5560351701e78a0dfb9b7d2eef703395a0d531b0.camel@linux.ibm.com>
 References: <20230306104036.1298529-1-roberto.sassu@huaweicloud.com>
          <c2b7b5531660befc66a25477abc0cc069d08926c.camel@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+         <5560351701e78a0dfb9b7d2eef703395a0d531b0.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: VIQZkp-PoCUhq85t2yv6xvEiSp27Ic5H
-X-Proofpoint-GUID: SwlhmSYs_Y2IHt1jUEoZTjYCpTQbKKrL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-03_08,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
- suspectscore=0 priorityscore=1501 phishscore=0 impostorscore=0 mlxscore=0
- mlxlogscore=712 bulkscore=0 malwarescore=0 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2306050114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwAHc+6p331kUnURAw--.3902S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFWkXw1fCFW8Ar4rXryfCrg_yoWDCwb_ur
+        1jyr1fu3yDXFs7GrZ0gFW7Wrs29ayFvr90gw4DGrnxZwsxG3srXFs7KFWFvw1kGF48Ar9x
+        uFyftFZ8Cry2gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbo8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+        JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
+        kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
+        6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
+        xhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4o68wABsm
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-06-05 at 13:57 +0200, Roberto Sassu wrote:
-> On Mon, 2023-03-06 at 11:40 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
+On Mon, 2023-06-05 at 09:12 -0400, Mimi Zohar wrote:
+> On Mon, 2023-06-05 at 13:57 +0200, Roberto Sassu wrote:
+> > On Mon, 2023-03-06 at 11:40 +0100, Roberto Sassu wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > Add the description for missing parameters of evm_inode_setattr() to
+> > > avoid the warning arising with W=n compile option.
+> > > 
+> > > Fixes: 817b54aa45db ("evm: add evm_inode_setattr to prevent updating an invalid security.evm")
+> > > Fixes: c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > > 
-> > Add the description for missing parameters of evm_inode_setattr() to
-> > avoid the warning arising with W=n compile option.
+> > Hi Mimi
 > > 
-> > Fixes: 817b54aa45db ("evm: add evm_inode_setattr to prevent updating an invalid security.evm")
-> > Fixes: c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > this probably got lost. It was also reviewed by Stefan:
+> > 
+> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> > 
+> > Could you please take it?
 > 
-> Hi Mimi
-> 
-> this probably got lost. It was also reviewed by Stefan:
-> 
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> Could you please take it?
+> Thanks for the reminder.  In case kernel-doc changes are backported to
+> stable, I've added # v3.2+ and # v6.3+ respectively to the Fixes lines.
 
-Thanks for the reminder.  In case kernel-doc changes are backported to
-stable, I've added # v3.2+ and # v6.3+ respectively to the Fixes lines.
+Thanks!
 
-There are two other warnings in EVM.  Any chance you're planning on
-fixing them as well?
+> There are two other warnings in EVM.  Any chance you're planning on
+> fixing them as well?
 
--- 
-thanks,
+Yes, will do.
 
-Mimi
-
-
+Roberto
 
