@@ -2,38 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D71E722E12
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 20:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AE8722E13
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jun 2023 20:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbjFESAO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Jun 2023 14:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S232934AbjFESAP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Jun 2023 14:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjFESAL (ORCPT
+        with ESMTP id S231165AbjFESAM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:00:11 -0400
-Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66602D3;
+        Mon, 5 Jun 2023 14:00:12 -0400
+Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC864F1;
         Mon,  5 Jun 2023 11:00:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1685988010; x=1717524010;
+  t=1685988011; x=1717524011;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=unN7GipSX//PB49ZOaB1Vh0lCsSkaIGKdO4Lzy+O6v0=;
-  b=STzSKAPqj5lHk2fwDHS8N+VvYAUrgzmw1F7345Lpe6AcscqXRZlACb/X
-   SKvVkhVTH78GQjxbvD35EUhj0MeWtztak7VUhdGg0DJxujd7ga80pXVbF
-   GL4Q+2nGFWJfAZbRBYMXqVM7lneVw7Oj90hcajcYY3715ls/gFHEIwCcz
-   g=;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="40773232"
+  bh=89MCpdG+JGXZTxJwkWPn/J+rl3u69O0nt8q8tvWyKNM=;
+  b=nFQPneGteeYZdHM9WhK5PtnP5+kZPzwN56kRiYfX2VPlYvJFoRaMGQbS
+   gl8ae5xwM4mdCLrulJEbOAQx0YEvdyi7mEJPgasRgaO8VvpsMBqsFB9Tx
+   DEo9rELqEdS60rqlpEqxbzSZFIyvmQviag/ENB1L5w0QibbdP7YHqxU7v
+   c=;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="17446835"
 X-IronPort-AV: E=Sophos;i="6.00,218,1681164000"; 
-   d="scan'208";a="40773232"
-Received: from unknown (HELO MUCSE803.infineon.com) ([172.23.29.29])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 20:00:08 +0200
-Received: from KLUSE818.infineon.com (172.28.156.171) by MUCSE803.infineon.com
- (172.23.29.29) with Microsoft SMTP Server (version=TLS1_2,
+   d="scan'208";a="17446835"
+Received: from unknown (HELO MUCSE822.infineon.com) ([172.23.29.53])
+  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 20:00:09 +0200
+Received: from KLUSE818.infineon.com (172.28.156.171) by MUCSE822.infineon.com
+ (172.23.29.53) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 5 Jun 2023
- 20:00:08 +0200
+ 20:00:09 +0200
 Received: from ISCNPC0VBFBX.infineon.com (10.161.6.196) by
  KLUSE818.infineon.com (172.28.156.171) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -42,9 +42,9 @@ From:   Alexander Steffen <Alexander.Steffen@infineon.com>
 To:     <jarkko@kernel.org>, <linux-integrity@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Alexander Steffen <Alexander.Steffen@infineon.com>
-Subject: [PATCH v2 1/4] tpm_tis: Explicitly check for error code
-Date:   Mon, 5 Jun 2023 19:59:56 +0200
-Message-ID: <20230605175959.2131-2-Alexander.Steffen@infineon.com>
+Subject: [PATCH v2 2/4] tpm_tis: Move CRC check to generic send routine
+Date:   Mon, 5 Jun 2023 19:59:57 +0200
+Message-ID: <20230605175959.2131-3-Alexander.Steffen@infineon.com>
 X-Mailer: git-send-email 2.28.0.windows.1
 In-Reply-To: <20230605175959.2131-1-Alexander.Steffen@infineon.com>
 References: <20230605175959.2131-1-Alexander.Steffen@infineon.com>
@@ -64,42 +64,50 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-recv_data either returns the number of received bytes, or a negative value
-representing an error code. Adding the return value directly to the total
-number of received bytes therefore looks a little weird, since it might add
-a negative error code to a sum of bytes.
+The CRC functionality is initialized before tpm_tis_core, so it can be used
+on all code paths within the module. Therefore, move the CRC check to the
+generic send routine, that also contains all other checks for successful
+command transmission, so that all those checks are in one place.
 
-The following check for size < expected usually makes the function return
-ETIME in that case, so it does not cause too many problems in practice. But
-to make the code look cleaner and because the caller might still be
-interested in the original error code, explicitly check for the presence of
-an error code and pass that through.
+Also, this ensures that tpm_tis_ready is called when a CRC failure is
+detected, to clear the invalid data from the TPM, which did not happen
+previously.
 
 Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
 ---
- drivers/char/tpm/tpm_tis_core.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/char/tpm/tpm_tis_core.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 558144fa707a..aaaa136044ae 100644
+index aaaa136044ae..5ddaf24518be 100644
 --- a/drivers/char/tpm/tpm_tis_core.c
 +++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -363,8 +363,13 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
- 		goto out;
+@@ -466,6 +466,12 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 		goto out_err;
  	}
  
--	size += recv_data(chip, &buf[TPM_HEADER_SIZE],
--			  expected - TPM_HEADER_SIZE);
-+	rc = recv_data(chip, &buf[TPM_HEADER_SIZE],
-+		       expected - TPM_HEADER_SIZE);
++	rc = tpm_tis_verify_crc(priv, len, buf);
 +	if (rc < 0) {
-+		size = rc;
-+		goto out;
++		dev_err(&chip->dev, "CRC mismatch for command.\n");
++		goto out_err;
 +	}
-+	size += rc;
- 	if (size < expected) {
- 		dev_err(&chip->dev, "Unable to read remainder of result\n");
- 		size = -ETIME;
++
+ 	return 0;
+ 
+ out_err:
+@@ -510,12 +516,6 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 	if (rc < 0)
+ 		return rc;
+ 
+-	rc = tpm_tis_verify_crc(priv, len, buf);
+-	if (rc < 0) {
+-		dev_err(&chip->dev, "CRC mismatch for command.\n");
+-		return rc;
+-	}
+-
+ 	/* go and do it */
+ 	rc = tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
+ 	if (rc < 0)
 -- 
 2.34.1
 
