@@ -2,53 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12933723DEC
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jun 2023 11:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B566724064
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jun 2023 13:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjFFJjv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Jun 2023 05:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S231259AbjFFLDu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Jun 2023 07:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjFFJju (ORCPT
+        with ESMTP id S236669AbjFFLDH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:39:50 -0400
+        Tue, 6 Jun 2023 07:03:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8496E69;
-        Tue,  6 Jun 2023 02:39:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2016319B3;
+        Tue,  6 Jun 2023 04:00:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D71362AAE;
-        Tue,  6 Jun 2023 09:39:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48475C433EF;
-        Tue,  6 Jun 2023 09:39:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 882826280D;
+        Tue,  6 Jun 2023 11:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D95C433A1;
+        Tue,  6 Jun 2023 11:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686044387;
-        bh=oiJVYfGoEpymuu4TrgDsflDLYDu8vRIKcXKj/GoJx1w=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=rW+9mI+onnugkSZ5uZhCBWB6Ei2A3ED3zAaav5F6vaNcHeFw0htVGJiF0uosBnqpy
-         b78rKm3awtifh5eHcT7vdN85sHD4mF+kEJjw8nSksn6nmnetwZJf07Y+C+EyJ5y+1S
-         nouagocmpg53GMuR0GZAuGymlSOSSUw+/L8j7UPDMGENA7nQrcK7V+1qTGRYpyQ9eU
-         Vuz0oxpLMhPiER1jv8l4MO2GzLyKLW+QJbdY98Ob/MDAZkRoIkYDNAETwJhE12OgnK
-         9hYJiIvVK7XrveC7guVRzGI9OUswSR1wwrjjiQr/J9h2kboJfmw+f24LyMP29MpMuI
-         mcZk/czFA8dNA==
-Message-ID: <7bb470fa70ff5944b7b9b82ac17d759819bccdf2.camel@kernel.org>
-Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Tue, 06 Jun 2023 12:39:44 +0300
-In-Reply-To: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
-References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1-0ubuntu1 
+        s=k20201202; t=1686049219;
+        bh=FJZBvU9mZ929InzbREOPQybjQtP4GSxypUKiLaiGPYY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=f8YppWGM9pkCcQiw8BokRT2JY3X69vuGpmvJMhjP7v+Li0/uaE71ySscWjIpuV4RK
+         AhoN9TUo3jQwzL677mAtiESDt/zi+B7hK8acfqOVU7toT0lPBZ6ZTbE8rAC7Qru+7w
+         Wfffy+NLgnq8GzQJSBe8lBylVcGAbZdNjhFbKUdl1xQn9JD8FU9OQa0EZFg3/HeiJ5
+         j6BqlGeR+vNLo2nINfnlZ3o9q5CeXDbQGNeBFcsnEjUBInrraE3iVbxBLIfbcN8qtH
+         w0aeW0AUbZTwPHkcZEio7sxGoGumfZq9jkJi1Vc/KY9RusvNRYnDssU/50OOTXFz45
+         jE4m/lBQ2hP5g==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2b1c30a1653so32320511fa.2;
+        Tue, 06 Jun 2023 04:00:18 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwf+WejIx8A98qzFziX1i7ixfFrpJ1tUJMMD0ZtxtncUwIvlGgg
+        vVQ+Zp7RYCNatw36xwBVFIn9uGYLUEi30dG3MjQ=
+X-Google-Smtp-Source: ACHHUZ563CmkIVh5K78BzyBEHDhqyYmtPZjw56PYzfIh3cc6Z/kEJrshyqqwF2nJo0HFFVkgYROpAOqSLHtjsHRwShg=
+X-Received: by 2002:a2e:b16f:0:b0:2ad:99dd:de07 with SMTP id
+ a15-20020a2eb16f000000b002ad99ddde07mr985836ljm.16.1686049216890; Tue, 06 Jun
+ 2023 04:00:16 -0700 (PDT)
 MIME-Version: 1.0
+References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
+ <CAHk-=wj4S0t5RnJQmF_wYwv+oMTKggwdLnrA9D1uMNKq4H4byw@mail.gmail.com>
+ <CAHk-=wgCUzRNTg4fC8DF=UFnznK0M=mNUBDcsnLt7D4+HP2_1Q@mail.gmail.com> <ZH2hgrV6po9dkxi+@gondor.apana.org.au>
+In-Reply-To: <ZH2hgrV6po9dkxi+@gondor.apana.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 6 Jun 2023 13:00:05 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFvpcKVQ2askwh-ahDRyjtN8MerjDJJBBMiTBZ1CSfZ9w@mail.gmail.com>
+Message-ID: <CAMj1kXFvpcKVQ2askwh-ahDRyjtN8MerjDJJBBMiTBZ1CSfZ9w@mail.gmail.com>
+Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        David Howells <dhowells@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>, davem@davemloft.net,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,112 +75,41 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, 2023-05-28 at 23:42 +0000, Chris Packham wrote:
-> Hi,
->=20
-> We have an embedded product with an Infineon SLM9670 TPM. After updating=
-=20
-> to a newer LTS kernel version we started seeing the following warning at=
-=20
-> boot.
->=20
-> [=C2=A0=C2=A0=C2=A0 4.741025] ------------[ cut here ]------------
-> [=C2=A0=C2=A0=C2=A0 4.749894] irq 38 handler tis_int_handler+0x0/0x154 en=
-abled interrupts
-> [=C2=A0=C2=A0=C2=A0 4.756555] WARNING: CPU: 0 PID: 0 at kernel/irq/handle=
-.c:159=20
-> __handle_irq_event_percpu+0xf4/0x180
-> [=C2=A0=C2=A0=C2=A0 4.765557] Modules linked in:
-> [=C2=A0=C2=A0=C2=A0 4.768626] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5=
-.15.113 #1
-> [=C2=A0=C2=A0=C2=A0 4.774747] Hardware name: Allied Telesis x250-18XS (DT=
-)
-> [=C2=A0=C2=A0=C2=A0 4.780080] pstate: 60000005 (nZCv daif -PAN -UAO -TCO =
--DIT -SSBS=20
-> BTYPE=3D--)
-> [=C2=A0=C2=A0=C2=A0 4.787072] pc : __handle_irq_event_percpu+0xf4/0x180
-> [=C2=A0=C2=A0=C2=A0 4.792146] lr : __handle_irq_event_percpu+0xf4/0x180
-> [=C2=A0=C2=A0=C2=A0 4.797220] sp : ffff800008003e40
-> [=C2=A0=C2=A0=C2=A0 4.800547] x29: ffff800008003e40 x28: ffff8000093951c0=
- x27:=20
-> ffff80000902a9b8
-> [=C2=A0=C2=A0=C2=A0 4.807716] x26: ffff800008fe8d28 x25: ffff8000094a62bd=
- x24:=20
-> ffff000001b92400
-> [=C2=A0=C2=A0=C2=A0 4.814885] x23: 0000000000000026 x22: ffff800008003ec4=
- x21:=20
-> 0000000000000000
-> [=C2=A0=C2=A0=C2=A0 4.822053] x20: 0000000000000001 x19: ffff000002381200=
- x18:=20
-> ffffffffffffffff
-> [=C2=A0=C2=A0=C2=A0 4.829222] x17: ffff800076962000 x16: ffff800008000000=
- x15:=20
-> ffff800088003b57
-> [=C2=A0=C2=A0=C2=A0 4.836390] x14: 0000000000000000 x13: ffff8000093a5078=
- x12:=20
-> 000000000000035d
-> [=C2=A0=C2=A0=C2=A0 4.843558] x11: 000000000000011f x10: ffff8000093a5078=
- x9 :=20
-> ffff8000093a5078
-> [=C2=A0=C2=A0=C2=A0 4.850727] x8 : 00000000ffffefff x7 : ffff8000093fd078=
- x6 :=20
-> ffff8000093fd078
-> [=C2=A0=C2=A0=C2=A0 4.857895] x5 : 000000000000bff4 x4 : 0000000000000000=
- x3 :=20
-> 0000000000000000
-> [=C2=A0=C2=A0=C2=A0 4.865062] x2 : 0000000000000000 x1 : 0000000000000000=
- x0 :=20
-> ffff8000093951c0
-> [=C2=A0=C2=A0=C2=A0 4.872230] Call trace:
-> [=C2=A0=C2=A0=C2=A0 4.874686]=C2=A0 __handle_irq_event_percpu+0xf4/0x180
-> [=C2=A0=C2=A0=C2=A0 4.879411]=C2=A0 handle_irq_event+0x64/0xec
-> [=C2=A0=C2=A0=C2=A0 4.883264]=C2=A0 handle_level_irq+0xc0/0x1b0
-> [=C2=A0=C2=A0=C2=A0 4.887202]=C2=A0 generic_handle_irq+0x30/0x50
-> [=C2=A0=C2=A0=C2=A0 4.891229]=C2=A0 mvebu_gpio_irq_handler+0x11c/0x2a0
-> [=C2=A0=C2=A0=C2=A0 4.895780]=C2=A0 handle_domain_irq+0x60/0x90
-> [=C2=A0=C2=A0=C2=A0 4.899720]=C2=A0 gic_handle_irq+0x4c/0xd0
-> [=C2=A0=C2=A0=C2=A0 4.903398]=C2=A0 call_on_irq_stack+0x20/0x4c
-> [=C2=A0=C2=A0=C2=A0 4.907338]=C2=A0 do_interrupt_handler+0x54/0x60
-> [=C2=A0=C2=A0=C2=A0 4.911538]=C2=A0 el1_interrupt+0x30/0x80
-> [=C2=A0=C2=A0=C2=A0 4.915130]=C2=A0 el1h_64_irq_handler+0x18/0x24
-> [=C2=A0=C2=A0=C2=A0 4.919244]=C2=A0 el1h_64_irq+0x78/0x7c
-> [=C2=A0=C2=A0=C2=A0 4.922659]=C2=A0 arch_cpu_idle+0x18/0x2c
-> [=C2=A0=C2=A0=C2=A0 4.926249]=C2=A0 do_idle+0xc4/0x150
-> [=C2=A0=C2=A0=C2=A0 4.929404]=C2=A0 cpu_startup_entry+0x28/0x60
-> [=C2=A0=C2=A0=C2=A0 4.933343]=C2=A0 rest_init+0xe4/0xf4
-> [=C2=A0=C2=A0=C2=A0 4.936584]=C2=A0 arch_call_rest_init+0x10/0x1c
-> [=C2=A0=C2=A0=C2=A0 4.940699]=C2=A0 start_kernel+0x600/0x640
-> [=C2=A0=C2=A0=C2=A0 4.944375]=C2=A0 __primary_switched+0xbc/0xc4
-> [=C2=A0=C2=A0=C2=A0 4.948402] ---[ end trace 940193047b35b311 ]---
->=20
-> Initially I dismissed this as a warning that would probably be cleaned=
-=20
-> up when we did more work on the TPM support for our product but we also=
-=20
-> seem to be getting some new i2c issues and possibly a kernel stack=20
-> corruption that we've conflated with this TPM warning.
+On Mon, 5 Jun 2023 at 10:49, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Fri, Jun 02, 2023 at 08:02:23PM -0400, Linus Torvalds wrote:
+> >
+> > I absolutely abhor the crypto interfaces. They all seem designed for
+> > that "external DMA engine" case that seems so horrendously pointless
+> > and slow.  In practice so few of them are that, and we have all those
+> > optimized routines for doing it all on the CPU - but have in the
+> > meantime wasted all that time and effort into copying everything,
+> > turning simple buffers into sg-bufs etc etc. The amount of indirection
+> > and "set this state in the state machine" is just nasty, and this
+> > seems to all be a prime example of it all. With some of it then
+> > randomly going through some kthread too.
+>
+> You're right.  Originally SG lists were used as the majority of
+> our input came from network packets, in the form of skb's.  They
+> are easily translated into SG lists.  This is still somewhat the
+> case for parts of the Crypto API (e.g., skcipher and ahash).
+>
+> However, for akcipher the only user of the underlying API is the
+> file in question so I absolutely agree that forcing it to go through
+> an SG list is just wrong.
+>
+> I'll change the underlying akcipher interface to take pointers
+> instead and hide the SG list stuff (along with the copying) inside
+> API.
+>
 
-Hi, sorry for late response. I've been moving my (home) office to
-a different location during last couple of weeks, and email has been
-piling up.
+Could we do the same for the compression API? This is a major pain as
+well, and results (on my 128-core workstation) in 32 MiB permanently
+tied up in scratch buffers in the scomp-to-acomp adaptation layer
+because most of the underlying implementations are compression
+libraries operating on plain virtual addresses, and so the
+scatterlists needs to be copied into a buffer and back to perform the
+actual transformation.
 
-What does dmidecode give you?
-
-More specific, I'm interested on DMI type 43:
-
-$ sudo dmidecode -t 43
-# dmidecode 3.4
-Getting SMBIOS data from sysfs.
-SMBIOS 3.4.0 present.
-
-Handle 0x004D, DMI type 43, 31 bytes
-TPM Device
-	Vendor ID: INTC
-	Specification Version: 2.0
-	Firmware Revision: 600.18
-	Description: INTEL
-	Characteristics:
-		Family configurable via platform software support
-	OEM-specific Information: 0x00000000
-
-BR, Jarkko
+The only user user of the async compression interface is zswap, but it
+blocks on the completion so it is actually synchronous as well.
