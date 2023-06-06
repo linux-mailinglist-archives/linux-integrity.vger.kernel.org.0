@@ -2,98 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155A27247D6
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jun 2023 17:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2907247E1
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jun 2023 17:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237854AbjFFPe1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Jun 2023 11:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
+        id S238299AbjFFPft (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Jun 2023 11:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237951AbjFFPeY (ORCPT
+        with ESMTP id S237693AbjFFPfs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:34:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36A510FB;
-        Tue,  6 Jun 2023 08:34:21 -0700 (PDT)
+        Tue, 6 Jun 2023 11:35:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1448A6;
+        Tue,  6 Jun 2023 08:35:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70E9A62FFF;
-        Tue,  6 Jun 2023 15:34:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96738C433EF;
-        Tue,  6 Jun 2023 15:34:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 673006350F;
+        Tue,  6 Jun 2023 15:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64CD9C4339B;
+        Tue,  6 Jun 2023 15:35:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686065660;
-        bh=FIBx38UvitOwB7dOa2hrmXarQRDdRvqYPxCX+aT0u0g=;
-        h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-        b=PR8lBP/9TFiRYT3wR3bALbpa+xhSUMdnDIvAfVFU9AvivYrZ7ealChxFaJ93oVJWk
-         eKg7uifDugGiHW2eWSUpOe1nxSB5G+ghpleqz74bixZDfG1R7SD61dI2SQ6qz4vl6R
-         tt8wmfTMaCd2sn5pxM98QfkXwxR7InOr0A+3FzFyPR21uZfWGs47XActwXn7zc1JYV
-         bMAD5I1zrVXKkmzmUCwFNMTRzSdFdP3hUeRZuQYd7zpQU4LyLePRQfJlvf9Wy6WZ0t
-         EH+5+S+mEPR3aUDswGj8WerHfPvQ81oj94DpN8CUwRbQHiuWyuY2rcAO+9kbzZsKyo
-         adRg07I3MPqwg==
+        s=k20201202; t=1686065746;
+        bh=QX2hJhXvR07WNQuH/Vadqzi2C83Wm8fOdLqApveKaFM=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=WH/054Ab6Lm8tTx35Ey6+bvToXiLSjhUlgmfrfGPs+sh3SHvQ8rPVsy2C2EYJWsBY
+         uHvw8chkYWWtVxyI0hStWsY3L1SBZfp5LNqKoxQBhqgRI1KkVUwnDd+QNX5vwZu55j
+         Z1SuPhWeEW5eVFaI1LJ9pYXfcPCSIWJwScAkA/cdzso7laLXF7voSBVmId8xiBdSJM
+         U/z6TLam9tCe8/cmTyUG7RMYbgsl+aZoKJLdwqh7aQci5xLvOqf8VOoTPS+ADR2A1V
+         jFe5g9PMwnxVzfi0ToHNpmamYza/DuCflsCRIZg67JdKuBqeSZCDmpzuDVYX0tDxPp
+         V/4SZKNCHy31Q==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 06 Jun 2023 18:34:17 +0300
-Message-Id: <CT5OE5VZA7D7.3B7C6CK27JIK1@suppilovahvero>
-To:     "James Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Stefan Berger" <stefanb@linux.ibm.com>,
-        <linux-integrity@vger.kernel.org>
-Cc:     <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
-Subject: Re: [PATCH v4 06/13] tpm: add buffer function to point to returned
- parameters
+Date:   Tue, 06 Jun 2023 18:35:41 +0300
+Message-Id: <CT5OF8SU9ZVZ.2HMX7ADFOL8LG@suppilovahvero>
+Cc:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Roberto Sassu" <roberto.sassu@huawei.com>
+Subject: Re: [PATCH 2/2] ima: Fix build warnings
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Roberto Sassu" <roberto.sassu@huaweicloud.com>,
+        <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
 X-Mailer: aerc 0.15.2-33-gedd4752268b2
-References: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
- <20230403214003.32093-7-James.Bottomley@HansenPartnership.com>
- <d5c86f6f-6854-c649-d2a9-8090cc7d74cd@linux.ibm.com>
- <CSCLXUWIMPCG.D6K372YA1HMK@suppilovahvero>
- <be5c726340a32914d0f79b38b015c0a8ea4a7780.camel@HansenPartnership.com>
-In-Reply-To: <be5c726340a32914d0f79b38b015c0a8ea4a7780.camel@HansenPartnership.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230606074113.2120632-1-roberto.sassu@huaweicloud.com>
+ <20230606074113.2120632-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230606074113.2120632-2-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Jun 6, 2023 at 5:09 AM EEST, James Bottomley wrote:
-> On Wed, 2023-05-03 at 14:31 +0300, Jarkko Sakkinen wrote:
-> > On Tue May 2, 2023 at 5:09 PM EEST, Stefan Berger wrote:
-> > >=20
-> > >=20
-> > > On 4/3/23 17:39, James Bottomley wrote:
-> > > > Introducing encryption sessions changes where the return
-> > > > parameters
-> >=20
-> > s/Introducing/Introduce/
-> >=20
-> > Commit messages should always be in the imperative form.
+On Tue Jun 6, 2023 at 10:41 AM EEST, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 >
-> "Introducing" in this sentence is a gerund (verb used as a noun); it
-> can't be changed to an imperative because it's not being used as a
-> direct verb in the sentence (that honour goes to "changes", which also
-> can't be made imperative because the gerund is the subject).  I can
-> reword it like this if you want the sentence to begin with an
-> imperative (and get rid of the gerund before Linus bites my head off
-> again for using obscure grammatical constructions):
+> Fix build warnings (function parameters description) for
+> ima_collect_modsig(), ima_match_policy() and ima_parse_add_rule().
 >
-> "Replace all instances of &buf.data[TPM_HEADER_SIZE] with a new
-> function tpm_buf_parameters() because encryption sessions change
-> where the return parameters are located in the buffer since if a
-> return session is present they're 4 bytes beyond the header with those
-> 4 bytes giving the parameter length.  If there is no return session,
-> then they're in the usual place immediately after the header."
+> Fixes: 15588227e086 ("ima: Collect modsig")
+> Fixes: 2fe5d6def167 ("ima: integrity appraisal extension")
+> Fixes: 4af4662fa4a9 ("integrity: IMA policy")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/integrity/ima/ima_modsig.c | 3 +++
+>  security/integrity/ima/ima_policy.c | 3 ++-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima=
+/ima_modsig.c
+> index fb25723c65b..3e7bee30080 100644
+> --- a/security/integrity/ima/ima_modsig.c
+> +++ b/security/integrity/ima/ima_modsig.c
+> @@ -89,6 +89,9 @@ int ima_read_modsig(enum ima_hooks func, const void *bu=
+f, loff_t buf_len,
+> =20
+>  /**
+>   * ima_collect_modsig - Calculate the file hash without the appended sig=
+nature.
+> + * @modsig: parsed module signature
+> + * @buf: data to verify the signature on
+> + * @size: data size
+>   *
+>   * Since the modsig is part of the file contents, the hash used in its s=
+ignature
+>   * isn't the same one ordinarily calculated by IMA. Therefore PKCS7 code
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima=
+/ima_policy.c
+> index 3ca8b7348c2..c9b3bd8f1bb 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -721,6 +721,7 @@ static int get_subaction(struct ima_rule_entry *rule,=
+ enum ima_hooks func)
+>   * @secid: LSM secid of the task to be validated
+>   * @func: IMA hook identifier
+>   * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC=
+)
+> + * @flags: IMA actions to consider (e.g. IMA_MEASURE | IMA_APPRAISE)
+>   * @pcr: set the pcr to extend
+>   * @template_desc: the template that should be used for this rule
+>   * @func_data: func specific data, may be NULL
+> @@ -1915,7 +1916,7 @@ static int ima_parse_rule(char *rule, struct ima_ru=
+le_entry *entry)
+> =20
+>  /**
+>   * ima_parse_add_rule - add a rule to ima_policy_rules
+> - * @rule - ima measurement policy rule
+> + * @rule: ima measurement policy rule
+>   *
+>   * Avoid locking by allowing just one writer at a time in ima_write_poli=
+cy()
+>   * Returns the length of the rule parsed, an error code on failure
 
-I'm planning to write a small (RFC) patch set just for the tpm_buf
-portion because it is the part that does not work for me. What builds
-on top of that looks decent, or will converge to decent.
-
-I have some ideas that have building up in my head so I'll just dump
-that as source code and see if that works for you (or not).
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
+
