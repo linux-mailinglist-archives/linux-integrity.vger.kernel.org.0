@@ -2,58 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFD87280F9
-	for <lists+linux-integrity@lfdr.de>; Thu,  8 Jun 2023 15:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5926F728208
+	for <lists+linux-integrity@lfdr.de>; Thu,  8 Jun 2023 16:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235361AbjFHNQZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 8 Jun 2023 09:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S233740AbjFHOAV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 8 Jun 2023 10:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236223AbjFHNQZ (ORCPT
+        with ESMTP id S235130AbjFHOAU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:16:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1736126B2
-        for <linux-integrity@vger.kernel.org>; Thu,  8 Jun 2023 06:16:23 -0700 (PDT)
+        Thu, 8 Jun 2023 10:00:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A9726AB;
+        Thu,  8 Jun 2023 07:00:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9379B61272
-        for <linux-integrity@vger.kernel.org>; Thu,  8 Jun 2023 13:16:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC7D8C433EF;
-        Thu,  8 Jun 2023 13:16:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E97564C79;
+        Thu,  8 Jun 2023 14:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B75C433D2;
+        Thu,  8 Jun 2023 14:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686230183;
-        bh=FvlFmDL5KCFEx9RvnVpnGFUOv20bbkmDzfuLyHmyB74=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=O32Exwy5L6D1wCaregDWkVfkcIieWz/F539ZmalzqXD2OlkpaOHkKLhbUs/uu1ntM
-         4UMzjKV+ChnS/yGysMukc7xH/wxjVkeRjjgLHS2UHPm85UJFKJxoNVaTOVn8ibHr+5
-         S0APT8iSF+LXtnrZMjqGxCqECpwHR/6Jccnwbko54Cn2euX5NraD3fz/FTGZAdartT
-         kFNLKQGs3MWp2+SOjiSw51SdAbG3waqkhx6W4gACUeGDpb5noEmuzDUmBr/jxI4QKj
-         Nv9oZi61lx7fNdRq4HUiGPsGyp9PQ3eQGHlu3OFLJZSvZYNpnnEZnCnIVqmhA3i0S2
-         K06GRvzSXB0NQ==
+        s=k20201202; t=1686232818;
+        bh=9D5wCgWDsvqhe68Ss5JsgTkkHCuqZ4CotewKlUNqRh8=;
+        h=Date:To:Subject:From:References:In-Reply-To:From;
+        b=uRKfV27O7tVqQ0KiHeplwVmB9eb95iwq9BEBdoCrOTlDhELHYL4389US+pdKASaJe
+         VuDh8fHKOcEGZ4Yn4sCq+3Tbsyhe2qYDN9djdvr/UcwEowTJ8GG/pwvGU7G5rOZhmq
+         Ai/hFBNotrzUaz8si1BnUw1j5/QWSATivRlk96L23PB7nlU4GaYu2GhURNEiOV6+e4
+         8U0c3EI62MfKTQSZMrfzlzykisBJzSTTi1qRnRu6nQyYzbqJ24zZYM6Vkb34j6zABW
+         mlYwlzun/35gBzkx844cg2SlTPRUHyrEBSD8+s1vl+9yejYBcGqsCv0epIZTk6f4VV
+         btJEMKdeuShIg==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 08 Jun 2023 16:16:18 +0300
-Message-Id: <CT7APLUB2CWF.1ZGTUWOTPQGQH@suppilovahvero>
-Cc:     "Andrew Donnellan" <ajd@linux.ibm.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Russell Currey" <ruscur@russell.cc>,
-        "Nageswara R Sastry" <rnsastry@linux.ibm.com>,
-        "George Wilson" <gcwilson@linux.ibm.com>, <stable@vger.kenrnel.org>
-Subject: Re: [PATCH v2] security/integrity: fix pointer to ESL data and its
- size on pseries
+Date:   Thu, 08 Jun 2023 17:00:15 +0300
+Message-Id: <CT7BN97ICGN7.37I0H14NKKMYR@suppilovahvero>
+To:     "Alexander Steffen" <Alexander.Steffen@infineon.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/4] tpm_tis: Use responseRetry to recover from data
+ transfer errors
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Nayna Jain" <nayna@linux.ibm.com>,
-        "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-integrity" <linux-integrity@vger.kernel.org>
 X-Mailer: aerc 0.14.0
-References: <20230608120444.382527-1-nayna@linux.ibm.com>
-In-Reply-To: <20230608120444.382527-1-nayna@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230605175959.2131-1-Alexander.Steffen@infineon.com>
+ <20230605175959.2131-4-Alexander.Steffen@infineon.com>
+ <CT5VOWDNIK5S.1549VUD23JWWB@suppilovahvero>
+ <34f01f17-3091-0ce2-f0c3-b0cd25ea61ce@infineon.com>
+In-Reply-To: <34f01f17-3091-0ce2-f0c3-b0cd25ea61ce@infineon.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,114 +58,77 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu Jun 8, 2023 at 3:04 PM EEST, Nayna Jain wrote:
-> On PowerVM guest, variable data is prefixed with 8 bytes of timestamp.
-> Extract ESL by stripping off the timestamp before passing to ESL parser.
+On Wed Jun 7, 2023 at 8:14 PM EEST, Alexander Steffen wrote:
+> >> -     if (status & TPM_STS_DATA_AVAIL) {      /* retry? */
+> >> +     if (status & TPM_STS_DATA_AVAIL) {
+> >=20
+> > Please remove (no-op).
 >
-> Fixes: 4b3e71e9a34c ("integrity/powerpc: Support loading keys from PLPKS"=
-)
-> Cc: stable@vger.kenrnel.org # v6.3
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> ---
-> Changelog:
-> v2: Fixed feedback from Jarkko
->       * added CC to stable
->       * moved *data declaration to same line as *db,*dbx
->     Renamed extract_data() macro to extract_esl() for clarity
->  .../integrity/platform_certs/load_powerpc.c   | 40 ++++++++++++-------
->  1 file changed, 26 insertions(+), 14 deletions(-)
->
-> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/=
-integrity/platform_certs/load_powerpc.c
-> index b9de70b90826..170789dc63d2 100644
-> --- a/security/integrity/platform_certs/load_powerpc.c
-> +++ b/security/integrity/platform_certs/load_powerpc.c
-> @@ -15,6 +15,9 @@
->  #include "keyring_handler.h"
->  #include "../integrity.h"
-> =20
-> +#define extract_esl(db, data, size, offset)	\
-> +	do { db =3D data + offset; size =3D size - offset; } while (0)
-> +
->  /*
->   * Get a certificate list blob from the named secure variable.
->   *
-> @@ -55,8 +58,9 @@ static __init void *get_cert_list(u8 *key, unsigned lon=
-g keylen, u64 *size)
->   */
->  static int __init load_powerpc_certs(void)
->  {
-> -	void *db =3D NULL, *dbx =3D NULL;
-> -	u64 dbsize =3D 0, dbxsize =3D 0;
-> +	void *db =3D NULL, *dbx =3D NULL, *data =3D NULL;
-> +	u64 dsize =3D 0;
-> +	u64 offset =3D 0;
->  	int rc =3D 0;
->  	ssize_t len;
->  	char buf[32];
-> @@ -74,38 +78,46 @@ static int __init load_powerpc_certs(void)
->  		return -ENODEV;
->  	}
-> =20
-> +	if (strcmp("ibm,plpks-sb-v1", buf) =3D=3D 0)
-> +		/* PLPKS authenticated variables ESL data is prefixed with 8 bytes of =
-timestamp */
-> +		offset =3D 8;
-> +
->  	/*
->  	 * Get db, and dbx. They might not exist, so it isn't an error if we
->  	 * can't get them.
->  	 */
-> -	db =3D get_cert_list("db", 3, &dbsize);
-> -	if (!db) {
-> +	data =3D get_cert_list("db", 3, &dsize);
-> +	if (!data) {
->  		pr_info("Couldn't get db list from firmware\n");
-> -	} else if (IS_ERR(db)) {
-> -		rc =3D PTR_ERR(db);
-> +	} else if (IS_ERR(data)) {
-> +		rc =3D PTR_ERR(data);
->  		pr_err("Error reading db from firmware: %d\n", rc);
->  		return rc;
->  	} else {
-> -		rc =3D parse_efi_signature_list("powerpc:db", db, dbsize,
-> +		extract_esl(db, data, dsize, offset);
-> +
-> +		rc =3D parse_efi_signature_list("powerpc:db", db, dsize,
->  					      get_handler_for_db);
->  		if (rc)
->  			pr_err("Couldn't parse db signatures: %d\n", rc);
-> -		kfree(db);
-> +		kfree(data);
->  	}
-> =20
-> -	dbx =3D get_cert_list("dbx", 4,  &dbxsize);
-> -	if (!dbx) {
-> +	data =3D get_cert_list("dbx", 4,  &dsize);
-> +	if (!data) {
->  		pr_info("Couldn't get dbx list from firmware\n");
-> -	} else if (IS_ERR(dbx)) {
-> -		rc =3D PTR_ERR(dbx);
-> +	} else if (IS_ERR(data)) {
-> +		rc =3D PTR_ERR(data);
->  		pr_err("Error reading dbx from firmware: %d\n", rc);
->  		return rc;
->  	} else {
-> -		rc =3D parse_efi_signature_list("powerpc:dbx", dbx, dbxsize,
-> +		extract_esl(dbx, data, dsize, offset);
-> +
-> +		rc =3D parse_efi_signature_list("powerpc:dbx", dbx, dsize,
->  					      get_handler_for_dbx);
->  		if (rc)
->  			pr_err("Couldn't parse dbx signatures: %d\n", rc);
-> -		kfree(dbx);
-> +		kfree(data);
->  	}
-> =20
->  	return rc;
-> --=20
-> 2.31.1
+> You mean I shouldn't change the line and leave the comment in? To me it=
+=20
+> looked like a very brief TODO comment "should we retry here?", and since=
+=20
+> with this change it now actually does retry, I removed it.
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+Right, ok, point taken, you can keep it.
+
+> >>                dev_err(&chip->dev, "Error left over data\n");
+> >>                size =3D -EIO;
+> >>                goto out;
+> >> @@ -396,10 +391,39 @@ static int tpm_tis_recv(struct tpm_chip *chip, u=
+8 *buf, size_t count)
+> >>        }
+> >>
+> >>   out:
+> >> -     tpm_tis_ready(chip);
+> >>        return size;
+> >>   }
+> >>
+> >> +static int tpm_tis_recv_with_retries(struct tpm_chip *chip, u8 *buf, =
+size_t count)
+> >=20
+> > This *substitutes* the curent tpm_tis_recv(), right?
+> >=20
+> > So it *is* tpm_tis_recv(), i.e. no renames thank you :-)
+> >=20
+> >> +{
+> >> +     struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+> >> +     unsigned int try;
+> >> +     int rc =3D 0;
+> >> +
+> >> +     if (count < TPM_HEADER_SIZE) {
+> >> +             rc =3D -EIO;
+> >> +             goto out;
+> >> +     }
+> >> +
+> >> +     for (try =3D 0; try < TPM_RETRY; try++) {
+> >> +             rc =3D tpm_tis_recv(chip, buf, count);
+> >=20
+> > I would rename single shot tpm_tis_recv() as tpm_tis_try_recv().
+> >=20
+> >> +
+> >> +             if (rc =3D=3D -EIO) {
+> >> +                     /* Data transfer errors, indicated by EIO, can b=
+e
+> >> +                      * recovered by rereading the response.
+> >> +                      */
+> >> +                     tpm_tis_write8(priv, TPM_STS(priv->locality),
+> >> +                                    TPM_STS_RESPONSE_RETRY);
+> >> +             } else {
+> >> +                     break;
+> >> +             }
+> >=20
+> > And if this should really be managed inside tpm_tis_try_recv(), and
+> > then return zero (as the code block consumes the return value).
+>
+> What exactly should be done in tpm_tis_try_recv()? It could set=20
+> TPM_STS_RESPONSE_RETRY, but then it would still need to return an error=
+=20
+> code, so that this loop knows whether to call it again or not.
+
+So my thinking was to:
+
+- Rename tpm_tis_recv() as tpm_tis_try_recv()
+- Rename this new function as tpm_tis_recv().
 
 BR, Jarkko
