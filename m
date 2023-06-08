@@ -2,174 +2,192 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2245F727232
-	for <lists+linux-integrity@lfdr.de>; Thu,  8 Jun 2023 00:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6D3727F9A
+	for <lists+linux-integrity@lfdr.de>; Thu,  8 Jun 2023 14:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbjFGWzD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 7 Jun 2023 18:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
+        id S235638AbjFHMFQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 8 Jun 2023 08:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbjFGWzC (ORCPT
+        with ESMTP id S235670AbjFHMFQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 7 Jun 2023 18:55:02 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887A72695
-        for <linux-integrity@vger.kernel.org>; Wed,  7 Jun 2023 15:54:55 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9788faaca2dso3794966b.0
-        for <linux-integrity@vger.kernel.org>; Wed, 07 Jun 2023 15:54:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686178493; x=1688770493;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=ZyieX1JAoOA7e6VkLdF85cS2BY4cQvDbL6o+xYaiiDE75fbNNMeoWverOzT52D4k2S
-         UYxoSJ2sm5xGBh8kGc5D0kAtYSbrkHKN7yaUsJGKRZoZXYrBXYeNkJg7vpsqI0ZjAmch
-         3x4lCBRFtDEICvCdIQ19CxXIxIMp7RqH7HgNNtZzrb+GNtp7UmkWpCYK0Mqw+TGqa2DT
-         Wvk1MhQkef7IdoZAN3IJWtskq7+eTMruF3Uq3kN0Wjfw07kba3wtEsWoMqE1Zay+Onj3
-         n2iJopnA3FIssXaBEX6Uelz+337ycjqTLZUyQ07MpeQf4qzAhsJurfOMFWTBWT4Ke8x2
-         t7lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686178493; x=1688770493;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=IRJUFsgBeiKvfOcRfREAKT3O1780ApstQlAzqp7ES76m5rRTKLdiFNRxpKPRp3ASwt
-         vrTKZeqTVylEhHeMXMCz93/Ouqe4gIeO7OOxjSbDXuW5OXIK9XeDfmiBcoojQmBh6ZrO
-         QE58+3kUhbYdWr8NU8zTzl1f7PR4Rx5YwIKS3ylmxoErTECJp4aqfEvS7rKjNY9wxUIZ
-         jWnGJB3I5pHNg8dPMm16aNENLg/gSXUFmpH7b3b7bOxaxwTd5TwX5vn+X+N6tZO89KO/
-         yPKjOT7sjjbYlwx7GP5LqTwHr8Jql9TscALq1npvoOLPXbaKXogfj5Qcty4d422iNZN/
-         6NHg==
-X-Gm-Message-State: AC+VfDypKoEVp3uR2sSKD6grDjA0trLZzSV4/e9Ko71jEQXUJe+5dJXB
-        2jKfncoU64cdSPCirHHwtkG/rWCw7OsIeQNwmbw=
-X-Google-Smtp-Source: ACHHUZ5q9v5E8VuN7LGrTh1boUYVANIIUnJnBwlK4YNL8XVT+z7GalrAexguq0b795Op+2qoCUEoHnMN8sFXq0M0ebg=
-X-Received: by 2002:a17:907:8a15:b0:96f:d154:54f7 with SMTP id
- sc21-20020a1709078a1500b0096fd15454f7mr7113590ejc.42.1686178492570; Wed, 07
- Jun 2023 15:54:52 -0700 (PDT)
+        Thu, 8 Jun 2023 08:05:16 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CF71FDB
+        for <linux-integrity@vger.kernel.org>; Thu,  8 Jun 2023 05:05:11 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 358BeBeC031269;
+        Thu, 8 Jun 2023 12:04:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=H+37Lslye+qIw9vFX9ZvVCKFhtWRKZLlcWZxRGx/5SE=;
+ b=Eh+vUi5g5eELGlG/ObbIysChyXatjY5uMK9ui3bPqT9NWBCrzBCjUjGvTn9V7CAxMCaW
+ Lk35Y6ueRcQnvu9mu0oWa3GM4lr0yRWB9iYsWzYnx9xlPO5iV3+AamNQ96V0gyCRoNa+
+ 2E4LcKfhpoGPLAdNz+JfdiyekQsfAkP2/p8ydiD1fSyLTN/c9slxVN31TZRhUKb2CGB0
+ aeKYFUmedG5/LSy7vjq0b7tJw8lT5cyirvz1ljEE6dC5Y4tmHI51OxI4dX7J1fc57NSL
+ j7EhVPYlGAlS7W68Gsq0VbHvEWQEubPwNaW2fUYPmQmUDTNdYgIjRzLn8e0frMqlew0e yA== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r3dks9qfr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 12:04:56 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 358BdIn7021066;
+        Thu, 8 Jun 2023 12:04:54 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3r2a790vay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 12:04:54 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 358C4oew12845800
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Jun 2023 12:04:51 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D1E652004F;
+        Thu,  8 Jun 2023 12:04:50 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B68220043;
+        Thu,  8 Jun 2023 12:04:48 +0000 (GMT)
+Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com (unknown [9.61.101.222])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  8 Jun 2023 12:04:48 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Cc:     Andrew Donnellan <ajd@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Russell Currey <ruscur@russell.cc>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>, stable@vger.kenrnel.org
+Subject: [PATCH v2] security/integrity: fix pointer to ESL data and its size on pseries
+Date:   Thu,  8 Jun 2023 08:04:44 -0400
+Message-Id: <20230608120444.382527-1-nayna@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
- 15:54:52 -0700 (PDT)
-Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
-From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
-        <successikolo@gmail.com>
-Date:   Wed, 7 Jun 2023 15:54:52 -0700
-Message-ID: <CADFNGJ8vkgORi1jPvvhP+FQnPCNqs4cr588+_a-ywDXpqf+qKA@mail.gmail.com>
-Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:631 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [successikolo[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DZl_F4kyxxumbfpRS0zEWpVOywuDRALL
+X-Proofpoint-GUID: DZl_F4kyxxumbfpRS0zEWpVOywuDRALL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_08,2023-06-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1011 phishscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306080104
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-UNITED NATION DEPUTY SECRETARY-GENERAL.
+On PowerVM guest, variable data is prefixed with 8 bytes of timestamp.
+Extract ESL by stripping off the timestamp before passing to ESL parser.
 
-This is to official inform you that we have been having meetings for
-the past three (3) weeks which ended two days ago with MR. JIM YONG
-KIM the world bank president and other seven continent presidents on
-the congress we treated on solution to scam victim problems.
+Fixes: 4b3e71e9a34c ("integrity/powerpc: Support loading keys from PLPKS")
+Cc: stable@vger.kenrnel.org # v6.3
+Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+---
+Changelog:
+v2: Fixed feedback from Jarkko
+      * added CC to stable
+      * moved *data declaration to same line as *db,*dbx
+    Renamed extract_data() macro to extract_esl() for clarity
+ .../integrity/platform_certs/load_powerpc.c   | 40 ++++++++++++-------
+ 1 file changed, 26 insertions(+), 14 deletions(-)
 
- Note: we have decided to contact you following the reports we
-received from anti-fraud international monitoring group your
-name/email has been submitted to us therefore the united nations have
-agreed to compensate you with the sum of (USD$ 1.5 Million) this
-compensation is also including international business that failed you
-in the past due to government problems etc.
+diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
+index b9de70b90826..170789dc63d2 100644
+--- a/security/integrity/platform_certs/load_powerpc.c
++++ b/security/integrity/platform_certs/load_powerpc.c
+@@ -15,6 +15,9 @@
+ #include "keyring_handler.h"
+ #include "../integrity.h"
+ 
++#define extract_esl(db, data, size, offset)	\
++	do { db = data + offset; size = size - offset; } while (0)
++
+ /*
+  * Get a certificate list blob from the named secure variable.
+  *
+@@ -55,8 +58,9 @@ static __init void *get_cert_list(u8 *key, unsigned long keylen, u64 *size)
+  */
+ static int __init load_powerpc_certs(void)
+ {
+-	void *db = NULL, *dbx = NULL;
+-	u64 dbsize = 0, dbxsize = 0;
++	void *db = NULL, *dbx = NULL, *data = NULL;
++	u64 dsize = 0;
++	u64 offset = 0;
+ 	int rc = 0;
+ 	ssize_t len;
+ 	char buf[32];
+@@ -74,38 +78,46 @@ static int __init load_powerpc_certs(void)
+ 		return -ENODEV;
+ 	}
+ 
++	if (strcmp("ibm,plpks-sb-v1", buf) == 0)
++		/* PLPKS authenticated variables ESL data is prefixed with 8 bytes of timestamp */
++		offset = 8;
++
+ 	/*
+ 	 * Get db, and dbx. They might not exist, so it isn't an error if we
+ 	 * can't get them.
+ 	 */
+-	db = get_cert_list("db", 3, &dbsize);
+-	if (!db) {
++	data = get_cert_list("db", 3, &dsize);
++	if (!data) {
+ 		pr_info("Couldn't get db list from firmware\n");
+-	} else if (IS_ERR(db)) {
+-		rc = PTR_ERR(db);
++	} else if (IS_ERR(data)) {
++		rc = PTR_ERR(data);
+ 		pr_err("Error reading db from firmware: %d\n", rc);
+ 		return rc;
+ 	} else {
+-		rc = parse_efi_signature_list("powerpc:db", db, dbsize,
++		extract_esl(db, data, dsize, offset);
++
++		rc = parse_efi_signature_list("powerpc:db", db, dsize,
+ 					      get_handler_for_db);
+ 		if (rc)
+ 			pr_err("Couldn't parse db signatures: %d\n", rc);
+-		kfree(db);
++		kfree(data);
+ 	}
+ 
+-	dbx = get_cert_list("dbx", 4,  &dbxsize);
+-	if (!dbx) {
++	data = get_cert_list("dbx", 4,  &dsize);
++	if (!data) {
+ 		pr_info("Couldn't get dbx list from firmware\n");
+-	} else if (IS_ERR(dbx)) {
+-		rc = PTR_ERR(dbx);
++	} else if (IS_ERR(data)) {
++		rc = PTR_ERR(data);
+ 		pr_err("Error reading dbx from firmware: %d\n", rc);
+ 		return rc;
+ 	} else {
+-		rc = parse_efi_signature_list("powerpc:dbx", dbx, dbxsize,
++		extract_esl(dbx, data, dsize, offset);
++
++		rc = parse_efi_signature_list("powerpc:dbx", dbx, dsize,
+ 					      get_handler_for_dbx);
+ 		if (rc)
+ 			pr_err("Couldn't parse dbx signatures: %d\n", rc);
+-		kfree(dbx);
++		kfree(data);
+ 	}
+ 
+ 	return rc;
+-- 
+2.31.1
 
- We have arranged your payment through our ATM Master Card and
-deposited it in DHL Office to deliver it to you which is the latest
-instruction from the World Bank president MR. JIM YONG KIM, For your
-information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
-he
-only money you will send to DHL office south Korea is
-($500). for security keeping fee, U.N coordinator already paid for
-others charges fees for delivery except the security keeping fee, the
-director of DHL refused to collect the security keeping fee from U.N
-coordinator, the Director of DHL office said that they don=E2=80=99t know
-exactly time you will contact them to reconfirm your details to avoid
-counting demur-rage that is why they refused collecting the ($500) .
-for security keeping fee.
-
- Therefore be advice to contact DHL Office agent south Korea. Rev:John
-Lee Tae-seok
-who is in position to deliver your ATM
-Master Card to your location address, contact DHL Office immediately
-with the bellow email & phone number as listed below.
-
- Contact name: John Lee Tae-seok
-
- Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
-
- read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Make sure you reconfirmed DHL Office your details ASAP as stated
-below to avoid wrong delivery.
-
- Your full name..........
-
- Home address:.........
-
- Your country...........
-
- Your city..............
-
- Telephone......
-
- Occupation:.......
-
- Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
-
- Let us know as soon as possible you receive your ATM MasterCard
-for proper verification.
-
- Regards,
-
- Mrs Vivian kakadu.
-
- DEPUTY SECRETARY-GENERAL (U.N)
