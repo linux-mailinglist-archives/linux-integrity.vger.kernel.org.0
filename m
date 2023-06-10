@@ -2,101 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7848D72AA2B
-	for <lists+linux-integrity@lfdr.de>; Sat, 10 Jun 2023 10:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B4272AAA6
+	for <lists+linux-integrity@lfdr.de>; Sat, 10 Jun 2023 11:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjFJIBj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 10 Jun 2023 04:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S229666AbjFJJZe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 10 Jun 2023 05:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjFJIBj (ORCPT
+        with ESMTP id S229649AbjFJJZd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 10 Jun 2023 04:01:39 -0400
-Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F67F1FDB;
-        Sat, 10 Jun 2023 01:01:38 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QdVWJ0GVGz9y7KF;
-        Sat, 10 Jun 2023 15:51:08 +0800 (CST)
-Received: from [10.81.219.229] (unknown [10.81.219.229])
-        by APP2 (Coremail) with SMTP id GxC2BwDHilG_LYRkHqEfAw--.38471S2;
-        Sat, 10 Jun 2023 09:01:14 +0100 (CET)
-Message-ID: <dca634f0-ca7d-1876-0702-6ecc194ac47d@huaweicloud.com>
-Date:   Sat, 10 Jun 2023 10:00:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v11 0/4] evm: Do HMAC of multiple per LSM xattrs for new
- inodes
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230603191518.1397490-1-roberto.sassu@huaweicloud.com>
- <CAHC9VhSzC0zV31XrEz06HKp=NNbz0XPT24ja0O1sZtNM_aXqHg@mail.gmail.com>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <CAHC9VhSzC0zV31XrEz06HKp=NNbz0XPT24ja0O1sZtNM_aXqHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDHilG_LYRkHqEfAw--.38471S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZw1DAw43Aw4Dtw4fAF4kXrb_yoWDZrbE9a
-        10yrZrCw45Xws7GF4aqr1YvrWkKFW8GF1jq3y5WrWay34rAan7AF4vkF4rZr4rJay3Z343
-        Cr9Iy34Sy3sFgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbsxYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI
-        62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
-        ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0x
-        ZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4qCKQAAsS
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,
-        RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Sat, 10 Jun 2023 05:25:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF816210D;
+        Sat, 10 Jun 2023 02:25:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 847BE601D9;
+        Sat, 10 Jun 2023 09:25:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78196C433D2;
+        Sat, 10 Jun 2023 09:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686389131;
+        bh=5ObCuzkHbQXY0iZOA2ZfL1NpOhXO7BEV89T0/ACabBA=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=bfG0JuaY7zTdbEpyw8U1wbFyeaeHptIrAWxa/VzFvUUkqO7LySZr9nSSFgXsVaE31
+         8vBKlFFXCuUQNcKzRqCQwYSw7sjzNL/WEdX0NXGy5yrHTkVTN2cIfMzQFRHfdbqpqX
+         oDoP3YtVXVaIHTQE50BUEN9tx8nVUgEsH5w4o4gKTM36LE0/6MTyXJnARRjKXLHIzU
+         4XOM7EFlBwi4flM8B2iSjgH0mKTxv6tetRXanPPgqsaBjzowpLtqkNeo7J118dZg+B
+         DwLD5jtNY/c0YL5uCnkcSQRrr9N4WaOEMDqucNSVIWerTeCL9RXmefNcbekTjcm4ef
+         GI5X8v5rPOHew==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 10 Jun 2023 12:25:25 +0300
+Message-Id: <CT8V1XE69DQ3.2JLQ9S20PK9OW@suppilovahvero>
+Subject: Re: [PATCH v9 2/4] tpm: of: Make of-tree specific function commonly
+ available
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Stefan Berger" <stefanb@linux.ibm.com>,
+        "Jerry Snitselaar" <jsnitsel@redhat.com>
+Cc:     <kexec@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <nayna@linux.ibm.com>,
+        <nasastry@in.ibm.com>, <mpe@ellerman.id.au>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Frank Rowand" <frowand.list@gmail.com>,
+        "Mimi Zohar" <zohar@linux.ibm.com>,
+        "Nageswara R Sastry" <rnsastry@linux.ibm.com>,
+        "Coiby Xu" <coxu@redhat.com>
+X-Mailer: aerc 0.14.0
+References: <20230418134409.177485-1-stefanb@linux.ibm.com>
+ <20230418134409.177485-3-stefanb@linux.ibm.com>
+ <e4dcxwp63uisirxwanjwrhzrnve45wqnxhijfp4oq274r4neco@v2btoy43ue5h>
+ <CT8BRJZS8RQU.9ICEA2UAFC7G@suppilovahvero>
+ <4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com>
+In-Reply-To: <4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/9/2023 10:05 PM, Paul Moore wrote:
-> On Sat, Jun 3, 2023 at 3:16 PM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
->>
->> From: Roberto Sassu <roberto.sassu@huawei.com>
->>
->> One of the major goals of LSM stacking is to run multiple LSMs side by side
->> without interfering with each other. The ultimate decision will depend on
->> individual LSM decision.
->>
->> Several changes need to be made to the LSM infrastructure to be able to
->> support that. This patch set tackles one of them: gives to each LSM the
->> ability to specify one or multiple xattrs to be set at inode creation
->> time and, at the same time, gives to EVM the ability to access all those
->> xattrs and calculate the HMAC on them ...
-> 
-> Thanks for sticking with this Roberto, I see a few
-> comments/suggestions on this patchset, but overall it is looking
-> pretty good; I'm hopeful we will be able to merge the next revision.
+On Fri Jun 9, 2023 at 9:49 PM EEST, Stefan Berger wrote:
+>
+>
+> On 6/9/23 14:18, Jarkko Sakkinen wrote:
+> > On Thu May 25, 2023 at 1:56 AM EEST, Jerry Snitselaar wrote:
+> >> On Tue, Apr 18, 2023 at 09:44:07AM -0400, Stefan Berger wrote:
+> >>> Simplify tpm_read_log_of() by moving reusable parts of the code into
+> >>> an inline function that makes it commonly available so it can be
+> >>> used also for kexec support. Call the new of_tpm_get_sml_parameters()
+> >>> function from the TPM Open Firmware driver.
+> >>>
+> >>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> >>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> >>> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> >>> Cc: Rob Herring <robh+dt@kernel.org>
+> >>> Cc: Frank Rowand <frowand.list@gmail.com>
+> >>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> >>> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+> >>> Tested-by: Coiby Xu <coxu@redhat.com>
+> >>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> >>>
+> >>
+> >> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> >=20
+> > If I just pick tpm only patches they won't apply so maybe TPM changes
+> > should be better separated if that is by any means possible.
+>
+> Per the comment here I am putting this series here on hold.
+> https://lore.kernel.org/linux-integrity/20230418134409.177485-1-stefanb@l=
+inux.ibm.com/T/#m03745c2af2c46f19f329522fcb6ccb2bf2eaedc7
 
-Thanks for looking at it.
+OK, cool.
 
-Just sent v12 with the suggestions. One is addressed with a different 
-patch set (Smack transmute fixes).
+I've mentioned this in few other emails but say this here too:
+I was relocating for last couple of weeks, and thus some latency.
+If you choose to repost the series, I'm happy to review it, thanks
+:-)
 
-Roberto
-
+BR, Jarkko
