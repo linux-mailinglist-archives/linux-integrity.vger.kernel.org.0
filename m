@@ -2,141 +2,166 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B516D731335
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jun 2023 11:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C262731907
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jun 2023 14:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245383AbjFOJIu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Jun 2023 05:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
+        id S238823AbjFOMhh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Jun 2023 08:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245385AbjFOJIp (ORCPT
+        with ESMTP id S238606AbjFOMhh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:08:45 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82741FE8;
-        Thu, 15 Jun 2023 02:08:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vl9wwvH_1686820112;
-Received: from 30.240.108.67(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Vl9wwvH_1686820112)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Jun 2023 17:08:34 +0800
-Message-ID: <66c72938-912c-5167-fdb1-bffefe1db0c9@linux.alibaba.com>
-Date:   Thu, 15 Jun 2023 17:08:31 +0800
+        Thu, 15 Jun 2023 08:37:37 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C361FDB
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Jun 2023 05:37:35 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QhhdN4XXfz4wjC;
+        Thu, 15 Jun 2023 22:37:28 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1686832650;
+        bh=DLcf+5K7V3E4z4AVT96NbZayRebxq4PS4eXJ8mvvsq0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ibxt6HU3Ozs2KNsN/fyE4RqL/akFc3n6BY/SCqOex2hfflFE/hkGqjj8IG38r4GmB
+         WbJlhl+4skBEXg5OfF6CVEI50B5JcjOleo7/1iXuWYr+R6bdAm1khKMBZGcA5yDFLB
+         mqsfYsG9vAFtdasO0ZStrDXddt2finCYpw95XzhjV3NPh6GTak+7d/mR3qd8rh+ZrC
+         cRzX19yxhzyPv2EVSnNQj4oyTdH6iPzwoJ008KAaWX/qQeND0wftiYNZSsnawZGE13
+         zqEvPbyQZtqZwBFjTUONgR1ZJQL9myAemOjTdlKtFWGvlYNeSma9gua63PK0M1AKyh
+         X/DmCyCF++m4g==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     <linuxppc-dev@lists.ozlabs.org>
+Cc:     jarkko@kernel.org, stefanb@linux.ibm.com, eajames@linux.ibm.com,
+        jgg@ziepe.ca, yangyingliang@huawei.com,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de
+Subject: [PATCH v2 1/2] powerpc/tpm: Create linux,sml-base/size as big endian
+Date:   Thu, 15 Jun 2023 22:37:02 +1000
+Message-Id: <20230615123703.4028156-1-mpe@ellerman.id.au>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2] integrity: Fix possible multiple allocation in
- integrity_inode_get()
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
- <20230601064244.33633-1-tianjia.zhang@linux.alibaba.com>
- <CT86SNGF201H.2UZF8SN2MEKZ6@suppilovahvero>
-Content-Language: en-US
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <CT86SNGF201H.2UZF8SN2MEKZ6@suppilovahvero>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko,
+There's code in prom_instantiate_sml() to do a "SML handover" (Stored
+Measurement Log) from OF to Linux, before Linux shuts down Open
+Firmware.
 
-On 6/9/23 10:24 PM, Jarkko Sakkinen wrote:
-> On Thu Jun 1, 2023 at 9:42 AM EEST, Tianjia Zhang wrote:
->> When integrity_inode_get() is querying and inserting the cache, there
->> is a conditional race in the concurrent environment.
->>
->> The race condition is the result of not properly implementing
->> "double-checked locking". In this case, it first checks to see if the
->> iint cache record exists before taking the lock, but doesn't check
->> again after taking the integrity_iint_lock.
->>
->> Fixes: bf2276d10ce5 ("ima: allocating iint improvements")
->> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
->> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
->> Cc: <stable@vger.kernel.org> # v3.10+
-> 
-> s/v3.10/v4.14/
-> 
-> I.e. cover only currently maintained longterms, right?
-> 
+This involves creating a buffer to hold the SML, and creating two device
+tree properties to record its base address and size. The kernel then
+later reads those properties from the device tree to find the SML.
 
-Yes, the race condition was indeed introduced in 3.10, but the fix is
-estimated to only cover the LTS version.
+When the code was initially added in commit 4a727429abec ("PPC64: Add
+support for instantiating SML from Open Firmware") the powerpc kernel
+was always built big endian, so the properties were created big endian
+by default.
 
-> 
->> ---
->>   security/integrity/iint.c | 15 +++++++++------
->>   1 file changed, 9 insertions(+), 6 deletions(-)
->>
->> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
->> index c73858e8c6d5..a462df827de2 100644
->> --- a/security/integrity/iint.c
->> +++ b/security/integrity/iint.c
->> @@ -43,12 +43,10 @@ static struct integrity_iint_cache *__integrity_iint_find(struct inode *inode)
->>   		else if (inode > iint->inode)
->>   			n = n->rb_right;
->>   		else
->> -			break;
->> +			return iint;
->>   	}
->> -	if (!n)
->> -		return NULL;
->>   
->> -	return iint;
->> +	return NULL;
->>   }
->>   
->>   /*
->> @@ -113,10 +111,15 @@ struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
->>   		parent = *p;
->>   		test_iint = rb_entry(parent, struct integrity_iint_cache,
->>   				     rb_node);
->> -		if (inode < test_iint->inode)
->> +		if (inode < test_iint->inode) {
->>   			p = &(*p)->rb_left;
->> -		else
->> +		} else if (inode > test_iint->inode) {
->>   			p = &(*p)->rb_right;
->> +		} else {
->> +			write_unlock(&integrity_iint_lock);
->> +			kmem_cache_free(iint_cache, iint);
->> +			return test_iint;
->> +		}
->>   	}
->>   
->>   	iint->inode = inode;
->> -- 
->> 2.24.3 (Apple Git-128)
-> 
-> Mimi, are you picking this?
+However since then little endian support was added to powerpc, and now
+the code lacks conversions to big endian when creating the properties.
 
-Mimi has picked this patch in next-integrity.
+This means on little endian kernels the device tree properties are
+little endian, which is contrary to the device tree spec, and in
+contrast to all other device tree properties.
 
-> 
-> Off-topic: how do you compile kernel on macOS, you're using VM right?
-> I'm just interested because I recently bought Mac mini for both
-> compiling and testing arm64. Optimal would be to be able to compile
-> the kernel on bare metal and then deploy to a VM...
-> 
+To cope with that a workaround was added in tpm_read_log_of() to skip
+the endian conversion if the properties were created via the SML
+handover.
 
-I am currently only coding and sending the final patch on a Mac.
-Compilation and testing are still carried out in the linux environment.
-If you have experience in launching a linux VM on macOS, please share it
-with me, thanks.
+A better solution is to encode the properties as big endian as they
+should be, and remove the workaround.
 
-Best regards,
-Tianjia
+Typically changing the encoding of a property like this would present
+problems for kexec. However the SML is not propagated across kexec, so
+changing the encoding of the properties is a non-issue.
+
+Fixes: e46e22f12b19 ("tpm: enhance read_log_of() to support Physical TPM event log")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+ arch/powerpc/kernel/prom_init.c |  8 ++++++--
+ drivers/char/tpm/eventlog/of.c  | 23 ++++-------------------
+ 2 files changed, 10 insertions(+), 21 deletions(-)
+
+v2: Add Stefan's reviewed-by.
+
+diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
+index d464ba412084..72fe306b6820 100644
+--- a/arch/powerpc/kernel/prom_init.c
++++ b/arch/powerpc/kernel/prom_init.c
+@@ -1900,6 +1900,7 @@ static void __init prom_instantiate_sml(void)
+ 	u32 entry = 0, size = 0, succ = 0;
+ 	u64 base;
+ 	__be32 val;
++	__be64 val64;
+ 
+ 	prom_debug("prom_instantiate_sml: start...\n");
+ 
+@@ -1956,10 +1957,13 @@ static void __init prom_instantiate_sml(void)
+ 
+ 	reserve_mem(base, size);
+ 
++	val64 = cpu_to_be64(base);
+ 	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-base",
+-		     &base, sizeof(base));
++		     &val64, sizeof(val64));
++
++	val = cpu_to_be32(size);
+ 	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-size",
+-		     &size, sizeof(size));
++		     &val, sizeof(val));
+ 
+ 	prom_debug("sml base     = 0x%llx\n", base);
+ 	prom_debug("sml size     = 0x%x\n", size);
+diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+index 930fe43d5daf..0bc0cb6333c6 100644
+--- a/drivers/char/tpm/eventlog/of.c
++++ b/drivers/char/tpm/eventlog/of.c
+@@ -51,8 +51,8 @@ static int tpm_read_log_memory_region(struct tpm_chip *chip)
+ int tpm_read_log_of(struct tpm_chip *chip)
+ {
+ 	struct device_node *np;
+-	const u32 *sizep;
+-	const u64 *basep;
++	const __be32 *sizep;
++	const __be64 *basep;
+ 	struct tpm_bios_log *log;
+ 	u32 size;
+ 	u64 base;
+@@ -73,23 +73,8 @@ int tpm_read_log_of(struct tpm_chip *chip)
+ 	if (sizep == NULL || basep == NULL)
+ 		return -EIO;
+ 
+-	/*
+-	 * For both vtpm/tpm, firmware has log addr and log size in big
+-	 * endian format. But in case of vtpm, there is a method called
+-	 * sml-handover which is run during kernel init even before
+-	 * device tree is setup. This sml-handover function takes care
+-	 * of endianness and writes to sml-base and sml-size in little
+-	 * endian format. For this reason, vtpm doesn't need conversion
+-	 * but physical tpm needs the conversion.
+-	 */
+-	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
+-	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+-		size = be32_to_cpup((__force __be32 *)sizep);
+-		base = be64_to_cpup((__force __be64 *)basep);
+-	} else {
+-		size = *sizep;
+-		base = *basep;
+-	}
++	size = be32_to_cpup(sizep);
++	base = be64_to_cpup(basep);
+ 
+ 	if (size == 0) {
+ 		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
+-- 
+2.40.1
+
