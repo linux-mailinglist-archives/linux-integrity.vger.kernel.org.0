@@ -2,151 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F62C732476
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jun 2023 03:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6410D7325F9
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jun 2023 05:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjFPBKw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Jun 2023 21:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
+        id S230318AbjFPDrb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Jun 2023 23:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjFPBKu (ORCPT
+        with ESMTP id S230158AbjFPDr3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Jun 2023 21:10:50 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA381FE2;
-        Thu, 15 Jun 2023 18:10:48 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-bc4e41b7bc9so98401276.2;
-        Thu, 15 Jun 2023 18:10:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686877847; x=1689469847;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sfbNROs6Pgx0jh/QUciGEinEqOd0nb4vq/TV0kvqbQo=;
-        b=gTK8Cv6eFtbLgE/zfUwBjmGBzANbNJnULQkjdZsqzXJErvHwD1mwEfqfSaWX5gFv6Y
-         ejpixWdCKuqznhLc3HsDHGPPOBhRnSRZXltJ4VPvwSPYAbuqfraKVCVtWDH374ZR6bst
-         VRF21Cto11sjMNZ8DTHPChL9KDGaOahwjpln26jZK+SuwjfECyQvGkvaez09Cy9va0qm
-         IcifmMFSQbD2Am1mzrwTLTcrb0eJKf3mjO5CchRm/d9jab8OTDYJrgoKNIHuopzvi7CN
-         Bpvi0VwR0XjqfaYCoFrHk3KE190hff4PB4JK7m5/HikX62kWNCqv/Gs2/ATVNTSlXHxT
-         c5cQ==
-X-Gm-Message-State: AC+VfDxfHAaAkHA2gwko8y3FWWLOrxcpHFpEwIXBLSMsAoG+4x9yl0Jh
-        8PbZ3F7OK+Hcjqe8tH7rgNQfbHbxEJBvNuFU
-X-Google-Smtp-Source: ACHHUZ7wlaqhzDPGMQG3IuZzoJKV5t+NBTLjV00lzeEt9HEbmQBwstS0wmZiS8zX+OaZk0O5J5rHng==
-X-Received: by 2002:a25:c0c7:0:b0:ba8:6530:d561 with SMTP id c190-20020a25c0c7000000b00ba86530d561mr446899ybf.30.1686877847158;
-        Thu, 15 Jun 2023 18:10:47 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id l23-20020a25b317000000b00bc9588e9a05sm2580768ybj.37.2023.06.15.18.10.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 18:10:46 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5700b15c12fso2790737b3.1;
-        Thu, 15 Jun 2023 18:10:46 -0700 (PDT)
-X-Received: by 2002:a0d:d5d5:0:b0:56d:4d7:4a45 with SMTP id
- x204-20020a0dd5d5000000b0056d04d74a45mr304478ywd.52.1686877846182; Thu, 15
- Jun 2023 18:10:46 -0700 (PDT)
+        Thu, 15 Jun 2023 23:47:29 -0400
+X-Greylist: delayed 4248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 20:47:28 PDT
+Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C530E269D
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Jun 2023 20:47:28 -0700 (PDT)
+Received: by mail.durme.pl (Postfix, from userid 1002)
+        id 48EF767865; Thu, 15 Jun 2023 08:00:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
+        t=1686822308; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=gN31HYOvMySQCIgGAYDz6ynzWnp8ksbfrbtskgBvZpo2Kc7szo2imEyh84YQL2Noh
+         z+bufZVQ7lQ0uxsx9O0oCFnQySH3yhPiEswUcc/0RTc8CxaF0bjkBVJ/NphjQbGicY
+         clQ64I0Uxneasj47+1mWvpnYhavOrtDJAaBoMevg6XwPhIyqQgXWzlYQcq7b4wmhqK
+         XDiGkEf9X3GhLpDlu3svdg5RN4Z7F3gi4N+bh0an+4BsJPcjkJqTtWJXxP6FvyV4O/
+         IlJsY3KiNACgsGcUvEtA4KJtKj51xT8Q3PSvwUJpcSh3W6P+it9OrcPIeIM711Atez
+         Dy9Wjjob0BKsw==
+Received: by mail.durme.pl for <linux-integrity@vger.kernel.org>; Thu, 15 Jun 2023 08:00:33 GMT
+Message-ID: <20230615064501-0.1.2i.ahl8.0.4kw0qimhmc@durme.pl>
+Date:   Thu, 15 Jun 2023 08:00:33 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
+To:     <linux-integrity@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.durme.pl
 MIME-Version: 1.0
-References: <20230615230537.30429-1-ebiggers@kernel.org>
-In-Reply-To: <20230615230537.30429-1-ebiggers@kernel.org>
-From:   Luca Boccassi <bluca@debian.org>
-Date:   Fri, 16 Jun 2023 02:10:35 +0100
-X-Gmail-Original-Message-ID: <CAMw=ZnR69AhMMQUOwKv9RtP85JzxQhMGO3yzyeEagWxaGiPAZg@mail.gmail.com>
-Message-ID: <CAMw=ZnR69AhMMQUOwKv9RtP85JzxQhMGO3yzyeEagWxaGiPAZg@mail.gmail.com>
-Subject: Re: [PATCH] fsverity: improve documentation for builtin signature support
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     fsverity@lists.linux.dev, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, Colin Walters <walters@verbum.org>,
-        Alexander Larsson <alexl@redhat.com>,
-        Victor Hsieh <victorhsieh@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 16 Jun 2023 at 00:07, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> From: Eric Biggers <ebiggers@google.com>
->
-> fsverity builtin signatures (CONFIG_FS_VERITY_BUILTIN_SIGNATURES) aren't
-> the only way to do signatures with fsverity, and they have some major
-> limitations.  Yet, more users have tried to use them, e.g. recently by
-> https://github.com/ostreedev/ostree/pull/2640.  In most cases this seems
-> to be because users aren't sufficiently familiar with the limitations of
-> this feature and what the alternatives are.
->
-> Therefore, make some updates to the documentation to try to clarify the
-> properties of this feature and nudge users in the right direction.
->
-> Note that the Integrity Policy Enforcement (IPE) LSM, which is not yet
-> upstream, is planned to use the builtin signatures.  (This differs from
-> IMA, which uses its own signature mechanism.)  For that reason, my
-> earlier patch "fsverity: mark builtin signatures as deprecated"
-> (https://lore.kernel.org/r/20221208033548.122704-1-ebiggers@kernel.org),
-> which marked builtin signatures as "deprecated", was controversial.
->
-> This patch therefore stops short of marking the feature as deprecated.
-> I've also revised the language to focus on better explaining the feature
-> and what its alternatives are.
->
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->
-> This patch applies to https://git.kernel.org/pub/scm/fs/fsverity/linux.git/log/?h=for-next
->
->  Documentation/filesystems/fsverity.rst | 176 ++++++++++++++++---------
->  fs/verity/Kconfig                      |  16 +--
->  fs/verity/enable.c                     |   2 +-
->  fs/verity/open.c                       |   8 +-
->  fs/verity/read_metadata.c              |   4 +-
->  fs/verity/signature.c                  |   8 ++
->  6 files changed, 139 insertions(+), 75 deletions(-)
->
-> diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
-> index ede672dedf110..e990149cfdf5c 100644
-> --- a/Documentation/filesystems/fsverity.rst
-> +++ b/Documentation/filesystems/fsverity.rst
+Dzie=C5=84 dobry,
 
-Most of the patch looks fine, two notes:
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-> +- Trusted userspace code.  When the accesses to a file happen in a
-> +  well-defined way, userspace code can authenticate the file's
-> +  fs-verity digest before accessing the file.  This can be done by
-> +  verifying a signature of the fs-verity file digest using any
-> +  userspace cryptographic library that supports digital signatures.
-> +  Consider using `libsodium
-> +  <https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures>`_
-> +  or `Tink <https://developers.google.com/tink/digitally-sign-data>`_.
-> +  Other options include OpenSSL, JCA, and libgcrypt.
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-This should at least mention something like "depending on whether the
-threat model allows trusting userspace with such tasks", because it is
-by no means guaranteed that it is the case.
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-> +- fs-verity builtin signatures are in PKCS#7 format, and the public
-> +  keys are in X.509 format.  These data formats are complex and prone
-> +  to vulnerabilities, so parsing them is preferably done in userspace.
-> +  (fs-verity builtin signatures were made to use these formats because
-> +  other kernel subsystems, such as the module loader, unfortunately
-> +  used these formats already.)  Most cryptographic libraries also
-> +  support working with raw keys and signatures, which are much
-> +  simpler.  For example, consider using `libsodium
-> +  <https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures>`_.
-> +
-> +  IMA appraisal, which supports fs-verity, does not use PKCS#7, so it
-> +  partially avoids this issue as well (though it does use X.509).
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
-The kernel makes extensive use of PKCS7, it's the foundation of the
-trust chain with secure boot (and kernel modules as noted) after all,
-among other things, so this description looks very out of place as
-part of the same project. Readers might be led to believe that using
-secure boot or signed modules is useless, or worse, dangerous, and
-that it's better not to, and I'm quite sure that's not something we
-want.
 
-Kind regards,
-Luca Boccassi
+Pozdrawiam
+Krystian Wieczorek
