@@ -2,107 +2,413 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C606B732B12
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jun 2023 11:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA81732B2B
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jun 2023 11:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbjFPJIT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 16 Jun 2023 05:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
+        id S245688AbjFPJLx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 16 Jun 2023 05:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344085AbjFPJIC (ORCPT
+        with ESMTP id S245355AbjFPJLa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:08:02 -0400
+        Fri, 16 Jun 2023 05:11:30 -0400
 Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4728835B3
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jun 2023 02:06:14 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QjCfx4Kz7z9y5Hn
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jun 2023 16:55:37 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D6E271E
+        for <linux-integrity@vger.kernel.org>; Fri, 16 Jun 2023 02:10:16 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QjClb2B6vz9yMKN
+        for <linux-integrity@vger.kernel.org>; Fri, 16 Jun 2023 16:59:39 +0800 (CST)
 Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAn0znsJYxkJOFAAw--.16257S2;
-        Fri, 16 Jun 2023 10:05:55 +0100 (CET)
-Message-ID: <f77e5c007738619f1ed084c3e1599294bfbf01c1.camel@huaweicloud.com>
-Subject: Re: [PATCH v2 ima-evm-utils 0/4] Simple EVM HMAC calculation tests
+        by APP1 (Coremail) with SMTP id LxC2BwAHiAPfJoxkCeJJAw--.17322S2;
+        Fri, 16 Jun 2023 10:09:57 +0100 (CET)
+Message-ID: <cc76782f91f3d31cc3008e24de2cd54eb20fbdb5.camel@huaweicloud.com>
+Subject: Re: [PATCH v2 ima-evm-utils 4/4] Add simple test to check EVM HMAC
+ calculation
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com
 Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
         stefanb@linux.ibm.com, paul@paul-moore.com, casey@schaufler-ca.com,
         Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 16 Jun 2023 11:05:42 +0200
-In-Reply-To: <44039a0f827e23f5714ac2461c86af494510f81c.camel@linux.ibm.com>
+Date:   Fri, 16 Jun 2023 11:09:46 +0200
+In-Reply-To: <f98d67f3b3302d85bd2b59429e75e7a5d3f1283e.camel@linux.ibm.com>
 References: <20230605165554.1965238-1-roberto.sassu@huaweicloud.com>
-         <44039a0f827e23f5714ac2461c86af494510f81c.camel@linux.ibm.com>
+         <20230605165554.1965238-5-roberto.sassu@huaweicloud.com>
+         <f98d67f3b3302d85bd2b59429e75e7a5d3f1283e.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAn0znsJYxkJOFAAw--.16257S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFyUtr1ftr1xGrWxtF1DKFg_yoW8Ww1kpa
-        y5Kw1Yyrn8t3WxAwn3uw4xXayS9wsYqr45Xr93J3s7A3W5Ja4vqr40qF1UWa47KFn7GF1j
-        vr4jgr1fua4UAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+X-CM-TRANSID: LxC2BwAHiAPfJoxkCeJJAw--.17322S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3tFy7uw18KFyUGr17XryUGFg_yoWkAF4fpa
+        y8tFykKr4kJFy7G3y3tFsru3s3Ka1fAFy5GFnxtw15AFyDCr1xtrW0qr17Cr9agr45Zr1I
+        vw48Xw43uw1kt37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgGb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
         vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
         AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
         Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
         6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
         CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-        0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr
-        1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
-        vfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj469wgABsO
+        0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnI
+        WIevJa73UjIFyTuYvjxUOyCJDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4697AACsj
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
         MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2023-06-14 at 15:29 -0400, Mimi Zohar wrote:
-> Hi Roberto,
-> 
+On Wed, 2023-06-14 at 20:59 -0400, Mimi Zohar wrote:
 > On Mon, 2023-06-05 at 18:55 +0200, Roberto Sassu wrote:
 > > From: Roberto Sassu <roberto.sassu@huawei.com>
 > > 
-> > Add two simple tests to check whether or not the HMAC calculated by the
-> > kernel and evmctl matches. Do the tests for a regular file, and for a
-> > directory successfully transmuted with Smack.
+> > Add a simple test to ensure that the kernel and evmctl provide the same
+> > result for the HMAC calculation. Also add another test to evaluate the
+> > HMAC on a directory for which Smack added the SMACK64TRANSMUTE xattr.
 > > 
-> > Also add two bug fixes to include the filesystem UUID and the inode
-> > generation in the HMAC calculation, and the new option --hmackey to specify
-> > an alternate location of the HMAC key.
+> > The second test fails without the kernel patch 'smack: Set the
+> > SMACK64TRANSMUTE xattr in smack_inode_init_security()', as Smack uses
+> > __vfs_setxattr() to set SMACK64TRANSMUTE, which does not go through EVM,
+> > and makes the HMAC invalid.
+> > 
+> > Require (unless the UML kernel is used) that the TST_EVM_CHANGE_MODE
+> > environment variable is set to 1, so that users acknowledge that they are
+> > initializing EVM with a well-known HMAC key, which can introduce obvious
+> > security concerns.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> The main purpose for having a "Simple EVM HMAC" test is to ensure that
-> nothing breaks.
+> Thanks, Roberto.  A few suggestions inline below.
+> > ---
+> >  kernel-configs/base      |   4 +-
+> >  kernel-configs/integrity |   1 +
+> >  tests/Makefile.am        |   2 +-
+> >  tests/evm_hmac.test      | 251 +++++++++++++++++++++++++++++++++++++++
+> >  tests/functions.sh       |   6 +
+> >  5 files changed, 262 insertions(+), 2 deletions(-)
+> >  create mode 100755 tests/evm_hmac.test
+> > 
+> > diff --git a/kernel-configs/base b/kernel-configs/base
+> > index 7acbd5b3b2a..6973e71f7bb 100644
+> > --- a/kernel-configs/base
+> > +++ b/kernel-configs/base
+> > @@ -46,11 +46,13 @@ CONFIG_TMPFS_XATTR=y
+> >  CONFIG_CONFIGFS_FS=y
+> >  CONFIG_KEYS=y
+> >  CONFIG_ENCRYPTED_KEYS=y
+> > +CONFIG_USER_DECRYPTED_DATA=y
+> >  CONFIG_SECURITY=y
+> >  CONFIG_SECURITYFS=y
+> >  CONFIG_SECURITY_NETWORK=y
+> >  CONFIG_SECURITY_PATH=y
+> > -CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,bpf"
+> > +CONFIG_SECURITY_SMACK=y
+> > +CONFIG_LSM="lockdown,yama,loadpin,safesetid,smack,bpf"
+> >  CONFIG_CRYPTO_AEAD2=y
+> >  CONFIG_CRYPTO_SKCIPHER=y
+> >  CONFIG_CRYPTO_SKCIPHER2=y
+> > diff --git a/kernel-configs/integrity b/kernel-configs/integrity
+> > index a7e01e19466..2e104d205ba 100644
+> > --- a/kernel-configs/integrity
+> > +++ b/kernel-configs/integrity
+> > @@ -27,3 +27,4 @@ CONFIG_EVM_ATTR_FSUUID=y
+> >  CONFIG_EVM_ADD_XATTRS=y
+> >  CONFIG_EVM_LOAD_X509=y
+> >  CONFIG_EVM_X509_PATH="/etc/keys/x509_evm.der"
+> > +CONFIG_EVM_EXTRA_SMACK_XATTRS=y
+> > diff --git a/tests/Makefile.am b/tests/Makefile.am
+> > index 03aa5b76088..a28f671398f 100644
+> > --- a/tests/Makefile.am
+> > +++ b/tests/Makefile.am
+> > @@ -3,7 +3,7 @@ TESTS = $(check_SCRIPTS)
+> >  
+> >  check_SCRIPTS += ima_hash.test sign_verify.test boot_aggregate.test \
+> >  		 fsverity.test portable_signatures.test ima_policy_check.test \
+> > -		 mmap_check.test
+> > +		 mmap_check.test evm_hmac.test
+> >  
+> >  check_PROGRAMS := test_mmap
+> >  
+> > diff --git a/tests/evm_hmac.test b/tests/evm_hmac.test
+> > new file mode 100755
+> > index 00000000000..e88ff4bf10c
+> > --- /dev/null
+> > +++ b/tests/evm_hmac.test
+> > @@ -0,0 +1,251 @@
+> > +#!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +#
+> > +# Copyright (C) 2023 Roberto Sassu <roberto.sassu@huawei.com>
+> > +#
+> > +# Check if the kernel and evmctl provide the same result for HMAC calculation.
+> > +
+> > +trap '_report_exit_and_cleanup _cleanup_env cleanup' SIGINT SIGTERM SIGSEGV EXIT
+> > +
+> > +# Base VERBOSE on the environment variable, if set.
+> > +VERBOSE="${VERBOSE:-0}"
+> > +TST_EVM_CHANGE_MODE="${TST_EVM_CHANGE_MODE:-0}"
+> > +IMA_UUID="28b23254-9467-44c0-b6ba-34b12e85a26f"
+> > +
+> > +PATCHES=(
+> > +'KEYS: encrypted: fix key instantiation with user-provided data'
+> > +'KEYS: encrypted: Instantiate key with user-provided decrypted data'
+> > +'smack: Set the SMACK64TRANSMUTE xattr in smack_inode_init_security()'
+> > +)
+> > +
+> > +# From security/integrity/evm/evm.h in kernel source directory
+> > +(( EVM_INIT_HMAC=0x0001 ))
+> > +
+> > +cd "$(dirname "$0")" || exit 1
+> > +export PATH=$PWD/../src:$PATH
+> > +export LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+> > +. ./functions.sh
+> > +_require evmctl
+> > +
+> > +cleanup() {
+> > +	if [ "$g_loop_mounted" = "1" ]; then
+> > +		popd > /dev/null || exit "$FAIL"
+> > +		umount "$g_mountpoint"
+> > +	fi
+> > +
+> > +	if [ -n "$g_dev" ]; then
+> > +		losetup -d "$g_dev"
+> > +	fi
+> > +
+> > +	if [ -n "$g_image" ]; then
+> > +		rm -f "$g_image"
+> > +	fi
+> > +
+> > +	if [ -n "$g_mountpoint" ]; then
+> > +		rm -Rf "$g_mountpoint"
+> > +	fi
+> > +}
+> > +
+> > +get_xattr() {
+> > +	local format="hex"
+> > +
+> > +	if [ "$1" = "security.selinux" ]; then
+> > +		format="text"
+> > +	fi
+> > +
+> > +	getfattr -n "$1" -e "$format" -d "$2" 2> /dev/null | awk -F "=" '$1 == "'"$1"'" {if ("'"$format"'" == "hex") v=substr($2, 3); else { split($2, temp, "\""); v=temp[2] }; print v}'
+> > +}
+> > +
+> > +# Compare HMAC calculated by the kernel with that calculated by evmctl.
+> > +compare_xattr() {
+> > +	local algo=$1
+> > +	local path=$2
+> > +	local evm_xattr evm_xattr_evmctl true_digest
+> > +
+> > +	evm_xattr="$(get_xattr security.evm "$path")"
+> > +	true_digest=$("$algo"sum /bin/true | awk '{print $1}')
+> > +	# evm_xattr has an extra byte at the beginning for the xattr type.
+> > +	if [ "${#evm_xattr}" != $(( ${#true_digest} + 2 )) ]; then
+> > +		echo "${RED}Unexpected size of security.evm for $path${NORM}"
+> > +		return "$FAIL"
+> > +	fi
+> > +
+> > +	evm_xattr_evmctl="$(evmctl hmac --smack -v -n "$path" --uuid="$IMA_UUID" -a "$algo" --hmackey "$g_hmackey" 2>&1 | awk -F " " '$1 == "hmac:" {print $2}')"
+> > +	if [ "$evm_xattr" != "02$evm_xattr_evmctl" ]; then
+> > +		echo "${RED}$path security.evm mismatch between the kernel and evmctl${NORM}"
+> > +		return "$FAIL"
+> > +	fi
+> > +
+> > +	return "$OK"
+> > +}
+> > +
+> > +# The purpose of this test is to verify if the kernel and evmctl produce the
+> > +# same HMAC.
+> > +check_evm_hmac() {
+> > +	echo "Test: ${FUNCNAME[0]} (evm_hash: $1, evm_value: $g_evm_value, algo: $1, fs: $2)"
+> > +
+> > +	if ! touch test-file; then
+> > +		echo "${RED}Cannot create test-file${NORM}"
+> > +		return "$FAIL"
+> > +	fi
+> > +
+> > +	compare_xattr "$1" test-file
+> > +	return $?
+> > +}
+> > +
+> > +cleanup_evm_hmac() {
+> > +	rm -f test-file
+> > +}
+> > +
+> > +# The purpose of this test is to verify that SMACK64TRANSMUTE is successfully
+> > +# set on a newly created directory, and that the HMAC on that directory is valid.
+> > +check_evm_hmac_transmute() {
+> > +	echo "Test: ${FUNCNAME[0]} (evm_hash: $1, evm_value: $g_evm_value, algo: $1, fs: $2)"
+> > +
+> > +	if ! grep -q smack < /sys/kernel/security/lsm; then
+> > +		echo "Smack LSM not active"
+> > +		return "${SKIP}"
+> > +	fi
+> > +
+> > +	# Add a Smack rule for transmuting of test-dir/test-dir2
+> > +	if ! echo "_ system rwxatl" > /sys/fs/smackfs/load2; then
+> > +		echo "${RED}Cannot set Smack policy${NORM}"
+> > +		return "$FAIL"
+> > +	fi
+> > +
+> > +	# Smack adds security.SMACK64=_.
+> > +	if ! mkdir test-dir; then
+> > +		echo "${RED}Cannot create test-dir${NORM}"
+> > +		return "$FAIL"
+> > +	fi
+> > +
+> > +	# Change the directory label so that transmuting happens.
+> > +	if ! setfattr -n security.SMACK64 -v system test-dir; then
+> > +		echo "${RED}Cannot set security.SMACK64 on test-dir${NORM}"
+> > +		return "$FAIL"
+> > +	fi
+> > +
+> > +	# Add the transmute xattr so that transmuting happens.
+> > +	if ! setfattr -n security.SMACK64TRANSMUTE -v TRUE test-dir; then
+> > +		echo "${RED}Cannot set security.SMACK64TRANSMUTE on test-dir${NORM}"
+> > +		return "$FAIL"
+> > +	fi
+> > +
+> > +	compare_xattr "$1" test-dir
+> > +	result=$?
+> > +
+> > +	if [ "$result" -ne "$OK" ]; then
+> > +		return "$result"
+> > +	fi
+> > +
+> > +	# Smack adds security.SMACK64=system and security.SMACK64TRANSMUTE=TRUE.
+> > +	if ! mkdir test-dir/test-dir2; then
+> > +		echo "${RED}Cannot create test-dir/test-dir2${NORM}"
+> > +		return "$FAIL"
+> > +	fi
+> > +
+> > +	compare_xattr "$1" test-dir/test-dir2
+> > +	return $?
+> > +}
+> > +
+> > +cleanup_evm_hmac_transmute() {
+> > +	rm -Rf test-dir
+> > +}
+> > +
+> > +_run_env "$TST_KERNEL" "$PWD/$(basename "$0")" "TST_ENV=$TST_ENV TST_KERNEL=$TST_KERNEL PATH=$PATH LD_LIBRARY_PATH=$LD_LIBRARY_PATH VERBOSE=$VERBOSE"
+> > +
+> > +# Exit from the creator of the new environment.
+> > +_exit_env "$TST_KERNEL"
+> > +
+> > +# Mount filesystems in the new environment.
+> > +_init_env
+> > +
+> > +# Assume that the EVM mode can be changed in a new environment.
+> > +if [ -z "$TST_ENV" ] && [ "$TST_EVM_CHANGE_MODE" -eq 0 ]; then
+> > +	echo "${CYAN}TST_EVM_CHANGE_MODE env variable must be set to 1${NORM}"
+> > +	exit "$SKIP"
+> > +fi
 > 
-> "evmctl --hmac" was only enabled in debug mode, since the hmac key was
-> not exposed to userspace.  It was never really used.  With the ability
-> of creating an encrypted key based  on user-provided decrypted data,
-> verifying the EVM hmac is now feasible.  This is the justification for
-> "Add --hmackey option for evmctl".
+> Perhaps also allow in a CI environment or set the TST_EVM_CHANGE_MODE
+> in the CI environment.
 
-Ok, will add it.
+I like the second.
 
-> The initial test should work with either SELinux or smack extended
-> attributes.  None of the CI tests have SELinux or Smack enabled, except
-> for the UFI kernel.  Verifying the EVM hmac with an SELinux extended
-> attribute is not being tested.  On my local machine, the EVM HMAC with
-> SELinux xattr is failing.  Is this related to SELinux returning
-> different lengths in the kernel vs. userspace?  Whatever the reason, it
-> needs to be fixed.
-
-If you used setfattr without \0 for the value at the end, that is
-likely the reason. The correct way should be to use chcon.
-
-> The prereqs needed for running the Smack transmute test should not
-> prevent running the first test.
+> > +
+> > +g_lsm_init_xattr=$(awk '$1 ~ /(smack|selinux)/' < /sys/kernel/security/lsm)
+> > +if [ -z "$g_lsm_init_xattr" ]; then
+> > +	echo "${CYAN}Either SMACK or SELinux must be active in the system${NORM}"
+> > +	exit "$SKIP"
+> > +fi
+> > +
+> > +g_mountpoint="$(mktemp -d)"
+> > +g_image="$(mktemp)"
+> > +
+> > +if [ -z "$g_mountpoint" ]; then
+> > +	echo "${RED}Mountpoint directory not created${NORM}"
+> > +	exit "$FAIL"
+> > +fi
+> > +
+> > +if [ "$(whoami)" != "root" ]; then
+> > +	echo "${CYAN}This script must be executed as root${NORM}"
+> > +	exit "$SKIP"
+> > +fi
+> > +
+> > +if ! evmctl -h | grep -q hmackey; then
+> > +	echo "${CYAN}Missing HMAC support, run: ./configure --enable-debug${NORM}"
+> > +	exit "$SKIP"
+> > +fi
+> > +
+> > +if [ ! -f /sys/kernel/security/integrity/evm/evm_xattrs ] ||
+> > +   ! grep -q SMACK64TRANSMUTE < /sys/kernel/security/integrity/evm/evm_xattrs; then
+> > +	echo "${CYAN}Set CONFIG_EVM_ADD_XATTRS=y and CONFIG_EVM_EXTRA_SMACK_XATTRS=y in the kernel configuration${NORM}"
+> > +	exit "$SKIP"
+> > +fi
+> 
+> Only check this when smack is enabled.
 
 Ok.
+
+> > +
+> > +if ! dd if=/dev/zero of="$g_image" bs=1M count=10 &> /dev/null; then
+> > +	echo "${RED}Cannot create test image${NORM}"
+> > +	exit "$FAIL"
+> > +fi
+> > +
+> > +g_dev="$(losetup -f "$g_image" --show)"
+> > +if [ -z "$g_dev" ]; then
+> > +	echo "${RED}Cannot create loop device${NORM}"
+> > +	exit "$FAIL"
+> > +fi
+> > +
+> > +if ! mkfs.ext4 -U $IMA_UUID -b 4096 "$g_dev" &> /dev/null; then
+> > +	echo "${RED}Cannot format $g_dev${NORM}"
+> > +	exit "$FAIL"
+> > +fi
+> > +
+> > +if ! mount "$g_dev" "$g_mountpoint"; then
+> > +	echo "${RED}Cannot mount loop device${NORM}"
+> > +	exit "$FAIL"
+> > +fi
+> > +
+> > +g_loop_mounted=1
+> > +chmod 777 "$g_mountpoint"
+> > +pushd "$g_mountpoint" > /dev/null || exit "$FAIL"
+> > +
+> > +if [ -f /sys/kernel/security/evm ]; then
+> > +	g_evm_value=$(cat /sys/kernel/security/evm)
+> > +fi
+> > +
+> > +g_hmackey_data="abcdefABCDEF1234567890aaaaaaaaaaabcdefABCDEF1234567890aaaaaaaaaa"
+> > +
+> > +g_hmackey="$(mktemp)"
+> > +echo $g_hmackey_data | xxd -r -p > "$g_hmackey"
+> > +
+> > +if [ -n "$g_evm_value" ] && [ $((g_evm_value & EVM_INIT_HMAC)) -ne $EVM_INIT_HMAC ]; then
+> > +	g_evm_id="$(keyctl add encrypted evm-key "new enc32 user:kmk 32 $g_hmackey_data" @u)"
+> > +	if ! echo "$EVM_INIT_HMAC" | tee /sys/kernel/security/evm &> /dev/null; then
+> > +		# Retry with sudo -i, to force search in the root user keyring.
+> > +		if ! echo "$EVM_INIT_HMAC" | sudo -i tee /sys/kernel/security/evm &> /dev/null; then
+> > +			keyctl unlink "$g_evm_id"
+> > +			echo "${RED}Failed to initialize EVM${NORM}"
+> > +			exit "$FAIL"
+> > +		fi
+> > +	fi
+> > +
+> > +	g_evm_value=$(cat /sys/kernel/security/evm)
+> > +fi
+> > +
+> > +expect_pass_if '0 1' check_evm_hmac sha1 ext4
+> > +cleanup_evm_hmac
+> > +
+> > +expect_pass_if '2' check_evm_hmac_transmute sha1 ext4
+> > +cleanup_evm_hmac_transmute
+> 
+> Skip test if smack is not enabled.
+
+It should be already like this.
 
 Thanks
 
