@@ -2,91 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20577336CF
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jun 2023 18:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E985733726
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jun 2023 19:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345789AbjFPQ4S (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 16 Jun 2023 12:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
+        id S235046AbjFPRHf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 16 Jun 2023 13:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345736AbjFPQ4D (ORCPT
+        with ESMTP id S229912AbjFPRHe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:56:03 -0400
-Received: from cavan.codon.org.uk (cavan.codon.org.uk [176.126.240.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D573590;
-        Fri, 16 Jun 2023 09:54:25 -0700 (PDT)
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 5E29440A72; Fri, 16 Jun 2023 17:54:15 +0100 (BST)
-Date:   Fri, 16 Jun 2023 17:54:15 +0100
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Cc:     Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        ardb@kernel.org, James.Bottomley@hansenpartnership.com,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v6 02/14] Documentation/x86: Secure Launch kernel
- documentation
-Message-ID: <20230616165415.GA28537@srcf.ucam.org>
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-3-ross.philipson@oracle.com>
- <20230512104753.GA14461@srcf.ucam.org>
- <e7dcb85b-25bb-8d5a-3758-e4243bc6ffec@apertussolutions.com>
+        Fri, 16 Jun 2023 13:07:34 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5549B5;
+        Fri, 16 Jun 2023 10:07:33 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f8fcaa31c7so3764445e9.3;
+        Fri, 16 Jun 2023 10:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686935252; x=1689527252;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KOyi1uZXbfS1mI0xtKCRw9/llyElWj9SgCwJLwNUQQw=;
+        b=l0qC/sZ3zGBtTdAmUHs33/HYMu2KRwoOg+5n+OYYoY/S3fO179g/teTeai5O6DC0sm
+         t9mTTMY90WgR4Gf1aXMhXZgEgnVEzXSN6d1YuI1xdOzxw0VeHOAevtlKXDo8tdiQhIhI
+         f04+EKQd4DWBcG3v6D1w1dEOmPkS9SvL5t2/Yi3HPJUEV5ze7HgaoDQZQNDCvNZ/x4Ma
+         KKjCgYiNTMUYVb1CZAM1ih9mgJCAdWIPteEf+h6BXLQtahr7m0qhT2ocMYiN+NBHlOnS
+         akJXFT8j6u9v7wovHIuMRfUQgmNpRU9Cie1NEdb44WHfW4eYde8kJ3a2EZ6RV6xj6BJ6
+         diIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686935252; x=1689527252;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KOyi1uZXbfS1mI0xtKCRw9/llyElWj9SgCwJLwNUQQw=;
+        b=Avw4JFpTkN5MroqYorBHzv0J2M40JmkI5vlVPJxvUA33x1EmuxElXSFm3bRZeNQYMw
+         Nq19f309Zf/3X36hZyAvRYZPZCgEC74CqO3gQ2UppBMagdGTGnBwgTPgYXbCNYA52JXS
+         1bc4TkclQSrSPUekPiD3CsNpJwKmE3Zyi66hwzFXVRb0mZkB2glW3EU+PbdCkZc4QvV2
+         HVLv16uk8Wnu73qlbvgskgw72kBXEItai3BzDU8xY/6i6aq350B27kOcl+HWsvrGuvdl
+         t4lrVdGCw4Q6roMxeEFem6uN/TWsff0P6KAMjhj3BHLHdVK8cWJJFDbfj8tIuB2Ayv8G
+         qrag==
+X-Gm-Message-State: AC+VfDx9vnILLPU8Bhq8g8OCEpIZMMk99KtrqQjS2N9pt6NF1zQQIUev
+        bUcbkJ9AoZdT2dHSxeR1m+w=
+X-Google-Smtp-Source: ACHHUZ4An+9O4ztbGuPRvwFpgFafnFx9+qA+nzyQdD6ycg1Wum1uQEIvMbJ/Js+C2xbg9090RCZJJQ==
+X-Received: by 2002:a7b:c7ce:0:b0:3f7:e80b:bfc with SMTP id z14-20020a7bc7ce000000b003f7e80b0bfcmr2415918wmk.30.1686935251990;
+        Fri, 16 Jun 2023 10:07:31 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 21-20020a05600c029500b003f8d80ecc4bsm2705383wmk.34.2023.06.16.10.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 10:07:31 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] tpm: remove redundant variable len
+Date:   Fri, 16 Jun 2023 18:07:30 +0100
+Message-Id: <20230616170730.2343540-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7dcb85b-25bb-8d5a-3758-e4243bc6ffec@apertussolutions.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 12:44:27PM -0400, Daniel P. Smith wrote:
-> 
-> On 5/12/23 06:47, Matthew Garrett wrote:
-> > On Thu, May 04, 2023 at 02:50:11PM +0000, Ross Philipson wrote:
-> > > +Secure Launch does not interoperate with KASLR. If possible, the MLE should be
-> > > +built with KASLR disabled::
-> > 
-> > Why does Secure Launch not interoperate with KASLR?
-> > 
-> > Re: IOMMUs
-> 
-> Until the IOMMU driver comes online, memory is protected by the PMRs regions
-> requested by the Preamble (pre-launch code) in accordance with Intel TXT
-> specifications and configured by the ACM. The KASLR randomizer will run
-> before the IOMMU driver is able to come online and ensure frames used by the
-> kernel are protected as well as frames that a driver may registered in a BAR
-> are not blocked.
+Variable len is being accumulated but the value is never read. It is
+redundant and can be removed. Cleans up clang scan build warning:
 
-This seems unfortunate. Presumably we're not able to modify the PMRs at 
-this point? This also seems like a potential issue for IOMMU config in 
-general - the presumption is that the firmware should be configuring the 
-IOMMU in such a way that DMA-capable devices can't attack the firmware 
-while we're in the boot environment, and if KASLR is leaving a window 
-there then it seems like we'd need to fix that?
+drivers/char/tpm/eventlog/tpm1.c:276:2: warning: Value stored to 'len' is never read [deadcode.DeadStores]
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/char/tpm/eventlog/tpm1.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/eventlog/tpm1.c b/drivers/char/tpm/eventlog/tpm1.c
+index 8aa9057601d6..12ee42a31c71 100644
+--- a/drivers/char/tpm/eventlog/tpm1.c
++++ b/drivers/char/tpm/eventlog/tpm1.c
+@@ -251,7 +251,6 @@ static int tpm1_binary_bios_measurements_show(struct seq_file *m, void *v)
  
-> > > +It is recommended that no other command line options should be set to override
-> > > +the defaults above.
-> > 
-> > What happens if they are? Does doing so change the security posture of
-> > the system? If so, will the measurements be different in a way that
-> > demonstrates the system is in an insecure state?
-> > 
-> 
-> In an early version of the patch series this was enforced when turning on
-> Secure Launch, but concerns were raised over this approach and was asked to
-> allow the user to be able to shoot themselves in the foot. Overriding these
-> values could render either an insecure state and/or an unstable system.
+ static int tpm1_ascii_bios_measurements_show(struct seq_file *m, void *v)
+ {
+-	int len = 0;
+ 	char *eventname;
+ 	struct tcpa_event *event = v;
+ 	unsigned char *event_entry =
+@@ -273,7 +272,7 @@ static int tpm1_ascii_bios_measurements_show(struct seq_file *m, void *v)
+ 	/* 3rd: event type identifier */
+ 	seq_printf(m, " %02x", do_endian_conversion(event->event_type));
+ 
+-	len += get_event_name(eventname, event, event_entry);
++	get_event_name(eventname, event, event_entry);
+ 
+ 	/* 4th: eventname <= max + \'0' delimiter */
+ 	seq_printf(m, " %s\n", eventname);
+-- 
+2.39.2
 
-If we're in an insecure state, is that something that would show up in 
-the form of different measurements?
