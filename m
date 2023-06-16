@@ -2,106 +2,137 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E985733726
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jun 2023 19:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5016373380C
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jun 2023 20:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbjFPRHf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 16 Jun 2023 13:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
+        id S232446AbjFPSWN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 16 Jun 2023 14:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjFPRHe (ORCPT
+        with ESMTP id S229521AbjFPSWM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 16 Jun 2023 13:07:34 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5549B5;
-        Fri, 16 Jun 2023 10:07:33 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f8fcaa31c7so3764445e9.3;
-        Fri, 16 Jun 2023 10:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686935252; x=1689527252;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KOyi1uZXbfS1mI0xtKCRw9/llyElWj9SgCwJLwNUQQw=;
-        b=l0qC/sZ3zGBtTdAmUHs33/HYMu2KRwoOg+5n+OYYoY/S3fO179g/teTeai5O6DC0sm
-         t9mTTMY90WgR4Gf1aXMhXZgEgnVEzXSN6d1YuI1xdOzxw0VeHOAevtlKXDo8tdiQhIhI
-         f04+EKQd4DWBcG3v6D1w1dEOmPkS9SvL5t2/Yi3HPJUEV5ze7HgaoDQZQNDCvNZ/x4Ma
-         KKjCgYiNTMUYVb1CZAM1ih9mgJCAdWIPteEf+h6BXLQtahr7m0qhT2ocMYiN+NBHlOnS
-         akJXFT8j6u9v7wovHIuMRfUQgmNpRU9Cie1NEdb44WHfW4eYde8kJ3a2EZ6RV6xj6BJ6
-         diIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686935252; x=1689527252;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KOyi1uZXbfS1mI0xtKCRw9/llyElWj9SgCwJLwNUQQw=;
-        b=Avw4JFpTkN5MroqYorBHzv0J2M40JmkI5vlVPJxvUA33x1EmuxElXSFm3bRZeNQYMw
-         Nq19f309Zf/3X36hZyAvRYZPZCgEC74CqO3gQ2UppBMagdGTGnBwgTPgYXbCNYA52JXS
-         1bc4TkclQSrSPUekPiD3CsNpJwKmE3Zyi66hwzFXVRb0mZkB2glW3EU+PbdCkZc4QvV2
-         HVLv16uk8Wnu73qlbvgskgw72kBXEItai3BzDU8xY/6i6aq350B27kOcl+HWsvrGuvdl
-         t4lrVdGCw4Q6roMxeEFem6uN/TWsff0P6KAMjhj3BHLHdVK8cWJJFDbfj8tIuB2Ayv8G
-         qrag==
-X-Gm-Message-State: AC+VfDx9vnILLPU8Bhq8g8OCEpIZMMk99KtrqQjS2N9pt6NF1zQQIUev
-        bUcbkJ9AoZdT2dHSxeR1m+w=
-X-Google-Smtp-Source: ACHHUZ4An+9O4ztbGuPRvwFpgFafnFx9+qA+nzyQdD6ycg1Wum1uQEIvMbJ/Js+C2xbg9090RCZJJQ==
-X-Received: by 2002:a7b:c7ce:0:b0:3f7:e80b:bfc with SMTP id z14-20020a7bc7ce000000b003f7e80b0bfcmr2415918wmk.30.1686935251990;
-        Fri, 16 Jun 2023 10:07:31 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id 21-20020a05600c029500b003f8d80ecc4bsm2705383wmk.34.2023.06.16.10.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 10:07:31 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] tpm: remove redundant variable len
-Date:   Fri, 16 Jun 2023 18:07:30 +0100
-Message-Id: <20230616170730.2343540-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 16 Jun 2023 14:22:12 -0400
+Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ABDCD;
+        Fri, 16 Jun 2023 11:22:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686939697; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=ffvSiDruYhLVJJGBcz4tQWNlfs6d5bauH+Ej2CpFSmpsU2USUfadAkTf61XiTUkuV/fwd6T4eN044PQ+mqv+bW8oGdYrENxv9+ZNEy4ZAHVgoGs/St8s/04QrDjVsEqiXT6OBT+HVzn9m0ylLfxZvopPb0cDCH30F5iNu5Ks9Tk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686939697; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=8enOf0amLtvBhNkLA/XPa3bwYhCfY01qhBgRzZsYp4k=; 
+        b=iWf2gamft5I1tQafDe+wzLXebNQzYgTsFca9wWHDHLlU6KpTO1qpzty8hZCqVyulR8PbWnlFxsQR8fJqa+E4Y+zRng39F8z0DpD35pHI66jgZ80xzygN7M8x2Pkuv75gqryEQ5wEkTUJy0yFlI6jKwZWMqj/W73Q/cmZIzFzfuo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=apertussolutions.com;
+        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+        dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686939697;
+        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+        h=Message-ID:Date:Date:MIME-Version:To:To:Cc:Cc:References:From:From:Subject:Subject:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=8enOf0amLtvBhNkLA/XPa3bwYhCfY01qhBgRzZsYp4k=;
+        b=qHykneBd3W/uQb3DdBB6UMoKU5vU2hAHAgTWfpyu0VTnkeKUnav9pYS2Lv2cPAAr
+        bEdoQSblbIGf34Wi35ucomsH+lyGq/exEwlUfLIru8FCcg0jLUx552Uf3IYYQESeI0f
+        rstR4wkctcFvn8BMkk0jayWtDQUD04axkQJGtfZA=
+Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+        with SMTPS id 1686939696166530.3719741366886; Fri, 16 Jun 2023 11:21:36 -0700 (PDT)
+Message-ID: <81a0a2f3-e7b2-23e8-5c95-91c9a52df18a@apertussolutions.com>
+Date:   Fri, 16 Jun 2023 14:21:33 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, James.Bottomley@hansenpartnership.com,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-3-ross.philipson@oracle.com>
+ <20230512104753.GA14461@srcf.ucam.org>
+ <e7dcb85b-25bb-8d5a-3758-e4243bc6ffec@apertussolutions.com>
+ <20230616165415.GA28537@srcf.ucam.org>
+From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Subject: Re: [PATCH v6 02/14] Documentation/x86: Secure Launch kernel
+ documentation
+In-Reply-To: <20230616165415.GA28537@srcf.ucam.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Variable len is being accumulated but the value is never read. It is
-redundant and can be removed. Cleans up clang scan build warning:
+On 6/16/23 12:54, Matthew Garrett wrote:
+> On Fri, Jun 16, 2023 at 12:44:27PM -0400, Daniel P. Smith wrote:
+>>
+>> On 5/12/23 06:47, Matthew Garrett wrote:
+>>> On Thu, May 04, 2023 at 02:50:11PM +0000, Ross Philipson wrote:
+>>>> +Secure Launch does not interoperate with KASLR. If possible, the MLE should be
+>>>> +built with KASLR disabled::
+>>>
+>>> Why does Secure Launch not interoperate with KASLR?
+>>>
+>>> Re: IOMMUs
+>>
+>> Until the IOMMU driver comes online, memory is protected by the PMRs regions
+>> requested by the Preamble (pre-launch code) in accordance with Intel TXT
+>> specifications and configured by the ACM. The KASLR randomizer will run
+>> before the IOMMU driver is able to come online and ensure frames used by the
+>> kernel are protected as well as frames that a driver may registered in a BAR
+>> are not blocked.
+> 
+> This seems unfortunate. Presumably we're not able to modify the PMRs at
+> this point? This also seems like a potential issue for IOMMU config in
+> general - the presumption is that the firmware should be configuring the
+> IOMMU in such a way that DMA-capable devices can't attack the firmware
+> while we're in the boot environment, and if KASLR is leaving a window
+> there then it seems like we'd need to fix that?
 
-drivers/char/tpm/eventlog/tpm1.c:276:2: warning: Value stored to 'len' is never read [deadcode.DeadStores]
+While unfortunate, it is a bit of the nature of the problem KASLR is 
+attempting to address. If you know in advance where kernel pages are 
+going to live and the frames that will be used for DMA, then have you 
+not defeated the purpose of the randomization? As for the firmware use 
+of the IOMMU, I am fairly certain those tables will get invalidated by 
+the ACM when it is setting up the PMRs.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/char/tpm/eventlog/tpm1.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+>>>> +It is recommended that no other command line options should be set to override
+>>>> +the defaults above.
+>>>
+>>> What happens if they are? Does doing so change the security posture of
+>>> the system? If so, will the measurements be different in a way that
+>>> demonstrates the system is in an insecure state?
+>>>
+>>
+>> In an early version of the patch series this was enforced when turning on
+>> Secure Launch, but concerns were raised over this approach and was asked to
+>> allow the user to be able to shoot themselves in the foot. Overriding these
+>> values could render either an insecure state and/or an unstable system.
+> 
+> If we're in an insecure state, is that something that would show up in
+> the form of different measurements?
 
-diff --git a/drivers/char/tpm/eventlog/tpm1.c b/drivers/char/tpm/eventlog/tpm1.c
-index 8aa9057601d6..12ee42a31c71 100644
---- a/drivers/char/tpm/eventlog/tpm1.c
-+++ b/drivers/char/tpm/eventlog/tpm1.c
-@@ -251,7 +251,6 @@ static int tpm1_binary_bios_measurements_show(struct seq_file *m, void *v)
- 
- static int tpm1_ascii_bios_measurements_show(struct seq_file *m, void *v)
- {
--	int len = 0;
- 	char *eventname;
- 	struct tcpa_event *event = v;
- 	unsigned char *event_entry =
-@@ -273,7 +272,7 @@ static int tpm1_ascii_bios_measurements_show(struct seq_file *m, void *v)
- 	/* 3rd: event type identifier */
- 	seq_printf(m, " %02x", do_endian_conversion(event->event_type));
- 
--	len += get_event_name(eventname, event, event_entry);
-+	get_event_name(eventname, event, event_entry);
- 
- 	/* 4th: eventname <= max + \'0' delimiter */
- 	seq_printf(m, " %s\n", eventname);
--- 
-2.39.2
+Yes, you would get a different measurement for the commandline. If you 
+are thinking in terms of attestation, I would expect that the 
+attestation measurement db would have a record for an acceptable 
+commandline and would determine the system to be in an unknown state if 
+it did not match.
 
+While the idea could be explored to create measurements based on 
+configurations of kernel subsystems, this would likely entail 
+instrumentation in those subsystems to assert a measurement to their 
+configuration. Maybe IMA could cover something like this? It would 
+definitely enable the ability to make deeper assessments about the state 
+of a system, but I think this is out of the scope of what Secure Launch 
+is attempting to do.
