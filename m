@@ -2,129 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2BE73A330
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Jun 2023 16:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C60873A371
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Jun 2023 16:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjFVOiL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Jun 2023 10:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
+        id S231689AbjFVOpG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Jun 2023 10:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFVOiK (ORCPT
+        with ESMTP id S231895AbjFVOoY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:38:10 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E476FE41;
-        Thu, 22 Jun 2023 07:38:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kl0jX/ScXDldWb9d/hz0s1PypoxaEVsLalSOZp6cqzwEBG5te/IPnEbqQRD8AZ8ggcT2H0muDWCrOmcpUWG1svuvJz2+6LpauGrKGBW5Jr4kGkHTMrgCGD8RxVA18nrzDebAdvwlr/GNEUP9cZn5iCRW+LOtXxzMwU0DCtRw27WOBo08ny/hGnE9pXLUC+rsl/3J8r25TPV8J1Op36Gw5vGKLD3j7wT5aM509TgkZHlSP26EUIvuN4BdvQ97aR8LjrgpUIsXOE2gscOSgEwkW0Hmm7F6sMhrXxEwe6HakGgoZZ4oDLJAPfjG8ROt/Vl/2xbi5TS8D+xLaUHKkN76Bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6C1k0E6VRMHIoAozH2rVxsMz96aEptMYqxwqVPAWTMg=;
- b=J4OSWEr/+OstpLlTjbrTq+iebGi6i/2+s5Ga7gBa0Ed/sOyfeGiQUqKxr5Yb7unrLbI8g10xQ53UcWUjpEMsT2QPCYNWsVdg05LefYL5Bo68WWXBd4Yo5FvbeKZpPNe4hRQ6WvgZYVGuhbVhlztiALiY4oqXVUbBHASnaGZ92etDLlwOe9Z0jM7l+50NBBqOohlMTDi+P4fXsP+yp/HYhyettDLn1Y8W3LYvF4RfA/cR1Aaeh9Wm+thJVoElsAH7LpRXRZEeKOWqQM6Z/yYk+4eQEpOXHzm+W7DPMbPLJq0wlx7qSPqlHnkt0qN9/S0B9t03yoOMugWtLZiYCCVVbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6C1k0E6VRMHIoAozH2rVxsMz96aEptMYqxwqVPAWTMg=;
- b=s2XPgj4no9qlERKadt2nqsCfyB2zyRf+1e4YzeByCife1zzcyx5e8Gl+PLHmYxxeshyKHUJeBM1XvkajRQc9K8xFk57ujmMi+A2zSUU5jk23BOzGFP4KRRNNntpBLKsUEEqTvE0lIvBkj98Ck0DKu4/geygiq9GzpQ2KhjTMH2E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MN2PR12MB4504.namprd12.prod.outlook.com (2603:10b6:208:24f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
- 2023 14:38:06 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.020; Thu, 22 Jun 2023
- 14:38:06 +0000
-Message-ID: <3f5a37f1-70e0-3dcf-3bd3-acc8a04e53ee@amd.com>
-Date:   Thu, 22 Jun 2023 09:38:04 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [6.4-rc6] Crash during a kexec operation
- (tpm_amd_is_rng_defective)
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Sachin Sant <sachinp@linux.ibm.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, jarkko@kernel.org,
-        linux-integrity@vger.kernel.org
-References: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
- <87o7lhfmoh.fsf@mail.lhotse>
- <CA0088E4-2851-4AFF-94F8-2A07C5CDA8D8@linux.ibm.com>
- <675a8893-429d-05be-b647-089b249c814c@leemhuis.info>
- <87o7l7oer1.fsf@mail.lhotse>
-Content-Language: en-US
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <87o7l7oer1.fsf@mail.lhotse>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA1P222CA0059.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:2c1::11) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Thu, 22 Jun 2023 10:44:24 -0400
+Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEB52708;
+        Thu, 22 Jun 2023 07:44:00 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qn2qB6Gy2z9xFr8;
+        Thu, 22 Jun 2023 22:31:02 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDHTQngXZRkeCaRAw--.29682S2;
+        Thu, 22 Jun 2023 15:42:54 +0100 (CET)
+Message-ID: <eb31920bd00e2c921b0aa6ebed8745cb0130b0e1.camel@huaweicloud.com>
+Subject: [QUESTION] Full user space process isolation?
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Oleg Nesterov <oleg@redhat.com>, Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        LuisChamberlain <mcgrof@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>
+Cc:     linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Thu, 22 Jun 2023 16:42:37 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MN2PR12MB4504:EE_
-X-MS-Office365-Filtering-Correlation-Id: ec40b563-dabd-4c86-69a4-08db732e4aed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bz4R2Ns1fK27e0Lj1LzPzUI2RNTSI3rwUbDYEYq9lGhNZ39MNYvOBA23M09cD0DB9MMydnz0G/3DeGXNR4AHs/UdRIVvVJJowt67qa9nMOYtERB/c8GF9l8eDB9UE1GmGxiovpxLa+hJmOaXjK9SZaT3Ew9wpKb4nmRF7Ad9ceWbzfVDy4HKNPoj7lh7T9d/RvYZZPaeAHN5bPX3s63Y2aqFhpzezr62U3TlzCcPegi+jKMKl8Gge02pSWvAPTwarzVBk5e6orY1i383nQfMeZMbOyOK7TbDZ+ebkU+SyqudNBwLESTKCfsg9NqlotoP52x8zOu0iz5rIwok3jSKgMAlktm90NTH1c/vNrsmBMud+xCEGB7WEXY54zSW9MuNDYYu2OBCdA3oAg4nJVoi0xF5U1xwj58oQkwlS+hm9UZaiOKj0lYR705sZBwj3+luFm/DcURX1lQKzGKgQWHN/UglzsFXKPsdh9OThAqBiPqq1sVBCe7iGo0mk6vF+U4CJoqCyWJ6lujsVS2pMveKGsLvF6GC8PZBXhHHSXCFgiBBhDqQx+FQ1KFGx7PvFQTEYINkUCajk8Tpf5M3RoPXOitq47UtEg7kWQdGHjbs7XaWupCMEJijHcixx5A38X0AL8bLRnUtAvwk2aOt4ETPfA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(346002)(396003)(136003)(376002)(451199021)(31696002)(4326008)(66556008)(66476007)(36756003)(2616005)(54906003)(316002)(66946007)(83380400001)(6506007)(53546011)(31686004)(86362001)(2906002)(966005)(6486002)(5660300002)(41300700001)(6512007)(45080400002)(186003)(26005)(8936002)(8676002)(110136005)(478600001)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N3AwSitNMXNMNWV6alB5dE1icjV6b2o5eFVhVm1BS0VFV0VQYVQ4dDVDRHFv?=
- =?utf-8?B?eDZWMVQ0WEhQVU50czAva0ZkV2xwcUsyMjBvVzdPREJaemRTOFRNWlZweXlD?=
- =?utf-8?B?cWEwSjFHVXBFY0VHZVp6SDdOdmNNTDBwbWlLNHJWVHZyd3ZFOHFvUGwvYXlH?=
- =?utf-8?B?RkxQcy95TTNmOGlXRzVMbnB5dFNFUitJeVFnUmZlOUkzQUxidzlVS2JHUitu?=
- =?utf-8?B?cDlrTm85aTdLTWJnZGRvTUwzZDZPWHV5S1kzaC9qdWE4ck8wOVJUSEZ2TmZo?=
- =?utf-8?B?MFV0ak05MlQzYXMzdW8xUVFyMlZrU1JBTk1LdW05SHBYbzNiaVZDWFQxT2g2?=
- =?utf-8?B?Z0F5Z0lBV0N3WHZjMm9GSjJNT09nM1hXM2N6OE84UVQzbTFjcDU5VXd6SDdq?=
- =?utf-8?B?cXVNbXV1REgxRHo3bWpJQ0tKdGZubFVSd0VESkxKUUgrVzhmZW5Da1ArMVZq?=
- =?utf-8?B?ZlV2V29BbytZYlhNR2FROXhzM2tuNW5hOGlYbVhNV3RHQnJ6UmNuUlJFWVZG?=
- =?utf-8?B?M3gvLy9EZ1pCL2ZyTWYwaXZlMjNWc1htc2VZa3RZL1VtUm5STmQxTllRVDlu?=
- =?utf-8?B?YmFzNkNUY1dwSm5zRjNiQXZXdWVLZHJYY2NtWjBHc0lPalVmQWNGVklTVGVK?=
- =?utf-8?B?Vy9NTmhmcG9nUWFYSHB6RjhmdnVOTW1EZnIvZmpJVWpvZFlUazJYNTlvTURD?=
- =?utf-8?B?dzZMb1I1Tk9WRUVkRDV6TVZCRVRKWGdORjZKbmI4NGdUK3ZFTW84ZVZneXNh?=
- =?utf-8?B?bkhqNEVobldvTGVnUkxIMUt1aFJ6RmpTRXozYjEzYkxTQncwVElteG0vQ1JH?=
- =?utf-8?B?cnFmeHFza2E5c25EKzkzU0NIZXRwQWg0N1lSSlhnODZVWlRYZ1gyUnVHTlFN?=
- =?utf-8?B?cXRONnBacXYyTlZlNEU5Tzl4OGdMN0RPMjJ2YTdLSnpjQTdUamFjZG0vbitW?=
- =?utf-8?B?dTZ0NHhBZG5xTSs1SHRUOCszR3g5SjhiOVZ4ZnhOcytnSUhZbWthbTVnRytu?=
- =?utf-8?B?SzMwM05uMzdBbmMxM3IwdGdtbmw1RVlEeXZoVWsyVWhaVG1SV3RmenlNb2pF?=
- =?utf-8?B?Vk1iaEhmR0dzd0hOY1ExSkRFbHg1dzZQUTVYOTI3UEZHVlBwZ3pxaGZRbkdU?=
- =?utf-8?B?bVpSVHFLWlBpN2t3aC9wVmRQa0orK0swYTN2amdCck53alovS2RjZ3NzeUFJ?=
- =?utf-8?B?ZGZYcVNWWVpjMG1wUnNRTFJvZkRZM0pRTzF2eG0vT2Z3K2NjWGpEQXh4NXpG?=
- =?utf-8?B?bndQb2pwdS9nMlFrQkwyak9FWGN3VHFpK2FUTXBCTmxjUkRWdXQvb0dxaTZ6?=
- =?utf-8?B?TnNxK21XN0c3NFpTQkNEemZTTGdpODY2OUR2ZjhvbjYyZ2lndkJ1YU0zSC9Y?=
- =?utf-8?B?M1kzS1hrNy9PcThrajJpVHVDRDEvcGt0cDl6czNBWm8zYmNpeGZIKytMSVJE?=
- =?utf-8?B?UnFSSGJmRkN3anA4c0VvSjl3cXR3cUUvZ1ZDRU9XZlNiby9iSkFuQmlSWUY2?=
- =?utf-8?B?K0tmOGNmdVNiZVhWUU9jS25ZN09JamV4aFdYOTRseDdNUS80c1ZzQ0RIMXpU?=
- =?utf-8?B?aWJmRDN6d0Z5VThHZ1BMS3JSN3NRQU1FK1JwQ3RSbUE2NUpOc0lmcDNtV2sy?=
- =?utf-8?B?Tk9xQnczaWNmQVVoM3NKbGtwYlFBcFk2TmxDNUVneXhjM2RLMHlDTWRSamRE?=
- =?utf-8?B?RHY1T0llU3ZMVHAvd1piWWRqeGJCR01CTlFsYkxpaGYrSU1Hdis4UjFkODZ6?=
- =?utf-8?B?YzVVeW5DZWRiaVJYMzhYYk0ySFg4cFFrOW0vKzNjM0xFOWFnM2hBNURSMUk2?=
- =?utf-8?B?Y3l6cm1BdS9GWG1HRWo5WDQrREdXUHoxZ2tObEVWRWlxcDBzVFZ5WkJ0djY2?=
- =?utf-8?B?N1NJb3R4VHcrc29iOUg0TkNQYWxTbHUwTWhON012Ymk0dFNTcjRpaC9yNFJI?=
- =?utf-8?B?dk9JM3lCekxHQmxaS3hoK0RmajB5ZmpDdkRaL2tWOFdueW1VTG9XdFVFWXVO?=
- =?utf-8?B?RHlBS0tFUnl3REN3OUhrVlk2THhLdURZdUxHOEd0YXd5NHZ0RVF3NGxlWVFO?=
- =?utf-8?B?ZE0xSFhvd2JaR3E1RVBUaEhrZHVBU3NCMnNMV0xiOTROQ0QyZiswSmVNblRM?=
- =?utf-8?Q?ImsrpHaLS10sdUnCdGSCXr/xO?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec40b563-dabd-4c86-69a4-08db732e4aed
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 14:38:06.7353
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rPP+I2XD6w4mDPu2JM9yst/Q9FNgnsTVJNLC7E9wgaLXODEEBI0YWNRtthFlymc4mIYx3OJ1Nsv9X1cIYp9PHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4504
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwDHTQngXZRkeCaRAw--.29682S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr4xtw1rXFyUGF4UJF13urg_yoW8Zw1fpF
+        9akFZ8GFn5GF429as7Wr48J3yrurZ3Xay3Gr9rKry3X34Y9Fy2yry3t3WrXF1DKrsY9a4j
+        vwsxtrWjya1DZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbQVy7
+        UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj4sbAQABs3
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,111 +77,71 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi everyone
 
-On 6/22/2023 7:36 AM, Michael Ellerman wrote:
-> "Linux regression tracking (Thorsten Leemhuis)" <regressions@leemhuis.info> writes:
->> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
->> for once, to make this easily accessible to everyone.
->>
->> As Linus will likely release 6.4 on this or the following Sunday a quick
->> question: is there any hope this regression might be fixed any time
->> soon?
-> No.
->
-> I have added the author of the commit to Cc, maybe they can help?
->
-> The immediate question is, is it expected for chip->ops to be NULL in
-> this path? Obviously on actual AMD systems that isn't the case,
-> otherwise the code would crash there. But is the fact that chip->ops is
-> NULL a bug in the ibmvtpm driver, or a possibility that has been
-> overlooked by the checking code.
->
-> cheers
+I briefly discussed this topic at LSS NA 2023, but I wanted to have an
+opinion from a broader audience.
 
-All that code assumes that the TPM is still functional which
-seems not to be the case for your TPM.
 
-This should fix it:
+In short:
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 5be91591cb3b..7082b031741e 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -525,6 +525,9 @@ static bool tpm_amd_is_rng_defective(struct tpm_chip 
-*chip)
-         u64 version;
-         int ret;
+I wanted to execute some kernel workloads in a fully isolated user
+space process, started from a binary statically linked with klibc,
+connected to the kernel only through a pipe.
 
-+       if (!chip->ops)
-+               return false;
-+
-         if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
-                 return false;
+I also wanted that, for the root user, tampering with that process is
+as hard as if the same code runs in kernel space.
 
->> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->> --
->> Everything you wanna know about Linux kernel regression tracking:
->> https://linux-regtracking.leemhuis.info/about/#tldr
->> If I did something stupid, please tell me, as explained on that page.
->>
->> #regzbot poke
->>
->> On 15.06.23 06:57, Sachin Sant wrote:
->>>>> [ 34.381788] Code: 5463063e 408201c8 38210080 4e800020 60000000 60000000 60000000 7c0802a6 fbe10078 7c7f1b78 f8010090 e9230728 <e9890050> 2c2c0000 41820020 7d8903a6
->>>>   2c:   28 07 23 e9     ld      r9,1832(r3)
->>>>   30:   50 00 89 e9     ld      r12,80(r9)
->>>>
->>>> Where r3 is *chip.
->>>> r9 is NULL, and 80 = 0x50.
->>>>
->>>> Looks like a NULL chip->ops, which oopses in:
->>>>
->>>> static int tpm_request_locality(struct tpm_chip *chip)
->>>> {
->>>> int rc;
->>>>
->>>> if (!chip->ops->request_locality)
->>>>
->>>>
->>>> Can you test the patch below?
->>>>
->>> It proceeds further but then run into following crash
->>>
->>> [  103.269574] Kernel attempted to read user page (18) - exploit attempt? (uid: 0)
->>> [  103.269589] BUG: Kernel NULL pointer dereference on read at 0x00000018
->>> [  103.269595] Faulting instruction address: 0xc0000000009dcf34
->>> [  103.269599] Oops: Kernel access of bad area, sig: 11 [#1]
->>> [  103.269602] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
->>> [  103.269606] Modules linked in: dm_mod(E) nft_fib_inet(E) nft_fib_ipv4(E) nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E) nf_reject_ipv6(E) nft_reject(E) nft_ct(E) nft_chain_nat(E) nf_nat(E) nf_conntrack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) bonding(E) tls(E) rfkill(E) ip_set(E) sunrpc(E) nf_tables(E) nfnetlink(E) pseries_rng(E) aes_gcm_p10_crypto(E) drm(E) drm_panel_orientation_quirks(E) xfs(E) libcrc32c(E) sd_mod(E) sr_mod(E) t10_pi(E) crc64_rocksoft_generic(E) cdrom(E) crc64_rocksoft(E) crc64(E) sg(E) ibmvscsi(E) scsi_transport_srp(E) ibmveth(E) vmx_crypto(E) fuse(E)
->>> [  103.269644] CPU: 18 PID: 6872 Comm: kexec Kdump: loaded Tainted: G            E      6.4.0-rc6-dirty #8
->>> [  103.269649] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 of:IBM,FW1030.20 (NH1030_058) hv:phyp pSeries
->>> [  103.269653] NIP:  c0000000009dcf34 LR: c0000000009dd2bc CTR: c0000000009eaa60
->>> [  103.269656] REGS: c0000000a113f510 TRAP: 0300   Tainted: G            E       (6.4.0-rc6-dirty)
->>> [  103.269660] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 88484886  XER: 00000001
->>> [  103.269669] CFAR: c0000000009dd2b8 DAR: 0000000000000018 DSISR: 40000000 IRQMASK: 0  [  103.269669] GPR00: c0000000009dd2bc c0000000a113f7b0 c0000000014a1500 c000000090310000  [  103.269669] GPR04: c00000009f770000 0000000000000016 0000060000007a01 0000000000000016  [  103.269669] GPR08: c00000009f770000 0000000000000000 0000000000000000 0000000000008000  [  103.269669] GPR12: c0000000009eaa60 c00000135fab7f00 0000000000000000 0000000000000000  [  103.269669] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000  [  103.269669] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000  [  103.269669] GPR24: 0000000000000000 0000000000000016 c000000090310000 0000000000001000  [  103.269669] GPR28: c00000009f770000 000000007a010000 c00000009f770000 c000000090310000  [  103.269707] NIP [c0000000009dcf34] tpm_try_transmit+0x74/0x300
->>> [  103.269713] LR [c0000000009dd2bc] tpm_transmit+0xfc/0x190
->>> [  103.269717] Call Trace:
->>> [  103.269718] [c0000000a113f7b0] [c0000000a113f880] 0xc0000000a113f880 (unreliable)
->>> [  103.269724] [c0000000a113f840] [c0000000009dd2bc] tpm_transmit+0xfc/0x190
->>> [  103.269727] [c0000000a113f900] [c0000000009dd398] tpm_transmit_cmd+0x48/0x110
->>> [  103.269731] [c0000000a113f980] [c0000000009df1b0] tpm2_get_tpm_pt+0x140/0x230
->>> [  103.269736] [c0000000a113fa20] [c0000000009db208] tpm_amd_is_rng_defective+0xb8/0x250
->>> [  103.269739] [c0000000a113faa0] [c0000000009db828] tpm_chip_unregister+0x138/0x160
->>> [  103.269743] [c0000000a113fae0] [c0000000009eaa94] tpm_ibmvtpm_remove+0x34/0x130
->>> [  103.269748] [c0000000a113fb50] [c000000000115738] vio_bus_remove+0x58/0xd0
->>> [  103.269754] [c0000000a113fb90] [c000000000a01dcc] device_shutdown+0x21c/0x39c
->>> [  103.269758] [c0000000a113fc20] [c0000000001a2684] kernel_restart_prepare+0x54/0x70
->>> [  103.269762] [c0000000a113fc40] [c000000000292c48] kernel_kexec+0xa8/0x100
->>> [  103.269766] [c0000000a113fcb0] [c0000000001a2cd4] __do_sys_reboot+0x214/0x2c0
->>> [  103.269770] [c0000000a113fe10] [c000000000034adc] system_call_exception+0x13c/0x340
->>> [  103.269776] [c0000000a113fe50] [c00000000000d05c] system_call_vectored_common+0x15c/0x2ec
->>> [  103.269781] --- interrupt: 3000 at 0x7fff805459f0
->>> [  103.269784] NIP:  00007fff805459f0 LR: 0000000000000000 CTR: 0000000000000000
->>> [  103.269786] REGS: c0000000a113fe80 TRAP: 3000   Tainted: G            E       (6.4.0-rc6-dirty)
->>> [  103.269790] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42422884  XER: 00000000
->>> [  103.269799] IRQMASK: 0  [  103.269799] GPR00: 0000000000000058 00007fffc07a68c0 0000000110437f00 fffffffffee1dead  [  103.269799] GPR04: 0000000028121969 0000000045584543 0000000000000000 0000000000000003  [  103.269799] GPR08: 0000000000100000 0000000000000000 0000000000000000 0000000000000000  [  103.269799] GPR12: 0000000000000000 00007fff8089b2c0 000000011042f598 0000000000000000  [  103.269799] GPR16: ffffffffffffffff 0000000000000000 000000011040fcc0 0000000000000000  [  103.269799] GPR20: 0000000000008913 0000000000008914 0000000149c61020 0000000000000003  [  103.269799] GPR24: 0000000000000000 0000000000000001 0000000000000003 00007fffc07a6a40  [  103.269799] GPR28: 0000000110409f10 00007fff806419c0 0000000149c61080 0000000149c61040  [  103.269833] NIP [00007fff805459f0] 0x7fff805459f0
->>> [  103.269836] LR [0000000000000000] 0x0
->>> [  103.269838] --- interrupt: 3000
->>> [  103.269839] Code: 83a40006 2c090000 41820208 7c0802a6 79250020 7c25d840 f80100a0 41810224 fbe10088 f8410018 7c7f1b78 e9230728 <e9890018> 7d8903a6 4e800421 e8410018  [  103.269852] ---[ end trace 0000000000000000 ]—
->>>
->>> - Sachin
+I would use the fully isolated process to parse and convert unsupported
+data formats to a supported one, after the kernel verified the
+authenticity of the original format (that already exists and cannot
+change).
+
+Preventing tampering of the process ensures that the conversion goes as
+expected. Also, the integrity of the binary needs to be verified.
+
+
+List of wished data formats:
+
+PGP: verify the authenticity of RPM/DEB/... headers
+RPM/DEB/... headers: extract reference file checksums for
+                    (kernel-based) file integrity check (e.g. with IMA)
+
+
+Alternative #1:
+
+Write the parsers to run in kernel space. That was rejected due to
+security and scalability concerns. If that changed, please let me know.
+
+
+Alternative #2:
+
+Linux distributions could provide what the kernel supports. However,
+from personal experience, the effort seems orders of magnitude higher
+than just writing a tiny component to support the original format. And
+there is no guarantee that all Linux distributions will do it.
+
+
+Full process isolation could be achieved in this way:
+
+process -> outside: set seccomp strict profile at process creation
+                    so that the process can only read/write/close the
+                    pipe and exit, no other system calls are allowed
+
+outside -> process: deny ptrace/kill with the process as target
+
+Anything else?
+
+
+The only risk I see is that a new feature allowing to interact with
+another process is added to the kernel, without the ptrace permission
+being asked.
+
+With the restrictions above, can we say that the code inside the
+process is as safe (against tampering) to execute as if it runs in
+kernel space?
+
+Thanks
+
+Roberto
+
