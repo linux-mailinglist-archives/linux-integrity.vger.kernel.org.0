@@ -2,162 +2,161 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6EB73B6BF
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jun 2023 13:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADB373B8E5
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jun 2023 15:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjFWLtV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Jun 2023 07:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
+        id S230373AbjFWNmP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Jun 2023 09:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbjFWLtJ (ORCPT
+        with ESMTP id S229775AbjFWNmO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Jun 2023 07:49:09 -0400
-Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EFA3590
-        for <linux-integrity@vger.kernel.org>; Fri, 23 Jun 2023 04:47:03 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QnZtM3bf4z9yBlZ
-        for <linux-integrity@vger.kernel.org>; Fri, 23 Jun 2023 19:35:39 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwA3_lT2hZVkpYeRAw--.30541S2;
-        Fri, 23 Jun 2023 12:46:05 +0100 (CET)
-Message-ID: <01135b4f26d4460179f3b7981d4736f73fa889ba.camel@huaweicloud.com>
-Subject: Re: [PATCH v3 ima-evm-utils 4/4] Add simple tests to check EVM HMAC
- calculation
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com
-Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
-        stefanb@linux.ibm.com, paul@paul-moore.com, casey@schaufler-ca.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 23 Jun 2023 13:45:54 +0200
-In-Reply-To: <1f125e9153369f757749f0825e41a4685b9fe005.camel@linux.ibm.com>
-References: <20230616192358.314906-1-roberto.sassu@huaweicloud.com>
-         <20230616192358.314906-5-roberto.sassu@huaweicloud.com>
-         <1f125e9153369f757749f0825e41a4685b9fe005.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
+        Fri, 23 Jun 2023 09:42:14 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2078.outbound.protection.outlook.com [40.107.223.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E610D2;
+        Fri, 23 Jun 2023 06:42:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JVip/B6NWm7NRuup6rHvR9JYOLBFXnLNCnScU8RKdzfGx8CRovN/sE2kFNcbBZZeTIXZGxsSGueO/0hmkuXXGJpZ6kg9/j1osCPy72YCtTa2CXE9XZanEvu+EcFK779AjsBTHdTinrxec8hNjIFbhsyer6G8qCwX0q60UtGqsK+BueS+/DYG5wf9/cjPo6HeKPI5pkBOrQSwl6rlK2Pw/ceYEtf9HFtvPBBszwixxiwZMkVwaKEcKffjIS6kcwWhDLkBgVWvq0A4XKdu4gIO+T+vpoeB4ZUvx4M2fPkFynB/E8MbZGxh8liT7yHhCbQB955veGfw5PkpAVGmNR5Uzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KoTJBKZuHoGB+do7JTOHF2q4MyHxHFAuDubC64jYohY=;
+ b=AMU3J4BWtg89EAU8LiGz+Ngo1oBu23IwFdQ+BiriXJa7d4KYDL1q0ePsr7gtVbp1Z05Pcu+8UX0URjSWuNPBRUmSOZH65rlLG9ai0AKwIFdCF3HQVtYujO+k3/lA8QfCbAFX34J5XtDSRDQ6q8kqBziVzp1XBQ5wNMI2Ud8UDy0fCoWuMZX2e9CjjTXNjkX3CstnGlhqqftZZO3dYUJZWCNEjsCsmYXOClTU99xnbi8kjvywyXcqjkFd4+guGf+loollaM73uouDngdBEMpR/I31fxHxejOyawrSvtLy6h6n3yT0T05unEUJ4P5mKjdNRP00dEMgeFWsARptxAWkrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KoTJBKZuHoGB+do7JTOHF2q4MyHxHFAuDubC64jYohY=;
+ b=E2LjYeySYXt4fFxRfnF1WzTwYIsL+UnS4R/59YGU099xeQRBmi6/5CvrN2vma1j71UFeumUrrDSpGaFgvyJOHFmlD3vG5cgubE+AvPsClRtEF3g+Cm+Rjw55fBHOKxQX0Va3b20LJpAxD8Z6RLaYg+6Ikkyd5JuYPWqnSdVinzc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by IA1PR12MB7519.namprd12.prod.outlook.com (2603:10b6:208:418::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Fri, 23 Jun
+ 2023 13:42:10 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.026; Fri, 23 Jun 2023
+ 13:42:10 +0000
+Message-ID: <4d3c4b8a-1788-08af-97ef-a1466a8cda5c@amd.com>
+Date:   Fri, 23 Jun 2023 08:42:08 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] tpm: Ensure that tpm chip has ops to check if it's
+ defective
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Sachin Sant <sachinp@linux.ibm.com>
+References: <20230623030427.908-1-mario.limonciello@amd.com>
+ <2023062317-daytime-angles-3c5a@gregkh>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <2023062317-daytime-angles-3c5a@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwA3_lT2hZVkpYeRAw--.30541S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxur13XF4fCr1rZw4UCrW3KFg_yoWrCrW7p3
-        y3GayxKrWkAryUur1fCa17Xrn7u398Wr4DJr92vF9rZFn5Zr9YvryUJ3W7urykC3y0yry3
-        tFZ8GFsrKa1UAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-        KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBF1jj481uQADsl
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: DS7PR03CA0044.namprd03.prod.outlook.com
+ (2603:10b6:5:3b5::19) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|IA1PR12MB7519:EE_
+X-MS-Office365-Filtering-Correlation-Id: d8cf1b89-34aa-49f8-6ddc-08db73efa4d2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fz23oZ5RuqJDqZ9BbCXH/YwBJGDQBFI7EMZJZSWZpG4fvRrHGG5RqI2ouexNT8Noas2dypx/DZSYWoqJGc6s/azBPdRLzA6m52SdTzZjUTcFF4aZ8++nRPTbPIjjr+j7YjVkAkL6/A5O6/J0CurwA4Oujj8b8jL+sq2vwmBWYeJFYdzniOHQ8Ohu8GSb2xqMXWS96ZwUliUeJjDAMfu86CYtmykLtJ+dzfZaMlsujrfiwfSeZIXjtLthNgPGx0A54P3uvTS9JXMIML5+5rcavwnXvtU+ftG0uhdBqQke4MgWDK/7xuiGjef47pGGsc3pck+lJ2Gnvp3jN2JgDEbU/pc4rGCL7k0lUHXc/ir1v+NUTUJn7zJP5aarY5ccplGO7un03pRqL1M3Y1Bwdn47UDKGlckTUp7msBTJzoceuLbQJJTALDvUDqZK0Y72kg4X2UbAoxRcB5jmDTDtNvRDNX/ceW1/qgfjjrYKVtej6CHCA/YPZN65kxfkLhTSn8oKLw79Ykp5UtNSAxfZns8jyliq674JhkzCfDwEfTJh4hMt/1FiFCmQLbq8dVmvVlsY2KIR5yLk3gKzA3hQulXPTRcfNLEotuoXpQ/JnaRjHJpEvarZXEDo98/o0/EFbN1iTp1momCm2Td8QJmzMuv1Jg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(136003)(376002)(346002)(396003)(451199021)(186003)(31686004)(966005)(6512007)(8676002)(6506007)(53546011)(2616005)(6486002)(2906002)(478600001)(36756003)(316002)(54906003)(38100700002)(86362001)(66476007)(31696002)(4326008)(66946007)(6916009)(5660300002)(41300700001)(66556008)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YzJUNXFIaDFBUjQ4aW1lN2k2SVh0ZHN3dUxOMEdiTWZQU3VBOWRsZnRBMG1M?=
+ =?utf-8?B?QXdNSzhMRFN1azJnQ0YyMmo0VlpsaUkrWUg4dGFrRFZDcmd3TkdIaDBOaHp1?=
+ =?utf-8?B?REg5VzhIekowYVIxNlV1OUVYdzBPZ1BTYlNNd3c3NDJLcGJEMnRTWlRpeUhn?=
+ =?utf-8?B?MGR3VlJVU1B1M0o5RU1mdStxU3hnZjVOZmMvOFU4UmhsVXVybzlaOE4wWWNo?=
+ =?utf-8?B?ZVFzRlJSZ2VISWoyREhBQlNuZXdXbHpIYWVGdE1zWEs0dTNyaC9tbWVHdEw0?=
+ =?utf-8?B?NHc4TUxqdWxlRkwvVFZhMkRCZE9HL0xLOVRlVXgxOFZ5aEVuNmFZeUZLdEhE?=
+ =?utf-8?B?aEU4Ymd1Ti90TFNJamFESVVpRDdTT25lZTljMW5BNjQ2ekxYTkFKY3pEMnRl?=
+ =?utf-8?B?S1dkWFpDblJRaVk1MUxSTnNaeHBuVjNpTzN6Z3pxSTIxN0Zub2UzWlZXUCtH?=
+ =?utf-8?B?dWs2Q1ZyL1lhSW13U0FIc04xSUVJbTE0bDVwR09BalduTi90MytHQll4SW9G?=
+ =?utf-8?B?TFZ2b3dXcVQ1ZmxPN2I5bkU1c2pHOTJ5RTAzenBSczVuZGMxTmNBbEV0aFlT?=
+ =?utf-8?B?YmdDd01NbThITnRROHo0TjdMMjJqcGJGVnVrU1B1TDZYbFZ5T0RTYUFWOW1O?=
+ =?utf-8?B?ZXg3aHRsVklWTWh3M1dmWHhiYk1Fa0dEL1NxcUdZeEtLSkpkMS82NkpDQm9Y?=
+ =?utf-8?B?aTlGMU9rZ1VwV2RzdTd0aDloc3dDUHlhaUtZRGE1UmRyRVlFZ2pqdnVuaml5?=
+ =?utf-8?B?VlAvOGQ2ZXBYME04b3FlZDJpeFdVdXhzclZScmZ2S3pVSUw0REVhTlZUWE5w?=
+ =?utf-8?B?b3psUFpnUElyZCtXaUdWeHZtdWgzNkYwc3hxcjZLUnhMN0U3cnhpQkgyaUF3?=
+ =?utf-8?B?b2hYYWw4SndnRldQcFpRM0hDRVR6WkpKZ2hxL2NLd0p5NUVZZ09NTDFuQkN6?=
+ =?utf-8?B?RDAvc0NIZ0RUMEd6SWRPSFpreTd1OXpNYW1zUW5DZ3ZhR1NoQm9rK0pCcit2?=
+ =?utf-8?B?enlKNFRzUm83c1I3Z2FHYlo3ejhGMU12NW5MUHBvbVM1UXVKM1ZjaU5vNWQ1?=
+ =?utf-8?B?MnVVdWZCTmY0eEtFWUwyUXRzejhCVEI0VkRIODJGT0RGakFMaXBEY1pwUUJt?=
+ =?utf-8?B?cmlLTm1Od294Qit4RHhMclBjQ3NzWWRCWDlBQmtpalozR0NtWXkrTWJ4NnZ5?=
+ =?utf-8?B?NUNaZGh6VHpoT3c1YkVwdVM4UURrSkk2KzFDczAvVDhna2hZMkpreS9FV3JW?=
+ =?utf-8?B?R0xyU01lOGY5TzIvb3FGY1RNbW5oaW5uUjRuQ0xValdkVGZmOWtZU01wS0FG?=
+ =?utf-8?B?RDFvc3BPakNMT2lXOUVNV2NMV3dzcmNIQWwyWEdkZmloMkNyRi9Za1FHdWE3?=
+ =?utf-8?B?RFNJdkJFdkpIWklKNGNPVjU3bmZxTDd0UjVDRU96d1cyclRIS0FwTUg1SUVX?=
+ =?utf-8?B?R0UvWEJtV3l1TC9mNkt3T0hXUkRUMytrR1lIZjFaNEZ6Z3VGNGhBbklQYTFn?=
+ =?utf-8?B?VmM1eDZJZm85L3FmZkxOOHJYS1g0eU10cWs1NHE1NjE2TVE4ZDlDVEpqeTJI?=
+ =?utf-8?B?Snc3T2RCTG9tUmJFdEFpdEtVN3dWRnZVallFQ3owNzM2UG5kRXN3VldwQUNG?=
+ =?utf-8?B?MWNnQ1YvakVPR096QkxKOFN5b2tMQXZvL0ZPemdzM3BZKy96RkJ1Zlh4a0pw?=
+ =?utf-8?B?VTlnQmdleDN6QmZIYjFsMjJpcVVIbWJuMXc5aityWm5iam85bzZyUUl3QVNB?=
+ =?utf-8?B?cisxdm9wNmpHZU1qZ2JoalhjQlVSdEdrTjlRWVRxV3MrOEUvMU9UbU1lalZ0?=
+ =?utf-8?B?NlpXZjN3bnZ3YlJ0SVNVSXJxQUxGZ0wrMVE4WWNsNXF3RldaM1VmeWtPbTda?=
+ =?utf-8?B?dU5sbTlVay92WnZnTlR0NWhrd3Z3ZGsycG40QzZVc3dmbm1xVXlpQ3FJS1Vr?=
+ =?utf-8?B?R3BpRTBucmdxb1MwcCt4UFdLQXYram9ndXoySXpwWUFBZXNPWDV2RnhUa2pp?=
+ =?utf-8?B?N1FXYUJkSzVCdDI3c2xwL3YxV0hjK2FVdnNxWnpxaDRDeVN2L2FFbi83a1lQ?=
+ =?utf-8?B?OURFSGpBaElSdkh0MUV3S0ptUS9JdmdQR3dzakticjdZVHhuZVhBQ2g1ZnNq?=
+ =?utf-8?B?VWFMMWVmbTZhZGJyWUtOMHZQSzU3ellnc1Z0OHhqako4c1VNbDlqeVRYeFNT?=
+ =?utf-8?Q?0tjtFzn9Tun+5BSxDG8nYMeHE7aQ4wgXOjnJ9hz25C17?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8cf1b89-34aa-49f8-6ddc-08db73efa4d2
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 13:42:10.4156
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: B3zLLDwLFQO2Eo27+C/EAMWR94L9SfT0+yA/U6V8mJa4Ruy+oy0kl3a9EK017eAIlFAUSgDdmJFhhYGaeXQmLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7519
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2023-06-23 at 07:42 -0400, Mimi Zohar wrote:
-> Hi Roberto,
-> 
-> On Fri, 2023-06-16 at 21:23 +0200, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Add a simple test to ensure that the kernel and evmctl provide the same
-> > result for the HMAC calculation. Do it with SELinux or Smack, whichever is
-> > available (if the UML kernel is used, the test is done with both LSMs).
-> > 
-> > Also add another test to evaluate the HMAC on a directory for which Smack
-> > added the SMACK64TRANSMUTE xattr.
-> > 
-> > The second test fails without the kernel patch 'smack: Set the
-> > SMACK64TRANSMUTE xattr in smack_inode_init_security()', as Smack uses
-> > __vfs_setxattr() to set SMACK64TRANSMUTE, which does not go through EVM,
-> > and makes the HMAC invalid.
-> > 
-> > Require (unless the UML kernel is used) that the TST_EVM_CHANGE_MODE
-> > environment variable is set to 1, so that users acknowledge that they are
-> > initializing EVM with a well-known HMAC key, which can introduce obvious
-> > security concerns.
-> > 
-> > Finally, enable SELinux, the EVM additional xattrs, and encrypted keys with
-> > user-decrypted data in the kernel configuration for CI, and set
-> > TST_EVM_CHANGE_MODE to 1 in the Github Action workflow.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> The simple SELinux and Smack tests are working properly without kernel
-> changes.  Even the Smack transmute test is working is proplery
-> returning an error message, but is followed by a kernel panic.
-> 
-> Possibly missing patches:
->  - smack: Set the SMACK64TRANSMUTE xattr in smack_inode_init_security
 
-Hi Mimi
+On 6/23/2023 1:08 AM, Greg KH wrote:
+> On Thu, Jun 22, 2023 at 10:04:27PM -0500, Mario Limonciello wrote:
+>> The ibmvtpm doesn't have `chip->ops` set, and so trying to check
+>> if it's a defective AMD fTPM doesn't work.
+>>
+>> Add an extra check to tpm_amd_is_rng_defective() to ensure the
+>> TPM being checked has `chip->ops`.
+>>
+>> Cc: Linux regressions mailing list <regressions@lists.linux.dev>
+>> Reported-by: Aneesh Kumar K. V <aneesh.kumar@linux.ibm.com>
+>> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+>> Link: https://lore.kernel.org/lkml/99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com/
+>> Tested-by: Sachin Sant <sachinp@linux.ibm.com>
+>> Fixes: bd8621ca1510 ("tpm: Add !tpm_amd_is_rng_defective() to the hwrng_unregister() call site")
+>> Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs")
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>>   drivers/char/tpm/tpm-chip.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+> No cc: stable on that list above?
 
-that means that the test is failing.
+Good point, my mistake on that miss.
 
-A UML kernel panic is used to signal to the caller that a test in that
-environment failed.
+If Jarkko agrees with the direction of this patch, I think
+it can be added while committing.
 
-It is expected that the test fails, Smack updates its xattr with
-__vfs_setxattr() which does not involve EVM checking and updating the
-HMAC.
-
-Thanks
-
-Roberto
-
->    14.620000][    T1] Kernel panic - not syncing: Attempted to kill
-> init! exitcode=0x00000100
-> [   14.620000][    T1] CPU: 0 PID: 1 Comm: evm_hmac.test Not tainted
-> 6.4.0-rc2-dont-use-g95526d13038c #1
-> [   14.620000][    T1] Stack:
-> [   14.620000][    T1]  60900a17 e1803be0 e1803c20 606f7598
-> [   14.620000][    T1]  63240701 60043a50 60900a17 00000000
-> [   14.620000][    T1]  60dfc308 00000000 e1803c60 60762e4b
-> [   14.620000][    T1] Call Trace:
-> [   14.620000][    T1]  [<6072ad82>] ? _printk+0x0/0x98
-> [   14.620000][    T1]  [<6072274d>] show_stack.cold+0x9d/0xf4
-> [   14.620000][    T1]  [<606f7598>] ? dump_stack_print_info+0xd8/0xf0
-> [   14.620000][    T1]  [<60043a50>] ? um_set_signals+0x0/0x60
-> [   14.620000][    T1]  [<60762e4b>] dump_stack_lvl+0x66/0x9a
-> [   14.620000][    T1]  [<607715d0>] ? _raw_spin_unlock_irq+0x0/0x60
-> [   14.620000][    T1]  [<60762e9d>] dump_stack+0x1e/0x20
-> [   14.620000][    T1]  [<6072429d>] panic+0x1a6/0x3a6
-> [   14.620000][    T1]  [<607240f7>] ? panic+0x0/0x3a6
-> [   14.620000][    T1]  [<600aec6a>] ? lock_release+0xca/0x180
-> [   14.620000][    T1]  [<60043a50>] ? um_set_signals+0x0/0x60
-> [   14.620000][    T1]  [<60764fe0>] ?
-> debug_lockdep_rcu_enabled+0x0/0x50
-> [   14.620000][    T1]  [<60043a9f>] ? um_set_signals+0x4f/0x60
-> [   14.620000][    T1]  [<60764fe0>] ?
-> debug_lockdep_rcu_enabled+0x0/0x50
-> [   14.620000][    T1]  [<60043a50>] ? um_set_signals+0x0/0x60
-> [   14.620000][    T1]  [<60064d79>] ? exit_signals+0x139/0x500
-> [   14.620000][    T1]  [<60771210>] ? _raw_spin_lock_irq+0x0/0xd0
-> [   14.620000][    T1]  [<607715d0>] ? _raw_spin_unlock_irq+0x0/0x60
-> [   14.620000][    T1]  [<607249c0>] make_task_dead.cold+0x0/0x9d
-> [   14.620000][    T1]  [<600557e7>] do_group_exit+0x47/0xe0
-> [   14.620000][    T1]  [<6004a0f0>] ? get_fp_registers+0x0/0x80
-> [   14.620000][    T1]  [<6005589a>] sys_exit_group+0x1a/0x20
-> [   14.620000][    T1]  [<600302a0>] handle_syscall+0xa0/0xd0
-> [   14.620000][    T1]  [<60046969>] handle_trap+0xe9/0x1a0
-> [   14.620000][    T1]  [<6004a0f0>] ? get_fp_registers+0x0/0x80
-> [   14.620000][    T1]  [<6004709f>] userspace+0x29f/0x530
-> [   14.620000][    T1]  [<6002c374>] new_thread_handler+0xb4/0xc0
-> ./functions.sh: line 72:  8546 Aborted                 (core dumped)
-> "$@"
-> =================================
->  Run with FAILEARLY=1 ./evm_hmac.test _cleanup_env cleanup
->  To stop after first failure
-> 
+Thanks!
 
