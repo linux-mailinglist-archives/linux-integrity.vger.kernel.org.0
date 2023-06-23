@@ -2,161 +2,152 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADB373B8E5
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jun 2023 15:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D601173BA36
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jun 2023 16:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjFWNmP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Jun 2023 09:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        id S232236AbjFWObM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Jun 2023 10:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjFWNmO (ORCPT
+        with ESMTP id S232230AbjFWOas (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Jun 2023 09:42:14 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2078.outbound.protection.outlook.com [40.107.223.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E610D2;
-        Fri, 23 Jun 2023 06:42:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JVip/B6NWm7NRuup6rHvR9JYOLBFXnLNCnScU8RKdzfGx8CRovN/sE2kFNcbBZZeTIXZGxsSGueO/0hmkuXXGJpZ6kg9/j1osCPy72YCtTa2CXE9XZanEvu+EcFK779AjsBTHdTinrxec8hNjIFbhsyer6G8qCwX0q60UtGqsK+BueS+/DYG5wf9/cjPo6HeKPI5pkBOrQSwl6rlK2Pw/ceYEtf9HFtvPBBszwixxiwZMkVwaKEcKffjIS6kcwWhDLkBgVWvq0A4XKdu4gIO+T+vpoeB4ZUvx4M2fPkFynB/E8MbZGxh8liT7yHhCbQB955veGfw5PkpAVGmNR5Uzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KoTJBKZuHoGB+do7JTOHF2q4MyHxHFAuDubC64jYohY=;
- b=AMU3J4BWtg89EAU8LiGz+Ngo1oBu23IwFdQ+BiriXJa7d4KYDL1q0ePsr7gtVbp1Z05Pcu+8UX0URjSWuNPBRUmSOZH65rlLG9ai0AKwIFdCF3HQVtYujO+k3/lA8QfCbAFX34J5XtDSRDQ6q8kqBziVzp1XBQ5wNMI2Ud8UDy0fCoWuMZX2e9CjjTXNjkX3CstnGlhqqftZZO3dYUJZWCNEjsCsmYXOClTU99xnbi8kjvywyXcqjkFd4+guGf+loollaM73uouDngdBEMpR/I31fxHxejOyawrSvtLy6h6n3yT0T05unEUJ4P5mKjdNRP00dEMgeFWsARptxAWkrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KoTJBKZuHoGB+do7JTOHF2q4MyHxHFAuDubC64jYohY=;
- b=E2LjYeySYXt4fFxRfnF1WzTwYIsL+UnS4R/59YGU099xeQRBmi6/5CvrN2vma1j71UFeumUrrDSpGaFgvyJOHFmlD3vG5cgubE+AvPsClRtEF3g+Cm+Rjw55fBHOKxQX0Va3b20LJpAxD8Z6RLaYg+6Ikkyd5JuYPWqnSdVinzc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by IA1PR12MB7519.namprd12.prod.outlook.com (2603:10b6:208:418::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Fri, 23 Jun
- 2023 13:42:10 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.026; Fri, 23 Jun 2023
- 13:42:10 +0000
-Message-ID: <4d3c4b8a-1788-08af-97ef-a1466a8cda5c@amd.com>
-Date:   Fri, 23 Jun 2023 08:42:08 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] tpm: Ensure that tpm chip has ops to check if it's
- defective
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Sachin Sant <sachinp@linux.ibm.com>
-References: <20230623030427.908-1-mario.limonciello@amd.com>
- <2023062317-daytime-angles-3c5a@gregkh>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <2023062317-daytime-angles-3c5a@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Fri, 23 Jun 2023 10:30:48 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FC5271F
+        for <linux-integrity@vger.kernel.org>; Fri, 23 Jun 2023 07:30:39 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35NEC4mE015374;
+        Fri, 23 Jun 2023 14:30:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=PU9NOrXfsn17oMAxzbm3e8tk78+vX8e9W88WCs+NdBs=;
+ b=iv6gJ7QbQaTzhEnMUSpd/hARX/6eALTGis54YUUN1LZBfHlIYh2dT7Rzyhlsb4tC+yqK
+ x4eCTKmYqo7DTsVUbp0mxloXRD5e9dOlr7T0IoVLAlgnabN+4HD7kI5IhuN0oaVVnCP9
+ a6w7a8DKpJFneA/hIvI2YCEdjNlJMbvD5yoq5iEqIBHypybbkWVbZqa0OU0GW2hMmFOO
+ nfNKwTgcgZ0zMW1ym1Tyf5pht2Sr/NJfm3/jI9XMLI69fH5WrQfpXI1zX658CsHUstD4
+ y1PNX4/6yqUqsVxTo5aKFhlz2GJ2t8D+tnbMBQTXC2rW4qnwE44I9C8vaDuHmM3Uc18b Ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rdcxtggdw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 14:30:19 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35NEEPTi023841;
+        Fri, 23 Jun 2023 14:30:18 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rdcxtggdj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 14:30:18 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35N4bcdw005581;
+        Fri, 23 Jun 2023 14:30:17 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3r94f5jqvq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 14:30:17 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35NEUG3x60948980
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 23 Jun 2023 14:30:16 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9424B5805E;
+        Fri, 23 Jun 2023 14:30:16 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 10A1158055;
+        Fri, 23 Jun 2023 14:30:16 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.58.24])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 23 Jun 2023 14:30:15 +0000 (GMT)
+Message-ID: <06d377cb2be8a23140c9f78c2d4dbf1bbcbef692.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 ima-evm-utils 4/4] Add simple tests to check EVM HMAC
+ calculation
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com
+Cc:     linux-integrity@vger.kernel.org, vt@altlinux.org, pvorel@suse.cz,
+        stefanb@linux.ibm.com, paul@paul-moore.com, casey@schaufler-ca.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 23 Jun 2023 10:30:15 -0400
+In-Reply-To: <01135b4f26d4460179f3b7981d4736f73fa889ba.camel@huaweicloud.com>
+References: <20230616192358.314906-1-roberto.sassu@huaweicloud.com>
+         <20230616192358.314906-5-roberto.sassu@huaweicloud.com>
+         <1f125e9153369f757749f0825e41a4685b9fe005.camel@linux.ibm.com>
+         <01135b4f26d4460179f3b7981d4736f73fa889ba.camel@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DS7PR03CA0044.namprd03.prod.outlook.com
- (2603:10b6:5:3b5::19) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|IA1PR12MB7519:EE_
-X-MS-Office365-Filtering-Correlation-Id: d8cf1b89-34aa-49f8-6ddc-08db73efa4d2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fz23oZ5RuqJDqZ9BbCXH/YwBJGDQBFI7EMZJZSWZpG4fvRrHGG5RqI2ouexNT8Noas2dypx/DZSYWoqJGc6s/azBPdRLzA6m52SdTzZjUTcFF4aZ8++nRPTbPIjjr+j7YjVkAkL6/A5O6/J0CurwA4Oujj8b8jL+sq2vwmBWYeJFYdzniOHQ8Ohu8GSb2xqMXWS96ZwUliUeJjDAMfu86CYtmykLtJ+dzfZaMlsujrfiwfSeZIXjtLthNgPGx0A54P3uvTS9JXMIML5+5rcavwnXvtU+ftG0uhdBqQke4MgWDK/7xuiGjef47pGGsc3pck+lJ2Gnvp3jN2JgDEbU/pc4rGCL7k0lUHXc/ir1v+NUTUJn7zJP5aarY5ccplGO7un03pRqL1M3Y1Bwdn47UDKGlckTUp7msBTJzoceuLbQJJTALDvUDqZK0Y72kg4X2UbAoxRcB5jmDTDtNvRDNX/ceW1/qgfjjrYKVtej6CHCA/YPZN65kxfkLhTSn8oKLw79Ykp5UtNSAxfZns8jyliq674JhkzCfDwEfTJh4hMt/1FiFCmQLbq8dVmvVlsY2KIR5yLk3gKzA3hQulXPTRcfNLEotuoXpQ/JnaRjHJpEvarZXEDo98/o0/EFbN1iTp1momCm2Td8QJmzMuv1Jg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(136003)(376002)(346002)(396003)(451199021)(186003)(31686004)(966005)(6512007)(8676002)(6506007)(53546011)(2616005)(6486002)(2906002)(478600001)(36756003)(316002)(54906003)(38100700002)(86362001)(66476007)(31696002)(4326008)(66946007)(6916009)(5660300002)(41300700001)(66556008)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YzJUNXFIaDFBUjQ4aW1lN2k2SVh0ZHN3dUxOMEdiTWZQU3VBOWRsZnRBMG1M?=
- =?utf-8?B?QXdNSzhMRFN1azJnQ0YyMmo0VlpsaUkrWUg4dGFrRFZDcmd3TkdIaDBOaHp1?=
- =?utf-8?B?REg5VzhIekowYVIxNlV1OUVYdzBPZ1BTYlNNd3c3NDJLcGJEMnRTWlRpeUhn?=
- =?utf-8?B?MGR3VlJVU1B1M0o5RU1mdStxU3hnZjVOZmMvOFU4UmhsVXVybzlaOE4wWWNo?=
- =?utf-8?B?ZVFzRlJSZ2VISWoyREhBQlNuZXdXbHpIYWVGdE1zWEs0dTNyaC9tbWVHdEw0?=
- =?utf-8?B?NHc4TUxqdWxlRkwvVFZhMkRCZE9HL0xLOVRlVXgxOFZ5aEVuNmFZeUZLdEhE?=
- =?utf-8?B?aEU4Ymd1Ti90TFNJamFESVVpRDdTT25lZTljMW5BNjQ2ekxYTkFKY3pEMnRl?=
- =?utf-8?B?S1dkWFpDblJRaVk1MUxSTnNaeHBuVjNpTzN6Z3pxSTIxN0Zub2UzWlZXUCtH?=
- =?utf-8?B?dWs2Q1ZyL1lhSW13U0FIc04xSUVJbTE0bDVwR09BalduTi90MytHQll4SW9G?=
- =?utf-8?B?TFZ2b3dXcVQ1ZmxPN2I5bkU1c2pHOTJ5RTAzenBSczVuZGMxTmNBbEV0aFlT?=
- =?utf-8?B?YmdDd01NbThITnRROHo0TjdMMjJqcGJGVnVrU1B1TDZYbFZ5T0RTYUFWOW1O?=
- =?utf-8?B?ZXg3aHRsVklWTWh3M1dmWHhiYk1Fa0dEL1NxcUdZeEtLSkpkMS82NkpDQm9Y?=
- =?utf-8?B?aTlGMU9rZ1VwV2RzdTd0aDloc3dDUHlhaUtZRGE1UmRyRVlFZ2pqdnVuaml5?=
- =?utf-8?B?VlAvOGQ2ZXBYME04b3FlZDJpeFdVdXhzclZScmZ2S3pVSUw0REVhTlZUWE5w?=
- =?utf-8?B?b3psUFpnUElyZCtXaUdWeHZtdWgzNkYwc3hxcjZLUnhMN0U3cnhpQkgyaUF3?=
- =?utf-8?B?b2hYYWw4SndnRldQcFpRM0hDRVR6WkpKZ2hxL2NLd0p5NUVZZ09NTDFuQkN6?=
- =?utf-8?B?RDAvc0NIZ0RUMEd6SWRPSFpreTd1OXpNYW1zUW5DZ3ZhR1NoQm9rK0pCcit2?=
- =?utf-8?B?enlKNFRzUm83c1I3Z2FHYlo3ejhGMU12NW5MUHBvbVM1UXVKM1ZjaU5vNWQ1?=
- =?utf-8?B?MnVVdWZCTmY0eEtFWUwyUXRzejhCVEI0VkRIODJGT0RGakFMaXBEY1pwUUJt?=
- =?utf-8?B?cmlLTm1Od294Qit4RHhMclBjQ3NzWWRCWDlBQmtpalozR0NtWXkrTWJ4NnZ5?=
- =?utf-8?B?NUNaZGh6VHpoT3c1YkVwdVM4UURrSkk2KzFDczAvVDhna2hZMkpreS9FV3JW?=
- =?utf-8?B?R0xyU01lOGY5TzIvb3FGY1RNbW5oaW5uUjRuQ0xValdkVGZmOWtZU01wS0FG?=
- =?utf-8?B?RDFvc3BPakNMT2lXOUVNV2NMV3dzcmNIQWwyWEdkZmloMkNyRi9Za1FHdWE3?=
- =?utf-8?B?RFNJdkJFdkpIWklKNGNPVjU3bmZxTDd0UjVDRU96d1cyclRIS0FwTUg1SUVX?=
- =?utf-8?B?R0UvWEJtV3l1TC9mNkt3T0hXUkRUMytrR1lIZjFaNEZ6Z3VGNGhBbklQYTFn?=
- =?utf-8?B?VmM1eDZJZm85L3FmZkxOOHJYS1g0eU10cWs1NHE1NjE2TVE4ZDlDVEpqeTJI?=
- =?utf-8?B?Snc3T2RCTG9tUmJFdEFpdEtVN3dWRnZVallFQ3owNzM2UG5kRXN3VldwQUNG?=
- =?utf-8?B?MWNnQ1YvakVPR096QkxKOFN5b2tMQXZvL0ZPemdzM3BZKy96RkJ1Zlh4a0pw?=
- =?utf-8?B?VTlnQmdleDN6QmZIYjFsMjJpcVVIbWJuMXc5aityWm5iam85bzZyUUl3QVNB?=
- =?utf-8?B?cisxdm9wNmpHZU1qZ2JoalhjQlVSdEdrTjlRWVRxV3MrOEUvMU9UbU1lalZ0?=
- =?utf-8?B?NlpXZjN3bnZ3YlJ0SVNVSXJxQUxGZ0wrMVE4WWNsNXF3RldaM1VmeWtPbTda?=
- =?utf-8?B?dU5sbTlVay92WnZnTlR0NWhrd3Z3ZGsycG40QzZVc3dmbm1xVXlpQ3FJS1Vr?=
- =?utf-8?B?R3BpRTBucmdxb1MwcCt4UFdLQXYram9ndXoySXpwWUFBZXNPWDV2RnhUa2pp?=
- =?utf-8?B?N1FXYUJkSzVCdDI3c2xwL3YxV0hjK2FVdnNxWnpxaDRDeVN2L2FFbi83a1lQ?=
- =?utf-8?B?OURFSGpBaElSdkh0MUV3S0ptUS9JdmdQR3dzakticjdZVHhuZVhBQ2g1ZnNq?=
- =?utf-8?B?VWFMMWVmbTZhZGJyWUtOMHZQSzU3ellnc1Z0OHhqako4c1VNbDlqeVRYeFNT?=
- =?utf-8?Q?0tjtFzn9Tun+5BSxDG8nYMeHE7aQ4wgXOjnJ9hz25C17?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8cf1b89-34aa-49f8-6ddc-08db73efa4d2
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 13:42:10.4156
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B3zLLDwLFQO2Eo27+C/EAMWR94L9SfT0+yA/U6V8mJa4Ruy+oy0kl3a9EK017eAIlFAUSgDdmJFhhYGaeXQmLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7519
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 2bRk0QnwKnKcji5DfhFRWSn4KglmbCUF
+X-Proofpoint-GUID: NH1ZCW3b4kYR4x6hiGGhwF_VZC5q31Z0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_08,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 clxscore=1015 suspectscore=0 bulkscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306230128
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, 2023-06-23 at 13:45 +0200, Roberto Sassu wrote:
+> On Fri, 2023-06-23 at 07:42 -0400, Mimi Zohar wrote:
+> > Hi Roberto,
+> > 
+> > On Fri, 2023-06-16 at 21:23 +0200, Roberto Sassu wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > Add a simple test to ensure that the kernel and evmctl provide the same
+> > > result for the HMAC calculation. Do it with SELinux or Smack, whichever is
+> > > available (if the UML kernel is used, the test is done with both LSMs).
+> > > 
+> > > Also add another test to evaluate the HMAC on a directory for which Smack
+> > > added the SMACK64TRANSMUTE xattr.
+> > > 
+> > > The second test fails without the kernel patch 'smack: Set the
+> > > SMACK64TRANSMUTE xattr in smack_inode_init_security()', as Smack uses
+> > > __vfs_setxattr() to set SMACK64TRANSMUTE, which does not go through EVM,
+> > > and makes the HMAC invalid.
+> > > 
+> > > Require (unless the UML kernel is used) that the TST_EVM_CHANGE_MODE
+> > > environment variable is set to 1, so that users acknowledge that they are
+> > > initializing EVM with a well-known HMAC key, which can introduce obvious
+> > > security concerns.
+> > > 
+> > > Finally, enable SELinux, the EVM additional xattrs, and encrypted keys with
+> > > user-decrypted data in the kernel configuration for CI, and set
+> > > TST_EVM_CHANGE_MODE to 1 in the Github Action workflow.
+> > > 
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > The simple SELinux and Smack tests are working properly without kernel
+> > changes.  Even the Smack transmute test is working is proplery
+> > returning an error message, but is followed by a kernel panic.
+> > 
+> > Possibly missing patches:
+> >  - smack: Set the SMACK64TRANSMUTE xattr in smack_inode_init_security
+> 
+> Hi Mimi
+> 
+> that means that the test is failing.
+> 
+> A UML kernel panic is used to signal to the caller that a test in that
+> environment failed.
 
-On 6/23/2023 1:08 AM, Greg KH wrote:
-> On Thu, Jun 22, 2023 at 10:04:27PM -0500, Mario Limonciello wrote:
->> The ibmvtpm doesn't have `chip->ops` set, and so trying to check
->> if it's a defective AMD fTPM doesn't work.
->>
->> Add an extra check to tpm_amd_is_rng_defective() to ensure the
->> TPM being checked has `chip->ops`.
->>
->> Cc: Linux regressions mailing list <regressions@lists.linux.dev>
->> Reported-by: Aneesh Kumar K. V <aneesh.kumar@linux.ibm.com>
->> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
->> Link: https://lore.kernel.org/lkml/99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com/
->> Tested-by: Sachin Sant <sachinp@linux.ibm.com>
->> Fixes: bd8621ca1510 ("tpm: Add !tpm_amd_is_rng_defective() to the hwrng_unregister() call site")
->> Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs")
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->>   drivers/char/tpm/tpm-chip.c | 3 +++
->>   1 file changed, 3 insertions(+)
-> No cc: stable on that list above?
+Thank you for the clarification.  That explains why I couldn't
+reproduce it locally.  Including a traceback like this though is kind
+of ugly.
 
-Good point, my mistake on that miss.
+-- 
+thanks,
 
-If Jarkko agrees with the direction of this patch, I think
-it can be added while committing.
-
-Thanks!
+Mimi
 
