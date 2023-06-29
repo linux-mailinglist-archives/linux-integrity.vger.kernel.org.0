@@ -2,222 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B3F742B7C
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jun 2023 19:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DC3742EAA
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jun 2023 22:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjF2RpG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Jun 2023 13:45:06 -0400
-Received: from mail-bn8nam12on2056.outbound.protection.outlook.com ([40.107.237.56]:11616
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231140AbjF2RpF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:45:05 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bXh5JU6+gYE+aTsVwVnzfxgp+2UrnsMqoeXh66WsyEBypP8RRRrGjG6EC5d9kiywCH5LXO8VDlQvHpzdHArAzOvDT1ApilZ4+G3Wz+HKZofsrqptbrs8TO0Eh0heZT1FTxLVjr1s0k84tZcF1tn8eKeXytxsiHgr91I4OjkzbKLDjr+M5E0bc5kyhJ2fLPF66Oy5xKOoyGS14Oud5vVzq/U7tLbf/9eZeXvCECWOXPG4Fl1b4bvfEZcg+d+WWl4cXCRoz/olT2ubFiNZvyS93gp32FbM+I1S0IDfQqhLs25FOAvkJnDHanNOcviEuY9RfAQsssXjp/XGKbs2dhxZjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T9lpN4BqNMr9rszDw/RbBBfjIKOfr4xrmeI1j8P4rE8=;
- b=RHbO5aZL806OnRz9AlQV+0F3CpXMcnnKTcTYnLI0e5Y5J33l7k9//gd4z2rIyVAGh/6bfieQ8U3Tj1sGZQGP2VgIooTN5JO+18Jpq8DDW43NB+wMeUjsc6roaYx+ILb7C24+HVG9KpYo1BIyVJ4qCKhgdlTqCMxhsf8QSgo+N4o4ajqzWKzBLiNmMk8W216TmgyAO9gYSdtr/yw7xwgTsZ3O+YCjNBnwpkZNH2s4iQSlFJtcT0g5t75NUWDzYOShuKgBi4Y4UB9Xa2CP8kaE9FtpX784oZIU3RpYN3OjF2/QDKrRrk022SAMqO/dOo5/u2Qj8GkCYI8xUHaHHTm+0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T9lpN4BqNMr9rszDw/RbBBfjIKOfr4xrmeI1j8P4rE8=;
- b=gGXkUNR/0ipQQorIczi4oktS373nnjQVOj3LHdwvDbD28E6FDGToLXLlAls+QILDMlW32FTg4vl9OBpAWr/64Wf9U7UPVxgYT9PyV7efFw0xJ2Er4j2uS3MitLxs5hpGVGPy0y4kPTT7w5IflApVbRV2j6qPthGrezKl3+7qSf0=
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by PH7PR12MB5999.namprd12.prod.outlook.com (2603:10b6:510:1db::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.15; Thu, 29 Jun
- 2023 17:45:02 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
- 17:45:02 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-CC:     Michael Ellerman <mpe@ellerman.id.au>,
+        id S229936AbjF2Umy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Jun 2023 16:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229445AbjF2Umw (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 29 Jun 2023 16:42:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23CE2689
+        for <linux-integrity@vger.kernel.org>; Thu, 29 Jun 2023 13:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688071315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Y1w2wveQj5ZjtvSYiiPZCbehKWVYDK8itGEibs3X60w=;
+        b=NiRapyswkJWY4O+CHprdcjiat12/laJIOyOnzXJIyU51o+uA68oge3CRgSKA6XYyRZlrVo
+        mFZkAUx9SE6arphFmF9M8RrR1upvuKyI/V8gikwWK2T722yjOR4nO1ajALGteKccSXI+6p
+        0aNQx72kwMVyjrGrquCWC1p9JjP409o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-396-OIXoYfhEM3SMriDDhuPqcQ-1; Thu, 29 Jun 2023 16:41:51 -0400
+X-MC-Unique: OIXoYfhEM3SMriDDhuPqcQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1DC6A803FDF;
+        Thu, 29 Jun 2023 20:41:51 +0000 (UTC)
+Received: from cantor.redhat.com (unknown [10.2.17.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A1012C00049;
+        Thu, 29 Jun 2023 20:41:49 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, stable@vger.kernel.org,
         Linux regressions mailing list <regressions@lists.linux.dev>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: RE: [6.4-rc6] Crash during a kexec operation
- (tpm_amd_is_rng_defective)
-Thread-Topic: [6.4-rc6] Crash during a kexec operation
- (tpm_amd_is_rng_defective)
-Thread-Index: AQHZpQYzLgs+SZK7S0mjzkR6+Tm69a+W5EEAgAsp34CAAAN8UIAABrAAgAAAVtA=
-Date:   Thu, 29 Jun 2023 17:45:02 +0000
-Message-ID: <MN0PR12MB61012FB42B67E7A77A15CDD3E225A@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
- <87o7lhfmoh.fsf@mail.lhotse>
- <CA0088E4-2851-4AFF-94F8-2A07C5CDA8D8@linux.ibm.com>
- <675a8893-429d-05be-b647-089b249c814c@leemhuis.info>
- <87o7l7oer1.fsf@mail.lhotse> <3f5a37f1-70e0-3dcf-3bd3-acc8a04e53ee@amd.com>
- <c53ihvuesmymj2o5jyqz7gw7mvbrxjifmphuuhiux3qjabjnic@wcak4hfb77td>
- <MN0PR12MB6101C50288F6FE99A3DA5D4FE225A@MN0PR12MB6101.namprd12.prod.outlook.com>
- <baqjq4zvfwte2y5rpsznu26qzapjjzhycydwgir34yvttbzvzq@z3pfby7pdjo7>
-In-Reply-To: <baqjq4zvfwte2y5rpsznu26qzapjjzhycydwgir34yvttbzvzq@z3pfby7pdjo7>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=57841338-780d-41e5-b4d6-bc21245ce8dc;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-06-29T17:44:23Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|PH7PR12MB5999:EE_
-x-ms-office365-filtering-correlation-id: ef3e1cee-7fe8-4231-dc62-08db78c890de
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Kzu+sqc0B1e0sp2C5YVUWwokOiPJx2Sl4Ich769vd4VWPFCfLniTCAbYmguqxMKyo7tA9Cs0EFoxVKy3rFcP1n1eoNJFA7YpdFXrJA8DKjWI07xIDrp7QQ+cJnDPOtiS+Tn5u2kQErzHvzUEh4AJmzZgGar8c+L4ybWtMoVGqu2C02BbOIZ7IplMHnV1V/eh+EZpsudDeXSQkMOHsk6t2p6Z1mYCPIjn7L/UaKkP4W/OG+49OVgcU4LaLxl80gQPvcftXIQ+6HabJdu9VigFM1HQqnnrAcem2cZjOh7KUMOyzHr9RTL0PFYof1Ch1EMCXLLG331vbt+5nDKbJpUEaTsn53xK1WP9Iyw0SNsLgUtygHnBXR/xQQwDdERisYDlqMUJXK5M/kCMMF6pUosn8qPQ7NKJlE75tYuTwH5puyPvF2q8AxSrzio6wo82XrZD6bw80WiiIaeTYTl71UOwPRYJN9xrdXaXlCKwfVwASwDyTGdMtPpBRckMKZqp7LVq738oBFKdu6GpGdmHUvqzBMIhjsYzFB3l3nB+0MBVYpJsxRioL6Fi6pRaJYITGyXtoyNb2Vqpg9ACBZyRcM2JdQql3ABsJ4rtBVSS6WC7vI8C+ExQXEE4l1XYm7vv3s/v
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199021)(7696005)(38100700002)(53546011)(71200400001)(122000001)(83380400001)(26005)(6506007)(186003)(9686003)(55016003)(54906003)(41300700001)(38070700005)(86362001)(316002)(2906002)(66556008)(33656002)(66476007)(6916009)(66446008)(76116006)(66946007)(64756008)(4326008)(5660300002)(52536014)(8676002)(8936002)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bENFeg/Jj9/sZaoo93tKHk9Ya6lIfg2DSNz0SQbz/XQUteiHwsB9hkrbwJCZ?=
- =?us-ascii?Q?WlzWGkMuk//4VVUMo/W3F7VVFVqHL2wFkxSQn194n5LKS9k67WgCDcugg4zu?=
- =?us-ascii?Q?es9M3/rSIfj/SjyCOwwLBhD/sPDXTbSD91lAF2sFNV3qIxfshZ/GI7wtg1X+?=
- =?us-ascii?Q?4MY9B2ZIY5saRTWZpeuCpspxWn2JglpnzbwrkzE7H5+fuCJLZvJKXplgrUvx?=
- =?us-ascii?Q?CbXnCaF2/SXqJ2GD5JOyYw1fw8LnedNoyH2MkHLcny/LO6s5ynYjEpJSYQ+8?=
- =?us-ascii?Q?dnOY/r0o1sybzGvihsCn2OuItnzcwEsVlsGf43OFUoKLR+dIssmCGTDGT8jx?=
- =?us-ascii?Q?J8JXtCbdcCV82R1U0gG5Jn+yqjQ257Vzwx8krSBbMFZJ1OOYWgPRlPCjzpkJ?=
- =?us-ascii?Q?2fDZaLUrtZEEYQfarTtVTm5ZUQdBdMXIfseChFwoPBWJrQ/bZs+Zx/OYjp2f?=
- =?us-ascii?Q?BNa/5R22nea07Ys3+nyfyrT+wekKDsFc6zyrEjR5KsGR5Ltdm2c/H44QhEuC?=
- =?us-ascii?Q?NBbDyG78U+Wgq70/EEIEhDTIs33QiIBEO9Pl5gZigYIYi/1REDNo/veJqPjW?=
- =?us-ascii?Q?zm1ePExS7SckCvysVP4lpAOC+gbeBRRgxaidbs7k++Czq1eAbWKf1hVyT+80?=
- =?us-ascii?Q?ON0cvHPvFdZjFgFUEUid/s+dKhRSuvo2N3Z4kk/foptOydBe8eKwRZEEMFpZ?=
- =?us-ascii?Q?IWzgVvetd0iR+epphfB/nnlGjbCeolulN3HUlCff0e6GwL870oIgSohskRQ5?=
- =?us-ascii?Q?GAXXr5YKX22hlx1teqwV30aTfiBDLZC0sqlU63r9qAQwA7fqumXuyZ/RtSj9?=
- =?us-ascii?Q?N0c5JklcFbKH4izhteOMXXNkv2P90umZNUU8tHIfPD7h15zo9ArlZMOMdTFE?=
- =?us-ascii?Q?yHkw74a2ma+0OjljgMxx5i4DjnsKPgag502Tukg7oQxnRReZxvQ1eRS3N10h?=
- =?us-ascii?Q?CD91cvC+0evaf6KwMeaZZUZsqC4uaGdYL6nob/CoHqwDW+5Dfy4ppM7ZofGR?=
- =?us-ascii?Q?9t+Xl4BGfhAKST5p/aOcLXBF5Rh556+lsXZY4uAZaeONIvB53fKHOFfhutUa?=
- =?us-ascii?Q?ZNlU3/Ozca9OEDE03uCJxKMeMznq3U0XeK/E0vd0jt5x2w47yuYbapPAGJf3?=
- =?us-ascii?Q?6npjbDolkYHgyeibg6ESrrR1VFBMpdGqoENHy70VrMx5O3wihwKKrnhDMCU1?=
- =?us-ascii?Q?e2AnuYzD8E9bEeYiJEojmYL90mY//vddCgJC6wyqpPylkcoZQOF8PkEirQ38?=
- =?us-ascii?Q?qIlNPpz+420Z4PqpNeLMdo8T7jCTM0VAFaRpJg1+pZ7YyWi3RpOUFE45/PA7?=
- =?us-ascii?Q?qYmS3lykadc9rdyLF9SQkqNAzIzLPMq3nmFouW+/P1sSlMazWIVrxRrXCcQP?=
- =?us-ascii?Q?/Xc9+38Aq4/SJqyeUovGjTynRPvkpSIcjMloIiCJByYF9JTxR9AFVZSoBuFs?=
- =?us-ascii?Q?nWicCLu04ygQqmOvSZaytX50y/rlue9zH4Zt0I+PE8l7RwX9J9qZGmIMiYb0?=
- =?us-ascii?Q?e+SV7Pdm860czaEEB6T3dM8p4jfPdbvegvxbII5ltQWsAKyjkqHvBDHAOR+/?=
- =?us-ascii?Q?4ESYsnVfhZu5+XBVmBY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Sachin Sant <sachinp@linux.ibm.com>
+Subject: [PATCH] tpm: return false from tpm_amd_is_rng_defective on non-x86 platforms
+Date:   Thu, 29 Jun 2023 13:41:47 -0700
+Message-Id: <20230629204147.1852823-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef3e1cee-7fe8-4231-dc62-08db78c890de
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 17:45:02.1812
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DVQ6UMQbuRxm01maeFjfKITjB0p0sn9OWSxoxj+y7Fj/s0N9keb6EO77NDPkVOszBQ5K1JCXi/f5LNVG2leJ3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5999
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[AMD Official Use Only - General]
+tpm_amd_is_rng_defective is for dealing with an issue related to the
+AMD firmware TPM, so on non-x86 architectures just have it inline and
+return false.
 
-> -----Original Message-----
-> From: Jerry Snitselaar <jsnitsel@redhat.com>
-> Sent: Thursday, June 29, 2023 12:43 PM
-> To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>; Linux regressions mailing list
-> <regressions@lists.linux.dev>; Sachin Sant <sachinp@linux.ibm.com>; open
-> list <linux-kernel@vger.kernel.org>; linuxppc-dev <linuxppc-
-> dev@lists.ozlabs.org>; jarkko@kernel.org; linux-integrity@vger.kernel.org
-> Subject: Re: [6.4-rc6] Crash during a kexec operation
-> (tpm_amd_is_rng_defective)
->
-> On Thu, Jun 29, 2023 at 05:28:58PM +0000, Limonciello, Mario wrote:
-> > [Public]
-> >
-> > > -----Original Message-----
-> > > From: Jerry Snitselaar <jsnitsel@redhat.com>
-> > > Sent: Thursday, June 29, 2023 12:07 PM
-> > > To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> > > Cc: Michael Ellerman <mpe@ellerman.id.au>; Linux regressions mailing =
-list
-> > > <regressions@lists.linux.dev>; Sachin Sant <sachinp@linux.ibm.com>;
-> open
-> > > list <linux-kernel@vger.kernel.org>; linuxppc-dev <linuxppc-
-> > > dev@lists.ozlabs.org>; jarkko@kernel.org; linux-integrity@vger.kernel=
-.org
-> > > Subject: Re: [6.4-rc6] Crash during a kexec operation
-> > > (tpm_amd_is_rng_defective)
-> > >
-> > > On Thu, Jun 22, 2023 at 09:38:04AM -0500, Limonciello, Mario wrote:
-> > > >
-> > > > On 6/22/2023 7:36 AM, Michael Ellerman wrote:
-> > > > > "Linux regression tracking (Thorsten Leemhuis)"
-> > > <regressions@leemhuis.info> writes:
-> > > > > > Hi, Thorsten here, the Linux kernel's regression tracker. Top-p=
-osting
-> > > > > > for once, to make this easily accessible to everyone.
-> > > > > >
-> > > > > > As Linus will likely release 6.4 on this or the following Sunda=
-y a quick
-> > > > > > question: is there any hope this regression might be fixed any =
-time
-> > > > > > soon?
-> > > > > No.
-> > > > >
-> > > > > I have added the author of the commit to Cc, maybe they can help?
-> > > > >
-> > > > > The immediate question is, is it expected for chip->ops to be NUL=
-L in
-> > > > > this path? Obviously on actual AMD systems that isn't the case,
-> > > > > otherwise the code would crash there. But is the fact that chip->=
-ops is
-> > > > > NULL a bug in the ibmvtpm driver, or a possibility that has been
-> > > > > overlooked by the checking code.
-> > > > >
-> > > > > cheers
-> > > >
-> > > > All that code assumes that the TPM is still functional which
-> > > > seems not to be the case for your TPM.
-> > > >
-> > > > This should fix it:
-> > > >
-> > > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chi=
-p.c
-> > > > index 5be91591cb3b..7082b031741e 100644
-> > > > --- a/drivers/char/tpm/tpm-chip.c
-> > > > +++ b/drivers/char/tpm/tpm-chip.c
-> > > > @@ -525,6 +525,9 @@ static bool tpm_amd_is_rng_defective(struct
-> > > tpm_chip
-> > > > *chip)
-> > > >         u64 version;
-> > > >         int ret;
-> > > >
-> > > > +       if (!chip->ops)
-> > > > +               return false;
-> > > > +
-> > > >         if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
-> > > >                 return false;
-> > >
-> > >
-> > > Should tpm_amd_is_rng_defective compile to nothing on non-x86
-> > > architectures? This code is all about
-> > > working around an issue with the AMD fTPM, right?
-> > >
-> >
-> > That's a good point.  Yes it could and that would also solve this probl=
-em.
-> >
-> Or I guess more accurately for non-x86 it should be:
->
-> static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
-> {
->       return false;
-> }
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: stable@vger.kernel.org
+Cc: Linux regressions mailing list <regressions@lists.linux.dev>
+Cc: Mario Limonciello <mario.limonciello@amd.com>
+Reported-by: Aneesh Kumar K. V <aneesh.kumar@linux.ibm.com>
+Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+Closes: https://lore.kernel.org/lkml/99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com/
+Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs")
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+ drivers/char/tpm/tpm-chip.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-
-Right, but it should be inline.  Would you mind sending something out for
-your cleaner idea to supercede my other solution that still didn't merge?
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index cd48033b804a..cf5499e51999 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -518,6 +518,7 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
+  * 6.x.y.z series: 6.0.18.6 +
+  * 3.x.y.z series: 3.57.y.5 +
+  */
++#ifdef CONFIG_X86
+ static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
+ {
+ 	u32 val1, val2;
+@@ -566,6 +567,12 @@ static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
+ 
+ 	return true;
+ }
++#else
++static inline bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
++{
++	return false;
++}
++#endif /* CONFIG_X86 */
+ 
+ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ {
+-- 
+2.38.1
 
