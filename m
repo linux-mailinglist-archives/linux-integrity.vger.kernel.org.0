@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28AA74653A
+	by mail.lfdr.de (Postfix) with ESMTP id 6E266746539
 	for <lists+linux-integrity@lfdr.de>; Mon,  3 Jul 2023 23:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjGCV5Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Jul 2023 17:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        id S231418AbjGCV5X (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Jul 2023 17:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbjGCV5V (ORCPT
+        with ESMTP id S231404AbjGCV5V (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Mon, 3 Jul 2023 17:57:21 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C90FFE58
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEED1E5B
         for <linux-integrity@vger.kernel.org>; Mon,  3 Jul 2023 14:57:20 -0700 (PDT)
 Received: from tushar-HP-Pavilion-Laptop-15-eg0xxx.lan (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2E33320C0900;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 80FE920C091F;
         Mon,  3 Jul 2023 14:57:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2E33320C0900
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 80FE920C091F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1688421440;
-        bh=jZlpyLIYjpWzttcfW8imXFANOTtzePBpV7z2w9ly2cQ=;
+        bh=gnWZBlqyn9Og/TXFeYVjeHamDdASDQOleIS25w3NzJY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E4ET/YXnwrZx/o2zwb9WVbHnUdn87s3v7wBVX1I4GI2yGxfzfGu27/Qcx2h9bZ58S
-         LUhgYEaI0/x9n4hf0sISkKDkLwUCr+w2deOIKfDcfpdheYuW0KrfEfJWUTPTxyMIDv
-         too7lIzFyrO4Oh7y1MBFrJoyBx2yKoDc/D8zXIwI=
+        b=BP7uwA9Z4rK9VvYzQq/a+oZbqsOSr96N5eD6OztrEuWAGoJF73lvv03v3otvWdi6J
+         a/ZcVxEWbMTH8QmHKkaxVKNC5VATJGF3EEgrxGhKni2SM6bhCfKxi/DPZEhLzA+RpE
+         CxMBNbGoeEZH0ggjkoRK6QcZwnYEKWCCcuTtutXw=
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
 To:     zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
         kexec@lists.infradead.org, linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-Subject: [PATCH 08/10] ima: implement and register a reboot notifier function to update kexec buffer
-Date:   Mon,  3 Jul 2023 14:57:07 -0700
-Message-Id: <20230703215709.1195644-9-tusharsu@linux.microsoft.com>
+Subject: [PATCH 09/10] ima: suspend measurements while the kexec buffer is being copied
+Date:   Mon,  3 Jul 2023 14:57:08 -0700
+Message-Id: <20230703215709.1195644-10-tusharsu@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
 References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
@@ -48,105 +48,52 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The IMA subsystem needs to ensure that the measurement list is up to date
-during a kexec operation, i.e., when the kernel is rebooted without going
-through the full system reboot process. Currently, there is no mechanism
-to update the measurement list when the system is soft booted using kexec.
+If the new measurements are added to the list while the kexec buffer is
+being copied during kexec execute, the buffer may get corrupted, or it can
+go out of sync with TPM PCRs.  This could potentially lead to breaking the
+integrity of the measurements after the kexec soft reboot to the new
+kernel.
 
-Add a notifier function ima_update_kexec_buffer that is called during a
-kexec soft reboot.  Implement ima_kexec_post_load, which maps the IMA
-buffer after a kexec load and registers the reboot notifier.
+Introduce a check in the ima_add_template_entry function not to measure
+events and return from the function early when the suspend_ima_measurements
+flag is set.
 
-Define a new notifier block update_buffer_nb, with ima_update_kexec_buffer
-as its notifier function.  Register the notifier function in
-ima_kexec_post_load if it hasn't been already, indicated by the
-ima_kexec_update_registered flag.
-
-When a kexec soft reboot is triggered, ima_update_kexec_buffer will be
-executed to update the IMA buffer.  This ensures that the events between
-kexec 'load' and 'execute' are captured and integrity of measurements
-remains intact across kexec reboots.
+This ensures the consistency of the IMA measurement list during the copying
+of the kexec buffer.  When the suspend_ima_measurements flag is set, any
+new measurements will be ignored until the flag is unset.  This allows the
+buffer to be safely copied without worrying about concurrent modifications
+to the measurement list.  This is crucial for maintaining the integrity of
+the measurements during a kexec soft reboot.
 
 Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 ---
- include/linux/ima.h                |  3 +++
- security/integrity/ima/ima_kexec.c | 35 ++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
+ security/integrity/ima/ima_queue.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 86b57757c7b1..006db20f852d 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -49,6 +49,9 @@ static inline void ima_appraise_parse_cmdline(void) {}
+diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
+index cb9abc02a304..5946a26a2849 100644
+--- a/security/integrity/ima/ima_queue.c
++++ b/security/integrity/ima/ima_queue.c
+@@ -195,6 +195,19 @@ int ima_add_template_entry(struct ima_template_entry *entry, int violation,
+ 		}
+ 	}
  
- #ifdef CONFIG_IMA_KEXEC
- extern void ima_add_kexec_buffer(struct kimage *image);
-+extern void ima_kexec_post_load(struct kimage *image);
-+#else
-+static inline void ima_kexec_post_load(struct kimage *image) {}
- #endif
- 
- #else
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 424930085c18..363c107dc4a5 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -12,6 +12,8 @@
- #include <linux/kexec.h>
- #include <linux/of.h>
- #include <linux/ima.h>
-+#include <linux/reboot.h>
-+#include <asm/page.h>
- #include "ima.h"
- 
- #ifdef CONFIG_IMA_KEXEC
-@@ -19,6 +21,7 @@ struct seq_file ima_kexec_file;
- struct ima_kexec_hdr ima_khdr;
- static size_t kexec_segment_size;
- static void *ima_kexec_buffer;
-+static bool ima_kexec_update_registered;
- 
- void ima_clear_kexec_file(void)
- {
-@@ -222,6 +225,38 @@ static int ima_update_kexec_buffer(struct notifier_block *self,
- 	return NOTIFY_OK;
- }
- 
-+struct notifier_block update_buffer_nb = {
-+	.notifier_call = ima_update_kexec_buffer,
-+};
-+
-+/*
-+ * Create a mapping for the source pages that contain the IMA buffer
-+ * so we can update it later.
-+ */
-+void ima_kexec_post_load(struct kimage *image)
-+{
-+	if (ima_kexec_buffer) {
-+		kimage_unmap_segment(ima_kexec_buffer);
-+		ima_kexec_buffer = NULL;
++	/*
++	 * suspend_ima_measurements will be set if the system is
++	 * undergoing kexec soft boot to a new kernel.
++	 * suspending measurements in this short window ensures the
++	 * consistency of the IMA measurement list during copying
++	 * of the kexec buffer.
++	 */
++	if (atomic_read(&suspend_ima_measurements)) {
++		audit_cause = "measurements_suspended";
++		audit_info = 0;
++		goto out;
 +	}
 +
-+	if (!image->ima_buffer_addr)
-+		return;
-+
-+	ima_kexec_buffer = kimage_map_segment(image,
-+					      image->ima_buffer_addr,
-+					      image->ima_buffer_size);
-+	if (!ima_kexec_buffer) {
-+		pr_err("%s: Could not map measurements buffer.\n", __func__);
-+		return;
-+	}
-+
-+	if (!ima_kexec_update_registered) {
-+		register_reboot_notifier(&update_buffer_nb);
-+		ima_kexec_update_registered = true;
-+	}
-+}
-+
- #endif /* IMA_KEXEC */
- 
- /*
+ 	result = ima_add_digest_entry(entry,
+ 				      !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE));
+ 	if (result < 0) {
 -- 
 2.25.1
 
