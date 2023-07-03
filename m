@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E266746539
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Jul 2023 23:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAEE74653B
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Jul 2023 23:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbjGCV5X (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 Jul 2023 17:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S231403AbjGCV5Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 Jul 2023 17:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbjGCV5V (ORCPT
+        with ESMTP id S231409AbjGCV5W (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 Jul 2023 17:57:21 -0400
+        Mon, 3 Jul 2023 17:57:22 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEED1E5B
-        for <linux-integrity@vger.kernel.org>; Mon,  3 Jul 2023 14:57:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76A65187
+        for <linux-integrity@vger.kernel.org>; Mon,  3 Jul 2023 14:57:21 -0700 (PDT)
 Received: from tushar-HP-Pavilion-Laptop-15-eg0xxx.lan (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 80FE920C091F;
+        by linux.microsoft.com (Postfix) with ESMTPSA id CF96B208FFDD;
         Mon,  3 Jul 2023 14:57:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 80FE920C091F
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CF96B208FFDD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1688421440;
-        bh=gnWZBlqyn9Og/TXFeYVjeHamDdASDQOleIS25w3NzJY=;
+        s=default; t=1688421441;
+        bh=IA4qVA7yS6tfVuU9PQyqSbjKk9N21XI0y5043nMYdXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BP7uwA9Z4rK9VvYzQq/a+oZbqsOSr96N5eD6OztrEuWAGoJF73lvv03v3otvWdi6J
-         a/ZcVxEWbMTH8QmHKkaxVKNC5VATJGF3EEgrxGhKni2SM6bhCfKxi/DPZEhLzA+RpE
-         CxMBNbGoeEZH0ggjkoRK6QcZwnYEKWCCcuTtutXw=
+        b=QGLrEABDXJHWi1bi5YE/9tRYciFa8BBH+oONcU85PCku4cyeQ0jqkVCY0h1wIVqcy
+         h/KyREwavxt4474a6GxwSENgRdxekCa24hShwYzfX3rdsKmmSLVjku82b3VG5bb+R1
+         zupINlJPJ/ih+YJwakHujz/W1kM+TvaSzdCeqgqY=
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
 To:     zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
         kexec@lists.infradead.org, linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-Subject: [PATCH 09/10] ima: suspend measurements while the kexec buffer is being copied
-Date:   Mon,  3 Jul 2023 14:57:08 -0700
-Message-Id: <20230703215709.1195644-10-tusharsu@linux.microsoft.com>
+Subject: [PATCH 10/10] kexec: update kexec_file_load syscall to call ima_kexec_post_load
+Date:   Mon,  3 Jul 2023 14:57:09 -0700
+Message-Id: <20230703215709.1195644-11-tusharsu@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
 References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
@@ -48,52 +48,64 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-If the new measurements are added to the list while the kexec buffer is
-being copied during kexec execute, the buffer may get corrupted, or it can
-go out of sync with TPM PCRs.  This could potentially lead to breaking the
-integrity of the measurements after the kexec soft reboot to the new
-kernel.
+The kexec_file_load syscall is used to load a new kernel for kexec.
+The syscall needs to update its function to call ima_kexec_post_load, which
+was implemented in a previous patch.  ima_kexec_post_load takes care of
+mapping the measurement list for the next kernel and registering a reboot
+notifier if it's not already registered.
 
-Introduce a check in the ima_add_template_entry function not to measure
-events and return from the function early when the suspend_ima_measurements
-flag is set.
+Modify the kexec_file_load syscall to call ima_kexec_post_load after the
+image has been loaded and prepared for kexec.  This ensures that the IMA
+measurement list will be available to the next kernel after a kexec reboot.
+This also ensures the measurements taken in the window between kexec load
+and execute are captured and passed to the next kernel. 
 
-This ensures the consistency of the IMA measurement list during the copying
-of the kexec buffer.  When the suspend_ima_measurements flag is set, any
-new measurements will be ignored until the flag is unset.  This allows the
-buffer to be safely copied without worrying about concurrent modifications
-to the measurement list.  This is crucial for maintaining the integrity of
-the measurements during a kexec soft reboot.
+Declare the kimage_file_post_load function in the kernel/kexec_internal.h, 
+so it can be properly used in the syscall.
 
 Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 ---
- security/integrity/ima/ima_queue.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ kernel/kexec_file.c     | 7 +++++++
+ kernel/kexec_internal.h | 1 +
+ 2 files changed, 8 insertions(+)
 
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index cb9abc02a304..5946a26a2849 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -195,6 +195,19 @@ int ima_add_template_entry(struct ima_template_entry *entry, int violation,
- 		}
- 	}
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index f989f5f1933b..efe28e77280c 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -184,6 +184,11 @@ kimage_validate_signature(struct kimage *image)
+ }
+ #endif
  
-+	/*
-+	 * suspend_ima_measurements will be set if the system is
-+	 * undergoing kexec soft boot to a new kernel.
-+	 * suspending measurements in this short window ensures the
-+	 * consistency of the IMA measurement list during copying
-+	 * of the kexec buffer.
-+	 */
-+	if (atomic_read(&suspend_ima_measurements)) {
-+		audit_cause = "measurements_suspended";
-+		audit_info = 0;
-+		goto out;
-+	}
++void kimage_file_post_load(struct kimage *image)
++{
++	ima_kexec_post_load(image);
++}
 +
- 	result = ima_add_digest_entry(entry,
- 				      !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE));
- 	if (result < 0) {
+ /*
+  * In file mode list of segments is prepared by kernel. Copy relevant
+  * data from user space, do error checking, prepare segment list
+@@ -399,6 +404,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
+ 
+ 	kimage_terminate(image);
+ 
++	kimage_file_post_load(image);
++
+ 	ret = machine_kexec_post_load(image);
+ 	if (ret)
+ 		goto out;
+diff --git a/kernel/kexec_internal.h b/kernel/kexec_internal.h
+index 74da1409cd14..98dd5fcafaf0 100644
+--- a/kernel/kexec_internal.h
++++ b/kernel/kexec_internal.h
+@@ -30,6 +30,7 @@ static inline void kexec_unlock(void)
+ 
+ #ifdef CONFIG_KEXEC_FILE
+ #include <linux/purgatory.h>
++void kimage_file_post_load(struct kimage *image);
+ void kimage_file_post_load_cleanup(struct kimage *image);
+ extern char kexec_purgatory[];
+ extern size_t kexec_purgatory_size;
 -- 
 2.25.1
 
