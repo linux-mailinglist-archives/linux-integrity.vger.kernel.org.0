@@ -2,136 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A4E7471F5
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jul 2023 14:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886C2747522
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jul 2023 17:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjGDM50 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Jul 2023 08:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S231773AbjGDPTC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Jul 2023 11:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbjGDM5X (ORCPT
+        with ESMTP id S231784AbjGDPTA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:57:23 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD89710CE;
-        Tue,  4 Jul 2023 05:57:18 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 364Clq1L030500;
-        Tue, 4 Jul 2023 12:57:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=iTDv4VPTfZqUZ7AKCiQnqMYiZmFlxHkGxEf8+CPNWo8=;
- b=F2z63e/OYzNaCShNERNgVClfVfXi3YLv77s28P2rmWpDMlYrvMKUrWpvHmbMbuYA16Mv
- usDaskLOxXN2ssxtqJGUWHL+C83KmR3jbibqzp4PPB0FgQUbYPp4/ZInIJT7ybrSzu5O
- vGPrSTWJEA7hC4YjiCgiPA8wl9VIjd29ZHYYeWdXLePTSETfWsxrHQ1CvtBEmLR8Q7CL
- 62NI/8kVSECLXFWIeQUmGTIUqnIr9uYX2dAUXC/rSeNSfnp/87WKQmgmY9wA1fqUS0Rg
- stGyEZMiJr9jh3GdcAD48XIyUoIzjl/U1h7OjnBquq7UgTwNaJCAAJmZrxABNM5k6XXo 4g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rmkr887x6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jul 2023 12:57:15 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 364CnP0p003018;
-        Tue, 4 Jul 2023 12:57:14 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rmkr887wh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jul 2023 12:57:14 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 364A6PWf008595;
-        Tue, 4 Jul 2023 12:57:14 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3rjbs5ys1e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jul 2023 12:57:13 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 364CvCMW25297190
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Jul 2023 12:57:12 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EACE458055;
-        Tue,  4 Jul 2023 12:57:11 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 33E0F5805E;
-        Tue,  4 Jul 2023 12:57:11 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.36.177])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Jul 2023 12:57:11 +0000 (GMT)
-Message-ID: <b61fedf214cbe72de063a3bf516dd72f80595219.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: require signed IMA policy when UEFI secure boot is
- enabled
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
+        Tue, 4 Jul 2023 11:19:00 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD6010EC;
+        Tue,  4 Jul 2023 08:18:47 -0700 (PDT)
+Received: from frapeml500002.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QwRFJ3CTLz67cSL;
+        Tue,  4 Jul 2023 23:15:48 +0800 (CST)
+Received: from [10.45.151.231] (10.45.151.231) by
+ frapeml500002.china.huawei.com (7.182.85.205) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 4 Jul 2023 17:18:44 +0200
+Message-ID: <17702e7f-479a-22b8-70d9-56e418c8120b@huawei.com>
+Date:   Tue, 4 Jul 2023 17:18:43 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [QUESTION] Full user space process isolation?
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Jann Horn <jannh@google.com>
+CC:     Oleg Nesterov <oleg@redhat.com>, Paul Moore <paul@paul-moore.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        "open list:SECURITY SUBSYSTEM" 
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        LuisChamberlain <mcgrof@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tejun Heo <tj@kernel.org>, <linux-mm@kvack.org>,
         <linux-security-module@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Tue, 04 Jul 2023 08:57:10 -0400
-In-Reply-To: <20230703115442.129725-1-coxu@redhat.com>
-References: <20230703115442.129725-1-coxu@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: TAr0e02RnOj9NLIdD-orsSF3sFfLLkK4
-X-Proofpoint-GUID: kHJ-0h6YRVkkA6xkvOne638UU5eyQSgX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-04_07,2023-07-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 impostorscore=0 spamscore=0 malwarescore=0 bulkscore=0
- adultscore=0 clxscore=1015 phishscore=0 priorityscore=1501
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2307040106
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        <linux-kernel@vger.kernel.org>, <keyrings@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>
+References: <eb31920bd00e2c921b0aa6ebed8745cb0130b0e1.camel@huaweicloud.com>
+ <CAG48ez2oRPBdbfoNxGcV85CXFx1Su+dmhoWXE6rWsXui6_OTPg@mail.gmail.com>
+ <ab8e68962feba9f16ed0a715d46ed003da61cfe8.camel@huaweicloud.com>
+Content-Language: en-US
+From:   Petr Tesarik <petr.tesarik.ext@huawei.com>
+In-Reply-To: <ab8e68962feba9f16ed0a715d46ed003da61cfe8.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.45.151.231]
+X-ClientProxiedBy: frapeml100004.china.huawei.com (7.182.85.167) To
+ frapeml500002.china.huawei.com (7.182.85.205)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-07-03 at 19:54 +0800, Coiby Xu wrote:
-> With the introduction of the .machine keyring for UEFI-based systems,
-> users are able to add custom CAs keys via MOK. This allow users to sign
-> their own IMA polices. For the sake of security, mandate signed IMA
-> policy when UEFI secure boot is enabled.
+On 7/3/2023 5:28 PM, Roberto Sassu wrote:
+> On Mon, 2023-07-03 at 17:06 +0200, Jann Horn wrote:
+>> On Thu, Jun 22, 2023 at 4:45 PM Roberto Sassu
+>> <roberto.sassu@huaweicloud.com> wrote:
+>>> I wanted to execute some kernel workloads in a fully isolated user
+>>> space process, started from a binary statically linked with klibc,
+>>> connected to the kernel only through a pipe.
+>>
+>> FWIW, the kernel has some infrastructure for this already, see
+>> CONFIG_USERMODE_DRIVER and kernel/usermode_driver.c, with a usage
+>> example in net/bpfilter/.
 > 
-> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
-> ---
->  security/integrity/ima/ima_efi.c | 3 +++
->  1 file changed, 3 insertions(+)
+> Thanks, I actually took that code to make a generic UMD management
+> library, that can be used by all use cases:
 > 
-> diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
-> index 9db66fe310d4..bb2881759505 100644
-> --- a/security/integrity/ima/ima_efi.c
-> +++ b/security/integrity/ima/ima_efi.c
-> @@ -58,6 +58,9 @@ static const char * const sb_arch_rules[] = {
->  #if !IS_ENABLED(CONFIG_MODULE_SIG)
->  	"appraise func=MODULE_CHECK appraise_type=imasig",
->  #endif
-> +#if IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && IS_ENABLED(CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY)
-> +	"appraise func=POLICY_CHECK appraise_type=imasig",
-> +#endif /* CONFIG_INTEGRITY_MACHINE_KEYRING && IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY */
->  	"measure func=MODULE_CHECK",
->  	NULL
->  };
+> https://lore.kernel.org/linux-kernel/20230317145240.363908-1-roberto.sassu@huaweicloud.com/
+> 
+>>> I also wanted that, for the root user, tampering with that process is
+>>> as hard as if the same code runs in kernel space.
+>>
+>> I believe that actually making it that hard would probably mean that
+>> you'd have to ensure that the process doesn't use swap (in other
+>> words, it would have to run with all memory locked), because root can
+>> choose where swapped pages are stored. Other than that, if you mark it
+>> as a kthread so that no ptrace access is allowed, you can probably get
+>> pretty close. But if you do anything like that, please leave some way
+>> (like a kernel build config option or such) to enable debugging for
+>> these processes.
+> 
+> I didn't think about the swapping part... thanks!
+> 
+> Ok to enable debugging with a config option.
+> 
+>> But I'm not convinced that it makes sense to try to draw a security
+>> boundary between fully-privileged root (with the ability to mount
+>> things and configure swap and so on) and the kernel - my understanding
+>> is that some kernel subsystems don't treat root-to-kernel privilege
+>> escalation issues as security bugs that have to be fixed.
+> 
+> Yes, that is unfortunately true, and in that case the trustworthy UMD
+> would not make things worse. On the other hand, on systems where that
+> separation is defined, the advantage would be to run more exploitable
+> code in user space, leaving the kernel safe.
+> 
+> I'm thinking about all the cases where the code had to be included in
+> the kernel to run at the same privilege level, but would not use any of
+> the kernel facilities (e.g. parsers).
 
-Thanks, Coiby.
+Thanks for reminding me of kexec-tools. The complete image for booting a
+new kernel was originally prepared in user space. With kernel lockdown,
+all this code had to move into the kernel, adding a new syscall and lots
+of complexity to build purgatory code, etc. Yet, this new implementation
+in the kernel does not offer all features of kexec-tools, so both code
+bases continue to exist and are happily diverging...
 
-Using IS_ENABLED() is not wrong, but unnecessary.  IS_BUILTIN()
-suffices.
+> If the boundary is extended to user space, some of these components
+> could be moved away from the kernel, and the functionality would be the
+> same without decreasing the security.
 
--- 
-thanks,
+All right, AFAICS your idea is limited to relatively simple cases for
+now. I mean, allowing kexec-tools to run in user space is not easily
+possible when UID 0 is not trusted, because kexec needs to open various
+files and make various other syscalls, which would require a complex LSM
+policy. It looks technically possible to write one, but then the big
+question is if it would be simpler to review and maintain than adding
+more kexec-tools features to the kernel.
 
-Mimi
+Anyway, I can sense a general desire to run less code in the most
+privileged system environment. Robert's proposal is one of few that go
+in this direction. What are the alternatives?
+
+Petr T
 
