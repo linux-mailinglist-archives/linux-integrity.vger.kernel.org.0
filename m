@@ -2,67 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FD174B356
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 16:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6C274B390
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 17:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbjGGOyh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jul 2023 10:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        id S233284AbjGGPDP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jul 2023 11:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232568AbjGGOyg (ORCPT
+        with ESMTP id S233456AbjGGPDO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:54:36 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3C72117
-        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 07:53:48 -0700 (PDT)
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7659db6339eso97579485a.1
-        for <linux-integrity@vger.kernel.org>; Fri, 07 Jul 2023 07:53:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688741627; x=1691333627;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CPovcDx0Jp7p0rxc31G4K4rf+RSfD3YoQjrCZo8Rivs=;
-        b=kjDC+a3zSK2eRN0GmVEwydy9WoqZR+OsMJ2XXOXpr9YFemPKHDZatNmWB2xWE3JYyz
-         6kZMDYEo+qE7Wb10ebRHKhch40lfLKnWmGGpdhX6SPBwfQp64RhReGAPk3VK330H24zi
-         vupbhMkmAoC3kpUtR1BfjDBaDWEaHKDWTSFcqrwmfu/qYD52gOY3abhBnzeMonb8s5dC
-         YweFAlsTGePigbe2lvdFE4OWf0XNv4cfzgxh8A7a7Vp/5vd9yx0q/6PxwTz8auhrJF/Y
-         SYVpyc/ihbXZiK12TXpsr0sP39tNiIJOD4SkCI3MAszdvNX/rn9G1+P4QV1Ear6/h43p
-         gkMA==
-X-Gm-Message-State: ABy/qLb1Uii/gDHEl1nhuQAmIBTyjzKFAv9FLvXI/XlTzKR8MenlogyZ
-        0oFtgdq+wEkggVb/VZVZShR+
-X-Google-Smtp-Source: APBJJlEcjwiB2P+G5P63povz9uFukN13UGlV0N1GEkdF3fsvn89XgwLKb03K3Qu7uI65bbZcCd9ADQ==
-X-Received: by 2002:a05:620a:3944:b0:765:44c2:826d with SMTP id qs4-20020a05620a394400b0076544c2826dmr6230550qkn.27.1688741627214;
-        Fri, 07 Jul 2023 07:53:47 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id m21-20020a05620a13b500b0076219ec1fbesm1900772qki.42.2023.07.07.07.53.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 07:53:46 -0700 (PDT)
-Date:   Fri, 7 Jul 2023 10:53:45 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, eparis@redhat.com,
-        paul@paul-moore.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, audit@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v10 11/17] dm-verity: consume root hash digest and
- signature data via LSM hook
-Message-ID: <ZKgm+ffQbdDTxrg9@redhat.com>
-References: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
- <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        Fri, 7 Jul 2023 11:03:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809471FE2
+        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 08:03:13 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367EqJX8030176;
+        Fri, 7 Jul 2023 15:02:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=e4L2IAnPOuCma6RJoU3QN8PWjT78HhgqR2PhYWPWuDg=;
+ b=l5Sc+o6uFol8YlkTS6zHzuqqyEnGMVIc1OhbY366Ej0Zxpe4oJpjRATAyCFKIRQdg/tO
+ 7sGARC5GiLKmSIXfqA8AZH7q5t91g8odbVpV+I3LrqkR1oBPTWrLsdH3Fs2x4shcNhd2
+ Gh71tVznf38fE4RiZvcAH76H1vMrAqgjhATla3rmbliv0wcAfaKoTFp/Rcy1p9MC+MeI
+ CkduvKP0RbmuGcvjeYgqAFmJkoqvQjk0a755nGTfSWszJFuWbL72m/e8nip09+gj1Hx3
+ lwkvFqStxpS8VcgiDgVvQQJIrozW+aAoggIjbegPi7lhrOV1wP9uWb+P/EYOJBASQPwz +w== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpmuhr7jc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 15:02:51 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 367Ag2Rc022997;
+        Fri, 7 Jul 2023 15:01:50 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3rjbs5wwmy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jul 2023 15:01:50 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367F1ndi64356838
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jul 2023 15:01:49 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D89E5805E;
+        Fri,  7 Jul 2023 15:01:49 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B1B9258051;
+        Fri,  7 Jul 2023 15:01:48 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.7.157])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jul 2023 15:01:48 +0000 (GMT)
+Message-ID: <5cd5b5efc443cbdce9dce3b121f4dbfd2db6dea3.camel@linux.ibm.com>
+Subject: Re: [PATCH 06/10] ima: update buffer at kexec execute with ima
+ measurements
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>, noodles@fb.com,
+        bauermann@kolabnow.com, kexec@lists.infradead.org,
+        linux-integrity@vger.kernel.org
+Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+Date:   Fri, 07 Jul 2023 11:01:48 -0400
+In-Reply-To: <20230703215709.1195644-7-tusharsu@linux.microsoft.com>
+References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
+         <20230703215709.1195644-7-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: S_68gnkbdCDoAkCtxBx-RJ6sGlfqDlYw
+X-Proofpoint-ORIG-GUID: S_68gnkbdCDoAkCtxBx-RJ6sGlfqDlYw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-07_10,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 adultscore=0 clxscore=1015 priorityscore=1501
+ mlxscore=0 malwarescore=0 impostorscore=0 spamscore=0 mlxlogscore=956
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307070139
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,123 +88,72 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jun 28 2023 at  5:09P -0400,
-Fan Wu <wufan@linux.microsoft.com> wrote:
+Hi Tushar,
 
-> From: Deven Bowers <deven.desai@linux.microsoft.com>
-> 
-> dm-verity provides a strong guarantee of a block device's integrity. As
-> a generic way to check the integrity of a block device, it provides
-> those integrity guarantees to its higher layers, including the filesystem
-> level.
-> 
-> An LSM that control access to a resource on the system based on the
-> available integrity claims can use this transitive property of
-> dm-verity, by querying the underlying block_device of a particular
-> file.
-> 
-> The digest and signature information need to be stored in the block
-> device to fulfill the next requirement of authorization via LSM policy.
-> This will enable the LSM to perform revocation of devices that are still
-> mounted, prohibiting execution of files that are no longer authorized
-> by the LSM in question.
-> 
-> This patch added two security hook calls in dm-verity to save the
-> dm-verity roothash and the roothash signature to LSM blobs.
-> 
-> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> ---
+On Mon, 2023-07-03 at 14:57 -0700, Tushar Sugandhi wrote:
 
-> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
-> index 26adcfea0302..54d46b2f2723 100644
-> --- a/drivers/md/dm-verity-target.c
-> +++ b/drivers/md/dm-verity-target.c
-> @@ -1440,6 +1453,15 @@ static int verity_ctr(struct dm_target *ti, unsigned int argc, char **argv)
->  	ti->per_io_data_size = roundup(ti->per_io_data_size,
->  				       __alignof__(struct dm_verity_io));
->  
-> +	root_digest.digest = v->root_digest;
-> +	root_digest.digest_len = v->digest_size;
-> +	root_digest.algo = v->alg_name;
+> +/*
+> + * Called during kexec execute so that IMA can update the measurement list.
+> + */
+> +static int ima_update_kexec_buffer(struct notifier_block *self,
+> +				   unsigned long action, void *data)
+> +{
+> +	void *new_buffer = NULL;
+> +	size_t new_buffer_size, cur_buffer_size;
+> +	bool resume = false;
 > +
-> +	r = security_bdev_setsecurity(bdev, DM_VERITY_ROOTHASH_SEC_NAME, &root_digest,
-> +				      sizeof(root_digest));
-> +	if (r)
-> +		goto bad;
+> +	if (!kexec_in_progress) {
+> +		pr_info("%s: No kexec in progress.\n", __func__);
+> +		return NOTIFY_OK;
+> +	}
 > +
->  	verity_verify_sig_opts_cleanup(&verify_args);
+> +	if (!ima_kexec_buffer) {
+> +		pr_err("%s: Kexec buffer not set.\n", __func__);
+> +		return NOTIFY_OK;
+> +	}
+> +
+> +	ima_measurements_suspend();
+> +
+> +	cur_buffer_size = kexec_segment_size - sizeof(struct ima_kexec_hdr);
+> +	new_buffer_size = ima_get_binary_runtime_size();
+> +	if (new_buffer_size > cur_buffer_size) {
+> +		pr_err("%s: Measurement list grew too large.\n", __func__);
+> +		resume = true;
+> +		goto out;
+> +	}
+
+This changes the current behavior of carrying as many measurements
+across kexec as possible.  True the measurement list won't verify
+against the TPM PCRs, but not copying the measurements leaves the
+impression there weren't any previous measurements.
+
+This also explains the reason for allocating an IMA buffer (patch 1/10)
+and not writing the measurements directly into the kexec buffer.
+
+> +	ima_populate_buf_at_kexec_execute(&new_buffer_size, &new_buffer);
+> +
+> +	if (!new_buffer) {
+> +		pr_err("%s: Dump measurements failed.\n", __func__);
+> +		resume = true;
+> +		goto out;
+> +	}
+> +	memcpy(ima_kexec_buffer, new_buffer, new_buffer_size);
+> +out:
+> +	kimage_unmap_segment(ima_kexec_buffer);
+> +	ima_kexec_buffer = NULL;
+> +
+> +	if (resume)
+> +		ima_measurements_resume();
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>  #endif /* IMA_KEXEC */
 >  
->  	dm_audit_log_ctr(DM_MSG_PREFIX, ti, 1);
-> diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-> index 4836508ea50c..33165dd7470f 100644
-> --- a/drivers/md/dm-verity-verify-sig.c
-> +++ b/drivers/md/dm-verity-verify-sig.c
-> @@ -9,6 +9,9 @@
->  #include <linux/verification.h>
->  #include <keys/user-type.h>
->  #include <linux/module.h>
-> +#include <linux/security.h>
-> +#include <linux/dm-verity.h>
-> +#include "dm-core.h"
+>  /*
 
-Why are you including dm-core.h here?
+-- 
+thanks,
 
->  #include "dm-verity.h"
->  #include "dm-verity-verify-sig.h"
->  
-> @@ -97,14 +100,17 @@ int verity_verify_sig_parse_opt_args(struct dm_arg_set *as,
->   * verify_verify_roothash - Verify the root hash of the verity hash device
->   *			     using builtin trusted keys.
->   *
-> + * @bdev: block_device representing the device-mapper created block device.
-> + *	  Used by the security hook, to set information about the block_device.
->   * @root_hash: For verity, the roothash/data to be verified.
->   * @root_hash_len: Size of the roothash/data to be verified.
->   * @sig_data: The trusted signature that verifies the roothash/data.
->   * @sig_len: Size of the signature.
->   *
->   */
-> -int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
-> -			    const void *sig_data, size_t sig_len)
-> +int verity_verify_root_hash(struct block_device *bdev, const void *root_hash,
-> +			    size_t root_hash_len, const void *sig_data,
-> +			    size_t sig_len)
->  {
->  	int ret;
->  
-> @@ -126,8 +132,12 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
->  				NULL,
->  #endif
->  				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
-> +	if (ret)
-> +		return ret;
->  
-> -	return ret;
-> +	return security_bdev_setsecurity(bdev,
-> +					 DM_VERITY_SIGNATURE_SEC_NAME,
-> +					 sig_data, sig_len);
->  }
->  
->  void verity_verify_sig_opts_cleanup(struct dm_verity_sig_opts *sig_opts)
+Mimi
 
-Both of your calls to security_bdev_setsecurity() to set your blobs in
-the bdev are suspect because you're doing so from the verity_ctr().
-The mapped_device has 2 dm_table slots (active and inactive).  The
-verity_ctr() becomes part of the inactive slot, there is an extra step
-to bind the inactive table to the active table.
-
-This leads to you changing the blobs in the global bdev _before_ the
-table is actually active.  It is possible that the inactive table will
-simply be removed and the DM verity device put back in service;
-leaving your blob(s) in the bdev inconsistent.
-
-This issue has parallels to how we need to defer changing the global
-queue_limits associated with a request_queue until _after_ all table
-loading is settled and then the update is done just before resuming
-the DM device (mapped_device) -- see dm_table_set_restrictions().
-
-Unfortunately, this feels like it may require a new hook in the
-target_type struct (e.g. ->finalize())
-
-Mike
