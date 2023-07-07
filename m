@@ -2,68 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C7B74ACA4
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 10:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B1A74ACAD
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 10:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjGGIR5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jul 2023 04:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S231991AbjGGITw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jul 2023 04:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbjGGIRy (ORCPT
+        with ESMTP id S232413AbjGGITv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jul 2023 04:17:54 -0400
+        Fri, 7 Jul 2023 04:19:51 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D14E1BE9
-        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 01:17:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDF41BE9
+        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 01:19:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688717828;
+        s=mimecast20190719; t=1688717949;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XPaN5pqbomSOKx5xl3JROR9VsqVfGN0ANT/ZNiELBU8=;
-        b=EgxBKNnyQfx6Lw8bnawKtB2iSqgq+xBoiydyXbfrhey3ItWOriUxBH/FmVtpoRtMEk6PjJ
-        ZCykEsS5Z4SJ2351FolvgY670d8WV0nCDU4mP+3LZufQyCHQXwQpA2FDQrKIg/GIDcaorz
-        TVS1Ru3+sZf73n/tLeYnqmo0J1S2n4o=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=LDsBTISbzBTDLjmus2cmCAKpmg00PLgnL3XexDug1Tk=;
+        b=DnGwFFdeFuzZJk3IreCUbSzEzyp1WTNbNnbB5bVhmnj9Fo2YjCxlC+RdKPUlqSh98l9hnK
+        t16CA1pV5HcpUiczh6puWwzPMtP6k+fKYswDvVvlwdBVBm/nv81ZjMEDSgMo3jP+5s8IuS
+        viqK2sLJSARoLux5R2dX10n18FNO3+s=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-517-RFlY0JXuO1au2VhAvbalgw-1; Fri, 07 Jul 2023 04:17:07 -0400
-X-MC-Unique: RFlY0JXuO1au2VhAvbalgw-1
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-34616cffaabso1547955ab.1
-        for <linux-integrity@vger.kernel.org>; Fri, 07 Jul 2023 01:17:07 -0700 (PDT)
+ us-mta-653-jXm09Y41MTmdNbrQjOfpuA-1; Fri, 07 Jul 2023 04:19:08 -0400
+X-MC-Unique: jXm09Y41MTmdNbrQjOfpuA-1
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-783339b6c88so26658039f.0
+        for <linux-integrity@vger.kernel.org>; Fri, 07 Jul 2023 01:19:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688717826; x=1691309826;
+        d=1e100.net; s=20221208; t=1688717947; x=1691309947;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XPaN5pqbomSOKx5xl3JROR9VsqVfGN0ANT/ZNiELBU8=;
-        b=Br9IFVP31srsDq3pocwY503Nu9MTcjYlHEUQGVc25a152L7oZBUCyHYyaHUqgc2BAB
-         fP8iExOpkyU21zHj4zQp+1wzXRss5klX7ePBZxYE6kVwjHQS3iTayiINF8GkKzo+FkxH
-         8PzjVih7y12lcMYA5EU8Y6ivE0vJPFadgobKaYJ6hNp1JW7LhuNSELI+Fo26oq9LJ9Qr
-         QJMRfd8XXj6f4OeYyJNhDeSR2TD4uKkS36y9ve2mOZx9XPTnONvqQNAP3cIEIOfynpDx
-         Ujjkh8dhq11lvsefTuI5mSTZIdeQ8w2gVURF1WAALKxwIgS/83oQHUMUwsMUaqW+BKzY
-         Slhw==
-X-Gm-Message-State: ABy/qLadnwikoh6DG6sLMLiigw0Ap118yX4GpyOXFB3v+tZPwUlRdqD8
-        D8CD425Ge7RAlpN1TSSnC7Lq5PNaqFhNDCX4xv0Cs9plQ5gcB4IEjSTlLbBWL00qS1e5xTd7P9T
-        PCub4cR9gBGB0TCS9Gv+spaUxqiDtS4rpq3vLu5CMHqQl
-X-Received: by 2002:a05:6e02:1a62:b0:346:1919:7cb1 with SMTP id w2-20020a056e021a6200b0034619197cb1mr6742330ilv.2.1688717826512;
-        Fri, 07 Jul 2023 01:17:06 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGLdSmS3qJJRQ35msI1TYAi+yBPPV4fvNEEnqy2IXhTRvWYiVXIjdoR/KlooxuKrMIls/Q5ivEzfqkjGa2k8uU=
-X-Received: by 2002:a05:6e02:1a62:b0:346:1919:7cb1 with SMTP id
- w2-20020a056e021a6200b0034619197cb1mr6742316ilv.2.1688717826255; Fri, 07 Jul
- 2023 01:17:06 -0700 (PDT)
+        bh=LDsBTISbzBTDLjmus2cmCAKpmg00PLgnL3XexDug1Tk=;
+        b=lqcYquhtRrdkiNtGcUWtC0Ck7mc32VqgSi9nGOoZ4eqehS6LxQ6IcU1L7pgR/fxsNF
+         FRoPwqsJMMMJI5sVzWVnn3yxqAI2KUotSEYRvGlc3LNzKxXo+RJSyljubjvufcdE7yoM
+         XeTw4uLMV0OiHBkwOOcJl3uuhLCBlI8HKk3TAd5EgjV1Ok1vvy76qffNTApQz6oiIpBr
+         tBF2fRZVWeOL8Y4F0txtWm8k13IPLu6u1+jXXBTn+27Auc4ZLNZOM+xD26JkI3PJKD6t
+         b1e4UL0J65yyf2fTJjMp29GS09ZC6n3lHpxeX8S1vB9xsFImAK7LoY9RzCuJhrV0r2w4
+         V4Gw==
+X-Gm-Message-State: ABy/qLaswbNflYiJzrQXF6i5iWdzi3b7JU1zTjKMxwksmZlwOYivOnR8
+        HozF2xE3R4atjhXdOEVKGN7bxtWnyN75ysptYR9aT6RN9Mxe+L31ikwvhOqFbAvO3whH+OdIzKO
+        6IXf7tkPug2nJILIGHSobmo4LCuss6DmCtIJ7qnEpV5iH
+X-Received: by 2002:a05:6e02:e04:b0:345:e438:7381 with SMTP id a4-20020a056e020e0400b00345e4387381mr4590736ilk.2.1688717947620;
+        Fri, 07 Jul 2023 01:19:07 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGmmO9KnWk1OmpKCwnkO7ACUqSxF9xZ4r8DsWs9KsNMtByt1/3EtUImi4KmVM+CqLQ/jkRSYBt6LhkIH/6JgZ0=
+X-Received: by 2002:a05:6e02:e04:b0:345:e438:7381 with SMTP id
+ a4-20020a056e020e0400b00345e4387381mr4590728ilk.2.1688717947397; Fri, 07 Jul
+ 2023 01:19:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
-In-Reply-To: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
-From:   Dave Young <dyoung@redhat.com>
-Date:   Fri, 7 Jul 2023 16:18:31 +0800
-Message-ID: <CALu+AoSyhnw0Cz06Mmqh+7FcLUF1q0txY1qbWLxkHO8OD5---Q@mail.gmail.com>
-Subject: Re: [PATCH 00/10] ima: measure events between kexec load and execute
+References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com> <20230703215709.1195644-11-tusharsu@linux.microsoft.com>
+In-Reply-To: <20230703215709.1195644-11-tusharsu@linux.microsoft.com>
+From:   RuiRui Yang <ruyang@redhat.com>
+Date:   Fri, 7 Jul 2023 16:20:33 +0800
+Message-ID: <CALu+AoQC101fcbJjLdJHD7QtqeXzt5uOZDgNYvob0U_NGyaqCQ@mail.gmail.com>
+Subject: Re: [PATCH 10/10] kexec: update kexec_file_load syscall to call ima_kexec_post_load
 To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>
 Cc:     zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
         kexec@lists.infradead.org, linux-integrity@vger.kernel.org,
-        code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com,
-        Eric Biederman <ebiederm@xmission.com>
+        code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -76,92 +75,71 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Add Eric in cc]
-
 On Tue, 4 Jul 2023 at 05:58, Tushar Sugandhi
 <tusharsu@linux.microsoft.com> wrote:
 >
-> The current Kernel behavior is IMA measurements snapshot is taken at
-> kexec 'load' and not at kexec 'execute'.  IMA log is then carried
-> over to the new Kernel after kexec 'execute'.
+> The kexec_file_load syscall is used to load a new kernel for kexec.
+> The syscall needs to update its function to call ima_kexec_post_load, which
+> was implemented in a previous patch.  ima_kexec_post_load takes care of
+> mapping the measurement list for the next kernel and registering a reboot
+> notifier if it's not already registered.
 >
-> Some devices can be configured to call kexec 'load' first, and followed
-> by kexec 'execute' after some time. (as opposed to calling 'load' and
-> 'execute' in one single kexec command).  In such scenario, if new IMA
-> measurements are added between kexec 'load' and kexec 'execute', the
-> TPM PCRs are extended with the IMA events between 'load' and 'execute';
-> but those IMA events are not carried over to the new kernel after kexec
-> soft reboot.  This results in mismatch between TPM PCR quotes and the
-> actual IMA measurements list after the device boots into the new kexec
-> image.  This mismatch results in the remote attestation failing for that
-> device.
+> Modify the kexec_file_load syscall to call ima_kexec_post_load after the
+> image has been loaded and prepared for kexec.  This ensures that the IMA
+> measurement list will be available to the next kernel after a kexec reboot.
+> This also ensures the measurements taken in the window between kexec load
+> and execute are captured and passed to the next kernel.
 >
-> This patch series proposes a solution to solve this problem by allocating
-> the necessary buffer at kexec 'load' time, and populating the buffer
-> with the IMA measurements at kexec 'execute' time.
+> Declare the kimage_file_post_load function in the kernel/kexec_internal.h,
+> so it can be properly used in the syscall.
 >
-> The solution includes:
->  - addition of new functionality to allocate a buffer to hold IMA
->    measurements at kexec 'load',
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> ---
+>  kernel/kexec_file.c     | 7 +++++++
+>  kernel/kexec_internal.h | 1 +
+>  2 files changed, 8 insertions(+)
 >
->  - ima functionality to suspend and resume measurements as needed during
->    buffer copy at kexec 'execute',
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index f989f5f1933b..efe28e77280c 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -184,6 +184,11 @@ kimage_validate_signature(struct kimage *image)
+>  }
+>  #endif
 >
->  - ima functionality for mapping the measurement list from the current
->    Kernel to the subsequent one,
+> +void kimage_file_post_load(struct kimage *image)
+> +{
+> +       ima_kexec_post_load(image);
+> +}
+> +
+>  /*
+>   * In file mode list of segments is prepared by kernel. Copy relevant
+>   * data from user space, do error checking, prepare segment list
+> @@ -399,6 +404,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
 >
->  - necessary changes to the kexec_file_load syscall, enabling it to call
->    the ima functions
+>         kimage_terminate(image);
 >
->  - registering a reboot notifier which gets called during kexec 'execute',
+> +       kimage_file_post_load(image);
+
+I think it should be only done for the reboot case,  please just
+exclude the kdump case here..
+
+> +
+>         ret = machine_kexec_post_load(image);
+>         if (ret)
+>                 goto out;
+> diff --git a/kernel/kexec_internal.h b/kernel/kexec_internal.h
+> index 74da1409cd14..98dd5fcafaf0 100644
+> --- a/kernel/kexec_internal.h
+> +++ b/kernel/kexec_internal.h
+> @@ -30,6 +30,7 @@ static inline void kexec_unlock(void)
 >
->  - and removal of deprecated functions.
->
-> The modifications proposed in this series ensure the integrity of the ima
-> measurements is preserved across kexec soft reboots, thus significantly
-> improving the security of the Kernel post kexec soft reboots.
->
-> There were previous attempts to fix this issue [1], [2], [3].  But they
-> were not merged into the mainline Kernel.
->
-> We took inspiration from the past work [1] and [2] while working on this
-> patch series.
->
-> References:
-> -----------
->
-> [1] [PATHC v2 5/9] ima: on soft reboot, save the measurement list
-> https://lore.kernel.org/lkml/1472596811-9596-6-git-send-email-zohar@linux.vnet.ibm.com/
->
-> [2] PATCH v2 4/6] kexec_file: Add mechanism to update kexec segments.
-> https://lkml.org/lkml/2016/8/16/577
->
-> [3] [PATCH 1/6] kexec_file: Add buffer hand-over support
-> https://lore.kernel.org/linuxppc-dev/1466473476-10104-6-git-send-email-bauerman@linux.vnet.ibm.com/T/
->
-> Tushar Sugandhi (10):
->   ima: implement function to allocate buffer at kexec load
->   ima: implement function to populate buffer at kexec execute
->   ima: allocate buffer at kexec load to hold ima measurements
->   ima: implement functions to suspend and resume measurements
->   kexec: implement functions to map and unmap segment to kimage
->   ima: update buffer at kexec execute with ima measurements
->   ima: remove function ima_dump_measurement_list
->   ima: implement and register a reboot notifier function to update kexec
->     buffer
->   ima: suspend measurements while the kexec buffer is being copied
->   kexec: update kexec_file_load syscall to call ima_kexec_post_load
->
->  include/linux/ima.h                |   3 +
->  include/linux/kexec.h              |  13 ++
->  kernel/kexec_core.c                |  72 +++++++++-
->  kernel/kexec_file.c                |   7 +
->  kernel/kexec_internal.h            |   1 +
->  security/integrity/ima/ima.h       |   4 +
->  security/integrity/ima/ima_kexec.c | 211 +++++++++++++++++++++++------
->  security/integrity/ima/ima_queue.c |  32 +++++
->  8 files changed, 295 insertions(+), 48 deletions(-)
->
+>  #ifdef CONFIG_KEXEC_FILE
+>  #include <linux/purgatory.h>
+> +void kimage_file_post_load(struct kimage *image);
+>  void kimage_file_post_load_cleanup(struct kimage *image);
+>  extern char kexec_purgatory[];
+>  extern size_t kexec_purgatory_size;
 > --
 > 2.25.1
 >
