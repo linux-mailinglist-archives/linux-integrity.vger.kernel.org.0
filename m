@@ -2,154 +2,191 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2492D74B332
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 16:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FD174B356
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 16:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbjGGOn1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jul 2023 10:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S232718AbjGGOyh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jul 2023 10:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233087AbjGGOn0 (ORCPT
+        with ESMTP id S232568AbjGGOyg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jul 2023 10:43:26 -0400
-Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E891FE9;
-        Fri,  7 Jul 2023 07:43:21 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QyG7k5q1bz9xGgg;
-        Fri,  7 Jul 2023 22:32:18 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnt15iJKhkVoAxBA--.59537S2;
-        Fri, 07 Jul 2023 15:42:55 +0100 (CET)
-Message-ID: <ceba64a94906550cd9d9b93e395c6e379cb028f0.camel@huaweicloud.com>
-Subject: Re: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "eparis@parisplace.org" <eparis@parisplace.org>,
-        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "nicolas.bouchinet@clip-os.org" <nicolas.bouchinet@clip-os.org>
-Date:   Fri, 07 Jul 2023 16:42:39 +0200
-In-Reply-To: <CAHC9VhQGWWQgA9DBpq+q4XQerbN0SXAB8RG94G8uMD0-J968xA@mail.gmail.com>
-References: <20230610075738.3273764-2-roberto.sassu@huaweicloud.com>
-         <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
-         <8fd08063bc6b4325b9785052d02da9f2@huawei.com>
-         <CAHC9VhQGWWQgA9DBpq+q4XQerbN0SXAB8RG94G8uMD0-J968xA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Fri, 7 Jul 2023 10:54:36 -0400
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3C72117
+        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 07:53:48 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7659db6339eso97579485a.1
+        for <linux-integrity@vger.kernel.org>; Fri, 07 Jul 2023 07:53:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688741627; x=1691333627;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CPovcDx0Jp7p0rxc31G4K4rf+RSfD3YoQjrCZo8Rivs=;
+        b=kjDC+a3zSK2eRN0GmVEwydy9WoqZR+OsMJ2XXOXpr9YFemPKHDZatNmWB2xWE3JYyz
+         6kZMDYEo+qE7Wb10ebRHKhch40lfLKnWmGGpdhX6SPBwfQp64RhReGAPk3VK330H24zi
+         vupbhMkmAoC3kpUtR1BfjDBaDWEaHKDWTSFcqrwmfu/qYD52gOY3abhBnzeMonb8s5dC
+         YweFAlsTGePigbe2lvdFE4OWf0XNv4cfzgxh8A7a7Vp/5vd9yx0q/6PxwTz8auhrJF/Y
+         SYVpyc/ihbXZiK12TXpsr0sP39tNiIJOD4SkCI3MAszdvNX/rn9G1+P4QV1Ear6/h43p
+         gkMA==
+X-Gm-Message-State: ABy/qLb1Uii/gDHEl1nhuQAmIBTyjzKFAv9FLvXI/XlTzKR8MenlogyZ
+        0oFtgdq+wEkggVb/VZVZShR+
+X-Google-Smtp-Source: APBJJlEcjwiB2P+G5P63povz9uFukN13UGlV0N1GEkdF3fsvn89XgwLKb03K3Qu7uI65bbZcCd9ADQ==
+X-Received: by 2002:a05:620a:3944:b0:765:44c2:826d with SMTP id qs4-20020a05620a394400b0076544c2826dmr6230550qkn.27.1688741627214;
+        Fri, 07 Jul 2023 07:53:47 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id m21-20020a05620a13b500b0076219ec1fbesm1900772qki.42.2023.07.07.07.53.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 07:53:46 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 10:53:45 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Fan Wu <wufan@linux.microsoft.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, eparis@redhat.com,
+        paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, audit@vger.kernel.org,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v10 11/17] dm-verity: consume root hash digest and
+ signature data via LSM hook
+Message-ID: <ZKgm+ffQbdDTxrg9@redhat.com>
+References: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
+ <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
 MIME-Version: 1.0
-X-CM-TRANSID: GxC2BwDnt15iJKhkVoAxBA--.59537S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF4rJF4fXFW8XrW8CrW3ZFb_yoW5trW3pF
-        W3J3Wjkrn5JFWfAr9ayw48u3WS93yrGr4UXr9xtw1UZas0gr1xJr1jkr1ruFykXrWkGFnY
-        qry7Xr9xurn8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj5AApQAAsK
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2023-07-07 at 10:34 -0400, Paul Moore wrote:
-> On Fri, Jul 7, 2023 at 2:49 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
-> > > From: Paul Moore [mailto:paul@paul-moore.com]
-> > > Sent: Friday, July 7, 2023 3:44 AM
-> > > On Jun 10, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> > > > 
-> > > > Currently, the LSM infrastructure supports only one LSM providing an xattr
-> > > > and EVM calculating the HMAC on that xattr, plus other inode metadata.
-> > > > 
-> > > > Allow all LSMs to provide one or multiple xattrs, by extending the security
-> > > > blob reservation mechanism. Introduce the new lbs_xattr_count field of the
-> > > > lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
-> > > > needs, and the LSM infrastructure knows how many xattr slots it should
-> > > > allocate.
-> > > > 
-> > > > Modify the inode_init_security hook definition, by passing the full
-> > > > xattr array allocated in security_inode_init_security(), and the current
-> > > > number of xattr slots in that array filled by LSMs. The first parameter
-> > > > would allow EVM to access and calculate the HMAC on xattrs supplied by
-> > > > other LSMs, the second to not leave gaps in the xattr array, when an LSM
-> > > > requested but did not provide xattrs (e.g. if it is not initialized).
-> > > > 
-> > > > Introduce lsm_get_xattr_slot(), which LSMs can call as many times as the
-> > > > number specified in the lbs_xattr_count field of the lsm_blob_sizes
-> > > > structure. During each call, lsm_get_xattr_slot() increments the number of
-> > > > filled xattrs, so that at the next invocation it returns the next xattr
-> > > > slot to fill.
-> > > > 
-> > > > Cleanup security_inode_init_security(). Unify the !initxattrs and
-> > > > initxattrs case by simply not allocating the new_xattrs array in the
-> > > > former. Update the documentation to reflect the changes, and fix the
-> > > > description of the xattr name, as it is not allocated anymore.
-> > > > 
-> > > > Adapt both SELinux and Smack to use the new definition of the
-> > > > inode_init_security hook, and to call lsm_get_xattr_slot() to obtain and
-> > > > fill the reserved slots in the xattr array.
-> > > > 
-> > > > Move the xattr->name assignment after the xattr->value one, so that it is
-> > > > done only in case of successful memory allocation.
-> > > > 
-> > > > Finally, change the default return value of the inode_init_security hook
-> > > > from zero to -EOPNOTSUPP, so that BPF LSM correctly follows the hook
-> > > > conventions.
-> > > > 
-> > > > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
-> > > > Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > ---
-> > > >  include/linux/lsm_hook_defs.h |  6 +--
-> > > >  include/linux/lsm_hooks.h     | 20 ++++++++++
-> > > >  security/security.c           | 71 +++++++++++++++++++++++------------
-> > > >  security/selinux/hooks.c      | 17 +++++----
-> > > >  security/smack/smack_lsm.c    | 25 ++++++------
-> > > >  5 files changed, 92 insertions(+), 47 deletions(-)
-> > > 
-> > > Two *very* small suggestions below, but I can make those during the
-> > > merge if you are okay with that Roberto?
-> > 
-> > Hi Paul
-> > 
-> > yes, sure, I'm ok with them. Please make them during the merge.
+On Wed, Jun 28 2023 at  5:09P -0400,
+Fan Wu <wufan@linux.microsoft.com> wrote:
+
+> From: Deven Bowers <deven.desai@linux.microsoft.com>
 > 
-> Great, I'll queue this up for merging once the merge window closes.
-> I'll send confirmation once it's done but just a heads-up that things
-> might be a little delayed next week.
+> dm-verity provides a strong guarantee of a block device's integrity. As
+> a generic way to check the integrity of a block device, it provides
+> those integrity guarantees to its higher layers, including the filesystem
+> level.
+> 
+> An LSM that control access to a resource on the system based on the
+> available integrity claims can use this transitive property of
+> dm-verity, by querying the underlying block_device of a particular
+> file.
+> 
+> The digest and signature information need to be stored in the block
+> device to fulfill the next requirement of authorization via LSM policy.
+> This will enable the LSM to perform revocation of devices that are still
+> mounted, prohibiting execution of files that are no longer authorized
+> by the LSM in question.
+> 
+> This patch added two security hook calls in dm-verity to save the
+> dm-verity roothash and the roothash signature to LSM blobs.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> ---
 
-Ok, no problem.
+> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+> index 26adcfea0302..54d46b2f2723 100644
+> --- a/drivers/md/dm-verity-target.c
+> +++ b/drivers/md/dm-verity-target.c
+> @@ -1440,6 +1453,15 @@ static int verity_ctr(struct dm_target *ti, unsigned int argc, char **argv)
+>  	ti->per_io_data_size = roundup(ti->per_io_data_size,
+>  				       __alignof__(struct dm_verity_io));
+>  
+> +	root_digest.digest = v->root_digest;
+> +	root_digest.digest_len = v->digest_size;
+> +	root_digest.algo = v->alg_name;
+> +
+> +	r = security_bdev_setsecurity(bdev, DM_VERITY_ROOTHASH_SEC_NAME, &root_digest,
+> +				      sizeof(root_digest));
+> +	if (r)
+> +		goto bad;
+> +
+>  	verity_verify_sig_opts_cleanup(&verify_args);
+>  
+>  	dm_audit_log_ctr(DM_MSG_PREFIX, ti, 1);
+> diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+> index 4836508ea50c..33165dd7470f 100644
+> --- a/drivers/md/dm-verity-verify-sig.c
+> +++ b/drivers/md/dm-verity-verify-sig.c
+> @@ -9,6 +9,9 @@
+>  #include <linux/verification.h>
+>  #include <keys/user-type.h>
+>  #include <linux/module.h>
+> +#include <linux/security.h>
+> +#include <linux/dm-verity.h>
+> +#include "dm-core.h"
 
-Thanks!
+Why are you including dm-core.h here?
 
-Roberto
+>  #include "dm-verity.h"
+>  #include "dm-verity-verify-sig.h"
+>  
+> @@ -97,14 +100,17 @@ int verity_verify_sig_parse_opt_args(struct dm_arg_set *as,
+>   * verify_verify_roothash - Verify the root hash of the verity hash device
+>   *			     using builtin trusted keys.
+>   *
+> + * @bdev: block_device representing the device-mapper created block device.
+> + *	  Used by the security hook, to set information about the block_device.
+>   * @root_hash: For verity, the roothash/data to be verified.
+>   * @root_hash_len: Size of the roothash/data to be verified.
+>   * @sig_data: The trusted signature that verifies the roothash/data.
+>   * @sig_len: Size of the signature.
+>   *
+>   */
+> -int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+> -			    const void *sig_data, size_t sig_len)
+> +int verity_verify_root_hash(struct block_device *bdev, const void *root_hash,
+> +			    size_t root_hash_len, const void *sig_data,
+> +			    size_t sig_len)
+>  {
+>  	int ret;
+>  
+> @@ -126,8 +132,12 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+>  				NULL,
+>  #endif
+>  				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
+> +	if (ret)
+> +		return ret;
+>  
+> -	return ret;
+> +	return security_bdev_setsecurity(bdev,
+> +					 DM_VERITY_SIGNATURE_SEC_NAME,
+> +					 sig_data, sig_len);
+>  }
+>  
+>  void verity_verify_sig_opts_cleanup(struct dm_verity_sig_opts *sig_opts)
 
+Both of your calls to security_bdev_setsecurity() to set your blobs in
+the bdev are suspect because you're doing so from the verity_ctr().
+The mapped_device has 2 dm_table slots (active and inactive).  The
+verity_ctr() becomes part of the inactive slot, there is an extra step
+to bind the inactive table to the active table.
+
+This leads to you changing the blobs in the global bdev _before_ the
+table is actually active.  It is possible that the inactive table will
+simply be removed and the DM verity device put back in service;
+leaving your blob(s) in the bdev inconsistent.
+
+This issue has parallels to how we need to defer changing the global
+queue_limits associated with a request_queue until _after_ all table
+loading is settled and then the update is done just before resuming
+the DM device (mapped_device) -- see dm_table_set_restrictions().
+
+Unfortunately, this feels like it may require a new hook in the
+target_type struct (e.g. ->finalize())
+
+Mike
