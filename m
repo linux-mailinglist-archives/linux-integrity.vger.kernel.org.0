@@ -2,201 +2,144 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEBB74B572
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 18:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFD974B740
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 21:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbjGGQyk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jul 2023 12:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        id S232744AbjGGTi6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jul 2023 15:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjGGQyj (ORCPT
+        with ESMTP id S232808AbjGGTgB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jul 2023 12:54:39 -0400
-Received: from sonic314-26.consmr.mail.ne1.yahoo.com (sonic314-26.consmr.mail.ne1.yahoo.com [66.163.189.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF4B26A2
-        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 09:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688748848; bh=7dUG/tEyuCsnWvgTF+ykPusSsDtzDF4QTHRG8+l4fWM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=k33JwQsSTksi1u+D4jg0dnnvzQuJoiIQuMELZK73bYM19E5jrrEVHxkKBATJ3CIQy4agP2hErjjpbFK76q7HdCYIMzMFXwxR7fAl1kg39dx1afZXa8eKMkvl9J4gBbWgVUT9ovyjCxIIgtauM7BidhyVu39YfW4acPysfAEXVYvuZl7B3sCiA131t6GRwKBU0juqrfNQMbtFlzBuWxz/ZEvEaCXXZ9tBx8wxwd4WHAQqDikU1cyFjooBiQyDkM3iMsb9y4e8QOgU6U25gxxleIijzzeJbZiiOKHYfAQxY/f70pXWSBHRz3+yS1xQrsrB+5ZRALrb4aTXkI2a4cwxWw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688748848; bh=tx9k0TN1T8vin8wdHwO2nG4qX/v/r09tkKCH6Un2w5v=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=emeh3ncUq7JgNSue0N0j/Fgm2DlP2UHlUPyz3SHcLXk7/4WXmnygV/tkPu/tzU5Pdhk1HmJ3HhbQvuf3ujiGDlVD+MSsnbUanpaym0EOWXUuOF7lKHQPZNOEovV8mO3Ptziljka2f9Wa3cs3iITZTrxWwEBmFjqX7z1Pv83lss9PkL6FRrn6OPHVkgyUDIpGowNv3zInoCvxakXnwdq31asOYiQ4u+GsrLPNpjVl7FTpHSfqdgObppaIBzwISsVq7C8fiK9pHUJuR7DF1AKM6EJW7T1L38YCdEPKGq73+BF4nvP9IWUYhp+bKOQlMxOJRPoqEXJ9BSVNBFT0LOVvoA==
-X-YMail-OSG: 3cMWPXEVM1ksAsW6ExbAWo3xHajlrtgcL1H_yMZEUdZajHEEbDWayzDJl9unhFx
- V2I46457HBKjxa8YP9y9f1u7E2dRKrSawhO23vd.M4HcGojwyiRn6BEPRWf97aLuC1mflAnCm6tM
- WlczvkiigYXMFAWN3M2lpUd3aqyPu8u1pdBLbQsbWZ_zgEO3JXhcbAoVt0hz4_tuLMXFJZwbS5dq
- Q3lCh_w3aoC4DEytKBscnH5l_D_U5GAQG.hmNekYBnKtlQZN5V0GxmLcvqFBnmMIOaFl1g9oDXGg
- nOrtwRP61KHzW2nnxz0PVeW1qfevQ76WEKtjmFLMz8qjipv7oAG25p0iv1yqrnF9lzwyWWT8ycbq
- zcmilJsaDYje5auB6zVrV4YZcmxW0bEkHhOvupWVMZwvzyZKIMxGfofOVldwWz4yoaC1Hn7u72YR
- JtTz_aWAB6OFYHfjz8Uho0tT5dN2lLbmlS7t8Djh0kcyEZi.IjLlIsVJAvUfGg.TWWZl_95AyaJZ
- ObS9vycfzaNh0yNu1S1GeUoBkFQ1ep.bQq.OJscU9mjajdkcKE4kM7ZeiaaGrgH6_93_I_RfFj1I
- pWZ1mwpcWl0k.00tbVj4LFpBqlXg9ebnsDrSo8isUeecWGnetLsbKhXJT2jI5Hw6XgnAWLqo6mSW
- TOeKXX5ev0XF23DHQCj6tfN9TqAbmrHOXyEqjicTRaCOhQTztTSv3lvVSIxHH1EV0I8R1Q0tNMgF
- N1GsjrBW6AY6ds5Kgz_gBzPq8mpz.G3QX_lYEUf5hz5vEpvJ3qSnrUpOas_3Ahnnr5s_CWxLWG9V
- INjKYK4zVW84Me_kGJGqTp1NHHd_8AMvFCm_SktAmH7MddZnt6J6.jW0g11rjp7DSw_CqHNVdxs.
- efsQ_I6gtbLE6KLDw1s86Ky8WWT8.I6qQQIoBNT1czh8JumJb_Q9ALfGk2cm4FD2x0FVmmMQXYOy
- 1vptlrjZjD4A9KFEUDi.a2Sij2cUpwT3dDCvPevmhfwB55fYUXW9oBG9p6KLDXWQbpO._S4N25Mo
- Pa9dIiWCcSqhNZJlCRUFVCfK8ZNxJl.szRY6aYZfQmIOwmdorJQICm2KyjS0PRUxlfzXGHZZNMfO
- 4_hNr0d1HaRuprP9dz5rdIs8SO8X4FuAOPFBgKX.AG_6ei9y675CSr1dnhjDUWPWjEzwOSR6E31n
- eHrQM3hqPVOcMl3ILksF3a9poPzgwHE76Kf44UBZMCUNbZZhX7fcLvudutA25XNmxIx4iU8WUwTV
- 22mVXAZ3KFkOnNuBybve7TeQ82xSbgsC1qszhx4q2.3ygpDXhGRVeB4cuOC7omxDJJl472esmlLK
- 6OWWOkksKlawCNnw2ZfdSxnzHLNr6fXZw5Fy3hKPBQHjiegdLrb3vOaQWNFfKxeztI1UOMFqAgb1
- QveMIRWGYJwnd19GzrCkm20G2QQgzCJ5weBGd7TtxJ.RMAl.9mOnnF8z9GmNkZ8M7.Ql4K1zHxCS
- 5ILM49RYVmo9mEKRR9bQq5P.g3Hl2OjbCRKj0Rkoi23a0FsdA_enxgTUrwZAwg2VVClPLjU9lWw0
- eGwf9I9yecWmm.hnZ2Nhqc4Dxh7OisHW.GnBhxV7FbVuRDfqOU6G76wKBu9ElqHb62ZtaX0ati1F
- rwcGJbxMYgttxxvVOYa1Vf01GtMGZF4SDriwYiGdF2UiKU40GXZqHKHzKCkGXYd8vPEXp4b0twqk
- jj3TUHl6L.5zYYjjGo6b5UVUEMyyFbNSI.2t5XaRmq57Mo9N8mUbFxYZkMa4_eQvJ5isj4rDayPl
- W82bKlmpH_K3MXQVIlo6uKVnOrXkJDT1LHHLV75zNiSL_CoKoealpTCQRoX89LWDuemeKSKchEtD
- Z70z9z6TdKdFBCe7520rZCD_9pfY1EVwWzA28celp3YG.y0WmrysXXF9oXrzwU.M8i6LDKpuqT33
- .OzOUOLKgLmjD4RHP39pFa5uwWJYDLuGr_55ipZLcVUU9UJ1iE6rly3dbQDqyKVkxGgZ7QArEGQQ
- 6g5LHA8dDXtRjG4z3B7vGht8zmpVxM_H3nJUCpo4VontlqyNDXnN9b5_WllLCj1Sa3T9CM1rOB2d
- AtkiisZnRZjay67spOW1b2wib6ERZECTBRS.MNbmxRsLcZQd4rh0BoKAU9Nqy7Lt13.mTIbdExOy
- M8BtBJofjnnuIv21rHyKUwqDktBEXsv9O6ZfaEVPdWLe2f2hwdVJO0MfV7G5g.QmYeUCUUjQjkCo
- E5WGcnNmqH9xhqf9z2RMo9YzdRv0R.ccKma_5yP3jm4fOO6u2Cx9zYXrQKXzZIojrsNOSJqa8NhA
- cN5yEA_XMQQ3W
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 8a7232ca-1467-48de-b49b-55042b582814
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Fri, 7 Jul 2023 16:54:08 +0000
-Received: by hermes--production-bf1-5d96b4b9f-2ghnc (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 74f4f2705c6e8c4c65d3815b934ef2a1;
-          Fri, 07 Jul 2023 16:54:02 +0000 (UTC)
-Message-ID: <a28c8fce-741b-e088-af5e-8a83daa7e25d@schaufler-ca.com>
-Date:   Fri, 7 Jul 2023 09:53:57 -0700
+        Fri, 7 Jul 2023 15:36:01 -0400
+Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9060E269F;
+        Fri,  7 Jul 2023 12:32:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1688758303; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=EwVRDfNxcmQnOtFGleOVrjIkgKRwh7y52cIfKN0GFaKN0OBxQFBpkW0gztPv2rTPKlsHRlXNwqX0V7X/g+5tbnDalixwm2P/depB+msJkqw/5QsMvebiIudbxXZcK1IbibAsD9T0IWr/xFfu3sBT8tHUKltieu6YOTNc2Jmrb0Y=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1688758303; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=fHoswupnpLAD4heKyuTd/2GZhFPZ+XaZr9DP5UrvceM=; 
+        b=DqSq9DCKsV8NNFqKvMsP7CH363mjfejdsBrrzQySj2V3OvRaWyj+oqjlPq7Epav31II3NSHM/7frG+F6Y1XfRgBLU0KRRwB9dW4hauAHB+OjLS5TlBRetCewMpONDWbHiwkl967kv0nYSIzxfV2EGWvZw+ADN9A1drGyDR7Yv1E=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=apertussolutions.com;
+        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+        dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1688758303;
+        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+        h=Message-ID:Date:Date:MIME-Version:To:To:Cc:Cc:References:From:From:Subject:Subject:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=fHoswupnpLAD4heKyuTd/2GZhFPZ+XaZr9DP5UrvceM=;
+        b=HoM7R2M40mW1tdXIy+g2mlEdzq4NQsxSZwuCWYH0mXFXkpb8z1J7gKkVr6gGnG0W
+        ThRDcJKAEMQPpH/O0wwTDLv9oL/6evwho0H4lNX1iHqyRIe2OeOj97Jr0LvSCMlnL99
+        foaIXq91NT2RQ/qveQIN7YXB140UETdVegWIRZHg=
+Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+        with SMTPS id 1688758300880456.56534128910005; Fri, 7 Jul 2023 12:31:40 -0700 (PDT)
+Message-ID: <df033b7b-54ce-504a-47d6-1b92ea1038f7@apertussolutions.com>
+Date:   Fri, 7 Jul 2023 15:31:38 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
 Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20230610075738.3273764-2-roberto.sassu@huaweicloud.com>
- <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, James.Bottomley@hansenpartnership.com,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-5-ross.philipson@oracle.com>
+ <20230512105554.GB14461@srcf.ucam.org>
+ <30d5891d-4747-8d67-2667-ff07628740bd@apertussolutions.com>
+ <20230515212206.GA2162@srcf.ucam.org>
+ <df9d1260-41dd-034b-9dc6-14173c6c0d25@apertussolutions.com>
+ <20230516014310.GA5403@srcf.ucam.org>
+ <eda6da3a-00fe-21c5-5a3d-3e06d21179f4@apertussolutions.com>
+ <20230616201513.GA30963@srcf.ucam.org>
+From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Subject: Re: [PATCH v6 04/14] x86: Secure Launch Resource Table header file
+In-Reply-To: <20230616201513.GA30963@srcf.ucam.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21638 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/6/2023 6:43 PM, Paul Moore wrote:
-> On Jun 10, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
->> Currently, the LSM infrastructure supports only one LSM providing an xattr
->> and EVM calculating the HMAC on that xattr, plus other inode metadata.
+On 6/16/23 16:15, Matthew Garrett wrote:
+> On Fri, Jun 16, 2023 at 04:01:09PM -0400, Daniel P. Smith wrote:
+>> On 5/15/23 21:43, Matthew Garrett wrote:
+>>> On Mon, May 15, 2023 at 08:41:00PM -0400, Daniel P. Smith wrote:
+>>>> On 5/15/23 17:22, Matthew Garrett wrote:
+>>>>> What if I don't use grub, but use something that behaves equivalently?
+>>>>> Which value should be used here?
+>>>>
+>>>> Generally we would request that the bootloader submit a request to register
+>>>> for a value to be reserved in the spec. That aside, the intent here is to
+>>>> allow for the possibility for the DLE handler to be independent from the
+>>>> bootloader, but this does not have to be this way. If a non-open entity
+>>>> decides to produce their own implementation, they can freely use a
+>>>> unallocated value at their own risk that it could be allocated to another
+>>>> bootloader in the future. Though in this scenario it likely would not matter
+>>>> as the non-open DLE handler would only be present when the non-open
+>>>> bootloader was present.
+>>>
+>>> Is the expectation that the DLE will always be shipped with the
+>>> bootloader? I think I'm not entirely clear on what's consuming this and
+>>> why.
+>>>
 >>
->> Allow all LSMs to provide one or multiple xattrs, by extending the security
->> blob reservation mechanism. Introduce the new lbs_xattr_count field of the
->> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
->> needs, and the LSM infrastructure knows how many xattr slots it should
->> allocate.
->>
->> Modify the inode_init_security hook definition, by passing the full
->> xattr array allocated in security_inode_init_security(), and the current
->> number of xattr slots in that array filled by LSMs. The first parameter
->> would allow EVM to access and calculate the HMAC on xattrs supplied by
->> other LSMs, the second to not leave gaps in the xattr array, when an LSM
->> requested but did not provide xattrs (e.g. if it is not initialized).
->>
->> Introduce lsm_get_xattr_slot(), which LSMs can call as many times as the
->> number specified in the lbs_xattr_count field of the lsm_blob_sizes
->> structure. During each call, lsm_get_xattr_slot() increments the number of
->> filled xattrs, so that at the next invocation it returns the next xattr
->> slot to fill.
->>
->> Cleanup security_inode_init_security(). Unify the !initxattrs and
->> initxattrs case by simply not allocating the new_xattrs array in the
->> former. Update the documentation to reflect the changes, and fix the
->> description of the xattr name, as it is not allocated anymore.
->>
->> Adapt both SELinux and Smack to use the new definition of the
->> inode_init_security hook, and to call lsm_get_xattr_slot() to obtain and
->> fill the reserved slots in the xattr array.
->>
->> Move the xattr->name assignment after the xattr->value one, so that it is
->> done only in case of successful memory allocation.
->>
->> Finally, change the default return value of the inode_init_security hook
->> from zero to -EOPNOTSUPP, so that BPF LSM correctly follows the hook
->> conventions.
->>
->> Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
->> Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->> ---
->>  include/linux/lsm_hook_defs.h |  6 +--
->>  include/linux/lsm_hooks.h     | 20 ++++++++++
->>  security/security.c           | 71 +++++++++++++++++++++++------------
->>  security/selinux/hooks.c      | 17 +++++----
->>  security/smack/smack_lsm.c    | 25 ++++++------
->>  5 files changed, 92 insertions(+), 47 deletions(-)
-> Two *very* small suggestions below, but I can make those during the
-> merge if you are okay with that Roberto?
->
-> I'm also going to assume that Casey is okay with the Smack portion of
-> this patchset?  It looks fine to me, and considering his ACK on the
-> other Smack patch in this patchset I'm assuming he is okay with this
-> one as well ... ?
+>> No, in fact, an early idea proposed by a pair of us in the TrenchBoot
+>> community was to have it live either as a Runtime Service that was loaded by
+>> a UEFI app or in the coreboot UEFI payload.
+> 
+> Ok, then I think I'm still confused. If I want to write a new bootloader
+> but make use of the existing DLE, what contract am I establishing and
+> what value should I be putting in here?
 
-Yes, please feel free to add my Acked-by as needed.
+Apologies on the delayed response, vacation and what not.
 
->
->> diff --git a/security/security.c b/security/security.c
->> index ee4f1cc4902..d5ef7df1ce4 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -1591,11 +1592,15 @@ EXPORT_SYMBOL(security_dentry_create_files_as);
->>   * created inode and set up the incore security field for the new inode.  This
->>   * hook is called by the fs code as part of the inode creation transaction and
->>   * provides for atomic labeling of the inode, unlike the post_create/mkdir/...
->> - * hooks called by the VFS.  The hook function is expected to allocate the name
->> - * and value via kmalloc, with the caller being responsible for calling kfree
->> - * after using them.  If the security module does not use security attributes
->> - * or does not wish to put a security attribute on this particular inode, then
->> - * it should return -EOPNOTSUPP to skip this processing.
->> + * hooks called by the VFS.  The hook function is expected to populate the
->> + * @xattrs array, by calling lsm_get_xattr_slot() to retrieve the slots
-> I think we want to change "@xattrs array" to just "xattrs array" as
-> there is no function parameter named "xattrs" in the LSM/security_XXX
-> hook itself, just in the 'inode_init_security' hook implementation.
->
-> I might also break the new text describing the hook implementation
-> into a new paragraph.
->
->> + * reserved by the security module with the lbs_xattr_count field of the
->> + * lsm_blob_sizes structure.  For each slot, the hook function should set ->name
->> + * to the attribute name suffix (e.g. selinux), to allocate ->value (will be
->> + * freed by the caller) and set it to the attribute value, to set ->value_len to
->> + * the length of the value.  If the security module does not use security
->> + * attributes or does not wish to put a security attribute on this particular
->> + * inode, then it should return -EOPNOTSUPP to skip this processing.
->>   *
->>   * Return: Returns 0 on success, -EOPNOTSUPP if no security attribute is
->>   * needed, or -ENOMEM on memory allocation failure.
->> @@ -1604,33 +1609,51 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
->>  				 const struct qstr *qstr,
->>  				 const initxattrs initxattrs, void *fs_data)
->>  {
->> -	struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
->> -	struct xattr *lsm_xattr, *evm_xattr, *xattr;
->> -	int ret;
->> +	struct security_hook_list *P;
-> The above comments were nitpicky, this one is even more so ...
-> convention within security/security.c is to call the
-> security_hook_list pointer "hp", not "P" (although I recognize P is
-> used in the macro).
->
->> +	struct xattr *new_xattrs = NULL;
->> +	int ret = -EOPNOTSUPP, xattr_count = 0;
-> --
-> paul-moore.com
+I believe I know where the confusion is coming from, let me see if I can 
+explain better by why that field came about. The motivation for the SLRT 
+came out of our agreement to use a callback mechanism to support 
+entering efi-stub and then going back to a dynamic launch aware hook to 
+complete the initiation of the dynamic launch. The SLRT was devised as a 
+platform and kernel agnostic means to handle the launch. As such, there 
+was a desire to use that interface, and the underlying DLE code, whether 
+GRUB was launching the kernel via the UEFI interface or the traditional 
+interface. Skipping the details, but it boils down to the fact that in 
+the non-UEFI case, functionality from core GRUB was needed. As a result, 
+to provide maximum flexibility for other bootloaders, and to make it 
+easier on us, we add the ability to pass a context object across the 
+interface. Thus allowing GRUB's DLE handler to have a single entry that 
+could be called externally by efi-stub or directly from GRUB proper.
+
+IOW, the bootloader context is a means to provide a bootloader with them 
+means to implement a private interface between the bootloader proper and 
+a DLE handler that it installed into memory should its implementation 
+require it.
+
+There is an underlying question within your question, and that is of 
+reuse. In this case, we wrote GRUB's DLE handler was written 
+specifically to be used by GRUB. It was written to provide a stable and 
+demonstrable implementation of the SL interface. In the future it may 
+get refactored or a common standalone implementation, e.g., the 
+previously mentioned UEFI runtime service, may arise that would be 
+reusable by multiple bootloaders.
+
+I hope this helped explain the purpose and use of this area of the 
+table. Please let me know if it did not.
+
+V/r,
+DPS
