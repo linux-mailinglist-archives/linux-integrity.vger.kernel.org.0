@@ -2,144 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098EF74B0CE
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 14:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6AA74B15C
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 15:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbjGGM2w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jul 2023 08:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        id S232134AbjGGNAl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jul 2023 09:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbjGGM2t (ORCPT
+        with ESMTP id S229458AbjGGNAk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jul 2023 08:28:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88856212C
-        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 05:28:43 -0700 (PDT)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367CM5v8008790;
-        Fri, 7 Jul 2023 12:28:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qZMm9yTjcJWUSWLm7JzzcwParFkZ3ZwO6pyqzRsLeJg=;
- b=JBdeuJEBQCmOqPx3HXA4bu7l5TLSFSEdKTitHuAwdqg6yAAbY38WgIxLsVC8Zkm1Ahl0
- jwnUGJFf48ERK1SL8ckJ4Z0kqI88thNocEnokjHwBRvYaTn3v88GTbKGTqHI2bxl5pne
- pawv72qVeqnVvNXl6Y9PBrU18E6Om5/ISZjPjw/V+9oR48+CRTzkqgWRTSjLa6FBOYiP
- IjP84AWQ4KAdjI63sXX9HE79DxQGf+0un4Sg2r/W0C27/otQFrAJlxjJkJqZ93elfGOz
- 4G65sb5NgKDaNynvuyVQnD6+TXDXAi4g6E38OokNpkm/Qj5JX+2JqswJBzxXuRQTN6IB Fw== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpjna040a-1
+        Fri, 7 Jul 2023 09:00:40 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47E8170C
+        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 06:00:39 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 367Cu8ni024664;
+        Fri, 7 Jul 2023 13:00:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=/RfW+H6HuSHaoDRhZa7QQy1R3krdvUDNGZk8+CKwmwk=;
+ b=FmTsyFTAy5Vr/tDBmQgITUde4SBJ1AgHeU9Qp8rqO0W+lAOy6nyKeQf9Tw+GK+rkZ6mg
+ eoGTktGCUISb+/OOK9Zj8CzCyO4MwZeeUnja6Wco/WIyJuiex9BulD98ZLmYrP1FH6C+
+ /npYasD18Qm2Nk7nx8laEuRv0bij+Pl/7H9Jhlj5pj9llzmbb7Z9KEE99I6DzXEI4dK7
+ s2lPEAwJUMawQO2jHX/S0kHu4OMKaFZe+9gfgI1aawDUfpC9f/sv4huyPbL12HzY2F/V
+ xwlSdSFtLdpgoiocRaN6qC1CYLEx/VED9/GeZnXsu83MMhh5oAQfoEJfqryvQX0rSbqL /Q== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rpk59830f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 12:28:22 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 367Aeqm8001784;
-        Fri, 7 Jul 2023 12:28:21 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3rjbs5a0pa-1
+        Fri, 07 Jul 2023 13:00:15 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 367AOxRr017839;
+        Fri, 7 Jul 2023 13:00:14 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3rjbs65gnj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jul 2023 12:28:21 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367CSJYO25231950
+        Fri, 07 Jul 2023 13:00:14 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 367D0DBj42664212
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Jul 2023 12:28:19 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 49E545805E;
-        Fri,  7 Jul 2023 12:28:19 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66E6358056;
-        Fri,  7 Jul 2023 12:28:18 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Jul 2023 12:28:18 +0000 (GMT)
-Message-ID: <ab4c5f9a-5b70-5d45-80d9-2ec48ea49913@linux.ibm.com>
-Date:   Fri, 7 Jul 2023 08:28:17 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 05/10] kexec: implement functions to map and unmap segment
- to kimage
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
-        kexec@lists.infradead.org, linux-integrity@vger.kernel.org
+        Fri, 7 Jul 2023 13:00:13 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5BFE358063;
+        Fri,  7 Jul 2023 13:00:13 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3CF015805F;
+        Fri,  7 Jul 2023 13:00:12 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.7.157])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jul 2023 13:00:12 +0000 (GMT)
+Message-ID: <494dffc6cc7cfb8c6ca78f3bae442d57362a8857.camel@linux.ibm.com>
+Subject: Re: [PATCH 01/10] ima: implement function to allocate buffer at
+ kexec load
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>, noodles@fb.com,
+        bauermann@kolabnow.com, kexec@lists.infradead.org,
+        linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+Date:   Fri, 07 Jul 2023 09:00:11 -0400
+In-Reply-To: <20230703215709.1195644-2-tusharsu@linux.microsoft.com>
 References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
- <20230703215709.1195644-6-tusharsu@linux.microsoft.com>
-Content-Language: en-US
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230703215709.1195644-6-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+         <20230703215709.1195644-2-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -_0LmGCmx17hBFyDp6E3G3bthskmOg0Y
-X-Proofpoint-ORIG-GUID: -_0LmGCmx17hBFyDp6E3G3bthskmOg0Y
+X-Proofpoint-GUID: VtN6U0vQllDOic3NboU5CP0_imEZVr3t
+X-Proofpoint-ORIG-GUID: VtN6U0vQllDOic3NboU5CP0_imEZVr3t
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-07_08,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- spamscore=0 adultscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0
- clxscore=1011 priorityscore=1501 impostorscore=0 mlxlogscore=868
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307070112
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=858 suspectscore=0
+ phishscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
+ spamscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307070117
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Tushar,
 
+On Mon, 2023-07-03 at 14:57 -0700, Tushar Sugandhi wrote:
+> IMA does not provide a mechanism to allocate memory for IMA log storage
+> during kexec operation.
 
-On 7/3/23 17:57, Tushar Sugandhi wrote:
-> Currently, there's no mechanism to map and unmap segments to the kimage
-> structure.  This functionality is needed when dealing with memory segments
-> in the context of a kexec operation.
+The IMA measurement list is currently being carried across kexec, so
+obviously a buffer is being allocated for it.  IMA not allocating
+memory for the measurment list is not the problem statement.  Please
+concisely provide the problem statement, explaining why IMA needs to
+allocate the buffer.
+
+> The function should handle the scenario where
+> the kexec load is called multiple times.
+
+Currently the buffer is being freed with the kexec 'unload'.  With this
+patch IMA is allocating a buffer for the measurement list, which needs
+to be freed independently of the kexec 'unload'.
+
+> Implement a function to allocate buffer of size kexec_segment_size at
+> kexec load.  If the buffer was already allocated, free that buffer and
+> reallocate.  Finally, initialihze ima_khdr struct. 
 > 
-> The patch adds two new functions: kimage_map_segment() and
-> kimage_unmap_segment().
-> 
-> Implement kimage_map_segment() which takes a kimage pointer, an address,
-> and a size.  Ensures that the entire segment is being mapped by comparing
-> the given address and size to each segment in the kimage's segment array.
-> Collect the source pages that correspond to the given address range,
-> allocate an array of pointers to these pages, and map them to a contiguous
-> range of virtual addresses.  If the mapping operation is successful, the
-> function returns the start of this range.  Otherwise, it frees the page
-> pointer array and returns NULL.
-> 
-> Implement kimage_unmap_segment() that takes a pointer to a segment buffer
-> and unmaps it using vunmap().
-> 
-> Finally, move for_each_kimage_entry() macro to kexec.h.
-> 
-> Note: Use kimage_map_segment() and kimage_unmap_segment() carefully to
-> avoid memory leaks and ensure that all mapped segments are properly
-> unmapped when they're no longer needed.
+> The patch operates under the assumption that the segment size does not
+> change between kexec load and execute.
 > 
 > Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 
-> +
-> +	i = 0;
-> +	for_each_kimage_entry(image, ptr, entry) {
-> +		if (entry & IND_DESTINATION)
-> +			dest_page_addr = entry & PAGE_MASK;
-> +		else if (entry & IND_SOURCE) {
-> +			if (dest_page_addr >= addr && dest_page_addr < eaddr) {
-> +				src_page_addr = entry & PAGE_MASK;
-> +				src_pages[i++] = phys_to_page(src_page_addr);
+-- 
+thanks,
 
-Since phys_to_page is not defined on many/most architectures I change it for ppc64 and have successfully used the following:
-
-+                               src_pages[i++] = virt_to_page(__va(src_page_addr))
+Mimib
 
 
-After several kexecs the following check still works:
 
-# evmctl ima_measurement --ignore-violations /sys/kernel/security/ima/binary_runtime_measurements
-Matched per TPM bank calculated digest(s).
-
-
-    Stefan
 
