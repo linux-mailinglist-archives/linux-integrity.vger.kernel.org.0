@@ -2,159 +2,193 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D60774B8C4
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jul 2023 23:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C4374BBFE
+	for <lists+linux-integrity@lfdr.de>; Sat,  8 Jul 2023 07:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjGGVoT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jul 2023 17:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S232898AbjGHFg6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 8 Jul 2023 01:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjGGVoS (ORCPT
+        with ESMTP id S229515AbjGHFg5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jul 2023 17:44:18 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE781FF0
-        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 14:44:17 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bdd069e96b5so2629412276.2
-        for <linux-integrity@vger.kernel.org>; Fri, 07 Jul 2023 14:44:17 -0700 (PDT)
+        Sat, 8 Jul 2023 01:36:57 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5691FEF
+        for <linux-integrity@vger.kernel.org>; Fri,  7 Jul 2023 22:36:56 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-7659c6cae2cso209517685a.1
+        for <linux-integrity@vger.kernel.org>; Fri, 07 Jul 2023 22:36:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1688766256; x=1691358256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PK1B4XUSmsVxTGEVpYofcXNkzU0O6/lnVCuUw/ZeQdk=;
-        b=LxFbbWM7m6qXuw+EWly1pWO3MyAtoZxWg6TZcpJu3iLzq2QY6sJIpGl0wupo0luYRx
-         pVRIys2j3G32VXIbzojRdil2K8tEOVhqGT5OUOeIE2PwQ52jk237oQWfc38OdQNCuGkr
-         O3fs4CDLUm4gid4rwtg7kHQU6fErmfotacH+6pwf4wXfYDRN/UcXKS1TBfFSeuz7L8io
-         EWFDUqNP4GfIkqaB31XF+P077AoYn46zSTZwCFuxxsRAkWGdRPFPeY0rpjNeM7qVBJ9s
-         BlZ5tGh7pfjTerY3fWfBsICMEwxkSP8po8czRPdb2mZscFahYWG3VZ+r0KrnClXG8nmo
-         Nwbw==
+        d=paul-moore.com; s=google; t=1688794615; x=1691386615;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/6X+3H1ljfy7IjsbLjk8teqFst7rLlyJv0xIACsaZ2M=;
+        b=YTtOX0w+o9n/CPVzXDv1lowkOGTsW9kVS4l1u0GlN+P4+Pe6TRMgaq+o7QEeDp1B1f
+         7vM6U77MpQ9uceQKGo0/a+NnWjsimwHU6ohZpZeFLkemHDBGS0frgwzmdlyfUOOBAbxU
+         ET+4I+z7GIBzMBcsWS/933I401edCFOFcHQNgUzaGht1OEi7TIAKdIBtTQz9Kzgb2tiU
+         tw5cc4FxstdLt4ipYhJ9ZMkYCPe29jz+lLQa4scUKCUFk/nlfJ+gnP1h7/hQnqFLSwvv
+         /cA8qPKZNBaudKaHEGn+LQXo3rJzTpV5iLzFhKIQjljhwcsODwxFNmwiIbD6qae1PQVx
+         1cdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688766256; x=1691358256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PK1B4XUSmsVxTGEVpYofcXNkzU0O6/lnVCuUw/ZeQdk=;
-        b=WfiSN8P7x0tW8r1wqCAxVqIpsckw7Y1RuEGmKFy8Qy8BO94gVq6hkQdq5lY4uEwPO7
-         Swg9GjU4AtiuHS6utzTdbEvJcSk6JNJPdU0X42jC0UjaIL1joX7Wvaf8IXlevCISnk9I
-         GDSWcCJkih3RKB7zl+0PA+KVTyCWK6/yo3esy6g5j8C1DXP/9kg9utEprbqIj+iXYUxO
-         zCkPnPJm/+oBpO01GXN0hPkyAaNjFSuetw9kJ6CCxV5KZUISR97QsKQYx6Yl3lKg4gQx
-         z9Y9VF+lL1UnnAiZWi3lIalhFJ23DyeYTJk3AzKDnbri+K6wJA7X3ruI2DCSkIS2suYQ
-         nAPg==
-X-Gm-Message-State: ABy/qLbIavtAHzoGlP3RdO4igpjhZLnBVG6p0OK4WdNBNZHvSYR6nw5V
-        /cYw0jV+ar5TCl4dTXVr8a6PVCok5NiajSQiCA0j
-X-Google-Smtp-Source: APBJJlGR43ihrdLgGgsRYf1YCP/AYWhQnuzYXgap5iD4vXhzbx7EYJXYzdJ8PVZfRsiuJT0N3fBYjkJYeCWWKTttST4=
-X-Received: by 2002:a0d:d64b:0:b0:579:ed5c:2d10 with SMTP id
- y72-20020a0dd64b000000b00579ed5c2d10mr5867478ywd.30.1688766256372; Fri, 07
- Jul 2023 14:44:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230610075738.3273764-2-roberto.sassu@huaweicloud.com>
- <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com> <a28c8fce-741b-e088-af5e-8a83daa7e25d@schaufler-ca.com>
-In-Reply-To: <a28c8fce-741b-e088-af5e-8a83daa7e25d@schaufler-ca.com>
+        d=1e100.net; s=20221208; t=1688794615; x=1691386615;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/6X+3H1ljfy7IjsbLjk8teqFst7rLlyJv0xIACsaZ2M=;
+        b=kkYZue1Vat32rhx8sTEtpvjNfgWTzCuBal7pk5sGWulF2wtWFKdBfiqlYBjJfFUJGF
+         Y8BTjOMYQjJNx0nzOKxCB7v2LQ9B1mx7zq9PZyfteu+kiVQD3pJurSMsx3DXJEbfqRXS
+         iSXJDJdDtYNs4S/oeue0p1eT5MDYcJDCq72hoAbFY6iaue9JLa29qzdJCwzWDv4Kfu1v
+         OwfFeAT9gIpT931r13XqtN3fkyqEeQH0UOH9rGlZ8lFHoVZDA5qUdpUiEFmMa85s+Zmc
+         JH1puBCMTXjPKGp8fQ6l+wX+nXknjn4uS69zqbm7UR53JV0vUXv3lJJfbw2JV4x7AzJ7
+         pEEA==
+X-Gm-Message-State: ABy/qLb26STmmSXdGkcfAyYF7fv4/E8QzifebQNhUFN2YZMoMkZotUqr
+        Y1mFmnItp1C8NhYARmi4/VO1
+X-Google-Smtp-Source: APBJJlG+a1EKnj+jvMEDInNdvc1r1W/hz+0/12Nwm+mpbZz0DyPSVNjr9MqOf37m7Bq8n/2COLAfQA==
+X-Received: by 2002:a05:620a:4051:b0:767:923:48d8 with SMTP id i17-20020a05620a405100b00767092348d8mr6721872qko.27.1688794615250;
+        Fri, 07 Jul 2023 22:36:55 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id c11-20020ae9e20b000000b0075cebaa1540sm2479491qkc.58.2023.07.07.22.36.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 22:36:54 -0700 (PDT)
+Date:   Sat, 08 Jul 2023 01:36:54 -0400
+Message-ID: <b460c0317dfbd5b4668015e104ea3e92.paul@paul-moore.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 7 Jul 2023 17:44:05 -0400
-Message-ID: <CAHC9VhSNqzVpHcDw59a2CznaME1078SJWuEcqJx=R5PQgSjTDg@mail.gmail.com>
-Subject: Re: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To:     Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
+Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, audit@vger.kernel.org,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Fan Wu <wufan@linux.microsoft.com>
+Subject: Re: [PATCH RFC v10 1/17] security: add ipe lsm
+References: <1687986571-16823-2-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1687986571-16823-2-git-send-email-wufan@linux.microsoft.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 12:54=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
-> On 7/6/2023 6:43 PM, Paul Moore wrote:
-> > On Jun 10, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> >> Currently, the LSM infrastructure supports only one LSM providing an x=
-attr
-> >> and EVM calculating the HMAC on that xattr, plus other inode metadata.
-> >>
-> >> Allow all LSMs to provide one or multiple xattrs, by extending the sec=
-urity
-> >> blob reservation mechanism. Introduce the new lbs_xattr_count field of=
- the
-> >> lsm_blob_sizes structure, so that each LSM can specify how many xattrs=
- it
-> >> needs, and the LSM infrastructure knows how many xattr slots it should
-> >> allocate.
-> >>
-> >> Modify the inode_init_security hook definition, by passing the full
-> >> xattr array allocated in security_inode_init_security(), and the curre=
-nt
-> >> number of xattr slots in that array filled by LSMs. The first paramete=
-r
-> >> would allow EVM to access and calculate the HMAC on xattrs supplied by
-> >> other LSMs, the second to not leave gaps in the xattr array, when an L=
-SM
-> >> requested but did not provide xattrs (e.g. if it is not initialized).
-> >>
-> >> Introduce lsm_get_xattr_slot(), which LSMs can call as many times as t=
-he
-> >> number specified in the lbs_xattr_count field of the lsm_blob_sizes
-> >> structure. During each call, lsm_get_xattr_slot() increments the numbe=
-r of
-> >> filled xattrs, so that at the next invocation it returns the next xatt=
-r
-> >> slot to fill.
-> >>
-> >> Cleanup security_inode_init_security(). Unify the !initxattrs and
-> >> initxattrs case by simply not allocating the new_xattrs array in the
-> >> former. Update the documentation to reflect the changes, and fix the
-> >> description of the xattr name, as it is not allocated anymore.
-> >>
-> >> Adapt both SELinux and Smack to use the new definition of the
-> >> inode_init_security hook, and to call lsm_get_xattr_slot() to obtain a=
-nd
-> >> fill the reserved slots in the xattr array.
-> >>
-> >> Move the xattr->name assignment after the xattr->value one, so that it=
- is
-> >> done only in case of successful memory allocation.
-> >>
-> >> Finally, change the default return value of the inode_init_security ho=
-ok
-> >> from zero to -EOPNOTSUPP, so that BPF LSM correctly follows the hook
-> >> conventions.
-> >>
-> >> Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
-> >> Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlin=
-ux/
-> >> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> >> ---
-> >>  include/linux/lsm_hook_defs.h |  6 +--
-> >>  include/linux/lsm_hooks.h     | 20 ++++++++++
-> >>  security/security.c           | 71 +++++++++++++++++++++++-----------=
--
-> >>  security/selinux/hooks.c      | 17 +++++----
-> >>  security/smack/smack_lsm.c    | 25 ++++++------
-> >>  5 files changed, 92 insertions(+), 47 deletions(-)
-> > Two *very* small suggestions below, but I can make those during the
-> > merge if you are okay with that Roberto?
-> >
-> > I'm also going to assume that Casey is okay with the Smack portion of
-> > this patchset?  It looks fine to me, and considering his ACK on the
-> > other Smack patch in this patchset I'm assuming he is okay with this
-> > one as well ... ?
->
-> Yes, please feel free to add my Acked-by as needed.
+On Jun 28, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
+> 
+> Integrity Policy Enforcement (IPE) is an LSM that provides an
+> complimentary approach to Mandatory Access Control than existing LSMs
+> today.
+> 
+> Existing LSMs have centered around the concept of access to a resource
+> should be controlled by the current user's credentials. IPE's approach,
+> is that access to a resource should be controlled by the system's trust
+> of a current resource.
+> 
+> The basis of this approach is defining a global policy to specify which
+> resource can be trusted.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> ---
+>  MAINTAINERS           |  7 +++++++
+>  security/Kconfig      | 11 ++++++-----
+>  security/Makefile     |  1 +
+>  security/ipe/Kconfig  | 17 +++++++++++++++++
+>  security/ipe/Makefile | 10 ++++++++++
+>  security/ipe/ipe.c    | 37 +++++++++++++++++++++++++++++++++++++
+>  security/ipe/ipe.h    | 16 ++++++++++++++++
+>  7 files changed, 94 insertions(+), 5 deletions(-)
+>  create mode 100644 security/ipe/Kconfig
+>  create mode 100644 security/ipe/Makefile
+>  create mode 100644 security/ipe/ipe.c
+>  create mode 100644 security/ipe/ipe.h
 
-Done.  Thanks Casey.
+...
 
---=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a82795114ad4..ad00887d38ea 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10278,6 +10278,13 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+>  F:	security/integrity/
+>  F:	security/integrity/ima/
+>  
+> +INTEGRITY POLICY ENFORCEMENT (IPE)
+> +M:	Fan Wu <wufan@linux.microsoft.com>
+> +L:	linux-security-module@vger.kernel.org
+> +S:	Supported
+> +T:	git git://github.com/microsoft/ipe.git
+
+Using the raw git protocol doesn't seem to work with GH, I think you
+need to refernce the git/https URL:
+
+ https://github.com/microsoft/ipe.git
+
+> +F:	security/ipe/
+> +
+>  INTEL 810/815 FRAMEBUFFER DRIVER
+>  M:	Antonino Daplas <adaplas@gmail.com>
+>  L:	linux-fbdev@vger.kernel.org
+> diff --git a/security/Kconfig b/security/Kconfig
+> index 97abeb9b9a19..daa4626ea99c 100644
+> --- a/security/Kconfig
+> +++ b/security/Kconfig
+> @@ -202,6 +202,7 @@ source "security/yama/Kconfig"
+>  source "security/safesetid/Kconfig"
+>  source "security/lockdown/Kconfig"
+>  source "security/landlock/Kconfig"
+> +source "security/ipe/Kconfig"
+>  
+>  source "security/integrity/Kconfig"
+>  
+> @@ -241,11 +242,11 @@ endchoice
+>  
+>  config LSM
+>  	string "Ordered list of enabled LSMs"
+> -	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
+> -	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
+> -	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
+> -	default "landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
+> -	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
+> +	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf,ipe" if DEFAULT_SECURITY_SMACK
+> +	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf,ipe" if DEFAULT_SECURITY_APPARMOR
+> +	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf,ipe" if DEFAULT_SECURITY_TOMOYO
+> +	default "landlock,lockdown,yama,loadpin,safesetid,bpf,ipe" if DEFAULT_SECURITY_DAC
+> +	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf,ipe"
+
+Generally speaking the BPF LSM should be the last entry in the LSM
+list to help prevent issues caused by a BPF LSM returning an improper
+error and shortcutting a LSM after it.
+
+>  	help
+>  	  A comma-separated list of LSMs, in initialization order.
+>  	  Any LSMs left off this list, except for those with order
+
+...
+
+> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+> new file mode 100644
+> index 000000000000..571648579991
+> --- /dev/null
+> +++ b/security/ipe/Makefile
+> @@ -0,0 +1,10 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Copyright (C) Microsoft Corporation. All rights reserved.
+> +#
+> +# Makefile for building the IPE module as part of the kernel tree.
+> +#
+> +
+> +obj-$(CONFIG_SECURITY_IPE) += \
+> +	hooks.o \
+> +	ipe.o \
+
+It doesn't look like security/ipe/hook.c is included in this patch.
+
+It is important to ensure that each patch compiles after it is
+applied.
+
+--
 paul-moore.com
