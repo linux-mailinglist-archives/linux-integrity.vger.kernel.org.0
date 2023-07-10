@@ -2,47 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B7274DBD0
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Jul 2023 18:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7923E74DBD4
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Jul 2023 19:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjGJQ76 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Jul 2023 12:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
+        id S229865AbjGJRAg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Jul 2023 13:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjGJQ75 (ORCPT
+        with ESMTP id S230113AbjGJRAf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Jul 2023 12:59:57 -0400
+        Mon, 10 Jul 2023 13:00:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8692CC0;
-        Mon, 10 Jul 2023 09:59:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A64D7;
+        Mon, 10 Jul 2023 10:00:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2346161063;
-        Mon, 10 Jul 2023 16:59:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A805C433C8;
-        Mon, 10 Jul 2023 16:59:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBB9961063;
+        Mon, 10 Jul 2023 17:00:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9BEBC433C7;
+        Mon, 10 Jul 2023 17:00:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689008395;
-        bh=wmfsXW7B/YZGN21md4uFFTb+UK7dFNWzwEMuj9c0dO8=;
+        s=k20201202; t=1689008433;
+        bh=olt/eE72Fe/WemTa8hX4qWzKexWxP3mHF33PZCU7i9I=;
         h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=opkC/EdxOnIdN/lG++IGm29PeszDoAVEWbyRDjwOIjiXk+7MX/U7fOkBOQTvLpWV0
-         3eUrXl+HVxJvja82aF9XTcrXgHuYL8x4mcFWGhL6dmy1SPO7Qz3lR/vudRlth4bueJ
-         Xl7XjUUJScS32Nxox4lbs4HT8/CO2cVh7cldn5sEBzuwsRLNiqBvuK3mjUGtRJukzd
-         IblWzE5WCUJ68UwcNc5QwYlJemAI/BYLOqPyaBtcve79ZiiK8r6Fugr2xKlPq2hJUc
-         VI+8mgNLDK2cSP+AgIg3JL4KVeym7LRB6tK+M+V8gZ3s33UJPYAPon0xaKZZvdayGo
-         PdZoNNS4uJi2Q==
-Message-ID: <65fc7c2867b630dad97030a6dda0695fce9330d3.camel@kernel.org>
-Subject: Re: [PATCH v3 3/4] tpm_tis: Use responseRetry to recover from data
+        b=myb7n+TDAMq+1aoTOqi2avGRFtbWQ0Xwo2eeJDzqim66ZnirfK67FwKBqW7Q8PBVR
+         Y1KmAjtfvL+d1MlUYOD54vWBG7KNDuLtIPYhbPCtyVyPXHrjbe5wWQRjWNn4qVlN8f
+         F/t/3gimacqsqfL46+vXf/Mhkc2iIe7oCYXO+mTc4d2sc3kaKiWnAOE8WIzHrlNuFY
+         XtwZgvJR+I2qXtk1CCIogxqOy/YWRfvb1g5PSNR4RCCjHWKlBtMR3xOu+Ddnw1g7BF
+         jTrqA+h1kxzLg7n0lPjAJVu91ykBZHxdOHZBc5gH+QgQLzmjHa+fhpoCN7CE2ZI32s
+         T7WnBRuNQFqhQ==
+Message-ID: <d380ea85b375c861067d01a2561150039e8c3491.camel@kernel.org>
+Subject: Re: [PATCH v3 4/4] tpm_tis: Resend command to recover from data
  transfer errors
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 10 Jul 2023 19:59:52 +0300
-In-Reply-To: <20230613180259.3525-4-Alexander.Steffen@infineon.com>
+Date:   Mon, 10 Jul 2023 20:00:29 +0300
+In-Reply-To: <20230613180259.3525-5-Alexander.Steffen@infineon.com>
 References: <20230613180259.3525-1-Alexander.Steffen@infineon.com>
-         <20230613180259.3525-4-Alexander.Steffen@infineon.com>
+         <20230613180259.3525-5-Alexander.Steffen@infineon.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.48.1-0ubuntu1 
@@ -58,111 +58,43 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 On Tue, 2023-06-13 at 20:02 +0200, Alexander Steffen wrote:
-> TPM responses may become damaged during transmission, for example due to
-> bit flips on the wire. Instead of aborting when detecting such issues, th=
-e
-> responseRetry functionality can be used to make the TPM retransmit its
-> response and receive it again without errors.
+> Similar to the transmission of TPM responses, also the transmission of TP=
+M
+> commands may become corrupted. Instead of aborting when detecting such
+> issues, try resending the command again.
 >=20
 > Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
 > ---
->  drivers/char/tpm/tpm_tis_core.c | 37 ++++++++++++++++++++++++++-------
->  drivers/char/tpm/tpm_tis_core.h |  1 +
->  2 files changed, 30 insertions(+), 8 deletions(-)
+>  drivers/char/tpm/tpm_tis_core.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
 >=20
 > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
 ore.c
-> index 5ddaf24518be..a6d1396413a7 100644
+> index a6d1396413a7..7b13ad4bd6dd 100644
 > --- a/drivers/char/tpm/tpm_tis_core.c
 > +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -337,7 +337,7 @@ static int recv_data(struct tpm_chip *chip, u8 *buf, =
-size_t count)
->  	return size;
->  }
-> =20
-> -static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
-> +static int tpm_tis_try_recv(struct tpm_chip *chip, u8 *buf, size_t count=
-)
->  {
->  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->  	int size =3D 0;
-> @@ -345,11 +345,6 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *b=
-uf, size_t count)
->  	u32 expected;
+> @@ -532,10 +532,17 @@ static int tpm_tis_send_main(struct tpm_chip *chip,=
+ const u8 *buf, size_t len)
 >  	int rc;
-> =20
-> -	if (count < TPM_HEADER_SIZE) {
-> -		size =3D -EIO;
-> -		goto out;
-> -	}
-> -
->  	size =3D recv_data(chip, buf, TPM_HEADER_SIZE);
->  	/* read first 10 bytes, including tag, paramsize, and result */
->  	if (size < TPM_HEADER_SIZE) {
-> @@ -382,7 +377,7 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *bu=
-f, size_t count)
->  		goto out;
->  	}
->  	status =3D tpm_tis_status(chip);
-> -	if (status & TPM_STS_DATA_AVAIL) {	/* retry? */
-> +	if (status & TPM_STS_DATA_AVAIL) {
->  		dev_err(&chip->dev, "Error left over data\n");
->  		size =3D -EIO;
->  		goto out;
-> @@ -396,10 +391,36 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *=
-buf, size_t count)
->  	}
-> =20
->  out:
-> -	tpm_tis_ready(chip);
->  	return size;
->  }
-> =20
-> +static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+>  	u32 ordinal;
+>  	unsigned long dur;
 > +	unsigned int try;
-> +	int rc =3D 0;
-> +
-> +	if (count < TPM_HEADER_SIZE)
-> +		return -EIO;
-> +
-> +	for (try =3D 0; try < TPM_RETRY; try++) {
-> +		rc =3D tpm_tis_try_recv(chip, buf, count);
-> +
-> +		if (rc =3D=3D -EIO)
-> +			/* Data transfer errors, indicated by EIO, can be
-> +			 * recovered by rereading the response.
-> +			 */
-> +			tpm_tis_write8(priv, TPM_STS(priv->locality),
-> +				       TPM_STS_RESPONSE_RETRY);
-> +		else
-> +			break;
-> +	}
-> +
-> +	tpm_tis_ready(chip);
-> +
-> +	return rc;
-> +}
-> +
->  /*
->   * If interrupts are used (signaled by an irq set in the vendor structur=
-e)
->   * tpm.c can skip polling for the data to be available as the interrupt =
-is
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_c=
-ore.h
-> index 610bfadb6acf..3a6b600d22ba 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -34,6 +34,7 @@ enum tis_status {
->  	TPM_STS_GO =3D 0x20,
->  	TPM_STS_DATA_AVAIL =3D 0x10,
->  	TPM_STS_DATA_EXPECT =3D 0x08,
-> +	TPM_STS_RESPONSE_RETRY =3D 0x02,
->  	TPM_STS_READ_ZERO =3D 0x23, /* bits that must be zero on read */
->  };
 > =20
+> -	rc =3D tpm_tis_send_data(chip, buf, len);
+> -	if (rc < 0)
+> -		return rc;
+> +	for (try =3D 0; try < TPM_RETRY; try++) {
+> +		rc =3D tpm_tis_send_data(chip, buf, len);
+> +		if (rc >=3D 0)
+> +			/* Data transfer done successfully */
+> +			break;
+> +		else if (rc !=3D -EIO)
+> +			/* Data transfer failed, not recoverable */
+> +			return rc;
+> +	}
+> =20
+>  	/* go and do it */
+>  	rc =3D tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
