@@ -2,27 +2,28 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E2F74D908
+	by mail.lfdr.de (Postfix) with ESMTP id 45A1B74D906
 	for <lists+linux-integrity@lfdr.de>; Mon, 10 Jul 2023 16:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjGJO33 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Jul 2023 10:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        id S233227AbjGJO32 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Jul 2023 10:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbjGJO31 (ORCPT
+        with ESMTP id S231578AbjGJO31 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Mon, 10 Jul 2023 10:29:27 -0400
-Received: from mx.mylinuxtime.de (mx.mylinuxtime.de [IPv6:2a01:4f8:13a:16c2::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DC7BB
+X-Greylist: delayed 3021 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Jul 2023 07:29:26 PDT
+Received: from mx.mylinuxtime.de (mx.mylinuxtime.de [195.201.174.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E44F2
         for <linux-integrity@vger.kernel.org>; Mon, 10 Jul 2023 07:29:26 -0700 (PDT)
 Received: from leda.eworm.de (unknown [194.36.25.21])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mx.mylinuxtime.de (Postfix) with ESMTPSA id 9A0F3234AEA;
-        Mon, 10 Jul 2023 16:29:24 +0200 (CEST)
+        by mx.mylinuxtime.de (Postfix) with ESMTPSA id 266AB234AF1;
+        Mon, 10 Jul 2023 16:29:25 +0200 (CEST)
 Received: by leda.eworm.de (Postfix, from userid 1000)
-        id 3F2891831C3; Mon, 10 Jul 2023 16:29:24 +0200 (CEST)
+        id E2E4B1831C3; Mon, 10 Jul 2023 16:29:24 +0200 (CEST)
 From:   Christian Hesse <mail@eworm.de>
 To:     linux-integrity@vger.kernel.org
 Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
@@ -31,12 +32,13 @@ Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
         Peter Huewe <peterhuewe@gmx.de>,
         Christian Hesse <mail@eworm.de>, stable@vger.kernel.org,
         roubro1991@gmail.com
-Subject: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework Laptop Intel 12th gen
-Date:   Mon, 10 Jul 2023 16:28:43 +0200
-Message-ID: <20230710142916.18162-1-mail@eworm.de>
+Subject: [PATCH v2 2/2] tpm/tpm_tis: Disable interrupts for Framework Laptop Intel 13th gen
+Date:   Mon, 10 Jul 2023 16:28:44 +0200
+Message-ID: <20230710142916.18162-2-mail@eworm.de>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230710133836.4367-1-mail@eworm.de>
+In-Reply-To: <20230710142916.18162-1-mail@eworm.de>
 References: <20230710133836.4367-1-mail@eworm.de>
+ <20230710142916.18162-1-mail@eworm.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
@@ -63,19 +65,19 @@ Signed-off-by: Christian Hesse <mail@eworm.de>
  1 file changed, 8 insertions(+)
 
 diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index 7db3593941ea..2979f8b9aaa0 100644
+index 2979f8b9aaa0..a8bcd2134e6b 100644
 --- a/drivers/char/tpm/tpm_tis.c
 +++ b/drivers/char/tpm/tpm_tis.c
-@@ -114,6 +114,14 @@ static int tpm_tis_disable_irq(const struct dmi_system_id *d)
- }
- 
- static const struct dmi_system_id tpm_tis_dmi_table[] = {
+@@ -122,6 +122,14 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_VERSION, "A4"),
+ 		},
+ 	},
 +	{
 +		.callback = tpm_tis_disable_irq,
-+		.ident = "Framework Laptop Intel 12th gen",
++		.ident = "Framework Laptop Intel 13th gen",
 +		.matches = {
 +			DMI_MATCH(DMI_SYS_VENDOR, "Framework"),
-+			DMI_MATCH(DMI_PRODUCT_VERSION, "A4"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "A6"),
 +		},
 +	},
  	{
