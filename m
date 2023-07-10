@@ -2,43 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C073874CE96
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Jul 2023 09:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0FA74D797
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Jul 2023 15:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjGJHhW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Jul 2023 03:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
+        id S232109AbjGJNbT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 Jul 2023 09:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbjGJHhV (ORCPT
+        with ESMTP id S229870AbjGJNbQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Jul 2023 03:37:21 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5905F102
-        for <linux-integrity@vger.kernel.org>; Mon, 10 Jul 2023 00:37:19 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qIlSP-0006do-9Z; Mon, 10 Jul 2023 09:37:17 +0200
-Message-ID: <c0ee4b7c-9d63-0bb3-c677-2be045deda43@leemhuis.info>
-Date:   Mon, 10 Jul 2023 09:37:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: [regression] Kernel 6.4 failing to access TPM on Framework Laptop
- 12th gen
+        Mon, 10 Jul 2023 09:31:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DA5EB;
+        Mon, 10 Jul 2023 06:31:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5456D60FC6;
+        Mon, 10 Jul 2023 13:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0B1C433C8;
+        Mon, 10 Jul 2023 13:31:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688995874;
+        bh=r3uzmglo2VwngxcYKz0Hb2V4QzJuLn34J6gv1sdtq6Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EGabTy3HkgEwfPfjLS2fC2p6cAuqFI6vQe7RdXYvWopgdTZwHYUtr21lo8EhmFE6n
+         xbLAg2RSQfTnai5hFyRfhRgJuu5YjWthVUYuHRerlYqdrPGgnXUi4S09DI1yKVvIRl
+         Nkx745We3eobqLBmpQUGZGn9gpE9PP+HU2Be7tZVtHQO6QOa+FS+VfXYVjW1pryjPX
+         Wd8RjKX4BE4Emi4t9dgLEPckEw99Mb5UTv7e+frqsBevPI38F1+uhmXMPA82Fy6nzC
+         ZqRiQLttUX2fM1Rzc+OuKQ8JTlHoUifgLIJ3uxWGWrLQFWAJ46B9jPaOHEnkJqza3l
+         CC10nbpmFoofQ==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688974639;5b09bc05;
-X-HE-SMSGID: 1qIlSP-0006do-9Z
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD,T_SCC_BODY_TEXT_LINE
+Date:   Mon, 10 Jul 2023 16:31:04 +0300
+Message-Id: <CTYJ2CJL0T5F.2L84F8XBD3Y6P@suppilovahvero>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Jerry Snitselaar" <jsnitsel@redhat.com>,
+        "Linux regressions mailing list" <regressions@lists.linux.dev>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Peter Huewe" <peterhuewe@gmx.de>, <stable@vger.kernel.org>,
+        "Mario Limonciello" <mario.limonciello@amd.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        "Sachin Sant" <sachinp@linux.ibm.com>
+Subject: Re: [PATCH] tpm: return false from tpm_amd_is_rng_defective on
+ non-x86 platforms
+X-Mailer: aerc 0.14.0
+References: <20230629204147.1852823-1-jsnitsel@redhat.com>
+ <CTPWGNGECE0A.7MSU6S60YWDK@suppilovahvero>
+ <mbbb2mdlmkhnkgmw37glklmllzelolmdvmdgz5pziidromxsh5@gkflot73u6gd>
+ <5b9ec275-31b5-7b77-d00b-da128bea8bb3@leemhuis.info>
+ <b4lqa5urhgbnvtqon6qgoaftr6ut32mbq4uosugr7w6ar2uqis@lbwodwhrfchs>
+In-Reply-To: <b4lqa5urhgbnvtqon6qgoaftr6ut32mbq4uosugr7w6ar2uqis@lbwodwhrfchs>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,75 +67,37 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
-
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developers don't keep an eye on it, I decided to forward it by mail.
-
-Lino Sanfilippo, apparently it's cause by a change of yours.
-
-Note, you have to use bugzilla to reach the reporters, as I sadly[1] can
-not CCed them in mails like this.
-
-Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217631 :
-
-> After updating to linux-6.4.1 several users of Framework Laptop
-> running Intel 12th gen CPUs reported that their machine fails to boot
-> (in my case i5-1240P). It seems it is working fine for the model
-> using 11th gen CPUs. See
-> https://community.frame.work/t/boot-and-shutdown-hangs-with-arch-linux-kernel-6-4-1-mainline-and-arch/33118
+On Fri Jul 7, 2023 at 11:18 PM EEST, Jerry Snitselaar wrote:
+> On Fri, Jul 07, 2023 at 06:07:49PM +0200, Linux regression tracking (Thor=
+sten Leemhuis) wrote:
+> > Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+> > for once, to make this easily accessible to everyone.
+> >=20
+> > So what's the way forward now? It sounded like Jarkko wanted to apply
+> > the patch from this thread days ago, but that didn't happen afaics. The=
+n
+> > below message showed up, but Marios patch also wasn't applied.
+> >=20
+> > Is this intentional, or did something somewhere fall through the cracks=
+?
+> >=20
+> > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat=
+)
 >
-> 
-> 
-> * When using TPM to unlock a LUKS volume it will wait infinitely to
-> start systemd-cryptsetup. When forcing a reboot, it will still wait
-> for this service to stop and print the following message after
-> waiting for some time (see attached cryptsetup_stack.jpg) * When
-> disabling TPM unlock, systemd-cryptsetup will start successfully and
-> allow to unlock the volume using the passphrase. However, after that
-> the boot will also wait indefinitely for systemd-pcrphase to start.
-> When force rebooting it will still wait for this service to stop (see
-> pcrphase_stack.jpg).
-> 
-> I was able to boot successfully by either reverting
-> e644b2f498d297a928efcb7ff6f900c27f8b788e or disabling interrupts for
-> my model like it has been done here:
-> https://lore.kernel.org/linux-integrity/20230620-flo-lenovo-l590-tpm-fix-v1-1-16032a8b5a1d%40bezdeka.de/
-> 
-> DMI_MATCH(DMI_SYS_VENDOR, "Framework"), 
-> DMI_MATCH(DMI_PRODUCT_VERSION, "A4"),
-See the ticket and the linked forum post for more details.
+> I haven't seen any update to Jarkko's repo.
+>
+> My patch resolves the immediate issue being seen on the ppc system,
+> and was mostly just me asking why even go through this amd specific
+> code on non-x86 systems.
+>
+> The vio bus shutdown code only does the remove call when kexec is in
+> progress. The pnp and platform bus type shutdown calls do not do
+> something similar so maybe the check in Mario's patch isn't needed,
+> but I don't think it would hurt to have it in there.
 
+The patch has been applied. I'm sending pull request for rc2 today.
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
+The merge window was a bit conflicting with the summer season, and
+also relocating.
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: e644b2f498d297a
-https://bugzilla.kernel.org/show_bug.cgi?id=217631
-#regzbot title: tpm: boot problems with Framework Laptop 12th gen
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-[1] because bugzilla.kernel.org tells users upon registration their
-"email address will never be displayed to logged out users"
+BR, Jarkko
