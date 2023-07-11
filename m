@@ -2,126 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACFA74FA1D
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 23:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B552E74FA27
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 23:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjGKVuV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jul 2023 17:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S231395AbjGKVyg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jul 2023 17:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjGKVuV (ORCPT
+        with ESMTP id S230289AbjGKVyg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jul 2023 17:50:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587E610C7;
-        Tue, 11 Jul 2023 14:50:20 -0700 (PDT)
+        Tue, 11 Jul 2023 17:54:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95033CF
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 14:54:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E28AC61632;
-        Tue, 11 Jul 2023 21:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A53C433C7;
-        Tue, 11 Jul 2023 21:50:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F5EA6162D
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 21:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 206ABC433C8;
+        Tue, 11 Jul 2023 21:54:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689112219;
-        bh=0T0pjrWcDkDJyoK4+B3r5UxdOezTd8UsIOmWJM7998o=;
+        s=k20201202; t=1689112474;
+        bh=EuiTP5R/M7ypb8hxPmxqp/u62cmZF8d2Lc6VA4N1Ag0=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=SlAC4z9aPTok8aMnJvGXJWw/qO6U+Qh6b1uxRBarfOPhmzFfWu/rCK/DcN5Zrr5Qd
-         N0ixjQDkXktV7lIcE5tFM4BSMOG5rXpNxST0GXXxWpjUR3VL8IjWRRrnTTnOI81HZO
-         HFc1IBuLfy3CIvLyTb0ae61TjsUB9OQi5A9EEPYUCrquot7qlQdPD/D7JaookJCDeW
-         DDU7jXt9vUgv210WImRXB1KNJOLkBb7WgYhsZuWxptLIP/OEY3HpqnIZ7Qz76lj77+
-         LMZs5G1Udn8gEyYuYdSHv1xz+DHuvi0Mb1lhp8/gZgoiu/0/cRESooiYplzWTICMJP
-         iJy2D1nmBrvHg==
-Message-ID: <0f272843a33a1706dbcbb2d84b02e3951ee60cbb.camel@kernel.org>
-Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
- Laptop Intel 12th gen
+        b=qnJ2jolNq26WcgU0E799VXsleOypeG9zelUnqkZ5+jABNYvYAWxNut0umGQfjkrmg
+         KPo6HeVpyz4N7M4nsaBAUqisaTs8Msff7+bQNZ2zVJgphEvUatGg/ubTIv2g9t6iUu
+         AJp3yNLEFOpBomBfTLk+36mYPFS1EvDBr/oaC/B0rOlRu4V/AWIk3u3UARJWPNurxL
+         btTHzbvoKCjnPum32Ev9dtfHBuONVAdru1+0e3gdyn6tF8chdKMZ5CH1fVUwYppXmz
+         pCdPdYd66pv8BfkMjlJSsZK+BplJluEerKx4hB6/UAEKrmhNwMBaQf5Mq2/nwzsbEY
+         uuOKDXaRSWsDw==
+Message-ID: <ec564375084b6edd7b7d77eb341f451e798fb50d.camel@kernel.org>
+Subject: Re: [PATCH v2 1/2] powerpc/tpm: Create linux,sml-base/size as big
+ endian
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Grundik <ggrundik@gmail.com>, Christian Hesse <list@eworm.de>,
-        linux-integrity@vger.kernel.org,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Christian Hesse <mail@eworm.de>, stable@vger.kernel.org,
-        roubro1991@gmail.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 12 Jul 2023 00:50:15 +0300
-In-Reply-To: <bb5580e93d244400c3330d7091bf64868aa2053f.camel@gmail.com>
-References: <20230710133836.4367-1-mail@eworm.de>
-         <20230710142916.18162-1-mail@eworm.de>
-         <20230710231315.4ef54679@leda.eworm.net>
-         <bd0587e16d55ef38277ab1f6169909ae7cde3542.camel@kernel.org>
-         <bb5580e93d244400c3330d7091bf64868aa2053f.camel@gmail.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     eajames@linux.ibm.com, jgg@ziepe.ca, yangyingliang@huawei.com,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de
+Date:   Wed, 12 Jul 2023 00:54:31 +0300
+In-Reply-To: <0fb26243-0d63-118b-2737-05391ba0c69a@linux.ibm.com>
+References: <20230615123703.4028156-1-mpe@ellerman.id.au>
+         <4d378d53225fc8b8cdc99dde900388d2eefaad4e.camel@kernel.org>
+         <0fb26243-0d63-118b-2737-05391ba0c69a@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.48.1-0ubuntu1 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2023-07-11 at 15:41 +0300, Grundik wrote:
-> On Tue, 2023-07-11 at 00:29 +0300, Jarkko Sakkinen wrote:
-> > On Mon, 2023-07-10 at 23:13 +0200, Christian Hesse wrote:
-> >=20
-> >=20
-> > OK, this good to hear! I've been late with my pull request (past rc1)
-> > because of kind of conflicting timing with Finnish holiday season and
-> > relocating my home office.
-> >=20
-> > I'll replace v2 patches with v3 and send the PR for rc2 after that.
-> > So unluck turned into luck this time :-)
-> >=20
-> > Thank you for spotting this!
+On Tue, 2023-07-11 at 08:47 -0400, Stefan Berger wrote:
 >=20
-> I want to say: this issue is NOT limited to Framework laptops.
+> On 7/10/23 17:23, Jarkko Sakkinen wrote:
+> > On Thu, 2023-06-15 at 22:37 +1000, Michael Ellerman wrote:
+> > > There's code in prom_instantiate_sml() to do a "SML handover" (Stored
+> > > Measurement Log) from OF to Linux, before Linux shuts down Open
+> > > Firmware.
+> > >=20
+> > > This involves creating a buffer to hold the SML, and creating two dev=
+ice
+> > > tree properties to record its base address and size. The kernel then
+> > > later reads those properties from the device tree to find the SML.
+> > >=20
+> > > When the code was initially added in commit 4a727429abec ("PPC64: Add
+> > > support for instantiating SML from Open Firmware") the powerpc kernel
+> > > was always built big endian, so the properties were created big endia=
+n
+> > > by default.
+> > >=20
+> > > However since then little endian support was added to powerpc, and no=
+w
+> > > the code lacks conversions to big endian when creating the properties=
+.
+> > >=20
+> > > This means on little endian kernels the device tree properties are
+> > > little endian, which is contrary to the device tree spec, and in
+> > > contrast to all other device tree properties.
+> > >=20
+> > > To cope with that a workaround was added in tpm_read_log_of() to skip
+> > > the endian conversion if the properties were created via the SML
+> > > handover.
+> > >=20
+> > > A better solution is to encode the properties as big endian as they
+> > > should be, and remove the workaround.
+> > >=20
+> > > Typically changing the encoding of a property like this would present
+> > > problems for kexec. However the SML is not propagated across kexec, s=
+o
+> > > changing the encoding of the properties is a non-issue.
+> > >=20
+> > > Fixes: e46e22f12b19 ("tpm: enhance read_log_of() to support Physical =
+TPM event log")
+> > > Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> > > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > ---
+> > >   arch/powerpc/kernel/prom_init.c |  8 ++++++--
+> > >   drivers/char/tpm/eventlog/of.c  | 23 ++++-------------------
+> > >   2 files changed, 10 insertions(+), 21 deletions(-)
+> >=20
+> > Split into two patches (producer and consumer).
 >=20
-> For example this MSI gen12 i5-1240P laptop also suffers from same
-> problem:
->         Manufacturer: Micro-Star International Co., Ltd.
->         Product Name: Summit E13FlipEvo A12MT
->         Version: REV:1.0
->         SKU Number: 13P3.1
->         Family: Summit
->=20
-> So, probably just blacklisting affected models is not the best
-> solution...
+> I think this wouldn't be right since it would break the system when only =
+one patch is applied since it would be reading the fields in the wrong endi=
+aness.
 
-It will be supplemented with
-
-https://lore.kernel.org/linux-integrity/CTYXI8TL7C36.2SCWH82FAZWBO@suppilov=
-ahvero/T/#me895f1920ca6983f791b58a6fa0c157161a33849
-
-Together they should fairly sustainable framework.
-
-Lino, can you add the same fixes tag as for this. It would probably
-ignore inline comments to keep the patch minimal since it is a
-critical fix. Just do the renames, remove inline comments and
-send v3.
-
-For tpm_tis_check_for_interrupt_storm(), you can could rename it
-simply as tpm_tis_update_unhandle_irqs() as that it what it does
-(my review did not include a suggestion for this).
-
-This way I think it should be fairly trivial to get a version that
-can be landed.
-
-To put short:
-1. Do the renames as suggested, they are good enough for me.
-2. Drop inline comments, their usefulness is somewhat questionable
-   and they increase the diff.
-3. Generally aim for minimal diff but I think this should be good
-   enough if you do steps 1 and 2.
-
-If you don't have the time at hand, I can carefully do these cleanups
-and apply the patch. If you have the time and motivation, go ahead
-and send v3.
+I think it would help if the commit message would better explain
+what is going on. It is somewhat difficult to decipher, if you
+don't have deep knowledge of the powerpc architecture.
 
 BR, Jarkko
