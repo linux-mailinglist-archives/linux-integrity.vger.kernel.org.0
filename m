@@ -2,223 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D46074EF48
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 14:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272C174EFC6
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 15:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjGKMsV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jul 2023 08:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
+        id S232300AbjGKNCY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jul 2023 09:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGKMsS (ORCPT
+        with ESMTP id S232415AbjGKNCY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:48:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D6411B
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 05:48:14 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BCklLR029718;
-        Tue, 11 Jul 2023 12:47:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=sdv+nX2g0tH7IRWavt/Cl+GR/UDTQqwkCstmk2Kzzf0=;
- b=h+WxNINbaqDCwY5V9fD17BvemK+ZuYmtj+m8AEFOx+QAwEfBGJh/F3A6bltvwqPuqHBo
- SclQ5dwZ6g+enTMzPhtNtF5dC63Cb7PUC8orN4CQ9miK0J/K5fhMkRKYPmA3gl7DXrGM
- 7cHsgCJxzfdAfk1g2yjYdmTRYmiCJJhRcCaV4wO+SHFul0Scx7AwNVB8bllYFFF7wmyI
- 56aYWPl8torTgwzrmFIn6vZzSsC6vl3P+K5pTIYZxZ0fOVdTvB8jAhHL8PV6sNK2skt0
- k8MPe3AbmFYjX0ctbYZK2A33rjjX97WCatH5o7lmUmDpLvm0iLqdchuj1ocxjvgfxMdE 6Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rs7ctr0x2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 12:47:54 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36BCllmj000539;
-        Tue, 11 Jul 2023 12:47:53 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rs7ctr0wk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 12:47:53 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36B9GTo6009352;
-        Tue, 11 Jul 2023 12:47:52 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3rpye5pt4c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 12:47:52 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36BClppM59965842
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 12:47:51 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 76B7D5804B;
-        Tue, 11 Jul 2023 12:47:51 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 49C1258059;
-        Tue, 11 Jul 2023 12:47:50 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jul 2023 12:47:50 +0000 (GMT)
-Message-ID: <0fb26243-0d63-118b-2737-05391ba0c69a@linux.ibm.com>
-Date:   Tue, 11 Jul 2023 08:47:49 -0400
+        Tue, 11 Jul 2023 09:02:24 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283CF171E;
+        Tue, 11 Jul 2023 06:01:59 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qJCyT-0000Lw-6c; Tue, 11 Jul 2023 15:00:13 +0200
+Message-ID: <3739ab8f-b1f2-dbbf-dffe-0ea5808c1d95@leemhuis.info>
+Date:   Tue, 11 Jul 2023 15:00:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/2] powerpc/tpm: Create linux,sml-base/size as big
- endian
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     eajames@linux.ibm.com, jgg@ziepe.ca, yangyingliang@huawei.com,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de
-References: <20230615123703.4028156-1-mpe@ellerman.id.au>
- <4d378d53225fc8b8cdc99dde900388d2eefaad4e.camel@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <4d378d53225fc8b8cdc99dde900388d2eefaad4e.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
+ Laptop Intel 12th gen
+Content-Language: en-US, de-DE
+To:     Grundik <ggrundik@gmail.com>, Jarkko Sakkinen <jarkko@kernel.org>,
+        Christian Hesse <list@eworm.de>,
+        linux-integrity@vger.kernel.org
+Cc:     Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Christian Hesse <mail@eworm.de>, stable@vger.kernel.org,
+        roubro1991@gmail.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20230710133836.4367-1-mail@eworm.de>
+ <20230710142916.18162-1-mail@eworm.de>
+ <20230710231315.4ef54679@leda.eworm.net>
+ <bd0587e16d55ef38277ab1f6169909ae7cde3542.camel@kernel.org>
+ <bb5580e93d244400c3330d7091bf64868aa2053f.camel@gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <bb5580e93d244400c3330d7091bf64868aa2053f.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Zl0EHenGq0Rsv_AogZccBYYIiJYXiM5L
-X-Proofpoint-GUID: 8rDio_9ztsvdkrLec7tE1iabzrZbRA_e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_06,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- clxscore=1011 mlxscore=0 impostorscore=0 malwarescore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 suspectscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110113
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689080520;f9977a24;
+X-HE-SMSGID: 1qJCyT-0000Lw-6c
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 7/10/23 17:23, Jarkko Sakkinen wrote:
-> On Thu, 2023-06-15 at 22:37 +1000, Michael Ellerman wrote:
->> There's code in prom_instantiate_sml() to do a "SML handover" (Stored
->> Measurement Log) from OF to Linux, before Linux shuts down Open
->> Firmware.
+On 11.07.23 14:41, Grundik wrote:
+> On Tue, 2023-07-11 at 00:29 +0300, Jarkko Sakkinen wrote:
+>> On Mon, 2023-07-10 at 23:13 +0200, Christian Hesse wrote:
 >>
->> This involves creating a buffer to hold the SML, and creating two device
->> tree properties to record its base address and size. The kernel then
->> later reads those properties from the device tree to find the SML.
 >>
->> When the code was initially added in commit 4a727429abec ("PPC64: Add
->> support for instantiating SML from Open Firmware") the powerpc kernel
->> was always built big endian, so the properties were created big endian
->> by default.
+>> OK, this good to hear! I've been late with my pull request (past rc1)
+>> because of kind of conflicting timing with Finnish holiday season and
+>> relocating my home office.
 >>
->> However since then little endian support was added to powerpc, and now
->> the code lacks conversions to big endian when creating the properties.
+>> I'll replace v2 patches with v3 and send the PR for rc2 after that.
+>> So unluck turned into luck this time :-)
 >>
->> This means on little endian kernels the device tree properties are
->> little endian, which is contrary to the device tree spec, and in
->> contrast to all other device tree properties.
->>
->> To cope with that a workaround was added in tpm_read_log_of() to skip
->> the endian conversion if the properties were created via the SML
->> handover.
->>
->> A better solution is to encode the properties as big endian as they
->> should be, and remove the workaround.
->>
->> Typically changing the encoding of a property like this would present
->> problems for kexec. However the SML is not propagated across kexec, so
->> changing the encoding of the properties is a non-issue.
->>
->> Fixes: e46e22f12b19 ("tpm: enhance read_log_of() to support Physical TPM event log")
->> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
->> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
->> ---
->>   arch/powerpc/kernel/prom_init.c |  8 ++++++--
->>   drivers/char/tpm/eventlog/of.c  | 23 ++++-------------------
->>   2 files changed, 10 insertions(+), 21 deletions(-)
+>> Thank you for spotting this!
 > 
-> Split into two patches (producer and consumer).
+> I want to say: this issue is NOT limited to Framework laptops.
+> 
+> For example this MSI gen12 i5-1240P laptop also suffers from same
+> problem:
+>         Manufacturer: Micro-Star International Co., Ltd.
+>         Product Name: Summit E13FlipEvo A12MT
+>         Version: REV:1.0
+>         SKU Number: 13P3.1
+>         Family: Summit
+> 
+> So, probably just blacklisting affected models is not the best
+> solution...
 
-I think this wouldn't be right since it would break the system when only one patch is applied since it would be reading the fields in the wrong endianess.
+Hmmm. Jarkko, you earlier in the thread said: "I'm about to send a PR to
+Linus with a pile of IRQ fixes for v6.4 feature.". Could any of those
+potentially help Grundik or those with the Framework laptop? Is that
+worth testing?
 
-     Stefan
-> 
-> BR, Jarkko
-> 
->>
->> v2: Add Stefan's reviewed-by.
->>
->> diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
->> index d464ba412084..72fe306b6820 100644
->> --- a/arch/powerpc/kernel/prom_init.c
->> +++ b/arch/powerpc/kernel/prom_init.c
->> @@ -1900,6 +1900,7 @@ static void __init prom_instantiate_sml(void)
->>   	u32 entry = 0, size = 0, succ = 0;
->>   	u64 base;
->>   	__be32 val;
->> +	__be64 val64;
->>   
->>   	prom_debug("prom_instantiate_sml: start...\n");
->>   
->> @@ -1956,10 +1957,13 @@ static void __init prom_instantiate_sml(void)
->>   
->>   	reserve_mem(base, size);
->>   
->> +	val64 = cpu_to_be64(base);
->>   	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-base",
->> -		     &base, sizeof(base));
->> +		     &val64, sizeof(val64));
->> +
->> +	val = cpu_to_be32(size);
->>   	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-size",
->> -		     &size, sizeof(size));
->> +		     &val, sizeof(val));
->>   
->>   	prom_debug("sml base     = 0x%llx\n", base);
->>   	prom_debug("sml size     = 0x%x\n", size);
->> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
->> index 930fe43d5daf..0bc0cb6333c6 100644
->> --- a/drivers/char/tpm/eventlog/of.c
->> +++ b/drivers/char/tpm/eventlog/of.c
->> @@ -51,8 +51,8 @@ static int tpm_read_log_memory_region(struct tpm_chip *chip)
->>   int tpm_read_log_of(struct tpm_chip *chip)
->>   {
->>   	struct device_node *np;
->> -	const u32 *sizep;
->> -	const u64 *basep;
->> +	const __be32 *sizep;
->> +	const __be64 *basep;
->>   	struct tpm_bios_log *log;
->>   	u32 size;
->>   	u64 base;
->> @@ -73,23 +73,8 @@ int tpm_read_log_of(struct tpm_chip *chip)
->>   	if (sizep == NULL || basep == NULL)
->>   		return -EIO;
->>   
->> -	/*
->> -	 * For both vtpm/tpm, firmware has log addr and log size in big
->> -	 * endian format. But in case of vtpm, there is a method called
->> -	 * sml-handover which is run during kernel init even before
->> -	 * device tree is setup. This sml-handover function takes care
->> -	 * of endianness and writes to sml-base and sml-size in little
->> -	 * endian format. For this reason, vtpm doesn't need conversion
->> -	 * but physical tpm needs the conversion.
->> -	 */
->> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
->> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
->> -		size = be32_to_cpup((__force __be32 *)sizep);
->> -		base = be64_to_cpup((__force __be64 *)basep);
->> -	} else {
->> -		size = *sizep;
->> -		base = *basep;
->> -	}
->> +	size = be32_to_cpup(sizep);
->> +	base = be64_to_cpup(basep);
->>   
->>   	if (size == 0) {
->>   		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
-> 
+Ciao, Thorsten
