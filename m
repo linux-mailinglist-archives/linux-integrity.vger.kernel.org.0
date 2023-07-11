@@ -2,125 +2,147 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAED874E52D
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 05:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5275A74E775
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 08:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjGKDRF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Jul 2023 23:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S231587AbjGKGks convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jul 2023 02:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjGKDRE (ORCPT
+        with ESMTP id S229903AbjGKGkr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Jul 2023 23:17:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D1EE56
-        for <linux-integrity@vger.kernel.org>; Mon, 10 Jul 2023 20:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689045376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fXhj7EzANXxG2zR22cPkd+LCDvsMw/4Z29S4c6txddw=;
-        b=GbbFDT9pMIGhkhP/CKNTCvEA52857SvX5YaW5PnYE1kbhMtYE/HVSPzY1a5R1SYJVfCTrt
-        OieZzDJ4C7dZSbLQhjr7s8SfdAtwAeT9p43UDUOO52lrfOtVOj5XvZJBPMqzx/YE02GRwN
-        VVPMp3UsMrhSbP5v7340cfMAMoH1JBM=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-457-MFX3dEytPkSrvV7wP-cO0g-1; Mon, 10 Jul 2023 23:16:15 -0400
-X-MC-Unique: MFX3dEytPkSrvV7wP-cO0g-1
-Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-56662adc40bso4205253eaf.1
-        for <linux-integrity@vger.kernel.org>; Mon, 10 Jul 2023 20:16:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689045374; x=1691637374;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fXhj7EzANXxG2zR22cPkd+LCDvsMw/4Z29S4c6txddw=;
-        b=d3T8Z4fH/7hqnwqywjA8mzRAyJ25JiiyAi61cN7na3u5sei71vMYa2ON+ve36RuuFs
-         nvfO90VOG4PO+Txe6fU9GWLtFF4v83qPonSEoxk1NbHFMYZ4uOKnCmeYflGDMfreR9y5
-         AyB/dXTQxcFN8X8uEyPtVgRrkUDjY8zRj164LfcS2lMHVvRVBCKa8cKqG/cLXXIt7tux
-         pNBZcEM1utol+muTc9RGcn33Ocp7Ae4D2nLgvrlYeo+2Uq2IO/8nuNBZR1PPO0HOvB8/
-         /fElMITUMllaCmaCkmarYl7NdFXpxhqrqiTuRUVJ1bVB0nGAK2THE731+yhH93Efy7lb
-         0SYw==
-X-Gm-Message-State: ABy/qLZXz6bxPnWI6sKB9NjlH0wHU1Yesk4uUYqqad/vUUBALlEjbc90
-        leghZpYeV29ViccwnwJlmfcduoUgdkA9PG9MBuZmf+flGDi3kLOuhCS9pC3TtP3A6gsYndqrQzT
-        vAPRIRk+Juc80l6R2nEOXweDoBnNRai5ZoYPYL32L3QR9iyaJ4rR8FCzuXY9qe6ZCdrvg4hGvnJ
-        cb6P18NDoTJW0I
-X-Received: by 2002:a05:6808:190b:b0:3a3:aedd:6b21 with SMTP id bf11-20020a056808190b00b003a3aedd6b21mr18778778oib.39.1689045374403;
-        Mon, 10 Jul 2023 20:16:14 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFxYZvl0B8mwmdXFaSoLskIzmhRC10jfKsKeBAMSMVBzej0sbUxtdM0TFtWtEyJ4k8kWK+yIg==
-X-Received: by 2002:a05:6808:190b:b0:3a3:aedd:6b21 with SMTP id bf11-20020a056808190b00b003a3aedd6b21mr18778752oib.39.1689045373985;
-        Mon, 10 Jul 2023 20:16:13 -0700 (PDT)
-Received: from localhost ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id s4-20020aa78284000000b0066883d75932sm488806pfm.204.2023.07.10.20.16.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 20:16:13 -0700 (PDT)
-From:   Coiby Xu <coxu@redhat.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        kexec@lists.infradead.org (open list:KEXEC),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] kexec_file: ima: allow loading a kernel with its IMA signature verified
-Date:   Tue, 11 Jul 2023 11:16:03 +0800
-Message-ID: <20230711031604.717124-1-coxu@redhat.com>
-X-Mailer: git-send-email 2.41.0
+        Tue, 11 Jul 2023 02:40:47 -0400
+Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA64793;
+        Mon, 10 Jul 2023 23:40:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4R0WF02hWlz9v7Yk;
+        Tue, 11 Jul 2023 14:29:40 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwB3IjlH+axkNk5bBA--.35225S2;
+        Tue, 11 Jul 2023 07:40:19 +0100 (CET)
+Message-ID: <badbc85145959e90cb9cbf9d21e0a43ea112776e.camel@huaweicloud.com>
+Subject: Re: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 11 Jul 2023 08:40:03 +0200
+In-Reply-To: <CAHC9VhSFy6wf+7DXrG=6CXZC4RrpTeP2sQezX0BPc95fxGAWxQ@mail.gmail.com>
+References: <20230610075738.3273764-2-roberto.sassu@huaweicloud.com>
+         <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
+         <a28c8fce-741b-e088-af5e-8a83daa7e25d@schaufler-ca.com>
+         <CAHC9VhSNqzVpHcDw59a2CznaME1078SJWuEcqJx=R5PQgSjTDg@mail.gmail.com>
+         <CAHC9VhSFy6wf+7DXrG=6CXZC4RrpTeP2sQezX0BPc95fxGAWxQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwB3IjlH+axkNk5bBA--.35225S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuF48uF48Aw1fuFW7GFy8Krg_yoWrGry7pF
+        Wft3Wjkrs5JF1fAr9ayw48W3Wak3yrGr4UWr9xtr1UZas09r1xJr1jkr4ruFyUZrWkGFn0
+        qF1UXr9xurn8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj4wlKwADs5
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When IMA has verified the signature of the kernel image, kexec'ing this
-kernel should be allowed.
+On Mon, 2023-07-10 at 14:04 -0400, Paul Moore wrote:
+> On Fri, Jul 7, 2023 at 5:44 PM Paul Moore <paul@paul-moore.com> wrote:
+> > On Fri, Jul 7, 2023 at 12:54 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > > On 7/6/2023 6:43 PM, Paul Moore wrote:
+> > > > On Jun 10, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+> > > > > Currently, the LSM infrastructure supports only one LSM providing an xattr
+> > > > > and EVM calculating the HMAC on that xattr, plus other inode metadata.
+> > > > > 
+> > > > > Allow all LSMs to provide one or multiple xattrs, by extending the security
+> > > > > blob reservation mechanism. Introduce the new lbs_xattr_count field of the
+> > > > > lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
+> > > > > needs, and the LSM infrastructure knows how many xattr slots it should
+> > > > > allocate.
+> > > > > 
+> > > > > Modify the inode_init_security hook definition, by passing the full
+> > > > > xattr array allocated in security_inode_init_security(), and the current
+> > > > > number of xattr slots in that array filled by LSMs. The first parameter
+> > > > > would allow EVM to access and calculate the HMAC on xattrs supplied by
+> > > > > other LSMs, the second to not leave gaps in the xattr array, when an LSM
+> > > > > requested but did not provide xattrs (e.g. if it is not initialized).
+> > > > > 
+> > > > > Introduce lsm_get_xattr_slot(), which LSMs can call as many times as the
+> > > > > number specified in the lbs_xattr_count field of the lsm_blob_sizes
+> > > > > structure. During each call, lsm_get_xattr_slot() increments the number of
+> > > > > filled xattrs, so that at the next invocation it returns the next xattr
+> > > > > slot to fill.
+> > > > > 
+> > > > > Cleanup security_inode_init_security(). Unify the !initxattrs and
+> > > > > initxattrs case by simply not allocating the new_xattrs array in the
+> > > > > former. Update the documentation to reflect the changes, and fix the
+> > > > > description of the xattr name, as it is not allocated anymore.
+> > > > > 
+> > > > > Adapt both SELinux and Smack to use the new definition of the
+> > > > > inode_init_security hook, and to call lsm_get_xattr_slot() to obtain and
+> > > > > fill the reserved slots in the xattr array.
+> > > > > 
+> > > > > Move the xattr->name assignment after the xattr->value one, so that it is
+> > > > > done only in case of successful memory allocation.
+> > > > > 
+> > > > > Finally, change the default return value of the inode_init_security hook
+> > > > > from zero to -EOPNOTSUPP, so that BPF LSM correctly follows the hook
+> > > > > conventions.
+> > > > > 
+> > > > > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
+> > > > > Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
+> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > ---
+> > > > >  include/linux/lsm_hook_defs.h |  6 +--
+> > > > >  include/linux/lsm_hooks.h     | 20 ++++++++++
+> > > > >  security/security.c           | 71 +++++++++++++++++++++++------------
+> > > > >  security/selinux/hooks.c      | 17 +++++----
+> > > > >  security/smack/smack_lsm.c    | 25 ++++++------
+> > > > >  5 files changed, 92 insertions(+), 47 deletions(-)
+> > > > Two *very* small suggestions below, but I can make those during the
+> > > > merge if you are okay with that Roberto?
+> > > > 
+> > > > I'm also going to assume that Casey is okay with the Smack portion of
+> > > > this patchset?  It looks fine to me, and considering his ACK on the
+> > > > other Smack patch in this patchset I'm assuming he is okay with this
+> > > > one as well ... ?
+> > > 
+> > > Yes, please feel free to add my Acked-by as needed.
+> > 
+> > Done.  Thanks Casey.
+> 
+> I'm merging the full patchset into lsm/next right now.  Thanks for all
+> your work on this Roberto, and a thank you for everyone else who
+> helped with reviews, testing, etc.
 
-Fixes: af16df54b89d ("ima: force signature verification when CONFIG_KEXEC_SIG is configured")
-Signed-off-by: Coiby Xu <coxu@redhat.com>
----
- kernel/kexec_file.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+Thanks Paul, also for making the patch set better!
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 881ba0d1714c..96fce001fbc0 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -162,6 +162,13 @@ kimage_validate_signature(struct kimage *image)
- 	ret = kexec_image_verify_sig(image, image->kernel_buf,
- 				     image->kernel_buf_len);
- 	if (ret) {
-+		/*
-+		 * If the kernel image already has its IMA signature verified, permit it.
-+		 */
-+		if (ima_appraise_signature(READING_KEXEC_IMAGE)) {
-+			pr_notice("The kernel image already has its IMA signature verified.\n");
-+			return 0;
-+		}
- 
- 		if (sig_enforce) {
- 			pr_notice("Enforced kernel signature verification failed (%d).\n", ret);
-@@ -169,12 +176,9 @@ kimage_validate_signature(struct kimage *image)
- 		}
- 
- 		/*
--		 * If IMA is guaranteed to appraise a signature on the kexec
--		 * image, permit it even if the kernel is otherwise locked
--		 * down.
-+		 * When both IMA and KEXEC_SIG fail in lockdown mode, reject it.
- 		 */
--		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
--		    security_locked_down(LOCKDOWN_KEXEC))
-+		if (security_locked_down(LOCKDOWN_KEXEC))
- 			return -EPERM;
- 
- 		pr_debug("kernel signature verification failed (%d).\n", ret);
--- 
-2.41.0
+Roberto
 
