@@ -2,48 +2,48 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D4574F818
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 20:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C814174F83B
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 21:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjGKSl0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jul 2023 14:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S231273AbjGKTFn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jul 2023 15:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjGKSlZ (ORCPT
+        with ESMTP id S230178AbjGKTFm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jul 2023 14:41:25 -0400
+        Tue, 11 Jul 2023 15:05:42 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53A071704
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 11:41:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C27A170A
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 12:05:42 -0700 (PDT)
 Received: from [192.168.87.36] (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9840721C3A8D;
-        Tue, 11 Jul 2023 11:41:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9840721C3A8D
+        by linux.microsoft.com (Postfix) with ESMTPSA id 11CFC21C3A93;
+        Tue, 11 Jul 2023 12:05:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 11CFC21C3A93
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1689100883;
-        bh=0GFCMNg+hUxtyeZcShJCkgLrUpGQ8MTiJMhSHuPwS3I=;
+        s=default; t=1689102341;
+        bh=aXHvCmO1BUIQBJdEF8OxJU3dxNsm+38XW0FQsQwOeyg=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iP1W+zVrSVAQrGy8cXoByzhI3bZaukOYdGVH9EqFojNZgzR1e2zhow2HqDQ4cHdG5
-         G3X1AbagoCZucIyEr0cVQ5GMrdFyeQ9FB7al/pBwTH3SPhKHWGOV+r+nWwp4sgwyw+
-         psN/2zIbasw6jX6ScpjiXYUqNGYaOCLGcFVWE9VQ=
-Message-ID: <7f38366e-744e-78c8-cf05-acfeb59afd2e@linux.microsoft.com>
-Date:   Tue, 11 Jul 2023 11:41:23 -0700
+        b=Ib4/ZR/NX9Av/yoTigqzSwEE8+EgmmIjQx1iWiWsC9pjbKz642ZbX2vWBw4lYrCo0
+         xZi0aLZIslBFStWieMlwANpwdsGx6qN1+rVDHjm+cJhK0w2/+uD8m7xyKc1kUUEA+p
+         80wnKSeTW3gc99F9gmyGu1Y3F7CskJXZBORL08Is=
+Message-ID: <192d4377-b714-b327-6b82-e445bca03bfc@linux.microsoft.com>
+Date:   Tue, 11 Jul 2023 12:05:40 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 05/10] kexec: implement functions to map and unmap segment
- to kimage
+Subject: Re: [PATCH 06/10] ima: update buffer at kexec execute with ima
+ measurements
 Content-Language: en-US
-To:     Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
-        noodles@fb.com, bauermann@kolabnow.com, kexec@lists.infradead.org,
+To:     Mimi Zohar <zohar@linux.ibm.com>, noodles@fb.com,
+        bauermann@kolabnow.com, kexec@lists.infradead.org,
         linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com,
         Eric Biederman <ebiederm@xmission.com>
 References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
- <20230703215709.1195644-6-tusharsu@linux.microsoft.com>
- <ab4c5f9a-5b70-5d45-80d9-2ec48ea49913@linux.ibm.com>
+ <20230703215709.1195644-7-tusharsu@linux.microsoft.com>
+ <5cd5b5efc443cbdce9dce3b121f4dbfd2db6dea3.camel@linux.ibm.com>
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <ab4c5f9a-5b70-5d45-80d9-2ec48ea49913@linux.ibm.com>
+In-Reply-To: <5cd5b5efc443cbdce9dce3b121f4dbfd2db6dea3.camel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -59,69 +59,74 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Adding Eric to cc.
 
-On 7/7/23 05:28, Stefan Berger wrote:
+On 7/7/23 08:01, Mimi Zohar wrote:
+> Hi Tushar,
 >
+> On Mon, 2023-07-03 at 14:57 -0700, Tushar Sugandhi wrote:
 >
-> On 7/3/23 17:57, Tushar Sugandhi wrote:
->> Currently, there's no mechanism to map and unmap segments to the kimage
->> structure.  This functionality is needed when dealing with memory 
->> segments
->> in the context of a kexec operation.
->>
->> The patch adds two new functions: kimage_map_segment() and
->> kimage_unmap_segment().
->>
->> Implement kimage_map_segment() which takes a kimage pointer, an address,
->> and a size.  Ensures that the entire segment is being mapped by 
->> comparing
->> the given address and size to each segment in the kimage's segment 
->> array.
->> Collect the source pages that correspond to the given address range,
->> allocate an array of pointers to these pages, and map them to a 
->> contiguous
->> range of virtual addresses.  If the mapping operation is successful, the
->> function returns the start of this range.  Otherwise, it frees the page
->> pointer array and returns NULL.
->>
->> Implement kimage_unmap_segment() that takes a pointer to a segment 
->> buffer
->> and unmaps it using vunmap().
->>
->> Finally, move for_each_kimage_entry() macro to kexec.h.
->>
->> Note: Use kimage_map_segment() and kimage_unmap_segment() carefully to
->> avoid memory leaks and ensure that all mapped segments are properly
->> unmapped when they're no longer needed.
->>
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->
+>> +/*
+>> + * Called during kexec execute so that IMA can update the measurement list.
+>> + */
+>> +static int ima_update_kexec_buffer(struct notifier_block *self,
+>> +				   unsigned long action, void *data)
+>> +{
+>> +	void *new_buffer = NULL;
+>> +	size_t new_buffer_size, cur_buffer_size;
+>> +	bool resume = false;
 >> +
->> +    i = 0;
->> +    for_each_kimage_entry(image, ptr, entry) {
->> +        if (entry & IND_DESTINATION)
->> +            dest_page_addr = entry & PAGE_MASK;
->> +        else if (entry & IND_SOURCE) {
->> +            if (dest_page_addr >= addr && dest_page_addr < eaddr) {
->> +                src_page_addr = entry & PAGE_MASK;
->> +                src_pages[i++] = phys_to_page(src_page_addr);
+>> +	if (!kexec_in_progress) {
+>> +		pr_info("%s: No kexec in progress.\n", __func__);
+>> +		return NOTIFY_OK;
+>> +	}
+>> +
+>> +	if (!ima_kexec_buffer) {
+>> +		pr_err("%s: Kexec buffer not set.\n", __func__);
+>> +		return NOTIFY_OK;
+>> +	}
+>> +
+>> +	ima_measurements_suspend();
+>> +
+>> +	cur_buffer_size = kexec_segment_size - sizeof(struct ima_kexec_hdr);
+>> +	new_buffer_size = ima_get_binary_runtime_size();
+>> +	if (new_buffer_size > cur_buffer_size) {
+>> +		pr_err("%s: Measurement list grew too large.\n", __func__);
+>> +		resume = true;
+>> +		goto out;
+>> +	}
+> This changes the current behavior of carrying as many measurements
+> across kexec as possible.  True the measurement list won't verify
+> against the TPM PCRs, but not copying the measurements leaves the
+> impression there weren't any previous measurements.
 >
-> Since phys_to_page is not defined on many/most architectures I change 
-> it for ppc64 and have successfully used the following:
->
-> +                               src_pages[i++] = 
-> virt_to_page(__va(src_page_addr))
->
->
-> After several kexecs the following check still works:
->
-> # evmctl ima_measurement --ignore-violations 
-> /sys/kernel/security/ima/binary_runtime_measurements
-> Matched per TPM bank calculated digest(s).
->
->
->    Stefan
-Thank you so much Stefan for reviewing this series, and catching this
-issue.  Are you suggesting I should use virt_to_page on all architectures
-unconditionally, or use it only when phys_to_page is not available?
+> This also explains the reason for allocating an IMA buffer (patch 1/10)
+> and not writing the measurements directly into the kexec buffer.
+Thanks.
+
+I will update this logic depending if we decide to use
+ima_dump_measurement_list() at kexec ‘execute’, or combination of
+ima_allocate_buf_at_kexec_load() and ima_populate_buf_at_kexec_execute()
+at kexec ‘load’ and kexec ‘execute’ respectively.
 
 ~Tushar
+
+>> +	ima_populate_buf_at_kexec_execute(&new_buffer_size, &new_buffer);
+>> +
+>> +	if (!new_buffer) {
+>> +		pr_err("%s: Dump measurements failed.\n", __func__);
+>> +		resume = true;
+>> +		goto out;
+>> +	}
+>> +	memcpy(ima_kexec_buffer, new_buffer, new_buffer_size);
+>> +out:
+>> +	kimage_unmap_segment(ima_kexec_buffer);
+>> +	ima_kexec_buffer = NULL;
+>> +
+>> +	if (resume)
+>> +		ima_measurements_resume();
+>> +
+>> +	return NOTIFY_OK;
+>> +}
+>> +
+>>   #endif /* IMA_KEXEC */
+>>   
+>>   /*
