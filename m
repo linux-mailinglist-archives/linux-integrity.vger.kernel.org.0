@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC0A74F7BE
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 20:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8180874F809
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 20:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjGKSFr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jul 2023 14:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S232199AbjGKSbr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jul 2023 14:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjGKSFq (ORCPT
+        with ESMTP id S229762AbjGKSbq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jul 2023 14:05:46 -0400
+        Tue, 11 Jul 2023 14:31:46 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6D7D10EF
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 11:05:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3009E10F0
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 11:31:45 -0700 (PDT)
 Received: from [192.168.87.36] (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4159121C3A89;
-        Tue, 11 Jul 2023 11:05:44 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4159121C3A89
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6A19E21C3A8D;
+        Tue, 11 Jul 2023 11:31:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6A19E21C3A8D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1689098744;
-        bh=gnwBbc0096fk8sZcdWqSOaZsZqqh1DSnlH3gad1n/+E=;
+        s=default; t=1689100304;
+        bh=/3mT8gr5WtW/jVqLDpzEl/U4ejE+qHGCh69ueIswO50=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=THjKfdiysIOyvbKoNcNWEfFb93HpTGW13bGEC+OQ443cFcjarc1OD4AJNZpJ4QLlS
-         jffffuFtGMFQockrlU3g9YhjWZ5CJ/NwX+NLDVe6KGHP4tr+llo0kNjRQDgVSZR1hP
-         D5Kn6oeP0LU8k8JpHKMTL0pJwFn3F7n/ycQWZ31M=
-Message-ID: <1bd07f48-0580-1db2-18f2-a8c268e876b3@linux.microsoft.com>
-Date:   Tue, 11 Jul 2023 11:05:43 -0700
+        b=qb89EVopFMR0fhNlyZay9qydXxrRE/BDnXPVwqMiblR5zQKnHOW/Jo94szR/Kfjtt
+         PFgI8/5U59EQn/FIzcKlc6MDCos5enJJ4X8LXJiJTRBzL+kBLmIfYtpyho6Cw0PlD8
+         vyvxMUyW6zkFO23kBa6qG539rOvqYdEiY1YNpw4k=
+Message-ID: <b43a443a-7884-c8ef-dff2-5563069937aa@linux.microsoft.com>
+Date:   Tue, 11 Jul 2023 11:31:43 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 02/10] ima: implement function to populate buffer at kexec
- execute
+Subject: Re: [PATCH 03/10] ima: allocate buffer at kexec load to hold ima
+ measurements
 Content-Language: en-US
 To:     Mimi Zohar <zohar@linux.ibm.com>, noodles@fb.com,
         bauermann@kolabnow.com, kexec@lists.infradead.org,
@@ -40,10 +40,10 @@ To:     Mimi Zohar <zohar@linux.ibm.com>, noodles@fb.com,
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com,
         Eric Biederman <ebiederm@xmission.com>
 References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
- <20230703215709.1195644-3-tusharsu@linux.microsoft.com>
- <7ecb8c00ca03831c68c3cdae8b402b119463f4f3.camel@linux.ibm.com>
+ <20230703215709.1195644-4-tusharsu@linux.microsoft.com>
+ <ef2f8f1f9ab806e010cac02aab1b64fa51ce4c2c.camel@linux.ibm.com>
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <7ecb8c00ca03831c68c3cdae8b402b119463f4f3.camel@linux.ibm.com>
+In-Reply-To: <ef2f8f1f9ab806e010cac02aab1b64fa51ce4c2c.camel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -59,117 +59,108 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Adding Eric to cc.
 
-On 7/7/23 06:00, Mimi Zohar wrote:
+On 7/7/23 06:01, Mimi Zohar wrote:
 > Hi Tushar,
 >
-> On Mon, 2023-07-03 at 14:57 -0700, Tushar Sugandhi wrote:
->> There is no existing IMA functionality to just populate the buffer at
->> kexec execute with IMA measurements.
-> The same function that copies the measurement list at kexec 'load',
-> could be re-used at kexec 'exec'.   Why is a new function that is very
-> similar to the existing ima_dump_measurement_list() needed?
-The current implementation of ima_dump_measurement_list() does both -
-(1) allocation of buffer and (2) copying the measurements at kexec ‘load’.
-
-The goal is to copy the measurements at kexec ‘execute’.
-
-As I mentioned earlier, my understanding is the buffer must be allocated
-at kexec ‘load’ time.  And the segment size cannot change between kexec
-‘load’ and kexec ‘execute’.
-
-That’s why I believe the two new functions are needed.
-So I split the functionality in ima_dump_measurement_list() into
-two functions –
-  (1) ima_allocate_buf_at_kexec_load() in patch 01/10 and
-  (2) ima_populate_buf_at_kexec_execute()  in patch 02/10
-
-and then deprecated ima_dump_measurement_list() in patch 7/10.
-
-If I call ima_dump_measurement_list() both at kexec ‘load’
-as well as kexec ‘execute’, it will result in double memory allocation.
-
-As you said, if the functionality can be achieved by simply moving
-ima_dump_measurement_list() from kexec ‘load’ to kexec ‘execute’ –
-then you are right, we don’t need the two separate functions.
-
-~Tushar
-
+> The function to "ima: allocate buffer at kexec load to hold ima
+> measurements" already exists.  Please update the Subject line to
+> indicate increasing the IMA kexec buffer size.
 >
->> Implement a function to iterate over ima_measurements and populate the
->> ima_kexec_file buffer.  After the loop, populate ima_khdr with buffer
->> details (version, buffer size, number of measurements).  Copy the ima_khdr
->> data into ima_kexec_file.buf and update buffer_size and buffer.
->>
->>
->> The patch assumes that the ima_kexec_file.size is sufficient to hold all
->> the measurements.  It returns an error and does not handle scenarios where
->> additional space might be needed.
->>
+> On Mon, 2023-07-03 at 14:57 -0700, Tushar Sugandhi wrote:
+>> The IMA subsystem needs a dedicated mechanism to reserve extra memory for
+>> measurements added between the kexec 'load' and kexec 'execute'.
+> What is a "dedicated mechanism?".  Either start the sentence with
+> "reserve ..." or completely remove it.
+>
+Will do.
+>> Update ima_add_kexec_buffer to allocate a buffer of a sufficient size
+>> taking ima binary runtime measurements size, size of ima_kexec_hdr, and
+>> IMA_KEXEC_EXTRA_SIZE into account.  Adjust the kexec_segment_size to align
+>> to the PAGE_SIZE.  Call ima_allocate_buf_at_kexec_load() to allocate the
+>> buffer.
+> The size of the ima_kexec_hdr kind of gets lost in the amount of
+> additional memory being allocated, but sure it's a nice clean up.
+Thanks. :)
+>> This patch assumes the extra space defined (IMA_KEXEC_EXTRA_SIZE) is
+>> sufficient to handle the additional measurements.  This should be as per
+>> the system requirements and based on the number of additional measurements
+>> expected during the window from kexec 'load' to kexec 'execute'.
+> Should the extra amount of memory be hard coded?
+>
+You are right.  As you suggested below, defining the extra amount in
+Kconfig is a cleaner approach.
+
 >> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 >> ---
->>   security/integrity/ima/ima_kexec.c | 52 ++++++++++++++++++++++++++++++
->>   1 file changed, 52 insertions(+)
+>>   security/integrity/ima/ima.h       |  2 ++
+>>   security/integrity/ima/ima_kexec.c | 21 ++++++++++-----------
+>>   2 files changed, 12 insertions(+), 11 deletions(-)
 >>
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index c29db699c996..2ffda9449b9b 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -43,6 +43,8 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
+>>   
+>>   #define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks : 0)
+>>   
+>> +#define IMA_KEXEC_EXTRA_SIZE (16 * PAGE_SIZE)
+>>
+> Not all IMA policies require extra memory.  Define and use a new IMA
+> Kconfig to set the amount of extra memory.
+Sure.  Will do.
+>>   /* current content of the policy */
+>>   extern int ima_policy_flag;
+>>   
 >> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
->> index 48a683874044..858b67689701 100644
+>> index 858b67689701..7deb8df31485 100644
 >> --- a/security/integrity/ima/ima_kexec.c
 >> +++ b/security/integrity/ima/ima_kexec.c
->> @@ -62,6 +62,58 @@ static int ima_allocate_buf_at_kexec_load(void)
->>   	return 0;
->>   }
+>> @@ -188,31 +188,30 @@ void ima_add_kexec_buffer(struct kimage *image)
+>>   	/* use more understandable variable names than defined in kbuf */
+>>   	void *kexec_buffer = NULL;
+>>   	size_t kexec_buffer_size;
+>> -	size_t kexec_segment_size;
+>>   	int ret;
 >>   
->> +static int ima_populate_buf_at_kexec_execute(unsigned long *buffer_size, void **buffer)
->> +{
->> +	struct ima_queue_entry *qe;
->> +	int ret = 0;
+>>   	/*
+>> -	 * Reserve an extra half page of memory for additional measurements
+>> -	 * added during the kexec load.
+>> +	 * Reserve extra memory for measurements added in the window from
+>> +	 * kexec 'load' to kexec 'execute'.
+>>   	 */
+>> -	binary_runtime_size = ima_get_binary_runtime_size();
+>> +	binary_runtime_size = ima_get_binary_runtime_size() +
+>> +			      sizeof(struct ima_kexec_hdr) +
+>> +			      IMA_KEXEC_EXTRA_SIZE;
 >> +
->> +	/*
->> +	 * Ensure the kexec buffer is large enough to hold ima_khdr
->> +	 */
->> +	if (ima_kexec_file.size < sizeof(ima_khdr)) {
->> +		pr_err("%s: Kexec buffer size too low to hold ima_khdr\n",
->> +			__func__);
->> +		ima_clear_kexec_file();
->> +		return -ENOMEM;
->> +	}
+>>   	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
+>>   		kexec_segment_size = ULONG_MAX;
+>>   	else
+>> -		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
+>> -					   PAGE_SIZE / 2, PAGE_SIZE);
+>> +		kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
 >> +
->> +	list_for_each_entry_rcu(qe, &ima_measurements, later) {
->> +		if (ima_kexec_file.count < ima_kexec_file.size) {
->> +			ima_khdr.count++;
->> +			ima_measurements_show(&ima_kexec_file, qe);
->> +		} else {
->> +			ret = -ENOMEM;
->> +			pr_err("%s: Kexec ima_measurements buffer too small\n",
->> +				__func__);
->> +			break;
->> +		}
->> +	}
+>>   	if ((kexec_segment_size == ULONG_MAX) ||
+>>   	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
+>>   		pr_err("Binary measurement list too large.\n");
+>>   		return;
+>>   	}
+>>   
+>> -	ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
+>> -				  kexec_segment_size);
+> Removing the call to ima_dump_measurement_list here is not bisect safe.
+Agreed.  Will take care of this based on if we end up using just
+ima_dump_measurement_list(), or combination of
+ima_allocate_buf_at_kexec_load() and ima_populate_buf_at_kexec_execute().
+
+~Tushar
+>> -	if (!kexec_buffer) {
+>> -		pr_err("Not enough memory for the kexec measurement buffer.\n");
+>> +	ret = ima_allocate_buf_at_kexec_load();
 >> +	if (ret < 0)
->> +		goto out;
->> +
->> +	/*
->> +	 * fill in reserved space with some buffer details
->> +	 * (eg. version, buffer size, number of measurements)
->> +	 */
->> +	ima_khdr.buffer_size = ima_kexec_file.count;
->> +	if (ima_canonical_fmt) {
->> +		ima_khdr.version = cpu_to_le16(ima_khdr.version);
->> +		ima_khdr.count = cpu_to_le64(ima_khdr.count);
->> +		ima_khdr.buffer_size = cpu_to_le64(ima_khdr.buffer_size);
->> +	}
->> +
->> +	memcpy(ima_kexec_file.buf, &ima_khdr, sizeof(ima_khdr));
->> +	*buffer_size = ima_kexec_file.count;
->> +	*buffer = ima_kexec_file.buf;
->> +
->> +out:
->> +	if (ret < 0)
->> +		ima_clear_kexec_file();
->> +
->> +	return ret;
->> +}
->> +
->> b+
->>   static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
->>   				     unsigned long segment_size)
->>   {
+>>   		return;
+>> -	}
+>>   
+>>   	kbuf.buffer = kexec_buffer;
+>>   	kbuf.bufsz = kexec_buffer_size;
