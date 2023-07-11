@@ -2,92 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AE174F852
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 21:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E490574F8E2
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 22:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjGKTTZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jul 2023 15:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S230296AbjGKUQt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jul 2023 16:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjGKTTY (ORCPT
+        with ESMTP id S229537AbjGKUQt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jul 2023 15:19:24 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755C610C2
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 12:19:23 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BJGxnu006315;
-        Tue, 11 Jul 2023 19:19:03 GMT
+        Tue, 11 Jul 2023 16:16:49 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE52171E
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 13:16:46 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BKCKfB028815;
+        Tue, 11 Jul 2023 20:16:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=oXg14WD/aQZ2LgZSpBtJvS+fxAZFY2YkYYU24ba+58c=;
- b=BtpYL68CASY9S7794WGK2UFqOCi9Gj1YCUbQkFismNy8eGHs2SkLL5pgJIzehRtQBoPA
- sibxoiLxa43Ro1wjQvucc9x24xRdo6V9cL3lp7/c6xQU7T8USoeSBio/OsgCH43cA7qL
- BQ3nL6UTY2z9AxohLXCBYGFiYhz5u/knBsmZoR4NhOKNrvaXgV9gzkIWcVr7TOgRQTq+
- xbf2rNtv3QdJZBikBD6EtQUq446olTukxdVbEjJXncTWPvBdu2xH3QRlByggv0ltCbOd
- zmwCuX1uUXoPP7VNYz0w49pRqAB3Y0lq3J0chLkxwpMufup7Df0o5SkRHrNcsZgFNYVN Bw== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rscx18ep7-1
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=IL+AOPlpv7sXx6J9Qrm22wjnMz4nXvYoy91J1MQet4w=;
+ b=OoNHNx+Su5dHg0yBlJ2JkEkGTnmf3a0YMd4VHdhij8BXBIAZLX4vbXg2y/hH40oUCmzr
+ CGMSaScxg21BqakSRMh0Q2e9hutr0yBUz7tYckiIV2giryG1Fdkskf87en987e9h2hr8
+ eSrGIi7lr2V7IQNjs4vl5GQ9u+hZs/W6AMgRkyVdC2UD5ZYl8ZE0ZZpzJel7uCdeFJWp
+ rxJ73xtP/ntbv4oMx39W0rRPiNKVu9/r7jHxnBtJAFiBo6WYAikkhVtN34TsjPVP9Jnk
+ RQWS3Us69sTKfLWQMOC2mGres7NBmSy6iov2FRrPz+Xbwr3W8mJup1A83UiKzhS4g30j Kw== 
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rsdwf04fv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 19:19:02 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36BEFhLu011267;
-        Tue, 11 Jul 2023 19:19:02 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3rqk4mgdq8-1
+        Tue, 11 Jul 2023 20:16:31 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36BEFi7M019772;
+        Tue, 11 Jul 2023 20:16:30 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3rqmu0rnub-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 19:19:02 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36BJJ1Ei59769300
+        Tue, 11 Jul 2023 20:16:30 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36BKGTVr525030
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 19:19:01 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D3335805F;
-        Tue, 11 Jul 2023 19:19:01 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ADD7558051;
-        Tue, 11 Jul 2023 19:19:00 +0000 (GMT)
+        Tue, 11 Jul 2023 20:16:29 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6973658054;
+        Tue, 11 Jul 2023 20:16:29 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 17DC35805C;
+        Tue, 11 Jul 2023 20:16:28 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jul 2023 19:19:00 +0000 (GMT)
-Message-ID: <4ccfe980-3c71-fa06-59e4-56c85d798224@linux.ibm.com>
-Date:   Tue, 11 Jul 2023 15:19:00 -0400
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jul 2023 20:16:27 +0000 (GMT)
+Message-ID: <273cea4f-9c82-e5ca-20e4-1db30d83393e@linux.ibm.com>
+Date:   Tue, 11 Jul 2023 16:16:27 -0400
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 05/10] kexec: implement functions to map and unmap segment
- to kimage
+Subject: Re: [PATCH 03/10] ima: allocate buffer at kexec load to hold ima
+ measurements
 Content-Language: en-US
 To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
         zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
         kexec@lists.infradead.org, linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com,
-        Eric Biederman <ebiederm@xmission.com>
+        "Eric W . Biederman" <ebiederm@xmission.com>
 References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
- <20230703215709.1195644-6-tusharsu@linux.microsoft.com>
- <ab4c5f9a-5b70-5d45-80d9-2ec48ea49913@linux.ibm.com>
- <7f38366e-744e-78c8-cf05-acfeb59afd2e@linux.microsoft.com>
+ <20230703215709.1195644-4-tusharsu@linux.microsoft.com>
 From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <7f38366e-744e-78c8-cf05-acfeb59afd2e@linux.microsoft.com>
+In-Reply-To: <20230703215709.1195644-4-tusharsu@linux.microsoft.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wmAJvMX1CPk8iauTbt6u4lwrYTXMyusH
-X-Proofpoint-ORIG-GUID: wmAJvMX1CPk8iauTbt6u4lwrYTXMyusH
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: 7XSJl1t9iIALAcvigGO2plrI8l8mIVZU
+X-Proofpoint-ORIG-GUID: 7XSJl1t9iIALAcvigGO2plrI8l8mIVZU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-11_11,2023-07-11_01,2023-05-22_02
+ definitions=2023-07-11_12,2023-07-11_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=921 clxscore=1011 mlxscore=0 suspectscore=0 bulkscore=0
- impostorscore=0 adultscore=0 malwarescore=0 priorityscore=1501
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110172
+ malwarescore=0 priorityscore=1501 spamscore=0 suspectscore=0 adultscore=0
+ mlxlogscore=999 impostorscore=0 clxscore=1015 mlxscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110181
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -96,74 +93,104 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 
-On 7/11/23 14:41, Tushar Sugandhi wrote:
-> Adding Eric to cc.
+On 7/3/23 17:57, Tushar Sugandhi wrote:
+> The IMA subsystem needs a dedicated mechanism to reserve extra memory for
+> measurements added between the kexec 'load' and kexec 'execute'.
 > 
-> On 7/7/23 05:28, Stefan Berger wrote:
->>
->>
->> On 7/3/23 17:57, Tushar Sugandhi wrote:
->>> Currently, there's no mechanism to map and unmap segments to the kimage
->>> structure.  This functionality is needed when dealing with memory segments
->>> in the context of a kexec operation.
->>>
->>> The patch adds two new functions: kimage_map_segment() and
->>> kimage_unmap_segment().
->>>
->>> Implement kimage_map_segment() which takes a kimage pointer, an address,
->>> and a size.  Ensures that the entire segment is being mapped by comparing
->>> the given address and size to each segment in the kimage's segment array.
->>> Collect the source pages that correspond to the given address range,
->>> allocate an array of pointers to these pages, and map them to a contiguous
->>> range of virtual addresses.  If the mapping operation is successful, the
->>> function returns the start of this range.  Otherwise, it frees the page
->>> pointer array and returns NULL.
->>>
->>> Implement kimage_unmap_segment() that takes a pointer to a segment buffer
->>> and unmaps it using vunmap().
->>>
->>> Finally, move for_each_kimage_entry() macro to kexec.h.
->>>
->>> Note: Use kimage_map_segment() and kimage_unmap_segment() carefully to
->>> avoid memory leaks and ensure that all mapped segments are properly
->>> unmapped when they're no longer needed.
->>>
->>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->>
->>> +
->>> +    i = 0;
->>> +    for_each_kimage_entry(image, ptr, entry) {
->>> +        if (entry & IND_DESTINATION)
->>> +            dest_page_addr = entry & PAGE_MASK;
->>> +        else if (entry & IND_SOURCE) {
->>> +            if (dest_page_addr >= addr && dest_page_addr < eaddr) {
->>> +                src_page_addr = entry & PAGE_MASK;
->>> +                src_pages[i++] = phys_to_page(src_page_addr);
->>
->> Since phys_to_page is not defined on many/most architectures I change it for ppc64 and have successfully used the following:
->>
->> +                               src_pages[i++] = virt_to_page(__va(src_page_addr))
->>
->>
->> After several kexecs the following check still works:
->>
->> # evmctl ima_measurement --ignore-violations /sys/kernel/security/ima/binary_runtime_measurements
->> Matched per TPM bank calculated digest(s).
->>
->>
->>    Stefan
-> Thank you so much Stefan for reviewing this series, and catching this
-> issue.  Are you suggesting I should use virt_to_page on all architectures
-> unconditionally, or use it only when phys_to_page is not available?
+> Update ima_add_kexec_buffer to allocate a buffer of a sufficient size
+> taking ima binary runtime measurements size, size of ima_kexec_hdr, and
+> IMA_KEXEC_EXTRA_SIZE into account.  Adjust the kexec_segment_size to align
+> to the PAGE_SIZE.  Call ima_allocate_buf_at_kexec_load() to allocate the
+> buffer.
+> 
+> This patch assumes the extra space defined (IMA_KEXEC_EXTRA_SIZE) is
+> sufficient to handle the additional measurements.  This should be as per
+> the system requirements and based on the number of additional measurements
+> expected during the window from kexec 'load' to kexec 'execute'.
 
-I would try to used it on all architectures.
+This could be the most problematic part if the 'execute' happens much later
+than the 'load' with lots of measurement activity in between. I am wondering
+whether not doing anything at 'load' time and doing the whole work at 'execute' time
+wouldn't be the right thing to do ?
 
+Otherwise, if we wanted the work to be split as you suggest, could you
+- krealloc the src_pages (now in kimage_map_segment) to add space for a few more pages needed for the additional measurements
+- add those few more pages to src_pages
+- vunmap the previous mapping
+- vmap the extended src_pages array
+- update ima_kexec_file.buf with the diff between the new and old vmap'ed addresses
+- append to the existing log
+
+This presumably would help resolve this potential issue.
+
+The src_pages is currently not kfree'd -- may be a memory leak.
+
+Regards,
     Stefan
 
 > 
-> ~Tushar
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> ---
+>   security/integrity/ima/ima.h       |  2 ++
+>   security/integrity/ima/ima_kexec.c | 21 ++++++++++-----------
+>   2 files changed, 12 insertions(+), 11 deletions(-)
 > 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index c29db699c996..2ffda9449b9b 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -43,6 +43,8 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
+>   
+>   #define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks : 0)
+>   
+> +#define IMA_KEXEC_EXTRA_SIZE (16 * PAGE_SIZE)
+> +
+>   /* current content of the policy */
+>   extern int ima_policy_flag;
+>   
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index 858b67689701..7deb8df31485 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -188,31 +188,30 @@ void ima_add_kexec_buffer(struct kimage *image)
+>   	/* use more understandable variable names than defined in kbuf */
+>   	void *kexec_buffer = NULL;
+>   	size_t kexec_buffer_size;
+> -	size_t kexec_segment_size;
+>   	int ret;
+>   
+>   	/*
+> -	 * Reserve an extra half page of memory for additional measurements
+> -	 * added during the kexec load.
+> +	 * Reserve extra memory for measurements added in the window from
+> +	 * kexec 'load' to kexec 'execute'.
+>   	 */
+> -	binary_runtime_size = ima_get_binary_runtime_size();
+> +	binary_runtime_size = ima_get_binary_runtime_size() +
+> +			      sizeof(struct ima_kexec_hdr) +
+> +			      IMA_KEXEC_EXTRA_SIZE;
+> +
+>   	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
+>   		kexec_segment_size = ULONG_MAX;
+>   	else
+> -		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
+> -					   PAGE_SIZE / 2, PAGE_SIZE);
+> +		kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
+> +
+>   	if ((kexec_segment_size == ULONG_MAX) ||
+>   	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
+>   		pr_err("Binary measurement list too large.\n");
+>   		return;
+>   	}
+>   
+> -	ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
+> -				  kexec_segment_size);
+> -	if (!kexec_buffer) {
+> -		pr_err("Not enough memory for the kexec measurement buffer.\n");
+> +	ret = ima_allocate_buf_at_kexec_load();
+> +	if (ret < 0)
+>   		return;
+> -	}
+>   
+>   	kbuf.buffer = kexec_buffer;
+>   	kbuf.bufsz = kexec_buffer_size;
