@@ -2,195 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E490574F8E2
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 22:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970EA74F99A
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jul 2023 23:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjGKUQt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jul 2023 16:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
+        id S229616AbjGKVMO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jul 2023 17:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjGKUQt (ORCPT
+        with ESMTP id S229573AbjGKVMM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jul 2023 16:16:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE52171E
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 13:16:46 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BKCKfB028815;
-        Tue, 11 Jul 2023 20:16:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=IL+AOPlpv7sXx6J9Qrm22wjnMz4nXvYoy91J1MQet4w=;
- b=OoNHNx+Su5dHg0yBlJ2JkEkGTnmf3a0YMd4VHdhij8BXBIAZLX4vbXg2y/hH40oUCmzr
- CGMSaScxg21BqakSRMh0Q2e9hutr0yBUz7tYckiIV2giryG1Fdkskf87en987e9h2hr8
- eSrGIi7lr2V7IQNjs4vl5GQ9u+hZs/W6AMgRkyVdC2UD5ZYl8ZE0ZZpzJel7uCdeFJWp
- rxJ73xtP/ntbv4oMx39W0rRPiNKVu9/r7jHxnBtJAFiBo6WYAikkhVtN34TsjPVP9Jnk
- RQWS3Us69sTKfLWQMOC2mGres7NBmSy6iov2FRrPz+Xbwr3W8mJup1A83UiKzhS4g30j Kw== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rsdwf04fv-1
+        Tue, 11 Jul 2023 17:12:12 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CE5133
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 14:12:11 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BL9jW1002442;
+        Tue, 11 Jul 2023 21:11:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=/jbmUM/Tz5PwYQ7xibcV54GFdtSsVEw7ymNllB0dx7E=;
+ b=sNxzswunyHLLzZnCfQZdMcKPULi7FTMBca+QNXlM+j9G7dL/udJSddAvioNRPMlslYXU
+ sjb9K8fwYmhCffM03mXg7QPxxdD+E+2xdgJjdEoKAccUbLZwUWV0w2JI17hZxZIo+Ujr
+ Lj0EJhR6DKalQKZALXq/xEjnVH4OyDQV0whw9kz6qtmuQ5Za9QGI02u6bUYodrrwvuMt
+ fVLB9cTT+yUPVzAVnCpASGAHTEwb49Xrf6uxWYB93fdi3tMIGHj+BT+8/nLj8kRvdp2t
+ Ywv0RnKaMSl8YecZolTRdq/y/VewWk0sx/KuZpiBwvsq/uCQA5SG1UPKlBdx49YnJzMS Ow== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rseg8gaak-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 20:16:31 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36BEFi7M019772;
-        Tue, 11 Jul 2023 20:16:30 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3rqmu0rnub-1
+        Tue, 11 Jul 2023 21:11:51 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36BEGJs7011647;
+        Tue, 11 Jul 2023 21:11:51 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3rqk4mgjbe-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jul 2023 20:16:30 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36BKGTVr525030
+        Tue, 11 Jul 2023 21:11:51 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36BLBosr34734376
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 20:16:29 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6973658054;
-        Tue, 11 Jul 2023 20:16:29 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 17DC35805C;
-        Tue, 11 Jul 2023 20:16:28 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jul 2023 20:16:27 +0000 (GMT)
-Message-ID: <273cea4f-9c82-e5ca-20e4-1db30d83393e@linux.ibm.com>
-Date:   Tue, 11 Jul 2023 16:16:27 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 03/10] ima: allocate buffer at kexec load to hold ima
- measurements
-Content-Language: en-US
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
-        kexec@lists.infradead.org, linux-integrity@vger.kernel.org
+        Tue, 11 Jul 2023 21:11:50 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 52D9258058;
+        Tue, 11 Jul 2023 21:11:50 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5B5F58057;
+        Tue, 11 Jul 2023 21:11:49 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.19.33])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jul 2023 21:11:49 +0000 (GMT)
+Message-ID: <66ca5d5504291161d887d141bc43ce2a4c14ff8c.camel@linux.ibm.com>
+Subject: Re: [PATCH 01/10] ima: implement function to allocate buffer at
+ kexec load
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>, noodles@fb.com,
+        bauermann@kolabnow.com, kexec@lists.infradead.org,
+        linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com,
-        "Eric W . Biederman" <ebiederm@xmission.com>
+        Eric Biederman <ebiederm@xmission.com>
+Date:   Tue, 11 Jul 2023 17:11:47 -0400
+In-Reply-To: <31eb2a9c-7410-b655-43d2-3b2966d2d3da@linux.microsoft.com>
 References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
- <20230703215709.1195644-4-tusharsu@linux.microsoft.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230703215709.1195644-4-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+         <20230703215709.1195644-2-tusharsu@linux.microsoft.com>
+         <494dffc6cc7cfb8c6ca78f3bae442d57362a8857.camel@linux.ibm.com>
+         <31eb2a9c-7410-b655-43d2-3b2966d2d3da@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7XSJl1t9iIALAcvigGO2plrI8l8mIVZU
-X-Proofpoint-ORIG-GUID: 7XSJl1t9iIALAcvigGO2plrI8l8mIVZU
+X-Proofpoint-GUID: ajjQURlfE6K12wP7zNJ6D7w-6WsYI88s
+X-Proofpoint-ORIG-GUID: ajjQURlfE6K12wP7zNJ6D7w-6WsYI88s
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-11_12,2023-07-11_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 priorityscore=1501 spamscore=0 suspectscore=0 adultscore=0
- mlxlogscore=999 impostorscore=0 clxscore=1015 mlxscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307110181
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ adultscore=0 priorityscore=1501 malwarescore=0 phishscore=0
+ impostorscore=0 mlxscore=0 bulkscore=0 clxscore=1011 spamscore=0
+ mlxlogscore=967 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2307110191
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 7/3/23 17:57, Tushar Sugandhi wrote:
-> The IMA subsystem needs a dedicated mechanism to reserve extra memory for
-> measurements added between the kexec 'load' and kexec 'execute'.
+On Tue, 2023-07-11 at 10:59 -0700, Tushar Sugandhi wrote:
+> Adding Eric to cc.
 > 
-> Update ima_add_kexec_buffer to allocate a buffer of a sufficient size
-> taking ima binary runtime measurements size, size of ima_kexec_hdr, and
-> IMA_KEXEC_EXTRA_SIZE into account.  Adjust the kexec_segment_size to align
-> to the PAGE_SIZE.  Call ima_allocate_buf_at_kexec_load() to allocate the
-> buffer.
-> 
-> This patch assumes the extra space defined (IMA_KEXEC_EXTRA_SIZE) is
-> sufficient to handle the additional measurements.  This should be as per
-> the system requirements and based on the number of additional measurements
-> expected during the window from kexec 'load' to kexec 'execute'.
+> On 7/7/23 06:00, Mimi Zohar wrote:
+> > Hi Tushar,
+> >
+> > On Mon, 2023-07-03 at 14:57 -0700, Tushar Sugandhi wrote:
+> >> IMA does not provide a mechanism to allocate memory for IMA log storage
+> >> during kexec operation.
+> > The IMA measurement list is currently being carried across kexec, so
+> > obviously a buffer is being allocated for it.  IMA not allocating
+> > memory for the measurment list is not the problem statement.  Please
+> > concisely provide the problem statement, explaining why IMA needs to
+> > allocate the buffer.
+> >
+> I meant IMA does not provide separate functions to allocate buffer and
+> populate measurements.  Both operations are wrapped in an atomic
+> ima_dump_measurement_list().
 
-This could be the most problematic part if the 'execute' happens much later
-than the 'load' with lots of measurement activity in between. I am wondering
-whether not doing anything at 'load' time and doing the whole work at 'execute' time
-wouldn't be the right thing to do ?
+Ok.
 
-Otherwise, if we wanted the work to be split as you suggest, could you
-- krealloc the src_pages (now in kimage_map_segment) to add space for a few more pages needed for the additional measurements
-- add those few more pages to src_pages
-- vunmap the previous mapping
-- vmap the extended src_pages array
-- update ima_kexec_file.buf with the diff between the new and old vmap'ed addresses
-- append to the existing log
+> As I mentioned in the comment in the cover letter, if there is no such
+> technical limitation to allocate the buffer and copy the measurements at
+> kexec ‘execute’ – I will make the necessary code changes and update the
+> above line in the patch description accordingly.
 
-This presumably would help resolve this potential issue.
+The "normal" way of making this type of change would be to split the
+existing ima_dump_measurement_list() function.  Copying the measurement
+list would still be named ima_dump_measurement_list().  The other could
+be named ima_alloc_kexec_buf().  Both functions initially would be
+called.
 
-The src_pages is currently not kfree'd -- may be a memory leak.
+Eric, besides updating the buffer at kexec execute, is there anything
+else that needs to be done (e.g. updating digests)?
 
-Regards,
-    Stefan
+> >> The function should handle the scenario where
+> >> the kexec load is called multiple times.
+> > Currently the buffer is being freed with the kexec 'unload'.  With this
+> > patch IMA is allocating a buffer for the measurement list, which needs
+> > to be freed independently of the kexec 'unload'.
 
-> 
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> ---
->   security/integrity/ima/ima.h       |  2 ++
->   security/integrity/ima/ima_kexec.c | 21 ++++++++++-----------
->   2 files changed, 12 insertions(+), 11 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index c29db699c996..2ffda9449b9b 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -43,6 +43,8 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
->   
->   #define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks : 0)
->   
-> +#define IMA_KEXEC_EXTRA_SIZE (16 * PAGE_SIZE)
-> +
->   /* current content of the policy */
->   extern int ima_policy_flag;
->   
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index 858b67689701..7deb8df31485 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -188,31 +188,30 @@ void ima_add_kexec_buffer(struct kimage *image)
->   	/* use more understandable variable names than defined in kbuf */
->   	void *kexec_buffer = NULL;
->   	size_t kexec_buffer_size;
-> -	size_t kexec_segment_size;
->   	int ret;
->   
->   	/*
-> -	 * Reserve an extra half page of memory for additional measurements
-> -	 * added during the kexec load.
-> +	 * Reserve extra memory for measurements added in the window from
-> +	 * kexec 'load' to kexec 'execute'.
->   	 */
-> -	binary_runtime_size = ima_get_binary_runtime_size();
-> +	binary_runtime_size = ima_get_binary_runtime_size() +
-> +			      sizeof(struct ima_kexec_hdr) +
-> +			      IMA_KEXEC_EXTRA_SIZE;
-> +
->   	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
->   		kexec_segment_size = ULONG_MAX;
->   	else
-> -		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
-> -					   PAGE_SIZE / 2, PAGE_SIZE);
-> +		kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
-> +
->   	if ((kexec_segment_size == ULONG_MAX) ||
->   	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
->   		pr_err("Binary measurement list too large.\n");
->   		return;
->   	}
->   
-> -	ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
-> -				  kexec_segment_size);
-> -	if (!kexec_buffer) {
-> -		pr_err("Not enough memory for the kexec measurement buffer.\n");
-> +	ret = ima_allocate_buf_at_kexec_load();
-> +	if (ret < 0)
->   		return;
-> -	}
->   
->   	kbuf.buffer = kexec_buffer;
->   	kbuf.bufsz = kexec_buffer_size;
+> If we end up allocating the buffer at kexec ‘execute’ (which results in
+> soft boot to next Kernel) – is it technically possible that
+> kexec ‘unload’ being called after calling kexec ‘execute’?
+
+> If not, should I still free the buffer at kexec ‘unload’ in this
+> scenario?
+
+The question is how to access the buffer once kexec_add_buffer() is
+called.
+
+Mimi
+
