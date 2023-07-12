@@ -2,69 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9A0750019
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 09:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6960750866
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 14:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbjGLHdo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jul 2023 03:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
+        id S232362AbjGLMfD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jul 2023 08:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjGLHdn (ORCPT
+        with ESMTP id S231436AbjGLMfB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jul 2023 03:33:43 -0400
-Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6EAE49
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jul 2023 00:33:42 -0700 (PDT)
-Received: by mail.durme.pl (Postfix, from userid 1002)
-        id DF5DD49DA2; Wed, 12 Jul 2023 07:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
-        t=1689147131; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=L3c9hm1YPbp6cxpy50GGWwNQPRWzoAoEeMx/FSTeNGdzprwh26OsKyvyJkjaZpGcz
-         X4upmAKstwUdvEtq4Fvw2Mn2Nwtl4oTxZ2hGE1zIsexCVLTPzzM0Vg7uWqnBZOTUbN
-         4iH9dx1QrGHRs1B3KVdHXgT7dT2XwbfHKau2ANXoWI/LJYVq5pJvjN6fT273Q8ksQF
-         pIbqujO+N/SeRRf/r1QNClI2FwypTWi0sJEB1QTAYnei/6VInry7+loKNYGc7vPwS1
-         L6OfuLrDcz8hqm88gtAIHZILsuvZnG1fI5t+jjjz6CtzhYsH6KA6kE6yUSjeExxngv
-         t0r0SxJHFlbJQ==
-Received: by mail.durme.pl for <linux-integrity@vger.kernel.org>; Wed, 12 Jul 2023 07:30:27 GMT
-Message-ID: <20230712064501-0.1.31.cls1.0.58jqjyqtji@durme.pl>
-Date:   Wed, 12 Jul 2023 07:30:27 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
-To:     <linux-integrity@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.durme.pl
+        Wed, 12 Jul 2023 08:35:01 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF9610EF
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Jul 2023 05:34:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1689165294;
+        bh=l35p0TcEUmDUj/vXsObL62vUHe1+adoudEDWvF7VoK8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=hvmfEYYloo9+IRmXyrs4Arl/1kGU/paHNLUvie0T/nS6bRdMeeoB4WC7r+jeOIev9
+         IayCUcVlviVodp3t3DV7/StkH94zI7nQDkG2FwVHeewYTleMnXbbkGBxGTdrRYROij
+         LzBUNSxJTqRxFR1Ha25q55R5S6VKLCC19BLMcDRI3kpJLtqbm8511rPSMs+c6Ir3oI
+         IS3gGq8K1J0acwa4JjPmQ0YMOcxVcgMAU3MjD1/gR2OBjfTngZjAjE1jHJeqnQZ8YD
+         OQjJCotWDyb08kBL6MMPltKIlGmU0b1drzbQy6fyJJgUw6mjn920EQnDJz29ybLOS+
+         L/xWDipukI61Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R1HHx21V2z4wxW;
+        Wed, 12 Jul 2023 22:34:53 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     eajames@linux.ibm.com, jgg@ziepe.ca, yangyingliang@huawei.com,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de
+Subject: Re: [PATCH v2 1/2] powerpc/tpm: Create linux,sml-base/size as big
+ endian
+In-Reply-To: <0fb26243-0d63-118b-2737-05391ba0c69a@linux.ibm.com>
+References: <20230615123703.4028156-1-mpe@ellerman.id.au>
+ <4d378d53225fc8b8cdc99dde900388d2eefaad4e.camel@kernel.org>
+ <0fb26243-0d63-118b-2737-05391ba0c69a@linux.ibm.com>
+Date:   Wed, 12 Jul 2023 22:34:47 +1000
+Message-ID: <87ttu9e2ag.fsf@mail.lhotse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Stefan Berger <stefanb@linux.ibm.com> writes:
+> On 7/10/23 17:23, Jarkko Sakkinen wrote:
+>> On Thu, 2023-06-15 at 22:37 +1000, Michael Ellerman wrote:
+>>> There's code in prom_instantiate_sml() to do a "SML handover" (Stored
+>>> Measurement Log) from OF to Linux, before Linux shuts down Open
+>>> Firmware.
+>>>
+>>> This involves creating a buffer to hold the SML, and creating two device
+>>> tree properties to record its base address and size. The kernel then
+>>> later reads those properties from the device tree to find the SML.
+>>>
+>>> When the code was initially added in commit 4a727429abec ("PPC64: Add
+>>> support for instantiating SML from Open Firmware") the powerpc kernel
+>>> was always built big endian, so the properties were created big endian
+>>> by default.
+>>>
+>>> However since then little endian support was added to powerpc, and now
+>>> the code lacks conversions to big endian when creating the properties.
+>>>
+>>> This means on little endian kernels the device tree properties are
+>>> little endian, which is contrary to the device tree spec, and in
+>>> contrast to all other device tree properties.
+>>>
+>>> To cope with that a workaround was added in tpm_read_log_of() to skip
+>>> the endian conversion if the properties were created via the SML
+>>> handover.
+>>>
+>>> A better solution is to encode the properties as big endian as they
+>>> should be, and remove the workaround.
+>>>
+>>> Typically changing the encoding of a property like this would present
+>>> problems for kexec. However the SML is not propagated across kexec, so
+>>> changing the encoding of the properties is a non-issue.
+>>>
+>>> Fixes: e46e22f12b19 ("tpm: enhance read_log_of() to support Physical TPM event log")
+>>> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+>>> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>>> ---
+>>>   arch/powerpc/kernel/prom_init.c |  8 ++++++--
+>>>   drivers/char/tpm/eventlog/of.c  | 23 ++++-------------------
+>>>   2 files changed, 10 insertions(+), 21 deletions(-)
+>> 
+>> Split into two patches (producer and consumer).
+>
+> I think this wouldn't be right since it would break the system when
+> only one patch is applied since it would be reading the fields in the
+> wrong endianess.
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+Yes that's right.
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+Typically we would split the patch by subsystem, but in this case it
+will just create a known-broken point in the git history, which helps no
+one.
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
-
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
-
-
-Pozdrawiam
-Krystian Wieczorek
+cheers
