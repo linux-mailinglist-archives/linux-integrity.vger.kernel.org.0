@@ -2,155 +2,152 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A6975108B
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 20:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4A975113F
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 21:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbjGLSby (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jul 2023 14:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S232099AbjGLTa3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jul 2023 15:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjGLSby (ORCPT
+        with ESMTP id S231888AbjGLTa2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jul 2023 14:31:54 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7B0E77;
-        Wed, 12 Jul 2023 11:31:52 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CISAdI022553;
-        Wed, 12 Jul 2023 18:31:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=aNorqnmo/2GS7PsW3g39N/to4zeZATLaUxLimbdZc9c=;
- b=aYZ/64hz9DIlqA3isI2k3uMwT8ztcgdyz/xHSYGh2WAaux5XS6RB0MEnwq9mdTRKh7vF
- 0eRDJPPRYNMdbs3l3RUiERqsEArxMZl/2J7gOvbTV9hWbGW0tHmP/NMlw8Zo65mnJIoX
- l9W1254pAj0+01QqsK1G612HOpn+Pgj7YJqietfILICN+dq7kSsHzPzy3QCZLUmQAuyj
- TcZiexRsela+PIF4Nei0g916L+VL0PZjBkgUwozPR6g7jAQ/cmrFnb6Io/JQMCNvqf0S
- EYTh21wIO1+UaFOKCK9oFVej6YAiAfZKGU4/DEDcVRm/fo1xHLlcsP3W+AdE/MbcWOP7 lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rt1fr82qf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 18:31:46 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36CIStcU024049;
-        Wed, 12 Jul 2023 18:31:46 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rt1fr82py-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 18:31:46 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36CF8j9H009334;
-        Wed, 12 Jul 2023 18:31:45 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3rpye5vy0x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 18:31:45 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36CIVibU66191858
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jul 2023 18:31:44 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9B1935805A;
-        Wed, 12 Jul 2023 18:31:44 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 342D458052;
-        Wed, 12 Jul 2023 18:31:44 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.watson.ibm.com (unknown [9.31.99.213])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Jul 2023 18:31:44 +0000 (GMT)
-Message-ID: <eaa1f1901abbceb2edc0aadaa94d9d959413c984.camel@linux.ibm.com>
-Subject: Re: [PATCH] kexec_file: ima: allow loading a kernel with its IMA
- signature verified
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        "open list:KEXEC" <kexec@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Wed, 12 Jul 2023 14:31:43 -0400
-In-Reply-To: <20230711031604.717124-1-coxu@redhat.com>
-References: <20230711031604.717124-1-coxu@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: QjMEjQZ_BxYhB90rZzCMnHeXDf5ywIsV
-X-Proofpoint-ORIG-GUID: 10cpgxsH4A-AhnpRAjLo9yBsSfZY9_A5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_13,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- clxscore=1015 mlxscore=0 malwarescore=0 phishscore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120163
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Jul 2023 15:30:28 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88B35B7
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Jul 2023 12:30:25 -0700 (PDT)
+Received: from [192.168.87.36] (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
+        by linux.microsoft.com (Postfix) with ESMTPSA id CAAA921C44E5;
+        Wed, 12 Jul 2023 12:30:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CAAA921C44E5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1689190225;
+        bh=Yu+xJdcstGuYIdFXmY3aIzZrTs0/bPtsUuWd7EMLaVc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BDT+i0Qpl4arWVvlIM+98p/Wb2mlz6qlnfQBR0ByVk19cIGp/JMPGPSdueCTS0f1R
+         5zor+uh4a6KF9Qh8SMWGaIObVDf+aKkd2kf53BTpWDnNaNGRQQRoqRvMt8Ei1WEGFo
+         jdCPbvHM1oTehF/9BxOxsfHjayVP1pCtJKd2ZpPw=
+Message-ID: <85dc6104-0d15-c31b-b36f-5345480d01e6@linux.microsoft.com>
+Date:   Wed, 12 Jul 2023 12:30:24 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 10/10] kexec: update kexec_file_load syscall to call
+ ima_kexec_post_load
+Content-Language: en-US
+To:     RuiRui Yang <ruyang@redhat.com>
+Cc:     zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
+        kexec@lists.infradead.org, linux-integrity@vger.kernel.org,
+        code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com,
+        Eric Biederman <ebiederm@xmission.com>
+References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
+ <20230703215709.1195644-11-tusharsu@linux.microsoft.com>
+ <CALu+AoQC101fcbJjLdJHD7QtqeXzt5uOZDgNYvob0U_NGyaqCQ@mail.gmail.com>
+ <b4047d8d-2c7c-e357-1c1f-cc55978fd963@linux.microsoft.com>
+ <CALu+AoSWcEU7PfHvejYAuFWMEO6uGEWPnJMXuW2kNG-MUshFsw@mail.gmail.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <CALu+AoSWcEU7PfHvejYAuFWMEO6uGEWPnJMXuW2kNG-MUshFsw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Cc'ing the LSM mailing list.]
 
-On Tue, 2023-07-11 at 11:16 +0800, Coiby Xu wrote:
-> When IMA has verified the signature of the kernel image, kexec'ing this
-> kernel should be allowed.
-> 
-> Fixes: af16df54b89d ("ima: force signature verification when CONFIG_KEXEC_SIG is configured")
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
-
-The original commit  29d3c1c8dfe7 ("kexec: Allow kexec_file() with
-appropriate IMA policy when locked down") was not in lieu of the PE-
-COFF signature, but allowed using the IMA signature on other
-architectures.
-
-Currently on systems with both PE-COFF and IMA signatures, both
-signatures are verified, assuming the file is in the IMA policy.  If
-either signature verification fails, the kexec fails.
- 
-With this patch, only the IMA signature would be verified.
-
-> ---
->  kernel/kexec_file.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 881ba0d1714c..96fce001fbc0 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -162,6 +162,13 @@ kimage_validate_signature(struct kimage *image)
->  	ret = kexec_image_verify_sig(image, image->kernel_buf,
->  				     image->kernel_buf_len);
->  	if (ret) {
-> +		/*
-> +		 * If the kernel image already has its IMA signature verified, permit it.
-> +		 */
-> +		if (ima_appraise_signature(READING_KEXEC_IMAGE)) {
-> +			pr_notice("The kernel image already has its IMA signature verified.\n");
-> +			return 0;
-> +		}
->  
->  		if (sig_enforce) {
->  			pr_notice("Enforced kernel signature verification failed (%d).\n", ret);
-> @@ -169,12 +176,9 @@ kimage_validate_signature(struct kimage *image)
->  		}
->  
->  		/*
-> -		 * If IMA is guaranteed to appraise a signature on the kexec
-> -		 * image, permit it even if the kernel is otherwise locked
-> -		 * down.
-> +		 * When both IMA and KEXEC_SIG fail in lockdown mode, reject it.
->  		 */
-> -		if (!ima_appraise_signature(READING_KEXEC_IMAGE) &&
-> -		    security_locked_down(LOCKDOWN_KEXEC))
-> +		if (security_locked_down(LOCKDOWN_KEXEC))
->  			return -EPERM;
->  
->  		pr_debug("kernel signature verification failed (%d).\n", ret);
-
-
+On 7/11/23 18:28, RuiRui Yang wrote:
+> On Wed, 12 Jul 2023 at 03:15, Tushar Sugandhi
+> <tusharsu@linux.microsoft.com> wrote:
+>>
+>> On 7/7/23 01:20, RuiRui Yang wrote:
+>>> On Tue, 4 Jul 2023 at 05:58, Tushar Sugandhi
+>>> <tusharsu@linux.microsoft.com> wrote:
+>>>> The kexec_file_load syscall is used to load a new kernel for kexec.
+>>>> The syscall needs to update its function to call ima_kexec_post_load, which
+>>>> was implemented in a previous patch.  ima_kexec_post_load takes care of
+>>>> mapping the measurement list for the next kernel and registering a reboot
+>>>> notifier if it's not already registered.
+>>>>
+>>>> Modify the kexec_file_load syscall to call ima_kexec_post_load after the
+>>>> image has been loaded and prepared for kexec.  This ensures that the IMA
+>>>> measurement list will be available to the next kernel after a kexec reboot.
+>>>> This also ensures the measurements taken in the window between kexec load
+>>>> and execute are captured and passed to the next kernel.
+>>>>
+>>>> Declare the kimage_file_post_load function in the kernel/kexec_internal.h,
+>>>> so it can be properly used in the syscall.
+>>>>
+>>>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>>>> ---
+>>>>    kernel/kexec_file.c     | 7 +++++++
+>>>>    kernel/kexec_internal.h | 1 +
+>>>>    2 files changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+>>>> index f989f5f1933b..efe28e77280c 100644
+>>>> --- a/kernel/kexec_file.c
+>>>> +++ b/kernel/kexec_file.c
+>>>> @@ -184,6 +184,11 @@ kimage_validate_signature(struct kimage *image)
+>>>>    }
+>>>>    #endif
+>>>>
+>>>> +void kimage_file_post_load(struct kimage *image)
+>>>> +{
+>>>> +       ima_kexec_post_load(image);
+>>>> +}
+>>>> +
+>>>>    /*
+>>>>     * In file mode list of segments is prepared by kernel. Copy relevant
+>>>>     * data from user space, do error checking, prepare segment list
+>>>> @@ -399,6 +404,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
+>>>>
+>>>>           kimage_terminate(image);
+>>>>
+>>>> +       kimage_file_post_load(image);
+>>> I think it should be only done for the reboot case,  please just
+>>> exclude the kdump case here..
+>>>
+>> Thanks for the feedback RuiRui.  Appreciate it.
+>>
+>> Conceptually I agree with you that this needs to be done only for reboot.
+>> I need to figure out how to do it implementation wise.
+>>
+>> If you can give me pointers/suggestions, that would help.
+> Hi Tushar,
+>
+> You can check the flags argument in the function
+> if (flags & KEXEC_FILE_ON_CRASH) is true then this is a kdump kernel
+> loading, just skip the kimage_file_post_load in that case?
+Great.  Thanks for the pointer.  Will do.
+~Tushar
+>> ~Tushar
+>>>> +
+>>>>           ret = machine_kexec_post_load(image);
+>>>>           if (ret)
+>>>>                   goto out;
+>>>> diff --git a/kernel/kexec_internal.h b/kernel/kexec_internal.h
+>>>> index 74da1409cd14..98dd5fcafaf0 100644
+>>>> --- a/kernel/kexec_internal.h
+>>>> +++ b/kernel/kexec_internal.h
+>>>> @@ -30,6 +30,7 @@ static inline void kexec_unlock(void)
+>>>>
+>>>>    #ifdef CONFIG_KEXEC_FILE
+>>>>    #include <linux/purgatory.h>
+>>>> +void kimage_file_post_load(struct kimage *image);
+>>>>    void kimage_file_post_load_cleanup(struct kimage *image);
+>>>>    extern char kexec_purgatory[];
+>>>>    extern size_t kexec_purgatory_size;
+>>>> --
+>>>> 2.25.1
+>>>>
+>>>>
+>>>> _______________________________________________
+>>>> kexec mailing list
+>>>> kexec@lists.infradead.org
+>>>> http://lists.infradead.org/mailman/listinfo/kexec
+>>>>
