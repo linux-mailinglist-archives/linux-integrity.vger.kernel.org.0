@@ -2,82 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96D0750F25
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 19:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E884D750FD1
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 19:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjGLRA5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jul 2023 13:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S231179AbjGLRlL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jul 2023 13:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbjGLRA4 (ORCPT
+        with ESMTP id S231417AbjGLRlA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jul 2023 13:00:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B9F2111
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jul 2023 10:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689181209;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V34PBFVRSyPmXY6TnLemmwcb7RItdmjHqC9gKS1fTBo=;
-        b=fmKQuv4tvXcPIh/lauKsl5NkUchs/WK6tss+6Z8K2N33DlB3JvIL1+2RULNBvciypm/IVO
-        rtEOcnqp1RTaxAdywQqkgl8woR88SEhX5d6PI4GUbFI+M7k365YMuIXzrqzPlYIZ0/tNX4
-        aVq8tCPRuLSvqUoYgtrgZUl7JTE3QL4=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-494-VHSW0Q1YOm2SlKQAtb8K4A-1; Wed, 12 Jul 2023 13:00:08 -0400
-X-MC-Unique: VHSW0Q1YOm2SlKQAtb8K4A-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7673e4eee45so691482585a.0
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jul 2023 10:00:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689181208; x=1691773208;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V34PBFVRSyPmXY6TnLemmwcb7RItdmjHqC9gKS1fTBo=;
-        b=CY2h2gI41Ye/gH7NIXxifgoShsgQQsbQ8iBclrhoyYf0WwVX4MW/tz5R1Aik2bK/SL
-         77a24SIwKr7vMerVrC/WFyKYhAxunushLXcy2675wtY3Y3lCHQJ6fg3CQVYQo7fi+Rax
-         kvwsH0QZX4W+Kp4kfqaIrg9P/SUEj6O468vyJR70BleMrtk9e/qtI1QvQT9alSc9pEUv
-         R5mdfYLYoRduJQosjuQddVCfq5QmaYOZ9flIirYYPhGnlrHr+e9c6f+lU8HXycwbQHU7
-         6LIgbEvFUJobZ3SuL1JtD4sGj/IGwWcwnxtuvxCRmWdeQMvGPDD5gRDao9Vab+p/egRl
-         +l3w==
-X-Gm-Message-State: ABy/qLYGuk2nNzzcAWDVQm2AsPpm11Z/D/JFVCAw+fFAyZoQhYKdeksZ
-        sQuOarW8RkhpUd3AXOPMKOIdxGi/g6F9yaVi6TDKq4E0WJHZ6k0lsrKvebN5BF196fBigpkC9ko
-        pmGuhiQEG+zvdcERctYhfiO88Tj42
-X-Received: by 2002:a05:620a:318f:b0:765:4418:cac7 with SMTP id bi15-20020a05620a318f00b007654418cac7mr18968020qkb.73.1689181208070;
-        Wed, 12 Jul 2023 10:00:08 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGfbsBm1Dqr0aQLF1S4fgHLvR9TbsCSLLXCvHTFTZHyd5eS5VdOP6vDZI4492sbHtDleRsIrg==
-X-Received: by 2002:a05:620a:318f:b0:765:4418:cac7 with SMTP id bi15-20020a05620a318f00b007654418cac7mr18967998qkb.73.1689181207795;
-        Wed, 12 Jul 2023 10:00:07 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id w18-20020a0cb552000000b0063004b5482csm2342328qvd.92.2023.07.12.10.00.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 10:00:07 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 10:00:05 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Christian Hesse <mail@eworm.de>, linux-integrity@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Peter Huewe <peterhuewe@gmx.de>, stable@vger.kernel.org,
-        roubro1991@gmail.com
-Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
- Laptop Intel 12th gen
-Message-ID: <qvt4ndqc23ftspjtpljyv45yfhtxi6oomjios2nuk34bs7n5fi@2ye4znwhgn4a>
-References: <20230710133836.4367-1-mail@eworm.de>
- <20230710142916.18162-1-mail@eworm.de>
- <ZKxHfTkgKHYqhBz2@ziepe.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKxHfTkgKHYqhBz2@ziepe.ca>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 12 Jul 2023 13:41:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21E21980;
+        Wed, 12 Jul 2023 10:40:58 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CHcYiP014845;
+        Wed, 12 Jul 2023 17:40:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=4GxWEjvEv5Twr+uqJ2gvsf8uuNbg1yd7ft+BOI9rfXc=;
+ b=i63FOm5sV41HH/jiZSCYycXnNW5JTP01UGN1HMOzheCPsA1FqntCqzO7YqU7d4qEfacW
+ 61x2FcatxKFEJ8FhMm+BJz3VQZsJ3FNN6a53nPoCeBHTcoFrWNoi6sOwQafKG8A0YZYk
+ QP0JCSUxM+hZSI5PEvI+UpSfxa4Aq1xaroCp4VPiaV4v/1HrFHU5UeZP4JLlaTJuUm2b
+ Ku7diif+2epZcRrvhxJpvNRFPuj786j8Vrf9ZfBcXA4Fi5u+60ntskwCG3pWNbYt+ZaH
+ P1agTToYUbaXKvFv6hf2BxEbhPsKOBVlKY2KqwbBYWt/a+Fz8pTGS60UvXTfNVmZdHea 2g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rt0ejggsd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 17:40:37 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36CHcnNa016467;
+        Wed, 12 Jul 2023 17:40:37 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rt0ejggrs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 17:40:36 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36CFG6Ql027318;
+        Wed, 12 Jul 2023 17:40:35 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3rpye6cr15-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 17:40:35 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36CHeYDR62980456
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jul 2023 17:40:34 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9006858055;
+        Wed, 12 Jul 2023 17:40:34 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2F2B58043;
+        Wed, 12 Jul 2023 17:40:33 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.watson.ibm.com (unknown [9.31.99.213])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 12 Jul 2023 17:40:33 +0000 (GMT)
+Message-ID: <6173db54e3d75481a6b1f1079c5b06e1c1caf564.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] integrity: Always reference the blacklist keyring
+ with apprasial
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, roberto.sassu@huawei.com,
+        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Wed, 12 Jul 2023 13:40:33 -0400
+In-Reply-To: <20230705225229.1435691-1-eric.snowberg@oracle.com>
+References: <20230705225229.1435691-1-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: X4cOEriUldXrdCZUhBjrp-IAEXRya-0f
+X-Proofpoint-ORIG-GUID: 5vpcSxvj7l7Qp4NdG5MdwqYtSH5NEvjf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_12,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ spamscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 suspectscore=0
+ clxscore=1015 priorityscore=1501 mlxlogscore=999 bulkscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307120158
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,28 +96,26 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 03:01:33PM -0300, Jason Gunthorpe wrote:
-> On Mon, Jul 10, 2023 at 04:28:43PM +0200, Christian Hesse wrote:
-> > This device suffer an irq storm, so add it in tpm_tis_dmi_table to
-> > force polling.
+On Wed, 2023-07-05 at 18:52 -0400, Eric Snowberg wrote:
+> Commit 273df864cf746 ("ima: Check against blacklisted hashes for files with
+> modsig") introduced an appraise_flag option for referencing the blacklist
+> keyring.  Any matching binary found on this keyring fails signature
+> validation. This flag only works with module appended signatures.
 > 
-> I can't help but feel like we are doing something wrong in the Linux
-> driver that we keep having IRQ problems.
+> An important part of a PKI infrastructure is to have the ability to do
+> revocation at a later time should a vulnerability be found.  Expand the
+> revocation flag usage to all appraisal functions. The flag is now
+> enabled by default. Setting the flag with an IMA policy has been
+> deprecated. Without a revocation capability like this in place, only
+> authenticity can be maintained. With this change, integrity can now be
+> achieved with digital signature based IMA appraisal.
 > 
-> Surely Windows uses the IRQ on these devices? How does it work
-> reliably there?
-> 
-> Jason
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 
-I worry about it as well, especially as more vendors get added to the
-list. On the other hand it seems like every 6-12 months I am
-interacting with vendors that repeatedly forget to have reserved
-memory regions added to IVRS and DMAR tables for devices that need
-them. So I guess it is possible for the problem to be on their end as
-well. For at least one case that someone looked at back in May, it
-looked like he could see the issue looking at a schematic for the
-system.
+Thanks, Eric.  Other than including "appraise_flag=check_blacklist"
+when displaying the measurement list, it looks good.
+-- 
+thanks,
 
-Regards,
-Jerry
+Mimi
 
