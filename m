@@ -2,56 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4A975113F
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 21:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E548B751165
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 21:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjGLTa3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jul 2023 15:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S232417AbjGLTjk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jul 2023 15:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbjGLTa2 (ORCPT
+        with ESMTP id S231594AbjGLTjk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jul 2023 15:30:28 -0400
+        Wed, 12 Jul 2023 15:39:40 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88B35B7
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jul 2023 12:30:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E90C31FC7
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Jul 2023 12:39:38 -0700 (PDT)
 Received: from [192.168.87.36] (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CAAA921C44E5;
-        Wed, 12 Jul 2023 12:30:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CAAA921C44E5
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3BF5221C44E3;
+        Wed, 12 Jul 2023 12:39:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3BF5221C44E3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1689190225;
-        bh=Yu+xJdcstGuYIdFXmY3aIzZrTs0/bPtsUuWd7EMLaVc=;
+        s=default; t=1689190778;
+        bh=ejHvuhi9pcpP1A/ico7WTH2llnMHDBUFt6eYXEXSrZs=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BDT+i0Qpl4arWVvlIM+98p/Wb2mlz6qlnfQBR0ByVk19cIGp/JMPGPSdueCTS0f1R
-         5zor+uh4a6KF9Qh8SMWGaIObVDf+aKkd2kf53BTpWDnNaNGRQQRoqRvMt8Ei1WEGFo
-         jdCPbvHM1oTehF/9BxOxsfHjayVP1pCtJKd2ZpPw=
-Message-ID: <85dc6104-0d15-c31b-b36f-5345480d01e6@linux.microsoft.com>
-Date:   Wed, 12 Jul 2023 12:30:24 -0700
+        b=g63x7OksBugGZW5IoHkQL3n4Ssn/2rVIAZ/cAJBR01rYWK4kXZ8dr2krMs1EdBAjl
+         ENUOIzrBM6iCrWAmBwXFBkcV+N0mNwaLSfWxtk03LatROQ3XWaR8hPTu9f19CIg6PV
+         a7FCHvo9RWisJWYrr9zSsjGSaZ7iGn/o7He8pPec=
+Message-ID: <105faa02-4008-5143-0ee3-8417e1411e54@linux.microsoft.com>
+Date:   Wed, 12 Jul 2023 12:39:37 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 10/10] kexec: update kexec_file_load syscall to call
- ima_kexec_post_load
+Subject: Re: [PATCH 03/10] ima: allocate buffer at kexec load to hold ima
+ measurements
 Content-Language: en-US
-To:     RuiRui Yang <ruyang@redhat.com>
-Cc:     zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
-        kexec@lists.infradead.org, linux-integrity@vger.kernel.org,
-        code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com,
-        Eric Biederman <ebiederm@xmission.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
+        noodles@fb.com, bauermann@kolabnow.com, kexec@lists.infradead.org,
+        linux-integrity@vger.kernel.org
+Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com,
+        "Eric W . Biederman" <ebiederm@xmission.com>
 References: <20230703215709.1195644-1-tusharsu@linux.microsoft.com>
- <20230703215709.1195644-11-tusharsu@linux.microsoft.com>
- <CALu+AoQC101fcbJjLdJHD7QtqeXzt5uOZDgNYvob0U_NGyaqCQ@mail.gmail.com>
- <b4047d8d-2c7c-e357-1c1f-cc55978fd963@linux.microsoft.com>
- <CALu+AoSWcEU7PfHvejYAuFWMEO6uGEWPnJMXuW2kNG-MUshFsw@mail.gmail.com>
+ <20230703215709.1195644-4-tusharsu@linux.microsoft.com>
+ <273cea4f-9c82-e5ca-20e4-1db30d83393e@linux.ibm.com>
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <CALu+AoSWcEU7PfHvejYAuFWMEO6uGEWPnJMXuW2kNG-MUshFsw@mail.gmail.com>
+In-Reply-To: <273cea4f-9c82-e5ca-20e4-1db30d83393e@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,94 +58,132 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 7/11/23 18:28, RuiRui Yang wrote:
-> On Wed, 12 Jul 2023 at 03:15, Tushar Sugandhi
-> <tusharsu@linux.microsoft.com> wrote:
->>
->> On 7/7/23 01:20, RuiRui Yang wrote:
->>> On Tue, 4 Jul 2023 at 05:58, Tushar Sugandhi
->>> <tusharsu@linux.microsoft.com> wrote:
->>>> The kexec_file_load syscall is used to load a new kernel for kexec.
->>>> The syscall needs to update its function to call ima_kexec_post_load, which
->>>> was implemented in a previous patch.  ima_kexec_post_load takes care of
->>>> mapping the measurement list for the next kernel and registering a reboot
->>>> notifier if it's not already registered.
->>>>
->>>> Modify the kexec_file_load syscall to call ima_kexec_post_load after the
->>>> image has been loaded and prepared for kexec.  This ensures that the IMA
->>>> measurement list will be available to the next kernel after a kexec reboot.
->>>> This also ensures the measurements taken in the window between kexec load
->>>> and execute are captured and passed to the next kernel.
->>>>
->>>> Declare the kimage_file_post_load function in the kernel/kexec_internal.h,
->>>> so it can be properly used in the syscall.
->>>>
->>>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->>>> ---
->>>>    kernel/kexec_file.c     | 7 +++++++
->>>>    kernel/kexec_internal.h | 1 +
->>>>    2 files changed, 8 insertions(+)
->>>>
->>>> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
->>>> index f989f5f1933b..efe28e77280c 100644
->>>> --- a/kernel/kexec_file.c
->>>> +++ b/kernel/kexec_file.c
->>>> @@ -184,6 +184,11 @@ kimage_validate_signature(struct kimage *image)
->>>>    }
->>>>    #endif
->>>>
->>>> +void kimage_file_post_load(struct kimage *image)
->>>> +{
->>>> +       ima_kexec_post_load(image);
->>>> +}
->>>> +
->>>>    /*
->>>>     * In file mode list of segments is prepared by kernel. Copy relevant
->>>>     * data from user space, do error checking, prepare segment list
->>>> @@ -399,6 +404,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
->>>>
->>>>           kimage_terminate(image);
->>>>
->>>> +       kimage_file_post_load(image);
->>> I think it should be only done for the reboot case,  please just
->>> exclude the kdump case here..
->>>
->> Thanks for the feedback RuiRui.  Appreciate it.
->>
->> Conceptually I agree with you that this needs to be done only for reboot.
->> I need to figure out how to do it implementation wise.
->>
->> If you can give me pointers/suggestions, that would help.
-> Hi Tushar,
+On 7/11/23 13:16, Stefan Berger wrote:
 >
-> You can check the flags argument in the function
-> if (flags & KEXEC_FILE_ON_CRASH) is true then this is a kdump kernel
-> loading, just skip the kimage_file_post_load in that case?
-Great.  Thanks for the pointer.  Will do.
+>
+> On 7/3/23 17:57, Tushar Sugandhi wrote:
+>> The IMA subsystem needs a dedicated mechanism to reserve extra memory 
+>> for
+>> measurements added between the kexec 'load' and kexec 'execute'.
+>>
+>> Update ima_add_kexec_buffer to allocate a buffer of a sufficient size
+>> taking ima binary runtime measurements size, size of ima_kexec_hdr, and
+>> IMA_KEXEC_EXTRA_SIZE into account.  Adjust the kexec_segment_size to 
+>> align
+>> to the PAGE_SIZE.  Call ima_allocate_buf_at_kexec_load() to allocate the
+>> buffer.
+>>
+>> This patch assumes the extra space defined (IMA_KEXEC_EXTRA_SIZE) is
+>> sufficient to handle the additional measurements.  This should be as per
+>> the system requirements and based on the number of additional 
+>> measurements
+>> expected during the window from kexec 'load' to kexec 'execute'.
+>
+> This could be the most problematic part if the 'execute' happens much 
+> later
+> than the 'load' with lots of measurement activity in between. I am 
+> wondering
+> whether not doing anything at 'load' time and doing the whole work at 
+> 'execute' time
+Technically I don't want to do anything at kexec 'load' time.
+But as I said elsewhere in this series, I am under impression that 
+segment allocation
+must happen at kexec 'load' time.
+
+
+But if that understanding is wrong - then we can move the entire logic 
+to kexec 'execute' time.
+
+I am currently trying to validate if moving the logic to kexec 'execute' 
+works.
+> wouldn't be the right thing to do ?
+>
+> Otherwise, if we wanted the work to be split as you suggest, could you
+> - krealloc the src_pages (now in kimage_map_segment) to add space for 
+> a few more pages needed for the additional measurements
+> - add those few more pages to src_pages
+> - vunmap the previous mapping
+> - vmap the extended src_pages array
+> - update ima_kexec_file.buf with the diff between the new and old 
+> vmap'ed addresses
+> - append to the existing log
+>
+> This presumably would help resolve this potential issue.
+Thanks for the detailed thoughts.
+I will investigate if this approach is needed, based on my comment above.
+If it is needed and feasible, I will incorporate it in the next iteration.
+
+Thanks again.
+
 ~Tushar
->> ~Tushar
->>>> +
->>>>           ret = machine_kexec_post_load(image);
->>>>           if (ret)
->>>>                   goto out;
->>>> diff --git a/kernel/kexec_internal.h b/kernel/kexec_internal.h
->>>> index 74da1409cd14..98dd5fcafaf0 100644
->>>> --- a/kernel/kexec_internal.h
->>>> +++ b/kernel/kexec_internal.h
->>>> @@ -30,6 +30,7 @@ static inline void kexec_unlock(void)
->>>>
->>>>    #ifdef CONFIG_KEXEC_FILE
->>>>    #include <linux/purgatory.h>
->>>> +void kimage_file_post_load(struct kimage *image);
->>>>    void kimage_file_post_load_cleanup(struct kimage *image);
->>>>    extern char kexec_purgatory[];
->>>>    extern size_t kexec_purgatory_size;
->>>> --
->>>> 2.25.1
->>>>
->>>>
->>>> _______________________________________________
->>>> kexec mailing list
->>>> kexec@lists.infradead.org
->>>> http://lists.infradead.org/mailman/listinfo/kexec
->>>>
+
+>
+> The src_pages is currently not kfree'd -- may be a memory leak.
+>
+> Regards,
+>    Stefan
+>
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> ---
+>>   security/integrity/ima/ima.h       |  2 ++
+>>   security/integrity/ima/ima_kexec.c | 21 ++++++++++-----------
+>>   2 files changed, 12 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index c29db699c996..2ffda9449b9b 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -43,6 +43,8 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, 
+>> TPM_PCR10 = 10 };
+>>     #define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks 
+>> : 0)
+>>   +#define IMA_KEXEC_EXTRA_SIZE (16 * PAGE_SIZE)
+>> +
+>>   /* current content of the policy */
+>>   extern int ima_policy_flag;
+>>   diff --git a/security/integrity/ima/ima_kexec.c 
+>> b/security/integrity/ima/ima_kexec.c
+>> index 858b67689701..7deb8df31485 100644
+>> --- a/security/integrity/ima/ima_kexec.c
+>> +++ b/security/integrity/ima/ima_kexec.c
+>> @@ -188,31 +188,30 @@ void ima_add_kexec_buffer(struct kimage *image)
+>>       /* use more understandable variable names than defined in kbuf */
+>>       void *kexec_buffer = NULL;
+>>       size_t kexec_buffer_size;
+>> -    size_t kexec_segment_size;
+>>       int ret;
+>>         /*
+>> -     * Reserve an extra half page of memory for additional measurements
+>> -     * added during the kexec load.
+>> +     * Reserve extra memory for measurements added in the window from
+>> +     * kexec 'load' to kexec 'execute'.
+>>        */
+>> -    binary_runtime_size = ima_get_binary_runtime_size();
+>> +    binary_runtime_size = ima_get_binary_runtime_size() +
+>> +                  sizeof(struct ima_kexec_hdr) +
+>> +                  IMA_KEXEC_EXTRA_SIZE;
+>> +
+>>       if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
+>>           kexec_segment_size = ULONG_MAX;
+>>       else
+>> -        kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
+>> -                       PAGE_SIZE / 2, PAGE_SIZE);
+>> +        kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
+>> +
+>>       if ((kexec_segment_size == ULONG_MAX) ||
+>>           ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
+>>           pr_err("Binary measurement list too large.\n");
+>>           return;
+>>       }
+>>   -    ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
+>> -                  kexec_segment_size);
+>> -    if (!kexec_buffer) {
+>> -        pr_err("Not enough memory for the kexec measurement 
+>> buffer.\n");
+>> +    ret = ima_allocate_buf_at_kexec_load();
+>> +    if (ret < 0)
+>>           return;
+>> -    }
+>>         kbuf.buffer = kexec_buffer;
+>>       kbuf.bufsz = kexec_buffer_size;
