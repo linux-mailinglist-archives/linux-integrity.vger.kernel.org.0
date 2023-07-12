@@ -2,190 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323D974FDEF
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 05:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABDE74FFB1
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jul 2023 08:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjGLDng (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jul 2023 23:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S231674AbjGLGtE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jul 2023 02:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbjGLDna (ORCPT
+        with ESMTP id S231322AbjGLGs6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jul 2023 23:43:30 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75246198B;
-        Tue, 11 Jul 2023 20:43:20 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id D850A21C4255; Tue, 11 Jul 2023 20:43:19 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D850A21C4255
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1689133399;
-        bh=AQSDwVr//PWnanNDVqJOKnFjTzDXsVxMzaz8VzfLX9U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gd86CwrooCUzTzLtcrbfpPja1MDbDSHeRi2drRdRHQKEr7+MeHUdPmo1OYofl8LO5
-         /BxTBXcBx+61KNVGQwmn84+RCmceckkYRqDvUCBubBwyfYCe0o4LvKZoEff8AP92wV
-         PLwJXBucI4r1Hv+6Ky15fLjo3Ox/F0xK3pPqj7RM=
-Date:   Tue, 11 Jul 2023 20:43:19 -0700
-From:   Fan Wu <wufan@linux.microsoft.com>
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, eparis@redhat.com,
-        paul@paul-moore.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, audit@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v10 11/17] dm-verity: consume root hash digest and
- signature data via LSM hook
-Message-ID: <20230712034319.GA17642@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
- <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
- <ZKgm+ffQbdDTxrg9@redhat.com>
+        Wed, 12 Jul 2023 02:48:58 -0400
+X-Greylist: delayed 120931 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Jul 2023 23:48:56 PDT
+Received: from mx.mylinuxtime.de (mx.mylinuxtime.de [195.201.174.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5F01703
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Jul 2023 23:48:56 -0700 (PDT)
+Received: from leda.eworm.net (unknown [194.36.25.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mx.mylinuxtime.de (Postfix) with ESMTPSA id BF48E23D399;
+        Wed, 12 Jul 2023 08:48:54 +0200 (CEST)
+Date:   Wed, 12 Jul 2023 08:48:50 +0200
+From:   Christian Hesse <list@eworm.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Christian Hesse <mail@eworm.de>, stable@vger.kernel.org,
+        roubro1991@gmail.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
+ Laptop Intel 12th gen
+Message-ID: <20230712084850.1e12ca3f@leda.eworm.net>
+In-Reply-To: <31d20085105784a02b60f11d46f2c7fec4d3aa0a.camel@kernel.org>
+References: <20230710133836.4367-1-mail@eworm.de>
+        <20230710142916.18162-1-mail@eworm.de>
+        <20230710231315.4ef54679@leda.eworm.net>
+        <bd0587e16d55ef38277ab1f6169909ae7cde3542.camel@kernel.org>
+        <31d20085105784a02b60f11d46f2c7fec4d3aa0a.camel@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+X-Face: %O:rCSk<c"<MpJ:yn<>HSKf7^4uF|FD$9$I0}g$nbnS1{DYPvs#:,~e`).mzj\$P9]V!WCveE/XdbL,L!{)6v%x4<jA|JaB-SKm74~Wa1m;|\QFlOg>\Bt!b#{;dS&h"7l=ow'^({02!2%XOugod|u*mYBVm-OS:VpZ"ZrRA4[Q&zye,^j;ftj!Hxx\1@;LM)Pz)|B%1#sfF;s;,N?*K*^)
+Face:   iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAGFBMVEUZFRFENy6KVTKEd23CiGHeqofJvrX4+vdHgItOAAAACXBIWXMAAA3XAAAN1wFCKJt4AAACUklEQVQ4y2VUTZeqMAxNxXG2Io5uGd64L35unbF9ax0b3OLxgFs4PcLff0lBHeb1QIq5uelNCEJNq/TIFGyeC+iugH0WJr+B1MvzWASpuP4CYHOB0VfoDdddwA7OIFQIEHjXDiCtV5e9QX0WMu8AG0mB7g7WP4GqeqVdsi4vv/5kFBvaF/zD7zDquL4DxbrDGDyAsgNYOsJOYzth4Q9ZF6iLV+6TLAT1pi2kuvgAtZxSjoG8cL+8vIn251uoe1OOEWwbIPU04gHsmMsoxyyhYsD2FdIigF1yxaVbBuSOCAlCoX324I7wNMhrO1bhOLsRoA6DC6wQ5eQiSG5BiWQfM4gN+uItQTRDMaJUhVbGyKWCuaaUGSVFVKpl4PdoDn3yY8J+YxQxyhlHfoYOyPgyDcO+cSQK6Bvabjcy2nwRo3pxgA8jslnCuYw23ESOzHAPYwo4ITNQMaOO+RGPEGhSlPEZBh2jmBEjQ5cKbxmr0ruAe/WCriUxW76I8T3h7vqY5VR5wXLdERodg2rHEzdxxk5KpXTL4FwnarvndKM5/MWDY5CuBBdQ+3/0ivsUJHicuHd+Xh3jOdBL+FjSGq4SPCwco+orpWlERRTNo7BHCvbNXFVSIQMp+P5QsIL9upmr8kMTUOfxEHoanwzKRcNAe76WbjBwex/RkdHu48xT5YqP70DaMOhBcTHmAVDxLaBdle93oJy1QKFUh2GXT4am+YH/GGel1CeI98GdMXsytjCKIq/9cMrlgxFCROv+3/BU1fijNpcVD6DxE8VfLBaxUGr1D5usgDYdjwiPAAAAAElFTkSuQmCC
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKgm+ffQbdDTxrg9@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/yQI_sn/JO1S3ejmlYu+D=W5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 10:53:45AM -0400, Mike Snitzer wrote:
-Thanks for the review!
+--Sig_/yQI_sn/JO1S3ejmlYu+D=W5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Wed, Jun 28 2023 at  5:09P -0400,
-> Fan Wu <wufan@linux.microsoft.com> wrote:
-> 
-> > From: Deven Bowers <deven.desai@linux.microsoft.com>
-> > 
-> > dm-verity provides a strong guarantee of a block device's integrity. As
-> > a generic way to check the integrity of a block device, it provides
-> > those integrity guarantees to its higher layers, including the filesystem
-> > level.
-> > 
-> > An LSM that control access to a resource on the system based on the
-> > available integrity claims can use this transitive property of
-> > dm-verity, by querying the underlying block_device of a particular
-> > file.
-> > 
-> > The digest and signature information need to be stored in the block
-> > device to fulfill the next requirement of authorization via LSM policy.
-> > This will enable the LSM to perform revocation of devices that are still
-> > mounted, prohibiting execution of files that are no longer authorized
-> > by the LSM in question.
-> > 
-> > This patch added two security hook calls in dm-verity to save the
-> > dm-verity roothash and the roothash signature to LSM blobs.
-> > 
-> > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> > ---
-...
-> > diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-> > index 4836508ea50c..33165dd7470f 100644
-> > --- a/drivers/md/dm-verity-verify-sig.c
-> > +++ b/drivers/md/dm-verity-verify-sig.c
-> > @@ -9,6 +9,9 @@
-> >  #include <linux/verification.h>
-> >  #include <keys/user-type.h>
-> >  #include <linux/module.h>
-> > +#include <linux/security.h>
-> > +#include <linux/dm-verity.h>
-> > +#include "dm-core.h"
-> 
-> Why are you including dm-core.h here?
-This is used to get the complete definition of struct mapped_device to extract
-the struct block_device from it.
+Jarkko Sakkinen <jarkko@kernel.org> on Tue, 2023/07/11 00:51:
+> On Tue, 2023-07-11 at 00:29 +0300, Jarkko Sakkinen wrote:
+> > OK, this good to hear! I've been late with my pull request (past rc1)
+> > because of kind of conflicting timing with Finnish holiday season and
+> > relocating my home office.
+> >=20
+> > I'll replace v2 patches with v3 and send the PR for rc2 after that.
+> > So unluck turned into luck this time :-)
+> >=20
+> > Thank you for spotting this! =20
+>=20
+> Please, sanity check before I send the PR for rc2:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/
 
-> 
-> >  #include "dm-verity.h"
-> >  #include "dm-verity-verify-sig.h"
-> >  
-> > @@ -97,14 +100,17 @@ int verity_verify_sig_parse_opt_args(struct dm_arg_set *as,
-> >   * verify_verify_roothash - Verify the root hash of the verity hash device
-> >   *			     using builtin trusted keys.
-> >   *
-> > + * @bdev: block_device representing the device-mapper created block device.
-> > + *	  Used by the security hook, to set information about the block_device.
-> >   * @root_hash: For verity, the roothash/data to be verified.
-> >   * @root_hash_len: Size of the roothash/data to be verified.
-> >   * @sig_data: The trusted signature that verifies the roothash/data.
-> >   * @sig_len: Size of the signature.
-> >   *
-> >   */
-> > -int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
-> > -			    const void *sig_data, size_t sig_len)
-> > +int verity_verify_root_hash(struct block_device *bdev, const void *root_hash,
-> > +			    size_t root_hash_len, const void *sig_data,
-> > +			    size_t sig_len)
-> >  {
-> >  	int ret;
-> >  
-> > @@ -126,8 +132,12 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
-> >  				NULL,
-> >  #endif
-> >  				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
-> > +	if (ret)
-> > +		return ret;
-> >  
-> > -	return ret;
-> > +	return security_bdev_setsecurity(bdev,
-> > +					 DM_VERITY_SIGNATURE_SEC_NAME,
-> > +					 sig_data, sig_len);
-> >  }
-> >  
-> >  void verity_verify_sig_opts_cleanup(struct dm_verity_sig_opts *sig_opts)
-> 
-> Both of your calls to security_bdev_setsecurity() to set your blobs in
-> the bdev are suspect because you're doing so from the verity_ctr().
-> The mapped_device has 2 dm_table slots (active and inactive).  The
-> verity_ctr() becomes part of the inactive slot, there is an extra step
-> to bind the inactive table to the active table.
-> 
-> This leads to you changing the blobs in the global bdev _before_ the
-> table is actually active.  It is possible that the inactive table will
-> simply be removed and the DM verity device put back in service;
-> leaving your blob(s) in the bdev inconsistent.
-> 
-> This issue has parallels to how we need to defer changing the global
-> queue_limits associated with a request_queue until _after_ all table
-> loading is settled and then the update is done just before resuming
-> the DM device (mapped_device) -- see dm_table_set_restrictions().
-> 
-> Unfortunately, this feels like it may require a new hook in the
-> target_type struct (e.g. ->finalize())
-> 
-> Mike
-Thanks for pointing out this issue. We were calling security_bdev_setsecurity()
-because the roothash signature data is only available in verity_ctr()
-and it is discarded after verity_ctr() finishes.
-After digging deeper into the table_load, I realized that we were indeed
-wrong here.
+Looks good and works as expected on Framework Laptop 12th Gen, verified by =
+me
+and someone in the linked bugzilla ticket. I do not have Framework Laptop
+13th Gen available for testing.
 
-Based on my understanding of your suggestion, it seems that the correct
-approach would be to save the roothash signature into the struct dm_target
-and then invoke security_bdev_setsecurity() before activating
-the inactive table in the __bind function (where dm_table_set_restrictions is called).
+Looks like there are general workarounds by disabling interrupts after a
+number of unhandled IRQs. Will this still go in?
+--=20
+main(a){char*c=3D/*    Schoene Gruesse                         */"B?IJj;MEH"
+"CX:;",b;for(a/*    Best regards             my address:    */=3D0;b=3Dc[a+=
++];)
+putchar(b-1/(/*    Chris            cc -ox -xc - && ./x    */b/42*2-3)*42);}
 
-To facilitate this process, it seems appropriate to introduce a new hook
-called finalize() within the struct target_type. This hook would enable
-targets to define tasks that need to be completed before activating
-a new table.
+--Sig_/yQI_sn/JO1S3ejmlYu+D=W5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-In our specific case, we would add a finalize hook to the dm-verity module,
-allowing us to call security_bdev_setsecurity() and associate the roothash
-information in the struct dm_target with the struct block_device of
-the struct mapped_device. Is this correct?
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-- Fan
+iQEzBAEBCAAdFiEEXHmveYAHrRp+prOviUUh18yA9HYFAmSuTNIACgkQiUUh18yA
+9HYg+QgAwzieNysWbqPhs/vDDbC2UQSFn9f7GXd/kHbjTSNbH3RMsJCwzB1W9kIl
+cjxizF1ljdu1YUfq/GgLn1GpOhqCOPbYDSmnCiPHI25I4h25djJwBxTHOwjYmYdR
+JvnSC8h3VczNcJLjswKX2lzl+nkNGclkszYF/RaTwX+Rj4sTRx56XbXsAxGYgQPN
+HMabdUlm34Tb9uOXETAl4k1nE1sS/iQDpgLnES9HOZPSvusjZ5oiKiwGypT/FFxe
+//Zu3u0fCFevFFHokDswB4keGaAh/skbZkpJhmGPMo80Pq8rayO5A7wou9yVLhO6
+KmVSNyN/dJiRaa0JxdnUxQI0Xq576w==
+=tP9E
+-----END PGP SIGNATURE-----
 
+--Sig_/yQI_sn/JO1S3ejmlYu+D=W5--
