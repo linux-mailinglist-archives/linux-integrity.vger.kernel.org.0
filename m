@@ -2,81 +2,61 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCFD752745
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jul 2023 17:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C945775279C
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jul 2023 17:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbjGMPeg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jul 2023 11:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
+        id S231231AbjGMPpN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 13 Jul 2023 11:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbjGMPeT (ORCPT
+        with ESMTP id S229897AbjGMPpM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jul 2023 11:34:19 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F422D48;
-        Thu, 13 Jul 2023 08:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1689262442; x=1689867242; i=linosanfilippo@gmx.de;
- bh=AC2RBZA0N9RMCn7XiFb7g7VTZZV5BgZub39Y6k6C61o=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=YM3E6VrUAEyZEPsbhJ5tjTTAEl/pO3a679p+YZr/UKpm/nryQ8vcc6WOCybFawFf0wNRzBY
- uS+pT2krFzNxziMWXGF32F1RDdy4/qdCxkAFFa35HlCMWeyAe3VxUXQePA95v39T+wkUfxCmP
- f7AxUg5V9fZFKyVdyf7t0U0PJ7IvcFmpttdZHjea6+z4QmtHgjprzHUbUb7jhaL4G78H48Xw5
- iuDoIG0o5XAqVSVcCQS5JL5K3GFGNIFR13gD9gSNikMxtL+iLj4WwsLHnXL5hg5CCXc9p/x7I
- WU1TtK0HtfoIsxbO7XnTCdfYrkOgjwzF0yJLZrAiYSpqbzeaWpjQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.10.87] ([180.183.243.38]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbAgq-1pn6Tx3d4C-00bbDd; Thu, 13
- Jul 2023 17:34:02 +0200
-Message-ID: <d9051309-618d-edac-8ed7-061f740d0096@gmx.de>
-Date:   Thu, 13 Jul 2023 17:33:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
- Laptop Intel 12th gen
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>, Grundik <ggrundik@gmail.com>,
-        Christian Hesse <list@eworm.de>,
-        linux-integrity@vger.kernel.org
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Christian Hesse <mail@eworm.de>, stable@vger.kernel.org,
-        roubro1991@gmail.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20230710133836.4367-1-mail@eworm.de>
- <20230710142916.18162-1-mail@eworm.de>
- <20230710231315.4ef54679@leda.eworm.net>
- <bd0587e16d55ef38277ab1f6169909ae7cde3542.camel@kernel.org>
- <bb5580e93d244400c3330d7091bf64868aa2053f.camel@gmail.com>
- <0f272843a33a1706dbcbb2d84b02e3951ee60cbb.camel@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-In-Reply-To: <0f272843a33a1706dbcbb2d84b02e3951ee60cbb.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:78VQjn+iF+tebOEulfJFQdV5ztIL2JV5S0ry84hHkR8EDZp67Zo
- APn5Zce3PTq/esOHqdmzoc4p41Gz+y6KGxsPAQMYzL8I6jYTb5a6nADus30fMuV8KGErJBy
- NFLT46d8zVMYqpPUkf6lDIKlBxsxnvZGmAGJU5ltd8+iVrTL2RnzssMdb6e1oXCriHBdqHY
- iNvOOnryVmBn7UozzQH5A==
-UI-OutboundReport: junk:10;M01:P0:iAwsYVtselo=;h7FIz2BjPy4UU/VZ2UCCrzgCeK9+l
- VG9RWb12gTQuv77jvZT6Fz4/+IR05qxCJ35rCrrUZUmLoponj53x0W2ujG+7w8yvr215hFvB8
- L6tUgfBGCSFLVEbLV87YCTtmQwESqMSF1KGC2D31vwZPbAZK0Rq3iQtK3lBc2BPjwHSva9TgA
- sE5tNMtynwDK03CXc3uTftEoaO1WP8ywOUmpow6bAnjm2BKlKhLXWy6+8U1GFmey3AaXKNXIX
- NXQPjYUKUWMsaKwLR51hS1p+xc6ZlOe88NMiyxMlf4ZknDFPHZAq20hJCLvvCEgVuO5IVcQ4P
- 5I2/h5SppZEurJd31XV8iv6v5X1a96URAhyZ2UH3nODAWpVYcnARMo3BSUL6qjhYnVvJ2Pz05
- jibSS1DcKEwr+OtsJTo+l0n0SYSMHy2mo28dkKGeESH8nDgAa56Doi8YDy40cQWd8uDXP/yBt
- LwK39zjzf4woHr+y31oDR8DuvLVx+r8kzv1ds8yecaqm7X83VTUbe6kaT53W1tADMwQZxd80A
- rNDBZbUllfPs3oLL5P3Pwi83+K99CD6/52seqEm/+yzfHq0u1cC73r0gWst9gE1tXoPyHdtYx
- 0AGTwYWiSmNmhHaCeAEB2mRYSohseO2mzN35cmfglg8cwWboBil0/k7SwaNQ33AFv21tEepF1
- QRVdoAz4yYVzur4PxxitV+FRHjw237pAnmUinxvwh6mSKWQrT7km8zvBzQ9/xeJ8rZZJyxbBB
- 2a52jYKyArrreSkR/ldsjVNTVDNvoZJyWpFq/f2pZjXVpKH6VuE4nVK8JWG+H5253MgETLFeq
- DgpNngU+RXZeUwR4mesLZ/Ex9hqLGjjxy/5u0ZfAgZTCvT1T7zWssMR/vIuou9tgv6eiQGINC
- xUuO4A0yGqvRA+mNYSSo8lGtWsrC0qPADSyNZFHmrjzpUAVB9LtmNC5AohXdFmDYduER+/SyJ
- D+J2Aj/3IA7I6iS3SAbk6pVgFu5OYNtBRZLan0ZKr5Prt3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Thu, 13 Jul 2023 11:45:12 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4BA2680;
+        Thu, 13 Jul 2023 08:45:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689263111; x=1720799111;
+  h=date:from:to:cc:subject:message-id;
+  bh=9/FLSPVdU4RNS+r4dReJ2NONh6zf50wlqAxsuoP5f0g=;
+  b=TNuv+nBuJxdw35a8vSQXWLYpBE+3CkDcEz7m3K6MoP5tzji/JrFjJWKo
+   0Zm1CUoX60H604RhdHWkgqpFd/ubCYMqMa3l+I2cPCChis1VCN8PRmwbe
+   OsI8NNRacMDM0ArLZHxy1Cy3AoxYN4sF0jaOt/ki14HX+5UvHGiXvLu5R
+   KvndMyZCOJED/IVmDpn7OiaK5vscZbL4yBIaWzkHnnS3TgXU+Tze0u9lo
+   bAlgxXfHornWOr3MZYypfAhqJyRz/Onv0c3EcrALVycW3f6fTv5Dwgxbx
+   dC3lna5UIVpR0IViUm3rRlRxDVuMukRSipU9PwTPOubzjDowZpz3GOD1R
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="355158640"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="355158640"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 08:45:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="846124438"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="846124438"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 13 Jul 2023 08:45:00 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qJyV1-0006in-1g;
+        Thu, 13 Jul 2023 15:44:59 +0000
+Date:   Thu, 13 Jul 2023 23:44:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [linux-next:master] BUILD REGRESSION
+ e3262265625831348cfb3128d35907ead75d8bf7
+Message-ID: <202307132315.M00QjCo4-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,72 +64,196 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: e3262265625831348cfb3128d35907ead75d8bf7  Add linux-next specific files for 20230713
 
-On 11.07.23 23:50, Jarkko Sakkinen wrote:
-> On Tue, 2023-07-11 at 15:41 +0300, Grundik wrote:
->> On Tue, 2023-07-11 at 00:29 +0300, Jarkko Sakkinen wrote:
->>> On Mon, 2023-07-10 at 23:13 +0200, Christian Hesse wrote:
->>>
->>>
->>> OK, this good to hear! I've been late with my pull request (past rc1)
->>> because of kind of conflicting timing with Finnish holiday season and
->>> relocating my home office.
->>>
->>> I'll replace v2 patches with v3 and send the PR for rc2 after that.
->>> So unluck turned into luck this time :-)
->>>
->>> Thank you for spotting this!
->>
->> I want to say: this issue is NOT limited to Framework laptops.
->>
->> For example this MSI gen12 i5-1240P laptop also suffers from same
->> problem:
->>         Manufacturer: Micro-Star International Co., Ltd.
->>         Product Name: Summit E13FlipEvo A12MT
->>         Version: REV:1.0
->>         SKU Number: 13P3.1
->>         Family: Summit
->>
->> So, probably just blacklisting affected models is not the best
->> solution...
->
-> It will be supplemented with
->
-> https://lore.kernel.org/linux-integrity/CTYXI8TL7C36.2SCWH82FAZWBO@suppi=
-lovahvero/T/#me895f1920ca6983f791b58a6fa0c157161a33849
->
-> Together they should fairly sustainable framework.
->
-> Lino, can you add the same fixes tag as for this. It would probably
-> ignore inline comments to keep the patch minimal since it is a
-> critical fix. Just do the renames, remove inline comments and
-> send v3.
->
-> For tpm_tis_check_for_interrupt_storm(), you can could rename it
-> simply as tpm_tis_update_unhandle_irqs() as that it what it does
-> (my review did not include a suggestion for this).
->
-> This way I think it should be fairly trivial to get a version that
-> can be landed.
->
-> To put short:
-> 1. Do the renames as suggested, they are good enough for me.
-> 2. Drop inline comments, their usefulness is somewhat questionable
->    and they increase the diff.
-> 3. Generally aim for minimal diff but I think this should be good
->    enough if you do steps 1 and 2.
->
-> If you don't have the time at hand, I can carefully do these cleanups
-> and apply the patch. If you have the time and motivation, go ahead
-> and send v3.
->> BR, Jarkko
+Error/Warning reports:
 
+https://lore.kernel.org/oe-kbuild-all/202306260401.qZlYQpV2-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202307131717.LtwApG0z-lkp@intel.com
 
-No problem, I can do this. But note that the next version will be v4 not
-v3 (as v3 is the version you recently reviewed).
+Error/Warning: (recently discovered and may have been fixed)
 
+drivers/input/touchscreen/iqs7211.c:2464:12: warning: cast to smaller integer type 'enum iqs7211_dev_id' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+drivers/mfd/max77541.c:176:18: warning: cast to smaller integer type 'enum max7754x_ids' from 'const void *' [-Wvoid-pointer-to-enum-cast]
 
-Regards,
-Lino
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
+drivers/char/tpm/tpm_tis_spi_main.c:137 tpm_tis_spi_transfer_half() error: uninitialized symbol 'ret'.
+drivers/net/ethernet/mellanox/mlx5/core/lib/devcom.c:98 mlx5_devcom_register_device() error: uninitialized symbol 'tmp_dev'.
+kernel/trace/trace_functions_graph.c:1012 print_graph_return() warn: bitwise AND condition is false here
+kernel/trace/trace_functions_graph.c:726 print_graph_entry_leaf() warn: bitwise AND condition is false here
+net/wireless/scan.c:373 cfg80211_gen_new_ie() warn: potential spectre issue 'sub->data' [r]
+net/wireless/scan.c:397 cfg80211_gen_new_ie() warn: possible spectre second half.  'ext_id'
+{standard input}: Error: local label `"2" (instance number 9 of a fb label)' is not defined
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- csky-randconfig-m031-20230710
+|   |-- drivers-char-tpm-tpm_tis_spi_main.c-tpm_tis_spi_transfer_half()-error:uninitialized-symbol-ret-.
+|   |-- kernel-trace-trace_functions_graph.c-print_graph_entry_leaf()-warn:bitwise-AND-condition-is-false-here
+|   `-- kernel-trace-trace_functions_graph.c-print_graph_return()-warn:bitwise-AND-condition-is-false-here
+|-- microblaze-randconfig-m041-20230710
+|   |-- drivers-net-ethernet-mellanox-mlx5-core-lib-devcom.c-mlx5_devcom_register_device()-error:uninitialized-symbol-tmp_dev-.
+|   |-- net-wireless-scan.c-cfg80211_gen_new_ie()-warn:possible-spectre-second-half.-ext_id
+|   `-- net-wireless-scan.c-cfg80211_gen_new_ie()-warn:potential-spectre-issue-sub-data-r
+`-- sh-allmodconfig
+    `-- standard-input:Error:local-label-(instance-number-of-a-fb-label)-is-not-defined
+clang_recent_errors
+|-- arm64-allmodconfig
+|   `-- drivers-input-touchscreen-iqs7211.c:warning:cast-to-smaller-integer-type-enum-iqs7211_dev_id-from-const-void
+|-- arm64-randconfig-r036-20230713
+|   `-- drivers-mfd-max77541.c:warning:cast-to-smaller-integer-type-enum-max7754x_ids-from-const-void
+`-- powerpc-randconfig-r003-20230713
+    `-- clang:error:unsupported-option-fsanitize-thread-for-target-powerpc-unknown-linux-gnu
+
+elapsed time: 726m
+
+configs tested: 139
+configs skipped: 2
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r024-20230712   gcc  
+arc                  randconfig-r043-20230713   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                       aspeed_g4_defconfig   clang
+arm                         at91_dt_defconfig   gcc  
+arm                                 defconfig   gcc  
+arm                            dove_defconfig   clang
+arm                           h3600_defconfig   gcc  
+arm                            mmp2_defconfig   clang
+arm                  randconfig-r004-20230713   gcc  
+arm                  randconfig-r022-20230712   gcc  
+arm                  randconfig-r046-20230713   clang
+arm                             rpc_defconfig   gcc  
+arm                           sunxi_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r034-20230713   clang
+arm64                randconfig-r036-20230713   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r013-20230713   gcc  
+csky                 randconfig-r026-20230712   gcc  
+hexagon              randconfig-r041-20230713   clang
+hexagon              randconfig-r045-20230713   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230712   gcc  
+i386         buildonly-randconfig-r005-20230712   gcc  
+i386         buildonly-randconfig-r006-20230712   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230713   clang
+i386                 randconfig-i002-20230713   clang
+i386                 randconfig-i003-20230713   clang
+i386                 randconfig-i004-20230713   clang
+i386                 randconfig-i005-20230713   clang
+i386                 randconfig-i006-20230713   clang
+i386                 randconfig-i011-20230713   gcc  
+i386                 randconfig-i012-20230713   gcc  
+i386                 randconfig-i013-20230713   gcc  
+i386                 randconfig-i014-20230713   gcc  
+i386                 randconfig-i015-20230713   gcc  
+i386                 randconfig-i016-20230713   gcc  
+i386                 randconfig-r002-20230713   clang
+i386                 randconfig-r021-20230712   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5208evb_defconfig   gcc  
+m68k                        mvme16x_defconfig   gcc  
+m68k                 randconfig-r023-20230712   gcc  
+microblaze           randconfig-r012-20230713   gcc  
+microblaze           randconfig-r015-20230713   gcc  
+microblaze           randconfig-r031-20230713   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           gcw0_defconfig   gcc  
+mips                           ip28_defconfig   clang
+mips                           rs90_defconfig   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r001-20230713   gcc  
+nios2                randconfig-r035-20230713   gcc  
+openrisc             randconfig-r006-20230713   gcc  
+openrisc             randconfig-r032-20230713   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r011-20230713   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                    amigaone_defconfig   gcc  
+powerpc                   currituck_defconfig   gcc  
+powerpc                       ebony_defconfig   clang
+powerpc                       holly_defconfig   gcc  
+powerpc                      mgcoge_defconfig   gcc  
+powerpc                   microwatt_defconfig   clang
+powerpc                      pmac32_defconfig   clang
+powerpc                     ppa8548_defconfig   clang
+powerpc                      ppc6xx_defconfig   gcc  
+powerpc                         ps3_defconfig   gcc  
+powerpc              randconfig-r003-20230713   clang
+powerpc                    sam440ep_defconfig   gcc  
+powerpc                     skiroot_defconfig   clang
+powerpc                     tqm5200_defconfig   clang
+powerpc                      tqm8xx_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230713   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r025-20230712   clang
+s390                 randconfig-r033-20230713   clang
+s390                 randconfig-r044-20230713   gcc  
+sh                               allmodconfig   gcc  
+sh                          polaris_defconfig   gcc  
+sh                   randconfig-r014-20230713   gcc  
+sh                          rsk7201_defconfig   gcc  
+sh                          urquell_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r005-20230713   gcc  
+um                               alldefconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230712   gcc  
+x86_64       buildonly-randconfig-r002-20230712   gcc  
+x86_64       buildonly-randconfig-r003-20230712   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-x001-20230712   clang
+x86_64               randconfig-x002-20230712   clang
+x86_64               randconfig-x003-20230712   clang
+x86_64               randconfig-x004-20230712   clang
+x86_64               randconfig-x005-20230712   clang
+x86_64               randconfig-x006-20230712   clang
+x86_64               randconfig-x011-20230712   gcc  
+x86_64               randconfig-x012-20230712   gcc  
+x86_64               randconfig-x013-20230712   gcc  
+x86_64               randconfig-x014-20230712   gcc  
+x86_64               randconfig-x015-20230712   gcc  
+x86_64               randconfig-x016-20230712   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r016-20230713   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
