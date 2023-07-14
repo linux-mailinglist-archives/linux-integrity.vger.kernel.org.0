@@ -2,372 +2,404 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8404A75300E
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jul 2023 05:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652EC75307C
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jul 2023 06:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbjGNDjw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jul 2023 23:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S234973AbjGNESN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jul 2023 00:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbjGNDjv (ORCPT
+        with ESMTP id S232770AbjGNESN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jul 2023 23:39:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681BF26B7;
-        Thu, 13 Jul 2023 20:39:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0464612D6;
-        Fri, 14 Jul 2023 03:39:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578BBC433C8;
-        Fri, 14 Jul 2023 03:39:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689305987;
-        bh=UsSz1goKzoabjB/VOxVIFiQTyxr8oFqoMy17tSiXbJw=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=u72cqx7HmVrp9ftEZqf5bQDjERlZAr21p0cwbmzvi4Zy7od6wcOFDuR0oA1BRf619
-         N5HxCqPvkdGrTFx+IGR0tw6nH3tqN918Gr4T0vRUwpQnp8gRAqvDTHNgiHB6s9qkOk
-         HTsia9ND+X0EwWruxpzKfj3TKW9X+ciC2MxvjKlHpGfBxhRd9iEgsPmLuLXmyA41xn
-         YHZXpJOO0XlOgrXgh1spSECL5Lk+oYWoa2L8qTmkXjBidbWzzXfm+gzNaQFLT2t67x
-         bI96EbtNcOWB78hY7KPv8O5Jw4JgIHB29BkiDc9Fx3qWN+xsi9403lSh8MaOy20666
-         t5FW0PVxlUB2Q==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 14 Jul 2023 03:39:42 +0000
-Message-Id: <CU1KZQOWE7P0.2DDYENDH5U99M@seitikki>
-Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
-        <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
-        =?utf-8?q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        <peterz@infradead.org>,
-        =?utf-8?q?Michael_Niew=C3=B6hner?= <linux@mniewoehner.de>,
-        "Linux Kernel Integrity" <linux-integrity@vger.kernel.org>,
-        "LKML" <linux-kernel@vger.kernel.org>,
-        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>,
-        "Lukas Wunner" <lukas@wunner.de>,
-        "Philipp Rosenberger" <p.rosenberger@kunbus.com>
-Subject: Re: [PATCH v4 RESEND] tpm,tpm_tis: Disable interrupts after 1000
- unhandled IRQs
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
-        "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>
-X-Mailer: aerc 0.14.0
-References: <144f1c66-499e-2da9-c4c1-b5f26cb8841f@kunbus.com>
-In-Reply-To: <144f1c66-499e-2da9-c4c1-b5f26cb8841f@kunbus.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Jul 2023 00:18:13 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A98C106;
+        Thu, 13 Jul 2023 21:18:11 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id CED5321C4671; Thu, 13 Jul 2023 21:18:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CED5321C4671
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1689308290;
+        bh=1gEl/GRj6c25B7r9dHqS3pawBqKkEdHWIHvR4HQj6sU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Oal6HR6h4sgrZUtnk3MlRaBzwN7QdW1Gc4+tOBT7PmbOeNpZCqr3pN14m8kZ8i39X
+         ipr2fevWdb2kJ2e48Pqt4ojbmsCIpM0R++7n6rIcCeCsY3Gxkkdj3F/7+JDK2c91eL
+         /l+HeHh9TpGqUna+1UTD9QWbL963n6ytqKUYhKxQ=
+Date:   Thu, 13 Jul 2023 21:18:10 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, audit@vger.kernel.org,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [PATCH RFC v10 2/17] ipe: add policy parser
+Message-ID: <20230714041810.GA15267@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1687986571-16823-3-git-send-email-wufan@linux.microsoft.com>
+ <b2abfd3883dce682ee911413fea2ec66.paul@paul-moore.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b2abfd3883dce682ee911413fea2ec66.paul@paul-moore.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu Jul 13, 2023 at 7:01 PM UTC, Lino Sanfilippo wrote:
-> After activation of interrupts for TPM TIS drivers 0-day reports an
-> interrupt storm on an Inspur NF5180M6 server.
->
-> Fix this by detecting the storm and falling back to polling:
-> Count the number of unhandled interrupts within a 10 ms time interval. In
-> case that more than 1000 were unhandled deactivate interrupts entirely,
-> deregister the handler and use polling instead.
->
-> Also print a note to point to the tpm_tis_dmi_table.
->
-> Since the interrupt deregistration function devm_free_irq() waits for all
-> interrupt handlers to finish, only trigger a worker in the interrupt
-> handler and do the unregistration in the worker to avoid a deadlock.
->
-> Note: the storm detection logic equals the implementation in
-> note_interrupt() which uses timestamps and counters stored in struct
-> irq_desc. Since this structure is private to the generic interrupt core
-> the TPM TIS core uses its own timestamps and counters. Furthermore the TP=
-M
-> interrupt handler always returns IRQ_HANDLED to prevent the generic
-> interrupt core from processing the interrupt storm.
->
-> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202305041325.ae8b0c43-yujie.liu@in=
-tel.com/
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 103 +++++++++++++++++++++++++++-----
->  drivers/char/tpm/tpm_tis_core.h |   4 ++
->  2 files changed, 92 insertions(+), 15 deletions(-)
->
-> Resending the patch due to several bounce messages for the first attempt.
->
-> Changes to v3 (all requested by Jarko):
-> - remove all inline comments=20
-> - rename tpm_tis_reenable_polling() to tpm_tis_revert_interrupts()
-> - rename tpm_tis_check_for_interrupt_storm() to tpm_tis_update_unhandled_=
-irqs()
-> - rename label "unhandled" to "err"
-> - add Fixes: tag
->
-> Changes to v2:
-> - use define for max number of unhandles irqs(requested by Jarko)
-> - rename intmask to int_mask (requested by Jarko)
-> - rephrased short summary (requested by Jarko)
-> - rename disable_interrupts to tpm_tis_disable_interrupts (requested by J=
-arko)
-> - print info message concerning adding an entry to tpm_tis_dmi_table
->   (suggested by Jerry)
-> - amended commit message
-> - handle failure of locality request by returning IRQ_NONE
-> - dont take and release locality in __tpm_tis_disable_interrupts but in i=
-ts
-> caller
->
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
-ore.c
-> index 558144fa707a..88a5384c09c0 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -24,9 +24,12 @@
->  #include <linux/wait.h>
->  #include <linux/acpi.h>
->  #include <linux/freezer.h>
-> +#include <linux/dmi.h>
->  #include "tpm.h"
->  #include "tpm_tis_core.h"
-> =20
-> +#define TPM_TIS_MAX_UNHANDLED_IRQS	1000
-> +
->  static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value);
-> =20
->  static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
-> @@ -468,25 +471,29 @@ static int tpm_tis_send_data(struct tpm_chip *chip,=
- const u8 *buf, size_t len)
->  	return rc;
->  }
-> =20
-> -static void disable_interrupts(struct tpm_chip *chip)
-> +static void __tpm_tis_disable_interrupts(struct tpm_chip *chip)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	u32 int_mask =3D 0;
-> +
-> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &int_mask);
-> +	int_mask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), int_mask);
-> +
-> +	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
-> +}
-> +
-> +static void tpm_tis_disable_interrupts(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> -	u32 intmask;
-> -	int rc;
-> =20
->  	if (priv->irq =3D=3D 0)
->  		return;
-> =20
-> -	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> -	if (rc < 0)
-> -		intmask =3D 0;
-> -
-> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> -	rc =3D tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> +	__tpm_tis_disable_interrupts(chip);
-> =20
->  	devm_free_irq(chip->dev.parent, priv->irq, chip);
->  	priv->irq =3D 0;
-> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->  }
-> =20
->  /*
-> @@ -552,7 +559,7 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *bu=
-f, size_t len)
->  	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
->  		tpm_msleep(1);
->  	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
-> -		disable_interrupts(chip);
-> +		tpm_tis_disable_interrupts(chip);
->  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->  	return rc;
->  }
-> @@ -752,6 +759,57 @@ static bool tpm_tis_req_canceled(struct tpm_chip *ch=
-ip, u8 status)
->  	return status =3D=3D TPM_STS_COMMAND_READY;
->  }
-> =20
-> +static irqreturn_t tpm_tis_revert_interrupts(struct tpm_chip *chip)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	const char *product;
-> +	const char *vendor;
-> +
-> +	dev_warn(&chip->dev, FW_BUG
-> +		 "TPM interrupt storm detected, polling instead\n");
-> +
-> +	vendor =3D dmi_get_system_info(DMI_SYS_VENDOR);
-> +	product =3D dmi_get_system_info(DMI_PRODUCT_VERSION);
-> +
-> +	if (vendor && product) {
-> +		dev_info(&chip->dev,
-> +			"Consider adding the following entry to tpm_tis_dmi_table:\n");
-> +		dev_info(&chip->dev, "\tDMI_SYS_VENDOR: %s\n", vendor);
-> +		dev_info(&chip->dev, "\tDMI_PRODUCT_VERSION: %s\n", product);
-> +	}
-> +
-> +	if (tpm_tis_request_locality(chip, 0) !=3D 0)
-> +		return IRQ_NONE;
-> +
-> +	__tpm_tis_disable_interrupts(chip);
-> +	tpm_tis_relinquish_locality(chip, 0);
-> +
-> +	schedule_work(&priv->free_irq_work);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static irqreturn_t tpm_tis_update_unhandled_irqs(struct tpm_chip *chip)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	irqreturn_t irqret =3D IRQ_HANDLED;
-> +
-> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
-> +		return IRQ_HANDLED;
-> +
-> +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
-> +		priv->unhandled_irqs =3D 1;
-> +	else
-> +		priv->unhandled_irqs++;
-> +
-> +	priv->last_unhandled_irq =3D jiffies;
-> +
-> +	if (priv->unhandled_irqs > TPM_TIS_MAX_UNHANDLED_IRQS)
-> +		irqret =3D tpm_tis_revert_interrupts(chip);
-> +
-> +	return irqret;
-> +}
-> +
->  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
->  {
->  	struct tpm_chip *chip =3D dev_id;
-> @@ -761,10 +819,10 @@ static irqreturn_t tis_int_handler(int dummy, void =
-*dev_id)
-> =20
->  	rc =3D tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt)=
-;
->  	if (rc < 0)
-> -		return IRQ_NONE;
-> +		goto err;
-> =20
->  	if (interrupt =3D=3D 0)
-> -		return IRQ_NONE;
-> +		goto err;
-> =20
->  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
-> @@ -780,10 +838,13 @@ static irqreturn_t tis_int_handler(int dummy, void =
-*dev_id)
->  	rc =3D tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt)=
-;
->  	tpm_tis_relinquish_locality(chip, 0);
->  	if (rc < 0)
-> -		return IRQ_NONE;
-> +		goto err;
-> =20
->  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
->  	return IRQ_HANDLED;
-> +
-> +err:
-> +	return tpm_tis_update_unhandled_irqs(chip);
->  }
-> =20
->  static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
-> @@ -804,6 +865,15 @@ static void tpm_tis_gen_interrupt(struct tpm_chip *c=
-hip)
->  		chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->  }
-> =20
-> +static void tpm_tis_free_irq_func(struct work_struct *work)
-> +{
-> +	struct tpm_tis_data *priv =3D container_of(work, typeof(*priv), free_ir=
-q_work);
-> +	struct tpm_chip *chip =3D priv->chip;
-> +
-> +	devm_free_irq(chip->dev.parent, priv->irq, chip);
-> +	priv->irq =3D 0;
-> +}
-> +
->  /* Register the IRQ and issue a command that will cause an interrupt. If=
- an
->   * irq is seen then leave the chip setup for IRQ operation, otherwise re=
-verse
->   * everything and leave in polling mode. Returns 0 on success.
-> @@ -816,6 +886,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *=
-chip, u32 intmask,
->  	int rc;
->  	u32 int_status;
-> =20
-> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
-> =20
->  	rc =3D devm_request_threaded_irq(chip->dev.parent, irq, NULL,
->  				       tis_int_handler, IRQF_ONESHOT | flags,
-> @@ -918,6 +989,7 @@ void tpm_tis_remove(struct tpm_chip *chip)
->  		interrupt =3D 0;
-> =20
->  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
-> +	flush_work(&priv->free_irq_work);
-> =20
->  	tpm_tis_clkrun_enable(chip, false);
-> =20
-> @@ -1021,6 +1093,7 @@ int tpm_tis_core_init(struct device *dev, struct tp=
-m_tis_data *priv, int irq,
->  	chip->timeout_b =3D msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
->  	chip->timeout_c =3D msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
->  	chip->timeout_d =3D msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
-> +	priv->chip =3D chip;
->  	priv->timeout_min =3D TPM_TIMEOUT_USECS_MIN;
->  	priv->timeout_max =3D TPM_TIMEOUT_USECS_MAX;
->  	priv->phy_ops =3D phy_ops;
-> @@ -1179,7 +1252,7 @@ int tpm_tis_core_init(struct device *dev, struct tp=
-m_tis_data *priv, int irq,
->  			rc =3D tpm_tis_request_locality(chip, 0);
->  			if (rc < 0)
->  				goto out_err;
-> -			disable_interrupts(chip);
-> +			tpm_tis_disable_interrupts(chip);
->  			tpm_tis_relinquish_locality(chip, 0);
->  		}
->  	}
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_c=
-ore.h
-> index 610bfadb6acf..b1a169d7d1ca 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -91,11 +91,15 @@ enum tpm_tis_flags {
->  };
-> =20
->  struct tpm_tis_data {
-> +	struct tpm_chip *chip;
->  	u16 manufacturer_id;
->  	struct mutex locality_count_mutex;
->  	unsigned int locality_count;
->  	int locality;
->  	int irq;
-> +	struct work_struct free_irq_work;
-> +	unsigned long last_unhandled_irq;
-> +	unsigned int unhandled_irqs;
->  	unsigned int int_mask;
->  	unsigned long flags;
->  	void __iomem *ilb_base_addr;
->
-> base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
-> --=20
-> 2.25.1
+On Sat, Jul 08, 2023 at 12:23:00AM -0400, Paul Moore wrote:
+> On Jun 28, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
+> > 
+> > IPE's interpretation of the what the user trusts is accomplished through
+> > its policy. IPE's design is to not provide support for a single trust
+> > provider, but to support multiple providers to enable the end-user to
+> > choose the best one to seek their needs.
+> > 
+> > This requires the policy to be rather flexible and modular so that
+> > integrity providers, like fs-verity, dm-verity, dm-integrity, or
+> > some other system, can plug into the policy with minimal code changes.
+> > 
+> > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> > ---
+> >  security/ipe/Makefile        |   2 +
+> >  security/ipe/policy.c        |  97 +++++++
+> >  security/ipe/policy.h        |  83 ++++++
+> >  security/ipe/policy_parser.c | 488 +++++++++++++++++++++++++++++++++++
+> >  security/ipe/policy_parser.h |  11 +
+> >  5 files changed, 681 insertions(+)
+> >  create mode 100644 security/ipe/policy.c
+> >  create mode 100644 security/ipe/policy.h
+> >  create mode 100644 security/ipe/policy_parser.c
+> >  create mode 100644 security/ipe/policy_parser.h
+> 
+> ...
+> 
+> > diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> > new file mode 100644
+> > index 000000000000..4069ff075093
+> > --- /dev/null
+> > +++ b/security/ipe/policy.c
+> > @@ -0,0 +1,97 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) Microsoft Corporation. All rights reserved.
+> > + */
+> > +
+> > +#include <linux/errno.h>
+> > +#include <linux/verification.h>
+> > +
+> > +#include "ipe.h"
+> > +#include "policy.h"
+> > +#include "policy_parser.h"
+> > +
+> > +/**
+> > + * ipe_free_policy - Deallocate a given IPE policy.
+> > + * @p: Supplies the policy to free.
+> > + *
+> > + * Safe to call on IS_ERR/NULL.
+> > + */
+> > +void ipe_free_policy(struct ipe_policy *p)
+> > +{
+> > +	if (IS_ERR_OR_NULL(p))
+> > +		return;
+> > +
+> > +	free_parsed_policy(p->parsed);
+> > +	if (!p->pkcs7)
+> > +		kfree(p->text);
+> 
+> Since it's safe to kfree(NULL), you could kfree(p->text) without
+> having to check if p->pkcs7 was non-NULL, correct?
+> 
+when p->pkcs7 is not NULL, p->text points to the plain text policy area inside
+the data of p->pkcs7, for such cases p->text is not really an allocated memory chunk
+so it cannot be passed to kfree.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+I might better add a comment here to avoid confusion in the future.
 
-Looks very good, thank you.
+> > +	kfree(p->pkcs7);
+> > +	kfree(p);
+> > +}
+> 
+> ...
+> 
+> > diff --git a/security/ipe/policy.h b/security/ipe/policy.h
+> > new file mode 100644
+> > index 000000000000..113a037f0d71
+> > --- /dev/null
+> > +++ b/security/ipe/policy.h
+> > @@ -0,0 +1,83 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) Microsoft Corporation. All rights reserved.
+> > + */
+> > +#ifndef _IPE_POLICY_H
+> > +#define _IPE_POLICY_H
+> > +
+> > +#include <linux/list.h>
+> > +#include <linux/types.h>
+> > +
+> > +enum ipe_op_type {
+> > +	__IPE_OP_EXEC = 0,
+> > +	__IPE_OP_FIRMWARE,
+> > +	__IPE_OP_KERNEL_MODULE,
+> > +	__IPE_OP_KEXEC_IMAGE,
+> > +	__IPE_OP_KEXEC_INITRAMFS,
+> > +	__IPE_OP_IMA_POLICY,
+> > +	__IPE_OP_IMA_X509,
+> > +	__IPE_OP_MAX
+> > +};
+> 
+> Thanks for capitalizing the enums, that helps make IPE consistent with
+> the majority of the kernel.  However, when I talked about using
+> underscores for "__IPE_OP_MAX", I was talking about *only*
+> "__IPE_OP_MAX" to help indicate it is a sentinel value and not an enum
+> value that would normally be used by itself.
+> 
+> Here is what I was intending:
+> 
+> enum ipe_op_type {
+>   IPE_OP_EXEC = 0,
+>   IPE_OP_FIRMWARE,
+>   ...
+>   IPE_OP_IMA_X509,
+>   __IPE_OP_MAX
+> };
+> 
+> > +#define __IPE_OP_INVALID __IPE_OP_MAX
+> 
+> Similarly, I would remove the underscores from "__IPE_OP_INVALID":
+> 
+> #define IPE_OP_INVALID __IPE_OP_MAX
+> 
+> Both of these comments would apply to the other IPE enums as well.
+> 
+Sorry for the mistake, I will update them.
 
-BR, Jarkko
+> > diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parser.c
+> > new file mode 100644
+> > index 000000000000..27e5767480b0
+> > --- /dev/null
+> > +++ b/security/ipe/policy_parser.c
+> > @@ -0,0 +1,488 @@
+> 
+> ...
+> 
+> > +/**
+> > + * parse_header - Parse policy header information.
+> > + * @line: Supplies header line to be parsed.
+> > + * @p: Supplies the partial parsed policy.
+> > + *
+> > + * Return:
+> > + * * 0	- OK
+> > + * * !0	- Standard errno
+> > + */
+> > +static int parse_header(char *line, struct ipe_parsed_policy *p)
+> > +{
+> > +	int rc = 0;
+> > +	char *t, *ver = NULL;
+> > +	substring_t args[MAX_OPT_ARGS];
+> > +	size_t idx = 0;
+> > +
+> > +	while ((t = strsep(&line, " \t")) != NULL) {
+> 
+> It might be nice to define a macro to help reinforce that " \t" are
+> the IPE policy delimiters, how about IPE_POLICY_DELIM?
+> 
+> #define IPE_POLICY_DELIM " \t"
+> 
+Sure, this is better, I will take this idea.
+
+> > +		int token;
+> > +
+> > +		if (*t == '\0')
+> > +			continue;
+> 
+> Why would you want to continue if you run into a NUL byte?  You would
+> only run into a NUL byte if the line was trimmed due to comments or
+> whitespace, correct?  If that is the case, wouldn't you want to
+> break out of this loop when hitting a NUL byte?
+> 
+This happens when two spaces are passed, for example "DEFAULT<space><space>action=DENY"
+has two spaces inside, the strsep will create a NUL string when it sees the first space,
+so for such cases I think we should just skip to the next token.
+
+> > +		if (idx >= __IPE_HEADER_MAX) {
+> > +			rc = -EBADMSG;
+> > +			goto err;
+> > +		}
+> > +
+> > +		token = match_token(t, header_tokens, args);
+> > +		if (token != idx) {
+> > +			rc = -EBADMSG;
+> > +			goto err;
+> > +		}
+> > +
+> > +		switch (token) {
+> > +		case __IPE_HEADER_POLICY_NAME:
+> > +			p->name = match_strdup(&args[0]);
+> > +			if (!p->name)
+> > +				rc = -ENOMEM;
+> > +			break;
+> > +		case __IPE_HEADER_POLICY_VERSION:
+> > +			ver = match_strdup(&args[0]);
+> > +			if (!ver) {
+> > +				rc = -ENOMEM;
+> > +				break;
+> > +			}
+> > +			rc = parse_version(ver, p);
+> > +			break;
+> > +		default:
+> > +			rc = -EBADMSG;
+> > +		}
+> > +		if (rc)
+> > +			goto err;
+> > +		++idx;
+> > +	}
+> > +
+> > +	if (idx != __IPE_HEADER_MAX) {
+> > +		rc = -EBADMSG;
+> > +		goto err;
+> > +	}
+> > +
+> > +out:
+> > +	kfree(ver);
+> > +	return rc;
+> > +err:
+> > +	kfree(p->name);
+> > +	p->name = NULL;
+> > +	goto out;
+> 
+> Do we need to worry about ipe_parsed_policy::name here?  If we are
+> returning an error the caller will call free_parsed_policy() for us,
+> right?  This would allow us to get rid of the 'err' jump label and
+> simply use 'out' for both success and failure.
+> 
+Yes this is not necessary, I will remove this part.
+
+> > +}
+> 
+> ...
+> 
+> > +/**
+> > + * parse_rule - parse a policy rule line.
+> > + * @line: Supplies rule line to be parsed.
+> > + * @p: Supplies the partial parsed policy.
+> > + *
+> > + * Return:
+> > + * * !IS_ERR	- OK
+> > + * * -ENOMEM	- Out of memory
+> > + * * -EBADMSG	- Policy syntax error
+> > + */
+> > +static int parse_rule(char *line, struct ipe_parsed_policy *p)
+> > +{
+> > +	int rc = 0;
+> > +	bool first_token = true, is_default_rule = false;
+> > +	bool op_parsed = false;
+> > +	enum ipe_op_type op = __IPE_OP_INVALID;
+> > +	enum ipe_action_type action = __IPE_ACTION_INVALID;
+> > +	struct ipe_rule *r = NULL;
+> > +	char *t;
+> > +
+> > +	r = kzalloc(sizeof(*r), GFP_KERNEL);
+> > +	if (!r)
+> > +		return -ENOMEM;
+> > +
+> > +	INIT_LIST_HEAD(&r->next);
+> > +	INIT_LIST_HEAD(&r->props);
+> > +
+> > +	while (t = strsep(&line, " \t"), line) {
+> 
+> See my previous comment about IPE_POLICY_DELIM.
+> 
+> > +		if (*t == '\0')
+> > +			continue;
+> 
+> I still wonder why continuing here is the desired behavior, can you
+> help me understand?
+This one is the same to the parse header function, when two consecutive
+delimitators is passed to strsep it will generate a '\0'.
+
+> 
+> > +		if (first_token && token_default(t)) {
+> > +			is_default_rule = true;
+> > +		} else {
+> > +			if (!op_parsed) {
+> > +				op = parse_operation(t);
+> > +				if (op == __IPE_OP_INVALID)
+> > +					rc = -EBADMSG;
+> > +				else
+> > +					op_parsed = true;
+> > +			} else {
+> > +				rc = parse_property(t, r);
+> > +			}
+> > +		}
+> > +
+> > +		if (rc)
+> > +			goto err;
+> > +		first_token = false;
+> > +	}
+> > +
+> > +	action = parse_action(t);
+> > +	if (action == __IPE_ACTION_INVALID) {
+> > +		rc = -EBADMSG;
+> > +		goto err;
+> > +	}
+> > +
+> > +	if (is_default_rule) {
+> > +		if (!list_empty(&r->props)) {
+> > +			rc = -EBADMSG;
+> > +		} else if (op == __IPE_OP_INVALID) {
+> > +			if (p->global_default_action != __IPE_ACTION_INVALID)
+> > +				rc = -EBADMSG;
+> > +			else
+> > +				p->global_default_action = action;
+> > +		} else {
+> > +			if (p->rules[op].default_action != __IPE_ACTION_INVALID)
+> > +				rc = -EBADMSG;
+> > +			else
+> > +				p->rules[op].default_action = action;
+> > +		}
+> > +	} else if (op != __IPE_OP_INVALID && action != __IPE_ACTION_INVALID) {
+> > +		r->op = op;
+> > +		r->action = action;
+> > +	} else {
+> > +		rc = -EBADMSG;
+> > +	}
+> > +
+> > +	if (rc)
+> > +		goto err;
+> > +	if (!is_default_rule)
+> > +		list_add_tail(&r->next, &p->rules[op].rules);
+> > +	else
+> > +		free_rule(r);
+> > +
+> > +out:
+> > +	return rc;
+> > +err:
+> > +	free_rule(r);
+> > +	goto out;
+> 
+> In keeping with the rule of not jumping to a label only to
+> immediately return, and considering that the only place where we jump
+> to 'out' is in the 'err' code, let's get rid of the 'out' label and
+> have 'err' "return rc" instead of "goto out".
+> 
+Sure I can change this part, yeah I agree this looks weird. 
+
+-Fan
+> > +}
+> 
+> --
+> paul-moore.com
