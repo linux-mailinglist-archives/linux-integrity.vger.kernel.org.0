@@ -2,173 +2,229 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F07B754267
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jul 2023 20:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDC07543BF
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jul 2023 22:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236324AbjGNSOp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jul 2023 14:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
+        id S235858AbjGNU2s (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jul 2023 16:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236374AbjGNSOo (ORCPT
+        with ESMTP id S235472AbjGNU2r (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jul 2023 14:14:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CD93A8B;
-        Fri, 14 Jul 2023 11:14:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AF3D61D96;
-        Fri, 14 Jul 2023 18:13:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2260DC433C7;
-        Fri, 14 Jul 2023 18:13:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689358437;
-        bh=nVZL7RlxRXIjaRFfK62a2o5A3geyjYMe5I9/3v5xSZ4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WmTXcQFOgByfSWynr0rdqdM+XengPBpavhvU9Vo/Ntaybu3Mj97iSkTkMc/TLW0PY
-         z5djKYkMamkSmUG8rRDdSQHK60xH+W4A7vgPAz4C3QMFeg4tvyPYlJ7cVOEi9tWm8g
-         +MDSi7r/bnx/qu8FPlFq44KAK6fbGmoiSTLPLDtPQSQ5eHs+5lKXZMNDZ3qLtHyneN
-         /hcb6+YJOCUfOCeSOdit6hqpVMAH+irUFoivXZOe4APFOLncHDM+skh8cEXYbpCIzP
-         MOznCmhxXsTtstBkZftczZc2gyVeay9wXGmQqmPpgK37Im0/pLQ4kN9JtJa4RrwNFo
-         eCC3hDTx5cELA==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] tpmdd changes for v6.5-rc2
-Date:   Fri, 14 Jul 2023 18:13:25 +0000
-Message-Id: <20230714181325.3351-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 14 Jul 2023 16:28:47 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D57831995;
+        Fri, 14 Jul 2023 13:28:45 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 353B820ABD64; Fri, 14 Jul 2023 13:28:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 353B820ABD64
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1689366525;
+        bh=P3inuFi0gMXqoY/7xlKkhztUrimCDUfNFGSqCXwgTfw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y9xCGTHAMzWx55C7H1MErPQE+n5ghx5PbMvaBnwI0vs8CCBaJ5VU9tOOqs/Jg36+p
+         wycIU9OWZ8tR0M5Yitid06KA4Yk3IPi5PSM32luz0EIsXBdKDL1X3jGYf4zsWPrIvt
+         JpNuiSLgROZLx0DdvUXKjEhBMKE7PX/6muWF71q4=
+Date:   Fri, 14 Jul 2023 13:28:45 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, audit@vger.kernel.org,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [PATCH RFC v10 3/17] ipe: add evaluation loop
+Message-ID: <20230714202845.GB15267@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1687986571-16823-4-git-send-email-wufan@linux.microsoft.com>
+ <309cfd62a474a7e93be6a0886a3d5aa8.paul@paul-moore.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <309cfd62a474a7e93be6a0886a3d5aa8.paul@paul-moore.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The following changes since commit 4b810bf037e524b54669acbe4e0df54b15d87ea1:
+On Sat, Jul 08, 2023 at 12:23:01AM -0400, Paul Moore wrote:
+> On Jun 28, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
+> > 
+> > IPE must have a centralized function to evaluate incoming callers
+> > against IPE's policy. This iteration of the policy for against the rules
+> > for that specific caller is known as the evaluation loop.
+> 
+> Can you rewrite that second sentence, it reads a bit awkward and I'm
+> unclear as to the meaning.
+> 
+Sure, it is indeed not clear, I might rewrite the whole message in the next version.
 
-  Merge tag 'erofs-for-6.5-rc2-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs (2023-07-13 14:35:02 -0700)
+> > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> > ---
+> >  security/ipe/Makefile |  1 +
+> >  security/ipe/eval.c   | 94 +++++++++++++++++++++++++++++++++++++++++++
+> >  security/ipe/eval.h   | 25 ++++++++++++
+> >  3 files changed, 120 insertions(+)
+> >  create mode 100644 security/ipe/eval.c
+> >  create mode 100644 security/ipe/eval.h
+> 
+> ...
+> 
+> > diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> > new file mode 100644
+> > index 000000000000..59144b2ecdda
+> > --- /dev/null
+> > +++ b/security/ipe/eval.c
+> > @@ -0,0 +1,94 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) Microsoft Corporation. All rights reserved.
+> > + */
+> > +
+> > +#include <linux/fs.h>
+> > +#include <linux/types.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/file.h>
+> > +#include <linux/sched.h>
+> > +#include <linux/rcupdate.h>
+> > +
+> > +#include "ipe.h"
+> > +#include "eval.h"
+> > +#include "hooks.h"
+> 
+> There is no "hooks.h" at this point in the patchset.
+> 
+> In order for 'git bisect' to remain useful (and it can be a very handy
+> tool), we need to ensure that each point in the patchset compiles
+> cleanly.
+> 
+Sorry for the mistake here, I will avoid this kind of problems in the future.
 
-are available in the Git repository at:
+> > +#include "policy.h"
+> > +
+> > +struct ipe_policy __rcu *ipe_active_policy;
+> > +
+> > +/**
+> > + * evaluate_property - Analyze @ctx against a property.
+> > + * @ctx: Supplies a pointer to the context to be evaluated.
+> > + * @p: Supplies a pointer to the property to be evaluated.
+> > + *
+> > + * Return:
+> > + * * true	- The current @ctx match the @p
+> > + * * false	- The current @ctx doesn't match the @p
+> > + */
+> > +static bool evaluate_property(const struct ipe_eval_ctx *const ctx,
+> > +			      struct ipe_prop *p)
+> > +{
+> > +	return false;
+> > +}
+> > +
+> > +/**
+> > + * ipe_evaluate_event - Analyze @ctx against the current active policy.
+> > + * @ctx: Supplies a pointer to the context to be evaluated.
+> > + *
+> > + * This is the loop where all policy evaluation happens against IPE policy.
+> > + *
+> > + * Return:
+> > + * * 0		- OK
+> > + * * -EACCES	- @ctx did not pass evaluation.
+> > + * * !0		- Error
+> > + */
+> > +int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx)
+> > +{
+> > +	int rc = 0;
+> > +	bool match = false;
+> > +	enum ipe_action_type action;
+> > +	struct ipe_policy *pol = NULL;
+> > +	const struct ipe_rule *rule = NULL;
+> > +	const struct ipe_op_table *rules = NULL;
+> > +	struct ipe_prop *prop = NULL;
+> > +
+> > +	rcu_read_lock();
+> > +
+> > +	pol = rcu_dereference(ipe_active_policy);
+> > +	if (!pol) {
+> > +		rcu_read_unlock();
+> > +		return 0;
+> > +	}
+> > +
+> > +	if (ctx->op == __IPE_OP_INVALID) {
+> > +		action = pol->parsed->global_default_action;
+> > +		goto eval;
+> 
+> It looks like you are missing a rcu_read_unlock() in this case.
+> 
+Thanks for pointing that out. I will add the unlock. 
+> Also, given how simplistic the evaluation is in this case, why not
+> just do it here, saving the assignment, jump, etc.?
+> 
+>   if (ctx->op == INVALID) {
+>     rcu_read_unlock()
+>     if (global_action == DENY)
+>       return -EACCES;
+>     return 0;
+>   }
+> 
+The jump is actually for auditing the decision in the next patch, while
+it does make more sense to not jump when the auditing is not introduced. 
+I will make the return here then switch to jump in the auditing patch.
 
-  git://git.kernel.org/pub/scm/linux/kernel/jarkko/linux-tpmdd.git/ tpmdd-v6.5-rc2-fixed
+> > +	}
+> > +
+> > +	rules = &pol->parsed->rules[ctx->op];
+> > +
+> > +	list_for_each_entry(rule, &rules->rules, next) {
+> > +		match = true;
+> > +
+> > +		list_for_each_entry(prop, &rule->props, next)
+> > +			match = match && evaluate_property(ctx, prop);
+> 
+> Why not break from this loop once evaluate_property() returns false?
+> 
+Yes we can break when one property evals to false, thanks for the advice.
 
-for you to fetch changes up to 0ec1b5bea32bce719ebdab253462f9c9cb0aca3e:
+> > +
+> > +		if (match)
+> > +			break;
+> > +	}
+> > +
+> > +	if (match)
+> > +		action = rule->action;
+> > +	else if (rules->default_action != __IPE_ACTION_INVALID)
+> > +		action = rules->default_action;
+> > +	else
+> > +		action = pol->parsed->global_default_action;
+> > +
+> > +	rcu_read_unlock();
+> > +eval:
+> > +	if (action == __IPE_ACTION_DENY)
+> > +		rc = -EACCES;
+> > +
+> > +	return rc;
+> 
+> This can just be 'return 0;' right?
+> 
+For this patch, if we just return on error, then yes the end of the function
+could just return 0. But when auditing(audit rc) and permissive switch(overwrite rc)
+are introduced then return on error might not be the clean way. So I kept
+the rc variable in this patch. I can change the style in this patch then
+switch to use rc when auditing and permissive switch are introduced.
 
-  tpm,tpm_tis: Disable interrupts after 1000 unhandled IRQs (2023-07-14 06:38:04 +0000)
+-Fan
 
-----------------------------------------------------------------
-Hi Linus,
-
-This comes late but it is really just a flush of bug fixes for the most
-part. I've also hold for some tpm_tis IRQ fixes. And holiday season in
-FI has caused some slow downs and conflicts between personal and work
-life.
-
-BR, Jarkko
-
-----------------------------------------------------------------
-Alexander Steffen (4):
-      tpm_tis: Explicitly check for error code
-      tpm_tis: Move CRC check to generic send routine
-      tpm_tis: Use responseRetry to recover from data transfer errors
-      tpm_tis: Resend command to recover from data transfer errors
-
-Alexander Sverdlin (2):
-      tpm: tis_i2c: Limit read bursts to I2C_SMBUS_BLOCK_MAX (32) bytes
-      tpm: tis_i2c: Limit write bursts to I2C_SMBUS_BLOCK_MAX (32) bytes
-
-Azeem Shaikh (1):
-      KEYS: Replace all non-returning strlcpy with strscpy
-
-Christian Göttsche (1):
-      security: keys: perform capable check only on privileged operations
-
-Christian Hesse (2):
-      tpm/tpm_tis: Disable interrupts for Framework Laptop Intel 12th gen
-      tpm/tpm_tis: Disable interrupts for Framework Laptop Intel 13th gen
-
-Colin Ian King (1):
-      tpm: remove redundant variable len
-
-Eric Snowberg (2):
-      KEYS: DigitalSignature link restriction
-      integrity: Enforce digitalSignature usage in the ima and evm keyrings
-
-Florian Bezdeka (1):
-      tpm/tpm_tis: Disable interrupts for Lenovo L590 devices
-
-Ivan Orlov (1):
-      tpm: make all 'class' structures const
-
-Jarkko Sakkinen (1):
-      tpm: tpm_vtpm_proxy: fix a race condition in /dev/vtpmx creation
-
-Jerry Snitselaar (1):
-      tpm: return false from tpm_amd_is_rng_defective on non-x86 platforms
-
-Jiapeng Chong (1):
-      security: keys: Modify mismatched function name
-
-Krishna Yarlagadda (1):
-      tpm_tis-spi: Add hardware wait polling
-
-Lino Sanfilippo (1):
-      tpm,tpm_tis: Disable interrupts after 1000 unhandled IRQs
-
-Peijie Shao (1):
-      tpm_tis_spi: Release chip select when flow control fails
-
-Peter Ujfalusi (1):
-      tpm: tpm_tis: Disable interrupts *only* for AEON UPX-i11
-
-Petr Pavlu (1):
-      keys: Fix linking a duplicate key to a keyring's assoc_array
-
-Uwe Kleine-König (1):
-      tpm: Switch i2c drivers back to use .probe()
-
-Valentin David (1):
-      tpm: Do not remap from ACPI resources again for Pluton TPM
-
- certs/system_keyring.c                    |  49 +++++++++
- crypto/asymmetric_keys/restrict.c         |  44 ++++++++
- drivers/char/tpm/eventlog/tpm1.c          |   3 +-
- drivers/char/tpm/st33zp24/i2c.c           |   2 +-
- drivers/char/tpm/tpm-chip.c               |  18 +++-
- drivers/char/tpm/tpm-interface.c          |  21 ++--
- drivers/char/tpm/tpm.h                    |   4 +-
- drivers/char/tpm/tpm2-space.c             |   2 +-
- drivers/char/tpm/tpm_crb.c                |  19 ++--
- drivers/char/tpm/tpm_i2c_atmel.c          |   2 +-
- drivers/char/tpm/tpm_i2c_infineon.c       |   2 +-
- drivers/char/tpm/tpm_i2c_nuvoton.c        |   2 +-
- drivers/char/tpm/tpm_tis.c                |  25 +++++
- drivers/char/tpm/tpm_tis_core.c           | 172 ++++++++++++++++++++++++------
- drivers/char/tpm/tpm_tis_core.h           |   5 +
- drivers/char/tpm/tpm_tis_i2c.c            |  61 +++++++----
- drivers/char/tpm/tpm_tis_i2c_cr50.c       |   2 +-
- drivers/char/tpm/tpm_tis_spi_main.c       |  99 ++++++++++++++++-
- drivers/char/tpm/tpm_vtpm_proxy.c         |  30 ++----
- include/crypto/public_key.h               |  11 ++
- include/keys/system_keyring.h             |  10 ++
- security/integrity/digsig.c               |   4 +-
- security/integrity/evm/Kconfig            |   3 +-
- security/integrity/ima/Kconfig            |   3 +-
- security/keys/keyctl.c                    |  11 +-
- security/keys/request_key.c               |  35 ++++--
- security/keys/request_key_auth.c          |   2 +-
- security/keys/trusted-keys/trusted_tpm2.c |   2 +-
- 28 files changed, 509 insertions(+), 134 deletions(-)
+> > +}
+> 
+> --
+> paul-moore.com
