@@ -2,405 +2,173 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AC87539B7
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jul 2023 13:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C527A753A43
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jul 2023 13:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbjGNLkz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jul 2023 07:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S235539AbjGNL6b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jul 2023 07:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235562AbjGNLkt (ORCPT
+        with ESMTP id S230347AbjGNL60 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jul 2023 07:40:49 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425D535AE;
-        Fri, 14 Jul 2023 04:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1689334808; x=1689939608; i=linosanfilippo@gmx.de;
- bh=lBOJf7LnGf42QJ4pEtT5JT3sukA9e1BFjJxw8/BOquM=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=mHLoTZbRsoCXVpZW+PrALu7ztPcZlg2bxLxdiJWn3tEkgz6bNjhoVPbmnK1X07a1f8dReR8
- PYBSB0775gIQpXCST2ZvYkJMttWAbPLAX1eHfG4koKRh1SvquitrIS/JRTajC9iReTuHdvLbr
- bdsYht10n9wEpA58yTg3apj4CzQrDFThD2g46GDN63E00lWoOE3FiBRDSzvVe1JLhFLHlJo4I
- /q6syvW6U2MlNztK8uoqnqcDhgGkUyDOyzB9pXOAibKLQV5CbjRQiSJEcbsJYfgYetzQ96qX0
- wAw3+2MLaq6Cg3kVLtudedpFiOwlFx3Zq3WZ4RnJiUNJaB0vb5Pg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.10.87] ([180.183.243.38]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M1po0-1qMU511URE-002IpQ; Fri, 14
- Jul 2023 13:40:08 +0200
-Message-ID: <5be1b7b6-7f7b-a201-0152-a5b50c48073e@gmx.de>
-Date:   Fri, 14 Jul 2023 13:40:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 RESEND] tpm,tpm_tis: Disable interrupts after 1000
- unhandled IRQs
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Fri, 14 Jul 2023 07:58:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B58211C;
+        Fri, 14 Jul 2023 04:58:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE9CB61CF4;
+        Fri, 14 Jul 2023 11:58:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD533C433C9;
+        Fri, 14 Jul 2023 11:58:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689335904;
+        bh=2/ArIUkFK5gcTofUVa+xOOtuchKM3rATFTnSn/dCsUM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mWtLPz/rBJaWCY1FHPGg/aLPqOcnzj48KUmNI3yH2um2ixXcnZEJb2c12CF5R8zHb
+         QuqAy/LL49OT9blYlr8l17/I9iE+i4tTuWpH+4woJQ9xpmjWmNu76nB16BrV3WYCve
+         grHAbfeCGXK2tdLHf+FGeODowjsnoHkRDPhQ2llKsMj8Um51XQonDkxpae+5rUtEp3
+         43dHVxzYWIACI7re7gjntDr5YkjQmeKtT7/i2IiWOwirAAG7QFBk9OHjV761g7xojO
+         Yxy60d4Y2LMmKvoZBN58elZhE7VN5Zvn3FIeQLdcDdXoMuMoNIyVMcTNxK2X4HC1pK
+         uaRBJbkgXjOXA==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
         Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     jsnitsel@redhat.com, hdegoede@redhat.com, oe-lkp@lists.linux.dev,
-        lkp@intel.com,
-        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        peterz@infradead.org,
-        =?UTF-8?Q?Michael_Niew=c3=b6hner?= <linux@mniewoehner.de>,
-        Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-References: <144f1c66-499e-2da9-c4c1-b5f26cb8841f@kunbus.com>
- <CU1KZQOWE7P0.2DDYENDH5U99M@seitikki>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-In-Reply-To: <CU1KZQOWE7P0.2DDYENDH5U99M@seitikki>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:v5bUbCfpF7r5GASdljh/kPB33WFAChmpLoyKYACBLd9Pe2zxTAS
- MJgOQ02VCuXFw3+hVktAnwINDipdcjv9JGZ5MQU1Pe/AIHzEGxoqW/JY00VtjYfova0uD0Q
- 4diDNdfvcTbOik2linDLOlpD+SgQihfcKEXYO7h4Kxhiwj03JShfz1VGDS4CX/vFEbCMouv
- J5BlQSn7319X/iWGc/+UA==
-UI-OutboundReport: junk:10;M01:P0:NYxcuu4CS1g=;yUCgLiwZNR38r32zIic6vFDHOJ/ps
- DUdnv8tO7ZSpsy9T7dKtIVT3ApZpIbe12yncgMyzkuQdme1JQcIaxTLEOpyh82PSczDQiI6XJ
- G7uM/uaNJJqvGhhALopu0JdtfbKPF5yCr+l0fTktw8+6fVNPxwDxHjX8Of8v+ojDK5n8XXZxW
- UU19G7/QQsyO8eYNH8T1KYF2cqdc2vuzQvHCGtAt0VDIZLbUo/btxf/mD1WewmERDlOLkGx/F
- KEgAyEuDVJuy0xpy36amKOptlxMO9yx5dg3mQaxNHTkkSJSOR5azYMbjVrDlF95XqD8m8K0+7
- 9UbiM6WFp7ptn6Fut8vYqZEVp7XoUBKWVX9onoGoOqnsSljoY5Ypy5xuqSpqus3z+uRGPPfi7
- Ut52i32fuWA9O+ZiFWCnoK/FGDrbGMF31+Ibym13sCwBS7i/RQ2Nf7jFdIA2fPVGX8GcuPSZk
- 9yrGunT6DgU3GigNk922aFqSPsREwgTWE0Z0hXnUKdDklC35qnOt8Jgik8oFSD28zJ0yALfEP
- w/YkmCPSS4D9QH7pgq42djOJsbHtkA90mWmwf9xvoYq0ex/oA/QXg6Vn4fi6t908reWtbN/af
- TO2X9nrYDxvZ4dlB+4L/dOejRZ8wcZWT527uWkUkYY0DpzAyK3TQPczF78bVgrGf5aYEfsIoT
- oHMmq9F9f0aqKw5BSXeujpjmJ6b1XBQyu5dkv2/n7owrR6L4OdlAmiqqFyHTnfTjtupmoasdU
- R1yJKKxNeWt+tK225vliIQZJoeoLVM8v1mSZ4yWYRLOlmZ7LBJGv/3IvJLmU2ckYLA+Uz6Dif
- xZjwrmBsacpgu1IRqDamNwQ7bsQX+5RHj7tLrLWNGUdD9DoWZewm2JF97F/lY9ssDQvjbxrO3
- f1VLAyPpOkpoT88RxrL9q8pgx9NHjfoB6crueEqhnSF01CyylWIr489i76wcLtZ50kCYD+dd2
- BrXLWEq8kTX/lNyjaviEVVBtWmG5KbyFLSGWs6gVuBSS/T
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] tpmdd changes for v6.5-rc2
+Date:   Fri, 14 Jul 2023 11:58:03 +0000
+Message-Id: <20230714115803.111346-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+The following changes since commit 4b810bf037e524b54669acbe4e0df54b15d87ea1:
 
+  Merge tag 'erofs-for-6.5-rc2-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs (2023-07-13 14:35:02 -0700)
 
-On 14.07.23 05:39, Jarkko Sakkinen wrote:
-> On Thu Jul 13, 2023 at 7:01 PM UTC, Lino Sanfilippo wrote:
->> After activation of interrupts for TPM TIS drivers 0-day reports an
->> interrupt storm on an Inspur NF5180M6 server.
->>
->> Fix this by detecting the storm and falling back to polling:
->> Count the number of unhandled interrupts within a 10 ms time interval. =
-In
->> case that more than 1000 were unhandled deactivate interrupts entirely,
->> deregister the handler and use polling instead.
->>
->> Also print a note to point to the tpm_tis_dmi_table.
->>
->> Since the interrupt deregistration function devm_free_irq() waits for a=
-ll
->> interrupt handlers to finish, only trigger a worker in the interrupt
->> handler and do the unregistration in the worker to avoid a deadlock.
->>
->> Note: the storm detection logic equals the implementation in
->> note_interrupt() which uses timestamps and counters stored in struct
->> irq_desc. Since this structure is private to the generic interrupt core
->> the TPM TIS core uses its own timestamps and counters. Furthermore the =
-TPM
->> interrupt handler always returns IRQ_HANDLED to prevent the generic
->> interrupt core from processing the interrupt storm.
->>
->> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
->> Reported-by: kernel test robot <yujie.liu@intel.com>
->> Closes: https://lore.kernel.org/oe-lkp/202305041325.ae8b0c43-yujie.liu@=
-intel.com/
->> Suggested-by: Lukas Wunner <lukas@wunner.de>
->> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->> ---
->>  drivers/char/tpm/tpm_tis_core.c | 103 +++++++++++++++++++++++++++-----
->>  drivers/char/tpm/tpm_tis_core.h |   4 ++
->>  2 files changed, 92 insertions(+), 15 deletions(-)
->>
->> Resending the patch due to several bounce messages for the first attemp=
-t.
->>
->> Changes to v3 (all requested by Jarko):
->> - remove all inline comments
->> - rename tpm_tis_reenable_polling() to tpm_tis_revert_interrupts()
->> - rename tpm_tis_check_for_interrupt_storm() to tpm_tis_update_unhandle=
-d_irqs()
->> - rename label "unhandled" to "err"
->> - add Fixes: tag
->>
->> Changes to v2:
->> - use define for max number of unhandles irqs(requested by Jarko)
->> - rename intmask to int_mask (requested by Jarko)
->> - rephrased short summary (requested by Jarko)
->> - rename disable_interrupts to tpm_tis_disable_interrupts (requested by=
- Jarko)
->> - print info message concerning adding an entry to tpm_tis_dmi_table
->>   (suggested by Jerry)
->> - amended commit message
->> - handle failure of locality request by returning IRQ_NONE
->> - dont take and release locality in __tpm_tis_disable_interrupts but in=
- its
->> caller
->>
->> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
-_core.c
->> index 558144fa707a..88a5384c09c0 100644
->> --- a/drivers/char/tpm/tpm_tis_core.c
->> +++ b/drivers/char/tpm/tpm_tis_core.c
->> @@ -24,9 +24,12 @@
->>  #include <linux/wait.h>
->>  #include <linux/acpi.h>
->>  #include <linux/freezer.h>
->> +#include <linux/dmi.h>
->>  #include "tpm.h"
->>  #include "tpm_tis_core.h"
->>
->> +#define TPM_TIS_MAX_UNHANDLED_IRQS	1000
->> +
->>  static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value);
->>
->>  static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
->> @@ -468,25 +471,29 @@ static int tpm_tis_send_data(struct tpm_chip *chi=
-p, const u8 *buf, size_t len)
->>  	return rc;
->>  }
->>
->> -static void disable_interrupts(struct tpm_chip *chip)
->> +static void __tpm_tis_disable_interrupts(struct tpm_chip *chip)
->> +{
->> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->> +	u32 int_mask =3D 0;
->> +
->> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &int_mask);
->> +	int_mask &=3D ~TPM_GLOBAL_INT_ENABLE;
->> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), int_mask);
->> +
->> +	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->> +}
->> +
->> +static void tpm_tis_disable_interrupts(struct tpm_chip *chip)
->>  {
->>  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->> -	u32 intmask;
->> -	int rc;
->>
->>  	if (priv->irq =3D=3D 0)
->>  		return;
->>
->> -	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask)=
-;
->> -	if (rc < 0)
->> -		intmask =3D 0;
->> -
->> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
->> -	rc =3D tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask)=
-;
->> +	__tpm_tis_disable_interrupts(chip);
->>
->>  	devm_free_irq(chip->dev.parent, priv->irq, chip);
->>  	priv->irq =3D 0;
->> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->>  }
->>
->>  /*
->> @@ -552,7 +559,7 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *=
-buf, size_t len)
->>  	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
->>  		tpm_msleep(1);
->>  	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
->> -		disable_interrupts(chip);
->> +		tpm_tis_disable_interrupts(chip);
->>  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->>  	return rc;
->>  }
->> @@ -752,6 +759,57 @@ static bool tpm_tis_req_canceled(struct tpm_chip *=
-chip, u8 status)
->>  	return status =3D=3D TPM_STS_COMMAND_READY;
->>  }
->>
->> +static irqreturn_t tpm_tis_revert_interrupts(struct tpm_chip *chip)
->> +{
->> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->> +	const char *product;
->> +	const char *vendor;
->> +
->> +	dev_warn(&chip->dev, FW_BUG
->> +		 "TPM interrupt storm detected, polling instead\n");
->> +
->> +	vendor =3D dmi_get_system_info(DMI_SYS_VENDOR);
->> +	product =3D dmi_get_system_info(DMI_PRODUCT_VERSION);
->> +
->> +	if (vendor && product) {
->> +		dev_info(&chip->dev,
->> +			"Consider adding the following entry to tpm_tis_dmi_table:\n");
->> +		dev_info(&chip->dev, "\tDMI_SYS_VENDOR: %s\n", vendor);
->> +		dev_info(&chip->dev, "\tDMI_PRODUCT_VERSION: %s\n", product);
->> +	}
->> +
->> +	if (tpm_tis_request_locality(chip, 0) !=3D 0)
->> +		return IRQ_NONE;
->> +
->> +	__tpm_tis_disable_interrupts(chip);
->> +	tpm_tis_relinquish_locality(chip, 0);
->> +
->> +	schedule_work(&priv->free_irq_work);
->> +
->> +	return IRQ_HANDLED;
->> +}
->> +
->> +static irqreturn_t tpm_tis_update_unhandled_irqs(struct tpm_chip *chip=
-)
->> +{
->> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->> +	irqreturn_t irqret =3D IRQ_HANDLED;
->> +
->> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
->> +		return IRQ_HANDLED;
->> +
->> +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
->> +		priv->unhandled_irqs =3D 1;
->> +	else
->> +		priv->unhandled_irqs++;
->> +
->> +	priv->last_unhandled_irq =3D jiffies;
->> +
->> +	if (priv->unhandled_irqs > TPM_TIS_MAX_UNHANDLED_IRQS)
->> +		irqret =3D tpm_tis_revert_interrupts(chip);
->> +
->> +	return irqret;
->> +}
->> +
->>  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
->>  {
->>  	struct tpm_chip *chip =3D dev_id;
->> @@ -761,10 +819,10 @@ static irqreturn_t tis_int_handler(int dummy, voi=
-d *dev_id)
->>
->>  	rc =3D tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrup=
-t);
->>  	if (rc < 0)
->> -		return IRQ_NONE;
->> +		goto err;
->>
->>  	if (interrupt =3D=3D 0)
->> -		return IRQ_NONE;
->> +		goto err;
->>
->>  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->>  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
->> @@ -780,10 +838,13 @@ static irqreturn_t tis_int_handler(int dummy, voi=
-d *dev_id)
->>  	rc =3D tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrup=
-t);
->>  	tpm_tis_relinquish_locality(chip, 0);
->>  	if (rc < 0)
->> -		return IRQ_NONE;
->> +		goto err;
->>
->>  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
->>  	return IRQ_HANDLED;
->> +
->> +err:
->> +	return tpm_tis_update_unhandled_irqs(chip);
->>  }
->>
->>  static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
->> @@ -804,6 +865,15 @@ static void tpm_tis_gen_interrupt(struct tpm_chip =
-*chip)
->>  		chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->>  }
->>
->> +static void tpm_tis_free_irq_func(struct work_struct *work)
->> +{
->> +	struct tpm_tis_data *priv =3D container_of(work, typeof(*priv), free_=
-irq_work);
->> +	struct tpm_chip *chip =3D priv->chip;
->> +
->> +	devm_free_irq(chip->dev.parent, priv->irq, chip);
->> +	priv->irq =3D 0;
->> +}
->> +
->>  /* Register the IRQ and issue a command that will cause an interrupt. =
-If an
->>   * irq is seen then leave the chip setup for IRQ operation, otherwise =
-reverse
->>   * everything and leave in polling mode. Returns 0 on success.
->> @@ -816,6 +886,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip=
- *chip, u32 intmask,
->>  	int rc;
->>  	u32 int_status;
->>
->> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
->>
->>  	rc =3D devm_request_threaded_irq(chip->dev.parent, irq, NULL,
->>  				       tis_int_handler, IRQF_ONESHOT | flags,
->> @@ -918,6 +989,7 @@ void tpm_tis_remove(struct tpm_chip *chip)
->>  		interrupt =3D 0;
->>
->>  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
->> +	flush_work(&priv->free_irq_work);
->>
->>  	tpm_tis_clkrun_enable(chip, false);
->>
->> @@ -1021,6 +1093,7 @@ int tpm_tis_core_init(struct device *dev, struct =
-tpm_tis_data *priv, int irq,
->>  	chip->timeout_b =3D msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
->>  	chip->timeout_c =3D msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
->>  	chip->timeout_d =3D msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
->> +	priv->chip =3D chip;
->>  	priv->timeout_min =3D TPM_TIMEOUT_USECS_MIN;
->>  	priv->timeout_max =3D TPM_TIMEOUT_USECS_MAX;
->>  	priv->phy_ops =3D phy_ops;
->> @@ -1179,7 +1252,7 @@ int tpm_tis_core_init(struct device *dev, struct =
-tpm_tis_data *priv, int irq,
->>  			rc =3D tpm_tis_request_locality(chip, 0);
->>  			if (rc < 0)
->>  				goto out_err;
->> -			disable_interrupts(chip);
->> +			tpm_tis_disable_interrupts(chip);
->>  			tpm_tis_relinquish_locality(chip, 0);
->>  		}
->>  	}
->> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis=
-_core.h
->> index 610bfadb6acf..b1a169d7d1ca 100644
->> --- a/drivers/char/tpm/tpm_tis_core.h
->> +++ b/drivers/char/tpm/tpm_tis_core.h
->> @@ -91,11 +91,15 @@ enum tpm_tis_flags {
->>  };
->>
->>  struct tpm_tis_data {
->> +	struct tpm_chip *chip;
->>  	u16 manufacturer_id;
->>  	struct mutex locality_count_mutex;
->>  	unsigned int locality_count;
->>  	int locality;
->>  	int irq;
->> +	struct work_struct free_irq_work;
->> +	unsigned long last_unhandled_irq;
->> +	unsigned int unhandled_irqs;
->>  	unsigned int int_mask;
->>  	unsigned long flags;
->>  	void __iomem *ilb_base_addr;
->>
->> base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
->> --
->> 2.25.1
->
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->
-> Looks very good, thank you.
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkkojs/linux-tpmdd.git/ tpmdd-v6.5-rc2
 
-Great, thanks a lot for the review(s)!
+for you to fetch changes up to 0ec1b5bea32bce719ebdab253462f9c9cb0aca3e:
 
-Regards,
-Lino
+  tpm,tpm_tis: Disable interrupts after 1000 unhandled IRQs (2023-07-14 06:38:04 +0000)
 
+----------------------------------------------------------------
+Hi Linus,
 
+This comes late but it is really just a flush of bug fixes for the most
+part. I've also hold for some tpm_tis IRQ fixes. And holiday season in
+FI has caused some slow downs and conflicts between personal and work
+life.
+
+BR, Jarkko
+
+----------------------------------------------------------------
+Alexander Steffen (4):
+      tpm_tis: Explicitly check for error code
+      tpm_tis: Move CRC check to generic send routine
+      tpm_tis: Use responseRetry to recover from data transfer errors
+      tpm_tis: Resend command to recover from data transfer errors
+
+Alexander Sverdlin (2):
+      tpm: tis_i2c: Limit read bursts to I2C_SMBUS_BLOCK_MAX (32) bytes
+      tpm: tis_i2c: Limit write bursts to I2C_SMBUS_BLOCK_MAX (32) bytes
+
+Azeem Shaikh (1):
+      KEYS: Replace all non-returning strlcpy with strscpy
+
+Christian Göttsche (1):
+      security: keys: perform capable check only on privileged operations
+
+Christian Hesse (2):
+      tpm/tpm_tis: Disable interrupts for Framework Laptop Intel 12th gen
+      tpm/tpm_tis: Disable interrupts for Framework Laptop Intel 13th gen
+
+Colin Ian King (1):
+      tpm: remove redundant variable len
+
+Eric Snowberg (2):
+      KEYS: DigitalSignature link restriction
+      integrity: Enforce digitalSignature usage in the ima and evm keyrings
+
+Florian Bezdeka (1):
+      tpm/tpm_tis: Disable interrupts for Lenovo L590 devices
+
+Ivan Orlov (1):
+      tpm: make all 'class' structures const
+
+Jarkko Sakkinen (1):
+      tpm: tpm_vtpm_proxy: fix a race condition in /dev/vtpmx creation
+
+Jerry Snitselaar (1):
+      tpm: return false from tpm_amd_is_rng_defective on non-x86 platforms
+
+Jiapeng Chong (1):
+      security: keys: Modify mismatched function name
+
+Krishna Yarlagadda (1):
+      tpm_tis-spi: Add hardware wait polling
+
+Lino Sanfilippo (1):
+      tpm,tpm_tis: Disable interrupts after 1000 unhandled IRQs
+
+Peijie Shao (1):
+      tpm_tis_spi: Release chip select when flow control fails
+
+Peter Ujfalusi (1):
+      tpm: tpm_tis: Disable interrupts *only* for AEON UPX-i11
+
+Petr Pavlu (1):
+      keys: Fix linking a duplicate key to a keyring's assoc_array
+
+Uwe Kleine-König (1):
+      tpm: Switch i2c drivers back to use .probe()
+
+Valentin David (1):
+      tpm: Do not remap from ACPI resources again for Pluton TPM
+
+ certs/system_keyring.c                    |  49 +++++++++
+ crypto/asymmetric_keys/restrict.c         |  44 ++++++++
+ drivers/char/tpm/eventlog/tpm1.c          |   3 +-
+ drivers/char/tpm/st33zp24/i2c.c           |   2 +-
+ drivers/char/tpm/tpm-chip.c               |  18 +++-
+ drivers/char/tpm/tpm-interface.c          |  21 ++--
+ drivers/char/tpm/tpm.h                    |   4 +-
+ drivers/char/tpm/tpm2-space.c             |   2 +-
+ drivers/char/tpm/tpm_crb.c                |  19 ++--
+ drivers/char/tpm/tpm_i2c_atmel.c          |   2 +-
+ drivers/char/tpm/tpm_i2c_infineon.c       |   2 +-
+ drivers/char/tpm/tpm_i2c_nuvoton.c        |   2 +-
+ drivers/char/tpm/tpm_tis.c                |  25 +++++
+ drivers/char/tpm/tpm_tis_core.c           | 172 ++++++++++++++++++++++++------
+ drivers/char/tpm/tpm_tis_core.h           |   5 +
+ drivers/char/tpm/tpm_tis_i2c.c            |  61 +++++++----
+ drivers/char/tpm/tpm_tis_i2c_cr50.c       |   2 +-
+ drivers/char/tpm/tpm_tis_spi_main.c       |  99 ++++++++++++++++-
+ drivers/char/tpm/tpm_vtpm_proxy.c         |  30 ++----
+ include/crypto/public_key.h               |  11 ++
+ include/keys/system_keyring.h             |  10 ++
+ security/integrity/digsig.c               |   4 +-
+ security/integrity/evm/Kconfig            |   3 +-
+ security/integrity/ima/Kconfig            |   3 +-
+ security/keys/keyctl.c                    |  11 +-
+ security/keys/request_key.c               |  35 ++++--
+ security/keys/request_key_auth.c          |   2 +-
+ security/keys/trusted-keys/trusted_tpm2.c |   2 +-
+ 28 files changed, 509 insertions(+), 134 deletions(-)
