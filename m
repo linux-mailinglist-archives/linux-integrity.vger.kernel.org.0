@@ -2,404 +2,245 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652EC75307C
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jul 2023 06:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA9675331A
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jul 2023 09:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234973AbjGNESN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jul 2023 00:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
+        id S234782AbjGNHXF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jul 2023 03:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbjGNESN (ORCPT
+        with ESMTP id S235259AbjGNHXC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jul 2023 00:18:13 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A98C106;
-        Thu, 13 Jul 2023 21:18:11 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id CED5321C4671; Thu, 13 Jul 2023 21:18:10 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CED5321C4671
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1689308290;
-        bh=1gEl/GRj6c25B7r9dHqS3pawBqKkEdHWIHvR4HQj6sU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Oal6HR6h4sgrZUtnk3MlRaBzwN7QdW1Gc4+tOBT7PmbOeNpZCqr3pN14m8kZ8i39X
-         ipr2fevWdb2kJ2e48Pqt4ojbmsCIpM0R++7n6rIcCeCsY3Gxkkdj3F/7+JDK2c91eL
-         /l+HeHh9TpGqUna+1UTD9QWbL963n6ytqKUYhKxQ=
-Date:   Thu, 13 Jul 2023 21:18:10 -0700
-From:   Fan Wu <wufan@linux.microsoft.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, audit@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [PATCH RFC v10 2/17] ipe: add policy parser
-Message-ID: <20230714041810.GA15267@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1687986571-16823-3-git-send-email-wufan@linux.microsoft.com>
- <b2abfd3883dce682ee911413fea2ec66.paul@paul-moore.com>
+        Fri, 14 Jul 2023 03:23:02 -0400
+Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147F72722;
+        Fri, 14 Jul 2023 00:22:57 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4R2N2D2s05z9xHf8;
+        Fri, 14 Jul 2023 15:11:48 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwC3hl2197BkUW5+BA--.7298S2;
+        Fri, 14 Jul 2023 08:22:37 +0100 (CET)
+Message-ID: <ecbf405c6806fa4706051e0bf946d742f3442367.camel@huaweicloud.com>
+Subject: Re: [PATCH v3] integrity: Always reference the blacklist keyring
+ with apprasial
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, zohar@linux.ibm.com
+Cc:     dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, roberto.sassu@huawei.com,
+        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Fri, 14 Jul 2023 09:22:25 +0200
+In-Reply-To: <20230714011141.2288133-1-eric.snowberg@oracle.com>
+References: <20230714011141.2288133-1-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2abfd3883dce682ee911413fea2ec66.paul@paul-moore.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwC3hl2197BkUW5+BA--.7298S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFyxKF45Kw1rKF4DXr1xAFb_yoW3Xr4fpa
+        95tF1j9FyxGryIvFy7Aw4q9F4S9r4jqF4UCFZ8t340yFs5Xr10gr18GrZxZFWFkr95t3Z2
+        qF1UK3yUA3Wjq37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgASBF1jj4xobAABss
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Jul 08, 2023 at 12:23:00AM -0400, Paul Moore wrote:
-> On Jun 28, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
-> > 
-> > IPE's interpretation of the what the user trusts is accomplished through
-> > its policy. IPE's design is to not provide support for a single trust
-> > provider, but to support multiple providers to enable the end-user to
-> > choose the best one to seek their needs.
-> > 
-> > This requires the policy to be rather flexible and modular so that
-> > integrity providers, like fs-verity, dm-verity, dm-integrity, or
-> > some other system, can plug into the policy with minimal code changes.
-> > 
-> > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> > ---
-> >  security/ipe/Makefile        |   2 +
-> >  security/ipe/policy.c        |  97 +++++++
-> >  security/ipe/policy.h        |  83 ++++++
-> >  security/ipe/policy_parser.c | 488 +++++++++++++++++++++++++++++++++++
-> >  security/ipe/policy_parser.h |  11 +
-> >  5 files changed, 681 insertions(+)
-> >  create mode 100644 security/ipe/policy.c
-> >  create mode 100644 security/ipe/policy.h
-> >  create mode 100644 security/ipe/policy_parser.c
-> >  create mode 100644 security/ipe/policy_parser.h
+On Thu, 2023-07-13 at 21:11 -0400, Eric Snowberg wrote:
+> Commit 273df864cf746 ("ima: Check against blacklisted hashes for files with
+> modsig") introduced an appraise_flag option for referencing the blacklist
+> keyring.  Any matching binary found on this keyring fails signature
+> validation. This flag only works with module appended signatures.
 > 
-> ...
+> An important part of a PKI infrastructure is to have the ability to do
+> revocation at a later time should a vulnerability be found.  Expand the
+> revocation flag usage to all appraisal functions. The flag is now
+> enabled by default. Setting the flag with an IMA policy has been
+> deprecated. Without a revocation capability like this in place, only
+> authenticity can be maintained. With this change, integrity can now be
+> achieved with digital signature based IMA appraisal.
 > 
-> > diff --git a/security/ipe/policy.c b/security/ipe/policy.c
-> > new file mode 100644
-> > index 000000000000..4069ff075093
-> > --- /dev/null
-> > +++ b/security/ipe/policy.c
-> > @@ -0,0 +1,97 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (C) Microsoft Corporation. All rights reserved.
-> > + */
-> > +
-> > +#include <linux/errno.h>
-> > +#include <linux/verification.h>
-> > +
-> > +#include "ipe.h"
-> > +#include "policy.h"
-> > +#include "policy_parser.h"
-> > +
-> > +/**
-> > + * ipe_free_policy - Deallocate a given IPE policy.
-> > + * @p: Supplies the policy to free.
-> > + *
-> > + * Safe to call on IS_ERR/NULL.
-> > + */
-> > +void ipe_free_policy(struct ipe_policy *p)
-> > +{
-> > +	if (IS_ERR_OR_NULL(p))
-> > +		return;
-> > +
-> > +	free_parsed_policy(p->parsed);
-> > +	if (!p->pkcs7)
-> > +		kfree(p->text);
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> ---
+> v3 changes:
+>   No longer display appraise_flag=check_blacklist in the policy
+> v2 changes:
+>   Update the "case Opt_apprase_flag"
+>   Removed "appraise_flag=" in the powerpc arch specific policy rules
+> ---
+>  Documentation/ABI/testing/ima_policy  |  6 +++---
+>  arch/powerpc/kernel/ima_arch.c        |  8 ++++----
+>  security/integrity/ima/ima_appraise.c | 12 +++++++-----
+>  security/integrity/ima/ima_policy.c   | 17 +++++------------
+>  4 files changed, 19 insertions(+), 24 deletions(-)
 > 
-> Since it's safe to kfree(NULL), you could kfree(p->text) without
-> having to check if p->pkcs7 was non-NULL, correct?
-> 
-when p->pkcs7 is not NULL, p->text points to the plain text policy area inside
-the data of p->pkcs7, for such cases p->text is not really an allocated memory chunk
-so it cannot be passed to kfree.
+> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
+> index 49db0ff288e5..a712c396f6e9 100644
+> --- a/Documentation/ABI/testing/ima_policy
+> +++ b/Documentation/ABI/testing/ima_policy
+> @@ -57,9 +57,9 @@ Description:
+>  				stored in security.ima xattr. Requires
+>  				specifying "digest_type=verity" first.)
+>  
+> -			appraise_flag:= [check_blacklist]
+> -			Currently, blacklist check is only for files signed with appended
+> -			signature.
+> +			appraise_flag:= [check_blacklist] (deprecated)
+> +			Setting the check_blacklist flag is no longer necessary.
+> +			All apprasial functions set it by default.
 
-I might better add a comment here to avoid confusion in the future.
+Typo.
 
-> > +	kfree(p->pkcs7);
-> > +	kfree(p);
-> > +}
-> 
-> ...
-> 
-> > diff --git a/security/ipe/policy.h b/security/ipe/policy.h
-> > new file mode 100644
-> > index 000000000000..113a037f0d71
-> > --- /dev/null
-> > +++ b/security/ipe/policy.h
-> > @@ -0,0 +1,83 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) Microsoft Corporation. All rights reserved.
-> > + */
-> > +#ifndef _IPE_POLICY_H
-> > +#define _IPE_POLICY_H
-> > +
-> > +#include <linux/list.h>
-> > +#include <linux/types.h>
-> > +
-> > +enum ipe_op_type {
-> > +	__IPE_OP_EXEC = 0,
-> > +	__IPE_OP_FIRMWARE,
-> > +	__IPE_OP_KERNEL_MODULE,
-> > +	__IPE_OP_KEXEC_IMAGE,
-> > +	__IPE_OP_KEXEC_INITRAMFS,
-> > +	__IPE_OP_IMA_POLICY,
-> > +	__IPE_OP_IMA_X509,
-> > +	__IPE_OP_MAX
-> > +};
-> 
-> Thanks for capitalizing the enums, that helps make IPE consistent with
-> the majority of the kernel.  However, when I talked about using
-> underscores for "__IPE_OP_MAX", I was talking about *only*
-> "__IPE_OP_MAX" to help indicate it is a sentinel value and not an enum
-> value that would normally be used by itself.
-> 
-> Here is what I was intending:
-> 
-> enum ipe_op_type {
->   IPE_OP_EXEC = 0,
->   IPE_OP_FIRMWARE,
->   ...
->   IPE_OP_IMA_X509,
->   __IPE_OP_MAX
-> };
-> 
-> > +#define __IPE_OP_INVALID __IPE_OP_MAX
-> 
-> Similarly, I would remove the underscores from "__IPE_OP_INVALID":
-> 
-> #define IPE_OP_INVALID __IPE_OP_MAX
-> 
-> Both of these comments would apply to the other IPE enums as well.
-> 
-Sorry for the mistake, I will update them.
+>  			digest_type:= verity
+>  			    Require fs-verity's file digest instead of the
+>  			    regular IMA file hash.
+> diff --git a/arch/powerpc/kernel/ima_arch.c b/arch/powerpc/kernel/ima_arch.c
+> index 957abd592075..b7029beed847 100644
+> --- a/arch/powerpc/kernel/ima_arch.c
+> +++ b/arch/powerpc/kernel/ima_arch.c
+> @@ -23,9 +23,9 @@ bool arch_ima_get_secureboot(void)
+>   * is not enabled.
+>   */
+>  static const char *const secure_rules[] = {
+> -	"appraise func=KEXEC_KERNEL_CHECK appraise_flag=check_blacklist appraise_type=imasig|modsig",
+> +	"appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig|modsig",
+>  #ifndef CONFIG_MODULE_SIG
+> -	"appraise func=MODULE_CHECK appraise_flag=check_blacklist appraise_type=imasig|modsig",
+> +	"appraise func=MODULE_CHECK appraise_type=imasig|modsig",
+>  #endif
+>  	NULL
+>  };
+> @@ -49,9 +49,9 @@ static const char *const trusted_rules[] = {
+>  static const char *const secure_and_trusted_rules[] = {
+>  	"measure func=KEXEC_KERNEL_CHECK template=ima-modsig",
+>  	"measure func=MODULE_CHECK template=ima-modsig",
+> -	"appraise func=KEXEC_KERNEL_CHECK appraise_flag=check_blacklist appraise_type=imasig|modsig",
+> +	"appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig|modsig",
+>  #ifndef CONFIG_MODULE_SIG
+> -	"appraise func=MODULE_CHECK appraise_flag=check_blacklist appraise_type=imasig|modsig",
+> +	"appraise func=MODULE_CHECK appraise_type=imasig|modsig",
+>  #endif
+>  	NULL
+>  };
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index 491c1aca0b1c..870dde67707b 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -458,11 +458,13 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
+>  		ima_get_modsig_digest(modsig, &hash_algo, &digest, &digestsize);
+>  
+>  		rc = is_binary_blacklisted(digest, digestsize);
+> -		if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
+> -			process_buffer_measurement(&nop_mnt_idmap, NULL, digest, digestsize,
+> -						   "blacklisted-hash", NONE,
+> -						   pcr, NULL, false, NULL, 0);
+> -	}
+> +	} else if (iint->flags & IMA_DIGSIG_REQUIRED && iint->ima_hash)
+> +		rc = is_binary_blacklisted(iint->ima_hash->digest, iint->ima_hash->length);
 
-> > diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parser.c
-> > new file mode 100644
-> > index 000000000000..27e5767480b0
-> > --- /dev/null
-> > +++ b/security/ipe/policy_parser.c
-> > @@ -0,0 +1,488 @@
-> 
-> ...
-> 
-> > +/**
-> > + * parse_header - Parse policy header information.
-> > + * @line: Supplies header line to be parsed.
-> > + * @p: Supplies the partial parsed policy.
-> > + *
-> > + * Return:
-> > + * * 0	- OK
-> > + * * !0	- Standard errno
-> > + */
-> > +static int parse_header(char *line, struct ipe_parsed_policy *p)
-> > +{
-> > +	int rc = 0;
-> > +	char *t, *ver = NULL;
-> > +	substring_t args[MAX_OPT_ARGS];
-> > +	size_t idx = 0;
-> > +
-> > +	while ((t = strsep(&line, " \t")) != NULL) {
-> 
-> It might be nice to define a macro to help reinforce that " \t" are
-> the IPE policy delimiters, how about IPE_POLICY_DELIM?
-> 
-> #define IPE_POLICY_DELIM " \t"
-> 
-Sure, this is better, I will take this idea.
+Curiosity (I didn't read the previous discussions), if you are checking
+if binaries are blacklisted, why not doing for the BPRM_CHECK hook?
 
-> > +		int token;
-> > +
-> > +		if (*t == '\0')
-> > +			continue;
-> 
-> Why would you want to continue if you run into a NUL byte?  You would
-> only run into a NUL byte if the line was trimmed due to comments or
-> whitespace, correct?  If that is the case, wouldn't you want to
-> break out of this loop when hitting a NUL byte?
-> 
-This happens when two spaces are passed, for example "DEFAULT<space><space>action=DENY"
-has two spaces inside, the strsep will create a NUL string when it sees the first space,
-so for such cases I think we should just skip to the next token.
+> +
+> +	if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
 
-> > +		if (idx >= __IPE_HEADER_MAX) {
-> > +			rc = -EBADMSG;
-> > +			goto err;
-> > +		}
-> > +
-> > +		token = match_token(t, header_tokens, args);
-> > +		if (token != idx) {
-> > +			rc = -EBADMSG;
-> > +			goto err;
-> > +		}
-> > +
-> > +		switch (token) {
-> > +		case __IPE_HEADER_POLICY_NAME:
-> > +			p->name = match_strdup(&args[0]);
-> > +			if (!p->name)
-> > +				rc = -ENOMEM;
-> > +			break;
-> > +		case __IPE_HEADER_POLICY_VERSION:
-> > +			ver = match_strdup(&args[0]);
-> > +			if (!ver) {
-> > +				rc = -ENOMEM;
-> > +				break;
-> > +			}
-> > +			rc = parse_version(ver, p);
-> > +			break;
-> > +		default:
-> > +			rc = -EBADMSG;
-> > +		}
-> > +		if (rc)
-> > +			goto err;
-> > +		++idx;
-> > +	}
-> > +
-> > +	if (idx != __IPE_HEADER_MAX) {
-> > +		rc = -EBADMSG;
-> > +		goto err;
-> > +	}
-> > +
-> > +out:
-> > +	kfree(ver);
-> > +	return rc;
-> > +err:
-> > +	kfree(p->name);
-> > +	p->name = NULL;
-> > +	goto out;
-> 
-> Do we need to worry about ipe_parsed_policy::name here?  If we are
-> returning an error the caller will call free_parsed_policy() for us,
-> right?  This would allow us to get rid of the 'err' jump label and
-> simply use 'out' for both success and failure.
-> 
-Yes this is not necessary, I will remove this part.
+Uhm, the measurement will be done only if you are also doing appraisal
+with digital signatures. But if you have only measure rules, you won't
+know. Shouldn't you run is_binary_blacklisted() also for measure rules?
 
-> > +}
-> 
-> ...
-> 
-> > +/**
-> > + * parse_rule - parse a policy rule line.
-> > + * @line: Supplies rule line to be parsed.
-> > + * @p: Supplies the partial parsed policy.
-> > + *
-> > + * Return:
-> > + * * !IS_ERR	- OK
-> > + * * -ENOMEM	- Out of memory
-> > + * * -EBADMSG	- Policy syntax error
-> > + */
-> > +static int parse_rule(char *line, struct ipe_parsed_policy *p)
-> > +{
-> > +	int rc = 0;
-> > +	bool first_token = true, is_default_rule = false;
-> > +	bool op_parsed = false;
-> > +	enum ipe_op_type op = __IPE_OP_INVALID;
-> > +	enum ipe_action_type action = __IPE_ACTION_INVALID;
-> > +	struct ipe_rule *r = NULL;
-> > +	char *t;
-> > +
-> > +	r = kzalloc(sizeof(*r), GFP_KERNEL);
-> > +	if (!r)
-> > +		return -ENOMEM;
-> > +
-> > +	INIT_LIST_HEAD(&r->next);
-> > +	INIT_LIST_HEAD(&r->props);
-> > +
-> > +	while (t = strsep(&line, " \t"), line) {
-> 
-> See my previous comment about IPE_POLICY_DELIM.
-> 
-> > +		if (*t == '\0')
-> > +			continue;
-> 
-> I still wonder why continuing here is the desired behavior, can you
-> help me understand?
-This one is the same to the parse header function, when two consecutive
-delimitators is passed to strsep it will generate a '\0'.
+Thanks
 
-> 
-> > +		if (first_token && token_default(t)) {
-> > +			is_default_rule = true;
-> > +		} else {
-> > +			if (!op_parsed) {
-> > +				op = parse_operation(t);
-> > +				if (op == __IPE_OP_INVALID)
-> > +					rc = -EBADMSG;
-> > +				else
-> > +					op_parsed = true;
-> > +			} else {
-> > +				rc = parse_property(t, r);
-> > +			}
-> > +		}
-> > +
-> > +		if (rc)
-> > +			goto err;
-> > +		first_token = false;
-> > +	}
-> > +
-> > +	action = parse_action(t);
-> > +	if (action == __IPE_ACTION_INVALID) {
-> > +		rc = -EBADMSG;
-> > +		goto err;
-> > +	}
-> > +
-> > +	if (is_default_rule) {
-> > +		if (!list_empty(&r->props)) {
-> > +			rc = -EBADMSG;
-> > +		} else if (op == __IPE_OP_INVALID) {
-> > +			if (p->global_default_action != __IPE_ACTION_INVALID)
-> > +				rc = -EBADMSG;
-> > +			else
-> > +				p->global_default_action = action;
-> > +		} else {
-> > +			if (p->rules[op].default_action != __IPE_ACTION_INVALID)
-> > +				rc = -EBADMSG;
-> > +			else
-> > +				p->rules[op].default_action = action;
-> > +		}
-> > +	} else if (op != __IPE_OP_INVALID && action != __IPE_ACTION_INVALID) {
-> > +		r->op = op;
-> > +		r->action = action;
-> > +	} else {
-> > +		rc = -EBADMSG;
-> > +	}
-> > +
-> > +	if (rc)
-> > +		goto err;
-> > +	if (!is_default_rule)
-> > +		list_add_tail(&r->next, &p->rules[op].rules);
-> > +	else
-> > +		free_rule(r);
-> > +
-> > +out:
-> > +	return rc;
-> > +err:
-> > +	free_rule(r);
-> > +	goto out;
-> 
-> In keeping with the rule of not jumping to a label only to
-> immediately return, and considering that the only place where we jump
-> to 'out' is in the 'err' code, let's get rid of the 'out' label and
-> have 'err' "return rc" instead of "goto out".
-> 
-Sure I can change this part, yeah I agree this looks weird. 
+Roberto
 
--Fan
-> > +}
-> 
-> --
-> paul-moore.com
+> +		process_buffer_measurement(&nop_mnt_idmap, NULL, digest, digestsize,
+> +					   "blacklisted-hash", NONE,
+> +					   pcr, NULL, false, NULL, 0);
+>  
+>  	return rc;
+>  }
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index c9b3bd8f1bb9..69452b79686b 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -1280,7 +1280,7 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+>  				     IMA_FSNAME | IMA_GID | IMA_EGID |
+>  				     IMA_FGROUP | IMA_DIGSIG_REQUIRED |
+>  				     IMA_PERMIT_DIRECTIO | IMA_VALIDATE_ALGOS |
+> -				     IMA_VERITY_REQUIRED))
+> +				     IMA_CHECK_BLACKLIST | IMA_VERITY_REQUIRED))
+>  			return false;
+>  
+>  		break;
+> @@ -1355,7 +1355,7 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+>  
+>  	/* Ensure that combinations of flags are compatible with each other */
+>  	if (entry->flags & IMA_CHECK_BLACKLIST &&
+> -	    !(entry->flags & IMA_MODSIG_ALLOWED))
+> +	    !(entry->flags & IMA_DIGSIG_REQUIRED))
+>  		return false;
+>  
+>  	/*
+> @@ -1803,11 +1803,11 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>  				if (entry->flags & IMA_VERITY_REQUIRED)
+>  					result = -EINVAL;
+>  				else
+> -					entry->flags |= IMA_DIGSIG_REQUIRED;
+> +					entry->flags |= IMA_DIGSIG_REQUIRED | IMA_CHECK_BLACKLIST;
+>  			} else if (strcmp(args[0].from, "sigv3") == 0) {
+>  				/* Only fsverity supports sigv3 for now */
+>  				if (entry->flags & IMA_VERITY_REQUIRED)
+> -					entry->flags |= IMA_DIGSIG_REQUIRED;
+> +					entry->flags |= IMA_DIGSIG_REQUIRED | IMA_CHECK_BLACKLIST;
+>  				else
+>  					result = -EINVAL;
+>  			} else if (IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG) &&
+> @@ -1816,18 +1816,13 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>  					result = -EINVAL;
+>  				else
+>  					entry->flags |= IMA_DIGSIG_REQUIRED |
+> -						IMA_MODSIG_ALLOWED;
+> +						IMA_MODSIG_ALLOWED | IMA_CHECK_BLACKLIST;
+>  			} else {
+>  				result = -EINVAL;
+>  			}
+>  			break;
+>  		case Opt_appraise_flag:
+>  			ima_log_string(ab, "appraise_flag", args[0].from);
+> -			if (IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG) &&
+> -			    strstr(args[0].from, "blacklist"))
+> -				entry->flags |= IMA_CHECK_BLACKLIST;
+> -			else
+> -				result = -EINVAL;
+>  			break;
+>  		case Opt_appraise_algos:
+>  			ima_log_string(ab, "appraise_algos", args[0].from);
+> @@ -2271,8 +2266,6 @@ int ima_policy_show(struct seq_file *m, void *v)
+>  	}
+>  	if (entry->flags & IMA_VERITY_REQUIRED)
+>  		seq_puts(m, "digest_type=verity ");
+> -	if (entry->flags & IMA_CHECK_BLACKLIST)
+> -		seq_puts(m, "appraise_flag=check_blacklist ");
+>  	if (entry->flags & IMA_PERMIT_DIRECTIO)
+>  		seq_puts(m, "permit_directio ");
+>  	rcu_read_unlock();
+
