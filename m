@@ -2,55 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433E3756677
-	for <lists+linux-integrity@lfdr.de>; Mon, 17 Jul 2023 16:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD97758257
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jul 2023 18:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbjGQOdn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 17 Jul 2023 10:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S230167AbjGRQoS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jul 2023 12:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbjGQOd1 (ORCPT
+        with ESMTP id S229476AbjGRQoR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 17 Jul 2023 10:33:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA59173A;
-        Mon, 17 Jul 2023 07:33:01 -0700 (PDT)
+        Tue, 18 Jul 2023 12:44:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C026F118;
+        Tue, 18 Jul 2023 09:44:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49C8F60F0B;
-        Mon, 17 Jul 2023 14:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862B2C433C8;
-        Mon, 17 Jul 2023 14:32:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 551246167A;
+        Tue, 18 Jul 2023 16:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA8BC433C7;
+        Tue, 18 Jul 2023 16:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689604366;
-        bh=Yva/5MHbcy0bGydQM8nVXYxJtVAjH+L9SZPQ/I541CE=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=D5ya+EMh9TGJ9ctyqtA7kO4yD9QB2HMhVeFFSJMT4KjpvUGw3trZGZdRm0U8UuGRJ
-         OGathQfjIZo6SQFol7EjO/gmWjYSvBF/0Rv7vMqUPoOjuSjjCXactfsI6HGIInvQwu
-         BGyxbby0qOGThVMHl0eN+8O6MjleA1NXgyFED/pK+U7LbAt/WsEmTizgXxoLepscWx
-         QWr6SYPlhCb2tWXpOSCZx+in3xiFthSF+V7NR8TXpZpdG/cQUsm4UOO9X4NnIDpyDw
-         z+emPx7qTVuDdcOVVIQZbaoWZLDA69/96hpV8cPcT3KaWxi/oFICuZrJRsPzcFesDA
-         i0sQWT4WrIakw==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 17 Jul 2023 14:32:43 +0000
-Message-Id: <CU4IRD6Z82AN.1NSKWR27ODX5I@seitikki>
-Cc:     "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] tpmdd changes for v6.5-rc2
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-X-Mailer: aerc 0.14.0
-References: <20230714181325.3351-1-jarkko@kernel.org>
- <CAHk-=wg6Gv+zbBt7RLN43KD0BaegS=SYkwaHjd_YM5BDsvS08w@mail.gmail.com>
-In-Reply-To: <CAHk-=wg6Gv+zbBt7RLN43KD0BaegS=SYkwaHjd_YM5BDsvS08w@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        s=k20201202; t=1689698655;
+        bh=KHZCd/nJ25NPZ2OT/3SmdbcC2TTHaZIhY3NAbhBmwZA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hk4gNuqjlw71rnaFKtTYOD1RlIjGKSPtpOb3NGuWGucJgWxGU9qNN12WOK7JYplbs
+         w20iL3fX87X2XmJEBOfWjQDqIUwDD94tmXVtSWbJ5cYwvH4qwLXhMYdoI5dgRm7CEP
+         Ia/97+z8yKw+6JVnTDexLklky70V+7BNk4Ro0Jryc1XNa0Qx/l306qcJFLUC2O+nR9
+         fVTmhD619+z0ip+fzGsqZTTT3GrlyafahZSnlI8wNHMor+mpGljqjyVzTL97WkDjMg
+         /R0DTXaFLO9FPh5e9W5TngkNixpJlBj9qs0YonNVi/JoiDPuTxO55ZDZNJI5Enzmkk
+         CiLuQqWF5glnA==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: [GIT PULL] tpmdd changes for v6.5-rc3
+Date:   Tue, 18 Jul 2023 19:43:48 +0300
+Message-Id: <20230718164348.35519-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,30 +57,67 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun Jul 16, 2023 at 7:11 PM UTC, Linus Torvalds wrote:
-> On Fri, 14 Jul 2023 at 11:14, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > are available in the Git repository at:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/jarkko/linux-tpmdd.git/ tpm=
-dd-v6.5-rc2-fixed
->
-> No, that still isn't a valid git repo path.
->
-> This all also looks like it should have come in during the merge
-> window, so I'm just going to ignore it.
->
-> Feel free to send in actual fixes - not this massive update - once you
-> have fixed your workflow.
->
-> But don't even bother emailing me until you have actually *verified*
-> what the heck you are sending me.
->
-> No more broken script garbage. No more untested git pull requests that
-> don't actually work.
->
->                 Linus
+  Linux 6.5-rc2 (2023-07-16 15:10:37 -0700)
 
-NP, I'll cut down the pr, and fix the issues.
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-v6.5-rc3
+
+for you to fetch changes up to 481c2d14627de8ecbb54dd125466e4b4a5069b47:
+
+  tpm,tpm_tis: Disable interrupts after 1000 unhandled IRQs (2023-07-17 19:40:27 +0000)
+
+----------------------------------------------------------------
+Hi Linus,
+
+This the trimmed down version of the previous pull request.
 
 BR, Jarkko
+
+----------------------------------------------------------------
+Alexander Sverdlin (2):
+      tpm: tis_i2c: Limit read bursts to I2C_SMBUS_BLOCK_MAX (32) bytes
+      tpm: tis_i2c: Limit write bursts to I2C_SMBUS_BLOCK_MAX (32) bytes
+
+Christian Hesse (2):
+      tpm/tpm_tis: Disable interrupts for Framework Laptop Intel 12th gen
+      tpm/tpm_tis: Disable interrupts for Framework Laptop Intel 13th gen
+
+Florian Bezdeka (1):
+      tpm/tpm_tis: Disable interrupts for Lenovo L590 devices
+
+Jarkko Sakkinen (1):
+      tpm: tpm_vtpm_proxy: fix a race condition in /dev/vtpmx creation
+
+Jerry Snitselaar (1):
+      tpm: return false from tpm_amd_is_rng_defective on non-x86 platforms
+
+Jiapeng Chong (1):
+      security: keys: Modify mismatched function name
+
+Lino Sanfilippo (1):
+      tpm,tpm_tis: Disable interrupts after 1000 unhandled IRQs
+
+Peijie Shao (1):
+      tpm_tis_spi: Release chip select when flow control fails
+
+Peter Ujfalusi (1):
+      tpm: tpm_tis: Disable interrupts *only* for AEON UPX-i11
+
+Petr Pavlu (1):
+      keys: Fix linking a duplicate key to a keyring's assoc_array
+
+Valentin David (1):
+      tpm: Do not remap from ACPI resources again for Pluton TPM
+
+ drivers/char/tpm/tpm-chip.c               |   7 ++
+ drivers/char/tpm/tpm_crb.c                |  19 +++---
+ drivers/char/tpm/tpm_tis.c                |  25 ++++++++
+ drivers/char/tpm/tpm_tis_core.c           | 103 +++++++++++++++++++++++++-----
+ drivers/char/tpm/tpm_tis_core.h           |   4 ++
+ drivers/char/tpm/tpm_tis_i2c.c            |  59 ++++++++++-------
+ drivers/char/tpm/tpm_tis_spi_main.c       |   8 +++
+ drivers/char/tpm/tpm_vtpm_proxy.c         |  30 ++-------
+ security/keys/request_key.c               |  35 ++++++----
+ security/keys/trusted-keys/trusted_tpm2.c |   2 +-
+ 10 files changed, 212 insertions(+), 80 deletions(-)
