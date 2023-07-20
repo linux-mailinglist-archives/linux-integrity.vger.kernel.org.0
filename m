@@ -2,242 +2,158 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3565758919
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jul 2023 01:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1869675B0EE
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Jul 2023 16:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjGRXji (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jul 2023 19:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        id S229816AbjGTONR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 Jul 2023 10:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjGRXji (ORCPT
+        with ESMTP id S229592AbjGTONQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jul 2023 19:39:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C41EC
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jul 2023 16:39:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 954BB612C5
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jul 2023 23:39:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31085C433C8;
-        Tue, 18 Jul 2023 23:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689723572;
-        bh=xbSfCumD8B2VKJnjvl3kRtZnWmIkW+3s3jFeuWj94SM=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=T680gBsdZH10WxjsxxMBw1U5zXJkdbzeNCaJNFgfROhvGPEu3C6NiN75tAcvfr88x
-         5wdHlQ5TFuopFvh2ksmitDhE0k8g76SV2Drit2qpB4BnLc0wSViiv1TSobZzI4hHTW
-         Ph5HjB8n/kCu33oVuHxgaDuYRO7TWmJ/L0Yw0B6D6c/ipmTJx1DnhH3CeR9UohEy3K
-         hyImTl+QnwTyMIFBLgiF9LJxCDXZN1RaLIMoSyVbzapet65NJOeOqlIxAHg0Tniid6
-         l4bKoXFihGhL5KRqMl7wBBrht+RYq8FLVv2coYVwSvJ0o87nDPczjtIrtx8dEsi36S
-         id3PoU9u/x3pA==
+        Thu, 20 Jul 2023 10:13:16 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3052115;
+        Thu, 20 Jul 2023 07:13:15 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36KE7pnL000536;
+        Thu, 20 Jul 2023 14:13:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=JHHpENURdf5rB7etiqoKe/V/ViYThscFn9W/0Kvtu+w=;
+ b=h0leQb4uAKWvBTcKBAms8xFVhrv+9FV7SWULIAlP0jJeF1F8EC9A5DXohPlWAkGQptq2
+ JZ/gNC7NvBbA9fjbQMwDDSlugJf9cq9UW4a6CQKDkJ5AXxqItUJcdVVUsiG9xuh/Ivju
+ ViMqBqlbXPuC+CLr/1nBKyk0oze0rQUQ8Zg5CpuBtgVjYrHKJHSuaPWC8ZRrgPIDWiSu
+ F0wbTBRG/iYletcdDpNxrH75cIGLX0aMBO0SvgE0MpOATxQjjuzqoviAY2ZXmzlDE7/l
+ GLMEdhUXGjAdsx8oijxpLZyXVgruYsuD935oDfjfn/60pIej/4ZjRyynddE6N6rjdsqy pA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rxwcgw4hu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jul 2023 14:13:02 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36KDqgD6030761;
+        Thu, 20 Jul 2023 14:12:54 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rxwcgw496-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jul 2023 14:12:53 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36KDoCJT016862;
+        Thu, 20 Jul 2023 14:12:37 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3rv5sryvqx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Jul 2023 14:12:37 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36KECaL124838768
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Jul 2023 14:12:37 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B89E45804B;
+        Thu, 20 Jul 2023 14:12:36 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D35AB58059;
+        Thu, 20 Jul 2023 14:12:35 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.191.187])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Jul 2023 14:12:35 +0000 (GMT)
+Message-ID: <b6a0475c67e975cf564e4b78830ae0e598c584ac.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: require signed IMA policy when UEFI secure boot is
+ enabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Thu, 20 Jul 2023 10:12:35 -0400
+In-Reply-To: <kglacif5fwh3byrjkmlzygpnaecdb2zxh6hbglnvdbsfu7hbxm@gc3mjr37mnpb>
+References: <20230703115442.129725-1-coxu@redhat.com>
+         <b61fedf214cbe72de063a3bf516dd72f80595219.camel@linux.ibm.com>
+         <kglacif5fwh3byrjkmlzygpnaecdb2zxh6hbglnvdbsfu7hbxm@gc3mjr37mnpb>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 19 Jul 2023 02:38:32 +0300
-Message-Id: <CU5OZTFCHAAK.2PFDUJD0CY2RE@suppilovahvero>
-Cc:     "Peter Huewe" <peterhuewe@gmx.de>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
-        "Peter Senna Tschudin" <peter.senna@gmail.com>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <kernel@pengutronix.de>, <linux-integrity@vger.kernel.org>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] tpm: Switch i2c drivers back to use .probe()
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        <cgzones@googlemail.com>
-X-Mailer: aerc 0.14.0
-References: <20230525202424.630260-1-u.kleine-koenig@pengutronix.de>
- <CT8AVI0MBB8R.U6HPYA37GZTK@suppilovahvero>
- <20230718203449.dsnrbzcdsoogbqp2@pengutronix.de>
-In-Reply-To: <20230718203449.dsnrbzcdsoogbqp2@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6nk1TxvYqy4j526hl-FRjEE0_qfBbqzg
+X-Proofpoint-ORIG-GUID: wb_rzvVwE4dwTN7r0uqQdOR67Pxyhg2y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-20_07,2023-07-20_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ phishscore=0 mlxlogscore=999 suspectscore=0 impostorscore=0 adultscore=0
+ spamscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2307200118
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Jul 18, 2023 at 11:34 PM EEST, Uwe Kleine-K=C3=B6nig wrote:
-> Hello,
->
-> On Fri, Jun 09, 2023 at 08:36:40PM +0300, Jarkko Sakkinen wrote:
-> > On Thu May 25, 2023 at 11:24 PM EEST, Uwe Kleine-K=C3=B6nig wrote:
-> > > After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> > > call-back type"), all drivers being converted to .probe_new() and the=
-n
-> > > 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
-> > > convert back to (the new) .probe() to be able to eventually drop
-> > > .probe_new() from struct i2c_driver.
-> > >
-> > > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > > ---
-> > >  drivers/char/tpm/st33zp24/i2c.c     | 2 +-
-> > >  drivers/char/tpm/tpm_i2c_atmel.c    | 2 +-
-> > >  drivers/char/tpm/tpm_i2c_infineon.c | 2 +-
-> > >  drivers/char/tpm/tpm_i2c_nuvoton.c  | 2 +-
-> > >  drivers/char/tpm/tpm_tis_i2c.c      | 2 +-
-> > >  drivers/char/tpm/tpm_tis_i2c_cr50.c | 2 +-
-> > >  6 files changed, 6 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33z=
-p24/i2c.c
-> > > index 2d28f55ef490..661574bb0acf 100644
-> > > --- a/drivers/char/tpm/st33zp24/i2c.c
-> > > +++ b/drivers/char/tpm/st33zp24/i2c.c
-> > > @@ -160,7 +160,7 @@ static struct i2c_driver st33zp24_i2c_driver =3D =
-{
-> > >  		.of_match_table =3D of_match_ptr(of_st33zp24_i2c_match),
-> > >  		.acpi_match_table =3D ACPI_PTR(st33zp24_i2c_acpi_match),
-> > >  	},
-> > > -	.probe_new =3D st33zp24_i2c_probe,
-> > > +	.probe =3D st33zp24_i2c_probe,
-> > >  	.remove =3D st33zp24_i2c_remove,
-> > >  	.id_table =3D st33zp24_i2c_id
-> > >  };
-> > > diff --git a/drivers/char/tpm/tpm_i2c_atmel.c b/drivers/char/tpm/tpm_=
-i2c_atmel.c
-> > > index 8f77154e0550..301a95b3734f 100644
-> > > --- a/drivers/char/tpm/tpm_i2c_atmel.c
-> > > +++ b/drivers/char/tpm/tpm_i2c_atmel.c
-> > > @@ -203,7 +203,7 @@ static SIMPLE_DEV_PM_OPS(i2c_atmel_pm_ops, tpm_pm=
-_suspend, tpm_pm_resume);
-> > > =20
-> > >  static struct i2c_driver i2c_atmel_driver =3D {
-> > >  	.id_table =3D i2c_atmel_id,
-> > > -	.probe_new =3D i2c_atmel_probe,
-> > > +	.probe =3D i2c_atmel_probe,
-> > >  	.remove =3D i2c_atmel_remove,
-> > >  	.driver =3D {
-> > >  		.name =3D I2C_DRIVER_NAME,
-> > > diff --git a/drivers/char/tpm/tpm_i2c_infineon.c b/drivers/char/tpm/t=
-pm_i2c_infineon.c
-> > > index 7cdaff52a96d..81d8a78dc655 100644
-> > > --- a/drivers/char/tpm/tpm_i2c_infineon.c
-> > > +++ b/drivers/char/tpm/tpm_i2c_infineon.c
-> > > @@ -716,7 +716,7 @@ static void tpm_tis_i2c_remove(struct i2c_client =
-*client)
-> > > =20
-> > >  static struct i2c_driver tpm_tis_i2c_driver =3D {
-> > >  	.id_table =3D tpm_tis_i2c_table,
-> > > -	.probe_new =3D tpm_tis_i2c_probe,
-> > > +	.probe =3D tpm_tis_i2c_probe,
-> > >  	.remove =3D tpm_tis_i2c_remove,
-> > >  	.driver =3D {
-> > >  		   .name =3D "tpm_i2c_infineon",
-> > > diff --git a/drivers/char/tpm/tpm_i2c_nuvoton.c b/drivers/char/tpm/tp=
-m_i2c_nuvoton.c
-> > > index a026e98add50..d7be03c41098 100644
-> > > --- a/drivers/char/tpm/tpm_i2c_nuvoton.c
-> > > +++ b/drivers/char/tpm/tpm_i2c_nuvoton.c
-> > > @@ -650,7 +650,7 @@ static SIMPLE_DEV_PM_OPS(i2c_nuvoton_pm_ops, tpm_=
-pm_suspend, tpm_pm_resume);
-> > > =20
-> > >  static struct i2c_driver i2c_nuvoton_driver =3D {
-> > >  	.id_table =3D i2c_nuvoton_id,
-> > > -	.probe_new =3D i2c_nuvoton_probe,
-> > > +	.probe =3D i2c_nuvoton_probe,
-> > >  	.remove =3D i2c_nuvoton_remove,
-> > >  	.driver =3D {
-> > >  		.name =3D "tpm_i2c_nuvoton",
-> > > diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_ti=
-s_i2c.c
-> > > index c8c34adc14c0..11b4196b7136 100644
-> > > --- a/drivers/char/tpm/tpm_tis_i2c.c
-> > > +++ b/drivers/char/tpm/tpm_tis_i2c.c
-> > > @@ -379,7 +379,7 @@ static struct i2c_driver tpm_tis_i2c_driver =3D {
-> > >  		.pm =3D &tpm_tis_pm,
-> > >  		.of_match_table =3D of_match_ptr(of_tis_i2c_match),
-> > >  	},
-> > > -	.probe_new =3D tpm_tis_i2c_probe,
-> > > +	.probe =3D tpm_tis_i2c_probe,
-> > >  	.remove =3D tpm_tis_i2c_remove,
-> > >  	.id_table =3D tpm_tis_i2c_id,
-> > >  };
-> > > diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/t=
-pm_tis_i2c_cr50.c
-> > > index 376ae18a04eb..e70abd69e1ae 100644
-> > > --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> > > +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> > > @@ -779,7 +779,7 @@ static void tpm_cr50_i2c_remove(struct i2c_client=
- *client)
-> > >  static SIMPLE_DEV_PM_OPS(cr50_i2c_pm, tpm_pm_suspend, tpm_pm_resume)=
-;
-> > > =20
-> > >  static struct i2c_driver cr50_i2c_driver =3D {
-> > > -	.probe_new =3D tpm_cr50_i2c_probe,
-> > > +	.probe =3D tpm_cr50_i2c_probe,
-> > >  	.remove =3D tpm_cr50_i2c_remove,
-> > >  	.driver =3D {
-> > >  		.name =3D "cr50_i2c",
-> > > --=20
-> > > 2.39.2
-> >=20
-> >=20
-> > Thanks, applied!
->
-> This was was in next up to next-20230717, it's not included in
-> next-20230718 any more. The branch pulled into next from=20
->
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git#nex=
-t
->
-> changed from 0ec1b5bea32bce719ebdab253462f9c9cb0aca3e to
-> 481c2d14627de8ecbb54dd125466e4b4a5069b47. This is a rebase to v6.5-rc2
-> dropping some more patches:
->
-> 	$ git log --oneline 481c2d14627de8ecbb54dd125466e4b4a5069b47...0ec1b5bea=
-32bce719ebdab253462f9c9cb0aca3e --cherry-pick --right-only
-> 	5a29fb0d959a tpm: make all 'class' structures const
-> 	17222dfebab1 tpm: remove redundant variable len
-> 	dfd6ecc2066c tpm_tis: Resend command to recover from data transfer error=
-s
-> 	8458b36c647c tpm_tis: Use responseRetry to recover from data transfer er=
-rors
-> 	a5dd583aa98b tpm_tis: Move CRC check to generic send routine
-> 	126f3df1f03c tpm_tis: Explicitly check for error code
-> 	dfba6d4ad558 tpm: Switch i2c drivers back to use .probe()
-> 	bed72785706c tpm_tis-spi: Add hardware wait polling
-> 	2afb9c102761 integrity: Enforce digitalSignature usage in the ima and ev=
-m keyrings
-> 	0d8f1c250285 KEYS: DigitalSignature link restriction
-> 	41e4e488742e KEYS: Replace all non-returning strlcpy with strscpy
-> 	e2e51b64f0c8 security: keys: perform capable check only on privileged op=
-erations
->
-> These all apply just fine on top of next-20230718, so I wonder what made
-> you drop them. Can you please reapply at least dfba6d4ad558?
->
-> Best regards
-> Uwe
->
-> --=20
-> Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig       =
-     |
-> Industrial Linux Solutions                 | https://www.pengutronix.de/ =
-|
+On Fri, 2023-07-14 at 09:29 +0800, Coiby Xu wrote:
+> On Tue, Jul 04, 2023 at 08:57:10AM -0400, Mimi Zohar wrote:
+> >On Mon, 2023-07-03 at 19:54 +0800, Coiby Xu wrote:
+> >> With the introduction of the .machine keyring for UEFI-based systems,
+> >> users are able to add custom CAs keys via MOK. This allow users to sign
+> >> their own IMA polices. For the sake of security, mandate signed IMA
+> >> policy when UEFI secure boot is enabled.
+> >>
+> >> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> >> Signed-off-by: Coiby Xu <coxu@redhat.com>
 
-I was a bit stalled because of tpm_tis irq issue [1]. The two [2] requested
-patches are now mirrored again to linux-next [3].
+With commit 099f26f22f58 ("integrity: machine keyring CA
+configuration") it is now possible to require signed IMA policies
+without having to recompile the kernel.  Please note this change might
+affect existing users/tests.
 
-I'll create rc4 pull request after rc3 comes out.
+> >> ---
+> >>  security/integrity/ima/ima_efi.c | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
+> >> index 9db66fe310d4..bb2881759505 100644
+> >> --- a/security/integrity/ima/ima_efi.c
+> >> +++ b/security/integrity/ima/ima_efi.c
+> >> @@ -58,6 +58,9 @@ static const char * const sb_arch_rules[] = {
+> >>  #if !IS_ENABLED(CONFIG_MODULE_SIG)
+> >>  	"appraise func=MODULE_CHECK appraise_type=imasig",
+> >>  #endif
+> >> +#if IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && IS_ENABLED(CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY)
+> >> +	"appraise func=POLICY_CHECK appraise_type=imasig",
+> >> +#endif /* CONFIG_INTEGRITY_MACHINE_KEYRING && IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY */
+> >>  	"measure func=MODULE_CHECK",
+> >>  	NULL
+> >>  };
+> >
+> >Thanks, Coiby.
+> 
+> You are welcome!
+> 
+> >
+> >Using IS_ENABLED() is not wrong, but unnecessary.  IS_BUILTIN()
+> >suffices.
+> 
+> Thanks for the reminding! When I was going to apply this suggestion, I
+> noticed ima_efi.c uses IS_ENABLED for all configuration items i.e.
+> CONFIG_MODULE_SIG and CONFIG_KEXEC_SIG which are all of bool type. Would
+> you like me to switch all IS_ENABLEs to IS_BUILTIN or still use
+> IS_ENABLED? While IS_BUILTIN is exclusively for bool type, it's not as
+> intuitive as IS_ENABLED. So it's not easy for me to make a choice.
 
-[1] https://lkml.org/lkml/2023/7/18/1123
-[2] https://lore.kernel.org/keyrings/CAJ2a_Dd-piQ51dqptuhJ8pXm+4HrFAcdbA-ES=
-d8YwNO3qHnJrA@mail.gmail.com/
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/=
-log/?h=3Dnext
+Sure, for consistency with the other rules IS_ENABLED is fine.
 
-BR, Jarkko
+thanks,
 
+Mimi
 
