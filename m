@@ -2,64 +2,43 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BC276797B
-	for <lists+linux-integrity@lfdr.de>; Sat, 29 Jul 2023 02:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC493767BD7
+	for <lists+linux-integrity@lfdr.de>; Sat, 29 Jul 2023 05:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235985AbjG2A1J (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Jul 2023 20:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S233512AbjG2DPG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Jul 2023 23:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbjG2A1J (ORCPT
+        with ESMTP id S229498AbjG2DPF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Jul 2023 20:27:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9937B2680;
-        Fri, 28 Jul 2023 17:27:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D6126221B;
-        Sat, 29 Jul 2023 00:27:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8269DC433C7;
-        Sat, 29 Jul 2023 00:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690590427;
-        bh=vf6eqh+hSbOXZ3cuyP/fJ3KKwC+CL5pgf5FhKK74odg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=GC0L/qOEANg6FkerGDtCauy/cOKxaNuVgydkmCmcx069785084iccxV7qyHaR3sGC
-         nL1Etcve8Ed3LlnoTxHFqY/vTXYNzGzXuZe45v8M9nScj8wWji2mZMjCHW4eCmJSe2
-         rwhq+wtviH1++ry+377D96gofw6KBOW38eyEYlslOO/nI1Psik4stAJUeYSYlxo72H
-         ARJi9be1KsF0dZt3VpnOikYdKEUun0LfTfaBiuiVf8yJdoqmvWcG03xeqPARCO13QC
-         yt5gqJuSgXAlLIrNAHSoTdb4+JGr7OziCAJzGY+nE1+w+dkuBdf82ycOgTu6qXxNiu
-         xxTdQ7h1XElNw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6FB5BC39562;
-        Sat, 29 Jul 2023 00:27:07 +0000 (UTC)
-Subject: Re: [GIT PULL] tpmdd changes for v6.5-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230728183322.16359-1-jarkko@kernel.org>
-References: <20230728183322.16359-1-jarkko@kernel.org>
-X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230728183322.16359-1-jarkko@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-v6.5-rc4
-X-PR-Tracked-Commit-Id: 513253f8c293c0c8bd46d09d337fc892bf8f9f48
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2b17e90d3f92f394a6dea9243aac70a5aa0d0c57
-Message-Id: <169059042744.2110.8212659249499335251.pr-tracker-bot@kernel.org>
-Date:   Sat, 29 Jul 2023 00:27:07 +0000
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Howells <dhowells@redhat.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 28 Jul 2023 23:15:05 -0400
+Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA60C423B
+        for <linux-integrity@vger.kernel.org>; Fri, 28 Jul 2023 20:15:04 -0700 (PDT)
+Received: by mail.durme.pl (Postfix, from userid 1002)
+        id 85C925F788; Wed, 26 Jul 2023 07:50:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
+        t=1690358741; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=NQyf2LBDdq9RdG4EKwZGmuQx0Y4GMPw8IG8V7RPMCtw2205+FoWlWga4nJkui3+jq
+         R/o2lo5bmDXhSozsEInonAG90ps+5DHzItqr4GixW7NHgRGThxYhAJ0sRgS0iW+Y3z
+         SM5QmEVCJlNuZ9I17IIjJZaVZKZ/ecx8s0p5rg+UMYDBnPqPLfpUKIl3eUcHTbWZ6R
+         inNcZ3wO6ZQmX3/7Exy/zYI4X+0wkPoW5Y4vqI8ynFgxWiMamvIV/OcumQ5m2Y0M+M
+         09Yvm4flpL51BaiJ5WnZBKSk8I4s/A4CEqP81nRr3eC5UZxcE+xxI8TIRuAM5iomC7
+         kFy3DpGY0yloQ==
+Received: by mail.durme.pl for <linux-integrity@vger.kernel.org>; Wed, 26 Jul 2023 07:50:32 GMT
+Message-ID: <20230726064501-0.1.3b.cls1.0.ugh2clcfya@durme.pl>
+Date:   Wed, 26 Jul 2023 07:50:32 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
+To:     <linux-integrity@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.durme.pl
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,15 +46,23 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Fri, 28 Jul 2023 18:33:22 +0000:
+Dzie=C5=84 dobry,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-v6.5-rc4
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2b17e90d3f92f394a6dea9243aac70a5aa0d0c57
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-Thank you!
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+
+
+Pozdrawiam
+Krystian Wieczorek
