@@ -2,56 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFCD767659
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jul 2023 21:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3ED7676E5
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jul 2023 22:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbjG1TaY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Jul 2023 15:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S229624AbjG1USe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Jul 2023 16:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjG1TaX (ORCPT
+        with ESMTP id S233913AbjG1USd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Jul 2023 15:30:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEC0268B;
-        Fri, 28 Jul 2023 12:30:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 586F7621E2;
-        Fri, 28 Jul 2023 19:30:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03259C433C7;
-        Fri, 28 Jul 2023 19:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690572621;
-        bh=ZUKB9yxNaWjmEQHRW9zG7qjbeHoA2GNdjk2jXmgn1vs=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=fVxA+CTpbQ1tc+ivlNQNyHGhmtpBUiCrwkq+VM0NxAcg99HwxnIDtd1ULhW31ToiB
-         6I1gPMvhRQ6b9d5B0+4wwSZNkBAjccVWXdfJxBB4AI6uGi9NLOSWvOAMF+QmPdtO4s
-         0YbXKVefi7C8Pvo9ABuwHaxF2RatyezAGAMsR14Mebhp13noLVUSKNSYiGzyIqrzvx
-         2t1Q2jPGyk5jKJksdxl6w/vODmFgTzsbPTY7GeszVmZy9uz6AZpDCU7L+5+ME/n8Rp
-         JGN2Y3/i/kt6OFIFtQ2hxcKbWCjOqGfB2NJ8DMK0LI+7vcGySrmC1SjdWbpIgHPUYh
-         N0l1NNHVu5H9A==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 28 Jul 2023 19:30:18 +0000
-Message-Id: <CUE1Z76QDX0Z.2K0OU6TPMS50X@seitikki>
-Cc:     <James.Bottomley@hansenpartnership.com>, <Jason@zx2c4.com>,
+        Fri, 28 Jul 2023 16:18:33 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D344487
+        for <linux-integrity@vger.kernel.org>; Fri, 28 Jul 2023 13:18:31 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 7DECE240104
+        for <linux-integrity@vger.kernel.org>; Fri, 28 Jul 2023 22:18:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1690575509; bh=6HJgTambXSITA+0qKZ/a7dX11wgfCP5FR4Ajeth5TqA=;
+        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Transfer-Encoding:From;
+        b=HYpb5OZsWqejBHx8Mouc25bQRdrnzIKl5D+05DBTfevHatnKH+aY5yPhIvb8urEmu
+         Lkj5mb4SRI/8e1Z3tKFLaaQt+Kxx6mWXTjI/3p/IldwtkAs5q6ADcFyrUzyeECqbFc
+         SN0zfbEBpEcg19bVwP5m4Yg82nDCPO0cx0yiYzklTxAcsj6SkqDAU9FnuNo33isgMu
+         SvPAhSSu+u6Tyk12IUWW7U0l+GrpamO3ZieRu74ep49aqmxrdnE91sJ8YsHcL0YdB/
+         DMqvZJ0NnCE+x9ImGKlPz0lJdq2BXxVOE4W81eRfZ7QmOrTFp2Tj5HXK5fwfgG0GHP
+         lW1uR51ZUDa/w==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4RCJqR3d5Yz9ryY;
+        Fri, 28 Jul 2023 22:18:27 +0200 (CEST)
+Date:   Fri, 28 Jul 2023 20:18:10 +0000
+From:   Daniil Stas <daniil.stas@posteo.net>
+To:     "Jarkko Sakkinen" <jarkko@kernel.org>
+Cc:     <mario.limonciello@amd.com>,
+        <James.Bottomley@hansenpartnership.com>, <Jason@zx2c4.com>,
         <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <regressions@leemhuis.info>, <stable@vger.kernel.org>,
         <torvalds@linux-foundation.org>
 Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Daniil Stas" <daniil.stas@posteo.net>, <mario.limonciello@amd.com>
-X-Mailer: aerc 0.14.0
+Message-ID: <20230728231810.48370d44@g14>
+In-Reply-To: <CUE1Z76QDX0Z.2K0OU6TPMS50X@seitikki>
 References: <20230214201955.7461-2-mario.limonciello@amd.com>
- <20230727183805.69c36d6e@g14>
-In-Reply-To: <20230727183805.69c36d6e@g14>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        <20230727183805.69c36d6e@g14>
+        <CUE1Z76QDX0Z.2K0OU6TPMS50X@seitikki>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,15 +59,22 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu Jul 27, 2023 at 3:38 PM UTC, Daniil Stas wrote:
-> Hi,
-> I am still getting fTPM stutters with 6.4.3 kernel on Asus GA402RJ
-> laptop.
-> Compiling kernel without TPM support makes the stutters go away.
-> The fTPM firmware version is 0x3005700020005 on my machine.
+On Fri, 28 Jul 2023 19:30:18 +0000
+"Jarkko Sakkinen" <jarkko@kernel.org> wrote:
 
-This is needs a bit more elaboration in order to be comprehended.
+> On Thu Jul 27, 2023 at 3:38 PM UTC, Daniil Stas wrote:
+> > Hi,
+> > I am still getting fTPM stutters with 6.4.3 kernel on Asus GA402RJ
+> > laptop.
+> > Compiling kernel without TPM support makes the stutters go away.
+> > The fTPM firmware version is 0x3005700020005 on my machine.  
+> 
+> This is needs a bit more elaboration in order to be comprehended.
+> 
+> Do you mean by "stutter" unexpected delays and when do they happen?
+> 
+> BR, Jarkko
 
-Do you mean by "stutter" unexpected delays and when do they happen?
-
-BR, Jarkko
+Yes, unexpected delays. They just happen randomly.
+You can google "AMD fTPM stuttering", there are a lot of examples.
+Here is one: https://www.youtube.com/watch?v=TYnRL-x6DVI
