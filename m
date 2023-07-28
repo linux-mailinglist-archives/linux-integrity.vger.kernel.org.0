@@ -2,97 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825AD767644
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jul 2023 21:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFCD767659
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jul 2023 21:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjG1TYg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Jul 2023 15:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S230505AbjG1TaY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Jul 2023 15:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjG1TYf (ORCPT
+        with ESMTP id S229488AbjG1TaX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Jul 2023 15:24:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D36BF;
-        Fri, 28 Jul 2023 12:24:34 -0700 (PDT)
+        Fri, 28 Jul 2023 15:30:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEC0268B;
+        Fri, 28 Jul 2023 12:30:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BE15621DD;
-        Fri, 28 Jul 2023 19:24:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56BD5C433C8;
-        Fri, 28 Jul 2023 19:24:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 586F7621E2;
+        Fri, 28 Jul 2023 19:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03259C433C7;
+        Fri, 28 Jul 2023 19:30:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690572273;
-        bh=kCVSSQB7vzNjIBbdRo2kjKff5xvX1ePhErKmi0IDngs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uvsknU0ortHAV8r9efa6lSuatJdKZSr7TxPdDwjl0Uj6FiCwjbXW9J95WkeXKSYbo
-         Q6n/T7Q49Omyb1t/1+cZ6Ae7AlMhPmrKgwJnMfZhlUSMjcBpy4uhnFaVLwHKZsSUPO
-         JNuCjsUSYrB0IF9KsdgrGlK4mdqjI28g35kouVxQivRyXNcFCsC8tn87ekhI6JcQwO
-         kuXbiq1MLdj+e093tMTxG/NPbBCGuNI3sbPDuFf0ooKfM9k8urykiHYP1N8mGbx25O
-         eUZn0l2QV03bUS+D5pPmw/6YpNyezCH2Au4nexK1yYnqjknq75hE70p9PiNHg5iKKX
-         xO9RWDIj63HkA==
+        s=k20201202; t=1690572621;
+        bh=ZUKB9yxNaWjmEQHRW9zG7qjbeHoA2GNdjk2jXmgn1vs=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=fVxA+CTpbQ1tc+ivlNQNyHGhmtpBUiCrwkq+VM0NxAcg99HwxnIDtd1ULhW31ToiB
+         6I1gPMvhRQ6b9d5B0+4wwSZNkBAjccVWXdfJxBB4AI6uGi9NLOSWvOAMF+QmPdtO4s
+         0YbXKVefi7C8Pvo9ABuwHaxF2RatyezAGAMsR14Mebhp13noLVUSKNSYiGzyIqrzvx
+         2t1Q2jPGyk5jKJksdxl6w/vODmFgTzsbPTY7GeszVmZy9uz6AZpDCU7L+5+ME/n8Rp
+         JGN2Y3/i/kt6OFIFtQ2hxcKbWCjOqGfB2NJ8DMK0LI+7vcGySrmC1SjdWbpIgHPUYh
+         N0l1NNHVu5H9A==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 28 Jul 2023 19:24:30 +0000
-Message-Id: <CUE1URH8QI55.15YQBHZNSL2UJ@seitikki>
+Date:   Fri, 28 Jul 2023 19:30:18 +0000
+Message-Id: <CUE1Z76QDX0Z.2K0OU6TPMS50X@seitikki>
+Cc:     <James.Bottomley@hansenpartnership.com>, <Jason@zx2c4.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <regressions@leemhuis.info>, <stable@vger.kernel.org>,
+        <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Takashi Iwai" <tiwai@suse.de>, "Peter Huewe" <peterhuewe@gmx.de>
-Cc:     "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts for TUXEDO InfinityBook
- S 15/17 Gen7
+To:     "Daniil Stas" <daniil.stas@posteo.net>, <mario.limonciello@amd.com>
 X-Mailer: aerc 0.14.0
-References: <20230726180035.14511-1-tiwai@suse.de>
-In-Reply-To: <20230726180035.14511-1-tiwai@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214201955.7461-2-mario.limonciello@amd.com>
+ <20230727183805.69c36d6e@g14>
+In-Reply-To: <20230727183805.69c36d6e@g14>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Jul 26, 2023 at 6:00 PM UTC, Takashi Iwai wrote:
-> TUXEDO InfinityBook S 15/17 Gen7 suffers from an IRQ problem on
-> tpm_tis like a few other laptops.  Add an entry for the workaround.
->
-> Cc: stable@vger.kernel.org
-> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-> Link: https://bugzilla.suse.com/show_bug.cgi?id=3D1213645
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> ---
->  drivers/char/tpm/tpm_tis.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index cc42cf3de960..a98773ac2e55 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -162,6 +162,14 @@ static const struct dmi_system_id tpm_tis_dmi_table[=
-] =3D {
->  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L590"),
->  		},
->  	},
-> +	{
-> +		.callback =3D tpm_tis_disable_irq,
-> +		.ident =3D "TUXEDO InfinityBook S 15/17 Gen7",
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "TUXEDO InfinityBook S 15/17 Gen7"),
-> +		},
-> +	},
->  	{
->  		.callback =3D tpm_tis_disable_irq,
->  		.ident =3D "UPX-TGL",
-> --=20
-> 2.35.3
+On Thu Jul 27, 2023 at 3:38 PM UTC, Daniil Stas wrote:
+> Hi,
+> I am still getting fTPM stutters with 6.4.3 kernel on Asus GA402RJ
+> laptop.
+> Compiling kernel without TPM support makes the stutters go away.
+> The fTPM firmware version is 0x3005700020005 on my machine.
 
-Hi does this occur with the latest linux-next and/or v6.5-rc3?
+This is needs a bit more elaboration in order to be comprehended.
+
+Do you mean by "stutter" unexpected delays and when do they happen?
 
 BR, Jarkko
