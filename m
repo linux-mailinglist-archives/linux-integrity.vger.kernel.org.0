@@ -2,90 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A1C76931D
-	for <lists+linux-integrity@lfdr.de>; Mon, 31 Jul 2023 12:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3325D7693F6
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 Jul 2023 12:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjGaK3I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 31 Jul 2023 06:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
+        id S231760AbjGaK7A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 31 Jul 2023 06:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjGaK3H (ORCPT
+        with ESMTP id S230161AbjGaK6o (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 31 Jul 2023 06:29:07 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5550EE
-        for <linux-integrity@vger.kernel.org>; Mon, 31 Jul 2023 03:29:01 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 91C50240029
-        for <linux-integrity@vger.kernel.org>; Mon, 31 Jul 2023 12:28:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1690799339; bh=UvxyRecDg9IUjbyy6N24jqLaWiWPsex+CRnzVne66tw=;
-        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Transfer-Encoding:From;
-        b=MctC08BV328WEy9wuHc42HOtNbB7plF2wY0PoAHFA5rWeyvBVSNoSZXJjmzzPA/U7
-         hHE6ThAf5+efRcuhhgJSrixxDztVYhU/+RgnDmgEd6MDl3XIhYKCAYZF2WYUq/Yw1y
-         b52ToS/rGKBuTFO8YozHrJjwc0/KKm/Y6bcaaPHaIMrUw0j8NE1TsPe2B/bFk6Sn1C
-         PQcVqq2Es8cYNxpiMnzV2ww6mP3PoF/XrVwWgoYj7bT3z6jylNdEAuXxs51B+76+ai
-         /xmSBOaGB/8V5p3axo5eLBLojlgh3JIC5FlfZy5xWRR2c/97n03ZR6WQf2W5Ff1flO
-         3EsFntNCuDEFg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4RDvbr5G30z6v2S;
-        Mon, 31 Jul 2023 12:28:56 +0200 (CEST)
-Date:   Mon, 31 Jul 2023 10:28:37 +0000
-From:   Daniil Stas <daniil.stas@posteo.net>
-To:     "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc:     <mario.limonciello@amd.com>,
-        <James.Bottomley@hansenpartnership.com>, <Jason@zx2c4.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <regressions@leemhuis.info>, <stable@vger.kernel.org>,
-        <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
-Message-ID: <20230731132837.64690d7b@g14>
-In-Reply-To: <CUGA0YM7BIJN.3RDWZ1WZSWG28@seitikki>
-References: <20230214201955.7461-2-mario.limonciello@amd.com>
-        <20230727183805.69c36d6e@g14>
-        <CUE1Z76QDX0Z.2K0OU6TPMS50X@seitikki>
-        <20230728231810.48370d44@g14>
-        <CUGA0YM7BIJN.3RDWZ1WZSWG28@seitikki>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 31 Jul 2023 06:58:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF7819AA;
+        Mon, 31 Jul 2023 03:58:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0996261013;
+        Mon, 31 Jul 2023 10:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 991C6C116A1;
+        Mon, 31 Jul 2023 10:58:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690801105;
+        bh=qT0FWHEOJrdzN0cD4SpSzxce4vu8bOeHDY7Zu5qv6b4=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=AQMoRdpolSfHThEn8BXOU1bHFOB1/jptLVMObxOGhYGSh7tW72wHOUzKYJWLE6ey5
+         0QApbJrPzdL+9iwJEd/Rb6hUlV7mqBb/2TExXmFTK1ZxAcWIFOZQQOa6cqutLQxIrp
+         R4ikXNX57VYAkLjF4qu+LZgg+pDY1cAKfPNkocYbSYaZQnW7H+cJV4S9mebFDErv9s
+         OHAQgdLNUNTPS4RSS7vltMXif9XxFvQE5N2AeuOfxdrkkbYjkjf/iMjJfHLkKDQjoA
+         4+jukEdFykSe5tmjTCgJRB4s6k9MSM9VYz9DU3Pwlz619GqxaVTfAOPioGPvY1Eb31
+         bwq052QEDExFg==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 31 Jul 2023 10:58:21 +0000
+Message-Id: <CUGAYUWIYL8Y.1UID37JVB3IIZ@seitikki>
+Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts for TUXEDO InfinityBook
+ S 15/17 Gen7
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Takashi Iwai" <tiwai@suse.de>
+Cc:     "Peter Huewe" <peterhuewe@gmx.de>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230726180035.14511-1-tiwai@suse.de>
+ <CUE1URH8QI55.15YQBHZNSL2UJ@seitikki> <878razdwnh.wl-tiwai@suse.de>
+In-Reply-To: <878razdwnh.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 31 Jul 2023 10:14:05 +0000
-"Jarkko Sakkinen" <jarkko@kernel.org> wrote:
+On Sat Jul 29, 2023 at 7:06 AM UTC, Takashi Iwai wrote:
+> On Fri, 28 Jul 2023 21:24:30 +0200,
+> Jarkko Sakkinen wrote:
+> >=20
+> > On Wed Jul 26, 2023 at 6:00 PM UTC, Takashi Iwai wrote:
+> > > TUXEDO InfinityBook S 15/17 Gen7 suffers from an IRQ problem on
+> > > tpm_tis like a few other laptops.  Add an entry for the workaround.
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+> > > Link: https://bugzilla.suse.com/show_bug.cgi?id=3D1213645
+> > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> > > ---
+> > >  drivers/char/tpm/tpm_tis.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> > > index cc42cf3de960..a98773ac2e55 100644
+> > > --- a/drivers/char/tpm/tpm_tis.c
+> > > +++ b/drivers/char/tpm/tpm_tis.c
+> > > @@ -162,6 +162,14 @@ static const struct dmi_system_id tpm_tis_dmi_ta=
+ble[] =3D {
+> > >  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L590"),
+> > >  		},
+> > >  	},
+> > > +	{
+> > > +		.callback =3D tpm_tis_disable_irq,
+> > > +		.ident =3D "TUXEDO InfinityBook S 15/17 Gen7",
+> > > +		.matches =3D {
+> > > +			DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
+> > > +			DMI_MATCH(DMI_PRODUCT_NAME, "TUXEDO InfinityBook S 15/17 Gen7"),
+> > > +		},
+> > > +	},
+> > >  	{
+> > >  		.callback =3D tpm_tis_disable_irq,
+> > >  		.ident =3D "UPX-TGL",
+> > > --=20
+> > > 2.35.3
+> >=20
+> > Hi does this occur with the latest linux-next and/or v6.5-rc3?
+>
+> Not tested yet, but do you have any relevant fix except for the commit
+> 481c2d14627d ("tpm,tpm_tis: Disable interrupts after 1000 unhandled
+> IRQs")?  That commit was already tested, at least.
 
-> On Fri Jul 28, 2023 at 8:18 PM UTC, Daniil Stas wrote:
-> > On Fri, 28 Jul 2023 19:30:18 +0000
-> > "Jarkko Sakkinen" <jarkko@kernel.org> wrote:
-> >  
-> > > On Thu Jul 27, 2023 at 3:38 PM UTC, Daniil Stas wrote:  
->  [...]  
-> > > 
-> > > This is needs a bit more elaboration in order to be comprehended.
-> > > 
-> > > Do you mean by "stutter" unexpected delays and when do they
-> > > happen?
-> > > 
-> > > BR, Jarkko  
-> >
-> > Yes, unexpected delays. They just happen randomly.
-> > You can google "AMD fTPM stuttering", there are a lot of examples.
-> > Here is one: https://www.youtube.com/watch?v=TYnRL-x6DVI  
-> 
-> What if you make tpm_amd_is_rng_defective() to unconditonally return
-> true? Does this make the problem dissappear, or not?
-> 
-> BR, Jarkko
+OK, I will pick this, thank you.
 
-I already tried compiling kernel without CONFIG_HW_RANDOM_TPM enabled,
-which does the same.
-Yes, it removes the issue.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko
