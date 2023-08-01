@@ -2,68 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E339D76B3DE
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Aug 2023 13:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7338776B367
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Aug 2023 13:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234397AbjHALwk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Aug 2023 07:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
+        id S234017AbjHALiO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Aug 2023 07:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234400AbjHALwd (ORCPT
+        with ESMTP id S233757AbjHALiM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Aug 2023 07:52:33 -0400
-Received: from mail.cothiafon.pl (mail.cothiafon.pl [217.61.106.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0841BD9
-        for <linux-integrity@vger.kernel.org>; Tue,  1 Aug 2023 04:52:30 -0700 (PDT)
-Received: by mail.cothiafon.pl (Postfix, from userid 1002)
-        id B542E835F5; Mon, 31 Jul 2023 10:36:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cothiafon.pl; s=mail;
-        t=1690792589; bh=dwoca0X6C9VXklO/zRgFQCPapTk5LFz4tKaENdvy6Po=;
-        h=Date:From:To:Subject:From;
-        b=gHMAMv/5WlANbsGFLKorUams/25uuYtH1vurxJzKif/YI/HLGMUGf+QYr7wFUwbCa
-         orn1LfZrxLgWiZSYF73givwoxugtJHmwVWet+0WRDnai7CPxJyE3rdZJ3ILCQfrB/K
-         wyv6jRrihKcn6OkQypBHsuJawK8nAno085oqkAgVVXbFEhsclP2ICQ+VHmC1GwvZUt
-         n2AQA9PA12/r+uzqBBo/7LP66i/HB17IWFxaBBtJwAGIs/WtkbVde74nL+6FgRilOM
-         ez+NB4cZi62pnsSa/O4zH+agMFQRINoxcLtez7wyDIwnHDAzq18bYCiy7+Sf8QM2Gq
-         Y1CKqYyQ+QdfQ==
-Received: by mail.cothiafon.pl for <linux-integrity@vger.kernel.org>; Mon, 31 Jul 2023 08:35:48 GMT
-Message-ID: <20230731095940-0.1.28.omtz.0.4gtg7wur2z@cothiafon.pl>
-Date:   Mon, 31 Jul 2023 08:35:48 GMT
-From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
-        <radoslaw.grabowski@cothiafon.pl>
-To:     <linux-integrity@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.cothiafon.pl
+        Tue, 1 Aug 2023 07:38:12 -0400
+Received: from smtpo94.poczta.onet.pl (smtpo94.poczta.onet.pl [213.180.149.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8483D1990
+        for <linux-integrity@vger.kernel.org>; Tue,  1 Aug 2023 04:38:04 -0700 (PDT)
+Received: from [192.168.226.2] (1567051-1921.iaas.home-whs.pl [46.242.128.131])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dragonn@op.pl)
+        by smtp.poczta.onet.pl (Onet) with ESMTPSA id 4RFY3W11lSz1yvF;
+        Tue,  1 Aug 2023 13:36:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=op.pl; s=2011;
+        t=1690889808; bh=OmZHHaG1yc2Gw63P200yn7wFAj1aCDNnGach0vZpB8w=;
+        h=Date:To:Cc:References:Subject:From:In-Reply-To:From;
+        b=JpRh7PkGNq7Zx2A8cxEi7Tdr3nHPa09QwNcnmqkKvgfp8AnRh5EbKrDf1oZ0qpQUc
+         /sfjXXMFdF2eQ6nG/imuSlkkgHB1kA+0azpBvVCG/Na5g7HL3FAN4eTKDDNs9Nh70K
+         sOVDFokBo/mGMpQKt51VxPkLtkBeeUmx5Ldlc5vg=
+Message-ID: <b79630a4-0473-89eb-44da-28d87b6539ef@op.pl>
+Date:   Tue, 1 Aug 2023 13:36:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+To:     mario.limonciello@amd.com
+Cc:     James.Bottomley@hansenpartnership.com, Jason@zx2c4.com,
+        daniil.stas@posteo.net, jarkko@kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@dominikbrodowski.net, regressions@leemhuis.info,
+        stable@vger.kernel.org, torvalds@linux-foundation.org
+References: <61b363bc-286a-535c-27da-0f52673768ad@amd.com>
+Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
+Content-Language: en-US
+From:   Mateusz Schyboll <dragonn@op.pl>
+In-Reply-To: <61b363bc-286a-535c-27da-0f52673768ad@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dzie=C5=84 dobry,
+I was following the issue under or discord channel ROG for Linux and 
+helping out some other users with it by shipping a kernel for Arch with 
+disabled CONFIG_HW_RANDOM_TPM as the default recommend kernel for Arch 
+for ROG laptops (as my device isn't affect by it because it is Ryzen 
+4800HS).
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+I know it was discussed here 
+https://bugzilla.kernel.org/show_bug.cgi?id=217212#c16 against allowing 
+the user to disable fTPM to be used as a random source via a boot time 
+parameter but I still I disagree with it.
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+Linux does have a parameter `random.trust_cpu` to control the random 
+source from CPU, why they can not be a parameter like 
+`random.trust_ftpm` (or `random.trust_tpm`)?
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+It might be my limited knowledge of this topic but to me it feels like 
+if they is a trust_cpu then Linux should have trust_ftpm too.
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+Mateusz
 
-
-Pozdrawiam
-Rados=C5=82aw Grabowski
