@@ -2,30 +2,30 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1461A76BC26
+	by mail.lfdr.de (Postfix) with ESMTP id 67E2E76BC27
 	for <lists+linux-integrity@lfdr.de>; Tue,  1 Aug 2023 20:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjHASTb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Aug 2023 14:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
+        id S229823AbjHASTc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Aug 2023 14:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjHAST3 (ORCPT
+        with ESMTP id S229833AbjHASTa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Aug 2023 14:19:29 -0400
+        Tue, 1 Aug 2023 14:19:30 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 803F72136
-        for <linux-integrity@vger.kernel.org>; Tue,  1 Aug 2023 11:19:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 043C02139
+        for <linux-integrity@vger.kernel.org>; Tue,  1 Aug 2023 11:19:29 -0700 (PDT)
 Received: from tushar-HP-Pavilion-Laptop-15-eg0xxx.lan (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B4CF7238AEA2;
-        Tue,  1 Aug 2023 11:19:27 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B4CF7238AEA2
+        by linux.microsoft.com (Postfix) with ESMTPSA id 33332238AEA4;
+        Tue,  1 Aug 2023 11:19:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 33332238AEA4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1690913968;
-        bh=XSu/u8+vyhoyKdaPC5jr7V2GlLG5uFfsCE+21U5Fofs=;
+        bh=MpKvOwQMNEthm2QKriOvs4GtmxKmM80/6fFiBHzjinA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kvgYNT7GmYF5rOZ0k6+hig3x2xbFWxcTxTpYi21DHDFieGhqLlltEKw8FAEJpZLrH
-         6QxtNqqZU/uXBPLiSHeM2QJZfwNMVRuHhALQR8rUYFT6b4d4QNP8CjPN8j5XFAWJw8
-         +qurG3UrKDaIX/7Ix/i4zVpJXAStZ2gAtQYp1znI=
+        b=B2ixVQ8WDavWmb+L174cjCs5Oh4eGgvJ8wIlmbnuQzZNuZpNBga2zJvkWBJ3C4IYX
+         ng1eik6dzuZAS5s8CGmo4wnjJswaoxangJ51BJQ8Y2NZ3uQY30kEp53c29LMT7VH3Y
+         u/59mDYN34L+bPtgD/CYnB/doawJcGKAJZTahS1M=
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
 To:     zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
         ebiederm@xmission.com, bhe@redhat.com, vgoyal@redhat.com,
@@ -33,9 +33,9 @@ To:     zohar@linux.ibm.com, noodles@fb.com, bauermann@kolabnow.com,
         jgg@ziepe.ca, kexec@lists.infradead.org,
         linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-Subject: [PATCH 3/6] ima: get TPM update counter
-Date:   Tue,  1 Aug 2023 11:19:14 -0700
-Message-Id: <20230801181917.8535-4-tusharsu@linux.microsoft.com>
+Subject: [PATCH 4/6] ima: implement functionality to measure TPM update counter
+Date:   Tue,  1 Aug 2023 11:19:15 -0700
+Message-Id: <20230801181917.8535-5-tusharsu@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230801181917.8535-1-tusharsu@linux.microsoft.com>
 References: <20230801181917.8535-1-tusharsu@linux.microsoft.com>
@@ -51,63 +51,92 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Measuring the TPM PCR update counter will help the remote attestation
-service to validate if there are any missing entries in the IMA log, when
-the system goes through certain important state changes (e.g. kexec soft
-boot, IMA log snapshotting etc.).  Detecting such missing entries would
-help the remote attestation service functionality to be more robust.
-It should also help the system administrators with manual investigations
-when TPM PCR quotes go out of sync with IMA measurements.
+Currently TPM update counter is not available external to the system,
+for instance, a remote attestation service.  It is a problem because
+the service cannot easily determine if the IMA log entries are missing.
+The IMA functionality needs to be extended to measure the TPM update
+counter from various subsystems in Linux kernel to help detect if
+the IMA log entries are missing.
 
-Implement a new function, 'ima_tpm_get_update_counter()', which uses
-the 'tpm_pcr_get_update_counter()' function from the TPM driver interface
-to retrieve the PCR update counter of the TPM chip in use.
+Implement a function, 'ima_measure_update_counter()' which would retrieve
+the TPM update counter using the previously defined function
+'ima_tpm_get_update_counter()'.  Format it as a string with the value 
+"update_counter=<N>;", and measure it using the function
+'ima_measure_critical_data()'.
+
+The function takes an event name as input, and the update counter value
+is measured as part of this event.
 
 Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 ---
- security/integrity/ima/ima.h       |  1 +
- security/integrity/ima/ima_queue.c | 16 ++++++++++++++++
- 2 files changed, 17 insertions(+)
+ include/linux/ima.h               |  1 +
+ security/integrity/ima/ima.h      |  1 +
+ security/integrity/ima/ima_main.c | 28 ++++++++++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
 
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 86b57757c7b1..f15f3a6a4c72 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -40,6 +40,7 @@ extern int ima_measure_critical_data(const char *event_label,
+ 				     const char *event_name,
+ 				     const void *buf, size_t buf_len,
+ 				     bool hash, u8 *digest, size_t digest_len);
++int ima_measure_update_counter(const char *event_name);
+ 
+ #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
+ extern void ima_appraise_parse_cmdline(void);
 diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index c29db699c996..4acd0e5a830f 100644
+index 4acd0e5a830f..5484bd362237 100644
 --- a/security/integrity/ima/ima.h
 +++ b/security/integrity/ima/ima.h
-@@ -167,6 +167,7 @@ void ima_init_template_list(void);
- int __init ima_init_digests(void);
+@@ -168,6 +168,7 @@ int __init ima_init_digests(void);
  int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
  			  void *lsm_data);
-+int ima_tpm_get_update_counter(u32 *cpu_update_counter);
+ int ima_tpm_get_update_counter(u32 *cpu_update_counter);
++int ima_measure_update_counter(const char *event_name);
  
  /*
   * used to protect h_table and sha_table
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index 532da87ce519..38f5c35b23b2 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -135,6 +135,22 @@ unsigned long ima_get_binary_runtime_size(void)
- 		return binary_runtime_size + sizeof(struct ima_kexec_hdr);
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index d66a0a36415e..1bcd45cc5a6a 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -1071,6 +1071,34 @@ int ima_measure_critical_data(const char *event_label,
  }
+ EXPORT_SYMBOL_GPL(ima_measure_critical_data);
  
-+int ima_tpm_get_update_counter(u32 *update_counter)
++#define IMA_TPM_UPDATE_CTR_BUF_SIZE 128
++int ima_measure_update_counter(const char *event_name)
 +{
 +	int result;
++	u32 update_counter = 0;
++	char buf[IMA_TPM_UPDATE_CTR_BUF_SIZE];
++	int buf_len;
 +
-+	if (!update_counter)
-+		return -EINVAL;
++	if (!event_name)
++		return -ENOPARAM;
 +
-+	result = tpm_pcr_get_update_counter(ima_tpm_chip,
-+				CONFIG_IMA_MEASURE_PCR_IDX, TPM_ALG_SHA1, update_counter);
++	result = ima_tpm_get_update_counter(&update_counter);
 +
 +	if (result != 0)
-+		pr_err("Failed to get TPM PCR update counter, result: %d\n", result);
++		return result;
++
++	scnprintf(buf, IMA_TPM_UPDATE_CTR_BUF_SIZE, "update_counter=%u;",
++			  update_counter);
++
++	buf_len = strlen(buf);
++
++	result = ima_measure_critical_data("tpm_pcr_update_counter", event_name,
++				  buf, buf_len, false, NULL, 0);
 +
 +	return result;
 +}
++EXPORT_SYMBOL_GPL(ima_measure_update_counter);
 +
- static int ima_pcr_extend(struct tpm_digest *digests_arg, int pcr)
+ static int __init init_ima(void)
  {
- 	int result = 0;
+ 	int error;
 -- 
 2.25.1
 
