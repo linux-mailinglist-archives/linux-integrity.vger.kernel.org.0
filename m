@@ -2,187 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239C476BD37
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Aug 2023 21:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B9076BD5E
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Aug 2023 21:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbjHATCy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Aug 2023 15:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S231152AbjHATKG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Aug 2023 15:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjHATCx (ORCPT
+        with ESMTP id S229873AbjHATKF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Aug 2023 15:02:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579AF184
-        for <linux-integrity@vger.kernel.org>; Tue,  1 Aug 2023 12:02:52 -0700 (PDT)
+        Tue, 1 Aug 2023 15:10:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262571BF0;
+        Tue,  1 Aug 2023 12:10:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8865616AD
-        for <linux-integrity@vger.kernel.org>; Tue,  1 Aug 2023 19:02:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71600C433B7;
-        Tue,  1 Aug 2023 19:02:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFA156168C;
+        Tue,  1 Aug 2023 19:10:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD0F8C433C7;
+        Tue,  1 Aug 2023 19:10:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690916571;
-        bh=QELR0/VAgEvzHkL6pJaiqVMd5NFnPPFbeIgCxZeiFqk=;
+        s=k20201202; t=1690917003;
+        bh=WmZPoZ2ncAPbHyIi412gnUY6DHW9Ve1TXWYRZhaL/6k=;
         h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=LekJib2hmEP7rOzsvbZ3XD57rkAM99mf29ceW+HF3IaV+WYLEB8vkd7AJOhnbttHi
-         f6230wbVhTFqow4q+qWBm/P2uJVkMOwCyJWHWbLYzN+WUVCgPrMLSm+5ef38uo/6d3
-         CCeUmsrweBtNJgsvEf+lTNmGJkpxKMyxsBpsjf222rIHHdF7Adu29RziPef9nFX6g2
-         XxOl2myyB59y9IkvoWCEzMB7vEmPwacQhAOq7GaDWtfo9C9GuosERC6S43dv+oOSBP
-         psb80SRaUN4LP8zMtBxLnxL75G9QHadHgVBDcfCduyw839l3s6aUnboe/bMBnwO5nc
-         ZpkwYaslLuPvA==
+        b=soesqq4mcDw1KGEMbIxztwJDTTm65/Q75or6DwbtQBcu06HxRy39XXYaf1CdpKHn/
+         01+tKdoM5iE4eLEHrIpIyUuLW1wXwgLcjRKGrun79bpyN3JBke61kFc4HOrmRDXS17
+         UvG2K8ZAZrqoCPrmxfqaH4u53jy+mKVyfBKjKCnMj9pVz8SbIMrXiblkyjTIrxjFP6
+         Fz/jekuvN4DwND/sntPyXAEQWRg/d4DkMwc0rEnDZ7VLhSOb1W+PVXCIiJ6aURaltF
+         m3R689cXlQBoPgPLtcTcKsecLKe0Cfm1332ZDQIwiD4p4unVSieyqn8TX6B6aiaHRX
+         BuZDlcH31WsuA==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 01 Aug 2023 22:02:45 +0300
-Message-Id: <CUHFWAAKMKJN.2EA3ZHLOOPPGB@suppilovahvero>
-Cc:     <code@tyhicks.com>, <nramas@linux.microsoft.com>,
-        <paul@paul-moore.com>
-Subject: Re: [PATCH 1/6] tpm: implement TPM2 function to get update counter
+Date:   Tue, 01 Aug 2023 22:09:58 +0300
+Message-Id: <CUHG1TB7IELF.PVXOXEXBGEPP@suppilovahvero>
+Cc:     "Daniil Stas" <daniil.stas@posteo.net>,
+        "Mario Limonciello" <mario.limonciello@amd.com>,
+        <James.Bottomley@hansenpartnership.com>, <Jason@zx2c4.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <regressions@leemhuis.info>, <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Tushar Sugandhi" <tusharsu@linux.microsoft.com>,
-        <zohar@linux.ibm.com>, <noodles@fb.com>, <bauermann@kolabnow.com>,
-        <ebiederm@xmission.com>, <bhe@redhat.com>, <vgoyal@redhat.com>,
-        <dyoung@redhat.com>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        <kexec@lists.infradead.org>, <linux-integrity@vger.kernel.org>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
 X-Mailer: aerc 0.14.0
-References: <20230801181917.8535-1-tusharsu@linux.microsoft.com>
- <20230801181917.8535-2-tusharsu@linux.microsoft.com>
-In-Reply-To: <20230801181917.8535-2-tusharsu@linux.microsoft.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230727183805.69c36d6e@g14>
+ <b1dd27df-744b-3977-0a86-f5dde8e24288@amd.com>
+ <20230727193949.55c18805@g14>
+ <65a1c307-826d-4ca3-0336-07a185684e5d@amd.com>
+ <20230727195019.41abb48d@g14>
+ <67eefe98-e6df-e152-3169-44329e22478d@amd.com>
+ <20230727200527.4080c595@g14>
+ <CAHk-=whqT0PxBazwfjWwoHQQFzZt50tV6Jfgq3iYceKMJtyuUg@mail.gmail.com>
+ <CUGAV1Y993FB.1O2Q691015Z2C@seitikki>
+ <CAHk-=whphk8Jp=NYmnm7Qv+vZ6ScYCz+rV8a2G1nD-AQY3z+mQ@mail.gmail.com>
+ <CUHF67ZOFOTN.1UFE7Q1IFRQMX@suppilovahvero>
+ <CAHk-=wgK0Z-LrJGExwG=e=oxjD93LJhY3jMmi_2O2_Pkjf8Tsg@mail.gmail.com>
+In-Reply-To: <CAHk-=wgK0Z-LrJGExwG=e=oxjD93LJhY3jMmi_2O2_Pkjf8Tsg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The short summary is cryptic to say the least.
+On Tue Aug 1, 2023 at 9:42 PM EEST, Linus Torvalds wrote:
+> On Tue, 1 Aug 2023 at 11:28, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > I would disable it inside tpm_crb driver, which is the driver used
+> > for fTPM's: they are identified by MSFT0101 ACPI identifier.
+> >
+> > I think the right scope is still AMD because we don't have such
+> > regressions with Intel fTPM.
+>
+> I'm ok with that.
+>
+> > I.e. I would move the helper I created inside tpm_crb driver, and
+> > a new flag, let's say "TPM_CHIP_FLAG_HWRNG_DISABLED", which tpm_crb
+> > sets before calling tpm_chip_register().
+> >
+> > Finally, tpm_add_hwrng() needs the following invariant:
+> >
+> >         if (chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED)
+> >                 return 0;
+> >
+> > How does this sound? I can refine this quickly from my first trial.
+>
+> Sounds fine.
 
-"update counter" does not map it to have anything to do with PCRs.
+Mario, it would be good if you could send a fix candidate but take my
+suggestion for a new TPM chip flag into account, while doing it. Please
+send it as a separate patch, not attachment to this thread.
 
-Why not "tpm: Read pcrUpdateCounter field from TPM2_PCR_Read"?
+I can test and ack it, if it looks reasonable.
 
-On Tue Aug 1, 2023 at 9:19 PM EEST, Tushar Sugandhi wrote:
-> The TPM2_PCR_Read command returns TPM2_PCR_Read Response struct[1].  It
-> contains pcrUpdateCounter member which contains the current value of TPM
-> PCR update counter.  The update counter provides the number of times the
-> PCRs are updated, which is essential for tracking changes and verifying
-> system integrity.  Thus, subsystems (like IMA) should measure
-> pcrUpdateCounter value.  Although tpm2_pcr_read_out struct is returned
-> by tpm2_pcr_read(), it is not used by it's caller function tpm_pcr_read()=
-.
-> Further, TPM2_PCR_Read Response struct and pcrUpdateCounter is not
-> available in tpm1_pcr_read().
->
-> PcrUpdateCounter is only needed in a specific case (IMA for measurements)=
-.
-> Changing tpm_pcr_read() and tpm2_pcr_read() function signature to return
-> tpm2_pcr_read_out struct would be a more disruptive change, since these
-> functions are used elsewhere too.  Creating separate functions to get
-> pcrUpdateCounter when needed would be a cleaner approach.
->
-> Add a function, 'tpm2_pcr_get_update_counter()' to retrieve
-> the update counter for a given PCR index and algorithm ID on a TPM2 chip.
->
-> This function complements existing TPM functionalities such as reading
-> and extending PCRs, and enhances the ability to monitor PCR status
-> in the Linux Kernel.=20
->
-> [1] https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_P=
-art3_Commands_pub.pdf
-> Section 22.4.2, Page 206.
->
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> ---
->  drivers/char/tpm/tpm.h      |  3 +++
->  drivers/char/tpm/tpm2-cmd.c | 48 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 51 insertions(+)
->
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 830014a26609..60489f21d3bd 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -288,6 +288,9 @@ static inline void tpm_add_ppi(struct tpm_chip *chip)
->  int tpm2_get_timeouts(struct tpm_chip *chip);
->  int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
->  		  struct tpm_digest *digest, u16 *digest_size_ptr);
-> +int tpm2_pcr_get_update_counter(struct tpm_chip *chip,
-> +				u32 pcr_idx, u16 alg_id,
-> +				u32 *update_counter);
+> My only worry comes from my ignorance: do these fTPM devices *always*
+> end up being enumerated through CRB, or do they potentially look
+> "normal enough" that you can actually end up using them even without
+> having that CRB driver loaded?
 
-tpm_pcr_read_update_cnt()
+I know that QEMU has TPM passthrough but I don't know how it behaves
+exactly.
 
->  int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
->  		    struct tpm_digest *digests);
->  int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max);
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 93545be190a5..55f4e102289a 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -216,6 +216,54 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx=
-,
->  	return rc;
->  }
-> =20
-> +/**
-> + * tpm2_pcr_get_update_counter() - gets an update counter value for a PC=
-R bank
-> + * @chip: TPM chip to use
-> + * @pcr_idx: PCR index used to retrieve the update counter
-> + * @alg_id:	alg id used to retrieve the update counter
-> + * @update_counter: output update counter value
-> + *
-> + * Return: Same as with tpm_transmit_cmd.
-> + */
-> +int tpm2_pcr_get_update_counter(struct tpm_chip *chip,
-> +				u32 pcr_idx, u16 alg_id, u32 *update_counter)
-> +{
-> +	int rc;
-> +	struct tpm_buf buf;
-> +	struct tpm2_pcr_read_out *read_out;
-> +	u8 pcr_select[TPM2_PCR_SELECT_MIN] =3D {0};
-> +
-> +	if (pcr_idx >=3D TPM2_PLATFORM_PCR)
-> +		return -EINVAL;
-> +
-> +	if (!update_counter)
-> +		return -EINVAL;
-> +
-> +	rc =3D tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
-> +	if (rc)
-> +		return rc;
-> +
-> +	pcr_select[pcr_idx >> 3] =3D 1 << (pcr_idx & 0x7);
-> +
-> +	tpm_buf_append_u32(&buf, 1);
-> +	tpm_buf_append_u16(&buf, alg_id);
-> +	tpm_buf_append_u8(&buf, TPM2_PCR_SELECT_MIN);
-> +	tpm_buf_append(&buf, (const unsigned char *)pcr_select,
-> +		       sizeof(pcr_select));
-> +
-> +	rc =3D tpm_transmit_cmd(chip, &buf, 0, "attempting to read a pcr value"=
-);
-> +	if (rc)
-> +		goto out;
-> +
-> +	read_out =3D (struct tpm2_pcr_read_out *)&buf.data[TPM_HEADER_SIZE];
-> +
-> +	*update_counter =3D be32_to_cpu(read_out->update_cnt);
-> +
-> +out:
-> +	tpm_buf_destroy(&buf);
-> +	return rc;
-> +}
-> +
->  struct tpm2_null_auth_area {
->  	__be32  handle;
->  	__be16  nonce_size;
-> --=20
-> 2.25.1
+> Put another way: is the CRB driver the _only_ way they are visible, or
+> could some people hit on this through the TPM TIS interface if they
+> have CRB disabled?
+
+I'm not aware of such implementations.
+
+> I see, for example, that qemu ends up emulating the TIS layer, and it
+> might end up forwarding the TPM requests to something that is natively
+> CRB?
+>
+> But again: I don't know enough about CRB vs TIS, so the above may be a
+> stupid question.
+>
+>            Linus
+
+I would focus exactly what is known not to work and disable exactly
+that.
+
+If someone still wants to enable TPM on such hardware, we can later
+on add a kernel command-line flag to enforce hwrng. This ofc based
+on user feedback, not something I would add right now.
 
 BR, Jarkko
