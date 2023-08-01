@@ -2,201 +2,214 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B82876BDC9
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Aug 2023 21:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8535576BEE8
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Aug 2023 23:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbjHAT3z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Aug 2023 15:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S230232AbjHAVBQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Aug 2023 17:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbjHAT3z (ORCPT
+        with ESMTP id S230120AbjHAVBP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Aug 2023 15:29:55 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8231199F
-        for <linux-integrity@vger.kernel.org>; Tue,  1 Aug 2023 12:29:52 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6b9a2416b1cso4986212a34.2
-        for <linux-integrity@vger.kernel.org>; Tue, 01 Aug 2023 12:29:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1690918192; x=1691522992;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9VoATP9NhH/kSJB8+YTj7ST63aExW0zMTg/FlvDeldU=;
-        b=SdoGE7ZGizDXbJRqNSzPFByd7neKDRG8vgDHG8wWrDk7Z7/KTjH2TS4QYzOvia6RNR
-         jSo187iZ1Y0P8fLXtxglQLJKCFUv7Kxsuv/9iavDmMLeprd+m+/YvCjNymHL8zq+iQ0j
-         DnKq58d2TsOX4iAzqQBRe8Hp1rZN6nyb9fpsoraZUicbFh9DHb/uzlKqyndedlb/nJRy
-         Bo0lKCsI77WBEpBlgXAEOJOmejm2HoJwSS2B7jJejSgrYS+hiVbwBYzWxiMGmUorhK4r
-         TSgxWS9DbAIJ9OnnXTRHeSKzq+qvZhxOUrB+K+5yVY2hS2EksqdgvxGeHATBviCI8YKY
-         xNlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690918192; x=1691522992;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9VoATP9NhH/kSJB8+YTj7ST63aExW0zMTg/FlvDeldU=;
-        b=M2QN/+VDjSAZRTT/xKo1x1xPQM9qFttpQy9YFH0xqkd0Zcfiu5AZ+GctWmLzcxmN46
-         22VNLLYT7EuU22oqhD1v4zAoR0peL+0cJovEOVaxpUWr59e38GKgDrmjp4pKTOyMBc0L
-         DkfZfNqIAG1BqlsC4YXrG7HURGfg9NCH3lLaETzWaRywTQ9Y7kzSiTIlH15RsjQWyFZo
-         5MD2Mb/3MTuCk900xXJhCw6tzsFtZwUfDneurotTcJ24BYe8LBpF06uRqdV3Mgt3ZbWV
-         2BIb8mWHzG+uSP0MKeOjPwY+EcS9RvfJlepKGV1M8YGhhnTX44sPoEYqbM0y1UE2Bmt8
-         x3oA==
-X-Gm-Message-State: ABy/qLZAblvC0x3YPP/Si3fUzEJ+m0PqKZYTfgyfALUuNa7XRgzKFHEB
-        rSBaKiECX2F/Gr/ZUwoAgt+vCUXeSeimLfFsnIgH
-X-Google-Smtp-Source: APBJJlFeosTdRRNCzhw56R7pSQbCNwevBbiNXiMElbuinfE7oB7aWtWCFN6s8eGVLK4C+bFbpQT0m3cUoqudXbEH1L0=
-X-Received: by 2002:a05:6830:10e:b0:6b9:1af3:3307 with SMTP id
- i14-20020a056830010e00b006b91af33307mr13348963otp.17.1690918192119; Tue, 01
- Aug 2023 12:29:52 -0700 (PDT)
+        Tue, 1 Aug 2023 17:01:15 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD1E7B4
+        for <linux-integrity@vger.kernel.org>; Tue,  1 Aug 2023 14:01:13 -0700 (PDT)
+Received: from [192.168.87.36] (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
+        by linux.microsoft.com (Postfix) with ESMTPSA id F3AC7238AE9F;
+        Tue,  1 Aug 2023 14:01:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F3AC7238AE9F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1690923673;
+        bh=neqUcw1bWdMlCVvlmZAMwLWfAKai4Nr455p592WKaO0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kj+PJM8kXyY7LUpTK9V9qqegjJMDPwZFNDvVEuE8jAmhIRqNH0p4wMBCE/Yp3S3FZ
+         eCm5cFmceXfHO1Ar89tSKaPUFf1He4RIgARIv5H+uDSP6khnZUpJBe59zGHlVgpCeJ
+         Qxxq4OIUmjU9xNrhy1Ps5BrLA9RdCoZ1UZ3vWmRo=
+Message-ID: <1d592ca1-1f6c-9eef-ce71-b07a837372b0@linux.microsoft.com>
+Date:   Tue, 1 Aug 2023 14:01:12 -0700
 MIME-Version: 1.0
-References: <1687986571-16823-8-git-send-email-wufan@linux.microsoft.com>
- <fcc5de3f153eb60b5acf799c159e6ec8.paul@paul-moore.com> <20230715032644.GF15267@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-In-Reply-To: <20230715032644.GF15267@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 1 Aug 2023 15:29:40 -0400
-Message-ID: <CAHC9VhQryLtJZ1W1ogyVuojnq0-ZAU-hfZLwpzUb=bobko9LsA@mail.gmail.com>
-Subject: Re: [PATCH RFC v10 7/17] ipe: add userspace interface
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, audit@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/6] tpm: implement TPM2 function to get update counter
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>, zohar@linux.ibm.com,
+        noodles@fb.com, bauermann@kolabnow.com, ebiederm@xmission.com,
+        bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
+        peterhuewe@gmx.de, jgg@ziepe.ca, kexec@lists.infradead.org,
+        linux-integrity@vger.kernel.org
+Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+References: <20230801181917.8535-1-tusharsu@linux.microsoft.com>
+ <20230801181917.8535-2-tusharsu@linux.microsoft.com>
+ <CUHFWAAKMKJN.2EA3ZHLOOPPGB@suppilovahvero>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <CUHFWAAKMKJN.2EA3ZHLOOPPGB@suppilovahvero>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 11:26=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com>=
- wrote:
-> On Sat, Jul 08, 2023 at 12:23:04AM -0400, Paul Moore wrote:
-> > On Jun 28, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
-> > >
-> > > As is typical with LSMs, IPE uses securityfs as its interface with
-> > > userspace. for a complete list of the interfaces and the respective
-> > > inputs/outputs, please see the documentation under
-> > > admin-guide/LSM/ipe.rst
-> > >
-> > > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> > > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> > > ---
-> > >  security/ipe/Makefile    |   2 +
-> > >  security/ipe/fs.c        | 101 ++++++++
-> > >  security/ipe/fs.h        |  16 ++
-> > >  security/ipe/ipe.c       |   3 +
-> > >  security/ipe/ipe.h       |   2 +
-> > >  security/ipe/policy.c    | 111 +++++++++
-> > >  security/ipe/policy.h    |   9 +
-> > >  security/ipe/policy_fs.c | 481 +++++++++++++++++++++++++++++++++++++=
-++
-> > >  8 files changed, 725 insertions(+)
-> > >  create mode 100644 security/ipe/fs.c
-> > >  create mode 100644 security/ipe/fs.h
-> > >  create mode 100644 security/ipe/policy_fs.c
+Thanks for the response Jarkko.
 
-...
+On 8/1/23 12:02, Jarkko Sakkinen wrote:
+> The short summary is cryptic to say the least.
+Do you mean the patch subject line, or the description below?
+> "update counter" does not map it to have anything to do with PCRs.
+Agreed.  I noticed that when I was testing the patches.
+The update counter is same for all PCRs.  It was also the same for
+the two hash algo's I tested it for (SHA1 and SHA256). But the spec
+description and Kernel implementation requires to pass the
+pcr_idx and hash algo to PCR_Read command to get the update counter.
+> Why not "tpm: Read pcrUpdateCounter field from TPM2_PCR_Read"?
+As I said in the patch description below, update counter is only
+needed for IMA measurements.  None of the other code that calls
+tpm2_pcr_read() use the update counter.
 
-> > > @@ -39,6 +67,65 @@ static int set_pkcs7_data(void *ctx, const void *d=
-ata, size_t len,
-> > >     return 0;
-> > >  }
-> > >
-> > > +/**
-> > > + * ipe_update_policy - parse a new policy and replace @old with it.
-> >
-> > What does "@old" refer to?  I'm guessing you want to drop the "@".
-> >
-> Yes it shouldn't be here, sorry confusion.
->
-> > > + * @root: Supplies a pointer to the securityfs inode saved the polic=
-y.
-> > > + * @text: Supplies a pointer to the plain text policy.
-> > > + * @textlen: Supplies the length of @text.
-> > > + * @pkcs7: Supplies a pointer to a buffer containing a pkcs7 message=
-.
-> > > + * @pkcs7len: Supplies the length of @pkcs7len.
-> > > + *
-> > > + * @text/@textlen is mutually exclusive with @pkcs7/@pkcs7len - see
-> > > + * ipe_new_policy.
-> > > + *
-> > > + * Return:
-> > > + * * !IS_ERR       - The old policy
-> >
-> > "The old policy" is what?
-> >
-> Let me try to pharse it in another way, how about the existing policy
-> saved in the inode before update?
+I was not sure if you were okay changing the function signature and
+implementation of tpm2_pcr_read(). It felt disruptive.
 
-That sounds better, thanks.
+But I can update tpm2_pcr_read() if you are ok with it.
+Please let me know.
 
-> > > diff --git a/security/ipe/policy_fs.c b/security/ipe/policy_fs.c
-> > > new file mode 100644
-> > > index 000000000000..52a120118cda
-> > > --- /dev/null
-> > > +++ b/security/ipe/policy_fs.c
-> > > @@ -0,0 +1,481 @@
-> >
-> > ...
-> >
-> > > +/**
-> > > + * getactive - Read handler for "ipe/policies/$name/active".
-> > > + * @f: Supplies a file structure representing the securityfs node.
-> > > + * @data: Suppleis a buffer passed to the write syscall.
-> > > + * @len: Supplies the length of @data.
-> > > + * @offset: unused.
-> > > + *
-> > > + * @data will be populated with the 1 or 0 depending on if the
-> > > + * corresponding policy is active.
-> > > + *
-> > > + * Return:
-> > > + * * >0    - Success, Length of buffer written
-> > > + * * <0    - Error
-> > > + */
-> > > +static ssize_t getactive(struct file *f, char __user *data,
-> > > +                    size_t len, loff_t *offset)
-> > > +{
-> > > +   int rc =3D 0;
-> > > +   const char *str;
-> > > +   struct inode *root =3D NULL;
-> > > +   const struct ipe_policy *p =3D NULL;
-> > > +
-> > > +   root =3D d_inode(f->f_path.dentry->d_parent);
-> > > +
-> > > +   inode_lock_shared(root);
-> > > +   p =3D (struct ipe_policy *)root->i_private;
-> > > +   if (!p) {
-> > > +           inode_unlock_shared(root);
-> > > +           return -ENOENT;
-> > > +   }
-> > > +   inode_unlock_shared(root);
-> > > +
-> > > +   str =3D (p =3D=3D rcu_access_pointer(ipe_active_policy)) ? "1" : =
-"0";
-> >
-> > The line above should be wrapped with a RCU lock.
->
-> This call only checks the value inside the pointer but doesn't dereferenc=
-e it.
-> Also from https://lwn.net/Articles/652156/ I found it says "The call to
-> rcu_access_pointer() need not be protected. In contrast, rcu_dereference(=
-) must
-> either be within an RCU read-side critical section", so I didn't add the =
-lock
-> here, is this article outdated?
+I also have a few more thoughts on this in the comment below.
+> On Tue Aug 1, 2023 at 9:19 PM EEST, Tushar Sugandhi wrote:
+>> The TPM2_PCR_Read command returns TPM2_PCR_Read Response struct[1].  It
+>> contains pcrUpdateCounter member which contains the current value of TPM
+>> PCR update counter.  The update counter provides the number of times the
+>> PCRs are updated, which is essential for tracking changes and verifying
+>> system integrity.  Thus, subsystems (like IMA) should measure
+>> pcrUpdateCounter value.  Although tpm2_pcr_read_out struct is returned
+>> by tpm2_pcr_read(), it is not used by it's caller function tpm_pcr_read().
+>> Further, TPM2_PCR_Read Response struct and pcrUpdateCounter is not
+>> available in tpm1_pcr_read().
+>>
+>> PcrUpdateCounter is only needed in a specific case (IMA for measurements).
+>> Changing tpm_pcr_read() and tpm2_pcr_read() function signature to return
+>> tpm2_pcr_read_out struct would be a more disruptive change, since these
+>> functions are used elsewhere too.  Creating separate functions to get
+>> pcrUpdateCounter when needed would be a cleaner approach.
+>>
+>> Add a function, 'tpm2_pcr_get_update_counter()' to retrieve
+>> the update counter for a given PCR index and algorithm ID on a TPM2 chip.
+>>
+>> This function complements existing TPM functionalities such as reading
+>> and extending PCRs, and enhances the ability to monitor PCR status
+>> in the Linux Kernel.
+>>
+>> [1] https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf
+>> Section 22.4.2, Page 206.
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> ---
+>>   drivers/char/tpm/tpm.h      |  3 +++
+>>   drivers/char/tpm/tpm2-cmd.c | 48 +++++++++++++++++++++++++++++++++++++
+>>   2 files changed, 51 insertions(+)
+>>
+>> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+>> index 830014a26609..60489f21d3bd 100644
+>> --- a/drivers/char/tpm/tpm.h
+>> +++ b/drivers/char/tpm/tpm.h
+>> @@ -288,6 +288,9 @@ static inline void tpm_add_ppi(struct tpm_chip *chip)
+>>   int tpm2_get_timeouts(struct tpm_chip *chip);
+>>   int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+>>   		  struct tpm_digest *digest, u16 *digest_size_ptr);
+>> +int tpm2_pcr_get_update_counter(struct tpm_chip *chip,
+>> +				u32 pcr_idx, u16 alg_id,
+>> +				u32 *update_counter);
+> tpm_pcr_read_update_cnt()
+I can rename 'get' -> 'read'
 
-No, I believe you are correct.  There is always something new to learn
-with RCU, thanks ;)
+About 'tpm2' -> 'tpm':
+I already have tpm_pcr_get_update_counter() defined in patch 2.
 
---=20
-paul-moore.com
+I was following the existing pattern here in patch 1 and 2 i. e.
+  - Implementing the tpm1/tpm2 specific functionality in
+    drivers/char/tpm/tpm.h, drivers/char/tpm/tpm2-cmd.c,
+    drivers/char/tpm/tpm1-cmd.c.
+
+  - And combining that functionality in drivers/char/tpm/tpm-interface.c
+    and exposing it to other subsystems (like IMA) through 
+include/linux/tpm.h
+    (patch 2 of this series)
+
+BTW, if I understand correctly, the update counter is not available in 
+TPM 1.2.
+
+Please let me know if you want me to expose the functionality directly
+from drivers/char/tpm/tpm2-cmd.c and getting rid of patch #2 of this series.
+
+~Tushar
+
+>>   int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>>   		    struct tpm_digest *digests);
+>>   int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max);
+>> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+>> index 93545be190a5..55f4e102289a 100644
+>> --- a/drivers/char/tpm/tpm2-cmd.c
+>> +++ b/drivers/char/tpm/tpm2-cmd.c
+>> @@ -216,6 +216,54 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+>>   	return rc;
+>>   }
+>>   
+>> +/**
+>> + * tpm2_pcr_get_update_counter() - gets an update counter value for a PCR bank
+>> + * @chip: TPM chip to use
+>> + * @pcr_idx: PCR index used to retrieve the update counter
+>> + * @alg_id:	alg id used to retrieve the update counter
+>> + * @update_counter: output update counter value
+>> + *
+>> + * Return: Same as with tpm_transmit_cmd.
+>> + */
+>> +int tpm2_pcr_get_update_counter(struct tpm_chip *chip,
+>> +				u32 pcr_idx, u16 alg_id, u32 *update_counter)
+>> +{
+>> +	int rc;
+>> +	struct tpm_buf buf;
+>> +	struct tpm2_pcr_read_out *read_out;
+>> +	u8 pcr_select[TPM2_PCR_SELECT_MIN] = {0};
+>> +
+>> +	if (pcr_idx >= TPM2_PLATFORM_PCR)
+>> +		return -EINVAL;
+>> +
+>> +	if (!update_counter)
+>> +		return -EINVAL;
+>> +
+>> +	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	pcr_select[pcr_idx >> 3] = 1 << (pcr_idx & 0x7);
+>> +
+>> +	tpm_buf_append_u32(&buf, 1);
+>> +	tpm_buf_append_u16(&buf, alg_id);
+>> +	tpm_buf_append_u8(&buf, TPM2_PCR_SELECT_MIN);
+>> +	tpm_buf_append(&buf, (const unsigned char *)pcr_select,
+>> +		       sizeof(pcr_select));
+>> +
+>> +	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to read a pcr value");
+>> +	if (rc)
+>> +		goto out;
+>> +
+>> +	read_out = (struct tpm2_pcr_read_out *)&buf.data[TPM_HEADER_SIZE];
+>> +
+>> +	*update_counter = be32_to_cpu(read_out->update_cnt);
+>> +
+>> +out:
+>> +	tpm_buf_destroy(&buf);
+>> +	return rc;
+>> +}
+>> +
+>>   struct tpm2_null_auth_area {
+>>   	__be32  handle;
+>>   	__be16  nonce_size;
+>> -- 
+>> 2.25.1
+> BR, Jarkko
