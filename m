@@ -2,98 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC9576DB1E
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Aug 2023 00:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5CA76DB4D
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Aug 2023 01:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbjHBW7m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Aug 2023 18:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S231994AbjHBXN4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Aug 2023 19:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbjHBW7b (ORCPT
+        with ESMTP id S231506AbjHBXNz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Aug 2023 18:59:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D58930F3;
-        Wed,  2 Aug 2023 15:59:26 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 372MgVIl014857;
-        Wed, 2 Aug 2023 22:59:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=GpAGXLlF4MFiIeIlOeRB3FOTgQoo/nj/0JBNKef5ICc=;
- b=ARK92OU5wOn/CBW5EfcY7SV2jBk8DWb16hu+hOLdO7FpaRG6DBacp0T4Pgf18trYSshu
- tycnQe4vf75vpUgLquNIrwYxyQ4yI0c4VJFAopBDEkg5wQ17JPKNfVB3JyYnWZRGuy6b
- mBcBi8ov/Z/IbFgc9+VKeD8mhMW+Fv+F9G1+Gu6hpCX1hws+LMIwkFMnxHu4b/2mzEIV
- RLrOg9bsUKd6pfV90L7zhpvURgVAPx5oYjDk6Mle2NntudD0vNk9oAt8ZNV78L69mRHH
- wLNlj/ML76Xp5dmomLcftFcHTUoIjHIT6/hpi1D62YyjCxUrsNWKbH/OIhPhJCSR/6p4 hw== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s7yysgbf9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Aug 2023 22:59:19 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 372MAkVN014533;
-        Wed, 2 Aug 2023 22:59:18 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3s5ft1qvta-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Aug 2023 22:59:18 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 372MxHci66060792
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Aug 2023 22:59:17 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C3AA458054;
-        Wed,  2 Aug 2023 22:59:17 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A331558050;
-        Wed,  2 Aug 2023 22:59:16 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.115.23])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Aug 2023 22:59:16 +0000 (GMT)
-Message-ID: <b3a604758ef1bc18efb6a7750b4362a23cb9adf2.camel@linux.ibm.com>
-Subject: Re: [PATCH 5/6] integrity: PowerVM machine keyring enablement.
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Paul Moore <paul@paul-moore.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 02 Aug 2023 18:59:11 -0400
-In-Reply-To: <20230714153435.28155-6-nayna@linux.ibm.com>
-References: <20230714153435.28155-1-nayna@linux.ibm.com>
-         <20230714153435.28155-6-nayna@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jwv7mcVB6RPCzbrgVEN_2_WremGD4Tt-
-X-Proofpoint-GUID: jwv7mcVB6RPCzbrgVEN_2_WremGD4Tt-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-02_18,2023-08-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- spamscore=0 priorityscore=1501 mlxlogscore=691 malwarescore=0
- suspectscore=0 clxscore=1015 phishscore=0 bulkscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308020199
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 2 Aug 2023 19:13:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35218115
+        for <linux-integrity@vger.kernel.org>; Wed,  2 Aug 2023 16:13:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691017989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=20Np0whiILikZWPV0Tm+DkfZOvMb6xU6aDilwDNR8Lg=;
+        b=DqzhmOWV76IC7G6Vitt+S08ADe8+uy2hWDwuRks6XAhntBg0XSCkYDvbxEGWqIJ5OnIMM9
+        qEAL5m9oTt+e4MzIdIrqILUd9HBQ3c2zj/bTrAX2zuPpJ2ICM8ka59nrFcc6XusWTCSy2M
+        Fj2/+fAu+nZpwcdzKAINpsdC0YG5UbI=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-60-Y95b27alMlO-ZNNsvxHP7Q-1; Wed, 02 Aug 2023 19:13:08 -0400
+X-MC-Unique: Y95b27alMlO-ZNNsvxHP7Q-1
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1bc0fc321ceso3041035ad.3
+        for <linux-integrity@vger.kernel.org>; Wed, 02 Aug 2023 16:13:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691017987; x=1691622787;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=20Np0whiILikZWPV0Tm+DkfZOvMb6xU6aDilwDNR8Lg=;
+        b=OBkdNxndXp8zzLZWao6/qIodoVL5gcRa0QW6Onw/jDzK1rrgf05q97mrpM+p8jSZe7
+         UIKtPjnn/0OEI+HWpj6tJsJJQWw29V38R2UyeVTqSMxb3Y2B/X7xYLkjZVc2DgXrmMwB
+         nVdCi1KmThLhZD+Ov9hJIy/praw0XfGoUNaj6hc4QxqLq9QUu9IcWD7dNaAcVNgtwFef
+         FkLR6qyShcXb+0nNvHBviU+p/qs2XmkDBHYhV3AFoFqx/Z75C1WJdl8DO/E1OoQ941CJ
+         aiAnTSuUfaSk/sHrHFkMCzlMvlHO/o0M2fWw7ia68mh/aBztyNr/kYccGNNa23IHegiE
+         g+cA==
+X-Gm-Message-State: ABy/qLYB3gplY3tLQCj7+0G+V/GsGjyGQA9IKUewh9IUd7mhWHhMsHLa
+        1r7Uj5Q4AiMNnJNPCo3+5cqFMP53Rb/j2dVN/YBtKMNCcTiK3VjdtRA9SFnwUXioUzMnyd8Dbm9
+        3fw2rbQe5JxjCU909n7KavzCzZz1L
+X-Received: by 2002:a17:903:234d:b0:1b6:6c32:59a8 with SMTP id c13-20020a170903234d00b001b66c3259a8mr16368699plh.36.1691017987201;
+        Wed, 02 Aug 2023 16:13:07 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGUasP1ILLvLjYv7dds9M1+TNQWo0lRyGqDpoahYttq390Z2rmdy2dwB1sArRMDxIfc57+UQg==
+X-Received: by 2002:a17:903:234d:b0:1b6:6c32:59a8 with SMTP id c13-20020a170903234d00b001b66c3259a8mr16368677plh.36.1691017986871;
+        Wed, 02 Aug 2023 16:13:06 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id v5-20020a170902b7c500b001b891259eddsm12882039plz.197.2023.08.02.16.13.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Aug 2023 16:13:06 -0700 (PDT)
+Date:   Wed, 2 Aug 2023 16:13:04 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniil Stas <daniil.stas@posteo.net>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        James.Bottomley@hansenpartnership.com, Jason@zx2c4.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@leemhuis.info, stable@vger.kernel.org
+Subject: Re: [PATCH 1/1] tpm: disable hwrng for fTPM on some AMD designs
+Message-ID: <ejqnhdrhktfrhcb76bxx6y73hydjov34t7m4wrvzjc22gdtzts@p4g7yqxdnijn>
+References: <65a1c307-826d-4ca3-0336-07a185684e5d@amd.com>
+ <20230727195019.41abb48d@g14>
+ <67eefe98-e6df-e152-3169-44329e22478d@amd.com>
+ <20230727200527.4080c595@g14>
+ <CAHk-=whqT0PxBazwfjWwoHQQFzZt50tV6Jfgq3iYceKMJtyuUg@mail.gmail.com>
+ <CUGAV1Y993FB.1O2Q691015Z2C@seitikki>
+ <CAHk-=whphk8Jp=NYmnm7Qv+vZ6ScYCz+rV8a2G1nD-AQY3z+mQ@mail.gmail.com>
+ <CUHF67ZOFOTN.1UFE7Q1IFRQMX@suppilovahvero>
+ <CAHk-=wgK0Z-LrJGExwG=e=oxjD93LJhY3jMmi_2O2_Pkjf8Tsg@mail.gmail.com>
+ <CUHG1TB7IELF.PVXOXEXBGEPP@suppilovahvero>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CUHG1TB7IELF.PVXOXEXBGEPP@suppilovahvero>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2023-07-14 at 11:34 -0400, Nayna Jain wrote:
-> Update Kconfig to enable machine keyring and limit to CA certificates
-> on PowerVM.
+On Tue, Aug 01, 2023 at 10:09:58PM +0300, Jarkko Sakkinen wrote:
+> On Tue Aug 1, 2023 at 9:42 PM EEST, Linus Torvalds wrote:
+> > On Tue, 1 Aug 2023 at 11:28, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > >
+> > > I would disable it inside tpm_crb driver, which is the driver used
+> > > for fTPM's: they are identified by MSFT0101 ACPI identifier.
+> > >
+> > > I think the right scope is still AMD because we don't have such
+> > > regressions with Intel fTPM.
+> >
+> > I'm ok with that.
+> >
+> > > I.e. I would move the helper I created inside tpm_crb driver, and
+> > > a new flag, let's say "TPM_CHIP_FLAG_HWRNG_DISABLED", which tpm_crb
+> > > sets before calling tpm_chip_register().
+> > >
+> > > Finally, tpm_add_hwrng() needs the following invariant:
+> > >
+> > >         if (chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED)
+> > >                 return 0;
+> > >
+> > > How does this sound? I can refine this quickly from my first trial.
+> >
+> > Sounds fine.
 > 
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> Mario, it would be good if you could send a fix candidate but take my
+> suggestion for a new TPM chip flag into account, while doing it. Please
+> send it as a separate patch, not attachment to this thread.
+> 
+> I can test and ack it, if it looks reasonable.
+> 
+> > My only worry comes from my ignorance: do these fTPM devices *always*
+> > end up being enumerated through CRB, or do they potentially look
+> > "normal enough" that you can actually end up using them even without
+> > having that CRB driver loaded?
+> 
+> I know that QEMU has TPM passthrough but I don't know how it behaves
+> exactly.
+> 
 
-Reviewed-and-tested-by: Mimi Zohar <zohar@linux.ibm.com>
+I just created a passthrough tpm device with a guest which it is using
+the tis driver, while the host is using crb (and apparently one of the
+amd devices that has an impacted fTPM). It looks like there is a
+complete separation between the frontend and backends, with the front
+end providing either a tis or crb interface to the guest, and then the
+backend sending commands by writing to the passthrough device that was
+given, such as /dev/tpm0, or an emulator such as swtpm. Stefan can
+probably explain it much better than I.
+
+Regards,
+Jerry
+
+> > Put another way: is the CRB driver the _only_ way they are visible, or
+> > could some people hit on this through the TPM TIS interface if they
+> > have CRB disabled?
+> 
+> I'm not aware of such implementations.
+> 
+> > I see, for example, that qemu ends up emulating the TIS layer, and it
+> > might end up forwarding the TPM requests to something that is natively
+> > CRB?
+> >
+> > But again: I don't know enough about CRB vs TIS, so the above may be a
+> > stupid question.
+> >
+> >            Linus
+> 
+> I would focus exactly what is known not to work and disable exactly
+> that.
+> 
+> If someone still wants to enable TPM on such hardware, we can later
+> on add a kernel command-line flag to enforce hwrng. This ofc based
+> on user feedback, not something I would add right now.
+> 
+> BR, Jarkko
 
