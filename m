@@ -2,255 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C08C76E863
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Aug 2023 14:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A065876E8BD
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Aug 2023 14:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbjHCMfq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Aug 2023 08:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S234116AbjHCMrE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Aug 2023 08:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234099AbjHCMfp (ORCPT
+        with ESMTP id S229760AbjHCMrD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Aug 2023 08:35:45 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F1B3C25
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Aug 2023 05:35:28 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fe44955decso1171374e87.1
-        for <linux-integrity@vger.kernel.org>; Thu, 03 Aug 2023 05:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691066126; x=1691670926;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z5pIJWbGUU+IcBqHu09pjkPy7MNVWuLFQRm8HIlUks0=;
-        b=gwESsG+WDXDy3C2tsUjbJ1FYYB3SyMjvoJaMALp3YjaZH6mzwR+5HwCxUT9kjr3Lfx
-         wazMwpG0cKmlZFEVO33Jg8t0oopFbPtYXdFCpB7UhfMlBgFPRcZUsWg8CwwxG64fpj68
-         kGFRPkxwA9WnvdysCECHGIkYBnn3GHZ/PdJk5FHitlyrVhTPiifKJNmNLrS6crB9DRS6
-         dugRnqjNCyuMPEzDB6M9535X5HDTQSXkygZ6kpqPGOcwdovmtwMG9JIGZHgSCXjEL/Op
-         V8WpqwIHiSMoxMleRDICKC0NUK45JUO0e7Tp64nXwtQ+CLg3kAQjN0yMOYJ0iRwHzX2/
-         VIlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691066126; x=1691670926;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z5pIJWbGUU+IcBqHu09pjkPy7MNVWuLFQRm8HIlUks0=;
-        b=g+Toow+ZtDlFQ7gv09uGgIwxeOYIcm2vBOQeV1M3VTOQT4KMavixFF0uzbEGl3zrMO
-         tYsP/PGwyrb5LG3jMWNvc9mizIDnMHBLoyrDeuetjg2dD9M/c2ceR+uqPV3cTcKfO1f7
-         YhiLkJF3HLcvki9GhY0Hr4TmNzX4ftcvYzzvHCtjLXSl4N7eT45tTyGGjLJXWxz2lmKo
-         eAhCV6zNQGrS+bM0UWFTHSwwYN6MWGm5jSnlyjU8Ea8ilH/WEJgiy788zTggNmND9CtD
-         gz75mdc3xoMMU1Pjsx7j/6sK9kt8lZbt7xNauKfsm7QdBFrBUZgaVACko9xzXHgYXWQu
-         W61A==
-X-Gm-Message-State: ABy/qLYoY6NKtB93/bAHo9+SdSiVQP2MG1m7wrCw6aTdqhxSB3jUvoNz
-        JUg4wzvqGw8rghYWANIA0Q+bGV4lA6/Rkb1qocg=
-X-Google-Smtp-Source: APBJJlHLHB55LHuoOqYiuGk548/vVQ+RlwPr0wSIpPDIRqwm7EI73ZDM2CoYFB8/oR+IUUpGxDAyJg==
-X-Received: by 2002:a19:654e:0:b0:4f8:6831:fd70 with SMTP id c14-20020a19654e000000b004f86831fd70mr2961739lfj.3.1691066125932;
-        Thu, 03 Aug 2023 05:35:25 -0700 (PDT)
-Received: from rayden.urgonet (h-46-59-78-111.A175.priv.bahnhof.se. [46.59.78.111])
-        by smtp.gmail.com with ESMTPSA id q18-20020ac25fd2000000b004fdc0023a47sm3304592lfg.238.2023.08.03.05.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Aug 2023 05:35:25 -0700 (PDT)
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH] KEYS: trusted: tee: use tee_shm_register_alloc_buf()
-Date:   Thu,  3 Aug 2023 14:35:15 +0200
-Message-Id: <20230803123515.4018838-1-jens.wiklander@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 3 Aug 2023 08:47:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17812198A;
+        Thu,  3 Aug 2023 05:47:03 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 373Cf1HE030571;
+        Thu, 3 Aug 2023 12:46:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Up5lPwvWwcAHCfun11IlNsNymawAvbNSo22c9NGV3/0=;
+ b=JDqxog76O9NiIK4r1COjPnPx6a5l6+66k5+LUmxQwmPSHwPCQpn7ixyKE2Tr+C3JogT+
+ nwJnsKVZV9oLC/XVT49QJeMbYj1QK/K4aukYyFV+aj9zQRhPQdYld6OAPy+LDG6KKIb1
+ bmXmPi9mCAffYVGjrT44momJH4Z7XiXEV/f7LozyobLDuVyxnbeEMq+ZKGczLF2LExFw
+ VMKoUJpT139azW9Iu/nJ7e7wH+q9gzaRv7x05wWmVn6GmNfjDZwSG6IyVb//LdHbuewA
+ ogLVavwAkXDVkOJPj8h7yxlM+vHgSKO00mVvpQwF+xjQVPhKJOfHgd4nXkApHvkxJj6e nw== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s8c1ggv76-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Aug 2023 12:46:54 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 373AsZmH017001;
+        Thu, 3 Aug 2023 12:46:53 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3s5dfynpu8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Aug 2023 12:46:53 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 373Ckq5U16187702
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Aug 2023 12:46:52 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AEC5258060;
+        Thu,  3 Aug 2023 12:46:52 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E0EA58056;
+        Thu,  3 Aug 2023 12:46:52 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Aug 2023 12:46:52 +0000 (GMT)
+Message-ID: <4150bf8c-7321-0dab-ab54-dca7d54c1f3d@linux.ibm.com>
+Date:   Thu, 3 Aug 2023 08:46:52 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: boot-time vtpm helper (was "Re: <void>")
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <CUIRLIY5N6CI.3O9UKOY2N5BS7@suppilovahvero>
+ <CUISH28XXJGN.EWZ3CWAQ7G1C@suppilovahvero>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <CUISH28XXJGN.EWZ3CWAQ7G1C@suppilovahvero>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MXzbe-pUtxzjd0E_P2u8gzHKyI0NFtGn
+X-Proofpoint-ORIG-GUID: MXzbe-pUtxzjd0E_P2u8gzHKyI0NFtGn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-03_12,2023-08-03_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=949 clxscore=1015 spamscore=0 malwarescore=0
+ adultscore=0 impostorscore=0 phishscore=0 mlxscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308030113
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Prior to this patch was trusted_tee_seal() and trusted_tee_get_random()
-relying on tee_shm_register_kernel_buf() to share memory with the TEE.
-Depending on the memory allocation pattern the pages holding the
-registered buffers overlap with other buffers also shared with the TEE.
 
-The OP-TEE driver using the old SMC based ABI permits overlapping shared
-buffers, but with the new FF-A based ABI each physical page may only
-be registered once.
 
-Fix this problem by allocating a temporary page aligned shared memory
-buffer to be used as a bounce buffer for the needed data buffers.
+On 8/3/23 05:06, Jarkko Sakkinen wrote:
+> On Thu Aug 3, 2023 at 11:25 AM EEST, Jarkko Sakkinen wrote:
+>> Hi,
+>>
+>> I have a working PoC for boot-time initialization of vtpm inside
+>> tpm_vtpm_proxy. ATM, it uses the Linux firmware interface to load a ELF
+>> binary for the vtpm, and delivers a communication end for the helper
+>> process.
+>>
+>> It is a great feature with the current narrow scope for continuous
+>> integration. Obviously the scope could be later on extended to e.g.
 
-Since TEE trusted keys doesn't depend on registered shared memory
-support any longer remove that explicit dependency when opening a
-context to the TEE.
+Since VMs with vTPMs exist, which CI/CD environment would one use this in?
 
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
----
- security/keys/trusted-keys/trusted_tee.c | 68 +++++++++++++-----------
- 1 file changed, 36 insertions(+), 32 deletions(-)
+Where does the binary for the vtpm live when it's loaded with the firmware interface?
 
-diff --git a/security/keys/trusted-keys/trusted_tee.c b/security/keys/trusted-keys/trusted_tee.c
-index ac3e270ade69..3085343c489a 100644
---- a/security/keys/trusted-keys/trusted_tee.c
-+++ b/security/keys/trusted-keys/trusted_tee.c
-@@ -8,6 +8,7 @@
- 
- #include <linux/err.h>
- #include <linux/key-type.h>
-+#include <linux/minmax.h>
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/string.h>
-@@ -65,38 +66,37 @@ static int trusted_tee_seal(struct trusted_key_payload *p, char *datablob)
- 	int ret;
- 	struct tee_ioctl_invoke_arg inv_arg;
- 	struct tee_param param[4];
--	struct tee_shm *reg_shm_in = NULL, *reg_shm_out = NULL;
-+	struct tee_shm *shm;
-+	uint8_t *buf;
- 
- 	memset(&inv_arg, 0, sizeof(inv_arg));
- 	memset(&param, 0, sizeof(param));
- 
--	reg_shm_in = tee_shm_register_kernel_buf(pvt_data.ctx, p->key,
--						 p->key_len);
--	if (IS_ERR(reg_shm_in)) {
--		dev_err(pvt_data.dev, "key shm register failed\n");
--		return PTR_ERR(reg_shm_in);
-+	shm = tee_shm_alloc_kernel_buf(pvt_data.ctx,
-+				       p->key_len + sizeof(p->blob));
-+	if (IS_ERR(shm)) {
-+		dev_err(pvt_data.dev, "key shm alloc failed\n");
-+		return PTR_ERR(shm);
- 	}
--
--	reg_shm_out = tee_shm_register_kernel_buf(pvt_data.ctx, p->blob,
--						  sizeof(p->blob));
--	if (IS_ERR(reg_shm_out)) {
--		dev_err(pvt_data.dev, "blob shm register failed\n");
--		ret = PTR_ERR(reg_shm_out);
-+	buf = tee_shm_get_va(shm, 0);
-+	if (IS_ERR(buf)) {
-+		ret = PTR_ERR(buf);
- 		goto out;
- 	}
-+	memcpy(buf, p->key, p->key_len);
- 
- 	inv_arg.func = TA_CMD_SEAL;
- 	inv_arg.session = pvt_data.session_id;
- 	inv_arg.num_params = 4;
- 
- 	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
--	param[0].u.memref.shm = reg_shm_in;
-+	param[0].u.memref.shm = shm;
- 	param[0].u.memref.size = p->key_len;
- 	param[0].u.memref.shm_offs = 0;
- 	param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
--	param[1].u.memref.shm = reg_shm_out;
-+	param[1].u.memref.shm = shm;
- 	param[1].u.memref.size = sizeof(p->blob);
--	param[1].u.memref.shm_offs = 0;
-+	param[1].u.memref.shm_offs = p->key_len;
- 
- 	ret = tee_client_invoke_func(pvt_data.ctx, &inv_arg, param);
- 	if ((ret < 0) || (inv_arg.ret != 0)) {
-@@ -104,14 +104,13 @@ static int trusted_tee_seal(struct trusted_key_payload *p, char *datablob)
- 			inv_arg.ret);
- 		ret = -EFAULT;
- 	} else {
-+		memcpy(p->blob, buf + p->key_len,
-+		       min(param[1].u.memref.size, sizeof(p->blob)));
- 		p->blob_len = param[1].u.memref.size;
- 	}
- 
- out:
--	if (reg_shm_out)
--		tee_shm_free(reg_shm_out);
--	if (reg_shm_in)
--		tee_shm_free(reg_shm_in);
-+	tee_shm_free(shm);
- 
- 	return ret;
- }
-@@ -166,11 +165,9 @@ static int trusted_tee_unseal(struct trusted_key_payload *p, char *datablob)
- 		p->key_len = param[1].u.memref.size;
- 	}
- 
-+	tee_shm_free(reg_shm_out);
- out:
--	if (reg_shm_out)
--		tee_shm_free(reg_shm_out);
--	if (reg_shm_in)
--		tee_shm_free(reg_shm_in);
-+	tee_shm_free(reg_shm_in);
- 
- 	return ret;
- }
-@@ -183,15 +180,21 @@ static int trusted_tee_get_random(unsigned char *key, size_t key_len)
- 	int ret;
- 	struct tee_ioctl_invoke_arg inv_arg;
- 	struct tee_param param[4];
--	struct tee_shm *reg_shm = NULL;
-+	struct tee_shm *shm;
-+	void *buf;
- 
- 	memset(&inv_arg, 0, sizeof(inv_arg));
- 	memset(&param, 0, sizeof(param));
- 
--	reg_shm = tee_shm_register_kernel_buf(pvt_data.ctx, key, key_len);
--	if (IS_ERR(reg_shm)) {
--		dev_err(pvt_data.dev, "key shm register failed\n");
--		return PTR_ERR(reg_shm);
-+	shm = tee_shm_alloc_kernel_buf(pvt_data.ctx, key_len);
-+	if (IS_ERR(shm)) {
-+		dev_err(pvt_data.dev, "key shm alloc failed\n");
-+		return PTR_ERR(shm);
-+	}
-+	buf = tee_shm_get_va(shm, 0);
-+	if (IS_ERR(buf)) {
-+		ret = PTR_ERR(buf);
-+		goto out;
- 	}
- 
- 	inv_arg.func = TA_CMD_GET_RANDOM;
-@@ -199,7 +202,7 @@ static int trusted_tee_get_random(unsigned char *key, size_t key_len)
- 	inv_arg.num_params = 4;
- 
- 	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
--	param[0].u.memref.shm = reg_shm;
-+	param[0].u.memref.shm = shm;
- 	param[0].u.memref.size = key_len;
- 	param[0].u.memref.shm_offs = 0;
- 
-@@ -209,18 +212,19 @@ static int trusted_tee_get_random(unsigned char *key, size_t key_len)
- 			inv_arg.ret);
- 		ret = -EFAULT;
- 	} else {
-+		memcpy(key, buf, min(param[0].u.memref.size, key_len));
- 		ret = param[0].u.memref.size;
- 	}
- 
--	tee_shm_free(reg_shm);
-+out:
-+	tee_shm_free(shm);
- 
- 	return ret;
- }
- 
- static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
- {
--	if (ver->impl_id == TEE_IMPL_ID_OPTEE &&
--	    ver->gen_caps & TEE_GEN_CAP_REG_MEM)
-+	if (ver->impl_id == TEE_IMPL_ID_OPTEE)
- 		return 1;
- 	else
- 		return 0;
--- 
-2.34.1
+>> from unencrypted plain text to a vTPM living inside SGX enclave.
 
+I would run swtpm inside an SGX enclave using Gramine.
+
+Regards,
+    Stefan
+
+>>
+>> I could send an RFC of this, if there is wider interest for the
+>> topic.
+>>
+>> BR, Jarkko
+> 
+> I'm sorry, I'm trying learn aerc, and unfortunately forgot to add a subject.
+> 
+> BR, Jarkko
