@@ -2,133 +2,177 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C716C76F5DE
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Aug 2023 00:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A5B76F5EC
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Aug 2023 01:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjHCW4O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Aug 2023 18:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S232243AbjHCXCU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Aug 2023 19:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjHCW4O (ORCPT
+        with ESMTP id S232258AbjHCXCM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Aug 2023 18:56:14 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AEFAC
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Aug 2023 15:56:12 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 373MsIfV011391;
-        Thu, 3 Aug 2023 22:55:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hppF3aZYJ8kwrLf6dHRucYmqqNY7MbJGS8+ol2sGIas=;
- b=gW3vmjDxzCDldsDox+60nXyWSxaT0CUTKRJYSXLlY2VD4y9StoXEP2vfIBHzPpHE/266
- zCW0U9LMZ54RGSfGHpJRD2bLn8TI6jDPXVNxg/K7bhhRrVotfq8H8DyNTZ2lMNIsI/CL
- YAbQARrMVqZ7dGbvcRnQP7fCqM1JW+zp01AqlnXb1L6anv6ifOYA7gZ1V8HeYtoga4aG
- d2LDNT2qIWwqq+3xbslPRIR+PWgnyeInNWQma4nsJBLk9OlrATEQlDOqpHkTHhCxAoaP
- 6SW/WBapLedz2SCC25mz5Op39RME8uOzHO23rviB/xls3REw82ADEcY83iabToq1Hs6N sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s8mxb0f4s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Aug 2023 22:55:47 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 373MhZjb010557;
-        Thu, 3 Aug 2023 22:55:46 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s8mxb0f4g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Aug 2023 22:55:45 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 373Knmci023537;
-        Thu, 3 Aug 2023 22:55:45 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3s8km9gq35-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Aug 2023 22:55:45 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 373Mtivi65208768
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Aug 2023 22:55:44 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8527958061;
-        Thu,  3 Aug 2023 22:55:44 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BBE8D58056;
-        Thu,  3 Aug 2023 22:55:43 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Aug 2023 22:55:43 +0000 (GMT)
-Message-ID: <dc883eeb-729d-f951-ba1b-9c030eed8b93@linux.ibm.com>
-Date:   Thu, 3 Aug 2023 18:55:43 -0400
+        Thu, 3 Aug 2023 19:02:12 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87D0E30F6
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Aug 2023 16:01:59 -0700 (PDT)
+Received: from [192.168.87.36] (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 81566207F5B2;
+        Thu,  3 Aug 2023 16:01:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 81566207F5B2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1691103717;
+        bh=wb6/cOS27R9v5HDFW3pHzcqDeGWkZFwt7EZjsyRl/e0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=U/nq6a2qhFgN7h4+2VQuJZSP9VtGTW0X9pwv0aUHGVncstNdE+B5ieWOhlRjS7dRp
+         P74i9eJ8Yt9E6FW9G43056xCM30Hg5lXxipc1rqgs8HM7LTMs9Y5elz4BC3XHwtcJj
+         HetADTR+jYH1MtqnrYy4zn9bVPzYdTFIpRHuU7hQ=
+Message-ID: <b9a77076-d6ac-a1ec-5e75-ab066dfade69@linux.microsoft.com>
+Date:   Thu, 3 Aug 2023 16:01:56 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 0/6] Measuring TPM update counter in IMA
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 4/6] ima: implement functionality to measure TPM update
+ counter
 Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>, noodles@fb.com,
+To:     Mimi Zohar <zohar@linux.ibm.com>, noodles@fb.com,
         bauermann@kolabnow.com, ebiederm@xmission.com, bhe@redhat.com,
         vgoyal@redhat.com, dyoung@redhat.com, peterhuewe@gmx.de,
         jarkko@kernel.org, jgg@ziepe.ca, kexec@lists.infradead.org,
         linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
 References: <20230801181917.8535-1-tusharsu@linux.microsoft.com>
- <dbfb545b-9399-d505-6739-c2940930ef48@linux.ibm.com>
- <cb2029b8-d585-1c06-a0ac-15624cf70e28@linux.microsoft.com>
- <a4a5e40b-abc1-27fa-3984-cee18fb4522c@linux.ibm.com>
- <d51cd6959472885a59fc13b863b71f2157fc8f65.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <d51cd6959472885a59fc13b863b71f2157fc8f65.camel@linux.ibm.com>
+ <20230801181917.8535-5-tusharsu@linux.microsoft.com>
+ <a2d9af7f54f364da9aeaef3dc6e03b7412957c23.camel@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <a2d9af7f54f364da9aeaef3dc6e03b7412957c23.camel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7rT4Gu6yYuot68cF3j025JAW6n5j5wh1
-X-Proofpoint-ORIG-GUID: yT5c7vkIbkd1-22MM3H7crqoKtzB5foM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-03_22,2023-08-03_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- impostorscore=0 adultscore=0 phishscore=0 malwarescore=0 spamscore=0
- lowpriorityscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308030203
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Thanks for the review Mimi.
 
-
-On 8/3/23 18:36, Mimi Zohar wrote:
-> On Thu, 2023-08-03 at 18:09 -0400, Stefan Berger wrote:
->>> I can remove the kexec example if it is causing confusion.> Please let me know.
+On 8/3/23 14:42, Mimi Zohar wrote:
+> On Tue, 2023-08-01 at 11:19 -0700, Tushar Sugandhi wrote:
+>> Currently TPM update counter is not available external to the system,
+>> for instance, a remote attestation service.  It is a problem because
+>> the service cannot easily determine if the IMA log entries are missing.
+>> The IMA functionality needs to be extended to measure the TPM update
+>> counter from various subsystems in Linux kernel to help detect if
+>> the IMA log entries are missing.
 >>
->> I am not convinced we need this series  ... :-( Your kexec series prevents
->> further logging and especially PCR extensions after the frozen measurement log
->> has been created and in ima_add_template_entry(), if we hit an oom condition,
->> then we luckily do not extend the PCR either. If either the log was to have one
->> more entry than number PCR extensions occurred or vice versa, then the remote
->> attestation service will see this mismatch no matter what and all the PCR update
->> counter won't help (and is generally not a good indicator for this purpose imo)
->> for it to recover from this. It's better to declare the system as un-trusted/
->> corrupted in this case then.
-> 
-> As previously mentioned, there is a patch set that doesn't carry any
-> records across kexec, if the the measurement list is too large, and
-> another proposal to trim the measurement list.
-> 
-> In both of these cases including a new IMA mesaurement record, at least
-> after the boot_aggregate, would help simplify detecting whether the
-> measurement list has been trimmed/truncated.
-> 
+>> Implement a function, 'ima_measure_update_counter()' which would retrieve
+>> the TPM update counter using the previously defined function
+>> 'ima_tpm_get_update_counter()'.  Format it as a string with the value
+>> "update_counter=<N>;", and measure it using the function
+>> 'ima_measure_critical_data()'.
+>>
+>> The function takes an event name as input, and the update counter value
+>> is measured as part of this event.
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Explicit TPM2 quote commands do not return the quoted PCR values or the
+> pcrCounter value.  Define and include a new IMA measurement record
+> containing the pcrCounter, other TPM info, and IMA info in the IMA
+> measurement list to help simplify detecting a trimmed/truncated
+> measurement list.
+Sounds good.
+>> ---
+>>   include/linux/ima.h               |  1 +
+>>   security/integrity/ima/ima.h      |  1 +
+>>   security/integrity/ima/ima_main.c | 28 ++++++++++++++++++++++++++++
+>>   3 files changed, 30 insertions(+)
+>>
+>> diff --git a/include/linux/ima.h b/include/linux/ima.h
+>> index 86b57757c7b1..f15f3a6a4c72 100644
+>> --- a/include/linux/ima.h
+>> +++ b/include/linux/ima.h
+>> @@ -40,6 +40,7 @@ extern int ima_measure_critical_data(const char *event_label,
+>>   				     const char *event_name,
+>>   				     const void *buf, size_t buf_len,
+>>   				     bool hash, u8 *digest, size_t digest_len);
+>> +int ima_measure_update_counter(const char *event_name);
+>>   
+>>   #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
+>>   extern void ima_appraise_parse_cmdline(void);
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index 4acd0e5a830f..5484bd362237 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -168,6 +168,7 @@ int __init ima_init_digests(void);
+>>   int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
+>>   			  void *lsm_data);
+>>   int ima_tpm_get_update_counter(u32 *cpu_update_counter);
+>> +int ima_measure_update_counter(const char *event_name);
+>>   
+>>   /*
+>>    * used to protect h_table and sha_table
+>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+>> index d66a0a36415e..1bcd45cc5a6a 100644
+>> --- a/security/integrity/ima/ima_main.c
+>> +++ b/security/integrity/ima/ima_main.c
+>> @@ -1071,6 +1071,34 @@ int ima_measure_critical_data(const char *event_label,
+>>   }
+>>   EXPORT_SYMBOL_GPL(ima_measure_critical_data);
+>>   
+>> +#define IMA_TPM_UPDATE_CTR_BUF_SIZE 128
+>> +int ima_measure_update_counter(const char *event_name)
+>> +{
+>> +	int result;
+>> +	u32 update_counter = 0;
+>> +	char buf[IMA_TPM_UPDATE_CTR_BUF_SIZE];
+>> +	int buf_len;
+>> +
+>> +	if (!event_name)
+>> +		return -ENOPARAM;
+>> +
+>> +	result = ima_tpm_get_update_counter(&update_counter);
+>> +
+>> +	if (result != 0)
+>> +		return result;
+>> +
+>> +	scnprintf(buf, IMA_TPM_UPDATE_CTR_BUF_SIZE, "update_counter=%u;",
+>> +			  update_counter);
+>> +
+>> +	buf_len = strlen(buf);
+>> +
+>> +	result = ima_measure_critical_data("tpm_pcr_update_counter", event_name,
+>> +				  buf, buf_len, false, NULL, 0);
+>>
+> The new record should contain everything needed to verify the
+> pcrCounter.  For example, each IMA measurement record updates the
+> pcrCounter for each TPM bank enabled.  So the number of enabled TPM
+> banks and number of IMA measurements should also be included in this
+> record.
+Agreed. That should be valuable information.
+How does the below format look like for the buf above?
 
-And if you can detect that I would log an event but not using the PCR update counter.
-Unless the state of PCRs is also logged, it's going to be unrecoverable for a log+quote
-verifier from there.
+version=<N>.<N>.<N>;num_enabled_pcr_banks=<N>;pcrUpdateCounter=<N>;num_ima_measurements=<N>;
 
-    Stefan
+>
+> Perhaps include a version number as well, so that if we ever want to
+> include other information, we could.
+By version number, do you mean kernel_version, or a new version
+number specific to this record? Or something else?
+
+~Tushar
+> Mimi
+>
+>
+>> +
+>> +	return result;
+>> +}
+>> +EXPORT_SYMBOL_GPL(ima_measure_update_counter);
+>> +
+>>   static int __init init_ima(void)
+>>   {
+>>   	int error;
+
