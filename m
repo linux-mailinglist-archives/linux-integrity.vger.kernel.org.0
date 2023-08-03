@@ -2,71 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA0076F614
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Aug 2023 01:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB0976F62B
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Aug 2023 01:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjHCXUc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Aug 2023 19:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S230471AbjHCXe7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Aug 2023 19:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjHCXUa (ORCPT
+        with ESMTP id S229779AbjHCXe6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Aug 2023 19:20:30 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987CE13E
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Aug 2023 16:20:28 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5768a7e3adbso38077917b3.0
-        for <linux-integrity@vger.kernel.org>; Thu, 03 Aug 2023 16:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1691104828; x=1691709628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9MXeaLjfcWtzHxNdYmCOMyJP3zSmOKDao0jQ+QjgI/I=;
-        b=V3EVTxtA5ED7sOkPK0jQ3poEb+JOcy9zDlw9VNp5kgG1quKmr1FEp+PpRFhnnodiYT
-         AynTIHgSu90a1r2GIXqd9+O+scLQx71THTiHWJf05YWlO5IUdAVU56wJpz4bhXBM1XO5
-         ond3AGqBZsQzIBOKDSLaKts71NuUZPAqp3URluGxd8Zh/sl7LacCfHujcnE7O8w5Z6Pk
-         O7VNOiY1eouL2UBcFzuYCIJU1o4tOT5ek2mJ8povllL9fOGQCq5+qvE+nf0aER/yX2FM
-         N/kzPA4KiqhPVrBi35/ynNvcZWBhtih7rkhNsuH59Ibhho7+wNqpUd16SGbdcZi1oQGS
-         C2jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691104828; x=1691709628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9MXeaLjfcWtzHxNdYmCOMyJP3zSmOKDao0jQ+QjgI/I=;
-        b=WbsOQ3vUGgU2yKJ66/WIXKQs//hEO3nsVGj217/3FiyQPu8GZ2T9RdnIj7lKiZTKOY
-         kZTLRgfWKg3VUijkINqdKnhW76yI/jA38j94KNia8DXNqg/0MD55yiZA/g38cO41hMRO
-         5QtJyJRh4U7Z8vgqi8h8hTEt+bgFwY2AopRmreC/WqKxQVCD62MkP9vGy13xBfCsRyOI
-         eFz9eqB9fOymbqB+KBGGHWjVzUgCHnYnLilTElMfAEWodMujtHVUYqUeJzzlH1h+RRwJ
-         wp5VuJLdWf2fbonSld6JnAWP7ikUC2789uQM9C9H3mHtattWm2QtP2SBJAVd8f0E4Vpa
-         Bw7A==
-X-Gm-Message-State: AOJu0YyPEXZ9FKhB2Xj8vPD0WAzHoPIWvTLexVZYpgGuxnMhKq0crtqD
-        RHAhttEcQA3b3yRt66F7t2pOp+9po+aezFWcGKT3
-X-Google-Smtp-Source: AGHT+IGP6dy+Ma9towFfeW4EYpOXpR399CS3Lux2gOMhtGk1oQrNm0ERb+nZF8/LAWRnUxAeXy0cxrfXLYsO+s9GLNU=
-X-Received: by 2002:a0d:e24d:0:b0:577:186c:2a3c with SMTP id
- l74-20020a0de24d000000b00577186c2a3cmr188706ywe.19.1691104827768; Thu, 03 Aug
- 2023 16:20:27 -0700 (PDT)
+        Thu, 3 Aug 2023 19:34:58 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F1F43A80
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Aug 2023 16:34:57 -0700 (PDT)
+Received: from [192.168.87.36] (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C6098207F5B1;
+        Thu,  3 Aug 2023 16:34:56 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C6098207F5B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1691105697;
+        bh=L8yrCktR1bInfqFj8yOAiQus2L1BtlSzyz1/mAjoTyI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sTQbB6oC/uYAco2S/dtzv26Klf8dFhBBWQwL9wfYoMhbBie1PciAnjj2E66O/TXXb
+         Jd0VzJCTzZYfEmZ43Ba/QRWvhGhfp7wNi84sYFKaTEOvb7j/a6g5OD6bVVHVXATTKs
+         EXCp+Hgs6nVDcNjR2J23clcbrtrElcQcGpFor57s=
+Message-ID: <da91b56a-83c8-d12e-71f8-887b6701f021@linux.microsoft.com>
+Date:   Thu, 3 Aug 2023 16:34:56 -0700
 MIME-Version: 1.0
-References: <20230621074623.498647-1-cuigaosheng1@huawei.com>
- <CAHC9VhQzZYg1HH_Q6OYytkp-uYOmCAnpzHb9tiRA-YC0VNha9A@mail.gmail.com>
- <CAHC9VhQaWM=eC98ezfKmOA6sd9wzxQ0PFp5EysUKLZFEt=yB=A@mail.gmail.com>
- <CAHC9VhTibk2tFPt7ZjFL9ps9NO6_sCQwXtbF1pQCXO+jGhshpg@mail.gmail.com> <31a5aed2f075b69705142ff6f558e8cd8ccb9cd8.camel@linux.ibm.com>
-In-Reply-To: <31a5aed2f075b69705142ff6f558e8cd8ccb9cd8.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 3 Aug 2023 19:20:16 -0400
-Message-ID: <CAHC9VhRQBOfdcYO5QLRgVGdbqLFrogXeVD3FT2cETmLhP5uz3A@mail.gmail.com>
-Subject: Re: [PATCH -next] trusted-keys: Fix kernel-doc warnings in trusted-keys
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>, jarkko@kernel.org,
-        dhowells@redhat.com, jejb@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 5/6] ima: measure TPM update counter at ima_init
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, noodles@fb.com,
+        bauermann@kolabnow.com, ebiederm@xmission.com, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, kexec@lists.infradead.org,
+        linux-integrity@vger.kernel.org
+Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+References: <20230801181917.8535-1-tusharsu@linux.microsoft.com>
+ <20230801181917.8535-6-tusharsu@linux.microsoft.com>
+ <223d5c5a655fec263895c991550e4291d1bbd4c9.camel@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <223d5c5a655fec263895c991550e4291d1bbd4c9.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,47 +57,129 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 3, 2023 at 6:21=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wro=
-te:
->
-> On Thu, 2023-08-03 at 18:00 -0400, Paul Moore wrote:
-> > On Tue, Jul 25, 2023 at 4:49=E2=80=AFPM Paul Moore <paul@paul-moore.com=
-> wrote:
-> > > On Wed, Jun 21, 2023 at 9:33=E2=80=AFAM Paul Moore <paul@paul-moore.c=
-om> wrote:
-> > > > On Wed, Jun 21, 2023 at 3:46=E2=80=AFAM Gaosheng Cui <cuigaosheng1@=
-huawei.com> wrote:
-> > > > >
-> > > > > Fix kernel-doc warnings in trusted-keys:
-> > > > >
-> > > > > security/keys/trusted-keys/trusted_tpm2.c:203: warning: expecting
-> > > > > prototype for tpm_buf_append_auth(). Prototype was for
-> > > > > tpm2_buf_append_auth() instead.
-> > > > >
-> > > > > Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-> > > > > ---
-> > > > >  security/keys/trusted-keys/trusted_tpm2.c | 2 +-
-> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > Reviewed-by: Paul Moore <paul@paul-moore.com>
-> > >
-> > > Jarkko, David, can one of you pick this up into your tree?
-> >
-> > Guys, this patch is both trivial and obviously correct, please pick it
-> > up so it can go up during the next merge window.
->
-> Paul, either Jarkko or I can queue a trusted-keys patch.  As this isn't
-> on the top of Jarkko's radar, I'll queue it.
 
-Ah ha!  I was working under the assumption that everything under
-security/keys/ was David and Jarko's responsibility, but now that I'm
-looking at MAINTAINERS I see that isn't the case.  In fact it looks
-like there are five (!) different "subsystems" under security/keys/
-... I don't currently know enough about the different divisions there,
-but it seems like we might want to see if we can do some consolidation
+
+On 8/3/23 15:15, Mimi Zohar wrote:
+> On Tue, 2023-08-01 at 11:19 -0700, Tushar Sugandhi wrote:
+>> IMA log entries can be lost due to a variety of causes, such as code bugs
+>> or error conditions, leading to a mismatch between TPM PCRs and
+>> the IMA log.  Measuring TPM PCR update counter during ima_init would
+>> provide a baseline counter for the number of times the TPM PCRs are
+>> updated.  The remote attestation service can compare this baseline
+>> counter with a subsequent measured one (e.g., post-kexec soft-boot) to
+>> identify if there are any lost IMA log events.
+>>
+>> Measure the TPM update counter at ima init.
+> No need for separate patches for one line changes like this.  Either
+> merge patches 5/6 and 6/6 or all three 4/6, 5/6, 6/6 together.
+>
+Sounds good.
+I will merge 4/6, 5/6, 6/6 together.
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> ---
+>>   security/integrity/ima/ima_init.c | 3 +++
+>>   security/integrity/ima/ima_main.c | 1 +
+>>   2 files changed, 4 insertions(+)
+>>
+>> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+>> index 63979aefc95f..9bb18d6c2fd6 100644
+>> --- a/security/integrity/ima/ima_init.c
+>> +++ b/security/integrity/ima/ima_init.c
+>> @@ -154,5 +154,8 @@ int __init ima_init(void)
+>>   				  UTS_RELEASE, strlen(UTS_RELEASE), false,
+>>   				  NULL, 0);
+>>   
+>> +	/* Measures TPM update counter at ima_init */
+>> +	ima_measure_update_counter("ima_init_tpm_update_counter");
+>> +
+> With "ima_policy=critical_data" on the boot command line, the IMA
+> measurement list record looks like:
+>
+> 6e190cc643ff0b718485966a0300473baedface735 ima_init_tpm_update_counter 7570646174655f636f756e7465723d3330383b
+>
+> Please change the "ima_init_tpm_update_counter" to something shorter
+> and the hex encoded ascii string and pcr counter to something readable.
+I believe you are seeing the above line in ascill_runtime_measurements log.
+
+The ascii logging format is consistent with other event data for 
+critical_data event e.g. kernel_version.
+10 8f449175bbf88bc55fc1127466628c39a3957d15 ima-buf 
+sha1:4acab4fbb08db663b7b7b4528e8729187d726782 kernel_version 
+362e332e302d7263332b
+10 f10678b63c4b2529339dff02282e63d9c6bb0385 ima-buf 
+sha1:d8c187524412f74a961f2051a9529c009e700337 
+ima_init_tpm_update_counter 7570646174655f636f756e7465723d3133303b
+
+Entries in the binary runtime measurements look readable to me.
+
+ima_init_tpm_update_counter update_counter=130;
 ...
+kexec_load_tpm_update_counte rupdate_counter=133;
 
-Anyway, thanks for picking this up Mimi.
+Please let me know if you still want me to change the format.
 
---=20
-paul-moore.com
+> Perhaps name this critical-data "tpm" and "tpm-info", similar to the
+ From patch 4/6:
++    result = ima_measure_critical_data("tpm_pcr_update_counter", 
+event_name,
++                  buf, buf_len, false, NULL, 0);
+
+The critical_data event_label value is currently set to 
+"tpm_pcr_update_counter".
+I can rename event_label to "tpm-info", so that the admins can filter the
+event in IMA policy based on the label if needed.
+
+As you know, event_label doesn't appear in IMA log, it can appear in IMA 
+policy.
+Whereas event_name appears in IMA log.
+
+I was thinking of using event_name to identify when was the info captured.
+(e.g. ima_init, kexec_load, or at some other event in future).
+
+We can either do
+(a)
+event_label = "tpm-info" event_name = "tpm-info-ima-init" | 
+"tpm-info-kexec-load" | ...
+
+-or-
+
+(b)
+event_label = "tpm" event_name = "tpm-info"
+and event_data to describe the where/when this info was captured.
+e.g.
+version=<N>.<N>.<N>;num_enabled_pcr_banks=<N>;pcrUpdateCounter=<N>;num_ima_measurements=<N>;event=kexec_load;
+
+Let me know if you would prefer option (a) or (b) or something else.
+
+
+> SELinux "selinux" and "selinux-state".  Then again, if this is TPM
+> critical-data we should rethink what other info should be included.
+As you suggested in Patch 4/6, I will add version, number of enabled pcr 
+banks,
+pcrUpdateCounter, and num_ima_measurements. I think we should include 
+the TPM
+version as well (1 v/s 2).
+
+Please let me know if you think of any other attribute to record.
+
+>>   	return rc;
+>>   }
+>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+>> index 1bcd45cc5a6a..93357c245e82 100644
+>> --- a/security/integrity/ima/ima_main.c
+>> +++ b/security/integrity/ima/ima_main.c
+>> @@ -1035,6 +1035,7 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+>>   				   buf, size, "kexec-cmdline", KEXEC_CMDLINE, 0,
+>>   				   NULL, false, NULL, 0);
+>>   	fdput(f);
+>> +
+>>   }
+>>   
+>>   /**
+> Unnecessary change.
+>
+oops. Thanks for catching. Will fix.
+
+
+~Tushar
+
