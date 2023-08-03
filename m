@@ -2,60 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6B476E3BE
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Aug 2023 10:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61CE76E3D1
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Aug 2023 10:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbjHCI5Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Aug 2023 04:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S234905AbjHCI7u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Aug 2023 04:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234871AbjHCI5Y (ORCPT
+        with ESMTP id S233192AbjHCI7s (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Aug 2023 04:57:24 -0400
+        Thu, 3 Aug 2023 04:59:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4769E53
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Aug 2023 01:57:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D20E58;
+        Thu,  3 Aug 2023 01:59:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D97B61CE3
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Aug 2023 08:57:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C709C433C7;
-        Thu,  3 Aug 2023 08:57:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9AE461CE1;
+        Thu,  3 Aug 2023 08:59:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F44EC433C8;
+        Thu,  3 Aug 2023 08:59:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691053038;
-        bh=8zuKLEw8Pz3rRWw3o+O48AfxI5v0Rox/L6Yf6SEhJbM=;
+        s=k20201202; t=1691053186;
+        bh=B1vzxq/kRKyZ43zAZmPOBu+yETrjQdKBLQMnoE5XNf8=;
         h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=mQUlpj8NyJkcTbWb/e3JtGfGNp/whhYZaAlIp81ozB/CB+KMVBojN0zaspUbT+SA/
-         V5ZoRTRqvukVWaLAMaslXEYcmazwTby72HeTYvjODoNHaeMKJQOGhWaM/61ucCsU1A
-         hgQ3n3t6B49NGVC9ixf/Q347/MBw5D7XfZzjhs/t7lVJDWjKYYa7mabupy0ZxwBlfv
-         zUD7HZMG2jQ8GjZyWctdf9vAc3deDTOe2En0WiANI+VOd6zRxPTki3T7zXZQ1imP4o
-         HWkYFqwsrHyIzJhiqjubf2PruNzC0cax5cDWZyBDct+EDkNSiOgzcP6TSh38el2hti
-         4OckI/QN5EV1w==
+        b=DLj0UTfwxlU82JisgfMzfjOyDChvMMqerlTzeenac245A11drO+yIHXeXYFWoegJn
+         KcK0FMW852YYfgGmnvwaWEwzYvGyAeU8/lASqjVQVmLVhRhYfEmHhNJzfsA78VNkWZ
+         GFvCIZKGTaj9UORaIuKuJ6NJu9gVORcGz64h3ZkSgHUyDbHpVu4bxiCPJeuD7AQV99
+         J9TX5B2KJE/OfjCBFVbWcerkZVG9OE8dtXCsh59ewha8k/g8PPZMgN7kSBoepQBVpE
+         dPU7wDMF7FMhcX3P0RGzf9us1IJD43vTZ4AxFZ+e1qMSiLIhG7GwhA27tuKnbhbMhq
+         3H5wW4SMLBIdQ==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 03 Aug 2023 11:57:11 +0300
-Message-Id: <CUIS9Q2RKN2Q.4V9YYAYHE2BD@suppilovahvero>
-Cc:     <code@tyhicks.com>, <nramas@linux.microsoft.com>,
-        <paul@paul-moore.com>
-Subject: Re: [PATCH 1/6] tpm: implement TPM2 function to get update counter
+Date:   Thu, 03 Aug 2023 11:59:41 +0300
+Message-Id: <CUISBN0W36B2.1DXXNNGS6P7JC@suppilovahvero>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <Jason@zx2c4.com>, <dragonn@op.pl>
+Subject: Re: [PATCH 1/3] tpm: Add a missing check for
+ TPM_CHIP_FLAG_HWRNG_DISABLED
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Tushar Sugandhi" <tusharsu@linux.microsoft.com>, <noodles@fb.com>,
-        <bauermann@kolabnow.com>, <ebiederm@xmission.com>,
-        <bhe@redhat.com>, <vgoyal@redhat.com>, <dyoung@redhat.com>,
-        <peterhuewe@gmx.de>, <jgg@ziepe.ca>, <kexec@lists.infradead.org>,
-        <linux-integrity@vger.kernel.org>
+To:     "Mario Limonciello" <mario.limonciello@amd.com>,
+        <peterhuewe@gmx.de>
 X-Mailer: aerc 0.14.0
-References: <20230801181917.8535-1-tusharsu@linux.microsoft.com>
- <20230801181917.8535-2-tusharsu@linux.microsoft.com>
- <CUHFWAAKMKJN.2EA3ZHLOOPPGB@suppilovahvero>
- <1d592ca1-1f6c-9eef-ce71-b07a837372b0@linux.microsoft.com>
- <CUHRAC79EW66.1VQRXS97GB0UO@suppilovahvero>
- <8c4257fb07a8c9fd26b70ce716665a9535e6af54.camel@linux.ibm.com>
-In-Reply-To: <8c4257fb07a8c9fd26b70ce716665a9535e6af54.camel@linux.ibm.com>
+References: <20230803015015.915-1-mario.limonciello@amd.com>
+ <20230803015015.915-2-mario.limonciello@amd.com>
+In-Reply-To: <20230803015015.915-2-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,23 +59,34 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu Aug 3, 2023 at 4:22 AM EEST, Mimi Zohar wrote:
-> On Wed, 2023-08-02 at 06:58 +0300, Jarkko Sakkinen wrote:
-> >=20
-> > From long description I see zero motivation to ack this change, except
-> > some heresay about IMA requiring it. Why does IMA need update_cnt and
-> > why this is not documented to the long description?
+On Thu Aug 3, 2023 at 4:50 AM EEST, Mario Limonciello wrote:
+> If the TPM is opted out of hwrng the error handling for
+> tpm_chip_register() needs to know this so it doesn't try to clean
+> up an uninitialized chip->hwrng.
 >
-> The motivation is to detect whether the IMA measurement list has been
-> truncated, for whatever reason.  A new IMA record should be defined
-> containing the "pcrCounter" value.  (I have not had a chance to review
-> this patch set.)
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> This new record would be a pre-req for both Tushar's "ima: measure
-> events between kexec load and execute" patch set and Sush's proposal to
-> trim the measurement list.  (I haven't looked at it yet either.)
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index e904aae9771be..8f61b784810d6 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -629,7 +629,8 @@ int tpm_chip_register(struct tpm_chip *chip)
+>  	return 0;
+> =20
+>  out_hwrng:
+> -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chip))
+> +	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chip) =
+&&
+> +	    !(chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED))
+>  		hwrng_unregister(&chip->hwrng);
+>  out_ppi:
+>  	tpm_bios_log_teardown(chip);
+> --=20
+> 2.34.1
 
-Please describe the story in a bit more understandable form. In the
-commit messages it is not good to have some redundancy in patch sets.
+Please add a fixes tag.
 
 BR, Jarkko
