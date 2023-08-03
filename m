@@ -2,53 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8728E76F4C9
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Aug 2023 23:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFD276F53D
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Aug 2023 00:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbjHCVqS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Aug 2023 17:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
+        id S230017AbjHCWBI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Aug 2023 18:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232720AbjHCVqH (ORCPT
+        with ESMTP id S229896AbjHCWBH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Aug 2023 17:46:07 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA69949D7
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Aug 2023 14:45:55 -0700 (PDT)
-Received: from [192.168.87.36] (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
-        by linux.microsoft.com (Postfix) with ESMTPSA id DF743207F5B0;
-        Thu,  3 Aug 2023 14:45:54 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DF743207F5B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1691099155;
-        bh=Q93SQ4X36h4pxUsa2NsSJNmaob4FBf2vL7NYb6qtqSc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dCDONyaJyOloSA+RTOU6wtthiVkOEmUwPw/DrzjiEoS/mQ+J/egXeHc18/Yp5HAXT
-         1PH3wEozgKjtt4jOtv8ChIg2FN4PCX9jPULsriIHyM4+MRAcMZ54Lb9Rx+WtB5x8cO
-         7WQyi9ZYTMGgvHZWsNPyrlm3s3ZCr8U3DjqMgJ1c=
-Message-ID: <65bc533d-8775-579b-aae7-7ae0a936bf7e@linux.microsoft.com>
-Date:   Thu, 3 Aug 2023 14:45:54 -0700
+        Thu, 3 Aug 2023 18:01:07 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4975E3A85
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Aug 2023 15:01:01 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-583e91891aeso16407727b3.1
+        for <linux-integrity@vger.kernel.org>; Thu, 03 Aug 2023 15:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1691100060; x=1691704860;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TSYrMpI2xB+WfBOsO3yAq2dJN3Nv27kk/7akbAhaNLQ=;
+        b=TfCqptoQmbSqbr1S2zvlpcH48pIJ+0muyuNXwxWWoMUjWTv1/ovxjm7kIlzER+kZhi
+         TEfwTs/jrENYGer0+zJllNL2NFF14f4LMTqT3Ck9kyQSx32LKErGZsEa1mSex0I6wP3g
+         eqVU1heQvIQ95A7HlDJ+fWaQDRmlURlbgSsrGfLngHN1LTAHCUd2FasSsKI3UkPe0L0u
+         4YMdzubpXU1fFmBk8MiunzUvh+oVgIBosfXMOsTouiOc5sjbe2OK9EWmJvK//SBYKc7c
+         u8VnsvCQit1AVx2EcieK05m0AzLjzfaEoYMryq7yLpv+UEfOSERi6/8FVl6lsy4Q2F8F
+         PV1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691100060; x=1691704860;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TSYrMpI2xB+WfBOsO3yAq2dJN3Nv27kk/7akbAhaNLQ=;
+        b=cgOobLThnf68+2x8R4Ng1S/VTqWQQpGq6RZ8HojZMktwPnzoOGrU6Sxi61dGVHgRRT
+         3qPzb1v6UkuDoWxQ7GBOWd/1WwVGMRyn2QCFK3cyU/BKqzko0N7auRMRZm2XQEfNu/TA
+         ttioc2u0HlnN61oRJx/NTsQ5IYNnmHkpgiy4EQdRGPia5ShNVbEhcbRjVPcAnFMPwmpU
+         wpkrIk44gFXA2hDF9hGVduDePgmV5ZjtOJqXh3x/aalfCyzgKkRz8nc4b0lfR9I/T6ye
+         BGUKd6EpQLP0nSwk8lOyO4THQGffMmq6h71uvtlqk/OZCh4At6Xy3cEqhlimE8ENReWN
+         A/NQ==
+X-Gm-Message-State: ABy/qLYJvL2x1tJGRWRh0phzFnD3FVHFbz8oAEskKEoesXE+miSJjKH2
+        xkOMUQlcfedV/DZfBbnjXHvd7dfitjEGfTqMpPEuKW8ZWjtyc+6mVA==
+X-Google-Smtp-Source: APBJJlEgLPlqAwkPPrIb6oCF0QOzGZswZtU6IPWBCij7+2y3NzyVzSj3lYqtQCHdE9u7OysL/JKCm/My+k4pMYRiIRM=
+X-Received: by 2002:a81:a101:0:b0:577:617c:8cd with SMTP id
+ y1-20020a81a101000000b00577617c08cdmr22173319ywg.35.1691100060506; Thu, 03
+ Aug 2023 15:01:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 0/6] Measuring TPM update counter in IMA
-Content-Language: en-US
-To:     Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
-        noodles@fb.com, bauermann@kolabnow.com, ebiederm@xmission.com,
-        bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
-        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        kexec@lists.infradead.org, linux-integrity@vger.kernel.org
-Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-References: <20230801181917.8535-1-tusharsu@linux.microsoft.com>
- <dbfb545b-9399-d505-6739-c2940930ef48@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <dbfb545b-9399-d505-6739-c2940930ef48@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20230621074623.498647-1-cuigaosheng1@huawei.com>
+ <CAHC9VhQzZYg1HH_Q6OYytkp-uYOmCAnpzHb9tiRA-YC0VNha9A@mail.gmail.com> <CAHC9VhQaWM=eC98ezfKmOA6sd9wzxQ0PFp5EysUKLZFEt=yB=A@mail.gmail.com>
+In-Reply-To: <CAHC9VhQaWM=eC98ezfKmOA6sd9wzxQ0PFp5EysUKLZFEt=yB=A@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 3 Aug 2023 18:00:49 -0400
+Message-ID: <CAHC9VhTibk2tFPt7ZjFL9ps9NO6_sCQwXtbF1pQCXO+jGhshpg@mail.gmail.com>
+Subject: Re: [PATCH -next] trusted-keys: Fix kernel-doc warnings in trusted-keys
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>, jarkko@kernel.org,
+        dhowells@redhat.com
+Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,141 +72,30 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Thanks Stefan for reviewing this series. Appreciate it.
+On Tue, Jul 25, 2023 at 4:49=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> On Wed, Jun 21, 2023 at 9:33=E2=80=AFAM Paul Moore <paul@paul-moore.com> =
+wrote:
+> > On Wed, Jun 21, 2023 at 3:46=E2=80=AFAM Gaosheng Cui <cuigaosheng1@huaw=
+ei.com> wrote:
+> > >
+> > > Fix kernel-doc warnings in trusted-keys:
+> > >
+> > > security/keys/trusted-keys/trusted_tpm2.c:203: warning: expecting
+> > > prototype for tpm_buf_append_auth(). Prototype was for
+> > > tpm2_buf_append_auth() instead.
+> > >
+> > > Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> > > ---
+> > >  security/keys/trusted-keys/trusted_tpm2.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > Reviewed-by: Paul Moore <paul@paul-moore.com>
+>
+> Jarkko, David, can one of you pick this up into your tree?
 
-Re-sending this email. I accidentally had some HTML content, the email
-bounced back from integrity mailing list.
+Guys, this patch is both trivial and obviously correct, please pick it
+up so it can go up during the next merge window.
 
-On 8/3/23 06:37, Stefan Berger wrote:
->
->
-> On 8/1/23 14:19, Tushar Sugandhi wrote:
->> Entries in IMA log may be lost due to code bugs, certain error 
->> conditions
->
-> I hope we don't have such bugs. And I guess the most critical ones 
-> would be
-> between logging and PCR extensions
-I hope so too, but in general, it’s hard to prove a negative.
-That’s why this patch series. :)
->
->
->> being met etc. This can result in TPM PCRs getting out of sync with the
->> IMA log.  One such example is events between kexec 'load' and kexec
->> 'execute' getting lost from the IMA log when the system soft-boots into
->> the new Kernel using kexec[1].  The remote attestation service does not
->
-> Though this particular condition I thought would go away with your 
-> kexec series.
-Currently the events in-between kexec ‘load’ and ‘execute’ are always
-lost – because IMA log is captured at ‘load’.  My kexec series addresses
-this scenario. But as you said, there is always a possibility that the
-events will still be lost during kexec because of error conditions, OOM
-etc.
->
-> The other conditions would be an out-of-memory or TPM failure. The OOM 
-> would
-> probably be more critical since something that was supposed to be logged
-> couldn't be logged and now you cannot show this anymore and presumably 
-> not even
-> an error condition could be logged.
->
-Precisely. As you can see in patch 5 of this series, I am logging the
-counter at ima_init (ima_init_tpm_update_counter).  So we will get the
-baseline counter at the system boot, where memory pressure is hopefully
-low.  Even if we are not able to log the counter later due to OOM, this
-baseline counter along with the number of events in the IMA log should
-help detect if IMA log is missing events.
-> https://elixir.bootlin.com/linux/latest/source/security/integrity/ima/ima_queue.c#L179 
->
->
->> have any information if the PCR mismatch with IMA log is because of loss
->> of entries in the IMA log or something else.  TPM 2.0 provides an update
->> counter which is incremented each time a PCR is updated [2]. 
->> Measuring the
->> TPM PCR update counter in IMA subsystem will help the remote attestation
->> service to validate if there are any missing entries in the IMA log, 
->> when
->
->
->
->> the system goes through certain important state changes (e.g. kexec soft
->> boot, IMA log snapshotting etc.)
->>
->> This patch series provides the required functionality to measure the
->> update counter through IMA subsystem by -
->>   - introducing a function to retrieve PCR update counter in the TPM
->>     subsystem.
->>   - IMA functionality to acquire the update counter from the TPM 
->> subsystem.
->>   - Measuring the update counter at system boot and at kexec Kernel
->>     load.
->
-> Then the bugs you mentioned above that may happen between system boot 
-> and kexec
-> load are still going to confuse anyone looking at the log and quote. I 
-> don't
-> think you should mention them. I thought you would provide a way to sync
-I used the kexec load-execute bug as an example to demonstrate the value of
-measuring update counter.  There could be other examples which I am not
-aware of.  As we discussed above, even when I fix the kexec bug – there is
-still a possibility that events may go missing in error/OOM cases.
-
-I can remove the kexec example if it is causing confusion.
-Please let me know.
-> up on every step...
-I don’t fully understand what you mean by “provide a way to sync up
-on every step”.  Could you please elaborate?
->
-> Also, I thought you had a variable in your kexec series that would 
-> prevent all further
-> logging and measuring once the log had been marshalled during kexec 
-> 'exec' stage
-> and this wasn't necessary.
->
-No, the variable suspend_ima_measurements[1] suspends the measurements
-while copying the kexec buffer during kexec execute to ensure consistency
-of the IMA measurements.  It doesn’t prevent all future logging. The
-variable is reset and the IMA measurements resume when the system boots
-into the new Kernel image.
-
-[1] 
-https://patchwork.kernel.org/project/linux-integrity/patch/20230703215709.1195644-10-tusharsu@linux.microsoft.com/
-
-~Tushar
->    Stefan
->
->>
->>
->> This patch series would be a prerequisite for the next version of kexec
->> load/execute series[1] and the future IMA log snapshotting patch series.
->>
->> [1] 
->> https://lore.kernel.org/all/20230703215709.1195644-1-tusharsu@linux.microsoft.com/
->>      ima: measure events between kexec load and execute
->>
->> [2] 
->> https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf
->>      Section 22.4.2, Page 206.
->>
->> Tushar Sugandhi (6):
->>    tpm: implement TPM2 function to get update counter
->>    tpm: provide functionality to get update counter
->>    ima: get TPM update counter
->>    ima: implement functionality to measure TPM update counter
->>    ima: measure TPM update counter at ima_init
->>    kexec: measure TPM update counter in ima log at kexec load
->>
->>   drivers/char/tpm/tpm-interface.c   | 28 +++++++++++++++++
->>   drivers/char/tpm/tpm.h             |  3 ++
->>   drivers/char/tpm/tpm2-cmd.c        | 48 ++++++++++++++++++++++++++++++
->>   include/linux/ima.h                |  1 +
->>   include/linux/tpm.h                |  8 +++++
->>   kernel/kexec_file.c                |  3 ++
->>   security/integrity/ima/ima.h       |  2 ++
->>   security/integrity/ima/ima_init.c  |  3 ++
->>   security/integrity/ima/ima_main.c  | 29 ++++++++++++++++++
->>   security/integrity/ima/ima_queue.c | 16 ++++++++++
->>   10 files changed, 141 insertions(+)
->>
-
+--=20
+paul-moore.com
