@@ -2,85 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75245770187
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Aug 2023 15:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB8B7702E8
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Aug 2023 16:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjHDN37 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Aug 2023 09:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S230169AbjHDOZG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Aug 2023 10:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjHDN3u (ORCPT
+        with ESMTP id S229736AbjHDOZF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Aug 2023 09:29:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DD64C25
-        for <linux-integrity@vger.kernel.org>; Fri,  4 Aug 2023 06:29:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B169761FFB
-        for <linux-integrity@vger.kernel.org>; Fri,  4 Aug 2023 13:29:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A8BC433C8;
-        Fri,  4 Aug 2023 13:29:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="X++vYF90"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1691155769;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hR2EUF+vNn2yXoVXgaFv3sEFT5UMsq9f0jVILE47LwM=;
-        b=X++vYF90tYiDDZeJ/VMY9Z30zet+bv1RxsZZTNh78EGJHBIJnXUWusY7dCduoCExdtI26N
-        9wjxQMq8wnhK3cgkgi24E+APq8DyEoyyI8KXNKHCy/uZtStVbWzq9moAmoOsgxylN6ZEcm
-        dSPCwC4AYxrteX+nfRa7M6VNjsqsRmU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3202ba64 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 4 Aug 2023 13:29:28 +0000 (UTC)
-Date:   Fri, 4 Aug 2023 15:28:15 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca,
-        linux@dominikbrodowski.net, linux-integrity@vger.kernel.org,
-        daniil.stas@posteo.net, peterhuewe@gmx.de
-Subject: Re: [PATCH v3] tpm: Disable RNG for all AMD fTPMs
-Message-ID: <ZMz879q9fXcJ1X46@zx2c4.com>
-References: <20230803182428.25753-1-mario.limonciello@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230803182428.25753-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 4 Aug 2023 10:25:05 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB24ECC;
+        Fri,  4 Aug 2023 07:25:04 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 374EFYJW002076;
+        Fri, 4 Aug 2023 14:25:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=+u/eLI9gfCUlanLl7aINXPZVZoCJsLmRPU0DfLIfGmc=;
+ b=hBkXyiJzURyGiqhfUCRIrwUR/tJ17yvIGb9rGCGqjCW+3It7v0pjj2MEgcumztIf6eaD
+ wEwUL/NibpNTjmpcgZvzR2njt+3Sjz78NVkyXJlRrYVkmPdVO6VoScOzqUz/5O7O8xWz
+ XAYhwdQrbSbTPn8+/LWfsDQloidA8pgjPcU/ocFxwNZ+vqTn6q1+V6QBMna7MaSmk5cA
+ At0bXbkpGhFO78LxnSYdQUzs6z/HqV9oPuswpVy3/jrWAFvMDV2WQH9PQsqOR5TKD02U
+ +RhOwCG6Piq+/+A2tOYQaKso2Utv8mXC2tnnOlDp6DtpSEcwuHwvdiHNNJRgl1dVwbQn RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s92xfg9du-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Aug 2023 14:25:01 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 374EGiZ7005369;
+        Fri, 4 Aug 2023 14:25:00 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s92xfg9d1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Aug 2023 14:25:00 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 374Dvqlm018450;
+        Fri, 4 Aug 2023 14:24:59 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3s8kp4xb18-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Aug 2023 14:24:59 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 374EOwp165339764
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 4 Aug 2023 14:24:58 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D19C58051;
+        Fri,  4 Aug 2023 14:24:58 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0270958060;
+        Fri,  4 Aug 2023 14:24:58 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.12.187])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  4 Aug 2023 14:24:57 +0000 (GMT)
+Message-ID: <7c288bb1bdc0a7c48ce5bd92c180f95ecbffcef9.camel@linux.ibm.com>
+Subject: Re: [PATCH] crypto: lib - Move mpi into lib/crypto
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Date:   Fri, 04 Aug 2023 10:24:57 -0400
+In-Reply-To: <ZMzD0q52dbeXNeaM@gondor.apana.org.au>
+References: <ZMzD0q52dbeXNeaM@gondor.apana.org.au>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Q__wxrnP4mi1lbFp874iOakc_EXeKV5F
+X-Proofpoint-GUID: WIU3Jjlz9ZZbcpKvUicq7Cb8HkFjAyu7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-04_13,2023-08-03_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 adultscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ phishscore=0 impostorscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308040125
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 03, 2023 at 01:24:28PM -0500, Mario Limonciello wrote:
-> The TPM RNG functionality is not necessary for entropy when the CPU
-> already supports the RDRAND instruction. The TPM RNG functionality
-> was previously disabled on a subset of AMD fTPM series, but reports
-> continue to show problems on some systems causing stutter root caused
-> to TPM RNG functionality.
+On Fri, 2023-08-04 at 17:24 +0800, Herbert Xu wrote:
+> As lib/mpi is mostly used by crypto code, move it under lib/crypto
+> so that patches touching it get directed to the right mailing list.
 > 
-> Expand disabling TPM RNG use for all AMD fTPMs whether they have versions
-> that claim to have fixed or not. To accomplish this, move the detection
-> into part of the TPM CRB registration and add a flag indicating that
-> the TPM should opt-out of registration to hwrng.
-> 
-> Cc: stable@vger.kernel.org # 5.5+
-> Fixes: b006c439d58d ("hwrng: core - start hwrng kthread also for untrusted sources")
-> Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs")
-> Fixes: 3ef193822b25 ("tpm_crb: fix fTPM on AMD Zen+ CPUs")
-> Reported-by: daniil.stas@posteo.net
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217719
-> Reported-by: bitlord0xff@gmail.com
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217212
-> Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-LGTM. Jarkko - can you replace the commit in your staging tree with this
-one?
+Thanks, Herbert.
+
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
