@@ -2,57 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7E6770C24
-	for <lists+linux-integrity@lfdr.de>; Sat,  5 Aug 2023 00:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0D6770C25
+	for <lists+linux-integrity@lfdr.de>; Sat,  5 Aug 2023 00:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjHDWwX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Aug 2023 18:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S229476AbjHDWyd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Aug 2023 18:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjHDWwW (ORCPT
+        with ESMTP id S229436AbjHDWyc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Aug 2023 18:52:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B030E1BE;
-        Fri,  4 Aug 2023 15:52:21 -0700 (PDT)
+        Fri, 4 Aug 2023 18:54:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3742611B
+        for <linux-integrity@vger.kernel.org>; Fri,  4 Aug 2023 15:54:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A69262153;
-        Fri,  4 Aug 2023 22:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60FF5C433C8;
-        Fri,  4 Aug 2023 22:52:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C03BB6214C
+        for <linux-integrity@vger.kernel.org>; Fri,  4 Aug 2023 22:54:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFCB1C433C8;
+        Fri,  4 Aug 2023 22:54:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691189540;
-        bh=JTeFe3yU6FTfVxHVzbN6FFW+rwd+24FgVbF4IkXJvlw=;
+        s=k20201202; t=1691189670;
+        bh=I1LWwL6PgPAAt6sTmBk0yMtdSe7CbSGk+Us9FeWDAwo=;
         h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=DAi1vg4eGxZeRFG/j0+u3c83hJLIbyd5rrNPN+GakXezFYR7UzPD4UHChAxacNgfJ
-         DcHb5ebX5RuJU9SDUDhWp7T10+i/KIChH3R+I/R1AY/bBii49/ffrK4qqlt+11sLTZ
-         WMkUwGvNs5uDHae2qEcp2LQGpBVcV7kknLzhad2qf9XpbYa+ENQ90hEVHzt+y73UEj
-         pWDVwAtSpidxjyqKN8gZguNdOuJXaMTGrMVNlEyQZoYE+zl6Yk+nmQW8nOzxknDgQX
-         i++eBS8qKRsmFzwEd2SWdBTN3lCynHfhK0OLxWTqcyf1rvGdThOrxomXXiplL3HMFp
-         xZT3e6RUognhQ==
+        b=ox4oUh6mTnjXVTUdaFfQA9areZseRTnVCezUrQXvMosYrrqFmNRX2oHFqzyh/9Dmc
+         xfvCSYGpVMp1CIBfAr94A3wTx7csgYrcnFQ7ilIvj8hMlyU6IdMU9tF7ssch/FiCLG
+         1ByU5QPkjD1EsHG8tji70aQQUURz02V8Ys3M3rVz1sIh5k+yyrsqgsW0SGdZgjzslf
+         ea8C/FnskjLkykXjkngH1/rgtDotnXg3F1jClOzn46sTlJrjIYFD2IcuLNRmSmWP8F
+         4xHfkyX+OrPG81Ln5u6k5gBwA273/+Y1Mx4PCwmGjIYTn/l2whbWhNxqL4u2DPNBa9
+         rJ442bXmNlGLw==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 05 Aug 2023 01:52:17 +0300
-Message-Id: <CUK4NNTX7G6W.669WZVTTH2SD@wks-101042-mac.ad.tuni.fi>
-Cc:     <peterhuewe@gmx.de>, <linux-kernel@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <dragonn@op.pl>
-Subject: Re: [PATCH 1/3] tpm: Add a missing check for
- TPM_CHIP_FLAG_HWRNG_DISABLED
+Date:   Sat, 05 Aug 2023 01:54:26 +0300
+Message-Id: <CUK4PB8J51W8.2NQ3CSI1HNLDR@wks-101042-mac.ad.tuni.fi>
+Cc:     "Jason A . Donenfeld" <Jason@zx2c4.com>, <jgg@ziepe.ca>,
+        <linux@dominikbrodowski.net>, <linux-integrity@vger.kernel.org>,
+        <daniil.stas@posteo.net>, <peterhuewe@gmx.de>
+Subject: Re: [PATCH v3] tpm: Disable RNG for all AMD fTPMs
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "Mario Limonciello" <mario.limonciello@amd.com>
+To:     "Mario Limonciello" <mario.limonciello@amd.com>
 X-Mailer: aerc 0.15.2
-References: <20230803015015.915-1-mario.limonciello@amd.com>
- <20230803015015.915-2-mario.limonciello@amd.com>
- <CUISBN0W36B2.1DXXNNGS6P7JC@suppilovahvero>
- <d19d0e9a-a788-8b33-506d-8a080d566366@amd.com> <ZMuwtE2IA-Hd3Vyd@zx2c4.com>
-In-Reply-To: <ZMuwtE2IA-Hd3Vyd@zx2c4.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230803182428.25753-1-mario.limonciello@amd.com>
+In-Reply-To: <20230803182428.25753-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,57 +56,32 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu Aug 3, 2023 at 4:50 PM EEST, Jason A. Donenfeld wrote:
-> On Thu, Aug 03, 2023 at 06:35:36AM -0500, Mario Limonciello wrote:
-> > On 8/3/23 03:59, Jarkko Sakkinen wrote:
-> > > On Thu Aug 3, 2023 at 4:50 AM EEST, Mario Limonciello wrote:
-> > >> If the TPM is opted out of hwrng the error handling for
-> > >> tpm_chip_register() needs to know this so it doesn't try to clean
-> > >> up an uninitialized chip->hwrng.
-> > >>
-> > >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > >> ---
-> > >>   drivers/char/tpm/tpm-chip.c | 3 ++-
-> > >>   1 file changed, 2 insertions(+), 1 deletion(-)
-> > >>
-> > >> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip=
-.c
-> > >> index e904aae9771be..8f61b784810d6 100644
-> > >> --- a/drivers/char/tpm/tpm-chip.c
-> > >> +++ b/drivers/char/tpm/tpm-chip.c
-> > >> @@ -629,7 +629,8 @@ int tpm_chip_register(struct tpm_chip *chip)
-> > >>   	return 0;
-> > >>  =20
-> > >>   out_hwrng:
-> > >> -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(c=
-hip))
-> > >> +	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(c=
-hip) &&
-> > >> +	    !(chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED))
-> > >>   		hwrng_unregister(&chip->hwrng);
-> > >>   out_ppi:
-> > >>   	tpm_bios_log_teardown(chip);
-> > >> --=20
-> > >> 2.34.1
-> > >=20
-> > > Please add a fixes tag.
-> > >=20
-> > > BR, Jarkko
-> >=20
-> > I didn't add a fixes tag because you hadn't sent a PR for the other one=
-=20
-> > yet so I wasn't sure the hash would be stable.  Also I thought it might=
-=20
-> > just make sense to squash into it.
-> >=20
-> > If the hash is now stable, could you just just commit and add that tag=
-=20
-> > with it yourself?  Or do you want me to re-send as a v2 with that?
+On Thu Aug 3, 2023 at 9:24 PM EEST, Mario Limonciello wrote:
+> The TPM RNG functionality is not necessary for entropy when the CPU
+> already supports the RDRAND instruction. The TPM RNG functionality
+> was previously disabled on a subset of AMD fTPM series, but reports
+> continue to show problems on some systems causing stutter root caused
+> to TPM RNG functionality.
 >
-> What about just sending a v3 of the patch that this patch fixes? The
-> stable@/fixes tags in that are wrong/incomplete so Jarkko's tree will
-> need to be fixed before pushing to Linus anyway.
+> Expand disabling TPM RNG use for all AMD fTPMs whether they have versions
+> that claim to have fixed or not. To accomplish this, move the detection
+> into part of the TPM CRB registration and add a flag indicating that
+> the TPM should opt-out of registration to hwrng.
+>
+> Cc: stable@vger.kernel.org # 5.5+
+> Fixes: b006c439d58d ("hwrng: core - start hwrng kthread also for untruste=
+d sources")
+> Fixes: f1324bbc4011 ("tpm: disable hwrng for fTPM on some AMD designs")
+> Fixes: 3ef193822b25 ("tpm_crb: fix fTPM on AMD Zen+ CPUs")
+> Reported-by: daniil.stas@posteo.net
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217719
+> Reported-by: bitlord0xff@gmail.com
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217212
+> Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Sounds reasonable. I can hold the PR to rc6 and send it on Monday.
+I will skip rc5 and send this for rc6 on Monday.
+
+Has anyone with suitable AMD system tested this?
 
 BR, Jarkko
