@@ -2,178 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFC276FD36
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Aug 2023 11:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1F576FFCC
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Aug 2023 13:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjHDJZw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Aug 2023 05:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S229525AbjHDL5p (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Aug 2023 07:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjHDJZV (ORCPT
+        with ESMTP id S229445AbjHDL5p (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Aug 2023 05:25:21 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981D54EE0;
-        Fri,  4 Aug 2023 02:24:39 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1qRr2w-003bIX-M2; Fri, 04 Aug 2023 17:24:35 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 04 Aug 2023 17:24:34 +0800
-Date:   Fri, 4 Aug 2023 17:24:34 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Subject: [PATCH] crypto: lib - Move mpi into lib/crypto
-Message-ID: <ZMzD0q52dbeXNeaM@gondor.apana.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+        Fri, 4 Aug 2023 07:57:45 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104FFB1;
+        Fri,  4 Aug 2023 04:57:43 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 374BkQ2G024137;
+        Fri, 4 Aug 2023 11:57:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=byQd/e8jN/kbPxwrbt6oRtBnv6y+f/qK8WxI9qlnir8=;
+ b=ChhJtqI6ThDJSvDMc3XC1jYS39HjNXgCIb6qJpYDmRNxv1uop/mFS2pcoUH5jzZloDc9
+ g6CJcu53s0Jvo8uN1WUgf5pVGpOekcAZIeeLX+Ej7pPHNRrLq9b0nb1yseUbRW7R3jbE
+ WBE8+5VT075gaGgNK5RX0uY2u5KeS1evdCz7qJVyf+lmByo9BU0K2QMJvTmFv3EeJQb0
+ 0az4kJWi6bUUsL8qOlnwIcQe5ZqgpURm8sNAWnCmX0YBndxTlmmDiWTPVnQn+NCOG6ls
+ /KXP81kV/ugRbFQBxzO9mbvhh8hLSFbi5EJap8nG60XGaCaXxGxCkaEq6qZ7156u7fBG 4A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s90h6ge6d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Aug 2023 11:57:15 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 374BkrKv025374;
+        Fri, 4 Aug 2023 11:57:15 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s90h6ge65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Aug 2023 11:57:15 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 374BsG0t027822;
+        Fri, 4 Aug 2023 11:57:14 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3s8kp2w9bt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Aug 2023 11:57:14 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 374BvDUY19202554
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 4 Aug 2023 11:57:13 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D5F25804B;
+        Fri,  4 Aug 2023 11:57:13 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B31F58065;
+        Fri,  4 Aug 2023 11:57:12 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.12.187])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  4 Aug 2023 11:57:12 +0000 (GMT)
+Message-ID: <84ddd923b49acb18946c1ecf5d773bcdadbea5c8.camel@linux.ibm.com>
+Subject: Re: [PATCH -next] trusted-keys: Fix kernel-doc warnings in
+ trusted-keys
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Paul Moore <paul@paul-moore.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>, jarkko@kernel.org,
+        dhowells@redhat.com, jejb@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Date:   Fri, 04 Aug 2023 07:57:10 -0400
+In-Reply-To: <CAHC9VhRQBOfdcYO5QLRgVGdbqLFrogXeVD3FT2cETmLhP5uz3A@mail.gmail.com>
+References: <20230621074623.498647-1-cuigaosheng1@huawei.com>
+         <CAHC9VhQzZYg1HH_Q6OYytkp-uYOmCAnpzHb9tiRA-YC0VNha9A@mail.gmail.com>
+         <CAHC9VhQaWM=eC98ezfKmOA6sd9wzxQ0PFp5EysUKLZFEt=yB=A@mail.gmail.com>
+         <CAHC9VhTibk2tFPt7ZjFL9ps9NO6_sCQwXtbF1pQCXO+jGhshpg@mail.gmail.com>
+         <31a5aed2f075b69705142ff6f558e8cd8ccb9cd8.camel@linux.ibm.com>
+         <CAHC9VhRQBOfdcYO5QLRgVGdbqLFrogXeVD3FT2cETmLhP5uz3A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: H-MXVBczj5cDs_ruQzBUyyH3tMpI9D-K
+X-Proofpoint-ORIG-GUID: KwepT0wnPBLx0hIIEDHT-Im1f8L_68ok
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-04_10,2023-08-03_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 spamscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
+ bulkscore=0 phishscore=0 malwarescore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308040102
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-As lib/mpi is mostly used by crypto code, move it under lib/crypto
-so that patches touching it get directed to the right mailing list.
+On Thu, 2023-08-03 at 19:20 -0400, Paul Moore wrote:
+> On Thu, Aug 3, 2023 at 6:21 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >
+> > On Thu, 2023-08-03 at 18:00 -0400, Paul Moore wrote:
+> > > On Tue, Jul 25, 2023 at 4:49 PM Paul Moore <paul@paul-moore.com> wrote:
+> > > > On Wed, Jun 21, 2023 at 9:33 AM Paul Moore <paul@paul-moore.com> wrote:
+> > > > > On Wed, Jun 21, 2023 at 3:46 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
+> > > > > >
+> > > > > > Fix kernel-doc warnings in trusted-keys:
+> > > > > >
+> > > > > > security/keys/trusted-keys/trusted_tpm2.c:203: warning: expecting
+> > > > > > prototype for tpm_buf_append_auth(). Prototype was for
+> > > > > > tpm2_buf_append_auth() instead.
+> > > > > >
+> > > > > > Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> > > > > > ---
+> > > > > >  security/keys/trusted-keys/trusted_tpm2.c | 2 +-
+> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > >
+> > > > > Reviewed-by: Paul Moore <paul@paul-moore.com>
+> > > >
+> > > > Jarkko, David, can one of you pick this up into your tree?
+> > >
+> > > Guys, this patch is both trivial and obviously correct, please pick it
+> > > up so it can go up during the next merge window.
+> >
+> > Paul, either Jarkko or I can queue a trusted-keys patch.  As this isn't
+> > on the top of Jarkko's radar, I'll queue it.
+> 
+> Ah ha!  I was working under the assumption that everything under
+> security/keys/ was David and Jarko's responsibility, but now that I'm
+> looking at MAINTAINERS I see that isn't the case.  In fact it looks
+> like there are five (!) different "subsystems" under security/keys/
+> ... I don't currently know enough about the different divisions there,
+> but it seems like we might want to see if we can do some consolidation
+> ...
+> 
+> Anyway, thanks for picking this up Mimi.
 
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Thanks, Steven.  "6c95d71bad61 tracing: Fix kernel-doc warnings in
+trace_seq.c " is in Linus' tree.
 
-diff --git a/lib/Makefile b/lib/Makefile
-index 42d307ade225..1f5235478259 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -253,7 +253,6 @@ obj-$(CONFIG_DQL) += dynamic_queue_limits.o
- obj-$(CONFIG_GLOB) += glob.o
- obj-$(CONFIG_GLOB_SELFTEST) += globtest.o
- 
--obj-$(CONFIG_MPILIB) += mpi/
- obj-$(CONFIG_DIMLIB) += dim/
- obj-$(CONFIG_SIGNATURE) += digsig.o
- 
-diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
-index 6ec2d4543d9c..8d1446c2be71 100644
---- a/lib/crypto/Makefile
-+++ b/lib/crypto/Makefile
-@@ -53,3 +53,5 @@ libblake2s-y					+= blake2s-selftest.o
- libchacha20poly1305-y				+= chacha20poly1305-selftest.o
- libcurve25519-y					+= curve25519-selftest.o
- endif
-+
-+obj-$(CONFIG_MPILIB) += mpi/
-diff --git a/lib/mpi/Makefile b/lib/crypto/mpi/Makefile
-similarity index 100%
-rename from lib/mpi/Makefile
-rename to lib/crypto/mpi/Makefile
-diff --git a/lib/mpi/ec.c b/lib/crypto/mpi/ec.c
-similarity index 100%
-rename from lib/mpi/ec.c
-rename to lib/crypto/mpi/ec.c
-diff --git a/lib/mpi/generic_mpih-add1.c b/lib/crypto/mpi/generic_mpih-add1.c
-similarity index 100%
-rename from lib/mpi/generic_mpih-add1.c
-rename to lib/crypto/mpi/generic_mpih-add1.c
-diff --git a/lib/mpi/generic_mpih-lshift.c b/lib/crypto/mpi/generic_mpih-lshift.c
-similarity index 100%
-rename from lib/mpi/generic_mpih-lshift.c
-rename to lib/crypto/mpi/generic_mpih-lshift.c
-diff --git a/lib/mpi/generic_mpih-mul1.c b/lib/crypto/mpi/generic_mpih-mul1.c
-similarity index 100%
-rename from lib/mpi/generic_mpih-mul1.c
-rename to lib/crypto/mpi/generic_mpih-mul1.c
-diff --git a/lib/mpi/generic_mpih-mul2.c b/lib/crypto/mpi/generic_mpih-mul2.c
-similarity index 100%
-rename from lib/mpi/generic_mpih-mul2.c
-rename to lib/crypto/mpi/generic_mpih-mul2.c
-diff --git a/lib/mpi/generic_mpih-mul3.c b/lib/crypto/mpi/generic_mpih-mul3.c
-similarity index 100%
-rename from lib/mpi/generic_mpih-mul3.c
-rename to lib/crypto/mpi/generic_mpih-mul3.c
-diff --git a/lib/mpi/generic_mpih-rshift.c b/lib/crypto/mpi/generic_mpih-rshift.c
-similarity index 100%
-rename from lib/mpi/generic_mpih-rshift.c
-rename to lib/crypto/mpi/generic_mpih-rshift.c
-diff --git a/lib/mpi/generic_mpih-sub1.c b/lib/crypto/mpi/generic_mpih-sub1.c
-similarity index 100%
-rename from lib/mpi/generic_mpih-sub1.c
-rename to lib/crypto/mpi/generic_mpih-sub1.c
-diff --git a/lib/mpi/longlong.h b/lib/crypto/mpi/longlong.h
-similarity index 100%
-rename from lib/mpi/longlong.h
-rename to lib/crypto/mpi/longlong.h
-diff --git a/lib/mpi/mpi-add.c b/lib/crypto/mpi/mpi-add.c
-similarity index 100%
-rename from lib/mpi/mpi-add.c
-rename to lib/crypto/mpi/mpi-add.c
-diff --git a/lib/mpi/mpi-bit.c b/lib/crypto/mpi/mpi-bit.c
-similarity index 100%
-rename from lib/mpi/mpi-bit.c
-rename to lib/crypto/mpi/mpi-bit.c
-diff --git a/lib/mpi/mpi-cmp.c b/lib/crypto/mpi/mpi-cmp.c
-similarity index 100%
-rename from lib/mpi/mpi-cmp.c
-rename to lib/crypto/mpi/mpi-cmp.c
-diff --git a/lib/mpi/mpi-div.c b/lib/crypto/mpi/mpi-div.c
-similarity index 100%
-rename from lib/mpi/mpi-div.c
-rename to lib/crypto/mpi/mpi-div.c
-diff --git a/lib/mpi/mpi-inline.h b/lib/crypto/mpi/mpi-inline.h
-similarity index 100%
-rename from lib/mpi/mpi-inline.h
-rename to lib/crypto/mpi/mpi-inline.h
-diff --git a/lib/mpi/mpi-internal.h b/lib/crypto/mpi/mpi-internal.h
-similarity index 100%
-rename from lib/mpi/mpi-internal.h
-rename to lib/crypto/mpi/mpi-internal.h
-diff --git a/lib/mpi/mpi-inv.c b/lib/crypto/mpi/mpi-inv.c
-similarity index 100%
-rename from lib/mpi/mpi-inv.c
-rename to lib/crypto/mpi/mpi-inv.c
-diff --git a/lib/mpi/mpi-mod.c b/lib/crypto/mpi/mpi-mod.c
-similarity index 100%
-rename from lib/mpi/mpi-mod.c
-rename to lib/crypto/mpi/mpi-mod.c
-diff --git a/lib/mpi/mpi-mul.c b/lib/crypto/mpi/mpi-mul.c
-similarity index 100%
-rename from lib/mpi/mpi-mul.c
-rename to lib/crypto/mpi/mpi-mul.c
-diff --git a/lib/mpi/mpi-pow.c b/lib/crypto/mpi/mpi-pow.c
-similarity index 100%
-rename from lib/mpi/mpi-pow.c
-rename to lib/crypto/mpi/mpi-pow.c
-diff --git a/lib/mpi/mpi-sub-ui.c b/lib/crypto/mpi/mpi-sub-ui.c
-similarity index 100%
-rename from lib/mpi/mpi-sub-ui.c
-rename to lib/crypto/mpi/mpi-sub-ui.c
-diff --git a/lib/mpi/mpicoder.c b/lib/crypto/mpi/mpicoder.c
-similarity index 100%
-rename from lib/mpi/mpicoder.c
-rename to lib/crypto/mpi/mpicoder.c
-diff --git a/lib/mpi/mpih-cmp.c b/lib/crypto/mpi/mpih-cmp.c
-similarity index 100%
-rename from lib/mpi/mpih-cmp.c
-rename to lib/crypto/mpi/mpih-cmp.c
-diff --git a/lib/mpi/mpih-div.c b/lib/crypto/mpi/mpih-div.c
-similarity index 100%
-rename from lib/mpi/mpih-div.c
-rename to lib/crypto/mpi/mpih-div.c
-diff --git a/lib/mpi/mpih-mul.c b/lib/crypto/mpi/mpih-mul.c
-similarity index 100%
-rename from lib/mpi/mpih-mul.c
-rename to lib/crypto/mpi/mpih-mul.c
-diff --git a/lib/mpi/mpiutil.c b/lib/crypto/mpi/mpiutil.c
-similarity index 100%
-rename from lib/mpi/mpiutil.c
-rename to lib/crypto/mpi/mpiutil.c
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Mimi
+
