@@ -2,96 +2,54 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6597772739
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Aug 2023 16:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A59D772E89
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Aug 2023 21:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbjHGONV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Aug 2023 10:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S229721AbjHGTKp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Aug 2023 15:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjHGONU (ORCPT
+        with ESMTP id S229631AbjHGTKo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Aug 2023 10:13:20 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B21A4;
-        Mon,  7 Aug 2023 07:13:19 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 377EA8Jx027339;
-        Mon, 7 Aug 2023 14:12:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=n84BQ09XyZvS5KUY2JrmSWiOSun89MF1BFDg9O40w/Q=;
- b=qQj+gKQWBPPopqtFLXQxL2+L26wqPCnUNRTVuIqD46ZluBWBLjlqCNmEKIq2RP9BF76p
- C8YuhGSPgCGMNJNFzBRRTpxTtsAVzapMTWLk4Dnv4PvH9c/D3QfHhAAuJ2/fn10NhTwj
- viU/DmUwuYVWfSvk4VuxnyVZr8vT1P/gW3jivDBUr3puhAfYcSkXAnaZWIbp5LJIzDcJ
- WnDlYP4NFxlQlsKLCr7fZX9S+IQHwMTwc9YSgZCwNQIP2G5pZ/U4/gWa/E8XWfI62OeZ
- 0n1EgWoUnWszxF6Kq2LiQtJ3MDYRsj32LIO2gheG/BSZux2SrsAS9hR4dqlFbRoaWQo1 +g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sb209r6ke-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Aug 2023 14:12:20 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 377EBKEP032235;
-        Mon, 7 Aug 2023 14:12:19 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sb209r6jv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Aug 2023 14:12:19 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 377DKBhs000404;
-        Mon, 7 Aug 2023 14:12:18 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3sa28k5hj5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Aug 2023 14:12:18 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 377ECIIC1638968
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Aug 2023 14:12:18 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5D6B758045;
-        Mon,  7 Aug 2023 14:12:18 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0EC9F58052;
-        Mon,  7 Aug 2023 14:12:17 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.107.174])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Aug 2023 14:12:16 +0000 (GMT)
-Message-ID: <53b8559db650886f013d5e91704ce8f4df77d815.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 RESEND] kexec_lock: Replace kexec_mutex() by
- kexec_lock() in two comments
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Wenyu Liu <liuwenyu7@huawei.com>, ebiederm@xmission.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Cc:     akpm@linux-foundation.org, vschneid@redhat.com,
-        pmenzel@molgen.mpg.de, bhe@redhat.com, louhongxiang@huawei.com
-Date:   Mon, 07 Aug 2023 10:12:16 -0400
-In-Reply-To: <20230807025206.3682381-1-liuwenyu7@huawei.com>
-References: <20230807025206.3682381-1-liuwenyu7@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3MTXnmgIWlUckT8r0RJNoUpKvEmNRFKG
-X-Proofpoint-ORIG-GUID: Seemm6eNkL6LT_0YpO8DJa7mQCDyrpLg
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 7 Aug 2023 15:10:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B00510F7;
+        Mon,  7 Aug 2023 12:10:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28AE26217C;
+        Mon,  7 Aug 2023 19:10:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB9BCC433C7;
+        Mon,  7 Aug 2023 19:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691435442;
+        bh=VZdvkZW5VU7ZVM1yMeC1WaXZnebwezMbAiJaja9tidg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D/SctkxGJzucLunDmysK9iC5PaJ4Ldm++PRMxccoxq+jU7p8gwGj+eZWVr88gU4On
+         +MFfkH/jFfiydU3aIo/PTR98sJyDywt2JnlSsBJhwEmiW5oEEVDHEBrJfwqd9iOz8d
+         tBPpQ9dWOe0EersZG6J17difqgbMDVdeiPGEJ/4wlCO2sNbwxGtcb93UcUqJf3cYqM
+         XFXD0b3DT1ARSMTBjyqVSHz4qwRIylVBr3tjxVhGxLj8GhyE/dW9VQCOfG1jtvGGnn
+         xlsnQ0QHBDm+lPXSxk4YKv30xMqBqlu6QyrJJGYXpTGt7eYFT/hN9fkp+IBTiSEIe1
+         G2lEWlbxEStoQ==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: [GIT PULL] tpmdd changes for v6.5-rc6
+Date:   Mon,  7 Aug 2023 19:10:36 +0000
+Message-Id: <20230807191037.103938-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-07_14,2023-08-03_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=930
- impostorscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0
- priorityscore=1501 phishscore=0 clxscore=1011 mlxscore=0 adultscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308070130
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,23 +57,39 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-08-07 at 10:52 +0800, Wenyu Liu wrote:
-> kexec_mutex is replaced by an atomic variable
-> in 05c6257433b (panic, kexec: make __crash_kexec() NMI safe).
-> 
-> But there are still two comments that referenced kexec_mutex,
-> replace them by kexec_lock.
-> 
-> Signed-off-by: Wenyu Liu <liuwenyu7@huawei.com>
-> Acked-by: Baoquan He <bhe@redhat.com>
-> Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
+  Merge tag 'for-linus' of git://git.kernel.org/pub/scm/virt/kvm/kvm (2023-08-07 10:18:20 -0700)
 
-Thank you. It's now queued 
-https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/log/?h=next-integrity
-.
+are available in the Git repository at:
 
---
-thanks,
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-v6.5-rc6
 
-Mimi
+for you to fetch changes up to e117e7adc637e364b599dc766f1d740698e7e027:
 
+  tpm/tpm_tis: Disable interrupts for Lenovo P620 devices (2023-08-07 18:01:01 +0000)
+
+----------------------------------------------------------------
+Hi,
+
+contains a few more bug fixes.
+
+BR, Jarkko
+
+----------------------------------------------------------------
+Jonathan McDowell (1):
+      tpm/tpm_tis: Disable interrupts for Lenovo P620 devices
+
+Mario Limonciello (1):
+      tpm: Disable RNG for all AMD fTPMs
+
+Takashi Iwai (1):
+      tpm/tpm_tis: Disable interrupts for TUXEDO InfinityBook S 15/17 Gen7
+
+Tom Rix (1):
+      sysctl: set variable key_sysctls storage-class-specifier to static
+
+ drivers/char/tpm/tpm-chip.c | 68 ++-------------------------------------------
+ drivers/char/tpm/tpm_crb.c  | 30 ++++++++++++++++++++
+ drivers/char/tpm/tpm_tis.c  | 16 +++++++++++
+ include/linux/tpm.h         |  1 +
+ security/keys/sysctl.c      |  2 +-
+ 5 files changed, 50 insertions(+), 67 deletions(-)
