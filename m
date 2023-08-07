@@ -2,57 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12EA771BFC
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Aug 2023 10:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A31B7726ED
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Aug 2023 16:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjHGICF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Aug 2023 04:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
+        id S229866AbjHGOEM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Aug 2023 10:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjHGICE (ORCPT
+        with ESMTP id S234751AbjHGODF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Aug 2023 04:02:04 -0400
-Received: from mail.loanfly.pl (mail.loanfly.pl [141.94.250.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FEE10F4
-        for <linux-integrity@vger.kernel.org>; Mon,  7 Aug 2023 01:02:01 -0700 (PDT)
-Received: by mail.loanfly.pl (Postfix, from userid 1002)
-        id 74C89A3560; Mon,  7 Aug 2023 08:00:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=loanfly.pl; s=mail;
-        t=1691395233; bh=Y0HnXqH+26AP5Uq6M8BQXaj1HIAPQY/WndV9tkpAHHU=;
-        h=Date:From:To:Subject:From;
-        b=Dy7W+MqwPKMJjUcauAZ6WwmdgiOotXP3hLevww3q64mCEJ0ZtbBnHfhbHIfqIRZv/
-         f+DNhQkvIxeRisBXGPAZztRV8ybE+5MXna8qWtpcH9zY/s6+XU8hcL7UMhQkorgGiP
-         DrbxgYRiAz9bpbtZXxOSy4Ld+j8YZDU2UR8opx2DGBdVBWp8zz/vTxAJvJWN1+dv1y
-         2IUdzL0fhJKl2th76NFrZCOATxC+iD/nVal2QO8mmR6vE5/Lw+uctMeYt6oGQbUaoD
-         L4C5SMI+fy+8HaJ2+HsbeJu09mUQOQldN9pwUzYCG4IOYUMxnuUUHlGbfXsLJcUytJ
-         UWKuWti0yDTuw==
-Received: by mail.loanfly.pl for <linux-integrity@vger.kernel.org>; Mon,  7 Aug 2023 08:00:09 GMT
-Message-ID: <20230807064501-0.1.br.1bs2t.0.xq1k4mh2w1@loanfly.pl>
-Date:   Mon,  7 Aug 2023 08:00:09 GMT
-From:   "Damian Cichocki" <damian.cichocki@loanfly.pl>
-To:     <linux-integrity@vger.kernel.org>
-Subject: =?UTF-8?Q?Pytanie_o_samoch=C3=B3d?=
-X-Mailer: mail.loanfly.pl
+        Mon, 7 Aug 2023 10:03:05 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D9C2697;
+        Mon,  7 Aug 2023 07:01:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 913E91FE02;
+        Mon,  7 Aug 2023 14:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1691416891; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=8YiVCjwWL8Hw6O2ccp24AagZioe0mi6UgFUQbptbfTQ=;
+        b=ojHriN3JOY/bSBqLl4QSvaLU6jbFDGQGR0v2JeL2AKiZsLR7dRarRb97H4wY1Zrs6DMr9/
+        HxLizwI6NeLgMFPwAnhRhlO95xOKpp1IyvNt7t4E7wbtCPvhFxLH2XRBxbB9qfPayWPavN
+        OUqS7qiJt09MSsJ7Yts01g8YuV0PUQY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1691416891;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=8YiVCjwWL8Hw6O2ccp24AagZioe0mi6UgFUQbptbfTQ=;
+        b=Y+sP2eHxATKVQfT5cS0Uy/ZWbDN6cZQSzqvC0PksykMgKYZVWkPIXKZuxwhTmk4czYH6Qz
+        +WpohGqTxSlVSTBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6128513910;
+        Mon,  7 Aug 2023 14:01:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gq62Fjv50GQvLAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 07 Aug 2023 14:01:31 +0000
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm/tpm_tis: Disable interrupts for Lenovo Thinkpad E14 Gen 2 and 13s-IML
+Date:   Mon,  7 Aug 2023 16:01:25 +0200
+Message-Id: <20230807140125.18486-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_ABUSE_SURBL,URIBL_CSS_A
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Like other Lenovo laptops, Thinkpad E14 Gen 2 and Thinkpad 13s-IML
+also require to disable the tpm_tis interrupts for avoiding a boot
+hang.
 
-Czy interesuje Pa=C5=84stwa rozwi=C4=85zanie umo=C5=BCliwiaj=C4=85ce moni=
-torowanie samochod=C3=B3w firmowych oraz optymalizacj=C4=99 koszt=C3=B3w =
-ich utrzymania?=20
+Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+Cc: <stable@vger.kernel.org> # v6.4+
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1213779
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 
+---
+ drivers/char/tpm/tpm_tis.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Pozdrawiam,
-Damian Cichocki
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index a98773ac2e55..0633823dc515 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -130,6 +130,22 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "Laptop (13th Gen Intel Core)"),
+ 		},
+ 	},
++	{
++		.callback = tpm_tis_disable_irq,
++		.ident = "ThinkPad E14 Gen 2",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad E14 Gen 2"),
++		},
++	},
++	{
++		.callback = tpm_tis_disable_irq,
++		.ident = "ThinkBook 13s-IML",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo ThinkBook 13s-IML"),
++		},
++	},
+ 	{
+ 		.callback = tpm_tis_disable_irq,
+ 		.ident = "ThinkPad T490s",
+-- 
+2.35.3
+
