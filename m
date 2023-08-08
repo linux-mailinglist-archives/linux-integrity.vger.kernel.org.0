@@ -2,223 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6191B774D2F
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Aug 2023 23:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD637774E86
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Aug 2023 00:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjHHVle (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Aug 2023 17:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S229942AbjHHWpF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Aug 2023 18:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjHHVle (ORCPT
+        with ESMTP id S229526AbjHHWpF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Aug 2023 17:41:34 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E6F10C;
-        Tue,  8 Aug 2023 14:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1691530892;
-        bh=i7hpyEZEZWlj2Ajx+MRSG8JElxaDe4Jh8vwUZ2MfVZ0=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=SEXS9n/2I4Tq6aZIxULzbS1JaJkekArdJRcRy5jh6mLcGadvf64e2TTY13OkPul+L
-         hr+OtBlf6ENxwni+EDCEXE7azzEgLfviTTz4S7YkjDkKesRr7KpKiDs1KRpf9DLmdh
-         GRPr4TkPPPT0nzIQ16gr8lLhHSCrhoFlruyfgvds=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 65ED712811F6;
-        Tue,  8 Aug 2023 17:41:32 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id SUFS-be2u0MT; Tue,  8 Aug 2023 17:41:32 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1691530892;
-        bh=i7hpyEZEZWlj2Ajx+MRSG8JElxaDe4Jh8vwUZ2MfVZ0=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=SEXS9n/2I4Tq6aZIxULzbS1JaJkekArdJRcRy5jh6mLcGadvf64e2TTY13OkPul+L
-         hr+OtBlf6ENxwni+EDCEXE7azzEgLfviTTz4S7YkjDkKesRr7KpKiDs1KRpf9DLmdh
-         GRPr4TkPPPT0nzIQ16gr8lLhHSCrhoFlruyfgvds=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9D1051280F38;
-        Tue,  8 Aug 2023 17:41:30 -0400 (EDT)
-Message-ID: <a522b17a536ea87a6a4c2faf95583ae3b7b74a26.camel@HansenPartnership.com>
-Subject: Re: [RFC] IMA Log Snapshotting Design Proposal
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Sush Shringarputale <sushring@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        kgold@linux.ibm.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, kexec@lists.infradead.org, jmorris@namei.org,
-        Paul Moore <paul@paul-moore.com>, serge@hallyn.com
-Cc:     code@tyhicks.com, nramas@linux.microsoft.com,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        linux-security-module@vger.kernel.org
-Date:   Tue, 08 Aug 2023 17:41:28 -0400
-In-Reply-To: <04fb2fe5-9ebe-b35f-bdde-6ef22786438f@linux.ibm.com>
-References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
-         <b748230c8ee291288afcf48898507556c3aa7c71.camel@HansenPartnership.com>
-         <5d21276a-daac-fc9b-add9-62e7c04bbdcd@linux.ibm.com>
-         <8ad131f35c33cf10788344be6c981473971f9c1c.camel@HansenPartnership.com>
-         <abe53dde-9a83-81fd-422d-babf4587c545@linux.ibm.com>
-         <350ecdcbf7796f488807fcd7983414a02dd71be4.camel@HansenPartnership.com>
-         <04fb2fe5-9ebe-b35f-bdde-6ef22786438f@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Tue, 8 Aug 2023 18:45:05 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46A97100;
+        Tue,  8 Aug 2023 15:45:04 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id ACC3A20FC0D2; Tue,  8 Aug 2023 15:45:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com ACC3A20FC0D2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1691534703;
+        bh=sVCat3a1M7KHdlESd70oA1x2KXrxJ+56GtFSeTDlhcM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IKGEzYVtmP2d5RXQGvuDn1I/QZ4sOzZi4K/A2GFZ2iulDRvmRtjOIZiRVuMKczceS
+         0CiDLnNBQ2LUBMhDJBdn1PQPlunEfC8CXQzTGInv/hBg/Ilpo2DmC4rg8xJgCfKGlU
+         /LGb9xCJTxmrboncvvC5Grxc+B/9dleXOZ5FNzVQ=
+Date:   Tue, 8 Aug 2023 15:45:03 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Mike Snitzer <snitzer@kernel.org>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, eparis@redhat.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, audit@vger.kernel.org,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v10 11/17] dm-verity: consume root hash digest and
+ signature data via LSM hook
+Message-ID: <20230808224503.GA20095@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1687986571-16823-1-git-send-email-wufan@linux.microsoft.com>
+ <1687986571-16823-12-git-send-email-wufan@linux.microsoft.com>
+ <ZKgm+ffQbdDTxrg9@redhat.com>
+ <20230712034319.GA17642@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CAHC9VhQFxqcfgR0acgdiXKP9LT1KLgGjZd-QHs6O1dEex31HEQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhQFxqcfgR0acgdiXKP9LT1KLgGjZd-QHs6O1dEex31HEQ@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2023-08-08 at 16:09 -0400, Stefan Berger wrote:
+On Tue, Jul 25, 2023 at 04:43:48PM -0400, Paul Moore wrote:
+> On Tue, Jul 11, 2023 at 11:43???PM Fan Wu <wufan@linux.microsoft.com> wrote:
+> > On Fri, Jul 07, 2023 at 10:53:45AM -0400, Mike Snitzer wrote:
 > 
+> ...
 > 
-> On 8/8/23 14:26, James Bottomley wrote:
-> > On Tue, 2023-08-08 at 09:31 -0400, Stefan Berger wrote:
-> > > 
-> > > 
-> > > On 8/8/23 08:35, James Bottomley wrote:
-> > > > On Mon, 2023-08-07 at 18:49 -0400, Stefan Berger wrote:
-> > > > > 
-> > > > > 
-> > > > > On 8/1/23 17:21, James Bottomley wrote:
-> > > > > > On Tue, 2023-08-01 at 12:12 -0700, Sush Shringarputale
-> > > > > > wrote:
-> > > > > > [...]
-> > > > > > > Truncating IMA log to reclaim memory is not feasible,
-> > > > > > > since
-> > > > > > > it makes the log go out of sync with the TPM PCR quote
-> > > > > > > making
-> > > > > > > remote attestation fail.
-> > > > > > 
-> > > > > > This assumption isn't entirely true.  It's perfectly
-> > > > > > possible
-> > > > > > to shard an IMA log using two TPM2_Quote's for the
-> > > > > > beginning
-> > > > > > and end PCR values to validate the shard.  The IMA log
-> > > > > > could be
-> > > > > > truncated in the same way (replace the removed part of the
-> > > > > > log
-> > > > > > with a TPM2_Quote and AK, so the log still validates from
-> > > > > > the
-> > > > > > beginning quote to the end).
-> > > > > > 
-> > > > > > If you use a TPM2_Quote mechanism to save the log, all you
-> > > > > > need
-> > > > > > to do is have the kernel generate the quote with an
-> > > > > > internal
-> > > > > > AK.  You can keep a record of the quote and the AK at the
-> > > > > > beginning of the truncated kernel log.  If the truncated
-> > > > > > entries are saved in a file shard it
-> > > > > 
-> > > > > The truncation seems dangerous to me. Maybe not all the
-> > > > > scenarios
-> > > > > with an attestation client (client = reading logs and
-> > > > > quoting)
-> > > > > are possible then anymore, such as starting an attestation
-> > > > > client
-> > > > > only after truncation but a verifier must have witnessed the
-> > > > > system's PCRs and log state before the truncation occurred.
-> > > > 
-> > > > That's not exactly correct.  Nothing needs to have "witnessed"
-> > > > the
-> > > > starting PCR value because the quote vouches for it (and can
-> > > > vouch
-> > > > for it after the fact).  The only thing you need to verify the
-> > > > quote is the attestation key and the only thing you need to do
-> > > > to
-> > > > trust the attestation key is ensure it was TPM created.  All of
-> > > > that can be verified after the fact as well.  The only thing
-> > > > that
-> > > > can be done to disrupt this is to destroy the TPM (or re-own
-> > > > it).>
-> > > > Remember the assumption is you *also* have the removed log
-> > > > shard to
-> > > > present.  From that the PCR state of the starting quote can be
-> > > 
-> > > Yes, the whole sequence of old logs needs to be available.
-> > 
-> > Yes and no.  If the person relying on the logs is happy they've
-> > extracted all the evidentiary value from the log itself then they
-> > can
-> > reduce the preceding log shard to simply the PCR values that match
-> > the
-> > quote and discard the rest.
-> > 
-> > >   IF that's the case and the logs can be stitched together
-> > > seamlessly, who then looks at the kernel AK quote and under what
-> > > circumstances?
-> > 
-> > For incremental attestation.  Each log shard can be verified using
-> > the base PCR values corresponding to the bottom quote then replayed
-> > and the
+> > > Both of your calls to security_bdev_setsecurity() to set your blobs in
+> > > the bdev are suspect because you're doing so from the verity_ctr().
+> > > The mapped_device has 2 dm_table slots (active and inactive).  The
+> > > verity_ctr() becomes part of the inactive slot, there is an extra step
+> > > to bind the inactive table to the active table.
+> > >
+> > > This leads to you changing the blobs in the global bdev _before_ the
+> > > table is actually active.  It is possible that the inactive table will
+> > > simply be removed and the DM verity device put back in service;
+> > > leaving your blob(s) in the bdev inconsistent.
+> > >
+> > > This issue has parallels to how we need to defer changing the global
+> > > queue_limits associated with a request_queue until _after_ all table
+> > > loading is settled and then the update is done just before resuming
+> > > the DM device (mapped_device) -- see dm_table_set_restrictions().
+> > >
+> > > Unfortunately, this feels like it may require a new hook in the
+> > > target_type struct (e.g. ->finalize())
+> >
+> > Thanks for pointing out this issue. We were calling security_bdev_setsecurity()
+> > because the roothash signature data is only available in verity_ctr()
+> > and it is discarded after verity_ctr() finishes.
+> > After digging deeper into the table_load, I realized that we were indeed
+> > wrong here.
+> >
+> > Based on my understanding of your suggestion, it seems that the correct
+> > approach would be to save the roothash signature into the struct dm_target
 > 
+Sorry for the delay in responding. It took me a while to test out the design idea
+suggested by Mike.
+
+The current implementation is indeed incorrect. However, I've been able to develop
+a working prototype that addresses the problem identified in the existing implementation.
+I still need some additional time to fine-tune and clean up the prototype.
+
+My goal is to have everything ready and send it out next month.
+
+> Would you be doing this with a LSM hook, or would this live in the
+> device mapper layer?
 > 
-> Somehow you have to tell a verifier to take a snapshot of the current
-> state of the PCRs when it replays the logs to be able to truncate the
-> log.
+In my implemention, it is a new hook in the device mapper layer. 
+The hook is triggered just before activating an inactive table of a mapped device.
+So in our case, we use the hook to attached the dm-verity's roothash metadata
+to the block_device struct of mapped device.
 
-No, the verifier is server side.  It would be the agent or the kernel,
-client side, which gets the quote and shards the log.  That way the
-operation can be done in such a way as to make sure the quote and the
-shard point match.  I'd imagine the verifier can provide some sort of
-guide as to how big it wants the shards to be and the client complies.
-
-> Whether the state of the PCRs is in the log itself or it's just some
-> sort of entry in the log indicating a truncation probably doesn't
-> matter for as long as the verifying side keeps state of the PCRs at
-> point of truncatiokn.
-
-The idea would be the log shard would be self attesting, that's why
-quote at beginning and end (and probably PCR state at beginning), so no
-verifier required until someone wants to check the log.
-
-> Also, the verifying side needs to take notice of the trustworthiness
-> of the system at the time the log was truncated in case the
-> attestation client is restarted and starts out sending the log with
-> the first entry.
-
-That's usually what a runtime verification system is actually
-verifying, yes.
-
->  The PCR state shown at the beginning of the truncated log (when
-> restarting the attestation client) must then match when the 'notice'
-> was taken and that determines its trustworthiness at this point in
-> the log.
+> > and then invoke security_bdev_setsecurity() before activating
+> > the inactive table in the __bind function (where dm_table_set_restrictions is called).
+> >
+> > To facilitate this process, it seems appropriate to introduce a new hook
+> > called finalize() within the struct target_type. This hook would enable
+> > targets to define tasks that need to be completed before activating
+> > a new table.
+> >
+> > In our specific case, we would add a finalize hook to the dm-verity module,
+> > allowing us to call security_bdev_setsecurity() and associate the roothash
+> > information in the struct dm_target with the struct block_device of
+> > the struct mapped_device. Is this correct?
 > 
-> That there's a kernel AK signature
+> Where would the finalize() hook be called?
 
-A quote is a signature over PCR state signed by an AK, yes.
+It is in the __bind function in drivers/md/dm.c, calling just before 
+rcu_assign_pointer(md->map, (void *)t) which activates the inactive table.
 
->  at this point doesn't seem necessary since one presumably can verify
-> the log and PCR states at the end with the 'regular' quote.
-
-I don't understand this.  A regular quote is a signature over PCR state
-by an AK.  The point about saving the AK in the log for the original is
-that if the *kernel* truncates the log and saves it to a file, it needs
-to generate both the AK and the quote for the top of the file shard. 
-That means the AK/EK binding is unverified, but can be verified by
-loading the AK and running the usual tests, which can only be done if
-you have the loadable AK, which is why you need it as part of the log
-saving proposal.
-
-> Nobody should ever trust a system by starting to look at the
-> beginning of a truncated log. You have to have evaluated all the
-> entries in the log before and determined whether the system was
-> trustworthy. I don't think the kernel AK quote buys much - at least
-> not from what I can see.
-
-You have a log shard with PCR state at the beginning and calculated at
-the end, both of which you can verify.  How you establish trust in the
-starting PCR values of the shard is a policy decision, but the policy
-doesn't have to be you see every shard up to boot.  You could take the
-word of the system owner on a handoff of responsibility for instance.
-
-James
-
+-Fan
