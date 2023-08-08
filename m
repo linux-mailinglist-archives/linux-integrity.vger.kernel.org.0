@@ -2,8 +2,8 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D237737B7
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Aug 2023 05:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946B2773B04
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Aug 2023 17:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
         id S230412AbjHHD23 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Mon, 7 Aug 2023 23:28:29 -0400
