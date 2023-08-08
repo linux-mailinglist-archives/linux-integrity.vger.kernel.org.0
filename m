@@ -2,136 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B25F7748FD
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Aug 2023 21:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C90774542
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Aug 2023 20:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbjHHTqV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Aug 2023 15:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S232571AbjHHSjk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Aug 2023 14:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbjHHTp7 (ORCPT
+        with ESMTP id S232584AbjHHSjQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Aug 2023 15:45:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1706D16AD7;
-        Tue,  8 Aug 2023 09:49:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Tue, 8 Aug 2023 14:39:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2305E74AD7
+        for <linux-integrity@vger.kernel.org>; Tue,  8 Aug 2023 10:19:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id ECB2920312;
-        Tue,  8 Aug 2023 06:12:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1691475177; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57CA36287B
+        for <linux-integrity@vger.kernel.org>; Tue,  8 Aug 2023 17:19:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE4CC433C7;
+        Tue,  8 Aug 2023 17:19:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LS9DmS3/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1691515171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Q3MK00CjNLL1ZfC7N82ZXn6nuzBSj9WikxOJJsXFTxE=;
-        b=u/kVXQ5FVsYn7MZJ9wIBDd56TjoPXUGOCVloXV5y/fMdjLGy9XPhw+Baps0z87S9QSXjQe
-        iQnYprmoLqI/vk29lirFO0Btc3Ghgiex8OvPVdfdtcOZCzj02W5HPCqEU275jHuVf/DlEe
-        HtNJ/BlgevNI+zKARShyWpMiPwqTJp4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1691475177;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q3MK00CjNLL1ZfC7N82ZXn6nuzBSj9WikxOJJsXFTxE=;
-        b=taJEEMQZ6yC504W4FpkfK/uGxk8QYw9Aw5SkOR06WzsekQaMPRhPx942c7UdLNawT6gGhx
-        ec7f12QLRBZgPQDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A90EA139D1;
-        Tue,  8 Aug 2023 06:12:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8BVUKOnc0WT5PgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 08 Aug 2023 06:12:57 +0000
-Date:   Tue, 08 Aug 2023 08:12:57 +0200
-Message-ID: <87il9qhxjq.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc:     "Takashi Iwai" <tiwai@suse.de>, "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts for Lenovo Thinkpad E14 Gen 2 and 13s-IML
-In-Reply-To: <CUMJWFCIG9EI.13F7LU8TYAUE1@seitikki>
-References: <20230807140125.18486-1-tiwai@suse.de>
-        <CUMJWFCIG9EI.13F7LU8TYAUE1@seitikki>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        bh=KWJ+tL6fXfn5mmcmnGToTc8ffpsUrrpqjM5IOZKSx7M=;
+        b=LS9DmS3/m6PEzq1iXd2bwraXeWUuQuQ9zvwBR6Wk50MIWW2k3SVzcI/Z74XwGuSSIhqMaC
+        IyCYbLd/JtAZVN/tM2CF25nwcnkMdxSTjk6hM3QDA8Eg9ajGHu4PcuV/v7vwq+LkzRCGFn
+        nPXV2OR7BpGMp79hqbsSnGApwFAzJ3A=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 23fbef99 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 8 Aug 2023 17:19:31 +0000 (UTC)
+Date:   Tue, 8 Aug 2023 19:19:29 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca,
+        linux@dominikbrodowski.net, linux-integrity@vger.kernel.org,
+        daniil.stas@posteo.net, peterhuewe@gmx.de
+Subject: Re: [PATCH v3] tpm: Disable RNG for all AMD fTPMs
+Message-ID: <ZNJ5IZjpOdOBFFja@zx2c4.com>
+References: <20230803182428.25753-1-mario.limonciello@amd.com>
+ <CUK4PB8J51W8.2NQ3CSI1HNLDR@wks-101042-mac.ad.tuni.fi>
+ <6bfc61fb-6432-cb17-3312-53c6268e2a46@amd.com>
+ <CUK5NKQKDAWO.2RCNF768IKZ9Q@wks-101042-mac.ad.tuni.fi>
+ <ZNFv8f3r86zq3JSh@zx2c4.com>
+ <f7f9be14-b5f6-4c2c-a4e3-8d44bfa4b36c@amd.com>
+ <ZNGOpFbH43qQ/v5T@zx2c4.com>
+ <CAHk-=whT2hf5f6SwK32J4cF2Yu+q9SZaO6JZVzBOsLz63uPW1w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whT2hf5f6SwK32J4cF2Yu+q9SZaO6JZVzBOsLz63uPW1w@mail.gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 07 Aug 2023 21:14:20 +0200,
-Jarkko Sakkinen wrote:
-> 
-> On Mon Aug 7, 2023 at 2:01 PM UTC, Takashi Iwai wrote:
-> > Like other Lenovo laptops, Thinkpad E14 Gen 2 and Thinkpad 13s-IML
-> > also require to disable the tpm_tis interrupts for avoiding a boot
-> > hang.
+On Mon, Aug 07, 2023 at 08:26:03PM -0700, Linus Torvalds wrote:
+> On Mon, 7 Aug 2023 at 17:39, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 > >
-> > Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-> > Cc: <stable@vger.kernel.org> # v6.4+
-> > Link: https://bugzilla.suse.com/show_bug.cgi?id=1213779
-> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> >
-> > ---
-> >  drivers/char/tpm/tpm_tis.c | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
-> >
-> > diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> > index a98773ac2e55..0633823dc515 100644
-> > --- a/drivers/char/tpm/tpm_tis.c
-> > +++ b/drivers/char/tpm/tpm_tis.c
-> > @@ -130,6 +130,22 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
-> >  			DMI_MATCH(DMI_PRODUCT_NAME, "Laptop (13th Gen Intel Core)"),
-> >  		},
-> >  	},
-> > +	{
-> > +		.callback = tpm_tis_disable_irq,
-> > +		.ident = "ThinkPad E14 Gen 2",
-> > +		.matches = {
-> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> > +			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad E14 Gen 2"),
-> > +		},
-> > +	},
-> > +	{
-> > +		.callback = tpm_tis_disable_irq,
-> > +		.ident = "ThinkBook 13s-IML",
-> > +		.matches = {
-> > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> > +			DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo ThinkBook 13s-IML"),
-> > +		},
-> > +	},
-> >  	{
-> >  		.callback = tpm_tis_disable_irq,
-> >  		.ident = "ThinkPad T490s",
-> > -- 
-> > 2.35.3
+> > I'm not sure what's best or what Linus prefers. Linus - Jarkko sent you
+> > the wrong version patch. Do you want a fixup patch that accounts for the
+> > difference, and then I'll address the stable@ metadata deficiency
+> > manually by talking to Greg, or would you rather some merge commit
+> > magic, or something else?
 > 
-> As almost all issues are with Lenovo, I would instead just put:
+> Either works for me, whatever ends up being easiest.
 > 
-> 	{
-> 		.callback = tpm_tis_disable_irq,
-> 		.matches = {
-> 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> 		},
-> 	},
+> However, looking at that v3 patch, that "should we enable/disable the
+> hwrng" is now repeated *three* times, and that first one is
 > 
-> And delete the existing entries with vendor as "LENOVO".
+>   if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip) ||
+> -     tpm_amd_is_rng_defective(chip))
+> +     chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED)
+> 
+> and wants fixing anyway: you want parenthesis around the '&'.
+> 
+> Yes, yes, it works (because bitwise ops have higher precedence than
+> logical ones), but let's not do that.
+> 
+> But more importantly, can we just have a single helper inline function
+> for this and *not* repeat the same multi-line expression three times
+> (just in negated and then 2x non-negated format)?
+> 
+> That test is ugly anyway. Why is "tpm_is_firmware_upgrade()" a wrapper
+> function around testing "chip->flags", but then right next to it it
+> tests them explicitly.
+> 
+> So if we have to re-do this all, let's re-do it properly. Ok?
+> 
+> Thinking about it, I do guess that makes it easier to just send an
+> incremental patch on top.
 
-Yeah, that will relieve pains better, too.
+Alright, looks like Mario took care of that:
+https://lore.kernel.org/all/20230808041229.22514-1-mario.limonciello@amd.com/
+Once this is in your tree I'll ping Greg about the right stable versions
+to make up for the wrong tag.
 
-
-thanks,
-
-Takashi
+Jason
