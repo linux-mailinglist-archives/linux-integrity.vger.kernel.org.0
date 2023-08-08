@@ -2,116 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946B2773B04
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Aug 2023 17:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161DB773C14
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Aug 2023 18:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjHHD23 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Aug 2023 23:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
+        id S231502AbjHHQAB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Aug 2023 12:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbjHHD2B (ORCPT
+        with ESMTP id S231251AbjHHP6e (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Aug 2023 23:28:01 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67C410CC
-        for <linux-integrity@vger.kernel.org>; Mon,  7 Aug 2023 20:26:23 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b9e6cc93d8so83370051fa.0
-        for <linux-integrity@vger.kernel.org>; Mon, 07 Aug 2023 20:26:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1691465182; x=1692069982;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2PshCcHXpSizN0WTlCYzw/czaRnP5WjNB+/CARvAIhU=;
-        b=V2PvIVndGCdt6RlV9mgVaBnOY/fEXPgs6jOFbwf8BFQ6LhhMbiZRt83Muer6HGCGvH
-         CFi5KGEOTfEtUr89DVsNL7pNSzzW5VYn0Nfqq/7kd1bDBrmx34u7pj7qO1OSj/J6MIki
-         v091agBbRuYhcuMlKUytXIVAG6U77PzTeqaak=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691465182; x=1692069982;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2PshCcHXpSizN0WTlCYzw/czaRnP5WjNB+/CARvAIhU=;
-        b=j7Vva7uLJUpTIjVFXYSazpqRlJEA/PSQZWA7ijIx39v6ZsNZbzGBVsXzlWjcrZYYE9
-         ZiUf9UyKQV8x5crfOLkD7o89sDf6YqhyDbLDPEzNxbdY+u/VWGUsKCOkZBEEQWFXts8l
-         vCkAJt3N9Q6OwlxVFtTptg9INjxNJw5I2EROMGvho2OFUkU3Br/81HIPTYRJjzwB1iQN
-         ZFBu+ZlLNHYhYFMfilpnzgUdzsO/bTTnmAAZ4Oc1mhB5XqUv7TICJsCCR1d+L98v5wax
-         XrCv8ZfMdZqxU7RxxSQHXnDfZZrgvtMeUiZnqBkYO8ARkFz1Q1JyRyhdaNiIn2yJvRQ6
-         IV/g==
-X-Gm-Message-State: AOJu0YzV+g/NXGBWYYIJ9EVlHZnuJdu7HSXImmM+jyoQwgPY0J6Kv/WE
-        Eu639356f48kaZ5ewFGQWQO8C8mVLYkTJarHoJBq0g+C
-X-Google-Smtp-Source: AGHT+IFrS3FmvI7CCiXPwUyarNcbvbKrdA0AE/MQ93Fwl4sxd5mioM8zJrSmGprZftNzWM7mOrHY8A==
-X-Received: by 2002:a05:651c:208:b0:2b6:cf0f:1fbf with SMTP id y8-20020a05651c020800b002b6cf0f1fbfmr8416853ljn.42.1691465182034;
-        Mon, 07 Aug 2023 20:26:22 -0700 (PDT)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id y15-20020a2e7d0f000000b002b9cd2d0d39sm2081567ljc.28.2023.08.07.20.26.20
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Aug 2023 20:26:20 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4fe0c566788so8052527e87.0
-        for <linux-integrity@vger.kernel.org>; Mon, 07 Aug 2023 20:26:20 -0700 (PDT)
-X-Received: by 2002:a05:6512:ad5:b0:4f9:607a:6508 with SMTP id
- n21-20020a0565120ad500b004f9607a6508mr7359752lfu.50.1691465180198; Mon, 07
- Aug 2023 20:26:20 -0700 (PDT)
+        Tue, 8 Aug 2023 11:58:34 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546E95BB0
+        for <linux-integrity@vger.kernel.org>; Tue,  8 Aug 2023 08:44:17 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 378Dad5n001321;
+        Tue, 8 Aug 2023 13:40:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date : to :
+ cc : from : subject : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=PKbMWUZL5OPfALHykmHZdHRbDf6wUehGBu74cgOft6g=;
+ b=ETjmOiSetlcCFiVyY2wIw2HoKWb1mr4M8KTRxlAv2DvDl2FfAJ52FCNp4wIyguuzIVKH
+ e/P9DTxj9sv4QIYFPRZOA1n02+bWbgvXSaNcMZNw6/gZcuRhOrDhlBgC60kKfTH3TUbl
+ jT3q9X5tyDdwiuUnbqoZeZoy/KxfFO1WOIEI9D2AjypqOO37fvyJkbSBkx+jFO9GtHu4
+ 5DZJ7m1/1KU0xleTtQYikePrhD93KmkGnX6o1EcExVqt/ghwUo/HP+DfznPYSsgAQVy/
+ 1yhCa233t1YkHGbcbFpWalUiLL55HL5cMVPOuoGquJFJ+SD7riUDB7vJk1bqCva+Xwpi ug== 
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sbpr108xe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Aug 2023 13:40:51 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 378CciUN001785;
+        Tue, 8 Aug 2023 13:40:51 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3sa3f1pdqb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Aug 2023 13:40:51 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 378Deo8F35979890
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Aug 2023 13:40:50 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 90B2358056;
+        Tue,  8 Aug 2023 13:40:50 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 60AA55803F;
+        Tue,  8 Aug 2023 13:40:50 +0000 (GMT)
+Received: from [9.61.3.84] (unknown [9.61.3.84])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  8 Aug 2023 13:40:50 +0000 (GMT)
+Message-ID: <ebe1d154-962b-4a8b-ad08-b26e99804c1b@linux.vnet.ibm.com>
+Date:   Tue, 8 Aug 2023 09:40:50 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+Subject: Build failure on tpmdd master branch
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fmhLQbjd-YLBnpYBbd7NKyQCVV2dtmCC
+X-Proofpoint-ORIG-GUID: fmhLQbjd-YLBnpYBbd7NKyQCVV2dtmCC
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20230803182428.25753-1-mario.limonciello@amd.com>
- <CUK4PB8J51W8.2NQ3CSI1HNLDR@wks-101042-mac.ad.tuni.fi> <6bfc61fb-6432-cb17-3312-53c6268e2a46@amd.com>
- <CUK5NKQKDAWO.2RCNF768IKZ9Q@wks-101042-mac.ad.tuni.fi> <ZNFv8f3r86zq3JSh@zx2c4.com>
- <f7f9be14-b5f6-4c2c-a4e3-8d44bfa4b36c@amd.com> <ZNGOpFbH43qQ/v5T@zx2c4.com>
-In-Reply-To: <ZNGOpFbH43qQ/v5T@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 7 Aug 2023 20:26:03 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whT2hf5f6SwK32J4cF2Yu+q9SZaO6JZVzBOsLz63uPW1w@mail.gmail.com>
-Message-ID: <CAHk-=whT2hf5f6SwK32J4cF2Yu+q9SZaO6JZVzBOsLz63uPW1w@mail.gmail.com>
-Subject: Re: [PATCH v3] tpm: Disable RNG for all AMD fTPMs
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca,
-        linux@dominikbrodowski.net, linux-integrity@vger.kernel.org,
-        daniil.stas@posteo.net, peterhuewe@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-08_11,2023-08-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ bulkscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=769 clxscore=1015
+ mlxscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308080121
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 7 Aug 2023 at 17:39, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> I'm not sure what's best or what Linus prefers. Linus - Jarkko sent you
-> the wrong version patch. Do you want a fixup patch that accounts for the
-> difference, and then I'll address the stable@ metadata deficiency
-> manually by talking to Greg, or would you rather some merge commit
-> magic, or something else?
+Hi Jarkko,
 
-Either works for me, whatever ends up being easiest.
+I rebased the "Enable loading local and third party keys on PowerVM 
+guest"( 
+https://lore.kernel.org/linux-integrity/20230714153435.28155-1-nayna@linux.ibm.com/) 
+on top of tpmdd master branch.
 
-However, looking at that v3 patch, that "should we enable/disable the
-hwrng" is now repeated *three* times, and that first one is
+The build is failing due to commit cfa7522f280a ("sysctl: set variable 
+key_sysctls storage-class-specifier to static"). A patch with the same 
+subject line is already in your tree. Refer to commit 0de030b30823 
+("sysctl: set variable key_sysctls storage-class-specifier to static").
 
-  if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip) ||
--     tpm_amd_is_rng_defective(chip))
-+     chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED)
+Thanks & Regards,
 
-and wants fixing anyway: you want parenthesis around the '&'.
+      - Nayna
 
-Yes, yes, it works (because bitwise ops have higher precedence than
-logical ones), but let's not do that.
-
-But more importantly, can we just have a single helper inline function
-for this and *not* repeat the same multi-line expression three times
-(just in negated and then 2x non-negated format)?
-
-That test is ugly anyway. Why is "tpm_is_firmware_upgrade()" a wrapper
-function around testing "chip->flags", but then right next to it it
-tests them explicitly.
-
-So if we have to re-do this all, let's re-do it properly. Ok?
-
-Thinking about it, I do guess that makes it easier to just send an
-incremental patch on top.
-
-              Linus
