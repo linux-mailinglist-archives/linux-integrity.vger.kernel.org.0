@@ -2,66 +2,147 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D38377552A
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Aug 2023 10:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491F27756A8
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Aug 2023 11:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjHII0s (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 9 Aug 2023 04:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S232097AbjHIJs6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 9 Aug 2023 05:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjHII0r (ORCPT
+        with ESMTP id S230245AbjHIJs6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 9 Aug 2023 04:26:47 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Aug 2023 01:26:47 PDT
-Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778C110FF
-        for <linux-integrity@vger.kernel.org>; Wed,  9 Aug 2023 01:26:47 -0700 (PDT)
-Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
-        id 8FDC74C69E; Wed,  9 Aug 2023 08:16:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
-        s=mail; t=1691569053;
-        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
-        h=Date:From:To:Subject:From;
-        b=aqwqiXkZ4qO78FRS7+WR8RkpezHJzpVjGwq+BzZV6/8MsFpi/lOmuGLpJFt7gEZzR
-         j64ucWU+YPzJ0VyJbnSJdztM3dOphZMTgKeSIVWtALGmIly4Pug4UZw27baFtGZkRC
-         5TbZFf99fePBVTSeQyS6SWFSKM4hPWul/PN1rZhHeD6fK2AfbvzExCeodcmefQjZcz
-         ccQ9OoriiTXHWUSIZTk5k2tg69u9dyNe/Ph8Gpkk1ULFKP3xFwwipD+TVcLWW0Twwq
-         6q7QyebDg8BEZeEKdVsPfRZTX0VtQTWdtw/7nc3TGD0ceTU5cg2sGB1BZCtZAzKZ7b
-         aWz5ww6tc35wg==
-Received: by mail.profitpathwaygo.com for <linux-integrity@vger.kernel.org>; Wed,  9 Aug 2023 08:16:11 GMT
-Message-ID: <20230809064500-0.1.10.4sz2.0.2ylr88kb0p@profitpathwaygo.com>
-Date:   Wed,  9 Aug 2023 08:16:11 GMT
-From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
-To:     <linux-integrity@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
-X-Mailer: mail.profitpathwaygo.com
+        Wed, 9 Aug 2023 05:48:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C53C1FD8;
+        Wed,  9 Aug 2023 02:48:57 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3799dD4O030706;
+        Wed, 9 Aug 2023 09:48:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=qb4nHKrxyC/H/r7t0RxFzDn0koTqV/7wXf1V15k7Hew=;
+ b=TcxvQ/e9g6WSBD6Oor/Cn7PYvFVVJ5dJ6Vieu7DY1Stx/aNJqfYISYBG1fDL27yv+4v7
+ sc6TuYSezj+IlpR8ulldhBL5NeNST7UXi4TlXDxSGoSCUpKS7oE/ozRstDl9a95eVpJa
+ CMeM6yGgoR+IuLRvq7m1V6mzfwaNH4CSlFbL8ld5K4G6sauyJ1AWZPWftr9B/u4Xqbck
+ ZJehxCgULy3x/OJ7UfrtYT53xZyZIXq+STMEezCgWD6cwnyH/gT/pE8EhkbMfNRH7D0E
+ DwQmSnkrcM5Su9WxjdLXvVzs6vtsMW2FmQfRCK71oDs8atlEzgIkdnAzmQins+lc26tr BA== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sc7rxs840-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Aug 2023 09:48:55 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3798FeNw006666;
+        Wed, 9 Aug 2023 09:48:54 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3sa0rt7dt3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Aug 2023 09:48:54 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3799mpag9699906
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Aug 2023 09:48:51 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1A6D920043;
+        Wed,  9 Aug 2023 09:48:51 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 073A020040;
+        Wed,  9 Aug 2023 09:48:51 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed,  9 Aug 2023 09:48:50 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55669)
+        id 9C731E0331; Wed,  9 Aug 2023 11:48:50 +0200 (CEST)
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH] s390/ipl: fix virtual vs physical address confusion
+Date:   Wed,  9 Aug 2023 11:48:50 +0200
+Message-Id: <20230809094850.3918281-1-agordeev@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0ke9H2pObXFBjrAJT0zxT-N1B6DvKbz_
+X-Proofpoint-ORIG-GUID: 0ke9H2pObXFBjrAJT0zxT-N1B6DvKbz_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-09_08,2023-08-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 suspectscore=0 priorityscore=1501 clxscore=1011
+ lowpriorityscore=0 phishscore=0 mlxscore=0 spamscore=0 adultscore=0
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308090084
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Fix virtual vs physical address confusion (which currently are the same).
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+---
+ arch/s390/kernel/machine_kexec_file.c             | 4 ++--
+ arch/s390/kernel/setup.c                          | 2 +-
+ security/integrity/platform_certs/load_ipl_s390.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+diff --git a/arch/s390/kernel/machine_kexec_file.c b/arch/s390/kernel/machine_kexec_file.c
+index 2df94d32140c..8d207b82d9fe 100644
+--- a/arch/s390/kernel/machine_kexec_file.c
++++ b/arch/s390/kernel/machine_kexec_file.c
+@@ -188,7 +188,7 @@ static int kexec_file_add_ipl_report(struct kimage *image,
+ 	data->memsz = ALIGN(data->memsz, PAGE_SIZE);
+ 	buf.mem = data->memsz;
+ 
+-	ptr = (void *)ipl_cert_list_addr;
++	ptr = __va(ipl_cert_list_addr);
+ 	end = ptr + ipl_cert_list_size;
+ 	ncerts = 0;
+ 	while (ptr < end) {
+@@ -200,7 +200,7 @@ static int kexec_file_add_ipl_report(struct kimage *image,
+ 
+ 	addr = data->memsz + data->report->size;
+ 	addr += ncerts * sizeof(struct ipl_rb_certificate_entry);
+-	ptr = (void *)ipl_cert_list_addr;
++	ptr = __va(ipl_cert_list_addr);
+ 	while (ptr < end) {
+ 		len = *(unsigned int *)ptr;
+ 		ptr += sizeof(len);
+diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
+index 393dd8385506..c744104e4a9c 100644
+--- a/arch/s390/kernel/setup.c
++++ b/arch/s390/kernel/setup.c
+@@ -875,7 +875,7 @@ static void __init log_component_list(void)
+ 		pr_info("Linux is running with Secure-IPL enabled\n");
+ 	else
+ 		pr_info("Linux is running with Secure-IPL disabled\n");
+-	ptr = (void *) early_ipl_comp_list_addr;
++	ptr = __va(early_ipl_comp_list_addr);
+ 	end = (void *) ptr + early_ipl_comp_list_size;
+ 	pr_info("The IPL report contains the following components:\n");
+ 	while (ptr < end) {
+diff --git a/security/integrity/platform_certs/load_ipl_s390.c b/security/integrity/platform_certs/load_ipl_s390.c
+index e769dcb7ea94..6723ba9f9ca4 100644
+--- a/security/integrity/platform_certs/load_ipl_s390.c
++++ b/security/integrity/platform_certs/load_ipl_s390.c
+@@ -23,7 +23,7 @@ static int __init load_ipl_certs(void)
+ 	if (!ipl_cert_list_addr)
+ 		return 0;
+ 	/* Copy the certificates to the system keyring */
+-	ptr = (void *) ipl_cert_list_addr;
++	ptr = __va(ipl_cert_list_addr);
+ 	end = ptr + ipl_cert_list_size;
+ 	while ((void *) ptr < end) {
+ 		len = *(unsigned int *) ptr;
+-- 
+2.39.2
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
-
-
-Pozdrawiam serdecznie
-Adam Charachuta
