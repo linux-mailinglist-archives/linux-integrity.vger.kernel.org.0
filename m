@@ -2,89 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4582777C4E
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Aug 2023 17:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28E5777C60
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Aug 2023 17:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbjHJPh0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Aug 2023 11:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S234322AbjHJPiv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Aug 2023 11:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbjHJPh0 (ORCPT
+        with ESMTP id S234282AbjHJPiv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Aug 2023 11:37:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1429C26B7
-        for <linux-integrity@vger.kernel.org>; Thu, 10 Aug 2023 08:37:26 -0700 (PDT)
+        Thu, 10 Aug 2023 11:38:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2655E125;
+        Thu, 10 Aug 2023 08:38:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A07E366030
-        for <linux-integrity@vger.kernel.org>; Thu, 10 Aug 2023 15:37:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976B0C433C8;
-        Thu, 10 Aug 2023 15:37:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B90F166064;
+        Thu, 10 Aug 2023 15:38:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1DB7C433C8;
+        Thu, 10 Aug 2023 15:38:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691681845;
-        bh=C8643SQYATJXOCK+gy5a21oMOmCfCm4rca7AbvzXS2M=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=NLyHjLHV7uFJEVeE/oGNx2RtVo1ZZQvAi2WfJFRUQiUm+KetFOH7AHHb5LkDHwxwy
-         YaX68BKCXuVXk0fhyB0Pg1F3AfY7CZ18n1eB9un1yWZUA9oh7nGBgqlGQdKfyUL6NT
-         bfd1LKX1FYwaq+3i71pQcIGPrAYl7ECBgXxSvEXTvggktDxnKN5CQ+y5Cnr05qiHZX
-         QG2nQ2pzS8iSl6V0okAgS1/KL3s8KORk7LcgofJ99q5/Yj1XOEX09c6oXZfiB2SmA9
-         WFclunoYU3j27tNRSn46RzcXyrULcjtIWduZzDWK5WMJBh6n41zKnIqrdvVOjti6U5
-         KXDYbkZ/YTK2Q==
+        s=k20201202; t=1691681929;
+        bh=xnhTYpWPIFOHSG3sk7givZEYBgSpBgHnBgsNcE+4edw=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=bqQ66ydZ97kMwJSbyiqdJXhdFJImIqG1tDWd2g0EI+CMMAa6fEZba1i0OVQbv/h2S
+         jXwC+xUG6l7x3FPFotosyygXgry40zyrgpKF8CxO9XxDKhm+1wC1MRmJ9IPkwiHxPT
+         tbKLI991PilX3gXXVPNurkACT6n3xSkD6g5WqfLv8EmYERYfkUNqr15XxgyiGd8KIu
+         wj0HXAmoYdwqN5fTeoinZlT9oZY5TXxbAhyFLSSe11vhcC13uMoN2cPKiOu7iR7Fnf
+         LFEJzjSy1uq++EY9nul1ZmFZ+7cGFQZxgRbQnD6QyM2UxgxmP8Gi6hvGelObSjK17e
+         3m+X18AH1x19A==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 10 Aug 2023 18:37:17 +0300
-Message-Id: <CUOZ5VOB1ECG.1KFQVQZES6ITA@wks-101042-mac.ad.tuni.fi>
-Cc:     "Mario Limonciello" <mario.limonciello@amd.com>, <jgg@ziepe.ca>,
-        <linux@dominikbrodowski.net>, <linux-integrity@vger.kernel.org>,
-        <daniil.stas@posteo.net>, <peterhuewe@gmx.de>
-Subject: Re: [PATCH v3] tpm: Disable RNG for all AMD fTPMs
+Date:   Thu, 10 Aug 2023 18:38:39 +0300
+Message-Id: <CUOZ6XAVQ7DS.2UB3SEOKGXOBX@wks-101042-mac.ad.tuni.fi>
+Subject: Re: [PATCH v2 3/6] integrity: remove global variable from
+ machine_keyring.c
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Nayna Jain" <nayna@linux.ibm.com>,
+        <linux-integrity@vger.kernel.org>
+Cc:     "Mimi Zohar" <zohar@linux.ibm.com>,
+        "Eric Snowberg" <eric.snowberg@oracle.com>,
+        "Paul Moore" <paul@paul-moore.com>,
+        "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
 X-Mailer: aerc 0.15.2
-References: <20230803182428.25753-1-mario.limonciello@amd.com>
- <CUK4PB8J51W8.2NQ3CSI1HNLDR@wks-101042-mac.ad.tuni.fi>
- <6bfc61fb-6432-cb17-3312-53c6268e2a46@amd.com>
- <CUK5NKQKDAWO.2RCNF768IKZ9Q@wks-101042-mac.ad.tuni.fi>
- <ZNFv8f3r86zq3JSh@zx2c4.com> <f7f9be14-b5f6-4c2c-a4e3-8d44bfa4b36c@amd.com>
- <ZNGOpFbH43qQ/v5T@zx2c4.com>
- <CAHk-=whT2hf5f6SwK32J4cF2Yu+q9SZaO6JZVzBOsLz63uPW1w@mail.gmail.com>
- <ZNJ5IZjpOdOBFFja@zx2c4.com>
- <CAHk-=whQFZ=KqUWiFUP7s=t4tKs8Aga=Gq5LvS5Ugyk-nMTF1w@mail.gmail.com>
-In-Reply-To: <CAHk-=whQFZ=KqUWiFUP7s=t4tKs8Aga=Gq5LvS5Ugyk-nMTF1w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230809195315.1085656-1-nayna@linux.ibm.com>
+ <20230809195315.1085656-4-nayna@linux.ibm.com>
+In-Reply-To: <20230809195315.1085656-4-nayna@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Aug 9, 2023 at 8:06 PM EEST, Linus Torvalds wrote:
-> On Tue, 8 Aug 2023 at 10:19, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > Alright, looks like Mario took care of that:
+On Wed Aug 9, 2023 at 10:53 PM EEST, Nayna Jain wrote:
+> trust_mok variable is accessed within a single function locally.
 >
-> Ok, I just took that patch directly, so that we can close this issue.
+> Change trust_mok from global to local static variable.
 >
-> It's
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> Reviewed-and-tested-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  security/integrity/platform_certs/machine_keyring.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
->     cacc6e22932f ("tpm: Add a helper for checking hwrng enabled")
->
-> in my tree, and I'll push out shortly after it's gone through my trivial =
-tests.
->
->                   Linus
+> diff --git a/security/integrity/platform_certs/machine_keyring.c b/securi=
+ty/integrity/platform_certs/machine_keyring.c
+> index 389a6e7c9245..9482e16cb2ca 100644
+> --- a/security/integrity/platform_certs/machine_keyring.c
+> +++ b/security/integrity/platform_certs/machine_keyring.c
+> @@ -8,8 +8,6 @@
+>  #include <linux/efi.h>
+>  #include "../integrity.h"
+> =20
+> -static bool trust_mok;
+> -
+>  static __init int machine_keyring_init(void)
+>  {
+>  	int rc;
+> @@ -65,9 +63,11 @@ static __init bool uefi_check_trust_mok_keys(void)
+>  bool __init trust_moklist(void)
+>  {
+>  	static bool initialized;
+> +	static bool trust_mok;
+> =20
+>  	if (!initialized) {
+>  		initialized =3D true;
+> +		trust_mok =3D false;
+> =20
+>  		if (uefi_check_trust_mok_keys())
+>  			trust_mok =3D true;
 
-Thank you.
+Nice catch.
 
-I'm still sending a small PR with fixup to disable tpm_tis irq usage
-across the board tonight or tomorrow morning (GMT+3).
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
