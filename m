@@ -2,106 +2,144 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28E5777C60
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Aug 2023 17:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6D3777F40
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Aug 2023 19:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbjHJPiv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Aug 2023 11:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        id S232996AbjHJRfX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Aug 2023 13:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234282AbjHJPiv (ORCPT
+        with ESMTP id S231319AbjHJRfX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Aug 2023 11:38:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2655E125;
-        Thu, 10 Aug 2023 08:38:50 -0700 (PDT)
+        Thu, 10 Aug 2023 13:35:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EFAC1;
+        Thu, 10 Aug 2023 10:35:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B90F166064;
-        Thu, 10 Aug 2023 15:38:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1DB7C433C8;
-        Thu, 10 Aug 2023 15:38:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37F2163C56;
+        Thu, 10 Aug 2023 17:35:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B60FFC433C8;
+        Thu, 10 Aug 2023 17:35:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691681929;
-        bh=xnhTYpWPIFOHSG3sk7givZEYBgSpBgHnBgsNcE+4edw=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=bqQ66ydZ97kMwJSbyiqdJXhdFJImIqG1tDWd2g0EI+CMMAa6fEZba1i0OVQbv/h2S
-         jXwC+xUG6l7x3FPFotosyygXgry40zyrgpKF8CxO9XxDKhm+1wC1MRmJ9IPkwiHxPT
-         tbKLI991PilX3gXXVPNurkACT6n3xSkD6g5WqfLv8EmYERYfkUNqr15XxgyiGd8KIu
-         wj0HXAmoYdwqN5fTeoinZlT9oZY5TXxbAhyFLSSe11vhcC13uMoN2cPKiOu7iR7Fnf
-         LFEJzjSy1uq++EY9nul1ZmFZ+7cGFQZxgRbQnD6QyM2UxgxmP8Gi6hvGelObSjK17e
-         3m+X18AH1x19A==
+        s=k20201202; t=1691688921;
+        bh=YwX3wVOuwREy+Nchdv0hP99Kg3aAymCQeLk99JQyD7M=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=d3uIy2jVnlFrhKjZMVIRwOSMbeA4D8RdLuCXnqOr05lrYmR3AyrGNzwdIk+FDq/rA
+         CxQwF4QFTugsbXMh8fcSwsavyde78w2UiTxZmyfTvYh9otBJ23D7wdY9MgTH5sqWSO
+         eFhqLorQbk42hnJTKtOCGcn8teGYup5C+Jpf9+ee+/ce0ZswAKQMtZIMShgabKUmIz
+         d6KitcahmYmxhze1TEnzS6OUg08JVYA2NzS9tsndm+++WclFz9OeDRSsECRzuANlZw
+         jIeWsGmIZkPh+izjl64awbMaC7gZ20lweusJK1YieC3OjPbZTJ67K2aD9mE4R8oFtQ
+         bsag5YVvRT18w==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 10 Aug 2023 18:38:39 +0300
-Message-Id: <CUOZ6XAVQ7DS.2UB3SEOKGXOBX@wks-101042-mac.ad.tuni.fi>
-Subject: Re: [PATCH v2 3/6] integrity: remove global variable from
- machine_keyring.c
+Date:   Thu, 10 Aug 2023 20:35:16 +0300
+Message-Id: <CUP1O7LTI58J.1VQMCH1YS0EXR@suppilovahvero>
+Cc:     "Peter Huewe" <peterhuewe@gmx.de>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts for Lenovo Thinkpad E14
+ Gen 2 and 13s-IML
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Nayna Jain" <nayna@linux.ibm.com>,
-        <linux-integrity@vger.kernel.org>
-Cc:     "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Eric Snowberg" <eric.snowberg@oracle.com>,
-        "Paul Moore" <paul@paul-moore.com>,
-        "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.15.2
-References: <20230809195315.1085656-1-nayna@linux.ibm.com>
- <20230809195315.1085656-4-nayna@linux.ibm.com>
-In-Reply-To: <20230809195315.1085656-4-nayna@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     "Takashi Iwai" <tiwai@suse.de>
+X-Mailer: aerc 0.14.0
+References: <20230807140125.18486-1-tiwai@suse.de>
+ <CUMJWFCIG9EI.13F7LU8TYAUE1@seitikki> <87il9qhxjq.wl-tiwai@suse.de>
+ <CUOYJI68K3KG.39YM92JXBEIQ9@wks-101042-mac.ad.tuni.fi>
+ <87ttt7rkpq.wl-tiwai@suse.de>
+In-Reply-To: <87ttt7rkpq.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Aug 9, 2023 at 10:53 PM EEST, Nayna Jain wrote:
-> trust_mok variable is accessed within a single function locally.
+On Thu Aug 10, 2023 at 6:16 PM EEST, Takashi Iwai wrote:
+> On Thu, 10 Aug 2023 17:08:04 +0200,
+> Jarkko Sakkinen wrote:
+> >=20
+> > On Tue Aug 8, 2023 at 9:12 AM EEST, Takashi Iwai wrote:
+> > > On Mon, 07 Aug 2023 21:14:20 +0200,
+> > > Jarkko Sakkinen wrote:
+> > > >=20
+> > > > On Mon Aug 7, 2023 at 2:01 PM UTC, Takashi Iwai wrote:
+> > > > > Like other Lenovo laptops, Thinkpad E14 Gen 2 and Thinkpad 13s-IM=
+L
+> > > > > also require to disable the tpm_tis interrupts for avoiding a boo=
+t
+> > > > > hang.
+> > > > >
+> > > > > Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+> > > > > Cc: <stable@vger.kernel.org> # v6.4+
+> > > > > Link: https://bugzilla.suse.com/show_bug.cgi?id=3D1213779
+> > > > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> > > > >
+> > > > > ---
+> > > > >  drivers/char/tpm/tpm_tis.c | 16 ++++++++++++++++
+> > > > >  1 file changed, 16 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_ti=
+s.c
+> > > > > index a98773ac2e55..0633823dc515 100644
+> > > > > --- a/drivers/char/tpm/tpm_tis.c
+> > > > > +++ b/drivers/char/tpm/tpm_tis.c
+> > > > > @@ -130,6 +130,22 @@ static const struct dmi_system_id tpm_tis_dm=
+i_table[] =3D {
+> > > > >  			DMI_MATCH(DMI_PRODUCT_NAME, "Laptop (13th Gen Intel Core)"),
+> > > > >  		},
+> > > > >  	},
+> > > > > +	{
+> > > > > +		.callback =3D tpm_tis_disable_irq,
+> > > > > +		.ident =3D "ThinkPad E14 Gen 2",
+> > > > > +		.matches =3D {
+> > > > > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> > > > > +			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad E14 Gen 2"),
+> > > > > +		},
+> > > > > +	},
+> > > > > +	{
+> > > > > +		.callback =3D tpm_tis_disable_irq,
+> > > > > +		.ident =3D "ThinkBook 13s-IML",
+> > > > > +		.matches =3D {
+> > > > > +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> > > > > +			DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo ThinkBook 13s-IML"),
+> > > > > +		},
+> > > > > +	},
+> > > > >  	{
+> > > > >  		.callback =3D tpm_tis_disable_irq,
+> > > > >  		.ident =3D "ThinkPad T490s",
+> > > > > --=20
+> > > > > 2.35.3
+> > > >=20
+> > > > As almost all issues are with Lenovo, I would instead just put:
+> > > >=20
+> > > > 	{
+> > > > 		.callback =3D tpm_tis_disable_irq,
+> > > > 		.matches =3D {
+> > > > 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> > > > 		},
+> > > > 	},
+> > > >=20
+> > > > And delete the existing entries with vendor as "LENOVO".
+> > >
+> > > Yeah, that will relieve pains better, too.
+> >=20
+> > Please do it if possible then :-)
 >
-> Change trust_mok from global to local static variable.
+> Do you mean that I should resubmit a new patch?
+> Honestly speaking, it'd be easier if you can do it directly.
+> I'm merely a sort of messenger, I don't own / test the device by
+> myself...
 >
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> Reviewed-and-tested-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  security/integrity/platform_certs/machine_keyring.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/security/integrity/platform_certs/machine_keyring.c b/securi=
-ty/integrity/platform_certs/machine_keyring.c
-> index 389a6e7c9245..9482e16cb2ca 100644
-> --- a/security/integrity/platform_certs/machine_keyring.c
-> +++ b/security/integrity/platform_certs/machine_keyring.c
-> @@ -8,8 +8,6 @@
->  #include <linux/efi.h>
->  #include "../integrity.h"
-> =20
-> -static bool trust_mok;
-> -
->  static __init int machine_keyring_init(void)
->  {
->  	int rc;
-> @@ -65,9 +63,11 @@ static __init bool uefi_check_trust_mok_keys(void)
->  bool __init trust_moklist(void)
->  {
->  	static bool initialized;
-> +	static bool trust_mok;
-> =20
->  	if (!initialized) {
->  		initialized =3D true;
-> +		trust_mok =3D false;
-> =20
->  		if (uefi_check_trust_mok_keys())
->  			trust_mok =3D true;
+> But if inevitably required, I can resubmit a patch, of course.
 
-Nice catch.
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+I'll submit a patch asap, and cc you. I put the conclusions
+to the description.
 
 BR, Jarkko
