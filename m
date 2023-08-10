@@ -2,222 +2,165 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B250776F27
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Aug 2023 06:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A612777452
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Aug 2023 11:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjHJEnZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Aug 2023 00:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
+        id S234813AbjHJJV0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Aug 2023 05:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjHJEnY (ORCPT
+        with ESMTP id S234776AbjHJJVL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Aug 2023 00:43:24 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 979D91982;
-        Wed,  9 Aug 2023 21:43:23 -0700 (PDT)
-Received: from [192.168.87.33] (c-98-237-170-177.hsd1.wa.comcast.net [98.237.170.177])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A0BBF20FC4EA;
-        Wed,  9 Aug 2023 21:43:22 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A0BBF20FC4EA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1691642603;
-        bh=+DWHuLIIJxSXS0lU56QFsDV+CHctvOnp6IE9qUIPFpw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GrwXMWX6LH8U2AqCe10fUsLzaM06uERFLo+aBdXSh5ba7sa8H77oV9SoSl5qX8yFc
-         KfFaTemy6fxd4oELL5MrGlc4p73ScVS8polhHNbXHreTpvRGLHTdE0eGzGdcZAl5se
-         9bC1S/xkS9cuDLjg9fMsIzIUhm7k9nFT112Ic5A0=
-Message-ID: <5cb03349-7a32-8f74-f2a1-ff3c6247c1ef@linux.microsoft.com>
-Date:   Wed, 9 Aug 2023 21:43:22 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RFC] IMA Log Snapshotting Design Proposal
+        Thu, 10 Aug 2023 05:21:11 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE5C49FD;
+        Thu, 10 Aug 2023 02:19:54 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 379LrI9Z030101;
+        Thu, 10 Aug 2023 02:18:58 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-id : mime-version;
+ s=s2048-2021-q4; bh=ECbYKy5KcRwshJ7/UEpJhtUT2ZIvB35haOCJn5Nfeyo=;
+ b=XGopA0qtBScInCYGTe5EUSSe4z8f+wS/eBm2cX2/WTXWEAFYUvL1l1Pntp+GEK/ZaaCc
+ P4/7ePLmIYZ13QXtbniRB5idttHTLD6PZpHmz0ECJZkRN48E9NDrgcxO6x7oA+n4GHKh
+ KLG+9SZYg5I7f/rAWUYdmC9qXfebMAbL0fEsFU7Sa0WoPazNJR665XUmvKhsZUc4QuUY
+ 4poFnOPaEJQN7voUFs397fMNyiD5y2Bh1o8rxCcj6gqKryHOzk9piIxQkS3paKFCe1uW
+ lr8BWxZn4Dg7Wt5ZcGarNmyUDY8UQZMEVcg7wypbHAgVurYdKB8DG5x8aa8I3qpPVE9P +A== 
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2048.outbound.protection.outlook.com [104.47.57.48])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3sc9v094jn-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Aug 2023 02:18:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QbhLxcrY6Awte+M+QD6n8wbWGXn4NWHjyNbvVgBlOOrqXWWtDf/Ke3YZxZv4mOcIL0LX1Fii9OuPtQGfutu+4B8UYsF5DbC1irxTqTOo+B+eDUZYnBHcvDxBHLKD02l64fgsOcKdrf8WWTHJNgu4Eo49bZfd9EJ5eYFKIUb+7e1HYiQjbt3+AQEROyvz4ohYVwd+7inlo3ecWBdmMk5q5hgwXVMcUAha0TZ3FnEYsgU5C8O9PzPw8bTeKuUSFIU7slBc7D88w7DQaM+LygVhVKyOVHJ/+NhWXxgGafS6q5rF/ceqUr62tCJzt6CSDC9wpdze9w6Rbz9/lUoBUx+hMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ECbYKy5KcRwshJ7/UEpJhtUT2ZIvB35haOCJn5Nfeyo=;
+ b=KI2/DjAsSNiFl2HI4VLGLJxgX+c9xj7922Fwm4WGC1rpUCOwgFA8XQJOt7uvLlQzVIEfYEDdoBPVXGSOdSPnpha7uYjhS0a8yOZJoZc5DRRxzbw1UVFX1qN6G5qAPc7YdwjltWG8/jrLbOIL2xZSwqLnpralUuHGCN42nXIyWHl/EpzGnx9e/l6VAPcf4TaoLcwGka1a9s3cn6nwsuA4EQ+v21tcq/6sU45CZvhim2qEQdJmebojs2IhuhxZPQiCFWDOYwSmKxGw6LuP71P07C9JY89oYXnEQem6xMc5an0nMHRcIqzukjVjbOcSKR4/wEBcSufrYckuCGOLErSN+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA0PR15MB3997.namprd15.prod.outlook.com (2603:10b6:806:84::21)
+ by PH0PR15MB4845.namprd15.prod.outlook.com (2603:10b6:510:a6::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.28; Thu, 10 Aug
+ 2023 09:18:55 +0000
+Received: from SA0PR15MB3997.namprd15.prod.outlook.com
+ ([fe80::fdb:2c72:511d:1b3]) by SA0PR15MB3997.namprd15.prod.outlook.com
+ ([fe80::fdb:2c72:511d:1b3%3]) with mapi id 15.20.6652.029; Thu, 10 Aug 2023
+ 09:18:54 +0000
+From:   Jonathan McDowell <noodles@meta.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+CC:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] tpm/tpm_tis: Disable interrupts for MSI GS66 Stealth 11UG
+Thread-Topic: [PATCH] tpm/tpm_tis: Disable interrupts for MSI GS66 Stealth
+ 11UG
+Thread-Index: AQHZy2uvJhqtBOgeUUqhgtaOcrpo8Q==
+Date:   Thu, 10 Aug 2023 09:18:54 +0000
+Message-ID: <20230810091851.GA1088011@noodles-fedora.dhcp.thefacebook.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Sush Shringarputale <sushring@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        kgold@linux.ibm.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, kexec@lists.infradead.org, jmorris@namei.org,
-        Paul Moore <paul@paul-moore.com>, serge@hallyn.com
-Cc:     code@tyhicks.com, nramas@linux.microsoft.com,
-        linux-security-module@vger.kernel.org
-References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
- <b748230c8ee291288afcf48898507556c3aa7c71.camel@HansenPartnership.com>
- <5d21276a-daac-fc9b-add9-62e7c04bbdcd@linux.ibm.com>
- <8ad131f35c33cf10788344be6c981473971f9c1c.camel@HansenPartnership.com>
- <abe53dde-9a83-81fd-422d-babf4587c545@linux.ibm.com>
- <350ecdcbf7796f488807fcd7983414a02dd71be4.camel@HansenPartnership.com>
- <04fb2fe5-9ebe-b35f-bdde-6ef22786438f@linux.ibm.com>
- <a522b17a536ea87a6a4c2faf95583ae3b7b74a26.camel@HansenPartnership.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <a522b17a536ea87a6a4c2faf95583ae3b7b74a26.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-20.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA0PR15MB3997:EE_|PH0PR15MB4845:EE_
+x-ms-office365-filtering-correlation-id: af6bad54-d48c-4280-f0be-08db9982d1c4
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UNkCkHSXMGQHv7Kly9oqseU6kqrdz0opD5iyonLe67CdA22msk4yJt5FZ1leVs1dJ+wpQMe3gBc9D1r3QzlYtENSCHRTqg3juHC5lyzj67jgMVkhUex0vshzDrRTSEMkDLqdWMLGETtVFGlwTE+VbetVZn+sCXb4Zy71E+f5CSmrpT5zfL08cl/gY7VxyVhyobLFovOs7+WNW2D55oM9tq9gqQj+woJzL3MdnZnl+F82U/UKpyYktvZ55D67+p9mc/M9qMuWb4m6UIHw1za/oSfHh3c6w3AjGqqiwYZ+UpR0ygMtqeiTWXwSpnEtiEcdySo1BkbgPChDGUC3jVdt8/vK+bv+9ON/UqxZ4sFuQZFBw110NrTIvEATjt/XYHcR6siyw1oeaZIBND9heq9aPfUot9GuFNDdZcBkpC404blZCiw7Jr8Pq05cqTZy4wan4M9lESiZ2+vp+tujt7CgmhVv4eRvhZN3LoGz+KnIx0WG/SihWDPCItoVKFPnRcqJuKnbTLUM/eJANkdX278RB4hlXEJO807jblo4swZfbfAXbHvQnYWTzlRkoEU/JxUxGKqUm5CBYbXEm+kxBBVI+bUsVRCeyQ4iBkmR+foaai0v3aUaB6h5sX5MbLXNR1V1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR15MB3997.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(136003)(376002)(346002)(366004)(451199021)(186006)(1800799006)(4744005)(2906002)(41300700001)(316002)(38070700005)(5660300002)(8676002)(8936002)(33656002)(86362001)(122000001)(71200400001)(38100700002)(54906003)(110136005)(478600001)(26005)(1076003)(6506007)(6512007)(9686003)(76116006)(6486002)(4326008)(91956017)(66946007)(66476007)(66446008)(64756008)(83380400001)(66556008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DaLIFubDHMNuhlADE1SQ0A+sdYwMmGls1MTRNabh4fk5D0lX1q92TPcqNgFv?=
+ =?us-ascii?Q?4nqCttn5rGoa989sPOFVpDogoHUh4gAaVtAC1GbWvZvttpjGnE6xBi7D0grB?=
+ =?us-ascii?Q?LxmvuYew0RA+FRbqQ0PS1OaUAdHObHguVyCPdEuwcYfV1OvmXkMUxfjnjqWX?=
+ =?us-ascii?Q?dC5+NIBye1qlnZFaNxSSU55G9ZEOPFpnOfhhTs/FI636ZEkjmb5JICiEEBj2?=
+ =?us-ascii?Q?Uch674+LxHxtzBHwSSbQ+48FEybNFjNkj2iAAK7GkfLfB5F1UZj0ihnYZ3CP?=
+ =?us-ascii?Q?c7vinYUrSJ2G0YP+zm/TAxdUW4zoqOY+mYYElXDwHCHXJgARWh3DgwY7q1Do?=
+ =?us-ascii?Q?wNUDkEtEFfVdMZ5l0D+QTyptlFSDrx9hUiG6CUHccLluC2AKcQUua8rCenRp?=
+ =?us-ascii?Q?B5Ds1TTU4eb+axYGUzTVI6KE/udB5PB+CL9i4UhemnVDSgvQFuU0/0eYhnUr?=
+ =?us-ascii?Q?O9FEvXMQZeRmIfA/DfZh5Xh/mwFLM5KEfhUAqDhZPoLqMg9pPIk+CGDk/HS2?=
+ =?us-ascii?Q?D3BHLeDavytMDL6ApU2BVtbGZx1fszJYNF6DnSwg++Ek314+8/wdYqgaFRZN?=
+ =?us-ascii?Q?I8Zd3PTmH/umVw9iaJ0rdjImiEmwlzQjQqxtmIPaBVd6btxOiOckVJkSAELY?=
+ =?us-ascii?Q?UynCxoQZXvVxv+ImLR+mQ+e+B4F1V/kypusY9RCXXTn+6for5R8rW/Y4JlaI?=
+ =?us-ascii?Q?ux5qZTmJJLEGp8QYI4zIyITT1xov8lBOZfsgacdgeEWKUsiq/WyOfD5t21WK?=
+ =?us-ascii?Q?78wggW+EEAksVM6F2QYwfUc6Qz9CYwqSKb+fiX/08Ksj/h1EfuGmaJNEsUGu?=
+ =?us-ascii?Q?Xmh6a0f+c9GrKpBiIs1vj0/nm4jwJYWJFLxa8eUq6l8j5fMfOsnVyIl73WzP?=
+ =?us-ascii?Q?kTSrjHYIK4BrYcWU9eaSA/95DAtbs+yjxT2dXSDIJdW0gQ0ddwqPVlZfLqDW?=
+ =?us-ascii?Q?O06WeimSYjwgooUF0mgB3Z3wRSuUdoGQ4vb+79yjbcYf4J15/VfIOfVxfnpq?=
+ =?us-ascii?Q?hW++OY3UXXJnROTE/3Ptn7s/qwNMepUBDWRUz3b5RW6T/ozXsk4zKES5wRS2?=
+ =?us-ascii?Q?mIF8vjxVFEz1VA/v3HaUZLwQtSW2GPTbBnQIU1OpmMeU4rpT0h0PYmlJPF89?=
+ =?us-ascii?Q?IOyxNe0Hac2QS0Gb4nz1WkVprbPk04Ol8i+xNQ4njrcgtWJqLbS+bJHjW4/5?=
+ =?us-ascii?Q?kCx9CoKadfkoxmln+xpL3DA7ZW7M8G+G7ldRoIrISA8Rzvh/MIRPhYro9/HI?=
+ =?us-ascii?Q?mrpxekzQLsNsolJWP4lES5EzaAQd4Gqpa1c1kv/uJCojffB5v6T0Aq3nt1RT?=
+ =?us-ascii?Q?q+XkkHF8PT+i83I4WQhPNelSYCKJPkuiFfiDv7WtsbTc64nnBJk7mcHHPNqb?=
+ =?us-ascii?Q?KpPDn85p8m2K4g03UtuRVxo/k9y9FdrhSTZGxtDNW93Zs2+UW2EAaGtQ0d27?=
+ =?us-ascii?Q?d+JoWHn72ENS6ht2yPH4qT2gnaFwcdRmB/5temu3DNHzO2V1Kr2zoDebip6M?=
+ =?us-ascii?Q?gjVh/FoCEJSI6defNOh2SoXYSPLbq0B4x33lF1V9Km0Ud5VDaQHC3lgz+95u?=
+ =?us-ascii?Q?zuXFOhZgBUIa/QaUSOabCNGimm+QYM0TNhXDyl5g?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <60AE0870EF5FF642B7ED5B41A0F04B0E@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR15MB3997.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af6bad54-d48c-4280-f0be-08db9982d1c4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2023 09:18:54.6709
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0zws8TSdZCksoDsS9yNTLQQER4q3ge0Kfj/wSmoPZMZ2BoCchW1CL+xsh9U4vW9Iq3MEpPZrKJxRS2cAHzfXSw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB4845
+X-Proofpoint-GUID: HGK1obO8AwfFzuMFRESV4x3X5zLd5wmz
+X-Proofpoint-ORIG-GUID: HGK1obO8AwfFzuMFRESV4x3X5zLd5wmz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-10_08,2023-08-09_01,2023-05-22_02
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+The MSI GS66 Stealth 11UG laptop also suffers from an IRQ problem with
+tpm_tis, causing the TPM to be inaccessible. Add an entry to
+tpm_tis_dmi_table to force polling mode.
 
+Cc: stable@vger.kernel.org # v6.4+
+Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+Signed-off-by: Jonathan McDowell <noodles@meta.com>
+---
+ drivers/char/tpm/tpm_tis.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-On 8/8/23 14:41, James Bottomley wrote:
-> On Tue, 2023-08-08 at 16:09 -0400, Stefan Berger wrote:
->>
->> On 8/8/23 14:26, James Bottomley wrote:
->>> On Tue, 2023-08-08 at 09:31 -0400, Stefan Berger wrote:
->>>>
->>>> On 8/8/23 08:35, James Bottomley wrote:
->>>>> On Mon, 2023-08-07 at 18:49 -0400, Stefan Berger wrote:
->>>>>>
->>>>>> On 8/1/23 17:21, James Bottomley wrote:
->>>>>>> On Tue, 2023-08-01 at 12:12 -0700, Sush Shringarputale
->>>>>>> wrote:
->>>>>>> [...]
->>>>>>>> Truncating IMA log to reclaim memory is not feasible,
->>>>>>>> since
->>>>>>>> it makes the log go out of sync with the TPM PCR quote
->>>>>>>> making
->>>>>>>> remote attestation fail.
->>>>>>> This assumption isn't entirely true.  It's perfectly
->>>>>>> possible
->>>>>>> to shard an IMA log using two TPM2_Quote's for the
->>>>>>> beginning
->>>>>>> and end PCR values to validate the shard.  The IMA log
->>>>>>> could be
->>>>>>> truncated in the same way (replace the removed part of the
->>>>>>> log
->>>>>>> with a TPM2_Quote and AK, so the log still validates from
->>>>>>> the
->>>>>>> beginning quote to the end).
->>>>>>>
->>>>>>> If you use a TPM2_Quote mechanism to save the log, all you
->>>>>>> need
->>>>>>> to do is have the kernel generate the quote with an
->>>>>>> internal
->>>>>>> AK.  You can keep a record of the quote and the AK at the
->>>>>>> beginning of the truncated kernel log.  If the truncated
->>>>>>> entries are saved in a file shard it
->>>>>> The truncation seems dangerous to me. Maybe not all the
->>>>>> scenarios
->>>>>> with an attestation client (client = reading logs and
->>>>>> quoting)
->>>>>> are possible then anymore, such as starting an attestation
->>>>>> client
->>>>>> only after truncation but a verifier must have witnessed the
->>>>>> system's PCRs and log state before the truncation occurred.
->>>>> That's not exactly correct.  Nothing needs to have "witnessed"
->>>>> the
->>>>> starting PCR value because the quote vouches for it (and can
->>>>> vouch
->>>>> for it after the fact).  The only thing you need to verify the
->>>>> quote is the attestation key and the only thing you need to do
->>>>> to
->>>>> trust the attestation key is ensure it was TPM created.  All of
->>>>> that can be verified after the fact as well.  The only thing
->>>>> that
->>>>> can be done to disrupt this is to destroy the TPM (or re-own
->>>>> it).>
->>>>> Remember the assumption is you *also* have the removed log
->>>>> shard to
->>>>> present.  From that the PCR state of the starting quote can be
->>>> Yes, the whole sequence of old logs needs to be available.
->>> Yes and no.  If the person relying on the logs is happy they've
->>> extracted all the evidentiary value from the log itself then they
->>> can
->>> reduce the preceding log shard to simply the PCR values that match
->>> the
->>> quote and discard the rest.
->>>
->>>>    IF that's the case and the logs can be stitched together
->>>> seamlessly, who then looks at the kernel AK quote and under what
->>>> circumstances?
->>> For incremental attestation.  Each log shard can be verified using
->>> the base PCR values corresponding to the bottom quote then replayed
->>> and the
->>
->> Somehow you have to tell a verifier to take a snapshot of the current
->> state of the PCRs when it replays the logs to be able to truncate the
->> log.
-> No, the verifier is server side.  It would be the agent or the kernel,
-> client side, which gets the quote and shards the log.  That way the
-> operation can be done in such a way as to make sure the quote and the
-> shard point match.  I'd imagine the verifier can provide some sort of
-> guide as to how big it wants the shards to be and the client complies.
-Yup. Agreed.
->> Whether the state of the PCRs is in the log itself or it's just some
->> sort of entry in the log indicating a truncation probably doesn't
->> matter for as long as the verifying side keeps state of the PCRs at
->> point of truncatiokn.
-> The idea would be the log shard would be self attesting, that's why
-> quote at beginning and end (and probably PCR state at beginning), so no
-> verifier required until someone wants to check the log.
->
->> Also, the verifying side needs to take notice of the trustworthiness
->> of the system at the time the log was truncated in case the
->> attestation client is restarted and starts out sending the log with
->> the first entry.
-> That's usually what a runtime verification system is actually
-> verifying, yes.
->
->>   The PCR state shown at the beginning of the truncated log (when
->> restarting the attestation client) must then match when the 'notice'
->> was taken and that determines its trustworthiness at this point in
->> the log.
->>
->> That there's a kernel AK signature
-> A quote is a signature over PCR state signed by an AK, yes.
->
->>   at this point doesn't seem necessary since one presumably can verify
->> the log and PCR states at the end with the 'regular' quote.
-> I don't understand this.  A regular quote is a signature over PCR state
-> by an AK.  The point about saving the AK in the log for the original is
-> that if the *kernel* truncates the log and saves it to a file, it needs
-> to generate both the AK and the quote for the top of the file shard.
-> That means the AK/EK binding is unverified, but can be verified by
-> loading the AK and running the usual tests, which can only be done if
-> you have the loadable AK, which is why you need it as part of the log
-> saving proposal.
-I had this question about the usability of AK/EK in this
-context. Although AK/EK + PCR quote is needed to verify the snapshot
-shards / IMA logs are not tampered with, I am still not sure why AK/EK
-needs to be part of the shard/IMA log. The client sending AK/EK to
-attestation service separately would still serve the purpose, right?
-
-For instance, PCR quotes will be signed by AK. So as long as the verifier
-trusts the AK/EK, it can verify the quotes are not tampered with.
-Replaying IMA log/snapshot can produce the PCR quotes which can be
-matched with signed PCR quotes. If they match, then the verifier can
-conclude that the IMA log is not tampered with. So AK doesn't need to
-be part of the log/snapshot.
-
-BTW, in this proposal, kernel is truncating the log and passing the
-truncated buffer to UM.  UM client need to save it to the disk location
-of it's choice.
-
-
->> Nobody should ever trust a system by starting to look at the
->> beginning of a truncated log. You have to have evaluated all the
->> entries in the log before and determined whether the system was
->> trustworthy. I don't think the kernel AK quote buys much - at least
->> not from what I can see.
-> You have a log shard with PCR state at the beginning and calculated at
-> the end, both of which you can verify.  How you establish trust in the
-> starting PCR values of the shard is a policy decision, but the policy
-> doesn't have to be you see every shard up to boot.  You could take the
-> word of the system owner on a handoff of responsibility for instance.
-Agreed. You don’t have to go all the way to the boot snapshot
-(shard).  It is up to the attestation service which last-known-good PCR
-quotes (sometimes referred as golden PCR quotes) it trusts, and verify
-the snapshots / logs after that.
-
-~Tushar
-
-> James
-
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index ac4daaf294a3..14dee959ee19 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -130,6 +130,14 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "Laptop (13th Gen Intel Core)"),
+ 		},
+ 	},
++	{
++		.callback = tpm_tis_disable_irq,
++		.ident = "MSI GS66 Stealth 11UG",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Micro-Star International Co., Ltd."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "GS66 Stealth 11UG"),
++		},
++	},
+ 	{
+ 		.callback = tpm_tis_disable_irq,
+ 		.ident = "ThinkPad T490s",
+-- 
+2.41.0
