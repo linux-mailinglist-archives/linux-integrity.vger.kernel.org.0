@@ -2,56 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD2E7782B4
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Aug 2023 23:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A657782E6
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Aug 2023 23:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjHJVav (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Aug 2023 17:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
+        id S230033AbjHJVyM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Aug 2023 17:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjHJVav (ORCPT
+        with ESMTP id S229707AbjHJVyL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Aug 2023 17:30:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A4026A0;
-        Thu, 10 Aug 2023 14:30:50 -0700 (PDT)
+        Thu, 10 Aug 2023 17:54:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159FAED;
+        Thu, 10 Aug 2023 14:54:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B31F64AA0;
-        Thu, 10 Aug 2023 21:30:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDAF1C433C7;
-        Thu, 10 Aug 2023 21:30:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8B1863AB5;
+        Thu, 10 Aug 2023 21:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E3BC433C8;
+        Thu, 10 Aug 2023 21:54:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691703049;
-        bh=HwppCFPvwSwZx+wlLwGlbLVfLPSGego30HtZ0L4HvQM=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=IMqNoFk7JXYVGd6jH3jDBTjTxiqE9IECKfWOkS6Qgk+rlo/KlU+QnlNlYqbvL7xU7
-         QjYJ+UJ3yRGp2MKUCD8dfs52rRrJs3Flo1O+HmgKWdFqFtn+kHB4nTgIGJf1h4BriQ
-         WAHbapPKuNOmohS74HIji0NgKai1JhjArjU+8f3EQ/Osq1g35mmmjSjFwQ/8YojfMm
-         IQEiax56RX6H+YMhT1eF5XXn7VDf4WbH/nAbvp4lwBFE15V4DBiwVX85u8f2Sj0YOU
-         tLVw7srzl7npvlNs0TTZcQaMccVhem8KpHfKUkeyOsej/E98BQ37fpaogkc5Ut/RM6
-         cXqAbdqCs6jQw==
+        s=k20201202; t=1691704450;
+        bh=zHlbC4DhGyvqqyiP84nv86Xr6u7c4WwQ5xngbfFhFuk=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=kmF1F8xDR5Lmybalh/o8eQmpCMGiYsVpMq6CJcn6OamF7Spr1QQHH8WlyEzGrMlfv
+         kW0MjOhksTi1L4FoVEo1p2qPGJrEdfFUyshVyUfOEY0CCjEtCCi56sLJwLS0MOAgfH
+         eSMQbcFzNXIvFYm7M9n80PUs1Nf38rLfvvw2R/ivjrtuFDTkM4SSeyfrbqN9cRVO19
+         Pzg5ekjcVkNZHdIDO6o/R3EjkFOjX7Wq7Ymo3b87C6wIS3TNdfNWbmYAViw/ZF6qF5
+         ZZHnKFD14FrPOLFgWwFDEu9XWJAujA/9LHHe1vLX4kB9Rc+Ai9BjgQKa31mCXNOmiu
+         8apXYvpiXlzCg==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 11 Aug 2023 00:30:45 +0300
-Message-Id: <CUP6OI811G6B.1TN6YQTBRA81A@suppilovahvero>
+Date:   Fri, 11 Aug 2023 00:54:05 +0300
+Subject: Re: [PATCH v2 6/6] integrity: PowerVM support for loading third
+ party code signing keys
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Nayna Jain" <nayna@linux.ibm.com>,
+        <linux-integrity@vger.kernel.org>
 Cc:     "Mimi Zohar" <zohar@linux.ibm.com>,
         "Eric Snowberg" <eric.snowberg@oracle.com>,
         "Paul Moore" <paul@paul-moore.com>,
         "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/6] integrity: PowerVM machine keyring enablement
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Nayna Jain" <nayna@linux.ibm.com>,
-        <linux-integrity@vger.kernel.org>
+Message-Id: <CUP754GCFF2H.15G672KXVX5AJ@suppilovahvero>
 X-Mailer: aerc 0.14.0
 References: <20230809195315.1085656-1-nayna@linux.ibm.com>
- <20230809195315.1085656-6-nayna@linux.ibm.com>
-In-Reply-To: <20230809195315.1085656-6-nayna@linux.ibm.com>
+ <20230809195315.1085656-7-nayna@linux.ibm.com>
+In-Reply-To: <20230809195315.1085656-7-nayna@linux.ibm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -63,34 +64,95 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 On Wed Aug 9, 2023 at 10:53 PM EEST, Nayna Jain wrote:
-> Update Kconfig to enable machine keyring and limit to CA certificates
-> on PowerVM. Only key signing CA keys are allowed.
+> On secure boot enabled PowerVM LPAR, third party code signing keys are
+> needed during early boot to verify signed third party modules. These
+> third party keys are stored in moduledb object in the Platform
+> KeyStore(PKS).
+          ^ space
+
+>
+> Load third party code signing keys onto .secondary_trusted_keys keyring.
 >
 > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> Reviewed-and-tested-by: Mimi Zohar <zohar@linux.ibm.com>
->
 > ---
->  security/integrity/Kconfig | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  certs/system_keyring.c                        | 23 +++++++++++++++++++
+>  include/keys/system_keyring.h                 |  7 ++++++
+>  security/integrity/integrity.h                |  1 +
+>  .../platform_certs/keyring_handler.c          |  8 +++++++
+>  .../platform_certs/keyring_handler.h          |  5 ++++
+>  .../integrity/platform_certs/load_powerpc.c   | 18 ++++++++++++++-
+>  6 files changed, 61 insertions(+), 1 deletion(-)
 >
-> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-> index ec6e0d789da1..232191ee09e3 100644
-> --- a/security/integrity/Kconfig
-> +++ b/security/integrity/Kconfig
-> @@ -67,7 +67,9 @@ config INTEGRITY_MACHINE_KEYRING
->  	depends on SECONDARY_TRUSTED_KEYRING
->  	depends on INTEGRITY_ASYMMETRIC_KEYS
->  	depends on SYSTEM_BLACKLIST_KEYRING
-> -	depends on LOAD_UEFI_KEYS
-> +	depends on LOAD_UEFI_KEYS || LOAD_PPC_KEYS
-> +	select INTEGRITY_CA_MACHINE_KEYRING if LOAD_PPC_KEYS
-> +	select INTEGRITY_CA_MACHINE_KEYRING_MAX if LOAD_PPC_KEYS
->  	help
->  	 If set, provide a keyring to which Machine Owner Keys (MOK) may
->  	 be added. This keyring shall contain just MOK keys.  Unlike keys
-> --=20
-> 2.31.1
+> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> index b348e0898d34..3435d4936fb2 100644
+> --- a/certs/system_keyring.c
+> +++ b/certs/system_keyring.c
+> @@ -396,3 +396,26 @@ void __init set_platform_trusted_keys(struct key *ke=
+yring)
+>  	platform_trusted_keys =3D keyring;
+>  }
+>  #endif
+> +
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+spurious newline character
+
+> +void __init add_to_secondary_keyring(const char *source, const void *dat=
+a,
+> +				     size_t len)
+
+Documentation is lacking, and should be in a single line, as it totals
+less than 100 characters.
+
+> +{
+> +	key_ref_t key;
+> +	key_perm_t perm; the following structure
+> +	int rc =3D 0;
+
+	int rc;
+
+> +
+> +	perm =3D (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW;
+> +
+> +	key =3D key_create_or_update(make_key_ref(secondary_trusted_keys, 1),
+> +				   "asymmetric",
+> +				   NULL, data, len, perm,
+> +				   KEY_ALLOC_NOT_IN_QUOTA);
+> +	if (IS_ERR(key)) {
+> +		rc =3D PTR_ERR(key);
+
+This helper variable is not very useful.
+
+> +		pr_err("Problem loading X.509 certificate %d\n", rc);
+
+Why pr_err()? What kind of object is "a problem"?
+
+Also X.509 certificates are everywhere. If these are printed to the
+klog, how can e.g. an admin deduce the problem over here?
+
+Even without having these log messages at all I could trace the called
+function and be informed that some X.509 cert has an issues. Actually
+then I could even deduce the location, thanks to call backtrace.
+
+These have a potential to lead into wrong conclusions.
+
+> +	} else {
+> +		pr_notice("Loaded X.509 cert '%s'\n",
+> +			  key_ref_to_ptr(key)->description);
+
+single line
+
+> +		key_ref_put(key);
+> +	}
+
+I'd suggest instead the following structure:
+
+	if (IS_ERR(key)) {
+		pr_err("Problem loading X.509 certificate %d\n", PTR_ERR(key));
+		return;
+	}
+
+	pr_notice("Loaded X.509 cert '%s'\n", key_ref_to_ptr(key)->description);
+	key_ref_put(key);
+}
 
 BR, Jarkko
