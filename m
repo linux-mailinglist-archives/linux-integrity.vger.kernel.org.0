@@ -2,42 +2,43 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46A8779519
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 18:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B50D77952E
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 18:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbjHKQtW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Aug 2023 12:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        id S235564AbjHKQvf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Aug 2023 12:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbjHKQtV (ORCPT
+        with ESMTP id S234418AbjHKQvc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Aug 2023 12:49:21 -0400
+        Fri, 11 Aug 2023 12:51:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6906630C1;
-        Fri, 11 Aug 2023 09:49:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3882D78;
+        Fri, 11 Aug 2023 09:51:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0958067735;
-        Fri, 11 Aug 2023 16:49:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C6B7C433C9;
-        Fri, 11 Aug 2023 16:49:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BFE366790;
+        Fri, 11 Aug 2023 16:51:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 421CBC433C8;
+        Fri, 11 Aug 2023 16:51:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691772559;
-        bh=eKkCZ/d+MEomhlb+8xM1aZnvpCXRBuIypiz4jujb2ag=;
-        h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-        b=uTj8Lk0uk7vMXk0fpJANo1H0prc+mKNBzBPevVLAiPlcXBwhA38BTjDXoS4fbzNru
-         ztQLlRASqqGlgkiaxQ9/8Pi/H74LbLeyoJFt4oPFzH6N5jpRTgYsCrNnpMR8oTaHc0
-         zaajxD5/qKDAX2OfTGVhTylLe8jFCnSG9seics6WtYhpDDn8kuaiYs90SvWTqIy2pC
-         0lEqo8moq3M+KNsPiVI7t6OU2vQgNI5RrisY/QfMjM/njJLYU/4hfsemAogmc4B+xi
-         5qpj1OkA2ABT4/ivMJWk5/VMg7y1wnxA7/pAzMNwRagbL1UdOMFYON/ruDc0JuZqRr
-         4skv5KZv0JV3A==
+        s=k20201202; t=1691772690;
+        bh=+gzQDpDpVxcoDrHfScSrPe9X+T9url7EabBaC/G4uZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ey1PH9BUCoK+Y2d2oG4sNhwVXeEKrvFxCoi2Aj8IQ2CZmf/O9D/VQ8HNVUQ3BwfXR
+         j4bnqul1G2ikIzdy0zpD+VhRVGwxNF7qX7fP3GCx0as9ZNUV/UYoViLOLs0Wvqi4eE
+         i9cEBJFXE7LuKQkLRLpLgcMBkYHNLJRmzLKl8r7FZjA9klk4ct9EXNkN4LJiIusAab
+         4gfVeuwlkfVmfh9mUxr31YL1Qzb/g7RCwlfTt/SY6B/wjFzG0tOTz4tjp9r/4TUGVm
+         Z0CTy3Q7GydlMCaf9B//X2+QrlOiX3A/hUdzMM8cWnjJzXKybIh3JTpw0nH7yU/2uC
+         IB4iMcdvDqrYg==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 11 Aug 2023 19:49:15 +0300
-Message-Id: <CUPVBIYZ2B34.P1LAY8LPFQEQ@suppilovahvero>
+Date:   Fri, 11 Aug 2023 19:51:27 +0300
+Message-Id: <CUPVD79CBVEF.1A618P66T7KTZ@suppilovahvero>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
 To:     "Takashi Iwai" <tiwai@suse.de>
 Cc:     <linux-integrity@vger.kernel.org>,
         "Linus Torvalds" <torvalds@linux-foundation.org>,
@@ -46,22 +47,21 @@ Cc:     <linux-integrity@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts categorically for
  Lenovo
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
 X-Mailer: aerc 0.14.0
 References: <20230810182433.518523-1-jarkko@kernel.org>
- <87zg2yrqmy.wl-tiwai@suse.de> <87wmy2rqjy.wl-tiwai@suse.de>
-In-Reply-To: <87wmy2rqjy.wl-tiwai@suse.de>
+ <87zg2yrqmy.wl-tiwai@suse.de> <87pm3tr467.wl-tiwai@suse.de>
+In-Reply-To: <87pm3tr467.wl-tiwai@suse.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Aug 11, 2023 at 10:22 AM EEST, Takashi Iwai wrote:
+On Fri Aug 11, 2023 at 6:26 PM EEST, Takashi Iwai wrote:
 > On Fri, 11 Aug 2023 09:21:09 +0200,
 > Takashi Iwai wrote:
 > >=20
@@ -90,12 +90,15 @@ I'm
 > >=20
 > > I'll build a test kernel and ask reporters for testing the fix, too.
 >
-> Also, it's worth to put the link to the original bug report:
->
-> Link: https://bugzilla.suse.com/show_bug.cgi?id=3D1213779
+> FYI, the test results are all positive, so far.
 
-These days it is recommended afaik to use "Closes:" so I used that
-(checkpatch even complains if it does not exist when you have a
-reported-by tag).
+Thanks a lot.
+
+Can you check this that it looks good to you:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/comm=
+it/?h=3Dnext&id=3Dbfc4b8c073a6dcfd39d413a7fa1c5ce1ede9f326
+
+Tested-by?
 
 BR, Jarkko
