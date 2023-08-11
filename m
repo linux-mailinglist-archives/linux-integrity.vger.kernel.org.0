@@ -2,104 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACE97796EF
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 20:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB1E779742
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 20:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237006AbjHKSRG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Aug 2023 14:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S229940AbjHKSrN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Aug 2023 14:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236337AbjHKSQ4 (ORCPT
+        with ESMTP id S229577AbjHKSrN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Aug 2023 14:16:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4435930DF;
-        Fri, 11 Aug 2023 11:16:56 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37BIGBob025041;
-        Fri, 11 Aug 2023 18:16:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=k5mR17zkrffo+X2rFTZCfWzMuxIb9pkxOfVjmLz2Jx4=;
- b=Iy4k7SHoiYa7dasuiqUN9ozO2bDIFFRYnnU6OYJYSvWgMu9Uni+F15lYU6eeWwJhBZby
- czQzQPuXrP6J3oRP7U8qr5ZRmppo4rdQS5tZFNz/7TlVAl7jpB8pgYUZutHmWueoj0mO
- n/Vt32Zn4KFSanhnjj6z6dpra2yjoByTA5HB9Hub2S++4PjQljT4Q8GHZA0bfGG9UE6p
- MZEKcQkUrRl2Cc5oilHYJvwzcZG3XkgWsTmWMu8EQ5WCjcYAf2JpIm0ykja6R+ozPcjp
- UrD3kCp4on5fx0Fz98pKxfdEUn6OmCv6bCAqrASbJEIzd51tVIrdbVEWc6w+JeNsMoZJ GQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sdsu98kyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Aug 2023 18:16:31 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37BIGUMq026395;
-        Fri, 11 Aug 2023 18:16:30 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sdsu98ky0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Aug 2023 18:16:30 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37BGhvtF001802;
-        Fri, 11 Aug 2023 18:16:29 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3sa3f2mhyu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Aug 2023 18:16:29 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37BIGSOB6423276
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Aug 2023 18:16:28 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7B8BE58061;
-        Fri, 11 Aug 2023 18:16:28 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C2A05805A;
-        Fri, 11 Aug 2023 18:16:25 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Aug 2023 18:16:25 +0000 (GMT)
-Message-ID: <b9094b2f-d349-e029-80d6-bab92f6eaea6@linux.ibm.com>
-Date:   Fri, 11 Aug 2023 14:16:25 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC] IMA Log Snapshotting Design Proposal
-Content-Language: en-US
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Sush Shringarputale <sushring@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        kgold@linux.ibm.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, kexec@lists.infradead.org, jmorris@namei.org,
-        Paul Moore <paul@paul-moore.com>, serge@hallyn.com
-Cc:     code@tyhicks.com, nramas@linux.microsoft.com,
-        linux-security-module@vger.kernel.org
-References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
- <b748230c8ee291288afcf48898507556c3aa7c71.camel@HansenPartnership.com>
- <5d21276a-daac-fc9b-add9-62e7c04bbdcd@linux.ibm.com>
- <b538f7d2-5a04-46d0-3792-a18653230a95@linux.microsoft.com>
- <011d8a79-236f-dc20-08fc-b5da7dd1d5a7@linux.ibm.com>
- <aba709f8-a808-9aa4-8322-430e3997f686@linux.microsoft.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <aba709f8-a808-9aa4-8322-430e3997f686@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4Mb-Xrz-dEpYPqWQnql2U-MEJZLcvnn7
-X-Proofpoint-GUID: i0ZJQDqKGnUUuTBys-drocWQPo-vyd5I
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 11 Aug 2023 14:47:13 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEF630E6;
+        Fri, 11 Aug 2023 11:47:12 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbea14706eso20006235e9.2;
+        Fri, 11 Aug 2023 11:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691779631; x=1692384431;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Lxiy661bwby5aRoESXiqAzZ+scVqqbirnP6RZhCnFMM=;
+        b=A7ILmlQA5bAiH10V7GlC8sTxKLx9opJQGSJL4IhDwDxykOuY/Xwk67uZzoN8yINKvL
+         8b0JyhV9U1ExuK970841hQyGd9FsSkEI5XiTF+THXpZwJpzs+oOG+lTgXpwZtJMInL25
+         dE+Y1qIrKLCG2/VGZNMXUWxWnEqEuXaOqpdwPGrdG/hlT09iWJ25oyo/FbIKBf3zVV0e
+         Mve9jAMHREhI8RexUeM5LQrBUaj2nyuUoisi5YXP0HxSo6YfeN/zG3ef1HVRShRhOyAq
+         owhy8i1hRoeWRQTXKk+25PDQS0RTihMyO0pZeVEe4qFALQjqvAMvIveboGH1BGWVk4Kl
+         znSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691779631; x=1692384431;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lxiy661bwby5aRoESXiqAzZ+scVqqbirnP6RZhCnFMM=;
+        b=DxegkZw7xv48vSTgjiSsRalCIqbYu3A1C3mavMUFv5V+ozSbV7VVPKoG7jgLY2VlzA
+         s/dY4KoJPLfLnfq1iVdISNJb4yGcZ+cQ3zB2OMlqWB3VpCwU4W2lZTVITCqxrBU3uIeC
+         GTLDMiskcvQbButQI6YJwsXICt46gQsBAMa/Tm+1QeG/OYr+s5ZX/mIsAz3bGWO6OQ+q
+         21UVubjzecbXIbjTSq7GHvr1uSQY75k8E497JYQKErr8gjPbyXTgb/2ueWdXJdiGjL2d
+         hqdnMoaEbp3QP6R/1gdB5h/Bw6yRJf/dTXNaUSlDu2Um8k16gEOBSpaK7lELxh6hcf+0
+         IIOw==
+X-Gm-Message-State: AOJu0YwsHMo5DZtqJTtkiQK/fgbFj7d/i67AtSj9BX39OEmwCwNPxktE
+        v0dt5lUjD2cnfaZ3LSJFp3Y=
+X-Google-Smtp-Source: AGHT+IH6iK08CJx3BF9fpDiBYtjrGSt7m8PU976946+kY85EA3t09QFl/CIA8khqPgbgmBL9w1BNUw==
+X-Received: by 2002:a05:600c:2946:b0:3fe:1f2c:df2b with SMTP id n6-20020a05600c294600b003fe1f2cdf2bmr2410275wmd.11.1691779630782;
+        Fri, 11 Aug 2023 11:47:10 -0700 (PDT)
+Received: from [192.168.1.23] ([176.232.63.90])
+        by smtp.gmail.com with ESMTPSA id a9-20020a5d5089000000b0031434c08bb7sm6236129wrt.105.2023.08.11.11.47.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Aug 2023 11:47:09 -0700 (PDT)
+Message-ID: <5806ebf113d52c660e1c70e8a57cc047ab039aff.camel@gmail.com>
+Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
+ Laptop Intel 12th gen
+From:   Grundik <ggrundik@gmail.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     Linux kernel regressions list <regressions@lists.linux.dev>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Christian Hesse <mail@eworm.de>, stable@vger.kernel.org,
+        roubro1991@gmail.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian Hesse <list@eworm.de>,
+        linux-integrity@vger.kernel.org
+Date:   Fri, 11 Aug 2023 21:47:07 +0300
+In-Reply-To: <CUPWEV9HSGHY.MLO0B4RRH4RR@suppilovahvero>
+References: <20230710133836.4367-1-mail@eworm.de>
+         <20230710142916.18162-1-mail@eworm.de>
+         <20230710231315.4ef54679@leda.eworm.net>
+         <bd0587e16d55ef38277ab1f6169909ae7cde3542.camel@kernel.org>
+         <bb5580e93d244400c3330d7091bf64868aa2053f.camel@gmail.com>
+         <0f272843a33a1706dbcbb2d84b02e3951ee60cbb.camel@kernel.org>
+         <fdd5fd9ece045ebd1888672a75f157e64ade98fb.camel@gmail.com>
+         <a588d1d3-12e0-b078-b6cc-b0a63c54ab37@leemhuis.info>
+         <CUPW0XP1RFXI.162GZ78E46TBJ@suppilovahvero>
+         <CUPWEV9HSGHY.MLO0B4RRH4RR@suppilovahvero>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (by Flathub.org) 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-11_09,2023-08-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- bulkscore=0 impostorscore=0 mlxlogscore=855 adultscore=0 spamscore=0
- lowpriorityscore=0 suspectscore=0 mlxscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308110165
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,94 +90,41 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, 2023-08-11 at 20:40 +0300, Jarkko Sakkinen wrote:
+> On Fri Aug 11, 2023 at 8:22 PM EEST, Jarkko Sakkinen wrote:
+> > On Fri Aug 11, 2023 at 11:18 AM EEST, Thorsten Leemhuis wrote:
+> >=20
+> >=20
+> > I see two long-standing options:
+> >=20
+> > A. Move from deny list to allow list when considering using IRQs.
+> > This
+> > =C2=A0=C2=A0 can be supplemented with a kernel command-line parameter t=
+o
+> > enforce
+> > =C2=A0=C2=A0 IRQs and ignore the allow list (and IRQ storm detection pr=
+ovides
+> > =C2=A0=C2=A0 additional measure in case you try to enforce)
+> > B. Change deny list to match only vendors for the time being. This
+> > can
+> > =C2=A0=C2=A0 be supplemented with a allow list that is processed after =
+the
+> > deny
+> > =C2=A0=C2=A0 list for models where IRQs are known to work.
+[...]
+>=20
+> This is also super time consuming and takes the focus away from more
+> important matters (like most likely the AMD rng fix would have gone
+> smoother without these getting in the way all the time).
 
+Main problem of any list is maintaining of them. So, I think there
+should not be any black or white lists at all. Module should work with
+reasonable default (polling is the one, which lived without problems
+for years and years due to bug, as I understand), and probably a boot
+option to force IRQ. Maybe module should warn user to try that option.
 
-On 8/11/23 11:57, Tushar Sugandhi wrote:
-> 
-> 
-> 
-> [1] https://patchwork.kernel.org/project/linux-integrity/cover/20230801181917.8535-1-tusharsu@linux.microsoft.com/
-> 
->> The shards should will need to be written into some sort of standard location or a config file needs to
->> be defined, so that everyone knows where to find them and how they are named.
->>
-> We thought about well known standard location earlier.
-> Letting the Kernel choose the name/location of the snapshot
-> file comes with its own complexity. Our initial stance is we don’t
-> want to handle that at Kernel level, and let the UM client choose
-> the location/naming of the snapshot files. But we are happy to
-> reconsider if the community requests it.
-
-I would also let user space do the snapshotting but all applications
-relying on shards should know where they are located on the system
-and what the naming scheme is so they can be  process in proper order.
-evmctl for example would have to know where the shards are if keylime
-agent had taken snapshots.
-
-
-
->>> Yes. If the “PCR quotes in the snapshot_aggregate event in IMA log”
->>
->> PCR quote or 'quotes'? Why multiple?
->>
->> Form your proposal but you may have changed your opinion  following what I see in other messages:
->> "- The Kernel will get the current TPM PCR values and PCR update counter [2]
->>     and store them as template data in a new IMA event "snapshot_aggregate"."
->>
->> Afaik TPM quote's don't give you the state of the individual PCR values, therefore
->> I would expect to at least find the 'PCR values' of all the PCRs that IMA touched to
->> be in the snapshot_aggregate so I can replay all the following events on top of these
->> PCR values and come up with the values that were used in the "final PCR quote". This
->> is unless you expect the server to take an automatic snapshot of the values of the
->> PCRs  that it computed while evaluating the log in case it ever needs to go back.
->>
-> I meant a single set of PCR values captured when snapshot_aggregate
-> is logged. Sorry for the confusion.
-
-Ok.
-
-> 
->>> + "replay of rest of the events in IMA log" results in the “final PCR quotes”
->>> that matches with the “AK signed PCR quotes” sent by the client, then the truncated
->>> IMA log can be trusted. The verifier can either ‘trust’ the “PCR quotes in the
->>> snapshot_aggregate event in IMA log” or it can ask for the (n-1)th snapshot shard
->>> to check the past events.
->>
->> For anything regarding determining the 'trustworthiness of a system' one would have to
->> be able to go back to the very beginning of the log *or* remember in what state a
->> system was when the latest snapshot was taken so that if a restart happens it can resume
->> with that assumption about state of trustworthiness and know what the values of the PCRs
->> were at that time so it can resume replaying the log (or the server would get these
->> values from the log).
->>
-> Correct. We intend to support the above. I hope our proposal
-> description captures it. BTW, when you say ‘restart’, you mean the UM
-> process restart, right? Because in case of a Kernel restart
-
-Yes, client restart not reboot.
-
-> (i.e. cold-boot) the past IMA log (and the TPM state) is lost,
-> and old snapshots (if any) are useless.
-
-Right. Some script should run on boot and delete all contents of the directory where the log
-shards are.
-
-> 
->> The AK quotes by the kernel (which adds a 2nd AK key) that James is proposing
->> could be useful if the entire log, consisting of multiple shards, is very large and
->> cannot be transferred from the client to the server in one go so that the server could
->> evaluate the 'final PCR quote' immediately . However, if a client can indicated 'I will
->> send more the next time and I have this much more to transfer' and the server allows
->> this multiple times (until all the 1MB shards of the 20MB log are transferred) then that
->> kernel AK key would not be necessary since presumably the "final PCR quote", created
->> by a user space client, would resolve whether the entire log is trustworthy.
->>
-> See my responses to James today [2]
-> 
-> [2] https://lore.kernel.org/all/72e39852-1ff1-c7f6-ac7e-593e8142dbe8@linux.microsoft.com/
-
-I think James was proposing one AK, possibly persisted in the TPM's NVRAM. Still, the less keys
-that are involved in this the better...
-
-    Stefan
+I don't know: is it even worth it to use IRQ, if it so problematic? Are
+there any significant advantages of that? I understand, polling is a
+resource consumer, but its just TPM, which is used mainly at the boot
+time, is it worth it?
 
