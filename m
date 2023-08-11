@@ -2,139 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438EF778378
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 00:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6D377880F
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 09:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjHJWKQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Aug 2023 18:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S229669AbjHKHVN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Aug 2023 03:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjHJWKQ (ORCPT
+        with ESMTP id S229379AbjHKHVM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Aug 2023 18:10:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CCF2713
-        for <linux-integrity@vger.kernel.org>; Thu, 10 Aug 2023 15:10:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 11 Aug 2023 03:21:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F3E2738;
+        Fri, 11 Aug 2023 00:21:11 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EB816333D
-        for <linux-integrity@vger.kernel.org>; Thu, 10 Aug 2023 22:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14FF3C433C8;
-        Thu, 10 Aug 2023 22:10:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691705413;
-        bh=E9Qq/D0I3KdG8XEj9VwItzZ5i+nyt+ZP387FEU1YwlY=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=NFUBURAKHNRiuRpiAzHrhpAOSAKv0c81Ypa4utNLndi4+ibJkMlAMot+HE6RR1aUC
-         e2pBJW/codqQBc053bFd4uCCW2k4YnM8palUeiVnQi3SaWQzO2r7ZrbuYIkFBpLLte
-         7oLNYWB6MO0x9vgd8soia3aNNAuqmb2GHp5T3pjCH9dONErfpfLi7ty5roGFOmzsiO
-         N4R3GzTlExsyKDynXTTqVml7ytuuGLSE9gQ9nvHeC5IlWjhWNSounLGPBvxZkI6qH1
-         9MWVIhpXFME7Wss2YhmD+Dh7XI5FQfLVd1aJkpqOECZFb8UJ2GPu34JoBOTfbGNRFR
-         u1Rc1SzKKMt5w==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 11 Aug 2023 01:10:09 +0300
-Message-Id: <CUP7IOG782XM.11EAVH910MQOR@suppilovahvero>
-Cc:     <jgg@ziepe.ca>, <linux@dominikbrodowski.net>,
-        <linux-integrity@vger.kernel.org>, <daniil.stas@posteo.net>,
-        <peterhuewe@gmx.de>
-Subject: Re: [PATCH] tpm: Add a helper for checking hwrng enabled
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-X-Mailer: aerc 0.14.0
-References: <20230808041229.22514-1-mario.limonciello@amd.com>
- <CUOYJ45WR5I0.3JFE0U1387QC8@wks-101042-mac.ad.tuni.fi>
- <17b312c5-d8e7-4f3c-9b38-ba82233eb003@amd.com>
-In-Reply-To: <17b312c5-d8e7-4f3c-9b38-ba82233eb003@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A40C321866;
+        Fri, 11 Aug 2023 07:21:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1691738470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZZXMP9POMv7KC+x9VLPOTS3Ne+HZSWG0MHLcv2J5N8A=;
+        b=SAgbd3j6VOuQvwrdCPVTkR6xG30eF5BLitxscOvRMjlsSwfQ0pkuMEcl2EAayc3i3w4BG7
+        aHP+PUDtJ9mH6cZcCVKn17XQZkJYPps4XPG5ZEvS4n8VSEKYjvatHflSINSYRI7+2D3Npw
+        NhNV7lytfBeshmAnc5A8XZbEXSo7c4w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1691738470;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZZXMP9POMv7KC+x9VLPOTS3Ne+HZSWG0MHLcv2J5N8A=;
+        b=SM24BEBRjSyUqJmEUK4lplbTaB1VAsISkR7KpU0BSZVnUrsXZ0DYsoo5D5zTZqc49jgB1f
+        +P+waw3vZK/5YrDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 750FD138E2;
+        Fri, 11 Aug 2023 07:21:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iKmYG2bh1WQ2YwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 11 Aug 2023 07:21:10 +0000
+Date:   Fri, 11 Aug 2023 09:21:09 +0200
+Message-ID: <87zg2yrqmy.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, "Takashi Iwai" <tiwai@suse.de>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts categorically for Lenovo
+In-Reply-To: <20230810182433.518523-1-jarkko@kernel.org>
+References: <20230810182433.518523-1-jarkko@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu Aug 10, 2023 at 6:08 PM EEST, Limonciello, Mario wrote:
->
->
-> On 8/10/2023 10:07 AM, Jarkko Sakkinen wrote:
-> > On Tue Aug 8, 2023 at 7:12 AM EEST, Mario Limonciello wrote:
-> >> The same checks are repeated in 3 places to decide whether to use
-> >> hwrng.  Consolidate these into a helper.
-> >>
-> >> Also this fixes a case that one of them was missing a check in the
-> >> cleanup path.
-> >>
-> >> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
-> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >> ---
-> >>   drivers/char/tpm/tpm-chip.c | 19 ++++++++++++++-----
-> >>   1 file changed, 14 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> >> index e904aae9771be..ea6b4013bc38f 100644
-> >> --- a/drivers/char/tpm/tpm-chip.c
-> >> +++ b/drivers/char/tpm/tpm-chip.c
-> >> @@ -521,10 +521,20 @@ static int tpm_hwrng_read(struct hwrng *rng, voi=
-d *data, size_t max, bool wait)
-> >>   	return tpm_get_random(chip, data, max);
-> >>   }
-> >>  =20
-> >> +static bool tpm_is_hwrng_enabled(struct tpm_chip *chip)
-> >> +{
-> >> +	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-> >> +		return false;
-> >> +	if (tpm_is_firmware_upgrade(chip))
-> >> +		return false;
-> >> +	if (chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED)
-> >> +		return false;
-> >> +	return true;
-> >> +}
-> >> +
-> >>   static int tpm_add_hwrng(struct tpm_chip *chip)
-> >>   {
-> >> -	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chi=
-p) ||
-> >> -	    chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED)
-> >> +	if (!tpm_is_hwrng_enabled(chip))
-> >>   		return 0;
-> >>  =20
-> >>   	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
-> >> @@ -629,7 +639,7 @@ int tpm_chip_register(struct tpm_chip *chip)
-> >>   	return 0;
-> >>  =20
-> >>   out_hwrng:
-> >> -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chi=
-p))
-> >> +	if (tpm_is_hwrng_enabled(chip))
-> >>   		hwrng_unregister(&chip->hwrng);
-> >>   out_ppi:
-> >>   	tpm_bios_log_teardown(chip);
-> >> @@ -654,8 +664,7 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
-> >>   void tpm_chip_unregister(struct tpm_chip *chip)
-> >>   {
-> >>   	tpm_del_legacy_sysfs(chip);
-> >> -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chi=
-p) &&
-> >> -	    !(chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED))
-> >> +	if (tpm_is_hwrng_enabled(chip))
-> >>   		hwrng_unregister(&chip->hwrng);
-> >>   	tpm_bios_log_teardown(chip);
-> >>   	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(ch=
-ip))
-> >=20
-> > Given my previous queries: should I apply this or revert and apply v3?
-> >=20
-> > BR, Jarkko
->
-> Linus picked it up already directly.
+On Thu, 10 Aug 2023 20:24:33 +0200,
+Jarkko Sakkinen wrote:
+> 
+> By large most of the entries in tpm_tis_dmi_table[] are for Lenovo laptops,
+> and they keep on coming. Therefore, disable IRQs categorically for Lenovo.
+> 
+> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+> Cc: <stable@vger.kernel.org> # v6.4+
+> Reported-by: "Takashi Iwai" <tiwai@suse.de>
+> Closes: https://lore.kernel.org/linux-integrity/87il9qhxjq.wl-tiwai@suse.de/
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> This will be included into v6.5-rc6 PR, as long as Takashi ack's it. I'm
+> planning to send tomorrow morning (GMT+3).
 
-I came two days behind, sorry.
+Feel free to take my ack:
 
-BR, Jarkko
+Acked-by: Takashi Iwai <tiwai@suse.de>
+
+I'll build a test kernel and ask reporters for testing the fix, too.
+
+Thanks!
+
+
+Takashi
+
+> 
+> BR, Jarkko
+>  drivers/char/tpm/tpm_tis.c | 34 ----------------------------------
+>  1 file changed, 34 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index 3c0f68b9e44f..dd0f52d35073 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -132,42 +132,8 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+>  	},
+>  	{
+>  		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkPad T490s",
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkStation P360 Tiny",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P360 Tiny"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkPad L490",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L490"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkPad L590",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L590"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkStation P620",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P620"),
+>  		},
+>  	},
+>  	{
+> -- 
+> 2.39.2
+> 
