@@ -2,68 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880CE779803
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 22:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C48C779B7D
+	for <lists+linux-integrity@lfdr.de>; Sat, 12 Aug 2023 01:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233755AbjHKUCA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Aug 2023 16:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S237258AbjHKXkP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Aug 2023 19:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjHKUCA (ORCPT
+        with ESMTP id S237257AbjHKXkL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Aug 2023 16:02:00 -0400
+        Fri, 11 Aug 2023 19:40:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746F930DE;
-        Fri, 11 Aug 2023 13:01:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8C810F5
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Aug 2023 16:40:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A738647AF;
-        Fri, 11 Aug 2023 20:01:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D64BC433C8;
-        Fri, 11 Aug 2023 20:01:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D6B167BFE
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Aug 2023 23:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1867AC433D9;
+        Fri, 11 Aug 2023 23:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691784118;
-        bh=UGeRy4kLv1Yj8E1RIf2OqaKJS9+bUxuImBDCoJL5HU0=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=H8miYJcl51YWHF2csAydYJQUkKKHzXsVUALhwxhFOTo4h9lyerhLx6EGirlj2N4i+
-         uWFG5gYxZ9SsZ7zWmiHt9SwND5jlo4rVikcBUn6m0nnbuNaLtcFRWeNsKxMzB3wFhT
-         qYswuT77+lkervYtfN+kTXtbb5mzQVafF8f3hzIDunNw6V3FnVpLTcnKjFAjCJtSCM
-         ekElFAgbpMStakJ1xm43G/nyKTC8GqG+UgsNlbtt4Yi8mLFmdvnbMcombOxoGWzZRz
-         MM0/lTfdeeOoWrMRi2ueRTg7C+ebUuJwZoCnNXKLRS0W6NN4cd+X8GM8kdfgUxAe3B
-         EWoTCokoWI6FQ==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 11 Aug 2023 23:01:53 +0300
-Message-Id: <CUPZF09RGD86.VQN9BOMEYZX5@suppilovahvero>
-Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
- Laptop Intel 12th gen
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Grundik" <ggrundik@gmail.com>,
-        "Thorsten Leemhuis" <regressions@leemhuis.info>,
-        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>
-Cc:     "Linux kernel regressions list" <regressions@lists.linux.dev>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Christian Hesse" <mail@eworm.de>, <stable@vger.kernel.org>,
-        <roubro1991@gmail.com>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Christian Hesse" <list@eworm.de>,
-        <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230710133836.4367-1-mail@eworm.de>
- <20230710142916.18162-1-mail@eworm.de>
- <20230710231315.4ef54679@leda.eworm.net>
- <bd0587e16d55ef38277ab1f6169909ae7cde3542.camel@kernel.org>
- <bb5580e93d244400c3330d7091bf64868aa2053f.camel@gmail.com>
- <0f272843a33a1706dbcbb2d84b02e3951ee60cbb.camel@kernel.org>
- <fdd5fd9ece045ebd1888672a75f157e64ade98fb.camel@gmail.com>
- <a588d1d3-12e0-b078-b6cc-b0a63c54ab37@leemhuis.info>
- <CUPW0XP1RFXI.162GZ78E46TBJ@suppilovahvero>
- <CUPWEV9HSGHY.MLO0B4RRH4RR@suppilovahvero>
- <5806ebf113d52c660e1c70e8a57cc047ab039aff.camel@gmail.com>
-In-Reply-To: <5806ebf113d52c660e1c70e8a57cc047ab039aff.camel@gmail.com>
+        s=k20201202; t=1691797209;
+        bh=QP5pGF3PO9EU2FA/xvRlheSZKOUjrm1q1NzOo0tPlNg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iXMlQ9lm3NrgiRF8VVeDDQFJ7Y3aMICJnxQ+QsFj1gNyVQL6yXg+G2qCT19MhefUG
+         wcA1GeOuxmI3MnkcOnppc3GCzpBhyP+DR3BYa0QwUjm9f0Oe/E9DCbgwE4gjJ8gSYE
+         lOxn6Mm/CqCEzI09gfsfgpQ5rR4F8RQ98++FdcWN79o6WttSoprtidCPnXlAlNG4jM
+         WoSPffXwXB14PIfDR9Mnrww7+Umc6mhpnRZcRL8/Tj7fdxNyIyNxpaP8WNLmcQIsFY
+         aUa/qs3uZLZCpJzkpefdaDeCtQvcTRFBWTmgJT0qkoaewuViIr50FwNz4TRPflLA7j
+         8oGggbMQJiJLw==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-integrity@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH 0/2] tpm_tis: opt-in interrupts
+Date:   Sat, 12 Aug 2023 02:40:00 +0300
+Message-Id: <20230811234002.2656180-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,47 +53,17 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Aug 11, 2023 at 9:47 PM EEST, Grundik wrote:
-> On Fri, 2023-08-11 at 20:40 +0300, Jarkko Sakkinen wrote:
-> > On Fri Aug 11, 2023 at 8:22 PM EEST, Jarkko Sakkinen wrote:
-> > > On Fri Aug 11, 2023 at 11:18 AM EEST, Thorsten Leemhuis wrote:
-> > >=20
-> > >=20
-> > > I see two long-standing options:
-> > >=20
-> > > A. Move from deny list to allow list when considering using IRQs.
-> > > This
-> > > =C2=A0=C2=A0 can be supplemented with a kernel command-line parameter=
- to
-> > > enforce
-> > > =C2=A0=C2=A0 IRQs and ignore the allow list (and IRQ storm detection =
-provides
-> > > =C2=A0=C2=A0 additional measure in case you try to enforce)
-> > > B. Change deny list to match only vendors for the time being. This
-> > > can
-> > > =C2=A0=C2=A0 be supplemented with a allow list that is processed afte=
-r the
-> > > deny
-> > > =C2=A0=C2=A0 list for models where IRQs are known to work.
-> [...]
-> >=20
-> > This is also super time consuming and takes the focus away from more
-> > important matters (like most likely the AMD rng fix would have gone
-> > smoother without these getting in the way all the time).
->
-> Main problem of any list is maintaining of them. So, I think there
-> should not be any black or white lists at all. Module should work with
-> reasonable default (polling is the one, which lived without problems
-> for years and years due to bug, as I understand), and probably a boot
-> option to force IRQ. Maybe module should warn user to try that option.
->
-> I don't know: is it even worth it to use IRQ, if it so problematic? Are
-> there any significant advantages of that? I understand, polling is a
-> resource consumer, but its just TPM, which is used mainly at the boot
-> time, is it worth it?
+Hopefully the last IRQ fixes for some time.
 
-+1
+Jarkko Sakkinen (1):
+  tpm_tis: Opt-in interrupts
 
-Thanks for sharing your opinion. I'll take the necessary steps.
+Peter Ujfalusi (1):
+  tpm: tpm_tis: Fix UPX-i11 DMI_MATCH condition
 
-BR, Jarkko
+ drivers/char/tpm/tpm_tis.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+-- 
+2.39.2
+
