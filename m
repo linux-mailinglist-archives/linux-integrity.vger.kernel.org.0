@@ -2,83 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA09779763
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 20:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8247797C4
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 21:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbjHKSzj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Aug 2023 14:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S236580AbjHKT2f (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Aug 2023 15:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236535AbjHKSzi (ORCPT
+        with ESMTP id S236787AbjHKT2e (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Aug 2023 14:55:38 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C86630F0
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Aug 2023 11:55:37 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b9f48b6796so35237911fa.3
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Aug 2023 11:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1691780135; x=1692384935;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uuRnK69MU6Lcim2KwchdBtj06ixdIXcvFeb8SD9Pua0=;
-        b=bevpvsPX4n5ismYz2JRzJu3RxtNmuz61zrOXwgrXa4rs6IMeUV8CWTvkBCunEuZUVD
-         EaIyx4/QXJzEiuBJ9Has3ZXHwuiPuduUzPaVKbnpOeunmDsNMao0rE2+NVH98dkurQax
-         je2nblq7WDYb8HO7/BgOlgz88FjsDBATEjxuU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691780135; x=1692384935;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uuRnK69MU6Lcim2KwchdBtj06ixdIXcvFeb8SD9Pua0=;
-        b=bnTmg2e22GTFsAA0MZowwnnG2dQmxJ3V1MBTCIyuCLMJadoMP1OuPi4RoGdfAIIH6w
-         CHX1dHLXUC5apa0zdmi02JQ+QW+xMfPNRwBuLT0VYGH2+347K2bYc5m/1bLxWzvvGlXF
-         hLIS3RGtWEpdeO9DEFn/HdaHoyd1+UMKLx3OtviSq95JNVJDHZzi9+CXdBLLnSBywjK5
-         IofdFNJsDPIcPWc/hjFe61LgYNLm6VXzhY5ZQDZ9Bmfn12j1j7ug2UDHoTajzLM7tgeG
-         OIUjM0ksip+bppZ8bLCzEt42z2HSyGXtE0pWnxpbXplUB2ZBsVjv51y4ch8yYRfTzE0Q
-         DEHA==
-X-Gm-Message-State: AOJu0Yy1PWBWzWmWUVWo852+Y67UZc4hFkwQ/O3tPhl9BwAt9MFh4fIg
-        dEzFAV4d2+dpUMOV3gNzogIhaJuvcb6YwfRRTYt7hkmX
-X-Google-Smtp-Source: AGHT+IFcJVysX0WwItb/lIpqiIXcxqbMpAXrmR91FSkcBbMO2pOvQbFWI55r+TtgEDSCR0o/JFKo2g==
-X-Received: by 2002:a2e:a41a:0:b0:2b9:20fe:4bc4 with SMTP id p26-20020a2ea41a000000b002b920fe4bc4mr2179343ljn.40.1691780135373;
-        Fri, 11 Aug 2023 11:55:35 -0700 (PDT)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
-        by smtp.gmail.com with ESMTPSA id m12-20020a2e910c000000b002b94327308asm973192ljg.133.2023.08.11.11.55.33
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Aug 2023 11:55:34 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4fe2de785e7so3702758e87.1
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Aug 2023 11:55:33 -0700 (PDT)
-X-Received: by 2002:a05:6512:10cd:b0:4fd:fef8:7a81 with SMTP id
- k13-20020a05651210cd00b004fdfef87a81mr2309540lfg.55.1691780133463; Fri, 11
- Aug 2023 11:55:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230710133836.4367-1-mail@eworm.de> <20230710142916.18162-1-mail@eworm.de>
- <20230710231315.4ef54679@leda.eworm.net> <bd0587e16d55ef38277ab1f6169909ae7cde3542.camel@kernel.org>
+        Fri, 11 Aug 2023 15:28:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678D430F0;
+        Fri, 11 Aug 2023 12:28:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E779F676D0;
+        Fri, 11 Aug 2023 19:28:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F650C433C7;
+        Fri, 11 Aug 2023 19:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691782113;
+        bh=Qwn9nJJxT7GtLecLQ803wJtLDl1iwvMz887QXkdDfdg=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=sd44wt2K7mPeq4mn3lD58KgWAP+5hvdkTjRvak8PcOc5ivRx2Gq3LlHidWFR0YA3u
+         2Ql+yquNQureKaE7fVWETtW/urr5YDljGTGiTz06oqbOgs93NfR58t8b+Y+UnJhSv8
+         BEns2FIPTrpAckUoIusDCsxDaKW6niaoXyOJqOJo1TTuqsNmdiI58iUWVzgF7vdzFO
+         GkZh/1OjlNBECJPS9f5GrO3dQdIgTfRhFDH3D2oY3QUvpptYrLNh3cGdbRaI5RLoiG
+         Acrb3FLExtTn8TdgUoSGdIF1/QNKdrOFuUBBRZPoSqRkd9J/U6wl4gpyyfqTqR13Jx
+         tb6XAX6ZSOebA==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 11 Aug 2023 22:28:27 +0300
+Message-Id: <CUPYPEYOKJ61.1WFKD20WQXVAA@suppilovahvero>
+Cc:     "Thorsten Leemhuis" <regressions@leemhuis.info>,
+        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>,
+        "Linux kernel regressions list" <regressions@lists.linux.dev>,
+        "Peter Huewe" <peterhuewe@gmx.de>,
+        "Christian Hesse" <mail@eworm.de>, <stable@vger.kernel.org>,
+        <roubro1991@gmail.com>, "Grundik" <ggrundik@gmail.com>,
+        "Christian Hesse" <list@eworm.de>,
+        <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
+ Laptop Intel 12th gen
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+X-Mailer: aerc 0.14.0
+References: <20230710133836.4367-1-mail@eworm.de>
+ <20230710142916.18162-1-mail@eworm.de>
+ <20230710231315.4ef54679@leda.eworm.net>
+ <bd0587e16d55ef38277ab1f6169909ae7cde3542.camel@kernel.org>
  <bb5580e93d244400c3330d7091bf64868aa2053f.camel@gmail.com>
  <0f272843a33a1706dbcbb2d84b02e3951ee60cbb.camel@kernel.org>
  <fdd5fd9ece045ebd1888672a75f157e64ade98fb.camel@gmail.com>
- <a588d1d3-12e0-b078-b6cc-b0a63c54ab37@leemhuis.info> <CUPW0XP1RFXI.162GZ78E46TBJ@suppilovahvero>
-In-Reply-To: <CUPW0XP1RFXI.162GZ78E46TBJ@suppilovahvero>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 11 Aug 2023 11:55:16 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whRVp4h8uWOX1YO+Y99+44u4s=XxMK4v00B6F1mOfqPLg@mail.gmail.com>
-Message-ID: <CAHk-=whRVp4h8uWOX1YO+Y99+44u4s=XxMK4v00B6F1mOfqPLg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
- Laptop Intel 12th gen
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Christian Hesse <mail@eworm.de>, stable@vger.kernel.org,
-        roubro1991@gmail.com, Grundik <ggrundik@gmail.com>,
-        Christian Hesse <list@eworm.de>,
-        linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+ <a588d1d3-12e0-b078-b6cc-b0a63c54ab37@leemhuis.info>
+ <CUPW0XP1RFXI.162GZ78E46TBJ@suppilovahvero>
+ <CAHk-=whRVp4h8uWOX1YO+Y99+44u4s=XxMK4v00B6F1mOfqPLg@mail.gmail.com>
+In-Reply-To: <CAHk-=whRVp4h8uWOX1YO+Y99+44u4s=XxMK4v00B6F1mOfqPLg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,22 +72,38 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 11 Aug 2023 at 10:22, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+On Fri Aug 11, 2023 at 9:55 PM EEST, Linus Torvalds wrote:
+> On Fri, 11 Aug 2023 at 10:22, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > I was planning to send a PR to Linus with a quirk for MSI GS66 Stealth
+> > 11UG, and apparently this bug report would add two additional MSI
+> > entries. This is becoming quickly a maintenance hell.
 >
-> I was planning to send a PR to Linus with a quirk for MSI GS66 Stealth
-> 11UG, and apparently this bug report would add two additional MSI
-> entries. This is becoming quickly a maintenance hell.
+> Honestly, what would be the immediate effects of just not enabling the
+> TPM irq by default at all, and making it an explicit opt-in?
+>
+> When a common solution is to just disable the TPM in the BIOS
+> entirely, and the end result is a working system, I really get the
+> teeling that this is all pain for very very little gain.
+>
+> Would anybody even notice if we just disabled it by default and added
+> a "if you really want it, use 'tpm=3Dirq' kernel command line"?
+>
+> Hmm?
+>
+>              Linus
 
-Honestly, what would be the immediate effects of just not enabling the
-TPM irq by default at all, and making it an explicit opt-in?
+It would be in line with what I proposed in [1] (option A), and also
+what Grundik said in this thread.
 
-When a common solution is to just disable the TPM in the BIOS
-entirely, and the end result is a working system, I really get the
-teeling that this is all pain for very very little gain.
+Right now IRQs should be only enabled by a command-line option, and what
+"allow list" would mean in practice should really be something that
+would be advertised e.g. Device Tree or ACPI, not really part of the
+solution implemented right now.
 
-Would anybody even notice if we just disabled it by default and added
-a "if you really want it, use 'tpm=irq' kernel command line"?
+I'll send a patch ASAP, which makes this feature opt-in.
 
-Hmm?
+[1] https://lore.kernel.org/linux-integrity/CUPW0XP1RFXI.162GZ78E46TBJ@supp=
+ilovahvero/
 
-             Linus
+BR, Jarkko
