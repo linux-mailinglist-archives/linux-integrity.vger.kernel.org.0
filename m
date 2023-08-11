@@ -2,154 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6D377880F
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 09:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D907D778818
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Aug 2023 09:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjHKHVN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Aug 2023 03:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S231256AbjHKHXB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Aug 2023 03:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjHKHVM (ORCPT
+        with ESMTP id S229992AbjHKHXA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Aug 2023 03:21:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F3E2738;
-        Fri, 11 Aug 2023 00:21:11 -0700 (PDT)
+        Fri, 11 Aug 2023 03:23:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B1D2738;
+        Fri, 11 Aug 2023 00:22:59 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A40C321866;
-        Fri, 11 Aug 2023 07:21:10 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 897AD2186E;
+        Fri, 11 Aug 2023 07:22:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1691738470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1691738578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ZZXMP9POMv7KC+x9VLPOTS3Ne+HZSWG0MHLcv2J5N8A=;
-        b=SAgbd3j6VOuQvwrdCPVTkR6xG30eF5BLitxscOvRMjlsSwfQ0pkuMEcl2EAayc3i3w4BG7
-        aHP+PUDtJ9mH6cZcCVKn17XQZkJYPps4XPG5ZEvS4n8VSEKYjvatHflSINSYRI7+2D3Npw
-        NhNV7lytfBeshmAnc5A8XZbEXSo7c4w=
+        bh=j+SvbtAGHvo5AvSfg2Qt2XhUaVOHYPGIm5HqTQIy5CY=;
+        b=IDoxhs0YlzafaTJZnNV2R5RtL1Peu7IefKp6kH/uIWYw4AUEV4LsYpWgvM1LDJFllMF41e
+        2+RAClCJn/V7ykZAxYH0Br7aBQ2LQYKxYL+CGX5icGYSxn3b7k9Qaqy+lnbu2QdGOcMaJZ
+        JYQCmuYueddqsWf0KzQ1wixv+9m3BCI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1691738470;
+        s=susede2_ed25519; t=1691738578;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ZZXMP9POMv7KC+x9VLPOTS3Ne+HZSWG0MHLcv2J5N8A=;
-        b=SM24BEBRjSyUqJmEUK4lplbTaB1VAsISkR7KpU0BSZVnUrsXZ0DYsoo5D5zTZqc49jgB1f
-        +P+waw3vZK/5YrDQ==
+        bh=j+SvbtAGHvo5AvSfg2Qt2XhUaVOHYPGIm5HqTQIy5CY=;
+        b=BMjZOTVwp7QbB2nA7CYdBI4pjfRNlo4yF7p9iA5uhi1FLbNXsdlikoskDSQqJeSKGNTzKV
+        Pez+yqNk6jrSJFDg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 750FD138E2;
-        Fri, 11 Aug 2023 07:21:10 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5EB91138E2;
+        Fri, 11 Aug 2023 07:22:58 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id iKmYG2bh1WQ2YwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 11 Aug 2023 07:21:10 +0000
-Date:   Fri, 11 Aug 2023 09:21:09 +0200
-Message-ID: <87zg2yrqmy.wl-tiwai@suse.de>
+        id Xpw/FtLh1WQIZAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 11 Aug 2023 07:22:58 +0000
+Date:   Fri, 11 Aug 2023 09:22:57 +0200
+Message-ID: <87wmy2rqjy.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     linux-integrity@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        stable@vger.kernel.org, "Takashi Iwai" <tiwai@suse.de>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org, Lino Sanfilippo <l.sanfilippo@kunbus.com>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts categorically for Lenovo
-In-Reply-To: <20230810182433.518523-1-jarkko@kernel.org>
+In-Reply-To: <87zg2yrqmy.wl-tiwai@suse.de>
 References: <20230810182433.518523-1-jarkko@kernel.org>
+        <87zg2yrqmy.wl-tiwai@suse.de>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 10 Aug 2023 20:24:33 +0200,
-Jarkko Sakkinen wrote:
+On Fri, 11 Aug 2023 09:21:09 +0200,
+Takashi Iwai wrote:
 > 
-> By large most of the entries in tpm_tis_dmi_table[] are for Lenovo laptops,
-> and they keep on coming. Therefore, disable IRQs categorically for Lenovo.
+> On Thu, 10 Aug 2023 20:24:33 +0200,
+> Jarkko Sakkinen wrote:
+> > 
+> > By large most of the entries in tpm_tis_dmi_table[] are for Lenovo laptops,
+> > and they keep on coming. Therefore, disable IRQs categorically for Lenovo.
+> > 
+> > Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+> > Cc: <stable@vger.kernel.org> # v6.4+
+> > Reported-by: "Takashi Iwai" <tiwai@suse.de>
+> > Closes: https://lore.kernel.org/linux-integrity/87il9qhxjq.wl-tiwai@suse.de/
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > This will be included into v6.5-rc6 PR, as long as Takashi ack's it. I'm
+> > planning to send tomorrow morning (GMT+3).
 > 
-> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-> Cc: <stable@vger.kernel.org> # v6.4+
-> Reported-by: "Takashi Iwai" <tiwai@suse.de>
-> Closes: https://lore.kernel.org/linux-integrity/87il9qhxjq.wl-tiwai@suse.de/
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> This will be included into v6.5-rc6 PR, as long as Takashi ack's it. I'm
-> planning to send tomorrow morning (GMT+3).
+> Feel free to take my ack:
+> 
+> Acked-by: Takashi Iwai <tiwai@suse.de>
+> 
+> I'll build a test kernel and ask reporters for testing the fix, too.
 
-Feel free to take my ack:
+Also, it's worth to put the link to the original bug report:
 
-Acked-by: Takashi Iwai <tiwai@suse.de>
-
-I'll build a test kernel and ask reporters for testing the fix, too.
-
-Thanks!
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1213779
 
 
 Takashi
-
-> 
-> BR, Jarkko
->  drivers/char/tpm/tpm_tis.c | 34 ----------------------------------
->  1 file changed, 34 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index 3c0f68b9e44f..dd0f52d35073 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -132,42 +132,8 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
->  	},
->  	{
->  		.callback = tpm_tis_disable_irq,
-> -		.ident = "ThinkPad T490s",
->  		.matches = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
-> -		},
-> -	},
-> -	{
-> -		.callback = tpm_tis_disable_irq,
-> -		.ident = "ThinkStation P360 Tiny",
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P360 Tiny"),
-> -		},
-> -	},
-> -	{
-> -		.callback = tpm_tis_disable_irq,
-> -		.ident = "ThinkPad L490",
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L490"),
-> -		},
-> -	},
-> -	{
-> -		.callback = tpm_tis_disable_irq,
-> -		.ident = "ThinkPad L590",
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L590"),
-> -		},
-> -	},
-> -	{
-> -		.callback = tpm_tis_disable_irq,
-> -		.ident = "ThinkStation P620",
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P620"),
->  		},
->  	},
->  	{
-> -- 
-> 2.39.2
-> 
