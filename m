@@ -1,84 +1,87 @@
 Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F1A779B7E
-	for <lists+linux-integrity@lfdr.de>; Sat, 12 Aug 2023 01:40:38 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id A730E779BC4
+	for <lists+linux-integrity@lfdr.de>; Sat, 12 Aug 2023 02:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236430AbjHKXkW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Aug 2023 19:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
+        id S236156AbjHLAFS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Aug 2023 20:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237269AbjHKXkS (ORCPT
+        with ESMTP id S233777AbjHLAFQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Aug 2023 19:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570A010FE;
-        Fri, 11 Aug 2023 16:40:18 -0700 (PDT)
+        Fri, 11 Aug 2023 20:05:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463511BF9;
+        Fri, 11 Aug 2023 17:05:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3BB6637A7;
-        Fri, 11 Aug 2023 23:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3F7DC433C7;
-        Fri, 11 Aug 2023 23:40:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E117641EA;
+        Sat, 12 Aug 2023 00:04:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26EE2C433C7;
+        Sat, 12 Aug 2023 00:04:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691797217;
-        bh=aV2LJbtr8NPZCiOq8BIk41FJhgohqOqu0LS4nEr0uvs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pPzegMV35VO8/6lfUmFitMOeXOXQlxTtJSYEEEUs072M5HMy7ZlwLp+ThLKXkM58a
-         ZGwSmrWv5ryjCypWVw29kdV33ksGUtDQ2bPaH3VSdPYvmlAc+IAD8ozkMlwk6GjoxU
-         Ie6GqQikR28FN8jX1n36DowvVmlDveyVvFvurZlFoVQwuzaFvNIvQPfjMjze8ybKvS
-         XNoAkJLRi0BEmbslbouybFecovD3DeD9DER5yxvPH6itnDFYKelihtkhaeOqmT4zy5
-         40kR0UupcJuKAiShCB9kglBcHpJoTz7/NeHFGH3rKdmZsGIj3S6sQ5xWP9R6Gw5wUi
-         9yVsqFceY6sBQ==
+        s=k20201202; t=1691798691;
+        bh=wzo63f8E943NP+JH4HHaZ920MDCt5eaYTMG1WRXJLN0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BAQTh4G4iRsxxm2LiUX3BNbPIx/4PRrbytyl+d9P9voo/4bDiZ21uHn0VqxozoBEb
+         cRhTTa87iqsMz6fr+0qq7AgPTd+hnJF3MMg/I0dio2/QrhYj2GgsBbAs3R/pRHmbnP
+         /LTv390x6ayBVllO2YrtWfunJPjNxo0lCyXyWan3+07cNDHBLibNZvxX5VyrWphbUR
+         TK+zQ3Pq5rP9ROdf/FCNQm0j/IX0zYNYX0NdxGrOEiWwy8ao04ICSCBWrLZb8G58Oi
+         KXUpkHkIDKovXQs3nIRL7aHJZvB+LJQ0b8y/RpTpYxzUl2KtcsdMDPEr8KNM4Le6Ry
+         Y0B/75nxyhuaw==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-integrity@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>, stable@vger.kernel.org,
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
         Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] tpm_tis: Opt-in interrupts
-Date:   Sat, 12 Aug 2023 02:40:02 +0300
-Message-Id: <20230811234002.2656180-3-jarkko@kernel.org>
+        David Howells <dhowells@redhat.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: [GIT PULL] tpmdd changes for v6.5-rc7
+Date:   Sat, 12 Aug 2023 03:04:40 +0300
+Message-Id: <20230812000440.2663553-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230811234002.2656180-1-jarkko@kernel.org>
-References: <20230811234002.2656180-1-jarkko@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Cc: stable@vger.kernel.org # v6.4+
-Link: https://lore.kernel.org/linux-integrity/CAHk-=whRVp4h8uWOX1YO+Y99+44u4s=XxMK4v00B6F1mOfqPLg@mail.gmail.com/
-Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- drivers/char/tpm/tpm_tis.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Merge tag 'mm-hotfixes-stable-2023-08-11-13-44' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm (2023-08-11 14:19:20 -0700)
 
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index 3c0f68b9e44f..7fa3d91042b2 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -89,7 +89,7 @@ static inline void tpm_tis_iowrite32(u32 b, void __iomem *iobase, u32 addr)
- 	tpm_tis_flush(iobase);
- }
- 
--static int interrupts = -1;
-+static int interrupts;
- module_param(interrupts, int, 0444);
- MODULE_PARM_DESC(interrupts, "Enable interrupts");
- 
--- 
-2.39.2
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-v6.5-rc7
+
+for you to fetch changes up to 6aaf663ee04a80b445f8f5abff53cb92cb583c88:
+
+  tpm_tis: Opt-in interrupts (2023-08-12 02:36:28 +0300)
+
+----------------------------------------------------------------
+Hi,
+
+These change the probing and enabling of interrupts advertised by the
+platform firmware (i.e. ACPI, Device Tree) to tpm_tis as an opt-in,
+which can be set from the kernel command-line.
+
+BR, Jarkko
+
+----------------------------------------------------------------
+Jarkko Sakkinen (1):
+      tpm_tis: Opt-in interrupts
+
+Peter Ujfalusi (1):
+      tpm: tpm_tis: Fix UPX-i11 DMI_MATCH condition
+
+ drivers/char/tpm/tpm_tis.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
