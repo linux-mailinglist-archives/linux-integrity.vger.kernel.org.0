@@ -2,70 +2,57 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43B477BF0C
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Aug 2023 19:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C1C77BF1F
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Aug 2023 19:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjHNRdp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Aug 2023 13:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
+        id S230367AbjHNRiE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 14 Aug 2023 13:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjHNRde (ORCPT
+        with ESMTP id S231158AbjHNRhd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Aug 2023 13:33:34 -0400
+        Mon, 14 Aug 2023 13:37:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B14133;
-        Mon, 14 Aug 2023 10:33:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1F6170B;
+        Mon, 14 Aug 2023 10:37:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1907E60F13;
-        Mon, 14 Aug 2023 17:33:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6333CC433C8;
-        Mon, 14 Aug 2023 17:33:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A61BF64141;
+        Mon, 14 Aug 2023 17:37:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75A4EC433C8;
+        Mon, 14 Aug 2023 17:37:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692034411;
-        bh=dMLWHmmWTHTpECQlogQ0Ns+k8Paiopb9T66lZHlkhII=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=h8GDb/X2iClmuQ5zfnXPmiXaDl9Kr6TqdPk9iMRYifdCs5TcOthXO4Hnmac1V1af8
-         mSo/bA8Uy1YoHuUBNr0W10qyeGiRKlZp6XGLSE7/C1qPbgwLQ23lxZdARJSGYc7Tq4
-         PWAl705L0Cd1cvET+qYqT4H5ANbjo17n8elx8weikQQ0MVb99e5FMid9DcOOI6WQOd
-         XUxLS1Yq0OSdv4mcDxAOPu66/N5DeAPo9DXiZ9jd+UibphFES1gctSEicQJ7NOSsbq
-         rWljLJkhTLkxwNy2kdSq8LWYtYqz456/8ICTDs/lKeFKEZyT3CJVYStPUaR1Ojc0cb
-         8JbvVV4wtiIcA==
+        s=k20201202; t=1692034645;
+        bh=LHvuxUi4RS4zNS43gxo6HisRbG6Z81b+jiNk7yx4v18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lRsS6jInqQYknu3yxKOTH7xPoDGz80KcRLcnoP5+qinRRAotvoNURx0u3kcTg+RtN
+         x2n9cbhBWo68IGoBQh/w98jCLPnScCjtVoCzcUDh/nms9JoWwXt8d1eH5Cx6xIJf9e
+         +SxV1DvElnB6K9xnRcUkMoYZ5WFz4PtVwVQhEGbiEc0W6jSRrRnUvb7UZsyJ/+3VZQ
+         GwFu57ibzvQvQMGd6E4CP9wX+Q+DPndgWNoHArRRQp5kasV+RSQVgS/LvRK4kQtUll
+         0tSDqS684FY2F22aw4OnvxylLBJAgp8+57WYn/ohFh2krUVWSRNj4tzCKpXbNL3PHq
+         lnPox45IE+Xow==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 14 Aug 2023 20:33:27 +0300
-Message-Id: <CUSG4ZTYMMD3.30DE3M55W3CJ1@suppilovahvero>
-Cc:     "Linux kernel regressions list" <regressions@lists.linux.dev>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Christian Hesse" <mail@eworm.de>, <stable@vger.kernel.org>,
-        <roubro1991@gmail.com>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Christian Hesse" <list@eworm.de>,
-        <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] tpm/tpm_tis: Disable interrupts for Framework
- Laptop Intel 12th gen
+Date:   Mon, 14 Aug 2023 20:37:21 +0300
+Message-Id: <CUSG7ZDGZ5N4.37KMXB8BFPWKI@suppilovahvero>
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Grundik" <ggrundik@gmail.com>,
-        "Thorsten Leemhuis" <regressions@leemhuis.info>,
-        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>
+To:     "Nayna Jain" <nayna@linux.ibm.com>,
+        <linux-integrity@vger.kernel.org>
+Cc:     "Mimi Zohar" <zohar@linux.ibm.com>,
+        "Eric Snowberg" <eric.snowberg@oracle.com>,
+        "Paul Moore" <paul@paul-moore.com>,
+        <linux-security-module@vger.kernel.org>,
+        "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/6] integrity: PowerVM support for loading CA keys
+ on machine keyring
 X-Mailer: aerc 0.14.0
-References: <20230710133836.4367-1-mail@eworm.de>
- <20230710142916.18162-1-mail@eworm.de>
- <20230710231315.4ef54679@leda.eworm.net>
- <bd0587e16d55ef38277ab1f6169909ae7cde3542.camel@kernel.org>
- <bb5580e93d244400c3330d7091bf64868aa2053f.camel@gmail.com>
- <0f272843a33a1706dbcbb2d84b02e3951ee60cbb.camel@kernel.org>
- <fdd5fd9ece045ebd1888672a75f157e64ade98fb.camel@gmail.com>
- <a588d1d3-12e0-b078-b6cc-b0a63c54ab37@leemhuis.info>
- <CUPW0XP1RFXI.162GZ78E46TBJ@suppilovahvero>
- <CUPWEV9HSGHY.MLO0B4RRH4RR@suppilovahvero>
- <5806ebf113d52c660e1c70e8a57cc047ab039aff.camel@gmail.com>
- <CUPZF09RGD86.VQN9BOMEYZX5@suppilovahvero>
- <2c5abdca1e93894ff3ee41ab1da90a5f8e38657f.camel@gmail.com>
-In-Reply-To: <2c5abdca1e93894ff3ee41ab1da90a5f8e38657f.camel@gmail.com>
+References: <20230813021531.1382815-1-nayna@linux.ibm.com>
+ <20230813021531.1382815-2-nayna@linux.ibm.com>
+In-Reply-To: <20230813021531.1382815-2-nayna@linux.ibm.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,27 +62,109 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat Aug 12, 2023 at 2:28 PM EEST, Grundik wrote:
-> On Fri, 2023-08-11 at 23:01 +0300, Jarkko Sakkinen wrote:
-> >=20
-> >=20
-> > Thanks for sharing your opinion. I'll take the necessary steps.
-> >=20
+On Sun Aug 13, 2023 at 5:15 AM EEST, Nayna Jain wrote:
+> Keys that derive their trust from an entity such as a security officer,
+> administrator, system owner, or machine owner are said to have "imputed
+> trust". CA keys with imputed trust can be loaded onto the machine keyring=
+.
+> The mechanism for loading these keys onto the machine keyring is platform
+> dependent.
 >
-> I was thinking... Maybe I'm wrong, maybe I mistaking, but isnt this TPM
-> located inside of the CPU chip? So that issue is not specific to laptop
-> vendor or model, but its CPU-specific.
+> Load keys stored in the variable trustedcadb onto the .machine keyring
+> on PowerVM platform.
+>
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> Reviewed-and-tested-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  .../integrity/platform_certs/keyring_handler.c  |  8 ++++++++
+>  .../integrity/platform_certs/keyring_handler.h  |  5 +++++
+>  .../integrity/platform_certs/load_powerpc.c     | 17 +++++++++++++++++
+>  3 files changed, 30 insertions(+)
+>
+> diff --git a/security/integrity/platform_certs/keyring_handler.c b/securi=
+ty/integrity/platform_certs/keyring_handler.c
+> index 8a1124e4d769..1649d047e3b8 100644
+> --- a/security/integrity/platform_certs/keyring_handler.c
+> +++ b/security/integrity/platform_certs/keyring_handler.c
+> @@ -69,6 +69,14 @@ __init efi_element_handler_t get_handler_for_mok(const=
+ efi_guid_t *sig_type)
+>  	return NULL;
+>  }
+> =20
+> +__init efi_element_handler_t get_handler_for_ca_keys(const efi_guid_t *s=
+ig_type)
+> +{
+> +	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) =3D=3D 0)
+> +		return add_to_machine_keyring;
+> +
+> +	return NULL;
+> +}
+> +
+>  /*
+>   * Return the appropriate handler for particular signature list types fo=
+und in
+>   * the UEFI dbx and MokListXRT tables.
+> diff --git a/security/integrity/platform_certs/keyring_handler.h b/securi=
+ty/integrity/platform_certs/keyring_handler.h
+> index 212d894a8c0c..6f15bb4cc8dc 100644
+> --- a/security/integrity/platform_certs/keyring_handler.h
+> +++ b/security/integrity/platform_certs/keyring_handler.h
+> @@ -29,6 +29,11 @@ efi_element_handler_t get_handler_for_db(const efi_gui=
+d_t *sig_type);
+>   */
+>  efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type);
+> =20
+> +/*
+> + * Return the handler for particular signature list types for CA keys.
+> + */
+> +efi_element_handler_t get_handler_for_ca_keys(const efi_guid_t *sig_type=
+);
+> +
+>  /*
+>   * Return the handler for particular signature list types found in the d=
+bx.
+>   */
+> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/=
+integrity/platform_certs/load_powerpc.c
+> index 170789dc63d2..6263ce3b3f1e 100644
+> --- a/security/integrity/platform_certs/load_powerpc.c
+> +++ b/security/integrity/platform_certs/load_powerpc.c
+> @@ -59,6 +59,7 @@ static __init void *get_cert_list(u8 *key, unsigned lon=
+g keylen, u64 *size)
+>  static int __init load_powerpc_certs(void)
+>  {
+>  	void *db =3D NULL, *dbx =3D NULL, *data =3D NULL;
+> +	void *trustedca =3D NULL;
 
-Nope, tpm_tis is MMIO interface for so called FIFO register interface,
-it could be backed e.g. by SPI [*]. It is a physical layer for MMIO.
-There's other backends too such as tpm_tis_i2c where kernel is directly
-exposed to the physical layer.
+Could this be just "void *trustedca;" ?
 
-> My MSI A12MT laptop has i5-1240P, Framework laptops mentioned in this
-> thread, also has i5-1240P CPU. Unfortunately there are no such
-> information about other affected models, but could it be just that CPU
-> line?
-
-[*] https://lkml.org/lkml/2023/8/14/1065
+>  	u64 dsize =3D 0;
+>  	u64 offset =3D 0;
+>  	int rc =3D 0;
+> @@ -120,6 +121,22 @@ static int __init load_powerpc_certs(void)
+>  		kfree(data);
+>  	}
+> =20
+> +	data =3D get_cert_list("trustedcadb", 12,  &dsize);
+> +	if (!data) {
+> +		pr_info("Couldn't get trustedcadb list from firmware\n");
+> +	} else if (IS_ERR(data)) {
+> +		rc =3D PTR_ERR(data);
+> +		pr_err("Error reading trustedcadb from firmware: %d\n", rc);
+> +	} else {
+> +		extract_esl(trustedca, data, dsize, offset);
+> +
+> +		rc =3D parse_efi_signature_list("powerpc:trustedca", trustedca, dsize,
+> +					      get_handler_for_ca_keys);
+> +		if (rc)
+> +			pr_err("Couldn't parse trustedcadb signatures: %d\n", rc);
+> +		kfree(data);
+> +	}
+> +
+>  	return rc;
+>  }
+>  late_initcall(load_powerpc_certs);
+> --=20
+> 2.31.1
 
 BR, Jarkko
