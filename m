@@ -2,116 +2,195 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B89677C397
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Aug 2023 00:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D6F77C3CE
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Aug 2023 01:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjHNWkr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Aug 2023 18:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
+        id S233420AbjHNXPN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 14 Aug 2023 19:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbjHNWkp (ORCPT
+        with ESMTP id S233423AbjHNXOo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Aug 2023 18:40:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6948E65
-        for <linux-integrity@vger.kernel.org>; Mon, 14 Aug 2023 15:40:03 -0700 (PDT)
+        Mon, 14 Aug 2023 19:14:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2661701
+        for <linux-integrity@vger.kernel.org>; Mon, 14 Aug 2023 16:13:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1692052802;
+        s=mimecast20190719; t=1692054837;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=l7gIh6nlPqSk8LuuWdz7csSouyNxDZki4ms0rDOko5s=;
-        b=WRIjQBjJPz9VloENeOoxHvr/UkFHC9HZn+lnCinXL0z0HiPD4W1nXXKdJIh1laTiuzu6o/
-        vIB9UzIDO2cFz+upj9ulNs3WJq9goPyw8yiFC+KrTZ26jjjnlkGKk4GV60r+H74ZMjXGvh
-        JwPSnTEeLgxYez756nb6T1oo67flMao=
+        bh=THE30SasYOk7GRpj1crEM/R/YR6biFAHq9J7CisS99U=;
+        b=C6Z6QDW6+CWf0D4EQEAXJlKkob/Rm8pX4VQmmCTwmuYqGRNU/GQqRhY0SnkH7UuIT5++0X
+        RxfzZAIXSdmbwRVG/IU9g8AhdI1pAoamj59RyL0+3CLRIQXQ0XdoEvJ1aFm1hJoCFM3xwS
+        ZWnn0CXHGFRsxGFl3wGwwsI1h4iQrHo=
 Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
  [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-605-QqyJcX5xN6qs7ppfaNofoQ-1; Mon, 14 Aug 2023 18:40:01 -0400
-X-MC-Unique: QqyJcX5xN6qs7ppfaNofoQ-1
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-5646868b9e7so5080613a12.3
-        for <linux-integrity@vger.kernel.org>; Mon, 14 Aug 2023 15:40:01 -0700 (PDT)
+ us-mta-468-pVauEBHaNjCuERxFpyGTMg-1; Mon, 14 Aug 2023 19:13:56 -0400
+X-MC-Unique: pVauEBHaNjCuERxFpyGTMg-1
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-5646868b9e7so5102918a12.3
+        for <linux-integrity@vger.kernel.org>; Mon, 14 Aug 2023 16:13:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692052800; x=1692657600;
+        d=1e100.net; s=20221208; t=1692054835; x=1692659635;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l7gIh6nlPqSk8LuuWdz7csSouyNxDZki4ms0rDOko5s=;
-        b=ai3PGZ3H2XlAhWP33C1mdEzKn33+7yI8+xYqYGVu1+7qIE9Y3YA8SxOMM5jP1jPvpO
-         neutwBE1kBf9t5idTfzfS7d4HnqbJPaw/D4qKpZkaLZG96dr94q9CmkEQ1ITHOgTI0ep
-         FyhoYtKk9wxBEBJBomt3G5WNhIuEa3PO2tz1D0NwaTLcx7Ih0ULBaBASu4RXfLeFUmaw
-         chpzrilQjGPMow42mHTlVC+3na21yNxMQCAaSnKd67sQ4U5oTPupo1g0vvXLlRo4wUIS
-         Q3ovpnaj75n6B3rrNeshh0/wCZijfdaRcSfvtebMKb2Fg/inA48pJN1Qp2zT4pZReu7O
-         9U6Q==
-X-Gm-Message-State: AOJu0YxyvBnpjKEvs2b9MQ+DxdXlf6GFbg7x4n7ox9Kp0ozk3A/FyvQp
-        heDnwf4OTM0nTkGN4e++A7GqkQUB1MYKxDMXeDkG3MTsvyOLmw5P1/394B4M9k8bVJm5VPtu0nV
-        ycR8wu6WfRX50vs6NbucUtYdz+K3yT2qn6IhG
-X-Received: by 2002:a05:6a20:441f:b0:12e:7c29:a6dd with SMTP id ce31-20020a056a20441f00b0012e7c29a6ddmr11376824pzb.43.1692052800014;
-        Mon, 14 Aug 2023 15:40:00 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF01jSZJ6upznh7bf7zow0hjWHaC+2v5nH9nEmy2PDwpj41mQnVkeFYwD3RO97AQ8NT35C/VA==
-X-Received: by 2002:a05:6a20:441f:b0:12e:7c29:a6dd with SMTP id ce31-20020a056a20441f00b0012e7c29a6ddmr11376811pzb.43.1692052799700;
-        Mon, 14 Aug 2023 15:39:59 -0700 (PDT)
+        bh=THE30SasYOk7GRpj1crEM/R/YR6biFAHq9J7CisS99U=;
+        b=XncvAzDJ3MB/8vaDcNesJAhfzxU7iYmRL5PpeOs0P+WqBInpb1An0tTWe10sfUdxdC
+         tnT05L+92nkeGUUeP0MvbcPNUC15kagfe6VeqJeDgBBmfbrt6o1gVfjqPt2g53cigmf1
+         S4amOTgBLUDRcnophMegGtSLBeu/CH41zhziMDa+2MAjta66Id4luwFGlSbOZkr2CbrD
+         wu7fKIjnf48CcjVhyjDcS5n5GlNiHHitdMbqJbrIG+dXarP/MRn5x3z/hSAv6Xo3uGiT
+         gD2P5uswNvJS+PvUGTTxi45yUNHocMiQJ4dWyry9ErJtEnI+3gyxH4jZYZK3PWgyqrbq
+         dP5A==
+X-Gm-Message-State: AOJu0Yyr5SRl/hiQbslnBkbnKtRKAJ3dq6R4z/qDMiKPPKHWQPXD9vKq
+        LtNvE2mF6fELKd74wwjCnMS7KlYE/z/XVF8fgN3plNFfVAvt2rd6wRE6rS4NR9WkhW2Y18KH/3U
+        JJSqSweunnaLiIv9lBinxDTsQi7v1
+X-Received: by 2002:a05:6a20:9383:b0:130:7803:57bd with SMTP id x3-20020a056a20938300b00130780357bdmr11277859pzh.3.1692054835350;
+        Mon, 14 Aug 2023 16:13:55 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFjENeL6XsZJ9mZ+BkCpOaC1eLAfNa4JPtq/hdBfyLaDaRLVp/nCTPdfNINr4xIrA91xOQIeA==
+X-Received: by 2002:a05:6a20:9383:b0:130:7803:57bd with SMTP id x3-20020a056a20938300b00130780357bdmr11277831pzh.3.1692054835020;
+        Mon, 14 Aug 2023 16:13:55 -0700 (PDT)
 Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id u18-20020a170903125200b001b53953f306sm9975124plh.178.2023.08.14.15.39.57
+        by smtp.gmail.com with ESMTPSA id j7-20020a170902758700b001b9e9edbf43sm10033090pll.171.2023.08.14.16.13.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 15:39:57 -0700 (PDT)
-Date:   Mon, 14 Aug 2023 15:39:56 -0700
+        Mon, 14 Aug 2023 16:13:54 -0700 (PDT)
+Date:   Mon, 14 Aug 2023 16:13:53 -0700
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
 To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts categorically for Lenovo
-Message-ID: <7ruidj3qnt6eapetwt6uwhkqeextehaisoc2i6axqax3s5js7z@eu6hoh2q7tkd>
-References: <20230810182433.518523-1-jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Richard Cochran <richardcochran@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] tpm_tis: Revert "tpm_tis: Disable interrupts on ThinkPad
+ T490s"
+Message-ID: <enaeow6numvzp74rrwpdqhjqs635ofqttj7o7gdoqfrsgbhihi@eb7ueum3r5w5>
+References: <20230814164054.64280-1-jarkko@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230810182433.518523-1-jarkko@kernel.org>
+In-Reply-To: <20230814164054.64280-1-jarkko@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 09:24:33PM +0300, Jarkko Sakkinen wrote:
-> By large most of the entries in tpm_tis_dmi_table[] are for Lenovo laptops,
-> and they keep on coming. Therefore, disable IRQs categorically for Lenovo.
+On Mon, Aug 14, 2023 at 07:40:53PM +0300, Jarkko Sakkinen wrote:
+> Since for MMIO driver using FIFO registers, also known as tpm_tis, the
+> default (and tbh recommended) behaviour is now the polling mode, the
+> "tristate" workaround is no longer for benefit.
 > 
-> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-> Cc: <stable@vger.kernel.org> # v6.4+
-> Reported-by: "Takashi Iwai" <tiwai@suse.de>
-> Closes: https://lore.kernel.org/linux-integrity/87il9qhxjq.wl-tiwai@suse.de/
+> If someone wants to explicitly enable IRQs for a TPM chip that should be
+> without question allowed. It could very well be a piece hardware in the
+> existing deny list because of e.g. firmware update or something similar.
+> 
+> While at it, document the module parameter, as this was not done in 2006
+> when it first appeared in the mainline.
+> 
+> Link: https://lore.kernel.org/linux-integrity/20201015214430.17937-1-jsnitsel@redhat.com/
+> Link: https://lore.kernel.org/all/1145393776.4829.19.camel@localhost.localdomain/
 > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Acked-by: Jerry Snitselaar <jsnitsel@redhat.com>
+I was just typing an email to say that it looks like 6aaf663ee04a ("tpm_tis: Opt-in interrupts") will require
+updating tpm_tis_disable_irq(), but you are already dealing with it. :)
+
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
 > ---
-> This will be included into v6.5-rc6 PR, as long as Takashi ack's it. I'm
-> planning to send tomorrow morning (GMT+3).
+>  .../admin-guide/kernel-parameters.txt         |  7 ++
+>  drivers/char/tpm/tpm_tis.c                    | 93 +------------------
+>  2 files changed, 9 insertions(+), 91 deletions(-)
 > 
-> BR, Jarkko
->  drivers/char/tpm/tpm_tis.c | 34 ----------------------------------
->  1 file changed, 34 deletions(-)
-> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 722b6eca2e93..6354aa779178 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -6340,6 +6340,13 @@
+>  			This will guarantee that all the other pcrs
+>  			are saved.
+>  
+> +	tpm_tis.interrupts= [HW,TPM]
+> +			Enable interrupts for the MMIO based physical layer
+> +			for the FIFO interface. By default it is set to false
+> +			(0). For more information about TPM hardware interfaces
+> +			defined by Trusted Computing Group (TCG) look up to
+> +			https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
+> +
+>  	tp_printk	[FTRACE]
+>  			Have the tracepoints sent to printk as well as the
+>  			tracing ring buffer. This is useful for early boot up
 > diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index 3c0f68b9e44f..dd0f52d35073 100644
+> index 7fa3d91042b2..077fdb73740c 100644
 > --- a/drivers/char/tpm/tpm_tis.c
 > +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -132,42 +132,8 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
->  	},
->  	{
->  		.callback = tpm_tis_disable_irq,
+> @@ -27,7 +27,6 @@
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+>  #include <linux/kernel.h>
+> -#include <linux/dmi.h>
+>  #include "tpm.h"
+>  #include "tpm_tis_core.h"
+>  
+> @@ -89,8 +88,8 @@ static inline void tpm_tis_iowrite32(u32 b, void __iomem *iobase, u32 addr)
+>  	tpm_tis_flush(iobase);
+>  }
+>  
+> -static int interrupts;
+> -module_param(interrupts, int, 0444);
+> +static bool interrupts;
+> +module_param(interrupts, bool, 0444);
+>  MODULE_PARM_DESC(interrupts, "Enable interrupts");
+>  
+>  static bool itpm;
+> @@ -103,92 +102,6 @@ module_param(force, bool, 0444);
+>  MODULE_PARM_DESC(force, "Force device probe rather than using ACPI entry");
+>  #endif
+>  
+> -static int tpm_tis_disable_irq(const struct dmi_system_id *d)
+> -{
+> -	if (interrupts == -1) {
+> -		pr_notice("tpm_tis: %s detected: disabling interrupts.\n", d->ident);
+> -		interrupts = 0;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct dmi_system_id tpm_tis_dmi_table[] = {
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "Framework Laptop (12th Gen Intel Core)",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "Framework"),
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "Laptop (12th Gen Intel Core)"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "Framework Laptop (13th Gen Intel Core)",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "Framework"),
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "Laptop (13th Gen Intel Core)"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
 > -		.ident = "ThinkPad T490s",
->  		.matches = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
 > -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
 > -		},
 > -	},
@@ -145,9 +224,39 @@ Acked-by: Jerry Snitselaar <jsnitsel@redhat.com>
 > -		.matches = {
 > -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
 > -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P620"),
->  		},
->  	},
->  	{
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "TUXEDO InfinityBook S 15/17 Gen7",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "TUXEDO InfinityBook S 15/17 Gen7"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "UPX-TGL",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "AAEON"),
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "UPX-TGL01"),
+> -		},
+> -	},
+> -	{}
+> -};
+> -
+>  #if defined(CONFIG_PNP) && defined(CONFIG_ACPI)
+>  static int has_hid(struct acpi_device *dev, const char *hid)
+>  {
+> @@ -312,8 +225,6 @@ static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
+>  	int irq = -1;
+>  	int rc;
+>  
+> -	dmi_check_system(tpm_tis_dmi_table);
+> -
+>  	rc = check_acpi_tpm2(dev);
+>  	if (rc)
+>  		return rc;
 > -- 
 > 2.39.2
 > 
