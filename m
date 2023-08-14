@@ -2,222 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5356977C292
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Aug 2023 23:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7BF77C332
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Aug 2023 00:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjHNVm7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Aug 2023 17:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S232889AbjHNWCw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 14 Aug 2023 18:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbjHNVmt (ORCPT
+        with ESMTP id S233169AbjHNWCu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Aug 2023 17:42:49 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79722127;
-        Mon, 14 Aug 2023 14:42:47 -0700 (PDT)
-Received: from [10.137.114.52] (unknown [131.107.159.180])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B551D2109420;
-        Mon, 14 Aug 2023 14:42:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B551D2109420
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1692049366;
-        bh=VrEk2AwesVAfdmRxYbk7yzrle2lO+wL2DH0neWh4nIQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=S9GJfn2Od14pgUphZugp6ChcUbBhcvXvRJJmXAiyk9k0z3kSl+E7o5AKgw4z88jwL
-         GHNffr/RbYjde/7Z9L/cbq9qtsFY8czbDmddnuFb0bFiUsO9uo3CQTJitVPIBdmlGu
-         e3BMNSfcYTNf9J+kZYDV2PXmY+kiBu7LT/aaNkpM=
-Message-ID: <bf794136-703a-0d33-e245-7e723007b5c0@linux.microsoft.com>
-Date:   Mon, 14 Aug 2023 14:42:46 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
+        Mon, 14 Aug 2023 18:02:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7A810F0;
+        Mon, 14 Aug 2023 15:02:49 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37EM2SHx018871;
+        Mon, 14 Aug 2023 22:02:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=FpIoN8YUDy/37QmvnUB3eIyTNRsXSQVZQhIRZ1O8vdM=;
+ b=iE7qvxlPBDojCpIChCLGoN11AwoFOto1+T55iVSOR1IgdqVfDdtl5yXkC/uW+kiUy5ti
+ bXGJqHhZ1AIvDSWo5lY55DvzooMwwgxdjvD1r5YPEuS75kX18n0/i9r/4nlYsh/RJV/m
+ pJmw+5k5LK+I0BvCwbEfuQE+HkJXhlZbXblsnVa8YvMT2b4ik9tA+veCLIJzZtCcL7eY
+ sWOCab1aCdJZbKqiTzMAHOGrBwZrsd0C5StybGwLd5+zcpD+LQTU7mX1DQ2/gcKGWvc5
+ H6B4nHlFD8Exn0w8QMeo7TKg6gol4HHzhJMykbvHJUqxkcR3jBXgrXxeEGPRitXupsgM Og== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sfvq4801f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Aug 2023 22:02:27 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37EM2Qt8018846;
+        Mon, 14 Aug 2023 22:02:27 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sfvq48016-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Aug 2023 22:02:26 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37EKULJt001107;
+        Mon, 14 Aug 2023 22:02:26 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3semsy0af6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Aug 2023 22:02:26 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37EM2PMk66847068
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Aug 2023 22:02:25 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0A81F58059;
+        Mon, 14 Aug 2023 22:02:25 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8535F5804B;
+        Mon, 14 Aug 2023 22:02:23 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.145.19])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Aug 2023 22:02:23 +0000 (GMT)
+Message-ID: <0e1511e8819b24ab8a34a7b15821f06eff688f29.camel@linux.ibm.com>
 Subject: Re: [RFC] IMA Log Snapshotting Design Proposal
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        kgold@linux.ibm.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, kexec@lists.infradead.org, jmorris@namei.org,
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Sush Shringarputale <sushring@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, kgold@linux.ibm.com,
+        bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
+        kexec@lists.infradead.org, jmorris@namei.org,
         Paul Moore <paul@paul-moore.com>, serge@hallyn.com
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com,
         Tushar Sugandhi <tusharsu@linux.microsoft.com>,
         linux-security-module@vger.kernel.org
+Date:   Mon, 14 Aug 2023 18:02:23 -0400
+In-Reply-To: <bf794136-703a-0d33-e245-7e723007b5c0@linux.microsoft.com>
 References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
- <277db5491460d5fd607785f2bcc733de39022a35.camel@linux.ibm.com>
-Content-Language: en-US
-From:   Sush Shringarputale <sushring@linux.microsoft.com>
-In-Reply-To: <277db5491460d5fd607785f2bcc733de39022a35.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+         <277db5491460d5fd607785f2bcc733de39022a35.camel@linux.ibm.com>
+         <bf794136-703a-0d33-e245-7e723007b5c0@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6baQrZRHoxmXqAZcmAVpDSkAA5M3VbwR
+X-Proofpoint-GUID: Sj7FcZiqreEfeid5Qv3WlRMcISm3L49a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-14_18,2023-08-10_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ spamscore=0 lowpriorityscore=0 mlxlogscore=885 adultscore=0 clxscore=1015
+ mlxscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308140199
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Mimi,
+On Mon, 2023-08-14 at 14:42 -0700, Sush Shringarputale wrote:
+> > This design seems overly complex and requires synchronization between
+> > the "snapshot" record and exporting the records from the measurement
+> > list.  None of this would be necessary if the measurements were copied
+> > from kernel memory to a backing file (e.g. tmpfs), as described in [1].
+> >
+> > What is the real problem - kernel memory pressure, memory pressure in
+> > general, or disk space?  Is the intention to remove or offload the
+> > exported measurements?
 
-Thanks for your feedback on this.
+> The main concern is the memory pressure on both the kernel and the 
+> attestation client
+> when it sends the request.  The concern you bring up is valid and we are 
+> working on
+> creating a prototype.  There is no intention to remove the exported 
+> measurements.
 
-
-On 8/11/2023 6:14 AM, Mimi Zohar wrote:
-> Hi Sush, Tushar,
->
-> On Tue, 2023-08-01 at 12:12 -0700, Sush Shringarputale wrote:
->> ================================================
->> | A. Problem Statement                         |
->> ================================================
->> Depending on the IMA policy, the IMA log can consume a lot of Kernel
->> memory on
->> the device.  For instance, the events for the following IMA policy
->> entries may
->> need to be measured in certain scenarios, but they can also lead to a
->> verbose
->> IMA log when the device is running for a long period of time.
->> ┌───────────────────────────────────────┐
->> │# PROC_SUPER_MAGIC                     │
->> │measure fsmagic=0x9fa0                 │
->> │# SYSFS_MAGIC                          │
->> │measure fsmagic=0x62656572             │
->> │# DEBUGFS_MAGIC                        │
->> │measure fsmagic=0x64626720             │
->> │# TMPFS_MAGIC                          │
->> │measure fsmagic=0x01021994             │
->> │# RAMFS_MAGIC                          │
->> │measure fsmagic=0x858458f6             │
->> │# SECURITYFS_MAGIC                     │
->> │measure fsmagic=0x73636673             │
->> │# OVERLAYFS_MAGIC                      │
->> │measure fsmagic=0x794c7630             │
->> │# log, audit or tmp files              │
->> │measure obj_type=var_log_t             │
->> │measure obj_type=auditd_log_t          │
->> │measure obj_type=tmp_t                 │
->> └───────────────────────────────────────┘
->>
->> Secondly, certain devices are configured to take Kernel updates using Kexec
->> soft-boot.  The IMA log from the previous Kernel gets carried over and the
->> Kernel memory consumption problem worsens when such devices undergo multiple
->> Kexec soft-boots over a long period of time.
->>
->> The above two scenarios can cause IMA log to grow and consume Kernel memory.
->>
->> In addition, a large IMA log can add pressure on the network bandwidth when
->> the attestation client sends it to remote-attestation-service.
->>
->> Truncating IMA log to reclaim memory is not feasible, since it makes the
->> log go
->> out of sync with the TPM PCR quote making remote attestation fail.
->>
->> A sophisticated solution is required which will help relieve the memory
->> pressure on the device and continue supporting remote attestation without
->> disruptions.
-> If the problem is kernel memory, then using a single tmpfs file has
-> already been proposed [1].  As entries are added to the measurement
-> list, they are copied to the tmpfs file and removed from kernel memory.
-> Userspace would still access the measurement list via the existing
-> securityfs file.
->
-> The IMA measurement list is a sequential file, allowing it to be read
-> from an offset.  How much or how little of the measuremnt list is read
-> by the attestation client and sent to the attestation server is up to
-> the attestation client/server.
->
-> If the problem is not kernel memory, but memory pressure in general,
-> then instead of a tmpfs file, the measurement list could similarly be
-> copied to a single persistent file [1].
-The suggested approach in this RFC discussion using a vfs_tmpfile was
-only discussed but no prototype was created back then.  We are
-discussing the approach internally now and will respond with more
-details about it.
->> -------------------------------------------------------------------------------
->> ================================================
->> | B. Proposed Solution                         |
->> ================================================
->> In this document, we propose an enhancement to the IMA subsystem to improve
->> the long-running performance by snapshotting the IMA log, while still
->> providing mechanisms to verify its integrity using the PCR quotes.
->>
->> The remainder of the document describes details of the proposed solution
->> in the
->> following sub-sections.
->>    - High-level Work-flow
->>    - Snapshot Triggering Mechanism
->>    - Design Choices for Storing Snapshots
->>    - Attestation-Client and Remote-Attestation-Service Side Changes
->>    - Example Walk-through
->>    - Open Questions
->> -------------------------------------------------------------------------------
->> ================================================
->> | B.1 High-level Work-flow                     |
->> ================================================
->> Pre-requisites:
->> - IMA Integrity guarantees are maintained.
->>
->> The proposed high level work-flow of IMA log snapshotting is as follows:
->> - A user-mode process will trigger the snapshot by opening a file in SysFS
->>     say /sys/kernel/security/ima/snapshot (referred to as
->> sysk_ima_snapshot_file
->>     here onwards).
-> Please fix the mailer so that it doesn't wrap sentences.   Adding blank
-> lines between bullets would improve readability.
-Noted, will do.
->> - The Kernel will get the current TPM PCR values and PCR update counter [2]
->>     and store them as template data in a new IMA event "snapshot_aggregate".
->>     This event will be measured by IMA using critical data measurement
->>     functionality [1].  Recording regular IMA events will be paused while
->>     "snapshot_aggregate" is being computed using the existing IMA mutex lock.
->> - Once the "snapshot_aggregate" is computed and measured in IMA log, the
->> prior
->>     IMA events will be made available in the sysk_ima_snapshot_file.
->> - The UM process will copy those IMA events from sysk_ima_snapshot_file to a
->>     snapshot file on disk chosen by UM (referred to as UM_snapshot_file here
->>     onwards).  The location, file-system type, access permissions etc. of the
->>     UM_snapshot_file would be controlled by UM process itself.
->> - Once UM is done copying the IMA events from sysk_ima_snapshot_file to
->>     UM_snapshot_file, it will indicate to the Kernel that the snapshot can be
->>     finalized by triggering a write with any data to the
->> sysk_ima_snapshot_file.
->>     UM process cannot prevent the IMA log purge operation after this point.
->> - The Kernel will truncate the current IMA log and and clear HTable up
->> to the
->>     "snapshot_aggregate" marker.
->> - The Kernel will measure the PCR update counter as part of measuring
->>     snapshot_aggregate, so that it can be used by the remote attestation
->> service
->>     for detecting missing events.
->> - UM can prevent the IMA log purge by closing the sysk_ima_snapshot_file
->>     without performing a write operation on it.  In this case, while the
->>     "snapshot_aggregate" marker may still be in the log, the event can be
->> ignored
->>     since the previous entries in the IMA log will not be purged.
->>
->> Note:
->> - This work-flow should work when interleaved with Kexec 'load' and
->> 'execute'
->>     events and should not cause IMA log + snapshot to go out of sync with PCR
->>     quotes. The implementation details are omitted from this document for
->>     brevity.
-> This design seems overly complex and requires synchronization between
-> the "snapshot" record and exporting the records from the measurement
-> list.  None of this would be necessary if the measurements were copied
-> from kernel memory to a backing file (e.g. tmpfs), as described in [1].
->
-> What is the real problem - kernel memory pressure, memory pressure in
-> general, or disk space?  Is the intention to remove or offload the
-> exported measurements?
-The main concern is the memory pressure on both the kernel and the 
-attestation client
-when it sends the request.  The concern you bring up is valid and we are 
-working on
-creating a prototype.  There is no intention to remove the exported 
+Glad to hear that you're not intending to remove the exported
 measurements.
-- Sush
-> Concerns:
-> - Pausing extending the measurement list.
->
-> [1]
-> https://lore.kernel.org/linux-integrity/CAOQ4uxj4Pv2Wr1wgvBCDR-tnA5dsZT3rvdDzKgAH1aEV_-r9Qg@mail.gmail.com/#t
->
+
+Defining and including a new record in the measurement list measurement
+is fine, if it helps with attestation and doesn't require pausing the
+measurements.
+
+-- 
+thanks,
+
+Mimi
+
