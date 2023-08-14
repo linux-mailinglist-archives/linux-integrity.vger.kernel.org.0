@@ -2,130 +2,153 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7BF77C332
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Aug 2023 00:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B89677C397
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Aug 2023 00:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbjHNWCw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Aug 2023 18:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        id S231731AbjHNWkr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 14 Aug 2023 18:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbjHNWCu (ORCPT
+        with ESMTP id S233368AbjHNWkp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Aug 2023 18:02:50 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7A810F0;
-        Mon, 14 Aug 2023 15:02:49 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37EM2SHx018871;
-        Mon, 14 Aug 2023 22:02:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=FpIoN8YUDy/37QmvnUB3eIyTNRsXSQVZQhIRZ1O8vdM=;
- b=iE7qvxlPBDojCpIChCLGoN11AwoFOto1+T55iVSOR1IgdqVfDdtl5yXkC/uW+kiUy5ti
- bXGJqHhZ1AIvDSWo5lY55DvzooMwwgxdjvD1r5YPEuS75kX18n0/i9r/4nlYsh/RJV/m
- pJmw+5k5LK+I0BvCwbEfuQE+HkJXhlZbXblsnVa8YvMT2b4ik9tA+veCLIJzZtCcL7eY
- sWOCab1aCdJZbKqiTzMAHOGrBwZrsd0C5StybGwLd5+zcpD+LQTU7mX1DQ2/gcKGWvc5
- H6B4nHlFD8Exn0w8QMeo7TKg6gol4HHzhJMykbvHJUqxkcR3jBXgrXxeEGPRitXupsgM Og== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sfvq4801f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Aug 2023 22:02:27 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37EM2Qt8018846;
-        Mon, 14 Aug 2023 22:02:27 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sfvq48016-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Aug 2023 22:02:26 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37EKULJt001107;
-        Mon, 14 Aug 2023 22:02:26 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3semsy0af6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Aug 2023 22:02:26 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37EM2PMk66847068
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Aug 2023 22:02:25 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A81F58059;
-        Mon, 14 Aug 2023 22:02:25 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8535F5804B;
-        Mon, 14 Aug 2023 22:02:23 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.145.19])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Aug 2023 22:02:23 +0000 (GMT)
-Message-ID: <0e1511e8819b24ab8a34a7b15821f06eff688f29.camel@linux.ibm.com>
-Subject: Re: [RFC] IMA Log Snapshotting Design Proposal
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Sush Shringarputale <sushring@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, kgold@linux.ibm.com,
-        bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
-        kexec@lists.infradead.org, jmorris@namei.org,
-        Paul Moore <paul@paul-moore.com>, serge@hallyn.com
-Cc:     code@tyhicks.com, nramas@linux.microsoft.com,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        linux-security-module@vger.kernel.org
-Date:   Mon, 14 Aug 2023 18:02:23 -0400
-In-Reply-To: <bf794136-703a-0d33-e245-7e723007b5c0@linux.microsoft.com>
-References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
-         <277db5491460d5fd607785f2bcc733de39022a35.camel@linux.ibm.com>
-         <bf794136-703a-0d33-e245-7e723007b5c0@linux.microsoft.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6baQrZRHoxmXqAZcmAVpDSkAA5M3VbwR
-X-Proofpoint-GUID: Sj7FcZiqreEfeid5Qv3WlRMcISm3L49a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-14_18,2023-08-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- spamscore=0 lowpriorityscore=0 mlxlogscore=885 adultscore=0 clxscore=1015
- mlxscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308140199
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 14 Aug 2023 18:40:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6948E65
+        for <linux-integrity@vger.kernel.org>; Mon, 14 Aug 2023 15:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692052802;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l7gIh6nlPqSk8LuuWdz7csSouyNxDZki4ms0rDOko5s=;
+        b=WRIjQBjJPz9VloENeOoxHvr/UkFHC9HZn+lnCinXL0z0HiPD4W1nXXKdJIh1laTiuzu6o/
+        vIB9UzIDO2cFz+upj9ulNs3WJq9goPyw8yiFC+KrTZ26jjjnlkGKk4GV60r+H74ZMjXGvh
+        JwPSnTEeLgxYez756nb6T1oo67flMao=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-605-QqyJcX5xN6qs7ppfaNofoQ-1; Mon, 14 Aug 2023 18:40:01 -0400
+X-MC-Unique: QqyJcX5xN6qs7ppfaNofoQ-1
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-5646868b9e7so5080613a12.3
+        for <linux-integrity@vger.kernel.org>; Mon, 14 Aug 2023 15:40:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692052800; x=1692657600;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l7gIh6nlPqSk8LuuWdz7csSouyNxDZki4ms0rDOko5s=;
+        b=ai3PGZ3H2XlAhWP33C1mdEzKn33+7yI8+xYqYGVu1+7qIE9Y3YA8SxOMM5jP1jPvpO
+         neutwBE1kBf9t5idTfzfS7d4HnqbJPaw/D4qKpZkaLZG96dr94q9CmkEQ1ITHOgTI0ep
+         FyhoYtKk9wxBEBJBomt3G5WNhIuEa3PO2tz1D0NwaTLcx7Ih0ULBaBASu4RXfLeFUmaw
+         chpzrilQjGPMow42mHTlVC+3na21yNxMQCAaSnKd67sQ4U5oTPupo1g0vvXLlRo4wUIS
+         Q3ovpnaj75n6B3rrNeshh0/wCZijfdaRcSfvtebMKb2Fg/inA48pJN1Qp2zT4pZReu7O
+         9U6Q==
+X-Gm-Message-State: AOJu0YxyvBnpjKEvs2b9MQ+DxdXlf6GFbg7x4n7ox9Kp0ozk3A/FyvQp
+        heDnwf4OTM0nTkGN4e++A7GqkQUB1MYKxDMXeDkG3MTsvyOLmw5P1/394B4M9k8bVJm5VPtu0nV
+        ycR8wu6WfRX50vs6NbucUtYdz+K3yT2qn6IhG
+X-Received: by 2002:a05:6a20:441f:b0:12e:7c29:a6dd with SMTP id ce31-20020a056a20441f00b0012e7c29a6ddmr11376824pzb.43.1692052800014;
+        Mon, 14 Aug 2023 15:40:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF01jSZJ6upznh7bf7zow0hjWHaC+2v5nH9nEmy2PDwpj41mQnVkeFYwD3RO97AQ8NT35C/VA==
+X-Received: by 2002:a05:6a20:441f:b0:12e:7c29:a6dd with SMTP id ce31-20020a056a20441f00b0012e7c29a6ddmr11376811pzb.43.1692052799700;
+        Mon, 14 Aug 2023 15:39:59 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id u18-20020a170903125200b001b53953f306sm9975124plh.178.2023.08.14.15.39.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 15:39:57 -0700 (PDT)
+Date:   Mon, 14 Aug 2023 15:39:56 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts categorically for Lenovo
+Message-ID: <7ruidj3qnt6eapetwt6uwhkqeextehaisoc2i6axqax3s5js7z@eu6hoh2q7tkd>
+References: <20230810182433.518523-1-jarkko@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230810182433.518523-1-jarkko@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-08-14 at 14:42 -0700, Sush Shringarputale wrote:
-> > This design seems overly complex and requires synchronization between
-> > the "snapshot" record and exporting the records from the measurement
-> > list.  None of this would be necessary if the measurements were copied
-> > from kernel memory to a backing file (e.g. tmpfs), as described in [1].
-> >
-> > What is the real problem - kernel memory pressure, memory pressure in
-> > general, or disk space?  Is the intention to remove or offload the
-> > exported measurements?
+On Thu, Aug 10, 2023 at 09:24:33PM +0300, Jarkko Sakkinen wrote:
+> By large most of the entries in tpm_tis_dmi_table[] are for Lenovo laptops,
+> and they keep on coming. Therefore, disable IRQs categorically for Lenovo.
+> 
+> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+> Cc: <stable@vger.kernel.org> # v6.4+
+> Reported-by: "Takashi Iwai" <tiwai@suse.de>
+> Closes: https://lore.kernel.org/linux-integrity/87il9qhxjq.wl-tiwai@suse.de/
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-> The main concern is the memory pressure on both the kernel and the 
-> attestation client
-> when it sends the request.  The concern you bring up is valid and we are 
-> working on
-> creating a prototype.  There is no intention to remove the exported 
-> measurements.
+Acked-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-Glad to hear that you're not intending to remove the exported
-measurements.
-
-Defining and including a new record in the measurement list measurement
-is fine, if it helps with attestation and doesn't require pausing the
-measurements.
-
--- 
-thanks,
-
-Mimi
+> ---
+> This will be included into v6.5-rc6 PR, as long as Takashi ack's it. I'm
+> planning to send tomorrow morning (GMT+3).
+> 
+> BR, Jarkko
+>  drivers/char/tpm/tpm_tis.c | 34 ----------------------------------
+>  1 file changed, 34 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index 3c0f68b9e44f..dd0f52d35073 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -132,42 +132,8 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+>  	},
+>  	{
+>  		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkPad T490s",
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkStation P360 Tiny",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P360 Tiny"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkPad L490",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L490"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkPad L590",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L590"),
+> -		},
+> -	},
+> -	{
+> -		.callback = tpm_tis_disable_irq,
+> -		.ident = "ThinkStation P620",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P620"),
+>  		},
+>  	},
+>  	{
+> -- 
+> 2.39.2
+> 
 
