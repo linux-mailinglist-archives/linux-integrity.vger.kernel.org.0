@@ -2,59 +2,61 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1002077EACC
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Aug 2023 22:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1368E77EAE1
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Aug 2023 22:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346136AbjHPUgc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Aug 2023 16:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S1346142AbjHPUkT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 16 Aug 2023 16:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346191AbjHPUg1 (ORCPT
+        with ESMTP id S1346222AbjHPUjy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Aug 2023 16:36:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BD42701;
-        Wed, 16 Aug 2023 13:36:26 -0700 (PDT)
+        Wed, 16 Aug 2023 16:39:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BAE2708;
+        Wed, 16 Aug 2023 13:39:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 060AD64A34;
-        Wed, 16 Aug 2023 20:36:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB137C433C8;
-        Wed, 16 Aug 2023 20:36:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5950F65EBF;
+        Wed, 16 Aug 2023 20:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33ABAC433CB;
+        Wed, 16 Aug 2023 20:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692218185;
-        bh=3znihyA+oNNC5toukf3Se/qa9M83w2qHg2WPNYDnsfA=;
-        h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-        b=kV+v+yOYJZeyBmuLXMZ4+RVu+Q24pkibRr9FH84OWhE0s70azYDnh1PYnm9swJ/Yc
-         Y0CqaTIjHL6zDsSZZzs5LbqUkQaoNwLH65wGXGE5dBaUjlKiTjFgcXJWfnI8/yM3c8
-         ct22xLe44OMHIwkwNUu33fZZnR7hiEL0GksRUvPKnkb5c5DFiesYkMLcD817R67KLH
-         IC6Dm8GmiQvISEC+4cAgD8VPCXIa0NYWam00jcgqMKF3lzqDOt3yH0dH1E4O4GDGmi
-         9CavmiUNmMk4Ywrb/J2G893+f/+r2QyxnIY3vGekvTR/QXSmp2H2PkmgchhZRbRp1W
-         Ik+M3mMLZY2hA==
+        s=k20201202; t=1692218391;
+        bh=pmS072dZEXt7YatJuOVq8UqswY8UVjXioO/Tl6j94hI=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=Ndp5yslugLgNMsZ3gI1USpmyqKuTZmSCb0FOq8KYq51JzeLxWEGnvnPN9a7FkbXNL
+         5oQExC/vjCdeFNyRRTxK09I52JFBXMO7ONerYunqggyERKaT6ZtJcSiijFZr72C4Eu
+         aq68W3f7OM9SDRQWAaiOicn8HfDNEKPkl2GL89u4f8RznR0YlkrOkLbhWWu0rGzv1R
+         C7LkLJqNRI4lvEy+NKi2W9BYVqBugJxx7JTo2aTk3Ak2X61QL8TVcTY4hjFdKfikWi
+         LlFavGGdogSNgJJxRX/gBhK/4iJssplcZ2ZCawGPllvM9uxJdJd8CWAYq0I43DE9eR
+         pi1Z3/I3ao5TA==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 16 Aug 2023 23:36:22 +0300
-Message-Id: <CUU9A4V7EREZ.2CPPYURBAGN95@suppilovahvero>
-To:     "Nayna Jain" <nayna@linux.ibm.com>,
-        <linux-integrity@vger.kernel.org>
-Cc:     "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Eric Snowberg" <eric.snowberg@oracle.com>,
-        "Paul Moore" <paul@paul-moore.com>,
-        "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>,
-        <linux-security-module@vger.kernel.org>,
-        <inux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 6/6] integrity: PowerVM support for loading third
- party code signing keys
+Date:   Wed, 16 Aug 2023 23:39:46 +0300
+Message-Id: <CUU9CQLZO8CU.2HZ1AA137CA2E@suppilovahvero>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <pbrobinson@gmail.com>, <zbyszek@in.waw.pl>, <hch@lst.de>,
+        <mjg59@srcf.ucam.org>, <pmatilai@redhat.com>, <jannh@google.com>,
+        "Roberto Sassu" <roberto.sassu@huawei.com>
+Subject: Re: [RFC][PATCH v2 02/13] integrity: Introduce a digest cache
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Roberto Sassu" <roberto.sassu@huaweicloud.com>, <corbet@lwn.net>,
+        <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
 X-Mailer: aerc 0.14.0
-References: <20230815112722.1591829-1-nayna@linux.ibm.com>
- <20230815112722.1591829-7-nayna@linux.ibm.com>
-In-Reply-To: <20230815112722.1591829-7-nayna@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230812104616.2190095-1-roberto.sassu@huaweicloud.com>
+ <20230812104616.2190095-3-roberto.sassu@huaweicloud.com>
+ <CUSFHQGJ3I8F.WBL3ZYT3U5FB@suppilovahvero>
+ <84159dc8-d2e5-4c10-9910-b329500862e0@huaweicloud.com>
+In-Reply-To: <84159dc8-d2e5-4c10-9910-b329500862e0@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,180 +64,27 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Aug 15, 2023 at 2:27 PM EEST, Nayna Jain wrote:
-> On secure boot enabled PowerVM LPAR, third party code signing keys are
-> needed during early boot to verify signed third party modules. These
-> third party keys are stored in moduledb object in the Platform
-> KeyStore (PKS).
+On Wed Aug 16, 2023 at 11:21 AM EEST, Roberto Sassu wrote:
+> On 8/14/2023 7:03 PM, Jarkko Sakkinen wrote:
+> > On Sat Aug 12, 2023 at 1:46 PM EEST, Roberto Sassu wrote:
+> >> From: Roberto Sassu <roberto.sassu@huawei.com>
+> >>
+> >> Introduce the digest cache, a structure holding a hash table of digest=
+s,
+> >> extracted from a digest list. Its pointer is stored in the iint of the
+> >=20
+> > What is iint? I honestly don't know what it is. I first thought that it
+> > was "int" typoed.
 >
-> Load third party code signing keys onto .secondary_trusted_keys keyring.
->
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> ---
->  certs/system_keyring.c                        | 30 +++++++++++++++++++
->  include/keys/system_keyring.h                 |  4 +++
->  .../platform_certs/keyring_handler.c          |  8 +++++
->  .../platform_certs/keyring_handler.h          |  5 ++++
->  .../integrity/platform_certs/load_powerpc.c   | 17 +++++++++++
->  5 files changed, 64 insertions(+)
->
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index b348e0898d34..33841c91f12c 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -152,6 +152,36 @@ static __init struct key_restriction *get_builtin_an=
-d_secondary_restriction(void
-> =20
->  	return restriction;
->  }
-> +
-> +/**
-> + * add_to_secondary_keyring - Add to secondary keyring.
-> + * @source: Source of key
-> + * @data: The blob holding the key
-> + * @len: The length of the data blob
-> + *
-> + * Add a key to the secondary keyring. The key must be vouched for by a =
-key in the builtin,
-> + * machine or secondary keyring itself.
-> + */
-> +void __init add_to_secondary_keyring(const char *source, const void *dat=
-a, size_t len)
-> +{
-> +	key_ref_t key;
-> +	key_perm_t perm;
-> +
-> +	perm =3D (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW;
-> +
-> +	key =3D key_create_or_update(make_key_ref(secondary_trusted_keys, 1),
-> +				   "asymmetric",
-> +				   NULL, data, len, perm,
-> +				   KEY_ALLOC_NOT_IN_QUOTA);
-> +	if (IS_ERR(key)) {
-> +		pr_err("Problem loading X.509 certificate from %s to secondary keyring=
- %ld\n",
-> +		       source, PTR_ERR(key));
-> +		return;
-> +	}
-> +
-> +	pr_notice("Loaded X.509 cert '%s'\n", key_ref_to_ptr(key)->description)=
-;
-> +	key_ref_put(key);
-> +}
->  #endif
->  #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
->  void __init set_machine_trusted_keys(struct key *keyring)
-> diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.=
-h
-> index 7e2583208820..8365adf842ef 100644
-> --- a/include/keys/system_keyring.h
-> +++ b/include/keys/system_keyring.h
-> @@ -50,9 +50,13 @@ int restrict_link_by_digsig_builtin_and_secondary(stru=
-ct key *keyring,
->  						  const struct key_type *type,
->  						  const union key_payload *payload,
->  						  struct key *restriction_key);
-> +void __init add_to_secondary_keyring(const char *source, const void *dat=
-a, size_t len);
->  #else
->  #define restrict_link_by_builtin_and_secondary_trusted restrict_link_by_=
-builtin_trusted
->  #define restrict_link_by_digsig_builtin_and_secondary restrict_link_by_d=
-igsig_builtin
-> +static inline void __init add_to_secondary_keyring(const char *source, c=
-onst void *data, size_t len)
-> +{
-> +}
->  #endif
-> =20
->  #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
-> diff --git a/security/integrity/platform_certs/keyring_handler.c b/securi=
-ty/integrity/platform_certs/keyring_handler.c
-> index 586027b9a3f5..13ea17207902 100644
-> --- a/security/integrity/platform_certs/keyring_handler.c
-> +++ b/security/integrity/platform_certs/keyring_handler.c
-> @@ -78,6 +78,14 @@ __init efi_element_handler_t get_handler_for_ca_keys(c=
-onst efi_guid_t *sig_type)
->  	return NULL;
->  }
-> =20
-> +__init efi_element_handler_t get_handler_for_code_signing_keys(const efi=
-_guid_t *sig_type)
-> +{
-> +	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) =3D=3D 0)
-> +		return add_to_secondary_keyring;
-> +
-> +	return NULL;
-> +}
-> +
->  /*
->   * Return the appropriate handler for particular signature list types fo=
-und in
->   * the UEFI dbx and MokListXRT tables.
-> diff --git a/security/integrity/platform_certs/keyring_handler.h b/securi=
-ty/integrity/platform_certs/keyring_handler.h
-> index 6f15bb4cc8dc..f92895cc50f6 100644
-> --- a/security/integrity/platform_certs/keyring_handler.h
-> +++ b/security/integrity/platform_certs/keyring_handler.h
-> @@ -34,6 +34,11 @@ efi_element_handler_t get_handler_for_mok(const efi_gu=
-id_t *sig_type);
->   */
->  efi_element_handler_t get_handler_for_ca_keys(const efi_guid_t *sig_type=
-);
-> =20
-> +/*
-> + * Return the handler for particular signature list types for code signi=
-ng keys.
-> + */
-> +efi_element_handler_t get_handler_for_code_signing_keys(const efi_guid_t=
- *sig_type);
-> +
->  /*
->   * Return the handler for particular signature list types found in the d=
-bx.
->   */
-> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/=
-integrity/platform_certs/load_powerpc.c
-> index 339053d9726d..c85febca3343 100644
-> --- a/security/integrity/platform_certs/load_powerpc.c
-> +++ b/security/integrity/platform_certs/load_powerpc.c
-> @@ -60,6 +60,7 @@ static int __init load_powerpc_certs(void)
->  {
->  	void *db =3D NULL, *dbx =3D NULL, *data =3D NULL;
->  	void *trustedca;
-> +	void *moduledb;
->  	u64 dsize =3D 0;
->  	u64 offset =3D 0;
->  	int rc =3D 0;
-> @@ -137,6 +138,22 @@ static int __init load_powerpc_certs(void)
->  		kfree(data);
->  	}
-> =20
-> +	data =3D get_cert_list("moduledb", 9,  &dsize);
-> +	if (!data) {
-> +		pr_info("Couldn't get moduledb list from firmware\n");
-> +	} else if (IS_ERR(data)) {
-> +		rc =3D PTR_ERR(data);
-> +		pr_err("Error reading moduledb from firmware: %d\n", rc);
-> +	} else {
-> +		extract_esl(moduledb, data, dsize, offset);
-> +
-> +		rc =3D parse_efi_signature_list("powerpc:moduledb", moduledb, dsize,
-> +					      get_handler_for_code_signing_keys);
-> +		if (rc)
-> +			pr_err("Couldn't parse moduledb signatures: %d\n", rc);
-> +		kfree(data);
-> +	}
-> +
->  	return rc;
->  }
->  late_initcall(load_powerpc_certs);
-> --=20
-> 2.31.1
+> Ops. It is the integrity_iint_cache structure, to retain the=20
+> integrity-specific state of an inode. Will explain that in the next versi=
+on.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+OK, cool!
 
-I can pick this. My last PR did not went too great partly because of
-mess with tpm_tis but now things are calmer.
+> Thanks
+>
+> Roberto
 
 BR, Jarkko
+
