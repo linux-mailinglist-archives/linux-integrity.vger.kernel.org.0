@@ -2,68 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8188A77DC8B
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Aug 2023 10:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B55F77E20D
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Aug 2023 14:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbjHPIif (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Aug 2023 04:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S245064AbjHPM6i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 16 Aug 2023 08:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243002AbjHPIhj (ORCPT
+        with ESMTP id S244660AbjHPM6d (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Aug 2023 04:37:39 -0400
-Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569653C18;
-        Wed, 16 Aug 2023 01:36:45 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4RQh5Q4x4Gz9xrq8;
-        Wed, 16 Aug 2023 16:24:58 +0800 (CST)
-Received: from [10.81.209.179] (unknown [10.81.209.179])
-        by APP1 (Coremail) with SMTP id LxC2BwBXCrpvitxk8zz3AA--.58903S2;
-        Wed, 16 Aug 2023 09:36:13 +0100 (CET)
-Message-ID: <98959e3d-7543-4a8e-9712-05a3ba04d2c8@huaweicloud.com>
-Date:   Wed, 16 Aug 2023 10:35:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH v2 03/13] integrity/digest_cache: Add functions to
- populate and search
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>, corbet@lwn.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de,
-        mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230812104616.2190095-1-roberto.sassu@huaweicloud.com>
- <20230812104616.2190095-4-roberto.sassu@huaweicloud.com>
- <CUSFPINBGDSS.DQ0I19Z9FNR4@suppilovahvero>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <CUSFPINBGDSS.DQ0I19Z9FNR4@suppilovahvero>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 16 Aug 2023 08:58:33 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776A91FF3;
+        Wed, 16 Aug 2023 05:58:32 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37GCvh1L032106;
+        Wed, 16 Aug 2023 12:58:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=WmKNqt5RyLphEHTQ3PhyNwbR24W9Co9HoNVQhPeG+SU=;
+ b=tlN282+ea6K8K19iQkBOd7thTBnMF9M7LVWNWzV5jMmItBzxqvaW41FXXJCdwKMxZIBI
+ bSMXdsXgz1hJttPtQHs+/pzztqgUcf2N4IjiUTFQMN9fnVhRlmhGUPM/NbRcMxhAsKKm
+ PpumHzYwDQEHKHcL3SRChhyoKtJ0to3nMVzdkJEVSCfymyPJf+fcDgbyy2TARYiL5Tcv
+ j77mft8egkhtRD6CMGPsqvf+Y2rJW9Q8Ns5MfcBAOQnlGODFyurqq3KIGX4HEbJBEqt9
+ NYWJ/kYK60PJOGcqSM3TCtw62MHm7zCSA7DmfPSMAhoB326PBg8HZ03GPWdxU+EB7QvG cA== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sgxx080p1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Aug 2023 12:58:20 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37GAvrJx001090;
+        Wed, 16 Aug 2023 12:58:19 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3semsycm8b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Aug 2023 12:58:19 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37GCwIHa20185390
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Aug 2023 12:58:18 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0886C5805B;
+        Wed, 16 Aug 2023 12:58:18 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F1D05805E;
+        Wed, 16 Aug 2023 12:58:17 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.190.160])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 16 Aug 2023 12:58:17 +0000 (GMT)
+Message-ID: <3b4024eb6602fc2b7be821e6e33c656eee3c7cae.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/6] integrity: ignore keys failing CA restrictions
+ on non-UEFI platform
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>,
+        linux-security-module@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 16 Aug 2023 08:58:16 -0400
+In-Reply-To: <CUSG8HX9J4L0.37OHE7QHLL9N7@suppilovahvero>
+References: <20230813021531.1382815-1-nayna@linux.ibm.com>
+         <20230813021531.1382815-3-nayna@linux.ibm.com>
+         <CUSG8HX9J4L0.37OHE7QHLL9N7@suppilovahvero>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwBXCrpvitxk8zz3AA--.58903S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtr4ftw4kKFyUCry5ZFWfuFg_yoW3Jr1fpa
-        s7CF1UKr4rZr13Gw17AF1ayr1SvryvqF47Gw45Wr1ayr4DZr10y3W8Aw1UWFy5Jr48Wa12
-        yF4jgr15ur1UXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgALBF1jj46tmwAAsE
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE autolearn=no
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: aJNxpgGI1i7q6w3pkC8aTvsLKU1rNLm9
+X-Proofpoint-ORIG-GUID: aJNxpgGI1i7q6w3pkC8aTvsLKU1rNLm9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-16_11,2023-08-15_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
+ impostorscore=0 phishscore=0 clxscore=1015 adultscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308160110
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,220 +93,52 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 8/14/2023 7:13 PM, Jarkko Sakkinen wrote:
-> On Sat Aug 12, 2023 at 1:46 PM EEST, Roberto Sassu wrote:
->> From: Roberto Sassu <roberto.sassu@huawei.com>
->>
->> Add digest_cache_init_htable(), to size a hash table depending on the
->> number of digests to be added to the cache.
->>
->> Add digest_cache_add() and digest_cache_lookup() to respectively add and
->> lookup a digest in the digest cache.
->>
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->> ---
->>   security/integrity/digest_cache.c | 131 ++++++++++++++++++++++++++++++
->>   security/integrity/digest_cache.h |  24 ++++++
->>   2 files changed, 155 insertions(+)
->>
->> diff --git a/security/integrity/digest_cache.c b/security/integrity/digest_cache.c
->> index 4201c68171a..d14d84b804b 100644
->> --- a/security/integrity/digest_cache.c
->> +++ b/security/integrity/digest_cache.c
->> @@ -315,3 +315,134 @@ struct digest_cache *digest_cache_get(struct dentry *dentry,
->>   
->>   	return iint->dig_user;
->>   }
->> +
->> +/**
->> + * digest_cache_init_htable - Allocate and initialize the hash table
->> + * @digest_cache: Digest cache
->> + * @num_digests: Number of digests to add to the digest cache
->> + *
->> + * This function allocates and initializes the hash table. Its size is
->> + * determined by the number of digests to add to the digest cache, known
->> + * at this point by the parser calling this function.
->> + *
->> + * Return: Zero on success, a negative value otherwise.
->> + */
->> +int digest_cache_init_htable(struct digest_cache *digest_cache,
->> +			     u64 num_digests)
->> +{
->> +	int i;
->> +
->> +	if (!digest_cache)
->> +		return 0;
->> +
->> +	digest_cache->num_slots = num_digests / DIGEST_CACHE_HTABLE_DEPTH;
->> +	if (!digest_cache->num_slots)
->> +		digest_cache->num_slots = 1;
->> +
->> +	digest_cache->slots = kmalloc_array(num_digests,
->> +					    sizeof(*digest_cache->slots),
->> +					    GFP_KERNEL);
->> +	if (!digest_cache->slots)
->> +		return -ENOMEM;
->> +
->> +	for (i = 0; i < digest_cache->num_slots; i++)
->> +		INIT_HLIST_HEAD(&digest_cache->slots[i]);
->> +
->> +	pr_debug("Initialized %d hash table slots for digest list %s\n",
->> +		 digest_cache->num_slots, digest_cache->path_str);
->> +	return 0;
->> +}
->> +
->> +/**
->> + * digest_cache_add - Add a new digest to the digest cache
->> + * @digest_cache: Digest cache
->> + * @digest: Digest to add
->> + *
->> + * This function, invoked by a digest list parser, adds a digest extracted
->> + * from a digest list to the digest cache.
->> + *
->> + * Return: Zero on success, a negative value on error.
+On Mon, 2023-08-14 at 20:38 +0300, Jarkko Sakkinen wrote:
+> On Sun Aug 13, 2023 at 5:15 AM EEST, Nayna Jain wrote:
+> > On non-UEFI platforms, handle restrict_link_by_ca failures differently.
+> >
+> > Certificates which do not satisfy CA restrictions on non-UEFI platforms
+> > are ignored.
+> >
+> > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> > Reviewed-and-tested-by: Mimi Zohar <zohar@linux.ibm.com>
+> > ---
+> >  security/integrity/platform_certs/machine_keyring.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/security/integrity/platform_certs/machine_keyring.c b/security/integrity/platform_certs/machine_keyring.c
+> > index 7aaed7950b6e..389a6e7c9245 100644
+> > --- a/security/integrity/platform_certs/machine_keyring.c
+> > +++ b/security/integrity/platform_certs/machine_keyring.c
+> > @@ -36,7 +36,7 @@ void __init add_to_machine_keyring(const char *source, const void *data, size_t
+> >  	 * If the restriction check does not pass and the platform keyring
+> >  	 * is configured, try to add it into that keyring instead.
+> >  	 */
+> > -	if (rc && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING))
+> > +	if (rc && efi_enabled(EFI_BOOT) && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING))
+> >  		rc = integrity_load_cert(INTEGRITY_KEYRING_PLATFORM, source,
+> >  					 data, len, perm);
+> >  
+> > -- 
+> > 2.31.1
 > 
-> Nit: previous had a different phrasing "a negative value otherwise".
-> 
-> I would suggest "a POSIX error code otherwise" for both.
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Ok.
+Hi Jarkko,
 
->> + */
->> +int digest_cache_add(struct digest_cache *digest_cache, u8 *digest)
->> +{
->> +	struct digest_cache_entry *entry;
->> +	unsigned int key;
->> +	int digest_len;
->> +
->> +	if (!digest_cache)
->> +		return 0;
->> +
->> +	digest_len = hash_digest_size[digest_cache->algo];
->> +
->> +	entry = kmalloc(sizeof(*entry) + digest_len, GFP_KERNEL);
->> +	if (!entry)
->> +		return -ENOMEM;
->> +
->> +	memcpy(entry->digest, digest, digest_len);
->> +
->> +	key = digest_cache_hash_key(digest, digest_cache->num_slots);
->> +	hlist_add_head(&entry->hnext, &digest_cache->slots[key]);
->> +	pr_debug("Add digest %s:%*phN from digest list %s\n",
->> +		 hash_algo_name[digest_cache->algo], digest_len, digest,
->> +		 digest_cache->path_str);
->> +	return 0;
->> +}
->> +
->> +/**
->> + * digest_cache_lookup - Searches a digest in the digest cache
->> + * @digest_cache: Digest cache
->> + * @digest: Digest to search
->> + * @algo: Algorithm of the digest to search
->> + * @pathname: Path of the file whose digest is looked up
->> + *
->> + * This function, invoked by IMA or EVM, searches the calculated digest of
->> + * a file or file metadata in the digest cache acquired with
->> + * digest_cache_get().
->> + *
->> + * Return: Zero if the digest is found, a negative value if not.
->> + */
->> +int digest_cache_lookup(struct digest_cache *digest_cache, u8 *digest,
->> +			enum hash_algo algo, const char *pathname)
->> +{
->> +	struct digest_cache_entry *entry;
->> +	unsigned int key;
->> +	int digest_len;
->> +	int search_depth = 0;
->> +
->> +	if (!digest_cache)
->> +		return -ENOENT;
->> +
->> +	if (digest_cache->algo == HASH_ALGO__LAST) {
->> +		pr_debug("Algorithm not set for digest list %s\n",
->> +			 digest_cache->path_str);
->> +		return -ENOENT;
->> +	}
->> +
->> +	digest_len = hash_digest_size[digest_cache->algo];
->> +
->> +	if (algo != digest_cache->algo) {
->> +		pr_debug("Algo mismatch for file %s, digest %s:%*phN in digest list %s (%s)\n",
->> +			 pathname, hash_algo_name[algo], digest_len, digest,
->> +			 digest_cache->path_str,
->> +			 hash_algo_name[digest_cache->algo]);
->> +		return -ENOENT;
->> +	}
->> +
->> +	key = digest_cache_hash_key(digest, digest_cache->num_slots);
->> +
->> +	hlist_for_each_entry_rcu(entry, &digest_cache->slots[key], hnext) {
->> +		if (!memcmp(entry->digest, digest, digest_len)) {
->> +			pr_debug("Cache hit at depth %d for file %s, digest %s:%*phN in digest list %s\n",
->> +				 search_depth, pathname, hash_algo_name[algo],
->> +				 digest_len, digest, digest_cache->path_str);
->> +			return 0;
->> +		}
->> +
->> +		search_depth++;
->> +	}
->> +
->> +	pr_debug("Cache miss for file %s, digest %s:%*phN in digest list %s\n",
->> +		 pathname, hash_algo_name[algo], digest_len, digest,
->> +		 digest_cache->path_str);
->> +	return -ENOENT;
->> +}
->> diff --git a/security/integrity/digest_cache.h b/security/integrity/digest_cache.h
->> index ff88e8593c6..01cd70f9850 100644
->> --- a/security/integrity/digest_cache.h
->> +++ b/security/integrity/digest_cache.h
->> @@ -66,6 +66,11 @@ static inline unsigned int digest_cache_hash_key(u8 *digest,
->>   void digest_cache_free(struct digest_cache *digest_cache);
->>   struct digest_cache *digest_cache_get(struct dentry *dentry,
->>   				      struct integrity_iint_cache *iint);
->> +int digest_cache_init_htable(struct digest_cache *digest_cache,
->> +			     u64 num_digests);
->> +int digest_cache_add(struct digest_cache *digest_cache, u8 *digest);
->> +int digest_cache_lookup(struct digest_cache *digest_cache, u8 *digest,
->> +			enum hash_algo algo, const char *pathname);
->>   #else
->>   static inline void digest_cache_free(struct digest_cache *digest_cache)
->>   {
->> @@ -77,5 +82,24 @@ digest_cache_get(struct dentry *dentry, struct integrity_iint_cache *iint)
->>   	return NULL;
->>   }
->>   
->> +static inline int digest_cache_init_htable(struct digest_cache *digest_cache,
->> +					   u64 num_digests)
->> +{
->> +	return -EOPNOTSUPP;
->> +}
->> +
->> +static inline int digest_cache_add(struct digest_cache *digest_cache,
->> +				   u8 *digest)
->> +{
->> +	return -EOPNOTSUPP;
->> +}
->> +
->> +static inline int digest_cache_lookup(struct digest_cache *digest_cache,
->> +				      u8 *digest, enum hash_algo algo,
->> +				      const char *pathname)
->> +{
->> +	return -ENOENT;
->> +}
->> +
->>   #endif /* CONFIG_INTEGRITY_DIGEST_CACHE */
->>   #endif /* _DIGEST_CACHE_H */
->> -- 
->> 2.34.1
-> 
-> Why all this complexity instead of using xarray?
-> 
-> https://docs.kernel.org/core-api/xarray.html
+Without the following two commits in your master branch, the last patch
+in this series "[PATCH v4 6/6] integrity: PowerVM support for loading
+third party code signing keys"   doesn't apply cleanly.
 
-Uhm, did I get correctly from the documentation that it isn't the 
-optimal solution for hash tables?
+- commit 409b465f8a83 ("integrity: Enforce digitalSignature usage in
+the ima and evm keyrings")
+- commit e34a6c7dd192 ("KEYS: DigitalSignature link restriction")
 
-Thanks
+If you're not planning on upstreaming this patch set, I'd appreciate
+your creating a topic branch with these two commits.
 
-Roberto
+-- 
+thanks,
+
+Mimi
 
