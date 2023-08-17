@@ -2,115 +2,166 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCF477FF8A
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Aug 2023 23:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47DB77FFB9
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Aug 2023 23:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355142AbjHQVJq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Aug 2023 17:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
+        id S1355248AbjHQVVj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Aug 2023 17:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355129AbjHQVJQ (ORCPT
+        with ESMTP id S244017AbjHQVVU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Aug 2023 17:09:16 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAB1358D;
-        Thu, 17 Aug 2023 14:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692306555; x=1723842555;
-  h=message-id:subject:from:reply-to:to:cc:date:mime-version:
-   content-transfer-encoding;
-  bh=RU5huI3tbguJ32IffneM090TDzieHgftTmnWJZO079U=;
-  b=PNhZQ9ijE1YTAESEMHryPDnuvsLKcrBV1FGp5T2I06jFAvRiTOPtfEPP
-   jKrj3eDxx8Zfo3ArRROIsHEUyvAKfZybJ6s+vvIHG+F90kOHWEiNv/UMP
-   a6kI89Agt17wfabsLk8m3SPFOMuKOgwk5xzB6Pzf+moKHd3wL1VyxPy84
-   zs54o2qJhbuZiupjFCn2xAVaDRdh8REVenJBzaP0M9ioy/rtYbWi8VSF4
-   ZrudbCO43KrD2Z9QS0NIkeKd76zc/gO/WGigOpeEP5+fTQ0mC2TCuM/TR
-   6S8ppvcs+t16MoEF812aGYSGdr7oSXwayD6z5uUD1kUCaR3tHUF9z5nxs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="372916027"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="372916027"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 14:09:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="858370883"
-X-IronPort-AV: E=Sophos;i="6.01,181,1684825200"; 
-   d="scan'208";a="858370883"
-Received: from wopr.jf.intel.com ([10.54.75.146])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 14:09:14 -0700
-Message-ID: <485e8740385239b56753ce01d8995f01f84a68e5.camel@linux.intel.com>
-Subject: REGRESSION WITH BISECT: v6.5-rc6 TPM patch breaks S3 on some Intel
- systems
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-Reply-To: todd.e.brandt@linux.intel.com
-To:     mario.limonciello@amd.com, linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, len.brown@intel.com,
-        charles.d.prestopine@intel.com, rafael.j.wysocki@intel.com
-Date:   Thu, 17 Aug 2023 14:09:00 -0700
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Aug 2023 17:21:20 -0400
+X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Aug 2023 14:21:19 PDT
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CA7C1
+        for <linux-integrity@vger.kernel.org>; Thu, 17 Aug 2023 14:21:19 -0700 (PDT)
+Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
+        by cmsmtp with ESMTP
+        id Whg3qxbNJfaVXWkPFqMMqy; Thu, 17 Aug 2023 21:19:49 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTPS
+        id WkPEqw2SFnVnbWkPFqV2tq; Thu, 17 Aug 2023 21:19:49 +0000
+X-Authority-Analysis: v=2.4 cv=IuUNzZzg c=1 sm=1 tr=0 ts=64de8ef5
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=VnNF1IyMAAAA:8 a=pGLkceISAAAA:8 a=xVhDTqbCAAAA:8 a=K6HrmWtEAAAA:8
+ a=hBqU3vQJAAAA:8 a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=YpZVJ9pEJ9zOGENEAE8A:9
+ a=QEXdDO2ut3YA:10 a=GrmWmAYt4dzCMttCBZOh:22 a=yV38gEssg_2GhkhKF82i:22
+ a=WLjMIN4s_96MqnBbPenP:22 a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=GdZkbs6d8xnOCEm6lQLRaAIvJNDQE/YytzCwGkCxNlI=; b=J3zzUh7hQsrwgewGUBVp5s9B7O
+        2WuKMk0PipxJ37aPvnI0QpZLkgYPEToEEcBgvnmuz4MU64YYmKrJv4xz/m20hg1H6tBWyG6CBp0Be
+        ozRvkQ26ggT+Y98ox1avR9r7Qlf9z5Sk03Hw31O3uSFefJ7NTLub18S/3Dj6tqfyfTzLKtdxee5Oq
+        z3V877OCMHPJXzMT33PnHURYbWVal9KBMLxqR8zM15Gp7NcqEU34UeHtcmOxAy003nBCZeG2KnKtB
+        mWH1mr5vcPZ3PM6ZHhDYgkra0740zlHg0mDgpgZSdGgR8QChXGOwbG4/Q8hXXICvlfl2CEZX1noic
+        7BCVOu9w==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:45576 helo=[192.168.15.8])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1qWkPD-001iQy-2Z;
+        Thu, 17 Aug 2023 16:19:47 -0500
+Message-ID: <9d3a054d-ce3d-a971-2635-7fc65f36bfd5@embeddedor.com>
+Date:   Thu, 17 Aug 2023 15:20:49 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] integrity: Annotate struct ima_rule_opt_list with
+ __counted_by
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230817210327.never.598-kees@kernel.org>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230817210327.never.598-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.21.192
+X-Source-L: No
+X-Exim-ID: 1qWkPD-001iQy-2Z
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:45576
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 41
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfKpfMxMpKNI4jdfe/Z51hlQIbcGL1tuFDSVfDoOh6CGdjJ8Qt6YXaVDIcsgtVIu3HQzL/GNLdSQEc1Z9OXs7x4wCmoZIA3tV90KPfVNVxlcbAoczGHNZ
+ xK+YYq2lWhHDl6SkNGjiIflDJem3lSuKcfjFR7L04sMV31a74nybJ5QZyo1+BYU/tAZuxDDHM2qvgoCx5Yj8zJZb67fiPz1ygOqSKyPm7L9hXT/Cuk8wbsLw
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-While testing S3 on 6.5.0-rc6 we've found that 5 systems are seeing a
-crash and reboot situation when S3 suspend is initiated. To reproduce
-it, this call is all that's required "sudo sleepgraph -m mem -rtcwake
-15".
 
-Ive created a Bugzilla to track this issue here:
-https://bugzilla.kernel.org/show_bug.cgi?id=217804
 
-I've bisected the issue to this patch:
+On 8/17/23 15:03, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct ima_rule_opt_list.
+> Additionally, since the element count member must be set before accessing
+> the annotated flexible array member, move its initialization earlier.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: linux-integrity@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-commit 554b841d470338a3b1d6335b14ee1cd0c8f5d754
-Author: Mario Limonciello <mario.limonciello@amd.com>
-Date:   Wed Aug 2 07:25:33 2023 -0500
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-    tpm: Disable RNG for all AMD fTPMs
-    
-    The TPM RNG functionality is not necessary for entropy when the CPU
-    already supports the RDRAND instruction. The TPM RNG functionality
-    was previously disabled on a subset of AMD fTPM series, but reports
-    continue to show problems on some systems causing stutter root
-caused
-    to TPM RNG functionality.
-    
-    Expand disabling TPM RNG use for all AMD fTPMs whether they have
-versions
-    that claim to have fixed or not. To accomplish this, move the
-detection
-    into part of the TPM CRB registration and add a flag indicating
-that
-    the TPM should opt-out of registration to hwrng.
+Thanks
+--
+Gustavo
 
-By reverting this patch in 6.5.0-rc6 the problem goes away, so it's
-pretty clear that this commit is at fault. I've done further debugging
-and I've found that if I simply comment out these lines in 6.5.0-rc6
-the problem goes away. So the "crb_check_flags" call is the root cause.
-
-diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index 9eb1a1859012..20ce8102e6bd 100644
---- a/drivers/char/tpm/tpm_crb.c
-+++ b/drivers/char/tpm/tpm_crb.c
-@@ -826,9 +826,9 @@ static int crb_acpi_add(struct acpi_device *device)
-        if (rc)
-                goto out;
- 
--       rc = crb_check_flags(chip);
--       if (rc)
--               goto out;
-+//     rc = crb_check_flags(chip);
-+//     if (rc)
-+//             goto out;
- 
-        rc = tpm_chip_register(chip);
-
+> ---
+>   security/integrity/ima/ima_policy.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 69452b79686b..f69062617754 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -68,7 +68,7 @@ enum policy_rule_list { IMA_DEFAULT_POLICY = 1, IMA_CUSTOM_POLICY };
+>   
+>   struct ima_rule_opt_list {
+>   	size_t count;
+> -	char *items[];
+> +	char *items[] __counted_by(count);
+>   };
+>   
+>   /*
+> @@ -342,6 +342,7 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
+>   		kfree(src_copy);
+>   		return ERR_PTR(-ENOMEM);
+>   	}
+> +	opt_list->count = count;
+>   
+>   	/*
+>   	 * strsep() has already replaced all instances of '|' with '\0',
+> @@ -357,7 +358,6 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
+>   		opt_list->items[i] = cur;
+>   		cur = strchr(cur, '\0') + 1;
+>   	}
+> -	opt_list->count = count;
+>   
+>   	return opt_list;
+>   }
