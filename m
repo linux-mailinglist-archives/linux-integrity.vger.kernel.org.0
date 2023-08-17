@@ -2,166 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47DB77FFB9
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Aug 2023 23:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E978D780021
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Aug 2023 23:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355248AbjHQVVj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Aug 2023 17:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
+        id S242031AbjHQVrp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Aug 2023 17:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244017AbjHQVVU (ORCPT
+        with ESMTP id S1355414AbjHQVrS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Aug 2023 17:21:20 -0400
-X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Aug 2023 14:21:19 PDT
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CA7C1
-        for <linux-integrity@vger.kernel.org>; Thu, 17 Aug 2023 14:21:19 -0700 (PDT)
-Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
-        by cmsmtp with ESMTP
-        id Whg3qxbNJfaVXWkPFqMMqy; Thu, 17 Aug 2023 21:19:49 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTPS
-        id WkPEqw2SFnVnbWkPFqV2tq; Thu, 17 Aug 2023 21:19:49 +0000
-X-Authority-Analysis: v=2.4 cv=IuUNzZzg c=1 sm=1 tr=0 ts=64de8ef5
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=UttIx32zK-AA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
- a=VnNF1IyMAAAA:8 a=pGLkceISAAAA:8 a=xVhDTqbCAAAA:8 a=K6HrmWtEAAAA:8
- a=hBqU3vQJAAAA:8 a=VwQbUJbxAAAA:8 a=cm27Pg_UAAAA:8 a=YpZVJ9pEJ9zOGENEAE8A:9
- a=QEXdDO2ut3YA:10 a=GrmWmAYt4dzCMttCBZOh:22 a=yV38gEssg_2GhkhKF82i:22
- a=WLjMIN4s_96MqnBbPenP:22 a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GdZkbs6d8xnOCEm6lQLRaAIvJNDQE/YytzCwGkCxNlI=; b=J3zzUh7hQsrwgewGUBVp5s9B7O
-        2WuKMk0PipxJ37aPvnI0QpZLkgYPEToEEcBgvnmuz4MU64YYmKrJv4xz/m20hg1H6tBWyG6CBp0Be
-        ozRvkQ26ggT+Y98ox1avR9r7Qlf9z5Sk03Hw31O3uSFefJ7NTLub18S/3Dj6tqfyfTzLKtdxee5Oq
-        z3V877OCMHPJXzMT33PnHURYbWVal9KBMLxqR8zM15Gp7NcqEU34UeHtcmOxAy003nBCZeG2KnKtB
-        mWH1mr5vcPZ3PM6ZHhDYgkra0740zlHg0mDgpgZSdGgR8QChXGOwbG4/Q8hXXICvlfl2CEZX1noic
-        7BCVOu9w==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:45576 helo=[192.168.15.8])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.96)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1qWkPD-001iQy-2Z;
-        Thu, 17 Aug 2023 16:19:47 -0500
-Message-ID: <9d3a054d-ce3d-a971-2635-7fc65f36bfd5@embeddedor.com>
-Date:   Thu, 17 Aug 2023 15:20:49 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] integrity: Annotate struct ima_rule_opt_list with
- __counted_by
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20230817210327.never.598-kees@kernel.org>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20230817210327.never.598-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1qWkPD-001iQy-2Z
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:45576
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 41
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfKpfMxMpKNI4jdfe/Z51hlQIbcGL1tuFDSVfDoOh6CGdjJ8Qt6YXaVDIcsgtVIu3HQzL/GNLdSQEc1Z9OXs7x4wCmoZIA3tV90KPfVNVxlcbAoczGHNZ
- xK+YYq2lWhHDl6SkNGjiIflDJem3lSuKcfjFR7L04sMV31a74nybJ5QZyo1+BYU/tAZuxDDHM2qvgoCx5Yj8zJZb67fiPz1ygOqSKyPm7L9hXT/Cuk8wbsLw
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 17 Aug 2023 17:47:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59C7E4F;
+        Thu, 17 Aug 2023 14:47:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7408562BEA;
+        Thu, 17 Aug 2023 21:47:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829F4C433C8;
+        Thu, 17 Aug 2023 21:47:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692308836;
+        bh=qlrOzzd25FuYd7cFhcqAxs88wg3C8mE7LMmEAPbH7qk=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=dgMI/Akp+pgf8d6vAbqiqT3JIAJnY70gjvVXZV9oLEFlVQQ4uaLwPQFrYQXjIWUu7
+         ps5pMxcYY9wpEtvx06PliyCYtYq+fUjA6HIKKl+Bcgy2n5+vrKezmg3riQ3P1V28Yr
+         lLwC7wFl5FwOAayTY9QypZUd3iNkbBZPpUnyHKZ9G/IGysEehKTdoGTGf9NFl63U3L
+         vHUmKPVISv7YUFhmjdHLibHAkoWitvKNYT3nyL97j4k66oLlCYlEUouSK2E+FAiQzy
+         dBClYArV/uwBZ4t4gSI+fXo+Iot+8/neGY5dN8nMNjYT9ik2SIXHKrdC2FiyYEX62t
+         5bRzia/jzOOrA==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 18 Aug 2023 00:47:13 +0300
+Message-Id: <CUV5EXGO425W.1RGBLDQJ8GK9W@suppilovahvero>
+Cc:     <linux-kernel@vger.kernel.org>, <len.brown@intel.com>,
+        <charles.d.prestopine@intel.com>, <rafael.j.wysocki@intel.com>
+Subject: Re: REGRESSION WITH BISECT: v6.5-rc6 TPM patch breaks S3 on some
+ Intel systems
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     <todd.e.brandt@linux.intel.com>, <mario.limonciello@amd.com>,
+        <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.14.0
+References: <485e8740385239b56753ce01d8995f01f84a68e5.camel@linux.intel.com>
+In-Reply-To: <485e8740385239b56753ce01d8995f01f84a68e5.camel@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri Aug 18, 2023 at 12:09 AM EEST, Todd Brandt wrote:
+> While testing S3 on 6.5.0-rc6 we've found that 5 systems are seeing a
+> crash and reboot situation when S3 suspend is initiated. To reproduce
+> it, this call is all that's required "sudo sleepgraph -m mem -rtcwake
+> 15".
 
+1. Are there logs available?
+2. Is this the test case: https://pypi.org/project/sleepgraph/ (never used =
+it before).
 
-On 8/17/23 15:03, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct ima_rule_opt_list.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: linux-integrity@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+I'll see if I can repeat it with QEMU + swtpm.
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> I=C2=92ve created a Bugzilla to track this issue here:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D217804
 
-Thanks
---
-Gustavo
+Thank you for reporting this.
 
-> ---
->   security/integrity/ima/ima_policy.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 69452b79686b..f69062617754 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -68,7 +68,7 @@ enum policy_rule_list { IMA_DEFAULT_POLICY = 1, IMA_CUSTOM_POLICY };
->   
->   struct ima_rule_opt_list {
->   	size_t count;
-> -	char *items[];
-> +	char *items[] __counted_by(count);
->   };
->   
->   /*
-> @@ -342,6 +342,7 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
->   		kfree(src_copy);
->   		return ERR_PTR(-ENOMEM);
->   	}
-> +	opt_list->count = count;
->   
->   	/*
->   	 * strsep() has already replaced all instances of '|' with '\0',
-> @@ -357,7 +358,6 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
->   		opt_list->items[i] = cur;
->   		cur = strchr(cur, '\0') + 1;
->   	}
-> -	opt_list->count = count;
->   
->   	return opt_list;
->   }
+BR, Jarkko
