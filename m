@@ -2,188 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E42D781573
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Aug 2023 00:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1EF7815BB
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Aug 2023 01:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241074AbjHRWib (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 18 Aug 2023 18:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S242356AbjHRXSR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 18 Aug 2023 19:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241331AbjHRWiT (ORCPT
+        with ESMTP id S242939AbjHRXSN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 18 Aug 2023 18:38:19 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2051.outbound.protection.outlook.com [40.107.220.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806591BD4;
-        Fri, 18 Aug 2023 15:38:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wh2dQWLb3M/T5hDFqiubH9GjqOjLmEZLIMcuaPuA/c3OMx4BICspCb4zjto2r9DeV3/7c8MA9aP6v7SkPb/rFK7LmlHjA1ujJxLuldDcX8DZi62i30on37ny23VkMmiOzcSbGWlqgTPLLyKSjHwIY/5YPDHZIieXRuO0HJGz8/SKzsLMYg+p2bTd9N8+gr+j+0PNWzmicZSnATgybCTKLTCIWmfdFLujTwB0WTxDzm2tcyaFL1eiKvF530TE81Bs3osPkdKF53TExenSVbI0fBhJjmwmp10K3yDnhxgArL0zoo68K+vBsXRqwwHldImM9oEb5Jf/1wZvF9knlSWxlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UfHsArDfllcJrcAN4Lrjk3DVIDTOZNBv0tfB5vPFb3U=;
- b=YtV77M6Tv/xeP3gItadIQrj1u1lKZ9GZStY6d/aj776ZT0EWg4R141D51uApdFcf8+JvIcIMJmbwfMNd1ywO348nbkHlTr3qtvMoUyfa7jMXFxMF5O/VlZs1ifq1vRMP+svHVYT1WEa6F6s8yAXf55lT5CNg5AAYNXNEt5BE51VyID4uGeqx/yDh/cIah/MBldUE3WIkbgAaIqdm1hD8ZZZ4d1KKWQnomEJQ7P6whYbdUKbqkCS1BLPyD6Xh6a0yrFgc+XCuSgNS9Q3F6s+XB5mRsVqL/a9w7IxV7q4IXm9utYsurXSYEpLLB6BpfnkxTJA9o7jHBjf6DFS2pqDzFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UfHsArDfllcJrcAN4Lrjk3DVIDTOZNBv0tfB5vPFb3U=;
- b=mjkCQ4a78H2/2nrcFAIfOES6JMQM7JpxhRS7MVH6DXpZYygUFy4Oq0ofztWTlWldXGpZhV9mO8NSE1t1IzY0X74YYqtpIrFdirb4VVYiFYxfiWzYJjvLs0h8BT4vQ87iHYfdJ+6DluHI+VTkTOUCfYKT7N0vblAsrmJ1UItpXOs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM6PR12MB4894.namprd12.prod.outlook.com (2603:10b6:5:209::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Fri, 18 Aug
- 2023 22:38:14 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6699.020; Fri, 18 Aug 2023
- 22:38:14 +0000
-Message-ID: <25a21516-7201-4ee4-be2b-f67edaf97e2a@amd.com>
-Date:   Fri, 18 Aug 2023 17:38:10 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tpm: Don't make vendor check required for probe
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        charles.d.prestopine@intel.com, rafael.j.wysocki@intel.com,
-        len.brown@intel.com, stable@vger.kernel.org,
-        Todd Brandt <todd.e.brandt@intel.com>
-References: <20230818181516.19167-1-mario.limonciello@amd.com>
- <CUW0GZCVHKPB.1W7ESSPE7INHQ@seitikki>
-Content-Language: en-US
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <CUW0GZCVHKPB.1W7ESSPE7INHQ@seitikki>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Fri, 18 Aug 2023 19:18:13 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A67D35A6
+        for <linux-integrity@vger.kernel.org>; Fri, 18 Aug 2023 16:18:05 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37IN2KHl008841;
+        Fri, 18 Aug 2023 23:17:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=4jJ2KqO2SeJBBX27XClF6Fl9V++knOGzbF7pbfVMa+Y=;
+ b=jxb0jd/gDYpzO4uD+phYyuRu/xQ6+Cldk/Bjv7jXmKc1vT6BKygUwfvInAR9iDyanFxG
+ qtHCSbibD8CgTjAVQ4df4EbTOPzpfjjfUlsByH9/Cp6DoSuPYzLIEGr/466PyWLvOwdU
+ tnj/ToOpW4AcmAGtPEq2McOfEUR5pINcYe1FRZmMjMMU7llskQbCTh7A+H5Hk4js/EgG
+ bSsojqzISmpwZKD2Hxdle3H6iuo0DOo7ThbvFjGMpVOThrxUJrsr2qk8ZkSrbWCqDLa5
+ HJrvfm7Fs01pAB+d07VPtzIHxmMaQpl2HKHvORX1PAbbC7aoMu1jHfT8fpJu4A6WK4vJ RQ== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sjhydr7jr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Aug 2023 23:17:56 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37IMZBcd001119;
+        Fri, 18 Aug 2023 23:17:56 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3semt0339k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Aug 2023 23:17:55 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37INHtCI62652852
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Aug 2023 23:17:55 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F0FCD58055;
+        Fri, 18 Aug 2023 23:17:54 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DF315804B;
+        Fri, 18 Aug 2023 23:17:54 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.57.160])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 18 Aug 2023 23:17:54 +0000 (GMT)
+Message-ID: <97198ee38422fbb1891981ac5c41263d5b03b321.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH -next] ima: Make tpm hash configurable
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     "Guozihua (Scott)" <guozihua@huawei.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-integrity@vger.kernel.org
+Date:   Fri, 18 Aug 2023 19:17:37 -0400
+In-Reply-To: <e2c5711c-6549-e81f-42a7-eec176b39d63@huawei.com>
+References: <20230817061334.1910-1-guozihua@huawei.com>
+         <90b4b5573182ec68b2da2f9ef2bc6567d724f8f1.camel@linux.ibm.com>
+         <e2c5711c-6549-e81f-42a7-eec176b39d63@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DS7P222CA0018.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::33)
- To MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM6PR12MB4894:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30aa5680-b0ab-4140-dece-08dba03bcea2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M1NxupP1nHo+hpw6XwchIL0i/q7jSFUzzZAGQT5W35WcTSoSkGOdjpdGWzgi6ZOFrkul39Zgp93XSyO1PLLpsiWtZAVkTNgahomQvrE6hSqEIMV5ydW2o6dSdJ5AFvW6D/6Swcb9mb7Sp3rs5y8ev8fTsieJBAKuk3ePygMcq67uvG45EPcFtkYKBC9/oTvkwKe+AvX/gqmC/3rjnSY13cPeIYJ4XSGgnb2cNrASsMvy+XeYcNz04x6FBEuwkvkvcTTm3iYudWUYgbA70UOT3vm6s4LrAjQLLdG0JvwWjqmac/T7g1qm5BI0DjmhuNDvtBQFjsdfoB2v334I6974xB8ujFmuzb/cb+XMVYInVrGpdTe+yKicxhe4U0a9XMDb+HFTTDHKN02D1ZoOV/GsAllbtUb0JGnxQW9x55jAPXEjcAa8iNSX3K7WrBspCnhfeLZ7Obac2WKWgmnsxadrBIzmjbiIX+UERfgtjZwmpfOuCOkFa8H43ebemxGdvpu9/9FR3MJV4JhKvskWSMsxGzCcVjaSFku/JbaNrp5yysRmPKPLR6rdgBhxuT+Xd0f4LlyInETDsVUwrvPgL0iQcvw6Eh2dQBplhwfytkrora0zg4AzfZa/BUqksv5YF6TopkKUBUNNcoECLFIsD77M8w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(346002)(376002)(39860400002)(366004)(396003)(1800799009)(186009)(451199024)(6666004)(6486002)(6506007)(38100700002)(6512007)(53546011)(31696002)(26005)(83380400001)(36756003)(2616005)(66556008)(2906002)(316002)(6916009)(54906003)(66476007)(66946007)(41300700001)(86362001)(5660300002)(8676002)(8936002)(4326008)(478600001)(31686004)(966005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TkJra0R3VThta1d4R3RBMWs2Y2Y2OXRSeEtEdmphSnQyYzhzdGNWN0w3N3R6?=
- =?utf-8?B?TiszdksxNUhrdkhQaFhwK0d2ZlQ5NUlvZXZPTGN3TnVVbFlUUDNhOENuNDBF?=
- =?utf-8?B?M1AweGpUYkI1T1FkU2hHYlZLK25Qd2wyYStuTFdnbnFtQmhibVF5eU1DSzBY?=
- =?utf-8?B?WlIyUUFMSDF3Ni9xbmpkcG1HcXBlR1p0dGZRV0xrNWdHaVk5MUN2MlhVcUhD?=
- =?utf-8?B?UUlTczlPUTBqWERUNThQVEc5TFRSYzZ5TjVFdi8vOHBBRk5temxuOXgrMFpn?=
- =?utf-8?B?TkNpK216VVlxaitWVzkvdVV5OStmY2MrT0VZL0NrTHNuTzBHUzhsZGFoR29x?=
- =?utf-8?B?S2kwYVNnVnlLWVJ5cUZ0NXY0N0tIUVpWRmhST1BvOXBldVhHdHljZzZ3ajlG?=
- =?utf-8?B?ZXhXZEVhVFJTM05YU09yVlhRS2pZNTBDZGF0c09nM3B4ckUwUk9GcjRwWndq?=
- =?utf-8?B?NEFsRHFIZEtDdXQ0NXU4dEJsMXJOQkZMRU1CWm1Pd3FMeFhMZk4vNGwzS1FR?=
- =?utf-8?B?WldiaWFQbXNjekZkd1BqdjJsYkZNd0RvVWd4UE9RbW93dFo0V21Ca0hvdzZQ?=
- =?utf-8?B?Z3d2UzFvcXdaSndSQjVySmJJZmRIVlZjcFlYUVc3OGxjQzJpdEJsOFNMcDFJ?=
- =?utf-8?B?YXlzZHpsU2dsNWFSUE1xQnlQTWFieE5MOGdMOWtvUmxtZllVampCbUc5RmRP?=
- =?utf-8?B?bTNlS3g1Q2xNUWhUVytOUUhsdEV5MUMzdHd4Y244UFBnMHY2QTcwWVJjSDl2?=
- =?utf-8?B?Qk04SWcwam1qMTh3SUVWRGFKZWl4VFkrS0NyZnFGL1FlT2dvTUFIWDRqcmRM?=
- =?utf-8?B?QTNrMURvdHQxM1o1SCt1UTBVdGJtQ05XU2xBK3YrU2dYTUJDWDhValRyNVdU?=
- =?utf-8?B?cXNUQ3d5cWJFS3FsM3Rkc0lqUDBHb29PRW5CUjhqWk9JRmlJOW5uOHJFOEJ2?=
- =?utf-8?B?VlRxdkR4VWxaQ1BBQS9wN2svVHpFSjh5dEd0T1pjRDVDTkFiQm9wSVNJQnlI?=
- =?utf-8?B?WlJVWHpSSXFCQksveFJNNWtrY21xcDV5VVgxaVY0clpDR1VTd3pWM2JlejZ1?=
- =?utf-8?B?WWt5SWtEaXZJK01PTGV1dExkcExnTmJxMHhrSHN1MUtSMGxqUDd6TmxxMG1p?=
- =?utf-8?B?Z09NdXE1MFZqTXJaTklpN0d3S1lQTVNjeDFBNklmSWdjWUxod1JpckowdE1x?=
- =?utf-8?B?TEtnd3JRbGlNVGFFWFRjUXBMYUZUNmNuK0p1WnV4dHRjV1BhUGphWHlwQ2hW?=
- =?utf-8?B?V08zemIrWTllUDNyTnpBVGlKMFNxUGRCTkp4NUM2TktlYkV3R09RcUNRZ2Zk?=
- =?utf-8?B?cmc5MlBXS2dNV0pIRlg1S3ZXUHNaWk03a1ZzTVMzMlFwVVdhMmZuaThFWlhR?=
- =?utf-8?B?NS9yZXB3WFNEb3FWSW1iakpJQnB3Y1pjcmVPLzFrOEZWdVgyQ1lPVkFCNzVT?=
- =?utf-8?B?YlNhTWpFNmZVb29pUXVQQzlZYmJmaG9sTFFGcWRlajduNWNpYmQyZXNLNXFF?=
- =?utf-8?B?L2RMclZ4V1lqcTJTMmFSMnBsM2RqaTg3TFhQREVGRnZCT1lXTVVyaEhEdDRp?=
- =?utf-8?B?Nk8rQ3lDZTVMSHpvN2Q2WnpjYnFDNTNNOFpvNGJ1Ujl2a2loNCtxTXRkVkli?=
- =?utf-8?B?am9OSFJDUG5rQ2xjeTBNZm5pSW5yeWkvM2E1RVFNa1BxNU5KY2REbmNiMm5H?=
- =?utf-8?B?Qmo1blRBamUybGRJRis4elNta3REeVVVNUtScnEzZ1pHa0ZLTVNkWHdPUFN0?=
- =?utf-8?B?MC9NZzZLSFlzOG5XTDJzb0FlUnFaUDVYVHluNFRLSTI2V2Y0bHZ4cWxudFRL?=
- =?utf-8?B?eU84OGZFbEV2TXpyNjAwa2dDZlVJeE9JdHh1YUNsQTBnR0xrcUl5YmhqU0g2?=
- =?utf-8?B?UmcwYVNrQTlDTTh1WDFUNWZnNHRlNjV4ZDh5RFRpYkRlMTdMM05zSCtTMlpr?=
- =?utf-8?B?WVNOUEhkY1JqR1o3SFVXamdCVGdScUJBSEMxMUw2alBOREhoU2tFY2N0SHhP?=
- =?utf-8?B?RlpBZUNXbnlMdVd0TDhTTlVUYit5UWJmYXoxZjV0TndiSnZxeVpyV0drOEtE?=
- =?utf-8?B?QlhVb1QzQVFCSlpyMldwcDVZWHQ3cEd1UG82SVpkdHJEZDRBdkxsa3M5NTY2?=
- =?utf-8?Q?qC3NHm4bBALxCZxemYFJ33cX4?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30aa5680-b0ab-4140-dece-08dba03bcea2
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2023 22:38:13.9807
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QRg8ZBfIaMiDzoxLxwU7FpbhGtxbUejrZK553F0i+aClNSb2s03yUpztZwrWreLLHy0m5uUx1hN84MTclU+1Kg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4894
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: tFgGrWzWQD0LU9kCElPXovST7fwMGu3v
+X-Proofpoint-GUID: tFgGrWzWQD0LU9kCElPXovST7fwMGu3v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-18_26,2023-08-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ impostorscore=0 phishscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ mlxscore=0 suspectscore=0 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308180212
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 8/18/2023 5:07 PM, Jarkko Sakkinen wrote:
-> On Fri Aug 18, 2023 at 6:15 PM UTC, Mario Limonciello wrote:
->> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG for
->> all AMD fTPMs") doesn't work properly on Intel fTPM.  The TPM doesn't reply
->> at bootup and returns back the command code.
+On Fri, 2023-08-18 at 09:25 +0800, Guozihua (Scott) wrote:
+> On 2023/8/17 22:19, Mimi Zohar wrote:
+> > On Thu, 2023-08-17 at 14:13 +0800, GUO Zihua wrote:
+[...]
+ 
+> > Other proposals have changed the hard coded hash algorithm and PCR
+> > value from SHA1 to SHA256.  Both that proposal and this will break
+> > existing userspace applications.
 > 
-> Is this reproducible with any production hardware? You are stating it
-> as it was reproducible categorically with any Intel fTPM.
-> 
+> This is the part I would like to "RFC" on, and thanks for the comment!
 
-Yes, it's affecting production hardware too.
-Someone came to the kernel bugzilla and reported a regression on 6.4.11 
-on a Lenovo Intel laptop as well.
+Another proposal included all of the enabled TPM bank digests.
 
->> As this isn't crucial for anything but AMD fTPM and AMD fTPM works, throw
->> away the error code to let Intel fTPM continue to work.
->>
->> Cc: stable@vger.kernel.org
->> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
-> 
-> It does make sense not to exercise this outside of AMD CPus but since
-> there is no production hardware failing, it cannot be categorized as a
-> bug fix.
+> In deed this change should break userspace as well as all the existing
+> remote attestation implementation. It should be better to have a brand
+> new file for this.
 
-See above (and also kernel bugzilla).
+True SHA1 is being phased out due to hash collisions.  Verifying the
+template data hash against the template data isn't necessary for the
+attestation server to verify a TPM quote against any of the enabled TPM
+banks.  The attestation server walks the measurement list calculating
+the bank specific template data hash.  Breaking existing applications
+is unreasonable.
 
-> 
->> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
->> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->>   drivers/char/tpm/tpm_crb.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
->> index 9eb1a18590123..b0e9931fe436c 100644
->> --- a/drivers/char/tpm/tpm_crb.c
->> +++ b/drivers/char/tpm/tpm_crb.c
->> @@ -472,8 +472,7 @@ static int crb_check_flags(struct tpm_chip *chip)
->>   	if (ret)
->>   		return ret;
->>   
->> -	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL);
->> -	if (ret)
->> +	if (tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL))
->>   		goto release;
-> 
-> It would be better not to exercise a potentially failing code path at
-> all. This initiates full transaction with the TPM.
+> > 
+> > Before we can introduce this sort of change, we would need to introduce
+> > an IMA measurement list version.  Perhaps its time to define an IMA
+> > security critical-dbata record, which would include this and other
+> > information.  The measurement list itself would need to include a
+> > version number.
+> > 
+> I guess one of the easy way to do it is to make a
+> ascii_runtime_measurements_ng and binary_runtime_measurements_ng, which
+> contains a changed template supporting configurable template hash. What
+> do you think?
 
-So why does a full transaction not work in this case?
+Defining additional pseudo filesystems would allow both the old and new
+measurement list formats to be enabled at the same time.
 
-> 
->>   
->>   	if (val == 0x414D4400U /* AMD */)
->> -- 
->> 2.34.1
-> 
-> BR, Jarkko
+-- 
+thanks,
+
+Mimi
+
