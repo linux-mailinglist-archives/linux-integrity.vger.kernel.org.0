@@ -2,102 +2,187 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA75781287
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Aug 2023 20:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8E6781293
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Aug 2023 20:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379333AbjHRSCB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 18 Aug 2023 14:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
+        id S1379355AbjHRSID (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 18 Aug 2023 14:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379331AbjHRSBc (ORCPT
+        with ESMTP id S1379352AbjHRSHn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 18 Aug 2023 14:01:32 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100DB2D67
-        for <linux-integrity@vger.kernel.org>; Fri, 18 Aug 2023 11:01:31 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-688731c6331so992750b3a.3
-        for <linux-integrity@vger.kernel.org>; Fri, 18 Aug 2023 11:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692381690; x=1692986490;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qYBhb547ncMi3wuUeN47Qu32Xgp7Mgncg35363KdjMY=;
-        b=e8Q1lB1q/5WpShrGBZOlVAiH4jHMVpOUuaOqIgAkBvaujIY8uzpya5ESLBaG3ix8nb
-         FHUNTjwbqpghd11R4Q+G2sU0BtL4HRvOe1svnqwdTQzKOSgMk3Jyhq+iNgCDAYct9ETm
-         lToX6VZMeh+e1RqjKH4Tk4VV24davAJq54e9U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692381690; x=1692986490;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qYBhb547ncMi3wuUeN47Qu32Xgp7Mgncg35363KdjMY=;
-        b=CEWMszTlvhnad1W80ey3EjBEkge4qIMTzKWK5w9QD8OLcK5+mG6C7Vk5wyiRshVX+l
-         9npmsWsYC5PRTrA+lBDYH4r4XqTMkfVVRSl1P0+m62aciwT8MJNJOMzwdOouG9J1smvX
-         8t8zzOwYgreet+s7BMCZxtdYw4XfBqcnFyh87fcqGIt5ZnLNQIR/2t4aR96NTlQSekXk
-         Ua0Qbw6e4SedXShXaL6j1NtmZwpltwQtkgbnAKaCGRQgpmkqnxgf9xhqsZPBpC/Wf4er
-         G/5JNL2/PHuW5vpVQg+DcMaGm7VEnt0ghY1uqTnTIcTxKR/uNjA8hGxgnbvBLQN9q9X1
-         oyeQ==
-X-Gm-Message-State: AOJu0YzaK60nYVX3dnwmTBKJ2wNp0gchA36eZ84GqhMS+1XibazP3mw+
-        lciP9PN6elD8t8FNwPMk0KutRg==
-X-Google-Smtp-Source: AGHT+IHK7p11ROoF/GBRTRYvtIRFeZ79ofBB2FpFJ+GKVFcVF+S6Zy6V00Y0yvuoDiCNKNnDjwtw1A==
-X-Received: by 2002:a05:6a21:3984:b0:135:10fd:31b0 with SMTP id ad4-20020a056a21398400b0013510fd31b0mr3565014pzc.15.1692381690480;
-        Fri, 18 Aug 2023 11:01:30 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id v21-20020aa78095000000b00687087d8bc3sm1883813pff.141.2023.08.18.11.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 11:01:29 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>, Kees Cook <keescook@chromium.org>
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] integrity: Annotate struct ima_rule_opt_list with __counted_by
-Date:   Fri, 18 Aug 2023 11:01:15 -0700
-Message-Id: <169238167326.1457886.12849640803727382145.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230817210327.never.598-kees@kernel.org>
-References: <20230817210327.never.598-kees@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 18 Aug 2023 14:07:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29AE2D65;
+        Fri, 18 Aug 2023 11:07:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C9DA616AF;
+        Fri, 18 Aug 2023 18:07:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83FF6C433C8;
+        Fri, 18 Aug 2023 18:07:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692382060;
+        bh=PA0g8MCD9n4RuyvKxhBTM/ICSokS9hykwXFI16iYb8c=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=aHoTf9RtY2olfw4rw5fje0l5NBU+OSKkuhMlPtdAx4vNSjMpHcPagUt24feerw/+r
+         3kxZta+tM5PqCMiUkJUAF9JeiqGeks5U7NfWTyLAR5G2sN+2UYY0ixww3M9ILbTUAC
+         O25rdJLpAPci87adndnENrVCsS8Ggrlabq4Llyo3DRawuHxmJI7L0odfRQimTnFj+k
+         vMV6oo9JvnFD9HuecmA2ygs5tcl44hKtojMIf5Taym2tW1O8NkGeOj4edQDSkikBkz
+         O22YByZVLKXBIaBqg9xpbigng6sSTMW9ZKBcTKkHUOgZto8QYPAmbHqJeUb21ooeUH
+         yS+fR7C+EPsGg==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 18 Aug 2023 21:07:37 +0300
+Message-Id: <CUVVDC2QGWV6.HGLDFFEGMGGU@suppilovahvero>
+Subject: Re: REGRESSION WITH BISECT: v6.5-rc6 TPM patch breaks S3 on some
+ Intel systems
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Mario Limonciello" <mario.limonciello@amd.com>,
+        <todd.e.brandt@linux.intel.com>, <linux-integrity@vger.kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>, <len.brown@intel.com>,
+        <charles.d.prestopine@intel.com>, <rafael.j.wysocki@intel.com>
+X-Mailer: aerc 0.14.0
+References: <485e8740385239b56753ce01d8995f01f84a68e5.camel@linux.intel.com>
+ <CUV5EXGO425W.1RGBLDQJ8GK9W@suppilovahvero>
+ <5a344d1ffa66fac828feb3d1c6abce010da94609.camel@linux.intel.com>
+ <CUV6EA5WZ2O5.5G3IV9BQITOG@suppilovahvero>
+ <bd4890a3-419c-463d-88fe-905946122c9f@amd.com>
+ <CUVTY0NCB0N6.VPFM83M83ZUR@suppilovahvero>
+ <92b93b79-14b9-46fe-9d4f-f44ab75fd229@amd.com>
+ <CUVV2MQRCGET.2U22LFQPX1J3G@suppilovahvero>
+ <64f62f2f-91ef-4707-b1bb-19ce5e81f719@amd.com>
+In-Reply-To: <64f62f2f-91ef-4707-b1bb-19ce5e81f719@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 17 Aug 2023 14:03:28 -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct ima_rule_opt_list.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
-> 
-> [...]
+On Fri Aug 18, 2023 at 8:57 PM EEST, Mario Limonciello wrote:
+> On 8/18/2023 12:53, Jarkko Sakkinen wrote:
+> > On Fri Aug 18, 2023 at 8:21 PM EEST, Mario Limonciello wrote:
+> >> On 8/18/2023 12:00, Jarkko Sakkinen wrote:
+> >>> On Fri Aug 18, 2023 at 4:58 AM EEST, Limonciello, Mario wrote:
+> >>>>
+> >>>>
+> >>>> On 8/17/2023 5:33 PM, Jarkko Sakkinen wrote:
+> >>>>> On Fri Aug 18, 2023 at 1:25 AM EEST, Todd Brandt wrote:
+> >>>>>> On Fri, 2023-08-18 at 00:47 +0300, Jarkko Sakkinen wrote:
+> >>>>>>> On Fri Aug 18, 2023 at 12:09 AM EEST, Todd Brandt wrote:
+> >>>>>>>> While testing S3 on 6.5.0-rc6 we've found that 5 systems are see=
+ing
+> >>>>>>>> a
+> >>>>>>>> crash and reboot situation when S3 suspend is initiated. To
+> >>>>>>>> reproduce
+> >>>>>>>> it, this call is all that's required "sudo sleepgraph -m mem
+> >>>>>>>> -rtcwake
+> >>>>>>>> 15".
+> >>>>>>>
+> >>>>>>> 1. Are there logs available?
+> >>>>>>> 2. Is this the test case: https://pypi.org/project/sleepgraph/ (n=
+ever
+> >>>>>>> used it before).
+> >>>>>>
+> >>>>>> There are no dmesg logs because the S3 crash wipes them out. Sleep=
+graph
+> >>>>>> isn't actually necessary to activate it, just an S3 suspend "echo =
+mem >
+> >>>>>> /sys/power/state".
+> >>>>>>
+> >>>>>> So far it appears to only have affected test systems, not producti=
+on
+> >>>>>> hardware, and none of them have TPM chips, so I'm beginning to won=
+der
+> >>>>>> if this patch just inadvertently activated a bug somewhere else in=
+ the
+> >>>>>> kernel that happens to affect test hardware.
+> >>>>>>
+> >>>>>> I'll continue to debug it, this isn't an emergency as so far I hav=
+en't
+> >>>>>> seen it in production hardware.
+> >>>>>
+> >>>>> OK, I'll still see if I could reproduce it just in case.
+> >>>>>
+> >>>>> BR, Jarkko
+> >>>>
+> >>>> I'd like to better understand what kind of TPM initialization path h=
+as
+> >>>> run.  Does the machine have some sort of TPM that failed to fully
+> >>>> initialize perhaps?
+> >>>>
+> >>>> If you can't share a full bootup dmesg, can you at least share
+> >>>>
+> >>>> # dmesg | grep -i tpm
+> >>>
+> >>> It would be more useful perhaps to get full dmesg output after power =
+on
+> >>> and before going into suspend.
+> >>>
+> >>> Also ftrace filter could be added to the kernel command-line:
+> >>>
+> >>> ftrace=3Dfunction ftrace_filter=3Dtpm*
+> >>>
+> >>> After bootup:
+> >>>
+> >>> mount -t tracefs nodev /sys/kernel/tracing
+> >>> cat /sys/kernel/tracing/trace
+> >>>
+> >>> BR, Jarkko
+> >>
+> >> Todd and I have gone back and forth a little bit on the bugzilla
+> >> (https://bugzilla.kernel.org/show_bug.cgi?id=3D217804), and it seems t=
+hat
+> >> this isn't an S3 problem - it's a probing problem.
+> >>
+> >> [    1.132521] tpm_crb: probe of INTC6001:00 failed with error 378
+> >>
+> >> That error 378 specifically matches TPM2_CC_GET_CAPABILITY, which is t=
+he
+> >> same command that was being requested.  This leads me to believe the T=
+PM
+> >> isn't ready at the time of probing.
+> >>
+> >> In this case one solution is we could potentially ignore failures for
+> >> that tpm2_get_tpm_pt() call, but I think we should first understand wh=
+y
+> >> it doesn't work at probing time for this TPM to ensure the actual quir=
+k
+> >> isn't built on a house of cards.
+> >=20
+> > Given that there is nothing known broken (at the moment) in production,
+> > I think the following might be a reasonable change.
+> >=20
+> > BR, Jarkko
+> >=20
+>
+> Yeah that would prevent it.
+>
+> Here's a simpler change that I think should work too though:
+> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+> index 9eb1a18590123..b0e9931fe436c 100644
+> --- a/drivers/char/tpm/tpm_crb.c
+> +++ b/drivers/char/tpm/tpm_crb.c
+> @@ -472,8 +472,7 @@ static int crb_check_flags(struct tpm_chip *chip)
+>          if (ret)
+>                  return ret;
+>
+> -       ret =3D tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL);
+> -       if (ret)
+> +       if (tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL))
+>                  goto release;
+>
+>          if (val =3D=3D 0x414D4400U /* AMD */)
+>
+> I think Todd needs to check whether TPM works with that or not though.
 
-Applied to for-next/hardening, thanks!
+Hmm... I'm sorry if I have a blind spot now but what is that changing?
 
-[1/1] integrity: Annotate struct ima_rule_opt_list with __counted_by
-      https://git.kernel.org/kees/c/a4b35d4d05b9
-
-Take care,
-
--- 
-Kees Cook
-
+BR, Jarkko
