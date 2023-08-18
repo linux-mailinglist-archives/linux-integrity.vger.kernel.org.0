@@ -2,44 +2,44 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C7978141C
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Aug 2023 22:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5A07814DA
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Aug 2023 23:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379877AbjHRUI2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 18 Aug 2023 16:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S240933AbjHRVkR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 18 Aug 2023 17:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379925AbjHRUIH (ORCPT
+        with ESMTP id S240956AbjHRVkB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 18 Aug 2023 16:08:07 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5759D1BD4;
-        Fri, 18 Aug 2023 13:08:05 -0700 (PDT)
+        Fri, 18 Aug 2023 17:40:01 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DAF30FE;
+        Fri, 18 Aug 2023 14:39:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692389285; x=1723925285;
+  t=1692394799; x=1723930799;
   h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nSDARPb9yrEXp6ynvO6USePkru7QYYKcTTxB2WQ9wvA=;
-  b=cxe4JtiWhAaO3LDsGivBQpxdOa0MNPwNWjN2H387zbtMwmhKCxkARbiq
-   rsFMpZkxd9Ni9ta56KCECXLPVBlCtg0kbSN25FZJqFmrqvyaAGj8Uqt3T
-   OQlvw1+8Q2a8RUkmZVEyRh3Yk1oSOz/BttVB1vKCGw23+IC7uXYDCf6EA
-   5iirpFWxk0PktAKNPHocUicfdotj3xDV/V1qdfvkZliJnmbbOJZHXIDCk
-   mVKzqKvm04+UoGhtHm9SHyieF81QWHIEZTIiCB8j9FlaYR52uBkj9SPdn
-   GjEd5fHBClDmIp17aSzFVD0LqoiNObrHqnYKw+M32v93h7IxLKUxRvIF+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="437099414"
+  bh=RfdGZ7rO3fwyeLR9BQcDHqA5uB9cvekhCEH4cNLXuR4=;
+  b=QrgOco1PQCaaJzcEaV7GnbZ/hjpcrZzpUxG6a62jXK79MIaGBFeJhMo+
+   ZzHIjKh0EB13bb5WhkiN6P4e3WaTa0gF20GGrO22PPgCpO3SlwVS+JX5j
+   lJjsIIiFbo1hJaa5BbQEUwIYM5vFpwGYCpmjBKxWirn86iYXohrJmI/0F
+   OK14KMy9z9b0vu7qZuskYM8v3Rb4b0g4xxBQj8bs1s/gQUBYRuJtND8F0
+   y1ju4enmLxD8KRjCZ3qe95AXcqwq3QMYllJE1EZmjJfjV0DadCnI0erYB
+   3SRVmKCtfk7VTZl9XW7dib8xTGf3FcVjb/IbUuP+VVYvZTMo421I9JgTF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="376963955"
 X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
-   d="scan'208";a="437099414"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 13:08:04 -0700
+   d="scan'208";a="376963955"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 14:39:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="735202247"
+X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="909026714"
 X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
-   d="scan'208";a="735202247"
+   d="scan'208";a="909026714"
 Received: from wopr.jf.intel.com ([10.54.75.146])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 13:08:04 -0700
-Message-ID: <4c8cb947894e47ff10ff5ee47b5e523f0e4da915.camel@linux.intel.com>
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 14:39:58 -0700
+Message-ID: <9f3b82466e36aef3591d03176c04663c89625d4a.camel@linux.intel.com>
 Subject: Re: REGRESSION WITH BISECT: v6.5-rc6 TPM patch breaks S3 on some
  Intel systems
 From:   Todd Brandt <todd.e.brandt@linux.intel.com>
@@ -49,7 +49,7 @@ To:     Mario Limonciello <mario.limonciello@amd.com>,
         linux-integrity@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, len.brown@intel.com,
         charles.d.prestopine@intel.com, rafael.j.wysocki@intel.com
-Date:   Fri, 18 Aug 2023 13:08:04 -0700
+Date:   Fri, 18 Aug 2023 14:39:58 -0700
 In-Reply-To: <eec91766-10a9-4d50-8e82-376f52f54be8@amd.com>
 References: <485e8740385239b56753ce01d8995f01f84a68e5.camel@linux.intel.com>
          <CUV5EXGO425W.1RGBLDQJ8GK9W@suppilovahvero>
@@ -220,15 +220,8 @@ On Fri, 2023-08-18 at 13:11 -0500, Mario Limonciello wrote:
 > It throws away the error code if it fails for some reason.
 > Todd just checked it works too.  I'll drop it on the M/L for review.
 
-Yea, instead of returning the error code, it just goes to "release"
-with the ret value uninitialized.
+I just ran 6.5.0-rc6 plus this patch on all 5 machines where the
+problem was detected and they work now. It looks good.
 
-So the issue is apparently that Intel TPM sometimes does not properly
-returning the manufacturer code in early boot. This patch just
-inadvertently triggered the real issue. We'll investigate this to see
-if there's a solution, but for now this patch works great.
-
-Thanks Mario and Jarkko!
-
-
+Tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
 
