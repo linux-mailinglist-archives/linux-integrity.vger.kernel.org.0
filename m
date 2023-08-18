@@ -2,131 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1EF7815BB
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Aug 2023 01:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 204E77815E6
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Aug 2023 01:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242356AbjHRXSR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 18 Aug 2023 19:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S242750AbjHRXpK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 18 Aug 2023 19:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242939AbjHRXSN (ORCPT
+        with ESMTP id S242803AbjHRXpD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 18 Aug 2023 19:18:13 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A67D35A6
-        for <linux-integrity@vger.kernel.org>; Fri, 18 Aug 2023 16:18:05 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37IN2KHl008841;
-        Fri, 18 Aug 2023 23:17:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=4jJ2KqO2SeJBBX27XClF6Fl9V++knOGzbF7pbfVMa+Y=;
- b=jxb0jd/gDYpzO4uD+phYyuRu/xQ6+Cldk/Bjv7jXmKc1vT6BKygUwfvInAR9iDyanFxG
- qtHCSbibD8CgTjAVQ4df4EbTOPzpfjjfUlsByH9/Cp6DoSuPYzLIEGr/466PyWLvOwdU
- tnj/ToOpW4AcmAGtPEq2McOfEUR5pINcYe1FRZmMjMMU7llskQbCTh7A+H5Hk4js/EgG
- bSsojqzISmpwZKD2Hxdle3H6iuo0DOo7ThbvFjGMpVOThrxUJrsr2qk8ZkSrbWCqDLa5
- HJrvfm7Fs01pAB+d07VPtzIHxmMaQpl2HKHvORX1PAbbC7aoMu1jHfT8fpJu4A6WK4vJ RQ== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sjhydr7jr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Aug 2023 23:17:56 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37IMZBcd001119;
-        Fri, 18 Aug 2023 23:17:56 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3semt0339k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Aug 2023 23:17:55 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37INHtCI62652852
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Aug 2023 23:17:55 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F0FCD58055;
-        Fri, 18 Aug 2023 23:17:54 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7DF315804B;
-        Fri, 18 Aug 2023 23:17:54 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.57.160])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Aug 2023 23:17:54 +0000 (GMT)
-Message-ID: <97198ee38422fbb1891981ac5c41263d5b03b321.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH -next] ima: Make tpm hash configurable
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-integrity@vger.kernel.org
-Date:   Fri, 18 Aug 2023 19:17:37 -0400
-In-Reply-To: <e2c5711c-6549-e81f-42a7-eec176b39d63@huawei.com>
-References: <20230817061334.1910-1-guozihua@huawei.com>
-         <90b4b5573182ec68b2da2f9ef2bc6567d724f8f1.camel@linux.ibm.com>
-         <e2c5711c-6549-e81f-42a7-eec176b39d63@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+        Fri, 18 Aug 2023 19:45:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D562135;
+        Fri, 18 Aug 2023 16:45:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B787A61AC3;
+        Fri, 18 Aug 2023 23:45:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DFD6C433C8;
+        Fri, 18 Aug 2023 23:44:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692402301;
+        bh=EFspup6cR9VPHpUpqSpRCk0dSa6MjO+d0wAi8Hq18po=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LZ5ElMq+XVvkH9j+Vo8v3BVpCeb1amQjUJemQnEx8Q/SED18QB/TaJmX36iMuRk3M
+         9k9Sj0eWgq4TEsg2jHcN/xeRZqIhcCJffniZgTxid//0Z7sUc9KA6zA+MPCmgcK3FH
+         mgGA/2+AsXcZvh4MuwtzMr1YVJbOpsuxzaNTefg6VR8IWSVbh51EVwb4Koxdjxl2Rb
+         rOYKEKKMI/jsHmKfTpRAuBcqHl7PlTv4bhdg7ACw1nTZl+T1uPeaNpaH4WsbBT8hs1
+         2ilPFi6W3YDU55tRtjL2/fXlauG7DdGO+BYOa5goCeCHYC4LqO4RonZWFZVKUaSGOD
+         Wcu/TwN3Sqv4Q==
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tFgGrWzWQD0LU9kCElPXovST7fwMGu3v
-X-Proofpoint-GUID: tFgGrWzWQD0LU9kCElPXovST7fwMGu3v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-18_26,2023-08-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
- impostorscore=0 phishscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
- mlxscore=0 suspectscore=0 lowpriorityscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308180212
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 18 Aug 2023 23:44:57 +0000
+Message-Id: <CUW2JM314GAR.36XV41132X3OX@seitikki>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Thorsten Leemhuis" <regressions@leemhuis.info>,
+        <charles.d.prestopine@intel.com>, <rafael.j.wysocki@intel.com>,
+        <len.brown@intel.com>, <stable@vger.kernel.org>,
+        "Todd Brandt" <todd.e.brandt@intel.com>
+Subject: Re: [PATCH] tpm: Don't make vendor check required for probe
+X-Mailer: aerc 0.14.0
+References: <20230818181516.19167-1-mario.limonciello@amd.com>
+ <CUW0GZCVHKPB.1W7ESSPE7INHQ@seitikki>
+ <25a21516-7201-4ee4-be2b-f67edaf97e2a@amd.com>
+In-Reply-To: <25a21516-7201-4ee4-be2b-f67edaf97e2a@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2023-08-18 at 09:25 +0800, Guozihua (Scott) wrote:
-> On 2023/8/17 22:19, Mimi Zohar wrote:
-> > On Thu, 2023-08-17 at 14:13 +0800, GUO Zihua wrote:
-[...]
- 
-> > Other proposals have changed the hard coded hash algorithm and PCR
-> > value from SHA1 to SHA256.  Both that proposal and this will break
-> > existing userspace applications.
-> 
-> This is the part I would like to "RFC" on, and thanks for the comment!
+On Fri Aug 18, 2023 at 10:38 PM UTC, Limonciello, Mario wrote:
+>
+>
+> On 8/18/2023 5:07 PM, Jarkko Sakkinen wrote:
+> > On Fri Aug 18, 2023 at 6:15 PM UTC, Mario Limonciello wrote:
+> >> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG =
+for
+> >> all AMD fTPMs") doesn't work properly on Intel fTPM.  The TPM doesn't =
+reply
+> >> at bootup and returns back the command code.
+> >=20
+> > Is this reproducible with any production hardware? You are stating it
+> > as it was reproducible categorically with any Intel fTPM.
+> >=20
+>
+> Yes, it's affecting production hardware too.
+> Someone came to the kernel bugzilla and reported a regression on 6.4.11=
+=20
+> on a Lenovo Intel laptop as well.
 
-Another proposal included all of the enabled TPM bank digests.
+Now the description says that cateogrically all Intel fTPM's fail.
 
-> In deed this change should break userspace as well as all the existing
-> remote attestation implementation. It should be better to have a brand
-> new file for this.
+I asked for the laptop model in the bugzilla bug, which should be put to
+the commit description later on (hopefully with a snippet of klog
+transcript). This commit cannot be applied as it is at the moment, even
+if it turned out to be a legit fix.
 
-True SHA1 is being phased out due to hash collisions.  Verifying the
-template data hash against the template data isn't necessary for the
-attestation server to verify a TPM quote against any of the enabled TPM
-banks.  The attestation server walks the measurement list calculating
-the bank specific template data hash.  Breaking existing applications
-is unreasonable.
+> >> As this isn't crucial for anything but AMD fTPM and AMD fTPM works, th=
+row
+> >> away the error code to let Intel fTPM continue to work.
+> >>
+> >> Cc: stable@vger.kernel.org
+> >> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
+> >=20
+> > It does make sense not to exercise this outside of AMD CPus but since
+> > there is no production hardware failing, it cannot be categorized as a
+> > bug fix.
+>
+> See above (and also kernel bugzilla).
+>
+> >=20
+> >> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
+> >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217804
+> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> >> ---
+> >>   drivers/char/tpm/tpm_crb.c | 3 +--
+> >>   1 file changed, 1 insertion(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+> >> index 9eb1a18590123..b0e9931fe436c 100644
+> >> --- a/drivers/char/tpm/tpm_crb.c
+> >> +++ b/drivers/char/tpm/tpm_crb.c
+> >> @@ -472,8 +472,7 @@ static int crb_check_flags(struct tpm_chip *chip)
+> >>   	if (ret)
+> >>   		return ret;
+> >>  =20
+> >> -	ret =3D tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL);
+> >> -	if (ret)
+> >> +	if (tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL))
+> >>   		goto release;
+> >=20
+> > It would be better not to exercise a potentially failing code path at
+> > all. This initiates full transaction with the TPM.
+>
+> So why does a full transaction not work in this case?
 
-> > 
-> > Before we can introduce this sort of change, we would need to introduce
-> > an IMA measurement list version.  Perhaps its time to define an IMA
-> > security critical-dbata record, which would include this and other
-> > information.  The measurement list itself would need to include a
-> > version number.
-> > 
-> I guess one of the easy way to do it is to make a
-> ascii_runtime_measurements_ng and binary_runtime_measurements_ng, which
-> contains a changed template supporting configurable template hash. What
-> do you think?
+It makes absolutely zero sense to send a message to a TPM just to know
+that you are on AMD CPU, right?
 
-Defining additional pseudo filesystems would allow both the old and new
-measurement list formats to be enabled at the same time.
+E.g. you could check if boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_AMD righ=
+t
+in the beginning of this function.
 
--- 
-thanks,
-
-Mimi
-
+BR, Jarkko
