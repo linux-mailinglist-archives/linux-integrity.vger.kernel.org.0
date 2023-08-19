@@ -2,139 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA187817CF
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Aug 2023 09:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FAA781881
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Aug 2023 10:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343778AbjHSHDt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 19 Aug 2023 03:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S229448AbjHSIsJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 19 Aug 2023 04:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343770AbjHSHDT (ORCPT
+        with ESMTP id S229544AbjHSIsE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 19 Aug 2023 03:03:19 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CC84218
-        for <linux-integrity@vger.kernel.org>; Sat, 19 Aug 2023 00:03:17 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id 5614622812f47-3a76d882052so1184534b6e.0
-        for <linux-integrity@vger.kernel.org>; Sat, 19 Aug 2023 00:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692428596; x=1693033396;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
-        b=JBXWdTgGa+H/8z7x8k6G4qRwkJ3v5AZ/3PYGnj7kkAMZbCITGbjXSuvcuKkaCUxj9A
-         hT+XSYJhdIdPsvN5uxepyoS5Yam8aiBOX7SRpGJgnvsRpFETmvB+u6CDvixjem3Auaz9
-         8XJTWSstONS7IHuP1KyK28Rq9cj9dMxehv9DuKFz97OyC6g6RCaqQCEfd1xPRF022Yxv
-         OVM1DuuVFrZOu0YWpd6OOGdZWk4r+v5LcWVhUS78S2WY/4U2qavTx1YIuX7hrkxe9nGH
-         /u9oCEeYI97+kWDS4PvF+OMWVZVDXeWZlkidVm9mYe1M2ztCdqbJibZhzUQ+rI08LuWJ
-         5AYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692428596; x=1693033396;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
-        b=DUcv1fCI9S5x9I2kHuROHVh9cunyGA0gLFyowl2zwbT0CtfNboXxDuiaSTpSMAi1g/
-         LbOqySMmUxdA+n7SwXl5u0YFj5Xuksk7T4omTQcKWuZ6E3/N+BEhgCSBv3qyjsZUU7aE
-         xWOZP4LfecTBIUHRt7bOYG1ugtyrv/88m4ggKedxpdl5e4xxobSOdIMc7R6R+ZxsMsMW
-         /W23atGEs/Kaf3ng6+2kpxde83piFdVBCH3q4niEMj9R4gCMR85FOkWjc3vAsFVQYc2F
-         YzObcDcS4on0vhExsenuS8OuK9/J+bbwIX52RB5D6rO0kA5DwkgNPmetCl8HLvPAoe9n
-         zj9g==
-X-Gm-Message-State: AOJu0Yz+P5r2TprwiKv+TvomGxOpN5OY86j/ozIJ/sRerlYQWu4edYLW
-        TYtdCz4c1LPqCiKIfKuFoq+R6p7UvO2UAB/Q8n4UVJEo0LdYJg==
-X-Google-Smtp-Source: AGHT+IHBFHux9W7amy752XAKQ4G+pXj9K8KLABgekYkKVjTaNiUovhqWPJjy5q7mdLIzANUAVG24gzrYlmHT6Kjn7Kk=
-X-Received: by 2002:a81:8782:0:b0:589:a9fc:ffcd with SMTP id
- x124-20020a818782000000b00589a9fcffcdmr1407212ywf.20.1692428576106; Sat, 19
- Aug 2023 00:02:56 -0700 (PDT)
+        Sat, 19 Aug 2023 04:48:04 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C76EC97D
+        for <linux-integrity@vger.kernel.org>; Sat, 19 Aug 2023 01:48:02 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RSXJQ0bnfzVjjv;
+        Sat, 19 Aug 2023 16:40:54 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Sat, 19 Aug 2023 16:43:03 +0800
+Message-ID: <9b2031fc-c902-66ae-b02f-9df49d110c8d@huawei.com>
+Date:   Sat, 19 Aug 2023 16:43:03 +0800
 MIME-Version: 1.0
-Reply-To: razumkoykhailo@gmail.com
-Sender: mrtombaba@gmail.com
-Received: by 2002:a05:7000:5395:b0:4f4:2174:eed4 with HTTP; Sat, 19 Aug 2023
- 00:02:55 -0700 (PDT)
-From:   "Mr.Razum Khailo" <razumkoykhailo@gmail.com>
-Date:   Sat, 19 Aug 2023 00:02:55 -0700
-X-Google-Sender-Auth: TD1SbUwALQWUaG93zNo0ky4SaO8
-Message-ID: <CADXgghn2t3mU_VvtZDjHwnbadg2QnVcJ30yFd0kN8SL6NDhY1g@mail.gmail.com>
-Subject: Greetings from Ukraine,
-To:     undisclosed-recipients:;
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH -next] ima: Make tpm hash configurable
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, Jonathan Corbet <corbet@lwn.net>
+CC:     <linux-integrity@vger.kernel.org>
+References: <20230817061334.1910-1-guozihua@huawei.com>
+ <90b4b5573182ec68b2da2f9ef2bc6567d724f8f1.camel@linux.ibm.com>
+ <e2c5711c-6549-e81f-42a7-eec176b39d63@huawei.com>
+ <97198ee38422fbb1891981ac5c41263d5b03b321.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <97198ee38422fbb1891981ac5c41263d5b03b321.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        MILLION_USD,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:241 listed in]
-        [list.dnswl.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [razumkoykhailo[at]gmail.com]
-        *  2.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.4 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-R3JlZXRpbmdzwqBmcm9twqBVa3JhaW5lLA0KDQpNci7CoFJhenVta292wqBNeWtoYWlsbyzCoGFu
-wqBlbnRyZXByZW5ldXLCoGJ1c2luZXNzbWFuwqBmcm9twqBPZGVzc2ENClVrcmFpbmUuwqBXaXRo
-aW7CoGHCoHllYXLCoHBsdXPCoHNvbWXCoG1vbnRoc8Kgbm93LMKgbW9yZcKgdGhhbsKgOC4ywqBt
-aWxsaW9uDQpwZW9wbGXCoGFyb3VuZMKgdGhlwqBjaXRpZXPCoG9mwqBtecKgY291bnRyecKgVWty
-YWluZcKgaGF2ZcKgYmVlbsKgZXZhY3VhdGVkwqB0bw0KYcKgc2FmZcKgbG9jYXRpb27CoGFuZMKg
-b3V0wqBvZsKgdGhlwqBjb3VudHJ5LMKgbW9zdMKgZXNwZWNpYWxsecKgY2hpbGRyZW7CoHdpdGgN
-CnRoZWlywqBwYXJlbnRzLMKgbnVyc2luZ8KgbW90aGVyc8KgYW5kwqBwcmVnbmFudMKgd29tZW4s
-wqBhbmTCoHRob3NlwqB3aG/CoGhhdmUNCmJlZW7CoHNlcmlvdXNsecKgd291bmRlZMKgYW5kwqBu
-ZWVkwqB1cmdlbnTCoG1lZGljYWzCoGF0dGVudGlvbi7CoEnCoHdhc8KgYW1vbmcNCnRob3NlwqB0
-aGF0wqB3ZXJlwqBhYmxlwqB0b8KgZXZhY3VhdGXCoHRvwqBvdXLCoG5laWdoYm91cmluZ8KgY291
-bnRyaWVzwqBhbmTCoEnigJltDQpub3fCoGluwqB0aGXCoHJlZnVnZWXCoGNhbXDCoG9mwqBUZXLC
-oEFwZWzCoEdyb25pbmdlbsKgaW7CoHRoZcKgTmV0aGVybGFuZHMuDQoNCknCoG5lZWTCoGHCoGZv
-cmVpZ27CoHBhcnRuZXLCoHRvwqBlbmFibGXCoG1lwqB0b8KgdHJhbnNwb3J0wqBtecKgaW52ZXN0
-bWVudA0KY2FwaXRhbMKgYW5kwqB0aGVuwqByZWxvY2F0ZcKgd2l0aMKgbXnCoGZhbWlseSzCoGhv
-bmVzdGx5wqBpwqB3aXNowqBJwqB3aWxsDQpkaXNjdXNzwqBtb3JlwqBhbmTCoGdldMKgYWxvbmcu
-wqBJwqBuZWVkwqBhwqBwYXJ0bmVywqBiZWNhdXNlwqBtecKgaW52ZXN0bWVudA0KY2FwaXRhbMKg
-aXPCoGluwqBtecKgaW50ZXJuYXRpb25hbMKgYWNjb3VudC7CoEnigJltwqBpbnRlcmVzdGVkwqBp
-bsKgYnV5aW5nDQpwcm9wZXJ0aWVzLMKgaG91c2VzLMKgYnVpbGRpbmfCoHJlYWzCoGVzdGF0ZXMs
-wqBtecKgY2FwaXRhbMKgZm9ywqBpbnZlc3RtZW50DQppc8KgKCQzMMKgTWlsbGlvbsKgVVNEKcKg
-LsKgVGhlwqBmaW5hbmNpYWzCoGluc3RpdHV0aW9uc8KgaW7CoG15wqBjb3VudHJ5DQpVa3JhaW5l
-wqBhcmXCoGFsbMKgc2hvdMKgZG93bsKgZHVlwqB0b8KgdGhlwqBjcmlzaXPCoG9mwqB0aGlzwqB3
-YXLCoG9uwqBVa3JhaW5lDQpzb2lswqBiecKgdGhlwqBSdXNzaWFuwqBmb3JjZXMuwqBNZWFud2hp
-bGUswqBpZsKgdGhlcmXCoGlzwqBhbnnCoHByb2ZpdGFibGUNCmludmVzdG1lbnTCoHRoYXTCoHlv
-dcKgaGF2ZcKgc2/CoG11Y2jCoGV4cGVyaWVuY2XCoGluwqB5b3VywqBjb3VudHJ5LMKgdGhlbsKg
-d2UNCmNhbsKgam9pbsKgdG9nZXRoZXLCoGFzwqBwYXJ0bmVyc8Kgc2luY2XCoEnigJltwqBhwqBm
-b3JlaWduZXIuDQoNCknCoGNhbWXCoGFjcm9zc8KgeW91csKgZS1tYWlswqBjb250YWN0wqB0aHJv
-dWdowqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLCoGFzc2lzdGFu
-Y2XCoGFuZMKgScKgZGVjaWRlZMKgdG/CoGNvbnRhY3TCoHlvdcKgZGlyZWN0bHnCoHRvwqBhc2vC
-oHlvdcKgaWYNCnlvdcKga25vd8KgYW55wqBsdWNyYXRpdmXCoGJ1c2luZXNzwqBpbnZlc3RtZW50
-wqBpbsKgeW91csKgY291bnRyecKgacKgY2FuDQppbnZlc3TCoG15wqBtb25lecKgc2luY2XCoG15
-wqBjb3VudHJ5wqBVa3JhaW5lwqBzZWN1cml0ecKgYW5kwqBlY29ub21pYw0KaW5kZXBlbmRlbnTC
-oGhhc8KgbG9zdMKgdG/CoHRoZcKgZ3JlYXRlc3TCoGxvd2VywqBsZXZlbCzCoGFuZMKgb3VywqBj
-dWx0dXJlwqBoYXMNCmxvc3TCoGluY2x1ZGluZ8Kgb3VywqBoYXBwaW5lc3PCoGhhc8KgYmVlbsKg
-dGFrZW7CoGF3YXnCoGZyb23CoHVzLsKgT3VywqBjb3VudHJ5DQpoYXPCoGJlZW7CoG9uwqBmaXJl
-wqBmb3LCoG1vcmXCoHRoYW7CoGHCoHllYXLCoG5vdy4NCg0KSWbCoHlvdcKgYXJlwqBjYXBhYmxl
-wqBvZsKgaGFuZGxpbmfCoHRoaXPCoGJ1c2luZXNzwqBwYXJ0bmVyc2hpcCzCoGNvbnRhY3TCoG1l
-DQpmb3LCoG1vcmXCoGRldGFpbHMswqBJwqB3aWxswqBhcHByZWNpYXRlwqBpdMKgaWbCoHlvdcKg
-Y2FuwqBjb250YWN0wqBtZQ0KaW1tZWRpYXRlbHkuwqBZb3XCoG1hecKgYXPCoHdlbGzCoHRlbGzC
-oG1lwqBhwqBsaXR0bGXCoG1vcmXCoGFib3V0wqB5b3Vyc2VsZi4NCkNvbnRhY3TCoG1lwqB1cmdl
-bnRsecKgdG/CoGVuYWJsZcKgdXPCoHRvwqBwcm9jZWVkwqB3aXRowqB0aGXCoGJ1c2luZXNzLsKg
-ScKgd2lsbA0KYmXCoHdhaXRpbmfCoGZvcsKgeW91csKgcmVzcG9uc2UuwqBNecKgc2luY2VyZcKg
-YXBvbG9naWVzwqBmb3LCoHRoZQ0KaW5jb252ZW5pZW5jZS4NCg0KDQpUaGFua8KgeW91IQ0KDQpN
-ci4gUmF6dW1rb3bCoE15a2hhaWxvLg0K
+On 2023/8/19 7:17, Mimi Zohar wrote:
+> On Fri, 2023-08-18 at 09:25 +0800, Guozihua (Scott) wrote:
+>> On 2023/8/17 22:19, Mimi Zohar wrote:
+>>> On Thu, 2023-08-17 at 14:13 +0800, GUO Zihua wrote:
+> [...]
+>  
+>>> Other proposals have changed the hard coded hash algorithm and PCR
+>>> value from SHA1 to SHA256.  Both that proposal and this will break
+>>> existing userspace applications.
+>>
+>> This is the part I would like to "RFC" on, and thanks for the comment!
+> 
+> Another proposal included all of the enabled TPM bank digests.
+> 
+>> In deed this change should break userspace as well as all the existing
+>> remote attestation implementation. It should be better to have a brand
+>> new file for this.
+> 
+> True SHA1 is being phased out due to hash collisions.  Verifying the
+> template data hash against the template data isn't necessary for the
+> attestation server to verify a TPM quote against any of the enabled TPM
+> banks.  The attestation server walks the measurement list calculating
+> the bank specific template data hash.  Breaking existing applications
+> is unreasonable.
+
+I get what you mean. Attestation could still extract result of the other
+PCR and do the verification ignoring the SHA1 hash in the measurement list.
+> 
+>>>
+>>> Before we can introduce this sort of change, we would need to introduce
+>>> an IMA measurement list version.  Perhaps its time to define an IMA
+>>> security critical-dbata record, which would include this and other
+>>> information.  The measurement list itself would need to include a
+>>> version number.
+>>>
+>> I guess one of the easy way to do it is to make a
+>> ascii_runtime_measurements_ng and binary_runtime_measurements_ng, which
+>> contains a changed template supporting configurable template hash. What
+>> do you think?
+> 
+> Defining additional pseudo filesystems would allow both the old and new
+> measurement list formats to be enabled at the same time.
+> 
+Something like an IMAfs? Or maybe showing different format based on
+flags when file is opened.
+
+-- 
+Best
+GUO Zihua
+
