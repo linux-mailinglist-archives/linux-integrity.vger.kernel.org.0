@@ -2,211 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EE07815F0
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Aug 2023 01:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA187817CF
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Aug 2023 09:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242928AbjHRX6P (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 18 Aug 2023 19:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
+        id S1343778AbjHSHDt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 19 Aug 2023 03:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242717AbjHRX6G (ORCPT
+        with ESMTP id S1343770AbjHSHDT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 18 Aug 2023 19:58:06 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2081.outbound.protection.outlook.com [40.107.243.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AE12D65;
-        Fri, 18 Aug 2023 16:58:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jkCBe1EEfkL8sBn3BOr+mrYJ2tQuWhPa1W4fJnhmRh0VKOA1b0N/dCeQNtP3EGtB8P5b9hYo8ZfBtOfNCBCU4nMim1XAsEmjm8kDCKArzZAE8gHAgkF3sb16FrUl603GqJS8IqOVmsG/J6URMG+FaF+ErOicOeBgp20gnWaSllA2+o9y1gGrMEl4kg0L3yaH+GmcrHnyNIOeOV2Mhus6XyWZ9j4SZ2LlXynzDYQiwqdFSKS8ieKiow88nJzpq76L0zgX5FKuP4R0CUP1dVKUx+uC9UgBANKqz/O3GnCAo+Qqu/ctgfKlJFyE1PUNavpskNxBkm4tvKq50L63BR8LIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hzAqwlpRc8z1ikiGNunPbbeEtWQvVwqeYnxfMljkLGw=;
- b=QTwHbFnQ47dPF/YTzPPLMoD9agem+6Gs9+aOS3CjEyeLt4fBm8hYsm0O0/PMDu7UXdkEqOstv3fioEF4hlv4K7nn4zW5r92nG24sCC1rr0OwqGoZNtpekG8t880l3zNF1wNH+R2hyFZLjm4nSq2CzxfUjSGob74jfo5NVoeGW866SwF1i6N9i2P3UY0oS3l0RHUhAzg5ZJNlIXP4f1wfw2vYsoV8NntcA4l06v4sGig9ZXW5KLZhz5Ia5f2VQ8Vd9qltrZMbFN4LetxTanBDAaD6qAmQdqb+hJqJxynHRT0vjUXXLRM5P30xjcGcMBiVOzXKKjHakUgao5qnPb65lA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hzAqwlpRc8z1ikiGNunPbbeEtWQvVwqeYnxfMljkLGw=;
- b=HY3Vz/Gm7AGtDC+7jGdeY28MKcbgACeujWh0RBQa7Ho9gqBw908lb7FDw7FvMNnHY6gOBn18o5U59/Am6/Tv2vkZ9no9Tn3ERUAxalNh4tA8csxnJE7IiCkmZY9q8Cdd4brcLNDQrlTajCVd9u8n92ZCQbyhNzx4kgstObT/vqQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DS0PR12MB9058.namprd12.prod.outlook.com (2603:10b6:8:c6::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Fri, 18 Aug
- 2023 23:58:01 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6699.020; Fri, 18 Aug 2023
- 23:58:00 +0000
-Message-ID: <719602ec-c9fc-4a72-9585-d50595cb6dca@amd.com>
-Date:   Fri, 18 Aug 2023 18:57:57 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tpm: Don't make vendor check required for probe
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        charles.d.prestopine@intel.com, rafael.j.wysocki@intel.com,
-        len.brown@intel.com, stable@vger.kernel.org,
-        Todd Brandt <todd.e.brandt@intel.com>
-References: <20230818181516.19167-1-mario.limonciello@amd.com>
- <CUW0GZCVHKPB.1W7ESSPE7INHQ@seitikki>
- <25a21516-7201-4ee4-be2b-f67edaf97e2a@amd.com>
- <CUW2JM314GAR.36XV41132X3OX@seitikki>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <CUW2JM314GAR.36XV41132X3OX@seitikki>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0233.namprd04.prod.outlook.com
- (2603:10b6:806:127::28) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Sat, 19 Aug 2023 03:03:19 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CC84218
+        for <linux-integrity@vger.kernel.org>; Sat, 19 Aug 2023 00:03:17 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id 5614622812f47-3a76d882052so1184534b6e.0
+        for <linux-integrity@vger.kernel.org>; Sat, 19 Aug 2023 00:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692428596; x=1693033396;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=JBXWdTgGa+H/8z7x8k6G4qRwkJ3v5AZ/3PYGnj7kkAMZbCITGbjXSuvcuKkaCUxj9A
+         hT+XSYJhdIdPsvN5uxepyoS5Yam8aiBOX7SRpGJgnvsRpFETmvB+u6CDvixjem3Auaz9
+         8XJTWSstONS7IHuP1KyK28Rq9cj9dMxehv9DuKFz97OyC6g6RCaqQCEfd1xPRF022Yxv
+         OVM1DuuVFrZOu0YWpd6OOGdZWk4r+v5LcWVhUS78S2WY/4U2qavTx1YIuX7hrkxe9nGH
+         /u9oCEeYI97+kWDS4PvF+OMWVZVDXeWZlkidVm9mYe1M2ztCdqbJibZhzUQ+rI08LuWJ
+         5AYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692428596; x=1693033396;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=DUcv1fCI9S5x9I2kHuROHVh9cunyGA0gLFyowl2zwbT0CtfNboXxDuiaSTpSMAi1g/
+         LbOqySMmUxdA+n7SwXl5u0YFj5Xuksk7T4omTQcKWuZ6E3/N+BEhgCSBv3qyjsZUU7aE
+         xWOZP4LfecTBIUHRt7bOYG1ugtyrv/88m4ggKedxpdl5e4xxobSOdIMc7R6R+ZxsMsMW
+         /W23atGEs/Kaf3ng6+2kpxde83piFdVBCH3q4niEMj9R4gCMR85FOkWjc3vAsFVQYc2F
+         YzObcDcS4on0vhExsenuS8OuK9/J+bbwIX52RB5D6rO0kA5DwkgNPmetCl8HLvPAoe9n
+         zj9g==
+X-Gm-Message-State: AOJu0Yz+P5r2TprwiKv+TvomGxOpN5OY86j/ozIJ/sRerlYQWu4edYLW
+        TYtdCz4c1LPqCiKIfKuFoq+R6p7UvO2UAB/Q8n4UVJEo0LdYJg==
+X-Google-Smtp-Source: AGHT+IHBFHux9W7amy752XAKQ4G+pXj9K8KLABgekYkKVjTaNiUovhqWPJjy5q7mdLIzANUAVG24gzrYlmHT6Kjn7Kk=
+X-Received: by 2002:a81:8782:0:b0:589:a9fc:ffcd with SMTP id
+ x124-20020a818782000000b00589a9fcffcdmr1407212ywf.20.1692428576106; Sat, 19
+ Aug 2023 00:02:56 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS0PR12MB9058:EE_
-X-MS-Office365-Filtering-Correlation-Id: ca8dc99b-f2f1-4411-b096-08dba046f3d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DZYcvHjfz7kIJD5nN2SrlOTi6JPZTbYhrtK2J/MZ8whK9XDEd0vwmy8mTH4OsB6OT6V+bkddf+HuWJhnmBAKKmrsvyzLraD+hTKdvcmkMLW6zO0oGydKQirTh/l0GjaE5IBIlQ/T9eKjDrCOKUZuAlNhU8msa/mrL45mVUmILrYMSeII3o+E9g05bzyULijelYuY1MQIfOTg8L3ITSEqVCBUXlWIgcq3n/asVGuDOEYD09uYqbQOw5RQEjzoz9PQnfSonNBOASLldf6dyY4GoJ0SMVclaGeljJFIQtqoMSg+9uzgAz1a+bEzIIkNXs48+7iUd/fR6EP+2HhubkoMi87xICIQJzJVNP6hesFq66+a8YhEn9ctx6bazMUK9JVy3QQVZSC2+TznH5++GywVEC9Kw/rI6e7sMFaHqbhd3HXCDP2Xn1NFy2HJ36GTbJKgnGEuTzLKTgMYEsFNkN5paPBsexFZCdR3WwgGCkq23kBDau57Q5KbgTkrRZXUMGp0zQLpa2LuCis+tCZvp3WJ/UVh3jnpglhAHX/Yl4PzIRgpyPMc9lfAxMu+d8dw+R60F8/Qp/LHLfm4zG15G2/kwN9Qfki2oauE8OUychh6k4fTWMFtTvib0ILI9P36KBtX4oLSRHkw7SFMwlTyt3AUng==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(39860400002)(376002)(396003)(366004)(451199024)(186009)(1800799009)(2906002)(6916009)(66556008)(66476007)(54906003)(66946007)(4326008)(5660300002)(8676002)(8936002)(316002)(41300700001)(966005)(53546011)(478600001)(6486002)(6506007)(31686004)(6666004)(6512007)(2616005)(26005)(83380400001)(86362001)(31696002)(38100700002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0hYcUdoZ21UcEp3bWRucGdwaUc0WE1BV1NOSHRTOEVPYWVQbUJTWUJKZ0la?=
- =?utf-8?B?M0lBWm5DN2VKUXhOTU1UeEMxTTV6a3dicEhSa3hRUmIvVnQ0dVV3YXFlc3Jn?=
- =?utf-8?B?c2VscnRjU0xaUytJM2VTS1NEM05ER3NwSFpNaXNHaHVUdVFYS3N0VHY0RXpL?=
- =?utf-8?B?SlhGUElLRmpTRTBPMmJ6cUpneFIybEd2aXA5Qi93NnVKbTRZS0NFdG1na0NM?=
- =?utf-8?B?NktYemt5YW9TbWE4ZVJXemtpY1ZBMWRET1VUdEt3cFVpYXkzTVRVVU4yVklK?=
- =?utf-8?B?YU1uRXY2NE5wdnlzN0NaalMwYkVFV1VsNWZZQlBuNS94N2xJWFQxdC9pSlhY?=
- =?utf-8?B?YzZCZCs5Nm45RkthanZWVDVXK3p0TzRqZ3RoeWwxeDVpemRPN1YzYmtMeUFB?=
- =?utf-8?B?YVlFbmFhbDhCUnBobGpzTCtwdlpPVGlPWjV3MGhjSUMvTFYzUjBtVXNvMGRO?=
- =?utf-8?B?cXoya2syeXpyN3d5WlFPTG0zZ3k1U1JtWWVlQVBLdU9OUnhjZlo5bDdaYStO?=
- =?utf-8?B?S1ZkL0VuUFoySUZFR0Y2THl6dWVSbUVkRDhBZU52OWF1a1Rnd3kwNkJKNmd1?=
- =?utf-8?B?V2xQWkVRNTRSUzBGcjhHb1hpWms2Z3JGVkJYN0ZRN25VbWxEUWtYYlBGaFlS?=
- =?utf-8?B?L0xHcGxpaDFBb1V5R0oxRnZCN1ZROXBOWkI2SXZDMjh1cnFCejR4Q3BQenRm?=
- =?utf-8?B?UitQbGE3NW5TSHFlTWlTOGQwdEt3dHBMcTNGUWFtY3lJaUNOWDZ1bmNib3c0?=
- =?utf-8?B?UklnN0s5djIyVUtWaGN3Zml6ZGYyWHV1ZlF0TUpOUEJuaDBvZ3h4Q3RYYldv?=
- =?utf-8?B?THNaVWh3QXp0bUo5Yno5UHQyRmFLWmtKTGQvcllPR1RYajJ4akhVZjV3R1J1?=
- =?utf-8?B?TjNtZklxY2haNGhNUkw4Ly9BRXJxa2RJYTZLVzgzN1dHb20yQ255bnhqMktB?=
- =?utf-8?B?bUtVSHFab3FUaEpuQ0k3ZmxDVUN5WU9oM2NvZ3dNKythTEc0VG9PK3AvVnpu?=
- =?utf-8?B?Z0F0enAyQi80VWc5Z3I1QytDVU5hc1hxb2s5TE1sZDdQTnppaGhhMnJsQ3hF?=
- =?utf-8?B?TERhM0pjRHlpTWw0NWZhdXNuc1hCaG1TZ2szUk9xTFRuVm1LK0dvL1pwUkpF?=
- =?utf-8?B?Vk1SSFFHL244SkQrOGN2ejBPK0h5OHBPbmF2Q2VvN0dMSktxay9CQ1lPcHUv?=
- =?utf-8?B?dFFRMWJ3UXZrS0pYQXczRTZQUC9zNm5scmlCWE9TamtTWlVCd2VKYzdKRUFn?=
- =?utf-8?B?cTBGRkRtS0pzRHVuM1psdFgzVmt0bFU2dFdvcVI3VFl1RFFHdyswaFhTRkxO?=
- =?utf-8?B?T1FxSlhDL2V3MGdxb2J4ZjFma0F5K09Zd2hXTWl4MTZUVFZMN1V5V3VkQVVC?=
- =?utf-8?B?ZFlIWlB3UTczVzhGcnEyMit3bnpTMnJiT2RDWnIrWEc1WHExRCtDQ0xsbG5x?=
- =?utf-8?B?cWxKNUdWNzZnMWdLMzFuOU56eHhPS2xnaDB4eCtZVzhaaVlFMVBKRUJLYlZI?=
- =?utf-8?B?aSt1dmtQR2hYNmpMd3gveWIveDd1TmFMdVRIS1V5OTJmMjU4aU5peFBBQmF0?=
- =?utf-8?B?N2NxNklIRytPRnZaeXVma1V5N2paYnRXQ1NjZEZVNndNcG1mZnpJbXd6K3FB?=
- =?utf-8?B?SUoycEZOSmRoLzlxUkplbkNvcEY2SUxBZUhXRDNZOWRyaDhJeW4zNWtnMjEx?=
- =?utf-8?B?QTZaTzRHYTc0aDAxWFZRWlpTVmEwZWxuV3JVaDZ2dUV6S0pEeC9SVytLczF5?=
- =?utf-8?B?eHp3VXpGckY4eTZmV2NQaDBMR0dlK0lGM2QxWG1ZNXI1QnlJdE8wZFhMSVRG?=
- =?utf-8?B?d2g4VmZrRmx2c09WVmxSM0FIR0hMek85VXp3RzVQeGh2UWpEYXB6c29wL2E5?=
- =?utf-8?B?bGFHYzRrVG9hbHpMSXVzb2g2aTl3OTRIZWVUVTl5UEFPVTVWaFFsTUpCUWsz?=
- =?utf-8?B?ekF6YURpNnFmaGRzSmF0b2d2TzVraHNwdDdRZ0w3bGRnV21lTWM4YXB2V2hl?=
- =?utf-8?B?S25DajVrU1JXRkR3M2dNYXFWb2VtckYyR1MzMXNRZ3doK2t4a2F2citRaWdM?=
- =?utf-8?B?R0o3RGFMWFVqdzNTWG9mNGsxbWJpQWdnM0U2TDU2OXB6bGNxRVNhTXNESkQr?=
- =?utf-8?Q?0/u9rPSUYrNAuF+sOhaB1ixnP?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca8dc99b-f2f1-4411-b096-08dba046f3d6
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2023 23:58:00.3892
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SMEeX/rWI2TTE9S9eW6+gsgicw/Cp4zAyKSMIxqi3tyHe0opCbndggYdcfxoC2V9FvNIVgP2+L4VXdKIeRGD4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9058
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Reply-To: razumkoykhailo@gmail.com
+Sender: mrtombaba@gmail.com
+Received: by 2002:a05:7000:5395:b0:4f4:2174:eed4 with HTTP; Sat, 19 Aug 2023
+ 00:02:55 -0700 (PDT)
+From:   "Mr.Razum Khailo" <razumkoykhailo@gmail.com>
+Date:   Sat, 19 Aug 2023 00:02:55 -0700
+X-Google-Sender-Auth: TD1SbUwALQWUaG93zNo0ky4SaO8
+Message-ID: <CADXgghn2t3mU_VvtZDjHwnbadg2QnVcJ30yFd0kN8SL6NDhY1g@mail.gmail.com>
+Subject: Greetings from Ukraine,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        MILLION_USD,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:241 listed in]
+        [list.dnswl.org]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [razumkoykhailo[at]gmail.com]
+        *  2.0 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.4 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 8/18/2023 6:44 PM, Jarkko Sakkinen wrote:
-> On Fri Aug 18, 2023 at 10:38 PM UTC, Limonciello, Mario wrote:
->>
->>
->> On 8/18/2023 5:07 PM, Jarkko Sakkinen wrote:
->>> On Fri Aug 18, 2023 at 6:15 PM UTC, Mario Limonciello wrote:
->>>> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG for
->>>> all AMD fTPMs") doesn't work properly on Intel fTPM.  The TPM doesn't reply
->>>> at bootup and returns back the command code.
->>>
->>> Is this reproducible with any production hardware? You are stating it
->>> as it was reproducible categorically with any Intel fTPM.
->>>
->>
->> Yes, it's affecting production hardware too.
->> Someone came to the kernel bugzilla and reported a regression on 6.4.11
->> on a Lenovo Intel laptop as well.
-> 
-> Now the description says that cateogrically all Intel fTPM's fail.
-
-According to Todd this change caused 5 *different* reference Intel 
-systems all to fail.  I know they're not production hardware, but still..
-
-> 
-> I asked for the laptop model in the bugzilla bug, which should be put to
-> the commit description later on (hopefully with a snippet of klog
-> transcript). This commit cannot be applied as it is at the moment, even
-> if it turned out to be a legit fix.
-> 
->>>> As this isn't crucial for anything but AMD fTPM and AMD fTPM works, throw
->>>> away the error code to let Intel fTPM continue to work.
->>>>
->>>> Cc: stable@vger.kernel.org
->>>> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
->>>
->>> It does make sense not to exercise this outside of AMD CPus but since
->>> there is no production hardware failing, it cannot be categorized as a
->>> bug fix.
->>
->> See above (and also kernel bugzilla).
->>
->>>
->>>> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
->>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
->>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->>>> ---
->>>>    drivers/char/tpm/tpm_crb.c | 3 +--
->>>>    1 file changed, 1 insertion(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
->>>> index 9eb1a18590123..b0e9931fe436c 100644
->>>> --- a/drivers/char/tpm/tpm_crb.c
->>>> +++ b/drivers/char/tpm/tpm_crb.c
->>>> @@ -472,8 +472,7 @@ static int crb_check_flags(struct tpm_chip *chip)
->>>>    	if (ret)
->>>>    		return ret;
->>>>    
->>>> -	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL);
->>>> -	if (ret)
->>>> +	if (tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL))
->>>>    		goto release;
->>>
->>> It would be better not to exercise a potentially failing code path at
->>> all. This initiates full transaction with the TPM.
->>
->> So why does a full transaction not work in this case?
-> 
-> It makes absolutely zero sense to send a message to a TPM just to know
-> that you are on AMD CPU, right?
-> 
-> E.g. you could check if boot_cpu_data.x86_vendor == X86_VENDOR_AMD right
-> in the beginning of this function.
-> 
-
-You couldn't replace the whole function with this check.
-
-If you apply it to everything on an AMD system you catch too much.  You 
-need to know it's specifically an AMD fTPM to avoid tripping the stutter 
-bug.  Pluton is fine, dTPMs are fine too.
+R3JlZXRpbmdzwqBmcm9twqBVa3JhaW5lLA0KDQpNci7CoFJhenVta292wqBNeWtoYWlsbyzCoGFu
+wqBlbnRyZXByZW5ldXLCoGJ1c2luZXNzbWFuwqBmcm9twqBPZGVzc2ENClVrcmFpbmUuwqBXaXRo
+aW7CoGHCoHllYXLCoHBsdXPCoHNvbWXCoG1vbnRoc8Kgbm93LMKgbW9yZcKgdGhhbsKgOC4ywqBt
+aWxsaW9uDQpwZW9wbGXCoGFyb3VuZMKgdGhlwqBjaXRpZXPCoG9mwqBtecKgY291bnRyecKgVWty
+YWluZcKgaGF2ZcKgYmVlbsKgZXZhY3VhdGVkwqB0bw0KYcKgc2FmZcKgbG9jYXRpb27CoGFuZMKg
+b3V0wqBvZsKgdGhlwqBjb3VudHJ5LMKgbW9zdMKgZXNwZWNpYWxsecKgY2hpbGRyZW7CoHdpdGgN
+CnRoZWlywqBwYXJlbnRzLMKgbnVyc2luZ8KgbW90aGVyc8KgYW5kwqBwcmVnbmFudMKgd29tZW4s
+wqBhbmTCoHRob3NlwqB3aG/CoGhhdmUNCmJlZW7CoHNlcmlvdXNsecKgd291bmRlZMKgYW5kwqBu
+ZWVkwqB1cmdlbnTCoG1lZGljYWzCoGF0dGVudGlvbi7CoEnCoHdhc8KgYW1vbmcNCnRob3NlwqB0
+aGF0wqB3ZXJlwqBhYmxlwqB0b8KgZXZhY3VhdGXCoHRvwqBvdXLCoG5laWdoYm91cmluZ8KgY291
+bnRyaWVzwqBhbmTCoEnigJltDQpub3fCoGluwqB0aGXCoHJlZnVnZWXCoGNhbXDCoG9mwqBUZXLC
+oEFwZWzCoEdyb25pbmdlbsKgaW7CoHRoZcKgTmV0aGVybGFuZHMuDQoNCknCoG5lZWTCoGHCoGZv
+cmVpZ27CoHBhcnRuZXLCoHRvwqBlbmFibGXCoG1lwqB0b8KgdHJhbnNwb3J0wqBtecKgaW52ZXN0
+bWVudA0KY2FwaXRhbMKgYW5kwqB0aGVuwqByZWxvY2F0ZcKgd2l0aMKgbXnCoGZhbWlseSzCoGhv
+bmVzdGx5wqBpwqB3aXNowqBJwqB3aWxsDQpkaXNjdXNzwqBtb3JlwqBhbmTCoGdldMKgYWxvbmcu
+wqBJwqBuZWVkwqBhwqBwYXJ0bmVywqBiZWNhdXNlwqBtecKgaW52ZXN0bWVudA0KY2FwaXRhbMKg
+aXPCoGluwqBtecKgaW50ZXJuYXRpb25hbMKgYWNjb3VudC7CoEnigJltwqBpbnRlcmVzdGVkwqBp
+bsKgYnV5aW5nDQpwcm9wZXJ0aWVzLMKgaG91c2VzLMKgYnVpbGRpbmfCoHJlYWzCoGVzdGF0ZXMs
+wqBtecKgY2FwaXRhbMKgZm9ywqBpbnZlc3RtZW50DQppc8KgKCQzMMKgTWlsbGlvbsKgVVNEKcKg
+LsKgVGhlwqBmaW5hbmNpYWzCoGluc3RpdHV0aW9uc8KgaW7CoG15wqBjb3VudHJ5DQpVa3JhaW5l
+wqBhcmXCoGFsbMKgc2hvdMKgZG93bsKgZHVlwqB0b8KgdGhlwqBjcmlzaXPCoG9mwqB0aGlzwqB3
+YXLCoG9uwqBVa3JhaW5lDQpzb2lswqBiecKgdGhlwqBSdXNzaWFuwqBmb3JjZXMuwqBNZWFud2hp
+bGUswqBpZsKgdGhlcmXCoGlzwqBhbnnCoHByb2ZpdGFibGUNCmludmVzdG1lbnTCoHRoYXTCoHlv
+dcKgaGF2ZcKgc2/CoG11Y2jCoGV4cGVyaWVuY2XCoGluwqB5b3VywqBjb3VudHJ5LMKgdGhlbsKg
+d2UNCmNhbsKgam9pbsKgdG9nZXRoZXLCoGFzwqBwYXJ0bmVyc8Kgc2luY2XCoEnigJltwqBhwqBm
+b3JlaWduZXIuDQoNCknCoGNhbWXCoGFjcm9zc8KgeW91csKgZS1tYWlswqBjb250YWN0wqB0aHJv
+dWdowqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLCoGFzc2lzdGFu
+Y2XCoGFuZMKgScKgZGVjaWRlZMKgdG/CoGNvbnRhY3TCoHlvdcKgZGlyZWN0bHnCoHRvwqBhc2vC
+oHlvdcKgaWYNCnlvdcKga25vd8KgYW55wqBsdWNyYXRpdmXCoGJ1c2luZXNzwqBpbnZlc3RtZW50
+wqBpbsKgeW91csKgY291bnRyecKgacKgY2FuDQppbnZlc3TCoG15wqBtb25lecKgc2luY2XCoG15
+wqBjb3VudHJ5wqBVa3JhaW5lwqBzZWN1cml0ecKgYW5kwqBlY29ub21pYw0KaW5kZXBlbmRlbnTC
+oGhhc8KgbG9zdMKgdG/CoHRoZcKgZ3JlYXRlc3TCoGxvd2VywqBsZXZlbCzCoGFuZMKgb3VywqBj
+dWx0dXJlwqBoYXMNCmxvc3TCoGluY2x1ZGluZ8Kgb3VywqBoYXBwaW5lc3PCoGhhc8KgYmVlbsKg
+dGFrZW7CoGF3YXnCoGZyb23CoHVzLsKgT3VywqBjb3VudHJ5DQpoYXPCoGJlZW7CoG9uwqBmaXJl
+wqBmb3LCoG1vcmXCoHRoYW7CoGHCoHllYXLCoG5vdy4NCg0KSWbCoHlvdcKgYXJlwqBjYXBhYmxl
+wqBvZsKgaGFuZGxpbmfCoHRoaXPCoGJ1c2luZXNzwqBwYXJ0bmVyc2hpcCzCoGNvbnRhY3TCoG1l
+DQpmb3LCoG1vcmXCoGRldGFpbHMswqBJwqB3aWxswqBhcHByZWNpYXRlwqBpdMKgaWbCoHlvdcKg
+Y2FuwqBjb250YWN0wqBtZQ0KaW1tZWRpYXRlbHkuwqBZb3XCoG1hecKgYXPCoHdlbGzCoHRlbGzC
+oG1lwqBhwqBsaXR0bGXCoG1vcmXCoGFib3V0wqB5b3Vyc2VsZi4NCkNvbnRhY3TCoG1lwqB1cmdl
+bnRsecKgdG/CoGVuYWJsZcKgdXPCoHRvwqBwcm9jZWVkwqB3aXRowqB0aGXCoGJ1c2luZXNzLsKg
+ScKgd2lsbA0KYmXCoHdhaXRpbmfCoGZvcsKgeW91csKgcmVzcG9uc2UuwqBNecKgc2luY2VyZcKg
+YXBvbG9naWVzwqBmb3LCoHRoZQ0KaW5jb252ZW5pZW5jZS4NCg0KDQpUaGFua8KgeW91IQ0KDQpN
+ci4gUmF6dW1rb3bCoE15a2hhaWxvLg0K
