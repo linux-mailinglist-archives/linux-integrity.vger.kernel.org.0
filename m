@@ -2,167 +2,407 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330657821F4
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Aug 2023 05:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2957824C6
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Aug 2023 09:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjHUDhQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 20 Aug 2023 23:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S232672AbjHUHpb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Aug 2023 03:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjHUDhQ (ORCPT
+        with ESMTP id S233829AbjHUHp1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 20 Aug 2023 23:37:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D720C3;
-        Sun, 20 Aug 2023 20:37:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AED262804;
-        Mon, 21 Aug 2023 03:37:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D7B6C43391;
-        Mon, 21 Aug 2023 03:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692589022;
-        bh=AKMF8KXh+pmIVW6h4ohhXyQ9DGyfVE6RymaY/KQPYCQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EubgdrJUSCHZfCrpraRuVYG7rwWw6Koko7iAOP7H5+J+1bztSkD5/WQyfW1ian1pv
-         O0yIXeQBI86iWXDuLFb1aCvQAq57AJ5Vo5PxYRO9G49azuG/nMX1jDMnOWsr7c3H++
-         oO4d6nC1r+LvWA+BxrdCgYTg4LFDle0kImlwIxMxCfPrgh+sy4oeFxM6NkMAAYsXJE
-         qqNVpI54fLoz2IUvJuBZRXizfC0LDCZmd8HQ99ta9vcF3CSzs/KrBePx80Dkf2yykw
-         NpBbsZQ1b8ypDHODPwCueUBASbyvEGg+69J0W/n6/yntD+5nTTU1k+wxuY5gdxk0wB
-         vWBfaduBPSe3g==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-integrity@vger.kernel.org
-Cc:     keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        William Roberts <bill.c.roberts@gmail.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 5/5] KEYS: trusted: tpm2: Use struct tpm_buf for sized buffers
-Date:   Mon, 21 Aug 2023 03:36:30 +0000
-Message-Id: <20230821033630.1039527-6-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230821033630.1039527-1-jarkko@kernel.org>
-References: <20230821033630.1039527-1-jarkko@kernel.org>
+        Mon, 21 Aug 2023 03:45:27 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD380B5
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Aug 2023 00:45:23 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-64c5f5d6f04so13815256d6.3
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Aug 2023 00:45:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692603923; x=1693208723;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JK+yH/rjX097n6VnxgC5Oh8q9usgRZGP6z2ZxHD6mi0=;
+        b=aqqyJpqUfZnZmrKqZo0iwFsvG/Uu+B9mH2ab7fhc33MCE5+5RxMv5NNxsDVMWHd1PH
+         bxO16oKHQ5xjGWYXpQh3pE8O95wu/Fn19HqU7acvWp0SvluZ6KgjrywLxfYZG3caoLoh
+         5Qy/u18g4xvGfDuDIuJK64BvtdjcoEPqvU/9DWDkDd7in+O9YG//IB7lKpitkprMchxX
+         dreHtIZZ2ygQ3C4DgPML5Jb0cpBoNnPabrZ++8JvlQnCgF6FL/8h9AXjv/G5tH20Uomi
+         CR3tiAbwfe5+X51+q5t+mFmdGGRXtuwN/hc7vRNUe4xwtMbVq5ibsAmBYUZKUzz95rx8
+         W3LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692603923; x=1693208723;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JK+yH/rjX097n6VnxgC5Oh8q9usgRZGP6z2ZxHD6mi0=;
+        b=Ec4d2pLWcawr24RfAQ8iu8y/MBT+PoiwWBXtYaJBIfFlxikgu2TSNQ50s+0swzH4UK
+         jCL0ngwLQs6qcWhYhsSHxV01P3z6inXBdddSMtpVtavqjmXc+GqcV8YcMXBN4gXO4Umf
+         UjlIgC5r8GtHPSOw1MCIkIRRNCvOZop03PUKov6st6tybMgmZHeMYt+6trEKS9dWkp/t
+         /wSFsHSmQYtuBTrLljH0zvMerfWVIxOve8dRZvR6FLO8YpadE7Ju0KFldQXNolk1jR4y
+         YtdZe3m11C3HKJcZ6QKtGyX9RMqmkhjQaxk2iuMKBGPCZ77IjxQAcVu9CWYaNlvhVC/C
+         JN+A==
+X-Gm-Message-State: AOJu0Yxg32KOuYDQaU1Hl2o4l8ZADLA41W/gYsNMJIfI5EJx6oEUaDWO
+        E+fzbIAnNnY3Xn77y5lSMaG9eZA/aU9MccY2pnX2vbMOVi8P8Os1
+X-Google-Smtp-Source: AGHT+IGVlgFx9K9waiPvbwRrHpMYHKMZ2VemCxLlgNtmSeBlncdCaxZFI7YUAdvU/XWYBMQQCzhZKPNp6O2snOVfzY0=
+X-Received: by 2002:a0c:f00f:0:b0:63f:63b2:624a with SMTP id
+ z15-20020a0cf00f000000b0063f63b2624amr6284553qvk.48.1692603922677; Mon, 21
+ Aug 2023 00:45:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230803123515.4018838-1-jens.wiklander@linaro.org>
+ <CAFA6WYMzBJTNUxh6b-y=a_NND8FX65YjEP4i-HPS4tQ-Qfm+0w@mail.gmail.com> <CAHUa44ET3Oqc4Yq8E4ouAjn5dF9ygxoXyWh0sjFF_vPoooxrnA@mail.gmail.com>
+In-Reply-To: <CAHUa44ET3Oqc4Yq8E4ouAjn5dF9ygxoXyWh0sjFF_vPoooxrnA@mail.gmail.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Mon, 21 Aug 2023 09:45:11 +0200
+Message-ID: <CAHUa44HpkxDPgdh1B_bFOVPSOETk3F_ZicdnhmuVOux+5fd7sA@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: trusted: tee: use tee_shm_register_alloc_buf()
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Take advantage of the new sized buffer (TPM2B) mode of struct tpm_buf in
-tpm2_seal_trusted(). This allows to add robustness to the command
-construction without requiring to calculate buffer sizes manually.
+Hi,
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- security/keys/trusted-keys/trusted_tpm2.c | 42 ++++++++++++++---------
- 1 file changed, 25 insertions(+), 17 deletions(-)
+On Tue, Aug 8, 2023 at 11:07=E2=80=AFAM Jens Wiklander
+<jens.wiklander@linaro.org> wrote:
+>
+> Hi Sumit,
+>
+> On Mon, Aug 7, 2023 at 9:58=E2=80=AFAM Sumit Garg <sumit.garg@linaro.org>=
+ wrote:
+> >
+> > Hi Jens,
+> >
+> > On Thu, 3 Aug 2023 at 18:05, Jens Wiklander <jens.wiklander@linaro.org>=
+ wrote:
+> > >
+> > > Prior to this patch was trusted_tee_seal() and trusted_tee_get_random=
+()
+> > > relying on tee_shm_register_kernel_buf() to share memory with the TEE=
+.
+> > > Depending on the memory allocation pattern the pages holding the
+> > > registered buffers overlap with other buffers also shared with the TE=
+E.
+> > >
+> >
+> > The overlap here is due to the fact that we are registering two array
+> > members of the same struct. This overlap can be removed by registering
+> > the overall structure at once. But that sounds unnecessary data
+> > structure type sharing with trusted keys TA.
+> >
+> > > The OP-TEE driver using the old SMC based ABI permits overlapping sha=
+red
+> > > buffers, but with the new FF-A based ABI each physical page may only
+> > > be registered once.
+> >
+> > Would it be possible for OP-TEE FF-A ABI to check if a page is already
+> > registered?
+>
+> No, there's no such ABI in the FF-A specification.
+>
+> > If it is then just return success with appropriate page
+> > offset.
+>
+> It's more complicated than that. What if only there's a partial registrat=
+ion?
+>
+> > As otherwise this sounds like an unnecessary restriction for
+> > users. I don't think the problem is only particular to the trusted
+> > keys driver but can be reproduced for user-space clients as well.
+>
+> Indeed, we're dealing with it by using a temporary buffer in the client l=
+ib.
+>
+> >
+> > >
+> > > Fix this problem by allocating a temporary page aligned shared memory
+> > > buffer to be used as a bounce buffer for the needed data buffers.
+> > >
+> > > Since TEE trusted keys doesn't depend on registered shared memory
+> > > support any longer remove that explicit dependency when opening a
+> > > context to the TEE.
+> > >
+> > > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > > ---
+> > >  security/keys/trusted-keys/trusted_tee.c | 68 +++++++++++++---------=
+--
+> > >  1 file changed, 36 insertions(+), 32 deletions(-)
+> > >
+> > > diff --git a/security/keys/trusted-keys/trusted_tee.c b/security/keys=
+/trusted-keys/trusted_tee.c
+> > > index ac3e270ade69..3085343c489a 100644
+> > > --- a/security/keys/trusted-keys/trusted_tee.c
+> > > +++ b/security/keys/trusted-keys/trusted_tee.c
+> > > @@ -8,6 +8,7 @@
+> > >
+> > >  #include <linux/err.h>
+> > >  #include <linux/key-type.h>
+> > > +#include <linux/minmax.h>
+> > >  #include <linux/module.h>
+> > >  #include <linux/slab.h>
+> > >  #include <linux/string.h>
+> > > @@ -65,38 +66,37 @@ static int trusted_tee_seal(struct trusted_key_pa=
+yload *p, char *datablob)
+> > >         int ret;
+> > >         struct tee_ioctl_invoke_arg inv_arg;
+> > >         struct tee_param param[4];
+> > > -       struct tee_shm *reg_shm_in =3D NULL, *reg_shm_out =3D NULL;
+> > > +       struct tee_shm *shm;
+> > > +       uint8_t *buf;
+> > >
+> > >         memset(&inv_arg, 0, sizeof(inv_arg));
+> > >         memset(&param, 0, sizeof(param));
+> > >
+> > > -       reg_shm_in =3D tee_shm_register_kernel_buf(pvt_data.ctx, p->k=
+ey,
+> > > -                                                p->key_len);
+> > > -       if (IS_ERR(reg_shm_in)) {
+> > > -               dev_err(pvt_data.dev, "key shm register failed\n");
+> > > -               return PTR_ERR(reg_shm_in);
+> > > +       shm =3D tee_shm_alloc_kernel_buf(pvt_data.ctx,
+> > > +                                      p->key_len + sizeof(p->blob));
+> > > +       if (IS_ERR(shm)) {
+> > > +               dev_err(pvt_data.dev, "key shm alloc failed\n");
+> > > +               return PTR_ERR(shm);
+> > >         }
+> > > -
+> > > -       reg_shm_out =3D tee_shm_register_kernel_buf(pvt_data.ctx, p->=
+blob,
+> > > -                                                 sizeof(p->blob));
+> > > -       if (IS_ERR(reg_shm_out)) {
+> > > -               dev_err(pvt_data.dev, "blob shm register failed\n");
+> > > -               ret =3D PTR_ERR(reg_shm_out);
+> > > +       buf =3D tee_shm_get_va(shm, 0);
+> > > +       if (IS_ERR(buf)) {
+> > > +               ret =3D PTR_ERR(buf);
+> > >                 goto out;
+> > >         }
+> > > +       memcpy(buf, p->key, p->key_len);
+> >
+> > These memcpy()'s here and below are undue overheads if we change to
+> > tee_shm_alloc_kernel_buf().
+>
+> There's a bit of overhead when entering and exiting the secure world
+> too, just to save and restore registers. Anyway, trusted_tee_seal()
+> doesn't together with FF-A without this patch.
 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index c41f30770138..a976de3c28ae 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -228,8 +228,8 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		      struct trusted_key_payload *payload,
- 		      struct trusted_key_options *options)
- {
-+	struct tpm_buf buf, sized;
- 	int blob_len = 0;
--	struct tpm_buf buf;
- 	u32 hash;
- 	u32 flags;
- 	int i;
-@@ -258,6 +258,13 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		return rc;
- 	}
- 
-+	rc = tpm_buf_init(&sized, true, true);
-+	if (rc) {
-+		tpm_buf_destroy(&buf);
-+		tpm_put_ops(chip);
-+		return rc;
-+	}
-+
- 	tpm_buf_reset(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
- 	tpm_buf_append_u32(&buf, options->keyhandle);
- 	tpm2_buf_append_auth(&buf, TPM2_RS_PW,
-@@ -267,36 +274,36 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 			     TPM_DIGEST_SIZE);
- 
- 	/* sensitive */
--	tpm_buf_append_u16(&buf, 4 + options->blobauth_len + payload->key_len);
-+	tpm_buf_append_u16(&sized, options->blobauth_len);
- 
--	tpm_buf_append_u16(&buf, options->blobauth_len);
- 	if (options->blobauth_len)
--		tpm_buf_append(&buf, options->blobauth, options->blobauth_len);
-+		tpm_buf_append(&sized, options->blobauth, options->blobauth_len);
- 
--	tpm_buf_append_u16(&buf, payload->key_len);
--	tpm_buf_append(&buf, payload->key, payload->key_len);
-+	tpm_buf_append_u16(&sized, payload->key_len);
-+	tpm_buf_append(&sized, payload->key, payload->key_len);
-+	tpm_buf_append(&buf, sized.data, sized.length);
- 
- 	/* public */
--	tpm_buf_append_u16(&buf, 14 + options->policydigest_len);
--	tpm_buf_append_u16(&buf, TPM_ALG_KEYEDHASH);
--	tpm_buf_append_u16(&buf, hash);
-+	tpm_buf_init(&sized, false, true);
-+	tpm_buf_append_u16(&sized, TPM_ALG_KEYEDHASH);
-+	tpm_buf_append_u16(&sized, hash);
- 
- 	/* key properties */
- 	flags = 0;
- 	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
--	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM |
--					    TPM2_OA_FIXED_PARENT);
--	tpm_buf_append_u32(&buf, flags);
-+	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT);
-+	tpm_buf_append_u32(&sized, flags);
- 
- 	/* policy */
--	tpm_buf_append_u16(&buf, options->policydigest_len);
-+	tpm_buf_append_u16(&sized, options->policydigest_len);
- 	if (options->policydigest_len)
--		tpm_buf_append(&buf, options->policydigest,
--			       options->policydigest_len);
-+		tpm_buf_append(&sized, options->policydigest, options->policydigest_len);
- 
- 	/* public parameters */
--	tpm_buf_append_u16(&buf, TPM_ALG_NULL);
--	tpm_buf_append_u16(&buf, 0);
-+	tpm_buf_append_u16(&sized, TPM_ALG_NULL);
-+	tpm_buf_append_u16(&sized, 0);
-+
-+	tpm_buf_append(&buf, sized.data, sized.length);
- 
- 	/* outside info */
- 	tpm_buf_append_u16(&buf, 0);
-@@ -328,6 +335,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 				   blob_len);
- 
- out:
-+	tpm_buf_destroy(&sized);
- 	tpm_buf_destroy(&buf);
- 
- 	if (rc > 0) {
--- 
-2.39.2
+By the way, without this patch the kernel fails with:
+[   12.642071] trusted-key-tee
+optee-ta-f04a0fe7-1f5d-4b9b-abf7-619b85b4ce8c: blob shm register
+failed
+[   12.642576] Unable to handle kernel paging request at virtual
+address fffffffffffffff3
+[   12.642668] Mem abort info:
+[   12.642701]   ESR =3D 0x0000000096000004
+[   12.642764]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+[   12.642821]   SET =3D 0, FnV =3D 0
+[   12.642864]   EA =3D 0, S1PTW =3D 0
+[   12.642910]   FSC =3D 0x04: level 0 translation fault
+[   12.642960] Data abort info:
+[   12.643006]   ISV =3D 0, ISS =3D 0x00000004
+[   12.643049]   CM =3D 0, WnR =3D 0
+[   12.643104] swapper pgtable: 4k pages, 48-bit VAs, pgdp=3D0000000043bfb0=
+00
+[   12.643197] [fffffffffffffff3] pgd=3D0000000000000000, p4d=3D00000000000=
+00000
+[   12.643654] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+[   12.643821] Modules linked in:
+[   12.647781] CPU: 0 PID: 134 Comm: keyctl Not tainted 6.4.0 #1
+[   12.647990] Hardware name: linux,dummy-virt (DT)
+[   12.648146] pstate: 63400009 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=
+=3D--)
+[   12.648280] pc : tee_shm_put+0x1c/0x180
+[   12.648715] lr : tee_shm_free+0x10/0x1c
+[   12.648773] sp : ffff80000aa33aa0
+[   12.648822] x29: ffff80000aa33aa0 x28: ffff0000002b7900 x27: ffff80000a2=
+f7750
+[   12.648980] x26: ffff80000aa33cf8 x25: ffff80000a2f76f0 x24: 00000000000=
+00020
+[   12.649088] x23: ffff80000a6b2000 x22: 00000000fffffff3 x21: fffffffffff=
+ffff3
+[   12.649199] x20: fffffffffffffff3 x19: fffffffffffffff3 x18: fffffffffff=
+fffff
+[   12.649307] x17: 62203a6338656334 x16: 623538623931362d x15: 376662612d6=
+23962
+[   12.649414] x14: 342d643566312d37 x13: ffff80000a271ac8 x12: 00000000000=
+00363
+[   12.649523] x11: 0000000000000121 x10: ffff80000a2c9ac8 x9 : ffff80000a2=
+71ac8
+[   12.649667] x8 : 00000000ffffefff x7 : ffff80000a2c9ac8 x6 : 00000000000=
+00000
+[   12.649797] x5 : ffff000041ea0c48 x4 : 0000000000000000 x3 : 00000000000=
+00000
+[   12.649912] x2 : 0000000000000000 x1 : 0000000000000000 x0 : fffffffffff=
+ffff3
+[   12.650074] Call trace:
+[   12.650212]  tee_shm_put+0x1c/0x180
+[   12.650361]  tee_shm_free+0x10/0x1c
+[   12.650437]  trusted_tee_seal+0xf4/0x17c
+[   12.650503]  trusted_instantiate+0x16c/0x1fc
+[   12.650564]  __key_instantiate_and_link+0x60/0x1f8
+[   12.650629]  __key_create_or_update+0x2a4/0x460
+[   12.650691]  key_create_or_update+0x14/0x20
+[   12.650757]  __arm64_sys_add_key+0xe4/0x244
+[   12.650822]  invoke_syscall+0x48/0x114
+[   12.650886]  el0_svc_common.constprop.0+0x44/0xf4
+[   12.650958]  do_el0_svc+0x3c/0xa8
+[   12.651015]  el0_svc+0x2c/0x84
+[   12.651074]  el0t_64_sync_handler+0xbc/0x138
+[   12.651144]  el0t_64_sync+0x190/0x194
+[   12.651341] Code: a90153f3 aa0003f4 aa0003f3 a9025bf5 (f8438680)
+[   12.651654] ---[ end trace 0000000000000000 ]---
+Segmentation fault
 
+So clearly something needs to be done since there's a bug in the error path=
+.
+
+I'm not overly concerned about the overhead with memcpy(), since we're
+using relatively small buffers. Kernel clients using large buffers
+will need a different approach, for example by using page-aligned
+buffers.
+
+Thanks,
+Jens
+
+>
+> Thanks,
+> Jens
+>
+> >
+> > -Sumit
+> >
+> > >
+> > >         inv_arg.func =3D TA_CMD_SEAL;
+> > >         inv_arg.session =3D pvt_data.session_id;
+> > >         inv_arg.num_params =3D 4;
+> > >
+> > >         param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
+> > > -       param[0].u.memref.shm =3D reg_shm_in;
+> > > +       param[0].u.memref.shm =3D shm;
+> > >         param[0].u.memref.size =3D p->key_len;
+> > >         param[0].u.memref.shm_offs =3D 0;
+> > >         param[1].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
+> > > -       param[1].u.memref.shm =3D reg_shm_out;
+> > > +       param[1].u.memref.shm =3D shm;
+> > >         param[1].u.memref.size =3D sizeof(p->blob);
+> > > -       param[1].u.memref.shm_offs =3D 0;
+> > > +       param[1].u.memref.shm_offs =3D p->key_len;
+> > >
+> > >         ret =3D tee_client_invoke_func(pvt_data.ctx, &inv_arg, param)=
+;
+> > >         if ((ret < 0) || (inv_arg.ret !=3D 0)) {
+> > > @@ -104,14 +104,13 @@ static int trusted_tee_seal(struct trusted_key_=
+payload *p, char *datablob)
+> > >                         inv_arg.ret);
+> > >                 ret =3D -EFAULT;
+> > >         } else {
+> > > +               memcpy(p->blob, buf + p->key_len,
+> > > +                      min(param[1].u.memref.size, sizeof(p->blob)));
+> > >                 p->blob_len =3D param[1].u.memref.size;
+> > >         }
+> > >
+> > >  out:
+> > > -       if (reg_shm_out)
+> > > -               tee_shm_free(reg_shm_out);
+> > > -       if (reg_shm_in)
+> > > -               tee_shm_free(reg_shm_in);
+> > > +       tee_shm_free(shm);
+> > >
+> > >         return ret;
+> > >  }
+> > > @@ -166,11 +165,9 @@ static int trusted_tee_unseal(struct trusted_key=
+_payload *p, char *datablob)
+> > >                 p->key_len =3D param[1].u.memref.size;
+> > >         }
+> > >
+> > > +       tee_shm_free(reg_shm_out);
+> > >  out:
+> > > -       if (reg_shm_out)
+> > > -               tee_shm_free(reg_shm_out);
+> > > -       if (reg_shm_in)
+> > > -               tee_shm_free(reg_shm_in);
+> > > +       tee_shm_free(reg_shm_in);
+> > >
+> > >         return ret;
+> > >  }
+> > > @@ -183,15 +180,21 @@ static int trusted_tee_get_random(unsigned char=
+ *key, size_t key_len)
+> > >         int ret;
+> > >         struct tee_ioctl_invoke_arg inv_arg;
+> > >         struct tee_param param[4];
+> > > -       struct tee_shm *reg_shm =3D NULL;
+> > > +       struct tee_shm *shm;
+> > > +       void *buf;
+> > >
+> > >         memset(&inv_arg, 0, sizeof(inv_arg));
+> > >         memset(&param, 0, sizeof(param));
+> > >
+> > > -       reg_shm =3D tee_shm_register_kernel_buf(pvt_data.ctx, key, ke=
+y_len);
+> > > -       if (IS_ERR(reg_shm)) {
+> > > -               dev_err(pvt_data.dev, "key shm register failed\n");
+> > > -               return PTR_ERR(reg_shm);
+> > > +       shm =3D tee_shm_alloc_kernel_buf(pvt_data.ctx, key_len);
+> > > +       if (IS_ERR(shm)) {
+> > > +               dev_err(pvt_data.dev, "key shm alloc failed\n");
+> > > +               return PTR_ERR(shm);
+> > > +       }
+> > > +       buf =3D tee_shm_get_va(shm, 0);
+> > > +       if (IS_ERR(buf)) {
+> > > +               ret =3D PTR_ERR(buf);
+> > > +               goto out;
+> > >         }
+> > >
+> > >         inv_arg.func =3D TA_CMD_GET_RANDOM;
+> > > @@ -199,7 +202,7 @@ static int trusted_tee_get_random(unsigned char *=
+key, size_t key_len)
+> > >         inv_arg.num_params =3D 4;
+> > >
+> > >         param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
+> > > -       param[0].u.memref.shm =3D reg_shm;
+> > > +       param[0].u.memref.shm =3D shm;
+> > >         param[0].u.memref.size =3D key_len;
+> > >         param[0].u.memref.shm_offs =3D 0;
+> > >
+> > > @@ -209,18 +212,19 @@ static int trusted_tee_get_random(unsigned char=
+ *key, size_t key_len)
+> > >                         inv_arg.ret);
+> > >                 ret =3D -EFAULT;
+> > >         } else {
+> > > +               memcpy(key, buf, min(param[0].u.memref.size, key_len)=
+);
+> > >                 ret =3D param[0].u.memref.size;
+> > >         }
+> > >
+> > > -       tee_shm_free(reg_shm);
+> > > +out:
+> > > +       tee_shm_free(shm);
+> > >
+> > >         return ret;
+> > >  }
+> > >
+> > >  static int optee_ctx_match(struct tee_ioctl_version_data *ver, const=
+ void *data)
+> > >  {
+> > > -       if (ver->impl_id =3D=3D TEE_IMPL_ID_OPTEE &&
+> > > -           ver->gen_caps & TEE_GEN_CAP_REG_MEM)
+> > > +       if (ver->impl_id =3D=3D TEE_IMPL_ID_OPTEE)
+> > >                 return 1;
+> > >         else
+> > >                 return 0;
+> > > --
+> > > 2.34.1
+> > >
