@@ -2,37 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5CE7821D7
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Aug 2023 05:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061ED7821DD
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Aug 2023 05:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbjHUDgn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 20 Aug 2023 23:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S229670AbjHUDgs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 20 Aug 2023 23:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjHUDgm (ORCPT
+        with ESMTP id S230221AbjHUDgr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 20 Aug 2023 23:36:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABEBA1;
-        Sun, 20 Aug 2023 20:36:40 -0700 (PDT)
+        Sun, 20 Aug 2023 23:36:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44BCA1;
+        Sun, 20 Aug 2023 20:36:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD9AB62353;
-        Mon, 21 Aug 2023 03:36:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A86C9C433C8;
-        Mon, 21 Aug 2023 03:36:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AE6F61E02;
+        Mon, 21 Aug 2023 03:36:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37EB8C433C7;
+        Mon, 21 Aug 2023 03:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692588999;
-        bh=R9xNAjyzFeWOUdSG6YFm/6Dcf84E+jNKuvpOQezsZPY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kFc+Oq07e2tulD8NnAXZyl01i0Du7KvGF0XC8Hjz+1IvKam7sf0Ia+rcuvbfgyHtN
-         zGi4y5bwzFMbEJCRX2tBrjewztyfe84nXTwdJj/aWW7XaJuKgXkuQhVg8ho2WOwYpT
-         BDo5MkF2+BX7/FGc3atOGygK6JPraE4YVg891ISpNP1Ezxl+IeJh4RSwIKGHXn5Wwf
-         aG+69Uoo3vmT/XwmmlwLSk/WwoS7tFzR/7cjA+NAS7nZabagQd2CGvSoCgE6zI92wj
-         jAVhUXPccI+UjTp1ujI3C6GFTeYP6tnKN0KliJm5kR3ChmAu1pfLFAi7zZAXTaze+L
-         XvNJV75bSac6A==
+        s=k20201202; t=1692589004;
+        bh=rjtncpc93tHE1DYcl0HjFew5WzgT41duth4IOU7U4j0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fM1CWBVRU/Y6LGVWYFMQuxd70EVJ2y7k8l4aHotq67TanxeGS8yKeEmFavXPxi6bd
+         O6ohiH/E7/LIhgK/jeFQ+cLrify5UL0qAt1jxhepIKuEouQ2t4H9UZ8zPcWd9pkd25
+         Rm3Dqus37MRExy1KdTHFu26UJYYaw2fbDjYqIMPL8y5vU+gYptS/8T+f+1dvdUtURC
+         yS/WO12eMSSNvXN/QYgwvIzEbv41xiChrrWgIb+fTQGUbUSPSpM6EEZAbL6dflRaas
+         G6M/ZZiMYwRSIv9O2DkmGztkbPpN0RxyPdmGTZej/kyJGMRSTKLgOv0Ys7DN7cpacp
+         QpclGMP4mgaRg==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-integrity@vger.kernel.org
 Cc:     keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
@@ -42,15 +42,22 @@ Cc:     keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
         Stefan Berger <stefanb@linux.ibm.com>,
         David Howells <dhowells@redhat.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 0/5] Extend struct tpm_buf to support sized buffers (TPM2B)
-Date:   Mon, 21 Aug 2023 03:36:25 +0000
-Message-Id: <20230821033630.1039527-1-jarkko@kernel.org>
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Julien Gomes <julien@arista.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/5] tpm: Move buffer handling from static inlines to real functions
+Date:   Mon, 21 Aug 2023 03:36:26 +0000
+Message-Id: <20230821033630.1039527-2-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230821033630.1039527-1-jarkko@kernel.org>
+References: <20230821033630.1039527-1-jarkko@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,73 +65,231 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch set implements my ideas on how to extend struct tpm_buf to
-support TPM2 sized buffers (TPM2B). See Section 10.4 in TPM2 Structures
-specification for more information.
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-The goal is to do initial groundwork for smoother landing of integrity
-protection patches by James Bottomley.
+separate out the tpm_buf_... handling functions from static inlines in
+tpm.h and move them to their own tpm-buf.c file.  This is a precursor
+to adding new functions for other TPM type handling because the amount
+of code will grow from the current 70 lines in tpm.h to about 200
+lines when the additions are done.  200 lines of inline functions is a
+bit too much to keep in a header file.
 
-I tested the patch set with:
-
-https://github.com/jarkkojs/buildroot-tpmdd/tree/linux-6.5.y
-
-Compilation:
-
-make qemu_x86_64_defconfig
-make 2>&1 | tee build.txt;
-
-TPM1 startup: output/images/start-qemu.sh --use-system-swtpm --rtc --tpm1
-TPM2 startup: output/images/start-qemu.sh --use-system-swtpm --rtc
-
-For TPM2 I executed the following as the smoke test for these patches:
-
-/usr/lib/kselftests/run_kselftest.sh
-tpm2_createprimary --hierarchy o -G rsa2048 -c key.ctxt
-tpm2_evictcontrol -c key.ctxt 0x81000001
-keyctl add trusted kmk "new 32 keyhandle=0x81000001" @u
-keyctl add encrypted 1000100010001000 "new ecryptfs trusted:kmk 64" @u
-
-For TPM1 I tried:
-
-keyctl add trusted kmk "new 32" @u
-
-This caused TPM error 18, which AFAIK means that there is not SRK (?),
-which is probably an issue in my swtpm configuration, which is visible
-in board/qemu/start-qemu.sh.in.
-
-Link: https://lore.kernel.org/linux-integrity/CT5OE5VZA7D7.3B7C6CK27JIK1@suppilovahvero/
-Link: https://lore.kernel.org/linux-integrity/20230403214003.32093-1-James.Bottomley@HansenPartnership.com/
-Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: William Roberts <bill.c.roberts@gmail.com> 
-Cc: Stefan Berger <stefanb@linux.ibm.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-
-James Bottomley (1):
-  tpm: Move buffer handling from static inlines to real functions
-
-Jarkko Sakkinen (4):
-  tpm: Store TPM buffer length
-  tpm: Detach tpm_buf_reset() from tpm_buf_init()
-  tpm: Support TPM2 sized buffers (TPM2B)
-  KEYS: trusted: tpm2: Use struct tpm_buf for sized buffers
-
- drivers/char/tpm/Makefile                 |   1 +
- drivers/char/tpm/tpm-buf.c                | 126 ++++++++++++++++++++++
- drivers/char/tpm/tpm-interface.c          |  18 +++-
- drivers/char/tpm/tpm-sysfs.c              |   3 +-
- drivers/char/tpm/tpm1-cmd.c               |  26 +++--
- drivers/char/tpm/tpm2-cmd.c               |  36 +++++--
- drivers/char/tpm/tpm2-space.c             |   7 +-
- drivers/char/tpm/tpm_vtpm_proxy.c         |  13 +--
- include/linux/tpm.h                       |  93 +++-------------
- security/keys/trusted-keys/trusted_tpm1.c |  12 +--
- security/keys/trusted-keys/trusted_tpm2.c |  51 +++++----
- 11 files changed, 249 insertions(+), 137 deletions(-)
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v3: make tpm_buf_tag static
+v4: remove space after spdx tag
+v5: fix checkpatch.pl --strict issues
+---
+ drivers/char/tpm/Makefile  |  1 +
+ drivers/char/tpm/tpm-buf.c | 87 ++++++++++++++++++++++++++++++++++++++
+ include/linux/tpm.h        | 86 ++++---------------------------------
+ 3 files changed, 97 insertions(+), 77 deletions(-)
  create mode 100644 drivers/char/tpm/tpm-buf.c
 
+diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+index 0222b1ddb310..ad3594e383e1 100644
+--- a/drivers/char/tpm/Makefile
++++ b/drivers/char/tpm/Makefile
+@@ -15,6 +15,7 @@ tpm-y += tpm-sysfs.o
+ tpm-y += eventlog/common.o
+ tpm-y += eventlog/tpm1.o
+ tpm-y += eventlog/tpm2.o
++tpm-y += tpm-buf.o
+ 
+ tpm-$(CONFIG_ACPI) += tpm_ppi.o eventlog/acpi.o
+ tpm-$(CONFIG_EFI) += eventlog/efi.o
+diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+new file mode 100644
+index 000000000000..88ce1a5402de
+--- /dev/null
++++ b/drivers/char/tpm/tpm-buf.c
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Handing for tpm_buf structures to facilitate the building of commands
++ */
++
++#include <linux/module.h>
++#include <linux/tpm.h>
++
++int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
++{
++	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
++	if (!buf->data)
++		return -ENOMEM;
++
++	buf->flags = 0;
++	tpm_buf_reset(buf, tag, ordinal);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(tpm_buf_init);
++
++void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
++{
++	struct tpm_header *head = (struct tpm_header *)buf->data;
++
++	head->tag = cpu_to_be16(tag);
++	head->length = cpu_to_be32(sizeof(*head));
++	head->ordinal = cpu_to_be32(ordinal);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_reset);
++
++void tpm_buf_destroy(struct tpm_buf *buf)
++{
++	free_page((unsigned long)buf->data);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_destroy);
++
++u32 tpm_buf_length(struct tpm_buf *buf)
++{
++	struct tpm_header *head = (struct tpm_header *)buf->data;
++
++	return be32_to_cpu(head->length);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_length);
++
++void tpm_buf_append(struct tpm_buf *buf,
++		    const unsigned char *new_data,
++		    unsigned int new_len)
++{
++	struct tpm_header *head = (struct tpm_header *)buf->data;
++	u32 len = tpm_buf_length(buf);
++
++	/* Return silently if overflow has already happened. */
++	if (buf->flags & TPM_BUF_OVERFLOW)
++		return;
++
++	if ((len + new_len) > PAGE_SIZE) {
++		WARN(1, "tpm_buf: overflow\n");
++		buf->flags |= TPM_BUF_OVERFLOW;
++		return;
++	}
++
++	memcpy(&buf->data[len], new_data, new_len);
++	head->length = cpu_to_be32(len + new_len);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_append);
++
++void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value)
++{
++	tpm_buf_append(buf, &value, 1);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_append_u8);
++
++void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value)
++{
++	__be16 value2 = cpu_to_be16(value);
++
++	tpm_buf_append(buf, (u8 *)&value2, 2);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_append_u16);
++
++void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
++{
++	__be32 value2 = cpu_to_be32(value);
++
++	tpm_buf_append(buf, (u8 *)&value2, 4);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 4ee9d13749ad..60032c60994b 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -326,84 +326,16 @@ struct tpm2_hash {
+ 	unsigned int tpm_id;
+ };
+ 
+-static inline void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-
+-	head->tag = cpu_to_be16(tag);
+-	head->length = cpu_to_be32(sizeof(*head));
+-	head->ordinal = cpu_to_be32(ordinal);
+-}
+-
+-static inline int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
+-{
+-	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
+-	if (!buf->data)
+-		return -ENOMEM;
+-
+-	buf->flags = 0;
+-	tpm_buf_reset(buf, tag, ordinal);
+-	return 0;
+-}
+-
+-static inline void tpm_buf_destroy(struct tpm_buf *buf)
+-{
+-	free_page((unsigned long)buf->data);
+-}
+-
+-static inline u32 tpm_buf_length(struct tpm_buf *buf)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-
+-	return be32_to_cpu(head->length);
+-}
+-
+-static inline u16 tpm_buf_tag(struct tpm_buf *buf)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-
+-	return be16_to_cpu(head->tag);
+-}
+-
+-static inline void tpm_buf_append(struct tpm_buf *buf,
+-				  const unsigned char *new_data,
+-				  unsigned int new_len)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-	u32 len = tpm_buf_length(buf);
+-
+-	/* Return silently if overflow has already happened. */
+-	if (buf->flags & TPM_BUF_OVERFLOW)
+-		return;
+-
+-	if ((len + new_len) > PAGE_SIZE) {
+-		WARN(1, "tpm_buf: overflow\n");
+-		buf->flags |= TPM_BUF_OVERFLOW;
+-		return;
+-	}
+ 
+-	memcpy(&buf->data[len], new_data, new_len);
+-	head->length = cpu_to_be32(len + new_len);
+-}
+-
+-static inline void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value)
+-{
+-	tpm_buf_append(buf, &value, 1);
+-}
+-
+-static inline void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value)
+-{
+-	__be16 value2 = cpu_to_be16(value);
+-
+-	tpm_buf_append(buf, (u8 *) &value2, 2);
+-}
+-
+-static inline void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
+-{
+-	__be32 value2 = cpu_to_be32(value);
+-
+-	tpm_buf_append(buf, (u8 *) &value2, 4);
+-}
++int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
++void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal);
++void tpm_buf_destroy(struct tpm_buf *buf);
++u32 tpm_buf_length(struct tpm_buf *buf);
++void tpm_buf_append(struct tpm_buf *buf, const unsigned char *new_data,
++		    unsigned int new_len);
++void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value);
++void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value);
++void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value);
+ 
+ /*
+  * Check if TPM device is in the firmware upgrade mode.
 -- 
 2.39.2
 
