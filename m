@@ -2,63 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1EE7848CE
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Aug 2023 19:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D151B784AD7
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Aug 2023 21:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjHVRxO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Aug 2023 13:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        id S229514AbjHVTut (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Aug 2023 15:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjHVRxO (ORCPT
+        with ESMTP id S230309AbjHVTus (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Aug 2023 13:53:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5C330C4;
-        Tue, 22 Aug 2023 10:52:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 404B56564C;
-        Tue, 22 Aug 2023 17:52:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21924C433C8;
-        Tue, 22 Aug 2023 17:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692726774;
-        bh=7ZBQ60QAjHKVFVd0j7bD6mifIJEl/fZHiRDkdIVlxpc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V1boDcjEUEjowJ74wIqHCDivWYXpyGjFaDDuAS9KS90+lQjBnBz51TP6w5Ic6x43H
-         Zz20oIizH/yH2WSkoXhh+vUmhufn+/aPX3wY3Zj9KKrOTGW+zaHMgqjp+oMUW7EspJ
-         5Ji01WRp74jsgv+RUr3hBbdJdGzR5wpY2UHcb7UVwhm6cZVtN18gFeOJ+9VvzluVWy
-         TCX7ssofokW2yaUtoo3uQls99pOxJRAj3dZThYhCWM1whyqbQeilV9mvzByhZU5D9t
-         zQ7BVuwAg5+JbtMGdlpwfOvgXPn+jjskPrzt60OdUKfVmOu+5g5h77A+8XR79ME0Lm
-         vfbeaVeEzcKkQ==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        William Roberts <bill.c.roberts@gmail.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] KEYS: trusted: tpm2: Use struct tpm_buf for sized buffers
-Date:   Tue, 22 Aug 2023 20:52:21 +0300
-Message-Id: <20230822175221.2196136-7-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230822175221.2196136-1-jarkko@kernel.org>
-References: <20230822175221.2196136-1-jarkko@kernel.org>
+        Tue, 22 Aug 2023 15:50:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FBFCD9
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Aug 2023 12:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692733809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5uIJYLeugTPKBtvMobwrsQt5z9ywutDVYoAznOGuvDE=;
+        b=YfSi/jPFvZWwK1x/1s1ouIlZgbIUsccpKAgeKAhJjBdb3IkU0IGE0mskGTE1r/qRr0zUW9
+        NgCzHjenxtrn4JDo8tQEV28M5DpIBWai61Bnc0bGNNcNloHLqY4ZTe4Y1y+09zAidcS1NZ
+        sVBXZJPLnC1MrpzAtrLeRT5gMbhXzbs=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-167-fX66U6VnPOCcEIsgl2wsBg-1; Tue, 22 Aug 2023 15:50:08 -0400
+X-MC-Unique: fX66U6VnPOCcEIsgl2wsBg-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4108cc40837so30993311cf.3
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Aug 2023 12:50:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692733808; x=1693338608;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5uIJYLeugTPKBtvMobwrsQt5z9ywutDVYoAznOGuvDE=;
+        b=FpsdtERRw2s2U0wYhmZPCNDsSVCgo1gjGk+hooPh5upIVqbMWODbCpidVNTsRf+mWx
+         EYlB6UnkysCMHMgRu9t505UUqT6Zwfe5iYe2KZyrYKDYNiez9TowZdZTovghFfUCgciH
+         pZbigIaAjSLNlCyTgCw/Dyj5d37LbHQ/fF5qN5zs+108VwLGk/8PthuVfYSW+sZeyRVt
+         u28i/yVPfW484/p84X+IryaiiOdbWy5j3gcOPY53dv+6vPWbiQLIowoinmZfoIDX6y9k
+         7azwULxikSY83Q7YN+8kD0wFOoux3QfdT3agH8RN3bghejspm+JEtmrSNB42TXJvYb6M
+         BmYg==
+X-Gm-Message-State: AOJu0YyzbuO/32OazKDpQsjn25NYmyItzraUP/k4Ly4BRslNVz5qMczM
+        Qe39P9duueN/XXZDqQtSXTMRwVbscjwi4JdR7HlPG4CamvRWWspMIFw55GZWdmJeahUvywoXnrV
+        hjTD4sLI+mRhIiATEZLkgAt7WgJIi
+X-Received: by 2002:a05:622a:1704:b0:410:9836:8066 with SMTP id h4-20020a05622a170400b0041098368066mr7470579qtk.43.1692733807711;
+        Tue, 22 Aug 2023 12:50:07 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEeetPG2YXy4IAFns4Qfu2Vlw4IKcTAsHPQ8h2GvWhs0XnPN5M9EabaXvPVn2sLq0CDGJtCKg==
+X-Received: by 2002:a05:622a:1704:b0:410:9836:8066 with SMTP id h4-20020a05622a170400b0041098368066mr7470566qtk.43.1692733807407;
+        Tue, 22 Aug 2023 12:50:07 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id jk9-20020a05622a748900b00403c1a19a2bsm3220849qtb.92.2023.08.22.12.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Aug 2023 12:50:06 -0700 (PDT)
+Date:   Tue, 22 Aug 2023 12:50:05 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Todd Brandt <todd.e.brandt@intel.com>,
+        Patrick Steinhardt <ps@pks.im>, Ronan Pigott <ronan@rjp.ie>,
+        Raymond Jay Golo <rjgolo@gmail.com>
+Subject: Re: [PATCH v2] tpm: Don't make vendor check required for probe
+Message-ID: <lpt7tqahlsekfyfh7qwlznxpitpcqjxwmeps7lljnuzdygkaqp@xcqfenucomie>
+References: <20230821140230.1168-1-mario.limonciello@amd.com>
+ <CUZ3T3G99JG2.29X1G67HRO9QT@suppilovahvero>
+ <b7d45df7-3d1c-4b31-9da1-5f81d3e5b279@amd.com>
+ <CUZ5SUEX8IUC.2LBS3FZP9XUTA@suppilovahvero>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CUZ5SUEX8IUC.2LBS3FZP9XUTA@suppilovahvero>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,126 +84,86 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Take advantage of the new sized buffer (TPM2B) mode of struct tpm_buf in
-tpm2_seal_trusted(). This allows to add robustness to the command
-construction without requiring to calculate buffer sizes manually.
+On Tue, Aug 22, 2023 at 05:56:03PM +0300, Jarkko Sakkinen wrote:
+> On Tue Aug 22, 2023 at 5:05 PM EEST, Mario Limonciello wrote:
+> > On 8/22/2023 08:22, Jarkko Sakkinen wrote:
+> > > On Mon Aug 21, 2023 at 5:02 PM EEST, Mario Limonciello wrote:
+> > >> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG for
+> > >> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  On the
+> > >> reported systems the TPM doesn't reply at bootup and returns back the
+> > >> command code. This makes the TPM fail probe.
+> > >>
+> > >> As this isn't crucial for anything but AMD fTPM and AMD fTPM works, check
+> > >> the chip vendor and if it's not AMD don't run the checks.
+> > >>
+> > >> Cc: stable@vger.kernel.org
+> > >> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
+> > >> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
+> > >> Reported-by: Patrick Steinhardt <ps@pks.im>
+> > >> Reported-by: Ronan Pigott <ronan@rjp.ie>
+> > >> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
+> > >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
+> > >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > >> ---
+> > >> v1->v2:
+> > >>   * Check x86 vendor for AMD
+> > >> ---
+> > >>   drivers/char/tpm/tpm_crb.c | 7 ++++++-
+> > >>   1 file changed, 6 insertions(+), 1 deletion(-)
+> > >>
+> > >> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+> > >> index 9eb1a18590123..7faf670201ccc 100644
+> > >> --- a/drivers/char/tpm/tpm_crb.c
+> > >> +++ b/drivers/char/tpm/tpm_crb.c
+> > >> @@ -465,8 +465,12 @@ static bool crb_req_canceled(struct tpm_chip *chip, u8 status)
+> > >>   
+> > >>   static int crb_check_flags(struct tpm_chip *chip)
+> > >>   {
+> > >> +	int ret = 0;
+> > >> +#ifdef CONFIG_X86
+> > >>   	u32 val;
+> > >> -	int ret;
+> > >> +
+> > >> +	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+> > >> +		return ret;
+> > >>   
+> > >>   	ret = crb_request_locality(chip, 0);
+> > >>   	if (ret)
+> > >> @@ -481,6 +485,7 @@ static int crb_check_flags(struct tpm_chip *chip)
+> > >>   
+> > >>   release:
+> > >>   	crb_relinquish_locality(chip, 0);
+> > >> +#endif
+> > > 
+> > > Looks much better but the main question here is that is this combination
+> > > possible:
+> > > 
+> > > 1. AMD CPU
+> > > 2. Non-AMD fTPM (i.e. manufacturer property differs)
+> > > 
+> > > BR, Jarkko
+> >
+> > Yes that combination is possible.
+> >
+> > Pluton TPM uses the tpm_crb driver.
+> 
+> Then I guess we'll go with this for now. Thanks for the effort.
+> 
+> Tested-by: Jarkko Sakkinen <jarkko@kernel.org> # QEMU + swtpm
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> I'm planning to send a pull request right after this with the fix so it
+> will land to v6.6-rc1 or v6.6-rc2:
+> https://lore.kernel.org/linux-integrity/20230817201935.31399-1-jarkko@kernel.org/
+> 
+> BR, Jarkko
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-v2:
-* Use tpm_buf_read_*
----
- security/keys/trusted-keys/trusted_tpm2.c | 51 +++++++++++++----------
- 1 file changed, 29 insertions(+), 22 deletions(-)
+Super minor nit that isn't this patch in particular so don't hold this
+up, but it seems like the function name for the earlier attempt to
+solve this issue that mentioned amd and ftpm was a clearer description
+of what was happening than crb_check_flags.
 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index c41f30770138..5d262306184c 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -228,8 +228,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		      struct trusted_key_payload *payload,
- 		      struct trusted_key_options *options)
- {
-+	off_t offset = TPM_HEADER_SIZE;
-+	struct tpm_buf buf, sized;
- 	int blob_len = 0;
--	struct tpm_buf buf;
- 	u32 hash;
- 	u32 flags;
- 	int i;
-@@ -258,6 +259,13 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		return rc;
- 	}
- 
-+	rc = tpm_buf_init(&sized, true, true);
-+	if (rc) {
-+		tpm_buf_destroy(&buf);
-+		tpm_put_ops(chip);
-+		return rc;
-+	}
-+
- 	tpm_buf_reset(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
- 	tpm_buf_append_u32(&buf, options->keyhandle);
- 	tpm2_buf_append_auth(&buf, TPM2_RS_PW,
-@@ -267,36 +275,36 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 			     TPM_DIGEST_SIZE);
- 
- 	/* sensitive */
--	tpm_buf_append_u16(&buf, 4 + options->blobauth_len + payload->key_len);
-+	tpm_buf_append_u16(&sized, options->blobauth_len);
- 
--	tpm_buf_append_u16(&buf, options->blobauth_len);
- 	if (options->blobauth_len)
--		tpm_buf_append(&buf, options->blobauth, options->blobauth_len);
-+		tpm_buf_append(&sized, options->blobauth, options->blobauth_len);
- 
--	tpm_buf_append_u16(&buf, payload->key_len);
--	tpm_buf_append(&buf, payload->key, payload->key_len);
-+	tpm_buf_append_u16(&sized, payload->key_len);
-+	tpm_buf_append(&sized, payload->key, payload->key_len);
-+	tpm_buf_append(&buf, sized.data, sized.length);
- 
- 	/* public */
--	tpm_buf_append_u16(&buf, 14 + options->policydigest_len);
--	tpm_buf_append_u16(&buf, TPM_ALG_KEYEDHASH);
--	tpm_buf_append_u16(&buf, hash);
-+	tpm_buf_init(&sized, false, true);
-+	tpm_buf_append_u16(&sized, TPM_ALG_KEYEDHASH);
-+	tpm_buf_append_u16(&sized, hash);
- 
- 	/* key properties */
- 	flags = 0;
- 	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
--	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM |
--					    TPM2_OA_FIXED_PARENT);
--	tpm_buf_append_u32(&buf, flags);
-+	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT);
-+	tpm_buf_append_u32(&sized, flags);
- 
- 	/* policy */
--	tpm_buf_append_u16(&buf, options->policydigest_len);
-+	tpm_buf_append_u16(&sized, options->policydigest_len);
- 	if (options->policydigest_len)
--		tpm_buf_append(&buf, options->policydigest,
--			       options->policydigest_len);
-+		tpm_buf_append(&sized, options->policydigest, options->policydigest_len);
- 
- 	/* public parameters */
--	tpm_buf_append_u16(&buf, TPM_ALG_NULL);
--	tpm_buf_append_u16(&buf, 0);
-+	tpm_buf_append_u16(&sized, TPM_ALG_NULL);
-+	tpm_buf_append_u16(&sized, 0);
-+
-+	tpm_buf_append(&buf, sized.data, sized.length);
- 
- 	/* outside info */
- 	tpm_buf_append_u16(&buf, 0);
-@@ -313,21 +321,20 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 	if (rc)
- 		goto out;
- 
--	blob_len = be32_to_cpup((__be32 *) &buf.data[TPM_HEADER_SIZE]);
-+	blob_len = tpm_buf_read_u32(&buf, &offset);
- 	if (blob_len > MAX_BLOB_SIZE) {
- 		rc = -E2BIG;
- 		goto out;
- 	}
--	if (tpm_buf_length(&buf) < TPM_HEADER_SIZE + 4 + blob_len) {
-+	if (buf.length - offset < blob_len) {
- 		rc = -EFAULT;
- 		goto out;
- 	}
- 
--	blob_len = tpm2_key_encode(payload, options,
--				   &buf.data[TPM_HEADER_SIZE + 4],
--				   blob_len);
-+	blob_len = tpm2_key_encode(payload, options, &buf.data[offset], blob_len);
- 
- out:
-+	tpm_buf_destroy(&sized);
- 	tpm_buf_destroy(&buf);
- 
- 	if (rc > 0) {
--- 
-2.39.2
+Regards,
+Jerry
 
