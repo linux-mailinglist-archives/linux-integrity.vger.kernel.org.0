@@ -2,57 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73594783EAD
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Aug 2023 13:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512B2783EB7
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Aug 2023 13:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbjHVLZR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Aug 2023 07:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S234191AbjHVL2c (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Aug 2023 07:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbjHVLZQ (ORCPT
+        with ESMTP id S234178AbjHVL2b (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Aug 2023 07:25:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82BFCD1;
-        Tue, 22 Aug 2023 04:25:14 -0700 (PDT)
+        Tue, 22 Aug 2023 07:28:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B38FCD7;
+        Tue, 22 Aug 2023 04:28:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 644CF64619;
-        Tue, 22 Aug 2023 11:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06C5C433C8;
-        Tue, 22 Aug 2023 11:25:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BB14648AA;
+        Tue, 22 Aug 2023 11:28:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E79C433C7;
+        Tue, 22 Aug 2023 11:28:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692703513;
-        bh=aKL6Ww4HSe7JFLDgTpjsybTa65dCu+935Jo7W5suW4Y=;
+        s=k20201202; t=1692703708;
+        bh=ImDJH7/Kwvo1zhzEm+BfmajPtkbIFANMBKvkW2Hz0ls=;
         h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=mzq9GHZAzTl5EASu0CxooNuulBuPPu6kZH+NeOJ94vxmzgbV0lyV1yEVCUjudXCkT
-         WZp1JkM7m0D1IvMSlcRKjhhr3CBK0n1Q+THGLwgHhqqJN5rO3ljm+yTeEbgLilHsuf
-         MbaXc2JGbbPD71Gc8UwYBGJDx8/FQIX3Zu7fKshuE9IUoxN9YEPxCi8EK000+k9Q2/
-         hFnu62N2nZv+9311pAPvsPqtqMfKxo640dL4zOkWwtkLbWureahChVNRfYjwJlsHlM
-         uvD5P5seEjkeGbRTkPwSfvpr5F1rkDLyvQuMAxpoW2pHv7t9i/ohIWItA/iPeQwEy+
-         hLlp+AU6XTNkg==
+        b=EtRhrjNEFjeW893ERMvh0WrT2ZlievG3ARvphKajTXCSwvd4NUufgGwLzjyR9GYGQ
+         QNI3S8dwXN8guAX9lNrkW0oZI61/fq6QB+VUQHhJGDGHQqK9GBH8huio4DEIVjDk2+
+         k71xbqoxTI0cs749rJTY/alque09MQK3mwtE7nL8BNKeJlPBZjI1Lnnhoqf5aAAvME
+         eLv5kR5CGKS3ta12+Hscw5dCNz1dXNfQ0TrbOvXHQQ26ydR9m7mnfdpFYG5O1ol7+a
+         4AqskFeLW2h50Kg28SqAIrrUy1i9nPjj1r7M445vw0sAEbXUZQxlvuzZ2DGQtOn0Lc
+         GUJDE91EgdBAg==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 22 Aug 2023 14:25:09 +0300
-Message-Id: <CUZ1BDCFZ7S8.26LGWT9U1C87H@suppilovahvero>
-Cc:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Thorsten Leemhuis" <regressions@leemhuis.info>,
-        <charles.d.prestopine@intel.com>, <rafael.j.wysocki@intel.com>,
-        <len.brown@intel.com>, <stable@vger.kernel.org>,
-        "Todd Brandt" <todd.e.brandt@intel.com>
-Subject: Re: [PATCH] tpm: Don't make vendor check required for probe
+Date:   Tue, 22 Aug 2023 14:28:24 +0300
+Message-Id: <CUZ1DUXBEAWM.6JDTPLT9I7NM@suppilovahvero>
+Cc:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH] tpm_crb: Fix an error handling path in crb_acpi_add()
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+To:     "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
+        "Peter Huewe" <peterhuewe@gmx.de>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Matthew Garrett" <mjg59@srcf.ucam.org>
 X-Mailer: aerc 0.14.0
-References: <20230818181516.19167-1-mario.limonciello@amd.com>
- <CUW0GZCVHKPB.1W7ESSPE7INHQ@seitikki>
- <25a21516-7201-4ee4-be2b-f67edaf97e2a@amd.com>
- <CUW2JM314GAR.36XV41132X3OX@seitikki>
- <719602ec-c9fc-4a72-9585-d50595cb6dca@amd.com>
-In-Reply-To: <719602ec-c9fc-4a72-9585-d50595cb6dca@amd.com>
+References: <a820eaf8c77ca4fde50fc170f535de4b28c82a2d.1677322706.git.christophe.jaillet@wanadoo.fr> <c2263ee0-2133-6f89-3f16-2ae1129a20df@wanadoo.fr>
+In-Reply-To: <c2263ee0-2133-6f89-3f16-2ae1129a20df@wanadoo.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -63,108 +59,50 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat Aug 19, 2023 at 2:57 AM EEST, Limonciello, Mario wrote:
->
->
-> On 8/18/2023 6:44 PM, Jarkko Sakkinen wrote:
-> > On Fri Aug 18, 2023 at 10:38 PM UTC, Limonciello, Mario wrote:
-> >>
-> >>
-> >> On 8/18/2023 5:07 PM, Jarkko Sakkinen wrote:
-> >>> On Fri Aug 18, 2023 at 6:15 PM UTC, Mario Limonciello wrote:
-> >>>> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RN=
-G for
-> >>>> all AMD fTPMs") doesn't work properly on Intel fTPM.  The TPM doesn'=
-t reply
-> >>>> at bootup and returns back the command code.
-> >>>
-> >>> Is this reproducible with any production hardware? You are stating it
-> >>> as it was reproducible categorically with any Intel fTPM.
-> >>>
-> >>
-> >> Yes, it's affecting production hardware too.
-> >> Someone came to the kernel bugzilla and reported a regression on 6.4.1=
-1
-> >> on a Lenovo Intel laptop as well.
+On Sun Aug 20, 2023 at 9:21 AM EEST, Christophe JAILLET wrote:
+> Le 25/02/2023 =C3=A0 11:58, Christophe JAILLET a =C3=A9crit=C2=A0:
+> > Some error paths don't call acpi_put_table() before returning.
+> > Branch to the correct place instead of doing some direct return.
 > >=20
-> > Now the description says that cateogrically all Intel fTPM's fail.
+> > Fixes: 4d2732882703 ("tpm_crb: Add support for CRB devices based on Plu=
+ton")
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > ---
+> >   drivers/char/tpm/tpm_crb.c | 5 +++--
+> >   1 file changed, 3 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+> > index 99698ee1a744..f7068bd8b3d0 100644
+> > --- a/drivers/char/tpm/tpm_crb.c
+> > +++ b/drivers/char/tpm/tpm_crb.c
+> > @@ -771,12 +771,13 @@ static int crb_acpi_add(struct acpi_device *devic=
+e)
+> >   				FW_BUG "TPM2 ACPI table has wrong size %u for start method type %=
+d\n",
+> >   				buf->header.length,
+> >   				ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON);
+> > -			return -EINVAL;
+> > +			rc =3D -EINVAL;
+> > +			goto out;
+> >   		}
+> >   		crb_pluton =3D ACPI_ADD_PTR(struct tpm2_crb_pluton, buf, sizeof(*bu=
+f));
+> >   		rc =3D crb_map_pluton(dev, priv, buf, crb_pluton);
+> >   		if (rc)
+> > -			return rc;
+> > +			goto out;
+> >   	}
+> >  =20
+> >   	priv->sm =3D sm;
 >
-> According to Todd this change caused 5 *different* reference Intel=20
-> systems all to fail.  I know they're not production hardware, but still..
-
-Kind of sane requirement is to scope on known systems that exists. We
-are not fixing bugs for R&D platforms.
-
+> Hi,
 >
-> >=20
-> > I asked for the laptop model in the bugzilla bug, which should be put t=
-o
-> > the commit description later on (hopefully with a snippet of klog
-> > transcript). This commit cannot be applied as it is at the moment, even
-> > if it turned out to be a legit fix.
-> >=20
-> >>>> As this isn't crucial for anything but AMD fTPM and AMD fTPM works, =
-throw
-> >>>> away the error code to let Intel fTPM continue to work.
-> >>>>
-> >>>> Cc: stable@vger.kernel.org
-> >>>> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
-> >>>
-> >>> It does make sense not to exercise this outside of AMD CPus but since
-> >>> there is no production hardware failing, it cannot be categorized as =
-a
-> >>> bug fix.
-> >>
-> >> See above (and also kernel bugzilla).
-> >>
-> >>>
-> >>>> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> >>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217804
-> >>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >>>> ---
-> >>>>    drivers/char/tpm/tpm_crb.c | 3 +--
-> >>>>    1 file changed, 1 insertion(+), 2 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-> >>>> index 9eb1a18590123..b0e9931fe436c 100644
-> >>>> --- a/drivers/char/tpm/tpm_crb.c
-> >>>> +++ b/drivers/char/tpm/tpm_crb.c
-> >>>> @@ -472,8 +472,7 @@ static int crb_check_flags(struct tpm_chip *chip=
-)
-> >>>>    	if (ret)
-> >>>>    		return ret;
-> >>>>   =20
-> >>>> -	ret =3D tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL);
-> >>>> -	if (ret)
-> >>>> +	if (tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL))
-> >>>>    		goto release;
-> >>>
-> >>> It would be better not to exercise a potentially failing code path at
-> >>> all. This initiates full transaction with the TPM.
-> >>
-> >> So why does a full transaction not work in this case?
-> >=20
-> > It makes absolutely zero sense to send a message to a TPM just to know
-> > that you are on AMD CPU, right?
-> >=20
-> > E.g. you could check if boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_AMD =
-right
-> > in the beginning of this function.
-> >=20
+> polite reminder.
 >
-> You couldn't replace the whole function with this check.
->
-> If you apply it to everything on an AMD system you catch too much.  You=
+> While re-looking at it, the 3rd parameter of crb_map_pluton() (i.e. buf)=
 =20
-> need to know it's specifically an AMD fTPM to avoid tripping the stutter=
-=20
-> bug.  Pluton is fine, dTPMs are fine too.
+> looks unused and could be removed if it makes sense to you.
 
-dTPM's have nothing to be with tpm_crb. They use tpm_tis_core.
-
-Is there a system with CPU recognized as AMD and *firmware* TPM from
-some 3rd party vendor? If not, then you could also drop
-tpm2_get_tpm_pt() altogether.
-
+This AFAIK went to Linux v6.2 already.
 
 BR, Jarkko
