@@ -2,139 +2,294 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADC07844CC
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Aug 2023 16:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D707848BC
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Aug 2023 19:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236980AbjHVO4K (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Aug 2023 10:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S229589AbjHVRwk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Aug 2023 13:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbjHVO4K (ORCPT
+        with ESMTP id S229591AbjHVRwg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Aug 2023 10:56:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AE710B;
-        Tue, 22 Aug 2023 07:56:08 -0700 (PDT)
+        Tue, 22 Aug 2023 13:52:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14C4196;
+        Tue, 22 Aug 2023 10:52:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBBE862211;
-        Tue, 22 Aug 2023 14:56:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEFF0C433C7;
-        Tue, 22 Aug 2023 14:56:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F706641CA;
+        Tue, 22 Aug 2023 17:52:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70ACDC433C7;
+        Tue, 22 Aug 2023 17:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692716167;
-        bh=9rBnVtfIE9EEcKxVqKq4SpV+7NlCvzYXOLbTw1vnuVE=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=i3JdsTGodYVHl7yJvR6B/T26F8aauAsMhnbPuDSd5MMEwlF9oNEUWKG7wVpyU7tPF
-         49p8V7FN4+viPVex4rfEoG22JaSB8v1lAKVU9mR6A5W/9Bohf4eA/C78Uce8hvUjEb
-         sngJHQr/5mpCxMivw+YoejJf4+rzvCmizm+RHZqIf/Ki595WtWGkhuePmTxb4Sl0jl
-         suTFG5Fvs5B99LO6zCFD1PdXtHYOxuCK4jLkr0r1UvBUOK0Rhd6l25jjSyIMhCM2Jb
-         VeYAJ6hqUm2GUgrCswpQzMMcAgQAZ5FY7Ee+0JS4Y2F4e7ImRqHmm3BB8llYEWdJed
-         esHkPJiNzvg6A==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 22 Aug 2023 17:56:03 +0300
-Message-Id: <CUZ5SUEX8IUC.2LBS3FZP9XUTA@suppilovahvero>
-Cc:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>, "Todd Brandt" <todd.e.brandt@intel.com>,
-        "Patrick Steinhardt" <ps@pks.im>, "Ronan Pigott" <ronan@rjp.ie>,
-        "Raymond Jay Golo" <rjgolo@gmail.com>
-Subject: Re: [PATCH v2] tpm: Don't make vendor check required for probe
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Mario Limonciello" <mario.limonciello@amd.com>
-X-Mailer: aerc 0.14.0
-References: <20230821140230.1168-1-mario.limonciello@amd.com>
- <CUZ3T3G99JG2.29X1G67HRO9QT@suppilovahvero>
- <b7d45df7-3d1c-4b31-9da1-5f81d3e5b279@amd.com>
-In-Reply-To: <b7d45df7-3d1c-4b31-9da1-5f81d3e5b279@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1692726752;
+        bh=SiVfJ4W6a/bmBWOS0Lq/pdyCODl7wLD9tUpQOHq7WzA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KNzgm/3GiZPJ5J3oBf1kz5gHZimMq0777J+bO3diprHkZ7qlloKmCuxisIybvuJaf
+         avOIS3aLu9Nil/qcx/xy70XqlWgyUie0dSJZh51dIbtW6r0C8MEqDD8KZzXvS1Q7Rc
+         OR12fo/FJHFcM1djpeqzljw8xXrpEf0NnH0Bm/dI0N88lMx+qi771OmFzJFu4IRHj2
+         swwJhhqPhqvsWZvfmvRjsCPnVFa4fBEktCOUZpW6x/U+Yh5vznMwr6SdNY3RZiH+ot
+         DYdzYjCLc84iTohK84Dw+tkffS/Gw2Fb+xj7uLPru+45hk7wNg7p0ZO4I/oYRYpOtX
+         q+VW+a5YJVqhQ==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        William Roberts <bill.c.roberts@gmail.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Julien Gomes <julien@arista.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: [PATCH v2 1/6] tpm: Move buffer handling from static inlines to real functions
+Date:   Tue, 22 Aug 2023 20:52:16 +0300
+Message-Id: <20230822175221.2196136-2-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230822175221.2196136-1-jarkko@kernel.org>
+References: <20230822175221.2196136-1-jarkko@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Aug 22, 2023 at 5:05 PM EEST, Mario Limonciello wrote:
-> On 8/22/2023 08:22, Jarkko Sakkinen wrote:
-> > On Mon Aug 21, 2023 at 5:02 PM EEST, Mario Limonciello wrote:
-> >> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG =
-for
-> >> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  On =
-the
-> >> reported systems the TPM doesn't reply at bootup and returns back the
-> >> command code. This makes the TPM fail probe.
-> >>
-> >> As this isn't crucial for anything but AMD fTPM and AMD fTPM works, ch=
-eck
-> >> the chip vendor and if it's not AMD don't run the checks.
-> >>
-> >> Cc: stable@vger.kernel.org
-> >> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
-> >> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> >> Reported-by: Patrick Steinhardt <ps@pks.im>
-> >> Reported-by: Ronan Pigott <ronan@rjp.ie>
-> >> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
-> >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217804
-> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >> ---
-> >> v1->v2:
-> >>   * Check x86 vendor for AMD
-> >> ---
-> >>   drivers/char/tpm/tpm_crb.c | 7 ++++++-
-> >>   1 file changed, 6 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-> >> index 9eb1a18590123..7faf670201ccc 100644
-> >> --- a/drivers/char/tpm/tpm_crb.c
-> >> +++ b/drivers/char/tpm/tpm_crb.c
-> >> @@ -465,8 +465,12 @@ static bool crb_req_canceled(struct tpm_chip *chi=
-p, u8 status)
-> >>  =20
-> >>   static int crb_check_flags(struct tpm_chip *chip)
-> >>   {
-> >> +	int ret =3D 0;
-> >> +#ifdef CONFIG_X86
-> >>   	u32 val;
-> >> -	int ret;
-> >> +
-> >> +	if (boot_cpu_data.x86_vendor !=3D X86_VENDOR_AMD)
-> >> +		return ret;
-> >>  =20
-> >>   	ret =3D crb_request_locality(chip, 0);
-> >>   	if (ret)
-> >> @@ -481,6 +485,7 @@ static int crb_check_flags(struct tpm_chip *chip)
-> >>  =20
-> >>   release:
-> >>   	crb_relinquish_locality(chip, 0);
-> >> +#endif
-> >=20
-> > Looks much better but the main question here is that is this combinatio=
-n
-> > possible:
-> >=20
-> > 1. AMD CPU
-> > 2. Non-AMD fTPM (i.e. manufacturer property differs)
-> >=20
-> > BR, Jarkko
->
-> Yes that combination is possible.
->
-> Pluton TPM uses the tpm_crb driver.
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-Then I guess we'll go with this for now. Thanks for the effort.
+separate out the tpm_buf_... handling functions from static inlines in
+tpm.h and move them to their own tpm-buf.c file.  This is a precursor
+to adding new functions for other TPM type handling because the amount
+of code will grow from the current 70 lines in tpm.h to about 200
+lines when the additions are done.  200 lines of inline functions is a
+bit too much to keep in a header file.
 
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org> # QEMU + swtpm
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-I'm planning to send a pull request right after this with the fix so it
-will land to v6.6-rc1 or v6.6-rc2:
-https://lore.kernel.org/linux-integrity/20230817201935.31399-1-jarkko@kerne=
-l.org/
+v3: make tpm_buf_tag static
+v4: remove space after spdx tag
+v5: fix checkpatch.pl --strict issues
+---
+ drivers/char/tpm/Makefile  |  1 +
+ drivers/char/tpm/tpm-buf.c | 87 ++++++++++++++++++++++++++++++++++++++
+ include/linux/tpm.h        | 86 ++++---------------------------------
+ 3 files changed, 97 insertions(+), 77 deletions(-)
+ create mode 100644 drivers/char/tpm/tpm-buf.c
 
-BR, Jarkko
+diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+index 0222b1ddb310..ad3594e383e1 100644
+--- a/drivers/char/tpm/Makefile
++++ b/drivers/char/tpm/Makefile
+@@ -15,6 +15,7 @@ tpm-y += tpm-sysfs.o
+ tpm-y += eventlog/common.o
+ tpm-y += eventlog/tpm1.o
+ tpm-y += eventlog/tpm2.o
++tpm-y += tpm-buf.o
+ 
+ tpm-$(CONFIG_ACPI) += tpm_ppi.o eventlog/acpi.o
+ tpm-$(CONFIG_EFI) += eventlog/efi.o
+diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+new file mode 100644
+index 000000000000..88ce1a5402de
+--- /dev/null
++++ b/drivers/char/tpm/tpm-buf.c
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Handing for tpm_buf structures to facilitate the building of commands
++ */
++
++#include <linux/module.h>
++#include <linux/tpm.h>
++
++int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
++{
++	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
++	if (!buf->data)
++		return -ENOMEM;
++
++	buf->flags = 0;
++	tpm_buf_reset(buf, tag, ordinal);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(tpm_buf_init);
++
++void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
++{
++	struct tpm_header *head = (struct tpm_header *)buf->data;
++
++	head->tag = cpu_to_be16(tag);
++	head->length = cpu_to_be32(sizeof(*head));
++	head->ordinal = cpu_to_be32(ordinal);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_reset);
++
++void tpm_buf_destroy(struct tpm_buf *buf)
++{
++	free_page((unsigned long)buf->data);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_destroy);
++
++u32 tpm_buf_length(struct tpm_buf *buf)
++{
++	struct tpm_header *head = (struct tpm_header *)buf->data;
++
++	return be32_to_cpu(head->length);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_length);
++
++void tpm_buf_append(struct tpm_buf *buf,
++		    const unsigned char *new_data,
++		    unsigned int new_len)
++{
++	struct tpm_header *head = (struct tpm_header *)buf->data;
++	u32 len = tpm_buf_length(buf);
++
++	/* Return silently if overflow has already happened. */
++	if (buf->flags & TPM_BUF_OVERFLOW)
++		return;
++
++	if ((len + new_len) > PAGE_SIZE) {
++		WARN(1, "tpm_buf: overflow\n");
++		buf->flags |= TPM_BUF_OVERFLOW;
++		return;
++	}
++
++	memcpy(&buf->data[len], new_data, new_len);
++	head->length = cpu_to_be32(len + new_len);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_append);
++
++void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value)
++{
++	tpm_buf_append(buf, &value, 1);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_append_u8);
++
++void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value)
++{
++	__be16 value2 = cpu_to_be16(value);
++
++	tpm_buf_append(buf, (u8 *)&value2, 2);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_append_u16);
++
++void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
++{
++	__be32 value2 = cpu_to_be32(value);
++
++	tpm_buf_append(buf, (u8 *)&value2, 4);
++}
++EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 4ee9d13749ad..60032c60994b 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -326,84 +326,16 @@ struct tpm2_hash {
+ 	unsigned int tpm_id;
+ };
+ 
+-static inline void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-
+-	head->tag = cpu_to_be16(tag);
+-	head->length = cpu_to_be32(sizeof(*head));
+-	head->ordinal = cpu_to_be32(ordinal);
+-}
+-
+-static inline int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
+-{
+-	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
+-	if (!buf->data)
+-		return -ENOMEM;
+-
+-	buf->flags = 0;
+-	tpm_buf_reset(buf, tag, ordinal);
+-	return 0;
+-}
+-
+-static inline void tpm_buf_destroy(struct tpm_buf *buf)
+-{
+-	free_page((unsigned long)buf->data);
+-}
+-
+-static inline u32 tpm_buf_length(struct tpm_buf *buf)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-
+-	return be32_to_cpu(head->length);
+-}
+-
+-static inline u16 tpm_buf_tag(struct tpm_buf *buf)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-
+-	return be16_to_cpu(head->tag);
+-}
+-
+-static inline void tpm_buf_append(struct tpm_buf *buf,
+-				  const unsigned char *new_data,
+-				  unsigned int new_len)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-	u32 len = tpm_buf_length(buf);
+-
+-	/* Return silently if overflow has already happened. */
+-	if (buf->flags & TPM_BUF_OVERFLOW)
+-		return;
+-
+-	if ((len + new_len) > PAGE_SIZE) {
+-		WARN(1, "tpm_buf: overflow\n");
+-		buf->flags |= TPM_BUF_OVERFLOW;
+-		return;
+-	}
+ 
+-	memcpy(&buf->data[len], new_data, new_len);
+-	head->length = cpu_to_be32(len + new_len);
+-}
+-
+-static inline void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value)
+-{
+-	tpm_buf_append(buf, &value, 1);
+-}
+-
+-static inline void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value)
+-{
+-	__be16 value2 = cpu_to_be16(value);
+-
+-	tpm_buf_append(buf, (u8 *) &value2, 2);
+-}
+-
+-static inline void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
+-{
+-	__be32 value2 = cpu_to_be32(value);
+-
+-	tpm_buf_append(buf, (u8 *) &value2, 4);
+-}
++int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
++void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal);
++void tpm_buf_destroy(struct tpm_buf *buf);
++u32 tpm_buf_length(struct tpm_buf *buf);
++void tpm_buf_append(struct tpm_buf *buf, const unsigned char *new_data,
++		    unsigned int new_len);
++void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value);
++void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value);
++void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value);
+ 
+ /*
+  * Check if TPM device is in the firmware upgrade mode.
+-- 
+2.39.2
+
