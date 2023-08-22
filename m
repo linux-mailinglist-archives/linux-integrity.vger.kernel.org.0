@@ -2,61 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DC178389B
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Aug 2023 05:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8979783EA1
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Aug 2023 13:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbjHVDle (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Aug 2023 23:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S233824AbjHVLPp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Aug 2023 07:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjHVDld (ORCPT
+        with ESMTP id S233448AbjHVLPp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Aug 2023 23:41:33 -0400
-X-Greylist: delayed 492 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Aug 2023 20:41:32 PDT
-Received: from out-38.mta1.migadu.com (out-38.mta1.migadu.com [IPv6:2001:41d0:203:375::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F946186
-        for <linux-integrity@vger.kernel.org>; Mon, 21 Aug 2023 20:41:32 -0700 (PDT)
-MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rjp.ie; s=key1;
-        t=1692675197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RTs14t3rJwjJ8nQIqP8mM2RUjVXGIHh5DU3GMM4wEaM=;
-        b=m8iZiLA5iTjxOVO6RAvgVGnFLhqNo4J7Kd+gqBuuDLHBH/K+T6EukywHTGnK+98TFwUIbL
-        OWXj3gSGR+IlKlUKPydmO9miicRfd0NGDuB9Q5TrkJzisacFjXoS2Q/KIEoXse66lX2f8x
-        dyCh+y0OTbVKkm9Ms/jPERaYR5AKz2k=
-Date:   Tue, 22 Aug 2023 03:33:16 +0000
-Content-Type: text/plain; charset="utf-8"
+        Tue, 22 Aug 2023 07:15:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0544F1BE;
+        Tue, 22 Aug 2023 04:15:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86A5B630A5;
+        Tue, 22 Aug 2023 11:15:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF08EC433C8;
+        Tue, 22 Aug 2023 11:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692702942;
+        bh=WWnUFRYYCqhoHCdpIcwCf3PPBW7vB8AWGZIXDAYxm98=;
+        h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+        b=YnQve18rwGbzuAttWAm+Lwf2wQFEjJxBYepCCmXdhF+jkedf4dSVXocWFM8dDcRkU
+         FxBdBrbIRL1Zt7AqUeu63+iONh0pWn3dQJwqYpuUF87j9c5kOLgKBS+pc4kVn3iaLs
+         67X1JiOr8RSeAje3LixsAZ6LdGuaKd5vBHtFp23JTpzrpvcbi2Eyn+rdR0mIRgP73Z
+         FabjzNxwtCiiOEEqCO/6iDuonrVifUDjss5BG/MPP0iYyoFq6GCUJkmOc+v8hlSvUF
+         YVTdfhxQbUDheOMjmHc3GgEtgBRfGf5+h5l68T3mrT+rOrB7jR2AUE3D4O//68Ln8g
+         JO5jWoL6RQn+g==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Ronan Pigott" <ronan@rjp.ie>
-Message-ID: <5c5de3dee5e5fcc4fbdf80226f0697f6269c585f@rjp.ie>
-TLS-Required: No
-Subject: Re: [PATCH v2] tpm: Don't make vendor check required for probe
-To:     "Mario Limonciello" <mario.limonciello@amd.com>
-Cc:     stable@vger.kernel.org, jarkko@kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ps@pks.im, rjgolo@gmail.com, todd.e.brandt@intel.com
-In-Reply-To: <20230821140230.1168-1-mario.limonciello@amd.com>
-References: <20230821140230.1168-1-mario.limonciello@amd.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 22 Aug 2023 14:15:39 +0300
+Message-Id: <CUZ143E6EP2G.2V9A6YWYBSXJX@suppilovahvero>
+To:     "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+        <linux-integrity@vger.kernel.org>
+Cc:     <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: [PATCH v4 05/13] tpm: add cursor based buffer functions for
+ response parsing
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
+ <20230403214003.32093-6-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20230403214003.32093-6-James.Bottomley@HansenPartnership.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mario,
+On Tue Apr 4, 2023 at 12:39 AM EEST, James Bottomley wrote:
+> Extracting values from returned TPM buffers can be hard.  Add cursor
+> based (moving poiner) functions that make it easier to extract TPM
+> returned values from a buffer.
+>
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+>
+> ---
+> v4: add kernel doc and reword commit
+> ---
+>  drivers/char/tpm/tpm-buf.c | 48 ++++++++++++++++++++++++++++++++++++++
+>  include/linux/tpm.h        |  3 +++
+>  2 files changed, 51 insertions(+)
+>
+> diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+> index b7e42fb6266c..da0f6e725c3f 100644
+> --- a/drivers/char/tpm/tpm-buf.c
+> +++ b/drivers/char/tpm/tpm-buf.c
+> @@ -6,6 +6,8 @@
+>  #include <linux/module.h>
+>  #include <linux/tpm.h>
+> =20
+> +#include <asm/unaligned.h>
+> +
+>  static int __tpm_buf_init(struct tpm_buf *buf)
+>  {
+>  	buf->data =3D (u8 *)__get_free_page(GFP_KERNEL);
+> @@ -229,3 +231,49 @@ void tpm_buf_append_2b(struct tpm_buf *buf, struct t=
+pm_buf *tpm2b)
+>  	tpm_buf_reset_int(tpm2b);
+>  }
+>  EXPORT_SYMBOL_GPL(tpm_buf_append_2b);
+> +
+> +/* functions for unmarshalling data and moving the cursor */
+> +
+> +/**
+> + * tpm_get_inc_u8 - read a u8 and move pointer beyond it
+> + * @ptr: pointer to pointer
+> + *
+> + * @return: value read
+> + */
+> +u8 tpm_get_inc_u8(const u8 **ptr)
+> +{
+> +	return *((*ptr)++);
+> +}
+> +EXPORT_SYMBOL_GPL(tpm_get_inc_u8);
 
-Thanks for the patch. I applied v2 to linux v6.4.11 and it resolves the
-issue on my workstation with the intel ADL fTPM.
+No overflow check, and these should be static inlines.
 
-Tested-By: Ronan Pigott <ronan@rjp.ie>
+Please consider this:
 
-Cheers,
-Ronan
+/**
+ * tpm_buf_read_u8() - Read a byte from a TPM buffer
+ * @buf:	&tpm_buf instance
+ * @offset:	offset within the consumed part of the buffer
+ */
+static inline int tpm_buf_read_u8(const struct tpm_buf *buf, offs_t *offset=
+)
+{
+	if (*offset++ >=3D buf->length)
+		return -EINVAL;
+=09
+	return buf->data[*offset - 1];	=09
+}
+
+Depends on:
+
+https://lore.kernel.org/linux-integrity/20230821033630.1039527-1-jarkko@ker=
+nel.org/
+
+No motivation for weird cursor concept, when the reality is just
+a read from a buffer.
+
+BR, Jarkko
