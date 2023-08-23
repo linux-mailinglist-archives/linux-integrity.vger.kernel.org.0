@@ -2,116 +2,231 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E921784D3A
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Aug 2023 01:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED5A7850E8
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Aug 2023 08:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbjHVXQJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Aug 2023 19:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
+        id S233010AbjHWGzz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Aug 2023 02:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjHVXQJ (ORCPT
+        with ESMTP id S231283AbjHWGzy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Aug 2023 19:16:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0904CE9;
-        Tue, 22 Aug 2023 16:16:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55F5861530;
-        Tue, 22 Aug 2023 23:16:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 020D2C433C8;
-        Tue, 22 Aug 2023 23:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692746166;
-        bh=jvom6YRY9DFH5+a0nubub9bkoGzaeU6lyAMRBFbF8eU=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=B6KzT4i0p19Ms4aXFI1rXalaTg+n7KRzghhFzyPugaK7L59ByhEdMZXTmP426BVNU
-         oqPzuv4v5BpMsccm/OlzRj5fatrKlFoi7Qezuwq9d8coYjZ7owstgW6Sg1CgvePLHA
-         8Qz6/tWimb/vgDSUXSyY9fcOwWKzTyDziQg+l2TETXMMfmlqwWOU37ufCu1pJKE/2N
-         eIlr9iTQ4WHNFTFJNThxQYNYS9aU3Rzx45jFZsdV/FeVWa7yNgqMQRuTqGh8P1lyvT
-         MGn2T/V/9ylyBSG44igWuvzNdntUNdZspLG48dhsrkzAMjR4AAw4BYilQvBgkh6nOV
-         1U6Cp4dpAGung==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 23 Aug 2023 02:16:02 +0300
-Message-Id: <CUZGFNUNLO3W.1669MKELG1XIL@suppilovahvero>
-Cc:     <linux-sgx@vger.kernel.org>, <stable@vger.kernel.org>,
-        "Todd Brandt" <todd.e.brandt@intel.com>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Mario Limonciello" <mario.limonciello@amd.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tpm: Enable hwrng only for Pluton on AMD CPUs
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Jerry Snitselaar" <jsnitsel@redhat.com>
-X-Mailer: aerc 0.14.0
-References: <20230822203912.2256229-1-jarkko@kernel.org>
- <ubwdpgalqja6c3ggp4rjapqhts7m3pxgrdvm7ytwxitaasbjhd@32tbbipd2vfn>
-In-Reply-To: <ubwdpgalqja6c3ggp4rjapqhts7m3pxgrdvm7ytwxitaasbjhd@32tbbipd2vfn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 23 Aug 2023 02:55:54 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB27CE8
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Aug 2023 23:55:51 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id ada2fe7eead31-44d4d997dcfso1256394137.0
+        for <linux-integrity@vger.kernel.org>; Tue, 22 Aug 2023 23:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692773750; x=1693378550;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PLfKs0vxuqFqgLcCcFNFpi2DXG8BlcoLy65tZmmHn4s=;
+        b=C9fd660wNdFLLdlS2TW0H+x8soH+wvy9kheDYuP5m9XABGCmyBn+reV7925EIRPp6a
+         7AXhimwLYPR08T0phs8tN2Be1X/caQvrUiIh7KJQkIVF3yNTS8uOcP+sLGxHyFyFBu8l
+         xU8E0DDwLqTKgfqqoQbFY5frZwkr5QbOO5pEBLxT48KoHVlD3ZFag8jq85yJXibiEzVQ
+         5qt6mpv/gxdaZ7JHHKfhk5u8rRIV7ejeu8wgLm+i9LqTSwJGwLcgtZ1JR7kNDaYgf3Kz
+         iC76tFy5F31ctUtAJwoBD6OExWePXojnDkc54iOiQVjbrf61yF8v3XHpwi3C3uXoO1Q7
+         9Spw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692773750; x=1693378550;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PLfKs0vxuqFqgLcCcFNFpi2DXG8BlcoLy65tZmmHn4s=;
+        b=i/bYusZUyXQ18Q+inSEHgz3FUi+wukGxh8mpE66OmfnGoXLkGE1IvT+VDRV7etLbNd
+         voCZeE3ISwH5CwWmsvmg1UWrKZtlR65Tcbdbl7FaBkKy9TaSOmzwX9l2bmavQAdXljs4
+         1MNxgSN9914MMI+CXUXZu+X46ZjUXkdSMKMriIGOYya7zkVzXI3bNcyYTFuBhVpPMBrO
+         yEgR2dZl4ll0OfMHeA+qLPfF0m8rZGQDya7fcBmo2GV7toQq2Prrt0k+uVPJyhv9cJFb
+         /1tcsqCn/I1Fh48sjSPgzyhZfjGxF8nGr5wXwJrlhduR+qX9IqldTIhuhkgvdzAp0nVg
+         4JbA==
+X-Gm-Message-State: AOJu0YysHIpoHQDovsdYx1yS7lq5yM6Kl4AZFLZiBcFsCJrCwfOZFQOl
+        AyTsHmV8HU12JMQEqsTk3xTiKi8NVsywqEttk4V8zA==
+X-Google-Smtp-Source: AGHT+IHZ6wzYTYuJHshwpDW0Nk/qU4m6YVHI11y0vAqL8DLXYwnKrO6DRhb4Erf21/HfbRs2sqC1d+WekK+UVKjFJCE=
+X-Received: by 2002:a05:6102:354f:b0:447:55b0:bceb with SMTP id
+ e15-20020a056102354f00b0044755b0bcebmr10299298vss.0.1692773750399; Tue, 22
+ Aug 2023 23:55:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230822112933.1550062-1-sumit.garg@linaro.org> <20230822125555.GA82256@rayden>
+In-Reply-To: <20230822125555.GA82256@rayden>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 23 Aug 2023 12:25:39 +0530
+Message-ID: <CAFA6WYPy=yxGg1HbT+ipWJFpxiJeUGK6BSgMhtRPd=zmKef-cw@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: trusted: tee: Refactor register SHM usage
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        jarkko@kernel.org, jejb@linux.ibm.com, zohar@linux.ibm.com,
+        sudeep.holla@arm.com, achin.gupta@arm.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Aug 23, 2023 at 12:28 AM EEST, Jerry Snitselaar wrote:
-> On Tue, Aug 22, 2023 at 11:39:12PM +0300, Jarkko Sakkinen wrote:
-> > The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG f=
-or
-> > all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  On t=
-he
-> > reported systems the TPM doesn't reply at bootup and returns back the
-> > command code. This makes the TPM fail probe.
-> >=20
-> > Since only Microsoft Pluton is the only known combination of AMD CPU an=
-d
-> > fTPM from other vendor, disable hwrng otherwise. In order to make sysad=
-min
-> > aware of this, print also info message to the klog.
-> >=20
-> > Cc: stable@vger.kernel.org
-> > Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
-> > Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217804
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> > v2:
-> > * CONFIG_X86
+On Tue, 22 Aug 2023 at 18:25, Jens Wiklander <jens.wiklander@linaro.org> wrote:
 >
-> Did you mean to wrap the crb_acpi_add chunk with CONFIG_X86?
+> On Tue, Aug 22, 2023 at 04:59:33PM +0530, Sumit Garg wrote:
+> > The OP-TEE driver using the old SMC based ABI permits overlapping shared
+> > buffers, but with the new FF-A based ABI each physical page may only
+> > be registered once.
+> >
+> > As the key and blob buffer are allocated adjancently, there is no need
+> > for redundant register shared memory invocation. Also, it is incompatibile
+> > with FF-A based ABI limitation. So refactor register shared memory
+> > implementation to use only single invocation to register both key and blob
+> > buffers.
+> >
+> > Fixes: 4615e5a34b95 ("optee: add FF-A support")
+> > Reported-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> > ---
+> >  security/keys/trusted-keys/trusted_tee.c | 64 ++++++++----------------
+> >  1 file changed, 20 insertions(+), 44 deletions(-)
+> >
+> > diff --git a/security/keys/trusted-keys/trusted_tee.c b/security/keys/trusted-keys/trusted_tee.c
+> > index ac3e270ade69..aa3d477de6db 100644
+> > --- a/security/keys/trusted-keys/trusted_tee.c
+> > +++ b/security/keys/trusted-keys/trusted_tee.c
+> > @@ -65,24 +65,16 @@ static int trusted_tee_seal(struct trusted_key_payload *p, char *datablob)
+> >       int ret;
+> >       struct tee_ioctl_invoke_arg inv_arg;
+> >       struct tee_param param[4];
+> > -     struct tee_shm *reg_shm_in = NULL, *reg_shm_out = NULL;
+> > +     struct tee_shm *reg_shm = NULL;
+> >
+> >       memset(&inv_arg, 0, sizeof(inv_arg));
+> >       memset(&param, 0, sizeof(param));
+> >
+> > -     reg_shm_in = tee_shm_register_kernel_buf(pvt_data.ctx, p->key,
+> > -                                              p->key_len);
+> > -     if (IS_ERR(reg_shm_in)) {
+> > -             dev_err(pvt_data.dev, "key shm register failed\n");
+> > -             return PTR_ERR(reg_shm_in);
+> > -     }
+> > -
+> > -     reg_shm_out = tee_shm_register_kernel_buf(pvt_data.ctx, p->blob,
+> > -                                               sizeof(p->blob));
+> > -     if (IS_ERR(reg_shm_out)) {
+> > -             dev_err(pvt_data.dev, "blob shm register failed\n");
+> > -             ret = PTR_ERR(reg_shm_out);
+> > -             goto out;
+> > +     reg_shm = tee_shm_register_kernel_buf(pvt_data.ctx, p->key,
+> > +                                           sizeof(p->key) + sizeof(p->blob));
+>
+> This is somewhat fragile. What if struct trusted_key_payload has a small
+> unexpected change in layout?
 
-Yup :-/
+key and blob buffers are just two adjacent fixed sized byte arrays. So
+I am not worried here as long as they stay adjacent (which has been
+the case since trusted keys were introduced in the kernel).
 
-$ git diff
-diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index 28448bfd4062..ea085b14ab7c 100644
---- a/drivers/char/tpm/tpm_crb.c
-+++ b/drivers/char/tpm/tpm_crb.c
-@@ -805,12 +805,14 @@ static int crb_acpi_add(struct acpi_device *device)
-        if (rc)
-                goto out;
+-Sumit
 
-+#ifdef CONFIG_X86
-        /* A quirk for https://www.amd.com/en/support/kb/faq/pa-410 */
-        if (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_AMD &&
-            priv->sm !=3D ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON) {
-                dev_info(dev, "Disabling hwrng\n");
-                chip->flags |=3D TPM_CHIP_FLAG_HWRNG_DISABLED;
-        }
-+#endif /* CONFIG_X86 */
-
-        rc =3D tpm_chip_register(chip);
-
-[also linux-sgx leaked by mistake to my git-send-email command line]
-
-I sent a new one:
-https://lkml.org/lkml/2023/8/22/1288
-
-BR, Jarkko
+>
+> Thanks,
+> Jens
+>
+> > +     if (IS_ERR(reg_shm)) {
+> > +             dev_err(pvt_data.dev, "shm register failed\n");
+> > +             return PTR_ERR(reg_shm);
+> >       }
+> >
+> >       inv_arg.func = TA_CMD_SEAL;
+> > @@ -90,13 +82,13 @@ static int trusted_tee_seal(struct trusted_key_payload *p, char *datablob)
+> >       inv_arg.num_params = 4;
+> >
+> >       param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
+> > -     param[0].u.memref.shm = reg_shm_in;
+> > +     param[0].u.memref.shm = reg_shm;
+> >       param[0].u.memref.size = p->key_len;
+> >       param[0].u.memref.shm_offs = 0;
+> >       param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
+> > -     param[1].u.memref.shm = reg_shm_out;
+> > +     param[1].u.memref.shm = reg_shm;
+> >       param[1].u.memref.size = sizeof(p->blob);
+> > -     param[1].u.memref.shm_offs = 0;
+> > +     param[1].u.memref.shm_offs = sizeof(p->key);
+> >
+> >       ret = tee_client_invoke_func(pvt_data.ctx, &inv_arg, param);
+> >       if ((ret < 0) || (inv_arg.ret != 0)) {
+> > @@ -107,11 +99,7 @@ static int trusted_tee_seal(struct trusted_key_payload *p, char *datablob)
+> >               p->blob_len = param[1].u.memref.size;
+> >       }
+> >
+> > -out:
+> > -     if (reg_shm_out)
+> > -             tee_shm_free(reg_shm_out);
+> > -     if (reg_shm_in)
+> > -             tee_shm_free(reg_shm_in);
+> > +     tee_shm_free(reg_shm);
+> >
+> >       return ret;
+> >  }
+> > @@ -124,24 +112,16 @@ static int trusted_tee_unseal(struct trusted_key_payload *p, char *datablob)
+> >       int ret;
+> >       struct tee_ioctl_invoke_arg inv_arg;
+> >       struct tee_param param[4];
+> > -     struct tee_shm *reg_shm_in = NULL, *reg_shm_out = NULL;
+> > +     struct tee_shm *reg_shm = NULL;
+> >
+> >       memset(&inv_arg, 0, sizeof(inv_arg));
+> >       memset(&param, 0, sizeof(param));
+> >
+> > -     reg_shm_in = tee_shm_register_kernel_buf(pvt_data.ctx, p->blob,
+> > -                                              p->blob_len);
+> > -     if (IS_ERR(reg_shm_in)) {
+> > -             dev_err(pvt_data.dev, "blob shm register failed\n");
+> > -             return PTR_ERR(reg_shm_in);
+> > -     }
+> > -
+> > -     reg_shm_out = tee_shm_register_kernel_buf(pvt_data.ctx, p->key,
+> > -                                               sizeof(p->key));
+> > -     if (IS_ERR(reg_shm_out)) {
+> > -             dev_err(pvt_data.dev, "key shm register failed\n");
+> > -             ret = PTR_ERR(reg_shm_out);
+> > -             goto out;
+> > +     reg_shm = tee_shm_register_kernel_buf(pvt_data.ctx, p->key,
+> > +                                           sizeof(p->key) + sizeof(p->blob));
+> > +     if (IS_ERR(reg_shm)) {
+> > +             dev_err(pvt_data.dev, "shm register failed\n");
+> > +             return PTR_ERR(reg_shm);
+> >       }
+> >
+> >       inv_arg.func = TA_CMD_UNSEAL;
+> > @@ -149,11 +129,11 @@ static int trusted_tee_unseal(struct trusted_key_payload *p, char *datablob)
+> >       inv_arg.num_params = 4;
+> >
+> >       param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
+> > -     param[0].u.memref.shm = reg_shm_in;
+> > +     param[0].u.memref.shm = reg_shm;
+> >       param[0].u.memref.size = p->blob_len;
+> > -     param[0].u.memref.shm_offs = 0;
+> > +     param[0].u.memref.shm_offs = sizeof(p->key);
+> >       param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
+> > -     param[1].u.memref.shm = reg_shm_out;
+> > +     param[1].u.memref.shm = reg_shm;
+> >       param[1].u.memref.size = sizeof(p->key);
+> >       param[1].u.memref.shm_offs = 0;
+> >
+> > @@ -166,11 +146,7 @@ static int trusted_tee_unseal(struct trusted_key_payload *p, char *datablob)
+> >               p->key_len = param[1].u.memref.size;
+> >       }
+> >
+> > -out:
+> > -     if (reg_shm_out)
+> > -             tee_shm_free(reg_shm_out);
+> > -     if (reg_shm_in)
+> > -             tee_shm_free(reg_shm_in);
+> > +     tee_shm_free(reg_shm);
+> >
+> >       return ret;
+> >  }
+> > --
+> > 2.34.1
+> >
