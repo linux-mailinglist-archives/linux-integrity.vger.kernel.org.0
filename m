@@ -2,211 +2,172 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CEF78A3AE
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Aug 2023 02:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2DC78A3CD
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Aug 2023 03:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjH1AfU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 27 Aug 2023 20:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S229451AbjH1BGx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 27 Aug 2023 21:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjH1AfL (ORCPT
+        with ESMTP id S229461AbjH1BGq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 27 Aug 2023 20:35:11 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2072.outbound.protection.outlook.com [40.107.244.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F4611C;
-        Sun, 27 Aug 2023 17:35:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BvbClXiStc+yD5FGPju6QPmHjoENUpV3tVz4WlD2l3XSqH+MqojgMBkAzqb2i9QEaz8yxuV4xxEsJoKUIMtTEOIywtL0fuUAxi1kGxclX1xuQq3A6hNksjtFtPeJ9/GCsQxf0zpa5cZzXObValCXBIdB7YPtIKnA6Tpcwj9c8Y18X5neTZqeHNoUvzdClr/bQg3xpZwaGqykjeJF/t6jYaryErxycV6G2M32jqnukj9C9oTJlv1AbJSSNYPfZdJLb75XSLJeFhHatsOsAT0CmmMwT9oobOecnb+O99mzfyDVqWI59ALzl+8OpBt84AezWwcNNMPWiZlMQeuIsopi+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MqUhjxAnxwE3Bc4oxRRlScQoqfultbb++6EaqdLWbYQ=;
- b=W4UCSk3I8EjZEYdw1xBZGQiy32fIsQFAf70Wyal/1Y3SVAbIjXUMwMV54406xHLHLMCJ6yYNjCqOYj2WxFjGApaITT1wKb7bNcsvFlrWRgLhYmbjK8TBhi7mWFXPoxvC+0CE968vfJjJbEVdcK9tX/lhhzyWplfvgRp5b2rFs4EWWRMTc7K1ZkbUXIxA1wfdYm/y2la2XnFU/wh7pfjp13XmUIw3fV2voJjdefZ2gwVZM94VGhMn7p24zR5nM0CORCHKh2L1rOmcUj0OHGdGeLelluQRdtgItdKC/cgTCAij/u8G4/w22GARiZhPyk96z+HHhBtZXG13U3hsSuikOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MqUhjxAnxwE3Bc4oxRRlScQoqfultbb++6EaqdLWbYQ=;
- b=kXAfy88M9Yftt6/+zbK+Xp6lqcV2oLbAQSUYjFjTqOcJWWI2l0WL+9/orKwn5kZ6kEvhGcgSjAqZh65Au5D5va9Q8ZTGF2VFXu+vOENptVYva73jVcc5wqVR3f5X5quhrDEBkfNZZdr5v0mRJIDuk81nAEYSGPVv3Ik5z1g5BzA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by BL1PR12MB5972.namprd12.prod.outlook.com (2603:10b6:208:39b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.34; Mon, 28 Aug
- 2023 00:35:03 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6699.034; Mon, 28 Aug 2023
- 00:35:03 +0000
-Message-ID: <f6d75cac-2556-484e-8a2c-3531b24b1ca5@amd.com>
-Date:   Sun, 27 Aug 2023 19:35:00 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] tpm: Enable hwrng only for Pluton on AMD CPUs
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-integrity@vger.kernel.org,
-        Jerry Snitselaar <jsnitsel@redhat.com>, stable@vger.kernel.org,
+        Sun, 27 Aug 2023 21:06:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7E0130
+        for <linux-integrity@vger.kernel.org>; Sun, 27 Aug 2023 18:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1693184754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/V5zkCsRDA+Gue7miMjMHK0pSH94dkxubU/DgbGWqtQ=;
+        b=OG17NI0NCwLl9Iiv+XsDQYI43X8EKu+39lgxnqdIcLUn1xv6M5n4vT1Ce4UFiEICOpsaKd
+        khdt0AihIQS9N/maPohx9jcwR1Al5Oibt9cfHzL9pO4pCKaCVlaZehjCKoyfjSVE3SFQnL
+        S37dPVrtjmdUdMgyPGaucPaXfbgK1A4=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-591-ujDqaI5uNJa_q4-cAGpH4Q-1; Sun, 27 Aug 2023 21:05:53 -0400
+X-MC-Unique: ujDqaI5uNJa_q4-cAGpH4Q-1
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-790d3e93a25so212032739f.0
+        for <linux-integrity@vger.kernel.org>; Sun, 27 Aug 2023 18:05:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693184752; x=1693789552;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/V5zkCsRDA+Gue7miMjMHK0pSH94dkxubU/DgbGWqtQ=;
+        b=X9/fI56Yqobb8AaXPavRbN4soc/UHiIH0zEheoTYjeYU2YWHwPENDNSaoqHkfgSFTK
+         ImBiSPdUnSxh/IkreHQrh+WGjegXVL+Hyk4TebBMvMzkPopYpS9gK3wRfVT4YMJGVZ6Y
+         Go2caN7HG6cw3hBjUL9+YjyQR4JWpl/mIu1Iiqvi8EtUggGmWgqNIJCs4wWMU4l2GQAb
+         uWQmF+nWQIYi2Hw++5uLkapEMR+KpRaVpqFSt9RPgs874v2eiRb8/ksKH+axpjbCAfyd
+         g1HAasLXjdze45Ct5eu57+M8lJ6km2d/gX2fx+vhFsbqyMBMsSnlyVjFReziXQ9b06kw
+         D5/w==
+X-Gm-Message-State: AOJu0YwNO8D9LkQQ27k99JzVEMIp5vXTgx3tpaNexWT4fGnlxgDQ+wG+
+        6Qi1q5fpe2tCeQUrL6neVhEYi1xhWIyo/dymNAMNHWuPoyFvNCYlnN6NqC1KeIGm8NA95ci4FIk
+        zppId9J7X/VGBUDF5btFZ7Px8zVVNpCSDLFCm
+X-Received: by 2002:a05:6e02:1bc3:b0:34c:cb72:32f7 with SMTP id x3-20020a056e021bc300b0034ccb7232f7mr15200946ilv.24.1693184752415;
+        Sun, 27 Aug 2023 18:05:52 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGBwlyJHli2Qu2Xz6/MKDcSTs2JPHM2rQb6JlupZKv5Ip5Isapx4Lhs3tCaLXGumwwptHqDEQ==
+X-Received: by 2002:a05:6e02:1bc3:b0:34c:cb72:32f7 with SMTP id x3-20020a056e021bc300b0034ccb7232f7mr15200932ilv.24.1693184752204;
+        Sun, 27 Aug 2023 18:05:52 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id t16-20020a639550000000b0056f8b44058csm5927641pgn.12.2023.08.27.18.05.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Aug 2023 18:05:51 -0700 (PDT)
+Date:   Sun, 27 Aug 2023 18:05:50 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
         Todd Brandt <todd.e.brandt@intel.com>,
         Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        Patrick Steinhardt <ps@pks.im>, Ronan Pigott <ronan@rjp.ie>,
-        Raymond Jay Golo <rjgolo@gmail.com>
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] tpm: Enable hwrng only for Pluton on AMD CPUs
+Message-ID: <ct256e7tloa3th4muxmhgvysvod35c4vp2aczuybud3q6747ts@hglky2egrg7y>
 References: <20230822231510.2263255-1-jarkko@kernel.org>
- <705b9769-4132-450b-bd47-2423c419db2a@molgen.mpg.de>
- <CV03X3OEI7RE.3NI1QJ6MBJSHA@suppilovahvero>
- <1eeddbdc-c1f0-4499-b3d1-24c96f42a50b@amd.com>
- <CV3J3TCMB74C.1WA96NQ9J593U@suppilovahvero>
-Content-Language: en-US
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <CV3J3TCMB74C.1WA96NQ9J593U@suppilovahvero>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SN6PR2101CA0013.namprd21.prod.outlook.com
- (2603:10b6:805:106::23) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|BL1PR12MB5972:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5682b475-9d0b-43ff-67eb-08dba75e9e8b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4menZ73oRVZnnEXSVEUTsZ/7eSdqlLcPbZE3+7bccQdiy5PaJEVPNNIqep3uLSbrAI5eBSrfVQ0ofSkRqh7bv7I9x4SFTShX6gE365XW3j4Uk+0K2E6JZqzWhra3z/oaC9O+HIm2yx6BtDGSr2z584F4G1XAFcEVwg+PFoDWjQnocsMPnFSP8OhDNeR3n2fvMM5GghvijciXySEodnPnJLTgBI24chfo3vJiBARtqVu8/JqahdkqiXI3lPWgjRbt3buPwXvTwIOfxh/TczOEXLu7zgO1y2GGs0QGLzTHjrVxSkuB82kKSNiDwURS+TlfZ3axE/gs0xVpDFHl4ATDGxL7oLHKVAGkvcSYHu/Qu8Qu5xp473ZsUa/54JMKSSz0nTGsqc15EM2duThVcRizez4S8QLCNtHZaoJju2gA7dup6vC+7JRYLc5Uyf4lcOpj8axo4ZWnk9J5Q3mC9Tx/Kv4gGmvDj6E8nUQ5UGRpAykeanAIJlmNz4sp0x/5S2G5g3P6/FBkkxlEqjVxpjdG5uD6C/YqElizAcBXljaJTS5viCiIrQ2qEcwu8Tv4fIS+zcwU42KCW7iF7a3hmIr7NF+0MBcouzYlfQWBKEKbLdWDjsUEvGz+49mFeqaGje1zAvZhg8qpCDFPPKD3ENltnanc8QwhCrzq2LsX8RnvKlk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(39860400002)(136003)(396003)(346002)(186009)(451199024)(1800799009)(31696002)(53546011)(6506007)(6486002)(2616005)(6512007)(44832011)(7416002)(86362001)(5660300002)(2906002)(54906003)(38100700002)(8936002)(66476007)(110136005)(66556008)(36756003)(4326008)(41300700001)(66946007)(8676002)(316002)(45080400002)(478600001)(966005)(83380400001)(26005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTNHbDloS0pnWUlVR0REWXpKMElNdzhKTzRuNEZpNDh2VTVYdktHaTRCT2dq?=
- =?utf-8?B?TjdDM1JicDRhVXpheGt5Vm5rMmRvK2dVWEN6d2tNWUhNRkRGaGtLWHJxQWk3?=
- =?utf-8?B?QnpCbitlUmFzd0RiSGt6Y2NhZWE3UVNpSE5KN0dnbjEyV1lYQnlvQ2Uyb2FI?=
- =?utf-8?B?clRwNVREdkJKRG1ZWjQ4c0kzTFVoRmFBSE1hWXg0dnJoYVVlckpXZlU4bms3?=
- =?utf-8?B?Z25oZit5M1c2RkRyckY0NFdEZmZmek1BcEJZTmc4MmJHc0N0STh0U2VUL0Jo?=
- =?utf-8?B?akJzVDZ1cHR6QkR4QzdhdlNKTVVIRTZmTWQwR1M4ZmI4QXlUTWJDN2Yyclkw?=
- =?utf-8?B?UWg1RDg4MWoyY0g0emRjNlNQaWdxclFNYmlkbFNBYThPWmdYemxvRnlwa2lO?=
- =?utf-8?B?V3kxNG4yNTJpeDk1S1laZXI2N25YU0NYTDkxRE5UYzZNM1lDSGt5dU5BeGVa?=
- =?utf-8?B?SGpuSWYzZU4yNWFFcHNLSThqam5YV1ZRT1Z4YTFaWjhHSnJzbWV3ZldPeHQ4?=
- =?utf-8?B?LzlsK292czYwVk04aTFhUW0zZ0kxdUdoR0tsQW9ML1JYTTBzd2p4WHdNSlNY?=
- =?utf-8?B?ckVsNUFDY2xiNnk4K05PNGsvRndjTjBMQXlocXFxM29ZbGJsUXI3QUdsTU8w?=
- =?utf-8?B?bnF1Z0hkbHRWNUZINEZ0RVpacHJlQ1VoaUJBaDVuOTJXdkFZNXR1bW9IMHlj?=
- =?utf-8?B?WXUrVlpsQ05xM00wMnZLRUp1OXlSUm95TTZ5MHRpd1dkUzY1R2VRQmt3YVRC?=
- =?utf-8?B?ZDIxMXBHdERPNndUU29TcnBsWVoxaFcxTlNIeHJVTW90NWgvT1NlNXpVc24v?=
- =?utf-8?B?QXE5emwvTG1GSzR1cWdsenIydStWSElEZTJWRnM3bXhpWTR4WGRNRlgzV2I3?=
- =?utf-8?B?eG4xVmNiV1U2RUN6cGFnSjljL0pwTERrMDFuRHdrM0V6UzRtNVNySUUrZWl4?=
- =?utf-8?B?N3F0dUF1eTRETFNvY0NjMDlTY2M2TmcySk80M1J2c2dDbURKU21yZDdTYktL?=
- =?utf-8?B?QS9CblpTeXRWcHNHbGdJZzlORHVSOGdaVUVPZTJ3Y0RTVWZMb1V1S2lKY0Jz?=
- =?utf-8?B?dFNpRDV4TFg0bHpaQUQvQzJaUGJXb2thT09rTW5ESnRmUGdEUlB0dFZBOXdt?=
- =?utf-8?B?RldheUNoVVpleHVXQ2tlZHhUdkZsMi9pbEUyeXY4SklDT0w2dytmdzRsc1hq?=
- =?utf-8?B?Z1hyazk1N2czNFZ5NTFQZXE4bmtFb0dzcmxhQ3o0WmFoZ2MvZEVPNTJiQWFF?=
- =?utf-8?B?cG5teHg4Wnl3SFg1Q0RqUWdtYk5uQ1FOZWlpUTd5OEEzSytjT3BwYzJxK0ln?=
- =?utf-8?B?OWtJR2l6bXg1OWJyR2pGY1BBM1g2dndYK0Ftb2N0NUo2RUxQZ1FOK2RFcUlw?=
- =?utf-8?B?OUQ5eFhtOEdBSVI4MXNidmM1TVVmS1RUY3Y1QSsvQmNvaVMzcU1SR243SGI4?=
- =?utf-8?B?MmxOemJJclAxa3NZaTZyS3ZwTmppcWRTdk1DYlI1RjRKZUk4VmNpOUhTMUhV?=
- =?utf-8?B?V25RWVVpTi9PK3ZIckgwanVRM0xCYkpVN09sWnVEVy9Xb1ZOcFo3YmdwT2FO?=
- =?utf-8?B?OVBPeVFqQTRNbFA2aGlBL3VKcGt2cXZDcnQ3V3Mwd3Z3RzBIcXFZY1RkSFRp?=
- =?utf-8?B?ejRUSk1KUW45eFR2My9sOEFCVFJ3NnpGZXBEczZSdGNjSEQwTU14ZXBPQzI0?=
- =?utf-8?B?ZTBuZUhJby9PL1hQTElmNDlxei9Fc0VyelA4a2w3WG5ueEJ0ckRPeTBBc1VV?=
- =?utf-8?B?SXJzTzY4ajNRNlNyNCtzZ2ZzN3ZDRER3dGsxNlB1NTdhV1BUK2ZKcTNmK1kv?=
- =?utf-8?B?dHNveitDdVVpOHR4bHFHczEzMmRxdkd4bFhUd1RlZHhyeTBzQnZCRFF0YW9s?=
- =?utf-8?B?bEE5cDJPc3ZwYzlwNWR0WStLKzg3Y2NFK2wvTVJYckxpVnRCaWpydHdzcVpB?=
- =?utf-8?B?eWp0dnpaZ1V4TXZSamRUNDE0R0NnaEl4YTF4cFlPVmxNOEE1L0h2ZWhNazhj?=
- =?utf-8?B?anIwaTAvdm5tWndxRTRPZWZ1R2hHK2tGaGhOcmErSkN3WHY3ZkNoZDhnandp?=
- =?utf-8?B?UlVPZFBwdVFqaHVEMU5nY1BZZlNDRFJXQnk5Z3AvRlNtcEV6eWVILzgraUo4?=
- =?utf-8?Q?X8dCHeYbECx+9HtgqbC6DKYuO?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5682b475-9d0b-43ff-67eb-08dba75e9e8b
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2023 00:35:03.3867
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VKULsA+e+3ZFJlYHvSVngJFDZdEDnmGcwkG6hDhiuxUMKXwiO4fA9afR4vxGiy9iM03+5ZZsXPo9Dqt3boIw+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5972
-X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230822231510.2263255-1-jarkko@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 8/27/2023 13:12, Jarkko Sakkinen wrote:
-> On Wed Aug 23, 2023 at 9:58 PM EEST, Mario Limonciello wrote:
->> On 8/23/2023 12:40, Jarkko Sakkinen wrote:
->>> On Wed Aug 23, 2023 at 11:23 AM EEST, Paul Menzel wrote:
->>>> Dear Jarkko,
->>>>
->>>>
->>>> Thank you for your patch.
->>>>
->>>>
->>>> Am 23.08.23 um 01:15 schrieb Jarkko Sakkinen:
->>>>> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG for
->>>>> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  On the
->>>>> reported systems the TPM doesn't reply at bootup and returns back the
->>>>> command code. This makes the TPM fail probe.
->>>>>
->>>>> Since only Microsoft Pluton is the only known combination of AMD CPU and
->>>>> fTPM from other vendor, disable hwrng otherwise. In order to make sysadmin
->>>>> aware of this, print also info message to the klog.
->>>>>
->>>>> Cc: stable@vger.kernel.org
->>>>> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
->>>>> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
->>>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
->>>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>>
->>>> Mario’s patch also had the three reporters below listed:
->>>>
->>>> Reported-by: Patrick Steinhardt <ps@pks.im>
->>>> Reported-by: Ronan Pigott <ronan@rjp.ie>
->>>> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
->>>
->>> The problem here is that checkpatch throws three warnings:
->>>
->>> WARNING: Reported-by: should be immediately followed by Closes: with a URL to the report
->>> #19:
->>> Reported-by: Patrick Steinhardt <ps@pks.im>
->>> Reported-by: Ronan Pigott <ronan@rjp.ie>
->>>
->>> WARNING: Reported-by: should be immediately followed by Closes: with a URL to the report
->>> #20:
->>> Reported-by: Ronan Pigott <ronan@rjp.ie>
->>> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
->>>
->>> WARNING: Reported-by: should be immediately followed by Closes: with a URL to the report
->>> #21:
->>> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
->>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>
->>
->> FWIW I observed the same checkpatch warning when I submitted my version
->> of the patch.  I figured it's better to ignore the warning and attribute
->> everyone who reported the issue affected them.
+On Wed, Aug 23, 2023 at 02:15:10AM +0300, Jarkko Sakkinen wrote:
+> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG for
+> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  On the
+> reported systems the TPM doesn't reply at bootup and returns back the
+> command code. This makes the TPM fail probe.
 > 
-> OK so:
+> Since only Microsoft Pluton is the only known combination of AMD CPU and
+> fTPM from other vendor, disable hwrng otherwise. In order to make sysadmin
+> aware of this, print also info message to the klog.
 > 
-> 1. checkpatch.pl is part of the kernel process.
-> 2. Bugzilla is not part of the kernel process.
+> Cc: stable@vger.kernel.org
+> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
+> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> v3:
+> * Forgot to amend config flags.
+> v2:
+> * CONFIG_X86
+> * Removed "Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>"
+> * Removed "Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>"
+> ---
+>  drivers/char/tpm/tpm_crb.c | 33 ++++++++-------------------------
+>  1 file changed, 8 insertions(+), 25 deletions(-)
 > 
-> Why emphasis on 1?
+
+It looks like stable should be pinged as well. I saw a report yesterday for Fedora
+where someone is seeing issue where the tpm device no longer shows up with
+a 6.4.11 kernel. That kernel pulled in commit 554b841d4703. It pulled in a couple
+other tpm commits, and there is practically no info in the bug at this point,
+but I'm guessing the probe is failing due to 554b841d4703.
+
+
+> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+> index 65ff4d2fbe8d..ea085b14ab7c 100644
+> --- a/drivers/char/tpm/tpm_crb.c
+> +++ b/drivers/char/tpm/tpm_crb.c
+> @@ -463,28 +463,6 @@ static bool crb_req_canceled(struct tpm_chip *chip, u8 status)
+>  	return (cancel & CRB_CANCEL_INVOKE) == CRB_CANCEL_INVOKE;
+>  }
+>  
+> -static int crb_check_flags(struct tpm_chip *chip)
+> -{
+> -	u32 val;
+> -	int ret;
+> -
+> -	ret = crb_request_locality(chip, 0);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL);
+> -	if (ret)
+> -		goto release;
+> -
+> -	if (val == 0x414D4400U /* AMD */)
+> -		chip->flags |= TPM_CHIP_FLAG_HWRNG_DISABLED;
+> -
+> -release:
+> -	crb_relinquish_locality(chip, 0);
+> -
+> -	return ret;
+> -}
+> -
+>  static const struct tpm_class_ops tpm_crb = {
+>  	.flags = TPM_OPS_AUTO_STARTUP,
+>  	.status = crb_status,
+> @@ -827,9 +805,14 @@ static int crb_acpi_add(struct acpi_device *device)
+>  	if (rc)
+>  		goto out;
+>  
+> -	rc = crb_check_flags(chip);
+> -	if (rc)
+> -		goto out;
+> +#ifdef CONFIG_X86
+> +	/* A quirk for https://www.amd.com/en/support/kb/faq/pa-410 */
+> +	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD &&
+> +	    priv->sm != ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON) {
+> +		dev_info(dev, "Disabling hwrng\n");
+> +		chip->flags |= TPM_CHIP_FLAG_HWRNG_DISABLED;
+> +	}
+> +#endif /* CONFIG_X86 */
+>  
+>  	rc = tpm_chip_register(chip);
+>  
+> -- 
+> 2.39.2
 > 
-> BR, Jarkko
 
-The reason I submitted it this way is because of this quote from the 
-documentation [1].
-
-"Check your patches with the patch style checker prior to submission 
-(scripts/checkpatch.pl). Note, though, that the style checker should be 
-viewed as a guide, not as a replacement for human judgment. If your code 
-looks better with a violation then its probably best left alone."
-
-I wanted the patch to capture and attribute all those that reported it 
-not just the "first one".  Like I said previously, it's better to have a 
-collection of people to ping to notify if something needs to be reverted.
-
-[1] 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#style-check-your-changes
