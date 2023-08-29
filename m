@@ -2,117 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B4678C073
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Aug 2023 10:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9A178C6F6
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Aug 2023 16:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjH2IjO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Aug 2023 04:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S236801AbjH2OKc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Aug 2023 10:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234418AbjH2Iiz (ORCPT
+        with ESMTP id S236858AbjH2OKJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Aug 2023 04:38:55 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD48FFC;
-        Tue, 29 Aug 2023 01:38:48 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qauFE-0007Gv-KK; Tue, 29 Aug 2023 10:38:40 +0200
-Message-ID: <fcf2f600-d1f0-de14-956b-4d4f3f0cb3fa@leemhuis.info>
-Date:   Tue, 29 Aug 2023 10:38:38 +0200
+        Tue, 29 Aug 2023 10:10:09 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCB89D
+        for <linux-integrity@vger.kernel.org>; Tue, 29 Aug 2023 07:10:06 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37TDwn6F025918;
+        Tue, 29 Aug 2023 14:09:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=vQ1KYdURn9r1HcC+S7oO8DIZcmU0Mu0nckyChSkVDIE=;
+ b=MWzbNVybp59XOBA+y/LrkHsgOmxbDwUVhtSk/yzDfL6oqPif1KgFH+rTEUlY9tu6WDXW
+ 8XO2gS99lR0N+lQV2raDKetDUKJxG6/wGUsQs5bOoUafL/YwhSOOsgJg7M9mGe3d/ar3
+ IsUebTPKF632gaFmgoe4JFuAHvVuCZvCN0ue0Ud5Na3ShazYNL+MGJe2gOxQBuxiCCtK
+ ayhBNnYK5bkc0F4Z2S0Ge+FTakXL5LeAzpnMQEZTEwyjeJTufbW2ql5WSUFLbIj+TOfN
+ wNFnL1sqoVkF0KMvwZ7Kv3L+W1QAqjgIRLMiAziTaiCj4A2SeSViTp1Klocc4BTb1kaK +g== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ssht20xjh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Aug 2023 14:09:53 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37TE7NXl004891;
+        Tue, 29 Aug 2023 14:09:52 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3squqsm8vj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Aug 2023 14:09:52 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37TE9qYr61604348
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Aug 2023 14:09:52 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF88958066;
+        Tue, 29 Aug 2023 14:09:51 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8249A58065;
+        Tue, 29 Aug 2023 14:09:51 +0000 (GMT)
+Received: from [9.67.37.59] (unknown [9.67.37.59])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 29 Aug 2023 14:09:51 +0000 (GMT)
+Message-ID: <28aefb27-8f8c-e77e-4e21-8b467738dce1@linux.ibm.com>
+Date:   Tue, 29 Aug 2023 10:09:51 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [PATCH v3] tpm: Enable hwrng only for Pluton on AMD CPUs
-Content-Language: en-US, de-DE
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-integrity@vger.kernel.org,
-        Jerry Snitselaar <jsnitsel@redhat.com>, stable@vger.kernel.org,
-        Todd Brandt <todd.e.brandt@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        Patrick Steinhardt <ps@pks.im>, Ronan Pigott <ronan@rjp.ie>,
-        Raymond Jay Golo <rjgolo@gmail.com>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Dusty Mabe <dusty@dustymabe.com>
-References: <20230822231510.2263255-1-jarkko@kernel.org>
- <705b9769-4132-450b-bd47-2423c419db2a@molgen.mpg.de>
- <CV03X3OEI7RE.3NI1QJ6MBJSHA@suppilovahvero>
- <1eeddbdc-c1f0-4499-b3d1-24c96f42a50b@amd.com>
- <CV3J3TCMB74C.1WA96NQ9J593U@suppilovahvero>
- <f6d75cac-2556-484e-8a2c-3531b24b1ca5@amd.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <f6d75cac-2556-484e-8a2c-3531b24b1ca5@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1693298328;afbcb769;
-X-HE-SMSGID: 1qauFE-0007Gv-KK
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [RFC PATCH -next] ima: Make tpm hash configurable
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, GUO Zihua <guozihua@huawei.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-integrity@vger.kernel.org
+References: <20230817061334.1910-1-guozihua@huawei.com>
+ <90b4b5573182ec68b2da2f9ef2bc6567d724f8f1.camel@linux.ibm.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+In-Reply-To: <90b4b5573182ec68b2da2f9ef2bc6567d724f8f1.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ezL7VRMnQ4fwU0o9VBMi_ddzy1mM5pGW
+X-Proofpoint-GUID: ezL7VRMnQ4fwU0o9VBMi_ddzy1mM5pGW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-29_11,2023-08-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ mlxlogscore=747 priorityscore=1501 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 phishscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308290121
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
+On 8/17/2023 10:19 AM, Mimi Zohar wrote:
+> Before we can introduce this sort of change, we would need to introduce
+> an IMA measurement list version.  Perhaps its time to define an IMA
+> security critical-data record, which would include this and other
+> information.  The measurement list itself would need to include a
+> version number.
 
-On 28.08.23 02:35, Mario Limonciello wrote:
-> On 8/27/2023 13:12, Jarkko Sakkinen wrote:
->> On Wed Aug 23, 2023 at 9:58 PM EEST, Mario Limonciello wrote:
->>> On 8/23/2023 12:40, Jarkko Sakkinen wrote:
->>>> On Wed Aug 23, 2023 at 11:23 AM EEST, Paul Menzel wrote:
->>>>> Am 23.08.23 um 01:15 schrieb Jarkko Sakkinen:
->>>>>> The vendor check introduced by commit 554b841d4703 ("tpm: Disable
->>>>>> RNG for
->>>>>> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs. 
->>>>>> On the
->>>>>> reported systems the TPM doesn't reply at bootup and returns back the
->>>>>> command code. This makes the TPM fail probe.
->>>>>>
->>>>>> Since only Microsoft Pluton is the only known combination of AMD
->>>>>> CPU and
->>>>>> fTPM from other vendor, disable hwrng otherwise. In order to make
->>>>>> sysadmin
->>>>>> aware of this, print also info message to the klog.
->>>>>>
->>>>>> Cc: stable@vger.kernel.org
->>>>>> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
->>>>>> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
->>>>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
->>>>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>>>
->>>>> Mario’s patch also had the three reporters below listed:
->>>>>
->>>>> Reported-by: Patrick Steinhardt <ps@pks.im>
->>>>> Reported-by: Ronan Pigott <ronan@rjp.ie>
->>>>> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
->>>>
->>>> The problem here is that checkpatch throws three warnings:
->>>>
->>>> WARNING: Reported-by: should be immediately followed by Closes: with
->>>> a URL to the report
+FYI, the TCG specified UEFI event log has a standard first record.  The 
+events themselves do not have a version number.
 
-Note, those are warnings (and not an errors) on purpose and the text
-says "should" (and not "must"), so this is IMHO something in this case
-can be ignored, as Mario indicated in his reply.
+That first record is itself versioned, so it can change over time.
 
-But I write for a different reason: this seems to become a regression
-that is annoying quite a few people (in 6.5 and 6.4.y afaics), so it
-would be good to get the fix merged to mainline rather sooner than
-later. Are these warnings and the mentioning of affected machines in the
-patch descriptions the only remaining problems, or is there anything
-else that needs to be addressed?
+The record has various version numbers, a count of PCR banks, a mapping 
+from algorithm number to algorithm size, and a sized vendor specific area.
 
-Ciao, Thorsten (just back from vacation and catching up)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-#regzbot poke
