@@ -2,129 +2,153 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C27678CD0C
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Aug 2023 21:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EFE78CD52
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Aug 2023 22:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbjH2Teu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Aug 2023 15:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
+        id S231361AbjH2UHG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Aug 2023 16:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240494AbjH2Tes (ORCPT
+        with ESMTP id S238652AbjH2UG7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Aug 2023 15:34:48 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A4CE54
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Aug 2023 12:34:23 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-58cd9d9dbf5so2059237b3.0
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Aug 2023 12:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1693337662; x=1693942462; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dku1evb9mZQ/UCmFfdo5JZbpZalq24cWTcGsSAzwTxo=;
-        b=GUB7STxbWkUDF/NQn4wyEXkioEA8oNZKQtrONNhVa0DSjs2gac/DbSU+cmA34mWhJu
-         S5Jfx0XYrmZ9UXoEZ+6Tz83IoUA1zQbHcft7aea2fFU2JLW0Y3b+mw1azRDMyidjeU1i
-         /3x0xaCloJjPcZFYekmBIXsXCxUp2T+5IEn+vfT3inx9jWYzm492gnde76XSCC70EKXo
-         6Yjx1eM25U1w1GVLLCXklc79qS+7qD039HZWOaMJPOdqs3Xneht97JkTc5iVmM0dztpw
-         bybWHvA5pTXuVrxRrKtAFZA3VzC1h95pkWFSSWddhSwQDS1hF+uJXbsJEMGbQNaoOaVG
-         Du5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693337662; x=1693942462;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dku1evb9mZQ/UCmFfdo5JZbpZalq24cWTcGsSAzwTxo=;
-        b=exRlq39RSfEPG3cPQjouC8FB4ZL0G49h1bSpUocbMAj7OcYcWslD4x+KuZiJYtOgbG
-         4a1uRQJJgemUZU63/FZb7bPuQ3CZTWsO5vccep3Ry1Q2pym4k9t+cZnAyKKYhfDwwFCm
-         6XMqwPq0z5AJZSsySDWA/VUzvVuzk2KWQaYmq3B6rQFLh9oWcr8nVFHBEFO7evlHsJ9V
-         EeFp7Qb1ayd8XgCaqkWvxEpeMPcT9lqSI1oqVSJBLQ9l/FlX218HUm1RyEPSEobN1L43
-         w04foRtzOSYI0aIvikWJKWyHQCpEqiRwB4kNydCAtnoiiRrZNWnJAvVK9W+9T2PcGANF
-         JnLQ==
-X-Gm-Message-State: AOJu0YyvEmTCb7cF/5KpOAV4BYINLf1R0FCtzrKUfI4pVl6N39LxVJkb
-        GEVCCYFlep3PKgSZWAhJ62xuOi9dd2cI/5liPTX5
-X-Google-Smtp-Source: AGHT+IFet3rs4lSa6SdyUYuNhduFXChT/c/u2XD2EuWbmN/GXJdqeDdKGD9HS33EBu3hJQ+LAmlIEUXeaAC+annspfI=
-X-Received: by 2002:a81:4e10:0:b0:586:a680:250 with SMTP id
- c16-20020a814e10000000b00586a6800250mr179637ywb.5.1693337661845; Tue, 29 Aug
- 2023 12:34:21 -0700 (PDT)
+        Tue, 29 Aug 2023 16:06:59 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD30DD2;
+        Tue, 29 Aug 2023 13:06:56 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37TIvZIc006992;
+        Tue, 29 Aug 2023 20:06:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=XA501ANLePL+0G2GPyH0Ue71yXgUdXGTt4VxTgJYOPU=;
+ b=Ff8GGH+dsWXGb7F79EDqCXBDE/l0z3TMzHGoUmaBobtX62xmrMyNAiyZfuN/XMMNnGWv
+ rYRbl5X7ACfMjIvwmM/5myOvJ1n8D9uug5hiC/Y1OeIuyIaPeRfAMKMeVHD5CRr9khW+
+ qyHWI8KwWNblBk2Hlz8siYudfS7pjHe4t2cgXBqFvmPUCFsBqquWfJNOanTkZKqCLT/g
+ 65IsuiLB1scpwfHehLEh4c8TGpuUBSGHzVYi490GqNhXA8Dx+kODAjm+4DQtnD3esOMc
+ th/etiQPj6yjsMPSfMuO7FwNhqT9qf9WbiBfD4P6ZH2FYMYbS49FWxUuPW5pw+esoTAh 1g== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sspda9utk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Aug 2023 20:06:55 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37TIgFI1020225;
+        Tue, 29 Aug 2023 20:06:54 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3sqv3yecrd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Aug 2023 20:06:54 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37TK6rFa24117812
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Aug 2023 20:06:54 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C0FCD58056;
+        Tue, 29 Aug 2023 20:06:53 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7BA735805A;
+        Tue, 29 Aug 2023 20:06:53 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.191.86])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 29 Aug 2023 20:06:53 +0000 (GMT)
+Message-ID: <50878e7747c6dc70493c54f35e9e71031c8ebb10.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity: susbystem updates for v6.6
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 29 Aug 2023 16:06:53 -0400
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2O5gPYLULrVG1-Bf2CI_4bPwuLNcocW2
+X-Proofpoint-ORIG-GUID: 2O5gPYLULrVG1-Bf2CI_4bPwuLNcocW2
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
- <277db5491460d5fd607785f2bcc733de39022a35.camel@linux.ibm.com>
- <bf794136-703a-0d33-e245-7e723007b5c0@linux.microsoft.com>
- <0e1511e8819b24ab8a34a7b15821f06eff688f29.camel@linux.ibm.com>
- <8bc0f024-fc12-cb32-7af0-e500948cc6db@linux.microsoft.com> <7e32afa2596b9d8cfdc275614575b2023cd1d673.camel@linux.ibm.com>
-In-Reply-To: <7e32afa2596b9d8cfdc275614575b2023cd1d673.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 29 Aug 2023 15:34:10 -0400
-Message-ID: <CAHC9VhSVO9t=9e9JmniXKoqqvMv42E4dVeYtQTWZ4Eih3Sfr0Q@mail.gmail.com>
-Subject: Re: [RFC] IMA Log Snapshotting Design Proposal
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Sush Shringarputale <sushring@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, kgold@linux.ibm.com,
-        bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
-        kexec@lists.infradead.org, jmorris@namei.org, serge@hallyn.com,
-        code@tyhicks.com, nramas@linux.microsoft.com,
-        Tushar Sugandhi <tusharsu@linux.mic>,
-        linux-security-module@vger.kernel.org,
-        AmirGoldstein <amir73il@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-29_13,2023-08-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 mlxlogscore=957 mlxscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 clxscore=1011 bulkscore=0 lowpriorityscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308290174
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Aug 21, 2023 at 7:08=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Mon, 2023-08-21 at 15:05 -0700, Sush Shringarputale wrote:
-> > On 8/14/2023 3:02 PM, Mimi Zohar wrote:
-> > > On Mon, 2023-08-14 at 14:42 -0700, Sush Shringarputale wrote:
-> > >>> This design seems overly complex and requires synchronization betwe=
-en
-> > >>> the "snapshot" record and exporting the records from the measuremen=
-t
-> > >>> list.  None of this would be necessary if the measurements were cop=
-ied
-> > >>> from kernel memory to a backing file (e.g. tmpfs), as described in =
-[1].
-> > Even if the Kernel maintains the link between a tmpfs exported and an
-> > in-memory IMA log - it still has to copy the tmpfs portion to the
-> > Kernel memory during kexec soft boot.  tmpfs is cleared during kexec,
-> > so this copying of tmpfs back to kernel memory is necessary to preserve
-> > the integrity of the log during kexec.  But the copying would add back
-> > the memory pressure on the node during kexec (which may result in
-> > out-of-memory), defeating the purpose of the overall effort/feature.
-> > Copying to a regular *persistent* protected file seems a cleaner
-> > approach, compared to tmpfs.
->
-> From a kernel perspective, it doesn't make a difference if userspace
-> provides a tmpfs or persistent file.  As per the discussion
-> https://lore.kernel.org/linux-integrity/CAOQ4uxj4Pv2Wr1wgvBCDR-tnA5dsZT3r=
-vdDzKgAH1aEV_-r9Qg@mail.gmail.com/#t
-> , userspace provides the kernel with the file descriptor of the opened
-> file.
->
-> > We prototyped this solution, however it
-> > does not seem to be a common pattern within the Kernel to write state
-> > directly to files on disk file systems.  We considered two potential
-> > options:
->
-> If no file descriptor is provided, then the measurements aren't copied
-> and removed from the securityfs file.  If there are write errors, the
-> measurements aren't removed from the securityfs file until the write
-> errors are resolved.
+Hi Linus,
 
-It sounds like this approach would require the file/filesystem to be
-continuously available for the life of the system once the log was
-snapshotted/overflowed to persistent storage, yes?  Assuming that is
-the case, what happens if the file/filesystem becomes inaccessible at
-some point and an attestation client attempts to read the entire log?
+Two IMA changes, a code cleanup, and a kernel-doc update:
 
---=20
-paul-moore.com
+- With commit 099f26f22f58 ("integrity: machine keyring CA
+configuration")
+certificates may be loaded onto the IMA keyring, directly or indirectly
+signed by keys on either the "builtin" or the "machine" keyrings. With
+the
+ability for the system/machine owner to sign the IMA policy itself
+without
+needing to recompile the kernel, update the IMA architecture specific
+policy rules to require the IMA policy itself be signed.
+
+[As commit 099f26f22f58 was upstreamed in linux-6.4, updating the IMA
+architecture specific policy to require signed IMA policies may break
+userspace expectations.]
+
+- IMA only checked the file data hash was not on the system blacklist
+keyring for files with an appended signature (e.g. kernel modules,
+Power
+kernel image). Check all file data hashes regardless of how it was
+signed.
+
+thanks,
+
+Mimi
+
+The following changes since commit
+5d0c230f1de8c7515b6567d9afba1f196fb4e2f4:
+
+  Linux 6.5-rc4 (2023-07-30 13:23:47 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-
+integrity.git tags/integrity-v6.6
+
+for you to fetch changes up to
+55e2b69649be38f1788b38755070875b96111d2f:
+
+  kexec_lock: Replace kexec_mutex() by kexec_lock() in two comments
+(2023-08-07 09:55:42 -0400)
+
+----------------------------------------------------------------
+integrity-v6.6
+
+----------------------------------------------------------------
+Coiby Xu (1):
+      ima: require signed IMA policy when UEFI secure boot is enabled
+
+Eric Snowberg (1):
+      integrity: Always reference the blacklist keyring with appraisal
+
+Nayna Jain (1):
+      ima: Remove deprecated IMA_TRUSTED_KEYRING Kconfig
+
+Wenyu Liu (1):
+      kexec_lock: Replace kexec_mutex() by kexec_lock() in two comments
+
+ Documentation/ABI/testing/ima_policy  |  6 +++---
+ arch/powerpc/kernel/ima_arch.c        |  8 ++++----
+ kernel/kexec_file.c                   |  2 +-
+ security/integrity/ima/Kconfig        | 12 ------------
+ security/integrity/ima/ima_appraise.c | 12 +++++++-----
+ security/integrity/ima/ima_efi.c      |  3 +++
+ security/integrity/ima/ima_kexec.c    |  2 +-
+ security/integrity/ima/ima_policy.c   | 17 +++++------------
+ 8 files changed, 24 insertions(+), 38 deletions(-)
+
