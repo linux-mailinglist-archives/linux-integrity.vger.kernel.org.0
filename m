@@ -2,166 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39E278CCA1
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Aug 2023 21:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C27678CD0C
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Aug 2023 21:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239217AbjH2TEZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Aug 2023 15:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
+        id S231797AbjH2Teu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Aug 2023 15:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239674AbjH2TEH (ORCPT
+        with ESMTP id S240494AbjH2Tes (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Aug 2023 15:04:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06314CC2
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Aug 2023 12:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1693335797;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zuneSeBFPY/y8fIPFfiRl+/xkZx/Kn4q/QLdpRgSaJQ=;
-        b=cJ5ZhRpbnPbtfM4zOukXZ9wo4OCcsjF+CKpd+N5WghkJtGM4KIov26f6MVjsSFPJUDfxvP
-        9E7sy4NMI+vuAx9xvwO1GlWO7V8izPL/JLw+itTTIcxWuTRbLZ0IlehrX54+b2Dzn4qkUH
-        CX8W0hsaWTFy4k61yUQKNOh//FM4XQo=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-687-ZbiXRPXlOIKqypVBz4bHRw-1; Tue, 29 Aug 2023 15:03:15 -0400
-X-MC-Unique: ZbiXRPXlOIKqypVBz4bHRw-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6496d9acb98so60256156d6.0
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Aug 2023 12:03:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693335795; x=1693940595;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 29 Aug 2023 15:34:48 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A4CE54
+        for <linux-integrity@vger.kernel.org>; Tue, 29 Aug 2023 12:34:23 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-58cd9d9dbf5so2059237b3.0
+        for <linux-integrity@vger.kernel.org>; Tue, 29 Aug 2023 12:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1693337662; x=1693942462; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zuneSeBFPY/y8fIPFfiRl+/xkZx/Kn4q/QLdpRgSaJQ=;
-        b=BBo40itTwnStg+j4RzqqHiSZG1NEMZPzFC2ymTE0JErlBEm/gsDZ0H3XmRdH53AyNA
-         MH8kYpT373EktMgMd+sixamfWzVQQ2Jl6hApYX/gJez/HR8B+CqZ2xJeDipBWLUJ/O+Q
-         UD64qBlHvsYqnAD/Tv03oQBsdMvpxW9ct/tmPQYDjoTNVc/PwdoBev0Al6BAP2szMW9b
-         +KhA+3vNgSQthA09NNDWMk4WtsOBiBh+VnaU/KN4qZEcsW+K8NoVZL+tGEQzkonOhjqI
-         6uWKR0iqsuBTo1ZjL7vCYorCxlYv8YSKWsLciVG4r3YnpeMgUKb/n8NyxO0S6w39TeVS
-         uYMw==
-X-Gm-Message-State: AOJu0YxTSkAdvCrx81Y3OwkhE+uVHXV7CwpwTUiPRI560ygh3cgiOx8T
-        6GGczKRZDw3av1Lx2QG16+TRvRhYuZxC3YpQOYGpUOnfZGO6gEZLXa7RqsgBSTPd0Zm4rhdkQBr
-        8RG27TQwMDDcTWn9aqwVJSVc6D4G/
-X-Received: by 2002:a0c:8ecb:0:b0:63d:657:4cb9 with SMTP id y11-20020a0c8ecb000000b0063d06574cb9mr28870359qvb.42.1693335795009;
-        Tue, 29 Aug 2023 12:03:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHO6zVtzuoNE6uuA2BCZJX/EOpJ2jrXsv+BY1DJ8I5lozKTj/Td7N9r2DAZ+Yrj8E+AMHy93Q==
-X-Received: by 2002:a0c:8ecb:0:b0:63d:657:4cb9 with SMTP id y11-20020a0c8ecb000000b0063d06574cb9mr28870339qvb.42.1693335794750;
-        Tue, 29 Aug 2023 12:03:14 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id b2-20020a0cb3c2000000b0063cdbe739f0sm3606355qvf.71.2023.08.29.12.03.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Aug 2023 12:03:14 -0700 (PDT)
-Date:   Tue, 29 Aug 2023 12:03:12 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        Todd Brandt <todd.e.brandt@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] tpm: Enable hwrng only for Pluton on AMD CPUs
-Message-ID: <zlywbvfgkkygcpvmj5rd4thuhbdacit2meg2fj6eyua5qpwyoc@beyiattrr7o6>
-References: <20230822231510.2263255-1-jarkko@kernel.org>
+        bh=Dku1evb9mZQ/UCmFfdo5JZbpZalq24cWTcGsSAzwTxo=;
+        b=GUB7STxbWkUDF/NQn4wyEXkioEA8oNZKQtrONNhVa0DSjs2gac/DbSU+cmA34mWhJu
+         S5Jfx0XYrmZ9UXoEZ+6Tz83IoUA1zQbHcft7aea2fFU2JLW0Y3b+mw1azRDMyidjeU1i
+         /3x0xaCloJjPcZFYekmBIXsXCxUp2T+5IEn+vfT3inx9jWYzm492gnde76XSCC70EKXo
+         6Yjx1eM25U1w1GVLLCXklc79qS+7qD039HZWOaMJPOdqs3Xneht97JkTc5iVmM0dztpw
+         bybWHvA5pTXuVrxRrKtAFZA3VzC1h95pkWFSSWddhSwQDS1hF+uJXbsJEMGbQNaoOaVG
+         Du5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693337662; x=1693942462;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dku1evb9mZQ/UCmFfdo5JZbpZalq24cWTcGsSAzwTxo=;
+        b=exRlq39RSfEPG3cPQjouC8FB4ZL0G49h1bSpUocbMAj7OcYcWslD4x+KuZiJYtOgbG
+         4a1uRQJJgemUZU63/FZb7bPuQ3CZTWsO5vccep3Ry1Q2pym4k9t+cZnAyKKYhfDwwFCm
+         6XMqwPq0z5AJZSsySDWA/VUzvVuzk2KWQaYmq3B6rQFLh9oWcr8nVFHBEFO7evlHsJ9V
+         EeFp7Qb1ayd8XgCaqkWvxEpeMPcT9lqSI1oqVSJBLQ9l/FlX218HUm1RyEPSEobN1L43
+         w04foRtzOSYI0aIvikWJKWyHQCpEqiRwB4kNydCAtnoiiRrZNWnJAvVK9W+9T2PcGANF
+         JnLQ==
+X-Gm-Message-State: AOJu0YyvEmTCb7cF/5KpOAV4BYINLf1R0FCtzrKUfI4pVl6N39LxVJkb
+        GEVCCYFlep3PKgSZWAhJ62xuOi9dd2cI/5liPTX5
+X-Google-Smtp-Source: AGHT+IFet3rs4lSa6SdyUYuNhduFXChT/c/u2XD2EuWbmN/GXJdqeDdKGD9HS33EBu3hJQ+LAmlIEUXeaAC+annspfI=
+X-Received: by 2002:a81:4e10:0:b0:586:a680:250 with SMTP id
+ c16-20020a814e10000000b00586a6800250mr179637ywb.5.1693337661845; Tue, 29 Aug
+ 2023 12:34:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230822231510.2263255-1-jarkko@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
+ <277db5491460d5fd607785f2bcc733de39022a35.camel@linux.ibm.com>
+ <bf794136-703a-0d33-e245-7e723007b5c0@linux.microsoft.com>
+ <0e1511e8819b24ab8a34a7b15821f06eff688f29.camel@linux.ibm.com>
+ <8bc0f024-fc12-cb32-7af0-e500948cc6db@linux.microsoft.com> <7e32afa2596b9d8cfdc275614575b2023cd1d673.camel@linux.ibm.com>
+In-Reply-To: <7e32afa2596b9d8cfdc275614575b2023cd1d673.camel@linux.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 29 Aug 2023 15:34:10 -0400
+Message-ID: <CAHC9VhSVO9t=9e9JmniXKoqqvMv42E4dVeYtQTWZ4Eih3Sfr0Q@mail.gmail.com>
+Subject: Re: [RFC] IMA Log Snapshotting Design Proposal
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Sush Shringarputale <sushring@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, kgold@linux.ibm.com,
+        bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
+        kexec@lists.infradead.org, jmorris@namei.org, serge@hallyn.com,
+        code@tyhicks.com, nramas@linux.microsoft.com,
+        Tushar Sugandhi <tusharsu@linux.mic>,
+        linux-security-module@vger.kernel.org,
+        AmirGoldstein <amir73il@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 02:15:10AM +0300, Jarkko Sakkinen wrote:
-> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG for
-> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  On the
-> reported systems the TPM doesn't reply at bootup and returns back the
-> command code. This makes the TPM fail probe.
-> 
-> Since only Microsoft Pluton is the only known combination of AMD CPU and
-> fTPM from other vendor, disable hwrng otherwise. In order to make sysadmin
-> aware of this, print also info message to the klog.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
-> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> v3:
-> * Forgot to amend config flags.
-> v2:
-> * CONFIG_X86
-> * Removed "Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>"
-> * Removed "Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>"
-> ---
->  drivers/char/tpm/tpm_crb.c | 33 ++++++++-------------------------
->  1 file changed, 8 insertions(+), 25 deletions(-)
-> 
+On Mon, Aug 21, 2023 at 7:08=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
+ote:
+> On Mon, 2023-08-21 at 15:05 -0700, Sush Shringarputale wrote:
+> > On 8/14/2023 3:02 PM, Mimi Zohar wrote:
+> > > On Mon, 2023-08-14 at 14:42 -0700, Sush Shringarputale wrote:
+> > >>> This design seems overly complex and requires synchronization betwe=
+en
+> > >>> the "snapshot" record and exporting the records from the measuremen=
+t
+> > >>> list.  None of this would be necessary if the measurements were cop=
+ied
+> > >>> from kernel memory to a backing file (e.g. tmpfs), as described in =
+[1].
+> > Even if the Kernel maintains the link between a tmpfs exported and an
+> > in-memory IMA log - it still has to copy the tmpfs portion to the
+> > Kernel memory during kexec soft boot.  tmpfs is cleared during kexec,
+> > so this copying of tmpfs back to kernel memory is necessary to preserve
+> > the integrity of the log during kexec.  But the copying would add back
+> > the memory pressure on the node during kexec (which may result in
+> > out-of-memory), defeating the purpose of the overall effort/feature.
+> > Copying to a regular *persistent* protected file seems a cleaner
+> > approach, compared to tmpfs.
+>
+> From a kernel perspective, it doesn't make a difference if userspace
+> provides a tmpfs or persistent file.  As per the discussion
+> https://lore.kernel.org/linux-integrity/CAOQ4uxj4Pv2Wr1wgvBCDR-tnA5dsZT3r=
+vdDzKgAH1aEV_-r9Qg@mail.gmail.com/#t
+> , userspace provides the kernel with the file descriptor of the opened
+> file.
+>
+> > We prototyped this solution, however it
+> > does not seem to be a common pattern within the Kernel to write state
+> > directly to files on disk file systems.  We considered two potential
+> > options:
+>
+> If no file descriptor is provided, then the measurements aren't copied
+> and removed from the securityfs file.  If there are write errors, the
+> measurements aren't removed from the securityfs file until the write
+> errors are resolved.
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+It sounds like this approach would require the file/filesystem to be
+continuously available for the life of the system once the log was
+snapshotted/overflowed to persistent storage, yes?  Assuming that is
+the case, what happens if the file/filesystem becomes inaccessible at
+some point and an attestation client attempts to read the entire log?
 
-> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-> index 65ff4d2fbe8d..ea085b14ab7c 100644
-> --- a/drivers/char/tpm/tpm_crb.c
-> +++ b/drivers/char/tpm/tpm_crb.c
-> @@ -463,28 +463,6 @@ static bool crb_req_canceled(struct tpm_chip *chip, u8 status)
->  	return (cancel & CRB_CANCEL_INVOKE) == CRB_CANCEL_INVOKE;
->  }
->  
-> -static int crb_check_flags(struct tpm_chip *chip)
-> -{
-> -	u32 val;
-> -	int ret;
-> -
-> -	ret = crb_request_locality(chip, 0);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL);
-> -	if (ret)
-> -		goto release;
-> -
-> -	if (val == 0x414D4400U /* AMD */)
-> -		chip->flags |= TPM_CHIP_FLAG_HWRNG_DISABLED;
-> -
-> -release:
-> -	crb_relinquish_locality(chip, 0);
-> -
-> -	return ret;
-> -}
-> -
->  static const struct tpm_class_ops tpm_crb = {
->  	.flags = TPM_OPS_AUTO_STARTUP,
->  	.status = crb_status,
-> @@ -827,9 +805,14 @@ static int crb_acpi_add(struct acpi_device *device)
->  	if (rc)
->  		goto out;
->  
-> -	rc = crb_check_flags(chip);
-> -	if (rc)
-> -		goto out;
-> +#ifdef CONFIG_X86
-> +	/* A quirk for https://www.amd.com/en/support/kb/faq/pa-410 */
-> +	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD &&
-> +	    priv->sm != ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON) {
-> +		dev_info(dev, "Disabling hwrng\n");
-> +		chip->flags |= TPM_CHIP_FLAG_HWRNG_DISABLED;
-> +	}
-> +#endif /* CONFIG_X86 */
->  
->  	rc = tpm_chip_register(chip);
->  
-> -- 
-> 2.39.2
-> 
-
+--=20
+paul-moore.com
