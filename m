@@ -2,190 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC2378D023
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Aug 2023 01:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCE278DCE2
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Aug 2023 20:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234465AbjH2XPd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Aug 2023 19:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
+        id S241878AbjH3SrA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Aug 2023 14:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239804AbjH2XPb (ORCPT
+        with ESMTP id S242668AbjH3JOW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Aug 2023 19:15:31 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9742F11B
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Aug 2023 16:15:27 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-594ebdf7bceso39424717b3.2
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Aug 2023 16:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1693350927; x=1693955727; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5vTa4PdCZfjFG5lHc4dNqG+0XSK9QBpqhYShWqlnoIo=;
-        b=UEjiKqvWpSQPtRSN0RbSnmCI54Gd7xmOQY7+HBbCJiFNIqTEJAtn46eEsDqfSEPr/o
-         3yFSwBdSN4qUZjnQUs/aAEWUaG9vpUzth69Rj2+ps502QXDb+EJV0hG7MShpq49AK5FO
-         LrmiyiEJL8N7u3QY2E65zi1gCrnAR3w3ic3RHoYObQiOjXeSHbUVm7ZsrEHzBQOYpdbi
-         t7+6BJvh0Sz980Dfdr6pa6EVJA/pstaKI0NTEtwNISLhr43wVmzUszFTYF9v5QQnOCu+
-         VmrtHMPwbC+k8H3HFltpso+B4Z1gOQhVi3ddi6tiXaXQAkRxri+RDob335bMnU02NU0D
-         HBeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693350927; x=1693955727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5vTa4PdCZfjFG5lHc4dNqG+0XSK9QBpqhYShWqlnoIo=;
-        b=Ol/oik/77cDndhrEqP0xTQ7SbpkPlofKNSX4b49enjtEF2nKoJujEAUPmFN47ToEsZ
-         iktu3TIgbdb/EyWx5hiehSWNvFkWS4hiKTdR976X/E6y/3ggEOmSZ0+BEdVrh445hQyo
-         Rt0HGxjYnERFbChtaLPnZTdMsvBra/lXlYx1bLceWhb2YIiVZfhwNXSOmuy9vU+y3rti
-         /khYEeKgGjusrvlEx9VBUfQRMmNQ18BbNKR9e98gFqBV6YdXmXbAybKR8h5IQcinAO8d
-         jks3m6hteDjVdE+8i2XDj8bMwjeX+JLCL/sGP3Q9fqGukPiBm0Yg6YQHM0OB1WTdt2EV
-         2gbg==
-X-Gm-Message-State: AOJu0Yzjq8ccfAKOQn1xBLih/7JN+P7oLxaMcUa1LT76SjLVRCOsaZPz
-        VDdmTJWOyo9ao1wVJA8Ljx1e6FV3NRYcf6Y+PZbmAzf0zODgX5o=
-X-Google-Smtp-Source: AGHT+IEfAIghQaOyFnhkOGghnSvmH8Q49mVxjPxt1pfkRStK7iBX7xSiHCbitdTjS+woAotcGaHR8STcdKo5RHy6JPA=
-X-Received: by 2002:a81:9204:0:b0:569:479f:6d7f with SMTP id
- j4-20020a819204000000b00569479f6d7fmr407224ywg.43.1693350926827; Tue, 29 Aug
- 2023 16:15:26 -0700 (PDT)
+        Wed, 30 Aug 2023 05:14:22 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5194D2
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Aug 2023 02:14:18 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RbJTy5866z1L9Bk;
+        Wed, 30 Aug 2023 17:12:38 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Wed, 30 Aug 2023 17:14:16 +0800
+Message-ID: <47e478d8-1559-a3cc-94c1-a05fd79b2f0b@huawei.com>
+Date:   Wed, 30 Aug 2023 17:14:16 +0800
 MIME-Version: 1.0
-References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
- <277db5491460d5fd607785f2bcc733de39022a35.camel@linux.ibm.com>
- <bf794136-703a-0d33-e245-7e723007b5c0@linux.microsoft.com>
- <0e1511e8819b24ab8a34a7b15821f06eff688f29.camel@linux.ibm.com>
- <8bc0f024-fc12-cb32-7af0-e500948cc6db@linux.microsoft.com>
- <7e32afa2596b9d8cfdc275614575b2023cd1d673.camel@linux.ibm.com>
- <CAHC9VhSVO9t=9e9JmniXKoqqvMv42E4dVeYtQTWZ4Eih3Sfr0Q@mail.gmail.com>
- <ed16f899485cbd559f9e6d7fbe17fa0d92335c20.camel@linux.ibm.com>
- <CAHC9VhTjej-GFjvEQhnL-HWnnkvJKA_DuOA_Md1KkV24Tx5haA@mail.gmail.com> <077249ac2bf2cb6d34347514e921720bb0f30b66.camel@linux.ibm.com>
-In-Reply-To: <077249ac2bf2cb6d34347514e921720bb0f30b66.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 29 Aug 2023 19:15:15 -0400
-Message-ID: <CAHC9VhTvK=sJUgCUS0H9BWWXPnj3e0XkfE-4vB3-oxyt2_Wj9w@mail.gmail.com>
-Subject: Re: [RFC] IMA Log Snapshotting Design Proposal
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Sush Shringarputale <sushring@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, kgold@linux.ibm.com,
-        bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
-        kexec@lists.infradead.org, jmorris@namei.org, serge@hallyn.com,
-        code@tyhicks.com, nramas@linux.microsoft.com,
-        Tushar Sugandhi <tusharsu@linux.mic>,
-        linux-security-module@vger.kernel.org,
-        AmirGoldstein <amir73il@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH -next] ima: Make tpm hash configurable
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, Jonathan Corbet <corbet@lwn.net>
+CC:     <linux-integrity@vger.kernel.org>
+References: <20230817061334.1910-1-guozihua@huawei.com>
+ <90b4b5573182ec68b2da2f9ef2bc6567d724f8f1.camel@linux.ibm.com>
+ <e2c5711c-6549-e81f-42a7-eec176b39d63@huawei.com>
+ <97198ee38422fbb1891981ac5c41263d5b03b321.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <97198ee38422fbb1891981ac5c41263d5b03b321.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 29, 2023 at 5:54=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Tue, 2023-08-29 at 17:30 -0400, Paul Moore wrote:
-> > On Tue, Aug 29, 2023 at 5:05=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com=
-> wrote:
-> > > On Tue, 2023-08-29 at 15:34 -0400, Paul Moore wrote:
-> > > > On Mon, Aug 21, 2023 at 7:08=E2=80=AFPM Mimi Zohar <zohar@linux.ibm=
-.com> wrote:
-> > > > > On Mon, 2023-08-21 at 15:05 -0700, Sush Shringarputale wrote:
-> > > > > > On 8/14/2023 3:02 PM, Mimi Zohar wrote:
-> > > > > > > On Mon, 2023-08-14 at 14:42 -0700, Sush Shringarputale wrote:
-> > > > > > >>> This design seems overly complex and requires synchronizati=
-on between
-> > > > > > >>> the "snapshot" record and exporting the records from the me=
-asurement
-> > > > > > >>> list.  None of this would be necessary if the measurements =
-were copied
-> > > > > > >>> from kernel memory to a backing file (e.g. tmpfs), as descr=
-ibed in [1].
-> > > > > > Even if the Kernel maintains the link between a tmpfs exported =
-and an
-> > > > > > in-memory IMA log - it still has to copy the tmpfs portion to t=
-he
-> > > > > > Kernel memory during kexec soft boot.  tmpfs is cleared during =
-kexec,
-> > > > > > so this copying of tmpfs back to kernel memory is necessary to =
-preserve
-> > > > > > the integrity of the log during kexec.  But the copying would a=
-dd back
-> > > > > > the memory pressure on the node during kexec (which may result =
-in
-> > > > > > out-of-memory), defeating the purpose of the overall effort/fea=
-ture.
-> > > > > > Copying to a regular *persistent* protected file seems a cleane=
-r
-> > > > > > approach, compared to tmpfs.
-> > > > >
-> > > > > From a kernel perspective, it doesn't make a difference if usersp=
-ace
-> > > > > provides a tmpfs or persistent file.  As per the discussion
-> > > > > https://lore.kernel.org/linux-integrity/CAOQ4uxj4Pv2Wr1wgvBCDR-tn=
-A5dsZT3rvdDzKgAH1aEV_-r9Qg@mail.gmail.com/#t
-> > > > > , userspace provides the kernel with the file descriptor of the o=
-pened
-> > > > > file.
-> > > > >
-> > > > > > We prototyped this solution, however it
-> > > > > > does not seem to be a common pattern within the Kernel to write=
- state
-> > > > > > directly to files on disk file systems.  We considered two pote=
-ntial
-> > > > > > options:
-> > > > >
-> > > > > If no file descriptor is provided, then the measurements aren't c=
-opied
-> > > > > and removed from the securityfs file.  If there are write errors,=
- the
-> > > > > measurements aren't removed from the securityfs file until the wr=
-ite
-> > > > > errors are resolved.
-> > > >
-> > > > It sounds like this approach would require the file/filesystem to b=
-e
-> > > > continuously available for the life of the system once the log was
-> > > > snapshotted/overflowed to persistent storage, yes?  Assuming that i=
-s
-> > > > the case, what happens if the file/filesystem becomes inaccessible =
-at
-> > > > some point and an attestation client attempts to read the entire lo=
-g?
-> > >
-> > > The main purpose of the change is to addres kernel memory pressure.
-> > > Two designs are being discussed: Sush's "snapshotting" design and
-> > > Amir's original suggestion of continously exporting the measurement
-> > > records to a tmpfs or regular file.  Both designs require verifying t=
-he
-> > > initial attestation quote by walking the entire measurement list,
-> > > calculating the expected TPM PCR value(s).  That doesn't change.
-> >
-> > Sure, but my question is about what happens if portions of the
-> > measurement list disappear due to file/filesystem problems?  How is
-> > that handled?
->
-> With the "snapshotting" solution there could be multiple files, so
-> portions could be missing.  The other solution, the preferred solution,
-> would be one file.
+On 2023/8/19 7:17, Mimi Zohar wrote:
+> On Fri, 2023-08-18 at 09:25 +0800, Guozihua (Scott) wrote:
+>> On 2023/8/17 22:19, Mimi Zohar wrote:
+>>> On Thu, 2023-08-17 at 14:13 +0800, GUO Zihua wrote:
+> [...]
+>  
+>>> Other proposals have changed the hard coded hash algorithm and PCR
+>>> value from SHA1 to SHA256.  Both that proposal and this will break
+>>> existing userspace applications.
+>>
+>> This is the part I would like to "RFC" on, and thanks for the comment!
+> 
+> Another proposal included all of the enabled TPM bank digests.
+Will this introduce some performance issue? I don't think we should be
+calculating various hashes on the same thing again and again.
 
-With the snapshotting approach the kernel doesn't need to maintain
-ongoing access to a file, that is left up to the user process
-performing the attestation (or simply inspecting the logs).  I have to
-ask, for the third time now in as many hours, how does the proposed
-kernel-holds-an-fd-open solution handle the case where the
-file/filesystem is no longer accessible?  The snapshotting approach
-should be much more resilient here as the error recovery paths can be
-much more involved than what we would have available in the kernel,
-not to mention the flexibility of allowing a user process to determine
-how to store and manage the snapshotted log.
+If we are feeding digests for all slots of the same PCR bank, we could
+do a cut-down or padding on the banks we don't care, avoid unnecessary
+hash operations.
+> 
+>> In deed this change should break userspace as well as all the existing
+>> remote attestation implementation. It should be better to have a brand
+>> new file for this.
+> 
+> True SHA1 is being phased out due to hash collisions.  Verifying the
+> template data hash against the template data isn't necessary for the
+> attestation server to verify a TPM quote against any of the enabled TPM
+> banks.  The attestation server walks the measurement list calculating
+> the bank specific template data hash.  Breaking existing applications
+> is unreasonable.
+> 
+>>>
+>>> Before we can introduce this sort of change, we would need to introduce
+>>> an IMA measurement list version.  Perhaps its time to define an IMA
+>>> security critical-dbata record, which would include this and other
+>>> information.  The measurement list itself would need to include a
+>>> version number.
+>>>
+>> I guess one of the easy way to do it is to make a
+>> ascii_runtime_measurements_ng and binary_runtime_measurements_ng, which
+>> contains a changed template supporting configurable template hash. What
+>> do you think?
+> 
+> Defining additional pseudo filesystems would allow both the old and new
+> measurement list formats to be enabled at the same time.
+> 
 
-Considering that the snapshotting approach is opt-in (userspace has to
-initiate the snapshot), I'm not sure the concern over log offsets is a
-significant objection: existing userspace will never trigger a
-snapshot, and new userspace that could potentially trigger a snapshot
-should be written to take that into account.
+-- 
+Best
+GUO Zihua
 
---=20
-paul-moore.com
