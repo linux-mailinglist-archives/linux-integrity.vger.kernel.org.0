@@ -2,100 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CB178DCCE
+	by mail.lfdr.de (Postfix) with ESMTP id A51A178DCCD
 	for <lists+linux-integrity@lfdr.de>; Wed, 30 Aug 2023 20:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241086AbjH3Sqt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Aug 2023 14:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
+        id S241027AbjH3Sqr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Aug 2023 14:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242789AbjH3Jiv (ORCPT
+        with ESMTP id S242862AbjH3Jxn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Aug 2023 05:38:51 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DD5137
-        for <linux-integrity@vger.kernel.org>; Wed, 30 Aug 2023 02:38:48 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RbK1G5f2YzVk2w;
-        Wed, 30 Aug 2023 17:36:18 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Wed, 30 Aug 2023 17:38:45 +0800
-Message-ID: <b56c97d6-830a-f1a9-d99e-304821dabc94@huawei.com>
-Date:   Wed, 30 Aug 2023 17:38:44 +0800
+        Wed, 30 Aug 2023 05:53:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F276D1B0;
+        Wed, 30 Aug 2023 02:53:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 801C260F0C;
+        Wed, 30 Aug 2023 09:53:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B009C433C8;
+        Wed, 30 Aug 2023 09:53:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693389219;
+        bh=nknoL9w3Y4YI7sgEzXEgy31hHjSBtW5t6+EKdvixVT4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PGeSqtlADXPNsSRMnED5y2bc51bStrsRKgRLsG0vFmeuS7ZjsjtBx9snAHe0G8Vr2
+         puIswmGZMwYKKpvbAUG4hgCkBPfAo5LnG+Zqi6zCKquDATicIUaBHr5eqdyzNoLlT+
+         eDLqK7F5l64Ce6vhg3+b1Cyvv77qi6SuOOpM4UfSj8i00ym6zp0iNwdRQNPeW8AsCh
+         s7jTGiZrttnG7dc7MMCLuv2nzzC2OWwW1dpk2JWvAsdtCdcLabRj31KBbnR0Ga2XvP
+         vjAjcw2evRgbmv/HS/X8EAdywyIIJ9VzMleY3re1+0iiynu1XGC3tw9hN+y2/tEsbr
+         Pj2cy6RWLJA5g==
+Date:   Wed, 30 Aug 2023 11:53:32 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
+        chuck.lever@oracle.com, jlayton@kernel.org,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH 15/28] security: Introduce inode_post_removexattr hook
+Message-ID: <20230830-kultfigur-verrohen-a689c59911d6@brauner>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+ <20230303181842.1087717-16-roberto.sassu@huaweicloud.com>
+ <f5a61c0f09c1b8d8aaeb99ad7ba4aab15818c5ed.camel@linux.ibm.com>
+ <9d482f25475a9d9bc0c93a8cbaf8bd4bb67d2cd6.camel@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH -next] ima: Make tpm hash configurable
-Content-Language: en-US
-To:     Ken Goldman <kgold@linux.ibm.com>, <zohar@linux.ibm.com>,
-        <corbet@lwn.net>, <dmitry.kasatkin@gmail.com>
-CC:     <linux-integrity@vger.kernel.org>
-References: <20230817061334.1910-1-guozihua@huawei.com>
- <245b0517-4c13-2815-4b99-c3691f3b86eb@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <245b0517-4c13-2815-4b99-c3691f3b86eb@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9d482f25475a9d9bc0c93a8cbaf8bd4bb67d2cd6.camel@huaweicloud.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2023/8/29 4:35, Ken Goldman wrote:
-> On 8/17/2023 2:13 AM, GUO Zihua wrote:
->> TPM2 chips supports algorithms other than SHA1. However, the original
->> IMA design hardcode template hash to be SHA1.
->>
->> This patch added CONFIG_IMA_TEMPLATE_HASH as well as ima_tpm_hash=
->> cmdline argument for configurating template hash. The usage is simuliar
->> to CONFIG_IMA_DEFAULT_HASH and ima_hash=. The configured hash is checked
->> against TPM and make sure that the hash algorithm is supported by
->> ima_tpm_chip.
->>
->> To accommodate the change, we must put a digest length into binary
->> measurement list items. The binary measurement list item format is
->> changed to this:
->>     16bit-le=pcr#
->>     16bit-le=template digest size
->>     char[n]=template digest
->>     32bit-le=template name size
->>     char[n]=template name
->>     [eventdata length]
->>     eventdata[n]=template specific data
->> The first element is now a 16bit pcr number and a 16bit template digest
->> size, instead of the original 32bit pcr number.
->>
->> The format of ascii_measurement_list is also changed. For sha1 template
->> hash, the format is the same as before. For other hash algorithms, a
->> hash name is prepended as such:
->> "sha256:30ee3e25620478759600be00e06fda7b4fe23bbf575621d480400d536cf54f5b"
+On Wed, Aug 30, 2023 at 11:31:35AM +0200, Roberto Sassu wrote:
+> On Wed, 2023-03-08 at 10:43 -0500, Mimi Zohar wrote:
+> > Hi Roberto,
+> > 
+> > On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> > > the inode_post_removexattr hook.
+> > > 
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > ---
+> > >  fs/xattr.c                    |  1 +
+> > >  include/linux/lsm_hook_defs.h |  2 ++
+> > >  include/linux/security.h      |  5 +++++
+> > >  security/security.c           | 14 ++++++++++++++
+> > >  4 files changed, 22 insertions(+)
+> > > 
+> > > diff --git a/fs/xattr.c b/fs/xattr.c
+> > > index 14a7eb3c8fa..10c959d9fc6 100644
+> > > --- a/fs/xattr.c
+> > > +++ b/fs/xattr.c
+> > > @@ -534,6 +534,7 @@ __vfs_removexattr_locked(struct mnt_idmap *idmap,
+> > >  
+> > >  	if (!error) {
+> > >  		fsnotify_xattr(dentry);
+> > > +		security_inode_post_removexattr(dentry, name);
+> > >  		evm_inode_post_removexattr(dentry, name);
+> > >  	}
+> > 
+> > Nothing wrong with this, but other places in this function test "if
+> > (error) goto ...".   Perhaps it is time to clean this up.
+> > 
+> > >  
+> > > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> > > index eedefbcdde3..2ae5224d967 100644
+> > > --- a/include/linux/lsm_hook_defs.h
+> > > +++ b/include/linux/lsm_hook_defs.h
+> > > @@ -147,6 +147,8 @@ LSM_HOOK(int, 0, inode_getxattr, struct dentry *dentry, const char *name)
+> > >  LSM_HOOK(int, 0, inode_listxattr, struct dentry *dentry)
+> > >  LSM_HOOK(int, 0, inode_removexattr, struct mnt_idmap *idmap,
+> > >  	 struct dentry *dentry, const char *name)
+> > > +LSM_HOOK(void, LSM_RET_VOID, inode_post_removexattr, struct dentry *dentry,
+> > > +	 const char *name)
+> > 
+> > @Christian should the security_inode_removexattr() and
+> > security_inode_post_removexattr() arguments be the same?
 > 
-> I would not change the PCR handle to 16 bits.  The TPM supports NVRAM
-> based PCRs, and their handles would be 0x01xxxxxx. In the future, there
-> may be other 'first byte' values.
+> Probably this got lost.
 > 
-> A template digest size does not describe the digest algorithm.  E.g.,
-> SM3 and SHA-256 are both 32 bytes.
+> Christian, should security_inode_post_removexattr() have the idmap
+> parameter as well?
 
-Oops that's a miss. We would need a brand new format for this I guess.
-> 
-> If one wants to describe the digest algorithm in 2 bytes, a reasonable
-> choice would be the values in the TCG Algorithm registry.  Se TPM Spec
-> Part 2 Table 9 — Definition of (UINT16) TPM_ALG_ID Constants <IN/OUT, S>
-> 
-> E.g., SHA-256 is 000b and SM3 is 0012.
-> 
-
--- 
-Best
-GUO Zihua
-
+Only if you call anything from any implementers of the hook that needs
+access to the idmap.
