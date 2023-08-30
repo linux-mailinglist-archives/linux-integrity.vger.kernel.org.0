@@ -2,135 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE7478DCC8
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Aug 2023 20:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AB978DCE1
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Aug 2023 20:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbjH3Sqn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Aug 2023 14:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S241704AbjH3Sq6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Aug 2023 14:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242764AbjH3JcT (ORCPT
+        with ESMTP id S242767AbjH3JdD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Aug 2023 05:32:19 -0400
-Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DF31A1;
-        Wed, 30 Aug 2023 02:32:16 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4RbJc43j53z9xFb1;
-        Wed, 30 Aug 2023 17:17:56 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBH+rl6DO9kg7vMAQ--.28846S2;
-        Wed, 30 Aug 2023 10:31:51 +0100 (CET)
-Message-ID: <9d482f25475a9d9bc0c93a8cbaf8bd4bb67d2cd6.camel@huaweicloud.com>
-Subject: Re: [PATCH 15/28] security: Introduce inode_post_removexattr hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     brauner@kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
-        chuck.lever@oracle.com, jlayton@kernel.org,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 30 Aug 2023 11:31:35 +0200
-In-Reply-To: <f5a61c0f09c1b8d8aaeb99ad7ba4aab15818c5ed.camel@linux.ibm.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
-         <20230303181842.1087717-16-roberto.sassu@huaweicloud.com>
-         <f5a61c0f09c1b8d8aaeb99ad7ba4aab15818c5ed.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4-0ubuntu2 
+        Wed, 30 Aug 2023 05:33:03 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C43195
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Aug 2023 02:32:59 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RbJvW0cYRz1L9MY;
+        Wed, 30 Aug 2023 17:31:19 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Wed, 30 Aug 2023 17:32:57 +0800
+Message-ID: <6a4766e4-1c50-f0a1-3efe-b3aada612bda@huawei.com>
+Date:   Wed, 30 Aug 2023 17:32:57 +0800
 MIME-Version: 1.0
-X-CM-TRANSID: LxC2BwBH+rl6DO9kg7vMAQ--.28846S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1DuFW3ur4ftrWxGr1xXwb_yoW8uFy8pF
-        s8t3ZxCF4rXr17Kr93ta1Du39agw4rGrWUJ3y2gw1jvFn7twn2qFWUKr15CFyrurW0gFyq
-        qF9Igr95Cr15ZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj5NN2wAAs0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH -next] ima: Make tpm hash configurable
+Content-Language: en-US
+To:     Ken Goldman <kgold@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>
+CC:     <linux-integrity@vger.kernel.org>
+References: <20230817061334.1910-1-guozihua@huawei.com>
+ <90b4b5573182ec68b2da2f9ef2bc6567d724f8f1.camel@linux.ibm.com>
+ <e2c5711c-6549-e81f-42a7-eec176b39d63@huawei.com>
+ <97198ee38422fbb1891981ac5c41263d5b03b321.camel@linux.ibm.com>
+ <76227f6b-a0ac-d198-fc0b-2029899cfe15@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <76227f6b-a0ac-d198-fc0b-2029899cfe15@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        PDS_RDNS_DYNAMIC_FP,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2023-03-08 at 10:43 -0500, Mimi Zohar wrote:
-> Hi Roberto,
+On 2023/8/29 5:05, Ken Goldman wrote:
+> I'd like to present three possible cases, expanding on Mimi's
+> observation that the template hash is currently the hash of the
+> template data.
 > 
-> On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > In preparation for moving IMA and EVM to the LSM infrastructure, introduce
-> > the inode_post_removexattr hook.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  fs/xattr.c                    |  1 +
-> >  include/linux/lsm_hook_defs.h |  2 ++
-> >  include/linux/security.h      |  5 +++++
-> >  security/security.c           | 14 ++++++++++++++
-> >  4 files changed, 22 insertions(+)
-> > 
-> > diff --git a/fs/xattr.c b/fs/xattr.c
-> > index 14a7eb3c8fa..10c959d9fc6 100644
-> > --- a/fs/xattr.c
-> > +++ b/fs/xattr.c
-> > @@ -534,6 +534,7 @@ __vfs_removexattr_locked(struct mnt_idmap *idmap,
-> >  
-> >  	if (!error) {
-> >  		fsnotify_xattr(dentry);
-> > +		security_inode_post_removexattr(dentry, name);
-> >  		evm_inode_post_removexattr(dentry, name);
-> >  	}
+> My vote is #2, but all have merits.
 > 
-> Nothing wrong with this, but other places in this function test "if
-> (error) goto ...".   Perhaps it is time to clean this up.
+> ----------
 > 
-> >  
-> > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> > index eedefbcdde3..2ae5224d967 100644
-> > --- a/include/linux/lsm_hook_defs.h
-> > +++ b/include/linux/lsm_hook_defs.h
-> > @@ -147,6 +147,8 @@ LSM_HOOK(int, 0, inode_getxattr, struct dentry *dentry, const char *name)
-> >  LSM_HOOK(int, 0, inode_listxattr, struct dentry *dentry)
-> >  LSM_HOOK(int, 0, inode_removexattr, struct mnt_idmap *idmap,
-> >  	 struct dentry *dentry, const char *name)
-> > +LSM_HOOK(void, LSM_RET_VOID, inode_post_removexattr, struct dentry *dentry,
-> > +	 const char *name)
+> 1. Leave the SHA-1 template hash.
 > 
-> @Christian should the security_inode_removexattr() and
-> security_inode_post_removexattr() arguments be the same?
-
-Probably this got lost.
-
-Christian, should security_inode_post_removexattr() have the idmap
-parameter as well?
-
-Thanks
-
-Roberto
-
-> >  LSM_HOOK(int, 0, inode_set_acl, struct mnt_idmap *idmap,
-> >  	 struct dentry *dentry, const char *acl_name, struct posix_acl *kacl)
-> >  LSM_HOOK(int, 0, inode_get_acl, struct mnt_idmap *idmap,
+> A. This does not break existing applications.
 > 
+> B. The template data is protected by the TPM quote, which does not
+> have to be SHA-1.
+> 
+> C. The SHA-1 digest provides some debug usefulness against a
+> non-malicious alteration of the template data. The application can
+> report which event record is incorrect.
+
+What the verifier can't do as of now is to tell which file has been
+corrupted, given the attacker managed to achieve a SHA-1 collision while
+keeping the measurement items reasonable.
+
+Even worse, as the TPM quote contains only an accumulated digest, there
+leaves a chance for the attacker to "fix" the TPM digest by generating
+additional measurement items. Without the ability to verify each and
+every individual measurement item verifier could produce a false
+negative result.
+> 
+> ----------
+> 
+> 2. Include template hashes for all PCR banks.
+> 
+> A. This breaks existing applications on the attestor side, but could
+> be made backward compatible / deprecated at the verifier side.
+> 
+> B. The redundant data is an attack surface, in that the verifier must
+> remember to check the hashes against the quote AND against the
+> template data.
+> 
+> C. The digest provides debug usefulness against malicious attacks on
+> the template data.
+> 
+> D. This permits the use case where the template hash is NOT a hash of
+> the template data. In the UEFI event log (using IMA terms), the
+> template hash can be a digest of some other data and the template data
+> is a hint as to where and what that data is.
+> 
+> E.g., the UEFI event EV_CPU_MICROCODE template data field has a patch
+> descriptor, while the template hash is a digest of the patch itself.
+
+As of now, IMA stores template hash with it's measurement item in the
+memory, and storing digest value from all banks would make the digest
+list N times bigger, where N would be an increasing number of supported
+algorithms by TPM.
+> 
+> ----------
+> 
+> 3. Include a template hash for the strongest hash algorithm.
+> 
+> A. It's not always clear what the strongest algorithm is.
+> 
+> Otherwise, this is the same as #2.
+
+"strongest" algorithm does not exist. I think it would be better to find
+a extensible solution allowing for future upgrade.
+> 
+> On 8/18/2023 7:17 PM, Mimi Zohar wrote:
+>> On Fri, 2023-08-18 at 09:25 +0800, Guozihua (Scott) wrote:
+>>> On 2023/8/17 22:19, Mimi Zohar wrote:
+>>>> On Thu, 2023-08-17 at 14:13 +0800, GUO Zihua wrote:
+>>
+>> True SHA1 is being phased out due to hash collisions.  Verifying the
+>> template data hash against the template data isn't necessary for the
+>> attestation server to verify a TPM quote against any of the enabled TPM
+>> banks.  The attestation server walks the measurement list calculating
+>> the bank specific template data hash.  Breaking existing applications
+>> is unreasonable.
+> 
+> 
+
+-- 
+Best
+GUO Zihua
 
