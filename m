@@ -2,125 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD0D78DCE6
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Aug 2023 20:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8F678E139
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Aug 2023 23:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242553AbjH3SrB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Aug 2023 14:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S240796AbjH3VLv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Aug 2023 17:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344200AbjH3S0y (ORCPT
+        with ESMTP id S240686AbjH3VLu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Aug 2023 14:26:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A247919A
-        for <linux-integrity@vger.kernel.org>; Wed, 30 Aug 2023 11:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1693419963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=536hEdeJYk89mYwQhbVybpmlRd6HjhERfF4XbjkRN4c=;
-        b=ghJvXEoo++yQfJOuziGrRadZeHEeqELLzHtLJVo/yB5RY5kWm232kL1jk2quvM4nGwzUyF
-        vHftsXcvjHbV7g+DT+UilIbaOdaw6GRme3Y/UTBu35A42j0N31jn9xso/GfcpvSiG2VTxs
-        6EEtb/p5NP/71REeG7t4sBTq8FANrz0=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-501-utHRCWoPMLuYvU_OEx_H8g-1; Wed, 30 Aug 2023 14:26:00 -0400
-X-MC-Unique: utHRCWoPMLuYvU_OEx_H8g-1
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2717f4ba116so52223a91.0
-        for <linux-integrity@vger.kernel.org>; Wed, 30 Aug 2023 11:25:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693419959; x=1694024759;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=536hEdeJYk89mYwQhbVybpmlRd6HjhERfF4XbjkRN4c=;
-        b=fHEXZ1oLLKIyIuXNq2cCE1h1oEXdHg2pAR6X7qAOGzmlSxBM49qhnknuIFw4T4lEKE
-         /zvopy3MTx5cSGblISxzk2g5FD+Zb0Da971e5id9Y48lVeYriro3061huZ/EVRtM/LDK
-         URnzOwEEnuoku3kwhbZOhFkp6ZRcDqQzVZv26Hv478vRNb+iapmlkkXO+lTWUrbmAysB
-         aMtg4xVsXMncuFgq/ZXT2Layzf81rEWLA1aIhxcLEAiF8zkjbaVCU7QYb0fmMZqwq5LS
-         XHM8ftitwhrY6wDpz6D+4HuMy1NtWnuDEgyc239gfqmhIE706YX+GXUEBSUczQvbHaz5
-         pqSg==
-X-Gm-Message-State: AOJu0YxjPKVKFw7paW29bMpzyySzWoH3DQe/BS7fLwPeakk9HpmhI0YN
-        rjBpR1FNEMVMeYgFdDYcRUOL5vCvs3vabRaLupYl5tlTZVxsK8gg8BzRnsP4J4Y04Q97qLvU9Up
-        YM1Xz28FRLm6Zn+uLCUOgQQ23TVQz
-X-Received: by 2002:a17:902:ea0f:b0:1b8:a88c:4dc6 with SMTP id s15-20020a170902ea0f00b001b8a88c4dc6mr3373225plg.45.1693419958891;
-        Wed, 30 Aug 2023 11:25:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFJpuzkMKCcUxXuBwzDEAWKKYDzm/197FeA+Z+f1IJBUSeHVr2tKRuQSsaHopYrWCL9mnbIjA==
-X-Received: by 2002:a17:902:ea0f:b0:1b8:a88c:4dc6 with SMTP id s15-20020a170902ea0f00b001b8a88c4dc6mr3373207plg.45.1693419958613;
-        Wed, 30 Aug 2023 11:25:58 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1011:b15c:d1ac:a90e:1171:fe6:7d04])
-        by smtp.gmail.com with ESMTPSA id jj14-20020a170903048e00b001bbaf09ce15sm11357005plb.152.2023.08.30.11.25.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 11:25:58 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v3] tpm: Enable hwrng only for Pluton on AMD CPUs
-Date:   Wed, 30 Aug 2023 11:25:45 -0700
-Message-Id: <446E94FC-C47A-453F-9A0E-CBE5049582ED@redhat.com>
-References: <zlywbvfgkkygcpvmj5rd4thuhbdacit2meg2fj6eyua5qpwyoc@beyiattrr7o6>
-Cc:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        Todd Brandt <todd.e.brandt@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <zlywbvfgkkygcpvmj5rd4thuhbdacit2meg2fj6eyua5qpwyoc@beyiattrr7o6>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-X-Mailer: iPhone Mail (20G75)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 30 Aug 2023 17:11:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09270E57;
+        Wed, 30 Aug 2023 14:11:15 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37UJ7RJQ025365;
+        Wed, 30 Aug 2023 19:12:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=nsWoYyWcb5D+Vc8qBgf5Yn3B+5VG4LYGM1UuJXlgJrE=;
+ b=MzGxKElHrjv36Kuqq8oENZk+2iWe/ZDZiJ/h6CDdCzqEawzE1slJjKiyFLIVLn6fvb4w
+ y7UbM5s835OnQR9HSBv9Tpt3rLdU4lYGbFdbIpfl5FBAIY3CtDEDyZWWl9KchPUj/X9r
+ /UfCSGVn9O4yXd+KCimXmGpWty2OOqY54rqofARiU/BqtMOF9OMaExvIjKEMWTzX3LDr
+ 5BE3U/z93gqTOTDgMTu4QZShLilayW2NMrhOM6RxWWzl9yJqA+B1wx+uDaJfg0J8VZRz
+ HCyPshNUcafAlfBT9xlzZx/oxE7XxgYVc9AKdZ9WrpXsY4JSUQzC07y1y+RcjxM/gxN4 Sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3stakf9maj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Aug 2023 19:12:43 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37UJ8SWQ032384;
+        Wed, 30 Aug 2023 19:12:42 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3stakf9mab-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Aug 2023 19:12:42 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37UH8WTd019171;
+        Wed, 30 Aug 2023 19:12:41 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3sqxe1wsyx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Aug 2023 19:12:41 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37UJCecF5571312
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Aug 2023 19:12:41 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B9C7F58054;
+        Wed, 30 Aug 2023 19:12:40 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3C40758045;
+        Wed, 30 Aug 2023 19:12:39 +0000 (GMT)
+Received: from [9.67.11.225] (unknown [9.67.11.225])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 30 Aug 2023 19:12:39 +0000 (GMT)
+Message-ID: <1ef45099-da24-b73f-b33f-6a299c0b1696@linux.ibm.com>
+Date:   Wed, 30 Aug 2023 15:12:39 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [RFC] IMA Log Snapshotting Design Proposal - unseal
+Content-Language: en-US
+To:     Sush Shringarputale <sushring@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
+        jmorris@namei.org, Paul Moore <paul@paul-moore.com>,
+        serge@hallyn.com
+Cc:     code@tyhicks.com, nramas@linux.microsoft.com,
+        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        linux-security-module@vger.kernel.org
+References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+In-Reply-To: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 1AJMc18zBnZZ7vPrb1MSLrtmROyoaSmV
+X-Proofpoint-GUID: vSpjfjen1JRsAVCDdiH0La52j66-fZAA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-30_15,2023-08-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 spamscore=0 mlxscore=0
+ adultscore=0 priorityscore=1501 suspectscore=0 clxscore=1015
+ mlxlogscore=670 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2308100000 definitions=main-2308300172
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 8/1/2023 3:12 PM, Sush Shringarputale wrote:
 
+> For remote attestation to work, the service will need to know how to
+>  validate the snapshot_aggregate entry in the IMA log.  It will have
+> to read the PCR values present in the template data of
+> snapshot_aggregate event in the latest IMA log, and ensure that the
+> PCR quotes align with the contents of the past UM_snapshot_file(s).
+> This will re-establish the chain of trust needed for the device to
+> pass remote attestation.  This will also maintain the ability of the
+> remote-attestation-service to seal the secrets, if the client-server
+>  use TPM unseal mechanism to attest the state of the device.
 
-> On Aug 29, 2023, at 12:03 PM, Jerry Snitselaar <jsnitsel@redhat.com> wrote=
-:
->=20
-> =EF=BB=BFOn Wed, Aug 23, 2023 at 02:15:10AM +0300, Jarkko Sakkinen wrote:
->> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG for=
-
->> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  On the=
-
->> reported systems the TPM doesn't reply at bootup and returns back the
->> command code. This makes the TPM fail probe.
->>=20
->> Since only Microsoft Pluton is the only known combination of AMD CPU and
->> fTPM from other vendor, disable hwrng otherwise. In order to make sysadmi=
-n
->> aware of this, print also info message to the klog.
->>=20
->> Cc: stable@vger.kernel.org
->> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
->> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
->> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217804
->> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->> ---
->> v3:
->> * Forgot to amend config flags.
->> v2:
->> * CONFIG_X86
->> * Removed "Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>"
->> * Removed "Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>"
->> ---
->> drivers/char/tpm/tpm_crb.c | 33 ++++++++-------------------------
->> 1 file changed, 8 insertions(+), 25 deletions(-)
->>=20
->=20
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-
-
-It looks like the Fedora folks are getting more reports of the issue.=
+I think that seal/unseal to IMA PCRs is futile.  Since boot is
+multi-threaded, the IMA PCR is unpredictable even when valid.
 
