@@ -2,55 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A59178E932
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Aug 2023 11:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0640978E947
+	for <lists+linux-integrity@lfdr.de>; Thu, 31 Aug 2023 11:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243215AbjHaJSt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 31 Aug 2023 05:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
+        id S242133AbjHaJUJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 31 Aug 2023 05:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbjHaJSs (ORCPT
+        with ESMTP id S236981AbjHaJUH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 31 Aug 2023 05:18:48 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E194CF7;
-        Thu, 31 Aug 2023 02:18:41 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qbdp1-0004V0-9q; Thu, 31 Aug 2023 11:18:39 +0200
-Message-ID: <8666bff5-e9ba-f472-d44f-82bdff35eecd@leemhuis.info>
-Date:   Thu, 31 Aug 2023 11:18:38 +0200
+        Thu, 31 Aug 2023 05:20:07 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE83E75
+        for <linux-integrity@vger.kernel.org>; Thu, 31 Aug 2023 02:19:44 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-59209b12c50so7370847b3.0
+        for <linux-integrity@vger.kernel.org>; Thu, 31 Aug 2023 02:19:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1693473573; x=1694078373; darn=vger.kernel.org;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Cbrhq38paxu0xySM9f3IPWoiWkUTnk9D5gKI2jM47E=;
+        b=6ChA0ZmY6HfHM/+kUAZQ2L9jhyeL9HY0g46tbWHzDMypPE4knP9/Vr94oMZYfpccMn
+         1IZT8hYX4W0tHYbMSh8EsALxNpqEABKlS5nMdPNVKY8W4sJA8JS7mwvoBrd5kFB++6+N
+         E8Ji7eUFqzs7vIuvSh52NkP/yfVWn0qDUGaWmdkmF13K6E0OU9tWQZ0zpcTy1+Z6ZDrL
+         9iVE4vOg+VSqzZLN5Dr6jl/QAk2yLp+e4V0ReqCKpdL38Hyiy61zlGkADa+m7JBkwblp
+         zPnmZqHgEtq0bMX3IvYLAGCzyqqCFQ+Y1w2Bzy2gtBfL4ddJUzfcX3FbJqem5/uGzms4
+         GhRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693473573; x=1694078373;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Cbrhq38paxu0xySM9f3IPWoiWkUTnk9D5gKI2jM47E=;
+        b=L/lYQi+SreZq2tHpdJsKQ665VhME8EB9dhnVJ7FtROubmlK5seCte9JG6BLlF8IBhr
+         MtLZlg/tPMPDYQJWXeg0U8hv6ysD/TCrs2qYA2iwG35JGvuvJMweA3EbplB3l2XSdXbp
+         D5nY5sp6cjKIzEOeAzVXeXbLGqGuDTpBSnL7C5l3QgOk5GqA89G/lAYDXpTxmNNAxxzN
+         VSUdYYS+pli3I8t5bS9DYNy7uWm/OyUL9v2euDxMnuDtzIA2wLzwesVnwHnGHlJfz8jB
+         mrzOxo9MxUn+ODAUfoB9gbamevzsrIHJaGZ/t9JXzbiNapiKg//QFEjbx2JL8/iCGZ+Q
+         Sk3Q==
+X-Gm-Message-State: AOJu0Ywn20HzCYb9htMDqk6bmTIBdxU0KVxPbeS66lIzxpLZa7QCCrbn
+        qkzwvhuf0jAScgWc4baIvtUtGA==
+X-Google-Smtp-Source: AGHT+IFThEVwm5PdQ/QiEIcAo8WglpblQRWl0MFWrXvjJuNLD0Kr5QEj6RbRV7hyCCkRaORZMOKarA==
+X-Received: by 2002:a0d:c483:0:b0:592:9236:9460 with SMTP id g125-20020a0dc483000000b0059292369460mr4914737ywd.31.1693473572920;
+        Thu, 31 Aug 2023 02:19:32 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id i185-20020a8191c2000000b00583e52232f1sm293607ywg.112.2023.08.31.02.19.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Aug 2023 02:19:32 -0700 (PDT)
+Date:   Thu, 31 Aug 2023 02:19:20 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Paul Moore <paul@paul-moore.com>
+cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, selinux@vger.kernel.org,
+        linux-mm@kvack.org, linux-integrity@vger.kernel.org
+Subject: Re: LSM hook ordering in shmem_mknod() and shmem_tmpfile()?
+In-Reply-To: <CAHC9VhQr2cpes2W0oWa8OENPFAgFKyGZQu3_m7-hjEdib_3s3Q@mail.gmail.com>
+Message-ID: <f75539a8-adf0-159b-15b9-4cc4a674e623@google.com>
+References: <CAHC9VhQr2cpes2W0oWa8OENPFAgFKyGZQu3_m7-hjEdib_3s3Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Linux Regressions <regressions@lists.linux.dev>
-Cc:     Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
- <ZHQIFLWvrWUNMVxb@debian.me>
- <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
- <2b09d2ed-0852-bbc9-b792-aad92235c7fa@gmail.com>
- <03daca5c-e468-8889-4dc2-e625a664d571@alliedtelesis.co.nz>
- <ec5245bd-3103-f0c7-d3ef-85aabb4d4712@alliedtelesis.co.nz>
- <ZH6TIjXeXJVMvSKa@debian.me> <2023060606-unlatch-yiddish-a45f@gregkh>
- <ac5b76af-87dc-b04d-6035-8eda8ba5ed12@kunbus.com>
- <2023060736-immodest-doormat-f957@gregkh>
- <2d7ed7bb-38ba-8840-6629-d210937b8513@leemhuis.info>
-In-Reply-To: <2d7ed7bb-38ba-8840-6629-d210937b8513@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1693473521;0f0897b6;
-X-HE-SMSGID: 1qbdp1-0004V0-9q
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,46 +77,39 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+On Wed, 30 Aug 2023, Paul Moore wrote:
 
-On 20.06.23 14:41, Linux regression tracking #update (Thorsten Leemhuis)
-wrote:
-> On 07.06.23 19:49, Greg KH wrote:
->> On Wed, Jun 07, 2023 at 05:47:57PM +0200, Lino Sanfilippo wrote:
->>> On 06.06.23 08:45, Greg KH wrote:
->>>>>
->>>>> Lino, it looks like this regression is caused by (backported) commit of yours.
->>>>> Would you like to take a look on it?
+> Hello all,
 > 
->>>>> Anyway, telling regzbot:
->>>>>
->>>>> #regzbot introduced: 51162b05a44cb5
->>>>
->>>> There's some tpm backports to 5.15.y that were suspect and I'll look
->>>> into reverting them and see if this was one of the ones that was on that
->>>> list.  Give me a few days...
->>>
->>> Could you please consider to apply (mainline) commit 0c7e66e5fd69 ("tpm, tpm_tis: Request threaded
->>> interrupt handler") to 5.15.y?
->>>
->>> As Chris confirmed it fixes the regression caused by 51162b05a44cb5 ("tpm, tpm_tis: Claim locality
->>> before writing interrupt registers").
->>>
->>> Commit 0c7e66e5fd69 is also needed for 5.10.y, 6.1.y and 6.3.y.
->>
->> Now queued up, thanks.
+> While looking at some recent changes in mm/shmem.c I noticed that the
+> ordering between simple_acl_create() and
+> security_inode_init_security() is different between shmem_mknod() and
+> shmem_tmpfile().  In shmem_mknod() the ACL call comes before the LSM
+> hook, and in shmem_tmpfile() the LSM call comes before the ACL call.
 > 
-> #regzbot fix: 0c7e66e5fd69
-> #regzbot ignore-activity
+> Perhaps this is correct, but it seemed a little odd to me so I wanted
+> to check with all of you to make sure there is a good reason for the
+> difference between the two functions.  Looking back to when
+> shmem_tmpfile() was created ~2013 I don't see any explicit mention as
+> to why the ordering is different so I'm looking for a bit of a sanity
+> check to see if I'm missing something obvious.
+> 
+> My initial thinking this morning is that the
+> security_inode_init_security() call should come before
+> simple_acl_create() in both cases, but I'm open to different opinions
+> on this.
 
-Brown paperback fix: should have used a stable commit id. Sory for the noise
+Good eye.  The crucial commit here appears to be Mimi's 3.11 commit
+37ec43cdc4c7 "evm: calculate HMAC after initializing posix acl on tmpfs"
+which intentionally moved shmem_mknod()'s generic_acl_init() up before
+the security_inode_init_security(), around the same time as Al was
+copying shmem_mknod() to introduce shmem_tmpfile().
 
-#regzbot fix: 4c3dda6b7cfd73fe818e424fe89ea19674ddb
-#regzbot ignore-activity
+I'd have agreed with you, Paul, until reading Mimi's commit:
+now it looks more like shmem_tmpfile() is the one to be changed,
+except (I'm out of my depth) maybe it's irrelevant on tmpfiles.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Anyway, I think it's a question better answered by Mimi and Al.
+
+Thanks,
+Hugh
