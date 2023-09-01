@@ -2,134 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A667878FA32
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Sep 2023 10:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724EE79032A
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Sep 2023 23:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235823AbjIAIt0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 1 Sep 2023 04:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S1350836AbjIAVq0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 1 Sep 2023 17:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjIAItZ (ORCPT
+        with ESMTP id S1350835AbjIAVmy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 1 Sep 2023 04:49:25 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648C110DE;
-        Fri,  1 Sep 2023 01:49:22 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qbzqA-0000PU-MU; Fri, 01 Sep 2023 10:49:18 +0200
-Message-ID: <116dd56f-695f-4ecd-dace-805db83f5c3e@leemhuis.info>
-Date:   Fri, 1 Sep 2023 10:49:17 +0200
+        Fri, 1 Sep 2023 17:42:54 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E1641BEC;
+        Fri,  1 Sep 2023 14:20:27 -0700 (PDT)
+Received: from [192.168.86.41] (unknown [50.46.242.41])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9E54B212A780;
+        Fri,  1 Sep 2023 14:20:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9E54B212A780
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1693603226;
+        bh=it67IfdVDRVdX2moDR85C5xi3JsHlNUpiQ1PvFyXwyc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=si6z6nr5hRK+iur7H3WtbmbfLXMYnnXtzVppQ+Hf3C0IlThevpaWcfHSHL/Tlsy6p
+         krlwvMSqsjlLhT9tTCyxtvuNg8VJSPPU/XSRpRbbLkES+L8ZCWuftDMWWN+Vhwfo8F
+         hhLQib+/gMVIhWXU8jArwJoYbG45uy7qrDsORhIc=
+Message-ID: <5ce32966-c8c5-adc4-8b9e-f8300b266a61@linux.microsoft.com>
+Date:   Fri, 1 Sep 2023 14:20:26 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] tpm: Enable hwrng only for Pluton on AMD CPUs
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Jerry Snitselaar <jsnitsel@redhat.com>, stable@vger.kernel.org,
-        Todd Brandt <todd.e.brandt@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        Patrick Steinhardt <ps@pks.im>, Ronan Pigott <ronan@rjp.ie>,
-        Raymond Jay Golo <rjgolo@gmail.com>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Dusty Mabe <dusty@dustymabe.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-References: <20230822231510.2263255-1-jarkko@kernel.org>
- <705b9769-4132-450b-bd47-2423c419db2a@molgen.mpg.de>
- <CV03X3OEI7RE.3NI1QJ6MBJSHA@suppilovahvero>
- <1eeddbdc-c1f0-4499-b3d1-24c96f42a50b@amd.com>
- <CV3J3TCMB74C.1WA96NQ9J593U@suppilovahvero>
- <f6d75cac-2556-484e-8a2c-3531b24b1ca5@amd.com>
- <fcf2f600-d1f0-de14-956b-4d4f3f0cb3fa@leemhuis.info>
-In-Reply-To: <fcf2f600-d1f0-de14-956b-4d4f3f0cb3fa@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [RFC] IMA Log Snapshotting Design Proposal - network bandwidth
+Content-Language: en-US
+To:     Ken Goldman <kgold@linux.ibm.com>,
+        Sush Shringarputale <sushring@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
+        jmorris@namei.org, Paul Moore <paul@paul-moore.com>,
+        serge@hallyn.com
+Cc:     code@tyhicks.com, nramas@linux.microsoft.com,
+        linux-security-module@vger.kernel.org
+References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
+ <5c323243-e22e-dd61-f808-2875654936a6@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <5c323243-e22e-dd61-f808-2875654936a6@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1693558162;5082f08a;
-X-HE-SMSGID: 1qbzqA-0000PU-MU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-21.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[CCing Linus, as this triggered my "this is moving to slowly" threshold,
-as (a) the initial report was two weeks ago by now (b) a fix seems
-within reach for nearly as long (c) the problem seems to annoy quite a
-few people, as the culprit of this regression made it into 6.5 and was
-picked up for 6.1.y and 6.4.y (rightfully so I'd say, as it fixes an
-earlier regression)]
+Thanks a lot Ken for looking at the proposal, and sharing your thoughts.
 
-On 29.08.23 10:38, Linux regression tracking (Thorsten Leemhuis) wrote:
-> On 28.08.23 02:35, Mario Limonciello wrote:
->> On 8/27/2023 13:12, Jarkko Sakkinen wrote:
->>> On Wed Aug 23, 2023 at 9:58 PM EEST, Mario Limonciello wrote:
->>>> On 8/23/2023 12:40, Jarkko Sakkinen wrote:
->>>>> On Wed Aug 23, 2023 at 11:23 AM EEST, Paul Menzel wrote:
->>>>>> Am 23.08.23 um 01:15 schrieb Jarkko Sakkinen:
->>>>>>> The vendor check introduced by commit 554b841d4703 ("tpm: Disable
->>>>>>> RNG for
->>>>>>> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs. 
->>>>>>> On the
->>>>>>> reported systems the TPM doesn't reply at bootup and returns back the
->>>>>>> command code. This makes the TPM fail probe.
->>>>>>>
->>>>>>> Since only Microsoft Pluton is the only known combination of AMD
->>>>>>> CPU and
->>>>>>> fTPM from other vendor, disable hwrng otherwise. In order to make
->>>>>>> sysadmin
->>>>>>> aware of this, print also info message to the klog.
->>>>>>>
->>>>>>> Cc: stable@vger.kernel.org
->>>>>>> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
->>>>>>> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
->>>>>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
->>>>>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>>>>
->>>>>> Mario’s patch also had the three reporters below listed:
->>>>>>
->>>>>> Reported-by: Patrick Steinhardt <ps@pks.im>
->>>>>> Reported-by: Ronan Pigott <ronan@rjp.ie>
->>>>>> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
->
-> [...] this seems to become a regression
-> that is annoying quite a few people (in 6.5 and 6.4.y afaics), so it
-> would be good to get the fix merged to mainline rather sooner than
-> later. Are these warnings and the mentioning of affected machines in the
-> patch descriptions the only remaining problems, or is there anything
-> else that needs to be addressed?
+On 8/30/23 11:06, Ken Goldman wrote:
+> 
+> 
+> On 8/1/2023 3:12 PM, Sush Shringarputale wrote:
+>> In addition, a large IMA log can add pressure on the network bandwidth 
+>> when
+>> the attestation client sends it to remote-attestation-service.
+> 
+> I would not worry too much about network bandwidth.
+Our bandwidth concerns are about scaled out system.
 
-Hmmm. Quite a bit progress to fix the issue was made in the first week
-after Todd's report; Jarkko apparently even applied the earlier patch
-from Mario to his master branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=b1a62d41bdc1d15b0641759717e8c3651f0a810c
-But since then (aka in the past week) there was not much progress.
+When IMA log size increases in the range of megabytes, and when the
+number of client devices increases, it makes an impact on the overall
+network bandwidth.
 
-Wondering what's up here -- and if both patches are needed or just one
-of them (I suspect it's the latter).
+> 
+> 1. Every solution eventually realizes that sending the entire log each 
+> time hurts performance.  The verifier will ask the attestor, "give me 
+> everything since record n", and the number of new entries approaches zero.
+> 
+Completely agreed. IMA log snapshotting (this proposed feature) is a
+solution in that direction.
 
-Checked lore and noticed that Jarkko was not much active in kernel land
-during the past few days; happens, *no worries at all*. But still would
-be good if this could be resolved rather sooner that later. Just not
-sure how to achieve that.
+> 2. My benchmarks show that
+> 
+> On the client, the TPM quote time swamps everything else.
+> On the server, verifying the IMA entry signatures swamps everything else.
+> 
+> The network transfer time is negligible.
+Agreed, it is true in the context of an individual client device.
 
-Mario, could you maybe pick this up in case Jarkko doesn't show up soon
-soon? From an earlier message in the thread it sounded like all that was
-missing was a slightly improved patch description? Or am I missing
-something?
+Our network bandwidth concerns are for the overall traffic on the scaled
+out system. It impacts the network bandwidth when the IMA log is large
+(MBs).  And the issue is compounded when there are large number of
+client devices.
 
-Ciao, Thorsten (who feels bad that he's putting pressure on people;
-sorry for that, but that duty comes with the "regression tracker" hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-#regzbot poke
+Thanks,
+Tushar
