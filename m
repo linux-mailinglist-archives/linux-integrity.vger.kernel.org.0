@@ -2,56 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A32791E99
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Sep 2023 22:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0997E791EDB
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Sep 2023 23:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbjIDUwG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Sep 2023 16:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
+        id S238255AbjIDVIz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Sep 2023 17:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjIDUwF (ORCPT
+        with ESMTP id S229481AbjIDVIy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Sep 2023 16:52:05 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85041AD;
-        Mon,  4 Sep 2023 13:52:00 -0700 (PDT)
+        Mon, 4 Sep 2023 17:08:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D421A1B6;
+        Mon,  4 Sep 2023 14:08:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EEF60CE0FD0;
-        Mon,  4 Sep 2023 20:51:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1302C433C7;
-        Mon,  4 Sep 2023 20:51:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 704D261708;
+        Mon,  4 Sep 2023 21:08:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04CF9C433C8;
+        Mon,  4 Sep 2023 21:08:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693860717;
-        bh=5f+w9wq1cKACBqEw4Mi47dxVltq/foUZBPbH+nXgbtc=;
+        s=k20201202; t=1693861729;
+        bh=c/K0v1f1fOXVzFbawIYNQ7qFhq1at121qQ4pgUfYVaU=;
         h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=icdRnncreM+UjsqGBMMBIXm5jZEBaz7aeMDQe/PsQNuC4eFBIOQZTLHElLFTQ1gAG
-         MH+KLPLal0P/HfatjnUhTNZ3miIcxcCZGsQdSJaEAJNskfuIxgK6Cva3D803s0lrze
-         3G6+GVNcd25hlHjnd64czJEuuo84hH+YkrUoMRr9P1j0MlK1hieu6+ZWUMdd5bDpze
-         C2uIy38xhoKwoGhwzg1ydW4o3MtiNmi2ML63IO+ifRbl4Hgyzjh1kzSsmj0OOUaGj9
-         b7L7bLhlH/dWZXdwccdlgnyvRzlof8omKGvK4C920VBxbLZK4qJp1RR50o4J+KbYDY
-         ITiQOYLXPtroA==
+        b=q0BatMXZee/hoOID0g6Y+zDdWfb54DoZlDDmyQKupB+mJxT5Q26glReDoLfGI3AU8
+         GG2PAkZBxyEVSgIGMEq7rrKvLqG38c6FNhfSgtCtKY1AcS9V0Mgqya7KVg4d6p1Cbh
+         YipxbCju6etroCrF/7BDJWy+xm65bqKyMlm4wmiExXeV8bOEcJRgpwquvrxRZL/LaY
+         pZ1IKjRk0l9BW30p4tIKLP7IML1F3jzlMkW3gBd4aonK5oZJVDF/PEiV5Hb6bZpDsZ
+         lM6p+nPfSqbOHBvTU41hKVXSj2+fZIcdcxcvDaTw0Ib7VjIKiInwRu2eHAfd7E2mge
+         Mk/WF2xYAlJqg==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 04 Sep 2023 23:51:53 +0300
-Message-Id: <CVAFIDGCEPEC.2R5MSSAO5M8UA@suppilovahvero>
-Cc:     <linux-integrity@vger.kernel.org>, <stable@vger.kernel.org>,
-        "Todd Brandt" <todd.e.brandt@intel.com>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Mario Limonciello" <mario.limonciello@amd.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] tpm: Enable hwrng only for Pluton on AMD CPUs
+Date:   Tue, 05 Sep 2023 00:08:43 +0300
+Message-Id: <CVAFV92MONCH.257Y9YQ3OEU4B@suppilovahvero>
+Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-nfs@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <keyrings@vger.kernel.org>, <selinux@vger.kernel.org>,
+        "Roberto Sassu" <roberto.sassu@huawei.com>,
+        "Stefan Berger" <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v2 11/25] security: Align inode_setattr hook definition
+ with EVM
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Jerry Snitselaar" <jsnitsel@redhat.com>
+To:     "Roberto Sassu" <roberto.sassu@huaweicloud.com>,
+        <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+        <chuck.lever@oracle.com>, <jlayton@kernel.org>, <neilb@suse.de>,
+        <kolga@netapp.com>, <Dai.Ngo@oracle.com>, <tom@talpey.com>,
+        <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <dhowells@redhat.com>, <stephen.smalley.work@gmail.com>,
+        <eparis@parisplace.org>, <casey@schaufler-ca.com>
 X-Mailer: aerc 0.14.0
-References: <zlywbvfgkkygcpvmj5rd4thuhbdacit2meg2fj6eyua5qpwyoc@beyiattrr7o6> <446E94FC-C47A-453F-9A0E-CBE5049582ED@redhat.com>
-In-Reply-To: <446E94FC-C47A-453F-9A0E-CBE5049582ED@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230831104136.903180-1-roberto.sassu@huaweicloud.com>
+ <20230831104136.903180-12-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230831104136.903180-12-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,65 +68,110 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Aug 30, 2023 at 9:25 PM EEST, Jerry Snitselaar wrote:
+On Thu Aug 31, 2023 at 1:41 PM EEST, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 >
+> Add the idmap parameter to the definition, so that evm_inode_setattr() ca=
+n
+> be registered as this hook implementation.
 >
-> > On Aug 29, 2023, at 12:03 PM, Jerry Snitselaar <jsnitsel@redhat.com> wr=
-ote:
-> >=20
-> > =EF=BB=BFOn Wed, Aug 23, 2023 at 02:15:10AM +0300, Jarkko Sakkinen wrot=
-e:
-> >> The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG =
-for
-> >> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  On =
-the
-> >> reported systems the TPM doesn't reply at bootup and returns back the
-> >> command code. This makes the TPM fail probe.
-> >>=20
-> >> Since only Microsoft Pluton is the only known combination of AMD CPU a=
-nd
-> >> fTPM from other vendor, disable hwrng otherwise. In order to make sysa=
-dmin
-> >> aware of this, print also info message to the klog.
-> >>=20
-> >> Cc: stable@vger.kernel.org
-> >> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
-> >> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217804
-> >> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >> ---
-> >> v3:
-> >> * Forgot to amend config flags.
-> >> v2:
-> >> * CONFIG_X86
-> >> * Removed "Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>"
-> >> * Removed "Signed-off-by: Mario Limonciello <mario.limonciello@amd.com=
->"
-> >> ---
-> >> drivers/char/tpm/tpm_crb.c | 33 ++++++++-------------------------
-> >> 1 file changed, 8 insertions(+), 25 deletions(-)
-> >>=20
-> >=20
-> > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+>  include/linux/lsm_hook_defs.h | 3 ++-
+>  security/security.c           | 2 +-
+>  security/selinux/hooks.c      | 3 ++-
+>  security/smack/smack_lsm.c    | 4 +++-
+>  4 files changed, 8 insertions(+), 4 deletions(-)
 >
->
-> It looks like the Fedora folks are getting more reports of the issue.
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.=
+h
+> index 4bdddb52a8fe..fdf075a6b1bb 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -134,7 +134,8 @@ LSM_HOOK(int, 0, inode_readlink, struct dentry *dentr=
+y)
+>  LSM_HOOK(int, 0, inode_follow_link, struct dentry *dentry, struct inode =
+*inode,
+>  	 bool rcu)
+>  LSM_HOOK(int, 0, inode_permission, struct inode *inode, int mask)
+> -LSM_HOOK(int, 0, inode_setattr, struct dentry *dentry, struct iattr *att=
+r)
+> +LSM_HOOK(int, 0, inode_setattr, struct mnt_idmap *idmap, struct dentry *=
+dentry,
+> +	 struct iattr *attr)
 
-https://lore.kernel.org/linux-integrity/20230904202512.29825-1-jarkko@kerne=
-l.org/T/#u
+LSM_HOOK(int, 0, inode_setattr, struct mnt_idmap *idmap, struct dentry *den=
+try, struct iattr *attr)
 
-I have all the possible reported-by's. I still don't fully understand
-kernel bugzilla's role. I don't oppose having it but e.g. for me
-reporter has been traditionally someone who reports the bug in LKML, not
-in bugzilla. Also the ambiguity of the whole discussion has been over
-the top. E.g. why bugzilla even has a field for reporter if that is not
-*the* reporter at least according to this discussion?
+Only 99 characters, i.e. breaking into two lines is not necessary.
 
-And in the case of this bug, the reporter in bugzilla was the same exact
-person who mailed about it to LKML.
+>  LSM_HOOK(int, 0, inode_getattr, const struct path *path)
+>  LSM_HOOK(int, 0, inode_setxattr, struct mnt_idmap *idmap,
+>  	 struct dentry *dentry, const char *name, const void *value,
+> diff --git a/security/security.c b/security/security.c
+> index cb6242feb968..2b24d01cf181 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -2117,7 +2117,7 @@ int security_inode_setattr(struct mnt_idmap *idmap,
+> =20
+>  	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+>  		return 0;
+> -	ret =3D call_int_hook(inode_setattr, 0, dentry, attr);
+> +	ret =3D call_int_hook(inode_setattr, 0, idmap, dentry, attr);
+>  	if (ret)
+>  		return ret;
+>  	return evm_inode_setattr(idmap, dentry, attr);
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index ee7c49c2cfd3..bfcc4d9aa5ab 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -3075,7 +3075,8 @@ static int selinux_inode_permission(struct inode *i=
+node, int mask)
+>  	return rc;
+>  }
+> =20
+> -static int selinux_inode_setattr(struct dentry *dentry, struct iattr *ia=
+ttr)
+> +static int selinux_inode_setattr(struct mnt_idmap *idmap, struct dentry =
+*dentry,
+> +				 struct iattr *iattr)
+>  {
+>  	const struct cred *cred =3D current_cred();
+>  	struct inode *inode =3D d_backing_inode(dentry);
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index 679156601a10..89f2669d50a9 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -1181,12 +1181,14 @@ static int smack_inode_permission(struct inode *i=
+node, int mask)
+> =20
+>  /**
+>   * smack_inode_setattr - Smack check for setting attributes
+> + * @idmap: idmap of the mount
+>   * @dentry: the object
+>   * @iattr: for the force flag
+>   *
+>   * Returns 0 if access is permitted, an error code otherwise
+>   */
+> -static int smack_inode_setattr(struct dentry *dentry, struct iattr *iatt=
+r)
+> +static int smack_inode_setattr(struct mnt_idmap *idmap, struct dentry *d=
+entry,
+> +			       struct iattr *iattr)
 
-I'm actually cool with almost any policy, as long as there is at least
-some policy in existence. Pretty confusing exercise overally, and very
-time consuming for a maintainer.
+static int smack_inode_setattr(struct mnt_idmap *idmap, struct dentry *dent=
+ry, struct iattr *iattr)
+
+Can be still in a single line (100 characters exactly).
+
+
+>  {
+>  	struct smk_audit_info ad;
+>  	int rc;
+> --=20
+> 2.34.1
+
 
 BR, Jarkko
