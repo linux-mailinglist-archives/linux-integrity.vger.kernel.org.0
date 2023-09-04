@@ -2,166 +2,148 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D814791C46
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Sep 2023 20:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EF9791C9C
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Sep 2023 20:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237000AbjIDSBL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Sep 2023 14:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
+        id S230327AbjIDSN2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Sep 2023 14:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbjIDSBK (ORCPT
+        with ESMTP id S229959AbjIDSN1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Sep 2023 14:01:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DFEDD;
-        Mon,  4 Sep 2023 11:01:07 -0700 (PDT)
+        Mon, 4 Sep 2023 14:13:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00A91712;
+        Mon,  4 Sep 2023 11:12:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 337D6B80ED9;
-        Mon,  4 Sep 2023 18:01:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9B4DC433C8;
-        Mon,  4 Sep 2023 18:01:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D451961862;
+        Mon,  4 Sep 2023 18:12:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B968BC433C7;
+        Mon,  4 Sep 2023 18:12:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693850463;
-        bh=ZO4d1HawvJ//3ptwuwm7onPYcLR7YnU0KtC0ZhmK0kQ=;
-        h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-        b=euqAD0ji2Pw8IAPMadKYJapR9GhENHWAyoLQTeF5iaEwYKY4v7adIY/4UD+yqj8q2
-         Gcy/9FXv5lBDSdvGJDaFqHF9o56D/f4wNnJka314gE+CVU+5zXCvSwfC4vMN7J7kcb
-         xlYuPfy6WImRtm+H4u+YoprHwtFiwsJYmHeAUhnA8lmmsvE7S5uaRPzeGPfYfYC206
-         eLFgCtFTJ2qxMWq4C5TOlVCDppfIwzI7i1vt7x+cGXDr7pauvcyO60EHFkBTI0iRIi
-         NpsR3VvfIXzW4y9AdNjFDOdgMf7JILKh9LNmcywhgS5lM2UrUwQYU7M/djc1VxJhhJ
-         LOEk2lReGNnBw==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 04 Sep 2023 21:00:59 +0300
-Message-Id: <CVABVIQB3858.CWOHMN527J67@suppilovahvero>
-To:     "Mario Limonciello" <mario.limonciello@amd.com>,
-        "Paul Menzel" <pmenzel@molgen.mpg.de>
-Cc:     <linux-integrity@vger.kernel.org>,
-        "Jerry Snitselaar" <jsnitsel@redhat.com>, <stable@vger.kernel.org>,
-        "Todd Brandt" <todd.e.brandt@intel.com>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>, <linux-kernel@vger.kernel.org>,
-        "Patrick Steinhardt" <ps@pks.im>, "Ronan Pigott" <ronan@rjp.ie>,
-        "Raymond Jay Golo" <rjgolo@gmail.com>
-Subject: Re: [PATCH v3] tpm: Enable hwrng only for Pluton on AMD CPUs
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230822231510.2263255-1-jarkko@kernel.org>
- <705b9769-4132-450b-bd47-2423c419db2a@molgen.mpg.de>
- <CV03X3OEI7RE.3NI1QJ6MBJSHA@suppilovahvero>
- <1eeddbdc-c1f0-4499-b3d1-24c96f42a50b@amd.com>
- <CV3J3TCMB74C.1WA96NQ9J593U@suppilovahvero>
- <f6d75cac-2556-484e-8a2c-3531b24b1ca5@amd.com>
-In-Reply-To: <f6d75cac-2556-484e-8a2c-3531b24b1ca5@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1693851137;
+        bh=giqsozg8yzFsr9l35aF4ia0ZabVHrLqwjYV8WecnZiw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hfk1W9JfuxXT30Bmh0QGLo7Q6ZN8QHP1h7lo0+PkEYgbV+P0fyZupCI5PzjzzfvJo
+         bA1cc+XFws0Kb3tzwtk6RAFDWHfcBJQxOEDY8o9py0b/qPWymEvXE0UATbOfqXyVcC
+         ak51nGuh9NnWcNqbKfFqSaSNZRHJ0u52+sjKeymQ43jNKrtd1R/amFj0U5WanDxXUM
+         V90E7lsNyDOUjKVkTpZIEtYT5WGmof/zIz1BADG6TusZDf+14NHIp9XbFZdx5gQiSv
+         jTx7LmRD2R+BnECfHiO0WLTKglGyDS1GexDvdF9sipdj/nuj3SM3rbGEbG5my0nqtG
+         3+HEcypemvb6Q==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, stable@vger.kernel.org,
+        Todd Brandt <todd.e.brandt@intel.com>,
+        Patrick Steinhardt <ps@pks.im>,
+        Raymond Jay Golo <rjgolo@gmail.com>,
+        Ronan Pigott <ronan@rjp.ie>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4] tpm: Enable hwrng only for Pluton on AMD CPUs
+Date:   Mon,  4 Sep 2023 21:12:10 +0300
+Message-Id: <20230822231510.2263255-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon Aug 28, 2023 at 3:35 AM EEST, Mario Limonciello wrote:
-> On 8/27/2023 13:12, Jarkko Sakkinen wrote:
-> > On Wed Aug 23, 2023 at 9:58 PM EEST, Mario Limonciello wrote:
-> >> On 8/23/2023 12:40, Jarkko Sakkinen wrote:
-> >>> On Wed Aug 23, 2023 at 11:23 AM EEST, Paul Menzel wrote:
-> >>>> Dear Jarkko,
-> >>>>
-> >>>>
-> >>>> Thank you for your patch.
-> >>>>
-> >>>>
-> >>>> Am 23.08.23 um 01:15 schrieb Jarkko Sakkinen:
-> >>>>> The vendor check introduced by commit 554b841d4703 ("tpm: Disable R=
-NG for
-> >>>>> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  =
-On the
-> >>>>> reported systems the TPM doesn't reply at bootup and returns back t=
-he
-> >>>>> command code. This makes the TPM fail probe.
-> >>>>>
-> >>>>> Since only Microsoft Pluton is the only known combination of AMD CP=
-U and
-> >>>>> fTPM from other vendor, disable hwrng otherwise. In order to make s=
-ysadmin
-> >>>>> aware of this, print also info message to the klog.
-> >>>>>
-> >>>>> Cc: stable@vger.kernel.org
-> >>>>> Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
-> >>>>> Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> >>>>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217804
-> >>>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >>>>
-> >>>> Mario=E2=80=99s patch also had the three reporters below listed:
-> >>>>
-> >>>> Reported-by: Patrick Steinhardt <ps@pks.im>
-> >>>> Reported-by: Ronan Pigott <ronan@rjp.ie>
-> >>>> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
-> >>>
-> >>> The problem here is that checkpatch throws three warnings:
-> >>>
-> >>> WARNING: Reported-by: should be immediately followed by Closes: with =
-a URL to the report
-> >>> #19:
-> >>> Reported-by: Patrick Steinhardt <ps@pks.im>
-> >>> Reported-by: Ronan Pigott <ronan@rjp.ie>
-> >>>
-> >>> WARNING: Reported-by: should be immediately followed by Closes: with =
-a URL to the report
-> >>> #20:
-> >>> Reported-by: Ronan Pigott <ronan@rjp.ie>
-> >>> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
-> >>>
-> >>> WARNING: Reported-by: should be immediately followed by Closes: with =
-a URL to the report
-> >>> #21:
-> >>> Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
-> >>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >>>
-> >>
-> >> FWIW I observed the same checkpatch warning when I submitted my versio=
-n
-> >> of the patch.  I figured it's better to ignore the warning and attribu=
-te
-> >> everyone who reported the issue affected them.
-> >=20
-> > OK so:
-> >=20
-> > 1. checkpatch.pl is part of the kernel process.
-> > 2. Bugzilla is not part of the kernel process.
-> >=20
-> > Why emphasis on 1?
-> >=20
-> > BR, Jarkko
->
-> The reason I submitted it this way is because of this quote from the=20
-> documentation [1].
->
-> "Check your patches with the patch style checker prior to submission=20
-> (scripts/checkpatch.pl). Note, though, that the style checker should be=
-=20
-> viewed as a guide, not as a replacement for human judgment. If your code=
-=20
-> looks better with a violation then its probably best left alone."
->
-> I wanted the patch to capture and attribute all those that reported it=20
-> not just the "first one".  Like I said previously, it's better to have a=
-=20
-> collection of people to ping to notify if something needs to be reverted.
->
-> [1]=20
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#st=
-yle-check-your-changes
+The vendor check introduced by commit 554b841d4703 ("tpm: Disable RNG for
+all AMD fTPMs") doesn't work properly on a number of Intel fTPMs.  On the
+reported systems the TPM doesn't reply at bootup and returns back the
+command code. This makes the TPM fail probe on Lenovo Legion Y540 laptop.
 
-Please denote also that kernel bugzilla is not mentioned in the page
-that you put as a reference, and only reporter in the LKML has been
-Todd.
+Since only Microsoft Pluton is the only known combination of AMD CPU and
+fTPM from other vendor, disable hwrng otherwise. In order to make sysadmin
+aware of this, print also info message to the klog.
 
-BR, Jarkko
+Cc: stable@vger.kernel.org
+Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
+Reported-by: Todd Brandt <todd.e.brandt@intel.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
+Reported-by: Patrick Steinhardt <ps@pks.im>
+Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
+Reported-by: Ronan Pigott <ronan@rjp.ie>
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v4:
+* Report the victim: Lenovo Legion Y540
+* Add reported-by's back due popular request.
+v3:
+* Forgot to amend config flags.
+v2:
+* CONFIG_X86
+* Removed "Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>"
+* Removed "Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>"
+---
+ drivers/char/tpm/tpm_crb.c | 33 ++++++++-------------------------
+ 1 file changed, 8 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+index 65ff4d2fbe8d..ea085b14ab7c 100644
+--- a/drivers/char/tpm/tpm_crb.c
++++ b/drivers/char/tpm/tpm_crb.c
+@@ -463,28 +463,6 @@ static bool crb_req_canceled(struct tpm_chip *chip, u8 status)
+ 	return (cancel & CRB_CANCEL_INVOKE) == CRB_CANCEL_INVOKE;
+ }
+ 
+-static int crb_check_flags(struct tpm_chip *chip)
+-{
+-	u32 val;
+-	int ret;
+-
+-	ret = crb_request_locality(chip, 0);
+-	if (ret)
+-		return ret;
+-
+-	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val, NULL);
+-	if (ret)
+-		goto release;
+-
+-	if (val == 0x414D4400U /* AMD */)
+-		chip->flags |= TPM_CHIP_FLAG_HWRNG_DISABLED;
+-
+-release:
+-	crb_relinquish_locality(chip, 0);
+-
+-	return ret;
+-}
+-
+ static const struct tpm_class_ops tpm_crb = {
+ 	.flags = TPM_OPS_AUTO_STARTUP,
+ 	.status = crb_status,
+@@ -827,9 +805,14 @@ static int crb_acpi_add(struct acpi_device *device)
+ 	if (rc)
+ 		goto out;
+ 
+-	rc = crb_check_flags(chip);
+-	if (rc)
+-		goto out;
++#ifdef CONFIG_X86
++	/* A quirk for https://www.amd.com/en/support/kb/faq/pa-410 */
++	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD &&
++	    priv->sm != ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON) {
++		dev_info(dev, "Disabling hwrng\n");
++		chip->flags |= TPM_CHIP_FLAG_HWRNG_DISABLED;
++	}
++#endif /* CONFIG_X86 */
+ 
+ 	rc = tpm_chip_register(chip);
+ 
+-- 
+2.39.2
+
