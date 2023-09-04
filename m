@@ -2,52 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AC3791F1D
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Sep 2023 23:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043BA791F83
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Sep 2023 00:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239099AbjIDVwO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Sep 2023 17:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S239951AbjIDWaa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Sep 2023 18:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjIDVwO (ORCPT
+        with ESMTP id S233722AbjIDWaa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Sep 2023 17:52:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5FB1B7
-        for <linux-integrity@vger.kernel.org>; Mon,  4 Sep 2023 14:52:11 -0700 (PDT)
+        Mon, 4 Sep 2023 18:30:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B019D;
+        Mon,  4 Sep 2023 15:30:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDE02B80E4F
-        for <linux-integrity@vger.kernel.org>; Mon,  4 Sep 2023 21:52:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8DDBC433C8;
-        Mon,  4 Sep 2023 21:52:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81062B80FCD;
+        Mon,  4 Sep 2023 22:30:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBFC4C433C8;
+        Mon,  4 Sep 2023 22:30:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693864328;
-        bh=tPzaMPYHGpz3yJX6A5YPoCiVV8Une6sibdwbdjNl2Lw=;
+        s=k20201202; t=1693866624;
+        bh=4yC+fr9M6gL7Ie5aoZuEBSSXO6paZy7H9zg904FBupw=;
         h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=oh4LoCjuFyyRiXRvmvnH61kXUwWBHHIP9As4QM5iZnCQlWOPx2kV7I7X211ogtbGv
-         MW/wql9QasrhRTy+LZQlKnTDl6/sk/49KThxfy90uAt6mWB0Kjv5XNhJtUT03Ju2dA
-         VbrGwc65ra0HC1dglgvUF0yvDhebt3diOHuy6XJ5rgwuO+R+jHOBG9+yv7vQ6z52CO
-         nq9XuBma3ETdOBMVyeKuz/GuLd9F8uy7kfr1MwYwz4wA9focuIFeG8tc91h8jaV7Id
-         iag40L5Xgu2SLMaXMgxsOafmnh1ZfLBboVNJGnDgya9R5hQamFSJXD1Lmd5hHPBKeU
-         7EXl5jJvf1V7Q==
+        b=XI0MOhb1pLSO57S+QzOYUb5lP5qOacgRK1ParNBcVdwNwQKOefXNwQuVdr59DRxcN
+         t3YnjF3RI1+TmhwPcQxvwNoTJJn96znE/Mwxprej4CJsZlMPTTviMVE/ecn3RHdU++
+         1yj/Vowz8S+OYuRsJkvWVUFhWGtCe/pnhuJbEn48Fip4mnmOqRoD8+C03LJGuVK5OQ
+         hrfw/8dTJBrkmddgQ1+9uHh3F8i+XzPBtxSmTTaQ+kt1J5s1UxUr16but5gJLV6Jyg
+         DhByop6lVP3S/UCZlo/MHM+wo6CYKXmR5odgZTmWfTgqD+QIkwNJI7IB/HI7o/xHR7
+         xHWvrIJnyo1vQ==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 05 Sep 2023 00:52:05 +0300
-Message-Id: <CVAGSGSJ0NC2.1OQUGKH4ZR0ZB@suppilovahvero>
-Cc:     "Jonathan Corbet" <corbet@lwn.net>
-Subject: Re: Linux IMA documentation
+Date:   Tue, 05 Sep 2023 01:30:20 +0300
+Message-Id: <CVAHLR1F623E.UTKKMHXN3GC2@suppilovahvero>
+Cc:     "Mario Limonciello" <mario.limonciello@amd.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <len.brown@intel.com>, <charles.d.prestopine@intel.com>,
+        <rafael.j.wysocki@intel.com>
+Subject: Re: REGRESSION WITH BISECT: v6.5-rc6 TPM patch breaks S3 on some
+ Intel systems
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Ken Goldman" <kgold@linux.ibm.com>,
-        "Linux Integrity" <linux-integrity@vger.kernel.org>
+To:     "Tyler Stachecki" <stachecki.tyler@gmail.com>,
+        "Todd Brandt" <todd.e.brandt@linux.intel.com>
 X-Mailer: aerc 0.14.0
-References: <a5ed5a0f-5692-426e-d058-983cf4d9cccb@linux.ibm.com>
- <CUUY4NO1I9DA.1S0KWKJVHQ8K5@seitikki>
- <6ea76738-f587-087d-60ea-ed03adedab62@linux.ibm.com>
-In-Reply-To: <6ea76738-f587-087d-60ea-ed03adedab62@linux.ibm.com>
+References: <5a344d1ffa66fac828feb3d1c6abce010da94609.camel@linux.intel.com>
+ <CUV6EA5WZ2O5.5G3IV9BQITOG@suppilovahvero>
+ <bd4890a3-419c-463d-88fe-905946122c9f@amd.com>
+ <CUVTY0NCB0N6.VPFM83M83ZUR@suppilovahvero>
+ <92b93b79-14b9-46fe-9d4f-f44ab75fd229@amd.com>
+ <CUVV2MQRCGET.2U22LFQPX1J3G@suppilovahvero>
+ <64f62f2f-91ef-4707-b1bb-19ce5e81f719@amd.com>
+ <CUVVDC2QGWV6.HGLDFFEGMGGU@suppilovahvero>
+ <eec91766-10a9-4d50-8e82-376f52f54be8@amd.com>
+ <9f3b82466e36aef3591d03176c04663c89625d4a.camel@linux.intel.com>
+ <ZPKiKrfVswqhrryZ@luigi.stachecki.net>
+In-Reply-To: <ZPKiKrfVswqhrryZ@luigi.stachecki.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -58,23 +70,47 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Sep 1, 2023 at 12:46 AM EEST, Ken Goldman wrote:
-> Thank you.
+On Sat Sep 2, 2023 at 5:47 AM EEST, Tyler Stachecki wrote:
+> On Fri, Aug 18, 2023 at 02:39:58PM -0700, Todd Brandt wrote:
+> > > > > > > > > > > > > While testing S3 on 6.5.0-rc6 we've found that 5
+> > > > > > > > > > > > > systems are seeing
+> > > > > > > > > > > > > a
+> > > > > > > > > > > > > crash and reboot situation when S3 suspend is
+> > > > > > > > > > > > > initiated. To
+> > > > > > > > > > > > > reproduce
+> > > > > > > > > > > > > it, this call is all that's required "sudo
+> > > > > > > > > > > > > sleepgraph -m mem
+> > > > > > > > > > > > > -rtcwake
+> > > > > > > > > > > > > 15".
+> > > > > > > > > > > >=20
+> >=20
+> > I just ran 6.5.0-rc6 plus this patch on all 5 machines where the
+> > problem was detected and they work now. It looks good.
+> >=20
+> > Tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
 >
-> Do you know the process for getting this accepted into the kernel=20
-> documentation.
+> I just wanted to report that at least on an SBC running a J4105, this
+> prevented the kernel from booting *at all* ever since 6.1.46 was released=
+.
+>
+> The fix which drops the ret assignment above allows the SBC to successful=
+ly
+> boot a kernel again -- just mentioning for severity given that:
+>   1) It also impacts the 6.1 LTS kernel that distros are tracking
+>   2) In some cases, the kernel no longer boots anymore at all
+>
+> SBC this is seen on is a Seeed Studio ODYSSEY - X86J4105 for the curious.
+>
+> Tested-by: Tyler J Stachecki <stachecki.tyler@gmail.com>
 
-The bulk of the work would be to convert it ReStructured Text and
-follow the guidelines in https://docs.kernel.org/doc-guide/index.html
+Hi I submitted PR today:
 
-You should also CC the documentation patches to:
+https://lore.kernel.org/linux-integrity/20230904202512.29825-1-jarkko@kerne=
+l.org/T/#u
 
-* Jonathan Corbet <corbet@lwn.net> (maintainer of the documentation)
-* linux-doc@vger.kernel.org
-=20
-Perhaps Mimi could help out formalizing this together so I suggest to
-work with her. I'm also happy to review the documentation once the
-patches are out.
+I hope this ends the story but please if does not.
+
+Unfortunately I missed this tested-by b4 sending the PR (sorry
+about that).
 
 BR, Jarkko
-
