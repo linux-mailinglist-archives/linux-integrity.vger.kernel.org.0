@@ -2,310 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D584E792954
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Sep 2023 18:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D0C79295A
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Sep 2023 18:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351632AbjIEQ0K (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 5 Sep 2023 12:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
+        id S1351722AbjIEQ0O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 5 Sep 2023 12:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354369AbjIELFM (ORCPT
+        with ESMTP id S1354499AbjIEMBg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 5 Sep 2023 07:05:12 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90407132
-        for <linux-integrity@vger.kernel.org>; Tue,  5 Sep 2023 04:05:08 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-44d60bb6aa5so1023712137.2
-        for <linux-integrity@vger.kernel.org>; Tue, 05 Sep 2023 04:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693911907; x=1694516707; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AjdfAUMQt11lOtOZhXgZtyQBLOJqMLXTb8Y4HhqzChQ=;
-        b=lcFsCct2iHd6Yqum5uTTqukHzbH+rplnx0vqFnNYDQUSw5WAULSLXIKHAmwgZhk7RB
-         /XV9P30gFTv8X4e+Ljbmu2dyqaW/s9p7+eKMSiNGErKioeN56aB2rbL5XdLw1Su9Vtgu
-         X7sYtda4TPlZO+fOFnNw3u4EaK43fp4J6YkgwdwSFE97vtNvy+sCHGuiAGC4FzeKCuzY
-         lHtQK8+XTb9ZtMuRdy/BrTKOSWapld2F/ArHF8qRtj1v4iLZsotKPXdeV9Z4JteFR5DW
-         iItPz8ZLoSDkun98u/XPwg3zDFyFSP/Q4mFvEIpI3YYopbTL52EC4jsbFAEaRGaszeO0
-         YLhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693911907; x=1694516707;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AjdfAUMQt11lOtOZhXgZtyQBLOJqMLXTb8Y4HhqzChQ=;
-        b=D6y1CCovugUqudB+GGwE4ek2XaDFmKw8qQlQohOnvKzW2GypJn4zjx9kVSqFmQp6NU
-         xULht0mk0Imn7PbCfqyGPRf2wIQ55lYwAf1iQnHqxFvFmdrR0iTHDUqv7EOfGoO1Qysw
-         sXCmcJc0K2Z4F3X2nn44lT/xw4dm6hhnYH08qX9LZQj20xbbYY2NZTSPha4iBwqp9BTo
-         x2qi5VZX1eXtPIP7zZkNDJePBSu7E2ecWlfUv7E1FxjfMI5NqcoPJchXh4xbGV549d/Q
-         sSxk4Y4TR/mJ0qn0buQ/NAezfBRAjY8aPCu5pAEEDMuNnxs0I28BcRBqqulKsBxjaRip
-         WAOw==
-X-Gm-Message-State: AOJu0YwVPolvwT0b94pW9gyplurTgfwKci2Hnqh5Jr+owvzM7c13hosy
-        4hEwJ3kDbgs+DGWlBqzgD8idOd5d6aQ2FbRbq5mdJg==
-X-Google-Smtp-Source: AGHT+IE7fBNntLQi1M21QzJ8SZhchLaav2pstQ/dADdPA6JsBb22kj31acXgw3V2iy63h6j6WUTXLA4nVMn1nuZCk5c=
-X-Received: by 2002:a67:f3ce:0:b0:44d:4385:1627 with SMTP id
- j14-20020a67f3ce000000b0044d43851627mr11184867vsn.14.1693911907511; Tue, 05
- Sep 2023 04:05:07 -0700 (PDT)
+        Tue, 5 Sep 2023 08:01:36 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A0D1AB;
+        Tue,  5 Sep 2023 05:01:33 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qdUkM-0004Lb-5r; Tue, 05 Sep 2023 14:01:30 +0200
+Message-ID: <8dc067e5-d81f-4c5b-be76-bf0c1227b71e@leemhuis.info>
+Date:   Tue, 5 Sep 2023 14:01:27 +0200
 MIME-Version: 1.0
-References: <20230822112933.1550062-1-sumit.garg@linaro.org>
- <20230822125555.GA82256@rayden> <CAFA6WYPy=yxGg1HbT+ipWJFpxiJeUGK6BSgMhtRPd=zmKef-cw@mail.gmail.com>
- <CAHUa44G9jCeHcRq=AZeieaTPWN_tpOVKeJNY=777QAh-bw1QNg@mail.gmail.com>
- <CAFA6WYPY70iYCmQhzCkATGinqK_C1i4SEZzTdv4yDwntpGNzew@mail.gmail.com> <CAHUa44H5eG6N0M_aAiWsYJorWVt4pYEZPWXgOJHgXAYVmR=cww@mail.gmail.com>
-In-Reply-To: <CAHUa44H5eG6N0M_aAiWsYJorWVt4pYEZPWXgOJHgXAYVmR=cww@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 5 Sep 2023 16:34:56 +0530
-Message-ID: <CAFA6WYNAifDVZy-pLSTJWonGTJBECijsTFw4OQdqToW3u6Lj_Q@mail.gmail.com>
-Subject: Re: [PATCH] KEYS: trusted: tee: Refactor register SHM usage
-To:     jarkko@kernel.org
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, sudeep.holla@arm.com, achin.gupta@arm.com,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] tpm: Enable hwrng only for Pluton on AMD CPUs
+Content-Language: en-US, de-DE
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Jerry Snitselaar <jsnitsel@redhat.com>, stable@vger.kernel.org,
+        Todd Brandt <todd.e.brandt@intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+        Patrick Steinhardt <ps@pks.im>, Ronan Pigott <ronan@rjp.ie>,
+        Raymond Jay Golo <rjgolo@gmail.com>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        Dusty Mabe <dusty@dustymabe.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+References: <20230822231510.2263255-1-jarkko@kernel.org>
+ <705b9769-4132-450b-bd47-2423c419db2a@molgen.mpg.de>
+ <CV03X3OEI7RE.3NI1QJ6MBJSHA@suppilovahvero>
+ <1eeddbdc-c1f0-4499-b3d1-24c96f42a50b@amd.com>
+ <CV3J3TCMB74C.1WA96NQ9J593U@suppilovahvero>
+ <f6d75cac-2556-484e-8a2c-3531b24b1ca5@amd.com>
+ <fcf2f600-d1f0-de14-956b-4d4f3f0cb3fa@leemhuis.info>
+ <116dd56f-695f-4ecd-dace-805db83f5c3e@leemhuis.info>
+ <CVAHNI7PWVDL.W8194GZA0SMK@suppilovahvero>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CVAHNI7PWVDL.W8194GZA0SMK@suppilovahvero>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1693915293;db139137;
+X-HE-SMSGID: 1qdUkM-0004Lb-5r
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko,
+On 05.09.23 00:32, Jarkko Sakkinen wrote:
+> On Fri Sep 1, 2023 at 11:49 AM EEST, Thorsten Leemhuis wrote:
+>> On 29.08.23 10:38, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>> On 28.08.23 02:35, Mario Limonciello wrote:
+>>>> On 8/27/2023 13:12, Jarkko Sakkinen wrote:
+>>>>> On Wed Aug 23, 2023 at 9:58 PM EEST, Mario Limonciello wrote:
+>>>>>> On 8/23/2023 12:40, Jarkko Sakkinen wrote:
+>>>>>>> On Wed Aug 23, 2023 at 11:23 AM EEST, Paul Menzel wrote:
+>>>>>>>> Am 23.08.23 um 01:15 schrieb Jarkko Sakkinen:
+>>>>>>>>> The vendor check introduced by commit 554b841d4703 ("tpm: Disable
+>>>>>>>>> RNG for
+>>>>>>>>> all AMD fTPMs") doesn't work properly on a number of Intel fTPMs. 
+>>>>>>>>> On the
+>>>>>>>>> reported systems the TPM doesn't reply at bootup and returns back the
+>>>>>>>>> command code. This makes the TPM fail probe.
+> [...]
+>> Hmmm. Quite a bit progress to fix the issue was made in the first week
+>> after Todd's report; Jarkko apparently even applied the earlier patch
+>> from Mario to his master branch:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=b1a62d41bdc1d15b0641759717e8c3651f0a810c
+>> But since then (aka in the past week) there was not much progress.
 
-On Wed, 23 Aug 2023 at 19:58, Jens Wiklander <jens.wiklander@linaro.org> wr=
-ote:
->
-> On Wed, Aug 23, 2023 at 3:04=E2=80=AFPM Sumit Garg <sumit.garg@linaro.org=
-> wrote:
-> >
-> > On Wed, 23 Aug 2023 at 13:32, Jens Wiklander <jens.wiklander@linaro.org=
-> wrote:
-> > >
-> > > On Wed, Aug 23, 2023 at 8:55=E2=80=AFAM Sumit Garg <sumit.garg@linaro=
-.org> wrote:
-> > > >
-> > > > On Tue, 22 Aug 2023 at 18:25, Jens Wiklander <jens.wiklander@linaro=
-.org> wrote:
-> > > > >
-> > > > > On Tue, Aug 22, 2023 at 04:59:33PM +0530, Sumit Garg wrote:
-> > > > > > The OP-TEE driver using the old SMC based ABI permits overlappi=
-ng shared
-> > > > > > buffers, but with the new FF-A based ABI each physical page may=
- only
-> > > > > > be registered once.
-> > > > > >
-> > > > > > As the key and blob buffer are allocated adjancently, there is =
-no need
-> > > > > > for redundant register shared memory invocation. Also, it is in=
-compatibile
-> > > > > > with FF-A based ABI limitation. So refactor register shared mem=
-ory
-> > > > > > implementation to use only single invocation to register both k=
-ey and blob
-> > > > > > buffers.
-> > > > > >
-> > > > > > Fixes: 4615e5a34b95 ("optee: add FF-A support")
-> > > > > > Reported-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > > > > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> > > > > > ---
-> > > > > >  security/keys/trusted-keys/trusted_tee.c | 64 ++++++++--------=
---------
-> > > > > >  1 file changed, 20 insertions(+), 44 deletions(-)
-> > > > > >
-> > > > > > diff --git a/security/keys/trusted-keys/trusted_tee.c b/securit=
-y/keys/trusted-keys/trusted_tee.c
-> > > > > > index ac3e270ade69..aa3d477de6db 100644
-> > > > > > --- a/security/keys/trusted-keys/trusted_tee.c
-> > > > > > +++ b/security/keys/trusted-keys/trusted_tee.c
-> > > > > > @@ -65,24 +65,16 @@ static int trusted_tee_seal(struct trusted_=
-key_payload *p, char *datablob)
-> > > > > >       int ret;
-> > > > > >       struct tee_ioctl_invoke_arg inv_arg;
-> > > > > >       struct tee_param param[4];
-> > > > > > -     struct tee_shm *reg_shm_in =3D NULL, *reg_shm_out =3D NUL=
-L;
-> > > > > > +     struct tee_shm *reg_shm =3D NULL;
-> > > > > >
-> > > > > >       memset(&inv_arg, 0, sizeof(inv_arg));
-> > > > > >       memset(&param, 0, sizeof(param));
-> > > > > >
-> > > > > > -     reg_shm_in =3D tee_shm_register_kernel_buf(pvt_data.ctx, =
-p->key,
-> > > > > > -                                              p->key_len);
-> > > > > > -     if (IS_ERR(reg_shm_in)) {
-> > > > > > -             dev_err(pvt_data.dev, "key shm register failed\n"=
-);
-> > > > > > -             return PTR_ERR(reg_shm_in);
-> > > > > > -     }
-> > > > > > -
-> > > > > > -     reg_shm_out =3D tee_shm_register_kernel_buf(pvt_data.ctx,=
- p->blob,
-> > > > > > -                                               sizeof(p->blob)=
-);
-> > > > > > -     if (IS_ERR(reg_shm_out)) {
-> > > > > > -             dev_err(pvt_data.dev, "blob shm register failed\n=
-");
-> > > > > > -             ret =3D PTR_ERR(reg_shm_out);
-> > > > > > -             goto out;
-> > > > > > +     reg_shm =3D tee_shm_register_kernel_buf(pvt_data.ctx, p->=
-key,
-> > > > > > +                                           sizeof(p->key) + si=
-zeof(p->blob));
-> > > > >
-> > > > > This is somewhat fragile. What if struct trusted_key_payload has =
-a small
-> > > > > unexpected change in layout?
-> > > >
-> > > > key and blob buffers are just two adjacent fixed sized byte arrays.=
- So
-> > > > I am not worried here as long as they stay adjacent (which has been
-> > > > the case since trusted keys were introduced in the kernel).
-> > >
-> > > Yeah, that was my point, but fine if you don't believe it's an issue.
-> > >
-> >
-> > Does it resolve the issue with FFA ABI for you? It would be good to
-> > have your Tested-by tag.
->
-> It does:
-> Tested-by: Jens Wiklander <jens.wiklander@linaro.org>
-> Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
->
+Jarkko, many thx for picking this up and submitting it to Linus, much
+appreciated. Sorry again for prodding things, but I felt I had to. Hope
+you didn't mind too much.
 
-Can you help pick up this fix for v6.6 kernel release?
+> Could it be possible to extend the actual kernel documentation
+> to give at least some guidelines how a maintainer should deal
+> with the bugzilla?
 
--Sumit
+I guess it's best if that is done by somebody that cares about bugzilla
+(I don't fall into that group[1]) and knows the official status.
 
-> Thanks,
-> Jens
->
-> >
-> > -Sumit
-> >
-> > > Thanks,
-> > > Jens
-> > >
-> > > >
-> > > > -Sumit
-> > > >
-> > > > >
-> > > > > Thanks,
-> > > > > Jens
-> > > > >
-> > > > > > +     if (IS_ERR(reg_shm)) {
-> > > > > > +             dev_err(pvt_data.dev, "shm register failed\n");
-> > > > > > +             return PTR_ERR(reg_shm);
-> > > > > >       }
-> > > > > >
-> > > > > >       inv_arg.func =3D TA_CMD_SEAL;
-> > > > > > @@ -90,13 +82,13 @@ static int trusted_tee_seal(struct trusted_=
-key_payload *p, char *datablob)
-> > > > > >       inv_arg.num_params =3D 4;
-> > > > > >
-> > > > > >       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
-> > > > > > -     param[0].u.memref.shm =3D reg_shm_in;
-> > > > > > +     param[0].u.memref.shm =3D reg_shm;
-> > > > > >       param[0].u.memref.size =3D p->key_len;
-> > > > > >       param[0].u.memref.shm_offs =3D 0;
-> > > > > >       param[1].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT=
-;
-> > > > > > -     param[1].u.memref.shm =3D reg_shm_out;
-> > > > > > +     param[1].u.memref.shm =3D reg_shm;
-> > > > > >       param[1].u.memref.size =3D sizeof(p->blob);
-> > > > > > -     param[1].u.memref.shm_offs =3D 0;
-> > > > > > +     param[1].u.memref.shm_offs =3D sizeof(p->key);
-> > > > > >
-> > > > > >       ret =3D tee_client_invoke_func(pvt_data.ctx, &inv_arg, pa=
-ram);
-> > > > > >       if ((ret < 0) || (inv_arg.ret !=3D 0)) {
-> > > > > > @@ -107,11 +99,7 @@ static int trusted_tee_seal(struct trusted_=
-key_payload *p, char *datablob)
-> > > > > >               p->blob_len =3D param[1].u.memref.size;
-> > > > > >       }
-> > > > > >
-> > > > > > -out:
-> > > > > > -     if (reg_shm_out)
-> > > > > > -             tee_shm_free(reg_shm_out);
-> > > > > > -     if (reg_shm_in)
-> > > > > > -             tee_shm_free(reg_shm_in);
-> > > > > > +     tee_shm_free(reg_shm);
-> > > > > >
-> > > > > >       return ret;
-> > > > > >  }
-> > > > > > @@ -124,24 +112,16 @@ static int trusted_tee_unseal(struct trus=
-ted_key_payload *p, char *datablob)
-> > > > > >       int ret;
-> > > > > >       struct tee_ioctl_invoke_arg inv_arg;
-> > > > > >       struct tee_param param[4];
-> > > > > > -     struct tee_shm *reg_shm_in =3D NULL, *reg_shm_out =3D NUL=
-L;
-> > > > > > +     struct tee_shm *reg_shm =3D NULL;
-> > > > > >
-> > > > > >       memset(&inv_arg, 0, sizeof(inv_arg));
-> > > > > >       memset(&param, 0, sizeof(param));
-> > > > > >
-> > > > > > -     reg_shm_in =3D tee_shm_register_kernel_buf(pvt_data.ctx, =
-p->blob,
-> > > > > > -                                              p->blob_len);
-> > > > > > -     if (IS_ERR(reg_shm_in)) {
-> > > > > > -             dev_err(pvt_data.dev, "blob shm register failed\n=
-");
-> > > > > > -             return PTR_ERR(reg_shm_in);
-> > > > > > -     }
-> > > > > > -
-> > > > > > -     reg_shm_out =3D tee_shm_register_kernel_buf(pvt_data.ctx,=
- p->key,
-> > > > > > -                                               sizeof(p->key))=
-;
-> > > > > > -     if (IS_ERR(reg_shm_out)) {
-> > > > > > -             dev_err(pvt_data.dev, "key shm register failed\n"=
-);
-> > > > > > -             ret =3D PTR_ERR(reg_shm_out);
-> > > > > > -             goto out;
-> > > > > > +     reg_shm =3D tee_shm_register_kernel_buf(pvt_data.ctx, p->=
-key,
-> > > > > > +                                           sizeof(p->key) + si=
-zeof(p->blob));
-> > > > > > +     if (IS_ERR(reg_shm)) {
-> > > > > > +             dev_err(pvt_data.dev, "shm register failed\n");
-> > > > > > +             return PTR_ERR(reg_shm);
-> > > > > >       }
-> > > > > >
-> > > > > >       inv_arg.func =3D TA_CMD_UNSEAL;
-> > > > > > @@ -149,11 +129,11 @@ static int trusted_tee_unseal(struct trus=
-ted_key_payload *p, char *datablob)
-> > > > > >       inv_arg.num_params =3D 4;
-> > > > > >
-> > > > > >       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
-> > > > > > -     param[0].u.memref.shm =3D reg_shm_in;
-> > > > > > +     param[0].u.memref.shm =3D reg_shm;
-> > > > > >       param[0].u.memref.size =3D p->blob_len;
-> > > > > > -     param[0].u.memref.shm_offs =3D 0;
-> > > > > > +     param[0].u.memref.shm_offs =3D sizeof(p->key);
-> > > > > >       param[1].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT=
-;
-> > > > > > -     param[1].u.memref.shm =3D reg_shm_out;
-> > > > > > +     param[1].u.memref.shm =3D reg_shm;
-> > > > > >       param[1].u.memref.size =3D sizeof(p->key);
-> > > > > >       param[1].u.memref.shm_offs =3D 0;
-> > > > > >
-> > > > > > @@ -166,11 +146,7 @@ static int trusted_tee_unseal(struct trust=
-ed_key_payload *p, char *datablob)
-> > > > > >               p->key_len =3D param[1].u.memref.size;
-> > > > > >       }
-> > > > > >
-> > > > > > -out:
-> > > > > > -     if (reg_shm_out)
-> > > > > > -             tee_shm_free(reg_shm_out);
-> > > > > > -     if (reg_shm_in)
-> > > > > > -             tee_shm_free(reg_shm_in);
-> > > > > > +     tee_shm_free(reg_shm);
-> > > > > >
-> > > > > >       return ret;
-> > > > > >  }
-> > > > > > --
-> > > > > > 2.34.1
-> > > > > >
+But FWIW, I wonder what you actually want to see documented. From
+https://lore.kernel.org/all/CVAC8VQPD3PK.1CBS5QTWDSS2C@suppilovahvero/
+it sounds like you had trouble with Link:/Closes: tag and Reported-by.
+From what I can see I don't think bugzilla.kernel.org needs special
+documentation in that area:
+
+ * just use Link:/Closes: to reports to public reports that might be
+helpful later in case somebody wants to look at the backstory of a
+commit, wherever those reports may be (lore, bugzilla.kernel.org,
+https://gitlab.freedesktop.org/drm/intel/-/issues,
+https://github.com/thesofproject/linux/issues, ...)
+
+ * use Reported-by: to give credit to anyone that deserves it, as it is
+a nice way to say thx while motivate people to help again in the future.
+That usually will include the initial reporter, but might also include
+people that replied to a report from somebody else and helped
+perceptible with debugging or fixing.
+
+Ciao, Thorsten
+
+[1] I only sometimes help people that report regressions to
+bugzilla.kernel.org that otherwise would likely would fall through the
+cracks (among others because many reports are never forwarded to the
+proper developers otherwise).
