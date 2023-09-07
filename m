@@ -2,88 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBEB797925
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Sep 2023 19:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A31797983
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Sep 2023 19:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238432AbjIGRD1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Sep 2023 13:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S242127AbjIGRQK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Sep 2023 13:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238554AbjIGRD0 (ORCPT
+        with ESMTP id S242144AbjIGRQK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Sep 2023 13:03:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659081FDC;
-        Thu,  7 Sep 2023 10:03:01 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 341692187B;
-        Thu,  7 Sep 2023 16:52:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1694105555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=4CViMOoPfZYMVVg2g3Ck1Pi4dtsEvBr/cA2U0br7Okw=;
-        b=sMXGtweBd2VGVFV79kut/M/2QvpaNuiPG4LQTCcw+Up4FXGCKAIPGFNOAR3gTtGiq3CaPO
-        vkT7XE1clY+iHXBJp+y+iLRcqNWtBvZV1U3XqrsqHc9YmysioXbYmu9IfxKz+eQdexgKar
-        yDuVkkn9V7TGlwTfvV3ZO3QUqFuDw4s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1694105555;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=4CViMOoPfZYMVVg2g3Ck1Pi4dtsEvBr/cA2U0br7Okw=;
-        b=mLX722n7X0xx4fuUvOt2l+0W3MoZ07NaOgu6Aexy3o7jiuiXj0vrbnzw5eKkDwkz/6KGLx
-        qcRFE2vc0FbVq5Dg==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        by relay2.suse.de (Postfix) with ESMTP id 7645C2C142;
-        Thu,  7 Sep 2023 16:52:34 +0000 (UTC)
-From:   Michal Suchanek <msuchanek@suse.de>
-To:     linux-integrity@vger.kernel.org
-Cc:     Michal Suchanek <msuchanek@suse.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
+        Thu, 7 Sep 2023 13:16:10 -0400
+Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D5694;
+        Thu,  7 Sep 2023 10:15:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1694106890;
+        bh=pgA+I/1UethBA3kTPM9wHgQdSRMpsBbEzyngE18JA8E=;
+        h=From:To:Cc:Subject:Date;
+        b=LBSt+mnZ8f++wfmzxHfkk+dD+BEVDr4oYqB6OUTqXBD/rv1eP8nlVRWFE9cKkOp24
+         Gdkej132D2SLAEjvZwREtm//QNk/6VMC/Wb0dgU33+eeOJYiSkurvH7gczLvaoZvPT
+         RLn0BAzWPNoIn56LVh60WbvtNux4j+TjrHCskA/I=
+Received: from localhost.localdomain.localdomain ([117.61.105.88])
+        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
+        id D722ECB4; Fri, 08 Sep 2023 00:53:50 +0800
+X-QQ-mid: xmsmtpt1694105630ti09a7drb
+Message-ID: <tencent_3373B90C5A9E646DDCF91C0D8CAD2184BC0A@qq.com>
+X-QQ-XMAILINFO: MBjwNRQMz5zUjCcz/6jhtF96ZPHh72CPUDwiLARk8gXh0pPNgvMiPCwmZKKMYd
+         eFuaCPEelFaBcCCA3CZzhdwuGJw/5vsHTl1t0QFq1S7YCRIJSGf/PGcNygBTIhPI6mOL+Vvj2VMl
+         Qj60MEdcQ9q0hK1pCtMbA5no+bdEPpmrNrygpdysatUHc2SBWHuoa5f2hq5C4wp+VIEGjTxWqCnD
+         SNFL5qjvPRYTVsH/r52P1mFeM4VyuAvSMHp3UCEOuY2VQp11VLZ5VZqaAQiM/uvXpBP6e1On540f
+         Goep+edpLiHyOG3CseXy2dsqsFmO59YQJ/CQiNcsmebme7/ONYaQ5g8A9F2vx4+S3DDfTQcP7dDP
+         CZB1DXdZdnSuMalfKF1LPoipnVUcqD1/0s+UkTZn/UvoEd1dFn6oDF7Anl1mx0Fyt2a/8ZNMqz4h
+         g2IfO0+MCIUAzvofsAsaYjb4igROkU+Krg6F71UiTqHQWM1KSo+2Vdp8SB96wjywNKmJPS3YP1it
+         ajbgHG6ORMpYjUvp0V+TX5JsepCRyPp3P+sI8cUsKSFsvS155LM07FWa50zn6tTvMLN+NWktWRVT
+         ZhJNUXz5TGKVY9cbLptn2CE56x7I1Pt4infc792+yXBumC4i00ynudvCol3WXAHTBbC6QGB3hb4I
+         rL1Hb9Kbque8/gYBCxX37cWjF/E3zhHDGjMrVvaf618VPlZ4srI8PJMO/yAW72H28KiD/ZcjU2CW
+         W0azm17BeyDgWLMgANQgXPT1T/wON5T0Oja+2ls7T0e+nCbWAGsH+gSxDkCeA8rz6rL3TpXFqSye
+         thdUx1arY77fr3CC9KL2h4wf2lYjIB6MiI1zHSUJuiFl6gbpdDL0MmqJ9YvYrxjrBmw5x55xfNFa
+         AAAJk7iS7p4U4qyB+PI0Gm3cYW2QVElvDYrFbByEdf3v71WjaS42MujLEnKizO2akuiwhnqXqVoE
+         jclVRj2DrylAF74pNde1PTlIs5R3HssAgu/W/RS+PBda6LyrygH0drDuMzIacot8kLFFRl4zZiIj
+         imCDRtt0M/LCV3loTA6it8PGRA95tm4kcSV5rFMA==
+X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
+From:   Yan Zhu <zhuyan2015@foxmail.com>
+To:     zohar@linux.ibm.com
+Cc:     dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joeyli <jlee@suse.com>
-Subject: [PATCH] integrity: powerpc: Do not select CA_MACHINE_KEYRING
-Date:   Thu,  7 Sep 2023 18:52:19 +0200
-Message-ID: <20230907165224.32256-1-msuchanek@suse.de>
-X-Mailer: git-send-email 2.41.0
+        linux-kernel@vger.kernel.org, Yan Zhu <zhuyan2015@foxmail.com>
+Subject: [PATCH] ima: fix return value of ima_restore_measurement_list
+Date:   Fri,  8 Sep 2023 00:53:49 +0800
+X-OQ-MSGID: <20230907165349.8770-1-zhuyan2015@foxmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-No other platform needs CA_MACHINE_KEYRING, either.
+When the function restore_template_fmt returns NULL due to insufficient
+memory, the ima_restore_measurement_list function will exit and the IMA
+measurement list recovery fails. However, since the return value of
+ima_restore_measurement_list is 0, there will be no prompt for IMA
+measurement list recovery failure in ima_load_kexec_buffer, which can
+easily cause misunderstandings for users.
 
-This is policy that should be decided by the administrator, not Kconfig
-dependencies.
-
-cc: joeyli <jlee@suse.com>
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+Signed-off-by: Yan Zhu <zhuyan2015@foxmail.com>
 ---
- security/integrity/Kconfig | 2 --
- 1 file changed, 2 deletions(-)
+ security/integrity/ima/ima_template.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-index 232191ee09e3..b6e074ac0227 100644
---- a/security/integrity/Kconfig
-+++ b/security/integrity/Kconfig
-@@ -68,8 +68,6 @@ config INTEGRITY_MACHINE_KEYRING
- 	depends on INTEGRITY_ASYMMETRIC_KEYS
- 	depends on SYSTEM_BLACKLIST_KEYRING
- 	depends on LOAD_UEFI_KEYS || LOAD_PPC_KEYS
--	select INTEGRITY_CA_MACHINE_KEYRING if LOAD_PPC_KEYS
--	select INTEGRITY_CA_MACHINE_KEYRING_MAX if LOAD_PPC_KEYS
- 	help
- 	 If set, provide a keyring to which Machine Owner Keys (MOK) may
- 	 be added. This keyring shall contain just MOK keys.  Unlike keys
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index 04c49f0..1b030cd 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -489,8 +489,10 @@ int ima_restore_measurement_list(loff_t size, void *buf)
+ 		template_desc = lookup_template_desc(template_name);
+ 		if (!template_desc) {
+ 			template_desc = restore_template_fmt(template_name);
+-			if (!template_desc)
++			if (!template_desc) {
++				ret = -ENOMEM;
+ 				break;
++			}
+ 		}
+ 
+ 		/*
 -- 
-2.41.0
+2.33.0
 
