@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1579797D7A
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Sep 2023 22:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804FC797DB0
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Sep 2023 23:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239260AbjIGUke (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Sep 2023 16:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
+        id S240939AbjIGVDS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Sep 2023 17:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbjIGUke (ORCPT
+        with ESMTP id S240015AbjIGVDL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Sep 2023 16:40:34 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698391BCA
-        for <linux-integrity@vger.kernel.org>; Thu,  7 Sep 2023 13:40:29 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-58e6c05f529so13955337b3.3
-        for <linux-integrity@vger.kernel.org>; Thu, 07 Sep 2023 13:40:29 -0700 (PDT)
+        Thu, 7 Sep 2023 17:03:11 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D039B1990
+        for <linux-integrity@vger.kernel.org>; Thu,  7 Sep 2023 14:03:06 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-590685a3be5so13777917b3.0
+        for <linux-integrity@vger.kernel.org>; Thu, 07 Sep 2023 14:03:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1694119227; x=1694724027; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1694120586; x=1694725386; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=19mrjjoxcwe4/BUgYp85zEpI/cd8uYB/AjYV4M2OpCk=;
-        b=YmACAPOqiIhSXtIRnk6daTl+Z3aJvO0G814ckX18lFnNdjjZVs1TyUbQPgR+oRoxTm
-         vypmPALn7zw2g46ghPMC761m0VjNTiJCHLS3O7OBqYnS45e9mnc8JTMLBgmUniPjvT/E
-         F15atnfGkmx+/bsHbkGJA/7+jfr56nquN0Ombp3uFxKA7eK3oLCxRNzgsGEZgh1EDZVl
-         e5i8ya8XL4jnHGVdY8ZxZSeXKHOvP2/xWJMAVjg3GBYuDBqiHDlIvGW8Qu2U6p6gqyp3
-         /vpJur6vyPhupGQPbhZpzaxhR2/jgHjIRm5n3Qfo9uPcSiyjNiporLXc8yjj1ha/m+P3
-         CoJw==
+        bh=FRdHQjf/tBzCy2IXz17HvVEnZ9t7E6rFEF3hyTH/5WQ=;
+        b=c8G9NXT5q1Ibnajb3cC6Gh4AACXW+peEb53X6Az6mzaAWmTnGIrDYpopsN0GkpoCVq
+         RY9btymGMjORQGWJvLGnE+4cPAonnx+KPCSKoLvrkpdQ/7pSUmtNgLobLFrqqP9zAEuo
+         HEUbDy9W3Re0Il+7Ad6/dR7VJs7aesQWQ0+JPsDsQCKeEnJnAS5cxMX0o3wTCtqU4OPK
+         qC4DQleTK4ShLoySfrUrlZUu9THcSF0533UJeFi9oktweqtfh72o+pkH3y2YP4fneXEi
+         s9oHDYQGGgiyV0zmp+5sbW+XbbHmTyLt1NHf+cf1keqa1sjdsP/C/9laoyivFwLAqmj4
+         bwxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694119227; x=1694724027;
+        d=1e100.net; s=20230601; t=1694120586; x=1694725386;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=19mrjjoxcwe4/BUgYp85zEpI/cd8uYB/AjYV4M2OpCk=;
-        b=PsgPumWl2GQkwjtYXxFYvAAIMq9GeUZw02T93JAW5U2TBfgPVvU5tJTx+jZRSncMyR
-         6FKnFrBYepHffV1u0zISSlpz8tNF0xR2KCV6IO45rFHrP3gK8se2MUloN2y+tyoOi9Au
-         xsXD91yW7+iFwPtJZURYWx+Ww77WIfhCr/n07gy3fQsrGRJQ3l35I/73uWWJBH6U6vrx
-         AUELDdIaOFWmTyoAnrI4hf1kXLYYxiXX8cK6s5eW71vmA7K/d/Ej+MkvdZH5lh62bXDA
-         zlWCE5oZarabjeX7W0WBLO/jh+8GZmExbtNdHeZlESpEQmcQxT44BNsJfDGgb2qK8iDP
-         4WNw==
-X-Gm-Message-State: AOJu0YxrTzCEM1uG0L16uzyrQTeW3N6QggtNKvEnPYDcsUoQ8lWo+xHO
-        KcKW2XsF3fn6Dlei+Cj+qIhxGDBdSbw0eHlaetKC
-X-Google-Smtp-Source: AGHT+IHwQv9AehS0KpaqBcHRMN5DynaFfcJvsCrwHhe2Bq+Il/WaOenPnY+AGB1mwVw6G5udIdrzbR8b6ETZoEVANjo=
-X-Received: by 2002:a0d:db81:0:b0:594:fd81:c3bf with SMTP id
- d123-20020a0ddb81000000b00594fd81c3bfmr709829ywe.1.1694119227671; Thu, 07 Sep
- 2023 13:40:27 -0700 (PDT)
+        bh=FRdHQjf/tBzCy2IXz17HvVEnZ9t7E6rFEF3hyTH/5WQ=;
+        b=vM7q3BubNxV0g+FD4RHVG1TXhjUfUUptiyjXDk9clIriN8Lbve22s/5z6siN5Hxgc0
+         WRTCTQklzZMvHkNc6UDsSb9JcWFQcSltfQWw5HKNJOFHf8Q5rHoVdsYxD2INq4aCHel+
+         qCxAMz5hxYA+tzZ8aXwHiRm7Kv8yr+cYUbQB1MRz+e1cd2nVxnNYjsFokVnb3qAtMz6P
+         QqSOZ25Hhx8ZsYqR6Lbfu+NefvueXjhS36YP/E7UoLmvM2una5mA1hARf7MYNeGAVxMq
+         gvTjvhRCntysGqcD+AdfMbz3i94xJgr67O2/vm5pGTTBgYN0rlkug67CdKa5ZuMU0X0X
+         5f4w==
+X-Gm-Message-State: AOJu0Ywm6f73KEoWHOVFYSxysr5IobvgWRXiItziJJRLKp0VtwViPT7q
+        y3vWnML1eAzxkJmxjt/AFlRdfWk7xwURLBdZMWL6
+X-Google-Smtp-Source: AGHT+IFDlkfTBZK0+MbboueHp/g4qH419JvtP06vu4lxBO7TjlbsQsl0/5IZc213XschnCZHZNUEjURU0tqfy5ak1jc=
+X-Received: by 2002:a81:6d41:0:b0:595:80be:fc6b with SMTP id
+ i62-20020a816d41000000b0059580befc6bmr695657ywc.18.1694120586006; Thu, 07 Sep
+ 2023 14:03:06 -0700 (PDT)
 MIME-Version: 1.0
 References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
- <5c323243-e22e-dd61-f808-2875654936a6@linux.ibm.com> <5ce32966-c8c5-adc4-8b9e-f8300b266a61@linux.microsoft.com>
- <696e8be1-ad31-4ffd-711d-6fb5ce54fbd4@linux.ibm.com>
-In-Reply-To: <696e8be1-ad31-4ffd-711d-6fb5ce54fbd4@linux.ibm.com>
+ <598fdd62-f4c3-a6dc-ae22-8f5a9e18f570@linux.ibm.com> <c83e13f8-4b7d-9489-37cc-53936b24343c@linux.microsoft.com>
+ <0cfdad7c-8cb9-20d3-7986-c1d3d58a33db@linux.ibm.com>
+In-Reply-To: <0cfdad7c-8cb9-20d3-7986-c1d3d58a33db@linux.ibm.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 7 Sep 2023 16:40:16 -0400
-Message-ID: <CAHC9VhTsSKLwnSscgc=HXtBd9N2Ot+3FQCj5SyStFjVDVv-w6w@mail.gmail.com>
-Subject: Re: [RFC] IMA Log Snapshotting Design Proposal - network bandwidth
+Date:   Thu, 7 Sep 2023 17:02:55 -0400
+Message-ID: <CAHC9VhRG1SgNz2RFe8gEYxT=5RK6EutFuNt0YRtwA0bp6PsRog@mail.gmail.com>
+Subject: Re: [RFC] IMA Log Snapshotting Design Proposal - aggregate
 To:     Ken Goldman <kgold@linux.ibm.com>
 Cc:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
         Sush Shringarputale <sushring@linux.microsoft.com>,
@@ -75,50 +75,87 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 6, 2023 at 4:21=E2=80=AFPM Ken Goldman <kgold@linux.ibm.com> wr=
+On Wed, Sep 6, 2023 at 4:49=E2=80=AFPM Ken Goldman <kgold@linux.ibm.com> wr=
 ote:
-> On 9/1/2023 5:20 PM, Tushar Sugandhi wrote:
-> > On 8/30/23 11:06, Ken Goldman wrote:
+> On 9/1/2023 6:06 PM, Tushar Sugandhi wrote:
+> > On 8/30/23 11:12, Ken Goldman wrote:
 > >> On 8/1/2023 3:12 PM, Sush Shringarputale wrote:
-> >>> In addition, a large IMA log can add pressure on the network
-> >>> bandwidth when
-> >>> the attestation client sends it to remote-attestation-service.
+> >>> - A user-mode process will trigger the snapshot by opening a file in
+> >>> SysFS
+> >>>    say /sys/kernel/security/ima/snapshot (referred to as
+> >>> sysk_ima_snapshot_file
+> >>>    here onwards).
+> >>> - The Kernel will get the current TPM PCR values and PCR update
+> >>> counter [2]
+> >>>    and store them as template data in a new IMA event
+> >>> "snapshot_aggregate".
 > >>
-> >> I would not worry too much about network bandwidth.
-> > Our bandwidth concerns are about scaled out system.
-> >
-> > When IMA log size increases in the range of megabytes, and when the
-> > number of client devices increases, it makes an impact on the overall
-> > network bandwidth.
+> >> If this is relying on a user-mode process, is there a concern that the
+> >> process doesn't run. Might it be safer to have the kernel trigger the
+> >> snapshot.
+> >>
+> > The UM process here would be typically an attestation client
+> > which passes on the IMA log to the remote service for attestation.
+> > If the process doesn't run, the client will operate the same way as it
+> > does currently.
 >
-> It should not, because the client only sends new measurements.  It only
-> sends the entire list once per boot.
+> I see.
 >
-> Does a megabyte matter in a modern network? As for overall performance,
-> a megabyte may take 10 msec, while the TPM quote could take 1000 msec,
-> and verifier hash and asymmetric signature checks are also slower.
+> 1. Ensure that the attestation client stores the snapshot in a
+> well-known and widely readable location.  There can be more than one
+> attestation client, and all need access to the snapshot.
 
-I think there are two issues here: the first is the attestation
-methodology, the second is simply the size of the deployment.
+A few points:
 
-There is rarely just one answer to a question, and in the case of
-remote attestation I believe that holds true.  Sending some delta of
-measurements to a remote node performing attestation does reduce the
-amount of network traffic, but it does add an additional burden of
-state tracking to the attestation node.  Sending the full measurement
-log decreases this tracking burden, but it does result in more network
-traffic.  Arguably the "best" choice is likely going to be dependent
-on a number of complex factors including the size and complexity of
-the deployment.
+* There is no requirement for an admin or solution provider to support
+or otherwise use the IMA measurement log snapshotting functionality,
+even if enabled in the kernel it is opt-in at runtime (i.e. simply
+don't trigger the snapshot).  If the deployment in question is using
+an attestation solution which is not compatible with the snapshot
+concept then there is no need to perform a snapshot, the system will
+behave just as it would today; nothing gained, but nothing lost.
 
-However, the snapshotting work is not about managing network traffic,
-it is about mitigating an unbounded memory buffer that has been
-causing problems in at least one real world deployment.  The IMA
-measurement log snapshot is designed to allow an admin, or some other
-privileged entity, to checkpoint the log and trim the old entries in
-such a way as to preserve the ability to perform a meaningful
-attestation without having to maintain the entire measurement log in a
-memory buffer.
+* One of the benefits of initiating the snapshot in userspace is that
+it affords solution providers a tremendous amount of flexibility with
+respect to how to manage the IMA measurement log.  Not only can
+different, and potentially more complex, logic be used to determine
+the appropriate time to trigger the snapshot, but the trimmed/old log
+can be processed any way the admin sees fit; writing and supporting
+userspace code is many orders of magnitude easier than kernel code.
+
+> There is a privacy concern around making the snapshot world-read.
+
+See the above points.  If security requirements can not be satisfied
+by any of the various solutions designed to protect the integrity of
+system configuration and log data, the snapshotting functionality can
+always be blocked at runtime by another collection of access control
+solutions.
+
+> 2. Is there a concern that, if the client doesn't run, it doesn't solve
+> the kernel memory issue?
+
+Yes, the design relies on a userspace process to initiate, and
+complete the snapshotting process.  The good news is that if the
+userspace process fails the system is no worse off than it is today,
+but modern init-systems, e.g. systemd, should help ensure the
+reliability of the userspace snapshot process/daemon.
+
+> Is this relying on a UM process to solve a  kernel issue?
+
+The ultimate problem is that we have an unbounded memory buffer that
+we can't enforce limits on in the traditional sense.  The design here
+proposes a checkpoint system which allows us to mitigate the
+uncontrolled growth of this buffer while preserving the ability to
+remotely attest the system (although perhaps with different, or
+modified attestation tools).
+
+I have not seen any other options for a viable, kernel driven solution
+in any of the discussions thus far, but if you have any suggestions I
+think we would all be very interested :)  The tmpfs based solution
+doesn't solve the problem of system-wide memory pressure as tmpfs is
+still a memory-backed filesystem.  Passing a fd to the kernel is still
+a userspace initiated action, with the added problem of requiring the
+kernel do the I/O itself.
 
 --=20
 paul-moore.com
