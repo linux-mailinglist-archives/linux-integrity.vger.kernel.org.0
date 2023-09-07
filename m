@@ -2,91 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0514279776D
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Sep 2023 18:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBEB797925
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Sep 2023 19:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238551AbjIGQZc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Sep 2023 12:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
+        id S238432AbjIGRD1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Sep 2023 13:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240939AbjIGQYG (ORCPT
+        with ESMTP id S238554AbjIGRD0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Sep 2023 12:24:06 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A503C272B;
-        Thu,  7 Sep 2023 09:21:12 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 001EAC116D6;
-        Thu,  7 Sep 2023 11:30:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694086232;
-        bh=BQqmAsnKsYCURZdBUxzJ5oq3xlzAgdnhH5VorW6j2es=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r6lYQANfxUUFWoyZp/V5KNiQHdM+KGxHUGVv4pBcJQhRwOn4+5pLAvcr3hecL4Ucm
-         nSg2sGI4ndAzw8OGj7Eb+6ZKbKjlRgaDPgZXIzgENndX8qklFZbFfz3Vv0QA2YGdTv
-         edRhLRXleubbSps3JiKxCVXgJ8r6e62wLhHU06hA=
-Date:   Thu, 7 Sep 2023 12:30:29 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org,
-        linux-security-module@vger.kernel.org, devicetree@vger.kernel.org,
-        frowand.list@gmail.com, robh+dt@kernel.org, sashal@kernel.org,
-        dmitry.kasatkin@gmail.com, linux-integrity@vger.kernel.org,
-        zohar@linux.ibm.com
-Subject: Re: [PATCH 5.15] of: kexec: Mark ima_{free,stable}_kexec_buffer() as
- __init
-Message-ID: <2023090723-mocha-overfed-f6df@gregkh>
-References: <20230905-5-15-of-kexec-modpost-warning-v1-1-4138b2e96b4e@kernel.org>
- <169403211998.243709.4772468997015448407.robh@kernel.org>
+        Thu, 7 Sep 2023 13:03:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659081FDC;
+        Thu,  7 Sep 2023 10:03:01 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 341692187B;
+        Thu,  7 Sep 2023 16:52:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1694105555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=4CViMOoPfZYMVVg2g3Ck1Pi4dtsEvBr/cA2U0br7Okw=;
+        b=sMXGtweBd2VGVFV79kut/M/2QvpaNuiPG4LQTCcw+Up4FXGCKAIPGFNOAR3gTtGiq3CaPO
+        vkT7XE1clY+iHXBJp+y+iLRcqNWtBvZV1U3XqrsqHc9YmysioXbYmu9IfxKz+eQdexgKar
+        yDuVkkn9V7TGlwTfvV3ZO3QUqFuDw4s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1694105555;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=4CViMOoPfZYMVVg2g3Ck1Pi4dtsEvBr/cA2U0br7Okw=;
+        b=mLX722n7X0xx4fuUvOt2l+0W3MoZ07NaOgu6Aexy3o7jiuiXj0vrbnzw5eKkDwkz/6KGLx
+        qcRFE2vc0FbVq5Dg==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 7645C2C142;
+        Thu,  7 Sep 2023 16:52:34 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     linux-integrity@vger.kernel.org
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joeyli <jlee@suse.com>
+Subject: [PATCH] integrity: powerpc: Do not select CA_MACHINE_KEYRING
+Date:   Thu,  7 Sep 2023 18:52:19 +0200
+Message-ID: <20230907165224.32256-1-msuchanek@suse.de>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <169403211998.243709.4772468997015448407.robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 03:28:51PM -0500, Rob Herring wrote:
-> 
-> On Tue, 05 Sep 2023 13:36:11 -0700, Nathan Chancellor wrote:
-> > This commit has no direct upstream equivalent.
-> > 
-> > After commit d48016d74836 ("mm,ima,kexec,of: use memblock_free_late from
-> > ima_free_kexec_buffer") in 5.15, there is a modpost warning for certain
-> > configurations:
-> > 
-> >   WARNING: modpost: vmlinux.o(.text+0xb14064): Section mismatch in reference from the function ima_free_kexec_buffer() to the function .init.text:__memblock_free_late()
-> >   The function ima_free_kexec_buffer() references
-> >   the function __init __memblock_free_late().
-> >   This is often because ima_free_kexec_buffer lacks a __init
-> >   annotation or the annotation of __memblock_free_late is wrong.
-> > 
-> > In mainline, there is no issue because ima_free_kexec_buffer() is marked
-> > as __init, which was done as part of commit b69a2afd5afc ("x86/kexec:
-> > Carry forward IMA measurement log on kexec") in 6.0, which is not
-> > suitable for stable.
-> > 
-> > Mark ima_free_kexec_buffer() and its single caller
-> > ima_load_kexec_buffer() as __init in 5.15, as ima_load_kexec_buffer() is
-> > only called from ima_init(), which is __init, clearing up the warning.
-> > 
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >  drivers/of/kexec.c                 | 2 +-
-> >  include/linux/of.h                 | 2 +-
-> >  security/integrity/ima/ima.h       | 2 +-
-> >  security/integrity/ima/ima_kexec.c | 2 +-
-> >  4 files changed, 4 insertions(+), 4 deletions(-)
-> > 
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> 
+No other platform needs CA_MACHINE_KEYRING, either.
 
-Now queued up, thanks.
+This is policy that should be decided by the administrator, not Kconfig
+dependencies.
 
-greg k-h
+cc: joeyli <jlee@suse.com>
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+ security/integrity/Kconfig | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+index 232191ee09e3..b6e074ac0227 100644
+--- a/security/integrity/Kconfig
++++ b/security/integrity/Kconfig
+@@ -68,8 +68,6 @@ config INTEGRITY_MACHINE_KEYRING
+ 	depends on INTEGRITY_ASYMMETRIC_KEYS
+ 	depends on SYSTEM_BLACKLIST_KEYRING
+ 	depends on LOAD_UEFI_KEYS || LOAD_PPC_KEYS
+-	select INTEGRITY_CA_MACHINE_KEYRING if LOAD_PPC_KEYS
+-	select INTEGRITY_CA_MACHINE_KEYRING_MAX if LOAD_PPC_KEYS
+ 	help
+ 	 If set, provide a keyring to which Machine Owner Keys (MOK) may
+ 	 be added. This keyring shall contain just MOK keys.  Unlike keys
+-- 
+2.41.0
+
