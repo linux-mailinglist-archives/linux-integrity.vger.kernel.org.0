@@ -2,76 +2,48 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70AC797552
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Sep 2023 17:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0514279776D
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Sep 2023 18:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjIGPqq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Sep 2023 11:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
+        id S238551AbjIGQZc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Sep 2023 12:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241462AbjIGP27 (ORCPT
+        with ESMTP id S240939AbjIGQYG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Sep 2023 11:28:59 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFAB1FF9;
-        Thu,  7 Sep 2023 08:28:30 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-77058512c18so63496885a.1;
-        Thu, 07 Sep 2023 08:28:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694100455; x=1694705255; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5xAG8vAki6OKzGSmwZKwpc8XIZTasbZNRXeMNLWYhYg=;
-        b=FthdpiOuGVKFl9W1bCgm4BkLjLtGl7JI7tf0hq2I763cBf5ThKzy+eR82yvcwXoTTZ
-         xRUCeEQPJqiExU1o8zwHdBT7MmUzEf5WcTiDqKIPAzc7FGyk2Jvhr4PkgyeaqkroCVii
-         WqaPwtMus0cAXnFZQUlBddKRggVc/A7n+MjEz27lXd9Xc7M0lfGWc7EIpaMo7w8B6paj
-         UHVLdmTAv7XYFuSMxx0pEgYGdzSg0EHWyhpViRL4lRhiXPZWPB77aJp6tlIMt5gpKjM2
-         jmRvyVnUBt0txLnGPWOkbIx+r9eFrbKXOEDdbd0DwdJoSzW71TxyzdEYZRJ0nRx/oPAo
-         rWeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694100455; x=1694705255;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5xAG8vAki6OKzGSmwZKwpc8XIZTasbZNRXeMNLWYhYg=;
-        b=Uw3S+RnQhNHoZoJUsOINNBgc6fcs3HEgPhDhbChev5hNfImk1ZJkvN2mIqhSP6f8kE
-         SQcZ5OASP2PkbH98Gz6zrQY0LjdeSFcPeKTY7o/PSYlq1+m1suRfChjB/k6OAT+ioG07
-         nQRHneIgLtXAjMACRyur/OFeaiapGOTjpFT1nXL7rrqAb6FBY49ToJ85OGmjNtuxg5Pz
-         T1loE90094e8tCKKxbQ5U7XQo59746JpsHw6UpCZXpZDbVO+gbKlmxLvsmZ+dZs+IQTn
-         VZiRBQ4gemoSYnvXQETXWm/Rbbq/vEv/h8Z4S3Mth+7hrP3nun1Kxg0w5kXEOpaDNvpP
-         eezA==
-X-Gm-Message-State: AOJu0YwbIXmbqP8hzxO7slh43LMYOLAqW8hkxvbs3telQZQ/qsEBCW19
-        6TuTT3wKqRjrqbPNNv6WfQRbz/a0Vk0=
-X-Google-Smtp-Source: AGHT+IH0oluWC/uZc5YWidmp8znrZ8ZfkiAQICtKAN+RZbG6DRdaEMFt4bVn9WEICH5+t1I9GRJ9dA==
-X-Received: by 2002:a17:902:ecc8:b0:1bc:7001:6e5e with SMTP id a8-20020a170902ecc800b001bc70016e5emr23293177plh.32.1694093109112;
-        Thu, 07 Sep 2023 06:25:09 -0700 (PDT)
-Received: from [192.168.0.106] ([103.124.138.83])
-        by smtp.gmail.com with ESMTPSA id jl1-20020a170903134100b001c32fd9e412sm8148306plb.58.2023.09.07.06.25.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Sep 2023 06:25:08 -0700 (PDT)
-Message-ID: <5011708f-b0ae-2853-0f87-a3b59845a2cc@gmail.com>
-Date:   Thu, 7 Sep 2023 20:25:04 +0700
+        Thu, 7 Sep 2023 12:24:06 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A503C272B;
+        Thu,  7 Sep 2023 09:21:12 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 001EAC116D6;
+        Thu,  7 Sep 2023 11:30:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1694086232;
+        bh=BQqmAsnKsYCURZdBUxzJ5oq3xlzAgdnhH5VorW6j2es=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r6lYQANfxUUFWoyZp/V5KNiQHdM+KGxHUGVv4pBcJQhRwOn4+5pLAvcr3hecL4Ucm
+         nSg2sGI4ndAzw8OGj7Eb+6ZKbKjlRgaDPgZXIzgENndX8qklFZbFfz3Vv0QA2YGdTv
+         edRhLRXleubbSps3JiKxCVXgJ8r6e62wLhHU06hA=
+Date:   Thu, 7 Sep 2023 12:30:29 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org,
+        linux-security-module@vger.kernel.org, devicetree@vger.kernel.org,
+        frowand.list@gmail.com, robh+dt@kernel.org, sashal@kernel.org,
+        dmitry.kasatkin@gmail.com, linux-integrity@vger.kernel.org,
+        zohar@linux.ibm.com
+Subject: Re: [PATCH 5.15] of: kexec: Mark ima_{free,stable}_kexec_buffer() as
+ __init
+Message-ID: <2023090723-mocha-overfed-f6df@gregkh>
+References: <20230905-5-15-of-kexec-modpost-warning-v1-1-4138b2e96b4e@kernel.org>
+ <169403211998.243709.4772468997015448407.robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Content-Language: en-US
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Marcus Seyfarth <m.seyfarth@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Integrity <linux-integrity@vger.kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: Slow boot and shutdown/reboot problems with 6.5.0+
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <169403211998.243709.4772468997015448407.robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,53 +51,42 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
-
-I notice a regression report on Bugzilla [1]. Quoting from it:
-
-> I've observed a slow boot and shutdown/reboot problems that have been verified on the stock Arch 6.5.1, CachyOS 6.5.0-2 and a custom-compiled 6.5.1 Kernel. I originally had seen a RCU-related trace which I thought to be the cause for these problems as well and reported it in https://bugzilla.kernel.org/show_bug.cgi?id=217864. However that specific trace turned out to be caused by an old patch that I carried around with me since 2022.
+On Wed, Sep 06, 2023 at 03:28:51PM -0500, Rob Herring wrote:
 > 
-> systemd-analyze with my custom compiled 6.5.1 shows a suspiciously long firmware time:
-> Startup finished in 2min 42.000s (firmware) + 4.201s (loader) + 6.895s (kernel) + 1.541s (userspace) = 2min 54.640s  
-> graphical.target reached after 1.539s in userspace.
+> On Tue, 05 Sep 2023 13:36:11 -0700, Nathan Chancellor wrote:
+> > This commit has no direct upstream equivalent.
+> > 
+> > After commit d48016d74836 ("mm,ima,kexec,of: use memblock_free_late from
+> > ima_free_kexec_buffer") in 5.15, there is a modpost warning for certain
+> > configurations:
+> > 
+> >   WARNING: modpost: vmlinux.o(.text+0xb14064): Section mismatch in reference from the function ima_free_kexec_buffer() to the function .init.text:__memblock_free_late()
+> >   The function ima_free_kexec_buffer() references
+> >   the function __init __memblock_free_late().
+> >   This is often because ima_free_kexec_buffer lacks a __init
+> >   annotation or the annotation of __memblock_free_late is wrong.
+> > 
+> > In mainline, there is no issue because ima_free_kexec_buffer() is marked
+> > as __init, which was done as part of commit b69a2afd5afc ("x86/kexec:
+> > Carry forward IMA measurement log on kexec") in 6.0, which is not
+> > suitable for stable.
+> > 
+> > Mark ima_free_kexec_buffer() and its single caller
+> > ima_load_kexec_buffer() as __init in 5.15, as ima_load_kexec_buffer() is
+> > only called from ima_init(), which is __init, clearing up the warning.
+> > 
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  drivers/of/kexec.c                 | 2 +-
+> >  include/linux/of.h                 | 2 +-
+> >  security/integrity/ima/ima.h       | 2 +-
+> >  security/integrity/ima/ima_kexec.c | 2 +-
+> >  4 files changed, 4 insertions(+), 4 deletions(-)
+> > 
 > 
-> For comparison, 6.4.14 starts in 16 seconds and doesn't even show a firmware section.
+> Acked-by: Rob Herring <robh@kernel.org>
 > 
-> System:
->   Host: klx99 Kernel: 6.5.1-3.1-cachyos-lto arch: x86_64 bits: 64
->     Desktop: KDE Plasma v: 5.27.7 Distro: CachyOS
-> Machine:
->   Mobo: Lenovo model: X99-TF Gaming v: G368J V1.1, NALEX
->     serial: <superuser required> UEFI: American Megatrends v: CX99DE26
->     date: 10/10/2020
-> CPU:
->   Info: 18-core model: Intel Xeon E5-2696 v3 bits: 64 type: MT MCP cache:
->     L2: 4.5 MiB
-> Graphics:
->   Device-1: AMD Navi 21 [Radeon RX 6950 XT] driver: amdgpu v: kernel
->   Display: x11 server: X.Org v: 21.1.99 with: Xwayland v: 23.2.0 driver: X:
->     loaded: amdgpu unloaded: modesetting dri: radeonsi gpu: amdgpu
->     resolution: 2560x1440~165Hz
->   API: OpenGL v: 4.6 Mesa 23.3.0-devel (git-8a32614a18) renderer: AMD
->     Radeon RX 6950 XT (navi21 LLVM 16.0.6 DRM 3.54 6.5.1-3.1-cachyos-lto)
 
-See Bugzilla for the full thread.
+Now queued up, thanks.
 
-FYI, it seems like this regression is related to systemd boot loop
-reported earlier [2].
-
-To Marcus: On Bugzilla, Artem had asked you to bisect. Do you have
-any conclusion on it?
-
-Anyway, I'm adding this regression to be tracked by regzbot:
-
-#regzbot introduced: v6.4..v6.5 https://bugzilla.kernel.org/show_bug.cgi?id=217874
-#regzbot title: slow boot possibly due to firmware (TPM?) issues
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217874
-[2]: https://lore.kernel.org/all/028a21df-4397-80aa-c2a5-7c754560f595@gmail.com/
-
--- 
-An old man doll... just what I always wanted! - Clara
+greg k-h
