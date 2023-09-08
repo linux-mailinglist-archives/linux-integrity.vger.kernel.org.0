@@ -2,47 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D40798E26
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Sep 2023 20:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67DBB798DDF
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Sep 2023 20:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236943AbjIHSbG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 8 Sep 2023 14:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S1343655AbjIHSZM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 8 Sep 2023 14:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjIHSbG (ORCPT
+        with ESMTP id S1343793AbjIHSYM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 8 Sep 2023 14:31:06 -0400
+        Fri, 8 Sep 2023 14:24:12 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA2A4691;
-        Fri,  8 Sep 2023 11:20:45 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36717C43395;
-        Fri,  8 Sep 2023 18:19:44 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3B649EF;
+        Fri,  8 Sep 2023 11:21:36 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CA00C433BA;
+        Fri,  8 Sep 2023 18:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694197184;
+        s=k20201202; t=1694197229;
         bh=gTvBjhblGfOCGq6YxqIkoHtJHRP7ZzQuH4eEA0DNYk8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fhI/3ZOiNcc3ezNm63kTUSwMXcMSycs7C92jB2QVfLsNxzPYbK1xY8KgZRmOK15yJ
-         dEteKHXbaQ8eyH8QyjoOxIHeWayJf5RMIh91bpxIzcG9mJXFFxa+5fAnpWqSkRomFj
-         fgb/VqcG1Wf82XruiNnkjG853KpoBKoe2l068+i5g3+DdXoTPbshrWAmW0n7Mn8TOt
-         VBmx0YDWfUpNuAXzx1UedZpaSsdRw6fseMxj1xQHF0f7WsTIGSrKw6jYswdQT35yjh
-         ZBeOot5BWaxE5cGjCgr9u6i9ix+xqAcXi5WBqbv/7HWbOLyTgSSBh/SBAcEUXWuW7J
-         C1hRTpr8IbyVw==
+        b=aDPrj9Pf4kMr6a9/jA4VEDZDm1LXalmAEmEwMrW2vwPe08KD1dtGpGe6nCpblLPmR
+         LBHdeQfurkT9Int1eSjNAS40in9EONzmgCQK1UYCJZL8AuYE85W/HvPKuGz4hJ/lqn
+         R7EOggVI6eRQ6zpQ2fKHR6kaZcCyaOzj6n9RnL5rqIG7JJG8aWhvjR7QFHCwHMMGTZ
+         dchAlISrJ7WNr6Q3yrzXKVUJQA7t1bXR19PbtuXji3wZvYyp1R93kRsCxwhQzh5hqd
+         Fi2gb3ed6ZOpbUljImQgnCDsmJ1tNbxdVQU7xJdFWDqFo5aCP0p6yxTFIdyplgjOkC
+         Y1p+MrEVmidLg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alexander Steffen <Alexander.Steffen@infineon.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Sasha Levin <sashal@kernel.org>, peterhuewe@gmx.de,
         linux-integrity@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 08/15] tpm_tis: Resend command to recover from data transfer errors
-Date:   Fri,  8 Sep 2023 14:19:11 -0400
-Message-Id: <20230908181920.3460520-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 08/14] tpm_tis: Resend command to recover from data transfer errors
+Date:   Fri,  8 Sep 2023 14:19:55 -0400
+Message-Id: <20230908182003.3460721-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230908181920.3460520-1-sashal@kernel.org>
-References: <20230908181920.3460520-1-sashal@kernel.org>
+In-Reply-To: <20230908182003.3460721-1-sashal@kernel.org>
+References: <20230908182003.3460721-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.131
+X-stable-base: Linux 5.10.194
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
