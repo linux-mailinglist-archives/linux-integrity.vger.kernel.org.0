@@ -2,143 +2,186 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD0479D99C
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 21:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3937D79D9D0
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 21:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237491AbjILTco (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Sep 2023 15:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
+        id S232575AbjILT5Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Sep 2023 15:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237577AbjILTcn (ORCPT
+        with ESMTP id S229500AbjILT5Y (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Sep 2023 15:32:43 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93751AE;
-        Tue, 12 Sep 2023 12:32:39 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD06C433C8;
-        Tue, 12 Sep 2023 19:32:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694547159;
-        bh=P84+DgXq81q28j/r5vXJ6K5cI51s58582oXvBjgtG9Y=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=gdzfXuTrCyG1C1XvFcXKjUu09PKYJXWJBN8dT9qYdaD/XX0vm5BykPdYS53gEC7l0
-         pk1jqwC6nIzie2vNlOqx6IgHUHYVRBli9r/HxadWFFLwXYcuIxPfkc38J3AioRDdrX
-         XrPoB9Y5qHb/FUuIV+51Ew9LKsgy8uggD8rxL+DsPBY7sGf+8l+EQIWG9ysSiaMNGM
-         ZkfAgMuHPCWO1a0yNGFCESBr2lvXXCNJcMEM+/ZPgGdltMFgvWoky/XYDpbPIPcn8I
-         wtlCDgc7hX6Z2P1WOD0jGeddpPw24brArpcoMYzXjtKwhkkQuhH4jOqzt5LRla41Qc
-         kgsDMy3ab8BNQ==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 12 Sep 2023 22:32:34 +0300
-Message-Id: <CVH6U03GHUXW.3V31YS67OXMQS@suppilovahvero>
+        Tue, 12 Sep 2023 15:57:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFD41AE;
+        Tue, 12 Sep 2023 12:57:20 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38CJcrws013557;
+        Tue, 12 Sep 2023 19:56:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=O5R4yk5s81mOKD4h+HS+3H/HYrvHD/FA/TtAzZs+wtk=;
+ b=k+gAYzMdGXSJShL9MVK90k054Kmgtg0UMWgXF0bRV35WUl82jvT8kdk18L3i7fAqnv8W
+ QpIQp2OhN4RMwNUjwIkVIIhzXD6WyzoWs7EeGjyUy64wdzR6lw5mXCGPr2lJWglVn8MZ
+ MqNUcHwVfMxbKJtKevZse9oHVKYL7Y8Pyczj7VgqTcw6JihgBRviJeDqQDkNL9Vu3G0O
+ HzzUZXdw9w6mX4uhpyJp9ZJUdnWaUmcl2FNh8f/WV+QXh/WC4I3OqwJB+cCvv6iJAURB
+ EaKqeIycfLoDSECLZqOIik8f5emLufcxiurRHQQB4fEWgqoNVgSz6rDTsHmv0O9c1U6K Dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2wxc1087-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Sep 2023 19:56:56 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38CJd6u1014071;
+        Tue, 12 Sep 2023 19:56:56 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2wxc107x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Sep 2023 19:56:56 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38CJcchK012069;
+        Tue, 12 Sep 2023 19:56:55 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3t13dyp022-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Sep 2023 19:56:55 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38CJuriP39649768
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Sep 2023 19:56:54 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7EC758055;
+        Tue, 12 Sep 2023 19:56:53 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 881865804B;
+        Tue, 12 Sep 2023 19:56:52 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.watson.ibm.com (unknown [9.31.99.213])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Sep 2023 19:56:52 +0000 (GMT)
+Message-ID: <f5759a6275ca1e978f33fb7bad53ee68a79d3609.camel@linux.ibm.com>
 Subject: Re: [PATCH] integrity: powerpc: Do not select CA_MACHINE_KEYRING
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Mimi Zohar" <zohar@linux.ibm.com>,
-        =?utf-8?q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>,
-        "Nayna" <nayna@linux.vnet.ibm.com>
-Cc:     <linux-integrity@vger.kernel.org>,
-        "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
-        "Paul Moore" <paul@paul-moore.com>,
-        "James Morris" <jmorris@namei.org>,
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Michal =?ISO-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
+        Nayna <nayna@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, "joeyli" <jlee@suse.com>,
-        "Eric Snowberg" <eric.snowberg@oracle.com>,
-        "Nayna Jain" <nayna@linux.ibm.com>,
-        "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>
-X-Mailer: aerc 0.14.0
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joeyli <jlee@suse.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Date:   Tue, 12 Sep 2023 15:56:52 -0400
+In-Reply-To: <CVH6U03GHUXW.3V31YS67OXMQS@suppilovahvero>
 References: <20230907165224.32256-1-msuchanek@suse.de>
- <20230907173232.GD8826@kitsune.suse.cz>
- <92e23f29-1a16-54da-48d1-59186158e923@linux.vnet.ibm.com>
- <20230912074116.GL8826@kitsune.suse.cz>
- <CVGUFUEQVCHS.37OA20PNG9EVB@suppilovahvero>
- <afba92bc2961c758d34ab340de207beb0a3b84b0.camel@linux.ibm.com>
-In-Reply-To: <afba92bc2961c758d34ab340de207beb0a3b84b0.camel@linux.ibm.com>
+         <20230907173232.GD8826@kitsune.suse.cz>
+         <92e23f29-1a16-54da-48d1-59186158e923@linux.vnet.ibm.com>
+         <20230912074116.GL8826@kitsune.suse.cz>
+         <CVGUFUEQVCHS.37OA20PNG9EVB@suppilovahvero>
+         <afba92bc2961c758d34ab340de207beb0a3b84b0.camel@linux.ibm.com>
+         <CVH6U03GHUXW.3V31YS67OXMQS@suppilovahvero>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: E3ajPj7DuwbxoSFWxRgrwOFdKkY5sMzQ
+X-Proofpoint-GUID: JgKj7eWT6P6o28yIE9BTYJDkdKpjp4DP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-12_19,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ spamscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
+ phishscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309120165
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Sep 12, 2023 at 10:22 PM EEST, Mimi Zohar wrote:
-> On Tue, 2023-09-12 at 12:49 +0300, Jarkko Sakkinen wrote:
-> > On Tue Sep 12, 2023 at 10:41 AM EEST, Michal Such=C3=A1nek wrote:
-> > > On Mon, Sep 11, 2023 at 11:39:38PM -0400, Nayna wrote:
-> > > >=20
-> > > > On 9/7/23 13:32, Michal Such=C3=A1nek wrote:
-> > > > > Adding more CC's from the original patch, looks like get_maintain=
-ers is
-> > > > > not that great for this file.
-> > > > >=20
-> > > > > On Thu, Sep 07, 2023 at 06:52:19PM +0200, Michal Suchanek wrote:
-> > > > > > No other platform needs CA_MACHINE_KEYRING, either.
-> > > > > >=20
-> > > > > > This is policy that should be decided by the administrator, not=
- Kconfig
-> > > > > > dependencies.
-> > > >=20
-> > > > We certainly agree that flexibility is important. However, in this =
-case,
-> > > > this also implies that we are expecting system admins to be securit=
-y
-> > > > experts. As per our understanding, CA based infrastructure(PKI) is =
-the
-> > > > standard to be followed and not the policy decision. And we can onl=
-y speak
-> > > > for Power.
-> > > >=20
-> > > > INTEGRITY_CA_MACHINE_KEYRING ensures that we always have CA signed =
-leaf
-> > > > certs.
-> > >
-> > > And that's the problem.
-> > >
-> > > From a distribution point of view there are two types of leaf certs:
-> > >
-> > >  - leaf certs signed by the distribution CA which need not be importe=
-d
-> > >    because the distribution CA cert is enrolled one way or another
-> > >  - user generated ad-hoc certificates that are not signed in any way,
-> > >    and enrolled by the user
-> > >
-> > > The latter are vouched for by the user by enrolling the certificate, =
-and
-> > > confirming that they really want to trust this certificate. Enrolling
-> > > user certificates is vital for usability or secure boot. Adding extra
-> > > step of creating a CA certificate stored on the same system only
-> > > complicates things with no added benefit.
-> >=20
-> > This all comes down to the generic fact that kernel should not
-> > proactively define what it *expects* sysadmins.
-> >=20
-> > CA based infrastructure like anything is a policy decision not
-> > a decision to be enforced by kernel.
->
-> Secure boot requires a signature chain of trust.  IMA extends the
-> secure and trusted boot concepts to the kernel. Missing from that
-> signature chain of trust is the ability of allowing the end
-> machine/system owner to load other certificates without recompiling the
-> kernel. The introduction of the machine keyring was to address this.
->
-> I'm not questioning the end user's intent on loading local or third
-> party keys via the normal mechanisms. If the existing mechanism(s) for
-> loading local or third party keys were full-proof, then loading a
-> single certificate, self-signed or not, would be fine. However, that
-> isn't the reality.  The security of the two-stage approach is simply
-> not equivalent to loading a single certificate.  Documentation could
-> help the end user/system owner to safely create (and manage) separate
-> certificate signing and code signing certs.
->
-> Unlike UEFI based systems, PowerVM defines two variables trustedcadb
-> and moduledb, for storing certificate signing and code signing
-> certificates respectively.  First the certs on the trustedcadb are
-> loaded and then the ones on moduledb are loaded.
+On Tue, 2023-09-12 at 22:32 +0300, Jarkko Sakkinen wrote:
+> On Tue Sep 12, 2023 at 10:22 PM EEST, Mimi Zohar wrote:
+> > On Tue, 2023-09-12 at 12:49 +0300, Jarkko Sakkinen wrote:
+> > > On Tue Sep 12, 2023 at 10:41 AM EEST, Michal Suchánek wrote:
+> > > > On Mon, Sep 11, 2023 at 11:39:38PM -0400, Nayna wrote:
+> > > > > 
+> > > > > On 9/7/23 13:32, Michal Suchánek wrote:
+> > > > > > Adding more CC's from the original patch, looks like get_maintainers is
+> > > > > > not that great for this file.
+> > > > > > 
+> > > > > > On Thu, Sep 07, 2023 at 06:52:19PM +0200, Michal Suchanek wrote:
+> > > > > > > No other platform needs CA_MACHINE_KEYRING, either.
+> > > > > > > 
+> > > > > > > This is policy that should be decided by the administrator, not Kconfig
+> > > > > > > dependencies.
+> > > > > 
+> > > > > We certainly agree that flexibility is important. However, in this case,
+> > > > > this also implies that we are expecting system admins to be security
+> > > > > experts. As per our understanding, CA based infrastructure(PKI) is the
+> > > > > standard to be followed and not the policy decision. And we can only speak
+> > > > > for Power.
+> > > > > 
+> > > > > INTEGRITY_CA_MACHINE_KEYRING ensures that we always have CA signed leaf
+> > > > > certs.
+> > > >
+> > > > And that's the problem.
+> > > >
+> > > > From a distribution point of view there are two types of leaf certs:
+> > > >
+> > > >  - leaf certs signed by the distribution CA which need not be imported
+> > > >    because the distribution CA cert is enrolled one way or another
+> > > >  - user generated ad-hoc certificates that are not signed in any way,
+> > > >    and enrolled by the user
+> > > >
+> > > > The latter are vouched for by the user by enrolling the certificate, and
+> > > > confirming that they really want to trust this certificate. Enrolling
+> > > > user certificates is vital for usability or secure boot. Adding extra
+> > > > step of creating a CA certificate stored on the same system only
+> > > > complicates things with no added benefit.
+> > > 
+> > > This all comes down to the generic fact that kernel should not
+> > > proactively define what it *expects* sysadmins.
+> > > 
+> > > CA based infrastructure like anything is a policy decision not
+> > > a decision to be enforced by kernel.
+> >
+> > Secure boot requires a signature chain of trust.  IMA extends the
+> > secure and trusted boot concepts to the kernel. Missing from that
+> > signature chain of trust is the ability of allowing the end
+> > machine/system owner to load other certificates without recompiling the
+> > kernel. The introduction of the machine keyring was to address this.
+> >
+> > I'm not questioning the end user's intent on loading local or third
+> > party keys via the normal mechanisms. If the existing mechanism(s) for
+> > loading local or third party keys were full-proof, then loading a
+> > single certificate, self-signed or not, would be fine. However, that
+> > isn't the reality.  The security of the two-stage approach is simply
+> > not equivalent to loading a single certificate.  Documentation could
+> > help the end user/system owner to safely create (and manage) separate
+> > certificate signing and code signing certs.
+> >
+> > Unlike UEFI based systems, PowerVM defines two variables trustedcadb
+> > and moduledb, for storing certificate signing and code signing
+> > certificates respectively.  First the certs on the trustedcadb are
+> > loaded and then the ones on moduledb are loaded.
+> 
+> There's pragmatic reasons to make things more open than they should be
+> in production. As a hardware example I still possess Raspberry Pi 3B for
+> test workloads because it has a broken TZ implementation. The world is
+> really bigger than production workloads.
+> 
+> It would be better to document what you said rather than enforce the
+> right choice IMHO (e.g. extend Kconfig documentation).
 
-There's pragmatic reasons to make things more open than they should be
-in production. As a hardware example I still possess Raspberry Pi 3B for
-test workloads because it has a broken TZ implementation. The world is
-really bigger than production workloads.
+PowerVM LPARs are more about production workloads than a Raspberry Pi. 
+:)
 
-It would be better to document what you said rather than enforce the
-right choice IMHO (e.g. extend Kconfig documentation).
+-- 
+thanks,
 
-BR, Jarkko
+Mimi
+
+
