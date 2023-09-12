@@ -2,79 +2,170 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6345A79D7CF
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 19:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8AEB79D977
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 21:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjILRnu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Sep 2023 13:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
+        id S229946AbjILTWr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Sep 2023 15:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233821AbjILRnt (ORCPT
+        with ESMTP id S229781AbjILTWp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Sep 2023 13:43:49 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FD310D3;
-        Tue, 12 Sep 2023 10:43:45 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6982AC433C8;
-        Tue, 12 Sep 2023 17:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694540624;
-        bh=ONBHIXmIJpuQpqY8iv+/EpWYcu9jmFnWikMk/+0bMrI=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=apqVne7LL2+W2DEta0JBgX7qiqCyEcKQqwauSDf/ABUKeQr+p/k/x+EKNWS63NsJR
-         UvDbvxt/aOymQPGMQQeWe1JJhQW5FFHWVzSCcush+/aahSeqpbKLwfnxLXfmXq9G3/
-         I07jRWQ3fzwfinnzj7yAvI0E+vNehdVo9yRbROU7creIn7z3yVgNBDR3zT+04PuorZ
-         3X+mMh1SiZrZm9Od9D+rO4pHsqzuCC4PO7yhQlfXsV0VF62KjCnadWP0ytsqwOUB6t
-         xHf8Zfxh0vXKu1l0wkCCEpXs9jq2+/YoHxEr0OmQDAkDn3bhHI2HKgeE/zdicM/bn2
-         UxTZN7+XZOcHA==
+        Tue, 12 Sep 2023 15:22:45 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7792C1;
+        Tue, 12 Sep 2023 12:22:41 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38CJKReI027902;
+        Tue, 12 Sep 2023 19:22:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=wWnLfUaBsk8/9XZq7ZQH7mewYkodHLrDkdq6gKH9nHs=;
+ b=b+rGIeotYwJ5mm+tN5Cg3Mvkl+ATz7Iwb3w7/mN+KOnolFN67Z3rNdqMH6TebkCJms/D
+ juB77jj9kdSVl8cQORe+9OacFjlBnRTWD/W2vwnlwsQ2jmOXEo+vhEaDv+h4fbgae2FL
+ KojfLqUQ4L6uc78RWLDMdwTDnmjZJSofYqK41V3DS+rMq2Bm15ImsVLVCoacAp8+A0Uc
+ 4QFyDgMtGExEkiHg0vmVAiPdCBJuQk8v1WecfWt3k4hj1nYk1eO5jDmkWbl1JR2CIZqM
+ 0Q42ej1ks0lqYnOQsSs5FOM3UC/UIbaXAlzmSviuQPTU1R+SmRkd19m5tgPn/rX9twco hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2x24r0xe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Sep 2023 19:22:24 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38CJLjsN032516;
+        Tue, 12 Sep 2023 19:22:24 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2x24r0xa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Sep 2023 19:22:24 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38CIOmoM002779;
+        Tue, 12 Sep 2023 19:22:23 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3t14hkweur-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Sep 2023 19:22:23 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38CJMMEN41353628
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Sep 2023 19:22:22 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 42AC758059;
+        Tue, 12 Sep 2023 19:22:22 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E074058058;
+        Tue, 12 Sep 2023 19:22:20 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.watson.ibm.com (unknown [9.31.99.213])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Sep 2023 19:22:20 +0000 (GMT)
+Message-ID: <afba92bc2961c758d34ab340de207beb0a3b84b0.camel@linux.ibm.com>
+Subject: Re: [PATCH] integrity: powerpc: Do not select CA_MACHINE_KEYRING
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Michal =?ISO-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
+        Nayna <nayna@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joeyli <jlee@suse.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Date:   Tue, 12 Sep 2023 15:22:20 -0400
+In-Reply-To: <CVGUFUEQVCHS.37OA20PNG9EVB@suppilovahvero>
+References: <20230907165224.32256-1-msuchanek@suse.de>
+         <20230907173232.GD8826@kitsune.suse.cz>
+         <92e23f29-1a16-54da-48d1-59186158e923@linux.vnet.ibm.com>
+         <20230912074116.GL8826@kitsune.suse.cz>
+         <CVGUFUEQVCHS.37OA20PNG9EVB@suppilovahvero>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 12 Sep 2023 20:43:41 +0300
-Message-Id: <CVH4IMR7IMFX.1GWUHKK42MKOG@suppilovahvero>
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Ivan Orlov" <ivan.orlov0322@gmail.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tpm: Fix typo in tpmrm class definition
-X-Mailer: aerc 0.14.0
-References: <20230912170248.11007-1-jforbes@fedoraproject.org>
-In-Reply-To: <20230912170248.11007-1-jforbes@fedoraproject.org>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3IPyqn1Wmos6pu4cDwBz0Ld8z88iSZJL
+X-Proofpoint-ORIG-GUID: Hba6BnrVByWDG4ASRxD3uNw2IT8kyZ52
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-12_18,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 malwarescore=0 adultscore=0 mlxlogscore=997
+ phishscore=0 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2308100000 definitions=main-2309120160
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Sep 12, 2023 at 8:02 PM EEST, Justin M. Forbes wrote:
-> Commit d2e8071bed0be ("tpm: make all 'class' structures const")
-> unfortunately had a typo for the name on tpmrm.
->
-> Fixes: d2e8071bed0b ("tpm: make all 'class' structures const")
-> Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
-> ---
->  drivers/char/tpm/tpm-chip.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index 23f6f2eda84c..42b1062e33cd 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -33,7 +33,7 @@ const struct class tpm_class =3D {
->  	.shutdown_pre =3D tpm_class_shutdown,
->  };
->  const struct class tpmrm_class =3D {
-> -	.name =3D "tmprm",
-> +	.name =3D "tpmrm",
->  };
->  dev_t tpm_devt;
-> =20
-> --=20
-> 2.41.0
+On Tue, 2023-09-12 at 12:49 +0300, Jarkko Sakkinen wrote:
+> On Tue Sep 12, 2023 at 10:41 AM EEST, Michal Suchánek wrote:
+> > On Mon, Sep 11, 2023 at 11:39:38PM -0400, Nayna wrote:
+> > > 
+> > > On 9/7/23 13:32, Michal Suchánek wrote:
+> > > > Adding more CC's from the original patch, looks like get_maintainers is
+> > > > not that great for this file.
+> > > > 
+> > > > On Thu, Sep 07, 2023 at 06:52:19PM +0200, Michal Suchanek wrote:
+> > > > > No other platform needs CA_MACHINE_KEYRING, either.
+> > > > > 
+> > > > > This is policy that should be decided by the administrator, not Kconfig
+> > > > > dependencies.
+> > > 
+> > > We certainly agree that flexibility is important. However, in this case,
+> > > this also implies that we are expecting system admins to be security
+> > > experts. As per our understanding, CA based infrastructure(PKI) is the
+> > > standard to be followed and not the policy decision. And we can only speak
+> > > for Power.
+> > > 
+> > > INTEGRITY_CA_MACHINE_KEYRING ensures that we always have CA signed leaf
+> > > certs.
+> >
+> > And that's the problem.
+> >
+> > From a distribution point of view there are two types of leaf certs:
+> >
+> >  - leaf certs signed by the distribution CA which need not be imported
+> >    because the distribution CA cert is enrolled one way or another
+> >  - user generated ad-hoc certificates that are not signed in any way,
+> >    and enrolled by the user
+> >
+> > The latter are vouched for by the user by enrolling the certificate, and
+> > confirming that they really want to trust this certificate. Enrolling
+> > user certificates is vital for usability or secure boot. Adding extra
+> > step of creating a CA certificate stored on the same system only
+> > complicates things with no added benefit.
+> 
+> This all comes down to the generic fact that kernel should not
+> proactively define what it *expects* sysadmins.
+> 
+> CA based infrastructure like anything is a policy decision not
+> a decision to be enforced by kernel.
 
-Hi, I was able to apply v2 after all thank you.
+Secure boot requires a signature chain of trust.  IMA extends the
+secure and trusted boot concepts to the kernel. Missing from that
+signature chain of trust is the ability of allowing the end
+machine/system owner to load other certificates without recompiling the
+kernel. The introduction of the machine keyring was to address this.
 
-I'll queue it for -rc2 pull request.
+I'm not questioning the end user's intent on loading local or third
+party keys via the normal mechanisms. If the existing mechanism(s) for
+loading local or third party keys were full-proof, then loading a
+single certificate, self-signed or not, would be fine. However, that
+isn't the reality.  The security of the two-stage approach is simply
+not equivalent to loading a single certificate.  Documentation could
+help the end user/system owner to safely create (and manage) separate
+certificate signing and code signing certs.
 
-BR, Jarkko
+Unlike UEFI based systems, PowerVM defines two variables trustedcadb
+and moduledb, for storing certificate signing and code signing
+certificates respectively.  First the certs on the trustedcadb are
+loaded and then the ones on moduledb are loaded.
+
+-- 
+thanks,
+
+Mimi
+
