@@ -2,57 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287BA79C9A0
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 10:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4AB79CC1C
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 11:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbjILISX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Sep 2023 04:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S232620AbjILJlJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Sep 2023 05:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjILISW (ORCPT
+        with ESMTP id S232584AbjILJlH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Sep 2023 04:18:22 -0400
-X-Greylist: delayed 516 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Sep 2023 01:18:18 PDT
-Received: from mail.arnisdale.pl (mail.arnisdale.pl [151.80.133.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C211FE73
-        for <linux-integrity@vger.kernel.org>; Tue, 12 Sep 2023 01:18:18 -0700 (PDT)
-Received: by mail.arnisdale.pl (Postfix, from userid 1002)
-        id A4CF92723C; Tue, 12 Sep 2023 08:06:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=arnisdale.pl; s=mail;
-        t=1694506061; bh=6DhEsVYOGxxfetVY3oiVeew+7Cm34ArcvgDq2WQYIRw=;
-        h=Date:From:To:Subject:From;
-        b=rFaCblzIeitwlgxqikKr52OZocexKKuZm2nMFVWnWKSfH6NbJfK14ISqdHFzP0fl5
-         IsTXs3JeYKqAM9nqA/f3WS+vnSGLl8TUiA+WiaDMYAd+MdfVIUMCVC5VIkU1Z9wE3g
-         7eOPf9PSGsX0jBHvMogvNf6rp5ZhWM04Z1xmkRwXA2vki6uxASdVyO6GoRPbd9mmoi
-         DWnNQkgurSQH+zK9k+y9FnhQiicPnE2vRcPMKYwZ2MaEYts21zb5Bq6lW3CgGD9SsN
-         hiPGPlikwWPOKZhcTi9LyCfweTi0pXXmmwueJrvosfBhTV2qD18MEcefqblVW7JAgT
-         VYNq+SCVWQe5A==
-Received: by mail.arnisdale.pl for <linux-integrity@vger.kernel.org>; Tue, 12 Sep 2023 08:05:23 GMT
-Message-ID: <20230912064501-0.1.6v.1yd8f.0.z0e0i49dih@arnisdale.pl>
-Date:   Tue, 12 Sep 2023 08:05:23 GMT
-From:   "Maciej Telka" <maciej.telka@arnisdale.pl>
-To:     <linux-integrity@vger.kernel.org>
-Subject: =?UTF-8?Q?Prosz=C4=99_o_kontakt?=
-X-Mailer: mail.arnisdale.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 12 Sep 2023 05:41:07 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57E1116;
+        Tue, 12 Sep 2023 02:41:03 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EF2CC433C8;
+        Tue, 12 Sep 2023 09:41:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694511663;
+        bh=51PegvIu8zCzbCvU9YkHXrLIAzh1Rt71MmT7cj1xrT0=;
+        h=Date:Subject:From:To:References:In-Reply-To:From;
+        b=LBnItSnVBw3+u9b4WkQjmTctDkHYCzIN5ABzZxz3dr+Eq1Q27n/leGwH5TrqSdln8
+         Tf5zoMcMMQoAC+Ag5uMt8i4iqe0z75WuZqFjOvbALNcDrZ5vxbdwL8o4QHvyPxCYcx
+         KA7Njcr2xV7O+qNzaQ6hhLzhnKATZyZFQz1EYMsnGuiDoz7gLMmfM6dnFGZl6viPSZ
+         o+WyZgxIH2Um8ja3MqtzGHtpDa+DmVS07La8XDrdIFkarp5XPARXvRlvfWMfqUW8fe
+         YSrZDRI+WoOUmuq7yr78Y6vK4ssHyHe3p4DdwiAGt9imL5BZO5/nP4rYDJJvz1HNHb
+         5atIv3lq0eS4w==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 12 Sep 2023 12:41:00 +0300
+Message-Id: <CVGU920P4LEH.4WNZCAJI4URK@suppilovahvero>
+Subject: Re: [PATCH] tpm: Fix typo in tpmrm class definition
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        "Peter Huewe" <peterhuewe@gmx.de>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Ivan Orlov" <ivan.orlov0322@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230911223238.3495955-1-jforbes@fedoraproject.org>
+In-Reply-To: <20230911223238.3495955-1-jforbes@fedoraproject.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Tue Sep 12, 2023 at 1:32 AM EEST, Justin M. Forbes wrote:
+> Commit d2e8071bed0be ("tpm: make all 'class' structures const")
+> unfortunately had a typo for the name on tpmrm.
+>
+> Fixes: d2e8071bed0b ("tpm: make all 'class' structures const")
+> Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 23f6f2eda84c..42b1062e33cd 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -33,7 +33,7 @@ const struct class tpm_class =3D {
+>  	.shutdown_pre =3D tpm_class_shutdown,
+>  };
+>  const struct class tpmrm_class =3D {
+> -	.name =3D "tmprm",
+> +	.name =3D "tpmrm",
+>  };
+>  dev_t tpm_devt;
+>
+> --=20
+> 2.41.0
 
-Czy jest mo=C5=BCliwo=C5=9B=C4=87 nawi=C4=85zania wsp=C3=B3=C5=82pracy z =
-Pa=C5=84stwem?
+Unfortunately your patch does not apply:
 
-Z ch=C4=99ci=C4=85 porozmawiam z osob=C4=85 zajmuj=C4=85c=C4=85 si=C4=99 =
-dzia=C5=82aniami zwi=C4=85zanymi ze sprzeda=C5=BC=C4=85.
+$ git-tip
+0bb80ecc33a8 (HEAD -> next, tag: v6.6-rc1, upstream/master, origin/next) Li=
+nux 6.6-rc1
 
-Pomagamy skutecznie pozyskiwa=C4=87 nowych klient=C3=B3w.
+$ b4 am 20230911223238.3495955-1-jforbes@fedoraproject.org
+Analyzing 1 messages in the thread
+Checking attestation on all messages, may take a moment...
+---
+  =E2=9C=93 [PATCH] tpm: Fix typo in tpmrm class definition
+  ---
+  =E2=9C=93 Signed: DKIM/linuxtx.org (From: jforbes@fedoraproject.org)
+---
+Total patches: 1
+---
+ Link: https://lore.kernel.org/r/20230911223238.3495955-1-jforbes@fedorapro=
+ject.org
+ Base: applies clean to current tree
+       git checkout -b 20230911_jforbes_fedoraproject_org HEAD
+       git am ./20230911_jforbes_tpm_fix_typo_in_tpmrm_class_definition.mbx
 
-Zapraszam do kontaktu.
+$ git am -3 20230911_jforbes_tpm_fix_typo_in_tpmrm_class_definition.mbx
+Applying: tpm: Fix typo in tpmrm class definition
+error: corrupt patch at line 18
+error: could not build fake ancestor
+Patch failed at 0001 tpm: Fix typo in tpmrm class definition
+hint: Use 'git am --show-current-patch=3Ddiff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
 
-
-Pozdrawiam serdecznie
-Maciej Telka
+BR, Jarkko
