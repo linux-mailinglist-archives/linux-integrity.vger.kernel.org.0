@@ -2,82 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864D579D71B
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 19:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6B379D733
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 19:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234303AbjILRDf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Sep 2023 13:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S236947AbjILRHz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Sep 2023 13:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjILRDe (ORCPT
+        with ESMTP id S236718AbjILRHy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Sep 2023 13:03:34 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3B610D9;
-        Tue, 12 Sep 2023 10:03:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4D0C433C7;
-        Tue, 12 Sep 2023 17:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694538210;
-        bh=2W640/p1T0Aq9kmII2hkn+rYKZ5SpA1fs1dP8heOBVE=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=twQH/1qGdGnYrPhAdtFIYKDpnDu0YDSj0/qE7BHTojiV8GgXeZR/OyC2APe4CIAbW
-         ZpPz1wvm5p05LuOgwADE9jSJNlHv/2QAZJO28c/sHoCv/Avp9hRLKak4J+n4NKG7bd
-         b39QcSIcLmrAa2Lh42SaS7GwEmcILv8OQHVWRq2bmZyzR0p/gAPkrwfjh922twekwN
-         JandcIUmRGgcut1LkoNcI2u841cYPADh/i7aBtJiDE35QwEu8gLV6O3ymP8r5rpCFl
-         EV8lbxUqAalMECxcFncPDxyxx/+R+gtwP0O2QhbDdj8OZY+vbfXDty88nWvfEZkDHJ
-         b6Sc7H2rU2FbQ==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 12 Sep 2023 20:03:26 +0300
-Message-Id: <CVH3NT4ZIBNS.22HFUP0WCDY26@suppilovahvero>
-Subject: Re: [PATCH] integrity: powerpc: Do not select CA_MACHINE_KEYRING
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Nayna" <nayna@linux.vnet.ibm.com>,
-        =?utf-8?q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>,
-        <linux-integrity@vger.kernel.org>
-Cc:     "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
-        "Paul Moore" <paul@paul-moore.com>,
-        "James Morris" <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, "joeyli" <jlee@suse.com>,
-        "Eric Snowberg" <eric.snowberg@oracle.com>,
-        "Nayna Jain" <nayna@linux.ibm.com>,
-        "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>
-X-Mailer: aerc 0.14.0
-References: <20230907165224.32256-1-msuchanek@suse.de>
- <20230907173232.GD8826@kitsune.suse.cz>
- <92e23f29-1a16-54da-48d1-59186158e923@linux.vnet.ibm.com>
-In-Reply-To: <92e23f29-1a16-54da-48d1-59186158e923@linux.vnet.ibm.com>
+        Tue, 12 Sep 2023 13:07:54 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F7E10F9
+        for <linux-integrity@vger.kernel.org>; Tue, 12 Sep 2023 10:07:50 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-68faf930054so2666600b3a.0
+        for <linux-integrity@vger.kernel.org>; Tue, 12 Sep 2023 10:07:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694538470; x=1695143270;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P9tCnWlA9XrE1nFim4ctCI9ELCfqKkedS78A2cZgsAs=;
+        b=RWK2VWBJ0Jj+BWvTEYsHyhRVssu8y6q1KFVx2rPYt4hA30MKizvrIrSqA9N5zSCwKP
+         e9QJwlLUy/TIZAVQHWXUoFJMmVFADSmNsG0XaWoUXcBJEIajPy6/QGZYIpYIvhkAUn1v
+         EaJXs33gcqWQ6n7E8ZFAearQC/y04maqrc/xxfSYwxKDho2UR+YW0+aOMNTpCbDhPNdy
+         JaAt9VNI0Lp2HX5ILf6xnH+HuSAzDoLA08sY9TPoPXtatzG9pBRz1tsQ8mh6ZPMUW5pR
+         4XkJd6voPxi5TGxmr7Y1a3heSokxplcqJCF9lmhQR5AfLGgL5XoUAPn8Xuapz250zHaJ
+         XHbw==
+X-Gm-Message-State: AOJu0Yzs4Hut7NpVK8OLw6kwLgsCZaGdI6uQ8PjS25y27kGzX/bnHpCD
+        QB/PLIKTZA3HdV7rolonOLLBeOQIAN0QHuQPK+IkSrC1JRsmZNI6uZzWsaOK46KOlg==
+X-Google-Smtp-Source: AGHT+IEX304k/En1unElz+dinA3pOm9BIfW/BeJRpXk+dmhwOWv24esWXOeFgonERRywb9hmuicVqc7Me333ZHXCx3Q=
+X-Received: by 2002:a05:6a20:54a1:b0:155:2c91:f8e5 with SMTP id
+ i33-20020a056a2054a100b001552c91f8e5mr25646pzk.14.1694538470311; Tue, 12 Sep
+ 2023 10:07:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230911223238.3495955-1-jforbes@fedoraproject.org> <CVGU920P4LEH.4WNZCAJI4URK@suppilovahvero>
+In-Reply-To: <CVGU920P4LEH.4WNZCAJI4URK@suppilovahvero>
+From:   Justin Forbes <jforbes@fedoraproject.org>
+Date:   Tue, 12 Sep 2023 12:07:38 -0500
+Message-ID: <CAFxkdAoSswhixvD6u0VLD=D9aaX-JFAdDewTF_WJmMwSbZDxeg@mail.gmail.com>
+Subject: Re: [PATCH] tpm: Fix typo in tpmrm class definition
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Ivan Orlov <ivan.orlov0322@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Sep 12, 2023 at 6:39 AM EEST, Nayna wrote:
+On Tue, Sep 12, 2023 at 4:41 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
 >
-> On 9/7/23 13:32, Michal Such=C3=A1nek wrote:
-> > Adding more CC's from the original patch, looks like get_maintainers is
-> > not that great for this file.
+> On Tue Sep 12, 2023 at 1:32 AM EEST, Justin M. Forbes wrote:
+> > Commit d2e8071bed0be ("tpm: make all 'class' structures const")
+> > unfortunately had a typo for the name on tpmrm.
 > >
-> > On Thu, Sep 07, 2023 at 06:52:19PM +0200, Michal Suchanek wrote:
-> >> No other platform needs CA_MACHINE_KEYRING, either.
-> >>
-> >> This is policy that should be decided by the administrator, not Kconfi=
-g
-> >> dependencies.
+> > Fixes: d2e8071bed0b ("tpm: make all 'class' structures const")
+> > Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
+> > ---
+> >  drivers/char/tpm/tpm-chip.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> > index 23f6f2eda84c..42b1062e33cd 100644
+> > --- a/drivers/char/tpm/tpm-chip.c
+> > +++ b/drivers/char/tpm/tpm-chip.c
+> > @@ -33,7 +33,7 @@ const struct class tpm_class = {
+> >       .shutdown_pre = tpm_class_shutdown,
+> >  };
+> >  const struct class tpmrm_class = {
+> > -     .name = "tmprm",
+> > +     .name = "tpmrm",
+> >  };
+> >  dev_t tpm_devt;
+> >
+> > --
+> > 2.41.0
 >
-> We certainly agree that flexibility is important. However, in this case,=
-=20
-> this also implies that we are expecting system admins to be security=20
-> experts. As per our understanding, CA based infrastructure(PKI) is the=20
-> standard to be followed and not the policy decision. And we can only=20
-> speak for Power.
+> Unfortunately your patch does not apply:
 
-In the end this is dictating policy for no compelling reason, and
-that is the bottom line here, not playing a mind game what type of
-expertise a sysadmin might or might not have.
+Fixed with the V2 I just sent out. Seems I had suppress-blank-empty =
+true in a config file somewhere. Apologies for wasting your time.
 
-BR, Jarkko
+Justin
+
+> $ git-tip
+> 0bb80ecc33a8 (HEAD -> next, tag: v6.6-rc1, upstream/master, origin/next) Linux 6.6-rc1
+>
+> $ b4 am 20230911223238.3495955-1-jforbes@fedoraproject.org
+> Analyzing 1 messages in the thread
+> Checking attestation on all messages, may take a moment...
+> ---
+>   ✓ [PATCH] tpm: Fix typo in tpmrm class definition
+>   ---
+>   ✓ Signed: DKIM/linuxtx.org (From: jforbes@fedoraproject.org)
+> ---
+> Total patches: 1
+> ---
+>  Link: https://lore.kernel.org/r/20230911223238.3495955-1-jforbes@fedoraproject.org
+>  Base: applies clean to current tree
+>        git checkout -b 20230911_jforbes_fedoraproject_org HEAD
+>        git am ./20230911_jforbes_tpm_fix_typo_in_tpmrm_class_definition.mbx
+>
+> $ git am -3 20230911_jforbes_tpm_fix_typo_in_tpmrm_class_definition.mbx
+> Applying: tpm: Fix typo in tpmrm class definition
+> error: corrupt patch at line 18
+> error: could not build fake ancestor
+> Patch failed at 0001 tpm: Fix typo in tpmrm class definition
+> hint: Use 'git am --show-current-patch=diff' to see the failed patch
+> When you have resolved this problem, run "git am --continue".
+> If you prefer to skip this patch, run "git am --skip" instead.
+> To restore the original branch and stop patching, run "git am --abort".
+>
+> BR, Jarkko
