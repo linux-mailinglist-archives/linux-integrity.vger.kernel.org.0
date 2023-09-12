@@ -2,107 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4AB79CC1C
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 11:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FD579CC36
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 11:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232620AbjILJlJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Sep 2023 05:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
+        id S232361AbjILJql (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Sep 2023 05:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjILJlH (ORCPT
+        with ESMTP id S232241AbjILJqk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Sep 2023 05:41:07 -0400
+        Tue, 12 Sep 2023 05:46:40 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57E1116;
-        Tue, 12 Sep 2023 02:41:03 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EF2CC433C8;
-        Tue, 12 Sep 2023 09:41:01 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE6212E;
+        Tue, 12 Sep 2023 02:46:36 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD8DC433C7;
+        Tue, 12 Sep 2023 09:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694511663;
-        bh=51PegvIu8zCzbCvU9YkHXrLIAzh1Rt71MmT7cj1xrT0=;
-        h=Date:Subject:From:To:References:In-Reply-To:From;
-        b=LBnItSnVBw3+u9b4WkQjmTctDkHYCzIN5ABzZxz3dr+Eq1Q27n/leGwH5TrqSdln8
-         Tf5zoMcMMQoAC+Ag5uMt8i4iqe0z75WuZqFjOvbALNcDrZ5vxbdwL8o4QHvyPxCYcx
-         KA7Njcr2xV7O+qNzaQ6hhLzhnKATZyZFQz1EYMsnGuiDoz7gLMmfM6dnFGZl6viPSZ
-         o+WyZgxIH2Um8ja3MqtzGHtpDa+DmVS07La8XDrdIFkarp5XPARXvRlvfWMfqUW8fe
-         YSrZDRI+WoOUmuq7yr78Y6vK4ssHyHe3p4DdwiAGt9imL5BZO5/nP4rYDJJvz1HNHb
-         5atIv3lq0eS4w==
+        s=k20201202; t=1694511996;
+        bh=7DHj9Jb6FeJL+iN5c+SG2J1fsifqdWlfmhVDvfRmFmA=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=YNEWSRxx6rYG5byoNYu25NrTupZZrCJHQFsBmqTcSdHCcUA9Mcg5oN5lge5vsYtn0
+         2kwHtncXuTIcZBX2e+eBJlY1FakhW0sidIOjrD/0IPBRNHM+cKvysBeJe32QOPyG0x
+         aIYNam3ajzSElhdt/yI7YJAafhncq55xLyjQuL1Gjt1hhA7wznNtqCdAcTv5Vt6b+l
+         56EK+ScpE47SXN+JwnuyZnZfsRKvsCIFe55fWC7g1Q1IOlp0VOb4354uFRnCyUzYaw
+         CFLQ0ZgauqCIMX5nRbio2Xs6G1piGNwG6cahxvSfBGthHhQSUjZNMbDKcFVIQeTvv3
+         dN4/T8eNdKY9g==
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 12 Sep 2023 12:41:00 +0300
-Message-Id: <CVGU920P4LEH.4WNZCAJI4URK@suppilovahvero>
-Subject: Re: [PATCH] tpm: Fix typo in tpmrm class definition
+Date:   Tue, 12 Sep 2023 12:46:32 +0300
+Message-Id: <CVGUDAU0TSNU.2KQP3U44NG61T@suppilovahvero>
+Cc:     <linux-integrity@vger.kernel.org>,
+        "Mimi Zohar" <zohar@linux.ibm.com>,
+        "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+        "Paul Moore" <paul@paul-moore.com>,
+        "James Morris" <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, "joeyli" <jlee@suse.com>
+Subject: Re: [PATCH] integrity: powerpc: Do not select CA_MACHINE_KEYRING
 From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Ivan Orlov" <ivan.orlov0322@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+To:     =?utf-8?q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
 X-Mailer: aerc 0.14.0
-References: <20230911223238.3495955-1-jforbes@fedoraproject.org>
-In-Reply-To: <20230911223238.3495955-1-jforbes@fedoraproject.org>
+References: <20230907165224.32256-1-msuchanek@suse.de>
+ <CVGF1AQT9WI4.2660NVII9NIDU@suppilovahvero>
+ <20230912075134.GM8826@kitsune.suse.cz>
+In-Reply-To: <20230912075134.GM8826@kitsune.suse.cz>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue Sep 12, 2023 at 1:32 AM EEST, Justin M. Forbes wrote:
-> Commit d2e8071bed0be ("tpm: make all 'class' structures const")
-> unfortunately had a typo for the name on tpmrm.
+On Tue Sep 12, 2023 at 10:51 AM EEST, Michal Such=C3=A1nek wrote:
+> On Tue, Sep 12, 2023 at 12:45:35AM +0300, Jarkko Sakkinen wrote:
+> > On Thu Sep 7, 2023 at 7:52 PM EEST, Michal Suchanek wrote:
+> > > No other platform needs CA_MACHINE_KEYRING, either.
+> > >
+> > > This is policy that should be decided by the administrator, not Kconf=
+ig
+> >=20
+> > s/administrator/distributor/ ?
 >
-> Fixes: d2e8071bed0b ("tpm: make all 'class' structures const")
-> Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
-> ---
->  drivers/char/tpm/tpm-chip.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> It depends on the situation. Ideally the administrator would pick the
+> distributor that provides a policy that is considered fitting for the
+> purpose or roll their own. Unfortunately, they don't always have the
+> choice.
 >
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index 23f6f2eda84c..42b1062e33cd 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -33,7 +33,7 @@ const struct class tpm_class =3D {
->  	.shutdown_pre =3D tpm_class_shutdown,
->  };
->  const struct class tpmrm_class =3D {
-> -	.name =3D "tmprm",
-> +	.name =3D "tpmrm",
->  };
->  dev_t tpm_devt;
+> For the kerenel's part it should support wide range of policies for
+> different use cases, and not force the hand of the administrator or
+> distributor.
 >
-> --=20
-> 2.41.0
+> >=20
+> > > dependencies.
+> > >
+> > > cc: joeyli <jlee@suse.com>
+> > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > > ---
+> > >  security/integrity/Kconfig | 2 --
+> > >  1 file changed, 2 deletions(-)
+> > >
+> > > diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+> > > index 232191ee09e3..b6e074ac0227 100644
+> > > --- a/security/integrity/Kconfig
+> > > +++ b/security/integrity/Kconfig
+> > > @@ -68,8 +68,6 @@ config INTEGRITY_MACHINE_KEYRING
+> > >  	depends on INTEGRITY_ASYMMETRIC_KEYS
+> > >  	depends on SYSTEM_BLACKLIST_KEYRING
+> > >  	depends on LOAD_UEFI_KEYS || LOAD_PPC_KEYS
+> > > -	select INTEGRITY_CA_MACHINE_KEYRING if LOAD_PPC_KEYS
+> > > -	select INTEGRITY_CA_MACHINE_KEYRING_MAX if LOAD_PPC_KEYS
+> > >  	help
+> > >  	 If set, provide a keyring to which Machine Owner Keys (MOK) may
+> > >  	 be added. This keyring shall contain just MOK keys.  Unlike keys
+> > > --=20
+> > > 2.41.0
+> >=20
+> > I'd suggest to add even fixes tag.
+>
+> Here it is
+>
+> Fixes: d7d91c4743c4 ("integrity: PowerVM machine keyring enablement")
 
-Unfortunately your patch does not apply:
+commit b755dd58d180b796d21bc14d03045e4ab84222b0 (HEAD -> next, origin/next)
+Author: Michal Suchanek <msuchanek@suse.de>
+Date:   Thu Sep 7 18:52:19 2023 +0200
 
-$ git-tip
-0bb80ecc33a8 (HEAD -> next, tag: v6.6-rc1, upstream/master, origin/next) Li=
-nux 6.6-rc1
+    integrity: powerpc: Do not select CA_MACHINE_KEYRING
 
-$ b4 am 20230911223238.3495955-1-jforbes@fedoraproject.org
-Analyzing 1 messages in the thread
-Checking attestation on all messages, may take a moment...
----
-  =E2=9C=93 [PATCH] tpm: Fix typo in tpmrm class definition
-  ---
-  =E2=9C=93 Signed: DKIM/linuxtx.org (From: jforbes@fedoraproject.org)
----
-Total patches: 1
----
- Link: https://lore.kernel.org/r/20230911223238.3495955-1-jforbes@fedorapro=
-ject.org
- Base: applies clean to current tree
-       git checkout -b 20230911_jforbes_fedoraproject_org HEAD
-       git am ./20230911_jforbes_tpm_fix_typo_in_tpmrm_class_definition.mbx
+    No other platform needs CA_MACHINE_KEYRING, either.
 
-$ git am -3 20230911_jforbes_tpm_fix_typo_in_tpmrm_class_definition.mbx
-Applying: tpm: Fix typo in tpmrm class definition
-error: corrupt patch at line 18
-error: could not build fake ancestor
-Patch failed at 0001 tpm: Fix typo in tpmrm class definition
-hint: Use 'git am --show-current-patch=3Ddiff' to see the failed patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
+    This is policy that should be decided by the administrator, not Kconfig
+    dependencies.
+
+    Fixes: d7d91c4743c4 ("integrity: PowerVM machine keyring enablement")
+    Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+    Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+index 232191ee09e3..b6e074ac0227 100644
+--- a/security/integrity/Kconfig
++++ b/security/integrity/Kconfig
+@@ -68,8 +68,6 @@ config INTEGRITY_MACHINE_KEYRING
+        depends on INTEGRITY_ASYMMETRIC_KEYS
+        depends on SYSTEM_BLACKLIST_KEYRING
+        depends on LOAD_UEFI_KEYS || LOAD_PPC_KEYS
+-       select INTEGRITY_CA_MACHINE_KEYRING if LOAD_PPC_KEYS
+-       select INTEGRITY_CA_MACHINE_KEYRING_MAX if LOAD_PPC_KEYS
+        help
+         If set, provide a keyring to which Machine Owner Keys (MOK) may
+         be added. This keyring shall contain just MOK keys.  Unlike keys
+
+If this look good to you, I'll put it to the -rc2 pull request.
+
+> Thanks
+>
+> Michal
 
 BR, Jarkko
