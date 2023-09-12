@@ -2,248 +2,198 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8619479CFA3
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 13:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D5F79D06E
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Sep 2023 13:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234517AbjILLOH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Sep 2023 07:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S234867AbjILLzW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Sep 2023 07:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234507AbjILLMC (ORCPT
+        with ESMTP id S234886AbjILLzV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Sep 2023 07:12:02 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49D5172B
-        for <linux-integrity@vger.kernel.org>; Tue, 12 Sep 2023 04:11:58 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5230a22cfd1so7009863a12.1
-        for <linux-integrity@vger.kernel.org>; Tue, 12 Sep 2023 04:11:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sigma-star.at; s=google; t=1694517117; x=1695121917; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+qntkmutwprS+2oQeQzgmaP97TAaIsTbzLeg5qvDo3I=;
-        b=iMzepLjNMKLJcQYvd5fyO+0ZOQ90UpaYBgzGzIm7H58asy0ZRDjtnwgLLDhr+Y7RoA
-         PFDxp0+dLGLpL0AwUT/sT5su7Rl7SnVKKRCb6T3uFCWjDYrvt5JucNYAJA7tz4x6qwFZ
-         6QFX6rvRGgY4PqLVTvn3fI/Wvuhcf0VKmq/x3Xg+MvjsOL9iKAEmMaR3L70dtVWKT5WM
-         j+/scgZ5VdLXCIfJ2CsmT5Yhb6r9gkEEnnImnm3cIviardcyc7Hp78CS24ILZFWLp41l
-         5ac+povKJbVzTzodm+nFR2y7QknUg+9UKV+bMPwkxNHADXXpzARlF8CkYBaytmRQ+KYE
-         bsbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694517117; x=1695121917;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+qntkmutwprS+2oQeQzgmaP97TAaIsTbzLeg5qvDo3I=;
-        b=G3pILLtPOuxi5yUHoRqL3knDF410tV/NpFOKN8iLzAIPyMQ2/puvsfocDpPZ0sc9bR
-         m+Xcl+WDAmS0K26nNIt44UhVBBHgj+xlkNFHvTn1Bb/N0vgojWzdHgIdDANDX9XRFhJv
-         snjYp9NSdDMuhCpFSgWfsvyr/sAwIIIi4SOvXR2rU/ywpRuIRCYyTn3iOa+Y9qqtEk6b
-         XR4qhyW7HO2fJbGHzQoIDjO+jgSaqySsrQ7ex+wiXmR4JXslxNiGQ3jR8nfWUHVofFfW
-         HyDoGzHl4TEvYbO/6yHH/X51A6suuuyMUddY6AwdwuWWu+NpbLKlTEZwSdmmmuFoeRdz
-         mkQQ==
-X-Gm-Message-State: AOJu0Yw8HJYSIpDbkPATayVeG3z/zUvOGDJP087JVAOUJDfATKYfTf26
-        KUXSapZHQawpeRQ/B4Y9CxztXA==
-X-Google-Smtp-Source: AGHT+IFcfRE8ddxwpToYbqFfRtOil3lX24xXTcYqNYqRo7uISxMJRRm2P8R9+XFaZVp+WcaxzQj80A==
-X-Received: by 2002:a17:906:51c8:b0:9a9:e4ce:c9a2 with SMTP id v8-20020a17090651c800b009a9e4cec9a2mr10496806ejk.53.1694517117122;
-        Tue, 12 Sep 2023 04:11:57 -0700 (PDT)
-Received: from localhost ([82.150.214.1])
-        by smtp.gmail.com with UTF8SMTPSA id u17-20020a170906069100b009a5f7fb51d5sm6638903ejb.21.2023.09.12.04.11.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Sep 2023 04:11:56 -0700 (PDT)
-From:   David Gstir <david@sigma-star.at>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>,
+        Tue, 12 Sep 2023 07:55:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F03810DF;
+        Tue, 12 Sep 2023 04:55:16 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38CBgddn027025;
+        Tue, 12 Sep 2023 11:55:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=PCM26YtKHiMVe1f3wkXnoA7poj4mfUWua7B9nhEe9yI=;
+ b=dP1SzG+9cdY+0guav+qgvL8ChL1MXPg2R3LEyn9EyG0heosXJ4U7mZLyY9pACGzxuXli
+ pP1dVRkmn7pSDJrBZpE12uFIUT+lzKfmrHiWV9sKTlPQL5B0nR8ybgdFH8c+hhnGQ9oK
+ ZfWBVz6d/0U47n10o0njL4sT39ALVEvk8qqA51hMwHJdI9FdN8SSbr9K9E60N6lJZ3sQ
+ Fim//zxIQzsZrAMnGPJY7ASrcSCfzQ9XU1KwTXciiVxJLD2/d6Pm5Phkd/BANmRgVoS1
+ hSWsTPs6RnG1b733AJzRfI81X/XOYE76ffHqrtvVVv9dIHOxSGs5UAUBvxCM8m1oCdXP fw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2p73jerk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Sep 2023 11:55:02 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38CB92cu015691;
+        Tue, 12 Sep 2023 11:55:02 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2p73jer7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Sep 2023 11:55:01 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38C9rHXw024021;
+        Tue, 12 Sep 2023 11:55:00 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t131t376q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Sep 2023 11:55:00 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38CBt0G966453926
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Sep 2023 11:55:00 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 210B358058;
+        Tue, 12 Sep 2023 11:55:00 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0ABE158061;
+        Tue, 12 Sep 2023 11:54:59 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.150.173])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Sep 2023 11:54:58 +0000 (GMT)
+Message-ID: <7335a4587233626a39ce9bc8a969957d7f43a34c.camel@linux.ibm.com>
+Subject: Re: [PATCH] certs: Restrict blacklist updates to the secondary
+ trusted keyring
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
         Jarkko Sakkinen <jarkko@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     David Gstir <david@sigma-star.at>, Shawn Guo <shawnguo@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        sigma star Kernel Team <upstream+dcp@sigma-star.at>,
         David Howells <dhowells@redhat.com>,
-        Li Yang <leoyang.li@nxp.com>, Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Tejun Heo <tj@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-security-module@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>,
-        David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Subject: [PATCH v2 3/3] doc: trusted-encrypted: add DCP as new trust source
-Date:   Tue, 12 Sep 2023 13:11:14 +0200
-Message-ID: <20230912111115.24274-4-david@sigma-star.at>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230912111115.24274-1-david@sigma-star.at>
-References: <20230912111115.24274-1-david@sigma-star.at>
-MIME-Version: 1.0
+        David Woodhouse <dwmw2@infradead.org>,
+        "mic@linux.microsoft.com" <mic@linux.microsoft.com>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>
+Date:   Tue, 12 Sep 2023 07:54:58 -0400
+In-Reply-To: <932231F5-8050-4436-84B8-D7708DC43845@oracle.com>
+References: <20230908213428.731513-1-eric.snowberg@oracle.com>
+         <097a0413b27ed9792dc598ff184730bcf6ae8fcf.camel@linux.ibm.com>
+         <20230911.chaeghaeJ4ei@digikod.net>
+         <CEA476C1-4CE5-4FFC-91D7-6061C8605B18@oracle.com>
+         <ba2f5560800608541e81fbdd28efa9875b35e491.camel@linux.ibm.com>
+         <932231F5-8050-4436-84B8-D7708DC43845@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Y7r9xd52tY3799dADkeyKPMg2wHxeGTe
+X-Proofpoint-GUID: 8bfjbYg2Do2G7ApmisuEcI6wSh8MLZnx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-12_09,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 spamscore=0 suspectscore=0
+ mlxscore=0 clxscore=1015 phishscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309120095
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Update the documentation for trusted and encrypted KEYS with DCP as new
-trust source:
+On Tue, 2023-09-12 at 02:00 +0000, Eric Snowberg wrote:
+> 
+> > On Sep 11, 2023, at 5:08 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > 
+> > On Mon, 2023-09-11 at 22:17 +0000, Eric Snowberg wrote:
+> >> 
+> >>> On Sep 11, 2023, at 10:51 AM, Mickaël Salaün <mic@digikod.net> wrote:
+> >>> 
+> >>> On Mon, Sep 11, 2023 at 09:29:07AM -0400, Mimi Zohar wrote:
+> >>>> Hi Eric,
+> >>>> 
+> >>>> On Fri, 2023-09-08 at 17:34 -0400, Eric Snowberg wrote:
+> >>>>> Currently root can dynamically update the blacklist keyring if the hash
+> >>>>> being added is signed and vouched for by the builtin trusted keyring.
+> >>>>> Currently keys in the secondary trusted keyring can not be used.
+> >>>>> 
+> >>>>> Keys within the secondary trusted keyring carry the same capabilities as
+> >>>>> the builtin trusted keyring.  Relax the current restriction for updating
+> >>>>> the .blacklist keyring and allow the secondary to also be referenced as
+> >>>>> a trust source.  Since the machine keyring is linked to the secondary
+> >>>>> trusted keyring, any key within it may also be used.
+> >>>>> 
+> >>>>> An example use case for this is IMA appraisal.  Now that IMA both
+> >>>>> references the blacklist keyring and allows the machine owner to add
+> >>>>> custom IMA CA certs via the machine keyring, this adds the additional
+> >>>>> capability for the machine owner to also do revocations on a running
+> >>>>> system.
+> >>>>> 
+> >>>>> IMA appraisal usage example to add a revocation for /usr/foo:
+> >>>>> 
+> >>>>> sha256sum /bin/foo | awk '{printf "bin:" $1}' > hash.txt
+> >>>>> 
+> >>>>> openssl smime -sign -in hash.txt -inkey machine-private-key.pem \
+> >>>>>      -signer machine-certificate.pem -noattr -binary -outform DER \
+> >>>>>      -out hash.p7s
+> >>>>> 
+> >>>>> keyctl padd blacklist "$(< hash.txt)" %:.blacklist < hash.p7s
+> >>>>> 
+> >>>>> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> >>>> 
+> >>>> The secondary keyring may include both CA and code signing keys.  With
+> >>>> this change any key loaded onto the secondary keyring may blacklist a
+> >>>> hash.  Wouldn't it make more sense to limit blacklisting
+> >>>> certificates/hashes to at least CA keys? 
+> >>> 
+> >>> Some operational constraints may limit what a CA can sign.
+> >> 
+> >> Agreed.  
+> >> 
+> >> Is there precedents for requiring this S/MIME to be signed by a CA? 
+> >> 
+> >>> This change is critical and should be tied to a dedicated kernel config
+> >>> (disabled by default), otherwise existing systems using this feature
+> >>> will have their threat model automatically changed without notice.
+> >> 
+> >> Today we have INTEGRITY_CA_MACHINE_KEYRING_MAX.  This can 
+> >> be enabled to enforce CA restrictions on the machine keyring.  Mimi, would 
+> >> this be a suitable solution for what you are after?
+> > 
+> > There needs to be some correlation between the file hashes being added
+> > to the blacklist and the certificate that signed them.  Without that
+> > correlation, any key on the secondary trusted keyring could add any
+> > file hashes it wants to the blacklist.
+> 
+> Today any key in the secondary trusted keyring can be used to validate a 
+> signed kernel module.  At a later time, if a new hash is added to the blacklist 
+> keyring to revoke loading a signed kernel module,  the ability to do the 
+> revocation with this additional change would be more restrictive than loading 
+> the original module.
 
-- Describe security properties of DCP trust source
-- Describe key usage
-- Document blob format
+A public key on the secondary keyring is used to verify code that it
+signed, but does not impact any other code. Allowing any public key on
+the secondary keyring to blacklist any file hash is giving it more
+privileges than it originally had.
 
-Co-developed-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Co-developed-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Signed-off-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Signed-off-by: David Gstir <david@sigma-star.at>
----
- .../security/keys/trusted-encrypted.rst       | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
+This requirement isn't different than how Certificate Revocation List
+(CRL) work.  Not any CA can revoke a certificate.
 
-diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-index 9bc9db8ec651..4452070afbe9 100644
---- a/Documentation/security/keys/trusted-encrypted.rst
-+++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -42,6 +42,14 @@ safe.
-          randomly generated and fused into each SoC at manufacturing time.
-          Otherwise, a common fixed test key is used instead.
- 
-+     (4) DCP (Data Co-Processor: crypto accelerator of various i.MX SoCs)
-+
-+         Rooted to a one-time programmable key (OTP) that is generally burnt
-+         in the on-chip fuses and is accessible to the DCP encryption engine only.
-+         DCP provides two keys that can be used as root of trust: the OTP key
-+         and the UNIQUE key. Default is to use the UNIQUE key, but selecting
-+         the OTP key can be done via a module parameter (dcp_use_otp_key).
-+
-   *  Execution isolation
- 
-      (1) TPM
-@@ -57,6 +65,12 @@ safe.
- 
-          Fixed set of operations running in isolated execution environment.
- 
-+     (4) DCP
-+
-+         Fixed set of cryptographic operations running in isolated execution
-+         environment. Only basic blob key encryption is executed there.
-+         The actual key sealing/unsealing is done on main processor/kernel space.
-+
-   * Optional binding to platform integrity state
- 
-      (1) TPM
-@@ -79,6 +93,11 @@ safe.
-          Relies on the High Assurance Boot (HAB) mechanism of NXP SoCs
-          for platform integrity.
- 
-+     (4) DCP
-+
-+         Relies on Secure/Trusted boot process (called HAB by vendor) for
-+         platform integrity.
-+
-   *  Interfaces and APIs
- 
-      (1) TPM
-@@ -94,6 +113,11 @@ safe.
- 
-          Interface is specific to silicon vendor.
- 
-+     (4) DCP
-+
-+         Vendor-specific API that is implemented as part of the DCP crypto driver in
-+         ``drivers/crypto/mxs-dcp.c``.
-+
-   *  Threat model
- 
-      The strength and appropriateness of a particular trust source for a given
-@@ -129,6 +153,13 @@ selected trust source:
-      CAAM HWRNG, enable CRYPTO_DEV_FSL_CAAM_RNG_API and ensure the device
-      is probed.
- 
-+  *  DCP (Data Co-Processor: crypto accelerator of various i.MX SoCs)
-+
-+     The DCP hardware device itself does not provide a dedicated RNG interface,
-+     so the kernel default RNG is used. SoCs with DCP like the i.MX6ULL do have
-+     a dedicated hardware RNG that is independent from DCP which can be enabled
-+     to back the kernel RNG.
-+
- Users may override this by specifying ``trusted.rng=kernel`` on the kernel
- command-line to override the used RNG with the kernel's random number pool.
- 
-@@ -231,6 +262,19 @@ Usage::
- CAAM-specific format.  The key length for new keys is always in bytes.
- Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
- 
-+Trusted Keys usage: DCP
-+-----------------------
-+
-+Usage::
-+
-+    keyctl add trusted name "new keylen" ring
-+    keyctl add trusted name "load hex_blob" ring
-+    keyctl print keyid
-+
-+"keyctl print" returns an ASCII hex copy of the sealed key, which is in format
-+specific to this DCP key-blob implementation.  The key length for new keys is
-+always in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-+
- Encrypted Keys usage
- --------------------
- 
-@@ -426,3 +470,44 @@ string length.
- privkey is the binary representation of TPM2B_PUBLIC excluding the
- initial TPM2B header which can be reconstructed from the ASN.1 octed
- string length.
-+
-+DCP Blob Format
-+---------------
-+
-+The Data Co-Processor (DCP) provides hardware-bound AES keys using its
-+AES encryption engine only. It does not provide direct key sealing/unsealing.
-+To make DCP hardware encryption keys usable as trust source, we define
-+our own custom format that uses a hardware-bound key to secure the sealing
-+key stored in the key blob.
-+
-+Whenever a new trusted key using DCP is generated, we generate a random 128-bit
-+blob encryption key (BEK) and 128-bit nonce. The BEK and nonce are used to
-+encrypt the trusted key payload using AES-128-GCM.
-+
-+The BEK itself is encrypted using the hardware-bound key using the DCP's AES
-+encryption engine with AES-128-ECB. The encrypted BEK, generated nonce,
-+BEK-encrypted payload and authentication tag make up the blob format together
-+with a version number, payload length and authentication tag::
-+
-+    /*
-+     * struct dcp_blob_fmt - DCP BLOB format.
-+     *
-+     * @fmt_version: Format version, currently being %1
-+     * @blob_key: Random AES 128 key which is used to encrypt @payload,
-+     *            @blob_key itself is encrypted with OTP or UNIQUE device key in
-+     *            AES-128-ECB mode by DCP.
-+     * @nonce: Random nonce used for @payload encryption.
-+     * @payload_len: Length of the plain text @payload.
-+     * @payload: The payload itself, encrypted using AES-128-GCM and @blob_key,
-+     *           GCM auth tag of size AES_BLOCK_SIZE is attached at the end of it.
-+     *
-+     * The total size of a DCP BLOB is sizeof(struct dcp_blob_fmt) + @payload_len +
-+     * AES_BLOCK_SIZE.
-+     */
-+    struct dcp_blob_fmt {
-+            __u8 fmt_version;
-+            __u8 blob_key[AES_KEYSIZE_128];
-+            __u8 nonce[AES_KEYSIZE_128];
-+            __le32 payload_len;
-+            __u8 payload[];
-+    } __packed;
+> 
+> But, if you think it would be appropriate, I could add a new Kconfig (disabled 
+> by default) that validates the key being used to vouch the S/MIME encoded 
+> hash is a CA.  That would certainly make this more complicated.   With this 
+> addition, would  the key usage field need to be referenced too?
+> 
+> Another idea I had was changing this patch to reference only the builtin and 
+> the machine keyring (if configured), not the secondary keyring.   Then with
+> INTEGRITY_CA_MACHINE_KEYRING_MAX, only CA keys could be 
+> used. Let me know your thoughts on this approach.  Thanks.
+
+Better, but it doesn't address the underlying problem.
+
 -- 
-2.35.3
+thanks,
+
+Mimi
 
