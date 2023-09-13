@@ -2,85 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72B879F274
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Sep 2023 21:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C347779F4F6
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Sep 2023 00:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232781AbjIMTyw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Sep 2023 15:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S233048AbjIMW2T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Sep 2023 18:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbjIMTys (ORCPT
+        with ESMTP id S229645AbjIMW2S (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Sep 2023 15:54:48 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBEC1FD7;
-        Wed, 13 Sep 2023 12:54:39 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56210C433CB;
-        Wed, 13 Sep 2023 19:54:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694634879;
-        bh=R4NyGPjqTOJdveL4q6k73GTVhLrDaw0wxAJyW09foX4=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=OqouiPKUjT9AstBjsUBIOpRKceRHw08413u8/UAysGbyg6TikZyOhX8D6SZG8Im3i
-         tyVr3CX4TuXpKYh9Dzj7A7/6wnZM3XcHU4mz+glQvIRwOQntKPD5zZfk4GsCwgQC+y
-         vYtvoLrjs6TeYTkvZ/qou4SU3f7LvYqfKKWbYDIzc2vmaKbktwB846NY5MN40A5ory
-         WuUJMaSyr6I4pVkqz+eUHcIgKO/HaWXcd3C8oen7LEfqulB8Pzq1c6E+d7tZ0waVMI
-         lbfwN0GSgrpyCXj1yxqGSUcarGZ4x8aRr/mqqhlqalbE7YdBMIEtmIIs4v425EQGTQ
-         BS/aG2aVFEkOw==
-Mime-Version: 1.0
+        Wed, 13 Sep 2023 18:28:18 -0400
+X-Greylist: delayed 914 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Sep 2023 15:28:13 PDT
+Received: from mail.hopital-saint-joseph.fr (mail.hopital-saint-joseph.fr [92.173.192.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1362A1BCB;
+        Wed, 13 Sep 2023 15:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; d=hopital-saint-joseph.fr; s=mail;
+        c=simple/simple; t=1694643166; h=from:subject:to:date:message-id;
+        bh=R6DIoOiH5JmDdiOW1wECBX1NoOpvDzqBTbkFS8nCiV4=;
+        b=SLZC2/rKO55kUz1iVrWwlKtHH1T8v1Y01dq7TQyDmiZd1X07kU9PF6JyoC6OHymXNyVairL9bMW
+        E+1Ke5mnidsU4GnJGbSetNNB2/tgmmTGHcIbYK1pXFLIBW6Ar8zvjLJ5W+05N0FqFOQZGIvuvFa6z
+        cczCoWTZPXsBbCbkPpZgPT7D/BP1wCX6Rjic+ey15dkh39lrJntmnEmL2oLV+Ch6MqgDY0+YGaQ4+
+        vwfH4viL6wFKrNQP9t1ezupXUIUDcVdsluxXuhVpT9w8WMnthzgnaWKg6ZUrynj2fN0Fge1iUDMPV
+        Q1jrvyzxBGTW+z7/eO4suIwjNHhXpk77Co8g==
+Received: from srvexc12.hopital-saint-joseph.fr (172.18.3.36) by
+ srvexc12.hopital-saint-joseph.fr (172.18.3.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2507.32; Thu, 14 Sep 2023 00:12:45 +0200
+Received: from srvexc12.hopital-saint-joseph.fr ([192.168.70.112]) by
+ srvexc12.hopital-saint-joseph.fr ([192.168.70.112]) with mapi id
+ 15.01.2507.032; Thu, 14 Sep 2023 00:12:45 +0200
+From:   ALLEMOZ Julie <jallemoz@hopital-saint-joseph.fr>
+To:     ALLEMOZ Julie <jallemoz@hopital-saint-joseph.fr>
+Subject: RE: Good News
+Thread-Topic: Good News
+Thread-Index: Adnmj2xNwPfKdt3qcEyVAV9JoIyB1A==
+Date:   Wed, 13 Sep 2023 22:12:45 +0000
+Message-ID: <41063cb77fbd4b9ab5d479763c72c49f@hopital-saint-joseph.fr>
+References: <e48fc36c54564d2abea8f0f4c8692962@hopital-saint-joseph.fr>
+In-Reply-To: <e48fc36c54564d2abea8f0f4c8692962@hopital-saint-joseph.fr>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.11.254]
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 13 Sep 2023 22:54:35 +0300
-Message-Id: <CVI1XE98FLQN.1S24GU1DJ89WY@suppilovahvero>
-Cc:     "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "David Howells" <dhowells@redhat.com>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Justin M . Forbes" <jforbes@fedoraproject.org>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <keyrings@vger.kernel.org>
-Subject: Re: [GIT PULL] tpmdd changes for v6.6-rc2
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-X-Mailer: aerc 0.14.0
-References: <20230912201102.1012306-1-jarkko@kernel.org>
- <CAHk-=wgLB9_z5TcvRKVsSk3BWPfkDeWN0pDMdEv=-hnrnTgX1Q@mail.gmail.com>
- <CVI1GKA044I2.2A5GRO80ABMNN@suppilovahvero>
- <CAHk-=wiS2rHdPe9qQ4Ahzy6t6hbG18ihsOjBYxn3Nr88yen52A@mail.gmail.com>
-In-Reply-To: <CAHk-=wiS2rHdPe9qQ4Ahzy6t6hbG18ihsOjBYxn3Nr88yen52A@mail.gmail.com>
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Sep 13, 2023 at 10:45 PM EEST, Linus Torvalds wrote:
-> On Wed, 13 Sept 2023 at 12:32, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > Ok, I'll make something more reasonable.
->
-> Well, I took the pull already, just saying "tpm fix".
->
-> I assume the only thing the typo actually causes is printk's with a
-> typo in it. Maybe some sysfs name will be wrong?
->
-> That's the kind of information I would have _liked_ to see in the
-> merge message, but I didn't then delve into just where the class names
-> might actually be used.
->
->                Linus
 
-Thanks for pointing this out because I also overlooked the whole fix,
-and based my conclusions just "git describe --contains", which pointed
-to my previous signed tag.
+You are a recipient to Mrs Julie Leach Donation of $2 million USD. Contact =
+( ms.julieleach001@gmail.com ) for claims.
 
-I actually do QA (both x86 and aarch64 and slowly setting up also riscv)
-to my tree, and I did not understand how this could have leaked into a
-PR since TPM2 kselftest would have catched that.
 
-The original commit must have gone through some other maintainer tree
-since I do not see in any of my PR's. Anyway, I'll document next time
-better my PR because apparently not doing that can lead to toally false
-conclusions :-)
-
-Thanks for picking it up anyway.
-
-BR, Jarkko
