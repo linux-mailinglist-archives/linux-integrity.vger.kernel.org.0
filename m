@@ -2,103 +2,80 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993FE79EACB
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Sep 2023 16:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C4579F167
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Sep 2023 20:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241130AbjIMOQ7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Sep 2023 10:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S231922AbjIMSwS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Sep 2023 14:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241185AbjIMOQ6 (ORCPT
+        with ESMTP id S231820AbjIMSwQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Sep 2023 10:16:58 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF90ABB
-        for <linux-integrity@vger.kernel.org>; Wed, 13 Sep 2023 07:16:54 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Rm2JK1PB1z9v7Gj
-        for <linux-integrity@vger.kernel.org>; Wed, 13 Sep 2023 22:04:33 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBHnbg8xAFlWTNDAA--.34259S2;
-        Wed, 13 Sep 2023 15:16:37 +0100 (CET)
-Message-ID: <ea3dc0b080d6ed56c2f90793017d2908ba15718f.camel@huaweicloud.com>
-Subject: Re: Linux IMA documentation
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Ken Goldman <kgold@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Linux Integrity <linux-integrity@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>
-Date:   Wed, 13 Sep 2023 16:16:24 +0200
-In-Reply-To: <5800e76f-bae5-b3c8-9d0d-51584c93d4ad@linux.ibm.com>
-References: <a5ed5a0f-5692-426e-d058-983cf4d9cccb@linux.ibm.com>
-         <CUUY4NO1I9DA.1S0KWKJVHQ8K5@seitikki>
-         <6ea76738-f587-087d-60ea-ed03adedab62@linux.ibm.com>
-         <CVAGSGSJ0NC2.1OQUGKH4ZR0ZB@suppilovahvero>
-         <5800e76f-bae5-b3c8-9d0d-51584c93d4ad@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4-0ubuntu2 
+        Wed, 13 Sep 2023 14:52:16 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901E6170F
+        for <linux-integrity@vger.kernel.org>; Wed, 13 Sep 2023 11:52:12 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b9d07a8d84so1930351fa.3
+        for <linux-integrity@vger.kernel.org>; Wed, 13 Sep 2023 11:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1694631130; x=1695235930; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Qj9Z1rQiOVRFuIxsKJDJyO2OoNyojeG35brwDaLZgQ=;
+        b=d5QJbEoRWpQ2nEetGEM2hXNIrWKepyH9sc02Igli9Z4bvlcITQXh4jZwq3ino2bEJg
+         J+2A7eiUQeTgEV72fi+ooGNvZsuGaAK3WI4ntzb/nIKbsPUcFDUAOS8tjQpG5BWuSZyt
+         kEGtw8f1YzU8zbMIfmWGu/V/gf5tbsETnu3V8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694631130; x=1695235930;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Qj9Z1rQiOVRFuIxsKJDJyO2OoNyojeG35brwDaLZgQ=;
+        b=s3jtjdvOKSmundDIKOWaYzdXgiZ61V5HSmtCboaVsM13Bc5m7ygyzaun08t3IWrYPS
+         /99BlKb4SjONZLMIFkTqwextLzcUHfrOOdN8JhKTyhLzDOAZb9DOWnIzoVfTNeYeF4LF
+         606Ss0PUc+f4ZWEifZfy85XFp16+oPZvFgSutZByOSyZbf5KsIg8lEo6HhswAuLC4a1K
+         QMtboRc4uMPetPib1uqOHqZHNZgd8GkX2eTvBVMq7UcgeDznsj8cymLLT3FPk1+cxIKz
+         p+/HbQm9NWgYibKoi5zwpBY+k+CpEyu9h0I0bvgPET5v1+qVRglvpXg5kH+iaaZ64PDG
+         1X7w==
+X-Gm-Message-State: AOJu0YykkXfqkARDMLmSw9qoJmropDrzE7AB3YdbBtRdpRfFzr0Igqhw
+        jxzXHiASHtTCJlxmsqsWB4IaoA8N/s4sr4Zy+kvs+36R
+X-Google-Smtp-Source: AGHT+IGLQrstF7MYSI2s4ojfUHkU8dym/UZv4Wji9kUmWwN+EhgvPW9gne0h5NoduJFs5OIRzTLWtQ==
+X-Received: by 2002:a2e:781a:0:b0:2bd:1fee:aacf with SMTP id t26-20020a2e781a000000b002bd1feeaacfmr2915263ljc.24.1694631130500;
+        Wed, 13 Sep 2023 11:52:10 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id q26-20020a17090676da00b009ad8338aafasm3116768ejn.13.2023.09.13.11.52.09
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Sep 2023 11:52:09 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-52e64bc7c10so90638a12.1
+        for <linux-integrity@vger.kernel.org>; Wed, 13 Sep 2023 11:52:09 -0700 (PDT)
+X-Received: by 2002:a17:907:761a:b0:9a2:185b:5376 with SMTP id
+ jx26-20020a170907761a00b009a2185b5376mr2470433ejc.49.1694631129472; Wed, 13
+ Sep 2023 11:52:09 -0700 (PDT)
 MIME-Version: 1.0
-X-CM-TRANSID: GxC2BwBHnbg8xAFlWTNDAA--.34259S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruFykJr4xJrWDJw4rKryDKFg_yoWktrcEyr
-        1DAFsak3srtwnFkanrAr47uF92gasFyF1aka4UJr42v34jyayvkF4vgrWSy3s5Gw409Fy5
-        Cas8Z3yvv3W3WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbOkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-        JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-        kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
-        6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIx
-        AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
-        Ja73UjIFyTuYvjxUzsqWUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj5PbzgAAsh
-X-CFilter-Loop: Reflected
+References: <20230912201102.1012306-1-jarkko@kernel.org>
+In-Reply-To: <20230912201102.1012306-1-jarkko@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 13 Sep 2023 11:51:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgLB9_z5TcvRKVsSk3BWPfkDeWN0pDMdEv=-hnrnTgX1Q@mail.gmail.com>
+Message-ID: <CAHk-=wgLB9_z5TcvRKVsSk3BWPfkDeWN0pDMdEv=-hnrnTgX1Q@mail.gmail.com>
+Subject: Re: [GIT PULL] tpmdd changes for v6.6-rc2
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Justin M . Forbes" <jforbes@fedoraproject.org>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2023-09-06 at 16:54 -0400, Ken Goldman wrote:
-> Jonathan:  What should be my next step?
-> 
-> On 9/4/2023 5:52 PM, Jarkko Sakkinen wrote:
-> > On Fri Sep 1, 2023 at 12:46 AM EEST, Ken Goldman wrote:
-> > > Thank you.
-> > > 
-> > > Do you know the process for getting this accepted into the kernel
-> > > documentation.
-> > 
-> > The bulk of the work would be to convert it ReStructured Text and
-> > follow the guidelines in https://docs.kernel.org/doc-guide/index.html
-> 
-> I think I did that.  The source .rst is at
-> https://github.com/IBM/ima-doc
+On Tue, 12 Sept 2023 at 13:11, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> This pull request contains a critical fix for my previous pull request.
 
-I think your document is a good candidate for being put in
-Documentation/admin-guide/LSM/, once my patch set is upstreamed:
+Please, less sarcasm and more actual helpful merge commit fodder, ok?
 
-https://lore.kernel.org/linux-integrity/20230904133415.1799503-1-roberto.sassu@huaweicloud.com/
-
-Thanks
-
-Roberto
-
-> > 
-> > You should also CC the documentation patches to:
-> > 
-> > * Jonathan Corbet <corbet@lwn.net> (maintainer of the documentation)
-> > * linux-doc@vger.kernel.org
-> 
-> Thank you for this.
-> 
-> >   
-> > Perhaps Mimi could help out formalizing this together so I suggest to
-> > work with her. I'm also happy to review the documentation once the
-> > patches are out.
-> 
-> Mimi worked with me from the beginning.
-
+              Linus
