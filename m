@@ -2,230 +2,242 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EE379E4C2
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Sep 2023 12:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4C079E79B
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Sep 2023 14:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239678AbjIMKWM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Sep 2023 06:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
+        id S240242AbjIMMJn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Sep 2023 08:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239672AbjIMKWL (ORCPT
+        with ESMTP id S233326AbjIMMJn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Sep 2023 06:22:11 -0400
-X-Greylist: delayed 149114 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Sep 2023 03:22:06 PDT
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC211989
-        for <linux-integrity@vger.kernel.org>; Wed, 13 Sep 2023 03:22:06 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RlxMZ6NS9zMq8Nl;
-        Wed, 13 Sep 2023 10:22:02 +0000 (UTC)
-Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4RlxMZ26RrzMpnPp;
-        Wed, 13 Sep 2023 12:22:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1694600522;
-        bh=OGBBrriytXbTynlMIGX4UlwFwmABh13hm5bjEeypW5s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wod3nnQbGgopFRU2P/IIdAFbDbftXNxK/tsR7jgQxqeOM8XvaX633IHba6epF5pRC
-         OyoBf+N8L2zz/gsX3XPkqKBYQgLbLjWJ66rkZgQBqykFQJsO3d1h/RHTX1NF0z2B2O
-         sMrRPjyC3fEayBkck2jPHgiOf4TwfwLwQUkercMA=
-Date:   Wed, 13 Sep 2023 12:21:58 +0200
-From:   =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "mic@linux.microsoft.com" <mic@linux.microsoft.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Subject: Re: [PATCH] certs: Restrict blacklist updates to the secondary
- trusted keyring
-Message-ID: <20230913.Ceifae7ievei@digikod.net>
-References: <20230908213428.731513-1-eric.snowberg@oracle.com>
- <097a0413b27ed9792dc598ff184730bcf6ae8fcf.camel@linux.ibm.com>
- <20230911.chaeghaeJ4ei@digikod.net>
- <CEA476C1-4CE5-4FFC-91D7-6061C8605B18@oracle.com>
- <ba2f5560800608541e81fbdd28efa9875b35e491.camel@linux.ibm.com>
- <932231F5-8050-4436-84B8-D7708DC43845@oracle.com>
- <7335a4587233626a39ce9bc8a969957d7f43a34c.camel@linux.ibm.com>
- <FD6FB139-F901-4E55-9705-E7B0023BDBA8@oracle.com>
- <1149b6dbfdaabef3e48dc2852cc76aa11a6dd6b0.camel@linux.ibm.com>
- <4A0505D0-2933-43BD-BEEA-94350BB22AE7@oracle.com>
+        Wed, 13 Sep 2023 08:09:43 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0593119A7;
+        Wed, 13 Sep 2023 05:09:39 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-7a86f1befb3so248346241.1;
+        Wed, 13 Sep 2023 05:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694606978; x=1695211778; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v7PgrZebStsMLGLk3sMmCJDo+2TFRZ9yCLxlUf6YSSY=;
+        b=j/5rkXRQjdNmzv1yCaU3I+f60aVndq1aUVCKWjbY6vOEjVnGUnUbn8rcsuSXgYA6jR
+         Laj74QHHSyGc+5YRIizCT/PnhJsr38vBEXPOOo3Mmz5136XOzVjSbEksL+7ZpaBuTlgQ
+         LtB0R46XGYU6ELlVWafu8WKLpHcYbDoFHSnrXS/3TsKPLCiA08gLaaUg83UUPGWk/R3O
+         cNfuLKjO84Dv6n9WDRmd1z2RYJ5eHFnSuT7SKNDt8tkmi7ER0atxA1abLGBOOozLbAi8
+         aiwNm1anO+2QxjZ2G44bYoel3N/wjEuR2yLyjEEVobLKWUIMKzp5zzeD/9IvaNcXz1L5
+         sTOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694606978; x=1695211778;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v7PgrZebStsMLGLk3sMmCJDo+2TFRZ9yCLxlUf6YSSY=;
+        b=Q67idreGCsPhlsPnSDZa0yh3vJT2ziA9zyypnSxx3SAhQH1/IIOJmO8n1nR881QHcV
+         fJvwbAx0c+N2IrlHM6HOcrFiwnDxzQwdELu7tmCVBQ4ZvhnQL7Ve683xpQY42Zct0unf
+         Kx5BZC052C3Ih75JnwcIUJjlbYCN6j/lSy462PHoJLNUvRM+tlTwmORxob+A8VDBxNda
+         Gi/CW7JVlXacwVkVKhgaPEXz3CUQJkpU0fcL2T1ephzHII76UOQ/aDz98oxhZQKDaqsO
+         +kOY3Mr179l/V2aSqOzsEPq59GIa4mQtTO210FziFR7U9Sy1JcfY5f35CMVyK/rOXA5j
+         HWpg==
+X-Gm-Message-State: AOJu0YwhI3gmIpby43Y4KkSx5dpSIX2MI2chixrxFqULMQFZ39AFzVQT
+        NrK2fWE0I+t+pRTQyk1WeFxjiuDGNmQysnCuqgXs73I1kAs=
+X-Google-Smtp-Source: AGHT+IH1ZHzlcMOlVPi2YBSVN8/CoExSRwU869JxL3LDAlW9iSAvGDqBm5POPzdp6GCjY/ZcvhWHOMExEha9nzUwNHw=
+X-Received: by 2002:a67:f24a:0:b0:44e:9614:39bf with SMTP id
+ y10-20020a67f24a000000b0044e961439bfmr1915051vsm.6.1694606977746; Wed, 13 Sep
+ 2023 05:09:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4A0505D0-2933-43BD-BEEA-94350BB22AE7@oracle.com>
-X-Infomaniak-Routing: alpha
+References: <20230913073755.3489676-1-amir73il@gmail.com>
+In-Reply-To: <20230913073755.3489676-1-amir73il@gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 13 Sep 2023 15:09:26 +0300
+Message-ID: <CAOQ4uxiPREeTmkaxohaqbg_XvngNXdRAssupoo+EdBoDD-FBeg@mail.gmail.com>
+Subject: Re: [PATCH] ima: fix wrong dereferences of file->f_path
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-integrity@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 02:40:17AM +0000, Eric Snowberg wrote:
-> 
-> 
-> > On Sep 12, 2023, at 4:47 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > 
-> > On Tue, 2023-09-12 at 17:11 +0000, Eric Snowberg wrote:
-> >> 
-> >>> On Sep 12, 2023, at 5:54 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>> 
-> >>> On Tue, 2023-09-12 at 02:00 +0000, Eric Snowberg wrote:
-> >>>> 
-> >>>>> On Sep 11, 2023, at 5:08 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>>>> 
-> >>>>> On Mon, 2023-09-11 at 22:17 +0000, Eric Snowberg wrote:
-> >>>>>> 
-> >>>>>>> On Sep 11, 2023, at 10:51 AM, Mickaël Salaün <mic@digikod.net> wrote:
-> >>>>>>> 
-> >>>>>>> On Mon, Sep 11, 2023 at 09:29:07AM -0400, Mimi Zohar wrote:
-> >>>>>>>> Hi Eric,
-> >>>>>>>> 
-> >>>>>>>> On Fri, 2023-09-08 at 17:34 -0400, Eric Snowberg wrote:
-> >>>>>>>>> Currently root can dynamically update the blacklist keyring if the hash
-> >>>>>>>>> being added is signed and vouched for by the builtin trusted keyring.
-> >>>>>>>>> Currently keys in the secondary trusted keyring can not be used.
-> >>>>>>>>> 
-> >>>>>>>>> Keys within the secondary trusted keyring carry the same capabilities as
-> >>>>>>>>> the builtin trusted keyring.  Relax the current restriction for updating
-> >>>>>>>>> the .blacklist keyring and allow the secondary to also be referenced as
-> >>>>>>>>> a trust source.  Since the machine keyring is linked to the secondary
-> >>>>>>>>> trusted keyring, any key within it may also be used.
-> >>>>>>>>> 
-> >>>>>>>>> An example use case for this is IMA appraisal.  Now that IMA both
-> >>>>>>>>> references the blacklist keyring and allows the machine owner to add
-> >>>>>>>>> custom IMA CA certs via the machine keyring, this adds the additional
-> >>>>>>>>> capability for the machine owner to also do revocations on a running
-> >>>>>>>>> system.
-> >>>>>>>>> 
-> >>>>>>>>> IMA appraisal usage example to add a revocation for /usr/foo:
-> >>>>>>>>> 
-> >>>>>>>>> sha256sum /bin/foo | awk '{printf "bin:" $1}' > hash.txt
-> >>>>>>>>> 
-> >>>>>>>>> openssl smime -sign -in hash.txt -inkey machine-private-key.pem \
-> >>>>>>>>>    -signer machine-certificate.pem -noattr -binary -outform DER \
-> >>>>>>>>>    -out hash.p7s
-> >>>>>>>>> 
-> >>>>>>>>> keyctl padd blacklist "$(< hash.txt)" %:.blacklist < hash.p7s
-> >>>>>>>>> 
-> >>>>>>>>> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> >>>>>>>> 
-> >>>>>>>> The secondary keyring may include both CA and code signing keys.  With
-> >>>>>>>> this change any key loaded onto the secondary keyring may blacklist a
-> >>>>>>>> hash.  Wouldn't it make more sense to limit blacklisting
-> >>>>>>>> certificates/hashes to at least CA keys? 
-> >>>>>>> 
-> >>>>>>> Some operational constraints may limit what a CA can sign.
-> >>>>>> 
-> >>>>>> Agreed.  
-> >>>>>> 
-> >>>>>> Is there precedents for requiring this S/MIME to be signed by a CA? 
-> >>>>>> 
-> >>>>>>> This change is critical and should be tied to a dedicated kernel config
-> >>>>>>> (disabled by default), otherwise existing systems using this feature
-> >>>>>>> will have their threat model automatically changed without notice.
-> >>>>>> 
-> >>>>>> Today we have INTEGRITY_CA_MACHINE_KEYRING_MAX.  This can 
-> >>>>>> be enabled to enforce CA restrictions on the machine keyring.  Mimi, would 
-> >>>>>> this be a suitable solution for what you are after?
-> >>>>> 
-> >>>>> There needs to be some correlation between the file hashes being added
-> >>>>> to the blacklist and the certificate that signed them.  Without that
-> >>>>> correlation, any key on the secondary trusted keyring could add any
-> >>>>> file hashes it wants to the blacklist.
-> >>>> 
-> >>>> Today any key in the secondary trusted keyring can be used to validate a 
-> >>>> signed kernel module.  At a later time, if a new hash is added to the blacklist 
-> >>>> keyring to revoke loading a signed kernel module,  the ability to do the 
-> >>>> revocation with this additional change would be more restrictive than loading 
-> >>>> the original module.
-> >>> 
-> >>> A public key on the secondary keyring is used to verify code that it
-> >>> signed, but does not impact any other code. Allowing any public key on
-> >>> the secondary keyring to blacklist any file hash is giving it more
-> >>> privileges than it originally had.
-> >>> 
-> >>> This requirement isn't different than how Certificate Revocation List
-> >>> (CRL) work.  Not any CA can revoke a certificate.
-> >> 
-> >> In UEFI Secure Boot we have the Forbidden Signature Database (DBX).  
-> >> Root can update the DBX on a host.  The requirement placed on updating 
-> >> it is the new DBX entry must be signed by any key contained within the 
-> >> KEK.  Following a reboot, all DBX entries load into the .blacklist keyring.  
-> >> There is not a requirement similar to how CRL’s work here, any KEK key 
-> >> can be used.
-> >> 
-> >> With architectures booted through a shim there is the MOKX.  Similar to 
-> >> DBX, MOKX have the same capabilities, however they do not need to be 
-> >> signed by any key, the machine owner must show they have physical 
-> >> presence (and potentially a MOK password) for inclusion.  Again there 
-> >> is not a requirement similar to how CRL’s work here either.  The machine 
-> >> owner can decide what is included.
-> >> 
-> >> Today when a kernel is built, any number of keys may be included within 
-> >> the builtin trusted keyring.  The keys included in the kernel may not have 
-> >> a single usage field set or the CA bit set.  There are no requirements on 
-> >> how these keys get used later on.  Any key in the builtin trusted keyring 
-> >> can be used to sign a revocation that can be added to the blacklist keyring.  
-> >> Additionally, any key in the MOK can be used to sign this kernel and it will 
-> >> boot.  Before booting the kernel, MOK keys have more privileges than 
-> >> after the kernel is booted in some instances.
-> >> 
-> >> Today MOK keys can be loaded into the machine keyring.  These keys get 
-> >> linked to the secondary trusted keyring.  Currently key usage enforcement
-> >> is being applied to these keys behind some Kconfig options.  By default 
-> >> anything in the secondary has the same capabilities as the builtin trusted 
-> >> keyring.  What is challenging here with this request is the inconsistency 
-> >> between how everything else currently works. 
-> >> 
-> >> Root can not arbitrarily add things to the secondary trusted keyring.  These 
-> >> keys must be signed by something in either the machine or the builtin.  In 
-> >> this thread [1], Jarkko is saying CA based infrastructure should be a policy 
-> >> decision not to be enforced by the kernel. Wouldn’t this apply here as well?
-> >> 
-> >> 1. https://lore.kernel.org/lkml/CVGUFUEQVCHS.37OA20PNG9EVB@suppilovahvero/
-> > 
-> > Mickaël said, "This change is critical and should be tied to a
-> > dedicated kernel config
-> > (disabled by default), otherwise existing systems using this feature
-> > will have their threat model automatically changed without notice."
-> 
-> I was thinking he meant it is critical not to change the current behavior
-> by limiting blacklisting to only CA keys.  Not that it was critical to add
-> CA enforcement.  Maybe Mickaël can comment?
+On Wed, Sep 13, 2023 at 10:38=E2=80=AFAM Amir Goldstein <amir73il@gmail.com=
+> wrote:
+>
+> When storing IMA xattr on an overlayfs inode, the xattr is actually
+> stored in the inode of the underlying (a.k.a real) filesystem, so there
+> is an ambiguity whether this IMA xattr describes the integrity of the
+> overlayfs inode or the real inode.
+>
+> For this reason and other reasons, IMA is not supported on overlayfs,
+> in the sense that integrity checking on the overlayfs inode/file/path
+> do not work correctly and have undefined behavior and the IMA xattr
+> always describes the integrity of the real inode.
+>
+> When a user operates on an overlayfs file, whose underlying real file
+> has IMA enabled, IMA should always operate on the real path and not
+> on the overlayfs path.
+>
+> IMA code already uses the helper file_dentry() to get the dentry
+> of the real file. Dereferencing file->f_path directly means that IMA
+> will operate on the overlayfs inode, which is wrong.
+>
+> Therefore, all dereferences to f_path were converted to use the
+> file_real_path() helper.
+>
+> Reported-by: syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/linux-unionfs/0000000000005bd097060530b75=
+8@google.com/
+> Fixes: db1d1e8b9867 ("IMA: use vfs_getattr_nosec to get the i_version")
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Cc: Goldwyn Rodrigues <rgoldwyn@suse.com>
+> Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+> ---
+>
+> Mimi,
+>
+> Some of the wrong f_path dereferences are much older than the Fixes
+> commit, but they did not have as big an impact as the wrong f_path
+> dereference that the Fixes commit introduced.
+>
+> For example, commit a408e4a86b36 ("ima: open a new file instance if no
+> read permissions") worked because reading the content of the overlayfs
+> file has the same result as reading the content of the real file, but it
+> is actually the real file integrity that we want to verify.
+>
+> Anyway, the real path information, that is now available via the
+> file_real_path() helper, was not available in IMA integrity check context
+> at the time that commit a408e4a86b36 was merged.
+>
 
-I meant that applying this patch as-is may change the threat model used
-by some users. Currently, only signed hashes vouched by the builtin
-trusted keyring are valid. If we extend this mechanism to the secondary
-trusted keyring without notice, this means that more certificates could
-vouch blacklisted hashes, which may include some certificates with an
-initial different usage.
+Only problem is that fix did not resolve the syzbot bug, which
+seems to do the IMA integrity check on overlayfs file (not sure).
 
-See commit 4da8f8c8a1e0 ("dm verity: Add support for signature
-verification with 2nd keyring") that adds
-CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING:
-https://lore.kernel.org/all/20201023170512.201124-1-mic@digikod.net/
+I am pretty sure that this patch fixes "a bug" when IMA is on the filesyste=
+m
+under overlayfs and this is a pretty important use case.
 
-> 
-> > As a possible alternative I suggested limiting which file hashes the
-> > certs on the secondary (or machine) keyring could blacklist.
-> 
-> I’m not sure I completely understand your suggestion here.
-> Do you mean, verify the CA bit is set for secondary keys, but
-> ignore the bit for builtin?  And then only use those keys to add
-> hashes to the blacklist keyring?  If I have that right, what would 
-> be the justification for the change based on how things currently
-> get included in the blacklist keyring?  Thanks.
+But I guess there are still issues with IMA over overlayfs and this is not
+the only one.
+Is this really a use case that needs to be supported?
+Isn't the newly added SB_I_IMA_UNVERIFIABLE_SIGNATURE flag
+a hint that IMA on overlayfs is not a good idea at all?
 
-I'd like to be able to specify which kind of certificate can vouch for
-blacklisting hashes, and for other usages, but AFAIK this is not the
-path Linux has followed (e.g. unlike Windows). We only have the keyring
-to identify an usage, which is unfortunate. On the other side, this
-approach lets users manage their certificates without constraint, which
-is quite (too?) flexible. A complementary approach would be to create an
-LSM (or a dedicated interface) to tie certificate properties to a set of
-kernel usages, while still letting users configure these constraints.
+Thanks,
+Amir.
+
+>
+>  security/integrity/ima/ima_api.c    |  4 ++--
+>  security/integrity/ima/ima_crypto.c |  2 +-
+>  security/integrity/ima/ima_main.c   | 10 +++++-----
+>  3 files changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/im=
+a_api.c
+> index 452e80b541e5..badf3784a1a0 100644
+> --- a/security/integrity/ima/ima_api.c
+> +++ b/security/integrity/ima/ima_api.c
+> @@ -268,8 +268,8 @@ int ima_collect_measurement(struct integrity_iint_cac=
+he *iint,
+>          * to an initial measurement/appraisal/audit, but was modified to
+>          * assume the file changed.
+>          */
+> -       result =3D vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_C=
+OOKIE,
+> -                                  AT_STATX_SYNC_AS_STAT);
+> +       result =3D vfs_getattr_nosec(file_real_path(file), &stat,
+> +                                  STATX_CHANGE_COOKIE, AT_STATX_SYNC_AS_=
+STAT);
+>         if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
+>                 i_version =3D stat.change_cookie;
+>         hash.hdr.algo =3D algo;
+> diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima=
+/ima_crypto.c
+> index 51ad29940f05..e6c52f3c8f37 100644
+> --- a/security/integrity/ima/ima_crypto.c
+> +++ b/security/integrity/ima/ima_crypto.c
+> @@ -555,7 +555,7 @@ int ima_calc_file_hash(struct file *file, struct ima_=
+digest_data *hash)
+>                 int flags =3D file->f_flags & ~(O_WRONLY | O_APPEND |
+>                                 O_TRUNC | O_CREAT | O_NOCTTY | O_EXCL);
+>                 flags |=3D O_RDONLY;
+> -               f =3D dentry_open(&file->f_path, flags, file->f_cred);
+> +               f =3D dentry_open(file_real_path(file), flags, file->f_cr=
+ed);
+>                 if (IS_ERR(f))
+>                         return PTR_ERR(f);
+>
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
+ma_main.c
+> index 365db0e43d7c..87c13effbdf4 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -94,7 +94,7 @@ static int mmap_violation_check(enum ima_hooks func, st=
+ruct file *file,
+>                 inode =3D file_inode(file);
+>
+>                 if (!*pathbuf)  /* ima_rdwr_violation possibly pre-fetche=
+d */
+> -                       *pathname =3D ima_d_path(&file->f_path, pathbuf,
+> +                       *pathname =3D ima_d_path(file_real_path(file), pa=
+thbuf,
+>                                                filename);
+>                 integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, *pathnam=
+e,
+>                                     "mmap_file", "mmapped_writers", rc, 0=
+);
+> @@ -142,7 +142,7 @@ static void ima_rdwr_violation_check(struct file *fil=
+e,
+>         if (!send_tomtou && !send_writers)
+>                 return;
+>
+> -       *pathname =3D ima_d_path(&file->f_path, pathbuf, filename);
+> +       *pathname =3D ima_d_path(file_real_path(file), pathbuf, filename)=
+;
+>
+>         if (send_tomtou)
+>                 ima_add_violation(file, *pathname, iint,
+> @@ -168,7 +168,7 @@ static void ima_check_last_writer(struct integrity_ii=
+nt_cache *iint,
+>                 update =3D test_and_clear_bit(IMA_UPDATE_XATTR,
+>                                             &iint->atomic_flags);
+>                 if ((iint->flags & IMA_NEW_FILE) ||
+> -                   vfs_getattr_nosec(&file->f_path, &stat,
+> +                   vfs_getattr_nosec(file_real_path(file), &stat,
+>                                       STATX_CHANGE_COOKIE,
+>                                       AT_STATX_SYNC_AS_STAT) ||
+>                     !(stat.result_mask & STATX_CHANGE_COOKIE) ||
+> @@ -347,7 +347,7 @@ static int process_measurement(struct file *file, con=
+st struct cred *cred,
+>                 goto out_locked;
+>
+>         if (!pathbuf)   /* ima_rdwr_violation possibly pre-fetched */
+> -               pathname =3D ima_d_path(&file->f_path, &pathbuf, filename=
+);
+> +               pathname =3D ima_d_path(file_real_path(file), &pathbuf, f=
+ilename);
+>
+>         if (action & IMA_MEASURE)
+>                 ima_store_measurement(iint, file, pathname,
+> @@ -487,7 +487,7 @@ int ima_file_mprotect(struct vm_area_struct *vma, uns=
+igned long prot)
+>                 result =3D -EPERM;
+>
+>         file =3D vma->vm_file;
+> -       pathname =3D ima_d_path(&file->f_path, &pathbuf, filename);
+> +       pathname =3D ima_d_path(file_real_path(file), &pathbuf, filename)=
+;
+>         integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, pathname,
+>                             "collect_data", "failed-mprotect", result, 0)=
+;
+>         if (pathbuf)
+> --
+> 2.34.1
+>
