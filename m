@@ -2,242 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4C079E79B
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Sep 2023 14:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993FE79EACB
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Sep 2023 16:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240242AbjIMMJn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Sep 2023 08:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
+        id S241130AbjIMOQ7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Sep 2023 10:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbjIMMJn (ORCPT
+        with ESMTP id S241185AbjIMOQ6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Sep 2023 08:09:43 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0593119A7;
-        Wed, 13 Sep 2023 05:09:39 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-7a86f1befb3so248346241.1;
-        Wed, 13 Sep 2023 05:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694606978; x=1695211778; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v7PgrZebStsMLGLk3sMmCJDo+2TFRZ9yCLxlUf6YSSY=;
-        b=j/5rkXRQjdNmzv1yCaU3I+f60aVndq1aUVCKWjbY6vOEjVnGUnUbn8rcsuSXgYA6jR
-         Laj74QHHSyGc+5YRIizCT/PnhJsr38vBEXPOOo3Mmz5136XOzVjSbEksL+7ZpaBuTlgQ
-         LtB0R46XGYU6ELlVWafu8WKLpHcYbDoFHSnrXS/3TsKPLCiA08gLaaUg83UUPGWk/R3O
-         cNfuLKjO84Dv6n9WDRmd1z2RYJ5eHFnSuT7SKNDt8tkmi7ER0atxA1abLGBOOozLbAi8
-         aiwNm1anO+2QxjZ2G44bYoel3N/wjEuR2yLyjEEVobLKWUIMKzp5zzeD/9IvaNcXz1L5
-         sTOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694606978; x=1695211778;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v7PgrZebStsMLGLk3sMmCJDo+2TFRZ9yCLxlUf6YSSY=;
-        b=Q67idreGCsPhlsPnSDZa0yh3vJT2ziA9zyypnSxx3SAhQH1/IIOJmO8n1nR881QHcV
-         fJvwbAx0c+N2IrlHM6HOcrFiwnDxzQwdELu7tmCVBQ4ZvhnQL7Ve683xpQY42Zct0unf
-         Kx5BZC052C3Ih75JnwcIUJjlbYCN6j/lSy462PHoJLNUvRM+tlTwmORxob+A8VDBxNda
-         Gi/CW7JVlXacwVkVKhgaPEXz3CUQJkpU0fcL2T1ephzHII76UOQ/aDz98oxhZQKDaqsO
-         +kOY3Mr179l/V2aSqOzsEPq59GIa4mQtTO210FziFR7U9Sy1JcfY5f35CMVyK/rOXA5j
-         HWpg==
-X-Gm-Message-State: AOJu0YwhI3gmIpby43Y4KkSx5dpSIX2MI2chixrxFqULMQFZ39AFzVQT
-        NrK2fWE0I+t+pRTQyk1WeFxjiuDGNmQysnCuqgXs73I1kAs=
-X-Google-Smtp-Source: AGHT+IH1ZHzlcMOlVPi2YBSVN8/CoExSRwU869JxL3LDAlW9iSAvGDqBm5POPzdp6GCjY/ZcvhWHOMExEha9nzUwNHw=
-X-Received: by 2002:a67:f24a:0:b0:44e:9614:39bf with SMTP id
- y10-20020a67f24a000000b0044e961439bfmr1915051vsm.6.1694606977746; Wed, 13 Sep
- 2023 05:09:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230913073755.3489676-1-amir73il@gmail.com>
-In-Reply-To: <20230913073755.3489676-1-amir73il@gmail.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 13 Sep 2023 15:09:26 +0300
-Message-ID: <CAOQ4uxiPREeTmkaxohaqbg_XvngNXdRAssupoo+EdBoDD-FBeg@mail.gmail.com>
-Subject: Re: [PATCH] ima: fix wrong dereferences of file->f_path
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-integrity@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>
+        Wed, 13 Sep 2023 10:16:58 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF90ABB
+        for <linux-integrity@vger.kernel.org>; Wed, 13 Sep 2023 07:16:54 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Rm2JK1PB1z9v7Gj
+        for <linux-integrity@vger.kernel.org>; Wed, 13 Sep 2023 22:04:33 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBHnbg8xAFlWTNDAA--.34259S2;
+        Wed, 13 Sep 2023 15:16:37 +0100 (CET)
+Message-ID: <ea3dc0b080d6ed56c2f90793017d2908ba15718f.camel@huaweicloud.com>
+Subject: Re: Linux IMA documentation
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Ken Goldman <kgold@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Linux Integrity <linux-integrity@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>
+Date:   Wed, 13 Sep 2023 16:16:24 +0200
+In-Reply-To: <5800e76f-bae5-b3c8-9d0d-51584c93d4ad@linux.ibm.com>
+References: <a5ed5a0f-5692-426e-d058-983cf4d9cccb@linux.ibm.com>
+         <CUUY4NO1I9DA.1S0KWKJVHQ8K5@seitikki>
+         <6ea76738-f587-087d-60ea-ed03adedab62@linux.ibm.com>
+         <CVAGSGSJ0NC2.1OQUGKH4ZR0ZB@suppilovahvero>
+         <5800e76f-bae5-b3c8-9d0d-51584c93d4ad@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu2 
+MIME-Version: 1.0
+X-CM-TRANSID: GxC2BwBHnbg8xAFlWTNDAA--.34259S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFykJr4xJrWDJw4rKryDKFg_yoWktrcEyr
+        1DAFsak3srtwnFkanrAr47uF92gasFyF1aka4UJr42v34jyayvkF4vgrWSy3s5Gw409Fy5
+        Cas8Z3yvv3W3WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbOkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+        JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
+        kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
+        6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIx
+        AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
+        Ja73UjIFyTuYvjxUzsqWUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj5PbzgAAsh
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 10:38=E2=80=AFAM Amir Goldstein <amir73il@gmail.com=
-> wrote:
->
-> When storing IMA xattr on an overlayfs inode, the xattr is actually
-> stored in the inode of the underlying (a.k.a real) filesystem, so there
-> is an ambiguity whether this IMA xattr describes the integrity of the
-> overlayfs inode or the real inode.
->
-> For this reason and other reasons, IMA is not supported on overlayfs,
-> in the sense that integrity checking on the overlayfs inode/file/path
-> do not work correctly and have undefined behavior and the IMA xattr
-> always describes the integrity of the real inode.
->
-> When a user operates on an overlayfs file, whose underlying real file
-> has IMA enabled, IMA should always operate on the real path and not
-> on the overlayfs path.
->
-> IMA code already uses the helper file_dentry() to get the dentry
-> of the real file. Dereferencing file->f_path directly means that IMA
-> will operate on the overlayfs inode, which is wrong.
->
-> Therefore, all dereferences to f_path were converted to use the
-> file_real_path() helper.
->
-> Reported-by: syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/linux-unionfs/0000000000005bd097060530b75=
-8@google.com/
-> Fixes: db1d1e8b9867 ("IMA: use vfs_getattr_nosec to get the i_version")
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: Goldwyn Rodrigues <rgoldwyn@suse.com>
-> Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-> ---
->
-> Mimi,
->
-> Some of the wrong f_path dereferences are much older than the Fixes
-> commit, but they did not have as big an impact as the wrong f_path
-> dereference that the Fixes commit introduced.
->
-> For example, commit a408e4a86b36 ("ima: open a new file instance if no
-> read permissions") worked because reading the content of the overlayfs
-> file has the same result as reading the content of the real file, but it
-> is actually the real file integrity that we want to verify.
->
-> Anyway, the real path information, that is now available via the
-> file_real_path() helper, was not available in IMA integrity check context
-> at the time that commit a408e4a86b36 was merged.
->
+On Wed, 2023-09-06 at 16:54 -0400, Ken Goldman wrote:
+> Jonathan:  What should be my next step?
+> 
+> On 9/4/2023 5:52 PM, Jarkko Sakkinen wrote:
+> > On Fri Sep 1, 2023 at 12:46 AM EEST, Ken Goldman wrote:
+> > > Thank you.
+> > > 
+> > > Do you know the process for getting this accepted into the kernel
+> > > documentation.
+> > 
+> > The bulk of the work would be to convert it ReStructured Text and
+> > follow the guidelines in https://docs.kernel.org/doc-guide/index.html
+> 
+> I think I did that.  The source .rst is at
+> https://github.com/IBM/ima-doc
 
-Only problem is that fix did not resolve the syzbot bug, which
-seems to do the IMA integrity check on overlayfs file (not sure).
+I think your document is a good candidate for being put in
+Documentation/admin-guide/LSM/, once my patch set is upstreamed:
 
-I am pretty sure that this patch fixes "a bug" when IMA is on the filesyste=
-m
-under overlayfs and this is a pretty important use case.
+https://lore.kernel.org/linux-integrity/20230904133415.1799503-1-roberto.sassu@huaweicloud.com/
 
-But I guess there are still issues with IMA over overlayfs and this is not
-the only one.
-Is this really a use case that needs to be supported?
-Isn't the newly added SB_I_IMA_UNVERIFIABLE_SIGNATURE flag
-a hint that IMA on overlayfs is not a good idea at all?
+Thanks
 
-Thanks,
-Amir.
+Roberto
 
->
->  security/integrity/ima/ima_api.c    |  4 ++--
->  security/integrity/ima/ima_crypto.c |  2 +-
->  security/integrity/ima/ima_main.c   | 10 +++++-----
->  3 files changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/im=
-a_api.c
-> index 452e80b541e5..badf3784a1a0 100644
-> --- a/security/integrity/ima/ima_api.c
-> +++ b/security/integrity/ima/ima_api.c
-> @@ -268,8 +268,8 @@ int ima_collect_measurement(struct integrity_iint_cac=
-he *iint,
->          * to an initial measurement/appraisal/audit, but was modified to
->          * assume the file changed.
->          */
-> -       result =3D vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_C=
-OOKIE,
-> -                                  AT_STATX_SYNC_AS_STAT);
-> +       result =3D vfs_getattr_nosec(file_real_path(file), &stat,
-> +                                  STATX_CHANGE_COOKIE, AT_STATX_SYNC_AS_=
-STAT);
->         if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
->                 i_version =3D stat.change_cookie;
->         hash.hdr.algo =3D algo;
-> diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima=
-/ima_crypto.c
-> index 51ad29940f05..e6c52f3c8f37 100644
-> --- a/security/integrity/ima/ima_crypto.c
-> +++ b/security/integrity/ima/ima_crypto.c
-> @@ -555,7 +555,7 @@ int ima_calc_file_hash(struct file *file, struct ima_=
-digest_data *hash)
->                 int flags =3D file->f_flags & ~(O_WRONLY | O_APPEND |
->                                 O_TRUNC | O_CREAT | O_NOCTTY | O_EXCL);
->                 flags |=3D O_RDONLY;
-> -               f =3D dentry_open(&file->f_path, flags, file->f_cred);
-> +               f =3D dentry_open(file_real_path(file), flags, file->f_cr=
-ed);
->                 if (IS_ERR(f))
->                         return PTR_ERR(f);
->
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index 365db0e43d7c..87c13effbdf4 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -94,7 +94,7 @@ static int mmap_violation_check(enum ima_hooks func, st=
-ruct file *file,
->                 inode =3D file_inode(file);
->
->                 if (!*pathbuf)  /* ima_rdwr_violation possibly pre-fetche=
-d */
-> -                       *pathname =3D ima_d_path(&file->f_path, pathbuf,
-> +                       *pathname =3D ima_d_path(file_real_path(file), pa=
-thbuf,
->                                                filename);
->                 integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, *pathnam=
-e,
->                                     "mmap_file", "mmapped_writers", rc, 0=
-);
-> @@ -142,7 +142,7 @@ static void ima_rdwr_violation_check(struct file *fil=
-e,
->         if (!send_tomtou && !send_writers)
->                 return;
->
-> -       *pathname =3D ima_d_path(&file->f_path, pathbuf, filename);
-> +       *pathname =3D ima_d_path(file_real_path(file), pathbuf, filename)=
-;
->
->         if (send_tomtou)
->                 ima_add_violation(file, *pathname, iint,
-> @@ -168,7 +168,7 @@ static void ima_check_last_writer(struct integrity_ii=
-nt_cache *iint,
->                 update =3D test_and_clear_bit(IMA_UPDATE_XATTR,
->                                             &iint->atomic_flags);
->                 if ((iint->flags & IMA_NEW_FILE) ||
-> -                   vfs_getattr_nosec(&file->f_path, &stat,
-> +                   vfs_getattr_nosec(file_real_path(file), &stat,
->                                       STATX_CHANGE_COOKIE,
->                                       AT_STATX_SYNC_AS_STAT) ||
->                     !(stat.result_mask & STATX_CHANGE_COOKIE) ||
-> @@ -347,7 +347,7 @@ static int process_measurement(struct file *file, con=
-st struct cred *cred,
->                 goto out_locked;
->
->         if (!pathbuf)   /* ima_rdwr_violation possibly pre-fetched */
-> -               pathname =3D ima_d_path(&file->f_path, &pathbuf, filename=
-);
-> +               pathname =3D ima_d_path(file_real_path(file), &pathbuf, f=
-ilename);
->
->         if (action & IMA_MEASURE)
->                 ima_store_measurement(iint, file, pathname,
-> @@ -487,7 +487,7 @@ int ima_file_mprotect(struct vm_area_struct *vma, uns=
-igned long prot)
->                 result =3D -EPERM;
->
->         file =3D vma->vm_file;
-> -       pathname =3D ima_d_path(&file->f_path, &pathbuf, filename);
-> +       pathname =3D ima_d_path(file_real_path(file), &pathbuf, filename)=
-;
->         integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, pathname,
->                             "collect_data", "failed-mprotect", result, 0)=
-;
->         if (pathbuf)
-> --
-> 2.34.1
->
+> > 
+> > You should also CC the documentation patches to:
+> > 
+> > * Jonathan Corbet <corbet@lwn.net> (maintainer of the documentation)
+> > * linux-doc@vger.kernel.org
+> 
+> Thank you for this.
+> 
+> >   
+> > Perhaps Mimi could help out formalizing this together so I suggest to
+> > work with her. I'm also happy to review the documentation once the
+> > patches are out.
+> 
+> Mimi worked with me from the beginning.
+
