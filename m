@@ -2,257 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94EAE79FE82
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Sep 2023 10:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5877A0750
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Sep 2023 16:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236473AbjINIe6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Sep 2023 04:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
+        id S240017AbjINO2s (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 Sep 2023 10:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236334AbjINIew (ORCPT
+        with ESMTP id S240125AbjINO2r (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Sep 2023 04:34:52 -0400
-X-Greylist: delayed 79964 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Sep 2023 01:34:48 PDT
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DB21BFC
-        for <linux-integrity@vger.kernel.org>; Thu, 14 Sep 2023 01:34:48 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RmVxJ4v4QzMqW3B;
-        Thu, 14 Sep 2023 08:34:44 +0000 (UTC)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4RmVxF3g18zMppB1;
-        Thu, 14 Sep 2023 10:34:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1694680484;
-        bh=Va+NlpX2Fn3CXeGKO0bJw1cjeZ8M1RUU583bKxbztGM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JJDPXtN85mA0ECbgb/P6nSTAambq+SvK403uk3q2xR72YbZt3XpkR1akykmczbctQ
-         lb2SzJsIxSUbvsma+gz3o8zqZxYkuaZPtHjssiOp7wkjovGZ3DrPjyjrp0tXYRbp0z
-         KqF66IZrgTwUuJzQRHOPpJxUyFL8bEPr41l5FOBU=
-Date:   Thu, 14 Sep 2023 10:34:40 +0200
-From:   =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To:     Eric Snowberg <eric.snowberg@oracle.com>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Thu, 14 Sep 2023 10:28:47 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2073.outbound.protection.outlook.com [40.107.13.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C0EE3
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Sep 2023 07:28:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SvvgZWWhb26YATJ9ZmOTn1QoRtuKIaBIHDpNnLz/fuJ3rg8nwK+dRGxyBldqNTSFB7Agh06SEawUFl9/0iL79JsNw79dvD1SQhUPCEY+UkE+lhSMQLfh6oBggPTVnhQMP7HPIvbrQmUrsHtvZ0n+u8re6SGzgmvIeikgPU2T5kjKSyHTgy1+8paXac3Cjk1739tnDiozMDeQQjtV7suqYMiIptm0SwNcJsXQZuwhmsnV9R2n1t92m6PvMhiKL7HaENXOYjE/eiOq5eX9TTEVeek6/plWC5XLrRgMHw/tFRHE8R6KWJ6PO/vsWzMc/bjJinEZq48HnLNuFEvga9AXPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OweYvp4Y3wfJ5eCBLl1Zes2Aakbo0bKdKpOc2/b/AZ8=;
+ b=YMXmdwlANfDU5D3e2ZqTh0XqcM8PJagyaGY5NEoEEY0/5pL4eq/2+5CT9RaFAiAQxm9Jn6FfjtLWCI1JDVOojAowt9kDpa5af2EtYVe2/PdIk+q20FzLpU7rZCrFevwecMHm8OdwurzKn7am4W7E7I9IB0QpQkwgrNtRjYebyySeM2wJCmdwSuI0zu4mJ1LK9LrMDmpklwRrBJqboH6lesS1no29m9CIeBPH3UT4+7Ug0U1T1RtF41ZrJKxFcCjEZGTkoZRKa0l5KwZD1sS/sqtv8Ey7HCWCkHCXCT5Od6S9npzEWiR/Z/PbWXc3TEURJ4NRp3wMjKMhj125y29O3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OweYvp4Y3wfJ5eCBLl1Zes2Aakbo0bKdKpOc2/b/AZ8=;
+ b=eJCutJrxdTegSTcwvBkUrWoheIyauAB2u6eDYp4ryXIJ0BcQ/rAiLzsuMJ1pXF4eIJgemJOYlEl6VaTA7b+g6qO7U/d1MWiE0uzTb8mNnte7r3XiokPzZffb9T8BumAl2gB8+rIyhKCIg8HbtxE7lD2EJys2UYqSSXy2jMZcGo0zMmV7a6jfET4kOXpgKyoS+35a1lNebL4SCuzL5JnmSvdDMo7Kig2+NZ7CJZdv8hxeI7bjpXTHwK3Wbw6XuvIAWPSNN0uu3Cb5HDRee+VA29zNZEafAKGnRurafFbqXPCH5mnHUnCTA67p9fNI8GFgzQyuYSJlbgYetO7WDN2lyQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from DU2PR04MB8790.eurprd04.prod.outlook.com (2603:10a6:10:2e1::23)
+ by DU0PR04MB9696.eurprd04.prod.outlook.com (2603:10a6:10:314::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Thu, 14 Sep
+ 2023 14:28:39 +0000
+Received: from DU2PR04MB8790.eurprd04.prod.outlook.com
+ ([fe80::f749:b27f:2187:6654]) by DU2PR04MB8790.eurprd04.prod.outlook.com
+ ([fe80::f749:b27f:2187:6654%6]) with mapi id 15.20.6792.020; Thu, 14 Sep 2023
+ 14:28:39 +0000
+Message-ID: <908e5878-61f9-7a75-129f-ac236fbc8b0a@suse.com>
+Date:   Thu, 14 Sep 2023 16:28:37 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Content-Language: en-US
+To:     linux-integrity@vger.kernel.org
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] certs: Restrict blacklist updates to the secondary
- trusted keyring
-Message-ID: <20230914.shah5al9Kaib@digikod.net>
-References: <20230911.chaeghaeJ4ei@digikod.net>
- <CEA476C1-4CE5-4FFC-91D7-6061C8605B18@oracle.com>
- <ba2f5560800608541e81fbdd28efa9875b35e491.camel@linux.ibm.com>
- <932231F5-8050-4436-84B8-D7708DC43845@oracle.com>
- <7335a4587233626a39ce9bc8a969957d7f43a34c.camel@linux.ibm.com>
- <FD6FB139-F901-4E55-9705-E7B0023BDBA8@oracle.com>
- <1149b6dbfdaabef3e48dc2852cc76aa11a6dd6b0.camel@linux.ibm.com>
- <4A0505D0-2933-43BD-BEEA-94350BB22AE7@oracle.com>
- <20230913.Ceifae7ievei@digikod.net>
- <D0F16BFD-72EB-4BE2-BA3D-BAE1BCCDCB6F@oracle.com>
+        Jason Gunthorpe <jgg@ziepe.ca>
+From:   Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH] tpm_tis: don't flush never initialized work
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0137.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9e::12) To DU2PR04MB8790.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::23)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D0F16BFD-72EB-4BE2-BA3D-BAE1BCCDCB6F@oracle.com>
-X-Infomaniak-Routing: alpha
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8790:EE_|DU0PR04MB9696:EE_
+X-MS-Office365-Filtering-Correlation-Id: c958b206-1fe6-49f3-24ee-08dbb52ee3aa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PA4Bh8Zyrgxek8miW3AVYcDJxrlmrkVYbVuPTyS3dwrzSqqZ4wTo8b/7nfbFSf6oqr8OPYXOlREo7JV+9dpCeRPD0knz7AwaQjG10bNKqMqDPpMr+ZU6+4ITG5DsBE5ZVRcCui+Is2b/RTVncvaJ+t0tfT2LRvKKp54yzZgSLCaKKQAaRC86LqHYSXb93lL3qjdBXEPyX13Cws83oW2Rb1OQEIcc8do2elRqq//cHbQbZZnpn7Iy9S2poveMB/2Row+hVXpnx6y9Tpa9K7SwBuWBpATuHU3QAjBgDiBIHbq9i6L8bA23oGFNl9hCUAQsf7UDC/0MDrnWy8u70g7FUV+2Rdgq4p47q5d5vJB4HeoJ5caKVHHZFVVXR4aGWhiHf5KlezXBnN+IvwN9dgCrn2VsFmc86onS5SWYe6clGdbyZ50pSPv5DwPvljQNE+kOwN8SY8o578cbuDf+0R53Dy0IWUIwPTZqF4VAapyMOAq3fFIZQiWlWytuyyq68mGiwf9BnmUW4IufDcCxLT4yw+36EDYPyuvsj6G7fiAvpumflyjA+6wyKdF0P2jghCNwZMCAzpNZxn+6Uyn/uG852lNvS9+8P8Vja/OF9V+4NIVlE/QhzgSosEiFktW/r18ja2bdSXYRUerBAyZp+n202w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8790.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(376002)(366004)(39860400002)(136003)(1800799009)(186009)(451199024)(2616005)(86362001)(2906002)(26005)(6486002)(31696002)(6506007)(4744005)(38100700002)(6512007)(36756003)(83380400001)(478600001)(4326008)(5660300002)(66556008)(316002)(8936002)(8676002)(6916009)(54906003)(31686004)(66946007)(66476007)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3ZRL0lRcjNJbGdHbDFaQk5nM254YnRvSk9DbDhFNm85NWo5cWVYM3hMTWVX?=
+ =?utf-8?B?Q1dlVWNPOU1wWnhVQ3RKNzA5VGZjQUJPeXM2QWJQWmh1ZVdabTZCZzRlSkxD?=
+ =?utf-8?B?MEFCMDc1aDFXV0R5WE9yOEhGSHZVeGtWYlVuOFZMY243NWZuU2JMMXk5MEp4?=
+ =?utf-8?B?Y2ZGd2hOMDlUZnJLUkhkRHlmQXMyK3pzNFBZdHRtVWM2RTNRelZHU3JqYU15?=
+ =?utf-8?B?L2NBQXFuNVJmUjcyQnZqbWpMVDhEYXdiSjlJQklqWGpzTzZ1dUNKamJaZ0xM?=
+ =?utf-8?B?M0grYUpFUmJZVmEzY3ZKS2UzTitVSjFRcUlxZHBkYmthY1JqNzVvem1HeUlM?=
+ =?utf-8?B?UFFIRWk4LzdOMUpsWXF0MmJPakNieDgvZTRCSno4TldmTENCRnBhby9nZ0FO?=
+ =?utf-8?B?Qko1eXZ1dUNuSVFiY2tZbWw4YnNPbmFOT01sL3BVTUNWOVNWY1Z2Y3ZteGpJ?=
+ =?utf-8?B?NXJmSDVTWG40bEdSaE1vZ3piNVJJTGlPeTNBUEVWNzJXeXYzekowa3pQZGtH?=
+ =?utf-8?B?Z0I1SUo2a1d0MVluVVpaOHVUMWRySzVHT0g0aytWLzFzUTkxR3Bzdi96NFor?=
+ =?utf-8?B?WXR4VCtMc0luZWxjUmpHVzRuUzVEaUFHTGs4ZXZoN04zZ3U2YTE1dlBjWnNh?=
+ =?utf-8?B?c0d6M2IrRnJTbVhPNHRsL2NZVVRJSmJhTTVLS1ErcVF1U2dXNGg5eldtQzJx?=
+ =?utf-8?B?MzRrdUtueVZvZE9pRC96MGNBeXRtZXc4VzRHVytUN1Q0N0RhdXVHVkJibGhu?=
+ =?utf-8?B?cGxQZzV2TlFwWG5pMW9BdmNSWTlNNU9ZU0IxWFpGbVd0QVUwaXgzWkhKTDNG?=
+ =?utf-8?B?aE91R3JwOEJCU01CdDlNZ1pqQkZtbENCZTdJVW1JU09FVUg5K3d5ditXZUNl?=
+ =?utf-8?B?Z1VadlZuSHhFQmgrS0J2aVQ2Vzc3aVRwQjhuNVo5Z1RYQ3pMdmVkZFB1a1FD?=
+ =?utf-8?B?OWVUTWNpNDVtUWpCZzZxVUJnU2FjTXdnR1ZRUGwwMGJNYWFhaUxCc0hQR1RS?=
+ =?utf-8?B?NlcwV0c4cElKUEJ4RmVOalFPYmRqUFo2SFFiVy90UXZTNkpWRkxSaCtjMjZl?=
+ =?utf-8?B?SnMvVW1zWTlhQ1pLQkczaHdMWUlCMFFsWEEyNmNQVEswU0RzaUtRR0JXRGhr?=
+ =?utf-8?B?c0pMU21DclhiQ0RRSTNoUXozOFd4QTRtclRKbmZaWTV4cWpWSGsxZ3I2Mk02?=
+ =?utf-8?B?bmhIakM1R3JMNVppQlV5WE96S3FXRmU4SjhwU2ZBSWFXSHZYbFc0SHJHY3VG?=
+ =?utf-8?B?a0NVcFhtN2h6OTdOOXZSWWxML2lVdmZvT0V0TjZ1N2ZTUFl5S1BtWmZBWkN2?=
+ =?utf-8?B?RmFFcTBqa0RlT1BLYVBLblliMXk2WkdTandqc21HbWFuV08rMm5RMktDaXVZ?=
+ =?utf-8?B?cE9qTjhWZ2l5Z09rNnBGMkZnMEdIRFRZOS83WEhONFlxc1N0ZjJSUHIyNUR4?=
+ =?utf-8?B?M2VoZTAvUk1pSmxPYTU2cVpnRXhxeDVsWkZuUStaUFMvMkRzWUVoOUNPOEp5?=
+ =?utf-8?B?U3k0RWJDbU5Na204b1RsL3BOVlE4Q0hmSHVBQVhzSmNIY1RFb3dZSjBDMUUy?=
+ =?utf-8?B?dllvdStLQmUwMnZoRW5FZDd6TjNHakNjcWs4aHpHUzVCZFlKWEhaeFU3c2JX?=
+ =?utf-8?B?NWZHVzFSclpkWjJwWUo0bTAwd3FrYVdLejhIYUFzbTlJeHYyK0VhNVN4WkEx?=
+ =?utf-8?B?bkpaN0RTUEhjZTRrTEFQVE9MSExNeHk5V2hmNWhWZ2xpalhVZlpUUlJPTWpT?=
+ =?utf-8?B?YzRsRk9IUGxyQzkwOXAvREdxY1F3STNtbkE3TmFPSE11b0xrNGY2NXJHOSt1?=
+ =?utf-8?B?di8zZWJhTnI2ZGZJdStYZUozeGJFaHpJZExzQVN1aUYzY29BRDdVQ3UxSnIx?=
+ =?utf-8?B?RDNyRW13TEZicllzTGQ1Tm1mbFNjYll1aTZrZ2cyUUZUN2o3M1gyTi85ODBI?=
+ =?utf-8?B?NnJza09FRHZ0SnBQTWx3Sm1Jc0piczNzVTdibXBkdHVRVWpQY1dJeHlWVTV2?=
+ =?utf-8?B?WUd6TUN5eTBwaVJ6dFJNaUVZUEtIY0hYd25BeS9lcERRZmFlYjgwUERJc1JH?=
+ =?utf-8?B?MGNPcXVpdFNKS0R2WGtwcVpZS280bGtXVHhFZDlGZEdacjBEZzhuekJlMkVV?=
+ =?utf-8?Q?7BA7V7fX4p4FT4fUcX/bz4H88?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c958b206-1fe6-49f3-24ee-08dbb52ee3aa
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8790.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2023 14:28:39.7888
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rB0oa2JWNqSOHgmhj8XXkSyOlGimzpKEvonFFbE1XTeefwjbSKGfSovqPyKT5Z2cyZWulBL8NEDW53OsFEBxnA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9696
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-CCing the LSM mailing list for this potential new LSM proposal:
+tpm_tis_core_init() may fail before tpm_tis_probe_irq_single() is
+called, in which case tpm_tis_remove() unconditionally calling
+flush_work() is triggering a warning for .func still being NULL.
 
-On Wed, Sep 13, 2023 at 10:29:58PM +0000, Eric Snowberg wrote:
-> 
-> 
-> > On Sep 13, 2023, at 4:21 AM, Mickaël Salaün <mic@digikod.net> wrote:
-> > 
-> > On Wed, Sep 13, 2023 at 02:40:17AM +0000, Eric Snowberg wrote:
-> >> 
-> >> 
-> >>> On Sep 12, 2023, at 4:47 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>> 
-> >>> On Tue, 2023-09-12 at 17:11 +0000, Eric Snowberg wrote:
-> >>>> 
-> >>>>> On Sep 12, 2023, at 5:54 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>>>> 
-> >>>>> On Tue, 2023-09-12 at 02:00 +0000, Eric Snowberg wrote:
-> >>>>>> 
-> >>>>>>> On Sep 11, 2023, at 5:08 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>>>>>> 
-> >>>>>>> On Mon, 2023-09-11 at 22:17 +0000, Eric Snowberg wrote:
-> >>>>>>>> 
-> >>>>>>>>> On Sep 11, 2023, at 10:51 AM, Mickaël Salaün <mic@digikod.net> wrote:
-> >>>>>>>>> 
-> >>>>>>>>> On Mon, Sep 11, 2023 at 09:29:07AM -0400, Mimi Zohar wrote:
-> >>>>>>>>>> Hi Eric,
-> >>>>>>>>>> 
-> >>>>>>>>>> On Fri, 2023-09-08 at 17:34 -0400, Eric Snowberg wrote:
-> >>>>>>>>>>> Currently root can dynamically update the blacklist keyring if the hash
-> >>>>>>>>>>> being added is signed and vouched for by the builtin trusted keyring.
-> >>>>>>>>>>> Currently keys in the secondary trusted keyring can not be used.
-> >>>>>>>>>>> 
-> >>>>>>>>>>> Keys within the secondary trusted keyring carry the same capabilities as
-> >>>>>>>>>>> the builtin trusted keyring.  Relax the current restriction for updating
-> >>>>>>>>>>> the .blacklist keyring and allow the secondary to also be referenced as
-> >>>>>>>>>>> a trust source.  Since the machine keyring is linked to the secondary
-> >>>>>>>>>>> trusted keyring, any key within it may also be used.
-> >>>>>>>>>>> 
-> >>>>>>>>>>> An example use case for this is IMA appraisal.  Now that IMA both
-> >>>>>>>>>>> references the blacklist keyring and allows the machine owner to add
-> >>>>>>>>>>> custom IMA CA certs via the machine keyring, this adds the additional
-> >>>>>>>>>>> capability for the machine owner to also do revocations on a running
-> >>>>>>>>>>> system.
-> >>>>>>>>>>> 
-> >>>>>>>>>>> IMA appraisal usage example to add a revocation for /usr/foo:
-> >>>>>>>>>>> 
-> >>>>>>>>>>> sha256sum /bin/foo | awk '{printf "bin:" $1}' > hash.txt
-> >>>>>>>>>>> 
-> >>>>>>>>>>> openssl smime -sign -in hash.txt -inkey machine-private-key.pem \
-> >>>>>>>>>>>   -signer machine-certificate.pem -noattr -binary -outform DER \
-> >>>>>>>>>>>   -out hash.p7s
-> >>>>>>>>>>> 
-> >>>>>>>>>>> keyctl padd blacklist "$(< hash.txt)" %:.blacklist < hash.p7s
-> >>>>>>>>>>> 
-> >>>>>>>>>>> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> >>>>>>>>>> 
-> >>>>>>>>>> The secondary keyring may include both CA and code signing keys.  With
-> >>>>>>>>>> this change any key loaded onto the secondary keyring may blacklist a
-> >>>>>>>>>> hash.  Wouldn't it make more sense to limit blacklisting
-> >>>>>>>>>> certificates/hashes to at least CA keys? 
-> >>>>>>>>> 
-> >>>>>>>>> Some operational constraints may limit what a CA can sign.
-> >>>>>>>> 
-> >>>>>>>> Agreed.  
-> >>>>>>>> 
-> >>>>>>>> Is there precedents for requiring this S/MIME to be signed by a CA? 
-> >>>>>>>> 
-> >>>>>>>>> This change is critical and should be tied to a dedicated kernel config
-> >>>>>>>>> (disabled by default), otherwise existing systems using this feature
-> >>>>>>>>> will have their threat model automatically changed without notice.
-> >>>>>>>> 
-> >>>>>>>> Today we have INTEGRITY_CA_MACHINE_KEYRING_MAX.  This can 
-> >>>>>>>> be enabled to enforce CA restrictions on the machine keyring.  Mimi, would 
-> >>>>>>>> this be a suitable solution for what you are after?
-> >>>>>>> 
-> >>>>>>> There needs to be some correlation between the file hashes being added
-> >>>>>>> to the blacklist and the certificate that signed them.  Without that
-> >>>>>>> correlation, any key on the secondary trusted keyring could add any
-> >>>>>>> file hashes it wants to the blacklist.
-> >>>>>> 
-> >>>>>> Today any key in the secondary trusted keyring can be used to validate a 
-> >>>>>> signed kernel module.  At a later time, if a new hash is added to the blacklist 
-> >>>>>> keyring to revoke loading a signed kernel module,  the ability to do the 
-> >>>>>> revocation with this additional change would be more restrictive than loading 
-> >>>>>> the original module.
-> >>>>> 
-> >>>>> A public key on the secondary keyring is used to verify code that it
-> >>>>> signed, but does not impact any other code. Allowing any public key on
-> >>>>> the secondary keyring to blacklist any file hash is giving it more
-> >>>>> privileges than it originally had.
-> >>>>> 
-> >>>>> This requirement isn't different than how Certificate Revocation List
-> >>>>> (CRL) work.  Not any CA can revoke a certificate.
-> >>>> 
-> >>>> In UEFI Secure Boot we have the Forbidden Signature Database (DBX).  
-> >>>> Root can update the DBX on a host.  The requirement placed on updating 
-> >>>> it is the new DBX entry must be signed by any key contained within the 
-> >>>> KEK.  Following a reboot, all DBX entries load into the .blacklist keyring.  
-> >>>> There is not a requirement similar to how CRL’s work here, any KEK key 
-> >>>> can be used.
-> >>>> 
-> >>>> With architectures booted through a shim there is the MOKX.  Similar to 
-> >>>> DBX, MOKX have the same capabilities, however they do not need to be 
-> >>>> signed by any key, the machine owner must show they have physical 
-> >>>> presence (and potentially a MOK password) for inclusion.  Again there 
-> >>>> is not a requirement similar to how CRL’s work here either.  The machine 
-> >>>> owner can decide what is included.
-> >>>> 
-> >>>> Today when a kernel is built, any number of keys may be included within 
-> >>>> the builtin trusted keyring.  The keys included in the kernel may not have 
-> >>>> a single usage field set or the CA bit set.  There are no requirements on 
-> >>>> how these keys get used later on.  Any key in the builtin trusted keyring 
-> >>>> can be used to sign a revocation that can be added to the blacklist keyring.  
-> >>>> Additionally, any key in the MOK can be used to sign this kernel and it will 
-> >>>> boot.  Before booting the kernel, MOK keys have more privileges than 
-> >>>> after the kernel is booted in some instances.
-> >>>> 
-> >>>> Today MOK keys can be loaded into the machine keyring.  These keys get 
-> >>>> linked to the secondary trusted keyring.  Currently key usage enforcement
-> >>>> is being applied to these keys behind some Kconfig options.  By default 
-> >>>> anything in the secondary has the same capabilities as the builtin trusted 
-> >>>> keyring.  What is challenging here with this request is the inconsistency 
-> >>>> between how everything else currently works. 
-> >>>> 
-> >>>> Root can not arbitrarily add things to the secondary trusted keyring.  These 
-> >>>> keys must be signed by something in either the machine or the builtin.  In 
-> >>>> this thread [1], Jarkko is saying CA based infrastructure should be a policy 
-> >>>> decision not to be enforced by the kernel. Wouldn’t this apply here as well?
-> >>>> 
-> >>>> 1. https://lore.kernel.org/lkml/CVGUFUEQVCHS.37OA20PNG9EVB@suppilovahvero/
-> >>> 
-> >>> Mickaël said, "This change is critical and should be tied to a
-> >>> dedicated kernel config
-> >>> (disabled by default), otherwise existing systems using this feature
-> >>> will have their threat model automatically changed without notice."
-> >> 
-> >> I was thinking he meant it is critical not to change the current behavior
-> >> by limiting blacklisting to only CA keys.  Not that it was critical to add
-> >> CA enforcement.  Maybe Mickaël can comment?
-> > 
-> > I meant that applying this patch as-is may change the threat model used
-> > by some users. Currently, only signed hashes vouched by the builtin
-> > trusted keyring are valid. If we extend this mechanism to the secondary
-> > trusted keyring without notice, this means that more certificates could
-> > vouch blacklisted hashes, which may include some certificates with an
-> > initial different usage.
-> > 
-> > See commit 4da8f8c8a1e0 ("dm verity: Add support for signature
-> > verification with 2nd keyring") that adds
-> > CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING:
-> > https://lore.kernel.org/all/20201023170512.201124-1-mic@digikod.net/
-> 
-> Thanks for clarifying.  I’ll add something similar in v2.
-> 
-> >> 
-> >>> As a possible alternative I suggested limiting which file hashes the
-> >>> certs on the secondary (or machine) keyring could blacklist.
-> >> 
-> >> I’m not sure I completely understand your suggestion here.
-> >> Do you mean, verify the CA bit is set for secondary keys, but
-> >> ignore the bit for builtin?  And then only use those keys to add
-> >> hashes to the blacklist keyring?  If I have that right, what would 
-> >> be the justification for the change based on how things currently
-> >> get included in the blacklist keyring?  Thanks.
-> > 
-> > I'd like to be able to specify which kind of certificate can vouch for
-> > blacklisting hashes, and for other usages, but AFAIK this is not the
-> > path Linux has followed (e.g. unlike Windows). We only have the keyring
-> > to identify an usage, which is unfortunate. On the other side, this
-> > approach lets users manage their certificates without constraint, which
-> > is quite (too?) flexible.
-> 
-> Yes, it is very flexible. What I believe Mimi is after is having a way to 
-> track what cert actually vouched for each specific binary hash.  But this
-> information is not tracked, plus entries within it can come from various 
-> sources that are not signed (dbx, mokx, compiled in).  Also key usage is 
-> being ignored.
-> 
-> > A complementary approach would be to create an
-> > LSM (or a dedicated interface) to tie certificate properties to a set of
-> > kernel usages, while still letting users configure these constraints.
-> 
-> That is an interesting idea.  Would the other security maintainers be in 
-> support of such an approach?  Would a LSM be the correct interface?  
-> Some of the recent work I have done with introducing key usage and CA 
-> enforcement is difficult for a distro to pick up, since these changes can be 
-> viewed as a regression.  Each end-user has different signing procedures 
-> and policies, so making something work for everyone is difficult.  Letting the 
-> user configure these constraints would solve this problem.
-> 
+Fixes: 481c2d14627d ("tpm,tpm_tis: Disable interrupts after 1000 unhandled IRQs")
+Signed-off-by: Jan Beulich <jbeulich@suse.com>
+---
+An alternative would be to move INIT_WORK(), but where to put it is far
+more difficult to tell for an outsider than simply making the flush call
+conditional.
+
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -1022,7 +1022,8 @@ void tpm_tis_remove(struct tpm_chip *chi
+ 		interrupt = 0;
+ 
+ 	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
+-	flush_work(&priv->free_irq_work);
++	if (priv->free_irq_work.func)
++		flush_work(&priv->free_irq_work);
+ 
+ 	tpm_tis_clkrun_enable(chip, false);
+ 
