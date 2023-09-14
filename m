@@ -2,108 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4107A0987
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Sep 2023 17:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422C37A0F74
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Sep 2023 23:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240961AbjINPmg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Sep 2023 11:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
+        id S229945AbjINVFb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 Sep 2023 17:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241142AbjINPmf (ORCPT
+        with ESMTP id S229771AbjINVFa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Sep 2023 11:42:35 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB4C115
-        for <linux-integrity@vger.kernel.org>; Thu, 14 Sep 2023 08:42:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF710C433C7;
-        Thu, 14 Sep 2023 15:42:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694706150;
-        bh=cm79zBBrYWeUj+lE/udPPmTsTno8E4H7W3ZJmG1QPkM=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=CxD3X1l7GN4VipFAAqbimZcM/4mWTzYnHdaxTKW99qbFIYn0blOnrLCSR0lz8foXy
-         5vdhU91NrNPEiPxYZeq7Opaw1zqlmBJDzCKvSk/PAg4sP1AmF2p2Yuc/V6pZt9QkYW
-         7zbiHKHZZAwuHV7jKKM8edxTJKoLDcFQGq+lNSFmA7JiUx0rIqqgF+o/tYifaDNO8l
-         oiMJQd71JUJ8xPs5vGX6cBDQZiyUfzQZJoN6HWpCxMqoLJ3wSOLXR2K95c2HYCBGo0
-         W4np2IL8LtZqSubKE5iYDJDWfFi8srCwLD5X6hYvX26koblfgYilTz2UGX5+cToepo
-         LRasj3AFpJwLw==
-Mime-Version: 1.0
+        Thu, 14 Sep 2023 17:05:30 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC132700
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Sep 2023 14:05:26 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2bf5bf33bcdso24074361fa.0
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Sep 2023 14:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google; t=1694725524; x=1695330324; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mi4VUf4gJCA6NveynZh2FFW5elFrdjQW2bjMwJLkbzQ=;
+        b=ey/GtXJ3Yxkr5e4iNZ9BQW4/bv+umESZXuIPtXGsD5YEcuraeY+O75RoJelFkqViJr
+         jPfZIaReTkFElezODBuC1KydwK5ayTpuM5tazwLWrY5CrutUyhmUUOH0oNMauObHhDpp
+         IpRrphtMC2KC649obRKX/n34D/xrlcrFnl1es=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694725524; x=1695330324;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mi4VUf4gJCA6NveynZh2FFW5elFrdjQW2bjMwJLkbzQ=;
+        b=SB19NQlFay184TDYMtF3kGNeyq3I+yFeEqCdgyYupSF6bzTdo4ltwVVpHuwNg4bJTa
+         kOnmZ2M2RBYkadazy9IWXeVg0ihaAAqwJy7JgyGqJLSBhXVfiNv3qpfHQFeO6fJs6Asf
+         psqEDxGBg5Aw3Lh0nu/DnPwiWonP3CxrnemnI6OvaPGakcmO+y5EN4XJlSdqZlJg1gUS
+         A5DWyWRpDnE6MOqBia9DFpJbGNDFfsNvW4JFjLkAgei3HIajYteBrrFNbAtTKlh/bp6T
+         aIMfoIrJXXM52BaHtLd06xFrLSDk1bfZMGAjp6aCg5b+EaqwpJjjEKk++6dZJGZXBmQy
+         Gs+w==
+X-Gm-Message-State: AOJu0Yz+bp1e0bYlroF26YEtvXVrVOXeZTTfS5tVJ4RY1xtjZm9pnEpO
+        mTF59fC6gIHNYQ53Ij8Pe7SBzXJN/FxJdN7ckgO0xx6G
+X-Google-Smtp-Source: AGHT+IFFkGOLOjwSKpL2YGJQMt6i3XMFMY7SAkXsvctiK9hmkNB2kDVwngBTY+Y3wZ/MS5qkHzK6Tw==
+X-Received: by 2002:ac2:5559:0:b0:4fb:9469:d659 with SMTP id l25-20020ac25559000000b004fb9469d659mr4538863lfk.23.1694725523915;
+        Thu, 14 Sep 2023 14:05:23 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id d8-20020ac25448000000b004fe1d770527sm404022lfn.309.2023.09.14.14.05.22
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Sep 2023 14:05:22 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-502e6d632b6so1987313e87.0
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Sep 2023 14:05:22 -0700 (PDT)
+X-Received: by 2002:a05:6512:3703:b0:4fb:8f79:631 with SMTP id
+ z3-20020a056512370300b004fb8f790631mr4518877lfr.46.1694725522393; Thu, 14 Sep
+ 2023 14:05:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230912201102.1012306-1-jarkko@kernel.org> <CAHk-=wgLB9_z5TcvRKVsSk3BWPfkDeWN0pDMdEv=-hnrnTgX1Q@mail.gmail.com>
+ <CVI1GKA044I2.2A5GRO80ABMNN@suppilovahvero> <CAHk-=wiS2rHdPe9qQ4Ahzy6t6hbG18ihsOjBYxn3Nr88yen52A@mail.gmail.com>
+In-Reply-To: <CAHk-=wiS2rHdPe9qQ4Ahzy6t6hbG18ihsOjBYxn3Nr88yen52A@mail.gmail.com>
+From:   Justin Forbes <jforbes@fedoraproject.org>
+Date:   Thu, 14 Sep 2023 16:05:10 -0500
+X-Gmail-Original-Message-ID: <CAFbkSA1vh+PS7HxhdZ2jLer4ZPQJWTsSU5NEAwJW2Rp8CZwzZQ@mail.gmail.com>
+Message-ID: <CAFbkSA1vh+PS7HxhdZ2jLer4ZPQJWTsSU5NEAwJW2Rp8CZwzZQ@mail.gmail.com>
+Subject: Re: [GIT PULL] tpmdd changes for v6.6-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 14 Sep 2023 18:42:27 +0300
-Message-Id: <CVIR6WGM46EU.PZVB1C9B4WAJ@suppilovahvero>
-Subject: Re: [PATCH] tpm_tis: don't flush never initialized work
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Jan Beulich" <jbeulich@suse.com>
-Cc:     "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <908e5878-61f9-7a75-129f-ac236fbc8b0a@suse.com>
- <CVIQPE7W60RN.2QQ8DLCMFV4CW@suppilovahvero>
- <9a1e2ac0-54a8-b88b-3953-22624da5d4b2@suse.com>
-In-Reply-To: <9a1e2ac0-54a8-b88b-3953-22624da5d4b2@suse.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu Sep 14, 2023 at 6:29 PM EEST, Jan Beulich wrote:
-> On 14.09.2023 17:19, Jarkko Sakkinen wrote:
-> > On Thu Sep 14, 2023 at 5:28 PM EEST, Jan Beulich wrote:
-> >> tpm_tis_core_init() may fail before tpm_tis_probe_irq_single() is
-> >> called, in which case tpm_tis_remove() unconditionally calling
-> >> flush_work() is triggering a warning for .func still being NULL.
-> >>
-> >> Fixes: 481c2d14627d ("tpm,tpm_tis: Disable interrupts after 1000 unhan=
-dled IRQs")
-> >> Signed-off-by: Jan Beulich <jbeulich@suse.com>
-> >> ---
-> >> An alternative would be to move INIT_WORK(), but where to put it is fa=
-r
-> >> more difficult to tell for an outsider than simply making the flush ca=
-ll
-> >> conditional.
-> >>
-> >> --- a/drivers/char/tpm/tpm_tis_core.c
-> >> +++ b/drivers/char/tpm/tpm_tis_core.c
-> >> @@ -1022,7 +1022,8 @@ void tpm_tis_remove(struct tpm_chip *chi
-> >>  		interrupt =3D 0;
-> >> =20
-> >>  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
-> >> -	flush_work(&priv->free_irq_work);
-> >> +	if (priv->free_irq_work.func)
-> >> +		flush_work(&priv->free_irq_work);
-> >> =20
-> >>  	tpm_tis_clkrun_enable(chip, false);
-> >> =20
-> >=20
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >=20
-> > Jan, I'm about to leave to vacation but will be back after next week.
-> >=20
-> > Do you think that the fix can hold up unti that?
+On Thu, Sep 14, 2023 at 4:02=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> There's no rush from my pov, as I have helped myself. Nevertheless ...
+> On Wed, 13 Sept 2023 at 12:32, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > Ok, I'll make something more reasonable.
 >
-> > The feature is opt-in as I documented to kernel-parameters.txt:
-> >=20
-> > 	tpm_tis.interrupts=3D [HW,TPM]
-> > 			Enable interrupts for the MMIO based physical layer
-> > 			for the FIFO interface. By default it is set to false
-> > 			(0). For more information about TPM hardware interfaces
-> > 			defined by Trusted Computing Group (TCG) see
-> > 			https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-pr=
-ofile-ptp-specification/
+> Well, I took the pull already, just saying "tpm fix".
 >
-> ... I'm not doing anything non-default. The issue here is that part of
-> interrupt cleanup occurs without interrupt setup having happened. So
-> I'm inclined to think that the warning is independent of (and perhaps
-> more likely to observe without) use of that optional functionality.
+> I assume the only thing the typo actually causes is printk's with a
+> typo in it. Maybe some sysfs name will be wrong?
 >
-> Jan
+> That's the kind of information I would have _liked_ to see in the
+> merge message, but I didn't then delve into just where the class names
+> might actually be used.
 
-Ah, you're absolutely right!
+Sorry, I should have been more clear. The typo causes misnamed sysfs
+files, which breaks some userspace tools.
 
-I'll apply and test this properly after I'm back. Thanks for finding
-the bug and fixing  it.
+Justin
 
-BR, Jrakko
+>                Linus
+>
