@@ -2,85 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35D27A0FAD
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Sep 2023 23:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8497A17F7
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Sep 2023 10:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjINVSj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Sep 2023 17:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S232262AbjIOIG1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Sep 2023 04:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjINVSj (ORCPT
+        with ESMTP id S230454AbjIOIG1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Sep 2023 17:18:39 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A92726B2;
-        Thu, 14 Sep 2023 14:18:35 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C45AC433C8;
-        Thu, 14 Sep 2023 21:18:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694726314;
-        bh=V244jUJ626fxcH+y8O4nZ/YjqzjgoDPJ7WhHv1mLgLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NAbQGF99ZFcedAWU9dq34WHR0IKjeV4PTJfJ5lqxQmNffICrZ2SDM95bde6VM1t4/
-         hFLsdJKd1FtxZkmlRHDA2uEmUeuPUznNiDDg8gNJ6w1TOm4wSR1ni5UsKDO1Ft4hqy
-         gTQtVosPW/M5UP11jnj5KnfeN73peJyc+rjH4HD75UPt1zt72YvU5RwcOQ5Vsw0uCE
-         VXgNOQ6NL8lLE5EkUQbSHx3QhhZkaEqIMGfFOC+9M4j3AlXdprmBy9R4siyjJfEGCd
-         sEt9rutAY3qJ46foaDXfny/n28+ZbZhB05audFP18O0/lShZnztHGNmn1HG3aHOyDL
-         rAx2QT3fbbvkw==
-Mime-Version: 1.0
+        Fri, 15 Sep 2023 04:06:27 -0400
+Received: from mail.arnisdale.pl (mail.arnisdale.pl [151.80.133.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB2AAC
+        for <linux-integrity@vger.kernel.org>; Fri, 15 Sep 2023 01:06:22 -0700 (PDT)
+Received: by mail.arnisdale.pl (Postfix, from userid 1002)
+        id E949B2AC20; Fri, 15 Sep 2023 08:02:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=arnisdale.pl; s=mail;
+        t=1694764971; bh=6DhEsVYOGxxfetVY3oiVeew+7Cm34ArcvgDq2WQYIRw=;
+        h=Date:From:To:Subject:From;
+        b=viFwEw9dSmQcVEEcFHUul+szTbG9CG1C2FWEfNKZtqFZH8O3eKe83DcP6oWRzjq+R
+         ze2hlegzBU4BLd/aQ1S982yvFmTs7eSzR5TtunHrIPHBr+4huK5xKBIdUhLG6wIzlj
+         36+WqEyCNaPTyz6VZk7sg2u9DTveO6FOu8dV8PQtlHJwtBByvRbGZICR+KV/la2gpR
+         fs8vC/ChiyAMc2vjSoNGHaOSk0CU1nk78QrdfolyuTURUBvKDhRa1fv7fMGrGr6qJi
+         KTgKq7QsxD3dwe/Mk2qLWgw1vuw0rgC2hLgF8rG5fRBvShkS3Rucifzw1UeTD5JLR+
+         vTP7iEd7gNgTA==
+Received: by mail.arnisdale.pl for <linux-integrity@vger.kernel.org>; Fri, 15 Sep 2023 08:00:37 GMT
+Message-ID: <20230915064502-0.1.6y.1yd8f.0.m3tkvpjs48@arnisdale.pl>
+Date:   Fri, 15 Sep 2023 08:00:37 GMT
+From:   "Maciej Telka" <maciej.telka@arnisdale.pl>
+To:     <linux-integrity@vger.kernel.org>
+Subject: =?UTF-8?Q?Prosz=C4=99_o_kontakt?=
+X-Mailer: mail.arnisdale.pl
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 15 Sep 2023 00:18:31 +0300
-Message-Id: <CVIYC7CUJOWH.FSY1TNPSHVX7@suppilovahvero>
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Justin Forbes" <jforbes@fedoraproject.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "David Howells" <dhowells@redhat.com>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <keyrings@vger.kernel.org>
-Subject: Re: [GIT PULL] tpmdd changes for v6.6-rc2
-X-Mailer: aerc 0.14.0
-References: <20230912201102.1012306-1-jarkko@kernel.org>
- <CAHk-=wgLB9_z5TcvRKVsSk3BWPfkDeWN0pDMdEv=-hnrnTgX1Q@mail.gmail.com>
- <CVI1GKA044I2.2A5GRO80ABMNN@suppilovahvero>
- <CAHk-=wiS2rHdPe9qQ4Ahzy6t6hbG18ihsOjBYxn3Nr88yen52A@mail.gmail.com>
- <CAFbkSA1vh+PS7HxhdZ2jLer4ZPQJWTsSU5NEAwJW2Rp8CZwzZQ@mail.gmail.com>
-In-Reply-To: <CAFbkSA1vh+PS7HxhdZ2jLer4ZPQJWTsSU5NEAwJW2Rp8CZwzZQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri Sep 15, 2023 at 12:05 AM EEST, Justin Forbes wrote:
-> On Thu, Sep 14, 2023 at 4:02=E2=80=AFPM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Wed, 13 Sept 2023 at 12:32, Jarkko Sakkinen <jarkko@kernel.org> wrot=
-e:
-> > >
-> > > Ok, I'll make something more reasonable.
-> >
-> > Well, I took the pull already, just saying "tpm fix".
-> >
-> > I assume the only thing the typo actually causes is printk's with a
-> > typo in it. Maybe some sysfs name will be wrong?
-> >
-> > That's the kind of information I would have _liked_ to see in the
-> > merge message, but I didn't then delve into just where the class names
-> > might actually be used.
->
-> Sorry, I should have been more clear. The typo causes misnamed sysfs
-> files, which breaks some userspace tools.
+Dzie=C5=84 dobry,
 
-Ya, I got a bit confused because I assumed that the original change was
-coming from my tree at first, and was wondering how could possibly my
-QA process did not catch it. Should have checked in detail and wrote a
-better description to the pull request. All in all, great that the issue
-was catched before the release :-)
+Czy jest mo=C5=BCliwo=C5=9B=C4=87 nawi=C4=85zania wsp=C3=B3=C5=82pracy z =
+Pa=C5=84stwem?
 
-In future I suggest to run always the tpm2 test from kselftest's for any
-TPM patch. It would have catched the bug early on.
+Z ch=C4=99ci=C4=85 porozmawiam z osob=C4=85 zajmuj=C4=85c=C4=85 si=C4=99 =
+dzia=C5=82aniami zwi=C4=85zanymi ze sprzeda=C5=BC=C4=85.
 
-BR, Jarkko
+Pomagamy skutecznie pozyskiwa=C4=87 nowych klient=C3=B3w.
+
+Zapraszam do kontaktu.
+
+
+Pozdrawiam serdecznie
+Maciej Telka
