@@ -2,84 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B83E7A3577
-	for <lists+linux-integrity@lfdr.de>; Sun, 17 Sep 2023 14:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE557A3EE7
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Sep 2023 02:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjIQMET (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 17 Sep 2023 08:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S232236AbjIRAFD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 17 Sep 2023 20:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjIQMER (ORCPT
+        with ESMTP id S231578AbjIRAEn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 17 Sep 2023 08:04:17 -0400
-Received: from shiva.jussieu.fr (shiva.jussieu.fr [134.157.0.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFA8112B;
-        Sun, 17 Sep 2023 05:04:11 -0700 (PDT)
-Received: from mailix1.insp.jussieu.fr (mailix1.insp.jussieu.fr [134.157.37.11])
-          by shiva.jussieu.fr (8.15.2/jtpda-5.4) with ESMTP id 38HC40nk026906
-          ; Sun, 17 Sep 2023 14:04:05 +0200 (CEST)
-X-Ids:  168
-Received: from hordix.insp.jussieu.fr (hordix.insp.jussieu.fr [134.157.37.9])
-        by mailix1.insp.jussieu.fr (Postfix-INSP-2.10.1) with ESMTPSA id 78A06C062BC0;
-        Sun, 17 Sep 2023 13:58:50 +0200 (CEST)
-Received: from [105.112.96.211] ([105.112.96.211]) by
- webmail.insp.jussieu.fr (Horde Framework) with HTTPS; Sun, 17 Sep 2023
- 11:58:50 +0000
-Date:   Sun, 17 Sep 2023 11:58:50 +0000
-Message-ID: <20230917115850.Horde.nDVhVuZCMbI1tdSrz7hexww@webmail.insp.jussieu.fr>
-From:   Victoria Cleland <wajdi.chaabani@insp.upmc.fr>
-Subject: Hallo
-Reply-to: v.cleland10@aol.com
-User-Agent: Horde Application Framework 5
-Organization: Institut des NanoSciences de Paris
-X-InspUpmcSession: CHAABANI
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        Sun, 17 Sep 2023 20:04:43 -0400
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947AC12A
+        for <linux-integrity@vger.kernel.org>; Sun, 17 Sep 2023 17:04:37 -0700 (PDT)
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1bf00f8cf77so6574713fac.0
+        for <linux-integrity@vger.kernel.org>; Sun, 17 Sep 2023 17:04:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694995474; x=1695600274;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=plqiVhsHQJW/q4sf5YkInYlIVvS0lexxFRBvtsJXFDw=;
+        b=q4Xj9kF/XPsS8RQKp4pU1GHvftKdZgT68FWzNgEkvJIrEQVsRrcjV0eXn6tTgEbhQD
+         /ngO605OynX0CHVXPecccd0mqxSILMfB2/3sh95crxXjzCvKomdmPiot8dEkjYRrYkF2
+         zUiEFZN0CLIiAiO0xGoqsYt/pMlLFfbUTRGwYqCapSDU8PJhO30WcqlPxvuF5aac+rDF
+         6OiH1AMK1EZDvd1V5YUGcjE2WoBTOlW1mAXgW1YzU2klKo/pp0kdDNndrEHV/u9gLzVY
+         b25fvAi3/qBGgvWSbEVGrFX4rvka6VS4MV0fPAWZGjU1omp9yVV51Z+iNaadfoedlAUn
+         HYyA==
+X-Gm-Message-State: AOJu0YwOE5y2FGUi7EUzWFpKis6676sNtga7vjM+Wg7hXwJiWKgWqQB0
+        oaDexBoAR+T0UhD/139GQSGWoBm0RMkI/SW4xOCXhnijI1aO
+X-Google-Smtp-Source: AGHT+IH/zkGlEDq9VbJg97gGt1EgLfqWnEVJ7h5xnIpv8Ku68gE0DF1eHR9jFI017KdKqlc7/TMCj9QpD4KDhKZQUzCLionLJESV
 MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Miltered: at jchkmail2.reseau.jussieu.fr with ID 6506EB30.005 by Joe's j-chkmail (http : // j-chkmail dot ensmp dot fr)!
-X-j-chkmail-Enveloppe: 6506EB30.005 from mailix1.insp.jussieu.fr/mailix1.insp.jussieu.fr/134.157.37.11/mailix1.insp.jussieu.fr/<wajdi.chaabani@insp.upmc.fr>
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [134.157.0.129 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 RCVD_IN_MSPIKE_H3 RBL: Good reputation (+3)
-        *      [134.157.0.129 listed in wl.mailspike.net]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [v.cleland10[at]aol.com]
-        *  1.0 MISSING_HEADERS Missing To: header
-        *  0.0 RCVD_IN_MSPIKE_WL Mailspike good senders
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+X-Received: by 2002:a05:6870:b7ad:b0:1d5:95fc:2a7f with SMTP id
+ ed45-20020a056870b7ad00b001d595fc2a7fmr2748642oab.7.1694995474388; Sun, 17
+ Sep 2023 17:04:34 -0700 (PDT)
+Date:   Sun, 17 Sep 2023 17:04:34 -0700
+In-Reply-To: <0000000000004f34d705ffbc2604@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000259bd8060596e33f@google.com>
+Subject: Re: [syzbot] [integrity] [overlayfs] general protection fault in d_path
+From:   syzbot <syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com>
+To:     amir73il@gmail.com, brauner@kernel.org, jlayton@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        miklos@szeredi.hu, stefanb@linux.ibm.com,
+        syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+syzbot has bisected this issue to:
 
-17. September 2023.
+commit db1d1e8b9867aae5c3e61ad7859abfcc4a6fd6c7
+Author: Jeff Layton <jlayton@kernel.org>
+Date:   Mon Apr 17 16:55:51 2023 +0000
 
-Hallo,
+    IMA: use vfs_getattr_nosec to get the i_version
 
-Ich möchte Ihnen einen Geschäftsvorschlag mitteilen. Für weitere  
-Details antworten Sie auf Englisch.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=106f7e54680000
+start commit:   a747acc0b752 Merge tag 'linux-kselftest-next-6.6-rc2' of g..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=126f7e54680000
+console output: https://syzkaller.appspot.com/x/log.txt?x=146f7e54680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df91a3034fe3f122
+dashboard link: https://syzkaller.appspot.com/bug?extid=a67fc5321ffb4b311c98
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1671b694680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ec94d8680000
 
-Grüße
-Frau Victoria Cleland
-_________________________
-Sekretär: Wajdi Chaabani
+Reported-by: syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com
+Fixes: db1d1e8b9867 ("IMA: use vfs_getattr_nosec to get the i_version")
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
