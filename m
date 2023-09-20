@@ -2,77 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34AE7A5AF6
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Sep 2023 09:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E793D7A7080
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Sep 2023 04:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjISHcs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 19 Sep 2023 03:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S232381AbjITC3u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 19 Sep 2023 22:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbjISHcs (ORCPT
+        with ESMTP id S232415AbjITC3i (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 19 Sep 2023 03:32:48 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C22120
-        for <linux-integrity@vger.kernel.org>; Tue, 19 Sep 2023 00:32:42 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d8571d5e71aso205188276.0
-        for <linux-integrity@vger.kernel.org>; Tue, 19 Sep 2023 00:32:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695108761; x=1695713561; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rKObcm639gGAm/mfp4vDKZFXpxuyA+KOVIh7QFzNSE8=;
-        b=Pu8w6X+tRXt+kklzC38dM/97d5FXi1N0EyxGNqQz0b81zB+awwtWYRerNUk6OCb/E/
-         dRokNif+u9qrPMfr/i9AftuIzyoTJY42WHu6sXZLfwTg9760sEptF6CKIM/A4sY+UkE9
-         WX9ak05bfDopHIZvzw7mY4mmRpyyi9quButIaFEM4muW7wfFg16mTHgWq8JNwVN7472m
-         b/hDbTn+zM7gxfnJj/GHvOfANGB+rJRsfHW/1J+QQS2NFT4+PR+C1Pd3FX9HR7futbhE
-         Z55bYEjqO3zL7SkNi+stvG2w6Yw9T7J7XYvz6Y94KyoMIQZoeaYORjPU2FxuIKO2jSF5
-         +6xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695108761; x=1695713561;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rKObcm639gGAm/mfp4vDKZFXpxuyA+KOVIh7QFzNSE8=;
-        b=i0xOe5jknNUFrh80kgfMkeM+yDzCLQcXwp8xPXplTWpvDyKSLSL2QbCBXUocm02oPw
-         eSHslRSN4vJLvgJO10lKqTwtKEDyyIz2ToNCT728P3Qe/JM7+h9GifEMpLAjam4Yk4Ma
-         7gV1IROJ2D/EZd8SR2ONLiUW1wzjC8lb5AwW72xP6KWxcBmq2Dyhd6QIPI8Qpcj05uBC
-         G2jBSM4awDkZuRza8vWkrx93WTYLR6GBNG+zkVEJCvbrPuk4i5UECpHHHnoK5Py0mwCB
-         thjPeNvCaHWagMBdQSxB4RLADexsvqED0uCj7QXtkfV1TNzlNnb1JsEbSqEKqXcZQ4I8
-         LYaw==
-X-Gm-Message-State: AOJu0Yw78FJcdZrKTQsyIdsGNpJvs7u9bg2FIpDa6lZzGm2hc0nIR6ZX
-        g4H0n1xA63/ZEogieK9E6M/B8vU=
-X-Google-Smtp-Source: AGHT+IHJxvy/cbJranGmaNtnWNIlAAOZOh3kGq6IYc0OGUoP8LX3QnKfja9ikwiEO9lFEoCk/VuVoMU=
-X-Received: from hmarynka.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:925])
- (user=ovt job=sendgmr) by 2002:a25:d882:0:b0:d81:9903:9dec with SMTP id
- p124-20020a25d882000000b00d8199039decmr237127ybg.7.1695108761694; Tue, 19 Sep
- 2023 00:32:41 -0700 (PDT)
-Date:   Tue, 19 Sep 2023 07:32:37 +0000
-In-Reply-To: <20230711164447.714035-1-nayna@linux.ibm.com>
-Mime-Version: 1.0
-References: <20230711164447.714035-1-nayna@linux.ibm.com>
-X-Mailer: git-send-email 2.42.0.459.ge4e396fd5e-goog
-Message-ID: <20230919073238.2476335-1-ovt@google.com>
-Subject: [PATCH] ima: Remove deprecated IMA_TRUSTED_KEYRING Kconfig
-From:   Oleksandr Tymoshenko <ovt@google.com>
-To:     nayna@linux.ibm.com
+        Tue, 19 Sep 2023 22:29:38 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4115F12B;
+        Tue, 19 Sep 2023 19:29:15 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38K2S8Rf003320;
+        Wed, 20 Sep 2023 02:29:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ZeuHGNNQIYn6AC2Wgt8zBkj72vfNGJb+GzJ8E/p0r0k=;
+ b=LlfYsStlF53VM6wLLOzrFGtVQHJU6TUR6bSaDg1Z/gvyShhfNrm4YAQyDpowG0OWVU9G
+ THNVu/YwaA2NoS8oApqqxgPDo21rNwiEtu9Sr/jFxOYXli5tEbdaqDO9yM0xJ7fDa2xs
+ n2nrDd4DEBii6ExIkSNoiydv9+t/rL4q0vONIIF5iBgBhnwTpt/tZAzIOv34j1gQrT1m
+ 1KUq1nSTLj1m8HdYfVINkk2sKfvuchfxBQz/qD5f48NNwNoZwVevBMVdL089YUjTNEAl
+ Rhzv+ckQjD6IM+uQogF5OdbdgmYCrYG1COUTqDmyzJprjyg/Gl8gEV754kAx8Cs6VuzR OA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t7pea22uj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Sep 2023 02:29:14 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38K2KFNv013186;
+        Wed, 20 Sep 2023 02:29:13 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t7pea22ud-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Sep 2023 02:29:13 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38K27b6R010460;
+        Wed, 20 Sep 2023 02:29:12 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t5rwk9gb0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Sep 2023 02:29:12 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38K2TCfR20447800
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Sep 2023 02:29:12 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F35858051;
+        Wed, 20 Sep 2023 02:29:12 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E7F3B5805E;
+        Wed, 20 Sep 2023 02:29:11 +0000 (GMT)
+Received: from [9.61.135.7] (unknown [9.61.135.7])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 20 Sep 2023 02:29:11 +0000 (GMT)
+Message-ID: <eaa7c485-ce72-9caf-57de-3ab29cb815e1@linux.vnet.ibm.com>
+Date:   Tue, 19 Sep 2023 22:29:11 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] ima: Remove deprecated IMA_TRUSTED_KEYRING Kconfig
+To:     Oleksandr Tymoshenko <ovt@google.com>, nayna@linux.ibm.com
 Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org, zohar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230711164447.714035-1-nayna@linux.ibm.com>
+ <20230919073238.2476335-1-ovt@google.com>
+Content-Language: en-US
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <20230919073238.2476335-1-ovt@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LKMt1k38ux8P_HK3BAcqQMQducq5pOm7
+X-Proofpoint-ORIG-GUID: tQMETAueg5Y_ecMbVcBKz9nNzHLPx5jA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-20_02,2023-09-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxlogscore=526 bulkscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309200014
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello,
 
-There are two Kconfigs that depend on IMA_TRUSTED_KEYRING:
-IMA_LOAD_X509 and IMA_BLACKLIST_KEYRING. Removing IMA_TRUSTED_KEYRING
-makes them unreachable. Should they be removed too or should
-the dependency clauses be removed?
+On 9/19/23 03:32, Oleksandr Tymoshenko wrote:
+> Hello,
+>
+> There are two Kconfigs that depend on IMA_TRUSTED_KEYRING:
+> IMA_LOAD_X509 and IMA_BLACKLIST_KEYRING. Removing IMA_TRUSTED_KEYRING
+> makes them unreachable. Should they be removed too or should
+> the dependency clauses be removed?
+>
+>
+Thanks Oleksandr for noticing this. Since IMA_TRUSTED_KEYRING is 
+deprecated in favor of INTEGRITY_TRUSTED_KEYRING, I think the dependency 
+clause should be updated to use INTEGRITY_TRUSTED_KEYRING.
 
+Thanks & Regards,
+
+    - Nayna
 
