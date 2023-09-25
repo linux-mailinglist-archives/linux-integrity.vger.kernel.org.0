@@ -2,75 +2,126 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD487ADB21
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Sep 2023 17:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115AC7ADB45
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Sep 2023 17:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbjIYPOh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 25 Sep 2023 11:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
+        id S232676AbjIYPWj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 25 Sep 2023 11:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232709AbjIYPOg (ORCPT
+        with ESMTP id S232287AbjIYPWh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 25 Sep 2023 11:14:36 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9E311B
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Sep 2023 08:14:29 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id ada2fe7eead31-452962769bdso2933954137.3
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Sep 2023 08:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=happybizdata-com.20230601.gappssmtp.com; s=20230601; t=1695654868; x=1696259668; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BtNfrxgf4X+cTsDMONzKl75qRElkb7tAwQe0Ph+Ar2Q=;
-        b=j4+1lOKQ75Eteyh3mYqAyulI5GJlyRFQpsBL2yBKWMLLGcf7Nb/I7hdZsguNApdfDt
-         rqeZSBiexuk1yh83iBi+uNIsWm0MZ763QD5dQgOMttnfNsxdbVv++xlQyitQXpdiN/p7
-         Dc5yozavczGK0Gl0GkFK1iFKMzXCKLqzINCixYXmCdv8R6fdILdfGcoNCxJpIzhDpo2Z
-         AUtBUsgjzCu11bNqil8hpXgEFGmSYx56yz5mRltmJBAMvpe8DZZWaLy/2AXEepBtZ24S
-         71KB4AI3pTR6oZZ3r7tiNd/ODzvNAzaaHF4yZbPbjNVUH9WwrQC8VMcDsGBzEabFZsAw
-         zmDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695654868; x=1696259668;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BtNfrxgf4X+cTsDMONzKl75qRElkb7tAwQe0Ph+Ar2Q=;
-        b=tiIg/s2Zv+aPl6ysUndOyAex6Cqhwrg0h1BoIzu/U/PhirRbYrPvDtXYP2r6gbMAZ7
-         3xU52QPvuJXCM3g15CqB53wJJKAVTxJt3ilD38QHn2pZQJWQ7esFGjr0qLeYMA1K7Abo
-         djWvr0x0n+8BT3IZjqiQzQLqzILaSOoVBjsfHOtHwi0Rm998dIG3P0ogf9h3QPiHYk7v
-         fNJfOmTARfa0NHvpAiKqlE+RS26hoNLOeEF3vhmDzXbHQuxoktfsdL9nbR5KxVcnz9s3
-         m5sCFs9Tz9jPRrL0vtClAUsg2SSJwvs+a/p0+khC0hHvmx5q/0tqpRNzF9zUSMXhpBJG
-         SmnQ==
-X-Gm-Message-State: AOJu0YyzXPAg8h4Bj4rV6DbD/ja7ri7sZmKtlwA5UmN9SJan5NryZn9d
-        3rBkljQudw82CQX/CQqaAnc/IBnlXMsol1EdfQ7o7g==
-X-Google-Smtp-Source: AGHT+IExQPiZeST6UBNLhESqww9YHARUad58911NAde7hcBWx2F6ERBPJHqYcyUSazR13vV6oN3kFh0eB9Fgb/bu72c=
-X-Received: by 2002:a67:f842:0:b0:452:5c6d:78c9 with SMTP id
- b2-20020a67f842000000b004525c6d78c9mr4218569vsp.12.1695654868281; Mon, 25 Sep
- 2023 08:14:28 -0700 (PDT)
-MIME-Version: 1.0
-From:   Sofia Gonzales <sofia@happybizdata.com>
-Date:   Mon, 25 Sep 2023 10:14:15 -0500
-Message-ID: <CAMh3ZMJ_yEt0YCimcbJ+BwwJSX+PGktO6dGS1gmSQ1snAUqVpg@mail.gmail.com>
-Subject: RE: HIMSS Global Health Conference Email List 2023
-To:     Sofia Gonzales <sofia@happybizdata.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 25 Sep 2023 11:22:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838BB9C;
+        Mon, 25 Sep 2023 08:22:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F12DC433C8;
+        Mon, 25 Sep 2023 15:22:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695655351;
+        bh=OGt2FOw6lDFFBJRltNV7eb25Y3RCJfPYVc/8wsDj+lM=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=Kp0VVt1IVmvLWEfHcZ2kGDvXU/kqTSlU+zkPCXYtz6OOHZKhyu9V5NSp0G4CcW036
+         DQ9LCiRXD6Q490pl7u8169h7tTEUAz8V7ziRXZiOnxF5dDnpKDrQj68Gjg0adng4T5
+         EC3+inaGcrSbVlkKIJs09PWUwziCRokB4AboyUs2UgQ2pt7Zy2tOwb59ADnu4WpGap
+         yRdxENwoFnqspD1+SNBWaf1kvwgaAh2yycGM8qQMtVXclYdN2nIeGugErrwJvR4YEl
+         H9OHYREey3oOXKbuXZV2mFLTFooU8OLOf/hOR2Asgxbi05opItQVsGdjANQ69Zqjb3
+         L4QCoe2YqHFVQ==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 25 Sep 2023 18:22:22 +0300
+Message-Id: <CVS3NIJ8OO6Y.2C6GJ9OBR6COC@suppilovahvero>
+Cc:     "Shawn Guo" <shawnguo@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        "NXP Linux Team" <linux-imx@nxp.com>,
+        "Ahmad Fatoum" <a.fatoum@pengutronix.de>,
+        "sigma star Kernel Team" <upstream+dcp@sigma-star.at>,
+        "David Howells" <dhowells@redhat.com>,
+        "Li Yang" <leoyang.li@nxp.com>, "Paul Moore" <paul@paul-moore.com>,
+        "James Morris" <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Tejun Heo" <tj@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        <linux-security-module@vger.kernel.org>,
+        "Richard Weinberger" <richard@nod.at>,
+        "David Oberhollenzer" <david.oberhollenzer@sigma-star.at>
+Subject: Re: [PATCH v3 1/3] crypto: mxs-dcp: Add support for hardware
+ provided keys
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "David Gstir" <david@sigma-star.at>,
+        "Mimi Zohar" <zohar@linux.ibm.com>,
+        "James Bottomley" <jejb@linux.ibm.com>,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+X-Mailer: aerc 0.14.0
+References: <20230918141826.8139-1-david@sigma-star.at>
+ <20230918141826.8139-2-david@sigma-star.at>
+In-Reply-To: <20230918141826.8139-2-david@sigma-star.at>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+On Mon Sep 18, 2023 at 5:18 PM EEST, David Gstir wrote:
+> DCP is capable to performing AES with hardware-bound keys.
+> These keys are not stored in main memory and are therefore not directly
+> accessible by the operating system.
+>
+> So instead of feeding the key into DCP, we need to place a
+> reference to such a key before initiating the crypto operation.
+> Keys are referenced by a one byte identifiers.
 
-Would you be interested in acquiring the Healthcare Information and
-Management Systems Society Email List?
+Not sure what the action of feeding key into DCP even means if such
+action does not exists.
 
-Number of Contacts: 45,486
-Cost: $1,918
+What you probably would want to describe here is how keys get created
+and how they are referenced by the kernel.
 
-Interested? Email me back; I would love to provide more information on the list.
+For the "use" part please try to avoid academic paper style long
+expression starting with "we" pronomine.
 
-Kind Regards,
-Sofia Gonzales
-Marketing Coordinator
+So the above paragraph would normalize into "The keys inside DCP
+are referenced by one byte identifier". Here of course would be
+for the context nice to know what is this set of DCP keys. E.g.
+are total 256 keys or some subset?
+
+When using too much prose there can be surprsingly little digestable
+information, thus this nitpicking.
+
+> DCP supports 6 different keys: 4 slots in the secure memory area,
+> a one time programmable key which can be burnt via on-chip fuses
+> and an unique device key.
+>
+> Using these keys is restricted to in-kernel users that use them as buildi=
+ng
+> block for other crypto tools such as trusted keys. Allowing userspace
+> (e.g. via AF_ALG) to use these keys to crypt or decrypt data is a securit=
+y
+> risk, because there is no access control mechanism.
+
+Unless this patch has anything else than trusted keys this should not
+be an open-ended sentence. You want to say roughly that DCP hardware
+keys are implemented for the sake to implement trusted keys support,
+and exactly and only that.
+
+This description also lacks actions taken by the code changes below,
+which is really the beef of any commit description.
+
+BR, Jarkko
