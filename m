@@ -2,111 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCA17AD896
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Sep 2023 15:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD487ADB21
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Sep 2023 17:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjIYNGb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 25 Sep 2023 09:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
+        id S232747AbjIYPOh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 25 Sep 2023 11:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbjIYNGa (ORCPT
+        with ESMTP id S232709AbjIYPOg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 25 Sep 2023 09:06:30 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63CB10F
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Sep 2023 06:06:23 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-692ada71d79so3343773b3a.1
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Sep 2023 06:06:23 -0700 (PDT)
+        Mon, 25 Sep 2023 11:14:36 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9E311B
+        for <linux-integrity@vger.kernel.org>; Mon, 25 Sep 2023 08:14:29 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id ada2fe7eead31-452962769bdso2933954137.3
+        for <linux-integrity@vger.kernel.org>; Mon, 25 Sep 2023 08:14:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695647183; x=1696251983; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mXglc8opTBOxqxBVnbKKZEfOjkArzaJ5mbcscFyV/Wo=;
-        b=E9p/DdAhQv/UcBbrSHqMLXHKKFmTmAEugjpfcAaJIi0oAhHW91Fn3L148iHyI9tq6y
-         1AXxdfTrMhS72Zy9gDH3x6BZX047nWgHv5SIYLenoGYIxmyhv/3Z0OHCspeSEWUjv/Dr
-         5v3ZlzF9MCgA6c4GY0EVCOxSXAvWL66AAIUVTzUcrOiHt1xQuSXO/meOJiZwKRblOuuE
-         cKIGL6pARcFlHbPhB2iJsp7kw3Bog0Y/ZW5yTM9A3tyq5lZSSMxCvErvB3dVJ9fa+G8q
-         yvN079Vrw4bkbbYAlPNEYfEE1Ty6s7Y2UpwRLImeV4hkPd1Mji5zfoNrzlvslblzeye5
-         9Qew==
+        d=happybizdata-com.20230601.gappssmtp.com; s=20230601; t=1695654868; x=1696259668; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BtNfrxgf4X+cTsDMONzKl75qRElkb7tAwQe0Ph+Ar2Q=;
+        b=j4+1lOKQ75Eteyh3mYqAyulI5GJlyRFQpsBL2yBKWMLLGcf7Nb/I7hdZsguNApdfDt
+         rqeZSBiexuk1yh83iBi+uNIsWm0MZ763QD5dQgOMttnfNsxdbVv++xlQyitQXpdiN/p7
+         Dc5yozavczGK0Gl0GkFK1iFKMzXCKLqzINCixYXmCdv8R6fdILdfGcoNCxJpIzhDpo2Z
+         AUtBUsgjzCu11bNqil8hpXgEFGmSYx56yz5mRltmJBAMvpe8DZZWaLy/2AXEepBtZ24S
+         71KB4AI3pTR6oZZ3r7tiNd/ODzvNAzaaHF4yZbPbjNVUH9WwrQC8VMcDsGBzEabFZsAw
+         zmDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695647183; x=1696251983;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mXglc8opTBOxqxBVnbKKZEfOjkArzaJ5mbcscFyV/Wo=;
-        b=FREX4BFdJkdAWUscBgVMDGD4VM4Wud1vJaO8aOflPFy1+XqISJnQyhlty/g0p77tBA
-         7PoN+fUqHlSVhJr1yWQk9nEpc3lMYc32yyIzfag3vbuRRAjxaqVtSkjkJ8O+gYwjNs0L
-         4NGajY0j4JTWW3nRTrowykBxOisGrObEYeViF38tMyPFA2kQeULXM4H7A64DVgbxVjLs
-         L1IvijkRAWLh0JJR1QJLpFrIySayTT0qqbmPq86vbVboSUuRUGSMhssJF07crLvjsvxp
-         HTZ3pyhUWSGhbALiBbst1CeFETDJhKVBwMDYi243dkfKpUq/iCnBMxps8luo8uIevqOY
-         tusw==
-X-Gm-Message-State: AOJu0YwJyn6cuGcZNhgQsVrZD9yAF1XjkJZ+Y22kPb+KyZZazLIPLbee
-        DfO8QjUa5yVj7CXD6tDoZx1aEHvEQqVL6YGwufs=
-X-Google-Smtp-Source: AGHT+IFXiu+hIuGpbMGnryBZPI9zrQcfgcwULkxd1ATRGTszst7B+kzsc3FXYgt1Oi/EhIFKc10wDAE9O22h3BLnnC4=
-X-Received: by 2002:a17:90b:33cc:b0:268:553f:1938 with SMTP id
- lk12-20020a17090b33cc00b00268553f1938mr4364657pjb.4.1695647182818; Mon, 25
- Sep 2023 06:06:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695654868; x=1696259668;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BtNfrxgf4X+cTsDMONzKl75qRElkb7tAwQe0Ph+Ar2Q=;
+        b=tiIg/s2Zv+aPl6ysUndOyAex6Cqhwrg0h1BoIzu/U/PhirRbYrPvDtXYP2r6gbMAZ7
+         3xU52QPvuJXCM3g15CqB53wJJKAVTxJt3ilD38QHn2pZQJWQ7esFGjr0qLeYMA1K7Abo
+         djWvr0x0n+8BT3IZjqiQzQLqzILaSOoVBjsfHOtHwi0Rm998dIG3P0ogf9h3QPiHYk7v
+         fNJfOmTARfa0NHvpAiKqlE+RS26hoNLOeEF3vhmDzXbHQuxoktfsdL9nbR5KxVcnz9s3
+         m5sCFs9Tz9jPRrL0vtClAUsg2SSJwvs+a/p0+khC0hHvmx5q/0tqpRNzF9zUSMXhpBJG
+         SmnQ==
+X-Gm-Message-State: AOJu0YyzXPAg8h4Bj4rV6DbD/ja7ri7sZmKtlwA5UmN9SJan5NryZn9d
+        3rBkljQudw82CQX/CQqaAnc/IBnlXMsol1EdfQ7o7g==
+X-Google-Smtp-Source: AGHT+IExQPiZeST6UBNLhESqww9YHARUad58911NAde7hcBWx2F6ERBPJHqYcyUSazR13vV6oN3kFh0eB9Fgb/bu72c=
+X-Received: by 2002:a67:f842:0:b0:452:5c6d:78c9 with SMTP id
+ b2-20020a67f842000000b004525c6d78c9mr4218569vsp.12.1695654868281; Mon, 25 Sep
+ 2023 08:14:28 -0700 (PDT)
 MIME-Version: 1.0
-Sender: mr.isaiahnwabudike01@gmail.com
-Received: by 2002:a05:6a10:4410:b0:4e6:519f:124c with HTTP; Mon, 25 Sep 2023
- 06:06:22 -0700 (PDT)
-From:   "Mrs. Rita Hassan" <ritahassan02@gmail.com>
-Date:   Mon, 25 Sep 2023 06:06:22 -0700
-X-Google-Sender-Auth: yeq3_xtuipO1P77d2qeKwPgsd4c
-Message-ID: <CAN0kuD_Mb6r_ybPEbbHkv8BKeKwvyedgB_EOczj0YvEYjcG2ZQ@mail.gmail.com>
-Subject: Please I need your help,
-To:     undisclosed-recipients:;
+From:   Sofia Gonzales <sofia@happybizdata.com>
+Date:   Mon, 25 Sep 2023 10:14:15 -0500
+Message-ID: <CAMh3ZMJ_yEt0YCimcbJ+BwwJSX+PGktO6dGS1gmSQ1snAUqVpg@mail.gmail.com>
+Subject: RE: HIMSS Global Health Conference Email List 2023
+To:     Sofia Gonzales <sofia@happybizdata.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_5,MONEY_NOHTML,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_MONEY_PERCENT,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Please I need your help,
+Hi,
 
+Would you be interested in acquiring the Healthcare Information and
+Management Systems Society Email List?
 
-Please forgive me for stressing you with my predicaments as I know
-that this letter may come to you as big surprise. Actually, I came
-across your E-mail from my personal search afterward I decided to
-email you directly believing that you will be honest to fulfill my
-final wish before i die.
+Number of Contacts: 45,486
+Cost: $1,918
 
-Meanwhile, I Am Mrs. Rita, 62 years old,I am suffering from a long
-time cancer and from all indication my condition is really
-deteriorating as my doctors have confirmed and courageously advised me
-that I may not live beyond two months from now for the reason that my
-tumor has reached a critical stage which has defiled all forms of
-medical treatment.
+Interested? Email me back; I would love to provide more information on the list.
 
-As a matter of fact, registered nurse by profession while my husband
-was dealing on Gold Dust and Gold Dory Bars till his sudden death the
-year 2019 then I took over his business till date. In fact, at this
-moment I have a deposit sum of $5.5million dollars with one of the
-leading bank  but unfortunately I cannot visit the bank since I am
-critically sick and powerless to do anything myself but my bank
-account officer advised me to assign any of my trustworthy relative,
-friends or partner with authorization letter to stand as the recipient
-of my money but sorrowfully I don t have any reliable relative and no
-child.
-
-Therefore, I want you to receive the money and take 30% to take care
-of yourself and family while 70% should be use basically on
-humanitarian purposes mostly to orphanages home, Motherless babies
-home, less privileged and disable citizens and widows around the
-world. and as soon as I receive your respond I shall send you my
-pictures, banking records and with full contacts of my banking
-institution If you are interested in carrying out this task please
-contact me for more details on this email. ( ritahassan02@gmail.com )
-
-Hope to hear from you soon.
-
-Yours Faithfully
-
-Mrs. Rita Hassan
+Kind Regards,
+Sofia Gonzales
+Marketing Coordinator
