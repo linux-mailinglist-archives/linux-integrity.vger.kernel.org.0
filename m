@@ -2,72 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7BF7AE484
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Sep 2023 06:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CED07AEB2D
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Sep 2023 13:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233612AbjIZEUv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 Sep 2023 00:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S230173AbjIZLPK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 Sep 2023 07:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233599AbjIZEUu (ORCPT
+        with ESMTP id S229507AbjIZLPJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 26 Sep 2023 00:20:50 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C07EFB
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Sep 2023 21:20:39 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c02e232c48so133137521fa.1
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Sep 2023 21:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695702038; x=1696306838; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Li36zbmUyy6s+dW9E67L55JpND/74r/URPr1wBjIrjM=;
-        b=auS5kjkfivrF7j/nKj/90dbQta5tuODGhg6Pzd+FdEQoTnAR9wzD6SRx2uXzETLNoW
-         GQSL8OPPq8zJBchBqXfDkwxuhruw7QTTVu1nKHBiJaFzxR2qXbI7MCao+0yXT6oVatvn
-         32TM9t/49UqV1P+LBVq3ULfI7+Ptn0cxhJDhpDbTPi7YjZwZa1tAB197rIYYUXtusoUl
-         bLvBejRlus/ni1mDoN8/j+rYGqF1l7w5iZ0EIi1if3x4yG3wQ8TTqKC5fAw3ZX6tU+yn
-         D16z6dOM/zPq3geD/F9ljvjoUsl2z4sJJTyRH6Vy4wMk+BVzE6/p7zvucztC/gq/GprQ
-         jqdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695702038; x=1696306838;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Li36zbmUyy6s+dW9E67L55JpND/74r/URPr1wBjIrjM=;
-        b=AX1iZUZjFAhOD3KXMVhrSkSSL4O+Nii6/rdEI9rTUmv4NjwfRI7DztUE+etNwxgZlB
-         vuy88eAHEW1No8eyI1mwyr5MHEuazob185mHY8Bfex1cbfIcAONwHb08CsO0MDdvmOe2
-         M+R9sSz/uz2jV2AITWxDirv4kRd79S4B8Mas0vRLky8dDAmS7SoiASq33xpwoN9E3meS
-         QNQDCNMUf0kYsBpCFO24iwh16a9yYks8LcPpd7YULfKNHPUQlmbXtsuyeNskTzJ6Pq3W
-         iLPVDgGVoz5iyvES8tACQ6BkyOH5DVdhbxqzo1mwYDksCNcfw8pu9OhqNuGFuEgV7Qoj
-         vBuA==
-X-Gm-Message-State: AOJu0YzHYg0JqTWBE/CrOJHcoiDqWXfqK2Bx+AezFXkhklwxBdz3dfzv
-        jd1zvpIELEj9hvRyT+1Tzu/V6GuOuKYYIo5JkBHGkQ==
-X-Google-Smtp-Source: AGHT+IEkvCHqaTe+C9BTh63er4gYYx6xBzFgCoo6j4Nql/jmV2gTohm+EMsT1nzsnEMZlt1Fkk9VQlZoksyiMSd4j3Y=
-X-Received: by 2002:a2e:7308:0:b0:2bc:dcd6:97b1 with SMTP id
- o8-20020a2e7308000000b002bcdcd697b1mr6827475ljc.47.1695702037646; Mon, 25 Sep
- 2023 21:20:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230921064506.3420402-1-ovt@google.com>
-In-Reply-To: <20230921064506.3420402-1-ovt@google.com>
-From:   Oleksandr Tymoshenko <ovt@google.com>
-Date:   Mon, 25 Sep 2023 21:20:26 -0700
-Message-ID: <CACGj0Cgh7Vjf5EcY7F+pf9bCjXhhJYN-xf3NeC8WWjT4+j9RrA@mail.gmail.com>
-Subject: Re: [PATCH] ima: Finish deprecation of IMA_TRUSTED_KEYRING Kconfig
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Nayna Jain <nayna@linux.ibm.com>
-Cc:     rnv@google.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+        Tue, 26 Sep 2023 07:15:09 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72EDE5;
+        Tue, 26 Sep 2023 04:15:01 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4RvxbH6zKSz9v7cV;
+        Tue, 26 Sep 2023 18:59:55 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDHH5ELvRJlT9ARAQ--.20978S2;
+        Tue, 26 Sep 2023 12:14:32 +0100 (CET)
+Message-ID: <66249824469de1edefd42b42f72cab17ea331d09.camel@huaweicloud.com>
+Subject: Re: [PATCH v3 12/25] security: Introduce inode_post_setattr hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        chuck.lever@oracle.com, jlayton@kernel.org, neilb@suse.de,
+        kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 26 Sep 2023 13:14:17 +0200
+In-Reply-To: <20230904133415.1799503-13-roberto.sassu@huaweicloud.com>
+References: <20230904133415.1799503-1-roberto.sassu@huaweicloud.com>
+         <20230904133415.1799503-13-roberto.sassu@huaweicloud.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu2 
+MIME-Version: 1.0
+X-CM-TRANSID: LxC2BwDHH5ELvRJlT9ARAQ--.20978S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCryrXF4ftryxWF4furW7Arb_yoWrCrWrpF
+        Wrt3WrCw4rGFW7Wrn5Ja17uanaga45WrW7XrWvgw1jyFn7tr17tF13K34UCr13GrW8Wr9F
+        q3ZFvrsxCwn8ZwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj5RUFAAAss
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,19 +72,113 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 11:45=E2=80=AFPM Oleksandr Tymoshenko <ovt@google.c=
-om> wrote:
->
-> The removal of IMA_TRUSTED_KEYRING made IMA_LOAD_X509
-> and IMA_BLACKLIST_KEYRING unavailable because the latter
-> two depend on the former. Since IMA_TRUSTED_KEYRING was
-> deprecated in favor of INTEGRITY_TRUSTED_KEYRING use it
-> as a dependency for the two Kconfigs affected by the
-> deprecation.
->
-> Fixes: 5087fd9e80e5 ("ima: Remove deprecated IMA_TRUSTED_KEYRING Kconfig"=
-)
-> Signed-off-by: Oleksandr Tymoshenko <ovt@google.com>
+On Mon, 2023-09-04 at 15:34 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> the inode_post_setattr hook.
+> 
+> It is useful for EVM to recalculate the HMAC on modified file attributes
+> and other file metadata, after it verified the HMAC of current file
+> metadata with the inode_setattr hook.
+> 
+> LSMs should use the new hook instead of inode_setattr, when they need to
+> know that the operation was done successfully (not known in inode_setattr).
+> The new hook cannot return an error and cannot cause the operation to be
+> reverted.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  fs/attr.c                     |  1 +
 
-Gentle ping, IMA_LOAD_X509 and IMA_BLACKLIST_KEYRING options are
-currently broken on all branches.
+Hi Christian, Al
+
+could you please review and ack patches 12-19, which touch the VFS?
+
+Thanks a lot!
+
+Roberto
+
+>  include/linux/lsm_hook_defs.h |  2 ++
+>  include/linux/security.h      |  7 +++++++
+>  security/security.c           | 16 ++++++++++++++++
+>  4 files changed, 26 insertions(+)
+> 
+> diff --git a/fs/attr.c b/fs/attr.c
+> index 431f667726c7..3c309eb456c6 100644
+> --- a/fs/attr.c
+> +++ b/fs/attr.c
+> @@ -486,6 +486,7 @@ int notify_change(struct mnt_idmap *idmap, struct dentry *dentry,
+>  
+>  	if (!error) {
+>  		fsnotify_change(dentry, ia_valid);
+> +		security_inode_post_setattr(idmap, dentry, ia_valid);
+>  		ima_inode_post_setattr(idmap, dentry, ia_valid);
+>  		evm_inode_post_setattr(idmap, dentry, ia_valid);
+>  	}
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index fdf075a6b1bb..995d30336cfa 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -136,6 +136,8 @@ LSM_HOOK(int, 0, inode_follow_link, struct dentry *dentry, struct inode *inode,
+>  LSM_HOOK(int, 0, inode_permission, struct inode *inode, int mask)
+>  LSM_HOOK(int, 0, inode_setattr, struct mnt_idmap *idmap, struct dentry *dentry,
+>  	 struct iattr *attr)
+> +LSM_HOOK(void, LSM_RET_VOID, inode_post_setattr, struct mnt_idmap *idmap,
+> +	 struct dentry *dentry, int ia_valid)
+>  LSM_HOOK(int, 0, inode_getattr, const struct path *path)
+>  LSM_HOOK(int, 0, inode_setxattr, struct mnt_idmap *idmap,
+>  	 struct dentry *dentry, const char *name, const void *value,
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index dcb3604ffab8..820899db5276 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -355,6 +355,8 @@ int security_inode_follow_link(struct dentry *dentry, struct inode *inode,
+>  int security_inode_permission(struct inode *inode, int mask);
+>  int security_inode_setattr(struct mnt_idmap *idmap,
+>  			   struct dentry *dentry, struct iattr *attr);
+> +void security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+> +				 int ia_valid);
+>  int security_inode_getattr(const struct path *path);
+>  int security_inode_setxattr(struct mnt_idmap *idmap,
+>  			    struct dentry *dentry, const char *name,
+> @@ -856,6 +858,11 @@ static inline int security_inode_setattr(struct mnt_idmap *idmap,
+>  	return 0;
+>  }
+>  
+> +static inline void
+> +security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+> +			    int ia_valid)
+> +{ }
+> +
+>  static inline int security_inode_getattr(const struct path *path)
+>  {
+>  	return 0;
+> diff --git a/security/security.c b/security/security.c
+> index 2b24d01cf181..764a6f28b3b9 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -2124,6 +2124,22 @@ int security_inode_setattr(struct mnt_idmap *idmap,
+>  }
+>  EXPORT_SYMBOL_GPL(security_inode_setattr);
+>  
+> +/**
+> + * security_inode_post_setattr() - Update the inode after a setattr operation
+> + * @idmap: idmap of the mount
+> + * @dentry: file
+> + * @ia_valid: file attributes set
+> + *
+> + * Update inode security field after successful setting file attributes.
+> + */
+> +void security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+> +				 int ia_valid)
+> +{
+> +	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+> +		return;
+> +	call_void_hook(inode_post_setattr, idmap, dentry, ia_valid);
+> +}
+> +
+>  /**
+>   * security_inode_getattr() - Check if getting file attributes is allowed
+>   * @path: file
+
