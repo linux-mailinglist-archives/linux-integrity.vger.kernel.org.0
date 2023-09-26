@@ -2,54 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261B17AF550
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Sep 2023 22:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F48E7AF6B6
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Sep 2023 01:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235864AbjIZUhR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 Sep 2023 16:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S229790AbjIZXX4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 Sep 2023 19:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbjIZUhQ (ORCPT
+        with ESMTP id S232524AbjIZXV4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 26 Sep 2023 16:37:16 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A61192
-        for <linux-integrity@vger.kernel.org>; Tue, 26 Sep 2023 13:37:10 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35521C433C7;
-        Tue, 26 Sep 2023 20:37:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695760630;
-        bh=isiCWq7kNpAgGUuwdR4QUnntDfYvQNVLVhuiWQj6Pxk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ZlgzqpD2NaRV6M7aQtH/FmuoImG9Wu/Qg1ut7Pfi5hU4yLrsK18SRl/1dw/FLIGqD
-         EMyLo56YAYouj1iPurI0ZNYhFcL27H54KKlNaXtRfZ3fLFHSTutrpX19ZRSnnMeOjv
-         yQ7MPp7cH3hzAOQAIWipgvfxX6enD+BmiXyfx2A5i9V7YwjtDRSVDpfvMGe76OHZwy
-         V/Z8xhlCZMkhZDCr/iQLvkj6w40q/kBAnpXPgphov6Oau9jzFf3TPCTwuzsLVEnlXz
-         ivHS9pwNsjdEabX2TuyWHZ1lgMBtIryueWEYOan4dUAxkUEXcxzW7sc55cHHaLRRyA
-         OX6RukSEy762w==
-Received: (nullmailer pid 534509 invoked by uid 1000);
-        Tue, 26 Sep 2023 20:37:07 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Tue, 26 Sep 2023 19:21:56 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836145274;
+        Tue, 26 Sep 2023 15:23:57 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38QLJDwm008181;
+        Tue, 26 Sep 2023 21:36:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HdYo7IF3hvnNdrc0T8ThUqLB1fvlrLKGIPhITVuMjN8=;
+ b=NTKpIytOOZuX/yP+0E+Jkq6/im6xcHz8j2qloyPZ0kRf7vo8yxJvy7unQIYWcUgu3L+3
+ YuRtJCYXIsgV9YdYXIvf9zITmfijhh5r8ArKf/thA21jr9aOd4uu06Fh/0434HcGIVlr
+ wM55xURNC7dBgx5Fc1eVA9sqyYLk4DHB0+3k6vrI5GZ/73O9wbljhS2A0aaShWFKrWFl
+ LDQ725wwWU9l0Df7D2nYYIqlsCorC8SiJE6IVchR3JfPGj2CJmZKP3iuYeOn9G7uarv6
+ 3ArmMjS5GSJ2kl0YRs96+nrjDGzGbCyfigeSlG8rQBY4YiEY+B8aHFF/7cpEdyVOIVqx UQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tc6me1k2c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Sep 2023 21:36:16 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38QLaDVX009478;
+        Tue, 26 Sep 2023 21:36:13 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tc6me1jkd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Sep 2023 21:36:12 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38QJPrWT008250;
+        Tue, 26 Sep 2023 21:32:49 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tabbn6h33-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Sep 2023 21:32:49 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38QLWmZF7537308
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Sep 2023 21:32:48 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 80F1358055;
+        Tue, 26 Sep 2023 21:32:48 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D95EC58063;
+        Tue, 26 Sep 2023 21:32:47 +0000 (GMT)
+Received: from [9.61.144.60] (unknown [9.61.144.60])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 26 Sep 2023 21:32:47 +0000 (GMT)
+Message-ID: <ed95040b-2368-473b-1dda-5d8c0eaa3259@linux.vnet.ibm.com>
+Date:   Tue, 26 Sep 2023 17:32:47 -0400
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        linux-integrity@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor+dt@kernel.org>
-In-Reply-To: <ae40859b82494d75e9ad7bf616b3264138ad1f6a.1695754856.git.lukas@wunner.de>
-References: <ae40859b82494d75e9ad7bf616b3264138ad1f6a.1695754856.git.lukas@wunner.de>
-Message-Id: <169576062741.534473.12201606598910537660.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: reset: Add Infineon SLB9670 TPM reset
- driver
-Date:   Tue, 26 Sep 2023 15:37:07 -0500
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] ima: Finish deprecation of IMA_TRUSTED_KEYRING Kconfig
+Content-Language: en-US
+To:     Oleksandr Tymoshenko <ovt@google.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     rnv@google.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>
+References: <20230921064506.3420402-1-ovt@google.com>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <20230921064506.3420402-1-ovt@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: fwjYmKAlxZvFNdVeaJ5d8wlks2OY9nkT
+X-Proofpoint-GUID: JOJkSSU5U-SAKUyZv7E0aYNsAI5y13bt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-26_15,2023-09-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=395 spamscore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 suspectscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309260184
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,42 +102,18 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On Tue, 26 Sep 2023 21:09:35 +0200, Lukas Wunner wrote:
-> A new reset driver is about to be added to perform the reset sequence of
-> the Infineon SLB9670 Trusted Platform Module.
-> 
-> Document its device tree bindings.
-> 
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> ---
->  .../bindings/reset/infineon,slb9670-reset.yaml     | 68 ++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/reset/infineon,slb9670-reset.yaml
-> 
+On 9/21/23 02:45, Oleksandr Tymoshenko wrote:
+> The removal of IMA_TRUSTED_KEYRING made IMA_LOAD_X509
+> and IMA_BLACKLIST_KEYRING unavailable because the latter
+> two depend on the former. Since IMA_TRUSTED_KEYRING was
+> deprecated in favor of INTEGRITY_TRUSTED_KEYRING use it
+> as a dependency for the two Kconfigs affected by the
+> deprecation.
+>
+> Fixes: 5087fd9e80e5 ("ima: Remove deprecated IMA_TRUSTED_KEYRING Kconfig")
+> Signed-off-by: Oleksandr Tymoshenko <ovt@google.com>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks for doing this.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/reset/infineon,slb9670-reset.yaml:29:111: [warning] line too long (124 > 110 characters) (line-length)
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/reset/infineon,slb9670-reset.example.dtb: /example-0/spi/tpm@0: failed to match any schema with compatible: ['infineon,slb9670']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/ae40859b82494d75e9ad7bf616b3264138ad1f6a.1695754856.git.lukas@wunner.de
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
 
