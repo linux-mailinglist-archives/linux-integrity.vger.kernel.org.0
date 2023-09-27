@@ -2,100 +2,174 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1AB7B0357
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Sep 2023 13:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6147E7B0F9F
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Sep 2023 01:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjI0LxF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Sep 2023 07:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S229464AbjI0XqR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Sep 2023 19:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjI0LxE (ORCPT
+        with ESMTP id S229445AbjI0XqQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Sep 2023 07:53:04 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91755BE
-        for <linux-integrity@vger.kernel.org>; Wed, 27 Sep 2023 04:53:03 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B393C433C7;
-        Wed, 27 Sep 2023 11:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695815583;
-        bh=w7NOYvDlz9WwO8/lZ+B4+xWRuFiX5D0MM18h/+ZIoV8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qKJam3pBL23Re2oidE3bSNRNlZF5e8ZSoDSs7Cw1pLhO4rHGwsqd+KKBrKauUl14s
-         SquphGJCtaUq2UKoqefo8+fRC8PafFUGr8g9cWJ7yI01YMLpLqGzhjzhqil2Cg7AZB
-         Bse98S5TCJjHTmvujAYQXDWrwDr4VmLV3eRgBMS4vleoBf+E2Ehr1eFxJMVRFIG+Ol
-         ycpU2Lr8e9bDPN627R9ym6FkXBRyh2X5rH1Sf4BVo8uv8AzS4wUFlMZyQOEp17PIQF
-         PAbW5N853xcJynP0pn9/Lqi5lf+mgW57OPuHiH6/Qjd4TtGXYRqVxfNqq/k602tNpR
-         QD6JQ+HtS7gog==
-Received: (nullmailer pid 1595187 invoked by uid 1000);
-        Wed, 27 Sep 2023 11:53:00 -0000
-Date:   Wed, 27 Sep 2023 06:53:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Wed, 27 Sep 2023 19:46:16 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9D4F4;
+        Wed, 27 Sep 2023 16:46:14 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id C2A775C25C4;
+        Wed, 27 Sep 2023 19:46:11 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 27 Sep 2023 19:46:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jfarr.cc; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1695858371; x=1695944771; bh=G6
+        UCu/TfSXHA2VOhzGvLxdM7gLocfJLCtB0VrZapTnA=; b=gkrf6LLSJ4W6bIbZAg
+        RzRrvqvIMGENAZfJ2MuWXpjgmu3CDKFxyE+BUpA6eI0v3xoVi/7f82fM6Q8L1jyE
+        LuyTdQnTd4Z5C9oBPclRNfpOwVe2iuPmeAKumst+04vq4YaUT0Mkoz11P9D4I3BW
+        tKv1F8THI8SihsqqM6c8WLXpG32JuEjvxMiE8i2A+DYOuN3mTTpPuRjXOSgHyGp5
+        Q/E9/lxRTWLNuvrAVLGvn+XgXLP87DYLhgoBzhXvskZ7HoNFFFPdkN7KjT/NqwjD
+        kheq+mSyZZrd9CDjqPVbOlGteB1dFrZcaaaQKSQvTHGJgPOhHteExVIOZFPGBAYH
+        guTw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695858371; x=1695944771; bh=G6UCu/TfSXHA2
+        VOhzGvLxdM7gLocfJLCtB0VrZapTnA=; b=Hmm9fUuXDcXY0zLBnAEMqUgWwdkrA
+        rm5nPnXd8wmybWfO5FfyDR7VseP1xVciL1FmdrCIbhJRKZ1npjJKOpySufVgilJ+
+        vwAvpA70ByYJ+MYfT0v8uVhF6mL6M9+SVRM85ZKZrEu76LxDSbowR4Hn6+aOoCVF
+        FgP4zK5KVpZgNpkyX1+n/pcyCl5QbqC0CKflTmOr9HkiCY6MuMwPqJFoGRSlq3E5
+        mZs9v/uKVOCQbsDYjo0SCp7WzTFmB1eeyqkUuYRN1pgPO+5myu6m/Qwjxh9xEw1m
+        zdVM0T0joL1gdyL8WLzgufoRRJKU3IU2gICpoo8+gseEP36h7DU67lqjQ==
+X-ME-Sender: <xms:w74UZUGHeKWbHFUQ89FiZrSRFLRZgQ-TJf_NlDR79AgyrHqcNN9x-Q>
+    <xme:w74UZdUYuBN8owHxwAIabVQK0zonvgI4gL4fnFW2KXKp-mToXsCdEAEB6dU4Y5GdH
+    8wXITcsSbXJb7xpDJ8>
+X-ME-Received: <xmr:w74UZeJIbl2ZOqSzTq-XWIlwSFZdRHCcggijAa1m8saJbUhACg9mg9qXilOJrJjua3JJT_ZMjqlleeAGlWuW54N_Hg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvjedrtdehgddviecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculdduhedmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomheplfgrnhcujfgvnhgurhhikhcuhfgrrhhruceokhgvrhhnvghlsehjfh
+    grrhhrrdgttgeqnecuggftrfgrthhtvghrnhepffefjeffveegjeduieevkedtieevfeeg
+    gffhffevueejfefhfeffvddvgfeivdehnecuffhomhgrihhnpehgihhthhhusgdrtghomh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkvghr
+    nhgvlhesjhhfrghrrhdrtggt
+X-ME-Proxy: <xmx:w74UZWGAq05zu-YoceKhnkzl4U5tslkxAnBjpJegOjNxpcwLBoMDew>
+    <xmx:w74UZaWTDEhuxjVOt4aNPiS2RhoTYoTZeQuk1cd8ksjD09bFkUokRQ>
+    <xmx:w74UZZO3A61IEoE9FBL_xddZMINYhIenZVs51JsmrwM0RsMBDthseg>
+    <xmx:w74UZRMeebJ4ohThUUrTJUPsvLE1Mj2QR6myIGaKI0MsCML3ZWUvKw>
+Feedback-ID: i01d149f8:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 27 Sep 2023 19:46:08 -0400 (EDT)
+Date:   Thu, 28 Sep 2023 01:46:06 +0200
+From:   Jan Hendrik Farr <kernel@jfarr.cc>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Pingfan Liu <piliu@redhat.com>, Pingfan Liu <kernelfans@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        kexec@lists.infradead.org, Baoquan He <bhe@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Philipp Rudo <prudo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, keyrings@vger.kernel.org,
+        Luca Boccassi <bluca@debian.org>, lennart@poettering.net,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         linux-integrity@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: reset: Add Infineon SLB9670 TPM reset
- driver
-Message-ID: <20230927115300.GA1587935-robh@kernel.org>
-References: <ae40859b82494d75e9ad7bf616b3264138ad1f6a.1695754856.git.lukas@wunner.de>
- <169576062741.534473.12201606598910537660.robh@kernel.org>
- <20230927063116.GA6252@wunner.de>
+        linux-security-module@vger.kernel.org, mjg59@google.com,
+        James.Bottomley@hansenpartnership.com
+Subject: Re: [PATCH 0/2] Sign the Image which is zboot's payload
+Message-ID: <ZRS-vnMyjZRKRLhT@desktop>
+References: <20230921133703.39042-1-kernelfans@gmail.com>
+ <ZQ0j6Es88aR8cjRv@desktop>
+ <CAF+s44R0ty0-aV+Amw2pL58YGa4JHt_y0WpiDMzehULPiC_aJw@mail.gmail.com>
+ <CAMj1kXF0rZ0Ej-+x__E9=Ca8Mesb+N+35etqiUzEMzhRR6trCg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230927063116.GA6252@wunner.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMj1kXF0rZ0Ej-+x__E9=Ca8Mesb+N+35etqiUzEMzhRR6trCg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 27, 2023 at 08:31:16AM +0200, Lukas Wunner wrote:
-> On Tue, Sep 26, 2023 at 03:37:07PM -0500, Rob Herring wrote:
-> > On Tue, 26 Sep 2023 21:09:35 +0200, Lukas Wunner wrote:
-> > > A new reset driver is about to be added to perform the reset sequence of
-> > > the Infineon SLB9670 Trusted Platform Module.
-> > > 
-> > > Document its device tree bindings.
-> > 
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > 
-> > yamllint warnings/errors:
-> > ./Documentation/devicetree/bindings/reset/infineon,slb9670-reset.yaml:29:111: [warning] line too long (124 > 110 characters) (line-length)
+On 25 08:55:46, Ard Biesheuvel wrote:
+> On Mon, 25 Sept 2023 at 03:01, Pingfan Liu <piliu@redhat.com> wrote:
+>
+> [...]
+>
+> > > 4. How can we debug the stubs that are being invoked?
+> > > 5. Can we let the EFI binary know that this is a kexec and not a normal
+> > > bootup. Potentially systemd-stub would want to change how/if it does TPM
+> > > PCR measurements.
+> > > ...
+> > >
+> >
 > 
-> That's the following line:
+> Not sure whether this matters. The TPM logic is exposed via EFI
+> protocols, and the kernel could either expose them or not. If it does,
+> and we execute the EFI stub (sytemd-stub) code all the way through to
+> ExitBootServices() while executing in the old kernel, we could even
+> take PCR measurements and display them, giving us secure and measured
+> boot for kexec.
 > 
->   [1] https://www.infineon.com/dgdl/Infineon-SLB%209670VQ2.0-DataSheet-v01_04-EN.pdf?fileId=5546d4626fc1ce0b016fc78270350cd6
+
+I think we should definitely delay any of the measurements until
+ExitBootServices(). We don't wan't measurements of a kernel that is not
+running and might even get unloaded before being kexec'ed to make their
+way into the TPM.
+
+> > Besides these questions, I wonder whether a highly configured EDK2 can
+> > be used as the stub (ArmVirtQemuKernel.dsc can be the start point).
+> > But there should be efforts to exclude the drivers which have the MMIO
+> > access. I saw Ard is active in EDK2, maybe that is the reason why he
+> > did not pick up EDK2 to serve the stub.
+> >
 > 
-> I'm not sure what to do about it.  Use an URL shortener?
-
-The link doesn't even work for me.
-
-> I did see the warning when running static checks before submission,
-> but it seemed like a false positive to me.
-
-I suppose we could bump the limit by 1 as I think it is set to 110.
-
+> I don't think EDK2 is suitable for this - the code style is different,
+> the license is different and it is simply a lot of code.
 > 
-> > dtschema/dtc warnings/errors:
-> > Documentation/devicetree/bindings/reset/infineon,slb9670-reset.example.dtb: /example-0/spi/tpm@0: failed to match any schema with compatible: ['infineon,slb9670']
+> What I would prefer is to define a subset of the EFI boot services
+> that we actually rely on, and perhaps even introduce some other
+> constraints on the EFI code, e.g., allow it to run unprivileged.
 > 
-> The TPM DT bindings in Documentation/devicetree/bindings/security/tpm/
-> haven't been converted to YAML yet, hence the warning/error.
+> That way, kexec could execute the EFI stub as an ordinary user process
+> (to some extent), including allocations for the decompressed kernel,
+> initrd, etc. Finally, the only thing purgatory would need to do is
+> linearize the populated regions in the VA space and copy them to
+> physical memory.
+> 
+> This all sounds very high-level, and there may be some difficulties
+> down the road, but I think this deserves a proper look because it is
+> an appealing way to make EFI execution idempotent in the context of
+> kexec, and also reduces the arch-specific logic substantially.
 
-Yes, there's been multiple attempts. Everyone disappears when I say work 
-together and consolidate the efforts.
+I just started work on a proof-of-concept implementation of this [1]. It's
+kinda unorganized and early right now though. Currently just testing with
+executing a bzimage with the normal EFI stub on x86. At this point it starts
+executing the EFI stub which checks efi_system_table->hdr.signature for the
+correct signature (which I have not set yet). That causes the EFI stub to
+exit. It does correctly call the exit function from my provided boot services
+table and the correct ExitStatus gets logged in dmesg. So it's able to call
+into my boot services correctly.
 
-> Is it a prerequisite that I consolidate and convert them before
-> this patch is acceptable?
+This is definitly the most low level code I've ever written though, so
+I'm just learning this stuff.
 
-Yes. Can't have warnings.
+Next I'll work on setting up a proper memory mapping for the EFI
+application.
 
-Rob
+After that I'll work on implementing the needed boot services and
+protocols.
+
+[1] https://github.com/Cydox/linux/commits/kexec-uefi
+
+--
+
+Jan
