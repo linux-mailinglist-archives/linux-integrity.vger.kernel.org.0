@@ -2,118 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F48E7AF6B6
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Sep 2023 01:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E077AFB06
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Sep 2023 08:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjIZXX4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 Sep 2023 19:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
+        id S229709AbjI0GZt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Sep 2023 02:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbjIZXV4 (ORCPT
+        with ESMTP id S229616AbjI0GZq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 26 Sep 2023 19:21:56 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836145274;
-        Tue, 26 Sep 2023 15:23:57 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38QLJDwm008181;
-        Tue, 26 Sep 2023 21:36:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=HdYo7IF3hvnNdrc0T8ThUqLB1fvlrLKGIPhITVuMjN8=;
- b=NTKpIytOOZuX/yP+0E+Jkq6/im6xcHz8j2qloyPZ0kRf7vo8yxJvy7unQIYWcUgu3L+3
- YuRtJCYXIsgV9YdYXIvf9zITmfijhh5r8ArKf/thA21jr9aOd4uu06Fh/0434HcGIVlr
- wM55xURNC7dBgx5Fc1eVA9sqyYLk4DHB0+3k6vrI5GZ/73O9wbljhS2A0aaShWFKrWFl
- LDQ725wwWU9l0Df7D2nYYIqlsCorC8SiJE6IVchR3JfPGj2CJmZKP3iuYeOn9G7uarv6
- 3ArmMjS5GSJ2kl0YRs96+nrjDGzGbCyfigeSlG8rQBY4YiEY+B8aHFF/7cpEdyVOIVqx UQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tc6me1k2c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Sep 2023 21:36:16 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38QLaDVX009478;
-        Tue, 26 Sep 2023 21:36:13 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tc6me1jkd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Sep 2023 21:36:12 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38QJPrWT008250;
-        Tue, 26 Sep 2023 21:32:49 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tabbn6h33-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Sep 2023 21:32:49 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38QLWmZF7537308
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Sep 2023 21:32:48 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 80F1358055;
-        Tue, 26 Sep 2023 21:32:48 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D95EC58063;
-        Tue, 26 Sep 2023 21:32:47 +0000 (GMT)
-Received: from [9.61.144.60] (unknown [9.61.144.60])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Sep 2023 21:32:47 +0000 (GMT)
-Message-ID: <ed95040b-2368-473b-1dda-5d8c0eaa3259@linux.vnet.ibm.com>
-Date:   Tue, 26 Sep 2023 17:32:47 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] ima: Finish deprecation of IMA_TRUSTED_KEYRING Kconfig
-Content-Language: en-US
-To:     Oleksandr Tymoshenko <ovt@google.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     rnv@google.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Wed, 27 Sep 2023 02:25:46 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13BAF4
+        for <linux-integrity@vger.kernel.org>; Tue, 26 Sep 2023 23:25:39 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9ad8d47ef2fso1267894866b.1
+        for <linux-integrity@vger.kernel.org>; Tue, 26 Sep 2023 23:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sigma-star.at; s=google; t=1695795938; x=1696400738; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e/2T+kTv/JcuflJsGd2CXCzB7+oY7taYM7m20LJ70dY=;
+        b=VFohLm3h8u7dS+QaCKcE42bLOQ/JXYcZgbCLmSPA2AKaeJeuC0qbjbrpzY25wtEPlU
+         LsmHessL1mPfqJCozBlq21GBXroG4lOnvFulV+UbHlRCIR51TfOsXT2bcKVQbCw/fGRQ
+         o8nBmAS2zizgTzM+IKWSGNO6cSgRYstk7C2huu56I3A+r+AG+xH5twZpKPEJcTv/ZSER
+         9t5IqKPranxIkGfqQcjaHl8NtsmJoerix+U2rZtqWEyPBaFF9qy9YS1fyEjvH+yjOqVK
+         b/hcCb3oIHm4PG/xcw9/igv3krje/tVe5G7mkgN786PcZgayZKPcet4zXk+uwcgBsYj5
+         60dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695795938; x=1696400738;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e/2T+kTv/JcuflJsGd2CXCzB7+oY7taYM7m20LJ70dY=;
+        b=npjOBO8niGdKsC+LS7uQvIcx2dQdW5Z2EZFtGap/+UorrBvIotZ03mIqAm8JagfZ/o
+         2n0IbwtTQlVX07TRgxd5XWl3+bQvkzslEZx4uBqjJeY9uCyc3DSRkL/RwIq6bGLEkLIe
+         CpZDTSoMDhrNxnsG9rgZdBrsd6x/zpiSN9l1A1BS+YV813FIj7cNK2qk7w4FKqTsKIMe
+         EwQa1w4ElFonAvHC5w7mZ7nzdpQ7HrdM6DDxfPHnrthjcE4ZUiLMuuMzgilKtIQKp5Yw
+         eFfUayawnlTsa3bS8RghdEaRX+aEZL2BIBGJetAmsOIuiAztgDXj+B3eMK7GuD42eGi/
+         +9WA==
+X-Gm-Message-State: AOJu0YzVUDKoy197qm5B049HZPD1xegU1VEBMaB3A21ZKvk3mReGeQu/
+        tv0rr2OKUlgVAfoWvsEeg4wVKA==
+X-Google-Smtp-Source: AGHT+IF+sh98cRJjLNIq8jQ2+ohMpgsb7FuT+Rgx8cnmOM61ikOsnrb8g2fLxxOWDkxmJbxpUUyb7A==
+X-Received: by 2002:a17:907:7858:b0:98e:26ae:9b07 with SMTP id lb24-20020a170907785800b0098e26ae9b07mr860495ejc.35.1695795937865;
+        Tue, 26 Sep 2023 23:25:37 -0700 (PDT)
+Received: from smtpclient.apple (213-225-13-130.nat.highway.a1.net. [213.225.13.130])
+        by smtp.gmail.com with ESMTPSA id rh27-20020a17090720fb00b009930c80b87csm8868973ejb.142.2023.09.26.23.25.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 26 Sep 2023 23:25:37 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6\))
+Subject: Re: [PATCH v3 1/3] crypto: mxs-dcp: Add support for hardware provided
+ keys
+From:   David Gstir <david@sigma-star.at>
+In-Reply-To: <CVS3NIJ8OO6Y.2C6GJ9OBR6COC@suppilovahvero>
+Date:   Wed, 27 Sep 2023 08:25:24 +0200
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        sigma star Kernel Team <upstream+dcp@sigma-star.at>,
+        David Howells <dhowells@redhat.com>,
+        Li Yang <leoyang.li@nxp.com>, Paul Moore <paul@paul-moore.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>
-References: <20230921064506.3420402-1-ovt@google.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <20230921064506.3420402-1-ovt@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fwjYmKAlxZvFNdVeaJ5d8wlks2OY9nkT
-X-Proofpoint-GUID: JOJkSSU5U-SAKUyZv7E0aYNsAI5y13bt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-26_15,2023-09-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- mlxlogscore=395 spamscore=0 clxscore=1015 priorityscore=1501
- impostorscore=0 suspectscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309260184
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Tejun Heo <tj@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        linux-doc@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <88FFAB6B-10A8-4732-A901-50859E22352D@sigma-star.at>
+References: <20230918141826.8139-1-david@sigma-star.at>
+ <20230918141826.8139-2-david@sigma-star.at>
+ <CVS3NIJ8OO6Y.2C6GJ9OBR6COC@suppilovahvero>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+X-Mailer: Apple Mail (2.3731.700.6)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Jarkko,
 
-On 9/21/23 02:45, Oleksandr Tymoshenko wrote:
-> The removal of IMA_TRUSTED_KEYRING made IMA_LOAD_X509
-> and IMA_BLACKLIST_KEYRING unavailable because the latter
-> two depend on the former. Since IMA_TRUSTED_KEYRING was
-> deprecated in favor of INTEGRITY_TRUSTED_KEYRING use it
-> as a dependency for the two Kconfigs affected by the
-> deprecation.
->
-> Fixes: 5087fd9e80e5 ("ima: Remove deprecated IMA_TRUSTED_KEYRING Kconfig")
-> Signed-off-by: Oleksandr Tymoshenko <ovt@google.com>
+> On 25.09.2023, at 17:22, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>=20
+> On Mon Sep 18, 2023 at 5:18 PM EEST, David Gstir wrote:
+>> DCP is capable to performing AES with hardware-bound keys.
+>> These keys are not stored in main memory and are therefore not =
+directly
+>> accessible by the operating system.
+>>=20
+>> So instead of feeding the key into DCP, we need to place a
+>> reference to such a key before initiating the crypto operation.
+>> Keys are referenced by a one byte identifiers.
+>=20
+> Not sure what the action of feeding key into DCP even means if such
+> action does not exists.
+>=20
+> What you probably would want to describe here is how keys get created
+> and how they are referenced by the kernel.
+>=20
+> For the "use" part please try to avoid academic paper style long
+> expression starting with "we" pronomine.
+>=20
+> So the above paragraph would normalize into "The keys inside DCP
+> are referenced by one byte identifier". Here of course would be
+> for the context nice to know what is this set of DCP keys. E.g.
+> are total 256 keys or some subset?
+>=20
+> When using too much prose there can be surprsingly little digestable
+> information, thus this nitpicking.
 
-Thanks for doing this.
+Thanks for reviewing that in detail! I=E2=80=99ll rephrase the commit
+messages on all patches to get rid of the academic paper style.
 
-Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
+
+>=20
+>> DCP supports 6 different keys: 4 slots in the secure memory area,
+>> a one time programmable key which can be burnt via on-chip fuses
+>> and an unique device key.
+>>=20
+>> Using these keys is restricted to in-kernel users that use them as =
+building
+>> block for other crypto tools such as trusted keys. Allowing userspace
+>> (e.g. via AF_ALG) to use these keys to crypt or decrypt data is a =
+security
+>> risk, because there is no access control mechanism.
+>=20
+> Unless this patch has anything else than trusted keys this should not
+> be an open-ended sentence. You want to say roughly that DCP hardware
+> keys are implemented for the sake to implement trusted keys support,
+> and exactly and only that.
+>=20
+> This description also lacks actions taken by the code changes below,
+> which is really the beef of any commit description.
+
+You=E2=80=99re right. I=E2=80=99ll add that.
+
+Thanks,
+- David
 
