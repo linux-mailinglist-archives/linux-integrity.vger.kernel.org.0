@@ -2,169 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E077AFB06
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Sep 2023 08:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0065A7AFB3A
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Sep 2023 08:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjI0GZt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Sep 2023 02:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S229853AbjI0GlT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Sep 2023 02:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjI0GZq (ORCPT
+        with ESMTP id S229882AbjI0GlK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Sep 2023 02:25:46 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13BAF4
-        for <linux-integrity@vger.kernel.org>; Tue, 26 Sep 2023 23:25:39 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9ad8d47ef2fso1267894866b.1
-        for <linux-integrity@vger.kernel.org>; Tue, 26 Sep 2023 23:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sigma-star.at; s=google; t=1695795938; x=1696400738; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e/2T+kTv/JcuflJsGd2CXCzB7+oY7taYM7m20LJ70dY=;
-        b=VFohLm3h8u7dS+QaCKcE42bLOQ/JXYcZgbCLmSPA2AKaeJeuC0qbjbrpzY25wtEPlU
-         LsmHessL1mPfqJCozBlq21GBXroG4lOnvFulV+UbHlRCIR51TfOsXT2bcKVQbCw/fGRQ
-         o8nBmAS2zizgTzM+IKWSGNO6cSgRYstk7C2huu56I3A+r+AG+xH5twZpKPEJcTv/ZSER
-         9t5IqKPranxIkGfqQcjaHl8NtsmJoerix+U2rZtqWEyPBaFF9qy9YS1fyEjvH+yjOqVK
-         b/hcCb3oIHm4PG/xcw9/igv3krje/tVe5G7mkgN786PcZgayZKPcet4zXk+uwcgBsYj5
-         60dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695795938; x=1696400738;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e/2T+kTv/JcuflJsGd2CXCzB7+oY7taYM7m20LJ70dY=;
-        b=npjOBO8niGdKsC+LS7uQvIcx2dQdW5Z2EZFtGap/+UorrBvIotZ03mIqAm8JagfZ/o
-         2n0IbwtTQlVX07TRgxd5XWl3+bQvkzslEZx4uBqjJeY9uCyc3DSRkL/RwIq6bGLEkLIe
-         CpZDTSoMDhrNxnsG9rgZdBrsd6x/zpiSN9l1A1BS+YV813FIj7cNK2qk7w4FKqTsKIMe
-         EwQa1w4ElFonAvHC5w7mZ7nzdpQ7HrdM6DDxfPHnrthjcE4ZUiLMuuMzgilKtIQKp5Yw
-         eFfUayawnlTsa3bS8RghdEaRX+aEZL2BIBGJetAmsOIuiAztgDXj+B3eMK7GuD42eGi/
-         +9WA==
-X-Gm-Message-State: AOJu0YzVUDKoy197qm5B049HZPD1xegU1VEBMaB3A21ZKvk3mReGeQu/
-        tv0rr2OKUlgVAfoWvsEeg4wVKA==
-X-Google-Smtp-Source: AGHT+IF+sh98cRJjLNIq8jQ2+ohMpgsb7FuT+Rgx8cnmOM61ikOsnrb8g2fLxxOWDkxmJbxpUUyb7A==
-X-Received: by 2002:a17:907:7858:b0:98e:26ae:9b07 with SMTP id lb24-20020a170907785800b0098e26ae9b07mr860495ejc.35.1695795937865;
-        Tue, 26 Sep 2023 23:25:37 -0700 (PDT)
-Received: from smtpclient.apple (213-225-13-130.nat.highway.a1.net. [213.225.13.130])
-        by smtp.gmail.com with ESMTPSA id rh27-20020a17090720fb00b009930c80b87csm8868973ejb.142.2023.09.26.23.25.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Sep 2023 23:25:37 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6\))
-Subject: Re: [PATCH v3 1/3] crypto: mxs-dcp: Add support for hardware provided
- keys
-From:   David Gstir <david@sigma-star.at>
-In-Reply-To: <CVS3NIJ8OO6Y.2C6GJ9OBR6COC@suppilovahvero>
-Date:   Wed, 27 Sep 2023 08:25:24 +0200
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        sigma star Kernel Team <upstream+dcp@sigma-star.at>,
-        David Howells <dhowells@redhat.com>,
-        Li Yang <leoyang.li@nxp.com>, Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Tejun Heo <tj@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        linux-doc@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <88FFAB6B-10A8-4732-A901-50859E22352D@sigma-star.at>
-References: <20230918141826.8139-1-david@sigma-star.at>
- <20230918141826.8139-2-david@sigma-star.at>
- <CVS3NIJ8OO6Y.2C6GJ9OBR6COC@suppilovahvero>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-X-Mailer: Apple Mail (2.3731.700.6)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 27 Sep 2023 02:41:10 -0400
+X-Greylist: delayed 590 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 26 Sep 2023 23:41:08 PDT
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81EEFC;
+        Tue, 26 Sep 2023 23:41:08 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 2957A100FBD1B;
+        Wed, 27 Sep 2023 08:31:17 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id CBB53A3DDA; Wed, 27 Sep 2023 08:31:16 +0200 (CEST)
+Date:   Wed, 27 Sep 2023 08:31:16 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        linux-integrity@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: reset: Add Infineon SLB9670 TPM reset
+ driver
+Message-ID: <20230927063116.GA6252@wunner.de>
+References: <ae40859b82494d75e9ad7bf616b3264138ad1f6a.1695754856.git.lukas@wunner.de>
+ <169576062741.534473.12201606598910537660.robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <169576062741.534473.12201606598910537660.robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Jarkko,
+On Tue, Sep 26, 2023 at 03:37:07PM -0500, Rob Herring wrote:
+> On Tue, 26 Sep 2023 21:09:35 +0200, Lukas Wunner wrote:
+> > A new reset driver is about to be added to perform the reset sequence of
+> > the Infineon SLB9670 Trusted Platform Module.
+> > 
+> > Document its device tree bindings.
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/reset/infineon,slb9670-reset.yaml:29:111: [warning] line too long (124 > 110 characters) (line-length)
 
-> On 25.09.2023, at 17:22, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->=20
-> On Mon Sep 18, 2023 at 5:18 PM EEST, David Gstir wrote:
->> DCP is capable to performing AES with hardware-bound keys.
->> These keys are not stored in main memory and are therefore not =
-directly
->> accessible by the operating system.
->>=20
->> So instead of feeding the key into DCP, we need to place a
->> reference to such a key before initiating the crypto operation.
->> Keys are referenced by a one byte identifiers.
->=20
-> Not sure what the action of feeding key into DCP even means if such
-> action does not exists.
->=20
-> What you probably would want to describe here is how keys get created
-> and how they are referenced by the kernel.
->=20
-> For the "use" part please try to avoid academic paper style long
-> expression starting with "we" pronomine.
->=20
-> So the above paragraph would normalize into "The keys inside DCP
-> are referenced by one byte identifier". Here of course would be
-> for the context nice to know what is this set of DCP keys. E.g.
-> are total 256 keys or some subset?
->=20
-> When using too much prose there can be surprsingly little digestable
-> information, thus this nitpicking.
+That's the following line:
 
-Thanks for reviewing that in detail! I=E2=80=99ll rephrase the commit
-messages on all patches to get rid of the academic paper style.
+  [1] https://www.infineon.com/dgdl/Infineon-SLB%209670VQ2.0-DataSheet-v01_04-EN.pdf?fileId=5546d4626fc1ce0b016fc78270350cd6
+
+I'm not sure what to do about it.  Use an URL shortener?
+
+I did see the warning when running static checks before submission,
+but it seemed like a false positive to me.
 
 
->=20
->> DCP supports 6 different keys: 4 slots in the secure memory area,
->> a one time programmable key which can be burnt via on-chip fuses
->> and an unique device key.
->>=20
->> Using these keys is restricted to in-kernel users that use them as =
-building
->> block for other crypto tools such as trusted keys. Allowing userspace
->> (e.g. via AF_ALG) to use these keys to crypt or decrypt data is a =
-security
->> risk, because there is no access control mechanism.
->=20
-> Unless this patch has anything else than trusted keys this should not
-> be an open-ended sentence. You want to say roughly that DCP hardware
-> keys are implemented for the sake to implement trusted keys support,
-> and exactly and only that.
->=20
-> This description also lacks actions taken by the code changes below,
-> which is really the beef of any commit description.
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/reset/infineon,slb9670-reset.example.dtb: /example-0/spi/tpm@0: failed to match any schema with compatible: ['infineon,slb9670']
 
-You=E2=80=99re right. I=E2=80=99ll add that.
+The TPM DT bindings in Documentation/devicetree/bindings/security/tpm/
+haven't been converted to YAML yet, hence the warning/error.
+
+Is it a prerequisite that I consolidate and convert them before
+this patch is acceptable?
 
 Thanks,
-- David
 
+Lukas
