@@ -2,127 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177D07B0281
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Sep 2023 13:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1AB7B0357
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Sep 2023 13:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjI0LNS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Sep 2023 07:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
+        id S229986AbjI0LxF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Sep 2023 07:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbjI0LNQ (ORCPT
+        with ESMTP id S229901AbjI0LxE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Sep 2023 07:13:16 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7101191;
-        Wed, 27 Sep 2023 04:13:14 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 3707D3200901;
-        Wed, 27 Sep 2023 07:13:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 27 Sep 2023 07:13:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1695813192; x=1695899592; bh=2g
-        R1k5tdvr6okGB4cxabccqENyYy1BsDzaxYM7gOAjg=; b=N8L3qu7IGuS3tYz7Sd
-        zUVcuPBUDQBsUSKNW6M2EI+2+ZYZ4rY+eoWrM4EuXIOkdGs6e4S2zZh5hrTz90EH
-        +CqoPQx6adFOb5hDQW2wiCPxPsyX1RMgWi3lpfnGZkXjx6echYH91u1jnSilnQ49
-        AjrpBjcbvh3/GJajom8fda99rDQR5MiAJWldlDXO6T2K3P0So54swYyyCSnuvKGQ
-        omaj4B2R8i35SDtUpQHj2cL+GOxABW0INslLNnKBOdcy1254etf1pEZMbvKwP04N
-        j63FwMVgYoO6Xsy6OMmpvG0UEF0JIiFc1cSKAh6KR2ZzBEpupB/eVIKqn9Q/9aUs
-        wU/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1695813192; x=1695899592; bh=2gR1k5tdvr6ok
-        GB4cxabccqENyYy1BsDzaxYM7gOAjg=; b=nxUAAk+ScjcqqqPXv9SO/lY9pux8I
-        9Tl++nzZx+sE2/NjL/dY42nd6fgqeWLC8DHODHPerNX94N1sQ5OJhHGmy9+SDuE2
-        VWN9ZBMaP15qMKPqhhBwUMRbLjwaMWHgornKlFzu83NbP2Tc3QEowDEP9cqt/9bI
-        0G3ca9avn/ra/ML5D10E3etkw4Nc8kkvVdG8oLg8tF5LTag3D1S94R2wixC7ux0l
-        ik7KYfUewkR98bYPR/DxK1DjwvaCvz2TC9NIyJTxQ6b1/JLdjfmiAAl7vVdrGMaL
-        IS+kpP8wht1+rDhpP+yoVnOSq1RTsl8wa53UovEUotP9BIlLD6jD+sItg==
-X-ME-Sender: <xms:Rw4UZQ-MPN2gMzJWcxWhp1EM5_9Njs0YdW84NtpPp3qh_kCcnlF0Zw>
-    <xme:Rw4UZYs4ZwD8lRKBaaYCh8lhwCv0S8feUDn07H8L-87J7uo_rsp75uyYL0owuLqaO
-    s97xIpgGunzHU1Yijk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvjedrtdefgddutdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Rw4UZWBNRIpOghMGTlB9-dPhszFwze7iURBrFQzq1fWV-sCkDnyFWA>
-    <xmx:Rw4UZQee_BWXBh7y4nBjgOgDvGBgjHLyGzOju8cMu88vjEVjUvgDFQ>
-    <xmx:Rw4UZVNXQU910jnokPJ-52xK3TkdwZry0HMVnHuguS5LSLRZ_3gj2g>
-    <xmx:SA4UZZmww0hgkVW4vp3P2AX79m733yxjHUg1LoqydOGtwFpgwyzvdg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1938FB6008D; Wed, 27 Sep 2023 07:13:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
-MIME-Version: 1.0
-Message-Id: <9065720e-5a5c-428a-a28d-a3337ac31f85@app.fastmail.com>
-In-Reply-To: <31585f93157c5c4487b53e3bcb6aac9e92e62f92.camel@linux.ibm.com>
-References: <20230927072223.2555698-1-arnd@kernel.org>
- <31585f93157c5c4487b53e3bcb6aac9e92e62f92.camel@linux.ibm.com>
-Date:   Wed, 27 Sep 2023 13:12:49 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>
-Cc:     "Paul Moore" <paul@paul-moore.com>,
-        "James Morris" <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Jarkko Sakkinen" <jarkko@kernel.org>,
-        "Nayna Jain" <nayna@linux.ibm.com>,
-        "Eric Snowberg" <eric.snowberg@oracle.com>,
-        "Tianjia Zhang" <tianjia.zhang@linux.alibaba.com>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Oleksandr Tymoshenko" <ovt@google.com>,
+        Wed, 27 Sep 2023 07:53:04 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91755BE
+        for <linux-integrity@vger.kernel.org>; Wed, 27 Sep 2023 04:53:03 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B393C433C7;
+        Wed, 27 Sep 2023 11:53:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695815583;
+        bh=w7NOYvDlz9WwO8/lZ+B4+xWRuFiX5D0MM18h/+ZIoV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qKJam3pBL23Re2oidE3bSNRNlZF5e8ZSoDSs7Cw1pLhO4rHGwsqd+KKBrKauUl14s
+         SquphGJCtaUq2UKoqefo8+fRC8PafFUGr8g9cWJ7yI01YMLpLqGzhjzhqil2Cg7AZB
+         Bse98S5TCJjHTmvujAYQXDWrwDr4VmLV3eRgBMS4vleoBf+E2Ehr1eFxJMVRFIG+Ol
+         ycpU2Lr8e9bDPN627R9ym6FkXBRyh2X5rH1Sf4BVo8uv8AzS4wUFlMZyQOEp17PIQF
+         PAbW5N853xcJynP0pn9/Lqi5lf+mgW57OPuHiH6/Qjd4TtGXYRqVxfNqq/k602tNpR
+         QD6JQ+HtS7gog==
+Received: (nullmailer pid 1595187 invoked by uid 1000);
+        Wed, 27 Sep 2023 11:53:00 -0000
+Date:   Wed, 27 Sep 2023 06:53:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Lino Sanfilippo <l.sanfilippo@kunbus.com>,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ima: rework CONFIG_IMA dependency block
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: reset: Add Infineon SLB9670 TPM reset
+ driver
+Message-ID: <20230927115300.GA1587935-robh@kernel.org>
+References: <ae40859b82494d75e9ad7bf616b3264138ad1f6a.1695754856.git.lukas@wunner.de>
+ <169576062741.534473.12201606598910537660.robh@kernel.org>
+ <20230927063116.GA6252@wunner.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230927063116.GA6252@wunner.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 27, 2023, at 12:52, Mimi Zohar wrote:
-> On Wed, 2023-09-27 at 09:22 +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> Changing the direct dependencies of IMA_BLACKLIST_KEYRING and
->> IMA_LOAD_X509 caused them to no longer depend on IMA, but a
->> a configuration without IMA results in link failures:
->> 
->> arm-linux-gnueabi-ld: security/integrity/iint.o: in function `integrity_load_keys':
->> iint.c:(.init.text+0xd8): undefined reference to `ima_load_x509'
->> 
->> aarch64-linux-ld: security/integrity/digsig_asymmetric.o: in function `asymmetric_verify':
->> digsig_asymmetric.c:(.text+0x104): undefined reference to `ima_blacklist_keyring'
->> 
->> Adding explicit dependencies on IMA would fix this, but a more reliable
->> way to do this is to enclose the entire Kconfig file in an 'if IMA' block.
->> This also allows removing the existing direct dependencies.
->> 
->> Fixes: be210c6d3597f ("ima: Finish deprecation of IMA_TRUSTED_KEYRING Kconfig")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Oleksandr Tymoshenko's patch to address this, made it into linux-next
-> today.
->
-> Commit be210c6d3597 ("ima: Finish deprecation of IMA_TRUSTED_KEYRING
-> Kconfig") made it last night into linux-next.
+On Wed, Sep 27, 2023 at 08:31:16AM +0200, Lukas Wunner wrote:
+> On Tue, Sep 26, 2023 at 03:37:07PM -0500, Rob Herring wrote:
+> > On Tue, 26 Sep 2023 21:09:35 +0200, Lukas Wunner wrote:
+> > > A new reset driver is about to be added to perform the reset sequence of
+> > > the Infineon SLB9670 Trusted Platform Module.
+> > > 
+> > > Document its device tree bindings.
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > ./Documentation/devicetree/bindings/reset/infineon,slb9670-reset.yaml:29:111: [warning] line too long (124 > 110 characters) (line-length)
+> 
+> That's the following line:
+> 
+>   [1] https://www.infineon.com/dgdl/Infineon-SLB%209670VQ2.0-DataSheet-v01_04-EN.pdf?fileId=5546d4626fc1ce0b016fc78270350cd6
+> 
+> I'm not sure what to do about it.  Use an URL shortener?
 
-No, that is the patch that caused the regression for me, since it
-is missing the IMA dependencies.
+The link doesn't even work for me.
 
-    Arnd
+> I did see the warning when running static checks before submission,
+> but it seemed like a false positive to me.
+
+I suppose we could bump the limit by 1 as I think it is set to 110.
+
+> 
+> > dtschema/dtc warnings/errors:
+> > Documentation/devicetree/bindings/reset/infineon,slb9670-reset.example.dtb: /example-0/spi/tpm@0: failed to match any schema with compatible: ['infineon,slb9670']
+> 
+> The TPM DT bindings in Documentation/devicetree/bindings/security/tpm/
+> haven't been converted to YAML yet, hence the warning/error.
+
+Yes, there's been multiple attempts. Everyone disappears when I say work 
+together and consolidate the efforts.
+
+> Is it a prerequisite that I consolidate and convert them before
+> this patch is acceptable?
+
+Yes. Can't have warnings.
+
+Rob
