@@ -2,82 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7067B2AF9
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 Sep 2023 06:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7947B32B7
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Sep 2023 14:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjI2EaY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 29 Sep 2023 00:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
+        id S233183AbjI2MkD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 29 Sep 2023 08:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjI2EaX (ORCPT
+        with ESMTP id S232977AbjI2MkC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 29 Sep 2023 00:30:23 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042091A2;
-        Thu, 28 Sep 2023 21:30:22 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-45260b91a29so6503097137.2;
-        Thu, 28 Sep 2023 21:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695961821; x=1696566621; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GK+5urlW+H/uBh4ugJ3a6JJPF2bjuI093VBoOXW+KIs=;
-        b=DmNDs08+qo5u064pz2gWRv7/MqzmoQHC1em0jT/U89ZGpoFU4iwr2aANhdSeXe6JHl
-         4ovfdmHnsXOyCj8ltTQZbDoTQPYA+LS0+reE616T6rAKyjaKadQuuR2f5d0Q+ws26Ruy
-         QGt495Xukj/0trnIlgzjJiOXS6m0VPjo0UnS+GHXxz+ltmbMGVhWxBKKEf9NuCith/eF
-         /P+P1Gt1rPuj9vdGqooNa8Dlii3x0l1KMW+2quSkcmxU9ZSm7ZcqkK9yOCtZRnmN7tOq
-         Odiq7hylnuWVCgcrQ6xOG5CsPnbHt1Z7rpr6VDVdHTM61DwBpNStsYcs0S1QoeKMqCii
-         z4+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695961821; x=1696566621;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GK+5urlW+H/uBh4ugJ3a6JJPF2bjuI093VBoOXW+KIs=;
-        b=ChCmXPtSaMzbFiolf49lr+YjvMA+j4pzeAqPFG24J5Pe83TRV322DvOdzfBwHQ68yt
-         sStO0RnJbTI/ZANsjRzPQy3XiURy6JB4iMmBA4kLreb5ytg8tfHWZE9ETNgrTAT2BtLl
-         uFMticgPJRmsUw1w7Cbwx4N0JuzQ5OKxbzuK9ZJTDQCEby5HhFQLydzxgDqLlj8yT7Qd
-         /z5PEMxckuusuXWUynKYOfdbFX3Ezjtjn0UvUwB/5qQ4FU9y0qMoNjpDOGf1fQ0F9lMN
-         SPsyzqRS4h9m0OdBkuHwuzt/70ywXJZAeDDj1qq3vkvxcJSdBIHa/Daw/wL33U9D/rlV
-         hM6w==
-X-Gm-Message-State: AOJu0YytJsAgFnQru+/zJQ3NuiJwAtEjskR81ZOUsH78GAhHdaCVMdTh
-        +0rKB7gA8K03QzlJmu1fBoCiz32MGzwIRR/g9Ag=
-X-Google-Smtp-Source: AGHT+IHqdC387drnXRl+RJB2xD7feSSZjVSE5QV774OWhJeiYcOK3kkxypgxw5/MswJamdpaeP6yUdggIhAgHhr4I6Q=
-X-Received: by 2002:a67:ecc6:0:b0:452:58a1:112 with SMTP id
- i6-20020a67ecc6000000b0045258a10112mr2663901vsp.3.1695961821016; Thu, 28 Sep
- 2023 21:30:21 -0700 (PDT)
+        Fri, 29 Sep 2023 08:40:02 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF1BB7;
+        Fri, 29 Sep 2023 05:39:59 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38TCKj9e007376;
+        Fri, 29 Sep 2023 12:39:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=b8liECuubWj23+OOyOhbTwvv0iXmphxxC6jfRERxOyA=;
+ b=F8g/4G9AOZpeGwOBWd4+f+yzQ65ErTl0ClzPJuztCPhjo2HsK5g2PqfKfOqfSfwgL9dY
+ kkj8X8y3mMbdG6W4yoc38V6JypymwC0L99UHfQ11JIihcIh2R8xSDRDliibEs2c4JK2b
+ kAxgyd2TwRnqqZPFmRk8+tMm1Qn52omK01K1uvFaRHES20gDtRUnbi6hJVETjCVU6Nco
+ ppdiO7oUfMfAiNpPLh24teeHizHEIbOoBArbS7MRdp3fkWneDl75xilJWI+B9kMwGGIj
+ jpIgpkLCioFZR52GlwqEWXCYTd67P3V4fIgoxeTE2YoP0+usZw7akPMlTFQRwJFBrWQz bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tdxgp8m14-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Sep 2023 12:39:52 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38TCKs0W007821;
+        Fri, 29 Sep 2023 12:39:51 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tdxgp8m0k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Sep 2023 12:39:51 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38TBLBeJ008427;
+        Fri, 29 Sep 2023 12:39:50 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3taabtcyrm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Sep 2023 12:39:50 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38TCdnPS32244270
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Sep 2023 12:39:50 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AF10F58056;
+        Fri, 29 Sep 2023 12:39:49 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F14A05803F;
+        Fri, 29 Sep 2023 12:39:48 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 29 Sep 2023 12:39:48 +0000 (GMT)
+Message-ID: <99294acf-7275-8f4d-a129-d5df208b7b2a@linux.ibm.com>
+Date:   Fri, 29 Sep 2023 08:39:48 -0400
 MIME-Version: 1.0
-References: <000000000000259bd8060596e33f@google.com> <bed99e92-cb7c-868d-94f3-ddf53e2b262a@linux.ibm.com>
- <8a65f5eb-2b59-9903-c6b8-84971f8765ae@linux.ibm.com> <ab7df5e93b5493de5fa379ccab48859fe953d7ae.camel@kernel.org>
- <b16550ac-f589-c5d7-e139-d585e8771cfd@linux.ibm.com> <00dbd1e7-dfc8-86bc-536f-264a929ebb35@linux.ibm.com>
- <94b4686a-fee8-c545-2692-b25285b9a152@schaufler-ca.com> <d59d40426c388789c195d94e7e72048ef45fec5e.camel@kernel.org>
- <7caa3aa06cc2d7f8d075306b92b259dab3e9bc21.camel@linux.ibm.com>
- <20230921-gedanken-salzwasser-40d25b921162@brauner> <7ef00ceb49abbb29c49a39287a7c3f28e00cf82a.camel@linux.ibm.com>
- <028eefb0207e8cb163617ef28b8104e98d00ca2e.camel@kernel.org>
- <7e211a0e0ccf335143abe8e8b6366bbbfada36f8.camel@linux.ibm.com>
- <e5a8196fbd3ed73b777df557633d1bfddf7cfd76.camel@kernel.org>
- <b9f8eb5c7e2e120bee908ab39a5ffc5d818d4cc2.camel@linux.ibm.com>
- <CAOQ4uxhNCar7jSeocjrH5RtccSJUO6jyqjnhj0U4Y+hQXL1X8Q@mail.gmail.com> <34f60b1462570d05ada03e4f2fed56d47e6b4430.camel@linux.ibm.com>
-In-Reply-To: <34f60b1462570d05ada03e4f2fed56d47e6b4430.camel@linux.ibm.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Fri, 29 Sep 2023 07:30:09 +0300
-Message-ID: <CAOQ4uximgT7cKyfJccLmm-a7Ty-cehxvnJ0+B81KKXe3zbH2Eg@mail.gmail.com>
-Subject: Re: [syzbot] [integrity] [overlayfs] general protection fault in d_path
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [syzbot] [integrity] [overlayfs] general protection fault in
+ d_path
+Content-Language: en-US
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jeff Layton <jlayton@kernel.org>,
         Casey Schaufler <casey@schaufler-ca.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
         syzbot <syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com>,
         linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
         miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <000000000000259bd8060596e33f@google.com>
+ <bed99e92-cb7c-868d-94f3-ddf53e2b262a@linux.ibm.com>
+ <8a65f5eb-2b59-9903-c6b8-84971f8765ae@linux.ibm.com>
+ <ab7df5e93b5493de5fa379ccab48859fe953d7ae.camel@kernel.org>
+ <b16550ac-f589-c5d7-e139-d585e8771cfd@linux.ibm.com>
+ <00dbd1e7-dfc8-86bc-536f-264a929ebb35@linux.ibm.com>
+ <94b4686a-fee8-c545-2692-b25285b9a152@schaufler-ca.com>
+ <d59d40426c388789c195d94e7e72048ef45fec5e.camel@kernel.org>
+ <7caa3aa06cc2d7f8d075306b92b259dab3e9bc21.camel@linux.ibm.com>
+ <20230921-gedanken-salzwasser-40d25b921162@brauner>
+ <28997978-0b41-9bf3-8f62-ce422425f672@linux.ibm.com>
+ <CAOQ4uxie6xT5mmCcCwYtnEvra37eSeFftXfxaTULfdJnk1VcXQ@mail.gmail.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <CAOQ4uxie6xT5mmCcCwYtnEvra37eSeFftXfxaTULfdJnk1VcXQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1vfEUxnPLtm5xmJC0Mcipygy0Q5pxN75
+X-Proofpoint-ORIG-GUID: up8I5SbR5DxVm9z6dZkBxWV6pb7_qm87
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-29_10,2023-09-28_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ phishscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
+ clxscore=1015 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309290107
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,68 +112,177 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 5:40=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
->
-> On Thu, 2023-09-21 at 20:01 +0300, Amir Goldstein wrote:
-> > On Thu, Sep 21, 2023 at 7:31=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com=
-> wrote:
-> > >
-...
-> > > Let's see if Amir's patch actually fixes the original problem before
-> > > making any decisions.  (Wishing for a reproducer of the original
-> > > problem.)
-> > >
-> >
-> > Confused. What is the "original problem"?
-> > I never claimed that my patch fixes the "original problem".
-> > I claimed [1] that my patch fixes a problem that existed before
-> > db1d1e8b9867, but db1d1e8b9867 added two more instances
-> > of that bug (wrong dereference of file->f_path).
-> > Apparently, db1d1e8b9867 introduced another bug.
-> >
-> > It looks like you should revert db1d1e8b9867, but regardless,
-> > I recommend that you apply my patch. My patch conflicts
-> > with the revert but the conflict is trivial - the two hunks that
-> > fix the new vfs_getattr_nosec() calls are irrelevant - the rest are.
-> >
-> > Thanks,
-> > Amir.
-> >
-> > [1] https://lore.kernel.org/linux-unionfs/20230913073755.3489676-1-amir=
-73il@gmail.com/
->
-> Here are some of the issues with IMA/Overlay:
->
-> 1. False positive syzbot IMA/overlay lockdep warnings.
-> 2, Not detecting file change with squashfs + overlay.
-> 3. Changes to the backing file are not detected by overlay (when
-> backing file is not in policy).
->
-> Commit db1d1e8b9867 ("IMA: use vfs_getattr_nosec to get the i_version")
-> upstreamed to address 2, but has become unnecessary due to other
-> changes.  According to Stefan, the problem subsequently was resolved
-> without either commit db1d1e8b9867 or 18b44bc5a672.  (Kernel was not
-> bi-sected to find bug resolution.)
->
-> Commit 18b44bc5a672 ("ovl: Always reevaluate the file signature for
-> IMA") to address 3.
->
-> [PATCH] "ima: fix wrong dereferences of file->f_path" is probably
-> correct.  Does it address any syzbot reports?
->
 
-Not that I know of.
+On 9/29/23 00:25, Amir Goldstein wrote:
+> On Fri, Sep 29, 2023 at 3:02 AM Stefan Berger <stefanb@linux.ibm.com> wrote:
+>>
+>> On 9/21/23 07:48, Christian Brauner wrote:
+>>> Imho, this is all very wild but I'm not judging.
+>>>
+>>> Two solutions imho:
+>>> (1) teach stacking filesystems like overlayfs and ecryptfs to use
+>>>       vfs_getattr_nosec() in their ->getattr() implementation when they
+>>>       are themselves called via vfs_getattr_nosec(). This will fix this by
+>>>       not triggering another LSM hook.
+>>
+>> You can avoid all this churn.
+>> Just use the existing query_flags arg.
+>> Nothing outside the AT_STATX_SYNC_TYPE query_flags is
+>> passed into filesystems from userspace.
+>>
+>> Mast out AT_STATX_SYNC_TYPE in vfs_getattr()
+>> And allow kernel internal request_flags in vfs_getattr_nosec()
+Hm, I thought that vfs_getattr_nosec needs to pass AT_GETATTR_NOSEC into 
+->getattr().
+>>
+>> The AT_ flag namespace is already a challenge, but mixing user
+>> flags and kernel-only flags in vfs interfaces has been done before.
+>>
+>> ...
 
-Mimi,
 
-I am going to change my recommendation to -
-Please wait with applying my patch unless you know that it
-fixes a known bug, because:
+That's what I wanted to avoid since now all filesystems' getattr() may 
+have the AT_GETATTR_NOSEC mixed into the query_flags.
 
-1. I don't have a complete picture of ovl+IMA
-2. I didn't find any specific test case to prove the bug
-3. I have a plan to get rid of the file_real_path() anomaly
+Anyway, here's what I currently have:
 
-Thanks,
-Amir.
+diff --git a/fs/ecryptfs/inode.c b/fs/ecryptfs/inode.c
+index 992d9c7e64ae..f7b5b1843dcc 100644
+--- a/fs/ecryptfs/inode.c
++++ b/fs/ecryptfs/inode.c
+@@ -998,16 +998,28 @@ static int ecryptfs_getattr_link(struct mnt_idmap 
+*idmap,
+         return rc;
+  }
+
++static int ecryptfs_do_getattr(bool nosec, const struct path *path,
++                              struct kstat *stat, u32 request_mask,
++                              unsigned int flags)
++{
++       if (nosec)
++               return vfs_getattr_nosec(path, stat, request_mask, flags);
++       return vfs_getattr(path, stat, request_mask, flags);
++}
++
+  static int ecryptfs_getattr(struct mnt_idmap *idmap,
+                             const struct path *path, struct kstat *stat,
+                             u32 request_mask, unsigned int flags)
+  {
+         struct dentry *dentry = path->dentry;
+         struct kstat lower_stat;
++       bool nosec = flags & AT_GETATTR_NOSEC;
+         int rc;
+
+-       rc = vfs_getattr(ecryptfs_dentry_to_lower_path(dentry), &lower_stat,
+-                        request_mask, flags);
++       flags &= ~AT_INTERNAL_MASK;
++
++       rc = ecryptfs_do_getattr(nosec, 
+ecryptfs_dentry_to_lower_path(dentry),
++                                &lower_stat, request_mask, flags);
+         if (!rc) {
+                 fsstack_copy_attr_all(d_inode(dentry),
+ecryptfs_inode_to_lower(d_inode(dentry)));
+diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
+index 83ef66644c21..ec4ceb5b4ebf 100644
+--- a/fs/overlayfs/inode.c
++++ b/fs/overlayfs/inode.c
+@@ -166,12 +166,15 @@ int ovl_getattr(struct mnt_idmap *idmap, const 
+struct path *path,
+         int fsid = 0;
+         int err;
+         bool metacopy_blocks = false;
++       bool nosec = flags & AT_GETATTR_NOSEC;
++
++       flags &= ~AT_INTERNAL_MASK;
+
+         metacopy_blocks = ovl_is_metacopy_dentry(dentry);
+
+         type = ovl_path_real(dentry, &realpath);
+         old_cred = ovl_override_creds(dentry->d_sb);
+-       err = vfs_getattr(&realpath, stat, request_mask, flags);
++       err = ovl_do_getattr(nosec, &realpath, stat, request_mask, flags);
+         if (err)
+                 goto out;
+
+@@ -196,8 +199,8 @@ int ovl_getattr(struct mnt_idmap *idmap, const 
+struct path *path,
+                                         (!is_dir ? STATX_NLINK : 0);
+
+                         ovl_path_lower(dentry, &realpath);
+-                       err = vfs_getattr(&realpath, &lowerstat,
+-                                         lowermask, flags);
++                       err = ovl_do_getattr(nosec, &realpath, &lowerstat,
++                                            lowermask, flags);
+                         if (err)
+                                 goto out;
+
+@@ -249,8 +252,9 @@ int ovl_getattr(struct mnt_idmap *idmap, const 
+struct path *path,
+
+                         ovl_path_lowerdata(dentry, &realpath);
+                         if (realpath.dentry) {
+-                               err = vfs_getattr(&realpath, &lowerdatastat,
+-                                                 lowermask, flags);
++                               err = ovl_do_getattr(nosec, &realpath,
++ &lowerdatastat, lowermask,
++                                                    flags);
+                                 if (err)
+                                         goto out;
+                         } else {
+diff --git a/fs/overlayfs/overlayfs.h b/fs/overlayfs/overlayfs.h
+index 9817b2dcb132..cbee3ff3bab7 100644
+--- a/fs/overlayfs/overlayfs.h
++++ b/fs/overlayfs/overlayfs.h
+@@ -397,6 +397,15 @@ static inline bool ovl_open_flags_need_copy_up(int 
+flags)
+         return ((OPEN_FMODE(flags) & FMODE_WRITE) || (flags & O_TRUNC));
+  }
+
++static inline int ovl_do_getattr(bool nosec, const struct path *path,
++                                struct kstat *stat, u32 request_mask,
++                                unsigned int flags)
++{
++       if (nosec)
++               return vfs_getattr_nosec(path, stat, request_mask, flags);
++       return vfs_getattr(path, stat, request_mask, flags);
++}
++
+  /* util.c */
+  int ovl_want_write(struct dentry *dentry);
+  void ovl_drop_write(struct dentry *dentry);
+diff --git a/fs/stat.c b/fs/stat.c
+index d43a5cc1bfa4..3250e427e1aa 100644
+--- a/fs/stat.c
++++ b/fs/stat.c
+@@ -133,7 +133,8 @@ int vfs_getattr_nosec(const struct path *path, 
+struct kstat *stat,
+         idmap = mnt_idmap(path->mnt);
+         if (inode->i_op->getattr)
+                 return inode->i_op->getattr(idmap, path, stat,
+-                                           request_mask, query_flags);
++                                           request_mask,
++                                           query_flags | AT_GETATTR_NOSEC);
+
+         generic_fillattr(idmap, request_mask, inode, stat);
+         return 0;
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index b528f063e8ff..9069d6a301f0 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2027,6 +2027,12 @@ struct super_operations {
+         void (*shutdown)(struct super_block *sb);
+  };
+
++/*
++ * Internal query flags. See fcntl.h AT_xxx flags for the rest.
++ */
++#define AT_GETATTR_NOSEC               0x80000000
++#define AT_INTERNAL_MASK               0x80000000
++
+  /*
+   * Inode flags - they have no relation to superblock flags now
+   */
+
+
+
