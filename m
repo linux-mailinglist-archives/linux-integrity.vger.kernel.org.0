@@ -2,150 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD9A7B5D5C
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Oct 2023 00:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA84C7B6AB9
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Oct 2023 15:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236769AbjJBWvB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Oct 2023 18:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
+        id S231977AbjJCNiQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Oct 2023 09:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236756AbjJBWvA (ORCPT
+        with ESMTP id S232165AbjJCNiP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Oct 2023 18:51:00 -0400
+        Tue, 3 Oct 2023 09:38:15 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22155CE;
-        Mon,  2 Oct 2023 15:50:58 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C30AC433C7;
-        Mon,  2 Oct 2023 22:50:46 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3659FAD;
+        Tue,  3 Oct 2023 06:38:12 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DE4C433C8;
+        Tue,  3 Oct 2023 13:38:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696287057;
-        bh=/OqHkpnCr2yp1sDRAdjhGT7oMqmIEUALgDHapbczbmI=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=YOzaTs8xV30AkpqZbykvhJSF0mNTVlgNrJdaZuah8iyObs6eMafbHTI/hNig4dWQX
-         vrC2a+GKlGOLBX6HK26gDeMOht2XNo+CNdwjXs5srCzTgdOfpbbQUUJDqTUYD0tuXj
-         5Ogpu/QrdP84k1KW44KYcZ484+H0U8gegEkBVgqLEnbrUOc4eqSG0slsHEIvnlad3P
-         Z56UeZDV+NpTwaI3LNFfV23LROuNH6PrMrmZQyTOgf4na/6gwlG+gzXU8XkYhLdzKb
-         7UXnUl6BPmy6BcW3oSUZm6y9Paqwl5OjOF2Z6r/UPVGqTS98/289KlB2V8IYDupALH
-         TqzvT1Mi7RhWQ==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 03 Oct 2023 01:50:43 +0300
-Message-Id: <CVYBKLX6LJR4.22G72LXAHW77W@seitikki>
-Cc:     "Mimi Zohar" <zohar@linux.ibm.com>,
-        "James Bottomley" <jejb@linux.ibm.com>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "Fabio Estevam" <festevam@gmail.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        "Ahmad Fatoum" <a.fatoum@pengutronix.de>,
-        "sigma star Kernel Team" <upstream+dcp@sigma-star.at>,
-        "David Howells" <dhowells@redhat.com>,
-        "Li Yang" <leoyang.li@nxp.com>, "Paul Moore" <paul@paul-moore.com>,
-        "James Morris" <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "Tejun Heo" <tj@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "Richard Weinberger" <richard@nod.at>,
-        "David Oberhollenzer" <david.oberhollenzer@sigma-star.at>
-Subject: Re: [PATCH v3 1/3] crypto: mxs-dcp: Add support for hardware
- provided keys
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "David Gstir" <david@sigma-star.at>
-X-Mailer: aerc 0.14.0
-References: <20230918141826.8139-1-david@sigma-star.at>
- <20230918141826.8139-2-david@sigma-star.at>
- <CVS3NIJ8OO6Y.2C6GJ9OBR6COC@suppilovahvero>
- <88FFAB6B-10A8-4732-A901-50859E22352D@sigma-star.at>
-In-Reply-To: <88FFAB6B-10A8-4732-A901-50859E22352D@sigma-star.at>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1696340291;
+        bh=NlZyxNkQIumtF9Q9n/tAacWuxbXBIywHbpZoKHCSE+s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tpp9bM6C4l9kDVx1k4oyStFZWxRMSksjZl716JrVk9Sq+++BVo6NUtXVeR7NfW8V+
+         UPobtpwYLj1jZBx4hfamN3KfK5SW4eYwnBZA+VIeKmptvM6mUnGkvje3wrCePSAG/O
+         Lsf4wXDhLfqbO4GYvHSasBSPU782q28FIsY2mAvHcb8scEw2lrO/mN06gPJL0710Gi
+         Xbc8l4rYEkbjAQoyJKtkIP+GvDiUslFaFI1H1+mVwr+e0SC3X4bEHg8wpxTWV75Q3J
+         BrfzBwF24u+MXKQ/kIB69XZpgnG7fyFJ3udmNhf8ZOnIXyj6WrYhtFlWf1zaBzdRTw
+         qo5W5OLpkHHfg==
+Date:   Tue, 3 Oct 2023 15:38:06 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [PATCH] fs: Pass AT_GETATTR_NOSEC flag to getattr interface
+ function
+Message-ID: <20231003-bespielbar-tarnt-c61162656db5@brauner>
+References: <20231002125733.1251467-1-stefanb@linux.vnet.ibm.com>
+ <CAOQ4uxiuQxTDqn4F62ueGf_9f4KC4p7xqRZdwPvL8rEYrCOWbg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxiuQxTDqn4F62ueGf_9f4KC4p7xqRZdwPvL8rEYrCOWbg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed Sep 27, 2023 at 9:25 AM EEST, David Gstir wrote:
-> Jarkko,
->
-> > On 25.09.2023, at 17:22, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >=20
-> > On Mon Sep 18, 2023 at 5:18 PM EEST, David Gstir wrote:
-> >> DCP is capable to performing AES with hardware-bound keys.
-> >> These keys are not stored in main memory and are therefore not directl=
-y
-> >> accessible by the operating system.
-> >>=20
-> >> So instead of feeding the key into DCP, we need to place a
-> >> reference to such a key before initiating the crypto operation.
-> >> Keys are referenced by a one byte identifiers.
-> >=20
-> > Not sure what the action of feeding key into DCP even means if such
-> > action does not exists.
-> >=20
-> > What you probably would want to describe here is how keys get created
-> > and how they are referenced by the kernel.
-> >=20
-> > For the "use" part please try to avoid academic paper style long
-> > expression starting with "we" pronomine.
-> >=20
-> > So the above paragraph would normalize into "The keys inside DCP
-> > are referenced by one byte identifier". Here of course would be
-> > for the context nice to know what is this set of DCP keys. E.g.
-> > are total 256 keys or some subset?
-> >=20
-> > When using too much prose there can be surprsingly little digestable
-> > information, thus this nitpicking.
->
-> Thanks for reviewing that in detail! I=E2=80=99ll rephrase the commit
-> messages on all patches to get rid of the academic paper style.
->
->
-> >=20
-> >> DCP supports 6 different keys: 4 slots in the secure memory area,
-> >> a one time programmable key which can be burnt via on-chip fuses
-> >> and an unique device key.
-> >>=20
-> >> Using these keys is restricted to in-kernel users that use them as bui=
-lding
-> >> block for other crypto tools such as trusted keys. Allowing userspace
-> >> (e.g. via AF_ALG) to use these keys to crypt or decrypt data is a secu=
-rity
-> >> risk, because there is no access control mechanism.
-> >=20
-> > Unless this patch has anything else than trusted keys this should not
-> > be an open-ended sentence. You want to say roughly that DCP hardware
-> > keys are implemented for the sake to implement trusted keys support,
-> > and exactly and only that.
-> >=20
-> > This description also lacks actions taken by the code changes below,
-> > which is really the beef of any commit description.
->
-> You=E2=80=99re right. I=E2=80=99ll add that.
+On Mon, Oct 02, 2023 at 04:22:25PM +0300, Amir Goldstein wrote:
+> On Mon, Oct 2, 2023 at 3:57 PM Stefan Berger <stefanb@linux.vnet.ibm.com> wrote:
+> >
+> > From: Stefan Berger <stefanb@linux.ibm.com>
+> >
+> > When vfs_getattr_nosec() calls a filesystem's getattr interface function
+> > then the 'nosec' should propagate into this function so that
+> > vfs_getattr_nosec() can again be called from the filesystem's gettattr
+> > rather than vfs_getattr(). The latter would add unnecessary security
+> > checks that the initial vfs_getattr_nosec() call wanted to avoid.
+> > Therefore, introduce the getattr flag GETATTR_NOSEC and allow to pass
+> > with the new getattr_flags parameter to the getattr interface function.
+> > In overlayfs and ecryptfs use this flag to determine which one of the
+> > two functions to call.
+> >
+> > In a recent code change introduced to IMA vfs_getattr_nosec() ended up
+> > calling vfs_getattr() in overlayfs, which in turn called
+> > security_inode_getattr() on an exiting process that did not have
+> > current->fs set anymore, which then caused a kernel NULL pointer
+> > dereference. With this change the call to security_inode_getattr() can
+> > be avoided, thus avoiding the NULL pointer dereference.
+> >
+> > Reported-by: syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com
+> > Fixes: db1d1e8b9867 ("IMA: use vfs_getattr_nosec to get the i_version")
+> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> > Cc: linux-fsdevel@vger.kernel.org
+> > Cc: Miklos Szeredi <miklos@szeredi.hu>
+> > Cc: Amir Goldstein <amir73il@gmail.com>
+> > Cc: Tyler Hicks <code@tyhicks.com>
+> > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > Suggested-by: Christian Brauner <brauner@kernel.org>
+> > Co-developed-by: Amir Goldstein <amir73il@gmail.com>
+> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > ---
+> 
+> Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+> 
+> Now let's see what vfs maintainers think about this...
 
-Yup, I'm just doing my part of the job, as I'm expected to do it :-)
-Thanks for understanding.
-
-> Thanks,
-> - David
-
-BR, Jarkko
+Seems fine overall. We kind of need to propagate the knowledge through
+the layers. But I don't like that we need something like it...
