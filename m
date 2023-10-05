@@ -2,191 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3BB7B9EE9
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 16:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7AB7BA086
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 16:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjJEOOm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Oct 2023 10:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
+        id S235757AbjJEOiV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Oct 2023 10:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjJEOMb (ORCPT
+        with ESMTP id S235373AbjJEOfu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:12:31 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F3624864;
-        Thu,  5 Oct 2023 04:16:05 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-32157c8e4c7so861319f8f.1;
-        Thu, 05 Oct 2023 04:16:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696504564; x=1697109364; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xeKrgt2PObn5BYrkIQTlAAhvL5PwerUzmeVsDKTDmUE=;
-        b=Afha9qOj3U8Zm5nXxX+vwj19AxICf4QIeVoVnip40nN40+dXhH4YPbvnFokM6hrKB8
-         0snq3lJd7TPE9I1qRbPoOaNCc4ee8BZfK98WbCCqn/GYxUdfvMPARK+OivDIB14TGMQC
-         NdzATWnTrX8g1aLO+xE/sLZN9esmYTI7g2W020qRTovO8L8u3K1kZ5AXPuAv58+4q7Vd
-         i9oTtgwJWhed/Ydxo50b0oXHbUPr2oHqhtZ3GA3pPuNxKQkiUXNmgCZNgWB5nNcKiPvc
-         v4FvJWO02614bFcT8cybewbu25O1KY62cAhOAUwXc1MGNUp1zAABqJN4xu5cEJs4ySIA
-         08Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696504564; x=1697109364;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xeKrgt2PObn5BYrkIQTlAAhvL5PwerUzmeVsDKTDmUE=;
-        b=BFZuEbokeghqEQZ7pgu7gg434sf9+QNf5JSmM4Mox5gcgZHxYycr6QQOTU/ygBQRcy
-         Z1lG5VXnz1WgOe+VJIXTZnFF4Zlokgis9WwMG7qF7BHoDKwevX5S7wxYhKzRjZ6oXO+U
-         u2VFtJDeA/6d9ojU+1gavfvAS2nrYaGnH98DFALxfQs7yTikfgcv+v1FU5b5YBB5vnAE
-         GjwKh8R2iofVrVxkffSqgi/t5mpfXEFVSqnVWe4NnRi8Vj+P0BSyFqZ/KYbPBMW+MkzW
-         whI8JxhSvn1ji4COupfohAtU2yZPnezXI6UutyaFKUTvLAu7JD6q4eUEgs+CcyHHU4mt
-         8x2Q==
-X-Gm-Message-State: AOJu0YyEzoVk5Tm13jXKyBOxAT7sgDTVeuQZzPCmnKi93sSwJTTon96o
-        6SL9UQtEg6uL+g0CsErVLcY=
-X-Google-Smtp-Source: AGHT+IFMA1coSmCYvnBs92G91Z67oy5exgUrf/EGcvBwscocCGaLzGjLCqJ6aspz3E4Rn2zHMXBJGQ==
-X-Received: by 2002:adf:edce:0:b0:317:58e4:e941 with SMTP id v14-20020adfedce000000b0031758e4e941mr4679699wro.33.1696504563834;
-        Thu, 05 Oct 2023 04:16:03 -0700 (PDT)
-Received: from amir-ThinkPad-T480.lan ([5.29.249.86])
-        by smtp.gmail.com with ESMTPSA id k15-20020a5d628f000000b003143c9beeaesm1545169wru.44.2023.10.05.04.16.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 04:16:03 -0700 (PDT)
-From:   Amir Goldstein <amir73il@gmail.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com
-Subject: [PATCH] ima: annotate iint mutex to avoid lockdep false positive warnings
-Date:   Thu,  5 Oct 2023 14:15:58 +0300
-Message-Id: <20231005111558.1263671-1-amir73il@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Thu, 5 Oct 2023 10:35:50 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562633790D;
+        Thu,  5 Oct 2023 06:58:54 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395D7At8014585;
+        Thu, 5 Oct 2023 13:14:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=3ex7mhh2wNwC1ElK8hxF+83j+vTpDKL0Hxu33BudBd8=;
+ b=MWciXcw9Mk5LbHWdbl1mR3kLIsj5/hHig5wyk5zJzaPcyw7X+i2ZrMCzDiHl0OFoxORW
+ N/HA45jFni71aaWEKoDfa+ky44f4UPOq4vNLWOI3h2oeiU25jQXx7Eh+YlbTWqUoJB6x
+ U3zKDhjTeuTcJDHReE/xu+H6u3RvZwvWygyUlAyyMDMNVj2Q4PZgDSi26zihSsPXtBGq
+ PzJu1rK3PXs6OnNI03sHPROY8c0fFbYSV8ThON3eYtdBGbwWxwpwVG7ricpuJTre3UaT
+ F5aGZsK2AvIS91P5kBlHERUSb9+G0sYAlHuKNYujuC+RII8rw2/UfLgiIRuDpOe4ji5S NQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3thwrdrbbe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 13:14:06 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 395D785C014528;
+        Thu, 5 Oct 2023 13:10:57 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3thwrdr93w-62
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 13:10:57 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 395ACNA9010931;
+        Thu, 5 Oct 2023 11:47:08 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tf0q2angr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 11:47:08 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 395Bl7mJ262752
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 Oct 2023 11:47:07 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2BE9B5805A;
+        Thu,  5 Oct 2023 11:47:07 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6BC8358052;
+        Thu,  5 Oct 2023 11:47:06 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.90.188])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  5 Oct 2023 11:47:06 +0000 (GMT)
+Message-ID: <25f6950a67be079e32ad5b4139b1e89e367a91ba.camel@linux.ibm.com>
+Subject: Re: [syzbot] [integrity] [overlayfs] possible deadlock in
+ mnt_want_write (2)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Amir Goldstein <amir73il@gmail.com>,
+        syzbot <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com>
+Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-unionfs@vger.kernel.org,
+        miklos@szeredi.hu, mszeredi@redhat.com,
+        syzbot@syzkalhler.appspotmail.com, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Date:   Thu, 05 Oct 2023 07:47:06 -0400
+In-Reply-To: <CAOQ4uxjw_XztGxrhR9LWtz_SszdURkM+Add2q8A9BAt0z901kA@mail.gmail.com>
+References: <CAOQ4uxhbNyDzf0_fFh1Yy5Kz2Coz=gTrfOtsmteE0=ncibBnpw@mail.gmail.com>
+         <0000000000001081fc0606f52ed9@google.com>
+         <CAOQ4uxjw_XztGxrhR9LWtz_SszdURkM+Add2q8A9BAt0z901kA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: mBwZEAiNtaVL6b8uRu3IAIxO_elfKi-K
+X-Proofpoint-ORIG-GUID: Moy2T3K-Oh6VNFoTbGhz-ZhtPfbNOcl5
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ mlxlogscore=711 adultscore=0 clxscore=1011 spamscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2309180000 definitions=main-2310050103
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-It is not clear that IMA should be nested at all, but as long is it
-measures files both on overlayfs and on underlying fs, we need to
-annotate the iint mutex to avoid lockdep false positives related to
-IMA + overlayfs, same as overlayfs annotates the inode mutex.
+On Thu, 2023-10-05 at 13:26 +0300, Amir Goldstein wrote:
+> On Thu, Oct 5, 2023 at 12:59 PM syzbot
+> <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot tried to test the proposed patch but the build/boot failed:
+> 
+> My mistake. Please try again:
+> 
+> #syz test: https://github.com/amir73il/linux ima-ovl-fix
 
-Reported-and-tested-by: syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
----
+Thanks, Amir.   "mutext_init(&iint->mutex); moved, but the status
+initialization lines 161-166 were dropped.   They're needed by IMA-
+appraisal for signature verification.
 
-Mimi,
-
-Syzbot finally found a reliable reproducer, so it tested this lockdep
-annotation fix and this proves that the warning was a false positive.
-
-Hopefully, this will fix all the different variants of lockdep warnings
-that syzbot reported over time.
-
-Thanks,
-Amir.
-
- security/integrity/iint.c | 48 ++++++++++++++++++++++++++++++---------
- 1 file changed, 37 insertions(+), 11 deletions(-)
-
-diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-index a462df827de2..27ea19fb1f54 100644
---- a/security/integrity/iint.c
-+++ b/security/integrity/iint.c
-@@ -66,9 +66,32 @@ struct integrity_iint_cache *integrity_iint_find(struct inode *inode)
- 	return iint;
- }
- 
--static void iint_free(struct integrity_iint_cache *iint)
-+#define IMA_MAX_NESTING (FILESYSTEM_MAX_STACK_DEPTH+1)
-+
-+/*
-+ * It is not clear that IMA should be nested at all, but as long is it measures
-+ * files both on overlayfs and on underlying fs, we need to annotate the iint
-+ * mutex to avoid lockdep false positives related to IMA + overlayfs.
-+ * See ovl_lockdep_annotate_inode_mutex_key() for more details.
-+ */
-+static inline void iint_lockdep_annotate(struct integrity_iint_cache *iint,
-+					 struct inode *inode)
-+{
-+#ifdef CONFIG_LOCKDEP
-+	static struct lock_class_key iint_mutex_key[IMA_MAX_NESTING];
-+
-+	int depth = inode->i_sb->s_stack_depth;
-+
-+	if (WARN_ON_ONCE(depth < 0 || depth >= IMA_MAX_NESTING))
-+		depth = 0;
-+
-+	lockdep_set_class(&iint->mutex, &iint_mutex_key[depth]);
-+#endif
-+}
-+
-+static void iint_init_always(struct integrity_iint_cache *iint,
-+			     struct inode *inode)
- {
--	kfree(iint->ima_hash);
- 	iint->ima_hash = NULL;
- 	iint->version = 0;
- 	iint->flags = 0UL;
-@@ -80,6 +103,14 @@ static void iint_free(struct integrity_iint_cache *iint)
- 	iint->ima_creds_status = INTEGRITY_UNKNOWN;
- 	iint->evm_status = INTEGRITY_UNKNOWN;
- 	iint->measured_pcrs = 0;
-+	mutex_init(&iint->mutex);
-+	iint_lockdep_annotate(iint, inode);
-+}
-+
-+static void iint_free(struct integrity_iint_cache *iint)
-+{
-+	kfree(iint->ima_hash);
-+	mutex_destroy(&iint->mutex);
- 	kmem_cache_free(iint_cache, iint);
- }
- 
-@@ -104,6 +135,8 @@ struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
- 	if (!iint)
- 		return NULL;
- 
-+	iint_init_always(iint, inode);
-+
- 	write_lock(&integrity_iint_lock);
- 
- 	p = &integrity_iint_tree.rb_node;
-@@ -153,25 +186,18 @@ void integrity_inode_free(struct inode *inode)
- 	iint_free(iint);
- }
- 
--static void init_once(void *foo)
-+static void iint_init_once(void *foo)
- {
- 	struct integrity_iint_cache *iint = (struct integrity_iint_cache *) foo;
- 
- 	memset(iint, 0, sizeof(*iint));
--	iint->ima_file_status = INTEGRITY_UNKNOWN;
--	iint->ima_mmap_status = INTEGRITY_UNKNOWN;
--	iint->ima_bprm_status = INTEGRITY_UNKNOWN;
--	iint->ima_read_status = INTEGRITY_UNKNOWN;
--	iint->ima_creds_status = INTEGRITY_UNKNOWN;
--	iint->evm_status = INTEGRITY_UNKNOWN;
--	mutex_init(&iint->mutex);
- }
- 
- static int __init integrity_iintcache_init(void)
- {
- 	iint_cache =
- 	    kmem_cache_create("iint_cache", sizeof(struct integrity_iint_cache),
--			      0, SLAB_PANIC, init_once);
-+			      0, SLAB_PANIC, iint_init_once);
- 	return 0;
- }
- DEFINE_LSM(integrity) = {
--- 
-2.34.1
+        iint->ima_file_status = INTEGRITY_UNKNOWN;
+	iint->ima_mmap_status = INTEGRITY_UNKNOWN;
+	iint->ima_bprm_status = INTEGRITY_UNKNOWN;
+	iint->ima_read_status = INTEGRITY_UNKNOWN;
+	iint->ima_creds_status = INTEGRITY_UNKNOWN;
+	iint->evm_status = INTEGRITY_UNKNOWN;
 
