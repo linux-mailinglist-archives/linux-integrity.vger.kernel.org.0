@@ -2,70 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F11B7B9FA7
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 16:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 146287BA08C
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 16:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233944AbjJEO00 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Oct 2023 10:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S236587AbjJEOgn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Oct 2023 10:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234902AbjJEOYY (ORCPT
+        with ESMTP id S236118AbjJEOej (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:24:24 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AAE27B09
-        for <linux-integrity@vger.kernel.org>; Thu,  5 Oct 2023 06:33:30 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1c61bde0b4bso7544455ad.3
-        for <linux-integrity@vger.kernel.org>; Thu, 05 Oct 2023 06:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696512810; x=1697117610; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rdJwxwbZqQ4I0O4A5YRp1pd8ZcaJivULLGhl6LhxxQE=;
-        b=KxeJN24Nqn4SB6flKWBzUwOL1qceUEZyWxPoBDjilIEBobJIeaDNXAkcmV/T+z9SKl
-         BrbsQuBMR3xg6VybWl5tEd/5KwRFDC5MgdYQArm79Ktm2wDK28Auijypoa1XlLxuTqIv
-         cnC6oUeCb6Uwp+ZlGZ6Ez9EcypIAAxbYCYR0yUBCEhKbHX+kAersLCABNWg0gFsv+Mbb
-         UAH9U+00PEM9ndapvTil37NhH3opjo7UQELGFG4KZ9AAh2aSGCs/mCQ8bln7tFj8Iqsm
-         pJ5MRdodrPZsCEp0YZMhpzWvbxVwNKP+Ex4tIRi0kw3KbzJobDuHFo4ERLGNwPrc/OLH
-         UKXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696512810; x=1697117610;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rdJwxwbZqQ4I0O4A5YRp1pd8ZcaJivULLGhl6LhxxQE=;
-        b=G0mysxiSMBhR/B0xmUzU81oYHBVjrAowiQITAwRBf1MXeP+HK+jNoENSaQ20YvNg2i
-         GXqqpxY6aI6YlCzkO4Y+A3gNLR3u5t0pEZ3H4ZEDB9MUPOwz0mO7Ek/JoVCInZMpWN9+
-         cSF6DEyXdBp/eX8YRUriBSBUVjHh3D3JofehGjeGY1AKzCQdzurdLWO3lslQOQOFV+1L
-         rDpRR4YQ6wiNdD5MB8Aihyo934rYC/TCU9It69R2QLX7wypoX91l4XDlhmoVQzDH0RIS
-         zqDxjwa1BO8yEPKtkHakakAP8qIbQ+lhg11uYg1pB4BgM7QSz5cZkfjl3lGpLDKeL6cZ
-         vjbA==
-X-Gm-Message-State: AOJu0YxeC9S4p8hooDAwPBixWQtg3AIQy/mDwr9gMdJfgTkJSxNcsdIZ
-        vWzzQzX9GBdGN0ErYsiOcOQIqQ==
-X-Google-Smtp-Source: AGHT+IEA4cLHqQcb+MIGG2dpWiFKleSqErzAWsk+2ZAO5zJgG2wamSV90gtm8PK1QSKzQmHiCELlAw==
-X-Received: by 2002:a17:902:e84a:b0:1c2:218c:3754 with SMTP id t10-20020a170902e84a00b001c2218c3754mr5994686plg.53.1696512810281;
-        Thu, 05 Oct 2023 06:33:30 -0700 (PDT)
-Received: from sumit-X1.. ([223.178.210.23])
-        by smtp.gmail.com with ESMTPSA id jw22-20020a170903279600b001b80d399730sm1643640plb.242.2023.10.05.06.33.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 06:33:29 -0700 (PDT)
-From:   Sumit Garg <sumit.garg@linaro.org>
-To:     torvalds@linux-foundation.org, jarkko@kernel.org,
-        peterz@infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        jejb@linux.ibm.com, zohar@linux.ibm.com, David.Kaplan@amd.com,
-        bp@alien8.de, mingo@kernel.org, x86@kernel.org,
-        regressions@leemhuis.info, Sumit Garg <sumit.garg@linaro.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: [PATCH] KEYS: trusted: Remove redundant static calls usage
-Date:   Thu,  5 Oct 2023 19:03:06 +0530
-Message-Id: <20231005133306.379718-1-sumit.garg@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Thu, 5 Oct 2023 10:34:39 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D16527A;
+        Thu,  5 Oct 2023 06:52:38 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395DQhjE031548;
+        Thu, 5 Oct 2023 13:41:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=R/QTM1fzVv6cm+wswFVzDr/m9+FgX0LQuY8/jeKmhko=;
+ b=cuCVAU6kZBORw4kNzQM8QhKATzaQYQx9sq9VyXtyAcbUjSJlu2csv9UKwRsMdWToW/kZ
+ 0C0RhlLfSx4clzeAM9kri0/U0zoNlTG8RblVDlrVkUr8EElTobyZsMXrLACmhgSCyeNj
+ mwc7IV+kj/e+X5u63Eo6l2E8JPclAG8R1FP1Mai2lrKjyos0n24UwIr+NGmFo5l/dmCQ
+ dGyPtibDLCjR17Zb0bp+IBJPg1LpSIU+tL/CMmv8D5xPmvorNRdNYuKpBMJSXVYh1+lJ
+ yx7r7YcPGH6+f/EQTT0ey3+nrJjVS9Dgplu6YZos1rGIOPl3jrrD8md/aNUQm4O8WJSh nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3thq9k02u9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 13:41:49 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 395DR6nD000477;
+        Thu, 5 Oct 2023 13:36:47 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3thq9jywwj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 13:36:47 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 395BKrDl017644;
+        Thu, 5 Oct 2023 13:35:43 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tey0nuqkf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 13:35:43 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 395DZgnd64356738
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 Oct 2023 13:35:42 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F204A58051;
+        Thu,  5 Oct 2023 13:35:41 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CBCF5805C;
+        Thu,  5 Oct 2023 13:35:41 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.90.188])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  5 Oct 2023 13:35:41 +0000 (GMT)
+Message-ID: <97be76d94fdacf369a324b6122d5f5bc19a3838c.camel@linux.ibm.com>
+Subject: Re: [syzbot] [integrity] [overlayfs] possible deadlock in
+ mnt_want_write (2)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-unionfs@vger.kernel.org,
+        miklos@szeredi.hu, mszeredi@redhat.com,
+        syzbot@syzkalhler.appspotmail.com, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Date:   Thu, 05 Oct 2023 09:35:40 -0400
+In-Reply-To: <CAOQ4uxgfJ4owqzh99t65MyT5A99BbwkLQ-sHumCUWyqSw-Rd5g@mail.gmail.com>
+References: <CAOQ4uxhbNyDzf0_fFh1Yy5Kz2Coz=gTrfOtsmteE0=ncibBnpw@mail.gmail.com>
+         <0000000000001081fc0606f52ed9@google.com>
+         <CAOQ4uxjw_XztGxrhR9LWtz_SszdURkM+Add2q8A9BAt0z901kA@mail.gmail.com>
+         <25f6950a67be079e32ad5b4139b1e89e367a91ba.camel@linux.ibm.com>
+         <CAOQ4uxgfJ4owqzh99t65MyT5A99BbwkLQ-sHumCUWyqSw-Rd5g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SRYz0AUECWsolMMPvJe_2XVNQ0vgpjPQ
+X-Proofpoint-ORIG-GUID: 2cgjxh7a4g6A1IxuXODZIVABZC_A6upp
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=642 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310050107
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,78 +102,40 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Static calls invocations aren't well supported from module __init and
-__exit functions, especially the static call from cleanup_trusted() led
-to a crash on x86 kernel with CONFIG_DEBUG_VIRTUAL=y.
+On Thu, 2023-10-05 at 16:22 +0300, Amir Goldstein wrote:
+> On Thu, Oct 5, 2023 at 4:14 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >
+> > On Thu, 2023-10-05 at 13:26 +0300, Amir Goldstein wrote:
+> > > On Thu, Oct 5, 2023 at 12:59 PM syzbot
+> > > <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com> wrote:
+> > > >
+> > > > Hello,
+> > > >
+> > > > syzbot tried to test the proposed patch but the build/boot failed:
+> > >
+> > > My mistake. Please try again:
+> > >
+> > > #syz test: https://github.com/amir73il/linux ima-ovl-fix
+> >
+> > Thanks, Amir.   "mutext_init(&iint->mutex); moved, but the status
+> > initialization lines 161-166 were dropped.   They're needed by IMA-
+> > appraisal for signature verification.
+> >
+> >         iint->ima_file_status = INTEGRITY_UNKNOWN;
+> >         iint->ima_mmap_status = INTEGRITY_UNKNOWN;
+> >         iint->ima_bprm_status = INTEGRITY_UNKNOWN;
+> >         iint->ima_read_status = INTEGRITY_UNKNOWN;
+> >         iint->ima_creds_status = INTEGRITY_UNKNOWN;
+> >         iint->evm_status = INTEGRITY_UNKNOWN;
+> >
+> 
+> They are dropped from iint_init_once()
+> They are not needed there because there are now set
+> in every iint allocation in iint_init_always()
+> instead of being set in iint_free()
 
-However, the usage of static call invocations for trusted_key_init()
-and trusted_key_exit() doesn't adds any value neither from performance
-point and nor there is any security benefit. Hence switch to use indirect
-function calls instead.
+I was only looking at the patch and noticed the removal.  Thanks, this
+looks good.
 
-Note here that although it will fix the current crash reported. But
-ultimately we need fix up static calls infrastructure to either support
-its future usage from module __init and __exit functions or not.
-
-Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Closes: https://lore.kernel.org/lkml/ZRhKq6e5nF%2F4ZIV1@fedora/#t
-Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
----
- security/keys/trusted-keys/trusted_core.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
-
-diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-index c6fc50d67214..85fb5c22529a 100644
---- a/security/keys/trusted-keys/trusted_core.c
-+++ b/security/keys/trusted-keys/trusted_core.c
-@@ -44,13 +44,12 @@ static const struct trusted_key_source trusted_key_sources[] = {
- #endif
- };
- 
--DEFINE_STATIC_CALL_NULL(trusted_key_init, *trusted_key_sources[0].ops->init);
- DEFINE_STATIC_CALL_NULL(trusted_key_seal, *trusted_key_sources[0].ops->seal);
- DEFINE_STATIC_CALL_NULL(trusted_key_unseal,
- 			*trusted_key_sources[0].ops->unseal);
- DEFINE_STATIC_CALL_NULL(trusted_key_get_random,
- 			*trusted_key_sources[0].ops->get_random);
--DEFINE_STATIC_CALL_NULL(trusted_key_exit, *trusted_key_sources[0].ops->exit);
-+static void (*trusted_key_exit)(void);
- static unsigned char migratable;
- 
- enum {
-@@ -359,19 +358,16 @@ static int __init init_trusted(void)
- 		if (!get_random)
- 			get_random = kernel_get_random;
- 
--		static_call_update(trusted_key_init,
--				   trusted_key_sources[i].ops->init);
- 		static_call_update(trusted_key_seal,
- 				   trusted_key_sources[i].ops->seal);
- 		static_call_update(trusted_key_unseal,
- 				   trusted_key_sources[i].ops->unseal);
- 		static_call_update(trusted_key_get_random,
- 				   get_random);
--		static_call_update(trusted_key_exit,
--				   trusted_key_sources[i].ops->exit);
-+		trusted_key_exit = trusted_key_sources[i].ops->exit;
- 		migratable = trusted_key_sources[i].ops->migratable;
- 
--		ret = static_call(trusted_key_init)();
-+		ret = trusted_key_sources[i].ops->init();
- 		if (!ret)
- 			break;
- 	}
-@@ -388,7 +384,8 @@ static int __init init_trusted(void)
- 
- static void __exit cleanup_trusted(void)
- {
--	static_call_cond(trusted_key_exit)();
-+	if (trusted_key_exit)
-+		(*trusted_key_exit)();
- }
- 
- late_initcall(init_trusted);
--- 
-2.34.1
+Mimi
 
