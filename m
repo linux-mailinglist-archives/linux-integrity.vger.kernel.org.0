@@ -2,140 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146287BA08C
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 16:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172367BA113
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 16:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbjJEOgn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Oct 2023 10:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
+        id S237207AbjJEOnb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Oct 2023 10:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236118AbjJEOej (ORCPT
+        with ESMTP id S237347AbjJEOjE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:34:39 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D16527A;
-        Thu,  5 Oct 2023 06:52:38 -0700 (PDT)
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395DQhjE031548;
-        Thu, 5 Oct 2023 13:41:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=R/QTM1fzVv6cm+wswFVzDr/m9+FgX0LQuY8/jeKmhko=;
- b=cuCVAU6kZBORw4kNzQM8QhKATzaQYQx9sq9VyXtyAcbUjSJlu2csv9UKwRsMdWToW/kZ
- 0C0RhlLfSx4clzeAM9kri0/U0zoNlTG8RblVDlrVkUr8EElTobyZsMXrLACmhgSCyeNj
- mwc7IV+kj/e+X5u63Eo6l2E8JPclAG8R1FP1Mai2lrKjyos0n24UwIr+NGmFo5l/dmCQ
- dGyPtibDLCjR17Zb0bp+IBJPg1LpSIU+tL/CMmv8D5xPmvorNRdNYuKpBMJSXVYh1+lJ
- yx7r7YcPGH6+f/EQTT0ey3+nrJjVS9Dgplu6YZos1rGIOPl3jrrD8md/aNUQm4O8WJSh nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3thq9k02u9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 13:41:49 +0000
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 395DR6nD000477;
-        Thu, 5 Oct 2023 13:36:47 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3thq9jywwj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 13:36:47 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 395BKrDl017644;
-        Thu, 5 Oct 2023 13:35:43 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tey0nuqkf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 13:35:43 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 395DZgnd64356738
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 Oct 2023 13:35:42 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F204A58051;
-        Thu,  5 Oct 2023 13:35:41 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4CBCF5805C;
-        Thu,  5 Oct 2023 13:35:41 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.90.188])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  5 Oct 2023 13:35:41 +0000 (GMT)
-Message-ID: <97be76d94fdacf369a324b6122d5f5bc19a3838c.camel@linux.ibm.com>
-Subject: Re: [syzbot] [integrity] [overlayfs] possible deadlock in
- mnt_want_write (2)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-unionfs@vger.kernel.org,
-        miklos@szeredi.hu, mszeredi@redhat.com,
-        syzbot@syzkalhler.appspotmail.com, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Date:   Thu, 05 Oct 2023 09:35:40 -0400
-In-Reply-To: <CAOQ4uxgfJ4owqzh99t65MyT5A99BbwkLQ-sHumCUWyqSw-Rd5g@mail.gmail.com>
-References: <CAOQ4uxhbNyDzf0_fFh1Yy5Kz2Coz=gTrfOtsmteE0=ncibBnpw@mail.gmail.com>
-         <0000000000001081fc0606f52ed9@google.com>
-         <CAOQ4uxjw_XztGxrhR9LWtz_SszdURkM+Add2q8A9BAt0z901kA@mail.gmail.com>
-         <25f6950a67be079e32ad5b4139b1e89e367a91ba.camel@linux.ibm.com>
-         <CAOQ4uxgfJ4owqzh99t65MyT5A99BbwkLQ-sHumCUWyqSw-Rd5g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SRYz0AUECWsolMMPvJe_2XVNQ0vgpjPQ
-X-Proofpoint-ORIG-GUID: 2cgjxh7a4g6A1IxuXODZIVABZC_A6upp
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 5 Oct 2023 10:39:04 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB75555DD8
+        for <linux-integrity@vger.kernel.org>; Thu,  5 Oct 2023 07:05:37 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-59f4f80d084so10894167b3.1
+        for <linux-integrity@vger.kernel.org>; Thu, 05 Oct 2023 07:05:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1696514737; x=1697119537; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YUPOooK4Ns6DH/Jalgn9lVTRMXc80w0ZAjwIoNKA7QA=;
+        b=gZJjm7wIgO3iNaVndIuYT4UV17QLvXVqy6yrN8Ec6SpZ1nPqHW9BOYT9/GBBD2pxUY
+         4X6htYn6c+WhUk2zH/Ppo9KAs97EYf/C5jPcdpK6dBpy5vqEYhqHKDSBAWyau5FJH84h
+         y0yt9V/2+L5zoliDdtajzBAAVTAOcuemc6Dp53MKB/NmrALbmsdPSCdVqnFUt0PV1PFk
+         SM5UvQ/PBgLUYEybmLEXY+7EjY2/Z/M3tEW7ME5LUcvM4gNv3LUBa8lkS5aaZ2T1W50K
+         QgFN7cgf79mUY8nEGz0LU993w2u2BA+LaJA58F7x7VOPCvsWz5UcDkQPS9CaD/Ps1kCr
+         1tGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696514737; x=1697119537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YUPOooK4Ns6DH/Jalgn9lVTRMXc80w0ZAjwIoNKA7QA=;
+        b=FZJjHiqOLj2mHQ6jbbrg4hlJOcmF5JtRWfUwWrMLD5Xx3J3wggY/FhifFWIKG88a26
+         GoBi43mjgqjZKJl4GzzYYwd1u7q1EP17AfeehFfuVrG1zNPcQ7VXobGYoGH8vKcFchDi
+         IW8L6AY7KKJLBVXBg3NtDirAZnsUDN1orG/mKwVmhG6oe5ohSo5j8PNFZj9g7wM0vuwE
+         2EMkIc0736HchJs4Si3VnQebg3RN5Y4IdP1WGpcaU/x7DmSVzwrepz4cM05WJuDc1OrR
+         7SqUwywWZwOxg60QionkpPvj6J8vZzPWpv2rvwHN7m5z4VKBYVtQ0Rqv4CIcXSRHU4ab
+         R9/w==
+X-Gm-Message-State: AOJu0YyN1vJQwofv1ka5MLhOGY+6GF1pQx401a5uuj4LDFRDt37/ixoL
+        ip2NGgNTFu3YR5ga5APd9DeumdN06ERQrnnXMOld
+X-Google-Smtp-Source: AGHT+IEhII1+ssm6kMv+2+D8NIey8gXMZEJQg4s9lOhq3v8CS0TIyvbGSdMA3HXKy2CrlPTC5uALpYCU+9MbO/YcHp4=
+X-Received: by 2002:a25:bb83:0:b0:d80:1bbf:fabf with SMTP id
+ y3-20020a25bb83000000b00d801bbffabfmr4580170ybg.2.1696514736829; Thu, 05 Oct
+ 2023 07:05:36 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=642 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310050107
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <CEA476C1-4CE5-4FFC-91D7-6061C8605B18@oracle.com>
+ <ba2f5560800608541e81fbdd28efa9875b35e491.camel@linux.ibm.com>
+ <932231F5-8050-4436-84B8-D7708DC43845@oracle.com> <7335a4587233626a39ce9bc8a969957d7f43a34c.camel@linux.ibm.com>
+ <FD6FB139-F901-4E55-9705-E7B0023BDBA8@oracle.com> <1149b6dbfdaabef3e48dc2852cc76aa11a6dd6b0.camel@linux.ibm.com>
+ <4A0505D0-2933-43BD-BEEA-94350BB22AE7@oracle.com> <20230913.Ceifae7ievei@digikod.net>
+ <D0F16BFD-72EB-4BE2-BA3D-BAE1BCCDCB6F@oracle.com> <20230914.shah5al9Kaib@digikod.net>
+ <20231005.dajohf2peiBu@digikod.net>
+In-Reply-To: <20231005.dajohf2peiBu@digikod.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 5 Oct 2023 10:05:25 -0400
+Message-ID: <CAHC9VhQioMnXdbBugn3h8TBmOPvv_pCehMh8ON5LOOPmt1=6LA@mail.gmail.com>
+Subject: Re: RFC: New LSM to control usage of x509 certificates
+To:     Eric Snowberg <eric.snowberg@oracle.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2023-10-05 at 16:22 +0300, Amir Goldstein wrote:
-> On Thu, Oct 5, 2023 at 4:14 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >
-> > On Thu, 2023-10-05 at 13:26 +0300, Amir Goldstein wrote:
-> > > On Thu, Oct 5, 2023 at 12:59 PM syzbot
-> > > <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > syzbot tried to test the proposed patch but the build/boot failed:
+On Thu, Oct 5, 2023 at 6:32=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digiko=
+d.net> wrote:
+>
+> The initial subject was "Re: [PATCH] certs: Restrict blacklist updates
+> to the secondary trusted keyring":
+> https://lore.kernel.org/all/20230908213428.731513-1-eric.snowberg@oracle.=
+com/
+>
+> On Thu, Sep 14, 2023 at 10:34:44AM +0200, Micka=C3=ABl Sala=C3=BCn wrote:
+> > CCing the LSM mailing list for this potential new LSM proposal:
+> > On Wed, Sep 13, 2023 at 10:29:58PM +0000, Eric Snowberg wrote:
+> > > > On Sep 13, 2023, at 4:21 AM, Micka=C3=ABl Sala=C3=BCn <mic@digikod.=
+net> wrote:
+> > > > On Wed, Sep 13, 2023 at 02:40:17AM +0000, Eric Snowberg wrote:
+> > > >>> On Sep 12, 2023, at 4:47 PM, Mimi Zohar <zohar@linux.ibm.com> wro=
+te:
+
+[Just a reminder that trimming massive emails to the relevant portions
+is a nice thing to do]
+
+> > > > A complementary approach would be to create an
+> > > > LSM (or a dedicated interface) to tie certificate properties to a s=
+et of
+> > > > kernel usages, while still letting users configure these constraint=
+s.
 > > >
-> > > My mistake. Please try again:
-> > >
-> > > #syz test: https://github.com/amir73il/linux ima-ovl-fix
-> >
-> > Thanks, Amir.   "mutext_init(&iint->mutex); moved, but the status
-> > initialization lines 161-166 were dropped.   They're needed by IMA-
-> > appraisal for signature verification.
-> >
-> >         iint->ima_file_status = INTEGRITY_UNKNOWN;
-> >         iint->ima_mmap_status = INTEGRITY_UNKNOWN;
-> >         iint->ima_bprm_status = INTEGRITY_UNKNOWN;
-> >         iint->ima_read_status = INTEGRITY_UNKNOWN;
-> >         iint->ima_creds_status = INTEGRITY_UNKNOWN;
-> >         iint->evm_status = INTEGRITY_UNKNOWN;
-> >
-> 
-> They are dropped from iint_init_once()
-> They are not needed there because there are now set
-> in every iint allocation in iint_init_always()
-> instead of being set in iint_free()
+> > > That is an interesting idea.  Would the other security maintainers be=
+ in
+> > > support of such an approach?  Would a LSM be the correct interface?
+> > > Some of the recent work I have done with introducing key usage and CA
+> > > enforcement is difficult for a distro to pick up, since these changes=
+ can be
+> > > viewed as a regression.  Each end-user has different signing procedur=
+es
+> > > and policies, so making something work for everyone is difficult.  Le=
+tting the
+> > > user configure these constraints would solve this problem.
 
-I was only looking at the patch and noticed the removal.  Thanks, this
-looks good.
+I can't say that I have been following this thread very closely, but I
+see no reason why we wouldn't support a LSM that enforces access
+controls on certificates/keys based on their attributes/properties.
+We do have some LSM control points for the kernel keyring, which are
+used by at least one LSM, but I'm sure you would probably need some
+additional control points.
 
-Mimi
+If you are interested in pursuing the creation of a new LSM, and
+likely new LSM hooks, we do have some documented guidelines you should
+keep in mind:
 
+* https://github.com/LinuxSecurityModule/kernel/blob/main/README.md
+
+--=20
+paul-moore.com
