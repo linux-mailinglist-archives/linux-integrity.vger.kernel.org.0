@@ -2,38 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EF57BA908
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 20:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439DF7BA909
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 20:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjJES0Q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Oct 2023 14:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S231208AbjJES0R (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Oct 2023 14:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbjJES0P (ORCPT
+        with ESMTP id S231213AbjJES0Q (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Oct 2023 14:26:15 -0400
+        Thu, 5 Oct 2023 14:26:16 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A61D69E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8EA1AD
         for <linux-integrity@vger.kernel.org>; Thu,  5 Oct 2023 11:26:14 -0700 (PDT)
 Received: from tushar-HP-Pavilion-Laptop-15-eg0xxx.lan (unknown [50.46.228.62])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 261C320B74C7;
-        Thu,  5 Oct 2023 11:26:13 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 261C320B74C7
+        by linux.microsoft.com (Postfix) with ESMTPSA id 56F0320B74C8;
+        Thu,  5 Oct 2023 11:26:14 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 56F0320B74C8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1696530374;
-        bh=8DnZqCRLNl2kH912XJt+JUclDDYq4fKWT4+5FgK5Duw=;
+        bh=ONPFQaah0h6Qnqt+reZDLhqeK6cEMyobvmiL4JTQPwA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F2PI4GCwKQxYpriwcXUCTi9/ezNh0cgu0fXOh1iGEhpLBtzp1+sGIc/XItOPZMIPa
-         JscSayHolG3wD/1ah2wKfuhJegtnChjdXsHkk8a81PNU1rjDbCGNCkGQtMHb0522mG
-         gFyoRjBookAHHwQPwok5P3wOrm73/P+dT1G8Xx8s=
+        b=g+RGV187kcOPOb2HX1ww0wYPY37J26ztVbuioeuEk33iG+u0PvGcUg5Wrr+U6DFai
+         b1TXW8XvGSpWFEC6BDw1LzfeWeJOU/rTi8vNryDYwCv3D1QOLkpPUnbnsQG4nZfUUN
+         ijrhjYLOd/u0/gKSOjVCFkCzJSIULCxbjyrlPyoM=
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
 To:     zohar@linux.ibm.com, ebiederm@xmission.com, noodles@fb.com,
         bauermann@kolabnow.com, kexec@lists.infradead.org,
         linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-Subject: [PATCH v2 6/7] ima: make the memory for events between kexec load and exec configurable
-Date:   Thu,  5 Oct 2023 11:26:01 -0700
-Message-Id: <20231005182602.634615-7-tusharsu@linux.microsoft.com>
+Subject: [PATCH v2 7/7] ima: record log size at kexec load and execute
+Date:   Thu,  5 Oct 2023 11:26:02 -0700
+Message-Id: <20231005182602.634615-8-tusharsu@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231005182602.634615-1-tusharsu@linux.microsoft.com>
 References: <20231005182602.634615-1-tusharsu@linux.microsoft.com>
@@ -49,70 +49,113 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA currently allocates half a PAGE_SIZE for the extra events that would
-be measured between kexec 'load' and 'execute'.  Depending on the IMA
-policy and the system state, that memory may not be sufficient to hold
-the extra IMA events measured after kexec 'load'.  The memory
-requirements vary from system to system and they should be configurable.
+The window between kexec 'load' and 'execute' could be arbitrarily long.
+Even with the large chunk of memory allocated at kexec 'load', it may
+run out which would result in missing events in IMA log after the system
+soft reboots to the new Kernel.  This would result in IMA measurements
+getting out of sync with the TPM PCR quotes which would result in remote
+attestation failing for that system.  There is currently no way for the
+new Kernel to know if the IMA log TPM PCR quote out of sync problem is
+because of the missing measurements during kexec.
 
-Define a Kconfig option, IMA_KEXEC_EXTRA_PAGES, to configure the number
-of extra pages to be allocated for IMA measurements added in the window
-from kexec 'load' to kexec 'execute'.
+Define two new IMA events, 'kexec_load' and 'kexec_execute', to be 
+measured at kexec 'load' and 'execute' respectively.
 
-Update ima_add_kexec_buffer() function to allocate memory based on the 
-Kconfig option value, rather than the currently hardcoded one.
+IMA measures 'boot_aggregate' as the first event when the system boots - 
+either cold boot or kexec soft boot.  In case when the system goes
+through multiple soft reboots, the number of 'boot_aggregate' events in
+IMA log corresponds to total number of boots (cold boot plus multiple
+kexec soft reboots).  With this change, there would be additional 
+'kexec_load' and 'kexec_execute' events in between the two 
+'boot_aggregate' events.  In rare cases, when the system runs out of
+memory during kexec soft reboot, 'kexec_execute' won't be copied since
+its one of the very last event measured just before kexec soft reboot.
+The absence of the event 'kexec_execute' in between the two 
+boot_aggregate' events would signal the attestation service that the IMA
+log on the system is out of sync with TPM PCR quotes and the system needs
+to be cold booted for the remote attestation to succeed again.
 
 Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 ---
- security/integrity/ima/Kconfig     |  9 +++++++++
- security/integrity/ima/ima_kexec.c | 13 ++++++++-----
- 2 files changed, 17 insertions(+), 5 deletions(-)
+ security/integrity/ima/ima_kexec.c | 35 +++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 60a511c6b583..1b55cd2bcb36 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -338,3 +338,12 @@ config IMA_DISABLE_HTABLE
- 	default n
- 	help
- 	   This option disables htable to allow measurement of duplicate records.
-+
-+config IMA_KEXEC_EXTRA_PAGES
-+	int
-+	depends on IMA && IMA_KEXEC
-+	default 16
-+	help
-+	  IMA_KEXEC_EXTRA_PAGES determines the number of extra
-+	  pages to be allocated for IMA measurements added in the
-+	  window from kexec 'load' to kexec 'execute'.
 diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 13fbbb90319b..6cd5f46a7208 100644
+index 6cd5f46a7208..0f9c424fe808 100644
 --- a/security/integrity/ima/ima_kexec.c
 +++ b/security/integrity/ima/ima_kexec.c
-@@ -150,15 +150,18 @@ void ima_add_kexec_buffer(struct kimage *image)
- 	int ret;
+@@ -17,6 +17,8 @@
+ #include "ima.h"
  
- 	/*
--	 * Reserve an extra half page of memory for additional measurements
--	 * added during the kexec load.
-+	 * Reserve extra memory for measurements added in the window from
-+	 * kexec 'load' to kexec 'execute'.
- 	 */
--	binary_runtime_size = ima_get_binary_runtime_size();
-+	binary_runtime_size = ima_get_binary_runtime_size() +
-+			      sizeof(struct ima_kexec_hdr) +
-+			      (CONFIG_IMA_KEXEC_EXTRA_PAGES * PAGE_SIZE);
+ #ifdef CONFIG_IMA_KEXEC
++#define IMA_KEXEC_EVENT_LEN 128
 +
- 	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
- 		kexec_segment_size = ULONG_MAX;
- 	else
--		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
--					   PAGE_SIZE / 2, PAGE_SIZE);
-+		kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
+ struct seq_file ima_kexec_file;
+ struct ima_kexec_hdr ima_khdr;
+ static void *ima_kexec_buffer;
+@@ -34,6 +36,8 @@ void ima_clear_kexec_file(void)
+ 
+ static int ima_alloc_kexec_buf(size_t kexec_segment_size)
+ {
++	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
 +
- 	if ((kexec_segment_size == ULONG_MAX) ||
+ 	if ((kexec_segment_size == 0) ||
+ 	    (kexec_segment_size == ULONG_MAX) ||
  	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
- 		pr_err("Binary measurement list too large.\n");
+@@ -64,6 +68,12 @@ static int ima_alloc_kexec_buf(size_t kexec_segment_size)
+ 	memset(&ima_khdr, 0, sizeof(ima_khdr));
+ 	ima_khdr.version = 1;
+ 
++	scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
++		  "kexec_segment_size=%lu;", kexec_segment_size);
++
++	ima_measure_critical_data("ima_kexec", "kexec_load", ima_kexec_event,
++				  strlen(ima_kexec_event), false, NULL, 0);
++
+ 	return 0;
+ }
+ 
+@@ -198,6 +208,7 @@ void ima_add_kexec_buffer(struct kimage *image)
+ static int ima_update_kexec_buffer(struct notifier_block *self,
+ 				   unsigned long action, void *data)
+ {
++	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
+ 	void *buf = NULL;
+ 	size_t buf_size;
+ 	bool resume = false;
+@@ -213,9 +224,31 @@ static int ima_update_kexec_buffer(struct notifier_block *self,
+ 		return NOTIFY_OK;
+ 	}
+ 
++	buf_size = ima_get_binary_runtime_size();
++	scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
++		  "kexec_segment_size=%lu;ima_binary_runtime_size=%lu;",
++		  kexec_segment_size, buf_size);
++
++	/*
++	 * This is one of the very last events measured by IMA before kexec
++	 * soft rebooting into the new Kernal.
++	 * This event can be used as a marker after the system soft reboots
++	 * to the new Kernel to check if there was sufficient memory allocated
++	 * at kexec 'load' to capture the events measured between the window
++	 * of kexec 'load' and 'execute'.
++	 * This event needs to be present in the IMA log, in between the two
++	 * 'boot_aggregate' events that are logged for the previous boot and
++	 * the current soft reboot. If it is not present after the system soft
++	 * reboots into the new Kernel, it would mean the IMA log is not
++	 * consistent with the TPM PCR quotes, and the system needs to be
++	 * cold-booted for the attestation to succeed again.
++	 */
++	ima_measure_critical_data("ima_kexec", "kexec_execute",
++				  ima_kexec_event, strlen(ima_kexec_event),
++				  false, NULL, 0);
++
+ 	ima_measurements_suspend();
+ 
+-	buf_size = ima_get_binary_runtime_size();
+ 	ret = ima_dump_measurement_list(&buf_size, &buf,
+ 					kexec_segment_size);
+ 
 -- 
 2.25.1
 
