@@ -2,111 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EE07BA542
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 18:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E428E7BA6E5
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 18:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240992AbjJEQPk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Oct 2023 12:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
+        id S230182AbjJEQnQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Oct 2023 12:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241112AbjJEQNk (ORCPT
+        with ESMTP id S234381AbjJEQlZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Oct 2023 12:13:40 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CADAD17;
-        Thu,  5 Oct 2023 02:36:16 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-7b07c3eaf9bso291393241.3;
-        Thu, 05 Oct 2023 02:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696498575; x=1697103375; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=miaHJCTsklS6Zbf74LdxRTHsnukEGfuauknHlldmnMc=;
-        b=N4af9kbi6Y+6dW9LsItj5fS5+DyE6zDpoaXlRE63hcUqzTAjlFVy++6BlgMNLc7eoc
-         9aEa02NdBFigDUFax26K4zjqVc1R9QevHORZNCEceZgUNfBD1PoKFZXlmUsuKvcLJB2z
-         Wzq25anMl7eXz6LpGSIH0XC1N/yUmNm0EjsFMP+KHLm7UWHZRh9zSI0p3N9zEQZ5T2pR
-         jH1t6eglUTla2oo0U+yFQhjcilqGxdoULd5rEZUjwZ4FX+CfYcsYszoomCu0204u545P
-         Qb/9Kwa9NQ6OpKIeEhQ8uk5o6pzGL3Q4OAVhpR88DQEJOju8mPcHgkmd00fDwrjBGC1S
-         gpEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696498575; x=1697103375;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=miaHJCTsklS6Zbf74LdxRTHsnukEGfuauknHlldmnMc=;
-        b=QFvdY/FyxkbAHDFTe1d61HEPBpvKjezRu16VHZ1FP1fyDKMAWt83XyBW9xdUAkDVMj
-         ucMPRNA+c3b6g2G37Yd6WOGa0fnzrs80dP1WOPrxzb+dZ7x7zPDDWSa6yIx9joVLJ/QK
-         i4g00/bNMTce7wD4UbcH068mTjj+CppEbfVleN9x3P+H+zshm9b2EOLRSDvOZhrVvbKF
-         xMNcM3ZBckOF8jrS6J4qMLGqjOA298urN61hUZ5d98tb7i2iHI6Vrqb6xbh7pIw3R5q7
-         KiNcTC7MCaYHwdwGx4HQZ0OOsTYld6EKj/F/nd4CtRIlq/nofxCN7OUVGiCNTj5krigO
-         Yerw==
-X-Gm-Message-State: AOJu0YyLqGrprqjZuIxtUDycFcIjMJ0drgO0UZTB6ivbyzVEi4eo+C3i
-        IgxweggwkHEHPOg5r2ppndtAk2CBYx7YCtTLmSw=
-X-Google-Smtp-Source: AGHT+IHEmB4hPkLYLPKiUKYdFA8EWWzm/1bKRsSKow5Ph7YiXuo2ENvDu/sgoJxWbdjYFoZ5NkuSiVgyiunS+gZFpDQ=
-X-Received: by 2002:a67:f4c9:0:b0:44d:3aba:b03d with SMTP id
- s9-20020a67f4c9000000b0044d3abab03dmr4641256vsn.17.1696498575187; Thu, 05 Oct
- 2023 02:36:15 -0700 (PDT)
+        Thu, 5 Oct 2023 12:41:25 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1139C9E;
+        Thu,  5 Oct 2023 09:29:52 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395GQ3Kl008480;
+        Thu, 5 Oct 2023 16:29:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=e/uxUGgKiTmqQdW2f3YDwweeYv/YTjo50AJHu3QIs4g=;
+ b=QD+regq6d+lND1misANH50l7ZSdJy134tf+kl2571l8wf57mO5vm5xRCDmSSzBW4El/U
+ /tniRGr0RUVMrv1pSDEK8qZ5jiiXYZb7blwEEjXMw0sjB0r0pm+pnpRIco96pKa0boF4
+ fhPOxUk3wwzNIaOCB9FbD0rwtzZJ615Im3Y0Rv0c4/FXBovsec9YcajG1wMsqeqOfocV
+ b9hnqo9mWW6aZUUTl0DoxI7GIGKV/FQEdnxc/X+5TZCfBLHzCVVRWPhMKuxKhNKU8SGg
+ iU3oExdtThsel/3bXvS7ZadhFY4GplMMPz0kxCXss1O1kfgOEKXU/3WtfHX3LtRaXH+2 rA== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tj0ner3xu-32
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 16:29:16 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 395FEwlK025087;
+        Thu, 5 Oct 2023 15:53:32 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3texcywjaj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Oct 2023 15:53:32 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 395FrVes7275070
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 Oct 2023 15:53:31 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8774458056;
+        Thu,  5 Oct 2023 15:53:31 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 087865803F;
+        Thu,  5 Oct 2023 15:53:31 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.90.188])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  5 Oct 2023 15:53:30 +0000 (GMT)
+Message-ID: <d213722924c7942bc60fc6b7acf934c8bf6f74e0.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity: susbystem fixes for v6.6 (take 2)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Thu, 05 Oct 2023 11:53:30 -0400
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: dJbaJMpTfBtZ0TFEo7FBGFZitGqLzd_r
+X-Proofpoint-ORIG-GUID: dJbaJMpTfBtZ0TFEo7FBGFZitGqLzd_r
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <00000000000067d24205c4d0e599@google.com> <000000000000accfd30606e6bcd0@google.com>
-In-Reply-To: <000000000000accfd30606e6bcd0@google.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 5 Oct 2023 12:36:04 +0300
-Message-ID: <CAOQ4uxhbNyDzf0_fFh1Yy5Kz2Coz=gTrfOtsmteE0=ncibBnpw@mail.gmail.com>
-Subject: Re: [syzbot] [integrity] [overlayfs] possible deadlock in
- mnt_want_write (2)
-To:     syzbot <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com>
-Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-unionfs@vger.kernel.org,
-        miklos@szeredi.hu, mszeredi@redhat.com,
-        syzbot@syzkalhler.appspotmail.com, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, zohar@us.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-05_11,2023-10-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=942 impostorscore=0
+ suspectscore=0 clxscore=1015 mlxscore=0 spamscore=0 bulkscore=0
+ lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2309180000 definitions=main-2310050128
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 4, 2023 at 7:45=E2=80=AFPM syzbot
-<syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com> wrote:
->
-> syzbot has bisected this issue to:
->
-> commit 708fa01597fa002599756bf56a96d0de1677375c
-> Author: Miklos Szeredi <mszeredi@redhat.com>
-> Date:   Mon Apr 12 10:00:37 2021 +0000
->
->     ovl: allow upperdir inside lowerdir
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D17ad11b268=
-0000
-> start commit:   3aba70aed91f Merge tag 'gpio-fixes-for-v6.6-rc3' of git:/=
-/..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D146d11b268=
-0000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D106d11b268000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3De4ca82a1bedd3=
-7e4
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3Db42fe626038981f=
-b7bfa
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1304fba6680=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D13cec0dc68000=
-0
->
-> Reported-by: syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com
-> Fixes: 708fa01597fa ("ovl: allow upperdir inside lowerdir")
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
-ion
+Hi Linus,
 
-#syz test: https://github.com/amir73il/linux ima-ovl-fix
+Two additional patches to fix the removal of the deprecated
+IMA_TRUSTED_KEYRING Kconfig.
+
+thanks,
+
+Mimi
+
+The following changes since commit 6465e260f48790807eef06b583b38ca9789b6072:
+
+  Linux 6.6-rc3 (2023-09-24 14:31:13 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.6-fix
+
+for you to fetch changes up to 91e326563ee34509c35267808a4b1b3ea3db62a8:
+
+  ima: rework CONFIG_IMA dependency block (2023-09-27 11:52:12 -0400)
+
+----------------------------------------------------------------
+integrity-v6.6-fix
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      ima: rework CONFIG_IMA dependency block
+
+Oleksandr Tymoshenko (1):
+      ima: Finish deprecation of IMA_TRUSTED_KEYRING Kconfig
+
+ security/integrity/ima/Kconfig | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
+
