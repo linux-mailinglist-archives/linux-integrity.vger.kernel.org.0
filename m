@@ -2,106 +2,79 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7268C7B9A16
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 04:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BAD7B9DD7
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 15:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjJECq2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Oct 2023 22:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S230088AbjJEN4C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Oct 2023 09:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233874AbjJECq1 (ORCPT
+        with ESMTP id S244142AbjJENv3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Oct 2023 22:46:27 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FA11C0;
-        Wed,  4 Oct 2023 19:46:24 -0700 (PDT)
-Received: from [10.137.106.151] (unknown [131.107.159.23])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4A2ED20B74C0;
-        Wed,  4 Oct 2023 19:46:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4A2ED20B74C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1696473983;
-        bh=Tk/tWsa69Leyj9ipJnNt9y71v/ZHhVK2fPaRDp6yvHQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZQxoETTv2uriamkJ6lcmJ39iqLPRnLv5GPtaWy8Cgj0R2TbpV39ck1IMfXgHmLpSU
-         V+Uu7J0ybvJh7tNBgQDYmTIlaWfSFLpTvLyQhdcaxLt7Lc2w56HcJAKUG31fioNpzB
-         ZAoqtGDUC5O8nf+oC1KzCGnUrL5/L/89+LLpsR+M=
-Message-ID: <a58cc269-1a95-445d-85c9-ecf997b47294@linux.microsoft.com>
-Date:   Wed, 4 Oct 2023 19:45:50 -0700
+        Thu, 5 Oct 2023 09:51:29 -0400
+Received: from mail-oa1-x47.google.com (mail-oa1-x47.google.com [IPv6:2001:4860:4864:20::47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0419E22CA2
+        for <linux-integrity@vger.kernel.org>; Thu,  5 Oct 2023 03:46:30 -0700 (PDT)
+Received: by mail-oa1-x47.google.com with SMTP id 586e51a60fabf-1e1ad195cbbso1009176fac.2
+        for <linux-integrity@vger.kernel.org>; Thu, 05 Oct 2023 03:46:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696502789; x=1697107589;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BGwGxlTuATRVWE5UT3ZKJoT5MpU675X68ZbpYCN+7kY=;
+        b=S7Nee8UIWxgKE4TdDPx98Ion49+ktgJEXERnsv6eE1yPRn4dgOi8CxZsjzTnnTLnoW
+         e3ujfdXJWt+auL7fo+tokTIl0QZig5yzKQEPH7wO4QnMSnlGOM0y9OezN/z2d4/P7IKn
+         7WpE/7DWS0L9y/tsQCtmeHwTWE5C47+YuJ4uILkEQu7eM8KRuURSAu7VxJZthKtbnO9o
+         zuGzLNsSHYvlE96yQuervmQAe5w25gVuO9OfxihNsFJuRDWa1CHGi+Rs63y1QL0bgxdZ
+         dvtcAwNneEdpc4V5y28GeCEzoEmj9Y+imFD8jh0UzAjSZtYiZ/nR8dULoHyqMjWWrNNE
+         KjiA==
+X-Gm-Message-State: AOJu0YyFnhlOJS/tsabEidxmfORkoNlYZMVptNSaKzEY2YRlfJME5JW4
+        DLhWSTLlKGiTVQLAPDCrw2pItGAR+95YPqi1DcIpvQu4NO7s
+X-Google-Smtp-Source: AGHT+IF6NXpW2zd+hCeIzElnwrg53MI5PnCCJL42D9bvk43rwJ1rmAHq/sIWi88y/rKUpfhhxrW+Yd6VgiNDyLe+SSuoEVFU4PnF
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v11 16/19] ipe: enable support for fs-verity as a
- trust provider
-To:     Randy Dunlap <rdunlap@infradead.org>, corbet@lwn.net,
-        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
-        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
-        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com,
-        paul@paul-moore.com
-Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, audit@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-References: <1696457386-3010-1-git-send-email-wufan@linux.microsoft.com>
- <1696457386-3010-17-git-send-email-wufan@linux.microsoft.com>
- <7cecea3f-aaca-4df5-9595-324137c3627e@infradead.org>
-Content-Language: en-US
-From:   Fan Wu <wufan@linux.microsoft.com>
-In-Reply-To: <7cecea3f-aaca-4df5-9595-324137c3627e@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6870:1987:b0:1dc:768d:bf6b with SMTP id
+ v7-20020a056870198700b001dc768dbf6bmr1900344oam.11.1696502788922; Thu, 05 Oct
+ 2023 03:46:28 -0700 (PDT)
+Date:   Thu, 05 Oct 2023 03:46:28 -0700
+In-Reply-To: <CAOQ4uxjw_XztGxrhR9LWtz_SszdURkM+Add2q8A9BAt0z901kA@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001824660606f5d6ac@google.com>
+Subject: Re: [syzbot] [integrity] [overlayfs] possible deadlock in
+ mnt_want_write (2)
+From:   syzbot <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com>
+To:     amir73il@gmail.com, hdanton@sina.com,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        mszeredi@redhat.com, syzbot@syzkalhler.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, zohar@us.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hello,
 
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-On 10/4/2023 4:58 PM, Randy Dunlap wrote:
-> 
-> 
-> On 10/4/23 15:09, Fan Wu wrote:
-> 
-> | diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
-> | index 7afb1ce0cb99..9dd5c4769d79 100644
-> | --- a/security/ipe/Kconfig
-> | +++ b/security/ipe/Kconfig
-> | @@ -30,6 +30,19 @@ config IPE_PROP_DM_VERITY
-> |  	  that was mounted with a signed root-hash or the volume's
-> |  	  root hash matches the supplied value in the policy.
-> |
-> | +	  If unsure, answer Y.
-> | +
-> | +config IPE_PROP_FS_VERITY
-> | +	bool "Enable property for fs-verity files"
-> | +	depends on FS_VERITY && FS_VERITY_BUILTIN_SIGNATURES
-> | +	help
-> | +	  This option enables the usage of properties "fsverity_signature"
-> | +	  and "fsverity_digest". These properties evaluates to TRUE when
-> 
-> 	                                          evaluate
-> 
-> | +	  a file is fsverity enabled and with a signed digest or its
-> | +	  diegst matches the supplied value in the policy.
-> 
-> 	  digest
-> 
-> | +
-> | +	  if unsure, answer Y.
-> | +
-> |  endmenu
-> |
-> |  endif
-> 
-> 
+Reported-and-tested-by: syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com
 
-Thanks for catching the typo/error. Not sure why my spell script didn't 
-find them. Maybe I should consider using a better tool.
+Tested on:
 
--Fan
+commit:         42555f30 ima: annotate iint mutex to avoid lockdep fal..
+git tree:       https://github.com/amir73il/linux ima-ovl-fix
+console output: https://syzkaller.appspot.com/x/log.txt?x=16889486680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=57da1ac039c4c78a
+dashboard link: https://syzkaller.appspot.com/bug?extid=b42fe626038981fb7bfa
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.
