@@ -2,160 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439DF7BA909
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 20:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085C97BA944
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 20:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjJES0R (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Oct 2023 14:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S232207AbjJESjk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Oct 2023 14:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjJES0Q (ORCPT
+        with ESMTP id S231891AbjJESjh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Oct 2023 14:26:16 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8EA1AD
-        for <linux-integrity@vger.kernel.org>; Thu,  5 Oct 2023 11:26:14 -0700 (PDT)
-Received: from tushar-HP-Pavilion-Laptop-15-eg0xxx.lan (unknown [50.46.228.62])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 56F0320B74C8;
-        Thu,  5 Oct 2023 11:26:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 56F0320B74C8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1696530374;
-        bh=ONPFQaah0h6Qnqt+reZDLhqeK6cEMyobvmiL4JTQPwA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g+RGV187kcOPOb2HX1ww0wYPY37J26ztVbuioeuEk33iG+u0PvGcUg5Wrr+U6DFai
-         b1TXW8XvGSpWFEC6BDw1LzfeWeJOU/rTi8vNryDYwCv3D1QOLkpPUnbnsQG4nZfUUN
-         ijrhjYLOd/u0/gKSOjVCFkCzJSIULCxbjyrlPyoM=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, ebiederm@xmission.com, noodles@fb.com,
-        bauermann@kolabnow.com, kexec@lists.infradead.org,
-        linux-integrity@vger.kernel.org
-Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-Subject: [PATCH v2 7/7] ima: record log size at kexec load and execute
-Date:   Thu,  5 Oct 2023 11:26:02 -0700
-Message-Id: <20231005182602.634615-8-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231005182602.634615-1-tusharsu@linux.microsoft.com>
-References: <20231005182602.634615-1-tusharsu@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 Oct 2023 14:39:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E509790;
+        Thu,  5 Oct 2023 11:39:35 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85911C433C7;
+        Thu,  5 Oct 2023 18:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696531175;
+        bh=LpfOYGc2Ux9Hp1qTff57llGXpA3isfqJznKBsCrgP/4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=YT7eH3AzkFqW7c6hDuXqSLlwsj0Zs47q/wCDm1YymuXGa+fuRspMFs3H5rDP5F05b
+         GvU4kOas9i9SIhG6i6azSuO3khgs1ze62u8bB68OL4UpqAenoA8BNTW2o5ABmUt7yO
+         /iMtu3PMsp4M9s1/OnJvcZrTvr9+IdbU6hVO8Gi0nE8utBCmbXotAUjWyrMH0FoQWH
+         PLdlLVK6Yf/on3Nw5m2rKAXIlwZG7Ff1FVBq4eAF4Ioq74aORdkPKasWuQiKANE7CI
+         +NbRP8ZCr20ek3CdUNg4GGQEmJKtxFzKOqRfhC/tD5j31PIo5ci3vW5AOBBcOr9u7X
+         ncjUOctORp8PA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 74E9FE632D2;
+        Thu,  5 Oct 2023 18:39:35 +0000 (UTC)
+Subject: Re: [GIT PULL] integrity: susbystem fixes for v6.6 (take 2)
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <d213722924c7942bc60fc6b7acf934c8bf6f74e0.camel@linux.ibm.com>
+References: <d213722924c7942bc60fc6b7acf934c8bf6f74e0.camel@linux.ibm.com>
+X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
+X-PR-Tracked-Message-Id: <d213722924c7942bc60fc6b7acf934c8bf6f74e0.camel@linux.ibm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.6-fix
+X-PR-Tracked-Commit-Id: 91e326563ee34509c35267808a4b1b3ea3db62a8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: cb84fb87f325ecd46be586b62623db5b2c0a792e
+Message-Id: <169653117547.4044.15970699493171924740.pr-tracker-bot@kernel.org>
+Date:   Thu, 05 Oct 2023 18:39:35 +0000
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The window between kexec 'load' and 'execute' could be arbitrarily long.
-Even with the large chunk of memory allocated at kexec 'load', it may
-run out which would result in missing events in IMA log after the system
-soft reboots to the new Kernel.  This would result in IMA measurements
-getting out of sync with the TPM PCR quotes which would result in remote
-attestation failing for that system.  There is currently no way for the
-new Kernel to know if the IMA log TPM PCR quote out of sync problem is
-because of the missing measurements during kexec.
+The pull request you sent on Thu, 05 Oct 2023 11:53:30 -0400:
 
-Define two new IMA events, 'kexec_load' and 'kexec_execute', to be 
-measured at kexec 'load' and 'execute' respectively.
+> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.6-fix
 
-IMA measures 'boot_aggregate' as the first event when the system boots - 
-either cold boot or kexec soft boot.  In case when the system goes
-through multiple soft reboots, the number of 'boot_aggregate' events in
-IMA log corresponds to total number of boots (cold boot plus multiple
-kexec soft reboots).  With this change, there would be additional 
-'kexec_load' and 'kexec_execute' events in between the two 
-'boot_aggregate' events.  In rare cases, when the system runs out of
-memory during kexec soft reboot, 'kexec_execute' won't be copied since
-its one of the very last event measured just before kexec soft reboot.
-The absence of the event 'kexec_execute' in between the two 
-boot_aggregate' events would signal the attestation service that the IMA
-log on the system is out of sync with TPM PCR quotes and the system needs
-to be cold booted for the remote attestation to succeed again.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/cb84fb87f325ecd46be586b62623db5b2c0a792e
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
----
- security/integrity/ima/ima_kexec.c | 35 +++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+Thank you!
 
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 6cd5f46a7208..0f9c424fe808 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -17,6 +17,8 @@
- #include "ima.h"
- 
- #ifdef CONFIG_IMA_KEXEC
-+#define IMA_KEXEC_EVENT_LEN 128
-+
- struct seq_file ima_kexec_file;
- struct ima_kexec_hdr ima_khdr;
- static void *ima_kexec_buffer;
-@@ -34,6 +36,8 @@ void ima_clear_kexec_file(void)
- 
- static int ima_alloc_kexec_buf(size_t kexec_segment_size)
- {
-+	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
-+
- 	if ((kexec_segment_size == 0) ||
- 	    (kexec_segment_size == ULONG_MAX) ||
- 	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
-@@ -64,6 +68,12 @@ static int ima_alloc_kexec_buf(size_t kexec_segment_size)
- 	memset(&ima_khdr, 0, sizeof(ima_khdr));
- 	ima_khdr.version = 1;
- 
-+	scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
-+		  "kexec_segment_size=%lu;", kexec_segment_size);
-+
-+	ima_measure_critical_data("ima_kexec", "kexec_load", ima_kexec_event,
-+				  strlen(ima_kexec_event), false, NULL, 0);
-+
- 	return 0;
- }
- 
-@@ -198,6 +208,7 @@ void ima_add_kexec_buffer(struct kimage *image)
- static int ima_update_kexec_buffer(struct notifier_block *self,
- 				   unsigned long action, void *data)
- {
-+	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
- 	void *buf = NULL;
- 	size_t buf_size;
- 	bool resume = false;
-@@ -213,9 +224,31 @@ static int ima_update_kexec_buffer(struct notifier_block *self,
- 		return NOTIFY_OK;
- 	}
- 
-+	buf_size = ima_get_binary_runtime_size();
-+	scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
-+		  "kexec_segment_size=%lu;ima_binary_runtime_size=%lu;",
-+		  kexec_segment_size, buf_size);
-+
-+	/*
-+	 * This is one of the very last events measured by IMA before kexec
-+	 * soft rebooting into the new Kernal.
-+	 * This event can be used as a marker after the system soft reboots
-+	 * to the new Kernel to check if there was sufficient memory allocated
-+	 * at kexec 'load' to capture the events measured between the window
-+	 * of kexec 'load' and 'execute'.
-+	 * This event needs to be present in the IMA log, in between the two
-+	 * 'boot_aggregate' events that are logged for the previous boot and
-+	 * the current soft reboot. If it is not present after the system soft
-+	 * reboots into the new Kernel, it would mean the IMA log is not
-+	 * consistent with the TPM PCR quotes, and the system needs to be
-+	 * cold-booted for the attestation to succeed again.
-+	 */
-+	ima_measure_critical_data("ima_kexec", "kexec_execute",
-+				  ima_kexec_event, strlen(ima_kexec_event),
-+				  false, NULL, 0);
-+
- 	ima_measurements_suspend();
- 
--	buf_size = ima_get_binary_runtime_size();
- 	ret = ima_dump_measurement_list(&buf_size, &buf,
- 					kexec_segment_size);
- 
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
