@@ -2,139 +2,157 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CEA7BA748
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 19:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A8E7BA902
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 20:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbjJERGl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Oct 2023 13:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S229764AbjJES0O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 5 Oct 2023 14:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbjJERFh (ORCPT
+        with ESMTP id S230520AbjJES0N (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Oct 2023 13:05:37 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5223AB3;
-        Thu,  5 Oct 2023 09:51:58 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395GoQXH009724;
-        Thu, 5 Oct 2023 16:51:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=BSDOGUc+JL9tA2cDFhfNjolCDslHhA0NmpBlnFKh2vs=;
- b=doMomtAxPLQ9ZicS3gR4V1yDjOwEmPt8s1QXcjtKaQS/RMCUM2GEzlSxhxTyE6OfR6uF
- 4GXFi4FqasQNfyDZxDslmnBqnO7Hj50H28EhXDeDsNZ/cEj9HvVrcqSCeNo6VGsPBFzR
- TRpDgztUkbJwyfvV0FHqW6zR8YQG7nqtbfJbExBpmMq5str4XzA91tzRa6KMkYAmfeV8
- Gek2c8LfRqockq6UlM39zUceGG873zTtBtas+1zq83XSrNxKSd3lFbTqbaHNFUsBaeTZ
- rUnGhujRpdTV4+GitL4sA8gDEue8JsL+9ejw9LjCeG7NxQOoowenZZeYfY5epcXgMCGf AA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tj11082kg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 16:51:36 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 395GoSfC009908;
-        Thu, 5 Oct 2023 16:51:36 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tj11082hb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 16:51:36 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 395GROnB007444;
-        Thu, 5 Oct 2023 16:45:09 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3teygm5y1w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 16:45:09 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 395Gj8bs21168402
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 Oct 2023 16:45:08 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6FF0F58060;
-        Thu,  5 Oct 2023 16:45:08 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4E4E35803F;
-        Thu,  5 Oct 2023 16:45:07 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.90.188])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  5 Oct 2023 16:45:07 +0000 (GMT)
-Message-ID: <e1570b53b991301ee73be185244ef43487bf5961.camel@linux.ibm.com>
-Subject: Re: [PATCH] KEYS: trusted: Remove redundant static calls usage
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Sumit Garg <sumit.garg@linaro.org>, torvalds@linux-foundation.org,
-        jarkko@kernel.org, peterz@infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        jejb@linux.ibm.com, David.Kaplan@amd.com, bp@alien8.de,
-        mingo@kernel.org, x86@kernel.org, regressions@leemhuis.info,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Date:   Thu, 05 Oct 2023 12:45:06 -0400
-In-Reply-To: <20231005133306.379718-1-sumit.garg@linaro.org>
-References: <20231005133306.379718-1-sumit.garg@linaro.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: AZfxM2HWduYWXK5tKbH3MW8Ha74FZdKX
-X-Proofpoint-ORIG-GUID: 8EcC0hJpp4Xb9w9BWrOx4e9kmUmdazCA
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 5 Oct 2023 14:26:13 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DDEC98
+        for <linux-integrity@vger.kernel.org>; Thu,  5 Oct 2023 11:26:12 -0700 (PDT)
+Received: from tushar-HP-Pavilion-Laptop-15-eg0xxx.lan (unknown [50.46.228.62])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6558220B74C0;
+        Thu,  5 Oct 2023 11:26:11 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6558220B74C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1696530371;
+        bh=N5vQ184H6G3MuIeE4MfuKAUvX0Io9ATVvdzb7uoPAhw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Tk6lwQRiVpJJ7bBszNrAQJ0k3BifqUqjighblZYn/uvp0X9b5hofdwbprE/YdFr8q
+         fd3RleDD6KJvfX8xGza5UKtD92c+LwmiMtr4KJwApuw237FaGZtKZEO/rs3i6AAoTt
+         8acz2tj+Xw0dBP0zRQi3Xjr3/avSLHFlaXT0R7UA=
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+To:     zohar@linux.ibm.com, ebiederm@xmission.com, noodles@fb.com,
+        bauermann@kolabnow.com, kexec@lists.infradead.org,
+        linux-integrity@vger.kernel.org
+Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+Subject: [PATCH v2 0/7] ima: kexec: measure events between kexec load and execute
+Date:   Thu,  5 Oct 2023 11:25:55 -0700
+Message-Id: <20231005182602.634615-1-tusharsu@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-05_12,2023-10-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501
- mlxlogscore=999 malwarescore=0 mlxscore=0 lowpriorityscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310050132
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Summit,
+The current Kernel behavior is IMA measurements snapshot is taken at
+kexec 'load' and not at kexec 'execute'.  IMA log is then carried
+over to the new Kernel after kexec 'execute'.
 
-On Thu, 2023-10-05 at 19:03 +0530, Sumit Garg wrote:
-> Static calls invocations aren't well supported from module __init and
-> __exit functions, especially the static call from cleanup_trusted() led 
-> to a crash on x86 kernel with CONFIG_DEBUG_VIRTUAL=y.
+Some systems can be configured to call kexec 'load' first, and followed
+by kexec 'execute' after some time.  (as opposed to calling 'load' and
+'execute' in one single kexec command).  In such scenario, if new IMA
+measurements are added between kexec 'load' and kexec 'execute', the
+TPM PCRs are extended with the IMA events between 'load' and 'execute'.
+But those IMA events are not carried over to the new Kernel after kexec
+soft reboot.  This results in mismatch between TPM PCR quotes, and the
+actual IMA measurements list, after the system boots into the new kexec
+image.  This mismatch results in the remote attestation failing for that
+system.
 
-Split the above paragraph into two sentences.
+This patch series proposes a solution to solve this problem by allocating
+the necessary buffer at kexec 'load' time, and populating the buffer
+with the IMA measurements at kexec 'execute' time. 
 
-> However, the usage of static call invocations for trusted_key_init()
-> and trusted_key_exit() doesn't adds any value neither from performance
-> point and nor there is any security benefit.
+The solution includes:
+ - refactoring the existing code to allocate a buffer to hold IMA
+   measurements at kexec 'load', and dump the measurements at kexec
+   'execute'
 
-   don't add any value from either a performance or security
-perspective.
+ - ima functionality to suspend and resume measurements as needed during
+   buffer copy at kexec 'execute',
 
->  Hence switch to use indirect
-> function calls instead.
-> 
-> Note here that although it will fix the current crash reported. But
-> ultimately we need fix up static calls infrastructure to either support
-> its future usage from module __init and __exit functions or not.
+ - ima functionality for mapping the measurement list from the current
+   Kernel to the subsequent one, 
 
-The first line is a sentence fragment.  Please replace the period with
-a comma.
+ - necessary changes to the kexec_file_load syscall, enabling it to call
+   the ima functions,
 
-   report, ultimately the static call call infrastructure should ...
+ - registering a reboot notifier which gets called during kexec 
+   'execute',
 
-> 
-> Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Closes: https://lore.kernel.org/lkml/ZRhKq6e5nF%2F4ZIV1@fedora/#t
+ - introducing a new Kconfig option to configure the amount of memory
+   to be allocated for passing IMA log from the current Kernel to the
+   next,
+   
+ - introducing two new events to be measured by IMA during kexec, to
+   help diagnose if the IMA log was copied fully or partially, from the
+   current Kernel to the next,
 
-Replace "Closes" with "Link".
+The modifications proposed in this series ensure the integrity of the ima
+measurements is preserved across kexec soft reboots, thus significantly
+improving the security of the Kernel post kexec soft reboots.
 
-> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+There were previous attempts to fix this issue [1], [2], [3].  But they
+were not merged into the mainline Kernel.
+
+We took inspiration from the past work [1] and [2] while working on this
+patch series.
+
+References:
+-----------
+
+[1] [PATHC v2 5/9] ima: on soft reboot, save the measurement list
+https://lore.kernel.org/lkml/1472596811-9596-6-git-send-email-zohar@linux.vnet.ibm.com/
+
+[2] PATCH v2 4/6] kexec_file: Add mechanism to update kexec segments.
+https://lkml.org/lkml/2016/8/16/577
+
+[3] [PATCH 1/6] kexec_file: Add buffer hand-over support
+https://lore.kernel.org/linuxppc-dev/1466473476-10104-6-git-send-email-bauerman@linux.vnet.ibm.com/T/
+
+Change Log v2:
+ - Incorporated feedback from the community on v1 series.
+ - Refactored the existing ima_dump_measurement_list to move buffer
+   allocation functionality to ima_alloc_kexec_buf() function.
+ - Introduced a new Kconfig option to configure the memory.
+ - Updated the logic to copy the IMA log only in case of kexec soft 
+   reboot, and not on kexec crash.
+ - Updated the logic to copy as many IMA events as possible in case of
+   memory constraint, rather than just bailing out.
+ - Introduced two new events to be measured by IMA during kexec, to
+   help diagnose if the IMA log was copied fully or partially from the
+   current Kernel to the next.
+ - Refactored patches to ensure no warnings during individual patch
+   compilation.
+ - Used virt_to_page instead of phys_to_page.
+ - Updated patch descriptions as necessary.
+
+Tushar Sugandhi (7):
+  ima: refactor ima_dump_measurement_list to move memory allocation to a
+    separate function
+  ima: move ima_dump_measurement_list call from kexec load to execute
+  ima: kexec: map source pages containing IMA buffer to image post kexec
+    load
+  kexec: update kexec_file_load syscall to call ima_kexec_post_load
+  ima: suspend measurements while the buffer is being copied during
+    kexec reboot
+  ima: make the memory for events between kexec load and exec
+    configurable
+  ima: record log size at kexec load and execute
+
+ include/linux/ima.h                |   3 +
+ include/linux/kexec.h              |  13 ++
+ kernel/kexec_core.c                |  73 ++++++++-
+ kernel/kexec_file.c                |   8 +
+ security/integrity/ima/Kconfig     |   9 ++
+ security/integrity/ima/ima.h       |   2 +
+ security/integrity/ima/ima_kexec.c | 246 ++++++++++++++++++++++++-----
+ security/integrity/ima/ima_queue.c |  31 ++++
+ 8 files changed, 341 insertions(+), 44 deletions(-)
 
 -- 
-thanks,
-
-Mimi
+2.25.1
 
