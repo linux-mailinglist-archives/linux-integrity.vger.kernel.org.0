@@ -2,53 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085C97BA944
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Oct 2023 20:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC297BB127
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Oct 2023 07:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbjJESjk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 5 Oct 2023 14:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
+        id S230112AbjJFFSW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Oct 2023 01:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbjJESjh (ORCPT
+        with ESMTP id S230050AbjJFFSV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 5 Oct 2023 14:39:37 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E509790;
-        Thu,  5 Oct 2023 11:39:35 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 85911C433C7;
-        Thu,  5 Oct 2023 18:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696531175;
-        bh=LpfOYGc2Ux9Hp1qTff57llGXpA3isfqJznKBsCrgP/4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=YT7eH3AzkFqW7c6hDuXqSLlwsj0Zs47q/wCDm1YymuXGa+fuRspMFs3H5rDP5F05b
-         GvU4kOas9i9SIhG6i6azSuO3khgs1ze62u8bB68OL4UpqAenoA8BNTW2o5ABmUt7yO
-         /iMtu3PMsp4M9s1/OnJvcZrTvr9+IdbU6hVO8Gi0nE8utBCmbXotAUjWyrMH0FoQWH
-         PLdlLVK6Yf/on3Nw5m2rKAXIlwZG7Ff1FVBq4eAF4Ioq74aORdkPKasWuQiKANE7CI
-         +NbRP8ZCr20ek3CdUNg4GGQEmJKtxFzKOqRfhC/tD5j31PIo5ci3vW5AOBBcOr9u7X
-         ncjUOctORp8PA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 74E9FE632D2;
-        Thu,  5 Oct 2023 18:39:35 +0000 (UTC)
-Subject: Re: [GIT PULL] integrity: susbystem fixes for v6.6 (take 2)
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <d213722924c7942bc60fc6b7acf934c8bf6f74e0.camel@linux.ibm.com>
-References: <d213722924c7942bc60fc6b7acf934c8bf6f74e0.camel@linux.ibm.com>
-X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
-X-PR-Tracked-Message-Id: <d213722924c7942bc60fc6b7acf934c8bf6f74e0.camel@linux.ibm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.6-fix
-X-PR-Tracked-Commit-Id: 91e326563ee34509c35267808a4b1b3ea3db62a8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cb84fb87f325ecd46be586b62623db5b2c0a792e
-Message-Id: <169653117547.4044.15970699493171924740.pr-tracker-bot@kernel.org>
-Date:   Thu, 05 Oct 2023 18:39:35 +0000
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Fri, 6 Oct 2023 01:18:21 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6CCBF
+        for <linux-integrity@vger.kernel.org>; Thu,  5 Oct 2023 22:18:20 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3af6bd48093so1176607b6e.3
+        for <linux-integrity@vger.kernel.org>; Thu, 05 Oct 2023 22:18:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696569499; x=1697174299; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XUmzwFWm2fPwy4CB12OZE+k96a2phqo45N6Zs8xEb94=;
+        b=aazrwwBsCaVyDnt4g/1TjY2zt3RrEiu45pqCtbzhpZzjaoPvrL6KDxILE2efffc0ZM
+         6TuY8QchUSUG6JEypfMG62ASzbQLQQzAzgeJud7h3p/xQ2XCxx9XqfYjcdl/DO88wD9M
+         KxAwB5wY8DMQJO72lUzV5sStH+7Pn32BiPqFqL5STu3H9RhqZWWYVbygTTcZO/fKfpLD
+         pd+4MSUEIoAXzGR2sOk4cExDhO2WEI6KrK2RRrjley6FEWiY+wnmv9yPfPTf9ZWzxu19
+         6nWijgppG9nVBpWzCB0BN4zy/lGr0NIBA5DliqXAnsu+/1x/u1Kkr26cusSQkzX6oxZM
+         fGXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696569499; x=1697174299;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XUmzwFWm2fPwy4CB12OZE+k96a2phqo45N6Zs8xEb94=;
+        b=Ikyvn4my7uXLgrFvNPGUfQZ4gD9r9TLm7zLthvxS0ZhEU+0ORA2QHvTNTXa3bB+0xi
+         gk8UbzwyCr2Om/03TNmCLcrqttzzBpJwEjltoYCtUn95sN4JoAt+7IcZ64x0UXEkLkIe
+         sWrREtggVy+BP11mz+nEwNPJEZ0MhVYoDrNaiskOxs1NsNVHS4ailvw4BGcLio2sDlfi
+         HAQNn0STONnwxIGX06kB2g6n2S9GtPm31nywr1M9AFk1F34fPvVUvV3nmyxpecPUx705
+         XZ1oxuuYrciHQfuqBzWzMR3fs2PYypjj5DeFaQhDzQ/pvngnkdxPLuI7Mzipiip5DuCh
+         nW7g==
+X-Gm-Message-State: AOJu0YwTf9sfcZCBEm3ZKB/4B/0LWzAxrdIBXc5AIl/1WMa9uK0ZGdhk
+        xeGfkacEPrDuAmauDlu8CYH6GZIjp3YpsQOyZQM=
+X-Google-Smtp-Source: AGHT+IGRKyv+Xkec+BOkW8HPio9rp9UbeWoHrfePkC+ZYEbRjOP+qBayFrCJkx5nft+RibIDm5hi0w==
+X-Received: by 2002:a05:6808:144d:b0:3ad:c5f3:36c6 with SMTP id x13-20020a056808144d00b003adc5f336c6mr8475294oiv.38.1696569499432;
+        Thu, 05 Oct 2023 22:18:19 -0700 (PDT)
+Received: from sumit-X1.. ([223.178.210.23])
+        by smtp.gmail.com with ESMTPSA id w25-20020a639359000000b00553dcfc2179sm2393874pgm.52.2023.10.05.22.18.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 22:18:19 -0700 (PDT)
+From:   Sumit Garg <sumit.garg@linaro.org>
+To:     torvalds@linux-foundation.org, jarkko@kernel.org,
+        peterz@infradead.org, zohar@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jejb@linux.ibm.com, David.Kaplan@amd.com, bp@alien8.de,
+        mingo@kernel.org, x86@kernel.org, regressions@leemhuis.info,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: [PATCH v2] KEYS: trusted: Remove redundant static calls usage
+Date:   Fri,  6 Oct 2023 10:48:01 +0530
+Message-Id: <20231006051801.423973-1-sumit.garg@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,15 +72,81 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Thu, 05 Oct 2023 11:53:30 -0400:
+Static calls invocations aren't well supported from module __init and
+__exit functions. Especially the static call from cleanup_trusted() led
+to a crash on x86 kernel with CONFIG_DEBUG_VIRTUAL=y.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.6-fix
+However, the usage of static call invocations for trusted_key_init()
+and trusted_key_exit() don't add any value from either a performance or
+security perspective. Hence switch to use indirect function calls instead.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cb84fb87f325ecd46be586b62623db5b2c0a792e
+Note here that although it will fix the current crash report, ultimately
+the static call infrastructure should be fixed to either support its
+future usage from module __init and __exit functions or not.
 
-Thank you!
+Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Link: https://lore.kernel.org/lkml/ZRhKq6e5nF%2F4ZIV1@fedora/#t
+Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+---
 
+Changes in v2:
+- Polish commit message as per comments from Mimi
+
+ security/keys/trusted-keys/trusted_core.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index c6fc50d67214..85fb5c22529a 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -44,13 +44,12 @@ static const struct trusted_key_source trusted_key_sources[] = {
+ #endif
+ };
+ 
+-DEFINE_STATIC_CALL_NULL(trusted_key_init, *trusted_key_sources[0].ops->init);
+ DEFINE_STATIC_CALL_NULL(trusted_key_seal, *trusted_key_sources[0].ops->seal);
+ DEFINE_STATIC_CALL_NULL(trusted_key_unseal,
+ 			*trusted_key_sources[0].ops->unseal);
+ DEFINE_STATIC_CALL_NULL(trusted_key_get_random,
+ 			*trusted_key_sources[0].ops->get_random);
+-DEFINE_STATIC_CALL_NULL(trusted_key_exit, *trusted_key_sources[0].ops->exit);
++static void (*trusted_key_exit)(void);
+ static unsigned char migratable;
+ 
+ enum {
+@@ -359,19 +358,16 @@ static int __init init_trusted(void)
+ 		if (!get_random)
+ 			get_random = kernel_get_random;
+ 
+-		static_call_update(trusted_key_init,
+-				   trusted_key_sources[i].ops->init);
+ 		static_call_update(trusted_key_seal,
+ 				   trusted_key_sources[i].ops->seal);
+ 		static_call_update(trusted_key_unseal,
+ 				   trusted_key_sources[i].ops->unseal);
+ 		static_call_update(trusted_key_get_random,
+ 				   get_random);
+-		static_call_update(trusted_key_exit,
+-				   trusted_key_sources[i].ops->exit);
++		trusted_key_exit = trusted_key_sources[i].ops->exit;
+ 		migratable = trusted_key_sources[i].ops->migratable;
+ 
+-		ret = static_call(trusted_key_init)();
++		ret = trusted_key_sources[i].ops->init();
+ 		if (!ret)
+ 			break;
+ 	}
+@@ -388,7 +384,8 @@ static int __init init_trusted(void)
+ 
+ static void __exit cleanup_trusted(void)
+ {
+-	static_call_cond(trusted_key_exit)();
++	if (trusted_key_exit)
++		(*trusted_key_exit)();
+ }
+ 
+ late_initcall(init_trusted);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
+
