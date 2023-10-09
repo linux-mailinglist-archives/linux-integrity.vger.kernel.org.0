@@ -2,131 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852997BD4D0
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Oct 2023 10:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839777BD506
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Oct 2023 10:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345461AbjJIIDi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Oct 2023 04:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S232759AbjJIIVH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Oct 2023 04:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345459AbjJIIDh (ORCPT
+        with ESMTP id S232666AbjJIIVG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Oct 2023 04:03:37 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8469F;
-        Mon,  9 Oct 2023 01:03:35 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-65d0da28fa8so26480546d6.0;
-        Mon, 09 Oct 2023 01:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696838614; x=1697443414; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q1nIHKqURNgS6hsXoVPp4SWJQjc4XuiXJwYAaygJdUs=;
-        b=O+VS9DfjTBT0svlWaMSsLAm5iuR/plADJ3kEeUsUeDrYY/EUJcICy7/zaOfc251zvE
-         ay2wXPUBQKfvXSbPgyD5M3aoMRkYaom618l1oqT/l1my5bW+A9UU/Fj2Va1Q/xL+G9uq
-         pyig8DbWfExhZwr4vZQTy7GoNCld1JyhjiozxNrpOU3mX7uiPP9kIsyEn5oSfFYnol1L
-         SGw/hfdOiVnYRJy2pubCm3sd+aCJHvRlic2BVVD32pX7tgGcXYGIrGZUe+Vl9oiy50qX
-         npUrKAVbFhtiawvJZ7P6M4Mz9OTUzA26JXRbGh9ioB8BJQ+3Zu+FmqNKX3hw6fs49MAX
-         bb0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696838614; x=1697443414;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q1nIHKqURNgS6hsXoVPp4SWJQjc4XuiXJwYAaygJdUs=;
-        b=V7GOhFbIWgHY0uuN0S2Ns+pQrrqd5vbp9+Q6W9ppn9ZcCvjBklvpUothJUnnpeoABz
-         HpFRL32UVUBeDbGNi7sxvoocUhJlbCZ8Kypgq7Iz5vMzlc3aIpxREq3pnZVs9vZmzSra
-         WW/kNVlmy3FBwBdC2eSFVtqWI8I7mfKK175z4DS3AZLF+UkIFMAIeWYqHsti3D2O7shm
-         Nk2NOa8egLsOXsqaJoGD0nqZDIWO9e43lFeJG+gpjV1OjnuMsMfjXA/b5uMB848Nrqou
-         hXPfN81ZU+hV0kwLP9iZl1cskZYE7EFslXAizQmZCTeZa40twhrA/Yx5tMnEsiER25+Z
-         3hMg==
-X-Gm-Message-State: AOJu0Yz3OEyxiZKgGdaEaKrhgIMQRyZ4FoxPagKVMzgd7bqHbvrdukkI
-        IzjKK4iJxb+cWh53yg89Z4HaloHy/2M4Rev1U34=
-X-Google-Smtp-Source: AGHT+IE3M5JCzAidNsX/AQ9FXIbzJ83NQTWibMotfaF+6g7HMZ3CNVIDHqyBp98AfSy75fSkxRcBkyLOhesTIUqOS20=
-X-Received: by 2002:a0c:e804:0:b0:656:2696:9947 with SMTP id
- y4-20020a0ce804000000b0065626969947mr14927806qvn.18.1696838614572; Mon, 09
- Oct 2023 01:03:34 -0700 (PDT)
+        Mon, 9 Oct 2023 04:21:06 -0400
+X-Greylist: delayed 324 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 Oct 2023 01:21:04 PDT
+Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5B58F
+        for <linux-integrity@vger.kernel.org>; Mon,  9 Oct 2023 01:21:04 -0700 (PDT)
+Received: by mail.durme.pl (Postfix, from userid 1002)
+        id EC4D44C6FB; Mon,  9 Oct 2023 08:15:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
+        t=1696839338; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=F87XkXajy6oYmwfaTlaibzT3cyZdd25EqkyCJ9FPFBvqR0n0+mtFckuiOS3LRv3Bf
+         GmWeNTNSglBhNq0/0NVRRy8ojEErAIpN3we2H8Kjh26extp38sDhXqnkyadGvDUk1R
+         mdq2FD3h2q3kjMDZ0bGoegPeIhfEx8Elq/Hc5NbVDDVaOGIXwFXG/vG5j6aiCDOgw6
+         ntkLH0j+FEU57amHJ9urvmt3UKTMxwi8orNrRjg3FIcO2psM8cXQoUxG5rjhWt7TZZ
+         UjKsAceP+FIq8ZuxxYo1qNcNvSrjX953SrEGOOw3tDC5MQ1/vV20m1HvOyVTdA0Njl
+         yAIuhVVcDnKpQ==
+Received: by mail.durme.pl for <linux-integrity@vger.kernel.org>; Mon,  9 Oct 2023 08:15:04 GMT
+Message-ID: <20231009064501-0.1.4t.nm8s.0.1a598mccgi@durme.pl>
+Date:   Mon,  9 Oct 2023 08:15:04 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
+To:     <linux-integrity@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.durme.pl
 MIME-Version: 1.0
-References: <20231007084433.1417887-1-amir73il@gmail.com> <20231007084433.1417887-2-amir73il@gmail.com>
- <20231009064330.GF800259@ZenIV>
-In-Reply-To: <20231009064330.GF800259@ZenIV>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Mon, 9 Oct 2023 11:03:23 +0300
-Message-ID: <CAOQ4uxj76yH+L6fE+XWsnXGx-ZFC+CCTxD0BZ9NO6UN7trSRZw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] fs: get mnt_writers count for an open backing
- file's real path
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NIXSPAM_IXHASH,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [217.182.69.186 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: durme.pl]
+        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
+        *      [score: 0.0298]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Oct 9, 2023 at 9:43=E2=80=AFAM Al Viro <viro@zeniv.linux.org.uk> wr=
-ote:
->
-> On Sat, Oct 07, 2023 at 11:44:31AM +0300, Amir Goldstein wrote:
-> > +static inline void file_put_write_access(struct file *file)
-> > +{
-> > +     put_write_access(file->f_inode);
-> > +     mnt_put_write_access(file->f_path.mnt);
-> > +     if (unlikely(file->f_mode & FMODE_BACKING)) {
-> > +             struct path *real_path =3D backing_file_real_path(file);
-> > +
-> > +             if (real_path->mnt)
-> > +                     mnt_put_write_access(real_path->mnt);
->
-> IDGI.  Where do we get FMODE_BACKING combined with NULL real_path.mnt *AN=
-D*
-> put_file_access() possibly called?  Or file_get_write_access(), for
-> that matter...
+Dzie=C5=84 dobry,
 
-Right.
-I was being over prudent here.
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
->
-> FMODE_BACKING is set only in alloc_empty_backing_file().  The only caller
-> is backing_file_open(), which immediately sets real_path to its third
-> argument.  That could only come from ovl_open_realfile().  And if that
-> had been called with buggered struct path, it would have already blown
-> up on mnt_idmap(realpath->mnt).
->
-> The only interval where such beasts exist is from
->         ff->file.f_mode |=3D FMODE_BACKING | FMODE_NOACCOUNT;
->         return &ff->file;
-> in alloc_empty_backing_file() through
->
->         f->f_path =3D *path;
->         path_get(real_path);
->         *backing_file_real_path(f) =3D *real_path;
->
-> in backing_file_open().  Where would that struct file (just allocated,
-> never seen outside of local variables in those two scopes) be passed
-> to get_file_write_access() or put_file_access()?
->
-> Or am I misreading something?
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-No. You are right.
-I admit that I did consider adding use cases in the future
-where a backing_file real_path is initialized lazily, but that
-is not the case with current overlayfs code, so we don't
-need to worry about that now.
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-Thanks,
-Amir.
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+
+
+Pozdrawiam
+Krystian Wieczorek
