@@ -2,105 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516BA7BEA28
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Oct 2023 20:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F89A7BEAEF
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Oct 2023 21:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378139AbjJISxV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Oct 2023 14:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S1378476AbjJITw6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Oct 2023 15:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378237AbjJISxT (ORCPT
+        with ESMTP id S1378496AbjJITw5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Oct 2023 14:53:19 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE6B4;
-        Mon,  9 Oct 2023 11:53:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B+aCRv+cYfcjMprkaIjsVznZpDwZanWLGMURzn+VRao=; b=M+xQB3qSAS3zQPFeJiJlUv0jLd
-        MAGDkccQTEr3MLwGXKgDPSdN+CHP0fP6ljdlspEf0Scw8HnE77un3TLK8zTvLO1rCCFS7qM8+V8zm
-        DcDSC8pjNYvcgw88r8zE03y/QbWK7z3EjzM+dvOgay3df+Bz5Wu4m6BOZQD6xE9OrI4cTKCld9xUU
-        bKC3B1YeRijMtciU+WPauzMQfTkeX5WG1/7zuAbu3fnU8IB93EJyq33u5RCzAAE4rMFYrlvEKoMH7
-        P7EgWTNC+Jkc3oG4Qt7lpLEvxQnpvF4ya6GgynzNmiFdUMA+nkRkYvIfrk78QtDd582Q8UJopOrTJ
-        anU0spQg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qpvNL-00HHRV-2f;
-        Mon, 09 Oct 2023 18:53:08 +0000
-Date:   Mon, 9 Oct 2023 19:53:07 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
+        Mon, 9 Oct 2023 15:52:57 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEC2BA;
+        Mon,  9 Oct 2023 12:52:54 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B98E3C433C8;
+        Mon,  9 Oct 2023 19:52:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696881173;
+        bh=kgSu1Cqs2OuHn6PG4+EYDe0mVAXd0o16yDhpNDyy/To=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mhdPJ8HqdLGlIJNxp5NZVxMUyfblvMGfJcgBLM0kNarSBE75oieRwZWrOIO27fbc6
+         l0atd0yFegWWyHlQfkdsxSbycNJlTb0v04VY3kDgV7PoBm/t8xrdTEy7A4G4clJheF
+         oHJuOjuOB76WiT5tHFPqQWbJySM3f675Yif/JuxgcRyYt3dEGfI/PAGClsLDn1KPzS
+         IU7YB7Z1KKoyr2D/ThRqwfXZdFAGRUJ/Lt+cn7xgb0p4NWOsYcrpCFrwzhsgA4M0MS
+         f+Kp7rQ7WL0KoYbH0IjnPkVAXI1xcR0qVBj/Eltue5vb8Tx9Cw6x3pTOfVOqoWjb3Q
+         YALHEZ71AkBfQ==
+Date:   Mon, 9 Oct 2023 13:52:45 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         Paul Moore <paul@paul-moore.com>,
         James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] fs: store real path instead of fake path in
- backing file f_path
-Message-ID: <20231009185307.GI800259@ZenIV>
-References: <20231007084433.1417887-1-amir73il@gmail.com>
- <20231007084433.1417887-4-amir73il@gmail.com>
- <20231009074809.GH800259@ZenIV>
- <CAOQ4uxhSEDF8G8_7Zr+OnMq7miNen6O=AXQV1-xAs7ABvXs0Mg@mail.gmail.com>
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] ima: Add __counted_by for struct modsig and use struct_size()
+Message-ID: <ZSRaDcJNARUUWUwS@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOQ4uxhSEDF8G8_7Zr+OnMq7miNen6O=AXQV1-xAs7ABvXs0Mg@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Oct 09, 2023 at 11:25:38AM +0300, Amir Goldstein wrote:
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-> It's not important. I don't mind dropping it.
-> 
-> If you dislike that name f_path(), I guess you are not a fan of
-> d_inode() either...
+Also, relocate `hdr->raw_pkcs7_len = sig_len;` so that the __counted_by
+annotation has effect, and flex-array member `raw_pkcs7` can be properly
+bounds-checked at run-time.
 
-In case of d_inode() there's an opposition between d_inode() and
-d_inode_rcu(), and that bears useful information.  In case of
-f_path()...
+While there, use struct_size() helper, instead of the open-coded
+version, to calculate the size for the allocation of the whole
+flexible structure, including of course, the flexible-array member.
 
-> FYI, I wanted to do a file_path() accessor to be consistent with
-> file_inode() and file_dentry(), alas file_path() is used for something
-> completely different.
-> 
-> I find it confusing that {file,dentry,d}_path() do not return a path
-> but a path string, but whatever.
+This code was found with the help of Coccinelle, and audited and
+fixed manually.
 
-*blink*
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ security/integrity/ima/ima_modsig.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-How would one possibly produce struct path (i.e. mount/dentry pair)
-out of dentry?
+diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima/ima_modsig.c
+index 3e7bee30080f..3265d744d5ce 100644
+--- a/security/integrity/ima/ima_modsig.c
++++ b/security/integrity/ima/ima_modsig.c
+@@ -29,7 +29,7 @@ struct modsig {
+ 	 * storing the signature.
+ 	 */
+ 	int raw_pkcs7_len;
+-	u8 raw_pkcs7[];
++	u8 raw_pkcs7[] __counted_by(raw_pkcs7_len);
+ };
+ 
+ /*
+@@ -65,10 +65,11 @@ int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
+ 	buf_len -= sig_len + sizeof(*sig);
+ 
+ 	/* Allocate sig_len additional bytes to hold the raw PKCS#7 data. */
+-	hdr = kzalloc(sizeof(*hdr) + sig_len, GFP_KERNEL);
++	hdr = kzalloc(struct_size(hdr, raw_pkcs7, sig_len), GFP_KERNEL);
+ 	if (!hdr)
+ 		return -ENOMEM;
+ 
++	hdr->raw_pkcs7_len = sig_len;
+ 	hdr->pkcs7_msg = pkcs7_parse_message(buf + buf_len, sig_len);
+ 	if (IS_ERR(hdr->pkcs7_msg)) {
+ 		rc = PTR_ERR(hdr->pkcs7_msg);
+@@ -77,7 +78,6 @@ int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
+ 	}
+ 
+ 	memcpy(hdr->raw_pkcs7, buf + buf_len, sig_len);
+-	hdr->raw_pkcs7_len = sig_len;
+ 
+ 	/* We don't know the hash algorithm yet. */
+ 	hdr->hash_algo = HASH_ALGO__LAST;
+-- 
+2.34.1
 
-Anyway, I admit that struct path hadn't been a great name to start with;
-it's basically "location in namespace", and it clashes with the use of
-the same word for "string interpreted to get a location in namespace".
-
-Originally it's been just in the pathname resolution internals; TBH,
-I don't remember I had specific plans regarding converting such
-pairs (a plenty of those in the tree at the time) back then.
-<checks the historical tree>
-<checks old mail archives>
-
-Probably hopeless to reconstruct the details, I'm afraid - everything
-else aside, the timestamps in that patch are in the first half of
-the day on Apr 29 2002; (hopefully) tested and sent out at about
-6pm.  Followed by sitting down for birthday celebration, of all things,
-so the details of rationale for name choice would probably be hard
-to recover on the next morning, nevermind 21 years later ;-)
-
-Bringing it out of fs/namei.c (into include/linux/namei.h) had happened
-in late 2006 (by Jeff Sipek) and after that it was too late to change
-the name; I'm still not sure what name would be good for that, TBH...
