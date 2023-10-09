@@ -2,57 +2,36 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC547BE51D
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Oct 2023 17:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 516BA7BEA28
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Oct 2023 20:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377766AbjJIPiE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Oct 2023 11:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S1378139AbjJISxV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Oct 2023 14:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377773AbjJIPht (ORCPT
+        with ESMTP id S1378237AbjJISxT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Oct 2023 11:37:49 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541A4133;
-        Mon,  9 Oct 2023 08:37:26 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-405417465aaso45093405e9.1;
-        Mon, 09 Oct 2023 08:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696865845; x=1697470645; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a+HQeegMFxdTmIDUpikNUTP1EtMcJMa5JsrdaHT+oHI=;
-        b=RTONlsEOkrCOArytf6/vvcav2wand0FWjRSCuvH9GyLIQO1XlpiBzEl0EKlKHRFy+Z
-         qUL21DjsuE42Pgt30EjUF6H/Xcu08KR+j2lExMP6wwnJT+A9rD7tw0lJ/oWv7b9NKKoS
-         AuS44COFYNCO/vcYZVmZBISvd7jbJ1MWWJ49aOHwTR/YLDVw20EP0KWhtZrULA7w8DMn
-         4d5BaTaHrRyc9u276BgiAogZ2uGC5N4VcHDTIyj1YuiNOUzHllJp9LzakbQpjNc+j2UP
-         b37JUnKKIcwXra05GwzeIe9O7f1PiPD3gg7jmbCQpcJFbdbxNe9QrjvVvPLoeOHGPbXx
-         YBLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696865845; x=1697470645;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a+HQeegMFxdTmIDUpikNUTP1EtMcJMa5JsrdaHT+oHI=;
-        b=OlKvk2PvEKCdSeROV5M8EMBDIcwFZO7HsIieNLhcZBt8Gbzky2FM5yVbUSzqs917LG
-         6OJ6Ua6ew+elWHZr4pDmMnu8TpQ7u2LwFDyJ6lA4PnDK7oVkc3PW1U7yJo1AO1IB+qTo
-         8MRkMg45hXpgA+tjmAkxVHZqcdZZnZ1lsRsmIABur5fY7nK6HzSNdmxaAV1NdfvNA8qb
-         jh0HcOJAcCnkEcmPmWUN1yG42jRQvYjvmm2ocytE6/Fm8huRKzoBpWWWrHTziursrwUs
-         fV6OpquDFTW8/gZCFzhTR7bVY5qRYzBUmJvvzITISpxz1F1o09VWEUXW9+3XPgYNF82L
-         yQbA==
-X-Gm-Message-State: AOJu0YwWtR2Xq/nZNioVse/xkcCTqPqOnk1ZcjdBCiQbTT6hIQRLVcKB
-        ASrjdqmlBBdi50vgxwP6tnA=
-X-Google-Smtp-Source: AGHT+IFgK5KMOpEDr9wVY4CaERQNmSjbu5seeXhEaWKuEXZ/0l5iKQo6/MWCUvdOiy6PL/vWXvZQ0g==
-X-Received: by 2002:adf:f74f:0:b0:319:68ba:7c8e with SMTP id z15-20020adff74f000000b0031968ba7c8emr13896792wrp.38.1696865844676;
-        Mon, 09 Oct 2023 08:37:24 -0700 (PDT)
-Received: from amir-ThinkPad-T480.lan ([5.29.249.86])
-        by smtp.gmail.com with ESMTPSA id g7-20020a056000118700b003143c9beeaesm9939924wrx.44.2023.10.09.08.37.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 08:37:24 -0700 (PDT)
-From:   Amir Goldstein <amir73il@gmail.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Mon, 9 Oct 2023 14:53:19 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE6B4;
+        Mon,  9 Oct 2023 11:53:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B+aCRv+cYfcjMprkaIjsVznZpDwZanWLGMURzn+VRao=; b=M+xQB3qSAS3zQPFeJiJlUv0jLd
+        MAGDkccQTEr3MLwGXKgDPSdN+CHP0fP6ljdlspEf0Scw8HnE77un3TLK8zTvLO1rCCFS7qM8+V8zm
+        DcDSC8pjNYvcgw88r8zE03y/QbWK7z3EjzM+dvOgay3df+Bz5Wu4m6BOZQD6xE9OrI4cTKCld9xUU
+        bKC3B1YeRijMtciU+WPauzMQfTkeX5WG1/7zuAbu3fnU8IB93EJyq33u5RCzAAE4rMFYrlvEKoMH7
+        P7EgWTNC+Jkc3oG4Qt7lpLEvxQnpvF4ya6GgynzNmiFdUMA+nkRkYvIfrk78QtDd582Q8UJopOrTJ
+        anU0spQg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qpvNL-00HHRV-2f;
+        Mon, 09 Oct 2023 18:53:08 +0000
+Date:   Mon, 9 Oct 2023 19:53:07 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
         Miklos Szeredi <miklos@szeredi.hu>,
         Paul Moore <paul@paul-moore.com>,
         James Morris <jmorris@namei.org>,
@@ -61,248 +40,67 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
         linux-fsdevel@vger.kernel.org
-Subject: [PATCH v3 3/3] fs: store real path instead of fake path in backing file f_path
-Date:   Mon,  9 Oct 2023 18:37:12 +0300
-Message-Id: <20231009153712.1566422-4-amir73il@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231009153712.1566422-1-amir73il@gmail.com>
-References: <20231009153712.1566422-1-amir73il@gmail.com>
+Subject: Re: [PATCH v2 3/3] fs: store real path instead of fake path in
+ backing file f_path
+Message-ID: <20231009185307.GI800259@ZenIV>
+References: <20231007084433.1417887-1-amir73il@gmail.com>
+ <20231007084433.1417887-4-amir73il@gmail.com>
+ <20231009074809.GH800259@ZenIV>
+ <CAOQ4uxhSEDF8G8_7Zr+OnMq7miNen6O=AXQV1-xAs7ABvXs0Mg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxhSEDF8G8_7Zr+OnMq7miNen6O=AXQV1-xAs7ABvXs0Mg@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-A backing file struct stores two path's, one "real" path that is referring
-to f_inode and one "fake" path, which should be displayed to users in
-/proc/<pid>/maps.
+On Mon, Oct 09, 2023 at 11:25:38AM +0300, Amir Goldstein wrote:
 
-There is a lot more potential code that needs to know the "real" path, then
-code that needs to know the "fake" path.
+> It's not important. I don't mind dropping it.
+> 
+> If you dislike that name f_path(), I guess you are not a fan of
+> d_inode() either...
 
-Instead of code having to request the "real" path with file_real_path(),
-store the "real" path in f_path and require code that needs to know the
-"fake" path request it with file_user_path().
-Replace the file_real_path() helper with a simple const accessor f_path().
+In case of d_inode() there's an opposition between d_inode() and
+d_inode_rcu(), and that bears useful information.  In case of
+f_path()...
 
-After this change, file_dentry() is not expected to observe any files
-with overlayfs f_path and real f_inode, so the call to ->d_real() should
-not be needed.  Leave the ->d_real() call for now and add an assertion
-in ovl_d_real() to catch if we made wrong assumptions.
+> FYI, I wanted to do a file_path() accessor to be consistent with
+> file_inode() and file_dentry(), alas file_path() is used for something
+> completely different.
+> 
+> I find it confusing that {file,dentry,d}_path() do not return a path
+> but a path string, but whatever.
 
-Suggested-by: Miklos Szeredi <miklos@szeredi.hu>
-Link: https://lore.kernel.org/r/CAJfpegtt48eXhhjDFA1ojcHPNKj3Go6joryCPtEFAKpocyBsnw@mail.gmail.com/
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
----
- fs/file_table.c          | 12 ++++++------
- fs/internal.h            |  2 +-
- fs/open.c                | 23 +++++++++++------------
- fs/overlayfs/super.c     | 16 ++++++++++++----
- include/linux/fs.h       | 22 ++++------------------
- include/linux/fsnotify.h |  3 +--
- 6 files changed, 35 insertions(+), 43 deletions(-)
+*blink*
 
-diff --git a/fs/file_table.c b/fs/file_table.c
-index 08fd1dd6d863..fa92743ba6a9 100644
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -44,10 +44,10 @@ static struct kmem_cache *filp_cachep __read_mostly;
- 
- static struct percpu_counter nr_files __cacheline_aligned_in_smp;
- 
--/* Container for backing file with optional real path */
-+/* Container for backing file with optional user path */
- struct backing_file {
- 	struct file file;
--	struct path real_path;
-+	struct path user_path;
- };
- 
- static inline struct backing_file *backing_file(struct file *f)
-@@ -55,11 +55,11 @@ static inline struct backing_file *backing_file(struct file *f)
- 	return container_of(f, struct backing_file, file);
- }
- 
--struct path *backing_file_real_path(struct file *f)
-+struct path *backing_file_user_path(struct file *f)
- {
--	return &backing_file(f)->real_path;
-+	return &backing_file(f)->user_path;
- }
--EXPORT_SYMBOL_GPL(backing_file_real_path);
-+EXPORT_SYMBOL_GPL(backing_file_user_path);
- 
- static inline void file_free(struct file *f)
- {
-@@ -68,7 +68,7 @@ static inline void file_free(struct file *f)
- 		percpu_counter_dec(&nr_files);
- 	put_cred(f->f_cred);
- 	if (unlikely(f->f_mode & FMODE_BACKING)) {
--		path_put(backing_file_real_path(f));
-+		path_put(backing_file_user_path(f));
- 		kfree(backing_file(f));
- 	} else {
- 		kmem_cache_free(filp_cachep, f);
-diff --git a/fs/internal.h b/fs/internal.h
-index 4e93a685bdaa..58e43341aebf 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -101,7 +101,7 @@ static inline void file_put_write_access(struct file *file)
- 	put_write_access(file->f_inode);
- 	mnt_put_write_access(file->f_path.mnt);
- 	if (unlikely(file->f_mode & FMODE_BACKING))
--		mnt_put_write_access(backing_file_real_path(file)->mnt);
-+		mnt_put_write_access(backing_file_user_path(file)->mnt);
- }
- 
- static inline void put_file_access(struct file *file)
-diff --git a/fs/open.c b/fs/open.c
-index fe63e236da22..02dc608d40d8 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -881,7 +881,7 @@ static inline int file_get_write_access(struct file *f)
- 	if (unlikely(error))
- 		goto cleanup_inode;
- 	if (unlikely(f->f_mode & FMODE_BACKING)) {
--		error = mnt_get_write_access(backing_file_real_path(f)->mnt);
-+		error = mnt_get_write_access(backing_file_user_path(f)->mnt);
- 		if (unlikely(error))
- 			goto cleanup_mnt;
- 	}
-@@ -1182,20 +1182,19 @@ EXPORT_SYMBOL_GPL(kernel_file_open);
- 
- /**
-  * backing_file_open - open a backing file for kernel internal use
-- * @path:	path of the file to open
-+ * @user_path:	path that the user reuqested to open
-  * @flags:	open flags
-  * @real_path:	path of the backing file
-  * @cred:	credentials for open
-  *
-  * Open a backing file for a stackable filesystem (e.g., overlayfs).
-- * @path may be on the stackable filesystem and backing inode on the
-- * underlying filesystem. In this case, we want to be able to return
-- * the @real_path of the backing inode. This is done by embedding the
-- * returned file into a container structure that also stores the path of
-- * the backing inode on the underlying filesystem, which can be
-- * retrieved using backing_file_real_path().
-+ * @user_path may be on the stackable filesystem and @real_path on the
-+ * underlying filesystem.  In this case, we want to be able to return the
-+ * @user_path of the stackable filesystem. This is done by embedding the
-+ * returned file into a container structure that also stores the stacked
-+ * file's path, which can be retrieved using backing_file_user_path().
-  */
--struct file *backing_file_open(const struct path *path, int flags,
-+struct file *backing_file_open(const struct path *user_path, int flags,
- 			       const struct path *real_path,
- 			       const struct cred *cred)
- {
-@@ -1206,9 +1205,9 @@ struct file *backing_file_open(const struct path *path, int flags,
- 	if (IS_ERR(f))
- 		return f;
- 
--	f->f_path = *path;
--	path_get(real_path);
--	*backing_file_real_path(f) = *real_path;
-+	path_get(user_path);
-+	*backing_file_user_path(f) = *user_path;
-+	f->f_path = *real_path;
- 	error = do_dentry_open(f, d_inode(real_path->dentry), NULL);
- 	if (error) {
- 		fput(f);
-diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
-index 3fa2416264a4..400a925a8ad2 100644
---- a/fs/overlayfs/super.c
-+++ b/fs/overlayfs/super.c
-@@ -34,14 +34,22 @@ static struct dentry *ovl_d_real(struct dentry *dentry,
- 	struct dentry *real = NULL, *lower;
- 	int err;
- 
--	/* It's an overlay file */
-+	/*
-+	 * vfs is only expected to call d_real() with NULL from d_real_inode()
-+	 * and with overlay inode from file_dentry() on an overlay file.
-+	 *
-+	 * TODO: remove @inode argument from d_real() API, remove code in this
-+	 * function that deals with non-NULL @inode and remove d_real() call
-+	 * from file_dentry().
-+	 */
- 	if (inode && d_inode(dentry) == inode)
- 		return dentry;
-+	else if (inode)
-+		goto bug;
- 
- 	if (!d_is_reg(dentry)) {
--		if (!inode || inode == d_inode(dentry))
--			return dentry;
--		goto bug;
-+		/* d_real_inode() is only relevant for regular files */
-+		return dentry;
- 	}
- 
- 	real = ovl_dentry_upper(dentry);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index a8e4e1cac48e..b0624d83c2db 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2451,26 +2451,10 @@ struct file *dentry_open(const struct path *path, int flags,
- 			 const struct cred *creds);
- struct file *dentry_create(const struct path *path, int flags, umode_t mode,
- 			   const struct cred *cred);
--struct file *backing_file_open(const struct path *path, int flags,
-+struct file *backing_file_open(const struct path *user_path, int flags,
- 			       const struct path *real_path,
- 			       const struct cred *cred);
--struct path *backing_file_real_path(struct file *f);
--
--/*
-- * file_real_path - get the path corresponding to f_inode
-- *
-- * When opening a backing file for a stackable filesystem (e.g.,
-- * overlayfs) f_path may be on the stackable filesystem and f_inode on
-- * the underlying filesystem.  When the path associated with f_inode is
-- * needed, this helper should be used instead of accessing f_path
-- * directly.
--*/
--static inline const struct path *file_real_path(struct file *f)
--{
--	if (unlikely(f->f_mode & FMODE_BACKING))
--		return backing_file_real_path(f);
--	return &f->f_path;
--}
-+struct path *backing_file_user_path(struct file *f);
- 
- /*
-  * file_user_path - get the path to display for memory mapped file
-@@ -2483,6 +2467,8 @@ static inline const struct path *file_real_path(struct file *f)
-  */
- static inline const struct path *file_user_path(struct file *f)
- {
-+	if (unlikely(f->f_mode & FMODE_BACKING))
-+		return backing_file_user_path(f);
- 	return &f->f_path;
- }
- 
-diff --git a/include/linux/fsnotify.h b/include/linux/fsnotify.h
-index ed48e4f1e755..bcb6609b54b3 100644
---- a/include/linux/fsnotify.h
-+++ b/include/linux/fsnotify.h
-@@ -96,8 +96,7 @@ static inline int fsnotify_file(struct file *file, __u32 mask)
- 	if (file->f_mode & FMODE_NONOTIFY)
- 		return 0;
- 
--	/* Overlayfs internal files have fake f_path */
--	path = file_real_path(file);
-+	path = &file->f_path;
- 	return fsnotify_parent(path->dentry, mask, path, FSNOTIFY_EVENT_PATH);
- }
- 
--- 
-2.34.1
+How would one possibly produce struct path (i.e. mount/dentry pair)
+out of dentry?
 
+Anyway, I admit that struct path hadn't been a great name to start with;
+it's basically "location in namespace", and it clashes with the use of
+the same word for "string interpreted to get a location in namespace".
+
+Originally it's been just in the pathname resolution internals; TBH,
+I don't remember I had specific plans regarding converting such
+pairs (a plenty of those in the tree at the time) back then.
+<checks the historical tree>
+<checks old mail archives>
+
+Probably hopeless to reconstruct the details, I'm afraid - everything
+else aside, the timestamps in that patch are in the first half of
+the day on Apr 29 2002; (hopefully) tested and sent out at about
+6pm.  Followed by sitting down for birthday celebration, of all things,
+so the details of rationale for name choice would probably be hard
+to recover on the next morning, nevermind 21 years later ;-)
+
+Bringing it out of fs/namei.c (into include/linux/namei.h) had happened
+in late 2006 (by Jeff Sipek) and after that it was too late to change
+the name; I'm still not sure what name would be good for that, TBH...
