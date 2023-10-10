@@ -2,69 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1157BFA8A
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Oct 2023 14:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3647BFB86
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Oct 2023 14:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjJJMAJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Oct 2023 08:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S231920AbjJJMdt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Oct 2023 08:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbjJJMAD (ORCPT
+        with ESMTP id S231917AbjJJMdr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Oct 2023 08:00:03 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7CC10E
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Oct 2023 04:59:55 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-99c3d3c3db9so924508366b.3
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Oct 2023 04:59:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1696939193; x=1697543993; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wLQsQuOsWejoU0OnrXi9mSD8MpURT7HqfTQjNz0yMO8=;
-        b=frprtuXLSULbwGZLMrH92NuTOvW1SJRtIKKthHmBNWMtxPbX6XC4pfHIOllfwhEewv
-         6X31752vTuXWZ32L5EMUdSY+PMTB93duQQ79I6NpTt60vXTppOzRRIXyb4LjJzV8kg/J
-         XcjENQdmltGiJ5ZZd/ScsnvmFSNsFoeAW6Grw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696939193; x=1697543993;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wLQsQuOsWejoU0OnrXi9mSD8MpURT7HqfTQjNz0yMO8=;
-        b=gSIkXUjFafAmOIvROEVSbgRfBZkjESgUtLqcvYG2EcfcRzt5MJtyogIBI/LvroRoZf
-         L1Je3mNjYB6QtjFqDxFRGfzdSSM5D2s75lNT4QcCf+bHthNYKNspui+Ex02r4f2+l3Vg
-         7hOibJKJXbjJCUdMoJhN51YSHhFwcdaUON64EpTtXk8IpNjsdBx7MHNVaMIFK1V/a/i1
-         7AF/q7keLbQ70GEpm8IcUNvdKDYZe8vVYsIR4oCagqkCdJ+RcYp2ypU6U8pNkcsWrMHw
-         kNNqyfbJw1cebTB2qCT+1AuwAprF/aCoocghKbtvubtp0iXbzdI4MRDxIoNubLn5NrZk
-         2dew==
-X-Gm-Message-State: AOJu0YwMkQMIEJfH189q55bYpRExHFxFP8wVd6GzDym5nH+aHTdKOPIo
-        oJNlEyDD70cAiMi/PAiaH3ohE9BnkonOeRmlOLGyAQ==
-X-Google-Smtp-Source: AGHT+IHuPQMXvx41pjFlEOEJcQh0r2acSYASqorJEhhRFR3294C8jolKTvIf3FuZCDAP872XQzr3xhS13RvSz1m8JyM=
-X-Received: by 2002:a17:906:3050:b0:9a1:f10d:9746 with SMTP id
- d16-20020a170906305000b009a1f10d9746mr15703509ejd.20.1696939192671; Tue, 10
- Oct 2023 04:59:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231009153712.1566422-1-amir73il@gmail.com> <20231009153712.1566422-4-amir73il@gmail.com>
-In-Reply-To: <20231009153712.1566422-4-amir73il@gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 10 Oct 2023 13:59:41 +0200
-Message-ID: <CAJfpegtcNOCMp+QBPFD5aUEok6u7AqwrGqAqMCZeeuyq6xfYFw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] fs: store real path instead of fake path in
- backing file f_path
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
+        Tue, 10 Oct 2023 08:33:47 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0E8102;
+        Tue, 10 Oct 2023 05:33:41 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26833C433C8;
+        Tue, 10 Oct 2023 12:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696941221;
+        bh=6czSRTftyYGlKbWOG1D22PcwxZAwDZn28yp1yUyg0oQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=bsHx/+dRAo5dDJmygSFEyW8QVp6AkcgFLWN3IkV75ZTJVBU4POOgSXD5pIe5xOSRX
+         Ys0TbA7FAybW9f4f+nJ9PAOXiwSJ1aIB+2ovQHcNGQipDzqsVNh26ZngRMEL/obnyH
+         MEQKYSJ4eu5iRWtzULMXqzs+SgPpkbmBC8F8wl9kp0Gu5wCCdjTxqrAjW5rYpvF1ws
+         VjzHqUfH9/kTGHG3yMNIyYhXfvm0Bm5GD6I5sGAiFAeoitt7dQ5REBIJ5nKxMVN/7S
+         6a2TbxCUHYUpBEA1zWNJEwSemkT4zZJQuVbllReaw/32ZhH+0OJm8GdSnph+r1SV+/
+         ledH0U4q+bU6Q==
+Message-ID: <8eeac047a59667912a45b21050a6e4c57d7cccd5.camel@kernel.org>
+Subject: Re: [PATCH v2] KEYS: trusted: Remove redundant static calls usage
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sumit Garg <sumit.garg@linaro.org>, torvalds@linux-foundation.org,
+        peterz@infradead.org, zohar@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jejb@linux.ibm.com, David.Kaplan@amd.com, bp@alien8.de,
+        mingo@kernel.org, x86@kernel.org, regressions@leemhuis.info,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Date:   Tue, 10 Oct 2023 15:33:36 +0300
+In-Reply-To: <20231006051801.423973-1-sumit.garg@linaro.org>
+References: <20231006051801.423973-1-sumit.garg@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4-2 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,27 +53,75 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 9 Oct 2023 at 17:37, Amir Goldstein <amir73il@gmail.com> wrote:
+T24gRnJpLCAyMDIzLTEwLTA2IGF0IDEwOjQ4ICswNTMwLCBTdW1pdCBHYXJnIHdyb3RlOgo+IFN0
+YXRpYyBjYWxscyBpbnZvY2F0aW9ucyBhcmVuJ3Qgd2VsbCBzdXBwb3J0ZWQgZnJvbSBtb2R1bGUg
+X19pbml0IGFuZAo+IF9fZXhpdCBmdW5jdGlvbnMuIEVzcGVjaWFsbHkgdGhlIHN0YXRpYyBjYWxs
+IGZyb20gY2xlYW51cF90cnVzdGVkKCkgbGVkCj4gdG8gYSBjcmFzaCBvbiB4ODYga2VybmVsIHdp
+dGggQ09ORklHX0RFQlVHX1ZJUlRVQUw9eS4KPiAKPiBIb3dldmVyLCB0aGUgdXNhZ2Ugb2Ygc3Rh
+dGljIGNhbGwgaW52b2NhdGlvbnMgZm9yIHRydXN0ZWRfa2V5X2luaXQoKQo+IGFuZCB0cnVzdGVk
+X2tleV9leGl0KCkgZG9uJ3QgYWRkIGFueSB2YWx1ZSBmcm9tIGVpdGhlciBhIHBlcmZvcm1hbmNl
+IG9yCj4gc2VjdXJpdHkgcGVyc3BlY3RpdmUuIEhlbmNlIHN3aXRjaCB0byB1c2UgaW5kaXJlY3Qg
+ZnVuY3Rpb24gY2FsbHMgaW5zdGVhZC4KPiAKPiBOb3RlIGhlcmUgdGhhdCBhbHRob3VnaCBpdCB3
+aWxsIGZpeCB0aGUgY3VycmVudCBjcmFzaCByZXBvcnQsIHVsdGltYXRlbHkKPiB0aGUgc3RhdGlj
+IGNhbGwgaW5mcmFzdHJ1Y3R1cmUgc2hvdWxkIGJlIGZpeGVkIHRvIGVpdGhlciBzdXBwb3J0IGl0
+cwo+IGZ1dHVyZSB1c2FnZSBmcm9tIG1vZHVsZSBfX2luaXQgYW5kIF9fZXhpdCBmdW5jdGlvbnMg
+b3Igbm90Lgo+IAo+IFJlcG9ydGVkLWJ5OiBIeWVvbmdnb24gWW9vIDw0Mi5oeWV5b29AZ21haWwu
+Y29tPgo+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvWlJoS3E2ZTVuRiUyRjRa
+SVYxQGZlZG9yYS8jdAo+IEZpeGVzOiA1ZDA2ODJiZTMxODkgKCJLRVlTOiB0cnVzdGVkOiBBZGQg
+Z2VuZXJpYyB0cnVzdGVkIGtleXMgZnJhbWV3b3JrIikKPiBTaWduZWQtb2ZmLWJ5OiBTdW1pdCBH
+YXJnIDxzdW1pdC5nYXJnQGxpbmFyby5vcmc+Cj4gLS0tCj4gCj4gQ2hhbmdlcyBpbiB2MjoKPiAt
+IFBvbGlzaCBjb21taXQgbWVzc2FnZSBhcyBwZXIgY29tbWVudHMgZnJvbSBNaW1pCj4gCj4gwqBz
+ZWN1cml0eS9rZXlzL3RydXN0ZWQta2V5cy90cnVzdGVkX2NvcmUuYyB8IDEzICsrKysrLS0tLS0t
+LS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pCj4g
+Cj4gZGlmZiAtLWdpdCBhL3NlY3VyaXR5L2tleXMvdHJ1c3RlZC1rZXlzL3RydXN0ZWRfY29yZS5j
+IGIvc2VjdXJpdHkva2V5cy90cnVzdGVkLWtleXMvdHJ1c3RlZF9jb3JlLmMKPiBpbmRleCBjNmZj
+NTBkNjcyMTQuLjg1ZmI1YzIyNTI5YSAxMDA2NDQKPiAtLS0gYS9zZWN1cml0eS9rZXlzL3RydXN0
+ZWQta2V5cy90cnVzdGVkX2NvcmUuYwo+ICsrKyBiL3NlY3VyaXR5L2tleXMvdHJ1c3RlZC1rZXlz
+L3RydXN0ZWRfY29yZS5jCj4gQEAgLTQ0LDEzICs0NCwxMiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0
+IHRydXN0ZWRfa2V5X3NvdXJjZSB0cnVzdGVkX2tleV9zb3VyY2VzW10gPSB7Cj4gwqAjZW5kaWYK
+PiDCoH07Cj4gwqAKPiAtREVGSU5FX1NUQVRJQ19DQUxMX05VTEwodHJ1c3RlZF9rZXlfaW5pdCwg
+KnRydXN0ZWRfa2V5X3NvdXJjZXNbMF0ub3BzLT5pbml0KTsKPiDCoERFRklORV9TVEFUSUNfQ0FM
+TF9OVUxMKHRydXN0ZWRfa2V5X3NlYWwsICp0cnVzdGVkX2tleV9zb3VyY2VzWzBdLm9wcy0+c2Vh
+bCk7Cj4gwqBERUZJTkVfU1RBVElDX0NBTExfTlVMTCh0cnVzdGVkX2tleV91bnNlYWwsCj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgKnRydXN0ZWRfa2V5
+X3NvdXJjZXNbMF0ub3BzLT51bnNlYWwpOwo+IMKgREVGSU5FX1NUQVRJQ19DQUxMX05VTEwodHJ1
+c3RlZF9rZXlfZ2V0X3JhbmRvbSwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAqdHJ1c3RlZF9rZXlfc291cmNlc1swXS5vcHMtPmdldF9yYW5kb20pOwo+
+IC1ERUZJTkVfU1RBVElDX0NBTExfTlVMTCh0cnVzdGVkX2tleV9leGl0LCAqdHJ1c3RlZF9rZXlf
+c291cmNlc1swXS5vcHMtPmV4aXQpOwo+ICtzdGF0aWMgdm9pZCAoKnRydXN0ZWRfa2V5X2V4aXQp
+KHZvaWQpOwo+IMKgc3RhdGljIHVuc2lnbmVkIGNoYXIgbWlncmF0YWJsZTsKPiDCoAo+IMKgZW51
+bSB7Cj4gQEAgLTM1OSwxOSArMzU4LDE2IEBAIHN0YXRpYyBpbnQgX19pbml0IGluaXRfdHJ1c3Rl
+ZCh2b2lkKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKCFnZXRfcmFuZG9t
+KQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdldF9y
+YW5kb20gPSBrZXJuZWxfZ2V0X3JhbmRvbTsKPiDCoAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBzdGF0aWNfY2FsbF91cGRhdGUodHJ1c3RlZF9rZXlfaW5pdCwKPiAtwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHRydXN0ZWRfa2V5X3NvdXJjZXNbaV0ub3BzLT5pbml0KTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoHN0YXRpY19jYWxsX3VwZGF0ZSh0cnVzdGVkX2tleV9zZWFsLAo+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIHRydXN0ZWRfa2V5X3NvdXJjZXNbaV0ub3BzLT5zZWFsKTsKPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoHN0YXRpY19jYWxsX3VwZGF0ZSh0cnVzdGVkX2tleV91bnNlYWws
+Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgdHJ1c3RlZF9rZXlfc291cmNlc1tpXS5vcHMtPnVuc2VhbCk7Cj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzdGF0aWNfY2FsbF91cGRhdGUodHJ1c3RlZF9r
+ZXlfZ2V0X3JhbmRvbSwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnZXRfcmFuZG9tKTsKPiAtwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgc3RhdGljX2NhbGxfdXBkYXRlKHRydXN0ZWRfa2V5X2V4aXQsCj4g
+LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCB0cnVzdGVkX2tleV9zb3VyY2VzW2ldLm9wcy0+ZXhpdCk7Cj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoHRydXN0ZWRfa2V5X2V4aXQgPSB0cnVzdGVkX2tleV9zb3Vy
+Y2VzW2ldLm9wcy0+ZXhpdDsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG1pZ3Jh
+dGFibGUgPSB0cnVzdGVkX2tleV9zb3VyY2VzW2ldLm9wcy0+bWlncmF0YWJsZTsKPiDCoAo+IC3C
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSBzdGF0aWNfY2FsbCh0cnVzdGVkX2tl
+eV9pbml0KSgpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSB0cnVzdGVk
+X2tleV9zb3VyY2VzW2ldLm9wcy0+aW5pdCgpOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgaWYgKCFyZXQpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgYnJlYWs7Cj4gwqDCoMKgwqDCoMKgwqDCoH0KPiBAQCAtMzg4LDcgKzM4NCw4IEBA
+IHN0YXRpYyBpbnQgX19pbml0IGluaXRfdHJ1c3RlZCh2b2lkKQo+IMKgCj4gwqBzdGF0aWMgdm9p
+ZCBfX2V4aXQgY2xlYW51cF90cnVzdGVkKHZvaWQpCj4gwqB7Cj4gLcKgwqDCoMKgwqDCoMKgc3Rh
+dGljX2NhbGxfY29uZCh0cnVzdGVkX2tleV9leGl0KSgpOwo+ICvCoMKgwqDCoMKgwqDCoGlmICh0
+cnVzdGVkX2tleV9leGl0KQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAoKnRydXN0
+ZWRfa2V5X2V4aXQpKCk7Cj4gwqB9Cj4gwqAKPiDCoGxhdGVfaW5pdGNhbGwoaW5pdF90cnVzdGVk
+KTsKCldvdWxkIGl0IGJlIGxlc3MgY29uZnVzaW5nIHRvIHJlcXVpcmUgdHJ1c3RlZF9rZXlfZXhp
+dCBmcm9tIGVhY2g/CgpCUiwgSmFya2tvCgo=
 
->  static inline void put_file_access(struct file *file)
-> diff --git a/fs/open.c b/fs/open.c
-> index fe63e236da22..02dc608d40d8 100644
-> --- a/fs/open.c
-> +++ b/fs/open.c
-> @@ -881,7 +881,7 @@ static inline int file_get_write_access(struct file *f)
->         if (unlikely(error))
->                 goto cleanup_inode;
->         if (unlikely(f->f_mode & FMODE_BACKING)) {
-> -               error = mnt_get_write_access(backing_file_real_path(f)->mnt);
-> +               error = mnt_get_write_access(backing_file_user_path(f)->mnt);
->                 if (unlikely(error))
->                         goto cleanup_mnt;
->         }
-
-Do we really need write access on the overlay mount?
-
-If so, should the order of getting write access not be the other way
-round (overlay first, backing second)?
-
-Thanks,
-Miklos
