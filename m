@@ -2,76 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281DB7BF623
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Oct 2023 10:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7BD7BFA62
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Oct 2023 13:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234665AbjJJIh3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Oct 2023 04:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
+        id S231406AbjJJLwb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Oct 2023 07:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442925AbjJJIhO (ORCPT
+        with ESMTP id S231459AbjJJLwa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Oct 2023 04:37:14 -0400
+        Tue, 10 Oct 2023 07:52:30 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE972D56;
-        Tue, 10 Oct 2023 01:36:08 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55C8C433C7;
-        Tue, 10 Oct 2023 08:36:04 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EF2A4;
+        Tue, 10 Oct 2023 04:52:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9EE1C433C8;
+        Tue, 10 Oct 2023 11:52:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696926968;
-        bh=r0acTdpPV43k03AaibK8ATvRg6OuKldRVbxez5OV1Wk=;
+        s=k20201202; t=1696938748;
+        bh=lS6j666yQyoqSWNnJzvLxKDEG6aA7JaskJUk41LjEXs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KUiMo2sfK8qNVzn9S67WuqpPL2z6FHIjcroFF4t4NDlVwiy7cASY1qTQbZ2waULx4
-         WICp1oJvJ+jLU3bRzuvIKn8qQZF68dJgv4ZY4MsELgva/xckA9qr3cplpIsPpfiE3k
-         h/+b8fZ7x33UQTHaxbpQTisEzCCqX9Ll5yqIm+GE7AR9SCgM9+LTJOZP5Tt4iQlLjt
-         Z2Z7djbu17Ep61ac0KGRM4IWAcFmvcGU4cMrEbu7d5nAvxWgE+KA78GR+lzTaADYdM
-         AEC0Ve6geMd/9/u0NxNcT6PuSN0W8Rw1ul7AaHRGmbR2D0Qgb3TeBcpNjEskt4eqIu
-         GXRVsp7e+HfcQ==
+        b=KiEk4CH0tcflNyGjG7ZTG2xo4gmxTrebyMOCAKM/H9Yr6bkz/c88nKgStSnN0jpSx
+         Bg+gFqtkEkmiWdSYu/rw1fzgy/lwH1MxwHxtyaqXphULb9ywuoiGrn4UZ+5sopnAIy
+         Enxj834wq1Ug16wWZvuwwWYAd5T35D+kxhVa2Yflrpw1EqWolMtwzc/l8OBAUe37yi
+         Hw1R9gsx24+KTRXSKLVT9xYyZ/BThYTL2hYrGrOKtssp0PUIdYvXCOpDCIS+lrfwJb
+         eOO4dicGiN1ZVEDSNLgzZaKkrJ7Gg1hFIZMdXhwMoKM0ZpdG1GyxUhp1a2MLK81qCT
+         HCO91tVJegkTg==
 From:   Christian Brauner <brauner@kernel.org>
-To:     amir73il@gmail.com, Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     Amir Goldstein <amir73il@gmail.com>
 Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: Pass AT_GETATTR_NOSEC flag to getattr interface function
-Date:   Tue, 10 Oct 2023 10:35:47 +0200
-Message-Id: <20231010-erhaben-kurznachrichten-d91432c937ee@brauner>
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] Reduce impact of overlayfs backing files fake path
+Date:   Tue, 10 Oct 2023 13:52:09 +0200
+Message-Id: <20231010-lohnen-botanik-7bf974a5cecd@brauner>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231002125733.1251467-1-stefanb@linux.vnet.ibm.com>
-References: <20231002125733.1251467-1-stefanb@linux.vnet.ibm.com>
+In-Reply-To: <20231009153712.1566422-1-amir73il@gmail.com>
+References: <20231009153712.1566422-1-amir73il@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1448; i=brauner@kernel.org; h=from:subject:message-id; bh=r0acTdpPV43k03AaibK8ATvRg6OuKldRVbxez5OV1Wk=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSq8tx16f98NfBy1Y1JS77aKfi5bJzIabXYSt5z28s6t+09 nLM9O0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACYyM43hv5uhRoDqs59z7B7kLDvH46 8SIGA1Oay4ZJYMy7Nt+ux/vjEy7D34aNKqW3GGQdk2POvXM3SLsPbs23G9iOG5m9h6S8VYJgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1146; i=brauner@kernel.org; h=from:subject:message-id; bh=lS6j666yQyoqSWNnJzvLxKDEG6aA7JaskJUk41LjEXs=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSqWj0RW27+IHNtNc+h6B4hm3VMFRl7+3L+7amr2nuh/N3N Ys35HaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABM5JMLwV1wgSujt+5k83WdfTjcw/S ic8jtytvD87y8d0jZO2pW1vJXhn/r6hUt2vPkq47fIhae1rkfU489Olind0hwdBcK/2fc08QAA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 02 Oct 2023 08:57:33 -0400, Stefan Berger wrote:
-> When vfs_getattr_nosec() calls a filesystem's getattr interface function
-> then the 'nosec' should propagate into this function so that
-> vfs_getattr_nosec() can again be called from the filesystem's gettattr
-> rather than vfs_getattr(). The latter would add unnecessary security
-> checks that the initial vfs_getattr_nosec() call wanted to avoid.
-> Therefore, introduce the getattr flag GETATTR_NOSEC and allow to pass
-> with the new getattr_flags parameter to the getattr interface function.
-> In overlayfs and ecryptfs use this flag to determine which one of the
-> two functions to call.
+On Mon, 09 Oct 2023 18:37:09 +0300, Amir Goldstein wrote:
+> Following v3 addresses Al's review comments on v2.
 > 
-> [...]
 
-Applied to the vfs.fixes branch of the vfs/vfs.git tree.
-Patches in the vfs.fixes branch should appear in linux-next soon.
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
 Please report any outstanding bugs that were missed during review in a
 new review to the original patch series allowing us to drop it.
@@ -83,7 +77,11 @@ Note that commit hashes shown below are subject to change due to rebase,
 trailer updates or similar. If in doubt, please check the listed branch.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.fixes
+branch: vfs.misc
 
-[1/1] fs: Pass AT_GETATTR_NOSEC flag to getattr interface function
-      https://git.kernel.org/vfs/vfs/c/6ea042691c74
+[1/3] fs: get mnt_writers count for an open backing file's real path
+      https://git.kernel.org/vfs/vfs/c/90e168d5fa01
+[2/3] fs: create helper file_user_path() for user displayed mapped file path
+      https://git.kernel.org/vfs/vfs/c/842b845c7657
+[3/3] fs: store real path instead of fake path in backing file f_path
+      https://git.kernel.org/vfs/vfs/c/6b9503cf48c9
