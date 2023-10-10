@@ -2,46 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72477BFB98
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Oct 2023 14:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBE17BFCFC
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Oct 2023 15:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjJJMfu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Oct 2023 08:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
+        id S232025AbjJJNKz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Oct 2023 09:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjJJMft (ORCPT
+        with ESMTP id S232024AbjJJNKx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Oct 2023 08:35:49 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491A894;
-        Tue, 10 Oct 2023 05:35:48 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD570C433C8;
-        Tue, 10 Oct 2023 12:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696941347;
-        bh=b7nUh1uQ6nC/Vhad6HRVLVfWcoL7dw7QIED5V55CPu4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=SZLWYwVs5O+QBHcViu03bl7YgzcblktmpftyA/8AA4Z6Qb9iHl2CMaMEQtctg8QIm
-         UfGuBgMsj6y53FuFr2hdPpxcxBQ+DNUnulxjpni6Uj+GWMB+P3WCBjLSvUAnDxHcbq
-         babI4DDWTDRrgcnv3o/GKJYBL7Yj4YY0xq7RuKd4OeJMtNV0XCTk3ZjHd0vlWXZPyy
-         1pJNqaMENnox4dmaljwMhwsneu0NFVzcv2js/g5UeIlUlSbYgag2erTpNCiuLRI7hg
-         Nih0fWMnU0UIFGEuIbjYS4UxzuDNbwI95KYCI+XEp5UiaGXkY70UZcYoPnVn0Jw7wW
-         ODYuCrLnODttg==
-Message-ID: <276b9295c119c1e54471398a63fa33ade66b9975.camel@kernel.org>
-Subject: Re: [PATCH] tpm: nuvoton: Use i2c_get_match_data()
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Rob Herring <robh@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 10 Oct 2023 15:35:44 +0300
-In-Reply-To: <20231006214246.337426-1-robh@kernel.org>
-References: <20231006214246.337426-1-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.4-2 
+        Tue, 10 Oct 2023 09:10:53 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75657B4;
+        Tue, 10 Oct 2023 06:10:50 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-7741b18a06aso403062885a.1;
+        Tue, 10 Oct 2023 06:10:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696943449; x=1697548249; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jms1ujwJI1idg8bEU/bR57E7ZINisVAtSz1uRROW3vM=;
+        b=Io8dSZfeHtJVq8ieMHnmYjOUr/LT0TpuR5lP9ddgR0GVuFazKqKKI5AuTsfDLvfWKn
+         tkF8PypCMGq1cg1pfvFBCmwwIUWn5l/BPcpBf5lBrrcf9d2uCT73oHCFH43QhXnGzeJQ
+         1nsLOqJpav7oQxdGkRYlUPmNf48/bGend4eVv84KAlHn/LjPYS17E84J5muOdd1cnFJs
+         tsltSv/IocxOy5jL51q65H6icxGhBS0bAAafrSeHH+zke2G+5lrV46LnsVe9wsOrOHSH
+         L6bP03gnTGhXA6w3wrERpYYd4M0wrkUEMyzQrIU+KBfhf2wyv0cnYLna7m1CTIwnMvzR
+         9+Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696943449; x=1697548249;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jms1ujwJI1idg8bEU/bR57E7ZINisVAtSz1uRROW3vM=;
+        b=QGO09BACMI21aBX16FclAJ5X02GmQXqmRJOwppAQfBbs3CT1V1VVjY0IDKQUVufE9M
+         zM4YkrfKdg5m11kT/Y/lrKdg6MDXlxV7MNvn1cZGWUeWA4eCE8TjAolhpijFY3mmC76w
+         BMOSL0Jyp4V6K6/F6r+QFD2QtoameKxj4vO8Cz9KSnsXe4GSEE9uz9p/g+gVjQ82HTe2
+         OA2tHJLaU5BVSxIOWuEZCGfUw9MbNk0cqXzstdVXWTPwJWvEwgzggU5t5aAco9OvcWKH
+         mEa8WMgrYwJCmtgrRTcjXl09j72vjTDXl/042pFBB/Ifijr6FK90KwPdtOi9SnWq6Spj
+         M0sQ==
+X-Gm-Message-State: AOJu0YzW92wsz15RgJO9NK7vwYFne7//slB+CDrpR/U0eDGCzNBRJNmq
+        DOgv+poHNLoVXiZm7PaElumcDMiXtVrNXLztuoO4/JzyZ24=
+X-Google-Smtp-Source: AGHT+IFLqu0IqXrBR6lQHGq2TiA5N5N2syJweqMa/sIE/Dp8x1INKuggrmUc1Bv7DalwhQeYmayZh/F0ZbHyXWrBQ9E=
+X-Received: by 2002:a0c:df88:0:b0:651:65f4:31fa with SMTP id
+ w8-20020a0cdf88000000b0065165f431famr20854019qvl.39.1696943449441; Tue, 10
+ Oct 2023 06:10:49 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+References: <20231009153712.1566422-1-amir73il@gmail.com> <20231009153712.1566422-4-amir73il@gmail.com>
+ <CAJfpegtcNOCMp+QBPFD5aUEok6u7AqwrGqAqMCZeeuyq6xfYFw@mail.gmail.com>
+In-Reply-To: <CAJfpegtcNOCMp+QBPFD5aUEok6u7AqwrGqAqMCZeeuyq6xfYFw@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 10 Oct 2023 16:10:38 +0300
+Message-ID: <CAOQ4uxiAHJy6viXBubm0y7x3J3P7N5XijOU8C340fi2Dpc7zXA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] fs: store real path instead of fake path in
+ backing file f_path
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,44 +78,46 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTEwLTA2IGF0IDE2OjQyIC0wNTAwLCBSb2IgSGVycmluZyB3cm90ZToKPiBV
-c2UgcHJlZmVycmVkIGkyY19nZXRfbWF0Y2hfZGF0YSgpIGluc3RlYWQgb2Ygb2ZfbWF0Y2hfZGV2
-aWNlKCkgdG8KPiBnZXQgdGhlIGRyaXZlciBtYXRjaCBkYXRhLiBXaXRoIHRoaXMsIGFkanVzdCB0
-aGUgaW5jbHVkZXMgdG8gZXhwbGljaXRseQo+IGluY2x1ZGUgdGhlIGNvcnJlY3QgaGVhZGVycy4K
-PiAKPiBTaWduZWQtb2ZmLWJ5OiBSb2IgSGVycmluZyA8cm9iaEBrZXJuZWwub3JnPgoKUGVyaGFw
-cyBzZWxmLWV2aWRlbnQgYnV0IHRvIGhhdmUgYSBjbG9zZWQgc3Rvcnkgd291bGQgYmUgbmljZSB0
-b3VjaAp0byB3cml0ZSBkb3duIHRoZSByZWFzb24gZm9yIHRoZSBzd2l0Y2guCgpCUiwgSmFya2tv
-Cgo+IC0tLQo+IMKgZHJpdmVycy9jaGFyL3RwbS90cG1faTJjX251dm90b24uYyB8IDE1ICsrKyst
-LS0tLS0tLS0tLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRp
-b25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2hhci90cG0vdHBtX2kyY19udXZvdG9u
-LmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV9pMmNfbnV2b3Rvbi5jCj4gaW5kZXggZDdiZTAzYzQx
-MDk4Li41NDkwZjdlMGZhNDMgMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90cG1faTJj
-X251dm90b24uYwo+ICsrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX2kyY19udXZvdG9uLmMKPiBA
-QCAtMTksNyArMTksOCBAQAo+IMKgI2luY2x1ZGUgPGxpbnV4L2ludGVycnVwdC5oPgo+IMKgI2lu
-Y2x1ZGUgPGxpbnV4L3dhaXQuaD4KPiDCoCNpbmNsdWRlIDxsaW51eC9pMmMuaD4KPiAtI2luY2x1
-ZGUgPGxpbnV4L29mX2RldmljZS5oPgo+ICsjaW5jbHVkZSA8bGludXgvb2YuaD4KPiArI2luY2x1
-ZGUgPGxpbnV4L3Byb3BlcnR5Lmg+Cj4gwqAjaW5jbHVkZSAidHBtLmgiCj4gwqAKPiDCoC8qIEky
-QyBpbnRlcmZhY2Ugb2Zmc2V0cyAqLwo+IEBAIC01MjQsNyArNTI1LDYgQEAgc3RhdGljIGludCBn
-ZXRfdmlkKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQsIHUzMiAqcmVzKQo+IMKgCj4gwqBzdGF0
-aWMgaW50IGkyY19udXZvdG9uX3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpCj4gwqB7
-Cj4gLcKgwqDCoMKgwqDCoMKgY29uc3Qgc3RydWN0IGkyY19kZXZpY2VfaWQgKmlkID0gaTJjX2Ns
-aWVudF9nZXRfZGV2aWNlX2lkKGNsaWVudCk7Cj4gwqDCoMKgwqDCoMKgwqDCoGludCByYzsKPiDC
-oMKgwqDCoMKgwqDCoMKgc3RydWN0IHRwbV9jaGlwICpjaGlwOwo+IMKgwqDCoMKgwqDCoMKgwqBz
-dHJ1Y3QgZGV2aWNlICpkZXYgPSAmY2xpZW50LT5kZXY7Cj4gQEAgLTU0NiwxNSArNTQ2LDggQEAg
-c3RhdGljIGludCBpMmNfbnV2b3Rvbl9wcm9iZShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50KQo+
-IMKgwqDCoMKgwqDCoMKgwqBpZiAoIXByaXYpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqByZXR1cm4gLUVOT01FTTsKPiDCoAo+IC3CoMKgwqDCoMKgwqDCoGlmIChkZXYtPm9mX25v
-ZGUpIHsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29uc3Qgc3RydWN0IG9mX2Rl
-dmljZV9pZCAqb2ZfaWQ7Cj4gLQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBvZl9p
-ZCA9IG9mX21hdGNoX2RldmljZShkZXYtPmRyaXZlci0+b2ZfbWF0Y2hfdGFibGUsIGRldik7Cj4g
-LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChvZl9pZCAmJiBvZl9pZC0+ZGF0YSA9
-PSBPRl9JU19UUE0yKQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgY2hpcC0+ZmxhZ3MgfD0gVFBNX0NISVBfRkxBR19UUE0yOwo+IC3CoMKgwqDCoMKgwqDC
-oH0gZWxzZQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoaWQtPmRyaXZlcl9k
-YXRhID09IEkyQ19JU19UUE0yKQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgY2hpcC0+ZmxhZ3MgfD0gVFBNX0NISVBfRkxBR19UUE0yOwo+ICvCoMKgwqDC
-oMKgwqDCoGlmIChpMmNfZ2V0X21hdGNoX2RhdGEoY2xpZW50KSkKPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgY2hpcC0+ZmxhZ3MgfD0gVFBNX0NISVBfRkxBR19UUE0yOwo+IMKgCj4g
-wqDCoMKgwqDCoMKgwqDCoGluaXRfd2FpdHF1ZXVlX2hlYWQoJnByaXYtPnJlYWRfcXVldWUpOwo+
-IMKgCgpObyBjb21wbGFpbnMgYWJvdXQgdGhlIGNvZGUgY2hhbmdlLgoKQlIsIEphcmtrbwoK
+On Tue, Oct 10, 2023 at 2:59=E2=80=AFPM Miklos Szeredi <miklos@szeredi.hu> =
+wrote:
+>
+> On Mon, 9 Oct 2023 at 17:37, Amir Goldstein <amir73il@gmail.com> wrote:
+>
+> >  static inline void put_file_access(struct file *file)
+> > diff --git a/fs/open.c b/fs/open.c
+> > index fe63e236da22..02dc608d40d8 100644
+> > --- a/fs/open.c
+> > +++ b/fs/open.c
+> > @@ -881,7 +881,7 @@ static inline int file_get_write_access(struct file=
+ *f)
+> >         if (unlikely(error))
+> >                 goto cleanup_inode;
+> >         if (unlikely(f->f_mode & FMODE_BACKING)) {
+> > -               error =3D mnt_get_write_access(backing_file_real_path(f=
+)->mnt);
+> > +               error =3D mnt_get_write_access(backing_file_user_path(f=
+)->mnt);
+> >                 if (unlikely(error))
+> >                         goto cleanup_mnt;
+> >         }
+>
+> Do we really need write access on the overlay mount?
+>
 
+I'd rather this vfs code be generic and not assume things about
+ovl private mount.
+These assumptions may not hold for fuse passthough backing files.
+
+That said, if we have an open(O_RDWR),mmap(PROT_WRITE),close()
+sequence on overlayfs, don't we need the write access on ovl_upper_mnt
+in order to avoid upper sb from being remounted RO?
+
+> If so, should the order of getting write access not be the other way
+> round (overlay first, backing second)?
+>
+
+Why is the order important?
+What am I missing?
+
+Thanks,
+Amir.
