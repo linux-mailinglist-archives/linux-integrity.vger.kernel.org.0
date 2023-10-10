@@ -2,229 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411F57BFF56
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Oct 2023 16:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9359F7C004D
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Oct 2023 17:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjJJObc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Oct 2023 10:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S232515AbjJJPWv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Oct 2023 11:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232993AbjJJObc (ORCPT
+        with ESMTP id S231279AbjJJPWu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Oct 2023 10:31:32 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD72AC;
-        Tue, 10 Oct 2023 07:31:30 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BBEC433C8;
-        Tue, 10 Oct 2023 14:31:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696948290;
-        bh=E6qmXnfM79rt9DvpUcOLVl3EFr6inxFqSczU8DTqSk8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=gH2yL6N0KLhvEhoOnb9yn5yIJS+3KBFb5lZc22sLtaAOGFdGWtFZ6gajXvQv5D7XT
-         RK8g+EQmNS/yQajQSiaxerd6q+C6rL5YOz9xV6HLFEP3T1HMWktFaEHZ9omVp+/vYE
-         THBjSxeXQ706bygv6W2brB9PytFYa562260owe47KQk7v4LyFE5f62gXp7k1cNnbVb
-         scYAwYXDYSplFnU5xQafOLTbj1hAssc8bT1qN9nMQipg6ERGggxZKVOabGnJs3Jcyg
-         EPRc/VCzqujLP3cRQNMCLUX0MBbr8d27BiQ3mT7iVjYeasaxz78L5biIalJ98/mpe3
-         SpJqRP4fdQ0UA==
-Message-ID: <786c9edfb4324eff764a279c96656db17d380b47.camel@kernel.org>
-Subject: Re: [PATCH v2] KEYS: trusted: Remove redundant static calls usage
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Sumit Garg <sumit.garg@linaro.org>
-Cc:     torvalds@linux-foundation.org, peterz@infradead.org,
-        zohar@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        David.Kaplan@amd.com, bp@alien8.de, mingo@kernel.org,
-        x86@kernel.org, regressions@leemhuis.info,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Date:   Tue, 10 Oct 2023 17:31:25 +0300
-In-Reply-To: <47e5f0a7-e3ee-79c8-7460-2c67cf9960cc@pengutronix.de>
-References: <20231006051801.423973-1-sumit.garg@linaro.org>
-         <8eeac047a59667912a45b21050a6e4c57d7cccd5.camel@kernel.org>
-         <CAFA6WYNamspdK=RakirdS3fiHrmmaPXcgEcZeNn5z2DRNdE3Rw@mail.gmail.com>
-         <1de1ace90f1645fc629c075826aa67eda8dfd138.camel@kernel.org>
-         <47e5f0a7-e3ee-79c8-7460-2c67cf9960cc@pengutronix.de>
+        Tue, 10 Oct 2023 11:22:50 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A1493;
+        Tue, 10 Oct 2023 08:22:49 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-65b0a54d436so32150406d6.3;
+        Tue, 10 Oct 2023 08:22:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696951368; x=1697556168; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j+OnTbTynmIeVS0uxC9pppcMn+kx7cUxRccWDPKjmcA=;
+        b=kL0O9Gp5vKGoGLTvTTe3cEym/KJ6p6+sA67LlDxX1RGEtsFNj9whnYmIzL4lRCLj1l
+         quvDCJrU2gaznYZbevuJtTycYm9fg4pekQFAB5smce2PlZkHaHQ7GIpzdAh6qdIcxhnk
+         aI3SDmpdlVr0ghqLHlZmtPfppURwUdDTGv1H50AT8Ayhm8zyLlHXT3MvbwRio99UH7gK
+         Boc2VE8jmlE0IGN0gcaydGml/1ahSI8u4itiicxsQtxsgzvG9BJWQjzFVr3sN5BqtmMx
+         J2sZIvon4Y/KVBqSjjPoReWJPEykNUF/7TcCgsyTB4MGgaxruFvzF12zMWE5q+5YXVLh
+         7a2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696951368; x=1697556168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j+OnTbTynmIeVS0uxC9pppcMn+kx7cUxRccWDPKjmcA=;
+        b=eLtoJMrMBCKfL0zRMnuhkt/bsl5BVMQegKaZJgs2r1bhKVAzJg89Mjys9AiWvgPg5A
+         oHe0je/LlrT+tyqmm44y/oPOEBvB3Q2jzLTtTecxTQt1JrNqkGpoTi0jEBC6zcqyvYI9
+         XIGUcGc/aqF6ZUmk9d3+xEMsZjgCcJTwHRNKLqKq0pBamVts4NcJSWC3n0kSpbgVrjbY
+         UyfuWtrRIsvuCwlZ1Ez9+4InKR7Pfo6XmaNm/m3EETFBuB5MWLuQwoeJpmlucFqJQQ69
+         XqROrnLrWcrmeByxEW38XsrwiFKZF7U3a/K4xp8Pa1cfB8uk0d3IFowuq6tsF8p3L2nL
+         lgkQ==
+X-Gm-Message-State: AOJu0YyC1o0nrDFpFwkC1nxFozi1x1WB9QiX8lVnYHG/Q6c4KswIghqx
+        ocFC2W+9Z2BD1NnuGkBMaF37f3ReeYrBSBD0+6IqiaJullo=
+X-Google-Smtp-Source: AGHT+IG1051Zw6vv59OtUCixwFCQ5J2BzOezNsEYSYYW9Fzobg/VOwuuYXT+UMnczMErTeTted7AeCQFSYhp5JT4bfY=
+X-Received: by 2002:a05:6214:440b:b0:658:59c3:c237 with SMTP id
+ oj11-20020a056214440b00b0065859c3c237mr17573342qvb.40.1696951368120; Tue, 10
+ Oct 2023 08:22:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231009153712.1566422-1-amir73il@gmail.com> <20231009153712.1566422-4-amir73il@gmail.com>
+ <CAJfpegtcNOCMp+QBPFD5aUEok6u7AqwrGqAqMCZeeuyq6xfYFw@mail.gmail.com>
+ <CAOQ4uxiAHJy6viXBubm0y7x3J3P7N5XijOU8C340fi2Dpc7zXA@mail.gmail.com>
+ <CAOQ4uxipA5oCQXn1-JZ+TbXw2-5O+_++FfNHC6fKqhNXfR7C0w@mail.gmail.com> <CAJfpeguEf71ZknP5rGU9YNtJTp1wBGBKyv6M0JZ=5ETuaipDxQ@mail.gmail.com>
+In-Reply-To: <CAJfpeguEf71ZknP5rGU9YNtJTp1wBGBKyv6M0JZ=5ETuaipDxQ@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 10 Oct 2023 18:22:37 +0300
+Message-ID: <CAOQ4uxjY8awawG3-7cNc373_cyms69PiM=G0BzvBK0c2Zh7TkA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] fs: store real path instead of fake path in
+ backing file f_path
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2023-10-10 at 16:19 +0200, Ahmad Fatoum wrote:
-> Hello Jarkko,
->=20
-> On 10.10.23 15:49, Jarkko Sakkinen wrote:
-> > On Tue, 2023-10-10 at 18:44 +0530, Sumit Garg wrote:
-> > > On Tue, 10 Oct 2023 at 18:03, Jarkko Sakkinen <jarkko@kernel.org> wro=
-te:
-> > > >=20
-> > > > On Fri, 2023-10-06 at 10:48 +0530, Sumit Garg wrote:
-> > > > > Static calls invocations aren't well supported from module __init=
- and
-> > > > > __exit functions. Especially the static call from cleanup_trusted=
-() led
-> > > > > to a crash on x86 kernel with CONFIG_DEBUG_VIRTUAL=3Dy.
-> > > > >=20
-> > > > > However, the usage of static call invocations for trusted_key_ini=
-t()
-> > > > > and trusted_key_exit() don't add any value from either a performa=
-nce or
-> > > > > security perspective. Hence switch to use indirect function calls=
- instead.
-> > > > >=20
-> > > > > Note here that although it will fix the current crash report, ult=
-imately
-> > > > > the static call infrastructure should be fixed to either support =
-its
-> > > > > future usage from module __init and __exit functions or not.
-> > > > >=20
-> > > > > Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > > > > Link: https://lore.kernel.org/lkml/ZRhKq6e5nF%2F4ZIV1@fedora/#t
-> > > > > Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys fra=
-mework")
-> > > > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> > > > > ---
-> > > > >=20
-> > > > > Changes in v2:
-> > > > > - Polish commit message as per comments from Mimi
-> > > > >=20
-> > > > > =C2=A0security/keys/trusted-keys/trusted_core.c | 13 +++++-------=
--
-> > > > > =C2=A01 file changed, 5 insertions(+), 8 deletions(-)
-> > > > >=20
-> > > > > diff --git a/security/keys/trusted-keys/trusted_core.c b/security=
-/keys/trusted-keys/trusted_core.c
-> > > > > index c6fc50d67214..85fb5c22529a 100644
-> > > > > --- a/security/keys/trusted-keys/trusted_core.c
-> > > > > +++ b/security/keys/trusted-keys/trusted_core.c
-> > > > > @@ -44,13 +44,12 @@ static const struct trusted_key_source truste=
-d_key_sources[] =3D {
-> > > > > =C2=A0#endif
-> > > > > =C2=A0};
-> > > > >=20
-> > > > > -DEFINE_STATIC_CALL_NULL(trusted_key_init, *trusted_key_sources[0=
-].ops->init);
-> > > > > =C2=A0DEFINE_STATIC_CALL_NULL(trusted_key_seal, *trusted_key_sour=
-ces[0].ops->seal);
-> > > > > =C2=A0DEFINE_STATIC_CALL_NULL(trusted_key_unseal,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- *trusted_key_sources[0].ops->unseal);
-> > > > > =C2=A0DEFINE_STATIC_CALL_NULL(trusted_key_get_random,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- *trusted_key_sources[0].ops->get_random);
-> > > > > -DEFINE_STATIC_CALL_NULL(trusted_key_exit, *trusted_key_sources[0=
-].ops->exit);
-> > > > > +static void (*trusted_key_exit)(void);
-> > > > > =C2=A0static unsigned char migratable;
-> > > > >=20
-> > > > > =C2=A0enum {
-> > > > > @@ -359,19 +358,16 @@ static int __init init_trusted(void)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!get_random)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- get_random =3D kernel_get_random;
-> > > > >=20
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 static_call_update(trusted_key_init,
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trusted_key_so=
-urces[i].ops->init);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 static_call_update(trusted_key_seal,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trusted_=
-key_sources[i].ops->seal);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 static_call_update(trusted_key_unseal,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trusted_=
-key_sources[i].ops->unseal);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 static_call_update(trusted_key_get_random,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 get_rand=
-om);
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 static_call_update(trusted_key_exit,
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trusted_key_so=
-urces[i].ops->exit);
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 trusted_key_exit =3D trusted_key_sources[i].ops->exit=
-;
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 migratable =3D trusted_key_sources[i].ops->migr=
-atable;
-> > > > >=20
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 ret =3D static_call(trusted_key_init)();
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 ret =3D trusted_key_sources[i].ops->init();
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!ret)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- break;
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > > > @@ -388,7 +384,8 @@ static int __init init_trusted(void)
-> > > > >=20
-> > > > > =C2=A0static void __exit cleanup_trusted(void)
-> > > > > =C2=A0{
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 static_call_cond(trusted_ke=
-y_exit)();
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (trusted_key_exit)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 (*trusted_key_exit)();
-> > > > > =C2=A0}
-> > > > >=20
-> > > > > =C2=A0late_initcall(init_trusted);
-> > > >=20
-> > > > Would it be less confusing to require trusted_key_exit from each?
-> > > >=20
-> > >=20
-> > > It is already required for each trust source to provide exit callback
-> > > but this NULL check was added via this fix [1] in case there isn't an=
-y
-> > > trust source present.
-> > >=20
-> > > [1] https://lkml.kernel.org/stable/20220126184155.220814-1-dave.kleik=
-amp@oracle.com/
-> >=20
-> > I'd considering creating a placeholder trusted_key_default_exit() with
-> > perhaps pr_debug() statement acknowledging it getting called.
-> >=20
-> > Hmm.. if we had that I wonder if we could get away with __weak... Then
-> > you would not need to assign anything. This is not through-out analyzed=
-.
-> > Tbh I'm not sure how module loader handles this type of scenario but
-> > at least the placeholder function would make sense in any case.
->=20
-> If you define a default exit function as __weak and expect trusted key so=
-urces
-> to override it, you can only have one trust source at most in the compile=
-d
-> kernel and no boot-time selection would be possible.
+On Tue, Oct 10, 2023 at 4:34=E2=80=AFPM Miklos Szeredi <miklos@szeredi.hu> =
+wrote:
+>
+> On Tue, 10 Oct 2023 at 15:17, Amir Goldstein <amir73il@gmail.com> wrote:
+>
+> > Sorry, you asked about ovl mount.
+> > To me it makes sense that if users observe ovl paths in writable mapped
+> > memory, that ovl should not be remounted RO.
+> > Anyway, I don't see a good reason to allow remount RO for ovl in that c=
+ase.
+> > Is there?
+>
+> Agreed.
+>
+> But is preventing remount RO important enough to warrant special
+> casing of backing file in generic code?  I'm not convinced either
+> way...
 
-Right, got it, thank you.
+I prefer correctness and I doubt that the check
+   if (unlikely(f->f_mode & FMODE_BACKING))
+is worth optimizing.
 
-So, I still would consider trusted_key_default_exit() and assign that in th=
-e
-declaration to trusted_exit.
+but I will let Christian make the final call.
 
-BR, Jarkko
+Thanks,
+Amir.
