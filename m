@@ -2,64 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0A17C56CB
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Oct 2023 16:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821C07C571E
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Oct 2023 16:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346815AbjJKO1V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Oct 2023 10:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        id S235069AbjJKOjD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Oct 2023 10:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235069AbjJKO1U (ORCPT
+        with ESMTP id S232260AbjJKOjC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Oct 2023 10:27:20 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0C0B6;
-        Wed, 11 Oct 2023 07:27:18 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39BEKJgZ026056;
-        Wed, 11 Oct 2023 14:26:30 GMT
+        Wed, 11 Oct 2023 10:39:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AF9C9;
+        Wed, 11 Oct 2023 07:39:01 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39BEZQdJ018357;
+        Wed, 11 Oct 2023 14:38:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=hwv9Ln5vwUJ6RTl5oYfvcx3p5aoxxW+VLSzODqPcTGI=;
- b=kNh1IE6/AIonVhJ3NCWkxse1DrFFdg9H2SIIDT0wD5L34gedEFjLcq5xQuuyRN3HvbIe
- tf/n/SVSv0/yCMxa1SfbrYd0Rxd7KoXtilfS5knyDmocKIVnYAQO++PUIMmMMTVNeMrz
- 6iLn6K+iDQYkNuqsEs6tdYZ7pTKGijxGrfB0Ijrd9efrHf3yAdRWnwXrScKgEFLAaA27
- 48x6JtzwPZd/cnaUR7o8QX5l/8s+Ton/qklkSwip7VmHnAe0nFrdNdGq5qPTf0csW1jV
- cRPO4ZyPhP7EhDlkKOIyWn6GYE9xIBy3Me+t4Z2mL3iYm6jpJ06cpbj6NEmr8W1r20F7 eg== 
+ bh=Rsrya8F9k3FKu3oAi/1f/gRrlIvhxy+n+lE/10Bl0gU=;
+ b=Wf0I7KA2CrPdmdAzdzbRGZQufcYWvcmVBUgSuIsoeXheVlzPJv8Oeyz5UYnPB06tURzz
+ Ue7kJ/mSvtwdccZIZ93kJblEmMRDQg9ctDNLpGFJEW26UwPUHr1gEX0FXbVozmpNDyvs
+ rxvzu7melyq2XI0yfAVHyrd3IzmQYg68lVPIsWwyGnjIvvWblfsg23h2WTzGk+1x4PDN
+ kcbc72R18OOT+zDbFI0LgdhHqOXo82DHe75cEmfx64+dFUiIzQSkI+Rqe8eWC9JjWOpV
+ uJXK5nnzU8bTMFXERPnP1L0ZxpTw0ScPLWEHFvXZmBgBbjf7IfVk9Onez90XlTT9Cv5X Ew== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tnwcng7ek-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tnwkm056m-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Oct 2023 14:26:30 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39BELEdB029444;
-        Wed, 11 Oct 2023 14:26:29 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tnwcng7e5-1
+        Wed, 11 Oct 2023 14:38:13 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39BEb0x2025752;
+        Wed, 11 Oct 2023 14:38:13 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tnwkm054p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Oct 2023 14:26:29 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39BE3NVc025863;
-        Wed, 11 Oct 2023 14:26:28 GMT
+        Wed, 11 Oct 2023 14:38:12 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39BDGYnQ001270;
+        Wed, 11 Oct 2023 14:38:11 GMT
 Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tkjnngkm5-1
+        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tkkvk09fg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Oct 2023 14:26:28 +0000
+        Wed, 11 Oct 2023 14:38:11 +0000
 Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39BEQSHP27001392
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39BEcAFT27853388
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Oct 2023 14:26:28 GMT
+        Wed, 11 Oct 2023 14:38:10 GMT
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0038B5803F;
-        Wed, 11 Oct 2023 14:26:28 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 103685803F;
+        Wed, 11 Oct 2023 14:38:10 +0000 (GMT)
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AAC4558056;
-        Wed, 11 Oct 2023 14:26:26 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 6455958063;
+        Wed, 11 Oct 2023 14:38:08 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.67.198])
         by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 11 Oct 2023 14:26:26 +0000 (GMT)
-Message-ID: <e9c402eac882ada620b9bf9aadd507ae51bd4a7f.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 01/25] ima: Align ima_inode_post_setattr() definition
+        Wed, 11 Oct 2023 14:38:08 +0000 (GMT)
+Message-ID: <a733fe780a3197150067ad35ed280bf85e11fa97.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 02/25] ima: Align ima_post_path_mknod() definition
  with LSM infrastructure
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
@@ -73,27 +73,26 @@ To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
 Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date:   Wed, 11 Oct 2023 10:26:26 -0400
-In-Reply-To: <20230904133415.1799503-2-roberto.sassu@huaweicloud.com>
+        selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 11 Oct 2023 10:38:08 -0400
+In-Reply-To: <20230904133415.1799503-3-roberto.sassu@huaweicloud.com>
 References: <20230904133415.1799503-1-roberto.sassu@huaweicloud.com>
-         <20230904133415.1799503-2-roberto.sassu@huaweicloud.com>
+         <20230904133415.1799503-3-roberto.sassu@huaweicloud.com>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: t0qch1x91VHPl_IFUTpYzTcwiC6OKrX2
-X-Proofpoint-GUID: Pm1mNEanTYeYNl1mS2QD2BQ4BS1Re_WB
+X-Proofpoint-GUID: QVsVQlDn-wAz8Uyi9OSmRgCBMpneIJFI
+X-Proofpoint-ORIG-GUID: 56WOXHa1T-ZiyjPUwv0xHI5wq_xiNMpW
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-11_09,2023-10-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1011
- suspectscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310110126
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=982 adultscore=0
+ spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2309180000 definitions=main-2310110129
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
         RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -107,82 +106,123 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 On Mon, 2023-09-04 at 15:33 +0200, Roberto Sassu wrote:
 > From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> Change ima_inode_post_setattr() definition, so that it can be registered as
-> implementation of the inode_post_setattr hook.
-
-Please indicate inode_post_settattr() is a new hook.  In general it
-should be stated on first usage.  In 02/25 the wording "(to be
-introduced)" is used, but not on first usage.  Please add "(to be
-introduced)" after inode_post_setattr.
-
-Adding a new security hook argument would be to support both IMA and
-EVM, which have different options.
-
-Mimi
-
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  fs/attr.c                             | 2 +-
->  include/linux/ima.h                   | 4 ++--
->  security/integrity/ima/ima_appraise.c | 3 ++-
->  3 files changed, 5 insertions(+), 4 deletions(-)
+> Change ima_post_path_mknod() definition, so that it can be registered as
+> implementation of the path_post_mknod hook. Since LSMs see a umask-stripped
+> mode from security_path_mknod(), pass the same to ima_post_path_mknod() as
+> well.
+> Also, make sure that ima_post_path_mknod() is executed only if
+> (mode & S_IFMT) is equal to zero or S_IFREG.
 > 
-> diff --git a/fs/attr.c b/fs/attr.c
-> index d60dc1edb526..7d4553c1208d 100644
-> --- a/fs/attr.c
-> +++ b/fs/attr.c
-> @@ -486,7 +486,7 @@ int notify_change(struct mnt_idmap *idmap, struct dentry *dentry,
+> Add this check to take into account the different placement of the
+> path_post_mknod hook (to be introduced) in do_mknodat().
+
+Move "(to be introduced)" to when it is first mentioned.
+
+> Since the new hook
+> will be placed after the switch(), the check ensures that
+> ima_post_path_mknod() is invoked as originally intended when it is
+> registered as implementation of path_post_mknod.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  fs/namei.c                        |  9 ++++++---
+>  include/linux/ima.h               |  7 +++++--
+>  security/integrity/ima/ima_main.c | 10 +++++++++-
+>  3 files changed, 20 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/namei.c b/fs/namei.c
+> index e56ff39a79bc..c5e96f716f98 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -4024,6 +4024,7 @@ static int do_mknodat(int dfd, struct filename *name, umode_t mode,
+>  	struct path path;
+>  	int error;
+>  	unsigned int lookup_flags = 0;
+> +	umode_t mode_stripped;
 >  
->  	if (!error) {
->  		fsnotify_change(dentry, ia_valid);
-> -		ima_inode_post_setattr(idmap, dentry);
-> +		ima_inode_post_setattr(idmap, dentry, ia_valid);
->  		evm_inode_post_setattr(dentry, ia_valid);
->  	}
+>  	error = may_mknod(mode);
+>  	if (error)
+> @@ -4034,8 +4035,9 @@ static int do_mknodat(int dfd, struct filename *name, umode_t mode,
+>  	if (IS_ERR(dentry))
+>  		goto out1;
 >  
+> -	error = security_path_mknod(&path, dentry,
+> -			mode_strip_umask(path.dentry->d_inode, mode), dev);
+> +	mode_stripped = mode_strip_umask(path.dentry->d_inode, mode);
+> +
+> +	error = security_path_mknod(&path, dentry, mode_stripped, dev);
+>  	if (error)
+>  		goto out2;
+>  
+> @@ -4045,7 +4047,8 @@ static int do_mknodat(int dfd, struct filename *name, umode_t mode,
+>  			error = vfs_create(idmap, path.dentry->d_inode,
+>  					   dentry, mode, true);
+>  			if (!error)
+> -				ima_post_path_mknod(idmap, dentry);
+> +				ima_post_path_mknod(idmap, &path, dentry,
+> +						    mode_stripped, dev);
+>  			break;
+>  		case S_IFCHR: case S_IFBLK:
+>  			error = vfs_mknod(idmap, path.dentry->d_inode,
 > diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index 86b57757c7b1..910a2f11a906 100644
+> index 910a2f11a906..179ce52013b2 100644
 > --- a/include/linux/ima.h
 > +++ b/include/linux/ima.h
-> @@ -186,7 +186,7 @@ static inline void ima_post_key_create_or_update(struct key *keyring,
->  #ifdef CONFIG_IMA_APPRAISE
->  extern bool is_ima_appraise_enabled(void);
->  extern void ima_inode_post_setattr(struct mnt_idmap *idmap,
-> -				   struct dentry *dentry);
-> +				   struct dentry *dentry, int ia_valid);
->  extern int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
->  		       const void *xattr_value, size_t xattr_value_len);
->  extern int ima_inode_set_acl(struct mnt_idmap *idmap,
-> @@ -206,7 +206,7 @@ static inline bool is_ima_appraise_enabled(void)
+> @@ -32,7 +32,8 @@ extern int ima_read_file(struct file *file, enum kernel_read_file_id id,
+>  extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
+>  			      enum kernel_read_file_id id);
+>  extern void ima_post_path_mknod(struct mnt_idmap *idmap,
+> -				struct dentry *dentry);
+> +				const struct path *dir, struct dentry *dentry,
+> +				umode_t mode, unsigned int dev);
+>  extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
+>  extern int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size);
+>  extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
+> @@ -114,7 +115,9 @@ static inline int ima_post_read_file(struct file *file, void *buf, loff_t size,
 >  }
->  h
->  static inline void ima_inode_post_setattr(struct mnt_idmap *idmap,
-> -					  struct dentry *dentry)
-> +					  struct dentry *dentry, int ia_valid)
+>  
+>  static inline void ima_post_path_mknod(struct mnt_idmap *idmap,
+> -				       struct dentry *dentry)
+> +				       const struct path *dir,
+> +				       struct dentry *dentry,
+> +				       umode_t mode, unsigned int dev)
 >  {
 >  	return;
 >  }
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index 491c1aca0b1c..6b032bce4fe7 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -627,6 +627,7 @@ void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file)
->   * ima_inode_post_setattr - reflect file metadata changes
->   * @idmap:  idmap of the mount the inode was found from
->   * @dentry: pointer to the affected dentry
-> + * @ia_valid: for the UID and GID status
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 365db0e43d7c..76eba92d7f10 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -696,18 +696,26 @@ void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+>  /**
+>   * ima_post_path_mknod - mark as a new inode
+>   * @idmap: idmap of the mount the inode was found from
+> + * @dir: path structure of parent of the new file
+>   * @dentry: newly created dentry
+> + * @mode: mode of the new file
+> + * @dev: undecoded device number
 >   *
->   * Changes to a dentry's metadata might result in needing to appraise.
->   *
-> @@ -634,7 +635,7 @@ void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file)
->   * to lock the inode's i_mutex.
+>   * Mark files created via the mknodat syscall as new, so that the
+>   * file data can be written later.
 >   */
->  void ima_inode_post_setattr(struct mnt_idmap *idmap,
-> -			    struct dentry *dentry)
-> +			    struct dentry *dentry, int ia_valid)
+>  void ima_post_path_mknod(struct mnt_idmap *idmap,
+> -			 struct dentry *dentry)
+> +			 const struct path *dir, struct dentry *dentry,
+> +			 umode_t mode, unsigned int dev)
 >  {
->  	struct inode *inode = d_backing_inode(dentry);
 >  	struct integrity_iint_cache *iint;
+>  	struct inode *inode = dentry->d_inode;
+>  	int must_appraise;
+>  
+> +	/* See do_mknodat(), IMA is executed for case 0: and case S_IFREG: */
+> +	if ((mode & S_IFMT) != 0 && (mode & S_IFMT) != S_IFREG)
+> +		return;
+> +
 
+There's already a check below to make sure that this is a regular file.
+Are both needed?
+
+>  	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+>  		return;
+>  
 
