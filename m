@@ -2,35 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58607C5039
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Oct 2023 12:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D317C5371
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Oct 2023 14:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjJKKef (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Oct 2023 06:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
+        id S234968AbjJKMRk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Oct 2023 08:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbjJKKee (ORCPT
+        with ESMTP id S234988AbjJKMR2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Oct 2023 06:34:34 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47E292;
-        Wed, 11 Oct 2023 03:34:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2633C433C9;
-        Wed, 11 Oct 2023 10:34:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697020471;
-        bh=woX3nAzbZTdgFyiPGo2Qva6o8So5SbxPp6WMWELScOQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=jLe9TQw1lcO96kxUQxZ19hVoRBeiPznOx6GgHnV4GMsbQKn40QG+/lef0alvzHiOd
-         l9pIvo7lD/Hiel+zGVzmiraMA31Pxyz4/QWGw7usOQlAdm1ccCIgxICzGvg5TavCmn
-         3aZ6rpja9xjWn8nfY0DvC7UI67SqKn02r9aMehe7jFVVYU0U5z8eWinfX5jd+5UUaE
-         rpnpjMGUmTa7I7Iay+i1G3pehAtpeF18AY8H8qq4wAvlikFN+MN1qeKe2ac3LXSDP7
-         Cbfoc5LR0LgYh69rwdNh960JNX/Pdmx9gTDY2+GoJmd6aME1LyDGtzxmMof8vRFIak
-         7r7cUQJEEjXJA==
-Message-ID: <0aeb4d88952aff53c5c1a40b547a9819ebd1947e.camel@kernel.org>
+        Wed, 11 Oct 2023 08:17:28 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C75A1AA
+        for <linux-integrity@vger.kernel.org>; Wed, 11 Oct 2023 05:17:23 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5a7b92cd0ccso26772417b3.1
+        for <linux-integrity@vger.kernel.org>; Wed, 11 Oct 2023 05:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697026642; x=1697631442; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sIwwSVPQgNdZrWxFWOKz+2uIJcJJpTj8JRe+NnP9VHY=;
+        b=LZfqlEFB66enpkByNrCJLWD1XzkygJVu38cM3b8tPbCRW2660S2BK8kOSBmngCuzYN
+         L31g56pVSheWxnDUgN2pCGV8i6RlK/lAWDaAvK6QmxRPAIqRVsAe6ASNCT3+wcNDtxbc
+         YH3wl8lkWzjSdV2K8wGRX7mstshrkktmuSwRyuIxumCc390tC3BzmvrKq3mbrErmRDun
+         QS1ydHoYwHiWHISP4nr75RuwxggEuOF1ablY5RWQyM1lKhJfDvmVnQi20C2wQvMDVyeU
+         vKDNc8Ej1Lk2cLx1E4q4dwJY1hBpzqCRznL+FZFQ3uoFZggIYsFbm+uK5b/RTiXDjYwc
+         ysDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697026642; x=1697631442;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sIwwSVPQgNdZrWxFWOKz+2uIJcJJpTj8JRe+NnP9VHY=;
+        b=mz+BTfQ8QDREzIlFtHgG92FgZyjtaRQQP/9EJi6vBEQSpf5xbpg0lMn6hqlgEIyZU3
+         Q9Z+GFrniWlo+CtopSIoOeURnJtJ8Vxd3+A7FBVlHFUW3H2eonykj6+L7+Mvf8aaAR84
+         Ru5JvtGucSxQMvAt4b/LS57sCXJ83qxhpLAfOa8pU2JPpc7DFRY5HPMo4CF3hBU+3zYb
+         ro6aBdi/C8yzUZXR778plstzyw67ZcOAwWF2eYaALo/sOV2UlaVo3qL1mmg7YclaFU3i
+         69tdrdXahZPgXyJ1Exly9Xc++L9E838WCvzJQ+oV+F4o1x4lCvqj1EeqG7/1ddMmQU3W
+         N1OQ==
+X-Gm-Message-State: AOJu0Yx0LaDdxZ6FJsv8zY23JBu1quDhHExkV/oMALVFdJBbR651xwqs
+        xuh0CqhSXD+bVCD4MBYFglz8EFRtW7Vn8P3nPpH8pA==
+X-Google-Smtp-Source: AGHT+IHdsGpUl2F/ABzPt0MiHqRLMOqD782Zj3S2K92UY3MNeAlMxM0Dfsb02ulGGkYsBm28PZa268wbqGdNjOa9tuA=
+X-Received: by 2002:a05:690c:dd2:b0:5a4:f7d3:394e with SMTP id
+ db18-20020a05690c0dd200b005a4f7d3394emr28388983ywb.14.1697026642640; Wed, 11
+ Oct 2023 05:17:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231010231616.3122392-1-jarkko@kernel.org> <CAFA6WYMdrCfqMVExYBbhCK7vUSQffyUfSWpQO0=HeQc6Edz9OA@mail.gmail.com>
+ <186a4b62517ead88df8c3c0e9e9585e88f9a6fd8.camel@kernel.org> <0aeb4d88952aff53c5c1a40b547a9819ebd1947e.camel@kernel.org>
+In-Reply-To: <0aeb4d88952aff53c5c1a40b547a9819ebd1947e.camel@kernel.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 11 Oct 2023 17:47:11 +0530
+Message-ID: <CAFA6WYObvJvQv=-JJ5gnmFqJKbT=4JnT+ErC=iB1KfnYfVn7Ag@mail.gmail.com>
 Subject: Re: [PATCH] KEYS: trusted: Rollback init_trusted() consistently
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     keyrings@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
         stable@vger.kernel.org, James Bottomley <jejb@linux.ibm.com>,
@@ -43,91 +67,101 @@ Cc:     keyrings@vger.kernel.org,
         "open list:SECURITY SUBSYSTEM" 
         <linux-security-module@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-Date:   Wed, 11 Oct 2023 13:34:26 +0300
-In-Reply-To: <186a4b62517ead88df8c3c0e9e9585e88f9a6fd8.camel@kernel.org>
-References: <20231010231616.3122392-1-jarkko@kernel.org>
-         <CAFA6WYMdrCfqMVExYBbhCK7vUSQffyUfSWpQO0=HeQc6Edz9OA@mail.gmail.com>
-         <186a4b62517ead88df8c3c0e9e9585e88f9a6fd8.camel@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.4-2 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTEwLTExIGF0IDEzOjEyICswMzAwLCBKYXJra28gU2Fra2luZW4gd3JvdGU6
-Cj4gT24gV2VkLCAyMDIzLTEwLTExIGF0IDExOjI3ICswNTMwLCBTdW1pdCBHYXJnIHdyb3RlOgo+
-ID4gT24gV2VkLCAxMSBPY3QgMjAyMyBhdCAwNDo0NiwgSmFya2tvIFNha2tpbmVuIDxqYXJra29A
-a2VybmVsLm9yZz4gd3JvdGU6Cj4gPiA+IAo+ID4gPiBEbyBiaW5kIG5laXRoZXIgc3RhdGljIGNh
-bGxzIG5vciB0cnVzdGVkX2tleV9leGl0KCkgYmVmb3JlIGEgc3VjY2Vzc2Z1bAo+ID4gPiBpbml0
-LCBpbiBvcmRlciB0byBtYWludGFpbiBhIGNvbnNpc3RlbnQgc3RhdGUuIEluIGFkZGl0aW9uLCBk
-ZXBhcnQgdGhlCj4gPiA+IGluaXRfdHJ1c3RlZCgpIGluIHRoZSBjYXNlIG9mIGEgcmVhbCBlcnJv
-ciAoaS5lLiBnZXR0aW5nIGJhY2sgc29tZXRoaW5nCj4gPiA+IGVsc2UgdGhhbiAtRU5PREVWKS4K
-PiA+ID4gCj4gPiA+IFJlcG9ydGVkLWJ5OiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgt
-Zm91bmRhdGlvbi5vcmc+Cj4gPiA+IENsb3NlczogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGlu
-dXgtaW50ZWdyaXR5L0NBSGstPXdoT1BvTGFXTThTOEdnb09QVDdhMituTUg1aDNUTEt0bj1SXzN3
-NFIxX1V2Z0BtYWlsLmdtYWlsLmNvbS8KPiA+ID4gQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmfC
-oCMgdjUuMTMrCj4gPiA+IEZpeGVzOiA1ZDA2ODJiZTMxODkgKCJLRVlTOiB0cnVzdGVkOiBBZGQg
-Z2VuZXJpYyB0cnVzdGVkIGtleXMgZnJhbWV3b3JrIikKPiA+ID4gU2lnbmVkLW9mZi1ieTogSmFy
-a2tvIFNha2tpbmVuIDxqYXJra29Aa2VybmVsLm9yZz4KPiA+ID4gLS0tCj4gPiA+IMKgc2VjdXJp
-dHkva2V5cy90cnVzdGVkLWtleXMvdHJ1c3RlZF9jb3JlLmMgfCAyMCArKysrKysrKysrLS0tLS0t
-LS0tLQo+ID4gPiDCoDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCAxMCBkZWxldGlv
-bnMoLSkKPiA+ID4gCj4gPiA+IGRpZmYgLS1naXQgYS9zZWN1cml0eS9rZXlzL3RydXN0ZWQta2V5
-cy90cnVzdGVkX2NvcmUuYyBiL3NlY3VyaXR5L2tleXMvdHJ1c3RlZC1rZXlzL3RydXN0ZWRfY29y
-ZS5jCj4gPiA+IGluZGV4IDg1ZmI1YzIyNTI5YS4uZmVlMWFiMmM3MzRkIDEwMDY0NAo+ID4gPiAt
-LS0gYS9zZWN1cml0eS9rZXlzL3RydXN0ZWQta2V5cy90cnVzdGVkX2NvcmUuYwo+ID4gPiArKysg
-Yi9zZWN1cml0eS9rZXlzL3RydXN0ZWQta2V5cy90cnVzdGVkX2NvcmUuYwo+ID4gPiBAQCAtMzU4
-LDE3ICszNTgsMTcgQEAgc3RhdGljIGludCBfX2luaXQgaW5pdF90cnVzdGVkKHZvaWQpCj4gPiA+
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoIWdldF9yYW5kb20pCj4gPiA+IMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ2V0X3JhbmRvbSA9
-IGtlcm5lbF9nZXRfcmFuZG9tOwo+ID4gPiAKPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgc3RhdGljX2NhbGxfdXBkYXRlKHRydXN0ZWRfa2V5X3NlYWwsCj4gPiA+IC3CoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgdHJ1c3RlZF9rZXlfc291cmNlc1tpXS5vcHMtPnNlYWwpOwo+ID4gPiAtwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBzdGF0aWNfY2FsbF91cGRhdGUodHJ1c3RlZF9rZXlfdW5zZWFsLAo+
-ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgIHRydXN0ZWRfa2V5X3NvdXJjZXNbaV0ub3BzLT51bnNlYWwpOwo+ID4g
-PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdGF0aWNfY2FsbF91cGRhdGUodHJ1c3Rl
-ZF9rZXlfZ2V0X3JhbmRvbSwKPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnZXRfcmFuZG9tKTsKPiA+ID4gLcKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdHJ1c3RlZF9rZXlfZXhpdCA9IHRydXN0ZWRfa2V5
-X3NvdXJjZXNbaV0ub3BzLT5leGl0Owo+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBtaWdyYXRhYmxlID0gdHJ1c3RlZF9rZXlfc291cmNlc1tpXS5vcHMtPm1pZ3JhdGFibGU7Cj4g
-PiA+IC0KPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldCA9IHRydXN0ZWRf
-a2V5X3NvdXJjZXNbaV0ub3BzLT5pbml0KCk7Cj4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIGlmICghcmV0KQo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAo
-IXJldCkgewo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgc3RhdGljX2NhbGxfdXBkYXRlKHRydXN0ZWRfa2V5X3NlYWwsIHRydXN0ZWRfa2V5X3NvdXJj
-ZXNbaV0ub3BzLT5zZWFsKTsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHN0YXRpY19jYWxsX3VwZGF0ZSh0cnVzdGVkX2tleV91bnNlYWwsIHRydXN0
-ZWRfa2V5X3NvdXJjZXNbaV0ub3BzLT51bnNlYWwpOwo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RhdGljX2NhbGxfdXBkYXRlKHRydXN0ZWRfa2V5
-X2dldF9yYW5kb20sIGdldF9yYW5kb20pOwo+ID4gPiArCj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0cnVzdGVkX2tleV9leGl0ID0gdHJ1c3RlZF9r
-ZXlfc291cmNlc1tpXS5vcHMtPmV4aXQ7Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCBtaWdyYXRhYmxlID0gdHJ1c3RlZF9rZXlfc291cmNlc1tpXS5v
-cHMtPm1pZ3JhdGFibGU7Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH0KPiA+
-ID4gKwo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoIXJldCB8fCByZXQg
-IT0gLUVOT0RFVikKPiA+IAo+ID4gQXMgbWVudGlvbmVkIGluIHRoZSBvdGhlciB0aHJlYWQsIHdl
-IHNob3VsZCBhbGxvdyBvdGhlciB0cnVzdCBzb3VyY2VzCj4gPiB0byBiZSBpbml0aWFsaXplZCBp
-ZiB0aGUgcHJpbWFyeSBvbmUgZmFpbHMuCj4gCj4gSSBzZW50IHRoZSBwYXRjaCBiZWZvcmUgSSBy
-ZWNlaXZlZCB0aGF0IHJlc3BvbnNlIGJ1dCBoZXJlJ3Mgd2hhdCB5b3UKPiB3cm90ZToKPiAKPiAi
-V2Ugc2hvdWxkIGdpdmUgb3RoZXIgdHJ1c3Qgc291cmNlcyBhIGNoYW5jZSB0byByZWdpc3RlciBm
-b3IgdHJ1c3RlZAo+IGtleXMgaWYgdGhlIHByaW1hcnkgb25lIGZhaWxzLiIKPiAKPiAxLiBUaGlz
-IGNvbmRpdGlvbiBpcyBsYWNraW5nIGFuIGlubGluZSBjb21tZW50Lgo+IDIuIE5laXRoZXIgdGhp
-cyByZXNwb25zZSBvciB0aGUgb25lIHRoYXQgeW91IHBvaW50ZWQgb3V0IGhhcyBhbnkKPiDCoMKg
-IGV4cGxhbmF0aW9uIHdoeSBmb3IgYW55IHN5c3RlbSBmYWlsdXJlIHRoZSBwcm9jZXNzIHNob3Vs
-ZAo+IMKgwqAgY29udGludWUuCj4gCj4gWW91IHNob3VsZCByZWFsbHkga25vdyB0aGUgc2l0dWF0
-aW9ucyAoZS5nLiBsaXN0IG9mIHBvc2l4IGVycm9yCj4gY29kZSkgd2hlbiB0aGUgcHJvY2VzcyBj
-YW4gY29udGludWUgYW5kICJhbGxvdyBsaXN0IiB0aG9zZS4gVGhpcwo+IHdheSB3YXkgdG9vIGFi
-c3RyYWN0LiBJdCBjYW5ub3QgYmUgbGV0IGFsbCBwb3NzaWJsZSBzeXN0ZW0gZmFpbHVyZXMKPiBw
-YXNzLgoKQW5kIGl0IHdvdWxkIG5pY2UgaWYgaXQgcHJpbnRlZCBvdXQgc29tZXRoaW5nIGZvciBs
-ZWdpdCBjYXNlcy4gTGlrZQoibm8gZGV2aWNlIGZvdW5kIiBldGMuIEFuZCBmb3IgcmVzdCBpdCBt
-dXN0IHJlYWxseSB3aXRoZHJhdyB0aGUgd2hvbGUKcHJvY2Vzcy4KCkJSLCBKYXJra28K
+On Wed, 11 Oct 2023 at 16:04, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, 2023-10-11 at 13:12 +0300, Jarkko Sakkinen wrote:
+> > On Wed, 2023-10-11 at 11:27 +0530, Sumit Garg wrote:
+> > > On Wed, 11 Oct 2023 at 04:46, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > >
+> > > > Do bind neither static calls nor trusted_key_exit() before a successful
+> > > > init, in order to maintain a consistent state. In addition, depart the
+> > > > init_trusted() in the case of a real error (i.e. getting back something
+> > > > else than -ENODEV).
+> > > >
+> > > > Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > > Closes: https://lore.kernel.org/linux-integrity/CAHk-=whOPoLaWM8S8GgoOPT7a2+nMH5h3TLKtn=R_3w4R1_Uvg@mail.gmail.com/
+> > > > Cc: stable@vger.kernel.org # v5.13+
+> > > > Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+> > > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > ---
+> > > >  security/keys/trusted-keys/trusted_core.c | 20 ++++++++++----------
+> > > >  1 file changed, 10 insertions(+), 10 deletions(-)
+> > > >
+> > > > diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+> > > > index 85fb5c22529a..fee1ab2c734d 100644
+> > > > --- a/security/keys/trusted-keys/trusted_core.c
+> > > > +++ b/security/keys/trusted-keys/trusted_core.c
+> > > > @@ -358,17 +358,17 @@ static int __init init_trusted(void)
+> > > >                 if (!get_random)
+> > > >                         get_random = kernel_get_random;
+> > > >
+> > > > -               static_call_update(trusted_key_seal,
+> > > > -                                  trusted_key_sources[i].ops->seal);
+> > > > -               static_call_update(trusted_key_unseal,
+> > > > -                                  trusted_key_sources[i].ops->unseal);
+> > > > -               static_call_update(trusted_key_get_random,
+> > > > -                                  get_random);
+> > > > -               trusted_key_exit = trusted_key_sources[i].ops->exit;
+> > > > -               migratable = trusted_key_sources[i].ops->migratable;
+> > > > -
+> > > >                 ret = trusted_key_sources[i].ops->init();
+> > > > -               if (!ret)
+> > > > +               if (!ret) {
+> > > > +                       static_call_update(trusted_key_seal, trusted_key_sources[i].ops->seal);
+> > > > +                       static_call_update(trusted_key_unseal, trusted_key_sources[i].ops->unseal);
+> > > > +                       static_call_update(trusted_key_get_random, get_random);
+> > > > +
+> > > > +                       trusted_key_exit = trusted_key_sources[i].ops->exit;
+> > > > +                       migratable = trusted_key_sources[i].ops->migratable;
+> > > > +               }
+> > > > +
+> > > > +               if (!ret || ret != -ENODEV)
+> > >
+> > > As mentioned in the other thread, we should allow other trust sources
+> > > to be initialized if the primary one fails.
+> >
+> > I sent the patch before I received that response but here's what you
+> > wrote:
+> >
+> > "We should give other trust sources a chance to register for trusted
+> > keys if the primary one fails."
+> >
+> > 1. This condition is lacking an inline comment.
+> > 2. Neither this response or the one that you pointed out has any
+> >    explanation why for any system failure the process should
+> >    continue.
+> >
+> > You should really know the situations (e.g. list of posix error
+> > code) when the process can continue and "allow list" those. This
+> > way way too abstract. It cannot be let all possible system failures
+> > pass.
+>
+> And it would nice if it printed out something for legit cases. Like
+> "no device found" etc. And for rest it must really withdraw the whole
+> process.
 
+IMO, it would be quite tricky to come up with an allow list. Can we
+keep "EACCES", "EPERM", "ENOTSUPP" etc in that allow list? I think
+these are all debatable.
+
+The original intention to iterate through the trust source list was to
+allow a single Linux kernel binary to support platforms with varying
+trust sources (one or choose one from multiple) available. IMO, any
+restriction on the basis of error codes here since we can't predict
+them correctly may forfeit this intended use-case.
+
+-Sumit
+
+>
+> BR, Jarkko
