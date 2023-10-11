@@ -2,66 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FCA7C565D
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Oct 2023 16:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0A17C56CB
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Oct 2023 16:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235065AbjJKOFT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Oct 2023 10:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
+        id S1346815AbjJKO1V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Oct 2023 10:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbjJKOFR (ORCPT
+        with ESMTP id S235069AbjJKO1U (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Oct 2023 10:05:17 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E219E;
-        Wed, 11 Oct 2023 07:05:15 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A2EC433C8;
-        Wed, 11 Oct 2023 14:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697033115;
-        bh=YxWa6wRi50kkRgmvr3rIDECtS1ebZ2pMVIPK1wPGjUk=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=p2aK7odQCK6lKXjxAPBb8TQsODJbbh0J/mlp5UeXtOc4zZZIMjvJ5mXMFuyIqj7/O
-         m2ykHotL7cuxc7GIAuugHkpXKlchGe+ZIpesJsHkFW8cifNG8LOjT2VZHJnvuhCjM7
-         1EcLI7BePAwJVskw+tIznReiPdpSGBmasfQ7i9YONu1CGUtKnPm2lULYcRdVM3i1gB
-         BLnDDsYJ7mGjGBcEq0udEQ1WNJZ7pee8RR4uYh/PhSrdu93mH/XcY2QgJeZdJBBToe
-         qyC+nZ94fJ1yAKgwmN/mSr24QI8HEUTVdrZMel0p3UP0LpRzuElibJFq7UmBsE3Sh+
-         tshmItWemMc9Q==
-Message-ID: <6b1c0255de20752b55b902df0882c018cf75032d.camel@kernel.org>
-Subject: Re: [PATCH] KEYS: trusted: Rollback init_trusted() consistently
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     keyrings@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        stable@vger.kernel.org, James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "open list:KEYS-TRUSTED" <linux-integrity@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Wed, 11 Oct 2023 17:05:10 +0300
-In-Reply-To: <bdf8dbb2e1aeeb6396d7a03b8c00d0db729c602d.camel@kernel.org>
-References: <20231010231616.3122392-1-jarkko@kernel.org>
-         <CAFA6WYMdrCfqMVExYBbhCK7vUSQffyUfSWpQO0=HeQc6Edz9OA@mail.gmail.com>
-         <186a4b62517ead88df8c3c0e9e9585e88f9a6fd8.camel@kernel.org>
-         <0aeb4d88952aff53c5c1a40b547a9819ebd1947e.camel@kernel.org>
-         <CAFA6WYObvJvQv=-JJ5gnmFqJKbT=4JnT+ErC=iB1KfnYfVn7Ag@mail.gmail.com>
-         <79fe0b97e2f5d1f02d08c9f633b7c0da13dc9127.camel@kernel.org>
-         <CAFA6WYMrg3VBYvdV8Or==YK_qATk22bL+_ryDC-oO4jVf7DCWg@mail.gmail.com>
-         <b70d6be5980185a4fb4205e71c56111183e1f160.camel@kernel.org>
-         <CAFA6WYN0vXWZveAkzOfV_6Kki77SxgX7C=Xqe9brZMX1Dj2iLg@mail.gmail.com>
-         <bdf8dbb2e1aeeb6396d7a03b8c00d0db729c602d.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 11 Oct 2023 10:27:20 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0C0B6;
+        Wed, 11 Oct 2023 07:27:18 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39BEKJgZ026056;
+        Wed, 11 Oct 2023 14:26:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=hwv9Ln5vwUJ6RTl5oYfvcx3p5aoxxW+VLSzODqPcTGI=;
+ b=kNh1IE6/AIonVhJ3NCWkxse1DrFFdg9H2SIIDT0wD5L34gedEFjLcq5xQuuyRN3HvbIe
+ tf/n/SVSv0/yCMxa1SfbrYd0Rxd7KoXtilfS5knyDmocKIVnYAQO++PUIMmMMTVNeMrz
+ 6iLn6K+iDQYkNuqsEs6tdYZ7pTKGijxGrfB0Ijrd9efrHf3yAdRWnwXrScKgEFLAaA27
+ 48x6JtzwPZd/cnaUR7o8QX5l/8s+Ton/qklkSwip7VmHnAe0nFrdNdGq5qPTf0csW1jV
+ cRPO4ZyPhP7EhDlkKOIyWn6GYE9xIBy3Me+t4Z2mL3iYm6jpJ06cpbj6NEmr8W1r20F7 eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tnwcng7ek-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Oct 2023 14:26:30 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39BELEdB029444;
+        Wed, 11 Oct 2023 14:26:29 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tnwcng7e5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Oct 2023 14:26:29 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39BE3NVc025863;
+        Wed, 11 Oct 2023 14:26:28 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tkjnngkm5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Oct 2023 14:26:28 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39BEQSHP27001392
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Oct 2023 14:26:28 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0038B5803F;
+        Wed, 11 Oct 2023 14:26:28 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AAC4558056;
+        Wed, 11 Oct 2023 14:26:26 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.67.198])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 11 Oct 2023 14:26:26 +0000 (GMT)
+Message-ID: <e9c402eac882ada620b9bf9aadd507ae51bd4a7f.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 01/25] ima: Align ima_inode_post_setattr() definition
+ with LSM infrastructure
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        chuck.lever@oracle.com, jlayton@kernel.org, neilb@suse.de,
+        kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Date:   Wed, 11 Oct 2023 10:26:26 -0400
+In-Reply-To: <20230904133415.1799503-2-roberto.sassu@huaweicloud.com>
+References: <20230904133415.1799503-1-roberto.sassu@huaweicloud.com>
+         <20230904133415.1799503-2-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: t0qch1x91VHPl_IFUTpYzTcwiC6OKrX2
+X-Proofpoint-GUID: Pm1mNEanTYeYNl1mS2QD2BQ4BS1Re_WB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-11_09,2023-10-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1011
+ suspectscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310110126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,204 +104,85 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2023-10-11 at 16:55 +0300, Jarkko Sakkinen wrote:
-> On Wed, 2023-10-11 at 19:12 +0530, Sumit Garg wrote:
-> > On Wed, 11 Oct 2023 at 18:36, Jarkko Sakkinen <jarkko@kernel.org> wrote=
-:
-> > >=20
-> > > On Wed, 2023-10-11 at 18:25 +0530, Sumit Garg wrote:
-> > > > On Wed, 11 Oct 2023 at 18:07, Jarkko Sakkinen <jarkko@kernel.org> w=
-rote:
-> > > > >=20
-> > > > > On Wed, 2023-10-11 at 17:47 +0530, Sumit Garg wrote:
-> > > > > > On Wed, 11 Oct 2023 at 16:04, Jarkko Sakkinen <jarkko@kernel.or=
-g> wrote:
-> > > > > > >=20
-> > > > > > > On Wed, 2023-10-11 at 13:12 +0300, Jarkko Sakkinen wrote:
-> > > > > > > > On Wed, 2023-10-11 at 11:27 +0530, Sumit Garg wrote:
-> > > > > > > > > On Wed, 11 Oct 2023 at 04:46, Jarkko Sakkinen <jarkko@ker=
-nel.org> wrote:
-> > > > > > > > > >=20
-> > > > > > > > > > Do bind neither static calls nor trusted_key_exit() bef=
-ore a successful
-> > > > > > > > > > init, in order to maintain a consistent state. In addit=
-ion, depart the
-> > > > > > > > > > init_trusted() in the case of a real error (i.e. gettin=
-g back something
-> > > > > > > > > > else than -ENODEV).
-> > > > > > > > > >=20
-> > > > > > > > > > Reported-by: Linus Torvalds <torvalds@linux-foundation.=
-org>
-> > > > > > > > > > Closes: https://lore.kernel.org/linux-integrity/CAHk-=
-=3DwhOPoLaWM8S8GgoOPT7a2+nMH5h3TLKtn=3DR_3w4R1_Uvg@mail.gmail.com/
-> > > > > > > > > > Cc: stable@vger.kernel.org=C2=A0# v5.13+
-> > > > > > > > > > Fixes: 5d0682be3189 ("KEYS: trusted: Add generic truste=
-d keys framework")
-> > > > > > > > > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > > > > > > > ---
-> > > > > > > > > > =C2=A0security/keys/trusted-keys/trusted_core.c | 20 ++=
-++++++++----------
-> > > > > > > > > > =C2=A01 file changed, 10 insertions(+), 10 deletions(-)
-> > > > > > > > > >=20
-> > > > > > > > > > diff --git a/security/keys/trusted-keys/trusted_core.c =
-b/security/keys/trusted-keys/trusted_core.c
-> > > > > > > > > > index 85fb5c22529a..fee1ab2c734d 100644
-> > > > > > > > > > --- a/security/keys/trusted-keys/trusted_core.c
-> > > > > > > > > > +++ b/security/keys/trusted-keys/trusted_core.c
-> > > > > > > > > > @@ -358,17 +358,17 @@ static int __init init_trusted(vo=
-id)
-> > > > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!get_random)
-> > > > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 get_random =3D kernel_get_random;
-> > > > > > > > > >=20
-> > > > > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 static_call_update(trusted_key_seal,
-> > > > > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trust=
-ed_key_sources[i].ops->seal);
-> > > > > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 static_call_update(trusted_key_unseal,
-> > > > > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trust=
-ed_key_sources[i].ops->unseal);
-> > > > > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 static_call_update(trusted_key_get_random,
-> > > > > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 get_r=
-andom);
-> > > > > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trusted_key_exit =3D trusted_key_sources[i].=
-ops->exit;
-> > > > > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 migratable =3D trusted_key_sources[i].ops->m=
-igratable;
-> > > > > > > > > > -
-> > > > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D trusted_key_sources[i].ops->in=
-it();
-> > > > > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!ret)
-> > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!ret) {
-> > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 static_call_update(trusted_key_seal, trusted_key_sources[i].ops->seal);
-> > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 static_call_update(trusted_key_unseal, trusted_key_sources[i].ops->unse=
-al);
-> > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 static_call_update(trusted_key_get_random, get_random);
-> > > > > > > > > > +
-> > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 trusted_key_exit =3D trusted_key_sources[i].ops->exit;
-> > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 migratable =3D trusted_key_sources[i].ops->migratable;
-> > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > > > > > > > > +
-> > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!ret || ret !=3D -ENODEV)
-> > > > > > > > >=20
-> > > > > > > > > As mentioned in the other thread, we should allow other t=
-rust sources
-> > > > > > > > > to be initialized if the primary one fails.
-> > > > > > > >=20
-> > > > > > > > I sent the patch before I received that response but here's=
- what you
-> > > > > > > > wrote:
-> > > > > > > >=20
-> > > > > > > > "We should give other trust sources a chance to register fo=
-r trusted
-> > > > > > > > keys if the primary one fails."
-> > > > > > > >=20
-> > > > > > > > 1. This condition is lacking an inline comment.
-> > > > > > > > 2. Neither this response or the one that you pointed out ha=
-s any
-> > > > > > > > =C2=A0=C2=A0 explanation why for any system failure the pro=
-cess should
-> > > > > > > > =C2=A0=C2=A0 continue.
-> > > > > > > >=20
-> > > > > > > > You should really know the situations (e.g. list of posix e=
-rror
-> > > > > > > > code) when the process can continue and "allow list" those.=
- This
-> > > > > > > > way way too abstract. It cannot be let all possible system =
-failures
-> > > > > > > > pass.
-> > > > > > >=20
-> > > > > > > And it would nice if it printed out something for legit cases=
-. Like
-> > > > > > > "no device found" etc. And for rest it must really withdraw t=
-he whole
-> > > > > > > process.
-> > > > > >=20
-> > > > > > IMO, it would be quite tricky to come up with an allow list. Ca=
-n we
-> > > > > > keep "EACCES", "EPERM", "ENOTSUPP" etc in that allow list? I th=
-ink
-> > > > > > these are all debatable.
-> > > > >=20
-> > > > > Yes, that does sounds reasonable.
-> > > > >=20
-> > > > > About the debate. Well, it is better eagerly block and tree falls=
- down
-> > > > > somewhere we can consider extending the list through a fix.
-> > > > >=20
-> > > > > This all wide open is worse than a few glitches somewhere, which =
-are
-> > > > > trivial to fix.
-> > > > >=20
-> > > >=20
-> > > > Fair enough, I would suggest we document it appropriately such that=
- it
-> > > > is clear to the users or somebody looking at the code.
-> > >=20
-> > > I went throught the backends on how they implement init:
-> > >=20
-> > > 1. Returns -ENODEV when it does not exist.
-> > > 2. Calls driver_register(). Something is wrong enough if that
-> > > =C2=A0=C2=A0 fails to rollback the whole procedure.
-> > > 3. TPM: -ENODEV
-> > >=20
-> > > Therefore, I would keep in the existing patch since there is no weird
-> > > uapi visible legacy behavior to support in the first place. And for
-> > > that reason there is no good reason to have all those four POSIX rc's
-> > > in the list.
-> >=20
-> > Okay I can live with this patch as long as it doesn't break the
-> > intended use-case.
->=20
-> Well this sort of policy has been already existing for some time:
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * encrypted_keys.ko depe=
-nds on successful load of this module even if
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * trusted key implementa=
-tion is not found.
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret =3D=3D -ENODEV)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return 0;
->=20
-> If we would need a list of error codes, then this is also incorrect
-> implementation because the error codes that you listed should be
-> also success cases.
+On Mon, 2023-09-04 at 15:33 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Change ima_inode_post_setattr() definition, so that it can be registered as
+> implementation of the inode_post_setattr hook.
 
-The dead obvious constraint here is that whatever error codes are
-processed they need to be exact same anyway right?
+Please indicate inode_post_settattr() is a new hook.  In general it
+should be stated on first usage.  In 02/25 the wording "(to be
+introduced)" is used, but not on first usage.  Please add "(to be
+introduced)" after inode_post_setattr.
 
-If things fall apart you should really not continue. This is IMHO
-categorizes as a critical bug, not just debatable aspect on how
-subsystems are engineered. I.e.I do not consider this as any sort
-of API discussion per se.
+Adding a new security hook argument would be to support both IMA and
+EVM, which have different options.
 
-BR, Jarkko
+Mimi
+
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  fs/attr.c                             | 2 +-
+>  include/linux/ima.h                   | 4 ++--
+>  security/integrity/ima/ima_appraise.c | 3 ++-
+>  3 files changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/attr.c b/fs/attr.c
+> index d60dc1edb526..7d4553c1208d 100644
+> --- a/fs/attr.c
+> +++ b/fs/attr.c
+> @@ -486,7 +486,7 @@ int notify_change(struct mnt_idmap *idmap, struct dentry *dentry,
+>  
+>  	if (!error) {
+>  		fsnotify_change(dentry, ia_valid);
+> -		ima_inode_post_setattr(idmap, dentry);
+> +		ima_inode_post_setattr(idmap, dentry, ia_valid);
+>  		evm_inode_post_setattr(dentry, ia_valid);
+>  	}
+>  
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 86b57757c7b1..910a2f11a906 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -186,7 +186,7 @@ static inline void ima_post_key_create_or_update(struct key *keyring,
+>  #ifdef CONFIG_IMA_APPRAISE
+>  extern bool is_ima_appraise_enabled(void);
+>  extern void ima_inode_post_setattr(struct mnt_idmap *idmap,
+> -				   struct dentry *dentry);
+> +				   struct dentry *dentry, int ia_valid);
+>  extern int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
+>  		       const void *xattr_value, size_t xattr_value_len);
+>  extern int ima_inode_set_acl(struct mnt_idmap *idmap,
+> @@ -206,7 +206,7 @@ static inline bool is_ima_appraise_enabled(void)
+>  }
+>  h
+>  static inline void ima_inode_post_setattr(struct mnt_idmap *idmap,
+> -					  struct dentry *dentry)
+> +					  struct dentry *dentry, int ia_valid)
+>  {
+>  	return;
+>  }
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index 491c1aca0b1c..6b032bce4fe7 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -627,6 +627,7 @@ void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file)
+>   * ima_inode_post_setattr - reflect file metadata changes
+>   * @idmap:  idmap of the mount the inode was found from
+>   * @dentry: pointer to the affected dentry
+> + * @ia_valid: for the UID and GID status
+>   *
+>   * Changes to a dentry's metadata might result in needing to appraise.
+>   *
+> @@ -634,7 +635,7 @@ void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file)
+>   * to lock the inode's i_mutex.
+>   */
+>  void ima_inode_post_setattr(struct mnt_idmap *idmap,
+> -			    struct dentry *dentry)
+> +			    struct dentry *dentry, int ia_valid)
+>  {
+>  	struct inode *inode = d_backing_inode(dentry);
+>  	struct integrity_iint_cache *iint;
+
+
