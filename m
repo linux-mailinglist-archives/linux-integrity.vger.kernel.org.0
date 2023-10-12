@@ -2,166 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DA87C6FAE
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Oct 2023 15:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D11C7C73F3
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Oct 2023 19:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378871AbjJLNuI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Oct 2023 09:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
+        id S1344113AbjJLRQd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Oct 2023 13:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347272AbjJLNuH (ORCPT
+        with ESMTP id S1344032AbjJLRQc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Oct 2023 09:50:07 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BED791;
-        Thu, 12 Oct 2023 06:50:04 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4S5rKL74bYz9xyNK;
-        Thu, 12 Oct 2023 21:37:10 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwDnPpBh+Sdls2kUAg--.18225S2;
-        Thu, 12 Oct 2023 14:49:35 +0100 (CET)
-Message-ID: <fc2fab2a1d3bbf3229374458b9d52d6766c19a21.camel@huaweicloud.com>
-Subject: Re: [PATCH v3 14/25] security: Introduce file_post_open hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
-        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com,
-        tom@talpey.com, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
-        jarkko@kernel.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
+        Thu, 12 Oct 2023 13:16:32 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1422D6;
+        Thu, 12 Oct 2023 10:16:27 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39CH2IQJ007409;
+        Thu, 12 Oct 2023 17:15:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=ruLAwstVJYOfziGmebf4MFgKg/exPipsxwb0UugNc+4=;
+ b=b2mv3jUxA6k4cTp8yMzRSfLlz0S4Zy/Nc0UwZtt3Szi4QUfJ1Q+rStBO4u52y64zObaR
+ ro/AiG7XiWrbz4Pxcgz9EmLvf/DoOywBPWDCH+I3Nw05JfLi0tzpjZhIZc9vM232dnMU
+ ETX0JVSw5lp/ME6rm38lMrh2gPaoZc4AzFLlIFe846AJwQY9cbLP0b7r9Q38S68ztnAV
+ AOmOZTArLtdDroBx2bmcjeCB4ANq065yMuOgntkJ1pyl2UaNiVdHVeKhzTVxiGMuQGae
+ khByidn34IHmUOGBnrkpqPr2uJPly5yHdMsKno390q7OztC+dZWRvsQh/nZ2oWwWMOkO hA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tpmuj0d14-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 17:15:44 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39CHFhwb020298;
+        Thu, 12 Oct 2023 17:15:43 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tpmuj0cwm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 17:15:43 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39CFCsfw028188;
+        Thu, 12 Oct 2023 17:10:53 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tkj1yh8y6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 17:10:53 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39CHAqUv50135662
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Oct 2023 17:10:53 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C5ADB5805A;
+        Thu, 12 Oct 2023 17:10:52 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 87EDD5805D;
+        Thu, 12 Oct 2023 17:10:50 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.watson.ibm.com (unknown [9.31.99.90])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 12 Oct 2023 17:10:50 +0000 (GMT)
+Message-ID: <102b06b30518ac6595022e079de92717c92f3b8e.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 02/25] ima: Align ima_post_path_mknod() definition
+ with LSM infrastructure
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        chuck.lever@oracle.com, jlayton@kernel.org, neilb@suse.de,
+        kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
 Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 12 Oct 2023 15:49:18 +0200
-In-Reply-To: <4c11613696d2ffd92a652c1a734d4abfc489ff40.camel@linux.ibm.com>
+Date:   Thu, 12 Oct 2023 13:10:50 -0400
+In-Reply-To: <4866a6ef46deebf9a9afdeb7efd600edb589da93.camel@huaweicloud.com>
 References: <20230904133415.1799503-1-roberto.sassu@huaweicloud.com>
-         <20230904133415.1799503-15-roberto.sassu@huaweicloud.com>
-         <2026a46459563d8f5d132a099f402ddad8f06fae.camel@linux.ibm.com>
-         <e6f0e7929abda6fa6ae7ef450b6e155b420a5f5b.camel@huaweicloud.com>
-         <4c11613696d2ffd92a652c1a734d4abfc489ff40.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4-0ubuntu2 
-MIME-Version: 1.0
-X-CM-TRANSID: LxC2BwDnPpBh+Sdls2kUAg--.18225S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGF4xAF4rZw4kZr1rZF1DJrb_yoW5ZFy7pF
-        WYkF47GF4Dtr17Aw10va13XF4SgrZ3tr4UXr9YqryUZrnYvr1kWF42qr4F9FWUJrn5A34j
-        vF17Gr9rur98AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBF1jj5DzlwAAsL
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+         <20230904133415.1799503-3-roberto.sassu@huaweicloud.com>
+         <a733fe780a3197150067ad35ed280bf85e11fa97.camel@linux.ibm.com>
+         <b51baf7741de1fdee8b36a87bd2dde71184d47a8.camel@huaweicloud.com>
+         <8646e30b0074a2932076b5a0a792b14be034de98.camel@linux.ibm.com>
+         <16c8c95f2e63ab9a2fba8cba919bf129d0541b61.camel@huaweicloud.com>
+         <c16551704db68c6e0ba89c729c892e9401f05dfc.camel@linux.ibm.com>
+         <2336abd6ae195eda221d54e3c2349a4760afaff2.camel@huaweicloud.com>
+         <84cfe4d93cb5b02591f4bd921b828eb6f3e95faa.camel@linux.ibm.com>
+         <4866a6ef46deebf9a9afdeb7efd600edb589da93.camel@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: JsOvQDlFYlC1UJRUF-UeTH3-IMW7Gucg
+X-Proofpoint-GUID: d359mtKa2PkNdJRCP2N4Q_la3JjXXcGd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-12_09,2023-10-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ clxscore=1015 malwarescore=0 spamscore=0 mlxscore=0 mlxlogscore=806
+ phishscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310120143
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2023-10-12 at 09:35 -0400, Mimi Zohar wrote:
-> On Thu, 2023-10-12 at 14:45 +0200, Roberto Sassu wrote:
-> > On Thu, 2023-10-12 at 08:36 -0400, Mimi Zohar wrote:
-> > > On Mon, 2023-09-04 at 15:34 +0200, Roberto Sassu wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > We need to make sure that ima_post_path_mknod() has the same parameters
+> > > > > as the LSM hook at the time we register it to the LSM infrastructure.
 > > > > 
-> > > > In preparation to move IMA and EVM to the LSM infrastructure, introduce the
-> > > > file_post_open hook. Also, export security_file_post_open() for NFS.
-> > > > 
-> > > > It is useful for IMA to calculate the dhigest of the file content, and to
-> > > > decide based on that digest whether the file should be made accessible to
-> > > > the requesting process.
+> > > > I'm trying to understand why the pre hook parameters and the missing
+> > > > IMA parameter are used, as opposed to just defining the new
+> > > > post_path_mknod hook like IMA.
 > > > 
-> > > Please remove "It is usefile for".   Perhaps something along the lines:
-> > > 
-> > > 
-> > > Based on policy, IMA calculates the digest of the file content and
-> > > decides ...
+> > > As an empyrical rule, I pass the same parameters as the corresponding
+> > > pre hook (plus idmap, in this case). This is similar to the
+> > > inode_setxattr hook. But I can be wrong, if desired I can reduce.
 > > 
-> > Ok.
+> > The inode_setxattr hook change example is legitimate, as EVM includes
+> > idmap, while IMA doesn't. 
 > > 
-> > > > 
-> > > > LSMs should use this hook instead of file_open, if they need to make their
-> > > > decision based on an opened file (for example by inspecting the file
-> > > > content). The file is not open yet in the file_open hook.
+> > Unless there is a good reason for the additional parameters, I'm not
+> > sure that adding them makes sense.  Not modifying the parameter list
+> > will reduce the size of this patch set.
 > 
-> Needing to inspect the file contents is a good example.
+> The hook is going to be used by any LSM. Without knowing all the
+> possible use cases, maybe it is better to include more information now,
+> than modifying the hook and respective implementations later.
 > 
-> >  
-> > > The security hooks were originally defined for enforcing access
-> > > control.  As a result the hooks were placed before the action.  The
-> > > usage of the LSM hooks is not limited to just enforcing access control
-> > > these days.  For IMA/EVM to become full LSMs additional hooks are
-> > > needed post action.  Other LSMs, probably non-access control ones,
-> > > could similarly take some action post action, in this case successful
-> > > file open.
-> > 
-> > I don't know, I would not exclude LSMs to enforce access control. The
-> > post action can be used to update the state, which can be used to check
-> > next accesses (exactly what happens for EVM).
-> > 
-> > > Having to justify the new LSM post hooks in terms of the existing LSMs,
-> > > which enforce access control, is really annoying and makes no sense. 
-> > > Please don't.
-> > 
-> > Well, there is a relationship between the pre and post. But if you
-> > prefer, I remove this comparison.
-> 
-> My comments, above, were a result of the wording of the hook
-> definition, below.
+> (again, no problem to reduce)
 
-Oh, ok. Actually there is a fundamental difference between this post
-and the other post: this one can be reverted and can be effectively
-used for access control.
+Unless there is a known use case for a specific parameter, please
+minimize them.   Additional parameters can be added later as needed. 
 
-Thanks
+-- 
+thanks,
 
-Roberto
-
-> > > > +/**
-> > > > + * security_file_post_open() - Recheck access to a file after it has been opened
-> > > 
-> > > The LSM post hooks aren't needed to enforce access control.   Probably
-> > > better to say something along the lines of "take some action after
-> > > successful file open".
-> > > 
-> > > > + * @file: the file
-> > > > + * @mask: access mask
-> > > > + *
-> > > > + * Recheck access with mask after the file has been opened. The hook is useful
-> > > > + * for LSMs that require the file content to be available in order to make
-> > > > + * decisions.
-> > > 
-> > > And reword the above accordingly.
-> > > 
-> > > > + *
-> > > > + * Return: Returns 0 if permission is granted.
-> > > > + */
-> > > > +int security_file_post_open(struct file *file, int mask)
-> > > > +{
-> > > > +	return call_int_hook(file_post_open, 0, file, mask);
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(security_file_post_open);
-> > > > +
-> > > >  /**
-> > > >   * security_file_truncate() - Check if truncating a file is allowed
-> > > >   * @file: file
-> > > 
-> > 
-> 
+Mimi
 
