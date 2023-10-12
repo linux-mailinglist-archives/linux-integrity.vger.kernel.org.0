@@ -2,237 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4ED7C6702
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Oct 2023 09:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CAF7C6832
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Oct 2023 10:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378173AbjJLHmH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Oct 2023 03:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S1347240AbjJLIDe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Oct 2023 04:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347192AbjJLHll (ORCPT
+        with ESMTP id S1347243AbjJLIDc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Oct 2023 03:41:41 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA762D57
-        for <linux-integrity@vger.kernel.org>; Thu, 12 Oct 2023 00:41:15 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id a1e0cc1a2514c-7ae19da7b79so305420241.2
-        for <linux-integrity@vger.kernel.org>; Thu, 12 Oct 2023 00:41:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697096475; x=1697701275; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HuTzVVpWdQXfIbCNcLDHhiGj4g2lhIgP95vVCMWnKu8=;
-        b=FjmhU7F58fXYqrpfekItfgbA6ig+1Po/mOShaCO2Bj7DIGV+zEBaohsxFI7BNins50
-         tgAoQBwq2fTy7QHeWtdlveyQpqSrbbSXspe0k1WN6s80VHRC4VFSIJuz8vkTAe2IvlT8
-         qyIno3wNoMRN8JOeFG4ZpSZL9T68KSuI5ykkvn3bTOdQcYK5JFSJAB+zeXGvYr1qwML/
-         B6t8fy+Jb8xu4rf412CCSPGWDQDSRDGMnEjHzqx+5lnSn5sW22NMQ3IE+HXG02p4dzhU
-         /yM1YwsrUsehl3XlSkZdgZBb7Vq7KbVM84a/QqoVe/Zb/V4tRpRioC4KwVPP16ey3yOl
-         AD7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697096475; x=1697701275;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HuTzVVpWdQXfIbCNcLDHhiGj4g2lhIgP95vVCMWnKu8=;
-        b=Q08wnAJUxmxK0SWIiN8M9oo6nmZtpp/O+fgS+p3vIxZSfHikSmqQVv6EN2Hfhxug2e
-         ElbrKP3vsORTOzSendon8StFB/IiwD8RZ2RMwjenP0uc5LSPWa8baE16uWuVIiGseFwB
-         sXqmVLLTXqfr7BlNr/dQO9T2vMdOsUGLfEEOYST3OhXwpyDiC/LfkkhIG82mB8iurJkj
-         U4rWdgh3QoQqGVHEl6DRnL7juX3m/P7Mn/BoBMRLqo/91QJVmovTmW6Jki7FemsAVZU+
-         BrKlLHtWFWI4V6I2G+NEfIoxvKdLGz12Gj3oO+5NDU3rbEA9omFNVG5qaNEZu8vhKyKp
-         xORQ==
-X-Gm-Message-State: AOJu0YxSYJJoZ5wc9dlafIKVTO25yoE1uMM/0Th8a5i/TrsTa75Gv5+b
-        TTpGbubbgyna5OsIbGOqCrrLcE7a8uT7mMghlo+47A==
-X-Google-Smtp-Source: AGHT+IFIoyyfZlTvB8S/gl1Hw8oygtouPPoDfVj32Vyph4N5NM7wLZ+d5sx0lnWhPESWJqsWmh24Zi0Fkzqqw/HJY6k=
-X-Received: by 2002:a67:fc43:0:b0:450:f9eb:f412 with SMTP id
- p3-20020a67fc43000000b00450f9ebf412mr23274386vsq.5.1697096474893; Thu, 12 Oct
- 2023 00:41:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231010231616.3122392-1-jarkko@kernel.org> <CAFA6WYMdrCfqMVExYBbhCK7vUSQffyUfSWpQO0=HeQc6Edz9OA@mail.gmail.com>
- <186a4b62517ead88df8c3c0e9e9585e88f9a6fd8.camel@kernel.org>
- <0aeb4d88952aff53c5c1a40b547a9819ebd1947e.camel@kernel.org>
- <CAFA6WYObvJvQv=-JJ5gnmFqJKbT=4JnT+ErC=iB1KfnYfVn7Ag@mail.gmail.com>
- <79fe0b97e2f5d1f02d08c9f633b7c0da13dc9127.camel@kernel.org>
- <CAFA6WYMrg3VBYvdV8Or==YK_qATk22bL+_ryDC-oO4jVf7DCWg@mail.gmail.com>
- <b70d6be5980185a4fb4205e71c56111183e1f160.camel@kernel.org>
- <CAFA6WYN0vXWZveAkzOfV_6Kki77SxgX7C=Xqe9brZMX1Dj2iLg@mail.gmail.com>
- <bdf8dbb2e1aeeb6396d7a03b8c00d0db729c602d.camel@kernel.org> <6b1c0255de20752b55b902df0882c018cf75032d.camel@kernel.org>
-In-Reply-To: <6b1c0255de20752b55b902df0882c018cf75032d.camel@kernel.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 12 Oct 2023 13:11:03 +0530
-Message-ID: <CAFA6WYM9_RmjTkvZ2xgr+GrhwWfJVYG8Zn+A++gOuNOsDZk0EA@mail.gmail.com>
-Subject: Re: [PATCH] KEYS: trusted: Rollback init_trusted() consistently
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     keyrings@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        stable@vger.kernel.org, James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "open list:KEYS-TRUSTED" <linux-integrity@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        Thu, 12 Oct 2023 04:03:32 -0400
+X-Greylist: delayed 1181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Oct 2023 01:03:27 PDT
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C9290;
+        Thu, 12 Oct 2023 01:03:27 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4S5hBk5V4Sz9yrH2;
+        Thu, 12 Oct 2023 15:30:54 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwBnwJGGoydlzkoQAg--.30762S2;
+        Thu, 12 Oct 2023 08:43:16 +0100 (CET)
+Message-ID: <80e4a1ea172edb2d4d441b70dcd93bfa1654a5b7.camel@huaweicloud.com>
+Subject: Re: [PATCH v3 12/25] security: Introduce inode_post_setattr hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com,
+        tom@talpey.com, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
+        jarkko@kernel.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 12 Oct 2023 09:42:58 +0200
+In-Reply-To: <22761c3d88c2c4dbac747cc7ddca3d743c6d88d9.camel@linux.ibm.com>
+References: <20230904133415.1799503-1-roberto.sassu@huaweicloud.com>
+         <20230904133415.1799503-13-roberto.sassu@huaweicloud.com>
+         <22761c3d88c2c4dbac747cc7ddca3d743c6d88d9.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu2 
+MIME-Version: 1.0
+X-CM-TRANSID: LxC2BwBnwJGGoydlzkoQAg--.30762S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1fKrykCF43XF13tw1rtFb_yoW8JFyxpF
+        W8Ga1DKr98Kry7C3s3tF48ZayFvayfKw4UXrZrJryxAFsrWw13Kan7Gay8ua4DGrWUGr1Y
+        qry2gasrXa4DZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
+        CF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQZ2-UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBF1jj5DumAAAsZ
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 11 Oct 2023 at 19:35, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Wed, 2023-10-11 at 16:55 +0300, Jarkko Sakkinen wrote:
-> > On Wed, 2023-10-11 at 19:12 +0530, Sumit Garg wrote:
-> > > On Wed, 11 Oct 2023 at 18:36, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > >
-> > > > On Wed, 2023-10-11 at 18:25 +0530, Sumit Garg wrote:
-> > > > > On Wed, 11 Oct 2023 at 18:07, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > > >
-> > > > > > On Wed, 2023-10-11 at 17:47 +0530, Sumit Garg wrote:
-> > > > > > > On Wed, 11 Oct 2023 at 16:04, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, 2023-10-11 at 13:12 +0300, Jarkko Sakkinen wrote:
-> > > > > > > > > On Wed, 2023-10-11 at 11:27 +0530, Sumit Garg wrote:
-> > > > > > > > > > On Wed, 11 Oct 2023 at 04:46, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > Do bind neither static calls nor trusted_key_exit() before a successful
-> > > > > > > > > > > init, in order to maintain a consistent state. In addition, depart the
-> > > > > > > > > > > init_trusted() in the case of a real error (i.e. getting back something
-> > > > > > > > > > > else than -ENODEV).
-> > > > > > > > > > >
-> > > > > > > > > > > Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > > > > > > > > > > Closes: https://lore.kernel.org/linux-integrity/CAHk-=whOPoLaWM8S8GgoOPT7a2+nMH5h3TLKtn=R_3w4R1_Uvg@mail.gmail.com/
-> > > > > > > > > > > Cc: stable@vger.kernel.org # v5.13+
-> > > > > > > > > > > Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
-> > > > > > > > > > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > > > > > > > > ---
-> > > > > > > > > > >  security/keys/trusted-keys/trusted_core.c | 20 ++++++++++----------
-> > > > > > > > > > >  1 file changed, 10 insertions(+), 10 deletions(-)
-> > > > > > > > > > >
-> > > > > > > > > > > diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-> > > > > > > > > > > index 85fb5c22529a..fee1ab2c734d 100644
-> > > > > > > > > > > --- a/security/keys/trusted-keys/trusted_core.c
-> > > > > > > > > > > +++ b/security/keys/trusted-keys/trusted_core.c
-> > > > > > > > > > > @@ -358,17 +358,17 @@ static int __init init_trusted(void)
-> > > > > > > > > > >                 if (!get_random)
-> > > > > > > > > > >                         get_random = kernel_get_random;
-> > > > > > > > > > >
-> > > > > > > > > > > -               static_call_update(trusted_key_seal,
-> > > > > > > > > > > -                                  trusted_key_sources[i].ops->seal);
-> > > > > > > > > > > -               static_call_update(trusted_key_unseal,
-> > > > > > > > > > > -                                  trusted_key_sources[i].ops->unseal);
-> > > > > > > > > > > -               static_call_update(trusted_key_get_random,
-> > > > > > > > > > > -                                  get_random);
-> > > > > > > > > > > -               trusted_key_exit = trusted_key_sources[i].ops->exit;
-> > > > > > > > > > > -               migratable = trusted_key_sources[i].ops->migratable;
-> > > > > > > > > > > -
-> > > > > > > > > > >                 ret = trusted_key_sources[i].ops->init();
-> > > > > > > > > > > -               if (!ret)
-> > > > > > > > > > > +               if (!ret) {
-> > > > > > > > > > > +                       static_call_update(trusted_key_seal, trusted_key_sources[i].ops->seal);
-> > > > > > > > > > > +                       static_call_update(trusted_key_unseal, trusted_key_sources[i].ops->unseal);
-> > > > > > > > > > > +                       static_call_update(trusted_key_get_random, get_random);
-> > > > > > > > > > > +
-> > > > > > > > > > > +                       trusted_key_exit = trusted_key_sources[i].ops->exit;
-> > > > > > > > > > > +                       migratable = trusted_key_sources[i].ops->migratable;
-> > > > > > > > > > > +               }
-> > > > > > > > > > > +
-> > > > > > > > > > > +               if (!ret || ret != -ENODEV)
-> > > > > > > > > >
-> > > > > > > > > > As mentioned in the other thread, we should allow other trust sources
-> > > > > > > > > > to be initialized if the primary one fails.
-> > > > > > > > >
-> > > > > > > > > I sent the patch before I received that response but here's what you
-> > > > > > > > > wrote:
-> > > > > > > > >
-> > > > > > > > > "We should give other trust sources a chance to register for trusted
-> > > > > > > > > keys if the primary one fails."
-> > > > > > > > >
-> > > > > > > > > 1. This condition is lacking an inline comment.
-> > > > > > > > > 2. Neither this response or the one that you pointed out has any
-> > > > > > > > >    explanation why for any system failure the process should
-> > > > > > > > >    continue.
-> > > > > > > > >
-> > > > > > > > > You should really know the situations (e.g. list of posix error
-> > > > > > > > > code) when the process can continue and "allow list" those. This
-> > > > > > > > > way way too abstract. It cannot be let all possible system failures
-> > > > > > > > > pass.
-> > > > > > > >
-> > > > > > > > And it would nice if it printed out something for legit cases. Like
-> > > > > > > > "no device found" etc. And for rest it must really withdraw the whole
-> > > > > > > > process.
-> > > > > > >
-> > > > > > > IMO, it would be quite tricky to come up with an allow list. Can we
-> > > > > > > keep "EACCES", "EPERM", "ENOTSUPP" etc in that allow list? I think
-> > > > > > > these are all debatable.
-> > > > > >
-> > > > > > Yes, that does sounds reasonable.
-> > > > > >
-> > > > > > About the debate. Well, it is better eagerly block and tree falls down
-> > > > > > somewhere we can consider extending the list through a fix.
-> > > > > >
-> > > > > > This all wide open is worse than a few glitches somewhere, which are
-> > > > > > trivial to fix.
-> > > > > >
-> > > > >
-> > > > > Fair enough, I would suggest we document it appropriately such that it
-> > > > > is clear to the users or somebody looking at the code.
-> > > >
-> > > > I went throught the backends on how they implement init:
-> > > >
-> > > > 1. Returns -ENODEV when it does not exist.
-> > > > 2. Calls driver_register(). Something is wrong enough if that
-> > > >    fails to rollback the whole procedure.
-> > > > 3. TPM: -ENODEV
-> > > >
-> > > > Therefore, I would keep in the existing patch since there is no weird
-> > > > uapi visible legacy behavior to support in the first place. And for
-> > > > that reason there is no good reason to have all those four POSIX rc's
-> > > > in the list.
-> > >
-> > > Okay I can live with this patch as long as it doesn't break the
-> > > intended use-case.
-> >
-> > Well this sort of policy has been already existing for some time:
-> >
-> >         /*
-> >          * encrypted_keys.ko depends on successful load of this module even if
-> >          * trusted key implementation is not found.
-> >          */
-> >         if (ret == -ENODEV)
-> >                 return 0;
-> >
-> > If we would need a list of error codes, then this is also incorrect
-> > implementation because the error codes that you listed should be
-> > also success cases.
->
+On Wed, 2023-10-11 at 20:08 -0400, Mimi Zohar wrote:
+> gOn Mon, 2023-09-04 at 15:34 +0200, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> > the inode_post_setattr hook.
+> > 
+> > It is useful for EVM to recalculate the HMAC on modified file attributes
+> > and other file metadata, after it verified the HMAC of current file
+> > metadata with the inode_setattr hook.
+> 
+> "useful"?  
+> 
+> At inode_setattr hook, EVM verifies the file's existing HMAC value.  At
+> inode_post_setattr, EVM re-calculates the file's HMAC based on the
+> modified file attributes and other file metadata.
+> 
+> > 
+> > LSMs should use the new hook instead of inode_setattr, when they need to
+> > know that the operation was done successfully (not known in inode_setattr).
+> > The new hook cannot return an error and cannot cause the operation to be
+> > reverted.
+> 
+> Other LSMs could similarly update security xattrs or ...
 
-As I mentioned before we can go ahead with this policy for trust
-sources and see how it pans out.
+I added your sentence. The one above is to satisfy Casey's request to
+justify the addition of the new hook, and to explain why inode_setattr
+is not sufficient.
 
-> The dead obvious constraint here is that whatever error codes are
-> processed they need to be exact same anyway right?
->
-> If things fall apart you should really not continue. This is IMHO
-> categorizes as a critical bug,
+Thanks
 
-Here we are discussing trust sources as multiple independent devices.
-If a particular device probe/init fails then it shouldn't be a blocker
-to probe/init another device.
+Roberto
 
-> not just debatable aspect on how
-> subsystems are engineered. I.e.I do not consider this as any sort
-> of API discussion per se.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Agree, I see it as a policy decision for the trusted keys subsystem.
-
--Sumit
-
->
-> BR, Jarkko
