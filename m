@@ -2,88 +2,78 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D23F7C7AD9
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Oct 2023 02:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709437C7EB9
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Oct 2023 09:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbjJMA3b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Oct 2023 20:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S229671AbjJMHjG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Oct 2023 03:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjJMA3a (ORCPT
+        with ESMTP id S229688AbjJMHjF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Oct 2023 20:29:30 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9004B7
-        for <linux-integrity@vger.kernel.org>; Thu, 12 Oct 2023 17:29:28 -0700 (PDT)
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39D0KfMH003833;
-        Fri, 13 Oct 2023 00:29:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=3YPw4GsgXu1OLkx5aQELsQmUfqqKyplSoLMbSUsmmf8=;
- b=GE26PyhTYFvdo7Zup7leseiuKvSzqc25nv/CGWF+G1IybnQuVd8ZgyPAUO+Bs2n44OlS
- aCM2Zt9KQPWnNLywxHtM/jQmAxSrW9PmGUeoqDvRKTFB7LaKUdqqN8bN/SA4iW17PJKN
- HdOBfs9SMWIXXaojVZRIfmLAsdjXzstyrCN/NFDbR2d1ne42dj4UGeaHUB94qmrJu0zh
- mzmqfWJ+Dg1sFMIpn9YDJjkChbpphK6zWH7vmsPfm/J0rmaGSV/TOeFNpnrhuojMeZGD
- y3Nu9YmXt4LpidvpzXj7Pb+9aWoM5EY9I8EU3NTIQdrSjVxU4cbJEAWpAAf2OxwWLznB jg== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tpu91g7br-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Oct 2023 00:29:14 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39CN4EVm010248;
-        Fri, 13 Oct 2023 00:29:14 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tpt59gebf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Oct 2023 00:29:14 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39D0TDbi21430878
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Oct 2023 00:29:13 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5824958056;
-        Fri, 13 Oct 2023 00:29:13 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3CC0358052;
-        Fri, 13 Oct 2023 00:29:12 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri, 13 Oct 2023 00:29:12 +0000 (GMT)
-Message-ID: <5098dd7c-70b5-f2ed-0fa6-0f0081f89df6@linux.ibm.com>
-Date:   Thu, 12 Oct 2023 20:29:11 -0400
+        Fri, 13 Oct 2023 03:39:05 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F2EB8;
+        Fri, 13 Oct 2023 00:39:01 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4S6J2l2TKpz9xrtb;
+        Fri, 13 Oct 2023 15:26:07 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwA3Q5Tr8yhlfkQgAg--.14800S2;
+        Fri, 13 Oct 2023 08:38:32 +0100 (CET)
+Message-ID: <893bc5837fea4395bfb19e35097810ec7e425917.camel@huaweicloud.com>
+Subject: Re: [PATCH v3 02/25] ima: Align ima_post_path_mknod() definition
+ with LSM infrastructure
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com,
+        tom@talpey.com, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
+        jarkko@kernel.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 13 Oct 2023 09:38:16 +0200
+In-Reply-To: <102b06b30518ac6595022e079de92717c92f3b8e.camel@linux.ibm.com>
+References: <20230904133415.1799503-1-roberto.sassu@huaweicloud.com>
+         <20230904133415.1799503-3-roberto.sassu@huaweicloud.com>
+         <a733fe780a3197150067ad35ed280bf85e11fa97.camel@linux.ibm.com>
+         <b51baf7741de1fdee8b36a87bd2dde71184d47a8.camel@huaweicloud.com>
+         <8646e30b0074a2932076b5a0a792b14be034de98.camel@linux.ibm.com>
+         <16c8c95f2e63ab9a2fba8cba919bf129d0541b61.camel@huaweicloud.com>
+         <c16551704db68c6e0ba89c729c892e9401f05dfc.camel@linux.ibm.com>
+         <2336abd6ae195eda221d54e3c2349a4760afaff2.camel@huaweicloud.com>
+         <84cfe4d93cb5b02591f4bd921b828eb6f3e95faa.camel@linux.ibm.com>
+         <4866a6ef46deebf9a9afdeb7efd600edb589da93.camel@huaweicloud.com>
+         <102b06b30518ac6595022e079de92717c92f3b8e.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v2 3/7] ima: kexec: map source pages containing IMA buffer
- to image post kexec load
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        zohar@linux.ibm.com, ebiederm@xmission.com, noodles@fb.com,
-        bauermann@kolabnow.com, kexec@lists.infradead.org,
-        linux-integrity@vger.kernel.org
-Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-References: <20231005182602.634615-1-tusharsu@linux.microsoft.com>
- <20231005182602.634615-4-tusharsu@linux.microsoft.com>
-Content-Language: en-US
-In-Reply-To: <20231005182602.634615-4-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OaeFo_BxDPpoFGVyWzFdkU3SK9vfwdvX
-X-Proofpoint-ORIG-GUID: OaeFo_BxDPpoFGVyWzFdkU3SK9vfwdvX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-12_14,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- spamscore=0 mlxlogscore=999 suspectscore=0 adultscore=0 impostorscore=0
- mlxscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310130002
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-CM-TRANSID: LxC2BwA3Q5Tr8yhlfkQgAg--.14800S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr45AFW8ZFyDGF45GrWxZwb_yoW8GF4kpr
+        W09a47KwsrJr15ur10va1Fqr4Fka13JFW5XrWrtr17A34qkryFqF4jkr1Yka1kGrW8G3Wa
+        vF4UJ3s7Wr15ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj5D5TgABsY
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,264 +81,46 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, 2023-10-12 at 13:10 -0400, Mimi Zohar wrote:
+> > > > > > We need to make sure that ima_post_path_mknod() has the
+> > > > > > same parameters
+> > > > > > as the LSM hook at the time we register it to the LSM
+> > > > > > infrastructure.
+> > > > > 
+> > > > > I'm trying to understand why the pre hook parameters and the
+> > > > > missing
+> > > > > IMA parameter are used, as opposed to just defining the new
+> > > > > post_path_mknod hook like IMA.
+> > > > 
+> > > > As an empyrical rule, I pass the same parameters as the
+> > > > corresponding
+> > > > pre hook (plus idmap, in this case). This is similar to the
+> > > > inode_setxattr hook. But I can be wrong, if desired I can
+> > > > reduce.
+> > > 
+> > > The inode_setxattr hook change example is legitimate, as EVM
+> > > includes
+> > > idmap, while IMA doesn't. 
+> > > 
+> > > Unless there is a good reason for the additional parameters, I'm
+> > > not
+> > > sure that adding them makes sense.  Not modifying the parameter
+> > > list
+> > > will reduce the size of this patch set.
+> > 
+> > The hook is going to be used by any LSM. Without knowing all the
+> > possible use cases, maybe it is better to include more information
+> > now,
+> > than modifying the hook and respective implementations later.
+> > 
+> > (again, no problem to reduce)
+> 
+> Unless there is a known use case for a specific parameter, please
+> minimize them.   Additional parameters can be added later as needed. 
 
-On 10/5/23 14:25, Tushar Sugandhi wrote:
-> Currently, the mechanism to map and unmap segments to the kimage
-> structure is not available to the subsystems outside of kexec.  This
-> functionality is needed when IMA is allocating the memory segments
-> during kexec 'load' operation.
->
-> Implement kimage_map_segment() which takes a kimage pointer, an address,
-> and a size.  Ensure that the entire segment is being mapped by comparing
-> the given address and size to each segment in the kimage's segment array.
-> Collect the source pages that correspond to the given address range,
-> allocate an array of pointers to these pages, and map them to a
-> contiguous range of virtual addresses.  If the mapping operation is
-> successful, the function returns the start of this range.  Otherwise, it
-> frees the page pointer array and returns NULL.
->
-> Implement kimage_unmap_segment() that takes a pointer to a segment buffer
-> and unmaps it using vunmap().
->
-> Implement function ima_kexec_post_load(), to be called by IMA after kexec
-> loads the new Kernel image.  ima_kexec_post_load() would map the IMA
-> buffer allocated during kexec 'load' to a segment in the loaded image.
->
-> Finally, move for_each_kimage_entry() macro from kexec_core.c to kexec.h.
->
-> Signed-off-by: Tushar Sugandhi<tusharsu@linux.microsoft.com>
-> ---
->   include/linux/ima.h                |  3 ++
->   include/linux/kexec.h              | 13 ++++++
->   kernel/kexec_core.c                | 73 ++++++++++++++++++++++++++++--
->   security/integrity/ima/ima_kexec.c | 32 +++++++++++++
->   4 files changed, 116 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index 86b57757c7b1..006db20f852d 100644
-> --- a/include/linux/ima.h
-> +++ b/include/linux/ima.h
-> @@ -49,6 +49,9 @@ static inline void ima_appraise_parse_cmdline(void) {}
->   
->   #ifdef CONFIG_IMA_KEXEC
->   extern void ima_add_kexec_buffer(struct kimage *image);
-> +extern void ima_kexec_post_load(struct kimage *image);
-> +#else
-> +static inline void ima_kexec_post_load(struct kimage *image) {}
->   #endif
->   
->   #else
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index 22b5cd24f581..e00b8101b53b 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -490,6 +490,15 @@ static inline int arch_kexec_post_alloc_pages(void *vaddr, unsigned int pages, g
->   static inline void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages) { }
->   #endif
->   
-> +#define for_each_kimage_entry(image, ptr, entry) \
-> +	for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
-> +		ptr = (entry & IND_INDIRECTION) ? \
-> +			boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
-> +
-> +extern void *kimage_map_segment(struct kimage *image,
-> +				unsigned long addr, unsigned long size);
-> +extern void kimage_unmap_segment(void *buffer);
-> +
->   #else /* !CONFIG_KEXEC_CORE */
->   struct pt_regs;
->   struct task_struct;
-> @@ -497,6 +506,10 @@ static inline void __crash_kexec(struct pt_regs *regs) { }
->   static inline void crash_kexec(struct pt_regs *regs) { }
->   static inline int kexec_should_crash(struct task_struct *p) { return 0; }
->   static inline int kexec_crash_loaded(void) { return 0; }
-> +static inline void *kimage_map_segment(struct kimage *image,
-> +				       unsigned long addr, unsigned long size)
-> +{ return NULL; }
-> +static inline void kimage_unmap_segment(void *buffer) { }
->   #define kexec_in_progress false
->   #endif /* CONFIG_KEXEC_CORE */
->   
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index 3d578c6fefee..e01156f3c404 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -594,11 +594,6 @@ void kimage_terminate(struct kimage *image)
->   	*image->entry = IND_DONE;
->   }
->   
-> -#define for_each_kimage_entry(image, ptr, entry) \
-> -	for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
-> -		ptr = (entry & IND_INDIRECTION) ? \
-> -			boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
-> -
->   static void kimage_free_entry(kimage_entry_t entry)
->   {
->   	struct page *page;
-> @@ -921,6 +916,74 @@ int kimage_load_segment(struct kimage *image,
->   	return result;
->   }
->   
-> +void *kimage_map_segment(struct kimage *image,
-> +			 unsigned long addr, unsigned long size)
-> +{
-> +	unsigned long eaddr = addr + size;
-> +	unsigned long src_page_addr, dest_page_addr;
-> +	struct page **src_pages;
-> +	int i, npages;
-> +	kimage_entry_t *ptr, entry;
-> +	void *vaddr = NULL;
-> +
-> +	/*
-> +	 * Make sure that we are mapping a whole segment.
-> +	 */
-> +	for (i = 0; i < image->nr_segments; i++) {
-> +		if (addr == image->segment[i].mem &&
-> +		    size == image->segment[i].memsz) {
-> +			break;
-> +		}
-> +	}
+Ok. I did the same for inode_post_create_tmpfile.
 
-I wonder whether this distrust in the segments or in the passed 
-pointer&size are justifyable since you call this function like this:
+Thanks
 
-         ima_kexec_buffer = kimage_map_segment(image,
-image->ima_buffer_addr,
-image->ima_buffer_size);
+Roberto
 
-and previously kexec_add_buffer() was also called:
-
-         kbuf.buffer = kexec_buffer;
-         kbuf.bufsz = kexec_buffer_size;
-         kbuf.memsz = kexec_segment_size;
-         ret = kexec_add_buffer(&kbuf);
-         if (ret) {
-                 pr_err("Error passing over kexec measurement buffer.\n");
-                 vfree(kexec_buffer);
-                 return;
-         }
-
-         image->ima_buffer_addr = kbuf.mem;
-         image->ima_buffer_size = kexec_segment_size;
-
-So the one segment should be matching these addresses.
-
-
-> +
-> +	if (i == image->nr_segments) {
-> +		pr_err("%s: No segment matching [%lx, %lx)\n", __func__,
-> +		       addr, eaddr);
-> +		return NULL;
-> +	}
-> +
-> +	/*
-> +	 * Collect the source pages and map them in a contiguous VA range.
-> +	 */
-> +	npages = PFN_UP(eaddr) - PFN_DOWN(addr);
-> +	src_pages = kmalloc(sizeof(*src_pages) * npages, GFP_KERNEL);
-> +	if (!src_pages) {
-> +		pr_err("%s: Could not allocate ima pages array.\n", __func__);
-> +		return NULL;
-> +	}
-> +
-> +	i = 0;
-> +	for_each_kimage_entry(image, ptr, entry) {
-> +		if (entry & IND_DESTINATION)
-> +			dest_page_addr = entry & PAGE_MASK;
-> +		else if (entry & IND_SOURCE) {
-> +			if (dest_page_addr >= addr && dest_page_addr < eaddr) {
-> +				src_page_addr = entry & PAGE_MASK;
-> +				src_pages[i++] =
-> +					virt_to_page(__va(src_page_addr));
-> +				if (i == npages)
-> +					break;
-> +				dest_page_addr += PAGE_SIZE;
-> +			}
-> +		}
-> +	}
-> +
-> +	/* Sanity check. */
-> +	WARN_ON(i < npages);
-> +
-> +	vaddr = vmap(src_pages, npages, VM_MAP, PAGE_KERNEL);
-On either success or failure kfree(sec_pages); should go right here to 
-not have a memory leak.
-> +	if (!vaddr) {
-> +		pr_err("%s: Could not map imap buffer.\n", __func__);
-> +		kfree(src_pages);
-> +	}
-> +	return vaddr;
-> +}
-> +
-> +void kimage_unmap_segment(void *segment_buffer)
-> +{
-> +	vunmap(segment_buffer);
-> +}
-> +
->   struct kexec_load_limit {
->   	/* Mutex protects the limit count. */
->   	struct mutex mutex;
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index 2c11bbe6efef..13fbbb90319b 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -12,6 +12,8 @@
->   #include <linux/kexec.h>
->   #include <linux/of.h>
->   #include <linux/ima.h>
-> +#include <linux/reboot.h>
-> +#include <asm/page.h>
->   #include "ima.h"
->   
->   #ifdef CONFIG_IMA_KEXEC
-> @@ -19,6 +21,7 @@ struct seq_file ima_kexec_file;
->   struct ima_kexec_hdr ima_khdr;
->   static void *ima_kexec_buffer;
->   static size_t kexec_segment_size;
-> +static bool ima_kexec_update_registered;
->   
->   void ima_clear_kexec_file(void)
->   {
-> @@ -221,6 +224,7 @@ static int ima_update_kexec_buffer(struct notifier_block *self,
->   	}
->   	memcpy(ima_kexec_buffer, buf, buf_size);
->   out:
-> +	kimage_unmap_segment(ima_kexec_buffer);
->   	ima_kexec_buffer = NULL;
->   
->   	if (resume)
-> @@ -232,6 +236,34 @@ struct notifier_block update_buffer_nb = {
->   	.notifier_call = ima_update_kexec_buffer,
->   };
->   
-> +/*
-> + * Create a mapping for the source pages that contain the IMA buffer
-> + * so we can update it later.
-> + */
-> +void ima_kexec_post_load(struct kimage *image)
-> +{
-> +	if (ima_kexec_buffer) {
-> +		kimage_unmap_segment(ima_kexec_buffer);
-> +		ima_kexec_buffer = NULL;
-> +	}
-> +
-> +	if (!image->ima_buffer_addr)
-> +		return;
-> +
-> +	ima_kexec_buffer = kimage_map_segment(image,
-> +					      image->ima_buffer_addr,
-> +					      image->ima_buffer_size);
-> +	if (!ima_kexec_buffer) {
-> +		pr_err("%s: Could not map measurements buffer.\n", __func__);
-> +		return;
-> +	}
-> +
-> +	if (!ima_kexec_update_registered) {
-> +		register_reboot_notifier(&update_buffer_nb);
-> +		ima_kexec_update_registered = true;
-> +	}
-> +}
-> +
->   #endif /* IMA_KEXEC */
->   
->   /*
