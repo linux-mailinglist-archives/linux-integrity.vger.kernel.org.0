@@ -2,64 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F1A7C8734
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Oct 2023 15:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94237C8BDB
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Oct 2023 18:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjJMNuu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Oct 2023 09:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
+        id S229721AbjJMQ4j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Oct 2023 12:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjJMNut (ORCPT
+        with ESMTP id S229683AbjJMQ4j (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Oct 2023 09:50:49 -0400
+        Fri, 13 Oct 2023 12:56:39 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12422BE;
-        Fri, 13 Oct 2023 06:50:48 -0700 (PDT)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39DDlgJh003980;
-        Fri, 13 Oct 2023 13:50:17 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBB8A9;
+        Fri, 13 Oct 2023 09:56:36 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39DGqKOC024192;
+        Fri, 13 Oct 2023 16:55:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=hk1JxYUdOqUjo9EtHBqQO8W6JS0LIeCWItzmNdTN+CQ=;
- b=NqXeBpZCDC0JU0YXnc0y/yvbggPdv5uhbrt2vdhAs8PsEqTwrELebslRqQHYbcYV+QWB
- fwt0VW/Hv6Xp3cbBKggsA037uwijoZG3L0FTW4X3rnT9JDl6SiljZk/CZDrcg7vUO87R
- JHZZJFsJTDwNWXtMnFC7mRzJRos3u6CeuqgJD1vtB2Yigw1SrEmojiIoHDjiQRpllqcR
- QYpaU0xV83Qnl8/TsB7kZ5SWWGTxQfmZ8OQJ+ppng9Ae/n+9F7OZbNam7+UwGTtKdfzs
- 5n4ZpPLYea657MZdVlg9Sfdrefkisn9EL3s2h4nf1YV5ZWUwlHe7TZT8kL6SUeWozSK5 Ew== 
+ bh=KvcxPRXQT8z860vA5hg/tsLyh50B3/HpjRrU1QQJ8xI=;
+ b=aRyGFJSh+SLsZmP2gF94tKa+RhNvw2DTpxNxbMGzS0lqn4KBjf7ffTdilYFucYAho2GY
+ y2MfrPXmrUgUw0H2fyveW8E/KbTUhz/YXPMZ2nukxK2KSemKk0DnEltEAXVgzzD2c1sR
+ 4d1KjYgcwqEvkRT9AGVCgOm5Jkore8dupnBAfgxzS+kIvgR7SNksDajKAvs6zbq3n0Zk
+ a/qNrZ5gL1EQi11bRSrNQkLrASX6svl2HNHIaeq4ix7xMlelG4M57KFdYEJBulpy+LyW
+ Mm5bIqZM8i/2SGuRdZVxv2dirghpgbJn6DVpXgdnCY5R+xA3jFcAENW2/DWQ0R4WQCAP jA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tq73903y4-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tq9sx05et-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Oct 2023 13:50:14 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39DDljne004656;
-        Fri, 13 Oct 2023 13:50:13 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tq73903wn-1
+        Fri, 13 Oct 2023 16:55:52 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39DGqTfr024518;
+        Fri, 13 Oct 2023 16:55:51 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tq9sx05du-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Oct 2023 13:50:12 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39DBOpYP026141;
-        Fri, 13 Oct 2023 13:50:11 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tpt54v8n1-1
+        Fri, 13 Oct 2023 16:55:51 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39DGmj3S008868;
+        Fri, 13 Oct 2023 16:55:49 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tpt57nb08-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Oct 2023 13:50:11 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39DDoAWc22610626
+        Fri, 13 Oct 2023 16:55:49 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39DGtnoB27656848
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Oct 2023 13:50:11 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E0AC258043;
-        Fri, 13 Oct 2023 13:50:10 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E6E0C58063;
-        Fri, 13 Oct 2023 13:50:07 +0000 (GMT)
+        Fri, 13 Oct 2023 16:55:49 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 397F158060;
+        Fri, 13 Oct 2023 16:55:49 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E158B5805E;
+        Fri, 13 Oct 2023 16:55:47 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.129.99])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 13 Oct 2023 13:50:07 +0000 (GMT)
-Message-ID: <8d7eff721935ed4c57952e31d3f77bbacafc2522.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 15/25] security: Introduce file_pre_free_security hook
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 13 Oct 2023 16:55:47 +0000 (GMT)
+Message-ID: <d24bfa5752f751cbd36070838508fde26a4e0625.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 21/25] ima: Move to LSM infrastructure
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
         viro@zeniv.linux.org.uk, brauner@kernel.org,
@@ -73,42 +73,66 @@ Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 13 Oct 2023 09:50:07 -0400
-In-Reply-To: <20230904133415.1799503-16-roberto.sassu@huaweicloud.com>
+Date:   Fri, 13 Oct 2023 12:55:47 -0400
+In-Reply-To: <20230904134049.1802006-2-roberto.sassu@huaweicloud.com>
 References: <20230904133415.1799503-1-roberto.sassu@huaweicloud.com>
-         <20230904133415.1799503-16-roberto.sassu@huaweicloud.com>
+         <20230904134049.1802006-2-roberto.sassu@huaweicloud.com>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0RV_bRCWRmbiHWMrVDY0KIWQB3h3czDV
-X-Proofpoint-GUID: lrPJU19t3V1CPwhdIOWNv7x5Kxh2gsz4
+X-Proofpoint-GUID: 0Yl2JA_HcM8CzbBM_Hj9g2VYlGlJP-Cj
+X-Proofpoint-ORIG-GUID: BrWDdS3j3a8JQM-mkSYfvS6gTLhas4ap
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-13_05,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 spamscore=0 impostorscore=0 clxscore=1015 adultscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=637 lowpriorityscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310130116
+ definitions=2023-10-13_08,2023-10-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ spamscore=0 bulkscore=0 mlxlogscore=999 phishscore=0 clxscore=1015
+ malwarescore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310130144
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2023-09-04 at 15:34 +0200, Roberto Sassu wrote:
-[..]
+On Mon, 2023-09-04 at 15:40 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Remove hardcoded IMA function calls (not for appraisal) from the LSM
+> infrastructure, the VFS, NFS and the key subsystem.
+> 
+> Make those functions as static (except for ima_file_check() which is
+> exported, and ima_post_key_create_or_update(), which is not in ima_main.c),
+> and register them as implementation of the respective hooks in the new
+> function init_ima_lsm().
 
-> It is useful for IMA to calculate the digest of the file content, just
-> before a file descriptor is closed, and update the security.ima xattr with
-> the new value.
+ima_post_path_mknod() is currently enabled whether or not
+CONFIG_SECURITY_PATH is enabled.  Now it will only be enabled when
+CONFIG_SECURITY_PATH is confiured.  Changes like this need to be
+mentioned.
 
---> before the last file descriptor opened for write is closed
+> Call init_ima_lsm() from integrity_lsm_init() (renamed from
+> integrity_iintcache_init()), to make sure that the integrity subsystem is
+> ready at the time IMA hooks are registered. The same will be done for EVM,
+> by calling init_evm_lsm() just after init_ima_lsm().
+
+Instead of creating separate IMA and EVM LSMs, the hooks are being
+added to "integrity".  Some sort of (brief) explanation should be
+provided.
+
+    security_add_hooks(ima_hooks, ARRAY_SIZE(ima_hooks), "integrity");
+
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Acked-by: Chuck Lever <chuck.lever@oracle.com>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
 -- 
 thanks,
