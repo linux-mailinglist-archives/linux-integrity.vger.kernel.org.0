@@ -2,119 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2FE7CC7CD
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Oct 2023 17:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB787CC86B
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Oct 2023 18:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbjJQPqP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Oct 2023 11:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
+        id S235044AbjJQQIi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 17 Oct 2023 12:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235204AbjJQPqF (ORCPT
+        with ESMTP id S234993AbjJQQIi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Oct 2023 11:46:05 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C71C116
-        for <linux-integrity@vger.kernel.org>; Tue, 17 Oct 2023 08:45:52 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-d9ad67058fcso6082117276.1
-        for <linux-integrity@vger.kernel.org>; Tue, 17 Oct 2023 08:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1697557551; x=1698162351; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0mrgPXshN0v6qqkRfhdm7z++OcXc8cz4EqlaMatvDL4=;
-        b=Y+7Tt7h+hxvay5+yY0XwfwxvEwvC1rwyUBnqH6sFMgEth05lz/zC9WMXxw7oDNbnMk
-         XJmM9PD8Rq2oDMAT0+73d88mCtMg3S5Z+JjcMw4hrZnh6acmdOdLmjbEmKmVYfiODRLH
-         Uo21Z8o+/DPowcTUs1CeDBkNTfjodR/N1plj1hlL/31d89Zud6oAgbEbsiwTInHqIouT
-         rRM1ZFKXe2Vko+dMlSPVcnZ2N8+gwESESSmCUGksSR8Z3C0cL2TAfM/a12KpT8OQnr+S
-         U5a8KtrzN7hPtbCRaZMwpE7mOZdUqV/Pa8fwJ/ZYAeI8SAfzd17VK1tWCrvFhhjpOqWc
-         orUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697557551; x=1698162351;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0mrgPXshN0v6qqkRfhdm7z++OcXc8cz4EqlaMatvDL4=;
-        b=XqBCDFJskf5JcVsAu79zAr+yohZkn7OU5F2I68rwB0Xo4ozEi983CsT0A+D2hi8Js1
-         36WEP03sgoaKDuShJGCtw8h+4NeIW0mcr9axkkRz+qiNi6ck1B5I4PzTBH5mRrmMmi/j
-         HzsLosG4Tqa4BT75hGXGkO3tJf/LgZghcyx24SmlWZsr05CLXlk2AwfEeDNQUROdbRyH
-         AFsLWGAMe1mopso88EqJIbn54kFyWA+ic9kYJX++e1HQfI9vZ05RcF5N4c3hWt1BWKRv
-         1bZK4ahslXk0ghmsyP+ZT9aiwgPyaG/msWcpXM7/ro4Fl1udDbrhAclbgHhpgxCqNTmJ
-         cYXg==
-X-Gm-Message-State: AOJu0Yz4Nz5nfwZs2S6mOZuM+kvBnUZ7iJhYIem9utpMG1qdjjPsLM2l
-        oBjNxQTwyn8KEWhsTpmgUvVUp6wCPypcjr3GNy+Z
-X-Google-Smtp-Source: AGHT+IGHRxj2dP4KvVblGmde8rkHCNUaoyj84XhV8ASt9OQHBcIZq+PiPzhrUnobB2KaHgLd0Lat/LiyB1T8gyOqrHg=
-X-Received: by 2002:a25:c712:0:b0:d9a:52ee:6080 with SMTP id
- w18-20020a25c712000000b00d9a52ee6080mr2021464ybe.37.1697557551094; Tue, 17
- Oct 2023 08:45:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <CEA476C1-4CE5-4FFC-91D7-6061C8605B18@oracle.com>
- <ba2f5560800608541e81fbdd28efa9875b35e491.camel@linux.ibm.com>
- <932231F5-8050-4436-84B8-D7708DC43845@oracle.com> <7335a4587233626a39ce9bc8a969957d7f43a34c.camel@linux.ibm.com>
- <FD6FB139-F901-4E55-9705-E7B0023BDBA8@oracle.com> <1149b6dbfdaabef3e48dc2852cc76aa11a6dd6b0.camel@linux.ibm.com>
- <4A0505D0-2933-43BD-BEEA-94350BB22AE7@oracle.com> <20230913.Ceifae7ievei@digikod.net>
- <D0F16BFD-72EB-4BE2-BA3D-BAE1BCCDCB6F@oracle.com> <20230914.shah5al9Kaib@digikod.net>
- <20231005.dajohf2peiBu@digikod.net> <d3b51f26c14fd273d41da3432895fdce9f4d047c.camel@linux.ibm.com>
-In-Reply-To: <d3b51f26c14fd273d41da3432895fdce9f4d047c.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 17 Oct 2023 11:45:40 -0400
-Message-ID: <CAHC9VhRdU1CZJpPSEdSmui-Xirr0j261K=+SM7KiDwiPG-JSrQ@mail.gmail.com>
-Subject: Re: RFC: New LSM to control usage of x509 certificates
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
+        Tue, 17 Oct 2023 12:08:38 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A28F1;
+        Tue, 17 Oct 2023 09:08:33 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4S8z5Z1hglz9xvtB;
+        Tue, 17 Oct 2023 23:52:50 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwD3TpBfsS5lfRxmAg--.39235S2;
+        Tue, 17 Oct 2023 17:08:08 +0100 (CET)
+Message-ID: <6f33144c850c40e9438a6de2cf3004e223508755.camel@huaweicloud.com>
+Subject: Re: [PATCH v15 00/11] LSM: Three basic syscalls
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        serge@hallyn.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net,
+        linux-integrity@vger.kernel.org
+Date:   Tue, 17 Oct 2023 18:07:56 +0200
+In-Reply-To: <CAHC9VhTjHT-DGKu0=cZPVb=+kMwmbPdr8HiVWJq-yzaDiYk_SA@mail.gmail.com>
+References: <20230912205658.3432-1-casey.ref@schaufler-ca.com>
+         <20230912205658.3432-1-casey@schaufler-ca.com>
+         <CAHC9VhRcbp3iWQwL7FTUrcU1C3OsZ413Nbq+17oTwW7hZ7XvBw@mail.gmail.com>
+         <CAHC9VhSqY5+DR-jXprrftb1=CzDvhTh0Ep66A16RMd4L7W7TYw@mail.gmail.com>
+         <ae39864947debbc7c460db478b8abe1c147b7d5c.camel@huaweicloud.com>
+         <CAHC9VhRQ7xpeSX7b3VZfzQ15noJ8mgauNMuHWo_n3hMgsYMAfQ@mail.gmail.com>
+         <468436cf766732a3cfc55d07ad119a6ccdc815c1.camel@huaweicloud.com>
+         <CAHC9VhTjHT-DGKu0=cZPVb=+kMwmbPdr8HiVWJq-yzaDiYk_SA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu2 
+MIME-Version: 1.0
+X-CM-TRANSID: LxC2BwD3TpBfsS5lfRxmAg--.39235S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4DWr17JF4UXFy7Wr45Wrg_yoW8Zry7pF
+        WkKay8KFs7Zr12kF1vvF4rC3W5Kr9YqrW3Wrn8Cr18JryFyFyYgrsrGFW29r15Grs5ta4S
+        yF4agryUuw1vy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj5EligAAsE
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Oct 17, 2023 at 9:48=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Thu, 2023-10-05 at 12:32 +0200, Micka=C3=ABl Sala=C3=BCn wrote:
-> > > > > A complementary approach would be to create an
-> > > > > LSM (or a dedicated interface) to tie certificate properties to a=
- set of
-> > > > > kernel usages, while still letting users configure these constrai=
-nts.
-> > > >
-> > > > That is an interesting idea.  Would the other security maintainers =
-be in
-> > > > support of such an approach?  Would a LSM be the correct interface?
-> > > > Some of the recent work I have done with introducing key usage and =
-CA
-> > > > enforcement is difficult for a distro to pick up, since these chang=
-es can be
-> > > > viewed as a regression.  Each end-user has different signing proced=
-ures
-> > > > and policies, so making something work for everyone is difficult.  =
-Letting the
-> > > > user configure these constraints would solve this problem.
->
-> Something definitely needs to be done about controlling the usage of
-> x509 certificates.  My concern is the level of granularity.  Would this
-> be at the LSM hook level or even finer granaularity?
+On Tue, 2023-10-17 at 11:58 -0400, Paul Moore wrote:
+> On Tue, Oct 17, 2023 at 3:01 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Mon, 2023-10-16 at 11:06 -0400, Paul Moore wrote:
+> > > On Mon, Oct 16, 2023 at 8:05 AM Roberto Sassu
+> > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > 
+> > > > Sorry, I just noticed LSM_ID_IMA. Since we have the 'integrity' LSM, I
+> > > > think it should be LSM_ID_INTEGRITY.
+> > > > 
+> > > > Mimi, all, do you agree? If yes, I send a patch shortly.
+> > > 
+> > > I believe LSM_ID_IMA is the better option, despite "integrity" already
+> > > being present in Kconfig and possibly other areas.  "IMA" is a
+> > > specific thing/LSM whereas "integrity" is a property, principle, or
+> > > quality.  Especially as we move forward with promoting IMA as a full
+> > > and proper LSM, we should work towards referring to it as "IMA" and
+> > > not "integrity".
+> > > 
+> > > If anything we should be working to support "IMA" in places where we
+> > > currently have "integrity" so that we can eventually deprecate
+> > > "integrity".
+> > 
+> > Hi Paul
+> > 
+> > I fully understand your argument. However, 'integrity' has been the
+> > word to identify the integrity subsystem since long time ago.
+> > 
+> > Reducing the scope to 'ima' would create some confusion since, while
+> > 'ima' is associated to integrity, it would not encompass EVM.
+> 
+> Using LSM_ID_IMA to reference the combination of IMA+EVM makes much
+> more sense to me than using LSM_ID_INTEGRITY, especially as we move
+> towards promoting IMA+EVM and adopting LSM hooks for integrity
+> verification, opening the door for other integrity focused LSMs.
 
-You lost me, what do you mean by finer granularity than a LSM-based
-access control?  Can you give an existing example in the Linux kernel
-of access control granularity that is finer grained than what is
-provided by the LSMs?
++ Mimi, linux-integrity
 
---=20
-paul-moore.com
+Ok, just to understand before posting v4, the code looks like this:
+
++const struct lsm_id integrity_lsmid = {
++	.name = "integrity",
++	.id = LSM_ID_IMA,
++};
++
+ DEFINE_LSM(integrity) = {
+ 	.name = "integrity",
+-	.init = integrity_iintcache_init,
++	.init = integrity_lsm_init,
+ 	.order = LSM_ORDER_LAST,
+ };
+ 
+Is it ok?
+
+Thanks
+
+Roberto
+
+
