@@ -2,79 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A1B7CE2DD
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Oct 2023 18:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AB27CE61E
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Oct 2023 20:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjJRQfx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Oct 2023 12:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S231292AbjJRSQl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Oct 2023 14:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjJRQfw (ORCPT
+        with ESMTP id S230147AbjJRSQk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Oct 2023 12:35:52 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B667DAB
-        for <linux-integrity@vger.kernel.org>; Wed, 18 Oct 2023 09:35:50 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d9abc069c8bso7363496276.3
-        for <linux-integrity@vger.kernel.org>; Wed, 18 Oct 2023 09:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1697646950; x=1698251750; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yg1ixXD9WP2UwFv3eCuFIgDaKeSzuWksYgfLUmtsPLE=;
-        b=YyjzUlMVr6NeIBZstb5IqDkkcck+5xjDdyastFAX+IA2reEOf2RmtoKTy2G1G5PXR8
-         8KopRCBxuHEPuPBIcqAWqe1g+86RNPddLDwuvPYW1qRNiA/bQO0k9u0BkAok9OC/6wDy
-         QKQxpKIjq8f4dqtbJUpPHShIO577inw/fiuT8geddCX5xHrA9gQ+yWS9FQxiRTcrOSOI
-         le763e1Fq2N6eHOpaDErlGS6/vKxK7UETnoGUjki13GwCsyzR/RIInWPU43A9JSbm4cD
-         FLpZAoBYyGTYu5976WkvHizZRksdf815iH7cfFWToH/LzyYE8TDh+q5JiBjyAvUwMB4v
-         VUDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697646950; x=1698251750;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yg1ixXD9WP2UwFv3eCuFIgDaKeSzuWksYgfLUmtsPLE=;
-        b=eNN5MnjGZp9tpZJR5b0eD2Q1tDf1NIeI6HclPrjhLSD/niBDut/PLLYiFtlaGqXTZv
-         h2z2sr3X6Miy6bx85tduFgopEncN/YHRUPk9LLLxqIK2wiSez84BS7BD38ILcUzYAZMv
-         fQwFQ3Yxc+EuGYIFU6xFjXeDna61yUP1xJLdHhy/HuHPEl4oFGijchWWHvLWxY8jltiH
-         DLCz/5DsFf1pD1h8W4QSfgz97ACM93zVHUw4gerH45Kim9gT1OXgKp5BtkNuSjL7Mg8W
-         tP8XfAqjhOvM5/XxV4ITpFqrnlxhcmc39VViXLg5fusz2FHg9y2QHXEtOrUyeQnB79uU
-         V7wQ==
-X-Gm-Message-State: AOJu0YwjzN8x9fiuFr7zDJTA7XfY7JxpsBi4BHieWOXWVmVgPh1DSXw5
-        jZZ3Ye+I5PxkN7j3FbazApK6j8D1bfv0NJ5gzlmm
-X-Google-Smtp-Source: AGHT+IEUZ6xuw82JyE5izuSckatFgudDKao+ZUtrcCvlVYbpEdBTt8l9Iieigfc86lzMInTlfSG9zwOCz5pN9FOfDmQ=
-X-Received: by 2002:a5b:a:0:b0:d79:d23f:b49c with SMTP id a10-20020a5b000a000000b00d79d23fb49cmr5549383ybp.35.1697646949881;
- Wed, 18 Oct 2023 09:35:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230912205658.3432-1-casey.ref@schaufler-ca.com>
- <20230912205658.3432-1-casey@schaufler-ca.com> <CAHC9VhRcbp3iWQwL7FTUrcU1C3OsZ413Nbq+17oTwW7hZ7XvBw@mail.gmail.com>
- <CAHC9VhSqY5+DR-jXprrftb1=CzDvhTh0Ep66A16RMd4L7W7TYw@mail.gmail.com>
- <ae39864947debbc7c460db478b8abe1c147b7d5c.camel@huaweicloud.com>
- <CAHC9VhRQ7xpeSX7b3VZfzQ15noJ8mgauNMuHWo_n3hMgsYMAfQ@mail.gmail.com>
- <468436cf766732a3cfc55d07ad119a6ccdc815c1.camel@huaweicloud.com>
- <CAHC9VhTjHT-DGKu0=cZPVb=+kMwmbPdr8HiVWJq-yzaDiYk_SA@mail.gmail.com>
- <6f33144c850c40e9438a6de2cf3004e223508755.camel@huaweicloud.com>
- <2637d5294d4a7ae871f1b758f5a30234836e2463.camel@huaweicloud.com>
- <c896c8ed559d0075146070be232e449b6951eb99.camel@linux.ibm.com> <283bf52d-af6e-4d20-a5ba-d98511c2e530@huaweicloud.com>
-In-Reply-To: <283bf52d-af6e-4d20-a5ba-d98511c2e530@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 18 Oct 2023 12:35:38 -0400
-Message-ID: <CAHC9VhSiUgY1Dzy6LGOjPF6XQ3pVBiZ9LPdcQANNXZ9rj-WURw@mail.gmail.com>
-Subject: Re: [PATCH v15 00/11] LSM: Three basic syscalls
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        serge@hallyn.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net,
-        linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        Wed, 18 Oct 2023 14:16:40 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBE610F;
+        Wed, 18 Oct 2023 11:16:38 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39IICYHl018187;
+        Wed, 18 Oct 2023 18:16:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=JXYWDyiW1JWQMSgIR9Wmq9AjhDVUSqBRcb+FAPMPPO0=;
+ b=fbSQaHpxJaR5g2fymOhEELchQsyQ2Kl/XD2xMUqsdfjNMDuHI7eqPq2nyCmSaLrHGWxm
+ srcYiinznONGnFcMqmkylS4dZrSq/veVSBSlnf9YKi/3WVE3jWt2Iofe2SJmYfw/rgvb
+ 8qNdkuI01PkJ9HKtm4+TBrSfytP6BNUk20qblMdc5PCI/N0NlN1k6b7/sK5cVQLL3oCW
+ c2lq/N6Ry3KdWOZWjLxk5AiXtb5PO4XyyrT6pHdCwM4NbvlwzYamORS6HZrtTSAZr7oh
+ 5mxZXUzyv0xC6QoTH+cc6dSE/P8ERWR90pChgUmMmRckW41Td/lIHcF/e4184V8bRjg/ 3w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ttmef05j3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Oct 2023 18:16:25 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39IIDsWn022464;
+        Wed, 18 Oct 2023 18:16:24 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ttmef05db-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Oct 2023 18:16:24 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39IGdfRr012876;
+        Wed, 18 Oct 2023 18:16:20 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tr5pyjyen-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Oct 2023 18:16:20 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39IIGJBH14811884
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Oct 2023 18:16:20 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BEAE35805D;
+        Wed, 18 Oct 2023 18:16:19 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 39ADD58059;
+        Wed, 18 Oct 2023 18:16:19 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.watson.ibm.com (unknown [9.31.99.90])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 18 Oct 2023 18:16:19 +0000 (GMT)
+Message-ID: <3117d99434303b00f5057bfbe4615cf8cd26b72a.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Add __counted_by for struct modsig and use
+ struct_size()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Wed, 18 Oct 2023 14:16:18 -0400
+In-Reply-To: <ZSRaDcJNARUUWUwS@work>
+References: <ZSRaDcJNARUUWUwS@work>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VgXm1I8MYbDieq0_K6zSaJizz07j5t7Q
+X-Proofpoint-ORIG-GUID: ZnTnGrQ5qSE-VkGMaOS6SvsrK70Vyy6P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-18_16,2023-10-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=611 bulkscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
+ adultscore=0 impostorscore=0 phishscore=0 clxscore=1011 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310180149
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,52 +97,25 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 18, 2023 at 10:15=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On 10/18/2023 3:09 PM, Mimi Zohar wrote:
+On Mon, 2023-10-09 at 13:52 -0600, Gustavo A. R. Silva wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
+> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> Also, relocate `hdr->raw_pkcs7_len = sig_len;` so that the __counted_by
+> annotation has effect, and flex-array member `raw_pkcs7` can be properly
+> bounds-checked at run-time.
+> 
+> While there, use struct_size() helper, instead of the open-coded
+> version, to calculate the size for the allocation of the whole
+> flexible structure, including of course, the flexible-array member.
+> 
+> This code was found with the help of Coccinelle, and audited and
+> fixed manually.
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-...
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-> > I agree with Roberto.  All three should be defined: LSM_ID_INTEGRITY,
-> > LSM_ID_IMA, LSM_ID_EVM.
->
-> I did not try yet, but the 'integrity' LSM does not need an LSM ID. With
-> the last version adding hooks to 'ima' or 'evm', it should be sufficient
-> to keep DEFINE_LSM(integrity) with the request to store a pointer in the
-> security blob (even the init function can be a dummy function).
-
-First off, this *really* should have been brought up way, way, *way*
-before now.  This patchset has been discussed for months, and bringing
-up concerns in the eleventh hour is borderline rude.
-
-At least we haven't shipped this in a tagged release from Linus yet,
-so there is that.
-
-If you want to add a unique LSM ID for both IMA and EVM, I'm okay with
-that, but if we do that I don't see the need for a dedicated ID for
-"integrity".  Roberto, Mimi, one of you please send me a patch on top
-of lsm/next-queue that updates the LSM ID to look like the following
-(I believe EVM was added between AppArmor and Yama, yes?):
-
-#define LSM_ID_UNDEF            0
-#define LSM_ID_CAPABILITY       100
-#define LSM_ID_SELINUX          101
-#define LSM_ID_SMACK            102
-#define LSM_ID_TOMOYO           103
-#define LSM_ID_IMA              104
-#define LSM_ID_APPARMOR         105
-#define LSM_ID_EVM              106
-#define LSM_ID_YAMA             107
-#define LSM_ID_LOADPIN          108
-#define LSM_ID_SAFESETID        109
-#define LSM_ID_LOCKDOWN         110
-#define LSM_ID_BPF              111
-#define LSM_ID_LANDLOCK         112
-
-... and also update the LSM registration code for IMA/EVM/etc. to do
-the right thing.
-
-Also, just to be clear, you should get this patch out ASAP.
-
---=20
-paul-moore.com
