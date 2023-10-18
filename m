@@ -2,147 +2,161 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4DF7CDF68
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Oct 2023 16:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4559E7CDF29
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Oct 2023 16:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbjJROXv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Oct 2023 10:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
+        id S1345010AbjJRORU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Oct 2023 10:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbjJROXu (ORCPT
+        with ESMTP id S1345065AbjJRORE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Oct 2023 10:23:50 -0400
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562E410DC
-        for <linux-integrity@vger.kernel.org>; Wed, 18 Oct 2023 07:14:11 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4S9Xs95kx0zMqBDW;
-        Wed, 18 Oct 2023 14:14:05 +0000 (UTC)
-Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4S9Xs900CdzMppKm;
-        Wed, 18 Oct 2023 16:14:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1697638445;
-        bh=AJCppQD+bLjbEs7xewzXV45Zcp0SfH1Bhh+lWslfscM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n23hMfMY7BCeeWfC+vRX7uYp3N2pqK1TOOIKiCpU1sWaX5L85cu8QOJvf3HhcUjx0
-         72e2daim6t3sKxX3Bjj93peawurco7/d809Ro3jVgn5rsGowPdzmA2GWt7hsyOmib4
-         aVsI6v+B2mIOSlnfQgc3KKNanxmjtBWB5Sy7YNR0=
-Date:   Wed, 18 Oct 2023 16:14:03 +0200
-From:   =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Subject: Re: RFC: New LSM to control usage of x509 certificates
-Message-ID: <20231018.heiju2Shexai@digikod.net>
-References: <D0F16BFD-72EB-4BE2-BA3D-BAE1BCCDCB6F@oracle.com>
- <20230914.shah5al9Kaib@digikod.net>
- <20231005.dajohf2peiBu@digikod.net>
- <d3b51f26c14fd273d41da3432895fdce9f4d047c.camel@linux.ibm.com>
- <CAHC9VhRdU1CZJpPSEdSmui-Xirr0j261K=+SM7KiDwiPG-JSrQ@mail.gmail.com>
- <a851227aaa75ab16b0d6dd93433e1ee1679715f9.camel@linux.ibm.com>
- <CAHC9VhS_Ttdy5ZB=jYdVfNyaJfn_7G1wztr5+g0g7uUDForXvA@mail.gmail.com>
- <5c795b4cf6d7460af205e85a36194fa188136c38.camel@linux.ibm.com>
- <CAHC9VhTug20M0ET=QojUPtjrGkeHfU=ADDNrKfXmLTQPG_i1vw@mail.gmail.com>
- <2512D2AE-4ACA-41B9-B9FB-C2B4802B9A10@oracle.com>
+        Wed, 18 Oct 2023 10:17:04 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26192449B;
+        Wed, 18 Oct 2023 07:15:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4S9XXk2rD7z9v7Nc;
+        Wed, 18 Oct 2023 21:59:50 +0800 (CST)
+Received: from [10.221.98.153] (unknown [10.221.98.153])
+        by APP1 (Coremail) with SMTP id LxC2BwBHU5Rl6C9lCP90Ag--.36102S2;
+        Wed, 18 Oct 2023 15:15:10 +0100 (CET)
+Message-ID: <283bf52d-af6e-4d20-a5ba-d98511c2e530@huaweicloud.com>
+Date:   Wed, 18 Oct 2023 16:14:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v15 00/11] LSM: Three basic syscalls
+To:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        serge@hallyn.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net,
+        linux-integrity@vger.kernel.org
+References: <20230912205658.3432-1-casey.ref@schaufler-ca.com>
+ <20230912205658.3432-1-casey@schaufler-ca.com>
+ <CAHC9VhRcbp3iWQwL7FTUrcU1C3OsZ413Nbq+17oTwW7hZ7XvBw@mail.gmail.com>
+ <CAHC9VhSqY5+DR-jXprrftb1=CzDvhTh0Ep66A16RMd4L7W7TYw@mail.gmail.com>
+ <ae39864947debbc7c460db478b8abe1c147b7d5c.camel@huaweicloud.com>
+ <CAHC9VhRQ7xpeSX7b3VZfzQ15noJ8mgauNMuHWo_n3hMgsYMAfQ@mail.gmail.com>
+ <468436cf766732a3cfc55d07ad119a6ccdc815c1.camel@huaweicloud.com>
+ <CAHC9VhTjHT-DGKu0=cZPVb=+kMwmbPdr8HiVWJq-yzaDiYk_SA@mail.gmail.com>
+ <6f33144c850c40e9438a6de2cf3004e223508755.camel@huaweicloud.com>
+ <2637d5294d4a7ae871f1b758f5a30234836e2463.camel@huaweicloud.com>
+ <c896c8ed559d0075146070be232e449b6951eb99.camel@linux.ibm.com>
+Content-Language: en-US
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <c896c8ed559d0075146070be232e449b6951eb99.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2512D2AE-4ACA-41B9-B9FB-C2B4802B9A10@oracle.com>
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: LxC2BwBHU5Rl6C9lCP90Ag--.36102S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF45AryfGF18KF4UuF1UAwb_yoWrJFy8pF
+        WUKa15tF4kZr1jkrn2va1rAw4UKrWrXryUWr98Gry8Za4qyryFqrW7CFW7ury5WrnYyw1j
+        yr4Yqa4xZ34qy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5UwpgACs7
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Oct 17, 2023 at 07:34:25PM +0000, Eric Snowberg wrote:
+On 10/18/2023 3:09 PM, Mimi Zohar wrote:
+> On Wed, 2023-10-18 at 11:31 +0200, Roberto Sassu wrote:
+>> On Tue, 2023-10-17 at 18:07 +0200, Roberto Sassu wrote:
+>>> On Tue, 2023-10-17 at 11:58 -0400, Paul Moore wrote:
+>>>> On Tue, Oct 17, 2023 at 3:01 AM Roberto Sassu
+>>>> <roberto.sassu@huaweicloud.com> wrote:
+>>>>> On Mon, 2023-10-16 at 11:06 -0400, Paul Moore wrote:
+>>>>>> On Mon, Oct 16, 2023 at 8:05 AM Roberto Sassu
+>>>>>> <roberto.sassu@huaweicloud.com> wrote:
+>>>>>>>
+>>>>>>> Sorry, I just noticed LSM_ID_IMA. Since we have the 'integrity' LSM, I
+>>>>>>> think it should be LSM_ID_INTEGRITY.
+>>>>>>>
+>>>>>>> Mimi, all, do you agree? If yes, I send a patch shortly.
+>>>>>>
+>>>>>> I believe LSM_ID_IMA is the better option, despite "integrity" already
+>>>>>> being present in Kconfig and possibly other areas.  "IMA" is a
+>>>>>> specific thing/LSM whereas "integrity" is a property, principle, or
+>>>>>> quality.  Especially as we move forward with promoting IMA as a full
+>>>>>> and proper LSM, we should work towards referring to it as "IMA" and
+>>>>>> not "integrity".
+>>>>>>
+>>>>>> If anything we should be working to support "IMA" in places where we
+>>>>>> currently have "integrity" so that we can eventually deprecate
+>>>>>> "integrity".
+>>>>>
+>>>>> Hi Paul
+>>>>>
+>>>>> I fully understand your argument. However, 'integrity' has been the
+>>>>> word to identify the integrity subsystem since long time ago.
+>>>>>
+>>>>> Reducing the scope to 'ima' would create some confusion since, while
+>>>>> 'ima' is associated to integrity, it would not encompass EVM.
+>>>>
+>>>> Using LSM_ID_IMA to reference the combination of IMA+EVM makes much
+>>>> more sense to me than using LSM_ID_INTEGRITY, especially as we move
+>>>> towards promoting IMA+EVM and adopting LSM hooks for integrity
+>>>> verification, opening the door for other integrity focused LSMs.
+>>>
+>>> + Mimi, linux-integrity
+>>>
+>>> Ok, just to understand before posting v4, the code looks like this:
+>>
+>> I worked on a new proposal. Let me know what you think. It is available
+>> here:
+>>
+>> https://github.com/robertosassu/linux/tree/ima-evm-lsms-v4-devel-v6
+>>
+>>
+>> I made IMA and EVM as standalone LSMs and removed 'integrity'. They
+>> maintain the same properties of 'integrity', i.e. they are the last and
+>> always enabled.
+>>
+>> During initialization, 'ima' and 'evm' call integrity_iintcache_init(),
+>> so that they can get integrity metadata. I added a check to ensure that
+>> this function is called only once. I also added the lsmid parameter so
+>> that the integrity-specific functions are added under the LSM ID of the
+>> caller.
+>>
+>> I added a new LSM ID for EVM, does not look good that IMA and EVM are
+>> represented by LSM_ID_IMA.
+>>
+>> Finally, I had to drop the patch to remove the rbtree, because without
+>> the 'integrity' LSM, space in the security blob cannot be reserved.
+>> Since integrity metadata is shared, it cannot be reserved by 'ima' or
+>> 'evm'.
+>>
+>> An intermediate solution would be to keep the 'integrity' LSM just to
+>> reserve space in the security blob. Or, we remove the rbtree if/when
+>> IMA and EVM use disjoint integrity metadata.
 > 
+> One of the major benefits for making IMA and EVM LSMs was removing the
+> rbtree and replacing it with the ability of using i_security.
 > 
-> > On Oct 17, 2023, at 12:51 PM, Paul Moore <paul@paul-moore.com> wrote:
-> > 
-> > On Tue, Oct 17, 2023 at 1:59 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >> On Tue, 2023-10-17 at 13:29 -0400, Paul Moore wrote:
-> >>> On Tue, Oct 17, 2023 at 1:09 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>>> On Tue, 2023-10-17 at 11:45 -0400, Paul Moore wrote:
-> >>>>> On Tue, Oct 17, 2023 at 9:48 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>>>>> On Thu, 2023-10-05 at 12:32 +0200, Mickaël Salaün wrote:
-> >>>>>>>>>> A complementary approach would be to create an
-> >>>>>>>>>> LSM (or a dedicated interface) to tie certificate properties to a set of
-> >>>>>>>>>> kernel usages, while still letting users configure these constraints.
-> >>>>>>>>> 
-> >>>>>>>>> That is an interesting idea.  Would the other security maintainers be in
-> >>>>>>>>> support of such an approach?  Would a LSM be the correct interface?
-> >>>>>>>>> Some of the recent work I have done with introducing key usage and CA
-> >>>>>>>>> enforcement is difficult for a distro to pick up, since these changes can be
-> >>>>>>>>> viewed as a regression.  Each end-user has different signing procedures
-> >>>>>>>>> and policies, so making something work for everyone is difficult.  Letting the
-> >>>>>>>>> user configure these constraints would solve this problem.
-> >>>>>> 
-> >>>>>> Something definitely needs to be done about controlling the usage of
-> >>>>>> x509 certificates.  My concern is the level of granularity.  Would this
-> >>>>>> be at the LSM hook level or even finer granaularity?
-> >>>>> 
-> >>>>> You lost me, what do you mean by finer granularity than a LSM-based
-> >>>>> access control?  Can you give an existing example in the Linux kernel
-> >>>>> of access control granularity that is finer grained than what is
-> >>>>> provided by the LSMs?
-> >>>> 
-> >>>> The current x509 certificate access control granularity is at the
-> >>>> keyring level.  Any key on the keyring may be used to verify a
-> >>>> signature.  Finer granularity could associate a set of certificates on
-> >>>> a particular keyring with an LSM hook - kernel modules, BPRM, kexec,
-> >>>> firmware, etc.  Even finer granularity could somehow limit a key's
-> >>>> signature verification to files in particular software package(s) for
-> >>>> example.
-> >>>> 
-> >>>> Perhaps Mickaël and Eric were thinking about a new LSM to control usage
-> >>>> of x509 certificates from a totally different perspective.  I'd like to
-> >>>> hear what they're thinking.
-> >>>> 
-> >>>> I hope this addressed your questions.
-> >>> 
-> >>> Okay, so you were talking about finer granularity when compared to the
-> >>> *current* LSM keyring hooks.  Gotcha.
-> >>> 
-> >>> If we need additional, or modified, hooks that shouldn't be a problem.
-> >>> Although I'm guessing the answer is going to be moving towards
-> >>> purpose/operation specific keyrings which might fit in well with the
-> >>> current keyring level controls.
-> >> 
-> >> I don't believe defining per purpose/operation specific keyrings will
-> >> resolve the underlying problem of granularity.
-> > 
-> > Perhaps not completely, but for in-kernel operations I believe it is
-> > an attractive idea.
-> 
-> Could the X.509 Extended Key Usage (EKU) extension [1], be used here?  
-> Various OIDs would need to be defined or assigned for each purpose.  
-> Once assigned, the kernel could parse this information and do the
-> enforcement.  Then all keys could continue to remain in the .builtin, 
-> .secondary, and .machine keyrings.   Only a subset of each keyring 
-> would be used for verification based on what is contained in the EKU.
-> 
-> 1. https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12
+> I agree with Roberto.  All three should be defined: LSM_ID_INTEGRITY,
+> LSM_ID_IMA, LSM_ID_EVM.
 
-I was also thinking about this kind of use cases. Because it might be
-difficult in practice to control all certificate properties, we might
-want to let sysadmins configure these subset of keyring according to
-various certificate properties. There are currently LSM hooks to control
-interactions with kernel keys by user space, and keys are already tied
-to LSM blobs. New LSM hooks could be added to dynamically filter
-keyrings according to kernel usages (e.g. kernel module verification, a
-subset of an authentication mechanism according to the checked object).
+I did not try yet, but the 'integrity' LSM does not need an LSM ID. With 
+the last version adding hooks to 'ima' or 'evm', it should be sufficient 
+to keep DEFINE_LSM(integrity) with the request to store a pointer in the 
+security blob (even the init function can be a dummy function).
+
+Roberto
+
