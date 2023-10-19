@@ -2,173 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDC07CF3F1
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Oct 2023 11:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F217CFC0B
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Oct 2023 16:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjJSJV5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 19 Oct 2023 05:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        id S1346003AbjJSOGB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Oct 2023 10:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbjJSJV4 (ORCPT
+        with ESMTP id S1345929AbjJSOF7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 19 Oct 2023 05:21:56 -0400
-X-Greylist: delayed 568 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 Oct 2023 02:21:51 PDT
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [IPv6:2001:1600:3:17::190b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE246FE
-        for <linux-integrity@vger.kernel.org>; Thu, 19 Oct 2023 02:21:51 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4SB26Z2T9TzMpqsp;
-        Thu, 19 Oct 2023 09:12:22 +0000 (UTC)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4SB26Y3Mssz11q;
-        Thu, 19 Oct 2023 11:12:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1697706742;
-        bh=yHQ4lbIXDIcyIod5pT5Nj5PJPKD0EcMy/UqYpm+iTjM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IAeo4fKsTgBIg+Ag9bTIkrGYryj3Ng6ge6EBe/PGutCVJWcoapcI11/m9Zya1iaXv
-         pZUD6wSsmSigFo00aTVGmXnKQ7g6IjcbAn5IiMrwMEc/Zeq/jT+H8//oc9jCWb1CJX
-         2o583mC8xfekrSVigHG1OZEv8dEM2KDO7XaC46yI=
-Date:   Thu, 19 Oct 2023 11:12:18 +0200
-From:   =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        KP Singh <kpsingh@kernel.org>
-Subject: Re: RFC: New LSM to control usage of x509 certificates
-Message-ID: <20231019.vair7OoRie7w@digikod.net>
-References: <20231005.dajohf2peiBu@digikod.net>
- <d3b51f26c14fd273d41da3432895fdce9f4d047c.camel@linux.ibm.com>
- <CAHC9VhRdU1CZJpPSEdSmui-Xirr0j261K=+SM7KiDwiPG-JSrQ@mail.gmail.com>
- <a851227aaa75ab16b0d6dd93433e1ee1679715f9.camel@linux.ibm.com>
- <CAHC9VhS_Ttdy5ZB=jYdVfNyaJfn_7G1wztr5+g0g7uUDForXvA@mail.gmail.com>
- <5c795b4cf6d7460af205e85a36194fa188136c38.camel@linux.ibm.com>
- <CAHC9VhTug20M0ET=QojUPtjrGkeHfU=ADDNrKfXmLTQPG_i1vw@mail.gmail.com>
- <2512D2AE-4ACA-41B9-B9FB-C2B4802B9A10@oracle.com>
- <20231018.heiju2Shexai@digikod.net>
- <18FC67B7-7966-49B7-8C27-F815F1568781@oracle.com>
+        Thu, 19 Oct 2023 10:05:59 -0400
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9256C136
+        for <linux-integrity@vger.kernel.org>; Thu, 19 Oct 2023 07:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+        t=1697724352; x=1698329152; i=juergen_repp@web.de;
+        bh=fhlyzthvcpbc/7YohqvgoFn4vYQ3OkDBQr4W37eIm8g=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=uERSW/DX0vk0/S/dC42N/ZcwSPL9tm+RyPTNoXENG/nRi6RlvXzJEXC6Avr9da3C
+         //+cgors3XIkvX7Lg5CyjRYuC+2ukYMQtd27BTIJxiuzomX3VUjSkpP3EUb3bH5Nj
+         gEstKCuzuOzJGqbxgkyD8fzV1B74PznKi8VYkoXhYB3rH8JzKXHi70W9zdxNEbI6B
+         hWrOH74MHNiU2JYaUgIUB42G6iarU4iIQC1iHeNGtZGcus7E3tsMAoCT7HOWJukj2
+         L/RfQPsWj3Nn/l+pM0n7TGCyvSbxw0UB1GOogUtctZgPLqMM1CAY6OO7hWdBMAjKS
+         9HTlDUOJUq22MO8IWQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.33] ([37.201.241.134]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1M7ept-1qs5YT1PNl-0084sk; Thu, 19
+ Oct 2023 16:05:52 +0200
+Message-ID: <0a8b84bd-7c79-415c-afac-b3c7d6341805@web.de>
+Date:   Thu, 19 Oct 2023 16:05:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <18FC67B7-7966-49B7-8C27-F815F1568781@oracle.com>
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Content-Language: de-DE
+From:   Juergen Repp <juergen_repp@web.de>
+Subject: TPM resource manager returns -1 for TPM2_RC_CONTEXT_GAP
+To:     linux-integrity@vger.kernel.org
+Cc:     Andreas Fuchs <andreas.fuchs@infineon.com>,
+        "Plappert, Christian" <christian.plappert@sit.fraunhofer.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:mcnhF+KtdpGi6w1eIzsJ/Fd+efU7+gDo4ge5d7GE/eybV0xnolz
+ //E5S5ulhFNBwwaG6qXmoZp410osB/Qt832Ujp+/uxW8Ss6C0chv2kIzRoip3hyV4DJyEpa
+ JYLuAVdKJoeoE09HMUf8Yh5hZNRnGlK8hOdXQ0VQfWKZ5uq32ER+OBClFL+nX5DTC3JEF82
+ fcLYPuh8L/OJe02SJOciw==
+UI-OutboundReport: notjunk:1;M01:P0:CPgjmUoxXk8=;dCj7amUa00OD0yFmrGMRqzyFQ9+
+ 9H9xqDB9ruQnrBijdEMZxbHUMPfYIGenTlL/UqV4Ed+xTEfo8hs6pkvRpyJ9VCICW9vzCP8/0
+ hL63mZxsv4HoFl+JwSNw9hK6PL+fzWOc1CPvkLVMC8N1vSqBacMgUkg5miw0/9uW8hPHtggiJ
+ GMFfjUH24y5bENvesC0kwVHGtkfvRYMhzj67cUkFcbAEGuZbraM5XYrVBv22+nzJV7ovXs7/8
+ ziCUjBDBQzr3KPTRNCkJ1pznJEEGHHsGGQWhnKl3yrmmBhn/A68z7adOpG1bSwTpUCkECmRK0
+ AOocRl8lsbSotnnYHwmKQjhy61j+//XHr/AotWTzFVvBdS31JWft+iUO+T0HYBmLGJn2cpeXN
+ tVEWih0m15gXraew15BujmXBsV+k1qmWRT37DMkAJySF6FBYgFxaOs4ZSyLtDz46pyv/n0cEG
+ 7ZnTPDdyl01k+rXK6u7kSAF7nK8BXjbHooMTkDzryid7dVEEfZrAs3gZpQhctcu41XDpwddYP
+ 1URbBPlhr6jfEBjZ2oU09C4NmzWXeFvMMqqR4h8HmMkDqxjFN3D2Ee3vu3iWFWqg3awDrj3ez
+ kWycJlvyu6xlT6cpZiVFldbk3MSOtD9UB2r7FdIoBjQ/c8jFSUU1graOx+CuiC6SZZbVumiT4
+ yiN5YNjxXQl1jQTL4aCqaRDDnCZqULxkeZkIdQTAbcyWYmJ/etD5yS80MmanpNAtr2oROY3Cx
+ w+QsMp2y5LqFZGbm5wqD/k4UgsTBX6aVMWZjNc6HK+BmFoa5HvapehVteWa5no2/iZQAOWGYi
+ tSnzZWxwqZ/ltbo/ZBbs26Ds3GiF789igpuOK/SYjSNja18MBR1PZi1uQ5xBGGjUiYmdP4InT
+ LWbiiLCZ+ENu4gMH1Z2VCTfMAzwahAEbhmhd7bsU5u4AGMmQ7/rJm6ow5yBkha6QnIoDt42LB
+ FdWqUi39FTsJJVE3HCmF4rSt0Jk=
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 18, 2023 at 11:12:45PM +0000, Eric Snowberg wrote:
-> 
-> 
-> > On Oct 18, 2023, at 8:14 AM, Mickaël Salaün <mic@digikod.net> wrote:
-> > 
-> > On Tue, Oct 17, 2023 at 07:34:25PM +0000, Eric Snowberg wrote:
-> >> 
-> >> 
-> >>> On Oct 17, 2023, at 12:51 PM, Paul Moore <paul@paul-moore.com> wrote:
-> >>> 
-> >>> On Tue, Oct 17, 2023 at 1:59 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>>> On Tue, 2023-10-17 at 13:29 -0400, Paul Moore wrote:
-> >>>>> On Tue, Oct 17, 2023 at 1:09 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>>>>> On Tue, 2023-10-17 at 11:45 -0400, Paul Moore wrote:
-> >>>>>>> On Tue, Oct 17, 2023 at 9:48 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>>>>>>> On Thu, 2023-10-05 at 12:32 +0200, Mickaël Salaün wrote:
-> >>>>>>>>>>>> A complementary approach would be to create an
-> >>>>>>>>>>>> LSM (or a dedicated interface) to tie certificate properties to a set of
-> >>>>>>>>>>>> kernel usages, while still letting users configure these constraints.
-> >>>>>>>>>>> 
-> >>>>>>>>>>> That is an interesting idea.  Would the other security maintainers be in
-> >>>>>>>>>>> support of such an approach?  Would a LSM be the correct interface?
-> >>>>>>>>>>> Some of the recent work I have done with introducing key usage and CA
-> >>>>>>>>>>> enforcement is difficult for a distro to pick up, since these changes can be
-> >>>>>>>>>>> viewed as a regression.  Each end-user has different signing procedures
-> >>>>>>>>>>> and policies, so making something work for everyone is difficult.  Letting the
-> >>>>>>>>>>> user configure these constraints would solve this problem.
-> >>>>>>>> 
-> >>>>>>>> Something definitely needs to be done about controlling the usage of
-> >>>>>>>> x509 certificates.  My concern is the level of granularity.  Would this
-> >>>>>>>> be at the LSM hook level or even finer granaularity?
-> >>>>>>> 
-> >>>>>>> You lost me, what do you mean by finer granularity than a LSM-based
-> >>>>>>> access control?  Can you give an existing example in the Linux kernel
-> >>>>>>> of access control granularity that is finer grained than what is
-> >>>>>>> provided by the LSMs?
-> >>>>>> 
-> >>>>>> The current x509 certificate access control granularity is at the
-> >>>>>> keyring level.  Any key on the keyring may be used to verify a
-> >>>>>> signature.  Finer granularity could associate a set of certificates on
-> >>>>>> a particular keyring with an LSM hook - kernel modules, BPRM, kexec,
-> >>>>>> firmware, etc.  Even finer granularity could somehow limit a key's
-> >>>>>> signature verification to files in particular software package(s) for
-> >>>>>> example.
-> >>>>>> 
-> >>>>>> Perhaps Mickaël and Eric were thinking about a new LSM to control usage
-> >>>>>> of x509 certificates from a totally different perspective.  I'd like to
-> >>>>>> hear what they're thinking.
-> >>>>>> 
-> >>>>>> I hope this addressed your questions.
-> >>>>> 
-> >>>>> Okay, so you were talking about finer granularity when compared to the
-> >>>>> *current* LSM keyring hooks.  Gotcha.
-> >>>>> 
-> >>>>> If we need additional, or modified, hooks that shouldn't be a problem.
-> >>>>> Although I'm guessing the answer is going to be moving towards
-> >>>>> purpose/operation specific keyrings which might fit in well with the
-> >>>>> current keyring level controls.
-> >>>> 
-> >>>> I don't believe defining per purpose/operation specific keyrings will
-> >>>> resolve the underlying problem of granularity.
-> >>> 
-> >>> Perhaps not completely, but for in-kernel operations I believe it is
-> >>> an attractive idea.
-> >> 
-> >> Could the X.509 Extended Key Usage (EKU) extension [1], be used here?  
-> >> Various OIDs would need to be defined or assigned for each purpose.  
-> >> Once assigned, the kernel could parse this information and do the
-> >> enforcement.  Then all keys could continue to remain in the .builtin, 
-> >> .secondary, and .machine keyrings.   Only a subset of each keyring 
-> >> would be used for verification based on what is contained in the EKU.
-> >> 
-> >> 1. https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12
-> > 
-> > I was also thinking about this kind of use cases. Because it might be
-> > difficult in practice to control all certificate properties, we might
-> > want to let sysadmins configure these subset of keyring according to
-> > various certificate properties.
-> 
-> I agree, a configuration component for a sysadmin would be needed.
-> 
-> > There are currently LSM hooks to control
-> > interactions with kernel keys by user space, and keys are already tied
-> > to LSM blobs. New LSM hooks could be added to dynamically filter
-> > keyrings according to kernel usages (e.g. kernel module verification, a
-> > subset of an authentication mechanism according to the checked object).
-> 
-> If an LSM hook could dynamically filter keyrings, and the EKU was used, 
-> is there an opinion on how flexible this should be?  Meaning, should there 
-> be OIDs defined and carried in mainline code?  This would make it easier 
-> to setup and use.  However who would be the initial OID owner?  Or would 
-> predefined OIDs not be contained within mainline code, leaving it to the 
-> sysadmin to create a policy that would be fed to the LSM to do the filtering.
+There is an issue related to this problem on github for tpm2-tss:
+https://github.com/tpm2-software/tpm2-tss/issues/2691 (/dev/tpmrm0 was used)
+The error did occur after abbout 200 signing operations when a second session was opened by a second process at the same time.
+Kernel log:
+[ 401.923826] tpm tpm0: tpm2_save_context: failed with a TPM error 0x0901
+[  401.925049] tpm tpm0: A TPM error (459) occurred flushing context
 
-The more flexible approach would be to not hardcode any policy in the
-kernel but let sysadmins define their own, including OIDs. We "just"
-need to find an adequate configuration scheme to define these
-constraints. We already have an ASN.1 parser in the kernel, so we might
-want to leverage that to match a certificate. Another option would be to
-rely on an eBPF program to filter certificates but I'm not sure how
-complex it could get. Maybe exposing the ASN.1 parser to eBPF? :)
+Juergen
+
+
