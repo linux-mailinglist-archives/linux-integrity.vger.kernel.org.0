@@ -2,897 +2,317 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECEA7D0204
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Oct 2023 20:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104227D0546
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Oct 2023 01:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233268AbjJSSt2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 19 Oct 2023 14:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S233357AbjJSXJO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Oct 2023 19:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbjJSSt1 (ORCPT
+        with ESMTP id S233222AbjJSXJN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 19 Oct 2023 14:49:27 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19A92CA;
-        Thu, 19 Oct 2023 11:49:23 -0700 (PDT)
-Received: from [192.168.86.69] (unknown [50.46.228.62])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 454DC20B74C0;
-        Thu, 19 Oct 2023 11:49:22 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 454DC20B74C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1697741362;
-        bh=d2JVGRdv8gCcfFfmeYalZ8EYM/3NfqEVrcnGI3WvI5g=;
-        h=Date:To:Cc:From:Subject:From;
-        b=sNCbO4IQA6lHhxfw1f2WkM3fFczWPPHZSHYB2/vrqBescY9XnB2uITCRqwSLAQEbE
-         4s+FguYPXscLPl6h4osoXw2WMxN9lYpC9erG/B4WnWLEIKrlEupFA9cGpzTeShluy1
-         G9NwHhFd6TXgjfccwN/199BI8n+MHAqKuB+yNqgA=
-Message-ID: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
-Date:   Thu, 19 Oct 2023 11:49:21 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
+        Thu, 19 Oct 2023 19:09:13 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18ED4119;
+        Thu, 19 Oct 2023 16:09:06 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39JKx6La032305;
+        Thu, 19 Oct 2023 23:08:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=EcD2rWRrqJp2v3Ry/6/bQiBN+GTVbD/FI/hlrdnIRLY=;
+ b=ShO92VqF3v7LI1bWvSiRRQb/7a9BIt3iOXImWu3u5A0sdWiVSm2MvhySTrmhNvNbYftq
+ 6tD1WHzU4o4qon7uZNx3+cYrfso4dpBDpZEjOid3C5VvGdeqk9JR7Ae2FlsAuTbbhCwb
+ eiTVZjV3xyW+w2uNslWV3xTeU4cCoo6Dl/zQMndLlePvxRgAIrTaI/e2vFSxgnCLZ6hW
+ 2tnj6j/Y3iwgwreIOIxGG3A55jhm6IFb4Xut52efWrMbtn89v1DaOHa2dHVhyoUqZtbV
+ AdIHf8hGz69I0C9eygKCVW9p+whk14OjEF31ZKK6Fi3p9BGXddBQuN0bgdcHWkGSK2Eb yg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tubwb858y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Oct 2023 23:08:42 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39JKrjaM038511;
+        Thu, 19 Oct 2023 23:08:41 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3tubw43yy6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Oct 2023 23:08:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a2xZ31lgaq/dOhqCMt1dZP9WHonpADjNtQDzyxjerXs8UFsVJNmhKOy/Tn8fiwrpIXlckE/f7MvNFrDYiNkgj5wj9AHTf1kpgrSQ8PTwJYdqRcRPqIllbF/9kV77ZOH4If/esW0yFIWeAoATIWvvkGqDhxzOpLURSIe9AFJv9sSs237lsEpFeiD1UbnLQrvQwyCF5gf1b0ggg61CSNI2KHQ/x2XExSN9Dr/kB50LwHuh9aMioIsOCzKUzH8lnWY0DlvnKeqTOjxKbz0RlHm3gUMnTz39PgkFXxmGuLyMdlF9DfSbch56pY8YzjaQGxehPWADsaWCr30WcyXPsHNZJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EcD2rWRrqJp2v3Ry/6/bQiBN+GTVbD/FI/hlrdnIRLY=;
+ b=hYVRqT6tuuzfQp5rGVX/YxxbIA9T9A3+e2nCNN4aZyZ6M1xLHwSgn49nNo208ZOuwkMUJls0OmGpYn29Wh76fHeWCUxBxHM8ETGGSKvJlYC+DJdCO35MYVy77FRRozNUWFZQzyiQDMv+tj/FrSlsDzXKnvdmo0qTSIWYO/qZetT0kR9iCQjmLE0nQv3QrVld9JKjUGDRQMAbT+R+lFqZ/j2VTzLkOZzC0ZHMto06EX5lJt/LJYauEZPe1DFs2p7PngtRUwb7C/IT969lZ3E+ScTaM23I83QjtA0DA/7KPJrgQ7QSMBeQrxQ++pRfrTMv9FU972xyiLYScYj9Kjch/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EcD2rWRrqJp2v3Ry/6/bQiBN+GTVbD/FI/hlrdnIRLY=;
+ b=vZzzhyhEXGQXW3+EIpwgJR3tFOmbkrTftaOKhRjLO5Ab5EPgswO04urIaZ3cVdJ0af6HwvxcaSkMdTWfAgLsILt0/gYiw2vVdaZ6uOPl7k2O9EKC01pGlIcrRI8Rd9WUYSaR0S/XciwZ1uDCB7q/SPRHG7DW+1jfQnV41AzR3LY=
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
+ by IA1PR10MB7239.namprd10.prod.outlook.com (2603:10b6:208:3f8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.26; Thu, 19 Oct
+ 2023 23:08:39 +0000
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::134:c770:8cb6:70e]) by CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::134:c770:8cb6:70e%4]) with mapi id 15.20.6863.032; Thu, 19 Oct 2023
+ 23:08:39 +0000
+From:   Eric Snowberg <eric.snowberg@oracle.com>
+To:     =?utf-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+CC:     Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        KP Singh <kpsingh@kernel.org>
+Subject: Re: RFC: New LSM to control usage of x509 certificates
+Thread-Topic: RFC: New LSM to control usage of x509 certificates
+Thread-Index: AQHZ93c4gJX6SHkC80mNOExcrBTnXrBOD7yAgAAjSwCAABc5gIAABa6AgAAIMoCAAA68gIAADAcAgAE44ICAAJZxAIAAp5UAgADpnAA=
+Date:   Thu, 19 Oct 2023 23:08:38 +0000
+Message-ID: <0296DA27-7CAF-4605-AF67-3645F82BEE4D@oracle.com>
+References: <20231005.dajohf2peiBu@digikod.net>
+ <d3b51f26c14fd273d41da3432895fdce9f4d047c.camel@linux.ibm.com>
+ <CAHC9VhRdU1CZJpPSEdSmui-Xirr0j261K=+SM7KiDwiPG-JSrQ@mail.gmail.com>
+ <a851227aaa75ab16b0d6dd93433e1ee1679715f9.camel@linux.ibm.com>
+ <CAHC9VhS_Ttdy5ZB=jYdVfNyaJfn_7G1wztr5+g0g7uUDForXvA@mail.gmail.com>
+ <5c795b4cf6d7460af205e85a36194fa188136c38.camel@linux.ibm.com>
+ <CAHC9VhTug20M0ET=QojUPtjrGkeHfU=ADDNrKfXmLTQPG_i1vw@mail.gmail.com>
+ <2512D2AE-4ACA-41B9-B9FB-C2B4802B9A10@oracle.com>
+ <20231018.heiju2Shexai@digikod.net>
+ <18FC67B7-7966-49B7-8C27-F815F1568781@oracle.com>
+ <20231019.vair7OoRie7w@digikod.net>
+In-Reply-To: <20231019.vair7OoRie7w@digikod.net>
+Accept-Language: en-US
 Content-Language: en-US
-To:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        peterhuewe@gmx.de, Jarkko Sakkinen <jarkko@kernel.org>,
-        jgg@ziepe.ca, Ken Goldman <kgold@linux.ibm.com>, bhe@redhat.com,
-        vgoyal@redhat.com, Dave Young <dyoung@redhat.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        jmorris@namei.org, Paul Moore <paul@paul-moore.com>,
-        serge@hallyn.com,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-security-module@vger.kernel.org
-Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Sush Shringarputale <sushring@linux.microsoft.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Subject: [RFC V2] IMA Log Snapshotting Design Proposal
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.700.6)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR10MB4150:EE_|IA1PR10MB7239:EE_
+x-ms-office365-filtering-correlation-id: af9d306c-10d3-4b2a-f734-08dbd0f85453
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IaFJ5pDfXSBndcqq1Y8CTmRzJ6+q4kxlSv/531SA/EHyq4/vwH83zUAjvYW81pP+ux0BhBURXtmdFPayV4f+IDUniMx6GgY7vlkred4F1uq9VnF09hql4i3EEqcurgBE9YkuxR8ibZlGJqKxpjjmdQi+15fJ6R+Bs8Sj2liCBqG+TdotlWtF58Z1IeyiTPIYQkg1Qyebb1PoXTgZTSMQ8f57DgYJRwraZKeLzXNO0DEN755yTP0mv5JIGXFpf1jDl2xp5zKrqcmlMkXdMPCzRkJ8NBZwfPnSzOwLnzmNHDmIg2XQumQnMhFbuOYbjskiOn9s85+SU12j7crtuOd0yc4w7GnFRSXnxXyN9FmmDSbT/FfXLeIlAbHLMBjqqho/y9ZV0yzMPDbSTbTz31nbrtKfUnVSR2b0sHRA5ze43JNDiODq8DY2bpM6mC9XqkXDsvrJMTYFOcIAz5adAUDPr56NUN5FDFN5oXprpWRKcm+eArz33C7R6JhfUMtflW6W0QGJRY6p1xhEZok+JnRuEnB9jMv8snclmMd3mYD4YIWENuGRnzv+TagpuyLm6cG3mAJz0sZDE9ZqGJLH2+AyN1M5dm97+xzMX7SsGChxmzN+jw4gJWi3mGI2tFajpNfMimklYut4c25hEjAjT5SuZA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(346002)(366004)(376002)(136003)(396003)(230922051799003)(186009)(1800799009)(64100799003)(451199024)(33656002)(36756003)(66899024)(38070700009)(66446008)(66476007)(6916009)(54906003)(66556008)(66946007)(76116006)(64756008)(38100700002)(86362001)(2616005)(122000001)(91956017)(53546011)(83380400001)(6512007)(26005)(71200400001)(66574015)(6506007)(6486002)(966005)(4001150100001)(2906002)(8936002)(316002)(478600001)(5660300002)(44832011)(41300700001)(4326008)(7416002)(8676002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MUZKTUk0T0lrZFNlMTJTSGlzd210NExPaWZSd3Iwa3JyaUVSSTMyRHorV3FV?=
+ =?utf-8?B?Q24rbWR4VWJDRnJ5MjgzajFWY3Q4QjJEbHhtY00veStrd2tOWGx0bGdYQU8w?=
+ =?utf-8?B?MDRURWpwVzBZTmFQT0tvLzVIZEdDRUJrOUs2clRIbFN6MWxDMGNFQlNqdVB3?=
+ =?utf-8?B?S3dQdUZlQitWSzgyRHo0ODEvWTJoVnVmeWNGTVVkWWJFVGU4bkZVZDlPYmdJ?=
+ =?utf-8?B?U3loTHUzb2pRdUYxSUZzb25MOFdDL2M1dGNSK2g1V0dYMy81VTNMcGxlNlU2?=
+ =?utf-8?B?TE12eHNNdVVGNXJTWDhiekhGR0k2a2MrVGhlT21yMjhvOUVDUTRRL3N2QUZH?=
+ =?utf-8?B?Ui9pdk5KaHBmMFc4U3FOeUx4cldTZWdiMGFiMkpkTmRzSGd3SDFaRGlmOVo0?=
+ =?utf-8?B?S2RwTjIxMHBMVTFGTlJGOFRRR1J0SEFGZ2d5TmlUYnd0TFVRbm52RXFjSVo1?=
+ =?utf-8?B?Z2J4VlhVQlhTOUFGM1JlMmFYdXpraWs1OElXVE9RVGgvbWRMU08xcUV5RnU1?=
+ =?utf-8?B?a3p4UTNHZzBlNXVmeDlGZFpPeCtLWDNER0VzK2d5WElaV0ExT0RNT20zcXRQ?=
+ =?utf-8?B?MTFNU3l1aE9kN3pOYWtZbysxeEtvQlJLdHZqVzhieSt5S2FnbFU4OW1hcHBk?=
+ =?utf-8?B?alpQT1FRcE5yWjl6K2JGYWZaeFUrdllwYUpHL0srR3hXTi80VTV3Z2g4VjAw?=
+ =?utf-8?B?bVQ5V1V1SHJDN2FrOUtsYmUvRkFlV0QweEorUlRLd2UxSWRUNlJjQzhMU24v?=
+ =?utf-8?B?RElPdExRZy9IaXNmV0t5QlVpblBlMmxDUCtSelZsTUdIRldDU1FyclNmVkJF?=
+ =?utf-8?B?dFV1c1JGbWR3ZnJUWXE2R2M4Y2RSZXBpdHM2ZDdnZzZyUjVmeFpBdGpsMyts?=
+ =?utf-8?B?THBmTEVySWxUdDdpaEEwenJxdWF0Z3EvTDdHSGpjWHZxYjlYTHhOQXNQZ1Vy?=
+ =?utf-8?B?UDBRWkdHYzc3TkJDRm96UzloYXdIWkxLN0trNEgxN2hmWXVjZThhLzFOVmla?=
+ =?utf-8?B?RThxWUgxRGozZ1hyTHFTbi9VcUdlalBLVkp3dEFQaGVvWk1HelJ3dUFPS3FR?=
+ =?utf-8?B?VlRUbk9yN0dkNTk1Z2JrWnd5QjdTZlRZckl1VUc5eVBMTjk1MnltVk1la1gz?=
+ =?utf-8?B?SGtrSjJzZzh6SWFNZElWK1p5RGlOM1ZkYmJ5SlJRb0VPNVhnZkxVUW9lN3F6?=
+ =?utf-8?B?aHgyeU9mdGpmRzhGTEtuUGhrL0Mzc0tDb3dnVXgzWTZwR3NoYkJlRWsyclVr?=
+ =?utf-8?B?SUdHL09LRnNhWm5FaldndzFRT3BBa0xzZjJhTThpWEFoZDVMTU9KMGprM215?=
+ =?utf-8?B?NmM1aXB4T2txTXR2MkVoMGl1Q3hkd3FWeVhqTGZMUkJaM1hyalo2RldraHZB?=
+ =?utf-8?B?b2hQdTJUc2lDQnBWT3I5WjB3Q09nKzdFU2tKS2lUR01RbUx3SnEwU3ZJditJ?=
+ =?utf-8?B?MTREcTdVVHE0dkdZZVQxZ05hQlFmMENTenh1VWdhOEJid1psK25meWpiWThD?=
+ =?utf-8?B?NmtTaS9JQ3h5NDUyMkkvNXZ3LzVkejRhWDdYaHpiaEM2cHBSd0NwVUQ4a2FU?=
+ =?utf-8?B?L21qdE9vODQ3dzRGejVJa0dCd0xmUURwMGhjS2QyMHVweWIxbkU5ZXoyK1Rp?=
+ =?utf-8?B?dmFSeDlHRjhtTDJ0RzkwZzF4T0d0NU9JTjRYYlpac1FoemdveWs2THR1RlVG?=
+ =?utf-8?B?MzZKT2d0TVBnZzZUeDB6cFFjTzFZcDVROGZndDRUMU9ZMjVCSzFTdnNNSzA0?=
+ =?utf-8?B?RElhWGVhT3h4ZHNETldrak5rRlRkZjFHVDBKd2RJVjMwUk9naXhieExkMGg3?=
+ =?utf-8?B?NGZsT09EMjhyT3Rwd2NuNktKK2QwVDZKMlcxS29rZXFtZkU3SzQ0NnJBTVVL?=
+ =?utf-8?B?ZjNuNTR3UExWOFdRWmNDQk85OExVZGhTNVYxcm5xNks4Q2VwblIxVHBJSTZC?=
+ =?utf-8?B?OHJaRVNGbU8rdU1rSHZKQnJwRDRvVStvbFJBWnVDQ09CRm15Zkw1cVdtV0xC?=
+ =?utf-8?B?alNEelMraVRZVnBVbzQ0aDZCWC9XbVgxNVpNYTNSNHlQeGZ4WTdPVHJ2bnBL?=
+ =?utf-8?B?UXVTMGQzOHZsczhvbFBNNm9NN2dhRnhDNXV4c3k0NHExTmpuMFMyZFZZeHh6?=
+ =?utf-8?B?bnMwNk9BcHBpRGNKUitmV3hiTS8rUVV6MGRub1JmYUlWSUYwOXl6Ym0wMzFF?=
+ =?utf-8?B?WGc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2E60C14C21B8944993C83C381E95A8AA@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?SFRDNlh2MVZ2bEhUcUVKMURzNVMrZjBSQ0Z6ZEpvQ2ZPT3hTU09zQTgzbndV?=
+ =?utf-8?B?UUFnQXVUMlZCL2paR0lRWXZMdEtIZmJSbjIyazJ0Zm01dFpsbU1veWhDUzkx?=
+ =?utf-8?B?Tmh1Zm1VRFdUeWdSUkFXaDhRM3dVQ2dPNXNpYjdDMnV6eitGVi9zM0tFdVVq?=
+ =?utf-8?B?c0wvVkUyTjNndUl3V21UbUxicno2cXlvenIxYzEwL1JDRlFMTG5rdXd5Zmc2?=
+ =?utf-8?B?Y2ZrVGpnb1ppMVp1L21KcGlDV21lZHdqNURBek1wYWFCaXU2QXpQOEZxcUl2?=
+ =?utf-8?B?RHJMYkZOQVZCcVJMZFZBYnN5YVE4ZHVkZXBNYnNSWktNKzZPZ2dLL0gxdkVx?=
+ =?utf-8?B?ZXdIUitMbStNSmpjYjNZSnBLOFAra20wdUNqN0hTYkxzMDV6NWIxb3hVZCtj?=
+ =?utf-8?B?ZWZEYW85NlVGeXVycUVNK0dJTnhuUjBvSnZyRHRHTVJ0RnVOTlJpTklQUXgw?=
+ =?utf-8?B?Z096VFJ4VW9wUU91czZQY0tXZ2szL2hLd2poTkFkS29mYUhQRDFFWmJOSFdr?=
+ =?utf-8?B?UWNWTHVaNjNFUkJCMUx0Q1AvRjZiY1dkcUlRbkFTVWFLU2dkSU8ycGNIeDJP?=
+ =?utf-8?B?UmdDVngxcFEzbkRqRU5WZmFPVkZEcDAyaHFmTVdUNFFtdFY2TC83Q2lhamhw?=
+ =?utf-8?B?QlkzTmQzZDRCOHVMVlVxR0N0TXNmSTJ6QmFoemFOakJxVnlNdHdjd2duZnNw?=
+ =?utf-8?B?ck9UZzlpUllTUFBEQzJmSzhKa3BZUU9BY1J1SXFEWW1USHJUcXJtbnVpcmpV?=
+ =?utf-8?B?M2QxREZWejFrVTh2K2pVbFFvckJWNHdyRTRHT3hFSzc5MVljVC9HbUU3dWdQ?=
+ =?utf-8?B?RGZ3TldtazNzWTlDNGsvM3RtWlVOdVVEajFPbjkwRzVWSDNmb1EwdkIxb2hQ?=
+ =?utf-8?B?M0lpdjNlRWNQVlo3dW0xNGdqZGhzSU5pNTN6YnZidFRxSkRUU0FKOW4vZ0RG?=
+ =?utf-8?B?SXpIU2kzOGRhYUFqSm1BTFBRNjhGNkRxeDRyVmtxM0QrUDQrYVVtY2V1WHla?=
+ =?utf-8?B?VVNyYnRjZzFrMi9aZlo1N0hrRlppbGJIeE5pc29rMFZoc1Y4VnFRaGFXRFJS?=
+ =?utf-8?B?c2s5U3hxZmpHeC9DYmd3TXh4WTIyQ3lZNGhCVFBYWTBWQURWZThIeUo2d2V0?=
+ =?utf-8?B?UVFjWC8ydXY5SW5RNmxSY0NxZWU0WjNpdzFBYXZKUWYvSzA0TWw2a09OVURT?=
+ =?utf-8?B?N2RMSUV0WGhnQ3FFaVpKb3JvaXB2Mlc1STFOc2MyQldQaldaVnFKVmxtSjc5?=
+ =?utf-8?B?RXpkVzdlbmdROWMxS3d1Q0VXVm92NW9yQVUxY1RkOXlvZmZKN0ZjbG1mQWE0?=
+ =?utf-8?Q?ufU2K8+I/Ky8MpLOm8N1tAkve4FEP/XSmV?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af9d306c-10d3-4b2a-f734-08dbd0f85453
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Oct 2023 23:08:38.8237
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gaDt5QXOPCNkhMViN1ZzX9Z/qrPpaWQNsPAp9Kyqe86lMHaVNRJVMM7OeCch63jafga+ZHsYe4rfiUwaTC+HkMNiYoRgd332gO+dFilNZXg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB7239
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-19_21,2023-10-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310170001 definitions=main-2310190196
+X-Proofpoint-GUID: f-KVXxkxz9IIPk9KkXmE_0QanZMh3Kyj
+X-Proofpoint-ORIG-GUID: f-KVXxkxz9IIPk9KkXmE_0QanZMh3Kyj
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-=======================================================================
-| Introduction                                                        |
-=======================================================================
-This document provides a detailed overview of the proposed Kernel
-feature IMA log snapshotting.  It describes the motivation behind the
-proposal, the problem to be solved, a detailed solution design with
-examples, and describes the changes to be made in the clients/services
-which are part of remote-attestation system.  This is the 2nd version
-of the proposal.  The first version is present here[1].
-
-Table of Contents:
-------------------
-A. Motivation and Background
-B. Goals and Non-Goals
-     B.1 Goals
-     B.2 Non-Goals
-C. Proposed Solution
-     C.1 Solution Summary
-     C.2 High-level Work-flow
-D. Detailed Design
-     D.1 Snapshot Aggregate Event
-     D.2 Snapshot Triggering Mechanism
-     D.3 Choosing A Persistent Storage Location For Snapshots
-     D.4 Remote-Attestation Client/Service-side Changes
-         D.4.a Client-side Changes
-         D.4.b Service-side Changes
-E. Example Walk-through
-F. Other Design Considerations
-G. References
-
-Change Log:
------------
-This RFC proposal doc has the following changes compared to its first
-version[1]
-     - Added table of contents for easy navigation through the doc.
-     - Clearly defined problem and added goals and non-goals this
-       proposal plans to achieve.
-     - Added diagrams in section "C.2 High-level Work-flow" to help
-       the audience better understand the steps proposed.
-     - Provided more clarity on changes needed in attestation client and
-       remote attestation service to benefit from this feature.
-     - Made the necessary changes to the doc based on the new learnings
-       from the investigations done in the past few months.
-     - Added section "F. Other Design Considerations" to address various
-       concerns brought up in the first version[1] of this doc on the
-       following topics:
-         o TPM-PCR update counter
-         o EK/AIK Public Cert
-         o implications of exporting and removing records from the IMA
-           measurement list
-         o attestation client restarts and the remote attestation
-           service being stateless
-         o using 'tmpfs' to store the snapshots
-         o TPM seal-unseal scenario
-=======================================================================
-| A. Motivation and Background                                        |
-=======================================================================
-Depending on the IMA policy, the IMA log can consume a lot of Kernel
-memory on the system.  For instance, the events for the following IMA
-policy entries may need to be measured in certain scenarios, but they
-can also lead to a verbose IMA log when the system is running for a
-long period of time.
-┌───────────────────────────────────────┐
-│# PROC_SUPER_MAGIC                     │
-│measure fsmagic=0x9fa0                 │
-│# SYSFS_MAGIC                          │
-│measure fsmagic=0x62656572             │
-│# DEBUGFS_MAGIC                        │
-│measure fsmagic=0x64626720             │
-│# TMPFS_MAGIC                          │
-│measure fsmagic=0x01021994             │
-│# RAMFS_MAGIC                          │
-│measure fsmagic=0x858458f6             │
-│# SECURITYFS_MAGIC                     │
-│measure fsmagic=0x73636673             │
-│# OVERLAYFS_MAGIC                      │
-│measure fsmagic=0x794c7630             │
-│# log, audit or tmp files              │
-│measure obj_type=var_log_t             │
-│measure obj_type=auditd_log_t          │
-│measure obj_type=tmp_t                 │
-└───────────────────────────────────────┘
-
-Secondly, certain systems are configured to take Kernel updates using
-Kexec soft-boot.  The IMA log from the previous Kernel gets carried
-over and the Kernel memory consumption problem worsens when such
-systems undergo multiple Kexec soft-boots over a long period of time.
-
-The above two scenarios can cause IMA log to consume significant memory
-on the system.
-
-In addition, processing a larger IMA log on the Remote-Attestation
-service-side is both time consuming and inefficient - because majority
-of the events would be already attested in the previous attestation
-requests.
-
-To solve this problem, putting a cap on the in-memory IMA log, or
-truncating IMA log to reclaim memory are not practical solutions.
-Putting a cap would result in events not getting measured in the IMA
-log, which would be a security vulnerability.  Truncating the log would
-make the log go out of sync with the TPM PCR quote, resulting in the
-remote attestation of the system to fail until the system goes through
-a hard reboot.  Therefore, both these solutions are unacceptable.
-
-A sophisticated solution is required in this case which will help
-reduce the memory pressure on the system and continue supporting remote
-attestation for a longer duration without disruptions.
-
-=======================================================================
-| B. Goals and Non-Goals                                              |
-=======================================================================
------------------------------------------------------------------------
-| B.1 Goals                                                           |
------------------------------------------------------------------------
-To address the issues described in the section above, we propose
-enhancements to the IMA subsystem to achieve the following goals:
-
-  a. Reduce memory pressure on the Kernel caused by larger in-memory
-     IMA logs.
-
-  b. Preserve the system's ability to get remotely attested using the
-     IMA log, even after implementing the enhancements to reduce memory
-     pressure caused by the IMA log. IMA's Integrity guarantees should
-     be maintained.
-
-  c. Provide mechanisms from Kernel side to the remote attestation
-     service to make service-side processing more efficient.
-
------------------------------------------------------------------------
-| B.2 Non-Goals                                                       |
------------------------------------------------------------------------
-  a. Implementing the changes needed in the remote attestation
-     client/service to benefit from the proposed enhancements are out of
-     scope of this proposal.  However, we will briefly discuss what needs
-     to be done in that space.
-
-=======================================================================
-| C. Proposed Solution                                                |
-=======================================================================
-
-This section provides high level summary of the proposed solution and
-the necessary steps in the work-flow.  The details of each aspect of
-the solution and the alternate approaches considered etc. are discussed
-in section "D. Detailed Design".
-
------------------------------------------------------------------------
-| C.1 Solution Summary                                                |
------------------------------------------------------------------------
-To achieve the goals described in the section above, we propose the
-following changes to the IMA subsystem.
-
-     a. The IMA log from Kernel memory will be offloaded to some
-        persistent storage disk to keep the system running reliably
-        without facing memory pressure.
-        More details, alternate approaches considered etc. are present
-        in section "D.3 Choices for Storing Snapshots" below.
-
-     b. The IMA log will be divided into multiple chunks (snapshots).
-        Each snapshot would be a delta between the two instances when
-        the log was offloaded from memory to the persistent storage
-        disk.
-
-     c. Some UM process (like a remote-attestation-client) will be
-        responsible for writing the IMA log snapshot to the disk.
-
-     d. The same UM process would be responsible for triggering the IMA
-        log snapshot.
-
-     e. There will be a well-known location for storing the IMA log
-        snapshots on the disk.  It will be non-trivial for UM processes
-        to change that location after booting into the Kernel.
-
-     f. A new event, "snapshot_aggregate", will be computed and measured
-        in the IMA log as part of this feature.  It should help the
-        remote-attestation client/service to benefit from the IMA log
-        snapshot feature.
-        The "snapshot_aggregate" event is described in more details in
-        section "D.1 Snapshot Aggregate Event" below.
-
-     g. If the existing remote-attestation client/services do not change
-        to benefit from this feature or do not trigger the snapshot,
-        the Kernel will continue to have it's current functionality of
-        maintaining an in-memory full IMA log.
-
-Additionally, the remote-attestation client/services need to be updated
-to benefit from the IMA log snapshot feature.  These proposed changes
-are described in section "D.4 Remote-Attestation Client/Service Side
-Changes" below, but their implementation is out of scope for this
-proposal.
-
------------------------------------------------------------------------
-| C.2 High-level Work-flow                                            |
------------------------------------------------------------------------
-This section describes the steps to take a snapshot of the IMA log.
-
-The proposed high level work-flow of IMA log snapshotting is as
-follows:
-     a. A user-mode process will trigger the snapshot by opening a file
-        in SysFS say /sys/kernel/security/ima/snapshot (referred to as
-        "sysk_ima_snapshot_file" here onwards).
-        See Step #a in Diagram #1 below.
-
-     b. The Kernel will get the current TPM PCR values and store them as
-        template data in a new IMA event "snapshot_aggregate".
-        This event will be measured by IMA using critical data
-        measurement functionality[2].
-        Measuring the "snapshot_aggregate" will be an atomic operation
-        similar to any other IMA log measurement.
-        See Step #b and #c in Diagram #1 below.
-
-     c. Once the "snapshot_aggregate" is computed and measured in IMA
-        log, the prior IMA events will be made available in the
-        "sysk_ima_snapshot_file".
-        See Step #b and #c in Diagram #1 below.
-
-                                Diagram #1
-                                ----------
-            Step #a                                   Step #b and #c
-           ---------                                 ----------------
-     (In-memory IMA log)                         (In-memory IMA log)
-    .--------------------.                     .----------------------.
-    | Event #E1          |                     | Event #E1            |
-    | Event #E2          |                     | Event #E2            |
-    |                    |                     |                      |
-    |                    |                     | "snapshot_aggregate" |
-    |                    |                     |   (#E1+#E2)          |
-    '--------------------'                     '----------------------'
-              ^                                            ^
-              |                                            |
-              |                                            |
-KM         *Kernel*                step #b.Kernel writes  |
----          |                       "snapshot_aggregate" |
-UM           |                                to IMA log  |
-              |                                            |
-              |                    step #c.Kernel writes   |
-              |                    the events E2 and E3 to |
-              |                     sysk_ima_snapshot_file |
-              V                                            V
-    (sysk_ima_snapshot_file)                   (sysk_ima_snapshot_file)
-    .--------------------.                      .--------------------.
-    |                    |                      | Event #E1          |
-    |       {Empty}      |        ====>         | Event #E2          |
-    |                    |                      |                    |
-    '--------------------'                      '--------------------'
-              ^                                            ^
-              |                                            |
-              |Step #a Client opens                        |
-              |sysk_ima_snapshot_file                      |
-              |                                            |
-   *Attestation Client (UM)*                   *Attestation Client (UM)*
-              |                                            |
-              |                                            |
-              |                                            |
-              V                                            V
-   UM_snapshot_file  (on DISK)               UM_snapshot_file  (on DISK)
-    .--------------------.                      .--------------------.
-    |                    |                      |                    |
-    |       {Empty}      |                      |       {Empty}      |
-    |                    |                      |                    |
-    '--------------------'                      '--------------------'
-
-     d. The UM process will copy those IMA events from
-        "sysk_ima_snapshot_file" to a snapshot file on disk chosen by UM
-        (referred to as "UM_snapshot_file" here onwards).
-        The location, file-system type, access permissions etc. of the
-        "UM_snapshot_file" would be controlled by UM process itself.
-        As described in section D.3, the location of "UM_snapshot_file"
-        should be well-known.
-        See Step #d in Diagram #2 below.
-
-     e. Once UM is done copying the IMA events from
-        "sysk_ima_snapshot_file" to "UM_snapshot_file", it will indicate
-        to the Kernel that the snapshot can be finalized by triggering a
-        write with any data to the "sysk_ima_snapshot_file".  UM process
-        cannot prevent the IMA log purge operation after this point.
-        See Step #e in Diagram #2 below.
-
-                                Diagram #2
-                                ----------
-            Step #d                                   Step #e
-           ---------                                 --------
-     (In-memory IMA log)                         (In-memory IMA log)
-    .--------------------.                     .----------------------.
-    | Event #1           |                     | Event #1             |
-    | Event #2           |                     | Event #2             |
-    |"snapshot_aggregate"|                     | "snapshot_aggregate" |
-    |   (#E1+#E2)        |                     |   (#E1+#E2)          |
-    '--------------------'                     '----------------------'
-              ^                                            ^
-              |                                            |
-              |                                            |
-KM         *Kernel*                                    *Kernel*
----          |                                            |
-UM           |                                            |
-              |                                            |
-              |                                            |
-              |                                            |
-              V                                            V
-    (sysk_ima_snapshot_file)                   (sysk_ima_snapshot_file)
-    .--------------------.                      .--------------------.
-    | Event #E1          |                      | "done"             |
-    | Event #E2          |        ====>         |                    |
-    |                    |                      |                    |
-    '--------------------'                      '--------------------'
-             ^                                             ^
-             |Step #d Client copies                        |
-             |events to UM_snapshot_file                   |
-             |                                             |
-             |                                             |
-             |                       step #e Client writes |
-             |                        "done" to the file   |
-             |                     sysk_ima_snapshot_file  |
-             |                                             |
-  *Attestation Client (UM)*                   *Attestation Client (UM)*
-             |                                             |
-             |                                             |
-             |                                             |
-             V                                             V
-   UM_snapshot_file  (on DISK)               UM_snapshot_file  (on DISK)
-    .--------------------.                      .--------------------.
-    | Event #E1          |                      |Event #E1           |
-    | Event #E2          |                      |Event #E2           |
-    |                    |                      |                    |
-    '--------------------'                      '--------------------'
-
-     f. The Kernel will truncate the current IMA log and and clear
-        HTable up to the "snapshot_aggregate" marker.
-        See Step #f in Diagram #3 below.
-
-                                Diagram #3
-                                ----------
-            Step #f
-           ---------
-      (In-memory IMA log)
-    .----------------------.
-    | "snapshot_aggregate" |
-    | Event #E4            |
-    | Event #E5            |
-    '----------------------'
-              ^
-              |
-              | Step #f
-KM           | Kernel removes the old events before
----          |  "snapshot_aggregate" i.e. #E1 and #E2.
-UM           | And continues to measure the new events
-              | i.e. #E4 and #E5
-              |
-              |
-              V
-   (sysk_ima_snapshot_file)
-    .--------------------.
-    | "done"             |
-    |                    |
-    |                    |
-    '--------------------'
-              ^
-              |
-              |
-              | Attestation Client can now close
-              | the sysk_ima_snapshot_file.
-              | When it is reopened by the client, a new snapshot will
-              | be triggered.
-              V
-   UM_snapshot_file  (on DISK)
-    .--------------------.
-    | Event #E1          |
-    | Event #E2          |
-    |                    |
-    '--------------------'
-     g. Optionally, UM can prevent the IMA log purge by closing the
-        "sysk_ima_snapshot_file" without performing a write operation
-        on it.  In this case, the events in the IMA log before
-        the latest "snapshot_aggregate" will not be purged.
-        While the "snapshot_aggregate" marker may still remain in the
-        log as an intermediate entry, it can be ignored since it will
-        not interfere with the remote attestation.
-
-     h. This work-flow should work when interleaved with Kexec 'load'
-        and 'execute' events and should not cause IMA log + snapshot to
-        go out of sync with PCR quotes.  The implementation details are
-        omitted from this document for brevity.
-
-=======================================================================
-| D. Detailed Design                                                  |
-=======================================================================
-
------------------------------------------------------------------------
-| D.1 Snapshot Aggregate Event                                        |
------------------------------------------------------------------------
-When the IMA log snapshot is triggered, IMA will pause the measurements
-and start computing and measurement of the event "snapshot_aggregate".
-
-The Template Data of the "snapshot_aggregate" event will have the
-following grammar:
-     TEMPLATE_DATA      := <Snapshot_Counter>";"<PCR_Banks>";"
-     Snapshot_Counter   := "Snapshot_Attempt_Count="
-                               <num. snapshot attempts>
-     PCR_Banks          := <PCR_Bank>";"|<PCR_Banks> "," <PCR_Bank>";"
-     PCR_Bank           := <PCR_Hash Type> ":" <PCRn>
-     PCR_Hash_Type      := "sha1"|"sha256"|"sha384"
-     PCRn               := "PCR"<N>":"<PCR_Hash>
-     PCR_Hash           := <hash of the PCR N>
-     N                  := [0-23]
-
-The Data Hash of the "snapshot_aggregate" event log line is -
-  Append(H(snapshot_file),PCR0,PCR1,...PCR23).  All available PCR banks
-  will be  included in the template data in a known structure.
-
-The events generated between the window of "triggering of
-a snapshot" and "computation and measurement of the 'snapshot_aggregate'
-event data" will be queued, and they will be measured in the IMA log
-after the "snapshot_aggregate" event data is computed and measured.
-
-After "snapshot_aggregate" event data is computed and measured, the UM
-process will dump the events before "snapshot_aggregate" to a well
-known location on persistent storage in "UM_snapshot_file".  Once the
-UM process signals that work is complete, IMA will remove those events
-from the IMA log.  IMA log will now have "snapshot_aggregate" as the
-first event in it.
-
-The "snapshot_aggregate" marker provides the following benefits:
-     a. It facilitates the IMA log to be divided into multiple chunks
-        and provides mechanism to verify the integrity of the system
-        using only the latest chunks during remote attestation.
-
-     b. It provides tangible evidence from Kernel to the attestation
-        client that IMA log snapshotting has been enabled and at least
-        one snapshot exists on the system.
-
-     c. It helps both the Kernel and UM attestation client define clear
-        boundaries between multiple snapshots.
-
-     d. In the event of multiple snapshots, the last measured
-        "snapshot_aggregate" marker, which is present in the current
-        segment of the IMA log, has sufficient information to verify the
-        integrity of the IMA log segment as well as the previous
-        snapshots using the PCR quotes.
-
-     e. In the event of multiple snapshots, say N, if the
-        remote-attestation service has already processed the last N-1
-        snapshots, it can efficiently parse through them by just
-        processing "snapshot_aggregate" events to compute the PCR quotes
-        needed to verify the events in the last snapshot.  This should
-        drastically improve the IMA log processing efficiency of the
-        service.
-
------------------------------------------------------------------------
-| D.2 Snapshot Triggering Mechanism                                   |
------------------------------------------------------------------------
-The snapshot triggering mechanism is as described below:
-
-     a. The IMA subsystem will create a new file:
-        /sys/kernel/security/ima/snapshot
-       (a.k.a. sysk_ima_snapshot_file).
-
-     b. A UM process opening this file will trigger a snapshot.
-        The file will be opened exclusively, so only one UM process can
-        trigger the snapshot at a time.
-
-     c. Once the kernel has written the "snapshot_aggregate" marker to
-        the IMA log, the IMA log prior to that event can be read by UM
-        on the same FD.
-
-     d. When UM writes some data to "sysk_ima_snapshot_file", the kernel
-        will finalize the snapshot by purging the in-memory IMA log.
-
-     e. If UM closes "sysk_ima_snapshot_file" without writing to it,
-        the Kernel will not purge the IMA log.
-
-     f. If a system administrator requires that only a specific client
-        process should trigger the snapshot, this capability can be set
-        as an SeLinux policy.
-
------------------------------------------------------------------------
-| D.3 Choosing A Persistent Storage Location For Snapshots            |
------------------------------------------------------------------------
-Choosing the snapshot location is handled by the UM process.  The
-location should be a well-known location, potentially set in a
-configuration file or the IMA policy file under /etc.  The
-configuration file should be marked as read-only for UM processes.
-
-The Kernel will wait for the UM process to indicate that the current
-IMA log has been written to "UM_snapshot_file" and only then the Kernel
-will truncate the in-memory IMA log.  UM is responsible to clear any
-existing UM_snapshot_file(s) on system start or on a hard reboot/power
-cycle.
-
-During the first RFC, concerns were raised over the protections of the
-"UM_snapshot_file".  Just like the current IMA log sent over the
-network to the attestation service, the "UM_snapshot_file" file is not
-resistant to modifications, neither should it be.  The TPM PCR quote
-provides the guarantee that the IMA log has not been modified - the
-same PCR quote continues to provide that guarantee for the snapshot
-files as well.
-Using the template data in the snapshot_aggregate marker, the
-attestation service can validate the integrity of the data provided in
-the past snapshots.  The log is validated all the way to the final
-event, which is validated by the PCR quote.
-
------------------------------------------------------------------------
-| D.4 Remote-Attestation Client/Service-side Changes                  |
------------------------------------------------------------------------
-A remote attestation client and service will need to be aware of the
-"snapshot_aggregate" marker and how it should be handled.  A typical
-attestation path on the system will remain the same - send the current
-IMA log along with the signed TPM PCR quotes to the remote
-attestation-service.  But the attestation clients and remote services
-need to be aware that they need to use "UM_snapshot_file(s)" too,
-along with PCR quotes and the data in "snapshot_aggregate" event in IMA
-log to re-establish the chain of trust if the feature is enabled and a
-snapshot is taken.
-
-As mentioned above, if the existing remote-attestation client/services
-do not change to benefit from the log snapshotting feature, or do not
-trigger the snapshot, the Kernel will continue to have it's current
-functionality of maintaining an in-memory full IMA log.
-
-   D.4.a Client-side changes
------------------------------------------------------------------------
-To use snapshot feature, the attestation client is required to know
-     - if snapshotting is supported/enabled by the Kernel
-     - if snapshotting is supported/enabled by the remote-attestation
-       service it interacts with
-     - the correct order of UM_snapshot_file(s) for backtracking through
-       the IMA log
-
-The protocol between the remote-attestation client and service needs to
-be updated to send previous snapshots to the service as requested.
-
-If the service is not yet ready to process the "snapshot_aggregate"
-events and the snapshots, then the clients should not write any data to
-the sysk_ima_snapshot_file before closing it.  This will add the
-"snapshot_aggregate" marker to the IMA log without purging the log.
-Once the service implements "snapshot_aggregate" event parsing, the
-client can implement the functionality to  write to the
-"sysk_ima_snapshot_file" each time it triggers the snapshot.  This
-would indicate to the Kernel that the log should be purged.
-
-   D.4.b Service-side changes
------------------------------------------------------------------------
-For the remote attestation to work, the service will need to know how
-to validate the "snapshot_aggregate" entry in the IMA log.  It will
-have to read the PCR values present in the template data of the
-"snapshot_aggregate" event in the latest IMA log segment, and ensure
-that the PCR quotes align with the contents of the past
-UM_snapshot_file(s).  This will re-establish the chain of trust needed
-for the system to pass remote attestation.  This will also maintain the
-ability of the remote-attestation service to seal the secrets, if the
-client-server use TPM seal/unseal mechanism to attest the state of the
-system.
-
-The client-service protocol will need an implementation for requesting
-previous snapshots of the IMA logs.  There may be various scenarios
-when such a request is made such as:
-     - the service is stateless and requires all the data since boot
-       for evaluating if the attestation should succeed or not.
-     - there are linked IMA events that are split across a snapshot
-       boundary
-     - the expected event that the service is looking for is not present
-       in the current list of IMA log + UM_snapshot_file(s).
-
-The service will need to request the client to send the old
-UM_snapshot_file(s) and ensure that the log replay still generates the
-expected PCR values provided in the quote.
-
-To avoid asking for previous snapshot chunks from the system, the
-service may maintain the past attestation status of the system at a
-given snapshot checkpoint.  This would make the service more efficient
-in processing IMA logs for attestation.  It will reduce the persistent
-storage space requirements on the client.  But it would require the
-service to be stateful.  It's a trade-off which needs to be evaluated
-by the owners of the remote attestation service.
-
-If the clients are not yet updated to trigger snapshots, they will
-still be sending the IMA log in its entirety without any
-"snapshot_aggregate" event recorded in the log.  Processing such IMA
-logs is an existing service behavior, and the service should continue
-supporting it until all the clients are updated to take IMA log
-snapshots.  The service can use the presence of the
-"snapshot_aggregate" event in the IMA log to determine and track which
-clients in the fleet have the capability to generate IMA log snapshot.
-
-=======================================================================
-| E. Example Walk-through                                             |
-=======================================================================
-This section provides an example walk-through of the IMA log snapshot
-capturing scenario.  Assume a system has below IMA log before a
-snapshot is taken.
-┌───┬─────────────┬────────┬────────────┬────────────────┬────────────┐
-│PCR│Template Hash│Template│ Data Hash  │   Data File    │TemplateData│
-├───┼─────────────┼────────┼────────────┼────────────────┼────────────┤
-│10 │322a847385...│ima-sig │sha256:309..│boot_aggregate  │            │
-├───┼─────────────┼────────┼────────────┼────────────────┼────────────┤
-│10 │92dbf55061...│ima-buf │sha256:b93..│kernel_version..│352342347...│
-├───┼─────────────┼────────┼────────────┼────────────────┼────────────┤
-│11 │e8e12d9532...│ima-buf │sha256:cd0..│dm_table_load.. │568956899...│
-├───┼─────────────┼────────┼────────────┼────────────────┼────────────┤
-│12 │e8e12d9532...│ima-sig │sha256:560..│/usr/lib/modul..│            │
-└───┴─────────────┴────────┴────────────┴────────────────┴────────────┘
-
-For this example, the PCR values in sha256 bank are as follows:
-
-     sha256:
-         0 : 0xDA009CB9DDBF2DF2...8D3CAE516A99847262790479368F82B6
-         ...
-         ...
-         10: 0xB93EBF68FC66C6B6...303BC0D5DA0B419F059DE27EAE3BAA29
-         11: 0xCD00ABB3D84DB0F0...01A1ADCDCADB15DEED47BA6FCE40D420
-         12: 0x560153FB6A0CC603...892BB48772682F692E44A0393281DB45
-         ...
-         ...
-         23: 0x0000000000000000...00000000000000000000000000000000
-
-If a snapshot is taken at this point, the current IMA log will be
-written to the disk.  The events generated between the window of
-"triggering of a snapshot" and "computation and measurement of the
-snapshot_aggregate event data" will be queued, and they will be
-measured in the IMA log after the "snapshot_aggregate" event data is
-computed and measured.
-
-The state of the IMA log after the snapshot:
-┌───┬─────────┬────────┬───────────┬──────────────────┬───────────────┐
-│PCR│Template │Template│ Data Hash │     Data File    │ Template      │
-│   │ Hash    │        │           │                  │   Data        │
-├───┼─────────┼────────┼───────────┼──────────────────┼───────────────┤
-│10 │e55cba...│ima-buf │Sha256:30a.│snapshot_aggregate│<TEMPLATE_DATA>│
-│   │         │        │           │                  │see the grammar│
-│   │         │        │           │                  │   below       │
-└───┴─────────┴────────┴───────────┴──────────────────┴───────────────┘
-
-  where the Data Hash of the log line is -
-  Append(H(snapshot_file),PCR0,PCR1,...PCR23).  All available PCR banks
-  will be  included in the template data in a known structure.
-
-The Template Data will follow the grammar below:
-     TEMPLATE_DATA      := <Snapshot_Counter>";"<PCR_Banks>";"
-     Snapshot_Counter   := "Snapshot_Attempt_Count="
-                               <num. snapshot attempts>
-     PCR_Banks          := <PCR_Bank>";"|<PCR_Banks> "," <PCR_Bank>";"
-     PCR_Bank           := <PCR_Hash Type> ":" <PCRn>
-     PCR_Hash_Type      := "sha1"|"sha256"|"sha384"
-     PCRn               := "PCR"<N>":"<PCR_Hash>
-     PCR_Hash           := <hash of the PCR N>
-     N                  := [0-23]
-
-The state of the PCRs after the snapshot:
-     (Only PCR 10 will change, since "snapshot_aggregate" is extended
-      in that PCR.)
-     sha256:
-         0 : 0xDA009CB9DDBF2DF2...8D3CAE516A99847262790479368F82B6
-         ...
-         ...
-         10 : 0x30A1B69F09A9599...2518394A8E1A3B8D343D4458E6FB0B04
-         11 : 0xCD00ABB3D84DB0F...01A1ADCDCADB15DEED47BA6FCE40D420
-         12 : 0x560153FB6A0CC60...892BB48772682F692E44A0393281DB45
-         ...
-         ...
-         23: 0x0000000000000000...00000000000000000000000000000000
-
-An example of "snapshot_aggregate" template data is given below.
-10 e55cba... ima-buf  Sha256:30a... snapshot_aggregate
-     Snapshot_Attempt_Count=7;
-     sha256:PCR0:0xDA009CB9DDBF2DF2...8D3CAE516A99847262790479368F82B6,
-     sha256:PCR1:0x30A1B69F09A9599E...2518394A8E1A3B8D343D4458E6FB0B04,
-     ...
-     sha256:PCR23:0x30A1B69F09A9599...2518394A8E1A3B8D343D4458E6FB0B04;
-
-Future IMA events can then continue to be extended in the assigned PCRs
-and added in the IMA log after snapshot_aggregate.  Since IMA
-measurements extend the TPM-PCRs and computing snapshot_aggregate
-involves reading TPM PCR banks, IMA measurements must be suspended
-until the snapshot_aggregate is computed and measured.  Otherwise,
-these two operations may interfere with each other compromising the
-integrity of the system.
-
-The remote-attestation-service can verify the contents of the past
-(N-1) UM_snapshot_file(s) by replaying the events in them and comparing
-them with the PCR values stored in template data of the first
-"snapshot_aggregate" event of subsequent IMA log.
-
-=======================================================================
-| F. Other Design Considerations                                      |
-=======================================================================
-     a. In v1 of this RFC proposal , it was discussed [5] if we should
-        use TPM-PCR update counter in the "snapshot_aggregate" event.
-            => After the initial investigation and prototyping[3], we
-               discovered the TPM PCR counter gets incremented when any
-               of the PCRs in the PCR bank gets updated.  The counter is
-               not specific to any single PCR (e.g. PCR 10 where IMA
-               extends the measurements by default).
-               Adding TPM PCR counter to "snapshot_aggregate" event
-               won't provide any additional benefits, therefore we do
-               not plan to include it in any of the IMA log
-               measurements.
-
-     b. In v1 of this RFC proposal , it was discussed [6] if we should
-        add the EK/AIK Public Cert as part of "snapshot_aggregate" event
-        data.
-            => In a typical remote attestation scenario that does not
-               use IMA log snapshotting, the EK/AIK public cert
-               typically needs to be sent to the remote attestation
-               service along with IMA log and TPM PCR quotes.  The
-               EK/AIK public cert verifies that the TPM PCR quotes are
-               signed by a genuine TPM, which in turn verifies that the
-               IMA log is not tampered with.  Since the EK/AIK public
-               cert is anyways sent outside of the IMA log in this
-               scenario, it is not needed to be sent as part of IMA log
-               again.  In other scenarios (e.g. seal/unseal, and some
-               cases fTPM/vTPM), the EK/AIK public cert is either
-               unavailable or is not used for remote attestation.
-               Therefore we will not be adding the EK/AIK public cert as
-               part of "snapshot_aggregate" event data.
-
-     c. In one of the previous attempts so to export the IMA log [4],
-        several aspects of the problem were discussed.
-            o "The implications of exporting and removing records from
-              the IMA measurement list needs to be considered carefully"
-                  => We are addressing that in this design by
-                     introducing the IMA event "snapshot_aggregate", a
-                     well known location to store them, coordination
-                     between the Kernel and the UM process to trigger
-                     and capture the snapshot, and providing guidance to
-                     the client/service to process the events.
-            o Conflating the two different use cases - i.e. both UM and
-              the Kernel requesting exporting and removing of the
-              measurement list records.
-                  => We are addressing that in this design by allowing
-                     only UM to request the snapshot, and store it on
-                     the well known persistent storage.  Whereas only
-                     Kernel being responsible for removing the exported
-                     events from the Kernel memory.
-                     The responsibilities of the Kernel and UM client are
-                     clearly defined, and they are distinct from each
-                     other.
-            o The feedback from the IMA maintainer on exporting the IMA
-              log [4] was that the user-space would be responsible for
-              safely storing the measurements.  The kernel would only be
-              responsible for limiting permission, perhaps based on a
-              capability, before removing records from the measurement
-              list.
-                  => We have incorporated this feedback in our design.
-                      - The UM process triggers the snapshot.
-                      - The UM process is responsible for storing the
-                        snapshot on the persistent storage.
-                      - The Kernel co-ordinates with the UM process
-                        before removing the records from the measurement
-                        list.
-
-     d. In v1 of this RFC proposal, some clarification was needed to
-        address the attestation client restarts and the remote
-        attestation service being stateless[7].
-            => As mentioned in the "Non-Goals" section above,
-               implementing the changes needed in the remote attestation
-               client/service are out of scope for this document.
-               However, taking the IMA log snapshots should not
-               interfere with the ability of the client to restart at
-               any point.  Even if the client restarts and does not write
-               any data to "sysk_ima_snapshot_file" after recording the
-               "snapshot_aggregate" event, IMA will not purge the records
-               from the IMA log.  There is no data loss, and the system
-               overall keeps the ability to attest itself remotely.
-               Similarly, the remote-attestation-service being state-less
-               or not is orthogonal to the IMA log snapshot feature.
-               As discussed in detail in section D.4.b above, that
-               decision should be made by the service owner after
-               weighing the pros and cons.
-
-     e. In v1 of this RFC proposal, there was discussion on using 'tmpfs'
-        as a location to store the snapshot.  Even though 'tmpfs' may
-        simplify some aspects of implementing the snapshotting feature,
-        it doesn't really help achieving the main goal of the feature -
-        i.e. reducing the memory pressure on the Kernel.
-        This is because:
-           - The 'tmpfs' is part of the system's memory and not
-             persistent storage[8].  Moving part of IMA log to 'tmpfs'
-             doesn't really address the memory pressure problem we are
-             trying to solve.
-           - The 'tmpfs' is an ephemeral storage.  It's contents are lost
-             on reboots.  Therefore, during kexec soft-boots, the
-             contents would have to be brought back to the main memory
-             so that they can be mapped to the memory of the next kernel.
-             Otherwise, remote attestation would fail post kexec soft
-             reboot.
-        Because of the above reasons, we will not store snapshots on
-        'tmpfs'.
-
-     f. In v1 of this RFC proposal, there was discussion about supporting
-        TPM seal-unseal scenario in the context of IMA log snapshots[9].
-        In a typical seal-unseal scenario, some secret is sealed using
-        the TPM-PCR quotes on the service-side.  The service may check
-        the IMA log have expected contents before sealing the secret.
-        The TPM on the client-side can only unseal the secret if the PCR
-        quotes are not changed since the time secret was sealed.  IMA log
-        snapshots as a feature does not alter this process of
-        seal-unseal.  Therefore it should not impact the core process of
-        seal-unseal.  Although, as mentioned in section D.4, changes are
-        needed in client/service side functionality to request snapshots
-        to verify the contents of IMA log which are not present in the
-        latest log segment.
-
-We appreciate your comments on this proposal.
-
-=======================================================================
-| G. References                                                       |
-=======================================================================
-[1] [RFC] IMA Log Snapshotting Design Proposal (V1)
-https://lore.kernel.org/linux-integrity/c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com/T/#m35e7d885db365b0aac4382830b39d446eb5efdb5
-
-[2] IMA: support for measuring kernel integrity critical data
-https://patchwork.kernel.org/project/linux-integrity/cover/20210108040708.8389-1-tusharsu@linux.microsoft.com/
-
-[3] Measuring TPM update counter in IMA
-https://patchwork.kernel.org/project/linux-integrity/cover/20230801181917.8535-1-tusharsu@linux.microsoft.com/
-
-[4] Re: [PATCH v2] ima: export the measurement list when needed
-https://lore.kernel.org/linux-integrity/1580998432.5585.411.camel@linux.ibm.com/
-
-[5] TPM-PCR Update counters in IMA log snapshots
-https://lore.kernel.org/linux-integrity/c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com/T/#m775b8b092e06bed4694b418e9d642c4d2642ee8f
-
-[6] Adding EK/AIK Public Cert to the IMA log snapshots
-https://lore.kernel.org/linux-integrity/c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com/T/#m48ec6d9ceaca40030604b2336f0ef0ada8d39e6a
-https://lore.kernel.org/linux-integrity/c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com/T/#m41081713da1ca15867b623bf7d2ffb822c1fe3fd
-https://lore.kernel.org/linux-integrity/c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com/T/#mb8bc2398ce4d2d71bce539776169e53b9f33c8d8
-
-[7] About Client restarts and remote attestation service being
-       stateless
-https://lore.kernel.org/linux-integrity/c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com/T/#m33fc4005b94e6fab79153800a06af40477c3be65 
-
-
-[8] Tmpfs
-https://www.kernel.org/doc/html/latest/filesystems/tmpfs.html
-
-[9] TPM Seal-Unseal
-https://lore.kernel.org/linux-integrity/c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com/T/#m12c1b35c6d130a6ee181a8cce4c1ebdea412a19b
-
-Thanks!
-Sush & Tushar
+DQoNCj4gT24gT2N0IDE5LCAyMDIzLCBhdCAzOjEyIEFNLCBNaWNrYcOrbCBTYWxhw7xuIDxtaWNA
+ZGlnaWtvZC5uZXQ+IHdyb3RlOg0KPiANCj4gT24gV2VkLCBPY3QgMTgsIDIwMjMgYXQgMTE6MTI6
+NDVQTSArMDAwMCwgRXJpYyBTbm93YmVyZyB3cm90ZToNCj4+IA0KPj4gDQo+Pj4gT24gT2N0IDE4
+LCAyMDIzLCBhdCA4OjE0IEFNLCBNaWNrYcOrbCBTYWxhw7xuIDxtaWNAZGlnaWtvZC5uZXQ+IHdy
+b3RlOg0KPj4+IA0KPj4+IE9uIFR1ZSwgT2N0IDE3LCAyMDIzIGF0IDA3OjM0OjI1UE0gKzAwMDAs
+IEVyaWMgU25vd2Jlcmcgd3JvdGU6DQo+Pj4+IA0KPj4+PiANCj4+Pj4+IE9uIE9jdCAxNywgMjAy
+MywgYXQgMTI6NTEgUE0sIFBhdWwgTW9vcmUgPHBhdWxAcGF1bC1tb29yZS5jb20+IHdyb3RlOg0K
+Pj4+Pj4gDQo+Pj4+PiBPbiBUdWUsIE9jdCAxNywgMjAyMyBhdCAxOjU54oCvUE0gTWltaSBab2hh
+ciA8em9oYXJAbGludXguaWJtLmNvbT4gd3JvdGU6DQo+Pj4+Pj4gT24gVHVlLCAyMDIzLTEwLTE3
+IGF0IDEzOjI5IC0wNDAwLCBQYXVsIE1vb3JlIHdyb3RlOg0KPj4+Pj4+PiBPbiBUdWUsIE9jdCAx
+NywgMjAyMyBhdCAxOjA54oCvUE0gTWltaSBab2hhciA8em9oYXJAbGludXguaWJtLmNvbT4gd3Jv
+dGU6DQo+Pj4+Pj4+PiBPbiBUdWUsIDIwMjMtMTAtMTcgYXQgMTE6NDUgLTA0MDAsIFBhdWwgTW9v
+cmUgd3JvdGU6DQo+Pj4+Pj4+Pj4gT24gVHVlLCBPY3QgMTcsIDIwMjMgYXQgOTo0OOKAr0FNIE1p
+bWkgWm9oYXIgPHpvaGFyQGxpbnV4LmlibS5jb20+IHdyb3RlOg0KPj4+Pj4+Pj4+PiBPbiBUaHUs
+IDIwMjMtMTAtMDUgYXQgMTI6MzIgKzAyMDAsIE1pY2thw6tsIFNhbGHDvG4gd3JvdGU6DQo+Pj4+
+Pj4+Pj4+Pj4+PiBBIGNvbXBsZW1lbnRhcnkgYXBwcm9hY2ggd291bGQgYmUgdG8gY3JlYXRlIGFu
+DQo+Pj4+Pj4+Pj4+Pj4+PiBMU00gKG9yIGEgZGVkaWNhdGVkIGludGVyZmFjZSkgdG8gdGllIGNl
+cnRpZmljYXRlIHByb3BlcnRpZXMgdG8gYSBzZXQgb2YNCj4+Pj4+Pj4+Pj4+Pj4+IGtlcm5lbCB1
+c2FnZXMsIHdoaWxlIHN0aWxsIGxldHRpbmcgdXNlcnMgY29uZmlndXJlIHRoZXNlIGNvbnN0cmFp
+bnRzLg0KPj4+Pj4+Pj4+Pj4+PiANCj4+Pj4+Pj4+Pj4+Pj4gVGhhdCBpcyBhbiBpbnRlcmVzdGlu
+ZyBpZGVhLiAgV291bGQgdGhlIG90aGVyIHNlY3VyaXR5IG1haW50YWluZXJzIGJlIGluDQo+Pj4+
+Pj4+Pj4+Pj4+IHN1cHBvcnQgb2Ygc3VjaCBhbiBhcHByb2FjaD8gIFdvdWxkIGEgTFNNIGJlIHRo
+ZSBjb3JyZWN0IGludGVyZmFjZT8NCj4+Pj4+Pj4+Pj4+Pj4gU29tZSBvZiB0aGUgcmVjZW50IHdv
+cmsgSSBoYXZlIGRvbmUgd2l0aCBpbnRyb2R1Y2luZyBrZXkgdXNhZ2UgYW5kIENBDQo+Pj4+Pj4+
+Pj4+Pj4+IGVuZm9yY2VtZW50IGlzIGRpZmZpY3VsdCBmb3IgYSBkaXN0cm8gdG8gcGljayB1cCwg
+c2luY2UgdGhlc2UgY2hhbmdlcyBjYW4gYmUNCj4+Pj4+Pj4+Pj4+Pj4gdmlld2VkIGFzIGEgcmVn
+cmVzc2lvbi4gIEVhY2ggZW5kLXVzZXIgaGFzIGRpZmZlcmVudCBzaWduaW5nIHByb2NlZHVyZXMN
+Cj4+Pj4+Pj4+Pj4+Pj4gYW5kIHBvbGljaWVzLCBzbyBtYWtpbmcgc29tZXRoaW5nIHdvcmsgZm9y
+IGV2ZXJ5b25lIGlzIGRpZmZpY3VsdC4gIExldHRpbmcgdGhlDQo+Pj4+Pj4+Pj4+Pj4+IHVzZXIg
+Y29uZmlndXJlIHRoZXNlIGNvbnN0cmFpbnRzIHdvdWxkIHNvbHZlIHRoaXMgcHJvYmxlbS4NCj4+
+Pj4+Pj4+Pj4gDQo+Pj4+Pj4+Pj4+IFNvbWV0aGluZyBkZWZpbml0ZWx5IG5lZWRzIHRvIGJlIGRv
+bmUgYWJvdXQgY29udHJvbGxpbmcgdGhlIHVzYWdlIG9mDQo+Pj4+Pj4+Pj4+IHg1MDkgY2VydGlm
+aWNhdGVzLiAgTXkgY29uY2VybiBpcyB0aGUgbGV2ZWwgb2YgZ3JhbnVsYXJpdHkuICBXb3VsZCB0
+aGlzDQo+Pj4+Pj4+Pj4+IGJlIGF0IHRoZSBMU00gaG9vayBsZXZlbCBvciBldmVuIGZpbmVyIGdy
+YW5hdWxhcml0eT8NCj4+Pj4+Pj4+PiANCj4+Pj4+Pj4+PiBZb3UgbG9zdCBtZSwgd2hhdCBkbyB5
+b3UgbWVhbiBieSBmaW5lciBncmFudWxhcml0eSB0aGFuIGEgTFNNLWJhc2VkDQo+Pj4+Pj4+Pj4g
+YWNjZXNzIGNvbnRyb2w/ICBDYW4geW91IGdpdmUgYW4gZXhpc3RpbmcgZXhhbXBsZSBpbiB0aGUg
+TGludXgga2VybmVsDQo+Pj4+Pj4+Pj4gb2YgYWNjZXNzIGNvbnRyb2wgZ3JhbnVsYXJpdHkgdGhh
+dCBpcyBmaW5lciBncmFpbmVkIHRoYW4gd2hhdCBpcw0KPj4+Pj4+Pj4+IHByb3ZpZGVkIGJ5IHRo
+ZSBMU01zPw0KPj4+Pj4+Pj4gDQo+Pj4+Pj4+PiBUaGUgY3VycmVudCB4NTA5IGNlcnRpZmljYXRl
+IGFjY2VzcyBjb250cm9sIGdyYW51bGFyaXR5IGlzIGF0IHRoZQ0KPj4+Pj4+Pj4ga2V5cmluZyBs
+ZXZlbC4gIEFueSBrZXkgb24gdGhlIGtleXJpbmcgbWF5IGJlIHVzZWQgdG8gdmVyaWZ5IGENCj4+
+Pj4+Pj4+IHNpZ25hdHVyZS4gIEZpbmVyIGdyYW51bGFyaXR5IGNvdWxkIGFzc29jaWF0ZSBhIHNl
+dCBvZiBjZXJ0aWZpY2F0ZXMgb24NCj4+Pj4+Pj4+IGEgcGFydGljdWxhciBrZXlyaW5nIHdpdGgg
+YW4gTFNNIGhvb2sgLSBrZXJuZWwgbW9kdWxlcywgQlBSTSwga2V4ZWMsDQo+Pj4+Pj4+PiBmaXJt
+d2FyZSwgZXRjLiAgRXZlbiBmaW5lciBncmFudWxhcml0eSBjb3VsZCBzb21laG93IGxpbWl0IGEg
+a2V5J3MNCj4+Pj4+Pj4+IHNpZ25hdHVyZSB2ZXJpZmljYXRpb24gdG8gZmlsZXMgaW4gcGFydGlj
+dWxhciBzb2Z0d2FyZSBwYWNrYWdlKHMpIGZvcg0KPj4+Pj4+Pj4gZXhhbXBsZS4NCj4+Pj4+Pj4+
+IA0KPj4+Pj4+Pj4gUGVyaGFwcyBNaWNrYcOrbCBhbmQgRXJpYyB3ZXJlIHRoaW5raW5nIGFib3V0
+IGEgbmV3IExTTSB0byBjb250cm9sIHVzYWdlDQo+Pj4+Pj4+PiBvZiB4NTA5IGNlcnRpZmljYXRl
+cyBmcm9tIGEgdG90YWxseSBkaWZmZXJlbnQgcGVyc3BlY3RpdmUuICBJJ2QgbGlrZSB0bw0KPj4+
+Pj4+Pj4gaGVhciB3aGF0IHRoZXkncmUgdGhpbmtpbmcuDQo+Pj4+Pj4+PiANCj4+Pj4+Pj4+IEkg
+aG9wZSB0aGlzIGFkZHJlc3NlZCB5b3VyIHF1ZXN0aW9ucy4NCj4+Pj4+Pj4gDQo+Pj4+Pj4+IE9r
+YXksIHNvIHlvdSB3ZXJlIHRhbGtpbmcgYWJvdXQgZmluZXIgZ3JhbnVsYXJpdHkgd2hlbiBjb21w
+YXJlZCB0byB0aGUNCj4+Pj4+Pj4gKmN1cnJlbnQqIExTTSBrZXlyaW5nIGhvb2tzLiAgR290Y2hh
+Lg0KPj4+Pj4+PiANCj4+Pj4+Pj4gSWYgd2UgbmVlZCBhZGRpdGlvbmFsLCBvciBtb2RpZmllZCwg
+aG9va3MgdGhhdCBzaG91bGRuJ3QgYmUgYSBwcm9ibGVtLg0KPj4+Pj4+PiBBbHRob3VnaCBJJ20g
+Z3Vlc3NpbmcgdGhlIGFuc3dlciBpcyBnb2luZyB0byBiZSBtb3ZpbmcgdG93YXJkcw0KPj4+Pj4+
+PiBwdXJwb3NlL29wZXJhdGlvbiBzcGVjaWZpYyBrZXlyaW5ncyB3aGljaCBtaWdodCBmaXQgaW4g
+d2VsbCB3aXRoIHRoZQ0KPj4+Pj4+PiBjdXJyZW50IGtleXJpbmcgbGV2ZWwgY29udHJvbHMuDQo+
+Pj4+Pj4gDQo+Pj4+Pj4gSSBkb24ndCBiZWxpZXZlIGRlZmluaW5nIHBlciBwdXJwb3NlL29wZXJh
+dGlvbiBzcGVjaWZpYyBrZXlyaW5ncyB3aWxsDQo+Pj4+Pj4gcmVzb2x2ZSB0aGUgdW5kZXJseWlu
+ZyBwcm9ibGVtIG9mIGdyYW51bGFyaXR5Lg0KPj4+Pj4gDQo+Pj4+PiBQZXJoYXBzIG5vdCBjb21w
+bGV0ZWx5LCBidXQgZm9yIGluLWtlcm5lbCBvcGVyYXRpb25zIEkgYmVsaWV2ZSBpdCBpcw0KPj4+
+Pj4gYW4gYXR0cmFjdGl2ZSBpZGVhLg0KPj4+PiANCj4+Pj4gQ291bGQgdGhlIFguNTA5IEV4dGVu
+ZGVkIEtleSBVc2FnZSAoRUtVKSBleHRlbnNpb24gWzFdLCBiZSB1c2VkIGhlcmU/ICANCj4+Pj4g
+VmFyaW91cyBPSURzIHdvdWxkIG5lZWQgdG8gYmUgZGVmaW5lZCBvciBhc3NpZ25lZCBmb3IgZWFj
+aCBwdXJwb3NlLiAgDQo+Pj4+IE9uY2UgYXNzaWduZWQsIHRoZSBrZXJuZWwgY291bGQgcGFyc2Ug
+dGhpcyBpbmZvcm1hdGlvbiBhbmQgZG8gdGhlDQo+Pj4+IGVuZm9yY2VtZW50LiAgVGhlbiBhbGwg
+a2V5cyBjb3VsZCBjb250aW51ZSB0byByZW1haW4gaW4gdGhlIC5idWlsdGluLCANCj4+Pj4gLnNl
+Y29uZGFyeSwgYW5kIC5tYWNoaW5lIGtleXJpbmdzLiAgIE9ubHkgYSBzdWJzZXQgb2YgZWFjaCBr
+ZXlyaW5nIA0KPj4+PiB3b3VsZCBiZSB1c2VkIGZvciB2ZXJpZmljYXRpb24gYmFzZWQgb24gd2hh
+dCBpcyBjb250YWluZWQgaW4gdGhlIEVLVS4NCj4+Pj4gDQo+Pj4+IDEuIGh0dHBzOi8vd3d3LnJm
+Yy1lZGl0b3Iub3JnL3JmYy9yZmM1MjgwI3NlY3Rpb24tNC4yLjEuMTINCj4+PiANCj4+PiBJIHdh
+cyBhbHNvIHRoaW5raW5nIGFib3V0IHRoaXMga2luZCBvZiB1c2UgY2FzZXMuIEJlY2F1c2UgaXQg
+bWlnaHQgYmUNCj4+PiBkaWZmaWN1bHQgaW4gcHJhY3RpY2UgdG8gY29udHJvbCBhbGwgY2VydGlm
+aWNhdGUgcHJvcGVydGllcywgd2UgbWlnaHQNCj4+PiB3YW50IHRvIGxldCBzeXNhZG1pbnMgY29u
+ZmlndXJlIHRoZXNlIHN1YnNldCBvZiBrZXlyaW5nIGFjY29yZGluZyB0bw0KPj4+IHZhcmlvdXMg
+Y2VydGlmaWNhdGUgcHJvcGVydGllcy4NCj4+IA0KPj4gSSBhZ3JlZSwgYSBjb25maWd1cmF0aW9u
+IGNvbXBvbmVudCBmb3IgYSBzeXNhZG1pbiB3b3VsZCBiZSBuZWVkZWQuDQo+PiANCj4+PiBUaGVy
+ZSBhcmUgY3VycmVudGx5IExTTSBob29rcyB0byBjb250cm9sDQo+Pj4gaW50ZXJhY3Rpb25zIHdp
+dGgga2VybmVsIGtleXMgYnkgdXNlciBzcGFjZSwgYW5kIGtleXMgYXJlIGFscmVhZHkgdGllZA0K
+Pj4+IHRvIExTTSBibG9icy4gTmV3IExTTSBob29rcyBjb3VsZCBiZSBhZGRlZCB0byBkeW5hbWlj
+YWxseSBmaWx0ZXINCj4+PiBrZXlyaW5ncyBhY2NvcmRpbmcgdG8ga2VybmVsIHVzYWdlcyAoZS5n
+LiBrZXJuZWwgbW9kdWxlIHZlcmlmaWNhdGlvbiwgYQ0KPj4+IHN1YnNldCBvZiBhbiBhdXRoZW50
+aWNhdGlvbiBtZWNoYW5pc20gYWNjb3JkaW5nIHRvIHRoZSBjaGVja2VkIG9iamVjdCkuDQo+PiAN
+Cj4+IElmIGFuIExTTSBob29rIGNvdWxkIGR5bmFtaWNhbGx5IGZpbHRlciBrZXlyaW5ncywgYW5k
+IHRoZSBFS1Ugd2FzIHVzZWQsIA0KPj4gaXMgdGhlcmUgYW4gb3BpbmlvbiBvbiBob3cgZmxleGli
+bGUgdGhpcyBzaG91bGQgYmU/ICBNZWFuaW5nLCBzaG91bGQgdGhlcmUgDQo+PiBiZSBPSURzIGRl
+ZmluZWQgYW5kIGNhcnJpZWQgaW4gbWFpbmxpbmUgY29kZT8gIFRoaXMgd291bGQgbWFrZSBpdCBl
+YXNpZXIgDQo+PiB0byBzZXR1cCBhbmQgdXNlLiAgSG93ZXZlciB3aG8gd291bGQgYmUgdGhlIGlu
+aXRpYWwgT0lEIG93bmVyPyAgT3Igd291bGQgDQo+PiBwcmVkZWZpbmVkIE9JRHMgbm90IGJlIGNv
+bnRhaW5lZCB3aXRoaW4gbWFpbmxpbmUgY29kZSwgbGVhdmluZyBpdCB0byB0aGUgDQo+PiBzeXNh
+ZG1pbiB0byBjcmVhdGUgYSBwb2xpY3kgdGhhdCB3b3VsZCBiZSBmZWQgdG8gdGhlIExTTSB0byBk
+byB0aGUgZmlsdGVyaW5nLg0KPiANCj4gVGhlIG1vcmUgZmxleGlibGUgYXBwcm9hY2ggd291bGQg
+YmUgdG8gbm90IGhhcmRjb2RlIGFueSBwb2xpY3kgaW4gdGhlDQo+IGtlcm5lbCBidXQgbGV0IHN5
+c2FkbWlucyBkZWZpbmUgdGhlaXIgb3duLCBpbmNsdWRpbmcgT0lEcy4gV2UgImp1c3QiDQo+IG5l
+ZWQgdG8gZmluZCBhbiBhZGVxdWF0ZSBjb25maWd1cmF0aW9uIHNjaGVtZSB0byBkZWZpbmUgdGhl
+c2UNCj4gY29uc3RyYWludHMuDQoNCkFsc28sIHdpdGggdGhlIGZsZXhpYmxlIGFwcHJvYWNoLCB0
+aGUgcG9saWN5IHdvdWxkIG5lZWQgdG8gYmUgZ2l2ZW4gdG8gdGhlIA0Ka2VybmVsIGJlZm9yZSBh
+bnkga2VybmVsIG1vZHVsZSBsb2FkcywgZnMtdmVyaXR5IHN0YXJ0cywgb3IgYW55dGhpbmcgZGVh
+bGluZyANCndpdGggZGlnaXRhbCBzaWduYXR1cmUgYmFzZWQgSU1BIHJ1bnMsIGV0Yy4gIFdpdGgg
+aGFyZGNvZGVkIHBvbGljaWVzIHRoaXMgDQpjb3VsZCBiZSBzZXR1cCBmcm9tIHRoZSBrZXJuZWwg
+Y29tbWFuZCBsaW5lIG9yIGJlIHNldCBmcm9tIGEgS2NvbmZpZy4gIA0KSSBhc3N1bWUgd2l0aCBh
+IGZsZXhpYmxlIGFwcHJvYWNoLCB0aGlzIHdvdWxkIG5lZWQgdG8gY29tZSBpbiBlYXJseSB3aXRo
+aW4gDQp0aGUgaW5pdHJhbT8NCg0KPiBXZSBhbHJlYWR5IGhhdmUgYW4gQVNOLjEgcGFyc2VyIGlu
+IHRoZSBrZXJuZWwsIHNvIHdlIG1pZ2h0DQo+IHdhbnQgdG8gbGV2ZXJhZ2UgdGhhdCB0byBtYXRj
+aCBhIGNlcnRpZmljYXRlLg0KDQpXZSBoYXZlIHRoZSBwYXJzZXIsIGhvd2V2ZXIgYWZ0ZXIgcGFy
+c2luZyB0aGUgY2VydGlmaWNhdGUgd2UgZG8gbm90IA0KcmV0YWluIGFsbCB0aGUgaW5mb3JtYXRp
+b24gd2l0aGluIGl0LiAgU29tZSBvZiB0aGUgcmVjZW50IGNoYW5nZXMgSSBoYXZlIA0KZG9uZSBy
+ZXF1aXJlZCBtb2RpZmljYXRpb25zIHRvIHRoZSBwdWJsaWNfa2V5IHN0cnVjdC4gIElmIHRoZXJl
+IGlzbuKAmXQgYW55IA0KdHlwZSBvZiBoYXJkIGNvZGVkIHBvbGljeSwgd2hhdCB3b3VsZCBiZSB0
+aGUgcmVjZXB0aW9uIG9mIHJldGFpbmluZyB0aGUgDQplbnRpcmUgY2VydCB3aXRoaW4gdGhlIGtl
+cm5lbD8gDQoNCg==
