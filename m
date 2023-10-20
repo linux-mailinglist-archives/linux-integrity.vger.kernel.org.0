@@ -2,47 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9667D171D
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Oct 2023 22:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6067D1721
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Oct 2023 22:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjJTUfO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Oct 2023 16:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S229954AbjJTUgy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Oct 2023 16:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjJTUfO (ORCPT
+        with ESMTP id S230114AbjJTUgx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Oct 2023 16:35:14 -0400
+        Fri, 20 Oct 2023 16:36:53 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20270D65
-        for <linux-integrity@vger.kernel.org>; Fri, 20 Oct 2023 13:35:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FF411BF
+        for <linux-integrity@vger.kernel.org>; Fri, 20 Oct 2023 13:36:51 -0700 (PDT)
 Received: from [192.168.86.69] (unknown [50.46.228.62])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 852CB20B74C1;
-        Fri, 20 Oct 2023 13:35:10 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 852CB20B74C1
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9EBEA20B74C2;
+        Fri, 20 Oct 2023 13:36:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9EBEA20B74C2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1697834110;
-        bh=X1zR+HC7ncwpNj+9ZQ1uJqVmCCvRjlUMsQzSqXgVEAk=;
+        s=default; t=1697834210;
+        bh=XyjdTx7sau1XzVkUYbHGoZYHMZjzWbRRvE35OpWVGx4=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cD1Cmw+XENd2safTq7ATAUhmR0dM0I8F2KlEOIOhNpHz1u4ca74EqZScjdTt80DGl
-         NUO13eAvPKw/cf0UfNF7vfn/fyHWWz2byluPTVlVMZ1ytssnWKP241GSPY2gNKiPgz
-         3BjN2/1lCpME3g1S3xVQTLFg1ruoSFvneTclU+G4=
-Message-ID: <de034114-1bac-8727-afba-8711d163def7@linux.microsoft.com>
-Date:   Fri, 20 Oct 2023 13:35:10 -0700
+        b=KXoYI7cZoOIA942OyXk3pv1dVP81sgSugIhclBEg5If/CLT7mwvsXGOsMxVuFQG+A
+         crGJXGyFG8SAGLx2hoJATR+Hp3XDuW65EWEsati3ZbLlXTgSzzsS6uu1BwbaOOUQeI
+         ey9jxSr+VY4b6sZ7N0uN89ARb14x/9nOw0qVel6o=
+Message-ID: <9e58b07b-29db-eddf-9263-41bcea4771db@linux.microsoft.com>
+Date:   Fri, 20 Oct 2023 13:36:50 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH v2 2/7] ima: move ima_dump_measurement_list call from
- kexec load to execute
+Subject: Re: [PATCH v2 3/7] ima: kexec: map source pages containing IMA buffer
+ to image post kexec load
 Content-Language: en-US
 To:     Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
         ebiederm@xmission.com, noodles@fb.com, bauermann@kolabnow.com,
         kexec@lists.infradead.org, linux-integrity@vger.kernel.org
 Cc:     code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
 References: <20231005182602.634615-1-tusharsu@linux.microsoft.com>
- <20231005182602.634615-3-tusharsu@linux.microsoft.com>
- <0c5ce35f-cb45-400e-4485-fac724f6b760@linux.ibm.com>
+ <20231005182602.634615-4-tusharsu@linux.microsoft.com>
+ <5098dd7c-70b5-f2ed-0fa6-0f0081f89df6@linux.ibm.com>
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <0c5ce35f-cb45-400e-4485-fac724f6b760@linux.ibm.com>
+In-Reply-To: <5098dd7c-70b5-f2ed-0fa6-0f0081f89df6@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-20.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,191 +57,265 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 
-On 10/12/23 17:28, Stefan Berger wrote:
+On 10/12/23 17:29, Stefan Berger wrote:
 > 
 > On 10/5/23 14:25, Tushar Sugandhi wrote:
->> In the current IMA implementation, ima_dump_measurement_list() is called
->> during the kexec 'load' operation.  This can result in loss of IMA
->> measurements taken between the 'load' and 'execute' phases when the
->> system goes through Kexec soft reboot to a new Kernel.  The call to the
->> function ima_dump_measurement_list() needs to be moved out of the
->> function ima_add_kexec_buffer() and needs to be called during the kexec
->> 'execute' operation.
+>> Currently, the mechanism to map and unmap segments to the kimage
+>> structure is not available to the subsystems outside of kexec.  This
+>> functionality is needed when IMA is allocating the memory segments
+>> during kexec 'load' operation.
 >>
->> Implement a function ima_update_kexec_buffer() that is called during
->> kexec 'execute', allowing IMA to update the measurement list with the
->> events between kexec 'load' and 'execute'.  Move the
->> ima_dump_measurement_list() call from ima_add_kexec_buffer() to
->> ima_update_kexec_buffer().  Make ima_kexec_buffer and kexec_segment_size
->> variables global, so that they can be accessed during both kexec 'load'
->> and 'execute'.  Add functions ima_measurements_suspend() and
->> ima_measurements_resume() to set and reset the 'suspend_ima_measurements'
->> variable respectively, to suspend/resume IMA measurements.  Use
->> the existing 'ima_extend_list_mutex' to ensure that the operations are
->> thread-safe.  These function calls will help maintaining the integrity
->> of the IMA log while it is being copied to the new Kernel's buffer.
->> Add a reboot notifier_block 'update_buffer_nb' to ensure
->> the function ima_update_kexec_buffer() gets called during kexec
->> soft-reboot.
+>> Implement kimage_map_segment() which takes a kimage pointer, an address,
+>> and a size.  Ensure that the entire segment is being mapped by comparing
+>> the given address and size to each segment in the kimage's segment array.
+>> Collect the source pages that correspond to the given address range,
+>> allocate an array of pointers to these pages, and map them to a
+>> contiguous range of virtual addresses.  If the mapping operation is
+>> successful, the function returns the start of this range.  Otherwise, it
+>> frees the page pointer array and returns NULL.
+>>
+>> Implement kimage_unmap_segment() that takes a pointer to a segment buffer
+>> and unmaps it using vunmap().
+>>
+>> Implement function ima_kexec_post_load(), to be called by IMA after kexec
+>> loads the new Kernel image.  ima_kexec_post_load() would map the IMA
+>> buffer allocated during kexec 'load' to a segment in the loaded image.
+>>
+>> Finally, move for_each_kimage_entry() macro from kexec_core.c to kexec.h.
 >>
 >> Signed-off-by: Tushar Sugandhi<tusharsu@linux.microsoft.com>
 >> ---
->>   security/integrity/ima/ima.h       |  2 ++
->>   security/integrity/ima/ima_kexec.c | 58 +++++++++++++++++++++++++-----
->>   security/integrity/ima/ima_queue.c | 18 ++++++++++
->>   3 files changed, 69 insertions(+), 9 deletions(-)
+>>   include/linux/ima.h                |  3 ++
+>>   include/linux/kexec.h              | 13 ++++++
+>>   kernel/kexec_core.c                | 73 ++++++++++++++++++++++++++++--
+>>   security/integrity/ima/ima_kexec.c | 32 +++++++++++++
+>>   4 files changed, 116 insertions(+), 5 deletions(-)
 >>
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index c29db699c996..49a6047dd8eb 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -161,6 +161,8 @@ bool ima_template_has_modsig(const struct 
->> ima_template_desc *ima_template);
->>   int ima_restore_measurement_entry(struct ima_template_entry *entry);
->>   int ima_restore_measurement_list(loff_t bufsize, void *buf);
->>   int ima_measurements_show(struct seq_file *m, void *v);
->> +void ima_measurements_suspend(void);
->> +void ima_measurements_resume(void);
->>   unsigned long ima_get_binary_runtime_size(void);
->>   int ima_init_template(void);
->>   void ima_init_template_list(void);
->> diff --git a/security/integrity/ima/ima_kexec.c 
->> b/security/integrity/ima/ima_kexec.c
->> index 307e07991865..2c11bbe6efef 100644
->> --- a/security/integrity/ima/ima_kexec.c
->> +++ b/security/integrity/ima/ima_kexec.c
->> @@ -17,6 +17,8 @@
+>> diff --git a/include/linux/ima.h b/include/linux/ima.h
+>> index 86b57757c7b1..006db20f852d 100644
+>> --- a/include/linux/ima.h
+>> +++ b/include/linux/ima.h
+>> @@ -49,6 +49,9 @@ static inline void ima_appraise_parse_cmdline(void) {}
 >>   #ifdef CONFIG_IMA_KEXEC
->>   struct seq_file ima_kexec_file;
->>   struct ima_kexec_hdr ima_khdr;
->> +static void *ima_kexec_buffer;
->> +static size_t kexec_segment_size;
->>   void ima_clear_kexec_file(void)
->>   {
->> @@ -142,7 +144,6 @@ void ima_add_kexec_buffer(struct kimage *image)
->>       /* use more understandable variable names than defined in kbuf */
->>       void *kexec_buffer = NULL;
->>       size_t kexec_buffer_size;
->> -    size_t kexec_segment_size;
->>       int ret;
->>       /*
->> @@ -167,14 +168,6 @@ void ima_add_kexec_buffer(struct kimage *image)
->>           return;
->>       }
->> -    ret = ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
->> -                    kexec_segment_size);
->> -    if (ret < 0) {
->> -        pr_err("%s: Failed to dump IMA measurements. Error:%d.\n",
->> -               __func__, ret);
->> -        return;
->> -    }
->> -
->>       kbuf.buffer = kexec_buffer;
->>       kbuf.bufsz = kexec_buffer_size;
->>       kbuf.memsz = kexec_segment_size;
->> @@ -192,6 +185,53 @@ void ima_add_kexec_buffer(struct kimage *image)
->>       pr_debug("kexec measurement buffer for the loaded kernel at 
->> 0x%lx.\n",
->>            kbuf.mem);
+>>   extern void ima_add_kexec_buffer(struct kimage *image);
+>> +extern void ima_kexec_post_load(struct kimage *image);
+>> +#else
+>> +static inline void ima_kexec_post_load(struct kimage *image) {}
+>>   #endif
+>>   #else
+>> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+>> index 22b5cd24f581..e00b8101b53b 100644
+>> --- a/include/linux/kexec.h
+>> +++ b/include/linux/kexec.h
+>> @@ -490,6 +490,15 @@ static inline int 
+>> arch_kexec_post_alloc_pages(void *vaddr, unsigned int pages, g
+>>   static inline void arch_kexec_pre_free_pages(void *vaddr, unsigned 
+>> int pages) { }
+>>   #endif
+>> +#define for_each_kimage_entry(image, ptr, entry) \
+>> +    for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
+>> +        ptr = (entry & IND_INDIRECTION) ? \
+>> +            boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
+>> +
+>> +extern void *kimage_map_segment(struct kimage *image,
+>> +                unsigned long addr, unsigned long size);
+>> +extern void kimage_unmap_segment(void *buffer);
+>> +
+>>   #else /* !CONFIG_KEXEC_CORE */
+>>   struct pt_regs;
+>>   struct task_struct;
+>> @@ -497,6 +506,10 @@ static inline void __crash_kexec(struct pt_regs 
+>> *regs) { }
+>>   static inline void crash_kexec(struct pt_regs *regs) { }
+>>   static inline int kexec_should_crash(struct task_struct *p) { return 
+>> 0; }
+>>   static inline int kexec_crash_loaded(void) { return 0; }
+>> +static inline void *kimage_map_segment(struct kimage *image,
+>> +                       unsigned long addr, unsigned long size)
+>> +{ return NULL; }
+>> +static inline void kimage_unmap_segment(void *buffer) { }
+>>   #define kexec_in_progress false
+>>   #endif /* CONFIG_KEXEC_CORE */
+>> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+>> index 3d578c6fefee..e01156f3c404 100644
+>> --- a/kernel/kexec_core.c
+>> +++ b/kernel/kexec_core.c
+>> @@ -594,11 +594,6 @@ void kimage_terminate(struct kimage *image)
+>>       *image->entry = IND_DONE;
 >>   }
->> +
->> +/*
->> + * Called during kexec execute so that IMA can update the measurement 
->> list.
->> + */
->> +static int ima_update_kexec_buffer(struct notifier_block *self,
->> +                   unsigned long action, void *data)
+>> -#define for_each_kimage_entry(image, ptr, entry) \
+>> -    for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
+>> -        ptr = (entry & IND_INDIRECTION) ? \
+>> -            boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
+>> -
+>>   static void kimage_free_entry(kimage_entry_t entry)
+>>   {
+>>       struct page *page;
+>> @@ -921,6 +916,74 @@ int kimage_load_segment(struct kimage *image,
+>>       return result;
+>>   }
+>> +void *kimage_map_segment(struct kimage *image,
+>> +             unsigned long addr, unsigned long size)
 >> +{
->> +    void *buf = NULL;
->> +    size_t buf_size;
->> +    bool resume = false;
->> +    int ret;
+>> +    unsigned long eaddr = addr + size;
+>> +    unsigned long src_page_addr, dest_page_addr;
+>> +    struct page **src_pages;
+>> +    int i, npages;
+>> +    kimage_entry_t *ptr, entry;
+>> +    void *vaddr = NULL;
 >> +
->> +    if (!kexec_in_progress) {
->> +        pr_info("%s: No kexec in progress.\n", __func__);
->> +        return NOTIFY_OK;
+>> +    /*
+>> +     * Make sure that we are mapping a whole segment.
+>> +     */
+>> +    for (i = 0; i < image->nr_segments; i++) {
+>> +        if (addr == image->segment[i].mem &&
+>> +            size == image->segment[i].memsz) {
+>> +            break;
+>> +        }
+>> +    }
+> 
+> I wonder whether this distrust in the segments or in the passed 
+> pointer&size are justifyable since you call this function like this:
+> 
+>          ima_kexec_buffer = kimage_map_segment(image,
+> image->ima_buffer_addr,
+> image->ima_buffer_size);
+> 
+> and previously kexec_add_buffer() was also called:
+> 
+>          kbuf.buffer = kexec_buffer;
+>          kbuf.bufsz = kexec_buffer_size;
+>          kbuf.memsz = kexec_segment_size;
+>          ret = kexec_add_buffer(&kbuf);
+>          if (ret) {
+>                  pr_err("Error passing over kexec measurement buffer.\n");
+>                  vfree(kexec_buffer);
+>                  return;
+>          }
+> 
+>          image->ima_buffer_addr = kbuf.mem;
+>          image->ima_buffer_size = kexec_segment_size;
+> 
+> So the one segment should be matching these addresses.
+> 
+> 
+Yeh. This check is an overkill at this point.
+I agree. I will remove this extra check.
+>> +
+>> +    if (i == image->nr_segments) {
+>> +        pr_err("%s: No segment matching [%lx, %lx)\n", __func__,
+>> +               addr, eaddr);
+>> +        return NULL;
 >> +    }
 >> +
->> +    if (!ima_kexec_buffer) {
->> +        pr_err("%s: Kexec buffer not set.\n", __func__);
->> +        return NOTIFY_OK;
+>> +    /*
+>> +     * Collect the source pages and map them in a contiguous VA range.
+>> +     */
+>> +    npages = PFN_UP(eaddr) - PFN_DOWN(addr);
+>> +    src_pages = kmalloc(sizeof(*src_pages) * npages, GFP_KERNEL);
+>> +    if (!src_pages) {
+>> +        pr_err("%s: Could not allocate ima pages array.\n", __func__);
+>> +        return NULL;
 >> +    }
 >> +
->> +    ima_measurements_suspend();
+>> +    i = 0;
+>> +    for_each_kimage_entry(image, ptr, entry) {
+>> +        if (entry & IND_DESTINATION)
+>> +            dest_page_addr = entry & PAGE_MASK;
+>> +        else if (entry & IND_SOURCE) {
+>> +            if (dest_page_addr >= addr && dest_page_addr < eaddr) {
+>> +                src_page_addr = entry & PAGE_MASK;
+>> +                src_pages[i++] =
+>> +                    virt_to_page(__va(src_page_addr));
+>> +                if (i == npages)
+>> +                    break;
+>> +                dest_page_addr += PAGE_SIZE;
+>> +            }
+>> +        }
+>> +    }
 >> +
->> +    buf_size = ima_get_binary_runtime_size();
-> There doesn't seem to be a need to call this function and pass in the 
-> binary runtime size into the dump function. You should be able to remove 
-> it.
-Oh. This was an oversight.
-This line is removed in patch 7/7.  It should have been removed here
-itself.
-Thanks for catching it. Will fix.
->> +    ret = ima_dump_measurement_list(&buf_size, &buf,
->> +                    kexec_segment_size);
+>> +    /* Sanity check. */
+>> +    WARN_ON(i < npages);
 >> +
->> +    if (!buf || ret < 0) {
-> I don't think this function can (or should) ever return ret >= 0 with 
-> buf == NULL.
-I will simplify this check. Thanks.
+>> +    vaddr = vmap(src_pages, npages, VM_MAP, PAGE_KERNEL);
+> On either success or failure kfree(sec_pages); should go right here to 
+> not have a memory leak.
+Will do.
 
 ~Tushar
->> +        pr_err("%s: Dump measurements failed. Error:%d\n",
->> +               __func__, ret);
->> +        resume = true;
->> +        goto out;
+>> +    if (!vaddr) {
+>> +        pr_err("%s: Could not map imap buffer.\n", __func__);
+>> +        kfree(src_pages);
 >> +    }
->> +    memcpy(ima_kexec_buffer, buf, buf_size);
->> +out:
->> +    ima_kexec_buffer = NULL;
->> +
->> +    if (resume)
->> +        ima_measurements_resume();
->> +
->> +    return NOTIFY_OK;
+>> +    return vaddr;
 >> +}
->> +struct notifier_block update_buffer_nb = {
->> +    .notifier_call = ima_update_kexec_buffer,
->> +};
+>> +
+>> +void kimage_unmap_segment(void *segment_buffer)
+>> +{
+>> +    vunmap(segment_buffer);
+>> +}
+>> +
+>>   struct kexec_load_limit {
+>>       /* Mutex protects the limit count. */
+>>       struct mutex mutex;
+>> diff --git a/security/integrity/ima/ima_kexec.c 
+>> b/security/integrity/ima/ima_kexec.c
+>> index 2c11bbe6efef..13fbbb90319b 100644
+>> --- a/security/integrity/ima/ima_kexec.c
+>> +++ b/security/integrity/ima/ima_kexec.c
+>> @@ -12,6 +12,8 @@
+>>   #include <linux/kexec.h>
+>>   #include <linux/of.h>
+>>   #include <linux/ima.h>
+>> +#include <linux/reboot.h>
+>> +#include <asm/page.h>
+>>   #include "ima.h"
+>>   #ifdef CONFIG_IMA_KEXEC
+>> @@ -19,6 +21,7 @@ struct seq_file ima_kexec_file;
+>>   struct ima_kexec_hdr ima_khdr;
+>>   static void *ima_kexec_buffer;
+>>   static size_t kexec_segment_size;
+>> +static bool ima_kexec_update_registered;
+>>   void ima_clear_kexec_file(void)
+>>   {
+>> @@ -221,6 +224,7 @@ static int ima_update_kexec_buffer(struct 
+>> notifier_block *self,
+>>       }
+>>       memcpy(ima_kexec_buffer, buf, buf_size);
+>>   out:
+>> +    kimage_unmap_segment(ima_kexec_buffer);
+>>       ima_kexec_buffer = NULL;
+>>       if (resume)
+>> @@ -232,6 +236,34 @@ struct notifier_block update_buffer_nb = {
+>>       .notifier_call = ima_update_kexec_buffer,
+>>   };
+>> +/*
+>> + * Create a mapping for the source pages that contain the IMA buffer
+>> + * so we can update it later.
+>> + */
+>> +void ima_kexec_post_load(struct kimage *image)
+>> +{
+>> +    if (ima_kexec_buffer) {
+>> +        kimage_unmap_segment(ima_kexec_buffer);
+>> +        ima_kexec_buffer = NULL;
+>> +    }
+>> +
+>> +    if (!image->ima_buffer_addr)
+>> +        return;
+>> +
+>> +    ima_kexec_buffer = kimage_map_segment(image,
+>> +                          image->ima_buffer_addr,
+>> +                          image->ima_buffer_size);
+>> +    if (!ima_kexec_buffer) {
+>> +        pr_err("%s: Could not map measurements buffer.\n", __func__);
+>> +        return;
+>> +    }
+>> +
+>> +    if (!ima_kexec_update_registered) {
+>> +        register_reboot_notifier(&update_buffer_nb);
+>> +        ima_kexec_update_registered = true;
+>> +    }
+>> +}
 >> +
 >>   #endif /* IMA_KEXEC */
 >>   /*
->> diff --git a/security/integrity/ima/ima_queue.c 
->> b/security/integrity/ima/ima_queue.c
->> index 532da87ce519..9e7d1196006e 100644
->> --- a/security/integrity/ima/ima_queue.c
->> +++ b/security/integrity/ima/ima_queue.c
->> @@ -44,6 +44,11 @@ struct ima_h_table ima_htable = {
->>    */
->>   static DEFINE_MUTEX(ima_extend_list_mutex);
->> +/*
->> + * Used internally by the kernel to suspend-resume ima measurements.
->> + */
->> +static atomic_t suspend_ima_measurements;
->> +
->>   /* lookup up the digest value in the hash table, and return the 
->> entry */
->>   static struct ima_queue_entry *ima_lookup_digest_entry(u8 
->> *digest_value,
->>                                  int pcr)
->> @@ -147,6 +152,19 @@ static int ima_pcr_extend(struct tpm_digest 
->> *digests_arg, int pcr)
->>           pr_err("Error Communicating to TPM chip, result: %d\n", 
->> result);
->>       return result;
->>   }
->> +void ima_measurements_suspend(void)
->> +{
->> +    mutex_lock(&ima_extend_list_mutex);
->> +    atomic_set(&suspend_ima_measurements, 1);
->> +    mutex_unlock(&ima_extend_list_mutex);
->> +}
->> +
->> +void ima_measurements_resume(void)
->> +{
->> +    mutex_lock(&ima_extend_list_mutex);
->> +    atomic_set(&suspend_ima_measurements, 0);
->> +    mutex_unlock(&ima_extend_list_mutex);
->> +}
->>   /*
->>    * Add template entry to the measurement list and hash table, and
