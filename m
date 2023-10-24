@@ -2,67 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF727D48AF
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Oct 2023 09:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486CB7D4E46
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Oct 2023 12:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbjJXHgd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Oct 2023 03:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S232849AbjJXKw7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Oct 2023 06:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbjJXHgc (ORCPT
+        with ESMTP id S232042AbjJXKw6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Oct 2023 03:36:32 -0400
-Received: from mail.bizcodes.pl (mail.bizcodes.pl [151.80.57.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51241BC
-        for <linux-integrity@vger.kernel.org>; Tue, 24 Oct 2023 00:36:30 -0700 (PDT)
-Received: by mail.bizcodes.pl (Postfix, from userid 1002)
-        id 230A3A367E; Tue, 24 Oct 2023 07:35:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bizcodes.pl; s=mail;
-        t=1698132989; bh=5QPMt7jNntM5ZbstM20BWsHIeLbmRE8lVU4Iu89IleQ=;
-        h=Date:From:To:Subject:From;
-        b=GHVXffbcmDId6IPzsdviwuHPYmn1cvp66Vqgqa7pTwSkU471/ZheEsHji+uLDTPqZ
-         oHFfnvX0hIBMgTuMm8LTXkN9iktGBTwFsX3n2vFbuNrNvbSjaEOAn2xMqyTOhx8ttL
-         yXEXDH5ysBALnWxEtiKQKHRegXygYmpU9Rh23LeSlpjSKY+74adS+BEQ1l2xr7fqTY
-         onedA6O/R5qjBAnNVh+EW4h1lFhnUr4+l0Zb1DkM7oBqMBQD4EIJAchGkuPKd2jYYP
-         xLDjBk0wHEIqCQlsAwYbqAI7wIiWShKYoAm/ggQjW3oxJgIqqMvBATAQRwbYAHjooE
-         cRToUrGiM3FSg==
-Received: by mail.bizcodes.pl for <linux-integrity@vger.kernel.org>; Tue, 24 Oct 2023 07:35:49 GMT
-Message-ID: <20231024064500-0.1.ch.1kp7p.0.9o009er2f4@bizcodes.pl>
-Date:   Tue, 24 Oct 2023 07:35:49 GMT
-From:   "Marcin Chruszcz" <marcin.chruszcz@bizcodes.pl>
-To:     <linux-integrity@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.bizcodes.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 24 Oct 2023 06:52:58 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DB5E5;
+        Tue, 24 Oct 2023 03:52:56 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F39C433C7;
+        Tue, 24 Oct 2023 10:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698144776;
+        bh=6YSqBXV8Q6ZLxR+uekTkLRXBUqLPTfXD2GcE6JjAFts=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=CgX987re7ZS0qylHmqFYwlTHLEPwEfcyIsKycVyYYOm/Lt+9EuTTNsHODYTu1efDY
+         ignd/9YFh4ugqsQpM0y8lMDwjgbInGmui0cp7F9EOeeS4KmlA8UraHNl0uzvT8OzW0
+         Ipy1pTEsB5ut/XEkzJJ8fygxVtymVGmGcwvQoyCnRA68y8Qjw8lhnI7+z1V5OTvd2/
+         +RYb7XZ2GortgvAPmq2si/N0JFJIymwAfkbz5My7vNCeGCoVVtgmS3SgrpKHCnTm+3
+         ciCLOy8t5L9g7jzXYVgWqrkTjTJzRlxzWmTtOr5EEkBS4MpvSPe7TDCR2NaGJ66a48
+         HBBsj0NLY2/+g==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 24 Oct 2023 13:52:51 +0300
+Message-Id: <CWGM2YH00DJ3.JKSYNNEWVRW4@suppilovahvero>
+Cc:     <keyrings@vger.kernel.org>,
+        "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "William Roberts" <bill.c.roberts@gmail.com>,
+        "Stefan Berger" <stefanb@linux.ibm.com>,
+        "David Howells" <dhowells@redhat.com>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Mimi Zohar" <zohar@linux.ibm.com>,
+        "Peter Huewe" <peterhuewe@gmx.de>,
+        "Julien Gomes" <julien@arista.com>,
+        "Jerry Snitselaar" <jsnitsel@redhat.com>,
+        "open list" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 5/6] tpm: Add tpm_buf_read_{u8,u16,u32}
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Mario Limonciello" <mario.limonciello@amd.com>,
+        <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.15.2
+References: <20231024011531.442587-1-jarkko@kernel.org>
+ <20231024011531.442587-6-jarkko@kernel.org>
+ <3f9086f6-935f-48a7-889b-c71398422fa1@amd.com>
+In-Reply-To: <3f9086f6-935f-48a7-889b-c71398422fa1@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dzie=C5=84 dobry!
+On Tue Oct 24, 2023 at 4:38 AM EEST, Mario Limonciello wrote:
+> On 10/23/2023 20:15, Jarkko Sakkinen wrote:
+> > Add tpm_buf_read_u8(), tpm_buf_read_u16() and tpm_read_u32() for the sa=
+ke
+> > of more convenient parsing of TPM responses.
+> >=20
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >   drivers/char/tpm/tpm-buf.c | 69 +++++++++++++++++++++++++++++++++++++=
++
+> >   include/linux/tpm.h        |  3 ++
+> >   2 files changed, 72 insertions(+)
+> >=20
+> > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+> > index f1d92d7e758d..bcd3cbcd9dd9 100644
+> > --- a/drivers/char/tpm/tpm-buf.c
+> > +++ b/drivers/char/tpm/tpm-buf.c
+> > @@ -124,3 +124,72 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const=
+ u32 value)
+> >   	tpm_buf_append(buf, (u8 *)&value2, 4);
+> >   }
+> >   EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
+> > +
+> > +/**
+> > + * tpm_buf_read() - Read from a TPM buffer
+> > + * @buf:	&tpm_buf instance
+> > + * @offset:	offset within the buffer
+> > + * @count:	the number of bytes to read
+> > + * @output:	the output buffer
+> > + */
+> > +static void tpm_buf_read(const struct tpm_buf *buf, off_t *offset, siz=
+e_t count, void *output)
+> > +{
+> > +	if (*(offset + count) >=3D buf->length) {
+> > +		WARN(1, "tpm_buf: overflow\n");
+> > +		return;
+> > +	}
+>
+> In the overflow case wouldn't you want to pass an error code up instead=
+=20
+> of just showing a WARN trace?
+>
+> The helper functions can't tell the difference, and the net outcome is=20
+> going to be that if there is overflow you get a warning trace in the=20
+> kernel log and whatever garbage "value" happened to have going to the=20
+> caller.  It's a programmer error but it's also unpredictable what=20
+> happens here.
+>
+> I think it's cleaner to have callers of=20
+> tpm_buf_read_u8/tpm_buf_read_u16/tpm_buf_read_u32 to to be able to know=
+=20
+> something wrong happened.
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+I think you have a fair point here and I also think it is also a bigger
+issue for the response parsing than programmer error. I.e. faulty or
+malicious TPM could return corrupted data, which makes WARN() wrong
+choice.
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+So, as a corrective measure I think it should be pr_warn() instead, and
+instead of returning u8/u16/u32, all functions should return 'ssize_t'
+and -EIO in the case of overflow.
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+Thank you, it was a really good catch.
 
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
+BR, Jarkko
 
-
-Pozdrawiam
-Marcin Chruszcz
