@@ -2,251 +2,501 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164937D4511
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Oct 2023 03:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E83F7D4625
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Oct 2023 05:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbjJXBim (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Oct 2023 21:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S231913AbjJXDw1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Oct 2023 23:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjJXBil (ORCPT
+        with ESMTP id S229510AbjJXDw0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Oct 2023 21:38:41 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E292DE;
-        Mon, 23 Oct 2023 18:38:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GOJue2FwCXr4Ws2KOr8MaowOiKCO753069NNT3YtqjtXIvcV/DL+rQQADzK94YwJSkfACy/CS1bAbKJ13hf043G9QasUS1xIFik9E0p8UQax2o93ZTLuhFn9zgHSdeK3PXAM1zIt020X/X8sQLEzmzKRLPYUwJo26ypM8aCd6wJokmpaCB+xD5wUrNNxs9s+skPvQZArWAYJRxgxublBD4s+UTofhjj+yhJFIeYV65YIRU6F1Mq4hYuBo78y4GhumVqPfIKBb1Pz2x446UDFu3bQSE0N3KNAjynHkIIXO8OWtF2ujfypCnmaeWzFmfj3EnTQzmra3FgK7gT6A7T26A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o1kKeX/ihbXvvqP29nTaG88FY+RiFfbbwuu7Z17YBTs=;
- b=msN+zMxnRINDpJvPSANuhlxeUCegPhu+bwuRVQxhu+Qrvj1JoEqtGnUUoQvMnbMynnzm8cpPevYAXcja4cr0psRwCc6/DlwjEmYEwmkkSlcLekC5zn7HnTrsi8CmQ+Q6jeLV2r/W1yQLTHYH/OemxgCnmrZD0sMrw/ax/IlmuVXmPkRFSSI0qQXYNom9pCyGPV/RfkIloaHBGBJ4q/G4yEVje24fGpUTJCWRTXMEPtkIG2TtnDPMay2XCghJxJk4lSoc/To+6rTS/nw6gN1zhnSmkgt9eSNEgDPktY+wh6fA62zStulpGqabEPAyc7CFJ3PK9AALralePcQdx1wDnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o1kKeX/ihbXvvqP29nTaG88FY+RiFfbbwuu7Z17YBTs=;
- b=asVZ9TXA+bHEzs9QQLn3prq1LeUMdiRtBryhxyjgxRizPeSW2UHW2VVeZDBem7Sw6XJJzo8U+5YwJkJXCeeCIF5Ro4qiPTwp2ZNIxWJmJk7Qj4iTC0lioQkcj9mDsJriTuJbfvNo1F8cEmOvQOecsChOwhhfTyvrW+58qrXaSII=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SJ2PR12MB9211.namprd12.prod.outlook.com (2603:10b6:a03:55e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.45; Tue, 24 Oct
- 2023 01:38:34 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::83d7:9c4f:4d9b:1f2a]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::83d7:9c4f:4d9b:1f2a%4]) with mapi id 15.20.6907.022; Tue, 24 Oct 2023
- 01:38:34 +0000
-Message-ID: <3f9086f6-935f-48a7-889b-c71398422fa1@amd.com>
-Date:   Mon, 23 Oct 2023 20:38:30 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/6] tpm: Add tpm_buf_read_{u8,u16,u32}
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org
-Cc:     keyrings@vger.kernel.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        William Roberts <bill.c.roberts@gmail.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Julien Gomes <julien@arista.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20231024011531.442587-1-jarkko@kernel.org>
- <20231024011531.442587-6-jarkko@kernel.org>
-From:   Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20231024011531.442587-6-jarkko@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR11CA0061.namprd11.prod.outlook.com
- (2603:10b6:806:d2::6) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ2PR12MB9211:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb84bda3-27c3-4c6f-05fb-08dbd431ef8a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GVf0AMHsmReD/yqcHR7gG7/8tMa5PorDxM+/YgcWIe5nNdNBH5oBTKo3XLVBb20iXqVIkFi4CX6LB8EdDgBusVfLaNR0lticazklgdia6GcJzBLR7st3jvDa7kfiWnESsrEurpRtr9uu5PrsF7QFTAmSFrmFhyg5TZZNJ7yn96CXzfmQJgEJ1qhW9m5Pi+0SthGCauAiQOf8keBPwhy84DjBgHatJ457W/RxoL0myNSEBb1gEWi7I673tbehrpOd+JqzCcZ953B7bbRNzNHHz8PpmuHrAR1J9Psd1PW1BP2ElAUgel7Ui3oP37wlSHgFOymTrQiWBNxPCHDu6D6fHDwDoUYRbiF961ZFRLbi4l2OVvv7Lo34rP0JM8TEjln8/8ugNMihc3PyFXTr89A1PlxtpwobFBDeqAlnMB1nTKJ/UQ9IUPhJ79fvQJCTOs27sYVnia5fF4flfk2ZY9poq395xHvgLqVZtvNO1HrOU75LDNGzpfhVSnic/ROrAOcqf3fNk1W3/5toIL3gyS46G49wHYC2IcD/f8I4/WOG9MVtJo6gZwEGkgSQfCCuZj84bqFwL5NTQNYoScJi+9k3/r35o1ymlBW3uvqHCNRFcKE990GiYeHzkYH+rCa1CdRHkl+lMymPomH2iOq1qGAgsw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(366004)(346002)(396003)(376002)(230922051799003)(1800799009)(451199024)(186009)(64100799003)(66946007)(6506007)(316002)(6512007)(8676002)(53546011)(66476007)(6666004)(54906003)(44832011)(38100700002)(5660300002)(66556008)(26005)(8936002)(2616005)(478600001)(6486002)(31686004)(41300700001)(4326008)(83380400001)(7416002)(2906002)(86362001)(36756003)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bnFIRjhJNDh6NnM5Skg2VENPNFZVcUJ0ZmkwSkY5WXcvL1RoQnJTb01sd2Qy?=
- =?utf-8?B?S2lxNEpRbGN4Q3lTT3UycGZxbTI4aS9XS212OFpXalRGSWtkZVZILzBFK3lt?=
- =?utf-8?B?Z2pRekp4bGdOVVFsaUJoZEFBZXZqTktXWWoxSlpKWHozU3BKaC9qRWRhZWpU?=
- =?utf-8?B?cHRQb3A5TGd4ZlJoWFJtZldkOVJqZ1RnWTR4QUZPaXdnUjZZUVA4SE5LbWVB?=
- =?utf-8?B?Qmt1eWc1emRId0xhd1NXTDJzUzRDSGxEeW8renJpVWIrM1dxNVhKQ3NzSmtH?=
- =?utf-8?B?VzgwcUQzTktycHJ2VUg3RVYyb3V0Y2lxVkhHbXlVSkRRSVhXZHJPdzdDRWFh?=
- =?utf-8?B?STNnV3pxZnd3ZnNuRTh0c1grMXhKbWhDNENkZUt4LzdSalFxVzltWWlXT0Jo?=
- =?utf-8?B?OG90LzN3M1JZUVVKc2Y0a29WWG9WMXBFc0tNUmNrOWdqQnRDeC9tRjdHSWpW?=
- =?utf-8?B?TWk3U1B0TmQxM0NnWldPcUlzWVNDeXl0VTZhWUU2eHo4bnd5M3Z5ZkJNdnZi?=
- =?utf-8?B?cTJXcU9TdFlyQndKblVhb3RPakNmbXd0OGtYelU1UE41VWhBQkJsNjc4ampz?=
- =?utf-8?B?WDdSR1BIZzhRTHRyZ1JJYlAwS0dSQ3dFSm9BY3M1MHdmMnR1Q3o1TTlDUHFl?=
- =?utf-8?B?QVg3ZTdTYUxWamNLMGkweXVFQU43WlFVN2tBdm9xTHJ4elRzWXhqYkU2VFdN?=
- =?utf-8?B?Wjkwa0dZLzF1cU1kWS9lTWtSVG9kVGdkMG85eGx5NFVWdUJ1ZWRuT2ZwS0VD?=
- =?utf-8?B?bWZ4VG9nNDhXR2FEbnFac1NyZEJFejRSRGhnRFlXRW5WTTEyWVhSNTJBdndI?=
- =?utf-8?B?WldNMWpCSmFSdWVXck9QWEltTG84bXIvbVVZelNqZ0t6M0p2ZUowTURIODAz?=
- =?utf-8?B?UFVNQzJNM1dJOUdzVE5BK1l1VGU5WTlSM0JwTFhUcERja293OEtQcTZtSmhK?=
- =?utf-8?B?RkZSWXYydkxmSStHRUt6VXdpYXRMS0pueEFIN3Z2WjBaTzQ4cDZOR25jODdy?=
- =?utf-8?B?UzdEUFk2L2s5bFZZMlpZbnlWMG9aWFNERGxaU2dyZUdqMWkySTFycXZxSmJW?=
- =?utf-8?B?OFlpVHRSMTdkL0luZ2tuN2xCd1liRnlUMis4cW0vRUlhaW5MQ2FhQk9obitP?=
- =?utf-8?B?QSs5Y1I0OURmbmN0cGFjMlNJU2IxcDdQUmdsekYvSkNPMDB1dkM0MkdrSnBi?=
- =?utf-8?B?cDU2ZTdnTmZSNjhVSFRQdkttTC9hU3ZLVGhFSENmY2Q5N0gzSVNnSGdGNUc1?=
- =?utf-8?B?dVpSdjhwWWhJM3FNdlRFZFJLMkNoWWdWbnYvalVmQ3V3M3NKcUpsWllNUEFv?=
- =?utf-8?B?dk1Hc3AwdkRnUE9XM3Z4V3RldFp2bGtjQXZmVEMrL1d2Rk5iTEhOZTcydmFr?=
- =?utf-8?B?clJIa3Z6VFhwU1VMeGtCbVRwMzNLSUY5OW4xcHRaWUErYmh0YXVWblp5Y3FB?=
- =?utf-8?B?QzVIak1LR3FEdFpzRmlWKzJPbDJZNFliUTA2RTgwU1dHU21LRHdFQ2pMUWRk?=
- =?utf-8?B?cGgxMXgwWnZRYlBrZHh5K2VoaUpqSEVWc0Z1RTFCN2d0SUtCRmZzdzdNcjJh?=
- =?utf-8?B?VVJoR0pIVzF6VnlUY0k2QUhQM2JzUE9XS04zc2QvbXJtMUc5WWF0cHNWUCtq?=
- =?utf-8?B?cEJTNjJDNjhlUEZpY1NHSjI2TlFCTWR1MEZJbEw1UEVtT1R2d2lYQlZGckFZ?=
- =?utf-8?B?UnV6TzhvcWRqMkh2ZnVndnhvakRjSm9MVmVtZStBNC9BaUNOcWNzY2FWTEg0?=
- =?utf-8?B?aDdjQUFWRWdnTjVneUtGRjF2Uk5vU01naTI3ODhTZTJlQURlKzR0YW1ac20r?=
- =?utf-8?B?dVFvUElxQ293SjEwdFJzRE1TUlo5NVpoLzdDM1pVSStjcXFmUmhLSnRWZXhG?=
- =?utf-8?B?SnR0TGJtWUpkSWp3dXJVamZJQ0xIeTFSUThNeUtJSXNNdnBTdmU3OWtGZ1Vx?=
- =?utf-8?B?NnZZTmdoMXJQMGxCdnZVOHlLMHBOdUpzN01SMFBwd3BOeWlVMGV6elpRa3RR?=
- =?utf-8?B?c1FGNGowcmZZZTU0UjNBRlJxSmIyUmkxSnRqSGlETGZ1MEJNTmx5NXJGT1Vk?=
- =?utf-8?B?YWR2ODUxTElCZkg1L3VreXdsTlB0VjhVbzRuY01TdkZoc2RJOGw5Z2NZblY5?=
- =?utf-8?Q?Cm0CvB01Rqj7zVZV6/UlAgZKQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb84bda3-27c3-4c6f-05fb-08dbd431ef8a
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2023 01:38:34.1887
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HiWqFtlFPANe0cuU0wdSMQD0JDtj3pen4kOIFpzxzAKXS4zxNfu1XZC3H60UckO39BHVaM2bx2Uf2n/XZy5KTg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9211
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 23 Oct 2023 23:52:26 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C051BDC
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Oct 2023 20:52:23 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-778a20df8c3so281469485a.3
+        for <linux-integrity@vger.kernel.org>; Mon, 23 Oct 2023 20:52:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1698119543; x=1698724343; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PYQStjjr2Q8HKTHbB20ou4WiXIqkha1Xi9gNGY1VyVs=;
+        b=WAHBHXtjHEsNLoriS8vOtzrxgPI6/NMjDrdW5rIviWtRjDjfsUKxfuTOekd8pKSCyk
+         D1j8V4OyAzgJh5iLtBrkUgqGbWOPoj3VTOZC9JcpciWz4cfj+rKZxhmRF+aEX4hl+T//
+         nYVBex5k/D3yPgZa64W8kV4L66lKiEm323MlPTmkYLspb6+hojACf8PyxQeG/Yi1/2Fd
+         +OW/2kBtN4yHRtVJALJYvZoAKP6yTODb8TTIJABeqk/QHJmguWtEAWhvnIO3uRtSFoP6
+         Z31sTINDDOu0o0B9lHst/GL//IKm5o/Qqk6Ny3uJV1kKyC3Zjd7UiZcqkB+qzb9Ja7sv
+         JeXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698119543; x=1698724343;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PYQStjjr2Q8HKTHbB20ou4WiXIqkha1Xi9gNGY1VyVs=;
+        b=MnWtk1xXTfn6Mp8V5NvdJc/jh9LyxWsbx0Q1ueDWhRxlOVHrY3AKD0e9ccfALkULia
+         7ViJ5DkNjhq/tugA2p36azjkqLuS0cpgwf8xLkbbiLECvNktjT1DiEaV8jIj+mWDS0kh
+         A/ifeubcya+X05kwQgBeO5zXeGBIadJFpdo5ef4kLJGlDu7K5HPNfCt04PrRSOX4tJr3
+         no6xpJJMN2bvWLT66wHpYlhuUqVxnsWOC7iitNetvGn2x4AuaA011xeqNnWVEOYFd2Xc
+         Zbu8FzI/Ag4yQ//M4oJCg1dXobPkPK7TFs6otGxNJVJ+RoG1/qghJKbZSg+IbRgWJABb
+         DPdA==
+X-Gm-Message-State: AOJu0YxJEXLkubKyQFz6AALPjCZnlkd1s7gUc285hdQmvHy9nua0oIbi
+        wn8XxUHD5SWML3fwp/5IcaNg
+X-Google-Smtp-Source: AGHT+IHfXLDpTQH23RQCgDD0EvaJ8t5ssD/FP1FN3NpOgQNJgnc6N7o0sQ0agZuP/Pbj2axyoTKe+g==
+X-Received: by 2002:a05:620a:1a25:b0:772:6419:89ab with SMTP id bk37-20020a05620a1a2500b00772641989abmr13610179qkb.55.1698119542757;
+        Mon, 23 Oct 2023 20:52:22 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id bi12-20020a05620a318c00b00772662b7804sm3164703qkb.100.2023.10.23.20.52.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Oct 2023 20:52:22 -0700 (PDT)
+Date:   Mon, 23 Oct 2023 23:52:21 -0400
+Message-ID: <7c8c2a158c628a642078f746e5c42f2f.paul@paul-moore.com>
+From:   Paul Moore <paul@paul-moore.com>
+To:     Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
+Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, audit@vger.kernel.org,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Fan Wu <wufan@linux.microsoft.com>
+Subject: Re: [PATCH RFC v11 2/19] ipe: add policy parser
+References: <1696457386-3010-3-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1696457386-3010-3-git-send-email-wufan@linux.microsoft.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 10/23/2023 20:15, Jarkko Sakkinen wrote:
-> Add tpm_buf_read_u8(), tpm_buf_read_u16() and tpm_read_u32() for the sake
-> of more convenient parsing of TPM responses.
+On Oct  4, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
 > 
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> IPE's interpretation of the what the user trusts is accomplished through
+> its policy. IPE's design is to not provide support for a single trust
+> provider, but to support multiple providers to enable the end-user to
+> choose the best one to seek their needs.
+> 
+> This requires the policy to be rather flexible and modular so that
+> integrity providers, like fs-verity, dm-verity, dm-integrity, or
+> some other system, can plug into the policy with minimal code changes.
+> 
+> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 > ---
->   drivers/char/tpm/tpm-buf.c | 69 ++++++++++++++++++++++++++++++++++++++
->   include/linux/tpm.h        |  3 ++
->   2 files changed, 72 insertions(+)
+> v2:
+>   + Split evaluation loop, access control hooks,
+>     and evaluation loop from policy parser and userspace
+>     interface to pass mailing list character limit
 > 
-> diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-> index f1d92d7e758d..bcd3cbcd9dd9 100644
-> --- a/drivers/char/tpm/tpm-buf.c
-> +++ b/drivers/char/tpm/tpm-buf.c
-> @@ -124,3 +124,72 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
->   	tpm_buf_append(buf, (u8 *)&value2, 4);
->   }
->   EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
+> v3:
+>   + Move policy load and activation audit event to 03/12
+>   + Fix a potential panic when a policy failed to load.
+>   + use pr_warn for a failure to parse instead of an
+>     audit record
+>   + Remove comments from headers
+>   + Add lockdep assertions to ipe_update_active_policy and
+>     ipe_activate_policy
+>   + Fix up warnings with checkpatch --strict
+>   + Use file_ns_capable for CAP_MAC_ADMIN for securityfs
+>     nodes.
+>   + Use memdup_user instead of kzalloc+simple_write_to_buffer.
+>   + Remove strict_parse command line parameter, as it is added
+>     by the sysctl command line.
+>   + Prefix extern variables with ipe_
+> 
+> v4:
+>   + Remove securityfs to reverse-dependency
+>   + Add SHA1 reverse dependency.
+>   + Add versioning scheme for IPE properties, and associated
+>     interface to query the versioning scheme.
+>   + Cause a parser to always return an error on unknown syntax.
+>   + Remove strict_parse option
+>   + Change active_policy interface from sysctl, to securityfs,
+>     and change scheme.
+> 
+> v5:
+>   + Cause an error if a default action is not defined for each
+>     operation.
+>   + Minor function renames
+> 
+> v6:
+>   + No changes
+> 
+> v7:
+>   + Further split parser and userspace interface into two
+>     separate commits, for easier review.
+>   + Refactor policy parser to make code cleaner via introducing a
+>     more modular design, for easier extension of policy, and
+>     easier review.
+> 
+> v8:
+>   + remove unnecessary pr_info emission on parser loading
+>   + add explicit newline to the pr_err emitted when a parser
+>     fails to load.
+> 
+> v9:
+>   + switch to match table to parse policy
+>   + remove quote syntax and KERNEL_READ operation
+> 
+> v10:
+>   + Fix memory leaks in parser
+>   + Fix typos and change code styles
+> 
+> v11:
+>   + Fix code style issues
+> ---
+>  security/ipe/Makefile        |   2 +
+>  security/ipe/policy.c        | 101 ++++++++
+>  security/ipe/policy.h        |  83 ++++++
+>  security/ipe/policy_parser.c | 487 +++++++++++++++++++++++++++++++++++
+>  security/ipe/policy_parser.h |  11 +
+>  5 files changed, 684 insertions(+)
+>  create mode 100644 security/ipe/policy.c
+>  create mode 100644 security/ipe/policy.h
+>  create mode 100644 security/ipe/policy_parser.c
+>  create mode 100644 security/ipe/policy_parser.h
+
+...
+
+> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> new file mode 100644
+> index 000000000000..3a529c7950a1
+> --- /dev/null
+> +++ b/security/ipe/policy.c
+> @@ -0,0 +1,101 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+
+...
+
+> +static int set_pkcs7_data(void *ctx, const void *data, size_t len,
+> +			  size_t asn1hdrlen)
+> +{
+> +	struct ipe_policy *p = ctx;
+> +
+> +	p->text = (const char *)data;
+> +	p->textlen = len;
+> +
+> +	return 0;
+> +}
+
+The @asn1hdrlen parameter isn't used in this function, at least at this
+point in the patchset, so you really should remove it.  If it is needed
+later in the patchset you can always update the function.
+
+> diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parser.c
+> new file mode 100644
+> index 000000000000..c09458bd348d
+> --- /dev/null
+> +++ b/security/ipe/policy_parser.c
+> @@ -0,0 +1,487 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
+> + */
+
+...
+
+> +/**
+> + * remove_trailing_spaces - Truncate all trailing spaces in a string.
+> + *
+> + * @line: Supplies a poilcy line string for preprocessing.
+> + *
+> + * Return: The length of truncated string.
+> + */
+> +static size_t remove_trailing_spaces(char *line)
+> +{
+> +	size_t i = 0;
+> +
+> +	for (i = strlen(line); i > 0 && (line[i - 1] == ' ' || line[i - 1] == '\t'); --i)
+> +		;
+
+Maybe I've asked this before, I can't remember: could you use the
+isspace() macro here instead of explicitly checking for ' ' and '\t'?
+
+  i = strlen(line);
+  while (i > 0 && isspace(line[i - 1]))
+    i--;
+  line[i] = '\0';
+
+> +	line[i] = '\0';
+> +
+> +	return i;
+> +}
 > +
 > +/**
-> + * tpm_buf_read() - Read from a TPM buffer
-> + * @buf:	&tpm_buf instance
-> + * @offset:	offset within the buffer
-> + * @count:	the number of bytes to read
-> + * @output:	the output buffer
+> + * parse_version - Parse policy version.
+> + * @ver: Supplies a version string to be parsed.
+> + * @p: Supplies the partial parsed policy.
+> + *
+> + * Return:
+> + * * 0	- OK
+> + * * !0	- Standard errno
 > + */
-> +static void tpm_buf_read(const struct tpm_buf *buf, off_t *offset, size_t count, void *output)
+> +static int parse_version(char *ver, struct ipe_parsed_policy *p)
 > +{
-> +	if (*(offset + count) >= buf->length) {
-> +		WARN(1, "tpm_buf: overflow\n");
-> +		return;
+> +	int rc = 0;
+> +	size_t sep_count = 0;
+> +	char *token;
+> +	u16 *const cv[] = { &p->version.major, &p->version.minor, &p->version.rev };
+> +
+> +	while ((token = strsep(&ver, ".")) != NULL) {
+> +		/* prevent overflow */
+> +		if (sep_count >= ARRAY_SIZE(cv))
+> +			return -EBADMSG;
+> +
+> +		rc = kstrtou16(token, 10, cv[sep_count]);
+> +		if (rc)
+> +			return rc;
+> +
+> +		++sep_count;
+> +	}
+> +
+> +	/* prevent underflow */
+> +	if (sep_count != ARRAY_SIZE(cv))
+> +		rc = -EBADMSG;
+
+You could always just 'return -EBADMSG' here and 'return 0' below to
+simplify things a little.
+
+> +	return rc;
+> +}
+> +
+> +enum header_opt {
+> +	IPE_HEADER_POLICY_NAME = 0,
+> +	IPE_HEADER_POLICY_VERSION,
+> +	__IPE_HEADER_MAX
+> +};
+> +
+> +static const match_table_t header_tokens = {
+> +	{IPE_HEADER_POLICY_NAME,	"policy_name=%s"},
+> +	{IPE_HEADER_POLICY_VERSION,	"policy_version=%s"},
+> +	{__IPE_HEADER_MAX,		NULL}
+> +};
+> +
+> +/**
+> + * parse_header - Parse policy header information.
+> + * @line: Supplies header line to be parsed.
+> + * @p: Supplies the partial parsed policy.
+> + *
+> + * Return:
+> + * * 0	- OK
+> + * * !0	- Standard errno
+> + */
+> +static int parse_header(char *line, struct ipe_parsed_policy *p)
+> +{
+> +	int rc = 0;
+> +	char *t, *ver = NULL;
+> +	substring_t args[MAX_OPT_ARGS];
+> +	size_t idx = 0;
+> +
+> +	while ((t = strsep(&line, IPE_POLICY_DELIM)) != NULL) {
+> +		int token;
+> +
+> +		if (*t == '\0')
+> +			continue;
+> +		if (idx >= __IPE_HEADER_MAX) {
+> +			rc = -EBADMSG;
+> +			goto out;
+> +		}
+> +
+> +		token = match_token(t, header_tokens, args);
+> +		if (token != idx) {
+> +			rc = -EBADMSG;
+> +			goto out;
+> +		}
+> +
+> +		switch (token) {
+> +		case IPE_HEADER_POLICY_NAME:
+> +			p->name = match_strdup(&args[0]);
+> +			if (!p->name)
+> +				rc = -ENOMEM;
+> +			break;
+> +		case IPE_HEADER_POLICY_VERSION:
+> +			ver = match_strdup(&args[0]);
+> +			if (!ver) {
+> +				rc = -ENOMEM;
+> +				break;
+> +			}
+> +			rc = parse_version(ver, p);
+> +			break;
+> +		default:
+> +			rc = -EBADMSG;
+> +		}
+> +		if (rc)
+> +			goto out;
+> +		++idx;
+> +	}
+> +
+> +	if (idx != __IPE_HEADER_MAX) {
+> +		rc = -EBADMSG;
+> +		goto out;
+
+You probably don't need to 'goto out' here.
+
+> +	}
+> +
+> +out:
+> +	kfree(ver);
+> +	return rc;
+> +}
+
+...
+
+> +/**
+> + * parse_rule - parse a policy rule line.
+> + * @line: Supplies rule line to be parsed.
+> + * @p: Supplies the partial parsed policy.
+> + *
+> + * Return:
+> + * * !IS_ERR	- OK
+> + * * -ENOMEM	- Out of memory
+> + * * -EBADMSG	- Policy syntax error
+> + */
+> +static int parse_rule(char *line, struct ipe_parsed_policy *p)
+> +{
+> +	int rc = 0;
+> +	bool first_token = true, is_default_rule = false;
+> +	bool op_parsed = false;
+> +	enum ipe_op_type op = IPE_OP_INVALID;
+> +	enum ipe_action_type action = IPE_ACTION_INVALID;
+> +	struct ipe_rule *r = NULL;
+> +	char *t;
+> +
+> +	r = kzalloc(sizeof(*r), GFP_KERNEL);
+> +	if (!r)
+> +		return -ENOMEM;
+> +
+> +	INIT_LIST_HEAD(&r->next);
+> +	INIT_LIST_HEAD(&r->props);
+> +
+> +	while (t = strsep(&line, IPE_POLICY_DELIM), line) {
+> +		if (*t == '\0')
+> +			continue;
+> +		if (first_token && token_default(t)) {
+> +			is_default_rule = true;
+> +		} else {
+> +			if (!op_parsed) {
+> +				op = parse_operation(t);
+> +				if (op == IPE_OP_INVALID)
+> +					rc = -EBADMSG;
+> +				else
+> +					op_parsed = true;
+> +			} else {
+> +				rc = parse_property(t, r);
+> +			}
+> +		}
+> +
+> +		if (rc)
+> +			goto err;
+> +		first_token = false;
+> +	}
+> +
+> +	action = parse_action(t);
+> +	if (action == IPE_ACTION_INVALID) {
+> +		rc = -EBADMSG;
+> +		goto err;
+> +	}
+> +
+> +	if (is_default_rule) {
+> +		if (!list_empty(&r->props)) {
+> +			rc = -EBADMSG;
+> +		} else if (op == IPE_OP_INVALID) {
+> +			if (p->global_default_action != IPE_ACTION_INVALID)
+> +				rc = -EBADMSG;
+> +			else
+> +				p->global_default_action = action;
+> +		} else {
+> +			if (p->rules[op].default_action != IPE_ACTION_INVALID)
+> +				rc = -EBADMSG;
+> +			else
+> +				p->rules[op].default_action = action;
+> +		}
+> +	} else if (op != IPE_OP_INVALID && action != IPE_ACTION_INVALID) {
+> +		r->op = op;
+> +		r->action = action;
+> +	} else {
+> +		rc = -EBADMSG;
 > +	}
 
-In the overflow case wouldn't you want to pass an error code up instead 
-of just showing a WARN trace?
+I might be missing something important in the policy syntac, but could
+this function, and perhaps the ipe_parsed_policy struct, be simplified
+if the default action was an explicit rule?
 
-The helper functions can't tell the difference, and the net outcome is 
-going to be that if there is overflow you get a warning trace in the 
-kernel log and whatever garbage "value" happened to have going to the 
-caller.  It's a programmer error but it's also unpredictable what 
-happens here.
+ "op=DEFAULT action=ALLOW"
 
-I think it's cleaner to have callers of 
-tpm_buf_read_u8/tpm_buf_read_u16/tpm_buf_read_u32 to to be able to know 
-something wrong happened.
-
+> +	if (rc)
+> +		goto err;
+> +	if (!is_default_rule)
+> +		list_add_tail(&r->next, &p->rules[op].rules);
+> +	else
+> +		free_rule(r);
 > +
-> +	memcpy(output, &buf->data[*offset], count);
-> +	*offset += count;
+> +	return rc;
+> +err:
+> +	free_rule(r);
+> +	return rc;
 > +}
 > +
 > +/**
-> + * tpm_buf_read_u8() - Read 8-bit word from a TPM buffer
-> + * @buf:	&tpm_buf instance
-> + * @offset:	offset within the buffer
-> + *
-> + * Return: next 8-bit word
+> + * free_parsed_policy - free a parsed policy structure.
+> + * @p: Supplies the parsed policy.
 > + */
-> +u8 tpm_buf_read_u8(const struct tpm_buf *buf, off_t *offset)
+> +void free_parsed_policy(struct ipe_parsed_policy *p)
 > +{
-> +	u8 value;
+> +	size_t i = 0;
+> +	struct ipe_rule *pp, *t;
 > +
-> +	tpm_buf_read(buf, offset, sizeof(value), &value);
+> +	if (IS_ERR_OR_NULL(p))
+> +		return;
 > +
-> +	return value;
+> +	for (i = 0; i < ARRAY_SIZE(p->rules); ++i)
+> +		list_for_each_entry_safe(pp, t, &p->rules[i].rules, next) {
+> +			list_del(&pp->next);
+> +			free_rule(pp);
+> +		}
+> +
+> +	kfree(p->name);
+> +	kfree(p);
 > +}
-> +EXPORT_SYMBOL_GPL(tpm_buf_read_u8);
 > +
 > +/**
-> + * tpm_buf_read_u16() - Read 16-bit word from a TPM buffer
-> + * @buf:	&tpm_buf instance
-> + * @offset:	offset within the buffer
+> + * validate_policy - validate a parsed policy.
+> + * @p: Supplies the fully parsed policy.
 > + *
-> + * Return: next 16-bit word
-> + */
-> +u16 tpm_buf_read_u16(const struct tpm_buf *buf, off_t *offset)
-> +{
-> +	u16 value;
-> +
-> +	tpm_buf_read(buf, offset, sizeof(value), &value);
-> +
-> +	return be16_to_cpu(value);
-> +}
-> +EXPORT_SYMBOL_GPL(tpm_buf_read_u16);
-> +
-> +/**
-> + * tpm_buf_read_u32() - Read 32-bit word from a TPM buffer
-> + * @buf:	&tpm_buf instance
-> + * @offset:	offset within the buffer
+> + * Given a policy structure that was just parsed, validate that all
+> + * necessary fields are present, initialized correctly.
 > + *
-> + * Return: next 32-bit word
+> + * A parsed policy can be in an invalid state for use (a default was
+> + * undefined) by just parsing the policy.
+> + *
+> + * Return:
+> + * * 0		- OK
+> + * * -EBADMSG	- Policy is invalid
 > + */
-> +u32 tpm_buf_read_u32(const struct tpm_buf *buf, off_t *offset)
+> +static int validate_policy(const struct ipe_parsed_policy *p)
 > +{
-> +	u32 value;
+> +	size_t i = 0;
 > +
-> +	tpm_buf_read(buf, offset, sizeof(value), &value);
-> +
-> +	return be32_to_cpu(value);
-> +}
-> +EXPORT_SYMBOL_GPL(tpm_buf_read_u32);
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 687b5173bdab..6590bd1f0a0e 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -337,6 +337,9 @@ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length);
->   void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value);
->   void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value);
->   void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value);
-> +u8 tpm_buf_read_u8(const struct tpm_buf *buf, off_t *offset);
-> +u16 tpm_buf_read_u16(const struct tpm_buf *buf, off_t *offset);
-> +u32 tpm_buf_read_u32(const struct tpm_buf *buf, off_t *offset);
->   
->   /*
->    * Check if TPM device is in the firmware upgrade mode.
+> +	if (p->global_default_action != IPE_ACTION_INVALID)
+> +		return 0;
 
+Should the if conditional above be "==" and not "!="?
+
+> +	for (i = 0; i < ARRAY_SIZE(p->rules); ++i) {
+> +		if (p->rules[i].default_action == IPE_ACTION_INVALID)
+> +			return -EBADMSG;
+> +	}
+> +
+> +	return 0;
+> +}
+
+--
+paul-moore.com
