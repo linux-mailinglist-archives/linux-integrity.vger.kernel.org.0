@@ -2,67 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBCF7D5056
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Oct 2023 14:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17737D548B
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Oct 2023 16:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234394AbjJXMxi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Oct 2023 08:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
+        id S234610AbjJXO6h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Oct 2023 10:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbjJXMxi (ORCPT
+        with ESMTP id S234594AbjJXO6g (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Oct 2023 08:53:38 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A05CC;
-        Tue, 24 Oct 2023 05:53:36 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-3b2e22f1937so2640499b6e.1;
-        Tue, 24 Oct 2023 05:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698152015; x=1698756815; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EM4Fv3c8UGojmnjnYetmNItfOCNpkkeFenXKakvLeSo=;
-        b=Y+TrhITclIRcUFmPoKsJ17xphlS7bSUNMUwsF117LM+ijrB/S4+WZizp5Cj8tpNC/D
-         Vgdd/vGqRJH+ZLu+MST9XCvpbNWekgcyNaYJ1Z57ZnIvTdQCISk83XiLyGN0BEis25sU
-         EeTPxSSzjlycYiaWMDzkYBEjwvsDLLRKrSLSXBWDtxrXLinnPlGDF6e8F1U+ufsYxafH
-         P9qJLLAwuZBIkw184Vb/9nhCoHoj5mRq14xUxReLyOlKiom0LzMSQVAlPvNp2yEnsbU5
-         YAMQ6pWjBueH1giluQhkT0quMcYX7Z4EQxwDlQh3KKhLrQVM7dO7SzcFtQxJzxxgVB/e
-         Kv+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698152015; x=1698756815;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EM4Fv3c8UGojmnjnYetmNItfOCNpkkeFenXKakvLeSo=;
-        b=KJn/L2KtMjibf2Xw4AMfmuqeV/ygblm8GH7ybDt6J23sH+U5WrLdWtAp2gXXkgSZ5P
-         /sPPPE6nwgjpkV/38hQrRXrCFGOEQmmUX/ijuXzXMgdlHbp1lMhlIRiJIwIuC9aU+MEf
-         nsmd7gVsjEAuOlTtVZkL4Srur69nhxc5/a15fS1/TdU6e1LvnjeJstFyuBHExAy2/KjF
-         lnlr4AS6+S0dJMrBbcmgYFNYBPu0QVcepZ6REUieL2XRiVFMeFS7zRlydkzM3OWE4/fy
-         G+Yk2o1ytnAIwSdJJ8JBwkrzQ7i30TgW1OkheGzDHnZCwp2Yb/dbKZvjYjttyGFjGAA1
-         wpPA==
-X-Gm-Message-State: AOJu0Yw2B2//R/HY0qGUUjb/HYBS/fDacwgCtWI9NItpS7tEGlYAF1b1
-        nkLL0YokpRCeCxL2sENc9xXijimcoEZbEpYm9T/OR0MOtDqszA==
-X-Google-Smtp-Source: AGHT+IFROi++TBTG5fQCokZI6lvT1I1p/ESAbrAV4OkrXB6oEmWv7QskQP+v15eyN2/jVo7Hgah70FotEqZbJneSTgw=
-X-Received: by 2002:a05:6808:1a8e:b0:3a7:57a6:e077 with SMTP id
- bm14-20020a0568081a8e00b003a757a6e077mr12319707oib.37.1698152015597; Tue, 24
- Oct 2023 05:53:35 -0700 (PDT)
+        Tue, 24 Oct 2023 10:58:36 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED8ACC;
+        Tue, 24 Oct 2023 07:58:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698159514; x=1729695514;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=C6IdOkpwYw0wn6gnNyHdezVBscMASvkkdmL0IsrKTB4=;
+  b=lxA+ktu1i7bHsnLoRENmxbe3jf3C4T4B4nPolAFkKBEniXbkGT3TL8Fm
+   fBcw3XfRPDNhQmQU8zSXP6KSxDxS6/naJ41WwAPP6ZRuixXl53IsC+c5Q
+   QLK4D0cfs3n2t2Wz845tf9UJ/oUY/OSpmv6HaSG/1Ti2qoW1Bc9vYBhJK
+   wNBC+srRtpSiUu4QyDvgVj0XHCGdt+dFZHdldOsQ3f9D8ovvHL3hS+8fS
+   vlpRMdwGcM1Sf2+mBkYDnshsc6TuJVmjDDhVQ+GCNVjIKQZWKsrqyP7QA
+   hGUCSbKjHczwVFvalprYTZwWZ+0yS0gNzHp2jvT7TraeR9ULXkpoDwLaT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="8628355"
+X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
+   d="scan'208";a="8628355"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 07:58:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="752020214"
+X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
+   d="scan'208";a="752020214"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Oct 2023 07:58:26 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Tue, 24 Oct 2023 07:58:25 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Tue, 24 Oct 2023 07:58:25 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Tue, 24 Oct 2023 07:58:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Wjuk/pW9epPX/FOusgSl61Vvmw84JesLRZd3LwcWwOptsjmdAAnCP6GLaZoZyDXRUlVUCm2t7HSrioob3mEvfYbqywggvyB2in5FRKzWG/7OwwGtI7i7dc26YC3ThQhr6Yb0HlhPoAhj9DtE1/XfnHNANgnIAUOt7q4zokWMQOVLNYqyVMs8dF1gVItB/ZJPsGETIKW18arZFOEtPJo06KY1L4y19oVRaNmgMn9eM4md7YXpOXPO3j0+fSJ4KKx+Szj2+WVGrsB/qLN9ldLxmCUuVnEp9G1bt7bya4Lp4Yr82lrM/x+nHdXtWwv1wQzPnq2/sXoutNoL2Wt1153Yng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y8XBX0j0ydhGIkL0qgMDNdsWCbMCEwGqKzO5JaoqHWE=;
+ b=oasHWGF65Gf4GOH7Eqbr0jC9LBQ+3vJNQ0++pzuXAn6VcNN9YeKG7X8ryKqW8xPAgUBqHigcImJnSp0kjE1lPd4wuk5yPYjjq8Lkn3tlFGdDg6wdm7UQSw7oZwuaGbAt3lizzkeSpMOKRdt8i85n8Ry5ADKvFCmILrIs9ot3gVqYr2nGwnyYPEirPFTfy0O2Sm2SY5Tis0vjBE1X5OQvSq+2tSZdtmwFajwc8BcNXMRElzVVJDpyV8ioecCrtdOJcVhEU1FWkUdWBDbF6UVDS/IjjX2GmRWh4ZhRZbIiAqeKJFRT67EUxz3kzcgub3C9jkgX/opluaoebizjaE3HQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB6779.namprd11.prod.outlook.com (2603:10b6:510:1ca::17)
+ by DS7PR11MB7691.namprd11.prod.outlook.com (2603:10b6:8:e4::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33; Tue, 24 Oct
+ 2023 14:58:18 +0000
+Received: from PH8PR11MB6779.namprd11.prod.outlook.com
+ ([fe80::29f0:3f0f:2591:d1f6]) by PH8PR11MB6779.namprd11.prod.outlook.com
+ ([fe80::29f0:3f0f:2591:d1f6%3]) with mapi id 15.20.6907.032; Tue, 24 Oct 2023
+ 14:58:17 +0000
+Date:   Tue, 24 Oct 2023 22:58:10 +0800
+From:   kernel test robot <oliver.sang@intel.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+CC:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>, <oliver.sang@intel.com>
+Subject: [robertosassu:ima-evm-lsms-v4-devel-v7] [evm]  ea31d8b249:
+ Kernel_panic-not_syncing:security_add_hooks_Too_many_LSMs_registered
+Message-ID: <202310242253.12601f42-oliver.sang@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: SG2PR04CA0194.apcprd04.prod.outlook.com
+ (2603:1096:4:14::32) To PH8PR11MB6779.namprd11.prod.outlook.com
+ (2603:10b6:510:1ca::17)
 MIME-Version: 1.0
-References: <20231024120845.942815-1-zohar@linux.ibm.com>
-In-Reply-To: <20231024120845.942815-1-zohar@linux.ibm.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 24 Oct 2023 15:53:24 +0300
-Message-ID: <CAOQ4uxiWCm5o+iezCOKVcunZaec=3AxY+z6BWuX7thaZ3+6p6Q@mail.gmail.com>
-Subject: Re: [PATCH] ima: detect changes to the backing overlay file
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Raul Rangel <rrangel@chromium.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB6779:EE_|DS7PR11MB7691:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6fb0d005-0329-406b-943b-08dbd4a1a7f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z8Y892IxGcOzDujuH7M8MGPlp1/7KsjZj9+TzWscmcW9JRqkK8dVp0KGvtI/b9pq08GBYSJk/3H2gF3oo8y4ZOQx3n2fTJT64q4PedDQAC/443Nw50eoZ257iqPxqzw5kVCg3REZpnTU3EtM6x88LNTFNMXX2S546XFarWhxsk3Bxbs9/BK87wjdICVSda2vR8jlKkkNSxW+ifwA3QWiJ1f0cfrEuwD6YKFpfPxzJSmxXXTr/6Tg1hPKxPSJirOIPTQMCb+67VaYkiy33QKRhKNfCFhea4OXzPchc1u+j2zfK9Iag6JzHXKgxO9olBIqfxRuiAKa7uwPRvn8+AJc6RDBofBt3dlrxk5iz0IWOnuK7xdD7sk7l4W8Z9Yo9/UNYPgdHh9IyB2b33kComnfWevKeBJn7e887CPNSEQ52siNquIxT/h8k+ROM/qN63GPS04w7xJsIHYhaL91Rfb1zOeJb2mzwrSiBt5G2e8StmwWqwM7buVrWNGcdWa8GdmeMsg5oRQFa8GFA/7SGYFJYG/YkFBxAd8RoClo2Fw6wsZFc9FN0RCa+SoL0/IZCGf1rbIC/zXYTkXzTIjEp9I4qQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6779.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(376002)(396003)(346002)(366004)(230922051799003)(64100799003)(186009)(451199024)(1800799009)(2906002)(4326008)(8676002)(8936002)(5660300002)(41300700001)(6506007)(6666004)(83380400001)(6512007)(38100700002)(86362001)(15650500001)(82960400001)(66946007)(107886003)(66556008)(66476007)(6916009)(316002)(966005)(6486002)(2616005)(26005)(1076003)(478600001)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D3x47SiEMm1AhHLrMXWKPXLklSD6+Ucor8mfmh+Kq19GI7Z09SJSvO/Yhq9c?=
+ =?us-ascii?Q?Y9bEsui4PD1hK8IN2+MNpHG2iuFj4ceG4qb9uDa2dJkfCyqtb5TOfd2NSmQK?=
+ =?us-ascii?Q?zGXm3IiV5AgaDEsaTGOIoteLbmDoapaQSC/e8KB5VN1KyA0aOx41ZVgXJ1Fy?=
+ =?us-ascii?Q?NekXeJCaD6XapxNBT/OgY8OcD0Hp0ifW7n2x1toLbJ3G8bHNbFFEfcIw5bIe?=
+ =?us-ascii?Q?duKRQMFeKBGFLWHde0tBQXSvQ8dBliqsro0vprX6Xvkw6A12ONyNnBhZ3YXM?=
+ =?us-ascii?Q?xh6Rk1pGWYDlor8ARA7Sft9GnVmsKb8sOj9FZDE0wQUQi21nPzczLges4wF4?=
+ =?us-ascii?Q?X8PdLgU4i0/w5fa7OK4KWZkNdcKolUmtsHavSdFb2HtHKMTMduitC//xjr2G?=
+ =?us-ascii?Q?wL/Tp0gtPhdZCtrK9zsdTjABE/tjUPLccvr0zHqbYYAHGkN5bWlsi6yDlgGm?=
+ =?us-ascii?Q?yoAayFY3MJ6/GP4BKGQXGH4i9UzM498AOKn29dv+m4/XzE+/OqkWHEqwvckI?=
+ =?us-ascii?Q?gYIPcIL1NrpqBRMWX9HBW8a0pz+V9IMudtnRUFMbASXrJYJDbw59O1AuZS4H?=
+ =?us-ascii?Q?Vqm56KeplXNJxyQ+Ouij5La2NLBjHVpssZtU9lWvNmSjS/+BUhSx214z56ah?=
+ =?us-ascii?Q?NpTFGO8hyhVqTyVHS+TvZkCOTjH45MGgxhIgqIxWMRFvhtrg3kV6xocfBhr1?=
+ =?us-ascii?Q?7HP02bLrDiL7lbIikbI5sg7kS2QMuNwykN9Vr2HqdjiAKypfTpzi2QkUZyb1?=
+ =?us-ascii?Q?YrXkmhM0x+wLbVgdcR5k8/Q4pM9X8+1zVLSWVTgFM/y7v+uRlHeMB9dYhW/K?=
+ =?us-ascii?Q?Vvkos7AAjosrQewZhRmPz8tAKYPkSnjmpAfurM2JxWd2Xn1ztnEZ75cOMw+/?=
+ =?us-ascii?Q?YvJ29ePDWp1gP+cSu/vOrZkk4Zkw+ughjjzo7HUniQ/teE5RULD6gtni6xWG?=
+ =?us-ascii?Q?X3sI+mCL/Q9dS10bfir18t1uT3MH2O1U+y2tj4cScWf+J2KIVbrLXqPOaUq7?=
+ =?us-ascii?Q?j7w9YTeomjHWtJozZzTpGFCTOd1mvv2lr5w6yaEVnmBmXj7mg+hYaiuS4Wzf?=
+ =?us-ascii?Q?SPw37BWDTaBSESX3IoliTxMq48hiK2hnlWHLGhvUpj2leAsyENSnGdidfg6i?=
+ =?us-ascii?Q?WAPo2wS0CXA2JNfODOcia74wCuEtqq3R3ml0RL/Z0QG5NXzB/EwvhFL/AQE0?=
+ =?us-ascii?Q?Ak7lo4uhNggnfOLi4NoPcfKkKBMGcANHW3tbywLRNpk0fZNiBOeU+ZpJPJDH?=
+ =?us-ascii?Q?ZkJFHgwbOR/dljkJLAI1WQTlS9tEydQ+32g7K5oA8hHJ3dX8kiMk6+XHEWKz?=
+ =?us-ascii?Q?2j1JgYT7HTUOQ+EjZNbSmNLHIm0OvpVssSR7uj39IhnsxS8rp32pLy40BMpZ?=
+ =?us-ascii?Q?WsdOnn2ugKkkT4Q9V2kneK8/vXYe/Lme7plFPRcWq1xFtahPpPNsNdCXC6PE?=
+ =?us-ascii?Q?tR+ax3H2ftdGkCzblUbh6hpnt9B2Lu5WgEzP0F1Ou1BFolAsnA0L0oLHXqPF?=
+ =?us-ascii?Q?QlDPcwIqlunOYGDs/v4Dqp32U9QkSuxUduwVIQIo8XjI2wPk2Vz3xgb+YBjz?=
+ =?us-ascii?Q?3DkOTjxm1GRNiHrM8spNxQkXj3q+kg1HouZTFCfRcJPHVbNFFfyDeUvf016T?=
+ =?us-ascii?Q?sQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fb0d005-0329-406b-943b-08dbd4a1a7f6
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6779.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2023 14:58:17.7654
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hID5v3OuXGZB68VFSABI6NLa2ksyjAW5ZgA6g7H0rno7Mv/Pil+Jq/kB1ctVBpzpC4teh+f7+V7U9XdP/CORRA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7691
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,118 +145,65 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 3:09=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
->
-> Commit 18b44bc5a672 ("ovl: Always reevaluate the file signature for
-> IMA") forced signature re-evaulation on every file access.
->
-> IMA does not detect changes made to the backing overlay file.  Instead
-> of always re-evaluating the file's integrity, detect a change to the
-> backing overlay file, by comparing the i_version, as stored in the iint,
-> with the backing file's i_version.
->
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  fs/overlayfs/super.c              |  2 +-
->  security/integrity/ima/ima_api.c  |  1 +
->  security/integrity/ima/ima_main.c | 21 ++++++++++++++++++++-
->  3 files changed, 22 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
-> index def266b5e2a3..4d9137ba2293 100644
-> --- a/fs/overlayfs/super.c
-> +++ b/fs/overlayfs/super.c
-> @@ -1482,7 +1482,7 @@ int ovl_fill_super(struct super_block *sb, struct f=
-s_context *fc)
->                 ovl_trusted_xattr_handlers;
->         sb->s_fs_info =3D ofs;
->         sb->s_flags |=3D SB_POSIXACL;
-> -       sb->s_iflags |=3D SB_I_SKIP_SYNC | SB_I_IMA_UNVERIFIABLE_SIGNATUR=
-E;
-> +       sb->s_iflags |=3D SB_I_SKIP_SYNC;
->
->         err =3D -ENOMEM;
->         root_dentry =3D ovl_get_root(sb, ctx->upper.dentry, oe);
-> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/im=
-a_api.c
-> index 452e80b541e5..d1c718ef9295 100644
-> --- a/security/integrity/ima/ima_api.c
-> +++ b/security/integrity/ima/ima_api.c
-> @@ -272,6 +272,7 @@ int ima_collect_measurement(struct integrity_iint_cac=
-he *iint,
->                                    AT_STATX_SYNC_AS_STAT);
->         if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
->                 i_version =3D stat.change_cookie;
-> +
->         hash.hdr.algo =3D algo;
->         hash.hdr.length =3D hash_digest_size[algo];
->
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index 365db0e43d7c..7c8aac81d16e 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -25,6 +25,7 @@
->  #include <linux/xattr.h>
->  #include <linux/ima.h>
->  #include <linux/fs.h>
-> +#include <linux/iversion.h>
->
->  #include "ima.h"
->
-> @@ -207,7 +208,7 @@ static int process_measurement(struct file *file, con=
-st struct cred *cred,
->                                u32 secid, char *buf, loff_t size, int mas=
-k,
->                                enum ima_hooks func)
->  {
-> -       struct inode *inode =3D file_inode(file);
-> +       struct inode *backing_inode, *inode =3D file_inode(file);
->         struct integrity_iint_cache *iint =3D NULL;
->         struct ima_template_desc *template_desc =3D NULL;
->         char *pathbuf =3D NULL;
-> @@ -284,6 +285,24 @@ static int process_measurement(struct file *file, co=
-nst struct cred *cred,
->                 iint->measured_pcrs =3D 0;
->         }
->
-> +       /*
-> +        * IMA does not detect changes made to the backing overlay file.
-> +        * If the backing file's i_version is greater than the overlay
-> +        * file's i_version or the backing file doesn't support iversion,
-> +        * clear the cache to force the file's integrity to be re-evaluat=
-ed.
-> +        */
-> +       if (inode->i_sb->s_magic =3D=3D 0x794c7630 &&
-
-Please don't use magic to detect overlayfs.
-Overlayfs is not the only fs that can have a backing file
-and this test is not needed.
-
-> +           (action & IMA_DO_MASK) && (iint->flags & IMA_DONE_MASK)) {
-> +               backing_inode =3D d_real_inode(file_dentry(file));
-> +               if (backing_inode !=3D inode) {
-
-This test is sufficient, because for regular files of filesystems
-without ->d_real(),
-backing_inode will always be =3D=3D inode.
-
-> +                       if (!IS_I_VERSION(backing_inode) ||
-> +                           inode_peek_iversion(backing_inode) > iint->ve=
-rsion) {
 
 
-IIUC, this checking > iint->version is not enough.
-The reason is that you could have recorded iint->version from i_version
-of a lower file, after open for write, lower file gets copied up to upper f=
-ile,
-which is a completely different backing_inode, so there is no guarantee
-that the copy up will not result in a smaller or even equal i_version.
+Message-ID: <202310242253.12601f42-oliver.sang@intel.com>
+TO: Roberto Sassu <roberto.sassu@huawei.com>
+CC: oe-lkp@lists.linux.dev, lkp@intel.com, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org
+BCC: 
 
-For a complete solution, you will need to store the backing_inode
-pointer or backing dev/ino in iint to make sure that backing_inode did not
-change.
 
-Thanks,
-Amir.
+
+Hello,
+
+kernel test robot noticed "Kernel_panic-not_syncing:security_add_hooks_Too_many_LSMs_registered" on:
+
+commit: ea31d8b2497ad757c81550037fe49a28e8fe5887 ("evm: Move to LSM infrastructure")
+https://github.com/robertosassu/linux ima-evm-lsms-v4-devel-v7
+
+in testcase: boot
+
+compiler: gcc-12
+test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+
+(please refer to attached dmesg/kmsg for entire log/backtrace)
+
+
++----------------------------------------------------------------------+------------+------------+
+|                                                                      | df77cb3dab | ea31d8b249 |
++----------------------------------------------------------------------+------------+------------+
+| Kernel_panic-not_syncing:security_add_hooks_Too_many_LSMs_registered | 0          | 6          |
++----------------------------------------------------------------------+------------+------------+
+
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <oliver.sang@intel.com>
+| Closes: https://lore.kernel.org/oe-lkp/202310242253.12601f42-oliver.sang@intel.com
+
+
+[    9.120367][    T0] x86/fpu: x87 FPU will use FXSAVE
+[    9.133888][    T0] Freeing SMP alternatives memory: 32K
+[    9.136370][    T0] pid_max: default: 32768 minimum: 301
+[    9.144589][    T0] LSM: initializing lsm=capability,landlock,safesetid,integrity,ima,evm
+[    9.148867][    T0] landlock: Up and running.
+[    9.152625][    T0] Kernel panic - not syncing: security_add_hooks Too many LSMs registered.
+[    9.156308][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.6.0-rc3-00044-gea31d8b2497a #1 0abe8f00443bfd0d07e7cec4aee08e82c1b9667d
+[    9.156308][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+[    9.156308][    T0] Call Trace:
+[ 9.156308][ T0] dump_stack_lvl (kbuild/src/consumer/lib/dump_stack.c:107) 
+[ 9.156308][ T0] dump_stack (kbuild/src/consumer/lib/dump_stack.c:114) 
+[ 9.156308][ T0] panic (kbuild/src/consumer/kernel/panic.c:340) 
+[ 9.156308][ T0] security_add_hooks (kbuild/src/consumer/security/security.c:559) 
+[ 9.156308][ T0] init_evm_lsm (kbuild/src/consumer/security/integrity/evm/evm_main.c:1046) 
+
+
+The kernel config and materials to reproduce are available at:
+https://download.01.org/0day-ci/archive/20231024/202310242253.12601f42-oliver.sang@intel.com
+
+
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
