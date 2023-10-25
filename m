@@ -2,206 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037D27D6F44
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Oct 2023 16:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E6C7D704A
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Oct 2023 17:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234548AbjJYOjV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 25 Oct 2023 10:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        id S1344424AbjJYO7b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Oct 2023 10:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbjJYOjU (ORCPT
+        with ESMTP id S1344016AbjJYO7b (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 25 Oct 2023 10:39:20 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16B9DC;
-        Wed, 25 Oct 2023 07:39:18 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39PEbVSZ024028;
-        Wed, 25 Oct 2023 14:39:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=RYXWvuKz5XjJBreeczhKCB8gTjqEoUBBUnk+NwYH+4E=;
- b=OYkpf1109S/oUqzR+BosX5SlIrviFIq7sYugVLF4s5MB46BU0R2ojlmDpuL1Nh3C1Nyo
- jOSIrPdS7APQ+GeOrhZ7QEyL8airBVBE5kpQA53pY2lXk31K/mHaiR4F7BprwJjDhWfm
- 7ruc51/ofrag7sMog+qdVtevygxOUmk21F3uZ7vKK6qq185kEWNIVGG3UTP077IxPBiL
- UqFJrR3dLYJYlwwXAeTLfD2ep7t03jnPXXKIdHazACygjIRuqfmR416EgSMy4DUHm+Uz
- VKLbXdlZuV5VhXt5TNMp0kX2Y+CtNeWJmoRinJvwXB71nwJRjI7juFJlGQtF2cNzpxCa 3A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ty4xm841h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Oct 2023 14:39:15 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39PEcMVV028948;
-        Wed, 25 Oct 2023 14:39:14 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ty4xm83ye-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Oct 2023 14:39:14 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39PCmdJ4023782;
-        Wed, 25 Oct 2023 14:39:13 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tvryt7ghr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Oct 2023 14:39:13 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39PEdBWb18940616
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Oct 2023 14:39:11 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 981BF20043;
-        Wed, 25 Oct 2023 14:39:11 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 040832004B;
-        Wed, 25 Oct 2023 14:39:10 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.61.173.216])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Oct 2023 14:39:09 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Raul Rangel <rrangel@chromium.org>,
+        Wed, 25 Oct 2023 10:59:31 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BABDDC
+        for <linux-integrity@vger.kernel.org>; Wed, 25 Oct 2023 07:59:29 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-49dc95be8c3so2222635e0c.0
+        for <linux-integrity@vger.kernel.org>; Wed, 25 Oct 2023 07:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1698245968; x=1698850768; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iYQ3okT5d3Nr7vbYAmBVtOHd+MxXyv8cMuIfiU00t8Q=;
+        b=k9LuhC8utHiHVdo8FxNHJ/oWyVNKWqsXLh3sCWCCqEZgBT5aEqZnFDzonvxqOFEg5q
+         UUAs8dUTs8o7QC6HWdRqTNyAsPHmklsq26BSNT9ZyELYIMhciUwK6+YkE9vSakWmISX3
+         E8lNh1ngirnhKG4B1RjMHeasWD1Vte5NfPjGU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698245968; x=1698850768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iYQ3okT5d3Nr7vbYAmBVtOHd+MxXyv8cMuIfiU00t8Q=;
+        b=lXpgrTz9UDC0cE0ZFu8dS37SvgAx6mSJrzrMZKuZZNOdANu8R9mMTuGPbHhHozmaqt
+         KyhXOpUOdGCUicmlXT3UganBp8HhTNsjtuKIX1O4TSdB0i/XyANOpuheBDqbENolBEMh
+         ehGez82fyb5QOYAS+BM11MQURtS2uqFMKK7IG2sJNl2/hpe3ffEhg0Wb3dLM5Xlt6kv9
+         TtP+zjheHWV3DEvoGaIRQmmniwhbQ87jS8d1c9nHDiZnTSRPEfao8jmGP6atGoHtj9qO
+         /GwSUxiUJSApZMejazsWhdPnSy7PskcPa6Gms+vEKeHdjtYsB4+aRPTZZAeg/UYG7zto
+         gxyQ==
+X-Gm-Message-State: AOJu0Yx15LDLVk+2ij+CG7L05HWyJeThZMkcxmZV9LN6TElXIi4VlPWE
+        Co67rlpRZM1TShraT4JWhVtENCPFVHwF3AKRrN8=
+X-Google-Smtp-Source: AGHT+IHI/DrZn37oro9HlyZLu/DU5faMwMNB2/t3Q3xJLLz7IMjv1WfjfM8RJhexNXd0jjXEVlttkg==
+X-Received: by 2002:a1f:9e4c:0:b0:4a8:d86b:9fd0 with SMTP id h73-20020a1f9e4c000000b004a8d86b9fd0mr3812124vke.3.1698245967975;
+        Wed, 25 Oct 2023 07:59:27 -0700 (PDT)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id r10-20020a056122014a00b0049d28bbb8e8sm2027vko.32.2023.10.25.07.59.27
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Oct 2023 07:59:27 -0700 (PDT)
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-49d0f24a815so2208234e0c.2
+        for <linux-integrity@vger.kernel.org>; Wed, 25 Oct 2023 07:59:27 -0700 (PDT)
+X-Received: by 2002:a67:c190:0:b0:458:8ef9:a27d with SMTP id
+ h16-20020a67c190000000b004588ef9a27dmr12269216vsj.20.1698245966786; Wed, 25
+ Oct 2023 07:59:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231025143906.133218-1-zohar@linux.ibm.com>
+In-Reply-To: <20231025143906.133218-1-zohar@linux.ibm.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Wed, 25 Oct 2023 08:59:13 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30BSD2c4WwUTARx9OeqTjusgq7te8OzwdUi6Qk+L=9vSgA@mail.gmail.com>
+Message-ID: <CAHQZ30BSD2c4WwUTARx9OeqTjusgq7te8OzwdUi6Qk+L=9vSgA@mail.gmail.com>
+Subject: Re: [PATCH v3] ima: detect changes to the backing overlay file
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         Eric Snowberg <eric.snowberg@oracle.com>,
         Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH v3] ima: detect changes to the backing overlay file
-Date:   Wed, 25 Oct 2023 10:39:06 -0400
-Message-Id: <20231025143906.133218-1-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.39.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: joOI4uH9uQaVio3nKlfp2aKU68fHikf1
-X-Proofpoint-ORIG-GUID: 8ZoHP_6UuIBbW08_9lxLtmvKMoVu_EO2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-25_04,2023-10-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 suspectscore=0 clxscore=1015 priorityscore=1501 adultscore=0
- malwarescore=0 impostorscore=0 spamscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310170001 definitions=main-2310250127
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Commit 18b44bc5a672 ("ovl: Always reevaluate the file signature for
-IMA") forced signature re-evaulation on every file access.
+On Wed, Oct 25, 2023 at 8:39=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wr=
+ote:
+> +               if (!IS_I_VERSION(backing_inode) ||
+> +                   backing_inode->i_sb->s_dev !=3D iint->real_dev ||
+> +                   backing_inode->i_ino !=3D iint->real_ino ||
+> +                   !inode_eq_iversion(backing_inode, iint->version)) {
+> +                       iint->flags &=3D ~IMA_DONE_MASK;
+> +                       iint->measured_pcrs =3D 0;
+> +               }
+> +       }
+> +
+Does this mean I need to mount ext4 with `-o iversion`? Or has it been
+enabled by default?
 
-Instead of always re-evaluating the file's integrity, detect a change
-to the backing file, by comparing the cached file metadata with the
-backing file's metadata.  Verifying just the i_version has not changed
-is insufficient.  In addition save and compare the i_ino and s_dev
-as well.
+I can test this patch out sometime this week and verify it fixes the
+performance regression.
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
-Changelog:
-- Changes made based on Amir's review:
-v2: Use s_dev, not i_rdev. Limit setting real_ino, real_dev.
-v1: Removal of unnecessary overlay magic test. Verify i_version, i_ino
-and i_rdev haven't changed.
-
- fs/overlayfs/super.c              |  2 +-
- security/integrity/ima/ima_api.c  |  5 +++++
- security/integrity/ima/ima_main.c | 16 +++++++++++++++-
- security/integrity/integrity.h    |  2 ++
- 4 files changed, 23 insertions(+), 2 deletions(-)
-
-diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
-index 3fa2416264a4..c71d185980c0 100644
---- a/fs/overlayfs/super.c
-+++ b/fs/overlayfs/super.c
-@@ -1489,7 +1489,7 @@ int ovl_fill_super(struct super_block *sb, struct fs_context *fc)
- 		ovl_trusted_xattr_handlers;
- 	sb->s_fs_info = ofs;
- 	sb->s_flags |= SB_POSIXACL;
--	sb->s_iflags |= SB_I_SKIP_SYNC | SB_I_IMA_UNVERIFIABLE_SIGNATURE;
-+	sb->s_iflags |= SB_I_SKIP_SYNC;
- 
- 	err = -ENOMEM;
- 	root_dentry = ovl_get_root(sb, ctx->upper.dentry, oe);
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 452e80b541e5..597ea0c4d72f 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -243,6 +243,7 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- {
- 	const char *audit_cause = "failed";
- 	struct inode *inode = file_inode(file);
-+	struct inode *real_inode = d_real_inode(file_dentry(file));
- 	const char *filename = file->f_path.dentry->d_name.name;
- 	struct ima_max_digest_data hash;
- 	struct kstat stat;
-@@ -302,6 +303,10 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 	iint->ima_hash = tmpbuf;
- 	memcpy(iint->ima_hash, &hash, length);
- 	iint->version = i_version;
-+	if (real_inode != inode) {
-+		iint->real_ino = real_inode->i_ino;
-+		iint->real_dev = real_inode->i_sb->s_dev;
-+	}
- 
- 	/* Possibly temporary failure due to type of read (eg. O_DIRECT) */
- 	if (!result)
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 365db0e43d7c..cc1217ac2c6f 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -25,6 +25,7 @@
- #include <linux/xattr.h>
- #include <linux/ima.h>
- #include <linux/fs.h>
-+#include <linux/iversion.h>
- 
- #include "ima.h"
- 
-@@ -207,7 +208,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 			       u32 secid, char *buf, loff_t size, int mask,
- 			       enum ima_hooks func)
- {
--	struct inode *inode = file_inode(file);
-+	struct inode *backing_inode, *inode = file_inode(file);
- 	struct integrity_iint_cache *iint = NULL;
- 	struct ima_template_desc *template_desc = NULL;
- 	char *pathbuf = NULL;
-@@ -284,6 +285,19 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 		iint->measured_pcrs = 0;
- 	}
- 
-+	/* Detect and re-evaluate changes made to the backing file. */
-+	backing_inode = d_real_inode(file_dentry(file));
-+	if (backing_inode != inode &&
-+	    (action & IMA_DO_MASK) && (iint->flags & IMA_DONE_MASK)) {
-+		if (!IS_I_VERSION(backing_inode) ||
-+		    backing_inode->i_sb->s_dev != iint->real_dev ||
-+		    backing_inode->i_ino != iint->real_ino ||
-+		    !inode_eq_iversion(backing_inode, iint->version)) {
-+			iint->flags &= ~IMA_DONE_MASK;
-+			iint->measured_pcrs = 0;
-+		}
-+	}
-+
- 	/* Determine if already appraised/measured based on bitmask
- 	 * (IMA_MEASURE, IMA_MEASURED, IMA_XXXX_APPRAISE, IMA_XXXX_APPRAISED,
- 	 *  IMA_AUDIT, IMA_AUDITED)
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index d7553c93f5c0..9561db7cf6b4 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -164,6 +164,8 @@ struct integrity_iint_cache {
- 	unsigned long flags;
- 	unsigned long measured_pcrs;
- 	unsigned long atomic_flags;
-+	unsigned long real_ino;
-+	dev_t real_dev;
- 	enum integrity_status ima_file_status:4;
- 	enum integrity_status ima_mmap_status:4;
- 	enum integrity_status ima_bprm_status:4;
--- 
-2.39.3
-
+Thanks!
