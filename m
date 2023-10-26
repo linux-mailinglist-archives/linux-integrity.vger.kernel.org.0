@@ -2,58 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CBE7D8658
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Oct 2023 17:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E7C7D86D1
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Oct 2023 18:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjJZP7P (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Oct 2023 11:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
+        id S231303AbjJZQgQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Oct 2023 12:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjJZP7O (ORCPT
+        with ESMTP id S230177AbjJZQgP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Oct 2023 11:59:14 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FA59D
-        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 08:59:12 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6ce344fa7e4so693498a34.0
-        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 08:59:12 -0700 (PDT)
+        Thu, 26 Oct 2023 12:36:15 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387551A2
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 09:36:13 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6cd0a8bc6dcso697142a34.2
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 09:36:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1698335951; x=1698940751; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1698338172; x=1698942972; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hXVf0I4Mz5SjvG1c0AtJO2LhT3AtAdGjKo7FK2Zg4Ic=;
-        b=Q7TxqLm3aKTQC/ar5o37y2qiMsnmUJh60IVOClyeYjJbwpTctGZRO9B5HshK5yqlY4
-         kTgWRMIW+qY9Al/sXL9txeJHNnNmC7IDgl/gzlMRw1s9anPdkO6NYcWmOXh8dvZ5B7eP
-         k61I8D/CFFGnnqxtO6O+RRmt8Sl0TlaWDnCb4n43x2F4CClpQGJPmMD1V7dKUkENEmor
-         fmyKQ9rJ0hf8R8tb6P/tCVe6H07WbTev4kT7J+m8vm5fG+OWZispMAIghVsIe3PpfLJd
-         jclU5wD21Ps13HT90/h03jX6k4wYhkQS+o6rhuSPoOIgCCFpV2kqUJuaZ4EBJEFwIPcm
-         wnIA==
+        bh=pxwXYwMyt0FwHK5OUsvzf3Vr4fO6GxIghkhPLs2Amdc=;
+        b=WRosmtEcLHBEWAWKLDmdhUvVsCvv9zDOU5tq+JF0npcqgd/7awDpVc4eiqgrP+U1II
+         stGbJhLa/8/F3GtxC9rnoirdmjaCPnFTSginSZDP8l+h6TAyh82I93Ey0jaBm+0MxTU0
+         M1DaWNU2+CXebhKajiJ+qy682z345RS4VRsn5HqewiMIhHETfnuuBOoOpbEidgdUP4Aj
+         8T2YJpUmUe6jLwRgsA+8tcZTMFggzFfzH7kiptC1FOlEB+yIIJbXYSiKF7aobt1oTsOh
+         7r/x83aNx+7WLRbN6X3343KlKJe9bHDNnkzD6fvBlZ9m+NohGSbgcir2lDXiBj6c+N3V
+         VN6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698335951; x=1698940751;
+        d=1e100.net; s=20230601; t=1698338172; x=1698942972;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hXVf0I4Mz5SjvG1c0AtJO2LhT3AtAdGjKo7FK2Zg4Ic=;
-        b=t3aeJ0yXaF+UwGitcD6uBZgjw5uSqjZ/zrWwmDoeFF8uGu3oFZzGU35VMVQ4jVaWoz
-         QLDHAubM4ezL30GYhNcOMs+1x+VRR6iCTg/ExFjsZbcjzGgF/HqmZtX06gyH6Op/r+6S
-         LA9c8aMqSYPW7NnDVaCwieskXHxuT1UgzwcLXOB4Nnkjd1Hjj+Q89xjv0aiBLUkBGI38
-         p5nI08UtCZThc659MupEvGACZx5ZOpxDuF+Bu86aHkGAx0yvegPVSoURIils5cek58kn
-         J7rKMebeEam8/YxQ9Syjh27Y/Ok6edtPlrDllAcXU0VhzgzhhF/soz/Ht55T0wBJGPJc
-         EvKQ==
-X-Gm-Message-State: AOJu0Yw9UcYjudJG5NHXzuVN+8Dyq/cYkWDPP0nN5w9L5Ko4jGtNpVGT
-        TpNcIH6LPXfsKHgTVW353/dSeHEtjqXq0Ar6dnXj
-X-Google-Smtp-Source: AGHT+IGb4o9qqen65yJYa9Za8Ruc7HjT8pYyYcgd4PHBmG3d3r9sBzWlY55aGRO14AFQloUnfdjPobJ3/vZmMA0zA/s=
-X-Received: by 2002:a05:6870:1049:b0:1bf:77e2:95cc with SMTP id
- 9-20020a056870104900b001bf77e295ccmr16895417oaj.17.1698335951360; Thu, 26 Oct
- 2023 08:59:11 -0700 (PDT)
+        bh=pxwXYwMyt0FwHK5OUsvzf3Vr4fO6GxIghkhPLs2Amdc=;
+        b=NA3aPZxrWRP3FEQ5jQ/nzWKLkj8WtMHtpgEQ50whPVcWj91DLZqQXE2hC0xyC3Q4Rl
+         lF0GQdcZzM1gki3zHIqgtDNbHDpYM2/2UtVEyxy2ZypF/fGQLiUAXicJh8eCGVq/Kt0C
+         j0h1VolfdjmmB89PA3gNiC6J0nHgZkRPcqnXaFRy62ILbB+QMeJFFCIQW52s42ZwTrJx
+         dY4bfQbUZG8dXRTYmDbXH2LAE4E1gmVt41NkqZ9gazc6U2FHKCnDd+q+WbmTBcz3MUyW
+         NZlaSaIEd2VcwWqOXBZPQS+uqgbtIrqO1O5FER2EaaTo2Bh2YjxOLxRQgyDlFUcdEmLh
+         4Sbw==
+X-Gm-Message-State: AOJu0YzkY09jbRr/xfsOP3p61svH/G9gJglLDUhWGO8Xej/kXvENSxad
+        5jlvNfqJlnnPtfktKzGthxpMqWtQ9mG1ASLh3c/6
+X-Google-Smtp-Source: AGHT+IEY3fApkDMaJbueyLpDliFh0pY6UiBcW7rNvFIgWkKAVzTXB5oZvPhkWACAtTHooiKMKO1OlWhVfNclqgBazKw=
+X-Received: by 2002:a05:6870:d3cb:b0:1e9:d8a4:5523 with SMTP id
+ l11-20020a056870d3cb00b001e9d8a45523mr58414oag.41.1698338172444; Thu, 26 Oct
+ 2023 09:36:12 -0700 (PDT)
 MIME-Version: 1.0
 References: <20231026090259.362945-1-roberto.sassu@huaweicloud.com>
  <dd0f6611c7b46f3cecee2b84681c45b1.paul@paul-moore.com> <447298d65b497fb1a7f8d47c4f1a3137eba24511.camel@huaweicloud.com>
-In-Reply-To: <447298d65b497fb1a7f8d47c4f1a3137eba24511.camel@huaweicloud.com>
+ <CAHC9VhSMVpEvLwWvBCgz0EMEb=DG_AZ7fenVUk5vPM=v5c6kYQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhSMVpEvLwWvBCgz0EMEb=DG_AZ7fenVUk5vPM=v5c6kYQ@mail.gmail.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 26 Oct 2023 11:59:00 -0400
-Message-ID: <CAHC9VhSMVpEvLwWvBCgz0EMEb=DG_AZ7fenVUk5vPM=v5c6kYQ@mail.gmail.com>
+Date:   Thu, 26 Oct 2023 12:36:01 -0400
+Message-ID: <CAHC9VhQW1mi5Z72cia7sqC7jERcCxO93xZJnvER=e7U6RqNFxQ@mail.gmail.com>
 Subject: Re: [PATCH] security: Don't yet account for IMA in LSM_CONFIG_COUNT calculation
 To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
 Cc:     jmorris@namei.org, serge@hallyn.com,
@@ -73,36 +74,41 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 26, 2023 at 11:12=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Thu, 2023-10-26 at 10:48 -0400, Paul Moore wrote:
-> > On Oct 26, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+On Thu, Oct 26, 2023 at 11:59=E2=80=AFAM Paul Moore <paul@paul-moore.com> w=
+rote:
+> On Thu, Oct 26, 2023 at 11:12=E2=80=AFAM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Thu, 2023-10-26 at 10:48 -0400, Paul Moore wrote:
+> > > On Oct 26, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+> > > >
+> > > > Since IMA is not yet an LSM, don't account for it in the LSM_CONFIG=
+_COUNT
+> > > > calculation, used to limit how many LSMs can invoke security_add_ho=
+oks().
+> > > >
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > ---
+> > > >  security/security.c | 1 -
+> > > >  1 file changed, 1 deletion(-)
 > > >
-> > > Since IMA is not yet an LSM, don't account for it in the LSM_CONFIG_C=
-OUNT
-> > > calculation, used to limit how many LSMs can invoke security_add_hook=
-s().
-> > >
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  security/security.c | 1 -
-> > >  1 file changed, 1 deletion(-)
+> > > Merged into lsm/dev-staging, thanks!
 > >
-> > Merged into lsm/dev-staging, thanks!
+> > Welcome!
+> >
+> > Could you please also rebase lsm/dev-staging, to move ab3888c7198d
+> > ("LSM: wireup Linux Security Module syscalls") after f7875966dc0c
+> > ("tools headers UAPI: Sync files changed by new fchmodat2 and
+> > map_shadow_stack syscalls with the kernel sources")?
 >
-> Welcome!
+> Let me look into that, as long as it doesn't blow up the stuff in
+> lsm/dev (I don't think it would), I'll go ahead and rebase to v6.6-rc4
+> which should resolve the syscall numbering conflict.
 >
-> Could you please also rebase lsm/dev-staging, to move ab3888c7198d
-> ("LSM: wireup Linux Security Module syscalls") after f7875966dc0c
-> ("tools headers UAPI: Sync files changed by new fchmodat2 and
-> map_shadow_stack syscalls with the kernel sources")?
+> FWIW, I also hit the same problem with my kernel-secnext builds, if
+> you're using those RPMs you'll find it's already resolved there.
 
-Let me look into that, as long as it doesn't blow up the stuff in
-lsm/dev (I don't think it would), I'll go ahead and rebase to v6.6-rc4
-which should resolve the syscall numbering conflict.
-
-FWIW, I also hit the same problem with my kernel-secnext builds, if
-you're using those RPMs you'll find it's already resolved there.
+That wasn't very messy so I've rebased lsm/dev-staging to v6.6-rc4 and
+regenerated lsm/next.  If you notice any problems please let me know.
 
 --=20
 paul-moore.com
