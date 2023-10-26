@@ -2,92 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B886A7D85B2
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Oct 2023 17:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E067D860B
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Oct 2023 17:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235155AbjJZPMi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Oct 2023 11:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        id S235066AbjJZPcE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Oct 2023 11:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345398AbjJZPMc (ORCPT
+        with ESMTP id S231200AbjJZPcD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Oct 2023 11:12:32 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11652D57;
-        Thu, 26 Oct 2023 08:12:28 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4SGTQQ05XyzB02gf;
-        Thu, 26 Oct 2023 22:56:30 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwDnPpDHgTplwlL2Ag--.10919S2;
-        Thu, 26 Oct 2023 16:12:14 +0100 (CET)
-Message-ID: <447298d65b497fb1a7f8d47c4f1a3137eba24511.camel@huaweicloud.com>
-Subject: Re: [PATCH] security: Don't yet account for IMA in LSM_CONFIG_COUNT
-  calculation
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 26 Oct 2023 17:12:03 +0200
-In-Reply-To: <dd0f6611c7b46f3cecee2b84681c45b1.paul@paul-moore.com>
-References: <20231026090259.362945-1-roberto.sassu@huaweicloud.com>
-         <dd0f6611c7b46f3cecee2b84681c45b1.paul@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4-0ubuntu2 
+        Thu, 26 Oct 2023 11:32:03 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F1A1AB
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 08:31:58 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6ce322b62aeso626180a34.3
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 08:31:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1698334317; x=1698939117; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Xy5YlEFiFq1Kwk2QLLV40Y+ZS9JkzljZy78RTLW+DE=;
+        b=mzQ+lSTGw9qY9foZURxV5bM6Jbw5XtLKKiy5xhUiM264DJ60ylX/xNphAQZ3HLjLR/
+         vduc4KEEHdm3Tt2N6WRCO4l8iZBMtY6Y6qt2PY8YkFEnxwB7RCRMSYPKzUl7l2ZQ7QBt
+         2NyzvKR/l8tRt6DNRgUHi7u5CSrfrJy7KOMnQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698334317; x=1698939117;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8Xy5YlEFiFq1Kwk2QLLV40Y+ZS9JkzljZy78RTLW+DE=;
+        b=kj4siFuhpzpAKWrFYw70lZa8kmqM2+4w69Q5SKs7MojI469+e7+Q+hYPFKHU9Z5iog
+         LMLaRjosf7dVUufej70hnx9meCeZE4jkJw6JuZ64tP2jKVKeq2PNcke+KUvB0JEyPs55
+         XhWh+pu5auIfWk5LrNcc5JwgtI12S9a5vD62IVxi3MO4+RL6M+uG8yIzpaPF1lFxcYho
+         ITiriBp773X95Z4b1FaSGJBPdpD5QuLbFcM+iSvk7p996O3b/TBzgwtJM89e9i8tpUd5
+         /HbgviTmOlpbTrNXJ9L4fGojBd5ImORZeZtEASIQ7E4oQRPyUVvfLqws8m/bWDzUo7yi
+         akUA==
+X-Gm-Message-State: AOJu0YxTBXpfbKC+r9+vc9pynZXsLDYJ/JcEbWkEk2FxxekYpYsRUsSi
+        lmEFucp5ftfk/v0XILoD92c/iFazAn39KH06CBo=
+X-Google-Smtp-Source: AGHT+IFgDvLrnyrDvrdpOZSV1VmELyX6Je+rxTKh9+X90o4f8WnYZGl0TdS5kHFZUWbc0vnrJ6usfA==
+X-Received: by 2002:a05:6830:108f:b0:6b9:b1b0:fcd1 with SMTP id y15-20020a056830108f00b006b9b1b0fcd1mr18135822oto.31.1698334317562;
+        Thu, 26 Oct 2023 08:31:57 -0700 (PDT)
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com. [209.85.160.47])
+        by smtp.gmail.com with ESMTPSA id l11-20020a9d6a8b000000b006cd2c236b8csm2667529otq.3.2023.10.26.08.31.56
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Oct 2023 08:31:57 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1e993765c1bso599824fac.3
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 08:31:56 -0700 (PDT)
+X-Received: by 2002:a05:6870:c991:b0:1c8:bbd0:2fc9 with SMTP id
+ hi17-20020a056870c99100b001c8bbd02fc9mr24965060oab.49.1698334316575; Thu, 26
+ Oct 2023 08:31:56 -0700 (PDT)
 MIME-Version: 1.0
-X-CM-TRANSID: LxC2BwDnPpDHgTplwlL2Ag--.10919S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xr47Zr18JrWxtw45WF1kAFb_yoW3GwcEkr
-        Wqkr17trZYy3ykZF43AF1F9rs29ayrJr15J3W3JrZIvw45J3WkXFWDArn5ZF1rX3Z7WrWD
-        tF93uFW0v3s7tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbOAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-        JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-        kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
-        6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIx
-        AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
-        KfnxnUUI43ZEXa7IU1E1v3UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj5WPIQACsP
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20231025143906.133218-1-zohar@linux.ibm.com> <485C9C57-ABF1-4618-81D1-345597A1B9FA@oracle.com>
+ <488442598c3703760ed6182426ed891f85fe0a1a.camel@linux.ibm.com>
+In-Reply-To: <488442598c3703760ed6182426ed891f85fe0a1a.camel@linux.ibm.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Thu, 26 Oct 2023 09:31:42 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30BbtoTGHV803WpiSdCi6Bz9E050FJUy=HEeSAti_zPsqg@mail.gmail.com>
+Message-ID: <CAHQZ30BbtoTGHV803WpiSdCi6Bz9E050FJUy=HEeSAti_zPsqg@mail.gmail.com>
+Subject: Re: [PATCH v3] ima: detect changes to the backing overlay file
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2023-10-26 at 10:48 -0400, Paul Moore wrote:
-> On Oct 26, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> > 
-> > Since IMA is not yet an LSM, don't account for it in the LSM_CONFIG_COUNT
-> > calculation, used to limit how many LSMs can invoke security_add_hooks().
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  security/security.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> 
-> Merged into lsm/dev-staging, thanks!
+On Wed, Oct 25, 2023 at 12:01=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> w=
+rote:
+>
+> On Wed, 2023-10-25 at 16:27 +0000, Eric Snowberg wrote:
+> >
+> > > On Oct 25, 2023, at 8:39 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > >
+> > > Commit 18b44bc5a672 ("ovl: Always reevaluate the file signature for
+> > > IMA") forced signature re-evaulation on every file access.
+> > >
+> > > Instead of always re-evaluating the file's integrity, detect a change
+> > > to the backing file, by comparing the cached file metadata with the
+> > > backing file's metadata.  Verifying just the i_version has not change=
+d
+> > > is insufficient.  In addition save and compare the i_ino and s_dev
+> > > as well.
+> > >
+> > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> >
+> > I ran the file integrity tests that originally uncovered the need for
+> > "Commit 18b44bc5a672 ("ovl: Always reevaluate the file signature for
+> > IMA=E2=80=9D). When the backing file is changed, file integrity remains=
+.  For that
+> > part, feel free to add:
+> >
+> > Tested-by: Eric Snowberg <eric.snowberg@oracle.com>
+>
+> Thanks!
+>
+> Mimi
+>
 
-Welcome!
+I just verified this fixes the speed regression:
 
-Could you please also rebase lsm/dev-staging, to move ab3888c7198d
-("LSM: wireup Linux Security Module syscalls") after f7875966dc0c
-("tools headers UAPI: Sync files changed by new fchmodat2 and
-map_shadow_stack syscalls with the kernel sources")?
+```
+rrangel920 / # time clang --version >/dev/null
 
-Thanks
+real 0m0.369s
+user 0m0.000s
+sys 0m0.368s
+rrangel920 / #
+rrangel920 / # time clang --version >/dev/null
 
-Roberto
+real 0m0.017s
+user 0m0.004s
+sys 0m0.013s
+rrangel920 / # time clang --version >/dev/null
 
+real 0m0.012s
+user 0m0.000s
+sys 0m0.012s
+rrangel920 / # time clang --version >/dev/null
+
+real 0m0.012s
+user 0m0.000s
+sys 0m0.012s
+```
+
+Tested-by: Raul E Rangel <rrangel@chromium.org>
+
+Thanks again for the quick fix!
