@@ -2,57 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242217D7F3B
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Oct 2023 11:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8BC7D8530
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Oct 2023 16:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344229AbjJZJDf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Oct 2023 05:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
+        id S235147AbjJZOtH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Oct 2023 10:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjJZJDe (ORCPT
+        with ESMTP id S235107AbjJZOs7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Oct 2023 05:03:34 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1136810E;
-        Thu, 26 Oct 2023 02:03:30 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4SGKHz6ZNmz9yKXj;
-        Thu, 26 Oct 2023 16:50:23 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD3T5FOKzplbiTyAg--.23455S2;
-        Thu, 26 Oct 2023 10:03:17 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+        Thu, 26 Oct 2023 10:48:59 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709F5D4C
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 07:48:51 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-458289fb60bso451625137.0
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 07:48:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1698331730; x=1698936530; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6lzK1pFiQoRniXEGjF6tOObNRoBOW1hYjV90v0xvTKY=;
+        b=XIsBta2gqorH+eW1Tl5gX/6yDCS3r+s/cKlITjSWU+mnuMN0AyOiNMu6UJs4jgBgsZ
+         E2SjWe0+5yAusnUReHe6sqUBR21Sc2Igl9v/yZm328P6J/T/+DTh/p/TiT6rXJNUEeUu
+         wdLUF572YEKcVH1pI2MPpa8kIHUPdPcssA7p4DFdXE8fYUWMlHm9vgvYfkoztI/OfkQM
+         xlI3WZSeqDepVZpfg9oda6eYM2mCGXUMoOmF1hTRyxVISY4i6bCIXL0U/kqb1NB7OrDN
+         lE+NLOti8OCm4TSm5iEz2nOKq++oktT2Vb6t3E9nQrcbTLQuHmFsMKK254D93ENsedLH
+         UnEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698331730; x=1698936530;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6lzK1pFiQoRniXEGjF6tOObNRoBOW1hYjV90v0xvTKY=;
+        b=SpAZFg6iOSKFlgJRc63SRJp5HkBxbSPR4jCK3RntUG0ss451VkJgDba9pnwFpuwtJG
+         GDiL038n5utq0xedqBYQcIBrO3u/dTDbV2JLxe4tGMdkz2c9Xha0SG58dqdpgNn+iGDn
+         0hZT3UWRW2IjzOO2KRZyN6eDbuIQagTsaTU4aCSp0irY0hLSd/aXmHBboQ6XXl6/C2+H
+         08KeMboFBiOWitX9L8MXuIyf6DBsNVe3GqSwzn7VgLv1hau3bFBhysQjSI0NjRPyVHKn
+         i3jjO7kVafKZPxyySKe9iE1CJNKeADy2tQypvvnAwkP1KqkjUgi6lkBXFoHUXzskrxlQ
+         sEWg==
+X-Gm-Message-State: AOJu0YwGD1tmZXEXZ0gmfVU2iYPo90Ot0VwX2K1AtRGLN6gtmUYjIEQ4
+        bDypQ6QxJc7ByoNgKQQnm0UGXwqJgPse9xbf3Q==
+X-Google-Smtp-Source: AGHT+IFOXcomS2z3Xzc1G+uf0v//E62w4tPep5wRMeQeBOXCc+hIrVPCulRaJjMdlYiUzKHt5WCX0g==
+X-Received: by 2002:a67:e050:0:b0:457:e32d:1732 with SMTP id n16-20020a67e050000000b00457e32d1732mr15674294vsl.4.1698331730343;
+        Thu, 26 Oct 2023 07:48:50 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id r13-20020a0cf60d000000b0064f4ac061b0sm5252286qvm.12.2023.10.26.07.48.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Oct 2023 07:48:49 -0700 (PDT)
+Date:   Thu, 26 Oct 2023 10:48:49 -0400
+Message-ID: <dd0f6611c7b46f3cecee2b84681c45b1.paul@paul-moore.com>
+From:   Paul Moore <paul@paul-moore.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, jmorris@namei.org,
+        serge@hallyn.com
 Cc:     linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
         linux-integrity@vger.kernel.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH] security: Don't yet account for IMA in LSM_CONFIG_COUNT calculation
-Date:   Thu, 26 Oct 2023 11:02:59 +0200
-Message-Id: <20231026090259.362945-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD3T5FOKzplbiTyAg--.23455S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GF1rZr4rZFW5uw45CF4UArb_yoWfGrcEka
-        1kAr40y3y7ZF93WF47A3W8ZF1vg3y8XrnxG3WYyr13uws8Wr1rXFZ7J34fAF1rJFnxGFWv
-        ka1fKFy3Aw1ktjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb7xYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j4eHgUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj5WKUwACs4
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Subject: Re: [PATCH] security: Don't yet account for IMA in LSM_CONFIG_COUNT  calculation
+References: <20231026090259.362945-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20231026090259.362945-1-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,28 +70,17 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Oct 26, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+> 
+> Since IMA is not yet an LSM, don't account for it in the LSM_CONFIG_COUNT
+> calculation, used to limit how many LSMs can invoke security_add_hooks().
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/security.c | 1 -
+>  1 file changed, 1 deletion(-)
 
-Since IMA is not yet an LSM, don't account for it in the LSM_CONFIG_COUNT
-calculation, used to limit how many LSMs can invoke security_add_hooks().
+Merged into lsm/dev-staging, thanks!
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/security.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/security/security.c b/security/security.c
-index 988483fcf153..7281aa90ca20 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -44,7 +44,6 @@
- 	(IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_SECURITY_TOMOYO) ? 1 : 0) + \
--	(IS_ENABLED(CONFIG_IMA) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_SECURITY_APPARMOR) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_SECURITY_YAMA) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_SECURITY_LOADPIN) ? 1 : 0) + \
--- 
-2.34.1
-
+--
+paul-moore.com
