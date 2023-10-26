@@ -2,59 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1CA7D8A79
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Oct 2023 23:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E647D8B81
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Oct 2023 00:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344872AbjJZVhQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Oct 2023 17:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
+        id S229649AbjJZWMm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Oct 2023 18:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344853AbjJZVhP (ORCPT
+        with ESMTP id S232171AbjJZWMk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Oct 2023 17:37:15 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC181AD
-        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 14:37:11 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5a7b91faf40so10846447b3.1
-        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 14:37:11 -0700 (PDT)
+        Thu, 26 Oct 2023 18:12:40 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29EA1B6
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 15:12:37 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-3b2e22a4004so923755b6e.3
+        for <linux-integrity@vger.kernel.org>; Thu, 26 Oct 2023 15:12:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1698356230; x=1698961030; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1698358357; x=1698963157; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MXajQCd4F/1lAfqXs9yFErTqS9iveL7bqi06E72Hzxw=;
-        b=O55ntrRkoSk4p1rxbJKdJBiHXyyTLjqfDZlFDCFTDaAftVT9vSSpsZ5Nn/lBMXAMyA
-         ngDsmGBQp16yWWUcSgjhE62qWfR/TPOOju5Wg6mZIWwtVZ0K8IBssUBxJ0uZ5Uqnrg52
-         TKGh5rInzQ0tNfMj7BSwHDqlljEjhadQoqWTGhbl7JaXlDBCzYGjy2L3kHy9P30XCuLX
-         S9MBoeODeT+oeMN2t/4TkRRXms1vrjYWN82xnLFav2POjw6xrL9KOI9y5VnAXIapfMsq
-         RtHKYkm/eYoYhmJW3S40jagam0J1jq/aK7JEDwETISARtuHZHYJxPSwVFCiuI1KA5Le+
-         x4PA==
+        bh=FyK27xM5kbIwxsUoSw19E95taRzCJvDq3pVbOquRTi4=;
+        b=RXB7vqUAQsVEoZtRnFcdwYSMSXtc6c9LbA0lTagpouOf01fdEEmMG0mdf4oUFGWoXn
+         wX06Td0qAOWNkEHp3LGRHVBIR85hpq6/bixg9NCs4nNMlukR8hX61IFeAyd9vgruIQpk
+         lEpnq5MTR7WIRemsye5aM2xL/+e1CHKBCNGb2bdDxYPmdU6COWsEnMRA+T5FG2tqeN4g
+         Zw36RqRt4PbyVAeE/GQ4mkaWZ5qIt9qNx0IN9LDpugEg62bd2mMwMzhJDDTebIdtTH9Y
+         L3lcvKsF1h9z/rebYStWYhl+G714T4BTrWjvL2WS40q2BSMBlM7CfDqoaI3mE02tXDGJ
+         NAtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698356230; x=1698961030;
+        d=1e100.net; s=20230601; t=1698358357; x=1698963157;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MXajQCd4F/1lAfqXs9yFErTqS9iveL7bqi06E72Hzxw=;
-        b=YhAT3bfS5+g1lU/J3WsWr4p8ecreI1TbppCaJD4m90hzmrVUQCUY3UgAGsRvEKqBCf
-         8NmQNWDbfIJzubB06JwwUBT9oSM5DCbhqBycOLG+WWrhWjGemy55lQbF4TRHa6t/fiMt
-         J9YdvnaDzrx4hrO8r+Gxiu+ZYcayUX2OYaGoMgioL6ySZe/0WX2LSlkjovLMSgkLZZmo
-         XmZ7WUA9AH3hPavXecYYXtUN0eOZrwAAL58hVHEb8FPAX7omNCt9T9/0JQW6DXxsuWoh
-         kaxjMtNe04Qr/lqs7tngKUldutYT1mWHXoXKczZ0RQGTE2aI0j7qeyl5u1HjdwEedApZ
-         V/sw==
-X-Gm-Message-State: AOJu0Yx38nXdgF0eR/i8YEirNnhAsKgfjfrkXQn3byDk/LKSat3AWqVk
-        1Ejj/g0VdkChZBOjmRj8VCZhCWkKwCB3r0jrMWIP
-X-Google-Smtp-Source: AGHT+IGs3yVweOLen1m7MhCJB6RbgNFPe23s8osYedKaob9va7EUB7gQ3SlX41xgxocwXKE4pusvmi6cSAkHebq1bDk=
-X-Received: by 2002:a25:238e:0:b0:da1:2a2b:4c5b with SMTP id
- j136-20020a25238e000000b00da12a2b4c5bmr342821ybj.41.1698356230039; Thu, 26
- Oct 2023 14:37:10 -0700 (PDT)
+        bh=FyK27xM5kbIwxsUoSw19E95taRzCJvDq3pVbOquRTi4=;
+        b=D+cmvuRpi9m0wzXm+HccVk8Pv2iNmzATA0DBkA9iUlydFqLc0bpwg5wGSRe3Vb/+66
+         NbKMuAcOUD60J+CNGqR58kbH3fTaKO+yqmp/6GkViLoeDSdNMzJ3dAXuhIfhTnlM9EeA
+         iyPUoUq2HoHKyYYP7a53WImMXBNopjT23TbrBxqVQrAVFFPNAdIUr+dd0jzuFuFDkYvt
+         O9kl1eays5xaY5+jzqBhlGtxbz6MpKtm0huXglFzTht8DzQdQMoCdOao67xgmONaiKLz
+         tcKNHl3+AiqmxftBDL95WMvYO0wmU2kszPeMrrOggviMbnIHdhbyQTXBHr5jP30fmSkG
+         3i5g==
+X-Gm-Message-State: AOJu0YxDBW0EGQKY+9dUBNElX/HeQilxCd9dAOmy/EaInfeiFED+V6XB
+        y/zS2FHGcwS//yiZz0/dAKeJtmLJaCvy8LFb9Pcp
+X-Google-Smtp-Source: AGHT+IH4B/F3jSVT6Nn8xcRQnsJ1uiLuOsG9IZM1z8u2NT76JtjnCTm3iCfolyAhImJmOOQWCLxEEJfWlt1eadUfIHE=
+X-Received: by 2002:a05:6808:4d9:b0:3b2:e5f2:5a59 with SMTP id
+ a25-20020a05680804d900b003b2e5f25a59mr797519oie.35.1698358356906; Thu, 26 Oct
+ 2023 15:12:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <1696457386-3010-3-git-send-email-wufan@linux.microsoft.com>
- <7c8c2a158c628a642078f746e5c42f2f.paul@paul-moore.com> <594923f6-6942-4b4b-8ca1-b9dcf74c9c1c@linux.microsoft.com>
-In-Reply-To: <594923f6-6942-4b4b-8ca1-b9dcf74c9c1c@linux.microsoft.com>
+References: <1696457386-3010-6-git-send-email-wufan@linux.microsoft.com>
+ <c53599e9d278fc55be30e3bac9411328.paul@paul-moore.com> <616a6fd7-47b1-4b46-af23-46f9b1a3eedf@linux.microsoft.com>
+In-Reply-To: <616a6fd7-47b1-4b46-af23-46f9b1a3eedf@linux.microsoft.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 26 Oct 2023 17:36:59 -0400
-Message-ID: <CAHC9VhQv5xBtG9zVk_rpNmQ=GLm9sitxeyqbwkw=LmHAN0Su3g@mail.gmail.com>
-Subject: Re: [PATCH RFC v11 2/19] ipe: add policy parser
+Date:   Thu, 26 Oct 2023 18:12:26 -0400
+Message-ID: <CAHC9VhScdtqJeUTTUQVk4D70tTLz4TgU_aRTMRnHa0OARyubaw@mail.gmail.com>
+Subject: Re: [PATCH RFC v11 5/19] ipe: introduce 'boot_verified' as a trust provider
 To:     Fan Wu <wufan@linux.microsoft.com>
 Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
         serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
@@ -78,236 +78,120 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 25, 2023 at 6:46=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+On Thu, Oct 26, 2023 at 5:33=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
 wrote:
 > On 10/23/2023 8:52 PM, Paul Moore wrote:
 > > On Oct  4, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
 > >>
-> >> IPE's interpretation of the what the user trusts is accomplished throu=
-gh
-> >> its policy. IPE's design is to not provide support for a single trust
-> >> provider, but to support multiple providers to enable the end-user to
-> >> choose the best one to seek their needs.
+> >> IPE is designed to provide system level trust guarantees, this usually
+> >> implies that trust starts from bootup with a hardware root of trust,
+> >> which validates the bootloader. After this, the bootloader verifies th=
+e
+> >> kernel and the initramfs.
 > >>
-> >> This requires the policy to be rather flexible and modular so that
-> >> integrity providers, like fs-verity, dm-verity, dm-integrity, or
-> >> some other system, can plug into the policy with minimal code changes.
+> >> As there's no currently supported integrity method for initramfs, and
+> >> it's typically already verified by the bootloader, introduce a propert=
+y
+> >> that causes the first superblock to have an execution to be "pinned",
+> >> which is typically initramfs.
+> >>
+> >> When the "pinned" device is unmounted, it will be "unpinned" and
+> >> `boot_verified` property will always evaluate to false afterward.
+> >>
+> >> We use a pointer with a spin_lock to "pin" the device instead of rcu
+> >> because rcu synchronization may sleep, which is not allowed when
+> >> unmounting a device.
 > >>
 > >> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 > >> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 > ...
 > >> ---
-> >>   security/ipe/Makefile        |   2 +
-> >>   security/ipe/policy.c        | 101 ++++++++
-> >>   security/ipe/policy.h        |  83 ++++++
-> >>   security/ipe/policy_parser.c | 487 +++++++++++++++++++++++++++++++++=
-++
-> >>   security/ipe/policy_parser.h |  11 +
-> >>   5 files changed, 684 insertions(+)
-> >>   create mode 100644 security/ipe/policy.c
-> >>   create mode 100644 security/ipe/policy.h
-> >>   create mode 100644 security/ipe/policy_parser.c
-> >>   create mode 100644 security/ipe/policy_parser.h
-> >
-> > ...
-> >
-> >> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
-> >> new file mode 100644
-> >> index 000000000000..3a529c7950a1
-> >> --- /dev/null
-> >> +++ b/security/ipe/policy.c
-> >> @@ -0,0 +1,101 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * Copyright (C) Microsoft Corporation. All rights reserved.
-> >> + */
-> >
-> > ...
-> >
-> >> +static int set_pkcs7_data(void *ctx, const void *data, size_t len,
-> >> +                      size_t asn1hdrlen)
-> >> +{
-> >> +    struct ipe_policy *p =3D ctx;
+> >>   security/ipe/eval.c          | 72 ++++++++++++++++++++++++++++++++++=
++-
+> >>   security/ipe/eval.h          |  2 +
+> >>   security/ipe/hooks.c         | 12 ++++++
+> >>   security/ipe/hooks.h         |  2 +
+> >>   security/ipe/ipe.c           |  1 +
+> >>   security/ipe/policy.h        |  2 +
+> >>   security/ipe/policy_parser.c | 35 +++++++++++++++++-
+> >>   7 files changed, 124 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> >> index 8a8bcc5c7d7f..bdac4abc0ddb 100644
+> >> --- a/security/ipe/eval.c
+> >> +++ b/security/ipe/eval.c
+> >> @@ -9,6 +9,7 @@
+> >>   #include <linux/file.h>
+> >>   #include <linux/sched.h>
+> >>   #include <linux/rcupdate.h>
+> >> +#include <linux/spinlock.h>
+> >>
+> >>   #include "ipe.h"
+> >>   #include "eval.h"
+> >> @@ -16,6 +17,44 @@
+> >>
+> >>   struct ipe_policy __rcu *ipe_active_policy;
+> >>
+> >> +static const struct super_block *pinned_sb;
+> >> +static DEFINE_SPINLOCK(pin_lock);
+> >> +#define FILE_SUPERBLOCK(f) ((f)->f_path.mnt->mnt_sb)
 > >> +
-> >> +    p->text =3D (const char *)data;
-> >> +    p->textlen =3D len;
-> >> +
-> >> +    return 0;
-> >> +}
-> >
-> > The @asn1hdrlen parameter isn't used in this function, at least at this
-> > point in the patchset, so you really should remove it.  If it is needed
-> > later in the patchset you can always update the function.
->
-> Although the @asn1hdrlen is not used, it's a required parameter for the
-> pkcs7 callback. I guess adding a __always_unused might be the right
-> solution?
-
-Ah gotcha, I'm sorry for the noise, I obviously didn't catch that.  As
-for the __always_unused marking, yes, that's probably a good idea.
-
 > >> +/**
-> >> + * parse_rule - parse a policy rule line.
-> >> + * @line: Supplies rule line to be parsed.
-> >> + * @p: Supplies the partial parsed policy.
-> >> + *
-> >> + * Return:
-> >> + * * !IS_ERR        - OK
-> >> + * * -ENOMEM        - Out of memory
-> >> + * * -EBADMSG       - Policy syntax error
+> >> + * pin_sb - Pin the underlying superblock of @f, marking it as truste=
+d.
+> >> + * @sb: Supplies a super_block structure to be pinned.
 > >> + */
-> >> +static int parse_rule(char *line, struct ipe_parsed_policy *p)
+> >> +static void pin_sb(const struct super_block *sb)
 > >> +{
-> >> +    int rc =3D 0;
-> >> +    bool first_token =3D true, is_default_rule =3D false;
-> >> +    bool op_parsed =3D false;
-> >> +    enum ipe_op_type op =3D IPE_OP_INVALID;
-> >> +    enum ipe_action_type action =3D IPE_ACTION_INVALID;
-> >> +    struct ipe_rule *r =3D NULL;
-> >> +    char *t;
-> >> +
-> >> +    r =3D kzalloc(sizeof(*r), GFP_KERNEL);
-> >> +    if (!r)
-> >> +            return -ENOMEM;
-> >> +
-> >> +    INIT_LIST_HEAD(&r->next);
-> >> +    INIT_LIST_HEAD(&r->props);
-> >> +
-> >> +    while (t =3D strsep(&line, IPE_POLICY_DELIM), line) {
-> >> +            if (*t =3D=3D '\0')
-> >> +                    continue;
-> >> +            if (first_token && token_default(t)) {
-> >> +                    is_default_rule =3D true;
-> >> +            } else {
-> >> +                    if (!op_parsed) {
-> >> +                            op =3D parse_operation(t);
-> >> +                            if (op =3D=3D IPE_OP_INVALID)
-> >> +                                    rc =3D -EBADMSG;
-> >> +                            else
-> >> +                                    op_parsed =3D true;
-> >> +                    } else {
-> >> +                            rc =3D parse_property(t, r);
-> >> +                    }
-> >> +            }
-> >> +
-> >> +            if (rc)
-> >> +                    goto err;
-> >> +            first_token =3D false;
-> >> +    }
-> >> +
-> >> +    action =3D parse_action(t);
-> >> +    if (action =3D=3D IPE_ACTION_INVALID) {
-> >> +            rc =3D -EBADMSG;
-> >> +            goto err;
-> >> +    }
-> >> +
-> >> +    if (is_default_rule) {
-> >> +            if (!list_empty(&r->props)) {
-> >> +                    rc =3D -EBADMSG;
-> >> +            } else if (op =3D=3D IPE_OP_INVALID) {
-> >> +                    if (p->global_default_action !=3D IPE_ACTION_INVA=
-LID)
-> >> +                            rc =3D -EBADMSG;
-> >> +                    else
-> >> +                            p->global_default_action =3D action;
-> >> +            } else {
-> >> +                    if (p->rules[op].default_action !=3D IPE_ACTION_I=
-NVALID)
-> >> +                            rc =3D -EBADMSG;
-> >> +                    else
-> >> +                            p->rules[op].default_action =3D action;
-> >> +            }
-> >> +    } else if (op !=3D IPE_OP_INVALID && action !=3D IPE_ACTION_INVAL=
-ID) {
-> >> +            r->op =3D op;
-> >> +            r->action =3D action;
-> >> +    } else {
-> >> +            rc =3D -EBADMSG;
-> >> +    }
-> >
-> > I might be missing something important in the policy syntac, but could
-> > this function, and perhaps the ipe_parsed_policy struct, be simplified
-> > if the default action was an explicit rule?
-> >
-> >   "op=3DDEFAULT action=3DALLOW"
->
-> The complexity here arises from our need for two types of default rules:
-> one for global settings and another for operation-specific settings.
->
-> To illustrate the flexibility of operation-specific default rules, users
-> can set their policy to have a default rule of 'DENY' for execution,
-> meaning all execution actions are prohibited by default. This let users
-> to create an allow-list for execution. At the same time, the default
-> rule for read can be set to 'ALLOW'.  This let users to create an
-> deny-list for read.
->
-> Adding explicit default rules can simplify ipe_parsed_policy struct, but
-> that impose a burden on users that requires users always add the default
-> rules the end of the policy. In contrast, our current design allows
-> users to place the default rule anywhere in the policy. In practice, we
-> often position the default rule at the beginning of the policy, which
-> makes it more convenient for users to add new rules.
-
-Okay, thanks for the explanation.
-
-> >> +/**
-> >> + * free_parsed_policy - free a parsed policy structure.
-> >> + * @p: Supplies the parsed policy.
-> >> + */
-> >> +void free_parsed_policy(struct ipe_parsed_policy *p)
-> >> +{
-> >> +    size_t i =3D 0;
-> >> +    struct ipe_rule *pp, *t;
-> >> +
-> >> +    if (IS_ERR_OR_NULL(p))
+> >> +    if (!sb)
 > >> +            return;
-> >> +
-> >> +    for (i =3D 0; i < ARRAY_SIZE(p->rules); ++i)
-> >> +            list_for_each_entry_safe(pp, t, &p->rules[i].rules, next)=
- {
-> >> +                    list_del(&pp->next);
-> >> +                    free_rule(pp);
-> >> +            }
-> >> +
-> >> +    kfree(p->name);
-> >> +    kfree(p);
+> >> +    spin_lock(&pin_lock);
+> >> +    if (!pinned_sb)
+> >> +            pinned_sb =3D sb;
+> >> +    spin_unlock(&pin_lock);
 > >> +}
 > >> +
 > >> +/**
-> >> + * validate_policy - validate a parsed policy.
-> >> + * @p: Supplies the fully parsed policy.
-> >> + *
-> >> + * Given a policy structure that was just parsed, validate that all
-> >> + * necessary fields are present, initialized correctly.
-> >> + *
-> >> + * A parsed policy can be in an invalid state for use (a default was
-> >> + * undefined) by just parsing the policy.
+> >> + * from_pinned - Determine whether @sb is the pinned super_block.
+> >> + * @sb: Supplies a super_block to check against the pinned super_bloc=
+k.
 > >> + *
 > >> + * Return:
-> >> + * * 0              - OK
-> >> + * * -EBADMSG       - Policy is invalid
+> >> + * * true   - @sb is the pinned super_block
+> >> + * * false  - @sb is not the pinned super_block
 > >> + */
-> >> +static int validate_policy(const struct ipe_parsed_policy *p)
+> >> +static bool from_pinned(const struct super_block *sb)
 > >> +{
-> >> +    size_t i =3D 0;
+> >> +    bool rv;
 > >> +
-> >> +    if (p->global_default_action !=3D IPE_ACTION_INVALID)
-> >> +            return 0;
+> >> +    if (!sb)
+> >> +            return false;
+> >> +    spin_lock(&pin_lock);
+> >> +    rv =3D !IS_ERR_OR_NULL(pinned_sb) && pinned_sb =3D=3D sb;
+> >> +    spin_unlock(&pin_lock);
 > >
-> > Should the if conditional above be "=3D=3D" and not "!=3D"?
+> > It's okay for an initial version, but I still think you need to get
+> > away from this spinlock in from_pinned() as quickly as possible.
+> > Maybe I'm wrong, but this looks like a major source of lock contention.
+> >
+> > I understand the issue around RCU and the potential for matching on
+> > a reused buffer/address, but if you modified IPE to have its own LSM
+> > security blob in super_block::security you could mark the superblock
+> > when it was mounted and do a lockless lookup here in from_pinned().
 >
-> >No, "!=3D" is the correct one.
->
-> The purpose of validation is to ensure that we have enough default rules
-> to cover all cases. If the global default action not invalid, it means
-> we have a global default rule in the policy to cover all cases, thus we
-> simply return 0.
->
-> However, if there is no global default rule, then we need to ensure that
-> for each operation, there is a operation specific default rule, this is
-> validated in the for loop below.
+> Thank you for the suggestion. After some testing, I discovered that
+> switching to RCU to pin the super block and using a security blob to
+> mark a pinned super block works. This approach do avoid many spinlock
+> operations. I'll incorporate these changes in the next version of the pat=
+ch.
 
-Makes sense, thanks.
+I probably wasn't as clear as I should have been, I was thinking of
+doing away with the @pinned_sb global variable entirely, as well as
+its associated lock problems and simply marking the initramfs/initrd
+superblock when it was mounted.  I will admit that I haven't fully
+thought about all the implementation details, but I think you could
+leverage the security_sb_mount() hook to set a flag in IPE's
+superblock metadata when the initramfs was mounted.
 
---=20
+--
 paul-moore.com
