@@ -2,58 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B127DE988
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Nov 2023 01:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DB37DE98C
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Nov 2023 01:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjKBAk3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Nov 2023 20:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S234518AbjKBAlH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Nov 2023 20:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbjKBAk2 (ORCPT
+        with ESMTP id S231511AbjKBAlG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Nov 2023 20:40:28 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2216B113
-        for <linux-integrity@vger.kernel.org>; Wed,  1 Nov 2023 17:40:18 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d9ac31cb051so392616276.3
-        for <linux-integrity@vger.kernel.org>; Wed, 01 Nov 2023 17:40:18 -0700 (PDT)
+        Wed, 1 Nov 2023 20:41:06 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA127101
+        for <linux-integrity@vger.kernel.org>; Wed,  1 Nov 2023 17:41:00 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-da2b9211dc0so377925276.3
+        for <linux-integrity@vger.kernel.org>; Wed, 01 Nov 2023 17:41:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1698885617; x=1699490417; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1698885660; x=1699490460; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XqFTar32ASbvPrjveH78MV7Rh5xk6Ufja7S8f/Bljs0=;
-        b=F7mWy0sDxS2NsZq4r0QIIkweMjFgefI5B9XATldwoY88ve/PPhdiO6WPTlCRZzZKYH
-         bDAL7W3bJxXiOJ0tdx4Oars+508WwIqhuqekUkgZD6Kb6UhFk0q2Tl0baDFvH+0eotKR
-         242gTFN2/4qwp3Mt8DWC447jdlMMPTvPfMjumv1oPnP7lMq7CKDlxhTYm5KTON3NCoNV
-         oU2XaTDUkxocJG0bR7yLUf9xyWKv6b02FIRYAtZ3biraiF7Qq2R9xLINkiSCYFzTmqxc
-         OTBpwVzjfD+HLWavnU5OuO7RaMH9DhPxo6jRfyHL/h18I27yuPQRGDWSsHDo4FKV0SlS
-         fmhw==
+        bh=TXv7lNcUKE/bPvUbNVQ0cVR7ltHedHv7vFfJ1xNnXoo=;
+        b=D9no4B2d4cqTGIzHucsVFeKxSN5A9mmIMdqIFPQ4RzAt/VBlLU8VAsOB0wV1fh0xsm
+         H/pGzVf4EBLMd92afH6nNZWydrUBamPyPQGA09x25gWCeiCuojHllt3VZKhGgqSZ7JN2
+         q2ZJUwqYiKVXBEfkThmZU2HnvWbjFEDOVoK2ywFzJT6aTLhlR0Y36hEgrJfKxZAmvtra
+         t/yknTSLg9RmHfFDGoVX/1GkHFCPhER4T8a8fdr95/HnWQs087yaa507YscWGoUlpBP2
+         arbLoim6AdpCroVlMlqTCqOYjLwBoZrwy7LMrf4pfW3fXZGqJuYZUCqAC5oAVQ1fkOfs
+         NR3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698885617; x=1699490417;
+        d=1e100.net; s=20230601; t=1698885660; x=1699490460;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XqFTar32ASbvPrjveH78MV7Rh5xk6Ufja7S8f/Bljs0=;
-        b=BB1KdhtwB1OnvbuGksCpW2Rh8D7dflJLE7DyOHhKi7xTOuJQSZ8Adi3ycy2LtTXYDf
-         Al/xx5DvwsWemeHCm4Gy4VJHZOpe/841ePgQrFR93vVmxj1Oo1Sz2o+ztCZKRbmtTaJY
-         PB59UeMOjiaqAvIItaf/ATc0FefzNJblYBjcmiD98acgK/GAxWc7W29LS2G7ch+IovUd
-         /siyocfKul+PKvhDJ3oP46xd5J/msGO6HBVw5SwKgcXs4OObEJuggZ/p4RXD/nY1sf04
-         h8y852yQKxL5QfzXkEh+SO/behcRZlsy58vc9a7xYund2wCDThmIUq5BM30x5IM97o9K
-         53Vg==
-X-Gm-Message-State: AOJu0Yxix1FzuWOkErhHrD3KA2jzCO2JIJpmvwrOyH7StRsDdqSeT8g7
-        U8j3NFz20+2QNE996muijtQ3KOCzjK4zgev+ngHA
-X-Google-Smtp-Source: AGHT+IGK/PhuZ+UhDDHZYM1Pa72OuOxp0eZOylk1ZmSUvvPb8Alc5ldvSn4N3nj0JccWeXvYLwtkGk3oqNifU7yZ4Jo=
-X-Received: by 2002:a25:da82:0:b0:da0:5ff5:5df7 with SMTP id
- n124-20020a25da82000000b00da05ff55df7mr17332747ybf.12.1698885617167; Wed, 01
- Nov 2023 17:40:17 -0700 (PDT)
+        bh=TXv7lNcUKE/bPvUbNVQ0cVR7ltHedHv7vFfJ1xNnXoo=;
+        b=LHlpwbTL+gX5kV3HJsnxM/UjQmKOTllH0hxKh1FFX52x7D6SbGZ+cLxewXF0JdY8EI
+         2+si+2y7yLeH30ynQwZRreY3J0anmNhjx1X7o5symnFijeYKDrZLul4duIGEFljIKoZW
+         wilQCt4XZxOfyyiJ91eV31cTMdCUMReEz0lhHg1q7e5KYidHYm1soSmXUgL3Etb/D0Co
+         lWEwt8fFV4oihXj/vnUXWSJCnF2R3AOF2WL+VvBpXpXE9itWwp478nJpM0fmbFTeUzOM
+         tm8DyiA0RpAoI63YbVg9++paBDxiZO3k58QZEANxnwxUD+goOG5CF9ko/cQWSUnv+gG3
+         Q+Lw==
+X-Gm-Message-State: AOJu0YyuXXjQRDu+BrnlgQOCPW1qdhqB5k6b8I4Gwzf1NdG3tp+nWjvY
+        f2GHJ7YIieg17awcLT1qRpG+T26W6fkEiv0XAT0d
+X-Google-Smtp-Source: AGHT+IHX5SByOusRzJbw7XlPM3jE3Ppiy/SLY9W8Ke82qVvDL1WHm97FTYfGRSVFyvB1nXe4XZRil3a/EiFE9ySrnAI=
+X-Received: by 2002:a25:db13:0:b0:d9c:a3dd:664e with SMTP id
+ g19-20020a25db13000000b00d9ca3dd664emr15078806ybf.56.1698885659901; Wed, 01
+ Nov 2023 17:40:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <1696457386-3010-16-git-send-email-wufan@linux.microsoft.com> <6efb7a80ba0eb3e02b3ae7a5c0a210f3.paul@paul-moore.com>
-In-Reply-To: <6efb7a80ba0eb3e02b3ae7a5c0a210f3.paul@paul-moore.com>
+References: <1696457386-3010-12-git-send-email-wufan@linux.microsoft.com> <85311850a862fe6ccb946634429b890a.paul@paul-moore.com>
+In-Reply-To: <85311850a862fe6ccb946634429b890a.paul@paul-moore.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 1 Nov 2023 20:40:06 -0400
-Message-ID: <CAHC9VhQJkcb-k+o+NvVn7crrMMZqpBcZpnEbKBT+eZg4Ocjqhw@mail.gmail.com>
-Subject: Re: [PATCH RFC v11 15/19] fsverity: consume builtin signature via LSM hook
+Date:   Wed, 1 Nov 2023 20:40:49 -0400
+Message-ID: <CAHC9VhQHizyP3frH61jQi-8eNeNvg9UcPkvPv6Kk3k7rMsCziQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v11 11/19] dm verity: set DM_TARGET_SINGLETON feature flag
 To:     Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
         zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
         tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
@@ -62,14 +62,13 @@ Cc:     linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
         dm-devel@redhat.com, audit@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,166 +79,48 @@ On Mon, Oct 23, 2023 at 11:52=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
 rote:
 > On Oct  4, 2023 Fan Wu <wufan@linux.microsoft.com> wrote:
 > >
-> > fsverity represents a mechanism to support both integrity and
-> > authenticity protection of a file, supporting both signed and unsigned
-> > digests.
+> > The device-mapper has a flag to mark targets as singleton, which is a
+> > required flag for immutable targets. Without this flag, multiple
+> > dm-verity targets can be added to a mapped device, which has no
+> > practical use cases and will let dm_table_get_immutable_target return
+> > NULL. This patch adds the missing flag, restricting only one
+> > dm-verity target per mapped device.
 > >
-> > An LSM which controls access to a resource based on authenticity and
-> > integrity of said resource, can then use this data to make an informed
-> > decision on the authorization (provided by the LSM's policy) of said
-> > claim.
-> >
-> > This effectively allows the extension of a policy enforcement layer in
-> > LSM for fsverity, allowing for more granular control of how a
-> > particular authenticity claim can be used. For example, "all (built-in)
-> > signed fsverity files should be allowed to execute, but only these
-> > hashes are allowed to be loaded as kernel modules".
-> >
-> > This enforcement must be done in kernel space, as a userspace only
-> > solution would fail a simple litmus test: Download a self-contained
-> > malicious binary that never touches the userspace stack. This
-> > binary would still be able to execute.
-> >
-> > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 > > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 > > ---
-> > v1-v6:
+> > v1-v10:
 > >   + Not present
-> >
-> > v7:
-> >   Introduced
-> >
-> > v8:
-> >   + Split fs/verity/ changes and security/ changes into separate patche=
-s
-> >   + Change signature of fsverity_create_info to accept non-const inode
-> >   + Change signature of fsverity_verify_signature to accept non-const i=
-node
-> >   + Don't cast-away const from inode.
-> >   + Digest functionality dropped in favor of:
-> >     ("fs-verity: define a function to return the integrity protected
-> >       file digest")
-> >   + Reworded commit description and title to match changes.
-> >   + Fix a bug wherein no LSM implements the particular fsverity @name
-> >     (or LSM is disabled), and returns -EOPNOTSUPP, causing errors.
-> >
-> > v9:
-> >   + No changes
-> >
-> > v10:
-> >   + Rename the signature blob key
-> >   + Cleanup redundant code
-> >   + Make the hook call depends on CONFIG_FS_VERITY_BUILTIN_SIGNATURES
-> >
-> > v11:
-> >   + No changes
 > > ---
-> >  fs/verity/fsverity_private.h |  2 +-
-> >  fs/verity/open.c             | 26 +++++++++++++++++++++++++-
-> >  include/linux/fsverity.h     |  2 ++
-> >  3 files changed, 28 insertions(+), 2 deletions(-)
+> >  drivers/md/dm-verity-target.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> We need an ACK from some VFS folks on this.
+> This seems reasonable to me and matches with other users of
+> DM_TARGET_IMMUTABLE.
+>
+> Alasdair, Mike, can we get an ACK on this?
 
-Eric and/or Ted, can we get either an ACK or some feedback on this patch?
+A gentle ping with a reminder ...
 
 For reference, the full patchset can be found on lore at the link below:
 
 https://lore.kernel.org/linux-security-module/1696457386-3010-1-git-send-em=
 ail-wufan@linux.microsoft.com/
 
-> > diff --git a/fs/verity/fsverity_private.h b/fs/verity/fsverity_private.=
-h
-> > index d071a6e32581..4a82716e852f 100644
-> > --- a/fs/verity/fsverity_private.h
-> > +++ b/fs/verity/fsverity_private.h
-> > @@ -108,7 +108,7 @@ int fsverity_init_merkle_tree_params(struct merkle_=
-tree_params *params,
-> >                                    unsigned int log_blocksize,
-> >                                    const u8 *salt, size_t salt_size);
+> > diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-targe=
+t.c
+> > index 26adcfea0302..80673b66c194 100644
+> > --- a/drivers/md/dm-verity-target.c
+> > +++ b/drivers/md/dm-verity-target.c
+> > @@ -1503,7 +1503,7 @@ int dm_verity_get_root_digest(struct dm_target *t=
+i, u8 **root_digest, unsigned i
 > >
-> > -struct fsverity_info *fsverity_create_info(const struct inode *inode,
-> > +struct fsverity_info *fsverity_create_info(struct inode *inode,
-> >                                          struct fsverity_descriptor *de=
-sc);
-> >
-> >  void fsverity_set_info(struct inode *inode, struct fsverity_info *vi);
-> > diff --git a/fs/verity/open.c b/fs/verity/open.c
-> > index 6c31a871b84b..5b48e2c39086 100644
-> > --- a/fs/verity/open.c
-> > +++ b/fs/verity/open.c
-> > @@ -8,6 +8,7 @@
-> >  #include "fsverity_private.h"
-> >
-> >  #include <linux/mm.h>
-> > +#include <linux/security.h>
-> >  #include <linux/slab.h>
-> >
-> >  static struct kmem_cache *fsverity_info_cachep;
-> > @@ -172,12 +173,28 @@ static int compute_file_digest(const struct fsver=
-ity_hash_alg *hash_alg,
-> >       return err;
-> >  }
-> >
-> > +#ifdef CONFIG_FS_VERITY_BUILTIN_SIGNATURES
-> > +static int fsverity_inode_setsecurity(struct inode *inode,
-> > +                                   struct fsverity_descriptor *desc)
-> > +{
-> > +     return security_inode_setsecurity(inode, FS_VERITY_INODE_SEC_NAME=
-,
-> > +                                       desc->signature,
-> > +                                       le32_to_cpu(desc->sig_size), 0)=
-;
-> > +}
-> > +#else
-> > +static inline int fsverity_inode_setsecurity(struct inode *inode,
-> > +                                          struct fsverity_descriptor *=
-desc)
-> > +{
-> > +     return 0;
-> > +}
-> > +#endif /* CONFIG_IPE_PROP_FS_VERITY*/
-> > +
-> >  /*
-> >   * Create a new fsverity_info from the given fsverity_descriptor (with=
- optional
-> >   * appended builtin signature), and check the signature if present.  T=
-he
-> >   * fsverity_descriptor must have already undergone basic validation.
-> >   */
-> > -struct fsverity_info *fsverity_create_info(const struct inode *inode,
-> > +struct fsverity_info *fsverity_create_info(struct inode *inode,
-> >                                          struct fsverity_descriptor *de=
-sc)
-> >  {
-> >       struct fsverity_info *vi;
-> > @@ -242,6 +259,13 @@ struct fsverity_info *fsverity_create_info(const s=
-truct inode *inode,
-> >               spin_lock_init(&vi->hash_page_init_lock);
-> >       }
-> >
-> > +     err =3D fsverity_inode_setsecurity(inode, desc);
-> > +     if (err =3D=3D -EOPNOTSUPP)
-> > +             err =3D 0;
-> > +
-> > +     if (err)
-> > +             goto fail;
-> > +
-> >       return vi;
-> >
-> >  fail:
-> > diff --git a/include/linux/fsverity.h b/include/linux/fsverity.h
-> > index 1eb7eae580be..9666721baf15 100644
-> > --- a/include/linux/fsverity.h
-> > +++ b/include/linux/fsverity.h
-> > @@ -319,4 +319,6 @@ static inline int fsverity_prepare_setattr(struct d=
-entry *dentry,
-> >       return 0;
-> >  }
-> >
-> > +#define FS_VERITY_INODE_SEC_NAME "fsverity.builtin-sig"
-> > +
-> >  #endif       /* _LINUX_FSVERITY_H */
+> >  static struct target_type verity_target =3D {
+> >       .name           =3D "verity",
+> > -     .features       =3D DM_TARGET_IMMUTABLE,
+> > +     .features       =3D DM_TARGET_SINGLETON | DM_TARGET_IMMUTABLE,
+> >       .version        =3D {1, 9, 0},
+> >       .module         =3D THIS_MODULE,
+> >       .ctr            =3D verity_ctr,
 > > --
 > > 2.25.1
 
