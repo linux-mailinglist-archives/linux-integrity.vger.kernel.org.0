@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2954B7E2CCD
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Nov 2023 20:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA0F7E2CE0
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Nov 2023 20:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbjKFT1l (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Nov 2023 14:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S232196AbjKFTc0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Nov 2023 14:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjKFT1k (ORCPT
+        with ESMTP id S232452AbjKFTcW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Nov 2023 14:27:40 -0500
+        Mon, 6 Nov 2023 14:32:22 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA671BC
-        for <linux-integrity@vger.kernel.org>; Mon,  6 Nov 2023 11:26:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E408F3
+        for <linux-integrity@vger.kernel.org>; Mon,  6 Nov 2023 11:31:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699298813;
+        s=mimecast20190719; t=1699299094;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/C/WjxiCVsJz9f1oEP2Y4XakhqVX5j64dRCa7+qXYyE=;
-        b=hqKzvSPDj2j3nBxuFmkXuNVbKviSYy4lYQJMnseMRcM1yc2kSPAIn/7taFCPe0kOMoVfJp
-        s0mNEbD+UR4xk3P/fI8exPD5R1x4k1J5LijLoq/kpYUzmkdpDCbh9yE56ccApraPjMZPqf
-        q5OucSFqHKuYcoQoDjyyP43t0lXYK4g=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=sqWGwV812/CXYndzj2W50PA7KOMPm+tHC+e+xjD2/M0=;
+        b=ASFf3jj0lazzOKnHJ/q3yO4maXPHk8gbLkUqNytOQ6xTG2dufg00/+F0u9inNM9APzRo/5
+        SElMhLm5CFMQsfDPQ8k7INcQ8V+fEBBVSyEcVdFRFaXQdt7M+t2/w33HPKIpE2/m62lKFR
+        hRlcmYvT0Z+oYrRTbVMwgylrr2Sr7TU=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-693-6QU77QxwO-GvF0GG3te8Og-1; Mon, 06 Nov 2023 14:26:49 -0500
-X-MC-Unique: 6QU77QxwO-GvF0GG3te8Og-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-779f645c74cso538314185a.0
-        for <linux-integrity@vger.kernel.org>; Mon, 06 Nov 2023 11:26:49 -0800 (PST)
+ us-mta-477-5cpNd4fkMF27erwpYL49mw-1; Mon, 06 Nov 2023 14:31:33 -0500
+X-MC-Unique: 5cpNd4fkMF27erwpYL49mw-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-778915a0c73so492256985a.1
+        for <linux-integrity@vger.kernel.org>; Mon, 06 Nov 2023 11:31:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699298809; x=1699903609;
+        d=1e100.net; s=20230601; t=1699299093; x=1699903893;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/C/WjxiCVsJz9f1oEP2Y4XakhqVX5j64dRCa7+qXYyE=;
-        b=lCEXuUkT1FTvlt9c/AXBlx3YnI6lTKzEIDo9CmFaNyIKH0n/JA2S11Q1c89u60vhbg
-         uilTzqvVWbvnVR/vRG34EB5RL3SJqTlYFV37nty3s7SWmLvooi5p5uRnJ2QK9yGu5zqL
-         TKhVJZHfbrHuqftr9v8ICGC5ygGtsfzr9erw4aIxbEO8Xs+zB6QV+4nuCAdOpLPUEzox
-         7nFO55JuloSD+RZxJVYnH5dMgQZcUSLsdEG1X1CfSGeXJGpBZei0VwD/+9ir4H8G0eW9
-         8Rcl+DmWG4/0MZJHl0xAOKrz56mCvlpvwME9ybVi1qFFagf24S5JNnGE9fQmmkJJpORX
-         3GcQ==
-X-Gm-Message-State: AOJu0Ywng53FPfS3+/mRAAlWXlASOawp3CnRuTgWKWr1B6uVSCZjUlbo
-        KjkNNhB0TSOApAlhUKjR2on86YNDpIQB87X56MYrTcaqWGheFvVedlXTlCi/amFu2NaZjnogLRN
-        xgDmPLH1G27YNcE2U/llOh/o6uCNq
-X-Received: by 2002:a05:620a:444b:b0:778:9542:a765 with SMTP id w11-20020a05620a444b00b007789542a765mr40268960qkp.64.1699298809008;
-        Mon, 06 Nov 2023 11:26:49 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF4J4SaJitD2GuvTLmTEH/lixSVaiP4mCjrPIimN2+kmtJXKyqkH9XwjIiR80Gp98vcOrUInw==
-X-Received: by 2002:a05:620a:444b:b0:778:9542:a765 with SMTP id w11-20020a05620a444b00b007789542a765mr40268946qkp.64.1699298808800;
-        Mon, 06 Nov 2023 11:26:48 -0800 (PST)
+        bh=sqWGwV812/CXYndzj2W50PA7KOMPm+tHC+e+xjD2/M0=;
+        b=cFwk4/Nlb/AK2eTLtCZAbAx83BFOqfMcKxb29MZ0qrjMbeSSa7bi+6IaqqFjRss2n3
+         aanBDBHU4QC7ENI9J9Xu0LLRTzUUzxA0d3lCxtABI2SxcV9Lw7HUjbDQ7hf/tFqd5XnD
+         MaJxyq+VB5mLlXaGOh8qroW4c+1ABLmsd2CZ5jr6wTEApVNzP1//NGdfPq7kuHLDRU81
+         m5dTfIB/KIhISDw/bfi7uV78h4UXfa/w+KlzQfrzgJzRkT0lvmSNipMYdspTayuaJ3aR
+         8/ZLKU+8fz7DUAPb0TkoKRYx4lTf40fOfPAyicnF/HZjy2s7AEIEonP/LznmtjF8BnjX
+         jWOg==
+X-Gm-Message-State: AOJu0YwMPvJmCa73JPTjQVcj0wJMGhOUtNx/YQSjENIhMfmvE7mZ49wZ
+        DPBRq0RnnkaaTeWMjxAQY9VOnDPD2ARnayMRTW2KrzrkuySCb8VJpaYU74yJ/Tmv4ErKd56slCF
+        v4ddeZxhH9pqnpSUUQ5aIBxDTuSK3
+X-Received: by 2002:a05:620a:31a6:b0:773:c4c8:2d58 with SMTP id bi38-20020a05620a31a600b00773c4c82d58mr33054191qkb.59.1699299092999;
+        Mon, 06 Nov 2023 11:31:32 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEMC4OZw13o7zojxKDTLQnTVqildfL87qAiPF2IC97OBWWvfcH0eCZKZ8LoCuggfuWN7AoEdg==
+X-Received: by 2002:a05:620a:31a6:b0:773:c4c8:2d58 with SMTP id bi38-20020a05620a31a600b00773c4c82d58mr33054171qkb.59.1699299092693;
+        Mon, 06 Nov 2023 11:31:32 -0800 (PST)
 Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id x8-20020ae9f808000000b007756e75b91bsm3554551qkh.78.2023.11.06.11.26.47
+        by smtp.gmail.com with ESMTPSA id oo12-20020a05620a530c00b007758b25ac3bsm3555862qkn.82.2023.11.06.11.31.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Nov 2023 11:26:48 -0800 (PST)
-Date:   Mon, 6 Nov 2023 12:26:46 -0700
+        Mon, 06 Nov 2023 11:31:32 -0800 (PST)
+Date:   Mon, 6 Nov 2023 12:31:30 -0700
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
 To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
@@ -75,25 +75,24 @@ Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         open list <linux-kernel@vger.kernel.org>,
         "open list:SECURITY SUBSYSTEM" 
         <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v3 2/6] tpm: Store TPM buffer length
-Message-ID: <lifu6orgfo57usei3szyfrmr6ofl37477gji5xh5bwkhftswxg@cjwwa5okjshi>
+Subject: Re: [PATCH v3 3/6] tpm: Detach tpm_buf_reset() from tpm_buf_init()
+Message-ID: <xp2tdlw2qjg3pbazb3oye7poeh4r5neeqbsvamgiazdl2bouwa@qnxhvt7vzkpb>
 References: <20231024011531.442587-1-jarkko@kernel.org>
- <20231024011531.442587-3-jarkko@kernel.org>
+ <20231024011531.442587-4-jarkko@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231024011531.442587-3-jarkko@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <20231024011531.442587-4-jarkko@kernel.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
-
 
 Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
