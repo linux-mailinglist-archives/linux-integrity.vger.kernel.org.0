@@ -2,97 +2,158 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA0F7E2CE0
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Nov 2023 20:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FE07E2CE7
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Nov 2023 20:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjKFTc0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Nov 2023 14:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S231699AbjKFTeN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Nov 2023 14:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbjKFTcW (ORCPT
+        with ESMTP id S231773AbjKFTeM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Nov 2023 14:32:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E408F3
-        for <linux-integrity@vger.kernel.org>; Mon,  6 Nov 2023 11:31:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699299094;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sqWGwV812/CXYndzj2W50PA7KOMPm+tHC+e+xjD2/M0=;
-        b=ASFf3jj0lazzOKnHJ/q3yO4maXPHk8gbLkUqNytOQ6xTG2dufg00/+F0u9inNM9APzRo/5
-        SElMhLm5CFMQsfDPQ8k7INcQ8V+fEBBVSyEcVdFRFaXQdt7M+t2/w33HPKIpE2/m62lKFR
-        hRlcmYvT0Z+oYrRTbVMwgylrr2Sr7TU=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-477-5cpNd4fkMF27erwpYL49mw-1; Mon, 06 Nov 2023 14:31:33 -0500
-X-MC-Unique: 5cpNd4fkMF27erwpYL49mw-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-778915a0c73so492256985a.1
-        for <linux-integrity@vger.kernel.org>; Mon, 06 Nov 2023 11:31:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699299093; x=1699903893;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sqWGwV812/CXYndzj2W50PA7KOMPm+tHC+e+xjD2/M0=;
-        b=cFwk4/Nlb/AK2eTLtCZAbAx83BFOqfMcKxb29MZ0qrjMbeSSa7bi+6IaqqFjRss2n3
-         aanBDBHU4QC7ENI9J9Xu0LLRTzUUzxA0d3lCxtABI2SxcV9Lw7HUjbDQ7hf/tFqd5XnD
-         MaJxyq+VB5mLlXaGOh8qroW4c+1ABLmsd2CZ5jr6wTEApVNzP1//NGdfPq7kuHLDRU81
-         m5dTfIB/KIhISDw/bfi7uV78h4UXfa/w+KlzQfrzgJzRkT0lvmSNipMYdspTayuaJ3aR
-         8/ZLKU+8fz7DUAPb0TkoKRYx4lTf40fOfPAyicnF/HZjy2s7AEIEonP/LznmtjF8BnjX
-         jWOg==
-X-Gm-Message-State: AOJu0YwMPvJmCa73JPTjQVcj0wJMGhOUtNx/YQSjENIhMfmvE7mZ49wZ
-        DPBRq0RnnkaaTeWMjxAQY9VOnDPD2ARnayMRTW2KrzrkuySCb8VJpaYU74yJ/Tmv4ErKd56slCF
-        v4ddeZxhH9pqnpSUUQ5aIBxDTuSK3
-X-Received: by 2002:a05:620a:31a6:b0:773:c4c8:2d58 with SMTP id bi38-20020a05620a31a600b00773c4c82d58mr33054191qkb.59.1699299092999;
-        Mon, 06 Nov 2023 11:31:32 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEMC4OZw13o7zojxKDTLQnTVqildfL87qAiPF2IC97OBWWvfcH0eCZKZ8LoCuggfuWN7AoEdg==
-X-Received: by 2002:a05:620a:31a6:b0:773:c4c8:2d58 with SMTP id bi38-20020a05620a31a600b00773c4c82d58mr33054171qkb.59.1699299092693;
-        Mon, 06 Nov 2023 11:31:32 -0800 (PST)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id oo12-20020a05620a530c00b007758b25ac3bsm3555862qkn.82.2023.11.06.11.31.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Nov 2023 11:31:32 -0800 (PST)
-Date:   Mon, 6 Nov 2023 12:31:30 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        William Roberts <bill.c.roberts@gmail.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Julien Gomes <julien@arista.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v3 3/6] tpm: Detach tpm_buf_reset() from tpm_buf_init()
-Message-ID: <xp2tdlw2qjg3pbazb3oye7poeh4r5neeqbsvamgiazdl2bouwa@qnxhvt7vzkpb>
-References: <20231024011531.442587-1-jarkko@kernel.org>
- <20231024011531.442587-4-jarkko@kernel.org>
+        Mon, 6 Nov 2023 14:34:12 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE5598;
+        Mon,  6 Nov 2023 11:34:09 -0800 (PST)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A6If1EH013911;
+        Mon, 6 Nov 2023 19:33:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=pR17r1i6xD2ZC1y/ELQ9wYH3czcd++vzBZ22lKrS8lM=;
+ b=dxw4uxV5E11BVQof7h9BMUzZOXAMjSUrrde8wTLMPj69A0LHH9cRaKTa48J2Slk4u5w2
+ 7xEDVrKfJ4/sOjjlAM3ZkFlAuKqG5vIGJPDohTlhhv+owQ7wpCVOerKEVyaZREb8pxKh
+ KmHlOdTpr+QAuCkwdUuOf0sxra8/J+5VZBQbL+/qqgFqDTuvJPp81f3vfVjX6ruzhEFy
+ HXvdCk7htMsnt/74vFtLsXXYTQyJEFQqf8D3ml5oy5Lvx/zsXPZ+mcmsDwEAs6jdyRUB
+ KMGkofU5qGEszI/ObcS8EkSo7pplMPyz0KEr5ZUC8XoWELFiO2u0kZnEyshmB1X73S5w cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u73f4npmr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Nov 2023 19:33:57 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3A6JAmjf032547;
+        Mon, 6 Nov 2023 19:33:56 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u73f4npkj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Nov 2023 19:33:56 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3A6Hh3QQ016959;
+        Mon, 6 Nov 2023 19:33:55 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3u6301k3d6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Nov 2023 19:33:55 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3A6JXsRa44237446
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Nov 2023 19:33:54 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7246C5805A;
+        Mon,  6 Nov 2023 19:33:54 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E08558051;
+        Mon,  6 Nov 2023 19:33:53 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.58.168])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Nov 2023 19:33:53 +0000 (GMT)
+Message-ID: <3bae86a2572e1ced0ad069ed6ecd2c0a7d33e11e.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/2] ima: Add machine keyring reference to
+ IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     dmitry.kasatkin@gmail.com, jarkko@kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 06 Nov 2023 14:33:53 -0500
+In-Reply-To: <20231102170617.2403495-2-eric.snowberg@oracle.com>
+References: <20231102170617.2403495-1-eric.snowberg@oracle.com>
+         <20231102170617.2403495-2-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1ecSAXapnbmuzgGvNH6uEXTtsKj4p1qq
+X-Proofpoint-ORIG-GUID: oxDtD7gTF9sK8j8cVjJDhoEugbcVcA4C
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231024011531.442587-4-jarkko@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-06_15,2023-11-02_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ clxscore=1015 lowpriorityscore=0 suspectscore=0 adultscore=0
+ mlxlogscore=999 priorityscore=1501 impostorscore=0 spamscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2311060161
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Hi Eric,
+
+The subject line is referred to as the 'summary' phrase.  As far as I'm
+aware the length is still between 70-75 charcaters.  Refer to 
+https://www.kernel.org/doc/Documentation/process/submitting-patches.rst
+.
+
+On Thu, 2023-11-02 at 13:06 -0400, Eric Snowberg wrote:
+> When the machine keyring is enabled, it may be used as a trust source
+> for the .ima keyring.  Add a reference to this in
+> IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY.
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> ---
+>  security/integrity/ima/Kconfig | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+> index a6bd817efc1a..c5dc0fabbc8b 100644
+> --- a/security/integrity/ima/Kconfig
+> +++ b/security/integrity/ima/Kconfig
+> @@ -243,7 +243,7 @@ config IMA_APPRAISE_MODSIG
+>  	   to accept such signatures.
+>  
+>  config IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+> -	bool "Permit keys validly signed by a built-in or secondary CA cert (EXPERIMENTAL)"
+> +	bool "Permit keys validly signed by a built-in, secondary or machine CA cert (EXPERIMENTAL)"
+
+Please add 'machine' in between built-in and secondary, like described
+below.
+
+>  	depends on SYSTEM_TRUSTED_KEYRING
+>  	depends on SECONDARY_TRUSTED_KEYRING
+>  	depends on INTEGRITY_ASYMMETRIC_KEYS
+> @@ -251,14 +251,14 @@ config IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+>  	default n
+>  	help
+>  	  Keys may be added to the IMA or IMA blacklist keyrings, if the
+> -	  key is validly signed by a CA cert in the system built-in or
+> -	  secondary trusted keyrings. The key must also have the
+> -	  digitalSignature usage set.
+> +	  key is validly signed by a CA cert in the system built-in,
+> +	  machine (if configured), or secondary trusted keyrings. The
+> +	  key must also have the digitalSignature usage set.
+>  
+>  	  Intermediate keys between those the kernel has compiled in and the
+>  	  IMA keys to be added may be added to the system secondary keyring,
+>  	  provided they are validly signed by a key already resident in the
+> -	  built-in or secondary trusted keyrings.
+> +	  built-in, machine (if configured) or secondary trusted keyrings.
+>  
+>  config IMA_BLACKLIST_KEYRING
+>  	bool "Create IMA machine owner blacklist keyrings (EXPERIMENTAL)"
+
+-- 
+thanks,
+
+Mimi
+
 
