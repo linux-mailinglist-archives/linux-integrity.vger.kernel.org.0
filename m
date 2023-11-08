@@ -2,108 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF107E494B
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Nov 2023 20:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FEE7E4F62
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Nov 2023 04:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234393AbjKGTiM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 7 Nov 2023 14:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S234685AbjKHDOh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Nov 2023 22:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbjKGTiL (ORCPT
+        with ESMTP id S230126AbjKHDOg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 7 Nov 2023 14:38:11 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95662184;
-        Tue,  7 Nov 2023 11:38:09 -0800 (PST)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A7JbP1P022507;
-        Tue, 7 Nov 2023 19:37:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=14T72CPVR285oFFtZ+8xzxRw9J5zB2JeOmh7d67ZjHo=;
- b=h4fPC9GYJfS1DQ7Kl8LrgWtkQcl2J64BQzEpoef7J5sjfpC01yrZppXvR8+JyweIinGs
- lpiQdZ9DiXAAFeuzA/Q5oh2bbhvCqpsCPy3QxI4nNH5NLe/HfJcCVTC56O+z3C3IUtmd
- m4VuYRyZG0nyLI4rsUoANo6t+0beK4T37hpUKTgCKSXpt5XRGN1eMwcEqq+3enUOoUkZ
- CAXpmBNHMOAcIsWfD+bTbCX5c/JKDlLv1OnGgZKt0k7jALd85MnfXKZ3beB9/dGuPurn
- MiwTnA+OQVfK90UnCajJPmmjWFP4ozzS+JzJtS0P6Q6o4C7lRC62eoBGuR0hou50DQgk yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u7uj6r031-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Nov 2023 19:37:31 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3A7JbU4d022644;
-        Tue, 7 Nov 2023 19:37:30 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u7uj6r01x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Nov 2023 19:37:30 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3A7HVCn8025666;
-        Tue, 7 Nov 2023 19:37:29 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3u619nk3xa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Nov 2023 19:37:29 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3A7JbSH319661386
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Nov 2023 19:37:28 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6EE1758059;
-        Tue,  7 Nov 2023 19:37:28 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7275258057;
-        Tue,  7 Nov 2023 19:37:26 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.112.185])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Nov 2023 19:37:26 +0000 (GMT)
-Message-ID: <c68a9acb758eb6989defc92beb66af9977dacfcc.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 00/23] security: Move IMA and EVM to the LSM
- infrastructure
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        Tue, 7 Nov 2023 22:14:36 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5B710FC
+        for <linux-integrity@vger.kernel.org>; Tue,  7 Nov 2023 19:14:34 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-d84c24a810dso6619210276.2
+        for <linux-integrity@vger.kernel.org>; Tue, 07 Nov 2023 19:14:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1699413274; x=1700018074; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B5vx1SuH10I5MRrYLP20KitGIgEW4Afe0xq877n9y14=;
+        b=CjlSIiQQuOE3VfMJb6D4Vo36nueAem9Rbb01GWWcXrlRqwHLcWpjjXuMeIbOWPRyhG
+         H2/yuzBQxt6xla58bQUxpW9dJiUUuQH1uZh2jB/Nw9DwilvMqzko5Pbln09PRGVUcHzJ
+         cC1I/zqOwxC+W4DCYVT+w9iGSXbRbzmVMHKFEm0TDZURchgkWVE7KuJPSR5eIOoDNxe2
+         DRzYmfmlG7zup3vE+oQk/4h096IC5Cqox/VAgKgQwp9lpMLAFrN3IPphaVDMW+1AZY5p
+         PpHtdmgJhyGihHUA8LYlHK8duyBPk4GEwKzA875M6hxBEKhqdSkv+qLwNJ8vQJP3R4dq
+         d/8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699413274; x=1700018074;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B5vx1SuH10I5MRrYLP20KitGIgEW4Afe0xq877n9y14=;
+        b=pVCx4KffMj3+j+0zcWNaE1BgUfTUIVNcHf5wOHCKEuYWXH6MyvREyItMu5bYfagJhY
+         BHTBcyCGmzwmnd10hH3s1qeqx2sXfsc1iRqCADCVB1RbsRSoZzowzII7xAcH4uGT8noE
+         oiR5RkLHIoe3YJPcL/nwxc47W9gFgfxUOhR/AgDl33XXOR3TAADSdjhYqqIvTBNBmW86
+         +yjv5ngENMlbtu3wIdvDXYNjFpMHwAa1lc+9HywmLXB5KkD7VY/nYk3Cilsfm22fvmqW
+         iPa9jLykTqnZnOArQc12+u6y0NHkm92D8PW8nKtSjuq9VWUhkLgh7VYe26mrK2/epN1b
+         jvdA==
+X-Gm-Message-State: AOJu0Ywv+31y3cuB/jAaYCmhZc1tC9nAwBo3zeHHiJ7PG4oy7yOgx9JE
+        InVliB/BGG+iceEbYAAJnGPOUgXFa+kdc3R6wjnz
+X-Google-Smtp-Source: AGHT+IHRgz90UgPoCYkWlS/aMw9sFfxqMSEFQczpq2CHZMN0KkBg+tCoSKeeUm0SHGN1yPZnqOEZ5u4F1SzXp1qhhSI=
+X-Received: by 2002:a25:c00f:0:b0:da0:400e:750c with SMTP id
+ c15-20020a25c00f000000b00da0400e750cmr643211ybf.27.1699413274027; Tue, 07 Nov
+ 2023 19:14:34 -0800 (PST)
+MIME-Version: 1.0
+References: <20231107134012.682009-1-roberto.sassu@huaweicloud.com> <563820b8fd57deb99e6247b6cdb416c4c3af3091.camel@huaweicloud.com>
+In-Reply-To: <563820b8fd57deb99e6247b6cdb416c4c3af3091.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 7 Nov 2023 22:14:23 -0500
+Message-ID: <CAHC9VhQ8otggx3uvwsdK=d6CJ167DHRuqPqihibJ37uCQ=_HbA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/23] security: Move IMA and EVM to the LSM infrastructure
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
         chuck.lever@oracle.com, jlayton@kernel.org, neilb@suse.de,
         kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
         dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
         stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, mic@digikod.net
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        casey@schaufler-ca.com, mic@digikod.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 07 Nov 2023 14:37:26 -0500
-In-Reply-To: <563820b8fd57deb99e6247b6cdb416c4c3af3091.camel@huaweicloud.com>
-References: <20231107134012.682009-1-roberto.sassu@huaweicloud.com>
-         <563820b8fd57deb99e6247b6cdb416c4c3af3091.camel@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: EAIzReFHRB0QO2SoXvZVSA00XKjUT0GT
-X-Proofpoint-GUID: 5KCl5XEErNXAt7C3086k7spDcOH8Pl_o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-07_10,2023-11-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0 suspectscore=0
- malwarescore=0 mlxlogscore=745 mlxscore=0 phishscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310240000 definitions=main-2311070162
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2023-11-07 at 15:05 +0100, Roberto Sassu wrote:
+On Tue, Nov 7, 2023 at 9:06=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> Hi everyone
+>
 > I kindly ask your support to add the missing reviewed-by/acked-by. I
 > summarize what is missing below:
-> 
+>
 > - @Mimi: patches 1, 2, 4, 5, 6, 19, 21, 22, 23 (IMA/EVM-specific
 >          patches)
+> - @Al/@Christian: patches 10-17 (VFS-specific patches)
+> - @Paul: patches 10-23 (VFS-specific patches/new LSM hooks/new LSMs)
 
-Thanks, Roberto.  I reviewed and commented on the entire patch set.
-	Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>h
+This patchset is next in my review queue :)
 
+> - @David Howells/@Jarkko: patch 18 (new LSM hook in the key subsystem)
+> - @Chuck Lever: patch 12 (new LSM hook in nfsd/vfs.c)
+>
+> Paul, as I mentioned I currently based the patch set on lsm/dev-
+> staging, which include the following dependencies:
+>
+> 8f79e425c140 lsm: don't yet account for IMA in LSM_CONFIG_COUNT calculati=
+on
+> 3c91a124f23d lsm: drop LSM_ID_IMA
+>
+> I know you wanted to wait until at least rc1 to make lsm/dev. I will
+> help for rebasing my patch set, if needed.
+
+No, it should be fine for right now.  Thanks for your patience and
+help with all of this.
+
+--=20
+paul-moore.com
