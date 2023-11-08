@@ -2,82 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F4F7E5150
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Nov 2023 08:47:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CF17E5292
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Nov 2023 10:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjKHHq7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Nov 2023 02:46:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S235543AbjKHJVF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Nov 2023 04:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjKHHq6 (ORCPT
+        with ESMTP id S235408AbjKHJVE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Nov 2023 02:46:58 -0500
-X-Greylist: delayed 571 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Nov 2023 23:46:55 PST
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BE6113;
-        Tue,  7 Nov 2023 23:46:55 -0800 (PST)
-Received: from localhost (unknown [124.16.138.129])
-        by APP-03 (Coremail) with SMTP id rQCowAB3fDyfOktlDpduAw--.10026S2;
-        Wed, 08 Nov 2023 15:37:03 +0800 (CST)
-From:   Chen Ni <nichen@iscas.ac.cn>
-To:     zohar@linux.ibm.com, dhowells@redhat.com, jarkko@kernel.org,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        sumit.garg@linaro.org, yaelt@google.com
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] KEYS: encrypted: Add check for strsep
-Date:   Wed,  8 Nov 2023 07:36:27 +0000
-Message-Id: <20231108073627.1063464-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Nov 2023 04:21:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8155D10A;
+        Wed,  8 Nov 2023 01:21:02 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51014C433C8;
+        Wed,  8 Nov 2023 09:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699435262;
+        bh=9f1HWkCwCFtzk3fX889cU2VmJzksISA21iZ6B4BDtY4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ffx2uh2ybtQm2VWN6sUqgEmp+f4T8KlTqy+vKM/yR25g1fiiGYU3n3SKANcJnNIT/
+         B0RG6ZT8lLSZRnZPNWXnE++9DaEpN+rEwCSp7hISUK6YnM2N5Slcw/Em8wuJy+vwg7
+         GNgY1qSTGhAtN6SV+rjEI3tInTNktZUkK03tOC1nF/BneKjW51QR4nZoK9UZeB+q10
+         KPO4hPWzCK9ztXaXC3ztWrxVFv2qJzmRvu1/aoBvdddCiyVy7f1Xec/yVIQyZXYbFq
+         fiUgEV4hsah02Yb+4IkFdi6M6Ua+PIYyNUthYTNGjorHQaLHO36sZ+GPFY1/B4aYmk
+         K1Mbtz6RR4leg==
+Date:   Wed, 8 Nov 2023 10:20:56 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     amir73il@gmail.com, Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs: Pass AT_GETATTR_NOSEC flag to getattr interface
+ function
+Message-ID: <20231108-knieprobleme-aufhielt-562b5bbafb79@brauner>
+References: <20231002125733.1251467-1-stefanb@linux.vnet.ibm.com>
+ <20231010-erhaben-kurznachrichten-d91432c937ee@brauner>
+ <e6b66098-77d6-46e9-b013-986ad86ba26b@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAB3fDyfOktlDpduAw--.10026S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XF1DKw4UJw1kCrW8uF15urg_yoW3KFX_Cr
-        yUAF1rJ3yDZF18WrWUX3y8Aw1Svr95J348ur9rKF1vy34Fqw40qFy7JFs7AFZ5Cry0qF1j
-        krs8try8A3ZrWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbVxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE14v_GF4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfUYMKZDUUUU
-X-Originating-IP: [124.16.138.129]
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e6b66098-77d6-46e9-b013-986ad86ba26b@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add check for strsep() in order to transfer the error.
+> Did something happen to this patch? I do not see it in your branch nor the
+> linux-next one nor Linus's tree.
 
-Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- security/keys/encrypted-keys/encrypted.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
-index 8af2136069d2..76f55dd13cb8 100644
---- a/security/keys/encrypted-keys/encrypted.c
-+++ b/security/keys/encrypted-keys/encrypted.c
-@@ -237,6 +237,10 @@ static int datablob_parse(char *datablob, const char **format,
- 			break;
- 		}
- 		*decrypted_data = strsep(&datablob, " \t");
-+		if (!*decrypted_data) {
-+			pr_info("encrypted_key: decrypted_data is missing\n");
-+			break;
-+		}
- 		ret = 0;
- 		break;
- 	case Opt_load:
--- 
-2.25.1
-
+Sorry, my bad. I'll send that out as a fixes pr soon.
