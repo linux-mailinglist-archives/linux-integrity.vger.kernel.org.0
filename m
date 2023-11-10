@@ -1,75 +1,72 @@
-Return-Path: <linux-integrity+bounces-17-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-24-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E86887E83B3
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Nov 2023 21:26:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D32F77E85A4
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Nov 2023 23:29:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EFB01C20998
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Nov 2023 20:26:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30A6BB20F08
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Nov 2023 22:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AEF938DDB;
-	Fri, 10 Nov 2023 20:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DA523D975;
+	Fri, 10 Nov 2023 22:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="enWaXVQP"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="y4GlSKu3"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831EC3AC2C
-	for <linux-integrity@vger.kernel.org>; Fri, 10 Nov 2023 20:26:17 +0000 (UTC)
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04C22D51
-	for <linux-integrity@vger.kernel.org>; Fri, 10 Nov 2023 12:26:13 -0800 (PST)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AAKQ2Zl018332;
-	Fri, 10 Nov 2023 20:26:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=YlMj/lub72oGyBL4jGAuS1xTsZRJr+32ugkiMJymiu8=;
- b=enWaXVQPU9PcWoVEaMlh2m1OUHCHXge7rSnI2CBd63lZ0b1vSm+5nUr0sCC9FGvmouvp
- QC9pF2rndOhc143i78VF09zbqe/jq4ys9koEWB2urH60VLKlR9E43un7yfvNmyDtN+wr
- 9qeSvSEs8UsDLG7UvtwaSylEzrPzaufajMZkhscRg6FyW3R1xCkDtBnAP9bXoNryKgiA
- NTWzo7DvXM9pn2uVuQn+3Kh2To7VIhkLKRirV3ZfL9HKp8Pwm0usnr4pVAIjSDyMW404
- mIMHijGgyjZ4Y42m3MjZPIESyls5l1mm52hoho+kCsFtX0gPI5FHUod3693QG8MU6UVl Dg== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u9udwr3s2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Nov 2023 20:26:04 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3AAJ2O88004124;
-	Fri, 10 Nov 2023 20:21:46 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3u7w21dd4n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Nov 2023 20:21:46 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AAKLjo832375470
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 10 Nov 2023 20:21:45 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5A7E558059;
-	Fri, 10 Nov 2023 20:21:45 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0749E58057;
-	Fri, 10 Nov 2023 20:21:45 +0000 (GMT)
-Received: from sbct-2.pok.ibm.com?044watson.ibm.com (unknown [9.47.158.152])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 10 Nov 2023 20:21:44 +0000 (GMT)
-From: Stefan Berger <stefanb@linux.ibm.com>
-To: linux-integrity@vger.kernel.org
-Cc: zohar@linux.ibm.com, roberto.sassu@huaweicloud.com,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [ima-evm-utils PATCH 14/14] tests: Address issues raised by shellcheck SC2003
-Date: Fri, 10 Nov 2023 15:21:37 -0500
-Message-ID: <20231110202137.3978820-15-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231110202137.3978820-1-stefanb@linux.ibm.com>
-References: <20231110202137.3978820-1-stefanb@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFDB3D3A5;
+	Fri, 10 Nov 2023 22:28:40 +0000 (UTC)
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2865A44A4;
+	Fri, 10 Nov 2023 14:28:37 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AAHiSsT017445;
+	Fri, 10 Nov 2023 22:27:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-03-30; bh=QS3x0d16eIil938oZJp/MoGvYR9O+02BSiZaTRa9b9M=;
+ b=y4GlSKu3n/ER17RSjy0+z18cLBUOFHRX1Ma+AReKtZs5VGeS1fZxDGorQhPLb2Kkjw+U
+ XfHUw8GfUXSHFayLRVG6UkJ1ER866MfQ5BjnuPJomPEaIdjb5LIDxJNqX4x9qYIh8HLo
+ qouusQygiS8XZa7dop8d1F1KyoRgOIqJYsKlPmUsnrHGPmXkireBf4jeOGVKorJM6DJq
+ +7DPo0UVtWWOz9QAvWZtq60F1Jsiy15Yy8KNIUe46yZaWfljSztukDPceqYderIjibZO
+ Zo5z58lx9PhspNkKpUHdZeF98E7n+uWYaelRIzhr/lnIUaEI1iPvMCxg0rMAtr+PqBbd Lw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3u7w26xx6m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 10 Nov 2023 22:27:56 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3AAK5Gco023867;
+	Fri, 10 Nov 2023 22:27:55 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3u7w28nayt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 10 Nov 2023 22:27:54 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AAMRsZw039112;
+	Fri, 10 Nov 2023 22:27:54 GMT
+Received: from ovs113.us.oracle.com (ovs113.us.oracle.com [10.149.224.213])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3u7w28nayh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 10 Nov 2023 22:27:54 +0000
+From: Ross Philipson <ross.philipson@oracle.com>
+To: linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org
+Cc: ross.philipson@oracle.com, dpsmith@apertussolutions.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+Subject: [PATCH v7 00/13] x86: Trenchboot secure dynamic launch Linux kernel support
+Date: Fri, 10 Nov 2023 17:27:38 -0500
+Message-Id: <20231110222751.219836-1-ross.philipson@oracle.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -77,69 +74,254 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9JfzonUnCZid8xEBcVcp1tD0vbUYK8wP
-X-Proofpoint-GUID: 9JfzonUnCZid8xEBcVcp1tD0vbUYK8wP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-10_18,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- clxscore=1011 priorityscore=1501 impostorscore=0 bulkscore=0
- suspectscore=0 phishscore=0 adultscore=0 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311060000 definitions=main-2311100171
+ definitions=2023-11-10_20,2023-11-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ spamscore=0 mlxscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311100187
+X-Proofpoint-GUID: GWVoZQ2WdLxubQPPYqVpSVMFu8XeikNw
+X-Proofpoint-ORIG-GUID: GWVoZQ2WdLxubQPPYqVpSVMFu8XeikNw
 
-Address issues detected by shellcheck SC2003:
-  expr is antiquated. Consider rewriting this using $((..)), ${} or [[ ]].
+The larger focus of the TrenchBoot project (https://github.com/TrenchBoot) is to
+enhance the boot security and integrity in a unified manner. The first area of
+focus has been on the Trusted Computing Group's Dynamic Launch for establishing
+a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
+Trust for Measurement). The project has been and continues to work on providing
+a unified means to Dynamic Launch that is a cross-platform (Intel and AMD) and
+cross-architecture (x86 and Arm), with our recent involvment in the upcoming
+Arm DRTM specification. The order of introducing DRTM to the Linux kernel
+follows the maturity of DRTM in the architectures. Intel's Trusted eXecution
+Technology (TXT) is present today and only requires a preamble loader, e.g. a
+boot loader, and an OS kernel that is TXT-aware. AMD DRTM implementation has
+been present since the introduction of AMD-V but requires an additional
+component that is AMD specific and referred to in the specification as the
+Secure Loader, which the TrenchBoot project has an active prototype in
+development. Finally Arm's implementation is in specification development stage
+and the project is looking to support it when it becomes available.
 
-The following statement in portable_signatures.test causes the issue:
+This patchset provides detailed documentation of DRTM, the approach used for
+adding the capbility, and relevant API/ABI documentation. In addition to the
+documentation the patch set introduces Intel TXT support as the first platform
+for Linux Secure Launch.
 
-  expr index "$TST_LIST" "check_evm_revalidate"
+A quick note on terminology. The larger open source project itself is called
+TrenchBoot, which is hosted on Github (links below). The kernel feature enabling
+the use of Dynamic Launch technology is referred to as "Secure Launch" within
+the kernel code. As such the prefixes sl_/SL_ or slaunch/SLAUNCH will be seen
+in the code. The stub code discussed above is referred to as the SL stub.
 
-The man page for expr states:
+The Secure Launch feature starts with patch #2. Patch #1 was authored by Arvind
+Sankar. There is no further status on this patch at this point but
+Secure Launch depends on it so it is included with the set.
 
-       index STRING CHARS
-              index in STRING where any CHARS is found, or 0
+## NOTE: EFI-STUB CONFLICTS
 
-The intention is certainly not to find an index of any of the characters
-in "check_evm_revalidate" in $TST_LIST but to find the word
-"check_evm_revalidate" in $TST_LIST. Therefore, use grep -w to determine
-whether the word is there.
+The primary focus of the v7 patch set was to align with Thomas Gleixner's
+changes to support parallel CPU bring-up on x86 platforms. In the process of
+rebasing and testing v7, it was discovered that there were significant changes
+to the efi-stub code. As a result, the efi-stub patch was dropped pending
+maintainer feedback on an appropriate means to re-integrate Secure Launch. The
+primary goal being to best align the DL stub functionality with efi-stub design.
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Cc: Roberto Sassu <roberto.sassu@huawei.com>
----
- tests/Makefile.am              | 2 --
- tests/portable_signatures.test | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+It was discovered that the efi-stub now subsumes all the setup which head_64.S
+was responsible. When attempting to rebase the DL stub patch on these changes,
+it became apparent that it would not be a simple relocation of the Secure Launch
+call. There are numerous things, such as efi-stub decompressing the main line
+kernel, which make simple relocation challenging. There may also be additional
+changes that should be considered when integrating Secure Launch support. It
+would be beneficial, and much appreciated, to obtain guidance from maintainers.
+Upon successful collaboration with the efi-stub maintainers, a Secure Launch v8
+series will be produce to re-introduce the DL stub patch.
 
-diff --git a/tests/Makefile.am b/tests/Makefile.am
-index a5ee424..18b134c 100644
---- a/tests/Makefile.am
-+++ b/tests/Makefile.am
-@@ -27,8 +27,6 @@ distclean: distclean-keys
- 
- shellcheck:
- 	shellcheck \
--		-i SC2086,SC2181,SC2046,SC2320,SC2317,SC2034,SC2164,SC2166 \
--		-i SC2294,SC2206,SC2196,SC2043,SC2295 \
- 		functions.sh gen-keys.sh install-fsverity.sh \
- 		install-mount-idmapped.sh install-openssl3.sh \
- 		install-swtpm.sh install-tss.sh softhsm_setup \
-diff --git a/tests/portable_signatures.test b/tests/portable_signatures.test
-index 5251211..c6e2d99 100755
---- a/tests/portable_signatures.test
-+++ b/tests/portable_signatures.test
-@@ -1090,7 +1090,7 @@ if [ $((evm_value & EVM_INIT_X509)) -ne "$EVM_INIT_X509" ] && [ "$TST_EVM_CHANGE
- 	echo "$EVM_INIT_X509" > /sys/kernel/security/evm 2> /dev/null
- fi
- 
--if [ "$(expr index "$TST_LIST" "check_evm_revalidate")" -gt 0 ] && [ "$TST_EVM_CHANGE_MODE" -eq 1 ]; then
-+if echo "$TST_LIST" | grep -q -w check_evm_revalidate && [ "$TST_EVM_CHANGE_MODE" -eq 1 ]; then
- 	echo "$EVM_ALLOW_METADATA_WRITES" > /sys/kernel/security/evm 2> /dev/null
- fi
- 
+Links:
+
+The TrenchBoot project including documentation:
+
+https://trenchboot.org
+
+The TrenchBoot project on Github:
+
+https://github.com/trenchboot
+
+Intel TXT is documented in its own specification and in the SDM Instruction Set volume:
+
+https://www.intel.com/content/dam/www/public/us/en/documents/guides/intel-txt-software-development-guide.pdf
+https://software.intel.com/en-us/articles/intel-sdm
+
+AMD SKINIT is documented in the System Programming manual:
+
+https://www.amd.com/system/files/TechDocs/24593.pdf
+
+GRUB2 pre-launch support branch (WIP):
+
+https://github.com/TrenchBoot/grub/tree/grub-sl-fc-38-dlstub
+
+Patch set based on commit:
+
+torvolds/master/6bc986ab839c844e78a2333a02e55f02c9e57935
+
+Thanks
+Ross Philipson and Daniel P. Smith
+
+Changes in v2:
+
+ - Modified 32b entry code to prevent causing relocations in the compressed
+   kernel.
+ - Dropped patches for compressed kernel TPM PCR extender.
+ - Modified event log code to insert log delimiter events and not rely
+   on TPM access.
+ - Stop extending PCRs in the early Secure Launch stub code.
+ - Removed Kconfig options for hash algorithms and use the algorithms the
+   ACM used.
+ - Match Secure Launch measurement algorithm use to those reported in the
+   TPM 2.0 event log.
+ - Read the TPM events out of the TPM and extend them into the PCRs using
+   the mainline TPM driver. This is done in the late initcall module.
+ - Allow use of alternate PCR 19 and 20 for post ACM measurements.
+ - Add Kconfig constraints needed by Secure Launch (disable KASLR
+   and add x2apic dependency).
+ - Fix testing of SL_FLAGS when determining if Secure Launch is active
+   and the architecture is TXT.
+ - Use SYM_DATA_START_LOCAL macros in early entry point code.
+ - Security audit changes:
+   - Validate buffers passed to MLE do not overlap the MLE and are
+     properly laid out.
+   - Validate buffers and memory regions used by the MLE are
+     protected by IOMMU PMRs.
+ - Force IOMMU to not use passthrough mode during a Secure Launch.
+ - Prevent KASLR use during a Secure Launch.
+
+Changes in v3:
+
+ - Introduce x86 documentation patch to provide background, overview
+   and configuration/ABI information for the Secure Launch kernel
+   feature.
+ - Remove the IOMMU patch with special cases for disabling IOMMU
+   passthrough. Configuring the IOMMU is now a documentation matter
+   in the previously mentioned new patch.
+ - Remove special case KASLR disabling code. Configuring KASLR is now
+   a documentation matter in the previously mentioned new patch.
+ - Fix incorrect panic on TXT public register read.
+ - Properly handle and measure setup_indirect bootparams in the early
+   launch code.
+ - Use correct compressed kernel image base address when testing buffers
+   in the early launch stub code. This bug was introduced by the changes
+   to avoid relocation in the compressed kernel.
+ - Use CPUID feature bits instead of CPUID vendor strings to determine
+   if SMX mode is supported and the system is Intel.
+ - Remove early NMI re-enable on the BSP. This can be safely done later
+   on the BSP after an IDT is setup.
+
+Changes in v4:
+ - Expand the cover letter to provide more context to the order that DRTM
+   support will be added.
+ - Removed debug tracing in TPM request locality funciton and fixed
+   local variable declarations.
+ - Fixed missing break in default case in slmodule.c.
+ - Reworded commit messages in patches 1 and 2 per suggestions.
+
+Changes in v5:
+ - Comprehensive documentation rewrite.
+ - Use boot param loadflags to communicate Secure Launch status to
+   kernel proper.
+ - Fix incorrect check of X86_FEATURE_BIT_SMX bit.
+ - Rename the alternate details and authorities PCR support.
+ - Refactor the securityfs directory and file setup in slmodule.c.
+ - Misc. cleanup from internal code reviews.
+ - Use reverse fir tree format for variables.
+
+Changes in v6:
+ - Support for the new Secure Launch Resourse Table that standardizes
+   the information passed and forms the ABI between the pre and post
+   launch code.
+ - Support for booting Linux through the EFI stub entry point and
+   then being able to do a Secure Launch once EFI stub is done and EBS
+   is called.
+ - Updates to the documentation to reflect the previous two items listed.
+
+Changes in v7:
+ - Switch to using MONITOR/MWAIT instead of NMIs to park the APs for
+   later bringup by the SMP code.
+ - Use static inline dummy functions instead of macros when the Secure
+   Launch feature is disabled.
+ - Move early SHA1 code to lib/crypto and pull it in from there.
+ - Numerous formatting fixes from comments on LKML.
+ - Remove efi-stub/DL stub patch temporarily for redesign/rework.
+
+Arvind Sankar (1):
+  x86/boot: Place kernel_info at a fixed offset
+
+Daniel P. Smith (2):
+  x86: Add early SHA support for Secure Launch early measurements
+  x86: Secure Launch late initcall platform module
+
+Ross Philipson (10):
+  Documentation/x86: Secure Launch kernel documentation
+  x86: Secure Launch Kconfig
+  x86: Secure Launch Resource Table header file
+  x86: Secure Launch main header file
+  x86: Secure Launch kernel early boot stub
+  x86: Secure Launch kernel late boot stub
+  x86: Secure Launch SMP bringup support
+  kexec: Secure Launch kexec SEXIT support
+  reboot: Secure Launch SEXIT support on reboot paths
+  tpm: Allow locality 2 to be set when initializing the TPM for Secure
+    Launch
+
+ Documentation/arch/x86/boot.rst               |  21 +
+ Documentation/security/index.rst              |   1 +
+ .../security/launch-integrity/index.rst       |  11 +
+ .../security/launch-integrity/principles.rst  | 320 ++++++++
+ .../secure_launch_details.rst                 | 584 +++++++++++++++
+ .../secure_launch_overview.rst                | 226 ++++++
+ arch/x86/Kconfig                              |  12 +
+ arch/x86/boot/compressed/Makefile             |   3 +
+ arch/x86/boot/compressed/early_sha1.c         |  12 +
+ arch/x86/boot/compressed/early_sha256.c       |   6 +
+ arch/x86/boot/compressed/head_64.S            |  34 +
+ arch/x86/boot/compressed/kernel_info.S        |  53 +-
+ arch/x86/boot/compressed/kernel_info.h        |  12 +
+ arch/x86/boot/compressed/sl_main.c            | 582 +++++++++++++++
+ arch/x86/boot/compressed/sl_stub.S            | 705 ++++++++++++++++++
+ arch/x86/boot/compressed/vmlinux.lds.S        |   6 +
+ arch/x86/include/asm/msr-index.h              |   5 +
+ arch/x86/include/asm/realmode.h               |   3 +
+ arch/x86/include/uapi/asm/bootparam.h         |   1 +
+ arch/x86/kernel/Makefile                      |   2 +
+ arch/x86/kernel/asm-offsets.c                 |  20 +
+ arch/x86/kernel/reboot.c                      |  10 +
+ arch/x86/kernel/setup.c                       |   3 +
+ arch/x86/kernel/slaunch.c                     | 598 +++++++++++++++
+ arch/x86/kernel/slmodule.c                    | 517 +++++++++++++
+ arch/x86/kernel/smpboot.c                     |  56 +-
+ arch/x86/realmode/init.c                      |   3 +
+ arch/x86/realmode/rm/header.S                 |   3 +
+ arch/x86/realmode/rm/trampoline_64.S          |  32 +
+ drivers/char/tpm/tpm-chip.c                   |   9 +-
+ drivers/iommu/intel/dmar.c                    |   4 +
+ include/crypto/sha1.h                         |   1 +
+ include/linux/slaunch.h                       | 542 ++++++++++++++
+ include/linux/slr_table.h                     | 270 +++++++
+ kernel/kexec_core.c                           |   4 +
+ lib/crypto/sha1.c                             |  81 ++
+ 36 files changed, 4746 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/security/launch-integrity/index.rst
+ create mode 100644 Documentation/security/launch-integrity/principles.rst
+ create mode 100644 Documentation/security/launch-integrity/secure_launch_details.rst
+ create mode 100644 Documentation/security/launch-integrity/secure_launch_overview.rst
+ create mode 100644 arch/x86/boot/compressed/early_sha1.c
+ create mode 100644 arch/x86/boot/compressed/early_sha256.c
+ create mode 100644 arch/x86/boot/compressed/kernel_info.h
+ create mode 100644 arch/x86/boot/compressed/sl_main.c
+ create mode 100644 arch/x86/boot/compressed/sl_stub.S
+ create mode 100644 arch/x86/kernel/slaunch.c
+ create mode 100644 arch/x86/kernel/slmodule.c
+ create mode 100644 include/linux/slaunch.h
+ create mode 100644 include/linux/slr_table.h
+
 -- 
-2.41.0
+2.39.3
 
 
