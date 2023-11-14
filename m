@@ -1,62 +1,41 @@
-Return-Path: <linux-integrity+bounces-43-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-44-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F92B7EA6EA
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Nov 2023 00:21:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 078787EB674
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Nov 2023 19:36:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4497C1C20845
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Nov 2023 23:21:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B10881F24642
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Nov 2023 18:36:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F2293D98C;
-	Mon, 13 Nov 2023 23:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2917F26ACF;
+	Tue, 14 Nov 2023 18:36:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="R9KN89sY"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="nOOO8ywM"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9C92D045
-	for <linux-integrity@vger.kernel.org>; Mon, 13 Nov 2023 23:21:41 +0000 (UTC)
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794C3D55
-	for <linux-integrity@vger.kernel.org>; Mon, 13 Nov 2023 15:21:39 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2c50fbc218bso65931981fa.3
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Nov 2023 15:21:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=citrix.com; s=google; t=1699917698; x=1700522498; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=16UHKTiJBBdygB3NDxQg1vSNAYLocg/Q+/o22+Gc4VM=;
-        b=R9KN89sYoE/N+duK+AjQhl/datsRFFG727K85SuRqRCpk5GBNF3O2E93GBmTu2fnJr
-         +FK1vMXBhkd15On5TCWykOBIlaTS/bAzi2yLbkSVVOIQFUZUVSTScm2sCw9GELBWc6RG
-         z4pxSclCXjU2xCEK0+/AFs+ClfPCRZPUhvThY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699917698; x=1700522498;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=16UHKTiJBBdygB3NDxQg1vSNAYLocg/Q+/o22+Gc4VM=;
-        b=A1b+svrRb8cEzQGmj+2RCNPXqowt9LjSvaEKjUi+6eAuuivmROrBpCePGzEmC+b7om
-         dGkH7psVykMvW+SCWTfy0aNtbp0zVWYGocagILT9SnSrMr2VYwqGCp+K1Ahu/y+l5Cm1
-         xdWIgZgfp9u0KQrVbBi178LpsrsXgCfm0FPYMJncsY1sUysbStrDIsWyDsfS6SLgpg6y
-         Ig8Q3iyynqiWfS/TCsHhZEm4d+7cD+hBfhCmsSiKeb11Orldt1DwRpRrrn3Uu327l4DE
-         yKXgPuz8HUb+9z0XMW8ClpU6m+lJyAfQBX1zEupGzB4EXd9VfbZ2IthETxtBVLTtH87I
-         +0dA==
-X-Gm-Message-State: AOJu0YybHA1f7U4kEsHNPt2uetoCpuao4ip/m3hkqtrE+t6+YnWn6+t1
-	wP7i/DkwhEMG8ntrQ6b0BT1jwA==
-X-Google-Smtp-Source: AGHT+IEFbywTuiCM3Qsf46VdvQGP+jWzn8QiLDib6v40aY/R+2Y0qrS+3M5SUqyMVbx0tvNqsu2OdA==
-X-Received: by 2002:a2e:3602:0:b0:2c5:623:aa01 with SMTP id d2-20020a2e3602000000b002c50623aa01mr436845lja.49.1699917697666;
-        Mon, 13 Nov 2023 15:21:37 -0800 (PST)
-Received: from [172.25.82.51] ([12.186.190.2])
-        by smtp.gmail.com with ESMTPSA id v4-20020ac87284000000b0041eef6cacf4sm2262161qto.81.2023.11.13.15.21.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Nov 2023 15:21:37 -0800 (PST)
-Message-ID: <8703f1a9-5d4d-4c5a-b9aa-3b31ad2dcd41@citrix.com>
-Date: Mon, 13 Nov 2023 23:21:36 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F61E26AC4
+	for <linux-integrity@vger.kernel.org>; Tue, 14 Nov 2023 18:36:39 +0000 (UTC)
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C78111D;
+	Tue, 14 Nov 2023 10:36:38 -0800 (PST)
+Received: from [10.137.114.52] (unknown [131.107.159.180])
+	by linux.microsoft.com (Postfix) with ESMTPSA id DDE2F20B74C1;
+	Tue, 14 Nov 2023 10:36:36 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DDE2F20B74C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1699986997;
+	bh=ip5SH1zQ+t2HatDE3wRWZbocUBe8AkIri1k+HYGCJUA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=nOOO8ywMLG/MkBJKtNIGNNBLu2+deC/41Hr8pT7oH3iuEgMaPpC0ODrhIwmj73U1O
+	 rW6MHW1axc7IZssrKgXtR1tEAyFVGbaqoPJqFFlDZmY1WMACPoUPktfmQKtdCy6U6T
+	 imiMLsrLn3s+lNqydjAFiDY5h+up7LxDCPX40PLg=
+Message-ID: <5dfcb0d6-8cbf-428e-b8c1-30333fc668b5@linux.microsoft.com>
+Date: Tue, 14 Nov 2023 10:36:36 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -64,122 +43,79 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 06/13] x86: Add early SHA support for Secure Launch
- early measurements
-Content-Language: en-GB
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
- Eric Biggers <ebiggers@kernel.org>,
- Ross Philipson <ross.philipson@oracle.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
- kexec@lists.infradead.org, linux-efi@vger.kernel.org,
- dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, hpa@zytor.com, ardb@kernel.org, mjg59@srcf.ucam.org,
- luto@amacapital.net, nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
- trenchboot-devel@googlegroups.com
-References: <20231110222751.219836-1-ross.philipson@oracle.com>
- <20231110222751.219836-7-ross.philipson@oracle.com>
- <20231111174435.GA998@sol.localdomain>
- <a16d44c5-2e1a-4e9a-8ca1-c7ca564f61cd@citrix.com>
- <87f56530b85ea894036a74be1824d6f2716f70de.camel@HansenPartnership.com>
-From: Andrew Cooper <andrew.cooper3@citrix.com>
-Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
- 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
- 6+ahAA==
-In-Reply-To: <87f56530b85ea894036a74be1824d6f2716f70de.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [RFC V2] IMA Log Snapshotting Design Proposal
+To: Stefan Berger <stefanb@linux.ibm.com>,
+ Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+ linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+ peterhuewe@gmx.de, Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca,
+ Ken Goldman <kgold@linux.ibm.com>, bhe@redhat.com, vgoyal@redhat.com,
+ Dave Young <dyoung@redhat.com>,
+ "kexec@lists.infradead.org" <kexec@lists.infradead.org>, jmorris@namei.org,
+ Paul Moore <paul@paul-moore.com>, serge@hallyn.com,
+ James Bottomley <James.Bottomley@HansenPartnership.com>,
+ linux-security-module@vger.kernel.org
+Cc: Tyler Hicks <tyhicks@linux.microsoft.com>,
+ Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+References: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
+ <53db2f31-e383-445f-b746-961958a619bd@linux.ibm.com>
+Content-Language: en-US
+From: Sush Shringarputale <sushring@linux.microsoft.com>
+In-Reply-To: <53db2f31-e383-445f-b746-961958a619bd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 11/11/2023 8:36 pm, James Bottomley wrote:
-> On Sat, 2023-11-11 at 18:19 +0000, Andrew Cooper wrote:
->> On 11/11/2023 5:44 pm, Eric Biggers wrote:
->>> On Fri, Nov 10, 2023 at 05:27:44PM -0500, Ross Philipson wrote:
->>>>  arch/x86/boot/compressed/early_sha1.c   | 12 ++++
->>>>  lib/crypto/sha1.c                       | 81
->>>> +++++++++++++++++++++++++
->>> It's surprising to still see this new use of SHA-1 after so many
->>> people objected to it in the v6 patchset.  It's also frustrating
->>> that the SHA-1 support is still being obfuscated by being combined
->>> in one patch with SHA-2 support, perhaps in an attempt to conflate
->>> the two algorithms and avoid having to give a rationale for the
->>> inclusion of SHA-1.  Finally, new functions should not be added to
->>> lib/crypto/sha1.c unless those functions have multiple users.
->> The rational was given.  Let me reiterate it.
+
+
+On 11/13/2023 10:59 AM, Stefan Berger wrote:
+>
+>
+> On 10/19/23 14:49, Tushar Sugandhi wrote:
+>> =======================================================================
+>> | Introduction |
+>> =======================================================================
+>> This document provides a detailed overview of the proposed Kernel
+>> feature IMA log snapshotting.  It describes the motivation behind the
+>> proposal, the problem to be solved, a detailed solution design with
+>> examples, and describes the changes to be made in the clients/services
+>> which are part of remote-attestation system.  This is the 2nd version
+>> of the proposal.  The first version is present here[1].
 >>
->> There are real TPMs in the world that can't use SHA-2.  The use of
->> SHA-1 is necessary to support DRTM on such systems, and there are
->> real users of such configurations.
-> Given that TPM 2.0 has been shipping in bulk since Windows 10 (2015)
-> and is required for Windows 11 (2021), are there really such huge
-> numbers of TPM 1.2 systems involved in security functions?
-
-Yes.
-
-As ever, it's not as simple as a straight TPM version issue.
-
-AMD's firmware-TPM2 isn't compatible with their DRTM implementation. 
-Users are limited to whatever headers are available on the motherboard.
-
-Furthermore, even with a TPM2, it is the firmware (Intel TXT ACM) or
-hardware (AMD SKINIT) which chooses the hash algorithms to use, and in a
-lot of cases the end user doesn't get a choice.
-
-So yes - there really are modern systems which you can't use SHA-2-only
-with.
-
->> DRTM with SHA-1-only is a damnsight better than no DTRM, even if SHA-
->> 1 is getting a little long in the tooth.
-> That's not the problem.  The problem is that sha1 is seen as a
-> compromised algorithm by NIST which began deprecating it in 2011 and is
-> now requiring it to be removed from all systems supplied to the US
-> government by 2030
-
-This is a non-issue.
-
-People who care about having no SHA-1 can not compile in DRTM support.
-
-But there are people who will tolerate SHA-1 code to get DTRM support.
-
-~Andrew
+>> Table of Contents:
+>> ------------------
+>> A. Motivation and Background
+>> B. Goals and Non-Goals
+>>      B.1 Goals
+>>      B.2 Non-Goals
+>> C. Proposed Solution
+>>      C.1 Solution Summary
+>>      C.2 High-level Work-flow
+>> D. Detailed Design
+>>      D.1 Snapshot Aggregate Event
+>>      D.2 Snapshot Triggering Mechanism
+>>      D.3 Choosing A Persistent Storage Location For Snapshots
+>>      D.4 Remote-Attestation Client/Service-side Changes
+>>          D.4.a Client-side Changes
+>>          D.4.b Service-side Changes
+>> E. Example Walk-through
+>> F. Other Design Considerations
+>> G. References
+>>
+>
+> Userspace applications will have to know
+> a) where are the shard files?
+We describe the file storage location choices in section D.3, but user
+applications will have to query the well-known location described there.
+> b) how do I read the shard files while locking out the producer of the 
+> shard files?
+>
+> IMO, this will require a well known config file and a locking method 
+> (flock) so that user space applications can work together in this new 
+> environment. The lock could be defined in the config file or just be 
+> the config file itself.
+The flock is a good idea for co-ordination between UM clients. While
+the Kernel cannot enforce any access in this way, any UM process that
+is planning on triggering the snapshot mechanism should follow that
+protocol.  We will ensure we document that as the best-practices in
+the patch series.
+- Sush
 
