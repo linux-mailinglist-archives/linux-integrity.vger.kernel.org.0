@@ -1,73 +1,41 @@
-Return-Path: <linux-integrity+bounces-45-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-46-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7FBB7EB6AA
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Nov 2023 19:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D46EF7EB95C
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Nov 2023 23:31:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43F44B20AA2
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Nov 2023 18:58:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C366B20A6C
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Nov 2023 22:31:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A6FE443C;
-	Tue, 14 Nov 2023 18:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97EB33072;
+	Tue, 14 Nov 2023 22:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="skACyuzp"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Ezm6Xd75"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0EBF1FD3
-	for <linux-integrity@vger.kernel.org>; Tue, 14 Nov 2023 18:58:39 +0000 (UTC)
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A40FF4;
-	Tue, 14 Nov 2023 10:58:38 -0800 (PST)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AEIXqVk017685;
-	Tue, 14 Nov 2023 18:58:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=e9myKv7gYQgnWacBTIa2Qmdo52E2fuIFXcT/0aKE0Fw=;
- b=skACyuzpIMG/V3xvhZ0gxlUA5ZrF+DuZwjlf+h4DPKV3Tul76aYzj9+aYQ1z0HF5rSZa
- NC6kWxYlHfrCriAV92RONQncqChp82QBXIc98cWsb7yiP8QO45okKu6ZIuRMVDz029bW
- ipca6ivUpLchkdi/KeM9hTCZ3HxRmnBSxTK46UfQQfbQYChx+hHsRvD/OwCsmRqu2s80
- aq0geQGuAJUhWNApSKrEVbvJZOkE3q3EfwNF4Scc7uv0vxHsFhCYRhifyKkBfEDiDBTu
- uCQ+xOjY65qaNuceliJG4zYN6jN7VCNEuUT41oapfvop/6YzfZHohqzjl7FJQj7bzP8l DQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ucdxth5fh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Nov 2023 18:58:17 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AEIhvAL014158;
-	Tue, 14 Nov 2023 18:58:16 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ucdxth5f4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Nov 2023 18:58:16 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3AEGY4hj020108;
-	Tue, 14 Nov 2023 18:58:16 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uamxn9wc1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Nov 2023 18:58:16 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AEIwFqZ14942856
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Nov 2023 18:58:15 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0142C5805A;
-	Tue, 14 Nov 2023 18:58:15 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ED10058051;
-	Tue, 14 Nov 2023 18:58:13 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 14 Nov 2023 18:58:13 +0000 (GMT)
-Message-ID: <ce2e6de7-4289-442e-8209-fb7c01f51e14@linux.ibm.com>
-Date: Tue, 14 Nov 2023 13:58:13 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62A033070
+	for <linux-integrity@vger.kernel.org>; Tue, 14 Nov 2023 22:31:43 +0000 (UTC)
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90ACAE0
+	for <linux-integrity@vger.kernel.org>; Tue, 14 Nov 2023 14:31:41 -0800 (PST)
+Received: from [192.168.86.69] (unknown [50.46.228.62])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 9825A20B74C1;
+	Tue, 14 Nov 2023 14:31:40 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9825A20B74C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1700001101;
+	bh=QKlw4fetvSAHCZzeB9isVln5Gc8zxcv/QUeOvWVw2qY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Ezm6Xd75FUvj0cJzppjB2Zrlt9M7P7WAbZkBJ5Oo5+sPebQnLqSR7MvbpFHVop5GG
+	 cRYwLKIfXr0OH5bhPRGhMC6OqODoXR7yc2ki12WZYvT4FTsjxy5uWkIC1bEl6QEvEr
+	 u6hai0NU0i4CaLLCrfef2SjbLasG4oQXQ/oAiY+E=
+Message-ID: <fc666310-164f-487e-8dde-d3a1a3c70a5a@linux.microsoft.com>
+Date: Tue, 14 Nov 2023 14:31:39 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -75,114 +43,254 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC V2] IMA Log Snapshotting Design Proposal
+Subject: Re: [PATCH v2 1/7] ima: refactor ima_dump_measurement_list to move
+ memory allocation to a separate function
 Content-Language: en-US
-To: Sush Shringarputale <sushring@linux.microsoft.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        peterhuewe@gmx.de, Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca,
-        Ken Goldman <kgold@linux.ibm.com>, bhe@redhat.com, vgoyal@redhat.com,
-        Dave Young <dyoung@redhat.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        jmorris@namei.org, Paul Moore <paul@paul-moore.com>, serge@hallyn.com,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-security-module@vger.kernel.org
-Cc: Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-References: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
- <53db2f31-e383-445f-b746-961958a619bd@linux.ibm.com>
- <5dfcb0d6-8cbf-428e-b8c1-30333fc668b5@linux.microsoft.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <5dfcb0d6-8cbf-428e-b8c1-30333fc668b5@linux.microsoft.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, ebiederm@xmission.com, noodles@fb.com,
+ bauermann@kolabnow.com, kexec@lists.infradead.org,
+ linux-integrity@vger.kernel.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+References: <20231005182602.634615-1-tusharsu@linux.microsoft.com>
+ <20231005182602.634615-2-tusharsu@linux.microsoft.com>
+ <1aa5524b52fdb46df4948a21b1139cf833758cde.camel@linux.ibm.com>
+From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <1aa5524b52fdb46df4948a21b1139cf833758cde.camel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HtwahexQ60FJmtfXYXLaNtuc8KDvQvev
-X-Proofpoint-ORIG-GUID: QY7C3PjP5IaOZtDqQjqhIzCQXdMkUzZE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-14_19,2023-11-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=624
- lowpriorityscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
- suspectscore=0 bulkscore=0 adultscore=0 spamscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311140144
+Content-Transfer-Encoding: 7bit
 
+Thanks a lot for reviewing this patch set Mimi.
 
-
-On 11/14/23 13:36, Sush Shringarputale wrote:
+On 10/26/23 13:16, Mimi Zohar wrote:
+> Hi Tushar,
 > 
+> According to Documentation/process/submitting-patches.rst, the subject
+> line should be between 70-75 characters.
 > 
-> On 11/13/2023 10:59 AM, Stefan Berger wrote:
+> Perhaps something like "ima: define and call ima_alloc_kexec_buffer()".
+> 
+Sure thing. I will shorten the subject line. Here and elsewhere.
+> On Thu, 2023-10-05 at 11:25 -0700, Tushar Sugandhi wrote:
+>> IMA allocates memory and dumps the measurement during kexec soft reboot
+>> as a single function call ima_dump_measurement_list().  It gets called
+>> during kexec 'load' operation.  It results in the IMA measurements
+>> between the window of kexec 'load' and 'execute' getting dropped when the
+>> system boots into the new Kernel.  One of the kexec requirements is the
+>> segment size cannot change between the 'load' and the 'execute'.
+>> Therefore, to address this problem, ima_dump_measurement_list() needs
+>> to be refactored to allocate the memory at kexec 'load', and dump the
+>> measurements at kexec 'execute'.  The function that allocates the memory
+>> should handle the scenario where the kexec load is called multiple times
+> 
+> The above pragraph is unnecessary.
+> 
+Sounds good. I will remove the above paragraph.
+
+>> Refactor ima_dump_measurement_list() to move the memory allocation part
+>> to a separate function ima_alloc_kexec_buf() to allocate buffer of size
+>> 'kexec_segment_size' at kexec 'load'.  Make the local variables in
+>> function ima_dump_measurement_list() global, so that they can be accessed
+>> from ima_alloc_kexec_buf().  Make necessary changes to the function
+>> ima_add_kexec_buffer() to call the above two functions.
+> 
+> Fix the wording based on the suggested changes below.
+> 
+Will do.
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> 
+> Before re-posting this patch set, verify there aren't any
+> "checkpatch.pl --strict" issues.
+> After applying each patch, compile the kernel and verify it still
+> works.
+> >> ---
+>>   security/integrity/ima/ima_kexec.c | 126 +++++++++++++++++++++--------
+>>   1 file changed, 93 insertions(+), 33 deletions(-)
 >>
->>
->> On 10/19/23 14:49, Tushar Sugandhi wrote:
->>> =======================================================================
->>> | Introduction |
->>> =======================================================================
->>> This document provides a detailed overview of the proposed Kernel
->>> feature IMA log snapshotting.  It describes the motivation behind the
->>> proposal, the problem to be solved, a detailed solution design with
->>> examples, and describes the changes to be made in the clients/services
->>> which are part of remote-attestation system.  This is the 2nd version
->>> of the proposal.  The first version is present here[1].
->>>
->>> Table of Contents:
->>> ------------------
->>> A. Motivation and Background
->>> B. Goals and Non-Goals
->>>      B.1 Goals
->>>      B.2 Non-Goals
->>> C. Proposed Solution
->>>      C.1 Solution Summary
->>>      C.2 High-level Work-flow
->>> D. Detailed Design
->>>      D.1 Snapshot Aggregate Event
->>>      D.2 Snapshot Triggering Mechanism
->>>      D.3 Choosing A Persistent Storage Location For Snapshots
->>>      D.4 Remote-Attestation Client/Service-side Changes
->>>          D.4.a Client-side Changes
->>>          D.4.b Service-side Changes
->>> E. Example Walk-through
->>> F. Other Design Considerations
->>> G. References
->>>
->>
->> Userspace applications will have to know
->> a) where are the shard files?
-> We describe the file storage location choices in section D.3, but user
-> applications will have to query the well-known location described there.
->> b) how do I read the shard files while locking out the producer of the 
->> shard files?
->>
->> IMO, this will require a well known config file and a locking method 
->> (flock) so that user space applications can work together in this new 
->> environment. The lock could be defined in the config file or just be 
->> the config file itself.
-> The flock is a good idea for co-ordination between UM clients. While
-> the Kernel cannot enforce any access in this way, any UM process that
-> is planning on triggering the snapshot mechanism should follow that
-> protocol.  We will ensure we document that as the best-practices in
-> the patch series.
+>> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+>> index 419dc405c831..307e07991865 100644
+>> --- a/security/integrity/ima/ima_kexec.c
+>> +++ b/security/integrity/ima/ima_kexec.c
+>> @@ -15,61 +15,114 @@
+>>   #include "ima.h"
+>>   
+>>   #ifdef CONFIG_IMA_KEXEC
+>> +struct seq_file ima_kexec_file;
+> 
+> Define "ima_kexec_file" as static since it only used in this file.
+> Since the variable does not need to be global, is there still a reason
+> for changing its name?   Minimize code change.
+> 
+>> +struct ima_kexec_hdr ima_khdr;
+>> +
+>> +void ima_clear_kexec_file(void)
+> 
+> The opposite of "set" is "clear" (e.g. set_git, clear_bit).  The
+> opposite of "alloc" would be "free" (e.g. ima_alloc_kexec_buf,
+> ima_free_kexec_buf)
+> 
+Agreed. Will make it ima_free_kexec_buf.
+>> +{
+>> +	vfree(ima_kexec_file.buf);
+>> +	ima_kexec_file.buf = NULL;
+>> +	ima_kexec_file.size = 0;
+>> +	ima_kexec_file.read_pos = 0;
+>> +	ima_kexec_file.count = 0;
+>> +}
+>> +
+>> +static int ima_alloc_kexec_buf(size_t kexec_segment_size)
+>> +{
+>> +	if ((kexec_segment_size == 0) ||
+>> +	    (kexec_segment_size == ULONG_MAX) ||
+>> +	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
+>> +		pr_err("%s: Invalid segment size for kexec: %zu\n",
+>> +			__func__, kexec_segment_size);
+>> +		return -EINVAL;
+>> +	}
+> 
+> Please avoid code duplication.  If moving the test here, then remove it
+> from its original place.
+> 
+Sure. Will do.
+>> +
+>> +	/*
+>> +	 * If kexec load was called before, clear the existing buffer
+>> +	 * before allocating a new one
+>> +	 */
+> 
+>> +	if (ima_kexec_file.buf)
+>> +		ima_clear_kexec_file();
+> 
+> Perhaps instead of always freeing the buffer, check and see whether the
+> size has changed.  If it hasn't changed, then simply return.  If it has
+> changed, perhaps use realloc().  Possible wording:
+> 
+> "Kexec may be called multiple times.  Free and re-alloc the buffer if
+> the size changed."
+> 
+That's a good optimization. Thanks for the suggestion. Will do.
+>> +
+>> +	/* segment size can't change between kexec load and execute */
+>> +	ima_kexec_file.buf = vmalloc(kexec_segment_size);
+>> +	if (!ima_kexec_file.buf) {
+>> +		pr_err("%s: No memory for ima kexec measurement buffer\n",
+>> +			__func__);
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	ima_kexec_file.size = kexec_segment_size;
+>> +	ima_kexec_file.read_pos = 0;
+>> +	ima_kexec_file.count = sizeof(ima_khdr);	/* reserved space */
+>> +
+>> +	memset(&ima_khdr, 0, sizeof(ima_khdr));
+>> +	ima_khdr.version = 1;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
+>>   				     unsigned long segment_size)
+>>   {
+>>   	struct ima_queue_entry *qe;
+>> -	struct seq_file file;
+>> -	struct ima_kexec_hdr khdr;
+>>   	int ret = 0;
+>>   
+>> -	/* segment size can't change between kexec load and execute */
+>> -	file.buf = vmalloc(segment_size);
+>> -	if (!file.buf) {
+>> -		ret = -ENOMEM;
+>> -		goto out;
+>> +	if (!ima_kexec_file.buf) {
+>> +		pr_err("%s: Kexec file buf not allocated\n",
+>> +			__func__);
+>> +		return -EINVAL;
+>>   	}
+>>   
+>> -	file.size = segment_size;
+>> -	file.read_pos = 0;
+>> -	file.count = sizeof(khdr);	/* reserved space */
+>> +	/*
+>> +	 * Ensure the kexec buffer is large enough to hold ima_khdr
+>> +	 */
+>> +	if (ima_kexec_file.size < sizeof(ima_khdr)) {
+>> +		pr_err("%s: Kexec buffer size too low to hold ima_khdr\n",
+>> +			__func__);
+>> +		ima_clear_kexec_file();
+>> +		return -ENOMEM;
+>> +	}
+> 
+> Is this necessary?
+>   
+Yeh. It's an overkill. Will remove.
 
-It's more than 'best practices'. You need a well-known config file with 
-well-known config options in it.
+>> -	memset(&khdr, 0, sizeof(khdr));
+>> -	khdr.version = 1;
+>> +	/*
+>> +	 * If we reach here, then there is enough memory
+>> +	 * of size kexec_segment_size in ima_kexec_file.buf
+>> +	 * to copy at least partial IMA log.
+>> +	 * Make best effort to copy as many IMA measurements
+>> +	 * as possible.
+>> +	 */
+> 
+> Suggestion:
+> 
+> /* Copy as many IMA measurements list records as possible */
+> 
+That's a much cleaner comment. Will update.
 
-All clients that were previously just trying to read new bytes from the 
-IMA log cannot do this anymore in the presence of a log shard producer 
-but have to also learn that a new log shard has been produced so they 
-need to figure out the new position in the log where to read from. So 
-maybe a counter in a config file should indicate to the log readers that 
-a new log has been produced -- otherwise they would have to monitor all 
-the log shard files or the log shard file's size.
+~Tushar
 
-Iff the log-shard producer were configured to discard leading parts of 
-the log then that should also be noted in a config file so clients, that 
-need to see the beginning of the log, can refuse early on to work on a 
-machine that either is configured this way or where the discarding has 
-already happened.
-
-   Stefan
-
-> - Sush
+>>   	list_for_each_entry_rcu(qe, &ima_measurements, later) {
+>> -		if (file.count < file.size) {
+>> -			khdr.count++;
+>> -			ima_measurements_show(&file, qe);
+>> +		if (ima_kexec_file.count < ima_kexec_file.size) {
+>> +			ima_khdr.count++;
+>> +			ima_measurements_show(&ima_kexec_file, qe);
+>>   		} else {
+>> -			ret = -EINVAL;
+>> +			ret = EFBIG;
+>> +			pr_err("%s: IMA log file is too big for Kexec buf\n",
+>> +				__func__);
+>>   			break;
+>>   		}
+>>   	}
+>>   
+>> -	if (ret < 0)
+>> -		goto out;
+>> -
+>>   	/*
+>>   	 * fill in reserved space with some buffer details
+>>   	 * (eg. version, buffer size, number of measurements)
+>>   	 */
+>> -	khdr.buffer_size = file.count;
+>> +	ima_khdr.buffer_size = ima_kexec_file.count;
+>>   	if (ima_canonical_fmt) {
+>> -		khdr.version = cpu_to_le16(khdr.version);
+>> -		khdr.count = cpu_to_le64(khdr.count);
+>> -		khdr.buffer_size = cpu_to_le64(khdr.buffer_size);
+>> +		ima_khdr.version = cpu_to_le16(ima_khdr.version);
+>> +		ima_khdr.count = cpu_to_le64(ima_khdr.count);
+>> +		ima_khdr.buffer_size = cpu_to_le64(ima_khdr.buffer_size);
+>>   	}
+>> -	memcpy(file.buf, &khdr, sizeof(khdr));
+>> +	memcpy(ima_kexec_file.buf, &ima_khdr, sizeof(ima_khdr));
+>>   
+>>   	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
+>> -			     file.buf, file.count < 100 ? file.count : 100,
+>> +			     ima_kexec_file.buf, ima_kexec_file.count < 100 ?
+>> +			     ima_kexec_file.count : 100,
+>>   			     true);
+>>   
+>> -	*buffer_size = file.count;
+>> -	*buffer = file.buf;
+>> -out:
+>> -	if (ret == -EINVAL)
+>> -		vfree(file.buf);
+>> +	*buffer_size = ima_kexec_file.count;
+>> +	*buffer = ima_kexec_file.buf;
+>> +
+>>   	return ret;
+>>   }
+> 
 
