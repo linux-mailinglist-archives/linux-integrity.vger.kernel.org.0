@@ -1,37 +1,37 @@
-Return-Path: <linux-integrity+bounces-56-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-57-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BED967ED5FC
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 22:24:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3346D7ED625
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 22:38:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF9821C209AB
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 21:24:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1CF3280F0E
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 21:38:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4564F29CF1;
-	Wed, 15 Nov 2023 21:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A5B3C471;
+	Wed, 15 Nov 2023 21:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UqxWumEH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vAYHeNK+"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181BD45BE6;
-	Wed, 15 Nov 2023 21:24:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04363C433C8;
-	Wed, 15 Nov 2023 21:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93E418657
+	for <linux-integrity@vger.kernel.org>; Wed, 15 Nov 2023 21:37:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CD8EC433C7;
+	Wed, 15 Nov 2023 21:37:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700083479;
-	bh=ozkO9Pw7MrmqVhdNfFB/XT1lNJNymTQrXyWvzxaXj4s=;
+	s=k20201202; t=1700084278;
+	bh=AmCgzmB7jjz+T45RrytzAofEx2AMRRYYB6hhglefLRg=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=UqxWumEH0m2fdEquDZaKkRIbRzbH2AkcKxY7EXBhGv/l6dwVXR5r8AATojnri5Lkz
-	 bMWVyQJSP20xXP4ud5yM28bO+jCp0s1O5KoKGDNgvkRyyzgRC8kSUHNC4LUPyydEF0
-	 UDuzicn1SjWdoAne0kUP/RrP73CX8TMpqU5XpjTTfNGTRffEUu37gkX4vf898Zpnh3
-	 wm0X1hZZlV1746CUxgCboamxmTQZMQC1M8UIHJ4eJJxA87Wer6cb+3M5YLgs6bZ+HV
-	 dHukM+sf1qHNmQEWTPLBCwhel6OCSLWNMQYcd50Wn8FqciyFtKtzgPC1mV6AvRH7Oz
-	 Af07p+j0+ojqQ==
+	b=vAYHeNK+27nLlK6csqDqimKGiMbHfw6gqr5RfG1F+2FyF2QETyLVwaii0D83vzB42
+	 PtVQOhRSWwe1LhVH7u07nXv9W8GW4TF9LiqzLCIMSpupPxvJuKJCTG7MtdFaU2w0bH
+	 CiTfFjX08v5IMmdM59s8dNC91keCn04H8Dj82yZNVDUuxAHKayzrhCkTdRQUvg7j7n
+	 pZDkQxAugC/D4TZ8O77V/MRcvxLZTPVhILsYWZlmt/YwqZsmsprA4HaMGac1GulYKs
+	 HDG6vPoCuSrsZm4gG3m7gXB7dW7Ow11Ck1iPLUoB0OYeu+WltkuYahWhTyX/EdfkBB
+	 aOiCAPDdZM6tw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -40,76 +40,74 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 15 Nov 2023 23:24:34 +0200
-Message-Id: <CWZPAM33DYND.1OEHYEHGBGBI7@kernel.org>
-Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>, "James
- Bottomley" <James.Bottomley@hansenpartnership.com>, "William Roberts"
- <bill.c.roberts@gmail.com>, "Stefan Berger" <stefanb@linux.ibm.com>, "David
- Howells" <dhowells@redhat.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Mimi
- Zohar" <zohar@linux.ibm.com>, "Peter Huewe" <peterhuewe@gmx.de>, "James
- Bottomley" <jejb@linux.ibm.com>, "Paul Moore" <paul@paul-moore.com>, "James
- Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Mario
- Limonciello" <mario.limonciello@amd.com>, "Julien Gomes"
- <julien@arista.com>, "open list" <linux-kernel@vger.kernel.org>, "open
- list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v3 4/6] tpm: Support TPM2 sized buffers (TPM2B)
+Date: Wed, 15 Nov 2023 23:37:55 +0200
+Message-Id: <CWZPKU58PWLS.1B1N297O1D9CY@kernel.org>
+Cc: <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [RESEND PATCH] tpm: nuvoton: Use i2c_get_match_data()
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jerry Snitselaar" <jsnitsel@redhat.com>
+To: "Rob Herring" <robh@kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>
 X-Mailer: aerc 0.15.2
-References: <20231024011531.442587-1-jarkko@kernel.org>
- <20231024011531.442587-5-jarkko@kernel.org>
- <nwbyc2al5msr7d2wqvqcfdm75osrestjncuhjgxxigm773a6k5@bc7hjv5srjxv>
-In-Reply-To: <nwbyc2al5msr7d2wqvqcfdm75osrestjncuhjgxxigm773a6k5@bc7hjv5srjxv>
+References: <20231115210215.3743873-1-robh@kernel.org>
+In-Reply-To: <20231115210215.3743873-1-robh@kernel.org>
 
-On Tue Nov 7, 2023 at 7:20 PM EET, Jerry Snitselaar wrote:
-> On Tue, Oct 24, 2023 at 04:15:22AM +0300, Jarkko Sakkinen wrote:
-> > Add boolean parameters @alloc and @sized to tpm_buf_init():
-> >=20
-> > * If @alloc is set to false, buf->data is assumed to be pre-feeded and
-> >   owned by the caller.
-> > * If @sized is set to true, the buffer represents a sized buffer
-> >   (TPM2B).
-> >=20
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> >  drivers/char/tpm/tpm-buf.c                | 32 ++++++++++++++++-------
-> >  drivers/char/tpm/tpm-sysfs.c              |  2 +-
-> >  drivers/char/tpm/tpm1-cmd.c               | 14 +++++-----
-> >  drivers/char/tpm/tpm2-cmd.c               | 22 ++++++++--------
-> >  drivers/char/tpm/tpm2-space.c             |  4 +--
-> >  drivers/char/tpm/tpm_vtpm_proxy.c         |  2 +-
-> >  include/linux/tpm.h                       |  3 ++-
-> >  security/keys/trusted-keys/trusted_tpm1.c |  4 +--
-> >  security/keys/trusted-keys/trusted_tpm2.c |  6 ++---
-> >  9 files changed, 51 insertions(+), 38 deletions(-)
-> >=20
-> > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-> > index fa9a4c51157a..f1d92d7e758d 100644
-> > --- a/drivers/char/tpm/tpm-buf.c
-> > +++ b/drivers/char/tpm/tpm-buf.c
-> > @@ -7,22 +7,32 @@
-> >  #include <linux/tpm.h>
-> > =20
-> >  /**
-> > - * tpm_buf_init() - Initialize from the heap
-> > + * tpm_buf_init() - Initialize a TPM buffer
-> >   * @buf:	A @tpm_buf
-> > + * @sized:	Represent a sized buffer (TPM2B)
-> > + * @alloc:	Allocate from the heap
-> >   *
-> >   * Initialize all structure fields to zero, allocate a page from the h=
-eap, and
+On Wed Nov 15, 2023 at 11:02 PM EET, Rob Herring wrote:
+> Use preferred i2c_get_match_data() instead of of_match_device() to
+> get the driver match data. With this, adjust the includes to explicitly
+> include the correct headers.
 >
-> Depending on what the decision ends up being on the bools, flags,
-> separate functions, or wrappers possibly an "if needed" should be
-> tacked on to the end of "allocate a page from the heap" here.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/char/tpm/tpm_i2c_nuvoton.c | 15 ++++-----------
+>  1 file changed, 4 insertions(+), 11 deletions(-)
 >
->
-> Flags would be better when coming across calls to the routine in the
-> code than the bools, but I think switching to wrappers around
-> a __tpm_buf_init for the different types would be good.
+> diff --git a/drivers/char/tpm/tpm_i2c_nuvoton.c b/drivers/char/tpm/tpm_i2=
+c_nuvoton.c
+> index d7be03c41098..5490f7e0fa43 100644
+> --- a/drivers/char/tpm/tpm_i2c_nuvoton.c
+> +++ b/drivers/char/tpm/tpm_i2c_nuvoton.c
+> @@ -19,7 +19,8 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/wait.h>
+>  #include <linux/i2c.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+> +#include <linux/property.h>
+>  #include "tpm.h"
+> =20
+>  /* I2C interface offsets */
+> @@ -524,7 +525,6 @@ static int get_vid(struct i2c_client *client, u32 *re=
+s)
+> =20
+>  static int i2c_nuvoton_probe(struct i2c_client *client)
+>  {
+> -	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
+>  	int rc;
+>  	struct tpm_chip *chip;
+>  	struct device *dev =3D &client->dev;
+> @@ -546,15 +546,8 @@ static int i2c_nuvoton_probe(struct i2c_client *clie=
+nt)
+>  	if (!priv)
+>  		return -ENOMEM;
+> =20
+> -	if (dev->of_node) {
+> -		const struct of_device_id *of_id;
+> -
+> -		of_id =3D of_match_device(dev->driver->of_match_table, dev);
+> -		if (of_id && of_id->data =3D=3D OF_IS_TPM2)
+> -			chip->flags |=3D TPM_CHIP_FLAG_TPM2;
+> -	} else
+> -		if (id->driver_data =3D=3D I2C_IS_TPM2)
+> -			chip->flags |=3D TPM_CHIP_FLAG_TPM2;
+> +	if (i2c_get_match_data(client))
+> +		chip->flags |=3D TPM_CHIP_FLAG_TPM2;
+> =20
+>  	init_waitqueue_head(&priv->read_queue);
+> =20
 
-Yeah, I'll bake something based on this discussion.
+OK, apologies for having to do a resend. I'll pick this, thanks!
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
 
