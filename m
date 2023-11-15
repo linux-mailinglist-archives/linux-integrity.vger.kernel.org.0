@@ -1,37 +1,37 @@
-Return-Path: <linux-integrity+bounces-54-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-55-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9E0F7ED54A
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 22:03:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E83647ED55A
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 22:04:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA9051C208D6
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 21:03:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F80CB20C05
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 21:04:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA766381A5;
-	Wed, 15 Nov 2023 21:03:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB997381BF;
+	Wed, 15 Nov 2023 21:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dk4rDKxA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PGHyJ667"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74DA2E40E;
-	Wed, 15 Nov 2023 21:03:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC40AC433C8;
-	Wed, 15 Nov 2023 21:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EB235EED;
+	Wed, 15 Nov 2023 21:04:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10ECC433CD;
+	Wed, 15 Nov 2023 21:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700082199;
-	bh=6iFkJ9CgOv8m2X+1Em1JMHhqIxyCZ6Qr3KSR13K3huM=;
+	s=k20201202; t=1700082247;
+	bh=RLgv+/x8PezTzgTf5EKWZ+43AZJwvZAtVguxZqC4KQI=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=dk4rDKxA0ItonubvGbIA6kOO4BQ/BxPKjEvuouQ3hBwft2YkQ1nM8EsubAujp6Rll
-	 VQaazriqth98JZ5XQk4K445Cepsy/FFEEQtYHDk8BHOyYDld+Td8jFeNHEVz/4ivWG
-	 G10fsUCTYPwf1EdKr2k8W3OJA0M2HQ3RcH0cK1eRdmk64soo+BxuEGzvc+y3rqtfc4
-	 hvOfAiGuGJp1BLqlUGtvB3lx3ayVs0StPc2jMLgduP9fgOPWv4pIZdjPnoat+PBRaa
-	 5x9z1UMoJaM3aG6Uz3G8Ne3GiYZWuMktXisQ00FWOK1UdPTvlb6+4swpdwJyRr6KSq
-	 GE5BnVtzL+Qpg==
+	b=PGHyJ667Xq042YZ3Mse9gMLBm31ojzt3yYgoEdCkeYyEzrdVgSR4yLYqsUH/x6MSa
+	 IWFFKhlnrW3i6/x89VtXDbCMTqc4vgNTDVrDq3CBdDq+jlhGaZ5sX9/SyOBmHpA/jK
+	 HRVGe5feDnWSB5jYML/2/SF4zDw2kAp8Qtrusj7YewDuNbVRWvlfjALOS7/TO0jK95
+	 vGyPjEydMBUJBHTg79d2D+6+5B+QGzoXuosTN9mSFrZ4bDYEadxoUQlmWvKklK5mCB
+	 nDXKoJ5vC7FCiTjTEwTo66ymkPtjcj5HJpKI8yTaum1zq1PglOkEcGLzkYox16yhXu
+	 YPoZDlWQKFVDw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -40,8 +40,8 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 15 Nov 2023 23:03:13 +0200
-Message-Id: <CWZOU9WPLL2Y.30QYCUBCE0UQA@kernel.org>
+Date: Wed, 15 Nov 2023 23:04:02 +0200
+Message-Id: <CWZOUW5A0LET.R8N9JGS5M1W3@kernel.org>
 Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>, "James
  Bottomley" <James.Bottomley@hansenpartnership.com>, "William Roberts"
  <bill.c.roberts@gmail.com>, "Stefan Berger" <stefanb@linux.ibm.com>, "David
@@ -52,19 +52,56 @@ Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>, "James
  Gomes" <julien@arista.com>, "Mario Limonciello"
  <mario.limonciello@amd.com>, "open list" <linux-kernel@vger.kernel.org>,
  "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v3 3/6] tpm: Detach tpm_buf_reset() from tpm_buf_init()
+Subject: Re: [PATCH v3 2/6] tpm: Store TPM buffer length
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
 To: "Jerry Snitselaar" <jsnitsel@redhat.com>
 X-Mailer: aerc 0.15.2
 References: <20231024011531.442587-1-jarkko@kernel.org>
- <20231024011531.442587-4-jarkko@kernel.org>
- <xp2tdlw2qjg3pbazb3oye7poeh4r5neeqbsvamgiazdl2bouwa@qnxhvt7vzkpb>
-In-Reply-To: <xp2tdlw2qjg3pbazb3oye7poeh4r5neeqbsvamgiazdl2bouwa@qnxhvt7vzkpb>
+ <20231024011531.442587-3-jarkko@kernel.org>
+ <4gyb46g6makecsv7mq67qdp5hilytpymvdbffz5q64tday5dva@wjg3achi5rrv>
+In-Reply-To: <4gyb46g6makecsv7mq67qdp5hilytpymvdbffz5q64tday5dva@wjg3achi5rrv>
 
-On Mon Nov 6, 2023 at 9:31 PM EET, Jerry Snitselaar wrote:
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+On Mon Nov 6, 2023 at 9:36 PM EET, Jerry Snitselaar wrote:
+> On Tue, Oct 24, 2023 at 04:15:20AM +0300, Jarkko Sakkinen wrote:
+> > Both TPM commands and sized buffers (TPM2B) have a fixed size header, w=
+hich
+> > is followed by the body. Store TPM buffer length to a new field in the
+> > struct tpm_buf.
+> >=20
+> > The invariant here is that the length field must always contain the tot=
+al
+> > length of the buffer, i.e. the sum header and body length. The value mu=
+st
+> > then be mapped to the length representation of the buffer type, and thi=
+s
+> > correspondence must be maintained.
+> >=20
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >  drivers/char/tpm/tpm-buf.c                | 36 ++++++++++++++++-------
+> >  drivers/char/tpm/tpm-interface.c          | 18 +++++++++---
+> >  include/linux/tpm.h                       | 10 +++----
+> >  security/keys/trusted-keys/trusted_tpm1.c |  8 ++---
+> >  4 files changed, 49 insertions(+), 23 deletions(-)
+> >=20
+> > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+> > index 88ce1a5402de..8dc6b9db006b 100644
+> > --- a/drivers/char/tpm/tpm-buf.c
+> > +++ b/drivers/char/tpm/tpm-buf.c
+> > @@ -18,6 +18,12 @@ int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 o=
+rdinal)
+> >  }
+> >  EXPORT_SYMBOL_GPL(tpm_buf_init);
+> > =20
+> > +/**
+> > + * tpm_buf_reset() - Initialize a TPM command
+> > + * @buf:	A @tpm_buf
+>
+> One minor thing I meant to mention, did you intend this to be &tpm_buf li=
+ke it
+> is for tpm_buf_append?
 
-Thanks.
+Yep, thanks. I'll change it to &tpm_buf.
 
 BR, Jarkko
 
