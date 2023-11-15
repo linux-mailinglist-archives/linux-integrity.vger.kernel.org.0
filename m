@@ -1,113 +1,115 @@
-Return-Path: <linux-integrity+bounces-57-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-58-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3346D7ED625
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 22:38:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DABF87ED666
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 22:56:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1CF3280F0E
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 21:38:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 864A91F259DA
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Nov 2023 21:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A5B3C471;
-	Wed, 15 Nov 2023 21:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F5053DB95;
+	Wed, 15 Nov 2023 21:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vAYHeNK+"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lUkytxTW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93E418657
-	for <linux-integrity@vger.kernel.org>; Wed, 15 Nov 2023 21:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CD8EC433C7;
-	Wed, 15 Nov 2023 21:37:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700084278;
-	bh=AmCgzmB7jjz+T45RrytzAofEx2AMRRYYB6hhglefLRg=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=vAYHeNK+27nLlK6csqDqimKGiMbHfw6gqr5RfG1F+2FyF2QETyLVwaii0D83vzB42
-	 PtVQOhRSWwe1LhVH7u07nXv9W8GW4TF9LiqzLCIMSpupPxvJuKJCTG7MtdFaU2w0bH
-	 CiTfFjX08v5IMmdM59s8dNC91keCn04H8Dj82yZNVDUuxAHKayzrhCkTdRQUvg7j7n
-	 pZDkQxAugC/D4TZ8O77V/MRcvxLZTPVhILsYWZlmt/YwqZsmsprA4HaMGac1GulYKs
-	 HDG6vPoCuSrsZm4gG3m7gXB7dW7Ow11Ck1iPLUoB0OYeu+WltkuYahWhTyX/EdfkBB
-	 aOiCAPDdZM6tw==
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F1E193;
+	Wed, 15 Nov 2023 13:56:41 -0800 (PST)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AFLhVJA004961;
+	Wed, 15 Nov 2023 21:56:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=9K/cLdVo2ucKzMPx1+SKCSvLmh4Jt/8QKnLodIoP+VA=;
+ b=lUkytxTWAYIo3dXMNT+PSP3+sXR4E9I9Psp3s10BkVwQw8qKiMOPgWjg+JKlWiDO/zBb
+ aJA/1tOQxVTPmjtfxgoeRB9i8Fl8a8QvaxQ7ak/jYySyuXOPYEz09uoHPuAL84pSTyf/
+ P4hTxv5DoAA6hPWo7CQ4BHZyRlhHANb5H59aIrW4QqJBsEmIW/2B7ROSfc3iE/UFT60c
+ 1w1080gz0+DvW7m6nein+BPKv0c5+78LYHQcAPW03a2ymuPwHsQEtPB+HMryqOZ89iP/
+ U6UVDdNzjuNw5H5ofpp+bNMHVJRGvoy72zKA7snJPmShj8KJM/NZBoUbqF44guypaUoQ Vg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ud51q1v6m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Nov 2023 21:56:38 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AFLRTAu016535;
+	Wed, 15 Nov 2023 21:56:37 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ud51q1uuw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Nov 2023 21:56:37 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3AFKIx1o014619;
+	Wed, 15 Nov 2023 21:56:06 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uanekt9w8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Nov 2023 21:56:06 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AFLu5JX15336128
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 15 Nov 2023 21:56:06 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9B99B5805E;
+	Wed, 15 Nov 2023 21:56:05 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D742C58051;
+	Wed, 15 Nov 2023 21:56:04 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 15 Nov 2023 21:56:04 +0000 (GMT)
+Message-ID: <ee054131-9d64-4945-b8aa-76b212effa7b@linux.ibm.com>
+Date: Wed, 15 Nov 2023 16:56:03 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 15 Nov 2023 23:37:55 +0200
-Message-Id: <CWZPKU58PWLS.1B1N297O1D9CY@kernel.org>
-Cc: <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH] tpm: nuvoton: Use i2c_get_match_data()
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Rob Herring" <robh@kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>,
- "Jason Gunthorpe" <jgg@ziepe.ca>
-X-Mailer: aerc 0.15.2
-References: <20231115210215.3743873-1-robh@kernel.org>
-In-Reply-To: <20231115210215.3743873-1-robh@kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/6] Extend struct tpm_buf to support sized buffers
+ (TPM2B)
+Content-Language: en-US
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        William Roberts <bill.c.roberts@gmail.com>,
+        David Howells <dhowells@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Mimi Zohar <zohar@linux.ibm.com>
+References: <20231024011531.442587-1-jarkko@kernel.org>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20231024011531.442587-1-jarkko@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hxvq3Jm9IotJVc_jxNKr0IXxcoNd_wRd
+X-Proofpoint-GUID: QU_NMfOQm3pNkuK5aTwxgI2p-wXCj569
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-15_20,2023-11-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ phishscore=0 suspectscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=690
+ mlxscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
+ definitions=main-2311150173
 
-On Wed Nov 15, 2023 at 11:02 PM EET, Rob Herring wrote:
-> Use preferred i2c_get_match_data() instead of of_match_device() to
-> get the driver match data. With this, adjust the includes to explicitly
-> include the correct headers.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/char/tpm/tpm_i2c_nuvoton.c | 15 ++++-----------
->  1 file changed, 4 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/char/tpm/tpm_i2c_nuvoton.c b/drivers/char/tpm/tpm_i2=
-c_nuvoton.c
-> index d7be03c41098..5490f7e0fa43 100644
-> --- a/drivers/char/tpm/tpm_i2c_nuvoton.c
-> +++ b/drivers/char/tpm/tpm_i2c_nuvoton.c
-> @@ -19,7 +19,8 @@
->  #include <linux/interrupt.h>
->  #include <linux/wait.h>
->  #include <linux/i2c.h>
-> -#include <linux/of_device.h>
-> +#include <linux/of.h>
-> +#include <linux/property.h>
->  #include "tpm.h"
-> =20
->  /* I2C interface offsets */
-> @@ -524,7 +525,6 @@ static int get_vid(struct i2c_client *client, u32 *re=
-s)
-> =20
->  static int i2c_nuvoton_probe(struct i2c_client *client)
->  {
-> -	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
->  	int rc;
->  	struct tpm_chip *chip;
->  	struct device *dev =3D &client->dev;
-> @@ -546,15 +546,8 @@ static int i2c_nuvoton_probe(struct i2c_client *clie=
-nt)
->  	if (!priv)
->  		return -ENOMEM;
-> =20
-> -	if (dev->of_node) {
-> -		const struct of_device_id *of_id;
-> -
-> -		of_id =3D of_match_device(dev->driver->of_match_table, dev);
-> -		if (of_id && of_id->data =3D=3D OF_IS_TPM2)
-> -			chip->flags |=3D TPM_CHIP_FLAG_TPM2;
-> -	} else
-> -		if (id->driver_data =3D=3D I2C_IS_TPM2)
-> -			chip->flags |=3D TPM_CHIP_FLAG_TPM2;
-> +	if (i2c_get_match_data(client))
-> +		chip->flags |=3D TPM_CHIP_FLAG_TPM2;
-> =20
->  	init_waitqueue_head(&priv->read_queue);
-> =20
 
-OK, apologies for having to do a resend. I'll pick this, thanks!
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+On 10/23/23 21:15, Jarkko Sakkinen wrote:
 
-BR, Jarkko
+> For TPM1 I tried:
+> 
+> keyctl add trusted kmk "new 32" @u
+> 
+> This caused TPM error 18, which AFAIK means that there is not SRK (?),
+> which is probably an issue in my swtpm configuration, which is visible
+> in board/qemu/start-qemu.sh.in.
+
+FYI: This would create a TPM 1.2 with an SRK with password 'sss':
+
+swtpm_setup --tpmstate=./ --create-ek-cert --take-ownership --overwrite 
+--srkpass sss --ownerpass ooo
 
