@@ -1,170 +1,166 @@
-Return-Path: <linux-integrity+bounces-73-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-74-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3A327EE6FC
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Nov 2023 19:46:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7791E7EE91B
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Nov 2023 23:07:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88F9B1F241AB
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Nov 2023 18:46:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D046280F71
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Nov 2023 22:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B392FC3F;
-	Thu, 16 Nov 2023 18:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF9245000;
+	Thu, 16 Nov 2023 22:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Zw1VCBY1"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="I+ByHDZl"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4A01A8
-	for <linux-integrity@vger.kernel.org>; Thu, 16 Nov 2023 10:46:17 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3b2ea7cc821so671048b6e.1
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Nov 2023 10:46:17 -0800 (PST)
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6555F189
+	for <linux-integrity@vger.kernel.org>; Thu, 16 Nov 2023 14:07:28 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d9ac3b4f42cso2165568276.0
+        for <linux-integrity@vger.kernel.org>; Thu, 16 Nov 2023 14:07:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1700160377; x=1700765177; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1700172447; x=1700777247; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H+G3Thi9QyaCj6G+9c//7y8tpV11xzrqy7tArsUAiXA=;
-        b=Zw1VCBY1r+zGu9M6JFNK6NZm9cwJTPF306Ly0oXrhXW8WotYpjix2J7T/hfgR5Ogt5
-         V9ofn7co3oYRzpIqPTSfQouAdMhKSCGwa8uR/BIQtNCvlbNQdZtqHDOy6erM839pHSfI
-         7NumeX0z1vC8zMSIWr00Jgf06SgzWx4g3vuWhdqhRZQ//tQCHIWuJKmvwQCsOe7LYE3G
-         yWYGekCQJDMUf8b0hkAPiHOH8h+ue6197JJqnagxlZpx2pzv09hx2tDW7agQV5R8olAg
-         viAVvXuuyqmbbG2rY1NDaTlW7P1lqtUo+mmWVKMQNitNFBj2JHyd3A4mtAYgkSXbs79E
-         8d/g==
+        bh=McWLK0Erh20b4c0w4AHhfY135hMZXUKuEa1U628p59w=;
+        b=I+ByHDZl7O1bS5T23yOnMkTOUF2NjpW7FPshYmiaOFgk4A08f/GZ9oFYW6S5vl6mpd
+         PmnoXxXTSNN0jKugKGAYviuziey8wqaKAP2gwxip2eet8ObO4a/Wyal3bOOTJVkpXLU5
+         ms9JvZtSHZKqMIs/Y+AVP7ribP2k2xr0x6OdHEkR7+s7SjlMVAa9tE3G0h64gCeX3eMF
+         fHsYvIAaAdTq2LgLyxb2NGDX8E1/K9inFVwBIWStjFVS3GLb/5K6JY4fz2/5cAyssSKo
+         xT7luT0bpyudmG+mM9IoC4+8CPCAhAeXkeZHTRKQaWLljd8TrH/tSMCjCthfy5kJpp6w
+         J1WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700160377; x=1700765177;
+        d=1e100.net; s=20230601; t=1700172447; x=1700777247;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H+G3Thi9QyaCj6G+9c//7y8tpV11xzrqy7tArsUAiXA=;
-        b=QGJQJxfLApw7+HqwIpy2t5QNoVwg4NZFIeUSjtSPWm3ZHJEh7KnNMAOXupU2ZLV2CF
-         DMkQDGZoINhk6deQSDwR5d9JMqCPi1LHHRY0a2Ldi3qm6WFJ5dKX6IOMv987cPpzZHMa
-         xYRO01QngWqbVRP3Mzg2AFarfRdkLnZsu2DkzZWd97Bs1mJwZcxzMt4hH5XgqKNY4/KI
-         OY8DQUHij8Do8Sa4CaCA87PJP0AcpYZ9lpnnVxAHYnd6KoqI/R+l/Cn5I1J8rHAlmNXg
-         qJtHF8Y6B0sNW8XaCHHaEujeMhDJWiHMFvcvZVOUvDB+SFU5l9wxqADLEVEjNT6E6gne
-         +lAw==
-X-Gm-Message-State: AOJu0Yw8HzmIMXEFoEReZZfztbauq4gpORoGBVo/P2rL1i0mK5vievMN
-	EO29Bk8S6S8Azayc1mMxYt0xOwIB3ufKozooFTS2
-X-Google-Smtp-Source: AGHT+IGAfgdZtmxubZhWLgb4REHHB7a+iMS46HjHd0YyX0scqg/dVHmKFiBP9iP4hjqFVyXuUq7chZhRosvMyhNi/Qo=
-X-Received: by 2002:a05:6358:52ce:b0:16b:c486:c315 with SMTP id
- z14-20020a05635852ce00b0016bc486c315mr12386060rwz.3.1700160377054; Thu, 16
- Nov 2023 10:46:17 -0800 (PST)
+        bh=McWLK0Erh20b4c0w4AHhfY135hMZXUKuEa1U628p59w=;
+        b=uePFryjPrcDlHjAiPP7u09oYfUW0U9h+Awksr68uS4z81A+mOzeuk5Wft2xl7tpy0o
+         4MPgfXlMv6dgDroksrpJDiULwOzUwXZkX78WDknC6EVq4NqNH1Bx48ZtzK13K3kC8Pft
+         Jsf01kaZkZFACWJKJ0e7PYevnqzGbhwXnrWyaw9Z+ze0kxfNKSBOaXu1yTbZrYaYyXR/
+         vNrxKl28gvqRYFE5pxchQzjyIXCCarHTK1LG1n+mjHRo/6sXljYVDwkYKH3aS3EP/C4S
+         9rDJkGnd2YiPeX50z3fQ/wDVWTWOryGrm+ecLT/LuydeUKiEpCRnf7gn+kvrkGQYrMsN
+         PE6w==
+X-Gm-Message-State: AOJu0YzoVhDTqgAT5Tq+MSop4lzLtX8inJWt9KGnVky3z4BExId4GvyQ
+	QAjxvgMP/HnJvrRCB9DUt+AiTqjOls80NUU20Obu
+X-Google-Smtp-Source: AGHT+IHED5b06hwidP35hDGIWSIQ9u3imhXraRogqXkH7N0Totrcom3GLJDKwPINv/bKKOTrKwcA+sef6an7q3F/l3w=
+X-Received: by 2002:a25:74cb:0:b0:daf:1ab5:e454 with SMTP id
+ p194-20020a2574cb000000b00daf1ab5e454mr2458374ybc.7.1700172447508; Thu, 16
+ Nov 2023 14:07:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231107134012.682009-11-roberto.sassu@huaweicloud.com>
- <231ff26ec85f437261753faf03b384e6.paul@paul-moore.com> <b0f6ece6579a5016243cca5c313d1a58cae6eff2.camel@huaweicloud.com>
-In-Reply-To: <b0f6ece6579a5016243cca5c313d1a58cae6eff2.camel@huaweicloud.com>
+References: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
+ <53db2f31-e383-445f-b746-961958a619bd@linux.ibm.com> <5dfcb0d6-8cbf-428e-b8c1-30333fc668b5@linux.microsoft.com>
+ <ce2e6de7-4289-442e-8209-fb7c01f51e14@linux.ibm.com>
+In-Reply-To: <ce2e6de7-4289-442e-8209-fb7c01f51e14@linux.ibm.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 16 Nov 2023 13:46:06 -0500
-Message-ID: <CAHC9VhSkomRmz9OQGaQ=4Ni=B+UEO=SLUtDtv7X_kbTSam=h=w@mail.gmail.com>
-Subject: Re: [PATCH v5 10/23] security: Introduce inode_post_setattr hook
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
-	jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
-	tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org, 
-	stephen.smalley.work@gmail.com, eparis@parisplace.org, casey@schaufler-ca.com, 
-	mic@digikod.net, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
-	selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Stefan Berger <stefanb@linux.ibm.com>
+Date: Thu, 16 Nov 2023 17:07:16 -0500
+Message-ID: <CAHC9VhQ2ZGxAyB0Zy=BQAyJe7ofknaXaAgsgtt5G-ENExdHA=A@mail.gmail.com>
+Subject: Re: [RFC V2] IMA Log Snapshotting Design Proposal
+To: Stefan Berger <stefanb@linux.ibm.com>
+Cc: Sush Shringarputale <sushring@linux.microsoft.com>, 
+	Tushar Sugandhi <tusharsu@linux.microsoft.com>, linux-integrity@vger.kernel.org, 
+	Mimi Zohar <zohar@linux.ibm.com>, peterhuewe@gmx.de, 
+	Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca, Ken Goldman <kgold@linux.ibm.com>, bhe@redhat.com, 
+	vgoyal@redhat.com, Dave Young <dyoung@redhat.com>, 
+	"kexec@lists.infradead.org" <kexec@lists.infradead.org>, jmorris@namei.org, serge@hallyn.com, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	linux-security-module@vger.kernel.org, 
+	Tyler Hicks <tyhicks@linux.microsoft.com>, 
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 16, 2023 at 4:44=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Wed, 2023-11-15 at 23:33 -0500, Paul Moore wrote:
-> > On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> > >
-> > > In preparation for moving IMA and EVM to the LSM infrastructure, intr=
-oduce
-> > > the inode_post_setattr hook.
-> > >
-> > > At inode_setattr hook, EVM verifies the file's existing HMAC value. A=
-t
-> > > inode_post_setattr, EVM re-calculates the file's HMAC based on the mo=
-dified
-> > > file attributes and other file metadata.
-> > >
-> > > Other LSMs could similarly take some action after successful file att=
-ribute
-> > > change.
-> > >
-> > > The new hook cannot return an error and cannot cause the operation to=
- be
-> > > reverted.
-> > >
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > Acked-by: Casey Schaufler <casey@schaufler-ca.com>
-> > > ---
-> > >  fs/attr.c                     |  1 +
-> > >  include/linux/lsm_hook_defs.h |  2 ++
-> > >  include/linux/security.h      |  7 +++++++
-> > >  security/security.c           | 16 ++++++++++++++++
-> > >  4 files changed, 26 insertions(+)
-> >
-> > ...
-> >
-> > > diff --git a/security/security.c b/security/security.c
-> > > index 7935d11d58b5..ce3bc7642e18 100644
-> > > --- a/security/security.c
-> > > +++ b/security/security.c
-> > > @@ -2222,6 +2222,22 @@ int security_inode_setattr(struct mnt_idmap *i=
-dmap,
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(security_inode_setattr);
-> > >
-> > > +/**
-> > > + * security_inode_post_setattr() - Update the inode after a setattr =
-operation
-> > > + * @idmap: idmap of the mount
-> > > + * @dentry: file
-> > > + * @ia_valid: file attributes set
-> > > + *
-> > > + * Update inode security field after successful setting file attribu=
-tes.
-> > > + */
-> > > +void security_inode_post_setattr(struct mnt_idmap *idmap, struct den=
-try *dentry,
-> > > +                            int ia_valid)
-> > > +{
-> > > +   if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-> > > +           return;
-> >
-> > I may be missing it, but I don't see the S_PRIVATE flag check in the
-> > existing IMA or EVM hooks so I'm curious as to why it is added here?
-> > Please don't misunderstand me, I think it makes sense to return early
-> > on private dentrys/inodes, but why aren't we doing that now?
+On Tue, Nov 14, 2023 at 1:58=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.co=
+m> wrote:
+> On 11/14/23 13:36, Sush Shringarputale wrote:
+> > On 11/13/2023 10:59 AM, Stefan Berger wrote:
+> >> On 10/19/23 14:49, Tushar Sugandhi wrote:
+> >>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >>> | Introduction |
+> >>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >>> This document provides a detailed overview of the proposed Kernel
+> >>> feature IMA log snapshotting.  It describes the motivation behind the
+> >>> proposal, the problem to be solved, a detailed solution design with
+> >>> examples, and describes the changes to be made in the clients/service=
+s
+> >>> which are part of remote-attestation system.  This is the 2nd version
+> >>> of the proposal.  The first version is present here[1].
+> >>>
+> >>> Table of Contents:
+> >>> ------------------
+> >>> A. Motivation and Background
+> >>> B. Goals and Non-Goals
+> >>>      B.1 Goals
+> >>>      B.2 Non-Goals
+> >>> C. Proposed Solution
+> >>>      C.1 Solution Summary
+> >>>      C.2 High-level Work-flow
+> >>> D. Detailed Design
+> >>>      D.1 Snapshot Aggregate Event
+> >>>      D.2 Snapshot Triggering Mechanism
+> >>>      D.3 Choosing A Persistent Storage Location For Snapshots
+> >>>      D.4 Remote-Attestation Client/Service-side Changes
+> >>>          D.4.a Client-side Changes
+> >>>          D.4.b Service-side Changes
+> >>> E. Example Walk-through
+> >>> F. Other Design Considerations
+> >>> G. References
+> >>>
+> >>
+> >> Userspace applications will have to know
+> >> a) where are the shard files?
+> > We describe the file storage location choices in section D.3, but user
+> > applications will have to query the well-known location described there=
+.
+> >> b) how do I read the shard files while locking out the producer of the
+> >> shard files?
+> >>
+> >> IMO, this will require a well known config file and a locking method
+> >> (flock) so that user space applications can work together in this new
+> >> environment. The lock could be defined in the config file or just be
+> >> the config file itself.
+> > The flock is a good idea for co-ordination between UM clients. While
+> > the Kernel cannot enforce any access in this way, any UM process that
+> > is planning on triggering the snapshot mechanism should follow that
+> > protocol.  We will ensure we document that as the best-practices in
+> > the patch series.
 >
-> My first motivation was that it is in the pre hooks, so it should be in
-> the post hook as well.
+> It's more than 'best practices'. You need a well-known config file with
+> well-known config options in it.
 >
-> Thinking more about it, suppose that the post don't have the check,
-> private inodes would gain an HMAC without checking the validity of the
-> current HMAC first (done in the pre hooks), which would be even worse.
->
-> So, my idea about this is that at least we are consistent.
->
-> If IMA and EVM should look at private inodes is a different question,
-> which would require a discussion.
+> All clients that were previously just trying to read new bytes from the
+> IMA log cannot do this anymore in the presence of a log shard producer
+> but have to also learn that a new log shard has been produced so they
+> need to figure out the new position in the log where to read from. So
+> maybe a counter in a config file should indicate to the log readers that
+> a new log has been produced -- otherwise they would have to monitor all
+> the log shard files or the log shard file's size.
 
-As I said above, I can understand why having the IS_PRIVATE() macro
-check might be a good idea, I am just concerned that the current
-IMA/EVM hooks don't check for S_PRIVATE and thus moving to this new
-LSM hook would potentially be a change in behavior (like I said, I
-could be missing a subtle detail).  I'd just like a quick confirmation
-from Mimi that either there is no difference because of X, or she is
-aware of the difference and is okay with it.  It's very possible she
-is fine with it, she did provide her 'Reviewed-by', but I worry this
-is the sort of thing that might have gone unnoticed during review.
+If a counter is needed, I would suggest placing it somewhere other
+than the config file so that we can enforce limited write access to
+the config file.
+
+Regardless, I imagine there are a few ways one could synchronize
+various userspace applications such that they see a consistent view of
+the decomposed log state, and the good news is that the approach
+described here is opt-in from a userspace perspective.  If the
+userspace does not fully support IMA log snapshotting then it never
+needs to trigger it and the system behaves as it does today; on the
+other hand, if the userspace has been updated it can make use of the
+new functionality to better manage the size of the IMA measurement
+log.
 
 --=20
 paul-moore.com
