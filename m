@@ -1,47 +1,49 @@
-Return-Path: <linux-integrity+bounces-99-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-100-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F1317F0D56
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 09:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 069BD7F145B
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 14:24:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A461281977
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 08:17:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEB1E28144B
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 13:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315E2F4EF;
-	Mon, 20 Nov 2023 08:17:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7180B1A59F;
+	Mon, 20 Nov 2023 13:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E9EE3;
-	Mon, 20 Nov 2023 00:16:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4SYg0Z1Pc1z9v7GV;
-	Mon, 20 Nov 2023 16:00:14 +0800 (CST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3928D51;
+	Mon, 20 Nov 2023 05:24:32 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4SYnqV4VwGz9xFr4;
+	Mon, 20 Nov 2023 21:07:50 +0800 (CST)
 Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwDHxV_LFVtlN1ABAQ--.398S2;
-	Mon, 20 Nov 2023 09:16:26 +0100 (CET)
-Message-ID: <2084adba3c27a606cbc5ed7b3214f61427a829dd.camel@huaweicloud.com>
-Subject: Re: [PATCH v5 23/23] integrity: Switch from rbtree to LSM-managed
- blob  for integrity_iint_cache
+	by APP1 (Coremail) with SMTP id LxC2BwDHtXXkXVtlxasHAQ--.12528S2;
+	Mon, 20 Nov 2023 14:24:02 +0100 (CET)
+Message-ID: <6f8fb47a73fe27c6f77ac9280c3f8b63ce57ba27.camel@huaweicloud.com>
+Subject: Re: [PATCH v5 22/23] integrity: Move integrity functions to the LSM
+ infrastructure
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Paul Moore <paul@paul-moore.com>, viro@zeniv.linux.org.uk, 
- brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
- neilb@suse.de,  kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
- jmorris@namei.org,  serge@hallyn.com, zohar@linux.ibm.com,
- dmitry.kasatkin@gmail.com,  dhowells@redhat.com, jarkko@kernel.org,
- stephen.smalley.work@gmail.com,  eparis@parisplace.org,
- casey@schaufler-ca.com, mic@digikod.net
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
-	selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Date: Mon, 20 Nov 2023 09:16:09 +0100
-In-Reply-To: <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
-References: <20231107134012.682009-24-roberto.sassu@huaweicloud.com>
-	 <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
+ jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
+ tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+ dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org, 
+ stephen.smalley.work@gmail.com, eparis@parisplace.org,
+ casey@schaufler-ca.com,  mic@digikod.net, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-nfs@vger.kernel.org,
+ linux-security-module@vger.kernel.org,  linux-integrity@vger.kernel.org,
+ keyrings@vger.kernel.org,  selinux@vger.kernel.org, Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Mon, 20 Nov 2023 14:23:45 +0100
+In-Reply-To: <CAHC9VhRpG3wFbu6-EZw3t1TeKxBzYX86YzizE6x9JGeWmyxixA@mail.gmail.com>
+References: <20231107134012.682009-23-roberto.sassu@huaweicloud.com>
+	 <f529266a02533411e72d706b908924e8.paul@paul-moore.com>
+	 <49a7fd0a1f89188fa92f258e88c50eaeca0f4ac9.camel@huaweicloud.com>
+	 <CAHC9VhRpG3wFbu6-EZw3t1TeKxBzYX86YzizE6x9JGeWmyxixA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.44.4-0ubuntu2 
@@ -51,10 +53,10 @@ List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwDHxV_LFVtlN1ABAQ--.398S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAF17Kw1kuFWrWr45ur1kGrg_yoWrJr43pF
-	W3Ka47Jr1kXFyI9rn2vF45uFWSgFWSgFWUGwn0kr1kAF98ur1Ygr15CryUuFyUGr98tw10
-	qr1a9ryUZ3Wqy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:LxC2BwDHtXXkXVtlxasHAQ--.12528S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3JF1kGFWkWFWkJF43trW5Jrb_yoW7tF43pa
+	yUKay5Cr4kAr1Fk3Wvy3Wrua1S9rZ7XFW7WrnxJry8A34UZFySvF48Kay5uFWDCryrtw10
+	qa1jkr9xC3Z0v3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
 	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
@@ -67,100 +69,160 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxAF17Kw1kuFWrWr45ur1kGrg_yoWrJr43pF
 	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
 	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
 	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj5ahSwACsN
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAHBF1jj5KmQgAAsG
 X-CFilter-Loop: Reflected
 
-On Fri, 2023-11-17 at 15:57 -0500, Paul Moore wrote:
-> On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> >=20
-> > Before the security field of kernel objects could be shared among LSMs =
-with
-> > the LSM stacking feature, IMA and EVM had to rely on an alternative sto=
-rage
-> > of inode metadata. The association between inode metadata and inode is
-> > maintained through an rbtree.
-> >=20
-> > Because of this alternative storage mechanism, there was no need to use
-> > disjoint inode metadata, so IMA and EVM today still share them.
-> >=20
-> > With the reservation mechanism offered by the LSM infrastructure, the
-> > rbtree is no longer necessary, as each LSM could reserve a space in the
-> > security blob for each inode. However, since IMA and EVM share the
-> > inode metadata, they cannot directly reserve the space for them.
-> >=20
-> > Instead, request from the 'integrity' LSM a space in the security blob =
-for
-> > the pointer of inode metadata (integrity_iint_cache structure). The oth=
-er
-> > reason for keeping the 'integrity' LSM is to preserve the original orde=
-ring
-> > of IMA and EVM functions as when they were hardcoded.
-> >=20
-> > Prefer reserving space for a pointer to allocating the integrity_iint_c=
-ache
-> > structure directly, as IMA would require it only for a subset of inodes=
+On Fri, 2023-11-17 at 16:22 -0500, Paul Moore wrote:
+> On Thu, Nov 16, 2023 at 5:08=E2=80=AFAM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Wed, 2023-11-15 at 23:33 -0500, Paul Moore wrote:
+> > > On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+>=20
+> ...
+>=20
+> > > > +/*
+> > > > + * Perform the initialization of the 'integrity', 'ima' and 'evm' =
+LSMs to
+> > > > + * ensure that the management of integrity metadata is working at =
+the time
+> > > > + * IMA and EVM hooks are registered to the LSM infrastructure, and=
+ to keep
+> > > > + * the original ordering of IMA and EVM functions as when they wer=
+e hardcoded.
+> > > > + */
+> > > >  static int __init integrity_lsm_init(void)
+> > > >  {
+> > > > +   const struct lsm_id *lsmid;
+> > > > +
+> > > >     iint_cache =3D
+> > > >         kmem_cache_create("iint_cache", sizeof(struct integrity_iin=
+t_cache),
+> > > >                           0, SLAB_PANIC, iint_init_once);
+> > > > +   /*
+> > > > +    * Obtain either the IMA or EVM LSM ID to register integrity-sp=
+ecific
+> > > > +    * hooks under that LSM, since there is no LSM ID assigned to t=
+he
+> > > > +    * 'integrity' LSM.
+> > > > +    */
+> > > > +   lsmid =3D ima_get_lsm_id();
+> > > > +   if (!lsmid)
+> > > > +           lsmid =3D evm_get_lsm_id();
+> > > > +   /* No point in continuing, since both IMA and EVM are disabled.=
+ */
+> > > > +   if (!lsmid)
+> > > > +           return 0;
+> > > > +
+> > > > +   security_add_hooks(integrity_hooks, ARRAY_SIZE(integrity_hooks)=
+, lsmid);
+> > >=20
+> > > Ooof.  I understand, or at least I think I understand, why the above
+> > > hack is needed, but I really don't like the idea of @integrity_hooks
+> > > jumping between IMA and EVM depending on how the kernel is configured=
 .
-> > Always allocating it would cause a waste of memory.
+> > >=20
+> > > Just to make sure I'm understanding things correctly, the "integrity"
+> > > LSM exists to ensure the proper hook ordering between IMA/EVM, shared
+> > > metadata management for IMA/EVM, and a little bit of a hack to solve
+> > > some kernel module loading issues with signatures.  Is that correct?
+> > >=20
+> > > I see that patch 23/23 makes some nice improvements to the metadata
+> > > management, moving them into LSM security blobs, but it appears that
+> > > they are still shared, and thus the requirement is still there for
+> > > an "integrity" LSM to manage the shared blobs.
 > >=20
-> > Introduce two primitives for getting and setting the pointer of
-> > integrity_iint_cache in the security blob, respectively
-> > integrity_inode_get_iint() and integrity_inode_set_iint(). This would m=
-ake
-> > the code more understandable, as they directly replace rbtree operation=
-s.
-> >=20
-> > Locking is not needed, as access to inode metadata is not shared, it is=
- per
-> > inode.
-> >=20
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >  security/integrity/iint.c      | 71 +++++-----------------------------
-> >  security/integrity/integrity.h | 20 +++++++++-
-> >  2 files changed, 29 insertions(+), 62 deletions(-)
-> >=20
-> > diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-> > index 882fde2a2607..a5edd3c70784 100644
-> > --- a/security/integrity/iint.c
-> > +++ b/security/integrity/iint.c
-> > @@ -231,6 +175,10 @@ static int __init integrity_lsm_init(void)
-> >  	return 0;
-> >  }
-> > =20
-> > +struct lsm_blob_sizes integrity_blob_sizes __ro_after_init =3D {
-> > +	.lbs_inode =3D sizeof(struct integrity_iint_cache *),
-> > +};
+> > Yes, all is correct.
 >=20
-> I'll admit that I'm likely missing an important detail, but is there
-> a reason why you couldn't stash the integrity_iint_cache struct
-> directly in the inode's security blob instead of the pointer?  For
-> example:
+> Thanks for the clarification, more on this below.
 >=20
->   struct lsm_blob_sizes ... =3D {
->     .lbs_inode =3D sizeof(struct integrity_iint_cache),
+> > > I'd like to hear everyone's honest opinion on this next question: do
+> > > we have any hope of separating IMA and EVM so they are independent
+> > > (ignore the ordering issues for a moment), or are we always going to
+> > > need to have the "integrity" LSM to manage shared resources, hooks,
+> > > etc.?
+> >=20
+> > I think it should not be technically difficult to do it. But, it would
+> > be very important to understand all the implications of doing those
+> > changes.
+> >=20
+> > Sorry, for now I don't see an immediate need to do that, other than
+> > solving this LSM naming issue. I tried to find the best solution I
+> > could.
+>=20
+> I first want to say that I think you've done a great job thus far, and
+> I'm very grateful for the work you've done.  We can always use more
+> help in the kernel security space and I'm very happy to see your
+> contributions - thank you :)
+
+Thank you!
+
+> I'm concerned about the integrity LSM because it isn't really a LSM,
+> it is simply an implementation artifact from a time when only one LSM
+> was enabled.  Now that we have basic support for stacking LSMs, as we
+> promote integrity/IMA/EVM I think this is the perfect time to move
+> away from the "integrity" portion and integrate the necessary
+> functionality into the IMA and EVM LSMs.  This is even more important
+> now that we are looking at making the LSMs more visible to userspace
+> via syscalls; how would you explain to a developer or user the need
+> for an "integrity" LSM along with the IMA and EVM LSMs?
+>=20
+> Let's look at the three things the the integrity code provides in this pa=
+tchset:
+>=20
+> * IMA/EVM hook ordering
+>=20
+> For better or worse, we have requirements on LSM ordering today that
+> are enforced only by convention, the BPF LSM being the perfect
+> example.  As long as we document this in Kconfig I think we are okay.
+>=20
+> * Shared metadata
+>=20
+> Looking at the integrity_iint_cache struct at the end of your patchset
+> I see the following:
+>=20
+>   struct integrity_iint_cache {
+>     struct mutex mutex;
+>     struct inode *inode;
+>     u64 version;
+>     unsigned long flags;
+>     unsigned long measured_pcrs;
+>     unsigned long atomic_flags;
+>     enum integrity_status ima_file_status:4;
+>     enum integrity_status ima_mmap_status:4;
+>     enum integrity_status ima_bprm_status:4;
+>     enum integrity_status ima_read_status:4;
+>     enum integrity_status ima_creds_status:4;
+>     enum integrity_status evm_status:4;
+>     struct ima_digest_data *ima_hash;
 >   };
 >=20
->   struct integrity_iint_cache *integrity_inode_get(inode)
->   {
->     if (unlikely(!inode->isecurity))
->       return NULL;
->     return inode->i_security + integrity_blob_sizes.lbs_inode;
->   }
+> Now that we are stashing the metadata in the inode, we should be able
+> to remove the @inode field back pointer.  It seems like we could
+> duplicate @mutex and @version without problem.
+>=20
+> I only see the @measured_pcrs, @atomic_flags used in the IMA code.
+>=20
+> I only see the @ima_XXX_status fields using in the IMA code, and the
+> @evm_status used in the EVM code.
+>=20
+> I only see the @ima_hash field used by the IMA code.
+>=20
+> I do see both IMA and EVM using the @flags field, but only one case
+> (IMA_NEW_FILE) where one LSM (EVM) looks for another flags (IMA).  I'm
+> not sure how difficult that would be to untangle, but I imagine we
+> could do something here; if we had to, we could make EVM be dependent
+> on IMA in Kconfig and add a function call to check on the inode
+> status.  Although I hope we could find a better solution.
+>=20
+> * Kernel module loading hook (integrity_kernel_module_request(...))
+>=20
+> My guess is that this is really an IMA hook, but I can't say for
+> certain.  If it is needed for EVM we could always duplicate it across
+> the IMA and EVM LSMs, it is trivially small and one extra strcmp() at
+> kernel module load time doesn't seem awful to me.
 
-It would increase memory occupation. Sometimes the IMA policy
-encompasses a small subset of the inodes. Allocating the full
-integrity_iint_cache would be a waste of memory, I guess?
-
-On the other hand... (did not think fully about that) if we embed the
-full structure in the security blob, we already have a mutex available
-to use, and we don't need to take the inode lock (?).
-
-I'm fully convinced that we can improve the implementation
-significantly. I just was really hoping to go step by step and not
-accumulating improvements as dependency for moving IMA and EVM to the
-LSM infrastructure.
+Ok... so, for now I'm trying to separate them just to see if it is
+possible. Will send just the integrity-related patches shortly.
 
 Thanks
 
