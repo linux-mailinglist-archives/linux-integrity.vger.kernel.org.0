@@ -1,251 +1,140 @@
-Return-Path: <linux-integrity+bounces-130-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-131-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 996A27F1DC8
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 21:09:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6931C7F1E4E
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 21:56:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAD141C211DD
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 20:09:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A0F21C20BFC
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 20:56:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FF0837175;
-	Mon, 20 Nov 2023 20:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603E6225D2;
+	Mon, 20 Nov 2023 20:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b="EP5frw6R"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dIN+TWjB"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2047.outbound.protection.outlook.com [40.107.6.47])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEBFCD;
-	Mon, 20 Nov 2023 12:08:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZP5S7yXjuxGw7mBh8Fs2TLn8bZ5meqYdrfVhJDrbuV1g8gWKazeS80c3HmfyOC1GJ5ZwFsOwYHTuuL/pjtHP1qxslwIvnOcjrZX5AHFMPeSyTbetUX65pj3SzRlfsxu1eB9Lf7+Dn+5fCyHpA8tPT9AC1WxVvwBO4S+B4NBWzw8aaygl4C/0IvVtFFI4xChAvR8ZTo6AWLVQJrkEI+JmuF93OlcOptmUC93WuFQ4txra+N/kKE8dXAJHxxhd+sonSoeXR53ER3X6UKwU6SWLq5kvxCZKy9K+KwC2HxUfc6L7Ak8Wsu+1pWV60RSgrp8wyX/FAXCBftXBhen9HkVFOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bX1eTwLYPWmqG1pR94SMWFl0lwvntsTCEeMdIykJwBY=;
- b=DIREj406KTXMEkOLZtg5g+RXMdOl5ZCsLXN79bDctNmznTh6aurm4HcwMVKDtTx3w75mqZ75EZFmrsuHwaBuycNYuJid3pBhsTMAH2M6+sJC/G4s+/LU6YDG8ZyJ6yTOhdIPFQXwsH96i1AA597QeNYHgfv4QKxRb+12C1Cfwbfi3ctkcSVqc2bJxZ7+mPtSszkbLwW61m3lJVXV7a+z2sUMWQ6BY5O37yA8qC+XI8ofoi9T1Zw3VDP11bdp+jAvdsAcFDScJRO7/ChA0403G790XizUC1+Zu3Ph3gHJoWQI9hXoAED9EJHSRJU2k+avJ/q80D5DOSlmnKhkufJ+pg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
- dkim=pass header.d=kunbus.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bX1eTwLYPWmqG1pR94SMWFl0lwvntsTCEeMdIykJwBY=;
- b=EP5frw6Rh8oKj+EcIYwcYD2CijWa9F2CCyZx6rm2EeSaRIjq+0xDt22xsplkVILNJfSy9je03+JYFyP6l3GeR0RQeDz4WvZ0+uXZ64f+s42mzR1CwWqk6/oUS7sR6I1BK6w9SX9bVjDfehGSPYRmJK5kCGprST2cU9/bRhrg6PI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kunbus.com;
-Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM (2603:10a6:803:4e::14)
- by AS8P193MB1288.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:335::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27; Mon, 20 Nov
- 2023 20:08:55 +0000
-Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- ([fe80::653f:d0f3:e7f6:8c06]) by VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- ([fe80::653f:d0f3:e7f6:8c06%5]) with mapi id 15.20.7002.027; Mon, 20 Nov 2023
- 20:08:54 +0000
-Message-ID: <8712ccc3-8619-41b8-97d0-d0187c0b59c6@kunbus.com>
-Date: Mon, 20 Nov 2023 21:08:52 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: tpm_tis_spi_remove() triggers WARN_ON() in __flushwork (RPi3B+
- and SLB9670)
-Content-Language: en-US
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: Lukas Wunner <lukas@wunner.de>, linux-kernel@vger.kernel.org
-References: <CX32RFOMJUQ0.3R4YCL9MDCB96@kernel.org>
- <CX342W32D30U.330BVFC336MA8@kernel.org>
-From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-In-Reply-To: <CX342W32D30U.330BVFC336MA8@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0161.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::20) To VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:803:4e::14)
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CABCC
+	for <linux-integrity@vger.kernel.org>; Mon, 20 Nov 2023 12:56:06 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-db3a09e96daso1272435276.3
+        for <linux-integrity@vger.kernel.org>; Mon, 20 Nov 2023 12:56:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1700513766; x=1701118566; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9TZd4/9tDYUVpH+va2bN+Lz+wNAalFU9/JWBiin7Umg=;
+        b=dIN+TWjB7DwY0CKa0z9f4TAEhPpuVnITgs51MdVSO/sn+arv6vDkaAE+8j/HKDuUM1
+         GwebVP0DAs0QMj1gPJiZPUm9Td7HGYrjiLx979fyGVdPoNdblR/yi5f8aaIMQR7BiX4g
+         CSnBeLFLW8wZLEYz0D4KFbH0EDNxXtEhULuNiYReIE1QCLzNuEXvG7IADxCQnNKppQu2
+         EmvHtz6I5+wZaFTRUhzV46MrXo3SjchHI2haXaEljwz4B+e29cl/dUwOrRS085VbsWzN
+         ISCuNZ/osu1X+QN1ydECzaNHMEtop//t/WxbUQZoJ3wx9xTBFqXKIupURA2uwrOhk/sh
+         hGbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700513766; x=1701118566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9TZd4/9tDYUVpH+va2bN+Lz+wNAalFU9/JWBiin7Umg=;
+        b=nkUaG9GZob1sRDJIzym8nU2uFCRWjQXiOkF5DFX4cAOFraQt4xlHzgpgmOM0kLT3n9
+         8rKLN1OEnnGQfW0lO6YL4GKP3V3Kvi7YEsLRr725Yd/khjq0uOf+0MuXuJhKl7cP28un
+         xleHsFh6Ws+cLsj/VqZ4Ino054Y+SLhf0LfiTpCGqGaBypXOGMu546K/G2/T4smU/XdE
+         MedDomL2k9LKVFgi0Wh0JPKugxJ2BrqY6/AHGmobeupy7ZC+OVoMQmMqFf8sUbwbhWBa
+         HtAduyaBnPL/f93shX69MXRXLyRg8qLwhz08o4t8whtIe/Q2BJuaNIvAB0zCla+Ivq06
+         Oj7g==
+X-Gm-Message-State: AOJu0Yx4t1fQwvvA149BpcLMcllBbmI/3TcD6Q6eHS/IshPWkuHtFOpm
+	GyTR5AqXXlulH8cAk7ELGdNTkKJkXQwb6BDTAKm9
+X-Google-Smtp-Source: AGHT+IEaRVh061VYZ3MAeHPyfSYqU87TX2/fj8L258pJWZLZTg4+MCecpLfeUh+AQrPfjanR5lZ9zeXYiylSMWWt87o=
+X-Received: by 2002:a25:8907:0:b0:da0:400e:750c with SMTP id
+ e7-20020a258907000000b00da0400e750cmr7368373ybl.27.1700513765828; Mon, 20 Nov
+ 2023 12:56:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P193MB0413:EE_|AS8P193MB1288:EE_
-X-MS-Office365-Filtering-Correlation-Id: 416f332a-2906-4bb5-0460-08dbea048599
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	O377JDwYRdslGg//YO2+MhzMXmm3jRJcKMCo8/H9mdrhfvzb62n+XjMuwjAvlAShA2hGZMcNQeGUNmTJrX9jfBwW7kUR9WUDQR2Qj9AQaCkA2xwdQjC8TscK8El8bAx2LkXipSniB/KFe4c+UOfcImz1dewQ9LYn/1RY3vT9OgUUOcw8F7z0I0hOFynkIi/k53EkXDxC2vb5LNk+TVj9vQo5/Jb4D7GRNXEoUocXQl99MMlTpu62jvUCufSS9j2C7rvNGoG8HLbqRwdflLHiG8vS4sQ1Wy6NtXTPjqkglV+2Zzs0JxyOjAsl/1Uy5ACntLJJuLGJWxiAstisLwTEAIyqu/2w5DFWaO4eU8oJYZOfMOUQdNO6a5zsgs4BX8n19LmvCSU4AJfLUy9scmtgLbp59mTuZr7FV2A0DBLvndrJKDyqWtDcoEC7k2qD3x7sGcG/47PV2Qijcnou1/hOcBXUCEBD2t+0cPvXzL/xIbo2zHpj3HSBHb1OQ0U/hM1vfXBpnaPoXydFOy3Uaqq/uacD2e8u57rQVct1nzR6qIqs41DSOtCFTdCwHBKzkwBB2UKnzQneFqcldLV1x2TgyfBWJ4m2tKm5tNgmf4r29sVLfCLHF0zZSJx/lcHIjsz//VuQP9Uqsxh/i4UQt5G4kRKeJ+JJOQAP37yZuWSN9CW4Iwwc9vSewNV9zWmS98+S
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P193MB0413.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(376002)(39840400004)(136003)(396003)(346002)(366004)(230922051799003)(230173577357003)(230273577357003)(64100799003)(451199024)(186009)(1800799012)(2906002)(5660300002)(4326008)(8936002)(8676002)(31696002)(86362001)(36756003)(38100700002)(41300700001)(478600001)(66946007)(66556008)(316002)(2616005)(66476007)(966005)(6486002)(83380400001)(52116002)(53546011)(31686004)(6512007)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WW43R0ZTZC9oaHNFUlIrci95aTlNaDByVlVVQ0R4SWhma0dkenkxdVpza0pl?=
- =?utf-8?B?bkFCZ2p4SExPdVhuY0dYbUtKQjh0R3B1SEMvbms4RFB1cVBoUHdWcURiSHhi?=
- =?utf-8?B?eSt4NExxdCtvQm5CalhZcVVEcU1sU0ZQdGxBcEMzRnVyUysvd1lMYWlxYWRk?=
- =?utf-8?B?aitlRURsNlVrL0tqQlhDUmRteFFENW5RVVdqY21TMW1yTnFDclZOejlRejYw?=
- =?utf-8?B?RDdPU0llNDU5cUdTRmtwOVNOUzd5TmViOVcwSFZteDdQeUZoNHl1aHA3WUtY?=
- =?utf-8?B?cnh5SmV1QW02TnJ5OVRLbXBHSlpwOXVpOEoxQlNBN2FMeHVXS1NndGNNWWpZ?=
- =?utf-8?B?c2VpWDFaTVZhUjBtc2RjQ1JrWW1NbmgwdERkUXRhNzQ1NTBLOUIweUdwSHZv?=
- =?utf-8?B?bE1CZ2ljT1lweHFWU2sxNEhOM2t0cTN6UzRxM24vN1RhMTJSb2Ztd0JoYVhy?=
- =?utf-8?B?WHZ1UnRZVjMyM0RVUG9ZUkJYREJXWExmSzBBWHd0bUI4Y0pwS1l4YlY4aWhj?=
- =?utf-8?B?ZmthaiswNlp3Vy9BclV4QTl3cGduY0xqbTd0UERla2JucXliMjR1c1dpc2Z0?=
- =?utf-8?B?SGZUOEl2Sk9oU1V4WG1jbzU1OXRIa1pQZUxoTkhneUoxRS9naSt2c0tMa1g0?=
- =?utf-8?B?ZjJkS0dsZC85TkVwYjh3djJ2Y01vMU13MGZjMW5RTzV5NG8vMG5Rc1hKRkJ3?=
- =?utf-8?B?T2dxY3R0VnNrL3VjZzdqdTZpYnF6YWx1aFNpcEZOSkN0Q0R6ZDA4Z0Z1RmdF?=
- =?utf-8?B?UmFiNkY3SXNXY0t3V2VnQU54RzF3MVpZUXVCRFNjNlZ6MFBNME4rd2M3V2J5?=
- =?utf-8?B?amRMK2pKbnMzUnBvY05QU2tBcnVXaHF2cE8zQ3R1Q05yNmVpZzczK1Z6Skgv?=
- =?utf-8?B?cHJnTTVSMGtuZ1hpMW5PSUtzSWVxb2c4MFpNcm45KzlKeWhhVjJFK0l1dVNI?=
- =?utf-8?B?Q1lIS0NoMkZvV0VXc0FYRTR2YytsRC9XWDR6UmJjTTFkUXIvOE9JQk5TV3Z3?=
- =?utf-8?B?ZmFkMTdOQmNoSW1PNmhXVXZpYmV2WlhaSityUTd1dzFkVS9ITVZpSDZ5cy9t?=
- =?utf-8?B?bDRBNzdrMi9OVzhCSS9taGxhOWVJcDE4cGtYVksxYzVNblMxMUtuTnlsYWxY?=
- =?utf-8?B?MVREUzJyb0NWNlhTblRUOFpPU0JxcTd0dmkxeC9SNm9KOFN6c3hKaHd3c0JL?=
- =?utf-8?B?NXNBUDdGclhwbTVJUCtJajU0ZmlDSnVubmsvSlJQbGFnK284MVFMb2ptWVAv?=
- =?utf-8?B?dGl3eUg5ODY2Tms1MnN1VHhoaVc1bkNXMDBZTGVSNFFlbU1HWTExK3NTUzBh?=
- =?utf-8?B?Zjk0eElTUHBaVFNmbU5iSEFTNXp2Mk1qNTV5SGpDU1h5TDByNUxVQkVwOTZI?=
- =?utf-8?B?cVdWdDFLbHY2Q0xIaEE0blNPS0VHRm1reDNjdFVoemNoVm5SV3U1WGtmcEZL?=
- =?utf-8?B?MGJkUWdvSXhIMVliY2x6V3lkN2MxWGVXWHVLMC9naFVZZUNYTHE3T1FoOUJY?=
- =?utf-8?B?UHVyOUlFczZrQVVBZGRwZjJmZVdRVnFZU0hFZTFXcDkzVHBqVytQYk81aFZK?=
- =?utf-8?B?OXNPejFHdGpVYWlJWGVWc2E3QjFaSURBKzZPaVdOaWViSHZlZzFsL0NEb0Mw?=
- =?utf-8?B?WU04Q1JsZFFGQU1lZ01vQktyQlhjV2NRT3FtUkIrTEdPMFZ2Q2IyV3p0Um04?=
- =?utf-8?B?N2pWWmZJSmpnMU95NGNib0hMSm9CUzRhOWdpemw1KzRYSjRCek9qbHBqNnN6?=
- =?utf-8?B?bHJObmN5b0pCenZPMUV0cG96Z2lRTHJHNm1FR1ZxdW83YUxtTm5xZE1OLzFP?=
- =?utf-8?B?WjlLWlVNTTFOVWl0VWpQTVdXVWdhc3dnY3ZyZWtwazV1blF2YkdwRmVjN2s2?=
- =?utf-8?B?aGk3Y3IvQ2l5dFV4cGVkcmxMbEdWM05TdkhTa1dYck83OWw0MFp1ODB0Q3dr?=
- =?utf-8?B?am8vQlFmSzlaUTk5ZVVyNzJEMmtBMHJNRW05bXJwZVV6a0cvWTZSaTlBTFhF?=
- =?utf-8?B?MHZaRE14b3VSdmd0dmtQdms1bXdMMjkzTVpFanRFMTJkYXZ0cWVNa2VuZTVl?=
- =?utf-8?B?ei93R3Zla0Rab1FQQ3B6c1E3R3ZwUnFEd0ZwbVVpeXEzdzdoVGpYVkRaS0x5?=
- =?utf-8?B?eGFnZURHZ1d2RTFuYUpYSWUrU01sSXZZVUNId0N1OERXcHFFd29IdGdIejQ0?=
- =?utf-8?Q?ljI8qbz19tVYI1jvxeRWM5qtpFG3CKj7TSW1R/RPkfev?=
-X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 416f332a-2906-4bb5-0460-08dbea048599
-X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2023 20:08:54.7499
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tOaggqfcTkzpCDU31Z+F9pBgQ9zuDFkpW4anTijlccLEXnxNOb5JcZlZkq1y1ZLr1eT5tj6z7SMeIumMNz6/Rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P193MB1288
+References: <20231107134012.682009-1-roberto.sassu@huaweicloud.com>
+ <20231107134012.682009-12-roberto.sassu@huaweicloud.com> <85c5dda2-5a2f-4c73-82ae-8a333b69b4a7@schaufler-ca.com>
+ <1999ed6f77100d9d2adc613c9748f15ab8fcf432.camel@huaweicloud.com> <13f7542f-4039-47a8-abde-45a702b85718@schaufler-ca.com>
+In-Reply-To: <13f7542f-4039-47a8-abde-45a702b85718@schaufler-ca.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 20 Nov 2023 15:55:54 -0500
+Message-ID: <CAHC9VhTPC6_dR0ymPtktVfi9rcFrnqXZL8Cq+c58OiijTRgOxg@mail.gmail.com>
+Subject: Re: [PATCH v5 11/23] security: Introduce inode_post_removexattr hook
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org, neilb@suse.de, 
+	kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com, jmorris@namei.org, 
+	serge@hallyn.com, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
+	dhowells@redhat.com, jarkko@kernel.org, stephen.smalley.work@gmail.com, 
+	eparis@parisplace.org, mic@digikod.net, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	keyrings@vger.kernel.org, selinux@vger.kernel.org, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Stefan Berger <stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Nov 20, 2023 at 1:04=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
+.com> wrote:
+> On 11/20/2023 9:31 AM, Roberto Sassu wrote:
+> > On Tue, 2023-11-07 at 09:33 -0800, Casey Schaufler wrote:
+> >> On 11/7/2023 5:40 AM, Roberto Sassu wrote:
+> >>> From: Roberto Sassu <roberto.sassu@huawei.com>
+> >>>
+> >>> In preparation for moving IMA and EVM to the LSM infrastructure, intr=
+oduce
+> >>> the inode_post_removexattr hook.
+> >>>
+> >>> At inode_removexattr hook, EVM verifies the file's existing HMAC valu=
+e. At
+> >>> inode_post_removexattr, EVM re-calculates the file's HMAC with the pa=
+ssed
+> >>> xattr removed and other file metadata.
+> >>>
+> >>> Other LSMs could similarly take some action after successful xattr re=
+moval.
+> >>>
+> >>> The new hook cannot return an error and cannot cause the operation to=
+ be
+> >>> reverted.
+> >>>
+> >>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> >>> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> >>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> >>> ---
+> >>>  fs/xattr.c                    |  9 +++++----
+> >>>  include/linux/lsm_hook_defs.h |  2 ++
+> >>>  include/linux/security.h      |  5 +++++
+> >>>  security/security.c           | 14 ++++++++++++++
+> >>>  4 files changed, 26 insertions(+), 4 deletions(-)
+> >>>
+> >>> diff --git a/fs/xattr.c b/fs/xattr.c
+> >>> index 09d927603433..84a4aa566c02 100644
+> >>> --- a/fs/xattr.c
+> >>> +++ b/fs/xattr.c
+> >>> @@ -552,11 +552,12 @@ __vfs_removexattr_locked(struct mnt_idmap *idma=
+p,
+> >>>             goto out;
+> >>>
+> >>>     error =3D __vfs_removexattr(idmap, dentry, name);
+> >>> +   if (error)
+> >>> +           goto out;
+> >> Shouldn't this be simply "return error" rather than a goto to nothing
+> >> but "return error"?
+> > I got a review from Andrew Morton. His argument seems convincing, that
+> > having less return places makes the code easier to handle.
+>
+> That was in a case where you did more than just "return". Nonetheless,
+> I think it's a matter of style that's not worth debating. Do as you will.
 
-On 19.11.23 22:37, Jarkko Sakkinen wrote:
+I'm not too bothered by this in the VFS code, that's up to the VFS
+maintainers, but for future reference, in the LSM layer I really
+dislike jumping to a label simply to return.
 
-> 
-> On Sun Nov 19, 2023 at 10:35 PM EET, Jarkko Sakkinen wrote:
->> Captured from serial link with Raspberry Pi 3B+ and Infineon SLB9670 TPM2 chip, i.e.
->> triggers here:
->>
->> static bool __flush_work(struct work_struct *work, bool from_cancel)
->> {
->>       struct wq_barrier barr;
->>
->>       if (WARN_ON(!wq_online))
->>               return false;
->>
->>       if (WARN_ON(!work->func)) /* <-- */
->>               return false;
->>
->>
->> # uname -a
->> Linux buildroot 6.6.1-v8 #1 SMP PREEMPT Sun Nov 19 21:46:00 EET 2023 aarch64 GNU/Linux
->> # poweroff
->> # Stopping dropbear sshd: OK
->> Stopping network: [  246.487818] smsc95xx 3-1.1:1.0 eth0: hardware isn't capable of remote wakeup
->> OK
->> Stopping klogd: OK
->> Stopping syslogd: OK
->> Seeding 256 bits and crediting
->> Saving 256 bits of creditable seed for next boot
->> umount: devtmpfs busy - remounted read-only
->> [  246.623163] EXT4-fs (mmcblk0p2): re-mounted c5bb63df-c03e-4e4a-9846-0cdf5986edc4 ro. Quota mode: none.
->> The system is going down NOW!
->> Sent SIGTERM to all processes
->> Sent SIGKILL to al[  248.680154] ------------[ cut here ]------------
->> [  248.684825] WARNING: CPU: 1 PID: 298 at kernel/workqueue.c:3400 __flush_work.isra.0+0x29c/0x2c4
->> [  248.693582] CPU: 1 PID: 298 Comm: init Tainted: G        W          6.6.1-v8 #1
->> [  248.700926] Hardware name: Raspberry Pi 3 Model B Rev 1.2 (DT)
->> [  248.706780] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> [  248.713774] pc : __flush_work.isra.0+0x29c/0x2c4
->> [  248.718415] lr : __flush_work.isra.0+0x44/0x2c4
->> [  248.722970] sp : ffffffc0812fb910
->> [  248.726299] x29: ffffffc0812fb910 x28: ffffff8003e30e40 x27: 0000000000000000
->> [  248.733481] x26: fffffff0350c9c10 x25: 0000000000000000 x24: fffffff03500c028
->> [  248.740661] x23: fffffff03500d208 x22: 0000000000000001 x21: fffffff034f37568
->> [  248.747840] x20: ffffff80064d9ac0 x19: ffffff80064d9a80 x18: ffffffffffffffff
->> [  248.755019] x17: 0000000000000000 x16: 0000000000000000 x15: ffffffc0812fb760
->> [  248.762197] x14: 0000000000000004 x13: ffffff8002808410 x12: 0000000000000000
->> [  248.769376] x11: 0000000000000040 x10: fffffff034f35a98 x9 : 0000000000000004
->> [  248.776554] x8 : ffffffc0812fb9a8 x7 : 0000000000000000 x6 : 00000000000003e8
->> [  248.783732] x5 : fffffff034e46000 x4 : 0000000000000000 x3 : 0000000000000000
->> [  248.790909] x2 : 0000000000000008 x1 : 0000000000000000 x0 : 0000000000000000
->> [  248.798087] Call trace:
->> [  248.800546]  __flush_work.isra.0+0x29c/0x2c4
->> [  248.804841]  flush_work+0x10/0x1c
->> [  248.808177]  tpm_tis_remove+0x90/0xc8
->> [  248.811866]  tpm_tis_spi_remove+0x24/0x34
->> [  248.815901]  spi_remove+0x30/0x4c
->> [  248.819238]  device_remove+0x4c/0x80
->> [  248.822836]  device_release_driver_internal+0x1d4/0x228
->> [  248.828088]  device_release_driver+0x18/0x24
->> [  248.832381]  bus_remove_device+0xcc/0x10c
->> [  248.836421]  device_del+0x15c/0x41c
->> [  248.839934]  spi_unregister_device+0x48/0x98
->> [  248.844231]  __unregister+0x10/0x20
->> [  248.847742]  device_for_each_child+0x60/0xb4
->> [  248.852037]  spi_unregister_controller+0x48/0x15c
->> [  248.856768]  bcm2835_spi_remove+0x20/0x60
->> [  248.860804]  platform_shutdown+0x24/0x34
->> [  248.864751]  device_shutdown+0x150/0x258
->> [  248.868701]  kernel_power_off+0x38/0x7c
->> [  248.872563]  __do_sys_reboot+0x200/0x238
->> [  248.876511]  __arm64_sys_reboot+0x24/0x30
->> [  248.880546]  invoke_syscall+0x48/0x114
->> [  248.884324]  el0_svc_common.constprop.0+0x40/0xe0
->> [  248.889057]  do_el0_svc+0x1c/0x28
->> [  248.892397]  el0_svc+0x40/0xe8
->> [  248.895478]  el0t_64_sync_handler+0x100/0x12c
->> [  248.899864]  el0t_64_sync+0x190/0x194
->> [  248.903549] ---[ end trace 0000000000000000 ]---
->> [  248.910555] reboot: Power down
->>
->> Just putting out. I was testing https://github.com/jarkkojs/buildroot-tpmdd/tree/linux-6.6.y
->> and this popped up. To build sdcard.img bootable with Raspberry Pi 3:
->>
->> make raspberrypi3_tpmdd_64_defconfig && make
->>
->> BR, Jarkko
-> 
-> So I applied [1] and now I get a clean shutdown:
-> 
-
-AFAIU the warning is shown in case that interrupts are not enabled and thus INIT_WORK has not
-been called for free_irq_work. This should not be too hard to fix, so I think I can provide 
-a patch for that, soon.
-
-BR,
-Lino
-
-> # poweroff
-> # Stopping dropbear sshd: OK
-> Stopping network: [   66.189514] smsc95xx 3-1.1:1.0 eth0: hardware isn't capable of remote wakeup
-> OK
-> Stopping klogd: OK
-> Stopping syslogd: OK
-> Seeding 256 bits and crediting
-> Saving 256 bits of creditable seed for next boot
-> umount: devtmpfs busy - remounted read-only
-> [   66.353850] EXT4-fs (mmcblk0p2): re-mounted 6accf2b0-3291-4e1e-90e0-1c75802d14cd ro. Quota mode: none.
-> The system is going down NOW!
-> Sent SIGTERM to all processes
-> Sent SIGKILL to a[   68.412015] reboot: Power down
-
-
-
-
-> 
-> [1] https://github.com/jarkkojs/buildroot-tpmdd/blob/linux-6.6.y/patches/linux/0001-Revert-tpm-tpm_tis-Disable-interrupts-after-1000-unh.patch
-> 
-> BR, Jarkko
+--=20
+paul-moore.com
 
