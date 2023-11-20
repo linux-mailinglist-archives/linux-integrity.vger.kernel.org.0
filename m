@@ -1,95 +1,169 @@
-Return-Path: <linux-integrity+bounces-98-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-99-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 493EC7F0953
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Nov 2023 23:12:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F1317F0D56
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 09:17:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDA1C280C52
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Nov 2023 22:12:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A461281977
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 08:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 041B118E08;
-	Sun, 19 Nov 2023 22:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gBeBWdLb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315E2F4EF;
+	Mon, 20 Nov 2023 08:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D844711CB2;
-	Sun, 19 Nov 2023 22:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78996C433C7;
-	Sun, 19 Nov 2023 22:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700431963;
-	bh=Y6E/q5+mdfnnezjfgP6j/OoQzXm+L6UpAxyma7lxXdU=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=gBeBWdLbcc/6ExfMeb66WgTsPT3BEgdchXHkT4DdWUM3EsdVacW1pUfu2C/ONuaFA
-	 kFIb4NJbIFbc9amyKB38CAB9D5MF7ZhBZN/FJDSk0GHC+E+nchD+Y5q2ufKs1Rbiqm
-	 N2lxjBLl/Nbc1//UEwU+5zrUO5I4XJwBuIl6d2Fy5ohfhyRANWfGPNNlfg93vGVeXt
-	 PdfoaOoGlWwk0CDvadNuTLT/0elPqhDnNoiXvW3Kz+HGyzpl7zFpW/HEAb0a4SVfGc
-	 LVz+3d98mAQqVPp1hmo8N7HnRmogWOIRiU65u3NKwZcuqWBMWZK5brJLueepxtjlRw
-	 JtI/2dN5vrPMQ==
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E9EE3;
+	Mon, 20 Nov 2023 00:16:56 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4SYg0Z1Pc1z9v7GV;
+	Mon, 20 Nov 2023 16:00:14 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwDHxV_LFVtlN1ABAQ--.398S2;
+	Mon, 20 Nov 2023 09:16:26 +0100 (CET)
+Message-ID: <2084adba3c27a606cbc5ed7b3214f61427a829dd.camel@huaweicloud.com>
+Subject: Re: [PATCH v5 23/23] integrity: Switch from rbtree to LSM-managed
+ blob  for integrity_iint_cache
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Paul Moore <paul@paul-moore.com>, viro@zeniv.linux.org.uk, 
+ brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+ neilb@suse.de,  kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ jmorris@namei.org,  serge@hallyn.com, zohar@linux.ibm.com,
+ dmitry.kasatkin@gmail.com,  dhowells@redhat.com, jarkko@kernel.org,
+ stephen.smalley.work@gmail.com,  eparis@parisplace.org,
+ casey@schaufler-ca.com, mic@digikod.net
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
+	selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Date: Mon, 20 Nov 2023 09:16:09 +0100
+In-Reply-To: <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
+References: <20231107134012.682009-24-roberto.sassu@huaweicloud.com>
+	 <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Nov 2023 00:12:39 +0200
-Message-Id: <CX34TM0NSPYT.3I002JNUTH5NL@kernel.org>
-Cc: <keyrings@vger.kernel.org>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, "William Roberts"
- <bill.c.roberts@gmail.com>, "David Howells" <dhowells@redhat.com>, "Jason
- Gunthorpe" <jgg@ziepe.ca>, "Mimi Zohar" <zohar@linux.ibm.com>
-Subject: Re: [PATCH v3 0/6] Extend struct tpm_buf to support sized buffers
- (TPM2B)
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Stefan Berger"
- <stefanb@linux.ibm.com>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.15.2
-References: <20231024011531.442587-1-jarkko@kernel.org>
- <ee054131-9d64-4945-b8aa-76b212effa7b@linux.ibm.com>
- <CX34O1F9H8AO.1FP8YF01HGAQ3@kernel.org>
-In-Reply-To: <CX34O1F9H8AO.1FP8YF01HGAQ3@kernel.org>
+MIME-Version: 1.0
+X-CM-TRANSID:GxC2BwDHxV_LFVtlN1ABAQ--.398S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF17Kw1kuFWrWr45ur1kGrg_yoWrJr43pF
+	W3Ka47Jr1kXFyI9rn2vF45uFWSgFWSgFWUGwn0kr1kAF98ur1Ygr15CryUuFyUGr98tw10
+	qr1a9ryUZ3Wqy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj5ahSwACsN
+X-CFilter-Loop: Reflected
 
-On Mon Nov 20, 2023 at 12:05 AM EET, Jarkko Sakkinen wrote:
-> On Wed Nov 15, 2023 at 11:56 PM EET, Stefan Berger wrote:
-> >
-> >
-> > On 10/23/23 21:15, Jarkko Sakkinen wrote:
-> >
-> > > For TPM1 I tried:
-> > >=20
-> > > keyctl add trusted kmk "new 32" @u
-> > >=20
-> > > This caused TPM error 18, which AFAIK means that there is not SRK (?)=
-,
-> > > which is probably an issue in my swtpm configuration, which is visibl=
-e
-> > > in board/qemu/start-qemu.sh.in.
-> >
-> > FYI: This would create a TPM 1.2 with an SRK with password 'sss':
-> >
-> > swtpm_setup --tpmstate=3D./ --create-ek-cert --take-ownership --overwri=
-te=20
-> > --srkpass sss --ownerpass ooo
->
-> Thanks! I'll update my scripts in my BuildRoot repository.
+On Fri, 2023-11-17 at 15:57 -0500, Paul Moore wrote:
+> On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+> >=20
+> > Before the security field of kernel objects could be shared among LSMs =
+with
+> > the LSM stacking feature, IMA and EVM had to rely on an alternative sto=
+rage
+> > of inode metadata. The association between inode metadata and inode is
+> > maintained through an rbtree.
+> >=20
+> > Because of this alternative storage mechanism, there was no need to use
+> > disjoint inode metadata, so IMA and EVM today still share them.
+> >=20
+> > With the reservation mechanism offered by the LSM infrastructure, the
+> > rbtree is no longer necessary, as each LSM could reserve a space in the
+> > security blob for each inode. However, since IMA and EVM share the
+> > inode metadata, they cannot directly reserve the space for them.
+> >=20
+> > Instead, request from the 'integrity' LSM a space in the security blob =
+for
+> > the pointer of inode metadata (integrity_iint_cache structure). The oth=
+er
+> > reason for keeping the 'integrity' LSM is to preserve the original orde=
+ring
+> > of IMA and EVM functions as when they were hardcoded.
+> >=20
+> > Prefer reserving space for a pointer to allocating the integrity_iint_c=
+ache
+> > structure directly, as IMA would require it only for a subset of inodes=
+.
+> > Always allocating it would cause a waste of memory.
+> >=20
+> > Introduce two primitives for getting and setting the pointer of
+> > integrity_iint_cache in the security blob, respectively
+> > integrity_inode_get_iint() and integrity_inode_set_iint(). This would m=
+ake
+> > the code more understandable, as they directly replace rbtree operation=
+s.
+> >=20
+> > Locking is not needed, as access to inode metadata is not shared, it is=
+ per
+> > inode.
+> >=20
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > ---
+> >  security/integrity/iint.c      | 71 +++++-----------------------------
+> >  security/integrity/integrity.h | 20 +++++++++-
+> >  2 files changed, 29 insertions(+), 62 deletions(-)
+> >=20
+> > diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+> > index 882fde2a2607..a5edd3c70784 100644
+> > --- a/security/integrity/iint.c
+> > +++ b/security/integrity/iint.c
+> > @@ -231,6 +175,10 @@ static int __init integrity_lsm_init(void)
+> >  	return 0;
+> >  }
+> > =20
+> > +struct lsm_blob_sizes integrity_blob_sizes __ro_after_init =3D {
+> > +	.lbs_inode =3D sizeof(struct integrity_iint_cache *),
+> > +};
+>=20
+> I'll admit that I'm likely missing an important detail, but is there
+> a reason why you couldn't stash the integrity_iint_cache struct
+> directly in the inode's security blob instead of the pointer?  For
+> example:
+>=20
+>   struct lsm_blob_sizes ... =3D {
+>     .lbs_inode =3D sizeof(struct integrity_iint_cache),
+>   };
+>=20
+>   struct integrity_iint_cache *integrity_inode_get(inode)
+>   {
+>     if (unlikely(!inode->isecurity))
+>       return NULL;
+>     return inode->i_security + integrity_blob_sizes.lbs_inode;
+>   }
 
-The repository helps to verify that tpm_buf changes don't break
-anything. I created it because I saw it as too high risk not to
-verify tpm_buf changes properly, as everything uses them.
+It would increase memory occupation. Sometimes the IMA policy
+encompasses a small subset of the inodes. Allocating the full
+integrity_iint_cache would be a waste of memory, I guess?
 
-Any bug in HMAC session feature itself would be optimally only
-local to the feature and not something that spreads everywhere.
+On the other hand... (did not think fully about that) if we embed the
+full structure in the security blob, we already have a mutex available
+to use, and we don't need to take the inode lock (?).
 
-So both the patch set itself and also the BuildRoot repository
-effectively manages this risk.
+I'm fully convinced that we can improve the implementation
+significantly. I just was really hoping to go step by step and not
+accumulating improvements as dependency for moving IMA and EVM to the
+LSM infrastructure.
 
-BR, Jarkko
+Thanks
+
+Roberto
+
 
