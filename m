@@ -1,192 +1,181 @@
-Return-Path: <linux-integrity+bounces-132-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-133-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D0C47F1E82
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 22:06:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3303F7F2175
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 00:34:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9CC71F2620A
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 21:06:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9A12281A92
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 23:34:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8409E32C9A;
-	Mon, 20 Nov 2023 21:06:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 241CD38F87;
+	Mon, 20 Nov 2023 23:34:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YLhyT6Rm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JxvM6Mk+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA66ED
-	for <linux-integrity@vger.kernel.org>; Mon, 20 Nov 2023 13:06:21 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-da0cfcb9f40so4774672276.2
-        for <linux-integrity@vger.kernel.org>; Mon, 20 Nov 2023 13:06:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1700514380; x=1701119180; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NG2FEhp12pFkNfvVzutmm+LjhzXXRny+ltBXXG6QNR4=;
-        b=YLhyT6RmzMxgdwWF3OzA1dbTAz8GYwlqdzU9jExIzFo7f7lyo2lc/g5s8M1FPVxNVx
-         9xH5Qe/wVsv58MHQpjcvW3LKQcQ5vIb9Aa73yrI/rkqK7MVSaCFxHqne8L13lT5gfTNd
-         jrz2ZdVN1Qe3itctMb74xkKwKI6nJ4cxYD4hmugMHvP5aWDW4emrejI+By1/ZbG0f7JT
-         cFXvDnsb5rYwIE/fidXu7jWV6ZgD3xHcJYQin5mUIyp4H3oCK5n4tdFaaQXQEZFpoH+G
-         SJuLfuXl8Rod2tCYybo07Z13jXhOFKBICD9TAWYrNxzyLdOcfmQ9oJDeTWht/WBRaKY0
-         ufgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700514380; x=1701119180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NG2FEhp12pFkNfvVzutmm+LjhzXXRny+ltBXXG6QNR4=;
-        b=rQcBdzmXliDttZGS4ln12oUINlt4x0VtnUMt6vVeyyUdYSoC1JqgdOJEl3jxIWypTU
-         94+Iw/nXgq5ePXz6xQn6Mpp2Z4MTeUeNkZHZdXjYFKtOaEKqdMfrHG9wlgV1SyHpnmgd
-         3fro4WCqr1GHkmWkv3/4u/r1w0peIj2dmEZJ1U3dnVBaJRRJAUD9EEIv5xLEyAetLY2Q
-         fqs3M8N3ztmOcQIi+pqYFURhWoH1h0xL2bcY1dk45kpLz2zTJhJlrqDoA22Fr/kIVu3c
-         vTOmXlqbLST0TuBp1iJY+y2AkDY3Etn0WTvXrx+6bNXYDHEa2NVZmUG47sO3fLyoJt9a
-         79Eg==
-X-Gm-Message-State: AOJu0YySr70AVllg1Lbp5RYI8A4RDmocwNsQge7VPfDwwt/0uViUznii
-	ref1s1FyY4LzZmHo9Oa7G4RhTGzdXu7qXm7uaha+
-X-Google-Smtp-Source: AGHT+IH9dEFOAePFkBv2PMwl9MhCUaQv6Ntac6yIXsmvUTEQCyAzM8wMPOVAFCDufYnlm3OoAXU+qg91wHL5Jm2H0Ok=
-X-Received: by 2002:a81:ac17:0:b0:5ca:7629:7a9a with SMTP id
- k23-20020a81ac17000000b005ca76297a9amr4086414ywh.37.1700514380344; Mon, 20
- Nov 2023 13:06:20 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E39101E1
+	for <linux-integrity@vger.kernel.org>; Mon, 20 Nov 2023 23:34:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A18C433C8;
+	Mon, 20 Nov 2023 23:34:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700523253;
+	bh=UKOg81H8o/6iLNicPunApOZKAZR/qkOAnT2RKdCcu48=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=JxvM6Mk+ACcUm5jBwk19Mq1N9RK0Xgtb55yN7bVinpHN4eBfKVKxfL7fMBoRnomPu
+	 fMODuAQWxKAHRrwPqP+cs1TSEMh/hINshQ6Yt5jsPwPHbXb+niJ8CMtDC3Be1l8CcU
+	 WcZNdpb7Ayj2KspXvkF5W66+rqU7Dp76j4b5cwqTLRq43QYecRelytYWGPqMiANFgZ
+	 iXfGDSGc8iUmjkTV6IPcHkDvE9OdbOfvWIo1nH6Dx8WeLfa7SWqeEV67yWuLicz7FU
+	 bZa8b1dzshy7ESBaRX5zzNMNgESe2Qi6Ugc1yNnOf3B0P9dpPpVa9zOzlCsRp487k4
+	 YOjniDJ6XHNxg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231107134012.682009-24-roberto.sassu@huaweicloud.com>
- <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com> <2084adba3c27a606cbc5ed7b3214f61427a829dd.camel@huaweicloud.com>
-In-Reply-To: <2084adba3c27a606cbc5ed7b3214f61427a829dd.camel@huaweicloud.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 20 Nov 2023 16:06:09 -0500
-Message-ID: <CAHC9VhTTKac1o=RnQadu2xqdeKH8C_F+Wh4sY=HkGbCArwc8JQ@mail.gmail.com>
-Subject: Re: [PATCH v5 23/23] integrity: Switch from rbtree to LSM-managed
- blob for integrity_iint_cache
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
-	jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
-	tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org, 
-	stephen.smalley.work@gmail.com, eparis@parisplace.org, casey@schaufler-ca.com, 
-	mic@digikod.net, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
-	selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 21 Nov 2023 01:34:10 +0200
+Message-Id: <CX416KNURFJD.3OKJBUW8D5O2T@kernel.org>
+Cc: "Lukas Wunner" <lukas@wunner.de>, <linux-kernel@vger.kernel.org>
+Subject: Re: tpm_tis_spi_remove() triggers WARN_ON() in __flushwork (RPi3B+
+ and SLB9670)
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
+ <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.15.2
+References: <CX32RFOMJUQ0.3R4YCL9MDCB96@kernel.org>
+ <CX342W32D30U.330BVFC336MA8@kernel.org>
+ <8712ccc3-8619-41b8-97d0-d0187c0b59c6@kunbus.com>
+In-Reply-To: <8712ccc3-8619-41b8-97d0-d0187c0b59c6@kunbus.com>
 
-On Mon, Nov 20, 2023 at 3:16=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Fri, 2023-11-17 at 15:57 -0500, Paul Moore wrote:
-> > On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> > >
-> > > Before the security field of kernel objects could be shared among LSM=
-s with
-> > > the LSM stacking feature, IMA and EVM had to rely on an alternative s=
-torage
-> > > of inode metadata. The association between inode metadata and inode i=
-s
-> > > maintained through an rbtree.
-> > >
-> > > Because of this alternative storage mechanism, there was no need to u=
-se
-> > > disjoint inode metadata, so IMA and EVM today still share them.
-> > >
-> > > With the reservation mechanism offered by the LSM infrastructure, the
-> > > rbtree is no longer necessary, as each LSM could reserve a space in t=
-he
-> > > security blob for each inode. However, since IMA and EVM share the
-> > > inode metadata, they cannot directly reserve the space for them.
-> > >
-> > > Instead, request from the 'integrity' LSM a space in the security blo=
-b for
-> > > the pointer of inode metadata (integrity_iint_cache structure). The o=
-ther
-> > > reason for keeping the 'integrity' LSM is to preserve the original or=
-dering
-> > > of IMA and EVM functions as when they were hardcoded.
-> > >
-> > > Prefer reserving space for a pointer to allocating the integrity_iint=
-_cache
-> > > structure directly, as IMA would require it only for a subset of inod=
-es.
-> > > Always allocating it would cause a waste of memory.
-> > >
-> > > Introduce two primitives for getting and setting the pointer of
-> > > integrity_iint_cache in the security blob, respectively
-> > > integrity_inode_get_iint() and integrity_inode_set_iint(). This would=
- make
-> > > the code more understandable, as they directly replace rbtree operati=
-ons.
-> > >
-> > > Locking is not needed, as access to inode metadata is not shared, it =
-is per
-> > > inode.
-> > >
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > ---
-> > >  security/integrity/iint.c      | 71 +++++---------------------------=
---
-> > >  security/integrity/integrity.h | 20 +++++++++-
-> > >  2 files changed, 29 insertions(+), 62 deletions(-)
-> > >
-> > > diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-> > > index 882fde2a2607..a5edd3c70784 100644
-> > > --- a/security/integrity/iint.c
-> > > +++ b/security/integrity/iint.c
-> > > @@ -231,6 +175,10 @@ static int __init integrity_lsm_init(void)
-> > >     return 0;
-> > >  }
-> > >
-> > > +struct lsm_blob_sizes integrity_blob_sizes __ro_after_init =3D {
-> > > +   .lbs_inode =3D sizeof(struct integrity_iint_cache *),
-> > > +};
-> >
-> > I'll admit that I'm likely missing an important detail, but is there
-> > a reason why you couldn't stash the integrity_iint_cache struct
-> > directly in the inode's security blob instead of the pointer?  For
-> > example:
-> >
-> >   struct lsm_blob_sizes ... =3D {
-> >     .lbs_inode =3D sizeof(struct integrity_iint_cache),
-> >   };
-> >
-> >   struct integrity_iint_cache *integrity_inode_get(inode)
-> >   {
-> >     if (unlikely(!inode->isecurity))
-> >       return NULL;
-> >     return inode->i_security + integrity_blob_sizes.lbs_inode;
-> >   }
+On Mon Nov 20, 2023 at 10:08 PM EET, Lino Sanfilippo wrote:
+> Hi,
 >
-> It would increase memory occupation. Sometimes the IMA policy
-> encompasses a small subset of the inodes. Allocating the full
-> integrity_iint_cache would be a waste of memory, I guess?
+> On 19.11.23 22:37, Jarkko Sakkinen wrote:
+>
+> >=20
+> > On Sun Nov 19, 2023 at 10:35 PM EET, Jarkko Sakkinen wrote:
+> >> Captured from serial link with Raspberry Pi 3B+ and Infineon SLB9670 T=
+PM2 chip, i.e.
+> >> triggers here:
+> >>
+> >> static bool __flush_work(struct work_struct *work, bool from_cancel)
+> >> {
+> >>       struct wq_barrier barr;
+> >>
+> >>       if (WARN_ON(!wq_online))
+> >>               return false;
+> >>
+> >>       if (WARN_ON(!work->func)) /* <-- */
+> >>               return false;
+> >>
+> >>
+> >> # uname -a
+> >> Linux buildroot 6.6.1-v8 #1 SMP PREEMPT Sun Nov 19 21:46:00 EET 2023 a=
+arch64 GNU/Linux
+> >> # poweroff
+> >> # Stopping dropbear sshd: OK
+> >> Stopping network: [  246.487818] smsc95xx 3-1.1:1.0 eth0: hardware isn=
+'t capable of remote wakeup
+> >> OK
+> >> Stopping klogd: OK
+> >> Stopping syslogd: OK
+> >> Seeding 256 bits and crediting
+> >> Saving 256 bits of creditable seed for next boot
+> >> umount: devtmpfs busy - remounted read-only
+> >> [  246.623163] EXT4-fs (mmcblk0p2): re-mounted c5bb63df-c03e-4e4a-9846=
+-0cdf5986edc4 ro. Quota mode: none.
+> >> The system is going down NOW!
+> >> Sent SIGTERM to all processes
+> >> Sent SIGKILL to al[  248.680154] ------------[ cut here ]------------
+> >> [  248.684825] WARNING: CPU: 1 PID: 298 at kernel/workqueue.c:3400 __f=
+lush_work.isra.0+0x29c/0x2c4
+> >> [  248.693582] CPU: 1 PID: 298 Comm: init Tainted: G        W         =
+ 6.6.1-v8 #1
+> >> [  248.700926] Hardware name: Raspberry Pi 3 Model B Rev 1.2 (DT)
+> >> [  248.706780] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS B=
+TYPE=3D--)
+> >> [  248.713774] pc : __flush_work.isra.0+0x29c/0x2c4
+> >> [  248.718415] lr : __flush_work.isra.0+0x44/0x2c4
+> >> [  248.722970] sp : ffffffc0812fb910
+> >> [  248.726299] x29: ffffffc0812fb910 x28: ffffff8003e30e40 x27: 000000=
+0000000000
+> >> [  248.733481] x26: fffffff0350c9c10 x25: 0000000000000000 x24: ffffff=
+f03500c028
+> >> [  248.740661] x23: fffffff03500d208 x22: 0000000000000001 x21: ffffff=
+f034f37568
+> >> [  248.747840] x20: ffffff80064d9ac0 x19: ffffff80064d9a80 x18: ffffff=
+ffffffffff
+> >> [  248.755019] x17: 0000000000000000 x16: 0000000000000000 x15: ffffff=
+c0812fb760
+> >> [  248.762197] x14: 0000000000000004 x13: ffffff8002808410 x12: 000000=
+0000000000
+> >> [  248.769376] x11: 0000000000000040 x10: fffffff034f35a98 x9 : 000000=
+0000000004
+> >> [  248.776554] x8 : ffffffc0812fb9a8 x7 : 0000000000000000 x6 : 000000=
+00000003e8
+> >> [  248.783732] x5 : fffffff034e46000 x4 : 0000000000000000 x3 : 000000=
+0000000000
+> >> [  248.790909] x2 : 0000000000000008 x1 : 0000000000000000 x0 : 000000=
+0000000000
+> >> [  248.798087] Call trace:
+> >> [  248.800546]  __flush_work.isra.0+0x29c/0x2c4
+> >> [  248.804841]  flush_work+0x10/0x1c
+> >> [  248.808177]  tpm_tis_remove+0x90/0xc8
+> >> [  248.811866]  tpm_tis_spi_remove+0x24/0x34
+> >> [  248.815901]  spi_remove+0x30/0x4c
+> >> [  248.819238]  device_remove+0x4c/0x80
+> >> [  248.822836]  device_release_driver_internal+0x1d4/0x228
+> >> [  248.828088]  device_release_driver+0x18/0x24
+> >> [  248.832381]  bus_remove_device+0xcc/0x10c
+> >> [  248.836421]  device_del+0x15c/0x41c
+> >> [  248.839934]  spi_unregister_device+0x48/0x98
+> >> [  248.844231]  __unregister+0x10/0x20
+> >> [  248.847742]  device_for_each_child+0x60/0xb4
+> >> [  248.852037]  spi_unregister_controller+0x48/0x15c
+> >> [  248.856768]  bcm2835_spi_remove+0x20/0x60
+> >> [  248.860804]  platform_shutdown+0x24/0x34
+> >> [  248.864751]  device_shutdown+0x150/0x258
+> >> [  248.868701]  kernel_power_off+0x38/0x7c
+> >> [  248.872563]  __do_sys_reboot+0x200/0x238
+> >> [  248.876511]  __arm64_sys_reboot+0x24/0x30
+> >> [  248.880546]  invoke_syscall+0x48/0x114
+> >> [  248.884324]  el0_svc_common.constprop.0+0x40/0xe0
+> >> [  248.889057]  do_el0_svc+0x1c/0x28
+> >> [  248.892397]  el0_svc+0x40/0xe8
+> >> [  248.895478]  el0t_64_sync_handler+0x100/0x12c
+> >> [  248.899864]  el0t_64_sync+0x190/0x194
+> >> [  248.903549] ---[ end trace 0000000000000000 ]---
+> >> [  248.910555] reboot: Power down
+> >>
+> >> Just putting out. I was testing https://github.com/jarkkojs/buildroot-=
+tpmdd/tree/linux-6.6.y
+> >> and this popped up. To build sdcard.img bootable with Raspberry Pi 3:
+> >>
+> >> make raspberrypi3_tpmdd_64_defconfig && make
+> >>
+> >> BR, Jarkko
+> >=20
+> > So I applied [1] and now I get a clean shutdown:
+> >=20
+>
+> AFAIU the warning is shown in case that interrupts are not enabled and th=
+us INIT_WORK has not
+> been called for free_irq_work. This should not be too hard to fix, so I t=
+hink I can provide=20
+> a patch for that, soon.
 
-Perhaps, but if it allows us to remove another layer of dynamic memory
-I would argue that it may be worth the cost.  It's also worth
-considering the size of integrity_iint_cache, while it isn't small, it
-isn't exactly huge either.
+Agreed, and take your time. I just captured without further analysis so
+that does not get lost, that's all. Thanks for looking into it.
 
-> On the other hand... (did not think fully about that) if we embed the
-> full structure in the security blob, we already have a mutex available
-> to use, and we don't need to take the inode lock (?).
+> BR,
+> Lino
 
-That would be excellent, getting rid of a layer of locking would be signifi=
-cant.
-
-> I'm fully convinced that we can improve the implementation
-> significantly. I just was really hoping to go step by step and not
-> accumulating improvements as dependency for moving IMA and EVM to the
-> LSM infrastructure.
-
-I understand, and I agree that an iterative approach is a good idea, I
-just want to make sure we keep things tidy from a user perspective,
-i.e. not exposing the "integrity" LSM when it isn't required.
-
---
-paul-moore.com
+BR, Jarkko
 
