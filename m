@@ -1,185 +1,172 @@
-Return-Path: <linux-integrity+bounces-173-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-174-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09A5D7F3936
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 23:32:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5CF97F3A04
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Nov 2023 00:03:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6CDA282971
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 22:32:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80A7CB211EA
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 23:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BB4558123;
-	Tue, 21 Nov 2023 22:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D042354BEF;
+	Tue, 21 Nov 2023 23:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxlqBO8t"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GiT/qhUx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2932C5811F
-	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 22:32:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 423D8C433C8;
-	Tue, 21 Nov 2023 22:32:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700605931;
-	bh=HqrOyp0nDcoraiIniTb/mB74p53iwObmhl1DoJZn8xs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AxlqBO8tevo8s6UQKQX4Mqi69U5UIYJddkHS64c3FvznQmoFYpmQECTyjTcXlSpmJ
-	 o8oSB6ufRS+U7nc7Z2zeoUSsVetL2mwAkPHwnhmQXBDWJZhCINjWqad2m6ebcBmLTU
-	 RcWOrVzsggYNeXGnqrqVHHffoQOi4TfwTeZqFl/umtvP/oJLTNKFsblWBo7k/HchDf
-	 ie5CM6MJ8rXU+aHQ2pT+nRkNaBivx89tsVTlbm65VEh+6P2IZ7noMGr0MR4qsXuV34
-	 EKL0Msv7228j9z8LlbBIuzIp7rrfa8jrs7PjN7d6DkH7hpkucbauKh2q2BLAQtHB3f
-	 uNK1dwN9q9y2Q==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	James Bottomley <jejb@linux.ibm.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>
-Subject: [PATCH v5 8/8] KEYS: trusted: tpm2: Use struct tpm_buf for sized buffers
-Date: Wed, 22 Nov 2023 00:31:20 +0200
-Message-ID: <20231121223130.30824-9-jarkko@kernel.org>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231121223130.30824-1-jarkko@kernel.org>
-References: <20231121223130.30824-1-jarkko@kernel.org>
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA43E10C
+	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 15:03:33 -0800 (PST)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALMkDdf018481;
+	Tue, 21 Nov 2023 23:03:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=8MCUN10kPsWW4ejGYPhq89iX/EBpS3gODWOP3XpH0dA=;
+ b=GiT/qhUxDxuAGxnwpCkTHRt3sMgbrg2HSxZXUBUMkcKzl9WTn0CICG/fxroRexAWym64
+ 29wCXw05+BwxDG9/xKyiEL4D/z3Yruick59RxUXDT3CVQ08r6Rmz5CxtoO6wQZ5DmgnM
+ 9BFVeyz19PE4ZGfpaVzIOB9Vr0ADI1m0WT8QhaQWhWYORSZ+FND8nePRyUhB5GkKB1/H
+ hpOT+SRluqQhqLmKIgJfJEXCKkD7DBjZFOqo3PUV6sRBQSxppnshvr25c5s27RHxzI5S
+ Nbq/hMy7uxxEgyqQbqpSWrTzOqBnWRVRtNrllhldtnRHprv4BHHgMwCwTzV4t1SgpVl1 TA== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uh4wn9jk6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Nov 2023 23:03:27 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALM4G75007410;
+	Tue, 21 Nov 2023 23:03:26 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uf7kt49nb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Nov 2023 23:03:26 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ALN3QHM36504000
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 21 Nov 2023 23:03:26 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E991458056;
+	Tue, 21 Nov 2023 23:03:25 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9C41558085;
+	Tue, 21 Nov 2023 23:03:25 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.87.103])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 21 Nov 2023 23:03:25 +0000 (GMT)
+Message-ID: <3083025b210cd5c44e9fa0df578c0b210a690f0c.camel@linux.ibm.com>
+Subject: Re: [ima-evm-utils PATCH 04/14] tests: Address issues raised by
+ shellcheck SC2320
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc: roberto.sassu@huaweicloud.com
+Date: Tue, 21 Nov 2023 18:03:25 -0500
+In-Reply-To: <20231110202137.3978820-5-stefanb@linux.ibm.com>
+References: <20231110202137.3978820-1-stefanb@linux.ibm.com>
+	 <20231110202137.3978820-5-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0XJlp-Leu8W5Y-24pV6E_3opsm_LZO6l
+X-Proofpoint-ORIG-GUID: 0XJlp-Leu8W5Y-24pV6E_3opsm_LZO6l
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-21_14,2023-11-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 adultscore=0 malwarescore=0
+ impostorscore=0 mlxscore=0 bulkscore=0 phishscore=0 clxscore=1015
+ spamscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311210180
 
-Take advantage of the new sized buffer (TPM2B) mode of struct tpm_buf in
-tpm2_seal_trusted(). This allows to add robustness to the command
-construction without requiring to calculate buffer sizes manually.
+Hi Stefan,
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v3 [2023-11-21]: A boundary error check as response for the feeedback
-from Mario Limenciello:
-https://lore.kernel.org/linux-integrity/3f9086f6-935f-48a7-889b-c71398422fa1@amd.com/
-v2: Use tpm_buf_read_*
----
- security/keys/trusted-keys/trusted_tpm2.c | 54 +++++++++++++----------
- 1 file changed, 31 insertions(+), 23 deletions(-)
+On Fri, 2023-11-10 at 15:21 -0500, Stefan Berger wrote:
+> Address issues raised by shellcheck SC2320:
+>   "This $? refers to echo/printf, not a previous command.
+>    Assign to variable to avoid it being overwritten."
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  tests/Makefile.am              | 2 +-
+>  tests/mmap_check.test          | 8 +++-----
+>  tests/portable_signatures.test | 9 +++------
+>  3 files changed, 7 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tests/Makefile.am b/tests/Makefile.am
+> index bcc1ee4..babfa7a 100644
+> --- a/tests/Makefile.am
+> +++ b/tests/Makefile.am
+> @@ -26,7 +26,7 @@ clean-local:
+>  distclean: distclean-keys
+>  
+>  shellcheck:
+> -	shellcheck -i SC2086,SC2181,SC2046 \
+> +	shellcheck -i SC2086,SC2181,SC2046,SC2320 \
+>  		functions.sh gen-keys.sh install-fsverity.sh \
+>  		install-mount-idmapped.sh install-openssl3.sh \
+>  		install-swtpm.sh install-tss.sh softhsm_setup \
+> diff --git a/tests/mmap_check.test b/tests/mmap_check.test
+> index 2dd3433..3d2e1b1 100755
+> --- a/tests/mmap_check.test
+> +++ b/tests/mmap_check.test
+> @@ -97,11 +97,9 @@ check_load_ima_rule() {
+>  
+>  	new_policy=$(mktemp -p "$g_mountpoint")
+>  	echo "$1" > "$new_policy"
+> -	echo "$new_policy" > /sys/kernel/security/ima/policy
+> -	result=$?
+> -	rm -f "$new_policy"
+> -
+> -	if [ "$result" -ne 0 ]; then
+> +	if echo "$new_policy" > /sys/kernel/security/ima/policy; then
+> +		rm -f "$new_policy"
+> +	else
+>  		echo "${RED}Failed to set IMA policy${NORM}"
+>  		return "$HARDFAIL"
+>  	fi
 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index bc700f85f80b..97b1dfca2dba 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -228,8 +228,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		      struct trusted_key_payload *payload,
- 		      struct trusted_key_options *options)
- {
-+	off_t offset = TPM_HEADER_SIZE;
-+	struct tpm_buf buf, sized;
- 	int blob_len = 0;
--	struct tpm_buf buf;
- 	u32 hash;
- 	u32 flags;
- 	int i;
-@@ -258,6 +259,14 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		return rc;
- 	}
- 
-+	rc = tpm_buf_init_sized(&sized);
-+	if (rc) {
-+		tpm_buf_destroy(&buf);
-+		tpm_put_ops(chip);
-+		return rc;
-+	}
-+
-+	tpm_buf_reset(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
- 	tpm_buf_append_u32(&buf, options->keyhandle);
- 	tpm2_buf_append_auth(&buf, TPM2_RS_PW,
- 			     NULL /* nonce */, 0,
-@@ -266,36 +275,36 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 			     TPM_DIGEST_SIZE);
- 
- 	/* sensitive */
--	tpm_buf_append_u16(&buf, 4 + options->blobauth_len + payload->key_len);
-+	tpm_buf_append_u16(&sized, options->blobauth_len);
- 
--	tpm_buf_append_u16(&buf, options->blobauth_len);
- 	if (options->blobauth_len)
--		tpm_buf_append(&buf, options->blobauth, options->blobauth_len);
-+		tpm_buf_append(&sized, options->blobauth, options->blobauth_len);
- 
--	tpm_buf_append_u16(&buf, payload->key_len);
--	tpm_buf_append(&buf, payload->key, payload->key_len);
-+	tpm_buf_append_u16(&sized, payload->key_len);
-+	tpm_buf_append(&sized, payload->key, payload->key_len);
-+	tpm_buf_append(&buf, sized.data, sized.length);
- 
- 	/* public */
--	tpm_buf_append_u16(&buf, 14 + options->policydigest_len);
--	tpm_buf_append_u16(&buf, TPM_ALG_KEYEDHASH);
--	tpm_buf_append_u16(&buf, hash);
-+	tpm_buf_reset_sized(&sized);
-+	tpm_buf_append_u16(&sized, TPM_ALG_KEYEDHASH);
-+	tpm_buf_append_u16(&sized, hash);
- 
- 	/* key properties */
- 	flags = 0;
- 	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
--	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM |
--					    TPM2_OA_FIXED_PARENT);
--	tpm_buf_append_u32(&buf, flags);
-+	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT);
-+	tpm_buf_append_u32(&sized, flags);
- 
- 	/* policy */
--	tpm_buf_append_u16(&buf, options->policydigest_len);
-+	tpm_buf_append_u16(&sized, options->policydigest_len);
- 	if (options->policydigest_len)
--		tpm_buf_append(&buf, options->policydigest,
--			       options->policydigest_len);
-+		tpm_buf_append(&sized, options->policydigest, options->policydigest_len);
- 
- 	/* public parameters */
--	tpm_buf_append_u16(&buf, TPM_ALG_NULL);
--	tpm_buf_append_u16(&buf, 0);
-+	tpm_buf_append_u16(&sized, TPM_ALG_NULL);
-+	tpm_buf_append_u16(&sized, 0);
-+
-+	tpm_buf_append(&buf, sized.data, sized.length);
- 
- 	/* outside info */
- 	tpm_buf_append_u16(&buf, 0);
-@@ -312,21 +321,20 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 	if (rc)
- 		goto out;
- 
--	blob_len = be32_to_cpup((__be32 *) &buf.data[TPM_HEADER_SIZE]);
--	if (blob_len > MAX_BLOB_SIZE) {
-+	blob_len = tpm_buf_read_u32(&buf, &offset);
-+	if (blob_len > MAX_BLOB_SIZE || buf.flags & TPM_BUF_BOUNDARY_ERROR) {
- 		rc = -E2BIG;
- 		goto out;
- 	}
--	if (tpm_buf_length(&buf) < TPM_HEADER_SIZE + 4 + blob_len) {
-+	if (buf.length - offset < blob_len) {
- 		rc = -EFAULT;
- 		goto out;
- 	}
- 
--	blob_len = tpm2_key_encode(payload, options,
--				   &buf.data[TPM_HEADER_SIZE + 4],
--				   blob_len);
-+	blob_len = tpm2_key_encode(payload, options, &buf.data[offset], blob_len);
- 
- out:
-+	tpm_buf_destroy(&sized);
- 	tpm_buf_destroy(&buf);
- 
- 	if (rc > 0) {
+This isn't equiavlent.  $new_policy was previously always removed.
+
+> diff --git a/tests/portable_signatures.test b/tests/portable_signatures.test
+> index 9f3339b..5251211 100755
+> --- a/tests/portable_signatures.test
+> +++ b/tests/portable_signatures.test
+> @@ -80,7 +80,6 @@ METADATA_CHANGE_FOWNER_2=3002
+>  
+>  check_load_ima_rule() {
+>  	local rule_loaded
+> -	local result
+>  	local new_policy
+>  
+>  	rule_loaded=$(grep "$1" /sys/kernel/security/ima/policy)
+> @@ -88,11 +87,9 @@ check_load_ima_rule() {
+>  		new_policy=$(mktemp -p "$g_mountpoint")
+>  		echo "$1" > "$new_policy"
+>  		evmctl sign -o -a sha256 --imasig --key "$key_path" "$new_policy" &> /dev/null
+> -		echo "$new_policy" > /sys/kernel/security/ima/policy
+> -		result=$?
+> -		rm -f "$new_policy"
+> -
+> -		if [ "$result" -ne 0 ]; then
+> +		if echo "$new_policy" > /sys/kernel/security/ima/policy; then
+> +			rm -f "$new_policy"
+> +		else
+>  			echo "${RED}Failed to set IMA policy${NORM}"
+>  			return "$FAIL"
+>  		fi
+
+Same here.
+
 -- 
-2.42.1
+thanks,
+
+Mimi
 
 
