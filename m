@@ -1,52 +1,50 @@
-Return-Path: <linux-integrity+bounces-165-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-166-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B02277F392E
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 23:31:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FCE77F392F
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 23:31:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E08271C20ED0
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 22:31:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C492AB2104D
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 22:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24BE355787;
-	Tue, 21 Nov 2023 22:31:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF1E5B1E0;
+	Tue, 21 Nov 2023 22:31:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a2d4gmlD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HPyXwNgn"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028E647799
-	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 22:31:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6246C433C8;
-	Tue, 21 Nov 2023 22:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 012D95A10D
+	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 22:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4429CC433C7;
+	Tue, 21 Nov 2023 22:31:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700605897;
-	bh=FoihPeiHwIoTNNUSVeXjOwQRGmpg7gdsuVMG2luO7/4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=a2d4gmlDNfzRw4QFwZ9E2OKRmnM8oeBvBzuGhHz5e20UbjH/0euqz2w4MZQ7W7qc5
-	 r0q+yMuwnxERKV1TwB1kxCSWK4UBwXKwkhUB/rqxq3udpW7Far7gXrMtzS6ZxTZDwN
-	 Gd9LOtJeTrvpVIIwRmdlfuF16leRTrCjd5nlZwVgUeDbaXpG81ZfWc4YGMofazKP92
-	 4Pde8j5hqu7S96omj2JI4sCdcfTCtzU0EBiVC8O/LtMGcWxoh3AIZbSkWQuIYcqLyp
-	 9QV5+fjENw24OAbxTbu7ZseFGyfbeai4IhhZV2eSOP2CxUdQ6TLErdS4HAFeiEp9dq
-	 Wfiwp01sjwpjg==
+	s=k20201202; t=1700605901;
+	bh=Y56AO+jdgKKv2wjrPycIECDNz6SB1qKX+7if35pK/Gw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=HPyXwNgnS7zCF6NPrE/wIwQ55UVOJ0qF6KkWl1qTqcOf9PV1bPFpjhn5GQmTvNPwK
+	 ID2TjXgxEhkiSYmImRMOZ42tB3tsPxRCL2qix7iI9ihdMiHtqpQWvYq/dwceU2Fk6H
+	 n9ddxB+8B+ARG93ER8ByfbcDImsZaYu7mSLANI9xrZTGzUSqt9KFQObprNhqSE1r0P
+	 eUxmzPUJrzYIB2f5w+tC1tszr79TRdJo6tX7LlvKXFL48lB3Ez4wU1hTx5mKmRp3Tm
+	 LmpPoquslb2qkTj7ZQZZwZyoDH7oNzepnMYf8As3boK1L+QeexKJ3MIakFmy1/hQyr
+	 zRdE6BK7O9vsA==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	William Roberts <bill.c.roberts@gmail.com>,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Mimi Zohar <zohar@linux.ibm.com>,
+	Julien Gomes <julien@arista.com>,
 	Mario Limonciello <mario.limonciello@amd.com>,
 	Jerry Snitselaar <jsnitsel@redhat.com>
-Subject: [PATCH v5 0/8] Extend struct tpm_buf to support sized buffers (TPM2B)
-Date: Wed, 22 Nov 2023 00:31:12 +0200
-Message-ID: <20231121223130.30824-1-jarkko@kernel.org>
+Subject: [PATCH v5 1/8] tpm: Remove unused tpm_buf_tag()
+Date: Wed, 22 Nov 2023 00:31:13 +0200
+Message-ID: <20231121223130.30824-2-jarkko@kernel.org>
 X-Mailer: git-send-email 2.42.1
+In-Reply-To: <20231121223130.30824-1-jarkko@kernel.org>
+References: <20231121223130.30824-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -55,71 +53,33 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch set extends struct tpm_buf to support TPM2 sized buffers, and
-adds reader functions for parsing more complex response data.  It is
-implemented to support smooth landing of [2]. Sealing of the TPM2 trusted
-keys is updated to utilize the new functionality, and thus provides a
-legit test case for it.
+The helper function has no call sites. Thus, remove it.
 
-TPM2 sized buffer, i.e. the buffers in TPM2 format, are defined in the
-section 10.4 of the TPM2 Structures [1] specification.
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v1 [2023-11-21]: A new patch.
+---
+ include/linux/tpm.h | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Here's the smoke test that I've run for TPM2:
-
-/usr/lib/kselftests/run_kselftest.sh
-tpm2_createprimary --hierarchy o -G rsa2048 -c key.ctxt
-tpm2_evictcontrol -c key.ctxt 0x81000001
-keyctl add trusted kmk "new 32 keyhandle=0x81000001" @u
-keyctl add encrypted 1000100010001000 "new ecryptfs trusted:kmk 64" @u
-
-[1] https://trustedcomputinggroup.org/resource/tpm-library-specification/
-[2] https://lore.kernel.org/linux-integrity/20230403214003.32093-1-James.Bottomley@HansenPartnership.com/
-
-v5:
-- Fixed glitch in tpm_buf_read() reported by James Bottomley to the v4.
-  Was forgotten from v4.
-- Remove a spurious memset() call introduced in v4.
-- Allow command buffer tag to be initially set to zero (caused spurious
-  warnings).
-v4:
-- Cleaned up the bit too spread code changes based on the v3 review.
-- For testing instructions see the previous cover letter, and use
-  linux-v6.6.y branch:
-  https://lore.kernel.org/linux-integrity/20231024011531.442587-1-jarkko@kernel.org/
-v3:
-- Resend with rebase to the latest upstream.
-
-Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: William Roberts <bill.c.roberts@gmail.com> 
-Cc: Stefan Berger <stefanb@linux.ibm.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Jerry Snitselaar <jsnitsel@redhat.com>
-
-James Bottomley (1):
-  tpm: Move buffer handling from static inlines to real functions
-
-Jarkko Sakkinen (7):
-  tpm: Remove unused tpm_buf_tag()
-  tpm: Remove tpm_send()
-  tpm: Update &tpm_buf documentation
-  tpm: Store the length of the tpm_buf data separately.
-  tpm: TPM2B formatted buffers
-  tpm: Add tpm_buf_read_{u8,u16,u32}
-  KEYS: trusted: tpm2: Use struct tpm_buf for sized buffers
-
- drivers/char/tpm/Makefile                 |   1 +
- drivers/char/tpm/tpm-buf.c                | 222 ++++++++++++++++++++++
- drivers/char/tpm/tpm-interface.c          |  26 +--
- include/keys/trusted_tpm.h                |   2 -
- include/linux/tpm.h                       | 112 +++--------
- security/keys/trusted-keys/trusted_tpm1.c |  23 ++-
- security/keys/trusted-keys/trusted_tpm2.c |  54 +++---
- 7 files changed, 295 insertions(+), 145 deletions(-)
- create mode 100644 drivers/char/tpm/tpm-buf.c
-
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 4ee9d13749ad..6588ca87cf93 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -358,13 +358,6 @@ static inline u32 tpm_buf_length(struct tpm_buf *buf)
+ 	return be32_to_cpu(head->length);
+ }
+ 
+-static inline u16 tpm_buf_tag(struct tpm_buf *buf)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-
+-	return be16_to_cpu(head->tag);
+-}
+-
+ static inline void tpm_buf_append(struct tpm_buf *buf,
+ 				  const unsigned char *new_data,
+ 				  unsigned int new_len)
 -- 
 2.42.1
 
