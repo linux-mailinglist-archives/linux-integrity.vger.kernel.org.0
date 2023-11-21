@@ -1,37 +1,37 @@
-Return-Path: <linux-integrity+bounces-163-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-164-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54FD47F3924
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 23:29:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 613957F3925
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 23:29:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F78E28283F
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 22:29:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01B9CB21978
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 22:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C4B256754;
-	Tue, 21 Nov 2023 22:29:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063BF5647C;
+	Tue, 21 Nov 2023 22:29:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="idbuuFfM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N6xvtCkX"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7179156468
-	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 22:29:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92D8EC433C7;
-	Tue, 21 Nov 2023 22:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD75356468
+	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 22:29:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D42C433C8;
+	Tue, 21 Nov 2023 22:29:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700605790;
-	bh=Y56AO+jdgKKv2wjrPycIECDNz6SB1qKX+7if35pK/Gw=;
+	s=k20201202; t=1700605793;
+	bh=JhIxIpxRqOX9d+TKHEN9Y5MeVUPXrIM8NDLV56PQmNI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=idbuuFfMwKFL0iyCutYWXuJIooDhF73x8euFxOhC7EKEvw+6Yc5EpK2TimQbXQRIQ
-	 Oe6iI4hy2XxIC6XhyP7KGmymfOxjKKC34gO54coa70JEZGaiwtx30W2VRgFJ9qKJlc
-	 1K1UTH8hWw3ZrhEanBhOM//WW+/fDfbLWoHIGP/Zw1oM/1mRTsZ1tpfCK60yl6ZuCi
-	 baZO+JrFOaoPwtgw1+YYQZIirO2dncGOAvQb26W5UEDMC8yu7RSRQBLup5s5PymbX0
-	 PXvwjCVP6jFoO94kzBQ3NXZg7CEdmdlym04xaDy8xn652NoEXU9roOMp11BRuaOliB
-	 0LiL2tdGocyuw==
+	b=N6xvtCkXXWhXFUvGtzDhYIb/ANR3MSGnVVnTGGU+QJHRXf8qC2VkY2c/z3j8th8pK
+	 d9SfNMyPdaH5gYbvBQFivQylKQ9LTHPM60aodURdd01RwbVoAJqD7/rk97Wwkt5juN
+	 6C7AaVgVlL79W1iSd5WY86haeerNlJbts78bmSOi0QKel27IinTLY/QptPfI3uXCM/
+	 P1yvy8+6Hm0tbF9iwlEN8/2MKY+6DMrYZTZ4wxhEfee8ZUekIVukxiwJMEM/ejyqeZ
+	 YUy0AsWfKjfjNaVp21au7X+HIeSAJFdPSFw0rm4IpR3umUgmVR5DcwYVbfT6WKbK8y
+	 /eMh959k2dZYQ==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
@@ -49,9 +49,9 @@ Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
 	Julien Gomes <julien@arista.com>
-Subject: [PATCH v5 1/8] tpm: Remove unused tpm_buf_tag()
-Date: Wed, 22 Nov 2023 00:29:34 +0200
-Message-ID: <20231121222941.30222-2-jarkko@kernel.org>
+Subject: [PATCH v5 2/8] tpm: Remove tpm_send()
+Date: Wed, 22 Nov 2023 00:29:35 +0200
+Message-ID: <20231121222941.30222-3-jarkko@kernel.org>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231121222941.30222-1-jarkko@kernel.org>
 References: <20231121222941.30222-1-jarkko@kernel.org>
@@ -63,33 +63,110 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The helper function has no call sites. Thus, remove it.
+Open code the last remaining call site for tpm_send().
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
 v1 [2023-11-21]: A new patch.
 ---
- include/linux/tpm.h | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/char/tpm/tpm-interface.c          | 25 -----------------------
+ include/linux/tpm.h                       |  5 -----
+ security/keys/trusted-keys/trusted_tpm1.c | 14 +++++++++++--
+ 3 files changed, 12 insertions(+), 32 deletions(-)
 
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 66b16d26eecc..163ae247bff2 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -342,31 +342,6 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ }
+ EXPORT_SYMBOL_GPL(tpm_pcr_extend);
+ 
+-/**
+- * tpm_send - send a TPM command
+- * @chip:	a &struct tpm_chip instance, %NULL for the default chip
+- * @cmd:	a TPM command buffer
+- * @buflen:	the length of the TPM command buffer
+- *
+- * Return: same as with tpm_transmit_cmd()
+- */
+-int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen)
+-{
+-	struct tpm_buf buf;
+-	int rc;
+-
+-	chip = tpm_find_get_ops(chip);
+-	if (!chip)
+-		return -ENODEV;
+-
+-	buf.data = cmd;
+-	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to a send a command");
+-
+-	tpm_put_ops(chip);
+-	return rc;
+-}
+-EXPORT_SYMBOL_GPL(tpm_send);
+-
+ int tpm_auto_startup(struct tpm_chip *chip)
+ {
+ 	int rc;
 diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 4ee9d13749ad..6588ca87cf93 100644
+index 6588ca87cf93..d9d645e9c52c 100644
 --- a/include/linux/tpm.h
 +++ b/include/linux/tpm.h
-@@ -358,13 +358,6 @@ static inline u32 tpm_buf_length(struct tpm_buf *buf)
- 	return be32_to_cpu(head->length);
+@@ -422,7 +422,6 @@ extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+ 			struct tpm_digest *digest);
+ extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 			  struct tpm_digest *digests);
+-extern int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen);
+ extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
+ extern struct tpm_chip *tpm_default_chip(void);
+ void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
+@@ -443,10 +442,6 @@ static inline int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 	return -ENODEV;
  }
  
--static inline u16 tpm_buf_tag(struct tpm_buf *buf)
+-static inline int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen)
 -{
--	struct tpm_header *head = (struct tpm_header *)buf->data;
--
--	return be16_to_cpu(head->tag);
+-	return -ENODEV;
 -}
--
- static inline void tpm_buf_append(struct tpm_buf *buf,
- 				  const unsigned char *new_data,
- 				  unsigned int new_len)
+ static inline int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max)
+ {
+ 	return -ENODEV;
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index aa108bea6739..37bce84eef99 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -356,17 +356,27 @@ static int TSS_checkhmac2(unsigned char *buffer,
+  */
+ int trusted_tpm_send(unsigned char *cmd, size_t buflen)
+ {
++	struct tpm_buf buf;
+ 	int rc;
+ 
+ 	if (!chip)
+ 		return -ENODEV;
+ 
++	rc = tpm_try_get_ops(chip);
++	if (rc)
++		return rc;
++
++	buf.flags = 0;
++	buf.data = cmd;
+ 	dump_tpm_buf(cmd);
+-	rc = tpm_send(chip, cmd, buflen);
++	rc = tpm_transmit_cmd(chip, &buf, 4, "sending data");
+ 	dump_tpm_buf(cmd);
++
+ 	if (rc > 0)
+-		/* Can't return positive return codes values to keyctl */
++		/* TPM error */
+ 		rc = -EPERM;
++
++	tpm_put_ops(chip);
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(trusted_tpm_send);
 -- 
 2.42.1
 
