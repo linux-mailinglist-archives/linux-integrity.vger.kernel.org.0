@@ -1,65 +1,59 @@
-Return-Path: <linux-integrity+bounces-152-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-153-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C30A7F35CF
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 19:18:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E427F37EE
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 22:17:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50C701C20D65
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 18:18:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 869BDB21049
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 21:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93CB722090;
-	Tue, 21 Nov 2023 18:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10F5554666;
+	Tue, 21 Nov 2023 21:17:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cUjDCpsH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USrHtx/1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE572F9
-	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 10:18:21 -0800 (PST)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALHMM0r015594
-	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 18:18:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=1MrusoKIPciVCKx1iaJFwPBn+4QmhccB142SevO1W2I=;
- b=cUjDCpsHdDboUiVbctphuwLZgj/eTx0lx4u8HKl8bv/I51YFX6BbHmwbFb5zD5Hr13iP
- Q0bQ0u1RlAdycuNWr2OhNW9egKm0fkxDWc6AsYPkZeAfWmlThqfRz3mKcuIWG15NI0b8
- HLHmVIoPfWwEg9PJysf7TGyoAIkY6hBHUoCK5TTtbYjZo+NiZ7q8TcwmDup5ttOSuggT
- DZW+3jdv6xPiJuoM8N1VDYFa/9ZNuIwqW/A6UekuX/KnFpHSuuNOKnRXoHWAtPQI900I
- zwf+5w49WZ+1xO3/bMFx6YaXS7e8uL8K8VHyU/Q2C2W+hB4T83//WxarRrLm+U+Wu7kq kQ== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uh0vx979d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 18:18:21 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALGJ4NW010295
-	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 18:18:20 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uf9tka7uj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 18:18:20 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ALIIJkl33227442
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 21 Nov 2023 18:18:19 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ED3095805A;
-	Tue, 21 Nov 2023 18:18:18 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ABD0B58052;
-	Tue, 21 Nov 2023 18:18:18 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 21 Nov 2023 18:18:18 +0000 (GMT)
-From: Stefan Berger <stefanb@linux.ibm.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E900154660
+	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 21:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E044EC433C7;
+	Tue, 21 Nov 2023 21:17:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700601443;
+	bh=64R9kZykc4uPmmWYiruAQb246jsaatupVICtxfjMGrc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=USrHtx/1czRsI3Lr0sNTdfpfuUETiOD3FnawXRS8xeU9f2IJucC1X6v8hZr7Ptv8O
+	 GOyy4mHCrr5j3KFYvLv2Mx8Cv30fm+WFTpdRItuoNJBBJMAHJwGoWFstabYFQQx0Ke
+	 ng3O3+//YJoiqPS/Sr0rs12eqntJQKXXYb7XpGNQVKiUSLTHVQNPiRF14YkPbYpIoF
+	 VUd+4bvAsKMBReHc0nElSZzXi0aqcHyMAZsPtPF1N7pW4q/c8ndFXgP31SbJw0Gkj1
+	 dkzGJn+20ALlnSmanywNkZJzGtHIME1Fwszj6Kzpf+ICN0wnuRY7zvBiTbSPlpExMX
+	 WEkJPmB931VUg==
+From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
-Cc: zohar@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [ima-evm-utils PATCH] Add note for how password needs to be provided when -p is used
-Date: Tue, 21 Nov 2023 13:18:11 -0500
-Message-ID: <20231121181811.43560-1-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.42.0
+Cc: linux-kernel@vger.kernel.org,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	William Roberts <bill.c.roberts@gmail.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Jerry Snitselaar <jsnitsel@redhat.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	James Bottomley <jejb@linux.ibm.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Julien Gomes <julien@arista.com>
+Subject: [PATCH v4 0/8] Extend struct tpm_buf to support sized buffers (TPM2B)
+Date: Tue, 21 Nov 2023 23:17:09 +0200
+Message-ID: <20231121211717.31681-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -67,54 +61,67 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QI8Blj0O07MGbkI2ScZVZZRHg3D6yijK
-X-Proofpoint-GUID: QI8Blj0O07MGbkI2ScZVZZRHg3D6yijK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-21_10,2023-11-21_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 mlxscore=0 mlxlogscore=793
- suspectscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311210143
 
-Add a note describing how a password needs to be provided when -p
-is used.
+This patch set extends struct tpm_buf to support TPM2 sized buffers, and
+adds reader functions for parsing more complex response data.  It is
+implemented to support smooth landing of [2]. Sealing of the TPM2 trusted
+keys is updated to utilize the new functionality, and thus provides a
+legit test case for it.
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- README       | 2 +-
- src/evmctl.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+TPM2 sized buffer, i.e. the buffers in TPM2 format, are defined in the
+section 10.4 of the TPM2 Structures [1] specification.
 
-diff --git a/README b/README
-index 7239dda..54746ef 100644
---- a/README
-+++ b/README
-@@ -59,7 +59,7 @@ OPTIONS
-       --keyid-from-cert file
-                      read keyid value from SKID of a x509 cert file
-   -o, --portable     generate portable EVM signatures
--  -p, --pass         password for encrypted signing key
-+  -p, --pass         password for encrypted signing key; use -p<password>
-   -r, --recursive    recurse into directories (sign)
-   -t, --type         file types to fix 'fxm' (f: file)
-                      x - skip fixing if both ima and evm xattrs exist (use with caution)
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 8caf9bd..2710a27 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -2851,7 +2851,7 @@ static void usage(void)
- 		"      --keyid-from-cert file\n"
- 		"                     read keyid value from SKID of a x509 cert file\n"
- 		"  -o, --portable     generate portable EVM signatures\n"
--		"  -p, --pass         password for encrypted signing key\n"
-+		"  -p, --pass         password for encrypted signing; use -p<password>\n"
- 		"  -r, --recursive    recurse into directories (sign)\n"
- 		"  -t, --type         file types to fix 'fxm' (f: file)\n"
- 		"                     x - skip fixing if both ima and evm xattrs exist (use with caution)\n"
+Here's the smoke test that I've run for TPM2:
+
+/usr/lib/kselftests/run_kselftest.sh
+tpm2_createprimary --hierarchy o -G rsa2048 -c key.ctxt
+tpm2_evictcontrol -c key.ctxt 0x81000001
+keyctl add trusted kmk "new 32 keyhandle=0x81000001" @u
+keyctl add encrypted 1000100010001000 "new ecryptfs trusted:kmk 64" @u
+
+[1] https://trustedcomputinggroup.org/resource/tpm-library-specification/
+[2] https://lore.kernel.org/linux-integrity/20230403214003.32093-1-James.Bottomley@HansenPartnership.com/
+
+v4:
+- Cleaned up the bit too spread code changes based on the v3 review.
+- For testing instructions see the previous cover letter, and use
+  linux-v6.6.y branch:
+  https://lore.kernel.org/linux-integrity/20231024011531.442587-1-jarkko@kernel.org/
+v3:
+- Resend with rebase to the latest upstream.
+
+Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: William Roberts <bill.c.roberts@gmail.com> 
+Cc: Stefan Berger <stefanb@linux.ibm.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Jerry Snitselaar <jsnitsel@redhat.com>
+
+James Bottomley (1):
+  tpm: Move buffer handling from static inlines to real functions
+
+Jarkko Sakkinen (7):
+  tpm: Remove unused tpm_buf_tag()
+  tpm: Remove tpm_send()
+  tpm: Update &tpm_buf documentation
+  tpm: Store the length of the tpm_buf data separately.
+  tpm: TPM2B formatted buffers
+  tpm: Add tpm_buf_read_{u8,u16,u32}
+  KEYS: trusted: tpm2: Use struct tpm_buf for sized buffers
+
+ drivers/char/tpm/Makefile                 |   1 +
+ drivers/char/tpm/tpm-buf.c                | 220 ++++++++++++++++++++++
+ drivers/char/tpm/tpm-interface.c          |  26 +--
+ include/keys/trusted_tpm.h                |   2 -
+ include/linux/tpm.h                       | 112 +++--------
+ security/keys/trusted-keys/trusted_tpm1.c |  23 ++-
+ security/keys/trusted-keys/trusted_tpm2.c |  54 +++---
+ 7 files changed, 293 insertions(+), 145 deletions(-)
+ create mode 100644 drivers/char/tpm/tpm-buf.c
+
 -- 
-2.42.0
+2.42.1
 
 
