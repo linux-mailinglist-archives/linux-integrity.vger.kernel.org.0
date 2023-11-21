@@ -1,54 +1,56 @@
-Return-Path: <linux-integrity+bounces-149-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-150-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 032E87F334B
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 17:10:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54CCB7F337B
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 17:19:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 865CCB210CB
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 16:10:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8C2EB21E9D
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 16:19:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD8DD5917A;
-	Tue, 21 Nov 2023 16:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B7C5A0EC;
+	Tue, 21 Nov 2023 16:19:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77223126;
-	Tue, 21 Nov 2023 08:10:29 -0800 (PST)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7b09035b850so170356439f.3;
-        Tue, 21 Nov 2023 08:10:29 -0800 (PST)
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E3A112;
+	Tue, 21 Nov 2023 08:19:28 -0800 (PST)
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7b350130c3fso10750339f.3;
+        Tue, 21 Nov 2023 08:19:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700583029; x=1701187829;
+        d=1e100.net; s=20230601; t=1700583567; x=1701188367;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zz4YwN0potTjrBEf6+oxarC/wn8cZfRVKDwYN1pUfTU=;
-        b=nQDvrCq7/PhVtr2bKTpE2C2puD+84yWuNgq40UTHAHkdLp2g/K3EKuerhAwDbyaEcI
-         AinWOryv1x9GKuPXW0q3wpx4jrXeIsuKZmQJlk8Rp75hAyHPjGxY2mPElIX8IsqVHLeY
-         67riiGm7vMEfq2kTwtThkzB1e8fSJJK0Clu/4m0VAxrm8K0gD6egDxanWQQ/1bFE7w2c
-         5aAI1K1ZXMQn469v577+Iox05/JVT0PKraaMBWaiaJ075+Qnf7cg6DxQjgrI4e0RxsTF
-         j/JgOzaLAGbzb85RtHk86XtmcHVp1QFPuXHxnMhFJYNqs3PIKR31kwoez6oIatg94SfE
-         AmYw==
-X-Gm-Message-State: AOJu0Yx3whiIMLxJmRTONihjGLtKaJbnXsxGWAyyMvL2eF//AP/x6W2G
-	xSJkGJLHMEE7iIS1RsC3WA==
-X-Google-Smtp-Source: AGHT+IGr009kMq89balOASHNC0PrzqqFtcjoasDVSTwBCPPkpTpppJGTWdRPv6RUn85v2aCo+d41/w==
-X-Received: by 2002:a05:6602:1249:b0:7a9:571c:5694 with SMTP id o9-20020a056602124900b007a9571c5694mr13196281iou.10.1700583028623;
-        Tue, 21 Nov 2023 08:10:28 -0800 (PST)
+        bh=nE8sgQxfoX8+3TQJMVpH7ghLRxaJtxNYH11teP3dimk=;
+        b=L58Ngcx6ptZ5/CWpHYuK2aFABjfvTjwmuNqjsBYkjZwGtiV/gyvluQuAE4VwtfTQKG
+         J0q6ASUHmmHRfksqwxGyYvyKZfeYfdCV3mhFeNnvXmujfUJOWPadoO6ciHfOlqBaxQAa
+         qQSSl+s2eEDy2zWH9rPEOTlaKMlMll1x60zjTMrW4cm7hinJxU9zTcG6y8y6DH3rysf6
+         ygAQ0hZyLqrar3Qnqpg46BKC3pfmIgoL6YMq7vr8grYbRQy2A71V5V4k0pBr4rWGNGVC
+         JPlsKIXkepU/DIuAcMcFfd2DkmLun/W+MqyomeMaJBuw5Tg1s1kyaFmrwyduZvrAwoZ6
+         TT0A==
+X-Gm-Message-State: AOJu0YyycyBOtQetOcPZPkc3CI/mEYKVw9OHh2tLUftc4BC3TRpuJibG
+	YVv+y5AK54ZZQkz2g4GnjQ==
+X-Google-Smtp-Source: AGHT+IGVvRlwp8BS7ldPf+BO5WVnnxEQt8lmTreBF2552SQlA/Toi8v4GDwoepsf6Hgxt+O0w96DGw==
+X-Received: by 2002:a6b:c545:0:b0:7b0:ae77:36ed with SMTP id v66-20020a6bc545000000b007b0ae7736edmr9471049iof.13.1700583567285;
+        Tue, 21 Nov 2023 08:19:27 -0800 (PST)
 Received: from herring.priv ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id y22-20020a5d94d6000000b00790b6b9d14bsm2894544ior.49.2023.11.21.08.10.27
+        by smtp.gmail.com with ESMTPSA id l21-20020a056638221500b00458ce1c9995sm2703124jas.24.2023.11.21.08.19.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 08:10:28 -0800 (PST)
-Received: (nullmailer pid 1930865 invoked by uid 1000);
-	Tue, 21 Nov 2023 16:10:26 -0000
-Date: Tue, 21 Nov 2023 09:10:26 -0700
+        Tue, 21 Nov 2023 08:19:26 -0800 (PST)
+Received: (nullmailer pid 2000251 invoked by uid 1000);
+	Tue, 21 Nov 2023 16:19:25 -0000
+Date: Tue, 21 Nov 2023 09:19:25 -0700
 From: Rob Herring <robh@kernel.org>
 To: Lukas Wunner <lukas@wunner.de>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, linux-integrity@vger.kernel.org, Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Subject: Re: [PATCH 0/3] dt-bindings: tpm: Clean all the things
-Message-ID: <20231121161026.GC1845293-robh@kernel.org>
+Subject: Re: [PATCH 2/3] dt-bindings: tpm: Convert IBM vTPM bindings to DT
+ schema
+Message-ID: <20231121161925.GD1845293-robh@kernel.org>
 References: <cover.1700555862.git.lukas@wunner.de>
+ <fc5c973d30df7ece297e19edad19ffe86378b6b1.1700555862.git.lukas@wunner.de>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -57,69 +59,173 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1700555862.git.lukas@wunner.de>
+In-Reply-To: <fc5c973d30df7ece297e19edad19ffe86378b6b1.1700555862.git.lukas@wunner.de>
 
-On Tue, Nov 21, 2023 at 10:48:40AM +0100, Lukas Wunner wrote:
-> Rob asked me to consolidate and convert the TPM dt-bindings:
-> https://lore.kernel.org/all/20230927115300.GA1587935-robh@kernel.org/
+On Tue, Nov 21, 2023 at 10:48:42AM +0100, Lukas Wunner wrote:
+> Convert the devicetree bindings for the IBM Virtual Trusted Platform
+> Module to DT schema.  Drop properties which are already documented in
+> tpm-common.yaml.
 > 
-> I came across several issues:
+> Document the "IBM,vtpm20" compatible string introduced by commit
+> 18b3670d79ae ("tpm: ibmvtpm: Add support for TPM2").
 > 
-> First, this pull request is needed to cope with ibm,#dma-address-cells
-> and ibm,#dma-size-cells properties used in ibm,vtpm.yaml:
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> ---
+>  .../bindings/security/tpm/ibmvtpm.txt         |  41 -------
+>  .../devicetree/bindings/tpm/ibm,vtpm.yaml     | 101 ++++++++++++++++++
+>  2 files changed, 101 insertions(+), 41 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/security/tpm/ibmvtpm.txt
+>  create mode 100644 Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
 > 
->   https://github.com/devicetree-org/dt-schema/pull/116
+> diff --git a/Documentation/devicetree/bindings/security/tpm/ibmvtpm.txt b/Documentation/devicetree/bindings/security/tpm/ibmvtpm.txt
+> deleted file mode 100644
+> index d89f99971368..000000000000
+> --- a/Documentation/devicetree/bindings/security/tpm/ibmvtpm.txt
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -* Device Tree Bindings for IBM Virtual Trusted Platform Module(vtpm)
+> -
+> -Required properties:
+> -
+> -- compatible            : property name that conveys the platform architecture
+> -                          identifiers, as 'IBM,vtpm'
+> -- device_type           : specifies type of virtual device
+> -- interrupts            : property specifying the interrupt source number and
+> -                          sense code associated with this virtual I/O Adapters
+> -- ibm,my-drc-index      : integer index for the connector between the device
+> -                          and its parent - present only if Dynamic
+> -                          Reconfiguration(DR) Connector is enabled
+> -- ibm,#dma-address-cells: specifies the number of cells that are used to
+> -                          encode the physical address field of dma-window
+> -                          properties
+> -- ibm,#dma-size-cells   : specifies the number of cells that are used to
+> -                          encode the size field of dma-window properties
+> -- ibm,my-dma-window     : specifies DMA window associated with this virtual
+> -                          IOA
+> -- ibm,loc-code          : specifies the unique and persistent location code
+> -                          associated with this virtual I/O Adapters
+> -- linux,sml-base        : 64-bit base address of the reserved memory allocated
+> -                          for the firmware event log
+> -- linux,sml-size        : size of the memory allocated for the firmware event log
+> -
+> -Example (IBM Virtual Trusted Platform Module)
+> ----------------------------------------------
+> -
+> -                vtpm@30000003 {
+> -                        ibm,#dma-size-cells = <0x2>;
+> -                        compatible = "IBM,vtpm";
+> -                        device_type = "IBM,vtpm";
+> -                        ibm,my-drc-index = <0x30000003>;
+> -                        ibm,#dma-address-cells = <0x2>;
+> -                        linux,sml-base = <0xc60e 0x0>;
+> -                        interrupts = <0xa0003 0x0>;
+> -                        ibm,my-dma-window = <0x10000003 0x0 0x0 0x0 0x10000000>;
+> -                        ibm,loc-code = "U8286.41A.10082DV-V3-C3";
+> -                        reg = <0x30000003>;
+> -                        linux,sml-size = <0xbce10200>;
+> -                };
+> diff --git a/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
+> new file mode 100644
+> index 000000000000..a88ed96c80cf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
+> @@ -0,0 +1,101 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/tpm/ibm,vtpm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: IBM Virtual Trusted Platform Module (vTPM)
+> +
+> +maintainers:
+> +  - Nayna Jain <nayna@linux.ibm.com>
+> +
+> +description: |
+> +  Virtual TPM is used on IBM POWER7+ and POWER8 systems running POWERVM.
+> +  It is supported through the adjunct partition with firmware release 740
+> +  or higher.  With vTPM support, each lpar is able to have its own vTPM
+> +  without the physical TPM hardware.  The TPM functionality is provided by
+> +  communicating with the vTPM adjunct partition through Hypervisor calls
+> +  (Hcalls) and Command/Response Queue (CRQ) commands.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - IBM,vtpm
+> +      - IBM,vtpm20
+> +
+> +  device_type:
+> +    description:
+> +      type of virtual device
 
-Now applied.
+const: IBM,vtpm
 
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  'ibm,#dma-address-cells':
+> +    description:
+> +      number of cells that are used to encode the physical address field of
+> +      dma-window properties
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +  'ibm,#dma-size-cells':
+> +    description:
+> +      number of cells that are used to encode the size field of
+> +      dma-window properties
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +  ibm,my-dma-window:
+> +    description:
+> +      DMA window associated with this virtual I/O Adapter
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 5
+> +    maxItems: 5
+> +
+> +  ibm,my-drc-index:
+> +    description:
+> +      integer index for the connector between the device and its parent;
+> +      present only if Dynamic Reconfiguration (DR) Connector is enabled
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  ibm,loc-code:
+> +    description:
+> +      unique and persistent location code associated with this virtual
+> +      I/O Adapter
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +
+> +required:
+> +  - compatible
+> +  - device_type
+> +  - reg
+> +  - interrupts
+> +  - ibm,#dma-address-cells
+> +  - ibm,#dma-size-cells
+> +  - ibm,my-dma-window
+> +  - ibm,my-drc-index
+> +  - ibm,loc-code
+> +  - linux,sml-base
+> +  - linux,sml-size
+> +
+> +allOf:
+> +  - $ref: tpm-common.yaml#
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    soc {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        vtpm@30000003 {
 
-> Second, the compatible string "google,cr50" refers to a chip which has
-> both an i2c and an spi interface (see drivers/char/tpm/tpm_tis_i2c_cr50.c
-> as well as tpm_tis_spi_main.c)  This confuses the schema validator
-> because it thinks that "google,cr50" may only use i2c properties but
-> tcg,tpm_tis-spi.yaml contains an spi example, which causes some warnings.
-> It seems deeper code changes to the schema validator are required to
-> avoid them:
-> 
->   Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.example.dtb: tpm@0: compatible:1: 'tcg,tpm-tis-i2c' was expected
->   from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
->   Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.example.dtb: tpm@0: Unevaluated properties are not allowed ('compatible', 'spi-max-frequency' were unexpected)
->   from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
+tpm@...
 
-You either need to put "google,cr50" into its own schema file with a 
-custom 'select' that omits the generic compatibles or the spi and i2c 
-schemas need a custom select omitting "google,cr50" or having just the 
-generic compatible. 
+With that,
 
-However, none of the current users of "google,cr50" have a fallback 
-compatible, so perhaps its own schema file with no fallback is the 
-answer. Is the fallback useful and is it worth updating all the users? 
-Probably not since we have to keep support for "google,cr50" explicitly 
-in the driver.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-
-> Third, the schema validator raises warnings about three properties
-> I've defined in tpm-common.yaml:  "linux,sml-base" and "linux,sml-size"
-> are nested in a oneOf/allOf clause and "lpcpd-gpios" is nested in an
-> allOf/if-then clause.  This seems to confuse the validator:
-> 
->   Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.example.dtb: tpm@57: Unevaluated properties are not allowed ('linux,sml-base', 'linux,sml-size' were unexpected)
->   from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
-
-Should be fixed with my suggestion in patch 1.
-
->   Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.example.dtb: tpm@13: Unevaluated properties are not allowed ('lpcpd-gpios' was unexpected)
->   from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
-
-The issue is here:
-
-+      properties:
-+        compatible:
-+          contains:
-+            const: st,st33zp24
-
-That's an exact match, not a pattern. You could do 'pattern: '^st,st33zp24'
-or an enum with both compatible strings.
-
-Rob
 
