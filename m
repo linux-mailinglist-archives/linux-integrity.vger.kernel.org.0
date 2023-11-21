@@ -1,181 +1,170 @@
-Return-Path: <linux-integrity+bounces-133-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-134-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3303F7F2175
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 00:34:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD09B7F2283
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 01:51:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9A12281A92
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Nov 2023 23:34:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF89E1C20D80
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 00:51:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 241CD38F87;
-	Mon, 20 Nov 2023 23:34:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64F8517D4;
+	Tue, 21 Nov 2023 00:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JxvM6Mk+"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="gE696MN7"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E39101E1
-	for <linux-integrity@vger.kernel.org>; Mon, 20 Nov 2023 23:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A18C433C8;
-	Mon, 20 Nov 2023 23:34:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700523253;
-	bh=UKOg81H8o/6iLNicPunApOZKAZR/qkOAnT2RKdCcu48=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=JxvM6Mk+ACcUm5jBwk19Mq1N9RK0Xgtb55yN7bVinpHN4eBfKVKxfL7fMBoRnomPu
-	 fMODuAQWxKAHRrwPqP+cs1TSEMh/hINshQ6Yt5jsPwPHbXb+niJ8CMtDC3Be1l8CcU
-	 WcZNdpb7Ayj2KspXvkF5W66+rqU7Dp76j4b5cwqTLRq43QYecRelytYWGPqMiANFgZ
-	 iXfGDSGc8iUmjkTV6IPcHkDvE9OdbOfvWIo1nH6Dx8WeLfa7SWqeEV67yWuLicz7FU
-	 bZa8b1dzshy7ESBaRX5zzNMNgESe2Qi6Ugc1yNnOf3B0P9dpPpVa9zOzlCsRp487k4
-	 YOjniDJ6XHNxg==
+Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A967BC
+	for <linux-integrity@vger.kernel.org>; Mon, 20 Nov 2023 16:51:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1700527863; bh=X6NNrh2o9TkByhBWiubp9qwlQAP2OzbbUw3CuaiiYt4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=gE696MN7CmATorwHr2JjXJaoQNL40hRgJ+cYESBnbzVDtVPmqT3VJc9V2qrJlzMI4lp7zBAPQ5PBVe/UAYPz4HqXD6khLzSwEwLx5eMXMNBUpIGJoWKiznMiTzu7C+UZIgI0CEOqp3HQOhXMnydGk5GmjBfNK+XyGvSUIsNQfOWYdO28Je6bttyedLshlF+6o3qfh8IflG+l6elX5or3Mue5rqMWugAKQBA0RyBtL6St/tV0XTgzEjcy2FRzWhHbD+AAgpkEjiRMo0FR5eFZCYxa7Ve71L+uwLRV31RWgutMHcVWg87MmzfOwrX6Rq+PfsLntxI5RNtF6lu3TxX7gA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1700527863; bh=kmDhWoqSbEAqPNzl2xg7xH/nF3Vp1fYXhkvFIclEdTW=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=gKB5VX19b9sjmgbIYKG13TCGWgcBtI/3SjHk4aGtPuetlKBKyT0qrhsUTA/daOmb5UpBtYklivT6DyKd78c7Ndgdp9S8wu7vLN+poEOcw1gZ4vV9JmyVV0gQf7w/Npi0MLLoU4UrQ7MBnRIPyyHGOIpmGbZ7jPZhdkP3RZldcBGU/p5YpkI+BVdGZZ1K3hPz272zNp/d7+4i6n41pb+7UaqHGJt2zkZE1jbv+++Lcq2mFn51phJ5S2fbrczTWHfaMSq2FHfWCGZRfXdMINfzdu4GeTggcEu3PkAvZNbOsY999JmUwI0UfepDQkI4jkCSONSK+ZrwwgjDkvzFnbR+wg==
+X-YMail-OSG: ylTlCfAVM1mNJDd8QjJ0ZLL.iLXAIZPAxbCtvzHeK8uGpJxFlIS4KnTw4dErzhw
+ fqwYAvTC2PxROLx4IPUjI.lG_3ni32g5.kRQXWgD28KXfH0lxU4PNQySgyZywT9RtshfuWR3HFRP
+ YWCfqhF2lO22bB4buWxosIa3.RJV18t9EyF3kC3b4R5lZYdgAHwqWDhoKzZ_iyUxV09ZjApUuFMG
+ DzNb8mb5_vxaSiyZfJT4.62rHnfMVPjaK82kUNEthikwKQ_lLzGiuoC6p3TXNf6LhVHqlb1tX70A
+ GA7gRZxJ08.sjsA79C5PQK2fPRX8vTejKAwkJdAEgwu6chRf03aOAS9LuPtf8WY9kVD9CChGKSyv
+ lwCDRt2wK.3BzElbggPPGp8jVBMmEYOGlmTjzP7n9YvVCJtKxB3bjmugxkSmJfNIY5l0w8gyWxxt
+ iycZSgqieeQwWd00tLd8m8K0ISiqys_DXcRubnHOVCJT2mPtOfMBl_uI6wwFra9tGPHv9BpW2eZw
+ Ja1TghgzisgEx5sCxwM7O990YaaY0IOKWTPWj9y_mgJGCNzCWxoEaMXhwht4oQ.dxbRFkfansHOk
+ FMiFv2GzRvzj0rW55PKVKGgrQVUk3tLQnSjNXZ74shCGHmLBg6_58K1B9YkQJKg538__08pC9nBs
+ cbMW_k0ZBilAzNjfqcG0mfywGZany6RT8L_R5h99Po4yj4vYTAiGLyeFnej8.J_xECkXaYxkMQgG
+ NM.B3jbJxk9UP7ZCwbKmxF.XVj7QSYVfRDQIQmOyaB2GUqKvrj99uM6ztjsyzmj61ngKDKfswbDl
+ eoniJYtrGwVubTE_HlyenAiks5V2EQio._WN2YNW89824ceg7nMRXz6MOrAFJ.hA7SH2NdjmdX0B
+ PKiOKPrhe7duwWa42yKcwKlVSpuY56jcIQ79R_vvgKYND9FGFnfMsbLJBI_f5rTyL7t3m0B6sY.q
+ DtKSbLRM4ZcpOM9CpvmQP9Am3BgYm4kQYXAOY5NZL3P42Is8r1aEQXI7Wi35GuJck5bUo6uYB4Wf
+ SsL1_.ZX5BkpciZZCAF.LfpFm.xmDRo9T.Ywmjpl57YQllo201amuihrxGHPvxNcX32uu8Cy2A47
+ mR4FaHMNjL8Gf8S0YFXIXa64_fmk4w9IJrMpkVMyW96vffn1s2xTia.uf.XDSxEDEbVCpsO5s8_6
+ 4c.yejFWarQ8Ga3kdYP_8ksYFuEl2THKuE7GEzQydMlBc4vxtZwIfADIqMcWyIENCj0vPJWV6Frx
+ PdaHBsnwzlhjfE12thBW7GT1xUYLq0r3xz0rvyVSQw5fuyjI2jvbErd6sJ8iry2jxpzQ2Q.pgW1I
+ fix5Y2CAAHQjUVBvoTDqHl90oj2mHj36sFL6n.mJue1_yDegNZs452ptcwSowzZEygAs2k9xXiP7
+ .5ufFmeOzMMo2A54yz3wKMHSMEgS82WSNs6AbAvLu2A_WY23BjZ.0UP_rbEOQqRQDpL7VB3UpAxX
+ pwdLS3vLCrjN8cCzG5bT_jgEV3_QJkZtv_bkXnyTzHiMsUskqkeE2XZ6woPjvgfqlg1hWb7ln1p5
+ j2GUVmQ_Gx6XlmuwEXLQsf7AMF73_Ok57brHY3Xt6cOdswIAhSus3OmxEEDGnYL7m9Jo2hSerSk4
+ Epg5WiRmr0HW8znp70EVs3bSazyo1umQQL0XYKjlZO20oXov4NbzcXu3WANxKd8XKpvJ3kjwIRxN
+ tbffOz2PAWhFHfUCLzAP6bEt2p5eRHIyl4AMZiBTpwkSrkH4FXRsh7JYeNa.lUz0is.NEuDCvwGT
+ rWEmyTBz.QuX4zfcb3of9K3MqxtFxnFkhRypxRtIVceGZ.90e2EjhKYAB7NKo2NgTwRCU3CtsdWy
+ VoxOkCKsQmuRVPB2bA_pR0q.uQ0irqnqVaSglF34Rr9gqt6BRG9yfGuGxYgaWi5IOoA_HczUUju3
+ Oic.VSBN6XOTK6i8t64CD4QDJ9NySXsSiigtd7Kup159H_fEpURwt5YWTSr2TlpPaTXm_N4tuKQF
+ CSGbhm2b3MltMqC6NH24K1Uq6oQuWo4RUUTv8IQdh0eT2v2SuDHoU2z6xT84PuYN6go.8Iy0Lqso
+ Sz6z50fJkrFL2Qr4BiwS.wjMRLegBLOMn0k7alzJ42FNFQLQKFiBnvVD0HYJzu6hxV6eRYV5D60T
+ JI6GQcFKuBff9M2of1AmMnF.04IM6QepkjvrV32hzYu_lYhPgey35wRsgGs0qJAGR21OLjpC861w
+ e.TyXO5Z1JN5t98T65VHw3ooV.unQIe.7JCc1He.U_MqFzcAoTS94yyvsV2sNMLduwEM-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 8d70e5ed-64ab-4e7f-8a95-7b16a6fffe37
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 21 Nov 2023 00:51:03 +0000
+Received: by hermes--production-gq1-6775bfb8fc-ljztx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 4e636f04e136106655e334c750e19110;
+          Tue, 21 Nov 2023 00:50:58 +0000 (UTC)
+Message-ID: <24a9f95d-6a28-47d3-a0cf-48e1698e2445@schaufler-ca.com>
+Date: Mon, 20 Nov 2023 16:50:56 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 25/25] security: Enforce ordering of 'ima' and 'evm'
+ LSMs
+Content-Language: en-US
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+ brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+ neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+ zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, dhowells@redhat.com,
+ jarkko@kernel.org, stephen.smalley.work@gmail.com, eparis@parisplace.org,
+ mic@digikod.net
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+ selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20231120173318.1132868-1-roberto.sassu@huaweicloud.com>
+ <20231120173318.1132868-26-roberto.sassu@huaweicloud.com>
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20231120173318.1132868-26-roberto.sassu@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 21 Nov 2023 01:34:10 +0200
-Message-Id: <CX416KNURFJD.3OKJBUW8D5O2T@kernel.org>
-Cc: "Lukas Wunner" <lukas@wunner.de>, <linux-kernel@vger.kernel.org>
-Subject: Re: tpm_tis_spi_remove() triggers WARN_ON() in __flushwork (RPi3B+
- and SLB9670)
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
- <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.15.2
-References: <CX32RFOMJUQ0.3R4YCL9MDCB96@kernel.org>
- <CX342W32D30U.330BVFC336MA8@kernel.org>
- <8712ccc3-8619-41b8-97d0-d0187c0b59c6@kunbus.com>
-In-Reply-To: <8712ccc3-8619-41b8-97d0-d0187c0b59c6@kunbus.com>
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21896 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Mon Nov 20, 2023 at 10:08 PM EET, Lino Sanfilippo wrote:
-> Hi,
+On 11/20/2023 9:33 AM, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 >
-> On 19.11.23 22:37, Jarkko Sakkinen wrote:
+> The ordering of LSM_ORDER_LAST LSMs depends on how they are placed in the
+> .lsm_info.init section of the kernel image.
 >
-> >=20
-> > On Sun Nov 19, 2023 at 10:35 PM EET, Jarkko Sakkinen wrote:
-> >> Captured from serial link with Raspberry Pi 3B+ and Infineon SLB9670 T=
-PM2 chip, i.e.
-> >> triggers here:
-> >>
-> >> static bool __flush_work(struct work_struct *work, bool from_cancel)
-> >> {
-> >>       struct wq_barrier barr;
-> >>
-> >>       if (WARN_ON(!wq_online))
-> >>               return false;
-> >>
-> >>       if (WARN_ON(!work->func)) /* <-- */
-> >>               return false;
-> >>
-> >>
-> >> # uname -a
-> >> Linux buildroot 6.6.1-v8 #1 SMP PREEMPT Sun Nov 19 21:46:00 EET 2023 a=
-arch64 GNU/Linux
-> >> # poweroff
-> >> # Stopping dropbear sshd: OK
-> >> Stopping network: [  246.487818] smsc95xx 3-1.1:1.0 eth0: hardware isn=
-'t capable of remote wakeup
-> >> OK
-> >> Stopping klogd: OK
-> >> Stopping syslogd: OK
-> >> Seeding 256 bits and crediting
-> >> Saving 256 bits of creditable seed for next boot
-> >> umount: devtmpfs busy - remounted read-only
-> >> [  246.623163] EXT4-fs (mmcblk0p2): re-mounted c5bb63df-c03e-4e4a-9846=
--0cdf5986edc4 ro. Quota mode: none.
-> >> The system is going down NOW!
-> >> Sent SIGTERM to all processes
-> >> Sent SIGKILL to al[  248.680154] ------------[ cut here ]------------
-> >> [  248.684825] WARNING: CPU: 1 PID: 298 at kernel/workqueue.c:3400 __f=
-lush_work.isra.0+0x29c/0x2c4
-> >> [  248.693582] CPU: 1 PID: 298 Comm: init Tainted: G        W         =
- 6.6.1-v8 #1
-> >> [  248.700926] Hardware name: Raspberry Pi 3 Model B Rev 1.2 (DT)
-> >> [  248.706780] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS B=
-TYPE=3D--)
-> >> [  248.713774] pc : __flush_work.isra.0+0x29c/0x2c4
-> >> [  248.718415] lr : __flush_work.isra.0+0x44/0x2c4
-> >> [  248.722970] sp : ffffffc0812fb910
-> >> [  248.726299] x29: ffffffc0812fb910 x28: ffffff8003e30e40 x27: 000000=
-0000000000
-> >> [  248.733481] x26: fffffff0350c9c10 x25: 0000000000000000 x24: ffffff=
-f03500c028
-> >> [  248.740661] x23: fffffff03500d208 x22: 0000000000000001 x21: ffffff=
-f034f37568
-> >> [  248.747840] x20: ffffff80064d9ac0 x19: ffffff80064d9a80 x18: ffffff=
-ffffffffff
-> >> [  248.755019] x17: 0000000000000000 x16: 0000000000000000 x15: ffffff=
-c0812fb760
-> >> [  248.762197] x14: 0000000000000004 x13: ffffff8002808410 x12: 000000=
-0000000000
-> >> [  248.769376] x11: 0000000000000040 x10: fffffff034f35a98 x9 : 000000=
-0000000004
-> >> [  248.776554] x8 : ffffffc0812fb9a8 x7 : 0000000000000000 x6 : 000000=
-00000003e8
-> >> [  248.783732] x5 : fffffff034e46000 x4 : 0000000000000000 x3 : 000000=
-0000000000
-> >> [  248.790909] x2 : 0000000000000008 x1 : 0000000000000000 x0 : 000000=
-0000000000
-> >> [  248.798087] Call trace:
-> >> [  248.800546]  __flush_work.isra.0+0x29c/0x2c4
-> >> [  248.804841]  flush_work+0x10/0x1c
-> >> [  248.808177]  tpm_tis_remove+0x90/0xc8
-> >> [  248.811866]  tpm_tis_spi_remove+0x24/0x34
-> >> [  248.815901]  spi_remove+0x30/0x4c
-> >> [  248.819238]  device_remove+0x4c/0x80
-> >> [  248.822836]  device_release_driver_internal+0x1d4/0x228
-> >> [  248.828088]  device_release_driver+0x18/0x24
-> >> [  248.832381]  bus_remove_device+0xcc/0x10c
-> >> [  248.836421]  device_del+0x15c/0x41c
-> >> [  248.839934]  spi_unregister_device+0x48/0x98
-> >> [  248.844231]  __unregister+0x10/0x20
-> >> [  248.847742]  device_for_each_child+0x60/0xb4
-> >> [  248.852037]  spi_unregister_controller+0x48/0x15c
-> >> [  248.856768]  bcm2835_spi_remove+0x20/0x60
-> >> [  248.860804]  platform_shutdown+0x24/0x34
-> >> [  248.864751]  device_shutdown+0x150/0x258
-> >> [  248.868701]  kernel_power_off+0x38/0x7c
-> >> [  248.872563]  __do_sys_reboot+0x200/0x238
-> >> [  248.876511]  __arm64_sys_reboot+0x24/0x30
-> >> [  248.880546]  invoke_syscall+0x48/0x114
-> >> [  248.884324]  el0_svc_common.constprop.0+0x40/0xe0
-> >> [  248.889057]  do_el0_svc+0x1c/0x28
-> >> [  248.892397]  el0_svc+0x40/0xe8
-> >> [  248.895478]  el0t_64_sync_handler+0x100/0x12c
-> >> [  248.899864]  el0t_64_sync+0x190/0x194
-> >> [  248.903549] ---[ end trace 0000000000000000 ]---
-> >> [  248.910555] reboot: Power down
-> >>
-> >> Just putting out. I was testing https://github.com/jarkkojs/buildroot-=
-tpmdd/tree/linux-6.6.y
-> >> and this popped up. To build sdcard.img bootable with Raspberry Pi 3:
-> >>
-> >> make raspberrypi3_tpmdd_64_defconfig && make
-> >>
-> >> BR, Jarkko
-> >=20
-> > So I applied [1] and now I get a clean shutdown:
-> >=20
+> Without making any assumption on the LSM ordering based on how they are
+> compiled, enforce that ordering at LSM infrastructure level.
 >
-> AFAIU the warning is shown in case that interrupts are not enabled and th=
-us INIT_WORK has not
-> been called for free_irq_work. This should not be too hard to fix, so I t=
-hink I can provide=20
-> a patch for that, soon.
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/security.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/security/security.c b/security/security.c
+> index 351a124b771c..b98db79ca500 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -263,6 +263,18 @@ static void __init initialize_lsm(struct lsm_info *lsm)
+>  	}
+>  }
+>  
+> +/* Find an LSM with a given name. */
+> +static struct lsm_info __init *find_lsm(const char *name)
+> +{
+> +	struct lsm_info *lsm;
+> +
+> +	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++)
+> +		if (!strcmp(lsm->name, name))
+> +			return lsm;
+> +
+> +	return NULL;
+> +}
+> +
+>  /*
+>   * Current index to use while initializing the lsm id list.
+>   */
+> @@ -333,10 +345,23 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>  
+>  	/* LSM_ORDER_LAST is always last. */
+>  	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+> +		/* Do it later, to enforce the expected ordering. */
+> +		if (!strcmp(lsm->name, "ima") || !strcmp(lsm->name, "evm"))
+> +			continue;
+> +
 
-Agreed, and take your time. I just captured without further analysis so
-that does not get lost, that's all. Thanks for looking into it.
+Hard coding the ordering of LSMs is incredibly ugly and unlikely to scale.
+Not to mention perplexing the next time someone creates an LSM that "has to be last".
 
-> BR,
-> Lino
+Why isn't LSM_ORDER_LAST sufficient? If it really isn't, how about adding
+and using LSM_ORDER_LAST_I_REALLY_MEAN_IT* ?
 
-BR, Jarkko
+Alternatively, a declaration of ordering requirements with regard to other
+LSMs in lsm_info. You probably don't care where ima is relative to Yama,
+but you need to be after SELinux and before evm. lsm_info could have 
+must_precede and must_follow lists. Maybe a must_not_combine list, too,
+although I'm hoping to make that unnecessary. 
+
+And you should be using LSM_ID values instead of LSM names.
+
+---
+* Naming subject to Paul's sensibilities, of course.
+
+>  		if (lsm->order == LSM_ORDER_LAST)
+>  			append_ordered_lsm(lsm, "   last");
+>  	}
+>  
+> +	/* Ensure that the 'ima' and 'evm' LSMs are last and in this order. */
+> +	lsm = find_lsm("ima");
+> +	if (lsm)
+> +		append_ordered_lsm(lsm, "   last");
+> +
+> +	lsm = find_lsm("evm");
+> +	if (lsm)
+> +		append_ordered_lsm(lsm, "   last");
+> +
+>  	/* Disable all LSMs not in the ordered list. */
+>  	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+>  		if (exists_ordered_lsm(lsm))
 
