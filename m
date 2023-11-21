@@ -1,79 +1,120 @@
-Return-Path: <linux-integrity+bounces-151-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-152-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88B857F3388
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 17:21:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C30A7F35CF
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 19:18:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29D53B20F2F
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 16:21:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50C701C20D65
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 18:18:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F0259155;
-	Tue, 21 Nov 2023 16:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93CB722090;
+	Tue, 21 Nov 2023 18:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cUjDCpsH"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E70CB;
-	Tue, 21 Nov 2023 08:21:01 -0800 (PST)
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-359d559766cso20729055ab.1;
-        Tue, 21 Nov 2023 08:21:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700583661; x=1701188461;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NB25iOKb1NuNSINJ9ZLnwambMkrdew+0Vk7Thm3qC3I=;
-        b=BNCv/ou6MROn27hiDlLfEV0IK/DxsXbM/wIxCGhgyCjsk0DIayf4hpJ0h1r0fjxJPk
-         Dmu0Lxl+h8K8vfAC+qvqrGJOEg435opwgmpBGqsJ0sZFqATWDzbKrxpNiFkOWQv6yYmH
-         ti57V0TyOwwiIIk473I/uXuE/Lf/CE+ImX8JkokigbazHdToHvOmgOHI8PC/IE5uGX1+
-         A05u0RdxbFNigdwOSkU2uwBniZKwEwniYEBFzQrBwpOsArgovIRlCyw3WFmbe3QLIy44
-         zoYCxFGMqvLcDQqQ0IX8MqmicjUFYSSrjtuWL41tbUZpHddCwYms+lVuOzI1NVnVU46+
-         tdgg==
-X-Gm-Message-State: AOJu0YwuTPynq/wRFn31vDl2J5YKEmjjaYnMKoF4/TXTN3QcTosLRya0
-	wGl0jHaIC9EDAgDPqCcQjg==
-X-Google-Smtp-Source: AGHT+IHe3e6NMuL+N9QoPHujHjV51pxEWuFse8JjWEWJ9MLuc6C6kduDqvpv1Iy/feCZFdtvNvcHww==
-X-Received: by 2002:a05:6e02:922:b0:359:47b9:7bef with SMTP id o2-20020a056e02092200b0035947b97befmr11340168ilt.1.1700583660991;
-        Tue, 21 Nov 2023 08:21:00 -0800 (PST)
-Received: from herring.priv ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id bs18-20020a056638451200b0043167542398sm1373780jab.141.2023.11.21.08.20.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 08:21:00 -0800 (PST)
-Received: (nullmailer pid 2001832 invoked by uid 1000);
-	Tue, 21 Nov 2023 16:20:59 -0000
-Date: Tue, 21 Nov 2023 09:20:59 -0700
-From: Rob Herring <robh@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, linux-integrity@vger.kernel.org, Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Subject: Re: [PATCH 3/3] dt-bindings: tpm: Document Microsoft fTPM bindings
-Message-ID: <20231121162059.GE1845293-robh@kernel.org>
-References: <cover.1700555862.git.lukas@wunner.de>
- <ad4b484da8190c83902b2525823ceb3439a7576e.1700555862.git.lukas@wunner.de>
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE572F9
+	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 10:18:21 -0800 (PST)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALHMM0r015594
+	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 18:18:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=1MrusoKIPciVCKx1iaJFwPBn+4QmhccB142SevO1W2I=;
+ b=cUjDCpsHdDboUiVbctphuwLZgj/eTx0lx4u8HKl8bv/I51YFX6BbHmwbFb5zD5Hr13iP
+ Q0bQ0u1RlAdycuNWr2OhNW9egKm0fkxDWc6AsYPkZeAfWmlThqfRz3mKcuIWG15NI0b8
+ HLHmVIoPfWwEg9PJysf7TGyoAIkY6hBHUoCK5TTtbYjZo+NiZ7q8TcwmDup5ttOSuggT
+ DZW+3jdv6xPiJuoM8N1VDYFa/9ZNuIwqW/A6UekuX/KnFpHSuuNOKnRXoHWAtPQI900I
+ zwf+5w49WZ+1xO3/bMFx6YaXS7e8uL8K8VHyU/Q2C2W+hB4T83//WxarRrLm+U+Wu7kq kQ== 
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uh0vx979d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 18:18:21 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALGJ4NW010295
+	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 18:18:20 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uf9tka7uj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <linux-integrity@vger.kernel.org>; Tue, 21 Nov 2023 18:18:20 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ALIIJkl33227442
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 21 Nov 2023 18:18:19 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id ED3095805A;
+	Tue, 21 Nov 2023 18:18:18 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id ABD0B58052;
+	Tue, 21 Nov 2023 18:18:18 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 21 Nov 2023 18:18:18 +0000 (GMT)
+From: Stefan Berger <stefanb@linux.ibm.com>
+To: linux-integrity@vger.kernel.org
+Cc: zohar@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [ima-evm-utils PATCH] Add note for how password needs to be provided when -p is used
+Date: Tue, 21 Nov 2023 13:18:11 -0500
+Message-ID: <20231121181811.43560-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad4b484da8190c83902b2525823ceb3439a7576e.1700555862.git.lukas@wunner.de>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QI8Blj0O07MGbkI2ScZVZZRHg3D6yijK
+X-Proofpoint-GUID: QI8Blj0O07MGbkI2ScZVZZRHg3D6yijK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-21_10,2023-11-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 mlxscore=0 mlxlogscore=793
+ suspectscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311210143
 
-On Tue, Nov 21, 2023 at 10:48:43AM +0100, Lukas Wunner wrote:
-> A driver for Microsoft's firmware-based Trusted Platform Module (fTPM)
-> was merged with commit 09e574831b27 ("tpm/tpm_ftpm_tee: A driver for
-> firmware TPM running inside TEE"), but its devicetree bindings were not.
-> 
-> This is the only remaining undocumented compatible string for a TPM,
-> so add a DT schema based on the patch linked below.
-> 
-> Link: https://lore.kernel.org/all/20190409184958.7476-2-sashal@kernel.org/
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> ---
->  .../bindings/tpm/microsoft,ftpm.yaml          | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/tpm/microsoft,ftpm.yaml
+Add a note describing how a password needs to be provided when -p
+is used.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+ README       | 2 +-
+ src/evmctl.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/README b/README
+index 7239dda..54746ef 100644
+--- a/README
++++ b/README
+@@ -59,7 +59,7 @@ OPTIONS
+       --keyid-from-cert file
+                      read keyid value from SKID of a x509 cert file
+   -o, --portable     generate portable EVM signatures
+-  -p, --pass         password for encrypted signing key
++  -p, --pass         password for encrypted signing key; use -p<password>
+   -r, --recursive    recurse into directories (sign)
+   -t, --type         file types to fix 'fxm' (f: file)
+                      x - skip fixing if both ima and evm xattrs exist (use with caution)
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 8caf9bd..2710a27 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -2851,7 +2851,7 @@ static void usage(void)
+ 		"      --keyid-from-cert file\n"
+ 		"                     read keyid value from SKID of a x509 cert file\n"
+ 		"  -o, --portable     generate portable EVM signatures\n"
+-		"  -p, --pass         password for encrypted signing key\n"
++		"  -p, --pass         password for encrypted signing; use -p<password>\n"
+ 		"  -r, --recursive    recurse into directories (sign)\n"
+ 		"  -t, --type         file types to fix 'fxm' (f: file)\n"
+ 		"                     x - skip fixing if both ima and evm xattrs exist (use with caution)\n"
+-- 
+2.42.0
+
 
