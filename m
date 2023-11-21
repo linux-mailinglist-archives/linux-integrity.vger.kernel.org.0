@@ -1,49 +1,49 @@
-Return-Path: <linux-integrity+bounces-141-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-142-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1E8C7F2B0D
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 11:57:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC0DE7F2B11
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 11:57:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9463D281A3C
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 10:57:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 217991C20DCE
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Nov 2023 10:57:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F5444778D;
-	Tue, 21 Nov 2023 10:57:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C9B482CF;
+	Tue, 21 Nov 2023 10:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A66CA;
-	Tue, 21 Nov 2023 02:57:24 -0800 (PST)
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-7a66b5f7ea7so168468239f.2;
-        Tue, 21 Nov 2023 02:57:24 -0800 (PST)
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6168A83;
+	Tue, 21 Nov 2023 02:57:29 -0800 (PST)
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-35aa6107e9fso19531675ab.0;
+        Tue, 21 Nov 2023 02:57:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700564244; x=1701169044;
+        d=1e100.net; s=20230601; t=1700564248; x=1701169048;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=7lBKRP1MxbrcZ6sLlvoLF/nznFoEzDVIPNY03KLacE0=;
-        b=J5W8bzJaZpIz6THr5ChuyjPH6aXgMbKc8+zQET40fhdxJp74gq76Gqab+rbNaUcR//
-         sIE5RrjIGblK+NI+i868qmbuS44Ofy4H13egwE0Y+ljSF26dojCp1os51ctDLDDELiMj
-         eK5ODUKIvvhLlo8W4E07F05CGiuwAk/fTCzEEl5SoE8vlcdeFy+2NMy3kMXOpi14fBsc
-         +q2sF1a6d6oDcQocHb0bcSdiY1+xUto3gcMgGNjZtlHX7aLqecU7fZZUTxLKp/B8JD+g
-         TIJWBTOMjX71QdKZtUemLOBZf7poIJE5zrh2QLOEXvyr5iwACu6vC3V7PZWaWSTSDuI8
-         VQ5g==
-X-Gm-Message-State: AOJu0YxQklIQN7Q6Yb4OV2SKZkGphFn87Pr1btE5H1G0Mfn/dR+IHbYL
-	BG76lh3jXUGhfqeYF9tWV171XMTYhQ==
-X-Google-Smtp-Source: AGHT+IFun/3IS8RH+ueLcjovySYxC6yq11jY8GXJt9NgRYRkdxUsojgypHI/OYJ6wj6Tc7Re0CYYgA==
-X-Received: by 2002:a92:7609:0:b0:357:f5d4:9b12 with SMTP id r9-20020a927609000000b00357f5d49b12mr11703618ilc.15.1700564243744;
-        Tue, 21 Nov 2023 02:57:23 -0800 (PST)
+        bh=cmjt7Cvxkdz+Mw7yc/+RbJZ/ktXLEhwYw8VZUPmFUL4=;
+        b=gzbOTIHp7Vnc6nUL+I6X+xQcZ3sdn1DT1gNthIGf1BZsmQDQwtWuT0QxqkI0hcwKGT
+         Q4+eH9tTzYP2PIuXQn9jM+iARebONO1kgDyHMEtJJ2qqgJ9KXHH2IQRCRN3tjYeIKVEq
+         XDsaAy2inBAUd3QULcQqMsKavKoJCrcCJ35uVdENwNTCC3ph72WqruHJmWW0PImql7av
+         53U85tqrZ4vQXou3jm28c8W7LACxGc5c4TdZUr+uw69ybn/OcEV9ASMt7e1bz3akiJV4
+         Sp7Kb4I71lFfe1dgysGftHkgEwdpoAelE5Hdok3KopaYLvljOP0zOdX+T3xAOAaWi9+d
+         atoA==
+X-Gm-Message-State: AOJu0Yz4K+obrhtFkNcBVNnwQbq5GeLQE2e6UH33zCxWXNr4e1O37THp
+	bhV6Trwz24riiRp9ZngjFg==
+X-Google-Smtp-Source: AGHT+IHSXPcvDe+5s83j1OJWr5LZcD3kjMa83yZv5E+brU51ZYtdW8m/My8ZESv69eZHh7AckhWaSw==
+X-Received: by 2002:a05:6e02:220e:b0:359:30b1:425b with SMTP id j14-20020a056e02220e00b0035930b1425bmr16445879ilf.23.1700564248640;
+        Tue, 21 Nov 2023 02:57:28 -0800 (PST)
 Received: from herring.priv ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id bk4-20020a056e02328400b003596a440efasm3142487ilb.19.2023.11.21.02.57.22
+        by smtp.gmail.com with ESMTPSA id j10-20020a056e02154a00b0035b0b56e0e1sm844636ilu.53.2023.11.21.02.57.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 02:57:23 -0800 (PST)
-Received: (nullmailer pid 1245586 invoked by uid 1000);
+        Tue, 21 Nov 2023 02:57:27 -0800 (PST)
+Received: (nullmailer pid 1245589 invoked by uid 1000);
 	Tue, 21 Nov 2023 10:57:21 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -52,64 +52,31 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: Rob Herring <robh@kernel.org>
 To: Lukas Wunner <lukas@wunner.de>
-Cc: linux-integrity@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Rob Herring <robh+dt@kernel.org>, Lino Sanfilippo <LinoSanfilippo@gmx.de>, devicetree@vger.kernel.org
-In-Reply-To: <e83a43a67c96b4f2614f029666209cb408da8678.1700555862.git.lukas@wunner.de>
+Cc: Lino Sanfilippo <LinoSanfilippo@gmx.de>, devicetree@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh+dt@kernel.org>, linux-integrity@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>
+In-Reply-To: <fc5c973d30df7ece297e19edad19ffe86378b6b1.1700555862.git.lukas@wunner.de>
 References: <cover.1700555862.git.lukas@wunner.de>
- <e83a43a67c96b4f2614f029666209cb408da8678.1700555862.git.lukas@wunner.de>
-Message-Id: <170056423883.1245414.13982600686594579960.robh@kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: tpm: Consolidate TCG TIS bindings
+ <fc5c973d30df7ece297e19edad19ffe86378b6b1.1700555862.git.lukas@wunner.de>
+Message-Id: <170056423981.1245464.10395498560154249075.robh@kernel.org>
+Subject: Re: [PATCH 2/3] dt-bindings: tpm: Convert IBM vTPM bindings to DT
+ schema
 Date: Tue, 21 Nov 2023 03:57:21 -0700
 
 
-On Tue, 21 Nov 2023 10:48:41 +0100, Lukas Wunner wrote:
-> A significant number of Trusted Platform Modules conform to the "TIS"
-> specification published by the Trusted Computing Group ("TCG PC Client
-> Specific TPM Interface Specification").  These chips typically use an
-> SPI, I²C or LPC bus as transport (via MMIO in the latter case).  Some
-> of them even support multiple of those buses (selectable through a
-> config strap) or the same chip is available in multiple SKUs, each with
-> a different bus interface.
+On Tue, 21 Nov 2023 10:48:42 +0100, Lukas Wunner wrote:
+> Convert the devicetree bindings for the IBM Virtual Trusted Platform
+> Module to DT schema.  Drop properties which are already documented in
+> tpm-common.yaml.
 > 
-> The devicetree bindings for these TPMs have not been converted to DT
-> schema yet and are spread out across 3 generic files and 3 chip-specific
-> files.  A few TPM compatible strings were added to trivial-devices.yaml
-> even though additional properties are documented in the plaintext
-> bindings.
-> 
-> Consolidate the devicetree bindings into 3 files, one per bus.
-> 
-> Move common properties to a separate tpm-common.yaml.
-> 
-> Document compatible strings which are supported by the TPM TIS driver
-> but were neglected to be added to the devicetree bindings.
-> 
-> Document the memory-region property recently introduced by commit
-> 1e2714bb83fc ("tpm: Add reserved memory event log").
+> Document the "IBM,vtpm20" compatible string introduced by commit
+> 18b3670d79ae ("tpm: ibmvtpm: Add support for TPM2").
 > 
 > Signed-off-by: Lukas Wunner <lukas@wunner.de>
 > ---
->  .../bindings/security/tpm/google,cr50.txt     |  19 ----
->  .../bindings/security/tpm/st33zp24-i2c.txt    |  34 ------
->  .../bindings/security/tpm/st33zp24-spi.txt    |  32 ------
->  .../bindings/security/tpm/tpm-i2c.txt         |  26 -----
->  .../bindings/security/tpm/tpm_tis_mmio.txt    |  25 ----
->  .../bindings/security/tpm/tpm_tis_spi.txt     |  23 ----
->  .../bindings/tpm/tcg,tpm-tis-i2c.yaml         | 107 ++++++++++++++++++
->  .../bindings/tpm/tcg,tpm-tis-mmio.yaml        |  50 ++++++++
->  .../bindings/tpm/tcg,tpm_tis-spi.yaml         |  88 ++++++++++++++
->  .../devicetree/bindings/tpm/tpm-common.yaml   |  56 +++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  16 ---
->  11 files changed, 301 insertions(+), 175 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/google,cr50.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/st33zp24-i2c.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/st33zp24-spi.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm_tis_mmio.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm_tis_spi.txt
->  create mode 100644 Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
->  create mode 100644 Documentation/devicetree/bindings/tpm/tcg,tpm-tis-mmio.yaml
->  create mode 100644 Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
->  create mode 100644 Documentation/devicetree/bindings/tpm/tpm-common.yaml
+>  .../bindings/security/tpm/ibmvtpm.txt         |  41 -------
+>  .../devicetree/bindings/tpm/ibm,vtpm.yaml     | 101 ++++++++++++++++++
+>  2 files changed, 101 insertions(+), 41 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/security/tpm/ibmvtpm.txt
+>  create mode 100644 Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -118,28 +85,20 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/tpm-common.yaml: properties:oneOf: [{'memory-region': {'description': 'reserved memory allocated for firmware event log', 'maxItems': 1}}, {'allOf': [{'linux,sml-base': {'description': 'base address of reserved memory allocated for firmware event log', '$ref': '/schemas/types.yaml#/definitions/uint32-array', 'minItems': 2, 'maxItems': 2}}, {'linux,sml-size': {'description': 'size of reserved memory allocated for firmware event log', '$ref': '/schemas/types.yaml#/definitions/uint32'}}]}] is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/tpm-common.yaml: properties: 'oneOf' should not be valid under {'$ref': '#/definitions/json-schema-prop-names'}
-	hint: A json-schema keyword was found instead of a DT property name.
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml: required:4: 'ibm,#dma-address-cells' does not match '^([a-zA-Z#][a-zA-Z0-9,+\\-._@]{0,63}|\\$nodename)$'
+	hint: 'required' must be valid DT property or node names
 	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/tpm-common.yaml: properties:oneOf: [{'memory-region': {'description': 'reserved memory allocated for firmware event log', 'maxItems': 1}}, {'allOf': [{'linux,sml-base': {'description': 'base address of reserved memory allocated for firmware event log', '$ref': '/schemas/types.yaml#/definitions/uint32-array', 'minItems': 2, 'maxItems': 2}}, {'linux,sml-size': {'description': 'size of reserved memory allocated for firmware event log', '$ref': '/schemas/types.yaml#/definitions/uint32'}}]}] is not of type 'object', 'boolean'
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml: required:5: 'ibm,#dma-size-cells' does not match '^([a-zA-Z#][a-zA-Z0-9,+\\-._@]{0,63}|\\$nodename)$'
+	hint: 'required' must be valid DT property or node names
 	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/tpm-common.yaml: powered-while-suspended: missing type definition
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.example.dtb: tpm@0: compatible:1: 'tcg,tpm-tis-i2c' was expected
-	from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.example.dtb: tpm@0: Unevaluated properties are not allowed ('compatible', 'spi-max-frequency' were unexpected)
-	from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.example.dtb: tpm@0: Unevaluated properties are not allowed ('lpcpd-gpios' was unexpected)
-	from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.example.dtb: tpm@57: Unevaluated properties are not allowed ('linux,sml-base', 'linux,sml-size' were unexpected)
-	from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.example.dtb: tpm@13: Unevaluated properties are not allowed ('lpcpd-gpios' was unexpected)
-	from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/ibm,vtpm.example.dtb: vtpm@30000003: Unevaluated properties are not allowed ('linux,sml-base', 'linux,sml-size' were unexpected)
+	from schema $id: http://devicetree.org/schemas/tpm/ibm,vtpm.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/tpm/ibm,vtpm.example.dtb: vtpm@30000003: 'ibm,#dma-address-cells', 'ibm,#dma-size-cells' do not match any of the regexes: '.*-names$', '.*-supply$', '^#.*-cells$', '^#[a-zA-Z0-9,+\\-._]{0,63}$', '^[a-zA-Z0-9][a-zA-Z0-9,+\\-._]{0,63}$', '^[a-zA-Z0-9][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-fA-F]+(,[0-9a-fA-F]+)*$', '^__.*__$', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/dt-core.yaml#
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/e83a43a67c96b4f2614f029666209cb408da8678.1700555862.git.lukas@wunner.de
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/fc5c973d30df7ece297e19edad19ffe86378b6b1.1700555862.git.lukas@wunner.de
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
