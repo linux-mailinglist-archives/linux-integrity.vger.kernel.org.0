@@ -1,107 +1,92 @@
-Return-Path: <linux-integrity+bounces-199-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-200-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54E497F4903
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Nov 2023 15:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CFE6C7F4A0A
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Nov 2023 16:15:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A439D2815DF
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Nov 2023 14:33:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94CC928100C
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Nov 2023 15:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D2D4E630;
-	Wed, 22 Nov 2023 14:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="imAl28ri"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C28E25571;
+	Wed, 22 Nov 2023 15:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B812D79
-	for <linux-integrity@vger.kernel.org>; Wed, 22 Nov 2023 06:33:32 -0800 (PST)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AME9GK2004610
-	for <linux-integrity@vger.kernel.org>; Wed, 22 Nov 2023 14:33:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=YJkzrFlFC9KGN3ETtQonj/dYF3b/hD1G12Ribzv2hQc=;
- b=imAl28riMRnFh8uJeVqK7h3D1sIbkyz7VY+bYZdtUIeOQBaK/gJetCKl/biwQLL3+riu
- pY/RllnOTN/hzQwlz4pwP45NJl2gIKYfk5CgPvWUKMVzThiDSYqosf8+dPXpoEzMuPsC
- 1EOYvVGw35VIsK6vis5cKS1vEOCo3JnqKqdgmHcf8uWJa8vVp/8WQ5ZgrHYKHPaVVBep
- Uud9AUMnbV7V29kzTfdDTJtYNUfZjKJiS43uWUgVhzbB741LMfvMcaxJH0QLnemsFMtl
- eN0HJnacNdHiI/XQI9S4bMZAP6zoJOJAm6IOiFlLysTa1JUV5naM7RisqaWQVE8SuV+q 4Q== 
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uhj8qj2cp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Wed, 22 Nov 2023 14:33:31 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3AMDT4dl001718
-	for <linux-integrity@vger.kernel.org>; Wed, 22 Nov 2023 14:33:30 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uf93m07jw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Wed, 22 Nov 2023 14:33:30 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AMEXT7x19792628
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 22 Nov 2023 14:33:29 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2E4FB5805B;
-	Wed, 22 Nov 2023 14:33:29 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E1DF958058;
-	Wed, 22 Nov 2023 14:33:28 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 22 Nov 2023 14:33:28 +0000 (GMT)
-Message-ID: <7042007c-dcc5-404b-878c-f5f36f9fb5af@linux.ibm.com>
-Date: Wed, 22 Nov 2023 09:33:28 -0500
+Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE1419E;
+	Wed, 22 Nov 2023 07:15:26 -0800 (PST)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 007CD20618;
+	Wed, 22 Nov 2023 16:15:22 +0100 (CET)
+Date: Wed, 22 Nov 2023 16:15:18 +0100
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Francesco Dolcini <francesco@dolcini.it>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-integrity@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] reset: Add Infineon SLB9670 TPM reset driver
+Message-ID: <ZV4bBowT9ij+BQup@francesco-nb.int.toradex.com>
+References: <ae40859b82494d75e9ad7bf616b3264138ad1f6a.1695754856.git.lukas@wunner.de>
+ <75b775d0526e72f292e0546a306b37680714686c.1695754856.git.lukas@wunner.de>
+ <ZV0+Zk590YSsvhFo@francesco-nb.int.toradex.com>
+ <20231122112949.GA18812@wunner.de>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [ima-evm-utils PATCH 09/12] Use a local hash algorithm variable
- when verifying file signatures
-Content-Language: en-US
-To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-References: <20231119165043.46960-1-zohar@linux.ibm.com>
- <20231119165043.46960-10-zohar@linux.ibm.com>
- <93aa5f57-fd8a-475f-a1b8-c8d00772b251@linux.ibm.com>
- <afbc47db6e3041bba6602d2dbd3c392ae2ac9d2e.camel@linux.ibm.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <afbc47db6e3041bba6602d2dbd3c392ae2ac9d2e.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: o1WzuulXXAC5ZmlsT1qJXUA_T-ytCoXj
-X-Proofpoint-ORIG-GUID: o1WzuulXXAC5ZmlsT1qJXUA_T-ytCoXj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-22_10,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- malwarescore=0 priorityscore=1501 mlxscore=0 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 phishscore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
- definitions=main-2311220103
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122112949.GA18812@wunner.de>
 
+Hello Lukas,
 
-
-On 11/22/23 09:14, Mimi Zohar wrote:
-> On Wed, 2023-11-22 at 08:37 -0500, Stefan Berger wrote:
->>
-
->> Now you are passing valid parameters into verify_hash2(). Would it not
->> be possible to drop 4/12?
+On Wed, Nov 22, 2023 at 12:29:49PM +0100, Lukas Wunner wrote:
+> On Wed, Nov 22, 2023 at 12:33:58AM +0100, Francesco Dolcini wrote:
+> > On Tue, Sep 26, 2023 at 09:09:36PM +0200, Lukas Wunner wrote:
+> > > Normally the platform firmware is responsible for taking a Trusted
+> > > Platform Module out of reset on boot and storing measurements into it.
+> > > 
+> > > However if the platform firmware is incapable of doing that -- as is the
+> > > case on the Raspberry Pi -- then the onus is on the kernel to take the
+> > > TPM out of reset before trying to attach a driver to it.
+> > > 
+> > > Provide a reset driver for such platforms.
+> > > 
+> > > The Infineon SLB9670 TPM requires a specific reset sequence on its RST#
+> > > pin which is documented in sections 5.4 and 5.5 of the datasheet:
+> > 
+> > Are you really sure that this change is required?
+> > I have seen the RST# Timing diagram in the datasheet, however I wonder
+> > if a reset is required at all during power-up, for example.
 > 
-> Just as we can't modify the library verify_hash() definition, I don't
-> think we should be modifying the verify_hash2() defintion either.
-> 04/12 defines and exports the final verify_hash2() definition.
-> 
+> If the RST# pin is not toggled at all upon a warm reset (reboot),
+> the TPM will remain in whatever state it was during the previous boot.
+...
+> Also, the pin controller connected to RST# might be reset upon a reboot
+> (think of a SoC internal pin controller setting all its registers to 0)
+> and RST# might be asserted as a result.  It is then necessary to take
+> the TPM out of reset.
 
-The question is whether verify_hash2() can be only introduced here in 
-versus made available in 4/12 with a parameter that it doesn't use at 
-all at that point.
+Toggled at boot is different from what you are doing here.
+
+> > Not to mention that I was able to see the driver probe succeed in a
+> > similar setup to the one you are describing in the commit message
+> > (different board, arm64, but nothing done by the platform firmware).
+> 
+> Hm, is the RST# pin even connected on that board?
+
+Yes, it's connected and it is asserted/de-asserted (aka toggled) during
+startup from the HW reset circuit. However this is not implementing the
+reset sequence you are implementing here.
+
+Francesco
+
 
