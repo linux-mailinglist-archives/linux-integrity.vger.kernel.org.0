@@ -1,102 +1,138 @@
-Return-Path: <linux-integrity+bounces-183-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-184-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AFD27F44EE
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Nov 2023 12:30:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A88C77F4656
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Nov 2023 13:34:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B6C01C208C9
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Nov 2023 11:30:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2247BB209E9
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Nov 2023 12:34:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B4EB5467C;
-	Wed, 22 Nov 2023 11:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7713B3C093;
+	Wed, 22 Nov 2023 12:34:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cSOF+PIx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C96110;
-	Wed, 22 Nov 2023 03:29:53 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 78B5830000D39;
-	Wed, 22 Nov 2023 12:29:49 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 6D36237039; Wed, 22 Nov 2023 12:29:49 +0100 (CET)
-Date: Wed, 22 Nov 2023 12:29:49 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Francesco Dolcini <francesco@dolcini.it>
-Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-integrity@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] reset: Add Infineon SLB9670 TPM reset driver
-Message-ID: <20231122112949.GA18812@wunner.de>
-References: <ae40859b82494d75e9ad7bf616b3264138ad1f6a.1695754856.git.lukas@wunner.de>
- <75b775d0526e72f292e0546a306b37680714686c.1695754856.git.lukas@wunner.de>
- <ZV0+Zk590YSsvhFo@francesco-nb.int.toradex.com>
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8DA91;
+	Wed, 22 Nov 2023 04:34:43 -0800 (PST)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AMBVnbg031299;
+	Wed, 22 Nov 2023 12:34:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=JfDEp2rYNNMJNDqWlkXnSrW+7ZX3LJDn+wjWCugogRE=;
+ b=cSOF+PIxGHmfVH8gXZeM4IQXDsjrzeQ+LIpOQ2dkN6NZTLTa01xYKdhKV2gM5prBNuWE
+ bgt7jzmGPk15zoKoD6L+owY+SpeQfCx41gIRRh7SzeIIAqld5tvlzY6pZZ/LczKySpjN
+ mPMSikfHCOglkK4qaKjHkRKfyttx9xWohGKjQRpNkQcNubuQ5/NoeTmOdJCgrtnjix3h
+ iIExx5v0NxdG6m5NeD3xFxkA+G8qm5pfsvVuynl10OFfbC6GQZmzBtpHOhhxQhvyEE/n
+ +b9h6oBoKCApe1eQyIJIWYSdQOJNPNSOjqlqXVl/AmLXcByet9dR6bYavKTjGW5jyBt+ Gw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uhgq2hx2b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Nov 2023 12:34:38 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AMBv4th023999;
+	Wed, 22 Nov 2023 12:34:37 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uhgq2hx1u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Nov 2023 12:34:37 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3AMAJr1B001763;
+	Wed, 22 Nov 2023 12:34:36 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uf93kymyh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Nov 2023 12:34:36 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AMCYZXP14942944
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 22 Nov 2023 12:34:35 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A49B15803F;
+	Wed, 22 Nov 2023 12:34:35 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DB5165805A;
+	Wed, 22 Nov 2023 12:34:34 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 22 Nov 2023 12:34:34 +0000 (GMT)
+Message-ID: <85154bfe-6bd5-440a-acc1-f01497d59af5@linux.ibm.com>
+Date: Wed, 22 Nov 2023 07:34:33 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZV0+Zk590YSsvhFo@francesco-nb.int.toradex.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tpm: Start the tpm2 before running a self test.
+Content-Language: en-US
+To: Hermin Anggawijaya <hermin.anggawijaya@alliedtelesis.co.nz>,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231122065528.1049819-1-hermin.anggawijaya@alliedtelesis.co.nz>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20231122065528.1049819-1-hermin.anggawijaya@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: LbJzGeycirY9ZjRWDHlyNiY9chUMTGIY
+X-Proofpoint-GUID: pWk4bk2Bxre_FEY90RMSySOWmCNkLYQ_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-22_08,2023-11-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 clxscore=1011 priorityscore=1501 spamscore=0
+ mlxlogscore=999 impostorscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311220088
 
-On Wed, Nov 22, 2023 at 12:33:58AM +0100, Francesco Dolcini wrote:
-> On Tue, Sep 26, 2023 at 09:09:36PM +0200, Lukas Wunner wrote:
-> > Normally the platform firmware is responsible for taking a Trusted
-> > Platform Module out of reset on boot and storing measurements into it.
-> > 
-> > However if the platform firmware is incapable of doing that -- as is the
-> > case on the Raspberry Pi -- then the onus is on the kernel to take the
-> > TPM out of reset before trying to attach a driver to it.
-> > 
-> > Provide a reset driver for such platforms.
-> > 
-> > The Infineon SLB9670 TPM requires a specific reset sequence on its RST#
-> > pin which is documented in sections 5.4 and 5.5 of the datasheet:
+
+
+On 11/22/23 01:55, Hermin Anggawijaya wrote:
+> Before sending a command to attempt the self test, the TPM
+> may need to be started, otherwise the self test returns
+> TPM2_RC_INITIALIZE value causing a log as follows:
+> "tpm tpm0: A TPM error (256) occurred attempting the self test".
 > 
-> Are you really sure that this change is required?
-> I have seen the RST# Timing diagram in the datasheet, however I wonder
-> if a reset is required at all during power-up, for example.
+> Signed-off-by: Hermin Anggawijaya <hermin.anggawijaya@alliedtelesis.co.nz>
+> ---
+>   drivers/char/tpm/tpm2-cmd.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index 93545be190a5..0530f3b5f86a 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -737,15 +737,15 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+>   	if (rc)
+>   		goto out;
+>   
+> +	rc = tpm2_startup(chip);
+> +	if (rc && rc != TPM2_RC_INITIALIZE)
+> +		goto out;
+> +
 
-If the RST# pin is not toggled at all upon a warm reset (reboot),
-the TPM will remain in whatever state it was during the previous boot.
+Most platforms should have firmware initialize the TPM 2 these days. 
+Therefore, a selftest should work and in case it doesn't work you fall 
+back to the tpm2_startup below and if you get an error message in the 
+log you at least know that you firmware is not up-to-date.
 
-Also, the pin controller connected to RST# might be reset upon a reboot
-(think of a SoC internal pin controller setting all its registers to 0)
-and RST# might be asserted as a result.  It is then necessary to take
-the TPM out of reset.
-
-
-> Not to mention that I would have expected some firmware to implement
-> such reset timing and I was not able to find any (I looked at
-> arm/arm64), if this is really required I the driver can work at all?
-> Which platform firmware implements such reset sequence?
-
-I can't answer how a TPM is reset by firmware on arm/arm64, you'd have
-to ask an FAE at ARM.  Normally I'd expect firmware in ROM do that so
-all subsequently executed code which is mutable (EFI, bootloader, kernel)
-can be measured.  Again, on simple platforms such as the Raspberry Pi
-there's no support to reset a TPM in ROM.
-
-
-> Not to mention that I was able to see the driver probe succeed in a
-> similar setup to the one you are describing in the commit message
-> (different board, arm64, but nothing done by the platform firmware).
-
-Hm, is the RST# pin even connected on that board?
-
-Thanks,
-
-Lukas
+>   	rc = tpm2_do_selftest(chip);
+>   	if (rc && rc != TPM2_RC_INITIALIZE)
+>   		goto out;
+>   
+>   	if (rc == TPM2_RC_INITIALIZE) {
+> -		rc = tpm2_startup(chip);
+> -		if (rc)
+> -			goto out;
+> -
+>   		rc = tpm2_do_selftest(chip);
+>   		if (rc)
+>   			goto out;
 
